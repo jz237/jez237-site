@@ -1,6 +1,6 @@
 {
   "date": "2026-07-02",
-  "updatedAt": "2026-07-02T18:00:01.923822+00:00",
+  "updatedAt": "2026-07-02T19:00:01.635006+00:00",
   "items": [
     {
       "title": "Microsoft launches its own AI deployment company with $2.5 billion commitment",
@@ -16,11 +16,11 @@
       "featuredLatest": false,
       "published": "2026-07-02T13:53:00+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.2711,
+      "score": 16.2442,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -33,6 +33,37 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "microsoft-launches-own-deployment-company-billion"
+    },
+    {
+      "title": "Using DSPy to evaluate and improve Datasette Agent's SQL system prompts",
+      "url": "https://simonwillison.net/2026/Jul/2/dspy-datasette-agent-prompts",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Research: Using DSPy to evaluate and improve Datasette Agent&#x27;s SQL system prompts\n        One of this morning's AIE keynotes covered dspy, which reminded me I've been meaning to see if it could help me improve the system prompt used by Datasette Agent - so I fired off an asynchronous research task in Claude Code for web using Claude Fable 5:\n\nPip install the latest Datasette alpha and datasette-agent and dspy - then figure out how to use dspy to evaluate and improve the main system prompts used by Datasette Agent for the feature where it can execute read only SQL queries to answer user qu",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-02T18:25:00+00:00",
+      "firstSeen": "2026-07-02T19:00:01.635006+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.4723,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Using DSPy to evaluate and improve Datasette Agent's SQL system prompts",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "using-dspy-evaluate-improve-datasette-agent"
     },
     {
       "title": "US in talks with AI companies over voluntary standards for new models",
@@ -51,7 +82,7 @@
       "lastSeen": "2026-07-02T14:28:43.305092+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.0032,
+      "score": 11.9784,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -81,10 +112,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T12:47:22+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.8018,
+      "score": 11.7757,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -100,6 +131,38 @@
       "imageOriginal": "https://media.thenextweb.com/2026/06/zhipu-ai-office.avif"
     },
     {
+      "title": "Anthropic is discussing a new custom chip with Samsung",
+      "url": "https://techcrunch.com/2026/07/02/anthropic-is-discussing-a-new-custom-chip-with-samsung",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The news comes about a week after OpenAI announced its own custom AI chip in a partnership with Broadcom.",
+      "image": "public/thumbnails/news-25958fdb6bc7a0afed.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-02T18:31:09+00:00",
+      "firstSeen": "2026-07-02T19:00:01.635006+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.2754,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Anthropic is discussing a new custom chip with Samsung",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-discussing-custom-chip-samsung",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2278736523.jpeg?resize=1200%2C798"
+    },
+    {
       "title": "Understand to participate",
       "url": "https://simonwillison.net/2026/Jul/2/understand-to-participate",
       "source": "Simon Willison",
@@ -113,10 +176,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T17:07:14+00:00",
       "firstSeen": "2026-07-02T18:00:01.923822+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3634,
+      "score": 6.334,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -144,10 +207,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T12:00:00+00:00",
       "firstSeen": "2026-07-02T13:00:01.981234+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1211,
+      "score": 6.0956,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -175,10 +238,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T12:38:42+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 5.8979,
+      "score": 5.872,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -207,10 +270,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T06:13:49+00:00",
       "firstSeen": "2026-07-02T07:00:01.243696+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7972,
+      "score": 5.7755,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -239,10 +302,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T11:48:30+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.7762,
+      "score": 5.7508,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -270,10 +333,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T15:20:51+00:00",
       "firstSeen": "2026-07-02T16:00:01.671434+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.2119,
+      "score": 5.1839,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -286,6 +349,38 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "openai-openai-proposed-donating-equity-sovereign"
+    },
+    {
+      "title": "Meta quietly launches vibe-coded gaming app Pocket",
+      "url": "https://techcrunch.com/2026/07/02/meta-quietly-launches-vibe-coded-gaming-app-pocket",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Meta has quietly launched Pocket, an experimental AI app that lets users generate and share interactive mini games using text prompts.",
+      "image": "public/thumbnails/news-3f3ee8b6e2903bd8d1.webp",
+      "featuredLatest": false,
+      "published": "2026-07-02T18:44:02+00:00",
+      "firstSeen": "2026-07-02T19:00:01.635006+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.1819,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Meta quietly launches vibe-coded gaming app Pocket",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "meta-meta-quietly-launches-vibe-coded-gaming",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/06/Meta-image.jpg?w=1024"
     },
     {
       "title": "OpenAI floats giving Trump administration 5 percent cut of AI boom",
@@ -301,10 +396,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T10:23:27+00:00",
       "firstSeen": "2026-07-02T11:00:01.644025+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.1504,
+      "score": 5.126,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -332,10 +427,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T11:12:09+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.0607,
+      "score": 5.0358,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -366,7 +461,7 @@
       "lastSeen": "2026-07-02T13:00:01.981234+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.9467,
+      "score": 4.9222,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -398,7 +493,7 @@
       "lastSeen": "2026-07-02T11:00:01.644025+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.8902,
+      "score": 4.8672,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -425,9 +520,9 @@
       "summary": "Two threads today: the industry's frantic hunt for cheaper inference — from OpenAI's secret 50% trick to Base44's own model — and the return of Fable 5 after 19 days offline. NLW closes with a practical guide to what you should actually try Fable on first.",
       "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
       "featuredLatest": false,
-      "published": "2026-07-02T18:00:10.360929+00:00",
+      "published": "2026-07-02T19:00:08.652548+00:00",
       "firstSeen": "2026-07-01T14:26:06.831755+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 4.632,
@@ -458,10 +553,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T17:50:23+00:00",
       "firstSeen": "2026-07-02T18:00:01.923822+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.4531,
+      "score": 4.4231,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -473,103 +568,7 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "best-practices-multi-turn-reinforcement-learning-amazon",
-      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/02/ml-21260.png"
-    },
-    {
-      "title": "Ubisoft taps ex-Amazon Games chief to run its Tom Clancy studio",
-      "url": "https://thenextweb.com/news/ubisoft-christoph-hartmann-tom-clancy-creative-house-2",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Ubisoft has hired Christoph Hartmann, until recently vice president of Amazon Games, to run the division that controls its Tom Clancy properties. He takes over as general manager of Creative House 2, the unit built around The Division, Ghost Recon and Splinter Cell, according to Ubisoft’s own statement. The appointment lands at a delicate moment for [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-799658a0ac2c315cc0.avif",
-      "featuredLatest": false,
-      "published": "2026-07-02T08:51:55+00:00",
-      "firstSeen": "2026-07-02T10:00:01.980548+00:00",
-      "lastSeen": "2026-07-02T11:00:01.644025+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.4035,
-      "signalGroup": "Media generation",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Ubisoft taps ex-Amazon Games chief to run its Tom Clancy studio",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "ubisoft-taps-ex-amazon-games-chief-run",
-      "imageOriginal": "https://media.thenextweb.com/2026/06/claude-guillemot-ubisoft-co-founder-dies-plane-crash-69.avif"
-    },
-    {
-      "title": "SK Hynix will spend $51bn on a new NAND factory to catch the AI memory wave",
-      "url": "https://thenextweb.com/news/sk-hynix-51-billion-nand-factory-cheongju-2029",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "SK Hynix will spend 80 trillion won, or roughly $51.46 billion, building a new NAND flash memory factory in Cheongju, South Korea, with production targeted to begin in the first half of 2029. Chief executive Kwak Noh-jung announced the plan at an event attended by President Lee Jae Myung, folding the new fab, called M17, [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-c1c51ad8c37c374a9e.avif",
-      "featuredLatest": false,
-      "published": "2026-07-02T09:22:58+00:00",
-      "firstSeen": "2026-07-02T10:00:01.980548+00:00",
-      "lastSeen": "2026-07-02T12:00:01.599273+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.3158,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "SK Hynix will spend $51bn on a new NAND factory to catch the AI memory wave",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "hynix-will-spend-51bn-nand-factory",
-      "imageOriginal": "https://media.thenextweb.com/2026/06/SK-Hynix.avif"
-    },
-    {
-      "title": "Skill engineering and the case against one-shot AI design",
-      "url": "https://www.latent.space/p/skill-engineering-design",
-      "source": "Latent Space",
-      "sourceUrl": "https://www.latent.space/feed",
-      "sourceWeight": 0.86,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Paul Bakaus talks to us about Impeccable, human judgment in a 'loopmaxxing' era, and why agents still need people to steer them.",
-      "image": "https://substackcdn.com/image/fetch/$s_!JOvz!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1c23df3d-275c-48a8-a914-994c53dcd352_1280x720.jpeg",
-      "featuredLatest": false,
-      "published": "2026-07-02T14:36:05+00:00",
-      "firstSeen": "2026-07-02T15:00:01.513224+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.9049,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Skill engineering and the case against one-shot AI design",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Latent Space."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "skill-engineering-case-against-one-shot-design"
+      "clusterKey": "best-practices-multi-turn-reinforcement-learning-amazon"
     }
   ],
   "tools": [
@@ -587,11 +586,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.402,
+      "score": 14.394,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -607,40 +606,6 @@
       "toolLabel": "Claude Sonnet 5",
       "toolSummary": "AI that plans, acts, and gets work done",
       "clusterKey": "claude-claude-sonnet"
-    },
-    {
-      "title": "Gemini Omni Flash",
-      "url": "https://www.producthunt.com/products/gemini-omni-flash",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "High-quality video generation and conversational editing\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
-      "featuredLatest": false,
-      "published": "2026-06-30T20:22:29+00:00",
-      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 7.5177,
-      "signalGroup": "Media generation",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Gemini Omni Flash",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Gemini Omni Flash",
-      "toolLabel": "Gemini Omni Flash",
-      "toolSummary": "High-quality video generation and conversational editing",
-      "clusterKey": "gemini-gemini-omni-flash"
     },
     {
       "title": "Gemini Spark",
@@ -659,7 +624,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5154,
+      "score": 7.5152,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -677,6 +642,40 @@
       "clusterKey": "gemini-gemini-spark"
     },
     {
+      "title": "Gemini Omni Flash",
+      "url": "https://www.producthunt.com/products/gemini-omni-flash",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "High-quality video generation and conversational editing\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
+      "featuredLatest": false,
+      "published": "2026-06-30T20:22:29+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.5092,
+      "signalGroup": "Media generation",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Gemini Omni Flash",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Gemini Omni Flash",
+      "toolLabel": "Gemini Omni Flash",
+      "toolSummary": "High-quality video generation and conversational editing",
+      "clusterKey": "gemini-gemini-omni-flash"
+    },
+    {
       "title": "Claude Science",
       "url": "https://www.producthunt.com/products/claude-for-desktop",
       "source": "Product Hunt AI",
@@ -690,10 +689,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5005,
+      "score": 7.4925,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -724,10 +723,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0524,
+      "score": 7.0484,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -791,10 +790,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 4.9819,
+      "score": 4.9635,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -860,11 +859,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.402,
+      "score": 14.394,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -880,40 +879,6 @@
       "toolLabel": "Claude Sonnet 5",
       "toolSummary": "AI that plans, acts, and gets work done",
       "clusterKey": "claude-claude-sonnet"
-    },
-    {
-      "title": "Gemini Omni Flash",
-      "url": "https://www.producthunt.com/products/gemini-omni-flash",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "High-quality video generation and conversational editing\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
-      "featuredLatest": false,
-      "published": "2026-06-30T20:22:29+00:00",
-      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 7.5177,
-      "signalGroup": "Media generation",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Gemini Omni Flash",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Gemini Omni Flash",
-      "toolLabel": "Gemini Omni Flash",
-      "toolSummary": "High-quality video generation and conversational editing",
-      "clusterKey": "gemini-gemini-omni-flash"
     },
     {
       "title": "Gemini Spark",
@@ -932,7 +897,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5154,
+      "score": 7.5152,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -950,6 +915,40 @@
       "clusterKey": "gemini-gemini-spark"
     },
     {
+      "title": "Gemini Omni Flash",
+      "url": "https://www.producthunt.com/products/gemini-omni-flash",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "High-quality video generation and conversational editing\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-e50dafc764f27ae111.avif",
+      "featuredLatest": false,
+      "published": "2026-06-30T20:22:29+00:00",
+      "firstSeen": "2026-07-01T08:00:01.990182+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.5092,
+      "signalGroup": "Media generation",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Gemini Omni Flash",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Gemini Omni Flash",
+      "toolLabel": "Gemini Omni Flash",
+      "toolSummary": "High-quality video generation and conversational editing",
+      "clusterKey": "gemini-gemini-omni-flash"
+    },
+    {
       "title": "Claude Science",
       "url": "https://www.producthunt.com/products/claude-for-desktop",
       "source": "Product Hunt AI",
@@ -963,10 +962,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5005,
+      "score": 7.4925,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -997,10 +996,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0524,
+      "score": 7.0484,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1064,10 +1063,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-02T18:00:01.923822+00:00",
+      "lastSeen": "2026-07-02T19:00:01.635006+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 4.9819,
+      "score": 4.9635,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1127,7 +1126,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1137,7 +1136,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1147,7 +1146,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1157,7 +1156,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1167,7 +1166,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 814,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1177,7 +1176,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1187,7 +1186,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1197,7 +1196,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1207,7 +1206,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1217,7 +1216,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1227,7 +1226,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1237,7 +1236,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "The Next Web",
@@ -1247,7 +1246,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1257,7 +1256,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1267,7 +1266,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1277,7 +1276,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1287,7 +1286,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1297,7 +1296,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 234,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1307,7 +1306,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1317,7 +1316,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1327,7 +1326,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1337,7 +1336,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Latent Space",
@@ -1347,7 +1346,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Import AI",
@@ -1357,7 +1356,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1367,7 +1366,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 156,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1377,7 +1376,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1387,7 +1386,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1397,7 +1396,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1407,7 +1406,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1417,7 +1416,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1427,7 +1426,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1437,7 +1436,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-02T18:00:01.923822+00:00"
+      "checkedAt": "2026-07-02T19:00:01.635006+00:00"
     }
   ],
   "errors": []
