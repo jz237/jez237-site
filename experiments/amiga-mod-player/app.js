@@ -211,8 +211,14 @@ function updateFavoriteControls() {
   refs.miniFavBtn.setAttribute("aria-pressed", active ? "true" : "false");
 }
 
+// The GitHub Pages mirror excludes the 3+ GB audio/ directory (Pages artifact
+// size limit), so MP3 soundtrack tracks are fetched from the canonical site.
+const REMOTE_AUDIO_BASE = "https://jez237.com/experiments/amiga-mod-player/";
+const useRemoteAudio = window.location.hostname.endsWith("github.io");
+
 function trackUrl(track) {
-  return new URL(track.path, PLAYER_BASE).href;
+  const base = useRemoteAudio && isAudioTrack(track) ? REMOTE_AUDIO_BASE : PLAYER_BASE;
+  return new URL(track.path, base).href;
 }
 
 function renderSeekPosition(seconds) {
