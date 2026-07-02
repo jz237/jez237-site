@@ -358,5 +358,41 @@
       "description": "A fictional roseate spoonbill + glass frog hybrid photographed in its dawn reed-marsh habitat.",
       "continuity": "Same adult phenotype across both images: tall dawn-marsh wader combining spoonbill stilt legs, spoon bill, rose feather fans, translucent glass-frog belly, sticky toe pads, lime wet skin, and gold side-set eyes."
     }
+  },
+  {
+    "id": "2026-07-02-hybrid-creature-infographic-amberglass-sailor-development-m",
+    "title": "Amberglass Sailor: Development Map",
+    "tests": "Hybrid creature development-map infographic for a fictional Portuguese man o war siphonophore + flying fish strain.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional two-source hybrid creature named \"Amberglass Sailor\", using exactly two source organisms: Portuguese man o war siphonophore + flying fish. Make it a landscape scientific wall chart assembled on a sunlit pelagic field-station bench with a source-trait map, juvenile-to-adult stage strip, central adult specimen panel, macro sail/fin/scale/tendril texture panels, open-ocean habitat swatches, and a field-context scale vignette. The adult phenotype is a low horizontal ocean-surface animal with a glassy amber gas-sail crest, streamlined silver-blue body, broad flying-fish pectoral outriggers, forked tail, armored head scales, and cobalt-violet ribbon tendrils trailing beneath the belly. Keep it fictional and non-actionable, with concise labels only and no real genetics, protocols, surgery, gore, logos, or dense paragraphs.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Amberglass Sailor; [SOURCE_A] = Portuguese man o war siphonophore; [SOURCE_B] = flying fish; [HABITAT] = open tropical blue water beside floating sargassum after a dawn squall; adult phenotype = low horizontal ocean-surface glider with glassy amber gas-sail crest, blue-violet trailing tendril ribbons, streamlined silver-blue flying-fish body, broad pectoral fins, forked tail, armored head scales, and sunlit salt spray.",
+    "image": "images/2026-07-02-hybrid-creature-infographic-amberglass-sailor-development-m.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Amberglass Sailor",
+      "imageKind": "infographic",
+      "description": "A fictional Portuguese man o war siphonophore + flying fish hybrid with a glassy sail crest, blue tendril ribbons, flying-fish fins, and a skimming ocean-surface body.",
+      "continuity": "Same adult open-ocean phenotype across both images: glassy amber gas-sail crest, silver-blue fish body, broad pectoral outriggers, forked tail, armored head scales, and cobalt-violet trailing tendrils."
+    }
+  },
+  {
+    "id": "2026-07-02-hybrid-creature-wild-amberglass-sailor-in-the-wild",
+    "title": "Amberglass Sailor: In the Wild",
+    "tests": "Hybrid creature wild field photo matching the fictional Portuguese man o war siphonophore + flying fish development map.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Amberglass Sailor\", a clearly fictional two-source hybrid of Portuguese man o war siphonophore + flying fish, skimming across open tropical blue water beside floating sargassum after a dawn squall. Preserve the exact adult phenotype from the development map: a low horizontal ocean-surface animal, not humanoid, with a clear amber glassy gas-sail crest rising above a streamlined silver-blue fishlike torso, two broad flying-fish pectoral fins spread like wet outriggers just above the wave surface, a short forked tail slicing a wake, armored head scales catching sun glitter, and a veil of cobalt-violet ribbon tendrils trailing harmlessly beneath the belly in the water. Show it moving left to right at wave height, lifting slightly on wind ripple, with beads of salt spray on the sail, translucent fin rays, iridescent membrane edges, sargassum pieces for scale, small flying droplets, early amber sunlight, deep blue water, distant low squall cloud, and realistic long-lens wildlife camera imperfections. No labels, no text, no people, no boat, no lab setting, no gore, no logos, no watermark, no costume look, no pure jellyfish or pure fish result; it must visibly combine Portuguese man o war traits and flying fish traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Amberglass Sailor; [SOURCE_A] = Portuguese man o war siphonophore; [SOURCE_B] = flying fish; [HABITAT] = open tropical blue water beside floating sargassum after a dawn squall; shared adult phenotype = low horizontal ocean-surface glider with glassy amber gas-sail crest, cobalt-violet tendril ribbons, silver-blue fish body, broad pectoral fins, forked tail, armored head scales, and salt-spray-lit skimming motion.",
+    "image": "images/2026-07-02-hybrid-creature-wild-amberglass-sailor-in-the-wild.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Amberglass Sailor",
+      "imageKind": "wild",
+      "description": "A fictional Portuguese man o war siphonophore + flying fish hybrid with a glassy sail crest, blue tendril ribbons, flying-fish fins, and a skimming ocean-surface body.",
+      "continuity": "Same adult open-ocean phenotype across both images: glassy amber gas-sail crest, silver-blue fish body, broad pectoral outriggers, forked tail, armored head scales, and cobalt-violet trailing tendrils."
+    }
   }
 ]
