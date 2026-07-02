@@ -191,6 +191,97 @@ const browser = await chromium.launch({
   await ctx.close();
 }
 
+// ---------- v3 features: colliders, rails, water, audio, season, minimap, traffic ----------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+
+  // collider audit: no static collider may block a road at ground level
+  const audit = await page.evaluate(() => window.__steelRibbonDebug.colliderAudit());
+  const hard = audit.blockers.filter((b) => b.overlap > 2.6);
+  const badKinds = audit.blockers.filter((b) => ["rock", "tree", "water"].includes(b.kind));
+  check("no road-blocking colliders", hard.length === 0 && badKinds.length === 0, `hard=${hard.length} kinds=${badKinds.length} of ${audit.total}`);
+
+  const sc = await page.evaluate(() => window.__steelRibbonDebug.sceneryCounters());
+  check("guardrails built", sc.railRuns >= 4 && sc.railPosts > 150, `runs=${sc.railRuns} posts=${sc.railPosts}`);
+  check("city ponds placed", sc.cityPonds >= 2, `cityPonds=${sc.cityPonds}`);
+
+  // menu cinematic shows the car
+  const mv = await page.evaluate(() => window.__steelRibbonDebug.viewInfo());
+  check("menu cinematic shows car", mv.carVisible === true, JSON.stringify({ carVisible: mv.carVisible }));
+
+  // audio boots after a gesture
+  await page.mouse.click(500, 500);
+  await page.waitForTimeout(1200);
+  const ai = await page.evaluate(() => window.__steelRibbonDebug.audioInfo());
+  check("audio running with all layers", !!ai && ai.state === "running" && ai.engine && ai.fx && ai.music, JSON.stringify(ai));
+
+  // rendering sanity
+  const ri = await page.evaluate(() => window.__steelRibbonDebug.renderInfo());
+  check("rendering active", ri.calls > 100 && ri.triangles > 50000, `calls=${ri.calls} tris=${ri.triangles}`);
+
+  // traffic models keep their wheels
+  const ti = await page.evaluate(() => window.__steelRibbonDebug.trafficInfo());
+  check("traffic cars have wheels", ti.wheels >= 4, JSON.stringify(ti));
+
+  // water: drive into a city pond — deep drag but never a dead stop
+  const pondsList = await page.evaluate(() => window.__steelRibbonDebug.listPonds());
+  const cityPond = pondsList.find((p) => p.rx < 50);
+  if (cityPond) {
+    await page.locator("#roamBtn").click();
+    await page.waitForTimeout(700);
+    await page.evaluate(
+      ([x, z]) => window.__steelRibbonDebug.setRoamPos(x, z, 0, 70),
+      [cityPond.x, cityPond.z + cityPond.rz + 20],
+    );
+    await page.keyboard.down("ArrowUp");
+    let maxDepth = 0,
+      minDeepSpeed = 999;
+    for (let i = 0; i < 60; i++) {
+      await page.waitForTimeout(250);
+      const t = await page.evaluate(() => ({
+        d: window.__steelRibbonTelemetry.waterDepth || 0,
+        s: Math.abs(window.__steelRibbonTelemetry.speed),
+      }));
+      maxDepth = Math.max(maxDepth, t.d);
+      if (t.d > 0.5) minDeepSpeed = Math.min(minDeepSpeed, t.s);
+      if (maxDepth > 0.5 && i > 30) break;
+    }
+    await page.keyboard.up("ArrowUp");
+    check("pond drags but never traps", maxDepth > 0.5 && minDeepSpeed > 2 && minDeepSpeed < 30, `depth=${maxDepth.toFixed(2)} minSpeed=${minDeepSpeed.toFixed(1)}`);
+    const mmVis = await page.locator("#minimap").isVisible();
+    check("minimap visible in roam", mmVis);
+  } else check("pond drags but never traps", false, "no city pond found");
+
+  // season: one race start-to-finish awards points
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+  await page.evaluate(() => window.__steelRibbonDebug.resetSeason());
+  await page.locator("#startBtn").click();
+  await page.waitForTimeout(800);
+  await page.keyboard.down("ArrowUp");
+  await page.evaluate(() => {
+    const info = window.__steelRibbonDebug.courseInfo();
+    window.__steelRibbonDebug.setTrackPosition(info.length * info.laps - 40, 110, 0);
+  });
+  const seasonDone = await poll(page, () => window.__steelRibbonTelemetry.mode, (m) => m === "result", 60);
+  await page.keyboard.up("ArrowUp");
+  const si = await page.evaluate(() => window.__steelRibbonDebug.seasonInfo());
+  check(
+    "season race awards points",
+    seasonDone === "result" && si.season?.raceIndex === 1 && si.season?.points?.you > 0,
+    JSON.stringify(si.season?.points),
+  );
+  const mmHidden = await page.locator("#minimap").isHidden();
+  check("minimap hidden outside roam", mmHidden);
+  check("no console errors (v3)", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await ctx.close();
+}
+
 // ---------- mobile ----------
 {
   const ctx = await browser.newContext({ ...devices["iPhone 13"], hasTouch: true });
