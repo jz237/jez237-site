@@ -522,42 +522,57 @@
     };
     var dialKeys = Object.keys(DIAL_RANGES);
     var glides = {};          // key -> { target, rate }
-    var driftTimer = 3;       // first drift kicks in quickly
-    var flipTimer = 16;
+    var driftTimer = 3;       // small wander kicks in quickly
+    var lookTimer = 10;       // first full look change arrives fast
+
+    function pickDifferent(options, current) {
+      var pool = options.filter(function (o) { return o !== current; });
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    // A "look change" re-rolls every slider at once and always flips at least
+    // one clearly visible discrete setting, so the effect keeps reinventing
+    // itself the way randomly playing the Fluid Lab panel does.
+    function newLook() {
+      for (var i = 0; i < dialKeys.length; i++) {
+        var key = dialKeys[i];
+        var range = DIAL_RANGES[key];
+        glides[key] = {
+          target: range[0] + Math.random() * (range[1] - range[0]),
+          rate: 1 / (2 + Math.random() * 3),
+        };
+      }
+      config.MIRROR = pickDifferent(["off", "2-way", "4-way"], config.MIRROR);
+      config.DISPLAY_MODE = Math.random() < 0.78 ? 0 : (Math.random() < 0.5 ? 1 : 3);
+      config.SHADING = Math.random() < 0.75;
+      for (var j = 0; j < emitters.length; j++) {
+        var e = emitters[j];
+        e.orbit = 0.18 + Math.random() * 0.26;
+        if (Math.random() < 0.5) e.dir = -e.dir;
+      }
+    }
 
     function driftDials(dt, energy) {
+      // gentle wander of one or two dials between look changes
       driftTimer -= dt * (1 + energy * 1.5);
       if (driftTimer <= 0) {
-        driftTimer = 6 + Math.random() * 8;
-        var count = 1 + Math.floor(Math.random() * 2);
-        for (var i = 0; i < count; i++) {
-          var key = dialKeys[Math.floor(Math.random() * dialKeys.length)];
-          var range = DIAL_RANGES[key];
-          glides[key] = {
-            target: range[0] + Math.random() * (range[1] - range[0]),
-            rate: 1 / (2 + Math.random() * 3),
-          };
-        }
+        driftTimer = 5 + Math.random() * 6;
+        var key = dialKeys[Math.floor(Math.random() * dialKeys.length)];
+        var range = DIAL_RANGES[key];
+        glides[key] = {
+          target: range[0] + Math.random() * (range[1] - range[0]),
+          rate: 1 / (2 + Math.random() * 3),
+        };
       }
       for (var k in glides) {
         var g = glides[k];
         config[k] += (g.target - config[k]) * Math.min(1, g.rate * dt * 3);
         if (Math.abs(g.target - config[k]) < (DIAL_RANGES[k][1] - DIAL_RANGES[k][0]) * 0.01) delete glides[k];
       }
-      flipTimer -= dt;
-      if (flipTimer <= 0) {
-        flipTimer = 14 + Math.random() * 16;
-        var roll = Math.random();
-        if (roll < 0.45) {
-          var mirrors = ["off", "off", "2-way", "4-way"];
-          config.MIRROR = mirrors[Math.floor(Math.random() * mirrors.length)];
-        } else if (roll < 0.7) {
-          // brief trips into the velocity/vorticity field views, mostly dye
-          var modes = [0, 0, 0, 0, 1, 3];
-          config.DISPLAY_MODE = modes[Math.floor(Math.random() * modes.length)];
-        } else {
-          config.SHADING = Math.random() < 0.75;
-        }
+      lookTimer -= dt * (1 + energy * 0.6);
+      if (lookTimer <= 0) {
+        lookTimer = 15 + Math.random() * 13;
+        newLook();
       }
     }
 
@@ -644,11 +659,12 @@
         splatWithMirror(x, y, dx, dy, color);
       }
       if (!audio.live) {
-        // ambient puffs so the idle screen keeps swirling gently
+        // in silence the fluid settles and the dye fades; just a faint
+        // occasional puff so the panel doesn't stay pure black forever
         idleSplatTimer -= dt;
         if (idleSplatTimer <= 0) {
-          idleSplatTimer = 2.5 + Math.random() * 3;
-          burst(0.12);
+          idleSplatTimer = 9 + Math.random() * 8;
+          burst(0.05);
         }
       }
     }
@@ -827,6 +843,7 @@
       render: render,
       burst: burst,
       resize: resize,
+      config: config, // exposed for debugging/tests
     };
   }
 
