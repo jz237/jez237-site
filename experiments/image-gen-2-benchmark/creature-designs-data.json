@@ -134,5 +134,22 @@
       "description": "A hare-sized mangrove-creek animal with salt-filtering throat fans, stilted mud-sensing toes, and olive-black skin flecked with amber nodules.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-02-creature-design-frostglass-scree-sifter",
+    "title": "Frostglass Scree Sifter",
+    "tests": "Generated via GPT Image 2 CLI; verified exact PNG output path exists and appended through archive script with JPEG conversion and R2 upload.",
+    "prompt": "Design a believable wind-scoured volcanic scree creature called the Frostglass Scree Sifter with heat-sensing chin whiskers, wide pebble-sieving forepaws, and smoky black fur dusted with pale glassy frost scales, shown as a realistic natural-history creature study. Create a finished square documentary wildlife photograph on a high volcanic slope at first thaw: one adult animal about the size of a fox crouches low among black basalt gravel and thin crusts of ice, with a compact arched body, four sturdy legs, enlarged shovel-like forepaws spread flat as they sift pea-sized stones for warm insects, a tapered muzzle with two rows of fine translucent chin whiskers hovering just above steam vents, small wind-folded ears, dark almond eyes protected by pale lids, and dense smoky black fur broken by pale glasslike frost scales along the shoulders, spine, and tail. Include two juveniles tucked behind a fractured pumice block, shallow paw-sift furrows, tiny disturbed beetle trails, orange lichen on basalt, a faint warm vapor plume from a rock crack, ice crystals caught in the whiskers, loose gravel sliding around the feet, and a natural scale cue from a shed whisker beside a pebble. Use cold early light with warm vent glow, shallow documentary depth of field, believable anatomy and weight, tactile fur, frost, basalt, pumice, steam, and gravel textures, and ecological logic that makes the adaptations clear without labels. The image itself should be the finished creature study, not a prompt card: no readable text, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra limbs beyond four legs, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nWhat the reusable visual operation changes or emphasizes: it turns a habitat-and-adaptation brief into a plausible original animal study, emphasizing ecological logic, coherent anatomy, tactile surface detail, scale, and behavior in context.\n\nExample substitution: [HABITAT] = wind-scoured volcanic scree at first thaw; [ADAPTATION 1] = heat-sensing chin whiskers; [ADAPTATION 2] = wide pebble-sieving forepaws; [TEXTURE/COLOR] = smoky black fur dusted with pale glassy frost scales; [LIFE STAGE OR GROUPING] = one adult with two juveniles; [SPECIFIC MICROHABITAT] = black basalt gravel beside warm steam vents and thin ice crusts.",
+    "image": "images/2026-07-02-creature-design-frostglass-scree-sifter.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Frostglass Scree Sifter",
+      "description": "A plausible volcanic scree animal with thermal whiskers, pebble-sieving forepaws, and glassy frost-scale camouflage.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
