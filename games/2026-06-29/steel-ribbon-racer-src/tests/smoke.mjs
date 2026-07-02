@@ -423,6 +423,99 @@ const browser = await chromium.launch({
   await ctx.close();
 }
 
+// ---------- v3.3: vehicle theft (parked + traffic), own-car marker, heli scale ----------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+  await page.locator("#roamBtn").click();
+  await page.waitForTimeout(800);
+
+  let vi = await page.evaluate(() => window.__steelRibbonDebug.vehicleInfo());
+  check("helicopter scaled up", vi.heli && vi.heli.scale >= 1.35, `scale=${vi.heli?.scale}`);
+  check("parked ride spots registered", vi.parkedSpots >= 50, `spots=${vi.parkedSpots}`);
+
+  // Steal a parked car: park own car at a known point, teleport to a spot far away
+  // from it (so E can't just re-enter the own car), press E.
+  const ownAt = await page.evaluate(() => {
+    const d = window.__steelRibbonDebug;
+    d.setRoamPos(80, 320, 0, 0);
+    d.setVehicle("foot"); // parks own car at (80,320)
+    const s = d.nearestParkedSpot(-450, -700);
+    d.setRoamPos(s.x + 2, s.z + 1.5, 0, 0);
+    d.setVehicle("foot");
+    return d.vehicleInfo().parkedCar;
+  });
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(500);
+  vi = await page.evaluate(() => window.__steelRibbonDebug.vehicleInfo());
+  check(
+    "E steals a parked car",
+    vi.drivingStolen && vi.stolen && !vi.stolen.fromTraffic,
+    `drivingStolen=${vi.drivingStolen} stolen=${JSON.stringify(vi.stolen)}`,
+  );
+
+  // Drive the stolen car
+  await page.keyboard.down("KeyW");
+  const stSpeed = await poll(page, () => Math.abs(window.__steelRibbonTelemetry.speed), (s) => s > 5, 80);
+  await page.keyboard.up("KeyW");
+  check("stolen car drives", stSpeed > 5, `speed=${stSpeed && stSpeed.toFixed(1)}`);
+  const stolenType = await page.evaluate(() => window.__steelRibbonTelemetry.stolenType);
+  check("telemetry reports stolen type", stolenType === "compact", `type=${stolenType}`);
+
+  // Exit: stolen ride gets its own parked marker, own car marker survives
+  await poll(page, () => Math.abs(window.__steelRibbonTelemetry.speed), (s) => s < 10, 80);
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(500);
+  vi = await page.evaluate(() => window.__steelRibbonDebug.vehicleInfo());
+  check(
+    "exiting stolen ride marks it parked",
+    vi.vehicle === "foot" && !vi.drivingStolen && !!vi.stolen?.parked,
+    `vehicle=${vi.vehicle} parked=${JSON.stringify(vi.stolen?.parked)}`,
+  );
+  const ownDrift = Math.hypot(vi.parkedCar.x - ownAt.x, vi.parkedCar.z - ownAt.z);
+  check("own-car map marker survives theft", ownDrift < 1, `drift=${ownDrift.toFixed(1)}`);
+
+  // Re-enter the stolen ride
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(500);
+  vi = await page.evaluate(() => window.__steelRibbonDebug.vehicleInfo());
+  check(
+    "E re-enters the stolen ride",
+    vi.vehicle === "car" && vi.drivingStolen && vi.stolen?.parked === null,
+    `vehicle=${vi.vehicle} drivingStolen=${vi.drivingStolen}`,
+  );
+
+  // Jack a moving traffic car: teleport next to the nearest one and steal it
+  const jacked = await poll(
+    page,
+    () => {
+      const d = window.__steelRibbonDebug;
+      let v = d.vehicleInfo();
+      if (v.drivingStolen && v.stolen && v.stolen.fromTraffic) return true;
+      const t = d.nearestTrafficCar(0, -400);
+      if (!t) return false;
+      d.setRoamPos(t.x + 1.5, t.z, 0, 0);
+      d.setVehicle("foot");
+      const tt = d.nearestTrafficCar(t.x + 1.5, t.z);
+      if (tt && tt.d < 6) d.stealNearest();
+      v = d.vehicleInfo();
+      return v.drivingStolen && v.stolen && v.stolen.fromTraffic === true;
+    },
+    (v) => v === true,
+    50,
+    400,
+  );
+  vi = await page.evaluate(() => window.__steelRibbonDebug.vehicleInfo());
+  check("traffic car can be jacked", jacked === true, `stolen=${JSON.stringify(vi.stolen)}`);
+
+  check("no console errors (v3.3)", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await ctx.close();
+}
+
 // ---------- mobile ----------
 {
   const ctx = await browser.newContext({ ...devices["iPhone 13"], hasTouch: true });
