@@ -134,5 +134,22 @@
       "description": "An after-hours laundromat plant nursery rebuilt as luminous stained glass, with lead seams, rippled colored panes, and rainlit reflections.",
       "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls color, edge quality, surface texture, lighting, and composition."
     }
+  },
+  {
+    "id": "2026-07-02-random-image-style-random-rendering-style-low-poly-rainwate",
+    "title": "Random rendering style: Low-Poly Rainwater Garden Pump Room",
+    "tests": "Prompt adherence; low-poly 3D medium clarity; non-paper random style; reusable prompt template included",
+    "prompt": "Create a finished square image of a rooftop rainwater garden pump room rendered as richly detailed low-poly 3D art, not a photograph and not a poster. The scene shows a compact rooftop service alcove after rain with faceted water tanks, angular ceramic planters of herbs and sedges, triangular puddles on dark rubber roofing, copper downspouts feeding a transparent cistern, a small hand pump opened for inspection, polygonal pipe elbows, mesh leaf screens, wet tool trays, coiled hose, basalt stepping pavers, and a skyline reduced to simple faceted silhouettes beyond the parapet. Make the low-poly 3D medium unmistakable: crisp planar geometry, visible polygon facets, bevelled edges, ambient occlusion in corners, matte clay-like surfaces, stylized but precise reflections on water, restrained teal rainwater, copper pipe highlights, moss green plants, warm maintenance lamp glow, and cool gray evening sky. Use an isometric three-quarter composition with dense readable object detail and no readable text, no logos, no watermark, no prompt-card framing, no cinematic movie-still lighting, no flat document layout, and no centered product photo.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls geometry, color behavior, edge quality, texture, lighting, and composition. Include [ENVIRONMENTAL_CONTEXT], [FUNCTIONAL_OBJECTS], [TACTILE_DETAILS], [MATERIAL_TEXTURES], and [LIGHTING_BEHAVIOR]. Keep the finished image as a visual example rather than an instruction card: no readable text, logos, labels, watermarks, prompt framing, flat document layout, cinematic scene framing, or generic centered object display.\n\nExample substitution: [SUBJECT_OR_PLACE] = a rooftop rainwater garden pump room after rain; [STYLE_OR_MEDIUM] = low-poly 3D art; [ENVIRONMENTAL_CONTEXT] = rooftop parapet, faceted skyline, wet rubber roofing, triangular puddles; [FUNCTIONAL_OBJECTS] = water tanks, transparent cistern, copper downspouts, open hand pump, pipe elbows, mesh screens, wet tool trays, coiled hose, ceramic planters; [TACTILE_DETAILS] = crisp polygon facets, bevelled edges, ambient occlusion, matte clay-like surfaces, precise stylized water reflections; [LIGHTING_BEHAVIOR] = warm maintenance lamp glow against a cool gray evening sky.",
+    "image": "images/2026-07-02-random-image-style-random-rendering-style-low-poly-rainwate.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "low-poly 3D art",
+      "description": "A faceted low-poly rooftop rainwater garden pump room with cisterns, copper pipes, wet planters, and maintenance tools.",
+      "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls geometry, color behavior, edge quality, texture, lighting, and composition."
+    }
   }
 ]
