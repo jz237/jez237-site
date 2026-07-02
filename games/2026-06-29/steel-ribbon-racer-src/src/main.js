@@ -38,6 +38,11 @@ import {
   PMREMGenerator,
   Clock,
   MathUtils,
+  ShaderMaterial,
+  RingGeometry,
+} from "three";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
+import {
   Float32BufferAttribute,
   AdditiveBlending,
   SRGBColorSpace,
@@ -57,9 +62,12 @@ import "./style.css";
 
 const Lr = document.querySelector("#game"),
   Qt = new WebGLRenderer({ canvas: Lr, antialias: !0, powerPreference: "high-performance", preserveDrawingBuffer: !0 });
-Qt.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+// Mobile perf trims: the city is draw-call heavy, so phones skip shadows and render at a lower pixel ratio.
+const mobilePerf = (window.matchMedia?.("(pointer: coarse)").matches ?? !1) || window.innerWidth < 720;
+Qt.setPixelRatio(Math.min(window.devicePixelRatio, mobilePerf ? 1.5 : 2));
 Qt.setSize(window.innerWidth, window.innerHeight);
-Qt.shadowMap.enabled = !0;
+Qt.shadowMap.enabled = !mobilePerf;
+Qt.info.autoReset = !1;
 Qt.shadowMap.type = PCFSoftShadowMap;
 Qt.outputColorSpace = SRGBColorSpace;
 Qt.toneMapping = ACESFilmicToneMapping;
@@ -283,8 +291,10 @@ Qe.best.textContent = `Best score ${u.best}`;
 let trackViewMode = localStorage.getItem("steel-ribbon-view") === "cockpit" ? "cockpit" : "chase";
 function applyTrackViewClass() {
   const onTrack = u.mode === "race" || u.mode === "paused" || u.mode === "result";
-  document.body.classList.toggle("chase-mode", onTrack && trackViewMode === "chase");
+  (document.body.classList.toggle("chase-mode", onTrack && trackViewMode === "chase"),
+    document.body.classList.toggle("menu-mode", u.mode === "menu"));
 }
+applyTrackViewClass();
 function toggleTrackView() {
   ((trackViewMode = trackViewMode === "chase" ? "cockpit" : "chase"),
     localStorage.setItem("steel-ribbon-view", trackViewMode),
@@ -327,7 +337,7 @@ function chime(freq = 880, dur = 0.16, type = "triangle", gain = 0.16) {
     o.frequency.exponentialRampToValueAtTime(freq * 1.5, ctx.currentTime + dur),
     g.gain.setValueAtTime(gain, ctx.currentTime),
     g.gain.exponentialRampToValueAtTime(1e-4, ctx.currentTime + dur + 0.05),
-    o.connect(g).connect(ctx.destination),
+    o.connect(g).connect(mi.master || ctx.destination),
     o.start(),
     o.stop(ctx.currentTime + dur + 0.06));
 }
@@ -921,6 +931,60 @@ function Hi(i, e, t, n, s = 8) {
   }
   return g;
 }
+// ─── Water system: animated ripple shader, pond registry, depth query ───
+const ponds = [],
+  waterMats = [];
+function makeWaterMaterial(scale = 1) {
+  const m = new ShaderMaterial({
+    transparent: !0,
+    depthWrite: !1,
+    uniforms: { uTime: { value: 0 }, uScale: { value: scale } },
+    vertexShader: `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`,
+    fragmentShader: `
+      varying vec2 vUv;
+      uniform float uTime;
+      uniform float uScale;
+      void main() {
+        vec2 p = (vUv - 0.5) * 2.0;
+        float r2 = dot(p, p);
+        vec2 q = p * uScale;
+        float w = sin(q.x * 21.0 + uTime * 1.5) * 0.5
+                + sin(q.y * 17.0 - uTime * 1.15) * 0.5
+                + sin((q.x + q.y) * 13.0 + uTime * 2.1) * 0.35
+                + sin(length(q) * 30.0 - uTime * 2.6) * 0.25;
+        vec3 deep = vec3(0.035, 0.1, 0.19);
+        vec3 sky = vec3(0.62, 0.42, 0.36);
+        vec3 col = mix(deep, sky, clamp(0.1 + 0.09 * w + 0.16 * r2, 0.0, 1.0));
+        float sparkle = pow(max(0.0, sin(q.x * 29.0 + q.y * 23.0 + uTime * 3.0) * w), 8.0);
+        col += vec3(1.0, 0.72, 0.45) * sparkle * 0.14;
+        float alpha = 0.94 * smoothstep(1.0, 0.84, r2);
+        gl_FragColor = vec4(col, alpha);
+      }`,
+  });
+  return (waterMats.push(m), m);
+}
+function registerPond(x, z, rx, rz = rx) {
+  ponds.push({ x, z, rx, rz });
+}
+function pondDepthAt(x, z) {
+  let depth = 0,
+    pond = null;
+  for (const p of ponds) {
+    const nx = (x - p.x) / p.rx,
+      nz = (z - p.z) / p.rz,
+      q = nx * nx + nz * nz;
+    if (q < 1) {
+      const d = Math.pow(1 - q, 1.35);
+      d > depth && ((depth = d), (pond = p));
+    }
+  }
+  return { depth, pond };
+}
 const Sa = [],
   Co = [],
   Bd = [];
@@ -984,7 +1048,8 @@ function Wi(i, e, t, n, s, r = 9) {
 function zn(i, e, t, n = 96) {
   for (let s = 0; s < n; s++) {
     const r = i(s);
-    if (Pn(r.x, r.z, e).clearance >= t) return r;
+    // Reject spots on/near road corridors too — rocks and trees must never sit in a driving lane.
+    if (Pn(r.x, r.z, e).clearance >= t && !Hi(r.x, r.z, e * 2, e * 2, 2)) return r;
   }
   return null;
 }
@@ -1394,27 +1459,16 @@ function D1() {
   {
     const h = zn(() => ({ x: -650 + Math.random() * 1300, z: -1200 - Math.random() * 700 }), 170, 60, 50);
     if (h) {
-      const _ = new MeshStandardMaterial({
-          color: 4165552,
-          roughness: 0.12,
-          metalness: 0.35,
-          transparent: !0,
-          opacity: 0.58,
-          depthWrite: !1,
-          side: DoubleSide,
-        }),
-        v = new Mesh(new CircleGeometry(150, 40), _);
+      // The big lake is real, driveable water now (drag + splash) — no invisible wall collider.
+      const v = new Mesh(new CircleGeometry(150, 48), makeWaterMaterial(9));
       ((v.rotation.x = -Math.PI / 2),
         v.position.set(h.x, $i(h.x, h.z, 450, 300) + 0.08, h.z),
         v.scale.set(1.5, 1, 1),
         (v.renderOrder = -4),
         et.add(v),
-        Di.push({ kind: "water", x: h.x, z: h.z, radius: 176, maxY: 90 }),
+        registerPond(h.x, h.z, 222, 148),
         Qi.waterBlockers++,
-        kn("lake", h.x, h.z, 170, 60),
-        Bn(v, (y) => {
-          ((_.opacity = 0.52 + Math.sin(y * 0.8) * 0.035), (v.rotation.z = Math.sin(y * 0.2) * 0.02));
-        }));
+        kn("lake", h.x, h.z, 170, 60));
     }
   }
   const s = new MeshStandardMaterial({ color: 15922422, roughness: 0.5, metalness: 0.2 });
@@ -1714,8 +1768,8 @@ function I1(i, e) {
     }),
     c = new MeshStandardMaterial({ color: 395016, roughness: 0.72, metalness: 0.02 }),
     l = new MeshStandardMaterial({ color: 14147041, roughness: 0.2, metalness: 0.68 }),
-    d = new MeshStandardMaterial({ color: 16774064, roughness: 0.2, emissive: 16765788, emissiveIntensity: 0.82 }),
-    f = new MeshStandardMaterial({ color: 16725033, roughness: 0.22, emissive: 16717325, emissiveIntensity: 0.7 }),
+    d = new MeshStandardMaterial({ color: 16774064, roughness: 0.2, emissive: 16765788, emissiveIntensity: 1.7 }),
+    f = new MeshStandardMaterial({ color: 16725033, roughness: 0.22, emissive: 16717325, emissiveIntensity: 1.45 }),
     p = new Mesh(new BoxGeometry(s.w, s.h, s.l), i === "taxi" ? new MeshStandardMaterial({ color: 16767293, roughness: 0.36, metalness: 0.24 }) : r);
   ((p.position.y = 0.95), t.add(p));
   const m = new Mesh(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2]), s.bus ? o : r);
@@ -1752,19 +1806,27 @@ function I1(i, e) {
     (x.position.set(0, 2.2, -0.35), t.add(x));
   }
   const g = s.l > 6 ? [-s.l * 0.34, 0, s.l * 0.34] : [-s.l * 0.34, s.l * 0.34],
-    M = [];
+    M = [],
+    archMat = new MeshStandardMaterial({ color: 1250072, roughness: 0.86, metalness: 0.04 });
   for (const x of g)
     for (const h of [-s.w * 0.54, s.w * 0.54]) {
       const _ = new Mesh(new CylinderGeometry(0.42, 0.42, 0.36, 14), c);
       ((_.rotation.z = Math.PI / 2), _.position.set(h, 0.45, x), t.add(_), M.push(_));
       const v = new Mesh(new CylinderGeometry(0.18, 0.18, 0.38, 10), l);
       ((v.rotation.z = Math.PI / 2), v.position.set(h, 0.45, x), t.add(v));
+      const arch = new Mesh(new BoxGeometry(0.3, 0.34, 1.12), archMat);
+      (arch.position.set(h * 1.02, 0.72, x), t.add(arch));
     }
+  // bumpers front + rear
+  for (const zc of [-s.l * 0.5 - 0.06, s.l * 0.5 + 0.06]) {
+    const b = new Mesh(new BoxGeometry(s.w * 1.02, 0.24, 0.16), archMat);
+    (b.position.set(0, 0.62, zc), t.add(b));
+  }
   for (const x of [-s.w * 0.28, s.w * 0.28]) {
-    const h = new Mesh(new BoxGeometry(0.42, 0.2, 0.08), d);
-    (h.position.set(x, 0.95, -s.l * 0.52), t.add(h));
-    const _ = new Mesh(new BoxGeometry(0.36, 0.22, 0.08), f);
-    (_.position.set(x, 0.98, s.l * 0.52), t.add(_));
+    const h = new Mesh(new BoxGeometry(0.42, 0.2, 0.1), d);
+    (h.position.set(x, 0.95, -s.l * 0.52 - 0.04), t.add(h));
+    const _ = new Mesh(new BoxGeometry(0.36, 0.22, 0.1), f);
+    (_.position.set(x, 0.98, s.l * 0.52 + 0.04), t.add(_));
   }
   return (
     (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55 }),
@@ -2189,7 +2251,7 @@ function N1() {
   const g = new MeshStandardMaterial({ map: S1(), color: 13097186, roughness: 0.34, metalness: 0.24, envMapIntensity: 1.25, side: DoubleSide }),
     M = new MeshStandardMaterial({ color: 11054244, roughness: 0.62, metalness: 0.04 }),
     x = new MeshStandardMaterial({ color: 13944196, roughness: 0.44, metalness: 0.05, emissive: 3942912, emissiveIntensity: 0.12 }),
-    h = new MeshStandardMaterial({ color: 15855586, roughness: 0.48, metalness: 0.02, emissive: 3158064, emissiveIntensity: 0.1 }),
+    h = new MeshStandardMaterial({ color: 13617592, roughness: 0.56, metalness: 0.02, emissive: 3158064, emissiveIntensity: 0.06 }),
     _ = new MeshStandardMaterial({ color: 15921375, roughness: 0.4, metalness: 0.03, emissive: 2960676, emissiveIntensity: 0.12 }),
     v = new MeshStandardMaterial({ color: 3422266, roughness: 0.58, metalness: 0.48 }),
     y = [],
@@ -2644,9 +2706,24 @@ function N1() {
       Xi("roof-billboard", oe.position.x, oe.position.y + 4.8, oe.position.z));
   }
   const le = [11680564, 3108784, 14205514, 15198700, 3752265, 4164178, 10112944],
-    fe = new BoxGeometry(2.2, 1.4, 4.6),
+    // parked cars: real silhouette (body + cabin) with a separate dark wheel layer, still 2 draw calls total
+    fe = mergeGeometries([
+      new BoxGeometry(2.2, 0.72, 4.6).translate(0, 0.78, 0),
+      new BoxGeometry(1.7, 0.56, 2.15).translate(0, 1.42, -0.22),
+    ]),
+    feWheels = mergeGeometries(
+      [
+        [-1.16, -1.5],
+        [1.16, -1.5],
+        [-1.16, 1.5],
+        [1.16, 1.5],
+      ].map(([wx, wz]) =>
+        new CylinderGeometry(0.36, 0.36, 0.3, 10).rotateZ(Math.PI / 2).translate(wx, 0.38, wz),
+      ),
+    ),
     ae = 130,
-    Ve = new InstancedMesh(fe, new MeshStandardMaterial({ roughness: 0.42, metalness: 0.36 }), ae);
+    Ve = new InstancedMesh(fe, new MeshStandardMaterial({ roughness: 0.42, metalness: 0.36 }), ae),
+    VeW = new InstancedMesh(feWheels, new MeshStandardMaterial({ color: 1512727, roughness: 0.9 }), ae);
   let Re = 0,
     Je = 0;
   for (; Re < ae && Je < ae * 6;) {
@@ -2659,19 +2736,24 @@ function N1() {
         ? r + Math.random() * (s - r)
         : s - Math.round(Math.random() * ((s - r) / a)) * a + (Math.random() < 0.5 ? -1 : 1) * (o * 0.26);
     if (Pn(O, Y, 4).clearance < 2) continue;
-    const j = He(O, Y) + 0.7;
+    const j = He(O, Y) + 0.06;
     (e.position.set(O, j, Y),
       e.quaternion.setFromAxisAngle(on, N ? 0 : Math.PI / 2),
       e.scale.set(1, 1, 1),
       e.updateMatrix(),
       Ve.setMatrixAt(Re, e.matrix),
+      VeW.setMatrixAt(Re, e.matrix),
       Ve.setColorAt(Re, new Color(le[(Math.random() * le.length) | 0])),
       Re++);
   }
   ((Ve.count = Re),
+    (VeW.count = Re),
     (Ve.instanceMatrix.needsUpdate = !0),
+    (VeW.instanceMatrix.needsUpdate = !0),
     Ve.instanceColor && (Ve.instanceColor.needsUpdate = !0),
-    i.add(Ve));
+    (Ve.castShadow = !0),
+    i.add(Ve),
+    i.add(VeW));
   const We = new Map(),
     ge = (N, O) => `${Math.round(N)},${Math.round(O)}`;
   function we(N, O) {
@@ -3295,13 +3377,13 @@ function N1() {
     qs(228, 315, 52, 42, 13, 13390888, { wallColor: 14734010, frontZ: 1, roofH: 6.6 }),
     en(-48, -360, 54, 56, 148, 2439765, 0.58, null, 0),
     en(172, -430, 50, 56, 132, 3817032, 0.66, "OPEN", -1),
-    En(112, 238, 1.35),
-    En(104, 231, 1.05),
-    En(121, 247, 1.15),
-    Ur(112, 227, 0),
+    En(112, 227, 1.35),
+    En(104, 221, 1.05),
+    En(121, 233, 1.15),
+    Ur(112, 217, 0),
     En(50, 292, 1.2),
     En(111, 316, 0.95),
-    En(48, 132, 0.9),
+    En(48, 137, 0.9),
     En(116, 102, 1.05),
     Ur(47, 248, Math.PI / 2),
     Fr(57, 226),
@@ -3393,6 +3475,8 @@ function Vd(
       ie = He(Q.x, Q.z),
       de = Q.y - ie;
     if (de < 3) continue;
+    // Never plant a ramp support in a driving lane — the ramp simply spans the road there.
+    if (Hi(Q.x, Q.z, 3.2, 3.2, 1.2)) continue;
     const pe = new Mesh(new CylinderGeometry(0.9, 1.15, de, 8), W);
     (pe.position.set(Q.x, ie + de / 2, Q.z), i.add(pe), $n.push({ x: Q.x, z: Q.z, hw: 1.3, hd: 1.3, maxY: Q.y - 0.9 }));
   }
@@ -3473,7 +3557,7 @@ function z1() {
         v = ce.width / 2 + 12 + Math.random() * 78,
         y = M.p.x + M.side.x * v * _ + (Math.random() - 0.5) * 16,
         E = M.p.z + M.side.z * v * _ + (Math.random() - 0.5) * 16;
-      if (ka(y, E, 18)) continue;
+      if (ka(y, E, 18) || Hi(y, E, 12, 12, 1.5)) continue;
       const T = He(y, E);
       if (Math.random() < 0.78) {
         const R = 0.7 + Math.random() * 1.5,
@@ -3697,7 +3781,7 @@ function X1() {
     r = new MeshStandardMaterial({ color: 6120040, roughness: 0.5, metalness: 0.6 }),
     a = new MeshStandardMaterial({ color: 5595238, roughness: 0.62, metalness: 0.38, emissive: 462868, emissiveIntensity: 0.18 }),
     o = new MeshStandardMaterial({ color: 14270570, roughness: 0.35, metalness: 0.65 }),
-    c = new MeshStandardMaterial({ color: 2435884, roughness: 0.48, metalness: 0.62 }),
+    c = new MeshStandardMaterial({ color: 7174288, roughness: 0.5, metalness: 0.55, emissive: 2765904, emissiveIntensity: 0.22 }),
     l = new MeshStandardMaterial({ color: 16730929, roughness: 0.5, metalness: 0.1, emissive: 4852740, emissiveIntensity: 0.35 }),
     d = new MeshStandardMaterial({ color: 16773238, roughness: 0.32, metalness: 0.2, emissive: 7097088, emissiveIntensity: 0.18 }),
     f = new MeshStandardMaterial({ color: 4935486, roughness: 0.92, metalness: 0.04 }),
@@ -3728,6 +3812,10 @@ function X1() {
       pe = T ? 0.52 : 0.36,
       ze = [],
       I = [];
+    // The ribbon spans roads without mid-lane pillars: skip the whole support station
+    // when either pylon base would land in a road corridor.
+    for (const _e of [-1, 1])
+      if (Hi(F.x + b.x * _e * ne, F.z + b.z * _e * ne, de * 2.2, de * 2.2, 1.2)) return !1;
     for (const _e of [-1, 1]) {
       const be = F.clone()
         .addScaledVector(b, _e * ne)
@@ -3752,15 +3840,15 @@ function X1() {
     const Z = ze[0].clone();
     Z.y -= 1;
     const K = ze[1].clone();
-    if (((K.y -= 1), gn(i, Me, K, T ? 0.16 : 0.1, c), gn(i, Se, Z, T ? 0.16 : 0.1, c), T)) {
+    if (((K.y -= 1), gn(i, Me, K, T ? 0.18 : 0.14, c), gn(i, Se, Z, T ? 0.18 : 0.14, c), T)) {
       const _e = I[0].clone();
       _e.y += (X - Q) * 0.58;
       const be = I[1].clone();
       ((be.y += (X - Q) * 0.58),
-        gn(i, I[0].clone().setY(Q + 1.2), be, 0.13, c),
-        gn(i, I[1].clone().setY(Q + 1.2), _e, 0.13, c),
-        gn(i, _e, K, 0.13, c),
-        gn(i, be, Z, 0.13, c));
+        gn(i, I[0].clone().setY(Q + 1.2), be, 0.16, c),
+        gn(i, I[1].clone().setY(Q + 1.2), _e, 0.16, c),
+        gn(i, _e, K, 0.16, c),
+        gn(i, be, Z, 0.16, c));
     }
     return (Cc++, !0);
   }
@@ -4174,8 +4262,60 @@ function q1() {
   }
   return (et.add(o), o);
 }
-const es = Gd(),
+// ─── Season: three rivals with distinct pace personalities, points across all four courses ───
+const RIVAL_DEFS = [
+  { key: "crowther", label: "Crowther", body: 13710372, trim: 7740696, lane: 0.02, base: 97, wave: 5, waveFreq: 0.6 },
+  { key: "bishop", label: "Bishop", body: 3244268, trim: 1400130, lane: -0.3, base: 92, wave: 9, waveFreq: 0.95 },
+  { key: "maddock", label: "Maddock", body: 16770387, trim: 5723991, lane: 0.3, base: 91, wave: 6, waveFreq: 0.5 },
+];
+const rivals = RIVAL_DEFS.map((d, idx) => ({
+  ...d,
+  idx,
+  mesh: Gd(d.body, d.trim),
+  distance: -900,
+  s: 0,
+  speed: 58,
+  phase: idx * 2.13,
+  finished: 0,
+  progEl: null,
+}));
+const es = rivals[0].mesh,
   cn = Gd(3108784, 1916782);
+for (const r of rivals) ((r.mesh.visible = !1), et.add(r.mesh));
+function setRivalsVisible(v) {
+  for (const r of rivals) r.mesh.visible = v;
+}
+const SEASON_PTS = [10, 6, 4, 2];
+let season = null;
+try {
+  season = JSON.parse(localStorage.getItem("steel-ribbon-season") || "null");
+} catch {}
+function seasonDivision() {
+  return season?.active ? season.division : Number(localStorage.getItem("steel-ribbon-division") || 4);
+}
+function saveSeason() {
+  localStorage.setItem("steel-ribbon-season", JSON.stringify(season));
+}
+function newSeason() {
+  ((season = {
+    division: seasonDivision(),
+    raceIndex: 0,
+    points: { you: 0, crowther: 0, bishop: 0, maddock: 0 },
+    active: !0,
+  }),
+    saveSeason());
+}
+function divisionName(d) {
+  return ["One", "Two", "Three", "Four"][MathUtils.clamp(d, 1, 4) - 1];
+}
+function seasonStandings() {
+  const rows = [
+    { key: "you", label: "You", pts: season?.points.you ?? 0 },
+    ...RIVAL_DEFS.map((r) => ({ key: r.key, label: r.label, pts: season?.points[r.key] ?? 0 })),
+  ];
+  // Ties put the player last — you start each season at the bottom of the division.
+  return rows.sort((a, b) => b.pts - a.pts || (a.key === "you" ? 1 : b.key === "you" ? -1 : 0));
+}
 cn.visible = !1;
 P1();
 R1();
@@ -4217,6 +4357,69 @@ function pg1() {
   }
   const n = new CanvasTexture(i);
   return ((n.colorSpace = SRGBColorSpace), n);
+}
+function railSkipZone(s, sideSign) {
+  if (Li(s)) return !0;
+  for (const g of ce.gaps) if (s > g.start - 8 && s < g.end + 8) return !0;
+  for (const r of Dr) {
+    if (r.dirSel !== sideSign) continue;
+    if (r.rampType === "on" && r.mergeS != null && s > r.mergeS - 8 && s < r.mergeS + 34) return !0;
+    if (r.rampType === "off" && r.exitS != null && s > r.exitS - 34 && s < r.exitS + 8) return !0;
+  }
+  return !1;
+}
+function buildGuardrails(parent) {
+  const railMat = new MeshStandardMaterial({
+      color: 11253456,
+      roughness: 0.38,
+      metalness: 0.62,
+      emissive: 3821654,
+      emissiveIntensity: 0.32,
+      side: DoubleSide,
+    }),
+    postGeo = new CylinderGeometry(0.09, 0.12, 1.05, 6),
+    postMat = new MeshStandardMaterial({ color: 4210757, roughness: 0.55, metalness: 0.5 }),
+    step = 6;
+  let railRuns = 0,
+    postCount = 0;
+  const postIM = new InstancedMesh(postGeo, postMat, Math.ceil((ce.length / 12) * 2) + 8),
+    dummy = new Object3D();
+  for (const sideSign of [-1, 1]) {
+    const lat = sideSign * (ce.width * 0.5 + 0.55),
+      pos = [],
+      flushRun = (run) => {
+        if (run.length < 2) return;
+        for (let k = 0; k < run.length - 1; k++) {
+          const a = run[k],
+            b = run[k + 1];
+          // rail band 0.55..0.95 above the deck surface — two triangles per segment
+          pos.push(a.x, a.y + 1.12, a.z, b.x, b.y + 1.12, b.z, b.x, b.y + 1.5, b.z);
+          pos.push(a.x, a.y + 1.12, a.z, b.x, b.y + 1.5, b.z, a.x, a.y + 1.5, a.z);
+        }
+        railRuns++;
+      };
+    let run = [];
+    for (let s = 0; s <= ce.length; s += step) {
+      if (railSkipZone(s % ce.length, sideSign)) {
+        (flushRun(run), (run = []));
+        continue;
+      }
+      const c = St(s % ce.length);
+      run.push(c.p.clone().addScaledVector(c.side, lat).addScaledVector(on, 0.58));
+      if (s % 12 === 0) {
+        const pp = run[run.length - 1];
+        (dummy.position.set(pp.x, pp.y + 0.95, pp.z), dummy.updateMatrix(), postIM.setMatrixAt(postCount++, dummy.matrix));
+      }
+    }
+    flushRun(run);
+    if (pos.length) {
+      const g = new BufferGeometry();
+      (g.setAttribute("position", new Float32BufferAttribute(pos, 3)), g.computeVertexNormals());
+      parent.add(new Mesh(g, railMat));
+    }
+  }
+  ((postIM.count = postCount), (postIM.instanceMatrix.needsUpdate = !0), parent.add(postIM));
+  ((qe.railRuns = railRuns), (qe.railPosts = postCount));
 }
 function buildTrackGear() {
   ((boostPads.length = 0), (gapBeaconMats.length = 0));
@@ -4284,6 +4487,7 @@ function buildTrackGear() {
         gapBeaconMats.push(l));
     }
   }
+  buildGuardrails(i);
   return (et.add(i), i);
 }
 Bn(new Object3D(), (i) => {
@@ -4305,6 +4509,7 @@ function cl(i) {
     (Lh = q1()),
     (Dh = z1()),
     (Gh = buildTrackGear()),
+    bakeMinimap(),
     (Qe.trackName.textContent = ce.name),
     Qe.courseName && (Qe.courseName.textContent = ce.name),
     Qe.courseButtons.forEach((e) => {
@@ -4369,6 +4574,102 @@ function Z1() {
     (Ro = i));
 }
 Z1();
+function buildPonds() {
+  const i = new Group(),
+    e = new MeshStandardMaterial({ color: 9075548, roughness: 0.98, metalness: 0.02 });
+  let placed = 0;
+  for (let t = 0; t < 900 && placed < 4; t++) {
+    const n = -560 + Math.random() * 1120,
+      s = -1330 + Math.random() * 1620,
+      r = 15 + Math.random() * 12;
+    if (Hi(n, s, r * 2 + 14, r * 2 + 14, 10)) continue;
+    // A pond under an elevated deck is fine (bridge over water) — just keep off the course centerline
+    // so ground-level ramp mouths never open into deep water.
+    if (Pn(n, s, r).clearance < -6) continue;
+    if (nn.some((c) => Math.hypot(c.x - n, c.z - s) < r + 26)) continue;
+    if (ponds.some((c) => Math.hypot(c.x - n, c.z - s) < c.rx + r + 60)) continue;
+    if (Mn.some((c) => Math.abs(c.x - n) < c.hw + r + 2 && Math.abs(c.z - s) < c.hd + r + 2)) continue;
+    if (
+      Di.some((c) => {
+        const l = c.radius != null ? c.radius : Math.max(c.hw ?? 0, c.hd ?? 0);
+        return Math.hypot(c.x - n, c.z - s) < l + r + 2;
+      })
+    )
+      continue;
+    // visual-only scenery (lawn trees, rocks, fields) lives in the Sa registry, not the collider arrays
+    if (Sa.some((c) => Math.hypot(c.x - n, c.z - s) < (c.radius || 4) + r + 2)) continue;
+    // reject sloped ground — a flat water disc must not clip a hillside
+    const a = He(n, s);
+    if (
+      Math.max(
+        Math.abs(He(n + r, s) - a),
+        Math.abs(He(n - r, s) - a),
+        Math.abs(He(n, s + r) - a),
+        Math.abs(He(n, s - r) - a),
+      ) > 1.7
+    )
+      continue;
+    const o = new Mesh(new RingGeometry(r * 0.96, r * 1.18, 36), e);
+    ((o.rotation.x = -Math.PI / 2), o.position.set(n, a + 0.09, s), (o.renderOrder = -4), i.add(o));
+    const c = new Mesh(new CircleGeometry(r, 36), makeWaterMaterial(Math.max(1.2, r / 13)));
+    ((c.rotation.x = -Math.PI / 2), c.position.set(n, a + 0.15, s), (c.renderOrder = -3), i.add(c));
+    (registerPond(n, s, r * 0.98), placed++);
+  }
+  ((qe.ponds = placed), et.add(i), bakeMinimap());
+}
+buildPonds();
+// Splash droplets + expanding wake rings for water driving.
+const Uw = new MeshBasicMaterial({ color: 10470630, transparent: !0, opacity: 0.8, depthWrite: !1 }),
+  splashPool = Array.from({ length: 42 }, () => {
+    const i = new Mesh(new SphereGeometry(0.14, 6, 5), Uw);
+    return ((i.visible = !1), et.add(i), { mesh: i, life: 0, velocity: new Vector3() });
+  }),
+  Vw = new MeshBasicMaterial({
+    color: 12245225,
+    transparent: !0,
+    opacity: 0.34,
+    depthWrite: !1,
+    side: DoubleSide,
+  }),
+  ringPool = Array.from({ length: 14 }, () => {
+    const i = new Mesh(new RingGeometry(0.82, 1, 28), Vw.clone());
+    return ((i.rotation.x = -Math.PI / 2), (i.visible = !1), et.add(i), { mesh: i, life: 0, maxLife: 1 });
+  });
+function spawnWaterRing(i, e, t = 1) {
+  const n = ringPool.find((s) => s.life <= 0) || ringPool[0];
+  ((n.life = 1),
+    (n.maxLife = 0.9 + t * 0.25),
+    (n.mesh.visible = !0),
+    n.mesh.position.set(i, He(i, e) + 0.22, e),
+    n.mesh.scale.setScalar(1.2 * t));
+}
+function waterSplash(i, e = 40) {
+  const t = Math.min(26, 8 + e * 0.22);
+  for (let n = 0; n < t; n++) {
+    const s = splashPool.find((r) => r.life <= 0) || splashPool[n % splashPool.length];
+    ((s.mesh.visible = !0),
+      s.mesh.position.set(i.x + (Math.random() - 0.5) * 2.4, i.y + 0.3, i.z + (Math.random() - 0.5) * 2.4),
+      s.velocity.set((Math.random() - 0.5) * 8, 2.4 + Math.random() * 3.6, (Math.random() - 0.5) * 8),
+      (s.life = 0.3 + Math.random() * 0.28));
+  }
+  spawnWaterRing(i.x, i.z, 1.6);
+}
+Bn(new Object3D(), (i, e) => {
+  for (const t of splashPool)
+    t.life > 0 &&
+      ((t.life -= e),
+      (t.velocity.y -= 31 * e),
+      t.mesh.position.addScaledVector(t.velocity, e),
+      t.life <= 0 && (t.mesh.visible = !1));
+  for (const t of ringPool)
+    if (t.life > 0) {
+      t.life -= e / t.maxLife;
+      const n = 1 - t.life;
+      (t.mesh.scale.setScalar(t.mesh.scale.x + e * (5 + n * 7)),
+        (t.mesh.material.opacity = 0.34 * t.life),
+        t.life <= 0 && (t.mesh.visible = !1));
+    }
+});
 const Ws = new EffectComposer(Qt);
 Ws.addPass(new RenderPass(et, Xe));
 const Hd = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 0.4, 0.72, 0.86);
@@ -4444,21 +4745,72 @@ const K1 = new MeshStandardMaterial({ color: 16757051, emissive: 16734743, emiss
 let mi = null;
 function Wd() {
   if (mi) return;
-  const i = new AudioContext(),
-    e = i.createOscillator(),
-    t = i.createGain(),
-    n = i.createBiquadFilter();
-  ((e.type = "sawtooth"),
-    (n.type = "lowpass"),
-    (n.frequency.value = 540),
-    (e.frequency.value = 70),
-    (t.gain.value = 1e-4),
-    e.connect(n).connect(t).connect(i.destination),
-    e.start(),
-    (mi = { ctx: i, engine: e, engineGain: t, filter: n, nextNote: 0, beat: 0 }));
+  const ctx = new AudioContext(),
+    master = ctx.createGain();
+  ((master.gain.value = Number(localStorage.getItem("steel-ribbon-vol") ?? 0.8)), master.connect(ctx.destination));
+  // Engine bus: rumble + growl + whine layers through a shared lowpass, driven by the RPM model.
+  const engineFilter = ctx.createBiquadFilter();
+  ((engineFilter.type = "lowpass"), (engineFilter.frequency.value = 540));
+  const engineGain = ctx.createGain();
+  ((engineGain.gain.value = 1e-4), engineFilter.connect(engineGain), engineGain.connect(master));
+  const mkOsc = (type, g) => {
+    const o = ctx.createOscillator(),
+      gn = ctx.createGain();
+    ((o.type = type), (gn.gain.value = g), o.connect(gn), gn.connect(engineFilter), o.start());
+    return { o, g: gn };
+  };
+  const rumble = mkOsc("sawtooth", 0.5),
+    growl = mkOsc("square", 0.26),
+    whine = mkOsc("triangle", 0.1);
+  // Shared looped noise buffer feeds wind, skid and boost layers.
+  const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate),
+    nd = noiseBuf.getChannelData(0);
+  for (let k = 0; k < nd.length; k++) nd[k] = Math.random() * 2 - 1;
+  const mkNoise = (type, freq, q, rate) => {
+    const src = ctx.createBufferSource(),
+      f = ctx.createBiquadFilter(),
+      g = ctx.createGain();
+    ((src.buffer = noiseBuf),
+      (src.loop = !0),
+      (src.playbackRate.value = rate),
+      (f.type = type),
+      (f.frequency.value = freq),
+      (f.Q.value = q),
+      (g.gain.value = 1e-4),
+      src.connect(f),
+      f.connect(g),
+      g.connect(master),
+      src.start());
+    return { filter: f, gain: g };
+  };
+  const wind = mkNoise("bandpass", 900, 0.6, 1),
+    skid = mkNoise("highpass", 1800, 0.8, 0.82),
+    boost = mkNoise("bandpass", 300, 1.4, 0.5);
+  const musicGain = ctx.createGain();
+  ((musicGain.gain.value = 1e-4), musicGain.connect(master));
+  mi = {
+    ctx,
+    master,
+    engine: rumble.o,
+    engineGain,
+    filter: engineFilter,
+    rumble,
+    growl,
+    whine,
+    wind,
+    skid,
+    boost,
+    musicGain,
+    nextNote: 0,
+    beat: 0,
+    prevBoost: !1,
+  };
 }
 function La() {
   (mi || Wd(), mi?.ctx.state === "suspended" && mi.ctx.resume().catch(() => {}));
+}
+function audioOut() {
+  return mi ? mi.master : null;
 }
 function Pc(i) {
   if (!mi) return;
@@ -4469,9 +4821,101 @@ function Pc(i) {
     (t.frequency.value = 55 + i * 2.6),
     n.gain.setValueAtTime(Math.min(0.34, i / 55), e.currentTime),
     n.gain.exponentialRampToValueAtTime(1e-4, e.currentTime + 0.23),
-    t.connect(n).connect(e.destination),
+    t.connect(n).connect(mi.master),
     t.start(),
     t.stop(e.currentTime + 0.24));
+}
+function boostWhoosh() {
+  if (!mi) return;
+  const { ctx: e } = mi,
+    t = e.createOscillator(),
+    n = e.createGain(),
+    s = e.createBiquadFilter();
+  ((t.type = "sawtooth"),
+    t.frequency.setValueAtTime(85, e.currentTime),
+    t.frequency.exponentialRampToValueAtTime(310, e.currentTime + 0.45),
+    (s.type = "lowpass"),
+    (s.frequency.value = 900),
+    n.gain.setValueAtTime(0.14, e.currentTime),
+    n.gain.exponentialRampToValueAtTime(1e-4, e.currentTime + 0.55),
+    t.connect(s).connect(n).connect(mi.master),
+    t.start(),
+    t.stop(e.currentTime + 0.6));
+}
+function splatSound() {
+  if (!mi) return;
+  // wet burst: lowpassed noise snap + pitch-dropping blip
+  const e = mi.ctx,
+    n = e.createBiquadFilter(),
+    s = e.createGain(),
+    src = e.createBufferSource();
+  ((src.buffer = miNoiseBuffer()), (src.loop = !1), (src.playbackRate.value = 0.72));
+  ((n.type = "lowpass"), (n.frequency.value = 760));
+  (s.gain.setValueAtTime(0.3, e.currentTime), s.gain.exponentialRampToValueAtTime(1e-4, e.currentTime + 0.2));
+  (src.connect(n), n.connect(s), s.connect(mi.master), src.start(e.currentTime, Math.random() * 1.2, 0.22));
+  const o = e.createOscillator(),
+    g = e.createGain();
+  ((o.type = "sine"),
+    o.frequency.setValueAtTime(300, e.currentTime),
+    o.frequency.exponentialRampToValueAtTime(64, e.currentTime + 0.2),
+    g.gain.setValueAtTime(0.22, e.currentTime),
+    g.gain.exponentialRampToValueAtTime(1e-4, e.currentTime + 0.24),
+    o.connect(g).connect(mi.master),
+    o.start(),
+    o.stop(e.currentTime + 0.26));
+}
+let miNoiseCache = null;
+function miNoiseBuffer() {
+  if (miNoiseCache) return miNoiseCache;
+  const e = mi.ctx,
+    b = e.createBuffer(1, e.sampleRate * 2, e.sampleRate),
+    d = b.getChannelData(0);
+  for (let k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1;
+  return (miNoiseCache = b);
+}
+function waterSplashSound(intensity = 1) {
+  if (!mi) return;
+  const { ctx: e } = mi,
+    src = e.createBufferSource(),
+    f = e.createBiquadFilter(),
+    g = e.createGain();
+  ((src.buffer = miNoiseBuffer()), (src.playbackRate.value = 0.55), (f.type = "lowpass"), (f.frequency.value = 950));
+  (g.gain.setValueAtTime(Math.min(0.32, 0.14 + intensity * 0.08), e.currentTime),
+    g.gain.exponentialRampToValueAtTime(1e-4, e.currentTime + 0.34));
+  (src.connect(f), f.connect(g), g.connect(mi.master), src.start(e.currentTime, Math.random() * 1.2, 0.36));
+}
+// Menu music: minor synthwave arp + bass, scheduled with a lookahead so timing survives frame hitches.
+const Wm = {
+  bass: [55, 55, 43.65, 49],
+  arps: [
+    [220, 261.63, 329.63, 440],
+    [220, 261.63, 329.63, 523.25],
+    [174.61, 220, 261.63, 349.23],
+    [196, 246.94, 293.66, 392],
+  ],
+};
+function playMusicTone(freq, at, dur, type, gain, cutoff) {
+  const { ctx: e } = mi,
+    o = e.createOscillator(),
+    f = e.createBiquadFilter(),
+    g = e.createGain();
+  ((o.type = type), (o.frequency.value = freq), (f.type = "lowpass"), (f.frequency.value = cutoff));
+  (g.gain.setValueAtTime(1e-4, at),
+    g.gain.linearRampToValueAtTime(gain, at + 0.02),
+    g.gain.exponentialRampToValueAtTime(1e-4, at + dur));
+  (o.connect(f), f.connect(g), g.connect(mi.musicGain), o.start(at), o.stop(at + dur + 0.05));
+}
+function musicScheduler() {
+  const { ctx: e } = mi,
+    step = 60 / 92 / 2;
+  mi.nextNote < e.currentTime - 1 && (mi.nextNote = e.currentTime + 0.08);
+  for (; mi.nextNote < e.currentTime + 0.35; ) {
+    const s = mi.beat % 32,
+      bar = (s / 8) | 0;
+    (s % 4 === 0 && playMusicTone(Wm.bass[bar], mi.nextNote, 0.5, "triangle", 0.5, 420),
+      playMusicTone(Wm.arps[bar][s % 4], mi.nextNote, 0.19, "sawtooth", 0.16, 1300));
+    ((mi.nextNote += step), mi.beat++);
+  }
 }
 function Pr(i, e = 18) {
   const t = Math.min(e, mr.length);
@@ -4554,21 +4998,44 @@ function tv(i) {
       (e.mesh.rotation.z += e.spin.z * i),
       e.life <= 0 && (e.mesh.visible = !1));
 }
-function nv(i) {
+function nv() {
   if (!mi) return;
-  const { ctx: e, engine: t, engineGain: n, filter: s } = mi;
-  (t.frequency.setTargetAtTime(
-    62 + u.speed * 2.9 + (_t.has("ShiftLeft") || _t.has("ShiftRight") ? 60 : 0),
-    e.currentTime,
-    0.04,
-  ),
-    s.frequency.setTargetAtTime(480 + u.speed * 9, e.currentTime, 0.08));
-  const r = u.mode === "race" || u.mode === "roam";
-  n.gain.setTargetAtTime(r ? 0.036 + Math.abs(u.speed) / 4200 : 1e-4, e.currentTime, 0.08);
+  const { ctx: e } = mi,
+    t = e.currentTime,
+    active = u.mode === "race" || u.mode === "roam" || u.mode === "paused",
+    rpm = u.tachRpm || 900,
+    load = MathUtils.clamp((rpm - 900) / 6600, 0, 1),
+    sp = Math.abs(u.speed),
+    wet = u.mode === "roam" ? u.waterDepth || 0 : 0,
+    f = 46 + load * 142;
+  (mi.rumble.o.frequency.setTargetAtTime(f, t, 0.03),
+    mi.growl.o.frequency.setTargetAtTime(f * 1.5 + 3.2, t, 0.03),
+    mi.whine.o.frequency.setTargetAtTime(f * 4.03, t, 0.03),
+    mi.whine.g.gain.setTargetAtTime(0.04 + load * 0.17, t, 0.08),
+    mi.filter.frequency.setTargetAtTime((420 + load * 2400 + sp * 5) * (1 - 0.6 * wet), t, 0.06),
+    mi.engineGain.gain.setTargetAtTime(
+      (active && u.mode !== "paused" ? 0.05 + load * 0.052 : 1e-4) * (1 - 0.42 * wet),
+      t,
+      0.07,
+    ));
+  (mi.wind.gain.gain.setTargetAtTime(active ? Math.min(0.1, Math.max(0, (sp - 55) / 850)) : 1e-4, t, 0.15),
+    mi.wind.filter.frequency.setTargetAtTime(700 + sp * 8, t, 0.12));
+  const slip = u.mode === "roam" ? u.roamSlip : u.grounded ? Math.min(1, Math.abs(u.lateralVel) / 15) : 0;
+  mi.skid.gain.gain.setTargetAtTime(active && slip > 0.32 ? (slip - 0.32) * 0.15 : 1e-4, t, 0.09);
+  (u.boosting && !mi.prevBoost && boostWhoosh(),
+    (mi.prevBoost = !!u.boosting),
+    mi.boost.gain.gain.setTargetAtTime(active && u.boosting ? 0.15 : 1e-4, t, u.boosting ? 0.05 : 0.22),
+    mi.boost.filter.frequency.setTargetAtTime(u.boosting ? 420 + sp * 3 : 260, t, 0.1));
+  (mi.musicGain.gain.setTargetAtTime(u.mode === "menu" ? 0.16 : 0.028, t, 0.5), musicScheduler());
 }
-function Va(i = !1, e = !1) {
-  (Wd(), _t.clear(), Ia());
+function Va(i = !1, e = !1, seasonRace = !1) {
+  (Wd(), La(), _t.clear(), Ia());
   const t = i || e;
+  u.seasonRace = seasonRace && !t;
+  for (let ri = 0; ri < rivals.length; ri++) {
+    const r = rivals[ri];
+    ((r.distance = t ? -900 : -26 - ri * 7), (r.finished = 0), (r.mesh.visible = !t));
+  }
   Object.assign(u, {
     mode: "race",
     practice: t,
@@ -4647,7 +5114,7 @@ function Yd() {
   for (const s of nn) s.collected = !1;
   ((u.message = ""),
     (u.messageTimer = 0),
-    (es.visible = !1),
+    (setRivalsVisible(!1)),
     (cn.visible = !0),
     qn && (qn.visible = !1),
     document.body.classList.add("roam-mode"),
@@ -4667,7 +5134,11 @@ function Yd() {
     Xe.updateProjectionMatrix());
 }
 function zs() {
-  (cn.position.set(u.roamPos.x, u.roamPos.y + 0.3 - u.roamSuspension * 0.45, u.roamPos.z),
+  (cn.position.set(
+    u.roamPos.x,
+    u.roamPos.y + 0.3 - u.roamSuspension * 0.45 - (u.waterDepth || 0) * 0.38,
+    u.roamPos.z,
+  ),
     cn.quaternion.setFromAxisAngle(on, -u.roamYaw),
     cn.rotateZ(-u.wheelSteer * MathUtils.clamp(Math.abs(u.speed) / 90, 0, 1) * 0.1),
     cn.rotateX(MathUtils.clamp(u.roamSuspension, -0.16, 0.22)));
@@ -4769,7 +5240,7 @@ function Ih(i) {
     (u.message = "Merged onto the ribbon"),
     (u.messageTimer = 1.6),
     (u.cameraShake = Math.max(u.cameraShake, 0.35)),
-    (es.visible = !1),
+    (setRivalsVisible(!1)),
     (cn.visible = !1),
     qn && (qn.visible = !0),
     document.body.classList.remove("roam-mode"),
@@ -4804,7 +5275,7 @@ function iv(i) {
     (u.message = "Exited to city streets"),
     (u.messageTimer = 1.25),
     (u.cameraShake = Math.max(u.cameraShake, 0.22)),
-    (es.visible = !1),
+    (setRivalsVisible(!1)),
     (cn.visible = !0),
     qn && (qn.visible = !1),
     document.body.classList.add("roam-mode"),
@@ -4838,12 +5309,96 @@ function publishRoamTelemetry() {
     yVel: u.yVel,
     grounded: !0,
     objectiveHits: u.objectiveHits,
+    waterDepth: +(u.waterDepth || 0).toFixed(3),
     roamPos: { x: u.roamPos.x, y: u.roamPos.y, z: u.roamPos.z },
     input: { steer: Fe.steer, throttle: Fe.throttle, brake: Fe.brake },
     forwardWorld: { x: Math.sin(u.roamYaw), y: 0, z: -Math.cos(u.roamYaw) },
     cameraWorld: { x: i.x, y: i.y, z: i.z },
   };
 }
+// ─── Free-roam minimap: baked road/ribbon map + live gates, traffic and player ───
+// var (not const): bakeMinimap gets called from cl() during module init, before this block runs.
+var minimapCv = document.createElement("canvas");
+((minimapCv.id = "minimap"), (minimapCv.width = 256), (minimapCv.height = 256));
+document.querySelector("#app")?.appendChild(minimapCv);
+var minimapBake = null,
+  mmFrame = 0,
+  MM = { cx: 0, cz: -570, span: 2180 };
+function mmPt(x, z, size) {
+  return [((x - MM.cx) / MM.span + 0.5) * size, ((z - MM.cz) / MM.span + 0.5) * size];
+}
+function bakeMinimap() {
+  if (!MM) return;
+  const size = 512,
+    b = document.createElement("canvas");
+  ((b.width = size), (b.height = size));
+  const c = b.getContext("2d");
+  ((c.fillStyle = "rgba(9, 15, 24, 0.88)"), c.fillRect(0, 0, size, size));
+  ((c.strokeStyle = "rgba(150, 185, 215, 0.5)"), (c.lineWidth = 3), (c.lineCap = "round"));
+  for (let x = di.x0; x <= di.x1 + 1; x += di.pitch) {
+    const [ax, az] = mmPt(x, di.zNear, size),
+      [bx, bz] = mmPt(x, di.zFar, size);
+    (c.beginPath(), c.moveTo(ax, az), c.lineTo(bx, bz), c.stroke());
+  }
+  for (let z = di.zNear; z >= di.zFar - 1; z -= di.pitch) {
+    const [ax, az] = mmPt(di.x0, z, size),
+      [bx, bz] = mmPt(di.x1, z, size);
+    (c.beginPath(), c.moveTo(ax, az), c.lineTo(bx, bz), c.stroke());
+  }
+  ((c.strokeStyle = "rgba(255, 176, 90, 0.85)"), (c.lineWidth = 2.6), c.beginPath());
+  let first = !0;
+  for (const p of kd())
+    if (p.courseIndex === Ma) {
+      const [px, pz] = mmPt(p.x, p.z, size);
+      (first ? c.moveTo(px, pz) : c.lineTo(px, pz), (first = !1));
+    }
+  (c.closePath(), c.stroke());
+  c.fillStyle = "rgba(96, 168, 255, 0.75)";
+  for (const p of ponds) {
+    const [px, pz] = mmPt(p.x, p.z, size);
+    (c.beginPath(), c.ellipse(px, pz, Math.max(3, (p.rx / MM.span) * size), Math.max(3, (p.rz / MM.span) * size), 0, 0, Math.PI * 2), c.fill());
+  }
+  minimapBake = b;
+}
+function updateMinimap() {
+  const roam = u.mode === "roam";
+  if ((minimapCv.style.display = roam ? "block" : "none") && !roam) return;
+  if (!roam || !minimapBake || mmFrame++ % 2) return;
+  const size = minimapCv.width,
+    c = minimapCv.getContext("2d");
+  (c.clearRect(0, 0, size, size), c.drawImage(minimapBake, 0, 0, size, size));
+  for (const r of Dr)
+    if (r.rampType === "on" && r.points?.length) {
+      const p0 = r.points[0],
+        [px, pz] = mmPt(p0.x, p0.z, size);
+      ((c.fillStyle = "#6dff9e"), c.beginPath(), c.arc(px, pz, 4, 0, Math.PI * 2), c.fill());
+    }
+  for (let k = 0; k < nn.length; k++) {
+    const g = nn[k],
+      [px, pz] = mmPt(g.x, g.z, size),
+      next = k === u.objectiveIndex % nn.length;
+    ((c.fillStyle = next ? "#7df1ff" : "rgba(125, 241, 255, 0.35)"),
+      c.beginPath(),
+      c.arc(px, pz, next ? 5.5 + Math.sin(Ch * 5) * 1.4 : 3, 0, Math.PI * 2),
+      c.fill());
+  }
+  c.fillStyle = "rgba(255, 255, 255, 0.8)";
+  for (const t of Ri) {
+    const [px, pz] = mmPt(t.x, t.z, size);
+    c.fillRect(px - 1.4, pz - 1.4, 2.8, 2.8);
+  }
+  const [px, pz] = mmPt(u.roamPos.x, u.roamPos.z, size);
+  (c.save(), c.translate(px, pz), c.rotate(u.roamYaw));
+  ((c.fillStyle = "#ffd45b"),
+    c.beginPath(),
+    c.moveTo(0, -8),
+    c.lineTo(5.2, 6),
+    c.lineTo(-5.2, 6),
+    c.closePath(),
+    c.fill(),
+    c.restore());
+}
+bakeMinimap();
 let gateBeam = null;
 function updateGateBeam() {
   if (!gateBeam) {
@@ -4963,6 +5518,7 @@ function $d(i) {
       (u.cameraShake = Math.max(u.cameraShake, 0.22)),
       (u.message = "SPLAT!"),
       (u.messageTimer = 0.9)),
+    waterPhysics(i, e),
     updateNearMisses(i, x),
     (_ = Ki(u.roamPos.x, u.roamPos.z, u.roamPos.y)),
     (u.roamPos.y = _.y + Wn),
@@ -4970,6 +5526,33 @@ function $d(i) {
       ((_.kind === "track" && Ih(_)) || (sv(), zs(), _t.has("KeyR") && (Yd(), _t.delete("KeyR")))));
 }
 const Xn = 2.6;
+function waterPhysics(dt, prevSpeed) {
+  const prev = u.waterDepth || 0;
+  if (u.roamPos.y > He(u.roamPos.x, u.roamPos.z) + 2.5) {
+    u.waterDepth = 0;
+    return;
+  }
+  const s = pondDepthAt(u.roamPos.x, u.roamPos.z);
+  u.waterDepth = s.depth;
+  if (s.depth <= 0.02) return;
+  // Pure drag, never a wall: terminal speed at full depth is ~7, so the car can always crawl or reverse out.
+  u.speed -= u.speed * (0.85 + 5.2 * s.depth) * s.depth * dt;
+  if (prev <= 0.02 && Math.abs(prevSpeed) > 16)
+    (waterSplash(u.roamPos.clone(), Math.abs(prevSpeed)),
+      waterSplashSound(Math.abs(prevSpeed) / 60),
+      (u.cameraShake = Math.max(u.cameraShake, 0.16)),
+      (u.message = "SPLASH"),
+      (u.messageTimer = 0.7));
+  u.wakeT = (u.wakeT ?? 0) - dt;
+  if (Math.abs(u.speed) > 5 && u.wakeT <= 0) {
+    u.wakeT = 0.15;
+    spawnWaterRing(
+      u.roamPos.x - Math.sin(u.roamYaw) * 1.5,
+      u.roamPos.z + Math.cos(u.roamYaw) * 1.5,
+      0.8 + Math.abs(u.speed) * 0.012,
+    );
+  }
+}
 function updateNearMisses(i, collided) {
   for (const t of Ri) t.actor && t.actor.nearMissT > 0 && (t.actor.nearMissT -= i);
   if (collided || Math.abs(u.speed) < 32 || u.collisionCooldown > 0) return;
@@ -5057,7 +5640,7 @@ function av(i, e, t = 0) {
       : Math.abs(i.x - e.x) < e.hw + t && Math.abs(i.z - e.z) < e.hd + t;
 }
 function ov(i) {
-  ((i.active = !1), (i.respawn = 4.5 + Math.random() * 1.5), (i.mesh.visible = !1), qe.splats++);
+  ((i.active = !1), (i.respawn = 4.5 + Math.random() * 1.5), (i.mesh.visible = !1), qe.splats++, splatSound());
   const e = Ps.find((t) => !t.visible) || Ps[qe.splats % Math.max(1, Ps.length)];
   e &&
     ((e.visible = !0),
@@ -5188,7 +5771,7 @@ function jd(i) {
     (u.cameraShake = Math.max(0, u.cameraShake - i * 2.4)),
     (u.collisionDrama = Math.max(0, u.collisionDrama - i * 1.8)));
 }
-function Qd(i) {
+function Qd(i, placement = null) {
   if (u.mode === "result") return;
   u.mode = "result";
   const e = Math.max(0, Math.round(u.score - u.damage * 9 + Math.max(0, 220 - u.time) * 45));
@@ -5196,6 +5779,32 @@ function Qd(i) {
     (Qe.best.textContent = `Best score ${u.best}`),
     (Qe.resultText.textContent = `${i} Score ${e}. Time ${Dc(u.time)}. Damage ${Math.round(u.damage)}%.`));
   const t = Number.isFinite(u.bestLap) ? Dc(u.bestLap) : "--:--.-";
+  let seasonHtml = "";
+  if (u.seasonRace && season?.active && placement) {
+    // Points by finishing order: player metric is totalDistance, rivals theirs.
+    const order = [
+      { key: "you", metric: u.totalDistance + 0.001 },
+      ...rivals.map((r) => ({ key: r.key, metric: r.distance })),
+    ].sort((a, b) => b.metric - a.metric);
+    order.forEach((o, k) => (season.points[o.key] += SEASON_PTS[k] ?? 0));
+    season.raceIndex++;
+    const done = season.raceIndex >= 4,
+      rows = seasonStandings();
+    if (done) {
+      season.active = !1;
+      const champ = rows[0].key === "you";
+      if (champ && season.division > 1) {
+        localStorage.setItem("steel-ribbon-division", String(season.division - 1));
+        seasonHtml += `<b>🏆 CHAMPION — promoted to Division ${divisionName(season.division - 1)}!</b>`;
+      } else seasonHtml += champ ? "<b>🏆 Season champion!</b>" : `<b>Season over — ${rows[0].label} takes the title.</b>`;
+    }
+    (saveSeason(),
+      (seasonHtml =
+        `<span>Season — after race ${season.raceIndex}/4</span>` +
+        rows.map((r, k) => `<b>${k + 1}. ${r.label} — ${r.pts} pts</b>`).join("") +
+        seasonHtml),
+      (Qe.againBtn.textContent = season.active ? "Next Race" : "Back to Menu"));
+  } else Qe.againBtn.textContent = "Race Again";
   ((Qe.resultStats.innerHTML = `
     <span>Run stats</span>
     <b>Best lap: ${t}</b>
@@ -5203,7 +5812,9 @@ function Qd(i) {
     <b>Hard landings: ${u.hardLandings}</b>
     <b>Recoveries: ${u.recoveries}</b>
     <b>Near edges: ${Math.round(u.nearMisses)}</b>
+    ${seasonHtml}
   `),
+    refreshSeasonUI(),
     Qe.result.classList.remove("hidden"));
 }
 function Uh(i = "Craned back to the ribbon") {
@@ -5295,6 +5906,73 @@ window.__steelRibbonDebug = {
   listBoostPads() {
     return boostPads.map((i) => ({ s: i.s, lat: +i.lat.toFixed(2) }));
   },
+  listPonds() {
+    return ponds.map((i) => ({ x: +i.x.toFixed(1), z: +i.z.toFixed(1), rx: +i.rx.toFixed(1), rz: +i.rz.toFixed(1) }));
+  },
+  seasonInfo() {
+    return {
+      season,
+      division: seasonDivision(),
+      position: racePosition(),
+      seasonRace: !!u.seasonRace,
+      rivals: rivals.map((r) => ({ key: r.key, d: +r.distance.toFixed(1), finished: +r.finished.toFixed(1) })),
+    };
+  },
+  resetSeason() {
+    return (localStorage.removeItem("steel-ribbon-season"), localStorage.removeItem("steel-ribbon-division"), (season = null), refreshSeasonUI(), "reset");
+  },
+  renderInfo() {
+    return {
+      calls: qe.renderCalls || 0,
+      triangles: qe.renderTris || 0,
+      geometries: Qt.info.memory.geometries,
+      textures: Qt.info.memory.textures,
+      mobilePerf,
+    };
+  },
+  trafficInfo() {
+    const m = Ri[0]?.actor?.mesh;
+    return { colliders: Ri.length, wheels: m?.userData?.wheels?.length ?? 0, pedestrians: qe.pedestrians || 0 };
+  },
+  audioInfo() {
+    return mi
+      ? {
+          state: mi.ctx.state,
+          master: +mi.master.gain.value.toFixed(2),
+          engine: !!mi.rumble && !!mi.growl && !!mi.whine,
+          fx: !!mi.wind && !!mi.skid && !!mi.boost,
+          music: !!mi.musicGain,
+          beat: mi.beat,
+        }
+      : null;
+  },
+  colliderAudit() {
+    // Flag any static collider whose footprint pokes into a driveable road corridor at ground level.
+    // A collider blocks ground driving unless its maxY says the car passes underneath it.
+    const roadsX = [],
+      roadsZ = [],
+      halfW = di.streetW * 0.5;
+    for (let x = di.x0; x <= di.x1 + 1; x += di.pitch) roadsX.push(Math.round(x));
+    for (let z = di.zNear; z >= di.zFar - 1; z -= di.pitch) roadsZ.push(Math.round(z));
+    const findings = [];
+    const checkOne = (arrName, idx, c) => {
+      const rx2 = c.radius != null ? c.radius : (c.hw ?? 0),
+        rz2 = c.radius != null ? c.radius : (c.hd ?? 0),
+        ground = He(c.x, c.z);
+      // car clears underneath when collider bottom is elevated: Lo skips if carY > maxY + 0.55 + 0.45
+      if (c.maxY != null && c.maxY < ground + 1.05) return;
+      for (const rx of roadsX)
+        if (Math.abs(c.x - rx) < halfW + rx2 + Xn && c.z < di.zNear + rz2 && c.z > di.zFar - rz2)
+          findings.push({ arr: arrName, idx, kind: c.kind ?? "box", x: +c.x.toFixed(1), z: +c.z.toFixed(1), r: +Math.max(rx2, rz2).toFixed(1), road: `x=${rx}`, overlap: +(halfW + rx2 + Xn - Math.abs(c.x - rx)).toFixed(1) });
+      for (const rz of roadsZ)
+        if (Math.abs(c.z - rz) < halfW + rz2 + Xn && c.x < di.x1 + rx2 && c.x > di.x0 - rx2)
+          findings.push({ arr: arrName, idx, kind: c.kind ?? "box", x: +c.x.toFixed(1), z: +c.z.toFixed(1), r: +Math.max(rx2, rz2).toFixed(1), road: `z=${rz}`, overlap: +(halfW + rz2 + Xn - Math.abs(c.z - rz)).toFixed(1) });
+    };
+    (Mn.forEach((c, i) => checkOne("Mn", i, c)),
+      Di.forEach((c, i) => checkOne("Di", i, c)),
+      $n.forEach((c, i) => checkOne("$n", i, c)));
+    return { total: Mn.length + Di.length + $n.length, blockers: findings };
+  },
   setRoamPos(i, e, t = 0, n = 0) {
     return (
       u.mode !== "roam" && Yd(),
@@ -5307,7 +5985,15 @@ window.__steelRibbonDebug = {
     );
   },
   sceneryCounters() {
-    return { ...Qi, boostPads: boostPads.length, gapBeacons: gapBeaconMats.length };
+    return {
+      ...Qi,
+      boostPads: boostPads.length,
+      gapBeacons: gapBeaconMats.length,
+      railRuns: qe.railRuns || 0,
+      railPosts: qe.railPosts || 0,
+      ponds: ponds.length,
+      cityPonds: qe.ponds || 0,
+    };
   },
   stats() {
     return { trafficCrashes: qe.trafficCrashes, splats: qe.splats, roamPos: { x: +u.roamPos.x.toFixed(1), y: +u.roamPos.y.toFixed(1), z: +u.roamPos.z.toFixed(1) }, speed: +u.speed.toFixed(2), cooldown: +u.collisionCooldown.toFixed(2) };
@@ -5820,7 +6506,13 @@ function eu(i) {
       (u.messageTimer = 1.4),
       !u.practice &&
         u.lap > ce.laps &&
-        Qd(u.totalDistance >= u.rivalDistance ? "You took the chequered gantry." : "You finished behind Crowther."));
+        (() => {
+          const pos = racePosition();
+          Qd(
+            pos === 1 ? "You took the chequered gantry." : `You finished P${pos}.`,
+            pos,
+          );
+        })());
   }
   for (const v of ce.gaps)
     Eh(x, u.totalDistance, v.start) &&
@@ -5854,29 +6546,41 @@ function eu(i) {
     _t.has("KeyR") && ((u.damage = Math.min(99, u.damage + 8)), Uh("Manual reset"), _t.delete("KeyR")));
 }
 function uv(i) {
-  if (u.mode === "race" && !u.practice) {
-    const r = u.totalDistance - u.rivalDistance,
-      a = MathUtils.clamp(r * 0.06, -12, 16),
-      o = Math.sin(u.time * 0.6) * 5;
-    ((u.rivalSpeed = MathUtils.clamp(92 + a + o, 70, 120)),
-      (u.rivalDistance += u.rivalSpeed * i),
-      u.rivalDistance >= ce.length * ce.laps && u.lap <= ce.laps && Qd("Crowther reached the gantry first."));
+  const total = ce.length * ce.laps,
+    divMult = 1 + 0.07 * (4 - seasonDivision());
+  for (const r of rivals) {
+    if (u.mode === "race" && !u.practice) {
+      const gap = u.totalDistance - r.distance,
+        rubber = MathUtils.clamp(gap * 0.055, -11, 15),
+        wave = Math.sin(u.time * r.waveFreq + r.phase) * r.wave;
+      let pace = r.base + wave + rubber;
+      (r.key === "bishop" && (pace += 11 * Math.exp(-u.time / 22)),
+        r.key === "maddock" && (pace += 10 * MathUtils.clamp(r.distance / Math.max(1, total), 0, 1)));
+      ((r.speed = MathUtils.clamp(pace * divMult, 60, 134)), (r.distance += r.speed * i));
+      r.distance >= total &&
+        !r.finished &&
+        ((r.finished = u.time), (u.message = `${r.label} takes the flag`), (u.messageTimer = 1.1));
+    }
+    r.s = ((r.distance % ce.length) + ce.length) % ce.length;
+    const e = St(r.s),
+      gapToPlayer = Math.abs(r.distance - u.totalDistance);
+    let lat = r.lane * ce.width + Math.sin(r.s * 0.02 + r.phase) * 1.2;
+    if (gapToPlayer < 14) {
+      // Side-by-side racing: rivals take the opposite lane instead of ghosting through the player.
+      const dodge = (u.lateral >= 0 ? -1 : 1) * ce.width * (0.22 + Math.abs(r.lane) * 0.4);
+      lat = MathUtils.lerp(dodge, lat, gapToPlayer / 14);
+    }
+    (r.mesh.position.copy(e.p).addScaledVector(on, 1.4).addScaledVector(e.side, lat),
+      r.mesh.quaternion.setFromRotationMatrix(new Matrix4().makeBasis(e.side, on, e.tangent)));
+    const hideClose = gapToPlayer < 26 && trackViewMode === "cockpit";
+    r.mesh.visible =
+      (u.mode === "race" || u.mode === "paused" || u.mode === "result") && !u.practice && !hideClose;
   }
-  u.rivalS = ((u.rivalDistance % ce.length) + ce.length) % ce.length;
-  const e = St(u.rivalS),
-    gapToPlayer = Math.abs(u.rivalDistance - u.totalDistance);
-  let rivalLat = Math.sin(u.rivalS * 0.02) * 1.4;
-  if (gapToPlayer < 14) {
-    // Side-by-side racing: the rival takes the opposite lane instead of ghosting through the player.
-    const dodge = (u.lateral >= 0 ? -1 : 1) * ce.width * 0.26;
-    rivalLat = MathUtils.lerp(dodge, rivalLat, gapToPlayer / 14);
-  }
-  const t = e.p.clone().addScaledVector(on, 1.4).addScaledVector(e.side, rivalLat);
-  es.position.copy(t);
-  const n = new Matrix4().makeBasis(e.side, on, e.tangent);
-  es.quaternion.setFromRotationMatrix(n);
-  const s = Math.abs(u.rivalDistance - u.totalDistance) < 26 && trackViewMode === "cockpit";
-  es.visible = (u.mode === "race" || u.mode === "paused") && !u.practice && !s;
+  ((u.rivalDistance = Math.max(...rivals.map((r) => r.distance))),
+    (u.rivalS = ((u.rivalDistance % ce.length) + ce.length) % ce.length));
+}
+function racePosition() {
+  return u.practice ? 1 : 1 + rivals.filter((r) => r.distance > u.totalDistance).length;
 }
 function cockpitTrackCamera(i, e) {
   const t = e.side.clone().multiplyScalar(u.lateral),
@@ -5963,6 +6667,26 @@ function updateTrackCarPose() {
   const w = cn.userData.frontWheels,
     steer = MathUtils.clamp(-u.lateralVel * 0.05, -0.5, 0.5);
   w && ((w[0].rotation.y = steer), (w[1].rotation.y = steer));
+}
+let menuOrbitT = 0.6;
+function menuCinematic(i) {
+  if (window.__freeCam) return;
+  menuOrbitT += i * 0.13;
+  const e = 80,
+    t = 300,
+    n = He(e, t);
+  ((cn.visible = !0), qn && (qn.visible = !1));
+  (cn.position.set(e, n + 0.85, t), cn.quaternion.setFromAxisAngle(on, Math.PI * 0.24));
+  const s = 16.5;
+  (Xe.position.set(
+    e + Math.cos(menuOrbitT) * s,
+    n + 5.3 + Math.sin(menuOrbitT * 0.57) * 1.1,
+    t + Math.sin(menuOrbitT) * s,
+  ),
+    Xe.lookAt(e, n + 1.5, t),
+    Xe.rotateY(0.3));
+  Math.abs(Xe.fov - 58) > 0.1 && ((Xe.fov = 58), Xe.updateProjectionMatrix());
+  window.__steelRibbonTelemetry && (window.__steelRibbonTelemetry.mode = u.mode);
 }
 function dl(i) {
   if (window.__freeCam) return;
@@ -6236,12 +6960,11 @@ function xv(i, e) {
 function vr() {
   ce.length * ce.laps;
   const i = Th(u.practice ? u.totalDistance % ce.length : u.totalDistance),
-    e = u.practice ? 0 : Th(u.rivalDistance),
-    t = u.practice ? "SOLO" : u.totalDistance >= u.rivalDistance ? "P1" : "P2";
+    t = u.practice ? "SOLO" : `P${racePosition()}`;
   (t !== u.leadState &&
     u.mode === "race" &&
     ((u.leadState = t),
-    u.practice || ((u.message = t === "P1" ? "You took the lead" : "Crowther ahead"), (u.messageTimer = 0.95))),
+    u.practice || ((u.message = t === "P1" ? "You took the lead" : `Now ${t}`), (u.messageTimer = 0.95))),
     (Qe.damage.style.width = `${Math.round(u.damage)}%`),
     (Qe.lap.textContent = u.practice ? `LAP ${u.lap}` : `${Math.min(u.lap, ce.laps)}/${ce.laps}`),
     (Qe.timer.textContent = Dc(u.time)));
@@ -6251,7 +6974,13 @@ function vr() {
     : `Score ${Math.round(u.score)}`;
   const s = u.mode === "race" || u.mode === "paused" || n;
   if (
-    ((Qe.position.textContent = n ? "FREE ROAM" : u.freeRun ? "FREE RUN" : u.practice ? "PRACTICE" : `${t} DIV 4`),
+    ((Qe.position.textContent = n
+      ? "FREE ROAM"
+      : u.freeRun
+        ? "FREE RUN"
+        : u.practice
+          ? "PRACTICE"
+          : `${t} DIV ${seasonDivision()}`),
     n && nn.length)
   ) {
     const d = nn[u.objectiveIndex % nn.length];
@@ -6260,8 +6989,9 @@ function vr() {
   ((Qe.hud.style.display = s ? "flex" : "none"),
     (Qe.raceStrip.style.display = u.mode === "race" || u.mode === "paused" ? "grid" : "none"),
     (Qe.touchControls.style.display = s ? "" : "none"),
-    (Qe.playerProgress.style.width = `${Math.round(i * 100)}%`),
-    (Qe.rivalProgress.style.width = `${Math.round(e * 100)}%`));
+    (Qe.playerProgress.style.width = `${Math.round(i * 100)}%`));
+  for (const r of rivals)
+    r.progEl && (r.progEl.style.width = `${Math.round((u.practice ? 0 : Th(r.distance)) * 100)}%`);
   const r = fv();
   u.gear = r.gear;
   const a = performance.now(),
@@ -6288,17 +7018,24 @@ function Dc(i) {
   return `${String(e).padStart(2, "0")}:${t.toFixed(1).padStart(4, "0")}`;
 }
 function nu() {
+  Qt.info.reset();
   const i = p1.getDelta(),
     e = Math.min(0.033, i);
   (u.messageTimer > 0 && (u.messageTimer -= e),
-    u.mode === "roam" ? ($d(e), jd(e), publishRoamTelemetry()) : (eu(e), uv(e), updateTrackCarPose(), dl(e)),
+    u.mode === "roam"
+      ? ($d(e), jd(e), publishRoamTelemetry())
+      : u.mode === "menu"
+        ? (uv(e), menuCinematic(e))
+        : (eu(e), uv(e), updateTrackCarPose(), dl(e)),
     updateGateBeam(),
+    updateMinimap(),
     skyDome && skyDome.position.copy(Xe.position),
     tv(e),
     zd(e),
     vr(),
     nv(),
     (lr.uniforms.uTime.value += e),
+    waterMats.forEach((wm) => (wm.uniforms.uTime.value += e)),
     (lr.uniforms.uSpeed.value = Math.min(1, Math.abs(u.speed) / 150)));
   const n =
     (_t.has("ShiftLeft") || _t.has("ShiftRight")) && u.boost > 0.02 && (u.mode === "race" || u.mode === "roam")
@@ -6306,6 +7043,8 @@ function nu() {
       : Math.min(0.75, u.roamSlip * 0.55 + u.collisionDrama * 0.6);
   ((lr.uniforms.uBoost.value += (n - lr.uniforms.uBoost.value) * Math.min(1, e * 6)),
     Ws.render(),
+    (qe.renderCalls = Qt.info.render.calls),
+    (qe.renderTris = Qt.info.render.triangles),
     requestAnimationFrame(nu));
 }
 window.addEventListener("keydown", (i) => {
@@ -6334,11 +7073,73 @@ window.addEventListener("resize", () => {
     Ws.setSize(window.innerWidth, window.innerHeight),
     Hd.setSize(window.innerWidth, window.innerHeight));
 });
-Qe.startBtn.addEventListener("click", () => Va(!1));
+// Audio starts on the first user gesture (autoplay policy); menu music fades in right after.
+const startAudioOnce = () => {
+  (La(),
+    window.removeEventListener("pointerdown", startAudioOnce),
+    window.removeEventListener("keydown", startAudioOnce));
+};
+window.addEventListener("pointerdown", startAudioOnce);
+window.addEventListener("keydown", startAudioOnce);
+const volBtn = document.createElement("button");
+((volBtn.id = "volBtn"), (volBtn.type = "button"));
+function refreshVolLabel() {
+  volBtn.textContent = Number(localStorage.getItem("steel-ribbon-vol") ?? 0.8) <= 0.001 ? "🔇 Sound off" : "🔊 Sound on";
+}
+refreshVolLabel();
+volBtn.addEventListener("click", (ev) => {
+  ev.stopPropagation();
+  const v = Number(localStorage.getItem("steel-ribbon-vol") ?? 0.8) <= 0.001 ? 0.8 : 0;
+  (localStorage.setItem("steel-ribbon-vol", String(v)),
+    mi && mi.master.gain.setTargetAtTime(v, mi.ctx.currentTime, 0.05),
+    refreshVolLabel());
+});
+Qe.menu.appendChild(volBtn);
+// Season-aware race strip: one progress row per driver.
+Qe.raceStrip.innerHTML =
+  `<span>YOU<i id="playerProgress"></i></span>` +
+  rivals.map((r) => `<span>${r.label.slice(0, 4).toUpperCase()}<i id="prog-${r.key}"></i></span>`).join("");
+Qe.playerProgress = document.querySelector("#playerProgress");
+rivals.forEach((r) => (r.progEl = document.querySelector(`#prog-${r.key}`)));
+function refreshSeasonUI() {
+  const div = seasonDivision();
+  Qe.startBtn.textContent = season?.active
+    ? `Continue Season — Race ${season.raceIndex + 1}/4`
+    : `Start Season (Div ${div})`;
+  const box = document.querySelector("#menu .league");
+  if (box) {
+    const rows = seasonStandings();
+    box.innerHTML =
+      `<span>Division ${divisionName(div)}${season?.active ? ` — after race ${season.raceIndex}/4` : ""}</span>` +
+      rows.map((r, k) => `<b>${k + 1}. ${r.label}${season ? ` — ${r.pts} pts` : ""}</b>`).join("");
+  }
+}
+function returnToMenu() {
+  ((u.mode = "menu"),
+    Ia(),
+    (cn.visible = !1),
+    qn && (qn.visible = !0),
+    setRivalsVisible(!1),
+    document.body.classList.remove("roam-mode"),
+    applyTrackViewClass(),
+    refreshSeasonUI(),
+    Qe.result.classList.add("hidden"),
+    Qe.menu.classList.remove("hidden"));
+}
+refreshSeasonUI();
+Qe.startBtn.addEventListener("click", () => {
+  ((season && season.active) || newSeason(), cl(MathUtils.clamp(season.raceIndex, 0, 3)), Va(!1, !1, !0));
+});
 Qe.practiceBtn.addEventListener("click", () => Va(!0));
 Qe.freeRunBtn.addEventListener("click", () => Va(!0, !0));
 Qe.roamBtn.addEventListener("click", () => Yd());
-Qe.againBtn.addEventListener("click", () => Va(!1));
+Qe.againBtn.addEventListener("click", () => {
+  u.seasonRace && season
+    ? season.active && season.raceIndex < 4
+      ? (cl(season.raceIndex), Va(!1, !1, !0))
+      : returnToMenu()
+    : Va(!1);
+});
 Qe.courseButtons.forEach((i) => {
   i.addEventListener("click", () => cl(Number(i.dataset.course)));
 });

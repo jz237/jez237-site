@@ -138,7 +138,10 @@ body.roam-mode #cockpit .roll,
 body.roam-mode #cockpit .strut,
 body.chase-mode #cockpit .glass-reflection,
 body.chase-mode #cockpit .roll,
-body.chase-mode #cockpit .strut {
+body.chase-mode #cockpit .strut,
+body.menu-mode #cockpit .glass-reflection,
+body.menu-mode #cockpit .roll,
+body.menu-mode #cockpit .strut {
   display: none;
 }
 .glass-reflection {
@@ -776,5 +779,46 @@ body.chase-mode #cockpit .strut {
   100% {
     opacity: 0;
     transform: translate(-50%, -64px) scale(0.94);
+  }
+}
+
+#volBtn {
+  background: rgba(20, 26, 34, 0.72);
+  border: 1px solid rgba(140, 200, 255, 0.35);
+  border-radius: 999px;
+  color: #cfe8ff;
+  font-size: 0.66rem;
+  margin-top: 10px;
+  opacity: 0.9;
+  padding: 0.4rem 0.9rem;
+  text-transform: none;
+}
+
+#raceStrip span:nth-child(3) i {
+  background: linear-gradient(90deg, #46e0b0, #b8ff8a);
+}
+#raceStrip span:nth-child(4) i {
+  background: linear-gradient(90deg, #ffd45b, #ff9a3d);
+}
+
+#minimap {
+  background: rgba(8, 14, 22, 0.4);
+  border: 2px solid rgba(140, 200, 255, 0.4);
+  border-radius: 12px;
+  display: none;
+  height: 176px;
+  pointer-events: none;
+  position: fixed;
+  right: 14px;
+  top: 86px;
+  width: 176px;
+  z-index: 4;
+}
+@media (max-width: 700px) {
+  #minimap {
+    height: 108px;
+    right: 8px;
+    top: 76px;
+    width: 108px;
   }
 }
