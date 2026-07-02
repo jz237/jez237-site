@@ -784,7 +784,8 @@ body.menu-mode #cockpit .strut {
 
 #volBtn,
 #musicBtn,
-#todBtn {
+#todBtn,
+#weatherBtn {
   background: rgba(20, 26, 34, 0.72);
   border: 1px solid rgba(140, 200, 255, 0.35);
   border-radius: 999px;
@@ -796,7 +797,8 @@ body.menu-mode #cockpit .strut {
   text-transform: none;
 }
 #musicBtn,
-#todBtn {
+#todBtn,
+#weatherBtn {
   margin-left: 8px;
 }
 

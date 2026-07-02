@@ -607,6 +607,84 @@ const browser = await chromium.launch({
   await ctx.close();
 }
 
+// ---------- v3.6: busted, traffic panic, delivery jobs, rain weather ----------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+  await page.locator("#roamBtn").click();
+  await page.waitForTimeout(900);
+
+  // rain: weather blends in, road turns glossy, telemetry reports it
+  await page.evaluate(() => {
+    window.__steelRibbonDebug.setRoamPos(80, 250, 0, 0);
+    window.__steelRibbonDebug.setWeather("rain");
+  });
+  const wet = await poll(page, () => window.__steelRibbonDebug.weatherInfo(), (w) => w.amt > 0.8, 90);
+  check("rain blends in", !!wet && wet.amt > 0.8, JSON.stringify(wet));
+  check("wet road turns glossy", !!wet && wet.roadRoughness < 0.4, `roughness=${wet?.roadRoughness}`);
+  await page.evaluate(() => window.__steelRibbonDebug.setWeather("clear"));
+
+  // delivery job: spawn, walk over, enter, teleport to the drop, get paid
+  await page.evaluate(() => window.__steelRibbonDebug.jobSpawnNow());
+  const job0 = await poll(page, () => window.__steelRibbonDebug.jobInfo(), (j) => j.state === "available", 30);
+  check("delivery job spawns", !!job0 && job0.state === "available" && !!job0.pickup, JSON.stringify(job0));
+  await page.evaluate(() => {
+    const d = window.__steelRibbonDebug;
+    d.setVehicle("foot"); // parks the own car far from the job vehicle
+    const j = d.jobInfo();
+    d.setRoamPos(j.pickup.x + 2, j.pickup.z + 1, 0, 0);
+  });
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(700);
+  const jobActive = await page.evaluate(() => window.__steelRibbonDebug.jobInfo());
+  check(
+    "E starts the delivery",
+    jobActive.state === "active" && jobActive.timeLeft > 10 && !!jobActive.dest,
+    JSON.stringify(jobActive),
+  );
+  await page.evaluate(() => {
+    const d = window.__steelRibbonDebug,
+      j = d.jobInfo();
+    d.setRoamPos(j.dest.x, j.dest.z, 0, 0);
+  });
+  const delivered = await poll(page, () => window.__steelRibbonDebug.jobInfo(), (j) => j.deliveries > 0, 40);
+  check("delivery pays out", !!delivered && delivered.deliveries === 1, JSON.stringify(delivered));
+
+  // traffic panic: heat + player near civilians makes them pull over
+  await page.evaluate(() => {
+    const d = window.__steelRibbonDebug;
+    d.setHeat(2);
+    const t = d.nearestTrafficCar(0, -400);
+    d.setRoamPos(t.x + 8, t.z, 0, 0);
+  });
+  const panicked = await poll(page, () => window.__steelRibbonDebug.panickedTraffic(), (n) => n > 0, 40);
+  check("traffic panics during a chase", panicked > 0, `panicked=${panicked}`);
+
+  // busted: cruiser parked on top of a stationary fugitive
+  await page.evaluate(() => window.__steelRibbonDebug.setHeat(2));
+  await poll(page, () => window.__steelRibbonDebug.policeInfo().cars.length, (n) => n >= 1, 30);
+  let busts = 0;
+  for (let k = 0; k < 100 && !busts; k++) {
+    await page.evaluate(() => {
+      const d = window.__steelRibbonDebug,
+        t = window.__steelRibbonTelemetry.roamPos;
+      d.policeTeleportNearest(t.x + 3, t.z);
+    });
+    busts = await page.evaluate(() => window.__steelRibbonDebug.policeInfo().busts);
+    await page.waitForTimeout(300);
+  }
+  const postBust = await page.evaluate(() => window.__steelRibbonDebug.policeInfo());
+  check("boxed-in fugitive gets busted", busts > 0, `busts=${busts}`);
+  check("bust resets the heat", postBust.heat === 0, `heat=${postBust.heat}`);
+
+  check("no console errors (v3.6)", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await ctx.close();
+}
+
 // ---------- v3.3: vehicle theft (parked + traffic), own-car marker, heli scale ----------
 {
   const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
