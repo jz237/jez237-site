@@ -27,6 +27,11 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # The MOD player MP3 library (~3.2 GB) blows past the 1 GB Pages artifact
+      # limit; the mirror's player fetches these from jez237.com instead.
+      - name: Exclude oversized audio library
+        run: rm -rf experiments/amiga-mod-player/audio
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

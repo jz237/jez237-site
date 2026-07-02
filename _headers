@@ -32,3 +32,7 @@
 
 /experiments/sid-player/*
   Cache-Control: no-cache, must-revalidate
+
+/experiments/amiga-mod-player/audio/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=604800
