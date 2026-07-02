@@ -1,11 +1,11 @@
 {
   "name": "Neon Vector Arena",
   "short_name": "Neon Arena",
-  "start_url": "./?fullscreen=1",
+  "start_url": "./?fullscreen=1&v=5.0",
   "scope": "./",
   "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#02030a",
   "theme_color": "#02030a",
-  "description": "A neon vector survival arcade game."
+  "description": "Geometry Wars-style neon twin-stick shooter: warping grid, geom multipliers, gravity wells, bosses, and online co-op. v5.0"
 }
