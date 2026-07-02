@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  VECTOR ARENA v5.2 — Geometry Wars-style polish pass CHANGELOG
+  VECTOR ARENA v5.3 — Geometry Wars-style polish pass CHANGELOG
   ==================================================================
   VISUALS
   - New deforming spring-mesh grid (ripples from shots, explosions, bombs; bends into gravity wells).
@@ -770,7 +770,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v5.2</div>
+	    <div class="title-version" id="titleVersion">v5.3</div>
 	    <div class="photo-note" id="photoNote">
 	      <b>Photosensitivity notice:</b> this game contains rapid flashing lights, screen shake, and pulsing neon effects. A reduced-flash mode is available.
 	      <div class="mini-grid">
@@ -848,7 +848,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v5.2</div>
+<div class="version">v5.3</div>
 
 <script>
 'use strict';
@@ -2053,7 +2053,7 @@ function loadSamples() {
   if (samplesRequested || !(settings.hqSounds || settings.hqMusic)) return;
   samplesRequested = true;
   for (const name of SAMPLE_NAMES) {
-    fetch(SAMPLE_BASE + name + '.mp3')
+    fetch(SAMPLE_BASE + name + '.mp3?v5.3')
       .then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(String(r.status))))
       .then(buf => { sampleRaw[name] = buf; decodeSample(name); })
       .catch(() => {});
