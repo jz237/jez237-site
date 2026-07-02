@@ -119,7 +119,8 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
     const img = document.createElement('img');
     img.className = 'news-card-img';
     img.alt = '';
-    img.loading = 'lazy';
+    img.loading = isFeatured ? 'eager' : 'lazy';
+    if (isFeatured) img.fetchPriority = 'high';
     img.referrerPolicy = 'no-referrer';
 
     if (n.image && !isLikelyBadImage(n.image)) {
@@ -170,7 +171,8 @@ function renderLeadStory(wrap, story) {
   const lead = el('article', 'news-lead-story');
   const img = document.createElement('img');
   img.alt = '';
-  img.loading = 'lazy';
+  img.loading = 'eager';
+  img.fetchPriority = 'high';
   img.referrerPolicy = 'no-referrer';
   img.src = story.image && !isLikelyBadImage(story.image) ? story.image : placeholderImage(story.source);
   lead.appendChild(img);
@@ -235,6 +237,25 @@ function renderSummary(items, mode) {
   ].forEach(label => summary.appendChild(el('span', 'news-summary-pill', label)));
 }
 
+function toolIconFor(item) {
+  const label = `${item.toolLabel || ''} ${item.title || ''}`.toLowerCase();
+  if (label.includes('gemini') || label.includes('spark')) return '✦';
+  if (label.includes('pluno')) return 'P';
+  if (label.includes('agentcard') || label.includes('buy')) return '🛒';
+  if (label.includes('browser')) return '◎';
+  if (label.includes('folio')) return '▤';
+  if (label.includes('claude') || label.includes('sonnet')) return 'CS';
+  if (label.includes('openai')) return 'AI';
+  const seed = item.toolLabel || item.title || item.source || 'AI';
+  return seed
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(word => word[0])
+    .join('')
+    .toUpperCase();
+}
+
 function renderTools(news) {
   const wrap = document.getElementById('news-tools');
   if (!wrap) return;
@@ -260,10 +281,15 @@ function renderTools(news) {
     a.href = item.url;
     a.target = '_blank';
     a.rel = 'noopener';
+    const icon = el('span', 'news-tool-icon', toolIconFor(item));
+    icon.setAttribute('aria-hidden', 'true');
+    const copy = el('span', 'news-tool-copy');
     const name = el('span', 'news-tool-name', item.toolLabel || item.title || 'Untitled');
     const meta = el('span', 'news-tool-meta', item.toolSummary || item.source || 'AI tool');
-    a.appendChild(name);
-    a.appendChild(meta);
+    copy.appendChild(name);
+    copy.appendChild(meta);
+    a.appendChild(icon);
+    a.appendChild(copy);
     row.appendChild(a);
   });
   wrap.appendChild(row);
