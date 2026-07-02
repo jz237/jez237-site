@@ -628,11 +628,13 @@
             wrap.classList.add("fluid-on");
             ctx.clearRect(0, 0, w, h);
             if (an.beatFired) engine.burst(Math.min(1, an.bass));
+            // zero the bands when idle: the synthetic idle bed that keeps the
+            // 2D modes breathing would otherwise stir the fluid in silence
             engine.step(1 / 60, {
-              bass: an.bass,
-              mid: an.mid,
-              treb: an.treb,
-              energy: an.energy,
+              bass: an.live ? an.bass : 0,
+              mid: an.live ? an.mid : 0,
+              treb: an.live ? an.treb : 0,
+              energy: an.live ? an.energy : 0,
               hue: an.hue,
               live: an.live,
             });
@@ -795,6 +797,7 @@
       getMode: function () { return MODES[modeIndex].id; },
       modes: MODES.slice(),
       renderFrame: step, // manual single-frame step (testing / embedding without RAF)
+      getFluid: function () { return fluid; },
     };
   }
 
