@@ -9,6 +9,7 @@ import {
   Mesh,
   SpriteMaterial,
   Line,
+  LineSegments,
   CylinderGeometry,
   Object3D,
   BoxGeometry,
@@ -340,6 +341,37 @@ function chime(freq = 880, dur = 0.16, type = "triangle", gain = 0.16) {
     o.connect(g).connect(mi.master || ctx.destination),
     o.start(),
     o.stop(ctx.currentTime + dur + 0.06));
+}
+let lastHonk = 0;
+function trafficHonk() {
+  if (!mi || mi.ctx.currentTime - lastHonk < 0.45) return;
+  lastHonk = mi.ctx.currentTime;
+  const { ctx } = mi,
+    freq = [352, 396, 440][(Math.random() * 3) | 0];
+  for (const [at, dur] of [
+    [0, 0.14],
+    [0.2, 0.22],
+  ]) {
+    const o = ctx.createOscillator(),
+      o2 = ctx.createOscillator(),
+      g = ctx.createGain(),
+      t0 = ctx.currentTime + at;
+    ((o.type = "square"),
+      (o2.type = "square"),
+      (o.frequency.value = freq),
+      (o2.frequency.value = freq * 1.26),
+      g.gain.setValueAtTime(1e-4, t0),
+      g.gain.linearRampToValueAtTime(0.05, t0 + 0.015),
+      g.gain.setValueAtTime(0.05, t0 + dur),
+      g.gain.exponentialRampToValueAtTime(1e-4, t0 + dur + 0.04),
+      o.connect(g),
+      o2.connect(g),
+      g.connect(mi.master),
+      o.start(t0),
+      o2.start(t0),
+      o.stop(t0 + dur + 0.05),
+      o2.stop(t0 + dur + 0.05));
+  }
 }
 function x1(i) {
   const e = MathUtils.clamp(i, 0, 1);
@@ -1119,7 +1151,7 @@ function P1() {
       side: BackSide,
       depthWrite: !1,
       fog: !1,
-      uniforms: { uSunDir: { value: sunDirWorld }, uDay: { value: 0 }, uNight: { value: 0 } },
+      uniforms: { uSunDir: { value: sunDirWorld }, uDay: { value: 0 }, uNight: { value: 0 }, uRain: { value: 0 } },
       vertexShader: `
         varying vec3 vDir;
         void main() {
@@ -1131,6 +1163,7 @@ function P1() {
         uniform vec3 uSunDir;
         uniform float uDay;
         uniform float uNight;
+        uniform float uRain;
         vec3 pal(vec3 dusk, vec3 day, vec3 night) {
           return mix(mix(dusk, day, uDay), night, uNight);
         }
@@ -1152,6 +1185,8 @@ function P1() {
           float away = max(dot(vDir, -uSunDir), 0.0);
           float awayAmt = pal(vec3(0.42), vec3(0.15), vec3(0.5)).x;
           col = mix(col, pal(vec3(0.14, 0.15, 0.32), vec3(0.3, 0.42, 0.62), vec3(0.02, 0.025, 0.06)), awayAmt * pow(away, 1.6) * (1.0 - h * 0.4));
+          // storm overcast: flatten toward gray, darker at night
+          col = mix(col, vec3(0.42, 0.45, 0.5) * (0.28 + 0.62 * (1.0 - uNight)), uRain * 0.72);
           gl_FragColor = vec4(col, 1.0);
         }`,
     }),
@@ -2200,6 +2235,12 @@ function F1(i, e, t) {
   function te(I, ye = 0, Me = 0) {
     if (I.stolen) return;
     let Se = Math.max(0, I.speed * Me);
+    // Panicked civilians (police chase nearby): brake hard, pull to the curb, honk.
+    if (I.panicT > 0) {
+      ((I.panicT -= Me), (Se *= 0.32), (I.brakePulse = 1));
+      I.avoidOffset += (Math.sign(I.laneOffset || 1) * 2.1 - I.avoidOffset) * Math.min(1, Me * 3);
+      I.honked || ((I.honked = !0), trafficHonk());
+    } else I.honked = !1;
     const Z = b(I);
     for (
       Z?.crash
@@ -2423,7 +2464,15 @@ function N1() {
       oe
     );
   }
-  const g = new MeshStandardMaterial({ map: S1(), color: 15132390, roughness: 0.62, metalness: 0.1, envMapIntensity: 0.8, side: DoubleSide }),
+  const g = ((todRefs.roadMat = new MeshStandardMaterial({
+      map: S1(),
+      color: 15132390,
+      roughness: 0.62,
+      metalness: 0.1,
+      envMapIntensity: 0.8,
+      side: DoubleSide,
+    })),
+    todRefs.roadMat),
     M = new MeshStandardMaterial({ color: 11054244, roughness: 0.62, metalness: 0.04 }),
     x = new MeshStandardMaterial({ color: 13944196, roughness: 0.44, metalness: 0.05, emissive: 3942912, emissiveIntensity: 0.12 }),
     h = new MeshStandardMaterial({ color: 13617592, roughness: 0.56, metalness: 0.02, emissive: 3158064, emissiveIntensity: 0.06 }),
@@ -5351,7 +5400,7 @@ buildPropPlanes();
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
 // up one star at a time once you keep 240+ units of distance. Roam only. ───
-const police = { cars: [], evadeT: 0, nearest: 1 / 0 };
+const police = { cars: [], evadeT: 0, nearest: 1 / 0, blocks: [], blockCd: 6, bustT: 0, panicTick: 0 };
 const POLICE_RED = new MeshStandardMaterial({ color: 16716851, emissive: 16711731, emissiveIntensity: 2.4 }),
   POLICE_BLUE = new MeshStandardMaterial({ color: 5559551, emissive: 2916351, emissiveIntensity: 0.4 });
 function addHeat(n) {
@@ -5391,9 +5440,70 @@ function spawnPoliceCar() {
 function removePoliceCar(c) {
   (removeVehicleMesh(c.mesh), (police.cars = police.cars.filter((x) => x !== c)));
 }
+function removeRoadblock(b) {
+  for (const m of b.meshes) removeVehicleMesh(m);
+  police.blocks = police.blocks.filter((x) => x !== b);
+}
 function resetPolice() {
   for (const c of [...police.cars]) removePoliceCar(c);
-  ((police.evadeT = 0), (police.nearest = 1 / 0), (u.heat = 0));
+  for (const b of [...police.blocks]) removeRoadblock(b);
+  ((police.evadeT = 0), (police.nearest = 1 / 0), (police.bustT = 0), (police.blockCd = 6), (u.heat = 0));
+}
+// Roadblock: two angled cruisers + a spike strip across the road the player is heading down.
+function tryRoadblock() {
+  const fx = Math.sin(u.roamYaw),
+    fz = -Math.cos(u.roamYaw),
+    ax = u.roamPos.x + fx * 215,
+    az = u.roamPos.z + fz * 215,
+    rx = di.x0 + Math.round((ax - di.x0) / di.pitch) * di.pitch,
+    rz = di.zNear - Math.round((di.zNear - az) / di.pitch) * di.pitch,
+    dxr = Math.abs(ax - rx),
+    dzr = Math.abs(az - rz);
+  let bx, bz, latX, latZ, fwX, fwZ;
+  if (dxr <= dzr && dxr < di.streetW * 0.6) ((bx = rx), (bz = az), (latX = 1), (latZ = 0), (fwX = 0), (fwZ = 1));
+  else if (dzr < di.streetW * 0.6) ((bx = ax), (bz = rz), (latX = 0), (latZ = 1), (fwX = 1), (fwZ = 0));
+  else return !1;
+  if (bx < di.x0 || bx > di.x1 || bz > di.zNear || bz < di.zFar) return !1;
+  if (police.blocks.some((b) => Math.hypot(b.x - bx, b.z - bz) < 140)) return !1;
+  const y0 = He(bx, bz),
+    w = di.streetW + 3,
+    stripMat = new MeshStandardMaterial({ color: 1907997, roughness: 0.6, emissive: 11674146, emissiveIntensity: 0.5 }),
+    strip = new Mesh(new BoxGeometry(0.9, 0.16, w), stripMat);
+  (strip.position.set(bx, y0 + 0.1, bz),
+    strip.lookAt(bx + latX, y0 + 0.1, bz + latZ),
+    et.add(strip));
+  const meshes = [strip];
+  for (const s of [-1, 1]) {
+    const car = buildPoliceCar();
+    (car.position.set(bx + latX * s * (w * 0.32), y0 + 0.06, bz + latZ * s * (w * 0.32)),
+      (car.rotation.y = Math.atan2(latX, latZ) + s * 0.7),
+      et.add(car),
+      meshes.push(car));
+  }
+  (police.blocks.push({ x: bx, z: bz, latX, latZ, fwX, fwZ, w, meshes, age: 0, hitT: 0 }),
+    (u.message = "ROADBLOCK AHEAD!"),
+    (u.messageTimer = 1.3),
+    chime(500, 0.2, "square", 0.1));
+  return !0;
+}
+function bustPlayer() {
+  const fine = Math.min(600, Math.round(u.score * 0.12) + 150);
+  ((u.score = Math.max(0, u.score - fine)),
+    (qe.busts = (qe.busts || 0) + 1),
+    (u.message = `BUSTED! -${fine}`),
+    (u.messageTimer = 2),
+    (u.cameraShake = 0.5),
+    chime(220, 0.5, "sawtooth", 0.14));
+  jobSys.state === "active" && failJob("busted");
+  if (u.drivingStolen && stolenRide) {
+    releaseStolenRide();
+    ((u.vehicle = "foot"),
+      (u.speed = 0),
+      (walker.visible = !0),
+      (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05),
+      (u.message = "BUSTED! Ride confiscated"));
+  }
+  resetPolice();
 }
 function updatePoliceCar(c, dt) {
   const dx = u.roamPos.x - c.x,
@@ -5445,6 +5555,54 @@ Bn(new Object3D(), (tt, dt) => {
   let nearest = 1 / 0;
   for (const c of [...police.cars]) nearest = Math.min(nearest, updatePoliceCar(c, dt));
   police.nearest = nearest;
+  // busted: boxed in slow next to a cruiser for a couple of seconds
+  if (heat > 0 && nearest < 12 && Math.abs(u.speed) < 8) {
+    police.bustT += dt;
+    police.bustT > 2.2 && ((police.bustT = 0), bustPlayer());
+  } else police.bustT = Math.max(0, police.bustT - dt * 1.5);
+  // roadblocks at 4+ stars
+  if (heat >= 4) {
+    police.blockCd -= dt;
+    police.blockCd <= 0 && Math.abs(u.speed) > 30 && (tryRoadblock(), (police.blockCd = 12));
+  }
+  for (const b of [...police.blocks]) {
+    b.age += dt;
+    b.hitT > 0 && (b.hitT -= dt);
+    (b.age > 40 || heat < 4) && removeRoadblock(b);
+    // spike strip: crossing it shreds the tires
+    const dx = u.roamPos.x - b.x,
+      dz = u.roamPos.z - b.z,
+      lat = dx * b.latX + dz * b.latZ,
+      along = dx * b.fwX + dz * b.fwZ;
+    if (Math.abs(lat) < b.w * 0.5 && Math.abs(along) < 1.5 && !u.roamAir && u.vehicle === "car" && b.hitT <= 0) {
+      ((b.hitT = 2.5),
+        (u.spikedT = 3.5),
+        (u.speed *= 0.5),
+        (u.damage = MathUtils.clamp(u.damage + 6, 0, 100)),
+        (u.message = "SPIKE STRIP!"),
+        (u.messageTimer = 1.2),
+        (u.cameraShake = Math.max(u.cameraShake, 0.4)),
+        playSfx("skid", 0.55, 1.25, 0.1),
+        addHeat(0.15));
+    }
+  }
+  // traffic panic: civilians near a cruiser (or near the fugitive player) pull over
+  police.panicTick -= dt;
+  if (police.panicTick <= 0 && heat > 0) {
+    police.panicTick = 0.4;
+    for (const r of Ri) {
+      const a = r.actor;
+      if (!a || !a.type || a.stolen || a.panicT > 0) continue;
+      let scared = Math.hypot(u.roamPos.x - r.x, u.roamPos.z - r.z) < 45;
+      if (!scared)
+        for (const c of police.cars)
+          if (Math.hypot(c.x - r.x, c.z - r.z) < 65) {
+            scared = !0;
+            break;
+          }
+      scared && (a.panicT = 1.6);
+    }
+  }
   if (heat > 0) {
     if (nearest > 240) {
       police.evadeT += dt;
@@ -5456,6 +5614,165 @@ Bn(new Object3D(), (tt, dt) => {
     } else police.evadeT = Math.max(0, police.evadeT - dt * 0.6);
   }
   qe.police = police.cars.length;
+});
+// ─── Delivery jobs: a marked vehicle waits under a cyan beacon; hop in and race the
+// clock to the gold beacon. Time bonus on the payout; timeout, busted or abandoning
+// the vehicle fails the run. One job at a time, roam only. ───
+const jobSys = { state: "idle", type: null, mesh: null, pickup: null, dest: null, timeLeft: 0, cooldown: 5, beacons: [] };
+const JOB_TYPES = ["van", "boxTruck", "taxi", "pickup"];
+function jobBeacon(colorHex) {
+  const m = new Mesh(
+    new CylinderGeometry(3.4, 3.4, 340, 12, 1, !0),
+    new MeshBasicMaterial({
+      color: colorHex,
+      transparent: !0,
+      opacity: 0.15,
+      depthWrite: !1,
+      side: DoubleSide,
+      blending: AdditiveBlending,
+    }),
+  );
+  return ((m.frustumCulled = !1), et.add(m), m);
+}
+function clearJobBeacons() {
+  for (const b of jobSys.beacons) (b.geometry.dispose(), b.material.dispose(), et.remove(b));
+  jobSys.beacons = [];
+}
+function findRoadsidePoint(minD, maxD) {
+  for (let k = 0; k < 220; k++) {
+    const ns = Math.random() < 0.5,
+      road = ns
+        ? di.x0 + ((Math.random() * Math.round((di.x1 - di.x0) / di.pitch)) | 0) * di.pitch
+        : di.zNear - ((Math.random() * Math.round((di.zNear - di.zFar) / di.pitch)) | 0) * di.pitch,
+      side = (Math.random() < 0.5 ? -1 : 1) * (di.streetW * 0.5 + 6),
+      along = ns
+        ? di.zFar + 100 + Math.random() * (di.zNear - di.zFar - 200)
+        : di.x0 + 100 + Math.random() * (di.x1 - di.x0 - 200),
+      x = ns ? road + side : along,
+      z = ns ? along : road + side,
+      d = Math.hypot(x - u.roamPos.x, z - u.roamPos.z);
+    if (d < minD || d > maxD) continue;
+    if (Hi(x, z, 8, 8, 1)) continue;
+    if (pondDepthAt(x, z).depth > 0) continue;
+    if (
+      Mn.some(
+        (c) => Math.abs(x - c.x) < (c.hw ?? c.radius ?? 0) + 5 && Math.abs(z - c.z) < (c.hd ?? c.radius ?? 0) + 5,
+      )
+    )
+      continue;
+    return { x, z, yaw: ns ? 0 : Math.PI / 2 };
+  }
+  return null;
+}
+function spawnJob() {
+  const p = findRoadsidePoint(200, 700);
+  if (!p) {
+    jobSys.cooldown = 4;
+    return;
+  }
+  const type = JOB_TYPES[(Math.random() * JOB_TYPES.length) | 0];
+  ((jobSys.type = type),
+    (jobSys.mesh = I1(type, [16770048, 5814783, 16752762, 9498256][(Math.random() * 4) | 0])),
+    (jobSys.mesh.userData.stolenYOff = 0.57),
+    jobSys.mesh.position.set(p.x, He(p.x, p.z) + 0.28, p.z),
+    (jobSys.mesh.rotation.y = -p.yaw),
+    et.add(jobSys.mesh),
+    (jobSys.pickup = p));
+  const b = jobBeacon(3531007);
+  (b.position.set(p.x, He(p.x, p.z) + 150, p.z), jobSys.beacons.push(b));
+  ((jobSys.state = "available"),
+    (u.message = `Delivery job: grab the ${type.toUpperCase()} at the cyan beacon`),
+    (u.messageTimer = 2));
+}
+function enterJobVehicle() {
+  if (jobSys.state !== "available" || !jobSys.mesh || u.roamPos.distanceTo(jobSys.mesh.position) > 6) return !1;
+  abandonStolenRide();
+  const m = jobSys.mesh;
+  stolenRide = { mesh: m, type: jobSys.type, actor: null, parked: null, parkedYaw: 0, job: !0 };
+  ((u.vehicle = "car"),
+    (u.drivingStolen = !0),
+    u.roamPos.set(m.position.x, He(m.position.x, m.position.z) + Wn, m.position.z),
+    (u.roamYaw = jobSys.pickup.yaw),
+    (u.camYaw = u.roamYaw),
+    (u.speed = 0),
+    (walker.visible = !1),
+    playSfx("jack", 0.5, 1, 0.08) || chime(340, 0.18, "square", 0.1),
+    zs());
+  startJob();
+  return !0;
+}
+function startJob() {
+  const d = findRoadsidePoint(420, 900) || findRoadsidePoint(250, 1100);
+  if (!d) {
+    failJob("no route");
+    return;
+  }
+  jobSys.dest = d;
+  jobSys.timeLeft = Math.round(14 + Math.hypot(d.x - u.roamPos.x, d.z - u.roamPos.z) * 0.062);
+  clearJobBeacons();
+  const b = jobBeacon(16766720);
+  (b.position.set(d.x, He(d.x, d.z) + 150, d.z), jobSys.beacons.push(b));
+  ((jobSys.state = "active"),
+    (u.message = `Deliver the ${jobSys.type.toUpperCase()} to the gold beacon — ${jobSys.timeLeft}s`),
+    (u.messageTimer = 2.2));
+}
+function jobIdle(cooldown) {
+  (clearJobBeacons(), Object.assign(jobSys, { state: "idle", mesh: null, pickup: null, dest: null, timeLeft: 0, cooldown }));
+}
+function failJob(reason) {
+  if (jobSys.state === "idle") return;
+  if (stolenRide?.job) {
+    releaseStolenRide();
+    u.vehicle === "car" &&
+      ((u.vehicle = "foot"),
+      (walker.visible = !0),
+      (u.speed = 0),
+      (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
+  } else jobSys.mesh && removeVehicleMesh(jobSys.mesh);
+  jobIdle(9);
+  reason !== "silent" &&
+    ((u.message = `Delivery failed — ${reason}`), (u.messageTimer = 1.6), chime(240, 0.3, "sawtooth", 0.1));
+  qe.deliveryFails = (qe.deliveryFails || 0) + 1;
+}
+function jobAbandoned(mesh) {
+  (removeVehicleMesh(mesh), jobIdle(9));
+  ((u.message = "Delivery failed — vehicle abandoned"), (u.messageTimer = 1.5));
+  qe.deliveryFails = (qe.deliveryFails || 0) + 1;
+}
+function completeJob() {
+  const bonus = 1200 + Math.ceil(jobSys.timeLeft) * 10;
+  ((u.score += bonus), (qe.deliveries = (qe.deliveries || 0) + 1));
+  (showScorePop(`+${bonus} DELIVERED`, !0), chime(980, 0.18), setTimeout(() => chime(1320, 0.22), 100));
+  const m = stolenRide?.mesh;
+  ((stolenRide = null), (u.drivingStolen = !1), m && removeVehicleMesh(m));
+  ((u.vehicle = "foot"),
+    (u.speed = 0),
+    (walker.visible = !0),
+    (u.roamPos.x -= Math.cos(u.roamYaw) * 3.4),
+    (u.roamPos.z -= Math.sin(u.roamYaw) * 3.4),
+    (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
+  jobIdle(8);
+  ((u.message = "Delivered! Another job will turn up"), (u.messageTimer = 1.8));
+}
+Bn(new Object3D(), (tt, dt) => {
+  if (u.mode !== "roam") {
+    jobSys.state !== "idle" && failJob("silent");
+    return;
+  }
+  if (jobSys.state === "idle") {
+    jobSys.cooldown -= dt;
+    jobSys.cooldown <= 0 && spawnJob();
+  } else if (jobSys.state === "active") {
+    jobSys.timeLeft -= dt;
+    if (jobSys.timeLeft <= 0) failJob("time's up");
+    else if (
+      u.drivingStolen &&
+      stolenRide?.job &&
+      Math.hypot(u.roamPos.x - jobSys.dest.x, u.roamPos.z - jobSys.dest.z) < 15 &&
+      Math.abs(u.speed) < 26
+    )
+      completeJob();
+  }
 });
 Bn(new Object3D(), (tt, dt) => {
   if (!heli) return;
@@ -5652,7 +5969,8 @@ function Wd() {
   };
   const wind = mkNoise("bandpass", 900, 0.6, 1),
     skid = mkNoise("highpass", 1800, 0.8, 0.82),
-    boost = mkNoise("bandpass", 300, 1.4, 0.5);
+    boost = mkNoise("bandpass", 300, 1.4, 0.5),
+    rain = mkNoise("bandpass", 5200, 0.3, 1);
   const musicGain = ctx.createGain();
   ((musicGain.gain.value = 1e-4), musicGain.connect(master));
   // two-tone police siren, gain driven by the nearest cruiser's distance
@@ -5676,6 +5994,7 @@ function Wd() {
     whine,
     burble: { o: burbleOsc, depth: burbleDepth },
     siren: { o: sirenOsc, g: sirenGain },
+    rain,
     wind,
     skid,
     boost,
@@ -5995,6 +6314,8 @@ function nv() {
     (mi.prevBoost = !!u.boosting),
     mi.boost.gain.gain.setTargetAtTime(active && u.boosting ? 0.15 : 1e-4, t, u.boosting ? 0.05 : 0.22),
     mi.boost.filter.frequency.setTargetAtTime(u.boosting ? 420 + sp * 3 : 260, t, 0.1));
+  mi.rain &&
+    mi.rain.gain.gain.setTargetAtTime(weatherWet() > 0.02 && u.mode !== "menu" ? weatherWet() * 0.045 : 1e-4, t, 0.4);
   const sirenOn = u.mode === "roam" && (u.heat || 0) > 0 && police.nearest < 460,
     sirenAmt = sirenOn ? Math.min(0.06, ((460 - police.nearest) / 460) * 0.075) : 1e-4;
   (mi.siren.g.gain.setTargetAtTime(sirenAmt, t, 0.25),
@@ -6108,7 +6429,7 @@ function Yd() {
     (u.roamAirT = 0),
     (u.vehicle = "car"),
     (walker.visible = !1));
-  (releaseStolenRide(), resetPolice());
+  (failJob("silent"), releaseStolenRide(), resetPolice());
   heli &&
     (heli.pos.set(heli.pad.x, heli.pad.y + 0.24, heli.pad.z),
     heli.vel.set(0, 0, 0),
@@ -6333,6 +6654,10 @@ function publishRoamTelemetry() {
     heat: +(u.heat || 0).toFixed(2),
     police: police.cars.length,
     policeNearest: police.nearest === 1 / 0 ? null : +police.nearest.toFixed(1),
+    roadblocks: police.blocks.length,
+    spikedT: +(u.spikedT || 0).toFixed(2),
+    rain: +weatherWet().toFixed(2),
+    job: { state: jobSys.state, type: jobSys.type, timeLeft: +jobSys.timeLeft.toFixed(1) },
     stuntActive: !!u.stuntActive,
     stuntType: (u.stuntActive && u.stuntRamp?.type) || null,
     flipT: +(u.flipT || 0).toFixed(2),
@@ -6448,6 +6773,18 @@ function updateMinimap() {
     const [qx, qz] = mmPt(pc.x, pc.z, size);
     (c.beginPath(), c.arc(qx, qz, 3.2, 0, Math.PI * 2), c.fill());
   }
+  for (const b of police.blocks) {
+    const [qx, qz] = mmPt(b.x, b.z, size);
+    ((c.fillStyle = "#ff8080"), c.fillRect(qx - 4, qz - 1.4, 8, 2.8));
+  }
+  if (jobSys.state === "available" && jobSys.pickup) {
+    const [qx, qz] = mmPt(jobSys.pickup.x, jobSys.pickup.z, size);
+    ((c.fillStyle = "#35e0ff"), c.fillRect(qx - 2.6, qz - 2.6, 5.2, 5.2));
+  }
+  if (jobSys.state === "active" && jobSys.dest) {
+    const [qx, qz] = mmPt(jobSys.dest.x, jobSys.dest.z, size);
+    (c.save(), c.translate(qx, qz), c.rotate(Math.PI / 4), (c.fillStyle = "#ffd700"), c.fillRect(-3, -3, 6, 6), c.restore());
+  }
   const [px, pz] = mmPt(u.roamPos.x, u.roamPos.z, size);
   (c.save(), c.translate(px, pz), c.rotate(u.roamYaw));
   ((c.fillStyle = "#ffd45b"),
@@ -6545,12 +6882,13 @@ function $d(i) {
   (n > 0.03 && (u.speed -= (u.speed > 1.2 ? 78 : 32) * n * i),
     (u.speed -= 0.00235 * u.speed * Math.abs(u.speed) * i),
     Math.abs(u.speed) > 0.08 ? (u.speed -= Math.sign(u.speed) * 3.6 * i) : t <= 0.03 && n <= 0.03 && (u.speed = 0),
-    (u.speed = MathUtils.clamp(u.speed, -24, 135 * carStats().top)),
+    (u.speed = MathUtils.clamp(u.speed, -24, 135 * carStats().top * (u.spikedT > 0 ? 0.62 : 1))),
     (u.boosting = a),
     a
       ? (u.boost = Math.max(0, u.boost - i * 0.22))
       : (u.boost = Math.min(1, u.boost + i * 0.05 * carStats().boostRegen)),
     (u.wheelSteer += (r - u.wheelSteer) * (1 - Math.pow(1e-5, i))));
+  u.spikedT > 0 && (u.spikedT -= i);
   const o = -u.wheelSteer * 0.55,
     c = driveMeshRef().userData.frontWheels;
   c && ((c[0].rotation.y = o), (c[1].rotation.y = o));
@@ -6563,7 +6901,7 @@ function $d(i) {
   if (l > Ac) {
     const v = MathUtils.clamp((l - Ac) / 5, 0, 1),
       y = 1 - 0.36 * MathUtils.clamp((l - 34) / 85, 0, 1),
-      E = m1 * 1.08 * v * y * (hb ? 1.85 : 1) * carStats().grip;
+      E = m1 * 1.08 * v * y * (hb ? 1.85 : 1) * carStats().grip * (u.spikedT > 0 ? 0.55 : 1) * (1 - 0.26 * weatherWet());
     u.roamYaw += u.wheelSteer * E * i * Math.sign(u.speed);
   }
   hb && l > 8
@@ -6645,6 +6983,12 @@ function driveMeshRef() {
 }
 function abandonStolenRide() {
   if (!stolenRide) return;
+  if (stolenRide.job) {
+    const m = stolenRide.mesh;
+    stolenRide = null;
+    jobAbandoned(m);
+    return;
+  }
   if (stolenRide.actor) {
     // Freeze the actor where it was left and make it solid again there.
     const cl = stolenRide.actor.collider,
@@ -6819,6 +7163,7 @@ function handleVehicleAction() {
             ? enterCar() || reenterStolen()
             : reenterStolen() || enterCar()) ||
           enterHeli() ||
+          enterJobVehicle() ||
           tryStealNearby()
         : exitHeli());
 }
@@ -7554,7 +7899,44 @@ window.__steelRibbonDebug = {
       cars: police.cars.map((c) => ({ x: +c.x.toFixed(1), z: +c.z.toFixed(1), speed: +c.speed.toFixed(1) })),
       nearest: police.nearest === 1 / 0 ? null : +police.nearest.toFixed(1),
       evadeT: +police.evadeT.toFixed(1),
+      bustT: +police.bustT.toFixed(2),
+      blocks: police.blocks.map((b) => ({ x: +b.x.toFixed(1), z: +b.z.toFixed(1), age: +b.age.toFixed(1) })),
+      busts: qe.busts || 0,
     };
+  },
+  policeTeleportNearest(x, z) {
+    const c = police.cars[0];
+    return c ? ((c.x = x), (c.z = z), !0) : !1;
+  },
+  jobInfo() {
+    return {
+      state: jobSys.state,
+      type: jobSys.type,
+      timeLeft: +jobSys.timeLeft.toFixed(1),
+      pickup: jobSys.pickup ? { x: +jobSys.pickup.x.toFixed(1), z: +jobSys.pickup.z.toFixed(1) } : null,
+      dest: jobSys.dest ? { x: +jobSys.dest.x.toFixed(1), z: +jobSys.dest.z.toFixed(1) } : null,
+      deliveries: qe.deliveries || 0,
+      fails: qe.deliveryFails || 0,
+    };
+  },
+  jobSpawnNow() {
+    return (jobSys.state === "idle" && ((jobSys.cooldown = 0), spawnJob()), jobSys.state);
+  },
+  setWeather(mode) {
+    return (
+      (mode === "rain" || mode === "clear") &&
+        mode !== weatherMode &&
+        (cycleWeather(), localStorage.setItem("steel-ribbon-weather", weatherMode)),
+      weatherMode
+    );
+  },
+  weatherInfo() {
+    return { mode: weatherMode, amt: +weatherWet().toFixed(2), roadRoughness: +(todRefs.roadMat?.roughness ?? -1).toFixed(2) };
+  },
+  panickedTraffic() {
+    let n = 0;
+    for (const r of Ri) r.actor?.panicT > 0 && n++;
+    return n;
   },
   setTod(mode) {
     return (
@@ -8683,6 +9065,9 @@ function vr() {
     Qe.trackName.textContent = d ? `Next: ${d.label}` : "City Streets";
   }
   n && (u.heat || 0) >= 1 && (Qe.position.textContent += `  ${"★".repeat(Math.min(5, Math.ceil(u.heat)))}`);
+  n &&
+    jobSys.state === "active" &&
+    (Qe.trackName.textContent = `Deliver the ${jobSys.type.toUpperCase()} · ${Math.max(0, Math.ceil(jobSys.timeLeft))}s`);
   ((Qe.hud.style.display = s ? "flex" : "none"),
     (Qe.raceStrip.style.display = u.mode === "race" || u.mode === "paused" ? "grid" : "none"),
     (Qe.touchControls.style.display = s ? "" : "none"),
@@ -8754,6 +9139,7 @@ window.addEventListener("keydown", (i) => {
     i.code === "KeyC" && (u.mode === "race" || u.mode === "paused") && toggleTrackView(),
     i.code === "KeyE" && handleVehicleAction(),
     i.code === "KeyN" && cycleTod(),
+    i.code === "KeyV" && cycleWeather(),
     i.code === "KeyP" && u.mode === "race"
       ? ((u.mode = "paused"), _t.clear(), Ia())
       : i.code === "KeyP" && u.mode === "paused"
@@ -9038,6 +9424,68 @@ Lr.addEventListener(
   },
   { passive: !1 },
 );
+// ─── Weather: clear or rain. Rain streaks follow the camera, the sky flattens to
+// overcast, lights dim, fog closes in, the asphalt turns to mirror and grip drops. ───
+var weatherAmt = 0;
+function weatherWet() {
+  return weatherAmt;
+}
+let weatherMode = localStorage.getItem("steel-ribbon-weather") || "clear";
+weatherMode === "rain" || (weatherMode = "clear");
+const RAIN_COUNT = 420,
+  rainSeed = [];
+for (let k = 0; k < RAIN_COUNT; k++)
+  rainSeed.push({ x: (Math.random() - 0.5) * 130, y: Math.random() * 90, z: (Math.random() - 0.5) * 130 });
+const rainGeo = new BufferGeometry();
+rainGeo.setAttribute("position", new Float32BufferAttribute(new Float32Array(RAIN_COUNT * 6), 3));
+const rainMat = new LineBasicMaterial({ color: 10203340, transparent: !0, opacity: 0, depthWrite: !1 }),
+  rainLines = new LineSegments(rainGeo, rainMat);
+((rainLines.frustumCulled = !1), (rainLines.renderOrder = 40), (rainLines.visible = !1), et.add(rainLines));
+Bn(new Object3D(), (tt, dt) => {
+  const target = weatherMode === "rain" ? 1 : 0;
+  weatherAmt += (target - weatherAmt) * Math.min(1, dt * 1.3);
+  target === 0 && weatherAmt < 0.01 && (weatherAmt = 0);
+  ((rainLines.visible = weatherAmt > 0.02), (rainMat.opacity = 0.34 * weatherAmt));
+  if (rainLines.visible) {
+    rainLines.position.copy(Xe.position);
+    const arr = rainGeo.attributes.position.array;
+    for (let k = 0; k < RAIN_COUNT; k++) {
+      const s = rainSeed[k];
+      ((s.y -= 96 * dt), s.y < -8 && (s.y += 98));
+      const o = k * 6;
+      ((arr[o] = s.x),
+        (arr[o + 1] = s.y),
+        (arr[o + 2] = s.z),
+        (arr[o + 3] = s.x + 0.3),
+        (arr[o + 4] = s.y - 1.7),
+        (arr[o + 5] = s.z));
+    }
+    rainGeo.attributes.position.needsUpdate = !0;
+  }
+  if (todRefs.roadMat) {
+    ((todRefs.roadMat.roughness = 0.62 - 0.37 * weatherAmt),
+      (todRefs.roadMat.metalness = 0.1 + 0.26 * weatherAmt),
+      (todRefs.roadMat.envMapIntensity = 0.8 + 0.9 * weatherAmt));
+  }
+});
+function cycleWeather() {
+  ((weatherMode = weatherMode === "rain" ? "clear" : "rain"),
+    localStorage.setItem("steel-ribbon-weather", weatherMode),
+    refreshWeatherLabel(),
+    (u.message = weatherMode === "rain" ? "Rain rolling in" : "Skies clearing"),
+    (u.messageTimer = 1.2));
+}
+const weatherBtn = document.createElement("button");
+((weatherBtn.id = "weatherBtn"), (weatherBtn.type = "button"));
+function refreshWeatherLabel() {
+  weatherBtn.textContent = weatherMode === "rain" ? "🌧 Rain" : "☀ Clear";
+}
+refreshWeatherLabel();
+weatherBtn.addEventListener("click", (ev) => {
+  (ev.stopPropagation(), cycleWeather());
+});
+Qe.menu.appendChild(weatherBtn);
+
 // ─── Time of day: dusk (default) / night / day / slow cycle. Blends the sky shader
 // palettes, the light rig, fog, sun disc and clouds. Streetlamps and windows stay lit —
 // they carry the night look and read as arcade charm in daylight. ───
@@ -9063,21 +9511,24 @@ const todMixN = (dusk, day, night, d, n) => dusk + (day - dusk) * d + (night - d
 })();
 function todApply(d, n) {
   if (!todRefs.skyU) return;
-  ((todRefs.skyU.uDay.value = d), (todRefs.skyU.uNight.value = n));
+  const w = weatherWet();
+  ((todRefs.skyU.uDay.value = d), (todRefs.skyU.uNight.value = n), (todRefs.skyU.uRain.value = w));
   const R = todRefs;
   (R.hemi.color.copy(todMixC(16757626, 12573183, 2371663, d, n)),
     R.hemi.groundColor.copy(todMixC(3097190, 5925464, 789534, d, n)),
-    (R.hemi.intensity = todMixN(0.66, 0.95, 0.22, d, n)));
-  (R.fill.color.copy(todMixC(7179775, 13096432, 2240591, d, n)), (R.fill.intensity = todMixN(0.6, 0.5, 0.16, d, n)));
-  (R.key.color.copy(todMixC(16752724, 16774880, 10336511, d, n)), (R.key.intensity = todMixN(2.3, 2.6, 0.45, d, n)));
-  R.rim.intensity = todMixN(0.5, 0.3, 0.1, d, n);
-  (et.fog.color.copy(todMixC(14719602, 12834794, 723741, d, n)),
-    (et.fog.near = todMixN(360, 430, 300, d, n)),
-    (et.fog.far = todMixN(2150, 2600, 1650, d, n)));
+    (R.hemi.intensity = todMixN(0.66, 0.95, 0.22, d, n) * (1 - 0.38 * w)));
+  (R.fill.color.copy(todMixC(7179775, 13096432, 2240591, d, n)),
+    (R.fill.intensity = todMixN(0.6, 0.5, 0.16, d, n) * (1 - 0.3 * w)));
+  (R.key.color.copy(todMixC(16752724, 16774880, 10336511, d, n)),
+    (R.key.intensity = todMixN(2.3, 2.6, 0.45, d, n) * (1 - 0.5 * w)));
+  R.rim.intensity = todMixN(0.5, 0.3, 0.1, d, n) * (1 - 0.4 * w);
+  (et.fog.color.copy(todMixC(14719602, 12834794, 723741, d, n).lerp(todB.set(5923950), 0.6 * w)),
+    (et.fog.near = todMixN(360, 430, 300, d, n) * (1 - 0.45 * w)),
+    (et.fog.far = todMixN(2150, 2600, 1650, d, n) * (1 - 0.35 * w)));
   (R.sunMat.color.copy(todMixC(16764250, 16777198, 14542591, d, n)),
-    (R.sunMat.opacity = todMixN(0.92, 0.95, 0.5, d, n)));
-  for (const g of R.glowMats) g.mat.opacity = todMixN(g.dusk, g.dusk * 0.55, g.dusk * 0.18, d, n);
-  const ct = todMixC(16777215, 16777215, 3687001, d, n);
+    (R.sunMat.opacity = todMixN(0.92, 0.95, 0.5, d, n) * (1 - 0.85 * w)));
+  for (const g of R.glowMats) g.mat.opacity = todMixN(g.dusk, g.dusk * 0.55, g.dusk * 0.18, d, n) * (1 - 0.7 * w);
+  const ct = todMixC(16777215, 16777215, 3687001, d, n).lerp(todB.set(4147533), 0.65 * w);
   for (const m of R.cloudMats) m.color.copy(ct);
 }
 Bn(new Object3D(), (tt, dt) => {
