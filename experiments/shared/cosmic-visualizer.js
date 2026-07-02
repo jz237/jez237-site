@@ -22,6 +22,7 @@
     { id: "tunnel", label: "Star Tunnel" },
     { id: "aurora", label: "Aurora" },
     { id: "kaleido", label: "Kaleidoscope" },
+    { id: "fluid", label: "Fluid Lab" },
   ];
 
   var CSS = [
@@ -31,6 +32,9 @@
     "  min-height: 0 !important; z-index: 2147483000; background: #000 !important; border: 0 !important; box-shadow: none !important; }",
     ".cviz { position: absolute; inset: 0; overflow: hidden; }",
     ".cviz canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: pointer; }",
+    ".cviz canvas.cviz-gl { display: none; background: #000; }",
+    ".cviz.fluid-on canvas.cviz-gl { display: block; }",
+    ".cviz-ui button.on { border-color: #8fffff; color: #8fffff; background: rgba(90, 220, 255, .18); }",
     ".cviz-ui { position: absolute; top: 10px; right: 10px; z-index: 2; display: flex; gap: 6px; align-items: center;",
     "  padding: 6px 8px; border-radius: 999px; background: rgba(4, 6, 16, .66); border: 1px solid rgba(140, 160, 255, .38);",
     "  backdrop-filter: blur(8px); opacity: 0; transition: opacity .25s ease; pointer-events: none; }",
@@ -90,6 +94,7 @@
       '<button type="button" data-act="prev" title="Previous mode" aria-label="Previous visualizer mode">&#9664;</button>' +
       '<span class="cviz-label"></span>' +
       '<button type="button" data-act="next" title="Next mode" aria-label="Next visualizer mode">&#9654;</button>' +
+      '<button type="button" data-act="shuffle" title="Auto-rotate modes randomly" aria-label="Auto-rotate visualizer modes" aria-pressed="false">AUTO</button>' +
       '<button type="button" data-act="fs" title="Fullscreen (double-click also works)" aria-label="Toggle fullscreen">&#x26F6;</button>';
     var toast = document.createElement("div");
     toast.className = "cviz-toast";
@@ -128,6 +133,43 @@
     var stars = null;
     var particles = [];
     var dust = null;
+
+    // ---- fluid mode (WebGL, lazy) ----
+    var glCanvas = null;
+    var fluid = null;
+    var fluidFailed = false;
+
+    function ensureFluid() {
+      if (fluid || fluidFailed) return fluid;
+      if (!window.CosmicFluid) {
+        fluidFailed = true;
+        return null;
+      }
+      glCanvas = document.createElement("canvas");
+      glCanvas.className = "cviz-gl";
+      glCanvas.setAttribute("aria-hidden", "true");
+      wrap.insertBefore(glCanvas, canvas);
+      fluid = window.CosmicFluid.create(glCanvas);
+      if (!fluid) {
+        fluidFailed = true;
+        glCanvas.remove();
+        glCanvas = null;
+      }
+      return fluid;
+    }
+
+    // ---- shuffle (auto-rotate modes) ----
+    var shuffleOn = false;
+    try {
+      shuffleOn = window.localStorage.getItem(storageKey + "-shuffle") === "1";
+    } catch (error) { /* ignore */ }
+    var shuffleCountdown = 0;
+
+    function resetShuffleCountdown() {
+      // 20-40s at ~60fps between automatic mode hops
+      shuffleCountdown = 1200 + Math.floor(Math.random() * 1200);
+    }
+    resetShuffleCountdown();
 
     function resize() {
       var rect = wrap.getBoundingClientRect();
@@ -207,8 +249,10 @@
       for (i = 0; i < bassHist.length; i += 1) avg += bassHist[i];
       avg /= Math.max(1, bassHist.length);
       beatCooldown -= 1;
+      an.beatFired = false;
       if (live && beatCooldown <= 0 && an.bass > avg * 1.32 + 0.03 && an.bass > 0.22) {
         an.beat = 1;
+        an.beatFired = true;
         beatCooldown = 14;
         spawnBurst();
       } else {
@@ -563,14 +607,50 @@
 
     function step() {
       analyze();
+      if (shuffleOn) {
+        shuffleCountdown -= 1;
+        if (shuffleCountdown <= 0) {
+          var next = Math.floor(Math.random() * (MODES.length - 1));
+          if (next >= modeIndex) next += 1;
+          setMode(next);
+          resetShuffleCountdown();
+        }
+      }
       if (w > 12 && h > 12) {
-        (DRAWERS[MODES[modeIndex].id] || drawNeon)();
-        if (an.beat > 0.45) {
-          var flash = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.3, w / 2, h / 2, Math.max(w, h) * 0.7);
-          flash.addColorStop(0, "rgba(0,0,0,0)");
-          flash.addColorStop(1, hsla(an.hue, 100, 70, an.beat * 0.07));
-          ctx.fillStyle = flash;
-          ctx.fillRect(0, 0, w, h);
+        var mode = MODES[modeIndex].id;
+        if (mode === "fluid") {
+          var engine = ensureFluid();
+          if (!engine) {
+            // WebGL unavailable: skip past the fluid mode
+            setMode(modeIndex + 1, true);
+            mode = MODES[modeIndex].id;
+          } else {
+            wrap.classList.add("fluid-on");
+            ctx.clearRect(0, 0, w, h);
+            if (an.beatFired) engine.burst(Math.min(1, an.bass));
+            // zero the bands when idle: the synthetic idle bed that keeps the
+            // 2D modes breathing would otherwise stir the fluid in silence
+            engine.step(1 / 60, {
+              bass: an.live ? an.bass : 0,
+              mid: an.live ? an.mid : 0,
+              treb: an.live ? an.treb : 0,
+              energy: an.live ? an.energy : 0,
+              hue: an.hue,
+              live: an.live,
+            });
+            engine.render();
+          }
+        }
+        if (mode !== "fluid") {
+          if (wrap.classList.contains("fluid-on")) wrap.classList.remove("fluid-on");
+          (DRAWERS[mode] || drawNeon)();
+          if (an.beat > 0.45) {
+            var flash = ctx.createRadialGradient(w / 2, h / 2, Math.min(w, h) * 0.3, w / 2, h / 2, Math.max(w, h) * 0.7);
+            flash.addColorStop(0, "rgba(0,0,0,0)");
+            flash.addColorStop(1, hsla(an.hue, 100, 70, an.beat * 0.07));
+            ctx.fillStyle = flash;
+            ctx.fillRect(0, 0, w, h);
+          }
         }
       }
     }
@@ -612,7 +692,24 @@
 
     function cycleMode(delta) {
       setMode(modeIndex + (delta || 1));
+      resetShuffleCountdown();
       showUi();
+    }
+
+    function syncShuffleButton() {
+      var button = ui.querySelector('button[data-act="shuffle"]');
+      button.classList.toggle("on", shuffleOn);
+      button.setAttribute("aria-pressed", shuffleOn ? "true" : "false");
+    }
+
+    function toggleShuffle() {
+      shuffleOn = !shuffleOn;
+      resetShuffleCountdown();
+      syncShuffleButton();
+      try {
+        window.localStorage.setItem(storageKey + "-shuffle", shuffleOn ? "1" : "0");
+      } catch (error) { /* ignore */ }
+      showToast(shuffleOn ? "Auto-rotate on" : "Auto-rotate off");
     }
 
     var fakeFullscreen = false;
@@ -662,6 +759,7 @@
       var act = button.dataset.act;
       if (act === "prev") cycleMode(-1);
       else if (act === "next") cycleMode(1);
+      else if (act === "shuffle") toggleShuffle();
       else if (act === "fs") toggleFullscreen();
     });
 
@@ -687,6 +785,7 @@
     }
 
     setMode(modeIndex, true);
+    syncShuffleButton();
     resize();
     window.requestAnimationFrame(frame);
 
@@ -698,6 +797,7 @@
       getMode: function () { return MODES[modeIndex].id; },
       modes: MODES.slice(),
       renderFrame: step, // manual single-frame step (testing / embedding without RAF)
+      getFluid: function () { return fluid; },
     };
   }
 
