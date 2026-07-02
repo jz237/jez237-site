@@ -495,13 +495,25 @@ function M1(i = 1024) {
     n.addColorStop(1, "#1f4a37"),
     (t.fillStyle = n),
     t.fillRect(0, 0, i, i));
-  for (let r = 0; r < 3600; r++) {
-    const a = 0.035 + Math.random() * 0.08,
-      o = 72 + Math.floor(Math.random() * 70);
-    ((t.fillStyle = `rgba(${38 + Math.random() * 30}, ${o}, ${38 + Math.random() * 26}, ${a})`),
-      t.fillRect(Math.random() * i, Math.random() * i, 1 + Math.random() * 4, 1 + Math.random() * 4));
+  // large mottled patches give the lawn tonal variety at distance
+  for (let r = 0; r < 120; r++) {
+    const cx = Math.random() * i,
+      cy = Math.random() * i,
+      cr = 30 + Math.random() * 120,
+      g2 = t.createRadialGradient(cx, cy, 0, cx, cy, cr),
+      warm = Math.random() < 0.4;
+    (g2.addColorStop(0, warm ? `rgba(140, 150, 70, ${0.06 + Math.random() * 0.1})` : `rgba(30, 90, 52, ${0.08 + Math.random() * 0.12})`),
+      g2.addColorStop(1, "rgba(0,0,0,0)"));
+    ((t.fillStyle = g2), t.beginPath(), t.arc(cx, cy, cr, 0, Math.PI * 2), t.fill());
   }
-  ((t.strokeStyle = "rgba(210, 220, 150, 0.08)"), (t.lineWidth = 2));
+  // fine blade speckle
+  for (let r = 0; r < 9000; r++) {
+    const a = 0.03 + Math.random() * 0.09,
+      o = 82 + Math.floor(Math.random() * 80);
+    ((t.fillStyle = `rgba(${34 + Math.random() * 34}, ${o}, ${36 + Math.random() * 30}, ${a})`),
+      t.fillRect(Math.random() * i, Math.random() * i, 1, 1 + Math.random() * 3));
+  }
+  ((t.strokeStyle = "rgba(214, 224, 150, 0.06)"), (t.lineWidth = 2));
   for (let r = -i; r < i * 1.5; r += 76) (t.beginPath(), t.moveTo(r, 0), t.lineTo(r + i * 0.65, i), t.stroke());
   const s = new CanvasTexture(e);
   return (
@@ -518,40 +530,23 @@ function S1(i = 1024) {
   ((e.width = i), (e.height = i));
   const t = e.getContext("2d"),
     n = t.createLinearGradient(0, 0, i, i);
-  (n.addColorStop(0, "#263139"),
-    n.addColorStop(0.45, "#3a444a"),
-    n.addColorStop(1, "#1b242c"),
-    (t.fillStyle = n),
-    t.fillRect(0, 0, i, i),
-    (t.strokeStyle = "rgba(180, 225, 255, 0.08)"),
-    (t.lineWidth = 1));
-  for (let r = -i; r < i * 2; r += 78) (t.beginPath(), t.moveTo(r, 0), t.lineTo(r + i * 0.32, i), t.stroke());
-  for (let r = 0; r < 360; r++) {
-    const a = Math.random() * i,
-      o = Math.random() * i,
-      c = 10 + Math.random() * 56,
-      l = t.createRadialGradient(a, o, 0, a, o, c);
-    (l.addColorStop(0, `rgba(145, 205, 255, ${0.12 + Math.random() * 0.15})`),
-      l.addColorStop(0.45, "rgba(80, 140, 180, 0.07)"),
-      l.addColorStop(1, "rgba(10, 18, 24, 0)"),
-      (t.fillStyle = l),
-      t.beginPath(),
-      t.ellipse(a, o, c, c * (0.16 + Math.random() * 0.18), Math.random() * Math.PI, 0, Math.PI * 2),
-      t.fill());
+  (n.addColorStop(0, "#2c2d31"), n.addColorStop(0.5, "#35363a"), n.addColorStop(1, "#28292d"), (t.fillStyle = n), t.fillRect(0, 0, i, i));
+  // dense fine asphalt grain
+  for (let r = 0; r < 26000; r++) {
+    const light = Math.random() < 0.48;
+    t.fillStyle = light
+      ? `rgba(232, 224, 210, ${0.025 + Math.random() * 0.05})`
+      : `rgba(0, 0, 0, ${0.035 + Math.random() * 0.06})`;
+    t.fillRect(Math.random() * i, Math.random() * i, Math.random() < 0.12 ? 2 : 1, 1);
   }
-  t.fillStyle = "rgba(255, 214, 122, 0.12)";
-  for (let r = 0; r < 48; r++) {
-    const a = Math.random() * i,
+  // faint meandering cracks + repair patches
+  ((t.strokeStyle = "rgba(12, 12, 14, 0.32)"), (t.lineWidth = 1.3));
+  for (let r = 0; r < 24; r++) {
+    let a = Math.random() * i,
       o = Math.random() * i;
-    (t.beginPath(),
-      t.ellipse(a, o, 8 + Math.random() * 36, 1.5 + Math.random() * 4, Math.random() * Math.PI, 0, Math.PI * 2),
-      t.fill());
-  }
-  for (let r = 0; r < 9200; r++) {
-    const a = 36 + Math.floor(Math.random() * 110),
-      o = 0.035 + Math.random() * 0.075,
-      c = Math.random() < 0.18 ? 2 : 1;
-    ((t.fillStyle = `rgba(${a}, ${a + 3}, ${a + 7}, ${o})`), t.fillRect(Math.random() * i, Math.random() * i, c, c));
+    (t.beginPath(), t.moveTo(a, o));
+    for (let s2 = 0; s2 < 7; s2++) ((a += (Math.random() - 0.5) * 64), (o += Math.random() * 46), t.lineTo(a, o));
+    t.stroke();
   }
   const s = new CanvasTexture(e);
   return (
@@ -1108,30 +1103,50 @@ function R1() {
 }
 let skyDome = null;
 function P1() {
-  // Golden-hour sky: a camera-following dome (so the horizon can never clip against the far plane),
-  // with the sun disc and halo parented to it so they sit at optical infinity.
-  const i = document.createElement("canvas");
-  ((i.width = 32), (i.height = 512));
-  const e = i.getContext("2d"),
-    t = e.createLinearGradient(0, 0, 0, i.height);
-  (t.addColorStop(0, "#141c3f"),
-    t.addColorStop(0.3, "#31437c"),
-    t.addColorStop(0.52, "#75689a"),
-    t.addColorStop(0.72, "#d1755a"),
-    t.addColorStop(0.86, "#f7ac68"),
-    t.addColorStop(1, "#ffd9a4"),
-    (e.fillStyle = t),
-    e.fillRect(0, 0, i.width, i.height));
-  const n = new CanvasTexture(i);
-  n.colorSpace = SRGBColorSpace;
+  // Golden-hour sky: a camera-following dome with a proper scattering-style shader — the sky
+  // brightens toward the horizon, glows warm around the sun, and stays deep indigo opposite it.
+  const sunDirWorld = new Vector3(-310, 150, 230).normalize();
   ((skyDome = new Mesh(
-    new SphereGeometry(1200, 40, 24),
-    new MeshBasicMaterial({ map: n, side: BackSide, depthWrite: !1, fog: !1 }),
+    new SphereGeometry(1200, 48, 32),
+    new ShaderMaterial({
+      side: BackSide,
+      depthWrite: !1,
+      fog: !1,
+      uniforms: { uSunDir: { value: sunDirWorld } },
+      vertexShader: `
+        varying vec3 vDir;
+        void main() {
+          vDir = normalize(position);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }`,
+      fragmentShader: `
+        varying vec3 vDir;
+        uniform vec3 uSunDir;
+        void main() {
+          float h = clamp(vDir.y, -0.08, 1.0);
+          // vertical gradient: peach horizon -> mauve band -> steel blue -> deep indigo zenith
+          vec3 zenith  = vec3(0.06, 0.09, 0.24);
+          vec3 upper   = vec3(0.2, 0.24, 0.47);
+          vec3 band    = vec3(0.56, 0.36, 0.47);
+          vec3 horizon = vec3(0.95, 0.66, 0.44);
+          vec3 col = mix(horizon, band, smoothstep(0.0, 0.09, h));
+          col = mix(col, upper, smoothstep(0.06, 0.26, h));
+          col = mix(col, zenith, smoothstep(0.2, 0.62, h));
+          // warm scattering lobe around the sun, wide at the horizon
+          float sunAmt = max(dot(vDir, uSunDir), 0.0);
+          col += vec3(1.0, 0.58, 0.28) * pow(sunAmt, 5.0) * 0.5;
+          col += vec3(1.0, 0.78, 0.5) * pow(sunAmt, 26.0) * 0.8;
+          // opposite-side cool deepening keeps the far sky moody
+          float away = max(dot(vDir, -uSunDir), 0.0);
+          col = mix(col, vec3(0.14, 0.15, 0.32), 0.42 * pow(away, 1.6) * (1.0 - h * 0.4));
+          gl_FragColor = vec4(col, 1.0);
+        }`,
+    }),
   )),
     (skyDome.renderOrder = -100),
     (skyDome.frustumCulled = !1),
     et.add(skyDome));
-  const sunDir = new Vector3(-310, 150, 230).normalize(),
+  const sunDir = sunDirWorld,
     r = new MeshBasicMaterial({ color: 16764250, transparent: !0, opacity: 0.92, depthWrite: !1, fog: !1 }),
     a = new Mesh(new CircleGeometry(46, 48), r);
   (a.position.copy(sunDir).multiplyScalar(1085), a.lookAt(0, 0, 0), skyDome.add(a));
@@ -1295,24 +1310,59 @@ function L1() {
       et.add(trunkIM),
       et.add(canopyIM));
   }
-  const d = new MeshStandardMaterial({
-    color: 16767433,
-    roughness: 0.75,
-    transparent: !0,
-    opacity: 0.88,
-    emissive: 16747088,
-    emissiveIntensity: 0.16,
-  });
-  for (let g = 0; g < 38; g++) {
-    const M = new Group(),
-      x = 4 + Math.floor(Math.random() * 5);
-    for (let h = 0; h < x; h++) {
-      const _ = new Mesh(new SphereGeometry(12 + Math.random() * 18, 14, 8), d);
-      (_.position.set(h * 18 - x * 9, Math.random() * 8, Math.random() * 12),
-        _.scale.set(1.2 + Math.random() * 0.9, 0.36 + Math.random() * 0.2, 0.8 + Math.random() * 0.5),
-        M.add(_));
+  {
+    // Soft billboard clouds: layered puff textures with warm under-lighting instead of hard sphere blobs.
+    const puffTex = (seed) => {
+      const cv = document.createElement("canvas");
+      ((cv.width = 256), (cv.height = 128));
+      const c = cv.getContext("2d");
+      // one coherent cloud mass: big overlapping puffs hugging a center line, tapering at the ends
+      const rnd = (k, m) => Math.sin(seed * m + k * 37.7) * 0.5 + 0.5;
+      for (let k = 0; k < 16; k++) {
+        const fx = k / 15,
+          taper = Math.sin(fx * Math.PI),
+          px = 24 + fx * 208,
+          py = 66 + (rnd(k, 53) - 0.5) * 22 * taper,
+          pr = (18 + rnd(k, 29) * 22) * (0.45 + taper * 0.75),
+          g = c.createRadialGradient(px, py - pr * 0.18, 0, px, py, pr);
+        (g.addColorStop(0, `rgba(255, 240, 226, ${0.5 + taper * 0.3})`),
+          g.addColorStop(0.55, `rgba(252, 214, 196, ${0.3 + taper * 0.16})`),
+          g.addColorStop(1, "rgba(250, 200, 185, 0)"));
+        ((c.fillStyle = g), c.beginPath(), c.arc(px, py, pr, 0, Math.PI * 2), c.fill());
+      }
+      // flat warm underside
+      for (let k = 0; k < 10; k++) {
+        const fx = 0.12 + (k / 9) * 0.76,
+          px = fx * 256,
+          pr = 20 + rnd(k, 71) * 16,
+          g = c.createRadialGradient(px, 92, 0, px, 92, pr);
+        (g.addColorStop(0, "rgba(255, 176, 128, 0.22)"), g.addColorStop(1, "rgba(255, 170, 120, 0)"));
+        ((c.fillStyle = g), c.beginPath(), c.arc(px, 92, pr, 0, Math.PI * 2), c.fill());
+      }
+      const tx = new CanvasTexture(cv);
+      return ((tx.colorSpace = SRGBColorSpace), tx);
+    };
+    const texes = [puffTex(1), puffTex(2), puffTex(3)];
+    qe.cloudSprites = 0;
+    for (let g = 0; g < 44; g++) {
+      const mat = new SpriteMaterial({
+          map: texes[g % 3],
+          transparent: !0,
+          depthWrite: !1,
+          opacity: 0.8 + Math.random() * 0.2,
+          fog: !1,
+        }),
+        sp = new Sprite(mat),
+        w = 170 + Math.random() * 280;
+      (sp.scale.set(w, w * (0.32 + Math.random() * 0.14), 1),
+        sp.position.set(-1500 + Math.random() * 3000, 200 + Math.random() * 210, -1400 + Math.random() * 2600),
+        (sp.renderOrder = -50),
+        et.add(sp),
+        qe.cloudSprites++,
+        Bn(sp, (tt) => {
+          sp.position.x += Math.sin(tt * 0.05 + g) * 0.02;
+        }));
     }
-    (M.position.set(-760 + Math.random() * 1520, 185 + Math.random() * 135, -130 - Math.random() * 1720), et.add(M));
   }
   const f = [
       new MeshStandardMaterial({ color: 6186600, roughness: 0.68, metalness: 0.2 }),
@@ -2298,7 +2348,7 @@ function N1() {
       oe
     );
   }
-  const g = new MeshStandardMaterial({ map: S1(), color: 13097186, roughness: 0.34, metalness: 0.24, envMapIntensity: 1.25, side: DoubleSide }),
+  const g = new MeshStandardMaterial({ map: S1(), color: 15132390, roughness: 0.62, metalness: 0.1, envMapIntensity: 0.8, side: DoubleSide }),
     M = new MeshStandardMaterial({ color: 11054244, roughness: 0.62, metalness: 0.04 }),
     x = new MeshStandardMaterial({ color: 13944196, roughness: 0.44, metalness: 0.05, emissive: 3942912, emissiveIntensity: 0.12 }),
     h = new MeshStandardMaterial({ color: 13617592, roughness: 0.56, metalness: 0.02, emissive: 3158064, emissiveIntensity: 0.06 }),
@@ -4884,6 +4934,142 @@ function buildPonds() {
   ((qe.ponds = placed), et.add(i), bakeMinimap());
 }
 buildPonds();
+// ─── On-foot walker + helicopter and its pad ───
+const walker = U1(3375807, 15905331);
+((walker.visible = !1), walker.scale.setScalar(1.06), et.add(walker));
+const parkedCarPos = new Vector3(0, 0, 0);
+let parkedCarYaw = 0;
+let heli = null;
+function buildHelicopter() {
+  const t = new Group(),
+    body = new MeshStandardMaterial({ color: 12872961, roughness: 0.32, metalness: 0.55, envMapIntensity: 1.1 }),
+    dark = new MeshStandardMaterial({ color: 1710623, roughness: 0.5, metalness: 0.3 }),
+    glass = new MeshStandardMaterial({
+      color: 7924479,
+      roughness: 0.06,
+      metalness: 0.02,
+      transparent: !0,
+      opacity: 0.42,
+      envMapIntensity: 1.5,
+    }),
+    steel = new MeshStandardMaterial({ color: 5860442, roughness: 0.25, metalness: 0.8 }),
+    lamp = new MeshStandardMaterial({ color: 16722713, roughness: 0.2, emissive: 16717836, emissiveIntensity: 2 }),
+    part = (name, geo, mat, x, y, z, rx = 0, ry = 0, rz = 0) => {
+      const m = new Mesh(geo, mat);
+      return ((m.name = name), m.position.set(x, y, z), m.rotation.set(rx, ry, rz), t.add(m), m);
+    };
+  (part("cabin hull", new BoxGeometry(2.5, 2, 4.4), body, 0, 2.1, -0.4),
+    part("cabin floor pan", new BoxGeometry(2.6, 0.4, 4.8), dark, 0, 1.05, -0.3),
+    part("nose glass", new BoxGeometry(2.1, 1.5, 1.1), glass, 0, 2.2, -2.6, -0.2),
+    part("left door glass", new BoxGeometry(0.1, 1.1, 2), glass, -1.28, 2.3, -0.7),
+    part("right door glass", new BoxGeometry(0.1, 1.1, 2), glass, 1.28, 2.3, -0.7),
+    part("roof turbine housing", new BoxGeometry(1.5, 0.8, 2.4), dark, 0, 3.4, -0.2),
+    part("exhaust stub", new CylinderGeometry(0.18, 0.22, 0.7, 10), steel, 0.7, 3.5, 0.9, Math.PI / 2.3),
+    part("tail boom", new BoxGeometry(0.55, 0.6, 4.6), body, 0, 2.7, 3.4, 0.02),
+    part("tail fin", new BoxGeometry(0.14, 1.5, 1), body, 0, 3.4, 5.5, 0, 0, 0),
+    part("tail plane", new BoxGeometry(1.5, 0.12, 0.6), body, 0, 3, 4.6),
+    part("nose lamp", new BoxGeometry(0.5, 0.2, 0.12), lamp, 0, 1.6, -2.95));
+  for (const s of [-1, 1])
+    (part("skid rail", new BoxGeometry(0.16, 0.16, 4.4), steel, s * 1.15, 0.32, -0.4),
+      part("skid strut front", new BoxGeometry(0.12, 0.9, 0.12), steel, s * 1.05, 0.85, -1.5, 0, 0, s * 0.22),
+      part("skid strut rear", new BoxGeometry(0.12, 0.9, 0.12), steel, s * 1.05, 0.85, 0.9, 0, 0, s * 0.22));
+  const hub = part("rotor hub", new CylinderGeometry(0.22, 0.28, 0.5, 10), steel, 0, 3.95, -0.2),
+    rotor = new Group();
+  rotor.name = "main rotor";
+  for (const a of [0, Math.PI / 2]) {
+    const blade = new Mesh(new BoxGeometry(11.4, 0.07, 0.44), dark);
+    ((blade.rotation.y = a), rotor.add(blade));
+  }
+  (rotor.position.set(0, 4.2, -0.2), t.add(rotor));
+  const tailRotor = new Group();
+  tailRotor.name = "tail rotor";
+  for (const a of [0, Math.PI / 2]) {
+    const blade = new Mesh(new BoxGeometry(0.06, 1.7, 0.24), dark);
+    ((blade.rotation.x = a), tailRotor.add(blade));
+  }
+  (tailRotor.position.set(0.36, 3.1, 5.6), t.add(tailRotor));
+  t.traverse((s) => {
+    ((s.castShadow = !0), (s.receiveShadow = !0));
+  });
+  return { mesh: t, rotor, tailRotor };
+}
+function buildHelipad() {
+  let spot = null;
+  for (let k = 0; k < 700 && !spot; k++) {
+    const x = -520 + Math.random() * 1040,
+      z = -1200 + Math.random() * 1500;
+    if (Math.hypot(x - 80, z - 300) > (k < 350 ? 420 : 1200)) continue;
+    if (Hi(x, z, 26, 26, 6)) continue;
+    const a = He(x, z);
+    if (
+      Math.max(
+        Math.abs(He(x + 11, z) - a),
+        Math.abs(He(x - 11, z) - a),
+        Math.abs(He(x, z + 11) - a),
+        Math.abs(He(x, z - 11) - a),
+      ) > 0.8
+    )
+      continue;
+    if (Mn.some((c) => Math.abs(c.x - x) < c.hw + 13 && Math.abs(c.z - z) < c.hd + 13)) continue;
+    if (Sa.some((c) => Math.hypot(c.x - x, c.z - z) < (c.radius || 4) + 13)) continue;
+    if (ponds.some((c) => Math.hypot(c.x - x, c.z - z) < c.rx + 16)) continue;
+    if (nn.some((c) => Math.hypot(c.x - x, c.z - z) < 24)) continue;
+    if (Pn(x, z, 12).clearance < 2) continue;
+    spot = { x, z, y: a };
+  }
+  spot || (spot = { x: 150, z: 330, y: He(150, 330) });
+  const g = new Group(),
+    padMat = new MeshStandardMaterial({ color: 4671310, roughness: 0.85, metalness: 0.05 }),
+    pad = new Mesh(new CylinderGeometry(10.5, 11, 0.24, 36), padMat);
+  (pad.position.set(spot.x, spot.y + 0.12, spot.z), (pad.receiveShadow = !0), g.add(pad));
+  const hv = document.createElement("canvas");
+  ((hv.width = 256), (hv.height = 256));
+  const hc = hv.getContext("2d");
+  ((hc.strokeStyle = "#ffd45b"),
+    (hc.lineWidth = 12),
+    hc.beginPath(),
+    hc.arc(128, 128, 104, 0, Math.PI * 2),
+    hc.stroke(),
+    (hc.fillStyle = "#ffd45b"),
+    (hc.font = "900 150px Arial"),
+    (hc.textAlign = "center"),
+    (hc.textBaseline = "middle"),
+    hc.fillText("H", 128, 136));
+  const htex = new CanvasTexture(hv);
+  htex.colorSpace = SRGBColorSpace;
+  const hMark = new Mesh(new CircleGeometry(9.6, 36), new MeshBasicMaterial({ map: htex, transparent: !0 }));
+  ((hMark.rotation.x = -Math.PI / 2), hMark.position.set(spot.x, spot.y + 0.26, spot.z), g.add(hMark));
+  const lampMat = new MeshStandardMaterial({ color: 6280948, emissive: 5301992, emissiveIntensity: 2.2, roughness: 0.4 });
+  for (let k = 0; k < 8; k++) {
+    const a = (k / 8) * Math.PI * 2,
+      lm = new Mesh(new SphereGeometry(0.22, 8, 6), lampMat);
+    (lm.position.set(spot.x + Math.cos(a) * 10.2, spot.y + 0.34, spot.z + Math.sin(a) * 10.2), g.add(lm));
+  }
+  et.add(g);
+  const built = buildHelicopter();
+  built.mesh.position.set(spot.x, spot.y + 0.24, spot.z);
+  et.add(built.mesh);
+  heli = {
+    pad: spot,
+    pos: new Vector3(spot.x, spot.y + 0.24, spot.z),
+    yaw: Math.random() * Math.PI * 2,
+    vel: new Vector3(),
+    rpm: 0,
+    mesh: built.mesh,
+    rotor: built.rotor,
+    tailRotor: built.tailRotor,
+  };
+  heli.mesh.quaternion.setFromAxisAngle(on, -heli.yaw);
+  qe.helipad = { x: +spot.x.toFixed(1), z: +spot.z.toFixed(1) };
+}
+buildHelipad();
+Bn(new Object3D(), (tt, dt) => {
+  if (!heli) return;
+  const target = u.mode === "roam" && u.vehicle === "heli" ? 1 : 0;
+  ((heli.rpm += (target - heli.rpm) * Math.min(1, dt * (target ? 1.4 : 0.5))),
+    (heli.rotor.rotation.y += heli.rpm * 26 * dt),
+    (heli.tailRotor.rotation.x += heli.rpm * 42 * dt));
+});
 // Splash droplets + expanding wake rings for water driving.
 const Uw = new MeshBasicMaterial({ color: 10470630, transparent: !0, opacity: 0.8, depthWrite: !1 }),
   splashPool = Array.from({ length: 42 }, () => {
@@ -5268,16 +5454,17 @@ function nv() {
   if (!mi) return;
   const { ctx: e } = mi,
     t = e.currentTime,
-    active = u.mode === "race" || u.mode === "roam" || u.mode === "paused",
+    active = (u.mode === "race" || u.mode === "roam" || u.mode === "paused") && !(u.mode === "roam" && u.vehicle === "foot"),
+    heliMode = u.mode === "roam" && u.vehicle === "heli",
     rpm = u.tachRpm || 900,
     load = MathUtils.clamp((rpm - 900) / 6600, 0, 1),
     sp = Math.abs(u.speed),
     wet = u.mode === "roam" ? u.waterDepth || 0 : 0,
-    f = 46 + load * 142;
+    f = heliMode ? 26 + (heli?.rpm || 0) * 14 : 46 + load * 142;
   (mi.rumble.o.frequency.setTargetAtTime(f, t, 0.03),
-    mi.growl.o.frequency.setTargetAtTime(f * 1.5 + 3.2, t, 0.03),
-    mi.whine.o.frequency.setTargetAtTime(f * 4.03, t, 0.03),
-    mi.whine.g.gain.setTargetAtTime(0.04 + load * 0.17, t, 0.08),
+    mi.growl.o.frequency.setTargetAtTime(heliMode ? f * 2 : f * 1.5 + 3.2, t, 0.03),
+    mi.whine.o.frequency.setTargetAtTime(heliMode ? 620 + sp * 4 : f * 4.03, t, 0.03),
+    mi.whine.g.gain.setTargetAtTime(heliMode ? 0.12 : 0.04 + load * 0.17, t, 0.08),
     mi.filter.frequency.setTargetAtTime((420 + load * 2400 + sp * 5) * (1 - 0.6 * wet), t, 0.06),
     mi.engineGain.gain.setTargetAtTime(
       (active && u.mode !== "paused" ? 0.05 + load * 0.052 : 1e-4) * (1 - 0.42 * wet),
@@ -5383,7 +5570,13 @@ function Yd() {
     (u.roamAir = !1),
     (u.roamVy = 0),
     (u.roamPrevY = null),
-    (u.roamAirT = 0));
+    (u.roamAirT = 0),
+    (u.vehicle = "car"),
+    (walker.visible = !1));
+  heli &&
+    (heli.pos.set(heli.pad.x, heli.pad.y + 0.24, heli.pad.z),
+    heli.vel.set(0, 0, 0),
+    heli.mesh.position.copy(heli.pos));
   for (const s of nn) s.collected = !1;
   ((u.message = ""),
     (u.messageTimer = 0),
@@ -5557,6 +5750,8 @@ function iv(i) {
     qn && (qn.visible = !1),
     document.body.classList.add("roam-mode"),
     applyTrackViewClass(),
+    (u.vehicle = "car"),
+    (walker.visible = !1),
     (Qe.position.textContent = "FREE ROAM"),
     (Qe.trackName.textContent = "City Streets"),
     zs());
@@ -5589,6 +5784,8 @@ function publishRoamTelemetry() {
     waterDepth: +(u.waterDepth || 0).toFixed(3),
     driftAngle: +(u.driftAngle || 0).toFixed(3),
     airTime: +(u.roamAirT || 0).toFixed(2),
+    vehicle: u.vehicle || "car",
+    altitude: +(u.roamPos.y - He(u.roamPos.x, u.roamPos.z)).toFixed(1),
     roamPos: { x: u.roamPos.x, y: u.roamPos.y, z: u.roamPos.z },
     input: { steer: Fe.steer, throttle: Fe.throttle, brake: Fe.brake },
     forwardWorld: { x: Math.sin(u.roamYaw), y: 0, z: -Math.cos(u.roamYaw) },
@@ -5665,6 +5862,18 @@ function updateMinimap() {
   for (const t of Ri) {
     const [px, pz] = mmPt(t.x, t.z, size);
     c.fillRect(px - 1.4, pz - 1.4, 2.8, 2.8);
+  }
+  if (heli) {
+    const [hx, hz] = mmPt(heli.pad.x, heli.pad.z, size);
+    ((c.fillStyle = "#ffd45b"), (c.font = "700 11px Arial"), (c.textAlign = "center"), c.fillText("H", hx, hz + 4));
+    if (u.vehicle !== "heli") {
+      const [ax, az] = mmPt(heli.pos.x, heli.pos.z, size);
+      ((c.fillStyle = "#8ef0ff"), c.beginPath(), c.arc(ax, az, 3, 0, Math.PI * 2), c.fill());
+    }
+  }
+  if (u.vehicle !== "car") {
+    const [cx2, cz2] = mmPt(parkedCarPos.x, parkedCarPos.z, size);
+    ((c.fillStyle = "#7dc4ff"), c.fillRect(cx2 - 2.4, cz2 - 2.4, 4.8, 4.8));
   }
   const [px, pz] = mmPt(u.roamPos.x, u.roamPos.z, size);
   (c.save(), c.translate(px, pz), c.rotate(u.roamYaw));
@@ -5824,6 +6033,137 @@ function $d(i) {
     roamVertical(i, _),
     !(_.kind === "ramp" && _.u > 0.72 && Ih(_)) &&
       ((_.kind === "track" && Ih(_)) || (sv(), zs(), _t.has("KeyR") && (Yd(), _t.delete("KeyR")))));
+}
+// ─── Vehicle transitions: car ⇄ foot ⇄ helicopter (E key / touch action button) ───
+function exitCar(force = !1) {
+  if (u.vehicle !== "car" || (!force && Math.abs(u.speed) > 12)) return !1;
+  (parkedCarPos.copy(u.roamPos), (parkedCarYaw = u.roamYaw));
+  ((u.vehicle = "foot"), (u.speed = 0), (u.driftAngle = 0), (u.roamAir = !1), (u.roamVy = 0));
+  const rx = Math.cos(u.roamYaw),
+    rz = Math.sin(u.roamYaw);
+  ((u.roamPos.x -= rx * 3.4), (u.roamPos.z -= rz * 3.4), (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
+  ((walker.visible = !0), (u.message = "On foot — E enters the car or helicopter"), (u.messageTimer = 1.6));
+  return !0;
+}
+function enterCar() {
+  if (u.vehicle !== "foot" || u.roamPos.distanceTo(parkedCarPos) > 7) return !1;
+  ((u.vehicle = "car"),
+    u.roamPos.copy(parkedCarPos),
+    (u.roamYaw = parkedCarYaw),
+    (u.camYaw = parkedCarYaw),
+    (u.speed = 0),
+    (walker.visible = !1),
+    zs());
+  return !0;
+}
+function enterHeli() {
+  if (u.vehicle !== "foot" || !heli || u.roamPos.distanceTo(heli.pos) > 9) return !1;
+  ((u.vehicle = "heli"),
+    u.roamPos.copy(heli.pos),
+    (u.roamYaw = heli.yaw),
+    (u.camYaw = heli.yaw),
+    (u.speed = 0),
+    heli.vel.set(0, 0, 0),
+    (walker.visible = !1),
+    (u.message = "Arrows fly · Space up · Shift down · E lands"),
+    (u.messageTimer = 2.2));
+  return !0;
+}
+function exitHeli() {
+  if (u.vehicle !== "heli" || !heli) return !1;
+  const groundY = He(heli.pos.x, heli.pos.z);
+  if (heli.pos.y - groundY > 4.2 || heli.vel.length() > 9) {
+    ((u.message = "Land first — get low and slow"), (u.messageTimer = 1.1));
+    return !1;
+  }
+  ((u.vehicle = "foot"),
+    (u.roamPos.x = heli.pos.x + Math.cos(heli.yaw) * -4.2),
+    (u.roamPos.z = heli.pos.z + Math.sin(heli.yaw) * -4.2),
+    (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05),
+    (u.speed = 0),
+    (walker.visible = !0));
+  return !0;
+}
+function handleVehicleAction() {
+  u.mode === "roam" &&
+    (u.vehicle === "car"
+      ? exitCar() || ((u.message = "Slow down to step out"), (u.messageTimer = 0.9))
+      : u.vehicle === "foot"
+        ? enterCar() || enterHeli()
+        : exitHeli());
+}
+function walkerUpdate(i) {
+  const t = Math.max(_t.has("KeyW") || _t.has("ArrowUp") ? 1 : 0, Fe.throttle),
+    n = Math.max(_t.has("KeyS") || _t.has("ArrowDown") ? 1 : 0, Fe.brake),
+    r = MathUtils.clamp(
+      (_t.has("KeyD") || _t.has("ArrowRight") ? 1 : 0) - (_t.has("KeyA") || _t.has("ArrowLeft") ? 1 : 0) + Fe.steer,
+      -1,
+      1,
+    ),
+    run = _t.has("ShiftLeft") || _t.has("ShiftRight"),
+    prevSpeed = u.speed,
+    target = (t - n) * (run ? 14.5 : 6.4);
+  ((u.speed += (target - u.speed) * Math.min(1, i * 7)), (u.roamYaw += r * 2.3 * i));
+  const d = Math.sin(u.roamYaw),
+    f = -Math.cos(u.roamYaw);
+  ((u.roamPos.x += d * u.speed * i), (u.roamPos.z += f * u.speed * i));
+  (lv(u.roamPos, { kind: "ground" }),
+    (u.roamPos.x = MathUtils.clamp(u.roamPos.x, -820, 820)),
+    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -1620, 480)),
+    (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
+  (waterPhysics(i, prevSpeed), sv());
+  // pose + limb swing
+  (walker.position.copy(u.roamPos), (walker.rotation.y = Math.atan2(-d, -f)));
+  u.walkPhase = (u.walkPhase || 0) + i * (2 + Math.abs(u.speed) * 0.85);
+  const sw = Math.sin(u.walkPhase) * MathUtils.clamp(Math.abs(u.speed) / 5, 0, 1);
+  for (const L of walker.userData.limbs || [])
+    ((L.mesh.rotation.x = sw * L.amp * L.side * 2.2), (L.mesh.position.y = L.baseY + Math.abs(sw) * 0.03));
+  // proximity hints
+  const nearCar = u.roamPos.distanceTo(parkedCarPos) < 7,
+    nearHeli = heli && u.roamPos.distanceTo(heli.pos) < 9;
+  u.messageTimer <= 0 &&
+    (nearCar
+      ? ((u.message = "E — enter car"), (u.messageTimer = 0.2))
+      : nearHeli && ((u.message = "E — enter helicopter"), (u.messageTimer = 0.2)));
+}
+function heliUpdate(i) {
+  if (!heli) return;
+  const fwd =
+      Math.max(_t.has("KeyW") || _t.has("ArrowUp") ? 1 : 0, Fe.throttle) -
+      Math.max(_t.has("KeyS") || _t.has("ArrowDown") ? 1 : 0, Fe.brake),
+    yawIn = MathUtils.clamp(
+      (_t.has("KeyA") || _t.has("ArrowLeft") ? 1 : 0) - (_t.has("KeyD") || _t.has("ArrowRight") ? 1 : 0) - Fe.steer,
+      -1,
+      1,
+    ),
+    lift = heli.rpm > 0.55,
+    boostHeld = _t.has("ShiftLeft") || _t.has("ShiftRight"),
+    // touch devices: hold the boost button to climb, release to sink gently; desktop: Space up / Shift down
+    upIn = mobilePerf ? (boostHeld ? 1 : heli.pos.y - He(heli.pos.x, heli.pos.z) > 6 ? -0.45 : 0) : _t.has("Space") ? 1 : boostHeld ? -1 : 0;
+  heli.yaw -= yawIn * 1.5 * i * (lift ? 1 : 0.2);
+  const d = Math.sin(heli.yaw),
+    f = -Math.cos(heli.yaw);
+  if (lift) {
+    ((heli.vel.x += d * fwd * 30 * i), (heli.vel.z += f * fwd * 30 * i), (heli.vel.y += upIn * 24 * i));
+    // touch flight auto-hover: gently sinks toward a cruising floor when no vertical input
+    upIn === 0 && (heli.vel.y -= heli.vel.y * 1.6 * i);
+  }
+  (heli.vel.x -= heli.vel.x * 0.85 * i, (heli.vel.z -= heli.vel.z * 0.85 * i), (heli.vel.y -= heli.vel.y * 1.1 * i));
+  heli.pos.addScaledVector(heli.vel, i);
+  const groundY = He(heli.pos.x, heli.pos.z);
+  ((heli.pos.x = MathUtils.clamp(heli.pos.x, -1500, 1500)),
+    (heli.pos.z = MathUtils.clamp(heli.pos.z, -1900, 700)),
+    (heli.pos.y = Math.min(heli.pos.y, 300)));
+  heli.pos.y < groundY + 1.1 && ((heli.pos.y = groundY + 1.1), (heli.vel.y = Math.max(0, heli.vel.y)));
+  // low-altitude building avoidance (colliders skip us once we're above their maxY)
+  (Lo(heli.pos, Mn) || Lo(heli.pos, Di)) &&
+    (heli.vel.multiplyScalar(0.25), (u.cameraShake = Math.max(u.cameraShake, 0.2)));
+  ((u.roamPos.x = heli.pos.x), (u.roamPos.y = heli.pos.y), (u.roamPos.z = heli.pos.z), (u.roamYaw = heli.yaw));
+  u.speed = Math.hypot(heli.vel.x, heli.vel.z);
+  (heli.mesh.position.copy(heli.pos), heli.mesh.quaternion.setFromAxisAngle(on, -heli.yaw));
+  (heli.mesh.rotateX(MathUtils.clamp((heli.vel.x * d + heli.vel.z * f) * 0.008, -0.24, 0.24)),
+    heli.mesh.rotateZ(MathUtils.clamp(yawIn * 0.14, -0.2, 0.2)));
+  sv();
 }
 function driftScoreUpdate(i, hb, collided) {
   const active = hb && Math.abs(u.driftAngle || 0) > 0.16 && Math.abs(u.speed) > 24;
@@ -6088,8 +6428,9 @@ function jd(i) {
     s = u.roamPos,
     r = MathUtils.clamp(u.cameraZoom, -0.42, 0.9),
     a = MathUtils.clamp(Math.abs(u.speed) / 135, 0, 1),
-    o = (17 + Math.abs(u.speed) * 0.11 + u.roamSlip * 3) * (1 + r * 0.72),
-    c = 7.2 + a * 2.1 + Math.max(0, r) * 4.4 - Math.min(0, r) * 2 + u.camLookPitch * 5.8,
+    vm = u.vehicle === "foot" ? { d: 0.42, h: 0.5 } : u.vehicle === "heli" ? { d: 1.55, h: 1.4 } : { d: 1, h: 1 },
+    o = (17 + Math.abs(u.speed) * 0.11 + u.roamSlip * 3) * (1 + r * 0.72) * vm.d,
+    c = (7.2 + a * 2.1 + Math.max(0, r) * 4.4 - Math.min(0, r) * 2 + u.camLookPitch * 5.8) * vm.h,
     l = Id.set(s.x - t * o, s.y + c, s.z - n * o);
   if (u.cameraShake > 0.01 || u.collisionDrama > 0.01) {
     const m = u.cameraShake + u.collisionDrama * 0.42;
@@ -6318,6 +6659,34 @@ window.__steelRibbonDebug = {
       $n.forEach((c, i) => checkOne("$n", i, c)));
     return { total: Mn.length + Di.length + $n.length, blockers: findings };
   },
+  setVehicle(v) {
+    if (u.mode !== "roam") Yd();
+    if (v === "foot") u.vehicle === "car" ? exitCar(!0) : u.vehicle === "heli" && exitHeli();
+    else if (v === "heli" && heli) {
+      u.vehicle === "car" && exitCar(!0);
+      (u.roamPos.set(heli.pos.x + 3, He(heli.pos.x + 3, heli.pos.z), heli.pos.z), enterHeli());
+    } else if (v === "car") {
+      u.vehicle === "heli" && ((heli.pos.y = He(heli.pos.x, heli.pos.z) + 1.1), heli.vel.set(0, 0, 0), exitHeli());
+      u.vehicle === "foot" && (u.roamPos.copy(parkedCarPos), enterCar());
+    }
+    return u.vehicle;
+  },
+  vehicleInfo() {
+    return {
+      vehicle: u.vehicle || "car",
+      walkerVisible: walker.visible,
+      heli: heli
+        ? {
+            x: +heli.pos.x.toFixed(1),
+            y: +heli.pos.y.toFixed(1),
+            z: +heli.pos.z.toFixed(1),
+            rpm: +heli.rpm.toFixed(2),
+            pad: heli.pad ? { x: +heli.pad.x.toFixed(1), z: +heli.pad.z.toFixed(1) } : null,
+          }
+        : null,
+      parkedCar: { x: +parkedCarPos.x.toFixed(1), z: +parkedCarPos.z.toFixed(1) },
+    };
+  },
   setRoamPos(i, e, t = 0, n = 0) {
     return (
       u.mode !== "roam" && Yd(),
@@ -6338,6 +6707,8 @@ window.__steelRibbonDebug = {
       railPosts: qe.railPosts || 0,
       ponds: ponds.length,
       cityPonds: qe.ponds || 0,
+      cloudSprites: qe.cloudSprites || 0,
+      helipad: qe.helipad || null,
     };
   },
   stats() {
@@ -7393,7 +7764,11 @@ function vr() {
   const s = u.mode === "race" || u.mode === "paused" || n;
   if (
     ((Qe.position.textContent = n
-      ? "FREE ROAM"
+      ? u.vehicle === "foot"
+        ? "ON FOOT"
+        : u.vehicle === "heli"
+          ? "HELICOPTER"
+          : "FREE ROAM"
       : u.freeRun
         ? "FREE RUN"
         : u.practice
@@ -7441,7 +7816,9 @@ function nu() {
     e = Math.min(0.033, i);
   (u.messageTimer > 0 && (u.messageTimer -= e),
     u.mode === "roam"
-      ? ($d(e), jd(e), publishRoamTelemetry())
+      ? ((u.vehicle === "foot" ? walkerUpdate(e) : u.vehicle === "heli" ? heliUpdate(e) : $d(e)),
+        jd(e),
+        publishRoamTelemetry())
       : u.mode === "menu"
         ? (uv(e), menuCinematic(e))
         : (eu(e), uv(e), updateTrackCarPose(), updateGhost(), dl(e)),
@@ -7469,6 +7846,7 @@ window.addEventListener("keydown", (i) => {
   (_t.add(i.code),
     ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(i.code) && i.preventDefault(),
     i.code === "KeyC" && (u.mode === "race" || u.mode === "paused") && toggleTrackView(),
+    i.code === "KeyE" && handleVehicleAction(),
     i.code === "KeyP" && u.mode === "race"
       ? ((u.mode = "paused"), _t.clear(), Ia())
       : i.code === "KeyP" && u.mode === "paused"
@@ -7513,6 +7891,13 @@ volBtn.addEventListener("click", (ev) => {
     refreshVolLabel());
 });
 Qe.menu.appendChild(volBtn);
+// Touch action button: enter/exit vehicles in free roam.
+const actionBtn = document.createElement("button");
+((actionBtn.id = "actionBtn"), (actionBtn.type = "button"), (actionBtn.textContent = "E"));
+actionBtn.addEventListener("pointerdown", (ev) => {
+  (ev.preventDefault(), La(), handleVehicleAction());
+});
+Qe.touchControls.appendChild(actionBtn);
 // Car garage selector — four models, persisted choice.
 const carSel = document.createElement("div");
 carSel.className = "course-select";
