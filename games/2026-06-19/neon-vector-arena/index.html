@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  VECTOR ARENA v5.1 — Geometry Wars-style polish pass CHANGELOG
+  VECTOR ARENA v5.2 — Geometry Wars-style polish pass CHANGELOG
   ==================================================================
   VISUALS
   - New deforming spring-mesh grid (ripples from shots, explosions, bombs; bends into gravity wells).
@@ -770,7 +770,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v5.1</div>
+	    <div class="title-version" id="titleVersion">v5.2</div>
 	    <div class="photo-note" id="photoNote">
 	      <b>Photosensitivity notice:</b> this game contains rapid flashing lights, screen shake, and pulsing neon effects. A reduced-flash mode is available.
 	      <div class="mini-grid">
@@ -848,7 +848,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v5.1</div>
+<div class="version">v5.2</div>
 
 <script>
 'use strict';
@@ -1028,7 +1028,7 @@ const MAX_MULTIPLIER = 999;
 const SETTINGS_KEY = 'neon-vector-arena-settings-v1';
 const PHOTO_KEY = 'neon-vector-arena-photo-notice-v1';
 const DEFAULTS = Object.freeze({
-  masterVol: .8, sfxVol: .9, musicVol: .7, muteAll: false, rumble: .7,
+  masterVol: .8, sfxVol: .9, musicVol: .7, muteAll: false, rumble: .7, hqSounds: true, hqMusic: true,
   bloom: 1, glowBright: 1, gridWarp: 1, gridDensity: 1, particleAmount: 1, trailLen: 1,
   screenShake: 1, hitStop: 1, chromatic: 1, bgPulse: 1, vignette: .8,
   colorBlind: false, showFps: false, autoQuality: true,
@@ -1110,6 +1110,8 @@ function applySettings() {
   PLAYER_MAX_SPEED = 440 * clamp(s.playerSpeed, .6, 1.6);
   PLAYER_ACCEL = 2200 * clamp(s.playerSpeed, .6, 1.6);
   audioMuted = !!s.muteAll;
+  if (!s.hqMusic) stopHqMusic();
+  loadSamples();
   document.body.classList.toggle('big-hud', !!s.bigHud);
   updateAudioGains();
   if (W) buildGridMesh();
@@ -1959,6 +1961,8 @@ function ensureAudio() {
     musicGain.connect(musicDuck).connect(masterGain);
     masterGain.connect(audioCtx.destination);
     updateAudioGains();
+    loadSamples();
+    decodeSamples();
     startMusic();
   }
   if (audioCtx.state === 'suspended' && !document.hidden) audioCtx.resume();
@@ -2034,8 +2038,104 @@ const DEATH_TONES = {
   splitter: [220, 'square'], well: [120, 'sawtooth'], boss: [90, 'sawtooth']
 };
 
+// ---- HQ audio pack ----
+// Samples generated offline with ElevenLabs (see workspace script); the procedural synth
+// below remains the automatic fallback while loading, on fetch failure, or when toggled off.
+const SAMPLE_BASE = 'assets/audio/';
+const SAMPLE_NAMES = ['shot1', 'shot2', 'pop1', 'pop2', 'boom', 'bossHit', 'bossDeath', 'geom', 'multUp', 'bomb', 'playerHit', 'extraLife', 'waveStart', 'gameOver', 'wellSpawn', 'wellBurst', 'uiClick', 'music'];
+const samples = {};
+const sampleRaw = {};
+let samplesRequested = false;
+let hqMusicSrc = null, hqMusicAmp = null;
+
+// Fetch immediately (no AudioContext needed); decode once audio unlocks on first gesture.
+function loadSamples() {
+  if (samplesRequested || !(settings.hqSounds || settings.hqMusic)) return;
+  samplesRequested = true;
+  for (const name of SAMPLE_NAMES) {
+    fetch(SAMPLE_BASE + name + '.mp3')
+      .then(r => r.ok ? r.arrayBuffer() : Promise.reject(new Error(String(r.status))))
+      .then(buf => { sampleRaw[name] = buf; decodeSample(name); })
+      .catch(() => {});
+  }
+}
+
+function decodeSample(name) {
+  if (!audioCtx || !sampleRaw[name] || samples[name]) return;
+  const raw = sampleRaw[name];
+  sampleRaw[name] = null;
+  audioCtx.decodeAudioData(raw).then(decoded => { samples[name] = decoded; }).catch(() => {});
+}
+
+function decodeSamples() {
+  for (const name of SAMPLE_NAMES) decodeSample(name);
+}
+
+function playSample(name, gain = 1, rate = 1) {
+  const buf = samples[name];
+  if (!buf || !audioCtx || audioCtx.state !== 'running') return false;
+  const src = audioCtx.createBufferSource();
+  src.buffer = buf;
+  src.playbackRate.value = rate;
+  const amp = audioCtx.createGain();
+  amp.gain.value = gain;
+  src.connect(amp).connect(sfxGain);
+  src.start();
+  return true;
+}
+
+// Map sfx kinds onto pack samples; false falls through to the synth version.
+function hqSfx(kind, variant) {
+  if (!settings.hqSounds) return false;
+  const jitter = () => .94 + Math.random() * .12;
+  switch (kind) {
+    case 'shot': return playSample(Math.random() < .5 ? 'shot1' : 'shot2', .5, .9 + Math.random() * .25);
+    case 'hit': return playSample('pop1', .3, 1.5 + Math.random() * .2);
+    case 'kill': {
+      if (variant === 'well') return playSample('wellBurst', .85, 1);
+      const spice = variant ? (variant.length * 7 % 5) * .04 : 0;
+      return playSample(Math.random() < .5 ? 'pop1' : 'pop2', .8, .88 + spice + Math.random() * .14);
+    }
+    case 'geom': return playSample('geom', .55, Math.pow(2, Math.min(geomStreak, 24) / 16) * .9);
+    case 'multUp': return playSample('multUp', .7, jitter());
+    case 'playerHit': { const ok = playSample('playerHit', .9, jitter()); if (ok) duckMusic(.4, .5); return ok; }
+    case 'life': return playSample('extraLife', .85, 1);
+    case 'bossHit': return playSample('bossHit', .6, .92 + Math.random() * .16);
+    case 'bossDeath': { const ok = playSample('bossDeath', 1, 1); if (ok) duckMusic(.2, 1.4); return ok; }
+    case 'boom': { const ok = playSample('boom', .85, jitter()); if (ok) duckMusic(.3, .8); return ok; }
+    case 'bomb': { const ok = playSample('bomb', 1, 1); if (ok) duckMusic(.25, 1.1); return ok; }
+    case 'waveStart': return playSample('waveStart', .55, 1);
+    case 'well': return playSample('wellSpawn', .6, 1);
+    case 'pickup': return playSample('multUp', .55, .82);
+    case 'over': return playSample('gameOver', .9, 1);
+    case 'ui': return playSample('uiClick', .5, jitter());
+  }
+  return false;
+}
+
+function startHqMusic() {
+  if (hqMusicSrc || !samples.music || !audioCtx) return false;
+  hqMusicAmp = audioCtx.createGain();
+  hqMusicAmp.gain.value = .0001;
+  const src = audioCtx.createBufferSource();
+  src.buffer = samples.music;
+  src.loop = true;
+  src.connect(hqMusicAmp).connect(musicGain);
+  src.start();
+  hqMusicSrc = src;
+  return true;
+}
+
+function stopHqMusic() {
+  if (!hqMusicSrc) return;
+  try { hqMusicSrc.stop(); } catch {}
+  hqMusicSrc = null;
+  hqMusicAmp = null;
+}
+
 function sfx(kind, variant = null) {
   if (demo) return;
+  if (hqSfx(kind, variant)) return;
   if (kind === 'shot') {
     tone(1180 + Math.random() * 140, .05, 'square', .014, .42);
     tone(2280 + Math.random() * 220, .028, 'sawtooth', .006, .6);
@@ -2084,7 +2184,7 @@ function sfx(kind, variant = null) {
     noiseBurst(.3, .02, 2400, 'bandpass', 'sfx', audioCtx ? audioCtx.currentTime + .08 : 0);
     duckMusic(.2, 1.2);
   }
-  else if (kind === 'boom') {
+  else if (kind === 'boom' || kind === 'bomb') {
     tone(82, .32, 'triangle', .066, .24);
     tone(46, .42, 'sine', .062, .38);
     tone(260, .13, 'triangle', .028, .52);
@@ -2128,6 +2228,15 @@ function startMusic() {
 function musicTick() {
   const ac = audioCtx;
   if (!ac || ac.state !== 'running' || audioMuted || settings.musicVol <= 0.001) return;
+  // Generated track replaces the procedural bed when enabled and decoded; its level
+  // follows the same intensity curve, and musicDuck ducking applies unchanged.
+  if (settings.hqMusic) {
+    if (!hqMusicSrc) startHqMusic();
+    if (hqMusicSrc) {
+      hqMusicAmp.gain.setTargetAtTime(.3 + musicIntensity() * .7, ac.currentTime, .6);
+      return;
+    }
+  } else if (hqMusicSrc) stopHqMusic();
   if (music.next < ac.currentTime - .5) music.next = ac.currentTime + .05;
   const level = musicIntensity();
   while (music.next < ac.currentTime + .22) {
@@ -3806,7 +3915,7 @@ function usePanicBomb() {
   gridImpulse(player.x, player.y, PANIC_RADIUS * 1.7, 15000);
   rumble(1, .7, 300);
   addBanner('PANIC BOMB', 188);
-  sfx('boom');
+  sfx('bomb');
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .55, max: .55, r: PANIC_RADIUS, hue: 188, kind: 'ring' });
   particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .8, max: .8, r: PANIC_RADIUS * 1.35, hue: 210, kind: 'ring' });
   if (fxFlash() > 0) particles.push({ x: player.x, y: player.y, vx: 0, vy: 0, life: .14, max: .14, r: PANIC_RADIUS * .75, hue: 0, kind: 'flash' });
@@ -5606,6 +5715,8 @@ const OPTION_GROUPS = [
     { key: 'sfxVol', label: 'SFX Volume', type: 'range', min: 0, max: 1, step: .05 },
     { key: 'musicVol', label: 'Music Volume', type: 'range', min: 0, max: 1, step: .05 },
     { key: 'muteAll', label: 'Mute All (M)', type: 'toggle' },
+    { key: 'hqSounds', label: 'HQ Sound Pack', type: 'toggle' },
+    { key: 'hqMusic', label: 'HQ Music Track', type: 'toggle' },
     { key: 'rumble', label: 'Rumble Intensity', type: 'range', min: 0, max: 1, step: .1 }
   ] },
   { title: 'Visual / FX', items: [
