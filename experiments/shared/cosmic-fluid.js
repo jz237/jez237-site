@@ -498,27 +498,29 @@
 
     var config = {
       CURL: 30,
-      DENSITY_DISSIPATION: 0.9,
+      DENSITY_DISSIPATION: 1.8,
       VELOCITY_DISSIPATION: 0.2,
       PRESSURE: 0.8,
-      SPLAT_RADIUS: 0.25,
+      SPLAT_RADIUS: 0.22,
       SPLAT_FORCE: 6000,
       COLOR_SPEED: 14,
-      BLOOM_INTENSITY: 0.9,
+      BLOOM_INTENSITY: 0.8,
       BLOOM_THRESHOLD: 0.5,
       MIRROR: "off",       // off | 2-way | 4-way
       DISPLAY_MODE: 0,     // 0 dye | 1 velocity | 3 curl
       SHADING: true,
     };
 
+    // dye fade stays high: emitters inject every frame (unlike Fluid Lab's
+    // pointer strokes), so slow-fading dye accumulates into a white screen
     var DIAL_RANGES = {
       CURL: [4, 50],
-      DENSITY_DISSIPATION: [0.2, 2.2],
+      DENSITY_DISSIPATION: [0.85, 2.8],
       VELOCITY_DISSIPATION: [0.05, 1.2],
-      SPLAT_RADIUS: [0.12, 0.55],
+      SPLAT_RADIUS: [0.1, 0.38],
       SPLAT_FORCE: [3500, 9000],
       COLOR_SPEED: [5, 45],
-      BLOOM_INTENSITY: [0.45, 1.4],
+      BLOOM_INTENSITY: [0.4, 1.0],
     };
     var dialKeys = Object.keys(DIAL_RANGES);
     var glides = {};          // key -> { target, rate }
@@ -655,7 +657,7 @@
         var speed = config.SPLAT_FORCE * level * 0.16;
         var dx = -Math.sin(e.ang) * e.dir * speed;
         var dy = Math.cos(e.ang) * e.dir * speed * 0.82;
-        var color = hsvColor(baseHue + e.hueOff, 0.11 + level * 0.28);
+        var color = hsvColor(baseHue + e.hueOff, 0.05 + level * 0.15);
         splatWithMirror(x, y, dx, dy, color);
       }
       if (!audio.live) {
@@ -671,9 +673,9 @@
 
     function burst(strength) {
       if (!velocity) return;
-      var count = 3 + Math.floor(strength * 6);
+      var count = 2 + Math.floor(strength * 5);
       for (var i = 0; i < count; i++) {
-        var color = hsvColor(Math.random(), 1.2 + strength);
+        var color = hsvColor(Math.random(), 0.5 + strength * 0.7);
         var x = Math.random();
         var y = Math.random();
         var dx = (300 + strength * 700) * (Math.random() - 0.5) * 2;
