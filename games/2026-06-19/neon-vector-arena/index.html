@@ -1259,10 +1259,16 @@ function enemyTrait(type) {
   return ENEMY_TRAITS[type] || null;
 }
 
+// Waves past 40 keep ratcheting pressure (endless surge) so runs can't reach equilibrium.
+function lateSurge(value = wave) {
+  return Math.max(0, value - 40);
+}
+
 function waveShapeCount(value = wave) {
   const cappedWave = Math.min(Math.max(1, value), 40);
   const count = cappedWave <= 4 ? 1 + cappedWave * 2 : 9 + (cappedWave - 4);
-  return clamp(count, 3, Math.min(MAX_ENEMIES, 45));
+  const surge = Math.floor(lateSurge(value) / 3);
+  return clamp(count + surge, 3, Math.min(MAX_ENEMIES, 45 + Math.min(11, surge)));
 }
 
 function unlockedShapeTypes(value = wave) {
@@ -2281,7 +2287,7 @@ function updateHud(force = false) {
   const destroyed = innerWidth >= 620 ? 'Destroyed ' + kills : '';
   const frames = settings.showFps && innerWidth >= 520 ? 'FPS ' + fpsDisplay : '';
   comboEl.textContent = hudParts([
-    scoreLabel + ' ' + String(Math.floor(score)).padStart(6, '0'),
+    scoreLabel + ' ' + (score >= 1e6 ? Math.floor(score).toLocaleString('en-US') : String(Math.floor(score)).padStart(6, '0')),
     'Combo ' + combo,
     destroyed,
     boss,
@@ -2383,7 +2389,7 @@ function spawnEnemy(initial = false, prepared = null) {
   const def = shapeDef(type);
   const baseR = def.baseR;
   const tier = SIZE_TIERS.find(item => item.name === prepared?.sizeTier) || chooseSizeTier(initial);
-  const eliteChance = clamp(.025 + wave * .002 + (wave % 5 === 0 ? .05 : 0) + (eliteRushTimer > 0 ? .16 : 0), .025, eliteRushTimer > 0 ? .28 : .11);
+  const eliteChance = clamp(.025 + wave * .002 + (wave % 5 === 0 ? .05 : 0) + (eliteRushTimer > 0 ? .16 : 0), .025, eliteRushTimer > 0 ? Math.min(.34, .28 + lateSurge() * .002) : Math.min(.3, .11 + lateSurge() * .004));
   const elite = boss || (!initial && !isWell && wave >= 4 && Math.random() < eliteChance);
   const scale = isWell ? 1 : (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06) * (elite ? 1.16 : 1) * (boss ? 1.78 + Math.min(wave, 40) * .012 : 1);
   const largeSplits = !boss && !isWell && tier.name === 'large';
@@ -2405,7 +2411,7 @@ function spawnEnemy(initial = false, prepared = null) {
     scale,
     sizeTier: tier.name,
     largeSplits,
-    speed: isWell ? speedBase : Math.min(speed + wave * (boss ? 1.1 : 2.2) * clamp(settings.enemySpeed, .5, 1.8), boss ? ENEMY_SPEED_CAP * .82 : ENEMY_SPEED_CAP),
+    speed: isWell ? speedBase : Math.min(speed + wave * (boss ? 1.1 : 2.2) * clamp(settings.enemySpeed, .5, 1.8), (boss ? ENEMY_SPEED_CAP * .82 : ENEMY_SPEED_CAP) * (1 + Math.min(.35, lateSurge() * .008))),
     rot: rand(0, TAU),
     spin: rand(-2.8, 2.8) * (boss ? .45 : 1),
     hue: prepared?.hue ?? enemyHue(def, tier, type, boss),
@@ -4338,7 +4344,7 @@ function update(dt) {
   if (waveBreather <= 0) {
     spawnTimer -= dt;
     if (spawnTimer <= 0) {
-      spawnTimer = Math.max(.2, (.86 - wave * .012) * (activeModifier?.spawn || 1) / clamp(settings.spawnRate, .4, 2));
+      spawnTimer = Math.max(Math.max(.11, .2 - lateSurge() * .002), (.86 - wave * .012) * (activeModifier?.spawn || 1) / clamp(settings.spawnRate, .4, 2));
       queueSpawnWarning();
     }
   }
