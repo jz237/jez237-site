@@ -364,6 +364,65 @@ const browser = await chromium.launch({
   await ctx.close();
 }
 
+// ---------- v3.2: clouds/helipad built, vehicle transitions, heli flight ----------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+
+  const sc32 = await page.evaluate(() => window.__steelRibbonDebug.sceneryCounters());
+  check("billboard clouds present", sc32.cloudSprites >= 30, `clouds=${sc32.cloudSprites}`);
+  check("helipad built", !!sc32.helipad, JSON.stringify(sc32.helipad));
+
+  await page.locator("#roamBtn").click();
+  await page.waitForTimeout(800);
+  // car -> foot via E, walk, re-enter
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(500);
+  let v = await page.evaluate(() => window.__steelRibbonTelemetry.vehicle);
+  check("E exits car to foot", v === "foot", v);
+  await page.keyboard.down("ArrowUp");
+  await page.waitForTimeout(1500);
+  const walkSpeed = await page.evaluate(() => Math.abs(window.__steelRibbonTelemetry.speed));
+  await page.keyboard.up("ArrowUp");
+  check("walking moves at foot pace", walkSpeed > 1 && walkSpeed < 18, `speed=${walkSpeed.toFixed(1)}`);
+  await page.evaluate(() => {
+    const vi = window.__steelRibbonDebug.vehicleInfo();
+    window.__steelRibbonDebug.setRoamPos(vi.parkedCar.x - 2, vi.parkedCar.z, 0, 0);
+  });
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(400);
+  v = await page.evaluate(() => window.__steelRibbonTelemetry.vehicle);
+  check("E re-enters car", v === "car", v);
+
+  // heli: enter, spin up, climb, altitude exit guard, land, exit
+  await page.evaluate(() => window.__steelRibbonDebug.setVehicle("heli"));
+  await page.waitForTimeout(400);
+  v = await page.evaluate(() => window.__steelRibbonTelemetry.vehicle);
+  check("enter helicopter", v === "heli", v);
+  await page.keyboard.down("Space");
+  const climbed = await poll(page, () => window.__steelRibbonTelemetry.altitude, (a) => a > 6, 80);
+  check("helicopter climbs", climbed > 6, `alt=${climbed}`);
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(400);
+  const still = await page.evaluate(() => window.__steelRibbonTelemetry.vehicle);
+  check("exit blocked at altitude", still === "heli", still);
+  await page.keyboard.up("Space");
+  await page.keyboard.down("ShiftLeft");
+  await poll(page, () => window.__steelRibbonTelemetry.altitude, (a) => a < 2.5, 90);
+  await page.keyboard.up("ShiftLeft");
+  await page.waitForTimeout(500);
+  await page.keyboard.press("KeyE");
+  await page.waitForTimeout(400);
+  v = await page.evaluate(() => window.__steelRibbonTelemetry.vehicle);
+  check("land and exit to foot", v === "foot", v);
+  check("no console errors (v3.2)", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await ctx.close();
+}
+
 // ---------- mobile ----------
 {
   const ctx = await browser.newContext({ ...devices["iPhone 13"], hasTouch: true });
