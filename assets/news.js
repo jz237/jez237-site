@@ -103,6 +103,205 @@ function placeholderImage(source) {
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 
+function canonicalArticleUrl(url) {
+  if (!url) return '';
+  try {
+    const parsed = new URL(url);
+    parsed.hash = '';
+    return parsed.toString().replace(/\/$/, '');
+  } catch {
+    return String(url).split('#')[0].replace(/\/$/, '');
+  }
+}
+
+function sourceGroupKey(item) {
+  const itemBase = canonicalArticleUrl(item?.url);
+  if (!itemBase) return '';
+  const sourceBase = canonicalArticleUrl(item?.sourceUrl || '');
+  if (sourceBase && itemBase !== sourceBase && (item?.url || '').includes('#')) return '';
+  return `${item.category || 'AI'}|${item.source || 'Unknown'}|${itemBase}`;
+}
+
+function blockId(block) {
+  return block?.type === 'source-group' ? block.key : `item:${block?.url || block?.item?.url || ''}`;
+}
+
+function blockItems(block) {
+  return block?.type === 'source-group' ? block.items : [block?.item || block].filter(Boolean);
+}
+
+function blockScore(block) {
+  return Math.max(...blockItems(block).map(item => item.score || 0), 0);
+}
+
+function blockPublishedValue(block) {
+  return Math.max(...blockItems(block).map(item => new Date(item.published || 0).getTime() || 0), 0);
+}
+
+function blockRepresentative(block) {
+  if (block?.type !== 'source-group') return block?.item || block;
+  return block.representative || block.items[0];
+}
+
+function blockSignalGroup(block) {
+  return blockRepresentative(block)?.signalGroup || 'Product updates';
+}
+
+function sharedTextValue(items, field) {
+  const values = [...new Set(items.map(item => (item?.[field] || '').trim()).filter(Boolean))];
+  return values.length === 1 ? values[0] : '';
+}
+
+function findSourceRoot(items, articleUrl) {
+  return items.find(item => canonicalArticleUrl(item.url) === articleUrl && !(item.url || '').includes('#')) || null;
+}
+
+function sourceGroupTitle(block) {
+  if (block.root?.title) return block.root.title;
+  const representative = block.representative;
+  let date = '';
+  try {
+    date = representative?.published
+      ? new Date(representative.published).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+      : '';
+  } catch {}
+  return [representative?.source || 'Shared source', date].filter(Boolean).join(' - ');
+}
+
+function buildStoryBlocks(items) {
+  const groups = new Map();
+  items.forEach((item, index) => {
+    const key = sourceGroupKey(item);
+    if (!key) return;
+    if (!groups.has(key)) {
+      groups.set(key, { key, articleUrl: canonicalArticleUrl(item.url), items: [], firstIndex: index });
+    }
+    const group = groups.get(key);
+    group.items.push(item);
+    group.firstIndex = Math.min(group.firstIndex, index);
+  });
+
+  const consumedUrls = new Set();
+  const sourceGroups = [];
+  groups.forEach(group => {
+    if (group.items.length < 2) return;
+    group.items.sort((a, b) => (b.score || 0) - (a.score || 0));
+    const root = findSourceRoot(group.items, group.articleUrl);
+    const representative = group.items[0];
+    group.items.forEach(item => consumedUrls.add(item.url));
+    sourceGroups.push({
+      type: 'source-group',
+      key: group.key,
+      articleUrl: group.articleUrl,
+      root,
+      representative,
+      firstIndex: group.firstIndex,
+      items: group.items
+    });
+  });
+
+  const blocks = [
+    ...sourceGroups,
+    ...items
+      .filter(item => !consumedUrls.has(item.url))
+      .map((item, index) => ({ ...item, firstIndex: index }))
+  ];
+
+  return blocks.sort((a, b) => {
+    return (blockPublishedValue(b) - blockPublishedValue(a)) || ((a.firstIndex || 0) - (b.firstIndex || 0));
+  });
+}
+
+function groupBlocksBySignal(blocks) {
+  const grouped = new Map();
+  blocks.forEach(block => {
+    const key = blockSignalGroup(block);
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(block);
+  });
+  return grouped;
+}
+
+function renderCardImage(item, className, eager = false) {
+  const img = document.createElement('img');
+  img.className = className;
+  img.alt = '';
+  img.loading = eager ? 'eager' : 'lazy';
+  if (eager) img.fetchPriority = 'high';
+  img.referrerPolicy = 'no-referrer';
+
+  if (item?.image && !isLikelyBadImage(item.image)) {
+    img.src = item.image;
+    img.onerror = () => {
+      img.src = placeholderImage(item.source);
+    };
+    img.onload = () => {
+      if (img.naturalWidth < 240 || img.naturalHeight < 120) {
+        img.src = placeholderImage(item.source);
+      }
+    };
+  } else {
+    img.src = placeholderImage(item?.source);
+  }
+
+  return img;
+}
+
+function renderSourceGroup(block, featuredSet, wrap) {
+  const root = block.root;
+  const representative = block.representative;
+  const isFeatured = featuredSet.has(block.key);
+  const card = el('article', `news-source-group ${isFeatured ? 'featured' : 'compact'}`);
+  card.appendChild(renderCardImage(representative, 'news-source-group-img', isFeatured));
+
+  const body = el('div', 'news-source-group-body');
+  const badges = el('div', 'news-card-badges');
+  if (blockSignalGroup(block)) badges.appendChild(el('span', 'badge signal-badge', blockSignalGroup(block)));
+  badges.appendChild(el('span', 'badge cluster-badge', `${block.items.length} briefs`));
+  const signalCount = new Set(block.items.map(item => item.signalGroup).filter(Boolean)).size;
+  if (signalCount > 1) badges.appendChild(el('span', 'badge source-badge', `${signalCount} signals`));
+  if (representative.sourceTier) badges.appendChild(el('span', `badge source-badge ${(representative.sourceRole || '').toLowerCase()}`, representative.sourceTier));
+  body.appendChild(badges);
+
+  const title = document.createElement('a');
+  title.className = 'news-source-group-title';
+  title.href = root?.url || representative.sourceUrl || representative.url;
+  title.target = '_blank';
+  title.rel = 'noopener';
+  title.textContent = sourceGroupTitle(block);
+  body.appendChild(title);
+
+  body.appendChild(el('div', 'news-meta', `${representative.source || 'Unknown'} · ${fmtDate(representative.published)} · top score ${blockScore(block).toFixed(1)}`));
+  if (root?.summary) body.appendChild(el('p', 'news-source-group-deck', root.summary));
+
+  const briefs = root && block.items.length > 1 ? block.items.filter(item => item.url !== root.url) : block.items;
+  const list = el('div', 'news-source-briefs');
+  briefs.forEach(item => {
+    const brief = el('article', 'news-source-brief');
+    const briefBadges = el('div', 'news-source-brief-badges');
+    if (item.signalGroup) briefBadges.appendChild(el('span', 'badge signal-badge', item.signalGroup));
+    if (item.sourceTier) briefBadges.appendChild(el('span', `badge source-badge ${(item.sourceRole || '').toLowerCase()}`, item.sourceTier));
+    if (briefBadges.children.length) brief.appendChild(briefBadges);
+
+    const briefTitle = document.createElement('a');
+    briefTitle.className = 'news-source-brief-title';
+    briefTitle.href = item.url;
+    briefTitle.target = '_blank';
+    briefTitle.rel = 'noopener';
+    briefTitle.textContent = item.brief?.whatHappened || item.title || 'Untitled';
+    brief.appendChild(briefTitle);
+    if (item.summary) brief.appendChild(el('p', 'muted', item.summary));
+    list.appendChild(brief);
+  });
+  body.appendChild(list);
+
+  const sharedWhy = sharedTextValue(block.items, 'whyItMatters');
+  if (sharedWhy) body.appendChild(el('p', 'news-source-group-why', sharedWhy));
+
+  card.appendChild(body);
+  wrap.appendChild(card);
+}
+
 function renderNews(items, featuredUrlSet = new Set(), container = null) {
   const wrap = container || document.getElementById('news-grid');
   if (!container) wrap.innerHTML = '';
@@ -112,32 +311,16 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
     return;
   }
 
-  items.forEach((n) => {
-    const isFeatured = featuredUrlSet.has(n.url);
+  items.forEach((entry) => {
+    if (entry?.type === 'source-group') {
+      renderSourceGroup(entry, featuredUrlSet, wrap);
+      return;
+    }
+    const n = entry?.item || entry;
+    const isFeatured = featuredUrlSet.has(n.url) || featuredUrlSet.has(blockId(entry));
     const card = el('article', `news-card ${isFeatured ? 'featured' : 'compact'}`);
 
-    const img = document.createElement('img');
-    img.className = 'news-card-img';
-    img.alt = '';
-    img.loading = isFeatured ? 'eager' : 'lazy';
-    if (isFeatured) img.fetchPriority = 'high';
-    img.referrerPolicy = 'no-referrer';
-
-    if (n.image && !isLikelyBadImage(n.image)) {
-      img.src = n.image;
-      img.onerror = () => {
-        img.src = placeholderImage(n.source);
-      };
-      img.onload = () => {
-        if (img.naturalWidth < 240 || img.naturalHeight < 120) {
-          img.src = placeholderImage(n.source);
-        }
-      };
-    } else {
-      img.src = placeholderImage(n.source);
-    }
-
-    card.appendChild(img);
+    card.appendChild(renderCardImage(n, 'news-card-img', isFeatured));
 
     const body = el('div', 'news-card-body');
     const badges = el('div', 'news-card-badges');
@@ -164,6 +347,15 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
     card.appendChild(body);
     wrap.appendChild(card);
   });
+}
+
+function renderLeadBlock(wrap, block) {
+  if (!block) return;
+  if (block.type === 'source-group') {
+    renderSourceGroup(block, new Set([block.key]), wrap);
+    return;
+  }
+  renderLeadStory(wrap, block.item || block);
 }
 
 function renderLeadStory(wrap, story) {
@@ -385,17 +577,18 @@ async function init() {
         return;
       }
 
-      const topCount = category === 'AI' ? Math.min(4, items.length) : Math.min(3, items.length);
-      const topStories = [...items]
-        .sort((a, b) => (b.score || 0) - (a.score || 0))
+      const storyBlocks = buildStoryBlocks(items);
+      const topCount = category === 'AI' ? Math.min(4, storyBlocks.length) : Math.min(3, storyBlocks.length);
+      const topStories = [...storyBlocks]
+        .sort((a, b) => (blockScore(b) - blockScore(a)) || (blockPublishedValue(b) - blockPublishedValue(a)))
         .slice(0, topCount);
-      const topSet = new Set(topStories.map(i => i.url));
+      const topSet = new Set(topStories.map(blockId));
 
-      renderLeadStory(wrap, topStories[0]);
+      renderLeadBlock(wrap, topStories[0]);
       renderSection(wrap, category === 'Science' ? 'Discovery Watch' : 'Top Briefing', topStories.slice(1), topSet);
 
-      const remaining = items.filter(i => !topSet.has(i.url));
-      const grouped = groupBySignal(remaining);
+      const remaining = storyBlocks.filter(block => !topSet.has(blockId(block)));
+      const grouped = groupBlocksBySignal(remaining);
       const orderedGroups = [
         ...SIGNAL_ORDER.filter(group => grouped.has(group)),
         ...[...grouped.keys()].filter(group => !SIGNAL_ORDER.includes(group)).sort()
