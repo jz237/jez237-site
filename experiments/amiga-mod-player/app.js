@@ -35,7 +35,6 @@ const refs = {
   volume: document.getElementById("volume"),
   volumeText: document.getElementById("volumeText"),
   scope: document.getElementById("scope"),
-  scopeGrid: document.getElementById("scopeGrid"),
   infoFormat: document.getElementById("infoFormat"),
   infoPatterns: document.getElementById("infoPatterns"),
   infoOrders: document.getElementById("infoOrders"),
@@ -336,8 +335,8 @@ function wireAnalyser(player) {
     return;
   }
   const analyser = player.context.createAnalyser();
-  analyser.fftSize = 256;
-  analyser.smoothingTimeConstant = 0.78;
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0.7;
   try {
     player.gain.disconnect();
   } catch (error) {
@@ -405,8 +404,8 @@ function ensureAudioElement() {
   const context = getAudioContext();
   const source = context.createMediaElementSource(audio);
   const analyser = context.createAnalyser();
-  analyser.fftSize = 256;
-  analyser.smoothingTimeConstant = 0.78;
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0.7;
   source.connect(analyser);
   analyser.connect(context.destination);
   state.audioElement = audio;
@@ -427,8 +426,8 @@ function ensureAudioBufferGraph() {
   if (!state.audioGain) {
     const gain = context.createGain();
     const analyser = context.createAnalyser();
-    analyser.fftSize = 256;
-    analyser.smoothingTimeConstant = 0.78;
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.7;
     gain.connect(analyser);
     analyser.connect(context.destination);
     state.audioGain = gain;
@@ -975,42 +974,37 @@ function wireSeekDelegation() {
 }
 
 function buildScope() {
-  const fragment = document.createDocumentFragment();
-  for (let i = 0; i < 32; i += 1) {
-    const bar = document.createElement("span");
-    bar.className = "bar";
-    bar.style.height = `${18 + ((i * 19) % 76)}%`;
-    bar.style.animationDelay = `${(i % 8) * -90}ms`;
-    fragment.appendChild(bar);
-  }
-  refs.scopeGrid.appendChild(fragment);
+  if (!window.CosmicVisualizer) return;
+  let timeData = null;
+  window.__cosmicViz = window.CosmicVisualizer.create({
+    container: refs.scope,
+    storageKey: "amiga-mod-player-viz",
+    isPlaying: () => state.playing,
+    getFreqData: () => {
+      if (!state.analyser) return null;
+      if (!state.analyserData || state.analyserData.length !== state.analyser.frequencyBinCount) {
+        state.analyserData = new Uint8Array(state.analyser.frequencyBinCount);
+      }
+      state.analyser.getByteFrequencyData(state.analyserData);
+      return state.analyserData;
+    },
+    getTimeData: () => {
+      if (!state.analyser) return null;
+      if (!timeData || timeData.length !== state.analyser.fftSize) {
+        timeData = new Uint8Array(state.analyser.fftSize);
+      }
+      state.analyser.getByteTimeDomainData(timeData);
+      return timeData;
+    },
+  });
 }
 
-function renderSpectrum() {
+function updatePlaybackUi() {
   if (state.playing && isAudioTrack(state.currentTrack) && !state.scrubbing && !state.seeking) {
     state.currentPosition = currentPlaybackPosition();
     renderSeekPosition(state.currentPosition);
   }
-
-  const bars = refs.scopeGrid.children;
-  if (state.analyser && state.analyserData && bars.length) {
-    state.analyser.getByteFrequencyData(state.analyserData);
-    refs.scope.classList.add("live");
-    const step = Math.max(1, Math.floor(state.analyserData.length / bars.length));
-    for (let i = 0; i < bars.length; i += 1) {
-      let peak = 0;
-      const start = i * step;
-      const end = Math.min(state.analyserData.length, start + step);
-      for (let j = start; j < end; j += 1) {
-        if (state.analyserData[j] > peak) peak = state.analyserData[j];
-      }
-      const level = Math.max(8, Math.round((peak / 255) * 100));
-      bars[i].style.height = `${level}%`;
-    }
-  } else {
-    refs.scope.classList.remove("live");
-  }
-  window.requestAnimationFrame(renderSpectrum);
+  window.requestAnimationFrame(updatePlaybackUi);
 }
 
 function wireEvents() {
@@ -1100,7 +1094,7 @@ function init() {
   applyFilters();
   buildScope();
   wireEvents();
-  renderSpectrum();
+  updatePlaybackUi();
 }
 
 init();

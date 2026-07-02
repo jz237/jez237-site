@@ -38,7 +38,6 @@
     volume: document.getElementById("volume"),
     volumeText: document.getElementById("volumeText"),
     scope: document.getElementById("scope"),
-    scopeGrid: document.getElementById("scopeGrid"),
     stilPanel: document.getElementById("stilPanel"),
     stilText: document.getElementById("stilText"),
     miniTitle: document.getElementById("miniTitle"),
@@ -608,41 +607,27 @@
     window.requestAnimationFrame(updateProgress);
   }
 
-  function renderSpectrum() {
-    const player = getPlayer();
-    const data = player && typeof player.getFreqByteData === "function" ? player.getFreqByteData() : null;
-    const bars = refs.scopeGrid.children;
-
-    if (data && data.length) {
-      refs.scope.classList.add("live");
-      const step = Math.max(1, Math.floor(data.length / bars.length));
-      for (let i = 0; i < bars.length; i += 1) {
-        let peak = 0;
-        const start = i * step;
-        const end = Math.min(data.length, start + step);
-        for (let j = start; j < end; j += 1) {
-          if (data[j] > peak) peak = data[j];
-        }
-        const level = Math.max(8, Math.round((peak / 255) * 100));
-        bars[i].style.height = `${level}%`;
-      }
-    } else {
-      refs.scope.classList.remove("live");
-    }
-
-    window.requestAnimationFrame(renderSpectrum);
-  }
-
   function buildScope() {
-    const fragment = document.createDocumentFragment();
-    for (let i = 0; i < 32; i += 1) {
-      const bar = document.createElement("span");
-      bar.className = "bar";
-      bar.style.height = `${18 + ((i * 19) % 76)}%`;
-      bar.style.animationDelay = `${(i % 8) * -90}ms`;
-      fragment.appendChild(bar);
-    }
-    refs.scopeGrid.appendChild(fragment);
+    if (!window.CosmicVisualizer) return;
+    let timeData = null;
+    window.__cosmicViz = window.CosmicVisualizer.create({
+      container: refs.scope,
+      storageKey: "sid-player-viz",
+      isPlaying: () => state.playing,
+      getFreqData: () => {
+        const player = getPlayer();
+        const data = player && typeof player.getFreqByteData === "function" ? player.getFreqByteData() : null;
+        return data && data.length ? data : null;
+      },
+      getTimeData: () => {
+        const player = getPlayer();
+        const node = player && player._analyzerNode;
+        if (!node || typeof node.getByteTimeDomainData !== "function") return null;
+        if (!timeData || timeData.length !== node.fftSize) timeData = new Uint8Array(node.fftSize);
+        node.getByteTimeDomainData(timeData);
+        return timeData;
+      },
+    });
   }
 
   function waitForUi() {
@@ -960,7 +945,6 @@
     buildScope();
     wireEvents();
     updateProgress();
-    renderSpectrum();
     ensurePlayer().catch((error) => {
       console.error(error);
       setStatus("Error", "error");

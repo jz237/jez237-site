@@ -505,44 +505,6 @@
       display: none;
     }
 
-    .scope-grid {
-      width: min(620px, 86%);
-      height: min(260px, 55%);
-      display: grid;
-      grid-template-columns: repeat(32, 1fr);
-      gap: 5px;
-      align-items: end;
-    }
-
-    .bar {
-      min-height: 8%;
-      background: linear-gradient(180deg, var(--accent-2), var(--accent));
-      border-radius: 0;
-      opacity: .42;
-      transform-origin: bottom;
-      transition: height 90ms linear, opacity 160ms ease;
-    }
-
-    .playing .bar {
-      animation: pulse 900ms ease-in-out infinite alternate;
-      opacity: .88;
-    }
-
-    .scope.live .bar {
-      animation: none;
-      opacity: .9;
-      transform: none;
-    }
-
-    .bar:nth-child(3n) { animation-duration: 720ms; }
-    .bar:nth-child(4n) { animation-duration: 1040ms; }
-    .bar:nth-child(5n) { animation-duration: 620ms; }
-
-    @keyframes pulse {
-      from { transform: scaleY(.24); }
-      to { transform: scaleY(1); }
-    }
-
     footer {
       color: var(--muted);
       font-size: .78rem;
@@ -917,9 +879,7 @@
           <div id="seekNotice" class="seek-notice" hidden></div>
         </div>
 
-        <div id="scope" class="scope" aria-hidden="true">
-          <div id="scopeGrid" class="scope-grid"></div>
-        </div>
+        <div id="scope" class="scope" role="region" aria-label="Spectrum visualizer"></div>
 
         <section id="stilPanel" class="stil-panel" hidden>
           <h3>HVSC Notes</h3>
@@ -965,6 +925,7 @@
   <script src="vendor/websid/backend_websid.js?v=20260628e"></script>
   <script src="tracks.js?v=20260628j"></script>
   <script src="stil.js?v=20260628b"></script>
-  <script src="app.js?v=20260628o"></script>
+  <script src="../shared/cosmic-visualizer.js?v=20260702b"></script>
+  <script src="app.js?v=20260702a"></script>
 </body>
 </html>
