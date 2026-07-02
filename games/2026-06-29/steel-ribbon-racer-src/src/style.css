@@ -782,7 +782,9 @@ body.menu-mode #cockpit .strut {
   }
 }
 
-#volBtn {
+#volBtn,
+#musicBtn,
+#todBtn {
   background: rgba(20, 26, 34, 0.72);
   border: 1px solid rgba(140, 200, 255, 0.35);
   border-radius: 999px;
@@ -792,6 +794,10 @@ body.menu-mode #cockpit .strut {
   opacity: 0.9;
   padding: 0.4rem 0.9rem;
   text-transform: none;
+}
+#musicBtn,
+#todBtn {
+  margin-left: 8px;
 }
 
 #raceStrip span:nth-child(3) i {
