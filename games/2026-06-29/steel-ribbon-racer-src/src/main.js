@@ -928,7 +928,9 @@ function Hi(i, e, t, n, s = 8) {
 }
 // ─── Water system: animated ripple shader, pond registry, depth query ───
 const ponds = [],
-  waterMats = [];
+  waterMats = [],
+  // parked-car ride system: instance spots the player can steal from
+  rideSys = { spots: [], im: null, imW: null };
 function makeWaterMaterial(scale = 1) {
   const m = new ShaderMaterial({
     transparent: !0,
@@ -2093,6 +2095,7 @@ function F1(i, e, t) {
       K = {
         axis: ye,
         dir: Se,
+        type: Me,
         road: y(ye === "ns" ? g : M),
         laneOffset: E(Se),
         along: y(ye === "ns" ? M : g),
@@ -2124,6 +2127,7 @@ function F1(i, e, t) {
       (qe.types[Me] = (qe.types[Me] || 0) + 1));
   }
   function te(I, ye = 0, Me = 0) {
+    if (I.stolen) return;
     let Se = Math.max(0, I.speed * Me);
     const Z = b(I);
     for (
@@ -2844,6 +2848,7 @@ function N1() {
       Ve.setMatrixAt(Re, e.matrix),
       VeW.setMatrixAt(Re, e.matrix),
       Ve.setColorAt(Re, new Color(le[(Math.random() * le.length) | 0])),
+      rideSys.spots.push({ x: O, z: Y, yaw: N ? 0 : -Math.PI / 2, idx: Re, taken: !1 }),
       Re++);
   }
   ((Ve.count = Re),
@@ -2852,6 +2857,8 @@ function N1() {
     (VeW.instanceMatrix.needsUpdate = !0),
     Ve.instanceColor && (Ve.instanceColor.needsUpdate = !0),
     (Ve.castShadow = !0),
+    (rideSys.im = Ve),
+    (rideSys.imW = VeW),
     i.add(Ve),
     i.add(VeW));
   const We = new Map(),
@@ -4569,7 +4576,9 @@ const CAR_MODELS = [
 ];
 let carModelIndex = MathUtils.clamp(Number(localStorage.getItem("steel-ribbon-carmodel") || 0), 0, 3);
 function carStats() {
-  return CAR_MODELS[carModelIndex].stats;
+  return u.drivingStolen && stolenRide
+    ? STOLEN_STATS[stolenRide.type] || STOLEN_STATS.compact
+    : CAR_MODELS[carModelIndex].stats;
 }
 const RIVAL_DEFS = [
   { key: "crowther", label: "Crowther", body: 13710372, trim: 7740696, lane: 0.02, base: 97, wave: 5, waveFreq: 0.6 },
@@ -5047,6 +5056,7 @@ function buildHelipad() {
   }
   et.add(g);
   const built = buildHelicopter();
+  built.mesh.scale.setScalar(1.42);
   built.mesh.position.set(spot.x, spot.y + 0.24, spot.z);
   et.add(built.mesh);
   heli = {
@@ -5482,7 +5492,7 @@ function nv() {
   (mi.musicGain.gain.setTargetAtTime(u.mode === "menu" ? 0.16 : 0.028, t, 0.5), musicScheduler());
 }
 function Va(i = !1, e = !1, seasonRace = !1) {
-  (Wd(), La(), _t.clear(), Ia());
+  (Wd(), La(), _t.clear(), Ia(), releaseStolenRide());
   const t = i || e;
   u.seasonRace = seasonRace && !t;
   for (let ri = 0; ri < rivals.length; ri++) {
@@ -5573,6 +5583,7 @@ function Yd() {
     (u.roamAirT = 0),
     (u.vehicle = "car"),
     (walker.visible = !1));
+  releaseStolenRide();
   heli &&
     (heli.pos.set(heli.pad.x, heli.pad.y + 0.24, heli.pad.z),
     heli.vel.set(0, 0, 0),
@@ -5600,14 +5611,15 @@ function Yd() {
     Xe.updateProjectionMatrix());
 }
 function zs() {
-  (cn.position.set(
+  const dm = driveMeshRef();
+  (dm.position.set(
     u.roamPos.x,
-    u.roamPos.y + 0.3 - u.roamSuspension * 0.45 - (u.waterDepth || 0) * 0.38,
+    u.roamPos.y + 0.3 - (dm.userData.stolenYOff || 0) - u.roamSuspension * 0.45 - (u.waterDepth || 0) * 0.38,
     u.roamPos.z,
   ),
-    cn.quaternion.setFromAxisAngle(on, -u.roamYaw),
-    cn.rotateZ(-u.wheelSteer * MathUtils.clamp(Math.abs(u.speed) / 90, 0, 1) * 0.1),
-    cn.rotateX(
+    dm.quaternion.setFromAxisAngle(on, -u.roamYaw),
+    dm.rotateZ(-u.wheelSteer * MathUtils.clamp(Math.abs(u.speed) / 90, 0, 1) * 0.1),
+    dm.rotateX(
       u.roamAir
         ? MathUtils.clamp(-u.roamVy * 0.014, -0.3, 0.34)
         : MathUtils.clamp(u.roamSuspension, -0.16, 0.22),
@@ -5683,7 +5695,7 @@ function Ki(i, e, t = u.roamPos.y) {
   return (!(s.kind === "ramp" && s.rampType === "off") && a && a.y >= s.y - 0.8 && (s = a), s);
 }
 function Ih(i) {
-  if (i.rampType === "off") return !1;
+  if (i.rampType === "off" || u.drivingStolen) return !1;
   const e = Math.sin(u.roamYaw) * i.tangentX + -Math.cos(u.roamYaw) * i.tangentZ;
   if (u.speed < 10 || e < 0.22) return !1;
   const t = (i.mergeS ?? i.s ?? 22) + 8,
@@ -5785,6 +5797,8 @@ function publishRoamTelemetry() {
     driftAngle: +(u.driftAngle || 0).toFixed(3),
     airTime: +(u.roamAirT || 0).toFixed(2),
     vehicle: u.vehicle || "car",
+    drivingStolen: !!u.drivingStolen,
+    stolenType: (u.drivingStolen && stolenRide?.type) || null,
     altitude: +(u.roamPos.y - He(u.roamPos.x, u.roamPos.z)).toFixed(1),
     roamPos: { x: u.roamPos.x, y: u.roamPos.y, z: u.roamPos.z },
     input: { steer: Fe.steer, throttle: Fe.throttle, brake: Fe.brake },
@@ -5871,9 +5885,13 @@ function updateMinimap() {
       ((c.fillStyle = "#8ef0ff"), c.beginPath(), c.arc(ax, az, 3, 0, Math.PI * 2), c.fill());
     }
   }
-  if (u.vehicle !== "car") {
+  if (u.vehicle !== "car" || u.drivingStolen) {
     const [cx2, cz2] = mmPt(parkedCarPos.x, parkedCarPos.z, size);
     ((c.fillStyle = "#7dc4ff"), c.fillRect(cx2 - 2.4, cz2 - 2.4, 4.8, 4.8));
+  }
+  if (stolenRide?.parked) {
+    const [sx2, sz2] = mmPt(stolenRide.parked.x, stolenRide.parked.z, size);
+    ((c.fillStyle = "#ffb35c"), c.fillRect(sx2 - 2.2, sz2 - 2.2, 4.4, 4.4));
   }
   const [px, pz] = mmPt(u.roamPos.x, u.roamPos.z, size);
   (c.save(), c.translate(px, pz), c.rotate(u.roamYaw));
@@ -5960,8 +5978,10 @@ function $d(i) {
       : (u.boost = Math.min(1, u.boost + i * 0.05 * carStats().boostRegen)),
     (u.wheelSteer += (r - u.wheelSteer) * (1 - Math.pow(1e-5, i))));
   const o = -u.wheelSteer * 0.55,
-    c = cn.userData.frontWheels;
+    c = driveMeshRef().userData.frontWheels;
   c && ((c[0].rotation.y = o), (c[1].rotation.y = o));
+  if (u.drivingStolen && stolenRide)
+    for (const wh of stolenRide.mesh.userData.wheels || []) wh.rotation.x -= u.speed * i * 1.7;
   const l = Math.abs(u.speed);
   // Handbrake (Space): the rear steps out — extra yaw, a drift angle between facing and travel,
   // speed scrub, and drift scoring while the slide is held.
@@ -6034,15 +6054,143 @@ function $d(i) {
     !(_.kind === "ramp" && _.u > 0.72 && Ih(_)) &&
       ((_.kind === "track" && Ih(_)) || (sv(), zs(), _t.has("KeyR") && (Yd(), _t.delete("KeyR")))));
 }
-// ─── Vehicle transitions: car ⇄ foot ⇄ helicopter (E key / touch action button) ───
+// ─── Vehicle transitions: car ⇄ foot ⇄ helicopter ⇄ stolen rides (E key / touch action button) ───
+const STOLEN_STATS = {
+  compact: { accel: 0.95, top: 0.9, grip: 1, boostRegen: 0.75 },
+  taxi: { accel: 0.97, top: 0.92, grip: 1, boostRegen: 0.75 },
+  pickup: { accel: 0.9, top: 0.88, grip: 0.94, boostRegen: 0.7 },
+  van: { accel: 0.84, top: 0.84, grip: 0.9, boostRegen: 0.7 },
+  boxTruck: { accel: 0.7, top: 0.78, grip: 0.82, boostRegen: 0.6 },
+  bus: { accel: 0.62, top: 0.74, grip: 0.76, boostRegen: 0.6 },
+};
+let stolenRide = null; // { mesh, type, actor|null, parked: Vector3|null, parkedYaw }
+const abandonedRides = [];
+function driveMeshRef() {
+  return u.drivingStolen && stolenRide ? stolenRide.mesh : cn;
+}
+function abandonStolenRide() {
+  if (!stolenRide) return;
+  if (stolenRide.actor) {
+    // Freeze the actor where it was left and make it solid again there.
+    const cl = stolenRide.actor.collider,
+      m = stolenRide.mesh.position;
+    ((cl.x = m.x), (cl.z = m.z));
+  }
+  (abandonedRides.push(stolenRide), (stolenRide = null));
+}
+function stealTrafficCar(actor) {
+  abandonStolenRide();
+  ((actor.stolen = !0), (actor.collider.x = 1e6), (actor.collider.z = 1e6));
+  et.attach(actor.mesh);
+  actor.mesh.userData.stolenYOff = 0.57;
+  const dirX = actor.axis === "ns" ? 0 : actor.dir,
+    dirZ = actor.axis === "ns" ? actor.dir : 0;
+  stolenRide = { mesh: actor.mesh, type: actor.type || "compact", actor, parked: null, parkedYaw: 0 };
+  ((u.vehicle = "car"),
+    (u.drivingStolen = !0),
+    u.roamPos.set(actor.mesh.position.x, He(actor.mesh.position.x, actor.mesh.position.z) + Wn, actor.mesh.position.z),
+    (u.roamYaw = Math.atan2(dirX, -dirZ)),
+    (u.camYaw = u.roamYaw),
+    (u.speed = actor.speed),
+    (walker.visible = !1),
+    (u.message = `${(actor.type || "car").toUpperCase()} jacked!`),
+    (u.messageTimer = 1.2),
+    chime(340, 0.18, "square", 0.1),
+    zs());
+  return !0;
+}
+function stealParkedCar(spot) {
+  abandonStolenRide();
+  ((spot.taken = !0), (spot.savedM = new Matrix4()));
+  if (rideSys.im) {
+    const hide = new Matrix4().makeScale(1e-4, 1e-4, 1e-4);
+    (rideSys.im.getMatrixAt(spot.idx, spot.savedM),
+      rideSys.im.setMatrixAt(spot.idx, hide),
+      rideSys.imW.setMatrixAt(spot.idx, hide),
+      (rideSys.im.instanceMatrix.needsUpdate = !0),
+      (rideSys.imW.instanceMatrix.needsUpdate = !0));
+  }
+  const mesh = I1("compact", [11680564, 14205514, 15198700, 4164178][(Math.random() * 4) | 0]);
+  ((mesh.userData.stolenYOff = 0.57), et.add(mesh));
+  stolenRide = { mesh, type: "compact", actor: null, parked: null, parkedYaw: 0, spotRef: spot };
+  ((u.vehicle = "car"),
+    (u.drivingStolen = !0),
+    u.roamPos.set(spot.x, He(spot.x, spot.z) + Wn, spot.z),
+    (u.roamYaw = spot.yaw),
+    (u.camYaw = spot.yaw),
+    (u.speed = 0),
+    (walker.visible = !1),
+    (u.message = "Borrowed a parked car"),
+    (u.messageTimer = 1.1),
+    chime(300, 0.16, "square", 0.09),
+    zs());
+  return !0;
+}
+function exitStolen() {
+  ((stolenRide.parked = u.roamPos.clone()), (stolenRide.parkedYaw = u.roamYaw));
+  ((u.vehicle = "foot"), (u.drivingStolen = !1), (u.speed = 0), (u.driftAngle = 0));
+  const rx = Math.cos(u.roamYaw),
+    rz = Math.sin(u.roamYaw);
+  ((u.roamPos.x -= rx * 3.4), (u.roamPos.z -= rz * 3.4), (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
+  walker.visible = !0;
+  return !0;
+}
+function reenterStolen() {
+  if (!stolenRide?.parked || u.roamPos.distanceTo(stolenRide.parked) > 7) return !1;
+  ((u.vehicle = "car"),
+    (u.drivingStolen = !0),
+    u.roamPos.copy(stolenRide.parked),
+    (u.roamYaw = stolenRide.parkedYaw),
+    (u.camYaw = u.roamYaw),
+    (u.speed = 0),
+    (stolenRide.parked = null),
+    (walker.visible = !1),
+    zs());
+  return !0;
+}
+function tryStealNearby() {
+  for (const r of Ri) {
+    const a = r.actor;
+    if (!a || !a.type || a.stolen || Math.hypot(u.roamPos.x - r.x, u.roamPos.z - r.z) > 6) continue;
+    return stealTrafficCar(a);
+  }
+  for (const s of rideSys.spots)
+    if (!s.taken && Math.hypot(u.roamPos.x - s.x, u.roamPos.z - s.z) < 5.5) return stealParkedCar(s);
+  return !1;
+}
+function disposeRide(r) {
+  if (r.actor) r.actor.stolen = !1;
+  else {
+    Po(r.mesh);
+    const s = r.spotRef;
+    s?.savedM &&
+      rideSys.im &&
+      (rideSys.im.setMatrixAt(s.idx, s.savedM),
+      rideSys.imW.setMatrixAt(s.idx, s.savedM),
+      (rideSys.im.instanceMatrix.needsUpdate = !0),
+      (rideSys.imW.instanceMatrix.needsUpdate = !0),
+      (s.taken = !1));
+  }
+}
+function releaseStolenRide() {
+  (stolenRide && (disposeRide(stolenRide), (stolenRide = null)),
+    abandonedRides.splice(0).forEach(disposeRide),
+    (u.drivingStolen = !1));
+}
 function exitCar(force = !1) {
   if (u.vehicle !== "car" || (!force && Math.abs(u.speed) > 12)) return !1;
+  if (u.drivingStolen && stolenRide) {
+    ((u.roamAir = !1), (u.roamVy = 0));
+    exitStolen();
+    ((u.message = "On foot — your car is marked on the map"), (u.messageTimer = 1.6));
+    return !0;
+  }
   (parkedCarPos.copy(u.roamPos), (parkedCarYaw = u.roamYaw));
   ((u.vehicle = "foot"), (u.speed = 0), (u.driftAngle = 0), (u.roamAir = !1), (u.roamVy = 0));
   const rx = Math.cos(u.roamYaw),
     rz = Math.sin(u.roamYaw);
   ((u.roamPos.x -= rx * 3.4), (u.roamPos.z -= rz * 3.4), (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
-  ((walker.visible = !0), (u.message = "On foot — E enters the car or helicopter"), (u.messageTimer = 1.6));
+  ((walker.visible = !0), (u.message = "On foot — E enters your car, the heli, or steals a ride"), (u.messageTimer = 1.6));
   return !0;
 }
 function enterCar() {
@@ -6057,7 +6205,7 @@ function enterCar() {
   return !0;
 }
 function enterHeli() {
-  if (u.vehicle !== "foot" || !heli || u.roamPos.distanceTo(heli.pos) > 9) return !1;
+  if (u.vehicle !== "foot" || !heli || u.roamPos.distanceTo(heli.pos) > 10.5) return !1;
   ((u.vehicle = "heli"),
     u.roamPos.copy(heli.pos),
     (u.roamYaw = heli.yaw),
@@ -6072,13 +6220,13 @@ function enterHeli() {
 function exitHeli() {
   if (u.vehicle !== "heli" || !heli) return !1;
   const groundY = He(heli.pos.x, heli.pos.z);
-  if (heli.pos.y - groundY > 4.2 || heli.vel.length() > 9) {
+  if (heli.pos.y - groundY > 5.2 || heli.vel.length() > 9) {
     ((u.message = "Land first — get low and slow"), (u.messageTimer = 1.1));
     return !1;
   }
   ((u.vehicle = "foot"),
-    (u.roamPos.x = heli.pos.x + Math.cos(heli.yaw) * -4.2),
-    (u.roamPos.z = heli.pos.z + Math.sin(heli.yaw) * -4.2),
+    (u.roamPos.x = heli.pos.x + Math.cos(heli.yaw) * -5.6),
+    (u.roamPos.z = heli.pos.z + Math.sin(heli.yaw) * -5.6),
     (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05),
     (u.speed = 0),
     (walker.visible = !0));
@@ -6089,7 +6237,12 @@ function handleVehicleAction() {
     (u.vehicle === "car"
       ? exitCar() || ((u.message = "Slow down to step out"), (u.messageTimer = 0.9))
       : u.vehicle === "foot"
-        ? enterCar() || enterHeli()
+        ? (u.roamPos.distanceTo(parkedCarPos) <=
+          (stolenRide?.parked ? u.roamPos.distanceTo(stolenRide.parked) : 1 / 0)
+            ? enterCar() || reenterStolen()
+            : reenterStolen() || enterCar()) ||
+          enterHeli() ||
+          tryStealNearby()
         : exitHeli());
 }
 function walkerUpdate(i) {
@@ -6620,6 +6773,16 @@ window.__steelRibbonDebug = {
     const m = Ri[0]?.actor?.mesh;
     return { colliders: Ri.length, wheels: m?.userData?.wheels?.length ?? 0, pedestrians: qe.pedestrians || 0 };
   },
+  nearestTrafficCar(x, z) {
+    let best = null;
+    for (const r of Ri) {
+      const a = r.actor;
+      if (!a || !a.type || a.stolen) continue;
+      const d = Math.hypot(x - r.x, z - r.z);
+      (!best || d < best.d) && (best = { x: +r.x.toFixed(1), z: +r.z.toFixed(1), type: a.type, d: +d.toFixed(1) });
+    }
+    return best;
+  },
   audioInfo() {
     return mi
       ? {
@@ -6681,11 +6844,42 @@ window.__steelRibbonDebug = {
             y: +heli.pos.y.toFixed(1),
             z: +heli.pos.z.toFixed(1),
             rpm: +heli.rpm.toFixed(2),
+            scale: +heli.mesh.scale.x.toFixed(2),
             pad: heli.pad ? { x: +heli.pad.x.toFixed(1), z: +heli.pad.z.toFixed(1) } : null,
           }
         : null,
       parkedCar: { x: +parkedCarPos.x.toFixed(1), z: +parkedCarPos.z.toFixed(1) },
+      drivingStolen: !!u.drivingStolen,
+      stolen: stolenRide
+        ? {
+            type: stolenRide.type,
+            fromTraffic: !!stolenRide.actor,
+            pos: {
+              x: +stolenRide.mesh.position.x.toFixed(1),
+              y: +stolenRide.mesh.position.y.toFixed(2),
+              z: +stolenRide.mesh.position.z.toFixed(1),
+            },
+            visible: stolenRide.mesh.visible,
+            inScene: stolenRide.mesh.parent === et,
+            parked: stolenRide.parked
+              ? { x: +stolenRide.parked.x.toFixed(1), z: +stolenRide.parked.z.toFixed(1) }
+              : null,
+          }
+        : null,
+      parkedSpots: rideSys.spots.length,
     };
+  },
+  stealNearest() {
+    return u.mode === "roam" && u.vehicle === "foot" ? tryStealNearby() : !1;
+  },
+  nearestParkedSpot(x, z) {
+    let best = null;
+    for (const s of rideSys.spots) {
+      if (s.taken) continue;
+      const d = Math.hypot(x - s.x, z - s.z);
+      (!best || d < best.d) && (best = { x: s.x, z: s.z, d: +d.toFixed(1) });
+    }
+    return best;
   },
   setRoamPos(i, e, t = 0, n = 0) {
     return (
@@ -7768,7 +7962,9 @@ function vr() {
         ? "ON FOOT"
         : u.vehicle === "heli"
           ? "HELICOPTER"
-          : "FREE ROAM"
+          : u.drivingStolen && stolenRide
+            ? `${stolenRide.type.toUpperCase()} · STOLEN`
+            : "FREE ROAM"
       : u.freeRun
         ? "FREE RUN"
         : u.practice
