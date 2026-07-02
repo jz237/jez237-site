@@ -1456,5 +1456,23 @@
       "continuity": "Preserves ochre mesas, chalk wind canyons, violet glass dunes, amber crystal-thorn groves, wind-harp infrastructure, dust-silk, ceramic, and non-human gliding inhabitants with amber sail-limbs.",
       "entryDescription": "Elders rest on warm canyon updraft perches while caregivers tune wind-harp frames at a dawn rest station."
     }
+  },
+  {
+    "id": "2026-07-02-weekly-world-image-thornlight-meridian-glass-dune-nursery-k",
+    "title": "Thornlight Meridian: Glass Dune Nursery Kite Seeds",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; verified exact output path under tool-image-generation before append; weekly-world image preserves Thornlight Meridian bible and no text-forward layout.",
+    "prompt": "Create a finished realistic photographed square image from the invented alien world Thornlight Meridian: Glass Dune Nursery Kite Seeds. Show caregivers teaching juveniles to tend kite-seed ribbons in a sheltered nursery among violet glass dunes at early amber dawn. Preserve Thornlight Meridian continuity: dry ochre highland mesas, chalk-white wind canyons beyond the dunes, amber crystal-thorn groves at the nursery edge, black lichen crust on sun-baked stone, floating dust halos, and long warm meridian light bands crawling across the highlands. The inhabitants must be clearly non-human and practical, not people in costumes: narrow mantislike torsos, four walking limbs, two folded sail-limbs with translucent amber wing membranes, long balancing tails, matte slate skin dusted with mineral powder, faceted side eyes, and delicate mouth feelers. Show adult caregivers gently anchoring tiny copper-root tethers to unfurling kite-seed ribbons while juveniles imitate tail-tap signals beside low ceramic nest bowls. The kite-seeds are alien plant structures: thin blue-wax leaf vanes, translucent dew spines, copper root filaments, amber seed bladders, and ribbonlike sails catching the first warm updraft. Include woven dust-silk shade cloth, porous ceramic seed trays, matte basalt tweezers, prism glass bead weights, blue wax leaf wind shields, copper root-fiber spools, tiny seed cradles, wind-harp resonator guides, mineral dust, warm amber dawn light, cool violet dune shadows, and no readable text.\n\nReusable fill-in-the-blank template: Create a finished realistic photographed daily-life image from the invented alien world [WORLD_NAME]: [SCENE_NAME]. Show [NON_HUMAN_INHABITANTS] performing [DAILY_LIFE_ACTIVITY] in [SPECIFIC_SETTLEMENT_OR_TERRAIN], preserving the world bible geography, ecology, materials, transit logic, palette, and recurring motifs. Include tactile tools, local infrastructure, scale cues, weather or lighting behavior, and practical gestures that make the society feel lived-in rather than generic sci-fi. Avoid humans as the main society, franchise cues, ordinary Earth settings with props, prompt-card text, readable labels, and contradictions of the world bible.\n\nExample substitution: [WORLD_NAME] = Thornlight Meridian; [SCENE_NAME] = Glass Dune Nursery Kite Seeds; [NON_HUMAN_INHABITANTS] = gliding mantislike caregivers and juveniles with four walking limbs, folded amber sail-limbs, long balancing tails, slate skin, faceted eyes, and mouth feelers; [DAILY_LIFE_ACTIVITY] = tending kite-seed ribbons with tiny tethers and nursery tools; [SPECIFIC_SETTLEMENT_OR_TERRAIN] = a sheltered nursery among violet glass dunes, amber crystal-thorn groves, chalk wind canyons, ochre mesas, dust-silk shade cloth, and ceramic seed trays.",
+    "image": "images/2026-07-02-weekly-world-image-thornlight-meridian-glass-dune-nursery-k.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light.",
+      "continuity": "Preserves violet glass dunes, amber crystal-thorn groves, kite-seed ribbons, dust-silk shade cloth, ceramic nursery tools, wind-harp guides, and non-human gliding inhabitants with folded amber sail-limbs.",
+      "entryDescription": "Caregivers teach juveniles to tend alien kite-seed ribbons with copper-root tethers in a dawn glass-dune nursery."
+    }
   }
 ]
