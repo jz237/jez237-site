@@ -4,7 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
-  <title>Garden Calendar — Jez237</title>
+  <title>Philadelphia Zone 7a Garden Calendar — Jez237</title>
+  <meta name="description" content="Philadelphia Zone 7a garden calendar with seasonal plant care reminders, pruning dates, fertilizing notes, hostas, grapevine, hydrangeas, and shade beds." />
+  <meta name="keywords" content="Philadelphia garden calendar, Zone 7a garden calendar, Zone 7a plant care, Philadelphia gardening, small space garden, shade garden plants, garden care schedule, plant progress journal, hostas, grapevine care, climbing hydrangea, Rising Sun redbud, yew, butterfly bush, native plants, Jez237 garden" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://jez237.com/garden/" />
+  <meta property="og:title" content="Philadelphia Zone 7a Garden Calendar — Jez237" />
+  <meta property="og:description" content="Seasonal plant care timing, pruning reminders, garden photos, shade borders, hostas, vines, shrubs, and small-space Philadelphia garden notes." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jez237.com/garden/" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/design.css" />
   <style>
@@ -21,12 +29,14 @@
       --earth-water: #8fc8df;
     }
     body {
-      background: radial-gradient(circle at top, #453226 0%, var(--earth-bg) 52%, #15100c 100%);
+      background:
+        linear-gradient(180deg, rgba(162,203,229,.68) 0%, rgba(179,212,146,.58) 34%, rgba(34,51,25,.86) 100%),
+        url("../assets/garden/garden-page-bg-20260531.webp") center top / cover no-repeat scroll;
       color: var(--earth-text);
     }
     header {
-      background: rgba(31, 23, 17, 0.82);
-      border-bottom: 1px solid var(--earth-border);
+      background: rgba(27, 38, 24, 0.78);
+      border-bottom: 1px solid rgba(202,225,173,.22);
     }
     a { color: #dec590; }
     .garden-hero {
@@ -90,12 +100,14 @@
       position: relative;
       overflow: visible;
       will-change: transform;
+      box-shadow: -5px 5px 0 rgba(0,0,0,0.42);
     }
     .day-cell:not(.empty):hover {
       transform: translateY(-3px) scale(1.05);
       background: var(--earth-panel-2);
       border-color: var(--earth-accent-2);
-      box-shadow: 0 14px 28px rgba(0,0,0,0.38),
+      box-shadow: -6px 6px 0 rgba(0,0,0,0.48),
+                  0 14px 28px rgba(0,0,0,0.38),
                   0 0 0 1px rgba(232,197,122,0.22),
                   0 0 22px rgba(209,148,99,0.18);
       z-index: 5;
@@ -103,16 +115,18 @@
     .day-cell.today { border-color: var(--earth-accent); }
     .day-cell.today .day-num { color: var(--earth-accent); font-weight: 700; }
     .day-cell.today:hover {
-      box-shadow: 0 14px 28px rgba(0,0,0,0.4),
+      box-shadow: -6px 6px 0 rgba(0,0,0,0.48),
+                  0 14px 28px rgba(0,0,0,0.4),
                   0 0 0 1px rgba(158,176,119,0.45),
                   0 0 26px rgba(158,176,119,0.3);
     }
     .day-cell.has-event:hover {
-      box-shadow: 0 14px 30px rgba(0,0,0,0.4),
+      box-shadow: -6px 6px 0 rgba(0,0,0,0.48),
+                  0 14px 30px rgba(0,0,0,0.4),
                   0 0 0 1px rgba(158,176,119,0.4),
                   0 0 22px rgba(158,176,119,0.22);
     }
-    .day-cell.empty { background: transparent; border-color: transparent; cursor: default; }
+    .day-cell.empty { background: transparent; border-color: transparent; cursor: default; box-shadow: none; }
     .day-cell.empty:hover { background: transparent; border-color: transparent; transform: none; box-shadow: none; }
     .day-cell.has-event { border-color: #5a6e42; }
 
@@ -228,11 +242,46 @@
       padding: 12px 16px;
       margin-bottom: 8px;
       font-size: 13px;
+      box-shadow: -5px 5px 0 rgba(0,0,0,0.42);
     }
     .log-card .log-date { color: var(--earth-accent-2); font-weight: 600; margin-bottom: 4px; }
     .log-card .log-text { color: var(--earth-text); }
 
     /* legend */
+    .garden-pulse {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin: 0 0 20px;
+    }
+    .pulse-card {
+      background: linear-gradient(180deg, rgba(45,34,25,.95), rgba(37,45,28,.92));
+      border: 1px solid rgba(158,176,119,.34);
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-height: 118px;
+      box-shadow: -5px 5px 0 rgba(0,0,0,0.36);
+    }
+    .pulse-card .pulse-kicker {
+      color: var(--earth-accent-3);
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .pulse-card h3 {
+      font-size: 15px;
+      margin: 0 0 6px;
+      line-height: 1.25;
+    }
+    .pulse-card p {
+      color: var(--earth-muted);
+      font-size: 12px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
     .legend {
       display: flex;
       flex-wrap: wrap;
@@ -279,24 +328,31 @@
     .wx-strip span { color: var(--earth-text); }
 
     @media (max-width: 600px) {
+      body { background-attachment: scroll; }
+      .garden-pulse { grid-template-columns: 1fr; }
       .day-cell { min-height: 54px; padding: 4px 4px; }
       .day-num { font-size: 11px; }
       .tag { font-size: 9px; padding: 1px 3px; }
+    }
+    @media (min-width: 601px) and (max-width: 900px) {
+      .garden-pulse { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
   </style>
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
 </head>
-<body>
+<body class="garden-backdrop">
   <header id="site-nav"></header>
 
   <main class="container">
     <div class="garden-hero">
-      <h1>🌱 Garden Calendar</h1>
-      <p>Zone 7a · Philadelphia, PA · ~20 plants</p>
+      <h1>🌱 Philadelphia Garden Calendar</h1>
+      <p>Zone 7a plant care · pruning, feeding, harvest, and small-space garden timing</p>
     </div>
 
     <div class="wx-strip" id="wx-strip">🌤️ Loading weather…</div>
+
+    <section class="garden-pulse" id="garden-pulse" aria-label="Current garden status"></section>
 
     <div class="legend">
       <span class="tag tag-water">💧 Water</span>
@@ -309,9 +365,9 @@
     </div>
 
     <div class="month-nav">
-      <button id="prev-btn">← Prev</button>
+      <button id="prev-btn" aria-label="Previous month" title="Previous month">←</button>
       <h2 id="month-label"></h2>
-      <button id="next-btn">Next →</button>
+      <button id="next-btn" aria-label="Next month" title="Next month">→</button>
     </div>
 
     <div class="calendar-grid" id="calendar-grid">
@@ -342,8 +398,46 @@
     const ZONE = "7a";
     const CITY = "Philadelphia, PA";
 
+    const gardenPulse = [
+      {
+        kicker: "Now",
+        title: "Grapevine is loaded",
+        text: "Green clusters are heavy along the arbor and gate. Keep shoots tied, open a little air around clusters, and watch for beetles."
+      },
+      {
+        kicker: "Harvest",
+        title: "Cucumbers have started",
+        text: "The raised-bed cucumber is carrying multiple clean fruits with more flowers behind them. Pick young to keep the vine producing."
+      },
+      {
+        kicker: "Bloom",
+        title: "Yarrow and milkweed are carrying color",
+        text: "Yarrow is in pastel bloom and orange milkweed is still doing pollinator work under the redbud canopy."
+      },
+      {
+        kicker: "Next",
+        title: "Crape myrtle and onion are queued",
+        text: "Dwarf crape myrtle buds are set and ornamental onion scapes are swelling, so early July should add a fresh bloom layer."
+      }
+    ];
+
     // Applications log — add entries here or update via garden_agent.py
     const appLog = [
+      {
+        date: "2026-06-26",
+        text: "📷 Garden calendar refreshed from June 24–26 photos: grapevine clusters heavy, yarrow blooming, ornamental onion and dwarf crape myrtle in bud, side-house bed fully layered.",
+        type: "task"
+      },
+      {
+        date: "2026-06-25",
+        text: "🥒 Cucumber vine confirmed in harvest mode — multiple dark-green fruit sizing up with yellow flowers still open behind them.",
+        type: "harvest"
+      },
+      {
+        date: "2026-06-24",
+        text: "🌿 Back garden entered full late-June density: Rising Sun redbud canopy, orange milkweed bloom, grapevine lattice wall, and the raised-bed cucumber pushing hard.",
+        type: "task"
+      },
       {
         date: "2026-03-26",
         text: "🌿 Crabgrass pre-emergent applied — Scotts Pendimethalin, 10.06 lb bag. Soil temp ~62°F. Rain next day to activate.",
@@ -521,6 +615,19 @@
       // Pre-emergent applied 2026-03-26 → reapplication due ~2026-05-21
       events["2026-05-21"] = events["2026-05-21"] || [];
       events["2026-05-21"].push({ icon: "🌿", label: "Pre-emergent reapplication due", type: "task", note: "~8 weeks after 2026-03-26 Pendimethalin application" });
+      events["2026-06-26"] = events["2026-06-26"] || [];
+      events["2026-06-26"].push(
+        { icon: "🍇", label: "Grapevine: heavy cluster check", type: "task", note: "Clusters are loaded along the arbor — keep enough air around fruit and thin crowded clusters if needed" },
+        { icon: "🌼", label: "Yarrow: peak bloom watch", type: "task", note: "Deadhead spent umbels as they brown; leave fresh pastel heads for pollinators" }
+      );
+      events["2026-06-27"] = events["2026-06-27"] || [];
+      events["2026-06-27"].push({ icon: "🥒", label: "Cucumber harvest watch", type: "harvest", note: "Pick cucumbers while still firm and dark green; frequent harvest keeps new fruit coming" });
+      events["2026-07-02"] = events["2026-07-02"] || [];
+      events["2026-07-02"].push({ icon: "🌸", label: "Ornamental onion bloom watch", type: "task", note: "Late-June scapes were swollen — watch for purple bloom opening and keep foliage until it yellows" });
+      events["2026-07-06"] = events["2026-07-06"] || [];
+      events["2026-07-06"].push({ icon: "🌸", label: "Dwarf Crape Myrtle: bloom watch", type: "task", note: "Buds were set across red stems on Jun 26 — avoid pruning now; just water through heat" });
+      events["2026-07-12"] = events["2026-07-12"] || [];
+      events["2026-07-12"].push({ icon: "🥒", label: "Cucumber succession check", type: "harvest", note: "Harvest every 1-2 days in heat; remove oversized fruit so the vine keeps setting" });
 
       return events;
     }
@@ -539,6 +646,17 @@
     const detailPanel = document.getElementById("detail-panel");
     const detailTitle = document.getElementById("detail-title");
     const eventList  = document.getElementById("event-list");
+
+    function renderGardenPulse() {
+      const container = document.getElementById("garden-pulse");
+      container.innerHTML = "";
+      gardenPulse.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "pulse-card";
+        card.innerHTML = `<div class="pulse-kicker">${item.kicker}</div><h3>${item.title}</h3><p>${item.text}</p>`;
+        container.appendChild(card);
+      });
+    }
 
     function renderCalendar(year, month) {
       // Remove day cells (keep headers)
@@ -751,6 +869,7 @@
       });
     }
 
+    renderGardenPulse();
     renderCalendar(currentYear, currentMonth);
     renderLog();
     loadWeather();
@@ -825,6 +944,6 @@
     })();
   </script>
   <script src="../assets/site-enhance.js" defer></script>
-  <script src="../assets/nav.js" defer></script>
+  <script src="../assets/nav.js?v=nav-20260702b" defer></script>
 </body>
 </html>
