@@ -1080,6 +1080,7 @@ function gn(i, e, t, n, s) {
     o
   );
 }
+const todRefs = { cloudMats: [], glowMats: [] };
 function R1() {
   // Dusk rig: warm low sun as key, cool blue sky fill, ember rim from the horizon.
   const i = new HemisphereLight(16757626, 3097190, 0.66);
@@ -1102,6 +1103,7 @@ function R1() {
   (n.position.set(-180, 35, 280), et.add(n));
   const s = new PointLight(5556479, 90, 900, 2);
   (s.position.set(0, 88, -920), et.add(s));
+  ((todRefs.hemi = i), (todRefs.fill = e), (todRefs.key = t), (todRefs.rim = n));
 }
 let skyDome = null;
 function P1() {
@@ -1114,7 +1116,7 @@ function P1() {
       side: BackSide,
       depthWrite: !1,
       fog: !1,
-      uniforms: { uSunDir: { value: sunDirWorld } },
+      uniforms: { uSunDir: { value: sunDirWorld }, uDay: { value: 0 }, uNight: { value: 0 } },
       vertexShader: `
         varying vec3 vDir;
         void main() {
@@ -1124,23 +1126,29 @@ function P1() {
       fragmentShader: `
         varying vec3 vDir;
         uniform vec3 uSunDir;
+        uniform float uDay;
+        uniform float uNight;
+        vec3 pal(vec3 dusk, vec3 day, vec3 night) {
+          return mix(mix(dusk, day, uDay), night, uNight);
+        }
         void main() {
           float h = clamp(vDir.y, -0.08, 1.0);
-          // vertical gradient: peach horizon -> mauve band -> steel blue -> deep indigo zenith
-          vec3 zenith  = vec3(0.06, 0.09, 0.24);
-          vec3 upper   = vec3(0.2, 0.24, 0.47);
-          vec3 band    = vec3(0.56, 0.36, 0.47);
-          vec3 horizon = vec3(0.95, 0.66, 0.44);
+          // vertical gradient blended across dusk / day / night palettes
+          vec3 zenith  = pal(vec3(0.06, 0.09, 0.24),  vec3(0.16, 0.38, 0.72), vec3(0.012, 0.015, 0.05));
+          vec3 upper   = pal(vec3(0.2, 0.24, 0.47),   vec3(0.35, 0.56, 0.86), vec3(0.02, 0.03, 0.09));
+          vec3 band    = pal(vec3(0.56, 0.36, 0.47),  vec3(0.56, 0.72, 0.9),  vec3(0.045, 0.055, 0.13));
+          vec3 horizon = pal(vec3(0.95, 0.66, 0.44),  vec3(0.8, 0.88, 0.96),  vec3(0.09, 0.09, 0.17));
           vec3 col = mix(horizon, band, smoothstep(0.0, 0.09, h));
           col = mix(col, upper, smoothstep(0.06, 0.26, h));
           col = mix(col, zenith, smoothstep(0.2, 0.62, h));
-          // warm scattering lobe around the sun, wide at the horizon
+          // scattering lobe around the sun (a cool moon halo at night)
           float sunAmt = max(dot(vDir, uSunDir), 0.0);
-          col += vec3(1.0, 0.58, 0.28) * pow(sunAmt, 5.0) * 0.5;
-          col += vec3(1.0, 0.78, 0.5) * pow(sunAmt, 26.0) * 0.8;
+          col += pal(vec3(1.0, 0.58, 0.28), vec3(1.0, 0.95, 0.85), vec3(0.5, 0.6, 0.8)) * pow(sunAmt, 5.0) * pal(vec3(0.5), vec3(0.25), vec3(0.1)).x;
+          col += pal(vec3(1.0, 0.78, 0.5), vec3(1.0, 1.0, 0.95), vec3(0.7, 0.8, 1.0)) * pow(sunAmt, 26.0) * pal(vec3(0.8), vec3(0.5), vec3(0.3)).x;
           // opposite-side cool deepening keeps the far sky moody
           float away = max(dot(vDir, -uSunDir), 0.0);
-          col = mix(col, vec3(0.14, 0.15, 0.32), 0.42 * pow(away, 1.6) * (1.0 - h * 0.4));
+          float awayAmt = pal(vec3(0.42), vec3(0.15), vec3(0.5)).x;
+          col = mix(col, pal(vec3(0.14, 0.15, 0.32), vec3(0.3, 0.42, 0.62), vec3(0.02, 0.025, 0.06)), awayAmt * pow(away, 1.6) * (1.0 - h * 0.4));
           gl_FragColor = vec4(col, 1.0);
         }`,
     }),
@@ -1167,7 +1175,9 @@ function P1() {
   ]) {
     const f = new Mesh(new CircleGeometry(l, 48), o.clone());
     ((f.material.opacity = d), f.position.copy(sunDir).multiplyScalar(1060), f.lookAt(0, 0, 0), skyDome.add(f));
+    todRefs.glowMats.push({ mat: f.material, dusk: d });
   }
+  ((todRefs.skyU = skyDome.material.uniforms), (todRefs.sunMat = r));
 }
 function L1() {
   const i = new MeshStandardMaterial({ map: M1(), color: 8231526, roughness: 0.98, metalness: 0.02 }),
@@ -1844,6 +1854,58 @@ function Xi(i, e, t, n) {
 function bi(i, e, t = 1) {
   qe[i][e] = (qe[i][e] || 0) + t;
 }
+// ─── Merged-vehicle building: parts bake their color and emissive into vertex attributes
+// so a whole car body is ONE draw (plus one for glass and one mesh per spinning wheel),
+// instead of ~23 meshes. All cars/pedestrians share two global materials. ───
+let vcOpaqueMat = null,
+  vcGlassMat = null;
+function vcMats() {
+  if (!vcOpaqueMat) {
+    vcOpaqueMat = new MeshStandardMaterial({ vertexColors: !0, roughness: 0.42, metalness: 0.22 });
+    vcOpaqueMat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute vec3 aEmissive;\nvarying vec3 vEmissive;")
+        .replace("#include <begin_vertex>", "#include <begin_vertex>\nvEmissive = aEmissive;");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec3 vEmissive;")
+        .replace(
+          "#include <emissivemap_fragment>",
+          "#include <emissivemap_fragment>\ntotalEmissiveRadiance += vEmissive;",
+        );
+    };
+    vcGlassMat = new MeshStandardMaterial({
+      color: 10217727,
+      roughness: 0.08,
+      metalness: 0.08,
+      transparent: !0,
+      opacity: 0.62,
+      emissive: 1192778,
+      emissiveIntensity: 0.2,
+    });
+  }
+  return { opaque: vcOpaqueMat, glass: vcGlassMat };
+}
+const vcTmp = new Color();
+function vcBake(geo, matrix, color, emissive = 0, emissiveIntensity = 1) {
+  const g = geo.clone();
+  matrix && g.applyMatrix4(matrix);
+  const count = g.attributes.position.count,
+    col = new Float32Array(count * 3),
+    emi = new Float32Array(count * 3);
+  vcTmp.set(color ?? 16777215);
+  for (let k = 0; k < count; k++) ((col[k * 3] = vcTmp.r), (col[k * 3 + 1] = vcTmp.g), (col[k * 3 + 2] = vcTmp.b));
+  if (emissive) {
+    vcTmp.set(emissive).multiplyScalar(emissiveIntensity);
+    for (let k = 0; k < count; k++) ((emi[k * 3] = vcTmp.r), (emi[k * 3 + 1] = vcTmp.g), (emi[k * 3 + 2] = vcTmp.b));
+  }
+  (g.setAttribute("color", new Float32BufferAttribute(col, 3)),
+    g.setAttribute("aEmissive", new Float32BufferAttribute(emi, 3)));
+  return g;
+}
+function vcAt(x, y, z, rz = 0) {
+  const m = rz ? new Matrix4().makeRotationZ(rz) : new Matrix4();
+  return m.setPosition(x, y, z);
+}
 function I1(i, e) {
   const t = new Group(),
     n = {
@@ -1855,79 +1917,66 @@ function I1(i, e) {
       bus: { w: 3, h: 2, l: 8.6, cabin: [2.72, 0.9, 6.6], cabinZ: 0.1, bus: !0 },
     },
     s = n[i] || n.compact,
-    r = new MeshStandardMaterial({ color: e, roughness: 0.34, metalness: 0.28 }),
-    a = new MeshStandardMaterial({ color: new Color(e).multiplyScalar(0.52), roughness: 0.42, metalness: 0.24 }),
-    o = new MeshStandardMaterial({
-      color: 10217727,
-      roughness: 0.08,
-      metalness: 0.08,
-      transparent: !0,
-      opacity: 0.62,
-      emissive: 1192778,
-      emissiveIntensity: 0.2,
-    }),
-    c = new MeshStandardMaterial({ color: 395016, roughness: 0.72, metalness: 0.02 }),
-    l = new MeshStandardMaterial({ color: 14147041, roughness: 0.2, metalness: 0.68 }),
-    d = new MeshStandardMaterial({ color: 16774064, roughness: 0.2, emissive: 16765788, emissiveIntensity: 1.7 }),
-    f = new MeshStandardMaterial({ color: 16725033, roughness: 0.22, emissive: 16717325, emissiveIntensity: 1.45 }),
-    p = new Mesh(new BoxGeometry(s.w, s.h, s.l), i === "taxi" ? new MeshStandardMaterial({ color: 16767293, roughness: 0.36, metalness: 0.24 }) : r);
-  ((p.position.y = 0.95), t.add(p));
-  const m = new Mesh(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2]), s.bus ? o : r);
-  if ((m.position.set(0, 1.65, s.cabinZ), t.add(m), !s.bus)) {
-    const x = new Mesh(new BoxGeometry(s.cabin[0] * 0.78, s.cabin[1] * 0.55, 0.08), o);
-    (x.position.set(0, 1.68, s.cabinZ - s.cabin[2] * 0.5 - 0.05), t.add(x));
-    for (const h of [-1, 1]) {
-      const _ = new Mesh(new BoxGeometry(0.08, s.cabin[1] * 0.5, s.cabin[2] * 0.48), o);
-      (_.position.set(h * (s.cabin[0] * 0.5 + 0.04), 1.68, s.cabinZ), t.add(_));
-    }
-  }
-  if (s.bed) {
-    const x = new Mesh(new BoxGeometry(s.w * 0.94, 0.58, s.l * 0.38), a);
-    (x.position.set(0, 1.2, 1.35), t.add(x));
-  }
-  if (s.box) {
-    const x = new Mesh(new BoxGeometry(s.box[0], s.box[1], s.box[2]), new MeshStandardMaterial({ color: 15130833, roughness: 0.62, metalness: 0.05 }));
-    (x.position.set(0, 1.55, 1.25), t.add(x));
-  }
-  if (s.bus) {
-    const x = new Mesh(new BoxGeometry(s.w + 0.06, 0.28, s.l * 0.86), a);
-    (x.position.set(0, 1.38, 0), t.add(x));
-    for (let h = -2.8; h <= 3.1; h += 1.2)
-      for (const _ of [-1, 1]) {
-        const v = new Mesh(new BoxGeometry(0.08, 0.64, 0.72), o);
-        (v.position.set(_ * (s.w * 0.5 + 0.05), 2.08, h), t.add(v));
-      }
-  }
-  if (s.sign) {
-    const x = new Mesh(
-      new BoxGeometry(1, 0.24, 0.46),
-      new MeshStandardMaterial({ color: 16774310, roughness: 0.2, emissive: 16765773, emissiveIntensity: 0.9 }),
+    { opaque, glass } = vcMats(),
+    bodyColor = i === "taxi" ? 16767293 : e,
+    dimColor = new Color(e).multiplyScalar(0.52).getHex(),
+    opq = [],
+    gls = [];
+  opq.push(vcBake(new BoxGeometry(s.w, s.h, s.l), vcAt(0, 0.95, 0), bodyColor));
+  (s.bus ? gls : opq).push(
+    vcBake(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2]), vcAt(0, 1.65, s.cabinZ), s.bus ? 10217727 : e),
+  );
+  if (!s.bus) {
+    gls.push(
+      vcBake(
+        new BoxGeometry(s.cabin[0] * 0.78, s.cabin[1] * 0.55, 0.08),
+        vcAt(0, 1.68, s.cabinZ - s.cabin[2] * 0.5 - 0.05),
+        10217727,
+      ),
     );
-    (x.position.set(0, 2.2, -0.35), t.add(x));
+    for (const h of [-1, 1])
+      gls.push(
+        vcBake(
+          new BoxGeometry(0.08, s.cabin[1] * 0.5, s.cabin[2] * 0.48),
+          vcAt(h * (s.cabin[0] * 0.5 + 0.04), 1.68, s.cabinZ),
+          10217727,
+        ),
+      );
   }
+  s.bed && opq.push(vcBake(new BoxGeometry(s.w * 0.94, 0.58, s.l * 0.38), vcAt(0, 1.2, 1.35), dimColor));
+  s.box && opq.push(vcBake(new BoxGeometry(s.box[0], s.box[1], s.box[2]), vcAt(0, 1.55, 1.25), 15130833));
+  if (s.bus) {
+    opq.push(vcBake(new BoxGeometry(s.w + 0.06, 0.28, s.l * 0.86), vcAt(0, 1.38, 0), dimColor));
+    const bw = new BoxGeometry(0.08, 0.64, 0.72);
+    for (let h = -2.8; h <= 3.1; h += 1.2)
+      for (const _ of [-1, 1]) gls.push(vcBake(bw, vcAt(_ * (s.w * 0.5 + 0.05), 2.08, h), 10217727));
+  }
+  s.sign && opq.push(vcBake(new BoxGeometry(1, 0.24, 0.46), vcAt(0, 2.2, -0.35), 16774310, 16765773, 0.9));
+  // Wheels: tire + hub merged into one spinning mesh per corner; arches merge into the body.
   const g = s.l > 6 ? [-s.l * 0.34, 0, s.l * 0.34] : [-s.l * 0.34, s.l * 0.34],
     M = [],
-    archMat = new MeshStandardMaterial({ color: 1250072, roughness: 0.86, metalness: 0.04 });
+    wheelGeo = mergeGeometries(
+      [
+        vcBake(new CylinderGeometry(0.42, 0.42, 0.36, 14), vcAt(0, 0, 0, Math.PI / 2), 395016),
+        vcBake(new CylinderGeometry(0.18, 0.18, 0.38, 10), vcAt(0, 0, 0, Math.PI / 2), 14147041),
+      ],
+      !1,
+    ),
+    archGeo = new BoxGeometry(0.3, 0.34, 1.12);
   for (const x of g)
     for (const h of [-s.w * 0.54, s.w * 0.54]) {
-      const _ = new Mesh(new CylinderGeometry(0.42, 0.42, 0.36, 14), c);
-      ((_.rotation.z = Math.PI / 2), _.position.set(h, 0.45, x), t.add(_), M.push(_));
-      const v = new Mesh(new CylinderGeometry(0.18, 0.18, 0.38, 10), l);
-      ((v.rotation.z = Math.PI / 2), v.position.set(h, 0.45, x), t.add(v));
-      const arch = new Mesh(new BoxGeometry(0.3, 0.34, 1.12), archMat);
-      (arch.position.set(h * 1.02, 0.72, x), t.add(arch));
+      const _ = new Mesh(wheelGeo, opaque);
+      (_.position.set(h, 0.45, x), t.add(_), M.push(_));
+      opq.push(vcBake(archGeo, vcAt(h * 1.02, 0.72, x), 1250072));
     }
-  // bumpers front + rear
-  for (const zc of [-s.l * 0.5 - 0.06, s.l * 0.5 + 0.06]) {
-    const b = new Mesh(new BoxGeometry(s.w * 1.02, 0.24, 0.16), archMat);
-    (b.position.set(0, 0.62, zc), t.add(b));
-  }
-  for (const x of [-s.w * 0.28, s.w * 0.28]) {
-    const h = new Mesh(new BoxGeometry(0.42, 0.2, 0.1), d);
-    (h.position.set(x, 0.95, -s.l * 0.52 - 0.04), t.add(h));
-    const _ = new Mesh(new BoxGeometry(0.36, 0.22, 0.1), f);
-    (_.position.set(x, 0.98, s.l * 0.52 + 0.04), t.add(_));
-  }
+  const bumperGeo = new BoxGeometry(s.w * 1.02, 0.24, 0.16);
+  for (const zc of [-s.l * 0.5 - 0.06, s.l * 0.5 + 0.06]) opq.push(vcBake(bumperGeo, vcAt(0, 0.62, zc), 1250072));
+  const headGeo = new BoxGeometry(0.42, 0.2, 0.1),
+    tailGeo = new BoxGeometry(0.36, 0.22, 0.1);
+  for (const x of [-s.w * 0.28, s.w * 0.28])
+    (opq.push(vcBake(headGeo, vcAt(x, 0.95, -s.l * 0.52 - 0.04), 16774064, 16765788, 1.7)),
+      opq.push(vcBake(tailGeo, vcAt(x, 0.98, s.l * 0.52 + 0.04), 16725033, 16717325, 1.45)));
+  (t.add(new Mesh(mergeGeometries(opq, !1), opaque)), gls.length && t.add(new Mesh(mergeGeometries(gls, !1), glass)));
   return (
     (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55 }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
@@ -1939,23 +1988,31 @@ function I1(i, e) {
 }
 function U1(i, e) {
   const t = new Group(),
-    n = new MeshStandardMaterial({ color: 12947299, roughness: 0.72 }),
-    s = new MeshStandardMaterial({ color: i, roughness: 0.68 }),
-    r = new MeshStandardMaterial({ color: e, roughness: 0.76 }),
-    a = new MeshStandardMaterial({ color: 1119001, roughness: 0.82 }),
-    o = new Mesh(new CylinderGeometry(0.28, 0.34, 0.95, 8), s);
-  ((o.position.y = 1.35), t.add(o));
-  const c = new Mesh(new SphereGeometry(0.24, 10, 8), n);
-  ((c.position.y = 2.02), t.add(c));
-  const l = new Mesh(new SphereGeometry(0.25, 8, 5), a);
-  ((l.scale.y = 0.5), (l.position.y = 2.17), t.add(l));
-  const d = [];
+    { opaque } = vcMats(),
+    hatGeo = new SphereGeometry(0.25, 8, 5);
+  hatGeo.scale(1, 0.5, 1);
+  t.add(
+    new Mesh(
+      mergeGeometries(
+        [
+          vcBake(new CylinderGeometry(0.28, 0.34, 0.95, 8), vcAt(0, 1.35, 0), i),
+          vcBake(new SphereGeometry(0.24, 10, 8), vcAt(0, 2.02, 0), 12947299),
+          vcBake(hatGeo, vcAt(0, 2.17, 0), 1119001),
+        ],
+        !1,
+      ),
+      opaque,
+    ),
+  );
+  const d = [],
+    legGeo = vcBake(new CylinderGeometry(0.075, 0.09, 0.78, 6), null, e),
+    armGeo = vcBake(new CylinderGeometry(0.055, 0.065, 0.72, 6), null, 12947299);
   for (const f of [-0.16, 0.16]) {
-    const p = new Mesh(new CylinderGeometry(0.075, 0.09, 0.78, 6), r);
+    const p = new Mesh(legGeo, opaque);
     (p.position.set(f, 0.58, 0), t.add(p), d.push({ mesh: p, side: Math.sign(f), baseY: 0.58, amp: 0.28 }));
   }
   for (const f of [-0.38, 0.38]) {
-    const p = new Mesh(new CylinderGeometry(0.055, 0.065, 0.72, 6), n);
+    const p = new Mesh(armGeo, opaque);
     (p.position.set(f, 1.33, 0),
       (p.rotation.z = f < 0 ? -0.18 : 0.18),
       t.add(p),
@@ -5073,6 +5130,130 @@ function buildHelipad() {
   qe.helipad = { x: +spot.x.toFixed(1), z: +spot.z.toFixed(1) };
 }
 buildHelipad();
+// ─── Stunt jumps: marked wedge ramps on open ground beside roads. The surface query (Ki)
+// reports their height so the existing crest-launch physics does the flying; launching off
+// one arms a slow-mo beat and an airtime bonus on landing. No colliders — pure ramp. ───
+var stuntRamps = [];
+function stuntRampHeightAt(x, z) {
+  if (!stuntRamps) return 0;
+  for (const r of stuntRamps) {
+    const dx = x - r.x,
+      dz = z - r.z,
+      f = dx * r.fx + dz * r.fz,
+      lat = -dx * r.fz + dz * r.fx;
+    if (f < 0 || f > r.len || Math.abs(lat) > r.w * 0.5) continue;
+    return (f / r.len) * r.h;
+  }
+  return 0;
+}
+function buildStuntRamps() {
+  const len = 17,
+    w = 7.5,
+    h = 4.4,
+    railMat = new MeshStandardMaterial({ color: 16743210, roughness: 0.4, emissive: 16734750, emissiveIntensity: 1.6 }),
+    orbMat = new MeshStandardMaterial({ color: 16764268, roughness: 0.3, emissive: 16750444, emissiveIntensity: 2.4 }),
+    deckMat = new MeshStandardMaterial({
+      color: 3821395,
+      roughness: 0.78,
+      metalness: 0.08,
+      emissive: 1119519,
+      emissiveIntensity: 0.35,
+    }),
+    stripeMat = new MeshStandardMaterial({ color: 16772736, roughness: 0.4, emissive: 16766208, emissiveIntensity: 1.3 });
+  for (let k = 0; k < 500 && stuntRamps.length < 6; k++) {
+    const ns = Math.random() < 0.5,
+      roadsN = Math.round((di.x1 - di.x0) / di.pitch),
+      road = (ns ? di.x0 : di.zFar) + ((Math.random() * (ns ? roadsN : Math.round((di.zNear - di.zFar) / di.pitch))) | 0) * di.pitch,
+      side = (Math.random() < 0.5 ? -1 : 1) * (di.streetW * 0.5 + 10 + Math.random() * 9),
+      along = ns ? di.zFar + 120 + Math.random() * (di.zNear - di.zFar - 240) : di.x0 + 120 + Math.random() * (di.x1 - di.x0 - 240),
+      x = ns ? road + side : along,
+      z = ns ? along : road + side,
+      yaw = ns ? (Math.random() < 0.5 ? 0 : Math.PI) : Math.random() < 0.5 ? Math.PI / 2 : -Math.PI / 2,
+      fx = Math.sin(yaw),
+      fz = -Math.cos(yaw),
+      ex = x + fx * len,
+      ez = z + fz * len;
+    if (Hi(x, z, w + 4, w + 4, 2) || Hi(ex, ez, w + 4, w + 4, 2)) continue;
+    if (Pn(x, z, 8).clearance < 11 || Pn(ex, ez, 8).clearance < 11) continue;
+    if (
+      pondDepthAt(x, z).depth > 0 ||
+      pondDepthAt(ex, ez).depth > 0 ||
+      pondDepthAt(ex + fx * 40, ez + fz * 40).depth > 0
+    )
+      continue;
+    if (Math.abs(He(x, z) - He(ex, ez)) > 1.1) continue;
+    if (stuntRamps.some((r) => Math.hypot(r.x - x, r.z - z) < 150)) continue;
+    // keep the approach, footprint and flight corridor clear of buildings AND props
+    // (trees, rocks) — a jump you can't reach or that fires you into a wall is a prank
+    const nearBox = (arr, px, pz, rad) =>
+      arr.some(
+        (cb) =>
+          Math.abs(px - cb.x) < (cb.hw ?? cb.radius ?? 0) + rad && Math.abs(pz - cb.z) < (cb.hd ?? cb.radius ?? 0) + rad,
+      );
+    let blocked = !1;
+    for (const [px, pz, rad] of [
+      [x - fx * 45, z - fz * 45, 6],
+      [x - fx * 22, z - fz * 22, 6],
+      [x, z, 7],
+      [ex, ez, 7],
+      [ex + fx * 45, ez + fz * 45, 9],
+      [ex + fx * 95, ez + fz * 95, 9],
+    ])
+      if (nearBox(Mn, px, pz, rad) || nearBox(Di, px, pz, rad)) {
+        blocked = !0;
+        break;
+      }
+    if (blocked) continue;
+    stuntRamps.push({ x, z, yaw, fx, fz, len, w, h });
+  }
+  // world-space wedge + glowing edge rails + top corner orbs per ramp
+  for (const r of stuntRamps) {
+    const y0 = He(r.x, r.z) + 0.05,
+      lx = -r.fz,
+      lz = r.fx,
+      hw = r.w * 0.5,
+      A = [r.x - lx * hw, y0, r.z - lz * hw],
+      B = [r.x + lx * hw, y0, r.z + lz * hw],
+      C = [r.x + r.fx * r.len - lx * hw, y0, r.z + r.fz * r.len - lz * hw],
+      D = [r.x + r.fx * r.len + lx * hw, y0, r.z + r.fz * r.len + lz * hw],
+      Ct = [C[0], y0 + r.h, C[2]],
+      Dt = [D[0], y0 + r.h, D[2]],
+      pos = [
+        // slope quad (two tris)
+        ...A, ...B, ...Dt, ...A, ...Dt, ...Ct,
+        // back face
+        ...C, ...D, ...Dt, ...C, ...Dt, ...Ct,
+        // left side tri
+        ...A, ...Ct, ...C,
+        // right side tri
+        ...B, ...D, ...Dt,
+      ],
+      geo = new BufferGeometry();
+    (geo.setAttribute("position", new Float32BufferAttribute(pos, 3)), geo.computeVertexNormals());
+    const wedge = new Mesh(geo, deckMat);
+    ((wedge.castShadow = !1), (wedge.receiveShadow = !0), et.add(wedge));
+    const slopeLen = Math.hypot(r.len, r.h),
+      railGeo = new BoxGeometry(0.26, 0.24, slopeLen),
+      stripe = new Mesh(new BoxGeometry(1.1, 0.1, slopeLen * 0.94), stripeMat);
+    (stripe.position.set(r.x + (r.fx * r.len) / 2, y0 + r.h / 2 + 0.08, r.z + (r.fz * r.len) / 2),
+      stripe.lookAt(r.x + r.fx * r.len, y0 + r.h + 0.08, r.z + r.fz * r.len),
+      et.add(stripe));
+    for (const s of [-1, 1]) {
+      const rail = new Mesh(railGeo, railMat),
+        bx = r.x + lx * hw * s,
+        bz = r.z + lz * hw * s,
+        tx = r.x + r.fx * r.len + lx * hw * s,
+        tz = r.z + r.fz * r.len + lz * hw * s;
+      (rail.position.set((bx + tx) / 2, y0 + r.h / 2 + 0.12, (bz + tz) / 2),
+        rail.lookAt(tx, y0 + r.h + 0.12, tz),
+        et.add(rail));
+      const orb = new Mesh(new SphereGeometry(0.34, 10, 8), orbMat);
+      (orb.position.set(tx, y0 + r.h + 0.55, tz), et.add(orb));
+    }
+  }
+  qe.stuntRamps = stuntRamps.length;
+}
+buildStuntRamps();
 Bn(new Object3D(), (tt, dt) => {
   if (!heli) return;
   const target = u.mode === "roam" && u.vehicle === "heli" ? 1 : 0;
@@ -5269,7 +5450,7 @@ function Wd() {
   };
 }
 function La() {
-  (mi || Wd(), mi?.ctx.state === "suspended" && mi.ctx.resume().catch(() => {}));
+  (mi || Wd(), mi?.ctx.state === "suspended" && mi.ctx.resume().catch(() => {}), loadSfx());
 }
 function audioOut() {
   return mi ? mi.master : null;
@@ -5289,6 +5470,7 @@ function Pc(i) {
 }
 function boostWhoosh() {
   if (!mi) return;
+  if (playSfx("whoosh", 0.4, 1, 0.1)) return;
   const { ctx: e } = mi,
     t = e.createOscillator(),
     n = e.createGain(),
@@ -5306,6 +5488,7 @@ function boostWhoosh() {
 }
 function splatSound() {
   if (!mi) return;
+  if (playSfx("splat", 0.6, 1, 0.14)) return;
   // wet burst: lowpassed noise snap + pitch-dropping blip
   const e = mi.ctx,
     n = e.createBiquadFilter(),
@@ -5337,6 +5520,7 @@ function miNoiseBuffer() {
 }
 function waterSplashSound(intensity = 1) {
   if (!mi) return;
+  if (playSfx("splash", Math.min(0.6, 0.28 + intensity * 0.16), 0.95, 0.1)) return;
   const { ctx: e } = mi,
     src = e.createBufferSource(),
     f = e.createBiquadFilter(),
@@ -5345,6 +5529,48 @@ function waterSplashSound(intensity = 1) {
   (g.gain.setValueAtTime(Math.min(0.32, 0.14 + intensity * 0.08), e.currentTime),
     g.gain.exponentialRampToValueAtTime(1e-4, e.currentTime + 0.34));
   (src.connect(f), f.connect(g), g.connect(mi.master), src.start(e.currentTime, Math.random() * 1.2, 0.36));
+}
+// ─── Generated SFX + music samples (static mp3 assets in audio/), decoded after first
+// gesture. Every call site keeps its synth fallback so the game sounds right even if
+// the fetch fails or hasn't finished. ───
+const sfx = { buffers: {}, loops: {}, loading: !1 };
+const SFX_FILES = ["splat", "crash", "whoosh", "splash", "rotor", "jack", "land", "skid", "music"];
+function loadSfx() {
+  if (sfx.loading || !mi) return;
+  sfx.loading = !0;
+  for (const name of SFX_FILES)
+    fetch(`audio/${name}.mp3`)
+      .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(r.status)))
+      .then((b) => mi.ctx.decodeAudioData(b))
+      .then((buf) => (sfx.buffers[name] = buf))
+      .catch(() => {});
+}
+function playSfx(name, gain = 0.5, rate = 1, jitter = 0.06) {
+  const buf = mi && sfx.buffers[name];
+  if (!buf) return !1;
+  const e = mi.ctx,
+    src = e.createBufferSource(),
+    g = e.createGain();
+  ((src.buffer = buf),
+    (src.playbackRate.value = rate * (1 - jitter / 2 + Math.random() * jitter)),
+    (g.gain.value = gain),
+    src.connect(g).connect(mi.master),
+    src.start());
+  return !0;
+}
+function ensureSampleLoop(name, dest, g0 = 1e-4) {
+  if (sfx.loops[name]) return sfx.loops[name];
+  if (!mi || !sfx.buffers[name]) return null;
+  const e = mi.ctx,
+    src = e.createBufferSource(),
+    g = e.createGain();
+  ((src.buffer = sfx.buffers[name]),
+    (src.loop = !0),
+    (g.gain.value = g0),
+    src.connect(g),
+    g.connect(dest || mi.master),
+    src.start());
+  return (sfx.loops[name] = { src, gain: g });
 }
 // Menu music: minor synthwave arp + bass, scheduled with a lookahead so timing survives frame hitches.
 const Wm = {
@@ -5429,7 +5655,7 @@ function ev(i, e = Math.abs(u.speed), t = "CRASH") {
     Pr(i, Math.round(10 + n * 24)),
     Xd(i, Math.round(5 + n * 12), n),
     Q1(i, Math.round(3 + n * 8), n),
-    Pc(18 + n * 34));
+    playSfx("crash", Math.min(0.75, 0.2 + n * 0.4), 0.88 + n * 0.18, 0.12) || Pc(18 + n * 34));
 }
 function tv(i) {
   for (const e of mr) {
@@ -5483,13 +5709,35 @@ function nv() {
     ));
   (mi.wind.gain.gain.setTargetAtTime(active ? Math.min(0.1, Math.max(0, (sp - 55) / 850)) : 1e-4, t, 0.15),
     mi.wind.filter.frequency.setTargetAtTime(700 + sp * 8, t, 0.12));
-  const slip = u.mode === "roam" ? u.roamSlip : u.grounded ? Math.min(1, Math.abs(u.lateralVel) / 15) : 0;
-  mi.skid.gain.gain.setTargetAtTime(active && slip > 0.32 ? (slip - 0.32) * 0.15 : 1e-4, t, 0.09);
+  const slip = u.mode === "roam" ? u.roamSlip : u.grounded ? Math.min(1, Math.abs(u.lateralVel) / 15) : 0,
+    skidLoop = ensureSampleLoop("skid");
+  mi.skid.gain.gain.setTargetAtTime(
+    active && slip > 0.32 ? (slip - 0.32) * (skidLoop ? 0.05 : 0.15) : 1e-4,
+    t,
+    0.09,
+  );
+  skidLoop &&
+    skidLoop.gain.gain.setTargetAtTime(
+      active && slip > 0.32 ? Math.min(0.34, (slip - 0.32) * 0.55) : 1e-4,
+      t,
+      0.09,
+    );
+  const rotorLoop = ensureSampleLoop("rotor");
+  rotorLoop &&
+    (rotorLoop.gain.gain.setTargetAtTime(heliMode ? 0.06 + (heli?.rpm || 0) * 0.3 : 1e-4, t, heliMode ? 0.3 : 0.15),
+      rotorLoop.src.playbackRate.setTargetAtTime(0.65 + (heliMode ? heli?.rpm || 0 : 0) * 0.5, t, 0.4));
   (u.boosting && !mi.prevBoost && boostWhoosh(),
     (mi.prevBoost = !!u.boosting),
     mi.boost.gain.gain.setTargetAtTime(active && u.boosting ? 0.15 : 1e-4, t, u.boosting ? 0.05 : 0.22),
     mi.boost.filter.frequency.setTargetAtTime(u.boosting ? 420 + sp * 3 : 260, t, 0.1));
-  (mi.musicGain.gain.setTargetAtTime(u.mode === "menu" ? 0.16 : 0.028, t, 0.5), musicScheduler());
+  const musicOn = localStorage.getItem("steel-ribbon-music") !== "0",
+    musicLoop = musicOn ? ensureSampleLoop("music", mi.musicGain, 1) : sfx.loops.music || null;
+  (mi.musicGain.gain.setTargetAtTime(
+    musicOn ? (u.mode === "menu" ? (musicLoop ? 0.3 : 0.16) : musicLoop ? 0.065 : 0.028) : 1e-4,
+    t,
+    0.5,
+  ),
+    musicOn && !musicLoop && musicScheduler());
 }
 function Va(i = !1, e = !1, seasonRace = !1) {
   (Wd(), La(), _t.clear(), Ia(), releaseStolenRide());
@@ -5577,6 +5825,11 @@ function Yd() {
     (u.objectiveIndex = 0),
     (u.objectiveHits = 0),
     (u.objectiveLap = 1),
+    (u.driftCombo = 0),
+    (u.driftComboT = 0),
+    (u.stuntActive = !1),
+    (u.stuntPrime = 0),
+    (u.sloMoT = 0),
     (u.roamAir = !1),
     (u.roamVy = 0),
     (u.roamPrevY = null),
@@ -5687,8 +5940,9 @@ function Zd(i, e, t = He(i, e), n = !1) {
   return ((s.tangentX /= a), (s.tangentZ /= a), s);
 }
 function Ki(i, e, t = u.roamPos.y) {
-  const n = He(i, e);
-  let s = { kind: "ground", y: n };
+  const n = He(i, e),
+    sr = stuntRampHeightAt(i, e);
+  let s = sr > 0 ? { kind: "stunt", y: n + sr } : { kind: "ground", y: n };
   const r = qd(i, e);
   r && r.y >= n - 1.2 && (s = r);
   const a = Zd(i, e, Math.max(t, s.y));
@@ -5795,6 +6049,13 @@ function publishRoamTelemetry() {
     objectiveHits: u.objectiveHits,
     waterDepth: +(u.waterDepth || 0).toFixed(3),
     driftAngle: +(u.driftAngle || 0).toFixed(3),
+    driftCombo: u.driftCombo || 0,
+    driftComboT: +(u.driftComboT || 0).toFixed(2),
+    driftT: +(u.driftT || 0).toFixed(2),
+    driftAcc: +(u.driftAcc || 0).toFixed(1),
+    stuntActive: !!u.stuntActive,
+    sloMoT: +(u.sloMoT || 0).toFixed(2),
+    stunts: qe.stunts || 0,
     airTime: +(u.roamAirT || 0).toFixed(2),
     vehicle: u.vehicle || "car",
     drivingStolen: !!u.drivingStolen,
@@ -5847,6 +6108,12 @@ function bakeMinimap() {
   for (const p of ponds) {
     const [px, pz] = mmPt(p.x, p.z, size);
     (c.beginPath(), c.ellipse(px, pz, Math.max(3, (p.rx / MM.span) * size), Math.max(3, (p.rz / MM.span) * size), 0, 0, Math.PI * 2), c.fill());
+  }
+  // stunt ramps: small orange arrowheads pointing along the launch direction
+  c.fillStyle = "rgba(255, 150, 60, 0.95)";
+  for (const r of stuntRamps || []) {
+    const [px, pz] = mmPt(r.x, r.z, size);
+    (c.save(), c.translate(px, pz), c.rotate(r.yaw), c.beginPath(), c.moveTo(0, -7), c.lineTo(4.4, 4.4), c.lineTo(-4.4, 4.4), c.closePath(), c.fill(), c.restore());
   }
   minimapBake = b;
 }
@@ -6095,7 +6362,7 @@ function stealTrafficCar(actor) {
     (walker.visible = !1),
     (u.message = `${(actor.type || "car").toUpperCase()} jacked!`),
     (u.messageTimer = 1.2),
-    chime(340, 0.18, "square", 0.1),
+    playSfx("jack", 0.5, 1, 0.08) || chime(340, 0.18, "square", 0.1),
     zs());
   return !0;
 }
@@ -6122,7 +6389,7 @@ function stealParkedCar(spot) {
     (walker.visible = !1),
     (u.message = "Borrowed a parked car"),
     (u.messageTimer = 1.1),
-    chime(300, 0.16, "square", 0.09),
+    playSfx("jack", 0.45, 1.05, 0.08) || chime(300, 0.16, "square", 0.09),
     zs());
   return !0;
 }
@@ -6320,13 +6587,22 @@ function heliUpdate(i) {
 }
 function driftScoreUpdate(i, hb, collided) {
   const active = hb && Math.abs(u.driftAngle || 0) > 0.16 && Math.abs(u.speed) > 24;
+  // Combo window: banking another drift within 4s multiplies the payout, up to x5.
+  // A collision kills both the current drift and the chain.
+  if (u.driftComboT > 0 && ((u.driftComboT -= i), u.driftComboT <= 0)) u.driftCombo = 0;
+  if (collided && (u.driftCombo || u.driftComboT > 0)) ((u.driftCombo = 0), (u.driftComboT = 0));
   if (active && !collided) {
     ((u.driftT = (u.driftT || 0) + i),
       (u.driftAcc = (u.driftAcc || 0) + i * Math.abs(u.speed) * (0.7 + Math.abs(u.driftAngle))));
   } else if (u.driftT) {
     if (!collided && u.driftT > 0.55) {
-      const pts = Math.round(u.driftAcc);
-      ((u.score += pts), showScorePop(`+${pts} DRIFT`), chime(600, 0.16, "square", 0.1));
+      const mult = Math.min(5, (u.driftCombo || 0) + 1),
+        pts = Math.round(u.driftAcc * mult);
+      ((u.score += pts),
+        showScorePop(mult > 1 ? `+${pts} DRIFT ×${mult}` : `+${pts} DRIFT`),
+        chime(600 + mult * 90, 0.16, "square", 0.1),
+        (u.driftCombo = mult),
+        (u.driftComboT = 4));
     }
     ((u.driftT = 0), (u.driftAcc = 0));
   }
@@ -6336,10 +6612,21 @@ function roamVertical(i, surf) {
   // falls away faster than gravity could pull us down from our current climb, the car goes ballistic.
   const surfY = surf.y + Wn,
     prevY = u.roamPrevY ?? surfY;
+  // Riding a stunt ramp primes the launch: leaving the ground within a beat of the ramp
+  // top counts as a stunt (slow-mo + a bigger landing payout than a plain hill hop).
+  (surf.kind === "stunt" && Math.abs(u.speed) > 30 && (u.stuntPrime = 0.3),
+    u.stuntPrime > 0 && (u.stuntPrime -= i));
   if (!u.roamAir) {
     const vyFollow = (surfY - prevY) / Math.max(1e-4, i);
     if (Math.abs(u.speed) > 26 && vyFollow < (u.roamVy || 0) - 40 * i - 3.4) {
       ((u.roamAir = !0), (u.roamAirT = 0));
+      u.stuntPrime > 0 &&
+        ((u.stuntActive = !0),
+        (u.stuntPrime = 0),
+        (u.sloMoT = 1.15),
+        (u.message = "STUNT!"),
+        (u.messageTimer = 1),
+        playSfx("whoosh", 0.38, 1.2, 0.08));
     } else {
       ((u.roamVy = MathUtils.clamp(vyFollow, -70, 70)), (u.roamPos.y = surfY));
     }
@@ -6353,9 +6640,16 @@ function roamVertical(i, surf) {
       u.roamVy = 0;
       if (impact > 9)
         ((u.cameraShake = Math.max(u.cameraShake, Math.min(0.5, impact / 40))),
-          Pc(Math.min(24, impact * 0.85)),
+          playSfx("land", Math.min(0.62, impact / 42), 1, 0.1) || Pc(Math.min(24, impact * 0.85)),
           (u.roamSuspension += 0.16));
-      if (u.roamAirT > 0.45) {
+      if (u.stuntActive) {
+        const pts = Math.round(160 + u.roamAirT * 240 + Math.abs(u.speed) * 1.4);
+        ((u.score += pts),
+          (qe.stunts = (qe.stunts || 0) + 1),
+          showScorePop(`STUNT +${pts}`),
+          chime(880, 0.2, "square", 0.12),
+          (u.stuntActive = !1));
+      } else if (u.roamAirT > 0.45) {
         const pts = Math.round(40 + u.roamAirT * 70);
         ((u.score += pts), showScorePop(`+${pts} AIR`), chime(760, 0.14));
       }
@@ -6767,7 +7061,24 @@ window.__steelRibbonDebug = {
       geometries: Qt.info.memory.geometries,
       textures: Qt.info.memory.textures,
       mobilePerf,
+      staticMerge: qe.staticMerge || null,
     };
+  },
+  drawAudit(top = 20) {
+    const tally = new Map();
+    et.traverse((o) => {
+      if (!o.visible || (!o.isMesh && !o.isSprite && !o.isLine && !o.isPoints)) return;
+      const p = o.geometry?.parameters,
+        sig = p
+          ? Object.values(p)
+              .filter((v) => typeof v === "number")
+              .map((v) => +v.toFixed(2))
+              .join("x")
+          : `verts${o.geometry?.attributes?.position?.count ?? "?"}`,
+        key = `${o.geometry?.type || o.type}(${sig})${o.isInstancedMesh ? `[inst ${o.count}]` : ""}`;
+      tally.set(key, (tally.get(key) || 0) + 1);
+    });
+    return [...tally.entries()].sort((a, b) => b[1] - a[1]).slice(0, top);
   },
   trafficInfo() {
     const m = Ri[0]?.actor?.mesh;
@@ -6792,6 +7103,10 @@ window.__steelRibbonDebug = {
           fx: !!mi.wind && !!mi.skid && !!mi.boost,
           music: !!mi.musicGain,
           beat: mi.beat,
+          samples: Object.keys(sfx.buffers).length,
+          sampleLoops: Object.keys(sfx.loops),
+          musicSample: !!sfx.buffers.music,
+          musicOn: localStorage.getItem("steel-ribbon-music") !== "0",
         }
       : null;
   },
@@ -6871,6 +7186,24 @@ window.__steelRibbonDebug = {
   },
   stealNearest() {
     return u.mode === "roam" && u.vehicle === "foot" ? tryStealNearby() : !1;
+  },
+  setTod(mode) {
+    return (
+      TOD_MODES.includes(mode) && ((todMode = mode), localStorage.setItem("steel-ribbon-tod", mode), refreshTodLabel()),
+      todMode
+    );
+  },
+  todInfo() {
+    return { mode: todMode, day: +todDay.toFixed(3), night: +todNight.toFixed(3) };
+  },
+  listStuntRamps() {
+    return (stuntRamps || []).map((r) => ({
+      x: +r.x.toFixed(1),
+      z: +r.z.toFixed(1),
+      yaw: +r.yaw.toFixed(2),
+      len: r.len,
+      h: r.h,
+    }));
   },
   nearestParkedSpot(x, z) {
     let best = null;
@@ -7951,9 +8284,10 @@ function vr() {
     (Qe.damage.style.width = `${Math.round(u.damage)}%`),
     (Qe.lap.textContent = u.practice ? `LAP ${u.lap}` : `${Math.min(u.lap, ce.laps)}/${ce.laps}`),
     (Qe.timer.textContent = Dc(u.time)));
-  const n = u.mode === "roam";
+  const n = u.mode === "roam",
+    comboTag = n && u.driftCombo > 0 && u.driftComboT > 0 ? `  ·  DRIFT ×${Math.min(5, u.driftCombo + 1)}` : "";
   Qe.score.textContent = n
-    ? `Gates ${u.objectiveHits}/${nn.length}  Score ${Math.round(u.score)}`
+    ? `Gates ${u.objectiveHits}/${nn.length}  Score ${Math.round(u.score)}${comboTag}`
     : `Score ${Math.round(u.score)}`;
   const s = u.mode === "race" || u.mode === "paused" || n;
   if (
@@ -8008,8 +8342,10 @@ function Dc(i) {
 }
 function nu() {
   Qt.info.reset();
-  const i = p1.getDelta(),
-    e = Math.min(0.033, i);
+  const i = p1.getDelta();
+  let e = Math.min(0.033, i);
+  // Stunt slow-mo: ramp launches dilate time briefly; the timer burns in real time.
+  u.sloMoT > 0 && ((u.sloMoT = Math.max(0, u.sloMoT - e)), (e *= 0.42));
   (u.messageTimer > 0 && (u.messageTimer -= e),
     u.mode === "roam"
       ? ((u.vehicle === "foot" ? walkerUpdate(e) : u.vehicle === "heli" ? heliUpdate(e) : $d(e)),
@@ -8043,6 +8379,7 @@ window.addEventListener("keydown", (i) => {
     ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(i.code) && i.preventDefault(),
     i.code === "KeyC" && (u.mode === "race" || u.mode === "paused") && toggleTrackView(),
     i.code === "KeyE" && handleVehicleAction(),
+    i.code === "KeyN" && cycleTod(),
     i.code === "KeyP" && u.mode === "race"
       ? ((u.mode = "paused"), _t.clear(), Ia())
       : i.code === "KeyP" && u.mode === "paused"
@@ -8087,6 +8424,18 @@ volBtn.addEventListener("click", (ev) => {
     refreshVolLabel());
 });
 Qe.menu.appendChild(volBtn);
+const musicBtn = document.createElement("button");
+((musicBtn.id = "musicBtn"), (musicBtn.type = "button"));
+function refreshMusicLabel() {
+  musicBtn.textContent = localStorage.getItem("steel-ribbon-music") !== "0" ? "🎵 Music on" : "🎵 Music off";
+}
+refreshMusicLabel();
+musicBtn.addEventListener("click", (ev) => {
+  ev.stopPropagation();
+  const on = localStorage.getItem("steel-ribbon-music") !== "0";
+  (localStorage.setItem("steel-ribbon-music", on ? "0" : "1"), La(), refreshMusicLabel());
+});
+Qe.menu.appendChild(musicBtn);
 // Touch action button: enter/exit vehicles in free roam.
 const actionBtn = document.createElement("button");
 ((actionBtn.id = "actionBtn"), (actionBtn.type = "button"), (actionBtn.textContent = "E"));
@@ -8315,6 +8664,171 @@ Lr.addEventListener(
   },
   { passive: !1 },
 );
+// ─── Time of day: dusk (default) / night / day / slow cycle. Blends the sky shader
+// palettes, the light rig, fog, sun disc and clouds. Streetlamps and windows stay lit —
+// they carry the night look and read as arcade charm in daylight. ───
+const TOD_MODES = ["dusk", "night", "day", "cycle"],
+  TOD_ICONS = { dusk: "🌇", night: "🌃", day: "🌞", cycle: "🔁" };
+let todMode = localStorage.getItem("steel-ribbon-tod") || "dusk";
+TOD_MODES.includes(todMode) || (todMode = "dusk");
+let todDay = 0,
+  todNight = 0,
+  todCycleT = 95; // cycle starts near dusk
+const todA = new Color(),
+  todB = new Color(),
+  todOut = new Color();
+function todMixC(dusk, day, night, d, n) {
+  return todOut.set(dusk).lerp(todA.set(day), d).lerp(todB.set(night), n);
+}
+const todMixN = (dusk, day, night, d, n) => dusk + (day - dusk) * d + (night - dusk) * n;
+(() => {
+  // tint cloud sprites per time of day — they're unlit, so night needs a manual dim
+  et.traverse((o) => {
+    o.isSprite && o.renderOrder === -50 && todRefs.cloudMats.push(o.material);
+  });
+})();
+function todApply(d, n) {
+  if (!todRefs.skyU) return;
+  ((todRefs.skyU.uDay.value = d), (todRefs.skyU.uNight.value = n));
+  const R = todRefs;
+  (R.hemi.color.copy(todMixC(16757626, 12573183, 2371663, d, n)),
+    R.hemi.groundColor.copy(todMixC(3097190, 5925464, 789534, d, n)),
+    (R.hemi.intensity = todMixN(0.66, 0.95, 0.22, d, n)));
+  (R.fill.color.copy(todMixC(7179775, 13096432, 2240591, d, n)), (R.fill.intensity = todMixN(0.6, 0.5, 0.16, d, n)));
+  (R.key.color.copy(todMixC(16752724, 16774880, 10336511, d, n)), (R.key.intensity = todMixN(2.3, 2.6, 0.45, d, n)));
+  R.rim.intensity = todMixN(0.5, 0.3, 0.1, d, n);
+  (et.fog.color.copy(todMixC(14719602, 12834794, 723741, d, n)),
+    (et.fog.near = todMixN(360, 430, 300, d, n)),
+    (et.fog.far = todMixN(2150, 2600, 1650, d, n)));
+  (R.sunMat.color.copy(todMixC(16764250, 16777198, 14542591, d, n)),
+    (R.sunMat.opacity = todMixN(0.92, 0.95, 0.5, d, n)));
+  for (const g of R.glowMats) g.mat.opacity = todMixN(g.dusk, g.dusk * 0.55, g.dusk * 0.18, d, n);
+  const ct = todMixC(16777215, 16777215, 3687001, d, n);
+  for (const m of R.cloudMats) m.color.copy(ct);
+}
+Bn(new Object3D(), (tt, dt) => {
+  let dT = 0,
+    nT = 0;
+  if (todMode === "day") dT = 1;
+  else if (todMode === "night") nT = 1;
+  else if (todMode === "cycle") {
+    todCycleT = (todCycleT + dt) % 270;
+    const p = todCycleT;
+    p < 60
+      ? (dT = 1)
+      : p < 90
+        ? (dT = 1 - (p - 60) / 30)
+        : p < 120
+          ? 0
+          : p < 150
+            ? (nT = (p - 120) / 30)
+            : p < 210
+              ? (nT = 1)
+              : p < 240
+                ? (nT = 1 - (p - 210) / 30)
+                : (dT = (p - 240) / 30);
+  }
+  const k = Math.min(1, dt * 1.4);
+  ((todDay += (dT - todDay) * k), (todNight += (nT - todNight) * k), todApply(todDay, todNight));
+});
+function cycleTod() {
+  ((todMode = TOD_MODES[(TOD_MODES.indexOf(todMode) + 1) % TOD_MODES.length]),
+    localStorage.setItem("steel-ribbon-tod", todMode),
+    refreshTodLabel(),
+    (u.message = `Time of day: ${todMode.toUpperCase()}`),
+    (u.messageTimer = 1.2));
+}
+const todBtn = document.createElement("button");
+((todBtn.id = "todBtn"), (todBtn.type = "button"));
+function refreshTodLabel() {
+  todBtn.textContent = `${TOD_ICONS[todMode]} ${todMode[0].toUpperCase()}${todMode.slice(1)}`;
+}
+refreshTodLabel();
+todBtn.addEventListener("click", (ev) => {
+  (ev.stopPropagation(), cycleTod());
+});
+Qe.menu.appendChild(todBtn);
+
+// ─── Static-scenery merge: fold thousands of small static decor meshes (road dashes,
+// lamp posts, window trims, pylon parts...) into one mesh per material+shadow-class.
+// Dynamic objects are excluded: animated Bn subtrees, gates, traffic/peds (userData
+// wheels/limbs/frontWheels), player/walker/heli/ghost, hidden particle pools, and any
+// transparent/additive/shader material (sorting would break). Material-level animations
+// (signal lamps, beacons) keep working — merged meshes reuse the same material instance.
+function mergeStaticScenery() {
+  const excluded = new Set(),
+    markSub = (o) => o && o.traverse((x) => excluded.add(x)),
+    subtreeMeshCount = (o) => {
+      let c = 0;
+      return (o.traverse((x) => x.isMesh && c++), c);
+    };
+  for (const b of Bd)
+    b.obj && b.obj.parent && subtreeMeshCount(b.obj) <= 300 && markSub(b.obj);
+  for (const g of nn) markSub(g.marker);
+  (markSub(cn),
+    markSub(walker),
+    typeof qn < "u" && markSub(qn),
+    typeof ghostMesh < "u" && markSub(ghostMesh),
+    heli && markSub(heli.mesh),
+    typeof skyDome < "u" && markSub(skyDome),
+    typeof gateBeam < "u" && gateBeam && markSub(gateBeam));
+  for (const r of rivals) markSub(r.mesh);
+  const groups = new Map();
+  et.traverse((o) => {
+    if (!o.isMesh || o.isInstancedMesh || !o.visible || excluded.has(o)) return;
+    for (let a = o; a && a !== et; a = a.parent) {
+      if (excluded.has(a) || !a.visible) return;
+      const ud = a.userData;
+      if (ud && (ud.wheels || ud.limbs || ud.frontWheels)) return;
+    }
+    const m = o.material;
+    if (
+      !m ||
+      Array.isArray(m) ||
+      m.transparent ||
+      m.blending !== 1 ||
+      !(m.isMeshStandardMaterial || m.isMeshBasicMaterial || m.isMeshLambertMaterial)
+    )
+      return;
+    const g = o.geometry;
+    if (!g?.attributes?.position || !g.attributes.normal || !g.attributes.uv || !g.index) return;
+    const key = `${m.uuid}|${o.castShadow ? 1 : 0}${o.receiveShadow ? 1 : 0}`;
+    let arr = groups.get(key);
+    arr || groups.set(key, (arr = []));
+    arr.push(o);
+  });
+  let mergedGroups = 0,
+    removedMeshes = 0;
+  const removedGeos = new Map();
+  for (const list of groups.values()) {
+    if (list.length < 6) continue;
+    try {
+      const geoms = list.map((o) => {
+        o.updateWorldMatrix(!0, !1);
+        const g2 = o.geometry.clone().applyMatrix4(o.matrixWorld);
+        for (const name of Object.keys(g2.attributes))
+          name === "position" || name === "normal" || name === "uv" || g2.deleteAttribute(name);
+        return g2;
+      });
+      const big = mergeGeometries(geoms, !1);
+      if (!big) continue;
+      const first = list[0],
+        mesh = new Mesh(big, first.material);
+      ((mesh.castShadow = first.castShadow),
+        (mesh.receiveShadow = first.receiveShadow),
+        (mesh.matrixAutoUpdate = !1),
+        et.add(mesh));
+      for (const o of list) (removedGeos.set(o.geometry.uuid, o.geometry), o.removeFromParent(), removedMeshes++);
+      mergedGroups++;
+    } catch {}
+  }
+  // free GPU buffers of geometries that no longer appear anywhere in the scene
+  const stillUsed = new Set();
+  et.traverse((o) => o.geometry && stillUsed.add(o.geometry.uuid));
+  for (const [uuid, geo] of removedGeos) stillUsed.has(uuid) || geo.dispose();
+  qe.staticMerge = { groups: mergedGroups, meshesRemoved: removedMeshes };
+}
+mergeStaticScenery();
 const vv = St(u.s);
 u.y = vv.p.y + 2.1;
 u.lastSafeS = u.s;
