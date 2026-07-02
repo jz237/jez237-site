@@ -822,3 +822,23 @@ body.menu-mode #cockpit .strut {
     width: 108px;
   }
 }
+
+#actionBtn {
+  background: rgba(20, 30, 40, 0.7);
+  border: 2px solid rgba(140, 220, 255, 0.55);
+  border-radius: 50%;
+  bottom: 190px;
+  color: #cfeeff;
+  font-size: 1.1rem;
+  font-weight: 900;
+  height: 54px;
+  padding: 0;
+  position: absolute;
+  right: 24px;
+  width: 54px;
+}
+@media (pointer: fine) {
+  #actionBtn {
+    display: none;
+  }
+}
