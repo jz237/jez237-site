@@ -1048,8 +1048,9 @@ function Wi(i, e, t, n, s, r = 9) {
 function zn(i, e, t, n = 96) {
   for (let s = 0; s < n; s++) {
     const r = i(s);
-    // Reject spots on/near road corridors too — rocks and trees must never sit in a driving lane.
-    if (Pn(r.x, r.z, e).clearance >= t && !Hi(r.x, r.z, e * 2, e * 2, 2)) return r;
+    // Reject spots on/near road corridors too — rocks and trees must never sit in a driving lane,
+    // with margin comfortably beyond the car's collision buffer.
+    if (Pn(r.x, r.z, e).clearance >= t && !Hi(r.x, r.z, e * 2, e * 2, 3.5)) return r;
   }
   return null;
 }
@@ -1189,10 +1190,18 @@ function L1() {
     new MeshStandardMaterial({ color: 3562320, roughness: 1 }),
   ];
   for (let g = 0; g < 46; g++) {
-    const M = new Mesh(new CircleGeometry(28 + Math.random() * 90, 9), s[g % s.length]);
+    // Flat ground decals must sit on genuinely flat ground, pinned just above the local maximum —
+    // a fixed height on rolling terrain made them slice through hillsides as giant planes.
+    const rad = 28 + Math.random() * 90,
+      mx = -900 + Math.random() * 1800,
+      mz = -260 - Math.random() * 1780,
+      hs = [He(mx, mz)];
+    for (let k = 0; k < 6; k++) hs.push(He(mx + Math.cos(k) * rad * 0.9, mz + Math.sin(k * 1.9) * rad * 0.9));
+    if (Math.max(...hs) - Math.min(...hs) > 0.9) continue;
+    const M = new Mesh(new CircleGeometry(rad, 9), s[g % s.length]);
     ((M.rotation.x = -Math.PI / 2),
       (M.rotation.z = Math.random() * Math.PI),
-      M.position.set(-900 + Math.random() * 1800, -5.6 + Math.random() * 0.8, -260 - Math.random() * 1780),
+      M.position.set(mx, Math.max(...hs) + 0.07, mz),
       (M.scale.y = 0.32 + Math.random() * 0.5),
       (M.receiveShadow = !0),
       et.add(M));
@@ -1247,27 +1256,44 @@ function L1() {
       new MeshStandardMaterial({ color: 3109954, roughness: 0.95 }),
       new MeshStandardMaterial({ color: 1589042, roughness: 0.9 }),
     ];
-  for (let g = 0; g < 185; g++) {
-    const M = 0.58 + Math.random() * 1.05,
-      x = 8 * M,
-      h = zn(() => ({ x: -1120 + Math.random() * 2240, z: -450 - Math.random() * 1740 }), x, 145, 40);
-    if (!h) continue;
-    const { x: _, z: v } = h;
-    if (ka(_, v, 18)) continue;
-    const y = He(_, v) + 0.8,
-      E = new Group(),
-      T = 2.2 + Math.random() * 3.8,
-      R = new Mesh(new CylinderGeometry(0.28, 0.42, T, 6), c);
-    ((R.position.y = T / 2), E.add(R));
-    const C = 2 + Math.floor(Math.random() * 3);
-    for (let b = 0; b < C; b++) {
-      const S = new Mesh(
-        new ConeGeometry(2.2 + Math.random() * 1.7 - b * 0.22, 4.8 + Math.random() * 2.6, 7),
-        l[(g + b) % l.length],
-      );
-      ((S.position.y = T + b * 1.45 + 1.6), (S.rotation.y = Math.random() * Math.PI), E.add(S));
+  {
+    // 185 conifers were ~740 individual meshes; two instanced draws now carry the whole forest.
+    const trunkGeo = new CylinderGeometry(0.28, 0.42, 1, 6).translate(0, 0.5, 0),
+      canopyGeo = mergeGeometries([
+        new ConeGeometry(2.7, 5.4, 7).translate(0, 1.9, 0),
+        new ConeGeometry(2.1, 4.9, 7).rotateY(0.6).translate(0, 3.35, 0),
+        new ConeGeometry(1.55, 4.1, 7).rotateY(1.2).translate(0, 4.7, 0),
+      ]),
+      canopyColors = [2055221, 3109954, 1589042].map((cc) => new Color(cc)),
+      trunkIM = new InstancedMesh(trunkGeo, c, 185),
+      canopyIM = new InstancedMesh(canopyGeo, new MeshStandardMaterial({ roughness: 0.92 }), 185),
+      dum = new Object3D();
+    let ci = 0;
+    for (let g = 0; g < 185; g++) {
+      const M = 0.58 + Math.random() * 1.05,
+        x = 8 * M,
+        h = zn(() => ({ x: -1120 + Math.random() * 2240, z: -450 - Math.random() * 1740 }), x, 145, 40);
+      if (!h) continue;
+      const { x: _, z: v } = h;
+      if (ka(_, v, 18)) continue;
+      const y = He(_, v) + 0.8,
+        T = 2.2 + Math.random() * 3.8;
+      (dum.position.set(_, y, v),
+        (dum.rotation.y = Math.random() * Math.PI),
+        dum.scale.set(M, T, M),
+        dum.updateMatrix(),
+        trunkIM.setMatrixAt(ci, dum.matrix));
+      (dum.position.set(_, y + T, v), dum.scale.set(M, M, M), dum.updateMatrix(), canopyIM.setMatrixAt(ci, dum.matrix));
+      (canopyIM.setColorAt(ci, canopyColors[g % 3]), ci++, kn("tree", _, v, x, 145));
     }
-    (E.position.set(_, y, v), E.scale.setScalar(M), et.add(E), kn("tree", _, v, x, 145));
+    ((trunkIM.count = ci),
+      (canopyIM.count = ci),
+      (trunkIM.instanceMatrix.needsUpdate = !0),
+      (canopyIM.instanceMatrix.needsUpdate = !0),
+      canopyIM.instanceColor && (canopyIM.instanceColor.needsUpdate = !0),
+      (canopyIM.castShadow = !0),
+      et.add(trunkIM),
+      et.add(canopyIM));
   }
   const d = new MeshStandardMaterial({
     color: 16767433,
@@ -1440,8 +1466,23 @@ function D1() {
   for (let h = 0; h < 14; h++) {
     const _ = 130 + Math.random() * 200,
       v = 130 + Math.random() * 200,
-      y = zn(() => ({ x: -1500 + Math.random() * 3e3, z: -700 - Math.random() * 1700 }), Math.max(_, v) * 0.5, 40, 24);
-    if (!y) continue;
+      y = zn(() => {
+        // farm fields are huge flat planes: reject spots where the terrain rolls underneath
+        for (let tries = 0; tries < 6; tries++) {
+          const cx = -1500 + Math.random() * 3e3,
+            cz = -700 - Math.random() * 1700,
+            hh = [
+              He(cx, cz),
+              He(cx + _ * 0.45, cz + v * 0.45),
+              He(cx - _ * 0.45, cz + v * 0.45),
+              He(cx + _ * 0.45, cz - v * 0.45),
+              He(cx - _ * 0.45, cz - v * 0.45),
+            ];
+          if (Math.max(...hh) - Math.min(...hh) < 1.0) return { x: cx, z: cz };
+        }
+        return { x: 1e5, z: 1e5 };
+      }, Math.max(_, v) * 0.5, 40, 24);
+    if (!y || y.x > 9e4) continue;
     const { x: E, z: T } = y,
       R = new Group(),
       C = 5 + Math.floor(Math.random() * 4),
@@ -1451,7 +1492,14 @@ function D1() {
         F = new Mesh(new PlaneGeometry(_, v / C), L);
       ((F.rotation.x = -Math.PI / 2), F.position.set(0, 0.05, -v / 2 + (S + 0.5) * (v / C)), R.add(F));
     }
-    (R.position.set(E, He(E, T) + 0.05, T),
+    const fieldTop = Math.max(
+      He(E, T),
+      He(E + _ * 0.45, T + v * 0.45),
+      He(E - _ * 0.45, T + v * 0.45),
+      He(E + _ * 0.45, T - v * 0.45),
+      He(E - _ * 0.45, T - v * 0.45),
+    );
+    (R.position.set(E, fieldTop + 0.06, T),
       (R.rotation.y = Math.random() * Math.PI),
       et.add(R),
       kn("field", E, T, Math.max(_, v) * 0.5, 40));
@@ -1830,8 +1878,9 @@ function I1(i, e) {
   }
   return (
     (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55 }),
+    // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
-      ((x.castShadow = !0), (x.receiveShadow = !0));
+      ((x.castShadow = !1), (x.receiveShadow = !0));
     }),
     t
   );
@@ -2117,6 +2166,7 @@ function F1(i, e, t) {
       (be.speed = 1.5 + (I % 4) * 0.35)),
       Q.push(be),
       Rr.push(be),
+      be.mesh.traverse((pm) => (pm.castShadow = !1)),
       i.add(be.mesh));
   }
   const de = new MeshBasicMaterial({ color: 14230306, transparent: !0, opacity: 0, depthWrite: !1, side: DoubleSide }),
@@ -3557,7 +3607,7 @@ function z1() {
         v = ce.width / 2 + 12 + Math.random() * 78,
         y = M.p.x + M.side.x * v * _ + (Math.random() - 0.5) * 16,
         E = M.p.z + M.side.z * v * _ + (Math.random() - 0.5) * 16;
-      if (ka(y, E, 18) || Hi(y, E, 12, 12, 1.5)) continue;
+      if (ka(y, E, 18) || Hi(y, E, 12, 12, 3.5)) continue;
       const T = He(y, E);
       if (Math.random() < 0.78) {
         const R = 0.7 + Math.random() * 1.5,
@@ -4262,7 +4312,215 @@ function q1() {
   }
   return (et.add(o), o);
 }
-// ─── Season: three rivals with distinct pace personalities, points across all four courses ───
+// ─── Player car garage: four hand-built models with distinct silhouettes and stats ───
+function carPartKit(t, bodyColor, trimColor) {
+  const mats = {
+    body: new MeshStandardMaterial({ color: bodyColor, roughness: 0.19, metalness: 0.68, envMapIntensity: 1.25 }),
+    trim: new MeshStandardMaterial({ color: trimColor, roughness: 0.28, metalness: 0.58, envMapIntensity: 1 }),
+    black: new MeshStandardMaterial({ color: 329225, roughness: 0.52, metalness: 0.12 }),
+    dark: new MeshStandardMaterial({ color: 1053463, roughness: 0.38, metalness: 0.34 }),
+    chrome: new MeshStandardMaterial({ color: 12569555, roughness: 0.16, metalness: 0.82, envMapIntensity: 1.15 }),
+    steel: new MeshStandardMaterial({ color: 5397346, roughness: 0.22, metalness: 0.78, envMapIntensity: 1.1 }),
+    glass: new MeshStandardMaterial({
+      color: 5425663,
+      roughness: 0.04,
+      metalness: 0.02,
+      transparent: !0,
+      opacity: 0.43,
+      emissive: 536402,
+      emissiveIntensity: 0.18,
+      envMapIntensity: 1.6,
+    }),
+    tailHot: new MeshStandardMaterial({ color: 16722713, roughness: 0.13, metalness: 0.04, emissive: 16717836, emissiveIntensity: 2.4 }),
+    tailWarm: new MeshStandardMaterial({ color: 16757562, roughness: 0.18, metalness: 0.04, emissive: 16747032, emissiveIntensity: 1.7 }),
+    headLamp: new MeshStandardMaterial({ color: 16773285, roughness: 0.18, metalness: 0.08, emissive: 16765019, emissiveIntensity: 1.7 }),
+    disc: new MeshStandardMaterial({ color: 2237480, roughness: 0.26, metalness: 0.78, envMapIntensity: 1.2 }),
+    matte: new MeshStandardMaterial({ color: 329225, roughness: 0.44, metalness: 0.22 }),
+  };
+  const shadow = new Mesh(
+    new CircleGeometry(3.65, 36),
+    new MeshBasicMaterial({ color: 0, transparent: !0, opacity: 0.22, depthWrite: !1 }),
+  );
+  ((shadow.rotation.x = -Math.PI / 2), (shadow.position.y = 0.08), (shadow.scale.z = 1.58), t.add(shadow));
+  const part = (name, geo, mat, pos, rot = null, scl = null) => {
+      const s = new Mesh(geo, mat);
+      return (
+        (s.name = name),
+        s.position.copy(pos),
+        rot && s.rotation.set(rot.x || 0, rot.y || 0, rot.z || 0),
+        scl && s.scale.copy(scl),
+        t.add(s),
+        s
+      );
+    },
+    box = (name, dx, dy, dz, mat, x, y, z, rx = 0, ry = 0, rz = 0) =>
+      part(name, new BoxGeometry(dx, dy, dz), mat, new Vector3(x, y, z), { x: rx, y: ry, z: rz });
+  const frontWheels = [];
+  function wheel(x, z, front, radius = 0.88, width = 0.62) {
+    const R = new Group();
+    ((R.name = front ? "steering front wheel assembly" : "rear wheel assembly"), R.position.set(x, radius * 0.62 + 0.18, z));
+    const tire = new Mesh(new CylinderGeometry(radius, radius, width, 28), mats.black);
+    ((tire.name = "performance tire"), (tire.rotation.z = Math.PI / 2), R.add(tire));
+    const wall = new Mesh(new TorusGeometry(radius, 0.06, 10, 32), mats.black);
+    ((wall.name = "tire sidewall"), (wall.rotation.y = Math.PI / 2), R.add(wall));
+    const rim = new Mesh(new CylinderGeometry(radius * 0.48, radius * 0.48, width + 0.04, 24), mats.chrome);
+    ((rim.name = "chrome rim"), (rim.rotation.z = Math.PI / 2), R.add(rim));
+    const disc = new Mesh(new CylinderGeometry(radius * 0.62, radius * 0.62, 0.08, 24), mats.disc);
+    ((disc.name = "brake disc"), (disc.rotation.z = Math.PI / 2), (disc.position.x = x > 0 ? -0.05 : 0.05), R.add(disc));
+    for (let k = 0; k < 8; k++) {
+      const sp = new Mesh(new BoxGeometry(0.08, 0.055, width), mats.chrome);
+      ((sp.name = "wheel spoke"),
+        (sp.rotation.x = (k / 8) * Math.PI * 2),
+        sp.position.set(x > 0 ? 0.035 : -0.035, 0, radius * 0.25),
+        R.add(sp));
+    }
+    const cap = new Mesh(new CylinderGeometry(0.17, 0.17, width + 0.1, 18), mats.steel);
+    ((cap.name = "center cap"), (cap.rotation.z = Math.PI / 2), R.add(cap), t.add(R), front && frontWheels.push(R));
+    return R;
+  }
+  return { mats, part, box, wheel, frontWheels };
+}
+function buildBulletGT(bodyColor = 15616818, trimColor = 2434871) {
+  // Long, low land-missile: cab-forward canopy, covered rear wheels, full-width tail bar, twin fins.
+  const t = new Group(),
+    K = carPartKit(t, bodyColor, trimColor),
+    { mats, box } = K;
+  (box("low undertray", 4.6, 0.26, 9.2, mats.black, 0, 0.42, 0),
+    box("long fuselage body", 4.15, 0.78, 8.6, mats.body, 0, 0.92, 0.1, -0.012),
+    box("tapered nose cone", 2.7, 0.5, 2.5, mats.body, 0, 0.78, -5.15, -0.12),
+    box("needle splitter", 4.5, 0.1, 0.7, mats.black, 0, 0.34, -6.2),
+    box("front intake slot", 2, 0.16, 0.14, mats.dark, 0, 0.62, -6.15),
+    box("canopy fairing", 2.15, 0.5, 3.1, mats.body, 0, 1.5, -1.7, -0.06),
+    box("bubble windshield", 1.85, 0.14, 1.35, mats.glass, 0, 1.74, -2.7, -0.42),
+    box("canopy glass roof", 1.7, 0.13, 1.7, mats.glass, 0, 1.86, -1.35, -0.1),
+    box("left canopy glass", 0.1, 0.5, 2.1, mats.glass, -1.02, 1.6, -1.6, -0.05, 0.03),
+    box("right canopy glass", 0.1, 0.5, 2.1, mats.glass, 1.02, 1.6, -1.6, -0.05, -0.03),
+    box("rear engine deck", 3.6, 0.34, 3.6, mats.body, 0, 1.28, 2.3, -0.05),
+    box("left rear wheel fairing", 0.8, 0.72, 3, mats.body, -1.95, 0.9, 2.3),
+    box("right rear wheel fairing", 0.8, 0.72, 3, mats.body, 1.95, 0.9, 2.3),
+    box("left fin", 0.1, 0.85, 1.6, mats.trim, -1.6, 1.75, 3.5, 0.18),
+    box("right fin", 0.1, 0.85, 1.6, mats.trim, 1.6, 1.75, 3.5, 0.18));
+  for (let k = 0; k < 6; k++) box("engine deck vent", 2.9, 0.1, 0.16, mats.dark, 0, 1.47 + k * 0.008, 1.3 + k * 0.42, -0.05);
+  (box("full width tail bar", 3.9, 0.24, 0.12, mats.tailHot, 0, 1.24, 4.42),
+    box("tail bar backplate", 4.1, 0.4, 0.08, mats.matte, 0, 1.22, 4.36),
+    box("rear diffuser", 3.4, 0.3, 0.6, mats.dark, 0, 0.5, 4.3, 0.25));
+  for (const y of [-0.72, 0.72]) box("slit headlight", 0.85, 0.09, 0.14, mats.headLamp, y, 0.92, -6.1, -0.1);
+  for (const y of [-1.5, 1.5]) box("beltline chrome strip", 0.05, 0.06, 5.4, mats.chrome, y * 1.36, 1.3, -0.4);
+  for (const y of [-0.4, 0.4]) {
+    const ex = new Mesh(new CylinderGeometry(0.19, 0.19, 0.6, 16), mats.chrome);
+    ((ex.name = "center exhaust"), (ex.rotation.x = Math.PI / 2), ex.position.set(y, 0.62, 4.65), t.add(ex));
+  }
+  (K.wheel(-2.14, -3.1, !0, 0.82, 0.56),
+    K.wheel(2.14, -3.1, !0, 0.82, 0.56),
+    K.wheel(-1.95, 2.3, !1, 0.86, 0.6),
+    K.wheel(1.95, 2.3, !1, 0.86, 0.6));
+  ((t.userData.frontWheels = K.frontWheels),
+    (t.userData.detailReport = { fins: 2, deckVents: 6, tailBar: !0, canopy: !0 }));
+  t.traverse((s) => {
+    ((s.castShadow = !0), (s.receiveShadow = !0));
+  });
+  return (et.add(t), t);
+}
+function buildBrawler(bodyColor = 4165830, trimColor = 15908108) {
+  // Wide muscle bruiser: high blocky body, hood scoop with blower, ducktail, side pipes, quad round lamps.
+  const t = new Group(),
+    K = carPartKit(t, bodyColor, trimColor),
+    { mats, box } = K;
+  (box("undertray", 5, 0.3, 7.6, mats.black, 0, 0.48, 0),
+    box("slab muscle body", 5.15, 1.05, 6.9, mats.body, 0, 1.1, 0, -0.01),
+    box("blunt nose clip", 4.6, 0.8, 1.3, mats.body, 0, 1, -4, -0.06),
+    box("chin spoiler", 5, 0.24, 0.5, mats.dark, 0, 0.48, -4.5),
+    box("hood panel", 3.6, 0.14, 2.6, mats.trim, 0, 1.66, -2.4, -0.04),
+    box("hood scoop", 1.5, 0.42, 1.5, mats.dark, 0, 1.86, -2.2),
+    box("exposed blower intake", 1.05, 0.3, 0.75, mats.chrome, 0, 2.12, -2.15),
+    box("cabin greenhouse", 3.2, 0.85, 2.5, mats.body, 0, 1.98, 0.55, -0.03),
+    box("windshield", 2.9, 0.14, 1.2, mats.glass, 0, 2.1, -0.7, -0.5),
+    box("rear glass", 2.9, 0.13, 1, mats.glass, 0, 2.12, 1.85, 0.44),
+    box("left door glass", 0.12, 0.62, 2, mats.glass, -1.58, 2.05, 0.5),
+    box("right door glass", 0.12, 0.62, 2, mats.glass, 1.58, 2.05, 0.5),
+    box("ducktail spoiler", 4.9, 0.2, 0.9, mats.body, 0, 1.9, 3.5, 0.2),
+    box("rear valance", 4.8, 0.6, 0.3, mats.dark, 0, 0.85, 3.72));
+  for (const y of [-2.05, -0.85, 0.85, 2.05]) {
+    const lamp = new Mesh(new CylinderGeometry(0.21, 0.21, 0.1, 18), Math.abs(y) > 1.4 ? mats.tailHot : mats.tailWarm);
+    ((lamp.name = "round tail lamp"), (lamp.rotation.x = Math.PI / 2), lamp.position.set(y, 1.28, 3.78), t.add(lamp));
+  }
+  for (const y of [-1.7, 1.7]) box("square headlamp", 0.7, 0.3, 0.12, mats.headLamp, y, 1.22, -4.62);
+  box("chrome front grille", 2.2, 0.4, 0.1, mats.chrome, 0, 1.2, -4.62);
+  for (const s of [-1, 1]) {
+    const pipe = new Mesh(new CylinderGeometry(0.16, 0.16, 3.4, 14), mats.chrome);
+    ((pipe.name = "side exhaust pipe"), (pipe.rotation.x = Math.PI / 2), pipe.position.set(s * 2.62, 0.55, 0.4), t.add(pipe));
+    box("side pipe heat shield", 0.16, 0.28, 2.4, mats.dark, s * 2.62, 0.72, 0.4);
+    box("fender flare front", 0.5, 0.6, 1.6, mats.body, s * 2.6, 1, -2.5, -0.03);
+    box("fender flare rear", 0.55, 0.68, 1.9, mats.body, s * 2.62, 1.05, 2.3, -0.03);
+    box("racing stripe", 0.8, 0.02, 6.8, mats.trim, s * 0.55, 1.72, 0, -0.008);
+  }
+  (K.wheel(-2.35, -2.5, !0, 0.86, 0.62),
+    K.wheel(2.35, -2.5, !0, 0.86, 0.62),
+    K.wheel(-2.4, 2.3, !1, 0.98, 0.78),
+    K.wheel(2.4, 2.3, !1, 0.98, 0.78));
+  ((t.userData.frontWheels = K.frontWheels),
+    (t.userData.detailReport = { blower: !0, sidePipes: 2, roundLamps: 4, ducktail: !0 }));
+  t.traverse((s) => {
+    ((s.castShadow = !0), (s.receiveShadow = !0));
+  });
+  return (et.add(t), t);
+}
+function buildZephyr(bodyColor = 16764159, trimColor = 526344) {
+  // Featherweight sprint buggy: short wheelbase, exposed roll cage + halo, fender pods, roof scoop.
+  const t = new Group(),
+    K = carPartKit(t, bodyColor, trimColor),
+    { mats, box } = K;
+  (box("stubby undertray", 3.9, 0.26, 6.2, mats.black, 0, 0.46, 0),
+    box("tub body", 3.55, 0.72, 5.4, mats.body, 0, 0.92, 0.1, -0.02),
+    box("snub nose", 2.5, 0.5, 1.2, mats.body, 0, 0.84, -3.15, -0.16),
+    box("front splitter lip", 3.8, 0.12, 0.5, mats.dark, 0, 0.42, -3.7),
+    box("open cockpit surround", 2.4, 0.4, 2.4, mats.trim, 0, 1.34, 0, -0.03),
+    box("low windscreen", 2, 0.12, 0.7, mats.glass, 0, 1.62, -1.15, -0.55),
+    box("halo spine", 0.16, 0.14, 1.9, mats.dark, 0, 2.08, -0.15, -0.1),
+    box("seat back panel", 1.7, 0.7, 0.2, mats.dark, 0, 1.6, 0.95),
+    box("roof air scoop", 0.9, 0.45, 1.1, mats.trim, 0, 2.02, 0.65, 0.12),
+    box("scoop mouth", 0.62, 0.24, 0.14, mats.black, 0, 2.08, 0.08),
+    box("rear deck", 3.3, 0.3, 1.8, mats.body, 0, 1.16, 2.2, -0.06),
+    box("kart wing", 3.7, 0.12, 0.7, mats.trim, 0, 1.78, 2.9, -0.1),
+    box("wing left strut", 0.12, 0.5, 0.3, mats.dark, -1.35, 1.5, 2.9),
+    box("wing right strut", 0.12, 0.5, 0.3, mats.dark, 1.35, 1.5, 2.9),
+    box("rear mesh panel", 2.6, 0.5, 0.1, mats.dark, 0, 0.95, 3.1));
+  for (const s of [-1, 1]) {
+    const bar = new Mesh(new CylinderGeometry(0.09, 0.09, 1.35, 10), mats.steel);
+    ((bar.name = "roll cage hoop"), (bar.rotation.z = s * 0.42), bar.position.set(s * 0.75, 1.85, 0.35), t.add(bar));
+    (box("front fender pod", 0.62, 0.4, 1.5, mats.body, s * 1.85, 0.95, -2.15, -0.05),
+      box("rear fender pod", 0.68, 0.46, 1.7, mats.body, s * 1.9, 1, 2.15, -0.05),
+      box("pod brace arm", 0.5, 0.1, 0.12, mats.steel, s * 1.45, 0.98, -2.15),
+      box("number roundel", 0.04, 0.5, 0.5, mats.trim, s * 1.79, 1.05, 0.2));
+  }
+  for (const y of [-0.85, 0.85])
+    (box("bug eye headlamp", 0.34, 0.26, 0.14, mats.headLamp, y, 1.08, -3.66),
+      box("tail lamp block", 0.4, 0.22, 0.1, Math.abs(y) > 0.5 ? mats.tailHot : mats.tailWarm, y * 1.6, 1.14, 3.14));
+  {
+    const ex = new Mesh(new CylinderGeometry(0.15, 0.15, 0.5, 14), mats.chrome);
+    ((ex.name = "single stinger exhaust"), (ex.rotation.x = Math.PI / 2), ex.position.set(0.65, 0.78, 3.28), t.add(ex));
+  }
+  (K.wheel(-1.85, -2.15, !0, 0.74, 0.52),
+    K.wheel(1.85, -2.15, !0, 0.74, 0.52),
+    K.wheel(-1.9, 2.15, !1, 0.8, 0.58),
+    K.wheel(1.9, 2.15, !1, 0.8, 0.58));
+  ((t.userData.frontWheels = K.frontWheels),
+    (t.userData.detailReport = { rollCage: !0, fenderPods: 4, halo: !0, wing: !0 }));
+  t.traverse((s) => {
+    ((s.castShadow = !0), (s.receiveShadow = !0));
+  });
+  return (et.add(t), t);
+}
+const CAR_MODELS = [
+  { key: "interceptor", label: "Interceptor", trait: "balanced", stats: { accel: 1, top: 1, grip: 1, boostRegen: 1 }, build: () => Gd(3108784, 1916782) },
+  { key: "bullet", label: "Bullet GT", trait: "top speed", stats: { accel: 0.9, top: 1.09, grip: 0.94, boostRegen: 1 }, build: () => buildBulletGT() },
+  { key: "brawler", label: "Brawler 442", trait: "acceleration", stats: { accel: 1.16, top: 0.95, grip: 1.04, boostRegen: 0.92 }, build: () => buildBrawler() },
+  { key: "zephyr", label: "Zephyr Kart", trait: "grip + boost", stats: { accel: 1.06, top: 0.9, grip: 1.18, boostRegen: 1.18 }, build: () => buildZephyr() },
+];
+let carModelIndex = MathUtils.clamp(Number(localStorage.getItem("steel-ribbon-carmodel") || 0), 0, 3);
+function carStats() {
+  return CAR_MODELS[carModelIndex].stats;
+}
 const RIVAL_DEFS = [
   { key: "crowther", label: "Crowther", body: 13710372, trim: 7740696, lane: 0.02, base: 97, wave: 5, waveFreq: 0.6 },
   { key: "bishop", label: "Bishop", body: 3244268, trim: 1400130, lane: -0.3, base: 92, wave: 9, waveFreq: 0.95 },
@@ -4279,8 +4537,16 @@ const rivals = RIVAL_DEFS.map((d, idx) => ({
   finished: 0,
   progEl: null,
 }));
-const es = rivals[0].mesh,
-  cn = Gd(3108784, 1916782);
+const es = rivals[0].mesh;
+let cn = CAR_MODELS[carModelIndex].build();
+function applyCarSelection(idx) {
+  ((carModelIndex = MathUtils.clamp(idx, 0, CAR_MODELS.length - 1)),
+    localStorage.setItem("steel-ribbon-carmodel", String(carModelIndex)));
+  const wasVisible = cn.visible;
+  Po(cn);
+  ((cn = CAR_MODELS[carModelIndex].build()), (cn.visible = wasVisible));
+  typeof refreshCarUI == "function" && refreshCarUI();
+}
 for (const r of rivals) ((r.mesh.visible = !1), et.add(r.mesh));
 function setRivalsVisible(v) {
   for (const r of rivals) r.mesh.visible = v;
@@ -5077,6 +5343,9 @@ function Va(i = !1, e = !1, seasonRace = !1) {
   const n = St(u.s);
   ((u.y = n.p.y + 2.1),
     (u.yVel = 0),
+    (u.ghostRec = []),
+    loadGhost(),
+    buildGhostMesh(),
     Qe.menu.classList.add("hidden"),
     Qe.result.classList.add("hidden"),
     (Qe.resultStats.innerHTML = ""),
@@ -5110,7 +5379,11 @@ function Yd() {
     (u.collisionCooldown = 0),
     (u.objectiveIndex = 0),
     (u.objectiveHits = 0),
-    (u.objectiveLap = 1));
+    (u.objectiveLap = 1),
+    (u.roamAir = !1),
+    (u.roamVy = 0),
+    (u.roamPrevY = null),
+    (u.roamAirT = 0));
   for (const s of nn) s.collected = !1;
   ((u.message = ""),
     (u.messageTimer = 0),
@@ -5141,7 +5414,11 @@ function zs() {
   ),
     cn.quaternion.setFromAxisAngle(on, -u.roamYaw),
     cn.rotateZ(-u.wheelSteer * MathUtils.clamp(Math.abs(u.speed) / 90, 0, 1) * 0.1),
-    cn.rotateX(MathUtils.clamp(u.roamSuspension, -0.16, 0.22)));
+    cn.rotateX(
+      u.roamAir
+        ? MathUtils.clamp(-u.roamVy * 0.014, -0.3, 0.34)
+        : MathUtils.clamp(u.roamSuspension, -0.16, 0.22),
+    ));
 }
 function qd(i, e) {
   let t = null;
@@ -5307,9 +5584,11 @@ function publishRoamTelemetry() {
     damage: u.damage,
     y: u.roamPos.y,
     yVel: u.yVel,
-    grounded: !0,
+    grounded: !u.roamAir,
     objectiveHits: u.objectiveHits,
     waterDepth: +(u.waterDepth || 0).toFixed(3),
+    driftAngle: +(u.driftAngle || 0).toFixed(3),
+    airTime: +(u.roamAirT || 0).toFixed(2),
     roamPos: { x: u.roamPos.x, y: u.roamPos.y, z: u.roamPos.z },
     input: { steer: Fe.steer, throttle: Fe.throttle, brake: Fe.brake },
     forwardWorld: { x: Math.sin(u.roamYaw), y: 0, z: -Math.cos(u.roamYaw) },
@@ -5460,29 +5739,49 @@ function $d(i) {
     a = (_t.has("ShiftLeft") || _t.has("ShiftRight")) && u.boost > 0.02 && t > 0.03;
   if (t > 0.03) {
     const v = u.speed < 0 ? 38 : 0;
-    u.speed += ((a ? 70 : 42) + v) * t * i;
+    u.speed += ((a ? 70 : 42) * carStats().accel + v) * t * i;
   }
   (n > 0.03 && (u.speed -= (u.speed > 1.2 ? 78 : 32) * n * i),
     (u.speed -= 0.00235 * u.speed * Math.abs(u.speed) * i),
     Math.abs(u.speed) > 0.08 ? (u.speed -= Math.sign(u.speed) * 3.6 * i) : t <= 0.03 && n <= 0.03 && (u.speed = 0),
-    (u.speed = MathUtils.clamp(u.speed, -24, 135)),
+    (u.speed = MathUtils.clamp(u.speed, -24, 135 * carStats().top)),
     (u.boosting = a),
-    a ? (u.boost = Math.max(0, u.boost - i * 0.22)) : (u.boost = Math.min(1, u.boost + i * 0.05)),
+    a
+      ? (u.boost = Math.max(0, u.boost - i * 0.22))
+      : (u.boost = Math.min(1, u.boost + i * 0.05 * carStats().boostRegen)),
     (u.wheelSteer += (r - u.wheelSteer) * (1 - Math.pow(1e-5, i))));
   const o = -u.wheelSteer * 0.55,
     c = cn.userData.frontWheels;
   c && ((c[0].rotation.y = o), (c[1].rotation.y = o));
   const l = Math.abs(u.speed);
+  // Handbrake (Space): the rear steps out — extra yaw, a drift angle between facing and travel,
+  // speed scrub, and drift scoring while the slide is held.
+  const hb = _t.has("Space") && !u.roamAir;
   if (l > Ac) {
     const v = MathUtils.clamp((l - Ac) / 5, 0, 1),
       y = 1 - 0.36 * MathUtils.clamp((l - 34) / 85, 0, 1),
-      E = m1 * 1.08 * v * y;
+      E = m1 * 1.08 * v * y * (hb ? 1.85 : 1) * carStats().grip;
     u.roamYaw += u.wheelSteer * E * i * Math.sign(u.speed);
   }
-  const d = Math.sin(u.roamYaw),
-    f = -Math.cos(u.roamYaw),
+  hb && l > 8
+    ? ((u.driftAngle = MathUtils.clamp(
+        (u.driftAngle || 0) + u.wheelSteer * i * 2.5 * Math.sign(u.speed),
+        -0.62,
+        0.62,
+      )),
+      (u.speed -= u.speed * (0.12 + Math.abs(u.driftAngle) * 0.45) * i))
+    : (u.driftAngle = (u.driftAngle || 0) * Math.pow(0.004, i));
+  const motionYaw = u.roamYaw - (u.driftAngle || 0),
+    d = Math.sin(motionYaw),
+    f = -Math.cos(motionYaw),
     p = (u.speed - e) / Math.max(0.001, i),
-    m = MathUtils.clamp((Math.abs(u.wheelSteer) * Math.max(0, l - 18)) / 68 + Math.max(0, -p - 34) / 90, 0, 1);
+    m = MathUtils.clamp(
+      (Math.abs(u.wheelSteer) * Math.max(0, l - 18)) / 68 +
+        Math.max(0, -p - 34) / 90 +
+        Math.abs(u.driftAngle || 0) * 1.5,
+      0,
+      1,
+    );
   if (
     ((u.roamSlip += (m - u.roamSlip) * (1 - Math.pow(0.01, i))),
     (u.roamSuspension +=
@@ -5502,11 +5801,11 @@ function $d(i) {
     ((u.roamPos.x += (d * u.speed * i) / M),
       (u.roamPos.z += (f * u.speed * i) / M),
       (_ = Ki(u.roamPos.x, u.roamPos.z, u.roamPos.y)),
-      (u.roamPos.y = _.y + Wn),
+      u.roamAir || (u.roamPos.y = _.y + Wn),
       cv(u.roamPos, _) && (h = !0),
       lv(u.roamPos, _) && (x = !0),
       (_ = Ki(u.roamPos.x, u.roamPos.z, u.roamPos.y)),
-      (u.roamPos.y = _.y + Wn));
+      u.roamAir || (u.roamPos.y = _.y + Wn));
   ((u.roamPos.x = MathUtils.clamp(u.roamPos.x, -820, 820)),
     (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -1620, 480)),
     x &&
@@ -5519,11 +5818,57 @@ function $d(i) {
       (u.message = "SPLAT!"),
       (u.messageTimer = 0.9)),
     waterPhysics(i, e),
+    driftScoreUpdate(i, hb, x),
     updateNearMisses(i, x),
     (_ = Ki(u.roamPos.x, u.roamPos.z, u.roamPos.y)),
-    (u.roamPos.y = _.y + Wn),
+    roamVertical(i, _),
     !(_.kind === "ramp" && _.u > 0.72 && Ih(_)) &&
       ((_.kind === "track" && Ih(_)) || (sv(), zs(), _t.has("KeyR") && (Yd(), _t.delete("KeyR")))));
+}
+function driftScoreUpdate(i, hb, collided) {
+  const active = hb && Math.abs(u.driftAngle || 0) > 0.16 && Math.abs(u.speed) > 24;
+  if (active && !collided) {
+    ((u.driftT = (u.driftT || 0) + i),
+      (u.driftAcc = (u.driftAcc || 0) + i * Math.abs(u.speed) * (0.7 + Math.abs(u.driftAngle))));
+  } else if (u.driftT) {
+    if (!collided && u.driftT > 0.55) {
+      const pts = Math.round(u.driftAcc);
+      ((u.score += pts), showScorePop(`+${pts} DRIFT`), chime(600, 0.16, "square", 0.1));
+    }
+    ((u.driftT = 0), (u.driftAcc = 0));
+  }
+}
+function roamVertical(i, surf) {
+  // Crest launches: while grounded we track the vertical rate the terrain demands; when the ground
+  // falls away faster than gravity could pull us down from our current climb, the car goes ballistic.
+  const surfY = surf.y + Wn,
+    prevY = u.roamPrevY ?? surfY;
+  if (!u.roamAir) {
+    const vyFollow = (surfY - prevY) / Math.max(1e-4, i);
+    if (Math.abs(u.speed) > 26 && vyFollow < (u.roamVy || 0) - 40 * i - 3.4) {
+      ((u.roamAir = !0), (u.roamAirT = 0));
+    } else {
+      ((u.roamVy = MathUtils.clamp(vyFollow, -70, 70)), (u.roamPos.y = surfY));
+    }
+  }
+  if (u.roamAir) {
+    ((u.roamVy -= 34 * i), (u.roamAirT += i));
+    u.roamPos.y = u.roamPos.y + u.roamVy * i;
+    if (u.roamPos.y <= surfY) {
+      ((u.roamPos.y = surfY), (u.roamAir = !1));
+      const impact = -u.roamVy;
+      u.roamVy = 0;
+      if (impact > 9)
+        ((u.cameraShake = Math.max(u.cameraShake, Math.min(0.5, impact / 40))),
+          Pc(Math.min(24, impact * 0.85)),
+          (u.roamSuspension += 0.16));
+      if (u.roamAirT > 0.45) {
+        const pts = Math.round(40 + u.roamAirT * 70);
+        ((u.score += pts), showScorePop(`+${pts} AIR`), chime(760, 0.14));
+      }
+    }
+  }
+  u.roamPrevY = u.roamPos.y;
 }
 const Xn = 2.6;
 function waterPhysics(dt, prevSpeed) {
@@ -6009,6 +6354,8 @@ window.__steelRibbonDebug = {
       camY: +Xe.position.y.toFixed(2),
       deckY: +(i.p.y + 0.58).toFixed(2),
       carY: +u.y.toFixed(2),
+      ghostRecLen: u.ghostRec?.length ?? -1,
+      ghostLoaded: !!ghostData,
       overheadY: +overheadDeckY(Xe.position.x, Xe.position.z, e + 5, e + 64).toFixed(2),
     };
   },
@@ -6421,7 +6768,7 @@ function eu(i) {
     d = Math.abs(u.speed);
   if (a) {
     const v = u.speed < 0 ? 40 : 0;
-    u.speed += ((o ? 68 : 40) + v) * t * i;
+    u.speed += ((o ? 68 : 40) * carStats().accel + v) * t * i;
   }
   if (n > 0.03) {
     const v = u.speed > 1.2 ? 70 : 26;
@@ -6430,15 +6777,17 @@ function eu(i) {
   const f = u.grounded ? 0.0024 : 0.0011;
   ((u.speed -= f * u.speed * d * i),
     d > 0.08 ? (u.speed -= Math.sign(u.speed) * (u.grounded ? 2.2 : 0.3) * i) : t <= 0.03 && n <= 0.03 && (u.speed = 0),
-    (u.speed = MathUtils.clamp(u.speed, -16, 156 - u.damage * 0.8)),
+    (u.speed = MathUtils.clamp(u.speed, -16, 156 * carStats().top - u.damage * 0.8)),
     e && (u.speed = Math.min(u.speed, 14)),
     (u.boosting = o),
     o
       ? ((u.boost = Math.max(0, u.boost - i * 0.21)), (u.score += 28 * i))
-      : (u.boost = Math.min(1, u.boost + i * (u.grounded ? 0.045 : 0.018))));
-  const p = 16 + d * 0.13;
+      : (u.boost = Math.min(1, u.boost + i * (u.grounded ? 0.045 : 0.018) * carStats().boostRegen)));
+  // Space on the ribbon = looser rear: stronger lateral push, less damping, a controlled slide.
+  const hbT = _t.has("Space") && u.grounded,
+    p = (16 + d * 0.13) * (hbT ? 1.45 : 1) * carStats().grip;
   ((u.lateralVel -= r * p * i),
-    (u.lateralVel -= u.lateralVel * (u.grounded ? 4.1 : 0.7) * i),
+    (u.lateralVel -= u.lateralVel * (u.grounded ? (hbT ? 2.2 : 4.1) : 0.7) * i),
     (u.lateral += u.lateralVel * i));
   const m = Li(u.s),
     g = Math.abs(u.lateral) < ce.width * 0.52,
@@ -6490,13 +6839,17 @@ function eu(i) {
     u.y < -55 && ((u.damage += 28), Uh("Track crew recovery"));
   }
   const x = u.totalDistance;
-  ((u.totalDistance += u.speed * i), (u.s = ((u.totalDistance % ce.length) + ce.length) % ce.length));
+  ((u.totalDistance += u.speed * i),
+    (u.s = ((u.totalDistance % ce.length) + ce.length) % ce.length),
+    recordGhostFrame());
   const h = Dr.find((v) => v.rampType === "off");
   if (u.freeRun && h && Eh(x, u.totalDistance, h.exitS) && u.lateral * h.dirSel > ce.width * 0.2 && iv(h)) return;
   const _ = Math.floor(u.totalDistance / ce.length) + 1;
   if (_ > u.lap) {
     const v = u.time - u.lapStartTime;
-    (u.splitTimes.push(v),
+    (saveGhostIfBest(v),
+      (u.ghostRec = []),
+      u.splitTimes.push(v),
       (u.bestLap = Math.min(u.bestLap, v)),
       (u.lapStartTime = u.time),
       (u.lap = _),
@@ -6651,6 +7004,71 @@ function chaseTrackCamera(i, e) {
     Xe.quaternion.slerp(Ln.quaternion, 1 - Math.pow(4e-4, i)));
   const a = 66 + Math.min(11, r * 0.055) + (u.boosting ? 5 : 0) + MathUtils.clamp(u.cameraZoom, -0.42, 0.9) * 10;
   Math.abs(Xe.fov - a) > 0.02 && ((Xe.fov += (a - Xe.fov) * (1 - Math.pow(0.004, i))), Xe.updateProjectionMatrix());
+}
+// ─── Ghost laps: your best practice/free-run lap per course replays as a translucent car ───
+let ghostMesh = null,
+  ghostData = null,
+  ghostCursor = 0;
+function loadGhost() {
+  try {
+    ghostData = JSON.parse(localStorage.getItem("steel-ribbon-ghost-" + Ma) || "null");
+  } catch {
+    ghostData = null;
+  }
+  ghostCursor = 0;
+}
+function buildGhostMesh() {
+  ghostMesh && Po(ghostMesh);
+  ghostMesh = CAR_MODELS[carModelIndex].build();
+  (ghostMesh.traverse((o) => {
+    ((o.castShadow = !1), (o.receiveShadow = !1));
+    o.material &&
+      ((o.material = o.material.clone()),
+      (o.material.transparent = !0),
+      (o.material.opacity = Math.min(o.material.opacity ?? 1, 0.28)),
+      (o.material.depthWrite = !1));
+  }),
+    (ghostMesh.visible = !1));
+}
+function saveGhostIfBest(lapTime) {
+  if (!(u.practice || u.freeRun) || !u.ghostRec || u.ghostRec.length < 12) return;
+  if (ghostData && lapTime >= ghostData.time) return;
+  const stride = Math.max(1, Math.floor(u.ghostRec.length / 700));
+  const samples = u.ghostRec.filter((s, k) => k % stride === 0);
+  ghostData = { time: +lapTime.toFixed(2), samples };
+  try {
+    localStorage.setItem("steel-ribbon-ghost-" + Ma, JSON.stringify(ghostData));
+  } catch {}
+  ((u.message = `Ghost saved — ${Dc(lapTime)}`), (u.messageTimer = 1.3), (ghostCursor = 0));
+}
+function recordGhostFrame() {
+  if (u.mode !== "race") return;
+  u.ghostRec || (u.ghostRec = []);
+  const t = u.time - u.lapStartTime,
+    last = u.ghostRec[u.ghostRec.length - 1];
+  (!last || t - last[0] > 0.08) &&
+    u.ghostRec.length < 4000 &&
+    u.ghostRec.push([+t.toFixed(2), +u.s.toFixed(1), +u.lateral.toFixed(2), +u.y.toFixed(2)]);
+}
+function updateGhost() {
+  if (!ghostMesh) return;
+  const show =
+    u.mode === "race" && (u.practice || u.freeRun) && ghostData?.samples?.length > 2 && !window.__freeCam;
+  ghostMesh.visible = show;
+  if (!show) return;
+  const t = (u.time - u.lapStartTime) % Math.max(0.01, ghostData.time),
+    S = ghostData.samples;
+  (t < (S[ghostCursor]?.[0] ?? 0) && (ghostCursor = 0));
+  for (; ghostCursor < S.length - 2 && S[ghostCursor + 1][0] < t; ) ghostCursor++;
+  const a = S[ghostCursor],
+    b = S[Math.min(ghostCursor + 1, S.length - 1)],
+    f = MathUtils.clamp((t - a[0]) / Math.max(0.01, b[0] - a[0]), 0, 1),
+    gs = MathUtils.lerp(a[1], b[1], Math.abs(b[1] - a[1]) > ce.length * 0.5 ? 0 : f),
+    glat = MathUtils.lerp(a[2], b[2], f),
+    gy = MathUtils.lerp(a[3], b[3], f),
+    e = St(((gs % ce.length) + ce.length) % ce.length);
+  ghostMesh.position.set(e.p.x + e.side.x * glat, gy - 0.72, e.p.z + e.side.z * glat);
+  ghostMesh.quaternion.setFromRotationMatrix(new Matrix4().makeBasis(e.side, on, e.tangent));
 }
 function updateTrackCarPose() {
   const onTrack = u.mode === "race" || u.mode === "paused" || u.mode === "result",
@@ -7026,7 +7444,7 @@ function nu() {
       ? ($d(e), jd(e), publishRoamTelemetry())
       : u.mode === "menu"
         ? (uv(e), menuCinematic(e))
-        : (eu(e), uv(e), updateTrackCarPose(), dl(e)),
+        : (eu(e), uv(e), updateTrackCarPose(), updateGhost(), dl(e)),
     updateGateBeam(),
     updateMinimap(),
     skyDome && skyDome.position.copy(Xe.position),
@@ -7095,6 +7513,25 @@ volBtn.addEventListener("click", (ev) => {
     refreshVolLabel());
 });
 Qe.menu.appendChild(volBtn);
+// Car garage selector — four models, persisted choice.
+const carSel = document.createElement("div");
+carSel.className = "course-select";
+carSel.innerHTML = `<span>Car — <b id="carName"></b></span><div class="course-buttons" id="carButtons"></div>`;
+Qe.freeRunBtn.parentNode.insertBefore(carSel, Qe.freeRunBtn);
+const carBtns = [];
+CAR_MODELS.forEach((m, k) => {
+  const b = document.createElement("button");
+  ((b.className = "course-btn"), (b.type = "button"), (b.textContent = String(k + 1)), (b.title = `${m.label} — ${m.trait}`));
+  b.addEventListener("click", () => applyCarSelection(k));
+  (carSel.querySelector("#carButtons").appendChild(b), carBtns.push(b));
+});
+function refreshCarUI() {
+  const m = CAR_MODELS[carModelIndex],
+    el = document.querySelector("#carName");
+  (el && (el.textContent = `${m.label} · ${m.trait}`),
+    carBtns.forEach((b, k) => b.classList.toggle("active", k === carModelIndex)));
+}
+refreshCarUI();
 // Season-aware race strip: one progress row per driver.
 Qe.raceStrip.innerHTML =
   `<span>YOU<i id="playerProgress"></i></span>` +

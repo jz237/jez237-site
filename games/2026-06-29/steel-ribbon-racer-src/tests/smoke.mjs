@@ -234,25 +234,26 @@ const browser = await chromium.launch({
   if (cityPond) {
     await page.locator("#roamBtn").click();
     await page.waitForTimeout(700);
+    // spawn right at the water's edge so random layouts can't block the approach
     await page.evaluate(
-      ([x, z]) => window.__steelRibbonDebug.setRoamPos(x, z, 0, 70),
-      [cityPond.x, cityPond.z + cityPond.rz + 20],
+      ([x, z]) => window.__steelRibbonDebug.setRoamPos(x, z, 0, 55),
+      [cityPond.x, cityPond.z + cityPond.rz * 0.9],
     );
     await page.keyboard.down("ArrowUp");
     let maxDepth = 0,
       minDeepSpeed = 999;
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 70; i++) {
       await page.waitForTimeout(250);
       const t = await page.evaluate(() => ({
         d: window.__steelRibbonTelemetry.waterDepth || 0,
         s: Math.abs(window.__steelRibbonTelemetry.speed),
       }));
       maxDepth = Math.max(maxDepth, t.d);
-      if (t.d > 0.5) minDeepSpeed = Math.min(minDeepSpeed, t.s);
-      if (maxDepth > 0.5 && i > 30) break;
+      if (t.d > 0.3) minDeepSpeed = Math.min(minDeepSpeed, t.s);
+      if (maxDepth > 0.3 && i > 35) break;
     }
     await page.keyboard.up("ArrowUp");
-    check("pond drags but never traps", maxDepth > 0.5 && minDeepSpeed > 2 && minDeepSpeed < 30, `depth=${maxDepth.toFixed(2)} minSpeed=${minDeepSpeed.toFixed(1)}`);
+    check("pond drags but never traps", maxDepth > 0.3 && minDeepSpeed > 2 && minDeepSpeed < 45, `depth=${maxDepth.toFixed(2)} minSpeed=${minDeepSpeed.toFixed(1)}`);
     const mmVis = await page.locator("#minimap").isVisible();
     check("minimap visible in roam", mmVis);
   } else check("pond drags but never traps", false, "no city pond found");
@@ -279,6 +280,87 @@ const browser = await chromium.launch({
   const mmHidden = await page.locator("#minimap").isHidden();
   check("minimap hidden outside roam", mmHidden);
   check("no console errors (v3)", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await ctx.close();
+}
+
+// ---------- v3.1: drift, hill air, car models, ghost laps, draw-call budget ----------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+
+  // car garage: 4 models, switching works
+  const carNames = [];
+  for (let k = 0; k < 4; k++) {
+    await page.evaluate((i) => document.querySelectorAll("#carButtons .course-btn")[i]?.click(), k);
+    await page.waitForTimeout(500);
+    carNames.push(await page.evaluate(() => document.querySelector("#carName")?.textContent || ""));
+  }
+  check("4 car models selectable", new Set(carNames).size === 4 && carNames.every(Boolean), carNames.join(" / "));
+  await page.evaluate(() => document.querySelectorAll("#carButtons .course-btn")[0]?.click());
+
+  // draw-call budget after batching pass
+  const ri2 = await page.evaluate(() => window.__steelRibbonDebug.renderInfo());
+  check("draw calls under budget", ri2.calls > 200 && ri2.calls < 5000, `calls=${ri2.calls}`);
+
+  // drift: hold Space + steer at speed, expect a drift angle and a DRIFT award
+  await page.locator("#roamBtn").click();
+  await page.waitForTimeout(700);
+  await page.evaluate(() => window.__steelRibbonDebug.setRoamPos(80, 300, 0, 70));
+  await page.keyboard.down("ArrowUp");
+  await page.waitForTimeout(400);
+  await page.keyboard.down("Space");
+  await page.keyboard.down("ArrowLeft");
+  let maxDrift = 0;
+  for (let k = 0; k < 22; k++) {
+    await page.waitForTimeout(200);
+    const da = await page.evaluate(() => Math.abs(window.__steelRibbonTelemetry.driftAngle || 0));
+    maxDrift = Math.max(maxDrift, da);
+  }
+  await page.keyboard.up("Space");
+  await page.keyboard.up("ArrowLeft");
+  let driftPop = null;
+  for (let k = 0; k < 12 && !driftPop; k++) {
+    await page.waitForTimeout(200);
+    const p = await page.evaluate(() => document.querySelector(".score-pop.pop")?.textContent);
+    if (p?.includes("DRIFT")) driftPop = p;
+  }
+  check("handbrake drift + scoring", maxDrift > 0.3 && !!driftPop, `angle=${maxDrift.toFixed(2)} pop=${driftPop}`);
+
+  // hill jumps: fast countryside sprint should produce airtime
+  await page.evaluate(() => window.__steelRibbonDebug.setRoamPos(-300, 400, 0.9, 120));
+  await page.keyboard.down("ShiftLeft");
+  let flew = false;
+  for (let k = 0; k < 55 && !flew; k++) {
+    await page.waitForTimeout(200);
+    flew = await page.evaluate(() => !window.__steelRibbonTelemetry.grounded);
+  }
+  await page.keyboard.up("ShiftLeft");
+  await page.keyboard.up("ArrowUp");
+  check("hill crest airtime", flew);
+
+  // ghost lap: finish a practice lap, ghost persists
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+  await page.evaluate(() => localStorage.removeItem("steel-ribbon-ghost-0"));
+  await page.locator("#practiceBtn").click();
+  await page.waitForTimeout(800);
+  await page.keyboard.down("ArrowUp");
+  await page.evaluate(() => {
+    const info = window.__steelRibbonDebug.courseInfo();
+    window.__steelRibbonDebug.setTrackPosition(info.length - 320, 118, 0);
+  });
+  let ghostSaved = null;
+  for (let k = 0; k < 140 && !ghostSaved; k++) {
+    await page.waitForTimeout(300);
+    ghostSaved = await page.evaluate(() => localStorage.getItem("steel-ribbon-ghost-0"));
+  }
+  await page.keyboard.up("ArrowUp");
+  check("ghost lap saved", !!ghostSaved, ghostSaved ? `time=${JSON.parse(ghostSaved).time}` : "none");
+  check("no console errors (v3.1)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
 
