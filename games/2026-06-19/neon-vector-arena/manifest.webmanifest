@@ -1,11 +1,11 @@
 {
   "name": "Vector Arena",
   "short_name": "Vector Arena",
-  "start_url": "./?fullscreen=1&v=5.0",
+  "start_url": "./?fullscreen=1&v=5.1",
   "scope": "./",
   "display": "fullscreen",
   "orientation": "landscape",
   "background_color": "#02030a",
   "theme_color": "#02030a",
-  "description": "Geometry Wars-style neon twin-stick shooter: warping grid, geom multipliers, gravity wells, bosses, and online co-op. v5.0"
+  "description": "Geometry Wars-style neon twin-stick shooter: warping grid, geom multipliers, gravity wells, bosses, and online co-op. v5.1"
 }

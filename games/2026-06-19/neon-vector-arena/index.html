@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  VECTOR ARENA v5.0 — Geometry Wars-style polish pass CHANGELOG
+  VECTOR ARENA v5.1 — Geometry Wars-style polish pass CHANGELOG
   ==================================================================
   VISUALS
   - New deforming spring-mesh grid (ripples from shots, explosions, bombs; bends into gravity wells).
@@ -770,7 +770,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v5.0</div>
+	    <div class="title-version" id="titleVersion">v5.1</div>
 	    <div class="photo-note" id="photoNote">
 	      <b>Photosensitivity notice:</b> this game contains rapid flashing lights, screen shake, and pulsing neon effects. A reduced-flash mode is available.
 	      <div class="mini-grid">
@@ -790,6 +790,7 @@
     <div class="control-mode" id="controlMode">
       <button id="autoMode" class="secondary" type="button">Auto Fire</button>
       <button id="dualMode" class="secondary" type="button">Dual Stick</button>
+      <button id="mouseMode" class="secondary" type="button">Mouse Pilot</button>
     </div>
     <div class="panel-section" id="scoreSubmit">
       <div class="stats-grid" id="statsGrid"></div>
@@ -834,6 +835,7 @@
         <button id="startOnline" disabled>Start</button>
         <button id="roomsOnline" class="secondary">Rooms</button>
         <button id="disconnectOnline" class="secondary" disabled>Leave</button>
+        <button id="backOnline" class="secondary" type="button">Back</button>
       </div>
       <div id="onlineStatus" class="online-status">Dedicated arena worker is live. Connect, ready up, then launch.</div>
       <div id="onlineSlots" class="slot-list"></div>
@@ -846,7 +848,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v5.0</div>
+<div class="version">v5.1</div>
 
 <script>
 'use strict';
@@ -871,6 +873,9 @@ const onlineBtn = document.getElementById('onlineBtn');
 const scoresBtn = document.getElementById('scoresBtn');
 const autoModeBtn = document.getElementById('autoMode');
 const dualModeBtn = document.getElementById('dualMode');
+const mouseModeBtn = document.getElementById('mouseMode');
+// Mouse Pilot only makes sense with a hovering pointer (desktop)
+if (!matchMedia('(pointer: fine)').matches) mouseModeBtn.style.display = 'none';
 const scoreSubmit = document.getElementById('scoreSubmit');
 const scorePanel = document.getElementById('scorePanel');
 const soloScoresBtn = document.getElementById('soloScoresBtn');
@@ -941,7 +946,7 @@ let bombsUsed = 0;
 let modifiersCleared = 0;
 let shake = 0;
 const storedControlMode = localStorage.getItem('neon-vector-arena-control-mode');
-let controlMode = storedControlMode === 'auto' ? 'auto' : 'dual';
+let controlMode = ['auto', 'dual', 'mouse'].includes(storedControlMode) ? storedControlMode : 'dual';
 let pointer = { active: false, id: null, x: 0, y: 0, sx: 0, sy: 0, usingTouch: false };
 let moveStick = { active: false, id: null, sx: 0, sy: 0, ox: 0, oy: 0 };
 let aimStick = { active: false, id: null, sx: 0, sy: 0, ox: 0, oy: 0, angle: -Math.PI / 2, strength: 0 };
@@ -1259,14 +1264,14 @@ function enemyTrait(type) {
   return ENEMY_TRAITS[type] || null;
 }
 
-// Waves past 40 keep ratcheting pressure (endless surge) so runs can't reach equilibrium.
+// Waves past 26 keep ratcheting pressure (endless surge) so runs can't reach equilibrium.
 function lateSurge(value = wave) {
-  return Math.max(0, value - 40);
+  return Math.max(0, value - 26);
 }
 
 function waveShapeCount(value = wave) {
   const cappedWave = Math.min(Math.max(1, value), 40);
-  const count = cappedWave <= 4 ? 1 + cappedWave * 2 : 9 + (cappedWave - 4);
+  const count = cappedWave <= 4 ? 1 + cappedWave * 2 : 9 + Math.round((cappedWave - 4) * 1.35);
   const surge = Math.floor(lateSurge(value) / 3);
   return clamp(count + surge, 3, Math.min(MAX_ENEMIES, 45 + Math.min(11, surge)));
 }
@@ -1470,16 +1475,19 @@ function controlHelpText() {
   const bombHelp = MOBILE_PERF || innerWidth < 760 ? ' Use the Bomb button for a panic bomb.' : ' B or Shift fires a panic bomb.';
   return controlMode === 'dual'
     ? 'Dual Stick: left thumb flies, right thumb aims and fires. Desktop: WASD moves, mouse aims, hold to fire. Gamepad twin-stick supported.' + bombHelp
+    : controlMode === 'mouse'
+    ? 'Mouse Pilot: the ship chases your cursor — hold the left button to fire (shots smart-aim). WASD nudges. Gamepad twin-stick supported.' + bombHelp
     : 'Auto Fire: drag anywhere to fly. Shots smart-aim at the highest danger cluster. Gamepad twin-stick supported.' + bombHelp;
 }
 
 function updateControlModeButtons() {
   autoModeBtn.classList.toggle('mode-active', controlMode === 'auto');
   dualModeBtn.classList.toggle('mode-active', controlMode === 'dual');
+  mouseModeBtn.classList.toggle('mode-active', controlMode === 'mouse');
 }
 
 function setControlMode(mode) {
-  controlMode = mode === 'dual' ? 'dual' : 'auto';
+  controlMode = ['dual', 'auto', 'mouse'].includes(mode) ? mode : 'auto';
   localStorage.setItem('neon-vector-arena-control-mode', controlMode);
   pointer.active = false;
   pointer.id = null;
@@ -2389,7 +2397,7 @@ function spawnEnemy(initial = false, prepared = null) {
   const def = shapeDef(type);
   const baseR = def.baseR;
   const tier = SIZE_TIERS.find(item => item.name === prepared?.sizeTier) || chooseSizeTier(initial);
-  const eliteChance = clamp(.025 + wave * .002 + (wave % 5 === 0 ? .05 : 0) + (eliteRushTimer > 0 ? .16 : 0), .025, eliteRushTimer > 0 ? Math.min(.34, .28 + lateSurge() * .002) : Math.min(.3, .11 + lateSurge() * .004));
+  const eliteChance = clamp(.025 + wave * .0028 + (wave % 5 === 0 ? .05 : 0) + (eliteRushTimer > 0 ? .16 : 0), .025, eliteRushTimer > 0 ? Math.min(.34, .28 + lateSurge() * .002) : Math.min(.3, .11 + lateSurge() * .004));
   const elite = boss || (!initial && !isWell && wave >= 4 && Math.random() < eliteChance);
   const scale = isWell ? 1 : (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06) * (elite ? 1.16 : 1) * (boss ? 1.78 + Math.min(wave, 40) * .012 : 1);
   const largeSplits = !boss && !isWell && tier.name === 'large';
@@ -4104,7 +4112,7 @@ function shouldSplitEnemy(e) {
 function advanceWave() {
   if (activeModifier) modifiersCleared++;
   wave++;
-  nextWaveScore += 780 + wave * 360;
+  nextWaveScore += 640 + wave * 300;
   activeModifier = modifierForWave(wave);
   waveCooldown = 11;
   waveBreather = BREATHER_SECONDS;
@@ -4263,6 +4271,16 @@ function update(dt) {
     ax += dx / d * accel * pull;
     ay += dy / d * accel * pull;
   }
+  // Mouse Pilot: ship chases the hovering cursor (no hold needed); touch falls back to drag
+  if (!demo && controlMode === 'mouse' && !padState.active && (mouse.seen || pointer.active)) {
+    const src = pointer.active ? screenToWorld(pointer.sx, pointer.sy) : screenToWorld(mouse.x, mouse.y);
+    const dx = src.x - player.x;
+    const dy = src.y - player.y;
+    const d = Math.hypot(dx, dy) || 1;
+    const pull = clamp(d / 140, 0, 1);
+    ax += dx / d * accel * pull;
+    ay += dy / d * accel * pull;
+  }
   player.vx += ax * dt;
   player.vy += ay * dt;
   player.vx *= Math.pow(.028, dt);
@@ -4301,7 +4319,7 @@ function update(dt) {
     fireAngle = player.aimAngle;
   }
   player.fire -= dt;
-  if (player.fire <= 0 && enemies.length && (demo || controlMode === 'auto' || localInput.fire)) {
+  if (player.fire <= 0 && enemies.length && (demo || controlMode === 'auto' || (controlMode === 'mouse' && (mouse.down || pointer.active)) || localInput.fire)) {
     player.fire = fireDelay();
     fireShot(fireAngle, aim);
   }
@@ -4344,7 +4362,7 @@ function update(dt) {
   if (waveBreather <= 0) {
     spawnTimer -= dt;
     if (spawnTimer <= 0) {
-      spawnTimer = Math.max(Math.max(.11, .2 - lateSurge() * .002), (.86 - wave * .012) * (activeModifier?.spawn || 1) / clamp(settings.spawnRate, .4, 2));
+      spawnTimer = Math.max(Math.max(.11, .2 - lateSurge() * .002), (.86 - wave * .015) * (activeModifier?.spawn || 1) / clamp(settings.spawnRate, .4, 2));
       queueSpawnWarning();
     }
   }
@@ -5542,7 +5560,7 @@ function setPointer(e, active) {
     if (controlMode === 'auto') setAutoPointer(e, active);
     return;
   }
-  if (controlMode === 'auto') {
+  if (controlMode === 'auto' || controlMode === 'mouse') {
     setAutoPointer(e, active);
     return;
   }
@@ -5563,7 +5581,7 @@ function movePointer(e) {
     if (controlMode === 'auto' && (pointer.active || true)) setAutoPointer(e, pointer.active);
     return;
   }
-  if (controlMode === 'auto') {
+  if (controlMode === 'auto' || controlMode === 'mouse') {
     if (pointer.active) setAutoPointer(e, pointer.active);
     return;
   }
@@ -5830,11 +5848,13 @@ bombButton.addEventListener('click', e => {
 });
 autoModeBtn.addEventListener('click', () => setControlMode('auto'));
 dualModeBtn.addEventListener('click', () => setControlMode('dual'));
+mouseModeBtn.addEventListener('click', () => setControlMode('mouse'));
 scoresBtn.addEventListener('click', () => showOverlay('scores'));
 soloScoresBtn.addEventListener('click', () => setScoreMode('solo', true));
 multiScoresBtn.addEventListener('click', () => setScoreMode('multiplayer', true));
 scoreBackBtn.addEventListener('click', () => showOverlay('menu'));
 onlineBtn.addEventListener('click', () => showOverlay('online'));
+document.getElementById('backOnline').addEventListener('click', () => showOverlay('menu'));
 connectOnlineBtn.addEventListener('click', connectOnline);
 readyOnlineBtn.addEventListener('click', toggleOnlineReady);
 startOnlineBtn.addEventListener('click', startOnlineHost);
@@ -5898,6 +5918,7 @@ window.addEventListener('keydown', e => {
   if (e.code === 'KeyP' || e.code === 'Escape') {
     if (menuState === 'options') { showOverlay(optionsReturn === 'paused' ? 'paused' : 'menu'); return; }
     if (menuState === 'help') { showOverlay(helpReturn === 'paused' ? 'paused' : 'menu'); return; }
+    if (menuState === 'online') { showOverlay('menu'); return; }
     if (running && !demo) pauseGame();
     else if (menuState === 'paused') resumeGame();
   }
