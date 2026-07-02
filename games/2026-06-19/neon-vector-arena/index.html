@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  NEON VECTOR ARENA v5.0 — Geometry Wars-style polish pass CHANGELOG
+  VECTOR ARENA v5.0 — Geometry Wars-style polish pass CHANGELOG
   ==================================================================
   VISUALS
   - New deforming spring-mesh grid (ripples from shots, explosions, bombs; bends into gravity wells).
@@ -40,15 +40,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Neon Vector Arena">
+<meta name="apple-mobile-web-app-title" content="Vector Arena">
 <meta name="theme-color" content="#02030a">
 <link rel="manifest" href="./manifest.webmanifest">
-<title>Neon Vector Arena — Neon Twin-Stick Arena Shooter</title>
+<title>Vector Arena — Twin-Stick Arena Shooter</title>
 <meta name="description" content="A polished Geometry Wars-style twin-stick shooter for the browser: deforming neon grid, geom multipliers, gravity wells, bosses, procedural synth soundtrack, global leaderboards, and 2-player online co-op. Plays great on desktop, gamepad, and mobile.">
-<meta name="keywords" content="twin stick shooter, geometry wars style game, vector shooter game, retro browser game, arcade shooter online, no download game, Neon Vector Arena">
+<meta name="keywords" content="twin stick shooter, geometry wars style game, vector shooter game, retro browser game, arcade shooter online, no download game, Vector Arena">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://jez237.com/games/2026-06-19/neon-vector-arena/">
-<meta property="og:title" content="Neon Vector Arena — Neon Twin-Stick Arena Shooter">
+<meta property="og:title" content="Vector Arena — Twin-Stick Arena Shooter">
 <meta property="og:description" content="Geometry Wars-grade neon twin-stick action in your browser: warping grid, geom multipliers, gravity wells, bosses, and online co-op.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jez237.com/games/2026-06-19/neon-vector-arena/">
@@ -769,7 +769,7 @@
 <div class="mult-hud" id="multHud"><span id="multValue">x1</span><small id="multLabel">multiplier</small></div>
 <div class="overlay" id="overlay">
   <div class="panel">
-	    <h1 id="overlayTitle">NEON<br>VECTOR<br>ARENA</h1>
+	    <h1 id="overlayTitle">VECTOR<br>ARENA</h1>
 	    <div class="title-version" id="titleVersion">v5.0</div>
 	    <div class="photo-note" id="photoNote">
 	      <b>Photosensitivity notice:</b> this game contains rapid flashing lights, screen shake, and pulsing neon effects. A reduced-flash mode is available.
@@ -835,7 +835,7 @@
         <button id="roomsOnline" class="secondary">Rooms</button>
         <button id="disconnectOnline" class="secondary" disabled>Leave</button>
       </div>
-      <div id="onlineStatus" class="online-status">Dedicated Neon worker is live. Connect, ready up, then launch.</div>
+      <div id="onlineStatus" class="online-status">Dedicated arena worker is live. Connect, ready up, then launch.</div>
       <div id="onlineSlots" class="slot-list"></div>
     </div>
     <div class="upgrade-panel" id="upgradePanel">
@@ -1413,7 +1413,7 @@ function setPanel(section = 'menu') {
   updateControlModeButtons();
   startBtn.disabled = false;
   if (section === 'menu') {
-    overlayTitle.innerHTML = 'NEON<br>VECTOR<br>ARENA';
+    overlayTitle.innerHTML = 'VECTOR<br>ARENA';
     overlaySub.textContent = 'Grid-warping twin-stick survival. Chain geoms into massive multipliers and shatter the swarm before it reaches you.';
     overlayFine.textContent = controlHelpText();
     startBtn.textContent = 'Solo Run';
@@ -1454,7 +1454,7 @@ function setPanel(section = 'menu') {
     overlayFine.textContent = 'Extra lives and bombs arrive at escalating score milestones. Bosses every ' + BOSS_INTERVAL + ' waves.';
   } else if (section === 'online') {
     overlayTitle.innerHTML = 'ONLINE';
-    overlaySub.textContent = 'Create or join a Neon room, ready both pilots, then launch into co-op vector space.';
+    overlaySub.textContent = 'Create or join a Vector room, ready both pilots, then launch into co-op vector space.';
     overlayFine.textContent = 'P1 runs the world; P2 sends controls and receives live snapshots. ' + controlHelpText();
     startBtn.disabled = true;
   }
@@ -1750,7 +1750,7 @@ function cleanName(raw) {
 }
 
 function randomRoom() {
-  return 'NEON-' + Math.random().toString(36).slice(2, 6).toUpperCase();
+  return 'VECTOR-' + Math.random().toString(36).slice(2, 6).toUpperCase();
 }
 
 function onlineUrl(room) {

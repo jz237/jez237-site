@@ -1,6 +1,6 @@
 {
-  "name": "Neon Vector Arena",
-  "short_name": "Neon Arena",
+  "name": "Vector Arena",
+  "short_name": "Vector Arena",
   "start_url": "./?fullscreen=1&v=5.0",
   "scope": "./",
   "display": "fullscreen",
