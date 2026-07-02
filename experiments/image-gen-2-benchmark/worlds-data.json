@@ -1438,5 +1438,23 @@
       "continuity": "Preserves Thornlight Meridian's ochre highlands, chalk canyon kilns, amber crystal-thorn materials, dust-silk shade cloth, basalt tools, and non-human gliding inhabitants with folded amber sail-limbs and tail-tap communication.",
       "entryDescription": "A kiln-quarter work shift where inhabitants fire porous ceramic vessels, sort thorn-crystal glaze chips, and teach juveniles tail-tap firing signals under dawn shade cloth."
     }
+  },
+  {
+    "id": "2026-07-02-weekly-world-image-thornlight-meridian-quiet-updrafts-rest-",
+    "title": "Thornlight Meridian: Quiet Updrafts Rest Perch",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; verified exact output path under tool-image-generation before append; weekly-world image preserves Thornlight Meridian bible and no text-forward layout.",
+    "prompt": "Create a finished realistic photographed square image from the invented alien world Thornlight Meridian: Quiet Updrafts Rest Perch. Show a calm dawn rest station built into a chalk-white canyon lip, where older non-human gliding inhabitants rest on warm updraft perches while caregivers tune wind-harp resonator frames and blue fan leaves flicker in the dry canyon wind. Preserve Thornlight Meridian canon: dry ochre mesa seas, violet glass dunes, amber crystal-thorn groves, mirror salt pans far below, floating dust halos, and long bands of warm meridian sunrise crawling across the highlands. The inhabitants are non-human and practical, not people in costumes: narrow mantislike torsos, four walking limbs folded around ceramic perch rails, two translucent amber sail-limbs partly opened to catch gentle updrafts, long balancing tails resting on polished supports, matte slate skin dusted with minerals, faceted side eyes, and delicate mouth feelers. Show caregivers using matte basalt tuning tools, copper root-fiber cord, prism glass bead weights, blue wax leaf laminate wind shields, woven dust-silk shade cloth, and porous sun-baked ceramic care trays. Include worn handholds, chipped ceramic perch cups, frayed dust-silk knots, mineral dust on limbs and tools, amber thorn-crystal facets catching light, tiny dew spines along the shade frame, wing-shimmer communication gestures, and tail-tap rhythms suggested by posture. Make it feel like a documentary field photograph of everyday alien life with believable lens depth, warm amber dawn light, cool violet canyon shadow, crisp dry air, clear scale cues, practical caregiving behavior, dense but coherent material detail, and no readable text.\n\nReusable fill-in-the-blank template: Create a finished realistic photographed daily-life image from the invented alien world [WORLD_NAME]: [SCENE_NAME]. Show [NON_HUMAN_INHABITANTS] performing [DAILY_LIFE_ACTIVITY] in [SPECIFIC_SETTLEMENT_OR_TERRAIN], preserving the world bible geography, ecology, materials, transit logic, palette, and recurring motifs. Include tactile tools, local infrastructure, scale cues, weather or lighting behavior, and practical gestures that make the society feel lived-in rather than generic sci-fi. Avoid humans as the main society, franchise cues, ordinary Earth settings with props, prompt-card text, readable labels, and contradictions of the world bible.\n\nExample substitution: [WORLD_NAME] = Thornlight Meridian; [SCENE_NAME] = Quiet Updrafts Rest Perch; [NON_HUMAN_INHABITANTS] = gliding mantislike elders and caregivers with four walking limbs, amber sail-limbs, long balancing tails, slate skin, faceted eyes, and mouth feelers; [DAILY_LIFE_ACTIVITY] = resting on warm updraft perches while caregivers tune wind-harp frames; [SPECIFIC_SETTLEMENT_OR_TERRAIN] = a chalk-white canyon-lip rest station above ochre mesas, violet glass dunes, crystal-thorn groves, and mirror salt pans.",
+    "image": "images/2026-07-02-weekly-world-image-thornlight-meridian-quiet-updrafts-rest-.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light.",
+      "continuity": "Preserves ochre mesas, chalk wind canyons, violet glass dunes, amber crystal-thorn groves, wind-harp infrastructure, dust-silk, ceramic, and non-human gliding inhabitants with amber sail-limbs.",
+      "entryDescription": "Elders rest on warm canyon updraft perches while caregivers tune wind-harp frames at a dawn rest station."
+    }
   }
 ]
