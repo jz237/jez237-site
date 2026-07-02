@@ -1,6 +1,6 @@
 {
   "date": "2026-07-02",
-  "updatedAt": "2026-07-02T15:00:01.513224+00:00",
+  "updatedAt": "2026-07-02T16:00:01.671434+00:00",
   "items": [
     {
       "title": "Microsoft launches its own AI deployment company with $2.5 billion commitment",
@@ -16,11 +16,11 @@
       "featuredLatest": false,
       "published": "2026-07-02T13:53:00+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.3564,
+      "score": 16.3272,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -51,7 +51,7 @@
       "lastSeen": "2026-07-02T14:28:43.305092+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.0816,
+      "score": 12.0547,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -81,10 +81,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T12:47:22+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 11.8845,
+      "score": 11.8561,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -113,10 +113,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T12:00:00+00:00",
       "firstSeen": "2026-07-02T13:00:01.981234+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.202,
+      "score": 6.1743,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -144,10 +144,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T12:38:42+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 5.9803,
+      "score": 5.9521,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -176,10 +176,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T06:13:49+00:00",
       "firstSeen": "2026-07-02T07:00:01.243696+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8662,
+      "score": 5.8425,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -208,10 +208,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T11:48:30+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8567,
+      "score": 5.8291,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -224,6 +224,38 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "mcp-microsoft-flags-mcp-tool-descriptions"
+    },
+    {
+      "title": "OpenAI proposed donating 5% of its equity to a US sovereign wealth fund",
+      "url": "https://techcrunch.com/2026/07/02/openai-proposed-donating-5-of-its-equity-to-a-us-sovereign-wealth-fund",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI CEO Sam Altman has reportedly proposed giving 5% of the company’s equity to a U.S. sovereign wealth fund, reviving discussions about letting the public share in the financial gains from the AI boom.",
+      "image": "public/thumbnails/news-d980435c9991916fc4.webp",
+      "featuredLatest": false,
+      "published": "2026-07-02T15:20:51+00:00",
+      "firstSeen": "2026-07-02T16:00:01.671434+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.2702,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "OpenAI proposed donating 5% of its equity to a US sovereign wealth fund",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-proposed-donating-equity-sovereign",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2194584986.jpg?w=1024"
     },
     {
       "title": "OpenAI floats giving Trump administration 5 percent cut of AI boom",
@@ -239,10 +271,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T10:23:27+00:00",
       "firstSeen": "2026-07-02T11:00:01.644025+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.2278,
+      "score": 5.2013,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -270,10 +302,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T11:12:09+00:00",
       "firstSeen": "2026-07-02T14:00:01.606761+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.1399,
+      "score": 5.1127,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -304,7 +336,7 @@
       "lastSeen": "2026-07-02T13:00:01.981234+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.0247,
+      "score": 4.998,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -336,7 +368,7 @@
       "lastSeen": "2026-07-02T11:00:01.644025+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.9632,
+      "score": 4.9382,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -363,9 +395,9 @@
       "summary": "Two threads today: the industry's frantic hunt for cheaper inference — from OpenAI's secret 50% trick to Base44's own model — and the return of Fable 5 after 19 days offline. NLW closes with a practical guide to what you should actually try Fable on first.",
       "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
       "featuredLatest": false,
-      "published": "2026-07-02T15:00:10.738563+00:00",
+      "published": "2026-07-02T16:00:15.270241+00:00",
       "firstSeen": "2026-07-01T14:26:06.831755+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 4.632,
@@ -399,7 +431,7 @@
       "lastSeen": "2026-07-02T11:00:01.644025+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.4776,
+      "score": 4.4522,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -431,7 +463,7 @@
       "lastSeen": "2026-07-02T12:00:01.599273+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.3911,
+      "score": 4.3653,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -460,10 +492,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T14:36:05+00:00",
       "firstSeen": "2026-07-02T15:00:01.513224+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.9919,
+      "score": 3.9621,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -476,6 +508,37 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "skill-engineering-case-against-one-shot-design"
+    },
+    {
+      "title": "Microsoft launches a $2.5 billion AI deployment business with 6,000 engineers",
+      "url": "https://thenextweb.com/news/microsoft-frontier-company-2-5-billion-ai-deployment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Microsoft announced a new operating business called Microsoft Frontier company on Thursday, backed by a $2.5 billion investment and 6,000 industry and engineering experts. The venture is focused on delivering enterprise AI deployments using Microsoft’s existing tools, with early partnerships including the London Stock Exchange Group, Unilever, Land O’Lakes, and Accenture. Commercial Business CEO Judson [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/microsoft-frontier-company-2-5-billion-ai-deployment.avif",
+      "featuredLatest": false,
+      "published": "2026-07-02T14:50:22+00:00",
+      "firstSeen": "2026-07-02T16:00:01.671434+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9151,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Microsoft launches a $2.5 billion AI deployment business with 6,000 engineers",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "microsoft-launches-billion-deployment-business-000"
     },
     {
       "title": "India tells WhatsApp to pause its usernames feature pending consultations",
@@ -494,7 +557,7 @@
       "lastSeen": "2026-07-02T14:28:43.305092+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.8482,
+      "score": 3.8209,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -507,68 +570,6 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "india-tells-whatsapp-pause-usernames-feature"
-    },
-    {
-      "title": "Apple’s next iPad Pro and MacBook Pro redesign are coming in 2027",
-      "url": "https://thenextweb.com/news/apple-ipad-pro-macbook-pro-2027",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Apple is preparing a refreshed iPad Pro lineup and a redesigned entry-level MacBook Pro for release in the first half of 2027, according to Bloomberg. The iPad Pro update keeps its current 11-inch and 13-inch sizes but focuses on internal changes, and the MacBook Pro overhaul brings the entry-level 14-inch model, codenamed K104, in line [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/MacBook-Pro.avif",
-      "featuredLatest": false,
-      "published": "2026-07-02T10:09:40+00:00",
-      "firstSeen": "2026-07-02T11:00:01.644025+00:00",
-      "lastSeen": "2026-07-02T12:00:01.599273+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.8116,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Apple’s next iPad Pro and MacBook Pro redesign are coming in 2027",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "apple-next-ipad-pro-macbook-pro"
-    },
-    {
-      "title": "Alva Industries raises €16M to scale its ultra-compact electric motors",
-      "url": "https://thenextweb.com/news/alva-industries-raises-e16m-to-scale-its-ultra-compact-electric-motors",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Alva Industries has raised €16 million to scale production of its ultra-compact electric motors, the Trondheim based deep-tech company announced on 2 July. The round is led by Nysnø Climate Investments, Sandwater and Emerald Technology Ventures, the latter investing on behalf of the Nabtesco Technology Ventures fund. Existing backers Statkraft Ventures and EnvisionTech also took part. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Alva-Industries.avif",
-      "featuredLatest": false,
-      "published": "2026-07-02T12:23:20+00:00",
-      "firstSeen": "2026-07-02T13:00:01.981234+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.473,
-      "signalGroup": "Media generation",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Alva Industries raises €16M to scale its ultra-compact electric motors",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "alva-industries-raises-16m-scale-ultra-compact"
     }
   ],
   "tools": [
@@ -586,11 +587,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4276,
+      "score": 14.4188,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -621,10 +622,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5446,
+      "score": 7.5354,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -655,10 +656,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.526,
+      "score": 7.5172,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -692,7 +693,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.516,
+      "score": 7.5158,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -723,10 +724,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0649,
+      "score": 7.0606,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -790,10 +791,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 5.0405,
+      "score": 5.0204,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -859,11 +860,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.4276,
+      "score": 14.4188,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -894,10 +895,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5446,
+      "score": 7.5354,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -928,10 +929,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.526,
+      "score": 7.5172,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -965,7 +966,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.516,
+      "score": 7.5158,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -996,10 +997,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.0649,
+      "score": 7.0606,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1063,10 +1064,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-02T15:00:01.513224+00:00",
+      "lastSeen": "2026-07-02T16:00:01.671434+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 5.0405,
+      "score": 5.0204,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1126,7 +1127,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1136,7 +1137,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1146,7 +1147,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1156,7 +1157,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1166,7 +1167,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 814,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1176,7 +1177,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1186,7 +1187,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1196,7 +1197,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1206,7 +1207,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1216,7 +1217,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1226,7 +1227,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1236,7 +1237,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "The Next Web",
@@ -1246,7 +1247,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1256,7 +1257,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1266,7 +1267,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1276,7 +1277,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1286,7 +1287,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1296,7 +1297,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 234,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1306,7 +1307,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1316,7 +1317,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1326,7 +1327,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1336,7 +1337,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Latent Space",
@@ -1346,7 +1347,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Import AI",
@@ -1356,7 +1357,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1366,7 +1367,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 156,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1376,7 +1377,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1386,7 +1387,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1396,7 +1397,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1406,7 +1407,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1416,7 +1417,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1426,7 +1427,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1436,7 +1437,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-02T15:00:01.513224+00:00"
+      "checkedAt": "2026-07-02T16:00:01.671434+00:00"
     }
   ],
   "errors": []
