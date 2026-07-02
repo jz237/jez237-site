@@ -8,17 +8,18 @@
 
   const ROOT = siteRoot();
   const LINKS = [
-    { href: ROOT + '/index.html', label: 'Home', sections: ['index'] },
     { href: ROOT + '/weather/', label: 'Weather', sections: ['weather'] },
     { href: ROOT + '/plants/', label: 'Garden', sections: ['plants', 'garden'] },
     { href: ROOT + '/experiments/image-gen-2-benchmark/', label: 'GPT Image 2', sections: ['experiments/image-gen-2-benchmark'] },
     { href: ROOT + '/ai-news/', label: 'AI News', sections: ['ai-news'] },
+    { href: ROOT + '/computer-generated-sounds/', label: 'Music', sections: ['computer-generated-sounds', 'ai-sounds', 'experiments/sid-player', 'experiments/amiga-mod-player'] },
+    { href: ROOT + '/computer-chronicle/', label: 'Chronicle', sections: ['computer-chronicle'] },
     { href: ROOT + '/photos/', label: 'Photos', sections: ['photos', 'plants/past-years'] },
     { href: ROOT + '/games/', label: 'Arcade', sections: ['games'] },
     { href: ROOT + '/experiments/ai-explainer/', label: 'How AI Works', sections: ['experiments/ai-explainer'] },
-    { href: ROOT + '/prototypes/hidden-reef/', label: 'Hidden Reef', sections: ['prototypes/hidden-reef'] },
+    { href: 'https://hidden-reef.pages.dev/', label: 'Hidden Reef', sections: ['prototypes/hidden-reef'], external: true },
     { href: ROOT + '/ops/', label: 'Ops', sections: ['ops'] },
-    { href: 'https://jz237.github.io/stock-command-center/', label: 'Stocks', external: true },
+    { href: ROOT + '/stock-market/', label: 'Stocks', sections: ['stock-market'] },
     { href: 'https://baudersigns.com/', label: 'Bauder Signs', external: true }
   ];
 
