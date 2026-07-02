@@ -507,6 +507,106 @@ const browser = await chromium.launch({
   await ctx.close();
 }
 
+// ---------- v3.5: police heat, gate sweep fix, water gating, engine v2, planes, stunt types ----------
+{
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
+  await page.locator("#roamBtn").click();
+  await page.waitForTimeout(900);
+
+  // engine v2 synth is live with a named profile
+  const ai = await page.evaluate(() => window.__steelRibbonDebug.audioInfo());
+  check("engine v2 synth active", ai && ai.engineV2 === true, `engineV2=${ai?.engineV2}`);
+  check("engine profile resolves", typeof ai?.engineProfile === "string" && ai.engineProfile.length > 0, ai?.engineProfile);
+
+  // prop planes in the sky
+  const sc = await page.evaluate(() => window.__steelRibbonDebug.sceneryCounters());
+  check("prop planes flying", sc.propPlanes === 4, `planes=${sc.propPlanes}`);
+
+  // stunt ramp variety
+  const ramps5 = await page.evaluate(() => window.__steelRibbonDebug.listStuntRamps());
+  const types = new Set(ramps5.map((r) => r.type));
+  check(
+    "stunt ramp types placed",
+    types.has("jump") && types.has("flip") && types.has("hoop"),
+    JSON.stringify([...types]),
+  );
+  const hooped = ramps5.find((r) => r.type === "hoop");
+  check("hoop ramps carry a hoop", !!hooped?.hoop, JSON.stringify(hooped?.hoop));
+
+  // fast gate pass registers (segment sweep, no tunneling)
+  const gateHits0 = await page.evaluate(() => window.__steelRibbonTelemetry.objectiveHits);
+  await page.evaluate(() => {
+    const d = window.__steelRibbonDebug,
+      g = d.activeGate();
+    // line up 46 units out on the +z side, facing -z (yaw 0), at max speed
+    d.setRoamPos(g.x, g.z + 46, 0, 132);
+  });
+  await page.keyboard.down("KeyW");
+  const gateHit = await poll(
+    page,
+    () => window.__steelRibbonTelemetry.objectiveHits,
+    (h) => h > gateHits0,
+    60,
+  );
+  await page.keyboard.up("KeyW");
+  check("gate registers at max speed", gateHit > gateHits0, `hits ${gateHits0} -> ${gateHit}`);
+
+  // phantom water: nowhere inside the lake footprint may report depth where the
+  // ground sits above the waterline
+  const wetDry = await page.evaluate(() => {
+    const d = window.__steelRibbonDebug,
+      lake = d.listPonds().find((p) => p.rx > 100);
+    if (!lake || lake.waterY == null) return { lake: !!lake, gated: lake?.waterY != null, violations: -1 };
+    let violations = 0,
+      wetSamples = 0;
+    for (let ix = -4; ix <= 4; ix++)
+      for (let iz = -4; iz <= 4; iz++) {
+        const px = lake.x + (ix / 5) * lake.rx,
+          pz = lake.z + (iz / 5) * lake.rz,
+          w = d.waterAt(px, pz);
+        (w.depth > 0.04 && wetSamples++, w.ground > lake.waterY + 0.15 && w.depth > 0.04 && violations++);
+      }
+    return { lake: !0, gated: !0, violations, wetSamples };
+  });
+  check(
+    "no phantom water above the lake waterline",
+    wetDry.gated && wetDry.violations === 0,
+    JSON.stringify(wetDry),
+  );
+  check("lake holds some real water", wetDry.wetSamples > 0, `wetSamples=${wetDry.wetSamples}`);
+
+  // police heat: cruisers spawn with heat, chase, and stand down at heat 0
+  await page.evaluate(() => {
+    window.__steelRibbonDebug.setRoamPos(80, 250, 0, 0);
+    window.__steelRibbonDebug.setHeat(2);
+  });
+  const cops = await poll(page, () => window.__steelRibbonDebug.policeInfo(), (p) => p.cars.length === 2, 40);
+  check("police spawn with heat", !!cops && cops.cars.length === 2, JSON.stringify(cops?.cars));
+  const closing = await poll(
+    page,
+    () => window.__steelRibbonDebug.policeInfo().nearest,
+    (n) => n !== null && n < 200,
+    90,
+  );
+  check("police pursue the player", closing !== null && closing < 200, `nearest=${closing}`);
+  const heatTel = await page.evaluate(() => ({
+    heat: window.__steelRibbonTelemetry.heat,
+    police: window.__steelRibbonTelemetry.police,
+  }));
+  check("heat in telemetry", heatTel.heat === 2 && heatTel.police === 2, JSON.stringify(heatTel));
+  await page.evaluate(() => window.__steelRibbonDebug.setHeat(0));
+  const standDown = await poll(page, () => window.__steelRibbonDebug.policeInfo().cars.length, (n) => n === 0, 30);
+  check("police stand down at heat 0", standDown === 0, `cars=${standDown}`);
+
+  check("no console errors (v3.5)", errors.length === 0, errors.slice(0, 3).join(" | "));
+  await ctx.close();
+}
+
 // ---------- v3.3: vehicle theft (parked + traffic), own-car marker, heli scale ----------
 {
   const ctx = await browser.newContext({ viewport: { width: 1600, height: 900 } });

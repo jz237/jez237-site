@@ -965,8 +965,8 @@ function makeWaterMaterial(scale = 1) {
   });
   return (waterMats.push(m), m);
 }
-function registerPond(x, z, rx, rz = rx) {
-  ponds.push({ x, z, rx, rz });
+function registerPond(x, z, rx, rz = rx, waterY = null) {
+  ponds.push({ x, z, rx, rz, waterY });
 }
 function pondDepthAt(x, z) {
   let depth = 0,
@@ -976,7 +976,10 @@ function pondDepthAt(x, z) {
       nz = (z - p.z) / p.rz,
       q = nx * nx + nz * nz;
     if (q < 1) {
-      const d = Math.pow(1 - q, 1.35);
+      let d = Math.pow(1 - q, 1.35);
+      // Terrain-gated water (the big lake): its flat disc is buried under hillsides across
+      // much of its footprint — no visible water there means no drag or splash either.
+      if (p.waterY != null) d *= MathUtils.clamp((p.waterY - He(x, z)) / 0.55, 0, 1);
       d > depth && ((depth = d), (pond = p));
     }
   }
@@ -1570,13 +1573,24 @@ function D1() {
     const h = zn(() => ({ x: -650 + Math.random() * 1300, z: -1200 - Math.random() * 700 }), 170, 60, 50);
     if (h) {
       // The big lake is real, driveable water now (drag + splash) — no invisible wall collider.
-      const v = new Mesh(new CircleGeometry(150, 48), makeWaterMaterial(9));
+      // Water level: fill the basin to a bit above its 3rd-lowest sample so a good part
+      // of the lake is actually visible water, while hillsides inside the footprint stay
+      // dry (the depth gate below keeps physics and audio matching what you can see).
+      const lakeSamples = [He(h.x, h.z)];
+      for (let ang = 0; ang < 8; ang++)
+        lakeSamples.push(
+          He(h.x + Math.cos((ang / 8) * Math.PI * 2) * 110, h.z + Math.sin((ang / 8) * Math.PI * 2) * 74),
+          He(h.x + Math.cos((ang / 8) * Math.PI * 2) * 200, h.z + Math.sin((ang / 8) * Math.PI * 2) * 132),
+        );
+      lakeSamples.sort((a, b) => a - b);
+      const lakeY = lakeSamples[4] + 0.4,
+        v = new Mesh(new CircleGeometry(150, 48), makeWaterMaterial(9));
       ((v.rotation.x = -Math.PI / 2),
-        v.position.set(h.x, $i(h.x, h.z, 450, 300) + 0.08, h.z),
+        v.position.set(h.x, lakeY, h.z),
         v.scale.set(1.5, 1, 1),
         (v.renderOrder = -4),
         et.add(v),
-        registerPond(h.x, h.z, 222, 148),
+        registerPond(h.x, h.z, 222, 148, lakeY),
         Qi.waterBlockers++,
         kn("lake", h.x, h.z, 170, 60));
     }
@@ -4713,6 +4727,11 @@ let Ph = null,
   Ro = null;
 const nn = [];
 Y1();
+// Remove a vehicle built from the shared vertex-color materials: dispose its (unique)
+// geometries but never the shared materials — Po would force a recompile for every car.
+function removeVehicleMesh(i) {
+  i && (i.traverse((e) => e.geometry && e.geometry.dispose()), et.remove(i));
+}
 function Po(i) {
   i &&
     (i.traverse((e) => {
@@ -5133,7 +5152,8 @@ buildHelipad();
 // ─── Stunt jumps: marked wedge ramps on open ground beside roads. The surface query (Ki)
 // reports their height so the existing crest-launch physics does the flying; launching off
 // one arms a slow-mo beat and an airtime bonus on landing. No colliders — pure ramp. ───
-var stuntRamps = [];
+var stuntRamps = [],
+  lastStuntRamp = null;
 function stuntRampHeightAt(x, z) {
   if (!stuntRamps) return 0;
   for (const r of stuntRamps) {
@@ -5142,15 +5162,20 @@ function stuntRampHeightAt(x, z) {
       f = dx * r.fx + dz * r.fz,
       lat = -dx * r.fz + dz * r.fx;
     if (f < 0 || f > r.len || Math.abs(lat) > r.w * 0.5) continue;
+    lastStuntRamp = r;
     return (f / r.len) * r.h;
   }
   return 0;
 }
 function buildStuntRamps() {
-  const len = 17,
+  // Three flavors: jump (long launch), flip (short + steep, the car backflips),
+  // hoop (a floating gold ring at the flight apex — thread it for double points).
+  const TYPES = [
+      { type: "jump", len: 17, h: 4.4, rail: 16734750 },
+      { type: "flip", len: 11, h: 6, rail: 16724787 },
+      { type: "hoop", len: 17, h: 4.4, rail: 16766208 },
+    ],
     w = 7.5,
-    h = 4.4,
-    railMat = new MeshStandardMaterial({ color: 16743210, roughness: 0.4, emissive: 16734750, emissiveIntensity: 1.6 }),
     orbMat = new MeshStandardMaterial({ color: 16764268, roughness: 0.3, emissive: 16750444, emissiveIntensity: 2.4 }),
     deckMat = new MeshStandardMaterial({
       color: 3821395,
@@ -5159,9 +5184,12 @@ function buildStuntRamps() {
       emissive: 1119519,
       emissiveIntensity: 0.35,
     }),
-    stripeMat = new MeshStandardMaterial({ color: 16772736, roughness: 0.4, emissive: 16766208, emissiveIntensity: 1.3 });
-  for (let k = 0; k < 500 && stuntRamps.length < 6; k++) {
-    const ns = Math.random() < 0.5,
+    stripeMat = new MeshStandardMaterial({ color: 16772736, roughness: 0.4, emissive: 16766208, emissiveIntensity: 1.3 }),
+    hoopMat = new MeshStandardMaterial({ color: 16770669, roughness: 0.3, emissive: 16762880, emissiveIntensity: 1.9 });
+  for (let k = 0; k < 700 && stuntRamps.length < 6; k++) {
+    const spec = TYPES[stuntRamps.length % TYPES.length],
+      { len, h } = spec,
+      ns = Math.random() < 0.5,
       roadsN = Math.round((di.x1 - di.x0) / di.pitch),
       road = (ns ? di.x0 : di.zFar) + ((Math.random() * (ns ? roadsN : Math.round((di.zNear - di.zFar) / di.pitch))) | 0) * di.pitch,
       side = (Math.random() < 0.5 ? -1 : 1) * (di.streetW * 0.5 + 10 + Math.random() * 9),
@@ -5204,10 +5232,27 @@ function buildStuntRamps() {
         break;
       }
     if (blocked) continue;
-    stuntRamps.push({ x, z, yaw, fx, fz, len, w, h });
+    const rec = { x, z, yaw, fx, fz, len, w, h, type: spec.type, rail: spec.rail };
+    if (spec.type === "hoop") {
+      const hy = He(x, z) + h + 13;
+      rec.hoop = { x: ex + fx * 28, y: hy, z: ez + fz * 28, r: 7 };
+    }
+    stuntRamps.push(rec);
   }
   // world-space wedge + glowing edge rails + top corner orbs per ramp
   for (const r of stuntRamps) {
+    const railMat = new MeshStandardMaterial({
+      color: r.rail,
+      roughness: 0.4,
+      emissive: r.rail,
+      emissiveIntensity: 1.6,
+    });
+    if (r.hoop) {
+      const hoop = new Mesh(new TorusGeometry(r.hoop.r, 0.5, 10, 30), hoopMat);
+      (hoop.position.set(r.hoop.x, r.hoop.y, r.hoop.z),
+        hoop.lookAt(r.hoop.x + r.fx, r.hoop.y, r.hoop.z + r.fz),
+        et.add(hoop));
+    }
     const y0 = He(r.x, r.z) + 0.05,
       lx = -r.fz,
       lz = r.fx,
@@ -5254,6 +5299,164 @@ function buildStuntRamps() {
   qe.stuntRamps = stuntRamps.length;
 }
 buildStuntRamps();
+// ─── Ambient propeller planes: low-poly single-props cruising over the map with a
+// gentle bank and visibly spinning propellers. Pure scenery. ───
+function buildPropPlanes() {
+  const lanes = [
+    { z: -220, alt: 170, dir: 1, speed: 30, color: 16733525 },
+    { z: -720, alt: 215, dir: -1, speed: 26, color: 16773083 },
+    { z: -1150, alt: 190, dir: 1, speed: 34, color: 9096933 },
+    { z: 120, alt: 240, dir: -1, speed: 24, color: 5817343 },
+  ];
+  qe.propPlanes = 0;
+  for (const lane of lanes) {
+    const plane = new Group(),
+      bodyMat = new MeshStandardMaterial({ color: lane.color, roughness: 0.45, metalness: 0.18 }),
+      darkMat = new MeshStandardMaterial({ color: 2236962, roughness: 0.55 });
+    const fus = new Mesh(new CylinderGeometry(0.85, 1.15, 7.2, 10), bodyMat);
+    ((fus.rotation.x = Math.PI / 2), plane.add(fus));
+    const nose = new Mesh(new ConeGeometry(1.16, 2.1, 10), bodyMat);
+    ((nose.rotation.x = -Math.PI / 2), (nose.position.z = -4.6), plane.add(nose));
+    const canopy = new Mesh(new SphereGeometry(0.85, 10, 8), darkMat);
+    ((canopy.scale.set(1, 0.7, 1.5)), canopy.position.set(0, 0.75, -0.9), plane.add(canopy));
+    const wing = new Mesh(new BoxGeometry(11.6, 0.2, 2.3), bodyMat);
+    ((wing.position.set(0, 0.15, -0.6)), plane.add(wing));
+    const tailWing = new Mesh(new BoxGeometry(4.4, 0.16, 1.35), bodyMat);
+    (tailWing.position.set(0, 0.25, 3.3), plane.add(tailWing));
+    const fin = new Mesh(new BoxGeometry(0.16, 2, 1.6), bodyMat);
+    (fin.position.set(0, 1.15, 3.35), plane.add(fin));
+    const prop = new Group(),
+      bladeGeo = new BoxGeometry(0.26, 5.4, 0.12),
+      b1 = new Mesh(bladeGeo, darkMat),
+      b2 = new Mesh(bladeGeo, darkMat);
+    ((b2.rotation.z = Math.PI / 2), prop.add(b1), prop.add(b2), (prop.position.z = -5.75), plane.add(prop));
+    plane.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1)));
+    plane.scale.setScalar(2.6);
+    ((plane.rotation.y = lane.dir > 0 ? -Math.PI / 2 : Math.PI / 2),
+      plane.position.set(-1300 + Math.random() * 2600, lane.alt, lane.z),
+      et.add(plane));
+    const phase = Math.random() * Math.PI * 2;
+    Bn(plane, (tt, dt) => {
+      ((plane.position.x += lane.dir * lane.speed * dt),
+        plane.position.x > 1500 && (plane.position.x = -1500),
+        plane.position.x < -1500 && (plane.position.x = 1500),
+        (plane.position.y = lane.alt + Math.sin(tt * 0.35 + phase) * 5),
+        (plane.rotation.z = Math.sin(tt * 0.22 + phase) * 0.14),
+        (prop.rotation.z += dt * 38));
+    });
+    qe.propPlanes++;
+  }
+}
+buildPropPlanes();
+// ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
+// home in on the player with feeler-based building avoidance, ram on contact, and give
+// up one star at a time once you keep 240+ units of distance. Roam only. ───
+const police = { cars: [], evadeT: 0, nearest: 1 / 0 };
+const POLICE_RED = new MeshStandardMaterial({ color: 16716851, emissive: 16711731, emissiveIntensity: 2.4 }),
+  POLICE_BLUE = new MeshStandardMaterial({ color: 5559551, emissive: 2916351, emissiveIntensity: 0.4 });
+function addHeat(n) {
+  if (u.mode !== "roam") return;
+  const prev = Math.ceil(u.heat || 0);
+  ((u.heat = Math.min(5, (u.heat || 0) + n)), (police.evadeT = 0));
+  Math.ceil(u.heat) > prev &&
+    ((u.message = `WANTED ${"★".repeat(Math.min(5, Math.ceil(u.heat)))}`), (u.messageTimer = 1.2));
+}
+function buildPoliceCar() {
+  const t = I1("compact", 16250871),
+    stripeMat2 = new MeshStandardMaterial({ color: 1381656, roughness: 0.5, metalness: 0.15 }),
+    stripe = new Mesh(new BoxGeometry(2.26, 0.34, 1.35), stripeMat2);
+  (stripe.position.set(0, 1.02, 0), t.add(stripe));
+  const barR = new Mesh(new BoxGeometry(0.62, 0.24, 0.46), POLICE_RED),
+    barB = new Mesh(new BoxGeometry(0.62, 0.24, 0.46), POLICE_BLUE);
+  (barR.position.set(-0.38, 2.12, -0.35), barB.position.set(0.38, 2.12, -0.35), t.add(barR), t.add(barB));
+  t.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !0)));
+  return t;
+}
+function policePathBlocked(px, pz) {
+  return (
+    Mn.some((cb) => Math.abs(px - cb.x) < (cb.hw ?? cb.radius ?? 0) + 4 && Math.abs(pz - cb.z) < (cb.hd ?? cb.radius ?? 0) + 4) ||
+    pondDepthAt(px, pz).depth > 0.35
+  );
+}
+function spawnPoliceCar() {
+  const a = Math.random() * Math.PI * 2,
+    sx = MathUtils.clamp(u.roamPos.x + Math.cos(a) * 320, -780, 780),
+    sz = MathUtils.clamp(u.roamPos.z + Math.sin(a) * 320, -1580, 440),
+    mesh = buildPoliceCar();
+  et.add(mesh);
+  const c = { mesh, x: sx, z: sz, yaw: Math.random() * Math.PI * 2, speed: 60, bumpT: 0 };
+  (police.cars.push(c), playSfx("whoosh", 0.2, 0.8, 0.1));
+  return c;
+}
+function removePoliceCar(c) {
+  (removeVehicleMesh(c.mesh), (police.cars = police.cars.filter((x) => x !== c)));
+}
+function resetPolice() {
+  for (const c of [...police.cars]) removePoliceCar(c);
+  ((police.evadeT = 0), (police.nearest = 1 / 0), (u.heat = 0));
+}
+function updatePoliceCar(c, dt) {
+  const dx = u.roamPos.x - c.x,
+    dz = u.roamPos.z - c.z,
+    dist = Math.hypot(dx, dz),
+    heat = u.heat || 0;
+  let wantYaw = Math.atan2(dx, -dz);
+  // feeler: if the path ahead is blocked, swerve toward whichever side probe is clear
+  const fx = Math.sin(c.yaw),
+    fz = -Math.cos(c.yaw);
+  if (policePathBlocked(c.x + fx * 17, c.z + fz * 17)) {
+    const lYaw = c.yaw - 0.7,
+      rYaw = c.yaw + 0.7,
+      lFree = !policePathBlocked(c.x + Math.sin(lYaw) * 17, c.z - Math.cos(lYaw) * 17);
+    wantYaw = lFree ? lYaw : rYaw;
+  }
+  const delta = Math.atan2(Math.sin(wantYaw - c.yaw), Math.cos(wantYaw - c.yaw));
+  c.yaw += MathUtils.clamp(delta, -2 * dt, 2 * dt);
+  const targetSpeed =
+    dist > 30 ? Math.min(112 + heat * 6, Math.abs(u.speed) + 30) : Math.max(42, Math.abs(u.speed) * 0.92);
+  c.speed += (targetSpeed - c.speed) * Math.min(1, dt * 0.85);
+  ((c.x += Math.sin(c.yaw) * c.speed * dt), (c.z -= Math.cos(c.yaw) * c.speed * dt));
+  ((c.x = MathUtils.clamp(c.x, -800, 800)), (c.z = MathUtils.clamp(c.z, -1600, 460)));
+  (c.mesh.position.set(c.x, He(c.x, c.z) + 0.28, c.z), (c.mesh.rotation.y = -c.yaw));
+  for (const wh of c.mesh.userData.wheels || []) wh.rotation.x -= c.speed * dt * 1.7;
+  c.bumpT > 0 && (c.bumpT -= dt);
+  if (dist < 6.2 && c.bumpT <= 0) {
+    c.bumpT = 1.3;
+    if (u.vehicle === "car") {
+      (ev(new Vector3(c.x, u.roamPos.y + 0.8, c.z), Math.abs(u.speed - c.speed) + 24, "PIT MANEUVER!"),
+        (u.speed *= 0.78),
+        (c.speed *= 0.4),
+        addHeat(0.3));
+    } else ((u.cameraShake = Math.max(u.cameraShake, 0.3)), (u.message = "Get out of there!"), (u.messageTimer = 0.9));
+  }
+  return dist;
+}
+Bn(new Object3D(), (tt, dt) => {
+  const flash = Math.floor(tt * 3.4) % 2;
+  ((POLICE_RED.emissiveIntensity = flash ? 2.6 : 0.35), (POLICE_BLUE.emissiveIntensity = flash ? 0.35 : 2.6));
+  if (u.mode !== "roam") {
+    police.cars.length && resetPolice();
+    return;
+  }
+  const heat = u.heat || 0,
+    target = heat >= 1 ? Math.min(4, Math.ceil(heat)) : 0;
+  for (; police.cars.length < target; ) spawnPoliceCar();
+  for (; police.cars.length > target; ) removePoliceCar(police.cars[police.cars.length - 1]);
+  let nearest = 1 / 0;
+  for (const c of [...police.cars]) nearest = Math.min(nearest, updatePoliceCar(c, dt));
+  police.nearest = nearest;
+  if (heat > 0) {
+    if (nearest > 240) {
+      police.evadeT += dt;
+      if (police.evadeT > 9) {
+        ((u.heat = Math.max(0, heat - 1)), (police.evadeT = u.heat > 0 ? 4 : 0));
+        u.heat === 0 &&
+          ((u.score += 500), showScorePop("+500 ESCAPED THE LAW"), chime(980, 0.22), (u.message = "You lost them"), (u.messageTimer = 1.4));
+      }
+    } else police.evadeT = Math.max(0, police.evadeT - dt * 0.6);
+  }
+  qe.police = police.cars.length;
+});
 Bn(new Object3D(), (tt, dt) => {
   if (!heli) return;
   const target = u.mode === "roam" && u.vehicle === "heli" ? 1 : 0;
@@ -5391,20 +5594,41 @@ function Wd() {
   const ctx = new AudioContext(),
     master = ctx.createGain();
   ((master.gain.value = Number(localStorage.getItem("steel-ribbon-vol") ?? 0.8)), master.connect(ctx.destination));
-  // Engine bus: rumble + growl + whine layers through a shared lowpass, driven by the RPM model.
+  // Engine bus v2: sub sine for body, twin detuned saws through a soft-clip waveshaper
+  // for thick growl (the old square wave was the kazoo), a high triangle that only
+  // appears near redline, and an exhaust-burble LFO that fades with load.
   const engineFilter = ctx.createBiquadFilter();
   ((engineFilter.type = "lowpass"), (engineFilter.frequency.value = 540));
   const engineGain = ctx.createGain();
   ((engineGain.gain.value = 1e-4), engineFilter.connect(engineGain), engineGain.connect(master));
-  const mkOsc = (type, g) => {
+  const shaper = ctx.createWaveShaper(),
+    shaperCurve = new Float32Array(1024);
+  for (let k = 0; k < 1024; k++) {
+    const xx = (k / 511.5 - 1) * 1.6;
+    shaperCurve[k] = ((1 + 3) * xx) / (1 + 3 * Math.abs(xx));
+  }
+  ((shaper.curve = shaperCurve), (shaper.oversample = "2x"), shaper.connect(engineFilter));
+  const sawBus = ctx.createGain();
+  ((sawBus.gain.value = 1), sawBus.connect(shaper));
+  const mkOsc = (type, g, dest) => {
     const o = ctx.createOscillator(),
       gn = ctx.createGain();
-    ((o.type = type), (gn.gain.value = g), o.connect(gn), gn.connect(engineFilter), o.start());
+    ((o.type = type), (gn.gain.value = g), o.connect(gn), gn.connect(dest), o.start());
     return { o, g: gn };
   };
-  const rumble = mkOsc("sawtooth", 0.5),
-    growl = mkOsc("square", 0.26),
-    whine = mkOsc("triangle", 0.1);
+  const rumble = mkOsc("sine", 0.5, engineFilter),
+    growl = mkOsc("sawtooth", 0.3, sawBus),
+    growlB = mkOsc("sawtooth", 0.3, sawBus),
+    whine = mkOsc("triangle", 0.03, engineFilter);
+  // exhaust burble: audio-rate wobble of the saw bus at quarter engine rate
+  const burbleOsc = ctx.createOscillator(),
+    burbleDepth = ctx.createGain();
+  ((burbleOsc.type = "sine"),
+    (burbleOsc.frequency.value = 12),
+    (burbleDepth.gain.value = 0),
+    burbleOsc.connect(burbleDepth),
+    burbleDepth.connect(sawBus.gain),
+    burbleOsc.start());
   // Shared looped noise buffer feeds wind, skid and boost layers.
   const noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate),
     nd = noiseBuf.getChannelData(0);
@@ -5431,6 +5655,15 @@ function Wd() {
     boost = mkNoise("bandpass", 300, 1.4, 0.5);
   const musicGain = ctx.createGain();
   ((musicGain.gain.value = 1e-4), musicGain.connect(master));
+  // two-tone police siren, gain driven by the nearest cruiser's distance
+  const sirenOsc = ctx.createOscillator(),
+    sirenGain = ctx.createGain();
+  ((sirenOsc.type = "triangle"),
+    (sirenOsc.frequency.value = 660),
+    (sirenGain.gain.value = 1e-4),
+    sirenOsc.connect(sirenGain),
+    sirenGain.connect(master),
+    sirenOsc.start());
   mi = {
     ctx,
     master,
@@ -5439,7 +5672,10 @@ function Wd() {
     filter: engineFilter,
     rumble,
     growl,
+    growlB,
     whine,
+    burble: { o: burbleOsc, depth: burbleDepth },
+    siren: { o: sirenOsc, g: sirenGain },
     wind,
     skid,
     boost,
@@ -5448,6 +5684,27 @@ function Wd() {
     beat: 0,
     prevBoost: !1,
   };
+}
+// Per-vehicle engine voices: frequency scale, layer mix, filter brightness, burble amount.
+const ENGINE_PROFILES = {
+  interceptor: { fMul: 1, sub: 0.55, saw: 0.4, det: 1.007, whine: 0.05, whineMul: 3.02, cutoff: 1, burble: 1 },
+  bullet: { fMul: 1.18, sub: 0.42, saw: 0.38, det: 1.01, whine: 0.11, whineMul: 4.1, cutoff: 1.25, burble: 0.5 },
+  brawler: { fMul: 0.82, sub: 0.68, saw: 0.44, det: 1.005, whine: 0.03, whineMul: 2.6, cutoff: 0.8, burble: 1.5 },
+  zephyr: { fMul: 1.45, sub: 0.3, saw: 0.34, det: 1.014, whine: 0.14, whineMul: 5, cutoff: 1.35, burble: 0.3 },
+  compact: { fMul: 1.3, sub: 0.3, saw: 0.3, det: 1.01, whine: 0.08, whineMul: 4, cutoff: 1.1, burble: 0.4 },
+  taxi: { fMul: 1.15, sub: 0.36, saw: 0.32, det: 1.008, whine: 0.06, whineMul: 3.6, cutoff: 1, burble: 0.5 },
+  pickup: { fMul: 0.9, sub: 0.6, saw: 0.4, det: 1.006, whine: 0.04, whineMul: 2.8, cutoff: 0.85, burble: 1.2 },
+  van: { fMul: 0.95, sub: 0.55, saw: 0.36, det: 1.006, whine: 0.04, whineMul: 3, cutoff: 0.9, burble: 0.9 },
+  boxTruck: { fMul: 0.6, sub: 0.75, saw: 0.42, det: 1.004, whine: 0.03, whineMul: 2.2, cutoff: 0.62, burble: 1.8 },
+  bus: { fMul: 0.52, sub: 0.8, saw: 0.42, det: 1.004, whine: 0.05, whineMul: 2, cutoff: 0.55, burble: 2 },
+};
+const PLAYER_ENGINE_KEYS = ["interceptor", "bullet", "brawler", "zephyr"];
+function engineProfileKey() {
+  return u.mode === "roam" && u.drivingStolen && stolenRide
+    ? ENGINE_PROFILES[stolenRide.type]
+      ? stolenRide.type
+      : "compact"
+    : PLAYER_ENGINE_KEYS[carModelIndex] || "interceptor";
 }
 function La() {
   (mi || Wd(), mi?.ctx.state === "suspended" && mi.ctx.resume().catch(() => {}), loadSfx());
@@ -5696,14 +5953,22 @@ function nv() {
     load = MathUtils.clamp((rpm - 900) / 6600, 0, 1),
     sp = Math.abs(u.speed),
     wet = u.mode === "roam" ? u.waterDepth || 0 : 0,
-    f = heliMode ? 26 + (heli?.rpm || 0) * 14 : 46 + load * 142;
-  (mi.rumble.o.frequency.setTargetAtTime(f, t, 0.03),
-    mi.growl.o.frequency.setTargetAtTime(heliMode ? f * 2 : f * 1.5 + 3.2, t, 0.03),
-    mi.whine.o.frequency.setTargetAtTime(heliMode ? 620 + sp * 4 : f * 4.03, t, 0.03),
-    mi.whine.g.gain.setTargetAtTime(heliMode ? 0.12 : 0.04 + load * 0.17, t, 0.08),
-    mi.filter.frequency.setTargetAtTime((420 + load * 2400 + sp * 5) * (1 - 0.6 * wet), t, 0.06),
+    prof = ENGINE_PROFILES[engineProfileKey()],
+    f = heliMode ? 26 + (heli?.rpm || 0) * 14 : (38 + load * 124) * prof.fMul;
+  (mi.rumble.o.frequency.setTargetAtTime(heliMode ? f : f * 0.5, t, 0.03),
+    mi.growl.o.frequency.setTargetAtTime(heliMode ? f * 2 : f, t, 0.03),
+    mi.growlB.o.frequency.setTargetAtTime(heliMode ? f * 2.02 : f * prof.det, t, 0.03),
+    mi.whine.o.frequency.setTargetAtTime(heliMode ? 620 + sp * 4 : f * prof.whineMul, t, 0.03),
+    mi.rumble.g.gain.setTargetAtTime(heliMode ? 0.6 : prof.sub, t, 0.08),
+    mi.growl.g.gain.setTargetAtTime(heliMode ? 0.24 : prof.saw, t, 0.08),
+    mi.growlB.g.gain.setTargetAtTime(heliMode ? 0.2 : prof.saw * 0.9, t, 0.08),
+    // whine only opens up near redline — load-cubed keeps idle clean
+    mi.whine.g.gain.setTargetAtTime(heliMode ? 0.12 : prof.whine * (0.15 + load * load * load * 0.85) * 2, t, 0.08),
+    mi.burble.o.frequency.setTargetAtTime(Math.max(6, f * 0.25), t, 0.05),
+    mi.burble.depth.gain.setTargetAtTime(heliMode ? 0.22 : prof.burble * 0.16 * (1 - load * 0.8), t, 0.1),
+    mi.filter.frequency.setTargetAtTime((380 + load * 2300 + sp * 5) * prof.cutoff * (1 - 0.6 * wet), t, 0.06),
     mi.engineGain.gain.setTargetAtTime(
-      (active && u.mode !== "paused" ? 0.05 + load * 0.052 : 1e-4) * (1 - 0.42 * wet),
+      (active && u.mode !== "paused" ? 0.055 + load * 0.055 : 1e-4) * (1 - 0.42 * wet),
       t,
       0.07,
     ));
@@ -5730,6 +5995,10 @@ function nv() {
     (mi.prevBoost = !!u.boosting),
     mi.boost.gain.gain.setTargetAtTime(active && u.boosting ? 0.15 : 1e-4, t, u.boosting ? 0.05 : 0.22),
     mi.boost.filter.frequency.setTargetAtTime(u.boosting ? 420 + sp * 3 : 260, t, 0.1));
+  const sirenOn = u.mode === "roam" && (u.heat || 0) > 0 && police.nearest < 460,
+    sirenAmt = sirenOn ? Math.min(0.06, ((460 - police.nearest) / 460) * 0.075) : 1e-4;
+  (mi.siren.g.gain.setTargetAtTime(sirenAmt, t, 0.25),
+    mi.siren.o.frequency.setTargetAtTime(Math.floor(t / 0.44) % 2 ? 924 : 655, t, 0.05));
   const musicOn = localStorage.getItem("steel-ribbon-music") !== "0",
     musicLoop = musicOn ? ensureSampleLoop("music", mi.musicGain, 1) : sfx.loops.music || null;
   (mi.musicGain.gain.setTargetAtTime(
@@ -5830,13 +6099,16 @@ function Yd() {
     (u.stuntActive = !1),
     (u.stuntPrime = 0),
     (u.sloMoT = 0),
+    (u.flipT = 0),
+    (u.airRoll = 0),
+    (u.stuntBullseye = !1),
     (u.roamAir = !1),
     (u.roamVy = 0),
     (u.roamPrevY = null),
     (u.roamAirT = 0),
     (u.vehicle = "car"),
     (walker.visible = !1));
-  releaseStolenRide();
+  (releaseStolenRide(), resetPolice());
   heli &&
     (heli.pos.set(heli.pad.x, heli.pad.y + 0.24, heli.pad.z),
     heli.vel.set(0, 0, 0),
@@ -5871,10 +6143,15 @@ function zs() {
     u.roamPos.z,
   ),
     dm.quaternion.setFromAxisAngle(on, -u.roamYaw),
-    dm.rotateZ(-u.wheelSteer * MathUtils.clamp(Math.abs(u.speed) / 90, 0, 1) * 0.1),
+    dm.rotateZ(
+      -u.wheelSteer * MathUtils.clamp(Math.abs(u.speed) / 90, 0, 1) * 0.1 +
+        (u.roamAir && u.stuntActive ? u.airRoll || 0 : 0),
+    ),
     dm.rotateX(
       u.roamAir
-        ? MathUtils.clamp(-u.roamVy * 0.014, -0.3, 0.34)
+        ? u.stuntActive && u.stuntRamp?.type === "flip"
+          ? -(u.flipT || 0) * Math.PI * 2
+          : MathUtils.clamp(-u.roamVy * 0.014, -0.3, 0.34)
         : MathUtils.clamp(u.roamSuspension, -0.16, 0.22),
     ));
 }
@@ -6053,7 +6330,13 @@ function publishRoamTelemetry() {
     driftComboT: +(u.driftComboT || 0).toFixed(2),
     driftT: +(u.driftT || 0).toFixed(2),
     driftAcc: +(u.driftAcc || 0).toFixed(1),
+    heat: +(u.heat || 0).toFixed(2),
+    police: police.cars.length,
+    policeNearest: police.nearest === 1 / 0 ? null : +police.nearest.toFixed(1),
     stuntActive: !!u.stuntActive,
+    stuntType: (u.stuntActive && u.stuntRamp?.type) || null,
+    flipT: +(u.flipT || 0).toFixed(2),
+    bullseye: !!u.stuntBullseye,
     sloMoT: +(u.sloMoT || 0).toFixed(2),
     stunts: qe.stunts || 0,
     airTime: +(u.roamAirT || 0).toFixed(2),
@@ -6160,6 +6443,11 @@ function updateMinimap() {
     const [sx2, sz2] = mmPt(stolenRide.parked.x, stolenRide.parked.z, size);
     ((c.fillStyle = "#ffb35c"), c.fillRect(sx2 - 2.2, sz2 - 2.2, 4.4, 4.4));
   }
+  c.fillStyle = "#ff4d4d";
+  for (const pc of police.cars) {
+    const [qx, qz] = mmPt(pc.x, pc.z, size);
+    (c.beginPath(), c.arc(qx, qz, 3.2, 0, Math.PI * 2), c.fill());
+  }
   const [px, pz] = mmPt(u.roamPos.x, u.roamPos.z, size);
   (c.save(), c.translate(px, pz), c.rotate(u.roamYaw));
   ((c.fillStyle = "#ffd45b"),
@@ -6196,15 +6484,34 @@ function updateGateBeam() {
   const e = nn[u.objectiveIndex % nn.length];
   (gateBeam.position.set(e.x, e.y + 296, e.z), (gateBeam.material.opacity = 0.1 + Math.sin(Ch * 3.1) * 0.04));
 }
+let gatePrev = null;
 function sv() {
-  if (u.mode !== "roam" || nn.length === 0) return;
+  if (u.mode !== "roam" || nn.length === 0) {
+    gatePrev = null;
+    return;
+  }
   const i = nn[u.objectiveIndex % nn.length];
   if (!i) return;
-  const e = u.roamPos.x - i.x,
-    t = u.roamPos.z - i.z,
-    n = Math.abs(u.roamPos.y - i.y);
-  e * e + t * t > i.radius * i.radius ||
-    n > 8.5 ||
+  // Sweep the whole frame's travel segment against the ring so a fast or clipping pass
+  // can't tunnel between two position samples. A huge segment means a teleport — skip it.
+  const px = gatePrev?.x ?? u.roamPos.x,
+    pz = gatePrev?.z ?? u.roamPos.z,
+    py = gatePrev?.y ?? u.roamPos.y,
+    dx = u.roamPos.x - px,
+    dz = u.roamPos.z - pz,
+    L2 = dx * dx + dz * dz;
+  ((gatePrev ??= { x: 0, y: 0, z: 0 }),
+    (gatePrev.x = u.roamPos.x),
+    (gatePrev.y = u.roamPos.y),
+    (gatePrev.z = u.roamPos.z));
+  if (L2 > 40000) return;
+  const ct = L2 > 1e-6 ? MathUtils.clamp(((i.x - px) * dx + (i.z - pz) * dz) / L2, 0, 1) : 0,
+    e = px + dx * ct - i.x,
+    t = pz + dz * ct - i.z,
+    n = Math.abs(py + (u.roamPos.y - py) * ct - i.y),
+    rr = i.radius + 1.2;
+  e * e + t * t > rr * rr ||
+    n > 10 ||
     ((i.collected = !0),
     u.objectiveHits++,
     (u.objectiveIndex = (u.objectiveIndex + 1) % nn.length),
@@ -6312,7 +6619,8 @@ function $d(i) {
       ((u.speed *= 0.62),
       (u.cameraShake = Math.max(u.cameraShake, 0.22)),
       (u.message = "SPLAT!"),
-      (u.messageTimer = 0.9)),
+      (u.messageTimer = 0.9),
+      addHeat(0.6)),
     waterPhysics(i, e),
     driftScoreUpdate(i, hb, x),
     updateNearMisses(i, x),
@@ -6362,6 +6670,7 @@ function stealTrafficCar(actor) {
     (walker.visible = !1),
     (u.message = `${(actor.type || "car").toUpperCase()} jacked!`),
     (u.messageTimer = 1.2),
+    addHeat(1),
     playSfx("jack", 0.5, 1, 0.08) || chime(340, 0.18, "square", 0.1),
     zs());
   return !0;
@@ -6389,6 +6698,7 @@ function stealParkedCar(spot) {
     (walker.visible = !1),
     (u.message = "Borrowed a parked car"),
     (u.messageTimer = 1.1),
+    addHeat(0.7),
     playSfx("jack", 0.45, 1.05, 0.08) || chime(300, 0.16, "square", 0.09),
     zs());
   return !0;
@@ -6428,7 +6738,7 @@ function tryStealNearby() {
 function disposeRide(r) {
   if (r.actor) r.actor.stolen = !1;
   else {
-    Po(r.mesh);
+    removeVehicleMesh(r.mesh);
     const s = r.spotRef;
     s?.savedM &&
       rideSys.im &&
@@ -6614,7 +6924,9 @@ function roamVertical(i, surf) {
     prevY = u.roamPrevY ?? surfY;
   // Riding a stunt ramp primes the launch: leaving the ground within a beat of the ramp
   // top counts as a stunt (slow-mo + a bigger landing payout than a plain hill hop).
-  (surf.kind === "stunt" && Math.abs(u.speed) > 30 && (u.stuntPrime = 0.3),
+  (surf.kind === "stunt" &&
+    Math.abs(u.speed) > 30 &&
+    ((u.stuntPrime = 0.3), (u.stuntRamp = lastStuntRamp)),
     u.stuntPrime > 0 && (u.stuntPrime -= i));
   if (!u.roamAir) {
     const vyFollow = (surfY - prevY) / Math.max(1e-4, i);
@@ -6623,8 +6935,11 @@ function roamVertical(i, surf) {
       u.stuntPrime > 0 &&
         ((u.stuntActive = !0),
         (u.stuntPrime = 0),
-        (u.sloMoT = 1.15),
-        (u.message = "STUNT!"),
+        (u.flipT = 0),
+        (u.airRoll = 0),
+        (u.stuntBullseye = !1),
+        (u.sloMoT = u.stuntRamp?.type === "flip" ? 1.4 : 1.15),
+        (u.message = u.stuntRamp?.type === "flip" ? "BACKFLIP!" : "STUNT!"),
         (u.messageTimer = 1),
         playSfx("whoosh", 0.38, 1.2, 0.08));
     } else {
@@ -6634,6 +6949,23 @@ function roamVertical(i, surf) {
   if (u.roamAir) {
     ((u.roamVy -= 34 * i), (u.roamAirT += i));
     u.roamPos.y = u.roamPos.y + u.roamVy * i;
+    if (u.stuntActive) {
+      // flip ramps rotate the car through a full backflip over the arc
+      u.stuntRamp?.type === "flip" && (u.flipT = Math.min(1, (u.flipT || 0) + i / 1.05));
+      // A/D barrel-rolls for style while airborne
+      const rollIn =
+        (_t.has("KeyD") || _t.has("ArrowRight") ? 1 : 0) - (_t.has("KeyA") || _t.has("ArrowLeft") ? 1 : 0);
+      u.airRoll = (u.airRoll || 0) + rollIn * i * 4.4;
+      // threading the hoop doubles the payout
+      const hp = u.stuntRamp?.hoop;
+      hp &&
+        !u.stuntBullseye &&
+        Math.hypot(u.roamPos.x - hp.x, u.roamPos.y - hp.y, u.roamPos.z - hp.z) < hp.r - 0.4 &&
+        ((u.stuntBullseye = !0),
+        (u.message = "BULLSEYE!"),
+        (u.messageTimer = 1),
+        chime(1240, 0.2, "square", 0.14));
+    }
     if (u.roamPos.y <= surfY) {
       ((u.roamPos.y = surfY), (u.roamAir = !1));
       const impact = -u.roamVy;
@@ -6643,12 +6975,23 @@ function roamVertical(i, surf) {
           playSfx("land", Math.min(0.62, impact / 42), 1, 0.1) || Pc(Math.min(24, impact * 0.85)),
           (u.roamSuspension += 0.16));
       if (u.stuntActive) {
-        const pts = Math.round(160 + u.roamAirT * 240 + Math.abs(u.speed) * 1.4);
+        const rolls = Math.floor(Math.abs(u.airRoll || 0) / (Math.PI * 2)),
+          flipped = u.stuntRamp?.type === "flip" && (u.flipT || 0) >= 0.96;
+        let pts = 160 + u.roamAirT * 240 + Math.abs(u.speed) * 1.4 + rolls * 140;
+        flipped && (pts *= 1.6);
+        u.stuntBullseye && (pts *= 2);
+        pts = Math.round(pts);
+        const tags = [flipped && "BACKFLIP", rolls > 0 && `ROLL ×${rolls}`, u.stuntBullseye && "BULLSEYE ×2"]
+          .filter(Boolean)
+          .join(" · ");
         ((u.score += pts),
           (qe.stunts = (qe.stunts || 0) + 1),
           showScorePop(`STUNT +${pts}`),
+          tags && ((u.message = tags), (u.messageTimer = 1.4)),
           chime(880, 0.2, "square", 0.12),
-          (u.stuntActive = !1));
+          (u.stuntActive = !1),
+          (u.flipT = 0),
+          (u.airRoll = 0));
       } else if (u.roamAirT > 0.45) {
         const pts = Math.round(40 + u.roamAirT * 70);
         ((u.score += pts), showScorePop(`+${pts} AIR`), chime(760, 0.14));
@@ -7040,7 +7383,20 @@ window.__steelRibbonDebug = {
     return boostPads.map((i) => ({ s: i.s, lat: +i.lat.toFixed(2) }));
   },
   listPonds() {
-    return ponds.map((i) => ({ x: +i.x.toFixed(1), z: +i.z.toFixed(1), rx: +i.rx.toFixed(1), rz: +i.rz.toFixed(1) }));
+    return ponds.map((i) => ({
+      x: +i.x.toFixed(1),
+      z: +i.z.toFixed(1),
+      rx: +i.rx.toFixed(1),
+      rz: +i.rz.toFixed(1),
+      waterY: i.waterY == null ? null : +i.waterY.toFixed(2),
+    }));
+  },
+  waterAt(x, z) {
+    return { depth: +pondDepthAt(x, z).depth.toFixed(3), ground: +He(x, z).toFixed(2) };
+  },
+  activeGate() {
+    const g = nn[u.objectiveIndex % nn.length];
+    return g ? { x: +g.x.toFixed(1), y: +g.y.toFixed(1), z: +g.z.toFixed(1), label: g.label } : null;
   },
   seasonInfo() {
     return {
@@ -7107,6 +7463,8 @@ window.__steelRibbonDebug = {
           sampleLoops: Object.keys(sfx.loops),
           musicSample: !!sfx.buffers.music,
           musicOn: localStorage.getItem("steel-ribbon-music") !== "0",
+          engineProfile: engineProfileKey(),
+          engineV2: !!mi.growlB && !!mi.burble,
         }
       : null;
   },
@@ -7187,6 +7545,17 @@ window.__steelRibbonDebug = {
   stealNearest() {
     return u.mode === "roam" && u.vehicle === "foot" ? tryStealNearby() : !1;
   },
+  setHeat(n) {
+    return (u.mode === "roam" && (u.heat = MathUtils.clamp(n, 0, 5)), u.heat || 0);
+  },
+  policeInfo() {
+    return {
+      heat: +(u.heat || 0).toFixed(2),
+      cars: police.cars.map((c) => ({ x: +c.x.toFixed(1), z: +c.z.toFixed(1), speed: +c.speed.toFixed(1) })),
+      nearest: police.nearest === 1 / 0 ? null : +police.nearest.toFixed(1),
+      evadeT: +police.evadeT.toFixed(1),
+    };
+  },
   setTod(mode) {
     return (
       TOD_MODES.includes(mode) && ((todMode = mode), localStorage.setItem("steel-ribbon-tod", mode), refreshTodLabel()),
@@ -7203,6 +7572,8 @@ window.__steelRibbonDebug = {
       yaw: +r.yaw.toFixed(2),
       len: r.len,
       h: r.h,
+      type: r.type,
+      hoop: r.hoop ? { x: +r.hoop.x.toFixed(1), y: +r.hoop.y.toFixed(1), z: +r.hoop.z.toFixed(1), r: r.hoop.r } : null,
     }));
   },
   nearestParkedSpot(x, z) {
@@ -7236,6 +7607,8 @@ window.__steelRibbonDebug = {
       cityPonds: qe.ponds || 0,
       cloudSprites: qe.cloudSprites || 0,
       helipad: qe.helipad || null,
+      stuntRamps: qe.stuntRamps || 0,
+      propPlanes: qe.propPlanes || 0,
     };
   },
   stats() {
@@ -8309,6 +8682,7 @@ function vr() {
     const d = nn[u.objectiveIndex % nn.length];
     Qe.trackName.textContent = d ? `Next: ${d.label}` : "City Streets";
   }
+  n && (u.heat || 0) >= 1 && (Qe.position.textContent += `  ${"★".repeat(Math.min(5, Math.ceil(u.heat)))}`);
   ((Qe.hud.style.display = s ? "flex" : "none"),
     (Qe.raceStrip.style.display = u.mode === "race" || u.mode === "paused" ? "grid" : "none"),
     (Qe.touchControls.style.display = s ? "" : "none"),
