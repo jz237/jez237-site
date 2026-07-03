@@ -1,8 +1,393 @@
 {
-  "generatedAt": "2026-07-02T12:02:44.884Z",
+  "generatedAt": "2026-07-03T12:00:00.000Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-03",
+      "historicDate": "1983-02-28",
+      "displayDate": "Week of February 28-March 6, 1983",
+      "edition": "Issue 031 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "March 1983 computer-weekly front page: warm newsprint, arcade-and-home-computer shelf cues, IBM PC office software boxes, red and blue section flags.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly Computer & Culture Chronicle",
+        "dateline": "Week of February 21-27, 1983",
+        "price": "35 cents",
+        "date": "Week of February 28-March 6, 1983",
+        "issue": "Issue 031"
+      },
+      "layoutPlan": "Lead with a large computer-games shelf story, then stack short boxed modules for IBM PC software, home-computer prices, movie/music charts, and store-shelf notes.",
+      "sectionChrome": [
+        "On This Week",
+        "Game Shelf",
+        "Software Counter",
+        "Price Watch",
+        "Charts"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-28.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of February 28-March 6, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The week opens with home-computer players reading deeper magazine coverage while IBM PC buyers hear more about integrated office software. Entertainment shelves remain crowded: Michael Jackson tops the singles chart, Tootsie keeps drawing moviegoers, and computer stores sell games beside BASIC manuals, disks, and productivity packages.",
+      "morningLine": "Computer stores start March with game boxes in the window, Lotus 1-2-3 talk at the IBM counter, and price tags doing as much selling as specifications.",
+      "lead": {
+        "headline": "Game shelves carry the home-computer pitch",
+        "dek": "As March 1983 begins, Computer Gaming World keeps strategy, adventure, and simulation titles in view while retailers use games to make home machines feel useful and fun.",
+        "body": "During the week of February 28-March 6, 1983, the home-computer market was still being explained from the shelf outward. Computer Gaming World's early-1983 issues put titles such as Serpentine, Cosmic Balance, S.E.U.I.S., Armor Assault, and wider strategy coverage in front of readers who wanted more than arcade imitation. At the same time, IBM PC shoppers were hearing the new Lotus 1-2-3 pitch, a spreadsheet/database/graphics package that had gone on sale in January and was quickly becoming a reason to take the PC seriously at work.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Computer Gaming World keeps serious play in print",
+          "summary": "Early-1983 CGW coverage emphasized strategy, simulation, and adventure games, including Serpentine, Cosmic Balance, S.E.U.I.S., and Armor Assault.",
+          "confidence": "High",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 becomes the IBM PC counter pitch",
+          "summary": "Lotus 1-2-3 had gone on sale in January 1983, giving IBM PC dealers a fresh integrated spreadsheet, database, and graphics story to tell office buyers.",
+          "confidence": "High",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "title": "Software firms chase a crowded business market",
+          "summary": "Contemporary business coverage described software companies competing hard for visibility as personal-computer use spread through offices and homes.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Home-computer value is sold through bundles and shelves",
+          "summary": "Commodore 64, Atari, TI, and IBM-compatible shoppers compared memory, game libraries, disk drives, printers, and office packages as much as processor names.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC: New integrated spreadsheet/database/graphics package for business buyers."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Apple II / IBM PC and others: Still the familiar spreadsheet reference point as Lotus gains attention."
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and microcomputer systems: A word-processing staple on office software shelves."
+        },
+        {
+          "name": "Serpentine",
+          "detail": "Apple II: Broderbund action game covered by Computer Gaming World."
+        },
+        {
+          "name": "Cosmic Balance",
+          "detail": "Apple II / Atari 8-bit: SSI space-combat strategy title highlighted in CGW coverage."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer games",
+          "items": [
+            "Serpentine",
+            "Cosmic Balance",
+            "S.E.U.I.S.",
+            "Armor Assault",
+            "Eastern Front scenarios"
+          ]
+        },
+        {
+          "label": "Home computers",
+          "items": [
+            "Commodore 64",
+            "Atari 800",
+            "TI-99/4A",
+            "Apple II Plus",
+            "IBM PC"
+          ]
+        },
+        {
+          "label": "Office software",
+          "items": [
+            "Lotus 1-2-3",
+            "VisiCalc",
+            "WordStar",
+            "dBASE II",
+            "EasyWriter"
+          ]
+        },
+        {
+          "label": "Accessories",
+          "items": [
+            "5.25-inch disks",
+            "joysticks",
+            "modems",
+            "dot-matrix printer paper",
+            "BASIC manuals"
+          ]
+        },
+        {
+          "label": "Magazines",
+          "items": [
+            "Computer Gaming World",
+            "Softline",
+            "BYTE",
+            "Creative Computing",
+            "InfoWorld"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64 system",
+          "price": "About $595 list; street prices often lower",
+          "note": "Aggressive retail pricing kept it prominent in home-computer ads.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "item": "TI-99/4A console",
+          "price": "Often promoted under $200 after rebates",
+          "note": "Price competition made TI a common family-computer comparison.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "IBM PC base system",
+          "price": "About $1,565 and up before monitor/storage choices",
+          "note": "The office buyer still paid far more than home-computer shoppers.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "item": "Lotus 1-2-3",
+          "price": "About $495 suggested retail",
+          "note": "A premium business package sold as a productivity reason to buy the PC.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "title": "Billie Jean tops the Hot 100",
+          "text": "Billboard's March 5, 1983 Hot 100 put Michael Jackson's Billie Jean at No. 1.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "title": "Tootsie leads the weekend box office",
+          "text": "For the March 4-6 weekend, Tootsie remained the leading domestic movie draw.",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "title": "CGW keeps a $2.75 cover price",
+          "text": "Computer Gaming World's early-1983 issues carried a $2.75 newsstand price for serious computer-game readers.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Software makers crowd the hill",
+          "text": "A February 1983 Christian Science Monitor story framed the software business as a fast-growing competitive market.",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Billie Jean",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Do You Really Want to Hurt Me",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 3,
+          "title": "Hungry Like the Wolf",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 4,
+          "title": "Shame on the Moon",
+          "artist": "Bob Seger & The Silver Bullet Band"
+        },
+        {
+          "rank": 5,
+          "title": "Stray Cat Strut",
+          "artist": "Stray Cats"
+        }
+      ],
+      "periodAd": {
+        "headline": "This week at the computer counter",
+        "summary": "Ask for a demonstration disk: strategy games for the family machine, Lotus 1-2-3 for the IBM PC, and a fresh box of 5.25-inch floppies before the weekend.",
+        "tagline": "Bring this notice for a joystick-and-disk bundle quote."
+      },
+      "market": {
+        "headline": "Software grows into the sales story",
+        "body": "Retailers no longer sell the machine alone. A credible shelf now needs games, spreadsheets, word processors, blank disks, magazines, and a clerk who can explain why each computer has a different future.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          1,
+          3,
+          4
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-02-28.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Computer Gaming World early-1983 coverage supports the named computer-game shelf items.",
+            "confidence": "High",
+            "sourceRefs": [
+              0,
+              9
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was newly on sale for IBM PC buyers after its January 1983 release.",
+            "confidence": "High",
+            "sourceRefs": [
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "Music and movie rankings use March 5 Hot 100 and March 4-6 box-office references.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              7,
+              8
+            ]
+          },
+          {
+            "claim": "Retail prices are period ranges and may vary by dealer advertisement.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              4,
+              5,
+              6
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "Computer Gaming World 3.1, Jan-Feb 1983",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.1.pdf",
+          "publisher": "CGW Museum",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "Lotus 1-2-3 Goes on Sale",
+          "url": "https://thisdayintechhistory.com/01/26/lotus-1-2-3-goes-on-sale/",
+          "publisher": "This Day in Tech History",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "Lotus 1-2-3",
+          "url": "https://en.wikipedia.org/wiki/Lotus_1-2-3",
+          "publisher": "Wikipedia",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "A couple of aspiring software makers plan a sales surge",
+          "url": "https://www.csmonitor.com/1983/0215/021539.html",
+          "publisher": "Christian Science Monitor",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "Commodore 64",
+          "url": "https://en.wikipedia.org/wiki/Commodore_64",
+          "publisher": "Wikipedia",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "TI-99/4A",
+          "url": "https://en.wikipedia.org/wiki/TI-99/4A",
+          "publisher": "Wikipedia",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "IBM Personal Computer",
+          "url": "https://en.wikipedia.org/wiki/IBM_Personal_Computer",
+          "publisher": "Wikipedia",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "Billboard Hot 100 week of March 5, 1983",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-03-05",
+          "publisher": "Billboard chart archive mirror",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "Domestic 1983 Weekend 9",
+          "url": "https://www.boxofficemojo.com/weekend/1983W09/",
+          "publisher": "Box Office Mojo",
+          "accessed": "2026-07-03"
+        },
+        {
+          "title": "Computer Gaming World galleries, 1983",
+          "url": "https://cgwmuseum.org/galleries/index.php?id=9&pub=2&year=1983",
+          "publisher": "CGW Museum",
+          "accessed": "2026-07-03"
+        }
+      ],
+      "pictureDesk": [
+        {
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-02-28.png",
+          "alt": "Generated halftone newspaper front page for the week of February 28-March 6, 1983",
+          "caption": "GPT Image 2 visual direction: home-computer game shelf with joystick, disk sleeves, and boxed software.",
+          "confidence": "Generated visual based on structured issue data."
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: used disk drive",
+          "detail": "Local Apple II owner seeks reliable 5.25-inch drive and controller card."
+        },
+        {
+          "headline": "BASIC lessons",
+          "detail": "Evening tutoring for students and parents. Bring your own manual."
+        }
+      ]
+    },
     {
       "currentDate": "2026-07-02",
       "historicDate": "1983-02-21",
