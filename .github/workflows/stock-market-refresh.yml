@@ -2,7 +2,7 @@ name: Refresh Stock Market Data
 
 on:
   schedule:
-    - cron: "31 13-21 * * 1-5" # hourly; gated below to 9:31 AM-4:31 PM Eastern
+    - cron: "1,31 13-21 * * 1-5" # half-hourly; gated below to 9:30 AM-4:35 PM Eastern
   workflow_dispatch:
 
 permissions:
@@ -26,17 +26,28 @@ jobs:
           eastern_hour="$(TZ=America/New_York date +%H)"
           eastern_minute="$(TZ=America/New_York date +%M)"
           eastern_total=$((10#$eastern_hour * 60 + 10#$eastern_minute))
-          market_start=$((9 * 60 + 31))
-          market_end=$((16 * 60 + 31))
+          market_start=$((9 * 60 + 30))
+          market_end=$((16 * 60 + 35))
+          close_run=$((16 * 60 + 30))
           if [ "$eastern_total" -ge "$market_start" ] && [ "$eastern_total" -le "$market_end" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping outside 9:31 AM-4:31 PM Eastern refresh window."
+            echo "Skipping outside 9:30 AM-4:35 PM Eastern refresh window."
           fi
+          # Intraday runs refresh quotes and intraday chart ranges only; the
+          # post-close run (and manual dispatch) rebuilds the full history.
+          mode="intraday"
+          if [ "$eastern_total" -ge "$close_run" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            mode="full"
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "Refresh mode: $mode"
 
       - name: Refresh stock market data
         if: steps.market_window.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          STOCK_REFRESH_MODE: ${{ steps.market_window.outputs.mode }}
         run: node scripts/refresh_stock_market_data.mjs
 
       - name: Commit and push changes (if any)
