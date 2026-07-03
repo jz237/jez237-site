@@ -130,6 +130,9 @@ const multiplayer = new Multiplayer({
   onWave: handleRemoteWave,
   onWaveClear: handleRemoteWaveClear,
   onRoleChange: handleRoleChange,
+  onPing: handleSquadPing,
+  onConvoy: handleRemoteConvoy,
+  onTruckKill: handleRemoteTruckKill,
 });
 let quickMatchWaiting = false;
 let roomsRefreshAt = 0;
@@ -376,6 +379,9 @@ function handleRemoteEnemyKill(id, pos, credit) {
   if (credit && credit === multiplayer.id && G.state === 'playing') {
     const tn = multiplayer.remoteEnemies.get(id)?.typeName;
     creditKillLocal(ENEMY_TYPES[tn]?.points ?? ENEMY.points);
+  } else if (credit && credit !== multiplayer.id) {
+    const name = multiplayer.peers.get(credit)?.name || 'ALLY';
+    hud.floater(`${name} DESTROYED A TANK`, 'good');
   }
   if (G.state === 'playing' && Math.random() < PICKUP.dropChance) {
     props.spawnCrate(pos.x + (Math.random() - 0.5) * 4, pos.z + (Math.random() - 0.5) * 4);
@@ -436,6 +442,38 @@ function handleRoleChange(host) {
       if (it.alive && it.kind === 'pillbox') props.removeItem(it);
     }
   }
+}
+
+// an ally pinged a spot: mark it in-world and on the minimap
+function handleSquadPing(pos, name) {
+  const active = G.state === 'playing' || G.state === 'downed' || G.state === 'dying';
+  if (!active) return;
+  effects.ring(pos, 6, 1.6, 0x52a8ff);
+  minimap.ping(pos.x, pos.z, '#52a8ff');
+  hud.floater(`${name}: OVER HERE`, 'good');
+  audio.click();
+}
+
+// convoys are deterministic (straight kinematic course at fixed speed), so
+// a shared layout keeps every client's copy in step
+function spawnConvoyShared(layout) {
+  const trucks = waves.spawnConvoy(scene, world, layout);
+  hud.banner('SUPPLY CONVOY SPOTTED', '250 per truck — intercept before they escape!', 2.6);
+  for (const t of trucks) minimap.ping(t.body.position.x, t.body.position.z, '#52d8ff');
+  audio.click();
+}
+
+function handleRemoteConvoy(layout) {
+  if (isCoopClient() && G.state !== 'menu' && G.state !== 'gameover' &&
+      (!waves.trucks || waves.trucks.length === 0)) {
+    spawnConvoyShared(layout);
+  }
+}
+
+// an ally destroyed truck `cid` on their copy — mirror it (no score here)
+function handleRemoteTruckKill(cid) {
+  const truck = waves.trucks?.find(t => t.alive && t.cid === cid);
+  if (truck) killTruck(truck, false);
 }
 
 // client-side per-wave props: targets/barrels/walls stay local flavour
@@ -631,6 +669,9 @@ function killEnemy(e, creditPeerId = null) {
   projectiles.explode(pos, 6, 2000);
   if (!creditPeerId && G.state === 'playing') {
     creditKillLocal(e.type?.points ?? ENEMY.points);
+  } else if (creditPeerId) {
+    const name = multiplayer.peers.get(creditPeerId)?.name || 'ALLY';
+    hud.floater(`${name} DESTROYED A TANK`, 'good');
   }
   // supply drop
   if (Math.random() < PICKUP.dropChance) {
@@ -692,6 +733,7 @@ function killTruck(truck, byPlayer) {
     if (waves.trucks?.length === 3 && waves.trucks.every(t => !t.alive)) {
       addScore(500, 'CONVOY DESTROYED', 'kill');
     }
+    if (inCoop()) multiplayer.sendTruckKill(truck.cid);
   }
 }
 
@@ -1165,15 +1207,15 @@ function fixedStep(dt) {
     }
     G.pendingBombs = G.pendingBombs.filter(b => !b.fired);
 
-    // bonus convoy crossings from wave 3 (solo only — trucks aren't synced)
-    if (G.wave >= 3 && !inCoop()) {
+    // bonus convoy crossings from wave 3 (host decides; layout is shared so
+    // co-op clients build the identical convoy)
+    if (G.wave >= 3 && !isCoopClient()) {
       G.convoyT -= dt;
       if (G.convoyT <= 0 && (!waves.trucks || waves.trucks.length === 0)) {
         G.convoyT = 80 + Math.random() * 25;
-        const trucks = waves.spawnConvoy(scene, world, p.body.position);
-        hud.banner('SUPPLY CONVOY SPOTTED', '250 per truck — intercept before they escape!', 2.6);
-        for (const t of trucks) minimap.ping(t.body.position.x, t.body.position.z, '#52d8ff');
-        audio.click();
+        const layout = WaveManager.convoyLayout(p.body.position);
+        spawnConvoyShared(layout);
+        if (inCoop() && multiplayer.isHost()) multiplayer.sendConvoy(layout);
       }
     }
     waves.stepTrucks(dt, scene, world);
@@ -1201,6 +1243,7 @@ const _pillboxLos = new CANNON.RaycastResult();
 // ---------------------------------------------------------------- camera
 const _camTarget = new THREE.Vector3();
 const _camDesired = new THREE.Vector3();
+const _zeroVel = new THREE.Vector3();
 const _lookTarget = new THREE.Vector3();
 const _dirCam = new THREE.Vector3();
 const _exhaustPos = new THREE.Vector3();
@@ -1216,11 +1259,20 @@ function updateCamera(dt) {
     G.camDist = THREE.MathUtils.clamp(G.camDist + input.consumeZoom() * 1.4, 6.5, 22);
   }
 
-  const root = p.visual.root.position;
+  // while downed, spectate the ally we'll respawn beside
+  let root = p.visual.root.position;
+  let lookahead = p.body.velocity;
+  if (G.state === 'downed') {
+    const allies = multiplayer.allyBlips().filter(a => !a.down && a.hp > 0);
+    if (allies.length) {
+      root = allies[0].position;
+      lookahead = _zeroVel;
+    }
+  }
   _camTarget.set(root.x, root.y + 2.6, root.z);
   // lookahead in the direction of travel
   _camTarget.addScaledVector(
-    new THREE.Vector3(p.body.velocity.x, 0, p.body.velocity.z), 0.1,
+    new THREE.Vector3(lookahead.x, 0, lookahead.z), 0.1,
   );
 
   // free-aim rig: the camera's own yaw/pitch defines where the reticle
@@ -1489,6 +1541,13 @@ function gameFrame(dt) {
     if (input.consumeReload()) {
       if (G.player.reloadNow()) audio.click();
     }
+    if (input.consumePing()) {
+      // squad ping on the reticle point (works solo too, as a self-marker)
+      effects.ring(G.aimPoint, 6, 1.6, 0x52a8ff);
+      minimap.ping(G.aimPoint.x, G.aimPoint.z, '#52a8ff');
+      audio.click();
+      if (inCoop()) multiplayer.sendPing(G.aimPoint.x, G.aimPoint.y, G.aimPoint.z);
+    }
     if (input.consumeStrike() && G.airstrike) {
       G.airstrike = false;
       hud.setStrike(false);
@@ -1613,7 +1672,8 @@ function gameFrame(dt) {
   }
   foliage.update(dt, camera.position.x, camera.position.z);
   effects.update(dt);
-  sky.update(dt, G.player ? G.player.visual.root.position : camera.position);
+  // shadow frustum follows the camera so downed-spectate stays lit
+  sky.update(dt, camera.position);
 
   // HUD
   if (playingish && G.player) {
