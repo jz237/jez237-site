@@ -4224,11 +4224,11 @@ return n?JSON.parse(n):t}catch{return t}}function ja(){let[e,t]=(0,l.useState)(n
 return()=>window.clearInterval(e)},[]);
 let ce=(0,l.useCallback)(async(e=!1)=>{let n=e?`?t=${Date.now()}`:``;
 f(!0);
-try{let[e,i,o]=await Promise.all([fetch(`data/stocks.json${n}`).then(e=>e.json()),fetch(`data/portfolio.json${n}`).then(e=>e.json()).catch(()=>null),fetch(`data/history.json${n}`).then(e=>e.json()).catch(()=>null)]);
+try{let[e,i,o]=await Promise.all([fetch(`data/stocks.json${n}`).then(e=>e.json()),fetch(`data/portfolio.json`).then(e=>e.json()).catch(()=>null),fetch(`data/history.json`).then(e=>e.json()).catch(()=>null)]);
 if(!Array.isArray(e.stocks))throw Error(`unexpected stocks.json shape`);
 t(e),o&&r(o);
 let s=Aa(`commandCenterPortfolio`,null);
-s?.positions?.length?a(s):i?.positions&&a(i),u(`ready`)}catch{u(e=>e===`ready`?`ready`:`error`)}finally{f(!1)}},[]);
+if(s?.positions?.length){let es=Aa(`commandCenterPortfolioSeen`,[]),ms=(i?.positions||[]).filter(e=>!es.includes(e.symbol)&&!s.positions.some(t=>t.symbol===e.symbol));if(ms.length){let hs={...s,positions:[...s.positions,...ms]};a(hs);try{localStorage.setItem(`commandCenterPortfolio`,JSON.stringify(hs))}catch{}}else a(s)}else i?.positions&&a(i);if(i?.positions)try{localStorage.setItem(`commandCenterPortfolioSeen`,JSON.stringify(i.positions.map(e=>e.symbol)))}catch{}u(`ready`)}catch{u(e=>e===`ready`?`ready`:`error`)}finally{f(!1)}},[]);
 (0,l.useEffect)(()=>{let e=window.setTimeout(()=>ce(!0),0),t=window.setInterval(()=>ce(!0),ga),n=()=>{document.visibilityState===`visible`&&ce(!0)};
 return document.addEventListener(`visibilitychange`,n),()=>{window.clearTimeout(e),window.clearInterval(t),document.removeEventListener(`visibilitychange`,n)}},[ce]),(0,l.useEffect)(()=>{function e(){let e=window.location.hash.replace(`#`,``);
 (e===`report`||e===`research`||e===`catalysts`||e===`risks`||e===`watchlist`)&&ie(e)}return e(),window.addEventListener(`hashchange`,e),()=>window.removeEventListener(`hashchange`,e)},[]);
