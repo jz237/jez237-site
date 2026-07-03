@@ -15,12 +15,24 @@
     }
   }
 
-  function exportBackup() {
+  // Visitors who never edited their portfolio have no local copy — fall back
+  // to the served list so exports match what the page shows.
+  async function effectivePortfolio() {
+    const local = readKey(KEYS.portfolio);
+    if (local?.positions?.length) return local;
+    try {
+      return await (await fetch("data/portfolio.json")).json();
+    } catch {
+      return local || { positions: [] };
+    }
+  }
+
+  async function exportBackup() {
     const backup = {
       app: "stock-command-center",
       version: 1,
       exportedAt: new Date().toISOString(),
-      portfolio: readKey(KEYS.portfolio),
+      portfolio: await effectivePortfolio(),
       holdings: readKey(KEYS.holdings),
       seen: readKey(KEYS.seen),
       starred: readKey(KEYS.starred),
@@ -29,6 +41,42 @@
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
     link.download = `stock-portfolio-backup-${backup.exportedAt.slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  }
+
+  async function exportCsv(statusEl) {
+    const portfolio = await effectivePortfolio();
+    const holdings = readKey(KEYS.holdings) || {};
+    let prices = {};
+    try {
+      const stocks = await (await fetch("data/stocks.json")).json();
+      for (const stock of stocks.stocks || []) prices[stock.symbol] = stock.price;
+    } catch {
+      statusEl.textContent = "Prices unavailable; exported shares and cost only.";
+    }
+    const rows = [["Symbol", "Shares", "AvgCost", "Price", "MarketValue", "TotalPL"]];
+    for (const { symbol } of portfolio.positions || []) {
+      const holding = holdings[symbol] || {};
+      const shares = Number(holding.shares) || 0;
+      const avgCost = Number(holding.avgCost) || 0;
+      const price = Number(prices[symbol]);
+      const value = shares && Number.isFinite(price) ? shares * price : "";
+      const pl = value !== "" && avgCost > 0 ? value - shares * avgCost : "";
+      rows.push([
+        symbol,
+        shares || "",
+        avgCost || "",
+        Number.isFinite(price) ? price : "",
+        value === "" ? "" : value.toFixed(2),
+        pl === "" ? "" : pl.toFixed(2),
+      ]);
+    }
+    const csv = rows.map((row) => row.join(",")).join("\r\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `stock-portfolio-${new Date().toISOString().slice(0, 10)}.csv`;
     link.click();
     URL.revokeObjectURL(link.href);
   }
@@ -95,14 +143,21 @@
     const status = document.createElement("span");
     status.style.cssText = "color:#7f94aa;font-size:10px";
 
+    const csvButton = document.createElement("button");
+    csvButton.type = "button";
+    csvButton.textContent = "Export CSV";
+    csvButton.title = "Download holdings as a spreadsheet-friendly CSV";
+    csvButton.style.cssText = BUTTON_STYLE;
+
     exportButton.addEventListener("click", exportBackup);
+    csvButton.addEventListener("click", () => exportCsv(status));
     importButton.addEventListener("click", () => fileInput.click());
     fileInput.addEventListener("change", () => {
       if (fileInput.files?.[0]) importBackup(fileInput.files[0], status);
       fileInput.value = "";
     });
 
-    bar.append(exportButton, importButton, fileInput, status);
+    bar.append(exportButton, importButton, csvButton, fileInput, status);
     editor.appendChild(bar);
   }
 

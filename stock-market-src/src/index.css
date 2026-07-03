@@ -1713,3 +1713,167 @@ h1 {
 .privacy .money {
   filter: blur(7px);
 }
+
+/* --- Mobile: keep the mode tabs / search / refresh reachable while scrolling --- */
+@media (width <= 920px) {
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(5, 11, 18, 0.94);
+    backdrop-filter: blur(6px);
+    margin: -10px -10px 10px;
+    padding: 10px;
+  }
+}
+
+/* --- Track-any-ticker + unpriced positions --- */
+.add-ticker {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.add-ticker input {
+  flex: 1;
+  min-width: 0;
+  color: #dbe8f6;
+  background: #0b1826;
+  border: 1px solid #4b617b55;
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.add-ticker input::placeholder {
+  text-transform: none;
+}
+.add-ticker button {
+  color: #c8f7d8;
+  background: #43e18414;
+  border: 1px solid #43e18452;
+  border-radius: 7px;
+  padding: 4px 12px;
+  font-size: 11px;
+}
+.add-ticker button:disabled {
+  opacity: 0.45;
+}
+.holding-row.ghost {
+  grid-template-columns: 44px 1fr 26px;
+  opacity: 0.75;
+}
+.holding-row.ghost span {
+  color: #7f94aa;
+  font-size: 10px;
+}
+
+/* --- Direction-colored sparklines --- */
+.watch svg.down path,
+.movers svg.down path,
+.market-strip svg.down path,
+.market-status svg.down path,
+.peer-table svg.down path,
+.market-summary svg.down path {
+  stroke: #f2708a;
+}
+
+/* --- Price alerts --- */
+.alert-bell {
+  font-size: 13px;
+}
+.alert-bell.on {
+  color: #ffb454;
+}
+.alert-editor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  border: 1px solid #ffb45433;
+  border-radius: 9px;
+  background: #ffb4540d;
+  color: #b9cade;
+  font-size: 11px;
+  padding: 8px 12px;
+  margin: 10px 0 2px;
+}
+.alert-editor label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #7f94aa;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.alert-editor input {
+  width: 84px;
+  color: #dbe8f6;
+  background: #0b1826;
+  border: 1px solid #4b617b55;
+  border-radius: 6px;
+  padding: 3px 7px;
+  font-size: 11px;
+}
+.alert-editor small {
+  color: #7f94aa;
+}
+.alert-editor button {
+  margin-left: auto;
+  color: #c8f7d8;
+  background: #43e18414;
+  border: 1px solid #43e18452;
+  border-radius: 7px;
+  padding: 3px 10px;
+  font-size: 11px;
+}
+.alert-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+.alert-banner button {
+  color: #ffd9a1;
+  background: #ffb45414;
+  border: 1px solid #ffb45455;
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+/* --- Curve stats + contribution toggle --- */
+.curve-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  color: #7f94aa;
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.curve-stats b {
+  color: #dbe8f6;
+  margin-left: 4px;
+  text-transform: none;
+}
+.contrib-toggle {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.contrib-toggle button {
+  color: #8da2ba;
+  background: 0 0;
+  border: 1px solid #4b617b33;
+  border-radius: 5px;
+  padding: 1px 7px;
+  font-size: 9px;
+  text-transform: uppercase;
+}
+.contrib-toggle button.active {
+  color: #c8f7d8;
+  background: #43e18414;
+  border-color: #43e18452;
+}
