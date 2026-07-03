@@ -81,7 +81,7 @@ export const SCATTER = {
   bushes: 700,
   logs: 90,
   stumps: 70,
-  grass: 2600,
+  grass: 3400,
   flowers: 500,
   maxFallingTrees: 12,
   treadMarks: 360,
