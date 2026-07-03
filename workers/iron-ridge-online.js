@@ -2,6 +2,12 @@ const MAX_CLIENTS = 12;
 const MAX_MESSAGE = 4096;
 const ROOM_TTL = 45000;
 
+// co-op sync events relayed verbatim (see games/2026-06-10/iron-ridge/js/multiplayer.js):
+// es=enemy state, ek=enemy kill, ef=enemy fire, wv=wave start, wc=wave clear,
+// hit=damage forward to host, down=player destroyed, pg=squad ping,
+// cv=convoy spawn, ck=convoy truck kill
+const COOP_TYPES = new Set(['es', 'ek', 'ef', 'wv', 'wc', 'hit', 'down', 'pg', 'cv', 'ck']);
+
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {
     ...init,
@@ -112,6 +118,14 @@ export class IronRidgeRoom {
           name: meta.name,
           shot: sanitizeShot(data.shot),
         });
+        return;
+      }
+
+      // co-op sync events (host-authoritative enemies): relay as-is with a
+      // trusted sender id. Payloads are size-capped above and validated
+      // client-side.
+      if (COOP_TYPES.has(data.type)) {
+        this.broadcast(id, { ...data, from: id, name: meta.name });
       }
     });
 

@@ -26,6 +26,10 @@
     { id: "plasma", label: "Plasma" },
     { id: "fireworks", label: "Fireworks" },
     { id: "galaxy", label: "Galaxy" },
+    { id: "scope", label: "Oscilloscope" },
+    { id: "matrix", label: "Matrix Rain" },
+    { id: "ripples", label: "Ripples" },
+    { id: "lava", label: "Lava Lamp" },
     { id: "fluid", label: "Fluid Lab" },
   ];
 
@@ -47,8 +51,10 @@
     "  border-radius: 999px; background: rgba(20, 26, 60, .68); color: #cfe3ff; font: 700 12px/1 ui-monospace, Menlo, Consolas, monospace;",
     "  cursor: pointer; box-shadow: none; text-transform: none; letter-spacing: 0; }",
     ".cviz-ui button:hover, .cviz-ui button:focus-visible { border-color: #8fffff; color: #8fffff; outline: none; }",
-    ".cviz-label { min-width: 104px; text-align: center; color: #e8f2ff; font: 700 12px/1.15 ui-monospace, Menlo, Consolas, monospace;",
-    "  letter-spacing: .05em; text-transform: uppercase; text-shadow: 0 0 8px rgba(120, 200, 255, .7); }",
+    ".cviz-ui button.cviz-label { min-width: 104px; text-align: center; color: #e8f2ff; font: 700 12px/1.15 ui-monospace, Menlo, Consolas, monospace;",
+    "  letter-spacing: .05em; text-transform: uppercase; text-shadow: 0 0 8px rgba(120, 200, 255, .7);",
+    "  background: none; border: 1px solid transparent; padding: 0 8px; }",
+    ".cviz-ui button.cviz-label:hover, .cviz-ui button.cviz-label:focus-visible { border-color: rgba(150, 170, 255, .42); color: #e8f2ff; }",
     ".cviz-toast { position: absolute; left: 50%; top: 13%; transform: translateX(-50%); z-index: 2; padding: 8px 18px;",
     "  border-radius: 999px; background: rgba(4, 6, 16, .55); border: 1px solid rgba(150, 170, 255, .4); color: #eaf4ff;",
     "  font: 800 clamp(13px, 2.2vw, 22px)/1 ui-monospace, Menlo, Consolas, monospace; letter-spacing: .08em; text-transform: uppercase;",
@@ -96,9 +102,9 @@
     ui.className = "cviz-ui";
     ui.innerHTML =
       '<button type="button" data-act="prev" title="Previous mode" aria-label="Previous visualizer mode">&#9664;</button>' +
-      '<span class="cviz-label"></span>' +
+      '<button type="button" class="cviz-label" data-act="pin" title="Current mode" aria-label="Stay on this mode"></button>' +
       '<button type="button" data-act="next" title="Next mode" aria-label="Next visualizer mode">&#9654;</button>' +
-      '<button type="button" data-act="shuffle" title="Auto-rotate modes randomly" aria-label="Auto-rotate visualizer modes" aria-pressed="false">AUTO</button>' +
+      '<button type="button" data-act="shuffle" title="Auto-rotate modes randomly (click the mode name to stop on one)" aria-label="Auto-rotate visualizer modes" aria-pressed="false">AUTO</button>' +
       '<button type="button" data-act="fs" title="Fullscreen (double-click also works)" aria-label="Toggle fullscreen">&#x26F6;</button>';
     var toast = document.createElement("div");
     toast.className = "cviz-toast";
@@ -822,6 +828,216 @@
       ctx.globalCompositeOperation = "source-over";
     }
 
+    // ---- mode: Oscilloscope ----
+    function scopeTrace(offsetY, scaleY, hue, width, alpha, time, steps) {
+      ctx.strokeStyle = hsla(hue, 100, 70, alpha);
+      ctx.lineWidth = width;
+      ctx.beginPath();
+      for (var i = 0; i <= steps; i += 1) {
+        var x = (i / steps) * w;
+        var sample;
+        if (time) {
+          sample = (time[Math.floor((i / steps) * (time.length - 1))] - 128) / 128;
+        } else {
+          sample = Math.sin(i * 0.11 + an.t * 0.06) * (0.16 + sampleBin(i / steps) * 0.5);
+        }
+        var y = offsetY + sample * scaleY;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    }
+
+    function drawScope() {
+      fade(0.3);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.lineJoin = "round";
+      var time = null;
+      try {
+        time = opts.getTimeData ? opts.getTimeData() : null;
+      } catch (error) { /* not ready */ }
+      if (!an.live) time = null;
+      var mid = h * 0.5;
+      var amp = h * (0.3 + an.bass * 0.1 + an.beat * 0.06);
+      var steps = 160;
+      // glow pass, main trace, then a quieter harmonic ghost
+      scopeTrace(mid, amp, an.hue, 7, 0.16, time, steps);
+      scopeTrace(mid, amp, an.hue, 2.4, 0.95, time, steps);
+      scopeTrace(mid, -amp * 0.45, an.hue + 130, 1.4, 0.5, time, steps);
+      // center graticule line
+      ctx.strokeStyle = hsla(an.hue + 180, 80, 60, 0.18);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, mid);
+      ctx.lineTo(w, mid);
+      ctx.stroke();
+      drawParticles();
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    // ---- mode: Matrix Rain ----
+    var matrixCols = null;
+    var matrixCell = 0;
+
+    function ensureMatrix() {
+      var cell = clamp(Math.floor(w / 48), 12, 22);
+      var count = Math.ceil(w / cell) + 1;
+      if (matrixCols && matrixCols.length === count && matrixCell === cell) return;
+      matrixCell = cell;
+      matrixCols = [];
+      for (var i = 0; i < count; i += 1) {
+        matrixCols.push({ y: -Math.random() * 40, extra: Math.random() });
+      }
+    }
+
+    function matrixGlyph() {
+      return Math.random() < 0.55
+        ? String.fromCharCode(0x30a0 + Math.floor(Math.random() * 96))
+        : String.fromCharCode(48 + Math.floor(Math.random() * 10));
+    }
+
+    function drawMatrix() {
+      ensureMatrix();
+      fade(0.15);
+      ctx.globalCompositeOperation = "lighter";
+      ctx.font = "700 " + matrixCell + "px ui-monospace, Menlo, Consolas, monospace";
+      ctx.textBaseline = "top";
+      var rows = Math.ceil(h / matrixCell);
+      for (var i = 0; i < matrixCols.length; i += 1) {
+        var col = matrixCols[i];
+        var v = sampleBin(i / (matrixCols.length - 1));
+        col.y += 0.12 + v * 1.1 + an.energy * 0.25 + col.extra * 0.1;
+        if (col.y > rows + 24) {
+          col.y = -Math.random() * 30;
+          col.extra = Math.random();
+        }
+        var yPix = Math.floor(col.y) * matrixCell;
+        if (yPix < -matrixCell || yPix > h) continue;
+        var x = i * matrixCell;
+        var hue = an.hue + 60 + v * 60;
+        // colored trail glyph one row up, bright head at the tip
+        ctx.fillStyle = hsla(hue, 95, 55, 0.35 + v * 0.5);
+        ctx.fillText(matrixGlyph(), x, yPix - matrixCell);
+        ctx.fillStyle = hsla(hue, 35, 90, 0.6 + v * 0.4);
+        ctx.fillText(matrixGlyph(), x, yPix);
+      }
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    // ---- mode: Ripples ----
+    var ripples = [];
+    var rippleTick = 0;
+
+    function spawnRipple(strength) {
+      if (ripples.length > 26) return;
+      ripples.push({
+        x: w * (0.1 + Math.random() * 0.8),
+        y: h * (0.12 + Math.random() * 0.76),
+        r: 2,
+        v: 1.2 + strength * 4,
+        life: 1,
+        width: 1.5 + strength * 3.5,
+        hue: an.hue + Math.random() * 100,
+      });
+    }
+
+    function drawRipples() {
+      fade(0.24);
+      ctx.globalCompositeOperation = "lighter";
+      if (an.beatFired) {
+        spawnRipple(Math.min(1, an.bass));
+        spawnRipple(Math.min(1, an.bass) * 0.7);
+      }
+      rippleTick += 1;
+      if (an.live && rippleTick % 18 === 0 && an.mid > 0.08) spawnRipple(an.mid * 0.6);
+      if (!an.live && rippleTick % 150 === 0) spawnRipple(0.12);
+      for (var i = ripples.length - 1; i >= 0; i -= 1) {
+        var p = ripples[i];
+        p.r += p.v;
+        p.life -= 0.011;
+        if (p.life <= 0) {
+          ripples.splice(i, 1);
+          continue;
+        }
+        ctx.strokeStyle = hsla(p.hue, 95, 62, p.life * 0.75);
+        ctx.lineWidth = p.width * (0.4 + p.life * 0.6);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.stroke();
+        // faint inner echo
+        ctx.strokeStyle = hsla(p.hue + 40, 95, 70, p.life * 0.3);
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 0.7, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      // bass bloom in the center ties it to the low end
+      var cx = w / 2;
+      var cy = h / 2;
+      var coreR = Math.min(w, h) * (0.05 + an.bass * 0.12 + an.beat * 0.05);
+      var core = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR);
+      core.addColorStop(0, hsla(an.hue + 30, 100, 80, 0.35 + an.beat * 0.3));
+      core.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = core;
+      ctx.beginPath();
+      ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    // ---- mode: Lava Lamp ----
+    var lavaBlobs = null;
+
+    function ensureLava() {
+      if (lavaBlobs) return;
+      lavaBlobs = [];
+      for (var i = 0; i < 7; i += 1) {
+        lavaBlobs.push({
+          x: Math.random(),
+          y: Math.random(),
+          r: 0.09 + Math.random() * 0.1,
+          speed: 0.5 + Math.random(),
+          phase: Math.random() * Math.PI * 2,
+          hueOff: Math.random() * 80,
+        });
+      }
+    }
+
+    function drawLava() {
+      ensureLava();
+      fade(0.38);
+      ctx.globalCompositeOperation = "lighter";
+      var R = Math.min(w, h);
+      for (var i = 0; i < lavaBlobs.length; i += 1) {
+        var b = lavaBlobs[i];
+        var v = sampleBin(i / (lavaBlobs.length - 1));
+        b.y -= (0.0007 + an.energy * 0.003 + v * 0.0022) * b.speed;
+        b.phase += 0.008 + an.treb * 0.02;
+        var bx = (b.x + Math.sin(b.phase) * 0.05) * w;
+        var rr = b.r * R * (1 + an.bass * 0.4 + v * 0.25);
+        if (b.y * h < -rr) {
+          b.y = 1 + (rr / h) + Math.random() * 0.2;
+          b.x = 0.1 + Math.random() * 0.8;
+        }
+        var by = b.y * h;
+        var g = ctx.createRadialGradient(bx, by, 0, bx, by, rr);
+        g.addColorStop(0, hsla(an.hue + b.hueOff, 95, 62, 0.5 + v * 0.3));
+        g.addColorStop(0.65, hsla(an.hue + b.hueOff + 25, 95, 50, 0.22));
+        g.addColorStop(1, "rgba(0,0,0,0)");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(bx, by, rr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // heat glow rising from the base
+      var heat = ctx.createLinearGradient(0, h, 0, h * 0.72);
+      heat.addColorStop(0, hsla(an.hue + 20, 100, 55, 0.16 + an.bass * 0.22));
+      heat.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = heat;
+      ctx.fillRect(0, h * 0.72, w, h * 0.28);
+      ctx.globalCompositeOperation = "source-over";
+    }
+
     var DRAWERS = {
       neon: drawNeon,
       radial: drawRadial,
@@ -832,6 +1048,10 @@
       plasma: drawPlasma,
       fireworks: drawFireworks,
       galaxy: drawGalaxy,
+      scope: drawScope,
+      matrix: drawMatrix,
+      ripples: drawRipples,
+      lava: drawLava,
     };
 
     function step() {
@@ -919,26 +1139,45 @@
       if (!silent) showToast(MODES[modeIndex].label);
     }
 
-    function cycleMode(delta) {
-      setMode(modeIndex + (delta || 1));
-      resetShuffleCountdown();
-      showUi();
-    }
-
     function syncShuffleButton() {
       var button = ui.querySelector('button[data-act="shuffle"]');
       button.classList.toggle("on", shuffleOn);
       button.setAttribute("aria-pressed", shuffleOn ? "true" : "false");
+      label.title = shuffleOn ? "Auto-rotating - click to stay on this mode" : "Current mode";
     }
 
-    function toggleShuffle() {
-      shuffleOn = !shuffleOn;
+    function setShuffle(on, silent) {
+      shuffleOn = on;
       resetShuffleCountdown();
       syncShuffleButton();
       try {
         window.localStorage.setItem(storageKey + "-shuffle", shuffleOn ? "1" : "0");
       } catch (error) { /* ignore */ }
-      showToast(shuffleOn ? "Auto-rotate on" : "Auto-rotate off");
+      if (!silent) showToast(shuffleOn ? "Auto-rotate on" : "Auto-rotate off");
+    }
+
+    function toggleShuffle() {
+      setShuffle(!shuffleOn);
+    }
+
+    // picking a mode by hand while auto-rotating means "stay on this one"
+    function cycleMode(delta) {
+      var wasShuffle = shuffleOn;
+      if (wasShuffle) setShuffle(false, true);
+      setMode(modeIndex + (delta || 1), wasShuffle);
+      if (wasShuffle) showToast("Staying on " + MODES[modeIndex].label);
+      resetShuffleCountdown();
+      showUi();
+    }
+
+    function pinMode() {
+      if (shuffleOn) {
+        setShuffle(false, true);
+        showToast("Staying on " + MODES[modeIndex].label);
+      } else {
+        showToast(MODES[modeIndex].label);
+      }
+      showUi();
     }
 
     var fakeFullscreen = false;
@@ -988,6 +1227,7 @@
       var act = button.dataset.act;
       if (act === "prev") cycleMode(-1);
       else if (act === "next") cycleMode(1);
+      else if (act === "pin") pinMode();
       else if (act === "shuffle") toggleShuffle();
       else if (act === "fs") toggleFullscreen();
     });
@@ -1000,6 +1240,7 @@
       if (!isFullscreen()) return;
       if (event.key === "ArrowLeft") cycleMode(-1);
       else if (event.key === "ArrowRight") cycleMode(1);
+      else if (event.key === "Enter" && shuffleOn) pinMode();
       else if (event.key === "f" || event.key === "F") toggleFullscreen();
       else if (event.key === "Escape" && fakeFullscreen) setFakeFullscreen(false);
     });
