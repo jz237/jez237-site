@@ -7,7 +7,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 const dataDir = path.join(repoRoot, "stock-market", "data");
 const stocksPath = path.join(dataDir, "stocks.json");
-const historyPath = path.join(dataDir, "history.json");
+const historyDir = path.join(dataDir, "history");
+
+// Must match historyFileName() in stock-market-src/src/lib/data.js.
+function historyFileName(symbol) {
+  return `${symbol.replace(/[^A-Za-z0-9.-]/g, "_")}.json`;
+}
 
 const yahooSymbols = {
   "S&P": "^GSPC",
@@ -147,10 +152,61 @@ function mergeDailyRows(existing, recent) {
   return rows.slice(-270);
 }
 
+async function readSymbolHistory(yahoo) {
+  try {
+    return await readJson(path.join(historyDir, historyFileName(yahoo)));
+  } catch {
+    return {};
+  }
+}
+
+const USER_AGENT = "Mozilla/5.0 jez237 stock command center refresh";
+
+// Best-effort next-earnings dates. Yahoo's quoteSummary API needs a
+// cookie+crumb pair; if any part of the dance fails we return null and the
+// previously stamped dates stay as they are.
+async function fetchEarningsDates(symbols) {
+  try {
+    const cookieRes = await fetch("https://fc.yahoo.com/", {
+      headers: { "user-agent": USER_AGENT },
+      redirect: "manual"
+    });
+    const cookie = (cookieRes.headers.get("set-cookie") || "").split(";")[0];
+    if (!cookie) return null;
+    const crumbRes = await fetch("https://query1.finance.yahoo.com/v1/test/getcrumb", {
+      headers: { accept: "text/plain", cookie, "user-agent": USER_AGENT }
+    });
+    if (!crumbRes.ok) return null;
+    const crumb = (await crumbRes.text()).trim();
+    if (!crumb || crumb.includes("<")) return null;
+
+    const dates = {};
+    for (const symbol of symbols) {
+      try {
+        const url = new URL(`https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(symbol)}`);
+        url.searchParams.set("modules", "calendarEvents");
+        url.searchParams.set("crumb", crumb);
+        const res = await fetch(url, {
+          headers: { accept: "application/json", cookie, "user-agent": USER_AGENT }
+        });
+        if (!res.ok) continue;
+        const json = await res.json();
+        const raw = json?.quoteSummary?.result?.[0]?.calendarEvents?.earnings?.earningsDate?.[0]?.raw;
+        if (Number.isFinite(raw)) dates[symbol] = new Date(raw * 1000).toISOString().slice(0, 10);
+        await sleep(120);
+      } catch {
+        // per-symbol best effort
+      }
+    }
+    return Object.keys(dates).length ? dates : null;
+  } catch {
+    return null;
+  }
+}
+
 async function main() {
   const stocksData = await readJson(stocksPath);
-  const historyData = await readJson(historyPath);
-  historyData.symbols ||= {};
+  await fs.mkdir(historyDir, { recursive: true });
 
   const now = new Date().toISOString();
   const failures = [];
@@ -160,7 +216,7 @@ async function main() {
     const yahoo = yahooSymbol(stock.symbol);
     try {
       const quoteResult = await fetchChart(yahoo, "5d", "1d");
-      const symbolHistory = historyData.symbols[yahoo] || {};
+      const symbolHistory = await readSymbolHistory(yahoo);
       let dailyRows;
       if (intradayOnly && Array.isArray(symbolHistory.d1y) && symbolHistory.d1y.length) {
         dailyRows = mergeDailyRows(symbolHistory.d1y, rowsFromChart(quoteResult, false));
@@ -184,7 +240,11 @@ async function main() {
           failures.push(`${stock.symbol}/${key}: ${error.message}`);
         }
       }
-      historyData.symbols[yahoo] = symbolHistory;
+      symbolHistory.symbol = yahoo;
+      symbolHistory.updatedAt = now;
+      symbolHistory.source = "yahoo-finance-chart";
+      symbolHistory.format = "[time, open, high, low, close, volume]; i*=unix seconds, others=YYYY-MM-DD";
+      await writeJson(path.join(historyDir, historyFileName(yahoo)), symbolHistory, { compact: true });
       updated++;
       await sleep(140);
     } catch (error) {
@@ -196,14 +256,24 @@ async function main() {
     throw new Error(`No stock records updated.\n${failures.join("\n")}`);
   }
 
+  if (!intradayOnly) {
+    const equities = (stocksData.stocks || []).filter(stock => (stock.kind || "equity") === "equity");
+    const earnings = await fetchEarningsDates(equities.map(stock => yahooSymbol(stock.symbol)));
+    if (earnings) {
+      for (const stock of equities) {
+        const date = earnings[yahooSymbol(stock.symbol)];
+        if (date) stock.earningsDate = date;
+      }
+      console.log(`Stamped next-earnings dates for ${Object.keys(earnings).length} symbols.`);
+    } else {
+      console.warn("Earnings-date enrichment skipped (crumb/quoteSummary unavailable).");
+    }
+  }
+
   stocksData.updatedAt = now;
   stocksData.source = "yahoo-finance-chart";
-  historyData.updatedAt = now;
-  historyData.source = "yahoo-finance-chart";
-  historyData.format = "[time, open, high, low, close, volume]; i*=unix seconds, others=YYYY-MM-DD";
 
   await writeJson(stocksPath, stocksData);
-  await writeJson(historyPath, historyData, { compact: true });
 
   console.log(`Updated ${updated} stock-market symbols at ${now} (${intradayOnly ? "intraday" : "full"} refresh).`);
   if (failures.length) {
