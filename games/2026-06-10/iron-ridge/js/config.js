@@ -108,6 +108,13 @@ export const ENEMY_TYPES = {
     maxSpeed: 8.5, engineForce: 6200, maxYawRate: 0.8,
     preferredRange: 75, minRange: 45,
   },
+  // the Iron Colossus: every-5th-wave breakthrough monster
+  boss: {
+    scheme: 'boss', scale: 1.5, hp: 520, points: 2500,
+    shellDamage: 30, reload: 5.2, aimNoise: 0.04,
+    maxSpeed: 7.5, engineForce: 7200, maxYawRate: 0.68,
+    preferredRange: 78, minRange: 46,
+  },
 };
 
 export const PILLBOX = {

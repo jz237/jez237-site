@@ -383,7 +383,14 @@ function handleRemoteEnemyKill(id, pos, credit) {
     const name = multiplayer.peers.get(credit)?.name || 'ALLY';
     hud.floater(`${name} DESTROYED A TANK`, 'good');
   }
-  if (G.state === 'playing' && Math.random() < PICKUP.dropChance) {
+  if (G.state !== 'menu' && multiplayer.remoteEnemies.get(id)?.typeName === 'boss') {
+    hud.banner('COLOSSUS DOWN', 'the breakthrough is broken', 2.4);
+    effects.explosion(pos, 2.6);
+    if (G.state === 'playing') {
+      props.spawnCrate(pos.x + 4, pos.z + 2);
+      props.spawnCrate(pos.x - 3, pos.z - 3);
+    }
+  } else if (G.state === 'playing' && Math.random() < PICKUP.dropChance) {
     props.spawnCrate(pos.x + (Math.random() - 0.5) * 4, pos.z + (Math.random() - 0.5) * 4);
   }
 }
@@ -401,10 +408,14 @@ function handleRemoteWave(w, hostiles) {
   if (!isCoopClient() || G.state === 'menu' || G.state === 'gameover') return;
   G.wave = w;
   spawnClientWaveProps(w);
-  const sub = hostiles
-    ? `${hostiles} hostile${hostiles > 1 ? 's' : ''} on the shared front — destroy them to advance`
-    : 'squad up — check the minimap';
-  hud.banner(`WAVE ${w}`, sub);
+  if (waves.waveSpec(w).tanks.includes('boss')) {
+    hud.banner(`WAVE ${w} — IRON COLOSSUS`, 'a breakthrough monster leads this assault', 3.2);
+  } else {
+    const sub = hostiles
+      ? `${hostiles} hostile${hostiles > 1 ? 's' : ''} on the shared front — destroy them to advance`
+      : 'squad up — check the minimap';
+    hud.banner(`WAVE ${w}`, sub);
+  }
   audio.waveAlert();
   if (w > 1 && G.player?.alive) {
     G.player.hp = Math.min(G.player.maxHp, G.player.hp + SCORING.waveClearHeal);
@@ -574,13 +585,13 @@ function updateAimPoint() {
   for (const e of waves.enemies) {
     if (!e.tank.alive) continue;
     const p = e.tank.visual.root.position;
-    const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6);
+    const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6 * (e.tank.scale ?? 1));
     if (d < best) best = d;
   }
   for (const re of multiplayer.remoteEnemies.values()) {
     if (!re.alive || !re.hasState) continue;
     const p = re.visual.root.position;
-    const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6);
+    const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6 * (re.scale ?? 1));
     if (d < best) best = d;
   }
   for (const it of props.items) {
@@ -673,8 +684,13 @@ function killEnemy(e, creditPeerId = null) {
     const name = multiplayer.peers.get(creditPeerId)?.name || 'ALLY';
     hud.floater(`${name} DESTROYED A TANK`, 'good');
   }
-  // supply drop
-  if (Math.random() < PICKUP.dropChance) {
+  // supply drop — the Colossus always leaves a double cache
+  if (e.typeName === 'boss') {
+    hud.banner('COLOSSUS DOWN', 'the breakthrough is broken', 2.4);
+    effects.explosion(pos, 2.6);
+    props.spawnCrate(pos.x + 4, pos.z + 2);
+    props.spawnCrate(pos.x - 3, pos.z - 3);
+  } else if (Math.random() < PICKUP.dropChance) {
     props.spawnCrate(pos.x + (Math.random() - 0.5) * 4, pos.z + (Math.random() - 0.5) * 4);
   }
   if (inCoop() && multiplayer.isHost()) {
@@ -693,11 +709,18 @@ function damageEnemy(e, dmg, hitPoint = null, creditPeerId = null) {
   }
 }
 
-function damagePlayer(dmg) {
+function damagePlayer(dmg, fromPos = null) {
   const p = G.player;
   if (!p || !p.alive || G.state !== 'playing') return;
   const killed = p.damage(dmg);
   hud.damageFlash();
+  if (fromPos) {
+    // screen-relative bearing of the threat: 0 = dead ahead of the camera.
+    // screen-left is world-left of the view axis, so negate for CSS rotate.
+    const pp = p.body.position;
+    const bearing = Math.atan2(fromPos.x - pp.x, fromPos.z - pp.z);
+    hud.damageDirection(-(bearing - G.camYaw));
+  }
   audio.damaged();
   effects.shake(0.45);
   hud.setHp(p.hp, p.maxHp);
@@ -712,7 +735,7 @@ function applySplashDamage(pos, radius, byPlayer, baseDmg) {
   }
   if (G.player?.alive) {
     const d = G.player.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
-    if (d < radius) damagePlayer(Math.round(baseDmg * 0.6 * (1 - d / radius)));
+    if (d < radius) damagePlayer(Math.round(baseDmg * 0.6 * (1 - d / radius)), pos);
   }
 }
 
@@ -757,7 +780,9 @@ function onShellHit(hit) {
   if (ud?.kind === 'tank') {
     const tk = ud.tank;
     if (tk.isPlayer && !s.fromPlayer) {
-      damagePlayer(shellDmg + Math.floor(G.wave * 0.8));
+      // trace back along the shell's flight for the threat direction
+      damagePlayer(shellDmg + Math.floor(G.wave * 0.8),
+        s.vel ? { x: pos.x - s.vel.x, z: pos.z - s.vel.z } : pos);
     } else if (!tk.isPlayer && byPlayer) {
       const e = waves.enemies.find(e => e.tank === tk);
       if (e) { damageEnemy(e, SHELL.damageDirect, pos); G.shotsHit++; }
@@ -816,7 +841,7 @@ function onShellHit(hit) {
     const d = G.player.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
     if (d < SHELL.splashRadius && hit.body !== G.player.body) {
       const dmg = byPlayer ? 6 : (shellDmg * 0.55);
-      if (d > 0.01) damagePlayer(Math.round(dmg * (1 - d / SHELL.splashRadius)));
+      if (d > 0.01) damagePlayer(Math.round(dmg * (1 - d / SHELL.splashRadius)), pos);
     }
   }
 
@@ -862,11 +887,14 @@ function compassDir(dx, dz) {
   return ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][oct];
 }
 
-function announceContacts(spawned, label = 'ARMOR INBOUND') {
+function announceContacts(spawned, label = 'ARMOR INBOUND', withBanner = true) {
   if (!spawned.length || !G.player) return;
   const pp = G.player.body.position;
   const e0 = spawned[0].tank.body.position;
-  hud.banner(label, `contact ${compassDir(e0.x - pp.x, e0.z - pp.z)} — check the minimap`, 2.2);
+  // boss waves keep their own banner; contacts still ping the minimap
+  if (withBanner) {
+    hud.banner(label, `contact ${compassDir(e0.x - pp.x, e0.z - pp.z)} — check the minimap`, 2.2);
+  }
   for (const e of spawned) minimap.ping(e.tank.body.position.x, e.tank.body.position.z);
   audio.click();
 }
@@ -887,9 +915,14 @@ function startWave(w) {
   const armor = spec.tanks.length + spec.pillboxes;
   if (armor) parts.push(`${armor} hostile${armor > 1 ? 's' : ''} — destroy them to advance`);
   if (spec.targets) parts.push('targets = bonus');
-  hud.banner(`WAVE ${w}`, parts.join(' • '));
+  const bossWave = spec.tanks.includes('boss');
+  if (bossWave) {
+    hud.banner(`WAVE ${w} — IRON COLOSSUS`, 'a breakthrough monster leads this assault', 3.2);
+  } else {
+    hud.banner(`WAVE ${w}`, parts.join(' • '));
+  }
   audio.waveAlert();
-  announceContacts(waves.enemies.slice(before));
+  announceContacts(waves.enemies.slice(before), 'ARMOR INBOUND', !bossWave);
   if (inCoop() && multiplayer.isHost()) multiplayer.sendWave(w, armor);
   if (w > 1 && G.player.alive) {
     G.player.hp = Math.min(G.player.maxHp, G.player.hp + SCORING.waveClearHeal);
