@@ -20,6 +20,7 @@ const SCHEMES = {
   desert: { hull: '#b3a279', camo: '#94815c', camo2: '#c9b990', dark: 0x77694c, barrel: 0x91825f, mark: '◆' },
   scout: { hull: '#8c9680', camo: '#6d7762', camo2: '#a3ab95', dark: 0x59624f, barrel: 0x6e7760, mark: '▲' },
   heavy: { hull: '#80714f', camo: '#62553e', camo2: '#988a68', dark: 0x4e4536, barrel: 0x615641, mark: '☠' },
+  boss: { hull: '#565b63', camo: '#3c4149', camo2: '#727a85', dark: 0x2c3037, barrel: 0x454b55, mark: '⬢' },
 };
 
 // two-tone camo splotches + grime, shared per scheme

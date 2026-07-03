@@ -61,6 +61,24 @@ export class Hud {
     }
     this.allies = $('mp-allies');
     this.lastAllyHtml = '';
+    this.dmgDirPool = [];
+    for (let i = 0; i < 4; i++) {
+      const d = document.createElement('div');
+      d.className = 'dmg-dir';
+      this.el.arrows.appendChild(d);
+      this.dmgDirPool.push(d);
+    }
+    this.dmgDirNext = 0;
+  }
+
+  // red arc at screen edge pointing toward incoming fire.
+  // relAngle: 0 = ahead of the camera, positive = clockwise on screen.
+  damageDirection(relAngle) {
+    const d = this.dmgDirPool[this.dmgDirNext++ % this.dmgDirPool.length];
+    d.style.transform = `translate(-50%,-50%) rotate(${relAngle}rad)`;
+    d.style.animation = 'none';
+    void d.offsetWidth;
+    d.style.animation = 'dmgDirFade 1.1s ease-out forwards';
   }
 
   showScreen(name) {
