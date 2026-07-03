@@ -2,7 +2,7 @@ name: Refresh AI News Feed
 
 on:
   schedule:
-    - cron: "12 * * * *" # hourly
+    - cron: "12 */3 * * *" # every 3 hours
   workflow_dispatch:
 
 permissions:
@@ -14,6 +14,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Blobless + sparse: skips the multi-GB media directories; this job
+          # only touches ai-news/.
+          filter: blob:none
+          sparse-checkout: |
+            ai-news
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,10 +31,16 @@ jobs:
           cd ai-news
           python fetch_ai_news.py
 
-      - name: Commit changes (if any)
+      - name: Commit and push changes (if any)
+        id: commit_changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add ai-news/data/items.json ai-news/data/image_cache.json ai-news/public/*.json ai-news/public/index.html
-          git diff --staged --quiet || git commit -m "chore: refresh ai news feed"
-          git push
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: refresh ai news feed"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
