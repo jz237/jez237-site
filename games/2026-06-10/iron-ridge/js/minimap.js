@@ -147,22 +147,28 @@ export class Minimap {
       }
     }
 
-    // enemy tanks
+    // enemy tanks (the Colossus gets a bigger double-ringed blip)
     for (const e of enemies) {
       if (!e.tank.alive) continue;
+      const big = (e.tank.scale ?? 1) > 1.3;
       const ep = e.tank.body.position;
       const d = Math.hypot(ep.x - pp.x, ep.z - pp.z);
       if (d > RANGE * 0.94) {
-        this.edgeMarker(ep.x, ep.z, pp.x, pp.z, '#ff3b30');
+        this.edgeMarker(ep.x, ep.z, pp.x, pp.z, big ? '#ff7a30' : '#ff3b30');
         continue;
       }
       const [x, y] = this.toMap(ep.x, ep.z, pp.x, pp.z);
-      this.blip(x, y, '#ff3b30', 4);
-      c.strokeStyle = 'rgba(255,59,48,0.6)';
-      c.lineWidth = 1;
+      this.blip(x, y, big ? '#ff7a30' : '#ff3b30', big ? 5.5 : 4);
+      c.strokeStyle = big ? 'rgba(255,122,48,0.7)' : 'rgba(255,59,48,0.6)';
+      c.lineWidth = big ? 1.5 : 1;
       c.beginPath();
-      c.arc(x, y, 6, 0, Math.PI * 2);
+      c.arc(x, y, big ? 8 : 6, 0, Math.PI * 2);
       c.stroke();
+      if (big) {
+        c.beginPath();
+        c.arc(x, y, 10.5, 0, Math.PI * 2);
+        c.stroke();
+      }
     }
 
     // room allies (blue; hollow when downed)

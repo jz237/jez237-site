@@ -200,12 +200,15 @@ export class WaveManager {
   waveSpec(w) {
     // armor on EVERY wave — targets are bonus objectives, never the gate
     const tanks = [];
-    const n = Math.min(6, w === 1 ? 1 : 1 + Math.floor(w / 2)); // 1,2,2,3,3,4…
+    const bossWave = w >= 5 && w % 5 === 0;
+    // boss waves trade one escort slot for the Colossus
+    const n = Math.max(1, Math.min(6, w === 1 ? 1 : 1 + Math.floor(w / 2)) - (bossWave ? 1 : 0));
     for (let i = 0; i < n; i++) {
       if (w >= 6 && i % 3 === 2) tanks.push('heavy');
       else if (i % 2 === 1 || w <= 2) tanks.push('scout');
       else tanks.push('standard');
     }
+    if (bossWave) tanks.push('boss');
     return {
       targets: Math.max(2, 5 - (w >> 1)),
       barrels: Math.min(9, 3 + w),

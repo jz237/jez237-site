@@ -129,6 +129,7 @@ const ENEMY_TYPE_CHARS = {
   s: { name: 'scout', scheme: 'scout' },
   t: { name: 'standard', scheme: 'desert' },
   h: { name: 'heavy', scheme: 'heavy' },
+  b: { name: 'boss', scheme: 'boss' },
 };
 
 class RemoteEnemy {
@@ -393,7 +394,7 @@ export class Multiplayer {
     const out = [];
     for (const re of this.remoteEnemies.values()) {
       if (!re.alive || !re.hasState) continue;
-      out.push({ tank: { alive: true, body: re.body, visual: re.visual } });
+      out.push({ tank: { alive: true, body: re.body, visual: re.visual, scale: re.scale } });
     }
     return out;
   }

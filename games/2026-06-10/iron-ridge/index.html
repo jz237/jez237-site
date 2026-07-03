@@ -123,6 +123,22 @@
   }
   .enemy-arrow.ally { color: #52a8ff; font-size: 17px; opacity: 0.9; }
 
+  /* incoming-fire direction arc: a quarter-circle border rotated toward
+     the threat, fading out */
+  .dmg-dir {
+    position: absolute; left: 50%; top: 50%;
+    width: min(34vmin, 300px); height: min(34vmin, 300px);
+    border: 5px solid transparent;
+    border-top-color: rgba(255, 64, 48, 0.85);
+    border-radius: 50%;
+    opacity: 0; pointer-events: none; will-change: transform, opacity;
+  }
+  @keyframes dmgDirFade {
+    0% { opacity: 1; }
+    70% { opacity: 0.8; }
+    100% { opacity: 0; }
+  }
+
   #floaters { position: absolute; left: 0; right: 0; top: 38%; text-align: center; }
   .floater {
     position: absolute; transform: translateX(-50%);
