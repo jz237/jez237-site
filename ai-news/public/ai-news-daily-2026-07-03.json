@@ -1,6 +1,6 @@
 {
   "date": "2026-07-03",
-  "updatedAt": "2026-07-03T11:00:01.323740+00:00",
+  "updatedAt": "2026-07-03T12:00:02.006357+00:00",
   "items": [
     {
       "title": "Alibaba to ban Claude Code over alleged backdoor risk, source says",
@@ -19,7 +19,7 @@
       "lastSeen": "2026-07-03T09:33:33.043490+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0482,
+      "score": 10.0208,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -33,6 +33,38 @@
       "toolCandidate": false,
       "clusterKey": "claude-alibaba-ban-claude-code-alleged",
       "imageOriginal": "https://media.thenextweb.com/2026/07/alibaba-600-million-doj-settlement-illegal-pharmaceuticals.avif"
+    },
+    {
+      "title": "Researchers say an AI agent just ran a ransomware attack from start to finish, with no human at the keyboard",
+      "url": "https://thenextweb.com/news/ai-agent-first-end-to-end-ransomware-attack",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Ransomware has always needed a skilled human somewhere in the loop. Security firm Sysdig says that just changed. It has documented what it calls the first ransomware attack run from start to finish by an AI agent, with no human at the keyboard. The researchers named the attacker JADEPUFFER, and say a large language model [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-8b9d80801df654671e.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T10:50:30+00:00",
+      "firstSeen": "2026-07-03T12:00:02.006357+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.2152,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Researchers say an AI agent just ran a ransomware attack from start to finish, with no human at the keyboard",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "researchers-say-agent-just-ran-ransomware",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/code-terminal.avif"
     },
     {
       "title": "Anthropic and the Trump administration deny discussing a government stake",
@@ -51,7 +83,7 @@
       "lastSeen": "2026-07-03T11:00:01.323740+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 7.0616,
+      "score": 7.0339,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -83,7 +115,7 @@
       "lastSeen": "2026-07-03T09:33:33.043490+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.7556,
+      "score": 4.728,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -110,9 +142,9 @@
       "summary": "Two threads today: the industry's frantic hunt for cheaper inference — from OpenAI's secret 50% trick to Base44's own model — and the return of Fable 5 after 19 days offline. NLW closes with a practical guide to what you should actually try Fable on first.",
       "image": "public/thumbnails/news-713b8dd999573d7a6b.png",
       "featuredLatest": false,
-      "published": "2026-07-03T11:00:09.296888+00:00",
+      "published": "2026-07-03T12:00:15.639003+00:00",
       "firstSeen": "2026-07-01T14:26:06.831755+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 4.632,
@@ -128,6 +160,37 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "fable-back-here-what-you-should"
+    },
+    {
+      "title": "Argentina’s AI-run companies plan still can’t do without humans",
+      "url": "https://thenextweb.com/news/argentina-ai-non-human-corporation-still-needs-humans",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Argentina’s government wants to let a company trade with no person in charge of it, and it has sent Congress a bill to make that legal. The proposal creates a new category called the non-human corporation, an entity run by AI agents or robots that can sign contracts and hold assets on its own, with [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Argentina.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T11:29:26+00:00",
+      "firstSeen": "2026-07-03T12:00:02.006357+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.8345,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Argentina’s AI-run companies plan still can’t do without humans",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "argentina-ai-run-companies-plan-still-can"
     },
     {
       "title": "EU lawmaker who investigated spyware abuse was hacked with Pegasus",
@@ -146,7 +209,7 @@
       "lastSeen": "2026-07-03T11:00:01.323740+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.4816,
+      "score": 3.4534,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -174,10 +237,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T10:00:00+00:00",
       "firstSeen": "2026-07-03T11:00:01.323740+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.3179,
+      "score": 3.2885,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -205,10 +268,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T09:56:38+00:00",
       "firstSeen": "2026-07-03T11:00:01.323740+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2182,
+      "score": 3.1889,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -239,7 +302,7 @@
       "lastSeen": "2026-07-03T11:00:01.323740+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2102,
+      "score": 3.1812,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -270,7 +333,7 @@
       "lastSeen": "2026-07-03T11:00:01.323740+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1716,
+      "score": 3.1436,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -283,6 +346,68 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "blackstone-qts-terminates-digital-gateway-data"
+    },
+    {
+      "title": "A behind-the-scenes look at Midjourney’s medical scanner leaves many questions unanswered",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/961265/midjourney-medical-ultrasound-scanner-behind-the-scenes-video",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Midjourney has shown more of its futuristic medical scanner. It still hasn't shown much proof it works. The AI startup, best known for generating images, released a behind-the-scenes video of its dunk-tank ultrasound scanner, which it plans to deploy in spas and hopes will transform medicine with cheap, detailed, radiation-free imaging. The nearly 20-minute tour [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/ultrasound_phantom_segmentation-b254a71d083eb5c9.png?quality=90&strip=all&crop=28.441715022566%2C0%2C70.316569954868%2C100",
+      "featuredLatest": false,
+      "published": "2026-07-03T11:49:10+00:00",
+      "firstSeen": "2026-07-03T12:00:02.006357+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0545,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "A behind-the-scenes look at Midjourney’s medical scanner leaves many questions unanswered",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "behind-the-scenes-look-midjourney-medical-scanner-leaves"
+    },
+    {
+      "title": "Amazon says it finally has enough satellites to switch on its Starlink rival",
+      "url": "https://thenextweb.com/news/amazon-leo-enough-satellites-start-starlink-rival",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Amazon has finally reached the starting line in the satellite-internet race. It says it now has enough spacecraft in orbit to switch on its Leo broadband network later this year. The target is clear: Elon Musk’s Starlink. An overnight launch on 2 July tipped the balance. A United Launch Alliance Atlas V rocket carried 29 [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Amazon-Leo.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T11:02:45+00:00",
+      "firstSeen": "2026-07-03T12:00:02.006357+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8212,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Amazon says it finally has enough satellites to switch on its Starlink rival",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "amazon-finally-has-enough-satellites-switch"
     },
     {
       "title": "Scientists built a cell from scratch that eats, divides and evolves. They just won’t call it alive",
@@ -301,7 +426,7 @@
       "lastSeen": "2026-07-03T11:00:01.323740+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4129,
+      "score": 2.3851,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -314,6 +439,99 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "scientists-built-cell-scratch-eats-divides"
+    },
+    {
+      "title": "GoDaddy warns India’s fake-site crackdown could damage the internet",
+      "url": "https://thenextweb.com/news/godaddy-india-fake-site-crackdown-domain-privacy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The world’s biggest seller of website addresses says a court order in India could make the internet less safe. GoDaddy is fighting new rules meant to stop fake sites impersonating famous brands. It warns the cure could expose millions of legitimate site owners, and not only in India. The order came from the Delhi High [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/GoDaddy-Logo.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T11:14:45+00:00",
+      "firstSeen": "2026-07-03T12:00:02.006357+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1272,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "GoDaddy warns India’s fake-site crackdown could damage the internet",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "godaddy-warns-india-fake-site-crackdown-could"
+    },
+    {
+      "title": "Spotify pushes back on Kalshi and Polymarket after a song’s chart run looked rigged",
+      "url": "https://thenextweb.com/news/spotify-prediction-markets-chart-manipulation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Spotify has removed roughly 500,000 streams from Malcolm Todd’s song “Earrings” after the track’s sudden rise to the top of its US daily chart lined up suspiciously well with a bet on the prediction market Kalshi. The company has also asked Kalshi and Polymarket to remove its logo from their sites and make clear that neither platform [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/spotify-removed-57000-fake-podcast-episodes-drug-spam.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T10:57:24+00:00",
+      "firstSeen": "2026-07-03T12:00:02.006357+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1186,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Spotify pushes back on Kalshi and Polymarket after a song’s chart run looked rigged",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "spotify-pushes-back-kalshi-polymarket-song"
+    },
+    {
+      "title": "ElevenLabs in talks for tender offer at $22bn valuation, doubling February mark",
+      "url": "https://thenextweb.com/news/elevenlabs-tender-offer-22-billion-valuation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The voice AI startup is reportedly weighing a staff share sale that would value it at nearly double its February funding round, according to people familiar with the discussions. ElevenLabs is in early talks with investors about an employee tender offer that would value the voice AI startup at roughly $22 billion, according to Bloomberg, which [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/elevenlabs-vp-sales-warns-candidates-long-hours-high-expectations-.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T10:49:42+00:00",
+      "firstSeen": "2026-07-03T12:00:02.006357+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1148,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "ElevenLabs in talks for tender offer at $22bn valuation, doubling February mark",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "elevenlabs-talks-tender-offer-22bn-valuation"
     },
     {
       "title": "AIEWF Daily Dispatch: The great loops debate and the state of AI engineering",
@@ -329,10 +547,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T05:11:43+00:00",
       "firstSeen": "2026-07-03T06:00:01.731366+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1402,
+      "score": 2.1145,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -345,161 +563,6 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "aiewf-daily-dispatch-great-loops-debate"
-    },
-    {
-      "title": "Crusoe reportedly in talks to raise $3 billion, tripling its valuation",
-      "url": "https://thenextweb.com/news/crusoe-reportedly-in-talks-to-raise-3-billion-tripling-its-valuation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Crusoe is reportedly in talks to raise about $3 billion in a new funding round that could triple its valuation to roughly $30 billion, according to Bloomberg News, which cited people familiar with the matter.  Crusoe did not respond to a request for comment, and no terms, structure or lead investors have been disclosed publicly. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Crusoe-CEO.avif",
-      "featuredLatest": false,
-      "published": "2026-07-03T10:31:06+00:00",
-      "firstSeen": "2026-07-03T11:00:01.323740+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1354,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "Crusoe reportedly in talks to raise $3 billion, tripling its valuation",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "crusoe-reportedly-talks-raise-billion-tripling"
-    },
-    {
-      "title": "A rocket motor blew up at Anduril’s Mississippi test site. The defence darling says it’s routine",
-      "url": "https://thenextweb.com/news/anduril-rocket-motor-explosion-mississippi",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Anduril has become the poster child for a faster, software-speed kind of defence contractor. Last Friday, one of its rocket motors blew up on a test stand in Mississippi. The blast is a small setback that carries an outsized message about how hard building missiles really is. A solid rocket motor exploded during a test [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Anduril-rocket-motor-exploded.avif",
-      "featuredLatest": false,
-      "published": "2026-07-03T10:19:11+00:00",
-      "firstSeen": "2026-07-03T11:00:01.323740+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1294,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "A rocket motor blew up at Anduril’s Mississippi test site. The defence darling says it’s routine",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "rocket-motor-blew-anduril-mississippi-test"
-    },
-    {
-      "title": "Dutch military backs Intelic’s drone software with tens of millions of euros",
-      "url": "https://thenextweb.com/news/dutch-military-intelic-drone-software",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The three-year deal aims to let drones from different manufacturers operate under one command system, a lesson the Netherlands says it has drawn from Ukraine. The Netherlands’ Ministry of Defence is putting tens of millions of euros into Intelic, a Dutch startup whose software lets drones from competing manufacturers operate under a single command system. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/The-Dutch-Ministry-of-Defence.avif",
-      "featuredLatest": false,
-      "published": "2026-07-03T10:06:22+00:00",
-      "firstSeen": "2026-07-03T11:00:01.323740+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.123,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "Dutch military backs Intelic’s drone software with tens of millions of euros",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "dutch-military-backs-intelic-drone-software"
-    },
-    {
-      "title": "HCLTech wins $1.14bn deal with a European firm, its biggest since 2023",
-      "url": "https://thenextweb.com/news/hcltech-wins-1-14-billion-deal-european-firm",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "HCLTech has signed a $1.14 billion contract with a major European company, the Indian IT services group said Thursday, in what is its largest single deal since a $2.1 billion agreement with Verizon in August 2023. The client is described only as a Fortune Global 50 firm, and neither side has named it publicly. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/HCLTech.avif",
-      "featuredLatest": false,
-      "published": "2026-07-03T09:22:37+00:00",
-      "firstSeen": "2026-07-03T10:00:01.467095+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1015,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "HCLTech wins $1.14bn deal with a European firm, its biggest since 2023",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "hcltech-wins-14bn-deal-european-firm"
-    },
-    {
-      "title": "Quantum Systems raises $1.2bn and doubles its valuation to $8bn as defence money floods in",
-      "url": "https://thenextweb.com/news/quantum-systems-1-2bn-series-d-8bn-valuation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Europe has a new defence-tech heavyweight. Quantum Systems, a German maker of autonomous drones, has raised $1.2bn and more than doubled its valuation to about $8bn. It is one of the largest rounds ever for a European defence startup. The Bavarian company announced the Series D on Thursday. Blackstone, Noteus, Airbus, and Advent co-led it. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Quantum-Systems.avif",
-      "featuredLatest": false,
-      "published": "2026-07-03T07:44:51+00:00",
-      "firstSeen": "2026-07-03T09:00:01.736613+00:00",
-      "lastSeen": "2026-07-03T09:33:33.043490+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.055,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "Quantum Systems raises $1.2bn and doubles its valuation to $8bn as defence money floods in",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "quantum-systems-raises-2bn-doubles-valuation"
     }
   ],
   "tools": [
@@ -517,11 +580,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2914,
+      "score": 14.2863,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -555,7 +618,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5126,
+      "score": 7.5125,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -586,10 +649,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4011,
+      "score": 7.3959,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -620,10 +683,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3904,
+      "score": 7.3854,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -654,10 +717,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.998,
+      "score": 6.9956,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -721,10 +784,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 4.7283,
+      "score": 4.7168,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -790,11 +853,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.2914,
+      "score": 14.2863,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -828,7 +891,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5126,
+      "score": 7.5125,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -859,10 +922,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.4011,
+      "score": 7.3959,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -893,10 +956,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3904,
+      "score": 7.3854,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -927,10 +990,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.998,
+      "score": 6.9956,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -994,10 +1057,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-03T11:00:01.323740+00:00",
+      "lastSeen": "2026-07-03T12:00:02.006357+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 4.7283,
+      "score": 4.7168,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1057,7 +1120,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1067,7 +1130,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1077,7 +1140,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1087,7 +1150,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1097,7 +1160,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 814,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1107,7 +1170,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1117,7 +1180,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1127,7 +1190,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1137,7 +1200,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1147,7 +1210,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1157,7 +1220,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1167,7 +1230,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "The Next Web",
@@ -1177,7 +1240,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1187,7 +1250,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1197,7 +1260,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1207,7 +1270,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1217,7 +1280,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1226,8 +1289,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 235,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "items": 236,
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1237,7 +1300,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1247,7 +1310,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1257,7 +1320,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1267,7 +1330,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Latent Space",
@@ -1277,7 +1340,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Import AI",
@@ -1287,7 +1350,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1297,7 +1360,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 156,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1307,7 +1370,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1317,7 +1380,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1327,7 +1390,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1337,7 +1400,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1347,7 +1410,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1357,7 +1420,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1367,7 +1430,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-03T11:00:01.323740+00:00"
+      "checkedAt": "2026-07-03T12:00:02.006357+00:00"
     }
   ],
   "errors": []
