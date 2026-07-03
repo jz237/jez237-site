@@ -6,6 +6,7 @@ import * as CANNON from 'cannon-es';
 import { EffectComposer } from '../vendor/postprocessing/EffectComposer.js';
 import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
 import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX } from './config.js';
 import { buildTerrain, getHeight, raycastTerrain } from './terrain.js';
@@ -132,6 +133,63 @@ const renderPass = new RenderPass(scene, camera);
 composer.addPass(renderPass);
 const bloomPass = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.25, 0.65, 0.9);
 composer.addPass(bloomPass);
+
+// Final grade pass. The composer's buffers hold LINEAR un-tone-mapped
+// values (three only applies tone mapping + sRGB on the default
+// framebuffer), so as the screen-writing pass this must run ACES + sRGB
+// itself, then grade: gentle contrast S-curve, saturation lift, warm tint,
+// vignette.
+const gradePass = new ShaderPass({
+  uniforms: {
+    tDiffuse: { value: null },
+    uExposure: { value: renderer.toneMappingExposure },
+  },
+  vertexShader: /* glsl */`
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }`,
+  fragmentShader: /* glsl */`
+    uniform sampler2D tDiffuse;
+    uniform float uExposure;
+    varying vec2 vUv;
+
+    vec3 rrtOdtFit(vec3 v) { // renamed: three predeclares RRTAndODTFit
+      vec3 a = v * (v + 0.0245786) - 0.000090537;
+      vec3 b = v * (0.983729 * v + 0.4329510) + 0.238081;
+      return a / b;
+    }
+    vec3 acesFilmic(vec3 color) { // matches three's ACESFilmicToneMapping
+      const mat3 inM = mat3(
+        vec3(0.59719, 0.07600, 0.02840),
+        vec3(0.35458, 0.90834, 0.13383),
+        vec3(0.04823, 0.01566, 0.83777));
+      const mat3 outM = mat3(
+        vec3(1.60475, -0.10208, -0.00327),
+        vec3(-0.53108, 1.10813, -0.07276),
+        vec3(-0.07367, -0.00605, 1.07602));
+      color *= uExposure / 0.6;
+      return clamp(outM * rrtOdtFit(inM * color), 0.0, 1.0);
+    }
+    vec3 toSRGB(vec3 c) {
+      return mix(1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, 12.92 * c,
+                 vec3(lessThanEqual(c, vec3(0.0031308))));
+    }
+
+    void main() {
+      vec4 c = texture2D(tDiffuse, vUv);
+      c.rgb = toSRGB(acesFilmic(c.rgb));
+      c.rgb = mix(c.rgb, c.rgb * c.rgb * (3.0 - 2.0 * c.rgb), 0.22);
+      float l = dot(c.rgb, vec3(0.299, 0.587, 0.114));
+      c.rgb = mix(vec3(l), c.rgb, 1.10);
+      c.rgb *= vec3(1.02, 1.0, 0.985);
+      vec2 q = vUv - 0.5;
+      c.rgb *= 1.0 - dot(q, q) * 0.42;
+      gl_FragColor = c;
+    }`,
+});
+composer.addPass(gradePass);
 
 // ---------------------------------------------------------------- state
 const G = {
@@ -297,6 +355,7 @@ const quality = new QualityScaler(isTouch ? 1 : 2, (L) => {
   scene.fog.far = L.fogFar;
   scene.fog.near = L.fogFar * 0.35;
   bloomPass.enabled = L.bloom;
+  gradePass.enabled = L.grade;
   foliage.setTreeFraction(L.treeFrac);
   foliage.setGrassFraction(L.grassFrac);
   effects.setParticleScale(L.particleScale);
