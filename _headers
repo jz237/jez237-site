@@ -27,6 +27,15 @@
 /stock-market/assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+/stock-market/stock-live-refresh.js
+  Cache-Control: no-cache, must-revalidate
+
+/stock-market/portfolio-tools.js
+  Cache-Control: no-cache, must-revalidate
+
+/stock-market/data/*
+  Cache-Control: public, max-age=0, must-revalidate
+
 /weather/almanac/*
   Cache-Control: public, max-age=300
 
