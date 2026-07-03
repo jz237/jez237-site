@@ -72,29 +72,66 @@
       </div>
 
       <section id="menu" class="screen">
-        <div class="logo">Steel Ribbon Racer</div>
-        <p>Suspended stunt racing, cockpit terror, and expensive landings.</p>
-        <button id="startBtn">Start Season</button>
-        <button id="practiceBtn">Practice Run</button>
-        <div class="course-select">
-          <span>Course — <b id="courseName">The Little Ramp</b></span>
-          <div class="course-buttons">
-            <button class="course-btn" data-course="0">1</button>
-            <button class="course-btn" data-course="1">2</button>
-            <button class="course-btn" data-course="2">3</button>
-            <button class="course-btn" data-course="3">4</button>
+        <div class="logo">STEEL <em>RIBBON</em> RACER</div>
+        <p class="tagline">Suspended stunt racing · open-city mayhem · expensive landings</p>
+        <div id="menuMain">
+          <div class="menu-cols">
+            <div class="menu-col">
+              <h3>The Ribbon</h3>
+              <button id="startBtn" class="primary">Start Season</button>
+              <button id="practiceBtn">Practice Run</button>
+              <div class="course-select">
+                <span>Course — <b id="courseName">The Little Ramp</b></span>
+                <div class="course-buttons">
+                  <button class="course-btn" data-course="0">1</button>
+                  <button class="course-btn" data-course="1">2</button>
+                  <button class="course-btn" data-course="2">3</button>
+                  <button class="course-btn" data-course="3">4</button>
+                </div>
+              </div>
+              <button id="freeRunBtn">Course Check (Free Run)</button>
+            </div>
+            <div class="menu-col">
+              <h3>The City</h3>
+              <button id="roamBtn" class="primary">Free Roam City</button>
+              <button id="onlineBtn">Online Cruise</button>
+              <button id="scoresBtn">Leaderboards</button>
+              <div class="league">
+                <span>Division Four</span>
+                <b>1. Crowther</b>
+                <b>2. Bishop</b>
+                <b>3. Maddock</b>
+                <b>4. You</b>
+              </div>
+            </div>
           </div>
+          <div id="menuToggles"></div>
+          <small id="best">Best score 0</small>
         </div>
-        <button id="freeRunBtn">Course Check (Free Run)</button>
-        <button id="roamBtn">Free Roam City</button>
-        <div class="league">
-          <span>Division Four</span>
-          <b>1. Crowther</b>
-          <b>2. Bishop</b>
-          <b>3. Maddock</b>
-          <b>4. You</b>
+        <div id="onlinePanel" class="menu-panel hidden">
+          <h3>Online Cruise</h3>
+          <p class="panel-hint">Share a room code — everyone in the room cruises the same city.</p>
+          <div class="mini-grid">
+            <input id="mpName" maxlength="12" placeholder="YOUR NAME" autocomplete="nickname" />
+            <input id="mpRoom" maxlength="10" placeholder="ROOM CODE" />
+          </div>
+          <div class="mini-grid">
+            <button id="mpJoinBtn" class="primary">Join Room</button>
+            <button id="mpLeaveBtn">Leave</button>
+          </div>
+          <div id="mpStatus">Not connected.</div>
+          <button id="onlineBackBtn" class="ghost">Back</button>
         </div>
-        <small id="best">Best score 0</small>
+        <div id="scoresPanel" class="menu-panel hidden">
+          <h3>Global Leaderboards</h3>
+          <div class="mini-grid">
+            <input id="initials" maxlength="3" placeholder="AAA — your initials" />
+            <button id="lapBoardBtn" class="active-board">Best Laps</button>
+            <button id="roamBoardBtn">Roam Scores</button>
+          </div>
+          <div id="scoreBoard">Loading…</div>
+          <button id="scoresBackBtn" class="ghost">Back</button>
+        </div>
       </section>
 
       <section id="result" class="screen hidden">

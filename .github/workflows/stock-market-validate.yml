@@ -1,0 +1,48 @@
+name: Validate Stock Market App
+
+on:
+  pull_request:
+    paths:
+      - "stock-market/**"
+      - "stock-market-src/**"
+      - "scripts/refresh_stock_market_data.mjs"
+      - "scripts/validate_stock_market.mjs"
+      - ".github/workflows/stock-market-*.yml"
+  push:
+    branches: [main]
+    paths:
+      - "stock-market/data/**"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate data files and asset references
+        run: node scripts/validate_stock_market.mjs
+
+      - name: Build app from source
+        if: github.event_name == 'pull_request'
+        working-directory: stock-market-src
+        run: |
+          npm ci
+          npm run build
+
+      - name: Ensure committed build is not stale
+        if: github.event_name == 'pull_request'
+        run: |
+          # The build regenerates stock-market/index.html and hashed assets.
+          # If that leaves the tree dirty, source changed without a rebuild.
+          if ! git diff --quiet -- stock-market/index.html; then
+            echo "::error::stock-market/index.html is stale — run 'npm run build' in stock-market-src and commit the output."
+            git diff -- stock-market/index.html
+            exit 1
+          fi
+          echo "Committed build matches source."

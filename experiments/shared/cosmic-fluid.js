@@ -498,7 +498,7 @@
 
     var config = {
       CURL: 30,
-      DENSITY_DISSIPATION: 1.8,
+      DENSITY_DISSIPATION: 2.6,
       VELOCITY_DISSIPATION: 0.2,
       PRESSURE: 0.8,
       SPLAT_RADIUS: 0.22,
@@ -515,7 +515,7 @@
     // pointer strokes), so slow-fading dye accumulates into a white screen
     var DIAL_RANGES = {
       CURL: [4, 50],
-      DENSITY_DISSIPATION: [0.85, 2.8],
+      DENSITY_DISSIPATION: [1.8, 4.0],
       VELOCITY_DISSIPATION: [0.05, 1.2],
       SPLAT_RADIUS: [0.1, 0.38],
       SPLAT_FORCE: [3500, 9000],
@@ -657,7 +657,8 @@
         var speed = config.SPLAT_FORCE * level * 0.16;
         var dx = -Math.sin(e.ang) * e.dir * speed;
         var dy = Math.cos(e.ang) * e.dir * speed * 0.82;
-        var color = hsvColor(baseHue + e.hueOff, 0.05 + level * 0.15);
+        // slightly stronger injection offsets the faster dye fade
+        var color = hsvColor(baseHue + e.hueOff, 0.07 + level * 0.18);
         splatWithMirror(x, y, dx, dy, color);
       }
       if (!audio.live) {
