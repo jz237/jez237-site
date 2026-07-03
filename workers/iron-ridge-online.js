@@ -4,8 +4,9 @@ const ROOM_TTL = 45000;
 
 // co-op sync events relayed verbatim (see games/2026-06-10/iron-ridge/js/multiplayer.js):
 // es=enemy state, ek=enemy kill, ef=enemy fire, wv=wave start, wc=wave clear,
-// hit=damage forward to host, down=player destroyed
-const COOP_TYPES = new Set(['es', 'ek', 'ef', 'wv', 'wc', 'hit', 'down']);
+// hit=damage forward to host, down=player destroyed, pg=squad ping,
+// cv=convoy spawn, ck=convoy truck kill
+const COOP_TYPES = new Set(['es', 'ek', 'ef', 'wv', 'wc', 'hit', 'down', 'pg', 'cv', 'ck']);
 
 function json(data, init = {}) {
   return new Response(JSON.stringify(data), {

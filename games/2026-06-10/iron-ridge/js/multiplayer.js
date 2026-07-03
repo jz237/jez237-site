@@ -279,7 +279,7 @@ function roundRect(ctx, x, y, w, h, r) {
 }
 
 export class Multiplayer {
-  constructor({ scene, world, effects, onRemoteFire, onStatus, onEnemyFire, onEnemyKill, onHitForward, onWave, onWaveClear, onRoleChange }) {
+  constructor({ scene, world, effects, onRemoteFire, onStatus, onEnemyFire, onEnemyKill, onHitForward, onWave, onWaveClear, onRoleChange, onPing, onConvoy, onTruckKill }) {
     this.scene = scene;
     this.world = world;
     this.effects = effects;
@@ -291,6 +291,9 @@ export class Multiplayer {
     this.onWave = onWave || (() => {});
     this.onWaveClear = onWaveClear || (() => {});
     this.onRoleChange = onRoleChange || (() => {});
+    this.onPing = onPing || (() => {});
+    this.onConvoy = onConvoy || (() => {});
+    this.onTruckKill = onTruckKill || (() => {});
     this.ws = null;
     this.id = null;
     this.joinedAt = 0;
@@ -648,6 +651,27 @@ export class Multiplayer {
     } else if (data.type === 'wc') {
       if (this.isHost()) return;
       this.onWaveClear(Math.max(0, Number(data.w) || 0));
+    } else if (data.type === 'pg') {
+      // squad ping — throttle to 1/s per peer so it can't be spammed
+      const now = performance.now();
+      if (now - (peer.lastPingAt || 0) < 1000) return;
+      peer.lastPingAt = now;
+      this.peers.set(peer.id, peer);
+      this.onPing(
+        new THREE.Vector3(Number(data.x) || 0, Number(data.y) || 0, Number(data.z) || 0),
+        peer.name,
+      );
+    } else if (data.type === 'cv') {
+      if (this.isHost()) return;
+      const layout = {
+        cx: Number(data.cx) || 0, cz: Number(data.cz) || 0,
+        dirX: Number(data.dx) || 1, dirZ: Number(data.dz) || 0,
+      };
+      const len = Math.hypot(layout.dirX, layout.dirZ) || 1;
+      layout.dirX /= len; layout.dirZ /= len;
+      this.onConvoy(layout);
+    } else if (data.type === 'ck') {
+      this.onTruckKill(Math.max(0, Number(data.i) | 0));
     }
   }
 
@@ -718,6 +742,15 @@ export class Multiplayer {
   sendWave(w, hostiles) { this.send({ type: 'wv', w, n: hostiles }); }
   sendWaveClear(w) { this.send({ type: 'wc', w }); }
   sendDown() { this.send({ type: 'down' }); }
+  sendPing(x, y, z) { this.send({ type: 'pg', x: r1(x), y: r1(y), z: r1(z) }); }
+  sendConvoy(layout) {
+    this.send({
+      type: 'cv',
+      cx: r1(layout.cx), cz: r1(layout.cz),
+      dx: r3(layout.dirX), dz: r3(layout.dirZ),
+    });
+  }
+  sendTruckKill(cid) { this.send({ type: 'ck', i: cid }); }
 
   // host: broadcast living enemies at ~8Hz
   sendEnemyState(enemies, wave) {

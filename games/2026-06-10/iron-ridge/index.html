@@ -323,6 +323,14 @@
     animation: strikePulse 1.1s ease-in-out infinite;
   }
   @keyframes strikePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+  #btn-ping {
+    position: fixed; right: 140px; bottom: 176px; z-index: 7;
+    display: none;
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 2px solid rgba(82, 168, 255, 0.7);
+    background: rgba(10, 20, 30, 0.6); font-size: 22px;
+  }
+  body.touch #btn-ping { display: block; }
   #btn-strike {
     position: fixed; right: 140px; bottom: 96px; z-index: 7;
     width: 64px; height: 64px; border-radius: 50%;
@@ -389,6 +397,7 @@
   <div id="stick"><div id="stick-knob"></div></div>
   <button id="btn-fire">FIRE</button>
   <button id="btn-strike" class="hidden">✈</button>
+  <button id="btn-ping">📍</button>
   <button id="btn-pause-touch">⏸ PAUSE</button>
 </div>
 
@@ -400,7 +409,7 @@
     <div class="controls-info" id="controls-desktop">
       <b>WASD / arrows</b> — drive &nbsp;·&nbsp; <b>mouse</b> — aim turret<br/>
       <b>click / space</b> — fire &nbsp;·&nbsp; <b>R</b> — restock rack &nbsp;·&nbsp; <b>scroll</b> — zoom<br/>
-      <b>F</b> — airstrike (earn it with kill streaks) &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
+      <b>F</b> — airstrike (earn it with kill streaks) &nbsp;·&nbsp; <b>G</b> — squad ping &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
     </div>
     <div class="controls-info hidden" id="controls-touch">
       <b>touch the left side</b> — a stick appears under your thumb; <b>push the
