@@ -316,14 +316,23 @@ export class WaveManager {
 
   aliveEnemies() { return this.enemies.filter(e => e.tank.alive); }
 
-  // ---- bonus convoy: unarmed fast trucks crossing the battlefield ----
-  spawnConvoy(scene, world, playerPos) {
-    this.trucks = this.trucks || [];
+  // random convoy course crossing near the player; broadcastable so co-op
+  // clients can build an identical convoy
+  static convoyLayout(playerPos) {
     const a = Math.random() * Math.PI * 2;
     const perp = a + Math.PI / 2;
-    const cx = playerPos.x + Math.cos(perp) * (40 + Math.random() * 30);
-    const cz = playerPos.z + Math.sin(perp) * (40 + Math.random() * 30);
-    const dirX = Math.cos(a), dirZ = Math.sin(a);
+    return {
+      cx: playerPos.x + Math.cos(perp) * (40 + Math.random() * 30),
+      cz: playerPos.z + Math.sin(perp) * (40 + Math.random() * 30),
+      dirX: Math.cos(a),
+      dirZ: Math.sin(a),
+    };
+  }
+
+  // ---- bonus convoy: unarmed fast trucks crossing the battlefield ----
+  spawnConvoy(scene, world, layout) {
+    this.trucks = this.trucks || [];
+    const { cx, cz, dirX, dirZ } = layout;
     for (let i = 0; i < 3; i++) {
       const sx = cx - dirX * (120 + i * 14);
       const sz = cz - dirZ * (120 + i * 14);
@@ -360,7 +369,7 @@ export class WaveManager {
       });
       body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.atan2(dirX, dirZ));
       world.addBody(body);
-      const truck = { mesh: grp, body, dirX, dirZ, alive: true, age: 0 };
+      const truck = { mesh: grp, body, dirX, dirZ, alive: true, age: 0, cid: i };
       body.userData = { kind: 'truck', truck };
       this.trucks.push(truck);
     }
