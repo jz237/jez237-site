@@ -147,9 +147,10 @@ function rockTexture() {
   ], { seed: 33 });
 }
 
-const COL_TINT_A = new THREE.Color(0xa8c188);   // grass tint variation (multiplies texture)
-const COL_TINT_B = new THREE.Color(0xc4d49a);
-const COL_DRY = new THREE.Color(0xc9c693);
+const COL_TINT_A = new THREE.Color(0x9cbc7e);   // grass tint variation (multiplies texture)
+const COL_TINT_B = new THREE.Color(0xc9d89c);
+const COL_DRY = new THREE.Color(0xd2cb8e);
+const COL_LUSH = new THREE.Color(0x7cae6a);     // deeper meadow-green patches
 
 export function buildTerrain(scene, world) {
   // ---- visual mesh ----
@@ -183,11 +184,14 @@ export function buildTerrain(scene, world) {
     // tint (multiplies the detail texture)
     c.copy(COL_TINT_A).lerp(COL_TINT_B, tint);
     if (patch > 0.62) c.lerp(COL_DRY, (patch - 0.62) * 1.8);
+    // second broad noise channel: lush darker-green meadow patches
+    const lush = detail.noise(x * 0.02 - 80, z * 0.02 + 33);
+    if (lush > 0.12) c.lerp(COL_LUSH, Math.min(0.6, (lush - 0.12) * 1.4));
 
     // cheap baked AO: valleys/concave spots darken, crests brighten
     const e = 4.5;
     const avg = (getHeight(x - e, z) + getHeight(x + e, z) + getHeight(x, z - e) + getHeight(x, z + e)) / 4;
-    const concavity = THREE.MathUtils.clamp((avg - h) * 0.22, -0.16, 0.22);
+    const concavity = THREE.MathUtils.clamp((avg - h) * 0.26, -0.18, 0.26);
     const ao = 1 - concavity;
     const m = (0.94 + detail.noise(x * 0.35, z * 0.35) * 0.06) * ao;
     colors[i * 3] = c.r * m;
