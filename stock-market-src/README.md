@@ -29,3 +29,15 @@ build. Commit the rebuilt output together with the source change.
   change must go through the hashed-filename build, never an in-place edit.
 - Holdings (share counts, cost basis) live only in visitors' localStorage by
   design; `data/portfolio.json` carries symbols only.
+
+## Deliberate design decisions (not open TODOs)
+
+- **Average-cost holdings, not transaction lots.** The dashboard is a research
+  and monitoring surface; shares + avg cost cover P&L without turning it into
+  accounting software. Realized P&L, lots, and dividends are out of scope.
+- **Research text is hand-curated.** Theses/risks/catalysts refresh only when
+  edited in `data/stocks.json`; automating them would require a paid LLM API
+  in the pipeline, which conflicts with the free-tier constraint.
+- **Alerts evaluate in-browser only.** There is no backend, so alerts check
+  on each data refresh while a tab is open; the Notifications API covers
+  background tabs. Push-when-closed would require a server.

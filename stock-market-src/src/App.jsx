@@ -13,6 +13,10 @@ import {
 } from "./lib/data.js";
 
 const BENCHMARK_KEY = "^GSPC";
+const BENCHMARKS = [
+  { label: "S&P 500", key: "^GSPC" },
+  { label: "NASDAQ", key: "^IXIC" },
+];
 import {
   dayChangeAmount,
   fmt,
@@ -60,6 +64,7 @@ export default function App() {
   const searchRef = useRef(null);
   const selectedKeyRef = useRef(null);
   const historyRequests = useRef(new Set());
+  const notifiedAlerts = useRef(new Set());
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 3e4);
@@ -275,7 +280,7 @@ export default function App() {
     const keys = positions
       .filter((p) => holdings[p.symbol]?.shares > 0)
       .map((p) => historyKey(p.stock));
-    ensureHistory([...keys, BENCHMARK_KEY]);
+    ensureHistory([...keys, ...BENCHMARKS.map((b) => b.key)]);
   }, [mode, positions, holdings, ensureHistory]);
   const plSummary = useMemo(() => {
     let value = 0;
@@ -495,6 +500,30 @@ export default function App() {
       : "Stock Command Center";
   }, [triggeredAlerts.length]);
 
+  // Browser notification on each newly triggered alert (permission is asked
+  // for when the first alert level is set). Fires once per alert per session.
+  useEffect(() => {
+    if (typeof Notification === "undefined") return;
+    const current = new Set();
+    for (const a of triggeredAlerts) {
+      const key = `${a.symbol}-${a.kind}-${a.level}`;
+      current.add(key);
+      if (
+        Notification.permission === "granted" &&
+        !notifiedAlerts.current.has(key)
+      ) {
+        try {
+          new Notification(`${a.symbol} ${a.kind} ${fmt(a.level)}`, {
+            body: `Now trading at ${fmt(a.price)}`,
+            tag: key,
+          });
+        } catch {}
+      }
+    }
+    // Re-arm alerts that stopped triggering so a re-cross notifies again.
+    notifiedAlerts.current = current;
+  }, [triggeredAlerts]);
+
   function selectFirstMatch() {
     if (filtered.length) {
       setSelectedSymbol(filtered[0].symbol);
@@ -563,6 +592,13 @@ export default function App() {
     try {
       localStorage.setItem("commandCenterAlerts", JSON.stringify(next));
     } catch {}
+    if (
+      value > 0 &&
+      typeof Notification !== "undefined" &&
+      Notification.permission === "default"
+    ) {
+      Notification.requestPermission().catch(() => {});
+    }
   }
   function openDrawer(view) {
     setDrawer(view);
@@ -1021,7 +1057,7 @@ export default function App() {
                 positions={positions}
                 holdings={holdings}
                 historyBySymbol={historyBySymbol}
-                benchmarkKey={BENCHMARK_KEY}
+                benchmarks={BENCHMARKS}
                 onSelect={setSelectedSymbol}
               />
             )}
@@ -1570,13 +1606,13 @@ export default function App() {
                     Risks & Opportunities{" "}
                     <button onClick={() => openDrawer("risks")}>View all</button>
                   </div>
-                  <h3>Opportunities</h3>
+                  <h2>Opportunities</h2>
                   {stock.opportunities.slice(0, 2).map((text) => (
                     <p key={text} className="good">
                       ● {text}
                     </p>
                   ))}
-                  <h3>Risks</h3>
+                  <h2>Risks</h2>
                   {stock.risks.slice(0, 2).map((text) => (
                     <p key={text} className="bad">
                       ● {text}
