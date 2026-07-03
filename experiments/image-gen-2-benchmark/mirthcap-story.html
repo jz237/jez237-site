@@ -136,6 +136,51 @@
       color: var(--muted-ink);
       font-weight: 650;
     }
+    .movie-section {
+      margin: 0 0 34px;
+      padding: 16px;
+      border: 1px solid rgba(82, 116, 69, .28);
+      border-radius: 8px;
+      background: rgba(82, 116, 69, .08);
+    }
+    .movie-section h2 {
+      margin-bottom: 8px;
+    }
+    .movie-section p {
+      color: var(--muted-ink);
+      font-weight: 620;
+    }
+    .movie-frame {
+      overflow: hidden;
+      margin: 16px 0 12px;
+      border: 1px solid rgba(36, 48, 36, .22);
+      border-radius: 8px;
+      background: #050806;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, .22);
+    }
+    .movie-frame video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #050806;
+    }
+    .movie-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid rgba(82, 116, 69, .44);
+      border-radius: 8px;
+      color: #31422e;
+      background: rgba(255, 250, 240, .62);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .movie-link:hover {
+      text-decoration: none;
+      border-color: rgba(185, 137, 53, .76);
+      color: #1f2d1d;
+    }
     .aside {
       position: sticky;
       top: 78px;
@@ -228,6 +273,18 @@
       <article class="paper">
         <h2>The Story So Far</h2>
         <p class="chapter-note">Working prose draft. The TV cut keeps the plot moving. The King cut leaves room for Marlow's funeral, village rituals, and a longer road through the outer garden.</p>
+
+        <section class="movie-section" aria-labelledby="movie-title">
+          <h2 id="movie-title">The Heartglass Rue Movie</h2>
+          <p>Animated storybook cut with narrated scenes, music, and selected Gemini Omni video inserts.</p>
+          <div class="movie-frame">
+            <video controls preload="metadata" poster="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he-identity-corrected.jpg">
+              <source src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/videos/mirthcap_heartglass_rue_v7_omni_mixed.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <a class="movie-link" href="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/videos/mirthcap_heartglass_rue_v7_omni_mixed.mp4">Open full MP4</a>
+        </section>
 
         <p>Mirthcap was never meant to be found. It sat beneath jewel-colored mushroom caps and moss terraces, tucked into a garden so large that a fallen teacup could become a hall and a pocketwatch gear could become civic machinery. Its people were tiny, practical, stubborn, and kind. They lived by lantern gnats, checkerboard paths, shell-fruit drinks, and the quiet law of the Under-Cap Circle.</p>
 
