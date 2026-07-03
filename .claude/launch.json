@@ -8,6 +8,12 @@
       "port": 8000
     },
     {
+      "name": "Python http.server 8791",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-m", "http.server", "8791"],
+      "port": 8791
+    },
+    {
       "name": "static serve auto",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["--yes", "serve", "."],
