@@ -53,6 +53,9 @@ export default function App() {
   );
   const [holdingsSort, setHoldingsSort] = useState("default");
   const [hideUnsized, setHideUnsized] = useState(false);
+  const [newTicker, setNewTicker] = useState("");
+  const [alerts, setAlerts] = useState(() => readLocal("commandCenterAlerts", {}));
+  const [alertsOpen, setAlertsOpen] = useState(false);
   const [now, setNow] = useState(() => Date.now());
   const searchRef = useRef(null);
   const selectedKeyRef = useRef(null);
@@ -254,6 +257,15 @@ export default function App() {
         .map((p) => ({ ...p, stock: equities.find((s) => s.symbol === p.symbol) }))
         .filter((p) => !!p.stock),
     [portfolio.positions, equities],
+  );
+  const unpricedPositions = useMemo(
+    () =>
+      stocksData
+        ? portfolio.positions.filter(
+            (p) => !allStocks.some((s) => s.symbol === p.symbol),
+          )
+        : [],
+    [stocksData, portfolio.positions, allStocks],
   );
 
   // Prefetch history for sized positions (plus the benchmark) so the
@@ -459,6 +471,29 @@ export default function App() {
   const statusInstruments = instruments.filter((s) =>
     ["S&P", "NASDAQ", "VIX", "10Y"].includes(s.symbol),
   );
+  const triggeredAlerts = useMemo(() => {
+    const out = [];
+    for (const [symbol, rule] of Object.entries(alerts)) {
+      const alerted = allStocks.find((s) => s.symbol === symbol);
+      if (!alerted || !Number.isFinite(alerted.price) || !alerted.price)
+        continue;
+      if (rule?.above > 0 && alerted.price >= rule.above)
+        out.push({ symbol, kind: "≥", level: rule.above, price: alerted.price });
+      if (rule?.below > 0 && alerted.price <= rule.below)
+        out.push({ symbol, kind: "≤", level: rule.below, price: alerted.price });
+    }
+    return out;
+  }, [alerts, allStocks]);
+  const alertedSymbols = useMemo(
+    () => new Set(triggeredAlerts.map((a) => a.symbol)),
+    [triggeredAlerts],
+  );
+
+  useEffect(() => {
+    document.title = triggeredAlerts.length
+      ? `⚠ ${triggeredAlerts.length} alert${triggeredAlerts.length > 1 ? "s" : ""} · Stock Command Center`
+      : "Stock Command Center";
+  }, [triggeredAlerts.length]);
 
   function selectFirstMatch() {
     if (filtered.length) {
@@ -485,6 +520,18 @@ export default function App() {
       positions: [...portfolio.positions, { symbol: stock.symbol }],
     });
   }
+  function trackTicker(event) {
+    event.preventDefault();
+    const symbol = newTicker.trim().toUpperCase();
+    if (!/^[A-Z][A-Z0-9.-]{0,9}$/.test(symbol)) return;
+    if (!portfolio.positions.some((p) => p.symbol === symbol)) {
+      savePortfolio({
+        ...portfolio,
+        positions: [...portfolio.positions, { symbol }],
+      });
+    }
+    setNewTicker("");
+  }
   function untrack(symbol) {
     savePortfolio({
       ...portfolio,
@@ -502,6 +549,19 @@ export default function App() {
     setPrivacy(next);
     try {
       localStorage.setItem("commandCenterPrivacy", JSON.stringify(next));
+    } catch {}
+  }
+  function setAlertBound(symbol, key, rawValue) {
+    const value = Number(rawValue);
+    const next = { ...alerts };
+    const entry = { ...(next[symbol] || {}) };
+    if (value > 0) entry[key] = value;
+    else delete entry[key];
+    if (Object.keys(entry).length) next[symbol] = entry;
+    else delete next[symbol];
+    setAlerts(next);
+    try {
+      localStorage.setItem("commandCenterAlerts", JSON.stringify(next));
     } catch {}
   }
   function openDrawer(view) {
@@ -608,7 +668,7 @@ export default function App() {
             Price{sortArrow("price")}
           </button>
           <button onClick={() => cycleSort("change")}>
-            24H %{sortArrow("change")}
+            Day %{sortArrow("change")}
           </button>
         </div>
         <div className="watchlist">
@@ -619,10 +679,11 @@ export default function App() {
               onClick={() => setSelectedSymbol(s.symbol)}
             >
               <strong>
+                {alertedSymbols.has(s.symbol) ? "⚠ " : ""}
                 {starred.includes(s.symbol) ? "★ " : ""}
                 {s.symbol}
               </strong>
-              <svg viewBox="0 0 90 28">
+              <svg viewBox="0 0 90 28" className={s.change < 0 ? "down" : ""}>
                 <path d={sparklinePath(s.chart, 90, 28)} />
               </svg>
               <span>{fmt(s.price)}</span>
@@ -670,7 +731,7 @@ export default function App() {
                 {s.change >= 0 ? "+" : ""}
                 {s.change.toFixed(2)}%
               </b>
-              <svg viewBox="0 0 54 18">
+              <svg viewBox="0 0 54 18" className={s.change < 0 ? "down" : ""}>
                 <path d={sparklinePath(s.chart.slice(-20), 54, 18)} />
               </svg>
             </p>
@@ -710,6 +771,18 @@ export default function App() {
             ))}
           </div>
         </header>
+        {triggeredAlerts.length > 0 && (
+          <div className="alert-banner">
+            {triggeredAlerts.map((a) => (
+              <button
+                key={`${a.symbol}-${a.kind}-${a.level}`}
+                onClick={() => setSelectedSymbol(a.symbol)}
+              >
+                ⚠ {a.symbol} {a.kind} {fmt(a.level)} — now {fmt(a.price)}
+              </button>
+            ))}
+          </div>
+        )}
         <section className="market-strip panel">
           {instrumentStrip.map((s) => (
             <button
@@ -723,7 +796,7 @@ export default function App() {
                 {s.change >= 0 ? "+" : ""}
                 {s.change.toFixed(2)}%
               </b>
-              <svg viewBox="0 0 48 14">
+              <svg viewBox="0 0 48 14" className={s.change < 0 ? "down" : ""}>
                 <path d={sparklinePath(s.chart.slice(-24), 48, 14)} />
               </svg>
             </button>
@@ -759,6 +832,17 @@ export default function App() {
                     {isStarred ? "★" : "☆"}
                   </button>
                 )}
+                <button
+                  onClick={() => setAlertsOpen((open) => !open)}
+                  className={`star alert-bell ${alerts[stock.symbol] ? "on" : ""}`}
+                  title={
+                    alerts[stock.symbol]
+                      ? "Edit price alert"
+                      : "Set a price alert"
+                  }
+                >
+                  ⚑
+                </button>
                 <div className="quote-stats">
                   <span>
                     Prev Close <b>{stock.prevClose ? fmt(stock.prevClose) : "—"}</b>
@@ -830,6 +914,41 @@ export default function App() {
                   </span>
                 </div>
               </div>
+              {alertsOpen && (
+                <div className="alert-editor">
+                  <span>Alert when {stock.symbol} trades</span>
+                  <label>
+                    at or above
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      min="0"
+                      step="any"
+                      placeholder="—"
+                      value={alerts[stock.symbol]?.above || ""}
+                      onChange={(e) =>
+                        setAlertBound(stock.symbol, "above", e.target.value)
+                      }
+                    />
+                  </label>
+                  <label>
+                    at or below
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      min="0"
+                      step="any"
+                      placeholder="—"
+                      value={alerts[stock.symbol]?.below || ""}
+                      onChange={(e) =>
+                        setAlertBound(stock.symbol, "below", e.target.value)
+                      }
+                    />
+                  </label>
+                  <small>Checked against each data refresh in this browser.</small>
+                  <button onClick={() => setAlertsOpen(false)}>Done</button>
+                </div>
+              )}
               <div className="rangebar">
                 {RANGES.map((r) => (
                   <button
@@ -1023,7 +1142,7 @@ export default function App() {
                   </span>
                   <span>{s.rating || "Watch"}</span>
                   <span>{s.confidence}/100</span>
-                  <svg viewBox="0 0 96 22">
+                  <svg viewBox="0 0 96 22" className={s.change < 0 ? "down" : ""}>
                     <path d={sparklinePath(s.chart, 96, 22)} />
                   </svg>
                 </button>
@@ -1040,7 +1159,7 @@ export default function App() {
                 {topMovers.map((s) => (
                   <button key={s.symbol} onClick={() => setSelectedSymbol(s.symbol)}>
                     <strong>{s.symbol}</strong>
-                    <svg viewBox="0 0 96 24">
+                    <svg viewBox="0 0 96 24" className={s.change < 0 ? "down" : ""}>
                       <path d={sparklinePath(s.chart, 96, 24)} />
                     </svg>
                     <span>{s.name}</span>
@@ -1297,6 +1416,7 @@ export default function App() {
                             Shares
                             <input
                               type="number"
+                              inputMode="decimal"
                               min="0"
                               step="any"
                               value={holding?.shares || ""}
@@ -1312,6 +1432,7 @@ export default function App() {
                             Avg Cost
                             <input
                               type="number"
+                              inputMode="decimal"
                               min="0"
                               step="any"
                               value={holding?.avgCost || ""}
@@ -1349,6 +1470,39 @@ export default function App() {
                         </div>
                       );
                     })}
+                    {unpricedPositions.map((position) => (
+                      <div key={position.symbol} className="holding-row ghost">
+                        <strong>{position.symbol}</strong>
+                        <span>
+                          Awaiting price data — quotes start once the symbol is
+                          in data/portfolio.json at the next refresh.
+                        </span>
+                        <button
+                          className="remove"
+                          title={`Stop tracking ${position.symbol}`}
+                          onClick={() => untrack(position.symbol)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                    <form className="add-ticker" onSubmit={trackTicker}>
+                      <input
+                        value={newTicker}
+                        onChange={(e) => setNewTicker(e.target.value)}
+                        placeholder="Track any ticker (e.g. TSLA)"
+                        maxLength={10}
+                        aria-label="Track any ticker"
+                      />
+                      <button
+                        type="submit"
+                        disabled={
+                          !/^[A-Za-z][A-Za-z0-9.-]{0,9}$/.test(newTicker.trim())
+                        }
+                      >
+                        Add
+                      </button>
+                    </form>
                     <small>
                       Share counts and cost basis live only in this browser
                       (localStorage). The public site never stores or uploads
@@ -1461,7 +1615,10 @@ export default function App() {
                       {firstInstrument.change >= 0 ? "+" : ""}
                       {firstInstrument.change.toFixed(2)}%
                     </span>
-                    <svg viewBox="0 0 230 72">
+                    <svg
+                      viewBox="0 0 230 72"
+                      className={firstInstrument.change < 0 ? "down" : ""}
+                    >
                       <path d={sparklinePath(firstInstrument.chart, 230, 72)} />
                     </svg>
                     <div className="breadth">
