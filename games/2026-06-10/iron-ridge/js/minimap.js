@@ -87,7 +87,7 @@ export class Minimap {
     c.restore();
   }
 
-  draw(player, enemies, props, camYaw, trucks = []) {
+  draw(player, enemies, props, camYaw, trucks = [], allies = []) {
     const c = this.ctx;
     const S = this.size;
     const pp = player.body.position;
@@ -163,6 +163,30 @@ export class Minimap {
       c.beginPath();
       c.arc(x, y, 6, 0, Math.PI * 2);
       c.stroke();
+    }
+
+    // room allies (blue; hollow when downed)
+    for (const al of allies) {
+      const d = Math.hypot(al.x - pp.x, al.z - pp.z);
+      if (d > RANGE * 0.94) {
+        this.edgeMarker(al.x, al.z, pp.x, pp.z, '#52a8ff');
+        continue;
+      }
+      const [x, y] = this.toMap(al.x, al.z, pp.x, pp.z);
+      if (al.down || al.hp <= 0) {
+        c.strokeStyle = '#52a8ff';
+        c.lineWidth = 2;
+        c.beginPath();
+        c.arc(x, y, 4, 0, Math.PI * 2);
+        c.stroke();
+      } else {
+        this.blip(x, y, '#52a8ff', 4);
+        c.strokeStyle = 'rgba(82,168,255,0.6)';
+        c.lineWidth = 1;
+        c.beginPath();
+        c.arc(x, y, 6, 0, Math.PI * 2);
+        c.stroke();
+      }
     }
 
     // convoy trucks

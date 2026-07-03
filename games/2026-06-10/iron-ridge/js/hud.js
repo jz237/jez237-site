@@ -50,6 +50,17 @@ export class Hud {
       this.el.arrows.appendChild(a);
       this.arrowPool.push(a);
     }
+    this.allyArrowPool = [];
+    for (let i = 0; i < 4; i++) {
+      const a = document.createElement('div');
+      a.className = 'enemy-arrow ally';
+      a.textContent = '▲';
+      a.style.display = 'none';
+      this.el.arrows.appendChild(a);
+      this.allyArrowPool.push(a);
+    }
+    this.allies = $('mp-allies');
+    this.lastAllyHtml = '';
   }
 
   showScreen(name) {
@@ -128,30 +139,65 @@ export class Hud {
     setTimeout(() => f.remove(), 1300);
   }
 
-  updateArrows(enemies, camera) {
+  // clamp a world position to a screen-edge chevron; returns false if the
+  // point is comfortably on screen
+  placeEdgeArrow(a, worldPos, camera) {
+    _v.copy(worldPos);
+    _v.y += 1.5;
+    _v.project(camera);
+    const behind = _v.z > 1;
+    const onScreen = !behind && Math.abs(_v.x) < 0.92 && Math.abs(_v.y) < 0.9;
+    if (onScreen) { a.style.display = 'none'; return; }
+    let x = _v.x, y = _v.y;
+    if (behind) { x = -x; y = -1; }
+    x = Math.max(-0.92, Math.min(0.92, x));
+    y = Math.max(-0.88, Math.min(0.88, y));
+    const px = (x * 0.5 + 0.5) * window.innerWidth;
+    const py = (-y * 0.5 + 0.5) * window.innerHeight;
+    const ang = Math.atan2(px - window.innerWidth / 2, -(py - window.innerHeight / 2));
+    a.style.display = 'block';
+    a.style.left = `${px}px`;
+    a.style.top = `${py}px`;
+    a.style.transform = `translate(-50%,-50%) rotate(${ang}rad)`;
+  }
+
+  updateArrows(enemies, camera, allies = []) {
     let i = 0;
     for (const e of enemies) {
       if (i >= this.arrowPool.length) break;
-      _v.copy(e.tank.visual.root.position);
-      _v.y += 1.5;
-      _v.project(camera);
-      const behind = _v.z > 1;
-      const onScreen = !behind && Math.abs(_v.x) < 0.92 && Math.abs(_v.y) < 0.9;
-      const a = this.arrowPool[i++];
-      if (onScreen) { a.style.display = 'none'; continue; }
-      let x = _v.x, y = _v.y;
-      if (behind) { x = -x; y = -1; }
-      x = Math.max(-0.92, Math.min(0.92, x));
-      y = Math.max(-0.88, Math.min(0.88, y));
-      const px = (x * 0.5 + 0.5) * window.innerWidth;
-      const py = (-y * 0.5 + 0.5) * window.innerHeight;
-      const ang = Math.atan2(px - window.innerWidth / 2, -(py - window.innerHeight / 2));
-      a.style.display = 'block';
-      a.style.left = `${px}px`;
-      a.style.top = `${py}px`;
-      a.style.transform = `translate(-50%,-50%) rotate(${ang}rad)`;
+      this.placeEdgeArrow(this.arrowPool[i++], e.tank.visual.root.position, camera);
     }
     for (; i < this.arrowPool.length; i++) this.arrowPool[i].style.display = 'none';
+
+    let j = 0;
+    for (const al of allies) {
+      if (j >= this.allyArrowPool.length) break;
+      if (al.down || al.hp <= 0) continue;
+      this.placeEdgeArrow(this.allyArrowPool[j++], al.position, camera);
+    }
+    for (; j < this.allyArrowPool.length; j++) this.allyArrowPool[j].style.display = 'none';
+  }
+
+  // squad readout under the online status line
+  setAllies(allies, connected) {
+    if (!this.allies) return;
+    if (!connected || !allies.length) {
+      if (this.lastAllyHtml !== '') {
+        this.allies.innerHTML = '';
+        this.lastAllyHtml = '';
+      }
+      return;
+    }
+    const html = allies.map(al => {
+      const hp = Math.max(0, Math.ceil(al.hp));
+      const cls = (al.down || hp <= 0) ? 'down' : hp <= 25 ? 'low' : '';
+      const status = (al.down || hp <= 0) ? 'DOWN' : hp;
+      return `<div class="mp-ally ${cls}"><span class="mp-ally-name">${al.name}</span><span class="mp-ally-hp">${status}</span></div>`;
+    }).join('');
+    if (html !== this.lastAllyHtml) {
+      this.allies.innerHTML = html;
+      this.lastAllyHtml = html;
+    }
   }
 
   setStrike(ready) {
