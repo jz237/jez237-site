@@ -161,32 +161,51 @@ function stumpGeometry() {
 }
 
 function grassGeometry() {
-  // 3 small blades in a tuft, tapered triangles, terrain-matched greens
+  // 5 tapered blades in a chunky tuft, terrain-matched greens
   const blades = [];
   const rng = makeRng(777);
-  for (let i = 0; i < 3; i++) {
-    const g = new THREE.PlaneGeometry(0.07, 0.34, 1, 1);
+  for (let i = 0; i < 5; i++) {
+    const bh = 0.3 + rng() * 0.18;
+    const g = new THREE.PlaneGeometry(0.08, bh, 1, 1);
     const p = g.attributes.position;
     for (let v = 0; v < p.count; v++) {
-      if (p.getY(v) > 0) p.setX(v, p.getX(v) * 0.15);
+      if (p.getY(v) > 0) p.setX(v, p.getX(v) * 0.12);
     }
-    g.translate(0, 0.17, 0);
-    const lean = (rng() - 0.5) * 0.5;
+    g.translate(0, bh / 2, 0);
+    const lean = (rng() - 0.5) * 0.7;
     g.rotateX(lean * 0.5);
     g.rotateY(rng() * Math.PI);
-    g.translate((rng() - 0.5) * 0.22, 0, (rng() - 0.5) * 0.22);
+    g.translate((rng() - 0.5) * 0.3, 0, (rng() - 0.5) * 0.3);
     const n = g.attributes.position.count;
     const col = new Float32Array(n * 3);
     for (let v = 0; v < n; v++) {
-      const t = g.attributes.position.getY(v) / 0.34;
-      col[v * 3] = 0.30 + 0.12 * t;
-      col[v * 3 + 1] = 0.44 + 0.14 * t;
+      const t = g.attributes.position.getY(v) / bh;
+      col[v * 3] = 0.30 + 0.13 * t;
+      col[v * 3 + 1] = 0.44 + 0.15 * t;
       col[v * 3 + 2] = 0.16 + 0.06 * t;
     }
     g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     blades.push(g);
   }
   return mergeGeoms(blades);
+}
+
+// Gentle vertex-shader wind: bend scales with height² so bases stay put.
+// Phase comes from the instance's world position, so tufts don't sway in
+// lockstep.
+function addWind(mat, windU, strength) {
+  mat.onBeforeCompile = (sh) => {
+    sh.uniforms.uWind = windU;
+    sh.vertexShader = sh.vertexShader
+      .replace('#include <common>', '#include <common>\nuniform float uWind;')
+      .replace('#include <begin_vertex>', `#include <begin_vertex>
+      {
+        float ph = instanceMatrix[3][0] * 0.71 + instanceMatrix[3][2] * 0.53;
+        float bend = position.y * position.y * ${strength.toFixed(3)};
+        transformed.x += (sin(uWind * 1.7 + ph) + sin(uWind * 2.9 + ph * 1.7) * 0.5) * bend;
+        transformed.z += cos(uWind * 1.3 + ph * 1.1) * bend * 0.6;
+      }`);
+  };
 }
 
 function flowerGeometry() {
@@ -242,7 +261,12 @@ export class Foliage {
         dummy.scale.setScalar(s);
         dummy.updateMatrix();
         mesh.setMatrixAt(placed, dummy.matrix);
-        col.setHSL(0.27 + rng() * 0.07, 0.4 + rng() * 0.22, 0.45 + rng() * 0.14);
+        // wider hue spread, plus occasional golden accents on the leafy trees
+        if ((v === 1 || v === 2) && rng() < 0.08) {
+          col.setHSL(0.10 + rng() * 0.05, 0.5 + rng() * 0.15, 0.5 + rng() * 0.1);
+        } else {
+          col.setHSL(0.24 + rng() * 0.11, 0.36 + rng() * 0.26, 0.42 + rng() * 0.17);
+        }
         mesh.setColorAt(placed, col);
         const rec = {
           variant: v, instanceId: placed, mesh,
@@ -360,17 +384,21 @@ export class Foliage {
     }
 
     // ---- grass + flowers (re-scattered around the camera) ----
+    this.windU = { value: 0 };
     const gMat = new THREE.MeshStandardMaterial({
       vertexColors: true, side: THREE.DoubleSide, roughness: 1,
     });
+    addWind(gMat, this.windU, 0.24);
     this.grass = new THREE.InstancedMesh(grassGeometry(), gMat, SCATTER.grass);
     this.grass.castShadow = false;
     this.grass.receiveShadow = false;
     this.scene.add(this.grass);
 
-    this.flowers = new THREE.InstancedMesh(flowerGeometry(), new THREE.MeshStandardMaterial({
+    const fMat = new THREE.MeshStandardMaterial({
       vertexColors: true, side: THREE.DoubleSide, roughness: 1,
-    }), SCATTER.flowers);
+    });
+    addWind(fMat, this.windU, 0.4);
+    this.flowers = new THREE.InstancedMesh(flowerGeometry(), fMat, SCATTER.flowers);
     this.flowers.castShadow = false;
     this.scene.add(this.flowers);
 
@@ -382,6 +410,7 @@ export class Foliage {
   scatterGrass(cx, cz) {
     const dummy = new THREE.Object3D();
     const rng = this.grassRng;
+    const gcol = new THREE.Color();
     const R = 58;
     const n = Math.floor(SCATTER.grass * this.grassFrac);
     for (let i = 0; i < n; i++) {
@@ -396,9 +425,15 @@ export class Foliage {
       dummy.scale.setScalar(s);
       dummy.updateMatrix();
       this.grass.setMatrixAt(i, dummy.matrix);
+      // colour multiplier over the baked blade gradient: mostly fresh
+      // saturated greens matching the terrain, a scattering of dried tufts
+      if (rng() < 0.12) gcol.setRGB(1.25 + rng() * 0.2, 1.0 + rng() * 0.12, 0.45 + rng() * 0.12);
+      else gcol.setRGB(0.72 + rng() * 0.25, 0.95 + rng() * 0.25, 0.5 + rng() * 0.2);
+      this.grass.setColorAt(i, gcol);
     }
     this.grass.count = n;
     this.grass.instanceMatrix.needsUpdate = true;
+    if (this.grass.instanceColor) this.grass.instanceColor.needsUpdate = true;
 
     // flowers prefer open meadows
     const fn = Math.floor(SCATTER.flowers * this.grassFrac);
@@ -506,6 +541,7 @@ export class Foliage {
   }
 
   update(dt, camX, camZ) {
+    this.windU.value += dt;
     if (this.grassAnchor.distanceTo(new THREE.Vector2(camX, camZ)) > 22) {
       this.scatterGrass(camX, camZ);
     }
