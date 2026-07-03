@@ -14,6 +14,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Blobless + sparse: skips the multi-GB media directories; this job
+          # only touches ai-news/.
+          filter: blob:none
+          sparse-checkout: |
+            ai-news
 
       - name: Set up Python
         uses: actions/setup-python@v5

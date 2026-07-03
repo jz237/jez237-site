@@ -65,6 +65,29 @@ function buildCurve(sized, historyBySymbol, benchmarkKey, rangeKey) {
   };
 }
 
+// Max drawdown and best/worst single day, computed from the percent-return
+// series the curve already renders.
+function curveStats(points) {
+  if (!points || points.length < 2) return null;
+  const factors = points.map((p) => 1 + p.value / 100);
+  let peak = factors[0];
+  let maxDrawdown = 0;
+  let bestDay = -Infinity;
+  let worstDay = Infinity;
+  for (let i = 1; i < factors.length; i++) {
+    peak = Math.max(peak, factors[i - 1]);
+    maxDrawdown = Math.min(maxDrawdown, factors[i] / Math.max(peak, factors[i]) - 1);
+    const dayReturn = factors[i] / factors[i - 1] - 1;
+    bestDay = Math.max(bestDay, dayReturn);
+    worstDay = Math.min(worstDay, dayReturn);
+  }
+  return {
+    maxDrawdown: maxDrawdown * 100,
+    bestDay: bestDay * 100,
+    worstDay: worstDay * 100,
+  };
+}
+
 export default function PortfolioPanel({
   benchmarkKey,
   historyBySymbol,
@@ -74,6 +97,7 @@ export default function PortfolioPanel({
 }) {
   const containerRef = useRef(null);
   const [curveRange, setCurveRange] = useState("3M");
+  const [contribMode, setContribMode] = useState("day");
 
   const sized = useMemo(
     () =>
@@ -168,7 +192,13 @@ export default function PortfolioPanel({
   const contributions = [...sized]
     .map((position) => ({
       symbol: position.symbol,
-      amount: position.holding.shares * dayChangeAmount(position.stock),
+      amount:
+        contribMode === "day"
+          ? position.holding.shares * dayChangeAmount(position.stock)
+          : position.holding.avgCost > 0
+            ? position.holding.shares *
+              (position.stock.price - position.holding.avgCost)
+            : 0,
     }))
     .sort((a, b) => Math.abs(b.amount) - Math.abs(a.amount));
   const maxContribution = Math.max(
@@ -178,6 +208,7 @@ export default function PortfolioPanel({
 
   const portfolioReturn = curve ? curve.portfolio.at(-1).value : null;
   const benchmarkReturn = curve ? curve.benchmark.at(-1).value : null;
+  const stats = curve ? curveStats(curve.portfolio) : null;
 
   if (!sized.length) {
     return (
@@ -228,6 +259,22 @@ export default function PortfolioPanel({
             </span>
           </div>
           <div className="curve-chart" ref={containerRef} />
+          {stats && (
+            <div className="curve-stats">
+              <span>
+                Max drawdown{" "}
+                <b className={stats.maxDrawdown < 0 ? "down" : ""}>
+                  {stats.maxDrawdown.toFixed(2)}%
+                </b>
+              </span>
+              <span>
+                Best day <b className="up">+{stats.bestDay.toFixed(2)}%</b>
+              </span>
+              <span>
+                Worst day <b className="down">{stats.worstDay.toFixed(2)}%</b>
+              </span>
+            </div>
+          )}
         </>
       ) : (
         <div className="chart-empty">
@@ -265,7 +312,20 @@ export default function PortfolioPanel({
           )}
         </div>
         <div>
-          <h3>Day P&L Contribution</h3>
+          <h3>
+            P&L Contribution{" "}
+            <span className="contrib-toggle">
+              {["day", "total"].map((key) => (
+                <button
+                  key={key}
+                  className={contribMode === key ? "active" : ""}
+                  onClick={() => setContribMode(key)}
+                >
+                  {key === "day" ? "Day" : "Total"}
+                </button>
+              ))}
+            </span>
+          </h3>
           {contributions.map((entry) => (
             <button
               key={entry.symbol}
