@@ -1492,5 +1492,23 @@
       "continuity": "Preserves Thornlight Meridian's ochre mesas, chalk wind canyons, violet glass dunes, amber thorn-crystal, dust-silk, wind-harp infrastructure, prism beads, and gliding slate-skinned inhabitants.",
       "entryDescription": "Alien archivists file prism-glass memory beads in basalt trays on an Ember Archive ledge while dust-sail ferries cross the dawn canyons."
     }
+  },
+  {
+    "id": "2026-07-03-weekly-world-image-thornlight-meridian-prism-beacon-cairn-r",
+    "title": "Thornlight Meridian: Prism Beacon Cairn Repair",
+    "tests": "Generated with openclaw infer image generate using openai/gpt-image-2; exact PNG output verified before append.",
+    "prompt": "Create a finished photorealistic documentary field image from Thornlight Meridian showing prism beacon cairn repair at amber dawn: non-human gliding inhabitants with mantislike torsos, four walking limbs, folded translucent amber sail-limbs, long balancing tails, matte slate skin, faceted side eyes, and delicate mouth feelers replace cracked prism beads on a chalk-white canyon cairn. Include copper fiber lashings, ceramic clamps, matte basalt tools, dust-silk safety lines, shade-sled tool trays, blue wax fan-leaf kneeling pads, wind-harp resonator tuning, dust ribbons in updrafts, violet glass dunes below, a tiny dust-sail ferry, crystal thorns catching dawn light, and tactile wear on chipped ceramic, frayed dust-silk, scratched basalt, abraded copper fiber, and mineral-dusted wing membranes. No humans, no readable text, no labels, no poster layout, no Earth desert town, no fantasy, no gore.\\n\\nReusable fill-in-the-blank template: Create a realistic photographed daily-life view from [WEEKLY_WORLD_NAME], showing [NON_HUMAN_INHABITANTS] doing [MAINTENANCE_OR_WORK_ACTIVITY] at [SPECIFIC_WORLD_LOCATION]. Preserve the world bible through [RECURRING_MATERIALS], [TRANSIT_OR_INFRASTRUCTURE], [LOCAL_ECOLOGY], [PALETTE_LIGHTING], and [COMMUNICATION_OR_SOCIAL_CUES]. Make it tactile, lived-in, and coherent, with no humans, no readable labels, no poster layout, and no generic Earth setting.\\n\\nExample substitution: [WEEKLY_WORLD_NAME] = Thornlight Meridian; [NON_HUMAN_INHABITANTS] = long-tailed gliding canyon inhabitants with folded amber sail-limbs; [MAINTENANCE_OR_WORK_ACTIVITY] = prism beacon cairn repair; [SPECIFIC_WORLD_LOCATION] = a chalk-white wind canyon rim at early amber dawn; [RECURRING_MATERIALS] = amber thorn-crystal, prism glass beads, copper root fiber, ceramic clamps, matte basalt tools, dust-silk lines, blue wax fan leaves; [TRANSIT_OR_INFRASTRUCTURE] = prism beacon cairns, wind-harp resonators, dust-sail ferry; [LOCAL_ECOLOGY] = crystal thorns, mineral dust, updraft ribbons, violet glass dunes; [PALETTE_LIGHTING] = hot amber dawn, chalk-white dust, teal-blue leaves, copper fibers, violet shadows; [COMMUNICATION_OR_SOCIAL_CUES] = wing-shimmer signals and tail taps.",
+    "image": "images/2026-07-03-weekly-world-image-thornlight-meridian-prism-beacon-cairn-r.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants build daily life along moving bands of warm light.",
+      "continuity": "Preserves Thornlight Meridian's amber crystal thorns, prism beacon cairns, wind-harp repair culture, copper root fiber, dust-silk, blue wax leaves, dry mineral air, and non-human gliding inhabitants.",
+      "entryDescription": "Maintenance crews replace prism beads on a canyon-rim beacon cairn while using wing-shimmer signals and tail taps in the dawn updraft."
+    }
   }
 ]
