@@ -1713,3 +1713,56 @@ h1 {
 .privacy .money {
   filter: blur(7px);
 }
+
+/* --- Mobile: keep the mode tabs / search / refresh reachable while scrolling --- */
+@media (width <= 920px) {
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 60;
+    background: rgba(5, 11, 18, 0.94);
+    backdrop-filter: blur(6px);
+    margin: -10px -10px 10px;
+    padding: 10px;
+  }
+}
+
+/* --- Track-any-ticker + unpriced positions --- */
+.add-ticker {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+.add-ticker input {
+  flex: 1;
+  min-width: 0;
+  color: #dbe8f6;
+  background: #0b1826;
+  border: 1px solid #4b617b55;
+  border-radius: 7px;
+  padding: 5px 9px;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+.add-ticker input::placeholder {
+  text-transform: none;
+}
+.add-ticker button {
+  color: #c8f7d8;
+  background: #43e18414;
+  border: 1px solid #43e18452;
+  border-radius: 7px;
+  padding: 4px 12px;
+  font-size: 11px;
+}
+.add-ticker button:disabled {
+  opacity: 0.45;
+}
+.holding-row.ghost {
+  grid-template-columns: 44px 1fr 26px;
+  opacity: 0.75;
+}
+.holding-row.ghost span {
+  color: #7f94aa;
+  font-size: 10px;
+}

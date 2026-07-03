@@ -132,6 +132,7 @@ function updateStock(stock, yahoo, quoteResult, dailyRows) {
   stock.quoteSource = "yahoo-finance-chart";
   stock.quoteUpdatedAt = meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000).toISOString() : new Date().toISOString();
   if (!stock.name && meta.longName) stock.name = meta.longName;
+  if (!stock.name) stock.name = stock.symbol;
   if (yahoo !== stock.symbol) stock.yahooSymbol = yahoo;
 }
 
@@ -204,8 +205,44 @@ async function fetchEarningsDates(symbols) {
   }
 }
 
+// Symbols listed in portfolio.json but absent from stocks.json get a minimal
+// equity entry so quotes and charts start flowing; research fields stay as
+// placeholders until real research is written for them.
+async function adoptPortfolioSymbols(stocksData) {
+  let positions = [];
+  try {
+    positions = (await readJson(path.join(dataDir, "portfolio.json"))).positions || [];
+  } catch {
+    return;
+  }
+  const known = new Set((stocksData.stocks || []).map(stock => stock.symbol));
+  for (const { symbol } of positions) {
+    if (!symbol || known.has(symbol)) continue;
+    known.add(symbol);
+    stocksData.stocks.push({
+      symbol,
+      kind: "equity",
+      name: "",
+      sector: "Unclassified",
+      rating: "Watch",
+      confidence: 50,
+      thesis: `${symbol} is tracked from portfolio.json. Automated research has not been generated for it yet.`,
+      risks: ["No research recorded for this symbol yet."],
+      opportunities: ["Price tracking only; research pending."],
+      catalysts: ["Next earnings update"],
+      price: 0,
+      change: 0,
+      changeAmount: 0,
+      prevClose: null,
+      chart: []
+    });
+    console.log(`Adopted ${symbol} from portfolio.json (minimal entry created).`);
+  }
+}
+
 async function main() {
   const stocksData = await readJson(stocksPath);
+  await adoptPortfolioSymbols(stocksData);
   await fs.mkdir(historyDir, { recursive: true });
 
   const now = new Date().toISOString();

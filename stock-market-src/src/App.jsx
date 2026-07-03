@@ -53,6 +53,7 @@ export default function App() {
   );
   const [holdingsSort, setHoldingsSort] = useState("default");
   const [hideUnsized, setHideUnsized] = useState(false);
+  const [newTicker, setNewTicker] = useState("");
   const [now, setNow] = useState(() => Date.now());
   const searchRef = useRef(null);
   const selectedKeyRef = useRef(null);
@@ -254,6 +255,15 @@ export default function App() {
         .map((p) => ({ ...p, stock: equities.find((s) => s.symbol === p.symbol) }))
         .filter((p) => !!p.stock),
     [portfolio.positions, equities],
+  );
+  const unpricedPositions = useMemo(
+    () =>
+      stocksData
+        ? portfolio.positions.filter(
+            (p) => !allStocks.some((s) => s.symbol === p.symbol),
+          )
+        : [],
+    [stocksData, portfolio.positions, allStocks],
   );
 
   // Prefetch history for sized positions (plus the benchmark) so the
@@ -485,6 +495,18 @@ export default function App() {
       positions: [...portfolio.positions, { symbol: stock.symbol }],
     });
   }
+  function trackTicker(event) {
+    event.preventDefault();
+    const symbol = newTicker.trim().toUpperCase();
+    if (!/^[A-Z][A-Z0-9.-]{0,9}$/.test(symbol)) return;
+    if (!portfolio.positions.some((p) => p.symbol === symbol)) {
+      savePortfolio({
+        ...portfolio,
+        positions: [...portfolio.positions, { symbol }],
+      });
+    }
+    setNewTicker("");
+  }
   function untrack(symbol) {
     savePortfolio({
       ...portfolio,
@@ -608,7 +630,7 @@ export default function App() {
             Price{sortArrow("price")}
           </button>
           <button onClick={() => cycleSort("change")}>
-            24H %{sortArrow("change")}
+            Day %{sortArrow("change")}
           </button>
         </div>
         <div className="watchlist">
@@ -1297,6 +1319,7 @@ export default function App() {
                             Shares
                             <input
                               type="number"
+                              inputMode="decimal"
                               min="0"
                               step="any"
                               value={holding?.shares || ""}
@@ -1312,6 +1335,7 @@ export default function App() {
                             Avg Cost
                             <input
                               type="number"
+                              inputMode="decimal"
                               min="0"
                               step="any"
                               value={holding?.avgCost || ""}
@@ -1349,6 +1373,39 @@ export default function App() {
                         </div>
                       );
                     })}
+                    {unpricedPositions.map((position) => (
+                      <div key={position.symbol} className="holding-row ghost">
+                        <strong>{position.symbol}</strong>
+                        <span>
+                          Awaiting price data — quotes start once the symbol is
+                          in data/portfolio.json at the next refresh.
+                        </span>
+                        <button
+                          className="remove"
+                          title={`Stop tracking ${position.symbol}`}
+                          onClick={() => untrack(position.symbol)}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ))}
+                    <form className="add-ticker" onSubmit={trackTicker}>
+                      <input
+                        value={newTicker}
+                        onChange={(e) => setNewTicker(e.target.value)}
+                        placeholder="Track any ticker (e.g. TSLA)"
+                        maxLength={10}
+                        aria-label="Track any ticker"
+                      />
+                      <button
+                        type="submit"
+                        disabled={
+                          !/^[A-Za-z][A-Za-z0-9.-]{0,9}$/.test(newTicker.trim())
+                        }
+                      >
+                        Add
+                      </button>
+                    </form>
                     <small>
                       Share counts and cost basis live only in this browser
                       (localStorage). The public site never stores or uploads
