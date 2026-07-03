@@ -8,6 +8,12 @@
       "port": 8000
     },
     {
+      "name": "static serve auto",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "."],
+      "autoPort": true
+    },
+    {
       "name": "npx serve",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["--yes", "serve", ".", "-l", "3000"],

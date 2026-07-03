@@ -22,6 +22,10 @@
     { id: "tunnel", label: "Star Tunnel" },
     { id: "aurora", label: "Aurora" },
     { id: "kaleido", label: "Kaleidoscope" },
+    { id: "horizon", label: "Synthwave" },
+    { id: "plasma", label: "Plasma" },
+    { id: "fireworks", label: "Fireworks" },
+    { id: "galaxy", label: "Galaxy" },
     { id: "fluid", label: "Fluid Lab" },
   ];
 
@@ -597,12 +601,237 @@
       ctx.globalCompositeOperation = "source-over";
     }
 
+    // ---- mode: Synthwave Horizon ----
+    function drawHorizon() {
+      fade(0.42);
+      var horizon = h * 0.46;
+      var cx = w / 2;
+      ctx.globalCompositeOperation = "lighter";
+      // sun
+      var sunR = Math.min(w, h) * (0.17 + an.bass * 0.06 + an.beat * 0.03);
+      var sunY = horizon - sunR * 0.2;
+      var sun = ctx.createRadialGradient(cx, sunY, 0, cx, sunY, sunR);
+      sun.addColorStop(0, hsla(an.hue + 45, 100, 78, 0.9));
+      sun.addColorStop(0.65, hsla(an.hue, 100, 55, 0.6));
+      sun.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = sun;
+      ctx.beginPath();
+      ctx.arc(cx, sunY, sunR, 0, Math.PI * 2);
+      ctx.fill();
+      // classic scanline stripes across the sun's lower half
+      ctx.globalCompositeOperation = "source-over";
+      for (var st = 0; st < 6; st += 1) {
+        var sy = sunY + sunR * (0.08 + st * 0.15);
+        ctx.fillStyle = "rgba(2,3,12,0.85)";
+        ctx.fillRect(cx - sunR, sy, sunR * 2, 1.5 + st * 1.4);
+      }
+      // spectrum mountain ridge (mirrored around center)
+      ctx.beginPath();
+      ctx.moveTo(0, horizon);
+      var steps = 64;
+      for (var i = 0; i <= steps; i += 1) {
+        var x = (i / steps) * w;
+        var v = sampleBin(Math.abs(i / steps - 0.5) * 2);
+        ctx.lineTo(x, horizon - Math.pow(v, 1.3) * h * 0.22 - 1);
+      }
+      ctx.lineTo(w, horizon);
+      ctx.closePath();
+      ctx.fillStyle = "rgba(3,4,16,0.92)";
+      ctx.fill();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.strokeStyle = hsla(an.hue + 160, 100, 65, 0.85);
+      ctx.lineWidth = 1.6;
+      ctx.stroke();
+      // perspective grid floor
+      ctx.strokeStyle = hsla(an.hue + 190, 95, 60, 0.4);
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      for (var k = -10; k <= 10; k += 1) {
+        ctx.moveTo(cx + k * w * 0.011, horizon);
+        ctx.lineTo(cx + k * w * 0.13, h);
+      }
+      ctx.stroke();
+      var rows = 9;
+      var scroll = (an.t * (0.004 + an.energy * 0.012)) % (1 / rows);
+      for (var r = 0; r < rows; r += 1) {
+        var zt = (r / rows + scroll) % 1;
+        var gy = horizon + zt * zt * (h - horizon);
+        ctx.strokeStyle = hsla(an.hue + 190, 95, 62, 0.12 + zt * 0.5);
+        ctx.lineWidth = 0.8 + zt * 2;
+        ctx.beginPath();
+        ctx.moveTo(0, gy);
+        ctx.lineTo(w, gy);
+        ctx.stroke();
+      }
+      drawParticles();
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    // ---- mode: Plasma ----
+    var plasmaT = { a: Math.random() * 10, b: Math.random() * 10, c: Math.random() * 10 };
+
+    function drawPlasma() {
+      ctx.globalCompositeOperation = "source-over";
+      plasmaT.a += 0.016 + an.energy * 0.05 + an.beat * 0.04;
+      plasmaT.b += 0.011 + an.bass * 0.07;
+      plasmaT.c += 0.008 + an.treb * 0.08;
+      var cols = clamp(Math.floor(w / 16), 20, 64);
+      var cell = Math.ceil(w / cols);
+      var rows = Math.ceil(h / cell);
+      var zoom = 0.16 * (1 + an.bass * 0.35);
+      var glow = 0.55 + an.energy * 0.9;
+      for (var iy = 0; iy < rows; iy += 1) {
+        for (var ix = 0; ix < cols; ix += 1) {
+          var dx = ix - cols / 2;
+          var dy = iy - rows / 2;
+          var v = Math.sin(ix * zoom * 2.1 + plasmaT.a)
+            + Math.sin(iy * zoom * 1.7 - plasmaT.b)
+            + Math.sin((ix + iy) * zoom * 1.2 + plasmaT.c)
+            + Math.sin(Math.sqrt(dx * dx + dy * dy) * zoom * 2.4 - plasmaT.a * 1.3);
+          ctx.fillStyle = hsla(an.hue + v * 44, 85, clamp(24 + (v + 4) * 6.5 * glow, 4, 74), 1);
+          ctx.fillRect(ix * cell, iy * cell, cell + 1, cell + 1);
+        }
+      }
+    }
+
+    // ---- mode: Fireworks ----
+    var rockets = [];
+    var sparks = [];
+    var framesSinceLaunch = 999;
+
+    function drawFireworks() {
+      fade(0.22);
+      ctx.globalCompositeOperation = "lighter";
+      var launch = an.beatFired ? 1 + Math.floor(an.bass * 2.5) : 0;
+      // smooth tracks rarely trip the beat detector — keep the sky alive anyway
+      if (!launch && an.live && framesSinceLaunch > 150 && an.energy > 0.04) launch = 1;
+      if (!an.live && Math.random() < 0.005) launch = 1; // lone idle rocket now and then
+      framesSinceLaunch += 1;
+      if (launch) framesSinceLaunch = 0;
+      for (var l = 0; l < launch && rockets.length < 6; l += 1) {
+        rockets.push({
+          x: w * (0.15 + Math.random() * 0.7),
+          y: h + 4,
+          vx: (Math.random() - 0.5) * 1.6,
+          vy: -h * (0.012 + Math.random() * 0.006 + an.bass * 0.004),
+          hue: an.hue + Math.random() * 120,
+          fuse: h * (0.18 + Math.random() * 0.3),
+        });
+      }
+      for (var r = rockets.length - 1; r >= 0; r -= 1) {
+        var k = rockets[r];
+        k.x += k.vx;
+        k.y += k.vy;
+        k.vy += h * 0.00016;
+        ctx.fillStyle = hsla(k.hue, 100, 78, 0.9);
+        ctx.fillRect(k.x - 1.2, k.y, 2.4, 6);
+        if (k.y <= k.fuse || k.vy > -0.4) {
+          var count = 36 + Math.floor(Math.random() * 30);
+          for (var s = 0; s < count && sparks.length < 700; s += 1) {
+            var a = Math.random() * Math.PI * 2;
+            var sp = (0.7 + Math.random() * 2.6) * Math.min(w, h) * 0.0042;
+            sparks.push({
+              x: k.x,
+              y: k.y,
+              vx: Math.cos(a) * sp,
+              vy: Math.sin(a) * sp,
+              life: 1,
+              hue: k.hue + Math.random() * 40 - 20,
+            });
+          }
+          rockets.splice(r, 1);
+        }
+      }
+      for (var s2 = sparks.length - 1; s2 >= 0; s2 -= 1) {
+        var p = sparks[s2];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += h * 0.0002;
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+        p.life -= 0.011;
+        if (p.life <= 0) {
+          sparks.splice(s2, 1);
+          continue;
+        }
+        ctx.fillStyle = hsla(p.hue, 100, 55 + p.life * 30, p.life);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 0.8 + p.life * 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      // equalizer skyline along the bottom
+      var count2 = clamp(Math.floor(w / 22), 20, 64);
+      var bw = w / count2;
+      for (var i2 = 0; i2 < count2; i2 += 1) {
+        var v = sampleBin(i2 / (count2 - 1));
+        var bh = Math.pow(v, 1.4) * h * 0.16 + 2;
+        ctx.fillStyle = hsla(an.hue + (i2 / count2) * 120, 90, 55, 0.5);
+        ctx.fillRect(i2 * bw + 1, h - bh, bw - 2, bh);
+      }
+      ctx.globalCompositeOperation = "source-over";
+    }
+
+    // ---- mode: Galaxy ----
+    var galaxyStars = null;
+
+    function ensureGalaxy() {
+      if (galaxyStars) return;
+      galaxyStars = [];
+      for (var i = 0; i < 460; i += 1) {
+        galaxyStars.push({
+          arm: i % 3,
+          dist: Math.pow(Math.random(), 0.7),
+          jitter: (Math.random() - 0.5) * 0.55,
+          size: 0.5 + Math.random() * 1.6,
+          tw: Math.random() * Math.PI * 2,
+        });
+      }
+    }
+
+    function drawGalaxy() {
+      ensureGalaxy();
+      feedback(1.006, 0.0012 + an.energy * 0.003, 0.45);
+      fade(0.3);
+      var cx = w / 2;
+      var cy = h / 2;
+      var R = Math.min(w, h) * 0.5;
+      ctx.globalCompositeOperation = "lighter";
+      var coreR = R * (0.1 + an.bass * 0.11 + an.beat * 0.06);
+      var core = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR);
+      core.addColorStop(0, hsla(an.hue + 50, 100, 88, 0.8));
+      core.addColorStop(0.6, hsla(an.hue, 95, 60, 0.35));
+      core.addColorStop(1, "rgba(0,0,0,0)");
+      ctx.fillStyle = core;
+      ctx.beginPath();
+      ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
+      ctx.fill();
+      for (var i = 0; i < galaxyStars.length; i += 1) {
+        var s = galaxyStars[i];
+        var v = sampleBin(s.dist);
+        var ang = s.arm * (Math.PI * 2 / 3) + s.dist * 4.6 + s.jitter + an.rot * (1.6 - s.dist * 0.8);
+        var rad = (0.12 + s.dist * 0.85) * R * (1 + v * 0.3);
+        var x = cx + Math.cos(ang) * rad;
+        var y = cy + Math.sin(ang) * rad * 0.72;
+        var bright = 0.22 + v * 0.75 + 0.15 * Math.sin(an.t * 0.1 + s.tw);
+        ctx.fillStyle = hsla(an.hue + s.dist * 140, 90, 62 + v * 20, clamp(bright, 0, 1));
+        ctx.beginPath();
+        ctx.arc(x, y, s.size + v * 2.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      drawParticles();
+      ctx.globalCompositeOperation = "source-over";
+    }
+
     var DRAWERS = {
       neon: drawNeon,
       radial: drawRadial,
       tunnel: drawTunnel,
       aurora: drawAurora,
       kaleido: drawKaleido,
+      horizon: drawHorizon,
+      plasma: drawPlasma,
+      fireworks: drawFireworks,
+      galaxy: drawGalaxy,
     };
 
     function step() {
