@@ -30,6 +30,9 @@
 /stock-market/stock-live-refresh.js
   Cache-Control: no-cache, must-revalidate
 
+/stock-market/portfolio-tools.js
+  Cache-Control: no-cache, must-revalidate
+
 /stock-market/data/*
   Cache-Control: public, max-age=0, must-revalidate
 
