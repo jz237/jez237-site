@@ -6585,6 +6585,56 @@ function Ih(i) {
     !0
   );
 }
+// Falling off the ribbon (practice/free-run): keep the crash energy and hand control to
+// roam physics right where you land — the city catches you, GTA style.
+function fallIntoCity(wx, wz, fp) {
+  if (u.mode !== "race") return !1;
+  const dirX = fp.tangent.x,
+    dirZ = fp.tangent.z,
+    n = Math.max(1e-4, Math.hypot(dirX, dirZ));
+  ((u.mode = "roam"),
+    (u.practice = !0),
+    (u.freeRun = !1),
+    u.roamPos.set(wx, He(wx, wz) + Wn, wz),
+    (u.roamYaw = Math.atan2(dirX / n, -dirZ / n)),
+    (u.camYaw = u.roamYaw),
+    (u.camLookYaw = 0),
+    (u.camLookPitch = 0),
+    (u.cameraZoom = 0),
+    (u.wheelSteer = 0),
+    (u.speed = MathUtils.clamp(Math.abs(u.speed) * 0.6, 12, 70)),
+    (u.grounded = !0),
+    (u.yVel = 0),
+    (u.airtime = 0),
+    (u.roamAir = !1),
+    (u.roamVy = 0),
+    (u.roamPrevY = null),
+    (u.damage = MathUtils.clamp(u.damage + 10, 0, 100)),
+    (u.cameraShake = Math.max(u.cameraShake, 0.8)),
+    (u.message = "Off the ribbon — welcome to the streets"),
+    (u.messageTimer = 1.8),
+    playSfx("land", 0.6, 0.92, 0.08) || Pc(30),
+    Pr(new Vector3(wx, u.roamPos.y + 0.4, wz), 20),
+    setRivalsVisible(!1),
+    (cn.visible = !0),
+    qn && (qn.visible = !1),
+    document.body.classList.add("roam-mode"),
+    applyTrackViewClass(),
+    (u.vehicle = "car"),
+    (walker.visible = !1),
+    (Qe.position.textContent = "FREE ROAM"),
+    (Qe.trackName.textContent = "City Streets"),
+    zs());
+  const a = Math.sin(u.roamYaw),
+    o = -Math.cos(u.roamYaw);
+  return (
+    Xe.position.set(u.roamPos.x - a * 17, u.roamPos.y + 7.2, u.roamPos.z - o * 17),
+    Xe.lookAt(u.roamPos.x + a * 13, u.roamPos.y + 2.45, u.roamPos.z + o * 13),
+    (Xe.fov = 69),
+    Xe.updateProjectionMatrix(),
+    !0
+  );
+}
 function iv(i) {
   if (!i || u.mode !== "race") return !1;
   const e = i.segments[0],
@@ -6651,6 +6701,7 @@ function publishRoamTelemetry() {
     driftComboT: +(u.driftComboT || 0).toFixed(2),
     driftT: +(u.driftT || 0).toFixed(2),
     driftAcc: +(u.driftAcc || 0).toFixed(1),
+    roamView,
     heat: +(u.heat || 0).toFixed(2),
     police: police.cars.length,
     policeNearest: police.nearest === 1 / 0 ? null : +police.nearest.toFixed(1),
@@ -7048,7 +7099,7 @@ function stealParkedCar(spot) {
   return !0;
 }
 function exitStolen() {
-  ((stolenRide.parked = u.roamPos.clone()), (stolenRide.parkedYaw = u.roamYaw));
+  ((stolenRide.mesh.visible = !0), (stolenRide.parked = u.roamPos.clone()), (stolenRide.parkedYaw = u.roamYaw));
   ((u.vehicle = "foot"), (u.drivingStolen = !1), (u.speed = 0), (u.driftAngle = 0));
   const rx = Math.cos(u.roamYaw),
     rz = Math.sin(u.roamYaw);
@@ -7106,7 +7157,7 @@ function exitCar(force = !1) {
     ((u.message = "On foot — your car is marked on the map"), (u.messageTimer = 1.6));
     return !0;
   }
-  (parkedCarPos.copy(u.roamPos), (parkedCarYaw = u.roamYaw));
+  (parkedCarPos.copy(u.roamPos), (parkedCarYaw = u.roamYaw), (cn.visible = !0));
   ((u.vehicle = "foot"), (u.speed = 0), (u.driftAngle = 0), (u.roamAir = !1), (u.roamVy = 0));
   const rx = Math.cos(u.roamYaw),
     rz = Math.sin(u.roamYaw);
@@ -7146,6 +7197,7 @@ function exitHeli() {
     return !1;
   }
   ((u.vehicle = "foot"),
+    (heli.mesh.visible = !0),
     (u.roamPos.x = heli.pos.x + Math.cos(heli.yaw) * -5.6),
     (u.roamPos.z = heli.pos.z + Math.sin(heli.yaw) * -5.6),
     (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05),
@@ -7551,12 +7603,58 @@ function Lc() {
     };
   ((Xe.position.y += ll(r, Xe.position, 3.4)), (Xe.position.y += Da(r, Xe.position, 4.2)));
 }
+// Roam camera view: chase (3rd person, default) or hood (1st person). C toggles.
+let roamView = localStorage.getItem("steel-ribbon-roam-view") === "hood" ? "hood" : "chase";
+function toggleRoamView() {
+  ((roamView = roamView === "chase" ? "hood" : "chase"),
+    localStorage.setItem("steel-ribbon-roam-view", roamView),
+    (u.message = roamView === "hood" ? "First person" : "Third person"),
+    (u.messageTimer = 0.9));
+}
+function roamViewMeshRef() {
+  return u.vehicle === "heli" && heli ? heli.mesh : driveMeshRef();
+}
+function jdHood(i) {
+  // rigid first-person hood cam: sits at the windshield, looks down the nose
+  const dm = roamViewMeshRef(),
+    yaw = u.roamYaw + u.camLookYaw * 0.8,
+    t = Math.sin(yaw),
+    n = -Math.cos(yaw),
+    heliMode = u.vehicle === "heli",
+    h = heliMode ? 2.6 : 1.42,
+    fwd = heliMode ? 1.2 : 0.85;
+  (dm.visible = !1);
+  Xe.position.set(u.roamPos.x + t * fwd, u.roamPos.y + h - u.roamSuspension * 0.4, u.roamPos.z + n * fwd);
+  if (u.cameraShake > 0.01) {
+    const m = u.cameraShake * 0.5;
+    ((Xe.position.x += (Math.random() - 0.5) * m), (Xe.position.y += (Math.random() - 0.5) * m * 0.6));
+  }
+  (Ln.position.copy(Xe.position),
+    Ln.lookAt(
+      u.roamPos.x + t * 30,
+      u.roamPos.y + h + u.camLookPitch * 16 + (u.roamAir ? u.roamVy * 0.06 : 0),
+      u.roamPos.z + n * 30,
+    ),
+    Ln.rotateY(Math.PI),
+    Ln.rotateZ((u.roamAir && u.stuntActive ? u.airRoll || 0 : 0) - u.wheelSteer * 0.05),
+    Xe.quaternion.slerp(Ln.quaternion, 1 - Math.pow(0.001, i)));
+  const p = 76 + Math.min(14, Math.abs(u.speed) * 0.08);
+  (Math.abs(Xe.fov - p) > 0.02 && ((Xe.fov += (p - Xe.fov) * (1 - Math.pow(0.01, i))), Xe.updateProjectionMatrix()),
+    (u.cameraShake = Math.max(0, u.cameraShake - i * 2.4)),
+    (u.collisionDrama = Math.max(0, u.collisionDrama - i * 1.8)));
+}
 function jd(i) {
   if (window.__freeCam) return;
   if ((Jd(i), Math.abs(u.speed) > Ac)) {
     let m = u.roamYaw - u.camYaw;
     ((m = Math.atan2(Math.sin(m), Math.cos(m))), (u.camYaw += m * (1 - Math.pow(0.08, i))));
   }
+  if (roamView === "hood" && u.vehicle !== "foot") {
+    jdHood(i);
+    return;
+  }
+  const dmv = roamViewMeshRef();
+  dmv.visible || (dmv.visible = !0);
   const e = u.camYaw + u.camLookYaw,
     t = Math.sin(e),
     n = -Math.cos(e),
@@ -7636,6 +7734,11 @@ function Qd(i, placement = null) {
     ${seasonHtml}
   `),
     refreshSeasonUI(),
+    Number.isFinite(u.bestLap) && u.bestLap > 3 && submitScore("lap", Math.round(1e6 / u.bestLap), {
+      time: +u.bestLap.toFixed(2),
+      course: ce.name,
+      car: CAR_MODELS[carModelIndex]?.label || "",
+    }),
     Qe.result.classList.remove("hidden"));
 }
 function Uh(i = "Craned back to the ribbon") {
@@ -7937,6 +8040,30 @@ window.__steelRibbonDebug = {
     let n = 0;
     for (const r of Ri) r.actor?.panicT > 0 && n++;
     return n;
+  },
+  mpInfo() {
+    return {
+      connected: mp.connected,
+      room: mp.room,
+      id: mp.id,
+      peers: [...mp.peers.values()].map((p) => ({ name: p.name, has: p.has, x: +(p.tx || 0).toFixed(1), z: +(p.tz || 0).toFixed(1) })),
+    };
+  },
+  mpJoin(room, name) {
+    const r = document.querySelector("#mpRoom"),
+      n = document.querySelector("#mpName");
+    (r && (r.value = room), n && (n.value = name), mpConnect());
+    return mp.room;
+  },
+  mpLeave() {
+    mpDisconnect(!0);
+    return !mp.connected;
+  },
+  boardsInfo() {
+    return fetchBoard(boardMode).then((rows) => ({ mode: boardMode, rows: rows ? rows.length : null, ok: rows !== null }));
+  },
+  gamepadInfo() {
+    return { active: pad.active };
   },
   setTod(mode) {
     return (
@@ -8489,7 +8616,18 @@ function eu(i) {
         Pr(v.p.clone().addScaledVector(v.side, u.lateral).addScaledVector(on, 0.7), R ? 7 : 24),
         (u.airtime = 0));
     }
-    u.y < -55 && ((u.damage += 28), Uh("Track crew recovery"));
+    if (u.practice || u.freeRun) {
+      // Falling off the ribbon in practice/free-run drops you straight into city cruising —
+      // catch the car at ground level and hand over to roam physics mid-tumble.
+      if (!u.grounded && u.yVel < -6) {
+        const fp = St(u.s),
+          wx = fp.p.x + fp.side.x * u.lateral,
+          wz = fp.p.z + fp.side.z * u.lateral,
+          gy = He(wx, wz);
+        u.y <= gy + 1.3 && fallIntoCity(wx, wz, fp);
+      }
+      u.y < -55 && ((u.damage += 28), Uh("Track crew recovery"));
+    } else u.y < -55 && ((u.damage += 28), Uh("Track crew recovery"));
   }
   const x = u.totalDistance;
   ((u.totalDistance += u.speed * i),
@@ -9099,8 +9237,44 @@ function Dc(i) {
     t = i - e * 60;
   return `${String(e).padStart(2, "0")}:${t.toFixed(1).padStart(4, "0")}`;
 }
+// ─── Gamepad (standard mapping): left stick steers, RT/A throttle, LT/B brake,
+// X handbrake, RB boost, Y enter/exit vehicles, Start pause/back. Feeds the same
+// input paths as touch (Fe) and keyboard (_t), so every mode just works. ───
+const pad = { active: !1, prev: {} };
+function pollGamepad() {
+  let g = null;
+  if (navigator.getGamepads) for (const c of navigator.getGamepads()) if (c && c.connected) { g = c; break; }
+  if (!g) {
+    if (pad.active) {
+      ((pad.active = !1), (Fe.steer = 0), (Fe.throttle = 0), (Fe.brake = 0));
+      for (const k of ["Space", "ShiftLeft"]) pad.prev[k] && (_t.delete(k), (pad.prev[k] = !1));
+    }
+    return;
+  }
+  const dz = (v) => (Math.abs(v) < 0.14 ? 0 : v),
+    steer = dz(g.axes[0] || 0),
+    th = Math.max(g.buttons[7]?.value || 0, g.buttons[0]?.pressed ? 1 : 0),
+    br = Math.max(g.buttons[6]?.value || 0, g.buttons[1]?.pressed ? 1 : 0),
+    hb = !!g.buttons[2]?.pressed,
+    act = !!g.buttons[3]?.pressed,
+    boost = !!g.buttons[5]?.pressed,
+    start = !!g.buttons[9]?.pressed;
+  if (!pad.active && !steer && !th && !br && !hb && !act && !boost && !start) return;
+  (pad.active || La(), (pad.active = !0));
+  ((Fe.steer = steer), (Fe.throttle = th), (Fe.brake = br));
+  const setKey = (code, on) => {
+    (on && !pad.prev[code] ? _t.add(code) : !on && pad.prev[code] && _t.delete(code), (pad.prev[code] = on));
+  };
+  (setKey("Space", hb), setKey("ShiftLeft", boost));
+  (act && !pad.prev.actB && u.mode === "roam" && handleVehicleAction(), (pad.prev.actB = act));
+  (start &&
+    !pad.prev.startB &&
+    window.dispatchEvent(new KeyboardEvent("keydown", { code: u.mode === "race" || u.mode === "paused" ? "KeyP" : "Escape" })),
+    (pad.prev.startB = start));
+}
 function nu() {
   Qt.info.reset();
+  pollGamepad();
   const i = p1.getDelta();
   let e = Math.min(0.033, i);
   // Stunt slow-mo: ramp launches dilate time briefly; the timer burns in real time.
@@ -9136,7 +9310,10 @@ function nu() {
 window.addEventListener("keydown", (i) => {
   (_t.add(i.code),
     ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Space"].includes(i.code) && i.preventDefault(),
-    i.code === "KeyC" && (u.mode === "race" || u.mode === "paused") && toggleTrackView(),
+    i.code === "KeyC" &&
+      (u.mode === "race" || u.mode === "paused"
+        ? toggleTrackView()
+        : u.mode === "roam" && u.vehicle !== "foot" && toggleRoamView()),
     i.code === "KeyE" && handleVehicleAction(),
     i.code === "KeyN" && cycleTod(),
     i.code === "KeyV" && cycleWeather(),
@@ -9183,7 +9360,8 @@ volBtn.addEventListener("click", (ev) => {
     mi && mi.master.gain.setTargetAtTime(v, mi.ctx.currentTime, 0.05),
     refreshVolLabel());
 });
-Qe.menu.appendChild(volBtn);
+const menuToggles = document.querySelector("#menuToggles") || Qe.menu;
+menuToggles.appendChild(volBtn);
 const musicBtn = document.createElement("button");
 ((musicBtn.id = "musicBtn"), (musicBtn.type = "button"));
 function refreshMusicLabel() {
@@ -9195,7 +9373,7 @@ musicBtn.addEventListener("click", (ev) => {
   const on = localStorage.getItem("steel-ribbon-music") !== "0";
   (localStorage.setItem("steel-ribbon-music", on ? "0" : "1"), La(), refreshMusicLabel());
 });
-Qe.menu.appendChild(musicBtn);
+menuToggles.appendChild(musicBtn);
 // Touch action button: enter/exit vehicles in free roam.
 const actionBtn = document.createElement("button");
 ((actionBtn.id = "actionBtn"), (actionBtn.type = "button"), (actionBtn.textContent = "E"));
@@ -9242,6 +9420,13 @@ function refreshSeasonUI() {
   }
 }
 function returnToMenu() {
+  u.mode === "roam" &&
+    u.score > 800 &&
+    submitScore("roam", u.score, {
+      deliveries: qe.deliveries || 0,
+      stunts: qe.stunts || 0,
+      busts: qe.busts || 0,
+    });
   ((u.mode = "menu"),
     Ia(),
     (cn.visible = !1),
@@ -9484,7 +9669,7 @@ refreshWeatherLabel();
 weatherBtn.addEventListener("click", (ev) => {
   (ev.stopPropagation(), cycleWeather());
 });
-Qe.menu.appendChild(weatherBtn);
+(document.querySelector("#menuToggles") || Qe.menu).appendChild(weatherBtn);
 
 // ─── Time of day: dusk (default) / night / day / slow cycle. Blends the sky shader
 // palettes, the light rig, fog, sun disc and clouds. Streetlamps and windows stay lit —
@@ -9572,7 +9757,311 @@ refreshTodLabel();
 todBtn.addEventListener("click", (ev) => {
   (ev.stopPropagation(), cycleTod());
 });
-Qe.menu.appendChild(todBtn);
+(document.querySelector("#menuToggles") || Qe.menu).appendChild(todBtn);
+
+// ─── Menu panels: online cruise + global leaderboards (shared site services) ───
+const menuMainEl = document.querySelector("#menuMain"),
+  onlinePanelEl = document.querySelector("#onlinePanel"),
+  scoresPanelEl = document.querySelector("#scoresPanel");
+function showMenuPanel(which) {
+  menuMainEl &&
+    (menuMainEl.classList.toggle("hidden", !!which),
+    onlinePanelEl.classList.toggle("hidden", which !== "online"),
+    scoresPanelEl.classList.toggle("hidden", which !== "scores"));
+}
+// Leaderboards on the site's game-scores worker (the same service Vector Arena uses).
+const SCORE_APIS = {
+  lap: "https://game-scores.jez237.workers.dev/scores/steel-ribbon-racer-laps-v1",
+  roam: "https://game-scores.jez237.workers.dev/scores/steel-ribbon-racer-roam-v1",
+};
+const INITIALS_KEY = "steel-ribbon-initials",
+  initialsInput = document.querySelector("#initials");
+if (initialsInput) {
+  initialsInput.value = localStorage.getItem(INITIALS_KEY) || "";
+  initialsInput.addEventListener("input", () => {
+    ((initialsInput.value = initialsInput.value
+      .toUpperCase()
+      .replace(/[^A-Z0-9]/g, "")
+      .slice(0, 3)),
+      localStorage.setItem(INITIALS_KEY, initialsInput.value));
+  });
+}
+function playerInitials() {
+  return (localStorage.getItem(INITIALS_KEY) || "").slice(0, 3);
+}
+let boardMode = "lap";
+async function fetchBoard(mode) {
+  try {
+    const ctl = new AbortController(),
+      timer = setTimeout(() => ctl.abort(), 7000),
+      res = await fetch(SCORE_APIS[mode], { signal: ctl.signal, cache: "no-store" });
+    clearTimeout(timer);
+    const data = await res.json(),
+      rows = Array.isArray(data) ? data : data.scores || [];
+    return rows
+      .filter((r) => Number(r.score) > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 12);
+  } catch {
+    return null;
+  }
+}
+async function submitScore(mode, score, extra = {}) {
+  const initials = playerInitials();
+  if (!initials || !(score > 0)) return !1;
+  try {
+    const ctl = new AbortController(),
+      timer = setTimeout(() => ctl.abort(), 7000);
+    await fetch(SCORE_APIS[mode], {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ initials, score: Math.max(0, Math.floor(score)), extra }),
+      signal: ctl.signal,
+    });
+    (clearTimeout(timer), (qe.scoresPosted = (qe.scoresPosted || 0) + 1));
+    return !0;
+  } catch {
+    return !1;
+  }
+}
+async function renderBoard() {
+  const el = document.querySelector("#scoreBoard");
+  if (!el) return;
+  el.textContent = "Loading…";
+  const rows = await fetchBoard(boardMode);
+  if (!rows) {
+    el.textContent = "Leaderboard unreachable — try again later.";
+    return;
+  }
+  if (!rows.length) {
+    el.textContent = "No entries yet — set your initials and claim the first spot.";
+    return;
+  }
+  el.innerHTML = rows
+    .map((r, k) => {
+      const nm = String(r.initials || r.name || "???").slice(0, 3),
+        val =
+          boardMode === "lap"
+            ? r.extra?.time
+              ? `${Number(r.extra.time).toFixed(2)}s — ${r.extra.course || "?"}`
+              : Math.round(r.score)
+            : Math.round(r.score).toLocaleString();
+      return `<div class="score-row"><i>${k + 1}</i><b>${nm}</b><span>${val}</span></div>`;
+    })
+    .join("");
+}
+for (const [id, mode] of [
+  ["#lapBoardBtn", "lap"],
+  ["#roamBoardBtn", "roam"],
+]) {
+  const b = document.querySelector(id);
+  b &&
+    b.addEventListener("click", () => {
+      ((boardMode = mode),
+        document.querySelector("#lapBoardBtn")?.classList.toggle("active-board", mode === "lap"),
+        document.querySelector("#roamBoardBtn")?.classList.toggle("active-board", mode === "roam"),
+        renderBoard());
+    });
+}
+document.querySelector("#scoresBtn")?.addEventListener("click", () => (showMenuPanel("scores"), renderBoard()));
+document.querySelector("#scoresBackBtn")?.addEventListener("click", () => showMenuPanel(null));
+
+// ─── Online cruise: shared-room presence over the site's relay worker. Everyone in a
+// room sees each other's car (or walker) with a name tag — arcade ghosts, no collisions. ───
+const MP_WS_BASE = "wss://iron-ridge-online.jez237.workers.dev/ws",
+  MP_ROOM_KEY = "steel-ribbon-mp-room",
+  MP_NAME_KEY = "steel-ribbon-mp-name",
+  mp = { ws: null, connected: !1, id: null, room: "", name: "", peers: new Map(), lastState: 0, lastPing: 0, manual: !1 };
+const mpClean = (v, fb, max) =>
+  String(v || "")
+    .toUpperCase()
+    .replace(/[^A-Z0-9_-]/g, "")
+    .slice(0, max) || fb;
+function mpRandomRoom() {
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+  let s = "";
+  const b = new Uint8Array(5);
+  crypto.getRandomValues(b);
+  for (const x of b) s += chars[x % chars.length];
+  return s;
+}
+function mpStatus(t) {
+  const el = document.querySelector("#mpStatus");
+  el && (el.textContent = t);
+}
+function mpNameSprite(name) {
+  const c = document.createElement("canvas");
+  ((c.width = 256), (c.height = 64));
+  const x = c.getContext("2d");
+  (x.clearRect(0, 0, 256, 64),
+    (x.fillStyle = "rgba(10, 16, 26, 0.78)"),
+    x.fillRect(14, 10, 228, 42),
+    (x.strokeStyle = "rgba(140, 200, 255, 0.9)"),
+    (x.lineWidth = 3),
+    x.strokeRect(14, 10, 228, 42),
+    (x.fillStyle = "#d8ecff"),
+    (x.font = "800 24px system-ui, sans-serif"),
+    (x.textAlign = "center"),
+    (x.textBaseline = "middle"),
+    x.fillText(name, 128, 32, 208));
+  const tex = new CanvasTexture(c);
+  tex.colorSpace = SRGBColorSpace;
+  const sp = new Sprite(new SpriteMaterial({ map: tex, transparent: !0, depthTest: !1 }));
+  return (sp.scale.set(7.4, 1.85, 1), sp);
+}
+function mpEnsurePeer(id, name) {
+  let p = mp.peers.get(id);
+  if (!p) {
+    p = { id, name: name || "DRIVER", hue: [...id].reduce((a, ch) => a + ch.charCodeAt(0), 0), tx: 0, ty: 0, tz: 0, tyaw: 0, v: "car", has: !1, lastSeen: performance.now() };
+    mp.peers.set(id, p);
+  }
+  name && (p.name = name);
+  return p;
+}
+function mpEnsureMeshes(p) {
+  if (p.car) return;
+  ((p.car = I1("compact", [16739693, 5163247, 16770048, 9498256, 3531007][p.hue % 5])),
+    (p.car.userData.stolenYOff = 0.57),
+    et.add(p.car),
+    (p.walker = U1(9464783, 4149685)),
+    (p.walker.visible = !1),
+    et.add(p.walker),
+    (p.label = mpNameSprite(p.name)),
+    et.add(p.label));
+}
+function mpRemovePeer(p) {
+  (p.car && removeVehicleMesh(p.car),
+    p.walker && removeVehicleMesh(p.walker),
+    p.label && (p.label.material.map?.dispose(), p.label.material.dispose(), et.remove(p.label)),
+    mp.peers.delete(p.id));
+}
+function mpDisconnect(manual = !0) {
+  mp.manual = manual;
+  if (mp.ws) {
+    try {
+      mp.ws.close(1000, "leave");
+    } catch {}
+  }
+  ((mp.ws = null), (mp.connected = !1), (mp.id = null));
+  for (const p of [...mp.peers.values()]) mpRemovePeer(p);
+  (mpStatus("Not connected."), mpUiState());
+}
+function mpConnect() {
+  mpDisconnect(!0);
+  const name = mpClean(document.querySelector("#mpName")?.value, "DRIVER", 12),
+    room = mpClean(document.querySelector("#mpRoom")?.value, "", 10) || mpRandomRoom(),
+    input = document.querySelector("#mpRoom");
+  input && (input.value = room);
+  (localStorage.setItem(MP_ROOM_KEY, room), localStorage.setItem(MP_NAME_KEY, name));
+  ((mp.room = room), (mp.name = name), (mp.manual = !1));
+  mpStatus(`Connecting to ${room}…`);
+  let ws;
+  try {
+    ws = new WebSocket(`${MP_WS_BASE}/${encodeURIComponent(`SRR-${room}`)}`);
+  } catch {
+    mpStatus("Connection failed.");
+    return;
+  }
+  mp.ws = ws;
+  ws.onopen = () => {
+    ((mp.connected = !0), ws.send(JSON.stringify({ type: "hello", name })), mpStatus(`Room ${room} — connected`), mpUiState());
+  };
+  ws.onclose = () => {
+    mp.ws === ws && (mpDisconnect(!0), mpStatus(mp.manual ? "Not connected." : "Connection dropped."));
+  };
+  ws.onerror = () => mpStatus("Connection failed — try again.");
+  ws.onmessage = (ev) => {
+    let d;
+    try {
+      d = JSON.parse(ev.data);
+    } catch {
+      return;
+    }
+    if (d.type === "welcome") {
+      ((mp.id = d.id), mpStatus(`Room ${mp.room} — ${Math.max(1, Number(d.count) || 1)} cruising`));
+      return;
+    }
+    if (d.type === "peers") {
+      const live = new Set((d.peers || []).filter((p) => p.id !== mp.id).map((p) => p.id));
+      for (const p of [...mp.peers.values()]) live.has(p.id) || mpRemovePeer(p);
+      for (const p of d.peers || []) {
+        if (!p.id || p.id === mp.id) continue;
+        const known = mp.peers.has(p.id);
+        mpEnsurePeer(p.id, mpClean(p.name, "DRIVER", 12));
+        known ||
+          (u.mode === "roam" && ((u.message = `${mpClean(p.name, "DRIVER", 12)} joined the cruise`), (u.messageTimer = 1.6)));
+      }
+      mpStatus(`Room ${mp.room} — ${mp.peers.size + 1} cruising`);
+      return;
+    }
+    if (!d.from || d.from === mp.id) return;
+    if (d.type === "state" && d.state) {
+      const p = mpEnsurePeer(d.from, d.name && mpClean(d.name, "DRIVER", 12));
+      ((p.tx = Number(d.state.x) || 0),
+        (p.ty = Number(d.state.y) || 0),
+        (p.tz = Number(d.state.z) || 0),
+        (p.tyaw = Number(d.state.yaw) || 0),
+        (p.v = d.state.v === "foot" ? "foot" : "car"),
+        (p.lastSeen = performance.now()),
+        p.has || (mpEnsureMeshes(p), p.car.position.set(p.tx, p.ty, p.tz), (p.has = !0)));
+    }
+  };
+}
+function mpUiState() {
+  const j = document.querySelector("#mpJoinBtn"),
+    l = document.querySelector("#mpLeaveBtn");
+  (j && (j.textContent = mp.connected ? "Switch Room" : "Join Room"), l && l.classList.toggle("hidden", !mp.connected));
+}
+{
+  const nameEl = document.querySelector("#mpName"),
+    roomEl = document.querySelector("#mpRoom");
+  (nameEl && (nameEl.value = localStorage.getItem(MP_NAME_KEY) || ""),
+    roomEl && (roomEl.value = localStorage.getItem(MP_ROOM_KEY) || ""));
+  (document.querySelector("#onlineBtn")?.addEventListener("click", () => showMenuPanel("online")),
+    document.querySelector("#onlineBackBtn")?.addEventListener("click", () => showMenuPanel(null)),
+    document.querySelector("#mpJoinBtn")?.addEventListener("click", mpConnect),
+    document.querySelector("#mpLeaveBtn")?.addEventListener("click", () => mpDisconnect(!0)));
+  mpUiState();
+}
+Bn(new Object3D(), (tt, dt) => {
+  if (!mp.connected) return;
+  const now = performance.now();
+  // remote ghosts: lerp toward the last packet, hop between car and walker
+  for (const p of [...mp.peers.values()]) {
+    if (!p.has) continue;
+    if (now - p.lastSeen > 12000) {
+      mpRemovePeer(p);
+      continue;
+    }
+    const k = 1 - Math.exp(-10 * dt),
+      car = p.v !== "foot";
+    ((p.car.visible = car), (p.walker.visible = !car));
+    const m = car ? p.car : p.walker;
+    (m.position.lerp(Id.set(p.tx, p.ty - (car ? 0.25 : 0.5), p.tz), k), (m.rotation.y = -p.tyaw));
+    p.label.position.set(m.position.x, m.position.y + (car ? 3.4 : 3), m.position.z);
+    if (car) for (const wh of p.car.userData.wheels || []) wh.rotation.x -= 20 * dt;
+  }
+  // heartbeat + state broadcast
+  (now - mp.lastPing > 5000 && ((mp.lastPing = now), mp.ws?.readyState === 1 && mp.ws.send(JSON.stringify({ type: "ping", t: now }))),
+    u.mode === "roam" &&
+      now - mp.lastState > 95 &&
+      mp.ws?.readyState === 1 &&
+      ((mp.lastState = now),
+      mp.ws.send(
+        JSON.stringify({
+          type: "state",
+          name: mp.name,
+          state: {
+            x: +u.roamPos.x.toFixed(1),
+            y: +u.roamPos.y.toFixed(1),
+            z: +u.roamPos.z.toFixed(1),
+            yaw: +u.roamYaw.toFixed(2),
+            v: u.vehicle === "foot" ? "foot" : "car",
+          },
+        }),
+      )));
+  qe.mpPeers = mp.peers.size;
+});
 
 // ─── Static-scenery merge: fold thousands of small static decor meshes (road dashes,
 // lamp posts, window trims, pylon parts...) into one mesh per material+shadow-class.
