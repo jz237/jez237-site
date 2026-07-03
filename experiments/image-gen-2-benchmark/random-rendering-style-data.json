@@ -151,5 +151,22 @@
       "description": "A faceted low-poly rooftop rainwater garden pump room with cisterns, copper pipes, wet planters, and maintenance tools.",
       "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls geometry, color behavior, edge quality, texture, lighting, and composition."
     }
+  },
+  {
+    "id": "2026-07-03-random-image-style-random-rendering-style-glazed-ceramic-gr",
+    "title": "Random rendering style: Glazed Ceramic Greenhouse Pump Room",
+    "tests": "Random rendering-style slot; physical glazed ceramic bas-relief medium; no readable text, no flat paper, no centered object display.",
+    "prompt": "Create a finished square image of an urban greenhouse pump room rendered as a richly detailed glazed ceramic bas-relief, photographed as a physical wall-mounted tile panel rather than a poster or ordinary room photo. The medium must control the whole image: raised clay contours, hand-carved grout channels, glossy pooled glaze, crackle in translucent teal water channels, matte unglazed terracotta pipe shadows, kiln-speckled white highlights, slightly warped tile seams, and real raking light catching the relief edges. Show a dense but readable maintenance scene in low relief: arched greenhouse ribs, rainwater cisterns, hand wheels, ceramic pump housings opened for inspection, coiled hose as raised clay loops, seedling trays on stepped benches, water droplets as raised glassy beads, small tool shelves, pressure gauges represented as simple glazed dials with no readable numbers, and a technician’s gloved hands only at the panel edge adjusting a valve. Use a varied palette of teal glaze, brick red clay, deep green leaves, warm ivory grout, cobalt shadow, brass-yellow accents, and black oxide line work. Make it feel like a handcrafted public-works mural seen in a workshop, with tiny chips, glaze runs, fingerprints, dust on the lower ledge, and side lighting; no readable text, no labels, no logos, no flat paper, no prompt-card layout, no cinematic scene, no generic centered object display, no clean digital filter.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect.\n\nExample substitution: [SUBJECT_OR_WORKSPACE] = an urban greenhouse pump room; [STYLE_OR_MEDIUM] = glazed ceramic bas-relief; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = raised clay contours, grout channels, pooled glaze, crackle, tile seams, carved edges; [ENVIRONMENTAL_CONTEXT] = arched greenhouse ribs, rainwater cisterns, seedling benches, dusty workshop ledge; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = open pump housings, valve adjustment, coiled hose, tool shelves, simple gauges; [SPECIFIC_PALETTE] = teal glaze, brick red clay, deep green leaves, warm ivory grout, cobalt shadow, brass-yellow accents, black oxide line work.",
+    "image": "images/2026-07-03-random-image-style-random-rendering-style-glazed-ceramic-gr.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "glazed ceramic bas-relief",
+      "description": "A greenhouse pump room reimagined as a handcrafted glazed ceramic relief tile panel with raised clay, pooled glaze, and workshop lighting.",
+      "template": "Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls construction, lighting, texture, and spatial logic; include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail; avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect."
+    }
   }
 ]
