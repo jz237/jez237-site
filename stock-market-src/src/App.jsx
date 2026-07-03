@@ -788,6 +788,21 @@ export default function App() {
                   <span>
                     Volume <b>{fmtVolume(stock.volume)}</b>
                   </span>
+                  {stock.earningsDate &&
+                    new Date(`${stock.earningsDate}T12:00:00`) >=
+                      new Date(Date.now() - 864e5) && (
+                      <span>
+                        Next Earnings{" "}
+                        <b>
+                          {new Date(
+                            `${stock.earningsDate}T12:00:00`,
+                          ).toLocaleDateString([], {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </b>
+                      </span>
+                    )}
                   <span>
                     Rating <b>{stock.rating || "Watch"}</b>
                   </span>
