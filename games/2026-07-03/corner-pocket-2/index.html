@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Corner Pocket II: Back Room · Pinball</title>
+<meta name="description" content="Corner Pocket II: Back Room — the money-game pinball table. True multiball with ball-to-ball physics, a live mini pool table with real pockets, magnet saves, wagers, and a hustler who talks.">
+<meta property="og:title" content="Corner Pocket II: Back Room — Pinball">
+<meta property="og:description" content="Board two of Corner Pocket: 3-ball multiball with real ball-to-ball collisions, a playable mini pool table ON the playfield, Massé magnet saves, back-room wagers, global scores.">
+<meta name="theme-color" content="#04140d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+  :root{
+    --mint:#63e0b8; --mint-hot:#a8f0d4; --pink:#ff9df0; --gold:#ffd257; --cream:#eaf5ee;
+    --ink:#04140d;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#030604}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;color:var(--cream);
+       -webkit-user-select:none;user-select:none;touch-action:none;
+       overscroll-behavior:none;position:fixed;inset:0}
+  canvas#pf{position:absolute;inset:0;display:block}
+  /* ---------- overlays ---------- */
+  .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+           z-index:10;background:radial-gradient(120% 90% at 50% 20%, rgba(6,20,13,.6), rgba(1,5,3,.9));
+           backdrop-filter:blur(2px)}
+  .overlay.hide{display:none}
+  .card{width:min(440px, 92vw);max-height:94vh;overflow-y:auto;text-align:center;
+        background:linear-gradient(165deg,#0b1f15 0%,#06130c 60%,#040d08 100%);
+        border:1px solid rgba(99,224,184,.32);border-radius:14px;
+        box-shadow:0 0 0 1px rgba(0,0,0,.6),0 18px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(168,240,212,.1);
+        padding:22px 22px 18px}
+  .card::-webkit-scrollbar{width:0}
+  h1.logo{margin:4px 0 0;font-size:clamp(28px,7.4vw,40px);line-height:.98;font-weight:900;letter-spacing:.5px;
+     background:linear-gradient(180deg,#ffe9fb 8%,#ff9df0 34%,#d34fc0 58%,#7e2a86 78%,#ff9df0 96%);
+     -webkit-background-clip:text;background-clip:text;color:transparent;
+     filter:drop-shadow(0 2px 0 rgba(0,0,0,.85)) drop-shadow(0 0 18px rgba(255,157,240,.4));
+     font-family:Georgia,"Times New Roman",serif;font-style:italic;text-transform:uppercase}
+  .sub{margin:6px 0 2px;color:#6fae94;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase}
+  .tiny{color:#597e6c;font-size:11.5px;margin:8px 0 0;line-height:1.5}
+  .chip{display:inline-block;width:46px;height:46px;border-radius:50%;
+     background:radial-gradient(circle at 34% 30%, #2a9a64, #14603c 58%, #06301c 100%);
+     box-shadow:0 4px 12px rgba(0,0,0,.7), inset 0 -3px 7px rgba(0,0,0,.8), inset 0 0 0 4px rgba(234,245,238,.25);
+     position:relative;vertical-align:middle;margin:2px 8px 8px}
+  .chip::after{content:"$";position:absolute;inset:0;margin:auto;width:24px;height:24px;border-radius:50%;
+     background:radial-gradient(circle at 38% 32%, #fff, #cfe8d8 70%);color:#0c4028;font:800 16px/24px Georgia,serif;text-align:center}
+  .btn{display:block;width:100%;margin:9px 0 0;padding:13px 14px;border-radius:10px;cursor:pointer;
+     font:700 15px/1 "Segoe UI",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;
+     color:#04140d;background:linear-gradient(180deg,#a8f0d4,#63e0b8 60%,#2fae84);
+     border:1px solid #14684a;box-shadow:0 3px 0 #0c4c34,0 6px 16px rgba(99,224,184,.22);
+     transition:transform .06s, box-shadow .06s;text-decoration:none}
+  .btn:active{transform:translateY(2px);box-shadow:0 1px 0 #0c4c34}
+  .btn.ghost{background:rgba(99,224,184,.08);color:var(--mint);border:1px solid rgba(99,224,184,.4);box-shadow:none}
+  .btn.ghost:active{background:rgba(99,224,184,.16)}
+  .prow{display:flex;gap:8px;margin-top:10px}
+  .prow .btn{flex:1 1 0;width:auto;min-width:0;margin:0;padding:12px 0;font-size:14px}
+  .rows{display:flex;flex-direction:column;gap:5px;margin:12px 0 4px;font-size:13.5px}
+  .rows>div{display:flex;justify-content:space-between;gap:10px;color:#cfe8d8}
+  .rows>div span:last-child{color:var(--mint-hot);font-variant-numeric:tabular-nums}
+  .board{margin-top:10px;display:flex;flex-direction:column;gap:4px;font-variant-numeric:tabular-nums}
+  .br{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;background:rgba(99,224,184,.06);font-size:13.5px}
+  .br .rk{width:18px;color:#597e6c;text-align:right}
+  .br .nm{font-weight:700;letter-spacing:.14em;color:var(--mint-hot)}
+  .br .sc{margin-left:auto;color:#eaf5ee}
+  .br .ex{color:#597e6c;font-size:11px}
+  .kbd{display:inline-block;border:1px solid rgba(200,240,220,.35);border-bottom-width:2px;border-radius:5px;
+       padding:1px 7px;margin:0 2px;font:600 11.5px/1.55 Consolas,monospace;color:#d4ecdc;background:rgba(255,255,255,.05)}
+  .howrows{ text-align:left;font-size:13px;line-height:1.62;color:#b6d4c2;margin:10px 2px 0}
+  .howrows b{color:var(--mint-hot)}
+  /* initials entry */
+  .init{display:flex;justify-content:center;gap:10px;margin:14px 0 6px}
+  .init span{width:52px;height:62px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+     font:800 34px Georgia,serif;color:var(--mint-hot);background:#05150e;border:1px solid rgba(99,224,184,.3)}
+  .init span.cur{border-color:var(--mint-hot);box-shadow:0 0 14px rgba(99,224,184,.45);animation:blink 1s steps(2) infinite}
+  @keyframes blink{50%{box-shadow:0 0 4px rgba(99,224,184,.2)}}
+  /* touch buttons */
+  .tbtn{position:absolute;z-index:6;width:42px;height:42px;border-radius:50%;border:1px solid rgba(200,240,220,.25);
+     background:rgba(3,10,7,.55);color:#b6d4c2;font:600 15px/40px sans-serif;text-align:center;cursor:pointer;
+     backdrop-filter:blur(3px)}
+  .tbtn.hide{display:none}
+  #btnPause{top:calc(8px + env(safe-area-inset-top));right:10px}
+  #btnMute{top:calc(8px + env(safe-area-inset-top));right:60px}
+  #btnView{top:calc(8px + env(safe-area-inset-top));right:110px}
+  .neonline{color:var(--pink);text-shadow:0 0 12px rgba(255,157,240,.7);font-style:italic}
+</style>
+</head>
+<body>
+<canvas id="pf"></canvas>
+
+<button class="tbtn hide" id="btnPause" aria-label="pause">⏸</button>
+<button class="tbtn hide" id="btnMute"  aria-label="mute">♪</button>
+<button class="tbtn hide" id="btnView"  aria-label="view">⤢</button>
+
+<!-- ---------- TITLE ---------- -->
+<div class="overlay" id="title">
+  <div class="card">
+    <div class="chip"></div>
+    <p class="sub" style="margin-bottom:0">corner pocket · board two</p>
+    <h1 class="logo">Back<br>Room</h1>
+    <p class="sub">the money game · true multiball · live pool physics</p>
+    <div class="prow">
+      <button class="btn" data-p="1">1 Player</button>
+      <button class="btn ghost" data-p="2">2P</button>
+      <button class="btn ghost" data-p="3">3P</button>
+      <button class="btn ghost" data-p="4">4P</button>
+    </div>
+    <button class="btn ghost" id="bHow">House rules</button>
+    <button class="btn ghost" id="bScores">The house ledger</button>
+    <a class="btn ghost" href="../../2026-06-11/corner-pocket/">← Board one: Corner Pocket</a>
+    <p class="tiny" id="titleHint">v1 · Flippers <span class="kbd">⇧ Shift</span> · plunger hold <span class="kbd">Space</span> · nudge <span class="kbd">◀ ▲ ▶</span>… arrows&nbsp;&nbsp;<span class="kbd">V</span> view · <span class="kbd">P</span> pause · <span class="kbd">M</span> mute</p>
+  </div>
+</div>
+
+<!-- ---------- HOW TO ---------- -->
+<div class="overlay hide" id="how">
+  <div class="card">
+    <p class="sub">house rules</p>
+    <h1 class="logo" style="font-size:30px">Money game</h1>
+    <div class="howrows">
+      <b>The Money Table.</b> There's a real mini pool table up there — 3 live balls, 2 pockets, real collisions. Shoot the pinball up its mouth and break. Every sink pays the climbing <b>Money Ball</b> value; all 3 is <b>RUN THE TABLE</b>. Sink the <i>silver</i> ball and you <b>scratch</b> — the value resets.<br><br>
+      <b>The Back Room.</b> Knock the <b>$</b> door down and shoot the hole. Unlit it's a <b>wager</b> (mystery payout). Complete the <b>HUSTLE</b> bank to light <b>LOCK</b> — lock two, and the third shot is <span class="neonline">3-ball MULTIBALL</span> with jackpots at the pockets.<br><br>
+      <b>Insurance.</b> Spell <b>C-H-A-L-K</b> for the Massé magnet save above the drain. 40 spinner spins arm the <b>kickback</b>. Full loop (spinner → crown) raises bonus X to 5×.<br><br>
+      <b>A-B-C-D</b> lights the SIDE BET in the crown. Your bankroll pays out every ball — and the Hustler <i>will</i> run his mouth.
+    </div>
+    <button class="btn ghost" id="bGuide">Table guide</button>
+    <button class="btn" id="bHowBack">Deal me in</button>
+  </div>
+</div>
+
+<!-- ---------- TABLE GUIDE ---------- -->
+<div class="overlay hide" id="guide">
+  <div class="card" style="width:min(540px,96vw)">
+    <p class="sub">know the table</p>
+    <h1 class="logo" style="font-size:26px">Table Guide</h1>
+    <div style="display:flex;gap:14px;align-items:flex-start;justify-content:center;flex-wrap:wrap">
+      <canvas id="guideCv" style="border-radius:8px;border:1px solid rgba(99,224,184,.3)"></canvas>
+      <ol id="guideList" style="text-align:left;font-size:12px;line-height:1.55;color:#b6d4c2;margin:4px 0;padding-left:20px;max-width:230px"></ol>
+    </div>
+    <button class="btn" id="bGuideBack">Back</button>
+  </div>
+</div>
+
+<!-- ---------- SCORES ---------- -->
+<div class="overlay hide" id="scores">
+  <div class="card">
+    <p class="sub">the house ledger</p>
+    <h1 class="logo" style="font-size:30px">High rollers</h1>
+    <div class="board" id="tBoard"></div>
+    <button class="btn" id="bScoresBack">Back</button>
+  </div>
+</div>
+
+<!-- ---------- PAUSE ---------- -->
+<div class="overlay hide" id="pause">
+  <div class="card">
+    <p class="sub">time out</p>
+    <h1 class="logo" style="font-size:30px">Paused</h1>
+    <button class="btn" id="bResume">Resume</button>
+    <button class="btn ghost" id="bQuit">Quit to title</button>
+  </div>
+</div>
+
+<!-- ---------- GAME OVER / ENTRY ---------- -->
+<div class="overlay hide" id="over">
+  <div class="card" id="overCard"></div>
+</div>
+
+<script src="physics.js?v=1"></script>
+<script src="table.js?v=1"></script>
+<script src="art.js?v=1"></script>
+<script src="audio.js?v=1"></script>
+<script src="game.js?v=1"></script>
+</body>
+</html>
