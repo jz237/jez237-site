@@ -11,8 +11,11 @@ const _v1 = new THREE.Vector3();
 const _from = new CANNON.Vec3();
 const _to = new CANNON.Vec3();
 
+let nextEnemyId = 1;
+
 export class EnemyTank {
   constructor(scene, world, x, z, wave, typeName = 'standard') {
+    this.id = String(nextEnemyId++); // stable id for co-op sync
     const T = ENEMY_TYPES[typeName] ?? ENEMY_TYPES.standard;
     this.type = T;
     this.typeName = typeName;
@@ -58,13 +61,28 @@ export class EnemyTank {
     return this.losResult.hasHit && this.losResult.body === playerBody;
   }
 
-  // returns shoot request {origin, dir} when it fires
-  think(dt, player, world, fixedDt) {
+  // returns shoot request {origin, dir} when it fires.
+  // `targets` is either a single tank-like {alive, body} or an array of
+  // them (co-op: host player + remote allies) — the nearest alive one wins.
+  think(dt, targets, world, fixedDt) {
     const t = this.tank;
     if (!t.alive) {
       t.applyControls(fixedDt);
       return null;
     }
+
+    let player = null;
+    if (Array.isArray(targets)) {
+      let best = Infinity;
+      for (const cand of targets) {
+        if (!cand?.alive) continue;
+        const d = Math.hypot(cand.body.position.x - t.pos.x, cand.body.position.z - t.pos.z);
+        if (d < best) { best = d; player = cand; }
+      }
+    } else {
+      player = targets;
+    }
+    if (!player) player = { alive: false, body: t.body }; // idle: nothing to hunt
 
     this.reloadT -= dt;
     this.strafeT -= dt;
@@ -214,8 +232,11 @@ export class WaveManager {
     return spawned;
   }
 
-  spawnWave(w, props, scene, world, playerPos) {
+  spawnWave(w, props, scene, world, playerPos, opts = {}) {
     const spec = this.waveSpec(w);
+    // online rooms skip pillboxes: they aren't synced to clients, so they
+    // must never gate a shared wave
+    if (opts.noPillboxes) spec.pillboxes = 0;
     const minR = 40, maxR = 95 + Math.min(60, w * 8);
     for (let i = 0; i < spec.targets; i++) {
       const s = props.ringSpot(minR, maxR);
@@ -295,14 +316,23 @@ export class WaveManager {
 
   aliveEnemies() { return this.enemies.filter(e => e.tank.alive); }
 
-  // ---- bonus convoy: unarmed fast trucks crossing the battlefield ----
-  spawnConvoy(scene, world, playerPos) {
-    this.trucks = this.trucks || [];
+  // random convoy course crossing near the player; broadcastable so co-op
+  // clients can build an identical convoy
+  static convoyLayout(playerPos) {
     const a = Math.random() * Math.PI * 2;
     const perp = a + Math.PI / 2;
-    const cx = playerPos.x + Math.cos(perp) * (40 + Math.random() * 30);
-    const cz = playerPos.z + Math.sin(perp) * (40 + Math.random() * 30);
-    const dirX = Math.cos(a), dirZ = Math.sin(a);
+    return {
+      cx: playerPos.x + Math.cos(perp) * (40 + Math.random() * 30),
+      cz: playerPos.z + Math.sin(perp) * (40 + Math.random() * 30),
+      dirX: Math.cos(a),
+      dirZ: Math.sin(a),
+    };
+  }
+
+  // ---- bonus convoy: unarmed fast trucks crossing the battlefield ----
+  spawnConvoy(scene, world, layout) {
+    this.trucks = this.trucks || [];
+    const { cx, cz, dirX, dirZ } = layout;
     for (let i = 0; i < 3; i++) {
       const sx = cx - dirX * (120 + i * 14);
       const sz = cz - dirZ * (120 + i * 14);
@@ -339,7 +369,7 @@ export class WaveManager {
       });
       body.quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), Math.atan2(dirX, dirZ));
       world.addBody(body);
-      const truck = { mesh: grp, body, dirX, dirZ, alive: true, age: 0 };
+      const truck = { mesh: grp, body, dirX, dirZ, alive: true, age: 0, cid: i };
       body.userData = { kind: 'truck', truck };
       this.trucks.push(truck);
     }

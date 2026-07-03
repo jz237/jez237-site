@@ -213,12 +213,19 @@ function updateFavoriteControls() {
 
 // The GitHub Pages mirror excludes the 3+ GB audio/ directory (Pages artifact
 // size limit), so MP3 soundtrack tracks are fetched from the canonical site.
+// R2_AUDIO_BASE is filled in by ops/migrate_amiga_audio_to_r2.sh once the
+// audio library is uploaded to R2; until then it stays empty and MP3s are
+// served from the repo as before.
 const REMOTE_AUDIO_BASE = "https://jez237.com/experiments/amiga-mod-player/";
+const R2_AUDIO_BASE = "";
 const useRemoteAudio = window.location.hostname.endsWith("github.io");
 
 function trackUrl(track) {
-  const base = useRemoteAudio && isAudioTrack(track) ? REMOTE_AUDIO_BASE : PLAYER_BASE;
-  return new URL(track.path, base).href;
+  if (isAudioTrack(track)) {
+    if (R2_AUDIO_BASE) return new URL(track.path, R2_AUDIO_BASE).href;
+    if (useRemoteAudio) return new URL(track.path, REMOTE_AUDIO_BASE).href;
+  }
+  return new URL(track.path, PLAYER_BASE).href;
 }
 
 function renderSeekPosition(seconds) {

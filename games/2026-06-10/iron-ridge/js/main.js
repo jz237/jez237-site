@@ -8,7 +8,7 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX } from './config.js';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX } from './config.js';
 import { buildTerrain, getHeight, raycastTerrain } from './terrain.js';
 import { buildSky } from './sky.js';
 import { Foliage } from './foliage.js';
@@ -120,12 +120,26 @@ const waves = new WaveManager();
 const minimap = new Minimap($('minimap'));
 const multiplayer = new Multiplayer({
   scene,
+  world,
   effects,
   onRemoteFire: handleRemoteFire,
   onStatus: syncMultiplayerStatus,
+  onEnemyFire: handleRemoteEnemyFire,
+  onEnemyKill: handleRemoteEnemyKill,
+  onHitForward: handleHitForward,
+  onWave: handleRemoteWave,
+  onWaveClear: handleRemoteWaveClear,
+  onRoleChange: handleRoleChange,
+  onPing: handleSquadPing,
+  onConvoy: handleRemoteConvoy,
+  onTruckKill: handleRemoteTruckKill,
 });
 let quickMatchWaiting = false;
 let roomsRefreshAt = 0;
+
+// co-op roles: in a room, the senior member simulates enemies for everyone
+const inCoop = () => multiplayer.connected && multiplayer.peers.size > 0;
+const isCoopClient = () => inCoop() && !multiplayer.isHost();
 
 // post-processing
 const composer = new EffectComposer(renderer);
@@ -312,14 +326,17 @@ async function refreshRooms() {
 
 function multiplayerPacket() {
   const p = G.player;
-  if (!p || !p.alive || G.state !== 'playing') return null;
+  // keep sending while downed/dying so allies still see us in the battle
+  // (hp 0 marks us as not targetable) and host election stays fresh
+  const active = G.state === 'playing' || G.state === 'downed' || G.state === 'dying';
+  if (!p || !active) return null;
   const b = p.body;
   return {
-    state: G.state,
+    state: G.state === 'playing' ? 'playing' : 'idle',
     score: G.score | 0,
     wave: G.wave | 0,
     kills: G.kills | 0,
-    hp: Math.ceil(p.hp),
+    hp: p.alive ? Math.ceil(p.hp) : 0,
     x: b.position.x, y: b.position.y, z: b.position.z,
     qx: b.quaternion.x, qy: b.quaternion.y, qz: b.quaternion.z, qw: b.quaternion.w,
     turretYaw: p.turretYaw,
@@ -336,7 +353,143 @@ function handleRemoteFire(raw) {
   effects.muzzleFlash(origin, dir);
   const d = camera.position.distanceTo(origin);
   if (d < 220) audio.fire(Math.max(0.14, 0.7 - d / 260));
-  projectiles.spawn(origin, dir, SHELL.speed, { isPlayer: true, shellDmg: SHELL.damageDirect }, onShellHit);
+  // `remote` marks ally shells as cosmetic: real impulses and explosions,
+  // but no friendly fire and no score credit — the shooter's own client
+  // reports damage to the host
+  projectiles.spawn(origin, dir, SHELL.speed, { isPlayer: true, remote: true, shellDmg: SHELL.damageDirect }, onShellHit);
+}
+
+// client: the host's enemies fired — replicate the shell so it can hit us
+function handleRemoteEnemyFire(origin, dir, dmg) {
+  const active = G.state === 'playing' || G.state === 'downed' || G.state === 'dying';
+  if (!active) return;
+  effects.muzzleFlash(origin, dir);
+  const d = camera.position.distanceTo(origin);
+  if (d < 200) audio.fire(Math.max(0.12, 0.85 - d / 240));
+  projectiles.spawn(origin, dir, SHELL.enemySpeed, { isPlayer: false, shellDmg: dmg }, onShellHit);
+}
+
+// client: host confirmed an enemy kill (ghost already turned to wreck)
+function handleRemoteEnemyKill(id, pos, credit) {
+  if (G.state === 'menu') return;
+  effects.explosion(pos, 1.6);
+  const camD = camera.position.distanceTo(pos);
+  if (camD < 200) audio.explosion(Math.max(0.4, 1.4 - camD / 200));
+  projectiles.explode(pos, 6, 2000);
+  if (credit && credit === multiplayer.id && G.state === 'playing') {
+    const tn = multiplayer.remoteEnemies.get(id)?.typeName;
+    creditKillLocal(ENEMY_TYPES[tn]?.points ?? ENEMY.points);
+  } else if (credit && credit !== multiplayer.id) {
+    const name = multiplayer.peers.get(credit)?.name || 'ALLY';
+    hud.floater(`${name} DESTROYED A TANK`, 'good');
+  }
+  if (G.state === 'playing' && Math.random() < PICKUP.dropChance) {
+    props.spawnCrate(pos.x + (Math.random() - 0.5) * 4, pos.z + (Math.random() - 0.5) * 4);
+  }
+}
+
+// host: an ally's client reports its shell connected with enemy `enemyId`
+function handleHitForward(enemyId, dmg, peer) {
+  if (G.state === 'menu' || G.state === 'gameover' || dmg <= 0) return;
+  const e = waves.enemies.find(e => e.id === enemyId);
+  if (!e || !e.tank.alive) return;
+  damageEnemy(e, dmg, null, peer.id);
+}
+
+// client: host started a wave
+function handleRemoteWave(w, hostiles) {
+  if (!isCoopClient() || G.state === 'menu' || G.state === 'gameover') return;
+  G.wave = w;
+  spawnClientWaveProps(w);
+  const sub = hostiles
+    ? `${hostiles} hostile${hostiles > 1 ? 's' : ''} on the shared front — destroy them to advance`
+    : 'squad up — check the minimap';
+  hud.banner(`WAVE ${w}`, sub);
+  audio.waveAlert();
+  if (w > 1 && G.player?.alive) {
+    G.player.hp = Math.min(G.player.maxHp, G.player.hp + SCORING.waveClearHeal);
+    hud.setHp(G.player.hp, G.player.maxHp);
+  }
+}
+
+// client: host declared the wave clear — pay out our own accuracy bonus
+function handleRemoteWaveClear(w) {
+  if (!isCoopClient() || G.state !== 'playing') return;
+  const acc = G.shotsFired > 0 ? Math.min(1, G.shotsHit / G.shotsFired) : 0;
+  const bonus = Math.round(SCORING.waveAccuracyBonus * acc);
+  G.score += bonus;
+  hud.banner(`WAVE ${w} CLEAR`, `accuracy ${(acc * 100) | 0}% — +${bonus} bonus — next wave incoming`);
+}
+
+// the room's senior playing member changed (host left/joined/died out)
+function handleRoleChange(host) {
+  const active = G.state === 'playing' || G.state === 'downed' || G.state === 'dying';
+  if (!active) return;
+  if (host) {
+    // promoted: spin up a live sim where the ghosts left off
+    G.wave = Math.max(G.wave, multiplayer.remoteWave, 1);
+    multiplayer.clearRemoteEnemies();
+    if (waves.aliveEnemies().length === 0 && G.player) {
+      G.waveTransition = 0;
+      startWave(G.wave);
+      hud.banner('TAKING COMMAND', 'you now lead the battle', 2.2);
+    }
+  } else {
+    // demoted (a senior member is back): hand the sim over
+    waves.reset();
+    waves.clearConvoy?.(scene, world);
+    for (const it of [...props.items]) {
+      if (it.alive && it.kind === 'pillbox') props.removeItem(it);
+    }
+  }
+}
+
+// an ally pinged a spot: mark it in-world and on the minimap
+function handleSquadPing(pos, name) {
+  const active = G.state === 'playing' || G.state === 'downed' || G.state === 'dying';
+  if (!active) return;
+  effects.ring(pos, 6, 1.6, 0x52a8ff);
+  minimap.ping(pos.x, pos.z, '#52a8ff');
+  hud.floater(`${name}: OVER HERE`, 'good');
+  audio.click();
+}
+
+// convoys are deterministic (straight kinematic course at fixed speed), so
+// a shared layout keeps every client's copy in step
+function spawnConvoyShared(layout) {
+  const trucks = waves.spawnConvoy(scene, world, layout);
+  hud.banner('SUPPLY CONVOY SPOTTED', '250 per truck — intercept before they escape!', 2.6);
+  for (const t of trucks) minimap.ping(t.body.position.x, t.body.position.z, '#52d8ff');
+  audio.click();
+}
+
+function handleRemoteConvoy(layout) {
+  if (isCoopClient() && G.state !== 'menu' && G.state !== 'gameover' &&
+      (!waves.trucks || waves.trucks.length === 0)) {
+    spawnConvoyShared(layout);
+  }
+}
+
+// an ally destroyed truck `cid` on their copy — mirror it (no score here)
+function handleRemoteTruckKill(cid) {
+  const truck = waves.trucks?.find(t => t.alive && t.cid === cid);
+  if (truck) killTruck(truck, false);
+}
+
+// client-side per-wave props: targets/barrels/walls stay local flavour
+function spawnClientWaveProps(w) {
+  for (const it of [...props.items]) {
+    if (it.alive && it.kind === 'target') props.removeItem(it);
+  }
+  const barrels = props.items.filter(i => i.alive && i.kind === 'barrel');
+  for (let i = 0; i < barrels.length - 8; i++) props.removeItem(barrels[i]);
+  const spec = waves.waveSpec(w);
+  const minR = 40, maxR = 95 + Math.min(60, w * 8);
+  for (let i = 0; i < spec.targets; i++) { const s = props.ringSpot(minR, maxR); props.spawnTarget(s.x, s.z); }
+  for (let i = 0; i < spec.barrels; i++) { const s = props.ringSpot(minR * 0.7, maxR); props.spawnBarrel(s.x, s.z); }
+  for (let i = 0; i < spec.walls; i++) { const s = props.ringSpot(minR + 15, maxR); props.spawnWall(s.x, s.z); }
+  G.waveHadTargets = spec.targets > 0;
+  G.targetsBonusGiven = false;
 }
 
 function deployAfterOnlineConnect() {
@@ -424,6 +577,12 @@ function updateAimPoint() {
     const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6);
     if (d < best) best = d;
   }
+  for (const re of multiplayer.remoteEnemies.values()) {
+    if (!re.alive || !re.hasState) continue;
+    const p = re.visual.root.position;
+    const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6);
+    if (d < best) best = d;
+  }
   for (const it of props.items) {
     if (!it.alive || !it.body) continue;
     const p = it.body.position;
@@ -482,17 +641,11 @@ function damageProp(it, dmg, byPlayer) {
   if (it.hp <= 0) killProp(it, byPlayer);
 }
 
-function killEnemy(e) {
-  const t = e.tank;
-  t.destroyVisual();
-  const pos = t.visual.root.position.clone();
-  pos.y += 1;
-  effects.explosion(pos, 1.6 * (e.type?.scale ?? 1));
-  audio.explosion(1.4);
-  projectiles.explode(pos, 6, 2000);
+// score/combo/streak payout for a kill this player earned
+function creditKillLocal(points) {
   G.kills++;
   bumpCombo();
-  addScore(e.type?.points ?? ENEMY.points, 'TANK KILL', 'kill');
+  addScore(points, 'TANK KILL', 'kill');
   hud.hitmarker(true);
   // kill streak builds toward an airstrike
   G.streakT = 14;
@@ -503,17 +656,37 @@ function killEnemy(e) {
     hud.setStrike(true);
     hud.banner('AIRSTRIKE READY', 'press F (or tap ✈) to call it in on your reticle', 3);
   }
+}
+
+// creditPeerId: peer who earned the kill (null = the local player)
+function killEnemy(e, creditPeerId = null) {
+  const t = e.tank;
+  t.destroyVisual();
+  const pos = t.visual.root.position.clone();
+  pos.y += 1;
+  effects.explosion(pos, 1.6 * (e.type?.scale ?? 1));
+  audio.explosion(1.4);
+  projectiles.explode(pos, 6, 2000);
+  if (!creditPeerId && G.state === 'playing') {
+    creditKillLocal(e.type?.points ?? ENEMY.points);
+  } else if (creditPeerId) {
+    const name = multiplayer.peers.get(creditPeerId)?.name || 'ALLY';
+    hud.floater(`${name} DESTROYED A TANK`, 'good');
+  }
   // supply drop
   if (Math.random() < PICKUP.dropChance) {
     props.spawnCrate(pos.x + (Math.random() - 0.5) * 4, pos.z + (Math.random() - 0.5) * 4);
   }
+  if (inCoop() && multiplayer.isHost()) {
+    multiplayer.sendEnemyKill(e.id, pos, creditPeerId || multiplayer.id);
+  }
 }
 
-function damageEnemy(e, dmg, hitPoint = null) {
+function damageEnemy(e, dmg, hitPoint = null, creditPeerId = null) {
   if (!e.tank.alive) return;
   const killed = e.tank.damage(dmg);
-  if (killed) killEnemy(e);
-  else {
+  if (killed) killEnemy(e, creditPeerId);
+  else if (!creditPeerId) {
     hud.hitmarker(false);
     audio.hitTink();
     if (hitPoint) effects.sparks(hitPoint);
@@ -560,16 +733,18 @@ function killTruck(truck, byPlayer) {
     if (waves.trucks?.length === 3 && waves.trucks.every(t => !t.alive)) {
       addScore(500, 'CONVOY DESTROYED', 'kill');
     }
+    if (inCoop()) multiplayer.sendTruckKill(truck.cid);
   }
 }
 
 function onShellHit(hit) {
   const s = hit.shell;
-  const byPlayer = s.fromPlayer;
+  // ally shells are cosmetic here — the shooter's own client scores them
+  const byPlayer = s.fromPlayer && !s.owner?.remote;
   const pos = hit.point;
   const power = s.power ?? 1;
 
-  effects.explosion(pos, (byPlayer ? 1 : 0.9) * power);
+  effects.explosion(pos, (s.fromPlayer ? 1 : 0.9) * power);
   const camD = camera.position.distanceTo(pos);
   if (camD < 160) audio.explosion(Math.max(0.4, 1.2 - camD / 160) * power);
 
@@ -581,12 +756,23 @@ function onShellHit(hit) {
   const ud = hit.body?.userData;
   if (ud?.kind === 'tank') {
     const tk = ud.tank;
-    if (tk.isPlayer && !byPlayer) {
+    if (tk.isPlayer && !s.fromPlayer) {
       damagePlayer(shellDmg + Math.floor(G.wave * 0.8));
     } else if (!tk.isPlayer && byPlayer) {
       const e = waves.enemies.find(e => e.tank === tk);
       if (e) { damageEnemy(e, SHELL.damageDirect, pos); G.shotsHit++; }
     }
+  } else if (ud?.kind === 'remoteEnemy') {
+    // client: direct hit on a host-simulated enemy — forward it
+    if (byPlayer && ud.remoteEnemy?.alive) {
+      G.shotsHit++;
+      hud.hitmarker(false);
+      audio.hitTink();
+      effects.sparks(pos);
+      multiplayer.sendHit(ud.id, SHELL.damageDirect * power);
+    }
+  } else if (ud?.kind === 'remoteAlly') {
+    // no friendly fire — the bang is enough
   } else if (ud?.kind === 'truck') {
     if (byPlayer) G.shotsHit++;
     killTruck(ud.truck, byPlayer);
@@ -608,6 +794,17 @@ function onShellHit(hit) {
       G.shotsHit++;
     }
   }
+  // client: splash onto host-simulated enemies — forward per enemy
+  if (byPlayer && isCoopClient()) {
+    for (const [id, re] of multiplayer.remoteEnemies) {
+      if (!re.alive || !re.hasState || hit.body === re.body) continue;
+      const d = re.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
+      if (d < splashR) {
+        multiplayer.sendHit(id, SHELL.damageSplash * power * (1 - d / splashR));
+        G.shotsHit++;
+      }
+    }
+  }
   if (byPlayer && waves.trucks) {
     for (const tr of waves.trucks) {
       if (tr.alive && tr.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z)) < splashR) {
@@ -615,7 +812,7 @@ function onShellHit(hit) {
       }
     }
   }
-  if (G.player?.alive) {
+  if (G.player?.alive && !s.owner?.remote) {
     const d = G.player.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
     if (d < SHELL.splashRadius && hit.body !== G.player.body) {
       const dmg = byPlayer ? 6 : (shellDmg * 0.55);
@@ -684,7 +881,7 @@ function startWave(w) {
   const barrels = props.items.filter(i => i.alive && i.kind === 'barrel');
   for (let i = 0; i < barrels.length - 8; i++) props.removeItem(barrels[i]);
   const before = waves.enemies.length;
-  const spec = waves.spawnWave(w, props, scene, world, G.player.body.position);
+  const spec = waves.spawnWave(w, props, scene, world, G.player.body.position, { noPillboxes: inCoop() });
   G.waveHadTargets = spec.targets > 0;
   const parts = [];
   const armor = spec.tanks.length + spec.pillboxes;
@@ -693,9 +890,23 @@ function startWave(w) {
   hud.banner(`WAVE ${w}`, parts.join(' • '));
   audio.waveAlert();
   announceContacts(waves.enemies.slice(before));
+  if (inCoop() && multiplayer.isHost()) multiplayer.sendWave(w, armor);
   if (w > 1 && G.player.alive) {
     G.player.hp = Math.min(G.player.maxHp, G.player.hp + SCORING.waveClearHeal);
     hud.setHp(G.player.hp, G.player.maxHp);
+  }
+}
+
+// bonus objective: clearing all target boards pays out, never gates
+function checkTargetsBonus() {
+  if (!G.targetsBonusGiven && G.waveHadTargets && props.countAlive('target') === 0) {
+    G.targetsBonusGiven = true;
+    G.score += 400;
+    if (G.player?.alive) {
+      G.player.hp = Math.min(G.player.maxHp, G.player.hp + 10);
+      hud.setHp(G.player.hp, G.player.maxHp);
+    }
+    hud.floater('+400 ALL TARGETS +10 ARMOR', 'good');
   }
 }
 
@@ -705,14 +916,7 @@ function checkWaveClear(dt) {
     if (G.waveTransition <= 0) startWave(G.wave + 1);
     return;
   }
-  // bonus objective: clearing all target boards pays out, never gates
-  if (!G.targetsBonusGiven && G.waveHadTargets && props.countAlive('target') === 0) {
-    G.targetsBonusGiven = true;
-    G.score += 400;
-    G.player.hp = Math.min(G.player.maxHp, G.player.hp + 10);
-    hud.setHp(G.player.hp, G.player.maxHp);
-    hud.floater('+400 ALL TARGETS +10 ARMOR', 'good');
-  }
+  checkTargetsBonus();
   // the gate: enemy armor only
   const armorLeft = waves.aliveEnemies().length + props.countAlive('pillbox');
   if (armorLeft === 0) {
@@ -721,6 +925,7 @@ function checkWaveClear(dt) {
     if (G.wave > 0) {
       G.score += bonus;
       hud.banner(`WAVE ${G.wave} CLEAR`, `accuracy ${(acc * 100) | 0}% — +${bonus} bonus — next wave incoming`);
+      if (inCoop() && multiplayer.isHost()) multiplayer.sendWaveClear(G.wave);
     }
     G.waveTransition = 4.5;
   }
@@ -745,15 +950,17 @@ function resetGame() {
   waves.reset();
   props.clearAll();
   projectiles.clear();
+  multiplayer.clearRemoteEnemies();
   if (G.player) { G.player.removeFromWorld(); G.player = null; }
   G.score = 0; G.kills = 0; G.shotsFired = 0; G.shotsHit = 0;
   G.combo = 0; G.comboT = 0; G.wave = 0; G.waveTransition = 0;
   G.camYaw = 0; G.camPitch = 0.3;
   G.simT = 0; G.artilleryT = 12; G.pendingArty = [];
   G.quietT = 0; G.streakKills = 0; G.streakT = 0; G.airstrike = false;
-  G.pendingBombs = []; G.convoyT = 50; G.fovKick = 0;
+  G.pendingBombs = []; G.convoyT = 50; G.fovKick = 0; G.respawnT = 0;
   waves.clearConvoy?.(scene, world);
   hud.setStrike(false);
+  multiplayer.localActive = false;
 }
 
 function startGame() {
@@ -763,12 +970,21 @@ function startGame() {
   });
   hud.setHp(G.player.hp, G.player.maxHp);
   G.state = 'playing';
+  multiplayer.localActive = true;
   hud.showScreen(null);
   audio.ensure();
   audio.resume();
   audio.startEngine();
   input.requestLock();
-  startWave(1);
+  if (isCoopClient()) {
+    // the host's sim is already running — join its battle in progress
+    G.wave = Math.max(1, multiplayer.remoteWave);
+    spawnClientWaveProps(G.wave);
+    hud.banner(`WAVE ${G.wave}`, 'joining the battle — hostiles on the shared front');
+    audio.waveAlert();
+  } else {
+    startWave(1);
+  }
 }
 
 function startDeath() {
@@ -783,10 +999,37 @@ function startDeath() {
   audio.explosion(1.6);
   audio.stopEngine();
   projectiles.explode(pos, 8, 3000);
+  if (inCoop()) multiplayer.sendDown();
+}
+
+// squad respawn: destroyed online with an ally still fighting → count down
+// beside your wreck, then redeploy next to the squad
+function enterDowned() {
+  G.state = 'downed';
+  G.respawnT = 8;
+  hud.banner('TANK DESTROYED', 'your squad is holding — redeploying shortly', 2.5);
+}
+
+function respawnPlayer() {
+  const allies = multiplayer.allyTargets();
+  if (!allies.length) { showGameOver(); return; }
+  const ap = allies[0].body.position;
+  const a = Math.random() * Math.PI * 2;
+  const x = ap.x + Math.cos(a) * 9;
+  const z = ap.z + Math.sin(a) * 9;
+  G.player.removeFromWorld();
+  G.player = new Tank(scene, world, {
+    x, z, y: getHeight(x, z) + 1.2, isPlayer: true, scheme: 'olive',
+  });
+  hud.setHp(G.player.hp, G.player.maxHp);
+  G.state = 'playing';
+  audio.startEngine();
+  hud.banner('REDEPLOYED', 'back in the fight beside your ally', 1.8);
 }
 
 function showGameOver() {
   G.state = 'gameover';
+  multiplayer.localActive = false;
   input.releaseLock();
   pendingScore = G.score;
   $('over-score').textContent = G.score.toLocaleString();
@@ -856,15 +1099,28 @@ function fixedStep(dt) {
     }
   }
 
+  // in co-op the sim never sleeps: it keeps running while the local player
+  // is downed (allies are still fighting) or has the pause menu open
+  const combatSim = G.state === 'playing' || G.state === 'downed' ||
+    (G.state === 'paused' && inCoop());
+
+  // enemies hunt the nearest living tank — local player or a room ally
+  const targets = [];
+  if (p?.alive && G.state !== 'downed') targets.push(p);
+  if (inCoop()) targets.push(...multiplayer.allyTargets());
+
   for (const e of waves.enemies) {
     e.tank.savePrev();
-    if (G.state === 'playing') {
-      const shot = e.think(dt, p, world, dt);
+    if (combatSim) {
+      const shot = e.think(dt, targets, world, dt);
       if (shot) {
         const d = camera.position.distanceTo(shot.origin);
         if (d < 200) audio.fire(Math.max(0.12, 0.85 - d / 240));
         effects.muzzleFlash(shot.origin, shot.dir);
         projectiles.spawn(shot.origin, shot.dir, SHELL.enemySpeed, e.tank, onShellHit);
+        if (inCoop() && multiplayer.isHost()) {
+          multiplayer.sendEnemyFire(shot, e.tank.shellDmg ?? ENEMY.shellDamage);
+        }
       }
     } else {
       e.tank.applyControls(dt);
@@ -893,7 +1149,7 @@ function fixedStep(dt) {
   if (p) crush(p);
   for (const e of waves.enemies) crush(e.tank);
 
-  if (G.state === 'playing') {
+  if (combatSim) {
     G.simT += dt;
     G.comboT -= dt;
     if (G.comboT <= 0) G.combo = 0;
@@ -951,15 +1207,15 @@ function fixedStep(dt) {
     }
     G.pendingBombs = G.pendingBombs.filter(b => !b.fired);
 
-    // bonus convoy crossings from wave 3
-    if (G.wave >= 3) {
+    // bonus convoy crossings from wave 3 (host decides; layout is shared so
+    // co-op clients build the identical convoy)
+    if (G.wave >= 3 && !isCoopClient()) {
       G.convoyT -= dt;
       if (G.convoyT <= 0 && (!waves.trucks || waves.trucks.length === 0)) {
         G.convoyT = 80 + Math.random() * 25;
-        const trucks = waves.spawnConvoy(scene, world, p.body.position);
-        hud.banner('SUPPLY CONVOY SPOTTED', '250 per truck — intercept before they escape!', 2.6);
-        for (const t of trucks) minimap.ping(t.body.position.x, t.body.position.z, '#52d8ff');
-        audio.click();
+        const layout = WaveManager.convoyLayout(p.body.position);
+        spawnConvoyShared(layout);
+        if (inCoop() && multiplayer.isHost()) multiplayer.sendConvoy(layout);
       }
     }
     waves.stepTrucks(dt, scene, world);
@@ -977,7 +1233,9 @@ function fixedStep(dt) {
       }
     }
 
-    checkWaveClear(dt);
+    // wave progression is host business; clients get told
+    if (isCoopClient()) checkTargetsBonus();
+    else checkWaveClear(dt);
   }
 }
 const _pillboxLos = new CANNON.RaycastResult();
@@ -985,6 +1243,7 @@ const _pillboxLos = new CANNON.RaycastResult();
 // ---------------------------------------------------------------- camera
 const _camTarget = new THREE.Vector3();
 const _camDesired = new THREE.Vector3();
+const _zeroVel = new THREE.Vector3();
 const _lookTarget = new THREE.Vector3();
 const _dirCam = new THREE.Vector3();
 const _exhaustPos = new THREE.Vector3();
@@ -1000,11 +1259,20 @@ function updateCamera(dt) {
     G.camDist = THREE.MathUtils.clamp(G.camDist + input.consumeZoom() * 1.4, 6.5, 22);
   }
 
-  const root = p.visual.root.position;
+  // while downed, spectate the ally we'll respawn beside
+  let root = p.visual.root.position;
+  let lookahead = p.body.velocity;
+  if (G.state === 'downed') {
+    const allies = multiplayer.allyBlips().filter(a => !a.down && a.hp > 0);
+    if (allies.length) {
+      root = allies[0].position;
+      lookahead = _zeroVel;
+    }
+  }
   _camTarget.set(root.x, root.y + 2.6, root.z);
   // lookahead in the direction of travel
   _camTarget.addScaledVector(
-    new THREE.Vector3(p.body.velocity.x, 0, p.body.velocity.z), 0.1,
+    new THREE.Vector3(lookahead.x, 0, lookahead.z), 0.1,
   );
 
   // free-aim rig: the camera's own yaw/pitch defines where the reticle
@@ -1254,7 +1522,8 @@ function gameFrame(dt) {
   }
   if (input.consumeMute()) { audio.ensure(); audio.setMuted(!audio.muted); syncMute(); }
 
-  const playingish = G.state === 'playing' || G.state === 'dying';
+  const playingish = G.state === 'playing' || G.state === 'dying' || G.state === 'downed' ||
+    (G.state === 'paused' && inCoop());
 
   if (playingish) {
     acc += dt;
@@ -1271,6 +1540,13 @@ function gameFrame(dt) {
     if (input.consumeFire()) playerFire();
     if (input.consumeReload()) {
       if (G.player.reloadNow()) audio.click();
+    }
+    if (input.consumePing()) {
+      // squad ping on the reticle point (works solo too, as a self-marker)
+      effects.ring(G.aimPoint, 6, 1.6, 0x52a8ff);
+      minimap.ping(G.aimPoint.x, G.aimPoint.z, '#52a8ff');
+      audio.click();
+      if (inCoop()) multiplayer.sendPing(G.aimPoint.x, G.aimPoint.y, G.aimPoint.z);
     }
     if (input.consumeStrike() && G.airstrike) {
       G.airstrike = false;
@@ -1320,7 +1596,23 @@ function gameFrame(dt) {
     if (G.dieT > 0.6 && Math.random() < 0.25) {
       effects.burningWreck(G.player.visual.root.position);
     }
-    if (G.dieT > 2.2) showGameOver();
+    if (G.dieT > 2.2) {
+      if (inCoop() && multiplayer.anyAllyAlive()) enterDowned();
+      else showGameOver();
+    }
+  }
+
+  if (G.state === 'downed') {
+    const prevTick = Math.ceil(G.respawnT);
+    G.respawnT -= dt;
+    if (Math.random() < 0.12) effects.burningWreck(G.player.visual.root.position);
+    if (!multiplayer.anyAllyAlive()) {
+      showGameOver(); // squad wiped
+    } else if (G.respawnT <= 0) {
+      respawnPlayer();
+    } else if (Math.ceil(G.respawnT) !== prevTick) {
+      hud.floater(`REDEPLOY IN ${Math.ceil(G.respawnT)}`, 'warn');
+    }
   }
 
   // visuals
@@ -1358,6 +1650,19 @@ function gameFrame(dt) {
   props.update(dt, G.time);
   multiplayer.update(dt, multiplayerPacket());
 
+  // co-op: host streams its enemies; clients smoke their damaged ghosts
+  if (inCoop()) {
+    if (multiplayer.isHost() && playingish) {
+      multiplayer.sendEnemyState(waves.enemies, G.wave);
+    }
+    for (const re of multiplayer.remoteEnemies.values()) {
+      if (re.alive && re.hasState &&
+          camera.position.distanceTo(re.visual.root.position) < 170) {
+        effects.damageSmoke(re.visual.root.position, re.hp / re.maxHp, dt);
+      }
+    }
+  }
+
   // shell whiz-by for incoming fire
   for (const s of projectiles.active) {
     if (!s.fromPlayer && !s.whizzed && camera.position.distanceTo(s.pos) < 10) {
@@ -1367,7 +1672,8 @@ function gameFrame(dt) {
   }
   foliage.update(dt, camera.position.x, camera.position.z);
   effects.update(dt);
-  sky.update(dt, G.player ? G.player.visual.root.position : camera.position);
+  // shadow frustum follows the camera so downed-spectate stays lit
+  sky.update(dt, camera.position);
 
   // HUD
   if (playingish && G.player) {
@@ -1378,8 +1684,11 @@ function gameFrame(dt) {
       1 - G.player.restocking / SHELL.restockTime,
     );
     hud.setScore(G.score, G.wave, G.kills, G.combo > 1 ? Math.min(SCORING.comboMax, 1 + (G.combo - 1) * 0.5) : 1);
-    hud.updateArrows(waves.aliveEnemies(), camera);
-    minimap.draw(G.player, waves.enemies, props, G.camYaw, waves.trucks || []);
+    const hudEnemies = isCoopClient() ? multiplayer.enemyBlips() : waves.aliveEnemies();
+    const allies = inCoop() ? multiplayer.allyBlips() : [];
+    hud.updateArrows(hudEnemies, camera, allies);
+    minimap.draw(G.player, isCoopClient() ? multiplayer.enemyBlips() : waves.enemies, props, G.camYaw, waves.trucks || [], allies);
+    hud.setAllies(allies, multiplayer.connected);
   }
 
 }
@@ -1439,7 +1748,7 @@ requestAnimationFrame(loop);
 // debug/testing handle (harmless in production)
 window.__IR = {
   G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer,
-  onShellHit, audio,
+  onShellHit, audio, damagePlayer,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)
   pump(n = 1, stepMs = 16.7) {
