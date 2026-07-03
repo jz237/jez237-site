@@ -3,7 +3,7 @@
   let manualRefreshUntil = 0;
   const originalFetch = window.fetch.bind(window);
   const pageBase = document.currentScript
-    ? new URL("../", document.currentScript.src)
+    ? new URL("./", document.currentScript.src)
     : new URL("./", window.location.href);
   const dataBase = pageBase.href;
   window.__STOCK_MARKET_BASE_URL__ = dataBase;

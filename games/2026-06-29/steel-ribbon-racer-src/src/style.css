@@ -420,6 +420,141 @@ body.menu-mode #cockpit .strut {
 .logo.small {
   font-size: clamp(2.1rem, 7vw, 5rem);
 }
+.logo em {
+  color: #ffd45b;
+  font-style: normal;
+  text-shadow:
+    0 6px 0 #7a4a08,
+    0 0 34px rgba(255, 190, 60, 0.55);
+}
+.tagline {
+  color: #9fc2d4;
+  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+#menuMain {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: min(880px, 94vw);
+}
+.menu-cols {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: 1fr 1fr;
+}
+.menu-col {
+  align-items: stretch;
+  background: rgba(6, 14, 20, 0.55);
+  border: 1px solid rgba(140, 200, 255, 0.16);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: min(300px, 44vw);
+  padding: 16px 18px 18px;
+}
+.menu-col h3 {
+  color: #ffd45b;
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  margin: 0 0 2px;
+  text-transform: uppercase;
+}
+.menu-col button.primary {
+  background: linear-gradient(180deg, #ffb02e, #e2701b);
+  border-color: #ffd9a0;
+  color: #251302;
+  font-weight: 900;
+}
+#menuToggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 2px;
+  justify-content: center;
+}
+.menu-panel {
+  align-items: center;
+  background: rgba(6, 14, 20, 0.72);
+  border: 1px solid rgba(140, 200, 255, 0.22);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: min(560px, 92vw);
+  padding: 20px 26px 22px;
+  width: 100%;
+}
+.menu-panel h3 {
+  color: #ffd45b;
+  letter-spacing: 0.2em;
+  margin: 0;
+  text-transform: uppercase;
+}
+.menu-panel .panel-hint {
+  color: #9fc2d4;
+  font-size: 0.85rem;
+}
+.mini-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+.menu-panel input {
+  background: rgba(8, 18, 26, 0.9);
+  border: 1px solid rgba(140, 200, 255, 0.35);
+  border-radius: 8px;
+  color: #d8ecff;
+  font: 700 0.95rem "Courier New", monospace;
+  letter-spacing: 0.12em;
+  padding: 0.6rem 0.8rem;
+  text-transform: uppercase;
+}
+.menu-panel button.ghost {
+  background: transparent;
+  border: 1px solid rgba(140, 200, 255, 0.3);
+  color: #9fc2d4;
+}
+#mpStatus {
+  color: #8ef0ff;
+  font-size: 0.88rem;
+  min-height: 1.2em;
+}
+#scoreBoard {
+  display: grid;
+  gap: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+  width: 100%;
+}
+.score-row {
+  align-items: center;
+  background: rgba(10, 20, 30, 0.6);
+  border-radius: 6px;
+  color: #dcebf3;
+  display: grid;
+  font-family: "Courier New", monospace;
+  gap: 10px;
+  grid-template-columns: 2ch 5ch 1fr;
+  padding: 5px 12px;
+  text-align: left;
+}
+.score-row i {
+  color: #ffd45b;
+  font-style: normal;
+}
+.active-board {
+  outline: 2px solid #ffd45b;
+}
+@media (max-width: 720px) {
+  .menu-cols {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
 .screen p {
   color: #dcebf3;
   font-size: clamp(1rem, 2vw, 1.2rem);
