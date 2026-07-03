@@ -29,6 +29,10 @@ const historyRanges = [
   ["mmax", "max", "1mo", false]
 ];
 
+// "intraday" refreshes quotes plus the intraday ranges only, reusing the stored
+// daily history (with today's bar merged in). Anything else is a full refresh.
+const intradayOnly = process.env.STOCK_REFRESH_MODE === "intraday";
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const round = value => Number.isFinite(value) ? Number(value.toFixed(4)) : null;
 const dateStamp = seconds => new Date(seconds * 1000).toISOString().slice(0, 10);
@@ -41,8 +45,8 @@ async function readJson(file) {
   return JSON.parse(await fs.readFile(file, "utf8"));
 }
 
-async function writeJson(file, data) {
-  await fs.writeFile(file, `${JSON.stringify(data, null, 2)}\n`);
+async function writeJson(file, data, { compact = false } = {}) {
+  await fs.writeFile(file, `${JSON.stringify(data, null, compact ? 0 : 2)}\n`);
 }
 
 async function fetchChart(symbol, range, interval) {
@@ -133,6 +137,16 @@ function latestVolume(rows) {
   return null;
 }
 
+function mergeDailyRows(existing, recent) {
+  const rows = existing.map(row => [...row]);
+  for (const row of recent) {
+    const index = rows.findIndex(candidate => candidate[0] === row[0]);
+    if (index >= 0) rows[index] = row;
+    else rows.push(row);
+  }
+  return rows.slice(-270);
+}
+
 async function main() {
   const stocksData = await readJson(stocksPath);
   const historyData = await readJson(historyPath);
@@ -146,15 +160,21 @@ async function main() {
     const yahoo = yahooSymbol(stock.symbol);
     try {
       const quoteResult = await fetchChart(yahoo, "5d", "1d");
-      const yearResult = await fetchChart(yahoo, "1y", "1d");
-      const dailyRows = rowsFromChart(yearResult, false);
+      const symbolHistory = historyData.symbols[yahoo] || {};
+      let dailyRows;
+      if (intradayOnly && Array.isArray(symbolHistory.d1y) && symbolHistory.d1y.length) {
+        dailyRows = mergeDailyRows(symbolHistory.d1y, rowsFromChart(quoteResult, false));
+      } else {
+        const yearResult = await fetchChart(yahoo, "1y", "1d");
+        dailyRows = rowsFromChart(yearResult, false);
+      }
       if (!dailyRows.length) throw new Error(`${yahoo}: no daily rows`);
       updateStock(stock, yahoo, quoteResult, dailyRows);
 
-      const symbolHistory = historyData.symbols[yahoo] || {};
       symbolHistory.d1y = dailyRows;
       for (const [key, range, interval, intraday] of historyRanges) {
         if (key === "d1y") continue;
+        if (intradayOnly && !intraday) continue;
         try {
           const result = await fetchChart(yahoo, range, interval);
           const rows = rowsFromChart(result, intraday);
@@ -183,9 +203,9 @@ async function main() {
   historyData.format = "[time, open, high, low, close, volume]; i*=unix seconds, others=YYYY-MM-DD";
 
   await writeJson(stocksPath, stocksData);
-  await writeJson(historyPath, historyData);
+  await writeJson(historyPath, historyData, { compact: true });
 
-  console.log(`Updated ${updated} stock-market symbols at ${now}.`);
+  console.log(`Updated ${updated} stock-market symbols at ${now} (${intradayOnly ? "intraday" : "full"} refresh).`);
   if (failures.length) {
     console.warn(`Completed with ${failures.length} warning(s):`);
     for (const warning of failures) console.warn(`- ${warning}`);
