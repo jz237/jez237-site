@@ -151,5 +151,22 @@
       "description": "A plausible volcanic scree animal with thermal whiskers, pebble-sieving forepaws, and glassy frost-scale camouflage.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-03-creature-design-canopy-dripfold-glider",
+    "title": "Canopy Dripfold Glider",
+    "tests": "GPT Image 2 creature-design study; finished natural-history wildlife image; no prompt-card text",
+    "prompt": "Design a believable cloud-forest limestone canopy creature called the Canopy Dripfold Glider with rain-collecting ear membranes, hooked mineral-climbing foreclaws, and moss-green velvet fur banded with pale calcite speckles, shown as a realistic natural-history creature study. Create a finished square documentary wildlife photograph high in a wet karst cloud forest after afternoon rain: one adult about the size of a civet clings diagonally to a slick limestone buttress and overhanging fig roots, body stretched in a shallow climbing posture rather than crouched toward camera, four slender limbs with dark hooked foreclaws gripping pitted mineral cracks, a long balancing tail wrapped around a wet root, broad folded ear membranes tilted like small leaf gutters with visible droplets running toward the mouth, narrow amber eyes, blunt browsing muzzle nibbling blue-green epiphyte mats, and dense moss-green velvet fur broken by pale calcite speckles and darker rain streaks. Include one juvenile half-hidden inside a fern pocket, wet orchids, translucent snail shells, mineral drip lines, beadlike water trails on the ear folds, tiny scratch marks in the limestone, fallen fig seeds, misty background canopy layers, and a field-naturalist sense of scale from fresh claw grooves and a shed whisker on the rock. Use humid diffused light, crisp macro wildlife detail, believable anatomy and weight, ecological logic that makes the adaptations clear without labels, tactile limestone, moss, fur, droplets, roots, and leaf textures, and shallow documentary depth of field. The image itself should be the finished creature study, not a prompt card: no readable text, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra limbs beyond four legs, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nWhat the reusable visual operation changes or emphasizes: it turns a habitat-and-adaptation brief into a plausible original animal study, emphasizing ecological logic, coherent anatomy, tactile surface detail, scale, and behavior in context.\n\nExample substitution: [HABITAT] = cloud-forest limestone canopy; [ADAPTATION 1] = rain-collecting ear membranes; [ADAPTATION 2] = hooked mineral-climbing foreclaws; [TEXTURE/COLOR] = moss-green velvet fur banded with pale calcite speckles; [LIFE STAGE OR GROUPING] = one adult with one juvenile; [SPECIFIC MICROHABITAT] = slick limestone buttress with overhanging fig roots after rain.",
+    "image": "images/2026-07-03-creature-design-canopy-dripfold-glider.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Canopy Dripfold Glider",
+      "description": "A cloud-forest limestone canopy animal with rain-collecting ear folds, mineral-climbing claws, and moss-green calcite-speckled fur.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
