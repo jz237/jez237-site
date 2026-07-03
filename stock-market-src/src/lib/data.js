@@ -44,8 +44,17 @@ export function rowsToOhlc(rows) {
   }));
 }
 
-export function historyForRange(history, stock, range) {
-  const symbolHistory = history?.symbols?.[stock.dataSymbol || stock.symbol];
+// History is stored one file per symbol under data/history/. Must match
+// historyFileName() in scripts/refresh_stock_market_data.mjs.
+export function historyKey(stock) {
+  return stock.dataSymbol || stock.symbol;
+}
+
+export function historyFileName(symbol) {
+  return `${symbol.replace(/[^A-Za-z0-9.-]/g, "_")}.json`;
+}
+
+export function historyForRange(symbolHistory, range) {
   if (!symbolHistory) return null;
   let rows = null;
   if (range === "1D" && symbolHistory.i1d) rows = rowsToOhlc(symbolHistory.i1d);

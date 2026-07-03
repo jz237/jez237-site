@@ -23,8 +23,8 @@ export default function HiResChart({
   const smaRef = useRef(null);
   const [hovered, setHovered] = useState(null);
   const rows = useMemo(
-    () => historyForRange(history, stock, range),
-    [history, range, stock],
+    () => historyForRange(history, range),
+    [history, range],
   );
   const hasVolume = useMemo(
     () => (rows || []).some((row) => row.volume > 0),

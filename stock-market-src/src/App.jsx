@@ -1,13 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import HiResChart from "./components/HiResChart.jsx";
+import PortfolioPanel from "./components/PortfolioPanel.jsx";
 import {
   AUTO_REFRESH_MS,
   FALLBACK_STOCKS,
   RANGES,
   RANGE_DESCRIPTIONS,
+  historyFileName,
   historyForRange,
+  historyKey,
   readLocal,
 } from "./lib/data.js";
+
+const BENCHMARK_KEY = "^GSPC";
 import {
   dayChangeAmount,
   fmt,
@@ -22,7 +27,7 @@ import {
 
 export default function App() {
   const [stocksData, setStocksData] = useState(null);
-  const [history, setHistory] = useState(null);
+  const [historyBySymbol, setHistoryBySymbol] = useState({});
   const [portfolio, setPortfolio] = useState({ positions: [] });
   const [holdings, setHoldings] = useState(() =>
     readLocal("commandCenterHoldings", {}),
@@ -43,31 +48,61 @@ export default function App() {
   );
   const [drawer, setDrawer] = useState(null);
   const [focusedCatalyst, setFocusedCatalyst] = useState("");
+  const [privacy, setPrivacy] = useState(() =>
+    readLocal("commandCenterPrivacy", false),
+  );
+  const [holdingsSort, setHoldingsSort] = useState("default");
+  const [hideUnsized, setHideUnsized] = useState(false);
   const [now, setNow] = useState(() => Date.now());
   const searchRef = useRef(null);
+  const selectedKeyRef = useRef(null);
+  const historyRequests = useRef(new Set());
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 3e4);
     return () => window.clearInterval(timer);
   }, []);
 
+  // History lives in one small file per symbol, fetched on demand and cached
+  // in state. force refetches (used by the refresh cycle for live symbols).
+  const ensureHistory = useCallback(async (keys, force = false) => {
+    const wanted = keys.filter((key) => {
+      if (!key) return false;
+      if (!force && historyRequests.current.has(key)) return false;
+      historyRequests.current.add(key);
+      return true;
+    });
+    if (!wanted.length) return;
+    const loaded = await Promise.all(
+      wanted.map((key) =>
+        fetch(`data/history/${historyFileName(key)}${force ? `?t=${Date.now()}` : ""}`)
+          .then((res) => (res.ok ? res.json() : null))
+          .then((data) => [key, data])
+          .catch(() => [key, null]),
+      ),
+    );
+    setHistoryBySymbol((current) => {
+      const next = { ...current };
+      for (const [key, data] of loaded) if (data) next[key] = data;
+      return next;
+    });
+  }, []);
+
   const loadData = useCallback(async (manual = false) => {
     const buster = manual ? `?t=${Date.now()}` : "";
     setRefreshing(true);
     try {
-      const [stocks, serverPortfolio, historyData] = await Promise.all([
+      const [stocks, serverPortfolio] = await Promise.all([
         fetch(`data/stocks.json${buster}`).then((res) => res.json()),
         fetch("data/portfolio.json")
-          .then((res) => res.json())
-          .catch(() => null),
-        fetch("data/history.json")
           .then((res) => res.json())
           .catch(() => null),
       ]);
       if (!Array.isArray(stocks.stocks))
         throw Error("unexpected stocks.json shape");
       setStocksData(stocks);
-      if (historyData) setHistory(historyData);
+      if (selectedKeyRef.current)
+        ensureHistory([selectedKeyRef.current, BENCHMARK_KEY], manual);
       // A saved local portfolio wins, but newly published server symbols merge
       // in once; the "seen" list keeps deliberate removals sticky.
       const saved = readLocal("commandCenterPortfolio", null);
@@ -103,7 +138,7 @@ export default function App() {
     } finally {
       setRefreshing(false);
     }
-  }, []);
+  }, [ensureHistory]);
 
   useEffect(() => {
     const kickoff = window.setTimeout(() => loadData(true), 0);
@@ -153,6 +188,12 @@ export default function App() {
     equities[0] ||
     FALLBACK_STOCKS[0];
   const isInstrument = stock.kind === "instrument";
+  const stockHistoryKey = historyKey(stock);
+  selectedKeyRef.current = stockHistoryKey;
+
+  useEffect(() => {
+    ensureHistory([stockHistoryKey]);
+  }, [ensureHistory, stockHistoryKey]);
   const folders = useMemo(
     () =>
       [
@@ -214,6 +255,16 @@ export default function App() {
         .filter((p) => !!p.stock),
     [portfolio.positions, equities],
   );
+
+  // Prefetch history for sized positions (plus the benchmark) so the
+  // portfolio equity curve can build as soon as the Portfolio tab opens.
+  useEffect(() => {
+    if (mode !== "Portfolio") return;
+    const keys = positions
+      .filter((p) => holdings[p.symbol]?.shares > 0)
+      .map((p) => historyKey(p.stock));
+    ensureHistory([...keys, BENCHMARK_KEY]);
+  }, [mode, positions, holdings, ensureHistory]);
   const plSummary = useMemo(() => {
     let value = 0;
     let cost = 0;
@@ -236,6 +287,26 @@ export default function App() {
       totalPlPct: cost > 0 ? ((value - cost) / cost) * 100 : 0,
     };
   }, [holdings, positions]);
+  const displayedPositions = useMemo(() => {
+    let list = positions;
+    if (hideUnsized)
+      list = list.filter((p) => holdings[p.symbol]?.shares > 0);
+    if (holdingsSort === "ticker")
+      list = [...list].sort((a, b) => a.symbol.localeCompare(b.symbol));
+    else if (holdingsSort === "value")
+      list = [...list].sort(
+        (a, b) =>
+          (holdings[b.symbol]?.shares || 0) * b.stock.price -
+          (holdings[a.symbol]?.shares || 0) * a.stock.price,
+      );
+    else if (holdingsSort === "daypl")
+      list = [...list].sort(
+        (a, b) =>
+          (holdings[b.symbol]?.shares || 0) * dayChangeAmount(b.stock) -
+          (holdings[a.symbol]?.shares || 0) * dayChangeAmount(a.stock),
+      );
+    return list;
+  }, [positions, holdings, holdingsSort, hideUnsized]);
   const sectorBuckets = equities.reduce((groups, s) => {
     const group = s.sector.includes("Semi")
       ? "Semiconductors"
@@ -376,8 +447,8 @@ export default function App() {
     .sort((a, b) => b.confidence - a.confidence || b.change - a.change)
     .slice(0, 10);
   const selectedRows = useMemo(
-    () => historyForRange(history, stock, range),
-    [history, range, stock],
+    () => historyForRange(historyBySymbol[stockHistoryKey], range),
+    [historyBySymbol, stockHistoryKey, range],
   );
   const rangeChangePct =
     selectedRows && selectedRows.length > 1
@@ -425,6 +496,13 @@ export default function App() {
     const next = { ...holdings, [symbol]: { ...current, ...patch } };
     setHoldings(next);
     localStorage.setItem("commandCenterHoldings", JSON.stringify(next));
+  }
+  function togglePrivacy() {
+    const next = !privacy;
+    setPrivacy(next);
+    try {
+      localStorage.setItem("commandCenterPrivacy", JSON.stringify(next));
+    } catch {}
   }
   function openDrawer(view) {
     setDrawer(view);
@@ -477,7 +555,7 @@ export default function App() {
     sortKey === key ? (sortDir === 1 ? " ▲" : " ▼") : "";
 
   return (
-    <main className="terminal">
+    <main className={`terminal ${privacy ? "privacy" : ""}`}>
       <nav className="rail">
         <a
           className="home-link"
@@ -796,7 +874,7 @@ export default function App() {
                   range={range}
                   chartMode={chartMode}
                   indicators={indicators}
-                  history={history}
+                  history={historyBySymbol[stockHistoryKey] || null}
                 />
                 <div className="unit-badge">
                   {stock.currency || "USD"}
@@ -804,6 +882,15 @@ export default function App() {
                 </div>
               </div>
             </section>
+            {mode === "Portfolio" && (
+              <PortfolioPanel
+                positions={positions}
+                holdings={holdings}
+                historyBySymbol={historyBySymbol}
+                benchmarkKey={BENCHMARK_KEY}
+                onSelect={setSelectedSymbol}
+              />
+            )}
             <section className="heat-panel panel">
               {sectorGroups.map(({ group, items }) => (
                 <div key={group} className="heat-sector">
@@ -1086,6 +1173,17 @@ export default function App() {
                     <div className="card-title">
                       Portfolio P&L{" "}
                       <button
+                        className="privacy-toggle"
+                        title={
+                          privacy
+                            ? "Show dollar amounts"
+                            : "Hide dollar amounts (privacy mode)"
+                        }
+                        onClick={togglePrivacy}
+                      >
+                        {privacy ? "🙈" : "👁"}
+                      </button>
+                      <button
                         onClick={trackCurrent}
                         disabled={
                           isInstrument ||
@@ -1130,7 +1228,29 @@ export default function App() {
                         </b>
                       </span>
                     </div>
-                    {positions.map((position) => {
+                    <div className="holdings-controls">
+                      <label>
+                        Sort
+                        <select
+                          value={holdingsSort}
+                          onChange={(e) => setHoldingsSort(e.target.value)}
+                        >
+                          <option value="default">Tracking order</option>
+                          <option value="ticker">Ticker</option>
+                          <option value="value">Market value</option>
+                          <option value="daypl">Day P&L</option>
+                        </select>
+                      </label>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={hideUnsized}
+                          onChange={(e) => setHideUnsized(e.target.checked)}
+                        />
+                        Hide unsized
+                      </label>
+                    </div>
+                    {displayedPositions.map((position) => {
                       const holding = holdings[position.symbol];
                       const sized = holding && holding.shares > 0;
                       const value = sized
@@ -1140,9 +1260,24 @@ export default function App() {
                         sized && holding.avgCost > 0
                           ? value - holding.shares * holding.avgCost
                           : null;
+                      const plPct =
+                        pl !== null && holding.avgCost > 0
+                          ? (pl / (holding.shares * holding.avgCost)) * 100
+                          : null;
                       return (
                         <div key={position.symbol} className="holding-row">
-                          <strong>{position.symbol}</strong>
+                          <strong
+                            role="button"
+                            tabIndex={0}
+                            title={`View ${position.symbol} chart`}
+                            onClick={() => setSelectedSymbol(position.symbol)}
+                            onKeyDown={(e) =>
+                              e.key === "Enter" &&
+                              setSelectedSymbol(position.symbol)
+                            }
+                          >
+                            {position.symbol}
+                          </strong>
                           <label>
                             Shares
                             <input
@@ -1186,7 +1321,7 @@ export default function App() {
                             >
                               {pl === null
                                 ? `${position.stock.change >= 0 ? "+" : ""}${position.stock.change.toFixed(2)}%`
-                                : `${pl >= 0 ? "+" : ""}$${fmt(pl)}`}
+                                : `${pl >= 0 ? "+" : ""}$${fmt(pl)}${plPct === null ? "" : ` (${plPct >= 0 ? "+" : ""}${plPct.toFixed(1)}%)`}`}
                             </b>
                           </span>
                           <button

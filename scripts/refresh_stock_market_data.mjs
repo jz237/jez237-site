@@ -7,7 +7,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, "..");
 const dataDir = path.join(repoRoot, "stock-market", "data");
 const stocksPath = path.join(dataDir, "stocks.json");
-const historyPath = path.join(dataDir, "history.json");
+const historyDir = path.join(dataDir, "history");
+
+// Must match historyFileName() in stock-market-src/src/lib/data.js.
+function historyFileName(symbol) {
+  return `${symbol.replace(/[^A-Za-z0-9.-]/g, "_")}.json`;
+}
 
 const yahooSymbols = {
   "S&P": "^GSPC",
@@ -147,10 +152,17 @@ function mergeDailyRows(existing, recent) {
   return rows.slice(-270);
 }
 
+async function readSymbolHistory(yahoo) {
+  try {
+    return await readJson(path.join(historyDir, historyFileName(yahoo)));
+  } catch {
+    return {};
+  }
+}
+
 async function main() {
   const stocksData = await readJson(stocksPath);
-  const historyData = await readJson(historyPath);
-  historyData.symbols ||= {};
+  await fs.mkdir(historyDir, { recursive: true });
 
   const now = new Date().toISOString();
   const failures = [];
@@ -160,7 +172,7 @@ async function main() {
     const yahoo = yahooSymbol(stock.symbol);
     try {
       const quoteResult = await fetchChart(yahoo, "5d", "1d");
-      const symbolHistory = historyData.symbols[yahoo] || {};
+      const symbolHistory = await readSymbolHistory(yahoo);
       let dailyRows;
       if (intradayOnly && Array.isArray(symbolHistory.d1y) && symbolHistory.d1y.length) {
         dailyRows = mergeDailyRows(symbolHistory.d1y, rowsFromChart(quoteResult, false));
@@ -184,7 +196,11 @@ async function main() {
           failures.push(`${stock.symbol}/${key}: ${error.message}`);
         }
       }
-      historyData.symbols[yahoo] = symbolHistory;
+      symbolHistory.symbol = yahoo;
+      symbolHistory.updatedAt = now;
+      symbolHistory.source = "yahoo-finance-chart";
+      symbolHistory.format = "[time, open, high, low, close, volume]; i*=unix seconds, others=YYYY-MM-DD";
+      await writeJson(path.join(historyDir, historyFileName(yahoo)), symbolHistory, { compact: true });
       updated++;
       await sleep(140);
     } catch (error) {
@@ -198,12 +214,8 @@ async function main() {
 
   stocksData.updatedAt = now;
   stocksData.source = "yahoo-finance-chart";
-  historyData.updatedAt = now;
-  historyData.source = "yahoo-finance-chart";
-  historyData.format = "[time, open, high, low, close, volume]; i*=unix seconds, others=YYYY-MM-DD";
 
   await writeJson(stocksPath, stocksData);
-  await writeJson(historyPath, historyData, { compact: true });
 
   console.log(`Updated ${updated} stock-market symbols at ${now} (${intradayOnly ? "intraday" : "full"} refresh).`);
   if (failures.length) {
