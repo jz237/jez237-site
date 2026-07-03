@@ -89,7 +89,7 @@ function curveStats(points) {
 }
 
 export default function PortfolioPanel({
-  benchmarkKey,
+  benchmarks,
   historyBySymbol,
   holdings,
   onSelect,
@@ -98,6 +98,9 @@ export default function PortfolioPanel({
   const containerRef = useRef(null);
   const [curveRange, setCurveRange] = useState("3M");
   const [contribMode, setContribMode] = useState("day");
+  const [benchmarkKey, setBenchmarkKey] = useState(benchmarks[0].key);
+  const benchmarkLabel =
+    benchmarks.find((b) => b.key === benchmarkKey)?.label || "Benchmark";
 
   const sized = useMemo(
     () =>
@@ -248,7 +251,17 @@ export default function PortfolioPanel({
               </b>
             </span>
             <span className="bench-key">
-              S&P 500{" "}
+              <span className="bench-toggle">
+                {benchmarks.map((b) => (
+                  <button
+                    key={b.key}
+                    className={benchmarkKey === b.key ? "active" : ""}
+                    onClick={() => setBenchmarkKey(b.key)}
+                  >
+                    {b.label}
+                  </button>
+                ))}
+              </span>{" "}
               <b className={benchmarkReturn >= 0 ? "up" : "down"}>
                 {benchmarkReturn >= 0 ? "+" : ""}
                 {benchmarkReturn.toFixed(2)}%
@@ -284,7 +297,7 @@ export default function PortfolioPanel({
       )}
       <div className="portfolio-columns">
         <div>
-          <h3>Allocation</h3>
+          <h2>Allocation</h2>
           {allocation.map((entry) => (
             <button
               key={entry.symbol}
@@ -312,7 +325,7 @@ export default function PortfolioPanel({
           )}
         </div>
         <div>
-          <h3>
+          <h2>
             P&L Contribution{" "}
             <span className="contrib-toggle">
               {["day", "total"].map((key) => (
@@ -325,7 +338,7 @@ export default function PortfolioPanel({
                 </button>
               ))}
             </span>
-          </h3>
+          </h2>
           {contributions.map((entry) => (
             <button
               key={entry.symbol}
