@@ -394,5 +394,41 @@
       "description": "A fictional Portuguese man o war siphonophore + flying fish hybrid with a glassy sail crest, blue tendril ribbons, flying-fish fins, and a skimming ocean-surface body.",
       "continuity": "Same adult open-ocean phenotype across both images: glassy amber gas-sail crest, silver-blue fish body, broad pectoral outriggers, forked tail, armored head scales, and cobalt-violet trailing tendrils."
     }
+  },
+  {
+    "id": "2026-07-03-hybrid-creature-infographic-snowpetal-jackmantis-developmen",
+    "title": "Snowpetal Jackmantis: Development Map",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; source-trait map, stage strip, adult specimen panel, macro windows, habitat swatches, and scale vignette requested.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional two-source hybrid creature named \"Snowpetal Jackmantis\", using exactly two source organisms: snowshoe hare + orchid mantis. Make it a landscape scientific wall chart assembled on a cold alpine field-station bench with restrained concise labels and no actionable biology. Include these distinct visual layers: a source-trait map showing snowshoe hare contributes oversized snowshoe hind feet, powerful leaping haunches, long heat-shedding ears, winter-white insulating fur, and a compact alert mammal posture, while orchid mantis contributes petal-like limb lobes, folded raptorial forelimbs, triangular insect head geometry, pale pink-white floral camouflage, and delicate spined grasping edges; a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel showing a waist-high side-profile leaper on packed snow with hare-like hindquarters, broad furred snow feet, long translucent-veined ears, a narrow triangular face with small mammal nose and faceted side-eye shimmer, folded mantis-like raptorial forelimbs integrated at the shoulders, and white fur broken by soft blush-pink petal plates; macro texture windows for snow-packed foot fur, petal-lobe veins, fine ear frost, raptorial forelimb spines, and faceted eye gloss; habitat swatches for wind-crusted alpine willow snow, pink saxifrage blossoms, blue shadow ice, lichen rock, and dawn powder; and a field-context scale vignette with hare-like tracks beside a willow twig, a nonbranded caliper, a mittened hand silhouette, and a shallow specimen tray on the bench. Use clean scientific color coding, photorealistic specimen lighting, tactile bench frost, restrained arrows, readable but minimal fictional labels, and clear panel hierarchy. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Snowpetal Jackmantis; [SOURCE_A] = snowshoe hare; [SOURCE_B] = orchid mantis; [HABITAT] = wind-crusted alpine willow snowfield at dawn; adult phenotype = waist-high side-profile leaper with snowshoe hare hindquarters, broad snow feet, winter-white fur, long frost-rimmed ears, triangular mantis-inspired face, folded orchid-mantis forelimbs, blush-pink petal lobes, delicate spined grasping edges, and pale floral camouflage plates.",
+    "image": "images/2026-07-03-hybrid-creature-infographic-snowpetal-jackmantis-developmen.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Snowpetal Jackmantis",
+      "imageKind": "infographic",
+      "description": "A fictional snowshoe hare + orchid mantis hybrid with snow-running feet, winter fur, long ears, folded petal-like raptorial forelimbs, and blush floral camouflage.",
+      "continuity": "Same adult phenotype across both images: waist-high alpine leaper with hare hindquarters, broad snow feet, frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and winter-white fur."
+    }
+  },
+  {
+    "id": "2026-07-03-hybrid-creature-wild-snowpetal-jackmantis-in-the-wild",
+    "title": "Snowpetal Jackmantis: In the Wild",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; matching in-the-wild field photo requested with the same adult phenotype and habitat continuity.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Snowpetal Jackmantis\", a clearly fictional two-source hybrid of snowshoe hare + orchid mantis, crossing a wind-crusted alpine willow snowfield at dawn. Preserve the exact adult phenotype from the development map: a waist-high side-profile leaping animal with snowshoe-hare-like powerful hindquarters, broad furred snow feet pressing shallow oval tracks into crusted snow, compact winter-white mammal body, long translucent-veined ears rimmed with frost, a narrow triangular face with a small mammal nose and subtle faceted side-eye shimmer, folded orchid-mantis-like raptorial forelimbs integrated at the shoulders, blush-pink petal-like lobes along the forelimbs and shoulders, delicate spined grasping edges held safely closed, and white insulating fur broken by pale pink floral camouflage plates. Show it moving left to right between dwarf willow stems and pink saxifrage flowers poking through snow, with blue shadow ice, lichen rocks, powder blown from its feet, tiny ice crystals on the petal lobes, visible breath in cold air, and a natural scale cue from willow twigs and track depth. Use long-lens wildlife photography, low snow-level camera angle, shallow documentary depth of field, dawn side light, tactile snow, frost, fur, petal membrane, and rock textures. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure hare or pure mantis result; it must visibly combine snowshoe hare traits and orchid mantis traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Snowpetal Jackmantis; [SOURCE_A] = snowshoe hare; [SOURCE_B] = orchid mantis; [HABITAT] = wind-crusted alpine willow snowfield at dawn; shared adult phenotype = waist-high alpine leaper with snowshoe hare hindquarters, broad snow feet, winter-white fur, long frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and pale floral camouflage plates.",
+    "image": "images/2026-07-03-hybrid-creature-wild-snowpetal-jackmantis-in-the-wild.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Snowpetal Jackmantis",
+      "imageKind": "wild",
+      "description": "A fictional snowshoe hare + orchid mantis hybrid with snow-running feet, winter fur, long ears, folded petal-like raptorial forelimbs, and blush floral camouflage.",
+      "continuity": "Same adult phenotype across both images: waist-high alpine leaper with hare hindquarters, broad snow feet, frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and winter-white fur."
+    }
   }
 ]
