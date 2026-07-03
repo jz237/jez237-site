@@ -1,13 +1,21 @@
-/* space-fx.js — animated star field + meteors for the home page galaxy backdrop.
-   Draws on a canvas injected into .galaxy-backdrop (z4: above nebula/dust, below
-   the vignette). Respects prefers-reduced-motion (static stars, no meteors).
+/* space-fx.js — animated star field + meteors for galaxy-themed pages.
+   Host resolution: [data-space-fx] element → .galaxy-backdrop (home) → a fixed
+   full-viewport layer appended to body (games/, how-ai-works/, ai-explainer —
+   their content sits at z-index 1, galaxy pseudo-elements at 0).
+   Respects prefers-reduced-motion (static stars, no meteors).
    Debug: window.__spaceFx.renderFrame(dtMs) steps one frame manually — needed in
    headless previews where document.hidden keeps requestAnimationFrame from firing. */
 (function () {
   'use strict';
 
-  var host = document.querySelector('.galaxy-backdrop');
-  if (!host) return;
+  var host = document.querySelector('[data-space-fx]') || document.querySelector('.galaxy-backdrop');
+  if (!host) {
+    host = document.createElement('div');
+    host.className = 'space-fx-layer';
+    host.setAttribute('aria-hidden', 'true');
+    host.style.cssText = 'position:fixed;inset:0;z-index:0;pointer-events:none;';
+    document.body.appendChild(host);
+  }
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -32,7 +40,7 @@
 
   function buildStars() {
     stars.length = 0;
-    var count = Math.min(230, Math.round((W * H) / 8500));
+    var count = Math.max(40, Math.min(230, Math.round((W * H) / 8500)));
     for (var i = 0; i < count; i++) {
       var bright = Math.random() < 0.08;
       stars.push({
@@ -56,7 +64,8 @@
   function spawnMeteor() {
     var dir = Math.random() < 0.5 ? 1 : -1;             // 1 = left→right
     var angle = (28 + Math.random() * 24) * Math.PI / 180; // downward slope
-    var speed = 520 + Math.random() * 520;               // px/s
+    var scale = Math.min(1, Math.max(0.45, H / 900));    // small hosts get slower, shorter meteors
+    var speed = (520 + Math.random() * 520) * scale;     // px/s
     meteors.push({
       x: dir === 1 ? -40 + Math.random() * W * 0.35 : W * 0.65 + Math.random() * (W * 0.35 + 40),
       y: -20 + Math.random() * H * 0.38,
@@ -64,7 +73,7 @@
       vy: Math.sin(angle) * speed,
       life: 0,
       ttl: 1.1 + Math.random() * 0.9,
-      len: 90 + Math.random() * 130,
+      len: (90 + Math.random() * 130) * scale,
       hue: Math.random() < 0.3 ? '200,230,255' : '255,255,255'
     });
   }
