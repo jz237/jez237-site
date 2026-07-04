@@ -22,18 +22,16 @@ html {
   background: #081008;
 }
 
-/* Base page overrides — evening greenhouse backdrop (dark blurred foliage + glass) */
+/* Base page overrides — lush dark foliage backdrop (ferns, hostas, monstera) */
 body {
   background-color: #081008;
   background-image:
-    radial-gradient(46% 34% at 4% 100%, rgba(96, 210, 80, .12), transparent 70%),
-    radial-gradient(46% 34% at 96% 100%, rgba(96, 210, 80, .09), transparent 70%),
-    linear-gradient(180deg, rgba(4, 9, 5, .3) 0%, rgba(3, 7, 4, .58) 100%),
-    url("garden/plants-greenhouse-bg-20260704.webp");
-  background-size: cover, cover, cover, cover;
-  background-position: center, center, center, center;
-  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
-  background-attachment: fixed, fixed, fixed, fixed;
+    linear-gradient(180deg, rgba(4, 9, 5, .38) 0%, rgba(3, 7, 4, .66) 100%),
+    url("garden/plants-bg-leaves-20260704.webp");
+  background-size: cover, cover;
+  background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
+  background-attachment: fixed, fixed;
   color: var(--pc-text);
 }
 @media (max-width: 820px) {
