@@ -74,6 +74,14 @@ body.cabinet .sidePanel{display:flex}
 .cabGuide b{color:#e8fffb}
 .cabGuide .guideSprite{width:30px;height:22px;flex:0 0 30px}
 .cabKeys{margin-top:auto;color:#54808a;font-size:9px;line-height:1.9;letter-spacing:.12em}
+.optrows{display:grid;gap:10px;margin:14px 0;text-align:left}
+.optrow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;font:900 11px ui-monospace,monospace;letter-spacing:.12em;color:#c6f4f0}
+.optrow input[type=range]{width:132px;accent-color:#1fffe3;height:22px}
+.opttoggle{min-width:76px;padding:7px 10px;border-radius:6px;font:900 11px ui-monospace,monospace;letter-spacing:.1em;background:rgba(255,255,255,.07);border:1px solid rgba(135,255,235,.34);color:#dff}
+.opttoggle.on{background:linear-gradient(180deg,#e9fff9 0,#1fffe3 60%);color:#021016;box-shadow:0 0 12px rgba(16,245,220,.35)}
+body.lefty #bombBtn{left:calc(12px + var(--gutter) + env(safe-area-inset-left));right:auto}
+body.lefty #pauseBtn{right:calc(12px + var(--gutter) + env(safe-area-inset-right));left:auto}
+body.lefty #muteBtn{right:calc(12px + var(--gutter) + env(safe-area-inset-right));left:auto}
 @media(max-width:370px){.panel{padding:14px 10px}.btn{min-width:142px}.title{font-size:2.35rem}.row{font-size:9px;gap:4px;grid-template-columns:20px 30px 1fr auto}.titleActions .btn{font-size:11px}}
 </style>
 </head>
@@ -133,7 +141,7 @@ body.cabinet .sidePanel{display:flex}
       <button id="startBtn" class="btn">Start</button>
       <button id="dailyBtn" class="btn warn">Daily</button>
       <button id="scoresBtn" class="btn secondary">Scores</button>
-      <button id="crtBtn" class="btn secondary">CRT: On</button>
+      <button id="optionsBtn" class="btn secondary">Options</button>
     </div>
     <div id="titleScores" class="scores"></div>
   </div>
@@ -172,7 +180,28 @@ body.cabinet .sidePanel{display:flex}
     <p class="small" style="margin-bottom:8px">P / Esc / Enter resumes · M toggles sound</p>
     <button id="resumeBtn" class="btn">Resume</button>
     <button id="restartBtn" class="btn secondary">Restart</button>
+    <button id="pauseOptionsBtn" class="btn secondary">Options</button>
     <button id="quitBtn" class="btn secondary">Menu</button>
+  </div>
+</section>
+
+<section id="optionsScreen" class="overlay hidden">
+  <div class="shade"></div>
+  <div class="panel">
+    <div class="version"></div>
+    <h2 class="subtitle" style="font-size:1rem;color:#fff;margin-top:4px">Options</h2>
+    <div class="optrows">
+      <div class="optrow"><span>SOUND FX</span><input id="optSfx" type="range" min="0" max="100" step="5" aria-label="Sound effects volume"></div>
+      <div class="optrow"><span>MUSIC</span><input id="optMusic" type="range" min="0" max="100" step="5" aria-label="Music volume"></div>
+      <div class="optrow"><span>AUTOFIRE</span><button id="optAutofire" class="opttoggle">ON</button></div>
+      <div class="optrow"><span>SCREEN SHAKE</span><button id="optShake" class="opttoggle">ON</button></div>
+      <div class="optrow"><span>FLASH FX</span><button id="optFlash" class="opttoggle">FULL</button></div>
+      <div class="optrow"><span>CRT FILTER</span><button id="optCrt" class="opttoggle">ON</button></div>
+      <div class="optrow"><span>LEFT-HANDED</span><button id="optLefty" class="opttoggle">OFF</button></div>
+    </div>
+    <p class="small">Autofire off: hold touch, mouse button, J, or gamepad A to fire. Left-handed swaps the mobile buttons. M mutes everything either way.</p>
+    <button id="optResetScores" class="btn secondary">Reset local scores</button>
+    <button id="optionsBackBtn" class="btn">Back</button>
   </div>
 </section>
 
@@ -195,7 +224,7 @@ body.cabinet .sidePanel{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v2.0.1';
+const VERSION = 'v2.1.0';
 const SCORE_KEY = 'millipede_scores_v1';
 const LEGACY_SCORE_KEY = 'neon_myriapod_scores_v1';
 // Keep the original backing key so existing global scores remain associated after the URL rename.
@@ -210,6 +239,11 @@ let muted = false;
 try{ muted = localStorage.getItem(MUTE_KEY) === '1'; }catch(e){}
 let crtOn = true;
 try{ crtOn = localStorage.getItem(CRT_KEY) !== '0'; }catch(e){}
+const OPTS_KEY = 'millipede_options_v1';
+let OPTS = {sfx:1, music:1, autofire:true, shake:true, flash:true, lefty:false};
+try{ OPTS = Object.assign(OPTS, JSON.parse(localStorage.getItem(OPTS_KEY) || '{}')); }catch(e){}
+function saveOpts(){ try{ localStorage.setItem(OPTS_KEY, JSON.stringify(OPTS)); }catch(e){} }
+let optionsReturn = 'title';
 let nextLifeAt = EXTRA_LIFE_EVERY;
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
@@ -229,7 +263,8 @@ let waveBanner = {text:'',sub:'',life:0,max:1};
 let deathMarker = null;
 let spawn = {spider:3.5,flea:5.5,scorpion:9,bee:14,inchworm:20};
 let audioCtx = null, audioReady = false, globalScoresCache = null, globalScoresTime = 0, pendingEntry = null, initials = ['A','A','A'], initialsCursor = 0;
-let keys = {}, padPrev = {};
+let keys = {}, padPrev = {}, padFire = false;
+function fireInputHeld(){ return pointer.active || keys.KeyJ || keys.KeyX || keys.KeyK || padFire; }
 
 function mulberry32(seed){
   let a = seed >>> 0;
@@ -351,6 +386,7 @@ document.addEventListener('touchstart', e => {
 //   music sources -> per-track gain -> musicBus -> master -> destination
 let masterGain = null, sfxBus = null, musicBus = null;
 const MUSIC_LEVEL = .42;
+function musicLevel(){ return MUSIC_LEVEL * OPTS.music; }
 let audioAssetsRequested = false;
 const audioBuffers = {};
 const AUDIO_FILES = {
@@ -364,8 +400,8 @@ function unlockAudio(){
     if(!audioCtx){
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       masterGain = audioCtx.createGain(); masterGain.gain.value = muted ? 0 : 1; masterGain.connect(audioCtx.destination);
-      sfxBus = audioCtx.createGain(); sfxBus.connect(masterGain);
-      musicBus = audioCtx.createGain(); musicBus.gain.value = MUSIC_LEVEL; musicBus.connect(masterGain);
+      sfxBus = audioCtx.createGain(); sfxBus.gain.value = OPTS.sfx; sfxBus.connect(masterGain);
+      musicBus = audioCtx.createGain(); musicBus.gain.value = musicLevel(); musicBus.connect(masterGain);
     }
     if(audioCtx.state === 'suspended') audioCtx.resume().then(()=>{ audioReady = audioCtx && audioCtx.state === 'running'; retryMusic(); }).catch(()=>{});
     audioReady = audioCtx.state === 'running';
@@ -476,8 +512,8 @@ function duckMusic(amount, seconds){
   if(!audioCtx || !musicBus) return;
   const t = audioCtx.currentTime;
   musicBus.gain.cancelScheduledValues(t);
-  musicBus.gain.setTargetAtTime(MUSIC_LEVEL * (amount || .35), t, .08);
-  musicBus.gain.setTargetAtTime(MUSIC_LEVEL, t + (seconds || 1.2), .4);
+  musicBus.gain.setTargetAtTime(musicLevel() * (amount || .35), t, .08);
+  musicBus.gain.setTargetAtTime(musicLevel(), t + (seconds || 1.2), .4);
 }
 function gameplayMusic(){
   playMusic(crawlers.some(c=>c.queen) ? 'musicBoss' : 'musicGame');
@@ -841,14 +877,20 @@ function seedDemo(){
   bullets=[]; enemies=[]; particles=[]; popups=[]; pickups=[]; crawlers=[]; powers = {spread:0,laser:0,shield:0,frost:0,score:0}; seedField(); makeCrawler(grid()*2, 12, 38);
 }
 
+let musicDimmed = false;
 function setMusicDim(dim){
+  musicDimmed = dim;
   if(!musicBus || !audioCtx) return;
   const t = audioCtx.currentTime;
   musicBus.gain.cancelScheduledValues(t);
-  musicBus.gain.setTargetAtTime(dim ? .12 : MUSIC_LEVEL, t, .2);
+  musicBus.gain.setTargetAtTime(dim ? .12 * OPTS.music : musicLevel(), t, .2);
+}
+function applyAudioOpts(){
+  if(sfxBus && audioCtx) sfxBus.gain.setTargetAtTime(OPTS.sfx, audioCtx.currentTime, .05);
+  setMusicDim(musicDimmed);
 }
 function showOnly(id){
-  ['titleScreen','scoresScreen','upgradeScreen','gameOverScreen','pauseScreen'].forEach(x=>document.getElementById(x).classList.toggle('hidden', x!==id));
+  ['titleScreen','scoresScreen','upgradeScreen','gameOverScreen','pauseScreen','optionsScreen'].forEach(x=>document.getElementById(x).classList.toggle('hidden', x!==id));
   document.getElementById('bombBtn').classList.toggle('show', state === 'playing');
   document.getElementById('pauseBtn').classList.toggle('hidden', state !== 'playing');
   document.getElementById('muteBtn').classList.toggle('hidden', state !== 'playing');
@@ -1215,8 +1257,9 @@ function pollGamepad(dt, play){
     const pads = navigator.getGamepads ? navigator.getGamepads() : [];
     for(const p of pads){ if(p && p.connected){ gp = p; break; } }
   }catch(e){}
-  if(!gp){ padPrev = {}; return; }
+  if(!gp){ padPrev = {}; padFire = false; return; }
   const bt = i => !!(gp.buttons[i] && gp.buttons[i].pressed);
+  padFire = bt(0);
   const edge = i => { const now = bt(i), was = padPrev[i]; padPrev[i] = now; return now && !was; };
   const e0 = edge(0), eBomb = edge(1) || edge(2), eStart = edge(9);
   const ax = Math.abs(gp.axes[0]||0) > .18 ? gp.axes[0] : 0;
@@ -1232,6 +1275,7 @@ function pollGamepad(dt, play){
   if(eStart){
     if(state==='playing') pauseGame();
     else if(state==='paused') resumeGame();
+    else if(state==='options') closeOptions();
     else if(state==='title' || (state==='gameover' && !pendingEntry)){ unlockAudio(); startGame(); }
   }
   if(e0){
@@ -1328,7 +1372,11 @@ function update(dt){
   player.x += (player.tx-player.x)*snap; player.y += (player.ty-player.y)*snap;
   player.x = clamp(player.x, 18, W-18); player.y = clamp(player.y, H*.68, H-30);
   if(play) pushPlayerFromMushrooms();
-  player.fire -= dt; if(player.fire <= 0 && (play || demoMode)){ player.fire = Math.max(.041,.069-rank*.0034-upgrades.fire*.0035); shoot(); }
+  player.fire -= dt;
+  if(player.fire <= 0 && (play || demoMode)){
+    if(demoMode || OPTS.autofire || fireInputHeld()){ player.fire = Math.max(.041,.069-rank*.0034-upgrades.fire*.0035); shoot(); }
+    else player.fire = 0;
+  }
   player.muzzle = Math.max(0, player.muzzle - dt); player.recoil = Math.max(0, player.recoil - dt);
   stars.forEach(st=>{ st.y += st.s*dt*7; if(st.y > H+2){ st.y = -2; st.x = Math.random()*W; } });
   if((play || demoMode) && Math.abs(player.tx-player.x) > 8 && Math.random() < dt*26)
@@ -1502,7 +1550,8 @@ function collisions(play){
 }
 function draw(){
   const live = state === 'playing' || state === 'title' || state === 'scores';
-  const ox = shake && live ? rand(-shake,shake) : 0, oy = shake && live ? rand(-shake,shake) : 0;
+  const doShake = shake && live && OPTS.shake;
+  const ox = doShake ? rand(-shake,shake) : 0, oy = doShake ? rand(-shake,shake) : 0;
   ctx.save(); ctx.translate(ox,oy);
   const tier=milestoneTier(); const bio=biome(); const g=ctx.createLinearGradient(0,0,0,H);
   g.addColorStop(0,bio.top); g.addColorStop(.62,bio.mid);
@@ -1545,7 +1594,7 @@ function draw(){
   ctx.restore();
   drawDeathMarker();
   drawWaveBanner();
-  if(flash && live){ctx.fillStyle=`rgba(255,255,255,${flash})`;ctx.fillRect(0,0,W,H);}
+  if(flash && live){ctx.fillStyle=`rgba(255,255,255,${flash * (OPTS.flash ? 1 : .3)})`;ctx.fillRect(0,0,W,H);}
 }
 function drawDeathMarker(){
   if(!deathMarker) return;
@@ -1893,6 +1942,7 @@ document.addEventListener('contextmenu', e=>{ if(state==='playing') e.preventDef
 addEventListener('keydown', e=>{
   const k = e.key;
   if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(k)) e.preventDefault();
+  if(state==='options' && (k==='Escape' || k==='Enter')) return closeOptions();
   if(k==='p' || k==='P' || k==='Escape'){
     if(state==='playing') return pauseGame();
     if(state==='paused') return resumeGame();
@@ -1930,17 +1980,67 @@ document.addEventListener('visibilitychange', ()=>{ if(document.hidden && state=
 
 function applyCrt(){
   document.body.classList.toggle('no-crt', !crtOn);
-  const btn = document.getElementById('crtBtn');
-  if(btn) btn.textContent = 'CRT: ' + (crtOn ? 'On' : 'Off');
 }
 function toggleCrt(){
   crtOn = !crtOn;
   try{ localStorage.setItem(CRT_KEY, crtOn ? '1' : '0'); }catch(e){}
-  applyCrt();
+  applyCrt(); syncOptionsUi();
 }
+function setToggle(id, on, onText, offText){
+  const b = document.getElementById(id);
+  b.textContent = on ? (onText || 'ON') : (offText || 'OFF');
+  b.classList.toggle('on', on);
+}
+function syncOptionsUi(){
+  document.getElementById('optSfx').value = Math.round(OPTS.sfx * 100);
+  document.getElementById('optMusic').value = Math.round(OPTS.music * 100);
+  setToggle('optAutofire', OPTS.autofire);
+  setToggle('optShake', OPTS.shake);
+  setToggle('optFlash', OPTS.flash, 'FULL', 'REDUCED');
+  setToggle('optCrt', crtOn);
+  setToggle('optLefty', OPTS.lefty);
+}
+function openOptions(from){
+  optionsReturn = from;
+  state = 'options';
+  syncOptionsUi();
+  document.getElementById('optResetScores').textContent = 'Reset local scores';
+  showOnly('optionsScreen');
+}
+function closeOptions(){
+  if(optionsReturn === 'paused'){ state = 'paused'; showOnly('pauseScreen'); }
+  else { state = 'title'; showOnly('titleScreen'); renderScores('titleScores'); }
+}
+function bindOption(id, fn){
+  bindButton(id, ()=>{ fn(); saveOpts(); syncOptionsUi(); sfx('tick'); });
+}
+function applyLefty(){ document.body.classList.toggle('lefty', OPTS.lefty); }
 bindButton('startBtn', ()=>startRun(false));
 bindButton('dailyBtn', ()=>startRun(true));
-bindButton('crtBtn', toggleCrt);
+bindButton('optionsBtn', ()=>openOptions('title'));
+bindButton('pauseOptionsBtn', ()=>openOptions('paused'));
+bindButton('optionsBackBtn', closeOptions);
+bindOption('optAutofire', ()=>{ OPTS.autofire = !OPTS.autofire; });
+bindOption('optShake', ()=>{ OPTS.shake = !OPTS.shake; });
+bindOption('optFlash', ()=>{ OPTS.flash = !OPTS.flash; });
+bindOption('optLefty', ()=>{ OPTS.lefty = !OPTS.lefty; applyLefty(); });
+bindButton('optCrt', toggleCrt);
+bindButton('optResetScores', ()=>{
+  try{
+    Object.keys(localStorage).filter(k=>k.startsWith(SCORE_KEY) || k === LEGACY_SCORE_KEY).forEach(k=>localStorage.removeItem(k));
+  }catch(e){}
+  document.getElementById('optResetScores').textContent = 'Local scores cleared ✓';
+  sfx('crumble');
+});
+['optSfx','optMusic'].forEach(id=>{
+  const el = document.getElementById(id);
+  el.addEventListener('input', ()=>{
+    unlockAudio();
+    OPTS[id === 'optSfx' ? 'sfx' : 'music'] = el.value / 100;
+    saveOpts(); applyAudioOpts();
+    if(id === 'optSfx') sfx('tick');
+  });
+});
 bindButton('scoresBtn', ()=>{ state='scores'; showOnly('scoresScreen'); renderScores('scoreTables'); });
 bindButton('scoresBackBtn', ()=>{ state='title'; seedDemo(); showOnly('titleScreen'); renderScores('titleScores'); });
 bindButton('againBtn', startGame);
@@ -1974,6 +2074,9 @@ window.__NEON_MYRIAPOD_TEST__ = {
   toggleMute,
   isMuted(){ return muted; },
   musicState(){ return {wanted:musicWanted, current:musicCurrent, buffers:Object.keys(audioBuffers), ready:audioReady}; },
+  options(){ return {...OPTS, crt:crtOn}; },
+  openOptions,
+  closeOptions,
   lifeProgress(){ return {score, nextLifeAt, lives, bombs}; },
   mushroomCheck(){
     const m = {x:60,y:60,hp:8,max:8,r:12,poison:false,pulse:0,chunks:[],seed:12345};
@@ -1985,6 +2088,8 @@ window.__NEON_MYRIAPOD_TEST__ = {
 document.querySelectorAll('.version').forEach(el=>el.textContent=VERSION);
 document.getElementById('muteBtn').classList.toggle('muted', muted);
 applyCrt();
+applyLefty();
+syncOptionsUi();
 seedDemo();
 drawGuideSprites();
 renderScores('titleScores');
