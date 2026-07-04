@@ -9,7 +9,9 @@
     "batch": "Launch Set",
     "slot": "launch-01",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#8b7455",
+    "thumb": "thumbs/01-glass-orchard.webp"
   },
   {
     "id": "02-clockwork-tidepool",
@@ -21,7 +23,9 @@
     "batch": "Launch Set",
     "slot": "launch-02",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#373530",
+    "thumb": "thumbs/02-clockwork-tidepool.webp"
   },
   {
     "id": "03-impossible-library-rain",
@@ -33,7 +37,9 @@
     "batch": "Launch Set",
     "slot": "launch-03",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#423d3c",
+    "thumb": "thumbs/03-impossible-library-rain.webp"
   },
   {
     "id": "04-cathedral-kitchen",
@@ -45,7 +51,9 @@
     "batch": "Launch Set",
     "slot": "launch-04",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#553c26",
+    "thumb": "thumbs/04-cathedral-kitchen.webp"
   },
   {
     "id": "05-weather-map-dragon",
@@ -57,7 +65,9 @@
     "batch": "Launch Set",
     "slot": "launch-05",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5d737d",
+    "thumb": "thumbs/05-weather-map-dragon.webp"
   },
   {
     "id": "06-night-market-snowglobe",
@@ -69,7 +79,9 @@
     "batch": "Launch Set",
     "slot": "launch-06",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#41312a",
+    "thumb": "thumbs/06-night-market-snowglobe.webp"
   },
   {
     "id": "07-botanical-spacesuit",
@@ -81,7 +93,9 @@
     "batch": "Launch Set",
     "slot": "launch-07",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#694e3b",
+    "thumb": "thumbs/07-botanical-spacesuit.webp"
   },
   {
     "id": "08-paper-city-flood",
@@ -93,7 +107,9 @@
     "batch": "Launch Set",
     "slot": "launch-08",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#7d746c",
+    "thumb": "thumbs/08-paper-city-flood.webp"
   },
   {
     "id": "09-underwater-greenhouse",
@@ -105,7 +121,9 @@
     "batch": "Launch Set",
     "slot": "launch-09",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#2d4d5a",
+    "thumb": "thumbs/09-underwater-greenhouse.webp"
   },
   {
     "id": "10-almanac-robot-garden",
@@ -117,7 +135,9 @@
     "batch": "Launch Set",
     "slot": "launch-10",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#8b754a",
+    "thumb": "thumbs/10-almanac-robot-garden.webp"
   },
   {
     "id": "2026-05-10-midday-bioluminescent-laundry-tide",
@@ -129,7 +149,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#192d42",
+    "thumb": "thumbs/2026-05-10-midday-bioluminescent-laundry-tide.webp"
   },
   {
     "id": "2026-05-10-afternoon-porcelain-storm-anatomy-cabinet",
@@ -141,7 +163,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3d352b",
+    "thumb": "thumbs/2026-05-10-afternoon-porcelain-storm-anatomy-cabinet.webp"
   },
   {
     "id": "2026-05-10-evening-mycelium-map-room",
@@ -153,7 +177,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#614324",
+    "thumb": "thumbs/2026-05-10-evening-mycelium-map-room.webp"
   },
   {
     "id": "2026-05-10-late-evening-amber-fossil-lighthouse",
@@ -165,7 +191,9 @@
     "batch": "Daily Prompt",
     "slot": "late-evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#463938",
+    "thumb": "thumbs/2026-05-10-late-evening-amber-fossil-lighthouse.webp"
   },
   {
     "id": "2026-05-11-morning-cake-terrace-farmland",
@@ -177,7 +205,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#925e39",
+    "thumb": "thumbs/2026-05-11-morning-cake-terrace-farmland.webp"
   },
   {
     "id": "2026-05-11-afternoon-ferrofluid-ballet-stage",
@@ -189,7 +219,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5e4258",
+    "thumb": "thumbs/2026-05-11-afternoon-ferrofluid-ballet-stage.webp"
   },
   {
     "id": "2026-05-11-afternoon-kinetic-sand-subway-cutaway",
@@ -201,7 +233,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#856948",
+    "thumb": "thumbs/2026-05-11-afternoon-kinetic-sand-subway-cutaway.webp"
   },
   {
     "id": "2026-05-11-evening-orbital-salvage-cathedral",
@@ -213,7 +247,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#403f3d",
+    "thumb": "thumbs/2026-05-11-evening-orbital-salvage-cathedral.webp"
   },
   {
     "id": "2026-05-12-morning-lantern-moth-conservatory",
@@ -225,7 +261,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3e4850",
+    "thumb": "thumbs/2026-05-12-morning-lantern-moth-conservatory.webp"
   },
   {
     "id": "2026-05-12-midday-clockwork-estuary-atlas",
@@ -237,7 +275,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#948d7b",
+    "thumb": "thumbs/2026-05-12-midday-clockwork-estuary-atlas.webp"
   },
   {
     "id": "2026-05-12-afternoon-opal-hive-planetarium",
@@ -249,7 +289,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#49392a",
+    "thumb": "thumbs/2026-05-12-afternoon-opal-hive-planetarium.webp"
   },
   {
     "id": "2026-05-12-evening-magnetar-harp-array",
@@ -261,7 +303,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3e4a79",
+    "thumb": "thumbs/2026-05-12-evening-magnetar-harp-array.webp"
   },
   {
     "id": "2026-05-13-morning-rootbound-sky-citadel",
@@ -273,7 +317,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#615a50",
+    "thumb": "thumbs/2026-05-13-morning-rootbound-sky-citadel.webp"
   },
   {
     "id": "2026-05-13-midday-lava-tube-city-ventilation-map",
@@ -285,7 +331,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#3a2d23",
+    "thumb": "thumbs/2026-05-13-midday-lava-tube-city-ventilation-map.webp"
   },
   {
     "id": "2026-05-13-afternoon-aurora-marionette-theater",
@@ -297,7 +345,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#342f27",
+    "thumb": "thumbs/2026-05-13-afternoon-aurora-marionette-theater.webp"
   },
   {
     "id": "2026-05-13-evening-neutrino-ice-forge",
@@ -309,7 +359,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#224963",
+    "thumb": "thumbs/2026-05-13-evening-neutrino-ice-forge.webp"
   },
   {
     "id": "2026-05-14-morning-glassbone-leviathan-apothecary",
@@ -321,7 +373,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#394246",
+    "thumb": "thumbs/2026-05-14-morning-glassbone-leviathan-apothecary.webp"
   },
   {
     "id": "2026-05-14-midday-tidal-octopus-color-lab",
@@ -333,7 +387,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#90836f",
+    "thumb": "thumbs/2026-05-14-midday-tidal-octopus-color-lab.webp"
   },
   {
     "id": "2026-05-14-afternoon-cloudforge-carousel",
@@ -345,7 +401,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#373438",
+    "thumb": "thumbs/2026-05-14-afternoon-cloudforge-carousel.webp"
   },
   {
     "id": "2026-05-14-evening-eclipse-engine-port",
@@ -357,7 +415,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3e4247",
+    "thumb": "thumbs/2026-05-14-evening-eclipse-engine-port.webp"
   },
   {
     "id": "2026-05-15-morning-mirror-root-menagerie",
@@ -369,7 +429,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#272a29",
+    "thumb": "thumbs/2026-05-15-morning-mirror-root-menagerie.webp"
   },
   {
     "id": "2026-05-15-midday-micro-rooftop-rain-garden-blueprint",
@@ -381,7 +443,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#83806f",
+    "thumb": "thumbs/2026-05-15-midday-micro-rooftop-rain-garden-blueprint.webp"
   },
   {
     "id": "2026-05-15-afternoon-porcelain-thunder-orchard",
@@ -393,7 +457,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3a3e46",
+    "thumb": "thumbs/2026-05-15-afternoon-porcelain-thunder-orchard.webp"
   },
   {
     "id": "2026-05-15-evening-titan-methane-lens-farm",
@@ -405,7 +471,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#654b38",
+    "thumb": "thumbs/2026-05-15-evening-titan-methane-lens-farm.webp"
   },
   {
     "id": "2026-05-16-morning-moonwell-bell-foundry",
@@ -417,7 +485,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#2d2e30",
+    "thumb": "thumbs/2026-05-16-morning-moonwell-bell-foundry.webp"
   },
   {
     "id": "2026-05-16-midday-seismic-mycelium-power-grid",
@@ -429,7 +499,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#352f23",
+    "thumb": "thumbs/2026-05-16-midday-seismic-mycelium-power-grid.webp"
   },
   {
     "id": "2026-05-16-afternoon-cobalt-salt-observatory",
@@ -441,7 +513,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#293341",
+    "thumb": "thumbs/2026-05-16-afternoon-cobalt-salt-observatory.webp"
   },
   {
     "id": "2026-05-16-evening-europa-brine-beacon-yard",
@@ -453,7 +527,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#384f5f",
+    "thumb": "thumbs/2026-05-16-evening-europa-brine-beacon-yard.webp"
   },
   {
     "id": "2026-05-17-morning-saffron-mirage-loom",
@@ -465,7 +541,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4d3e2a",
+    "thumb": "thumbs/2026-05-17-morning-saffron-mirage-loom.webp"
   },
   {
     "id": "2026-05-17-midday-fog-comb-watershed-atlas",
@@ -477,7 +555,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#6d6c66",
+    "thumb": "thumbs/2026-05-17-midday-fog-comb-watershed-atlas.webp"
   },
   {
     "id": "2026-05-17-afternoon-cyanotype-rain-press",
@@ -489,7 +569,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#303335",
+    "thumb": "thumbs/2026-05-17-afternoon-cyanotype-rain-press.webp"
   },
   {
     "id": "2026-05-17-evening-kuiper-seed-vault-relay",
@@ -501,7 +583,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#454743",
+    "thumb": "thumbs/2026-05-17-evening-kuiper-seed-vault-relay.webp"
   },
   {
     "id": "2026-05-18-morning-selenite-oracle-apiary",
@@ -513,7 +597,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#575b65",
+    "thumb": "thumbs/2026-05-18-morning-selenite-oracle-apiary.webp"
   },
   {
     "id": "2026-05-18-midday-fulgurite-aquifer-battery",
@@ -525,7 +611,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#50443b",
+    "thumb": "thumbs/2026-05-18-midday-fulgurite-aquifer-battery.webp"
   },
   {
     "id": "2026-05-18-afternoon-mica-cloud-memory-mill",
@@ -537,7 +625,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4b423d",
+    "thumb": "thumbs/2026-05-18-afternoon-mica-cloud-memory-mill.webp"
   },
   {
     "id": "2026-05-18-evening-mercury-terminator-rail-city",
@@ -549,7 +639,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#453e39",
+    "thumb": "thumbs/2026-05-18-evening-mercury-terminator-rail-city.webp"
   },
   {
     "id": "2026-05-19-morning-thunder-egg-familiar-nursery",
@@ -561,7 +653,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#302a2f",
+    "thumb": "thumbs/2026-05-19-morning-thunder-egg-familiar-nursery.webp"
   },
   {
     "id": "2026-05-19-midday-cryovolcano-seed-ark-diagram",
@@ -573,7 +667,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#2e383c",
+    "thumb": "thumbs/2026-05-19-midday-cryovolcano-seed-ark-diagram.webp"
   },
   {
     "id": "2026-05-19-afternoon-whispering-rainbow-archive",
@@ -585,7 +681,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#413b30",
+    "thumb": "thumbs/2026-05-19-afternoon-whispering-rainbow-archive.webp"
   },
   {
     "id": "2026-05-20-morning-ionosphere-kelp-aerostat",
@@ -597,7 +695,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#535c5c",
+    "thumb": "thumbs/2026-05-20-morning-ionosphere-kelp-aerostat.webp"
   },
   {
     "id": "2026-05-20-afternoon-verdigris-spell-quarry",
@@ -609,7 +709,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#39383b",
+    "thumb": "thumbs/2026-05-20-afternoon-verdigris-spell-quarry.webp"
   },
   {
     "id": "2026-05-20-evening-stratospheric-spore-weather-loom",
@@ -621,7 +723,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#a8aeb0",
+    "thumb": "thumbs/2026-05-20-evening-stratospheric-spore-weather-loom.webp"
   },
   {
     "id": "2026-05-21-morning-holographic-salt-organ",
@@ -633,7 +737,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5e5046",
+    "thumb": "thumbs/2026-05-21-morning-holographic-salt-organ.webp"
   },
   {
     "id": "2026-05-21-midday-graviton-coral-data-reef",
@@ -645,7 +751,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#363a45",
+    "thumb": "thumbs/2026-05-21-midday-graviton-coral-data-reef.webp"
   },
   {
     "id": "2026-05-21-afternoon-saffron-ink-oracle-vats",
@@ -657,7 +765,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#a5b1be",
+    "thumb": "thumbs/2026-05-21-afternoon-saffron-ink-oracle-vats.webp"
   },
   {
     "id": "2026-05-21-afternoon-abyssal-recovery-manifest",
@@ -669,7 +779,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#666a6a",
+    "thumb": "thumbs/2026-05-21-afternoon-abyssal-recovery-manifest.webp"
   },
   {
     "id": "2026-05-21-evening-mending-map-of-the-moonless-orchard",
@@ -681,7 +793,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3b3834",
+    "thumb": "thumbs/2026-05-21-evening-mending-map-of-the-moonless-orchard.webp"
   },
   {
     "id": "2026-05-22-morning-hinged-seeds-of-the-clockwork-mangrove",
@@ -693,7 +807,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#403930",
+    "thumb": "thumbs/2026-05-22-morning-hinged-seeds-of-the-clockwork-mangrove.webp"
   },
   {
     "id": "2026-05-22-midday-moire-orchard-transparency-stack",
@@ -705,7 +821,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#9f9385",
+    "thumb": "thumbs/2026-05-22-midday-moire-orchard-transparency-stack.webp"
   },
   {
     "id": "2026-05-22-evening-municipal-fog-permit-ledger",
@@ -717,7 +835,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#91806b",
+    "thumb": "thumbs/2026-05-22-evening-municipal-fog-permit-ledger.webp"
   },
   {
     "id": "2026-05-22-evening-paper-theater-of-the-rain-harvest",
@@ -729,7 +849,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#746957",
+    "thumb": "thumbs/2026-05-22-evening-paper-theater-of-the-rain-harvest.webp"
   },
   {
     "id": "2026-05-23-morning-luminous-littoral-geode-snail",
@@ -741,7 +863,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#40474f",
+    "thumb": "thumbs/2026-05-23-morning-luminous-littoral-geode-snail.webp"
   },
   {
     "id": "2026-05-23-midday-phonograph-frost-bloom",
@@ -753,7 +877,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#505351",
+    "thumb": "thumbs/2026-05-23-midday-phonograph-frost-bloom.webp"
   },
   {
     "id": "2026-05-23-afternoon-lost-elevator-certificate",
@@ -765,7 +891,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#a6a88b",
+    "thumb": "thumbs/2026-05-23-afternoon-lost-elevator-certificate.webp"
   },
   {
     "id": "2026-05-23-evening-button-sun-almanac",
@@ -777,7 +905,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#7c6852",
+    "thumb": "thumbs/2026-05-23-evening-button-sun-almanac.webp"
   },
   {
     "id": "2026-05-24-morning-glasshouse-thunder-lichen",
@@ -789,7 +919,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#9b9586",
+    "thumb": "thumbs/2026-05-24-morning-glasshouse-thunder-lichen.webp"
   },
   {
     "id": "2026-05-24-midday-magnetic-soup-weather-window",
@@ -801,7 +933,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#6e6e6a",
+    "thumb": "thumbs/2026-05-24-midday-magnetic-soup-weather-window.webp"
   },
   {
     "id": "2026-05-24-afternoon-unclaimed-shadow-postage-register",
@@ -813,7 +947,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#897867",
+    "thumb": "thumbs/2026-05-24-afternoon-unclaimed-shadow-postage-register.webp"
   },
   {
     "id": "2026-05-24-evening-sock-puppet-weather-report",
@@ -825,7 +961,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5f4831",
+    "thumb": "thumbs/2026-05-24-evening-sock-puppet-weather-report.webp"
   },
   {
     "id": "2026-05-25-morning-velvet-static-seed-battery",
@@ -837,7 +975,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#443c2b",
+    "thumb": "thumbs/2026-05-25-morning-velvet-static-seed-battery.webp"
   },
   {
     "id": "2026-05-25-midday-thermal-kite-shadowgram",
@@ -849,7 +989,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#666b6f",
+    "thumb": "thumbs/2026-05-25-midday-thermal-kite-shadowgram.webp"
   },
   {
     "id": "2026-05-25-afternoon-rain-garden-transfer-window",
@@ -861,7 +1003,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#403f3e",
+    "thumb": "thumbs/2026-05-25-afternoon-rain-garden-transfer-window.webp"
   },
   {
     "id": "2026-05-25-evening-rainwater-switchyard-chalk-mural",
@@ -873,7 +1017,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#645e5a",
+    "thumb": "thumbs/2026-05-25-evening-rainwater-switchyard-chalk-mural.webp"
   },
   {
     "id": "2026-05-26-morning-orchard-moon-delivery-carton",
@@ -885,7 +1031,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#585f62",
+    "thumb": "thumbs/2026-05-26-morning-orchard-moon-delivery-carton.webp"
   },
   {
     "id": "2026-05-26-midday-harbor-fog-vegetable-float",
@@ -897,7 +1045,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#876239",
+    "thumb": "thumbs/2026-05-26-midday-harbor-fog-vegetable-float.webp"
   },
   {
     "id": "2026-05-26-afternoon-moss-calendar-board",
@@ -909,7 +1059,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#706650",
+    "thumb": "thumbs/2026-05-26-afternoon-moss-calendar-board.webp"
   },
   {
     "id": "2026-05-26-evening-rain-harbor-foundry-mold",
@@ -921,7 +1073,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#815f49",
+    "thumb": "thumbs/2026-05-26-evening-rain-harbor-foundry-mold.webp"
   },
   {
     "id": "2026-05-27-morning-vacuum-fluorescent-tide-console",
@@ -933,7 +1087,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#1f251f",
+    "thumb": "thumbs/2026-05-27-morning-vacuum-fluorescent-tide-console.webp"
   },
   {
     "id": "2026-05-27-midday-rain-canal-van-mural",
@@ -945,7 +1101,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#565c5a",
+    "thumb": "thumbs/2026-05-27-midday-rain-canal-van-mural.webp"
   },
   {
     "id": "2026-05-27-afternoon-rain-index-microfiche-window",
@@ -957,7 +1115,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#343b20",
+    "thumb": "thumbs/2026-05-27-afternoon-rain-index-microfiche-window.webp"
   },
   {
     "id": "2026-05-27-evening-abbey-orchard-endgame",
@@ -969,7 +1129,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#6e573d",
+    "thumb": "thumbs/2026-05-27-evening-abbey-orchard-endgame.webp"
   },
   {
     "id": "2026-05-29-morning-tide-engine-commemorative-obverse",
@@ -981,7 +1143,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4c4235",
+    "thumb": "thumbs/2026-05-29-morning-tide-engine-commemorative-obverse.webp"
   },
   {
     "id": "2026-05-29-morning-reservoir-maintenance-level",
@@ -993,7 +1157,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#353b35",
+    "thumb": "thumbs/2026-05-29-morning-reservoir-maintenance-level.webp"
   },
   {
     "id": "2026-05-29-midday-tidelock-backglass-jackpot",
@@ -1005,7 +1171,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#463524",
+    "thumb": "thumbs/2026-05-29-midday-tidelock-backglass-jackpot.webp"
   },
   {
     "id": "2026-05-29-afternoon-transit-seat-river-myth",
@@ -1017,7 +1185,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#2e2f2f",
+    "thumb": "thumbs/2026-05-29-afternoon-transit-seat-river-myth.webp"
   },
   {
     "id": "2026-05-29-evening-foldout-guide-to-the-cistern-tram",
@@ -1029,7 +1199,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#847f70",
+    "thumb": "thumbs/2026-05-29-evening-foldout-guide-to-the-cistern-tram.webp"
   },
   {
     "id": "2026-05-30-midday-needlepoint-canal-control-room",
@@ -1041,7 +1213,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#807766",
+    "thumb": "thumbs/2026-05-30-midday-needlepoint-canal-control-room.webp"
   },
   {
     "id": "2026-05-30-afternoon-clockwork-estuary-cake-window",
@@ -1053,7 +1227,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#786f5a",
+    "thumb": "thumbs/2026-05-30-afternoon-clockwork-estuary-cake-window.webp"
   },
   {
     "id": "2026-05-30-evening-moon-tide-spoke-orchestra",
@@ -1065,7 +1241,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#626a66",
+    "thumb": "thumbs/2026-05-30-evening-moon-tide-spoke-orchestra.webp"
   },
   {
     "id": "2026-05-31-afternoon-tide-hall-underfoot",
@@ -1077,7 +1255,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#857563",
+    "thumb": "thumbs/2026-05-31-afternoon-tide-hall-underfoot.webp"
   },
   {
     "id": "2026-06-01-morning-lake-weather-lure-display-card",
@@ -1089,7 +1269,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#4e4c3c",
+    "thumb": "thumbs/2026-06-01-morning-lake-weather-lure-display-card.webp"
   },
   {
     "id": "2026-06-01-midday-level-b-rain-oracle",
@@ -1101,7 +1283,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#2b312b",
+    "thumb": "thumbs/2026-06-01-midday-level-b-rain-oracle.webp"
   },
   {
     "id": "2026-06-01-afternoon-basement-aurora-indicator",
@@ -1113,7 +1297,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#615b51",
+    "thumb": "thumbs/2026-06-01-afternoon-basement-aurora-indicator.webp"
   },
   {
     "id": "2026-06-01-afternoon-portrait-as-grocery-receipt-icon",
@@ -1125,7 +1311,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#b09e8c",
+    "thumb": "thumbs/2026-06-01-afternoon-portrait-as-grocery-receipt-icon.webp"
   },
   {
     "id": "2026-06-01-afternoon-pet-made-of-salt-crystals",
@@ -1137,7 +1325,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#968f8e",
+    "thumb": "thumbs/2026-06-01-afternoon-pet-made-of-salt-crystals.webp"
   },
   {
     "id": "2026-06-01-afternoon-portrait-as-topographic-paper-relief",
@@ -1149,7 +1339,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#72705d",
+    "thumb": "thumbs/2026-06-01-afternoon-portrait-as-topographic-paper-relief.webp"
   },
   {
     "id": "2026-06-01-afternoon-pet-as-neon-tube-laundromat-sign",
@@ -1161,7 +1353,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#503f26",
+    "thumb": "thumbs/2026-06-01-afternoon-pet-as-neon-tube-laundromat-sign.webp"
   },
   {
     "id": "2026-06-01-evening-glasshouse-beehive-repair-manual",
@@ -1173,7 +1367,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#cfc6b7",
+    "thumb": "thumbs/2026-06-01-evening-glasshouse-beehive-repair-manual.webp"
   },
   {
     "id": "2026-06-01-evening-portrait-as-porcelain-kintsugi-teapot",
@@ -1185,7 +1381,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5a5145",
+    "thumb": "thumbs/2026-06-01-evening-portrait-as-porcelain-kintsugi-teapot.webp"
   },
   {
     "id": "2026-06-01-evening-attic-planetarium-maintenance-checklist",
@@ -1197,7 +1395,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#8e806f",
+    "thumb": "thumbs/2026-06-01-evening-attic-planetarium-maintenance-checklist.webp"
   },
   {
     "id": "2026-06-01-evening-lost-hotel-key-auction-catalog",
@@ -1209,7 +1409,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#908571",
+    "thumb": "thumbs/2026-06-01-evening-lost-hotel-key-auction-catalog.webp"
   },
   {
     "id": "2026-06-01-evening-pocket-lighthouse-moth-field-guide",
@@ -1221,7 +1423,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#b6ac97",
+    "thumb": "thumbs/2026-06-01-evening-pocket-lighthouse-moth-field-guide.webp"
   },
   {
     "id": "2026-06-02-morning-portrait-as-tin-toy-automaton",
@@ -1233,7 +1437,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#49321d",
+    "thumb": "thumbs/2026-06-02-morning-portrait-as-tin-toy-automaton.webp"
   },
   {
     "id": "2026-06-02-midday-car-as-cutaway-coral-reef",
@@ -1245,7 +1451,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3e4e4c",
+    "thumb": "thumbs/2026-06-02-midday-car-as-cutaway-coral-reef.webp"
   },
   {
     "id": "2026-06-02-afternoon-rain-vial-apothecary-inventory-form",
@@ -1257,7 +1465,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#9f8367",
+    "thumb": "thumbs/2026-06-02-afternoon-rain-vial-apothecary-inventory-form.webp"
   },
   {
     "id": "2026-06-02-evening-fog-orchard-courier",
@@ -1269,7 +1479,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "fal/openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#615645",
+    "thumb": "thumbs/2026-06-02-evening-fog-orchard-courier.webp"
   },
   {
     "id": "2026-06-03-morning-portrait-as-onion-skin-lantern",
@@ -1281,7 +1493,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#623f22",
+    "thumb": "thumbs/2026-06-03-morning-portrait-as-onion-skin-lantern.webp"
   },
   {
     "id": "2026-06-03-midday-pet-as-marquetry-music-box",
@@ -1293,7 +1507,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#422613",
+    "thumb": "thumbs/2026-06-03-midday-pet-as-marquetry-music-box.webp"
   },
   {
     "id": "2026-06-03-afternoon-cloud-elevator-checkout-card",
@@ -1305,7 +1521,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#857863",
+    "thumb": "thumbs/2026-06-03-afternoon-cloud-elevator-checkout-card.webp"
   },
   {
     "id": "2026-06-03-evening-miniature-weather-machine-bin-labels",
@@ -1317,7 +1535,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#8a795f",
+    "thumb": "thumbs/2026-06-03-evening-miniature-weather-machine-bin-labels.webp"
   },
   {
     "id": "2026-06-03-evening-mineral-radio-repair-bench",
@@ -1329,7 +1549,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#2f2216",
+    "thumb": "thumbs/2026-06-03-evening-mineral-radio-repair-bench.webp"
   },
   {
     "id": "2026-06-04-morning-portrait-as-soapstone-weather-idol",
@@ -1341,7 +1563,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#615e5b",
+    "thumb": "thumbs/2026-06-04-morning-portrait-as-soapstone-weather-idol.webp"
   },
   {
     "id": "2026-06-04-midday-pet-as-embroidered-train-patch",
@@ -1353,7 +1577,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#423c40",
+    "thumb": "thumbs/2026-06-04-midday-pet-as-embroidered-train-patch.webp"
   },
   {
     "id": "2026-06-04-evening-pocket-orchard-apron-pattern",
@@ -1365,7 +1591,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#ad9d87",
+    "thumb": "thumbs/2026-06-04-evening-pocket-orchard-apron-pattern.webp"
   },
   {
     "id": "2026-06-04-evening-storm-library-visitor-passport",
@@ -1377,7 +1605,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#9c917f",
+    "thumb": "thumbs/2026-06-04-evening-storm-library-visitor-passport.webp"
   },
   {
     "id": "2026-06-04-evening-umbrella-aquarium-service-invoice",
@@ -1389,7 +1619,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#8d8f89",
+    "thumb": "thumbs/2026-06-04-evening-umbrella-aquarium-service-invoice.webp"
   },
   {
     "id": "2026-06-05-midday-garden-as-miniature-circuit-board",
@@ -1401,7 +1633,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#43422c",
+    "thumb": "thumbs/2026-06-05-midday-garden-as-miniature-circuit-board.webp"
   },
   {
     "id": "2026-06-05-midday-product-as-museum-x-ray",
@@ -1413,7 +1647,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#202d32",
+    "thumb": "thumbs/2026-06-05-midday-product-as-museum-x-ray.webp"
   },
   {
     "id": "2026-06-05-afternoon-bicycle-as-botanical-pressing",
@@ -1425,7 +1661,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#958b78",
+    "thumb": "thumbs/2026-06-05-afternoon-bicycle-as-botanical-pressing.webp"
   },
   {
     "id": "2026-06-05-evening-tidepool-moon-observation-log",
@@ -1437,7 +1675,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#6d6f70",
+    "thumb": "thumbs/2026-06-05-evening-tidepool-moon-observation-log.webp"
   },
   {
     "id": "2026-06-06-morning-pet-as-frosted-bakery-window-cake",
@@ -1449,7 +1689,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#69584c",
+    "thumb": "thumbs/2026-06-06-morning-pet-as-frosted-bakery-window-cake.webp"
   },
   {
     "id": "2026-06-06-midday-clockwork-greenhouse-transit-map",
@@ -1461,7 +1703,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#94866e",
+    "thumb": "thumbs/2026-06-06-midday-clockwork-greenhouse-transit-map.webp"
   },
   {
     "id": "2026-06-06-afternoon-house-as-pop-up-book-spread",
@@ -1473,7 +1717,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#766551",
+    "thumb": "thumbs/2026-06-06-afternoon-house-as-pop-up-book-spread.webp"
   },
   {
     "id": "2026-06-06-evening-shoe-as-archaeology-fragment",
@@ -1485,7 +1731,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#895b32",
+    "thumb": "thumbs/2026-06-06-evening-shoe-as-archaeology-fragment.webp"
   },
   {
     "id": "2026-06-06-evening-museum-of-misdelivered-mail-placards",
@@ -1497,7 +1745,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#948c7b",
+    "thumb": "thumbs/2026-06-06-evening-museum-of-misdelivered-mail-placards.webp"
   },
   {
     "id": "2026-06-07-evening-tiny-impossible-services-classifieds",
@@ -1509,7 +1759,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#a39079",
+    "thumb": "thumbs/2026-06-07-evening-tiny-impossible-services-classifieds.webp"
   },
   {
     "id": "2026-06-07-evening-rooftop-rain-barrel-festival-schedule",
@@ -1521,7 +1773,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#5d5c52",
+    "thumb": "thumbs/2026-06-07-evening-rooftop-rain-barrel-festival-schedule.webp"
   },
   {
     "id": "2026-06-08-morning-cat-as-red-lacquered-wood-artifact",
@@ -1533,7 +1787,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5a4335",
+    "thumb": "thumbs/2026-06-08-morning-cat-as-red-lacquered-wood-artifact.webp"
   },
   {
     "id": "2026-06-08-morning-dog-as-woven-newspaper-artifact",
@@ -1545,7 +1801,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#47443f",
+    "thumb": "thumbs/2026-06-08-morning-dog-as-woven-newspaper-artifact.webp"
   },
   {
     "id": "2026-06-08-midday-borrowed-weather-index-card-system",
@@ -1557,7 +1815,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#836c55",
+    "thumb": "thumbs/2026-06-08-midday-borrowed-weather-index-card-system.webp"
   },
   {
     "id": "2026-06-08-midday-basement-comet-seed-packet-labels",
@@ -1569,7 +1829,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#9f968b",
+    "thumb": "thumbs/2026-06-08-midday-basement-comet-seed-packet-labels.webp"
   },
   {
     "id": "2026-06-08-midday-houseplant-as-opalized-moss-artifact",
@@ -1581,7 +1843,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4e513d",
+    "thumb": "thumbs/2026-06-08-midday-houseplant-as-opalized-moss-artifact.webp"
   },
   {
     "id": "2026-06-08-afternoon-kitchen-meteorite-safety-poster",
@@ -1593,7 +1857,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#967d5d",
+    "thumb": "thumbs/2026-06-08-afternoon-kitchen-meteorite-safety-poster.webp"
   },
   {
     "id": "2026-06-08-evening-under-stair-moon-jam-menu-board",
@@ -1605,7 +1871,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#201c17",
+    "thumb": "thumbs/2026-06-08-evening-under-stair-moon-jam-menu-board.webp"
   },
   {
     "id": "2026-06-08-evening-pocket-fog-machine-repair-manual",
@@ -1617,7 +1885,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#8e7f6c",
+    "thumb": "thumbs/2026-06-08-evening-pocket-fog-machine-repair-manual.webp"
   },
   {
     "id": "2026-06-09-morning-car-as-blue-ceramic-tile-artifact",
@@ -1629,7 +1899,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#797169",
+    "thumb": "thumbs/2026-06-09-morning-car-as-blue-ceramic-tile-artifact.webp"
   },
   {
     "id": "2026-06-09-midday-product-bottle-as-paper-quilling-artifact",
@@ -1641,7 +1913,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#6c5d50",
+    "thumb": "thumbs/2026-06-09-midday-product-bottle-as-paper-quilling-artifact.webp"
   },
   {
     "id": "2026-06-09-evening-laundry-oracle-board-game-card-sheet",
@@ -1653,7 +1927,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#8f877f",
+    "thumb": "thumbs/2026-06-09-evening-laundry-oracle-board-game-card-sheet.webp"
   },
   {
     "id": "2026-06-09-evening-junk-drawer-lichen-field-guide-plate",
@@ -1665,7 +1941,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#a19587",
+    "thumb": "thumbs/2026-06-09-evening-junk-drawer-lichen-field-guide-plate.webp"
   },
   {
     "id": "2026-06-09-evening-apartment-echo-auction-catalog",
@@ -1677,7 +1955,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#82705a",
+    "thumb": "thumbs/2026-06-09-evening-apartment-echo-auction-catalog.webp"
   },
   {
     "id": "2026-06-10-midday-instrument-as-charcoal-sketch-artifact",
@@ -1689,7 +1969,9 @@
     "batch": "Daily Prompt",
     "slot": "midday",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5c5752",
+    "thumb": "thumbs/2026-06-10-midday-instrument-as-charcoal-sketch-artifact.webp"
   },
   {
     "id": "2026-06-10-afternoon-attic-rain-lantern-inspection-checklist",
@@ -1701,7 +1983,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1536"
+    "size": "1024x1536",
+    "color": "#716353",
+    "thumb": "thumbs/2026-06-10-afternoon-attic-rain-lantern-inspection-checklist.webp"
   },
   {
     "id": "2026-06-10-evening-pet-as-salt-crystal-lantern",
@@ -1713,7 +1997,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#382d25",
+    "thumb": "thumbs/2026-06-10-evening-pet-as-salt-crystal-lantern.webp"
   },
   {
     "id": "2026-06-10-evening-moonlit-oyster-tool-bench",
@@ -1725,7 +2011,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#333130",
+    "thumb": "thumbs/2026-06-10-evening-moonlit-oyster-tool-bench.webp"
   },
   {
     "id": "2026-06-11-morning-person-as-cobalt-porcelain-kintsugi",
@@ -1737,7 +2025,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5d5b59",
+    "thumb": "thumbs/2026-06-11-morning-person-as-cobalt-porcelain-kintsugi.webp"
   },
   {
     "id": "2026-06-11-morning-backpack-as-alpine-wax-sculpture",
@@ -1749,7 +2039,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5d4535",
+    "thumb": "thumbs/2026-06-11-morning-backpack-as-alpine-wax-sculpture.webp"
   },
   {
     "id": "2026-06-11-afternoon-tool-as-botanical-bone-artifact",
@@ -1761,7 +2053,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3f3829",
+    "thumb": "thumbs/2026-06-11-afternoon-tool-as-botanical-bone-artifact.webp"
   },
   {
     "id": "2026-06-11-evening-night-market-spice-cabinet",
@@ -1773,7 +2067,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#231d1b",
+    "thumb": "thumbs/2026-06-11-evening-night-market-spice-cabinet.webp"
   },
   {
     "id": "2026-06-12-morning-houseplant-as-velvet-circuit-creature",
@@ -1785,7 +2081,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#1e1c1a",
+    "thumb": "thumbs/2026-06-12-morning-houseplant-as-velvet-circuit-creature.webp"
   },
   {
     "id": "2026-06-12-afternoon-bicycle-as-woven-willow-relic",
@@ -1797,7 +2095,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5e4d38",
+    "thumb": "thumbs/2026-06-12-afternoon-bicycle-as-woven-willow-relic.webp"
   },
   {
     "id": "2026-06-12-evening-subway-moss-maintenance-kit",
@@ -1809,7 +2109,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#34322b",
+    "thumb": "thumbs/2026-06-12-evening-subway-moss-maintenance-kit.webp"
   },
   {
     "id": "2026-06-13-morning-garden-as-wool-felt-terrain",
@@ -1821,7 +2123,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#65543e",
+    "thumb": "thumbs/2026-06-13-morning-garden-as-wool-felt-terrain.webp"
   },
   {
     "id": "2026-06-13-afternoon-chair-as-mushroom-mycelium-model",
@@ -1833,7 +2137,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#493e31",
+    "thumb": "thumbs/2026-06-13-afternoon-chair-as-mushroom-mycelium-model.webp"
   },
   {
     "id": "2026-06-14-afternoon-pet-as-copper-weather-vane",
@@ -1845,7 +2151,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#746a5f",
+    "thumb": "thumbs/2026-06-14-afternoon-pet-as-copper-weather-vane.webp"
   },
   {
     "id": "2026-06-14-evening-porcelain-weather-machine-prototype",
@@ -1857,7 +2165,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3b3830",
+    "thumb": "thumbs/2026-06-14-evening-porcelain-weather-machine-prototype.webp"
   },
   {
     "id": "2026-06-15-evening-opal-beekeeper-suit-display",
@@ -1869,7 +2179,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#2f2615",
+    "thumb": "thumbs/2026-06-15-evening-opal-beekeeper-suit-display.webp"
   },
   {
     "id": "2026-06-16-morning-pet-as-salt-crystal-lantern",
@@ -1881,7 +2193,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4b342a",
+    "thumb": "thumbs/2026-06-16-morning-pet-as-salt-crystal-lantern.webp"
   },
   {
     "id": "2026-06-16-afternoon-shoe-as-glass-jelly-artifact",
@@ -1893,7 +2207,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#303832",
+    "thumb": "thumbs/2026-06-16-afternoon-shoe-as-glass-jelly-artifact.webp"
   },
   {
     "id": "2026-06-16-evening-clockwork-herb-drying-rack",
@@ -1905,7 +2221,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#372a1a",
+    "thumb": "thumbs/2026-06-16-evening-clockwork-herb-drying-rack.webp"
   },
   {
     "id": "2026-06-16-evening-frosted-library-aquarium",
@@ -1917,7 +2235,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#282724",
+    "thumb": "thumbs/2026-06-16-evening-frosted-library-aquarium.webp"
   },
   {
     "id": "2026-06-17-afternoon-after-storm-cat-forensics",
@@ -1929,7 +2249,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#60574e",
+    "thumb": "thumbs/2026-06-17-afternoon-after-storm-cat-forensics.webp"
   },
   {
     "id": "2026-06-17-evening-lost-and-found-rain-boot-intake",
@@ -1941,7 +2263,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4e4d45",
+    "thumb": "thumbs/2026-06-17-evening-lost-and-found-rain-boot-intake.webp"
   },
   {
     "id": "2026-06-18-afternoon-repairability-score-bench",
@@ -1953,7 +2277,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4b443b",
+    "thumb": "thumbs/2026-06-18-afternoon-repairability-score-bench.webp"
   },
   {
     "id": "2026-06-18-evening-cloud-sample-storage-rack",
@@ -1965,7 +2291,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#392f2b",
+    "thumb": "thumbs/2026-06-18-evening-cloud-sample-storage-rack.webp"
   },
   {
     "id": "2026-06-19-afternoon-transit-authority-object-test",
@@ -1977,7 +2305,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#534736",
+    "thumb": "thumbs/2026-06-19-afternoon-transit-authority-object-test.webp"
   },
   {
     "id": "2026-06-19-evening-forgotten-elevator-miniature-set",
@@ -1989,7 +2319,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3b2e21",
+    "thumb": "thumbs/2026-06-19-evening-forgotten-elevator-miniature-set.webp"
   },
   {
     "id": "2026-06-19-evening-harbor-clockwork-fish-tank",
@@ -2001,7 +2333,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#2c281d",
+    "thumb": "thumbs/2026-06-19-evening-harbor-clockwork-fish-tank.webp"
   },
   {
     "id": "2026-06-19-evening-museum-conservation-before-touch",
@@ -2013,7 +2347,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3c3024",
+    "thumb": "thumbs/2026-06-19-evening-museum-conservation-before-touch.webp"
   },
   {
     "id": "2026-06-20-afternoon-tiny-disaster-drill-for-a-houseplant",
@@ -2025,7 +2361,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4a3e30",
+    "thumb": "thumbs/2026-06-20-afternoon-tiny-disaster-drill-for-a-houseplant.webp"
   },
   {
     "id": "2026-06-20-evening-toy-fire-truck-recovery-layer",
@@ -2037,7 +2375,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#584538",
+    "thumb": "thumbs/2026-06-20-evening-toy-fire-truck-recovery-layer.webp"
   },
   {
     "id": "2026-06-21-evening-cat-cabinet-of-procedures",
@@ -2049,7 +2389,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3c3228",
+    "thumb": "thumbs/2026-06-21-evening-cat-cabinet-of-procedures.webp"
   },
   {
     "id": "2026-06-21-evening-pet-shadow-puppet-engineering",
@@ -2061,7 +2403,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#775e46",
+    "thumb": "thumbs/2026-06-21-evening-pet-shadow-puppet-engineering.webp"
   },
   {
     "id": "2026-06-22-evening-portrait-as-witness-reconstruction-room",
@@ -2073,7 +2417,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#38322b",
+    "thumb": "thumbs/2026-06-22-evening-portrait-as-witness-reconstruction-room.webp"
   },
   {
     "id": "2026-06-22-evening-room-as-soundproofing-failure-map",
@@ -2085,7 +2431,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#342b26",
+    "thumb": "thumbs/2026-06-22-evening-room-as-soundproofing-failure-map.webp"
   },
   {
     "id": "2026-06-23-morning-garden-as-night-pollinator-inspection",
@@ -2097,7 +2445,9 @@
     "batch": "Daily Prompt",
     "slot": "morning",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#302413",
+    "thumb": "thumbs/2026-06-23-morning-garden-as-night-pollinator-inspection.webp"
   },
   {
     "id": "2026-06-23-afternoon-parrot-travel-permit-relic-box",
@@ -2109,7 +2459,9 @@
     "batch": "Daily Prompt",
     "slot": "afternoon",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4b3c2d",
+    "thumb": "thumbs/2026-06-23-afternoon-parrot-travel-permit-relic-box.webp"
   },
   {
     "id": "2026-06-23-evening-photo-to-archaeological-recovery-layer",
@@ -2121,7 +2473,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#534236",
+    "thumb": "thumbs/2026-06-23-evening-photo-to-archaeological-recovery-layer.webp"
   },
   {
     "id": "2026-06-23-evening-elder-cyclist-newspaper-profile-box",
@@ -2133,7 +2487,9 @@
     "batch": "Daily Prompt",
     "slot": "evening",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#41372d",
+    "thumb": "thumbs/2026-06-23-evening-elder-cyclist-newspaper-profile-box.webp"
   },
   {
     "id": "2026-06-24-miniature-diorama-submerged-bakery-window-miniature",
@@ -2145,7 +2501,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#4e4b39",
+    "thumb": "thumbs/2026-06-24-miniature-diorama-submerged-bakery-window-miniature.webp"
   },
   {
     "id": "2026-06-24-factual-infographic-factual-infographic-how-a-thermal-recei",
@@ -2162,7 +2520,9 @@
       "topic": "Direct thermal receipt paper fading",
       "description": "A real-world materials-science infographic explaining how direct thermal receipt paper forms marks through heat-activated coating chemistry and why heat, UV, abrasion, oils, plasticizers, solvents, humidity, and poor storage can fade it.",
       "sourceNote": "Conservative general materials knowledge: direct thermal paper uses heat-sensitive dye/developer coatings; storage advice avoids heat, sunlight, abrasion, solvents, plasticizers, oils, and humidity."
-    }
+    },
+    "color": "#8e897f",
+    "thumb": "thumbs/2026-06-24-factual-infographic-factual-infographic-how-a-thermal-recei.webp"
   },
   {
     "id": "2026-06-24-historical-recreation-historical-recreation-1890s-coal-cell",
@@ -2174,7 +2534,9 @@
     "batch": "Daily Prompt",
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#312721",
+    "thumb": "thumbs/2026-06-24-historical-recreation-historical-recreation-1890s-coal-cell.webp"
   },
   {
     "id": "2026-06-24-hybrid-creature-infographic-prism-reef-strain-development-m",
@@ -2192,7 +2554,9 @@
       "imageKind": "infographic",
       "description": "Peacock mantis shrimp and poison dart frog traits blended into a vivid reef-cave fictional hybrid.",
       "continuity": "Same Prism Reef adult phenotype across the development-map and wild-photo entries."
-    }
+    },
+    "color": "#828d91",
+    "thumb": "thumbs/2026-06-24-hybrid-creature-infographic-prism-reef-strain-development-m.webp"
   },
   {
     "id": "2026-06-24-hybrid-creature-wild-prism-reef-strain-in-the-wild",
@@ -2210,7 +2574,9 @@
       "imageKind": "wild",
       "description": "Peacock mantis shrimp and poison dart frog traits blended into a vivid reef-cave fictional hybrid.",
       "continuity": "Same Prism Reef adult phenotype across the development-map and wild-photo entries."
-    }
+    },
+    "color": "#373c33",
+    "thumb": "thumbs/2026-06-24-hybrid-creature-wild-prism-reef-strain-in-the-wild.webp"
   },
   {
     "id": "2026-06-24-creature-design-nocturnal-limestone-cave-glider",
@@ -2227,7 +2593,9 @@
       "name": "Nocturnal Limestone-Cave Glider",
       "description": "A believable limestone-cave animal built from gliding, gripping, sensory, translucent-skin, and faint bioluminescent adaptations.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#2a2825",
+    "thumb": "thumbs/2026-06-24-creature-design-nocturnal-limestone-cave-glider.webp"
   },
   {
     "id": "2026-06-24-random-image-style-retro-animation-look",
@@ -2244,7 +2612,9 @@
       "medium": "Retro animation look",
       "description": "A rendering-style example where the style or visual medium is the main variable rather than a separate subject category.",
       "template": "Create [SUBJECT_OR_SCENE] in [STYLE_OR_MEDIUM], with visible medium-specific texture, composition rules, color behavior, and detail level suited to that rendering style."
-    }
+    },
+    "color": "#5b3c22",
+    "thumb": "thumbs/2026-06-24-random-image-style-retro-animation-look.webp"
   },
   {
     "id": "2026-06-24-reference-photo-template-portrait-as-emergency-broadcast-st",
@@ -2256,7 +2626,9 @@
     "batch": "Daily Prompt",
     "slot": "reference-photo-template",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3c2f25",
+    "thumb": "thumbs/2026-06-24-reference-photo-template-portrait-as-emergency-broadcast-st.webp"
   },
   {
     "id": "2026-06-25-factual-infographic-factual-infographic-how-a-mechanical-fi",
@@ -2273,7 +2645,9 @@
       "topic": "mechanical fire sprinkler head",
       "description": "Explains a common automatic fire sprinkler head with cutaway parts, heat-release concept, water path, deflector spray behavior, and conservative inspection-safe visual clues.",
       "sourceNote": "Conservative general fire-protection engineering knowledge; no installation procedure, legal/code advice, or fake exact statistics."
-    }
+    },
+    "color": "#766d65",
+    "thumb": "thumbs/2026-06-25-factual-infographic-factual-infographic-how-a-mechanical-fi.webp"
   },
   {
     "id": "2026-06-25-factual-infographic-factual-infographic-how-a-quartz-watch-",
@@ -2290,7 +2664,9 @@
       "topic": "How a Quartz Watch Keeps Time",
       "description": "A conservative real-world horology/electronics infographic explaining how a quartz wristwatch turns a battery-powered crystal oscillator into hand movement.",
       "sourceNote": "Evergreen general horology/electronics knowledge; uses conservative mechanism descriptions and a typical 32,768 Hz quartz watch oscillator reference."
-    }
+    },
+    "color": "#3b3731",
+    "thumb": "thumbs/2026-06-25-factual-infographic-factual-infographic-how-a-quartz-watch-.webp"
   },
   {
     "id": "2026-06-25-creature-design-desert-glassback-burrower",
@@ -2307,7 +2683,9 @@
       "name": "Desert Glassback Burrower",
       "description": "Believable invented salt-pan desert animal with a reflective heat-shield carapace, dew-collecting belly bristles, and sand-gold shell with violet shadows.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#817877",
+    "thumb": "thumbs/2026-06-25-creature-design-desert-glassback-burrower.webp"
   },
   {
     "id": "2026-06-25-random-image-style-voxel-rooftop-greenhouse",
@@ -2324,7 +2702,9 @@
       "medium": "voxel graphics",
       "description": "A rooftop greenhouse maintenance scene rebuilt as tactile cube-based voxel art.",
       "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
-    }
+    },
+    "color": "#5a4931",
+    "thumb": "thumbs/2026-06-25-random-image-style-voxel-rooftop-greenhouse.webp"
   },
   {
     "id": "2026-06-25-hybrid-creature-infographic-blue-fen-strider-development-ma",
@@ -2342,7 +2722,9 @@
       "imageKind": "infographic",
       "description": "Fictional strain with a tall wading adult, backward-bending knees, paddle feet, flexible cranial crest, and blue-gray pebbled hide adapted to reed-choked fens.",
       "continuity": "Same adult phenotype across both images: tall wading body, backward-bending knees, long stiltlike legs, broad paddle feet, flexible cranial crest, narrow shoulders, folded reduced forelimbs, and blue-gray pebbled wet hide in a reed-choked fen."
-    }
+    },
+    "color": "#a4aba9",
+    "thumb": "thumbs/2026-06-25-hybrid-creature-infographic-blue-fen-strider-development-ma.webp"
   },
   {
     "id": "2026-06-25-hybrid-creature-wild-blue-fen-strider-in-the-wild",
@@ -2360,7 +2742,9 @@
       "imageKind": "wild",
       "description": "Fictional strain with a tall wading adult, backward-bending knees, paddle feet, flexible cranial crest, and blue-gray pebbled hide adapted to reed-choked fens.",
       "continuity": "Same adult phenotype across both images: tall wading body, backward-bending knees, long stiltlike legs, broad paddle feet, flexible cranial crest, narrow shoulders, folded reduced forelimbs, and blue-gray pebbled wet hide in a reed-choked fen."
-    }
+    },
+    "color": "#4d617b",
+    "thumb": "thumbs/2026-06-25-hybrid-creature-wild-blue-fen-strider-in-the-wild.webp"
   },
   {
     "id": "2026-06-25-historical-recreation-historical-recreation-1930s-observato",
@@ -2372,7 +2756,9 @@
     "batch": "Daily Prompt",
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#311d14",
+    "thumb": "thumbs/2026-06-25-historical-recreation-historical-recreation-1930s-observato.webp"
   },
   {
     "id": "2026-06-26-factual-infographic-factual-infographic-how-a-honeybee-wagg",
@@ -2389,7 +2775,9 @@
       "topic": "honeybee waggle dance communication",
       "description": "Explains how a worker honeybee's waggle run, return loops, dance angle, and waggle duration/vigor communicate food direction and general distance to nestmates.",
       "sourceNote": "Conservative general entomology knowledge; avoids fake exact statistics and presents only widely accepted concepts."
-    }
+    },
+    "color": "#9b7c53",
+    "thumb": "thumbs/2026-06-26-factual-infographic-factual-infographic-how-a-honeybee-wagg.webp"
   },
   {
     "id": "2026-06-26-random-image-style-scratchboard-night-kitchen",
@@ -2406,7 +2794,9 @@
       "medium": "scratchboard",
       "description": "A cramped late-night kitchen rendered in carved black-and-white scratchboard with restrained hand-tinted accents.",
       "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
-    }
+    },
+    "color": "#23211e",
+    "thumb": "thumbs/2026-06-26-random-image-style-scratchboard-night-kitchen.webp"
   },
   {
     "id": "2026-06-26-creature-design-glass-reed-mudskimmer",
@@ -2423,7 +2813,9 @@
       "name": "Glass-Reed Mudskimmer",
       "description": "Believable invented tidal reed marsh animal with transparent lateral balance fins, vibration-sensing chin whiskers, and wet jade skin with copper speckles.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#4b4941",
+    "thumb": "thumbs/2026-06-26-creature-design-glass-reed-mudskimmer.webp"
   },
   {
     "id": "2026-06-26-hybrid-creature-infographic-quartzback-lantern-ape-developm",
@@ -2441,7 +2833,9 @@
       "imageKind": "infographic",
       "description": "Fictional non-actionable hybrid of gorilla + lanternfish: a mostly animal-like knuckle-walker with heavy forearms, dark reflective skin, glowing throat pouch, lateral light organs, and quartz-like shoulder plates in a moonlit mineral forest.",
       "continuity": "Sources: gorilla + lanternfish. Same adult phenotype: mostly animal-like knuckle-walker with gorilla-like heavy forearms and shoulders, dark lanternfish shimmer, glowing throat pouch, lateral light organs, quartz shoulder plates, and low forward head carriage; same habitat: moonlit mineral forest."
-    }
+    },
+    "color": "#2f3335",
+    "thumb": "thumbs/2026-06-26-hybrid-creature-infographic-quartzback-lantern-ape-developm.webp"
   },
   {
     "id": "2026-06-26-hybrid-creature-wild-quartzback-lantern-ape-in-the-wild",
@@ -2459,7 +2853,9 @@
       "imageKind": "wild",
       "description": "Fictional non-actionable hybrid of gorilla + lanternfish: a mostly animal-like knuckle-walker with heavy forearms, dark reflective skin, glowing throat pouch, lateral light organs, and quartz-like shoulder plates in a moonlit mineral forest.",
       "continuity": "Sources: gorilla + lanternfish. Same adult phenotype: mostly animal-like knuckle-walker with gorilla-like heavy forearms and shoulders, dark lanternfish shimmer, glowing throat pouch, lateral light organs, quartz shoulder plates, and low forward head carriage; same habitat: moonlit mineral forest."
-    }
+    },
+    "color": "#22333e",
+    "thumb": "thumbs/2026-06-26-hybrid-creature-wild-quartzback-lantern-ape-in-the-wild.webp"
   },
   {
     "id": "2026-06-26-historical-recreation-historical-recreation-1880s-telegraph",
@@ -2471,7 +2867,9 @@
     "batch": "Daily Prompt",
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#7a6b5c",
+    "thumb": "thumbs/2026-06-26-historical-recreation-historical-recreation-1880s-telegraph.webp"
   },
   {
     "id": "2026-06-26-miniature-diorama-tiny-laundromat-under-a-stair",
@@ -2483,7 +2881,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1536x1024"
+    "size": "1536x1024",
+    "color": "#65523f",
+    "thumb": "thumbs/2026-06-26-miniature-diorama-tiny-laundromat-under-a-stair.webp"
   },
   {
     "id": "2026-06-27-factual-infographic-factual-infographic-how-a-bicycle-freeh",
@@ -2500,7 +2900,9 @@
       "topic": "bicycle freehub body",
       "description": "Explains how a bicycle freehub body engages under pedaling load and clicks while coasting, with core parts and maintenance observations.",
       "sourceNote": "Conservative general bicycle-mechanics knowledge; avoids brand-specific claims and precise statistics."
-    }
+    },
+    "color": "#777573",
+    "thumb": "thumbs/2026-06-27-factual-infographic-factual-infographic-how-a-bicycle-freeh.webp"
   },
   {
     "id": "2026-06-27-random-image-style-needle-felt-rain-gauge",
@@ -2517,7 +2919,9 @@
       "medium": "needle felt",
       "description": "A handcrafted fiber-art rain gauge scene with wool fibers, stitched ticks, felted water beads, and macro workbench scale cues.",
       "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
-    }
+    },
+    "color": "#706851",
+    "thumb": "thumbs/2026-06-27-random-image-style-needle-felt-rain-gauge.webp"
   },
   {
     "id": "2026-06-27-creature-design-basalt-crevice-lanternback",
@@ -2534,7 +2938,9 @@
       "name": "Basalt Crevice Lanternback",
       "description": "Believable invented volcanic sea-cliff animal with heat-shedding dorsal plates, bioluminescent throat sacs, and charcoal hide with pale amber vents.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#2e3034",
+    "thumb": "thumbs/2026-06-27-creature-design-basalt-crevice-lanternback.webp"
   },
   {
     "id": "2026-06-27-hybrid-creature-infographic-salt-veil-basker-development-ma",
@@ -2552,7 +2958,9 @@
       "imageKind": "infographic",
       "description": "A fictional harbor seal + cuttlefish strain with a low seal-like coastal body, translucent cuttlefish veils, chromatophore mottling, fin frills, and fan-tail display.",
       "continuity": "Same adult phenotype in both images: broad belly-crawling seal mass, blunt whiskered head, translucent side veils, mottled chromatophore skin, fin-frill edges, fan tail, and dusk salt-flat habitat."
-    }
+    },
+    "color": "#a4a29f",
+    "thumb": "thumbs/2026-06-27-hybrid-creature-infographic-salt-veil-basker-development-ma.webp"
   },
   {
     "id": "2026-06-27-hybrid-creature-wild-salt-veil-basker-in-the-wild",
@@ -2570,7 +2978,9 @@
       "imageKind": "wild",
       "description": "A fictional harbor seal + cuttlefish strain with a low seal-like coastal body, translucent cuttlefish veils, chromatophore mottling, fin frills, and fan-tail display.",
       "continuity": "Same adult phenotype in both images: broad belly-crawling seal mass, blunt whiskered head, translucent side veils, mottled chromatophore skin, fin-frill edges, fan tail, and dusk salt-flat habitat."
-    }
+    },
+    "color": "#5c4f4a",
+    "thumb": "thumbs/2026-06-27-hybrid-creature-wild-salt-veil-basker-in-the-wild.webp"
   },
   {
     "id": "2026-06-27-historical-recreation-historical-recreation-1920s-streetcar",
@@ -2582,7 +2992,9 @@
     "batch": "Daily Prompt",
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#40382e",
+    "thumb": "thumbs/2026-06-27-historical-recreation-historical-recreation-1920s-streetcar.webp"
   },
   {
     "id": "2026-06-27-miniature-diorama-miniature-glasshouse-tram-stop",
@@ -2594,7 +3006,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1536x1024"
+    "size": "1536x1024",
+    "color": "#6f573d",
+    "thumb": "thumbs/2026-06-27-miniature-diorama-miniature-glasshouse-tram-stop.webp"
   },
   {
     "id": "2026-06-28-factual-infographic-factual-infographic-how-a-refrigerator-",
@@ -2611,7 +3025,9 @@
       "topic": "magnetic refrigerator gasket",
       "description": "Shows how a flexible magnetic refrigerator door gasket compresses against the cabinet, limits warm-air leaks, and can develop condensation risk when dirty, twisted, or poorly seated.",
       "sourceNote": "Conservative general appliance-engineering knowledge; avoids brand-specific instructions, fake statistics, and unsafe bypass details."
-    }
+    },
+    "color": "#8d8c8c",
+    "thumb": "thumbs/2026-06-28-factual-infographic-factual-infographic-how-a-refrigerator-.webp"
   },
   {
     "id": "2026-06-28-hybrid-creature-infographic-ochre-spindlejaw-development-ma",
@@ -2629,7 +3045,9 @@
       "imageKind": "infographic",
       "description": "Fictional non-actionable hybrid of kangaroo + aardvark: a low side-profile badlands runner with kangaroo hind-limb leverage and aardvark digging/head traits.",
       "continuity": "Sources: kangaroo + aardvark. Shared adult phenotype: low side-profile runner with long springing hind limbs, counterbalancing body angle, tucked digging forelimbs, narrow shovel jaw, blunt ears, coarse ochre scale-fur, and dry clay badlands habitat."
-    }
+    },
+    "color": "#a89687",
+    "thumb": "thumbs/2026-06-28-hybrid-creature-infographic-ochre-spindlejaw-development-ma.webp"
   },
   {
     "id": "2026-06-28-hybrid-creature-wild-ochre-spindlejaw-in-the-wild",
@@ -2647,7 +3065,9 @@
       "imageKind": "wild",
       "description": "Fictional non-actionable hybrid of kangaroo + aardvark: a low badlands runner preserving the same adult phenotype as the development map.",
       "continuity": "Sources: kangaroo + aardvark. Shared adult phenotype: low side-profile runner with long springing hind limbs, counterbalancing body angle, tucked digging forelimbs, narrow shovel jaw, blunt ears, coarse ochre scale-fur, and dry clay badlands habitat."
-    }
+    },
+    "color": "#876b55",
+    "thumb": "thumbs/2026-06-28-hybrid-creature-wild-ochre-spindlejaw-in-the-wild.webp"
   },
   {
     "id": "2026-06-28-creature-design-snowmelt-root-grazer",
@@ -2664,7 +3084,9 @@
       "name": "Snowmelt Root Grazer",
       "description": "Believable invented alpine thaw meadow animal with wide snowshoe toes, a root-probing flexible muzzle, and cream fur with moss-green striping.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#78746b",
+    "thumb": "thumbs/2026-06-28-creature-design-snowmelt-root-grazer.webp"
   },
   {
     "id": "2026-06-28-miniature-diorama-thumb-sized-canal-bakery",
@@ -2676,7 +3098,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#3c332d",
+    "thumb": "thumbs/2026-06-28-miniature-diorama-thumb-sized-canal-bakery.webp"
   },
   {
     "id": "2026-06-28-historical-recreation-historical-recreation-1910s-print-sho",
@@ -2688,7 +3112,9 @@
     "batch": "Daily Prompt",
     "slot": "historical-recreation",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#443c37",
+    "thumb": "thumbs/2026-06-28-historical-recreation-historical-recreation-1910s-print-sho.webp"
   },
   {
     "id": "2026-06-28-random-image-style-random-rendering-style-risograph-toy-rep",
@@ -2705,7 +3131,9 @@
       "medium": "risograph print",
       "description": "A toy repair bench rendered as a tactile risograph print with spot colors, halftone grain, paper texture, and slight ink misregistration.",
       "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
-    }
+    },
+    "color": "#78765e",
+    "thumb": "thumbs/2026-06-28-random-image-style-random-rendering-style-risograph-toy-rep.webp"
   },
   {
     "id": "2026-06-29-factual-infographic-factual-infographic-how-a-manual-can-op",
@@ -2722,7 +3150,9 @@
       "topic": "Manual can opener mechanism",
       "description": "A conservative non-fiction engineering infographic explaining how a handheld rotary can opener clamps, feeds, and cuts around a can lid.",
       "sourceNote": "General real-world mechanical description; no brand-specific claims, exact statistics, or repair instructions."
-    }
+    },
+    "color": "#857d77",
+    "thumb": "thumbs/2026-06-29-factual-infographic-factual-infographic-how-a-manual-can-op.webp"
   },
   {
     "id": "2026-06-29-creature-design-fogbank-needle-grazer",
@@ -2739,7 +3169,9 @@
       "name": "Fogbank Needle Grazer",
       "description": "A believable coastal fog-cliff grazer with fog-combing whiskers, split gripping hooves, and lichen-flecked slate fur.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#535355",
+    "thumb": "thumbs/2026-06-29-creature-design-fogbank-needle-grazer.webp"
   },
   {
     "id": "2026-06-29-hybrid-creature-infographic-lanternjaw-railback-development",
@@ -2757,7 +3189,9 @@
       "imageKind": "infographic",
       "description": "A fictional cave-river hybrid combining anglerfish lure anatomy with pangolin armor, digging forelimbs, and curled railback posture.",
       "continuity": "Same low armored cave-river adult with cyan jaw lure, dark wet skin, blunt digging foreclaws, and curled plated tail."
-    }
+    },
+    "color": "#4f4b44",
+    "thumb": "thumbs/2026-06-29-hybrid-creature-infographic-lanternjaw-railback-development.webp"
   },
   {
     "id": "2026-06-29-hybrid-creature-wild-lanternjaw-railback-in-the-wild",
@@ -2775,7 +3209,9 @@
       "imageKind": "wild",
       "description": "A fictional cave-river hybrid combining anglerfish lure anatomy with pangolin armor, digging forelimbs, and curled railback posture.",
       "continuity": "Same low armored cave-river adult with cyan jaw lure, dark wet skin, blunt digging foreclaws, and curled plated tail."
-    }
+    },
+    "color": "#2f2e2c",
+    "thumb": "thumbs/2026-06-29-hybrid-creature-wild-lanternjaw-railback-in-the-wild.webp"
   },
   {
     "id": "2026-06-29-hybrid-creature-infographic-abyssal-lantern-warden-developm",
@@ -2793,7 +3229,9 @@
       "imageKind": "infographic",
       "description": "A fictional deep-sea anglerfish + human hybrid with a humanoid vertical-swimmer body plan, webbed five-fingered hands, cranial lure, fin fringes, dark gelatinous skin, and blue-green bioluminescent freckles.",
       "continuity": "Both images preserve the same Abyssal Lantern Warden phenotype: upright human-derived torso and hands, anglerfish lure and jaw, fin-fringed limbs, charcoal skin, and cyan bioluminescence in blackwater habitat."
-    }
+    },
+    "color": "#0f181f",
+    "thumb": "thumbs/2026-06-29-hybrid-creature-infographic-abyssal-lantern-warden-developm.webp"
   },
   {
     "id": "2026-06-29-hybrid-creature-wild-abyssal-lantern-warden-in-the-wild",
@@ -2811,7 +3249,9 @@
       "imageKind": "wild",
       "description": "A fictional deep-sea anglerfish + human hybrid with a humanoid vertical-swimmer body plan, webbed five-fingered hands, cranial lure, fin fringes, dark gelatinous skin, and blue-green bioluminescent freckles.",
       "continuity": "Both images preserve the same Abyssal Lantern Warden phenotype: upright human-derived torso and hands, anglerfish lure and jaw, fin-fringed limbs, charcoal skin, and cyan bioluminescence in blackwater habitat."
-    }
+    },
+    "color": "#101514",
+    "thumb": "thumbs/2026-06-29-hybrid-creature-wild-abyssal-lantern-warden-in-the-wild.webp"
   },
   {
     "id": "2026-06-29-random-image-style-random-rendering-style-technical-airbrus",
@@ -2828,7 +3268,9 @@
       "medium": "technical airbrush",
       "description": "A detailed aquarium maintenance workbench rendered as precise late-1970s technical airbrush art.",
       "template": "Render a crowded [WORKSHOP_OR_MAINTENANCE_SPACE] as a richly detailed [STYLE_OR_MEDIUM] image with [TOOLS], [WET_OR_REFLECTIVE_SURFACES], [OPENED_PARTS_OR_MATERIAL_TRAYS], [SPECIFIC_LIGHTING], and no prompt-card text."
-    }
+    },
+    "color": "#4e4f4b",
+    "thumb": "thumbs/2026-06-29-random-image-style-random-rendering-style-technical-airbrus.webp"
   },
   {
     "id": "2026-06-29-world-that-never-was-maple-junction-moon-milk-diner-postcar",
@@ -2845,7 +3287,9 @@
       "artifact": "Maple Junction Moon-Milk Diner Postcard",
       "description": "A fictional 1950s Pennsylvania roadside postcard for an imaginary Moon-Milk diner, presented as a weathered alternate-history archive artifact.",
       "template": "Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for [IMAGINARY_PLACE_OR_OBJECT], using period materials, weathering, local signage/design details, and small readable fictional text while making clear it is imaginary."
-    }
+    },
+    "color": "#5d5040",
+    "thumb": "thumbs/2026-06-29-world-that-never-was-maple-junction-moon-milk-diner-postcar.webp"
   },
   {
     "id": "2026-06-29-miniature-diorama-pocket-subway-tile-bakery",
@@ -2857,7 +3301,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1536x1024"
+    "size": "1536x1024",
+    "color": "#756553",
+    "thumb": "thumbs/2026-06-29-miniature-diorama-pocket-subway-tile-bakery.webp"
   },
   {
     "id": "2026-06-30-factual-infographic-factual-infographic-how-a-zipper-slider",
@@ -2874,7 +3320,9 @@
       "topic": "Zipper slider tooth interlocking mechanism",
       "description": "Explains how a real zipper slider guides separated teeth into an interlocked chain, with conservative engineering labels and repair-bench context.",
       "sourceNote": "Real-world/non-fiction mechanical topic; conservative general zipper construction, no invented statistics or repair procedure."
-    }
+    },
+    "color": "#756f6a",
+    "thumb": "thumbs/2026-06-30-factual-infographic-factual-infographic-how-a-zipper-slider.webp"
   },
   {
     "id": "2026-06-30-creature-design-alpine-saltglass-whiskerback",
@@ -2891,7 +3339,9 @@
       "name": "Alpine Saltglass Whiskerback",
       "description": "A badger-sized alpine salt-flat animal with glassy shoulder sails, sifting tusks, and salt-crusted lavender-gray hide.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#848281",
+    "thumb": "thumbs/2026-06-30-creature-design-alpine-saltglass-whiskerback.webp"
   },
   {
     "id": "2026-06-30-hybrid-creature-infographic-prismleaf-hovergecko-developmen",
@@ -2909,7 +3359,9 @@
       "imageKind": "infographic",
       "description": "A fictional leaf-tailed gecko + hummingbird hybrid with adhesive toe pads, bark camouflage, a leaf-tail rudder, a nectar beak, iridescent throat patch, and translucent hovering wings.",
       "continuity": "Shared phenotype: vertical-clinging cloud-forest adult with gecko limbs and leaf-tail plus hummingbird nectar beak, iridescent throat, and translucent wings."
-    }
+    },
+    "color": "#968d7d",
+    "thumb": "thumbs/2026-06-30-hybrid-creature-infographic-prismleaf-hovergecko-developmen.webp"
   },
   {
     "id": "2026-06-30-hybrid-creature-wild-prismleaf-hovergecko-in-the-wild",
@@ -2927,7 +3379,9 @@
       "imageKind": "wild",
       "description": "A fictional leaf-tailed gecko + hummingbird hybrid photographed in a rainy cloud-forest flower canopy.",
       "continuity": "Shared phenotype: vertical-clinging cloud-forest adult with gecko limbs and leaf-tail plus hummingbird nectar beak, iridescent throat, and translucent wings."
-    }
+    },
+    "color": "#555238",
+    "thumb": "thumbs/2026-06-30-hybrid-creature-wild-prismleaf-hovergecko-in-the-wild.webp"
   },
   {
     "id": "2026-06-30-random-image-style-random-rendering-style-voxel-seed-vault-",
@@ -2944,7 +3398,9 @@
       "medium": "voxel graphics",
       "description": "A subterranean seed-vault conservation workroom built as a dense voxel-graphics scene with glass shelves, seed trays, frost, copper pipes, and amber work lights.",
       "template": "Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect."
-    }
+    },
+    "color": "#3c372b",
+    "thumb": "thumbs/2026-06-30-random-image-style-random-rendering-style-voxel-seed-vault-.webp"
   },
   {
     "id": "2026-06-30-world-that-never-was-riverglass-motor-court-glow-pool",
@@ -2961,7 +3417,9 @@
       "artifact": "Riverglass Motor Court Glow Pool",
       "description": "Fictional 1962 Pine Barrens motor-court pool attraction photographed as a humid alternate-local-history evening scene.",
       "template": "Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for \"[IMAGINARY_PLACE_OR_OBJECT]\", an imaginary [REGION_OR_SETTING] subject from a world that never existed. Make it feel like a discovered archive object or documentary photograph with [PERIOD_MATERIALS], [WEATHERING_OR_SURFACE_TEXTURE], [SIGNAGE_OR_LOCAL_DESIGN_DETAILS], [ENVIRONMENTAL_CONTEXT], and small readable fictional place text only when naturally part of the scene, while clearly framing it as imaginary rather than real."
-    }
+    },
+    "color": "#3b3c33",
+    "thumb": "thumbs/2026-06-30-world-that-never-was-riverglass-motor-court-glow-pool.webp"
   },
   {
     "id": "2026-06-30-miniature-diorama-miniature-crawlspace-radio-repair-kiosk",
@@ -2973,7 +3431,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1536x1024"
+    "size": "1536x1024",
+    "color": "#433329",
+    "thumb": "thumbs/2026-06-30-miniature-diorama-miniature-crawlspace-radio-repair-kiosk.webp"
   },
   {
     "id": "2026-07-01-factual-infographic-factual-infographic-how-a-mechanical-pe",
@@ -2990,7 +3450,9 @@
       "topic": "Mechanical pencil clutch mechanism",
       "description": "A real-world engineering infographic explaining how a push-button mechanical pencil opens its clutch, advances graphite lead, and grips it again.",
       "sourceNote": "Conservative general mechanical description of common push-button mechanical pencil clutch mechanisms; exact construction varies by pencil design."
-    }
+    },
+    "color": "#918c84",
+    "thumb": "thumbs/2026-07-01-factual-infographic-factual-infographic-how-a-mechanical-pe.webp"
   },
   {
     "id": "2026-07-01-creature-design-mangrove-glassroot-skimmer",
@@ -3007,7 +3469,9 @@
       "name": "Mangrove Glassroot Skimmer",
       "description": "A hare-sized mangrove-creek animal with salt-filtering throat fans, stilted mud-sensing toes, and olive-black skin flecked with amber nodules.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#403a2d",
+    "thumb": "thumbs/2026-07-01-creature-design-mangrove-glassroot-skimmer.webp"
   },
   {
     "id": "2026-07-01-hybrid-creature-infographic-reedglass-spoonwalker-developme",
@@ -3025,7 +3489,9 @@
       "imageKind": "infographic",
       "description": "A fictional roseate spoonbill + glass frog hybrid with a tall marsh-wading body, rose shoulder fans, spoon bill, translucent glassy belly, sticky toe pads, and gold amphibian eyes.",
       "continuity": "Same adult phenotype across both images: tall dawn-marsh wader combining spoonbill stilt legs, spoon bill, rose feather fans, translucent glass-frog belly, sticky toe pads, lime wet skin, and gold side-set eyes."
-    }
+    },
+    "color": "#7d766b",
+    "thumb": "thumbs/2026-07-01-hybrid-creature-infographic-reedglass-spoonwalker-developme.webp"
   },
   {
     "id": "2026-07-01-hybrid-creature-wild-reedglass-spoonwalker-in-the-wild",
@@ -3043,7 +3509,9 @@
       "imageKind": "wild",
       "description": "A fictional roseate spoonbill + glass frog hybrid photographed in its dawn reed-marsh habitat.",
       "continuity": "Same adult phenotype across both images: tall dawn-marsh wader combining spoonbill stilt legs, spoon bill, rose feather fans, translucent glass-frog belly, sticky toe pads, lime wet skin, and gold side-set eyes."
-    }
+    },
+    "color": "#5d4f44",
+    "thumb": "thumbs/2026-07-01-hybrid-creature-wild-reedglass-spoonwalker-in-the-wild.webp"
   },
   {
     "id": "2026-07-01-miniature-diorama-miniature-rain-gutter-observatory-kiosk",
@@ -3055,7 +3523,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1536x1024"
+    "size": "1536x1024",
+    "color": "#5c4c3f",
+    "thumb": "thumbs/2026-07-01-miniature-diorama-miniature-rain-gutter-observatory-kiosk.webp"
   },
   {
     "id": "2026-07-01-random-image-style-random-rendering-style-stained-glass-lau",
@@ -3072,7 +3542,9 @@
       "medium": "stained glass art",
       "description": "An after-hours laundromat plant nursery rebuilt as luminous stained glass, with lead seams, rippled colored panes, and rainlit reflections.",
       "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls color, edge quality, surface texture, lighting, and composition."
-    }
+    },
+    "color": "#393423",
+    "thumb": "thumbs/2026-07-01-random-image-style-random-rendering-style-stained-glass-lau.webp"
   },
   {
     "id": "2026-07-01-world-that-never-was-velvet-relay-library-concourse",
@@ -3089,7 +3561,9 @@
       "artifact": "Velvet Relay Library Concourse",
       "description": "A fictional 1937 underground civic library concourse where brass pneumatic tubes move books through a rainy city.",
       "template": "Create a World That Never Was image of [IMAGINARY_PLACE_OR_ARTIFACT], a fictional but plausible [ERA] [CIVIC_SPACE/WORKSHOP/INSTITUTION/INFRASTRUCTURE] built around [ALTERNATE_TECHNOLOGY_OR_CUSTOM]. Show [PERIOD_MATERIALS], [WORKERS_OR_VISITORS], [FUNCTIONAL_OBJECTS], [MAINTENANCE_OR_USE_DETAILS], [WEATHER_OR_LIGHTING], and tactile evidence of wear. Make it feel like an archival documentary photograph from an imaginary history, while clearly fictional/imaginary. Avoid modern devices, logos, readable propaganda, real historical claims, fantasy magic, sci-fi screens, poster layout, and prompt-card text."
-    }
+    },
+    "color": "#3d372b",
+    "thumb": "thumbs/2026-07-01-world-that-never-was-velvet-relay-library-concourse.webp"
   },
   {
     "id": "2026-07-02-factual-infographic-factual-infographic-how-bioluminescent-",
@@ -3106,7 +3580,9 @@
       "topic": "Dinoflagellate bioluminescence in glowing surf",
       "description": "A non-fiction marine science infographic explaining why disturbed plankton-rich seawater can flash blue in breaking waves.",
       "sourceNote": "Real-world/non-fiction topic; based on conservative general marine biology: many glowing surf events involve dinoflagellates whose bioluminescence is triggered by mechanical disturbance, with visibility affected by darkness and bloom density."
-    }
+    },
+    "color": "#1e1f20",
+    "thumb": "thumbs/2026-07-02-factual-infographic-factual-infographic-how-bioluminescent-.webp"
   },
   {
     "id": "2026-07-02-creature-design-frostglass-scree-sifter",
@@ -3123,7 +3599,9 @@
       "name": "Frostglass Scree Sifter",
       "description": "A plausible volcanic scree animal with thermal whiskers, pebble-sieving forepaws, and glassy frost-scale camouflage.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#504c4d",
+    "thumb": "thumbs/2026-07-02-creature-design-frostglass-scree-sifter.webp"
   },
   {
     "id": "2026-07-02-hybrid-creature-infographic-amberglass-sailor-development-m",
@@ -3141,7 +3619,9 @@
       "imageKind": "infographic",
       "description": "A fictional Portuguese man o war siphonophore + flying fish hybrid with a glassy sail crest, blue tendril ribbons, flying-fish fins, and a skimming ocean-surface body.",
       "continuity": "Same adult open-ocean phenotype across both images: glassy amber gas-sail crest, silver-blue fish body, broad pectoral outriggers, forked tail, armored head scales, and cobalt-violet trailing tendrils."
-    }
+    },
+    "color": "#6e7680",
+    "thumb": "thumbs/2026-07-02-hybrid-creature-infographic-amberglass-sailor-development-m.webp"
   },
   {
     "id": "2026-07-02-hybrid-creature-wild-amberglass-sailor-in-the-wild",
@@ -3159,7 +3639,9 @@
       "imageKind": "wild",
       "description": "A fictional Portuguese man o war siphonophore + flying fish hybrid with a glassy sail crest, blue tendril ribbons, flying-fish fins, and a skimming ocean-surface body.",
       "continuity": "Same adult open-ocean phenotype across both images: glassy amber gas-sail crest, silver-blue fish body, broad pectoral outriggers, forked tail, armored head scales, and cobalt-violet trailing tendrils."
-    }
+    },
+    "color": "#495465",
+    "thumb": "thumbs/2026-07-02-hybrid-creature-wild-amberglass-sailor-in-the-wild.webp"
   },
   {
     "id": "2026-07-02-random-image-style-random-rendering-style-low-poly-rainwate",
@@ -3176,7 +3658,9 @@
       "medium": "low-poly 3D art",
       "description": "A faceted low-poly rooftop rainwater garden pump room with cisterns, copper pipes, wet planters, and maintenance tools.",
       "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls geometry, color behavior, edge quality, texture, lighting, and composition."
-    }
+    },
+    "color": "#34342f",
+    "thumb": "thumbs/2026-07-02-random-image-style-random-rendering-style-low-poly-rainwate.webp"
   },
   {
     "id": "2026-07-02-miniature-diorama-miniature-storm-drain-teahouse-harbor",
@@ -3188,7 +3672,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#5e544a",
+    "thumb": "thumbs/2026-07-02-miniature-diorama-miniature-storm-drain-teahouse-harbor.webp"
   },
   {
     "id": "2026-07-02-world-that-never-was-copper-snowglass-conservatory-platform",
@@ -3205,7 +3691,9 @@
       "artifact": "Copper Snowglass Conservatory Platform",
       "description": "A fictional 1911 mountain railway greenhouse platform where copper snowglass and steam-warmed citrus beds softened winter travel in an imaginary history.",
       "template": "Create a World That Never Was image of [IMAGINARY_PLACE_OR_ARTIFACT], a fictional but plausible [ERA] [CIVIC_SPACE/WORKSHOP/INSTITUTION/INFRASTRUCTURE] built around [ALTERNATE_TECHNOLOGY_OR_CUSTOM]. Show [PERIOD_MATERIALS], [WORKERS_OR_VISITORS], [FUNCTIONAL_OBJECTS], [MAINTENANCE_OR_USE_DETAILS], [WEATHER_OR_LIGHTING], and tactile evidence of wear. Make it feel like an archival documentary photograph from an imaginary history, while clearly fictional/imaginary."
-    }
+    },
+    "color": "#333331",
+    "thumb": "thumbs/2026-07-02-world-that-never-was-copper-snowglass-conservatory-platform.webp"
   },
   {
     "id": "2026-07-03-creature-design-canopy-dripfold-glider",
@@ -3222,7 +3710,9 @@
       "name": "Canopy Dripfold Glider",
       "description": "A cloud-forest limestone canopy animal with rain-collecting ear folds, mineral-climbing claws, and moss-green calcite-speckled fur.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#3f3e2e",
+    "thumb": "thumbs/2026-07-03-creature-design-canopy-dripfold-glider.webp"
   },
   {
     "id": "2026-07-03-factual-infographic-factual-infographic-how-retroreflective",
@@ -3239,7 +3729,9 @@
       "topic": "Retroreflective sign vinyl optics",
       "description": "Real-world sign-material science explaining how microprismatic or glass-bead retroreflective sheeting sends headlight rays back toward the driver instead of glowing on its own.",
       "sourceNote": "Conservative general optics/materials summary: retroreflective sheeting uses glass beads or cube-corner microprisms to return much of incoming light toward its source; no proprietary specifications or exact performance numbers."
-    }
+    },
+    "color": "#53524b",
+    "thumb": "thumbs/2026-07-03-factual-infographic-factual-infographic-how-retroreflective.webp"
   },
   {
     "id": "2026-07-03-hybrid-creature-infographic-snowpetal-jackmantis-developmen",
@@ -3257,7 +3749,9 @@
       "imageKind": "infographic",
       "description": "A fictional snowshoe hare + orchid mantis hybrid with snow-running feet, winter fur, long ears, folded petal-like raptorial forelimbs, and blush floral camouflage.",
       "continuity": "Same adult phenotype across both images: waist-high alpine leaper with hare hindquarters, broad snow feet, frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and winter-white fur."
-    }
+    },
+    "color": "#999699",
+    "thumb": "thumbs/2026-07-03-hybrid-creature-infographic-snowpetal-jackmantis-developmen.webp"
   },
   {
     "id": "2026-07-03-hybrid-creature-wild-snowpetal-jackmantis-in-the-wild",
@@ -3275,7 +3769,9 @@
       "imageKind": "wild",
       "description": "A fictional snowshoe hare + orchid mantis hybrid with snow-running feet, winter fur, long ears, folded petal-like raptorial forelimbs, and blush floral camouflage.",
       "continuity": "Same adult phenotype across both images: waist-high alpine leaper with hare hindquarters, broad snow feet, frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and winter-white fur."
-    }
+    },
+    "color": "#737785",
+    "thumb": "thumbs/2026-07-03-hybrid-creature-wild-snowpetal-jackmantis-in-the-wild.webp"
   },
   {
     "id": "2026-07-03-random-image-style-random-rendering-style-glazed-ceramic-gr",
@@ -3292,7 +3788,9 @@
       "medium": "glazed ceramic bas-relief",
       "description": "A greenhouse pump room reimagined as a handcrafted glazed ceramic relief tile panel with raised clay, pooled glaze, and workshop lighting.",
       "template": "Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls construction, lighting, texture, and spatial logic; include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail; avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect."
-    }
+    },
+    "color": "#534c3e",
+    "thumb": "thumbs/2026-07-03-random-image-style-random-rendering-style-glazed-ceramic-gr.webp"
   },
   {
     "id": "2026-07-03-miniature-diorama-miniature-desk-drawer-ferry-terminal",
@@ -3304,7 +3802,9 @@
     "batch": "Daily Prompt",
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
-    "size": "1024x1024"
+    "size": "1024x1024",
+    "color": "#57493b",
+    "thumb": "thumbs/2026-07-03-miniature-diorama-miniature-desk-drawer-ferry-terminal.webp"
   },
   {
     "id": "2026-07-03-world-that-never-was-bellflower-pneumatic-parcel-arcade",
@@ -3321,7 +3821,9 @@
       "artifact": "Bellflower Pneumatic Parcel Arcade",
       "description": "A fictional 1927 civic parcel-exchange concourse built around brass pneumatic tubes, enamel intake bells, and rainy tiled arcade daily life.",
       "template": "Create a World That Never Was image of [IMAGINARY_PLACE_OR_ARTIFACT], a fictional but plausible [ERA] [CIVIC_SPACE/WORKSHOP/INSTITUTION/INFRASTRUCTURE] built around [ALTERNATE_TECHNOLOGY_OR_CUSTOM]. Show [PERIOD_MATERIALS], [WORKERS_OR_VISITORS], [FUNCTIONAL_OBJECTS], [MAINTENANCE_OR_USE_DETAILS], [WEATHER_OR_LIGHTING], and tactile evidence of wear. Make it feel like an archival documentary photograph from an imaginary history, while clearly fictional/imaginary."
-    }
+    },
+    "color": "#49433d",
+    "thumb": "thumbs/2026-07-03-world-that-never-was-bellflower-pneumatic-parcel-arcade.webp"
   },
   {
     "id": "2026-07-04-factual-infographic-factual-infographic-how-comb-jellies-ma",
@@ -3338,7 +3840,9 @@
       "topic": "Ctenophore comb-row iridescence from moving cilia",
       "description": "Explains how comb jellies produce traveling rainbow shimmer through structural light scattering from beating ciliary plates, contrasted with true bioluminescence.",
       "sourceNote": "Real-world/non-fiction marine biology and optics; comb-jelly rainbow bands are primarily structural scattering/diffraction from moving comb rows under external light, distinct from bioluminescence."
-    }
+    },
+    "color": "#2c2e31",
+    "thumb": "thumbs/2026-07-04-factual-infographic-factual-infographic-how-comb-jellies-ma.webp"
   },
   {
     "id": "2026-07-04-creature-design-cenote-rootwhisker",
@@ -3355,7 +3859,9 @@
       "name": "Cenote Rootwhisker",
       "description": "A plausible amphibious cenote animal with webbed swimming forelimbs, branching root-mimic whiskers, mineral-freckled wet skin, and juveniles hidden among submerged roots.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
-    }
+    },
+    "color": "#383624",
+    "thumb": "thumbs/2026-07-04-creature-design-cenote-rootwhisker.webp"
   },
   {
     "id": "2026-07-04-factual-infographic-factual-infographic-how-a-heat-dome-wor",
@@ -3372,7 +3878,9 @@
       "topic": "Heat dome formation and persistence",
       "description": "A real-world weather infographic explaining how a persistent high-pressure ridge can suppress clouds and mixing, steer storms around a region, and allow repeated solar heating and warm nights to build dangerous heat.",
       "sourceNote": "Conservative general meteorology: heat domes involve persistent high pressure/ridging, sinking/compressing air, reduced cloud cover and mixing, jet-stream blocking patterns, and cumulative surface heating; not a literal glass dome."
-    }
+    },
+    "color": "#5d5145",
+    "thumb": "thumbs/2026-07-04-factual-infographic-factual-infographic-how-a-heat-dome-wor.webp"
   },
   {
     "id": "2026-07-04-hybrid-creature-infographic-glassveil-tidewalker-developmen",
@@ -3390,7 +3898,9 @@
       "imageKind": "infographic",
       "description": "A fictional coconut octopus + glasswing butterfly hybrid shown as a wet mangrove development map and matching field phenotype.",
       "continuity": "Same palm-sized tidepool adult: octopus mantle, eight sucker-lined arms, shell shelter, transparent veined sail membranes, amber-black wing rims, antennae, and curled proboscis."
-    }
+    },
+    "color": "#33322a",
+    "thumb": "thumbs/2026-07-04-hybrid-creature-infographic-glassveil-tidewalker-developmen.webp"
   },
   {
     "id": "2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild",
@@ -3408,6 +3918,8 @@
       "imageKind": "wild",
       "description": "A fictional coconut octopus + glasswing butterfly hybrid photographed in a shallow mangrove tidepool.",
       "continuity": "Same palm-sized tidepool adult: octopus mantle, eight sucker-lined arms, shell shelter, transparent veined sail membranes, amber-black wing rims, antennae, and curled proboscis."
-    }
+    },
+    "color": "#4d4841",
+    "thumb": "thumbs/2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild.webp"
   }
 ]
