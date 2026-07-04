@@ -3,8 +3,8 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { getHeight, getNormal } from './terrain.js?v=4';
-import { SCATTER } from './config.js?v=4';
+import { getHeight, getNormal } from './terrain.js?v=5';
+import { SCATTER } from './config.js?v=5';
 
 function softCircleTexture(hard = false) {
   const s = 64;
@@ -17,6 +17,37 @@ function softCircleTexture(hard = false) {
   g.addColorStop(1, 'rgba(255,255,255,0)');
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, s, s);
+  return new THREE.CanvasTexture(cv);
+}
+
+// irregular dark-red splatter with outlying droplets
+function bloodTexture() {
+  const s = 64;
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = s;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, s, s);
+  for (let i = 0; i < 9; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = Math.random() * 14;
+    const x = s / 2 + Math.cos(a) * r;
+    const y = s / 2 + Math.sin(a) * r;
+    const rad = 4 + Math.random() * 9;
+    const g = ctx.createRadialGradient(x, y, 0, x, y, rad);
+    g.addColorStop(0, 'rgba(96,14,10,0.9)');
+    g.addColorStop(0.7, 'rgba(110,19,13,0.55)');
+    g.addColorStop(1, 'rgba(110,19,13,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, s, s);
+  }
+  for (let i = 0; i < 14; i++) {
+    const a = Math.random() * Math.PI * 2;
+    const r = 12 + Math.random() * 17;
+    ctx.fillStyle = 'rgba(90,13,9,0.75)';
+    ctx.beginPath();
+    ctx.arc(s / 2 + Math.cos(a) * r, s / 2 + Math.sin(a) * r, 0.8 + Math.random() * 1.8, 0, Math.PI * 2);
+    ctx.fill();
+  }
   return new THREE.CanvasTexture(cv);
 }
 
@@ -182,6 +213,32 @@ export class Effects {
     this.markLife = 22;
     const zeroM = new THREE.Matrix4().makeScale(0, 0, 0);
     for (let i = 0; i < SCATTER.treadMarks; i++) this.marks.setMatrixAt(i, zeroM);
+
+    // blood splats where infantry fall
+    const bsGeo = new THREE.PlaneGeometry(1.5, 1.5);
+    bsGeo.rotateX(-Math.PI / 2);
+    const bsMat = new THREE.MeshBasicMaterial({
+      map: bloodTexture(), transparent: true, opacity: 0.7, depthWrite: false,
+      polygonOffset: true, polygonOffsetFactor: -2,
+    });
+    this.splats = new THREE.InstancedMesh(bsGeo, bsMat, 90);
+    this.splats.frustumCulled = false;
+    scene.add(this.splats);
+    this.splatHead = 0;
+    for (let i = 0; i < 90; i++) this.splats.setMatrixAt(i, zeroM);
+  }
+
+  bloodSplat(x, z) {
+    const i = this.splatHead;
+    this.splatHead = (this.splatHead + 1) % this.splats.count;
+    const n = getNormal(x, z);
+    this.dummy.position.set(x, getHeight(x, z) + 0.05, z);
+    this.dummy.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), n);
+    this.dummy.rotateY(Math.random() * Math.PI * 2);
+    this.dummy.scale.setScalar(0.7 + Math.random() * 0.8);
+    this.dummy.updateMatrix();
+    this.splats.setMatrixAt(i, this.dummy.matrix);
+    this.splats.instanceMatrix.needsUpdate = true;
   }
 
   setParticleScale(s) { this.particleScale = s; }
