@@ -3,7 +3,10 @@
 //   POST {SCORES_API} {initials, score, extra}
 // Falls back to localStorage when offline.
 
-import { SCORES_API, HS_KEY, NAME_KEY } from './config.js?v=2';
+import { SCORES_API, HS_KEY, NAME_KEY, DAILY, DAILY_STAMP } from './config.js?v=3';
+
+// Daily Ridge runs score to their own per-day board
+const API = DAILY ? `${SCORES_API}-daily-${DAILY_STAMP}` : SCORES_API;
 
 let globalCache = null;
 
@@ -38,7 +41,7 @@ export async function fetchGlobal(force = false) {
   try {
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 8000);
-    const r = await fetch(SCORES_API, { signal: ctl.signal });
+    const r = await fetch(API, { signal: ctl.signal });
     clearTimeout(timer);
     const data = await r.json();
     const rows = Array.isArray(data) ? data : (data.scores || []);
@@ -57,7 +60,7 @@ export async function submitScore(initials, score, extra) {
   try {
     const ctl = new AbortController();
     const timer = setTimeout(() => ctl.abort(), 8000);
-    await fetch(SCORES_API, {
+    await fetch(API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initials, score, extra }),

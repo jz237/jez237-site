@@ -3,8 +3,8 @@
 // everything else — engine rumble, wind, clicks, whistles — is synthesized.
 // The synth versions remain as fallback until the samples finish decoding.
 
-import { MUTE_KEY } from './config.js?v=2';
-import { settings, setSetting } from './settings.js?v=2';
+import { MUTE_KEY } from './config.js?v=3';
+import { settings, setSetting } from './settings.js?v=3';
 
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
@@ -18,6 +18,10 @@ const MUSIC_TRACKS = {
 };
 const MUSIC_BASE = 0.62; // headroom under the combat SFX
 
+// commander voice lines (ElevenLabs), played through a radio bandpass
+const VO_LINES = ['deploy', 'armor', 'strike-ready', 'strike-in', 'critical',
+  'wave-clear', 'convoy', 'repaired', 'boss', 'streak'];
+
 export class GameAudio {
   constructor() {
     this.ctx = null;
@@ -29,6 +33,8 @@ export class GameAudio {
     this.musicLoading = {};
     this.musicNodes = null;   // { src, gain, track }
     this.musicWant = null;    // requested before the ctx exists
+    this.voBuffers = {};
+    this.voBusyUntil = 0;
   }
 
   ensure() {
@@ -40,6 +46,7 @@ export class GameAudio {
       this.master.connect(this.ctx.destination);
       this.startWind();
       this.loadSamples();
+      this.loadVoices();
       if (this.musicWant) this.startMusic(this.musicWant);
     } catch { return false; }
     return true;
@@ -101,6 +108,61 @@ export class GameAudio {
   setSfxVolume(v) {
     setSetting('sfxVol', v);
     if (this.master) this.master.gain.value = this.sfxGainValue();
+  }
+
+  // -------- commander voice callouts (radio-filtered) --------
+  loadVoices() {
+    for (const name of VO_LINES) {
+      fetch(`./assets/audio/vo-${name}.mp3`)
+        .then(r => r.arrayBuffer())
+        .then(buf => this.ctx.decodeAudioData(buf))
+        .then(decoded => { this.voBuffers[name] = decoded; })
+        .catch(() => {});
+    }
+  }
+
+  vo(name, priority = false) {
+    if (!this.ctx || !(settings.voiceOn ?? true)) return;
+    const buf = this.voBuffers[name];
+    if (!buf) return;
+    const now = this.ctx.currentTime;
+    if (!priority && now < this.voBusyUntil) return; // don't talk over yourself
+    this.voBusyUntil = now + buf.duration + 0.6;
+    const src = this.ctx.createBufferSource();
+    src.buffer = buf;
+    // radio squawk: bandpass + a touch of drive
+    const bp = this.ctx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.frequency.value = 1500;
+    bp.Q.value = 0.55;
+    const shaper = this.ctx.createWaveShaper();
+    const curve = new Float32Array(64);
+    for (let i = 0; i < 64; i++) {
+      const x = (i / 63) * 2 - 1;
+      curve[i] = Math.tanh(x * 2.2);
+    }
+    shaper.curve = curve;
+    const g = this.ctx.createGain();
+    g.gain.value = 0.9;
+    src.connect(bp).connect(shaper).connect(g).connect(this.master);
+    src.start(now);
+  }
+
+  // rapid coax MG report — short filtered noise snap per round
+  mgShot() {
+    if (!this.ctx) return;
+    const ctx = this.ctx, t = ctx.currentTime;
+    const n = ctx.createBufferSource();
+    n.buffer = this.noiseBuffer(0.05);
+    const f = ctx.createBiquadFilter();
+    f.type = 'bandpass';
+    f.frequency.value = 900 + Math.random() * 500;
+    f.Q.value = 1.1;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.22, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+    n.connect(f).connect(g).connect(this.master);
+    n.start(t);
   }
 
   loadSamples() {
