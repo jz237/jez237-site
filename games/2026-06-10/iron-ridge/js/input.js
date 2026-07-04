@@ -1,7 +1,7 @@
 // Unified input: keyboard + pointer-lock mouse on desktop, twin virtual
 // sticks + fire button on touch. Exposes one normalized state object.
 
-import { settings, setSetting } from './settings.js?v=4';
+import { settings, setSetting } from './settings.js?v=5';
 
 export const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
@@ -10,6 +10,8 @@ export class Input {
     this.canvas = canvas;
     this.throttle = 0;
     this.turn = 0;
+    this.stickX = 0;   // camera-relative drive vector (touch stick OR WASD)
+    this.stickY = 0;
     this.lookDX = 0;
     this.lookDY = 0;
     this.zoomDelta = 0;
@@ -265,16 +267,19 @@ export class Input {
     }, { passive: false });
   }
 
-  // call once per frame; merges keyboard into analog state
+  // call once per frame; keyboard becomes a camera-relative stick vector
+  // (same as touch): W drives away from the camera and the hull turns
+  // itself to match — no manual turning-around
   poll() {
     if (!isTouch) {
-      let th = 0, tr = 0;
-      if (this.keys.has('KeyW') || this.keys.has('ArrowUp')) th += 1;
-      if (this.keys.has('KeyS') || this.keys.has('ArrowDown')) th -= 1;
-      if (this.keys.has('KeyA') || this.keys.has('ArrowLeft')) tr -= 1;
-      if (this.keys.has('KeyD') || this.keys.has('ArrowRight')) tr += 1;
-      this.throttle = th;
-      this.turn = tr;
+      let sx = 0, sy = 0;
+      if (this.keys.has('KeyW') || this.keys.has('ArrowUp')) sy += 1;
+      if (this.keys.has('KeyS') || this.keys.has('ArrowDown')) sy -= 1;
+      if (this.keys.has('KeyA') || this.keys.has('ArrowLeft')) sx -= 1;
+      if (this.keys.has('KeyD') || this.keys.has('ArrowRight')) sx += 1;
+      const m = Math.hypot(sx, sy);
+      this.stickX = m ? sx / m : 0;
+      this.stickY = m ? sy / m : 0;
     }
   }
 

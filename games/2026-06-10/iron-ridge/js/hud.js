@@ -2,7 +2,7 @@
 // vignette, off-screen enemy arrows, leaderboard rendering, screens.
 
 import * as THREE from 'three';
-import { SHELL } from './config.js?v=4';
+import { SHELL } from './config.js?v=5';
 
 const $ = (id) => document.getElementById(id);
 const _v = new THREE.Vector3();
@@ -253,8 +253,9 @@ export class Hud {
     el.classList.toggle('active', mode === 'field' || mode === 'depot');
   }
 
-  // between-wave perk choice; onPick(perk) fires once
-  showPerks(perks, onPick, hint = '') {
+  // between-wave perk choice; onPick(perk) fires once. numbered = show the
+  // 1/2/3 key badges (desktop, where the mouse is pointer-locked)
+  showPerks(perks, onPick, hint = '', numbered = false) {
     const bar = this.el.perkBar;
     if (!bar) return;
     bar.innerHTML = `<div class="perk-title">FIELD UPGRADE — PICK ONE</div>` +
@@ -263,17 +264,17 @@ export class Hud {
     row.className = 'perk-row';
     bar.appendChild(row);
     let done = false;
-    for (const p of perks) {
+    perks.forEach((p, i) => {
       const btn = document.createElement('button');
       btn.className = 'perk-card';
-      btn.innerHTML = `<b>${p.name}</b><span>${p.desc}</span>`;
+      btn.innerHTML = `<b>${numbered ? `<span class="perk-num">${i + 1}</span>` : ''}${p.name}</b><span>${p.desc}</span>`;
       btn.addEventListener('click', () => {
         if (done) return;
         done = true;
         onPick(p);
       });
       row.appendChild(btn);
-    }
+    });
     bar.classList.remove('hidden');
   }
 
