@@ -128,7 +128,7 @@ body.lefty #muteBtn{right:calc(12px + var(--gutter) + env(safe-area-inset-right)
     <h1 class="title">Millipede</h1>
     <div class="byline">by Jez &amp; Kosh</div>
     <div class="subtitle">fungal arcade swarm</div>
-    <p class="small">Auto-fire clears fungus and segments. Touch: drag the lower field to steer. Desktop: mouse, WASD / arrows, or gamepad · Space = smart bomb · P = pause · M = mute · C = CRT. Chain kills for a ×5 combo, pick a build path every 4 waves, extra life every 25k. DAILY = same seed for everyone, fresh board each day.</p>
+    <p class="small">Auto-fire clears fungus and segments. Touch: drag the lower field to steer. Desktop: mouse, WASD / arrows, or gamepad · Space = smart bomb · P = pause · M = mute · C = CRT. Chain kills for a ×5 combo, pick a build path every 4 waves, extra life every 60k. DAILY = same seed for everyone, fresh board each day.</p>
     <div class="enemyguide" aria-label="Enemy field guide">
       <div class="wide">FIELD GUIDE</div>
       <div><canvas class="guideSprite" data-sprite="ship" width="76" height="56"></canvas><b>Shooter</b> your ship</div><div><canvas class="guideSprite" data-sprite="milli" width="76" height="56"></canvas><b>Millipede</b> crawler</div>
@@ -224,7 +224,7 @@ body.lefty #muteBtn{right:calc(12px + var(--gutter) + env(safe-area-inset-right)
 
 <script>
 'use strict';
-const VERSION = 'v2.1.1';
+const VERSION = 'v2.2.0';
 const SCORE_KEY = 'millipede_scores_v1';
 const LEGACY_SCORE_KEY = 'neon_myriapod_scores_v1';
 // Keep the original backing key so existing global scores remain associated after the URL rename.
@@ -234,7 +234,7 @@ const TOUCH_OFFSET = 48;
 const FINE_POINTER = matchMedia('(pointer:fine)').matches;
 const MUTE_KEY = 'millipede_muted';
 const CRT_KEY = 'millipede_crt';
-const EXTRA_LIFE_EVERY = 25000, MAX_LIVES = 5;
+const EXTRA_LIFE_EVERY = 60000, MAX_LIVES = 5;
 let muted = false;
 try{ muted = localStorage.getItem(MUTE_KEY) === '1'; }catch(e){}
 let crtOn = true;
@@ -287,7 +287,7 @@ function utcStamp(){
 const POWERUP_TYPES = [
   {id:'spread',label:'S',name:'SPREAD',color:'#56fff0',duration:10,weight:1.2},
   {id:'laser',label:'L',name:'LASER',color:'#ff4fc4',duration:5,weight:1},
-  {id:'shield',label:'B',name:'BEETLE',color:'#ffe66b',duration:12,weight:1},
+  {id:'shield',label:'B',name:'BEETLE',color:'#ffe66b',duration:8,weight:1},
   {id:'frost',label:'F',name:'FROST',color:'#9fdcff',duration:6,weight:1},
   {id:'score',label:'2X',name:'SCORE',color:'#a7ff55',duration:10,weight:1}
 ];
@@ -1125,7 +1125,7 @@ function killEnemy(e){
   creditKill();
   addPop(e.x,e.y,e.r+4,e.type==='scorpion'?'#ff48cc':'#ffd766');
   if(e.type==='inchworm'){
-    timeSlow = 3;
+    timeSlow = 2;
     addRing(e.x,e.y,'#a7ff55',Math.max(W,H)*.42,4);
     popups.push({x:e.x-44,y:e.y-20,t:'TIME SLOWED',life:1.2,color:'#a7ff55'});
   }
@@ -1240,7 +1240,7 @@ function updateDrones(dt, active){
     d.y = player.y - 6 + Math.sin(d.a + i*Math.PI) * orbit * .55;
     d.fire -= dt;
     if(d.fire <= 0 && state === 'playing' && player.dead <= 0){
-      d.fire = Math.max(.26, .52 - paths.drone*.05);
+      d.fire = Math.max(.32, .6 - paths.drone*.05);
       if(bullets.length < 57) bullets.push({x:d.x,y:d.y-8,vx:0,vy:-640,r:1.4,life:.9,dmg:1,mushDmg:1,drone:true});
     }
   });
@@ -1407,7 +1407,7 @@ function update(dt){
     if(wave >= 3 && spawn.flea<=0){ spawnFlea(); sfx('flea'); spawn.flea = Math.max(3.2, rand(7,11)-Math.min(3,wave*.18)-latePressure()*.07); }
     if(wave >= 3 && spawn.scorpion<=0){ spawnScorpion(); sfx('scorpion'); spawn.scorpion = Math.max(4.2, rand(10,15)-Math.min(4,wave*.2)-latePressure()*.09); }
     if(wave >= 5 && spawn.bee<=0){ spawnBee(); sfx('flea'); spawn.bee = Math.max(6.5, rand(12,18)-Math.min(5,wave*.22)); }
-    if(wave >= 4 && spawn.inchworm<=0){ spawnInchworm(); spawn.inchworm = rand(24,40); }
+    if(wave >= 4 && spawn.inchworm<=0){ spawnInchworm(); spawn.inchworm = rand(30,48); }
     if(crawlers.length === 0 && !maybeOfferUpgrade()) nextWave();
   }
   updateDrones(dt, play || demoMode);
@@ -1415,7 +1415,7 @@ function update(dt){
 }
 function updateCrawlers(dt, play){
   const cell = grid();
-  const frost = (powers.frost > 0 ? .48 : 1) * (timeSlow > 0 ? .45 : 1);
+  const frost = (powers.frost > 0 ? .48 : 1) * (timeSlow > 0 ? .58 : 1);
   crawlers.forEach(c=>{
     c.wiggle += dt*8*frost; c.turnLock = Math.max(0, (c.turnLock || 0) - dt); c.scatter = Math.max(0, (c.scatter || 0) - dt);
     c.segs.forEach(s=>{ s.grace = Math.max(0, (s.grace || 0) - dt); s.wound = Math.max(0, (s.wound || 0) - dt); });
@@ -1439,6 +1439,8 @@ function updateCrawlers(dt, play){
     if((blocked || edge) && c.turnLock <= 0){
       c.dir *= -1; c.turnLock = .11; lead.y = laneY + cell*.96; lead.x = clamp(Math.round(lead.x / cell) * cell + cell*.5, cell*.45, W-cell*.45);
       if(blocked) lead.y += cell*.12;
+      // Heads that reach the player band hunt: turns bias toward the ship.
+      if(play && !c.child && lead.y > H*.62) c.dir = player.x > lead.x ? 1 : -1;
     }
     if(c.child && c.scatter > 0){
       lead.x += c.dir * speed * 1.05;
@@ -1492,11 +1494,11 @@ function splitHitCrawler(c, play){
   out.forEach(o=>o.segs.forEach((s,i)=>s.head=i===0));
   return out;
 }
-function spawnSpider(){ const side = chooseEdgeSide(H*.78), spd = (rand(70,122) + latePressure()*3.2) * wf(); enemies.push({type:'spider',x:side>0?-22:W+22,y:rand(H*.7,H-48),vx:side*spd,vy:rand(-35,35),r:15,t:0,hp:2,warn:.85,safe:.55}); }
+function spawnSpider(){ const side = chooseEdgeSide(H*.78), spd = (rand(70,122) + latePressure()*3.2) * wf(); enemies.push({type:'spider',x:side>0?-22:W+22,y:rand(H*.7,H-48),vx:side*spd,vy:rand(-35,35),r:15,t:0,hp:2,warn:.65,safe:.3,life:rand(5.5,8.5)}); }
 function spawnFlea(){ enemies.push({type:'flea',x:safeTopX(),y:-24,vx:0,vy:rand(95,135)+wave*2+latePressure()*3.5,r:10,t:0,hp:1,drop:.42,warn:.7,safe:.45}); }
 function spawnScorpion(){ const side = chooseEdgeSide(H*.35), spd = (rand(62,94) + latePressure()*2.6) * wf(); enemies.push({type:'scorpion',x:side>0?-26:W+26,y:rand(58,H*.55),vx:side*spd,vy:0,r:13,t:0,hp:2,warn:.9,safe:.65}); }
 function updateEnemies(dt, play){
-  const frost = (powers.frost > 0 ? .55 : 1) * (timeSlow > 0 ? .45 : 1);
+  const frost = (powers.frost > 0 ? .55 : 1) * (timeSlow > 0 ? .58 : 1);
   enemies.forEach(e=>{
     e.t += dt*frost; e.warn = Math.max(0, (e.warn || 0) - dt);
     if(e.warn > 0) return;
@@ -1515,8 +1517,20 @@ function updateEnemies(dt, play){
       e.vy += 300*dt*frost;
       e.x += e.vx*dt*frost; e.y += e.vy*dt*frost;
       if(e.y >= e.landY){ e.dead = true; addMushroom(e.x,Math.min(e.landY,H-120),3,true); burst(e.x,e.landY,'#ff4fc4',10); }
+    } else if(e.type==='spider'){
+      // Spiders now prowl: bounce off side walls while alive, drift toward the
+      // player's row instead of wandering off. After `life` runs out they exit.
+      e.life = (e.life === undefined ? 7 : e.life - dt*frost);
+      if(e.life > 0){
+        if(e.x < 24 && e.vx < 0) e.vx = Math.abs(e.vx);
+        if(e.x > W-24 && e.vx > 0) e.vx = -Math.abs(e.vx);
+      }
+      const targetY = state === 'playing' ? player.y : H*.8;
+      e.x += e.vx*dt*frost;
+      e.y += (clamp((targetY - e.y)*.9, -48, 48) + Math.sin(e.t*5)*30)*dt*frost;
+      e.y = clamp(e.y, H*.58, H-34);
     } else {
-      e.x += e.vx*dt*frost; e.y += (e.vy + Math.sin(e.t*5)*28*(e.type==='spider'))*dt*frost;
+      e.x += e.vx*dt*frost; e.y += e.vy*dt*frost;
     }
     if(e.type==='flea'){ e.drop-=dt; if(e.drop<=0){ e.drop=.32; addMushroom(e.x,e.y,3,false); } }
     if(e.type==='scorpion'){ mushrooms.forEach(m=>{ if(Math.abs(m.y-e.y)<14 && Math.abs(m.x-e.x)<18) m.poison=true; }); }
