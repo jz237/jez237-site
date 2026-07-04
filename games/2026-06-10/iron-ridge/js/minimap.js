@@ -2,8 +2,8 @@
 // live blips for enemies/pillboxes/targets/barrels/crates, view cone, and
 // edge-clamped chevrons for threats beyond minimap range.
 
-import { getHeight, forestDensity } from './terrain.js';
-import { WORLD_HALF } from './config.js';
+import { getHeight, forestDensity } from './terrain.js?v=2';
+import { WORLD_HALF } from './config.js?v=2';
 
 const RANGE = 130;       // metres shown from centre to edge
 

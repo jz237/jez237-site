@@ -5,8 +5,8 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { Simplex2, makeRng } from './noise.js';
-import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG } from './config.js';
+import { Simplex2, makeRng } from './noise.js?v=2';
+import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG } from './config.js?v=2';
 
 const simplex = new Simplex2(90210);
 const detail = new Simplex2(417);
