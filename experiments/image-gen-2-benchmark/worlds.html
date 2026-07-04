@@ -293,28 +293,29 @@
 </head>
 <body>
   <header id="site-nav"></header>
-  <header class="hero">
-    <div class="hero-layout">
-      <div>
-        <h1>Fictional Worlds</h1>
-        <p class="lede">Recurring fictional settings grouped by world, with scenes, maps, artifacts, and continuity notes.</p>
-        <div class="meta">
-          <span class="pill stat" id="world-count-pill">Worlds: loading...</span>
-          <span class="pill stat" id="image-count-pill">Images: loading...</span>
-          <a class="pill featured" href="mirthcap-story.html">Mirthcap story</a>
-          <a class="pill" href="hybrid-creatures.html">Hybrid creatures</a>
-          <a class="pill" href="creature-designs.html">Creature designs</a>
-          <a class="pill" href="random-rendering-style.html">Random rendering style</a>
-          <a class="pill" href="world-that-never-was.html">World that never was</a>
-          <a class="pill" href="index.html">Image archive</a>
-        </div>
-      </div>
-      <div class="hero-panel">
-        <p class="hero-panel-label">Jump to world</p>
-        <select class="control" id="world-picker" aria-label="Jump to fictional world">
-          <option value="">Loading worlds...</option>
-        </select>
-      </div>
+  <header class="hero museum-hero">
+    <h1>Fictional Worlds</h1>
+    <div class="ornament" aria-hidden="true">✦</div>
+    <p class="lede">Recurring fictional settings grouped by world, with scenes, maps, artifacts, and continuity notes.</p>
+    <div class="hero-controls" aria-label="Page controls">
+      <select class="control" id="world-picker" aria-label="Jump to fictional world"><option value="">Loading worlds...</option></select>
+      <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
+    </div>
+    <nav class="series-nav" aria-label="Image series">
+      <a href="index.html">Image archive</a>
+      <a href="worlds.html" aria-current="page">Fictional worlds</a>
+      <a href="factual-infographics.html">Factual infographics</a>
+      <a href="hybrid-creatures.html">Hybrid creatures</a>
+      <a href="creature-designs.html">Creature designs</a>
+      <a href="random-rendering-style.html">Random rendering style</a>
+      <a href="world-that-never-was.html">World that never was</a>
+      <a href="subject-artifacts.html">Subject as artifact</a>
+      <a href="data-artifacts.html">Data as artifact</a>
+      <a href="mirthcap-story.html">Mirthcap story</a>
+    </nav>
+    <div class="meta">
+      <span class="pill stat" id="world-count-pill">Worlds: loading...</span>
+      <span class="pill stat" id="image-count-pill">Images: loading...</span>
     </div>
   </header>
   <main id="worlds" aria-live="polite">
@@ -536,5 +537,6 @@
     })();
   </script>
   <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="museum-theme.js?v=1" defer></script>
 </body>
 </html>

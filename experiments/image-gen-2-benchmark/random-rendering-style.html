@@ -141,17 +141,26 @@
 </head>
 <body>
   <header id="site-nav"></header>
-  <header class="hero">
+  <header class="hero museum-hero">
     <h1>Random Rendering Style</h1>
+    <div class="ornament" aria-hidden="true">✦</div>
     <p class="lede">One-off visual media and rendering treatments.</p>
+    <div class="hero-controls" aria-label="Page controls">
+      <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
+    </div>
+    <nav class="series-nav" aria-label="Image series">
+      <a href="index.html">Image archive</a>
+      <a href="worlds.html">Fictional worlds</a>
+      <a href="factual-infographics.html">Factual infographics</a>
+      <a href="hybrid-creatures.html">Hybrid creatures</a>
+      <a href="creature-designs.html">Creature designs</a>
+      <a href="random-rendering-style.html" aria-current="page">Random rendering style</a>
+      <a href="world-that-never-was.html">World that never was</a>
+      <a href="subject-artifacts.html">Subject as artifact</a>
+      <a href="data-artifacts.html">Data as artifact</a>
+    </nav>
     <div class="meta">
       <span class="pill stat" id="style-count-pill">Images: loading...</span>
-      <a class="pill featured" href="index.html">Image archive</a>
-      <a class="pill" href="creature-designs.html">Creature designs</a>
-      <a class="pill" href="hybrid-creatures.html">Hybrid creatures</a>
-      <a class="pill" href="factual-infographics.html">Factual infographics</a>
-      <a class="pill" href="worlds.html">Fictional worlds</a>
-      <a class="pill" href="world-that-never-was.html">World that never was</a>
     </div>
   </header>
   <main>
@@ -274,5 +283,6 @@
     })();
   </script>
   <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="museum-theme.js?v=1" defer></script>
 </body>
 </html>
