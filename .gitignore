@@ -13,5 +13,21 @@ node_modules/
 dist/
 build/
 
+# Externally hosted media
+/experiments/image-gen-2-benchmark/images/
+/experiments/image-gen-2-benchmark/thumbs/
+/photos/garden/images/
+
+# Secrets/credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+secrets.*
+credentials.json
+
 # macOS
 .DS_Store
