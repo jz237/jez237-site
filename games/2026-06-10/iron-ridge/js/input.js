@@ -1,7 +1,7 @@
 // Unified input: keyboard + pointer-lock mouse on desktop, twin virtual
 // sticks + fire button on touch. Exposes one normalized state object.
 
-import { REVERSE_LOOK_KEY } from './config.js';
+import { settings, setSetting } from './settings.js';
 
 export const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
@@ -19,7 +19,7 @@ export class Input {
     this.pauseQueued = false;
     this.keys = new Set();
     this.locked = false;
-    this.reverseLook = localStorage.getItem(REVERSE_LOOK_KEY) === '1';
+    this.reverseLook = settings.reverseLook;
 
     window.addEventListener('keydown', (e) => {
       if (e.repeat) return;
@@ -41,8 +41,8 @@ export class Input {
     });
     canvas.addEventListener('mousemove', (e) => {
       if (!this.locked) return;
-      this.lookDX += e.movementX;
-      this.lookDY += e.movementY;
+      this.lookDX += e.movementX * settings.lookSens;
+      this.lookDY += e.movementY * settings.lookSens;
     });
     canvas.addEventListener('mousedown', (e) => {
       if (e.button === 0 && this.locked) { this.firing = true; this.fireQueued = true; }
@@ -71,7 +71,7 @@ export class Input {
 
   setReverseLook(on) {
     this.reverseLook = !!on;
-    localStorage.setItem(REVERSE_LOOK_KEY, this.reverseLook ? '1' : '0');
+    setSetting('reverseLook', this.reverseLook);
   }
 
   setupTouch() {
@@ -86,14 +86,16 @@ export class Input {
     this.stickX = 0;
     this.stickY = 0;
 
-    let stickId = null, lookId = null;
+    let stickId = null, lookId = null, fireId = null, pinchId = null;
     let sx = 0, sy = 0;
-    const RANGE = 56;
     const homeRect = stick.getBoundingClientRect();
     const homeX = homeRect.left, homeY = homeRect.top;
-    const half = stick.offsetWidth / 2 || 62;
+    // sizes are live: the control-size option rescales the elements
+    const half = () => stick.offsetWidth / 2 || 62;
+    const range = () => (stick.offsetWidth || 124) * 0.45;
 
     const stickPos = (t) => {
+      const RANGE = range();
       const dx = t.clientX - sx, dy = t.clientY - sy;
       const len = Math.hypot(dx, dy) || 1;
       const cl = Math.min(len, RANGE);
@@ -101,7 +103,7 @@ export class Input {
       knob.style.transform = `translate(${nx}px, ${ny}px)`;
       // deadzone + smooth response curve
       const mRaw = cl / RANGE;
-      const m = mRaw < 0.16 ? 0 : (mRaw - 0.16) / 0.84;
+      const m = mRaw < 0.14 ? 0 : (mRaw - 0.14) / 0.86;
       this.stickX = (nx / RANGE) * (m / (mRaw || 1));
       this.stickY = -(ny / RANGE) * (m / (mRaw || 1));
     };
@@ -112,8 +114,8 @@ export class Input {
       if (stickId !== null) return;
       stickId = t.identifier;
       sx = t.clientX; sy = t.clientY;
-      stick.style.left = `${sx - half}px`;
-      stick.style.top = `${sy - half}px`;
+      stick.style.left = `${sx - half()}px`;
+      stick.style.top = `${sy - half()}px`;
       stick.style.bottom = 'auto';
       stick.classList.add('active');
       stickPos(t);
@@ -121,18 +123,42 @@ export class Input {
     }, { passive: false });
 
     let lastLX = 0, lastLY = 0;
+    let lastPinchD = 0;
+    const touchById = (e, id) => {
+      for (const t of e.touches) if (t.identifier === id) return t;
+      return null;
+    };
     lookZone.addEventListener('touchstart', (e) => {
       const t = e.changedTouches[0];
-      if (lookId !== null) return;
-      lookId = t.identifier;
-      lastLX = t.clientX; lastLY = t.clientY;
+      if (lookId === null) {
+        lookId = t.identifier;
+        lastLX = t.clientX; lastLY = t.clientY;
+      } else if (pinchId === null) {
+        // second finger on the look side = pinch zoom
+        pinchId = t.identifier;
+        const a = touchById(e, lookId);
+        if (a) lastPinchD = Math.hypot(t.clientX - a.clientX, t.clientY - a.clientY);
+      }
       e.preventDefault();
     }, { passive: false });
 
     // consistent look feel across phone sizes
-    const lookScale = () => 2.6 * (820 / Math.max(360, window.innerWidth));
+    const lookScale = () => 2.6 * (820 / Math.max(360, window.innerWidth)) * settings.lookSens;
 
+    let lastFX = 0, lastFY = 0;
     window.addEventListener('touchmove', (e) => {
+      if (pinchId !== null && lookId !== null) {
+        const a = touchById(e, lookId), b = touchById(e, pinchId);
+        if (a && b) {
+          const d = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
+          this.zoomDelta -= (d - lastPinchD) * 0.045;
+          lastPinchD = d;
+          // keep the look anchor fresh so releasing the pinch doesn't jump
+          lastLX = a.clientX; lastLY = a.clientY;
+        }
+        e.preventDefault();
+        return;
+      }
       for (const t of e.changedTouches) {
         if (t.identifier === stickId) stickPos(t);
         else if (t.identifier === lookId) {
@@ -140,9 +166,15 @@ export class Input {
           this.lookDX += (t.clientX - lastLX) * k;
           this.lookDY += (t.clientY - lastLY) * k;
           lastLX = t.clientX; lastLY = t.clientY;
+        } else if (t.identifier === fireId) {
+          // drag on the fire button aims too — hold to fire, slide to track
+          const k = lookScale();
+          this.lookDX += (t.clientX - lastFX) * k;
+          this.lookDY += (t.clientY - lastFY) * k;
+          lastFX = t.clientX; lastFY = t.clientY;
         }
       }
-      if (stickId !== null || lookId !== null) e.preventDefault();
+      if (stickId !== null || lookId !== null || fireId !== null) e.preventDefault();
     }, { passive: false });
 
     const endTouch = (e) => {
@@ -155,17 +187,28 @@ export class Input {
           stick.style.left = `${homeX}px`;
           stick.style.top = `${homeY}px`;
         }
-        if (t.identifier === lookId) lookId = null;
+        if (t.identifier === lookId) {
+          lookId = null;
+          if (pinchId !== null) { lookId = pinchId; pinchId = null; }
+        } else if (t.identifier === pinchId) pinchId = null;
+        if (t.identifier === fireId) { fireId = null; this.firing = false; }
       }
     };
     window.addEventListener('touchend', endTouch);
     window.addEventListener('touchcancel', endTouch);
 
     fireBtn.addEventListener('touchstart', (e) => {
+      const t = e.changedTouches[0];
+      fireId = t.identifier;
+      lastFX = t.clientX; lastFY = t.clientY;
       this.firing = true; this.fireQueued = true;
       e.preventDefault();
     }, { passive: false });
-    fireBtn.addEventListener('touchend', () => { this.firing = false; });
+
+    document.getElementById('btn-reload')?.addEventListener('touchstart', (e) => {
+      this.reloadQueued = true;
+      e.preventDefault();
+    }, { passive: false });
 
     document.getElementById('btn-pause-touch')?.addEventListener('touchstart', (e) => {
       this.pauseQueued = true;

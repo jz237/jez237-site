@@ -147,10 +147,12 @@ function rockTexture() {
   ], { seed: 33 });
 }
 
-const COL_TINT_A = new THREE.Color(0x9cbc7e);   // grass tint variation (multiplies texture)
-const COL_TINT_B = new THREE.Color(0xc9d89c);
-const COL_DRY = new THREE.Color(0xd2cb8e);
-const COL_LUSH = new THREE.Color(0x7cae6a);     // deeper meadow-green patches
+// tints multiply the (already colored) photo grass texture, so they sit
+// near white with mild hue variation instead of carrying the green themselves
+const COL_TINT_A = new THREE.Color(0xdcead0);   // grass tint variation (multiplies texture)
+const COL_TINT_B = new THREE.Color(0xf2f7d8);
+const COL_DRY = new THREE.Color(0xf0e6ae);
+const COL_LUSH = new THREE.Color(0xa8cc8a);     // deeper meadow-green patches
 
 export function buildTerrain(scene, world) {
   // ---- visual mesh ----
@@ -210,6 +212,15 @@ export function buildTerrain(scene, world) {
     roughness: 0.96,
     metalness: 0.0,
     map: gTex,
+  });
+
+  // photoreal seamless grass (AI-generated) replaces the canvas placeholder
+  // as soon as it loads; the canvas texture keeps first paint instant
+  new THREE.TextureLoader().load('./assets/textures/grass.jpg', (tex) => {
+    tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.anisotropy = 8;
+    mat.map = tex;
   });
   mat.onBeforeCompile = (shader) => {
     shader.uniforms.dirtMap = { value: dTex };
