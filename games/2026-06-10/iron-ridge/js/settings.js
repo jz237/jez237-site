@@ -15,7 +15,7 @@ export const DEFAULTS = {
   quality: 'auto',   // 'auto' | 0..3 (locked level)
   camShake: true,
   musicOn: true,
-  musicVol: 0.55,
+  musicVol: 0.65,
   sfxVol: 1.0,
   showFps: true,
 };
