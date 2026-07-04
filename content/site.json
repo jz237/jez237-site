@@ -51,37 +51,43 @@
   "games": [
     {
       "name": "👷 Hard Hat Mac",
-      "desc": "Classic 1983 Apple II remake — 3 construction levels.",
+      "desc": "The 1983 Apple II classic, fully remastered — 4 levels, power-ups, chiptune music, global scores.",
       "status": "live",
-      "link": "https://jz237.github.io/games/hard-hat-mac/"
+      "link": "/games/hard-hat-mac/"
     },
     {
       "name": "💎 Crystal Cavern",
       "desc": "Descend through dark crystal caves with dynamic lighting.",
       "status": "live",
-      "link": "https://jz237.github.io/games/2026-03-16/crystal-cavern/"
+      "link": "/games/2026-03-16/crystal-cavern/"
     },
     {
       "name": "🖖 Super Star Trek",
       "desc": "The 70s computer classic — reborn with LCARS visuals.",
       "status": "live",
-      "link": "https://jz237.github.io/games/2026-03-27/star-trek/"
+      "link": "/games/2026-03-27/star-trek/"
     },
     {
-      "name": "🏮 Lantern Creek",
-      "desc": "Guide glowing lanterns down a moonlit stream.",
+      "name": "💵 Corner Pocket II: Back Room",
+      "desc": "Board two — true multiball with ball-to-ball physics and a live mini pool table on the playfield.",
       "status": "live",
-      "link": "https://jz237.github.io/games/2026-03-29/lantern-creek/"
+      "link": "/games/2026-07-03/corner-pocket-2/"
+    },
+    {
+      "name": "🌀 Eddy",
+      "desc": "Fluid-dynamics herding game: swipe simulated water to guide spores home.",
+      "status": "live",
+      "link": "/games/2026-06-10/eddy/"
     },
     {
       "name": "⚡ Neon Qix",
       "desc": "Modernized Qix with neon field capture.",
       "status": "live",
-      "link": "https://jz237.github.io/games/2026-04-09/quix-modern/"
+      "link": "/games/2026-04-09/quix-modern/"
     },
     {
-      "name": "🎮 See all 25 games →",
-      "desc": "The full GameMaster Arcade — featured, classic, and experimental builds.",
+      "name": "🎮 See all games →",
+      "desc": "The full GameMaster Arcade — featured, classic, experimental, Three.js, and mobile-first browser games.",
       "status": "live",
       "link": "/games/"
     }
@@ -89,7 +95,7 @@
   "photos": [
     {
       "name": "🐱 Cat Corner",
-      "desc": "Luca, Cosmo, Taco & Marty — 30 photos and counting.",
+      "desc": "Luca, Cosmo, Taco & Marty — 34 photos and counting.",
       "status": "live",
       "link": "/photos/cats/"
     },
