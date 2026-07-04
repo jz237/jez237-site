@@ -16,7 +16,7 @@ const MUSIC_TRACKS = {
   menu: './assets/audio/music-menu.mp3',
   battle: './assets/audio/music-battle.mp3',
 };
-const MUSIC_BASE = 0.42; // headroom under the combat SFX
+const MUSIC_BASE = 0.62; // headroom under the combat SFX
 
 export class GameAudio {
   constructor() {
@@ -55,7 +55,7 @@ export class GameAudio {
       .then(r => r.arrayBuffer())
       .then(buf => this.ctx.decodeAudioData(buf))
       .then(decoded => { this.musicBuffers[track] = decoded; return decoded; })
-      .catch(() => null);
+      .catch(() => { delete this.musicLoading[track]; return null; }); // flaky network: retry later
     return this.musicLoading[track];
   }
 
@@ -134,7 +134,10 @@ export class GameAudio {
   }
 
   resume() {
-    if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume();
+    // iOS can leave the context 'interrupted' after backgrounding
+    if (this.ctx && this.ctx.state !== 'running') this.ctx.resume();
+    // music that failed to load (or never got a chance) tries again here
+    if (this.ctx && this.musicWant && !this.musicNodes) this.startMusic(this.musicWant);
   }
 
   setMuted(m) {

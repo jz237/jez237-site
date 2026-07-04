@@ -9,6 +9,10 @@
 /assets/*
   Cache-Control: public, max-age=300, must-revalidate
 
+# game code updates often — always revalidate (etag 304s keep this cheap)
+/games/*
+  Cache-Control: public, max-age=0, must-revalidate
+
 /assets/nav.js
   Cache-Control: no-cache, must-revalidate
 
