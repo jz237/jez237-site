@@ -138,6 +138,20 @@ function blockPublishedValue(block) {
   return Math.max(...blockItems(block).map(item => new Date(item.published || 0).getTime() || 0), 0);
 }
 
+function blockLocalDayIndex(block) {
+  const publishedValue = blockPublishedValue(block);
+  if (!publishedValue) return 0;
+  return dayIndexForKey(localDateKey(new Date(publishedValue)));
+}
+
+function compareTopBriefingBlocks(a, b, newestDayIndex) {
+  const aAgeDays = Math.max(0, newestDayIndex - blockLocalDayIndex(a));
+  const bAgeDays = Math.max(0, newestDayIndex - blockLocalDayIndex(b));
+  return (aAgeDays - bAgeDays)
+    || (blockScore(b) - blockScore(a))
+    || (blockPublishedValue(b) - blockPublishedValue(a));
+}
+
 function blockRepresentative(block) {
   if (block?.type !== 'source-group') return block?.item || block;
   return block.representative || block.items[0];
@@ -187,7 +201,10 @@ function buildStoryBlocks(items) {
     if (group.items.length < 2) return;
     group.items.sort((a, b) => (b.score || 0) - (a.score || 0));
     const root = findSourceRoot(group.items, group.articleUrl);
-    const representative = group.items[0];
+    const representative = [...group.items].sort((a, b) => {
+      return (new Date(b.published || 0) - new Date(a.published || 0))
+        || ((b.score || 0) - (a.score || 0));
+    })[0];
     group.items.forEach(item => consumedUrls.add(item.url));
     sourceGroups.push({
       type: 'source-group',
@@ -579,8 +596,9 @@ async function init() {
 
       const storyBlocks = buildStoryBlocks(items);
       const topCount = category === 'AI' ? Math.min(4, storyBlocks.length) : Math.min(3, storyBlocks.length);
+      const newestDayIndex = Math.max(...storyBlocks.map(blockLocalDayIndex), 0);
       const topStories = [...storyBlocks]
-        .sort((a, b) => (blockScore(b) - blockScore(a)) || (blockPublishedValue(b) - blockPublishedValue(a)))
+        .sort((a, b) => compareTopBriefingBlocks(a, b, newestDayIndex))
         .slice(0, topCount);
       const topSet = new Set(topStories.map(blockId));
 
