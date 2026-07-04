@@ -3921,5 +3921,24 @@
     },
     "color": "#4d4841",
     "thumb": "thumbs/2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild.webp"
+  },
+  {
+    "id": "2026-07-04-random-image-style-random-rendering-style-embroidered-tidep",
+    "title": "Random rendering style: Embroidered Tidepool Tram Stop",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified exact PNG output path before append; appended as high-quality JPEG and uploaded to R2 by append-entry.py.",
+    "prompt": "Create a finished square image of a tiny tidepool tram stop rendered as richly detailed raised embroidery and stumpwork textile art, photographed close like a museum textile under soft raking light. The subject is a whimsical coastal transit scene made entirely from thread, felt, beads, and stitched fabric, not a poster and not a flat graphic: a thumb-sized tram shelter perched on barnacle-covered rocks, a miniature cable tram made from layered satin stitches and padded felt panels, seaweed handrails in twisted green floss, bead tidepools with clear glass seed beads and pearly French knots, tiny embroidered anemones, stitched limpets, silver-thread rail lines disappearing over wet rocks, a shell-fragment bench made from cream felt, a small maintenance tool roll, tide marks in variegated blue thread, salt crystals suggested by white knots, and a low horizon of fabric waves behind it. Make the medium visibly control everything: raised padded forms, couching, satin stitch, chain stitch, French knots, frayed fabric edges, visible hoop tension, needle holes, thread sheen, soft shadows between stitched layers, and a few sewing pins and embroidery scissors just outside the hoop for scale. Use a palette of sea-glass teal, kelp green, coral pink, pearl white, charcoal rock, tarnished silver, and warm brass tram lamps. Avoid readable text, logos, watermarks, paper-poster layout, ordinary photo realism, generic filter effect, cinematic scene framing, and any result that looks like a flat printed illustration rather than handmade textile relief.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_SCENE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, cinematic scene framing, and a generic filter effect.\n\nExample substitution: [SUBJECT_OR_SCENE] = a tiny tidepool tram stop; [STYLE_OR_MEDIUM] = raised embroidery and stumpwork textile art; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = padded forms, couching, satin stitch, chain stitch, French knots, frayed fabric edges, visible hoop tension, needle holes, thread sheen, sewing pins, and embroidery scissors; [ENVIRONMENTAL_CONTEXT] = barnacle-covered rocks, bead tidepools, fabric waves, stitched limpets, anemones, salt knots, and silver-thread rails; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = miniature cable tram, tram shelter, seaweed handrails, shell-fragment bench, and maintenance tool roll; [SPECIFIC_PALETTE] = sea-glass teal, kelp green, coral pink, pearl white, charcoal rock, tarnished silver, and warm brass lamps.",
+    "image": "images/2026-07-04-random-image-style-random-rendering-style-embroidered-tidep.jpg",
+    "thumb": "thumbs/2026-07-04-random-image-style-random-rendering-style-embroidered-tidep.webp",
+    "color": "#57544b",
+    "date": "2026-07-04",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "raised embroidery and stumpwork textile art",
+      "description": "A handmade-looking coastal tram stop scene built from padded stitches, beads, felt, floss, and visible textile relief.",
+      "template": "Render [SUBJECT_OR_SCENE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, cinematic scene framing, and a generic filter effect."
+    }
   }
 ]
