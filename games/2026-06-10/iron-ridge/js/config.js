@@ -140,26 +140,26 @@ export const ENEMY_TYPES = {
   scout: {
     scheme: 'scout', scale: 0.85, hp: 60, points: 400,
     shellDamage: 10, reload: 3.4, aimNoise: 0.07,
-    maxSpeed: 16, engineForce: 5200, maxYawRate: 1.35,
+    maxSpeed: 13.6, engineForce: 5200, maxYawRate: 1.35,
     preferredRange: 48, minRange: 26,
   },
   standard: {
     scheme: 'desert', scale: 1.0, hp: 100, points: 500,
     shellDamage: 14, reload: 4.4, aimNoise: 0.055,
-    maxSpeed: 12.5, engineForce: 5200, maxYawRate: 1.1,
+    maxSpeed: 10.6, engineForce: 5200, maxYawRate: 1.1,
     preferredRange: 62, minRange: 34,
   },
   heavy: {
     scheme: 'heavy', scale: 1.18, hp: 200, points: 900,
     shellDamage: 24, reload: 5.6, aimNoise: 0.045,
-    maxSpeed: 8.5, engineForce: 6200, maxYawRate: 0.8,
+    maxSpeed: 7.2, engineForce: 6200, maxYawRate: 0.8,
     preferredRange: 75, minRange: 45,
   },
   // the Iron Colossus: every-5th-wave breakthrough monster
   boss: {
     scheme: 'boss', scale: 1.5, hp: 520, points: 2500,
     shellDamage: 30, reload: 5.2, aimNoise: 0.04,
-    maxSpeed: 7.5, engineForce: 7200, maxYawRate: 0.68,
+    maxSpeed: 6.4, engineForce: 7200, maxYawRate: 0.68,
     preferredRange: 78, minRange: 46,
   },
 };

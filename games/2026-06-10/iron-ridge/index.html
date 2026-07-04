@@ -94,8 +94,15 @@
     text-shadow: 0 1px 8px #000; margin-bottom: 3px; font-weight: 800;
   }
   .perk-hint {
-    font-size: 11px; letter-spacing: 2px; color: var(--ink);
-    text-shadow: 0 1px 6px #000; margin-bottom: 7px; opacity: 0.85;
+    font-size: 15px; letter-spacing: 3px; color: var(--accent2);
+    font-weight: 900; text-shadow: 0 1px 8px #000; margin-bottom: 8px;
+    animation: strikePulse 1.2s ease-in-out infinite;
+  }
+  .perk-num {
+    display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+    margin-right: 7px; border-radius: 50%;
+    background: var(--accent2); color: #1a1406;
+    font-weight: 900; font-size: 13px; text-align: center;
   }
   .perk-row { display: flex; gap: 8px; }
   .perk-card {
@@ -539,7 +546,7 @@
     <div class="title">IRON RIDGE</div>
     <div class="subtitle">open-field tank combat — real physics, real recoil</div>
     <div class="controls-info" id="controls-desktop">
-      <b>WASD / arrows</b> — drive &nbsp;·&nbsp; <b>mouse</b> — aim &nbsp;·&nbsp; <b>click / space</b> — fire<br/>
+      <b>WASD / arrows</b> — drive where you point (the hull turns itself) &nbsp;·&nbsp; <b>mouse</b> — aim &nbsp;·&nbsp; <b>click / space</b> — fire<br/>
       <b>1 / 2</b> — AP / HE shells &nbsp;·&nbsp; <b>hold right-click</b> — coax MG &nbsp;·&nbsp; <b>R</b> — restock<br/>
       <b>E</b> — field repair (sit still, or park at the green depot) &nbsp;·&nbsp; <b>F</b> — airstrike<br/>
       <b>Shift</b> — boost &nbsp;·&nbsp; <b>G</b> — ping &nbsp;·&nbsp; <b>scroll</b> — zoom &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
@@ -686,7 +693,7 @@
   }
 }
 </script>
-<script type="module" src="./js/main.js?v=4"></script>
+<script type="module" src="./js/main.js?v=5"></script>
 <script>
   // show matching controls hint
   if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {

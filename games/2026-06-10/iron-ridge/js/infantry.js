@@ -4,10 +4,12 @@
 // head, helmet, rifle) share one matrix per soldier: 4 draw calls total.
 
 import * as THREE from 'three';
-import { getHeight } from './terrain.js?v=4';
-import { INFANTRY } from './config.js?v=4';
+import { getHeight } from './terrain.js?v=5';
+import { INFANTRY } from './config.js?v=5';
 
 const _m = new THREE.Matrix4();
+const _lm = new THREE.Matrix4();
+const _fm = new THREE.Matrix4();
 const _q = new THREE.Quaternion();
 const _e = new THREE.Euler();
 const _p = new THREE.Vector3();
@@ -15,47 +17,91 @@ const _s = new THREE.Vector3(1, 1, 1);
 const _zero = new THREE.Matrix4().makeScale(0, 0, 0);
 
 const UNIFORMS = [0x5c6647, 0x66604a, 0x4f5a50]; // olive/khaki/grey-green
+const HIP_Y = 0.66;
 
 export class Infantry {
   constructor(scene) {
     this.scene = scene;
     const mats = {
       cloth: new THREE.MeshStandardMaterial({ roughness: 0.9 }),
+      clothDark: new THREE.MeshStandardMaterial({ color: 0x474f38, roughness: 0.92 }),
       skin: new THREE.MeshStandardMaterial({ color: 0xc9a279, roughness: 0.8 }),
       steel: new THREE.MeshStandardMaterial({ color: 0x3d4438, roughness: 0.6, metalness: 0.3 }),
       gun: new THREE.MeshStandardMaterial({ color: 0x2e2a24, roughness: 0.7, metalness: 0.3 }),
+      pack: new THREE.MeshStandardMaterial({ color: 0x555c40, roughness: 0.95 }),
+      boot: new THREE.MeshStandardMaterial({ color: 0x2a241d, roughness: 0.9 }),
     };
-    const body = new THREE.CapsuleGeometry(0.21, 0.72, 3, 6);
-    body.translate(0, 0.82, 0);
-    const head = new THREE.SphereGeometry(0.145, 6, 5);
-    head.translate(0, 1.44, 0);
-    const helmet = new THREE.SphereGeometry(0.185, 7, 4, 0, Math.PI * 2, 0, Math.PI * 0.55);
-    helmet.translate(0, 1.47, 0);
-    const rifle = new THREE.BoxGeometry(0.055, 0.055, 0.85);
-    rifle.translate(0.2, 1.05, 0.32);
+    // torso with webbing belt, head under a brimmed helmet, slung rifle,
+    // field pack, cross-chest arms; legs get their own matrices so they swing
+    const torso = new THREE.CapsuleGeometry(0.19, 0.42, 3, 7);
+    torso.translate(0, 1.02, 0);
+    const belt = new THREE.CylinderGeometry(0.21, 0.21, 0.09, 8);
+    belt.translate(0, 0.8, 0);
+    const head = new THREE.SphereGeometry(0.135, 7, 6);
+    head.translate(0, 1.43, 0);
+    const helmet = new THREE.SphereGeometry(0.18, 8, 5, 0, Math.PI * 2, 0, Math.PI * 0.62);
+    helmet.scale(1, 0.85, 1.08);
+    helmet.translate(0, 1.46, 0);
+    const rifle = new THREE.BoxGeometry(0.05, 0.07, 0.86);
+    rifle.translate(0.19, 1.07, 0.3);
+    const mag = new THREE.BoxGeometry(0.05, 0.13, 0.08);
+    mag.translate(0.19, 0.99, 0.22);
+    const pack = new THREE.BoxGeometry(0.3, 0.34, 0.16);
+    pack.translate(0, 1.08, -0.25);
+    const arms = new THREE.BoxGeometry(0.4, 0.09, 0.1);
+    arms.rotateY(-0.5);
+    arms.translate(0.03, 1.12, 0.14);
+    // legs pivot at the hip: geometry hangs downward from the origin
+    const legGeo = () => {
+      const g = new THREE.BoxGeometry(0.12, 0.56, 0.15);
+      g.translate(0, -0.28, 0);
+      return g;
+    };
+    const bootGeo = () => {
+      const g = new THREE.BoxGeometry(0.13, 0.09, 0.24);
+      g.translate(0, -0.6, 0.04);
+      return g;
+    };
 
-    this.meshes = [
-      new THREE.InstancedMesh(body, mats.cloth, INFANTRY.max),
-      new THREE.InstancedMesh(head, mats.skin, INFANTRY.max),
-      new THREE.InstancedMesh(helmet, mats.steel, INFANTRY.max),
-      new THREE.InstancedMesh(rifle, mats.gun, INFANTRY.max),
-    ];
-    const col = new THREE.Color();
-    for (const m of this.meshes) {
+    const make = (geo, mat) => {
+      const m = new THREE.InstancedMesh(geo, mat, INFANTRY.max);
       m.castShadow = true;
       m.frustumCulled = false;
       for (let i = 0; i < INFANTRY.max; i++) m.setMatrixAt(i, _zero);
       scene.add(m);
-    }
-    // per-soldier uniform tint on the body mesh
+      return m;
+    };
+    // parts sharing the soldier's base matrix
+    this.staticMeshes = [
+      make(torso, mats.cloth),
+      make(belt, mats.clothDark),
+      make(head, mats.skin),
+      make(helmet, mats.steel),
+      make(rifle, mats.gun),
+      make(mag, mats.gun),
+      make(pack, mats.pack),
+      make(arms, mats.cloth),
+    ];
+    // legs swing around the hip
+    this.legL = make(legGeo(), mats.clothDark);
+    this.legR = make(legGeo(), mats.clothDark);
+    this.bootL = make(bootGeo(), mats.boot);
+    this.bootR = make(bootGeo(), mats.boot);
+    this.meshes = [...this.staticMeshes, this.legL, this.legR, this.bootL, this.bootR];
+
+    // per-soldier uniform tint on torso + arms
+    const col = new THREE.Color();
     for (let i = 0; i < INFANTRY.max; i++) {
       col.set(UNIFORMS[i % UNIFORMS.length]);
-      this.meshes[0].setColorAt(i, col);
+      this.staticMeshes[0].setColorAt(i, col);
+      this.staticMeshes[7].setColorAt(i, col);
     }
-    if (this.meshes[0].instanceColor) this.meshes[0].instanceColor.needsUpdate = true;
+    for (const m of [this.staticMeshes[0], this.staticMeshes[7]]) {
+      if (m.instanceColor) m.instanceColor.needsUpdate = true;
+    }
 
     this.units = new Array(INFANTRY.max).fill(null).map(() => ({
-      alive: false, x: 0, z: 0, yaw: 0, fireT: 1, phase: Math.random() * 7, walk: 0,
+      alive: false, x: 0, z: 0, yaw: 0, fireT: 1, phase: Math.random() * 7, walk: 0, swingAmp: 0,
     }));
     this.time = 0;
   }
@@ -109,6 +155,9 @@ export class Infantry {
         u.x += Math.sin(u.yaw + weave) * INFANTRY.speed * dt;
         u.z += Math.cos(u.yaw + weave) * INFANTRY.speed * dt;
         u.walk += dt;
+        u.swingAmp = Math.min(1, u.swingAmp + dt * 6);
+      } else {
+        u.swingAmp = Math.max(0, u.swingAmp - dt * 6);
       }
       u.fireT -= dt;
       if (u.fireT <= 0 && bestD < INFANTRY.fireRange) {
@@ -169,7 +218,7 @@ export class Infantry {
     for (const u of this.units) u.alive = false;
   }
 
-  // walking bob + lean, matrices pushed every frame
+  // walking bob + lean shared by all parts; legs swing around the hip
   updateVisuals() {
     for (let i = 0; i < this.units.length; i++) {
       const u = this.units[i];
@@ -177,12 +226,25 @@ export class Infantry {
         for (const m of this.meshes) m.setMatrixAt(i, _zero);
         continue;
       }
-      const bob = Math.abs(Math.sin(u.walk * 7 + u.phase)) * 0.06;
+      const stride = Math.sin(u.walk * 8 + u.phase);
+      const bob = Math.abs(stride) * 0.055 * u.swingAmp;
       _p.set(u.x, getHeight(u.x, u.z) + bob, u.z);
-      _e.set(Math.sin(u.walk * 7 + u.phase) * 0.05, u.yaw, 0);
+      _e.set(stride * 0.05 * u.swingAmp, u.yaw, 0);
       _q.setFromEuler(_e);
       _m.compose(_p, _q, _s);
-      for (const m of this.meshes) m.setMatrixAt(i, _m);
+      for (const m of this.staticMeshes) m.setMatrixAt(i, _m);
+      // legs: base × T(hip) × RotX(±swing)
+      const swing = stride * 0.55 * u.swingAmp;
+      for (const [mesh, boot, sideX, sign] of [
+        [this.legL, this.bootL, -0.095, 1],
+        [this.legR, this.bootR, 0.095, -1],
+      ]) {
+        _lm.makeRotationX(swing * sign);
+        _lm.setPosition(sideX, HIP_Y, 0);
+        _fm.multiplyMatrices(_m, _lm);
+        mesh.setMatrixAt(i, _fm);
+        boot.setMatrixAt(i, _fm);
+      }
     }
     for (const m of this.meshes) m.instanceMatrix.needsUpdate = true;
   }
