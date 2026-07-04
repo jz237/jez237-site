@@ -195,7 +195,7 @@ body.cabinet .sidePanel{display:flex}
 
 <script>
 'use strict';
-const VERSION = 'v2.0.0';
+const VERSION = 'v2.0.1';
 const SCORE_KEY = 'millipede_scores_v1';
 const LEGACY_SCORE_KEY = 'neon_myriapod_scores_v1';
 // Keep the original backing key so existing global scores remain associated after the URL rename.
@@ -350,6 +350,7 @@ document.addEventListener('touchstart', e => {
 //   tone/noise/sample -> panner -> sfxBus -> master -> destination
 //   music sources -> per-track gain -> musicBus -> master -> destination
 let masterGain = null, sfxBus = null, musicBus = null;
+const MUSIC_LEVEL = .42;
 let audioAssetsRequested = false;
 const audioBuffers = {};
 const AUDIO_FILES = {
@@ -364,12 +365,13 @@ function unlockAudio(){
       audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       masterGain = audioCtx.createGain(); masterGain.gain.value = muted ? 0 : 1; masterGain.connect(audioCtx.destination);
       sfxBus = audioCtx.createGain(); sfxBus.connect(masterGain);
-      musicBus = audioCtx.createGain(); musicBus.gain.value = .55; musicBus.connect(masterGain);
+      musicBus = audioCtx.createGain(); musicBus.gain.value = MUSIC_LEVEL; musicBus.connect(masterGain);
     }
-    if(audioCtx.state === 'suspended') audioCtx.resume().then(()=>{ audioReady = audioCtx && audioCtx.state === 'running'; startTitleMusicIfIdle(); }).catch(()=>{});
+    if(audioCtx.state === 'suspended') audioCtx.resume().then(()=>{ audioReady = audioCtx && audioCtx.state === 'running'; retryMusic(); }).catch(()=>{});
     audioReady = audioCtx.state === 'running';
     loadAudioAssets();
     startTitleMusicIfIdle();
+    retryMusic();
   }catch(e){}
 }
 // Samples and music load lazily after the first user gesture; every failure
@@ -380,7 +382,7 @@ function loadAudioAssets(){
   Object.entries(AUDIO_FILES).forEach(([name, url])=>{
     fetch(url).then(r=>{ if(!r.ok) throw 0; return r.arrayBuffer(); })
       .then(ab=>audioCtx.decodeAudioData(ab))
-      .then(buf=>{ audioBuffers[name] = buf; if(name === 'musicTitle') startTitleMusicIfIdle(); })
+      .then(buf=>{ audioBuffers[name] = buf; retryMusic(); })
       .catch(()=>{});
   });
 }
@@ -439,11 +441,17 @@ function playSample(name, x, vol){
   }catch(e){ return false; }
 }
 // Music: looped buffer sources crossfaded on a shared bus, ducked for big hits.
-let musicCurrent = null, musicPlaying = null;
+// playMusic remembers the wanted track so a request made before its buffer has
+// decoded is retried the moment the decode (or the context resume) lands.
+let musicCurrent = null, musicPlaying = null, musicWanted = null;
 function startTitleMusicIfIdle(){
   if((state === 'title' || state === 'scores' || state === 'gameover') && audioReady) playMusic('musicTitle');
 }
+function retryMusic(){
+  if(musicWanted && audioReady && musicCurrent !== musicWanted && audioBuffers[musicWanted]) playMusic(musicWanted);
+}
 function playMusic(name){
+  musicWanted = name || null;
   if(!audioCtx || !audioReady || musicCurrent === name) return;
   if(name && !audioBuffers[name]) return;
   const t = audioCtx.currentTime;
@@ -468,8 +476,8 @@ function duckMusic(amount, seconds){
   if(!audioCtx || !musicBus) return;
   const t = audioCtx.currentTime;
   musicBus.gain.cancelScheduledValues(t);
-  musicBus.gain.setTargetAtTime(.55 * (amount || .35), t, .08);
-  musicBus.gain.setTargetAtTime(.55, t + (seconds || 1.2), .4);
+  musicBus.gain.setTargetAtTime(MUSIC_LEVEL * (amount || .35), t, .08);
+  musicBus.gain.setTargetAtTime(MUSIC_LEVEL, t + (seconds || 1.2), .4);
 }
 function gameplayMusic(){
   playMusic(crawlers.some(c=>c.queen) ? 'musicBoss' : 'musicGame');
@@ -485,8 +493,8 @@ function sfx(name, x){
     if(name==='gameover'){ if(playSample('gameover', x)) return; }
     if(name==='queenWarn'){ if(playSample('queenWarn', x)){ duckMusic(.3, 1.4); return; } }
     if(name==='queenDeath'){ if(playSample('queenDeath', x)){ duckMusic(.3, 1.2); return; } }
-    if(name==='shot'){ tone(1280,.014,'square',.0042,1680,x,.05); }
-    if(name==='mushroom'){ [0,12,24].forEach((d,i)=>setTimeout(()=>tone(720+i*55,.009,'triangle',.0019,620,x,.04),d)); }
+    if(name==='shot'){ tone(1280,.016,'square',.012,1680,x,.05); tone(2560,.01,'triangle',.004,3200,x,.05); }
+    if(name==='mushroom'){ [0,12,24].forEach((d,i)=>setTimeout(()=>tone(720+i*55,.011,'triangle',.0048,620,x,.04),d)); }
     if(name==='crumble'){ tone(190,.07,'triangle',.018,80,x,.04); noiseBurst(.09,.018,'dark',x); }
     if(name==='segment'){ tone(150,.045,'sawtooth',.018,90,x,.05); tone(420,.026,'square',.01,250,x,.05); }
     if(name==='enemy'){ tone(520,.06,'square',.022,180,x,.04); noiseBurst(.08,.018,null,x); }
@@ -504,7 +512,7 @@ function sfx(name, x){
     if(name==='oneup'){ [659,784,1046,1318].forEach((f,i)=>setTimeout(()=>tone(f,.07,i%2?'square':'triangle',.022),i*55)); }
     if(name==='expire'){ tone(520,.06,'triangle',.014,190); tone(260,.07,'square',.008,130); }
     if(name==='shield'){ tone(180,.08,'sawtooth',.035,70,x); tone(840,.08,'square',.018,360,x); noiseBurst(.12,.018,null,x); }
-    if(name==='laser'){ tone(1460,.035,'square',.01,920,x,.06); noiseBurst(.035,.006,null,x); }
+    if(name==='laser'){ tone(1460,.035,'square',.014,920,x,.06); noiseBurst(.035,.008,null,x); }
     if(name==='queenWarn'){ [146,196,146,262].forEach((f,i)=>setTimeout(()=>tone(f,.09,i%2?'square':'sawtooth',.034),i*70)); setTimeout(()=>noiseBurst(.18,.028,'dark'),120); }
     if(name==='queenHit'){ tone(92,.07,'sawtooth',.026,55,x,.05); tone(540,.035,'square',.014,360,x,.05); }
     if(name==='queenDeath'){ [330,247,196,147,110].forEach((f,i)=>setTimeout(()=>tone(f,.11,'sawtooth',.035,Math.max(45,f*.5)),i*58)); noiseBurst(.32,.045,'dark'); }
@@ -837,7 +845,7 @@ function setMusicDim(dim){
   if(!musicBus || !audioCtx) return;
   const t = audioCtx.currentTime;
   musicBus.gain.cancelScheduledValues(t);
-  musicBus.gain.setTargetAtTime(dim ? .15 : .55, t, .2);
+  musicBus.gain.setTargetAtTime(dim ? .12 : MUSIC_LEVEL, t, .2);
 }
 function showOnly(id){
   ['titleScreen','scoresScreen','upgradeScreen','gameOverScreen','pauseScreen'].forEach(x=>document.getElementById(x).classList.toggle('hidden', x!==id));
@@ -1965,6 +1973,7 @@ window.__NEON_MYRIAPOD_TEST__ = {
   startGame,
   toggleMute,
   isMuted(){ return muted; },
+  musicState(){ return {wanted:musicWanted, current:musicCurrent, buffers:Object.keys(audioBuffers), ready:audioReady}; },
   lifeProgress(){ return {score, nextLifeAt, lives, bombs}; },
   mushroomCheck(){
     const m = {x:60,y:60,hp:8,max:8,r:12,poison:false,pulse:0,chunks:[],seed:12345};
