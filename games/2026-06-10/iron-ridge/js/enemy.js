@@ -3,9 +3,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { Tank } from './tank.js';
-import { getHeight } from './terrain.js';
-import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js';
+import { Tank } from './tank.js?v=2';
+import { getHeight } from './terrain.js?v=2';
+import { ENEMY, ENEMY_TYPES, PILLBOX, SHELL, CG, PLAY_RADIUS } from './config.js?v=2';
 
 const _v1 = new THREE.Vector3();
 const _from = new CANNON.Vec3();
