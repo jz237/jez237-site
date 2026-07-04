@@ -65,6 +65,39 @@ function buildCurve(sized, historyBySymbol, benchmarkKey, rangeKey) {
   };
 }
 
+// Beta, correlation, and annualized volatility vs the selected benchmark,
+// from the daily returns of the two percent-return series (same date spine).
+function riskStats(portfolioPoints, benchmarkPoints) {
+  if (!portfolioPoints || portfolioPoints.length < 11) return null;
+  const pf = portfolioPoints.map((p) => 1 + p.value / 100);
+  const bf = benchmarkPoints.map((p) => 1 + p.value / 100);
+  const rp = [];
+  const rb = [];
+  for (let i = 1; i < pf.length; i++) {
+    rp.push(pf[i] / pf[i - 1] - 1);
+    rb.push(bf[i] / bf[i - 1] - 1);
+  }
+  const mean = (a) => a.reduce((sum, v) => sum + v, 0) / a.length;
+  const meanP = mean(rp);
+  const meanB = mean(rb);
+  let cov = 0;
+  let varP = 0;
+  let varB = 0;
+  for (let i = 0; i < rp.length; i++) {
+    cov += (rp[i] - meanP) * (rb[i] - meanB);
+    varP += (rp[i] - meanP) ** 2;
+    varB += (rb[i] - meanB) ** 2;
+  }
+  cov /= rp.length;
+  varP /= rp.length;
+  varB /= rp.length;
+  return {
+    beta: varB > 0 ? cov / varB : null,
+    correlation: varP > 0 && varB > 0 ? cov / Math.sqrt(varP * varB) : null,
+    volatility: Math.sqrt(varP) * Math.sqrt(252) * 100,
+  };
+}
+
 // Max drawdown and best/worst single day, computed from the percent-return
 // series the curve already renders.
 function curveStats(points) {
@@ -212,6 +245,7 @@ export default function PortfolioPanel({
   const portfolioReturn = curve ? curve.portfolio.at(-1).value : null;
   const benchmarkReturn = curve ? curve.benchmark.at(-1).value : null;
   const stats = curve ? curveStats(curve.portfolio) : null;
+  const risk = curve ? riskStats(curve.portfolio, curve.benchmark) : null;
 
   if (!sized.length) {
     return (
@@ -286,6 +320,25 @@ export default function PortfolioPanel({
               <span>
                 Worst day <b className="down">{stats.worstDay.toFixed(2)}%</b>
               </span>
+              {risk && (
+                <>
+                  <span>
+                    Beta vs {benchmarkLabel}{" "}
+                    <b>{risk.beta === null ? "—" : risk.beta.toFixed(2)}</b>
+                  </span>
+                  <span>
+                    Correlation{" "}
+                    <b>
+                      {risk.correlation === null
+                        ? "—"
+                        : risk.correlation.toFixed(2)}
+                    </b>
+                  </span>
+                  <span>
+                    Volatility <b>{risk.volatility.toFixed(1)}% ann.</b>
+                  </span>
+                </>
+              )}
             </div>
           )}
         </>
