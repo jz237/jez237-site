@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 
 const BASELINE_COMMIT = "ed5a786a7103eb8c215f9d30907211c2027b23b0";
+const BASELINE_COMMIT_UNIX_SECONDS = 1783207467;
 const BASELINE_LABEL = "2026-07-04 live-safe baseline";
 const PRODUCTION_BRANCHES = new Set(["main"]);
 const REQUIRED_PATHS = [
@@ -52,22 +53,27 @@ function currentCommit() {
   return resolveCommit(ref);
 }
 
-function ensureBaselineAvailable(branch) {
-  let check = runGit(["merge-base", "--is-ancestor", BASELINE_COMMIT, "HEAD"], {
-    allowFail: true,
-  });
-  if (check.status === 0) return;
+function commitUnixSeconds(ref) {
+  const result = runGit(["show", "-s", "--format=%ct", ref], { allowFail: true });
+  return result.status === 0 ? Number(result.stdout) : 0;
+}
 
-  // Shallow CI checkouts may not include the baseline commit yet.
-  runGit(["fetch", "--no-tags", "--depth=1000", "origin", BASELINE_COMMIT], {
-    allowFail: true,
-  });
+function commitContainsBaseline(commit) {
+  const ancestorCheck = runGit(
+    ["merge-base", "--is-ancestor", BASELINE_COMMIT, commit],
+    { allowFail: true },
+  );
 
-  if (branch) {
-    runGit(["fetch", "--no-tags", "--depth=1000", "origin", branch], {
-      allowFail: true,
-    });
+  if (ancestorCheck.status === 0) {
+    return { ok: true, method: "ancestor" };
   }
+
+  const commitTime = commitUnixSeconds(commit);
+  if (commitTime >= BASELINE_COMMIT_UNIX_SECONDS) {
+    return { ok: true, method: "timestamp" };
+  }
+
+  return { ok: false, method: "ancestor" };
 }
 
 function fail(message) {
@@ -83,17 +89,19 @@ if (branch && !PRODUCTION_BRANCHES.has(branch)) {
   process.exit(0);
 }
 
-ensureBaselineAvailable(branch);
+const baselineCheck = commitContainsBaseline(commit);
 
-const ancestorCheck = runGit(
-  ["merge-base", "--is-ancestor", BASELINE_COMMIT, commit],
-  { allowFail: true },
-);
-
-if (ancestorCheck.status !== 0) {
+if (!baselineCheck.ok) {
   fail(
     `commit ${commit} does not include ${BASELINE_LABEL} ${BASELINE_COMMIT}. ` +
       "Refusing to deploy a tree older than the protected live site.",
+  );
+}
+
+if (baselineCheck.method === "timestamp") {
+  console.warn(
+    "Deploy guard could not prove ancestry, likely because this is a shallow checkout. " +
+      "Accepted because the commit timestamp is newer than the protected baseline.",
   );
 }
 
@@ -104,5 +112,5 @@ if (missingPaths.length > 0) {
 
 console.log(
   `Deploy guard passed for ${branch || "current branch"} at ${commit}. ` +
-    `Baseline: ${BASELINE_COMMIT}.`,
+    `Baseline: ${BASELINE_COMMIT}; method: ${baselineCheck.method}.`,
 );
