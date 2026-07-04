@@ -1,8 +1,353 @@
 {
-  "generatedAt": "2026-07-03T12:00:00.000Z",
+  "generatedAt": "2026-07-04T12:02:08.695Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-04",
+      "historicDate": "1983-03-07",
+      "displayDate": "Week of March 7-13, 1983",
+      "edition": "Issue 032 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "March 1983 computer-weekly front page: warm newsprint, IBM PC XT office-counter cues, arcade and Apple II game shelf art, red and blue section flags.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly Computer & Culture Chronicle",
+        "dateline": "Week of March 7-13, 1983",
+        "price": "35 cents",
+        "date": "Week of March 7-13, 1983",
+        "issue": "Issue 032"
+      },
+      "layoutPlan": "Lead with IBM introducing the PC XT, then give large shelf space to computer games, business software, home-computer prices, movie/music charts, and period retail notes.",
+      "sectionChrome": [
+        "On This Week",
+        "Game Shelf",
+        "Software Counter",
+        "Price Watch",
+        "Charts"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-03-07.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of March 7-13, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This issue follows the week IBM put a hard disk inside the PC line while game and software shelves kept pulling home-computer buyers toward Apple II, Atari, Commodore, and IBM machines.",
+      "morningLine": "IBM adds the PC XT, Lotus keeps selling the office pitch, and store shelves make room for adventures, strategy games, and arcade conversions.",
+      "lead": {
+        "headline": "IBM puts a hard disk in the personal-computer aisle",
+        "dek": "On March 8, IBM introduced the Personal Computer XT, an expanded PC with a 10 MB fixed disk that made the office micro feel more permanent.",
+        "body": "During the week of March 7-13, 1983, IBM gave business buyers a clearer upgrade path from the original PC. Contemporary coverage described the PC XT as a new model with more expansion room and a built-in fixed disk, while the quoted $4,995 configuration kept it firmly in office-machine territory. The timing helped software such as Lotus 1-2-3 look less like an add-on and more like the daily reason to buy an IBM-compatible desk system.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "IBM introduces the PC XT",
+          "summary": "IBM unveiled the PC XT on March 8, 1983, extending the PC line with a 10 MB hard disk, more slots, and a business-facing price around $4,995.",
+          "confidence": "High",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 strengthens the IBM PC pitch",
+          "summary": "Lotus 1-2-3, introduced for the IBM PC in early 1983, gave spreadsheet buyers integrated charting and database features in one package.",
+          "confidence": "High",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Computer Gaming World turns to Ultima II",
+          "summary": "The March-April 1983 issue of Computer Gaming World carried a review of Ultima II and kept Apple II adventure and strategy play in the magazine spotlight.",
+          "confidence": "High",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "title": "Home shelves stay multi-platform",
+          "summary": "Retail attention remained split among Apple II, Atari 8-bit, Commodore VIC-20/64, and IBM PC software as buyers compared games, learning titles, and business packages.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            3,
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC: integrated spreadsheet, database, and graphics package for business users."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Apple II and other micros: the established spreadsheet name still visible at retail."
+        },
+        {
+          "name": "dBASE II",
+          "detail": "CP/M and IBM PC: database software for small-business records."
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and IBM PC: word processing standard for office buyers."
+        },
+        {
+          "name": "Apple DOS 3.3",
+          "detail": "Apple II: disk operating system behind many education, game, and utility shelves."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer games",
+          "items": [
+            "Ultima II",
+            "Zork I",
+            "Miner 2049er",
+            "Choplifter",
+            "The Cosmic Balance"
+          ]
+        },
+        {
+          "label": "IBM PC counter",
+          "items": [
+            "IBM PC XT",
+            "Lotus 1-2-3",
+            "dBASE II",
+            "WordStar",
+            "monochrome display"
+          ]
+        },
+        {
+          "label": "Apple II rack",
+          "items": [
+            "Ultima II",
+            "VisiCalc",
+            "Apple Writer",
+            "Logo",
+            "Wizardry"
+          ]
+        },
+        {
+          "label": "Atari and Commodore",
+          "items": [
+            "cartridge games",
+            "cassette software",
+            "joysticks",
+            "disk drives",
+            "learning titles"
+          ]
+        },
+        {
+          "label": "Magazines",
+          "items": [
+            "Computer Gaming World",
+            "BYTE",
+            "Creative Computing",
+            "Softalk",
+            "Compute!"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "IBM announcement coverage placed the XT in business-machine territory."
+        },
+        {
+          "item": "Lotus 1-2-3",
+          "price": "about $495 list",
+          "note": "Business software pricing matched the IBM PC office market."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "under $600 street in many 1983 ads",
+          "note": "Aggressive pricing kept the C64 in home-computer conversations."
+        },
+        {
+          "item": "Atari 2600 cartridges",
+          "price": "often $20-$35",
+          "note": "Console software stayed visible beside computer-game shelves."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "PC buyers ask about fixed disks",
+          "text": "The XT made a built-in hard disk part of IBM personal-computer conversation instead of an exotic add-on."
+        },
+        {
+          "headline": "Adventure games keep shelf pull",
+          "text": "Ultima II and Zork gave computer stores story-driven titles to contrast with arcade conversions."
+        },
+        {
+          "headline": "Arcade names still travel home",
+          "text": "Retailers leaned on familiar action games and joysticks when pitching home systems to families."
+        },
+        {
+          "headline": "Charts keep Thriller in front",
+          "text": "Michael Jackson held the pop conversation as Billie Jean topped the March 12 Hot 100."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Billie Jean",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Hungry Like the Wolf",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 3,
+          "title": "Do You Really Want to Hurt Me",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 4,
+          "title": "Back on the Chain Gang",
+          "artist": "Pretenders"
+        },
+        {
+          "rank": 5,
+          "title": "You Are",
+          "artist": "Lionel Richie"
+        }
+      ],
+      "periodAd": {
+        "headline": "This week at the computer counter",
+        "summary": "Ask for an IBM PC XT fixed-disk demonstration, a Lotus 1-2-3 worksheet setup, and a look at the Apple II adventure-game shelf before the weekend.",
+        "tagline": "Bring this notice for a printer-and-disk quote."
+      },
+      "market": {
+        "headline": "Office buyers get a firmer PC target",
+        "summary": "The XT announcement helped frame the IBM PC as a durable office platform, while cheaper home machines competed on games, education, and family use.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-03-07.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "IBM introduced the Personal Computer XT during this week, with contemporary coverage dated March 9 after the Tuesday announcement.",
+            "confidence": "High",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was an early-1983 IBM PC business-software landmark.",
+            "confidence": "High",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Computer Gaming World 3.2 supports the named Ultima II and early-1983 game-shelf context.",
+            "confidence": "High",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "Music and movie rankings use March 12 Hot 100 mirrors and Box Office Mojo weekend March 11-13 references.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "claim": "Retail prices are period ranges and may vary by dealer advertisement.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              0,
+              1,
+              5
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Christian Science Monitor - IBM upgrades its Personal Computer",
+          "url": "https://www.csmonitor.com/1983/0309/030939.html"
+        },
+        {
+          "label": "This Day in Tech History - IBM Introduces PC-XT",
+          "url": "https://thisdayintechhistory.com/03/08/ibm-introduces-pc-xt/"
+        },
+        {
+          "label": "Lotus 1-2-3 history - IBM PC software context",
+          "url": "https://www.britannica.com/technology/Lotus-1-2-3"
+        },
+        {
+          "label": "Computer Gaming World 3.2 issue listing",
+          "url": "https://www.oldgames.sk/en/mag/cgw-9"
+        },
+        {
+          "label": "Computer Gaming World 3.2 - Ultima II review listing",
+          "url": "https://www.oldgames.sk/en/mags/article/11511"
+        },
+        {
+          "label": "BYTE Magazine archive - early 1983 personal-computer advertising context",
+          "url": "https://archive.org/details/byte-magazine-1983-03"
+        },
+        {
+          "label": "Billboard Hot 100 week of March 12, 1983 mirror",
+          "url": "https://elpee.jp/hot100/week/1983-03-12/"
+        },
+        {
+          "label": "Tunecaster pop chart for March 12, 1983",
+          "url": "https://tunecaster.com/charts/80/week8311.html"
+        },
+        {
+          "label": "Box Office Mojo domestic weekend March 11-13, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W10/"
+        },
+        {
+          "label": "IBM Personal Computer XT overview - IT History Society",
+          "url": "https://www.ithistory.org/db/hardware/ibm/ibm-personal-computer-xt"
+        }
+      ],
+      "pictureDesk": [
+        {
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-03-07.png",
+          "alt": "Generated halftone newspaper front page for the week of March 7-13, 1983",
+          "caption": "GPT Image 2 visual direction: IBM PC XT business counter with boxed software and a busy home-computer game shelf.",
+          "confidence": "Generated visual based on structured issue data."
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "BBS nights",
+          "detail": "Modem users trade tips after 10 p.m.; bring your own terminal settings."
+        },
+        {
+          "headline": "Apple II disks wanted",
+          "detail": "Local user group seeks adventure-game maps, blank disks, and printer ribbons."
+        }
+      ]
+    },
     {
       "currentDate": "2026-07-03",
       "historicDate": "1983-02-28",
