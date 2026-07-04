@@ -200,26 +200,27 @@
 </head>
 <body>
   <header id="site-nav"></header>
-  <header class="hero">
-    <div class="hero-layout">
-      <div>
-        <h1>Data as Artifact</h1>
-        <p class="lede">Generated images where information becomes a believable object: almanacs, specimens, tickets, maps, ledgers, labels, instruments, and other data with a physical life.</p>
-        <div class="meta">
-          <span class="pill stat" id="artifact-count-pill">Artifacts: loading...</span>
-          <span class="pill stat" id="image-count-pill">Images: loading...</span>
-          <a class="pill featured" href="index.html">Image archive</a>
-          <a class="pill" href="hybrid-creatures.html">Hybrid creatures</a>
-          <a class="pill" href="creature-designs.html">Creature designs</a>
-          <a class="pill" href="random-rendering-style.html">Random rendering style</a>
-          <a class="pill" href="worlds.html">Fictional worlds</a>
-          <a class="pill" href="world-that-never-was.html">World that never was</a>
-        </div>
-      </div>
-      <div class="hero-panel">
-        <p class="hero-panel-label">Archive mode</p>
-        <p class="lede">Newest first, with the latest artifact featured below.</p>
-      </div>
+  <header class="hero museum-hero">
+    <h1>Data as Artifact</h1>
+    <div class="ornament" aria-hidden="true">✦</div>
+    <p class="lede">Images where information becomes a believable object: almanacs, specimens, tickets, maps, ledgers, labels, and other data with a physical life.</p>
+    <div class="hero-controls" aria-label="Page controls">
+      <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
+    </div>
+    <nav class="series-nav" aria-label="Image series">
+      <a href="index.html">Image archive</a>
+      <a href="worlds.html">Fictional worlds</a>
+      <a href="factual-infographics.html">Factual infographics</a>
+      <a href="hybrid-creatures.html">Hybrid creatures</a>
+      <a href="creature-designs.html">Creature designs</a>
+      <a href="random-rendering-style.html">Random rendering style</a>
+      <a href="world-that-never-was.html">World that never was</a>
+      <a href="subject-artifacts.html">Subject as artifact</a>
+      <a href="data-artifacts.html" aria-current="page">Data as artifact</a>
+    </nav>
+    <div class="meta">
+      <span class="pill stat" id="artifact-count-pill">Artifacts: loading...</span>
+      <span class="pill stat" id="image-count-pill">Images: loading...</span>
     </div>
   </header>
   <main>
@@ -366,5 +367,6 @@
     })();
   </script>
   <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="museum-theme.js?v=1" defer></script>
 </body>
 </html>
