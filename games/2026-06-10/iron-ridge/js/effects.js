@@ -186,7 +186,9 @@ export class Effects {
 
   setParticleScale(s) { this.particleScale = s; }
 
-  shake(amount) { this.trauma = Math.min(1.2, this.trauma + amount); }
+  setShakeScale(s) { this.shakeScale = s; }
+
+  shake(amount) { this.trauma = Math.min(1.2, this.trauma + amount * (this.shakeScale ?? 1)); }
 
   flashLight(pos, color, intensity, dur) {
     let slot = this.lights[0];

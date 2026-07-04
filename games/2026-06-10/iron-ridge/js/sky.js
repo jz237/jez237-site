@@ -20,10 +20,10 @@ varying vec3 vDir;
 uniform vec3 sunDir;
 void main() {
   float h = clamp(vDir.y, -0.1, 1.0);
-  vec3 zenith  = vec3(0.14, 0.36, 0.80);
-  vec3 horizon = vec3(0.72, 0.84, 0.94);
+  vec3 zenith  = vec3(0.09, 0.31, 0.79);
+  vec3 horizon = vec3(0.78, 0.88, 0.97);
   vec3 ground  = vec3(0.62, 0.68, 0.66);
-  vec3 col = mix(horizon, zenith, pow(max(h, 0.0), 0.48));
+  vec3 col = mix(horizon, zenith, pow(max(h, 0.0), 0.52));
   if (h < 0.0) col = mix(horizon, ground, clamp(-h * 8.0, 0.0, 1.0));
 
   float sunAmt = max(dot(normalize(vDir), sunDir), 0.0);
@@ -164,17 +164,17 @@ export function buildSky(scene) {
   const texB = cloudTexture(137);
   const clouds = new THREE.Group();
   const cloudData = [];
-  for (let i = 0; i < 18; i++) {
+  for (let i = 0; i < 26; i++) {
     const cMat = new THREE.SpriteMaterial({
       map: i % 2 ? texA : texB,
-      transparent: true, opacity: 0.5 + Math.random() * 0.16,
-      depthWrite: false, fog: false, color: 0xf0f5fa,
+      transparent: true, opacity: 0.58 + Math.random() * 0.2,
+      depthWrite: false, fog: false, color: 0xffffff,
     });
     const sp = new THREE.Sprite(cMat);
     const ang = Math.random() * Math.PI * 2;
-    const rad = 280 + Math.random() * 420;
-    sp.position.set(Math.cos(ang) * rad, 120 + Math.random() * 90, Math.sin(ang) * rad);
-    const sc = 120 + Math.random() * 170;
+    const rad = 260 + Math.random() * 440;
+    sp.position.set(Math.cos(ang) * rad, 110 + Math.random() * 110, Math.sin(ang) * rad);
+    const sc = 130 + Math.random() * 200;
     sp.scale.set(sc, sc * 0.42, 1);
     clouds.add(sp);
     cloudData.push({ sp, speed: 1.2 + Math.random() * 1.6 });
@@ -187,10 +187,10 @@ export function buildSky(scene) {
   let birdT = 0;
 
   // lighting
-  const hemi = new THREE.HemisphereLight(0xbcd8ee, 0x68724f, 0.85);
+  const hemi = new THREE.HemisphereLight(0xaccdf0, 0x6d7a4a, 0.78);
   scene.add(hemi);
 
-  const sun = new THREE.DirectionalLight(0xfff2dc, 2.6);
+  const sun = new THREE.DirectionalLight(0xfff0d2, 3.0);
   sun.position.copy(SUN_DIR).multiplyScalar(180);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);
