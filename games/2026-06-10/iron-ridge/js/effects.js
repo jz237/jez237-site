@@ -3,8 +3,8 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { getHeight, getNormal } from './terrain.js';
-import { SCATTER } from './config.js';
+import { getHeight, getNormal } from './terrain.js?v=2';
+import { SCATTER } from './config.js?v=2';
 
 function softCircleTexture(hard = false) {
   const s = 64;
