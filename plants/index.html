@@ -14,7 +14,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://jez237.com/plants/" />
   <link rel="stylesheet" href="../assets/styles.css">
-  <link rel="stylesheet" href="../assets/plant-cards.css?v=gh20260704">
+  <link rel="stylesheet" href="../assets/plant-cards.css?v=gh20260704b">
   <style>
     /* ===== 2026 redesign: editorial layout on the shared evening-greenhouse backdrop
        (background comes from plant-cards.css so index and sub pages match) ===== */
@@ -91,12 +91,27 @@
     .plant-directory { margin:6px 0 30px; padding-bottom:24px; border-bottom:1px solid var(--gp-line); }
     .plant-directory h2 { margin:0 0 2px; font-family:var(--font-serif,'Fraunces',Georgia,serif); font-weight:600; font-size:clamp(1.3rem,2.6vw,1.7rem); letter-spacing:-.02em; color:var(--gp-ink); }
     .dir-subtitle { color:var(--gp-muted); font-size:.88rem; margin:0 0 14px; }
+    .dir-scroller { position:relative; }
     .dir-grid {
       display:flex; gap:12px; overflow-x:auto;
       padding:4px 2px 12px;
       scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
-      scrollbar-width:thin; scrollbar-color:rgba(171,226,103,.35) transparent;
+      scrollbar-width:none; -ms-overflow-style:none;
     }
+    .dir-grid::-webkit-scrollbar { display:none; }
+    .dir-arrow {
+      position:absolute; top:63px; transform:translateY(-50%); z-index:5;
+      width:40px; height:40px; border-radius:50%;
+      border:1px solid rgba(210,243,176,.35); background:rgba(8,18,10,.85);
+      backdrop-filter:blur(8px); color:#dfeccf;
+      font-size:1.5rem; line-height:1; padding:0 0 3px;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; transition:border-color .2s ease, background .2s ease;
+    }
+    .dir-arrow:hover { border-color:rgba(171,226,103,.6); background:rgba(20,40,20,.92); }
+    .dir-arrow.left { left:-10px; }
+    .dir-arrow.right { right:-10px; }
+    .dir-arrow[hidden] { display:none; }
     .dir-item { flex:0 0 118px; min-width:0; display:block; text-decoration:none; color:inherit; scroll-snap-align:start; background:transparent; border:none; border-radius:16px; overflow:visible; box-shadow:none; }
     .dir-item:hover { transform:none; box-shadow:none; border-color:transparent; }
     .dir-thumb {
@@ -187,6 +202,8 @@
     <div class="plant-directory">
       <h2>Individual Plants</h2>
       <p class="dir-subtitle">Every plant tracked individually &mdash; tap one for its full season timeline &middot; scroll for more &rarr;</p>
+      <div class="dir-scroller">
+      <button class="dir-arrow left" id="dir-left" aria-label="Scroll plants left" hidden>&#8249;</button>
       <div class="dir-grid">
         <a class="dir-item" href="baptisia/">
           <div class="dir-thumb"><img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/baptisia-lemon-meringue-2026-05-11.jpg" alt="" loading="lazy" decoding="async"></div>
@@ -292,6 +309,8 @@
           <div class="dir-thumb"><img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/yarrow-pink-white-bloom-2026-06-26.jpg" alt="" loading="lazy" decoding="async"></div>
           <div class="dir-label">Yarrow <span class="dir-count">1</span></div>
         </a>
+      </div>
+      <button class="dir-arrow right" id="dir-right" aria-label="Scroll plants right">&#8250;</button>
       </div>
     </div>
 
@@ -1538,7 +1557,31 @@
         it.style.display = (!q || label.includes(q)) ? '' : 'none';
       });
       pill.textContent = visible.length+' scenes · '+dirItems.length+' plants';
+      dirUpd();
     }
+
+    // Plant strip: arrow buttons + horizontal mouse-wheel scrolling, no scrollbar
+    const dirGrid = document.querySelector('.dir-grid');
+    const dirL = document.getElementById('dir-left');
+    const dirR = document.getElementById('dir-right');
+    function dirUpd(){
+      if(!dirGrid || !dirL) return;
+      dirL.hidden = dirGrid.scrollLeft <= 4;
+      dirR.hidden = dirGrid.scrollLeft >= dirGrid.scrollWidth - dirGrid.clientWidth - 4;
+    }
+    if(dirGrid && dirL && dirR){
+      dirL.addEventListener('click', ()=>dirGrid.scrollBy({left:-Math.round(dirGrid.clientWidth*0.8), behavior:'smooth'}));
+      dirR.addEventListener('click', ()=>dirGrid.scrollBy({left: Math.round(dirGrid.clientWidth*0.8), behavior:'smooth'}));
+      dirGrid.addEventListener('scroll', dirUpd, {passive:true});
+      window.addEventListener('resize', dirUpd);
+      dirGrid.addEventListener('wheel', e=>{
+        if(Math.abs(e.deltaY) > Math.abs(e.deltaX)){
+          e.preventDefault();
+          dirGrid.scrollLeft += e.deltaY;
+        }
+      }, {passive:false});
+    }
+
     chips.forEach(ch=>ch.addEventListener('click', ()=>{
       chips.forEach(x=>x.classList.remove('active'));
       ch.classList.add('active');
