@@ -29,6 +29,12 @@
       --accent-strong: #004c7c;
       --line: #d8e8ef;
       --shadow: -10px 14px 18px rgba(0,65,105,.18), inset 0 1px 0 rgba(255,255,255,.68);
+      --day-head-fg: #eaf6ff;
+      --day-head-bg: rgba(2,8,19,.82);
+    }
+    :root[data-theme="light"] {
+      --day-head-fg: #123044;
+      --day-head-bg: rgba(240,248,252,.88);
     }
     * { box-sizing: border-box; }
     body {
@@ -58,7 +64,7 @@
       position: relative;
       top: auto;
       z-index: 1;
-      padding: 30px 22px 24px;
+      padding: 18px 22px 24px;
       background:
         radial-gradient(circle at 82% 0%, rgba(19,184,223,.18), transparent 26rem),
         linear-gradient(180deg, rgba(255,255,255,.92), rgba(233,248,252,.86)) !important;
@@ -69,6 +75,14 @@
       -webkit-backdrop-filter: none !important;
     }
     .gallery-hero-inner { max-width: 1180px; margin: 0 auto; }
+    .hero-banner {
+      margin: 0 0 18px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(0,76,124,.28);
+      box-shadow: 0 14px 30px rgba(0,40,70,.25);
+    }
+    .hero-banner img { display: block; width: 100%; height: clamp(72px, 11vw, 130px); object-fit: cover; }
     .hero-layout {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(280px, 410px);
@@ -78,6 +92,16 @@
     h1 { margin: 0 0 10px; color: var(--accent-strong); font-size: clamp(2rem, 5vw, 3.9rem); letter-spacing: -0.04em; line-height: .96; }
     .lede { max-width: 760px; color: #4e6f82; font-size: clamp(.98rem, 2.1vw, 1.08rem); font-weight: 560; margin: 0; }
     .meta, .controls { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .series-row {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
+      margin-top: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+    }
+    .series-row .pill { flex: 0 0 auto; white-space: nowrap; }
     .pill, .control, button.control {
       border: 1px solid var(--line);
       background: rgba(255,255,255,.82);
@@ -170,7 +194,7 @@
       padding: 6px 10px;
       font-size: .9rem;
     }
-    #toolbar-search { width: min(42vw, 420px); }
+    #toolbar-search { width: min(38vw, 380px); }
     .compact-count {
       min-height: 34px;
       display: inline-flex;
@@ -187,19 +211,27 @@
     main { padding: 12px 22px 70px; }
     .gallery-list { display: block; }
     .load-more-row { display: flex; justify-content: center; margin: 30px 0 0; }
+    #load-more { font-weight: 700; padding: 12px 22px; }
     .day-group { margin-top: 28px; }
     .day-heading {
+      position: sticky;
+      top: calc(var(--nav-height, 54px) + 52px);
+      z-index: 5;
       display: flex;
       align-items: baseline;
       justify-content: space-between;
       gap: 14px;
-      padding: 0 4px 12px;
-      border-bottom: 1px solid var(--line);
-      margin-bottom: 18px;
+      padding: 10px 10px;
+      margin: 0 -10px 18px;
+      border-bottom: 1px solid rgba(120,160,200,.25);
+      background: var(--day-head-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 0 0 10px 10px;
     }
     .day-heading h2 {
       margin: 0;
-      color: #eaf6ff;
+      color: var(--day-head-fg);
       font-size: clamp(1.35rem, 3vw, 2.2rem);
       letter-spacing: -.04em;
     }
@@ -207,7 +239,11 @@
     footer {
       color: #b7c7d9;
     }
+    :root[data-theme="light"] .day-heading span { color: #657d8d; }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    body[data-density="3"] .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    body[data-density="3"] .content { padding: 14px 16px; }
+    body[data-density="3"] h3 { font-size: 1.12rem; }
     .card {
       overflow: hidden;
       border: 1px solid var(--line);
@@ -236,10 +272,27 @@
     }
     .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
     img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-wrap img { opacity: 0; transition: opacity .35s ease; }
+    .image-wrap img.loaded { opacity: 1; }
     .image-wrap.portrait img { object-fit: contain; background: #05070a; }
     .image-wrap img { cursor: zoom-in; }
     .content { padding: 20px; background: linear-gradient(180deg, rgba(248,252,255,.97), rgba(231,244,255,.9)); }
+    .kicker-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
     .kicker { color: var(--accent); text-transform: uppercase; font-size: .74rem; letter-spacing: .14em; font-weight: 800; }
+    .copy-btn {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.85);
+      color: #31546a;
+      font: inherit;
+      font-size: .76rem;
+      font-weight: 750;
+      padding: 4px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .copy-btn:hover { border-color: rgba(0,122,176,.5); color: var(--accent-strong); }
+    .copy-btn.copied { border-color: rgba(24,150,90,.6); color: #12784a; background: #e9fbf1; }
     h3 { margin: 7px 0 10px; font-size: 1.35rem; line-height: 1.08; }
     .tests { color: var(--muted); margin: 0 0 14px; }
     details { border-top: 1px solid var(--line); padding-top: 14px; }
@@ -259,16 +312,39 @@
     footer { padding: 0 22px 50px; color: var(--muted); }
     .lightbox { position: fixed; inset: 0; z-index: 50; display: none; background: rgba(3,5,8,.94); backdrop-filter: blur(14px); color: var(--text); }
     .lightbox.open { display: grid; grid-template-rows: auto 1fr; }
-    .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(12,15,20,.78); }
-    .lightbox-title { min-width: 0; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .lightbox-hint { color: var(--muted); font-size: .88rem; font-weight: 500; }
-    .lightbox-close { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.06); color: var(--text); padding: 8px 12px; cursor: pointer; font: inherit; }
+    .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(12,15,20,.78); }
+    .lightbox-title { min-width: 0; font-weight: 800; color: #eaf3fb; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: #93a7bd; font-size: .88rem; font-weight: 500; }
+    .lightbox-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+    .lightbox-btn { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.06); color: #eaf3fb; padding: 8px 12px; cursor: pointer; font: inherit; }
+    .lightbox-btn:disabled { opacity: .35; cursor: default; }
+    .lightbox-btn.copied { border-color: rgba(90,220,160,.7); color: #9ff0c8; }
     .lightbox-stage { min-height: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .lightbox-stage img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 28px 90px rgba(0,0,0,.55); cursor: zoom-in; }
     .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
     .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 51;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 999px;
+      background: rgba(10,14,20,.6);
+      color: #eaf3fb;
+      width: 46px;
+      height: 46px;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+    .lightbox-nav:hover { background: rgba(30,50,70,.75); }
+    .lightbox-nav[hidden] { display: none; }
+    .lightbox-nav.prev { left: 14px; }
+    .lightbox-nav.next { right: 14px; }
     @media (max-width: 680px) {
-      .gallery-hero { padding-top: 24px; }
+      .gallery-hero { padding-top: 16px; }
       .hero-layout {
         grid-template-columns: 1fr;
         gap: 18px;
@@ -285,9 +361,10 @@
         align-items: stretch;
       }
       #toolbar-search { width: 100%; }
-      .grid { grid-template-columns: 1fr; }
-      .day-heading { display: block; }
+      .grid, body[data-density="3"] .grid { grid-template-columns: 1fr; }
+      .day-heading { top: calc(var(--nav-height, 54px) + 2px); }
       .lightbox-hint { display: none; }
+      .lightbox-nav { width: 40px; height: 40px; }
     }
   </style>
 </head>
@@ -296,12 +373,15 @@
 
   <header class="gallery-hero">
     <div class="gallery-hero-inner">
+      <div class="hero-banner"><img src="hero-banner.webp" alt="" aria-hidden="true"></div>
       <div class="hero-layout">
         <div>
           <h1>Daily Image Prompts</h1>
           <p class="lede">A compact archive of prompts, generated images, and recurring fictional-world experiments.</p>
           <div class="meta">
             <span class="pill stat" id="count-pill">Images: loading...</span>
+          </div>
+          <div class="series-row" aria-label="Recurring series">
             <a class="pill featured" href="worlds.html">Fictional worlds</a>
             <a class="pill featured" href="factual-infographics.html">Factual infographics</a>
             <a class="pill featured" href="hybrid-creatures.html">Hybrid creatures</a>
@@ -316,6 +396,7 @@
           <div class="controls" aria-label="Gallery controls">
             <input class="control" id="search" type="search" placeholder="Search prompts...">
             <select class="control" id="date-filter"><option value="all">All dates</option></select>
+            <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
           </div>
         </div>
       </div>
@@ -341,16 +422,21 @@
   </main>
 
   <footer>
-    Prompt metadata is saved as <code>gallery-data.json</code>; image files can be served locally or from the configured media base. Click any image for fullscreen, then click it again for true 1:1 size.
+    Prompt metadata is chunked by month (<code>manifest.json</code> + <code>gallery-YYYY-MM.json</code>); images and thumbnails are served from the configured media base. Click any image for fullscreen, then click it again for true 1:1 size.
   </footer>
 
   <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
     <div class="lightbox-bar">
       <div class="lightbox-title" id="lightbox-title">Image preview</div>
-      <div class="lightbox-hint">Click image: fit screen ⇄ 1:1 size · Esc closes</div>
-      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+      <div class="lightbox-hint">← → to browse · Click image: fit screen ⇄ 1:1 · Esc closes</div>
+      <div class="lightbox-actions">
+        <button class="lightbox-btn" type="button" id="lightbox-copy">Copy prompt</button>
+        <button class="lightbox-btn" type="button" id="lightbox-close">Close</button>
+      </div>
     </div>
     <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <button class="lightbox-nav prev" type="button" id="lightbox-prev" aria-label="Previous image">‹</button>
+    <button class="lightbox-nav next" type="button" id="lightbox-next" aria-label="Next image">›</button>
   </div>
 
   <script>
@@ -365,11 +451,22 @@
       const toolbarCount = document.getElementById('toolbar-count');
       const loadMore = document.getElementById('load-more');
       const loadMoreRow = document.getElementById('load-more-row');
+      const densityToggle = document.getElementById('density-toggle');
       const hero = document.querySelector('.gallery-hero');
       const siteNav = document.getElementById('site-nav');
-      const pageSize = 12;
+      const pageSize = 24;
+
+      const MEDIA_BASE = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/';
+      const IMAGE_BASE_URL = MEDIA_BASE + 'images/';
+      const THUMB_BASE_URL = MEDIA_BASE + 'thumbs/';
+
+      let manifest = null;
       let allItems = [];
       let visibleCount = pageSize;
+      let renderedCount = 0;
+      const itemsById = new Map();
+      const monthLoads = new Map();
+      let loadedMonthCount = 0;
       let ticking = false;
 
       function updateHeroChrome() {
@@ -378,35 +475,77 @@
         const threshold = hero.offsetTop + hero.offsetHeight - 40;
         toolbar.classList.toggle('is-visible', window.scrollY > threshold);
       }
-
       window.addEventListener('scroll', () => {
         if (ticking) return;
         ticking = true;
-        requestAnimationFrame(() => {
-          updateHeroChrome();
-          ticking = false;
-        });
+        requestAnimationFrame(() => { updateHeroChrome(); ticking = false; });
       }, { passive: true });
       window.addEventListener('resize', updateHeroChrome);
       window.addEventListener('load', updateHeroChrome);
       setTimeout(updateHeroChrome, 0);
       setTimeout(updateHeroChrome, 150);
 
-      const IMAGE_BASE_URL = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/';
       const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
-      const imageUrl = (value) => {
+      const resolveMedia = (value, base) => {
         const path = String(value || '');
         if (/^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('/')) return path;
-        if (!path.startsWith('images/')) return path;
-        const base = IMAGE_BASE_URL.endsWith('/') ? IMAGE_BASE_URL : `${IMAGE_BASE_URL}/`;
-        return `${base}${path.slice('images/'.length)}`;
+        const slash = path.indexOf('/');
+        if (slash === -1) return path;
+        return base + path.slice(slash + 1);
       };
+      const imageUrl = (item) => resolveMedia(item.image, IMAGE_BASE_URL);
+      const thumbUrl = (item) => item.thumb ? resolveMedia(item.thumb, THUMB_BASE_URL) : imageUrl(item);
       const formatDate = (value) => {
-        if (!value) return 'Undated';
+        if (!value || value === 'undated') return 'Undated';
         const [y, m, d] = value.split('-').map(Number);
         const dt = new Date(y, (m || 1) - 1, d || 1);
         return dt.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
       };
+      const formatMonth = (key) => {
+        if (!key || key === 'undated') return 'Undated';
+        const [y, m] = key.split('-').map(Number);
+        return new Date(y, (m || 1) - 1, 1).toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
+      };
+      const sortItems = (items) => items.sort((a, b) =>
+        String(b.date || '').localeCompare(String(a.date || '')) ||
+        String(b.slot || '').localeCompare(String(a.slot || '')) ||
+        String(b.id || '').localeCompare(String(a.id || '')));
+
+      // --- data loading (month chunks, newest first) ---
+      function loadMonth(monthMeta) {
+        if (!monthLoads.has(monthMeta.key)) {
+          // current (first) month changes daily; bust with its count
+          const bust = `?v=${monthMeta.count}`;
+          monthLoads.set(monthMeta.key, fetch(monthMeta.file + bust)
+            .then((r) => r.ok ? r.json() : Promise.reject(new Error(`Could not load ${monthMeta.file}`)))
+            .then((items) => {
+              const fresh = items.filter((it) => !itemsById.has(it.id));
+              fresh.forEach((it) => itemsById.set(it.id, it));
+              allItems.push(...fresh);
+              sortItems(allItems);
+              loadedMonthCount += 1;
+            }));
+        }
+        return monthLoads.get(monthMeta.key);
+      }
+      const monthOf = (date) => manifest.months.find((m) => m.key === String(date).slice(0, 7));
+      const nextUnloadedMonth = () => manifest.months.find((m) => !monthLoads.has(m.key));
+      const allMonthsLoaded = () => loadedMonthCount >= manifest.months.length;
+
+      async function ensureData() {
+        const q = search.value.trim();
+        const date = dateFilter.value;
+        if (q) {
+          await Promise.all(manifest.months.map(loadMonth));
+        } else if (date !== 'all') {
+          const m = monthOf(date);
+          if (m) await loadMonth(m);
+        } else {
+          while (filteredItems().length < visibleCount && !allMonthsLoaded()) {
+            await loadMonth(nextUnloadedMonth());
+          }
+        }
+      }
 
       function filteredItems() {
         const q = search.value.trim().toLowerCase();
@@ -419,41 +558,25 @@
         });
       }
 
-      function render() {
-        const items = filteredItems();
-        const shown = items.slice(0, visibleCount);
-        countPill.textContent = `Images: ${allItems.length}`;
-        toolbarCount.textContent = `Images: ${allItems.length}`;
-        loadMoreRow.hidden = visibleCount >= items.length;
-        if (!shown.length) {
-          gallery.innerHTML = '<p class="empty">No matching prompts yet.</p>';
-          return;
-        }
-        const groups = new Map();
-        shown.forEach((item) => {
-          const key = item.date || 'undated';
-          if (!groups.has(key)) groups.set(key, []);
-          groups.get(key).push(item);
-        });
-        gallery.innerHTML = Array.from(groups.entries()).map(([date, group]) => `
-          <section class="day-group">
-            <div class="day-heading"><h2>${escapeHtml(formatDate(date))}</h2><span>${group.length} shown</span></div>
-            <div class="grid">
-              ${group.map(cardHtml).join('')}
-            </div>
-          </section>
-        `).join('');
-        bindImages();
+      function totalForCurrentFilter(filtered) {
+        const q = search.value.trim();
+        const date = dateFilter.value;
+        if (!q && date === 'all') return manifest ? manifest.total : filtered.length;
+        return filtered.length;
       }
 
+      // --- rendering (append-only) ---
       function cardHtml(item) {
         const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
-        const src = imageUrl(item.image);
+        const color = /^#[0-9a-f]{6}$/i.test(String(item.color || '')) ? item.color : '#05070a';
         return `
           <article class="card" id="${escapeHtml(item.id)}">
-            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${portrait ? ' portrait' : ''}" style="background:${color}"><img src="${escapeHtml(thumbUrl(item))}" data-item-id="${escapeHtml(item.id)}" data-full="${escapeHtml(imageUrl(item))}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
-              <div class="kicker">${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}</div>
+              <div class="kicker-row">
+                <div class="kicker">${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}</div>
+                <button class="copy-btn" type="button" data-copy-id="${escapeHtml(item.id)}">Copy prompt</button>
+              </div>
               <h3>${escapeHtml(item.title)}</h3>
               ${item.tests ? `<p class="tests"><strong>Explores:</strong> ${escapeHtml(item.tests)}</p>` : ''}
               <details>
@@ -464,73 +587,234 @@
           </article>`;
       }
 
-      function populateDates() {
-        const dates = [...new Set(allItems.map((item) => item.date).filter(Boolean))].sort().reverse();
-        const options = '<option value="all">All dates</option>' + dates.map((date) => `<option value="${escapeHtml(date)}">${escapeHtml(formatDate(date))}</option>`).join('');
-        dateFilter.innerHTML = options;
-        toolbarDateFilter.innerHTML = options;
+      function appendCards(filtered) {
+        const slice = filtered.slice(renderedCount, visibleCount);
+        if (!slice.length) return;
+        slice.forEach((item) => {
+          const dayKey = item.date || 'undated';
+          let section = gallery.lastElementChild;
+          if (!section || section.dataset.date !== dayKey) {
+            const dayTotal = filtered.filter((it) => (it.date || 'undated') === dayKey).length;
+            section = document.createElement('section');
+            section.className = 'day-group';
+            section.dataset.date = dayKey;
+            section.innerHTML = `
+              <div class="day-heading"><h2>${escapeHtml(formatDate(dayKey))}</h2><span>${dayTotal} image${dayTotal === 1 ? '' : 's'}</span></div>
+              <div class="grid"></div>`;
+            gallery.appendChild(section);
+          }
+          section.querySelector('.grid').insertAdjacentHTML('beforeend', cardHtml(item));
+        });
+        renderedCount = Math.min(visibleCount, filtered.length);
+        bindImages();
+        pollPendingFades();
       }
 
-      function applyFilters(nextSearch, nextDate) {
+      function render(reset) {
+        const filtered = filteredItems();
+        if (reset) {
+          gallery.innerHTML = '';
+          renderedCount = 0;
+        }
+        const total = totalForCurrentFilter(filtered);
+        if (manifest) {
+          countPill.textContent = `Images: ${manifest.total}`;
+          toolbarCount.textContent = `Images: ${manifest.total}`;
+        }
+        if (!filtered.length) {
+          gallery.innerHTML = '<p class="empty">No matching prompts yet.</p>';
+          loadMoreRow.hidden = true;
+          return;
+        }
+        if (reset && gallery.querySelector('.empty')) gallery.innerHTML = '';
+        appendCards(filtered);
+        const shown = Math.min(renderedCount, total);
+        loadMoreRow.hidden = shown >= total;
+        loadMore.textContent = `Load more · showing ${shown} of ${total}`;
+      }
+
+      // --- filters + URL state ---
+      function syncUrl() {
+        const params = new URLSearchParams();
+        if (search.value.trim()) params.set('q', search.value.trim());
+        if (dateFilter.value !== 'all') params.set('date', dateFilter.value);
+        const qs = params.toString();
+        history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+      }
+
+      let filterToken = 0;
+      async function applyFilters(nextSearch, nextDate) {
         search.value = nextSearch;
         toolbarSearch.value = nextSearch;
         dateFilter.value = nextDate;
         toolbarDateFilter.value = nextDate;
         visibleCount = pageSize;
-        render();
+        syncUrl();
+        const token = ++filterToken;
+        await ensureData();
+        if (token !== filterToken) return;
+        render(true);
       }
 
       search.addEventListener('input', () => applyFilters(search.value, dateFilter.value));
       toolbarSearch.addEventListener('input', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
       dateFilter.addEventListener('change', () => applyFilters(search.value, dateFilter.value));
       toolbarDateFilter.addEventListener('change', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
-      loadMore.addEventListener('click', () => { visibleCount += pageSize; render(); });
+      loadMore.addEventListener('click', async () => {
+        visibleCount += pageSize;
+        loadMore.disabled = true;
+        try { await ensureData(); } finally { loadMore.disabled = false; }
+        render(false);
+      });
 
-      fetch('gallery-data.json', { cache: 'no-cache' })
-        .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load gallery-data.json')))
-        .then((items) => {
-          allItems = items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')) || String(b.id || '').localeCompare(String(a.id || '')));
-          populateDates();
-          render();
-        })
-        .catch((err) => { gallery.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
+      // prefetch the next month's data when the user nears the bottom (no auto-render)
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          if (!manifest || search.value.trim() || dateFilter.value !== 'all') return;
+          const next = nextUnloadedMonth();
+          if (next) loadMonth(next);
+        }, { rootMargin: '600px' }).observe(loadMoreRow);
+      }
 
+      // --- density toggle ---
+      function setDensity(cols, persist) {
+        document.body.dataset.density = cols;
+        densityToggle.textContent = `Grid: ${cols} column${cols === '1' ? '' : 's'}`;
+        if (persist) try { localStorage.setItem('gallery-density', cols); } catch (e) {}
+      }
+      let density = '3';
+      try { density = localStorage.getItem('gallery-density') || '3'; } catch (e) {}
+      setDensity(density === '2' ? '2' : '3', false);
+      densityToggle.addEventListener('click', () => {
+        setDensity(document.body.dataset.density === '3' ? '2' : '3', true);
+      });
+
+      // --- copy prompt (cards) ---
+      async function copyPrompt(text, button) {
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = button.dataset.label || button.textContent;
+          button.dataset.label = original;
+          button.textContent = 'Copied ✓';
+          button.classList.add('copied');
+          setTimeout(() => { button.textContent = original; button.classList.remove('copied'); }, 1400);
+        } catch (e) {
+          window.prompt('Copy prompt:', text);
+        }
+      }
+      gallery.addEventListener('click', (event) => {
+        const btn = event.target.closest('.copy-btn');
+        if (!btn) return;
+        const item = itemsById.get(btn.dataset.copyId);
+        if (item) copyPrompt(item.prompt || '', btn);
+      });
+
+      // --- date dropdown from manifest (grouped by month) ---
+      function populateDates() {
+        let html = '<option value="all">All dates</option>';
+        manifest.months.forEach((m) => {
+          html += `<optgroup label="${escapeHtml(formatMonth(m.key))} · ${m.count}">`;
+          m.dates.forEach((d) => {
+            html += `<option value="${escapeHtml(d.date)}">${escapeHtml(formatDate(d.date))} (${d.count})</option>`;
+          });
+          html += '</optgroup>';
+        });
+        dateFilter.innerHTML = html;
+        toolbarDateFilter.innerHTML = html;
+      }
+
+      // --- lightbox with prev/next ---
       const viewer = document.getElementById('image-lightbox');
       const stage = document.getElementById('lightbox-stage');
       const image = document.getElementById('lightbox-image');
       const title = document.getElementById('lightbox-title');
       const close = document.getElementById('lightbox-close');
+      const copyBtn = document.getElementById('lightbox-copy');
+      const prevBtn = document.getElementById('lightbox-prev');
+      const nextBtn = document.getElementById('lightbox-next');
+      let viewerList = [];
+      let viewerIndex = -1;
 
+      let fadePoll = null;
+      function pollPendingFades() {
+        // safety net: 'load' events can be missed on cached images; poll completion
+        if (fadePoll) return;
+        fadePoll = setInterval(() => {
+          const pending = [...document.querySelectorAll('.image-wrap img:not(.loaded)')];
+          pending.forEach((img) => { if (img.complete && img.naturalWidth) img.classList.add('loaded'); });
+          if (!pending.length) { clearInterval(fadePoll); fadePoll = null; }
+        }, 400);
+      }
       function bindImages() {
         document.querySelectorAll('.image-wrap img').forEach((thumb) => {
-          if (thumb.dataset.lightboxBound === '1') return;
-          thumb.dataset.lightboxBound = '1';
+          if (thumb.dataset.bound === '1') return;
+          thumb.dataset.bound = '1';
           thumb.setAttribute('tabindex', '0');
-          thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
+          if (thumb.complete && thumb.naturalWidth) thumb.classList.add('loaded');
+          else thumb.addEventListener('load', () => thumb.classList.add('loaded'), { once: true });
+          thumb.addEventListener('error', () => {
+            if (thumb.dataset.fellBack === '1') return;
+            thumb.dataset.fellBack = '1';
+            thumb.src = thumb.dataset.full || thumb.src;
+          }, { once: true });
+          const open = () => openViewerAt(thumb.dataset.itemId);
+          thumb.addEventListener('click', open);
           thumb.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              openViewer(thumb.currentSrc || thumb.src, thumb.alt);
-            }
+            if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); }
           });
         });
       }
-      function openViewer(src, alt) {
-        image.src = src;
-        image.alt = alt || 'Expanded generated image';
-        title.textContent = alt || 'Generated image';
-        viewer.classList.add('open');
+
+      function currentDomOrder() {
+        return [...gallery.querySelectorAll('.image-wrap img')].map((el) => el.dataset.itemId);
+      }
+      function preloadNeighbor(offset) {
+        const id = viewerList[viewerIndex + offset];
+        const item = id && itemsById.get(id);
+        if (item) { const im = new Image(); im.src = imageUrl(item); }
+      }
+      function showViewerItem() {
+        const item = itemsById.get(viewerList[viewerIndex]);
+        if (!item) return;
+        image.src = imageUrl(item);
+        image.alt = item.title || 'Expanded generated image';
+        title.textContent = `${item.title || 'Generated image'} · ${formatDate(item.date)}`;
         viewer.classList.remove('actual');
+        prevBtn.hidden = viewerIndex <= 0;
+        nextBtn.hidden = viewerIndex >= viewerList.length - 1;
+        preloadNeighbor(1);
+        preloadNeighbor(-1);
+      }
+      function openViewerAt(itemId) {
+        viewerList = currentDomOrder();
+        viewerIndex = viewerList.indexOf(itemId);
+        if (viewerIndex === -1) return;
+        viewer.classList.add('open');
         viewer.setAttribute('aria-hidden', 'false');
         document.body.style.overflow = 'hidden';
+        showViewerItem();
         close.focus({ preventScroll: true });
+      }
+      function stepViewer(delta) {
+        const next = viewerIndex + delta;
+        if (next < 0 || next >= viewerList.length) return;
+        viewerIndex = next;
+        showViewerItem();
       }
       function closeViewer() {
         viewer.classList.remove('open', 'actual');
         viewer.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
         image.removeAttribute('src');
+        viewerIndex = -1;
       }
+      prevBtn.addEventListener('click', () => stepViewer(-1));
+      nextBtn.addEventListener('click', () => stepViewer(1));
+      copyBtn.addEventListener('click', () => {
+        const item = itemsById.get(viewerList[viewerIndex]);
+        if (item) copyPrompt(item.prompt || '', copyBtn);
+      });
       image.addEventListener('click', (event) => {
         event.stopPropagation();
         viewer.classList.toggle('actual');
@@ -541,7 +825,30 @@
       });
       stage.addEventListener('click', (event) => { if (event.target === stage) closeViewer(); });
       close.addEventListener('click', closeViewer);
-      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && viewer.classList.contains('open')) closeViewer(); });
+      document.addEventListener('keydown', (event) => {
+        if (!viewer.classList.contains('open')) return;
+        if (event.key === 'Escape') closeViewer();
+        else if (event.key === 'ArrowLeft') stepViewer(-1);
+        else if (event.key === 'ArrowRight') stepViewer(1);
+      });
+
+      // --- boot ---
+      (async function init() {
+        try {
+          const r = await fetch('manifest.json', { cache: 'no-cache' });
+          if (!r.ok) throw new Error('Could not load manifest.json');
+          manifest = await r.json();
+          populateDates();
+          const params = new URLSearchParams(location.search);
+          const q = params.get('q') || '';
+          let date = params.get('date') || 'all';
+          if (date !== 'all' && ![...dateFilter.options].some((o) => o.value === date)) date = 'all';
+          await applyFilters(q, date);
+        } catch (err) {
+          gallery.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`;
+          loadMoreRow.hidden = true;
+        }
+      })();
     })();
   </script>
   <script src="../../assets/nav.js?v=nav-20260702b" defer></script>

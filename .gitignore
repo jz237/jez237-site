@@ -15,6 +15,7 @@ build/
 
 # Externally hosted media
 /experiments/image-gen-2-benchmark/images/
+/experiments/image-gen-2-benchmark/thumbs/
 /photos/garden/images/
 
 # Secrets/credentials

@@ -30,9 +30,12 @@ CREATURE_DESIGNS = ROOT / "creature-designs-data.json"
 RANDOM_RENDERING_STYLES = ROOT / "random-rendering-style-data.json"
 WORLD_THAT_NEVER_WAS = ROOT / "world-that-never-was-data.json"
 IMAGES = ROOT / "images"
+THUMBS = ROOT / "thumbs"
+MANIFEST = ROOT / "manifest.json"
 DEFAULT_R2_ACCOUNT_ID = "ac73a259dff5a3cbeccbb78824ac0db6"
 DEFAULT_R2_BUCKET = "jez237-site-media"
 DEFAULT_R2_PREFIX = "image-gen-2-benchmark/images"
+DEFAULT_R2_THUMB_PREFIX = "image-gen-2-benchmark/thumbs"
 DEFAULT_R2_PUBLIC_BASE_URL = "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/"
 
 
@@ -88,6 +91,42 @@ def save_archive_jpeg(src: Path, dest: Path) -> None:
         im.save(dest, "JPEG", quality=92, optimize=True, progressive=True, subsampling=0)
 
 
+def save_thumb(src: Path, dest: Path) -> str:
+    """Write a 640px WebP thumbnail and return the image's dominant color."""
+    with Image.open(src) as im:
+        im = ImageOps.exif_transpose(im).convert("RGB")
+        r, g, b = im.resize((1, 1), Image.LANCZOS).getpixel((0, 0))
+        im.thumbnail((640, 640), Image.LANCZOS)
+        im.save(dest, "WEBP", quality=78, method=6)
+    return f"#{r:02x}{g:02x}{b:02x}"
+
+
+def rebuild_monthly(data: list[dict]) -> None:
+    """Regenerate gallery-YYYY-MM.json chunks + manifest.json from full data."""
+    def sort_key(item: dict):
+        return (str(item.get("date") or ""), str(item.get("slot") or ""), str(item.get("id") or ""))
+
+    data = sorted(data, key=sort_key, reverse=True)
+    months: dict[str, list[dict]] = {}
+    for item in data:
+        months.setdefault(str(item.get("date") or "")[:7] or "undated", []).append(item)
+    manifest: dict = {"total": len(data), "months": []}
+    for key, items in months.items():
+        fname = f"gallery-{key}.json"
+        (ROOT / fname).write_text(json.dumps(items, indent=2, ensure_ascii=False) + "\n")
+        dates: dict[str, int] = {}
+        for it in items:
+            d = str(it.get("date") or "undated")
+            dates[d] = dates.get(d, 0) + 1
+        manifest["months"].append({
+            "key": key,
+            "file": fname,
+            "count": len(items),
+            "dates": [{"date": d, "count": c} for d, c in dates.items()],
+        })
+    MANIFEST.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--title", required=True)
@@ -136,6 +175,7 @@ def main() -> None:
     ap.add_argument("--skip-r2-upload", action="store_true", help="Copy the image locally but do not upload it to Cloudflare R2")
     ap.add_argument("--r2-bucket", default=os.environ.get("IMAGE_ARCHIVE_R2_BUCKET", DEFAULT_R2_BUCKET))
     ap.add_argument("--r2-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_PREFIX", DEFAULT_R2_PREFIX))
+    ap.add_argument("--r2-thumb-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_THUMB_PREFIX", DEFAULT_R2_THUMB_PREFIX))
     ap.add_argument("--r2-public-base-url", default=os.environ.get("IMAGE_ARCHIVE_R2_PUBLIC_BASE_URL", DEFAULT_R2_PUBLIC_BASE_URL))
     ap.add_argument("--wrangler-bin", default=os.environ.get("WRANGLER_BIN", "wrangler"))
     args = ap.parse_args()
@@ -152,10 +192,14 @@ def main() -> None:
         dest = IMAGES / f"{base_slug}-{n}.jpg"
         n += 1
     save_archive_jpeg(src, dest)
+    THUMBS.mkdir(parents=True, exist_ok=True)
+    thumb_dest = THUMBS / f"{dest.stem}.webp"
+    color = save_thumb(dest, thumb_dest)
     if args.skip_r2_upload:
         r2_key = ""
     else:
         r2_key = upload_to_r2(dest, args.r2_bucket, args.r2_prefix, args.wrangler_bin)
+        upload_to_r2(thumb_dest, args.r2_bucket, args.r2_thumb_prefix, args.wrangler_bin)
 
     entry = {
         "id": dest.stem,
@@ -163,6 +207,8 @@ def main() -> None:
         "tests": args.tests,
         "prompt": args.prompt,
         "image": f"images/{dest.name}",
+        "thumb": f"thumbs/{thumb_dest.name}",
+        "color": color,
         "date": args.date,
         "batch": args.batch,
         "slot": args.slot,
@@ -255,6 +301,8 @@ def main() -> None:
         data = load(path)
         data.append(entry)
         save(path, data)
+        if path == DATA:
+            rebuild_monthly(data)
 
     if r2_key:
         base = args.r2_public_base_url.rstrip("/") + "/"
