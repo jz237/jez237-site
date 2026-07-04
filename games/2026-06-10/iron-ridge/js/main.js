@@ -8,25 +8,25 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=4';
-import { Infantry } from './infantry.js?v=4';
-import { makeRng } from './noise.js?v=4';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=4';
-import { buildSky } from './sky.js?v=4';
-import { Foliage } from './foliage.js?v=4';
-import { Props } from './props.js?v=4';
-import { Tank } from './tank.js?v=4';
-import { WaveManager } from './enemy.js?v=4';
-import { Projectiles } from './projectiles.js?v=4';
-import { Effects } from './effects.js?v=4';
-import { GameAudio } from './audio.js?v=4';
-import { Input, isTouch } from './input.js?v=4';
-import { settings, setSetting } from './settings.js?v=4';
-import { Hud } from './hud.js?v=4';
-import { QualityScaler, LEVELS } from './quality.js?v=4';
-import { Minimap } from './minimap.js?v=4';
-import * as LB from './leaderboard.js?v=4';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=4';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=5';
+import { Infantry } from './infantry.js?v=5';
+import { makeRng } from './noise.js?v=5';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=5';
+import { buildSky } from './sky.js?v=5';
+import { Foliage } from './foliage.js?v=5';
+import { Props } from './props.js?v=5';
+import { Tank } from './tank.js?v=5';
+import { WaveManager } from './enemy.js?v=5';
+import { Projectiles } from './projectiles.js?v=5';
+import { Effects } from './effects.js?v=5';
+import { GameAudio } from './audio.js?v=5';
+import { Input, isTouch } from './input.js?v=5';
+import { settings, setSetting } from './settings.js?v=5';
+import { Hud } from './hud.js?v=5';
+import { QualityScaler, LEVELS } from './quality.js?v=5';
+import { Minimap } from './minimap.js?v=5';
+import * as LB from './leaderboard.js?v=5';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=5';
 
 const $ = (id) => document.getElementById(id);
 
@@ -1032,6 +1032,7 @@ function killSoldier(u, byPlayer = true) {
   _infPos.set(u.x, getHeight(u.x, u.z) + 0.9, u.z);
   effects.spawnDebris(_infPos, 4, 0.45, 0x5c6647);
   effects.dustPuff(u.x, getHeight(u.x, u.z), u.z, 0.7);
+  effects.bloodSplat(u.x, u.z);
   if (byPlayer && G.state === 'playing') addScore(INFANTRY.points, '');
 }
 
@@ -1286,7 +1287,8 @@ function offerPerks() {
   }
   G.perkPending = picks;
   G.perkTimer = 14;
-  hud.showPerks(picks, choosePerk, isTouch ? 'tap a card' : 'press 1 · 2 · 3');
+  hud.showPerks(picks, choosePerk,
+    isTouch ? 'TAP A CARD TO INSTALL' : 'PRESS 1 · 2 · 3 TO INSTALL', !isTouch);
 }
 
 // re-apply run perks to a fresh hull (start of run, squad respawn)
@@ -2077,16 +2079,19 @@ function gameFrame(dt) {
 
   input.poll();
 
-  // touch drive is camera-relative: the stick vector is the desired travel
-  // direction. The tank chooses forward or reverse, whichever points closer.
-  if ((isTouch || window.__forceTouch) && G.player && G.state === 'playing') {
+  // drive is camera-relative on every platform: the stick vector (thumb
+  // stick or WASD) is the desired travel direction; the hull turns itself
+  // and picks forward or reverse, whichever points closer.
+  if (G.player && G.state === 'playing') {
     const m = Math.hypot(input.stickX ?? 0, input.stickY ?? 0);
     if (m < 0.02) {
       input.throttle = 0;
       input.turn = 0;
     } else {
       const stickAng = Math.atan2(input.stickX, input.stickY); // up = 0
-      const want = G.camYaw + stickAng + Math.PI;
+      // up on the stick (or W) = straight away from the camera,
+      // right = screen-right (camYaw turns opposite to screen x)
+      const want = G.camYaw - stickAng;
       const cur = G.player.visualYaw();
       let err = want - cur;
       err = Math.atan2(Math.sin(err), Math.cos(err));

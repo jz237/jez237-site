@@ -3,8 +3,8 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { TANK, SHELL, CG } from './config.js?v=4';
-import { getHeight } from './terrain.js?v=4';
+import { TANK, SHELL, CG } from './config.js?v=5';
+import { getHeight } from './terrain.js?v=5';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
