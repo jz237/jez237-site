@@ -1196,9 +1196,16 @@
   <script>
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
+    const shots = [];
+    let shotIdx = -1;
+    function showShot(i) {
+      shotIdx = (i + shots.length) % shots.length;
+      lightboxImg.src = shots[shotIdx];
+    }
     document.querySelectorAll('img').forEach((img) => {
+      const n = shots.push(img.src) - 1;
       img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
+        showShot(n);
         lightbox.classList.add('active');
       });
     });
@@ -1206,9 +1213,10 @@
       const bg = card.style.backgroundImage;
       const match = bg && bg.match(/url\(["']?(.*?)["']?\)/);
       if (match && match[1]) {
+        const n = shots.push(match[1]) - 1;
         card.addEventListener('click', (e) => {
           e.preventDefault();
-          lightboxImg.src = match[1];
+          showShot(n);
           lightbox.classList.add('active');
         });
       }
@@ -1217,6 +1225,15 @@
       lightbox.classList.remove('active');
       lightboxImg.src = '';
     });
+    let wheelLast = 0;
+    lightbox.addEventListener('wheel', (e) => {
+      if (!lightbox.classList.contains('active') || shots.length < 2) return;
+      e.preventDefault();
+      const now = Date.now();
+      if (now - wheelLast < 350 || Math.abs(e.deltaY) < 6) return;
+      wheelLast = now;
+      showShot(shotIdx + (e.deltaY > 0 ? 1 : -1));
+    }, { passive: false });
   </script>
   <script src="../../assets/plant-enhance.js" defer></script>
   <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
