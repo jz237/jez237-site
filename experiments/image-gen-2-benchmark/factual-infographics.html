@@ -140,6 +140,7 @@
       .lightbox-hint { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="museum-theme.css?v=1">
 </head>
 <body>
   <header id="site-nav"></header>
@@ -205,12 +206,22 @@
       window.addEventListener('load', updateNavHeight);
       setTimeout(updateNavHeight, 0);
 
+      function sizeClass(value) {
+        const match = String(value || '').match(/^(\d+)x(\d+)$/);
+        if (!match) return '';
+        const w = Number(match[1]);
+        const h = Number(match[2]);
+        if (h > w) return ' portrait';
+        if (w > h) return ' landscape';
+        return ' square';
+      }
+
       function cardHtml(item) {
         const factual = item.factualInfographic || {};
         const src = imageUrl(item.image);
         return `
           <article class="card">
-            <div class="image-wrap"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${sizeClass(item.size)}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
               <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
               <h3>${escapeHtml(item.title)}</h3>

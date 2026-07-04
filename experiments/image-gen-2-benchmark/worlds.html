@@ -289,6 +289,7 @@
       .lightbox-hint { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="museum-theme.css?v=1">
 </head>
 <body>
   <header id="site-nav"></header>
@@ -364,12 +365,14 @@
 
       function cardHtml(item) {
         const world = item.world || {};
-        const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        const sizeMatch = String(item.size || '').match(/^(\d+)x(\d+)$/);
+        const portrait = sizeMatch ? Number(sizeMatch[2]) > Number(sizeMatch[1]) : (String(item.size || '').includes('portrait') || String(item.image || '').includes('almanac'));
+        const landscape = sizeMatch ? Number(sizeMatch[1]) > Number(sizeMatch[2]) : false;
         const description = world.entryDescription || item.tests || '';
         const src = imageUrl(item.image);
         return `
           <article class="card">
-            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${portrait ? ' portrait' : landscape ? ' landscape' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
               <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
               <h3>${escapeHtml(item.title)}</h3>
@@ -386,10 +389,12 @@
       function heroHtml(world) {
         const item = world.items.find((candidate) => /first view/i.test(candidate.title || '') || /^(world|manual)-0?1$/i.test(candidate.slot || '')) || world.items[0];
         const src = imageUrl(item.image);
-        const portrait = String(item.size || '').includes('portrait') || String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        const sizeMatch = String(item.size || '').match(/^(\d+)x(\d+)$/);
+        const portrait = sizeMatch ? Number(sizeMatch[2]) > Number(sizeMatch[1]) : (String(item.size || '').includes('portrait') || String(item.image || '').includes('almanac'));
+        const landscape = sizeMatch ? Number(sizeMatch[1]) > Number(sizeMatch[2]) : false;
         const subtitle = world.description || item.world?.entryDescription || item.tests || '';
         return `
-          <div class="world-hero${portrait ? ' portrait' : ''}">
+          <div class="world-hero${portrait ? ' portrait' : landscape ? ' landscape' : ''}">
             <img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy">
             <div class="world-hero-content">
               <div class="world-hero-kicker">Fictional world</div>

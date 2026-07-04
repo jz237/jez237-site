@@ -196,6 +196,7 @@
       .lightbox-hint { display: none; }
     }
   </style>
+  <link rel="stylesheet" href="museum-theme.css?v=1">
 </head>
 <body>
   <header id="site-nav"></header>
@@ -271,11 +272,13 @@
 
       function cardHtml(item) {
         const subject = item.subjectArtifact || {};
-        const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        const sizeMatch = String(item.size || '').match(/^(\d+)x(\d+)$/);
+        const portrait = sizeMatch ? Number(sizeMatch[2]) > Number(sizeMatch[1]) : (String(item.size || '').includes('portrait') || String(item.image || '').includes('almanac'));
+        const landscape = sizeMatch ? Number(sizeMatch[1]) > Number(sizeMatch[2]) : false;
         const src = imageUrl(item.image);
         return `
           <article class="card">
-            <div class="image-wrap${portrait ? ' portrait' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${portrait ? ' portrait' : landscape ? ' landscape' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
               <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
               <h3>${escapeHtml(item.title)}</h3>
