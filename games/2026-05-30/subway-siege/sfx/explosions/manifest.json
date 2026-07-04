@@ -1,0 +1,97 @@
+{
+  "sampleRate": 44100,
+  "channels": 1,
+  "format": "wav+ogg",
+  "effects": [
+    {
+      "id": "01_raider_pop",
+      "durationSeconds": 0.48,
+      "suggestedUse": "small enemy",
+      "description": "Short arcade ship pop with glassy top crack",
+      "wavFile": "sfx/explosions/01_raider_pop.wav",
+      "oggFile": "sfx/explosions/01_raider_pop.ogg",
+      "wavBytes": 42380,
+      "oggBytes": 9527
+    },
+    {
+      "id": "02_drone_crunch",
+      "durationSeconds": 0.62,
+      "suggestedUse": "drone enemy",
+      "description": "Crunchy drone hull burst with metallic fizz",
+      "wavFile": "sfx/explosions/02_drone_crunch.wav",
+      "oggFile": "sfx/explosions/02_drone_crunch.ogg",
+      "wavBytes": 54728,
+      "oggBytes": 11045
+    },
+    {
+      "id": "04_brute_rupture",
+      "durationSeconds": 0.82,
+      "suggestedUse": "brute enemy",
+      "description": "Heavier brute rupture with thick low body",
+      "wavFile": "sfx/explosions/04_brute_rupture.wav",
+      "oggFile": "sfx/explosions/04_brute_rupture.ogg",
+      "wavBytes": 72368,
+      "oggBytes": 12961
+    },
+    {
+      "id": "05_metal_debris_explosion",
+      "durationSeconds": 3.0,
+      "suggestedUse": "brute enemy/train debris",
+      "description": "Spark-local metal debris explosion audition #5",
+      "wavFile": "sfx/explosions/05_metal_debris_explosion.wav",
+      "oggFile": "sfx/explosions/05_metal_debris_explosion.ogg",
+      "wavBytes": 529244,
+      "oggBytes": 45564
+    },
+    {
+      "id": "06_quick_crack_boom",
+      "durationSeconds": 3.0,
+      "suggestedUse": "drone/spark enemy",
+      "description": "Spark-local quick crack-boom explosion audition #6",
+      "wavFile": "sfx/explosions/06_quick_crack_boom.wav",
+      "oggFile": "sfx/explosions/06_quick_crack_boom.ogg",
+      "wavBytes": 529244,
+      "oggBytes": 49806
+    },
+    {
+      "id": "07_cluster_flak",
+      "durationSeconds": 0.74,
+      "suggestedUse": "chain kills",
+      "description": "Clustered flak pops for multi-kill chains",
+      "wavFile": "sfx/explosions/07_cluster_flak.wav",
+      "oggFile": "sfx/explosions/07_cluster_flak.ogg",
+      "wavBytes": 65312,
+      "oggBytes": 12618
+    },
+    {
+      "id": "08_charge_bloom",
+      "durationSeconds": 1.06,
+      "suggestedUse": "charged kill",
+      "description": "Rail-charge bloom with widening energy blast",
+      "wavFile": "sfx/explosions/08_charge_bloom.wav",
+      "oggFile": "sfx/explosions/08_charge_bloom.ogg",
+      "wavBytes": 93536,
+      "oggBytes": 15576
+    },
+    {
+      "id": "09_long_tunnel_rumble",
+      "durationSeconds": 3.0,
+      "suggestedUse": "charged blast/boss arrival",
+      "description": "Spark-local long tunnel rumble explosion audition #9",
+      "wavFile": "sfx/explosions/09_long_tunnel_rumble.wav",
+      "oggFile": "sfx/explosions/09_long_tunnel_rumble.ogg",
+      "wavBytes": 529244,
+      "oggBytes": 43600
+    },
+    {
+      "id": "10_hard_standard_kaboom",
+      "durationSeconds": 3.0,
+      "suggestedUse": "boss destroyed",
+      "description": "Spark-local hard standard kaboom audition #10",
+      "wavFile": "sfx/explosions/10_hard_standard_kaboom.wav",
+      "oggFile": "sfx/explosions/10_hard_standard_kaboom.ogg",
+      "wavBytes": 529244,
+      "oggBytes": 42359
+    }
+  ]
+}

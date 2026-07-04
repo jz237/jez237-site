@@ -17,37 +17,6 @@ class GoogleAnalyticsInjector {
   }
 }
 
-async function legacyGameFallback(request, response) {
-  const url = new URL(request.url);
-
-  if (response.status !== 404 || !url.pathname.startsWith("/games/")) {
-    return response;
-  }
-
-  const legacyPath = url.pathname.slice("/games/".length);
-  if (!legacyPath || legacyPath.includes("..")) {
-    return response;
-  }
-
-  const legacyUrl = new URL(`https://jz237.github.io/games/${legacyPath}`);
-  legacyUrl.search = url.search;
-
-  const legacyResponse = await fetch(legacyUrl, { redirect: "follow" });
-  if (legacyResponse.status === 404) {
-    return response;
-  }
-
-  const headers = new Headers(legacyResponse.headers);
-  headers.set("Cache-Control", "public, max-age=0, must-revalidate");
-  headers.set("Access-Control-Allow-Origin", "*");
-
-  return new Response(legacyResponse.body, {
-    status: legacyResponse.status,
-    statusText: legacyResponse.statusText,
-    headers,
-  });
-}
-
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const retiredPaths = [
@@ -72,8 +41,7 @@ export async function onRequest(context) {
     });
   }
 
-  let response = await context.next();
-  response = await legacyGameFallback(context.request, response);
+  const response = await context.next();
   const contentType = response.headers.get("content-type") || "";
 
   if (!contentType.includes("text/html")) {
