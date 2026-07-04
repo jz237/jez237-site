@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Night Fireworks Show v1.0.9</title>
+<style>
+:root{
+  --bg-top:#06111f;
+  --bg-mid:#081a2d;
+  --bg-bottom:#10070f;
+  --panel:rgba(8, 18, 32, 0.56);
+  --panel-border:rgba(197, 225, 255, 0.24);
+  --text:#f7f3ea;
+  --muted:#c4d0df;
+  --accent:#ffd48d;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#02060d;color:var(--text)}
+body{
+  font-family:Georgia,"Times New Roman",serif;
+  touch-action:none;
+  -webkit-user-select:none;
+  user-select:none;
+  background:
+    radial-gradient(circle at 50% 110%, rgba(255,137,66,0.12), transparent 36%),
+    radial-gradient(circle at 20% 15%, rgba(96,125,255,0.1), transparent 28%),
+    linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 55%, var(--bg-bottom) 100%);
+}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+.hud{
+  position:fixed;
+  left:12px;
+  right:12px;
+  top:calc(12px + env(safe-area-inset-top, 0px));
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  pointer-events:none;
+}
+.title-card,.control-card{
+  background:var(--panel);
+  border:1px solid var(--panel-border);
+  border-radius:18px;
+  backdrop-filter:blur(14px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+.title-card{
+  padding:10px 12px 9px;
+  max-width:min(72vw, 420px);
+}
+.eyebrow{
+  display:block;
+  font:600 12px/1.2 "Trebuchet MS",Verdana,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:0.18em;
+  color:var(--accent);
+  margin-bottom:8px;
+}
+h1{
+  margin:0;
+  font-size:clamp(18px, 3.5vw, 30px);
+  line-height:0.95;
+  font-weight:700;
+  letter-spacing:0.02em;
+}
+.meta{
+  margin-top:6px;
+  color:var(--muted);
+  font:500 11px/1.35 "Trebuchet MS",Verdana,sans-serif;
+}
+.control-card{
+  padding:10px;
+  display:flex;
+  gap:8px;
+  pointer-events:auto;
+  align-items:center;
+  flex-wrap:wrap;
+  max-width:min(42vw, 430px);
+}
+.slider-wrap{display:flex;align-items:center;gap:10px;padding:0 6px;min-width:240px;flex:1}
+.slider-wrap span{font:600 11px/1.1 "Trebuchet MS",Verdana,sans-serif;color:var(--muted);white-space:nowrap}
+input[type="range"]{width:100%;accent-color:#ffd48d}
+.manual-panel{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+  display:none;
+  flex-direction:column;
+  gap:8px;
+  background:var(--panel);
+  border:1px solid var(--panel-border);
+  border-radius:18px;
+  padding:12px;
+  backdrop-filter:blur(14px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.08);
+  pointer-events:auto;
+}
+.manual-panel.show{display:flex}
+.manual-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.manual-head span{font:600 11px/1.1 "Trebuchet MS",Verdana,sans-serif;color:var(--accent);text-transform:uppercase;letter-spacing:0.16em}
+  .manual-panel .slider-wrap{min-width:0;width:100%;padding:0}
+  .manual-panel .slider-wrap span:first-child{min-width:92px}
+  .manual-panel .slider-wrap span:last-child{min-width:42px;text-align:right;color:var(--text)}
+  .manual-actions{display:flex;gap:8px;justify-content:space-between}
+  .manual-actions button{flex:1}
+@media (max-width: 720px){
+  .slider-wrap{min-width:0;flex-basis:100%}
+}
+button{
+  appearance:none;
+  border:1px solid rgba(255,239,207,0.2);
+  background:linear-gradient(180deg, rgba(255,228,170,0.2), rgba(255,134,74,0.12));
+  color:var(--text);
+  border-radius:999px;
+  min-height:42px;
+  padding:0 14px;
+  font:600 13px/1 "Trebuchet MS",Verdana,sans-serif;
+  letter-spacing:0.04em;
+}
+button.active{
+  background:linear-gradient(180deg, rgba(255,217,135,0.38), rgba(255,108,47,0.18));
+  box-shadow:0 0 22px rgba(255,185,97,0.22);
+}
+.footer-note{
+  position:fixed;
+  left:12px;
+  right:12px;
+  bottom:calc(12px + env(safe-area-inset-bottom, 0px));
+  display:flex;
+  justify-content:center;
+  pointer-events:none;
+}
+.footer-note span{
+  background:rgba(6, 14, 24, 0.5);
+  border:1px solid rgba(197, 225, 255, 0.18);
+  border-radius:999px;
+  color:#dfe7f2;
+  padding:8px 14px;
+  font:500 12px/1.2 "Trebuchet MS",Verdana,sans-serif;
+  text-align:center;
+  backdrop-filter:blur(12px);
+}
+@media (max-width: 720px){
+  .hud{flex-direction:column;align-items:stretch}
+  .title-card{max-width:none}
+  .control-card{justify-content:space-between}
+  button{flex:1;padding:0 10px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="hud">
+  <div class="title-card">
+    <h1>Night Fireworks Show</h1>
+    <div class="meta">v1.0.9 • autonomous fireworks at midnight • drag and release to launch a shell • Shapes Mode now builds each burst from particles</div>
+  </div>
+  <div class="control-card">
+    <button id="autoBtn" class="active" type="button">Auto Show</button>
+    <button id="shapeBtn" type="button">Shapes: Off</button>
+    <button id="manualBtn" type="button">Manual Mode</button>
+    <button id="soundBtn" type="button">Sound: On</button>
+  </div>
+</div>
+<div id="manualPanel" class="manual-panel">
+  <div class="manual-head"><span>Manual Mode</span><button id="manualCloseBtn" type="button">Hide Sliders</button></div>
+  <div class="manual-actions"><button id="resetSlidersBtn" type="button">Default Mode</button></div>
+  <div class="slider-wrap"><span>Particle Size</span><input id="sizeSlider" type="range" min="0.5" max="2" step="0.05" value="1"><span id="sizeValue">1.00×</span></div>
+  <div class="slider-wrap"><span>Thickness</span><input id="thicknessSlider" type="range" min="0.4" max="2.2" step="0.05" value="1"><span id="thicknessValue">1.00×</span></div>
+  <div class="slider-wrap"><span>Spark Count</span><input id="countSlider" type="range" min="0.25" max="4" step="0.05" value="1"><span id="countValue">1.00×</span></div>
+  <div class="slider-wrap"><span>Shape Hold</span><input id="holdSlider" type="range" min="0.4" max="2.5" step="0.05" value="1"><span id="holdValue">1.00×</span></div>
+</div>
+<script>
+(() => {
+  "use strict";
+
+  const canvas = document.getElementById("fx");
+  const ctx = canvas.getContext("2d");
+  const autoBtn = document.getElementById("autoBtn");
+  const shapeBtn = document.getElementById("shapeBtn");
+  const manualBtn = document.getElementById("manualBtn");
+  const sizeSlider = document.getElementById("sizeSlider");
+  const sizeValue = document.getElementById("sizeValue");
+  const thicknessSlider = document.getElementById("thicknessSlider");
+  const thicknessValue = document.getElementById("thicknessValue");
+  const countSlider = document.getElementById("countSlider");
+  const countValue = document.getElementById("countValue");
+  const holdSlider = document.getElementById("holdSlider");
+  const holdValue = document.getElementById("holdValue");
+  const soundBtn = document.getElementById("soundBtn");
+  const manualPanel = document.getElementById("manualPanel");
+  const manualCloseBtn = document.getElementById("manualCloseBtn");
+  const resetSlidersBtn = document.getElementById("resetSlidersBtn");
+
+  const TAU = Math.PI * 2;
+  const state = {
+    width: 0,
+    height: 0,
+    dpr: 1,
+    now: 0,
+    last: 0,
+    rockets: [],
+    sparks: [],
+    smoke: [],
+    flashes: [],
+    embers: [],
+    stars: [],
+    skyline: [],
+    auto: true,
+    shapesMode: false,
+    manualMode: false,
+    sizeScale: 1,
+    thicknessScale: 1,
+    countScale: 1,
+    holdScale: 1,
+    pointerDown: false,
+    pointerStart: null,
+    pointerCurrent: null,
+    autoClock: 0,
+    finaleClock: 0,
+    wind: 3,
+    launchX: 0.5,
+    burstLock: 0
+  };
+
+  const burstPalettes = [
+    ["#fff4c7", "#ffd766", "#ff9e42", "#ff5a36"],
+    ["#fefefe", "#ff8ac8", "#ff5f7a", "#d42b58"],
+    ["#f4ffda", "#b8ff7a", "#5bd368", "#1f9759"],
+    ["#ffffff", "#8fd9ff", "#59a8ff", "#4775ff"],
+    ["#ffffff", "#d7b0ff", "#af76ff", "#833dff"]
+  ];
+
+  const rand = (min, max) => Math.random() * (max - min) + min;
+  const pick = (array) => array[(Math.random() * array.length) | 0];
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+  const hexToRgba = (hex, alpha) => {
+    const clean = hex.replace("#", "");
+    const full = clean.length === 3 ? clean.split("").map((part) => part + part).join("") : clean;
+    const int = parseInt(full, 16);
+    const r = (int >> 16) & 255;
+    const g = (int >> 8) & 255;
+    const b = int & 255;
+    return `rgba(${r},${g},${b},${alpha})`;
+  };
+
+  function resize() {
+    state.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    state.width = window.innerWidth;
+    state.height = window.innerHeight;
+    canvas.width = Math.floor(state.width * state.dpr);
+    canvas.height = Math.floor(state.height * state.dpr);
+    canvas.style.width = `${state.width}px`;
+    canvas.style.height = `${state.height}px`;
+    ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+    buildBackdrop();
+  }
+
+  function buildBackdrop() {
+    state.stars = [];
+    state.skyline = [];
+    const horizon = state.height * 0.83;
+
+    for (let i = 0; i < 110; i += 1) {
+      state.stars.push({
+        x: Math.random() * state.width,
+        y: Math.random() * horizon * 0.72,
+        size: rand(0.5, 2),
+        alpha: rand(0.25, 0.95),
+        twinkle: rand(0.4, 1.2)
+      });
+    }
+
+    let x = 0;
+    while (x < state.width + 50) {
+      const width = rand(32, 88);
+      const height = rand(state.height * 0.08, state.height * 0.22);
+      const lights = [];
+      const rows = Math.max(2, Math.floor(height / 18));
+      for (let row = 0; row < rows; row += 1) {
+        if (Math.random() > 0.34) {
+          lights.push({
+            x: 6 + (Math.random() * Math.max(6, width - 14)),
+            y: 10 + row * 16,
+            w: rand(2, 4),
+            h: rand(3, 6),
+            a: rand(0.08, 0.24)
+          });
+        }
+      }
+      state.skyline.push({ x, width, height, lights });
+      x += width - rand(6, 18);
+    }
+  }
+
+  const audio = {
+    ctx: null,
+    master: null,
+    enabled: false,
+    unlocked: false,
+    noiseCache: new Map(),
+    init() {
+      if (this.ctx) {
+        return this.ctx;
+      }
+      const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextCtor) {
+        return null;
+      }
+      this.ctx = new AudioContextCtor();
+      this.master = this.ctx.createGain();
+      this.master.gain.value = this.enabled ? 0.32 : 0;
+      const compressor = this.ctx.createDynamicsCompressor();
+      compressor.threshold.value = -18;
+      compressor.knee.value = 10;
+      compressor.ratio.value = 6;
+      compressor.attack.value = 0.005;
+      compressor.release.value = 0.18;
+      this.master.connect(compressor);
+      compressor.connect(this.ctx.destination);
+      return this.ctx;
+    },
+    async enable() {
+      const ctxRef = this.init();
+      if (!ctxRef) {
+        return false;
+      }
+      if (ctxRef.state !== "running") {
+        try {
+          await ctxRef.resume();
+        } catch (error) {
+          return false;
+        }
+      }
+      this.enabled = true;
+      this.unlocked = ctxRef.state === "running";
+      soundBtn.textContent = this.enabled ? "Sound: On" : "Sound: Off";
+      soundBtn.classList.add("active");
+      return this.unlocked;
+    },
+    setEnabled(on) {
+      const ctxRef = this.init();
+      this.enabled = !!on;
+      if (ctxRef && this.master) {
+        this.master.gain.value = this.enabled ? 0.32 : 0;
+      }
+      soundBtn.textContent = this.enabled ? "Sound: On" : "Sound: Off";
+      soundBtn.classList.toggle("active", this.enabled);
+      if (this.enabled && ctxRef && ctxRef.state !== "running") {
+        ctxRef.resume().catch(() => {});
+      }
+      return this.enabled;
+    },
+    noiseBuffer(seconds = 2) {
+      const key = seconds.toFixed(2);
+      if (this.noiseCache.has(key)) {
+        return this.noiseCache.get(key);
+      }
+      const length = Math.max(1, Math.floor(this.ctx.sampleRate * seconds));
+      const buffer = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
+      const channel = buffer.getChannelData(0);
+      for (let i = 0; i < length; i += 1) {
+        channel[i] = (Math.random() * 2 - 1) * (1 - i / length);
+      }
+      this.noiseCache.set(key, buffer);
+      return buffer;
+    },
+    launch(depth = 1) {
+      if (!this.unlocked || !this.enabled) {
+        return;
+      }
+      const now = this.ctx.currentTime;
+      const body = this.ctx.createOscillator();
+      const bodyGain = this.ctx.createGain();
+      body.type = "sawtooth";
+      body.frequency.setValueAtTime(130, now);
+      body.frequency.exponentialRampToValueAtTime(58, now + 0.58);
+      bodyGain.gain.setValueAtTime(0.0001, now);
+      bodyGain.gain.exponentialRampToValueAtTime(0.05 * depth, now + 0.02);
+      bodyGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
+      body.connect(bodyGain);
+      bodyGain.connect(this.master);
+      body.start(now);
+      body.stop(now + 0.65);
+
+      const hiss = this.ctx.createBufferSource();
+      hiss.buffer = this.noiseBuffer(0.9);
+      const hp = this.ctx.createBiquadFilter();
+      hp.type = "highpass";
+      hp.frequency.value = 900;
+      const lp = this.ctx.createBiquadFilter();
+      lp.type = "lowpass";
+      lp.frequency.value = 3600;
+      const hissGain = this.ctx.createGain();
+      hissGain.gain.setValueAtTime(0.0001, now);
+      hissGain.gain.exponentialRampToValueAtTime(0.045 * depth, now + 0.03);
+      hissGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.54);
+      hiss.connect(hp);
+      hp.connect(lp);
+      lp.connect(hissGain);
+      hissGain.connect(this.master);
+      hiss.start(now);
+    },
+    burst(size = 1, colorBias = 1500) {
+      if (!this.unlocked || !this.enabled) {
+        return;
+      }
+      const now = this.ctx.currentTime;
+      const thump = this.ctx.createOscillator();
+      const thumpGain = this.ctx.createGain();
+      thump.type = "triangle";
+      thump.frequency.setValueAtTime(96, now);
+      thump.frequency.exponentialRampToValueAtTime(34, now + 0.28);
+      thumpGain.gain.setValueAtTime(0.0001, now);
+      thumpGain.gain.exponentialRampToValueAtTime(0.14 * size, now + 0.008);
+      thumpGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.33);
+      thump.connect(thumpGain);
+      thumpGain.connect(this.master);
+      thump.start(now);
+      thump.stop(now + 0.36);
+
+      const snap = this.ctx.createBufferSource();
+      snap.buffer = this.noiseBuffer(1.2);
+      const bp = this.ctx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.setValueAtTime(colorBias, now);
+      bp.Q.value = 1.2;
+      const snapGain = this.ctx.createGain();
+      snapGain.gain.setValueAtTime(0.0001, now);
+      snapGain.gain.exponentialRampToValueAtTime(0.16 * size, now + 0.006);
+      snapGain.gain.exponentialRampToValueAtTime(0.03 * size, now + 0.11);
+      snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+      snap.connect(bp);
+      bp.connect(snapGain);
+      snapGain.connect(this.master);
+      snap.start(now);
+
+      const shimmer = this.ctx.createOscillator();
+      const shimmerGain = this.ctx.createGain();
+      shimmer.type = "sine";
+      shimmer.frequency.setValueAtTime(colorBias * 0.7, now + 0.01);
+      shimmer.frequency.exponentialRampToValueAtTime(colorBias * 0.28, now + 0.6);
+      shimmerGain.gain.setValueAtTime(0.0001, now);
+      shimmerGain.gain.exponentialRampToValueAtTime(0.025 * size, now + 0.04);
+      shimmerGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.55);
+      shimmer.connect(shimmerGain);
+      shimmerGain.connect(this.master);
+      shimmer.start(now + 0.01);
+      shimmer.stop(now + 0.58);
+    },
+    crackle(size = 1) {
+      if (!this.unlocked || !this.enabled) {
+        return;
+      }
+      const now = this.ctx.currentTime;
+      const noise = this.ctx.createBufferSource();
+      noise.buffer = this.noiseBuffer(1.1);
+      const hp = this.ctx.createBiquadFilter();
+      hp.type = "highpass";
+      hp.frequency.value = 1800;
+      const crackleGain = this.ctx.createGain();
+      crackleGain.gain.setValueAtTime(0.0001, now);
+      for (let i = 0; i < 8; i += 1) {
+        const t = now + i * 0.045;
+        crackleGain.gain.linearRampToValueAtTime(rand(0.015, 0.08) * size, t + 0.01);
+        crackleGain.gain.linearRampToValueAtTime(0.0001, t + 0.04);
+      }
+      noise.connect(hp);
+      hp.connect(crackleGain);
+      crackleGain.connect(this.master);
+      noise.start(now);
+    }
+  };
+
+  function addFlash(x, y, radius, color, alpha) {
+    state.flashes.push({
+      x,
+      y,
+      radius,
+      color,
+      alpha,
+      life: 0,
+      ttl: rand(0.12, 0.3)
+    });
+  }
+
+  function addSmoke(x, y, radius, count, tint = "255,255,255", rise = 0.4) {
+    for (let i = 0; i < count; i += 1) {
+      state.smoke.push({
+        x: x + rand(-radius * 0.18, radius * 0.18),
+        y: y + rand(-radius * 0.12, radius * 0.12),
+        vx: rand(-16, 16),
+        vy: rand(-18, -6) * rise,
+        radius: rand(radius * 0.06, radius * 0.2),
+        growth: rand(12, 36),
+        alpha: rand(0.07, 0.2),
+        ttl: rand(1.8, 4.6),
+        life: 0,
+        tint
+      });
+    }
+  }
+
+  function addSpark(config) {
+    state.sparks.push({
+      x: config.x,
+      y: config.y,
+      vx: config.vx,
+      vy: config.vy,
+      drag: config.drag,
+      gravity: config.gravity,
+      radius: config.radius,
+      color: config.color,
+      glow: config.glow,
+      ttl: config.ttl,
+      life: 0,
+      trail: [],
+      ember: config.ember || false,
+      crackle: config.crackle || false,
+      kind: config.kind || "spark",
+      shape: config.shape || "hex",
+      points: config.points || 6,
+      rotate: config.rotate || 0,
+      spin: config.spin || 0,
+      stroke: config.stroke || 2,
+      strobe: config.strobe || 0,
+      fadeFloor: config.fadeFloor || 0.08
+    });
+  }
+
+  function addShapeBurst(x, y, shellSize, palette, heavy) {
+    const shapes = ["triangle", "square", "diamond", "pentagon", "hex", "heptagon", "octagon", "star", "ring"];
+    const shape = pick(shapes);
+    const maxDim = Math.min(state.width, state.height);
+    const diameter = maxDim * rand(0.1, 0.8);
+    const radius = diameter * 0.5 * state.sizeScale;
+    const points = shape === "triangle" ? 3 : shape === "square" ? 4 : shape === "diamond" ? 4 : shape === "pentagon" ? 5 : shape === "hex" ? 6 : shape === "heptagon" ? 7 : shape === "octagon" ? 8 : 5;
+    const particleCount = Math.round(clamp(radius * (shape === "ring" ? 2.2 : 3.2) * Math.pow(state.countScale, 1.55), heavy ? 90 : 55, heavy ? 360 : 220));
+    const baseColor = pick(palette);
+    for (let i = 0; i < particleCount; i += 1) {
+      const t = i / particleCount;
+      const offset = rand(-0.02, 0.02);
+      const angle = t * TAU + offset;
+      let px = 0;
+      let py = 0;
+      if (shape === "ring") {
+        px = Math.cos(angle) * radius;
+        py = Math.sin(angle) * radius;
+      } else if (shape === "star") {
+        const spokes = points * 2;
+        const seg = t * spokes;
+        const idx = Math.floor(seg);
+        const local = seg - idx;
+        const a0 = (idx / spokes) * TAU - Math.PI / 2;
+        const a1 = ((idx + 1) / spokes) * TAU - Math.PI / 2;
+        const r0 = idx % 2 === 0 ? radius : radius * 0.38;
+        const r1 = (idx + 1) % 2 === 0 ? radius : radius * 0.38;
+        px = lerp(Math.cos(a0) * r0, Math.cos(a1) * r1, local);
+        py = lerp(Math.sin(a0) * r0, Math.sin(a1) * r1, local);
+      } else {
+        const seg = t * points;
+        const idx = Math.floor(seg);
+        const local = seg - idx;
+        const a0 = (idx / points) * TAU - Math.PI / 2;
+        const a1 = ((idx + 1) / points) * TAU - Math.PI / 2;
+        const r0 = idx % 2 === 0 ? radius : radius * 0.56;
+        const r1 = (idx + 1) % 2 === 0 ? radius : radius * 0.56;
+        px = lerp(Math.cos(a0) * r0, Math.cos(a1) * r1, local);
+        py = lerp(Math.sin(a0) * r0, Math.sin(a1) * r1, local);
+      }
+      const outward = Math.atan2(py, px);
+      const speed = rand(24, 88) + radius * 0.12;
+      const burstColor = palette[i % palette.length] || baseColor;
+      addSpark({
+        x: x + px,
+        y: y + py,
+        vx: Math.cos(outward) * speed + rand(-10, 10),
+        vy: Math.sin(outward) * speed + rand(-20, 8),
+        drag: 0.987,
+        gravity: rand(68, 108),
+        radius: rand(0.85, 1.9) * state.thicknessScale,
+        color: burstColor,
+        glow: rand(8, 22) * state.thicknessScale,
+        ttl: (heavy ? rand(1.0, 1.7) : rand(0.8, 1.4)) * state.holdScale,
+        ember: true,
+        crackle: false,
+        kind: "shapeParticle",
+        shape,
+        points,
+        rotate: 0,
+        spin: rand(-0.25, 0.25),
+        stroke: rand(1.2, 2.2),
+        fadeFloor: 0.03
+      });
+    }
+  }
+
+  function createRocket(xRatio, targetX = null, targetY = null, heavy = false, configPower = 1) {
+    const x = clamp((targetX ?? (state.width * xRatio)), 30, state.width - 30);
+    const y = state.height + rand(8, 36);
+    const arcTarget = targetX ?? lerp(state.width * 0.18, state.width * 0.82, xRatio);
+    const apexY = targetY ?? rand(state.height * 0.14, state.height * 0.48);
+    const dx = arcTarget - x;
+    const travel = Math.max(0.55, (y - apexY) / rand(330, 440));
+    const power = Math.max(0.45, configPower || 1);
+    const vx = (dx / travel) * power;
+    const vy = -rand(300, heavy ? 470 : 410) * power;
+    const palette = pick(burstPalettes);
+    const styleRoll = Math.random();
+    let shell = "peony";
+    if (styleRoll > 0.78) {
+      shell = "willow";
+    } else if (styleRoll > 0.58) {
+      shell = "crackle";
+    } else if (styleRoll > 0.36) {
+      shell = "ring";
+    } else if (styleRoll > 0.18) {
+      shell = "palm";
+    }
+
+    state.rockets.push({
+      x,
+      y,
+      vx,
+      vy,
+      life: 0,
+      targetY: apexY,
+      fuse: rand(0.7, 1.25) / (0.8 + configPower * 0.35),
+      shell,
+      palette,
+      size: (heavy ? rand(1.1, 1.55) : rand(0.8, 1.25)) * (0.75 + configPower * 0.25),
+      heavy,
+      trail: [],
+      whistle: rand(0.85, 1.2)
+    });
+    audio.launch((heavy ? 1.12 : 0.85) * (0.7 + configPower * 0.6));
+  }
+
+  function explodeRocket(rocket) {
+    const x = rocket.x;
+    const y = rocket.y;
+    const palette = rocket.palette;
+    const coreColor = palette[0];
+    const shellSize = rocket.size;
+    const style = rocket.shell;
+    const countBase = (rocket.heavy ? rand(50, 90) : rand(30, 58)) * Math.pow(state.countScale, 1.35);
+    let layers = rocket.heavy ? 2 : 1;
+
+    addFlash(x, y, rand(34, 84) * shellSize, coreColor, rocket.heavy ? 0.18 : 0.12);
+    addSmoke(x, y, 64 * shellSize, rocket.heavy ? 16 : 10, "232,236,244", 1);
+    addSmoke(x, y, 34 * shellSize, rocket.heavy ? 8 : 5, "255,175,130", 0.55);
+    audio.burst(shellSize, rand(900, 2600));
+
+    if (state.shapesMode) {
+      addShapeBurst(x, y, shellSize, palette, rocket.heavy);
+      return;
+    }
+
+    if (style === "crackle") {
+      audio.crackle(shellSize);
+      layers = 2;
+    }
+    if (rocket.heavy && Math.random() > 0.55) {
+      layers += 1;
+    }
+
+    for (let layer = 0; layer < layers; layer += 1) {
+      const layerRadius = (1 + layer * 0.28) * shellSize;
+      const count = Math.floor(countBase * (1 - layer * 0.18));
+      const speed = rand(62, 130) * layerRadius;
+      for (let i = 0; i < count; i += 1) {
+        const angle = rand(0, TAU);
+        let spread = 1;
+        if (style === "ring") {
+          spread = rand(0.75, 0.95);
+        } else if (style === "palm") {
+          spread = Math.pow(Math.random(), 1.9);
+        } else if (style === "willow") {
+          spread = Math.pow(Math.random(), 1.2);
+        } else {
+          spread = Math.pow(Math.random(), 0.72);
+        }
+        const shellSpeed = speed * spread;
+        const vx = Math.cos(angle) * shellSpeed + rand(-8, 8);
+        let vy = Math.sin(angle) * shellSpeed + rand(-8, 8);
+        if (style === "ring") {
+          vy *= 0.55;
+        }
+        if (style === "palm") {
+          vy = Math.sin(angle) * shellSpeed * 0.3 - shellSpeed * 0.42;
+        }
+        const color = palette[(Math.random() * palette.length) | 0];
+        addSpark({
+          x,
+          y,
+          vx,
+          vy,
+          drag: style === "willow" ? 0.989 : 0.984,
+          gravity: style === "willow" ? 82 : style === "palm" ? 100 : 92,
+          radius: rand(0.9, 2.0) * shellSize,
+          color,
+          glow: rand(8, 18) * shellSize,
+          ttl: style === "willow" ? rand(1.2, 2.0) : rand(0.95, 1.65),
+          ember: Math.random() > 0.58,
+          crackle: style === "crackle" && Math.random() > 0.86,
+          strobe: color === "#ffffff" ? rand(0, 18) : 0,
+          fadeFloor: rand(0.02, 0.08)
+        });
+      }
+    }
+
+    const embers = rocket.heavy ? 18 : 10;
+    for (let i = 0; i < embers; i += 1) {
+      state.embers.push({
+        x: x + rand(-16, 16),
+        y: y + rand(-16, 16),
+        vx: rand(-28, 28),
+        vy: rand(6, 64),
+        radius: rand(0.8, 2.2) * shellSize,
+        life: 0,
+        ttl: rand(0.7, 1.9),
+        color: pick(["#ffdf9b", "#ff9f50", "#ff7347", "#fff8db"])
+      });
+    }
+
+    if (rocket.heavy && Math.random() > 0.5) {
+      const secondary = 3 + ((Math.random() * 4) | 0);
+      for (let i = 0; i < secondary; i += 1) {
+        const a = (i / secondary) * TAU + rand(-0.12, 0.12);
+        createRocket(
+          x / state.width,
+          x + Math.cos(a) * rand(60, 150),
+          y + Math.sin(a) * rand(25, 95),
+          false
+        );
+      }
+    }
+  }
+
+  function updateRocket(rocket, dt) {
+    rocket.life += dt;
+    rocket.vx += state.wind * dt * 0.5;
+    rocket.x += rocket.vx * dt;
+    rocket.y += rocket.vy * dt;
+    rocket.vy += 120 * dt;
+    rocket.trail.push({ x: rocket.x, y: rocket.y, age: 0 });
+    if (rocket.trail.length > 18) {
+      rocket.trail.shift();
+    }
+    for (const point of rocket.trail) {
+      point.age += dt;
+    }
+    const shouldBurst = rocket.vy >= -22 || rocket.y <= rocket.targetY || rocket.life >= rocket.fuse + (rocket.heavy ? 0.12 : 0);
+    if (shouldBurst) {
+      explodeRocket(rocket);
+      return false;
+    }
+    return rocket.x > -120 && rocket.x < state.width + 120 && rocket.y < state.height + 80;
+  }
+
+  function updateSpark(spark, dt) {
+    spark.life += dt;
+    spark.vx *= spark.drag;
+    spark.vy = spark.vy * spark.drag + spark.gravity * dt;
+    spark.x += spark.vx * dt;
+    spark.y += spark.vy * dt;
+    spark.trail.push({ x: spark.x, y: spark.y, age: 0 });
+    if (spark.trail.length > 14) {
+      spark.trail.shift();
+    }
+    for (const point of spark.trail) {
+      point.age += dt;
+    }
+    if (spark.crackle && Math.random() > 0.84) {
+      state.embers.push({
+        x: spark.x,
+        y: spark.y,
+        vx: rand(-34, 34),
+        vy: rand(-10, 40),
+        radius: rand(0.8, 2.2),
+        life: 0,
+        ttl: rand(0.18, 0.55),
+        color: pick(["#fff5da", "#ffd15c", "#ff8a38"])
+      });
+    }
+    if (spark.ember && Math.random() > 0.93) {
+      addSmoke(spark.x, spark.y, spark.glow * 0.6, 1, "185,190,210", 0.35);
+    }
+    return spark.life < spark.ttl;
+  }
+
+  function updateSmoke(puff, dt) {
+    puff.life += dt;
+    puff.x += (puff.vx + state.wind * 2.6) * dt;
+    puff.y += puff.vy * dt;
+    puff.radius += puff.growth * dt;
+    puff.alpha *= 0.996;
+    return puff.life < puff.ttl && puff.alpha > 0.008;
+  }
+
+  function updateFlash(flash, dt) {
+    flash.life += dt;
+    flash.radius += flash.radius * 0.8 * dt;
+    flash.alpha *= 0.9;
+    return flash.life < flash.ttl && flash.alpha > 0.01;
+  }
+
+  function updateEmber(ember, dt) {
+    ember.life += dt;
+    ember.x += ember.vx * dt;
+    ember.y += ember.vy * dt;
+    ember.vx *= 0.985;
+    ember.vy += 62 * dt;
+    return ember.life < ember.ttl;
+  }
+
+  function scheduleAuto(dt) {
+    if (!state.auto) {
+      return;
+    }
+    state.autoClock -= dt;
+    state.finaleClock -= dt;
+
+    if (state.finaleClock <= 0) {
+      state.finaleClock = rand(6.5, 10.5);
+      const barrage = 1 + ((Math.random() * 2) | 0);
+      for (let i = 0; i < barrage; i += 1) {
+        const delay = i * rand(0.12, 0.24);
+        window.setTimeout(() => {
+          createRocket(rand(0.14, 0.86), null, rand(state.height * 0.12, state.height * 0.42), Math.random() > 0.28);
+        }, delay * 1000);
+      }
+    }
+
+    if (state.autoClock <= 0) {
+      const density = state.width < 700 ? rand(0.64, 1.0) : rand(0.58, 0.92);
+      state.autoClock = density;
+      const chance = Math.random();
+      if (state.rockets.length > 3) {
+        return;
+      }
+      if (chance > 0.94) {
+        createRocket(rand(0.18, 0.82), null, rand(state.height * 0.2, state.height * 0.42), true);
+      } else {
+        createRocket(rand(0.16, 0.84), null, rand(state.height * 0.24, state.height * 0.52), chance > 0.82);
+      }
+    }
+  }
+
+  function drawBackground(time) {
+    ctx.clearRect(0, 0, state.width, state.height);
+
+    const sky = ctx.createLinearGradient(0, 0, 0, state.height);
+    sky.addColorStop(0, "#04101d");
+    sky.addColorStop(0.54, "#09172a");
+    sky.addColorStop(1, "#14070d");
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, state.width, state.height);
+
+    const haze = ctx.createRadialGradient(state.width * 0.5, state.height * 0.9, 0, state.width * 0.5, state.height * 0.9, state.width * 0.7);
+    haze.addColorStop(0, "rgba(255,120,62,0.1)");
+    haze.addColorStop(0.55, "rgba(27,39,62,0.03)");
+    haze.addColorStop(1, "rgba(1,5,14,0)");
+    ctx.fillStyle = haze;
+    ctx.fillRect(0, 0, state.width, state.height);
+
+    for (const star of state.stars) {
+      const twinkle = 0.72 + Math.sin(time * star.twinkle + star.x * 0.01) * 0.28;
+      ctx.fillStyle = `rgba(255,255,255,${star.alpha * twinkle})`;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.size, 0, TAU);
+      ctx.fill();
+    }
+
+    const horizon = state.height * 0.83;
+    ctx.fillStyle = "rgba(8,10,18,0.94)";
+    ctx.beginPath();
+    ctx.moveTo(0, state.height);
+    ctx.lineTo(0, horizon);
+    for (const building of state.skyline) {
+      ctx.lineTo(building.x, horizon);
+      ctx.lineTo(building.x, horizon - building.height);
+      ctx.lineTo(building.x + building.width, horizon - building.height);
+      ctx.lineTo(building.x + building.width, horizon);
+    }
+    ctx.lineTo(state.width, horizon);
+    ctx.lineTo(state.width, state.height);
+    ctx.closePath();
+    ctx.fill();
+
+    for (const building of state.skyline) {
+      for (const light of building.lights) {
+        ctx.fillStyle = `rgba(255,200,120,${light.a})`;
+        ctx.fillRect(building.x + light.x, horizon - building.height + light.y, light.w, light.h);
+      }
+    }
+  }
+
+  function drawSmoke() {
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    for (const puff of state.smoke) {
+      const fade = 1 - puff.life / puff.ttl;
+      const gradient = ctx.createRadialGradient(puff.x, puff.y, 0, puff.x, puff.y, puff.radius);
+      gradient.addColorStop(0, `rgba(${puff.tint},${puff.alpha * fade})`);
+      gradient.addColorStop(0.4, `rgba(${puff.tint},${puff.alpha * fade * 0.45})`);
+      gradient.addColorStop(1, "rgba(30,35,45,0)");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(puff.x, puff.y, puff.radius, 0, TAU);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawRocket(rocket) {
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    for (let i = 0; i < rocket.trail.length; i += 1) {
+      const point = rocket.trail[i];
+      const ratio = i / rocket.trail.length;
+      const alpha = ratio * 0.16;
+      const radius = (2 + ratio * 6) * state.sizeScale;
+      const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
+      gradient.addColorStop(0, `rgba(255,246,219,${alpha})`);
+      gradient.addColorStop(0.45, `rgba(255,169,89,${alpha * 0.7})`);
+      gradient.addColorStop(1, "rgba(255,80,25,0)");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(point.x, point.y, radius, 0, TAU);
+      ctx.fill();
+    }
+    const glow = ctx.createRadialGradient(rocket.x, rocket.y, 0, rocket.x, rocket.y, 24);
+    glow.addColorStop(0, "rgba(255,255,240,0.55)");
+    glow.addColorStop(0.3, "rgba(255,200,110,0.28)");
+    glow.addColorStop(0.72, "rgba(255,110,48,0.05)");
+    glow.addColorStop(1, "rgba(255,110,48,0)");
+    ctx.fillStyle = glow;
+    ctx.beginPath();
+    ctx.arc(rocket.x, rocket.y, 24, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawSpark(spark) {
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    if (spark.kind === "shapeParticle") {
+      const fade = Math.max(spark.fadeFloor, 1 - spark.life / spark.ttl);
+      const fallFade = spark.vy > 0 ? Math.max(0.15, 1 - spark.vy / 220) : 1;
+      const radius = spark.radius * state.sizeScale * state.thicknessScale;
+      const glow = ctx.createRadialGradient(spark.x, spark.y, 0, spark.x, spark.y, radius * 4);
+      glow.addColorStop(0, `${spark.color}c8`);
+      glow.addColorStop(0.35, `${spark.color}44`);
+      glow.addColorStop(1, `${spark.color}00`);
+      ctx.fillStyle = glow;
+      ctx.globalAlpha = fade * fallFade;
+      ctx.beginPath();
+      ctx.arc(spark.x, spark.y, radius * 3.2, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = spark.color;
+      ctx.beginPath();
+      ctx.arc(spark.x, spark.y, radius, 0, TAU);
+      ctx.fill();
+      ctx.restore();
+      return;
+    }
+    if (spark.kind === "shape") {
+      const fade = Math.max(spark.fadeFloor, 1 - spark.life / spark.ttl);
+      const fallFade = spark.vy > 0 ? Math.max(0.1, 1 - spark.vy / 180) : 1;
+      const sides = spark.points || 6;
+      const radius = spark.radius * state.sizeScale * state.thicknessScale;
+      const spin = spark.rotate + spark.life * spark.spin;
+      ctx.translate(spark.x, spark.y);
+      ctx.rotate(spin);
+      ctx.globalAlpha = fade * fallFade;
+      const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, radius * 1.05);
+      glow.addColorStop(0, `${spark.color}60`);
+      glow.addColorStop(0.45, `${spark.color}1c`);
+      glow.addColorStop(1, `${spark.color}00`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 1.05, 0, TAU);
+      ctx.fill();
+      ctx.strokeStyle = hexToRgba(spark.color, fade * fallFade * 0.85);
+      ctx.lineWidth = spark.stroke;
+      ctx.beginPath();
+      if (spark.shape === "ring") {
+        ctx.arc(0, 0, radius, 0, TAU);
+      } else if (spark.shape === "star") {
+        for (let i = 0; i <= 10; i += 1) {
+          const a = (i / 10) * TAU;
+          const r = i % 2 === 0 ? radius : radius * 0.38;
+          const px = Math.cos(a) * r;
+          const py = Math.sin(a) * r;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+      } else {
+        for (let i = 0; i <= sides; i += 1) {
+          const a = (i / sides) * TAU;
+          const r = i % 2 === 0 ? radius : radius * 0.55;
+          const px = Math.cos(a) * r;
+          const py = Math.sin(a) * r;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+      }
+      ctx.stroke();
+      ctx.restore();
+      return;
+    }
+    for (let i = 1; i < spark.trail.length; i += 1) {
+      const prev = spark.trail[i - 1];
+      const point = spark.trail[i];
+      const ratio = i / spark.trail.length;
+      const alpha = ratio * 0.12;
+      ctx.strokeStyle = hexToRgba(spark.color, alpha);
+      ctx.lineWidth = Math.max(0.35, spark.radius * ratio * 0.68);
+      ctx.beginPath();
+      ctx.moveTo(prev.x, prev.y);
+      ctx.lineTo(point.x, point.y);
+      ctx.stroke();
+    }
+    const pulseVisible = !spark.strobe || ((spark.life * 1000 + spark.x) % spark.strobe > spark.strobe * 0.4);
+    if (pulseVisible) {
+      const fade = Math.max(spark.fadeFloor, 1 - spark.life / spark.ttl);
+      const gradient = ctx.createRadialGradient(spark.x, spark.y, 0, spark.x, spark.y, spark.glow);
+      gradient.addColorStop(0, `${spark.color}88`);
+      gradient.addColorStop(0.2, `${spark.color}44`);
+      gradient.addColorStop(0.48, `${spark.color}14`);
+      gradient.addColorStop(1, `${spark.color}00`);
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(spark.x, spark.y, spark.glow, 0, TAU);
+      ctx.fill();
+      ctx.fillStyle = spark.color;
+      ctx.globalAlpha = fade;
+      ctx.beginPath();
+      ctx.arc(spark.x, spark.y, spark.radius, 0, TAU);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawFlash(flash) {
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    const gradient = ctx.createRadialGradient(flash.x, flash.y, 0, flash.x, flash.y, flash.radius);
+    gradient.addColorStop(0, `${flash.color}88`);
+    gradient.addColorStop(0.22, `${flash.color}2a`);
+    gradient.addColorStop(1, `${flash.color}00`);
+    ctx.fillStyle = gradient;
+    ctx.globalAlpha = flash.alpha;
+    ctx.beginPath();
+    ctx.arc(flash.x, flash.y, flash.radius, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawEmber(ember) {
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    const fade = 1 - ember.life / ember.ttl;
+    const gradient = ctx.createRadialGradient(ember.x, ember.y, 0, ember.x, ember.y, ember.radius * 4);
+    gradient.addColorStop(0, `${ember.color}77`);
+    gradient.addColorStop(0.35, `${ember.color}1c`);
+    gradient.addColorStop(1, `${ember.color}00`);
+    ctx.fillStyle = gradient;
+    ctx.globalAlpha = fade;
+    ctx.beginPath();
+    ctx.arc(ember.x, ember.y, ember.radius * 6, 0, TAU);
+    ctx.fill();
+    ctx.fillStyle = ember.color;
+    ctx.beginPath();
+    ctx.arc(ember.x, ember.y, ember.radius, 0, TAU);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  function drawPointerGuide() {
+    if (!state.pointerDown || !state.pointerStart || !state.pointerCurrent) {
+      return;
+    }
+    ctx.save();
+    const dx = state.pointerCurrent.x - state.pointerStart.x;
+    const dy = state.pointerCurrent.y - state.pointerStart.y;
+    const dist = Math.hypot(dx, dy);
+    ctx.strokeStyle = "rgba(255,223,176,0.82)";
+    ctx.lineWidth = 3;
+    ctx.setLineDash([10, 8]);
+    ctx.shadowColor = "rgba(255,200,110,0.65)";
+    ctx.shadowBlur = 16;
+    ctx.beginPath();
+    ctx.moveTo(state.pointerStart.x, state.pointerStart.y);
+    ctx.lineTo(state.pointerCurrent.x, state.pointerCurrent.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(255,243,214,0.24)";
+    ctx.beginPath();
+    ctx.arc(state.pointerStart.x, state.pointerStart.y, 16, 0, TAU);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,240,210,0.92)";
+    ctx.beginPath();
+    ctx.arc(state.pointerCurrent.x, state.pointerCurrent.y, 10 + Math.min(dist * 0.08, 16), 0, TAU);
+    ctx.fill();
+    ctx.font = '700 12px "Trebuchet MS",Verdana,sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255,242,222,0.92)';
+    ctx.fillText(dist < 20 ? 'TAP = BURST' : `POWER ${Math.min(4, (0.8 + dist / 170).toFixed(1))}x`, state.pointerCurrent.x, state.pointerCurrent.y - 18);
+    ctx.restore();
+  }
+
+  function tick(timestamp) {
+    if (!state.last) {
+      state.last = timestamp;
+    }
+    const dt = Math.min(0.033, (timestamp - state.last) / 1000);
+    state.last = timestamp;
+    state.now += dt;
+    state.wind = Math.sin(state.now * 0.16) * 5 + Math.sin(state.now * 0.71) * 2;
+
+    scheduleAuto(dt);
+
+    state.rockets = state.rockets.filter((rocket) => updateRocket(rocket, dt));
+    state.sparks = state.sparks.filter((spark) => updateSpark(spark, dt));
+    state.smoke = state.smoke.filter((puff) => updateSmoke(puff, dt));
+    state.flashes = state.flashes.filter((flash) => updateFlash(flash, dt));
+    state.embers = state.embers.filter((ember) => updateEmber(ember, dt));
+
+    drawBackground(state.now);
+    drawSmoke();
+    for (const flash of state.flashes) {
+      drawFlash(flash);
+    }
+    for (const rocket of state.rockets) {
+      drawRocket(rocket);
+    }
+    for (const spark of state.sparks) {
+      drawSpark(spark);
+    }
+    for (const ember of state.embers) {
+      drawEmber(ember);
+    }
+    drawPointerGuide();
+
+    requestAnimationFrame(tick);
+  }
+
+  function pointerPoint(event) {
+    if (event.touches && event.touches[0]) {
+      return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+    }
+    if (event.changedTouches && event.changedTouches[0]) {
+      return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+    }
+    return { x: event.clientX, y: event.clientY };
+  }
+
+  function launchFromGesture(start, end) {
+    const dx = clamp(end.x - start.x, -320, 320);
+    const dy = clamp(end.y - start.y, -520, 40);
+    const dist = Math.hypot(dx, dy);
+    const targetX = clamp(start.x + dx * 1.12, 40, state.width - 40);
+    const targetY = clamp(start.y + dy * 1.06, state.height * 0.1, state.height * 0.68);
+    const power = clamp(0.85 + dist / 200, 0.85, 4);
+    createRocket(start.x / state.width, targetX, targetY, Math.abs(dy) > 170 || Math.abs(dx) > 120, power);
+  }
+
+  function onPointerStart(event) {
+    if (event.target.closest && event.target.closest(".control-card, .manual-panel")) {
+      return;
+    }
+    const point = pointerPoint(event);
+    state.pointerDown = true;
+    state.pointerStart = point;
+    state.pointerCurrent = point;
+    audio.enable();
+  }
+
+  function onPointerMove(event) {
+    if (!state.pointerDown) {
+      return;
+    }
+    state.pointerCurrent = pointerPoint(event);
+  }
+
+  function onPointerEnd(event) {
+    if (!state.pointerDown) {
+      return;
+    }
+    if (event.target.closest && event.target.closest(".control-card, .manual-panel")) {
+      state.pointerDown = false;
+      state.pointerStart = null;
+      state.pointerCurrent = null;
+      return;
+    }
+    const end = pointerPoint(event);
+    const start = state.pointerStart || end;
+    const distance = Math.hypot(end.x - start.x, end.y - start.y);
+    if (distance < 20) {
+      createRocket(end.x / state.width, end.x, rand(state.height * 0.16, state.height * 0.42), false, 0.55);
+    } else {
+      launchFromGesture(start, end);
+    }
+    state.pointerDown = false;
+    state.pointerStart = null;
+    state.pointerCurrent = null;
+  }
+
+  autoBtn.addEventListener("click", () => {
+    state.auto = !state.auto;
+    autoBtn.classList.toggle("active", state.auto);
+    autoBtn.textContent = state.auto ? "Auto Show" : "Paused";
+    if (!state.auto) {
+      state.autoClock = 999;
+    } else {
+      state.autoClock = 0.05;
+    }
+  });
+
+    shapeBtn.addEventListener("click", () => {
+      state.shapesMode = !state.shapesMode;
+      shapeBtn.classList.toggle("active", state.shapesMode);
+      shapeBtn.textContent = state.shapesMode ? "Shapes: On" : "Shapes: Off";
+    });
+
+  function resetManualDefaults(){
+    const defaults = {size:1, thickness:1, count:1, hold:1};
+    sizeSlider.value = defaults.size;
+    thicknessSlider.value = defaults.thickness;
+    countSlider.value = defaults.count;
+    holdSlider.value = defaults.hold;
+    state.sizeScale = defaults.size;
+    state.thicknessScale = defaults.thickness;
+    state.countScale = defaults.count;
+    state.holdScale = defaults.hold;
+    sizeValue.textContent = `${state.sizeScale.toFixed(2)}×`;
+    thicknessValue.textContent = `${state.thicknessScale.toFixed(2)}×`;
+    countValue.textContent = `${state.countScale.toFixed(2)}×`;
+    holdValue.textContent = `${state.holdScale.toFixed(2)}×`;
+  }
+
+  manualBtn.addEventListener("click", () => {
+    state.manualMode = !state.manualMode;
+    manualPanel.classList.toggle("show", state.manualMode);
+    manualBtn.classList.toggle("active", state.manualMode);
+  });
+
+  manualCloseBtn.addEventListener("click", () => {
+    state.manualMode = false;
+    manualPanel.classList.remove("show");
+    manualBtn.classList.remove("active");
+  });
+
+  sizeSlider.addEventListener("input", () => {
+    state.sizeScale = Number(sizeSlider.value);
+    sizeValue.textContent = `${state.sizeScale.toFixed(2)}×`;
+  });
+  thicknessSlider.addEventListener("input", () => {
+    state.thicknessScale = Number(thicknessSlider.value);
+    thicknessValue.textContent = `${state.thicknessScale.toFixed(2)}×`;
+  });
+  countSlider.addEventListener("input", () => {
+    state.countScale = Number(countSlider.value);
+    countValue.textContent = `${state.countScale.toFixed(2)}×`;
+  });
+  holdSlider.addEventListener("input", () => {
+    state.holdScale = Number(holdSlider.value);
+    holdValue.textContent = `${state.holdScale.toFixed(2)}×`;
+  });
+
+  resetSlidersBtn.addEventListener("click", resetManualDefaults);
+
+  soundBtn.addEventListener("click", () => {
+    if (!audio.ctx || !audio.unlocked) {
+      audio.setEnabled(true);
+    } else {
+      audio.setEnabled(!audio.enabled);
+    }
+  });
+
+  window.addEventListener("pointerdown", onPointerStart, { passive: true });
+  window.addEventListener("pointermove", onPointerMove, { passive: true });
+  window.addEventListener("pointerup", onPointerEnd, { passive: true });
+  window.addEventListener("pointercancel", onPointerEnd, { passive: true });
+  window.addEventListener("resize", resize);
+  window.addEventListener("visibilitychange", () => {
+    if (!document.hidden) {
+      state.last = 0;
+    }
+  });
+
+  resize();
+  resetManualDefaults();
+  for (let i = 0; i < 3; i += 1) {
+    window.setTimeout(() => {
+      createRocket(rand(0.2, 0.8), null, rand(state.height * 0.2, state.height * 0.5), i === 0);
+    }, 260 + i * 260);
+  }
+  audio.enable();
+  audio.setEnabled(true);
+  requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
