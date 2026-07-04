@@ -1,6 +1,6 @@
 {
   "date": "2026-07-04",
-  "updatedAt": "2026-07-04T13:55:52.591295+00:00",
+  "updatedAt": "2026-07-04T15:00:01.491825+00:00",
   "items": [
     {
       "title": "The fanfiction community is at war with AI — and itself",
@@ -16,10 +16,10 @@
       "featuredLatest": false,
       "published": "2026-07-04T12:00:00+00:00",
       "firstSeen": "2026-07-04T13:00:01.397173+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.3025,
+      "score": 10.272,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -32,6 +32,38 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "fanfiction-community-war-itself"
+    },
+    {
+      "title": "OpenAI apparently never visited the site of its flagship UK AI project",
+      "url": "https://thenextweb.com/news/openai-apparently-never-visited-the-site-of-its-flagship-uk-ai-project",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI apparently failed to visit a key site earmarked for its Stargate UK data centre project before the initiative was announced, the Guardian reported on Friday. The revelation deepens questions about whether the UK government’s flagship AI infrastructure programme was built on press releases rather than due diligence. Stargate UK, a partnership between OpenAI, Nvidia, and [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-a6deb0326312009b24.avif",
+      "featuredLatest": false,
+      "published": "2026-07-04T13:47:43+00:00",
+      "firstSeen": "2026-07-04T15:00:01.491825+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.9138,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "OpenAI apparently never visited the site of its flagship UK AI project",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-apparently-never-visited-site",
+      "imageOriginal": "https://media.thenextweb.com/2026/04/sam-altman-home-shooting-arrest-molotov-openai.avif"
     },
     {
       "title": "Micron breaks ground on $9bn Hiroshima expansion to chase AI memory demand",
@@ -47,10 +79,10 @@
       "featuredLatest": false,
       "published": "2026-07-04T13:38:41+00:00",
       "firstSeen": "2026-07-04T13:55:52.591295+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.5413,
+      "score": 4.5093,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -77,9 +109,9 @@
       "summary": "OpenAI floats handing 5% of itself to the US government on the same day the jobs data delivers a genuine surprise: the companies going hardest on AI are the ones hiring the most. A messy, hopeful counter-narrative to the AI-jobs apocalypse.",
       "image": "public/thumbnails/news-1aa8c5678def52937e.png",
       "featuredLatest": false,
-      "published": "2026-07-04T13:55:57.844424+00:00",
+      "published": "2026-07-04T15:00:07.980819+00:00",
       "firstSeen": "2026-07-04T03:00:01.462318+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 4.332,
@@ -95,6 +127,162 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "companies-hiring-more"
+    },
+    {
+      "title": "China is rewriting e-commerce law to tighten platform rules at home and shield its companies abroad",
+      "url": "https://thenextweb.com/news/china-ecommerce-law-amendment-platform-countermeasures",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "China released draft amendments to its e-commerce law on Saturday, proposing 20 provisions that would expand the law’s reach beyond platforms and merchants to cover a wider range of participants in the digital economy. The proposal, jointly issued by the State Administration for Market Regulation and the Ministry of Commerce, is open for public consultation until 4 [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-ccdf9402d2e9175a6b.avif",
+      "featuredLatest": false,
+      "published": "2026-07-04T14:34:35+00:00",
+      "firstSeen": "2026-07-04T15:00:01.491825+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.2371,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "China is rewriting e-commerce law to tighten platform rules at home and shield its companies abroad",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "china-rewriting-e-commerce-law-tighten-platform",
+      "imageOriginal": "https://media.thenextweb.com/2025/03/Untitled-design-44.avif"
+    },
+    {
+      "title": "Germany’s most conservative banks are about to let millions of customers buy Bitcoin",
+      "url": "https://thenextweb.com/news/germany-cooperative-savings-banks-crypto-trading",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Germany’s cooperative banks and savings banks, the local institutions that handle mortgages, current accounts, and small business loans for tens of millions of customers, are rolling out their own cryptocurrency trading services. The move will bring digital asset trading to a population that could barely be persuaded to use credit cards a decade ago. Some of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Germany-Flag.avif",
+      "featuredLatest": false,
+      "published": "2026-07-04T14:10:41+00:00",
+      "firstSeen": "2026-07-04T15:00:01.491825+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2252,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Germany’s most conservative banks are about to let millions of customers buy Bitcoin",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "germany-most-conservative-banks-let-millions"
+    },
+    {
+      "title": "Macron and Modi are winning the AI infrastructure race with text messages and personal meetings",
+      "url": "https://thenextweb.com/news/macron-modi-ai-infrastructure-personal-diplomacy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The global race for AI infrastructure has become a contest of personal relationships. French President Emmanuel Macron and Indian Prime Minister Narendra Modi have emerged as its most aggressive practitioners, personally courting the heads of the world’s largest technology companies to secure data centre investments that will determine where the next generation of AI systems are trained [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/macron-modi-ai-infrastructure-personal-diplomacy.avif",
+      "featuredLatest": false,
+      "published": "2026-07-04T13:59:22+00:00",
+      "firstSeen": "2026-07-04T15:00:01.491825+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1195,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Macron and Modi are winning the AI infrastructure race with text messages and personal meetings",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "macron-modi-winning-infrastructure-race-text"
+    },
+    {
+      "title": "India summons Meta over Instagram ads promoting child sexual abuse material",
+      "url": "https://thenextweb.com/news/india-summons-meta-instagram-csam-ads",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "India’s Ministry of Electronics and Information Technology will summon Meta executives after a BBC investigation found that Instagram had been running paid advertisements promoting child sexual abuse material to users in the country. Union IT Minister Ashwini Vaishnaw has directed ministry officials to seek a formal explanation from the company, according to Business Standard, which cited government [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Meta.avif",
+      "featuredLatest": false,
+      "published": "2026-07-04T13:50:28+00:00",
+      "firstSeen": "2026-07-04T15:00:01.491825+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1151,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "India summons Meta over Instagram ads promoting child sexual abuse material",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "meta-india-summons-meta-instagram-ads"
+    },
+    {
+      "title": "China wants cinemas to sell you karaoke and coffee, not just tickets",
+      "url": "https://thenextweb.com/news/china-cinemas-ai-karaoke-coffee-plan",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "China’s cinemas are being told to stop relying on tickets alone. New guidelines from the National Film Administration and the State Administration for Market Regulation encourage theatres to add AI concierge agents, karaoke booths and coffee shops to their lobbies, according to Bloomberg. The same guidance nudges operators toward movie-themed merchandise stores, licensed products, art exhibitions [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/china-agentic-commerce-ai-shopping-alibaba-qwen.avif",
+      "featuredLatest": false,
+      "published": "2026-07-04T14:12:15+00:00",
+      "firstSeen": "2026-07-04T15:00:01.491825+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 0.7259,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "China wants cinemas to sell you karaoke and coffee, not just tickets",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "china-wants-cinemas-sell-you-karaoke"
     }
   ],
   "tools": [
@@ -112,11 +300,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1948,
+      "score": 14.1922,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -150,7 +338,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5102,
+      "score": 7.5101,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -181,10 +369,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2994,
+      "score": 7.2967,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -215,10 +403,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2943,
+      "score": 7.2918,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -249,10 +437,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9506,
+      "score": 6.9494,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -316,10 +504,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 4.5069,
+      "score": 4.5011,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -386,11 +574,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1948,
+      "score": 14.1922,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -424,7 +612,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5102,
+      "score": 7.5101,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -455,10 +643,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2994,
+      "score": 7.2967,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -489,10 +677,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2943,
+      "score": 7.2918,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -523,10 +711,10 @@
       "featuredLatest": false,
       "published": "2026-06-29T16:54:09+00:00",
       "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9506,
+      "score": 6.9494,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -590,10 +778,10 @@
       "featuredLatest": false,
       "published": "2026-07-02T00:21:44+00:00",
       "firstSeen": "2026-07-02T08:00:02.123947+00:00",
-      "lastSeen": "2026-07-04T13:55:52.591295+00:00",
+      "lastSeen": "2026-07-04T15:00:01.491825+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 4.5069,
+      "score": 4.5011,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -654,7 +842,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -664,7 +852,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -674,7 +862,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -684,7 +872,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -694,7 +882,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 814,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -704,7 +892,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -714,7 +902,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -722,10 +910,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "not well-formed (invalid token): line 1, column 158",
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -735,7 +922,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -745,7 +932,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -755,7 +942,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -765,7 +952,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "The Next Web",
@@ -775,7 +962,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -785,7 +972,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -795,7 +982,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -805,7 +992,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -815,7 +1002,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Anthropic News",
@@ -825,7 +1012,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 236,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "The Verge AI",
@@ -835,7 +1022,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -845,7 +1032,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Simon Willison",
@@ -855,7 +1042,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -865,7 +1052,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Latent Space",
@@ -875,7 +1062,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Import AI",
@@ -883,10 +1070,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -896,7 +1082,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 154,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -906,7 +1092,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -916,7 +1102,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -926,7 +1112,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -936,7 +1122,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -946,7 +1132,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -956,7 +1142,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -966,19 +1152,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-04T13:55:52.591295+00:00"
+      "checkedAt": "2026-07-04T15:00:01.491825+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
