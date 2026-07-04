@@ -4,9 +4,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { getHeight, getNormal, forestDensity } from './terrain.js';
-import { makeRng } from './noise.js';
-import { WORLD_HALF, SCATTER, CG } from './config.js';
+import { getHeight, getNormal, forestDensity } from './terrain.js?v=2';
+import { makeRng } from './noise.js?v=2';
+import { WORLD_HALF, SCATTER, CG } from './config.js?v=2';
 
 // --- tiny non-indexed geometry merger (avoids vendoring utils) ----------
 function mergeGeoms(geoms) {

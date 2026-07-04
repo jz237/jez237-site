@@ -3,7 +3,7 @@
 //   POST {SCORES_API} {initials, score, extra}
 // Falls back to localStorage when offline.
 
-import { SCORES_API, HS_KEY, NAME_KEY } from './config.js';
+import { SCORES_API, HS_KEY, NAME_KEY } from './config.js?v=2';
 
 let globalCache = null;
 

@@ -3,8 +3,8 @@
 // everything else — engine rumble, wind, clicks, whistles — is synthesized.
 // The synth versions remain as fallback until the samples finish decoding.
 
-import { MUTE_KEY } from './config.js';
-import { settings, setSetting } from './settings.js';
+import { MUTE_KEY } from './config.js?v=2';
+import { settings, setSetting } from './settings.js?v=2';
 
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],

@@ -2,7 +2,7 @@
 // vignette, off-screen enemy arrows, leaderboard rendering, screens.
 
 import * as THREE from 'three';
-import { SHELL } from './config.js';
+import { SHELL } from './config.js?v=2';
 
 const $ = (id) => document.getElementById(id);
 const _v = new THREE.Vector3();
