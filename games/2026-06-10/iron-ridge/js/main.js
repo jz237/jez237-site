@@ -1619,12 +1619,19 @@ function showMenu() {
   audio.startMusic('menu');
 }
 
-// browsers gate audio on a user gesture — the first tap/click anywhere
-// unlocks the context and starts whatever music the state wants
-window.addEventListener('pointerdown', () => {
+// browsers gate audio on a user gesture — any tap/click/key unlocks the
+// context and (re)starts whatever music the state wants. Persistent, not
+// once: iOS suspends/interrupts the context when the tab backgrounds.
+const unlockAudio = () => {
   audio.ensure();
   audio.resume();
-}, { once: true });
+};
+window.addEventListener('pointerdown', unlockAudio);
+window.addEventListener('touchstart', unlockAudio, { passive: true });
+window.addEventListener('keydown', unlockAudio);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) audio.resume();
+});
 
 // ---------------------------------------------------------------- main loop
 let last = performance.now();
