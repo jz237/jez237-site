@@ -1,0 +1,82 @@
+name: Refresh Stock Market Data
+
+on:
+  schedule:
+    - cron: "1,31 13-21 * * 1-5" # half-hourly; gated below to 9:30 AM-4:35 PM Eastern
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Blobless + sparse: skips the multi-GB media directories; this job
+          # only reads scripts/ and reads/writes stock-market/data.
+          filter: blob:none
+          sparse-checkout: |
+            scripts
+            stock-market/data
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check market refresh window
+        id: market_window
+        run: |
+          eastern_hour="$(TZ=America/New_York date +%H)"
+          eastern_minute="$(TZ=America/New_York date +%M)"
+          eastern_total=$((10#$eastern_hour * 60 + 10#$eastern_minute))
+          # GitHub cron fires with 20-90 minute lag, so the window and the
+          # full-refresh band are generous: any run landing between 3:55 PM
+          # and 5:00 PM Eastern rebuilds the full history for the day.
+          market_start=$((9 * 60 + 30))
+          market_end=$((17 * 60))
+          close_run=$((15 * 60 + 55))
+          if [ "$eastern_total" -ge "$market_start" ] && [ "$eastern_total" -le "$market_end" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping outside 9:30 AM-5:00 PM Eastern refresh window."
+          fi
+          # Intraday runs refresh quotes and intraday chart ranges only; the
+          # post-close run (and manual dispatch) rebuilds the full history.
+          mode="intraday"
+          if [ "$eastern_total" -ge "$close_run" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            mode="full"
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "Refresh mode: $mode"
+
+      - name: Refresh stock market data
+        if: steps.market_window.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          STOCK_REFRESH_MODE: ${{ steps.market_window.outputs.mode }}
+        run: node scripts/refresh_stock_market_data.mjs
+
+      # Pushes made with GITHUB_TOKEN never trigger other workflows, so the
+      # data validation runs here instead of relying on a push-triggered run.
+      - name: Validate refreshed data
+        if: steps.market_window.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
+        run: node scripts/validate_stock_market.mjs --data-only
+
+      - name: Commit and push changes (if any)
+        id: commit_changes
+        if: steps.market_window.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add stock-market/data
+          if git diff --staged --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: refresh stock market data"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
