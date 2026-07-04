@@ -8,23 +8,24 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX } from './config.js?v=2';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=2';
-import { buildSky } from './sky.js?v=2';
-import { Foliage } from './foliage.js?v=2';
-import { Props } from './props.js?v=2';
-import { Tank } from './tank.js?v=2';
-import { WaveManager } from './enemy.js?v=2';
-import { Projectiles } from './projectiles.js?v=2';
-import { Effects } from './effects.js?v=2';
-import { GameAudio } from './audio.js?v=2';
-import { Input, isTouch } from './input.js?v=2';
-import { settings, setSetting } from './settings.js?v=2';
-import { Hud } from './hud.js?v=2';
-import { QualityScaler, LEVELS } from './quality.js?v=2';
-import { Minimap } from './minimap.js?v=2';
-import * as LB from './leaderboard.js?v=2';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=2';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG } from './config.js?v=3';
+import { makeRng } from './noise.js?v=3';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=3';
+import { buildSky } from './sky.js?v=3';
+import { Foliage } from './foliage.js?v=3';
+import { Props } from './props.js?v=3';
+import { Tank } from './tank.js?v=3';
+import { WaveManager } from './enemy.js?v=3';
+import { Projectiles } from './projectiles.js?v=3';
+import { Effects } from './effects.js?v=3';
+import { GameAudio } from './audio.js?v=3';
+import { Input, isTouch } from './input.js?v=3';
+import { settings, setSetting } from './settings.js?v=3';
+import { Hud } from './hud.js?v=3';
+import { QualityScaler, LEVELS } from './quality.js?v=3';
+import { Minimap } from './minimap.js?v=3';
+import * as LB from './leaderboard.js?v=3';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=3';
 
 const $ = (id) => document.getElementById(id);
 
@@ -238,7 +239,70 @@ const G = {
   pendingBombs: [],
   convoyT: 50,
   fovKick: 0,
+  // weapons
+  weapon: 'ap',
+  mgHeat: 0,
+  mgLocked: false,
+  mgAcc: 0,
+  // repair
+  repairing: false,
+  repairArm: 0,
+  lastDmgT: -99,
+  criticalSaid: false,
+  depot: null,
+  // per-run perk modifiers
+  perks: null,
+  perkPending: null,
+  perkTimer: 0,
 };
+
+function freshPerks() {
+  return {
+    chamberMult: 1, heRadius: 1, apDmg: 1,
+    speedMult: 1, magnetMult: 1, mgCool: 1, repairMult: 1, strikeNeed: 3,
+    taken: [],
+  };
+}
+G.perks = freshPerks();
+
+// vibration on touch (Android; iOS ignores it)
+function haptic(ms) {
+  if ((settings.haptics ?? true) && isTouch) navigator.vibrate?.(ms);
+}
+
+// directional armor: shells that arrive from behind a hull bite harder.
+// `vel` is the shell's travel direction — travelling the same way the hull
+// faces means the shot came from the rear.
+const _fwdArmor = new CANNON.Vec3();
+function armorMult(tank, vel, isPlayerTarget = false) {
+  if (!vel) return 1;
+  tank.body.quaternion.vmult(new CANNON.Vec3(0, 0, 1), _fwdArmor);
+  const len = Math.hypot(vel.x, vel.z) || 1;
+  const d = (vel.x * _fwdArmor.x + vel.z * _fwdArmor.z) / len;
+  if (d > 0.45) return isPlayerTarget ? 1.35 : 1.5;   // rear
+  if (d < -0.45) return 0.85;                          // frontal glacis
+  return isPlayerTarget ? 1.1 : 1.15;                  // side
+}
+
+// perk-adjusted stats for the currently selected shell type
+function currentWeapon() {
+  const base = WEAPONS[G.weapon];
+  return {
+    ...base,
+    dmgDirect: base.dmgDirect * (G.weapon === 'ap' ? G.perks.apDmg : 1),
+    splashRadius: base.splashRadius * (G.weapon === 'he' ? G.perks.heRadius : 1),
+  };
+}
+
+function setWeapon(sel) {
+  if (sel === 'cycle') sel = G.weapon === 'ap' ? 'he' : 'ap';
+  if (sel === G.weapon) return;
+  G.weapon = sel;
+  if (G.player) G.player.shellSpeed = WEAPONS[sel].speed;
+  hud.setWeapon(sel);
+  audio.click();
+  hud.floater(sel === 'ap' ? 'AP — ARMOR PIERCING' : 'HE — HIGH EXPLOSIVE', 'good');
+}
 
 let pendingScore = 0;
 let lbMode = 'global';
@@ -431,6 +495,8 @@ function handleRemoteWaveClear(w) {
   const bonus = Math.round(SCORING.waveAccuracyBonus * acc);
   G.score += bonus;
   hud.banner(`WAVE ${w} CLEAR`, `accuracy ${(acc * 100) | 0}% — +${bonus} bonus — next wave incoming`);
+  audio.vo('wave-clear');
+  offerPerks();
 }
 
 // the room's senior playing member changed (host left/joined/died out)
@@ -473,6 +539,7 @@ function spawnConvoyShared(layout) {
   hud.banner('SUPPLY CONVOY SPOTTED', '250 per truck — intercept before they escape!', 2.6);
   for (const t of trucks) minimap.ping(t.body.position.x, t.body.position.z, '#52d8ff');
   audio.click();
+  audio.vo('convoy');
 }
 
 function handleRemoteConvoy(layout) {
@@ -694,14 +761,18 @@ function creditKillLocal(points) {
   bumpCombo();
   addScore(points, 'TANK KILL', 'kill');
   hud.hitmarker(true);
+  haptic(20);
   // kill streak builds toward an airstrike
   G.streakT = 14;
   G.streakKills++;
-  if (G.streakKills >= 3 && !G.airstrike) {
+  if (G.streakKills >= G.perks.strikeNeed && !G.airstrike) {
     G.airstrike = true;
     G.streakKills = 0;
     hud.setStrike(true);
     hud.banner('AIRSTRIKE READY', 'press F (or tap ✈) to call it in on your reticle', 3);
+    audio.vo('strike-ready');
+  } else if (G.streakKills === G.perks.strikeNeed - 1) {
+    audio.vo('streak');
   }
 }
 
@@ -749,6 +820,13 @@ function damagePlayer(dmg, fromPos = null) {
   const p = G.player;
   if (!p || !p.alive || G.state !== 'playing') return;
   const killed = p.damage(dmg);
+  G.lastDmgT = G.simT;
+  G.repairing = false; // taking fire stops the wrenching
+  haptic(35);
+  if (!killed && p.hp < 25 && !G.criticalSaid) {
+    G.criticalSaid = true;
+    audio.vo('critical');
+  }
   hud.damageFlash();
   if (fromPos) {
     // screen-relative bearing of the threat: 0 = dead ahead of the camera.
@@ -802,26 +880,33 @@ function onShellHit(hit) {
   const byPlayer = s.fromPlayer && !s.owner?.remote;
   const pos = hit.point;
   const power = s.power ?? 1;
+  // player shells carry their AP/HE stats; enemy shells use the defaults
+  const W = s.wpn;
+  const expR = (W?.splashRadius ?? SHELL.splashRadius) * power;
+  const expImp = (W?.impulse ?? SHELL.impulse) * power;
+  const dirDmg = W?.dmgDirect ?? SHELL.damageDirect;
+  const splDmg = W?.dmgSplash ?? SHELL.damageSplash;
+  const fxScale = W ? Math.max(0.7, W.splashRadius / 6.5) : 1;
 
-  effects.explosion(pos, (s.fromPlayer ? 1 : 0.9) * power);
+  effects.explosion(pos, (s.fromPlayer ? 1 : 0.9) * power * fxScale);
   const camD = camera.position.distanceTo(pos);
-  if (camD < 160) audio.explosion(Math.max(0.4, 1.2 - camD / 160) * power);
+  if (camD < 160) audio.explosion(Math.max(0.4, 1.2 - camD / 160) * power * fxScale);
 
   // real impulses into nearby rigid bodies
-  const affected = projectiles.explode(pos, SHELL.splashRadius * power, SHELL.impulse * power);
+  const affected = projectiles.explode(pos, expR, expImp);
 
-  // direct hit damage
+  // direct hit damage (rear/side hits multiply through directional armor)
   const shellDmg = s.owner?.shellDmg ?? ENEMY.shellDamage;
   const ud = hit.body?.userData;
   if (ud?.kind === 'tank') {
     const tk = ud.tank;
     if (tk.isPlayer && !s.fromPlayer) {
       // trace back along the shell's flight for the threat direction
-      damagePlayer(shellDmg + Math.floor(G.wave * 0.8),
+      damagePlayer(Math.round((shellDmg + Math.floor(G.wave * 0.8)) * armorMult(tk, s.vel, true)),
         s.vel ? { x: pos.x - s.vel.x, z: pos.z - s.vel.z } : pos);
     } else if (!tk.isPlayer && byPlayer) {
       const e = waves.enemies.find(e => e.tank === tk);
-      if (e) { damageEnemy(e, SHELL.damageDirect, pos); G.shotsHit++; }
+      if (e) { damageEnemy(e, dirDmg * armorMult(tk, s.vel), pos); G.shotsHit++; }
     }
   } else if (ud?.kind === 'remoteEnemy') {
     // client: direct hit on a host-simulated enemy — forward it
@@ -830,7 +915,7 @@ function onShellHit(hit) {
       hud.hitmarker(false);
       audio.hitTink();
       effects.sparks(pos);
-      multiplayer.sendHit(ud.id, SHELL.damageDirect * power);
+      multiplayer.sendHit(ud.id, dirDmg * power);
     }
   } else if (ud?.kind === 'remoteAlly') {
     // no friendly fire — the bang is enough
@@ -846,12 +931,12 @@ function onShellHit(hit) {
   }
 
   // splash damage to tanks + trucks
-  const splashR = SHELL.splashRadius * power;
+  const splashR = expR;
   for (const e of waves.enemies) {
     if (!e.tank.alive) continue;
     const d = e.tank.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
     if (d < splashR && byPlayer && (!hit.body || hit.body !== e.tank.body)) {
-      damageEnemy(e, SHELL.damageSplash * power * (1 - d / splashR));
+      damageEnemy(e, splDmg * power * (1 - d / splashR));
       G.shotsHit++;
     }
   }
@@ -861,7 +946,7 @@ function onShellHit(hit) {
       if (!re.alive || !re.hasState || hit.body === re.body) continue;
       const d = re.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
       if (d < splashR) {
-        multiplayer.sendHit(id, SHELL.damageSplash * power * (1 - d / splashR));
+        multiplayer.sendHit(id, splDmg * power * (1 - d / splashR));
         G.shotsHit++;
       }
     }
@@ -875,9 +960,9 @@ function onShellHit(hit) {
   }
   if (G.player?.alive && !s.owner?.remote) {
     const d = G.player.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
-    if (d < SHELL.splashRadius && hit.body !== G.player.body) {
+    if (d < splashR && hit.body !== G.player.body) {
       const dmg = byPlayer ? 6 : (shellDmg * 0.55);
-      if (d > 0.01) damagePlayer(Math.round(dmg * (1 - d / SHELL.splashRadius)), pos);
+      if (d > 0.01) damagePlayer(Math.round(dmg * (1 - d / splashR)), pos);
     }
   }
 
@@ -885,7 +970,7 @@ function onShellHit(hit) {
   for (const it of [...props.items]) {
     if (!it.alive || !it.body) continue;
     const d = it.body.position.distanceTo(new CANNON.Vec3(pos.x, pos.y, pos.z));
-    if (d < SHELL.splashRadius * 0.9) {
+    if (d < splashR * 0.9) {
       if (it.kind === 'barrel') setTimeout(() => killProp(it, byPlayer), 90 + Math.random() * 150);
       else damageProp(it, 1, byPlayer);
     }
@@ -897,6 +982,142 @@ function onShellHit(hit) {
   }
 }
 
+// ---------------------------------------------------------------- coax MG
+const _mgOrigin = new THREE.Vector3();
+const _mgDir = new THREE.Vector3();
+const _mgEnd = new THREE.Vector3();
+const _mgFrom = new CANNON.Vec3();
+const _mgTo = new CANNON.Vec3();
+const _mgRes = new CANNON.RaycastResult();
+
+function mgFire(dt) {
+  const p = G.player;
+  G.mgAcc += dt * MG.rate;
+  while (G.mgAcc >= 1 && !G.mgLocked) {
+    G.mgAcc -= 1;
+    G.mgHeat += MG.heatPerShot;
+    if (G.mgHeat >= 1) {
+      G.mgHeat = 1;
+      G.mgLocked = true;
+      hud.floater('MG OVERHEATED', 'warn');
+      break;
+    }
+    p.visual.root.updateMatrixWorld(true);
+    p.visual.coaxMuzzle.getWorldPosition(_mgOrigin);
+    _mgDir.copy(G.aimPoint).sub(_mgOrigin).normalize();
+    _mgDir.x += (Math.random() - 0.5) * MG.spread * 2;
+    _mgDir.y += (Math.random() - 0.5) * MG.spread * 2;
+    _mgDir.z += (Math.random() - 0.5) * MG.spread * 2;
+    _mgDir.normalize();
+    _mgFrom.set(_mgOrigin.x, _mgOrigin.y, _mgOrigin.z);
+    _mgTo.set(
+      _mgOrigin.x + _mgDir.x * MG.range,
+      _mgOrigin.y + _mgDir.y * MG.range,
+      _mgOrigin.z + _mgDir.z * MG.range,
+    );
+    _mgRes.reset();
+    world.raycastClosest(_mgFrom, _mgTo, { collisionFilterMask: ~CG.PLAYER, skipBackfaces: true }, _mgRes);
+    if (_mgRes.hasHit) {
+      _mgEnd.copy(_mgRes.hitPointWorld);
+      const ud = _mgRes.body?.userData;
+      if (ud?.kind === 'tank' && !ud.tank.isPlayer) {
+        // light armor chipping — no per-round hitmarker spam
+        if (ud.tank.alive && ud.tank.damage(MG.dmgTank)) {
+          const e = waves.enemies.find(e => e.tank === ud.tank);
+          if (e) killEnemy(e);
+        }
+      } else if (ud?.kind === 'remoteEnemy' && ud.remoteEnemy?.alive) {
+        multiplayer.sendHit(ud.id, MG.dmgTank);
+      } else if (ud?.kind === 'prop') {
+        damageProp(ud.prop, ud.prop.kind === 'pillbox' ? 0.12 : 0.5, true);
+      } else if (ud?.kind === 'truck') {
+        const tr = ud.truck;
+        tr.mgHp = (tr.mgHp ?? MG.truckHp) - 1;
+        if (tr.mgHp <= 0) killTruck(tr, true);
+      }
+      effects.sparks(_mgEnd);
+    } else {
+      _mgEnd.copy(_mgOrigin).addScaledVector(_mgDir, MG.range);
+    }
+    effects.tracer(_mgOrigin, _mgEnd);
+    audio.mgShot();
+  }
+}
+
+// ---------------------------------------------------------------- repair
+function toggleRepair() {
+  if (G.repairing) { G.repairing = false; hud.setRepair(''); return; }
+  const p = G.player;
+  if (!p?.alive) return;
+  if (p.hp >= p.maxHp) { hud.floater('ARMOR ALREADY FULL', 'good'); return; }
+  G.repairing = true;
+  G.repairArm = 0;
+}
+
+const _sparkPos = new THREE.Vector3();
+function updateRepair(dt) {
+  const p = G.player;
+  if (!p?.alive) { hud.setRepair(''); return; }
+  const speed = p.body.velocity.length();
+  let mode = '';
+  let healed = 0;
+
+  // depot: park inside the green ring and the crew does the rest
+  const depot = G.depot;
+  if (depot && speed < 2 &&
+      Math.hypot(p.body.position.x - depot.x, p.body.position.z - depot.z) < depot.radius) {
+    if (p.hp < p.maxHp) {
+      healed = REPAIR.depotRate * G.perks.repairMult * dt;
+      mode = 'depot';
+    }
+    // free rack top-up while parked
+    if (p.rack < SHELL.rackSize && p.restocking <= 0) {
+      p.rack = SHELL.rackSize;
+      p.chamber = 1;
+      hud.floater('RACK RESTOCKED', 'good');
+      audio.reloadDone();
+    }
+  }
+
+  if (!mode && G.repairing) {
+    if (Math.abs(p.throttle) > 0.15 || speed > 0.8) {
+      mode = 'wait';
+      hud.setRepair('wait', 'HOLD STILL TO REPAIR');
+      G.repairArm = 0;
+    } else if (G.simT - G.lastDmgT < REPAIR.combatLockout) {
+      mode = 'wait';
+      hud.setRepair('wait', 'UNDER FIRE — REPAIR BLOCKED');
+      G.repairArm = 0;
+    } else {
+      G.repairArm += dt;
+      if (G.repairArm < REPAIR.fieldDelay) mode = 'arming';
+      else {
+        mode = 'field';
+        healed = REPAIR.fieldRate * G.perks.repairMult * dt;
+      }
+    }
+  }
+
+  if (healed > 0) {
+    p.hp = Math.min(p.maxHp, p.hp + healed);
+    hud.setHp(p.hp, p.maxHp);
+    if (p.hp >= 35) G.criticalSaid = false;
+    if (Math.random() < dt * 5) {
+      _sparkPos.copy(p.visual.root.position);
+      _sparkPos.y += 1.5;
+      effects.sparks(_sparkPos);
+    }
+    if (p.hp >= p.maxHp) {
+      G.repairing = false;
+      audio.vo('repaired');
+      hud.floater('REPAIRS COMPLETE', 'good');
+      haptic(30);
+    }
+  }
+  if (mode !== 'wait') hud.setRepair(mode);
+  $('btn-repair')?.classList.toggle('active', G.repairing || mode === 'depot');
+}
+
 function playerFire() {
   const p = G.player;
   if (!p) return;
@@ -906,12 +1127,16 @@ function playerFire() {
   }
   const shot = p.fire();
   if (!shot) return;
+  const W = currentWeapon();
   G.fovKick = 1;
   G.shotsFired++;
+  G.repairing = false;
+  haptic(12);
   audio.fire();
   effects.muzzleFlash(shot.origin, shot.dir);
   effects.shake(0.32);
-  projectiles.spawn(shot.origin, shot.dir, SHELL.speed, p, onShellHit);
+  const sh = projectiles.spawn(shot.origin, shot.dir, W.speed, p, onShellHit);
+  if (sh) sh.wpn = W;
   multiplayer.sendFire(shot);
   if (p.rack === 0) hud.floater('RESTOCKING…', 'warn');
 }
@@ -933,6 +1158,7 @@ function announceContacts(spawned, label = 'ARMOR INBOUND', withBanner = true) {
   }
   for (const e of spawned) minimap.ping(e.tank.body.position.x, e.tank.body.position.z);
   audio.click();
+  audio.vo('armor');
 }
 
 function startWave(w) {
@@ -954,6 +1180,7 @@ function startWave(w) {
   const bossWave = spec.tanks.includes('boss');
   if (bossWave) {
     hud.banner(`WAVE ${w} — IRON COLOSSUS`, 'a breakthrough monster leads this assault', 3.2);
+    audio.vo('boss', true);
   } else {
     hud.banner(`WAVE ${w}`, parts.join(' • '));
   }
@@ -979,9 +1206,65 @@ function checkTargetsBonus() {
   }
 }
 
+// between-wave upgrade: pick 1 of 3 random perks; auto-picks the first if
+// ignored so the next wave is never blocked forever
+function offerPerks() {
+  if (G.perkPending) return;
+  const pool = [...PERKS];
+  const picks = [];
+  while (picks.length < 3 && pool.length) {
+    picks.push(pool.splice((Math.random() * pool.length) | 0, 1)[0]);
+  }
+  G.perkPending = picks;
+  G.perkTimer = 14;
+  hud.showPerks(picks, choosePerk);
+}
+
+// re-apply run perks to a fresh hull (start of run, squad respawn)
+function applyPerksToTank(p) {
+  const P = G.perks;
+  p.chamberMult = P.chamberMult;
+  p.tuning.maxSpeed *= P.speedMult;
+  p.tuning.engineForce *= P.speedMult;
+  const plates = P.taken.filter(id => id === 'plating').length;
+  if (plates) {
+    p.maxHp += plates * 25;
+    p.hp = p.maxHp;
+  }
+}
+
+function choosePerk(perk) {
+  if (!G.perkPending) return;
+  G.perkPending = null;
+  hud.hidePerks();
+  const P = G.perks;
+  P.taken.push(perk.id);
+  const p = G.player;
+  switch (perk.id) {
+    case 'loader': P.chamberMult *= 0.82; if (p) p.chamberMult = P.chamberMult; break;
+    case 'plating': if (p) { p.maxHp += 25; p.hp = Math.min(p.maxHp, p.hp + 25); hud.setHp(p.hp, p.maxHp); } break;
+    case 'he_expert': P.heRadius *= 1.2; break;
+    case 'ap_expert': P.apDmg *= 1.2; break;
+    case 'turbo': P.speedMult *= 1.15; if (p) { p.tuning.maxSpeed *= 1.15; p.tuning.engineForce *= 1.15; } break;
+    case 'magnet': P.magnetMult *= 1.8; break;
+    case 'coolant': P.mgCool *= 1.45; break;
+    case 'mechanic': P.repairMult *= 1.6; break;
+    case 'doctrine': P.strikeNeed = 2; break;
+  }
+  audio.reloadDone();
+  hud.floater(`${perk.name} INSTALLED`, 'good');
+}
+
 function checkWaveClear(dt) {
   if (G.waveTransition > 0) {
-    G.waveTransition -= dt;
+    if (G.perkPending) {
+      G.perkTimer -= dt;
+      if (G.perkTimer <= 0) choosePerk(G.perkPending[0]);
+      // hold just short of the next wave until the upgrade is picked
+      G.waveTransition = Math.max(G.waveTransition - dt, 0.8);
+    } else {
+      G.waveTransition -= dt;
+    }
     if (G.waveTransition <= 0) startWave(G.wave + 1);
     return;
   }
@@ -995,6 +1278,8 @@ function checkWaveClear(dt) {
       G.score += bonus;
       hud.banner(`WAVE ${G.wave} CLEAR`, `accuracy ${(acc * 100) | 0}% — +${bonus} bonus — next wave incoming`);
       if (inCoop() && multiplayer.isHost()) multiplayer.sendWaveClear(G.wave);
+      audio.vo('wave-clear');
+      offerPerks();
     }
     G.waveTransition = 4.5;
   }
@@ -1027,6 +1312,14 @@ function resetGame() {
   G.simT = 0; G.artilleryT = 12; G.pendingArty = [];
   G.quietT = 0; G.streakKills = 0; G.streakT = 0; G.airstrike = false;
   G.pendingBombs = []; G.convoyT = 50; G.fovKick = 0; G.respawnT = 0;
+  G.weapon = 'ap'; G.mgHeat = 0; G.mgLocked = false; G.mgAcc = 0;
+  G.repairing = false; G.repairArm = 0; G.lastDmgT = -99; G.criticalSaid = false;
+  G.depot = null;
+  G.perks = freshPerks(); G.perkPending = null; G.perkTimer = 0;
+  hud.hidePerks();
+  hud.setWeapon('ap');
+  hud.setMg(0, false);
+  hud.setRepair('');
   waves.clearConvoy?.(scene, world);
   hud.setStrike(false);
   multiplayer.localActive = false;
@@ -1037,7 +1330,17 @@ function startGame() {
   G.player = new Tank(scene, world, {
     x: 0, z: 0, y: getHeight(0, 0) + 1.2, isPlayer: true, scheme: 'olive',
   });
+  G.player.shellSpeed = WEAPONS[G.weapon].speed;
+  applyPerksToTank(G.player);
   hud.setHp(G.player.hp, G.player.maxHp);
+  // repair depot: one per battle, off in the middle distance (deterministic
+  // per world seed so the Daily Ridge depot is the same for everyone)
+  {
+    const drng = makeRng(4242 + (DAILY ? parseInt(DAILY_STAMP, 10) : (Math.random() * 1e9) | 0));
+    const da = drng() * Math.PI * 2;
+    const dr = 62 + drng() * 45;
+    G.depot = props.spawnDepot(Math.cos(da) * dr, Math.sin(da) * dr, REPAIR.depotRadius);
+  }
   G.state = 'playing';
   multiplayer.localActive = true;
   hud.showScreen(null);
@@ -1045,6 +1348,7 @@ function startGame() {
   audio.resume();
   audio.startEngine();
   audio.startMusic('battle');
+  audio.vo('deploy', true);
   input.requestLock();
   if (isCoopClient()) {
     // the host's sim is already running — join its battle in progress
@@ -1061,6 +1365,7 @@ function startDeath() {
   if (G.state !== 'playing') return;
   G.state = 'dying';
   G.dieT = 0;
+  haptic(180);
   const p = G.player;
   p.destroyVisual();
   const pos = p.visual.root.position.clone();
@@ -1091,6 +1396,8 @@ function respawnPlayer() {
   G.player = new Tank(scene, world, {
     x, z, y: getHeight(x, z) + 1.2, isPlayer: true, scheme: 'olive',
   });
+  G.player.shellSpeed = WEAPONS[G.weapon].speed;
+  applyPerksToTank(G.player);
   hud.setHp(G.player.hp, G.player.maxHp);
   G.state = 'playing';
   audio.startEngine();
@@ -1295,7 +1602,7 @@ function fixedStep(dt) {
     for (const it of props.items) {
       if (!it.alive || it.kind !== 'crate' || !p?.alive) continue;
       const d = Math.hypot(it.x - p.body.position.x, it.z - p.body.position.z);
-      if (d < PICKUP.magnetRadius) {
+      if (d < PICKUP.magnetRadius * G.perks.magnetMult) {
         props.removeItem(it, false);
         G.player.hp = Math.min(G.player.maxHp, G.player.hp + PICKUP.heal);
         hud.setHp(G.player.hp, G.player.maxHp);
@@ -1305,8 +1612,13 @@ function fixedStep(dt) {
     }
 
     // wave progression is host business; clients get told
-    if (isCoopClient()) checkTargetsBonus();
-    else checkWaveClear(dt);
+    if (isCoopClient()) {
+      checkTargetsBonus();
+      if (G.perkPending) {
+        G.perkTimer -= dt;
+        if (G.perkTimer <= 0) choosePerk(G.perkPending[0]);
+      }
+    } else checkWaveClear(dt);
   }
 }
 const _pillboxLos = new CANNON.RaycastResult();
@@ -1562,6 +1874,30 @@ bindCycle('btn-tscale',
   () => settings.touchScale,
   (v) => { setSetting('touchScale', v); applyTouchLayout(); });
 bindToggle('btn-fps', () => settings.showFps, (v) => { setSetting('showFps', v); applyFpsDisplay(); });
+bindToggle('btn-voice', () => settings.voiceOn ?? true, (v) => setSetting('voiceOn', v));
+bindToggle('btn-haptics', () => settings.haptics ?? true, (v) => setSetting('haptics', v));
+
+// weapon panel buttons are tappable/clickable directly
+$('wpn-ap')?.addEventListener('click', () => setWeapon('ap'));
+$('wpn-he')?.addEventListener('click', () => setWeapon('he'));
+
+// Daily Ridge mode toggle (reload with/without ?mode=daily)
+$('btn-daily')?.addEventListener('click', () => {
+  const url = new URL(location.href);
+  if (DAILY) url.searchParams.delete('mode');
+  else url.searchParams.set('mode', 'daily');
+  location.href = url.toString();
+});
+if (DAILY) {
+  const d = `${DAILY_STAMP.slice(0, 4)}-${DAILY_STAMP.slice(4, 6)}-${DAILY_STAMP.slice(6)}`;
+  $('btn-daily').textContent = '↩ STANDARD RIDGE';
+  const sub = document.querySelector('#screen-menu .subtitle');
+  if (sub) sub.textContent = `📅 DAILY RIDGE ${d} — one map, one board, all day`;
+  const tgm = $('tab-global-menu');
+  if (tgm) tgm.textContent = '📅 DAILY TOP 10';
+  const tgo = $('tab-global-over');
+  if (tgo) tgo.textContent = '📅 DAILY';
+}
 
 effects.setShakeScale(settings.camShake ? 1 : 0);
 quality.setLock(settings.quality);
@@ -1655,11 +1991,13 @@ function gameFrame(dt) {
       const cur = G.player.visualYaw();
       let err = want - cur;
       err = Math.atan2(Math.sin(err), Math.cos(err));
-      const reverse = Math.cos(err) < -0.2;
+      // go where the stick points: reverse for anything behind the beam
+      // (reverse is near full speed now) instead of slow-pivoting around
+      const reverse = Math.cos(err) < -0.12;
       if (reverse) err = Math.atan2(Math.sin(want - cur - Math.PI), Math.cos(want - cur - Math.PI));
-      input.turn = THREE.MathUtils.clamp((reverse ? err : -err) * 1.5, -1, 1);
+      input.turn = THREE.MathUtils.clamp((reverse ? err : -err) * 2.0, -1, 1);
       const align = Math.abs(Math.cos(err));
-      input.throttle = (reverse ? -1 : 1) * Math.min(1, m) * THREE.MathUtils.clamp(align + 0.35, 0, 1);
+      input.throttle = (reverse ? -1 : 1) * Math.min(1, m) * THREE.MathUtils.clamp(align * 0.5 + 0.55, 0, 1);
     }
   }
 
@@ -1690,6 +2028,21 @@ function gameFrame(dt) {
     if (input.consumeReload()) {
       if (G.player.reloadNow()) audio.click();
     }
+    const wq = input.consumeWeapon();
+    if (wq) setWeapon(wq);
+
+    // coax MG: hold to hose, watch the heat
+    if (input.mgHeld && !G.mgLocked && G.player.alive && !G.perkPending) mgFire(dt);
+    else G.mgAcc = 0;
+    G.mgHeat = Math.max(0, G.mgHeat - MG.coolRate * G.perks.mgCool * dt);
+    if (G.mgLocked && G.mgHeat <= MG.resumeAt) {
+      G.mgLocked = false;
+      hud.floater('MG READY', 'good');
+    }
+    hud.setMg(G.mgHeat, G.mgLocked);
+
+    if (input.consumeRepair()) toggleRepair();
+    updateRepair(dt);
     if (input.consumePing()) {
       // squad ping on the reticle point (works solo too, as a self-marker)
       effects.ring(G.aimPoint, 6, 1.6, 0x52a8ff);
@@ -1701,6 +2054,7 @@ function gameFrame(dt) {
       G.airstrike = false;
       hud.setStrike(false);
       audio.whistle();
+      audio.vo('strike-in', true);
       hud.banner('AIRSTRIKE INBOUND', 'danger close!', 1.8);
       camera.getWorldDirection(_dir);
       const fx = _dir.x, fz = _dir.z;

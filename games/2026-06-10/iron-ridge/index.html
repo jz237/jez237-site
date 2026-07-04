@@ -69,6 +69,39 @@
   .bar > div { height: 100%; width: 100%; background: #7fd24f; border-radius: 6px; transition: width 0.18s; }
 
   #gun-panel { right: 12px; bottom: 12px; width: 190px; }
+  #weapon-row { display: flex; gap: 5px; margin-bottom: 6px; }
+  .wpn {
+    flex: 1; pointer-events: auto; cursor: pointer;
+    background: #00000055; color: var(--muted);
+    border: 1px solid var(--panel-border); border-radius: 7px;
+    padding: 6px 4px; font-weight: 900; font-size: 12px; letter-spacing: 1px;
+  }
+  .wpn.active { background: #ffd05e; color: #1a1406; border-color: #ffd05e; }
+  #mg-bar { height: 6px; }
+  #mg-fill { background: #8fd6ff; width: 0%; }
+  #repair-status {
+    margin-top: 4px; min-height: 14px;
+    font-size: 11px; letter-spacing: 1px; color: var(--muted);
+  }
+  #repair-status.active { color: #52ffc8; }
+  #perk-bar {
+    position: absolute; left: 50%; bottom: 13%; transform: translateX(-50%);
+    width: min(640px, 94vw); text-align: center; pointer-events: none;
+  }
+  .perk-title {
+    font-size: 13px; letter-spacing: 3px; color: var(--accent2);
+    text-shadow: 0 1px 8px #000; margin-bottom: 7px; font-weight: 800;
+  }
+  .perk-row { display: flex; gap: 8px; }
+  .perk-card {
+    flex: 1; pointer-events: auto; cursor: pointer;
+    background: var(--panel); border: 1px solid var(--panel-border);
+    border-radius: 12px; padding: 11px 8px; color: var(--ink);
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .perk-card b { color: var(--accent2); font-size: 13px; letter-spacing: 1px; }
+  .perk-card span { font-size: 11px; color: var(--muted); line-height: 1.35; }
+  .perk-card:active { transform: translateY(1px); background: #2a331f; }
   #rack { display: flex; gap: 5px; margin: 5px 0 6px; }
   .shell { width: 13px; height: 26px; border-radius: 4px 4px 2px 2px; background: linear-gradient(#ffd05e, #c98a2e); box-shadow: inset 0 -8px 0 #8a5a1c; }
   .shell.spent { background: #2c3326; box-shadow: none; }
@@ -362,8 +395,9 @@
     animation: strikePulse 1.1s ease-in-out infinite;
   }
   @keyframes strikePulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+  /* left-edge utility column (ping + repair) */
   #btn-ping {
-    position: fixed; right: calc(150px * var(--tscale)); bottom: calc(186px * var(--tscale)); z-index: 7;
+    position: fixed; left: 12px; top: 150px; z-index: 7;
     display: none;
     width: calc(52px * var(--tscale)); height: calc(52px * var(--tscale)); border-radius: 50%;
     border: 2px solid rgba(82, 168, 255, 0.7);
@@ -371,9 +405,29 @@
     pointer-events: auto; touch-action: none;
   }
   body.touch #btn-ping { display: block; }
-  body.lefty #btn-ping { right: auto; left: calc(150px * var(--tscale)); }
+  body.lefty #btn-ping { left: auto; right: 12px; }
+  #btn-repair {
+    position: fixed; left: 12px; top: calc(150px + 62px * var(--tscale)); z-index: 7;
+    width: calc(52px * var(--tscale)); height: calc(52px * var(--tscale)); border-radius: 50%;
+    border: 2px solid rgba(82, 255, 200, 0.65);
+    background: rgba(10, 30, 20, 0.6); font-size: calc(22px * var(--tscale));
+    pointer-events: auto; touch-action: none;
+  }
+  body.lefty #btn-repair { left: auto; right: 12px; }
+  #btn-repair.active { background: #2f9e55; box-shadow: 0 0 14px #52ffc8aa; }
+  /* right cluster above the gun panel */
+  #btn-mg {
+    position: fixed; right: calc(150px * var(--tscale)); bottom: calc(195px * var(--tscale)); z-index: 7;
+    width: calc(78px * var(--tscale)); height: calc(78px * var(--tscale)); border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #9fdcff, #3a6d96);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    color: #fff; font-weight: 900; font-size: calc(18px * var(--tscale)); letter-spacing: 1px;
+    pointer-events: auto; touch-action: none;
+  }
+  #btn-mg:active { filter: brightness(1.3); }
+  body.lefty #btn-mg { right: auto; left: calc(150px * var(--tscale)); }
   #btn-strike {
-    position: fixed; right: calc(150px * var(--tscale)); bottom: 96px; z-index: 7;
+    position: fixed; right: calc(150px * var(--tscale)); bottom: calc(285px * var(--tscale)); z-index: 7;
     width: calc(64px * var(--tscale)); height: calc(64px * var(--tscale)); border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #9fdcff, #2f7cb6);
     border: 3px solid rgba(255, 255, 255, 0.35);
@@ -382,6 +436,14 @@
     animation: strikePulse 1.1s ease-in-out infinite;
   }
   body.lefty #btn-strike { right: auto; left: calc(150px * var(--tscale)); }
+  #btn-wpn-touch {
+    position: fixed; right: 292px; bottom: 14px; z-index: 7;
+    padding: 9px 12px; border-radius: 9px;
+    background: var(--panel); border: 1px solid var(--panel-border);
+    color: var(--accent2); font-weight: 900; font-size: 13px; letter-spacing: 1px;
+    pointer-events: auto; touch-action: none;
+  }
+  body.lefty #btn-wpn-touch { right: auto; left: 292px; }
   #btn-pause-touch {
     position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 7;
     background: var(--panel); border: 1px solid var(--panel-border);
@@ -412,14 +474,23 @@
   <div class="hud-panel" id="hp-panel">
     <div class="bar-label"><span>ARMOR</span><span id="hp-text">100</span></div>
     <div class="bar"><div id="hp-fill"></div></div>
+    <div id="repair-status"></div>
   </div>
 
   <div class="hud-panel" id="gun-panel">
+    <div id="weapon-row">
+      <button class="wpn active" id="wpn-ap">1·AP</button>
+      <button class="wpn" id="wpn-he">2·HE</button>
+    </div>
     <div class="bar-label"><span>READY RACK</span></div>
     <div id="rack"></div>
     <div class="bar" id="chamber-bar"><div id="chamber-fill"></div></div>
     <div id="reload-label">READY</div>
+    <div class="bar-label" style="margin-top:5px"><span id="mg-label">COAX MG</span></div>
+    <div class="bar" id="mg-bar"><div id="mg-fill"></div></div>
   </div>
+
+  <div id="perk-bar" class="hidden"></div>
 
   <div id="minimap-wrap"><canvas id="minimap" width="336" height="336"></canvas></div>
   <div id="perf"><div id="fps">60 fps</div><div id="quality">High</div></div>
@@ -439,6 +510,9 @@
   <div id="stick"><div id="stick-knob"></div></div>
   <button id="btn-fire">FIRE</button>
   <button id="btn-reload">⟳</button>
+  <button id="btn-mg">MG</button>
+  <button id="btn-repair">🔧</button>
+  <button id="btn-wpn-touch">AP·HE</button>
   <button id="btn-strike" class="hidden">✈</button>
   <button id="btn-ping">📍</button>
   <button id="btn-pause-touch">⏸ PAUSE</button>
@@ -450,19 +524,22 @@
     <div class="title">IRON RIDGE</div>
     <div class="subtitle">open-field tank combat — real physics, real recoil</div>
     <div class="controls-info" id="controls-desktop">
-      <b>WASD / arrows</b> — drive &nbsp;·&nbsp; <b>mouse</b> — aim turret<br/>
-      <b>click / space</b> — fire &nbsp;·&nbsp; <b>R</b> — restock rack &nbsp;·&nbsp; <b>scroll</b> — zoom<br/>
-      <b>F</b> — airstrike (earn it with kill streaks) &nbsp;·&nbsp; <b>G</b> — squad ping &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
+      <b>WASD / arrows</b> — drive &nbsp;·&nbsp; <b>mouse</b> — aim &nbsp;·&nbsp; <b>click / space</b> — fire<br/>
+      <b>1 / 2</b> — AP / HE shells &nbsp;·&nbsp; <b>hold right-click</b> — coax MG &nbsp;·&nbsp; <b>R</b> — restock<br/>
+      <b>E</b> — field repair (sit still, or park at the green depot) &nbsp;·&nbsp; <b>F</b> — airstrike<br/>
+      <b>G</b> — ping &nbsp;·&nbsp; <b>scroll</b> — zoom &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
     </div>
     <div class="controls-info hidden" id="controls-touch">
       <b>touch the left side</b> — a stick appears under your thumb; <b>push the
       direction you want to go</b> (the tank steers itself), pull back to reverse<br/>
       <b>drag the right side</b> — aim (you can also drag on FIRE while holding it)<br/>
       <b>auto-fire is on</b>: aim at a tank and your cannon shoots itself &nbsp;·&nbsp;
-      <b>pinch</b> — zoom &nbsp;·&nbsp; <b>⟳</b> — restock &nbsp;·&nbsp;
-      <b>✈</b> — airstrike when earned &nbsp;·&nbsp; tune it all in <b>OPTIONS</b>
+      <b>MG</b> — hold for the coax gun &nbsp;·&nbsp; <b>AP·HE</b> — swap shells<br/>
+      <b>🔧</b> — repair (sit still, or park at the green depot) &nbsp;·&nbsp;
+      <b>⟳</b> — restock &nbsp;·&nbsp; <b>pinch</b> — zoom &nbsp;·&nbsp; <b>✈</b> — airstrike when earned
     </div>
     <button class="btn" id="btn-play">▶ DEPLOY</button>
+    <button class="btn secondary" id="btn-daily">📅 DAILY RIDGE</button><br/>
     <button class="btn secondary" id="btn-mute">🔊 SOUND ON</button>
     <button class="btn secondary" id="btn-options">OPTIONS</button>
     <div class="mp-panel">
@@ -545,6 +622,14 @@
       <button class="toggle-btn" id="btn-tscale">MEDIUM</button>
     </div>
     <div class="option-row">
+      <div><b>Voice callouts</b><br/>Radio commander announcements</div>
+      <button class="toggle-btn" id="btn-voice">ON</button>
+    </div>
+    <div class="option-row touch-only">
+      <div><b>Vibration</b><br/>Haptic feedback on fire and hits</div>
+      <button class="toggle-btn" id="btn-haptics">ON</button>
+    </div>
+    <div class="option-row">
       <div><b>Show FPS</b><br/>Performance readout in the corner</div>
       <button class="toggle-btn" id="btn-fps">ON</button>
     </div>
@@ -585,7 +670,7 @@
   }
 }
 </script>
-<script type="module" src="./js/main.js?v=2"></script>
+<script type="module" src="./js/main.js?v=3"></script>
 <script>
   // show matching controls hint
   if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {

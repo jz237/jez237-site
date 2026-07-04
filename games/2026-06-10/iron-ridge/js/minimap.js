@@ -2,8 +2,8 @@
 // live blips for enemies/pillboxes/targets/barrels/crates, view cone, and
 // edge-clamped chevrons for threats beyond minimap range.
 
-import { getHeight, forestDensity } from './terrain.js?v=2';
-import { WORLD_HALF } from './config.js?v=2';
+import { getHeight, forestDensity } from './terrain.js?v=3';
+import { WORLD_HALF } from './config.js?v=3';
 
 const RANGE = 130;       // metres shown from centre to edge
 
@@ -130,18 +130,25 @@ export class Minimap {
       const d = Math.hypot(wp.x - pp.x, wp.z - pp.z);
       const colors = {
         target: '#ffd95e', barrel: '#ff8a3c', pillbox: '#ff4d4d',
-        crate: '#7dffa8', block: 'rgba(220,214,196,0.55)',
+        crate: '#7dffa8', block: 'rgba(220,214,196,0.55)', depot: '#52ffc8',
       };
       const col = colors[it.kind];
       if (!col) continue;
       if (d > RANGE * 0.94) {
-        if (it.kind === 'target' || it.kind === 'pillbox') this.edgeMarker(wp.x, wp.z, pp.x, pp.z, col);
+        if (it.kind === 'target' || it.kind === 'pillbox' || it.kind === 'depot') {
+          this.edgeMarker(wp.x, wp.z, pp.x, pp.z, col);
+        }
         continue;
       }
       const [x, y] = this.toMap(wp.x, wp.z, pp.x, pp.z);
       if (it.kind === 'pillbox') {
         c.fillStyle = col;
         c.fillRect(x - 3.5, y - 3.5, 7, 7);
+      } else if (it.kind === 'depot') {
+        // green cross
+        c.fillStyle = col;
+        c.fillRect(x - 4.5, y - 1.5, 9, 3);
+        c.fillRect(x - 1.5, y - 4.5, 3, 9);
       } else {
         this.blip(x, y, col, it.kind === 'block' ? 2 : 3.2);
       }
