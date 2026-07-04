@@ -5,7 +5,7 @@ rigid-body physics across rolling forested terrain, shell targets and
 explosive barrels, then survive waves of AI tanks that hunt, keep range,
 check line-of-sight, and lead their shots.
 
-**Play it:** https://jz237.github.io/jez237-site/games/2026-06-10/iron-ridge/
+**Play it:** https://jez237.com/games/2026-06-10/iron-ridge/
 
 ## Controls
 
