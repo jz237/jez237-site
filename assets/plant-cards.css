@@ -19,16 +19,25 @@
 }
 
 html {
-  background: #142915;
+  background: #081008;
 }
 
-/* Base page overrides — garden photo backdrop with a leafy contrast wash */
+/* Base page overrides — evening greenhouse backdrop (dark blurred foliage + glass) */
 body {
-  background:
-    linear-gradient(180deg, rgba(7, 25, 16, .78) 0%, rgba(19, 62, 31, .7) 38%, rgba(7, 18, 10, .9) 100%),
-    linear-gradient(90deg, rgba(5, 16, 10, .56) 0%, rgba(25, 76, 35, .2) 46%, rgba(4, 15, 9, .58) 100%),
-    var(--pc-garden-bg) center top / cover no-repeat scroll;
+  background-color: #081008;
+  background-image:
+    radial-gradient(46% 34% at 4% 100%, rgba(96, 210, 80, .12), transparent 70%),
+    radial-gradient(46% 34% at 96% 100%, rgba(96, 210, 80, .09), transparent 70%),
+    linear-gradient(180deg, rgba(4, 9, 5, .3) 0%, rgba(3, 7, 4, .58) 100%),
+    url("garden/plants-greenhouse-bg-20260704.webp");
+  background-size: cover, cover, cover, cover;
+  background-position: center, center, center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed, fixed, fixed, fixed;
   color: var(--pc-text);
+}
+@media (max-width: 820px) {
+  body { background-image: none; background-color: #0a140b; }
 }
 
 .plant-page a,
@@ -300,3 +309,50 @@ main {
   .card-grid { grid-template-columns: 1fr; }
   .lb-hint { display: none; }
 }
+
+/* === Editorial garden theme (2026-07) — shared by /plants/ index and sub pages.
+   Flat dark cards, serif titles overlaid on the photo's bottom gradient. === */
+
+.plant-card,
+.card {
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, .09);
+  background: rgba(13, 24, 14, .58);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .32);
+}
+.plant-card:hover,
+.card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(171, 226, 103, .34);
+  box-shadow: 0 22px 54px rgba(0, 0, 0, .44);
+}
+.card-image-wrap { aspect-ratio: 4 / 3; }
+
+.card-overlay {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  z-index: 1;
+  padding: 46px 16px 13px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(4, 10, 5, 0) 0%, rgba(4, 10, 5, .6) 55%, rgba(3, 8, 4, .9) 100%);
+}
+.card-overlay .card-kicker {
+  color: #c4e595;
+  font-size: .66rem;
+  letter-spacing: .16em;
+}
+.card-overlay .card-title,
+.card-overlay h3 {
+  margin: 3px 0 0;
+  font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+  font-weight: 600;
+  font-size: 1.12rem;
+  line-height: 1.18;
+  letter-spacing: normal;
+  color: #f7fbf1;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, .55);
+}
+.card-image-wrap::after { left: auto; right: 12px; top: 12px; bottom: auto; }
+
+.card-content { background: transparent; padding: 12px 16px 15px; }
+.card-desc { font-size: .88rem; }
