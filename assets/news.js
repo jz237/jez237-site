@@ -19,6 +19,69 @@ function uniqueSources(items) {
   return [...new Set(items.map(i => i.source).filter(Boolean))].sort();
 }
 
+function isToolSource(item) {
+  return item?.toolCandidate === true || item?.sourceType === 'tool-directory' || item?.sourceType === 'tool-release';
+}
+
+function localDateKey(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function dayIndexForKey(key) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(key || '');
+  if (!match) return 0;
+  const [, year, month, day] = match.map(Number);
+  return Math.floor(Date.UTC(year, month - 1, day) / 86400000);
+}
+
+function rotateForDailyTools(items, news, limit) {
+  if (items.length <= limit) return items.slice(0, limit);
+  const key = news.date || localDateKey();
+  const offset = dayIndexForKey(key) % items.length;
+  return [...items.slice(offset), ...items.slice(0, offset)].slice(0, limit);
+}
+
+const FILL_EXCLUDED_REASONS = new Set([
+  'fluff',
+  'framework_or_plumbing',
+  'not_ai_story',
+  'watchlist_low_signal',
+  'repo_title_low_context'
+]);
+
+function visibleItemsForCategory(items, category, mode = 'curated') {
+  const categoryItems = items
+    .filter(i => !isToolSource(i))
+    .filter(i => (i.category || 'AI') === category);
+  if (mode === 'all') return categoryItems;
+  const curatedItems = categoryItems.filter(i => i.editorial_allow === true);
+  if (category !== 'AI') return curatedItems.length ? curatedItems : categoryItems;
+
+  const curatedUrls = new Set(curatedItems.map(i => i.url));
+  const fillItems = categoryItems
+    .filter(i => !curatedUrls.has(i.url))
+    .filter(i => !FILL_EXCLUDED_REASONS.has(i.editorial_reason || ''))
+    .filter(i => (i.score || 0) >= 2.8 || i.tryWorthy === true)
+    .sort((a, b) => (b.score || 0) - (a.score || 0));
+
+  const targetCount = Math.min(18, categoryItems.length);
+  return [...curatedItems, ...fillItems].slice(0, Math.max(curatedItems.length, targetCount));
+}
+
+const SIGNAL_ORDER = [
+  'Model releases',
+  'Agents & tooling',
+  'Media generation',
+  'Infrastructure',
+  'Policy & risk',
+  'Research',
+  'Business',
+  'Product updates'
+];
+
 function isLikelyBadImage(url) {
   if (!url) return true;
   const u = url.toLowerCase();
@@ -40,6 +103,222 @@ function placeholderImage(source) {
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 
+function canonicalArticleUrl(url) {
+  if (!url) return '';
+  try {
+    const parsed = new URL(url);
+    parsed.hash = '';
+    return parsed.toString().replace(/\/$/, '');
+  } catch {
+    return String(url).split('#')[0].replace(/\/$/, '');
+  }
+}
+
+function sourceGroupKey(item) {
+  const itemBase = canonicalArticleUrl(item?.url);
+  if (!itemBase) return '';
+  const sourceBase = canonicalArticleUrl(item?.sourceUrl || '');
+  if (sourceBase && itemBase !== sourceBase && (item?.url || '').includes('#')) return '';
+  return `${item.category || 'AI'}|${item.source || 'Unknown'}|${itemBase}`;
+}
+
+function blockId(block) {
+  return block?.type === 'source-group' ? block.key : `item:${block?.url || block?.item?.url || ''}`;
+}
+
+function blockItems(block) {
+  return block?.type === 'source-group' ? block.items : [block?.item || block].filter(Boolean);
+}
+
+function blockScore(block) {
+  return Math.max(...blockItems(block).map(item => item.score || 0), 0);
+}
+
+function blockPublishedValue(block) {
+  return Math.max(...blockItems(block).map(item => new Date(item.published || 0).getTime() || 0), 0);
+}
+
+function blockLocalDayIndex(block) {
+  const publishedValue = blockPublishedValue(block);
+  if (!publishedValue) return 0;
+  return dayIndexForKey(localDateKey(new Date(publishedValue)));
+}
+
+function compareTopBriefingBlocks(a, b, newestDayIndex) {
+  const aAgeDays = Math.max(0, newestDayIndex - blockLocalDayIndex(a));
+  const bAgeDays = Math.max(0, newestDayIndex - blockLocalDayIndex(b));
+  return (aAgeDays - bAgeDays)
+    || (blockScore(b) - blockScore(a))
+    || (blockPublishedValue(b) - blockPublishedValue(a));
+}
+
+function blockRepresentative(block) {
+  if (block?.type !== 'source-group') return block?.item || block;
+  return block.representative || block.items[0];
+}
+
+function blockSignalGroup(block) {
+  return blockRepresentative(block)?.signalGroup || 'Product updates';
+}
+
+function sharedTextValue(items, field) {
+  const values = [...new Set(items.map(item => (item?.[field] || '').trim()).filter(Boolean))];
+  return values.length === 1 ? values[0] : '';
+}
+
+function findSourceRoot(items, articleUrl) {
+  return items.find(item => canonicalArticleUrl(item.url) === articleUrl && !(item.url || '').includes('#')) || null;
+}
+
+function sourceGroupTitle(block) {
+  if (block.root?.title) return block.root.title;
+  const representative = block.representative;
+  let date = '';
+  try {
+    date = representative?.published
+      ? new Date(representative.published).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+      : '';
+  } catch {}
+  return [representative?.source || 'Shared source', date].filter(Boolean).join(' - ');
+}
+
+function buildStoryBlocks(items) {
+  const groups = new Map();
+  items.forEach((item, index) => {
+    const key = sourceGroupKey(item);
+    if (!key) return;
+    if (!groups.has(key)) {
+      groups.set(key, { key, articleUrl: canonicalArticleUrl(item.url), items: [], firstIndex: index });
+    }
+    const group = groups.get(key);
+    group.items.push(item);
+    group.firstIndex = Math.min(group.firstIndex, index);
+  });
+
+  const consumedUrls = new Set();
+  const sourceGroups = [];
+  groups.forEach(group => {
+    if (group.items.length < 2) return;
+    group.items.sort((a, b) => (b.score || 0) - (a.score || 0));
+    const root = findSourceRoot(group.items, group.articleUrl);
+    const representative = [...group.items].sort((a, b) => {
+      return (new Date(b.published || 0) - new Date(a.published || 0))
+        || ((b.score || 0) - (a.score || 0));
+    })[0];
+    group.items.forEach(item => consumedUrls.add(item.url));
+    sourceGroups.push({
+      type: 'source-group',
+      key: group.key,
+      articleUrl: group.articleUrl,
+      root,
+      representative,
+      firstIndex: group.firstIndex,
+      items: group.items
+    });
+  });
+
+  const blocks = [
+    ...sourceGroups,
+    ...items
+      .filter(item => !consumedUrls.has(item.url))
+      .map((item, index) => ({ ...item, firstIndex: index }))
+  ];
+
+  return blocks.sort((a, b) => {
+    return (blockPublishedValue(b) - blockPublishedValue(a)) || ((a.firstIndex || 0) - (b.firstIndex || 0));
+  });
+}
+
+function groupBlocksBySignal(blocks) {
+  const grouped = new Map();
+  blocks.forEach(block => {
+    const key = blockSignalGroup(block);
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(block);
+  });
+  return grouped;
+}
+
+function renderCardImage(item, className, eager = false) {
+  const img = document.createElement('img');
+  img.className = className;
+  img.alt = '';
+  img.loading = eager ? 'eager' : 'lazy';
+  if (eager) img.fetchPriority = 'high';
+  img.referrerPolicy = 'no-referrer';
+
+  if (item?.image && !isLikelyBadImage(item.image)) {
+    img.src = item.image;
+    img.onerror = () => {
+      img.src = placeholderImage(item.source);
+    };
+    img.onload = () => {
+      if (img.naturalWidth < 240 || img.naturalHeight < 120) {
+        img.src = placeholderImage(item.source);
+      }
+    };
+  } else {
+    img.src = placeholderImage(item?.source);
+  }
+
+  return img;
+}
+
+function renderSourceGroup(block, featuredSet, wrap) {
+  const root = block.root;
+  const representative = block.representative;
+  const isFeatured = featuredSet.has(block.key);
+  const card = el('article', `news-source-group ${isFeatured ? 'featured' : 'compact'}`);
+  card.appendChild(renderCardImage(representative, 'news-source-group-img', isFeatured));
+
+  const body = el('div', 'news-source-group-body');
+  const badges = el('div', 'news-card-badges');
+  if (blockSignalGroup(block)) badges.appendChild(el('span', 'badge signal-badge', blockSignalGroup(block)));
+  badges.appendChild(el('span', 'badge cluster-badge', `${block.items.length} briefs`));
+  const signalCount = new Set(block.items.map(item => item.signalGroup).filter(Boolean)).size;
+  if (signalCount > 1) badges.appendChild(el('span', 'badge source-badge', `${signalCount} signals`));
+  if (representative.sourceTier) badges.appendChild(el('span', `badge source-badge ${(representative.sourceRole || '').toLowerCase()}`, representative.sourceTier));
+  body.appendChild(badges);
+
+  const title = document.createElement('a');
+  title.className = 'news-source-group-title';
+  title.href = root?.url || representative.sourceUrl || representative.url;
+  title.target = '_blank';
+  title.rel = 'noopener';
+  title.textContent = sourceGroupTitle(block);
+  body.appendChild(title);
+
+  body.appendChild(el('div', 'news-meta', `${representative.source || 'Unknown'} · ${fmtDate(representative.published)} · top score ${blockScore(block).toFixed(1)}`));
+  if (root?.summary) body.appendChild(el('p', 'news-source-group-deck', root.summary));
+
+  const briefs = root && block.items.length > 1 ? block.items.filter(item => item.url !== root.url) : block.items;
+  const list = el('div', 'news-source-briefs');
+  briefs.forEach(item => {
+    const brief = el('article', 'news-source-brief');
+    const briefBadges = el('div', 'news-source-brief-badges');
+    if (item.signalGroup) briefBadges.appendChild(el('span', 'badge signal-badge', item.signalGroup));
+    if (item.sourceTier) briefBadges.appendChild(el('span', `badge source-badge ${(item.sourceRole || '').toLowerCase()}`, item.sourceTier));
+    if (briefBadges.children.length) brief.appendChild(briefBadges);
+
+    const briefTitle = document.createElement('a');
+    briefTitle.className = 'news-source-brief-title';
+    briefTitle.href = item.url;
+    briefTitle.target = '_blank';
+    briefTitle.rel = 'noopener';
+    briefTitle.textContent = item.brief?.whatHappened || item.title || 'Untitled';
+    brief.appendChild(briefTitle);
+    if (item.summary) brief.appendChild(el('p', 'muted', item.summary));
+    list.appendChild(brief);
+  });
+  body.appendChild(list);
+
+  const sharedWhy = sharedTextValue(block.items, 'whyItMatters');
+  if (sharedWhy) body.appendChild(el('p', 'news-source-group-why', sharedWhy));
+
+  card.appendChild(body);
+  wrap.appendChild(card);
+}
+
 function renderNews(items, featuredUrlSet = new Set(), container = null) {
   const wrap = container || document.getElementById('news-grid');
   if (!container) wrap.innerHTML = '';
@@ -49,33 +328,23 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
     return;
   }
 
-  items.forEach((n) => {
-    const isFeatured = featuredUrlSet.has(n.url);
+  items.forEach((entry) => {
+    if (entry?.type === 'source-group') {
+      renderSourceGroup(entry, featuredUrlSet, wrap);
+      return;
+    }
+    const n = entry?.item || entry;
+    const isFeatured = featuredUrlSet.has(n.url) || featuredUrlSet.has(blockId(entry));
     const card = el('article', `news-card ${isFeatured ? 'featured' : 'compact'}`);
 
-    const img = document.createElement('img');
-    img.className = 'news-card-img';
-    img.alt = '';
-    img.loading = 'lazy';
-    img.referrerPolicy = 'no-referrer';
-
-    if (n.image && !isLikelyBadImage(n.image)) {
-      img.src = n.image;
-      img.onerror = () => {
-        img.src = placeholderImage(n.source);
-      };
-      img.onload = () => {
-        if (img.naturalWidth < 240 || img.naturalHeight < 120) {
-          img.src = placeholderImage(n.source);
-        }
-      };
-    } else {
-      img.src = placeholderImage(n.source);
-    }
-
-    card.appendChild(img);
+    card.appendChild(renderCardImage(n, 'news-card-img', isFeatured));
 
     const body = el('div', 'news-card-body');
+    const badges = el('div', 'news-card-badges');
+    if (n.signalGroup) badges.appendChild(el('span', 'badge signal-badge', n.signalGroup));
+    if (n.sourceTier) badges.appendChild(el('span', `badge source-badge ${(n.sourceRole || '').toLowerCase()}`, n.sourceTier));
+    if ((n.clusterSize || 0) > 1) badges.appendChild(el('span', 'badge cluster-badge', `${n.clusterSize} sources`));
+
     const title = document.createElement('a');
     title.className = 'news-card-title';
     title.href = n.url;
@@ -85,30 +354,198 @@ function renderNews(items, featuredUrlSet = new Set(), container = null) {
 
     const meta = el('div', 'news-meta', `${n.source || 'Unknown'} · ${fmtDate(n.published)} · score ${n.score ?? '-'}`);
 
-
+    if (badges.children.length) body.appendChild(badges);
     body.appendChild(title);
     body.appendChild(meta);
 
     if (n.summary) body.appendChild(el('p', 'muted', n.summary));
+    if (n.whyItMatters) body.appendChild(el('p', 'news-why', n.whyItMatters));
+    if (n.brief?.practicalImpact && isFeatured) body.appendChild(el('p', 'news-impact', n.brief.practicalImpact));
     card.appendChild(body);
     wrap.appendChild(card);
   });
 }
 
+function renderLeadBlock(wrap, block) {
+  if (!block) return;
+  if (block.type === 'source-group') {
+    renderSourceGroup(block, new Set([block.key]), wrap);
+    return;
+  }
+  renderLeadStory(wrap, block.item || block);
+}
+
+function renderLeadStory(wrap, story) {
+  if (!story) return;
+  const lead = el('article', 'news-lead-story');
+  const img = document.createElement('img');
+  img.alt = '';
+  img.loading = 'eager';
+  img.fetchPriority = 'high';
+  img.referrerPolicy = 'no-referrer';
+  img.src = story.image && !isLikelyBadImage(story.image) ? story.image : placeholderImage(story.source);
+  lead.appendChild(img);
+
+  const body = el('div', 'news-lead-body');
+  body.appendChild(el('div', 'eyebrow', story.signalGroup || 'Top story'));
+  const title = document.createElement('a');
+  title.href = story.url;
+  title.target = '_blank';
+  title.rel = 'noopener';
+  title.className = 'news-lead-title';
+  title.textContent = story.title || 'Untitled';
+  body.appendChild(title);
+  body.appendChild(el('div', 'news-meta', `${story.source || 'Unknown'} · ${fmtDate(story.published)} · score ${story.score ?? '-'}`));
+  if (story.brief?.whatHappened) body.appendChild(el('p', 'news-lead-what', story.brief.whatHappened));
+  if (story.brief?.whoItAffects) body.appendChild(el('p', 'news-why', story.brief.whoItAffects));
+  if (story.brief?.practicalImpact) body.appendChild(el('p', 'news-impact', story.brief.practicalImpact));
+  lead.appendChild(body);
+  wrap.appendChild(lead);
+}
+
+function renderSection(wrap, title, items, featuredSet = new Set()) {
+  if (!items.length) return;
+  const section = document.createElement('section');
+  section.className = 'news-signal-section';
+  section.appendChild(el('h2', 'news-section-heading', title));
+  const grid = document.createElement('div');
+  grid.className = 'news-inner-grid';
+  section.appendChild(grid);
+  wrap.appendChild(section);
+  renderNews(items, featuredSet, grid);
+}
+
+function groupBySignal(items) {
+  const grouped = new Map();
+  items.forEach(item => {
+    const key = item.signalGroup || 'Product updates';
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(item);
+  });
+  return grouped;
+}
+
+function renderSummary(items, mode) {
+  const summary = document.getElementById('news-summary');
+  if (!summary) return;
+
+  const localImages = items.filter(i => (i.image || '').startsWith('public/thumbnails/')).length;
+  const primarySources = items.filter(i => i.sourceRole === 'primary').length;
+  const groups = groupBySignal(items);
+  const topGroups = [...groups.entries()]
+    .sort((a, b) => b[1].length - a[1].length)
+    .slice(0, 3)
+    .map(([group, groupItems]) => `${group}: ${groupItems.length}`);
+
+  summary.innerHTML = '';
+  [
+    `${items.length} ${mode === 'all' ? 'raw' : 'curated'} stories`,
+    `${localImages} with local images`,
+    `${primarySources} primary-source`,
+    ...topGroups
+  ].forEach(label => summary.appendChild(el('span', 'news-summary-pill', label)));
+}
+
+function toolIconFor(item) {
+  const label = `${item.toolLabel || ''} ${item.title || ''}`.toLowerCase();
+  if (label.includes('gemini') || label.includes('spark')) return '✦';
+  if (label.includes('pluno')) return 'P';
+  if (label.includes('agentcard') || label.includes('buy')) return '🛒';
+  if (label.includes('browser')) return '◎';
+  if (label.includes('folio')) return '▤';
+  if (label.includes('claude') || label.includes('sonnet')) return 'CS';
+  if (label.includes('openai')) return 'AI';
+  const seed = item.toolLabel || item.title || item.source || 'AI';
+  return seed
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(word => word[0])
+    .join('')
+    .toUpperCase();
+}
+
+function renderTools(news) {
+  const wrap = document.getElementById('news-tools');
+  if (!wrap) return;
+  const pool = news.items || [];
+  const fallback = pool
+    .filter(i => (i.category || 'AI') === 'AI')
+    .filter(isToolSource)
+    .sort((a, b) => {
+      const sourceScore = type => type === 'tool-directory' ? 2 : type === 'tool-release' ? 1 : 0;
+      return (sourceScore(b.sourceType) - sourceScore(a.sourceType)) || ((b.score || 0) - (a.score || 0));
+    });
+  const seen = new Set();
+  const tools = [...(news.tools || []), ...fallback]
+    .filter(i => i && i.url && !seen.has(i.url) && seen.add(i.url));
+  const dailyTools = rotateForDailyTools(tools, news, 6);
+  wrap.innerHTML = '';
+  if (!dailyTools.length) return;
+  wrap.appendChild(el('h2', 'news-tools-title', 'Tools Worth Trying'));
+  const row = el('div', 'news-tools-row');
+  dailyTools.forEach(item => {
+    const a = document.createElement('a');
+    a.className = 'news-tool-pill';
+    a.href = item.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    const icon = el('span', 'news-tool-icon', toolIconFor(item));
+    icon.setAttribute('aria-hidden', 'true');
+    const copy = el('span', 'news-tool-copy');
+    const name = el('span', 'news-tool-name', item.toolLabel || item.title || 'Untitled');
+    const meta = el('span', 'news-tool-meta', item.toolSummary || item.source || 'AI tool');
+    copy.appendChild(name);
+    copy.appendChild(meta);
+    a.appendChild(icon);
+    a.appendChild(copy);
+    row.appendChild(a);
+  });
+  wrap.appendChild(row);
+}
+
+function renderHealth(news) {
+  const body = document.getElementById('news-health-body');
+  if (!body) return;
+  const health = news.sourceHealth || [];
+  const ok = health.filter(s => s.status === 'ok').length;
+  const errors = health.filter(s => s.status !== 'ok');
+  const itemTotal = health.reduce((sum, s) => sum + (s.items || 0), 0);
+  body.innerHTML = '';
+  body.appendChild(el('p', 'news-health-line', `${ok}/${health.length} sources healthy · ${itemTotal} feed items checked · ${errors.length} errors`));
+  if (errors.length) {
+    const list = el('ul', 'news-health-errors');
+    errors.forEach(error => list.appendChild(el('li', '', `${error.source}: ${error.error || error.status}`)));
+    body.appendChild(list);
+  }
+}
+
 async function init() {
   try {
-    const news = await loadJson('https://raw.githubusercontent.com/jz237/jez237-site/main/ai-news/public/ai-news-latest.json');
-    const baseItems = news.items || [];
+    let news = await loadJson('public/ai-news-latest.json');
+    let baseItems = news.items || [];
+    let archiveIndex = { archives: [] };
+    try {
+      archiveIndex = await loadJson('public/archive-index.json');
+    } catch {}
 
     document.getElementById('news-updated').textContent = `Updated: ${fmtDate(news.updatedAt)}`;
 
-    const sortSelect = document.getElementById('news-sort');
     const categorySelect = document.getElementById('news-category');
     const sourceSelect = document.getElementById('news-source');
+    const tierSelect = document.getElementById('news-tier');
+    const archiveSelect = document.getElementById('news-archive');
     const queryInput = document.getElementById('news-query');
 
-    function populateSources(category) {
-      const categoryItems = baseItems.filter(i => (i.category || 'AI') === category);
+    (archiveIndex.archives || []).forEach(entry => {
+      const opt = document.createElement('option');
+      opt.value = entry.path;
+      opt.textContent = `${entry.date} (${entry.count})`;
+      archiveSelect.appendChild(opt);
+    });
+
+    function populateSources(category, mode) {
+      const categoryItems = visibleItemsForCategory(baseItems, category, mode);
       const sources = uniqueSources(categoryItems);
       sourceSelect.innerHTML = '<option value="">All sources</option>';
       sources.forEach(source => {
@@ -121,56 +558,99 @@ async function init() {
 
     function applyFilters() {
       const category = categorySelect?.value || 'AI';
+      const mode = 'curated';
       const source = sourceSelect?.value || '';
+      const tier = tierSelect?.value || '';
       const q = (queryInput?.value || '').trim().toLowerCase();
 
-      let items = baseItems.filter(i => (i.category || 'AI') === category);
+      let items = visibleItemsForCategory(baseItems, category, mode);
       if (source) items = items.filter(i => i.source === source);
+      if (tier) items = items.filter(i => (i.sourceRole || 'secondary') === tier);
       if (q) {
         items = items.filter(i => {
           const t = (i.title || '').toLowerCase();
           const s = (i.summary || '').toLowerCase();
-          return t.includes(q) || s.includes(q);
+          const w = (i.whyItMatters || '').toLowerCase();
+          const g = (i.signalGroup || '').toLowerCase();
+          return t.includes(q) || s.includes(q) || w.includes(q) || g.includes(q);
         });
       }
 
-      const mode = sortSelect?.value || 'latest';
-      if (mode === 'top') items.sort((a, b) => (b.score || 0) - (a.score || 0));
-      else items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
+      items.sort((a, b) => (new Date(b.published) - new Date(a.published)));
 
-
-      const limit = category === 'Science' ? 30 : 60;
+      const limit = category === 'Science' ? 30 : 36;
       items = items.slice(0, limit);
+
+      const itemLabel = items.length === 1 ? 'story' : 'stories';
+      const modeLabel = mode === 'all' ? 'raw' : 'curated';
+      document.getElementById('news-updated').textContent = `Updated: ${fmtDate(news.updatedAt)} · ${items.length} ${modeLabel} ${itemLabel}`;
+      renderSummary(items, mode);
 
       const wrap = document.getElementById('news-grid');
       wrap.innerHTML = '';
 
-      const grid = document.createElement('div');
-      grid.className = 'news-inner-grid';
-      wrap.appendChild(grid);
+      if (!items.length) {
+        wrap.appendChild(el('div', 'item', 'No news items available right now.'));
+        return;
+      }
 
-      const featuredByScore = [...items]
-        .sort((a, b) => (b.score || 0) - (a.score || 0))
-        .slice(0, Math.max(4, Math.round(items.length * 0.22)));
-      const featuredSet = new Set(featuredByScore.map(i => i.url));
-      renderNews(items, featuredSet, grid);
+      const storyBlocks = buildStoryBlocks(items);
+      const topCount = category === 'AI' ? Math.min(4, storyBlocks.length) : Math.min(3, storyBlocks.length);
+      const newestDayIndex = Math.max(...storyBlocks.map(blockLocalDayIndex), 0);
+      const topStories = [...storyBlocks]
+        .sort((a, b) => compareTopBriefingBlocks(a, b, newestDayIndex))
+        .slice(0, topCount);
+      const topSet = new Set(topStories.map(blockId));
+
+      renderLeadBlock(wrap, topStories[0]);
+      renderSection(wrap, category === 'Science' ? 'Discovery Watch' : 'Top Briefing', topStories.slice(1), topSet);
+
+      const remaining = storyBlocks.filter(block => !topSet.has(blockId(block)));
+      const grouped = groupBlocksBySignal(remaining);
+      const orderedGroups = [
+        ...SIGNAL_ORDER.filter(group => grouped.has(group)),
+        ...[...grouped.keys()].filter(group => !SIGNAL_ORDER.includes(group)).sort()
+      ];
+      const compactSingles = [];
+      orderedGroups.forEach(group => {
+        const groupItems = grouped.get(group) || [];
+        if (category === 'AI' && groupItems.length === 1) compactSingles.push(groupItems[0]);
+        else renderSection(wrap, group, groupItems);
+      });
+      if (compactSingles.length) renderSection(wrap, 'More AI News', compactSingles);
     }
 
     categorySelect.onchange = () => {
-      populateSources(categorySelect.value);
+      populateSources(categorySelect.value, 'curated');
+      sourceSelect.value = '';
       applyFilters();
     };
-    sortSelect.onchange = applyFilters;
     sourceSelect.onchange = applyFilters;
+    tierSelect.onchange = applyFilters;
+    archiveSelect.onchange = async () => {
+      const path = archiveSelect.value || 'public/ai-news-latest.json';
+      news = await loadJson(path);
+      baseItems = news.items || [];
+      populateSources(categorySelect.value, 'curated');
+      sourceSelect.value = '';
+      renderTools(news);
+      renderHealth(news);
+      applyFilters();
+    };
     queryInput.oninput = applyFilters;
 
     // Init with default category
-    populateSources(categorySelect.value);
+    populateSources(categorySelect.value, 'curated');
+    renderTools(news);
+    renderHealth(news);
 
     applyFilters();
   } catch (e) {
     const wrap = document.getElementById('news-grid');
-    wrap.innerHTML = `<div class="item">Could not load feed data: ${e.message}</div>`;
+    const item = document.createElement('div');
+    item.className = 'item';
+    item.textContent = `Could not load feed data: ${e.message}`;
+    wrap.replaceChildren(item);
   }
 }
 

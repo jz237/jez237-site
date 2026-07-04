@@ -5,19 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Jez237 — AI News Feed</title>
+  <meta name="description" content="A curated AI news feed tracking model releases, AI tools, research updates, developer platforms, image and video generation, and practical AI workflows." />
+  <meta name="keywords" content="AI news, artificial intelligence news, AI model releases, AI tools, generative AI, OpenAI, Anthropic, Google DeepMind, xAI, image generation, video generation, AI agents, developer tools, Jez237" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://jez237.com/ai-news/" />
+  <meta property="og:title" content="Jez237 — AI News Feed" />
+  <meta property="og:description" content="Curated AI model, tooling, research, image generation, video generation, and developer platform updates." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jez237.com/ai-news/" />
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/design.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
+  <link rel="stylesheet" href="../assets/ai-news.css?v=20260702-imgfix" />
 </head>
-<body>
+<body class="ai-news-page">
   <header id="site-nav"></header>
 
   <main class="container">
-    <section class="hero-editorial">
+    <section class="hero-editorial ai-news-hero">
       <div class="eyebrow">Daily refresh</div>
-      <h1>AI model &amp; tooling stream.</h1>
-      <p class="lede">A curated feed of model releases, developer tooling, and notable research — rebuilt from scratch every morning. Filter by source, search headlines, sort by recency or score.</p>
+      <h1>AI News</h1>
+      <p class="lede">A curated briefing of model releases, agent tooling, infrastructure, research, and AI industry shifts — grouped by signal, with local thumbnails and short notes on why each story matters.</p>
     </section>
 
     <section class="card col-12" style="margin-top:16px;">
@@ -26,14 +35,25 @@
           <option value="AI">🤖 AI News</option>
           <option value="Science">🔬 Discovery News</option>
         </select>
-        <select id="news-sort" class="control">
-          <option value="latest">Sort: Latest</option>
-          <option value="top">Sort: Top scored</option>
+        <select id="news-archive" class="control archive-control">
+          <option value="">Latest briefing</option>
         </select>
         <select id="news-source" class="control"></select>
+        <select id="news-tier" class="control">
+          <option value="">All source tiers</option>
+          <option value="primary">Primary sources</option>
+          <option value="secondary">Reported sources</option>
+          <option value="watchlist">Watchlist sources</option>
+        </select>
         <input id="news-query" class="control" type="search" placeholder="Filter headline/summary..." />
         <span id="news-updated" class="news-meta"></span>
       </div>
+      <div id="news-summary" class="news-summary" aria-live="polite"></div>
+      <div id="news-tools" class="news-tools-strip"></div>
+      <details id="news-health" class="news-health">
+        <summary>Source health</summary>
+        <div id="news-health-body"></div>
+      </details>
       <div id="news-grid" class="news-grid"></div>
     </section>
 
@@ -42,8 +62,8 @@
     </footer>
   </main>
 
-  <script src="../assets/news.js"></script>
+  <script src="../assets/news.js?v=fresh-top-20260704"></script>
   <script src="../assets/site-enhance.js" defer></script>
-  <script src="../assets/nav.js" defer></script>
+  <script src="../assets/nav.js?v=nav-20260702b" defer></script>
 </body>
 </html>
