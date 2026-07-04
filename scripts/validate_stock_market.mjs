@@ -119,12 +119,16 @@ async function validateIndexHtml() {
     errors.push("index.html: no hashed app bundle reference found");
 }
 
+// --data-only skips the index.html/asset checks for callers with a sparse
+// checkout of just stock-market/data (the refresh workflow).
+const dataOnly = process.argv.includes("--data-only");
+
 const stocksData = await validateStocks();
 if (stocksData) {
   await validatePortfolio(stocksData);
   await validateHistory(stocksData);
 }
-await validateIndexHtml();
+if (!dataOnly) await validateIndexHtml();
 
 for (const warning of warnings) console.warn(`WARN  ${warning}`);
 for (const error of errors) console.error(`ERROR ${error}`);

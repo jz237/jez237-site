@@ -8,10 +8,6 @@ on:
       - "scripts/refresh_stock_market_data.mjs"
       - "scripts/validate_stock_market.mjs"
       - ".github/workflows/stock-market-*.yml"
-  push:
-    branches: [main]
-    paths:
-      - "stock-market/data/**"
 
 jobs:
   validate:
