@@ -3,8 +3,8 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { getHeight, getNormal } from './terrain.js?v=2';
-import { SCATTER } from './config.js?v=2';
+import { getHeight, getNormal } from './terrain.js?v=3';
+import { SCATTER } from './config.js?v=3';
 
 function softCircleTexture(hard = false) {
   const s = 64;
@@ -187,6 +187,31 @@ export class Effects {
   setParticleScale(s) { this.particleScale = s; }
 
   setShakeScale(s) { this.shakeScale = s; }
+
+  // thin additive MG tracer line from muzzle to impact, fades in ~70ms
+  tracer(from, to) {
+    if (!this.tracers) {
+      this.tracers = [];
+      const geo = new THREE.BoxGeometry(0.05, 0.05, 1);
+      geo.translate(0, 0, 0.5); // scale along +z from origin
+      for (let i = 0; i < 14; i++) {
+        const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
+          color: 0xffe9a0, transparent: true, opacity: 0.9,
+          blending: THREE.AdditiveBlending, depthWrite: false, fog: false,
+        }));
+        mesh.visible = false;
+        this.scene.add(mesh);
+        this.tracers.push({ mesh, t: 1 });
+      }
+      this.tracerHead = 0;
+    }
+    const tr = this.tracers[this.tracerHead++ % this.tracers.length];
+    tr.t = 0;
+    tr.mesh.visible = true;
+    tr.mesh.position.copy(from);
+    tr.mesh.lookAt(to);
+    tr.mesh.scale.set(1, 1, from.distanceTo(to));
+  }
 
   shake(amount) { this.trauma = Math.min(1.2, this.trauma + amount * (this.shakeScale ?? 1)); }
 
@@ -451,6 +476,16 @@ export class Effects {
       l.t += dt;
       const t = Math.min(1, l.t / l.dur);
       l.light.intensity = l.peak * (1 - t) * (1 - t);
+    }
+
+    // MG tracers
+    if (this.tracers) {
+      for (const tr of this.tracers) {
+        if (!tr.mesh.visible) continue;
+        tr.t += dt;
+        if (tr.t > 0.07) tr.mesh.visible = false;
+        else tr.mesh.material.opacity = 0.9 * (1 - tr.t / 0.07);
+      }
     }
 
     this.trauma = Math.max(0, this.trauma - dt * 1.6);

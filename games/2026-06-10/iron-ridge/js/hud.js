@@ -2,7 +2,7 @@
 // vignette, off-screen enemy arrows, leaderboard rendering, screens.
 
 import * as THREE from 'three';
-import { SHELL } from './config.js?v=2';
+import { SHELL } from './config.js?v=3';
 
 const $ = (id) => document.getElementById(id);
 const _v = new THREE.Vector3();
@@ -32,6 +32,12 @@ export class Hud {
       reticle: $('reticle'),
       strike: $('strike-ready'),
       strikeBtn: $('btn-strike'),
+      wpnAp: $('wpn-ap'),
+      wpnHe: $('wpn-he'),
+      mgFill: $('mg-fill'),
+      mgLabel: $('mg-label'),
+      repairStatus: $('repair-status'),
+      perkBar: $('perk-bar'),
     };
     this.bannerT = 0;
     this.shells = [];
@@ -221,6 +227,57 @@ export class Hud {
   setStrike(ready) {
     this.el.strike?.classList.toggle('hidden', !ready);
     this.el.strikeBtn?.classList.toggle('hidden', !ready);
+  }
+
+  setWeapon(sel) {
+    this.el.wpnAp?.classList.toggle('active', sel === 'ap');
+    this.el.wpnHe?.classList.toggle('active', sel === 'he');
+  }
+
+  setMg(heat, locked) {
+    if (!this.el.mgFill) return;
+    this.el.mgFill.style.width = `${Math.min(1, heat) * 100}%`;
+    this.el.mgFill.style.background = locked ? '#e0563c' : heat > 0.7 ? '#e8c84a' : '#8fd6ff';
+    if (this.el.mgLabel) this.el.mgLabel.textContent = locked ? 'OVERHEATED' : 'COAX MG';
+  }
+
+  // '', 'wait' (blocked), 'arming' (delay), 'field', 'depot'
+  setRepair(mode, detail = '') {
+    const el = this.el.repairStatus;
+    if (!el) return;
+    const text = {
+      '': '', wait: detail || 'CANNOT REPAIR YET', arming: '🔧 STARTING REPAIRS…',
+      field: '🔧 REPAIRING', depot: '⛺ DEPOT REPAIRS',
+    }[mode] ?? '';
+    if (el.textContent !== text) el.textContent = text;
+    el.classList.toggle('active', mode === 'field' || mode === 'depot');
+  }
+
+  // between-wave perk choice; onPick(perk) fires once
+  showPerks(perks, onPick) {
+    const bar = this.el.perkBar;
+    if (!bar) return;
+    bar.innerHTML = '<div class="perk-title">FIELD UPGRADE — PICK ONE</div>';
+    const row = document.createElement('div');
+    row.className = 'perk-row';
+    bar.appendChild(row);
+    let done = false;
+    for (const p of perks) {
+      const btn = document.createElement('button');
+      btn.className = 'perk-card';
+      btn.innerHTML = `<b>${p.name}</b><span>${p.desc}</span>`;
+      btn.addEventListener('click', () => {
+        if (done) return;
+        done = true;
+        onPick(p);
+      });
+      row.appendChild(btn);
+    }
+    bar.classList.remove('hidden');
+  }
+
+  hidePerks() {
+    this.el.perkBar?.classList.add('hidden');
   }
 
   setPerf(fps, qualityName) {

@@ -1,5 +1,13 @@
 // Central tuning constants for Iron Ridge.
 
+// Daily Ridge: ?mode=daily reseeds the world from the UTC date and scores
+// to a per-day leaderboard
+const _params = new URLSearchParams(location.search);
+export const DAILY = _params.get('mode') === 'daily';
+const _d = new Date();
+export const DAILY_STAMP = `${_d.getUTCFullYear()}${String(_d.getUTCMonth() + 1).padStart(2, '0')}${String(_d.getUTCDate()).padStart(2, '0')}`;
+export const WORLD_SEED = DAILY ? (parseInt(DAILY_STAMP, 10) % 99991) : 0;
+
 export const WORLD_SIZE = 560;          // metres, square terrain
 export const WORLD_HALF = WORLD_SIZE / 2;
 export const TERRAIN_SEGS = 224;        // visual + physics grid resolution
@@ -15,12 +23,12 @@ export const TANK = {
   chassisHalf: { x: 1.42, y: 0.55, z: 2.3 },
   mass: 700,
   engineForce: 5200,
-  reverseForce: 3600,
+  reverseForce: 4800,
   brakeForce: 28,
   turnForce: 2200,       // differential track thrust per side (flavor)
-  maxYawRate: 1.15,      // rad/s commanded pivot rate at full turn input
+  maxYawRate: 1.5,       // rad/s commanded pivot rate at full turn input
   maxSpeed: 13.5,        // m/s forward
-  maxReverse: 6.0,
+  maxReverse: 11.0,      // near-forward reverse: the tank goes where you point
   wheelRadius: 0.42,
   suspensionRest: 0.52,
   suspK: 16000,          // spring N/m per corner
@@ -50,6 +58,45 @@ export const SHELL = {
   chamberTime: 1.7,      // s between shots
   restockTime: 5.0,      // s to refill the rack
 };
+
+// --- Player weapons: main-gun shell types + coaxial MG ------------------
+export const WEAPONS = {
+  ap: { label: 'AP', speed: 125, dmgDirect: 65, dmgSplash: 12, splashRadius: 3.4, impulse: 2200 },
+  he: { label: 'HE', speed: 95, dmgDirect: 34, dmgSplash: 42, splashRadius: 8.5, impulse: 3400 },
+};
+
+export const MG = {
+  rate: 11,            // rounds/sec
+  dmgTank: 3,          // per round vs armor
+  dmgSoft: 8,          // per round vs trucks/props
+  range: 175,
+  heatPerShot: 0.055,
+  coolRate: 0.34,      // heat/sec
+  resumeAt: 0.45,      // after overheat, usable below this heat
+  spread: 0.013,       // rad
+  truckHp: 26,         // MG rounds to wreck a convoy truck
+};
+
+export const REPAIR = {
+  fieldRate: 6,        // hp/sec, stationary field repair
+  fieldDelay: 1.2,     // sec of stillness before wrenching starts
+  combatLockout: 2.5,  // sec after taking damage before repair can start
+  depotRate: 9,        // hp/sec inside the depot ring
+  depotRadius: 9,
+};
+
+// --- Between-wave perk cards (pick 1 of 3, stack for the whole run) -----
+export const PERKS = [
+  { id: 'loader', name: 'RAPID LOADER', desc: 'Main gun chambers 18% faster' },
+  { id: 'plating', name: 'EXTRA PLATING', desc: '+25 max armor, repaired now' },
+  { id: 'he_expert', name: 'HE EXPERT', desc: 'HE blast radius +20%' },
+  { id: 'ap_expert', name: 'AP EXPERT', desc: 'AP shell damage +20%' },
+  { id: 'turbo', name: 'TURBO TRACKS', desc: 'Speed and acceleration +15%' },
+  { id: 'magnet', name: 'SUPPLY MAGNET', desc: 'Crates pull in from 80% farther' },
+  { id: 'coolant', name: 'MG COOLANT', desc: 'Coax MG cools 45% faster' },
+  { id: 'mechanic', name: 'FIELD MECHANIC', desc: 'All repairs 60% faster' },
+  { id: 'doctrine', name: 'STRIKE DOCTRINE', desc: 'Airstrike after 2 kills instead of 3' },
+];
 
 export const ENEMY = {
   hp: 100,
