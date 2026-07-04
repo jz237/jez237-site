@@ -224,7 +224,7 @@ body.lefty #muteBtn{right:calc(12px + var(--gutter) + env(safe-area-inset-right)
 
 <script>
 'use strict';
-const VERSION = 'v2.1.0';
+const VERSION = 'v2.1.1';
 const SCORE_KEY = 'millipede_scores_v1';
 const LEGACY_SCORE_KEY = 'neon_myriapod_scores_v1';
 // Keep the original backing key so existing global scores remain associated after the URL rename.
@@ -392,9 +392,10 @@ const audioBuffers = {};
 const AUDIO_FILES = {
   musicTitle:'audio/music-title.mp3', musicGame:'audio/music-game.mp3', musicBoss:'audio/music-boss.mp3',
   queenWarn:'audio/sfx-queen-warn.mp3', queenDeath:'audio/sfx-queen-death.mp3', death:'audio/sfx-death.mp3',
-  bomb:'audio/sfx-bomb.mp3', oneup:'audio/sfx-oneup.mp3', wave:'audio/sfx-wave.mp3', gameover:'audio/sfx-gameover.mp3'
+  bomb:'audio/sfx-bomb.mp3', oneup:'audio/sfx-oneup.mp3', wave:'audio/sfx-wave.mp3', gameover:'audio/sfx-gameover.mp3',
+  shot:'audio/sfx-shot.mp3'
 };
-const SAMPLE_GAIN = {queenWarn:.8, queenDeath:.9, death:.85, bomb:.9, oneup:.6, wave:.5, gameover:.8};
+const SAMPLE_GAIN = {queenWarn:.8, queenDeath:.9, death:.85, bomb:.9, oneup:.6, wave:.5, gameover:.8, shot:.34};
 function unlockAudio(){
   try{
     if(!audioCtx){
@@ -465,12 +466,12 @@ function noiseBurst(dur, gain, color, x){
     src.buffer = buf; src.connect(g); routeSfx(g, x); src.start(); src.stop(audioCtx.currentTime + dur);
   }catch(e){}
 }
-function playSample(name, x, vol){
+function playSample(name, x, vol, rate){
   if(!audioCtx || !audioReady || muted || !audioBuffers[name]) return false;
   try{
     const src = audioCtx.createBufferSource(), g = audioCtx.createGain();
     src.buffer = audioBuffers[name];
-    src.playbackRate.value = 1 + (Math.random()*2-1)*.03;
+    src.playbackRate.value = rate || (1 + (Math.random()*2-1)*.03);
     g.gain.value = (vol !== undefined ? vol : SAMPLE_GAIN[name] || .7);
     src.connect(g); routeSfx(g, x); src.start();
     return true;
@@ -529,7 +530,13 @@ function sfx(name, x){
     if(name==='gameover'){ if(playSample('gameover', x)) return; }
     if(name==='queenWarn'){ if(playSample('queenWarn', x)){ duckMusic(.3, 1.4); return; } }
     if(name==='queenDeath'){ if(playSample('queenDeath', x)){ duckMusic(.3, 1.2); return; } }
-    if(name==='shot'){ tone(1280,.016,'square',.012,1680,x,.05); tone(2560,.01,'triangle',.004,3200,x,.05); }
+    if(name==='shot'){
+      // Pitch-jittered laser sample; synth pew (descending zap) as fallback.
+      if(playSample('shot', x, .3 + Math.random()*.1, .95 + Math.random()*.22)) return;
+      tone(1500,.07,'square',.016,380,x,.06);
+      tone(2900,.03,'triangle',.006,900,x,.06);
+      noiseBurst(.018,.006,null,x);
+    }
     if(name==='mushroom'){ [0,12,24].forEach((d,i)=>setTimeout(()=>tone(720+i*55,.011,'triangle',.0048,620,x,.04),d)); }
     if(name==='crumble'){ tone(190,.07,'triangle',.018,80,x,.04); noiseBurst(.09,.018,'dark',x); }
     if(name==='segment'){ tone(150,.045,'sawtooth',.018,90,x,.05); tone(420,.026,'square',.01,250,x,.05); }
