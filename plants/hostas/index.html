@@ -153,6 +153,15 @@
       if (e.key === 'ArrowRight') next(1);
       if (e.key === 'ArrowLeft') next(-1);
     });
+    let wheelLast = 0;
+    lightbox.addEventListener('wheel', e => {
+      if (!lightbox.classList.contains('open')) return;
+      e.preventDefault();
+      const now = Date.now();
+      if (now - wheelLast < 350 || Math.abs(e.deltaY) < 6) return;
+      wheelLast = now;
+      next(e.deltaY > 0 ? 1 : -1);
+    }, { passive: false });
   })();
   </script>
   <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
