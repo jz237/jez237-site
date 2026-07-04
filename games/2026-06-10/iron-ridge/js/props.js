@@ -3,9 +3,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { getHeight } from './terrain.js?v=3';
-import { makeRng } from './noise.js?v=3';
-import { CG, SCORING, PILLBOX, PICKUP } from './config.js?v=3';
+import { getHeight } from './terrain.js?v=4';
+import { makeRng } from './noise.js?v=4';
+import { CG, SCORING, PILLBOX, PICKUP } from './config.js?v=4';
 
 function barrelTexture() {
   const cv = document.createElement('canvas');
@@ -246,7 +246,7 @@ export class Props {
     return it;
   }
 
-  spawnCrate(x, z) {
+  spawnCrate(x, z, persistent = false) {
     const grp = new THREE.Group();
     const box = new THREE.Mesh(
       new THREE.BoxGeometry(0.9, 0.9, 0.9),
@@ -269,7 +269,7 @@ export class Props {
     const it = {
       kind: 'crate', mesh: grp, body: null, hp: 1, points: 0,
       alive: true, dynamic: false, radius: 0.9,
-      x, z, age: 0, beam,
+      x, z, age: 0, beam, persistent,
     };
     this.items.push(it);
     return it;
@@ -351,11 +351,13 @@ export class Props {
         it.mesh.position.y = getHeight(it.x, it.z) + 0.8 + Math.sin(time * 2.4 + it.x) * 0.18;
         it.mesh.rotation.y += dt * 1.2;
         it.beam.material.opacity = 0.38 + Math.sin(time * 3.2 + it.x) * 0.16;
-        // blink before expiring
-        if (it.age > PICKUP.ttl - 4) {
-          it.mesh.visible = it.beam.visible = Math.sin(time * 9) > -0.4;
+        // battle-drop crates expire; persistent field caches never do
+        if (!it.persistent) {
+          if (it.age > PICKUP.ttl - 4) {
+            it.mesh.visible = it.beam.visible = Math.sin(time * 9) > -0.4;
+          }
+          if (it.age > PICKUP.ttl) this.removeItem(it, false);
         }
-        if (it.age > PICKUP.ttl) this.removeItem(it, false);
       } else if (it.kind === 'depot') {
         it.ring.material.opacity = 0.28 + Math.sin(time * 2.2) * 0.12;
         it.beam.material.opacity = 0.3 + Math.sin(time * 2.2) * 0.1;

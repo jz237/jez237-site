@@ -38,7 +38,7 @@ export const TANK = {
   rollResist: 950,       // N per (m/s) when coasting
   turretSlewRate: 2.6,   // rad/s
   barrelMinPitch: -0.32, // rad (up is positive here)
-  barrelMaxPitch: 0.14,  // rad downward limit
+  barrelMaxPitch: 0.24,  // rad downward limit (can hit close-in targets)
   hp: 100,
 };
 
@@ -186,7 +186,34 @@ export const PICKUP = {
   dropChance: 0.45,  // from tank kills
   heal: 30,
   ttl: 25,
-  magnetRadius: 4.5,
+  magnetRadius: 7,
+};
+
+// persistent field caches: heal, vanish, reappear somewhere else
+export const CACHE = {
+  count: 3,
+  respawnDelay: 8,   // seconds after pickup before it pops up elsewhere
+};
+
+// escape boost: burst of track power to shake off tailgaters
+export const BOOST = {
+  force: 1.9,        // engine force multiplier while boosting
+  speed: 1.45,       // max speed multiplier
+  time: 1.8,         // seconds of burn
+  cooldown: 9,
+};
+
+// ground infantry: chip damage in, big MG/splash payouts out
+export const INFANTRY = {
+  max: 60,
+  speed: 3.2,        // m/s advance
+  stopRange: 30,     // halt and shoot inside this
+  fireRange: 62,
+  reload: 1.7,       // seconds between rifle shots (jittered)
+  dmg: 1,
+  hitChance: 0.45,
+  points: 25,
+  crushRadius: 1.8,  // tracks are the best melee weapon
 };
 
 export const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/iron-ridge';

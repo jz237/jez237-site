@@ -85,12 +85,17 @@
   }
   #repair-status.active { color: #52ffc8; }
   #perk-bar {
-    position: absolute; left: 50%; bottom: 13%; transform: translateX(-50%);
+    position: fixed; left: 50%; bottom: 13%; transform: translateX(-50%);
     width: min(640px, 94vw); text-align: center; pointer-events: none;
+    z-index: 9; /* above the touch look/drive zones */
   }
   .perk-title {
     font-size: 13px; letter-spacing: 3px; color: var(--accent2);
-    text-shadow: 0 1px 8px #000; margin-bottom: 7px; font-weight: 800;
+    text-shadow: 0 1px 8px #000; margin-bottom: 3px; font-weight: 800;
+  }
+  .perk-hint {
+    font-size: 11px; letter-spacing: 2px; color: var(--ink);
+    text-shadow: 0 1px 6px #000; margin-bottom: 7px; opacity: 0.85;
   }
   .perk-row { display: flex; gap: 8px; }
   .perk-card {
@@ -415,6 +420,14 @@
   }
   body.lefty #btn-repair { left: auto; right: 12px; }
   #btn-repair.active { background: #2f9e55; box-shadow: 0 0 14px #52ffc8aa; }
+  #btn-boost {
+    position: fixed; left: 12px; top: calc(150px + 124px * var(--tscale)); z-index: 7;
+    width: calc(52px * var(--tscale)); height: calc(52px * var(--tscale)); border-radius: 50%;
+    border: 2px solid rgba(255, 208, 94, 0.7);
+    background: rgba(30, 24, 8, 0.6); font-size: calc(22px * var(--tscale));
+    pointer-events: auto; touch-action: none;
+  }
+  body.lefty #btn-boost { left: auto; right: 12px; }
   /* right cluster above the gun panel */
   #btn-mg {
     position: fixed; right: calc(150px * var(--tscale)); bottom: calc(195px * var(--tscale)); z-index: 7;
@@ -490,8 +503,6 @@
     <div class="bar" id="mg-bar"><div id="mg-fill"></div></div>
   </div>
 
-  <div id="perk-bar" class="hidden"></div>
-
   <div id="minimap-wrap"><canvas id="minimap" width="336" height="336"></canvas></div>
   <div id="perf"><div id="fps">60 fps</div><div id="quality">High</div></div>
 
@@ -515,8 +526,12 @@
   <button id="btn-wpn-touch">AP·HE</button>
   <button id="btn-strike" class="hidden">✈</button>
   <button id="btn-ping">📍</button>
+  <button id="btn-boost">⚡</button>
   <button id="btn-pause-touch">⏸ PAUSE</button>
 </div>
+
+<!-- above the touch zones so perk cards stay tappable mid-battle -->
+<div id="perk-bar" class="hidden"></div>
 
 <!-- ===================== screens ===================== -->
 <div id="overlay">
@@ -527,7 +542,7 @@
       <b>WASD / arrows</b> — drive &nbsp;·&nbsp; <b>mouse</b> — aim &nbsp;·&nbsp; <b>click / space</b> — fire<br/>
       <b>1 / 2</b> — AP / HE shells &nbsp;·&nbsp; <b>hold right-click</b> — coax MG &nbsp;·&nbsp; <b>R</b> — restock<br/>
       <b>E</b> — field repair (sit still, or park at the green depot) &nbsp;·&nbsp; <b>F</b> — airstrike<br/>
-      <b>G</b> — ping &nbsp;·&nbsp; <b>scroll</b> — zoom &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
+      <b>Shift</b> — boost &nbsp;·&nbsp; <b>G</b> — ping &nbsp;·&nbsp; <b>scroll</b> — zoom &nbsp;·&nbsp; <b>Esc</b> — pause &nbsp;·&nbsp; <b>M</b> — mute
     </div>
     <div class="controls-info hidden" id="controls-touch">
       <b>touch the left side</b> — a stick appears under your thumb; <b>push the
@@ -536,6 +551,7 @@
       <b>auto-fire is on</b>: aim at a tank and your cannon shoots itself &nbsp;·&nbsp;
       <b>MG</b> — hold for the coax gun &nbsp;·&nbsp; <b>AP·HE</b> — swap shells<br/>
       <b>🔧</b> — repair (sit still, or park at the green depot) &nbsp;·&nbsp;
+      <b>⚡ / double-tap drive side</b> — boost &nbsp;·&nbsp;
       <b>⟳</b> — restock &nbsp;·&nbsp; <b>pinch</b> — zoom &nbsp;·&nbsp; <b>✈</b> — airstrike when earned
     </div>
     <button class="btn" id="btn-play">▶ DEPLOY</button>
@@ -670,7 +686,7 @@
   }
 }
 </script>
-<script type="module" src="./js/main.js?v=3"></script>
+<script type="module" src="./js/main.js?v=4"></script>
 <script>
   // show matching controls hint
   if (('ontouchstart' in window) || navigator.maxTouchPoints > 0) {
