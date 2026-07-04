@@ -10,15 +10,15 @@
   <style>
     .page-header { max-width:1180px; margin:0 auto; padding:36px 22px 0; }
     .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--pc-muted); text-decoration:none; font-size:.88rem; font-weight:500; margin-bottom:16px; }
-    .back-link:hover { color:#8eb6ff; }
+    .back-link:hover { color:#b9ee79; }
     .back-link svg { width:16px; height:16px; }
-    .page-header h1 { font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.04em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fff 0%,#8eb6ff 55%,#c084fc 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .page-header h1 { font-family:var(--font-serif,'Fraunces',Georgia,serif); font-weight:600; font-size:clamp(2rem,5vw,3.2rem); letter-spacing:-.03em; line-height:1.05; margin-bottom:4px; background:linear-gradient(120deg,#fffef4 0%,#e4fab4 55%,#9fd45f 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
     .page-header .latin { font-style:italic; color:var(--pc-muted); font-size:.95rem; margin-bottom:8px; }
     .page-header .one-liner { color:var(--pc-muted); font-size:1rem; max-width:600px; line-height:1.5; }
     .meta-row { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
     .meta-pill { font-size:11px; padding:4px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.1); background:rgba(255,255,255,.04); color:var(--pc-muted); letter-spacing:.3px; text-transform:uppercase; font-weight:600; }
-    .meta-pill.season { border-color:rgba(79,140,255,.35); color:#8eb6ff; }
-    .meta-pill.type { border-color:rgba(192,132,252,.3); color:#c084fc; }
+    .meta-pill.season { border-color:rgba(185,238,121,.4); color:#cdf08d; }
+    .meta-pill.type { border-color:rgba(159,212,95,.35); color:#9fd45f; }
   </style>
 </head>
 <body>
@@ -44,10 +44,12 @@
       <div class="card" data-title="Yellow spires in bloom" data-date="May 11, 2026">
         <div class="card-image-wrap">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/baptisia-lemon-meringue-2026-05-11.jpg" alt="Baptisia Lemon Meringue in bloom" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 11, 2026</div>
+            <h3>Yellow spires in bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 11, 2026</div>
-          <h3>Yellow spires in bloom</h3>
           <p class="card-desc">Bright yellow flower spikes rising above blue-green compound foliage, still pushing buds at the top.</p>
           <details>
             <summary>Season notes</summary>
