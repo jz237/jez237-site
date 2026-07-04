@@ -430,5 +430,41 @@
       "description": "A fictional snowshoe hare + orchid mantis hybrid with snow-running feet, winter fur, long ears, folded petal-like raptorial forelimbs, and blush floral camouflage.",
       "continuity": "Same adult phenotype across both images: waist-high alpine leaper with hare hindquarters, broad snow feet, frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and winter-white fur."
     }
+  },
+  {
+    "id": "2026-07-04-hybrid-creature-infographic-glassveil-tidewalker-developmen",
+    "title": "Glassveil Tidewalker: Development Map",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under /home/jez237/.openclaw/media/tool-image-generation/.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Glassveil Tidewalker\", using exactly two source organisms: coconut octopus + glasswing butterfly. Show a concise fictional source-trait map where coconut octopus contributes soft mottled mantle, eight flexible sucker-lined arms, shell-carrying shelter behavior, chromatophore freckles, and cautious tidepool walking, while glasswing butterfly contributes transparent veined wing-panels, black-and-amber wing borders, delicate clubbed antennae, a slender curled feeding proboscis, and stained-glass iridescent edge colors. Build the landscape chart around a wet mangrove field-station specimen bench with a central adult specimen in side-three-quarter view: a low palm-sized amphibious cephalopod body braced on four walking arms, four trailing arms curled around a small half-shell shelter, paired transparent wing-like sail membranes rising from the mantle like glass panes with butterfly vein tracery, black-and-amber rim bands, small clubbed antennae above wide cephalopod eyes, and a curled nonhuman proboscis used only for sipping moisture from mangrove blossoms. Include source-trait map, juvenile-to-adult stage strip, adult anatomy/specimen panel, macro windows for sucker texture, chromatophore freckles, transparent wing veins, amber rim scales, wet shell interior, and antenna tips, habitat swatches for mangrove roots, brackish tidepool water, wet black mud, fallen blossom nectar, and shell rubble, plus a field-context scale vignette with a mangrove leaf, small unbranded caliper, shell fragment, gloved fingertip silhouette, and shallow observation tray. Use lively scientific color coding, photorealistic wet bench detail, restrained arrows, readable but minimal fictional labels, clear panel hierarchy, turquoise water reflections, amber wing edges, rust-red mangrove roots, black mud, and pearly shell highlights. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Glassveil Tidewalker; [SOURCE_A] = coconut octopus; [SOURCE_B] = glasswing butterfly; [HABITAT] = shallow mangrove tidepool at low tide; adult phenotype = palm-sized amphibious cephalopod with eight sucker-lined arms, shell-carrying behavior, chromatophore freckles, transparent veined wing-like sail membranes, black-and-amber butterfly rim bands, clubbed antennae, and a curled nonhuman proboscis.",
+    "image": "images/2026-07-04-hybrid-creature-infographic-glassveil-tidewalker-developmen.jpg",
+    "date": "2026-07-04",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glassveil Tidewalker",
+      "imageKind": "infographic",
+      "description": "A fictional coconut octopus + glasswing butterfly hybrid shown as a wet mangrove development map and matching field phenotype.",
+      "continuity": "Same palm-sized tidepool adult: octopus mantle, eight sucker-lined arms, shell shelter, transparent veined sail membranes, amber-black wing rims, antennae, and curled proboscis."
+    }
+  },
+  {
+    "id": "2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild",
+    "title": "Glassveil Tidewalker: In the Wild",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under /home/jez237/.openclaw/media/tool-image-generation/.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Glassveil Tidewalker\", a clearly fictional two-source hybrid of coconut octopus + glasswing butterfly, moving through a shallow mangrove tidepool at low tide. Preserve the same adult phenotype from the development map: a palm-sized amphibious cephalopod with a low soft mottled mantle, eight flexible sucker-lined arms total, four arms braced as cautious walking limbs on wet black mud, four trailing arms curled around a small half-shell shelter, chromatophore freckles across the skin, wide alert cephalopod eyes, paired transparent wing-like sail membranes rising from the mantle like glass panes with glasswing-butterfly vein tracery, black-and-amber rim bands, tiny iridescent stained-glass edge colors, delicate clubbed antennae above the eyes, and a slender curled nonhuman proboscis touching a fallen mangrove blossom for moisture. Show it in real habitat scale among rust-red mangrove roots, brackish tidepool water, shell rubble, reflected turquoise sky, wet leaves, tiny bubbles, silt ripples, and a soft track of sucker marks in mud; include a second blurred individual half-hidden near a root only as continuity, not a new species. Use low macro wildlife camera angle at waterline, natural humid morning light, shallow documentary depth of field, tactile wet textures, pearly shell highlights, translucent wing membranes catching backlight, and believable cautious animal posture. No text, no labels, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure octopus or pure butterfly result; it must visibly combine coconut octopus traits and glasswing butterfly traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Glassveil Tidewalker; [SOURCE_A] = coconut octopus; [SOURCE_B] = glasswing butterfly; [HABITAT] = shallow mangrove tidepool at low tide; shared adult phenotype = palm-sized amphibious cephalopod with eight sucker-lined arms, shell shelter, chromatophore freckles, transparent veined wing-like sails, black-and-amber butterfly edges, clubbed antennae, and curled proboscis.",
+    "image": "images/2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild.jpg",
+    "date": "2026-07-04",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glassveil Tidewalker",
+      "imageKind": "wild",
+      "description": "A fictional coconut octopus + glasswing butterfly hybrid photographed in a shallow mangrove tidepool.",
+      "continuity": "Same palm-sized tidepool adult: octopus mantle, eight sucker-lined arms, shell shelter, transparent veined sail membranes, amber-black wing rims, antennae, and curled proboscis."
+    }
   }
 ]
