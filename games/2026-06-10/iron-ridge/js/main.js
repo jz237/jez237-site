@@ -19,6 +19,7 @@ import { Projectiles } from './projectiles.js';
 import { Effects } from './effects.js';
 import { GameAudio } from './audio.js';
 import { Input, isTouch } from './input.js';
+import { settings, setSetting } from './settings.js';
 import { Hud } from './hud.js';
 import { QualityScaler, LEVELS } from './quality.js';
 import { Minimap } from './minimap.js';
@@ -36,7 +37,7 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 1.14;
 
 const scene = new THREE.Scene();
 const FOG_COLOR = 0xc8dfee;
@@ -194,12 +195,12 @@ const gradePass = new ShaderPass({
     void main() {
       vec4 c = texture2D(tDiffuse, vUv);
       c.rgb = toSRGB(acesFilmic(c.rgb));
-      c.rgb = mix(c.rgb, c.rgb * c.rgb * (3.0 - 2.0 * c.rgb), 0.22);
+      c.rgb = mix(c.rgb, c.rgb * c.rgb * (3.0 - 2.0 * c.rgb), 0.26);
       float l = dot(c.rgb, vec3(0.299, 0.587, 0.114));
-      c.rgb = mix(vec3(l), c.rgb, 1.10);
-      c.rgb *= vec3(1.02, 1.0, 0.985);
+      c.rgb = mix(vec3(l), c.rgb, 1.20);
+      c.rgb *= vec3(1.03, 1.005, 0.975);
       vec2 q = vUv - 0.5;
-      c.rgb *= 1.0 - dot(q, q) * 0.42;
+      c.rgb *= 1.0 - dot(q, q) * 0.30;
       gl_FragColor = c;
     }`,
 });
@@ -575,6 +576,7 @@ function updateAimPoint() {
   }
 
   // prefer tanks / targets under the reticle
+  G.aimOnHostile = false; // reticle over something worth auto-firing at
   const sphereHit = (cx, cy, cz, r) => {
     const ox = cx - _origin.x, oy = cy - _origin.y, oz = cz - _origin.z;
     const proj = ox * _dir.x + oy * _dir.y + oz * _dir.z;
@@ -586,22 +588,56 @@ function updateAimPoint() {
     if (!e.tank.alive) continue;
     const p = e.tank.visual.root.position;
     const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6 * (e.tank.scale ?? 1));
-    if (d < best) best = d;
+    if (d < best) { best = d; G.aimOnHostile = true; }
   }
   for (const re of multiplayer.remoteEnemies.values()) {
     if (!re.alive || !re.hasState) continue;
     const p = re.visual.root.position;
     const d = sphereHit(p.x, p.y + 1.4, p.z, 2.6 * (re.scale ?? 1));
-    if (d < best) best = d;
+    if (d < best) { best = d; G.aimOnHostile = true; }
   }
   for (const it of props.items) {
     if (!it.alive || !it.body) continue;
     const p = it.body.position;
     const d = sphereHit(p.x, p.y, p.z, it.radius + 0.4);
-    if (d < best) best = d;
+    if (d < best) { best = d; G.aimOnHostile = it.kind === 'pillbox'; }
+  }
+  for (const tr of waves.trucks || []) {
+    if (!tr.alive) continue;
+    const p = tr.body.position;
+    const d = sphereHit(p.x, p.y + 1, p.z, 2.4);
+    if (d < best) { best = d; G.aimOnHostile = true; }
   }
 
   G.aimPoint.copy(_origin).addScaledVector(_dir, best);
+}
+
+// Aim assist: when the reticle ray passes near a hostile, look input slows
+// so small corrections don't overshoot — the classic "sticky reticle".
+function aimAssistFactor() {
+  if (!(settings.aimAssist ?? true)) return 1;
+  camera.getWorldDirection(_dir);
+  const consider = (p, r) => {
+    const dx = p.x - camera.position.x;
+    const dy = p.y + 1.2 - camera.position.y;
+    const dz = p.z - camera.position.z;
+    const dist = Math.hypot(dx, dy, dz);
+    if (dist < 5 || dist > 260) return false;
+    const dot = (dx * _dir.x + dy * _dir.y + dz * _dir.z) / dist;
+    const ang = Math.acos(THREE.MathUtils.clamp(dot, -1, 1));
+    // wider cone up close, tighter at range
+    return ang < Math.min(0.15, 0.05 + (r * 2.4) / dist);
+  };
+  for (const e of waves.aliveEnemies()) {
+    if (consider(e.tank.visual.root.position, 2.6 * (e.tank.scale ?? 1))) return 0.45;
+  }
+  for (const re of multiplayer.remoteEnemies.values()) {
+    if (re.alive && re.hasState && consider(re.visual.root.position, 2.6)) return 0.45;
+  }
+  for (const it of props.items) {
+    if (it.alive && it.kind === 'pillbox' && it.body && consider(it.body.position, it.radius)) return 0.45;
+  }
+  return 1;
 }
 
 // ---------------------------------------------------------------- combat
@@ -1008,6 +1044,7 @@ function startGame() {
   audio.ensure();
   audio.resume();
   audio.startEngine();
+  audio.startMusic('battle');
   input.requestLock();
   if (isCoopClient()) {
     // the host's sim is already running — join its battle in progress
@@ -1074,6 +1111,7 @@ function showGameOver() {
   $('lb-block-over').classList.add('hidden');
   $('name-input').value = LB.lastInitials();
   hud.showScreen('screen-over');
+  audio.startMusic('menu');
 }
 
 function pauseGame() {
@@ -1287,8 +1325,9 @@ function updateCamera(dt) {
 
   if (G.state === 'playing') {
     const { dx, dy } = input.consumeLook();
-    G.camYaw -= dx * 0.0024;
-    G.camPitch = THREE.MathUtils.clamp(G.camPitch + dy * 0.0021, -0.18, 0.9);
+    const assist = aimAssistFactor();
+    G.camYaw -= dx * 0.0024 * assist;
+    G.camPitch = THREE.MathUtils.clamp(G.camPitch + dy * 0.0021 * assist, -0.18, 0.9);
     G.camDist = THREE.MathUtils.clamp(G.camDist + input.consumeZoom() * 1.4, 6.5, 22);
   }
 
@@ -1448,26 +1487,86 @@ for (const b of muteBtns) {
 }
 syncMute();
 
+// ---------------------------------------------------------------- options
 let optionsReturnScreen = 'screen-menu';
-function syncOptions() {
-  const btn = $('btn-reverse-look');
-  if (!btn) return;
-  btn.textContent = input.reverseLook ? 'ON' : 'OFF';
-  btn.classList.toggle('on', input.reverseLook);
-}
 function showOptions(from) {
   optionsReturnScreen = from;
-  syncOptions();
   hud.showScreen('screen-options');
 }
 $('btn-options')?.addEventListener('click', () => showOptions('screen-menu'));
 $('btn-options-pause')?.addEventListener('click', () => showOptions('screen-pause'));
 $('btn-options-back')?.addEventListener('click', () => hud.showScreen(optionsReturnScreen));
-$('btn-reverse-look')?.addEventListener('click', () => {
-  input.setReverseLook(!input.reverseLook);
-  syncOptions();
+
+function bindToggle(id, get, set) {
+  const b = $(id);
+  if (!b) return;
+  const sync = () => {
+    b.textContent = get() ? 'ON' : 'OFF';
+    b.classList.toggle('on', !!get());
+  };
+  b.addEventListener('click', () => { set(!get()); sync(); });
+  sync();
+}
+
+function bindRange(id, get, set) {
+  const r = $(id);
+  if (!r) return;
+  r.value = get();
+  r.addEventListener('input', () => set(parseFloat(r.value)));
+}
+
+// cycle button: click steps through [value, label] pairs
+function bindCycle(id, pairs, get, set) {
+  const b = $(id);
+  if (!b) return;
+  const sync = () => {
+    const i = pairs.findIndex(p => p[0] === get());
+    b.textContent = pairs[i >= 0 ? i : 0][1];
+  };
+  b.addEventListener('click', () => {
+    const i = pairs.findIndex(p => p[0] === get());
+    set(pairs[(i + 1) % pairs.length][0]);
+    sync();
+  });
+  sync();
+}
+
+function applyTouchLayout() {
+  document.documentElement.style.setProperty('--tscale', settings.touchScale);
+  document.body.classList.toggle('lefty', settings.leftHanded);
+}
+
+function applyFpsDisplay() {
+  const p = $('perf');
+  if (p) p.style.display = settings.showFps ? '' : 'none';
+}
+
+bindCycle('btn-quality',
+  [['auto', 'AUTO'], [0, 'LOW'], [1, 'MEDIUM'], [2, 'HIGH'], [3, 'ULTRA']],
+  () => settings.quality,
+  (v) => { setSetting('quality', v); quality.setLock(v); });
+bindToggle('btn-music', () => settings.musicOn, (v) => { audio.ensure(); audio.setMusicOn(v); });
+bindRange('rng-music', () => settings.musicVol, (v) => audio.setMusicVolume(v));
+bindRange('rng-sfx', () => settings.sfxVol, (v) => audio.setSfxVolume(v));
+bindRange('rng-sens', () => settings.lookSens, (v) => setSetting('lookSens', v));
+bindToggle('btn-assist', () => settings.aimAssist ?? true, (v) => setSetting('aimAssist', v));
+bindToggle('btn-autofire', () => settings.autoFire ?? isTouch, (v) => setSetting('autoFire', v));
+bindToggle('btn-reverse-look', () => input.reverseLook, (v) => input.setReverseLook(v));
+bindToggle('btn-shake', () => settings.camShake, (v) => {
+  setSetting('camShake', v);
+  effects.setShakeScale(v ? 1 : 0);
 });
-syncOptions();
+bindToggle('btn-lefty', () => settings.leftHanded, (v) => { setSetting('leftHanded', v); applyTouchLayout(); });
+bindCycle('btn-tscale',
+  [[0.85, 'SMALL'], [1, 'MEDIUM'], [1.2, 'LARGE']],
+  () => settings.touchScale,
+  (v) => { setSetting('touchScale', v); applyTouchLayout(); });
+bindToggle('btn-fps', () => settings.showFps, (v) => { setSetting('showFps', v); applyFpsDisplay(); });
+
+effects.setShakeScale(settings.camShake ? 1 : 0);
+quality.setLock(settings.quality);
+applyTouchLayout();
+applyFpsDisplay();
 
 $('btn-submit').addEventListener('click', async () => {
   const name = LB.cleanInitials($('name-input').value);
@@ -1517,7 +1616,15 @@ tabSetup('-over', (m) => renderBoardOver(m, LB.cleanInitials($('name-input').val
 function showMenu() {
   hud.showScreen('screen-menu');
   renderBoardMenu('global');
+  audio.startMusic('menu');
 }
+
+// browsers gate audio on a user gesture — the first tap/click anywhere
+// unlocks the context and starts whatever music the state wants
+window.addEventListener('pointerdown', () => {
+  audio.ensure();
+  audio.resume();
+}, { once: true });
 
 // ---------------------------------------------------------------- main loop
 let last = performance.now();
@@ -1570,7 +1677,9 @@ function gameFrame(dt) {
   if (G.state === 'playing') {
     updateAimPoint();
     G.player.setAim(G.aimPoint);
-    if (input.consumeFire()) playerFire();
+    // auto-fire (defaults on for touch): shoot when the reticle is on a hostile
+    const autoFire = (settings.autoFire ?? isTouch) && G.aimOnHostile;
+    if (input.consumeFire() || autoFire) playerFire();
     if (input.consumeReload()) {
       if (G.player.reloadNow()) audio.click();
     }
