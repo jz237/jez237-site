@@ -17,6 +17,29 @@ const BENCHMARKS = [
   { label: "S&P 500", key: "^GSPC" },
   { label: "NASDAQ", key: "^IXIC" },
 ];
+const DRAWER_VIEWS = ["report", "research", "catalysts", "risks", "watchlist"];
+const MODE_TABS = ["Research", "News", "Portfolio"];
+
+// Deep-link hash: #symbol=NVDA&range=1Y&tab=Portfolio&view=report.
+// Legacy single-token hashes (#report) and bare symbols (#AAPL) also parse.
+function parseHash() {
+  const raw = window.location.hash.replace(/^#/, "");
+  if (!raw) return {};
+  if (!raw.includes("=")) {
+    return DRAWER_VIEWS.includes(raw)
+      ? { view: raw }
+      : { symbol: decodeURIComponent(raw).toUpperCase() };
+  }
+  const params = new URLSearchParams(raw);
+  const parsed = {};
+  if (params.get("symbol")) parsed.symbol = params.get("symbol").toUpperCase();
+  if (RANGES.includes(params.get("range"))) parsed.range = params.get("range");
+  if (MODE_TABS.includes(params.get("tab"))) parsed.tab = params.get("tab");
+  if (DRAWER_VIEWS.includes(params.get("view"))) parsed.view = params.get("view");
+  return parsed;
+}
+
+const initialHash = parseHash();
 import {
   dayChangeAmount,
   fmt,
@@ -38,19 +61,21 @@ export default function App() {
   );
   const [status, setStatus] = useState("loading");
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedSymbol, setSelectedSymbol] = useState("NVDA");
+  const [selectedSymbol, setSelectedSymbol] = useState(
+    initialHash.symbol || "NVDA",
+  );
   const [query, setQuery] = useState("");
   const [folder, setFolder] = useState("");
   const [sortKey, setSortKey] = useState("default");
   const [sortDir, setSortDir] = useState(1);
-  const [range, setRange] = useState("1D");
+  const [range, setRange] = useState(initialHash.range || "1D");
   const [chartMode, setChartMode] = useState("Candles");
-  const [mode, setMode] = useState("Research");
+  const [mode, setMode] = useState(initialHash.tab || "Research");
   const [indicators, setIndicators] = useState(true);
   const [starred, setStarred] = useState(() =>
     readLocal("savedPortfolioSymbols", []),
   );
-  const [drawer, setDrawer] = useState(null);
+  const [drawer, setDrawer] = useState(initialHash.view || null);
   const [focusedCatalyst, setFocusedCatalyst] = useState("");
   const [privacy, setPrivacy] = useState(() =>
     readLocal("commandCenterPrivacy", false),
@@ -162,22 +187,44 @@ export default function App() {
     };
   }, [loadData]);
 
+  // External hash edits (back/forward, pasted links) flow into state…
   useEffect(() => {
     function applyHash() {
-      const hash = window.location.hash.replace("#", "");
-      if (
-        hash === "report" ||
-        hash === "research" ||
-        hash === "catalysts" ||
-        hash === "risks" ||
-        hash === "watchlist"
-      )
-        setDrawer(hash);
+      const parsed = parseHash();
+      if (parsed.symbol) setSelectedSymbol(parsed.symbol);
+      if (parsed.range) setRange(parsed.range);
+      if (parsed.tab) setMode(parsed.tab);
+      setDrawer(parsed.view || null);
     }
-    applyHash();
     window.addEventListener("hashchange", applyHash);
     return () => window.removeEventListener("hashchange", applyHash);
   }, []);
+
+  // …and state flows back into the hash so any view is a shareable link.
+  // The default view keeps a clean URL. replaceState avoids history spam
+  // and does not re-fire hashchange.
+  useEffect(() => {
+    const parts = [];
+    const isDefault =
+      selectedSymbol === "NVDA" &&
+      range === "1D" &&
+      mode === "Research" &&
+      !drawer;
+    if (!isDefault) {
+      parts.push(`symbol=${encodeURIComponent(selectedSymbol)}`);
+      if (range !== "1D") parts.push(`range=${range}`);
+      if (mode !== "Research") parts.push(`tab=${mode}`);
+      if (drawer) parts.push(`view=${drawer}`);
+    }
+    const desired = parts.length ? `#${parts.join("&")}` : "";
+    if (window.location.hash !== desired) {
+      window.history.replaceState(
+        null,
+        "",
+        desired || window.location.pathname + window.location.search,
+      );
+    }
+  }, [selectedSymbol, range, mode, drawer]);
 
   const allStocks = useMemo(
     () => stocksData?.stocks || FALLBACK_STOCKS,
@@ -202,6 +249,13 @@ export default function App() {
   useEffect(() => {
     ensureHistory([stockHistoryKey]);
   }, [ensureHistory, stockHistoryKey]);
+
+  // A deep link to a symbol we don't track falls back to the first equity;
+  // normalize the selection so the shareable hash matches what's shown.
+  useEffect(() => {
+    if (stocksData && selectedSymbol !== stock.symbol)
+      setSelectedSymbol(stock.symbol);
+  }, [stocksData, selectedSymbol, stock.symbol]);
   const folders = useMemo(
     () =>
       [
@@ -495,10 +549,11 @@ export default function App() {
   );
 
   useEffect(() => {
-    document.title = triggeredAlerts.length
-      ? `⚠ ${triggeredAlerts.length} alert${triggeredAlerts.length > 1 ? "s" : ""} · Stock Command Center`
-      : "Stock Command Center";
-  }, [triggeredAlerts.length]);
+    const alertPrefix = triggeredAlerts.length
+      ? `⚠ ${triggeredAlerts.length} alert${triggeredAlerts.length > 1 ? "s" : ""} · `
+      : "";
+    document.title = `${alertPrefix}${selectedSymbol} · Stock Command Center`;
+  }, [triggeredAlerts.length, selectedSymbol]);
 
   // Browser notification on each newly triggered alert (permission is asked
   // for when the first alert level is set). Fires once per alert per session.
@@ -602,7 +657,6 @@ export default function App() {
   }
   function openDrawer(view) {
     setDrawer(view);
-    window.history.replaceState(null, "", `#${view}`);
     if (view !== "research" && view !== "catalysts") {
       window.setTimeout(
         () =>
@@ -629,7 +683,6 @@ export default function App() {
   }
   function closeDrawer() {
     setDrawer(null);
-    window.history.replaceState(null, "", window.location.pathname);
   }
   function toggleFolder(name) {
     setFolder((current) => (current === name ? "" : name));
