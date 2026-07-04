@@ -16,94 +16,183 @@
   <link rel="stylesheet" href="../assets/styles.css">
   <link rel="stylesheet" href="../assets/plant-cards.css">
   <style>
-    .index-header { max-width:1180px; margin:0 auto; padding:56px 22px 28px; position:relative; z-index:2; text-shadow:0 2px 18px rgba(0,0,0,.7); }
-    .index-header h1 { font-size:clamp(2.2rem,6vw,5rem); letter-spacing:-0.07em; line-height:.92; margin-bottom:12px; }
-    .index-header h1 span { background:linear-gradient(120deg,#fffef4 0%,#d7f7a2 48%,#76d45a 100%); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .index-header .lede { max-width:850px; color:#e7f3dc; font-size:1.1rem; }
-    .index-meta { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
-    .index-meta .pill { border:1px solid rgba(210,243,176,.22); background:rgba(8,30,13,.64); color:#dcefd0; padding:9px 12px; border-radius:999px; font-size:.88rem; backdrop-filter:blur(10px); }
-    .index-meta a.pill { color:#c7f08d; text-decoration:none; }
-    .index-controls { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
-    .ctl { border:1px solid rgba(210,243,176,.2); background:rgba(8,30,13,.64); color:#e7f3dc; padding:9px 12px; border-radius:999px; font:inherit; min-height:40px; outline:none; backdrop-filter:blur(10px); }
-    .section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:14px; padding:0 4px 12px; border-bottom:1px solid rgba(255,255,255,.12); margin-bottom:18px; margin-top:28px; }
-    .section-heading h2 { margin:0; font-size:clamp(1.35rem,3vw,2rem); letter-spacing:-.04em; }
-    .section-heading span { color:var(--pc-muted); font-size:.9rem; }
-    .plant-directory { margin:0 0 34px; padding-bottom:28px; border-bottom:1px solid rgba(255,255,255,.1); }
-    .plant-directory h2 { font-size:clamp(1.2rem,2.5vw,1.6rem); letter-spacing:-0.03em; margin-bottom:4px; }
-    .dir-subtitle { color:var(--pc-muted); font-size:.9rem; margin-bottom:18px; }
-    .dir-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(130px,1fr)); gap:10px; }
-    .dir-item { display:block; text-decoration:none; color:inherit; border-radius:14px; overflow:hidden; background:linear-gradient(180deg,rgba(18,25,35,.7),rgba(11,15,20,.8)); border:1px solid rgba(255,255,255,.08); transition:transform .35s cubic-bezier(.23,1,.32,1),border-color .3s ease,box-shadow .3s ease; }
-    .dir-item:hover { transform:translateY(-2px); border-color:rgba(171,226,103,.35); box-shadow:var(--pc-shadow-lg); }
-    .dir-thumb { aspect-ratio:4/3; overflow:hidden; background:#050709; }
-    .dir-thumb img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s cubic-bezier(.23,1,.32,1); }
-    .dir-item:hover .dir-thumb img { transform:scale(1.06); }
-    .dir-label { padding:6px 8px 8px; font-size:.72rem; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--pc-text); }
-    .dir-count { font-size:.62rem; color:var(--pc-muted); font-weight:500; }
-    .garden-feature-links { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; margin:0 0 34px; }
-    .garden-feature-link { display:block; padding:24px; border-radius:18px; border:1px solid rgba(210,243,176,.18); background:linear-gradient(135deg, rgba(25,75,34,.82), rgba(8,26,13,.88)); text-decoration:none; color:inherit; box-shadow:var(--pc-shadow); transition:transform .35s cubic-bezier(.23,1,.32,1), border-color .3s ease, box-shadow .3s ease; }
-    .garden-feature-link:hover { transform:translateY(-3px); border-color:rgba(171,226,103,.4); box-shadow:var(--pc-shadow-lg); text-decoration:none; }
-    .garden-feature-link-inner { display:flex; align-items:center; gap:16px; }
-    .garden-feature-icon { font-size:2rem; line-height:1; }
-    .garden-feature-copy { min-width:0; }
-    .garden-feature-copy h2 { margin:0 0 4px; font-size:1.35rem; letter-spacing:-.03em; }
-    .garden-feature-copy p { margin:0; color:var(--pc-muted,#97a4b5); font-size:.95rem; }
-    .garden-feature-arrow { margin-left:auto; font-size:1.35rem; color:var(--pc-accent,#9fd45f); }
-    @media(max-width:680px) { .dir-grid { grid-template-columns:repeat(auto-fill,minmax(100px,1fr)); } }
+    /* ===== 2026 redesign: editorial layout on a quiet dark-green backdrop ===== */
+    :root {
+      --gp-bg:#0a130b;
+      --gp-ink:#eef6e6;
+      --gp-muted:#b7c9ac;
+      --gp-accent:#aade67;
+      --gp-line:rgba(255,255,255,.1);
+    }
+    html { background:var(--gp-bg); }
+    body {
+      background-color:var(--gp-bg);
+      background-image:linear-gradient(180deg, rgba(10,19,11,.14) 0%, rgba(7,13,8,.6) 100%), url("../assets/garden/plants-index-bg-texture-20260704.webp");
+      background-size:cover; background-position:center top; background-repeat:no-repeat; background-attachment:fixed;
+    }
+    @media (max-width:820px) { body { background-image:none; } }
+
+    /* ---- Hero banner ---- */
+    .garden-hero-banner { max-width:1180px; margin:18px auto 0; padding:0 22px; position:relative; z-index:2; }
+    .garden-hero-inner {
+      position:relative; border-radius:26px; overflow:hidden;
+      border:1px solid rgba(210,243,176,.16);
+      min-height:min(54vh, 430px);
+      display:flex; align-items:flex-end;
+      background:url("../assets/garden/garden-page-bg-20260531.webp") center 38% / cover no-repeat #0d1a0e;
+      box-shadow:0 24px 70px rgba(0,0,0,.45);
+    }
+    .garden-hero-inner::after {
+      content:""; position:absolute; inset:0;
+      background:linear-gradient(180deg, rgba(5,12,6,.24) 0%, rgba(5,12,6,.06) 42%, rgba(4,10,5,.88) 100%);
+    }
+    .hero-content { position:relative; z-index:1; width:100%; padding:clamp(24px,5vw,44px); }
+    .hero-eyebrow { margin:0 0 10px; text-transform:uppercase; letter-spacing:.22em; font-size:.72rem; font-weight:700; color:#cfe8ae; }
+    .hero-content h1 {
+      margin:0 0 12px;
+      font-family:var(--font-serif,'Fraunces',Georgia,serif); font-weight:600;
+      font-size:clamp(2.4rem,6vw,4.4rem); line-height:.98; letter-spacing:-.02em;
+      background:linear-gradient(120deg,#fffef4 0%,#e4fab4 55%,#9fd45f 100%);
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .hero-content .lede { margin:0 0 18px; max-width:760px; color:#e3efd7; font-size:clamp(.98rem,1.6vw,1.08rem); line-height:1.6; text-shadow:0 1px 12px rgba(0,0,0,.55); }
+    .hero-pills { display:flex; flex-wrap:wrap; gap:9px; }
+    .pill {
+      display:inline-flex; align-items:center; gap:7px;
+      border:1px solid rgba(210,243,176,.24); border-radius:999px;
+      background:rgba(8,20,10,.55); backdrop-filter:blur(10px);
+      color:#e0f0cf; padding:8px 13px; font-size:.86rem; text-decoration:none;
+      transition:border-color .2s ease, background .2s ease;
+    }
+    a.pill:hover { border-color:rgba(171,226,103,.55); background:rgba(20,42,20,.72); text-decoration:none; }
+
+    /* ---- Sticky filter bar ---- */
+    .filter-bar { position:sticky; top:58px; z-index:20; max-width:1180px; margin:16px auto 0; padding:0 22px; }
+    .filter-bar-inner {
+      display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+      padding:10px; border-radius:22px;
+      border:1px solid var(--gp-line);
+      background:rgba(9,17,10,.82); backdrop-filter:blur(16px);
+      box-shadow:0 12px 34px rgba(0,0,0,.35);
+    }
+    .filter-bar input {
+      flex:1 1 220px; min-width:150px;
+      border:1px solid rgba(255,255,255,.12); border-radius:999px;
+      background:rgba(255,255,255,.05); color:var(--gp-ink);
+      padding:10px 16px; font:inherit; outline:none;
+    }
+    .filter-bar input::placeholder { color:rgba(214,230,200,.55); }
+    .filter-bar input:focus { border-color:rgba(171,226,103,.5); }
+    .month-chips { display:flex; gap:6px; flex-wrap:wrap; }
+    .chip {
+      border:1px solid transparent; border-radius:999px; background:transparent;
+      color:var(--gp-muted); padding:9px 14px; font:inherit; font-size:.88rem; font-weight:600;
+      cursor:pointer; transition:color .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .chip:hover { color:var(--gp-ink); border-color:rgba(255,255,255,.16); }
+    .chip.active { background:linear-gradient(120deg,#b9e878,#8fc94f); color:#122507; }
+    @media (max-width:680px) { .filter-bar { top:52px; } }
+
+    /* ---- Plant directory: horizontal strip ---- */
+    .plant-directory { margin:6px 0 30px; padding-bottom:24px; border-bottom:1px solid var(--gp-line); }
+    .plant-directory h2 { margin:0 0 2px; font-family:var(--font-serif,'Fraunces',Georgia,serif); font-weight:600; font-size:clamp(1.3rem,2.6vw,1.7rem); letter-spacing:-.02em; color:var(--gp-ink); }
+    .dir-subtitle { color:var(--gp-muted); font-size:.88rem; margin:0 0 14px; }
+    .dir-grid {
+      display:flex; gap:12px; overflow-x:auto;
+      padding:4px 2px 12px;
+      scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch;
+      scrollbar-width:thin; scrollbar-color:rgba(171,226,103,.35) transparent;
+    }
+    .dir-item { flex:0 0 118px; min-width:0; display:block; text-decoration:none; color:inherit; scroll-snap-align:start; background:transparent; border:none; border-radius:16px; overflow:visible; box-shadow:none; }
+    .dir-item:hover { transform:none; box-shadow:none; border-color:transparent; }
+    .dir-thumb {
+      aspect-ratio:1/1; border-radius:16px; overflow:hidden;
+      border:1px solid rgba(255,255,255,.12); background:#0a130b;
+      box-shadow:0 8px 22px rgba(0,0,0,.35);
+      transition:border-color .25s ease, transform .3s var(--pc-ease, ease);
+    }
+    .dir-item:hover .dir-thumb { border-color:rgba(171,226,103,.5); transform:translateY(-3px); }
+    .dir-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .dir-label { padding:8px 2px 0; text-align:center; font-size:.74rem; font-weight:600; color:var(--gp-ink); white-space:normal; line-height:1.25; }
+    .dir-count { display:block; font-size:.64rem; color:var(--gp-muted); font-weight:500; margin-top:2px; }
+
+    /* ---- Section heading ---- */
+    .section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:14px; border-bottom:0; margin:30px 0 4px; padding:0 2px; }
+    .section-heading h2 { margin:0; font-family:var(--font-serif,'Fraunces',Georgia,serif); font-weight:600; font-size:clamp(1.35rem,3vw,1.9rem); letter-spacing:-.02em; color:var(--gp-ink); }
+    .section-heading span { color:var(--gp-muted); font-size:.88rem; }
+
+    /* ---- Scene cards: photo-first with overlay titles ---- */
+    .card-grid { grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; grid-auto-flow:dense; align-items:start; }
+    .plant-card {
+      display:flex; flex-direction:column;
+      border-radius:20px; border:1px solid rgba(255,255,255,.09);
+      background:rgba(13,24,14,.58);
+      box-shadow:0 14px 36px rgba(0,0,0,.32);
+    }
+    .plant-card:hover { transform:translateY(-3px); border-color:rgba(171,226,103,.34); box-shadow:0 22px 54px rgba(0,0,0,.44); }
+    .plant-card.wide { grid-column:span 2; }
+    @media (max-width:680px) { .plant-card.wide { grid-column:span 1; } }
+    .card-image-wrap { aspect-ratio:4/3; background:#08110a; }
+    .plant-card.wide .card-image-wrap { aspect-ratio:1.85/1; }
+    @media (max-width:680px) { .plant-card.wide .card-image-wrap { aspect-ratio:16/10; } }
+    .card-overlay {
+      position:absolute; left:0; right:0; bottom:0; z-index:1;
+      padding:46px 16px 13px; pointer-events:none;
+      background:linear-gradient(180deg, rgba(4,10,5,0) 0%, rgba(4,10,5,.6) 55%, rgba(3,8,4,.9) 100%);
+    }
+    .card-overlay .card-kicker { color:#c4e595; font-size:.66rem; letter-spacing:.16em; }
+    .card-overlay .card-title { margin:3px 0 0; font-family:var(--font-serif,'Fraunces',Georgia,serif); font-weight:600; font-size:1.12rem; line-height:1.18; color:#f7fbf1; text-shadow:0 1px 10px rgba(0,0,0,.55); }
+    .card-image-wrap::after { left:auto; right:12px; top:12px; bottom:auto; }
+    .card-content { flex:1; background:transparent; padding:12px 16px 15px; }
+    .card-desc { font-size:.88rem; color:var(--gp-muted); }
+    .card-notes { border-top-color:rgba(255,255,255,.08); padding-top:10px; margin-top:10px; }
+    .card-notes summary { font-size:.8rem; color:#d6e6c8; }
+
+    /* ---- Month dividers ---- */
+    .month-divider { grid-column:1 / -1; display:flex; align-items:center; gap:12px; margin:26px 2px 2px; }
+    .month-divider:first-child { margin-top:6px; }
+    .month-divider .m-leaf { color:var(--gp-accent); font-size:1.1rem; line-height:1; }
+    .month-divider .m-label { font-family:var(--font-serif,'Fraunces',Georgia,serif); font-weight:600; font-size:clamp(1.25rem,2.4vw,1.6rem); color:#edf6e2; letter-spacing:-.01em; }
+    .month-divider::after { content:""; flex:1 1 auto; height:1px; background:linear-gradient(90deg, rgba(210,243,176,.28), rgba(210,243,176,0)); }
   </style>
 </head>
 <body>
   <header id="site-nav"></header>
 
-  <div class="index-header">
-    <h1><span>2026 Garden Progress</span></h1>
-    <p class="lede">A Philadelphia Zone 7a garden through the season — small-space garden scenes, shade border compositions, and every plant tracked individually. Click any image to expand.</p>
-    <div class="index-meta">
-      <span class="pill">Zone 7a · Philadelphia</span>
-      <span class="pill" id="count-pill">Loading…</span>
-      <a class="pill" href="../garden/">Garden calendar</a>
-      <a class="pill" href="../">← Home</a>
+  <section class="garden-hero-banner">
+    <div class="garden-hero-inner">
+      <div class="hero-content">
+        <p class="hero-eyebrow">Philadelphia &middot; Zone 7a &middot; April &ndash; July 2026</p>
+        <h1>2026 Garden Progress</h1>
+        <p class="lede">A small-space Philadelphia garden through the season &mdash; bed compositions, shade borders, and every plant tracked photo by photo. Click any image to expand.</p>
+        <div class="hero-pills">
+          <span class="pill" id="count-pill">Loading&hellip;</span>
+          <a class="pill" href="interesting-insects/">&#129419; Insects &amp; Wildlife</a>
+          <a class="pill" href="past-years/">&#128247; 2025 Reference Photos</a>
+          <a class="pill" href="../garden/">&#128197; Garden Calendar</a>
+          <a class="pill" href="../">&larr; Home</a>
+        </div>
+      </div>
     </div>
-    <div class="index-controls">
-      <input class="ctl" id="search" type="search" placeholder="Search plants, garden beds, shade plants…">
-      <select class="ctl" id="date-filter">
-        <option value="all">All dates</option>
-        
-        <option value="April 2026">April 2026</option>
-        <option value="May 2026">May 2026</option>
-        <option value="June 2026">June 2026</option>
-        <option value="July 2026">July 2026</option>
-      </select>
+  </section>
+
+  <div class="filter-bar">
+    <div class="filter-bar-inner">
+      <input id="search" type="search" placeholder="Search plants, beds, scenes&hellip;" aria-label="Search garden photos">
+      <div class="month-chips" id="month-chips" role="group" aria-label="Filter by month">
+        <button class="chip active" data-month="all">All</button>
+        <button class="chip" data-month="April 2026">April</button>
+        <button class="chip" data-month="May 2026">May</button>
+        <button class="chip" data-month="June 2026">June</button>
+        <button class="chip" data-month="July 2026">July</button>
+      </div>
     </div>
   </div>
 
   <div class="plant-main">
-    <div class="garden-feature-links" aria-label="Garden reference sections">
-      <a class="garden-feature-link" href="interesting-insects/">
-        <div class="garden-feature-link-inner">
-          <div class="garden-feature-icon">🦋</div>
-          <div class="garden-feature-copy">
-            <h2>Interesting Insects &amp; Wildlife</h2>
-            <p>Pollinators, butterflies, caterpillars, and other garden visitors.</p>
-          </div>
-          <div class="garden-feature-arrow">→</div>
-        </div>
-      </a>
-
-      <a class="garden-feature-link" href="past-years/">
-        <div class="garden-feature-link-inner">
-          <div class="garden-feature-icon">📷</div>
-          <div class="garden-feature-copy">
-            <h2>2025 Reference Photos</h2>
-            <p>Year-over-year comparison — garden overview, bed compositions, and reference shots from last year.</p>
-          </div>
-          <div class="garden-feature-arrow">→</div>
-        </div>
-      </a>
-    </div>
-
     <div class="plant-directory">
       <h2>Individual Plants</h2>
-      <p class="dir-subtitle">Click any plant to see its full season timeline</p>
+      <p class="dir-subtitle">Every plant tracked individually &mdash; tap one for its full season timeline &middot; scroll for more &rarr;</p>
       <div class="dir-grid">
         <a class="dir-item" href="baptisia/">
           <div class="dir-thumb"><img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/baptisia-lemon-meringue-2026-05-11.jpg" alt="" loading="lazy" decoding="async"></div>
@@ -222,10 +311,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Pugster and grapevine in full summer — July 3">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/07/pugster-butterfly-bush-grapevine-summer-bloom-2026-07-03.jpg" alt="Pugster butterfly bush in heavy purple bloom below grapevine leaves and green grape clusters on a white lattice" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">July 3, 2026</div>
+            <h3 class="card-title">Pugster and grapevine in full summer</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">July 3, 2026</div>
-          <h3 class="card-title">Pugster and grapevine in full summer</h3>
           <p class="card-desc">The raised bed is at peak summer density now, with Pugster purple filling the foreground and grape clusters hanging through the lattice behind it.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This view catches several layers at once: many open butterfly bush cones, darker buds still queued, a heavy grapevine canopy above the white lattice, and the Gold Dust aucuba holding a glossy green-and-gold wall at the right edge.</div></details>
         </div>
@@ -234,10 +325,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Side-house bed and lawn corridor — June 26">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/side-house-foundation-bed-lawn-corridor-2026-06-26.jpg" alt="Side-house foundation bed with mature rhododendron, Sunshine ligustrum, hostas, heuchera, groundcover, and mown lawn corridor" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 26, 2026</div>
+            <h3 class="card-title">Side-house bed and lawn corridor</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 26, 2026</div>
-          <h3 class="card-title">Side-house bed and lawn corridor</h3>
           <p class="card-desc">The side-house foundation planting is settled into a summer edge, with the rhododendron canopy anchoring the bed and the mown lawn giving it a clean corridor.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This wide view shows the whole relationship: Sunshine ligustrum glowing at the near corner, hostas and heuchera filling the lower layer, low groundcover along the stones, and the old rhododendron giving the bed height and shade.</div></details>
         </div>
@@ -246,10 +339,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Grapevine arbor loaded with fruit — June 26">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/grapevine-heavy-green-clusters-2026-06-26.jpg" alt="Many green grape clusters hanging from a grapevine trained over a wooden arbor" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 26, 2026</div>
+            <h3 class="card-title">Grapevine arbor loaded with fruit</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 26, 2026</div>
-          <h3 class="card-title">Grapevine arbor loaded with fruit</h3>
           <p class="card-desc">The grapevine is carrying a heavy set now, with tight green clusters hanging all along the arbor rail and arch.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This close view shows the fruit load clearly: clusters tucked under broad leaves, enough structure still visible for training, and the grapes already sizing well for late June.</div></details>
         </div>
@@ -258,22 +353,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Grapevine gate threshold — June 26">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/grapevine-arbor-gate-heavy-fruit-2026-06-26.jpg" alt="Grapevine heavily leafed out around a wooden arbor and garden gate with grape clusters visible" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 26, 2026</div>
+            <h3 class="card-title">Grapevine gate threshold</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 26, 2026</div>
-          <h3 class="card-title">Grapevine gate threshold</h3>
           <p class="card-desc">The gate is framed by grape leaves and green clusters now, with the Rising Sun redbud glowing across the left side of the arbor.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">A strong summer structure shot: the path is still clear, but the arbor has become a leafy fruiting tunnel around the entry.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Yarrow pastel bloom mat — June 26">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/yarrow-pink-white-bloom-2026-06-26.jpg" alt="Pink and white yarrow flowers blooming above fine ferny foliage" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 26, 2026</div>
+            <h3 class="card-title">Yarrow pastel bloom mat</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 26, 2026</div>
-          <h3 class="card-title">Yarrow pastel bloom mat</h3>
           <p class="card-desc">The yarrow is open in soft pink and cream, forming a broad flat-topped bloom layer over ferny foliage.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">A strong late-June pollinator plant record: many small clusters are open together, with enough color variation to keep the pastel layer from looking flat.</div></details>
         </div>
@@ -282,10 +381,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Dwarf crape myrtle in bud — June 26">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/dwarf-crape-myrtle-buds-2026-06-26.jpg" alt="Dwarf crape myrtle foliage with red stems and many flower buds set" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 26, 2026</div>
+            <h3 class="card-title">Dwarf crape myrtle in bud</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 26, 2026</div>
-          <h3 class="card-title">Dwarf crape myrtle in bud</h3>
           <p class="card-desc">Clean glossy foliage and red stems are carrying rounded buds across the plant, setting up the next summer bloom stage.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is the pre-bloom checkpoint: healthy dense leaves, good branching, and buds distributed all through the tips rather than only on a few shoots.</div></details>
         </div>
@@ -294,10 +395,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Ornamental onion before bloom — June 26">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/ornamental-onion-buds-2026-06-26.jpg" alt="Ornamental onion foliage with pale curved flower scapes and unopened buds" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 26, 2026</div>
+            <h3 class="card-title">Ornamental onion before bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 26, 2026</div>
-          <h3 class="card-title">Ornamental onion before bloom</h3>
           <p class="card-desc">Curved pale scapes and swollen buds are rising through the blue-green foliage, with the first purple hint beginning to show.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Good just-before-open record: the plant is full of flower stems now, so the next photo should catch the bloom shift when the buds break open.</div></details>
         </div>
@@ -306,34 +409,40 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Cucumbers in harvest mode — June 25">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/cucumber-multiple-fruit-close-2026-06-25.jpg" alt="Several dark green cucumbers hanging from a healthy vine with yellow blossoms" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 25, 2026</div>
+            <h3 class="card-title">Cucumbers in harvest mode</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 25, 2026</div>
-          <h3 class="card-title">Cucumbers in harvest mode</h3>
           <p class="card-desc">The vine has jumped from first fruit to real production, with several clean dark-green cucumbers sizing up at once and yellow flowers still open.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Good follow-up to the June 24 fruit-set shot: the plant is carrying multiple harvest-size cucumbers while still pushing new blossoms.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Back garden summer panorama — June 24">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/back-garden-redbud-grapevine-panorama-2026-06-24.jpg" alt="Wide back garden view with Rising Sun redbud, grapevine on lattice, orange milkweed, and dense summer planting" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 24, 2026</div>
+            <h3 class="card-title">Back garden summer panorama</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 24, 2026</div>
-          <h3 class="card-title">Back garden summer panorama</h3>
           <p class="card-desc">The whole back-garden wall is in summer mode now: Rising Sun redbud glowing at left, grapevine thick across the lattice, and orange milkweed plus purple flower spikes filling the foreground.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This wider frame is the best June 24 context shot because it shows how the arbor/lattice, tree canopy, and pollinator bed are reading together as one dense garden room.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side-house summer color block — June 24">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/side-house-foundation-bed-summer-color-2026-06-24.jpg" alt="Side-house foundation bed with Sunshine ligustrum, purple loropetalum, variegated liriope, and Shaina Japanese maple" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 24, 2026</div>
+            <h3 class="card-title">Side-house summer color block</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 24, 2026</div>
-          <h3 class="card-title">Side-house summer color block</h3>
           <p class="card-desc">The side-house foundation bed has settled into a strong summer composition: chartreuse Sunshine ligustrum, purple loropetalum, variegated liriope edging, and Shaina maple at the right.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is the clearest late-June view of how the color blocking is working against the brick wall, with the warm red brick making the chartreuse and purple foliage read even stronger.</div></details>
         </div>
@@ -342,10 +451,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Redbud and milkweed summer bed — June 24">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/rising-sun-redbud-milkweed-summer-bed-2026-06-24.jpg" alt="Rising Sun redbud canopy above a dense summer bed with orange milkweed in bloom" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 24, 2026</div>
+            <h3 class="card-title">Redbud and milkweed summer bed</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 24, 2026</div>
-          <h3 class="card-title">Redbud and milkweed summer bed</h3>
           <p class="card-desc">Rising Sun is still throwing bright chartreuse canopy over the back garden while the orange milkweed carries the hot color below.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The path is shaded and enclosed now, but the bed still has strong color from the redbud's fresh growth and the milkweed bloom layer.</div></details>
         </div>
@@ -354,10 +465,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="First cucumber sizing up — June 24">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/cucumber-fruit-close-2026-06-24.jpg" alt="Large dark green cucumber fruit hanging from the vine with yellow blossoms around it" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 24, 2026</div>
+            <h3 class="card-title">First cucumber sizing up</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 24, 2026</div>
-          <h3 class="card-title">First cucumber sizing up</h3>
           <p class="card-desc">A clean dark-green cucumber is already hanging from the vine, with more blossoms and developing fruit around it.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Good fruit-set record for late June: the vine is flowering hard and already moving from climb stage into harvest stage.</div></details>
         </div>
@@ -366,10 +479,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Cucumber vine filled in — June 24">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/cucumber-vine-raised-bed-2026-06-24.jpg" alt="Healthy cucumber vine climbing a support in the raised vegetable bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 24, 2026</div>
+            <h3 class="card-title">Cucumber vine filled in</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 24, 2026</div>
-          <h3 class="card-title">Cucumber vine filled in</h3>
           <p class="card-desc">The cucumber has made a big jump since the June 10 trellis shot, with broad clean leaves, reaching tendrils, and yellow flowers throughout the vine.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The support is doing its job, but the vine is vigorous enough now that regular tying/training will keep it upright and easier to harvest.</div></details>
         </div>
@@ -378,10 +493,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Pugster full purple bloom — June 18">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/pugster-butterfly-bush-purple-bloom-close-2026-06-18.jpg" alt="Pugster butterfly bush flower spike in full purple bloom" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 18, 2026</div>
+            <h3 class="card-title">Pugster full purple bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 18, 2026</div>
-          <h3 class="card-title">Pugster full purple bloom</h3>
           <p class="card-desc">The Pugster has crossed from budded green mound into its main purple bloom moment, with dense flower cones and fresh buds still queued at the tips.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The close view shows the individual tiny flowers packed tightly along the cone, plus enough unopened buds to keep the bloom going.</div></details>
         </div>
@@ -390,22 +507,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Pugster and peach summer layer — June 18">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/pugster-butterfly-bush-summer-bloom-wide-2026-06-18.jpg" alt="Pugster butterfly bush blooming purple below a leafy dwarf peach and near orange milkweed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 18, 2026</div>
+            <h3 class="card-title">Pugster and peach summer layer</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 18, 2026</div>
-          <h3 class="card-title">Pugster and peach summer layer</h3>
           <p class="card-desc">The raised bed is fully layered now: purple Pugster bloom low and forward, dwarf peach foliage overhead, and orange milkweed burning in the background.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is a strong mid-June composition shot because the bed reads as stacked layers rather than separate plants.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Hosta shade border — June 10">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/hosta-variegated-shade-border-2026-06-10.jpg" alt="Variegated hostas filling the shaded border in June" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 10, 2026</div>
+            <h3 class="card-title">Hosta shade border</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 10, 2026</div>
-          <h3 class="card-title">Hosta shade border</h3>
           <p class="card-desc">The shaded hosta layer is fully filled in now, with clean green leaves, cream margins, and enough chartreuse to brighten the lower border.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is a strong June record of the hostas doing quiet structure: broad ribbed leaves, layered clumps, and a clean edge under the darker shade planting.</div></details>
         </div>
@@ -414,10 +535,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Cucumber vine on trellis — June 10">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/cucumber-vine-trellis-2026-06-10.jpg" alt="Cucumber vine climbing a green trellis in the vegetable bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 10, 2026</div>
+            <h3 class="card-title">Cucumber vine on trellis</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 10, 2026</div>
-          <h3 class="card-title">Cucumber vine on trellis</h3>
           <p class="card-desc">The cucumber has broad healthy leaves and fresh top growth starting to grab the cage, right on schedule for the June climb.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Tendrils are already reaching and wrapping toward the support, so this is a useful baseline before the vine starts moving fast up the trellis.</div></details>
         </div>
@@ -426,10 +549,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Small blue butterfly on catmint — June 9">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/small-blue-butterfly-catmint-macro-2026-06-09.jpg" alt="Small blue butterfly close-up feeding on purple catmint flowers" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 9, 2026</div>
+            <h3 class="card-title">Small blue butterfly on catmint</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 9, 2026</div>
-          <h3 class="card-title">Small blue butterfly on catmint</h3>
           <p class="card-desc">A tiny blue/azure-type butterfly showed up on the catmint, small enough to disappear into the flower spike until the pale wings caught the light.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The macro crop shows fine dark wing markings, striped antennae, and fuzzy wing edges. A good record of the smaller pollinator traffic using the garden, not just the big obvious butterflies.</div></details>
         </div>
@@ -438,22 +563,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Lemony Lace summer form — June 9">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/lemony-lace-elderberry-summer-form-2026-06-09.jpg" alt="Lemony Lace elderberry in bright chartreuse summer foliage on the brick patio" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 9, 2026</div>
+            <h3 class="card-title">Lemony Lace summer form</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 9, 2026</div>
-          <h3 class="card-title">Lemony Lace summer form</h3>
           <p class="card-desc">The elderberry is settling into a small airy patio-tree shape, with clean chartreuse cutleaf foliage and the brightest new growth at the tips.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This photo shows the plant's role more clearly than the spring shots: vertical but light, bright without being bulky, and strong enough to anchor the brick patio edge in front of the raised beds.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Grape arbor threshold — June 9">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/garden-arbor-grapevine-threshold-2026-06-09.jpg" alt="Garden arbor and gate enclosed by grapevine and Rising Sun redbud foliage" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 9, 2026</div>
+            <h3 class="card-title">Grape arbor threshold</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 9, 2026</div>
-          <h3 class="card-title">Grape arbor threshold</h3>
           <p class="card-desc">The entry has crossed into full summer-room mode, with grapevine growth overhead and the redbud glowing beside the gate.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Young grape clusters are visible through the arbor leaves, while the path and gate still give the dense planting a clear passage line.</div></details>
         </div>
@@ -462,22 +591,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="View through the arbor — June 9">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/grapevine-arbor-view-2026-06-09.jpg" alt="View through the grapevine-covered arbor into the June garden" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 9, 2026</div>
+            <h3 class="card-title">View through the arbor</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 9, 2026</div>
-          <h3 class="card-title">View through the arbor</h3>
           <p class="card-desc">From under the arch, the garden opens into a layered June view: grape leaves overhead, redbud to the side, and the raised beds beyond.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This angle shows the arbor doing exactly what it should: shade at the entry, framed sightline forward, and enough foliage to make the transition feel enclosed without blocking the path.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Back garden raised beds — June 9">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/back-garden-raised-beds-2026-06-09.jpg" alt="Back garden raised beds in full early summer growth" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 9, 2026</div>
+            <h3 class="card-title">Back garden raised beds</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 9, 2026</div>
-          <h3 class="card-title">Back garden raised beds</h3>
           <p class="card-desc">The back beds are fully packed now, with orange milkweed, purple bloom, tomatoes on the fence, and the Lemony Lace elderberry holding the patio edge.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The raised timber edges are doing a lot of visual work here: without them this much growth would read wild, but the structure keeps the whole scene ordered.</div></details>
         </div>
@@ -486,22 +619,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Redbud summer canopy — June 8">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/rising-sun-redbud-summer-canopy-2026-06-08.jpg" alt="Rising Sun redbud glowing yellow green above the layered June garden" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 8, 2026</div>
+            <h3 class="card-title">Redbud summer canopy</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 8, 2026</div>
-          <h3 class="card-title">Redbud summer canopy</h3>
           <p class="card-desc">The Rising Sun redbud is still holding a bright yellow-green ceiling over the back garden, even with the lower planting now fully filled in.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Hostas, purple bloom, daylily foliage, and the lavender/salvia edge make the tree read as part of a complete early-summer garden room rather than a standalone spring feature.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Orange milkweed full bloom — June 8">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/orange-milkweed-full-bloom-2026-06-08.jpg" alt="Orange milkweed blooming heavily in the raised mixed bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 8, 2026</div>
+            <h3 class="card-title">Orange milkweed full bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 8, 2026</div>
-          <h3 class="card-title">Orange milkweed full bloom</h3>
           <p class="card-desc">The raised bed has gone hot orange, with milkweed flower clusters open across the front and more buds still waiting in the wings.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is the strongest milkweed color moment so far: open orange flowers, rounded buds, clean narrow foliage, and the butterfly bush foliage forming a deep green backdrop.</div></details>
         </div>
@@ -510,34 +647,40 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Carpenter bee on milkweed — June 8">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/carpenter-bee-on-orange-milkweed-2026-06-08.jpg" alt="Large carpenter bee visiting orange milkweed flowers" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 8, 2026</div>
+            <h3 class="card-title">Carpenter bee on milkweed</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 8, 2026</div>
-          <h3 class="card-title">Carpenter bee on milkweed</h3>
           <p class="card-desc">A large carpenter bee-type pollinator is buried in the orange milkweed, dusted with pollen and catching the light on clear wings.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The shiny black abdomen and fuzzy pale thorax point toward carpenter bee rather than bumblebee. Either way, it is a perfect close record of the milkweed doing habitat work.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Speedwell full purple flush — June 2">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/speedwell-full-bloom-2026-06-02.jpg" alt="Purple speedwell covered in bloom spikes and fresh pale buds" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 2, 2026</div>
+            <h3 class="card-title">Speedwell full purple flush</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 2, 2026</div>
-          <h3 class="card-title">Speedwell full purple flush</h3>
           <p class="card-desc">The speedwell is in its strongest purple flush yet, with upright flower spikes open across the plant and fresh pale buds still waiting at the tips.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is a good follow-up to the May 30 visitor shot: the plant is still clean, still blooming heavily, and still carrying enough unopened buds to extend the show.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Orange milkweed opens — June 2">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/orange-milkweed-bloom-clusters-2026-06-02.jpg" alt="Orange milkweed blooming with many orange flower clusters and unopened buds" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 2, 2026</div>
+            <h3 class="card-title">Orange milkweed opens</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 2, 2026</div>
-          <h3 class="card-title">Orange milkweed opens</h3>
           <p class="card-desc">The orange milkweed has shifted from late-May bud to full early-June color, with bright clusters open and plenty of buds still queued up.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is the raised bed's first big orange milkweed moment of the season: upright stems, clean narrow foliage, red-orange buds, and vivid open flowers all showing at once.</div></details>
         </div>
@@ -546,10 +689,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Redbud still glowing — June 1">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/rising-sun-redbud-canopy-2026-06-01.jpg" alt="Rising Sun redbud canopy glowing yellow green over the late spring garden" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">June 1, 2026</div>
+            <h3 class="card-title">Redbud still glowing</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">June 1, 2026</div>
-          <h3 class="card-title">Redbud still glowing</h3>
           <p class="card-desc">The Rising Sun redbud is still holding the garden's brightest overhead color, with yellow-green leaves and amber tips shining above the filled-in path bed.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The lower planting has gone lush now: hostas, purple salvia, daylily foliage, and the grape arbor all make the tree feel like part of a complete garden room instead of a standalone feature.</div></details>
         </div>
@@ -558,22 +703,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Front planter in full color — May 31">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/front-planter-pugster-barberry-2026-05-31.jpg" alt="Front raised planter with Pugster butterfly bush and Orange Rocket barberry" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 31, 2026</div>
+            <h3 class="card-title">Front planter in full color</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 31, 2026</div>
-          <h3 class="card-title">Front planter in full color</h3>
           <p class="card-desc">The front planter is doing strong foliage contrast now: Pugster butterfly bush dense and green in front, Orange Rocket barberry red and upright behind it.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The budded butterfly bush gives the bed weight at the front, while the barberry keeps the vertical red accent right by the steps. The small box reads tidy even with the plants filling it hard.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side-house color blocks — May 30">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-foundation-bed-color-blocks-2026-05-30.jpg" alt="Side-house foundation bed with Sunshine ligustrum, Shaina maple, and dark lower planting" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 30, 2026</div>
+            <h3 class="card-title">Side-house color blocks</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 30, 2026</div>
-          <h3 class="card-title">Side-house color blocks</h3>
           <p class="card-desc">The side-house foundation bed has settled into a clear late-May rhythm: chartreuse, burgundy, red maple, striped liriope, and open mulch between the young pieces.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Sunshine ligustrum is the bright left mass, Shaina maple is the taller red feature, and the loropetalum/heuchera/liriope layer is starting to make the front edge feel intentional.</div></details>
         </div>
@@ -582,10 +731,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Speedwell with visitors — May 30">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/speedwell-bloom-pollinator-2026-05-30.jpg" alt="Purple speedwell blooming below Gold Dust aucuba with a small pollinator" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 30, 2026</div>
+            <h3 class="card-title">Speedwell with visitors</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 30, 2026</div>
-          <h3 class="card-title">Speedwell with visitors</h3>
           <p class="card-desc">The speedwell is still blooming hard below the aucuba, with fresh purple spikes and small pollinator activity in the flowers.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The flower spikes still have new buds at the tips, so this corner should keep carrying purple for a bit longer before the first flush winds down.</div></details>
         </div>
@@ -594,10 +745,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Redbud over the path — May 27">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/rising-sun-redbud-arbor-path-2026-05-27.jpg" alt="Rising Sun redbud framing the path beside purple salvia, hostas, and the grape arbor" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 27, 2026</div>
+            <h3 class="card-title">Redbud over the path</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 27, 2026</div>
-          <h3 class="card-title">Redbud over the path</h3>
           <p class="card-desc">This path view shows the redbud turning into a bright canopy over purple salvia, hostas, and the shaded layers leading toward the grape arbor.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The portrait angle makes the vertical structure clear: redbud overhead, purple salvia at the foot, broad hostas tucked in shade, and the arbor-side growth closing around the path.</div></details>
         </div>
@@ -606,10 +759,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Side-house bed layered up — May 27">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-foundation-bed-2026-05-27.jpg" alt="Side-house foundation bed with rhododendron, hostas, heuchera, sweetspire, and Sunshine ligustrum" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 27, 2026</div>
+            <h3 class="card-title">Side-house bed layered up</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 27, 2026</div>
-          <h3 class="card-title">Side-house bed layered up</h3>
           <p class="card-desc">The foundation bed is reading as a real layered shade-edge composition now, with rhododendron structure above and hostas, heuchera, sweetspire, and bright shrubs filling below.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This view catches the whole relationship: dark rhododendron trunks, glossy evergreen canopy, Shaina maple color behind, Sunshine ligustrum glow, burgundy heuchera, white sweetspire racemes, and the front edge knitting together.</div></details>
         </div>
@@ -618,10 +773,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Little Henry in bloom — May 27">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/little-henry-sweetspire-bloom-2026-05-27.jpg" alt="Little Henry sweetspire blooming with white flower racemes" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 27, 2026</div>
+            <h3 class="card-title">Little Henry in bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 27, 2026</div>
-          <h3 class="card-title">Little Henry in bloom</h3>
           <p class="card-desc">Little Henry has opened its white racemes, shifting from quiet green mound to a clear bloom moment along the bed edge.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The foliage is clean and compact, and the flower spikes are arching outward instead of standing stiffly, which gives the small shrub more presence in the mixed planting.</div></details>
         </div>
@@ -630,22 +787,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Sunshine and liriope — May 27">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/sunshine-ligustrum-liriope-2026-05-27.jpg" alt="Sunshine ligustrum glowing above variegated liriope in the side-house bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 27, 2026</div>
+            <h3 class="card-title">Sunshine and liriope</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 27, 2026</div>
-          <h3 class="card-title">Sunshine and liriope</h3>
           <p class="card-desc">Sunshine ligustrum is carrying the bright middle layer, while the variegated liriope starts to make the front edge feel deliberate.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The chartreuse shrub is at full glow against the brick, with creamy new leaves, dark loropetalum beneath, and the striped liriope repeating the edge rhythm.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Gate swallowed by growth — May 27">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/grapevine-arbor-gate-lush-2026-05-27.jpg" alt="Late-May garden gate with Rising Sun redbud and grapevine filling the arbor" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 27, 2026</div>
+            <h3 class="card-title">Gate swallowed by growth</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 27, 2026</div>
-          <h3 class="card-title">Gate swallowed by growth</h3>
           <p class="card-desc">The arbor and gate have turned into a green threshold, with Rising Sun redbud glowing on the left and grapevine leaves pushing hard across the right lattice.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Young grape clusters are visible under the larger leaves, the arbor is still readable as structure, and the path keeps the dense late-May growth from feeling chaotic.</div></details>
         </div>
@@ -654,10 +815,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Front box filling in — May 26">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/bobo-heuchera-salvia-front-bed-2026-05-26.jpg" alt="Front raised bed with Bobo hydrangea, heuchera, and purple salvia" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 26, 2026</div>
+            <h3 class="card-title">Front box filling in</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 26, 2026</div>
-          <h3 class="card-title">Front box filling in</h3>
           <p class="card-desc">The front raised box has tightened into a strong little composition, with Bobo hydrangea bulking up behind heuchera and purple salvia still blooming at the edge.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The burgundy heuchera now reads as a full color band, the Bobo is building the green middle layer, and the salvia keeps the left edge tied to the rest of the spring bloom sequence.</div></details>
         </div>
@@ -666,10 +829,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Pugster and milkweed layered up — May 25">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/raised-mixed-perennial-bed-pugster-milkweed-2026-05-25.jpg" alt="Raised bed with Pugster butterfly bush, milkweed buds, speedwell, and sedum" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 25, 2026</div>
+            <h3 class="card-title">Pugster and milkweed layered up</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 25, 2026</div>
-          <h3 class="card-title">Pugster and milkweed layered up</h3>
           <p class="card-desc">The raised mixed bed has moved from spring recovery into real late-May mass, with Pugster foliage, milkweed buds, speedwell, and sedum each holding a distinct layer.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This is a useful fullness check: broad butterfly-bush leaves on the left, upright milkweed stems on the right, violet speedwell in the back corner, and sedum keeping the front edge low and textural.</div></details>
         </div>
@@ -678,34 +843,40 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Speedwell under the aucuba — May 24">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/speedwell-aucuba-corner-2026-05-24.jpg" alt="Purple speedwell blooming below Gold Dust aucuba" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 24, 2026</div>
+            <h3 class="card-title">Speedwell under the aucuba</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 24, 2026</div>
-          <h3 class="card-title">Speedwell under the aucuba</h3>
           <p class="card-desc">Purple speedwell spikes are carrying the lower layer while the Gold Dust aucuba throws bright variegated growth above them.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The shaded corner is reading as a layered composition now: aucuba overhead, hostas tucked behind, and the speedwell giving the front edge a clear bloom moment.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Whole garden fully knitted — May 23">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/garden-overview-lush-2026-05-23.jpg" alt="Lush late-May garden overview with redbud, grapevine, hostas, and raised beds" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 23, 2026</div>
+            <h3 class="card-title">Whole garden fully knitted</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 23, 2026</div>
-          <h3 class="card-title">Whole garden fully knitted</h3>
           <p class="card-desc">The garden is reading as one dense late-May room now: redbud glowing, grapevine softening the lattice, and the lower layers filling every edge.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Hostas, salvia, creeping Jenny, raised beds, and the path structure are all visible, so the fullness still feels organized instead of crowded.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Raised beds after rain — May 23">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/raised-beds-and-white-rose-2026-05-23.jpg" alt="Raised beds with vegetables, white rose, coreopsis, and fence vines" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 23, 2026</div>
+            <h3 class="card-title">Raised beds after rain</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 23, 2026</div>
-          <h3 class="card-title">Raised beds after rain</h3>
           <p class="card-desc">Vegetables settling into the raised boxes, white rose blooming on the fence, and coreopsis lighting the front edge after rain.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This angle ties the productive beds into the ornamental planting: tomato starts, fence vines, white rose, coreopsis, and the patio-side tree form all in one view.</div></details>
         </div>
@@ -714,22 +885,26 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Hosta and heuchera edge — May 14">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-hosta-heuchera-edge-2026-05-14.jpg" alt="Side-house foundation bed edge with variegated hostas, dark heuchera, and fresh chartreuse shrub growth" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 14, 2026</div>
+            <h3 class="card-title">Hosta and heuchera edge</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 14, 2026</div>
-          <h3 class="card-title">Hosta and heuchera edge</h3>
           <p class="card-desc">The shade-edge planting is filling in under the larger structure, with variegated hostas, dark heuchera, and bright new shrub growth making a layered front corner.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This close view shows the foundation bed’s smaller plants doing the quiet work: broad hosta leaves, burgundy coral bells, low glossy groundcover, and a hard-pruned variegated/golden shrub pushing fresh growth through the mulch.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side-house bed in full sun — May 14">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-bed-overview-2026-05-14.jpg" alt="Side-house foundation bed with Sunshine ligustrum, Shaina maple, loropetalum, and young edge plantings" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 14, 2026</div>
+            <h3 class="card-title">Side-house bed in full sun</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 14, 2026</div>
-          <h3 class="card-title">Side-house bed in full sun</h3>
           <p class="card-desc">The whole foundation line is reading brighter and more connected, with Shaina upright against the brick and the chartreuse ligustrum lighting the front corner.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Purple loropetalum, fresh liriope, low sedum-like edging, and the far orange barberry are beginning to turn the narrow strip into one continuous planting rather than separate islands.</div></details>
         </div>
@@ -738,10 +913,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Sunshine ligustrum and loropetalum — May 14">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/sunshine-ligustrum-loropetalum-2026-05-14.jpg" alt="Sunshine ligustrum glowing beside purple loropetalum and young liriope" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 14, 2026</div>
+            <h3 class="card-title">Sunshine &amp; burgundy contrast</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 14, 2026</div>
-          <h3 class="card-title">Sunshine &amp; burgundy contrast</h3>
           <p class="card-desc">The Sunshine ligustrum is at peak chartreuse against the brick, with the loropetalum holding the dark counterweight beside it.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This close angle shows the color plan clearly: gold in the center, burgundy low to the side, variegated liriope starting the front rhythm, and fallen rhododendron petals marking the season.</div></details>
         </div>
@@ -750,70 +927,82 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="View through the arbor — May 14">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/garden-overview-arbor-2026-05-14.jpg" alt="Wide view through the arbor into the garden with grapevine, redbud, raised beds, and patio path" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 14, 2026</div>
+            <h3 class="card-title">View through the arbor</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 14, 2026</div>
-          <h3 class="card-title">View through the arbor</h3>
           <p class="card-desc">The garden is starting to feel enclosed and lush now, with grape leaves framing the path and the Rising Sun redbud glowing on the right.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">This angle captures the yard as a room: shaded entry, bright open middle, raised beds beyond, and the arbor casting a strong leaf shadow across the path.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Pugster bed filling in — May 14">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/pugster-butterfly-bushes-raised-bed-2026-05-14.jpg" alt="Raised bed with Pugster butterfly bushes and companion perennials filling in" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 14, 2026</div>
+            <h3 class="card-title">Pugster bed filling in</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 14, 2026</div>
-          <h3 class="card-title">Pugster bed filling in</h3>
           <p class="card-desc">The Pugster butterfly bushes are back to dense green mounds, while the middle of the raised bed is starting to layer up around them.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Fresh upright perennial growth through the back and small center growth give this bed a clear mid-May transition point: no longer just waking up, not quite summer-full yet.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Grapevine arbor filling in May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/grapevine-arbor-gate-2026-05-13.jpg" alt="Grapevine filling the wooden arbor over the garden gate" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 13, 2026</div>
+            <h3 class="card-title">Grapevine arbor filling in</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 13, 2026</div>
-          <h3 class="card-title">Grapevine arbor filling in</h3>
           <p class="card-desc">By mid-May the vine is spilling over the gate, turning the arbor from bare structure into a living threshold.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Broad healthy leaves are covering the top beam, with young grape clusters visible above the gate and the Lemony Lace elderberry glowing chartreuse on the left.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Garden overview — April 19">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/garden-overview-2026-04-19.jpg" alt="Garden overview mid-April 2026" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 19, 2026</div>
+            <h3 class="card-title">Garden overview</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 19, 2026</div>
-          <h3 class="card-title">Garden overview</h3>
           <p class="card-desc">The full yard in mid-spring push, everything leafing out and filling in at once.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">Wide shot showing how all the beds relate — the peach in the corner, maples catching light, raised bed mid-stride.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Peach, salvia &amp; butterfly bush">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/mixed-bed-peach-salvia-buddleia.jpg" alt="Dwarf peach centered in layered bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 13, 2026</div>
+            <h3 class="card-title">Peach, salvia &amp; butterfly bush</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 13, 2026</div>
-          <h3 class="card-title">Peach, salvia &amp; butterfly bush</h3>
           <p class="card-desc">The dwarf peach holding court in the brick-edged bed, Pugster and salvia building the lower layer.</p>
           <details class="card-notes"><summary>Notes</summary><div class="notes-body">The bed starting to read as a designed garden room rather than a single specimen. Brick edging gives it structure.</div></details>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Aster, peach &amp; Pugster">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/mixed-bed-aster-peach-pugster.jpg" alt="Aster, peach and Pugster in mixed bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 2026</div>
+            <h3 class="card-title">Aster, peach &amp; Pugster</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 2026</div>
-          <h3 class="card-title">Aster, peach &amp; Pugster</h3>
           <p class="card-desc">Another angle on the layered peach bed with purple aster in the foreground.</p>
         </div>
       </div>
@@ -821,10 +1010,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Hydrangea &amp; Gold Dust Aucuba">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/mixed-bed-hydrangea-gold-dust-2026-04-17.jpg" alt="Hydrangea and Gold Dust Aucuba" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 17, 2026</div>
+            <h3 class="card-title">Hydrangea &amp; Gold Dust Aucuba</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 17, 2026</div>
-          <h3 class="card-title">Hydrangea &amp; Gold Dust Aucuba</h3>
           <p class="card-desc">Limelight hydrangea pushing up behind the variegated aucuba — two different greens in easy conversation.</p>
         </div>
       </div>
@@ -832,10 +1023,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Gold Dust Aucuba bed">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/mixed-bed-gold-dust-aucuba-2026-04-27.jpg" alt="Gold Dust Aucuba mixed bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 27, 2026</div>
+            <h3 class="card-title">Gold Dust Aucuba bed</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 27, 2026</div>
-          <h3 class="card-title">Gold Dust Aucuba bed</h3>
           <p class="card-desc">The aucuba filling in with hostas underneath, speckled variegation handling the shade beautifully.</p>
         </div>
       </div>
@@ -843,10 +1036,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Limelight, Astilbe &amp; Alliums">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/limelight-prime-astilbe-ornamental-onions-2026-04-21.jpg" alt="Limelight with astilbe and alliums" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 21, 2026</div>
+            <h3 class="card-title">Limelight, Astilbe &amp; Alliums</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 21, 2026</div>
-          <h3 class="card-title">Limelight, Astilbe &amp; Alliums</h3>
           <p class="card-desc">Hydrangea backdrop with astilbe and alliums pushing through the front of the bed.</p>
         </div>
       </div>
@@ -854,10 +1049,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Mixed perennial bed — early April">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/mixed-perennial-bed-2026-04-12.jpg" alt="Mixed perennial bed early April" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 12, 2026</div>
+            <h3 class="card-title">Mixed perennial bed — early April</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 12, 2026</div>
-          <h3 class="card-title">Mixed perennial bed — early April</h3>
           <p class="card-desc">Early spring structure still visible before the perennials fill in — the bones of the garden showing clearly.</p>
         </div>
       </div>
@@ -865,10 +1062,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="White salvia in bloom May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/salvia-white-bloom-2026-05-09.jpg" alt="White salvia in bloom" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 9, 2026</div>
+            <h3 class="card-title">White salvia opening up</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 9, 2026</div>
-          <h3 class="card-title">White salvia opening up</h3>
           <p class="card-desc">White flower spikes rising clean above the foliage, still pushing new buds at the top.</p>
         </div>
       </div>
@@ -876,21 +1075,25 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Mixed perennial bed — salvia May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/mixed-perennial-bed-salvia-2026-05-09.jpg" alt="Mixed perennial bed with salvia in bloom" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 9, 2026</div>
+            <h3 class="card-title">Mixed perennial bed — salvia</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 9, 2026</div>
-          <h3 class="card-title">Mixed perennial bed — salvia</h3>
           <p class="card-desc">Salvia taking over as the main color in May, the whole bed shifting into bloom mode.</p>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side house — Barberry, Salvia &amp; Heuchera">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/side-house-bed-2026-04-16-barberry-salvia-heuchera-holly.jpg" alt="Side house bed April 16" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 16, 2026</div>
+            <h3 class="card-title">Side house — Barberry, Salvia &amp; Heuchera</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 16, 2026</div>
-          <h3 class="card-title">Side house — Barberry, Salvia &amp; Heuchera</h3>
           <p class="card-desc">Orange Rocket starting to ember up against the green backdrop of the side foundation bed.</p>
         </div>
       </div>
@@ -898,21 +1101,25 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Side house — Ligustrum &amp; Loropetalum">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/side-house-bed-2026-04-16-ligustrum-loropetalum.jpg" alt="Side house bed ligustrum and loropetalum" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 16, 2026</div>
+            <h3 class="card-title">Side house — Ligustrum &amp; Loropetalum</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 16, 2026</div>
-          <h3 class="card-title">Side house — Ligustrum &amp; Loropetalum</h3>
           <p class="card-desc">Sunshine ligustrum lighting up the corner, purple loropetalum providing contrast behind.</p>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side house — Shaina angle">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/side-house-bed-2026-04-16-shaina-angle.jpg" alt="Shaina angle from side house bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 16, 2026</div>
+            <h3 class="card-title">Side house — Shaina angle</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 16, 2026</div>
-          <h3 class="card-title">Side house — Shaina angle</h3>
           <p class="card-desc">The Shaina maple from the side bed perspective — dark red against warm brick.</p>
         </div>
       </div>
@@ -920,10 +1127,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Side house foundation bed overview April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/side-house-foundation-bed-overview-2026-04-29.jpg" alt="Side house foundation bed overview" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 29, 2026</div>
+            <h3 class="card-title">Side house foundation overview</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 29, 2026</div>
-          <h3 class="card-title">Side house foundation overview</h3>
           <p class="card-desc">The full side foundation bed in late April, everything finding its place in the layering.</p>
         </div>
       </div>
@@ -931,21 +1140,25 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron bed close April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/side-house-rhododendron-bed-close-2026-04-29.jpg" alt="Rhododendron bed close-up" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 29, 2026</div>
+            <h3 class="card-title">Side house — Rhododendron bed</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 29, 2026</div>
-          <h3 class="card-title">Side house — Rhododendron bed</h3>
           <p class="card-desc">Fat buds forming, the rhododendron holding the shady side anchor.</p>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Ligustrum, Loropetalum &amp; Liriope April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/sunshine-ligustrum-loropetalum-liriope-2026-04-21.jpg" alt="Ligustrum with loropetalum and liriope" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 21, 2026</div>
+            <h3 class="card-title">Ligustrum, Loropetalum &amp; Liriope</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 21, 2026</div>
-          <h3 class="card-title">Ligustrum, Loropetalum &amp; Liriope</h3>
           <p class="card-desc">A gold-purple-green three-layer composition that reads as a completely designed vignette.</p>
         </div>
       </div>
@@ -953,10 +1166,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Side house — May 2026 bloom">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-foundation-bed-2026-05-07-overview.jpg" alt="Side house foundation bed May overview" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 7, 2026</div>
+            <h3 class="card-title">Side house — May bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 7, 2026</div>
-          <h3 class="card-title">Side house — May bloom</h3>
           <p class="card-desc">Foundation bed in full May push, rhododendron blooming and everything else catching up.</p>
         </div>
       </div>
@@ -964,10 +1179,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron bloom cluster May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/rhododendron-bloom-cluster-2026-05-10.jpg" alt="Rhododendron bloom cluster" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 10, 2026</div>
+            <h3 class="card-title">Rhododendron — full bloom cluster</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 10, 2026</div>
-          <h3 class="card-title">Rhododendron — full bloom cluster</h3>
           <p class="card-desc">Vibrant pink-purple trusses lit up against the dark evergreen leaves, speckled throats and long stamens on full display.</p>
         </div>
       </div>
@@ -975,10 +1192,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron bloom close-up May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/rhododendron-bloom-closeup-2026-05-10.jpg" alt="Rhododendron bloom close-up" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 10, 2026</div>
+            <h3 class="card-title">Rhododendron — bloom detail</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 10, 2026</div>
-          <h3 class="card-title">Rhododendron — bloom detail</h3>
           <p class="card-desc">Tight on the flowers — speckled petals, curved stamens, translucent pink catching the light.</p>
         </div>
       </div>
@@ -986,10 +1205,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron in bloom May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-rhododendron-bloom-2026-05-07-close.jpg" alt="Rhododendron bloom close-up" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 7, 2026</div>
+            <h3 class="card-title">Rhododendron in bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 7, 2026</div>
-          <h3 class="card-title">Rhododendron in bloom</h3>
           <p class="card-desc">Big trusses of pale pink finally opening against the dark evergreen foliage.</p>
         </div>
       </div>
@@ -997,43 +1218,51 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron — wide shot May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-rhododendron-wide-2026-05-11.jpg" alt="Rhododendron wide shot" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 11, 2026</div>
+            <h3 class="card-title">Rhododendron — full shrub in bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 11, 2026</div>
-          <h3 class="card-title">Rhododendron — full shrub in bloom</h3>
           <p class="card-desc">The whole shrub lit up pink, hosta and heuchera filling the understory beneath it.</p>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side house — Ligustrum and Loropetalum May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-ligustrum-loropetalum-2026-05-10.jpg" alt="Side house Ligustrum and Loropetalum May" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 10, 2026</div>
+            <h3 class="card-title">Side house — gold and purple</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 10, 2026</div>
-          <h3 class="card-title">Side house — gold and purple</h3>
           <p class="card-desc">Sunshine ligustrum blazing chartreuse, purple loropetalum holding the contrast, liriope filling the front edge.</p>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side house — Rhododendron bed May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/side-house-rhododendron-bed-2026-05-10.jpg" alt="Side house rhododendron bed May" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 10, 2026</div>
+            <h3 class="card-title">Side house — rhododendron in full bloom</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 10, 2026</div>
-          <h3 class="card-title">Side house — rhododendron in full bloom</h3>
           <p class="card-desc">The rhododendron owning the corner, heuchera and hostas filling the understory beneath it.</p>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Salvia, Creeping Jenny and hostas May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/salvia-jenny-hosta-bed-2026-05-12.jpg" alt="Salvia creeping jenny hosta bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 12, 2026</div>
+            <h3 class="card-title">Salvia, Jenny &amp; hostas</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 12, 2026</div>
-          <h3 class="card-title">Salvia, Jenny &amp; hostas</h3>
           <p class="card-desc">Purple salvia spikes, golden creeping Jenny spilling over the edge, hostas holding the backdrop — this bed has it all.</p>
         </div>
       </div>
@@ -1041,10 +1270,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Euonymus regrowth after hard prune May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/euonymus-regrowth-2026-05-12.jpg" alt="Euonymus regrowth after hard prune" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 12, 2026</div>
+            <h3 class="card-title">Euonymus — fighting back</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 12, 2026</div>
-          <h3 class="card-title">Euonymus — fighting back</h3>
           <p class="card-desc">New variegated leaves pushing from bare stems after a hard prune — this shrub doesn’t quit.</p>
         </div>
       </div>
@@ -1052,10 +1283,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="White rose — first blooms May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/white-rose-bush-2026-05-11.jpg" alt="White rose first blooms" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 11, 2026</div>
+            <h3 class="card-title">White rose — first blooms</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 11, 2026</div>
-          <h3 class="card-title">White rose — first blooms</h3>
           <p class="card-desc">White roses starting to open against the fence, buds stacked up behind them.</p>
         </div>
       </div>
@@ -1063,10 +1296,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Raised beds — tomatoes planted May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/raised-beds-tomatoes-2026-05-11.jpg" alt="Raised beds with tomatoes planted" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 11, 2026</div>
+            <h3 class="card-title">Raised beds — planted</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 11, 2026</div>
-          <h3 class="card-title">Raised beds — planted</h3>
           <p class="card-desc">Tomatoes and cucumbers in the ground, vine already climbing the cage, a new season underway in the veggie beds.</p>
         </div>
       </div>
@@ -1074,10 +1309,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron from the yard May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/rhododendron-wide-angle-2026-05-12.jpg" alt="Rhododendron from the yard" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 12, 2026</div>
+            <h3 class="card-title">Rhododendron — yard view</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 12, 2026</div>
-          <h3 class="card-title">Rhododendron — yard view</h3>
           <p class="card-desc">Another angle on the full shrub in bloom, the pink mass reading loud from across the yard.</p>
         </div>
       </div>
@@ -1085,10 +1322,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Baptisia Lemon Meringue in bloom May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/baptisia-lemon-meringue-2026-05-11.jpg" alt="Baptisia Lemon Meringue in bloom" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 11, 2026</div>
+            <h3 class="card-title">Baptisia — yellow spires</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 11, 2026</div>
-          <h3 class="card-title">Baptisia — yellow spires</h3>
           <p class="card-desc">Bright yellow flower spikes rising against the lattice, compound blue-green foliage holding strong underneath.</p>
         </div>
       </div>
@@ -1096,10 +1335,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Raised beds — tomatoes, peppers, cucumbers May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/raised-beds-mixed-2026-05-09.jpg" alt="Raised beds mixed plantings" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 9, 2026</div>
+            <h3 class="card-title">Raised beds — the full mix</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 9, 2026</div>
-          <h3 class="card-title">Raised beds — the full mix</h3>
           <p class="card-desc">Tomatoes, cucumbers, and peppers in the beds, daylilies and sedum along the edges, sunshine ligustrum lighting up the corner.</p>
         </div>
       </div>
@@ -1107,10 +1348,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Coreopsis in full bloom May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/coreopsis-bloom-2026-05-11.jpg" alt="Coreopsis in bloom" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 11, 2026</div>
+            <h3 class="card-title">Coreopsis going off</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 11, 2026</div>
-          <h3 class="card-title">Coreopsis going off</h3>
           <p class="card-desc">Bright yellow daisies packed tight, still budding out — this plant is just getting started.</p>
         </div>
       </div>
@@ -1118,10 +1361,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Grapevine arbor &amp; gate April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/grapevine-arbor-gate-2026-04-30.jpg" alt="Grapevine arbor gate" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 30, 2026</div>
+            <h3 class="card-title">Grapevine arbor &amp; gate</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 30, 2026</div>
-          <h3 class="card-title">Grapevine arbor &amp; gate</h3>
           <p class="card-desc">The vine just beginning to cover the arch over the white gate — structure becoming threshold.</p>
         </div>
       </div>
@@ -1129,10 +1374,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Grape clusters forming April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/grapevine-clusters-2026-04-27.jpg" alt="Grape clusters forming" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 27, 2026</div>
+            <h3 class="card-title">Grape clusters forming</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 27, 2026</div>
-          <h3 class="card-title">Grape clusters forming</h3>
           <p class="card-desc">Tiny clusters already visible on trained canes — the promise of a real harvest taking shape.</p>
         </div>
       </div>
@@ -1140,10 +1387,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Orange Rocket barberry side house bed May 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/05/orange-rocket-barberry-side-house-bed-2026-05-01.jpg" alt="Orange Rocket in side house bed" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">May 1, 2026</div>
+            <h3 class="card-title">Orange Rocket &amp; side house — May</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">May 1, 2026</div>
-          <h3 class="card-title">Orange Rocket &amp; side house — May</h3>
           <p class="card-desc">Barberry embering up in May, the full side bed composition gelling.</p>
         </div>
       </div>
@@ -1151,21 +1400,25 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Heuchera, salvia &amp; Bobo April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/bobo-heuchera-salvia-2026-04-19.jpg" alt="Heuchera, salvia and Bobo hydrangea" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 19, 2026</div>
+            <h3 class="card-title">Heuchera, Salvia &amp; Bobo</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 19, 2026</div>
-          <h3 class="card-title">Heuchera, Salvia &amp; Bobo</h3>
           <p class="card-desc">A compact three-layer perennial composition coming into spring focus.</p>
         </div>
       </div>
 
-      <div class="plant-card">
+      <div class="plant-card wide">
         <div class="card-image-wrap" data-title="Side house bed early April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/side-house-bed-2026-04-12.jpg" alt="Side house bed early April" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 12, 2026</div>
+            <h3 class="card-title">Side house bed — early April</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 12, 2026</div>
-          <h3 class="card-title">Side house bed — early April</h3>
           <p class="card-desc">Still sparse, but the bones of the layering are already there, waiting to fill in.</p>
         </div>
       </div>
@@ -1173,10 +1426,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Gold Dust Aucuba berries April 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/gold-dust-aucuba-berries-2026-04-20.jpg" alt="Gold Dust Aucuba berries" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 20, 2026</div>
+            <h3 class="card-title">Gold Dust Aucuba — berries</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 20, 2026</div>
-          <h3 class="card-title">Gold Dust Aucuba — berries</h3>
           <p class="card-desc">Bright red berries still visible on the aucuba in spring before the new growth covers them.</p>
         </div>
       </div>
@@ -1184,10 +1439,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron April 21 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rhododendron-2026-04-21.jpg" alt="Rhododendron April 21" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 21, 2026</div>
+            <h3 class="card-title">Rhododendron — buds swelling</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 21, 2026</div>
-          <h3 class="card-title">Rhododendron — buds swelling</h3>
           <p class="card-desc">Buds fattening up, the rhododendron building toward its late-spring bloom.</p>
         </div>
       </div>
@@ -1195,10 +1452,12 @@
       <div class="plant-card">
         <div class="card-image-wrap" data-title="Rhododendron April 27 2026">
           <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rhododendron-2026-04-27.jpg" alt="Rhododendron late April" loading="lazy" decoding="async">
+          <div class="card-overlay">
+            <div class="card-kicker">April 27, 2026</div>
+            <h3 class="card-title">Rhododendron — late April</h3>
+          </div>
         </div>
         <div class="card-content">
-          <div class="card-kicker">April 27, 2026</div>
-          <h3 class="card-title">Rhododendron — late April</h3>
           <p class="card-desc">Getting close — the bud clusters tight and ready, the foliage looking strong.</p>
         </div>
       </div>
@@ -1223,73 +1482,120 @@
 
   <script>
   (function(){
-    const allCards = document.querySelectorAll('.plant-card');
+    const gallery = document.getElementById('gallery');
+    const MONTHS = {January:0,February:1,March:2,April:3,May:4,June:5,July:6,August:7,September:8,October:9,November:10,December:11};
+
+    function cardDate(c){
+      const k = (c.querySelector('.card-kicker')||{}).textContent||'';
+      const m = k.match(/(January|February|March|April|May|June|July|August|September|October|November|December)\s+(?:(\d{1,2}),\s*)?(\d{4})/);
+      if(!m) return null;
+      return { t:new Date(+m[3], MONTHS[m[1]], m[2]?+m[2]:1).getTime(), month:m[1]+' '+m[3] };
+    }
+
+    // Sort newest-first so the season reads backwards from today
+    Array.from(gallery.querySelectorAll('.plant-card'))
+      .map(c=>({c, d:cardDate(c)}))
+      .sort((a,b)=>((b.d?b.d.t:0)-(a.d?a.d.t:0)))
+      .forEach(x=>gallery.appendChild(x.c));
+
+    const cards = Array.from(gallery.querySelectorAll('.plant-card'));
+
+    // Month dividers
+    let lastMonth = null;
+    cards.forEach(c=>{
+      const d = cardDate(c);
+      const label = d ? d.month : 'Undated';
+      c.dataset.month = label;
+      if(label !== lastMonth){
+        const div = document.createElement('div');
+        div.className = 'month-divider';
+        div.dataset.month = label;
+        div.innerHTML = '<span class="m-leaf">&#10087;</span><span class="m-label"></span>';
+        div.querySelector('.m-label').textContent = label;
+        gallery.insertBefore(div, c);
+        lastMonth = label;
+      }
+    });
+    const dividers = Array.from(gallery.querySelectorAll('.month-divider'));
+
     const pill = document.getElementById('count-pill');
     const search = document.getElementById('search');
-    const dateFilter = document.getElementById('date-filter');
+    const chips = Array.from(document.querySelectorAll('#month-chips .chip'));
+    const dirItems = Array.from(document.querySelectorAll('.dir-item'));
+    let activeMonth = 'all';
+    let visible = [];
+
+    function filter(){
+      const q = search.value.trim().toLowerCase();
+      visible = [];
+      cards.forEach(c=>{
+        const text = (((c.querySelector('.card-title')||{}).textContent||'')+' '
+          +((c.querySelector('.card-kicker')||{}).textContent||'')+' '
+          +((c.querySelector('.card-desc')||{}).textContent||'')).toLowerCase();
+        const show = (!q || text.includes(q)) && (activeMonth==='all' || c.dataset.month===activeMonth);
+        c.style.display = show ? '' : 'none';
+        if(show) visible.push(c);
+      });
+      dividers.forEach(d=>{
+        d.style.display = visible.some(c=>c.dataset.month===d.dataset.month) ? '' : 'none';
+      });
+      dirItems.forEach(it=>{
+        const label = ((it.querySelector('.dir-label')||{}).textContent||'').toLowerCase();
+        it.style.display = (!q || label.includes(q)) ? '' : 'none';
+      });
+      pill.textContent = visible.length+' scenes · '+dirItems.length+' plants';
+    }
+    chips.forEach(ch=>ch.addEventListener('click', ()=>{
+      chips.forEach(x=>x.classList.remove('active'));
+      ch.classList.add('active');
+      activeMonth = ch.dataset.month;
+      filter();
+    }));
+    search.addEventListener('input', filter);
+
+    // Lightbox
     const lb = document.getElementById('lb');
     const lbImg = document.getElementById('lb-img');
     const lbTitle = document.getElementById('lb-title');
     const lbCounter = document.getElementById('lb-counter');
-    let visible = [];
     let idx = 0;
 
-    function filter(){
-      const q = search.value.trim().toLowerCase();
-      const d = dateFilter.value;
-      visible = [];
-      allCards.forEach(c=>{
-        const title = (c.querySelector('.card-title')||{}).textContent||'';
-        const kicker = (c.querySelector('.card-kicker')||{}).textContent||'';
-        const mq = !q || title.toLowerCase().includes(q) || kicker.toLowerCase().includes(q);
-        const md = d==='all' || kicker.includes(d);
-        const show = mq && md;
-        c.style.display = show ? '' : 'none';
-        if(show) visible.push(c);
-      });
-      pill.textContent = 'Scenes: '+visible.length;
-    }
-
     function open(i){
-      idx=i; show(i);
+      idx = i; show(i);
       lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
-      document.body.style.overflow='hidden';
+      document.body.style.overflow = 'hidden';
     }
     function show(i){
-      const c=visible[i];
-      lbImg.src=c.querySelector('img').src;
-      lbImg.alt=c.querySelector('img').alt;
-      lbTitle.textContent=c.querySelector('.card-image-wrap').dataset.title||'';
-      lbCounter.textContent=(i+1)+' / '+visible.length;
+      const c = visible[i];
+      lbImg.src = c.querySelector('img').src;
+      lbImg.alt = c.querySelector('img').alt;
+      lbTitle.textContent = c.querySelector('.card-image-wrap').dataset.title||'';
+      lbCounter.textContent = (i+1)+' / '+visible.length;
       lb.classList.remove('actual');
     }
     function close(){
       lb.classList.remove('open','actual'); lb.setAttribute('aria-hidden','true');
-      document.body.style.overflow=''; lbImg.src='';
+      document.body.style.overflow = ''; lbImg.src = '';
     }
 
-    allCards.forEach(c=>{
-      c.querySelector('.card-image-wrap').addEventListener('click',()=>{
-        // Rebuild visible list to ensure it's current
-        visible = [];
-        allCards.forEach(x=>{ if(x.style.display !== 'none') visible.push(x); });
+    cards.forEach(c=>{
+      c.querySelector('.card-image-wrap').addEventListener('click', ()=>{
+        visible = cards.filter(x=>x.style.display!=='none');
         const i = visible.indexOf(c);
         if(i>=0) open(i);
       });
     });
-    document.getElementById('lb-close').addEventListener('click',close);
-    lb.addEventListener('click',e=>{ if(e.target===lb) close(); });
-    document.getElementById('lb-prev').addEventListener('click',()=>{ idx=(idx-1+visible.length)%visible.length; show(idx); });
-    document.getElementById('lb-next').addEventListener('click',()=>{ idx=(idx+1)%visible.length; show(idx); });
-    lbImg.addEventListener('click',()=>lb.classList.toggle('actual'));
-    document.addEventListener('keydown',e=>{
+    document.getElementById('lb-close').addEventListener('click', close);
+    lb.addEventListener('click', e=>{ if(e.target===lb) close(); });
+    document.getElementById('lb-prev').addEventListener('click', ()=>{ idx=(idx-1+visible.length)%visible.length; show(idx); });
+    document.getElementById('lb-next').addEventListener('click', ()=>{ idx=(idx+1)%visible.length; show(idx); });
+    lbImg.addEventListener('click', ()=>lb.classList.toggle('actual'));
+    document.addEventListener('keydown', e=>{
       if(!lb.classList.contains('open')) return;
       if(e.key==='Escape') close();
       if(e.key==='ArrowLeft'){ idx=(idx-1+visible.length)%visible.length; show(idx); }
       if(e.key==='ArrowRight'){ idx=(idx+1)%visible.length; show(idx); }
     });
-    search.addEventListener('input', filter);
-    dateFilter.addEventListener('change', filter);
     filter();
   })();
   </script>
