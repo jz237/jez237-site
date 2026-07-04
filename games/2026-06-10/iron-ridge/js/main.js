@@ -8,24 +8,25 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG } from './config.js?v=3';
-import { makeRng } from './noise.js?v=3';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=3';
-import { buildSky } from './sky.js?v=3';
-import { Foliage } from './foliage.js?v=3';
-import { Props } from './props.js?v=3';
-import { Tank } from './tank.js?v=3';
-import { WaveManager } from './enemy.js?v=3';
-import { Projectiles } from './projectiles.js?v=3';
-import { Effects } from './effects.js?v=3';
-import { GameAudio } from './audio.js?v=3';
-import { Input, isTouch } from './input.js?v=3';
-import { settings, setSetting } from './settings.js?v=3';
-import { Hud } from './hud.js?v=3';
-import { QualityScaler, LEVELS } from './quality.js?v=3';
-import { Minimap } from './minimap.js?v=3';
-import * as LB from './leaderboard.js?v=3';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=3';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=4';
+import { Infantry } from './infantry.js?v=4';
+import { makeRng } from './noise.js?v=4';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=4';
+import { buildSky } from './sky.js?v=4';
+import { Foliage } from './foliage.js?v=4';
+import { Props } from './props.js?v=4';
+import { Tank } from './tank.js?v=4';
+import { WaveManager } from './enemy.js?v=4';
+import { Projectiles } from './projectiles.js?v=4';
+import { Effects } from './effects.js?v=4';
+import { GameAudio } from './audio.js?v=4';
+import { Input, isTouch } from './input.js?v=4';
+import { settings, setSetting } from './settings.js?v=4';
+import { Hud } from './hud.js?v=4';
+import { QualityScaler, LEVELS } from './quality.js?v=4';
+import { Minimap } from './minimap.js?v=4';
+import * as LB from './leaderboard.js?v=4';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=4';
 
 const $ = (id) => document.getElementById(id);
 
@@ -113,6 +114,7 @@ const terrain = buildTerrain(scene, world);
 const sky = buildSky(scene);
 const foliage = new Foliage(scene, world);
 const props = new Props(scene, world);
+const infantry = new Infantry(scene);
 const effects = new Effects(scene, camera);
 const projectiles = new Projectiles(scene, world);
 const audio = new GameAudio();
@@ -254,6 +256,8 @@ const G = {
   perks: null,
   perkPending: null,
   perkTimer: 0,
+  boostCd: 0,
+  pendingCaches: [],
 };
 
 function freshPerks() {
@@ -296,7 +300,7 @@ function currentWeapon() {
 
 function setWeapon(sel) {
   if (sel === 'cycle') sel = G.weapon === 'ap' ? 'he' : 'ap';
-  if (sel === G.weapon) return;
+  if (!WEAPONS[sel] || sel === G.weapon) return;
   G.weapon = sel;
   if (G.player) G.player.shellSpeed = WEAPONS[sel].speed;
   hud.setWeapon(sel);
@@ -567,6 +571,13 @@ function spawnClientWaveProps(w) {
   for (let i = 0; i < spec.targets; i++) { const s = props.ringSpot(minR, maxR); props.spawnTarget(s.x, s.z); }
   for (let i = 0; i < spec.barrels; i++) { const s = props.ringSpot(minR * 0.7, maxR); props.spawnBarrel(s.x, s.z); }
   for (let i = 0; i < spec.walls; i++) { const s = props.ringSpot(minR + 15, maxR); props.spawnWall(s.x, s.z); }
+  if (w >= 2) {
+    const squads = Math.min(4, 1 + (w >> 1));
+    for (let i = 0; i < squads; i++) {
+      const s = props.ringSpot(48, 95);
+      infantry.spawnSquad(s.x, s.z, 4 + Math.min(3, (w / 3) | 0));
+    }
+  }
   G.waveHadTargets = spec.targets > 0;
   G.targetsBonusGiven = false;
 }
@@ -674,6 +685,13 @@ function updateAimPoint() {
     const p = tr.body.position;
     const d = sphereHit(p.x, p.y + 1, p.z, 2.4);
     if (d < best) { best = d; G.aimOnHostile = true; }
+  }
+  // soldiers snag the aim point so the coax MG converges on them — but they
+  // don't set the hostile flag (auto-fire would waste cannon shells on them)
+  for (const u of infantry.units) {
+    if (!u.alive) continue;
+    const d = sphereHit(u.x, getHeight(u.x, u.z) + 0.9, u.z, 1.6);
+    if (d < best) best = d;
   }
 
   G.aimPoint.copy(_origin).addScaledVector(_dir, best);
@@ -816,27 +834,33 @@ function damageEnemy(e, dmg, hitPoint = null, creditPeerId = null) {
   }
 }
 
-function damagePlayer(dmg, fromPos = null) {
+// light = infantry chip fire: no flash/shake spam, but it still counts as
+// "under fire" so you can't wrench mid-swarm
+function damagePlayer(dmg, fromPos = null, light = false) {
   const p = G.player;
   if (!p || !p.alive || G.state !== 'playing') return;
   const killed = p.damage(dmg);
   G.lastDmgT = G.simT;
   G.repairing = false; // taking fire stops the wrenching
-  haptic(35);
+  if (!light) haptic(35);
   if (!killed && p.hp < 25 && !G.criticalSaid) {
     G.criticalSaid = true;
     audio.vo('critical');
   }
-  hud.damageFlash();
-  if (fromPos) {
+  if (!light) hud.damageFlash();
+  if (fromPos && (!light || Math.random() < 0.3)) {
     // screen-relative bearing of the threat: 0 = dead ahead of the camera.
     // screen-left is world-left of the view axis, so negate for CSS rotate.
     const pp = p.body.position;
     const bearing = Math.atan2(fromPos.x - pp.x, fromPos.z - pp.z);
     hud.damageDirection(-(bearing - G.camYaw));
   }
-  audio.damaged();
-  effects.shake(0.45);
+  if (!light) {
+    audio.damaged();
+    effects.shake(0.45);
+  } else {
+    audio.hitTink();
+  }
   hud.setHp(p.hp, p.maxHp);
   if (killed) startDeath();
 }
@@ -980,6 +1004,35 @@ function onShellHit(hit) {
   for (const tree of foliage.treesNear(pos.x, pos.z, 4.2)) {
     foliage.topple(tree, tree.x - pos.x, tree.z - pos.z, 0.8);
   }
+
+  // shells, artillery and airstrikes shred infantry
+  infantry.killRadius(pos.x, pos.z, Math.max(3.2, splashR), (u) => killSoldier(u, byPlayer));
+}
+
+// ---------------------------------------------------------------- infantry
+const _infMuzzle = new THREE.Vector3();
+const _infTarget = new THREE.Vector3();
+const _infPos = new THREE.Vector3();
+
+function infantryShoot(u, target) {
+  infantry.muzzleOf(u, _infMuzzle);
+  _infTarget.set(
+    target.body.position.x + (Math.random() - 0.5) * 2.4,
+    target.body.position.y + 0.8 + Math.random() * 1.2,
+    target.body.position.z + (Math.random() - 0.5) * 2.4,
+  );
+  effects.tracer(_infMuzzle, _infTarget);
+  if (camera.position.distanceTo(_infMuzzle) < 100) audio.mgShot();
+  if (target.isPlayer && Math.random() < INFANTRY.hitChance) {
+    damagePlayer(INFANTRY.dmg, { x: u.x, z: u.z }, true);
+  }
+}
+
+function killSoldier(u, byPlayer = true) {
+  _infPos.set(u.x, getHeight(u.x, u.z) + 0.9, u.z);
+  effects.spawnDebris(_infPos, 4, 0.45, 0x5c6647);
+  effects.dustPuff(u.x, getHeight(u.x, u.z), u.z, 0.7);
+  if (byPlayer && G.state === 'playing') addScore(INFANTRY.points, '');
 }
 
 // ---------------------------------------------------------------- coax MG
@@ -1017,7 +1070,15 @@ function mgFire(dt) {
     );
     _mgRes.reset();
     world.raycastClosest(_mgFrom, _mgTo, { collisionFilterMask: ~CG.PLAYER, skipBackfaces: true }, _mgRes);
-    if (_mgRes.hasHit) {
+    // soldiers first: they have no physics bodies, so test the ray by hand
+    const bodyDist = _mgRes.hasHit ? _mgRes.distance : MG.range;
+    const infHit = infantry.mgHit(_mgOrigin, _mgDir, bodyDist);
+    if (infHit) {
+      infHit.unit.alive = false;
+      killSoldier(infHit.unit, true);
+      _mgEnd.copy(_mgOrigin).addScaledVector(_mgDir, infHit.dist);
+      effects.sparks(_mgEnd);
+    } else if (_mgRes.hasHit) {
       _mgEnd.copy(_mgRes.hitPointWorld);
       const ud = _mgRes.body?.userData;
       if (ud?.kind === 'tank' && !ud.tank.isPlayer) {
@@ -1186,6 +1247,14 @@ function startWave(w) {
   }
   audio.waveAlert();
   announceContacts(waves.enemies.slice(before), 'ARMOR INBOUND', !bossWave);
+  // infantry screen from wave 2: rifles that sting, tracks that squish
+  if (w >= 2) {
+    const squads = Math.min(4, 1 + (w >> 1));
+    for (let i = 0; i < squads; i++) {
+      const s = props.ringSpot(48, 95);
+      infantry.spawnSquad(s.x, s.z, 4 + Math.min(3, (w / 3) | 0));
+    }
+  }
   if (inCoop() && multiplayer.isHost()) multiplayer.sendWave(w, armor);
   if (w > 1 && G.player.alive) {
     G.player.hp = Math.min(G.player.maxHp, G.player.hp + SCORING.waveClearHeal);
@@ -1217,7 +1286,7 @@ function offerPerks() {
   }
   G.perkPending = picks;
   G.perkTimer = 14;
-  hud.showPerks(picks, choosePerk);
+  hud.showPerks(picks, choosePerk, isTouch ? 'tap a card' : 'press 1 · 2 · 3');
 }
 
 // re-apply run perks to a fresh hull (start of run, squad respawn)
@@ -1314,7 +1383,9 @@ function resetGame() {
   G.pendingBombs = []; G.convoyT = 50; G.fovKick = 0; G.respawnT = 0;
   G.weapon = 'ap'; G.mgHeat = 0; G.mgLocked = false; G.mgAcc = 0;
   G.repairing = false; G.repairArm = 0; G.lastDmgT = -99; G.criticalSaid = false;
-  G.depot = null;
+  G.depot = null; G.boostCd = 0; G.pendingCaches = [];
+  infantry.clear();
+  infantry.updateVisuals();
   G.perks = freshPerks(); G.perkPending = null; G.perkTimer = 0;
   hud.hidePerks();
   hud.setWeapon('ap');
@@ -1340,6 +1411,12 @@ function startGame() {
     const da = drng() * Math.PI * 2;
     const dr = 62 + drng() * 45;
     G.depot = props.spawnDepot(Math.cos(da) * dr, Math.sin(da) * dr, REPAIR.depotRadius);
+    // persistent field caches: grab one and it pops up somewhere else
+    for (let i = 0; i < CACHE.count; i++) {
+      const a = drng() * Math.PI * 2;
+      const r = 45 + drng() * 75;
+      props.spawnCrate(Math.cos(a) * r, Math.sin(a) * r, true);
+    }
   }
   G.state = 'playing';
   multiplayer.localActive = true;
@@ -1511,6 +1588,24 @@ function fixedStep(dt) {
   // shell smoke trails
   for (const s of projectiles.active) effects.shellTrail(s.pos);
 
+  // infantry advance, shoot, and get ground under tracks
+  if (combatSim) {
+    infantry.step(dt, p?.alive && G.state !== 'downed' ? [p] : [], infantryShoot);
+    if (p) infantry.crush(p, (u, byP) => killSoldier(u, byP));
+    for (const e of waves.enemies) infantry.crush(e.tank, (u) => killSoldier(u, false));
+  }
+
+  // relocating field caches pop back up after being collected
+  if (combatSim && G.pendingCaches.length) {
+    for (let i = G.pendingCaches.length - 1; i >= 0; i--) {
+      if (G.simT >= G.pendingCaches[i]) {
+        G.pendingCaches.splice(i, 1);
+        const s = props.ringSpot(55, 125);
+        props.spawnCrate(s.x, s.z, true);
+      }
+    }
+  }
+
   // tanks crush small trees
   const crush = (tank) => {
     if (!tank.alive) return;
@@ -1605,9 +1700,13 @@ function fixedStep(dt) {
       if (d < PICKUP.magnetRadius * G.perks.magnetMult) {
         props.removeItem(it, false);
         G.player.hp = Math.min(G.player.maxHp, G.player.hp + PICKUP.heal);
+        if (G.player.hp >= 35) G.criticalSaid = false;
         hud.setHp(G.player.hp, G.player.maxHp);
         hud.floater(`+${PICKUP.heal} ARMOR`, 'good');
         audio.reloadDone();
+        haptic(25);
+        // field caches relocate instead of disappearing for good
+        if (it.persistent) G.pendingCaches.push(G.simT + CACHE.respawnDelay);
       }
     }
 
@@ -2028,8 +2127,24 @@ function gameFrame(dt) {
     if (input.consumeReload()) {
       if (G.player.reloadNow()) audio.click();
     }
+    // digits pick perks while cards are up (mouse is pointer-locked on
+    // desktop), otherwise they switch shells
     const wq = input.consumeWeapon();
-    if (wq) setWeapon(wq);
+    if (wq && G.perkPending) {
+      const idx = wq === 'ap' ? 0 : wq === 'he' ? 1 : wq === 'third' ? 2 : -1;
+      if (idx >= 0 && G.perkPending[idx]) choosePerk(G.perkPending[idx]);
+    } else if (wq) setWeapon(wq);
+
+    // escape boost: burst of track power to break off a tailgater
+    if (input.consumeBoost() && G.boostCd <= 0 && G.player.alive) {
+      G.boostCd = BOOST.cooldown;
+      G.player.boostT = BOOST.time;
+      hud.floater('⚡ BOOST', 'good');
+      G.fovKick = 1.6;
+      effects.shake(0.12);
+      haptic(15);
+    }
+    if (G.boostCd > 0) G.boostCd -= dt;
 
     // coax MG: hold to hose, watch the heat
     if (input.mgHeld && !G.mgLocked && G.player.alive && !G.perkPending) mgFire(dt);
@@ -2151,6 +2266,7 @@ function gameFrame(dt) {
     }
   }
   props.update(dt, G.time);
+  infantry.updateVisuals();
   multiplayer.update(dt, multiplayerPacket());
 
   // co-op: host streams its enemies; clients smoke their damaged ghosts
@@ -2250,7 +2366,7 @@ requestAnimationFrame(loop);
 
 // debug/testing handle (harmless in production)
 window.__IR = {
-  G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer,
+  G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry,
   onShellHit, audio, damagePlayer,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)

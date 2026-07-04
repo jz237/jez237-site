@@ -1,7 +1,7 @@
 // Unified input: keyboard + pointer-lock mouse on desktop, twin virtual
 // sticks + fire button on touch. Exposes one normalized state object.
 
-import { settings, setSetting } from './settings.js?v=3';
+import { settings, setSetting } from './settings.js?v=4';
 
 export const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
@@ -33,8 +33,10 @@ export class Input {
       if (e.code === 'KeyM') this.muteQueued = true;
       if (e.code === 'Digit1') this.weaponQueued = 'ap';
       if (e.code === 'Digit2') this.weaponQueued = 'he';
+      if (e.code === 'Digit3') this.weaponQueued = 'third';
       if (e.code === 'KeyQ') this.weaponQueued = 'cycle';
       if (e.code === 'KeyE') this.repairQueued = true;
+      if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') this.boostQueued = true;
     });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
     window.addEventListener('blur', () => this.keys.clear());
@@ -117,10 +119,15 @@ export class Input {
       this.stickY = -(ny / RANGE) * (m / (mRaw || 1));
     };
 
-    // floating joystick: anchor wherever the thumb lands in the zone
+    // floating joystick: anchor wherever the thumb lands in the zone.
+    // A quick double-tap on the drive side triggers the escape boost.
+    let lastStickTap = 0;
     stickZone.addEventListener('touchstart', (e) => {
       const t = e.changedTouches[0];
       if (stickId !== null) return;
+      const now = performance.now();
+      if (now - lastStickTap < 300) this.boostQueued = true;
+      lastStickTap = now;
       stickId = t.identifier;
       sx = t.clientX; sy = t.clientY;
       stick.style.left = `${sx - half()}px`;
@@ -237,6 +244,11 @@ export class Input {
       e.preventDefault();
     }, { passive: false });
 
+    document.getElementById('btn-boost')?.addEventListener('touchstart', (e) => {
+      this.boostQueued = true;
+      e.preventDefault();
+    }, { passive: false });
+
     document.getElementById('btn-pause-touch')?.addEventListener('touchstart', (e) => {
       this.pauseQueued = true;
       e.preventDefault();
@@ -324,5 +336,11 @@ export class Input {
     const r = this.repairQueued;
     this.repairQueued = false;
     return r;
+  }
+
+  consumeBoost() {
+    const b = this.boostQueued;
+    this.boostQueued = false;
+    return b;
   }
 }

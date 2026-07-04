@@ -3,7 +3,7 @@
 //   POST {SCORES_API} {initials, score, extra}
 // Falls back to localStorage when offline.
 
-import { SCORES_API, HS_KEY, NAME_KEY, DAILY, DAILY_STAMP } from './config.js?v=3';
+import { SCORES_API, HS_KEY, NAME_KEY, DAILY, DAILY_STAMP } from './config.js?v=4';
 
 // Daily Ridge runs score to their own per-day board
 const API = DAILY ? `${SCORES_API}-daily-${DAILY_STAMP}` : SCORES_API;
