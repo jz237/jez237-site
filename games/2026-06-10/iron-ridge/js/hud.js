@@ -2,7 +2,7 @@
 // vignette, off-screen enemy arrows, leaderboard rendering, screens.
 
 import * as THREE from 'three';
-import { SHELL } from './config.js?v=3';
+import { SHELL } from './config.js?v=4';
 
 const $ = (id) => document.getElementById(id);
 const _v = new THREE.Vector3();
@@ -254,10 +254,11 @@ export class Hud {
   }
 
   // between-wave perk choice; onPick(perk) fires once
-  showPerks(perks, onPick) {
+  showPerks(perks, onPick, hint = '') {
     const bar = this.el.perkBar;
     if (!bar) return;
-    bar.innerHTML = '<div class="perk-title">FIELD UPGRADE — PICK ONE</div>';
+    bar.innerHTML = `<div class="perk-title">FIELD UPGRADE — PICK ONE</div>` +
+      (hint ? `<div class="perk-hint">${hint}</div>` : '');
     const row = document.createElement('div');
     row.className = 'perk-row';
     bar.appendChild(row);

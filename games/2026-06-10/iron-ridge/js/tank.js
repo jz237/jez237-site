@@ -3,8 +3,8 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { TANK, SHELL, CG } from './config.js?v=3';
-import { getHeight } from './terrain.js?v=3';
+import { TANK, SHELL, CG } from './config.js?v=4';
+import { getHeight } from './terrain.js?v=4';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
@@ -568,6 +568,7 @@ export class Tank {
 
     this.throttle = 0;
     this.turn = 0;
+    this.boostT = 0;           // seconds of boost burn remaining
     this.trackScroll = 0;
     this.smokeTimer = 0;
     this.lowHpSmoke = 0;
@@ -617,11 +618,15 @@ export class Tank {
       fwd.y = 0;
       if (fwd.length() > 0.01) {
         fwd.normalize();
+        // escape boost: short burst of extra track power and top speed
+        this.boostT = Math.max(0, this.boostT - dt);
+        const bF = this.boostT > 0 ? 1.9 : 1;
+        const bS = this.boostT > 0 ? 1.45 : 1;
         let force = 0;
         if (this.throttle > 0.01) {
-          force = speed < this.tuning.maxSpeed ? this.tuning.engineForce * sc2 * this.throttle : 0;
+          force = speed < this.tuning.maxSpeed * bS ? this.tuning.engineForce * bF * sc2 * this.throttle : 0;
         } else if (this.throttle < -0.01) {
-          force = speed > -TANK.maxReverse ? -TANK.reverseForce * sc2 * -this.throttle : 0;
+          force = speed > -TANK.maxReverse * bS ? -TANK.reverseForce * bF * sc2 * -this.throttle : 0;
         } else {
           // tracks resist rolling when coasting
           force = -THREE.MathUtils.clamp(speed * TANK.rollResist * sc2, -2800 * sc2, 2800 * sc2);
