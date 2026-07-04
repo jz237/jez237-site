@@ -1243,30 +1243,7 @@
 
   <script>
     const SITE_BASE = './';
-    const LEGACY_BASE = 'https://jz237.github.io/games/';
-    const SITE_GAME_PATHS = new Set([
-      '2026-06-05/invaders/',
-      '2026-06-09/fluid/',
-      '2026-06-09/choplifter/',
-      '2026-06-09/subway-siege-blackout/',
-      '2026-06-10/hollow-deep/',
-      '2026-06-10/glimmer-grotto/',
-      '2026-06-10/iron-ridge/',
-      '2026-06-10/eddy/',
-      '2026-06-11/corner-pocket/',
-      '2026-06-12/pay-dirt/',
-      '2026-06-14/steel-duel/',
-      '2026-06-19/neon-vector-arena/',
-      '2026-06-22/snake-awakening/',
-      '2026-06-24/particle-creature-arena/',
-      '2026-06-25/vector-drift/',
-      '2026-06-29/steel-ribbon-racer/',
-      '2026-07-03/corner-pocket-2/',
-      '2026-04-28/millipede/',
-      '2026-03-29/void-arcade/',
-      'hard-hat-mac/'
-    ]);
-    const gameHref = g => g.href || `${SITE_GAME_PATHS.has(g.path) ? SITE_BASE : LEGACY_BASE}${g.path}`;
+    const gameHref = g => g.href || `${SITE_BASE}${g.path}`;
     const games = [
       // Featured (polished)
       { title: 'Corner Pocket II: Back Room',   path: '2026-07-03/corner-pocket-2/',       emoji: '💵', date: 'Jul 3',  cat: 'arcade',    tag: 'featured',    desc: 'Board two of Corner Pocket — the after-hours money game. A gen-two physics engine simulates every ball at once: true 3-ball MULTIBALL with real ball-to-ball collisions, and a live mini pool table ON the playfield — 3 captive balls, 2 real pockets, scratches included. Back-room wagers and physical ball locks, Massé magnet saves, an inner-loop spinner, kickback, dice bumpers, a trash-talking hustler, and global scores. Keyboard + touch' },
