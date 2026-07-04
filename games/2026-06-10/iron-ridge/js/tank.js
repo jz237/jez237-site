@@ -3,8 +3,8 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { TANK, SHELL, CG } from './config.js?v=2';
-import { getHeight } from './terrain.js?v=2';
+import { TANK, SHELL, CG } from './config.js?v=3';
+import { getHeight } from './terrain.js?v=3';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
@@ -487,9 +487,18 @@ export function buildTankMesh(scheme = 'olive') {
   muzzle.position.z = 3.65;
   recoilGrp.add(muzzle);
 
+  // coaxial MG beside the main gun (elevates with it)
+  const coax = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.035, 0.7, 6), steelMat);
+  coax.rotation.x = Math.PI / 2;
+  coax.position.set(0.34, 0.02, 0.55);
+  pivot.add(coax);
+  const coaxMuzzle = new THREE.Object3D();
+  coaxMuzzle.position.set(0.34, 0.02, 0.95);
+  pivot.add(coaxMuzzle);
+
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
 
-  return { root, hull, turret, pivot, recoilGrp, muzzle, roadWheels, spinning, tracks, exhausts };
+  return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts };
 }
 
 export class Tank {
@@ -551,6 +560,7 @@ export class Tank {
 
     // gun state
     this.shellSpeed = opts.shellSpeed ?? SHELL.speed;
+    this.chamberMult = 1;      // perk-modified chamber time multiplier
     this.rack = SHELL.rackSize;
     this.chamber = 1;          // 0..1 ready
     this.restocking = 0;       // >0 while refilling rack
@@ -665,7 +675,7 @@ export class Tank {
       this.restocking -= dt;
       if (this.restocking <= 0) { this.rack = SHELL.rackSize; this.chamber = 1; }
     } else if (this.chamber < 1) {
-      this.chamber = Math.min(1, this.chamber + dt / SHELL.chamberTime);
+      this.chamber = Math.min(1, this.chamber + dt / (SHELL.chamberTime * this.chamberMult));
     }
     this.recoil = Math.max(0, this.recoil - dt * 3.2);
   }

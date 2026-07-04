@@ -1,7 +1,7 @@
 // Unified input: keyboard + pointer-lock mouse on desktop, twin virtual
 // sticks + fire button on touch. Exposes one normalized state object.
 
-import { settings, setSetting } from './settings.js?v=2';
+import { settings, setSetting } from './settings.js?v=3';
 
 export const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
 
@@ -31,6 +31,10 @@ export class Input {
       if (e.code === 'KeyG') this.pingQueued = true;
       if (e.code === 'KeyP' || e.code === 'Escape') this.pauseQueued = true;
       if (e.code === 'KeyM') this.muteQueued = true;
+      if (e.code === 'Digit1') this.weaponQueued = 'ap';
+      if (e.code === 'Digit2') this.weaponQueued = 'he';
+      if (e.code === 'KeyQ') this.weaponQueued = 'cycle';
+      if (e.code === 'KeyE') this.repairQueued = true;
     });
     window.addEventListener('keyup', (e) => this.keys.delete(e.code));
     window.addEventListener('blur', () => this.keys.clear());
@@ -46,9 +50,14 @@ export class Input {
     });
     canvas.addEventListener('mousedown', (e) => {
       if (e.button === 0 && this.locked) { this.firing = true; this.fireQueued = true; }
+      if (e.button === 2 && this.locked) this.mgHeld = true; // hold RMB = coax MG
     });
     window.addEventListener('mouseup', (e) => {
       if (e.button === 0) this.firing = false;
+      if (e.button === 2) this.mgHeld = false;
+    });
+    window.addEventListener('contextmenu', (e) => {
+      if (this.locked) e.preventDefault();
     });
     window.addEventListener('wheel', (e) => { this.zoomDelta += Math.sign(e.deltaY); }, { passive: true });
 
@@ -210,6 +219,24 @@ export class Input {
       e.preventDefault();
     }, { passive: false });
 
+    const mgBtn = document.getElementById('btn-mg');
+    mgBtn?.addEventListener('touchstart', (e) => {
+      this.mgHeld = true;
+      e.preventDefault();
+    }, { passive: false });
+    mgBtn?.addEventListener('touchend', () => { this.mgHeld = false; });
+    mgBtn?.addEventListener('touchcancel', () => { this.mgHeld = false; });
+
+    document.getElementById('btn-repair')?.addEventListener('touchstart', (e) => {
+      this.repairQueued = true;
+      e.preventDefault();
+    }, { passive: false });
+
+    document.getElementById('btn-wpn-touch')?.addEventListener('touchstart', (e) => {
+      this.weaponQueued = 'cycle';
+      e.preventDefault();
+    }, { passive: false });
+
     document.getElementById('btn-pause-touch')?.addEventListener('touchstart', (e) => {
       this.pauseQueued = true;
       e.preventDefault();
@@ -285,5 +312,17 @@ export class Input {
     const m = this.muteQueued;
     this.muteQueued = false;
     return m;
+  }
+
+  consumeWeapon() {
+    const w = this.weaponQueued;
+    this.weaponQueued = null;
+    return w;
+  }
+
+  consumeRepair() {
+    const r = this.repairQueued;
+    this.repairQueued = false;
+    return r;
   }
 }
