@@ -44,7 +44,7 @@ export const LEVELS = [
     grade: true,
     treeFrac: 1,
     grassFrac: 1,
-    fogFar: 460,
+    fogFar: 520,
     particleScale: 1,
   },
 ];
@@ -53,6 +53,7 @@ export class QualityScaler {
   constructor(startLevel, applyFn) {
     this.level = startLevel;
     this.apply = applyFn;
+    this.locked = false;
     this.emaDt = 1 / 60;
     this.slowTime = 0;
     this.fastTime = 0;
@@ -60,9 +61,23 @@ export class QualityScaler {
     this.apply(LEVELS[this.level], this.level);
   }
 
+  // pin to a fixed level ('auto' releases back to adaptive scaling)
+  setLock(level) {
+    if (level === 'auto' || level === null || level === undefined) {
+      this.locked = false;
+      return;
+    }
+    this.locked = true;
+    if (this.level !== level) {
+      this.level = level;
+      this.apply(LEVELS[this.level], this.level);
+    }
+  }
+
   frame(dt) {
     if (dt > 0.5) return; // tab was hidden; ignore
     this.emaDt = this.emaDt * 0.94 + dt * 0.06;
+    if (this.locked) return;
     this.cooldown -= dt;
     const fps = 1 / this.emaDt;
 

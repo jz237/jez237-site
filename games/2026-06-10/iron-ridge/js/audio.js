@@ -4,12 +4,19 @@
 // The synth versions remain as fallback until the samples finish decoding.
 
 import { MUTE_KEY } from './config.js';
+import { settings, setSetting } from './settings.js';
 
 const SAMPLES = {
   fire: ['shot-01', 'shot-02', 'shot-03', 'shot-04', 'shot-05'],
   explosion: ['explosion-01', 'explosion-02', 'explosion-03', 'explosion-04', 'explosion-05'],
   waveAlert: ['wave-alert'],
 };
+
+const MUSIC_TRACKS = {
+  menu: './assets/audio/music-menu.mp3',
+  battle: './assets/audio/music-battle.mp3',
+};
+const MUSIC_BASE = 0.42; // headroom under the combat SFX
 
 export class GameAudio {
   constructor() {
@@ -18,6 +25,10 @@ export class GameAudio {
     this.engineNodes = null;
     this.windNodes = null;
     this.buffers = { fire: [], explosion: [], waveAlert: [] };
+    this.musicBuffers = {};
+    this.musicLoading = {};
+    this.musicNodes = null;   // { src, gain, track }
+    this.musicWant = null;    // requested before the ctx exists
   }
 
   ensure() {
@@ -25,12 +36,71 @@ export class GameAudio {
     try {
       this.ctx = new (window.AudioContext || window.webkitAudioContext)();
       this.master = this.ctx.createGain();
-      this.master.gain.value = this.muted ? 0 : 0.8;
+      this.master.gain.value = this.sfxGainValue();
       this.master.connect(this.ctx.destination);
       this.startWind();
       this.loadSamples();
+      if (this.musicWant) this.startMusic(this.musicWant);
     } catch { return false; }
     return true;
+  }
+
+  sfxGainValue() { return this.muted ? 0 : 0.8 * settings.sfxVol; }
+  musicGainValue() { return (this.muted || !settings.musicOn) ? 0 : MUSIC_BASE * settings.musicVol; }
+
+  // -------- background music (looping buffers, gentle crossfade) --------
+  async loadMusic(track) {
+    if (this.musicBuffers[track] || this.musicLoading[track]) return this.musicLoading[track];
+    this.musicLoading[track] = fetch(MUSIC_TRACKS[track])
+      .then(r => r.arrayBuffer())
+      .then(buf => this.ctx.decodeAudioData(buf))
+      .then(decoded => { this.musicBuffers[track] = decoded; return decoded; })
+      .catch(() => null);
+    return this.musicLoading[track];
+  }
+
+  async startMusic(track) {
+    this.musicWant = track;
+    if (!this.ctx) return; // starts on ensure() (first user gesture)
+    if (this.musicNodes?.track === track) return;
+    const buf = await this.loadMusic(track);
+    if (!buf || this.musicWant !== track || this.musicNodes?.track === track) return;
+    const t = this.ctx.currentTime;
+    if (this.musicNodes) {
+      const old = this.musicNodes;
+      old.gain.gain.setTargetAtTime(0, t, 0.5);
+      setTimeout(() => { try { old.src.stop(); } catch {} }, 2200);
+    }
+    const src = this.ctx.createBufferSource();
+    src.buffer = buf;
+    src.loop = true;
+    const gain = this.ctx.createGain();
+    gain.gain.setValueAtTime(0, t);
+    gain.gain.setTargetAtTime(this.musicGainValue(), t, 1.2);
+    src.connect(gain).connect(this.ctx.destination);
+    src.start(t);
+    this.musicNodes = { src, gain, track };
+  }
+
+  syncMusicGain() {
+    if (this.musicNodes && this.ctx) {
+      this.musicNodes.gain.gain.setTargetAtTime(this.musicGainValue(), this.ctx.currentTime, 0.15);
+    }
+  }
+
+  setMusicOn(on) {
+    setSetting('musicOn', !!on);
+    this.syncMusicGain();
+  }
+
+  setMusicVolume(v) {
+    setSetting('musicVol', v);
+    this.syncMusicGain();
+  }
+
+  setSfxVolume(v) {
+    setSetting('sfxVol', v);
+    if (this.master) this.master.gain.value = this.sfxGainValue();
   }
 
   loadSamples() {
@@ -70,7 +140,8 @@ export class GameAudio {
   setMuted(m) {
     this.muted = m;
     localStorage.setItem(MUTE_KEY, m ? '1' : '0');
-    if (this.master) this.master.gain.value = m ? 0 : 0.8;
+    if (this.master) this.master.gain.value = this.sfxGainValue();
+    this.syncMusicGain();
   }
 
   noiseBuffer(seconds = 1) {
