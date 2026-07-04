@@ -19,6 +19,20 @@
     }
   },
   {
+    "id": "2026-07-04-miniature-diorama-miniature-basement-laundromat-signal-towe",
+    "title": "Miniature Basement Laundromat Signal Tower",
+    "tests": "Generated via openclaw infer image generate primary openai/gpt-image-2 route; exact output path verified under tool-image-generation; miniature-diorama slot selected to complete July 4 daily mix without repeating recent rain-gutter, storm-drain, or desk-drawer miniature settings.",
+    "prompt": "Build a visibly handmade miniature diorama of a basement laundromat signal tower hidden behind a row of old coin washers, photographed as a finished macro model set on a hobby workbench rather than a full-size room. Show a thumb-sized maintenance platform rising from lint-dusted tile, stacked washer drums repurposed as tiny lookout decks, a matchbox-scale brass signal lamp glowing through blue detergent-bottle plastic, thread-and-copper-wire clothesline antennas, tiny enamel conduit pipes, bead valve handles, a bottle-cap ventilation fan, fabric-softener-sheet curtains, miniature mop bucket, pinhead screws, toothpick ladder rungs, lint fuzz caught in drain grates, chipped cream-and-green painted wall tile, wet floor reflections, and a little service hatch half-open behind the machines. Make the handmade scale unmistakable with visible basswood grain, foamcore wall edges, brush-painted rust, glue beads, uneven cut lines, tweezers, hobby knife, paint jars, a coin, and a scale ruler just outside the set. Use shallow macro depth of field, practical warm LEDs inside the signal lamp, cool fluorescent desk-lamp spill, tactile lint, enamel, plastic, wire, tile grout, and water droplets. Keep it richly detailed, coherent as a physical model, quietly strange, and clearly miniature. Finished image only: no readable labels, no captions, no signs, no poster layout, no watermark, no full-size ambiguity, no people or hands.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Build a visibly handmade miniature diorama of [SCENE], with scale cues, tiny props, model-making materials, macro photography, and practical lighting. Make [SCENE] clearly small-scale by including [SCALE_CUES], [TINY_PROPS], [VISIBLE_MATERIAL_EDGES], [CRAFT_TOOLS_OR_WORKBENCH_CUES], [SURFACE_WEAR], and [LIGHTING/MOOD]. Avoid full-size realism without scale cues, flat paper/poster composition, readable text/logos, people or hands, and watermarks.\n\nWhat the reusable visual operation changes or emphasizes: it turns a hidden, everyday, or imaginary place into a tactile small-scale model set, emphasizing handmade construction, tiny props, visible craft materials, macro depth of field, and physical lighting.\n\nExample substitution: [SCENE] = a basement laundromat signal tower hidden behind old coin washers; [SCALE_CUES] = tweezers, hobby knife, paint jars, coin, scale ruler, foamcore wall edges, glue beads, uneven cut lines; [TINY_PROPS] = washer-drum lookout decks, brass signal lamp, clothesline antennas, conduit pipes, bead valve handles, bottle-cap fan, mop bucket, pinhead screws, and toothpick ladder rungs; [LIGHTING/MOOD] = warm LED signal glow through blue detergent-bottle plastic mixed with cool fluorescent desk-lamp spill, quietly strange and tactile.",
+    "image": "images/2026-07-04-miniature-diorama-miniature-basement-laundromat-signal-towe.jpg",
+    "thumb": "thumbs/2026-07-04-miniature-diorama-miniature-basement-laundromat-signal-towe.webp",
+    "color": "#686255",
+    "date": "2026-07-04",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
+  },
+  {
     "id": "2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild",
     "title": "Glassveil Tidewalker: In the Wild",
     "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under /home/jez237/.openclaw/media/tool-image-generation/.",
