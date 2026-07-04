@@ -1,0 +1,191 @@
+[
+  {
+    "id": "2026-06-24-random-image-style-retro-animation-look",
+    "title": "Retro Animation Look",
+    "tests": "Random rendering style seed entry; tests whether GPT Image 2 can make the chosen visual medium the main variable without turning it into another named daily category.",
+    "prompt": "Create a finished image of a small neighborhood record shop in a retro animation look: rounded shapes, cel-painted color blocks, warm film-grain texture, simplified expressive characters, hand-painted background detail, and a lively Saturday afternoon mood. Reusable template: Create [SUBJECT_OR_SCENE] in [STYLE_OR_MEDIUM], with visible medium-specific texture, composition rules, color behavior, and detail level suited to that rendering style.",
+    "image": "images/2026-06-24-random-image-style-retro-animation-look.jpg",
+    "date": "2026-06-24",
+    "batch": "Random Rendering Style",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "randomRenderingStyle": {
+      "medium": "Retro animation look",
+      "description": "A rendering-style example where the style or visual medium is the main variable rather than a separate subject category.",
+      "template": "Create [SUBJECT_OR_SCENE] in [STYLE_OR_MEDIUM], with visible medium-specific texture, composition rules, color behavior, and detail level suited to that rendering style."
+    }
+  },
+  {
+    "id": "2026-06-25-random-image-style-voxel-rooftop-greenhouse",
+    "title": "Voxel Rooftop Greenhouse",
+    "tests": "Generated with openclaw infer image generate using openai/gpt-image-2; exact PNG output verified before append.",
+    "prompt": "Render a rooftop greenhouse maintenance scene as richly detailed voxel graphics: a compact city roof garden built from crisp cube geometry, translucent glass panels, stepped planters of herbs and dwarf citrus, blocky irrigation tubes, tiny fans, water barrels, seedling trays, and a repair cart with square tools. Use a warm late-afternoon sky, strong readable silhouettes, tactile pixel-cube shadows, varied greens, terracotta, clear aqua glass, and small lived-in details. The image is a finished visual example only: no captions, no labels, no prompt-card text, no logos, no watermarks, no cinematic movie scene.\n\nReusable template: Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text.\n\nOperation: changes the subject into a finished style/medium showcase where the medium controls geometry, texture, lighting, and surface detail rather than acting like a light filter.\n\nNegative constraints: no readable private data, no logos, no watermarks, no prompt cards, no incoherent anatomy, no generic centered product photo.\n\nExample substitution: Render a neighborhood rooftop greenhouse maintenance scene as richly detailed voxel graphics.",
+    "image": "images/2026-06-25-random-image-style-voxel-rooftop-greenhouse.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "voxel graphics",
+      "description": "A rooftop greenhouse maintenance scene rebuilt as tactile cube-based voxel art.",
+      "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
+    }
+  },
+  {
+    "id": "2026-06-26-random-image-style-scratchboard-night-kitchen",
+    "title": "Scratchboard Night Kitchen",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; exact source PNG verified under tool-image-generation; appended as random rendering style and converted/uploaded to R2 by append-entry.py.",
+    "prompt": "Render a cramped late-night apartment galley kitchen as a richly detailed scratchboard illustration. The scene is built from black ink with carved white linework and a few restrained warm amber and dull teal hand-tinted accents: an open enamel sink with stacked mugs, a checked dish towel, a tiny windowsill herb pot, steam curling from a dented kettle, tiled backsplash cracks, hanging utensils, a loaf of bread under a cloth, a small table fan, magnets on the refrigerator with no readable text, rain streaks on the dark window, and pools of lamplight scraped out of the black surface. Make the scratchboard medium unmistakable: dense cross-hatched cuts, burr-like scraped highlights, stippled metal reflections, white edge glints on ceramic and glass, uneven hand-engraved textures, and strong graphic silhouettes. Finished visual example only, no captions, no labels, no prompt-card text, no logos, no watermarks, no cinematic movie framing, no people.\n\nReusable template: Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text.\n\nOperation: changes the subject into a finished style/medium showcase where the medium controls geometry, texture, lighting, and surface detail rather than acting like a light filter.\n\nNegative constraints: no readable private data, no logos, no watermarks, no prompt cards, no incoherent anatomy, no generic centered product photo.\n\nExample substitution: Render a cramped late-night apartment galley kitchen as a richly detailed scratchboard illustration with black ink, carved white linework, amber and dull teal hand-tinted accents, rain-streaked window, enamel sink, steam, utensils, and dense scraped highlights.",
+    "image": "images/2026-06-26-random-image-style-scratchboard-night-kitchen.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "randomRenderingStyle": {
+      "medium": "scratchboard",
+      "description": "A cramped late-night kitchen rendered in carved black-and-white scratchboard with restrained hand-tinted accents.",
+      "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
+    }
+  },
+  {
+    "id": "2026-06-27-random-image-style-needle-felt-rain-gauge",
+    "title": "Needle Felt Rain Gauge",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI on first primary attempt; verified exact same-run PNG path exists and is non-empty before append; random rendering-style slot.",
+    "prompt": "Render a mossy windowsill rain gauge station as a richly detailed needle-felt fiber-art diorama after a summer storm: preserve the clear purpose of the rain gauge, but build it from wool roving, stitched thread ticks, clear resin, tiny felt moss cushions, bead-like raindrops, miniature wool clover leaves, a bent copper wire bracket, felt mud splashes, damp window glass, and handmade scale cues such as a felting needle, thimble, and wool scrap. Use macro photography, cool gray storm light mixed with warm indoor lamp glow, soft fuzzy fiber edges, visible needle punch marks, layered roving color transitions, and tactile handmade detail. Avoid people, hands, readable numbers, labels, logos, watermarks, flat poster composition, instructional text, and realistic plastic product styling.\\n\\nReusable fill-in-the-blank template: Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text. Make [STYLE_OR_MEDIUM] visibly control the materials, lighting, texture, and construction rather than acting like a light filter.\\n\\nExample substitution: [SUBJECT] = a mossy windowsill rain gauge station after a summer storm; [STYLE_OR_MEDIUM] = needle felt fiber-art diorama with wool roving, stitched ticks, felted water beads, clear resin, and macro workbench scale cues.",
+    "image": "images/2026-06-27-random-image-style-needle-felt-rain-gauge.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "needle felt",
+      "description": "A handcrafted fiber-art rain gauge scene with wool fibers, stitched ticks, felted water beads, and macro workbench scale cues.",
+      "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
+    }
+  },
+  {
+    "id": "2026-06-28-random-image-style-random-rendering-style-risograph-toy-rep",
+    "title": "Random rendering style: Risograph Toy Repair Bench",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; exact source PNG verified before append; random rendering style entry added to main archive and random rendering style collection.",
+    "prompt": "Create a finished square image of a crowded toy repair bench rendered as a richly detailed risograph print. The subject is a busy tabletop where wind-up tin toys, a wooden pull duck, a cloth doll with one button eye, a tiny metal robot, loose gears, springs, painted screws, a spool of red thread, tweezers, a magnifying lamp, chipped enamel trays, small jars of spare parts, and torn masking tape are arranged in a clear diagonal composition around an open repair in progress. Make the risograph medium unmistakable: layered spot colors, slight ink misregistration, halftone grain, paper tooth texture, overprinted teal, warm red, mustard yellow, charcoal, and pale blue, with bold simplified shadows and tactile print noise. Use no readable text, no labels, no prompt-card framing, no logos, no watermarks, no cinematic movie still look, and do not make it a plain product photo; the repair activity, tools, opened mechanisms, and printmaking texture should be the visual point.\n\nReusable fill-in-the-blank template: Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text. Make [STYLE_OR_MEDIUM] control the color behavior, texture, mark-making, light, and composition rather than acting like a minor filter.\n\nExample substitution: [SUBJECT] = a crowded toy repair bench with opened wind-up toys, spare gears, thread, tweezers, enamel trays, and a magnifying lamp; [STYLE_OR_MEDIUM] = risograph print with layered spot colors, ink misregistration, halftone grain, and visible paper tooth.\n\nWhat the reusable visual operation changes or emphasizes: it turns a subject into a finished rendering-style showcase where the chosen medium drives surface, palette, edge quality, and detail.\n\nOptional negative constraints: no readable private data, no logos, no watermarks, no prompt cards, no cinematic scene framing, no generic centered product photo.",
+    "image": "images/2026-06-28-random-image-style-random-rendering-style-risograph-toy-rep.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "risograph print",
+      "description": "A toy repair bench rendered as a tactile risograph print with spot colors, halftone grain, paper texture, and slight ink misregistration.",
+      "template": "Render [SUBJECT] as a richly detailed [STYLE_OR_MEDIUM] image with tactile format-specific marks, clear subject silhouette, environmental context, and no prompt-card text."
+    }
+  },
+  {
+    "id": "2026-06-29-random-image-style-random-rendering-style-technical-airbrus",
+    "title": "Random rendering style: Technical Airbrush Aquarium Workshop",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; verified exact PNG output path existed before append; append-entry converted to JPEG and uploaded to R2.",
+    "prompt": "Create a finished square image of a crowded aquarium maintenance workshop rendered as richly detailed technical airbrush art, like a late-1970s precision illustration painted with smooth gradients, crisp masking, soft sprayed highlights, and controlled edge work. The subject is a practical workbench scene, not a poster: clear acrylic quarantine tanks with condensation beads, coiled silicone tubing, brass hose valves, algae scrapers, siphon bulbs, filter cartridges opened for inspection, ceramic bio-media in small trays, test vials with colored liquid, damp towels, unlabeled buckets, and a magnifying lamp casting clean white light across wet glass and metal. Use layered perspective and visible hand-rendered airbrush texture, tiny droplets, translucent water surfaces, reflections, and shadowed tool drawers. No readable text, no logos, no prompt-card layout, no centered product photo, no cinematic scene, no people as the focus.\n\nReusable template: Render a crowded [WORKSHOP_OR_MAINTENANCE_SPACE] as a richly detailed [STYLE_OR_MEDIUM] image with [TOOLS], [WET_OR_REFLECTIVE_SURFACES], [OPENED_PARTS_OR_MATERIAL_TRAYS], [SPECIFIC_LIGHTING], and no prompt-card text.",
+    "image": "images/2026-06-29-random-image-style-random-rendering-style-technical-airbrus.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "technical airbrush",
+      "description": "A detailed aquarium maintenance workbench rendered as precise late-1970s technical airbrush art.",
+      "template": "Render a crowded [WORKSHOP_OR_MAINTENANCE_SPACE] as a richly detailed [STYLE_OR_MEDIUM] image with [TOOLS], [WET_OR_REFLECTIVE_SURFACES], [OPENED_PARTS_OR_MATERIAL_TRAYS], [SPECIFIC_LIGHTING], and no prompt-card text."
+    }
+  },
+  {
+    "id": "2026-06-30-random-image-style-random-rendering-style-voxel-seed-vault-",
+    "title": "Random rendering style: Voxel Seed-Vault Workroom",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified exact output path exists; archive JSON parse and R2 URL checks performed after append.",
+    "prompt": "Create a finished square image of a subterranean seed-vault workroom rendered as richly detailed voxel graphics, like a tactile block-built 3D scene with tiny cubic geometry, crisp stepped shadows, and no text. The subject is an active conservation workspace, not a poster and not a centered object photo: tiered cold-storage shelves made of tiny translucent frosted voxel blocks, seed jars with colored caps but no readable labels, open sorting trays of varied seeds, a blocky magnifier lamp, insulated sample crates, frost on the floor tiles, copper pipe condensate, a small germination test bench with damp paper grids represented only as texture, gloved blocky hands visible at the edge arranging trays without showing a face, a rolling cart with soil plugs, humidity beads, amber status lights, and a curved concrete tunnel wall behind it. Make the voxel medium control everything: visible cube units, chunky edges, stepped light falloff, gridded reflections on glass, small block particles, and layered depth like a high-end isometric game asset photographed with macro depth of field. Use a palette of cold mint glass, dark concrete, warm amber lamps, copper pipes, red seed caps, pale wood trays, and soft white frost. Avoid readable text, logos, watermarks, paper-poster layout, cinematic scene framing, flat illustration, realistic photo texture, and any result that looks like a normal room with a voxel filter.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect.\n\nExample substitution: [SUBJECT_OR_WORKSPACE] = a subterranean seed-vault workroom; [STYLE_OR_MEDIUM] = voxel graphics; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = tiny cubic geometry, chunky edges, stepped light falloff, gridded glass reflections, small block particles; [ENVIRONMENTAL_CONTEXT] = curved concrete tunnel, frost, copper pipes, cold-storage shelves; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = seed sorting trays, germination bench, rolling cart, gloved hands at the edge; [SPECIFIC_PALETTE] = cold mint glass, dark concrete, warm amber lamps, copper pipes, red seed caps, pale wood trays, and soft white frost.",
+    "image": "images/2026-06-30-random-image-style-random-rendering-style-voxel-seed-vault-.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "voxel graphics",
+      "description": "A subterranean seed-vault conservation workroom built as a dense voxel-graphics scene with glass shelves, seed trays, frost, copper pipes, and amber work lights.",
+      "template": "Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect."
+    }
+  },
+  {
+    "id": "2026-07-01-random-image-style-random-rendering-style-stained-glass-lau",
+    "title": "Random rendering style: Stained Glass Laundromat Nursery",
+    "tests": "Generated with GPT Image 2 through the OpenClaw CLI; verified exact PNG provenance path, random rendering-style slot, stained-glass medium, finished visual example, no prompt-card text, no readable labels, and no flat document layout.",
+    "prompt": "Create a finished square image of an after-hours laundromat converted into a plant nursery, rendered as richly detailed stained glass art rather than a photograph or poster. The scene shows rows of circular washing-machine doors transformed into glowing glass rondels, shelves of propagated pothos and begonias, glass jars with cuttings in water, a rolling metal laundry cart full of terracotta pots, damp floor reflections, hanging grow lights as jewel-like halos, watering cans, seed trays, folded towels, and a back wall of dark window panes with rain outside. Make the stained-glass medium unmistakable: lead came outlines of varied thickness, translucent colored glass pieces, rippled cathedral glass texture, opalescent whites, emerald and jade plant glass, amber lamp glow, cobalt night windows, ruby and peach accents, solder seams, small bubbles and striations in the glass, and light passing through the panels onto the floor. Use a three-quarter interior composition with deep perspective down the laundromat aisle, dense tactile detail, clear silhouettes, and no readable text, no signage, no labels, no logos, no watermark, no prompt-card framing, no cinematic movie still, no plain centered object display, and no flat document layout.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls the color, edge quality, surface texture, lighting, and composition. Include [ENVIRONMENTAL_CONTEXT], [TACTILE_DETAILS], [FUNCTIONAL_OBJECTS], [MATERIAL_TEXTURES], and [LIGHTING_BEHAVIOR]. Keep the finished image as a visual example rather than an instruction card: no readable text, logos, labels, watermarks, prompt framing, flat document layout, or generic centered object display.\n\nWhat the reusable visual operation changes or emphasizes: it turns a place or scene into a finished rendering-style showcase where the chosen medium drives structure, palette, transparency, light behavior, and fine surface detail.\n\nExample substitution: [SUBJECT_OR_PLACE] = an after-hours laundromat converted into a plant nursery; [STYLE_OR_MEDIUM] = stained glass art; [ENVIRONMENTAL_CONTEXT] = rain-dark windows, damp floor reflections, and deep perspective down a laundromat aisle; [TACTILE_DETAILS] = lead came outlines, rippled cathedral glass, opalescent whites, bubbles, solder seams, and glass striations; [FUNCTIONAL_OBJECTS] = washing-machine rondels, propagated plants, glass jars, laundry cart, terracotta pots, grow lights, watering cans, seed trays, and folded towels; [LIGHTING_BEHAVIOR] = amber grow-light halos and cobalt rainy night glass casting colored reflections.",
+    "image": "images/2026-07-01-random-image-style-random-rendering-style-stained-glass-lau.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "stained glass art",
+      "description": "An after-hours laundromat plant nursery rebuilt as luminous stained glass, with lead seams, rippled colored panes, and rainlit reflections.",
+      "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls color, edge quality, surface texture, lighting, and composition."
+    }
+  },
+  {
+    "id": "2026-07-02-random-image-style-random-rendering-style-low-poly-rainwate",
+    "title": "Random rendering style: Low-Poly Rainwater Garden Pump Room",
+    "tests": "Prompt adherence; low-poly 3D medium clarity; non-paper random style; reusable prompt template included",
+    "prompt": "Create a finished square image of a rooftop rainwater garden pump room rendered as richly detailed low-poly 3D art, not a photograph and not a poster. The scene shows a compact rooftop service alcove after rain with faceted water tanks, angular ceramic planters of herbs and sedges, triangular puddles on dark rubber roofing, copper downspouts feeding a transparent cistern, a small hand pump opened for inspection, polygonal pipe elbows, mesh leaf screens, wet tool trays, coiled hose, basalt stepping pavers, and a skyline reduced to simple faceted silhouettes beyond the parapet. Make the low-poly 3D medium unmistakable: crisp planar geometry, visible polygon facets, bevelled edges, ambient occlusion in corners, matte clay-like surfaces, stylized but precise reflections on water, restrained teal rainwater, copper pipe highlights, moss green plants, warm maintenance lamp glow, and cool gray evening sky. Use an isometric three-quarter composition with dense readable object detail and no readable text, no logos, no watermark, no prompt-card framing, no cinematic movie-still lighting, no flat document layout, and no centered product photo.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls geometry, color behavior, edge quality, texture, lighting, and composition. Include [ENVIRONMENTAL_CONTEXT], [FUNCTIONAL_OBJECTS], [TACTILE_DETAILS], [MATERIAL_TEXTURES], and [LIGHTING_BEHAVIOR]. Keep the finished image as a visual example rather than an instruction card: no readable text, logos, labels, watermarks, prompt framing, flat document layout, cinematic scene framing, or generic centered object display.\n\nExample substitution: [SUBJECT_OR_PLACE] = a rooftop rainwater garden pump room after rain; [STYLE_OR_MEDIUM] = low-poly 3D art; [ENVIRONMENTAL_CONTEXT] = rooftop parapet, faceted skyline, wet rubber roofing, triangular puddles; [FUNCTIONAL_OBJECTS] = water tanks, transparent cistern, copper downspouts, open hand pump, pipe elbows, mesh screens, wet tool trays, coiled hose, ceramic planters; [TACTILE_DETAILS] = crisp polygon facets, bevelled edges, ambient occlusion, matte clay-like surfaces, precise stylized water reflections; [LIGHTING_BEHAVIOR] = warm maintenance lamp glow against a cool gray evening sky.",
+    "image": "images/2026-07-02-random-image-style-random-rendering-style-low-poly-rainwate.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "low-poly 3D art",
+      "description": "A faceted low-poly rooftop rainwater garden pump room with cisterns, copper pipes, wet planters, and maintenance tools.",
+      "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] image where the medium controls geometry, color behavior, edge quality, texture, lighting, and composition."
+    }
+  },
+  {
+    "id": "2026-07-03-random-image-style-random-rendering-style-glazed-ceramic-gr",
+    "title": "Random rendering style: Glazed Ceramic Greenhouse Pump Room",
+    "tests": "Random rendering-style slot; physical glazed ceramic bas-relief medium; no readable text, no flat paper, no centered object display.",
+    "prompt": "Create a finished square image of an urban greenhouse pump room rendered as a richly detailed glazed ceramic bas-relief, photographed as a physical wall-mounted tile panel rather than a poster or ordinary room photo. The medium must control the whole image: raised clay contours, hand-carved grout channels, glossy pooled glaze, crackle in translucent teal water channels, matte unglazed terracotta pipe shadows, kiln-speckled white highlights, slightly warped tile seams, and real raking light catching the relief edges. Show a dense but readable maintenance scene in low relief: arched greenhouse ribs, rainwater cisterns, hand wheels, ceramic pump housings opened for inspection, coiled hose as raised clay loops, seedling trays on stepped benches, water droplets as raised glassy beads, small tool shelves, pressure gauges represented as simple glazed dials with no readable numbers, and a technician’s gloved hands only at the panel edge adjusting a valve. Use a varied palette of teal glaze, brick red clay, deep green leaves, warm ivory grout, cobalt shadow, brass-yellow accents, and black oxide line work. Make it feel like a handcrafted public-works mural seen in a workshop, with tiny chips, glaze runs, fingerprints, dust on the lower ledge, and side lighting; no readable text, no labels, no logos, no flat paper, no prompt-card layout, no cinematic scene, no generic centered object display, no clean digital filter.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls the construction, lighting, texture, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect.\n\nExample substitution: [SUBJECT_OR_WORKSPACE] = an urban greenhouse pump room; [STYLE_OR_MEDIUM] = glazed ceramic bas-relief; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = raised clay contours, grout channels, pooled glaze, crackle, tile seams, carved edges; [ENVIRONMENTAL_CONTEXT] = arched greenhouse ribs, rainwater cisterns, seedling benches, dusty workshop ledge; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = open pump housings, valve adjustment, coiled hose, tool shelves, simple gauges; [SPECIFIC_PALETTE] = teal glaze, brick red clay, deep green leaves, warm ivory grout, cobalt shadow, brass-yellow accents, black oxide line work.",
+    "image": "images/2026-07-03-random-image-style-random-rendering-style-glazed-ceramic-gr.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "glazed ceramic bas-relief",
+      "description": "A greenhouse pump room reimagined as a handcrafted glazed ceramic relief tile panel with raised clay, pooled glaze, and workshop lighting.",
+      "template": "Render [SUBJECT_OR_WORKSPACE] as a richly detailed [STYLE_OR_MEDIUM] image where the chosen medium visibly controls construction, lighting, texture, and spatial logic; include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail; avoid readable text, logos, prompt-card layout, plain centered object display, and a generic filter effect."
+    }
+  },
+  {
+    "id": "2026-07-04-random-image-style-random-rendering-style-embroidered-tidep",
+    "title": "Random rendering style: Embroidered Tidepool Tram Stop",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified exact PNG output path before append; appended as high-quality JPEG and uploaded to R2 by append-entry.py.",
+    "prompt": "Create a finished square image of a tiny tidepool tram stop rendered as richly detailed raised embroidery and stumpwork textile art, photographed close like a museum textile under soft raking light. The subject is a whimsical coastal transit scene made entirely from thread, felt, beads, and stitched fabric, not a poster and not a flat graphic: a thumb-sized tram shelter perched on barnacle-covered rocks, a miniature cable tram made from layered satin stitches and padded felt panels, seaweed handrails in twisted green floss, bead tidepools with clear glass seed beads and pearly French knots, tiny embroidered anemones, stitched limpets, silver-thread rail lines disappearing over wet rocks, a shell-fragment bench made from cream felt, a small maintenance tool roll, tide marks in variegated blue thread, salt crystals suggested by white knots, and a low horizon of fabric waves behind it. Make the medium visibly control everything: raised padded forms, couching, satin stitch, chain stitch, French knots, frayed fabric edges, visible hoop tension, needle holes, thread sheen, soft shadows between stitched layers, and a few sewing pins and embroidery scissors just outside the hoop for scale. Use a palette of sea-glass teal, kelp green, coral pink, pearl white, charcoal rock, tarnished silver, and warm brass tram lamps. Avoid readable text, logos, watermarks, paper-poster layout, ordinary photo realism, generic filter effect, cinematic scene framing, and any result that looks like a flat printed illustration rather than handmade textile relief.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_SCENE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, cinematic scene framing, and a generic filter effect.\n\nExample substitution: [SUBJECT_OR_SCENE] = a tiny tidepool tram stop; [STYLE_OR_MEDIUM] = raised embroidery and stumpwork textile art; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = padded forms, couching, satin stitch, chain stitch, French knots, frayed fabric edges, visible hoop tension, needle holes, thread sheen, sewing pins, and embroidery scissors; [ENVIRONMENTAL_CONTEXT] = barnacle-covered rocks, bead tidepools, fabric waves, stitched limpets, anemones, salt knots, and silver-thread rails; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = miniature cable tram, tram shelter, seaweed handrails, shell-fragment bench, and maintenance tool roll; [SPECIFIC_PALETTE] = sea-glass teal, kelp green, coral pink, pearl white, charcoal rock, tarnished silver, and warm brass lamps.",
+    "image": "images/2026-07-04-random-image-style-random-rendering-style-embroidered-tidep.jpg",
+    "thumb": "thumbs/2026-07-04-random-image-style-random-rendering-style-embroidered-tidep.webp",
+    "color": "#57544b",
+    "date": "2026-07-04",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "raised embroidery and stumpwork textile art",
+      "description": "A handmade-looking coastal tram stop scene built from padded stitches, beads, felt, floss, and visible textile relief.",
+      "template": "Render [SUBJECT_OR_SCENE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, plain centered object display, cinematic scene framing, and a generic filter effect."
+    }
+  }
+]
