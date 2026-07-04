@@ -33,14 +33,17 @@ jobs:
           eastern_hour="$(TZ=America/New_York date +%H)"
           eastern_minute="$(TZ=America/New_York date +%M)"
           eastern_total=$((10#$eastern_hour * 60 + 10#$eastern_minute))
+          # GitHub cron fires with 20-90 minute lag, so the window and the
+          # full-refresh band are generous: any run landing between 3:55 PM
+          # and 5:00 PM Eastern rebuilds the full history for the day.
           market_start=$((9 * 60 + 30))
-          market_end=$((16 * 60 + 35))
-          close_run=$((16 * 60 + 30))
+          market_end=$((17 * 60))
+          close_run=$((15 * 60 + 55))
           if [ "$eastern_total" -ge "$market_start" ] && [ "$eastern_total" -le "$market_end" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping outside 9:30 AM-4:35 PM Eastern refresh window."
+            echo "Skipping outside 9:30 AM-5:00 PM Eastern refresh window."
           fi
           # Intraday runs refresh quotes and intraday chart ranges only; the
           # post-close run (and manual dispatch) rebuilds the full history.
@@ -56,6 +59,12 @@ jobs:
         env:
           STOCK_REFRESH_MODE: ${{ steps.market_window.outputs.mode }}
         run: node scripts/refresh_stock_market_data.mjs
+
+      # Pushes made with GITHUB_TOKEN never trigger other workflows, so the
+      # data validation runs here instead of relying on a push-triggered run.
+      - name: Validate refreshed data
+        if: steps.market_window.outputs.run == 'true' || github.event_name == 'workflow_dispatch'
+        run: node scripts/validate_stock_market.mjs --data-only
 
       - name: Commit and push changes (if any)
         id: commit_changes
