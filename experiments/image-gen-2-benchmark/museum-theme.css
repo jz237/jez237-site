@@ -197,7 +197,9 @@ footer { color: var(--muted) !important; }
 
 /* unified centered museum header (series pages) */
 .museum-hero {
-  position: relative;
+  /* assets/styles.css makes bare <header> sticky; force normal flow */
+  position: relative !important;
+  top: auto !important;
   overflow: hidden;
   text-align: center;
   padding: 16px 22px 18px !important;
