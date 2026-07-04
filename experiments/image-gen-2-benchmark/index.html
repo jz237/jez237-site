@@ -302,6 +302,8 @@
     .card:hover { border-color: var(--hair-strong); }
     .image-wrap { background: #0b0906; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid var(--hair); }
     .image-wrap.portrait { aspect-ratio: 2 / 3; }
+    .image-wrap.landscape { aspect-ratio: 3 / 2; }
+    .image-wrap.landscape img { object-fit: contain; background: #0b0906; }
     .image-wrap::before {
       content: "";
       position: absolute;
@@ -645,11 +647,13 @@
 
       // --- rendering (append-only) ---
       function cardHtml(item) {
-        const portrait = String(item.size || '').includes('1536') || String(item.image || '').includes('almanac');
+        const sizeMatch = String(item.size || '').match(/^(\d+)x(\d+)$/);
+        const portrait = sizeMatch ? Number(sizeMatch[2]) > Number(sizeMatch[1]) : (String(item.size || '').includes('portrait') || String(item.image || '').includes('almanac'));
+        const landscape = sizeMatch ? Number(sizeMatch[1]) > Number(sizeMatch[2]) : false;
         const color = /^#[0-9a-f]{6}$/i.test(String(item.color || '')) ? item.color : '#0b0906';
         return `
           <article class="card" id="${escapeHtml(item.id)}">
-            <div class="image-wrap${portrait ? ' portrait' : ''}" style="background:${color}"><img src="${escapeHtml(thumbUrl(item))}" data-item-id="${escapeHtml(item.id)}" data-full="${escapeHtml(imageUrl(item))}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="image-wrap${portrait ? ' portrait' : landscape ? ' landscape' : ''}" style="background:${color}"><img src="${escapeHtml(thumbUrl(item))}" data-item-id="${escapeHtml(item.id)}" data-full="${escapeHtml(imageUrl(item))}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
             <div class="content">
               <div class="kicker-row">
                 <div class="kicker">${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}</div>
