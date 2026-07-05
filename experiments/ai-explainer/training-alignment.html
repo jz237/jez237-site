@@ -919,7 +919,9 @@
         const tally = {};
         prefPicks.forEach(pick => pick.traits.forEach(trait => { tally[trait] = (tally[trait] || 0) + 1; }));
         const learned = Object.keys(tally).sort((a, b) => tally[b] - tally[a]);
-        document.getElementById('prefSignal').innerHTML = `<strong>Reward signal learned from your picks:</strong> answers that ${learned.map(t => `<em>${t}</em>`).join(', ')} score higher.<br><br>A reward model trained on millions of such picks scores new answers automatically, and reinforcement learning adjusts the assistant until high-scoring answers become its default behavior. You just did, three times, what RLHF raters do all day.`;
+        const badTraits = ['sounded confident without checking anything', 'buried the point in jargon'];
+        const rewardedBad = learned.some(trait => badTraits.includes(trait));
+        document.getElementById('prefSignal').innerHTML = `<strong>Reward signal learned from your picks:</strong> answers that ${learned.map(t => `<em>${t}</em>`).join(', ')} score higher.<br><br>A reward model trained on millions of such picks scores new answers automatically, and reinforcement learning adjusts the assistant until high-scoring answers become its default behavior. You just did, three times, what RLHF raters do all day.${rewardedBad ? '<br><br><strong>Notice what you rewarded:</strong> at least one pick favored an answer that bluffed or buried the point. Multiply that across millions of ratings and the model learns those habits — this is exactly how over-confident, flattering behavior gets trained in.' : ''}`;
         return;
       }
       const round = prefRounds[prefRound];
