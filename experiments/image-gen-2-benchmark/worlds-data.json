@@ -1566,5 +1566,25 @@
       "continuity": "Preserves Thornlight Meridian's ochre mesas, chalk wind canyons, amber crystal-thorn technology, dust-silk shade cloth, prism beads, wind-harp infrastructure, and non-human gliding inhabitants.",
       "entryDescription": "Gate inspectors test a hand-tuned updraft gate while Keth places the final prism bead and clean spiral dust ribbons show the meridian wind returning."
     }
+  },
+  {
+    "id": "2026-07-05-weekly-world-image-thornlight-meridian-night-cold-ravine-sh",
+    "title": "Thornlight Meridian: Night Cold Ravine Shelter",
+    "tests": "Prompt follows weekly-world canon; non-human inhabitants only; story beat advances to restored dawn; no readable text or logos.",
+    "prompt": "Create a finished square realistic photographed daily-life image from the invented alien world Thornlight Meridian, story beat 12 of 12: families shelter through the last cold ravine night while repaired wind-harp weather sounds settle into the correct pattern and the first restored dawn glow appears at the ravine edge. Show the interior mouth of a shadow-cold chalk-white ravine shelter carved into ochre mesa stone: curved porous sun-baked ceramic alcoves, bone-white dust-silk shade cloth hung as wind baffles, warm amber ceramic heat stones arranged in shallow basins, prism glass bead lanterns casting small dawn-colored glints, copper root-fiber cords, matte basalt tools, repaired blue wax leaf laminate wing braces, and a polished wind-harp resonator frame near the entrance vibrating in the returning correct tone. Include non-human gliding inhabitants only: narrow mantislike torsos, four walking limbs, two folded sail-limbs with translucent amber wing membranes, long balancing tails, matte slate skin, faceted side eyes, and delicate mouth feelers; show varied ages gathered in a calm communal shelter, juveniles tucked under folded wing membranes, elders listening to throat-click echoes, and the returning repair crew resting with dusty tool bundles. At the ravine edge, the first hot amber dawn band catches amber crystal-thorn tips and blue fan leaves outside, with floating mineral dust halos and a thin line of renewed dew spines beginning to shine. Use crisp dry air, tactile ceramic wear, chalk dust on claws, fabric fibers, worn copper, practical warmth against cold violet shadows, believable documentary lens depth, and dense inspectable material detail. Make it clearly alien but plausible and lived-in, not a movie still. No humans, no Earth desert town, no mushrooms or spores, no glass space habitat, no medieval fantasy, no neon cyberpunk, no brand logos, no readable text, no captions, no watermark, no prompt-card framing, no gore.\n\nReusable fill-in-the-blank template: Create a realistic photographed daily-life scene from [INVENTED_WORLD_NAME] at story beat [STORY_ORDER]/[PLANNED_COUNT], showing [CHARACTER_GROUP] doing [PLOT_RELEVANT_ACTIVITY] in [WORLD_SPECIFIC_LOCATION]. Preserve [WORLD_ECOLOGY], [NON_HUMAN_INHABITANTS], [MATERIAL_CULTURE], [TRANSIT_OR_INFRASTRUCTURE], [PALETTE_AND_LIGHTING], and [CONTINUITY_FROM_PREVIOUS], while avoiding generic Earth settings, humans as the main society, readable text, logos, and unrelated fantasy or sci-fi motifs.\n\nExample substitution: [INVENTED_WORLD_NAME] = Thornlight Meridian; [STORY_ORDER]/[PLANNED_COUNT] = 12/12; [CHARACTER_GROUP] = families, elders, juveniles, and the returning repair crew; [PLOT_RELEVANT_ACTIVITY] = sheltering through the last cold night as the repaired wind-harp tone settles and dawn returns; [WORLD_SPECIFIC_LOCATION] = a chalk ravine shelter with ceramic alcoves and heat stones.",
+    "image": "images/2026-07-05-weekly-world-image-thornlight-meridian-night-cold-ravine-sh.jpg",
+    "thumb": "thumbs/2026-07-05-weekly-world-image-thornlight-meridian-night-cold-ravine-sh.webp",
+    "color": "#5d473e",
+    "date": "2026-07-05",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light.",
+      "continuity": "Preserves Thornlight Meridian's ochre mesas, chalk ravines, amber crystal thorns, wind-harp infrastructure, dust-silk shade cloth, blue fan leaves, and non-human gliding inhabitants with translucent amber sail-limbs.",
+      "entryDescription": "Families, elders, juveniles, and the returning repair crew wait in a cold ravine shelter as the repaired wind-harp tone settles and the first restored dawn glow reaches the ravine edge."
+    }
   }
 ]
