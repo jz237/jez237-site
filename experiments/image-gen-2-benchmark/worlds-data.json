@@ -1546,5 +1546,25 @@
       "continuity": "Preserves the amber crystal-thorn groves, dust-silk shade cloth, wind-harp infrastructure, prism beacon cairns, non-human gliding inhabitants, and the failing updraft-gate repair arc.",
       "entryDescription": "Keth, Sava, ferry handlers, and apprentices load resonator pieces, water bulbs, and signal frames onto a dust-sail ferry before crossing the mirror salt pan toward the damaged updraft gate."
     }
+  },
+  {
+    "id": "2026-07-05-weekly-world-image-thornlight-meridian-updraft-gate-inspect",
+    "title": "Thornlight Meridian: Updraft Gate Inspection",
+    "tests": "Weekly world image for Thornlight Meridian story order 11: Keth and gate inspectors retune the updraft gate as dust ribbons rise and the meridian wind begins to return.",
+    "prompt": "Create a finished square photorealistic documentary image from the invented alien world Thornlight Meridian, titled \"Thornlight Meridian: Updraft Gate Inspection\". Show a dawn canyon-rim work platform built from porous ceramic and amber thorn-crystal struts, cantilevered over a chalk-white wind canyon. Non-human gliding inhabitants with narrow mantislike torsos, four walking limbs, folded amber sail-limbs, long balancing tails, matte slate skin, faceted side eyes, and delicate mouth feelers inspect a hand-tuned updraft gate. Keth, a young Sunneedle Roost courier, leans from a copper-root safety line to seat the final prism glass bead into a wind-harp resonator frame while two apprentice tuners adjust matte basalt tuning keys, Sava steadies a blue wax-leaf laminate tool tray, and older inspectors watch translucent dust ribbons lift in clean spirals as the meridian wind begins to return. Include bone-white dust-silk shade cloth, glider silhouettes far below, violet glass dunes beyond the ravine, amber crystal-thorn clusters, wing-shimmer and tail-tap communication posture, worn ceramic edges, mineral dust on tools, bead reflections, and dense tactile dawn light. Avoid humans, Earth towns, mushrooms, tidal mudflat motifs, neon cyberpunk, readable text, logos, and poster layout.\n\nReusable fill-in-the-blank template: Create a realistic photographed daily-life image from the invented weekly world [WORLD_NAME], preserving [WORLD_GEOGRAPHY], [NON_HUMAN_INHABITANTS], [MATERIALS_TECHNOLOGY], [PALETTE_LIGHTING], and [RECURRING_MOTIFS]. Show [CHARACTER_OR_GROUP] performing [STORY_BEAT_ACTION] in [SPECIFIC_LOCATION], with visible ecology, tools, body language, scale cues, material wear, and continuity from previous story beats. Keep it as a lived-in world photograph rather than an infographic, prompt card, or cinematic scene.\n\nExample substitution: [WORLD_NAME] = Thornlight Meridian; [WORLD_GEOGRAPHY] = ochre mesa seas, chalk-white wind canyons, violet glass dunes, amber crystal-thorn groves, floating dust halos, and sunrise meridian bands; [NON_HUMAN_INHABITANTS] = gliding slate-skinned, mantislike inhabitants with four walking limbs, folded amber sail-limbs, long tails, faceted side eyes, and mouth feelers; [MATERIALS_TECHNOLOGY] = porous ceramic, amber thorn-crystal, dust-silk, blue wax leaf laminate, matte basalt tools, copper root fiber, prism glass beads, and wind-harp resonator frames; [STORY_BEAT_ACTION] = inspectors testing an updraft gate while Keth places the final prism bead and the meridian wind returns.",
+    "image": "images/2026-07-05-weekly-world-image-thornlight-meridian-updraft-gate-inspect.jpg",
+    "thumb": "thumbs/2026-07-05-weekly-world-image-thornlight-meridian-updraft-gate-inspect.webp",
+    "color": "#7a655a",
+    "date": "2026-07-05",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Thornlight Meridian",
+      "description": "A dry alien highland world where dawn-powered crystal thorns, wind-harp canyons, and long-limbed gliding inhabitants make cities along moving bands of warm light.",
+      "continuity": "Preserves Thornlight Meridian's ochre mesas, chalk wind canyons, amber crystal-thorn technology, dust-silk shade cloth, prism beads, wind-harp infrastructure, and non-human gliding inhabitants.",
+      "entryDescription": "Gate inspectors test a hand-tuned updraft gate while Keth places the final prism bead and clean spiral dust ribbons show the meridian wind returning."
+    }
   }
 ]
