@@ -150,6 +150,7 @@
     const rotFactor = BG_MODE ? (bgRot > 0 ? bgRot : 0.5) : 1;
     if (BG_MODE) {
       controls.enableZoom = false;
+      controls.autoRotateSpeed = 0.9 * rotFactor;
     }
 
     const world = new THREE.Group();
@@ -1075,17 +1076,23 @@
     window.addEventListener("resize", resize);
     resize();
 
+    let animClock = 0;
     function animate() {
       requestAnimationFrame(animate);
-      const elapsed = clock.getElapsedTime();
-      const delta = clock.getDelta();
+      // Only call getDelta() (calling getElapsedTime() too would consume the
+      // delta and leave it ~0). Scale animation time by rotFactor so the whole
+      // globe — camera spin, clouds, arcs, rings, stars — slows/speeds as one.
+      const rawDelta = clock.getDelta();
+      animClock += rawDelta * rotFactor;
+      const elapsed = animClock;
+      const delta = rawDelta * rotFactor;
 
       if (!reduceMotion) {
         controls.autoRotateSpeed = THREE.MathUtils.damp(
           controls.autoRotateSpeed,
           targetAutoRotateSpeed,
           4,
-          delta
+          rawDelta
         );
       }
 
