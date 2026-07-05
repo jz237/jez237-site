@@ -95,6 +95,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  object-position: center 25%; /* bias crops toward the top so faces stay in frame */
   display: block;
 }
 .pg-card .pg-meta { padding: 10px 12px 12px; }
