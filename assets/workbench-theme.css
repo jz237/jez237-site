@@ -623,6 +623,26 @@ p,
   color: var(--wb-gold, #f1d18e);
   border-bottom-color: currentColor;
 }
+.weather-radar-embed {
+  margin: 4px 0 18px;
+}
+.weather-radar-embed iframe {
+  display: block;
+  width: 100%;
+  height: 420px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  background: rgba(10, 14, 20, 0.55);
+}
+.weather-radar-embed .weather-radar-link {
+  margin: 10px 0 0;
+}
+.weather-radar-embed .weather-radar-link a {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+}
 .weather-metric span {
   display: block;
   margin-bottom: 8px;
@@ -1021,6 +1041,9 @@ p,
     overflow-wrap: anywhere;
     font-size: 22px;
   }
+  .weather-radar-embed iframe { height: 300px; border-radius: 12px; }
+  .weather-radar-embed .weather-radar-link { margin: 8px 0 0; }
+  .weather-radar-embed .weather-radar-link a { font-size: 14px; }
   .weather-nws-summary,
   .weather-air-detail,
   .weather-alert,

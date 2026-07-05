@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="../assets/styles.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../assets/design.css" />
-  <link rel="stylesheet" href="../assets/workbench-theme.css?v=20260506-mobile-overflow-fix" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css?v=20260704-radar-embed" />
   <style>
     main.container { max-width: 1200px; margin: 0 auto; padding: 22px clamp(16px,3vw,40px) 80px; }
     .weather-page-intro { margin-bottom: 18px; }
@@ -52,7 +52,8 @@
       .weather-location-form { display: grid !important; grid-template-columns: minmax(0,1fr) auto auto !important; gap: 7px !important; }
       .weather-location-form label { grid-column: 1 / -1 !important; }
       .weather-location-form input { width: 100% !important; min-width: 0 !important; }
-      .weather-radar-link a { display: block !important; white-space: normal !important; overflow-wrap: anywhere !important; font-size: 22px !important; }
+      .weather-radar-link a { display: block !important; white-space: normal !important; overflow-wrap: anywhere !important; font-size: 14px !important; }
+      .weather-radar-embed iframe { height: 300px !important; border-radius: 12px !important; }
       .weather-nws-summary,
       .weather-air-detail,
       .weather-alert,
@@ -104,7 +105,10 @@
         <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
           <div id="philly-weather-widget"></div>
           <figure style="margin-top:22px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:linear-gradient(135deg,rgba(13,19,28,.88),rgba(11,15,20,.7));box-shadow:0 18px 46px rgba(0,0,0,.22);">
-            <img src="almanac/latest.jpg" alt="Illustrated Philly 19111 weather almanac" loading="lazy" decoding="async" style="display:block;width:min(100%,760px);height:auto;margin:0 auto;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);">
+            <picture>
+              <source srcset="almanac/latest.webp" type="image/webp">
+              <img src="almanac/latest.jpg" alt="Illustrated Philly 19111 weather almanac" width="800" height="1421" loading="lazy" decoding="async" style="display:block;width:min(100%,760px);height:auto;margin:0 auto;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);">
+            </picture>
           </figure>
         </section>
       </div>
@@ -119,6 +123,6 @@
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/side-menu.js?v=chronicle-20260612" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
-  <script src="../assets/weather-widget.js?v=20260506-forecast-audit" defer></script>
+  <script src="../assets/weather-widget.js?v=20260704-radar-embed" defer></script>
 </body>
 </html>
