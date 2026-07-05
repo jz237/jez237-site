@@ -1,0 +1,28 @@
+{
+  "sfx": {
+    "collect":   { "file": "collect.mp3",   "loop": false, "gain": 0.6 },
+    "roll":      { "file": "roll.mp3",      "loop": false, "gain": 0.5 },
+    "stone":     { "file": "stone.mp3",     "loop": false, "gain": 0.45 },
+    "nut":       { "file": "nut.mp3",       "loop": false, "gain": 0.4 },
+    "crack":     { "file": "crack.mp3",     "loop": false, "gain": 1.0 },
+    "squash":    { "file": "squash.mp3",    "loop": false, "gain": 0.7 },
+    "diamond":   { "file": "diamond.mp3",   "loop": false, "gain": 0.5 },
+    "drip":      { "file": "drip.mp3",      "loop": false, "gain": 0.4 },
+    "door":      { "file": "door.mp3",      "loop": false, "gain": 0.7 },
+    "dynamite":  { "file": "dynamite.mp3",  "loop": false, "gain": 0.6 },
+    "boom":      { "file": "boom.mp3",      "loop": false, "gain": 1.0 },
+    "die":       { "file": "die.mp3",       "loop": false, "gain": 0.8 },
+    "exit":      { "file": "exit.mp3",      "loop": false, "gain": 0.9 },
+    "acid":      { "file": "acid.mp3",      "loop": false, "gain": 0.5 },
+    "extralife": { "file": "extralife.mp3", "loop": false, "gain": 0.9 },
+    "wonder":    { "file": "wonder.mp3",    "loop": true,  "gain": 0.35 },
+    "wheel":     { "file": "wheel.mp3",     "loop": true,  "gain": 0.35 },
+    "bug":       { "file": "bug.mp3",       "loop": true,  "gain": 0.2 },
+    "tank":      { "file": "tank.mp3",      "loop": true,  "gain": 0.15 },
+    "eater":     { "file": "eater.mp3",     "loop": true,  "gain": 0.3 },
+    "alien":     { "file": "alien.mp3",     "loop": true,  "gain": 0.25 }
+  },
+  "music": {
+    "title": "title-music.mp3"
+  }
+}
