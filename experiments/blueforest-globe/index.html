@@ -145,6 +145,9 @@
     const BG_MODE = bgParams.has("bg");
     const bgZ = parseFloat(bgParams.get("z"));
     const bgScale = parseFloat(bgParams.get("s"));
+    // Auto-rotate multiplier for background mode (?r= to override; default 0.5 = half speed).
+    const bgRot = parseFloat(bgParams.get("r"));
+    const rotFactor = BG_MODE ? (bgRot > 0 ? bgRot : 0.5) : 1;
     if (BG_MODE) {
       controls.enableZoom = false;
     }
@@ -1030,18 +1033,18 @@
       }
     }
 
-    let targetAutoRotateSpeed = 0.9;
+    let targetAutoRotateSpeed = 0.9 * rotFactor;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduceMotion) {
       controls.autoRotate = false;
     }
 
     canvas.addEventListener("pointerenter", () => {
-      targetAutoRotateSpeed = 1.8;
+      targetAutoRotateSpeed = 1.8 * rotFactor;
     });
 
     canvas.addEventListener("pointerleave", () => {
-      targetAutoRotateSpeed = 0.9;
+      targetAutoRotateSpeed = 0.9 * rotFactor;
     });
 
     function resize() {
