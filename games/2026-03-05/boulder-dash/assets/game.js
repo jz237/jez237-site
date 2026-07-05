@@ -2,7 +2,7 @@
 // Engine (engine.js) is headless; this file owns everything user-facing.
 'use strict';
 
-const VERSION = 'v1.2.3';
+const VERSION = 'v1.2.4';
 const ASSET_Q = '?v=' + VERSION;   // cache-buster: same-named assets change between versions
 const STEP_MS = 160;                 // authentic cave cycle (6.25 Hz)
 const LB_URL = 'https://game-scores.jez237.workers.dev/scores/emerald-mine-2';
