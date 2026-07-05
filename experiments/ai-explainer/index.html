@@ -1383,7 +1383,7 @@
               <div class="metric-row">
                 <div class="metric"><span>Approx tokens</span><strong id="tokenCount">0</strong></div>
                 <div class="metric"><span>Demo budget used</span><strong id="contextUse">0%</strong></div>
-                <div class="metric"><span>Why it matters</span><strong id="tokenHint">Short</strong></div>
+                <div class="metric"><span>Length</span><strong id="tokenHint">Short</strong></div>
               </div>
             </div>
             <div class="token-output" id="tokenOutput" aria-live="polite"></div>
@@ -1651,6 +1651,7 @@
     let autoTimer = null;
     let memorySaved = false;
     let tourIndex = 0;
+    let tourStarted = false;
     let quizKind = 'commit';
     const tourStops = [
       ['map', 'System map', 'The illustration turns the abstract parts into stations: input, tokens, context, model, tools, memory, verification, and answer.'],
@@ -1683,9 +1684,17 @@
       renderAgent();
     }
 
+    function stopAuto() {
+      if (!autoTimer) return;
+      clearInterval(autoTimer);
+      autoTimer = null;
+      document.getElementById('autoStep').textContent = 'Auto run';
+    }
+
     function setScenario(kind) {
       steps = scenarios[kind];
       stepIndex = 0;
+      stopAuto();
       document.querySelectorAll('[data-scenario]').forEach(btn => btn.classList.toggle('active', btn.dataset.scenario === kind));
       renderAgent();
     }
@@ -1728,7 +1737,9 @@
       const pct = Math.min(100, Math.round(tokens.length / 120 * 100));
       document.getElementById('contextUse').textContent = pct + '%';
       document.getElementById('tokenMeter').style.width = pct + '%';
-      document.getElementById('tokenHint').textContent = tokens.length < 35 ? 'Short' : tokens.length < 80 ? 'Medium' : 'Crowded';
+      const words = (input.trim().match(/\S+/g) || []).length;
+      const size = tokens.length < 35 ? 'Short' : tokens.length < 80 ? 'Medium' : 'Crowded';
+      document.getElementById('tokenHint').textContent = words ? `${size} · ${words} words` : size;
     }
 
     const tokenPresets = {
@@ -1769,9 +1780,12 @@
       document.getElementById('contextStack').innerHTML = contextMessages.slice(0, count).map((msg, i) => {
         let state = 'dropped';
         let label = 'dropped';
-        if (memorySaved && i === 2) { state = 'memory'; label = 'saved'; }
-        else if (i >= visibleFrom) { state = 'visible'; label = 'visible'; }
+        if (i >= visibleFrom) { state = 'visible'; label = 'visible'; }
         else if (i >= summaryFrom) { state = 'summary'; label = 'summary'; }
+        if (memorySaved && i === 2) {
+          if (state === 'visible') { label = 'visible + saved'; }
+          else { state = 'memory'; label = 'saved'; }
+        }
         return `<div class="context-item ${state}"><strong>${msg[0]}</strong><span>${msg[1]}</span><span class="context-state">${label}</span></div>`;
       }).join('');
     }
@@ -1910,8 +1924,8 @@
         short: 'A chunk of text the model reads or writes.',
         definition: 'A token is a piece of text: sometimes a whole short word, sometimes part of a word, sometimes punctuation. Models process tokens, not raw letters or human meanings directly.',
         example: 'Long pasted logs consume many tokens. If the important error is buried near the bottom, the model may spend attention on noise before it reaches the useful clue.',
-        avoid: 'Not exactly a word.',
-        better: 'A model-sized text piece.'
+        avoid: 'A token is exactly one word.',
+        better: 'A model-sized piece of text.'
       },
       context: {
         label: 'Context',
@@ -2118,17 +2132,22 @@
     }
 
     function renderTour() {
+      document.getElementById('tourProgress').innerHTML = tourStops.map((stop, index) => {
+        return `<button class="tour-dot ${tourStarted && index === tourIndex ? 'active' : ''}" data-tour-index="${index}" type="button" aria-label="Tour stop ${index + 1}"></button>`;
+      }).join('');
+      document.querySelectorAll('[data-tour-index]').forEach(btn => btn.addEventListener('click', () => moveTour(Number(btn.dataset.tourIndex), true)));
+      if (!tourStarted) {
+        document.querySelectorAll('.lab-card').forEach(card => card.classList.remove('tour-active'));
+        return;
+      }
       const [id, title, copy] = tourStops[tourIndex];
       document.getElementById('tourTitle').textContent = `${tourIndex + 1}/${tourStops.length}: ${title}`;
       document.getElementById('tourCopy').textContent = copy;
-      document.getElementById('tourProgress').innerHTML = tourStops.map((stop, index) => {
-        return `<button class="tour-dot ${index === tourIndex ? 'active' : ''}" data-tour-index="${index}" type="button" aria-label="Tour stop ${index + 1}"></button>`;
-      }).join('');
       document.querySelectorAll('.lab-card').forEach(card => card.classList.toggle('tour-active', card.id === id));
-      document.querySelectorAll('[data-tour-index]').forEach(btn => btn.addEventListener('click', () => moveTour(Number(btn.dataset.tourIndex), true)));
     }
 
     function moveTour(index, scroll) {
+      tourStarted = true;
       tourIndex = (index + tourStops.length) % tourStops.length;
       renderTour();
       if (scroll) document.getElementById(tourStops[tourIndex][0]).scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -2165,7 +2184,9 @@
       const hasApprovals = selected.some(layer => layer.key === 'approvals');
       const hasVerify = selected.some(layer => layer.key === 'verification');
       let summary = 'This stack can answer basic questions, but it is limited.';
-      if (hasTools && hasVerify && hasApprovals) {
+      if (!selected.length) {
+        summary = 'Nothing selected: with no model and no context there is no system here to do any work.';
+      } else if (hasTools && hasVerify && hasApprovals) {
         summary = 'This is the strongest practical setup: tools provide evidence, verification checks the result, and approvals keep risky actions bounded.';
       } else if (hasTools && !hasApprovals) {
         summary = 'Powerful but risky: tools let the agent act, but missing approvals makes destructive or public actions easier to mishandle.';
@@ -2233,26 +2254,25 @@
     }
 
     document.getElementById('nextStep').addEventListener('click', advanceAgent);
-    document.getElementById('resetStep').addEventListener('click', () => { stepIndex = 0; renderAgent(); });
-    document.getElementById('autoStep').addEventListener('click', (event) => {
-      if (autoTimer) {
-        clearInterval(autoTimer);
-        autoTimer = null;
-        event.currentTarget.textContent = 'Auto run';
-        return;
-      }
-      event.currentTarget.textContent = 'Stop';
-      autoTimer = setInterval(advanceAgent, 1300);
+    document.getElementById('resetStep').addEventListener('click', () => { stopAuto(); stepIndex = 0; renderAgent(); });
+    document.getElementById('autoStep').addEventListener('click', () => {
+      if (autoTimer) { stopAuto(); return; }
+      document.getElementById('autoStep').textContent = 'Stop';
+      autoTimer = setInterval(() => {
+        advanceAgent();
+        if (stepIndex === steps.length - 1) stopAuto();
+      }, 1300);
     });
     document.getElementById('tokenInput').addEventListener('input', renderTokens);
     document.getElementById('contextRange').addEventListener('input', renderContext);
     document.getElementById('memoryToggle').addEventListener('click', toggleMemory);
+    const stepTour = delta => moveTour(tourStarted ? tourIndex + delta : 0, true);
     document.getElementById('startTour').addEventListener('click', () => moveTour(0, true));
-    document.getElementById('prevTour').addEventListener('click', () => moveTour(tourIndex - 1, true));
-    document.getElementById('nextTour').addEventListener('click', () => moveTour(tourIndex + 1, true));
+    document.getElementById('prevTour').addEventListener('click', () => stepTour(-1));
+    document.getElementById('nextTour').addEventListener('click', () => stepTour(1));
     document.getElementById('mobileTour').addEventListener('click', () => moveTour(0, true));
-    document.getElementById('mobilePrev').addEventListener('click', () => moveTour(tourIndex - 1, true));
-    document.getElementById('mobileNext').addEventListener('click', () => moveTour(tourIndex + 1, true));
+    document.getElementById('mobilePrev').addEventListener('click', () => stepTour(-1));
+    document.getElementById('mobileNext').addEventListener('click', () => stepTour(1));
     document.querySelectorAll('[data-map]').forEach(btn => btn.addEventListener('click', () => renderMapStation(btn.dataset.map)));
     document.getElementById('pipelineRun').addEventListener('click', runPipeline);
     document.querySelectorAll('#pipelineDiagram span').forEach(el => el.addEventListener('click', () => { stopPipeline(); renderPipelineStage(Number(el.dataset.stage)); }));
