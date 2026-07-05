@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Snapshots — Jez237</title>
+  <meta name="description" content="General photo feed — everything worth keeping that isn't a cat or a garden bed. Trips, projects, food, oddities, and everyday snapshots." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://jez237.com/photos/snapshots/" />
+  <meta property="og:title" content="Snapshots — Jez237" />
+  <meta property="og:description" content="The catch-all photo feed: everything that isn't a cat or a leaf." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jez237.com/photos/snapshots/" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg" />
+  <link rel="stylesheet" href="../../assets/styles.css" />
+  <link rel="stylesheet" href="../../assets/design.css" />
+  <link rel="stylesheet" href="../assets/gallery.css" />
+  <link rel="stylesheet" href="../../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../../assets/workbench-theme.css" />
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="kicker">Snapshots</div>
+      <h1 class="title">Everything else</h1>
+      <p class="muted">The catch-all album — trips, projects, food, oddities, and whatever else deserves a photo. Grouped by month as it fills up.</p>
+    </section>
+
+    <!-- PHOTO DATA LIVES IN manifest.json (this folder). To add a photo:
+         drop the image in images/YYYY/MM/ (or upload to R2) and prepend an
+         entry (src, alt, caption, date) to manifest.json.
+         Do not add photos to this HTML file. See ../README.md -->
+    <div data-gallery data-manifest="manifest.json" data-layout="timeline" id="gallery"></div>
+
+    <template data-gallery-empty>
+      <div class="pg-empty-emoji">📷</div>
+      <p><strong>Nothing here yet — this album is ready for its first photo.</strong></p>
+      <p>Drop an image into <code>photos/snapshots/images/YYYY/MM/</code> and add an entry to <code>manifest.json</code>, or just hand Jez's assistant a photo and say "put this in Snapshots."</p>
+    </template>
+
+    <footer>
+      <a href="../">← Back to Photos</a>
+    </footer>
+  </main>
+
+  <script src="../assets/gallery.js" defer></script>
+  <script src="../../assets/site-enhance.js" defer></script>
+  <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+</body>
+</html>
