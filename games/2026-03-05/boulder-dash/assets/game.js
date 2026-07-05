@@ -2,7 +2,7 @@
 // Engine (engine.js) is headless; this file owns everything user-facing.
 'use strict';
 
-const VERSION = 'v1.1.0';
+const VERSION = 'v1.2.0';
 const STEP_MS = 160;                 // authentic cave cycle (6.25 Hz)
 const LB_URL = 'https://game-scores.jez237.workers.dev/scores/emerald-mine-2';
 const MAX_LEVEL = 80;
@@ -99,11 +99,9 @@ const SYNTH = {
   blip2: () => synthTone(1320, 0.06, 'square', 0.15),
 };
 const LOOP_SOUNDS = new Set(['wonder', 'wheel', 'bug', 'tank', 'eater', 'alien']);
-// tonal gem sounds are synthesized (matches original frequencies better than generated audio)
-const SYNTH_PREFERRED = new Set(['collect', 'diamond']);
+// sfx are the original digitized Amiga samples; SYNTH entries remain as fallbacks only
 function playSfx(name) {
   if (!audioReady || !ac) return;
-  if (SYNTH_PREFERRED.has(name) && SYNTH[name]) { SYNTH[name](); return; }
   if (SYNTH[name] && !buffers[name]) { SYNTH[name](); return; }
   const buf = buffers[name]; if (!buf) return;
   const meta = manifest.sfx[name] || {};
@@ -630,6 +628,7 @@ function drawTitle(now) {
     ['START — LEVEL ' + Math.min(handicap(), MAX_LEVEL), () => startRun(Math.min(handicap(), MAX_LEVEL))],
     ['LEVEL SELECT', () => { state = 'levels'; levelPage = Math.floor(Math.min(handicap(), MAX_LEVEL) / 20); }],
     ['HIGH SCORES', () => { state = 'scores'; fetchGlobal(); }],
+    ['HOW TO PLAY', () => { state = 'help'; }],
     ['OPTIONS', () => { state = 'options'; optIdx = 0; }],
   ];
   const iy = VH * 0.42, ih = Math.min(52, VH * 0.075);
@@ -724,6 +723,45 @@ function drawOptions() {
   });
   uiBtn(VW / 2 - 90, VH - 60, 180, 44, 'BACK', () => { persist(); backToTitle(); });
   text('ENTER/CLICK = CHANGE   ←/→ = ADJUST', VW / 2, VH - 88, 12, '#7a7');
+}
+
+const HELP_LINES = [
+  ['GOAL', 'Collect emeralds (diamonds count as 3) until the counter hits 0, then reach the flashing exit before time runs out.'],
+  ['MOVE', 'Arrow keys (P2: WASD) or drag anywhere on touch. The cave starts on your first move.'],
+  ['FIRE', 'Hold FIRE + a direction to grab an adjacent tile without moving. Hold FIRE standing still to plant dynamite — then RUN.'],
+  ['STONES', 'Stones fall and roll; gems roll off walls too. A falling stone kills — a resting one never will. Push stones sideways.'],
+  ['ENEMIES', 'Drop stones on them: bugs burst into gems, tanks into nothing, eaters into surprises. Bugs and tanks kill on touch — even adjacent. Aliens hunt you: press the wheel to distract them.'],
+  ['CAVE', 'Amoeba grows and drips; bugs/tanks touching it explode. The magic wall transmutes falling stones→emeralds→diamonds→stones, once. Acid dissolves everything. Keys open matching doors.'],
+  ['RESTART', 'Stuck? Press R or hold ESC to blow up and retry the level (costs a life). 3 lives per run, extra life every 2000 points.'],
+  ['TEAMWORK', '2 players, one keyboard. Each player must leave by a DIFFERENT exit. F1/F2/F3 switch the camera.'],
+];
+function drawHelp() {
+  ctx.fillStyle = '#000'; ctx.fillRect(0, 0, VW, VH); drawBg();
+  text3d('HOW TO PLAY', VW / 2, 44, 32, '#0ca');
+  const w = Math.min(760, VW - 40);
+  const x0 = VW / 2 - w / 2, labW = Math.min(110, w * 0.16);
+  const fs = Math.max(11, Math.min(15, VH / 46));
+  let y = 86;
+  ctx.textBaseline = 'top';
+  for (const [label, body] of HELP_LINES) {
+    ctx.font = `700 ${fs}px 'Courier New', monospace`;
+    ctx.textAlign = 'left'; ctx.fillStyle = '#ffcc44';
+    ctx.fillText(label, x0, y);
+    ctx.fillStyle = '#8fdd8f';
+    // word-wrap body
+    const words = body.split(' ');
+    let line = '', ly = y;
+    for (const wd of words) {
+      const trial = line ? line + ' ' + wd : wd;
+      if (ctx.measureText(trial).width > w - labW - 10) {
+        ctx.fillText(line, x0 + labW, ly); ly += fs + 4; line = wd;
+      } else line = trial;
+    }
+    ctx.fillText(line, x0 + labW, ly);
+    y = ly + fs + 12;
+  }
+  ctx.textBaseline = 'middle';
+  uiBtn(VW / 2 - 90, Math.min(VH - 60, y + 16), 180, 44, 'BACK', () => backToTitle());
 }
 
 function drawScores(now) {
@@ -905,6 +943,8 @@ function handleKeyUI(e) {
     if (code === 'ArrowRight') { rows[optIdx][2](1); persist(); }
     if (code === 'Enter') { rows[optIdx][2](1); persist(); }
     if (code === 'Escape') { persist(); backToTitle(); }
+  } else if (state === 'help') {
+    if (code === 'Escape' || code === 'Enter') backToTitle();
   } else if (state === 'scores' || state === 'gameover') {
     if (code === 'Escape') backToTitle();
     if (state === 'gameover' && (code === 'Enter' || code === 'Space')) startRun(level);
@@ -954,6 +994,7 @@ function frame(now) {
   switch (state) {
     case 'title': drawTitle(now); break;
     case 'levels': drawLevels(); break;
+    case 'help': drawHelp(); break;
     case 'options': drawOptions(); break;
     case 'scores': drawScores(now); break;
     case 'intro': drawIntro(now); break;
