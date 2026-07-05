@@ -1,0 +1,252 @@
+/* ===================================================================
+   photos/assets/gallery.css — shared styles for /photos/ albums
+   Used with gallery.js. Album photo data lives in each album's
+   manifest.json; pages only provide a [data-gallery] container.
+   =================================================================== */
+
+/* ---------------- Masonry layout (e.g. cats) ---------------- */
+.pg-masonry {
+  columns: 3;
+  column-gap: 12px;
+  padding: 0;
+}
+.pg-item {
+  break-inside: avoid;
+  margin-bottom: 12px;
+  border-radius: var(--r-sm, 10px);
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--surf-1, #1d1811);
+  border: 1px solid var(--border, #223044);
+  box-shadow: var(--shadow-sm, 0 2px 10px rgba(0,0,0,0.22));
+  transition: transform 0.35s var(--ease-out, ease), box-shadow 0.35s ease;
+}
+.pg-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md, 0 14px 32px rgba(0,0,0,0.28));
+}
+.pg-item img {
+  width: 100%;
+  display: block;
+}
+.pg-item .pg-caption {
+  padding: 10px 12px 12px;
+  color: var(--ink-mid, #d7c9b3);
+  font-size: 13px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.pg-item .pg-caption .pg-date {
+  display: block;
+  color: var(--ink-lo, #8d7f6d);
+  font-size: 11.5px;
+  margin-top: 4px;
+}
+@media (max-width: 900px) { .pg-masonry { columns: 2; } }
+@media (max-width: 520px) { .pg-masonry { columns: 1; } }
+
+/* ---------------- Timeline layout (e.g. garden, snapshots) ---------------- */
+.pg-timeline {
+  display: grid;
+  gap: 28px;
+}
+.pg-month {
+  background: var(--surf-1, #1d1811);
+  border: 1px solid var(--border, #223044);
+  border-radius: var(--r-md, 16px);
+  padding: 18px;
+}
+.pg-month-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.pg-month-title {
+  margin: 0;
+  font-size: 24px;
+  font-family: var(--font-serif, Georgia, serif);
+  color: var(--ink-hi, #f4ecdf);
+}
+.pg-month-count {
+  color: var(--ink-lo, #8d7f6d);
+  font-size: 14px;
+}
+.pg-month-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+.pg-card {
+  background: var(--surf-2, #28211a);
+  border: 1px solid var(--border, #223044);
+  border-radius: var(--r-sm, 10px);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.35s var(--ease-out, ease), box-shadow 0.35s ease;
+}
+.pg-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md, 0 14px 32px rgba(0,0,0,0.28));
+}
+.pg-card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+.pg-card .pg-meta { padding: 10px 12px 12px; }
+.pg-card .pg-date {
+  color: var(--ink-lo, #8d7f6d);
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+.pg-card .pg-text {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--ink-mid, #d7c9b3);
+}
+
+/* ---------------- Load more / count ---------------- */
+.pg-more-wrap {
+  text-align: center;
+  margin: 26px 0;
+}
+.pg-more-btn {
+  background: var(--surf-2, #28211a);
+  color: var(--ink-hi, #f4ecdf);
+  border: 1px solid var(--border, #223044);
+  padding: 10px 28px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.pg-more-btn:hover {
+  border-color: var(--brand-gold, #e8c57a);
+  transform: translateY(-1px);
+}
+.pg-count {
+  color: var(--ink-lo, #8d7f6d);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* ---------------- Empty / error states ---------------- */
+.pg-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--ink-mid, #d7c9b3);
+  background: var(--surf-1, #1d1811);
+  border: 1px dashed var(--border, #223044);
+  border-radius: var(--r-md, 16px);
+}
+.pg-empty .pg-empty-emoji { font-size: 44px; }
+.pg-empty code {
+  background: rgba(127,127,127,0.15);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+
+/* ---------------- Lightbox ---------------- */
+.pg-lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.92);
+  z-index: 1000;
+  flex-direction: column;
+}
+.pg-lightbox.open { display: flex; }
+
+.pg-lb-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  color: #fff;
+}
+.pg-lb-title {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.4;
+  min-width: 0;
+}
+.pg-lb-hint {
+  color: rgba(255,255,255,0.55);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.pg-lb-close {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.pg-lb-close:hover { background: rgba(255,255,255,0.22); }
+
+.pg-lb-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 0 16px;
+  overflow: hidden;
+}
+.pg-lb-stage img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  cursor: zoom-in;
+}
+/* 1:1 mode — wheel/drag pans the full-size image */
+.pg-lightbox.actual .pg-lb-stage {
+  display: block;
+  overflow: auto;
+}
+.pg-lightbox.actual .pg-lb-stage img {
+  max-width: none;
+  max-height: none;
+  cursor: zoom-out;
+  margin: 0 auto;
+}
+
+.pg-lb-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 12px 18px 16px;
+}
+.pg-lb-nav button {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px;
+  padding: 8px 20px;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+}
+.pg-lb-nav button:hover { background: rgba(255,255,255,0.22); }
+.pg-lb-counter {
+  color: rgba(255,255,255,0.7);
+  font-size: 13px;
+  min-width: 64px;
+  text-align: center;
+}
+
+@media (max-width: 640px) {
+  .pg-lb-hint { display: none; }
+  .pg-lb-nav button { padding: 8px 16px; }
+}
