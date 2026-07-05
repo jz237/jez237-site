@@ -850,13 +850,15 @@ header#site-nav .links a:hover { transform: translateY(-1px); }
   max-width: 1480px !important;
   padding: 26px clamp(16px, 3vw, 42px) 70px !important;
 }
-body.home-page {
+body.home-page,
+body.ai-sounds-page {
   background:
     radial-gradient(ellipse at 0% 54%, rgba(76,211,255,0.28), transparent 34%),
     radial-gradient(ellipse at 100% 54%, rgba(40,153,255,0.26), transparent 36%),
     linear-gradient(180deg, #020711, #061833 62%, #020711) !important;
 }
-body.home-page::before {
+body.home-page::before,
+body.ai-sounds-page::before {
   content: "";
   position: fixed;
   inset: -8vh -18vw -14vh;
@@ -872,7 +874,8 @@ body.home-page::before {
   mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
   animation: galaxy-drift 28s ease-in-out infinite alternate;
 }
-body.home-page::after {
+body.home-page::after,
+body.ai-sounds-page::after {
   content: "";
   position: fixed;
   inset: -38vmax -42vmax;
@@ -916,6 +919,25 @@ body.home-page::after {
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   animation: galaxy-drift 28s ease-in-out infinite alternate;
+}
+/* Home + sound pages: keep the BRIGHT hub galaxy (viewport-fixed so it doesn't
+   stretch on tall pages) AND show the shooting stars. A body-level star layer
+   can't sit above the hub galaxy — the hub is its own z-1 stacking context — so
+   host the stars INSIDE the hub via [data-space-fx]. Within the hub the galaxy
+   ::before is z-index -2 and the star host is -1: galaxy on the bottom, stars
+   above it, page content above both. This is the original bright home layering,
+   now applied consistently to the sound pages too. */
+body.home-page .desktop-hub::before,
+body.ai-sounds-page .desktop-hub::before {
+  position: fixed;
+  inset: -8vh -18vw -14vh;
+}
+body.home-page .desktop-hub [data-space-fx],
+body.ai-sounds-page .desktop-hub [data-space-fx] {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 .galaxy-backdrop {
   position: absolute;
@@ -1895,7 +1917,8 @@ body.home-page::after {
     height: 96px;
   }
 
-  .is-touch-tablet body.home-page {
+  .is-touch-tablet body.home-page,
+  .is-touch-tablet body.ai-sounds-page {
     background:
       linear-gradient(180deg, rgba(2,7,17,0.72), rgba(6,24,51,0.42) 48%, rgba(2,7,17,0.82)),
       url("galaxy-home-20260702.webp") center top / 190% auto repeat-y,
@@ -1904,6 +1927,8 @@ body.home-page::after {
 
   .is-touch-tablet body.home-page::before,
   .is-touch-tablet body.home-page::after,
+  .is-touch-tablet body.ai-sounds-page::before,
+  .is-touch-tablet body.ai-sounds-page::after,
   .is-touch-tablet .desktop-hub::before {
     content: none !important;
   }
@@ -1938,7 +1963,8 @@ body.home-page::after {
 }
 
 @media (max-width: 760px), (hover: none) and (pointer: coarse) {
-  body.home-page {
+  body.home-page,
+  body.ai-sounds-page {
     background:
       linear-gradient(180deg, rgba(2,7,17,0.72), rgba(6,24,51,0.42) 48%, rgba(2,7,17,0.82)),
       url("galaxy-home-20260702.webp") center top / 190% auto repeat-y,
@@ -1947,6 +1973,8 @@ body.home-page::after {
 
   body.home-page::before,
   body.home-page::after,
+  body.ai-sounds-page::before,
+  body.ai-sounds-page::after,
   .desktop-hub::before,
   .galaxy-backdrop,
   .galaxy-backdrop::before,
