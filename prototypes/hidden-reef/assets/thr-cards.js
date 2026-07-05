@@ -16,12 +16,36 @@
     return price;
   }
 
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, function(char) {
+      return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char];
+    });
+  }
+
   function normalizeVariantKey(product) {
     return (product?.name || '')
       .toLowerCase()
       .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver|tan|clear|assorted)\b/g, '')
       .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|liter|litre|gal|g|w|lb|lbs|pk|pack|ct|count|in|inch|\")\b/g, '')
       .replace(/[^a-z0-9]+/g, '');
+  }
+
+  function variantIdentity(product) {
+    return product?.productUrl || product?.name || '';
+  }
+
+  /* The same product can be cross-listed in several catalog groups; only
+     distinct product URLs count as real variants. */
+  function dedupeVariants(variants) {
+    var seen = {};
+    var out = [];
+    (variants || []).forEach(function(variant) {
+      var id = variantIdentity(variant);
+      if (id && seen[id]) return;
+      if (id) seen[id] = true;
+      out.push(variant);
+    });
+    return out;
   }
 
   function groupProductVariants(products) {
@@ -32,12 +56,12 @@
       var variants = Array.isArray(product?.variants) ? product.variants : [product];
       if (!key || !indexByKey[key]) {
         var representative = Object.assign({}, product);
-        representative.variants = variants.slice();
+        representative.variants = dedupeVariants(variants);
         groups.push(representative);
         indexByKey[key] = representative;
         return;
       }
-      indexByKey[key].variants = indexByKey[key].variants.concat(variants);
+      indexByKey[key].variants = dedupeVariants(indexByKey[key].variants.concat(variants));
     });
     return groups;
   }
@@ -55,20 +79,17 @@
     items.forEach(function(p, i) {
       var brand = extractBrand(p.name);
       var imgSrc = p.imageUrl || '../assets/site/product-placeholder.jpg';
-      var name = (p.name || 'Unknown Product').replace(/</g, '&lt;');
-      var price = formatPrice(p.price);
-      var url = p.productUrl || '#';
-      var pageLabel = p.page > 1 ? 'Page ' + p.page : '';
-      var brandHtml = brand ? '<span class="thr-brand">' + brand + '</span>' : '';
-      var badge = pageLabel ? '<span class="thr-page">' + pageLabel + '</span>' : '';
+      var name = escapeHtml(p.name || 'Unknown Product');
+      var price = escapeHtml(formatPrice(p.price));
+      var url = escapeHtml(p.productUrl || '#');
+      var brandHtml = brand ? '<span class="thr-brand">' + escapeHtml(brand) + '</span>' : '';
       var optionBadge = p.variants && p.variants.length > 1 ? '<span class="thr-options">' + p.variants.length + ' options</span>' : '';
 
       html += '<a class="thr-product" href="' + url + '" target="_blank" rel="noopener">'
         + '<span class="thr-ext" title="View on Hidden Reef">↗</span>'
         + brandHtml
         + '<div class="thr-img">'
-        + '<img src="' + imgSrc + '" alt="' + name.replace(/"/g, '&quot;') + '" loading="lazy" onerror="this.parentElement.style.background=\'linear-gradient(180deg,#0c2030,#071a27)\';this.style.display=\'none\'" />'
-        + badge
+        + '<img src="' + escapeHtml(imgSrc) + '" alt="' + name + '" loading="lazy" onerror="this.parentElement.style.background=\'linear-gradient(180deg,#0c2030,#071a27)\';this.style.display=\'none\'" />'
         + optionBadge
         + '</div>'
         + '<div class="thr-info">'

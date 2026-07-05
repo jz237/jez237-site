@@ -3034,10 +3034,6 @@
 	      homeHref: '#top',
 	      defaultFilter: 'new-arrivals'
 	    };
-	    const cartCount = document.getElementById('cart-count');
-	    const cartItems = document.getElementById('cart-items');
-	    const emptyCart = document.getElementById('empty-cart');
-	    const cart = [];
 	    const heroImages = [
 	      'assets/site/hero-aquatic-world.jpg',
 	      'assets/site/hero-aquatic-world-2.jpg',
@@ -3046,10 +3042,14 @@
 	      'assets/site/hero-aquatic-world-5.jpg'
 	    ];
 	    const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
-	    heroImages.slice(1).forEach(src => {
+	    const preloadedHeroImages = new Set([heroImages[0]]);
+	    function preloadHeroImage(src) {
+	      if (!src || preloadedHeroImages.has(src)) return;
+	      preloadedHeroImages.add(src);
 	      const image = new Image();
 	      image.src = src;
-	    });
+	    }
+	    preloadHeroImage(heroImages[1]);
 	    if (heroSlides.length >= 2 && heroImages.length > 1) {
 	      let activeHeroImage = 0;
 	      let activeHeroLayer = 0;
@@ -3061,6 +3061,7 @@
 	        const outgoingSlide = heroSlides[activeHeroLayer];
 	        incomingSlide.classList.remove('is-active', 'is-fading-out');
 	        incomingSlide.src = heroImages[activeHeroImage];
+	        preloadHeroImage(heroImages[(activeHeroImage + 1) % heroImages.length]);
 	        if (incomingSlide.decode) {
 	          try {
 	            await incomingSlide.decode();
@@ -3112,6 +3113,22 @@
 	          setSpecial(Number(dot.dataset.specialIndex || 0));
 	        });
 	      });
+	      let specialTouchX = null;
+	      let specialTouchY = null;
+	      specialsTrack.addEventListener('touchstart', event => {
+	        if (event.touches.length !== 1) { specialTouchX = null; return; }
+	        specialTouchX = event.touches[0].clientX;
+	        specialTouchY = event.touches[0].clientY;
+	      }, { passive: true });
+	      specialsTrack.addEventListener('touchend', event => {
+	        if (specialTouchX === null || !event.changedTouches.length) return;
+	        const dx = event.changedTouches[0].clientX - specialTouchX;
+	        const dy = event.changedTouches[0].clientY - specialTouchY;
+	        specialTouchX = null;
+	        if (Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) {
+	          setSpecial(activeSpecial + (dx < 0 ? 1 : -1));
+	        }
+	      }, { passive: true });
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3134,13 +3151,6 @@
 	      e.preventDefault();
 	      document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
 	    });
-	    document.querySelector('.close-cart').addEventListener('click', () => document.body.classList.remove('cart-open'));
-	    function renderCart() {
-	      cartCount.textContent = cart.length;
-	      emptyCart.style.display = cart.length ? 'none' : '';
-	      cartItems.innerHTML = cart.map(name => '<div class="cart-item"><strong>' + name + '</strong><span>Qty 1</span></div>').join('');
-	    }
-	    renderCart();
 	  </script>
 	  <script src="assets/reef-background.js?v=20260603-water8"></script>
 		  <script src="assets/category.js?v=20260604-sale-prices"></script>

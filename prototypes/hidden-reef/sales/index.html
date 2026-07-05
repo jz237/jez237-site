@@ -328,6 +328,7 @@
           const count = Number(dept.products?.length || dept.count || 0);
           return '<option value="' + index + '">' + escapeHtml(dept.title) + ' (' + count + ')</option>';
         }).join('');
+        select.value = String(activeIndex);
         tabs.innerHTML = departments.map(function(dept, index) {
           const active = index === activeIndex ? ' is-active' : '';
           const count = Number(dept.products?.length || dept.count || 0);

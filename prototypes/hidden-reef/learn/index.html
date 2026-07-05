@@ -1779,6 +1779,11 @@
       cursor: pointer;
       font: inherit;
     }
+    .triage-copy-button[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      border-bottom-color: rgba(255,255,255,0.28);
+    }
     .triage-copy-status {
       align-self: center;
       color: #ffdd9a;
@@ -2339,6 +2344,7 @@
           <div class="triage-result__actions">
             <div data-triage-links></div>
             <button class="triage-copy-button" type="button" data-triage-copy>Copy checklist</button>
+            <button class="triage-copy-button" type="button" data-triage-print>Print checklist</button>
             <span class="triage-copy-status" data-triage-copy-status aria-live="polite"></span>
           </div>
           <div class="triage-visit">
@@ -3004,7 +3010,7 @@
           label: 'Invertebrate safety check',
           title: 'Look for toxins, swings, and acclimation stress.',
           summary: 'Shrimp and snails often react first to copper, medication, ammonia, nitrite, temperature swings, or poor acclimation.',
-          validTankTypes: ['freshwater', 'saltwater', 'reef'],
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
           tests: ['Ammonia', 'Nitrite', 'pH', 'Copper if medication was used'],
           actions: ['Review recent dosing', 'Check acclimation history', 'Stabilize temperature', 'Use clean source water'],
           avoid: ['Do not dose copper in invert systems', 'Do not make rapid parameter changes', 'Do not assume it is only lack of food'],
@@ -3102,6 +3108,7 @@
         links: document.querySelector('[data-triage-links]'),
         visit: document.querySelector('[data-triage-visit]'),
         copy: document.querySelector('[data-triage-copy]'),
+        print: document.querySelector('[data-triage-print]'),
         copyStatus: document.querySelector('[data-triage-copy-status]')
       };
 
@@ -3127,16 +3134,44 @@
         return [...(select?.options || [])].find((option) => option.value === value)?.textContent.trim() || value;
       }
 
+      function humanList(items, conjunction) {
+        const list = items.filter(Boolean);
+        if (list.length <= 1) return list.join('');
+        if (list.length === 2) return `${list[0]} ${conjunction} ${list[1]}`;
+        return `${list.slice(0, -1).join(', ')}, ${conjunction} ${list[list.length - 1]}`;
+      }
+
+      /* Keep the address bar shareable after user changes without adding history entries */
+      function syncTriageUrl() {
+        if (typeof window.history?.replaceState !== 'function') return;
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('symptom', triageEls.symptom.value);
+          url.searchParams.set('tank', triageEls.tank.value);
+          url.searchParams.set('change', triageEls.change.value);
+          window.history.replaceState(null, '', url.toString());
+        } catch (error) {
+          /* Leave the address bar unchanged if the URL cannot be rebuilt. */
+        }
+      }
+
+      function setTriageChecklistEnabled(enabled) {
+        if (triageEls.copy) triageEls.copy.disabled = !enabled;
+        if (triageEls.print) triageEls.print.disabled = !enabled;
+      }
+
       function renderTankMismatch(base, selectedTankType) {
         const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
         const validTankLabels = validTankTypes.map((type) => selectedOptionText(triageEls.tank, type));
+        const validTankText = humanList(validTankLabels, 'or');
+        const selectedTankLabel = selectedOptionText(triageEls.tank, selectedTankType);
         triageEls.result?.classList.add('is-mismatch');
         triageEls.label.textContent = 'Selection mismatch';
-        triageEls.title.textContent = `${base.title.replace(/\.$/, '')} - but check the tank type first.`;
-        triageEls.summary.textContent = `${selectedOptionText(triageEls.symptom)} does not fit ${selectedOptionText(triageEls.tank, selectedTankType)} guidance. Use ${validTankLabels.join(' or ')} for this symptom before following the checklist.`;
-        renderList(triageEls.tests, ['Confirm the aquarium type', 'Re-select the matching tank type']);
-        renderList(triageEls.actions, ['Do not follow this checklist until the tank type matches', `Switch the tank type if this should be ${validTankLabels.join(' or ')}`]);
-        renderList(triageEls.avoid, ['Do not use tests or treatments meant for a different aquarium type', `Do not treat ${selectedOptionText(triageEls.tank, selectedTankType)} livestock as ${validTankLabels.join(' or ')}`]);
+        triageEls.title.textContent = `${base.title.replace(/\.$/, '')} - but check the selections first.`;
+        triageEls.summary.textContent = `${selectedOptionText(triageEls.symptom)} does not fit ${selectedTankLabel} guidance. If the tank really is ${selectedTankLabel}, pick a different symptom. If not, switch the tank type to ${validTankText}.`;
+        renderList(triageEls.tests, ['Confirm the aquarium type', 'Re-select the matching tank type or symptom']);
+        renderList(triageEls.actions, ['Do not follow this checklist until the selections match', `Switch the tank type if this should be ${validTankText}`, `Keep ${selectedTankLabel} and pick a different symptom if the tank type is right`]);
+        renderList(triageEls.avoid, ['Do not use tests or treatments meant for a different aquarium type', `Do not treat ${selectedTankLabel} livestock as ${validTankText}`]);
         renderList(triageEls.visit, ['Photo of the tank and livestock', 'Tank type and setup notes', 'Recent test numbers']);
 
         triageEls.links.innerHTML = '';
@@ -3147,15 +3182,25 @@
           button.textContent = `Use ${selectedOptionText(triageEls.tank, tankType)}`;
           button.addEventListener('click', () => {
             triageEls.tank.value = tankType;
-            updateTriageResult();
+            updateTriageResult({ sync: true });
           });
           triageEls.links.appendChild(button);
         });
+        const keepTankButton = document.createElement('button');
+        keepTankButton.className = 'triage-copy-button';
+        keepTankButton.type = 'button';
+        keepTankButton.textContent = `Keep ${selectedTankLabel}, change symptom`;
+        keepTankButton.addEventListener('click', () => {
+          triageEls.symptom.focus();
+        });
+        triageEls.links.appendChild(keepTankButton);
+        setTriageChecklistEnabled(false);
         if (triageEls.copyStatus) triageEls.copyStatus.textContent = '';
       }
 
-      function updateTriageResult() {
+      function updateTriageResult(options = {}) {
         if (!triageEls.symptom) return;
+        if (options.sync) syncTriageUrl();
         const base = triageData[triageEls.symptom.value] || triageData.breathing;
         const selectedTankType = triageEls.tank.value;
         const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
@@ -3184,11 +3229,12 @@
           link.textContent = label;
           triageEls.links.appendChild(link);
         });
+        setTriageChecklistEnabled(true);
         if (triageEls.copyStatus) triageEls.copyStatus.textContent = '';
       }
 
       [triageEls.symptom, triageEls.tank, triageEls.change].forEach((select) => {
-        select?.addEventListener('change', updateTriageResult);
+        select?.addEventListener('change', () => updateTriageResult({ sync: true }));
       });
       const triageParams = new URLSearchParams(window.location.search);
       [
@@ -3202,11 +3248,12 @@
       });
       updateTriageResult();
 
-      async function copyTriageChecklist() {
-        if (!triageEls.copy) return;
+      function buildTriageChecklistText() {
         const symptom = triageEls.symptom.options[triageEls.symptom.selectedIndex]?.textContent.trim();
         const tank = triageEls.tank.options[triageEls.tank.selectedIndex]?.textContent.trim();
         const change = triageEls.change.options[triageEls.change.selectedIndex]?.textContent.trim();
+        const guideLines = [...(triageEls.links?.querySelectorAll('a') || [])]
+          .map((link) => `- ${link.textContent.trim()}: ${link.href}`);
         const lines = [
           'Hidden Reef tank triage',
           `Symptom: ${symptom}`,
@@ -3228,7 +3275,13 @@
           'Bring to the store:',
           ...readList(triageEls.visit).map((item) => `- ${item}`)
         ];
-        const text = lines.join('\n');
+        if (guideLines.length) lines.push('', 'Guides:', ...guideLines);
+        return lines.join('\n');
+      }
+
+      async function copyTriageChecklist() {
+        if (!triageEls.copy || triageEls.copy.disabled) return;
+        const text = buildTriageChecklistText();
 
         try {
           if (navigator.clipboard?.writeText) {
@@ -3250,7 +3303,24 @@
         }
       }
 
+      function printTriageChecklist() {
+        if (!triageEls.print || triageEls.print.disabled) return;
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          if (triageEls.copyStatus) triageEls.copyStatus.textContent = 'Allow pop-ups to print';
+          return;
+        }
+        const doc = printWindow.document;
+        doc.open();
+        doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Hidden Reef tank triage checklist</title><style>body{font-family:Arial,Helvetica,sans-serif;margin:32px;color:#111}h1{font-size:20px;margin:0 0 6px}p.meta{color:#555;margin:0 0 18px;font-size:12px}pre{white-space:pre-wrap;font:14px/1.5 Arial,Helvetica,sans-serif}</style></head><body><h1>The Hidden Reef - Tank Triage Checklist</h1><p class="meta">Bring this with a fresh water sample. Store staff can run the tests with you.</p><pre></pre></body></html>');
+        doc.close();
+        doc.querySelector('pre').textContent = buildTriageChecklistText();
+        printWindow.focus();
+        printWindow.print();
+      }
+
       triageEls.copy?.addEventListener('click', copyTriageChecklist);
+      triageEls.print?.addEventListener('click', printTriageChecklist);
 
       /* Click-to-zoom: clicking a diagram image opens the poster modal fullscreen */
       const modal = document.querySelector('.poster-modal');

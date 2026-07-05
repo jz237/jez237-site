@@ -32,7 +32,7 @@
       filter: p.get('filter') || '',
       brand: p.get('brand') || '',
       search: p.get('search') || '',
-      page: parseInt(p.get('page')) || 1
+      page: Math.max(1, parseInt(p.get('page')) || 1)
     };
   }
 
@@ -848,15 +848,12 @@
     let html = '';
     pageProducts.forEach((p, i) => {
       const brand = extractBrand(p.name);
-      const imgSrc = p.imageUrl || assetBase + '/site/product-placeholder.jpg';
-      const imgAlt = (p.name || 'Product').replace(/"/g, '&quot;');
-      const name = (p.name || 'Unknown Product').replace(/</g, '&lt;');
-      const price = formatPrice(p.price);
-      const oldPrice = p.oldPrice ? formatPrice(p.oldPrice) : '';
-      const url = p.productUrl || '#';
-      const pageLabel = p.page > 1 ? `Page ${p.page}` : '';
-      const brandHtml = brand ? `<span class="thr-brand">${brand}</span>` : '';
-      const badge = pageLabel ? `<span class="thr-page">${pageLabel}</span>` : '';
+      const imgSrc = escapeHtml(p.imageUrl || assetBase + '/site/product-placeholder.jpg');
+      const name = escapeHtml(p.name || 'Unknown Product');
+      const price = escapeHtml(formatPrice(p.price));
+      const oldPrice = p.oldPrice ? escapeHtml(formatPrice(p.oldPrice)) : '';
+      const url = escapeHtml(p.productUrl || '#');
+      const brandHtml = brand ? `<span class="thr-brand">${escapeHtml(brand)}</span>` : '';
       const isSaleItem = Boolean(p.isSaleItem);
       const optionBadge = !isSaleItem && p.variants && p.variants.length > 1 ? `<span class="thr-options">${p.variants.length} options</span>` : '';
       const discountPercent = p.saleDiscount || getDiscountPercent(p.price, p.oldPrice);
@@ -875,8 +872,7 @@
           <span class="thr-ext" title="View on Hidden Reef">↗</span>
           ${brandHtml}
           <div class="thr-img">
-            <img src="${imgSrc}" alt="${imgAlt}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
-            ${badge}
+            <img src="${imgSrc}" alt="${name}" loading="lazy" onerror="this.parentElement.style.background='linear-gradient(180deg,#0c2030,#071a27)';this.style.display='none'" />
             ${optionBadge}
             ${saleBadge}
           </div>
@@ -936,7 +932,7 @@
   }
 
   function updateProductView(page) {
-    currentPage = page || 1;
+    currentPage = Math.max(1, page || 1);
     const controls = getActiveControls();
     const filteredProducts = applyProductControls(baseProducts);
     const rawFilteredCount = filteredProducts.length;
