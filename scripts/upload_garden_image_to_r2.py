@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
-"""Upload garden images to Cloudflare R2 and print GitHub-safe public URLs.
+"""Upload photo-album images to Cloudflare R2 and print GitHub-safe public URLs.
+
+Defaults to the garden album; use --album for other /photos/ albums
+(e.g. --album snapshots).
 
 Examples:
   scripts/upload_garden_image_to_r2.py photos/garden/images/2026/06/example.jpg
   scripts/upload_garden_image_to_r2.py /path/to/photo.jpg --date 2026-06-17 --slug redbud-after-rain
+  scripts/upload_garden_image_to_r2.py /path/to/photo.jpg --album snapshots --date 2026-07-04 --slug fourth-of-july-grill
 """
 from __future__ import annotations
 
@@ -21,13 +25,20 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_R2_ACCOUNT_ID = "ac73a259dff5a3cbeccbb78824ac0db6"
 DEFAULT_R2_BUCKET = "jez237-site-media"
 DEFAULT_PUBLIC_BASE_URL = "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/"
-GARDEN_PREFIX = "photos/garden/images"
+DEFAULT_ALBUM = "garden"
 
 
 def slugify(value: str) -> str:
     value = value.lower().strip()
     value = re.sub(r"[^a-z0-9]+", "-", value)
-    return value.strip("-")[:80] or "garden-photo"
+    return value.strip("-")[:80] or "photo"
+
+
+def album_prefix(album: str) -> str:
+    album = album.strip().strip("/")
+    if not re.fullmatch(r"[a-z0-9-]+", album):
+        raise SystemExit(f"Invalid album name: {album!r}")
+    return f"photos/{album}/images"
 
 
 def infer_key(src: Path, args: argparse.Namespace) -> str:
@@ -36,19 +47,21 @@ def infer_key(src: Path, args: argparse.Namespace) -> str:
     except ValueError:
         rel = None
 
-    if rel and str(rel).startswith(f"{GARDEN_PREFIX}/"):
+    if rel and re.match(r"^photos/[a-z0-9-]+/images/", rel.as_posix()):
         return rel.as_posix()
+
+    prefix = album_prefix(args.album)
 
     if args.key:
         key = args.key.strip().lstrip("/")
-        if not key.startswith(f"{GARDEN_PREFIX}/"):
-            raise SystemExit(f"--key must start with {GARDEN_PREFIX}/")
+        if not re.match(r"^photos/[a-z0-9-]+/images/", key):
+            raise SystemExit("--key must start with photos/<album>/images/")
         return key
 
     date = dt.date.fromisoformat(args.date) if args.date else dt.date.today()
     slug = slugify(args.slug or src.stem)
     suffix = src.suffix.lower() or ".jpg"
-    return f"{GARDEN_PREFIX}/{date:%Y/%m}/{slug}-{date.isoformat()}{suffix}"
+    return f"{prefix}/{date:%Y/%m}/{slug}-{date.isoformat()}{suffix}"
 
 
 def upload_to_r2(src: Path, key: str, bucket: str, wrangler_bin: str) -> None:
@@ -75,7 +88,8 @@ def upload_to_r2(src: Path, key: str, bucket: str, wrangler_bin: str) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("image", help="Image path to upload")
-    ap.add_argument("--key", help=f"Explicit R2 key, starting with {GARDEN_PREFIX}/")
+    ap.add_argument("--album", default=DEFAULT_ALBUM, help="Album under photos/ (default: garden)")
+    ap.add_argument("--key", help="Explicit R2 key, starting with photos/<album>/images/")
     ap.add_argument("--date", help="Photo date for external images, YYYY-MM-DD")
     ap.add_argument("--slug", help="Slug for external images")
     ap.add_argument("--r2-bucket", default=os.environ.get("GARDEN_R2_BUCKET", DEFAULT_R2_BUCKET))

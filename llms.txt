@@ -22,7 +22,10 @@ use these instructions before writing code or snippets.
 - `/plants/` - 2026 garden progress, plant timelines, garden scenes,
   insects, wildlife, and past-year references.
 - `/garden/` - practical garden calendar and timing notes.
-- `/photos/` - casual photo archive, including cats and garden images.
+- `/photos/` - casual photo archive: cats, garden images, and a
+  general-purpose `snapshots` album for everything else. Every album
+  renders from a `manifest.json` in its folder — add photos to the
+  manifest, never to the album HTML. See `photos/README.md`.
 - `/experiments/image-gen-2-benchmark/` - daily GPT Image 2 prompts and
   generated image gallery.
 - `/experiments/image-gen-2-benchmark/worlds.html` - fictional-world
@@ -170,6 +173,16 @@ Destination rules:
 - Cat -> use `/photos/cats/`.
 - General garden scene -> use `/photos/garden/` or the garden scenes
   section of `/plants/`.
+- Anything else (trips, projects, food, oddities, everyday photos) ->
+  use `/photos/snapshots/`.
+
+Photo albums under `/photos/` are manifest-driven: each album folder has
+a `manifest.json` and the page renders from it via the shared
+`photos/assets/gallery.js`. To add a photo, place the image (cats:
+`photos/cats/images/`; snapshots: `photos/snapshots/images/YYYY/MM/`;
+garden: R2 only) and prepend an entry `{src, alt, caption, date}` to the
+album's `manifest.json`, newest first. Do not add photo markup to the
+album HTML pages. Full details in `photos/README.md`.
 
 Garden image path:
 
