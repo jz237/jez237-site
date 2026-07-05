@@ -120,14 +120,16 @@ script, data-source, and generated-image folders. Verify live changes on
 
 ## Garden and plant photos
 
-If Jez uploads a plant, pet, garden, or insect photo and asks you to add
-it to the site, first identify the subject:
+If Jez uploads any photo and asks you to add it to the site, first
+identify the subject:
 
 - Plant: common name, cultivar if visible, stage, and condition.
 - Bed or composition: plants visible and the scene type.
 - Insect or wildlife: species if identifiable and behavior.
 - Cat: Luca, Cosmo, Taco, or Marty, if recognizable.
 - General garden scene: wider view without one clear plant subject.
+- Anything else (trips, projects, food, oddities, everyday shots):
+  note the subject and context for the caption; it goes to Snapshots.
 
 Use the actual photo date if known; otherwise use today's date.
 
@@ -191,9 +193,10 @@ Garden image path:
 Garden image storage rule: do not commit new garden image binaries to
 Git. Upload them to Cloudflare R2 with `scripts/upload_garden_image_to_r2.py`
 using the same `photos/garden/images/YYYY/MM/...` key, then commit only
-the HTML/metadata pointer. Cloudflare Pages redirects
-`/photos/garden/images/*` to the R2 object, so existing relative image
-paths continue to work on the live site.
+the manifest.json entry (and, for plant journal pages, the HTML entry).
+The script also takes `--album snapshots` for other albums. Cloudflare
+Pages redirects `/photos/garden/images/*` to the R2 object, so existing
+relative image paths continue to work on the live site.
 
 Examples:
 
