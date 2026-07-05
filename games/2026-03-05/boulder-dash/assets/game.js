@@ -2,7 +2,7 @@
 // Engine (engine.js) is headless; this file owns everything user-facing.
 'use strict';
 
-const VERSION = 'v1.2.4';
+const VERSION = 'v1.2.5';
 const ASSET_Q = '?v=' + VERSION;   // cache-buster: same-named assets change between versions
 const STEP_MS = 160;                 // authentic cave cycle (6.25 Hz)
 const LB_URL = 'https://game-scores.jez237.workers.dev/scores/emerald-mine-2';
@@ -653,7 +653,7 @@ function drawLevels() {
   drawBg();
   text3d('SELECT LEVEL', VW / 2, 50, 34, '#0ca');
   text((mode === 'single' ? '1 PLAYER' : 'TEAMWORK') + ' — REACHED ' + handicap() +
-    (save.opts.tester ? '  ·  TEST UNLOCK' : ''), VW / 2, 86, 14, save.opts.tester ? '#ffcc44' : '#7a7');
+    (save.opts.tester ? '  ·  ALL LEVELS' : ''), VW / 2, 86, 14, save.opts.tester ? '#ffcc44' : '#7a7');
   const per = 20, pages = Math.ceil((MAX_LEVEL + 1) / per);
   const cols = 5, rows = 4;
   const bw = Math.min(96, (VW - 60) / cols - 10), bh = 46;
@@ -697,10 +697,10 @@ const OPT_ROWS = () => [
   ['P2 LEFT', () => keyName('p2', 'left'), () => { remapTarget = { p: 'p2', act: 'left' }; }],
   ['P2 RIGHT', () => keyName('p2', 'right'), () => { remapTarget = { p: 'p2', act: 'right' }; }],
   ['P2 FIRE', () => keyName('p2', 'fire'), () => { remapTarget = { p: 'p2', act: 'fire' }; }],
-  ['TEST UNLOCK (PASSWORD)', () => save.opts.tester ? 'ON' : 'OFF', () => {
-    if (save.opts.tester) { save.opts.tester = false; flash('TEST UNLOCK OFF'); return; }
+  ['ALL LEVELS (PASS:1234)', () => save.opts.tester ? 'ON' : 'OFF', () => {
+    if (save.opts.tester) { save.opts.tester = false; flash('ALL-LEVELS UNLOCK OFF'); return; }
     const p = window.prompt('Enter password:') || '';
-    if (p.trim().toLowerCase() === 'tester') { save.opts.tester = true; flash('ALL LEVELS UNLOCKED'); }
+    if (p.trim() === '1234') { save.opts.tester = true; flash('ALL LEVELS UNLOCKED'); }
     else if (p) flash('WRONG PASSWORD');
   }],
   ['RESET PROGRESS', () => '', () => { if (confirm('Reset all progress and scores?')) { save.h1 = 0; save.hT = 0; save.best = {}; save.scores = []; save.opts.tester = false; persist(); } }],
