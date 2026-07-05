@@ -19,22 +19,94 @@
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <style>
     main.container { max-width: 1200px; margin: 0 auto; padding: 14px clamp(16px,3vw,40px) 80px; }
-    .hero-editorial { padding: clamp(22px, 4vw, 42px) clamp(24px, 4vw, 56px); }
+    .hero-editorial {
+      padding: clamp(22px, 4vw, 42px) clamp(24px, 4vw, 56px);
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(18px, 3vw, 36px);
+      align-items: center;
+    }
     .hero-editorial h1 { margin: 4px 0 8px; }
     .hero-editorial .lede { margin: 0; }
     .photostrip a { display: block; }
+
+    /* Subtle full-page backdrop (sits above the body gradient, below content).
+       Body paints its own background over negative z-index layers, so this
+       uses z-index 0 with the main content lifted to z-index 1. */
+    main.container { position: relative; z-index: 1; }
+    .photos-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(7,11,17,0.87) 0%, rgba(7,11,17,0.82) 45%, rgba(7,11,17,0.95) 100%),
+        url('https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/back-garden-redbud-grapevine-panorama-2026-06-24.jpg') center / cover no-repeat;
+    }
+
+    /* Animated hero photo — slow Ken Burns crossfade through recent favourites */
+    .hero-photo {
+      position: relative;
+      border-radius: var(--r-md, 18px);
+      overflow: hidden;
+      min-height: 250px;
+      height: 100%;
+      box-shadow: var(--shadow-md);
+      background: var(--surf-2, #28211a);
+    }
+    .hero-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+      opacity: 0;
+      animation: heroKb 28s linear infinite;
+    }
+    .hero-photo img:nth-child(2) { animation-delay: 7s; }
+    .hero-photo img:nth-child(3) { animation-delay: 14s; }
+    .hero-photo img:nth-child(4) { animation-delay: 21s; }
+    @keyframes heroKb {
+      0%   { opacity: 0; transform: scale(1); }
+      6%   { opacity: 1; }
+      27%  { opacity: 1; }
+      34%  { opacity: 0; transform: scale(1.09); }
+      100% { opacity: 0; transform: scale(1.09); }
+    }
+    @media (max-width: 780px) {
+      .hero-editorial { grid-template-columns: 1fr; }
+      .hero-photo { min-height: 200px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-photo img { animation: none; }
+      .hero-photo img:first-child { opacity: 1; }
+    }
+
+    /* Keep faces in frame when photos get cropped */
+    .photostrip img { object-position: center 25%; }
+    .feature .feature-media { background-position: center 25%; }
   </style>
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
 </head>
 <body>
+  <div class="photos-bg" aria-hidden="true"></div>
   <header id="site-nav"></header>
 
   <main class="container">
 
     <section class="hero-editorial">
-      <div class="eyebrow">Collections</div>
-      <h1>Photos, kept casual.</h1>
-      <p class="lede">Cats, the garden, and everything else. The polished chronicle lives in Plant Progress — this is the looser feed.</p>
+      <div>
+        <div class="eyebrow">Collections</div>
+        <h1>Photos, kept casual.</h1>
+        <p class="lede">Cats, the garden, and everything else. The polished chronicle lives in Plant Progress — this is the looser feed.</p>
+      </div>
+      <div class="hero-photo" aria-hidden="true">
+        <img src="cats/images/cat-family-portrait-2026-06-19.jpg" alt="" decoding="async" />
+        <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/07/pugster-butterfly-bush-grapevine-summer-bloom-2026-07-03.jpg" alt="" decoding="async" />
+        <img src="cats/images/luca-cosmo-synchronized-nap.jpg" alt="" decoding="async" />
+        <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="" decoding="async" />
+      </div>
     </section>
 
     <!-- Latest photos across all albums; JS refreshes this from the album manifests. -->
@@ -70,21 +142,21 @@
         </a>
       </div>
 
-      <a class="feature" href="snapshots/">
-        <div class="feature-media" data-album-cover="snapshots" style="background: linear-gradient(135deg, var(--surf-2), var(--surf-3)); display:flex; align-items:center; justify-content:center; font-size:52px;">📷</div>
-        <div class="feature-copy">
-          <div class="eyebrow">Everything else</div>
-          <h3>Snapshots</h3>
-          <p>The catch-all album — trips, projects, food, oddities, anything worth keeping that isn't a cat or a leaf. <span data-album-count="snapshots">Empty and waiting for its first photo.</span></p>
-        </div>
-      </a>
-
       <a class="feature" href="../plants/">
         <div class="feature-media" style="background-image:url('https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
         <div class="feature-copy">
           <div class="eyebrow">The polished record</div>
           <h3>Plant Progress</h3>
           <p>Each plant kept as a dated journal with multiple entries, notes, and seasonal reference photos. The good photos from here earn stronger writing over there.</p>
+        </div>
+      </a>
+
+      <a class="feature" href="snapshots/">
+        <div class="feature-media" data-album-cover="snapshots" style="background: linear-gradient(135deg, var(--surf-2), var(--surf-3)); display:flex; align-items:center; justify-content:center; font-size:52px;">📷</div>
+        <div class="feature-copy">
+          <div class="eyebrow">Everything else</div>
+          <h3>Snapshots</h3>
+          <p>The catch-all album — trips, projects, food, oddities, anything worth keeping that isn't a cat or a leaf. <span data-album-count="snapshots">Empty and waiting for its first photo.</span></p>
         </div>
       </a>
     </div>
