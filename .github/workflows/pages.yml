@@ -33,6 +33,12 @@ jobs:
       - name: Exclude oversized audio library
         run: rm -rf experiments/amiga-mod-player/audio
 
+      - name: Exclude non-public source files
+        run: |
+          rm -rf .claude .git .github .wrangler functions scripts stock-market-src tmp workers
+          rm -f ops/migrate_amiga_audio_to_r2.sh
+          rm -f package.json package-lock.json pnpm-lock.yaml yarn.lock wrangler.toml
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
