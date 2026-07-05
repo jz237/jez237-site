@@ -773,6 +773,51 @@ p,
   font-size: 12px;
   font-style: normal;
 }
+details.weather-alert summary {
+  cursor: pointer;
+  list-style: none;
+  position: relative;
+  padding-right: 30px;
+}
+details.weather-alert summary::-webkit-details-marker { display: none; }
+details.weather-alert summary::after {
+  content: '▸';
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 17px;
+  color: var(--wb-gold, #f1d18e);
+  opacity: 0.65;
+  transition: transform 0.15s ease;
+}
+details.weather-alert[open] summary::after { transform: translateY(-50%) rotate(90deg); }
+details.weather-alert summary:hover::after,
+details.weather-alert summary:focus-visible::after { opacity: 1; }
+details.weather-alert summary:focus-visible {
+  outline: 2px solid var(--wb-gold, #f1d18e);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+.weather-alert-body {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.weather-alert-body p {
+  margin: 0 0 9px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(255, 247, 232, 0.88);
+}
+.weather-alert-body p:last-child { margin-bottom: 0; }
+.weather-alert-body p.weather-alert-area {
+  color: var(--wb-muted, #a8bdc6);
+  font-size: 12.5px;
+}
+.weather-alert-body a {
+  color: var(--wb-gold, #f1d18e);
+}
 .weather-nws-summary {
   margin: 18px 0;
   padding: 14px 16px;
