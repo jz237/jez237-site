@@ -136,6 +136,19 @@
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.9;
 
+    // Background-embed mode (used by the arcade page via ?bg=1): pull the camera
+    // in close so the globe overspills the viewport (cropped top/bottom, edges in
+    // the margins), and turn off wheel-zoom so the host page can still scroll.
+    // Manual left-drag rotate + auto-rotate stay on. Optional ?z= (camera
+    // distance) and ?s= (world scale) let the host fine-tune without a redeploy.
+    const bgParams = new URLSearchParams(location.search);
+    const BG_MODE = bgParams.has("bg");
+    const bgZ = parseFloat(bgParams.get("z"));
+    const bgScale = parseFloat(bgParams.get("s"));
+    if (BG_MODE) {
+      controls.enableZoom = false;
+    }
+
     const world = new THREE.Group();
     world.rotation.set(0.06, -0.55, 0);
     scene.add(world);
@@ -1040,11 +1053,20 @@
 
       const mobile = width < 720;
       camera.position.y = mobile ? 0.08 : 0.22;
-      camera.position.z = mobile ? 8.15 : 7.78;
-      controls.minDistance = mobile ? 4.85 : 5.65;
-      controls.maxDistance = mobile ? 12.4 : 10.5;
-      world.position.y = mobile ? 0.02 : -0.02;
-      world.scale.setScalar(mobile ? 0.72 : 1.02);
+      if (BG_MODE) {
+        // Big, viewport-filling globe for the arcade-page background.
+        camera.position.z = bgZ || (mobile ? 5.7 : 5.3);
+        controls.minDistance = 2.8;
+        controls.maxDistance = 14;
+        world.position.y = mobile ? 0.0 : -0.02;
+        world.scale.setScalar(bgScale || (mobile ? 0.92 : 1.08));
+      } else {
+        camera.position.z = mobile ? 8.15 : 7.78;
+        controls.minDistance = mobile ? 4.85 : 5.65;
+        controls.maxDistance = mobile ? 12.4 : 10.5;
+        world.position.y = mobile ? 0.02 : -0.02;
+        world.scale.setScalar(mobile ? 0.72 : 1.02);
+      }
     }
 
     window.addEventListener("resize", resize);
