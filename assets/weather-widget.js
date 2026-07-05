@@ -406,6 +406,30 @@
     return `https://www.windy.com/?radar,${lat},${lon},9`;
   }
 
+  function radarEmbedUrl(place) {
+    const lat = Number(place?.lat ?? DEFAULT_PLACE.lat).toFixed(4);
+    const lon = Number(place?.lon ?? DEFAULT_PLACE.lon).toFixed(4);
+    const params = new URLSearchParams({
+      lat,
+      lon,
+      detailLat: lat,
+      detailLon: lon,
+      zoom: '8',
+      level: 'surface',
+      overlay: 'radar',
+      product: 'radar',
+      menu: '',
+      message: '',
+      marker: 'true',
+      calendar: 'now',
+      type: 'map',
+      location: 'coordinates',
+      metricWind: 'mph',
+      metricTemp: '°F'
+    });
+    return `https://embed.windy.com/embed2.html?${params.toString()}`;
+  }
+
   function uvPct(value) {
     if (!Number.isFinite(value)) return 0;
     return Math.max(0, Math.min(100, (value / 11) * 100));
@@ -586,7 +610,10 @@
           </div>
         </div>
 
-        <p class="weather-radar-link"><a href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">Live Weather Radar on Windy</a></p>
+        <div class="weather-radar-embed">
+          <iframe src="${escapeHtml(radarEmbedUrl(place))}" title="Live weather radar near ${escapeHtml(placeTitle)}" loading="lazy" allowfullscreen></iframe>
+          <p class="weather-radar-link"><a href="${escapeHtml(radarHref)}" target="_blank" rel="noopener noreferrer">Open full radar on Windy ↗</a></p>
+        </div>
 
         ${stale ? `<div class="weather-stale-banner"><strong>Showing cached weather${cachedTime ? ` from ${cachedTime}` : ''}.</strong><span>${escapeHtml(error || 'Live weather APIs are temporarily unavailable.')}</span></div>` : ''}
 
