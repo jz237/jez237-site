@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>Jez237 — Photos</title>
-  <meta name="description" content="Jez237 photo archive with cats, garden snapshots, plant progress, casual collections, restorations, and personal image galleries." />
-  <meta name="keywords" content="Jez237 photos, photo archive, garden photos, plant photos, cat photos, personal photography, image gallery, photo restoration, Jez Bauder" />
+  <meta name="description" content="Jez237 photo archive with cats, garden snapshots, plant progress, casual collections, and personal image galleries." />
+  <meta name="keywords" content="Jez237 photos, photo archive, garden photos, plant photos, cat photos, personal photography, image gallery, Jez Bauder" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://jez237.com/photos/" />
   <meta property="og:title" content="Jez237 — Photos" />
-  <meta property="og:description" content="Cats, garden snapshots, plant progress, restorations, and casual personal photo collections." />
+  <meta property="og:description" content="Cats, garden snapshots, plant progress, and casual personal photo collections." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://jez237.com/photos/" />
   <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
@@ -22,6 +22,7 @@
     .hero-editorial { padding: clamp(22px, 4vw, 42px) clamp(24px, 4vw, 56px); }
     .hero-editorial h1 { margin: 4px 0 8px; }
     .hero-editorial .lede { margin: 0; }
+    .photostrip a { display: block; }
   </style>
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
 </head>
@@ -33,49 +34,59 @@
     <section class="hero-editorial">
       <div class="eyebrow">Collections</div>
       <h1>Photos, kept casual.</h1>
-      <p class="lede">Cats, the garden, and the occasional restoration. The polished chronicle lives in Plant Progress — this is the looser feed.</p>
+      <p class="lede">Cats, the garden, and everything else. The polished chronicle lives in Plant Progress — this is the looser feed.</p>
     </section>
 
-    <div class="photostrip" style="margin-top: 22px;">
-      <img loading="lazy" decoding="async" src="../photos/cats/images/cosmo-golden-eyes.jpg" alt="Cosmo" />
+    <!-- Latest photos across all albums; JS refreshes this from the album manifests. -->
+    <div class="photostrip" id="photostrip" style="margin-top: 22px;">
+      <img loading="lazy" decoding="async" src="cats/images/cosmo-golden-eyes.jpg" alt="Cosmo" />
       <img loading="lazy" decoding="async" src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg" alt="Redbud" />
       <img loading="lazy" decoding="async" src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/dwarf-peach-tree-2026-04-12.jpg" alt="Peach" />
-      <img loading="lazy" decoding="async" src="../photos/cats/images/luca-cosmo-synchronized-nap.jpg" alt="Luca and Cosmo" />
+      <img loading="lazy" decoding="async" src="cats/images/luca-cosmo-synchronized-nap.jpg" alt="Luca and Cosmo" />
     </div>
 
     <div class="section-head">
-      <h2>Sections</h2>
+      <h2>Albums</h2>
       <span class="section-sub">Pick a corner</span>
     </div>
 
     <div class="stack-lg">
+      <div class="row-2">
+        <a class="feature" href="cats/">
+          <div class="feature-media" data-album-cover="cats" style="background-image:url('cats/images/cat-family-portrait-2026-06-19.jpg')"></div>
+          <div class="feature-copy">
+            <div class="eyebrow">Daily life</div>
+            <h3>🐱 Cat Corner</h3>
+            <p>Luca, Cosmo, Taco &amp; Marty in their natural habitat. <span data-album-count="cats">34 photos and counting.</span></p>
+          </div>
+        </a>
+        <a class="feature" href="garden/">
+          <div class="feature-media" data-album-cover="garden" style="background-image:url('https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/06/back-garden-redbud-grapevine-panorama-2026-06-24.jpg')"></div>
+          <div class="feature-copy">
+            <div class="eyebrow">Seasonal</div>
+            <h3>🌿 Garden Photos</h3>
+            <p>Raw garden shots and seasonal progress, month by month. <span data-album-count="garden">46 photos.</span></p>
+          </div>
+        </a>
+      </div>
+
+      <a class="feature" href="snapshots/">
+        <div class="feature-media" data-album-cover="snapshots" style="background: linear-gradient(135deg, var(--surf-2), var(--surf-3)); display:flex; align-items:center; justify-content:center; font-size:52px;">📷</div>
+        <div class="feature-copy">
+          <div class="eyebrow">Everything else</div>
+          <h3>Snapshots</h3>
+          <p>The catch-all album — trips, projects, food, oddities, anything worth keeping that isn't a cat or a leaf. <span data-album-count="snapshots">Empty and waiting for its first photo.</span></p>
+        </div>
+      </a>
+
       <a class="feature" href="../plants/">
         <div class="feature-media" style="background-image:url('https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/rising-sun-redbud-2026-04-12.jpg')"></div>
         <div class="feature-copy">
           <div class="eyebrow">The polished record</div>
           <h3>Plant Progress</h3>
-          <p>Each plant kept as a dated journal with multiple entries, notes, and seasonal reference photos. Currently following a spring full of bloom.</p>
+          <p>Each plant kept as a dated journal with multiple entries, notes, and seasonal reference photos. The good photos from here earn stronger writing over there.</p>
         </div>
       </a>
-
-      <div class="row-2">
-        <a class="feature" href="../photos/cats/">
-          <div class="feature-media" style="background-image:url('../photos/cats/images/cosmo-throne.jpg')"></div>
-          <div class="feature-copy">
-            <div class="eyebrow">Daily life</div>
-            <h3>🐱 Cat Corner</h3>
-            <p>Luca, Cosmo, Taco &amp; Marty in their natural habitat — 34 photos and counting.</p>
-          </div>
-        </a>
-        <a class="feature" href="../photos/garden/">
-          <div class="feature-media" style="background-image:url('https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/photos/garden/images/2026/04/forsythia-2026-04-12-view-2.jpg')"></div>
-          <div class="feature-copy">
-            <div class="eyebrow">Seasonal</div>
-            <h3>🌿 Garden Photos</h3>
-            <p>Raw garden shots, seasonal progress, and reference images before they become journal entries.</p>
-          </div>
-        </a>
-      </div>
     </div>
 
     <div class="pullquote">
@@ -98,6 +109,88 @@
     </footer>
   </main>
 
+  <script>
+  /* Live album stats: fetch each album's manifest.json for photo counts,
+     latest covers, and the recent-photos strip. Static markup above is the
+     no-JS / fetch-failure fallback. */
+  (function () {
+    'use strict';
+
+    var albums = [
+      { key: 'cats', href: 'cats/' },
+      { key: 'garden', href: 'garden/' },
+      { key: 'snapshots', href: 'snapshots/' }
+    ];
+
+    function resolveSrc(album, src) {
+      return /^https?:\/\//.test(src) ? src : album.href + src;
+    }
+
+    function shortDate(dateStr) {
+      var d = new Date(dateStr + 'T12:00:00');
+      return d.toLocaleString('en-US', { month: 'short', day: 'numeric' });
+    }
+
+    Promise.all(albums.map(function (album) {
+      return fetch(album.href + 'manifest.json')
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (data) {
+          album.photos = Array.isArray(data) ? data : (data.photos || []);
+          return album;
+        })
+        .catch(function () { album.photos = null; return album; });
+    })).then(function (loaded) {
+      var pool = [];
+
+      loaded.forEach(function (album) {
+        if (!album.photos) return; // fetch failed — leave static fallback
+
+        var countEl = document.querySelector('[data-album-count="' + album.key + '"]');
+        var dated = album.photos.filter(function (p) { return p.date; })
+          .sort(function (a, b) { return b.date.localeCompare(a.date); });
+
+        if (countEl) {
+          if (!album.photos.length) {
+            countEl.textContent = 'Empty and waiting for its first photo.';
+          } else {
+            var label = album.photos.length + ' photo' + (album.photos.length === 1 ? '' : 's');
+            if (dated.length) label += ' · latest ' + shortDate(dated[0].date);
+            countEl.textContent = label + '.';
+          }
+        }
+
+        if (dated.length) {
+          var cover = document.querySelector('[data-album-cover="' + album.key + '"]');
+          if (cover) {
+            cover.style.background = '';
+            cover.textContent = '';
+            cover.style.backgroundImage = 'url("' + resolveSrc(album, dated[0].src) + '")';
+          }
+          dated.slice(0, 4).forEach(function (p) {
+            pool.push({ album: album, photo: p });
+          });
+        }
+      });
+
+      if (pool.length >= 4) {
+        pool.sort(function (a, b) { return b.photo.date.localeCompare(a.photo.date); });
+        var strip = document.getElementById('photostrip');
+        strip.innerHTML = '';
+        pool.slice(0, 8).forEach(function (entry) {
+          var link = document.createElement('a');
+          link.href = entry.album.href;
+          var img = document.createElement('img');
+          img.src = resolveSrc(entry.album, entry.photo.src);
+          img.alt = entry.photo.alt || entry.photo.caption || '';
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          link.appendChild(img);
+          strip.appendChild(link);
+        });
+      }
+    });
+  })();
+  </script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
 </body>
