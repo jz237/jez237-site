@@ -152,6 +152,31 @@
   font-size: 0.9em;
 }
 
+/* ---------------- Light theme ----------------
+   The workbench light theme intentionally keeps cards dark/muted
+   (see assets/workbench-theme.css); match that treatment here. */
+:root[data-theme="light"] .pg-item,
+:root[data-theme="light"] .pg-card,
+:root[data-theme="light"] .pg-month,
+:root[data-theme="light"] .pg-empty,
+:root[data-theme="light"] .pg-more-btn {
+  color: var(--wb-text, #eef6f8);
+  background: linear-gradient(145deg, rgba(15,35,48,0.82), rgba(8,21,31,0.9));
+  border-color: var(--wb-border, rgba(62,121,222,0.34));
+}
+:root[data-theme="light"] .pg-item .pg-caption,
+:root[data-theme="light"] .pg-card .pg-text,
+:root[data-theme="light"] .pg-empty {
+  color: var(--wb-muted, #b7c7d9);
+}
+:root[data-theme="light"] .pg-month-title { color: var(--wb-text, #eef6f8); }
+:root[data-theme="light"] .pg-item .pg-caption .pg-date,
+:root[data-theme="light"] .pg-card .pg-date,
+:root[data-theme="light"] .pg-month-count,
+:root[data-theme="light"] .pg-count {
+  color: var(--wb-muted-2, #7899bd);
+}
+
 /* ---------------- Lightbox ---------------- */
 .pg-lightbox {
   display: none;
