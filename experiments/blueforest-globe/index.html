@@ -94,8 +94,8 @@
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        "three": "./vendor/three.module.js",
+        "three/addons/": "./vendor/addons/"
       }
     }
   </script>
@@ -158,10 +158,10 @@
       return texture;
     }
 
-    const dayTexture = loadGlobeTexture("https://unpkg.com/three-globe@2.31.0/example/img/earth-blue-marble.jpg");
-    const nightTexture = loadGlobeTexture("https://unpkg.com/three-globe@2.31.0/example/img/earth-night.jpg");
-    const topologyTexture = loadGlobeTexture("https://unpkg.com/three-globe@2.31.0/example/img/earth-topology.png");
-    const waterTexture = loadGlobeTexture("https://unpkg.com/three-globe@2.31.0/example/img/earth-water.png", THREE.NoColorSpace);
+    const dayTexture = loadGlobeTexture("./textures/earth-blue-marble.jpg");
+    const nightTexture = loadGlobeTexture("./textures/earth-night.jpg");
+    const topologyTexture = loadGlobeTexture("./textures/earth-topology.png");
+    const waterTexture = loadGlobeTexture("./textures/earth-water.png", THREE.NoColorSpace);
     const sunDirection = new THREE.Vector3(-0.92, 0.22, -0.32).normalize();
 
     const globe = new THREE.Mesh(
