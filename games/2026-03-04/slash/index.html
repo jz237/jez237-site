@@ -47,7 +47,7 @@
   .optToggle.on { color:#8afff4; border-color:#8afff4; background:rgba(10,74,58,0.55); box-shadow:0 0 12px rgba(138,255,244,0.25); }
   #overlay p { color:#c7b6d7; font-size:12px; text-align:center; max-width:300px; line-height:1.55; margin-top:0; margin-bottom:14px; }
   .menuBtns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:0; }
-  .homeInfo { display:flex; flex-direction:column; align-items:center; gap:0; margin-top:280px; }
+  .homeInfo { display:flex; flex-direction:column; align-items:center; gap:0; margin-top:clamp(190px,31vh,280px); }
   .homeInstructions { width:min(440px,calc(100vw - 36px)); margin:0 0 14px; padding:12px 16px; border:1px solid rgba(255,224,128,0.38); border-radius:12px; background:linear-gradient(180deg,rgba(20,8,42,0.86),rgba(7,2,18,0.76)); box-shadow:0 0 28px rgba(128,64,204,0.26), inset 0 1px 0 rgba(255,255,255,0.12); color:#fff4ff; font-size:clamp(14px,2.7vw,18px); font-weight:900; line-height:1.42; letter-spacing:0.8px; text-align:center; text-shadow:0 0 12px rgba(224,128,255,0.68),0 2px 8px rgba(0,0,0,0.9); }
   .homeInstructions div { margin:2px 0; }
   .homeInstructions b { color:#ffe080; text-shadow:0 0 16px rgba(255,224,128,0.82); }
@@ -86,6 +86,28 @@
   .buildTag { margin-top:6px; font-size:10px; letter-spacing:2px; color:#594774; }
   .medalLine { margin-top:10px; font-size:16px; letter-spacing:3px; color:#ffe9a8; text-shadow:0 0 16px rgba(255,214,96,0.55); }
   .victoryStats { margin-top:10px; text-align:center; color:#d8c6f2; line-height:1.8; font-size:13px; }
+  @media (max-width: 640px), (max-height: 820px) {
+    #overlay { padding:22px 14px max(16px,env(safe-area-inset-bottom)); }
+    #overlay h1 { font-size:clamp(36px,10vw,48px); letter-spacing:5px; margin-top:clamp(34px,6vh,62px); }
+    .titleSub { margin-top:5px; font-size:11px; letter-spacing:6px; }
+    .titleBest { margin-top:7px; font-size:10px; letter-spacing:2px; min-height:12px; }
+    .homeInfo { margin-top:clamp(92px,17vh,156px); }
+    .homeInstructions { width:min(440px,calc(100vw - 28px)); padding:9px 12px; margin-bottom:9px; font-size:clamp(11px,3.25vw,14px); line-height:1.26; border-radius:8px; }
+    .menuBtns { gap:8px; }
+    #tapBtn, #duoBtn { margin-top:3px; padding:9px 16px; font-size:12px; letter-spacing:1.4px; }
+    .secondaryBtn { padding:8px 10px; font-size:10px; letter-spacing:1px; }
+    .versionTag { margin-top:7px; font-size:10px; }
+    .buildTag { margin-top:4px; font-size:9px; }
+  }
+  @media (max-height: 700px) {
+    #overlay h1 { margin-top:22px; font-size:34px; }
+    .titleSub { font-size:10px; }
+    .titleBest { display:none; }
+    .homeInfo { margin-top:74px; }
+    .homeInstructions { font-size:11px; line-height:1.18; padding:7px 9px; margin-bottom:7px; }
+    #tapBtn, #duoBtn { padding:7px 13px; }
+    .secondaryBtn { padding:7px 9px; }
+  }
 </style>
 </head>
 <body><div id="hud">
@@ -190,7 +212,7 @@
 <script>
 const canvas=document.getElementById('c');
 const ctx=canvas.getContext('2d');
-const GAME_VERSION='v1.2.0';
+const GAME_VERSION='v1.2.1';
 const GAME_BUILD='2026-07-04';
 const OPTS_KEY='slash_options';
 const OPTS=(()=>{
@@ -2962,6 +2984,10 @@ document.getElementById('shareBtn').addEventListener('touchend',e=>{e.preventDef
 const overlay=document.getElementById('overlay');
 overlay.addEventListener('pointerdown',()=>{ if(!gameActive) resumeAudio(); },{passive:true});
 overlay.addEventListener('touchstart',()=>{ if(!gameActive) resumeAudio(); },{passive:true});
+overlay.addEventListener('pointerup',e=>{
+  if(gameActive || isButton(e) || e.target.closest('.panel')) return;
+  startGame(false);
+});
 
 document.getElementById('initialsRow').addEventListener('click',e=>{
   const btn=e.target.closest('.initialBtn');
