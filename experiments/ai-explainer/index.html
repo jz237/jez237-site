@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
   <title>How AI Works - Interactive Guide</title>
+  <meta name="description" content="A beginner-friendly interactive guide to how AI works: tokens, context windows, prompts, tools, agents, and failure modes — every idea has a demo you can poke." />
+  <meta property="og:title" content="How AI Works — Interactive Guide" />
+  <meta property="og:description" content="Poke every part of an AI system: tokens, context, prompts, tools, agents, and where it all goes wrong. No signup, no API — just hands-on demos." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jez237.com/experiments/ai-explainer/" />
+  <meta property="og:image" content="https://jez237.com/assets/ai-explainer/ai-system-map.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg" />
   <link rel="stylesheet" href="../../assets/styles.css" />
   <link rel="stylesheet" href="../../assets/site-enhance.css" />
@@ -1613,7 +1620,7 @@
         </section>
 
         <footer>
-          <a href="../../">Home</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a>
+          <a href="../../">Home</a> · <a href="https://github.com/jz237/jez237-site" target="_blank" rel="noopener">Source repo</a> · <span>Last updated July 2026</span>
         </footer>
       </div>
     </div>
@@ -1951,6 +1958,14 @@
         avoid: 'The model is the whole assistant.',
         better: 'The model is one part of the assistant.'
       },
+      randomness: {
+        label: 'Randomness',
+        short: 'Why the same question gets different answers.',
+        definition: 'At each step the model produces a ranked list of plausible next tokens, and most systems sample from the top few instead of always taking the single best one. A setting often called temperature controls how adventurous that sampling is.',
+        example: 'Ask for a tagline twice and you get two different but similar answers. Neither is a glitch — both were high-probability paths through the same model.',
+        avoid: 'Different answers mean the model is broken.',
+        better: 'Answers are sampled, not looked up.'
+      },
       training: {
         label: 'Training',
         short: 'The process that creates the model weights.',
@@ -1958,6 +1973,14 @@
         example: 'A base language model learns broad text patterns during pretraining. Later tuning can make it follow instructions or specialize in code.',
         avoid: 'Training happens every time you chat.',
         better: 'Training creates the model; inference uses it.'
+      },
+      privacy: {
+        label: 'Chat privacy',
+        short: 'Whether the model learns from what you type.',
+        definition: 'Talking to a model does not train it. The weights are frozen during normal use — your words shape the current conversation, then leave when the context does. Whether chats are stored, reviewed, or used to train future models is a policy decision made by the service, not something the model does on its own.',
+        example: 'Tell a chatbot your dog\'s name today and a fresh chat tomorrow will not know it — unless the product deliberately saved it to a memory feature.',
+        avoid: 'It is learning about me as we talk.',
+        better: 'Chatting uses the model; it does not retrain it.'
       },
       alignment: {
         label: 'Alignment',
