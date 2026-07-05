@@ -2293,6 +2293,7 @@
             <label for="triage-symptom">Main symptom</label>
             <select id="triage-symptom" data-triage-symptom>
               <option value="breathing">Fish breathing hard or at surface</option>
+              <option value="death">Fish died suddenly</option>
               <option value="cloudy">Cloudy, milky, or hazy water</option>
               <option value="green">Water itself looks green</option>
               <option value="algae">Hair algae, mats, or heavy growth</option>
@@ -2300,6 +2301,8 @@
               <option value="coral">Coral not opening</option>
               <option value="inverts">Snails or shrimp dying</option>
               <option value="smell">Tank smells bad</option>
+              <option value="cycling">New tank still cycling</option>
+              <option value="temperature">Temperature or heater problem</option>
             </select>
           </div>
           <div class="triage-field">
@@ -3016,6 +3019,39 @@
           avoid: ['Do not dose copper in invert systems', 'Do not make rapid parameter changes', 'Do not assume it is only lack of food'],
           visit: ['Fresh sample of tank water', 'Medication or copper history', 'Acclimation method', 'Source water notes'],
           links: [['Open invert guide', 'snails-shrimp-dying/'], ['Shop water care', '../category/?cat=maintenance']]
+        },
+        death: {
+          label: 'Emergency loss check',
+          title: 'Protect the survivors first, then find the cause.',
+          summary: 'Sudden deaths usually trace to ammonia or nitrite, oxygen, temperature swings, or something added to the water.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'Temperature', 'Oxygen and surface movement'],
+          actions: ['Remove dead livestock right away', 'Increase aeration', 'Do a partial water change with matched temperature', 'Review everything added in the last 48 hours'],
+          avoid: ['Do not medicate without a test result', 'Do not do a full teardown in a panic', 'Do not restock until the cause is known'],
+          visit: ['Fresh sample of tank water', 'Timeline of the losses', 'List of recent additions or dosing', 'Photos of remaining livestock'],
+          links: [['Open crash guide', 'prevent-crash/'], ['Shop testing', '../category/?cat=testing']]
+        },
+        cycling: {
+          label: 'New tank check',
+          title: 'Confirm the cycle before adding or changing anything.',
+          summary: 'New tanks swing through ammonia and nitrite before the filter bacteria catch up. Most early problems are cycle problems, not disease.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'Nitrate', 'Days since setup'],
+          actions: ['Test daily during the first weeks', 'Feed lightly', 'Add a bacteria starter if levels climb', 'Do partial water changes when ammonia or nitrite rise'],
+          avoid: ['Do not add more livestock yet', 'Do not deep-clean the filter during the cycle', 'Do not chase pH while ammonia is present'],
+          visit: ['Days since setup', 'Full test results', 'Livestock list and dates added', 'Filter model and tank size'],
+          links: [['Open first tank guide', 'first-tank/'], ['Shop water care', '../category/?cat=maintenance']]
+        },
+        temperature: {
+          label: 'Temperature check',
+          title: 'Verify the reading before trusting the heater.',
+          summary: 'Temperature trouble shows up as stress, gasping, or sudden behavior changes. Confirm with a second thermometer before changing equipment.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Actual temperature on a second thermometer', 'Heater indicator and setting', 'Ammonia', 'Nitrite'],
+          actions: ['Compare two thermometers', 'Adjust temperature slowly', 'Increase aeration if the tank ran warm', 'Check for direct sun or equipment heat'],
+          avoid: ['Do not swing temperature quickly', 'Do not trust a single stuck thermometer', 'Do not leave a suspect heater running unwatched'],
+          visit: ['Tank size and current temperature', 'Heater brand and wattage', 'Recent temperature readings', 'Livestock list'],
+          links: [['Open parameter guide', 'track-parameters/'], ['Shop heating', '../category/?cat=heating-temperature']]
         },
         smell: {
           label: 'Odor source check',

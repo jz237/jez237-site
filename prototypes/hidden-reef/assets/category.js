@@ -317,8 +317,24 @@
       const matchesBrand = !controls.brand || brand === controls.brand;
       return matchesQuery && matchesCategory && matchesBrand;
     });
+    /* A query with no hits in the current scope (e.g. New Arrivals on the home
+       page) falls back to searching the whole catalog instead of dead-ending. */
+    let searchedAllProducts = false;
+    if (query && filtered.length === 0) {
+      const fallback = allProducts.filter(product => {
+        const name = product.name || '';
+        const brand = extractBrand(name);
+        const matchesQuery = name.toLowerCase().includes(query) || brand.toLowerCase().includes(query);
+        const matchesBrand = !controls.brand || brand === controls.brand;
+        return matchesQuery && matchesBrand;
+      });
+      if (fallback.length) {
+        filtered = fallback;
+        searchedAllProducts = true;
+      }
+    }
     filtered = sortProducts(filtered, controls.sort);
-    return filtered;
+    return { products: filtered, searchedAllProducts };
   }
 
   function renderProductControls(products) {
@@ -840,7 +856,7 @@
     const pageProducts = products.slice(start, end);
 
     if (pageProducts.length === 0) {
-      el.innerHTML = '<p style="color:var(--reef-muted);text-align:center;padding:40px;">No products found.</p>';
+      el.innerHTML = '<p style="color:var(--reef-muted);text-align:center;padding:40px;">No products found. Try a shorter search or press Reset.</p>';
       return;
     }
 
@@ -916,14 +932,16 @@
     el.innerHTML = html;
   }
 
-  function renderCountBar(shown, total, sub, rawTotal) {
+  function renderCountBar(shown, total, sub, rawTotal, searchedAllProducts) {
     const el = document.getElementById('count-bar');
     if (!el) return;
     const controls = getActiveControls();
     const selectedCategory = controls.category
       ? document.querySelector('#category-filter option:checked')?.textContent || ''
       : '';
-    const label = selectedCategory || 'All products';
+    const label = searchedAllProducts
+      ? `All products${selectedCategory ? ` (no matches in ${selectedCategory})` : ''}`
+      : selectedCategory || 'All products';
     const rawCount = Number(rawTotal || 0);
     const variantNote = rawCount && rawCount !== total
       ? `<small>${rawCount.toLocaleString()} catalog items including variants</small>`
@@ -934,7 +952,8 @@
   function updateProductView(page) {
     currentPage = Math.max(1, page || 1);
     const controls = getActiveControls();
-    const filteredProducts = applyProductControls(baseProducts);
+    const controlResult = applyProductControls(baseProducts);
+    const filteredProducts = controlResult.products;
     const rawFilteredCount = filteredProducts.length;
     const shouldGroupVariants = controls.category !== NEW_ARRIVALS_FILTER;
     currentProducts = shouldGroupVariants && window.THR?.groupProductVariants ? THR.groupProductVariants(filteredProducts) : filteredProducts;
@@ -943,7 +962,7 @@
     const start = (currentPage - 1) * PRODUCTS_PER_PAGE;
     const shown = Math.max(0, Math.min(PRODUCTS_PER_PAGE, currentProducts.length - start));
     renderProducts(currentProducts, currentPage);
-    renderCountBar(shown, currentProducts.length, currentSubcategory, rawFilteredCount);
+    renderCountBar(shown, currentProducts.length, currentSubcategory, rawFilteredCount, controlResult.searchedAllProducts);
     renderPagination(currentProducts.length, currentPage);
   }
 
