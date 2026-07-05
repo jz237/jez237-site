@@ -105,6 +105,8 @@
   function setPlayButtonText(text) {
     refs.playBtn.textContent = text;
     refs.miniPlayBtn.textContent = text;
+    refs.playBtn.classList.toggle("is-playing", text === "Pause");
+    refs.miniPlayBtn.classList.toggle("is-playing", text === "Pause");
     refs.playBtn.setAttribute("aria-label", text === "Pause" ? "Pause SID" : "Play SID");
     refs.miniPlayBtn.setAttribute("aria-label", text === "Pause" ? "Pause SID" : "Play SID");
   }
@@ -887,6 +889,7 @@
     refs.scopeModeBtn.addEventListener("click", cycleScopeMode);
     refs.volume.addEventListener("input", () => {
       const volume = Number(refs.volume.value);
+      refs.volume.style.setProperty("--fill", `${Math.round(volume * 100)}%`);
       refs.volumeText.textContent = `${Math.round(volume * 100)}%`;
       const player = getPlayer();
       if (player) player.setVolume(volume);
