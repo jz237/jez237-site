@@ -19,6 +19,7 @@
     const style = document.createElement('style');
     style.id = 'reef-background-glass-style';
     style.textContent = [
+      '.has-reef-background{background:#03182c!important;}',
       '.has-reef-background body{background:transparent!important;}',
       '.has-reef-background .page{background:transparent!important;}',
       '.has-reef-background .header:not(.masthead),',
@@ -200,21 +201,32 @@
     ctx.clearRect(0, 0, width, height);
 
     const bg = ctx.createLinearGradient(0, 0, 0, height);
-    bg.addColorStop(0, 'rgba(3,48,84,0.92)');
-    bg.addColorStop(0.45, 'rgba(2,31,63,0.76)');
-    bg.addColorStop(1, 'rgba(0,8,22,0.96)');
+    bg.addColorStop(0, 'rgba(5,38,68,1)');
+    bg.addColorStop(0.5, 'rgba(3,21,43,1)');
+    bg.addColorStop(1, 'rgba(0,5,13,1)');
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, width, height);
 
     const topLight = ctx.createRadialGradient(width * 0.5, -height * 0.12, 0, width * 0.5, -height * 0.12, Math.max(width, height) * 0.75);
-    topLight.addColorStop(0, 'rgba(83,226,255,0.34)');
-    topLight.addColorStop(0.42, 'rgba(0,167,183,0.12)');
+    topLight.addColorStop(0, 'rgba(74,205,240,0.24)');
+    topLight.addColorStop(0.42, 'rgba(0,150,168,0.09)');
     topLight.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = topLight;
     ctx.fillRect(0, 0, width, height);
 
     drawLightRays(time);
     drawCaustics(time);
+
+    // Darken the left/right gutters so the content column reads as framed
+    // deep blue instead of a flat wash. Bubbles still float over the sides.
+    const isWide = width >= 900;
+    const sideShade = ctx.createLinearGradient(0, 0, width, 0);
+    sideShade.addColorStop(0, 'rgba(0,4,11,0.74)');
+    sideShade.addColorStop(isWide ? 0.17 : 0.1, 'rgba(0,4,11,0)');
+    sideShade.addColorStop(isWide ? 0.83 : 0.9, 'rgba(0,4,11,0)');
+    sideShade.addColorStop(1, 'rgba(0,4,11,0.74)');
+    ctx.fillStyle = sideShade;
+    ctx.fillRect(0, 0, width, height);
 
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
