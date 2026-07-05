@@ -4,6 +4,28 @@
    manifest.json; pages only provide a [data-gallery] container.
    =================================================================== */
 
+/* ---------------- Page backdrop ----------------
+   Album pages add <div class="pg-backdrop" style="background-image:url(...)">
+   right after <body>. Body paints its own background over negative
+   z-index layers, so this sits at z-index 0 with main content lifted. */
+.pg-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center 30%;
+  filter: blur(4px);
+  transform: scale(1.06); /* hide blurred edges */
+}
+.pg-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7,11,17,0.88) 0%, rgba(7,11,17,0.84) 45%, rgba(7,11,17,0.95) 100%);
+}
+main.container { position: relative; z-index: 1; }
+
 /* ---------------- Masonry layout (e.g. cats) ---------------- */
 .pg-masonry {
   columns: 3;
