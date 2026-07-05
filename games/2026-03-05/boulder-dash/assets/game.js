@@ -2,7 +2,7 @@
 // Engine (engine.js) is headless; this file owns everything user-facing.
 'use strict';
 
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.1.0';
 const STEP_MS = 160;                 // authentic cave cycle (6.25 Hz)
 const LB_URL = 'https://game-scores.jez237.workers.dev/scores/emerald-mine-2';
 const MAX_LEVEL = 80;
@@ -69,9 +69,28 @@ function synthNoise(dur, vol, freq) {
   const g = ac.createGain(); g.gain.value = vol || 0.3;
   src.connect(f); f.connect(g); g.connect(sfxGain); src.start();
 }
+// glassy gem tones matched to the measured originals (research/audio.md):
+// collect = ring swelling 2.6->2.85kHz peaking ~170ms then stopping (~250ms);
+// gem landing = pure steady ~2.7kHz "tiiing" fading over ~0.3s
+function synthGlass(fStart, fEnd, dur, peakAt, vol) {
+  if (!ac) return;
+  const t0 = ac.currentTime;
+  for (const [mult, v] of [[1, 1], [2, 0.18]]) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(fStart * mult, t0);
+    o.frequency.linearRampToValueAtTime(fEnd * mult, t0 + dur);
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.001, vol * v), t0 + peakAt);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    o.connect(g); g.connect(sfxGain); o.start(t0); o.stop(t0 + dur + 0.02);
+  }
+}
 const SYNTH = {
   space: () => synthTone(150, 0.05, 'triangle', 0.07),
   dirt: () => synthNoise(0.09, 0.5, 1400),
+  collect: () => synthGlass(2600, 2850, 0.25, 0.17, 0.4),
+  diamond: () => synthGlass(2700, 2700, 0.31, 0.015, 0.32),
   press: () => { synthTone(1700, 0.09, 'square', 0.2); setTimeout(() => synthTone(2100, 0.09, 'square', 0.2), 90); },
   tick: () => synthTone(890, 0.02, 'square', 0.3),
   time: () => synthTone(2100, 0.2, 'square', 0.35),
@@ -80,8 +99,11 @@ const SYNTH = {
   blip2: () => synthTone(1320, 0.06, 'square', 0.15),
 };
 const LOOP_SOUNDS = new Set(['wonder', 'wheel', 'bug', 'tank', 'eater', 'alien']);
+// tonal gem sounds are synthesized (matches original frequencies better than generated audio)
+const SYNTH_PREFERRED = new Set(['collect', 'diamond']);
 function playSfx(name) {
   if (!audioReady || !ac) return;
+  if (SYNTH_PREFERRED.has(name) && SYNTH[name]) { SYNTH[name](); return; }
   if (SYNTH[name] && !buffers[name]) { SYNTH[name](); return; }
   const buf = buffers[name]; if (!buf) return;
   const meta = manifest.sfx[name] || {};
@@ -273,6 +295,7 @@ let paused = false;
 let mode = 'single';                 // single | team
 let eng = null, level = 0, lives = 3, runScore = 0, nextLifeAt = 2000;
 let finaleCave = false;   // cave with no exits (teamwork file 101, "THE END")
+let awaitStart = true;    // cave physics hold until the player's first input
 let lastStep = 0, stepAcc = 0;
 let menuIdx = 0, levelPage = 0, optIdx = 0;
 let flashMsg = null, flashUntil = 0;
@@ -285,6 +308,16 @@ function flash(msg, ms) { flashMsg = msg; flashUntil = performance.now() + (ms |
 
 function caveFileFor(lv, m) { return m === 'team' ? (lv % 4 === 0 ? 81 + lv / 4 : lv) : lv; }
 function handicap() { return mode === 'team' ? save.hT : save.h1; }
+function unlockedMax() { return save.opts.tester ? MAX_LEVEL : handicap(); }
+function anyGameInput() {
+  if (touchState.dir || touchState.fire) return true;
+  for (const P of [save.opts.keys.p1, mode === 'team' ? save.opts.keys.p2 : null]) {
+    if (!P) continue;
+    if (keysDown.has(P.up) || keysDown.has(P.down) || keysDown.has(P.left) ||
+        keysDown.has(P.right) || keysDown.has(P.fire)) return true;
+  }
+  return latch.some(l => l.dx || l.dy || l.fire);
+}
 
 function startLevel(lv) {
   const file = caveFileFor(lv, mode);
@@ -293,6 +326,7 @@ function startLevel(lv) {
   eng = new EMEngine(cave, { players: mode === 'team' ? 2 : 1, seed: (Date.now() & 0xffffffff) >>> 0 });
   level = lv;
   finaleCave = !cave.grid.some(e => e === EL.exit_closed || e === EL.exit_open);
+  awaitStart = true;
   state = 'intro'; paused = false; escDownAt = 0;
   latch = [{ dx: 0, dy: 0, fire: false }, { dx: 0, dy: 0, fire: false }];
   stepAcc = 0; lastStep = performance.now();
@@ -618,7 +652,8 @@ function drawLevels() {
   ctx.fillStyle = '#000'; ctx.fillRect(0, 0, VW, VH);
   drawBg();
   text3d('SELECT LEVEL', VW / 2, 50, 34, '#0ca');
-  text((mode === 'single' ? '1 PLAYER' : 'TEAMWORK') + ' — REACHED ' + handicap(), VW / 2, 86, 14, '#7a7');
+  text((mode === 'single' ? '1 PLAYER' : 'TEAMWORK') + ' — REACHED ' + handicap() +
+    (save.opts.tester ? '  ·  TEST UNLOCK' : ''), VW / 2, 86, 14, save.opts.tester ? '#ffcc44' : '#7a7');
   const per = 20, pages = Math.ceil((MAX_LEVEL + 1) / per);
   const cols = 5, rows = 4;
   const bw = Math.min(96, (VW - 60) / cols - 10), bh = 46;
@@ -627,7 +662,7 @@ function drawLevels() {
   for (let i = 0; i < per; i++) {
     const lv = levelPage * per + i; if (lv > MAX_LEVEL) break;
     const cx = gx + (i % cols) * (bw + 10), cyy = gy + Math.floor(i / cols) * (bh + 10);
-    const unlocked = lv <= handicap();
+    const unlocked = lv <= unlockedMax();
     const isTW4 = mode === 'team' && lv % 4 === 0;
     uiBtn(cx, cyy, bw, bh, String(lv) + (isTW4 ? '•' : ''), () => { if (unlocked) startRun(lv); }, {
       bg: unlocked ? 'rgba(0,60,30,.85)' : 'rgba(30,30,30,.7)',
@@ -662,7 +697,13 @@ const OPT_ROWS = () => [
   ['P2 LEFT', () => keyName('p2', 'left'), () => { remapTarget = { p: 'p2', act: 'left' }; }],
   ['P2 RIGHT', () => keyName('p2', 'right'), () => { remapTarget = { p: 'p2', act: 'right' }; }],
   ['P2 FIRE', () => keyName('p2', 'fire'), () => { remapTarget = { p: 'p2', act: 'fire' }; }],
-  ['RESET PROGRESS', () => '', () => { if (confirm('Reset all progress and scores?')) { save.h1 = 0; save.hT = 0; save.best = {}; save.scores = []; persist(); } }],
+  ['TEST UNLOCK (PASSWORD)', () => save.opts.tester ? 'ON' : 'OFF', () => {
+    if (save.opts.tester) { save.opts.tester = false; flash('TEST UNLOCK OFF'); return; }
+    const p = window.prompt('Enter password:') || '';
+    if (p.trim().toLowerCase() === 'tester') { save.opts.tester = true; flash('ALL LEVELS UNLOCKED'); }
+    else if (p) flash('WRONG PASSWORD');
+  }],
+  ['RESET PROGRESS', () => '', () => { if (confirm('Reset all progress and scores?')) { save.h1 = 0; save.hT = 0; save.best = {}; save.scores = []; save.opts.tester = false; persist(); } }],
 ];
 function keyName(p, act) {
   const k = save.opts.keys[p][act];
@@ -854,7 +895,7 @@ function handleKeyUI(e) {
     if (code === 'ArrowRight') levelPage = Math.min(4, levelPage + 1);
     if (/^(Digit|Numpad)\d$/.test(code)) {
       const lv = levelPage * 20 + (+code.slice(-1));
-      if (lv <= MAX_LEVEL && lv <= handicap()) startRun(lv);
+      if (lv <= MAX_LEVEL && lv <= unlockedMax()) startRun(lv);
     }
   } else if (state === 'options') {
     const rows = OPT_ROWS();
@@ -894,11 +935,16 @@ function frame(now) {
   requestAnimationFrame(frame);
   uiHot = [];
   if ((state === 'playing' || state === 'ending') && !paused) {
-    stepAcc += Math.min(100, now - (frame.last || now));
-    while (stepAcc >= STEP_MS) {
-      stepAcc -= STEP_MS; lastStep = now;
-      if (state === 'playing') gameTick();
-      else { eng.step({}, {}); processEngineEvents(); }  // explosions animate WITH sound
+    if (state === 'playing' && awaitStart) {
+      stepAcc = 0;
+      if (anyGameInput()) { awaitStart = false; lastStep = now; }
+    } else {
+      stepAcc += Math.min(100, now - (frame.last || now));
+      while (stepAcc >= STEP_MS) {
+        stepAcc -= STEP_MS; lastStep = now;
+        if (state === 'playing') gameTick();
+        else { eng.step({}, {}); processEngineEvents(); }  // explosions animate WITH sound
+      }
     }
     if (state === 'ending' && now > endingAt) onLevelEnd();
   }
@@ -913,6 +959,10 @@ function frame(now) {
     case 'intro': drawIntro(now); break;
     case 'playing': case 'ending':
       drawPlayfield(now); drawHUD(now); drawEscHold(now);
+      if (state === 'playing' && awaitStart && !paused && Math.floor(now / 400) % 2 === 0) {
+        ctx.fillStyle = 'rgba(0,0,0,.65)'; rr(ctx, VW / 2 - 150, VH * 0.18, 300, 44, 10); ctx.fill();
+        text(touchControls ? 'DRAG TO START' : 'MOVE TO START', VW / 2, VH * 0.18 + 22, 18, '#aaffaa');
+      }
       if (paused) drawPause();
       break;
     case 'clear': drawClear(now); break;
