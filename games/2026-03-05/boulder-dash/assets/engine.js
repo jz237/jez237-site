@@ -632,7 +632,9 @@ class EMEngine {
       this.timeElapsed++;
       if (this.timed) {
         this.timeLeft--;
-        if (this.timeLeft <= 100 && this.timeLeft >= 0 && this.timeLeft % 10 === 0) this.snd('time', this.players[0].idx);
+        // original warns once per second during the FINAL 10 seconds only (bin_EM2 $4f6e:
+        // cmpi.w #$b,$3ae / bcc skip — never at 100/90/... like later engine lineages)
+        if (this.timeLeft >= 0 && this.timeLeft <= 9) this.snd('time', this.players[0].idx);
         if (this.timeLeft <= 0) { this.timeLeft = 0; this.killedOutOfTime = true; }
       }
     }
