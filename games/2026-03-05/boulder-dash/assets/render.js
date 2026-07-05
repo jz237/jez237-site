@@ -136,41 +136,62 @@ P.stone = (v) => (ctx, S) => {
     if ((px - cx) ** 2 + (py - cy) ** 2 < rad * rad * 0.8) ctx.fillRect(px, py, S / 18 + rnd() * S / 20, S / 22 + rnd() * S / 24);
   }
 };
-P.emerald = (f) => (ctx, S) => {
-  const cx = S / 2, cy = S / 2, w = S * 0.42, h = S * 0.47;
-  ctx.beginPath();
-  ctx.moveTo(cx, cy - h); ctx.lineTo(cx + w, cy - h * 0.35); ctx.lineTo(cx + w, cy + h * 0.35);
-  ctx.lineTo(cx, cy + h); ctx.lineTo(cx - w, cy + h * 0.35); ctx.lineTo(cx - w, cy - h * 0.35);
+// Round brilliant-cut gem, matching the original Amiga sprites: many-faceted
+// roundish body with an off-center apex and radiating facets, lit from top-left.
+// `shades` darkest->lightest; `apexCone` draws the diamond's bright white top cone.
+function gemBrilliant(ctx, S, shades, apexCone, f) {
+  const cx = S / 2, cy = S / 2 + S * 0.02, r = S * 0.47;
+  const N = 9;
+  const ccx = cx - S * 0.05, ccy = cy - S * 0.06;      // table center, shifted to the light
+  const outer = [], inner = [];
+  for (let i = 0; i < N; i++) {
+    const a = -Math.PI / 2 - Math.PI / N + i * (Math.PI * 2 / N);
+    const ox = cx + Math.cos(a) * r, oy = cy + Math.sin(a) * r * 0.97;
+    outer.push([ox, oy]);
+    inner.push([ccx + (ox - ccx) * 0.52, ccy + (oy - ccy) * 0.52]);
+  }
+  const lightA = -2.2; // light from upper-left
+  // rim band: one trapezoid facet per edge, shaded by orientation to the light
+  for (let i = 0; i < N; i++) {
+    const j = (i + 1) % N;
+    const mx = (outer[i][0] + outer[j][0]) / 2 - cx, my = (outer[i][1] + outer[j][1]) / 2 - cy;
+    const ang = Math.atan2(my, mx);
+    const d = 1 - Math.abs(((ang - lightA + Math.PI * 3) % (Math.PI * 2)) - Math.PI) / Math.PI;
+    const idx = Math.max(0, Math.min(shades.length - 1, Math.round(d * (shades.length - 1))));
+    const topFacet = my < -r * 0.15;
+    ctx.beginPath();
+    ctx.moveTo(outer[i][0], outer[i][1]); ctx.lineTo(outer[j][0], outer[j][1]);
+    ctx.lineTo(inner[j][0], inner[j][1]); ctx.lineTo(inner[i][0], inner[i][1]);
+    ctx.closePath();
+    ctx.fillStyle = apexCone && topFacet ? (d > 0.5 ? '#ffffff' : '#e2f0e9') : shades[idx];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,20,0,.45)'; ctx.lineWidth = S / 70; ctx.stroke();
+  }
+  // central table
+  ctx.beginPath(); inner.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
   ctx.closePath();
-  ctx.fillStyle = PAL.emA; ctx.fill();
-  ctx.fillStyle = PAL.emB;
-  ctx.beginPath(); ctx.moveTo(cx, cy - h * 0.75); ctx.lineTo(cx + w * 0.6, cy - h * 0.15); ctx.lineTo(cx, cy + h * 0.35); ctx.lineTo(cx - w * 0.6, cy - h * 0.15); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,0,.5)'; ctx.lineWidth = S / 40; ctx.stroke();
-  ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = S / 26;
-  ctx.beginPath(); ctx.moveTo(cx - w * 0.45, cy - h * 0.55); ctx.lineTo(cx + w * 0.1, cy - h * 0.05); ctx.stroke();
-  if (f >= 6) { // sparkle
-    const sx = cx + (f === 6 ? -w * 0.3 : w * 0.35), sy = cy - h * (f === 6 ? 0.5 : 0.1);
+  ctx.fillStyle = apexCone ? '#f2faf6' : shades[Math.min(3, shades.length - 1)];
+  ctx.fill(); ctx.strokeStyle = 'rgba(0,20,0,.5)'; ctx.lineWidth = S / 60; ctx.stroke();
+  // table highlight toward the light
+  ctx.beginPath();
+  ctx.moveTo(inner[0][0], inner[0][1]);
+  ctx.lineTo(inner[N - 1][0], inner[N - 1][1]);
+  ctx.lineTo(ccx, ccy); ctx.closePath();
+  ctx.fillStyle = apexCone ? '#ffffff' : shades[shades.length - 1]; ctx.fill();
+  // silhouette outline
+  ctx.beginPath(); outer.forEach((p, i) => i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]));
+  ctx.closePath(); ctx.strokeStyle = 'rgba(0,0,0,.6)'; ctx.lineWidth = S / 36; ctx.stroke();
+  if (f >= 6) { // occasional sparkle
+    const sx = ccx + (f === 6 ? -r * 0.35 : r * 0.5), sy = ccy + (f === 6 ? -r * 0.25 : r * 0.3);
     ctx.strokeStyle = '#fff'; ctx.lineWidth = S / 30;
-    ctx.beginPath(); ctx.moveTo(sx - S / 10, sy); ctx.lineTo(sx + S / 10, sy); ctx.moveTo(sx, sy - S / 10); ctx.lineTo(sx, sy + S / 10); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx - S / 10, sy); ctx.lineTo(sx + S / 10, sy);
+    ctx.moveTo(sx, sy - S / 10); ctx.lineTo(sx, sy + S / 10); ctx.stroke();
   }
-};
-P.diamond = (f) => (ctx, S) => {
-  const cx = S / 2, cy = S / 2, w = S * 0.4, top = cy - S * 0.32, mid = cy - S * 0.1, bot = cy + S * 0.44;
-  ctx.beginPath(); ctx.moveTo(cx - w, mid); ctx.lineTo(cx - w * 0.5, top); ctx.lineTo(cx + w * 0.5, top);
-  ctx.lineTo(cx + w, mid); ctx.lineTo(cx, bot); ctx.closePath();
-  const gr = ctx.createLinearGradient(0, top, 0, bot);
-  gr.addColorStop(0, PAL.diC); gr.addColorStop(0.35, PAL.diB); gr.addColorStop(1, PAL.diA);
-  ctx.fillStyle = gr; ctx.fill();
-  ctx.strokeStyle = 'rgba(0,0,60,.5)'; ctx.lineWidth = S / 40; ctx.stroke();
-  ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = S / 44;
-  ctx.beginPath(); ctx.moveTo(cx - w * 0.55, mid); ctx.lineTo(cx, bot); ctx.lineTo(cx + w * 0.55, mid);
-  ctx.moveTo(cx - w, mid); ctx.lineTo(cx + w, mid); ctx.stroke();
-  if (f >= 6) {
-    const sx = cx + (f === 6 ? -w * 0.5 : w * 0.55), sy = top + (f === 6 ? S * 0.05 : S * 0.16);
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = S / 28;
-    ctx.beginPath(); ctx.moveTo(sx - S / 9, sy); ctx.lineTo(sx + S / 9, sy); ctx.moveTo(sx, sy - S / 9); ctx.lineTo(sx, sy + S / 9); ctx.stroke();
-  }
-};
+}
+P.emerald = (f) => (ctx, S) =>
+  gemBrilliant(ctx, S, ['#0d3a0d', '#1c661c', '#2f9a2f', '#4fc44f', '#8dee8d'], false, f);
+P.diamond = (f) => (ctx, S) =>
+  gemBrilliant(ctx, S, ['#7fa08e', '#a8c8b6', '#cfe4d8', '#eef8f2', '#ffffff'], true, f);
 P.bomb = () => (ctx, S) => {
   const cx = S / 2, cy = S / 2 + S * 0.04, rad = S * 0.4;
   const gr = ctx.createRadialGradient(cx - rad / 3, cy - rad / 2.4, rad / 6, cx, cy, rad * 1.15);
