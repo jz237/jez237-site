@@ -920,22 +920,24 @@ body.ai-sounds-page::after {
   mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
   animation: galaxy-drift 28s ease-in-out infinite alternate;
 }
-/* Home + sound pages get their galaxy from the fixed body ::before/::after
-   layers (z-0), which already cover the viewport and never stretch with content.
-   The hub's own ::before galaxy lives in the hub's z-1 stacking context, so on
-   these pages it painted ON TOP of the space-fx star canvas (a body-level z-0
-   layer) and hid the stars + meteors. Drop it here so the shooting stars show;
-   the translucent hub still reveals the body galaxy behind the content. */
+/* Home + sound pages: keep the BRIGHT hub galaxy (viewport-fixed so it doesn't
+   stretch on tall pages) AND show the shooting stars. A body-level star layer
+   can't sit above the hub galaxy — the hub is its own z-1 stacking context — so
+   host the stars INSIDE the hub via [data-space-fx]. Within the hub the galaxy
+   ::before is z-index -2 and the star host is -1: galaxy on the bottom, stars
+   above it, page content above both. This is the original bright home layering,
+   now applied consistently to the sound pages too. */
 body.home-page .desktop-hub::before,
 body.ai-sounds-page .desktop-hub::before {
-  content: none;
+  position: fixed;
+  inset: -8vh -18vw -14vh;
 }
-/* The star canvas is a body-level z-0 layer behind the hub, so lighten the hub
-   panel on the galaxy pages to let the twinkling stars + meteors show through it
-   (not just in the side gutters). Cards/nav keep their own backgrounds. */
-body.home-page .desktop-hub,
-body.ai-sounds-page .desktop-hub {
-  background: rgba(2, 8, 19, 0.32);
+body.home-page .desktop-hub [data-space-fx],
+body.ai-sounds-page .desktop-hub [data-space-fx] {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
 }
 .galaxy-backdrop {
   position: absolute;
