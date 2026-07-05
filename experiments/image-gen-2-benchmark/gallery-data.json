@@ -4011,5 +4011,45 @@
       "description": "A believable kelp-forest tide-channel animal with buoyant shoulder bladders, ribbon whiskers, and wet olive-bronze skin.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-05-hybrid-creature-infographic-spiralplate-mangrove-forager-de",
+    "title": "Spiralplate Mangrove Forager: Development Map",
+    "tests": "Hybrid creature development-map infographic; fictional/non-actionable; sources: Sunda pangolin + lined seahorse; includes source-trait map, juvenile-to-adult strip, adult specimen panel, macro texture windows, habitat swatches, and field-context scale vignette.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Spiralplate Mangrove Forager\", using exactly two source organisms: Sunda pangolin + lined seahorse. Make it a landscape scientific wall chart assembled on a wet mangrove field-station bench, with restrained concise labels and no actionable biology. Include a source-trait map showing Sunda pangolin contributes overlapping keratin scale armor, powerful digging foreclaws, long narrow insect-feeding snout and tongue, curled defensive posture, and low cautious terrestrial gait, while lined seahorse contributes upright arched neck and horse-like head profile, prehensile curled tail, bony ring ridges, small fluttering dorsal fin, and brackish seagrass camouflage. Add a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel showing a knee-high amphibious mangrove forager with a pangolin-like armored torso and foreclaws, a seahorse-arched neck and small horse-like head, alternating bronze keratin plates and pale lined bony ridges, a curled prehensile tail gripping a mangrove root, a small translucent dorsal fin folded along the back, and a long narrow snout probing termite-soft driftwood; macro texture windows for wet scale edges, bony ring ridges, claw mud scratches, dorsal fin membrane, snout whisker pores, and tail-grip skin; habitat swatches for black mangrove mud, brackish seagrass, rust-red prop roots, termite-pocked driftwood, and green tidal foam; plus a field-context scale vignette with a mangrove leaf, root cross-section, small unbranded caliper, boot-print edge, and shallow observation tray. Use clean scientific color coding, photorealistic wet bench detail, restrained arrows, readable but minimal fictional labels, clear panel hierarchy, bronze scale highlights, sea-green fin tinting, rust-red roots, black mud, and pearly water reflections. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], preserving source traits visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Spiralplate Mangrove Forager; [SOURCE_A] = Sunda pangolin; [SOURCE_B] = lined seahorse; [HABITAT] = brackish mangrove root maze at low tide; adult phenotype = knee-high amphibious forager with pangolin scale armor, digging foreclaws, narrow insect-feeding snout, seahorse-arched neck and head, pale bony ring ridges, folded sea-green dorsal fin, and curled prehensile tail gripping roots.",
+    "image": "images/2026-07-05-hybrid-creature-infographic-spiralplate-mangrove-forager-de.jpg",
+    "thumb": "thumbs/2026-07-05-hybrid-creature-infographic-spiralplate-mangrove-forager-de.webp",
+    "color": "#888174",
+    "date": "2026-07-05",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Spiralplate Mangrove Forager",
+      "imageKind": "infographic",
+      "description": "A fictional pangolin-plus-seahorse mangrove forager with bronze scale armor, bony ring ridges, digging foreclaws, an arched seahorse neck, folded dorsal fin, and root-gripping prehensile tail.",
+      "continuity": "Same adult phenotype across both images: Sunda pangolin scale armor, foreclaws, and insect-feeding snout combined with lined seahorse arched neck, bony ridges, dorsal fin, and curled tail in a brackish mangrove root habitat."
+    }
+  },
+  {
+    "id": "2026-07-05-hybrid-creature-wild-spiralplate-mangrove-forager-in-the-wi",
+    "title": "Spiralplate Mangrove Forager: In the Wild",
+    "tests": "Hybrid creature wild field photo; fictional/non-actionable; sources: Sunda pangolin + lined seahorse; preserves the same adult phenotype and mangrove habitat continuity.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Spiralplate Mangrove Forager\", a clearly fictional two-source hybrid of Sunda pangolin + lined seahorse, foraging in a brackish mangrove root maze at low tide. Preserve the exact adult phenotype from the development map: a knee-high amphibious forager with a low pangolin-like armored torso, overlapping wet bronze keratin scales, powerful digging foreclaws caked with black mud, a long narrow insect-feeding snout probing termite-soft driftwood, an upright seahorse-arched neck with a small horse-like head profile, pale lined bony ring ridges alternating between scale bands, a small translucent sea-green dorsal fin folded along the back, and a curled prehensile tail gripping a rust-red mangrove prop root. Show it in a cautious three-quarter side view, body low to the mud but neck raised, one foreclaw opening rotted driftwood while the snout probes inside, tail visibly wrapped around a root for balance. Include brackish seagrass strands, green tidal foam, wet black mud ripples, mangrove leaves, tiny bubbles, pearly water reflections, termite-pocked wood, scale scratches, droplets on the dorsal fin membrane, and a boot-print edge or fallen mangrove leaf for scale. Use low wildlife camera angle at root level, humid filtered afternoon light, shallow documentary depth of field, tactile mud, scales, bony ridges, fin membrane, root bark, and water textures. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure pangolin or pure seahorse result; it must visibly combine Sunda pangolin traits and lined seahorse traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Spiralplate Mangrove Forager; [SOURCE_A] = Sunda pangolin; [SOURCE_B] = lined seahorse; [HABITAT] = brackish mangrove root maze at low tide; shared adult phenotype = knee-high amphibious forager with pangolin scale armor, digging foreclaws, narrow insect-feeding snout, seahorse-arched neck and head, pale bony ring ridges, folded sea-green dorsal fin, and curled prehensile tail gripping roots.",
+    "image": "images/2026-07-05-hybrid-creature-wild-spiralplate-mangrove-forager-in-the-wi.jpg",
+    "thumb": "thumbs/2026-07-05-hybrid-creature-wild-spiralplate-mangrove-forager-in-the-wi.webp",
+    "color": "#474137",
+    "date": "2026-07-05",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Spiralplate Mangrove Forager",
+      "imageKind": "wild",
+      "description": "A fictional pangolin-plus-seahorse mangrove forager with bronze scale armor, bony ring ridges, digging foreclaws, an arched seahorse neck, folded dorsal fin, and root-gripping prehensile tail.",
+      "continuity": "Same adult phenotype across both images: Sunda pangolin scale armor, foreclaws, and insect-feeding snout combined with lined seahorse arched neck, bony ridges, dorsal fin, and curled tail in a brackish mangrove root habitat."
+    }
   }
 ]
