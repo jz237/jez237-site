@@ -5,6 +5,20 @@
   const TOUCH_ZOOM_MAX = 4;
   const DOUBLE_TAP_MS = 320;
 
+  let lastFocusBeforeModal = null;
+  let lastFocusBeforeDrawer = null;
+
+  function restoreFocus(element) {
+    if (element && document.contains(element) && typeof element.focus === 'function') {
+      element.focus();
+    }
+  }
+
+  function getFocusable(container) {
+    return [...container.querySelectorAll('button, [href], select, input, textarea, [tabindex]:not([tabindex="-1"])')]
+      .filter(el => !el.disabled && el.getClientRects().length > 0);
+  }
+
   function ensureModal() {
     let modal = document.querySelector('.link-modal');
     if (modal) return modal;
@@ -48,14 +62,31 @@
     document.addEventListener('keydown', event => {
       if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(modal);
     });
+    modal.addEventListener('keydown', event => {
+      if (event.key !== 'Tab' || !modal.classList.contains('is-open')) return;
+      const focusables = getFocusable(modal);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
     return modal;
   }
 
   function closeModal(modal) {
     resetImageZoom(modal);
+    if (modal.contains(document.activeElement)) document.activeElement.blur();
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('link-modal-open');
+    restoreFocus(lastFocusBeforeModal);
+    lastFocusBeforeModal = null;
   }
 
   function setImageZoom(modal, event) {
@@ -449,9 +480,25 @@
   function openCart() {
     const drawer = ensureCartDrawer();
     renderCart();
+    lastFocusBeforeDrawer = document.activeElement;
     drawer.classList.add('is-open');
     drawer.style.transform = 'translateX(0)';
     document.body.classList.add('cart-open');
+    drawer.querySelector('.close-cart')?.focus();
+  }
+
+  function closeCartDrawer() {
+    const drawer = document.querySelector('.drawer');
+    if (!drawer || !drawer.classList.contains('is-open')) {
+      document.body.classList.remove('cart-open');
+      return;
+    }
+    if (drawer.contains(document.activeElement)) document.activeElement.blur();
+    drawer.classList.remove('is-open');
+    drawer.style.transform = '';
+    document.body.classList.remove('cart-open');
+    restoreFocus(lastFocusBeforeDrawer);
+    lastFocusBeforeDrawer = null;
   }
 
   function initDemoCart() {
@@ -460,6 +507,12 @@
     });
     ensureCartDrawer();
     renderCart();
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      const modal = document.querySelector('.link-modal');
+      if (modal && modal.classList.contains('is-open')) return;
+      closeCartDrawer();
+    });
     document.addEventListener('click', event => {
       const cartButton = event.target.closest('.cart-button');
       if (cartButton) {
@@ -467,10 +520,7 @@
         openCart();
       }
       if (event.target.matches('.close-cart')) {
-        const drawer = document.querySelector('.drawer');
-        drawer?.classList.remove('is-open');
-        if (drawer) drawer.style.transform = '';
-        document.body.classList.remove('cart-open');
+        closeCartDrawer();
       }
       const remove = event.target.closest('[data-cart-remove]');
       if (remove) {
@@ -545,7 +595,23 @@
       const product = products.find(item => normalizeUrl(item.productUrl) === target);
       if (product) {
         const variantKey = normalizeVariantKey(product);
-        const variants = products.filter(item => normalizeVariantKey(item) === variantKey);
+        /* Collect variants across the whole catalog (a product's color/size
+           siblings can live in another group), deduped by product URL so
+           cross-listed copies of the same product never count as options. */
+        let variants = [product];
+        if (variantKey) {
+          const seenUrls = new Set();
+          variants = [];
+          Object.keys(productsBySlug).forEach(anySlug => {
+            (productsBySlug[anySlug] || []).forEach(item => {
+              if (normalizeVariantKey(item) !== variantKey) return;
+              const urlKey = normalizeUrl(item.productUrl || item.name || '');
+              if (seenUrls.has(urlKey)) return;
+              seenUrls.add(urlKey);
+              variants.push(item);
+            });
+          });
+        }
         return {
           product,
           slug,
@@ -660,6 +726,7 @@
     modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(source) + '</strong><span>' + escapeHtml(url.hostname) + '</span><span class="link-modal__barcode"' + (barcode ? '' : ' style="display:none"') + '>' + (barcode ? 'Barcode: ' + escapeHtml(barcode) : '') + '</span><span class="link-modal__url">' + escapeHtml(link.href) + '</span>';
     modal.querySelector('.link-modal__image').alt = img?.getAttribute('alt') || title;
     renderImageGallery(modal, productImages, title);
+    lastFocusBeforeModal = document.activeElement;
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('link-modal-open');
