@@ -115,6 +115,7 @@ function isAudioTrack(track) {
 function applyVolume(volume = Number(refs.volume.value)) {
   const nextVolume = Math.max(0, Math.min(1, Number(volume) || 0));
   refs.volume.value = String(nextVolume);
+  refs.volume.style.setProperty("--fill", `${Math.round(nextVolume * 100)}%`);
   refs.volumeText.textContent = `${Math.round(nextVolume * 100)}%`;
   if (state.player) state.player.setVol(nextVolume);
   if (state.audioGain) {
@@ -160,6 +161,8 @@ function setStatus(text, kind) {
 function setPlayButtonText(text) {
   refs.playBtn.textContent = text;
   refs.miniPlayBtn.textContent = text;
+  refs.playBtn.classList.toggle("is-playing", text === "Pause");
+  refs.miniPlayBtn.classList.toggle("is-playing", text === "Pause");
   refs.playBtn.setAttribute("aria-label", text === "Pause" ? "Pause track" : "Play track");
   refs.miniPlayBtn.setAttribute("aria-label", text === "Pause" ? "Pause track" : "Play track");
 }
@@ -261,7 +264,7 @@ function currentPlaybackPosition() {
 
 function setNowPlaying(track, meta) {
   refs.nowTitle.textContent = track.title;
-  refs.nowMeta.textContent = `${track.composer} | ${track.collection}`;
+  refs.nowMeta.textContent = `${track.composer} / ${track.collection}`;
   refs.miniTitle.textContent = track.title;
   syncMiniMeta();
 }
@@ -652,7 +655,7 @@ function resetTrackState(track, autoplay) {
   setPlayButtonText(autoplay ? "Pause" : "Play");
   refs.scope.classList.remove("playing");
   refs.nowTitle.textContent = track.title;
-  refs.nowMeta.textContent = `${track.composer} | ${track.collection}`;
+  refs.nowMeta.textContent = `${track.composer} / ${track.collection}`;
   refs.miniTitle.textContent = track.title;
   syncMiniMeta();
   updateFavoriteControls();
@@ -1082,7 +1085,7 @@ function chooseInitialTrack() {
   const track = selectedTrack();
   if (!track) return;
   refs.nowTitle.textContent = track.title;
-  refs.nowMeta.textContent = `${track.composer} | ${track.collection}`;
+  refs.nowMeta.textContent = `${track.composer} / ${track.collection}`;
   refs.miniTitle.textContent = track.title;
   syncMiniMeta();
   updateFavoriteControls();
