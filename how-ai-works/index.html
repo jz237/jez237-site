@@ -74,6 +74,31 @@
       -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
       mask-image: radial-gradient(ellipse at 50% 50%, #000 0 43%, rgba(0,0,0,0.72) 58%, transparent 83%);
     }
+    /* Match the home/sound-page galaxy: the single body layer above reads dim, so
+       add a second bright galaxy layer bleeding into the gutters, and host the
+       twinkling stars + meteors above it (z -1) but below the .ai-lab content. */
+    .ai-lab::before {
+      content: "";
+      position: fixed;
+      inset: -8vh -18vw -14vh;
+      z-index: -2;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(2,7,17,0.8), rgba(2,7,17,0.0) 16%, rgba(2,7,17,0.0) 84%, rgba(2,7,17,0.8)),
+        linear-gradient(180deg, rgba(2,7,17,0.76), rgba(2,7,17,0.0) 24%, rgba(2,7,17,0.18) 72%, rgba(2,7,17,0.86)),
+        url("../assets/galaxy-home-20260702.webp") center 42% / cover no-repeat;
+      opacity: 0.96;
+      filter: saturate(1.28) contrast(1.08);
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+      animation: galaxy-drift 28s ease-in-out infinite alternate;
+    }
+    .ai-lab [data-space-fx] {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+    }
     a { color: var(--lab-cyan); }
     button, textarea, input { font: inherit; }
     .ai-lab {
@@ -1240,6 +1265,7 @@
   <header id="site-nav"></header>
 
   <main class="ai-lab">
+    <div data-space-fx aria-hidden="true"></div>
     <div class="lab-shell">
       <aside class="lab-rail" aria-label="AI guide sections">
         <a class="rail-brand" href="../">
