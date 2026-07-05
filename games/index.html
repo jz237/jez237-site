@@ -418,18 +418,28 @@
       margin: 0;
       padding: 0;
       z-index: 0;
-      pointer-events: none;
+      /* Interactive: grab & drag to rotate the globe in the margins around the
+         content. The page content sits above (z-index:1) and captures its own
+         clicks/scroll, so only the empty margins hand events to the globe. */
+      pointer-events: auto;
       background: #02060b;
     }
-    /* Soft scrim above the globe, below the content, for text legibility. */
+    /* Light scrim above the globe, below the content. Only the top & bottom are
+       dimmed (for nav/footer legibility); the middle band stays clear so the big
+       globe reads brightly in the left/right margins. pointer-events:none so
+       drags pass through to the globe. */
     #globe-scrim {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
       background:
-        linear-gradient(180deg, rgba(3,7,15,0.62), rgba(3,7,15,0.10) 20%, rgba(3,7,15,0.10) 60%, rgba(3,7,15,0.82)),
-        radial-gradient(ellipse at 50% 44%, transparent 34%, rgba(2,6,13,0.52) 84%);
+        linear-gradient(180deg, rgba(3,7,15,0.58) 0%, rgba(3,7,15,0.04) 15%, rgba(3,7,15,0.04) 72%, rgba(3,7,15,0.66) 100%);
+    }
+    /* On narrow screens the side margins are too thin to grab and touch-scroll
+       matters more, so keep the globe visible but non-interactive there. */
+    @media (max-width: 900px) {
+      #globe-bg { pointer-events: none; }
     }
     /* Neutralize the old static galaxy-image background layers so the globe shows through. */
     body.arcade-galaxy-page::before,
@@ -1240,7 +1250,7 @@
   </style>
 </head>
 <body class="arcade-galaxy-page">
-  <iframe id="globe-bg" src="../experiments/blueforest-globe/?v=globe-local2" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
+  <iframe id="globe-bg" src="../experiments/blueforest-globe/?bg=1&v=globe-big1" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
   <div id="globe-scrim" aria-hidden="true"></div>
   <header id="site-nav"></header>
 
