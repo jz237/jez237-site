@@ -2,7 +2,8 @@
 // Engine (engine.js) is headless; this file owns everything user-facing.
 'use strict';
 
-const VERSION = 'v1.2.0';
+const VERSION = 'v1.2.1';
+const ASSET_Q = '?v=' + VERSION;   // cache-buster: same-named assets change between versions
 const STEP_MS = 160;                 // authentic cave cycle (6.25 Hz)
 const LB_URL = 'https://game-scores.jez237.workers.dev/scores/emerald-mine-2';
 const MAX_LEVEL = 80;
@@ -35,16 +36,16 @@ async function initAudio() {
   sfxGain = ac.createGain(); sfxGain.gain.value = save.opts.sfx; sfxGain.connect(ac.destination);
   musGain = ac.createGain(); musGain.gain.value = save.opts.mus; musGain.connect(ac.destination);
   try {
-    manifest = await (await fetch('assets/sfx/manifest.json')).json();
+    manifest = await (await fetch('assets/sfx/manifest.json' + ASSET_Q)).json();
     const names = Object.keys(manifest.sfx);
     await Promise.all(names.map(async n => {
       try {
-        const ab = await (await fetch('assets/sfx/' + manifest.sfx[n].file)).arrayBuffer();
+        const ab = await (await fetch('assets/sfx/' + manifest.sfx[n].file + ASSET_Q)).arrayBuffer();
         buffers[n] = await ac.decodeAudioData(ab);
       } catch (e) {}
     }));
     try {
-      const ab = await (await fetch('assets/sfx/' + (manifest.music?.title || 'title-music.mp3'))).arrayBuffer();
+      const ab = await (await fetch('assets/sfx/' + (manifest.music?.title || 'title-music.mp3') + ASSET_Q)).arrayBuffer();
       musicBuf = await ac.decodeAudioData(ab);
     } catch (e) {}
   } catch (e) { manifest = { sfx: {} }; }
@@ -135,7 +136,7 @@ function stopMusic() { if (musicSrc) { try { musicSrc.stop(); } catch (e) {} mus
 
 // ─── images ───
 const IMG = {};
-for (const n of ['title-art', 'cave-bg']) { const im = new Image(); im.src = 'assets/img/' + n + '.jpg'; IMG[n] = im; }
+for (const n of ['title-art', 'cave-bg']) { const im = new Image(); im.src = 'assets/img/' + n + '.jpg' + ASSET_Q; IMG[n] = im; }
 
 // ─── atlas ───
 let TILE = 40;                       // on-screen tile px (zoomable)
