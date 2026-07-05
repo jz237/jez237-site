@@ -9,6 +9,14 @@ SECRET_ENV="$HOME/.config/openclaw/secrets/hidden-reef-cloudflare.env"
 
 cd "$REPO"
 
+echo "Preflight: JavaScript syntax checks"
+for js_file in "$SOURCE_DIR"/assets/*.js; do
+  node --check "$js_file"
+done
+
+echo "Preflight: internal link check"
+python3 "$SCRIPT_DIR/check_hidden_reef_links.py" "$SOURCE_DIR"
+
 rm -rf "$BUILD_DIR"
 mkdir -p "$BUILD_DIR"
 

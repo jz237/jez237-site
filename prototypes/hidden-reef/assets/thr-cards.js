@@ -22,11 +22,25 @@
     });
   }
 
+  /* Variant keys strip color/size/package tokens so siblings group together.
+     The brand is kept as a key prefix (so same-sounding products from
+     different brands never merge), while the brand name and its initials
+     ("IM" for Innovative Marine) are stripped from the name portion so
+     inconsistently prefixed listings still match. */
   function normalizeVariantKey(product) {
-    return (product?.name || '')
-      .toLowerCase()
-      .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver|tan|clear|assorted)\b/g, '')
-      .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|liter|litre|gal|g|w|lb|lbs|pk|pack|ct|count|in|inch|\")\b/g, '')
+    var rawName = String(product?.name || '');
+    var name = rawName.toLowerCase();
+    var brand = String((window.THR?.extractBrand && THR.extractBrand(rawName)) || '').toLowerCase();
+    var brandPrefix = '';
+    if (brand) {
+      brandPrefix = brand.replace(/[^a-z0-9]+/g, '');
+      if (name.indexOf(brand) === 0) name = name.slice(brand.length);
+      var initials = brand.split(/\s+/).map(function(word) { return word.charAt(0); }).join('');
+      if (initials.length > 1) name = name.replace(new RegExp('^\\s*' + initials + '\\b'), '');
+    }
+    return brandPrefix + name
+      .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver|tan|clear|assorted|orange|yellow|pink|purple|teal|ivory|beige)\b/g, '')
+      .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|liter|litre|gal|gallon|gallons|g|w|watt|watts|lb|lbs|pk|pack|ct|count|in|inch|\")\b/g, '')
       .replace(/[^a-z0-9]+/g, '');
   }
 
@@ -72,7 +86,7 @@
     var end = start + PER_PAGE;
     var items = products.slice(start, end);
     if (items.length === 0) {
-      container.innerHTML = '<p style="color:var(--reef-muted);text-align:center;padding:40px;">No products found.</p>';
+      container.innerHTML = '<p style="color:var(--reef-muted);text-align:center;padding:40px;">No products found. Try a shorter search.</p>';
       return;
     }
     var html = '';
@@ -133,7 +147,16 @@
 
     container.dataset.searchBound = 'true';
     function applySearch() {
-      renderCards(container, filterProducts(products, input.value), 1);
+      var results = filterProducts(products, input.value);
+      /* No hits in this department's products: search the whole catalog. */
+      if (!results.length && String(input.value || '').trim() && window.THR_PRODUCTS) {
+        var all = [];
+        Object.keys(THR_PRODUCTS).forEach(function(k) {
+          all = all.concat(THR_PRODUCTS[k]);
+        });
+        results = filterProducts(all, input.value);
+      }
+      renderCards(container, results, 1);
     }
     input.addEventListener('input', applySearch);
     form.addEventListener('submit', function(event) {

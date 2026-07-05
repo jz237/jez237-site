@@ -19,16 +19,57 @@
       .filter(el => !el.disabled && el.getClientRects().length > 0);
   }
 
+  /* Keep ?product= in the address bar while the popup is open so the link is shareable. */
+  function syncProductUrl(href) {
+    if (typeof window.history?.replaceState !== 'function') return;
+    try {
+      const url = new URL(window.location.href);
+      if (href) url.searchParams.set('product', href);
+      else url.searchParams.delete('product');
+      window.history.replaceState(null, '', url.toString());
+    } catch (error) {
+      /* Leave the address bar unchanged if the URL cannot be rebuilt. */
+    }
+  }
+
+  async function copyTextToClipboard(text) {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const field = document.createElement('textarea');
+        field.value = text;
+        field.setAttribute('readonly', '');
+        field.style.position = 'fixed';
+        field.style.left = '-9999px';
+        document.body.appendChild(field);
+        field.select();
+        document.execCommand('copy');
+        field.remove();
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
   function ensureModal() {
     let modal = document.querySelector('.link-modal');
     if (modal) return modal;
     modal = document.createElement('div');
     modal.className = 'link-modal';
     modal.setAttribute('aria-hidden', 'true');
-    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image"><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a></div></div></section>';
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image"><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a><button class="btn secondary link-modal__share" type="button">Copy link</button></div></div></section>';
     document.body.appendChild(modal);
     modal.addEventListener('click', event => {
       if (event.target.matches('[data-link-close]')) closeModal(modal);
+      if (event.target.matches('.link-modal__share')) {
+        const shareButton = event.target;
+        copyTextToClipboard(window.location.href).then(copied => {
+          shareButton.textContent = copied ? 'Link copied' : 'Copy failed';
+          window.setTimeout(() => { shareButton.textContent = 'Copy link'; }, 1600);
+        });
+      }
       if (event.target.matches('.link-modal__add')) {
         const button = event.target;
         addToCart({
@@ -85,6 +126,7 @@
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     document.body.classList.remove('link-modal-open');
+    syncProductUrl(null);
     restoreFocus(lastFocusBeforeModal);
     lastFocusBeforeModal = null;
   }
@@ -418,6 +460,15 @@
     }
     const note = drawer.querySelector('.drawer-note');
     if (note) note.innerHTML = drawerNoteHtml;
+    if (!drawer.querySelector('.drawer-tools')) {
+      const tools = document.createElement('div');
+      tools.className = 'drawer-tools';
+      tools.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;';
+      tools.innerHTML = '<button class="btn secondary cart-copy" type="button">Copy list</button><button class="btn secondary cart-print" type="button">Print list</button><span class="cart-tools-status" aria-live="polite" style="font-size:12px;color:#ffdd9a;font-weight:800;"></span>';
+      const summary = drawer.querySelector('.cart-summary');
+      if (summary) summary.after(tools);
+      else drawer.appendChild(tools);
+    }
     const handoff = drawer.querySelector('.cart-handoff') || drawer.querySelector('.drawer .btn, .btn');
     if (handoff) {
       handoff.classList.add('cart-handoff');
@@ -427,6 +478,53 @@
       handoff.setAttribute('rel', 'noopener');
     }
     return drawer;
+  }
+
+  function buildCartListText() {
+    const items = readCart();
+    const lines = ['The Hidden Reef preview list', ''];
+    items.forEach((item, index) => {
+      lines.push(`${index + 1}. ${item.name}`);
+      lines.push(`   Qty ${item.qty} - ${item.price || 'See site'}`);
+      if (item.url) lines.push(`   ${item.url}`);
+    });
+    const total = items.reduce((sum, item) => sum + parsePrice(item.price) * item.qty, 0);
+    lines.push('', `Reference subtotal: $${total.toFixed(2)}`);
+    lines.push('Availability, discounts, tax, and final pricing are confirmed by the store.');
+    return lines.join('\n');
+  }
+
+  function setCartToolsStatus(message) {
+    const status = document.querySelector('.drawer .cart-tools-status');
+    if (status) status.textContent = message;
+  }
+
+  async function copyCartList() {
+    if (!readCart().length) {
+      setCartToolsStatus('List is empty');
+      return;
+    }
+    const copied = await copyTextToClipboard(buildCartListText());
+    setCartToolsStatus(copied ? 'Copied' : 'Copy failed');
+  }
+
+  function printCartList() {
+    if (!readCart().length) {
+      setCartToolsStatus('List is empty');
+      return;
+    }
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      setCartToolsStatus('Allow pop-ups to print');
+      return;
+    }
+    const doc = printWindow.document;
+    doc.open();
+    doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Hidden Reef preview list</title><style>body{font-family:Arial,Helvetica,sans-serif;margin:32px;color:#111}h1{font-size:20px;margin:0 0 6px}p.meta{color:#555;margin:0 0 18px;font-size:12px}pre{white-space:pre-wrap;font:14px/1.5 Arial,Helvetica,sans-serif}</style></head><body><h1>The Hidden Reef - Preview List</h1><p class="meta">Bring this list to the store to check availability and current pricing.</p><pre></pre></body></html>');
+    doc.close();
+    doc.querySelector('pre').textContent = buildCartListText();
+    printWindow.focus();
+    printWindow.print();
   }
 
   function updateCartCount(items) {
@@ -443,6 +541,7 @@
     const drawer = ensureCartDrawer();
     const items = readCart();
     updateCartCount(items);
+    setCartToolsStatus('');
     const list = drawer.querySelector('#cart-items');
     const empty = drawer.querySelector('#empty-cart');
     const summary = drawer.querySelector('.cart-summary');
@@ -522,6 +621,8 @@
       if (event.target.matches('.close-cart')) {
         closeCartDrawer();
       }
+      if (event.target.matches('.cart-copy')) copyCartList();
+      if (event.target.matches('.cart-print')) printCartList();
       const remove = event.target.closest('[data-cart-remove]');
       if (remove) {
         const items = readCart();
@@ -627,11 +728,21 @@
     return { product: null, slug: '', variants: [], related: [], category: {} };
   }
 
+  /* Mirrors normalizeVariantKey in thr-cards.js for pages that load without it. */
   function fallbackVariantKey(product) {
-    return (product?.name || '')
-      .toLowerCase()
-      .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver|tan|clear|assorted)\b/g, '')
-      .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|liter|litre|gal|g|w|lb|lbs|pk|pack|ct|count|in|inch|\")\b/g, '')
+    const rawName = String(product?.name || '');
+    let name = rawName.toLowerCase();
+    const brand = String((window.THR?.extractBrand && THR.extractBrand(rawName)) || '').toLowerCase();
+    let brandPrefix = '';
+    if (brand) {
+      brandPrefix = brand.replace(/[^a-z0-9]+/g, '');
+      if (name.indexOf(brand) === 0) name = name.slice(brand.length);
+      const initials = brand.split(/\s+/).map(word => word.charAt(0)).join('');
+      if (initials.length > 1) name = name.replace(new RegExp('^\\s*' + initials + '\\b'), '');
+    }
+    return brandPrefix + name
+      .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver|tan|clear|assorted|orange|yellow|pink|purple|teal|ivory|beige)\b/g, '')
+      .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|liter|litre|gal|gallon|gallons|g|w|watt|watts|lb|lbs|pk|pack|ct|count|in|inch|\")\b/g, '')
       .replace(/[^a-z0-9]+/g, '');
   }
 
@@ -661,6 +772,7 @@
       barcodeNode.textContent = barcode ? 'Barcode: ' + barcode : '';
       barcodeNode.style.display = barcode ? '' : 'none';
     }
+    syncProductUrl(url);
   }
 
   function renderVariantSelector(modal, variants, activeUrl) {
@@ -678,16 +790,11 @@
     }).join('') + '</select><span>Select the exact color, size, or package before adding it to your cart.</span>';
   }
 
-  document.addEventListener('click', event => {
-    const link = event.target.closest('.product a[href^="https://www.thehiddenreef.com"], .product-link, .live-link[href^="https://www.thehiddenreef.com"], .thr-product[href^="https://www.thehiddenreef.com"]');
-    if (!link) return;
-
-    event.preventDefault();
-    const card = link.closest('.product') || link.closest('.thr-product') || link.closest('.live-link');
+  function openProductModal(href, card, fallbackTitle) {
     const modal = ensureModal();
-    const context = getProductContext(link.href);
+    const context = getProductContext(href);
     const product = context.product || {};
-    const title = product.name || card?.querySelector('h3, strong')?.textContent?.trim() || link.textContent.trim() || 'Hidden Reef item';
+    const title = product.name || card?.querySelector('h3, strong')?.textContent?.trim() || fallbackTitle || 'Hidden Reef item';
     const categoryName = context.category.childName || card?.dataset.category || card?.querySelector('.thr-brand, span')?.textContent?.trim() || 'Catalog item';
     const departmentName = context.category.groupName || 'Hidden Reef catalog';
     const desc = card?.dataset.info || context.category.description || card?.querySelector('p, em')?.textContent?.trim() || 'Check the product page for current details, options, and availability.';
@@ -697,7 +804,7 @@
     const source = card?.dataset.source || 'Original Hidden Reef page';
     const barcode = product.barcode || '';
     const details = (card?.dataset.details || '').split('|').map(item => item.trim()).filter(Boolean);
-    const url = new URL(link.href);
+    const url = new URL(href);
     const brand = card?.querySelector('.thr-brand')?.textContent?.trim() || extractBrand(title) || 'Hidden Reef';
     const detailItems = details.length ? details : [
       'Listed under ' + departmentName + ' / ' + categoryName + '.',
@@ -710,20 +817,20 @@
 
     modal.querySelector('h2').textContent = title;
     modal.querySelector('p').textContent = desc;
-    modal.querySelector('.link-modal__open').href = link.href;
+    modal.querySelector('.link-modal__open').href = href;
     const addButton = modal.querySelector('.link-modal__add');
     addButton.dataset.name = title;
     addButton.dataset.price = price;
-    addButton.dataset.url = link.href;
+    addButton.dataset.url = href;
     addButton.dataset.image = productImages[0] || '';
     modal.querySelector('.link-modal__facts').innerHTML = '<span><strong>Brand</strong>' + escapeHtml(brand) + '</span><span><strong>Price</strong><em data-modal-price>' + escapeHtml(price) + '</em></span><span><strong>Department</strong>' + escapeHtml(departmentName) + '</span><span><strong>Category</strong>' + escapeHtml(categoryName) + '</span>';
-    renderVariantSelector(modal, context.variants, link.href);
+    renderVariantSelector(modal, context.variants, href);
     modal.querySelector('.link-modal__status').innerHTML = '<strong>Store availability</strong><span>Stock can change quickly. Check the product page or contact the store before making a special trip.</span>';
     modal.querySelector('.link-modal__details').innerHTML = detailItems.map(item => '<li>' + escapeHtml(item) + '</li>').join('');
     modal.querySelector('.link-modal__details').style.display = detailItems.length ? '' : 'none';
     modal.querySelector('.link-modal__related').innerHTML = relatedHtml;
     modal.querySelector('.link-modal__related').style.display = relatedHtml ? '' : 'none';
-    modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(source) + '</strong><span>' + escapeHtml(url.hostname) + '</span><span class="link-modal__barcode"' + (barcode ? '' : ' style="display:none"') + '>' + (barcode ? 'Barcode: ' + escapeHtml(barcode) : '') + '</span><span class="link-modal__url">' + escapeHtml(link.href) + '</span>';
+    modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(source) + '</strong><span>' + escapeHtml(url.hostname) + '</span><span class="link-modal__barcode"' + (barcode ? '' : ' style="display:none"') + '>' + (barcode ? 'Barcode: ' + escapeHtml(barcode) : '') + '</span><span class="link-modal__url">' + escapeHtml(href) + '</span>';
     modal.querySelector('.link-modal__image').alt = img?.getAttribute('alt') || title;
     renderImageGallery(modal, productImages, title);
     lastFocusBeforeModal = document.activeElement;
@@ -732,11 +839,43 @@
     document.body.classList.add('link-modal-open');
     modal.querySelector('.link-modal__panel').scrollTop = 0;
     modal.querySelector('.link-modal__close').focus();
+    syncProductUrl(href);
+  }
+
+  document.addEventListener('click', event => {
+    const link = event.target.closest('.product a[href^="https://www.thehiddenreef.com"], .product-link, .live-link[href^="https://www.thehiddenreef.com"], .thr-product[href^="https://www.thehiddenreef.com"]');
+    if (!link) return;
+
+    event.preventDefault();
+    const card = link.closest('.product') || link.closest('.thr-product') || link.closest('.live-link');
+    openProductModal(link.href, card, link.textContent.trim());
   });
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initDemoCart);
-  } else {
+  /* Shared product links: ?product=<catalog url> opens the popup on load. */
+  function openProductFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const productUrl = params.get('product');
+    if (!productUrl) return;
+    try {
+      const parsed = new URL(productUrl, 'https://www.thehiddenreef.com/');
+      if (parsed.hostname !== 'www.thehiddenreef.com') return;
+      openProductModal(parsed.href);
+    } catch (error) {
+      /* Ignore malformed product URLs. */
+    }
+  }
+
+  window.THR = window.THR || {};
+  window.THR.openProductModal = openProductModal;
+
+  function boot() {
     initDemoCart();
+    openProductFromUrl();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 }());
