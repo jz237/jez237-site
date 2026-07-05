@@ -1666,6 +1666,17 @@ h1 {
   font-size: 11px;
   margin: 9px 0 0;
 }
+/* The panel adapts to its own width, not the viewport, so mid-size
+   windows (where the right stack squeezes the main column) still stack
+   the two lists instead of cramming them side by side. */
+.portfolio-overview {
+  container-type: inline-size;
+}
+@container (max-width: 680px) {
+  .portfolio-columns {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width: 900px) {
   .portfolio-columns {
     grid-template-columns: 1fr;
@@ -1846,15 +1857,23 @@ h1 {
 .curve-stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 6px;
   color: #7f94aa;
   font-size: 10px;
   text-transform: uppercase;
-  margin-top: 8px;
+  margin-top: 10px;
+}
+.curve-stats span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #4b617b0f;
+  border: 1px solid #4b617b33;
+  border-radius: 7px;
+  padding: 5px 9px;
 }
 .curve-stats b {
   color: #dbe8f6;
-  margin-left: 4px;
   text-transform: none;
 }
 .contrib-toggle {
