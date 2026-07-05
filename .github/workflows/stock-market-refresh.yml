@@ -2,7 +2,10 @@ name: Refresh Stock Market Data
 
 on:
   schedule:
-    - cron: "1,31 13-21 * * 1-5" # half-hourly; gated below to 9:30 AM-4:35 PM Eastern
+    # Four weekday checks, chosen to stay inside market hours in both EST and EDT.
+    - cron: "35 14 * * 1-5"
+    - cron: "5 16,18 * * 1-5"
+    - cron: "56 20 * * 1-5"
   workflow_dispatch:
 
 permissions:
@@ -33,7 +36,7 @@ jobs:
           eastern_hour="$(TZ=America/New_York date +%H)"
           eastern_minute="$(TZ=America/New_York date +%M)"
           eastern_total=$((10#$eastern_hour * 60 + 10#$eastern_minute))
-          # GitHub cron fires with 20-90 minute lag, so the window and the
+          # GitHub cron can run late, so the window and the
           # full-refresh band are generous: any run landing between 3:55 PM
           # and 5:00 PM Eastern rebuilds the full history for the day.
           market_start=$((9 * 60 + 30))
