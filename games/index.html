@@ -405,6 +405,44 @@
       position: relative;
       z-index: 1;
     }
+
+    /* Live rotating globe (blueforest-globe experiment) as the page background,
+       replacing the static galaxy art. Non-interactive so it can't steal scroll/drag. */
+    #globe-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      border: 0;
+      margin: 0;
+      padding: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: #02060b;
+    }
+    /* Soft scrim above the globe, below the content, for text legibility. */
+    #globe-scrim {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(3,7,15,0.62), rgba(3,7,15,0.10) 20%, rgba(3,7,15,0.10) 60%, rgba(3,7,15,0.82)),
+        radial-gradient(ellipse at 50% 44%, transparent 34%, rgba(2,6,13,0.52) 84%);
+    }
+    /* Neutralize the old static galaxy-image background layers so the globe shows through. */
+    body.arcade-galaxy-page::before,
+    body.arcade-galaxy-page::after {
+      background: none !important;
+      animation: none !important;
+      -webkit-mask-image: none !important;
+      mask-image: none !important;
+      opacity: 0 !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* Keep the globe (it self-limits), but users who want calm can hide it via the OS setting is respected inside the experiment. */
+    }
     header#site-nav, :root[data-theme="light"] header#site-nav { background: rgba(8,8,20,.78) !important; border-bottom: 1px solid rgba(255,255,255,.08) !important; backdrop-filter: blur(14px); }
     header#site-nav .links a, :root[data-theme="light"] header#site-nav .links a { color: #cfd6ff !important; }
     header#site-nav .links a:hover, header#site-nav .links a[aria-current="page"], :root[data-theme="light"] header#site-nav .links a:hover, :root[data-theme="light"] header#site-nav .links a[aria-current="page"] { background: rgba(127,107,255,.22) !important; color: #fff !important; }
@@ -1202,6 +1240,8 @@
   </style>
 </head>
 <body class="arcade-galaxy-page">
+  <iframe id="globe-bg" src="../experiments/blueforest-globe/?v=games-bg" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
+  <div id="globe-scrim" aria-hidden="true"></div>
   <header id="site-nav"></header>
 
   <main class="container">
