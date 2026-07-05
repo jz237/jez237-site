@@ -29,12 +29,25 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Jez237",
-    "url": "https://jez237.com/",
-    "description": "Jez Bauder's personal site for AI projects, free online browser games, Philadelphia Zone 7a garden notes, photos, weather utilities, and creative coding.",
-    "keywords": ["Jez237", "Jez Bauder", "AI tools", "AI news", "free online games", "browser games", "HTML5 games", "creative coding", "Philadelphia garden", "Zone 7a garden", "garden calendar", "plant progress", "photo archive", "weather dashboard", "web experiments"],
-    "sameAs": ["https://github.com/jz237", "https://baudersigns.com/"]
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://jez237.com/#website",
+        "name": "Jez237",
+        "url": "https://jez237.com/",
+        "description": "Jez Bauder's personal site for AI projects, free online browser games, Philadelphia Zone 7a garden notes, photos, weather utilities, and creative coding.",
+        "keywords": ["Jez237", "Jez Bauder", "AI tools", "AI news", "free online games", "browser games", "HTML5 games", "creative coding", "Philadelphia garden", "Zone 7a garden", "garden calendar", "plant progress", "photo archive", "weather dashboard", "web experiments"],
+        "publisher": {"@id": "https://jez237.com/#person"}
+      },
+      {
+        "@type": "Person",
+        "@id": "https://jez237.com/#person",
+        "name": "Jez Bauder",
+        "alternateName": "Jez237",
+        "url": "https://jez237.com/",
+        "sameAs": ["https://github.com/jz237", "https://baudersigns.com/"]
+      }
+    ]
   }
   </script>
   <link rel="icon" type="image/svg+xml" href="assets/brand.svg" />
