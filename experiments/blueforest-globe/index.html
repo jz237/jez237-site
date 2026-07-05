@@ -148,9 +148,15 @@
     // Auto-rotate multiplier for background mode (?r= to override; default 0.5 = half speed).
     const bgRot = parseFloat(bgParams.get("r"));
     const rotFactor = BG_MODE ? (bgRot > 0 ? bgRot : 0.5) : 1;
+    // Blob (arc-runner) speed multiplier for bg mode; ?b= to override.
+    const bgBlob = parseFloat(bgParams.get("b"));
+    const blobFactor = bgBlob > 0 ? bgBlob : 2.6;
     if (BG_MODE) {
       controls.enableZoom = false;
       controls.autoRotateSpeed = 0.9 * rotFactor;
+      // Solid (non-transparent) backdrop so the globe reads as a solid planet
+      // instead of blending into the page behind the iframe.
+      renderer.setClearColor(0x02070c, 1);
     }
 
     const world = new THREE.Group();
@@ -1063,7 +1069,8 @@
         controls.minDistance = 2.8;
         controls.maxDistance = 14;
         world.position.y = mobile ? 0.0 : -0.02;
-        world.scale.setScalar(bgScale || (mobile ? 0.92 : 1.08));
+        // ~15% smaller than the previous 0.92/1.08.
+        world.scale.setScalar(bgScale || (mobile ? 0.78 : 0.92));
       } else {
         camera.position.z = mobile ? 8.15 : 7.78;
         controls.minDistance = mobile ? 4.85 : 5.65;
@@ -1077,6 +1084,7 @@
     resize();
 
     let animClock = 0;
+    let realClock = 0;
     function animate() {
       requestAnimationFrame(animate);
       // Only call getDelta() (calling getElapsedTime() too would consume the
@@ -1084,8 +1092,12 @@
       // globe — camera spin, clouds, arcs, rings, stars — slows/speeds as one.
       const rawDelta = clock.getDelta();
       animClock += rawDelta * rotFactor;
+      realClock += rawDelta;
       const elapsed = animClock;
       const delta = rawDelta * rotFactor;
+      // Blobs (arc runners) run on unslowed real time * blobFactor so they stay
+      // fast while the rest of the globe is slowed.
+      const runnerTime = BG_MODE ? realClock * blobFactor : elapsed;
 
       if (!reduceMotion) {
         controls.autoRotateSpeed = THREE.MathUtils.damp(
@@ -1116,7 +1128,7 @@
       }
 
       for (const runner of arcRunners) {
-        const t = (runner.userData.offset + elapsed * runner.userData.speed) % 1;
+        const t = (runner.userData.offset + runnerTime * runner.userData.speed) % 1;
         runner.position.copy(runner.userData.curve.getPoint(t));
         const taper = Math.sin(t * Math.PI);
         runner.scale.setScalar(runner.userData.baseScale * (0.46 + 0.88 * taper));
