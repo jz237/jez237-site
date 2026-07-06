@@ -85,14 +85,16 @@ main.netmap-page {
   pointer-events: none;
 }
 .netmap-hud-top { top: 18px; left: 20px; max-width: min(420px, 70%); }
-.netmap-title-block h1 {
+.netmap-title-block h1,
+.netmap-title-block .netmap-h1 {
   margin: 2px 0 6px;
   font-size: clamp(22px, 3vw, 32px);
   line-height: 1.05;
   text-shadow: 0 2px 18px rgba(0,0,0,0.55);
 }
 /* workbench-theme forces cream headings; unreadable on the light board */
-:root[data-theme="light"] .netmap-title-block h1 {
+:root[data-theme="light"] .netmap-title-block h1,
+:root[data-theme="light"] .netmap-title-block .netmap-h1 {
   color: #1c2836 !important;
   text-shadow: none;
 }
