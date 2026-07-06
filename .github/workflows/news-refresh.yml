@@ -36,11 +36,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git fetch origin main
+          git rebase --autostash origin/main
           git add ai-news/data/items.json ai-news/data/image_cache.json ai-news/public/*.json ai-news/public/index.html
           if git diff --staged --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git commit -m "chore: refresh ai news feed"
-            git push
+            git push || { git pull --rebase --autostash origin main && git push; }
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
