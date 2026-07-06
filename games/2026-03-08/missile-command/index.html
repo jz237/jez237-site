@@ -174,12 +174,33 @@ button:active { transform: translateY(1px) scale(.99); }
       <label><span>SFX Vol</span><span id="sfxVolText">100%</span></label>
       <input id="sfxVolSlider" type="range" min="0" max="100" value="100">
     </div>
+    <div class="audio-row">
+      <label><span>Voice Vol</span><span id="voiceVolText">90%</span></label>
+      <input id="voiceVolSlider" type="range" min="0" max="100" value="90">
+    </div>
+    <div class="audio-row" style="align-items:center">
+      <label style="margin:0"><span>Difficulty</span></label>
+      <div id="diffSeg" style="display:flex;gap:4px">
+        <button data-v="easy" class="secondary-btn" style="min-width:0!important;padding:.3em .7em!important">Easy</button>
+        <button data-v="normal" class="secondary-btn" style="min-width:0!important;padding:.3em .7em!important">Normal</button>
+        <button data-v="hard" class="secondary-btn" style="min-width:0!important;padding:.3em .7em!important">Hard</button>
+      </div>
+    </div>
+    <div class="audio-row" style="align-items:center">
+      <label style="margin:0"><span>CRT Scanlines</span></label>
+      <button id="crtToggleBtn" class="secondary-btn" style="min-width:0!important;padding:.3em .9em!important">Off</button>
+    </div>
+    <p style="font-size:.72rem;opacity:.7;margin:.2em 0 .5em">🎮 Gamepad: left stick aims reticle · A / trigger fires · Start pauses</p>
+    <button id="fullscreenBtn" class="secondary-btn" style="min-width:170px;margin:.1em 0 .5em">Fullscreen</button>
     <button id="optionsClose" style="margin-top:.4em">Back</button>
   </div>
 </div>
 <button id="pauseBtn" style="position:fixed;top:max(8px,env(safe-area-inset-top));right:8px;z-index:50;pointer-events:auto;background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:36px;height:36px;font-size:18px;color:#fff;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:0">⏸</button>
 <button id="muteBtn" style="position:fixed;top:max(8px,env(safe-area-inset-top));right:50px;z-index:50;pointer-events:auto;background:rgba(255,255,255,0.15);border:none;border-radius:50%;width:36px;height:36px;font-size:18px;color:#fff;cursor:pointer;backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:0">🔊</button>
-<div id="pauseHint">Enter = start • P/Space = pause • M = mute • R = restart</div>
+<div id="pauseHint">Enter = start • P/Space = pause • M = mute • R = restart • F = fullscreen</div>
+<div id="crtOverlay" style="position:fixed;inset:0;z-index:60;pointer-events:none;display:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,0.22) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;"></div>
+<div id="voiceToast" style="position:fixed;left:50%;bottom:16%;transform:translateX(-50%);z-index:61;pointer-events:none;color:#bfe4ff;font-family:monospace;font-size:clamp(0.8rem,2.5vw,1.1rem);letter-spacing:0.12em;text-shadow:0 0 12px rgba(80,170,255,0.9);opacity:0;transition:opacity 0.25s;text-align:center;padding:0 1em;"></div>
+<div id="versionBadge" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v3.0.0</div>
 <script>
 (() => {
   const canvas = document.getElementById('game');
@@ -225,34 +246,11 @@ button:active { transform: translateY(1px) scale(.99); }
       }
     } catch(e) {}
   }
-  function escapeHTML(value) {
-    return String(value ?? '').replace(/[&<>"']/g, ch => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[ch]));
-  }
-  function formatScoreNumber(value, fallback = 0) {
-    const number = Number(value);
-    return String(Number.isFinite(number) ? Math.max(0, Math.floor(number)) : fallback);
-  }
-  function formatInitials(value) {
-    const text = String(value ?? '???').trim().slice(0, 12);
-    return escapeHTML(text || '???');
-  }
-  function highScoreRow(entry, index, color) {
-    const rank = String(index + 1).padStart(2, ' ');
-    const score = formatScoreNumber(entry && entry.score).padStart(8, ' ');
-    const wave = entry && entry.wave != null ? formatScoreNumber(entry.wave, '?') : '?';
-    return `<div style="color:${color};padding:0.15em 0">${rank}. ${formatInitials(entry && entry.initials)}  ${score}  W${escapeHTML(wave)}</div>`;
-  }
   function renderHSBoth(container) {
     const list = loadHS();
     let html = '<div style="color:#5be4ff;font-size:0.9em;letter-spacing:0.1em;margin-bottom:0.3em">🏠 LOCAL HIGH SCORES</div>';
     if (!list.length) html += '<div style="color:rgba(255,255,255,0.4);padding:0.2em 0">No scores yet</div>';
-    else list.forEach((e,i) => { html += highScoreRow(e, i, '#aef'); });
+    else list.forEach((e,i) => { html += `<div style="color:#aef;padding:0.15em 0">${String(i+1).padStart(2,' ')}. ${e.initials}  ${String(e.score).padStart(8,' ')}  W${e.wave}</div>`; });
     html += '<div style="color:#ffd700;font-size:0.9em;letter-spacing:0.1em;margin:0.6em 0 0.3em">🌐 GLOBAL HIGH SCORES</div>';
     html += '<div id="globalInner_' + container.id + '"><div style="color:rgba(255,255,255,0.4)">Loading...</div></div>';
     container.innerHTML = html;
@@ -260,7 +258,7 @@ button:active { transform: translateY(1px) scale(.99); }
       const el = document.getElementById('globalInner_' + container.id);
       if (!el) return;
       if (!gs || !gs.length) { el.innerHTML = '<div style="color:rgba(255,255,255,0.4)">No scores yet</div>'; return; }
-      el.innerHTML = gs.slice(0,20).map((e,i) => highScoreRow(e, i, '#ffe082')).join('');
+      el.innerHTML = gs.slice(0,20).map((e,i) => `<div style="color:#ffe082;padding:0.15em 0">${String(i+1).padStart(2,' ')}. ${e.initials}  ${String(e.score).padStart(8,' ')}  W${e.wave||'?'}</div>`).join('');
     });
   }
 
@@ -323,8 +321,66 @@ button:active { transform: translateY(1px) scale(.99); }
     applySfxVolume();
     updateOptionsUI();
   }
-  // After wave 16, scaling grows at only 10% rate
-  function ew(w) { return w <= 16 ? w : 16 + (w - 16) * 0.25; }
+
+  // ===== v3: voice / difficulty / gamepad / CRT =====
+  const VOICE_VOLUME_KEY='auroraSiege_voiceVol_v1', DIFF_KEY='auroraSiege_diff_v1', CRT_KEY='auroraSiege_crt_v1';
+  let voiceVolume=Math.max(0,Math.min(1,Number(localStorage.getItem(VOICE_VOLUME_KEY)||0.9)));
+  let difficulty=localStorage.getItem(DIFF_KEY)||'normal';
+  let crtOn=localStorage.getItem(CRT_KEY)==='on';
+  const DIFF_MUL={easy:0.82,normal:1,hard:1.28};
+  let diffMul=DIFF_MUL[difficulty]||1;
+  const voiceEl=new Audio(); voiceEl.preload='auto';
+  let voiceCooldown=0;
+  const VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-city-lost':'CITY LOST','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED','vo-boss':'BOSS INBOUND — BRACE'};
+  let voiceToastTimer=null;
+  function showVoiceToast(t){const el=document.getElementById('voiceToast');if(!el||!t)return;el.textContent=t;el.style.opacity='1';clearTimeout(voiceToastTimer);voiceToastTimer=setTimeout(()=>{el.style.opacity='0';},1700);}
+  function playVoice(name,priority){
+    if(muted||voiceVolume<=0)return;
+    if(voiceCooldown>0&&!priority)return;
+    voiceCooldown=1.6;
+    try{voiceEl.src='assets/'+name+'.mp3';voiceEl.volume=voiceVolume;voiceEl.currentTime=0;voiceEl.play().catch(()=>{});showVoiceToast(VOICE_TEXT[name]||'');}catch(e){}
+  }
+  function setVoiceVolume(v){voiceVolume=Math.max(0,Math.min(1,v));localStorage.setItem(VOICE_VOLUME_KEY,String(voiceVolume));updateOptionsUI();}
+  function setDifficulty(d){difficulty=d;diffMul=DIFF_MUL[d]||1;localStorage.setItem(DIFF_KEY,d);updateOptionsUI();}
+  function setCrt(on){crtOn=!!on;localStorage.setItem(CRT_KEY,crtOn?'on':'off');const el=document.getElementById('crtOverlay');if(el)el.style.display=crtOn?'block':'none';updateOptionsUI();}
+  function toggleFullscreen(){try{const el=document.documentElement;if(!document.fullscreenElement)(el.requestFullscreen||el.webkitRequestFullscreen).call(el);else (document.exitFullscreen||document.webkitExitFullscreen).call(document);}catch(e){}}
+  // Gamepad reticle aim + fire
+  const reticle={x:0,y:0,active:false};
+  let gpFireLatch=false,gpPauseLatch=false,gpStartLatch=false;
+  function pollGamepadMC(dt){
+    const gps=navigator.getGamepads?navigator.getGamepads():[];let gp=null;for(const g of gps){if(g&&g.connected){gp=g;break;}}
+    if(!gp)return;
+    const pressed=(i)=>gp.buttons[i]&&gp.buttons[i].pressed, trig=(i)=>gp.buttons[i]?gp.buttons[i].value:0;
+    const titleVisible=ui.tutorial.style.display!=='none';
+    if(titleVisible||state.gameOver){
+      if((pressed(0)||pressed(9))&&!gpStartLatch){gpStartLatch=true; if(titleVisible){const b=document.getElementById('startBtn');b&&b.click();} else {const b=document.getElementById('restartBtn');b&&b.click();}}
+      if(!pressed(0)&&!pressed(9))gpStartLatch=false;
+      return;
+    }
+    if(!running)return;
+    if(!reticle.active){reticle.x=w/2;reticle.y=h/2;reticle.active=true;}
+    const dz=0.22,lx=Math.abs(gp.axes[0])>dz?gp.axes[0]:0,ly=Math.abs(gp.axes[1])>dz?gp.axes[1]:0;
+    const rx=Math.abs(gp.axes[2]||0)>dz?gp.axes[2]:0,ry=Math.abs(gp.axes[3]||0)>dz?gp.axes[3]:0;
+    const spd=Math.max(w,h)*0.9*dt;
+    reticle.x=Math.max(0,Math.min(w,reticle.x+(lx+rx)*spd));
+    reticle.y=Math.max(0,Math.min(h,reticle.y+(ly+ry)*spd));
+    if(pressed(9)&&!gpPauseLatch){gpPauseLatch=true;if(running&&!state.gameOver){paused=!paused;const pb=document.getElementById('pauseBtn');if(pb)pb.textContent=paused?'▶':'⏸';updateUI();}}
+    if(!pressed(9))gpPauseLatch=false;
+    const fire=pressed(0)||pressed(7)||trig(7)>0.4||pressed(5);
+    if(fire&&!gpFireLatch){gpFireLatch=true;fireAt(reticle.x,reticle.y);}
+    if(!fire)gpFireLatch=false;
+  }
+  function drawReticle(){
+    if(!reticle.active||!running||paused||state.gameOver)return;
+    const x=reticle.x,y=reticle.y;
+    ctx.save();ctx.strokeStyle='rgba(120,230,255,0.9)';ctx.lineWidth=2;ctx.shadowColor='rgba(80,200,255,0.9)';ctx.shadowBlur=8;
+    ctx.beginPath();ctx.arc(x,y,13,0,Math.PI*2);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x-20,y);ctx.lineTo(x-6,y);ctx.moveTo(x+6,y);ctx.lineTo(x+20,y);ctx.moveTo(x,y-20);ctx.lineTo(x,y-6);ctx.moveTo(x,y+6);ctx.lineTo(x,y+20);ctx.stroke();
+    ctx.restore();
+  }
+
+  // After wave 16, scaling grows at only 10% rate — difficulty scales the effective wave
+  function ew(w) { return (w <= 16 ? w : 16 + (w - 16) * 0.25) * diffMul; }
 
   const skyPresets = [
     { top: '#21112f', mid: '#8d3767', bottom: '#ff9757', aurora: ['#5be4ff','#ff7dd6','#d6ff7d'] },
@@ -576,6 +632,7 @@ button:active { transform: translateY(1px) scale(.99); }
   }
 
   function startWave(first = false) {
+    playVoice(first ? 'vo-incoming' : 'vo-wave');
     state.waveElapsed = 0;
     state.enemyMissiles = []; state.playerMissiles = []; state.explosions = []; state.particles = []; state.smoke = []; state.satellites = []; state.debris = []; state.fires = [];
     state.chainPopups = []; state.smokes = []; state.scorePopups = []; state.tapRipples = []; state.fireworks = [];
@@ -866,6 +923,7 @@ button:active { transform: translateY(1px) scale(.99); }
     spawnParticles(city.x, city.y, 15, '#5a4a3a', 1.4, 2.5, 150);
     spawnParticles(city.x, city.y, 10, '#3a3028', 1.0, 3.0, 180);
     audio.cityCrash(); shake = Math.max(shake, 10); flash = Math.max(flash, .24); updateUI();
+    { const aliveN = state.cities.filter(c=>c.alive).length; if (aliveN === 1) playVoice('vo-last-city', true); else if (aliveN > 1) playVoice('vo-city-lost', true); }
     if (!state.cities.some(c=>c.alive)) {
       state.gameOver = true; running = false;
       applyMusicVolume();
@@ -1326,6 +1384,7 @@ button:active { transform: translateY(1px) scale(.99); }
         const ammoCount = state.bases.reduce((sum,b)=>sum+b.ammo,0);
         const ammoMax = state.bases.reduce((sum,b)=>sum+b.ammoMax,0);
         tally = { cityCount, cityMax, ammoCount, ammoMax, cityAwarded: 0, ammoAwarded: 0, runningScore: 0, phase: 0, timer: 0, wave: state.wave };
+        playVoice('vo-sector-secure');
       }
     } else if (!tally) {
       state.waveOverDelay = 0;
@@ -2118,7 +2177,9 @@ button:active { transform: translateY(1px) scale(.99); }
   function loop(ts) {
     try {
       const dt = Math.min(0.033, (ts - last) / 1000 || 0.016); last = ts;
-      update(dt); draw(ts);
+      if (voiceCooldown > 0) voiceCooldown -= dt;
+      pollGamepadMC(dt);
+      update(dt); draw(ts); drawReticle();
     } catch(err) {
       console.error('Game loop error:', err);
       // Attempt recovery: clear any boss state that might have caused the crash
@@ -2221,6 +2282,11 @@ button:active { transform: translateY(1px) scale(.99); }
     sfxVolSlider.value = Math.round(sfxVolume * 100);
     musicVolText.textContent = `${Math.round(musicVolume * 100)}%`;
     sfxVolText.textContent = `${Math.round(sfxVolume * 100)}%`;
+    const vs=document.getElementById('voiceVolSlider'), vt=document.getElementById('voiceVolText');
+    if(vs)vs.value=Math.round(voiceVolume*100); if(vt)vt.textContent=`${Math.round(voiceVolume*100)}%`;
+    const ct=document.getElementById('crtToggleBtn'); if(ct)ct.textContent=crtOn?'On':'Off';
+    const seg=document.getElementById('diffSeg');
+    if(seg)seg.querySelectorAll('button').forEach(b=>{const on=b.dataset.v===difficulty;b.style.background=on?'#ffd700':'transparent';b.style.color=on?'#000':'#ffd700';});
   }
   function openHsOverlay() { hsOverlay.style.display = 'flex'; renderHSBoth(document.getElementById('hsOverlayScores')); }
   function closeHsOverlay() { hsOverlay.style.display = 'none'; }
@@ -2238,6 +2304,10 @@ button:active { transform: translateY(1px) scale(.99); }
   musicToggleBtn.addEventListener('touchend', (e) => { e.stopPropagation(); e.preventDefault(); setMusicEnabled(!musicEnabled); });
   musicVolSlider.addEventListener('input', () => setMusicVolume(Number(musicVolSlider.value) / 100));
   sfxVolSlider.addEventListener('input', () => setSfxVolume(Number(sfxVolSlider.value) / 100));
+  { const vs=document.getElementById('voiceVolSlider'); if(vs)vs.addEventListener('input',()=>setVoiceVolume(Number(vs.value)/100)); }
+  { const ct=document.getElementById('crtToggleBtn'); if(ct){const h=(e)=>{if(e&&e.stopPropagation)e.stopPropagation();setCrt(!crtOn);};ct.addEventListener('click',h);ct.addEventListener('touchend',(e)=>{e.preventDefault();h(e);});} }
+  { const fb=document.getElementById('fullscreenBtn'); if(fb){fb.addEventListener('click',(e)=>{e.stopPropagation();toggleFullscreen();});fb.addEventListener('touchend',(e)=>{e.stopPropagation();e.preventDefault();toggleFullscreen();});} }
+  { const seg=document.getElementById('diffSeg'); if(seg)seg.querySelectorAll('button').forEach(b=>{const h=(e)=>{if(e&&e.stopPropagation)e.stopPropagation();setDifficulty(b.dataset.v);};b.addEventListener('click',h);b.addEventListener('touchend',(e)=>{e.preventDefault();h(e);});}); }
 
   document.getElementById('restartBtn').addEventListener('click', () => { ui.gameOver.classList.remove('show'); running = true; resetGame(); startMusic(); });
   document.getElementById('restartBtn').addEventListener('touchend', (e) => { e.stopPropagation(); document.getElementById('restartBtn').click(); });
@@ -2281,6 +2351,7 @@ button:active { transform: translateY(1px) scale(.99); }
       return;
     }
     if (k === 'm' || k === 'M') { muted = !muted; applySfxVolume(); muteBtn.textContent = muted ? '🔇' : '🔊'; return; }
+    if (k === 'f' || k === 'F') { toggleFullscreen(); return; }
     if (k === 'r' || k === 'R') {
       if (titleVisible) return; // don't start a game behind the title card
       running = true; resetGame();
@@ -2291,6 +2362,8 @@ button:active { transform: translateY(1px) scale(.99); }
     ui.tutorial.querySelector('p').textContent = 'Tap anywhere to order an interception. Protect the skyline, chain your explosions, and survive escalating waves.';
   }
 
+  { const co=document.getElementById('crtOverlay'); if(co)co.style.display = crtOn ? 'block' : 'none'; }
+  updateOptionsUI();
   resize(); updateUI(); requestAnimationFrame(loop);
 })();
 
