@@ -200,7 +200,7 @@ button:active { transform: translateY(1px) scale(.99); }
 <div id="pauseHint">Enter = start • P/Space = pause • M = mute • R = restart • F = fullscreen</div>
 <div id="crtOverlay" style="position:fixed;inset:0;z-index:60;pointer-events:none;display:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,0.22) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;"></div>
 <div id="voiceToast" style="position:fixed;left:50%;bottom:16%;transform:translateX(-50%);z-index:61;pointer-events:none;color:#bfe4ff;font-family:monospace;font-size:clamp(0.8rem,2.5vw,1.1rem);letter-spacing:0.12em;text-shadow:0 0 12px rgba(80,170,255,0.9);opacity:0;transition:opacity 0.25s;text-align:center;padding:0 1em;"></div>
-<div id="versionBadge" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v3.0.0</div>
+<div id="versionBadge" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v3.1.0</div>
 <script>
 (() => {
   const canvas = document.getElementById('game');
@@ -331,7 +331,18 @@ button:active { transform: translateY(1px) scale(.99); }
   let diffMul=DIFF_MUL[difficulty]||1;
   const voiceEl=new Audio(); voiceEl.preload='auto';
   let voiceCooldown=0;
-  const VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-city-lost':'CITY LOST','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED','vo-boss':'BOSS INBOUND — BRACE'};
+  const VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-wave-2':'MULTIPLE CONTACTS ON RADAR','vo-wave-3':'WEAPONS FREE','vo-city-lost':'CITY LOST','vo-city-lost-2':'CITY DOWN — TIGHTEN THE NET','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED','vo-secure-2':'WAVE NEUTRALIZED','vo-secure-3':'ALL CLEAR — REARMING','vo-mirv':'MIRV SEPARATION','vo-mirv-2':'WARHEADS SPLITTING','vo-smart':'SMART WEAPONS — THEY EVADE','vo-bomber':'BOMBER ON APPROACH','vo-orbital':'ORBITAL WEAPON CHARGING','vo-meteor':'METEOR SHOWER INBOUND','vo-stealth':'STEALTH SIGNATURES DETECTED','vo-nuke':'NUCLEAR WARHEADS — STOP THEM','vo-ammo-low':'AMMUNITION LOW','vo-chain':'BEAUTIFUL CHAIN','vo-boss':'BOSS INBOUND — BRACE'};
+  // Per-event voice pools: random variant, never the same twice in a row
+  const VO_POOLS={wave:['vo-wave','vo-wave-2','vo-wave-3'],secure:['vo-sector-secure','vo-secure-2','vo-secure-3'],cityLost:['vo-city-lost','vo-city-lost-2'],mirv:['vo-mirv','vo-mirv-2']};
+  const voLast={};
+  const voFlags={mirv:false,smart:false,ammoLow:false,chain:false};
+  function announce(event,priority){
+    const pool=VO_POOLS[event]||[event];
+    let pick=pool[0];
+    if(pool.length>1){let guard=0;do{pick=pool[(Math.random()*pool.length)|0];}while(pick===voLast[event]&&++guard<8);}
+    voLast[event]=pick;
+    playVoice(pick,priority);
+  }
   let voiceToastTimer=null;
   function showVoiceToast(t){const el=document.getElementById('voiceToast');if(!el||!t)return;el.textContent=t;el.style.opacity='1';clearTimeout(voiceToastTimer);voiceToastTimer=setTimeout(()=>{el.style.opacity='0';},1700);}
   function playVoice(name,priority){
@@ -632,7 +643,7 @@ button:active { transform: translateY(1px) scale(.99); }
   }
 
   function startWave(first = false) {
-    playVoice(first ? 'vo-incoming' : 'vo-wave');
+    voFlags.mirv=false;voFlags.smart=false;voFlags.ammoLow=false;voFlags.chain=false;
     state.waveElapsed = 0;
     state.enemyMissiles = []; state.playerMissiles = []; state.explosions = []; state.particles = []; state.smoke = []; state.satellites = []; state.debris = []; state.fires = [];
     state.chainPopups = []; state.smokes = []; state.scorePopups = []; state.tapRipples = []; state.fireworks = [];
@@ -683,6 +694,15 @@ button:active { transform: translateY(1px) scale(.99); }
     setTimeout(() => ui.waveBanner.classList.remove('show'), 2200);
     if (state.bossWave >= 0) state.bossTint = 2.5; // tint screen briefly
     if (!first) audio.fanfare();
+
+    // Wave-type-aware commander callout (boss waves announce their actual threat)
+    if (state.bossWave === 0) announce('vo-bomber', true);
+    else if (state.bossWave === 1) announce('vo-orbital', true);
+    else if (state.bossWave === 2) announce('vo-meteor', true);
+    else if (state.bossWave === 3) announce('vo-stealth', true);
+    else if (state.bossWave === 4) announce('vo-nuke', true);
+    else if (first) announce('vo-incoming', true);
+    else announce('wave');
 
     // Boss wave spawning
     if (state.bossWave === 0) {
@@ -768,6 +788,7 @@ button:active { transform: translateY(1px) scale(.99); }
     else if (wave >= 10 && typeRoll < 0.35) kind = 'smart';
     const speed = rand(40 + ew(wave)*10, 28 + ew(wave)*7);
     state.enemyMissiles.push({ x:startX, y:-rand(220,20), sx:startX, sy:-20, tx:target.x, ty:target.y, speed, progress:-delay*speed/Math.max(1,dist(startX,-20,target.x,target.y)), trail:[], alive:true, split:false, kind, wiggle:rand(1000), whistle:false });
+    if (kind === 'smart' && !voFlags.smart) { voFlags.smart = true; announce('vo-smart'); }
   }
 
   function spawnSatellite(i) {
@@ -785,6 +806,10 @@ button:active { transform: translateY(1px) scale(.99); }
     }
     if (!chosen) return;
     chosen.ammo--; chosen.reloadPulse = 0.35;
+    if (!voFlags.ammoLow) {
+      const tot = state.bases.reduce((s,b)=>s+b.ammo,0), max = state.bases.reduce((s,b)=>s+b.ammoMax,0);
+      if (max > 0 && tot / max <= 0.2) { voFlags.ammoLow = true; announce('vo-ammo-low'); }
+    }
     const speed = 520;
     const dx = x - chosen.x, dy = y - chosen.y;
     const len = Math.hypot(dx, dy) || 1;
@@ -803,6 +828,8 @@ button:active { transform: translateY(1px) scale(.99); }
 
   function detonate(x, y, radius, friendly = true, comboBoost = 1) {
     state.explosions.push({ x, y, radius: 1, maxRadius: radius * 1.4, age: 0, life: friendly ? 1.0 : 1.2, friendly, comboBoost, hitIds: new Set() });
+    // v3.1: spark burst on every detonation
+    spawnParticles(x, y, friendly ? 12 : 8, friendly ? '#bff0ff' : '#ffb46a', 2.4, 1.1, 40);
     flash = Math.min(1, flash + (friendly ? 0.15 : 0.22));
     shake = Math.max(shake, friendly ? 6 : 10);
     // massive particle burst — matching title screen style
@@ -833,6 +860,7 @@ button:active { transform: translateY(1px) scale(.99); }
     state.score += pts;
     state.scorePopups.push({ x: missile.x, y: missile.y, text: '+' + pts, life: 1.0, maxLife: 1.0, color: state.chainCount >= 2 ? '#55ffff' : '#ffd700' });
     state.chainCount++; state.chainWindow = 1.2; comboTimer = 0.8;
+    if (state.chainCount === 5 && !voFlags.chain) { voFlags.chain = true; announce('vo-chain'); }
     if (state.chainCount >= 2) {
       state.chainPopups.push({ x: missile.x, y: missile.y - 20, text: `CHAIN x${state.chainCount}!`, life: 1.2, maxLife: 1.2, scale: 0 });
     }
@@ -892,6 +920,7 @@ button:active { transform: translateY(1px) scale(.99); }
   function splitMirv(m) {
     if (m.kind !== 'mirv' || m.split || m.progress < 0.45 + Math.random()*0.18 || state.wave < 6) return;
     m.split = true;
+    if (!voFlags.mirv) { voFlags.mirv = true; announce('mirv'); }
     for (let i=0;i<2 + (state.wave>12?1:0); i++) {
       const targetCities = state.cities.filter(c=>c.alive);
       const t = targetCities[Math.floor(Math.random()*targetCities.length)] || { x: rand(w*0.9,w*0.1), y:h*0.84 };
@@ -923,7 +952,7 @@ button:active { transform: translateY(1px) scale(.99); }
     spawnParticles(city.x, city.y, 15, '#5a4a3a', 1.4, 2.5, 150);
     spawnParticles(city.x, city.y, 10, '#3a3028', 1.0, 3.0, 180);
     audio.cityCrash(); shake = Math.max(shake, 10); flash = Math.max(flash, .24); updateUI();
-    { const aliveN = state.cities.filter(c=>c.alive).length; if (aliveN === 1) playVoice('vo-last-city', true); else if (aliveN > 1) playVoice('vo-city-lost', true); }
+    { const aliveN = state.cities.filter(c=>c.alive).length; if (aliveN === 1) announce('vo-last-city', true); else if (aliveN > 1) announce('cityLost', true); }
     if (!state.cities.some(c=>c.alive)) {
       state.gameOver = true; running = false;
       applyMusicVolume();
@@ -1384,7 +1413,7 @@ button:active { transform: translateY(1px) scale(.99); }
         const ammoCount = state.bases.reduce((sum,b)=>sum+b.ammo,0);
         const ammoMax = state.bases.reduce((sum,b)=>sum+b.ammoMax,0);
         tally = { cityCount, cityMax, ammoCount, ammoMax, cityAwarded: 0, ammoAwarded: 0, runningScore: 0, phase: 0, timer: 0, wave: state.wave };
-        playVoice('vo-sector-secure');
+        announce('secure');
       }
     } else if (!tally) {
       state.waveOverDelay = 0;
@@ -1404,13 +1433,64 @@ button:active { transform: translateY(1px) scale(.99); }
     ui.status.textContent = state.gameOver ? 'All cities lost' : paused ? 'Paused' : state.chainWindow > 0 ? `Chain active x${Math.max(1,state.chainCount)}` : 'Tap anywhere to intercept';
   }
 
+  // v3.1: shared animated aurora-curtain renderer (main sky + tutorial demo).
+  // Additive flowing ribbons with a bright upper rim and slow per-band breathing.
+  function drawAuroraCurtains(gc, time, W2, H2, bands, palette) {
+    gc.save();
+    gc.globalCompositeOperation = 'lighter';
+    const hex2rgb = (hx) => { const n = parseInt(hx.slice(1), 16); return [(n>>16)&255, (n>>8)&255, n&255]; };
+    for (let bi = 0; bi < bands.length; bi++) {
+      const band = bands[bi];
+      const [cr, cg, cbv] = hex2rgb(palette[bi % palette.length]);
+      const t = time * 0.00016 + band.phase;
+      const breathe = 0.72 + 0.28 * Math.sin(time * 0.00045 + band.phase * 3);
+      const amp = H2 * (0.035 + bi * 0.011);
+      const curtain = H2 * (0.09 + bi * 0.024);
+      const step = Math.max(26, W2 / 42);
+      const topY = (x) => band.y + Math.sin(x * 0.0042 + t * 2.4) * amp + Math.sin(x * 0.0011 - t * 1.4) * amp * 1.7;
+      const botY = (x, spread) => band.y + Math.sin(x * 0.0042 + t * 2.4 + 0.7) * amp * 0.7 + Math.sin(x * 0.0011 - t * 1.4) * amp * 1.4 + curtain * spread;
+      for (let pass = 0; pass < 2; pass++) {
+        const alpha = (pass === 0 ? 0.30 : 0.13) * breathe;   // core ribbon, then wide soft glow
+        const spread = pass === 0 ? 1 : 1.7;
+        // gradient spans the ribbon's full wave range (edges clamp to alpha 0 otherwise)
+        const g = gc.createLinearGradient(0, band.y - amp * 2.8, 0, band.y + curtain * spread + amp * 1.6);
+        g.addColorStop(0, `rgba(${cr},${cg},${cbv},0)`);
+        g.addColorStop(0.32, `rgba(${cr},${cg},${cbv},${alpha})`);
+        g.addColorStop(0.7, `rgba(${cr},${cg},${cbv},${alpha * 0.45})`);
+        g.addColorStop(1, `rgba(${cr},${cg},${cbv},0)`);
+        gc.fillStyle = g;
+        gc.beginPath();
+        gc.moveTo(-60, topY(-60));
+        for (let x = -60; x <= W2 + 60; x += step) gc.lineTo(x, topY(x));
+        for (let x = W2 + 60; x >= -60; x -= step) gc.lineTo(x, botY(x, spread));
+        gc.closePath();
+        gc.fill();
+      }
+      // crisp bright rim along the ribbon's upper edge
+      gc.beginPath();
+      gc.moveTo(-60, topY(-60));
+      for (let x = -60; x <= W2 + 60; x += step) gc.lineTo(x, topY(x));
+      gc.strokeStyle = `rgba(${Math.min(255,cr+80)},${Math.min(255,cg+80)},${Math.min(255,cbv+80)},${0.32 * breathe})`;
+      gc.lineWidth = 2.2;
+      gc.stroke();
+      gc.strokeStyle = `rgba(${cr},${cg},${cbv},${0.13 * breathe})`;
+      gc.lineWidth = 7;
+      gc.stroke();
+    }
+    gc.restore();
+  }
+  window.drawAuroraCurtains = drawAuroraCurtains; // shared with the tutorial-demo IIFE
+
   function drawSky(time) {
     const preset = skyPresets[(state.wave - 1) % skyPresets.length];
     const grad = ctx.createLinearGradient(0,0,0,h);
     grad.addColorStop(0, preset.top); grad.addColorStop(0.48, preset.mid); grad.addColorStop(1, preset.bottom);
     ctx.fillStyle = grad; ctx.fillRect(0,0,w,h);
 
-
+    // v3.1: animated aurora curtains — the game's namesake, finally rendered.
+    if (state.auroraBands && state.auroraBands.length) {
+      drawAuroraCurtains(ctx, time, w, h, state.auroraBands, preset.aurora || ['#53ffa3','#55d2ff','#b381ff']);
+    }
 
     const dt2 = 0.016; // approx frame dt for star movement
     for (const s of state.stars) {
@@ -1876,6 +1956,14 @@ button:active { transform: translateY(1px) scale(.99); }
         const cAlpha = (1 - t / 0.3) * 0.5;
         ctx.fillStyle = `rgba(255,255,255,${cAlpha})`;
         ctx.beginPath(); ctx.arc(e.x, e.y, e.radius * 0.25, 0, Math.PI * 2); ctx.fill();
+      }
+      // v3.1: crisp expanding shockwave ring
+      const rt = clamp(t * 1.2, 0, 1);
+      if (rt < 1) {
+        const rr = 6 + e.maxRadius * 1.35 * rt;
+        ctx.strokeStyle = e.friendly ? `rgba(150,240,255,${(1 - rt) * 0.55})` : `rgba(255,170,110,${(1 - rt) * 0.45})`;
+        ctx.lineWidth = 1.5 + (1 - rt) * 3;
+        ctx.beginPath(); ctx.arc(e.x, e.y, rr, 0, Math.PI * 2); ctx.stroke();
       }
       // screen flash on big ones
       if (t < 0.06 && e.maxRadius > 55) { ctx.fillStyle = `rgba(255,240,200,${0.08 * (1-t/0.06)})`; ctx.fillRect(0,0,w,h); }
@@ -2364,6 +2452,10 @@ button:active { transform: translateY(1px) scale(.99); }
 
   { const co=document.getElementById('crtOverlay'); if(co)co.style.display = crtOn ? 'block' : 'none'; }
   updateOptionsUI();
+  // debug hook (harmless): inspect live sim state from the console
+  window.__auroraDbg = () => ({ running, paused, gameOver: state.gameOver, wt: waveTransition, wave: state.wave,
+    enemies: state.enemyMissiles.length, firstProg: state.enemyMissiles[0] ? +state.enemyMissiles[0].progress.toFixed(3) : null,
+    w, h, ammo: state.bases.map(b=>b.ammo) });
   resize(); updateUI(); requestAnimationFrame(loop);
 })();
 
@@ -2487,15 +2579,10 @@ button:active { transform: translateY(1px) scale(.99); }
     }
     bx.globalAlpha = 1;
 
-    // aurora shimmer
-    for (let i = 0; i < 3; i++) {
-      const ay = th * (0.15 + i * 0.12) + Math.sin(st * 0.4 + i) * 20;
-      const ag = bx.createLinearGradient(0, ay, tw, ay);
-      const ao = 0.02 + 0.015 * Math.sin(st * 0.3 + i * 2);
-      ag.addColorStop(0, 'rgba(0,255,150,0)'); ag.addColorStop(0.3, `rgba(0,255,180,${ao})`);
-      ag.addColorStop(0.5, `rgba(80,200,255,${ao*1.2})`); ag.addColorStop(0.7, `rgba(0,255,150,${ao})`);
-      ag.addColorStop(1, 'rgba(0,255,150,0)');
-      bx.fillStyle = ag; bx.fillRect(0, ay - 25, tw, 50);
+    // aurora curtains (shared renderer — same aurora as the game sky)
+    if (window.drawAuroraCurtains) {
+      if (!tc.__auroraBands) tc.__auroraBands = [0,1,2].map(i => ({ y: th * (0.14 + i * 0.09), phase: i * 2.1 }));
+      window.drawAuroraCurtains(bx, t, tw, th, tc.__auroraBands, ['#53ffa3','#55d2ff','#b381ff']);
     }
 
     // ground with terrain variation

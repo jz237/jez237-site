@@ -65,7 +65,7 @@ body.touch #mControls.on{display:block;}
 <body>
 <canvas id="gc"></canvas>
 <div id="hud"><span id="scoreDisp">0</span><span id="livesDisp"></span><span id="levelDisp">LV 1</span></div>
-<div id="versionBadge">v4.0.0</div>
+<div id="versionBadge">v4.1.0</div>
 <div id="crt"></div>
 <div id="voiceToast"></div>
 <div id="mControls"></div>
@@ -221,6 +221,9 @@ function diff(){return DIFF[settings.difficulty]||DIFF.normal;}
 const QUAL={low:{part:200,stars:170,dpr:1.5},high:{part:560,stars:340,dpr:2.4},ultra:{part:840,stars:470,dpr:3.2}};
 function Q(){return QUAL[settings.quality]||QUAL.high;}
 const titleImg=new Image();titleImg.src='assets/title-bg.jpg';
+const nebulaImg=new Image();nebulaImg.src='assets/nebula-bg.jpg';
+let nebOffX=0,nebOffY=0;
+const shipTrail=[];
 const CB_ENEMY='#ffb000';
 
 // ================= AUDIO BUSES / MUSIC / VOICE =================
@@ -263,7 +266,17 @@ function playVoice(name,priority){
     showToast(VOICE_TEXT[name]||'');
   }catch(e){}
 }
-const VOICE_TEXT={'vo-wave-cleared':'WAVE CLEARED','vo-ufo-warning':'HOSTILE SAUCER INBOUND','vo-shields':'SHIELDS ONLINE','vo-last-ship':'FINAL SHIP — MAKE IT COUNT','vo-high-score':'NEW HIGH SCORE'};
+const VOICE_TEXT={'vo-wave-cleared':'WAVE CLEARED','vo-wave-cleared-2':'SECTOR CLEAR','vo-wave-cleared-3':'ALL ROCKS VAPORIZED','vo-ufo-warning':'HOSTILE SAUCER INBOUND','vo-ufo-down':'SAUCER DESTROYED','vo-boss-rock':'MASSIVE ASTEROID ON SCOPE','vo-shields':'SHIELDS ONLINE','vo-rapid':'RAPID FIRE ENGAGED','vo-triple':'TRIPLE CANNONS ONLINE','vo-speed':'ENGINES OVERCHARGED','vo-last-ship':'FINAL SHIP — MAKE IT COUNT','vo-high-score':'NEW HIGH SCORE'};
+// Per-event voice pools: random variant, never the same twice in a row
+const VO_POOLS={waveCleared:['vo-wave-cleared','vo-wave-cleared-2','vo-wave-cleared-3']};
+const voLast={};
+function announce(event,priority){
+  const pool=VO_POOLS[event]||[event];
+  let pick=pool[0];
+  if(pool.length>1){let guard=0;do{pick=pool[(Math.random()*pool.length)|0];}while(pick===voLast[event]&&++guard<8);}
+  voLast[event]=pick;
+  playVoice(pick,priority);
+}
 let toastTimer=null;
 function showToast(text){
   const el=document.getElementById('voiceToast');if(!el||!text)return;
@@ -375,6 +388,9 @@ function drawStars(){
   ctx.globalAlpha=1;
 }
 function updateStars(sx,sy){
+  // deepest parallax layer: the nebula drifts opposite ship motion, saturating softly
+  nebOffX=Math.max(-70,Math.min(70,nebOffX-sx*0.003));
+  nebOffY=Math.max(-70,Math.min(70,nebOffY-sy*0.003));
   for(const s of stars){
     const spd=[0.005,0.012,0.025][s.layer];
     s.x-=sx*spd;s.y-=sy*spd;
@@ -1079,7 +1095,13 @@ function update(dt){
     ship.x+=ship.vx*dt;ship.y+=ship.vy*dt;
     wrap(ship);
     updateStars(ship.vx,ship.vy);
+    // v4.1: engine ribbon trail
+    if(ship.thrust||boostTimer>0){
+      shipTrail.push({x:ship.x-Math.cos(ship.angle)*14,y:ship.y-Math.sin(ship.angle)*14,life:0.3,maxLife:0.3});
+      if(shipTrail.length>26)shipTrail.shift();
+    }
   }
+  for(let i=shipTrail.length-1;i>=0;i--){shipTrail[i].life-=dt;if(shipTrail[i].life<=0)shipTrail.splice(i,1);}
 
   // Bullets
   for(let i=bullets.length-1;i>=0;i--){
@@ -1185,6 +1207,7 @@ function update(dt){
       const u=ufos[ui];
       if(dist(b,u)<u.radius){
         bullets.splice(bi,1);ufos.splice(ui,1);
+        playVoice('vo-ufo-down');
         score+=200;
         scorePopups.push({x:u.x,y:u.y,text:'+200',life:1.2,maxLife:1.2,vy:-40,color:'#66ff66',size:18});
         spawnParticles(u.x,u.y,44,'#66ff66',1.5,1,u.vx,u.vy);
@@ -1246,9 +1269,9 @@ function update(dt){
       if(dist(ship,p)<ship.radius+12){
         powerups.splice(i,1);
         if(p.type==='shield'){shieldTimer=8;playVoice('vo-shields');}
-        else if(p.type==='rapid')rapidTimer=8;
-        else if(p.type==='triple')tripleTimer=10;
-        else if(p.type==='speed')speedTimer=8;
+        else if(p.type==='rapid'){rapidTimer=8;playVoice('vo-rapid');}
+        else if(p.type==='triple'){tripleTimer=10;playVoice('vo-triple');}
+        else if(p.type==='speed'){speedTimer=8;playVoice('vo-speed');}
         playSound('powerup');
       }
     }
@@ -1256,7 +1279,7 @@ function update(dt){
 
   // Level complete check
   if(asteroids.length===0&&ufos.length===0&&gameState==='play'){
-    level++;announceLevel();playVoice('vo-wave-cleared');
+    level++;announceLevel();announce('waveCleared');
     if(level===5){
       // Boss level
       spawnLevel();
@@ -1269,6 +1292,7 @@ function update(dt){
         craters:makeCraters(80,7),
         mesh:makeAsteroidMesh(80,15,7),
         palette:['#880000','#aa2222','#cc4444','#ff6666'],hp:5,mass:140});
+      playVoice('vo-boss-rock',true);
     } else {
       spawnLevel();
     }
@@ -1436,6 +1460,16 @@ function draw(){
   bg.addColorStop(1,'#03040c');
   ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
 
+  // v4.1: deep-space nebula layer — parallax with ship motion, additive so only the wisps glow
+  if(nebulaImg.complete&&nebulaImg.naturalWidth){
+    const ir=nebulaImg.naturalWidth/nebulaImg.naturalHeight,sr=W/H;
+    let dw,dh;if(sr>ir){dw=W;dh=W/ir;}else{dh=H;dw=H*ir;}
+    dw*=1.18;dh*=1.18;
+    ctx.save();ctx.globalCompositeOperation='screen';ctx.globalAlpha=0.9;
+    ctx.drawImage(nebulaImg,(W-dw)/2+nebOffX,(H-dh)/2+nebOffY,dw,dh);
+    ctx.restore();
+  }
+
   // Title-screen backdrop image (behind stars, faint) during attract/menus
   if((gameState==='attract'||gameState==='start'||gameState==='opt'||gameState==='how'||gameState==='hs')&&titleImg.complete&&titleImg.naturalWidth){
     const ir=titleImg.naturalWidth/titleImg.naturalHeight,sr=W/H;
@@ -1471,6 +1505,20 @@ function draw(){
 
   // Bullets
   for(const b of bullets)drawBullet(b);
+
+  // v4.1: engine ribbon trail (under the ship)
+  if(shipTrail.length>1){
+    ctx.save();ctx.globalCompositeOperation='lighter';
+    for(let i=1;i<shipTrail.length;i++){
+      const p0=shipTrail[i-1],p1=shipTrail[i];
+      if(Math.hypot(p1.x-p0.x,p1.y-p0.y)>90)continue; // skip screen-wrap jumps
+      const a=(p1.life/p1.maxLife);
+      ctx.strokeStyle=`rgba(120,190,255,${a*0.45})`;
+      ctx.lineWidth=1+a*3.5;
+      ctx.beginPath();ctx.moveTo(p0.x,p0.y);ctx.lineTo(p1.x,p1.y);ctx.stroke();
+    }
+    ctx.restore();
+  }
 
   // Ship
   if(ship)drawShip();
