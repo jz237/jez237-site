@@ -37,18 +37,35 @@
             <span class="dn">▼ <b id="netmap-total-down">—</b></span>
             <span class="up">▲ <b id="netmap-total-up">—</b></span>
             <span class="clock" id="netmap-clock"></span>
+            <span class="netmap-mode" id="netmap-mode" title="Traffic on the public map is simulated — see About below">SIMULATED</span>
           </p>
         </div>
       </div>
 
       <!-- HUD: controls -->
       <div class="netmap-hud netmap-hud-controls" role="toolbar" aria-label="Map controls">
+        <input type="search" id="netmap-search" class="netmap-search" placeholder="Find a device…"
+          aria-label="Find a device by name, IP, or type" autocomplete="off" spellcheck="false" />
         <button type="button" id="netmap-audio-toggle" class="netmap-btn" aria-pressed="false" title="Toggle network sound">
           <span class="ico" aria-hidden="true">🔇</span><span class="lbl">Sound</span>
         </button>
         <button type="button" id="netmap-zoom-in" class="netmap-btn" title="Zoom in" aria-label="Zoom in">＋</button>
         <button type="button" id="netmap-zoom-out" class="netmap-btn" title="Zoom out" aria-label="Zoom out">－</button>
         <button type="button" id="netmap-reset" class="netmap-btn" title="Reset view" aria-label="Reset view">⌂</button>
+      </div>
+
+      <!-- HUD: top talkers -->
+      <div class="netmap-hud netmap-toptalkers" id="netmap-toptalkers" aria-label="Busiest devices right now">
+        <div class="tt-head">Top talkers</div>
+        <ol id="netmap-toptalkers-list"></ol>
+      </div>
+
+      <!-- HUD: day scrubber (simulation only) -->
+      <div class="netmap-hud netmap-scrubber" id="netmap-scrubber" aria-label="Preview a time of day">
+        <button type="button" id="netmap-scrub-now" class="netmap-btn" title="Follow the real clock" aria-pressed="true">Now</button>
+        <input type="range" id="netmap-scrub-range" min="0" max="287" step="1" value="0"
+          aria-label="Simulated time of day" />
+        <span class="scrub-label" id="netmap-scrub-label"></span>
       </div>
 
       <!-- HUD: traffic class legend -->
@@ -91,11 +108,17 @@
           <p>Traffic here is a time-of-day-aware simulation seeded per device (the real LAN isn't reachable from a static page). Topology and behavior live in <code>network/data.js</code>, and <code>traffic-sim.js</code> documents an adapter for wiring in a real exporter later.</p>
         </div>
       </div>
+      <details class="netmap-howreal">
+        <summary>How real is this?</summary>
+        <p><strong>The topology is real</strong> — devices, districts, and connections come from an actual scan of the network. <strong>The traffic is simulated</strong>: each device follows a behavior profile (a TV streams in the evening, the NAS backs up overnight, IoT gadgets chirp all day) driven by the real time of day, but the numbers are generated in your browser, not measured. Use the timeline at the bottom of the map to preview any hour.</p>
+        <p>A live version exists, but it's owner-only by design: real-time rates would reveal when the house is occupied or asleep, so the public site's security policy blocks all outside data sources. The owner can run the map locally against a small LAN exporter (see <code>network/exporter/</code>) — the badge in the corner switches from <em>SIMULATED</em> to <em>LIVE</em> when that's active.</p>
+      </details>
     </section>
   </main>
 
   <script src="data.js" defer></script>
   <script src="traffic-sim.js" defer></script>
+  <script src="live-adapter.js" defer></script>
   <script src="map.js" defer></script>
   <script src="inspector.js" defer></script>
   <script src="audio.js" defer></script>
