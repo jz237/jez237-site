@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-07-05-random-image-style-random-rendering-style-claymation-subway",
+    "title": "Random rendering style: Claymation Subway Beehive Switchroom",
+    "tests": "daily-image-archive cron generated one random rendering-style image with the required GPT Image 2 CLI route; append-entry converted/uploaded JPEG and updated archive JSON.",
+    "prompt": "Create a finished square image of a subterranean beehive switchroom beneath an old city subway station, rendered as richly detailed claymation stop-motion miniature art rather than a photograph, poster, or cinematic still. The scene shows a maintenance alcove where honeycomb-shaped relay cabinets control train signals: rounded clay subway tiles, amber translucent wax panels glowing from inside, thumbprint-textured clay conduits, tiny brass-like clay lever handles, pollen-dust footprints on the floor, bead-sized signal bulbs, a repair cart with sculpted wax fuses, bundled cloth-wrapped cables, a shallow puddle reflecting yellow platform light, and a tunnel curve receding behind a safety railing. Make the claymation medium unmistakable: visible fingerprints, hand-smoothed polymer-clay edges, slight asymmetry, miniature set seams, matte painted surfaces, pin-prick tool marks, soft stop-motion lighting, shallow tabletop depth of field, and tactile wax, tile, dust, rubber, metal, and damp concrete textures. Use a warm honey-amber and cool subway-green palette with small red signal accents. Finished visual example only: no readable text, no labels, no logos, no watermark, no flat document layout, no prompt-card framing, no human portraits, no living bees swarming, no horror, and no plain centered object display.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_PLACE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, flat document composition, plain centered object display, cinematic scene framing, and a generic filter effect.\n\nWhat the reusable visual operation changes or emphasizes: it turns a place or system into a finished rendering-style showcase where the selected medium determines material behavior, surface marks, lighting, construction logic, and small inspectable details.\n\nExample substitution: [SUBJECT_OR_PLACE] = a subterranean beehive switchroom beneath an old subway station; [STYLE_OR_MEDIUM] = claymation stop-motion miniature art; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = fingerprints, hand-smoothed polymer-clay edges, miniature set seams, pin-prick tool marks, matte painted surfaces, and slight asymmetry; [ENVIRONMENTAL_CONTEXT] = rounded subway tiles, tunnel curve, safety railing, damp concrete, and puddle reflections; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = honeycomb relay cabinets, glowing wax panels, lever handles, signal bulbs, repair cart, wax fuses, cloth-wrapped cables, and pollen-dust footprints; [SPECIFIC_PALETTE] = warm honey amber, cool subway green, yellow platform light, and small red signal accents.",
+    "image": "images/2026-07-05-random-image-style-random-rendering-style-claymation-subway.jpg",
+    "thumb": "thumbs/2026-07-05-random-image-style-random-rendering-style-claymation-subway.webp",
+    "color": "#44331d",
+    "date": "2026-07-05",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "claymation stop-motion miniature art",
+      "description": "A tactile claymation subway maintenance alcove where honeycomb relay cabinets glow like wax under platform light.",
+      "template": "Render [SUBJECT_OR_PLACE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail."
+    }
+  },
+  {
     "id": "2026-07-05-hybrid-creature-wild-spiralplate-mangrove-forager-in-the-wi",
     "title": "Spiralplate Mangrove Forager: In the Wild",
     "tests": "Hybrid creature wild field photo; fictional/non-actionable; sources: Sunda pangolin + lined seahorse; preserves the same adult phenotype and mangrove habitat continuity.",
