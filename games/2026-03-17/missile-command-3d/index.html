@@ -174,9 +174,10 @@
         <li>Desktop: <strong>click</strong> to fire &mdash; <strong>Enter</strong> starts, <strong>P</strong>/<strong>Esc</strong> pauses</li>
       </ul>
       <div class="row">
-        <span class="tiny">First tap unlocks sound. &middot; v1.0.1</span>
+        <span class="tiny">First tap unlocks sound. &middot; v2.0.0</span>
         <div class="row" style="margin-top:0">
           <button class="ghost" id="titleScoresBtn">High Scores</button>
+          <button class="ghost" id="titleOptionsBtn">Options</button>
           <button id="startBtn">Launch Defense</button>
         </div>
       </div>
@@ -216,6 +217,35 @@
       <p id="waveSubtext" style="opacity:0.7"></p>
     </div>
   </div>
+
+  <div class="overlay hidden" id="optionsOverlay">
+    <div class="panel">
+      <h1>Options</h1>
+      <div style="display:flex;flex-direction:column;gap:9px;text-align:left;margin:12px 0;font-size:13px">
+        <label style="display:flex;align-items:center;gap:10px">Master<input type="range" id="mcMaster" min="0" max="100" style="flex:1"><span id="mcMasterV" style="width:3em;text-align:right;color:#ffd700"></span></label>
+        <label style="display:flex;align-items:center;gap:10px">Music<input type="range" id="mcMusic" min="0" max="100" style="flex:1"><span id="mcMusicV" style="width:3em;text-align:right;color:#ffd700"></span></label>
+        <label style="display:flex;align-items:center;gap:10px">SFX<input type="range" id="mcSfx" min="0" max="100" style="flex:1"><span id="mcSfxV" style="width:3em;text-align:right;color:#ffd700"></span></label>
+        <label style="display:flex;align-items:center;gap:10px">Voice<input type="range" id="mcVoice" min="0" max="100" style="flex:1"><span id="mcVoiceV" style="width:3em;text-align:right;color:#ffd700"></span></label>
+        <div style="display:flex;justify-content:space-between;align-items:center">Difficulty
+          <span id="mcDiffSeg" style="display:flex;gap:4px">
+            <button class="ghost" data-v="easy" style="padding:4px 10px">Easy</button>
+            <button class="ghost" data-v="normal" style="padding:4px 10px">Normal</button>
+            <button class="ghost" data-v="hard" style="padding:4px 10px">Hard</button>
+          </span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">CRT Scanlines <button class="ghost" id="mcCrtBtn" style="padding:4px 14px">Off</button></div>
+      </div>
+      <p class="tiny" style="text-align:center;margin:4px 0 10px">🎮 Left stick aims · A / trigger fires · Start pauses</p>
+      <div class="row">
+        <button class="ghost" id="mcFullscreenBtn">Fullscreen</button>
+        <button id="mcOptClose">Back</button>
+      </div>
+    </div>
+  </div>
+
+<div id="mcCrt" style="position:fixed;inset:0;z-index:60;pointer-events:none;display:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,0.22) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;"></div>
+<div id="mcToast" style="position:fixed;left:50%;bottom:16%;transform:translateX(-50%);z-index:61;pointer-events:none;color:#bfe4ff;font-family:monospace;font-size:clamp(0.8rem,2.5vw,1.1rem);letter-spacing:0.12em;text-shadow:0 0 12px rgba(80,170,255,0.9);opacity:0;transition:opacity 0.25s;text-align:center;padding:0 1em;"></div>
+<div id="mcVersion" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v2.0.0</div>
 
 <script>
 (() => {
@@ -412,6 +442,67 @@ function initAudio() {
   } catch(e) {}
 }
 
+// ============ v2: MUSIC / VOICE / GAMEPAD / OPTIONS / CRT ============
+const MC_SET_KEY='mc3d_settings_v1';
+const MC_DEF={master:90,music:55,sfx:100,voice:100,difficulty:'normal',crt:false};
+let mcSet=(()=>{try{return Object.assign({},MC_DEF,JSON.parse(localStorage.getItem(MC_SET_KEY))||{});}catch(e){return Object.assign({},MC_DEF);}})();
+function mcSave(){try{localStorage.setItem(MC_SET_KEY,JSON.stringify(mcSet));}catch(e){}}
+const MC_DIFF={easy:0.82,normal:1,hard:1.25};
+function mcDiffMul(){return MC_DIFF[mcSet.difficulty]||1;}
+let mc3PrevCities=6;
+let mcMusic=null,mcVoice=null,mcMediaBooted=false,mcVoiceCd=0,mcGpActive=false;
+function mcInitMedia(){
+  if(mcMediaBooted)return;mcMediaBooted=true;
+  try{mcMusic=new Audio('assets/gameplay-loop.mp3');mcMusic.loop=true;mcMusic.volume=0;mcMusic.preload='auto';mcVoice=new Audio();mcVoice.preload='auto';}catch(e){}
+}
+function mcApplyAudio(){
+  if(audio&&audio.master)audio.master.gain.value=0.3*(mcSet.master/100)*(mcSet.sfx/100);
+  if(mcMusic)mcMusic.volume=(mcSet.master/100)*(mcSet.music/100)*0.9;
+}
+function mcStartMusic(){mcInitMedia();if(mcMusic){mcApplyAudio();mcMusic.play().catch(()=>{});}}
+const MC_VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-city-lost':'CITY LOST','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED'};
+let mcToastT=null;
+function mcToast(t){const el=document.getElementById('mcToast');if(!el||!t)return;el.textContent=t;el.style.opacity='1';clearTimeout(mcToastT);mcToastT=setTimeout(()=>el.style.opacity='0',1700);}
+function playVoice(name,priority){
+  mcInitMedia();
+  if(!mcVoice||mcSet.voice<=0)return;
+  if(mcVoiceCd>0&&!priority)return;mcVoiceCd=1.6;
+  try{mcVoice.src='assets/'+name+'.mp3';mcVoice.volume=(mcSet.master/100)*(mcSet.voice/100);mcVoice.currentTime=0;mcVoice.play().catch(()=>{});mcToast(MC_VOICE_TEXT[name]||'');}catch(e){}
+}
+function mcSetCrt(on){mcSet.crt=!!on;const el=document.getElementById('mcCrt');if(el)el.style.display=on?'block':'none';mcSave();}
+function mcToggleFullscreen(){try{const el=document.documentElement;if(!document.fullscreenElement)(el.requestFullscreen||el.webkitRequestFullscreen).call(el);else (document.exitFullscreen||document.webkitExitFullscreen).call(document);}catch(e){}}
+let mcGpFire=false,mcGpPause=false,mcGpStart=false;
+function mcPollGamepad(dt){
+  const gps=navigator.getGamepads?navigator.getGamepads():[];let gp=null;for(const g of gps){if(g&&g.connected){gp=g;break;}}
+  mcGpActive=!!gp;if(!gp)return;
+  const pr=(i)=>gp.buttons[i]&&gp.buttons[i].pressed, tr=(i)=>gp.buttons[i]?gp.buttons[i].value:0;
+  const titleUp=!titleOverlay.classList.contains('hidden'), goUp=!gameOverOverlay.classList.contains('hidden');
+  if(titleUp||goUp){
+    if((pr(0)||pr(9))&&!mcGpStart){mcGpStart=true;initAudio();if(audio)audio.resume();const b=document.getElementById(titleUp?'startBtn':'restartBtn');if(b)b.click();}
+    if(!pr(0)&&!pr(9))mcGpStart=false;return;
+  }
+  if(!S.playing)return;
+  if(!cursorPos)cursorPos={x:W/2,y:H*0.45};
+  const dz=0.22,lx=Math.abs(gp.axes[0])>dz?gp.axes[0]:0,ly=Math.abs(gp.axes[1])>dz?gp.axes[1]:0;
+  const rx=Math.abs(gp.axes[2]||0)>dz?gp.axes[2]:0,ry=Math.abs(gp.axes[3]||0)>dz?gp.axes[3]:0;
+  const spd=Math.max(W,H)*0.9*dt;
+  cursorPos.x=Math.max(0,Math.min(W,cursorPos.x+(lx+rx)*spd));
+  cursorPos.y=Math.max(0,Math.min(H,cursorPos.y+(ly+ry)*spd));
+  if(pr(9)&&!mcGpPause){mcGpPause=true;togglePause();}
+  if(!pr(9))mcGpPause=false;
+  const fire=pr(0)||pr(7)||tr(7)>0.4||pr(5);
+  if(fire&&!mcGpFire){mcGpFire=true;initAudio();if(audio)audio.resume();handleInput(cursorPos.x,cursorPos.y);}
+  if(!fire)mcGpFire=false;
+}
+function mcDrawReticle(){
+  if(!mcGpActive||!cursorPos||!S.playing||S.paused||S.gameOver)return;
+  const x=cursorPos.x,y=cursorPos.y;
+  ctx.save();ctx.strokeStyle='rgba(127,231,255,0.9)';ctx.lineWidth=2;ctx.shadowColor='rgba(127,231,255,0.9)';ctx.shadowBlur=8;
+  ctx.beginPath();ctx.arc(x,y,13,0,Math.PI*2);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x-20,y);ctx.lineTo(x-6,y);ctx.moveTo(x+6,y);ctx.lineTo(x+20,y);ctx.moveTo(x,y-20);ctx.lineTo(x,y-6);ctx.moveTo(x,y+6);ctx.lineTo(x,y+20);ctx.stroke();
+  ctx.restore();
+}
+
 // ============ GLOBAL LEADERBOARD ============
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/missile-command-3d';
 let globalScoresCache = null;
@@ -588,11 +679,14 @@ function getWaveConfig(wave) {
   const mirvChance = wave >= 3 ? Math.min(0.3, (wave - 2) * 0.08) : 0;
   const smartChance = wave >= 5 ? Math.min(0.25, (wave - 4) * 0.06) : 0;
   const bomberCount = wave >= 5 ? Math.min(3, Math.floor((wave - 4) / 2) + 1) : 0;
-  return { count, speed, mirvChance, smartChance, bomberCount };
+  return { count, speed: speed * mcDiffMul(), mirvChance, smartChance, bomberCount };
 }
 
 function startWave() {
   S.wavePhase = 'intro';
+  playVoice(S.wave === 1 ? 'vo-incoming' : 'vo-wave');
+  mcStartMusic();
+  mc3PrevCities = S.buildings.filter(b => b.alive).length;
   S.waveTimer = 2.5;
   S.spawnCount = 0;
   S.spawnTimer = 0;
@@ -1042,6 +1136,7 @@ function update(dt) {
     S.wavePhase = 'bonus';
     S.bonusTimer = 2.5;
     if (audio) audio.waveClear();
+    playVoice('vo-sector-secure');
     // Calculate bonuses
     const livingBuildings = S.buildings.filter(b => b.alive);
     let buildingSections = 0;
@@ -1067,6 +1162,8 @@ function update(dt) {
   // HUD
   const ammoStr = S.batteries.map(b => b.alive ? b.ammo : 'X').join('/');
   const cities = S.buildings.filter(b => b.alive).length;
+  if (cities < mc3PrevCities) { if (cities === 1) playVoice('vo-last-city', true); else if (cities >= 1) playVoice('vo-city-lost', true); }
+  mc3PrevCities = cities;
   hudLine.textContent = `W${S.wave} | Score ${S.score.toLocaleString()} | Cities ${cities} | Ammo ${ammoStr}`;
 }
 
@@ -1763,10 +1860,14 @@ function gameLoop(ts) {
   const dt = Math.min((ts - S.lastTime) / 1000, 1 / 30);
   S.lastTime = ts;
 
+  if (mcVoiceCd > 0) mcVoiceCd -= dt;
+  mcPollGamepad(dt);
+
   if (S.playing && !S.gameOver && !S.paused) {
     update(dt);
   }
   draw();
+  mcDrawReticle();
 }
 
 // ============ INPUT ============
@@ -1955,11 +2056,33 @@ btnHandler(document.getElementById('scoresBackBtn'), () => {
   titleOverlay.classList.remove('hidden');
 });
 
+// ============ OPTIONS WIRING ============
+function mcSyncOptions(){
+  const setS=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v;};
+  const setT=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v+'%';};
+  setS('mcMaster',mcSet.master);setS('mcMusic',mcSet.music);setS('mcSfx',mcSet.sfx);setS('mcVoice',mcSet.voice);
+  setT('mcMasterV',mcSet.master);setT('mcMusicV',mcSet.music);setT('mcSfxV',mcSet.sfx);setT('mcVoiceV',mcSet.voice);
+  const cb=document.getElementById('mcCrtBtn');if(cb)cb.textContent=mcSet.crt?'On':'Off';
+  const seg=document.getElementById('mcDiffSeg');if(seg)seg.querySelectorAll('button').forEach(b=>{const on=b.dataset.v===mcSet.difficulty;b.style.background=on?'#7fe7ff':'transparent';b.style.color=on?'#04121a':'';});
+}
+function mcBindOptions(){
+  const bind=(id,vid,key)=>{const e=document.getElementById(id);if(!e)return;e.addEventListener('input',()=>{mcSet[key]=parseInt(e.value)||0;const v=document.getElementById(vid);if(v)v.textContent=mcSet[key]+'%';mcApplyAudio();if(mcVoice)mcVoice.volume=(mcSet.master/100)*(mcSet.voice/100);mcSave();});};
+  bind('mcMaster','mcMasterV','master');bind('mcMusic','mcMusicV','music');bind('mcSfx','mcSfxV','sfx');bind('mcVoice','mcVoiceV','voice');
+  const seg=document.getElementById('mcDiffSeg');if(seg)seg.querySelectorAll('button').forEach(b=>b.addEventListener('click',(e)=>{e.stopPropagation();mcSet.difficulty=b.dataset.v;mcSave();mcSyncOptions();}));
+  const cb=document.getElementById('mcCrtBtn');if(cb)cb.addEventListener('click',(e)=>{e.stopPropagation();mcSetCrt(!mcSet.crt);mcSyncOptions();});
+  const fb=document.getElementById('mcFullscreenBtn');if(fb)fb.addEventListener('click',(e)=>{e.stopPropagation();mcToggleFullscreen();});
+}
+btnHandler(document.getElementById('titleOptionsBtn'), () => { titleOverlay.classList.add('hidden'); document.getElementById('optionsOverlay').classList.remove('hidden'); mcSyncOptions(); });
+btnHandler(document.getElementById('mcOptClose'), () => { document.getElementById('optionsOverlay').classList.add('hidden'); titleOverlay.classList.remove('hidden'); });
+
 // ============ INIT ============
 window.addEventListener('resize', resize);
 resize();
 createBuildings();
 createBatteries();
+mcBindOptions();
+mcSetCrt(mcSet.crt);
+mcSyncOptions();
 requestAnimationFrame(gameLoop);
 
 })();
