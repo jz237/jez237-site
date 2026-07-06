@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home Network Map — Jez237</title>
+  <meta name="description" content="A living neon map of the Jez237 home network — topology, simulated traffic flows, device inspector, and optional sound." />
+  <meta name="keywords" content="home network map, network visualization, home lab, network traffic, topology diagram, Jez237" />
+  <meta name="robots" content="noindex, follow" />
+  <link rel="canonical" href="https://jez237.com/network/" />
+  <meta property="og:title" content="Home Network Map — Jez237" />
+  <meta property="og:description" content="A living neon circuit-board map of the home network: topology, traffic flows, and device details." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jez237.com/network/" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="network.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <main class="container netmap-page">
+    <section class="netmap-stage" aria-label="Interactive home network map">
+      <canvas id="netmap-canvas" tabindex="0"
+        aria-label="Home network map. Use arrow keys to move between devices, Enter to inspect, plus and minus to zoom, Escape to back out."></canvas>
+
+      <!-- HUD: title + live totals -->
+      <div class="netmap-hud netmap-hud-top" aria-hidden="false">
+        <div class="netmap-title-block">
+          <div class="eyebrow">Home Lab</div>
+          <h1>Home Network Map</h1>
+          <p class="netmap-totals" id="netmap-totals" aria-live="off">
+            <span class="dn">▼ <b id="netmap-total-down">—</b></span>
+            <span class="up">▲ <b id="netmap-total-up">—</b></span>
+            <span class="clock" id="netmap-clock"></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- HUD: controls -->
+      <div class="netmap-hud netmap-hud-controls" role="toolbar" aria-label="Map controls">
+        <button type="button" id="netmap-audio-toggle" class="netmap-btn" aria-pressed="false" title="Toggle network sound">
+          <span class="ico" aria-hidden="true">🔇</span><span class="lbl">Sound</span>
+        </button>
+        <button type="button" id="netmap-zoom-in" class="netmap-btn" title="Zoom in" aria-label="Zoom in">＋</button>
+        <button type="button" id="netmap-zoom-out" class="netmap-btn" title="Zoom out" aria-label="Zoom out">－</button>
+        <button type="button" id="netmap-reset" class="netmap-btn" title="Reset view" aria-label="Reset view">⌂</button>
+      </div>
+
+      <!-- HUD: traffic class legend -->
+      <div class="netmap-hud netmap-legend" id="netmap-legend" aria-label="Traffic classes"></div>
+
+      <!-- Hover tooltip chip -->
+      <div class="netmap-tooltip" id="netmap-tooltip" role="status" hidden></div>
+
+      <!-- Device inspector (L2/L3) -->
+      <aside class="netmap-inspector" id="netmap-inspector" aria-label="Device inspector" hidden></aside>
+
+      <!-- Screen-reader announcements -->
+      <div class="sr-only" id="netmap-live" aria-live="polite"></div>
+
+      <noscript>
+        <div class="netmap-noscript">
+          <p>The network map needs JavaScript to render. It shows the home network topology — internet uplink, gateway, switch, access points, and the devices behind them — with live simulated traffic.</p>
+        </div>
+      </noscript>
+    </section>
+
+    <section class="netmap-about panel">
+      <div class="eyebrow">About this map</div>
+      <h2>Reading the board</h2>
+      <div class="netmap-about-grid">
+        <div>
+          <h3>Topology</h3>
+          <p>The gateway sits at the center of the board. The internet uplink beacon hangs above it, and each district — Office, Wireless, Media, IoT — fans out around the core. Solid traces are ethernet; dashed traces are Wi-Fi.</p>
+        </div>
+        <div>
+          <h3>Traffic</h3>
+          <p>Particles ride the traces in the direction data flows, and a trace glows brighter as it carries more. Colors mark what kind of traffic it is — streaming, browsing, gaming, backups, IoT chatter, calls.</p>
+        </div>
+        <div>
+          <h3>Depth</h3>
+          <p>Scroll or pinch to zoom, drag to pan. Hover a device for a quick chip; click it to open the inspector with its address, live rate sparkline, and connections — then click a connection to go one level deeper.</p>
+        </div>
+        <div>
+          <h3>Data</h3>
+          <p>Traffic here is a time-of-day-aware simulation seeded per device (the real LAN isn't reachable from a static page). Topology and behavior live in <code>network/data.js</code>, and <code>traffic-sim.js</code> documents an adapter for wiring in a real exporter later.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="data.js" defer></script>
+  <script src="traffic-sim.js" defer></script>
+  <script src="map.js" defer></script>
+  <script src="inspector.js" defer></script>
+  <script src="audio.js" defer></script>
+  <script src="main.js" defer></script>
+  <script src="../assets/site-enhance.js" defer></script>
+  <script src="../assets/nav.js?v=nav-20260702b" defer></script>
+</body>
+</html>
