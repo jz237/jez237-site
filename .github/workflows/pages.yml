@@ -23,31 +23,58 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
-      # The MOD player MP3 library (~3.2 GB) blows past the 1 GB Pages artifact
-      # limit; the mirror's player fetches these from jez237.com instead.
-      - name: Exclude oversized audio library
-        run: rm -rf experiments/amiga-mod-player/audio
-
-      - name: Exclude non-public source files
+      - name: Prepare GitHub Pages payload
         run: |
-          rm -rf .claude .git .github .wrangler functions scripts stock-market-src tmp workers
-          rm -f ops/migrate_amiga_audio_to_r2.sh
-          rm -f package.json package-lock.json pnpm-lock.yaml yarn.lock wrangler.toml
+          set -euo pipefail
+
+          rm -rf _site
+          mkdir -p _site
+
+          # The mirror keeps public pages and game assets, but skips source-only
+          # files and large media libraries already served from jez237.com or R2.
+          tar \
+            --exclude='./_site' \
+            --exclude='./.claude' \
+            --exclude='./.git' \
+            --exclude='./.github' \
+            --exclude='./.wrangler' \
+            --exclude='./functions' \
+            --exclude='./scripts' \
+            --exclude='./stock-market-src' \
+            --exclude='./tmp' \
+            --exclude='./workers' \
+            --exclude='./experiments/amiga-mod-player/audio' \
+            --exclude='./experiments/image-gen-2-benchmark/__pycache__' \
+            --exclude='./experiments/image-gen-2-benchmark/images' \
+            --exclude='./experiments/image-gen-2-benchmark/thumbs' \
+            --exclude='./ops/migrate_amiga_audio_to_r2.sh' \
+            --exclude='./package.json' \
+            --exclude='./package-lock.json' \
+            --exclude='./pnpm-lock.yaml' \
+            --exclude='./yarn.lock' \
+            --exclude='./wrangler.toml' \
+            -cf - . | tar -xf - -C _site
+
+      - name: Report payload size
+        run: |
+          du -sh _site
+          find _site -type f | wc -l
+          du -ah _site | sort -h | tail -n 25
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
-          path: .
+          path: _site
           retention-days: 1
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
         with:
           artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
