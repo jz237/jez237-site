@@ -134,6 +134,10 @@ function checkRendererShapes(issue, issueIndex) {
     fail(`Issue ${issueIndex}: periodAd must include headline and summary.`);
   }
 
+  if (issue.worldAnchor && (!issue.worldAnchor.headline || !issue.worldAnchor.summary)) {
+    fail(`Issue ${issueIndex}: worldAnchor must include headline and summary when present.`);
+  }
+
   if (!issue.accuracyLedger || !Array.isArray(issue.accuracyLedger.items)) {
     fail(`Issue ${issueIndex}: accuracyLedger must be an object with an items array.`);
   }
