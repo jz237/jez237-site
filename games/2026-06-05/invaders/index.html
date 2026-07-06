@@ -655,7 +655,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v2.0 — Daily Ops</div>
+          <div class="title-version">v2.1 — Daily Ops</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through escalating waves, chain combos into Overdrive, bank smart bombs, and break three rotating boss warships.</p>
           <div class="mode-note" id="dailyNote"></div>
           <p class="hint" id="controlsHint"></p>
@@ -692,7 +692,7 @@
         <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
         <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
       </div>
-      <div class="version" aria-hidden="true">v2.0</div>
+      <div class="version" aria-hidden="true">v2.1</div>
     </section>
   </main>
 
@@ -723,7 +723,7 @@
       const dailyButton = document.getElementById("dailyButton");
       const bombButton = document.getElementById("bombButton");
 
-      const VERSION = "v2.0";
+      const VERSION = "v2.1";
       const TAU = Math.PI * 2;
       const LOCAL_SCORES_KEY = "neon_invaders_highscores_v1";
       const LAST_INITIALS_KEY = "neon_invaders_last_initials";
@@ -1012,7 +1012,10 @@
         gain.gain.value = opts.gain == null ? 1 : opts.gain;
         src.connect(gain).connect(sfxGain);
         activeVoices += 1;
-        src.onended = () => { activeVoices = Math.max(0, activeVoices - 1); };
+        src.onended = () => {
+          activeVoices = Math.max(0, activeVoices - 1);
+          try { src.disconnect(); gain.disconnect(); } catch (error) {}
+        };
         try { src.start(); } catch (error) { activeVoices = Math.max(0, activeVoices - 1); return false; }
         return true;
       }
@@ -2910,6 +2913,28 @@
         drawVignette();
         ctx.restore();
         drawOverlayHud();
+        drawPerfOverlay();
+      }
+
+      function drawPerfOverlay() {
+        if (!game.showPerf) return;
+        ctx.save();
+        ctx.font = "700 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+        ctx.textAlign = "left";
+        ctx.textBaseline = "top";
+        const y = Math.max(84, game.height * 0.09);
+        ctx.globalAlpha = 0.92;
+        ctx.fillStyle = "rgba(2, 5, 15, 0.74)";
+        ctx.fillRect(8, y, 258, 56);
+        ctx.strokeStyle = "rgba(53, 244, 255, 0.4)";
+        ctx.strokeRect(8, y, 258, 56);
+        const fps = game.pfFps || 0;
+        ctx.fillStyle = fps && fps < 50 ? "#ff4d6d" : "#a7ff3d";
+        ctx.fillText(`${VERSION}  FPS ${fps}  worst ${game.pfWorstShown || 0}ms  hitch/s ${game.pfHitchShown || 0}`, 14, y + 7);
+        ctx.fillStyle = "#eaf9ff";
+        ctx.fillText(`bul ${game.bullets.length}  eb ${game.enemyBullets.length}  part ${game.particles.length}  inv ${game.invaders.length}`, 14, y + 23);
+        ctx.fillText(`fxLow ${game.fxLow ? "Y" : "n"}  slowmo ${game.slowmo > 0 ? "Y" : "n"}  OD ${game.overdrive > 0 ? "Y" : "n"}  voices ${activeVoices}`, 14, y + 39);
+        ctx.restore();
       }
 
       function drawRings() {
@@ -3783,12 +3808,32 @@
       }
 
       function loop(now) {
-        const dt = Math.min(0.033, Math.max(0, (now - game.last) / 1000 || 0));
+        const rawMs = now - game.last;
+        const dt = Math.min(0.033, Math.max(0, rawMs / 1000 || 0));
         game.last = now;
+        trackPerf(rawMs);
         update(dt);
         draw();
         stepMusic(dt);
         requestAnimationFrame(loop);
+      }
+
+      // Rolling frame-time diagnostic surfaced by the on-screen perf meter (toggle: F / ?perf).
+      function trackPerf(rawMs) {
+        if (!(rawMs > 0) || rawMs > 5000) return;
+        game.pfWorst = Math.max(game.pfWorst || 0, rawMs);
+        if (rawMs > 45) game.pfHitch = (game.pfHitch || 0) + 1;
+        game.pfCount = (game.pfCount || 0) + 1;
+        game.pfWin = (game.pfWin || 0) + rawMs;
+        if (game.pfWin >= 1000) {
+          game.pfFps = Math.round(game.pfCount * 1000 / game.pfWin);
+          game.pfWorstShown = Math.round(game.pfWorst);
+          game.pfHitchShown = game.pfHitch || 0;
+          game.pfWorst = 0;
+          game.pfHitch = 0;
+          game.pfCount = 0;
+          game.pfWin = 0;
+        }
       }
 
       function togglePause() {
@@ -3825,6 +3870,7 @@
         if ((event.code === "KeyP" || event.code === "Escape") && !event.repeat) togglePause();
         if (event.code === "KeyM" && !event.repeat) toggleMute();
         if (event.code === "KeyB" && !event.repeat) useBomb();
+        if (event.code === "KeyF" && !event.repeat) game.showPerf = !game.showPerf;
         if ((event.code === "Enter" || event.code === "Space") && !event.repeat
           && (game.state === "ready" || game.state === "over" || game.state === "paused")
           && performance.now() - overlayShownAt > 500) {
@@ -4165,6 +4211,7 @@
       makeShields();
       updateHud();
       applyMute();
+      if (/[?&]perf/i.test(location.search)) game.showPerf = true;
       controlsHint.textContent = window.matchMedia && matchMedia("(pointer: coarse)").matches
         ? "Drag anywhere — your ship follows your finger and auto-fires. Tap 💣 for a smart bomb. Chain kills to trigger Overdrive."
         : "Mouse steers · Fire: hold mouse or Space · Move: ← → / A D · Dash: Shift · Bomb: B · Pause: P · Mute: M · Chain kills for Overdrive.";
