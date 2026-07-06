@@ -251,6 +251,32 @@
   </div>
 </div>
 
+<div id="crtFx" style="position:fixed;inset:0;z-index:28;pointer-events:none;display:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,0.22) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;"></div>
+<div id="voToast" style="position:fixed;left:50%;bottom:17%;transform:translateX(-50%);z-index:29;pointer-events:none;color:#ffe9b8;font:bold 15px system-ui,sans-serif;letter-spacing:0.12em;text-shadow:0 0 12px rgba(255,200,80,0.9);opacity:0;transition:opacity .25s;text-align:center;padding:0 1em;"></div>
+<button id="optGear" style="position:fixed;top:8px;left:8px;z-index:30;background:rgba(120,180,255,0.12);border:1px solid rgba(120,180,255,0.5);color:#cfe4ff;font:bold 12px system-ui,sans-serif;padding:7px 11px;border-radius:6px;display:none;letter-spacing:0.1em;cursor:pointer;">⚙ OPTIONS</button>
+<div id="optPanel" style="position:fixed;inset:0;z-index:31;background:rgba(4,6,14,0.92);display:none;align-items:center;justify-content:center;font-family:system-ui,sans-serif;color:#dbe8fa;">
+  <div style="width:min(420px,92vw);max-height:88vh;overflow-y:auto;border:1px solid rgba(120,180,255,0.4);border-radius:10px;padding:18px;background:rgba(10,14,26,0.94);">
+    <h2 style="text-align:center;color:#ffd76a;letter-spacing:0.25em;margin:0 0 14px;font-size:18px;">OPTIONS</h2>
+    <div style="display:flex;align-items:center;gap:10px;margin:9px 0;"><span style="width:72px;font-size:12px;">MASTER</span><input id="ssMaster" type="range" min="0" max="100" style="flex:1;accent-color:#6ab0ff;"><span id="ssMasterV" style="width:3.2em;text-align:right;color:#ffd76a;font-size:12px;"></span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin:9px 0;"><span style="width:72px;font-size:12px;">MUSIC</span><input id="ssMusic" type="range" min="0" max="100" style="flex:1;accent-color:#6ab0ff;"><span id="ssMusicV" style="width:3.2em;text-align:right;color:#ffd76a;font-size:12px;"></span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin:9px 0;"><span style="width:72px;font-size:12px;">SFX</span><input id="ssSfx" type="range" min="0" max="100" style="flex:1;accent-color:#6ab0ff;"><span id="ssSfxV" style="width:3.2em;text-align:right;color:#ffd76a;font-size:12px;"></span></div>
+    <div style="display:flex;align-items:center;gap:10px;margin:9px 0;"><span style="width:72px;font-size:12px;">VOICE</span><input id="ssVoice" type="range" min="0" max="100" style="flex:1;accent-color:#6ab0ff;"><span id="ssVoiceV" style="width:3.2em;text-align:right;color:#ffd76a;font-size:12px;"></span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:12px;">DIFFICULTY
+      <span id="ssDiff" style="display:flex;gap:5px;">
+        <button data-v="easy" style="background:transparent;border:1px solid #6ab0ff;color:#cfe4ff;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;">EASY</button>
+        <button data-v="normal" style="background:transparent;border:1px solid #6ab0ff;color:#cfe4ff;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;">NORMAL</button>
+        <button data-v="hard" style="background:transparent;border:1px solid #6ab0ff;color:#cfe4ff;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;">HARD</button>
+      </span></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0;font-size:12px;">CRT SCANLINES <button id="ssCrt" style="background:transparent;border:1px solid #6ab0ff;color:#cfe4ff;padding:4px 14px;border-radius:5px;font-size:11px;cursor:pointer;">OFF</button></div>
+    <p style="font-size:10px;opacity:0.65;text-align:center;margin:10px 0;">🎮 GAMEPAD: LEFT STICK/D-PAD FLIES · A LIFTS/STARTS · START PAUSES</p>
+    <p style="font-size:10px;opacity:0.65;text-align:center;margin:6px 0;">DIFFICULTY APPLIES TO THE NEXT MISSION</p>
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button id="ssFull" style="flex:1;background:transparent;border:1px solid #6ab0ff;color:#cfe4ff;padding:9px;border-radius:6px;font-size:12px;cursor:pointer;">FULLSCREEN</button>
+      <button id="ssClose" style="flex:1;background:#6ab0ff;border:none;color:#04101f;font-weight:bold;padding:9px;border-radius:6px;font-size:12px;cursor:pointer;">CLOSE</button>
+    </div>
+  </div>
+</div>
+
 <script>
 "use strict";
 /* ============================================================================
@@ -258,7 +284,7 @@
    Single-file canvas game. Mobile one-finger + desktop keyboard.
    ========================================================================== */
 (function () {
-const VERSION = 'v1.3.0';
+const VERSION = 'v2.0.0';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/choplifter';
 const HS_KEY = 'choplifter_highscores_v1';
 const MUTE_KEY = 'choplifter_muted';
@@ -363,10 +389,110 @@ const Audio2 = (function () {
     extraLife() { [659, 784, 988, 1318, 1568].forEach((f, i) => setTimeout(() => blip(f, 0.16, 'triangle', 0.3), i * 80)); },
     win() { [523,659,784,1046,1318].forEach((f,i)=>setTimeout(()=>blip(f,0.22,'triangle',0.3),i*120)); },
     lose() { [400,330,260,180].forEach((f,i)=>setTimeout(()=>blip(f,0.3,'sawtooth',0.28,f*0.6),i*150)); },
-    toggleMute() { muted = !muted; localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); if (master && ac) master.gain.setTargetAtTime(muted ? 0 : 0.9, ac.currentTime, 0.05); return muted; },
+    toggleMute() { muted = !muted; localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); if (master && ac) master.gain.setTargetAtTime(muted ? 0 : sfxLevel, ac.currentTime, 0.05); return muted; },
+    setLevel(v) { sfxLevel = v; if (master && ac && !muted) master.gain.setTargetAtTime(v, ac.currentTime, 0.05); },
     isMuted() { return muted; }
   };
 })();
+let sfxLevel = 0.9;
+
+// ===========================================================================
+//  v2: SETTINGS / DIFFICULTY / MUSIC / VOICE / GAMEPAD
+// ===========================================================================
+const SET_KEY = 'choplifter_settings_v1';
+const DEFAULT_SETTINGS = { master: 90, music: 55, sfx: 90, voice: 100, difficulty: 'normal', crt: false };
+let settings = (() => { try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SET_KEY)) || {}); } catch (e) { return Object.assign({}, DEFAULT_SETTINGS); } })();
+function saveSettings() { try { localStorage.setItem(SET_KEY, JSON.stringify(settings)); } catch (e) {} }
+const DIFF_CH = { easy: { hp: 0.8, rate: 0.78, spd: 0.85, fuel: 0.8 }, normal: { hp: 1, rate: 1, spd: 1, fuel: 1 }, hard: { hp: 1.25, rate: 1.3, spd: 1.15, fuel: 1.25 } };
+function diffCh() { return DIFF_CH[settings.difficulty] || DIFF_CH.normal; }
+
+const music = { title: null, game: null };
+let voiceEl = null, musicReady = false, voiceCooldown = 0, voJets = false;
+function applyAudioSettings() {
+  Audio2.setLevel(0.9 * (settings.master / 100) * (settings.sfx / 100));
+  if (voiceEl) voiceEl.volume = (settings.master / 100) * (settings.voice / 100);
+}
+function initMusic() {
+  if (musicReady) return; musicReady = true;
+  try {
+    music.title = new Audio('assets/title-theme.mp3'); music.title.loop = true; music.title.volume = 0; music.title.preload = 'auto';
+    music.game = new Audio('assets/gameplay-loop.mp3'); music.game.loop = true; music.game.volume = 0; music.game.preload = 'auto';
+    voiceEl = new Audio(); voiceEl.preload = 'auto';
+    music.title.play().catch(() => {}); music.game.play().catch(() => {});
+  } catch (e) {}
+}
+function targetMusicVol(which) {
+  const base = (settings.master / 100) * (settings.music / 100) * (Audio2.isMuted() ? 0 : 1);
+  if (which === 'title') return G.state === 'title' ? base : 0;
+  if (G.state === 'play') return base * 0.8;
+  if (G.state === 'pause') return base * 0.3;
+  if (G.state === 'over') return base * 0.25;
+  return 0;
+}
+function updateMusic(dtFrames) {
+  if (!musicReady) return;
+  const k = Math.min(1, dtFrames * 0.045);
+  for (const key of ['title', 'game']) {
+    const el = music[key]; if (!el) continue;
+    const t = targetMusicVol(key);
+    el.volume = Math.max(0, Math.min(1, el.volume + (t - el.volume) * k));
+  }
+}
+const VOICE_TEXT = { 'vo-brief': 'BRING THEM HOME', 'vo-wave-sam': 'SAM SITES — STAY LOW', 'vo-wave': 'NEXT SECTOR', 'vo-wave-2': 'PUSH FORWARD', 'vo-pickup': 'SURVIVORS ABOARD', 'vo-saved': 'SOULS DELIVERED', 'vo-saved-2': "THEY'RE SAFE", 'vo-fuel-low': 'FUEL LOW', 'vo-fuel-crit': 'FUEL CRITICAL', 'vo-chopper-down': 'WE LOST THE BIRD', 'vo-lost-aboard': 'WE LOST THEM', 'vo-jets': 'JETS ON YOUR SIX', 'vo-victory': 'YOU BROUGHT THEM HOME', 'vo-defeat': 'MISSION FAILED', 'vo-extra': 'EXTRA CHOPPER', 'vo-high-score': 'NEW RECORD' };
+// Per-event voice pools: random variant, never the same twice in a row
+const VO_POOLS = { wave: ['vo-wave', 'vo-wave-2'], saved: ['vo-saved', 'vo-saved-2'] };
+const voLast = {};
+let voToastTimer = null;
+function showVoToast(t) { const el = document.getElementById('voToast'); if (!el || !t) return; el.textContent = t; el.style.opacity = '1'; clearTimeout(voToastTimer); voToastTimer = setTimeout(() => el.style.opacity = '0', 1700); }
+function playVoice(name, priority) {
+  initMusic();
+  if (Audio2.isMuted() || !voiceEl || settings.voice <= 0) return;
+  if (voiceCooldown > 0 && !priority) return;
+  voiceCooldown = 100; // frames (~1.7s)
+  try { voiceEl.src = 'assets/' + name + '.mp3'; voiceEl.volume = (settings.master / 100) * (settings.voice / 100); voiceEl.currentTime = 0; voiceEl.play().catch(() => {}); showVoToast(VOICE_TEXT[name] || ''); } catch (e) {}
+}
+function announceVo(event, priority) {
+  const pool = VO_POOLS[event] || [event];
+  let pick = pool[0];
+  if (pool.length > 1) { let guard = 0; do { pick = pool[(Math.random() * pool.length) | 0]; } while (pick === voLast[event] && ++guard < 8); }
+  voLast[event] = pick;
+  playVoice(pick, priority);
+}
+
+let gpALatch = false, gpStartLatch = false;
+function pollGamepad() {
+  const gps = navigator.getGamepads ? navigator.getGamepads() : []; let gp = null;
+  for (const g of gps) { if (g && g.connected) { gp = g; break; } }
+  if (!gp) return;
+  const pr = (i) => gp.buttons[i] && gp.buttons[i].pressed;
+  const dz = 0.3;
+  if (G.state === 'play') {
+    const lx = gp.axes[0] || 0, ly = gp.axes[1] || 0;
+    keys['arrowleft'] = lx < -dz || pr(14);
+    keys['arrowright'] = lx > dz || pr(15);
+    keys['arrowup'] = ly < -dz || pr(12) || pr(0);
+    keys['arrowdown'] = ly > dz || pr(13);
+  }
+  const a = pr(0);
+  if (a && !gpALatch) {
+    gpALatch = true;
+    if (G.state === 'title' || G.state === 'over') { Audio2.resume(); initMusic(); startGame(); }
+    else if (G.state === 'pause') togglePause();
+  }
+  if (!a) gpALatch = false;
+  const st = pr(9);
+  if (st && !gpStartLatch) { gpStartLatch = true; if (G.state === 'play' || G.state === 'pause') togglePause(); }
+  if (!st) gpStartLatch = false;
+}
+
+// v2: per-wave sky palettes — night deepens toward a blood-orange dawn
+const SKY_WAVES = [
+  ['#070a1e', '#16204e', '#3b3468', '#6e4a72', '#a8606a', '#cf7f56', '#e09a5e'],
+  ['#04061a', '#0c1440', '#232a5e', '#454272', '#6a5a80', '#8a6a74', '#a67a66'],
+  ['#0a0822', '#241a52', '#4a2e6e', '#7a4a80', '#a8607e', '#c87a6a', '#e0945e'],
+  ['#101030', '#31245e', '#5e3a72', '#96547c', '#c47268', '#e89054', '#ffb050'],
+  ['#180a20', '#3e1a48', '#712e58', '#a84658', '#d86048', '#f08040', '#ffa040'],
+];
 
 // ===========================================================================
 //  WORLD CONSTANTS
@@ -571,23 +697,24 @@ function buildLevel(wave) {
 }
 
 function mkTank(x) {
-  return { type: 'tank', x, y: 0, w: 52, h: 26, hp: 2, vx: (Math.random() < .5 ? -1 : 1) * rnd(0.5, 1.1),
-    fireCd: rnd(60, 160), turret: 0, dead: false, alpha: 1 };
+  return { type: 'tank', x, y: 0, w: 52, h: 26, hp: Math.max(1, Math.round(2 * diffCh().hp)), vx: (Math.random() < .5 ? -1 : 1) * rnd(0.5, 1.1) * diffCh().spd,
+    fireCd: rnd(60, 160) / diffCh().rate, turret: 0, dead: false, alpha: 1 };
 }
 function mkDrone(x, y) {
   return { type: 'drone', x, y, w: 30, h: 18, hp: 1, baseY: y, phase: Math.random() * 6.28,
-    fireCd: rnd(70, 150), dead: false, alpha: 1, spin: 0 };
+    fireCd: rnd(70, 150) / diffCh().rate, dead: false, alpha: 1, spin: 0 };
 }
 function mkJet() {
   const dir = Math.random() < .5 ? 1 : -1;
+  if (G.state === 'play' && !voJets) { voJets = true; playVoice('vo-jets', true); }
   return { type: 'jet', x: dir === 1 ? -120 : WORLD_W + 120, y: rnd(VH * 0.12, VH * 0.34),
-    w: 60, h: 18, hp: 1, vx: dir * rnd(4.5, 6.5), fireCd: rnd(40, 90), dead: false, alpha: 1, respawn: rnd(120, 360) };
+    w: 60, h: 18, hp: 1, vx: dir * rnd(4.5, 6.5) * diffCh().spd, fireCd: rnd(40, 90) / diffCh().rate, dead: false, alpha: 1, respawn: rnd(120, 360) };
 }
 function mkSam(x) {
-  return { type: 'sam', x, y: 0, w: 36, h: 20, hp: 3, fireCd: rnd(240, 420), dish: rnd(0, 6.28), dead: false, alpha: 1 };
+  return { type: 'sam', x, y: 0, w: 36, h: 20, hp: Math.max(2, Math.round(3 * diffCh().hp)), fireCd: rnd(240, 420) / diffCh().rate, dish: rnd(0, 6.28), dead: false, alpha: 1 };
 }
 function mkMissile(x, y) {
-  return { type: 'missile', x, y, w: 16, h: 8, hp: 1, ang: -Math.PI / 2, speed: 2.2, life: 420, dead: false, alpha: 1 };
+  return { type: 'missile', x, y, w: 16, h: 8, hp: 1, ang: -Math.PI / 2, speed: 2.2 * diffCh().spd, life: 420, dead: false, alpha: 1 };
 }
 function boomMissile(e) {
   e.dead = true; e.hp = 0;
@@ -621,6 +748,7 @@ function addScore(n, x, y, label, color) {
     nextLifeAt += LIFE_EVERY;
     G.lives++;
     toast('EXTRA CHOPPER!', 100);
+    playVoice('vo-extra', true);
     Audio2.extraLife();
   }
 }
@@ -643,6 +771,7 @@ function spawnParticles(x, y, n, opts) {
 //  GAME FLOW
 // ===========================================================================
 function startGame() {
+  initMusic();
   G.state = 'play'; G.t = 0; G.score = 0; G.lives = 3; G.wave = 1; G.kills = 0;
   G.savedHome = 0; G.aboard = 0; G.lost = 0; G.cam = 0;
   G.deathT = 0; G.waveT = 0;
@@ -654,6 +783,8 @@ function startGame() {
   hideAllScreens();
   Audio2.resume();
   toast('WAVE 1 — RESCUE THEM ALL', 110);
+  voJets = false;
+  playVoice('vo-brief', true);
 }
 function resetHeli(full) {
   heli.x = homeBase.x + homeBase.w / 2; heli.y = groundY() - heli.h / 2 - 2;
@@ -673,9 +804,12 @@ function nextWave() {
   resetHeli(false);
   heli.fuel = Math.min(100, heli.fuel + 40);
   toast('WAVE ' + G.wave + (G.wave === 2 ? ' — SAM SITES SPOTTED!' : ' — GO!'), 120);
+  voJets = false;
+  if (G.wave === 2) playVoice('vo-wave-sam', true); else announceVo('wave');
   Audio2.win();
 }
 function loseLife(reason) {
+  playVoice(G.aboard > 0 ? 'vo-lost-aboard' : 'vo-chopper-down', true);
   if (!heli.alive) return;
   G.lives--;
   heli.alive = false;
@@ -698,6 +832,7 @@ function endGame(win) {
   G.state = 'over'; G.result = win ? 'win' : 'lose';
   G.deathT = 0; G.waveT = 0;
   if (win) Audio2.win(); else Audio2.lose();
+  playVoice(win ? 'vo-victory' : 'vo-defeat', true);
   showGameOver();
 }
 
@@ -783,11 +918,11 @@ function updateHeli() {
   }
 
   // fuel burn scales with demand
-  heli.fuel = Math.max(0, heli.fuel - (0.006 + (powered ? 0.05 : 0)));
+  heli.fuel = Math.max(0, heli.fuel - (0.006 + (powered ? 0.05 : 0)) * diffCh().fuel);
   if (heli.fuel > 30) fuelWarn = 0;
   else if (heli.fuel <= 0) { if (fuelWarn < 3) { fuelWarn = 3; toast('OUT OF FUEL!', 90); } }
-  else if (heli.fuel <= 12) { if (fuelWarn < 2) { fuelWarn = 2; toast('FUEL CRITICAL!', 80); Audio2.lowFuel(); } }
-  else if (fuelWarn < 1) { fuelWarn = 1; toast('LOW FUEL — GRAB ⛽', 80); Audio2.lowFuel(); }
+  else if (heli.fuel <= 12) { if (fuelWarn < 2) { fuelWarn = 2; toast('FUEL CRITICAL!', 80); Audio2.lowFuel(); playVoice('vo-fuel-crit', true); } }
+  else if (fuelWarn < 1) { fuelWarn = 1; toast('LOW FUEL — GRAB ⛽', 80); Audio2.lowFuel(); playVoice('vo-fuel-low'); }
 
   heli.vx = clamp(heli.vx, -MAX_VX, MAX_VX);
   heli.vy = clamp(heli.vy, -MAX_VY, MAX_VY);
@@ -924,6 +1059,7 @@ function tryDeliver() {
     addScore(n * 100, heli.x, heli.y - 30, '+' + (n * 100), '#7dffae');
     if (n >= G.maxAboard) addScore(250, heli.x, heli.y - 52, 'FULL LOAD +250');
     toast(n + ' SAVED!', 90);
+    announceVo('saved');
     Audio2.deliver();
     spawnParticles(heli.x, groundY(), 18, { color: '#7dffae', angle: -1.57, spread: 1, smax: 4, lmax: 40 });
   }
@@ -1109,7 +1245,7 @@ function updateHostages() {
       h.x += clamp(dx, -2.4, 2.4);
       h.frame = (h.frame + 0.4) % 4;
       if (Math.abs(dx) < 8) {
-        h.state = 'aboard'; G.aboard++; Audio2.pickup();
+        h.state = 'aboard'; G.aboard++; Audio2.pickup(); playVoice('vo-pickup');
         spawnParticles(heli.x, gY - 10, 6, { color: '#7dffae', angle: -1.57, spread: 0.8, smax: 2, lmax: 20 });
       }
     } else if (h.state === 'delivered') {
@@ -1245,6 +1381,7 @@ function render() {
   drawEnemies();
   drawBullets();
   drawBombs();
+  if (heli.alive) drawHeliSpotlight();
   if (heli.alive) drawHeli();
   drawParticles();
   drawRings();
@@ -1263,14 +1400,11 @@ function render() {
 }
 
 function drawSky() {
+  // v2: the sky shifts each wave — night deepens toward a blood-orange dawn
+  const pal = SKY_WAVES[Math.min(Math.max(G.wave, 1), SKY_WAVES.length) - 1];
+  const stops = [0, 0.35, 0.62, 0.78, 0.88, 0.96, 1];
   const g = ctx.createLinearGradient(0, 0, 0, VH);
-  g.addColorStop(0, '#070a1e');
-  g.addColorStop(0.35, '#16204e');
-  g.addColorStop(0.62, '#3b3468');
-  g.addColorStop(0.78, '#6e4a72');
-  g.addColorStop(0.88, '#a8606a');
-  g.addColorStop(0.96, '#cf7f56');
-  g.addColorStop(1, '#e09a5e');
+  for (let i = 0; i < stops.length; i++) g.addColorStop(stops[i], pal[i]);
   ctx.fillStyle = g; ctx.fillRect(0, 0, VW, VH);
   // moon with a wide halo and a few craters
   const mx = 90 - G.cam * 0.05, my = VH * 0.18;
@@ -1855,6 +1989,34 @@ function drawBullets() {
   }
 }
 
+// v2: nose spotlight — a soft cone sweeping the ground ahead of the chopper
+function drawHeliSpotlight() {
+  if (G.state !== 'play') return;
+  const gy = groundY();
+  const nx = heli.x + heli.facing * 16, ny = heli.y + 4;
+  if (ny > gy - 20) return; // too low, light collapses
+  const tx = heli.x + heli.facing * Math.min(240, (gy - ny) * 0.9);
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const grad = ctx.createLinearGradient(nx, ny, tx, gy);
+  grad.addColorStop(0, 'rgba(255,244,200,0.30)');
+  grad.addColorStop(1, 'rgba(255,244,200,0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.moveTo(nx, ny);
+  ctx.lineTo(tx - 55, gy);
+  ctx.lineTo(tx + 55, gy);
+  ctx.closePath();
+  ctx.fill();
+  // ground pool
+  const pool = ctx.createRadialGradient(tx, gy, 4, tx, gy, 60);
+  pool.addColorStop(0, 'rgba(255,244,200,0.22)');
+  pool.addColorStop(1, 'rgba(255,244,200,0)');
+  ctx.fillStyle = pool;
+  ctx.beginPath(); ctx.ellipse(tx, gy, 60, 14, 0, 0, 6.28); ctx.fill();
+  ctx.restore();
+}
+
 function drawHeli() {
   ctx.save();
   // gentle hover bob (visual only) + a touch of pitch from vertical speed
@@ -2118,6 +2280,7 @@ function showGameOver() {
 }
 
 document.getElementById('btn-submit').onclick = async () => {
+  playVoice('vo-high-score', true);
   const ni = document.getElementById('name-input');
   let name = (ni.value || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'AAA';
   // local
@@ -2183,13 +2346,42 @@ function loop(ts) {
   if (!lastT) lastT = ts;
   let dt = (ts - lastT) / 16.667; lastT = ts;
   if (dt > 3) dt = 3; // clamp after tab switch
+  pollGamepad();
   readKeys();
+  if (voiceCooldown > 0) voiceCooldown -= dt;
+  updateMusic(dt);
   // fixed-ish step
   acc += dt;
   while (acc >= 1) { update(1); acc -= 1; }
   if (G.state !== 'play') Audio2.setRotor(0);   // no engine drone behind menus
   render();
+  const gear = document.getElementById('optGear');
+  if (gear) { const want = G.state === 'title' ? 'block' : 'none'; if (gear.style.display !== want) gear.style.display = want; }
 }
+
+// ---- v2: options panel wiring ----
+function applyCrt() { const el = document.getElementById('crtFx'); if (el) el.style.display = settings.crt ? 'block' : 'none'; }
+function syncOptionsUI() {
+  const sv = (id, v) => { const e = document.getElementById(id); if (e) e.value = v; };
+  const st = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v + '%'; };
+  sv('ssMaster', settings.master); sv('ssMusic', settings.music); sv('ssSfx', settings.sfx); sv('ssVoice', settings.voice);
+  st('ssMasterV', settings.master); st('ssMusicV', settings.music); st('ssSfxV', settings.sfx); st('ssVoiceV', settings.voice);
+  const seg = document.getElementById('ssDiff');
+  if (seg) seg.querySelectorAll('button').forEach(b => { const on = b.dataset.v === settings.difficulty; b.style.background = on ? '#6ab0ff' : 'transparent'; b.style.color = on ? '#04101f' : '#cfe4ff'; });
+  const cb = document.getElementById('ssCrt'); if (cb) cb.textContent = settings.crt ? 'ON' : 'OFF';
+}
+(function bindOptions() {
+  const bind = (id, vid, key) => { const e = document.getElementById(id); if (!e) return; e.addEventListener('input', () => { settings[key] = parseInt(e.value) || 0; const v = document.getElementById(vid); if (v) v.textContent = settings[key] + '%'; applyAudioSettings(); saveSettings(); }); };
+  bind('ssMaster', 'ssMasterV', 'master'); bind('ssMusic', 'ssMusicV', 'music'); bind('ssSfx', 'ssSfxV', 'sfx'); bind('ssVoice', 'ssVoiceV', 'voice');
+  const seg = document.getElementById('ssDiff');
+  if (seg) seg.querySelectorAll('button').forEach(b => b.addEventListener('click', e => { e.stopPropagation(); settings.difficulty = b.dataset.v; saveSettings(); syncOptionsUI(); }));
+  const cb = document.getElementById('ssCrt'); if (cb) cb.addEventListener('click', e => { e.stopPropagation(); settings.crt = !settings.crt; saveSettings(); applyCrt(); syncOptionsUI(); });
+  const fb = document.getElementById('ssFull'); if (fb) fb.addEventListener('click', e => { e.stopPropagation(); try { const el = document.documentElement; if (!document.fullscreenElement) (el.requestFullscreen || el.webkitRequestFullscreen).call(el); else (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (err) {} });
+  const cl = document.getElementById('ssClose'); if (cl) cl.addEventListener('click', e => { e.stopPropagation(); document.getElementById('optPanel').style.display = 'none'; });
+  const gear = document.getElementById('optGear');
+  if (gear) gear.addEventListener('click', e => { e.stopPropagation(); Audio2.resume(); initMusic(); document.getElementById('optPanel').style.display = 'flex'; syncOptionsUI(); });
+  applyCrt(); syncOptionsUI(); applyAudioSettings();
+})();
 
 // ---- boot ----
 document.getElementById('version-line').textContent = VERSION;
