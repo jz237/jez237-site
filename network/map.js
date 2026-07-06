@@ -65,13 +65,23 @@
 
     const clusters = data.clusters || {};
 
-    // infrastructure ring
+    // infrastructure ring — multiple tier-2 nodes in one cluster get
+    // spread around the cluster angle so they don't stack
+    const infraByCluster = {};
     nodes.filter(n => n.tier === 2).forEach(n => {
-      const c = clusters[n.cluster] || { angle: 0 };
-      const d = dirOf(c.angle);
-      n.x = router.x + d.x * R_INFRA;
-      n.y = router.y + d.y * R_INFRA;
-      n.r = NODE_R[n.type] || NODE_R.leaf;
+      (infraByCluster[n.cluster || ''] = infraByCluster[n.cluster || ''] || []).push(n);
+    });
+    Object.keys(infraByCluster).forEach(key => {
+      const infra = infraByCluster[key].sort((a, b) => a.id < b.id ? -1 : 1);
+      const c = clusters[key] || { angle: 0 };
+      infra.forEach((n, i) => {
+        const off = (i - (infra.length - 1) / 2) * 20;
+        const d = dirOf(c.angle + off);
+        const rr = R_INFRA * (1 + (i % 2) * 0.22);
+        n.x = router.x + d.x * rr;
+        n.y = router.y + d.y * rr;
+        n.r = NODE_R[n.type] || NODE_R.leaf;
+      });
     });
 
     // leaf fan around each parent, seeded jitter so it never moves
@@ -92,25 +102,68 @@
       Object.keys(groups).forEach(gkey => {
         const leaves = groups[gkey];
         const cl = clusters[gkey];
-        // fan out along the cluster's own direction; fall back to
-        // "away from the router" for unclustered leaves
-        const baseA = cl ? rad(-cl.angle)
-          : Math.atan2(parent.y - router.y, parent.x - router.x);
+        // fan out along the cluster's own direction — unless that points
+        // back across the board (e.g. IoT clients on an extender that
+        // lives in another district), then fan away from the router
+        const awayA = Math.atan2(parent.y - router.y, parent.x - router.x) || -Math.PI / 2;
+        let baseA = awayA;
+        if (cl) {
+          const clA = rad(-cl.angle);
+          const dot = Math.cos(clA) * Math.cos(awayA) + Math.sin(clA) * Math.sin(awayA);
+          if (parent === router || dot > 0.1) baseA = clA;
+        }
         const spread = rad(Math.min(96, 34 * leaves.length));
         // leaves from a different district than their parent's own get a
         // longer run so the two fans don't overlap
         const stretch = cl && parent.cluster && gkey !== parent.cluster ? 1.4 : 1;
+        // big fans grow outward and alternate between two rows so a
+        // device-heavy district doesn't pile up at one radius
+        const grow = 1 + 0.06 * Math.max(0, leaves.length - 3);
         leaves.forEach((n, i) => {
           const rand = mulberry32(hashStr(n.id) ^ 0x9e37);
           const t = leaves.length === 1 ? 0.5 : i / (leaves.length - 1);
           const a = baseA - spread / 2 + spread * t + (rand() - 0.5) * rad(10);
-          const rr = R_LEAF * stretch * (0.86 + rand() * 0.3);
+          const rr = R_LEAF * stretch * grow * (0.86 + rand() * 0.3 + (i % 2) * 0.5);
           n.x = parent.x + Math.cos(a) * rr;
           n.y = parent.y + Math.sin(a) * rr;
           n.r = NODE_R.leaf;
         });
       });
     });
+
+    // relaxation pass: nudge overlapping leaves apart (deterministic —
+    // fixed iteration count and stable node order, no randomness)
+    const leaves = nodes.filter(n => n.tier === undefined || n.tier > 2);
+    const anchors = nodes.filter(n => n.tier !== undefined && n.tier <= 2);
+    const MIN_LEAF = 92, MIN_ANCHOR = 110;
+    for (let iter = 0; iter < 60; iter++) {
+      let movedAny = false;
+      for (let i = 0; i < leaves.length; i++) {
+        for (let j = i + 1; j < leaves.length; j++) {
+          const a = leaves[i], b = leaves[j];
+          let dx = b.x - a.x, dy = b.y - a.y;
+          let d = Math.hypot(dx, dy);
+          if (d >= MIN_LEAF) continue;
+          if (d < 1) { const ha = (hashStr(a.id + b.id) % 360); dx = Math.cos(rad(ha)); dy = Math.sin(rad(ha)); d = 1; }
+          const push = (MIN_LEAF - d) / 2 / d;
+          a.x -= dx * push; a.y -= dy * push;
+          b.x += dx * push; b.y += dy * push;
+          movedAny = true;
+        }
+        // keep leaves clear of the router/infra/beacon anchors
+        anchors.forEach(an => {
+          const a = leaves[i];
+          let dx = a.x - an.x, dy = a.y - an.y;
+          const d = Math.hypot(dx, dy) || 1;
+          if (d < MIN_ANCHOR) {
+            a.x = an.x + (dx / d) * MIN_ANCHOR;
+            a.y = an.y + (dy / d) * MIN_ANCHOR;
+            movedAny = true;
+          }
+        });
+      }
+      if (!movedAny) break;
+    }
 
     // links: uplink tree + implicit WAN trace
     const links = [];
@@ -123,7 +176,14 @@
     // landed, pushed a little outward so the label clears the nodes
     const clusterAnchors = Object.keys(clusters).map(key => {
       const c = clusters[key];
-      const members = nodes.filter(n => n.cluster === key);
+      // anchor the label over the district's home turf: skip members that
+      // physically hang off infrastructure in a different district
+      let members = nodes.filter(n => {
+        if (n.cluster !== key) return false;
+        const p = n.uplink && byId[n.uplink];
+        return !p || !p.cluster || p.cluster === key;
+      });
+      if (!members.length) members = nodes.filter(n => n.cluster === key);
       let mx = 0, my = 0;
       members.forEach(n => { mx += n.x; my += n.y; });
       mx /= members.length || 1; my /= members.length || 1;
@@ -814,7 +874,18 @@
       focusCluster,
       resetView() {
         selectedId = null;
-        animateTo(CX, CY - 60, Math.min(1, (vh - 40) / WORLD_H * 1.45), 0.6);
+        // fit the actual node bounds (real networks outgrow the nominal world)
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+        L.nodes.forEach(n => {
+          minX = Math.min(minX, n.x); maxX = Math.max(maxX, n.x);
+          minY = Math.min(minY, n.y); maxY = Math.max(maxY, n.y);
+        });
+        const pad = 110;
+        const s = Math.min(1, Math.min(
+          vw / (maxX - minX + pad * 2),
+          vh / (maxY - minY + pad * 2)
+        ));
+        animateTo((minX + maxX) / 2, (minY + maxY) / 2, Math.max(MIN_SCALE, s), 0.6);
       },
       setSelected(id) { selectedId = id; },
       zoomBy(f) { zoomAt(vw / 2, vh / 2, f); },

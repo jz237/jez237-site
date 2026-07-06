@@ -4,11 +4,11 @@
 prompt below to OpenClaw (or any agent with router access), then paste its
 JSON output back into `data.js` as `window.NETMAP_DATA = { ... };`.
 
-> **Privacy note:** `data.js` is published on the public site. Consider
-> masking MAC addresses (e.g. keep only the vendor prefix: `A4:83:E7:xx:xx:xx`),
-> renaming devices you'd rather not advertise, and skipping anything
+> **Privacy note:** `data.js` is published on the public site. MAC
+> addresses are omitted from the map entirely — don't add them. Consider
+> renaming devices you'd rather not advertise and skipping anything
 > sensitive in `notes`. Private-range IPs (192.168.x.x / 10.x.x.x) reveal
-> nothing on their own, but device names and MACs can.
+> nothing on their own, but device names can.
 
 ---
 
@@ -37,7 +37,7 @@ JSON, no commentary, matching this schema:
     { "id": "internet", "type": "internet", "label": "Internet", "tier": 0,
       "notes": "<ISP name and plan speed if known>" },
     { "id": "router", "type": "router", "label": "<router name>", "tier": 1,
-      "ip": "<lan ip>", "mac": "<masked mac>", "model": "<model>",
+      "ip": "<lan ip>", "model": "<model>",
       "linkMbps": 1000 },
     // then one node per switch/AP with "tier": 2, and one per device:
     { "id": "<short-stable-id>",
@@ -49,7 +49,7 @@ JSON, no commentary, matching this schema:
       "uplink": "<id of the switch/AP/router it connects through>",
       "media": "<ethernet | wifi>",
       "linkMbps": <negotiated or nominal link speed, number>,
-      "ip": "<ip>", "mac": "<masked mac>",
+      "ip": "<ip>",
       "notes": "<optional>",
       "profile": "<optional traffic profile: workstation | server | nas |
                   streamer | phone | tablet | console | speaker | camera |
@@ -65,7 +65,7 @@ Rules:
   router and note the guess.
 - Group similar IoT gadgets (e.g. smart plugs) into one node with a
   "×N" label if there are many.
-- Mask MAC addresses to the vendor prefix (AA:BB:CC:xx:xx:xx).
+- Do NOT include MAC addresses — the public map omits them.
 - If the router reports live per-client traffic, add a one-line summary
   per busy device in "notes" so traffic profiles can be tuned.
 ```
