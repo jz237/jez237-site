@@ -6,6 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#050816">
 <title>Neon Qix</title>
 <style>
 :root{
@@ -54,7 +55,9 @@ body{
     linear-gradient(180deg, rgba(125,246,255,0.04), transparent 20%, transparent 80%, rgba(255,94,168,0.04)),
     repeating-linear-gradient(180deg, rgba(255,255,255,0.02) 0 1px, transparent 1px 4px);
   mix-blend-mode:screen;
+  z-index:2;
 }
+body.crt-off .chrome{display:none}
 .shell{
   position:absolute;
   inset:0;
@@ -120,12 +123,38 @@ body{
   background:repeating-linear-gradient(180deg, rgba(255,255,255,0.02) 0 1px, rgba(0,0,0,0) 1px 4px);
   opacity:0.45;
 }
+body.crt-off .stage::after{display:none}
+body.crt-off canvas{filter:none}
 canvas{
   display:block;
   width:100%;
   height:100%;
   touch-action:none;
   filter:saturate(1.06) contrast(1.04);
+}
+.draw-chip{
+  position:absolute;
+  top:8px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:6;
+  padding:4px 12px;
+  border-radius:999px;
+  font-size:11px;
+  letter-spacing:0.16em;
+  text-transform:uppercase;
+  font-weight:700;
+  background:rgba(8,16,30,0.7);
+  border:1px solid rgba(125,246,255,0.28);
+  color:var(--cyan);
+  pointer-events:none;
+  backdrop-filter:blur(4px);
+  transition:color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+.draw-chip.slow{
+  color:var(--gold);
+  border-color:rgba(255,213,106,0.5);
+  box-shadow:0 0 16px rgba(255,213,106,0.28);
 }
 .overlay{
   position:absolute;
@@ -141,6 +170,7 @@ canvas{
   transition:opacity 180ms ease, visibility 180ms ease;
   pointer-events:none;
   z-index:8;
+  overflow-y:auto;
 }
 .overlay.show{
   opacity:1;
@@ -164,14 +194,15 @@ canvas{
     0 0 0 1px rgba(255,255,255,0.03) inset,
     0 0 40px rgba(61,182,255,0.14),
     0 24px 60px rgba(0,0,0,0.55);
+  margin:auto;
 }
 #titleOverlay .panel{
-  width:min(100%, 360px);
-  background:linear-gradient(180deg, rgba(11,24,54,0.78), rgba(6,10,24,0.8));
+  width:min(100%, 380px);
+  background:linear-gradient(180deg, rgba(11,24,54,0.82), rgba(6,10,24,0.86));
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.03) inset,
-    0 0 28px rgba(61,182,255,0.1),
-    0 14px 36px rgba(0,0,0,0.38);
+    0 0 28px rgba(61,182,255,0.12),
+    0 14px 36px rgba(0,0,0,0.4);
 }
 .eyebrow{
   display:inline-block;
@@ -183,16 +214,39 @@ canvas{
 }
 .title{
   margin:0;
-  font-size:38px;
+  font-size:44px;
   line-height:0.92;
   text-transform:uppercase;
   letter-spacing:0.04em;
-  text-shadow:0 0 18px rgba(125,246,255,0.42), 0 0 34px rgba(255,94,168,0.2);
+  font-weight:800;
+  background:linear-gradient(92deg,#7df6ff,#9f7cff 40%,#ff5ea8 70%,#ffd56a);
+  background-size:220% 100%;
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 0 18px rgba(125,246,255,0.42)) drop-shadow(0 0 34px rgba(255,94,168,0.22));
+  animation:titleHue 6s linear infinite, titleFlicker 4.5s ease-in-out infinite;
 }
 .title span{
   display:block;
-  color:var(--gold);
+  animation:titleBob 3.2s ease-in-out infinite;
 }
+@keyframes titleHue{0%{background-position:0% 0}100%{background-position:220% 0}}
+@keyframes titleFlicker{0%,100%{filter:drop-shadow(0 0 18px rgba(125,246,255,0.42)) drop-shadow(0 0 34px rgba(255,94,168,0.22))}48%{filter:drop-shadow(0 0 26px rgba(125,246,255,0.6)) drop-shadow(0 0 44px rgba(255,94,168,0.32))}50%{filter:drop-shadow(0 0 10px rgba(125,246,255,0.3)) drop-shadow(0 0 20px rgba(255,94,168,0.16))}52%{filter:drop-shadow(0 0 26px rgba(125,246,255,0.6)) drop-shadow(0 0 44px rgba(255,94,168,0.32))}}
+@keyframes titleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.press-start{
+  margin:14px 0 4px;
+  font-size:13px;
+  letter-spacing:0.28em;
+  text-transform:uppercase;
+  color:var(--gold);
+  font-weight:700;
+  animation:pressPulse 1.15s ease-in-out infinite;
+}
+@keyframes pressPulse{0%,100%{opacity:0.35}50%{opacity:1}}
+body.reduced-motion .title{animation:none;background-position:0 0}
+body.reduced-motion .title span{animation:none}
+body.reduced-motion .press-start{animation:none;opacity:0.85}
 .lead{
   margin:12px 0 14px;
   color:#d8ebff;
@@ -212,6 +266,7 @@ canvas{
   font-size:13px;
   line-height:1.4;
 }
+.howto strong{color:var(--cyan)}
 .cta-row,.secondary-row,.entry-row{
   display:flex;
   gap:10px;
@@ -231,7 +286,10 @@ button,.score-action{
   border:1px solid rgba(125,246,255,0.28);
   box-shadow:0 10px 24px rgba(0,0,0,0.3), 0 0 18px rgba(125,246,255,0.1) inset;
   cursor:pointer;
+  transition:transform 90ms ease, filter 120ms ease;
 }
+button:active{transform:translateY(1px) scale(0.99)}
+button:hover{filter:brightness(1.08)}
 button.primary{
   background:linear-gradient(180deg, rgba(255,213,106,0.28), rgba(255,94,168,0.26));
   border-color:rgba(255,213,106,0.38);
@@ -240,6 +298,7 @@ button.primary{
 button.ghost{
   background:rgba(255,255,255,0.04);
 }
+button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
 .secondary-row button,.cta-row button{
   flex:1 1 140px;
 }
@@ -283,22 +342,14 @@ button.ghost{
   background:rgba(255,255,255,0.04);
   border:1px solid rgba(255,255,255,0.06);
 }
-.score-row.local{
-  background:rgba(125,246,255,0.05);
-  border-color:rgba(125,246,255,0.1);
-}
-.score-row.global{
-  background:rgba(255,213,106,0.05);
-  border-color:rgba(255,213,106,0.12);
-}
+.score-row.local{background:rgba(125,246,255,0.05);border-color:rgba(125,246,255,0.1)}
+.score-row.global{background:rgba(255,213,106,0.05);border-color:rgba(255,213,106,0.12)}
 .score-row.highlight{
   background:linear-gradient(180deg, rgba(255,213,106,0.16), rgba(255,94,168,0.12));
   border-color:rgba(255,213,106,0.35);
   box-shadow:0 0 18px rgba(255,213,106,0.14);
 }
-.score-row strong{
-  letter-spacing:0.16em;
-}
+.score-row strong{letter-spacing:0.16em}
 .entry-field{
   width:100%;
   background:rgba(255,255,255,0.05);
@@ -313,10 +364,27 @@ button.ghost{
   font-size:28px;
   font-weight:700;
 }
-.entry-field::placeholder{
-  color:rgba(234,248,255,0.35);
-  letter-spacing:0.2em;
+.entry-field::placeholder{color:rgba(234,248,255,0.35);letter-spacing:0.2em}
+/* Options controls */
+.opt-group{display:grid;gap:14px;margin:14px 0 4px}
+.opt-row{display:grid;gap:8px}
+.opt-row > label{font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.opt-row .val{color:var(--cyan);font-weight:700}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;
+  background:linear-gradient(90deg,var(--cyan),var(--pink));outline:none;padding:0;min-height:0;border:none;box-shadow:none;
 }
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--cyan);box-shadow:0 0 12px rgba(125,246,255,0.6);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:2px solid var(--cyan);box-shadow:0 0 12px rgba(125,246,255,0.6);cursor:pointer}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg button{flex:1 1 auto;min-height:42px;padding:9px 10px;font-size:13px;border-radius:12px}
+.seg button.active{background:linear-gradient(180deg, rgba(255,213,106,0.32), rgba(255,94,168,0.28));border-color:rgba(255,213,106,0.5);color:#fff9e6;font-weight:700}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06)}
+.toggle-row span{font-size:13px}
+.switch{position:relative;width:52px;height:30px;flex:0 0 auto;border-radius:999px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.14);cursor:pointer;transition:background 140ms ease;min-height:0;padding:0;box-shadow:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#e6f4ff;transition:transform 140ms ease;box-shadow:0 2px 6px rgba(0,0,0,0.4)}
+.switch.on{background:linear-gradient(90deg,var(--cyan),var(--teal))}
+.switch.on::after{transform:translateX(22px)}
 .status-bar{
   min-width:0;
   padding:8px 10px;
@@ -361,23 +429,63 @@ button.ghost{
   border-radius:12px;
   font-size:12px;
 }
+/* Touch d-pad */
+.touch-controls{
+  position:absolute;
+  left:0;right:0;bottom:0;
+  z-index:7;
+  display:none;
+  justify-content:space-between;
+  align-items:flex-end;
+  padding:0 14px calc(env(safe-area-inset-bottom, 0px) + 52px);
+  pointer-events:none;
+}
+body.show-pad .touch-controls{display:flex}
+.dpad{
+  position:relative;
+  width:150px;height:150px;
+  pointer-events:auto;
+}
+.dpad button{
+  position:absolute;
+  width:50px;height:50px;
+  min-height:0;padding:0;
+  border-radius:14px;
+  font-size:20px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(12,22,44,0.72);
+  border:1px solid rgba(125,246,255,0.3);
+  color:var(--cyan);
+}
+.dpad .up{left:50px;top:0}
+.dpad .down{left:50px;bottom:0}
+.dpad .left{left:0;top:50px}
+.dpad .right{right:0;top:50px}
+.dpad button.pressed{background:rgba(125,246,255,0.28);color:#fff}
+.slow-btn{
+  pointer-events:auto;
+  width:96px;height:96px;
+  border-radius:50%;
+  font-size:12px;font-weight:700;letter-spacing:0.12em;
+  text-transform:uppercase;
+  background:radial-gradient(circle at 40% 35%, rgba(255,213,106,0.34), rgba(255,94,168,0.24));
+  border:1px solid rgba(255,213,106,0.44);
+  color:#fff6df;
+  align-self:flex-end;
+}
+.slow-btn.pressed{box-shadow:0 0 26px rgba(255,213,106,0.55);filter:brightness(1.15)}
 @media (max-width:520px){
   .status-bar{right:78px;bottom:4px;padding:7px 9px}
   .status-bar span{font-size:11px}
+  .title{font-size:38px}
 }
 @media (min-width:720px){
   .shell{
-    /* Desktop: track the field's natural 72:116 aspect so the play area fills tall
-       monitors instead of staying phone width. render() still letterboxes inside the
-       canvas, so any rounding only leaves slim bands. Fixed 560px is the fallback for
-       browsers without dvh support. */
     max-width:560px;
     max-width:clamp(420px, calc((100dvh - 112px) * 0.62), 920px);
     margin:0 auto;
   }
-  .title{
-    font-size:46px;
-  }
+  .title{font-size:50px}
 }
 </style>
 </head>
@@ -392,20 +500,24 @@ button.ghost{
     </div>
     <div class="stage">
       <canvas id="gameCanvas"></canvas>
+      <div class="draw-chip" id="drawChip">Fast</div>
 
       <div class="overlay show" id="titleOverlay">
         <div class="panel">
           <span class="eyebrow">Vector Arcade / 1981 Reimagined</span>
           <h1 class="title">Neon <span>Qix</span></h1>
-          <p class="lead">Cut fast, trap space, stay off the live line.</p>
+          <p class="press-start" id="pressStart">Press Start</p>
+          <p class="lead">Cut fast, trap space, dodge the Qix, the Sparx, and your own burning fuse.</p>
           <div class="cta-row">
             <button class="primary" id="startButton">Start Game</button>
             <button class="ghost" id="howButton">How To Play</button>
           </div>
           <div class="secondary-row" style="margin-top:10px">
+            <button id="optionsButton">Options</button>
             <button id="scoresButton">High Scores</button>
+            <button id="creditsButton">Credits</button>
           </div>
-          <p class="small-copy" id="attractCopy">Fast demo play runs behind this panel. Soundtrack wakes on your first tap because of browser rules. Use How To Play if you want the full rules.</p>
+          <p class="small-copy" id="attractCopy">Demo play runs behind this panel. The soundtrack wakes on your first tap because of browser rules. Arrow keys / WASD, a gamepad, or touch all work.</p>
           <div class="version-chip" id="versionTag">VERSION</div>
         </div>
       </div>
@@ -413,15 +525,54 @@ button.ghost{
       <div class="overlay" id="howOverlay">
         <div class="panel">
           <span class="eyebrow">How To Play</span>
-          <p class="lead">This version keeps the original Qix loop: safe movement on existing walls, dangerous movement while drawing, and area capture determined by which side traps the Qix.</p>
+          <p class="lead">Trap territory by cutting the field into pieces the Qix can't reach. Fill enough of the board to clear the level.</p>
           <div class="howto">
-            <div><strong>Controls:</strong> drag anywhere on the field. Your current direction stays active while you hold. On desktop, use arrow keys / WASD, or hold the mouse button and drag anywhere in the window. Enter starts, P or Escape pauses.</div>
-            <div><strong>Safe movement:</strong> move along glowing walls and captured territory edges with no risk from the Qix.</div>
-            <div><strong>Danger movement:</strong> when you leave safety, your tracer becomes vulnerable. If the Qix line touches it, you lose a life.</div>
-            <div><strong>Scoring:</strong> bigger captures score more, and each level raises Qix speed and the target percentage.</div>
+            <div><strong>Move &amp; draw:</strong> travel the glowing border safely, then cut inward into open space to draw a line (Stix). Close it back onto a wall to claim everything the Qix is sealed out of.</div>
+            <div><strong>Slow vs fast:</strong> hold <strong>Shift</strong> (or the SLOW button / gamepad X) while cutting to draw slowly — claims made slow score <strong>2×</strong>. Fast cutting is safer but worth less.</div>
+            <div><strong>The Qix:</strong> the churning energy line in the open field. If it touches your live cut, you lose a life. On later levels a second Qix appears — seal a cut that splits the two apart for a huge bonus.</div>
+            <div><strong>Sparx:</strong> sparks patrol the walls and edges of claimed ground. Don't let them reach you.</div>
+            <div><strong>The Fuse:</strong> if you stop while cutting, a fuse ignites at the start of your line and races toward you. Keep moving to stay ahead of it.</div>
+            <div><strong>Controls:</strong> Arrow keys / WASD, gamepad d-pad/stick, or touch (swipe, or on-screen pad). Enter/Start begins, P or Esc pauses.</div>
           </div>
           <div class="cta-row">
             <button class="primary" id="howCloseButton">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlay" id="optionsOverlay">
+        <div class="panel">
+          <span class="eyebrow">Options</span>
+          <div class="opt-group">
+            <div class="opt-row">
+              <label>Sound FX <span class="val" id="sfxVal">80%</span></label>
+              <input type="range" id="sfxRange" min="0" max="100" value="80">
+            </div>
+            <div class="opt-row">
+              <label>Music <span class="val" id="musicVal">50%</span></label>
+              <input type="range" id="musicRange" min="0" max="100" value="50">
+            </div>
+            <div class="opt-row">
+              <label>Difficulty</label>
+              <div class="seg" id="diffSeg">
+                <button data-diff="easy">Easy</button>
+                <button data-diff="normal">Normal</button>
+                <button data-diff="hard">Hard</button>
+              </div>
+            </div>
+            <div class="opt-row">
+              <label>Touch Controls</label>
+              <div class="seg" id="ctrlSeg">
+                <button data-ctrl="drag">Swipe</button>
+                <button data-ctrl="pad">On-screen Pad</button>
+              </div>
+            </div>
+            <div class="toggle-row"><span>CRT / scanlines</span><button class="switch" id="crtSwitch" aria-label="Toggle CRT"></button></div>
+            <div class="toggle-row"><span>Reduced motion</span><button class="switch" id="motionSwitch" aria-label="Toggle reduced motion"></button></div>
+            <div class="toggle-row"><span>Fullscreen</span><button class="switch" id="fsSwitch" aria-label="Toggle fullscreen"></button></div>
+          </div>
+          <div class="cta-row" style="margin-top:16px">
+            <button class="primary" id="optionsCloseButton">Done</button>
           </div>
         </div>
       </div>
@@ -433,6 +584,38 @@ button.ghost{
           <div class="score-list" id="scoreList"></div>
           <div class="cta-row" style="margin-top:14px">
             <button class="primary" id="scoresCloseButton">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlay" id="creditsOverlay">
+        <div class="panel">
+          <span class="eyebrow">Credits</span>
+          <h1 class="title" style="font-size:30px">Neon <span>Qix</span></h1>
+          <div class="howto" style="margin-top:16px">
+            <div><strong>Original concept:</strong> inspired by <strong>Qix</strong>, created by Randy &amp; Sandy Pfeiffer and published by <strong>Taito</strong> in 1981. This is an original neon reimagining — not affiliated with or endorsed by Taito.</div>
+            <div><strong>Code &amp; design:</strong> built for jez237.com as a self-contained HTML5 canvas game.</div>
+            <div><strong>Music &amp; sound:</strong> original score and effects generated with ElevenLabs, layered over a live Web Audio synthesis engine.</div>
+            <div><strong>Thanks for playing.</strong> Aim for the 2× slow cuts and the Qix split bonus.</div>
+          </div>
+          <div class="cta-row" style="margin-top:14px">
+            <button class="primary" id="creditsCloseButton">Back</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="overlay" id="pauseOverlay">
+        <div class="panel">
+          <span class="eyebrow">Paused</span>
+          <p class="lead" id="pauseText">Take a breath. The field is holding.</p>
+          <div class="cta-row">
+            <button class="primary" id="resumeButton">Resume</button>
+            <button class="ghost" id="pauseOptionsButton">Options</button>
+          </div>
+          <div class="secondary-row" style="margin-top:10px">
+            <button id="pauseHowButton">How To Play</button>
+            <button id="pauseRestartButton">Restart</button>
+            <button id="pauseTitleButton">Title</button>
           </div>
         </div>
       </div>
@@ -450,6 +633,16 @@ button.ghost{
             <button class="ghost" id="titleButton">Title Screen</button>
           </div>
         </div>
+      </div>
+
+      <div class="touch-controls" id="touchControls">
+        <div class="dpad">
+          <button class="up" data-dir="up">▲</button>
+          <button class="down" data-dir="down">▼</button>
+          <button class="left" data-dir="left">◀</button>
+          <button class="right" data-dir="right">▶</button>
+        </div>
+        <button class="slow-btn" id="slowBtn">Slow<br>2×</button>
       </div>
     </div>
 
@@ -469,12 +662,24 @@ button.ghost{
 (() => {
   const GRID_W = 72;
   const GRID_H = 116;
-  const GAME_VERSION = "v1.1.1";
-  const CLAIM_GOAL_BASE = 0.72;
+  const GAME_VERSION = "v2.0.0";
   const SCORE_KEY = "neon-qix-highscores-v1";
+  const SETTINGS_KEY = "neon-qix-settings-v1";
   const GLOBAL_SCORES_API = "https://game-scores.jez237.workers.dev/scores/neon-qix";
-  const MUSIC_TRACKS = ["assets/quarter-drop.mp3", "assets/one-life-left.mp3"];
-  const MUSIC_VOLUME = 0.32;
+  const MENU_TRACK = "assets/title-theme.mp3";
+  const GAME_TRACKS = ["assets/gameplay-music.mp3", "assets/quarter-drop.mp3", "assets/one-life-left.mp3"];
+  const SFX_FILES = {
+    drawSlow: "assets/draw-slow.mp3",
+    drawFast: "assets/draw-fast.mp3",
+    claim: "assets/area-claimed.mp3",
+    sparx: "assets/sparx-warning.mp3",
+    fuse: "assets/fuse-burn.mp3",
+    death: "assets/death.mp3",
+    level: "assets/level-complete.mp3",
+    gameover: "assets/game-over.mp3",
+    navigate: "assets/menu-navigate.mp3",
+    select: "assets/menu-select.mp3"
+  };
   const CELL_EMPTY = 0;
   const CELL_SAFE = 1;
   const CELL_TRAIL = 2;
@@ -484,20 +689,37 @@ button.ghost{
     left: {x: -1, y: 0},
     right: {x: 1, y: 0}
   };
+  const DIFF = {
+    easy:   {label: "Easy",   speed: 0.85, goalBase: 0.70, goalStep: 0.012, goalCap: 0.80, lives: 4, twoQixLevel: 6, sparxSecondLevel: 3, sparxThirdLevel: 9, fuse: 0.82, sparxMul: 0.85},
+    normal: {label: "Normal", speed: 1.00, goalBase: 0.75, goalStep: 0.015, goalCap: 0.84, lives: 3, twoQixLevel: 4, sparxSecondLevel: 2, sparxThirdLevel: 7, fuse: 1.00, sparxMul: 1.00},
+    hard:   {label: "Hard",   speed: 1.18, goalBase: 0.78, goalStep: 0.017, goalCap: 0.88, lives: 3, twoQixLevel: 3, sparxSecondLevel: 2, sparxThirdLevel: 6, fuse: 1.22, sparxMul: 1.15}
+  };
 
   const canvas = document.getElementById("gameCanvas");
   const ctx = canvas.getContext("2d");
   const titleOverlay = document.getElementById("titleOverlay");
   const howOverlay = document.getElementById("howOverlay");
+  const optionsOverlay = document.getElementById("optionsOverlay");
   const scoresOverlay = document.getElementById("scoresOverlay");
+  const creditsOverlay = document.getElementById("creditsOverlay");
+  const pauseOverlay = document.getElementById("pauseOverlay");
   const gameOverOverlay = document.getElementById("gameOverOverlay");
   const startButton = document.getElementById("startButton");
   const howButton = document.getElementById("howButton");
   const howCloseButton = document.getElementById("howCloseButton");
+  const optionsButton = document.getElementById("optionsButton");
+  const optionsCloseButton = document.getElementById("optionsCloseButton");
   const scoresButton = document.getElementById("scoresButton");
   const scoresCloseButton = document.getElementById("scoresCloseButton");
+  const creditsButton = document.getElementById("creditsButton");
+  const creditsCloseButton = document.getElementById("creditsCloseButton");
   const miniScoresButton = document.getElementById("miniScoresButton");
   const pauseButton = document.getElementById("pauseButton");
+  const resumeButton = document.getElementById("resumeButton");
+  const pauseOptionsButton = document.getElementById("pauseOptionsButton");
+  const pauseHowButton = document.getElementById("pauseHowButton");
+  const pauseRestartButton = document.getElementById("pauseRestartButton");
+  const pauseTitleButton = document.getElementById("pauseTitleButton");
   const restartButton = document.getElementById("restartButton");
   const titleButton = document.getElementById("titleButton");
   const saveScoreButton = document.getElementById("saveScoreButton");
@@ -514,6 +736,51 @@ button.ghost{
   const gameOverEyebrow = document.getElementById("gameOverEyebrow");
   const attractCopy = document.getElementById("attractCopy");
   const versionTag = document.getElementById("versionTag");
+  const drawChip = document.getElementById("drawChip");
+  const pressStart = document.getElementById("pressStart");
+  const touchControls = document.getElementById("touchControls");
+  const slowBtn = document.getElementById("slowBtn");
+  const sfxRange = document.getElementById("sfxRange");
+  const musicRange = document.getElementById("musicRange");
+  const sfxVal = document.getElementById("sfxVal");
+  const musicVal = document.getElementById("musicVal");
+  const diffSeg = document.getElementById("diffSeg");
+  const ctrlSeg = document.getElementById("ctrlSeg");
+  const crtSwitch = document.getElementById("crtSwitch");
+  const motionSwitch = document.getElementById("motionSwitch");
+  const fsSwitch = document.getElementById("fsSwitch");
+  const pauseText = document.getElementById("pauseText");
+
+  // ---------- Settings ----------
+  const defaultSettings = {
+    sfxVolume: 0.8,
+    musicVolume: 0.5,
+    difficulty: "normal",
+    controlScheme: "drag",
+    crt: true,
+    reducedMotion: (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) || false
+  };
+  let settings = loadSettings();
+
+  function loadSettings() {
+    try {
+      const parsed = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+      return Object.assign({}, defaultSettings, parsed && typeof parsed === "object" ? parsed : {});
+    } catch (error) {
+      return Object.assign({}, defaultSettings);
+    }
+  }
+  function saveSettings() {
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    } catch (error) {}
+  }
+  function diff() {
+    return DIFF[settings.difficulty] || DIFF.normal;
+  }
+  function reduced() {
+    return !!settings.reducedMotion;
+  }
 
   let raf = 0;
   let lastTime = 0;
@@ -525,30 +792,25 @@ button.ghost{
   let controlDir = null;
   let controlSource = null;
   let keyboardDir = null;
+  let gamepadDir = null;
   let canvasPointerId = null;
   let canvasStartX = 0;
   let canvasStartY = 0;
   let canvasLastDir = null;
   let attractDir = null;
   let dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
-  let audioCtx = null;
-  let audioUnlocked = false;
-  let qixHum = null;
-  let musicIndex = 0;
-  let soundtrackStarted = false;
-  const soundtrack = new Audio(MUSIC_TRACKS[musicIndex]);
-  soundtrack.preload = "auto";
-  soundtrack.volume = MUSIC_VOLUME;
-  soundtrack.addEventListener("ended", () => {
-    musicIndex = (musicIndex + 1) % MUSIC_TRACKS.length;
-    soundtrack.src = MUSIC_TRACKS[musicIndex];
-    soundtrack.currentTime = 0;
-    startSoundtrack();
-  });
+  let slowKey = false;
+  let slowTouch = false;
+  let slowPad = false;
+  let prevPadButtons = {};
   let levelAdvanceTimer = 0;
   let deathResolveTimer = 0;
   let mouseDragActive = false;
   let lastRenderError = "";
+  let lastFpsSample = 0;
+  let frameCount = 0;
+  let fps = 60;
+  let sparxWarnClock = 0;
 
   const state = {
     phase: "title",
@@ -556,16 +818,16 @@ button.ghost{
     level: 1,
     lives: 3,
     claimedRatio: 0,
-    targetRatio: CLAIM_GOAL_BASE,
+    targetRatio: DIFF.normal.goalBase,
     field: new Uint8Array(GRID_W * GRID_H),
     fieldHue: new Uint16Array(GRID_W * GRID_H),
-    player: {x: 0, y: 0, alive: true, drawing: false, moveClock: 0, respawnFlash: 0},
+    player: {x: 0, y: 0, alive: true, drawing: false, moveClock: 0, respawnFlash: 0, movedTick: false},
     trail: [],
     sparx: [],
-    qix: null,
-    qixTrail: [],
+    qixList: [],
     particles: [],
     pulses: [],
+    fuse: {active: false, progress: 0, idle: 0},
     captureFlash: 0,
     screenFlash: 0,
     shake: 0,
@@ -580,41 +842,148 @@ button.ghost{
     attractLastY: 0,
     attractLastKey: "",
     totalClaimedCells: 0,
+    splitFlash: 0,
     levelMessage: "Trace into open space and close the cut."
   };
 
-  function resizeCanvas() {
-    const bounds = canvas.getBoundingClientRect();
-    dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
-    canvas.width = Math.max(1, Math.round(bounds.width * dpr));
-    canvas.height = Math.max(1, Math.round(bounds.height * dpr));
+  function primaryQix() {
+    return state.qixList[0] || null;
   }
 
-  function safeFocus(el) {
-    if (!el || typeof el.focus !== "function") return;
-    try {
-      el.focus({preventScroll: true});
-    } catch (error) {
-      try {
-        el.focus();
-      } catch (error2) {
-      }
+  // ---------- Audio ----------
+  let audioCtx = null;
+  let audioUnlocked = false;
+  let sfxGain = null;
+  let qixHum = null;
+  const sfxRaw = {};
+  const sfxBuffers = {};
+  let fuseVoice = null;
+  const music = new Audio();
+  music.preload = "auto";
+  let musicMode = "";
+  let gameTrackIndex = 0;
+  music.addEventListener("ended", () => {
+    if (musicMode === "game") {
+      gameTrackIndex = (gameTrackIndex + 1) % GAME_TRACKS.length;
+      music.src = GAME_TRACKS[gameTrackIndex];
+      music.currentTime = 0;
+      music.play().catch(() => {});
+    }
+  });
+
+  function prefetchSfx() {
+    for (const key of Object.keys(SFX_FILES)) {
+      fetch(SFX_FILES[key])
+        .then((res) => (res.ok ? res.arrayBuffer() : null))
+        .then((buf) => { if (buf) sfxRaw[key] = buf; })
+        .catch(() => {});
     }
   }
 
-  function idx(x, y) {
-    return y * GRID_W + x;
+  function decodeAllSfx() {
+    if (!audioCtx) return;
+    for (const key of Object.keys(sfxRaw)) {
+      if (sfxBuffers[key] || !sfxRaw[key]) continue;
+      const raw = sfxRaw[key];
+      try {
+        audioCtx.decodeAudioData(raw.slice(0), (decoded) => { sfxBuffers[key] = decoded; }, () => {});
+      } catch (error) {}
+    }
   }
 
-  function inBounds(x, y) {
-    return x >= 0 && y >= 0 && x < GRID_W && y < GRID_H;
+  function playSfx(name, gainMul = 1, rate = 1) {
+    if (!audioUnlocked || !audioCtx || !sfxGain) return;
+    const buffer = sfxBuffers[name];
+    if (!buffer) return;
+    try {
+      const source = audioCtx.createBufferSource();
+      source.buffer = buffer;
+      source.playbackRate.value = rate;
+      const g = audioCtx.createGain();
+      g.gain.value = gainMul;
+      source.connect(g);
+      g.connect(sfxGain);
+      source.start();
+    } catch (error) {}
   }
 
+  function startFuseSound() {
+    if (fuseVoice || !audioUnlocked || !audioCtx || !sfxGain || !sfxBuffers.fuse) return;
+    try {
+      const source = audioCtx.createBufferSource();
+      source.buffer = sfxBuffers.fuse;
+      source.loop = true;
+      const g = audioCtx.createGain();
+      g.gain.value = 0.85;
+      source.connect(g);
+      g.connect(sfxGain);
+      source.start();
+      fuseVoice = {source, g};
+    } catch (error) {}
+  }
+  function stopFuseSound() {
+    if (!fuseVoice) return;
+    try { fuseVoice.source.stop(); } catch (error) {}
+    fuseVoice = null;
+  }
+
+  function applySfxVolume() {
+    if (sfxGain) sfxGain.gain.value = settings.sfxVolume;
+  }
+  function applyMusicVolume() {
+    music.volume = Math.max(0, Math.min(1, settings.musicVolume));
+  }
+  function vibrate(pattern) {
+    if (navigator.vibrate && !reduced()) { try { navigator.vibrate(pattern); } catch (error) {} }
+  }
+
+  function playMusic(mode) {
+    if (!audioUnlocked) return;
+    if (musicMode === mode && !music.paused) return;
+    musicMode = mode;
+    applyMusicVolume();
+    if (mode === "menu") {
+      music.loop = true;
+      if (music.src.indexOf("title-theme") === -1) music.src = MENU_TRACK;
+    } else if (mode === "game") {
+      music.loop = false;
+      music.src = GAME_TRACKS[gameTrackIndex];
+    } else {
+      return;
+    }
+    music.currentTime = 0;
+    music.play().catch(() => {});
+  }
+
+  function unlockAudio() {
+    if (audioUnlocked) {
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
+      return;
+    }
+    try {
+      const AudioCtor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtor) return;
+      audioCtx = new AudioCtor();
+      sfxGain = audioCtx.createGain();
+      sfxGain.gain.value = settings.sfxVolume;
+      sfxGain.connect(audioCtx.destination);
+      if (audioCtx.state === "suspended") audioCtx.resume().catch(() => {});
+      audioUnlocked = true;
+      decodeAllSfx();
+      ensureQixHum();
+      if (attractCopy) attractCopy.textContent = "Attract mode is live and the soundtrack is awake. Press Start when you want control.";
+    } catch (error) {
+      audioUnlocked = false;
+    }
+  }
+
+  // ---------- Grid helpers ----------
+  function idx(x, y) { return y * GRID_W + x; }
+  function inBounds(x, y) { return x >= 0 && y >= 0 && x < GRID_W && y < GRID_H; }
   function getCell(x, y) {
     if (!inBounds(x, y)) return CELL_SAFE;
     return state.field[idx(x, y)];
   }
-
   function setCell(x, y, value, hue) {
     if (inBounds(x, y)) {
       const id = idx(x, y);
@@ -623,12 +992,10 @@ button.ghost{
       else if (value !== CELL_SAFE) state.fieldHue[id] = 0;
     }
   }
-
   function getCellHue(x, y) {
     if (!inBounds(x, y)) return 200;
     return state.fieldHue[idx(x, y)] || 200;
   }
-
   function resetField() {
     state.field.fill(CELL_EMPTY);
     state.fieldHue.fill(0);
@@ -642,23 +1009,38 @@ button.ghost{
     }
     state.totalClaimedCells = 0;
   }
-
   function levelGoal(level) {
-    return Math.min(0.82, CLAIM_GOAL_BASE + (level - 1) * 0.015);
+    const d = diff();
+    return Math.min(d.goalCap, d.goalBase + (level - 1) * d.goalStep);
+  }
+  function randomInt(min, max) { return Math.floor(min + Math.random() * (max - min + 1)); }
+
+  function resizeCanvas() {
+    const bounds = canvas.getBoundingClientRect();
+    dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
+    canvas.width = Math.max(1, Math.round(bounds.width * dpr));
+    canvas.height = Math.max(1, Math.round(bounds.height * dpr));
+  }
+  function safeFocus(el) {
+    if (!el || typeof el.focus !== "function") return;
+    try { el.focus({preventScroll: true}); }
+    catch (error) { try { el.focus(); } catch (error2) {} }
   }
 
-  function randomInt(min, max) {
-    return Math.floor(min + Math.random() * (max - min + 1));
+  // ---------- Qix ----------
+  function qixCount(level) {
+    return level >= diff().twoQixLevel ? 2 : 1;
   }
-
-  function createQix(level) {
-    const speed = 10 + level * 1.15;
+  function createQix(level, index, count) {
+    const speed = (10 + level * 1.15) * diff().speed;
+    const spread = count > 1 ? (index === 0 ? -0.16 : 0.16) : 0;
+    const dir = index % 2 === 0 ? 1 : -1;
     return {
-      x: GRID_W * 0.5,
-      y: GRID_H * 0.46,
-      vx: speed * 0.9,
+      x: GRID_W * (0.5 + spread),
+      y: GRID_H * (0.42 + index * 0.08),
+      vx: speed * 0.9 * dir,
       vy: speed * 0.74,
-      phase: 0,
+      phase: index * 1.4,
       spin: 1.7 + level * 0.08,
       length: 12 + level * 0.7,
       baseLength: 12 + level * 0.7,
@@ -667,21 +1049,27 @@ button.ghost{
       wanderX: Math.random() * Math.PI * 2,
       wanderY: Math.random() * Math.PI * 2,
       width: 1.5 + Math.min(level * 0.06, 1),
-      hue: (195 + level * 14) % 360
+      hue: (195 + level * 14 + index * 96) % 360,
+      trail: []
     };
   }
+  function createQixList(level, count) {
+    const list = [];
+    for (let i = 0; i < count; i++) list.push(createQix(level, i, count));
+    return list;
+  }
 
-  function getQixEndpoints(qix = state.qix) {
-    if (!qix) return null;
+  function getQixEndpoints(qix) {
     const q = qix;
+    if (!q) return null;
     const wobble = Math.sin(q.phase * 1.7) * 2.8 + Math.sin(q.phase * 0.63) * 1.6;
     const len = Math.max(6, q.length + wobble + q.stretch);
     const skew = Math.sin(q.phase * 0.91) * 0.26;
     const a1 = q.phase;
     const a2 = q.phase * 1.37 + Math.PI * 0.72 + skew;
     return {
-      a: {x: q.x + Math.cos(a1) * len, y: q.y + Math.sin(a1 * 1.18) * len * (0.72 + Math.sin(q.phase*0.6)*0.12)},
-      b: {x: q.x + Math.cos(a2) * len * (0.78 + Math.cos(q.phase*0.74)*0.2), y: q.y + Math.sin(a2 * 1.11) * len * (0.76 + Math.sin(q.phase*0.52)*0.16)},
+      a: {x: q.x + Math.cos(a1) * len, y: q.y + Math.sin(a1 * 1.18) * len * (0.72 + Math.sin(q.phase * 0.6) * 0.12)},
+      b: {x: q.x + Math.cos(a2) * len * (0.78 + Math.cos(q.phase * 0.74) * 0.2), y: q.y + Math.sin(a2 * 1.11) * len * (0.76 + Math.sin(q.phase * 0.52) * 0.16)},
       center: {x: q.x, y: q.y}
     };
   }
@@ -700,9 +1088,9 @@ button.ghost{
     return false;
   }
 
-  function qixShapeCollision(qix = state.qix) {
+  function qixShapeCollision(qix) {
     const shape = getQixEndpoints(qix);
-    if (!shape) return {blocked:false,minX:0,maxX:0,minY:0,maxY:0};
+    if (!shape) return {blocked: false, minX: 0, maxX: 0, minY: 0, maxY: 0};
     const points = [shape.a, shape.b, shape.center];
     let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
     for (const p of points) {
@@ -729,109 +1117,15 @@ button.ghost{
       for (const off of offsets) {
         const sx = baseX + nx * off;
         const sy = baseY + ny * off;
-        if (isQixForbiddenPoint(sx, sy)) {
-          blocked = true;
-          break;
-        }
+        if (isQixForbiddenPoint(sx, sy)) { blocked = true; break; }
       }
     }
-
     if (!blocked) {
       for (const p of points) {
-        if (isQixForbiddenPoint(p.x, p.y)) {
-          blocked = true;
-          break;
-        }
+        if (isQixForbiddenPoint(p.x, p.y)) { blocked = true; break; }
       }
     }
-
-    return {blocked,minX,maxX,minY,maxY};
-  }
-
-  function resetPlayer() {
-    state.player.x = Math.floor(GRID_W / 2);
-    state.player.y = GRID_H - 1;
-    state.player.alive = true;
-    state.player.drawing = false;
-    state.player.moveClock = 0;
-    state.player.respawnFlash = 1.2;
-    clearTrail();
-  }
-
-  function clearDeathTimer() {
-    if (deathResolveTimer) {
-      clearTimeout(deathResolveTimer);
-      deathResolveTimer = 0;
-    }
-  }
-
-  function clearTrail() {
-    for (const cell of state.trail) {
-      if (getCell(cell.x, cell.y) === CELL_TRAIL) {
-        setCell(cell.x, cell.y, CELL_EMPTY);
-      }
-    }
-    state.trail.length = 0;
-    state.player.drawing = false;
-  }
-
-  function startLevel(level, keepScore) {
-    if (levelAdvanceTimer) {
-      clearTimeout(levelAdvanceTimer);
-      levelAdvanceTimer = 0;
-    }
-    clearDeathTimer();
-    state.level = level;
-    if (!keepScore) {
-      state.score = 0;
-      state.lives = 3;
-    }
-    state.targetRatio = levelGoal(level);
-    state.captureFlash = 0;
-    state.screenFlash = 0;
-    state.shake = 0;
-    state.particles.length = 0;
-    state.pulses.length = 0;
-    state.qixTrail.length = 0;
-    resetField();
-    resetPlayer();
-    state.sparx = createSparxWave(level, false);
-    state.qix = createQix(level);
-    state.claimedRatio = calculateClaimedRatio();
-    state.levelMessage = "Claim " + Math.round(state.targetRatio * 100) + "% to clear the field.";
-    updateHud(true);
-  }
-
-  function beginGame() {
-    unlockAudio();
-    startSoundtrack();
-    hideAllOverlays();
-    pauseButton.textContent = "Pause";
-    state.phase = "playing";
-    startLevel(1, false);
-    playTone("start");
-  }
-
-  function restartGame() {
-    unlockAudio();
-    startSoundtrack();
-    hideAllOverlays();
-    pauseButton.textContent = "Pause";
-    state.phase = "playing";
-    startLevel(1, false);
-    playTone("start");
-  }
-
-  function hideAllOverlays() {
-    titleOverlay.classList.remove("show");
-    howOverlay.classList.remove("show");
-    scoresOverlay.classList.remove("show");
-    gameOverOverlay.classList.remove("show");
-  }
-
-  function showOverlay(el) {
-    hideAllOverlays();
-    el.classList.add("show");
+    return {blocked, minX, maxX, minY, maxY};
   }
 
   function clampQixPoint(point) {
@@ -839,15 +1133,7 @@ button.ghost{
     point.y = Math.max(3.5, Math.min(GRID_H - 4.5, point.y));
   }
 
-  function isQixBlocked(x, y) {
-    const ix = Math.floor(x);
-    const iy = Math.floor(y);
-    return getCell(ix, iy) === CELL_SAFE;
-  }
-
-  function updateQix(dt) {
-    if (!state.qix) return;
-    const q = state.qix;
+  function updateQix(q, dt) {
     q.phase += dt * q.spin * 2.6;
     q.wanderX += dt * (0.9 + state.level * 0.03);
     q.wanderY += dt * (1.1 + state.level * 0.035);
@@ -866,19 +1152,11 @@ button.ghost{
 
       q.x = prevX + q.vx * slice;
       let shape = qixShapeCollision(q);
-      if (shape.blocked) {
-        q.x = prevX;
-        q.vx = -q.vx;
-        bounced = true;
-      }
+      if (shape.blocked) { q.x = prevX; q.vx = -q.vx; bounced = true; }
 
       q.y = prevY + q.vy * slice;
       shape = qixShapeCollision(q);
-      if (shape.blocked) {
-        q.y = prevY;
-        q.vy = -q.vy;
-        bounced = true;
-      }
+      if (shape.blocked) { q.y = prevY; q.vy = -q.vy; bounced = true; }
 
       clampQixPoint(q);
       remaining -= slice;
@@ -896,29 +1174,27 @@ button.ghost{
     q.vy += roamBiasY * dt;
 
     const speed = Math.hypot(q.vx, q.vy) || 1;
-    const minSpeed = 8 + state.level * 0.9;
-    const maxSpeed = 16 + state.level * 1.2;
-    if (speed < minSpeed) {
-      const scale = minSpeed / speed;
-      q.vx *= scale;
-      q.vy *= scale;
-    } else if (speed > maxSpeed) {
-      const scale = maxSpeed / speed;
-      q.vx *= scale;
-      q.vy *= scale;
-    }
+    const minSpeed = (8 + state.level * 0.9) * diff().speed;
+    const maxSpeed = (16 + state.level * 1.2) * diff().speed;
+    if (speed < minSpeed) { const scale = minSpeed / speed; q.vx *= scale; q.vy *= scale; }
+    else if (speed > maxSpeed) { const scale = maxSpeed / speed; q.vx *= scale; q.vy *= scale; }
 
     const shape = getQixEndpoints(q);
-    state.qixTrail.unshift({
+    q.trail.unshift({
       ax: shape.a.x, ay: shape.a.y,
       bx: shape.b.x, by: shape.b.y,
       hue: (q.hue + Math.sin(q.phase * 1.3) * 40 + Math.cos(q.phase * 0.7) * 25 + 360) % 360,
       life: 1
     });
-    if (state.qixTrail.length > 22) state.qixTrail.length = 22;
-    if (bounced && Math.random() < 0.4) playTone("qixBounce");
+    if (q.trail.length > 22) q.trail.length = 22;
+    if (bounced && Math.random() < 0.32) playTone("qixBounce");
   }
 
+  function updateAllQix(dt) {
+    for (const q of state.qixList) updateQix(q, dt);
+  }
+
+  // ---------- Sparx (edge patrol) ----------
   function isBorderSafeCell(x, y) {
     if (getCell(x, y) !== CELL_SAFE) return false;
     if (x === 0 || y === 0 || x === GRID_W - 1 || y === GRID_H - 1) return true;
@@ -929,370 +1205,6 @@ button.ghost{
       if (getCell(nx, ny) !== CELL_SAFE) return true;
     }
     return false;
-  }
-
-  function rotateRight(dx, dy) {
-    return {dx: -dy, dy: dx};
-  }
-
-  function rotateLeft(dx, dy) {
-    return {dx: dy, dy: -dx};
-  }
-
-  function computeReachableOpenMap() {
-    const shape = state.qix ? getQixEndpoints() : null;
-    const seeds = shape ? [shape.a, shape.b, shape.center] : [{x: GRID_W * 0.5, y: GRID_H * 0.5}];
-    return floodFillFromSeeds(seeds);
-  }
-
-  function isReachableSparxOpenCell(x, y, reachable) {
-    return inBounds(x, y) && getCell(x, y) !== CELL_SAFE && !!reachable[idx(x, y)];
-  }
-
-  function buildSparxCycles(reachable) {
-    const edges = [];
-    const pushEdge = (sx, sy, ex, ey) => edges.push({sx, sy, ex, ey});
-
-    for (let y = 0; y < GRID_H; y++) {
-      for (let x = 0; x < GRID_W; x++) {
-        if (!isReachableSparxOpenCell(x, y, reachable)) continue;
-        if (getCell(x, y - 1) === CELL_SAFE) pushEdge(x + 1, y, x, y);
-        if (getCell(x + 1, y) === CELL_SAFE) pushEdge(x + 1, y + 1, x + 1, y);
-        if (getCell(x, y + 1) === CELL_SAFE) pushEdge(x, y + 1, x + 1, y + 1);
-        if (getCell(x - 1, y) === CELL_SAFE) pushEdge(x, y, x, y + 1);
-      }
-    }
-
-    const startMap = new Map();
-    edges.forEach((edge, index) => {
-      const key = edge.sx + "," + edge.sy;
-      if (!startMap.has(key)) startMap.set(key, []);
-      startMap.get(key).push(index);
-    });
-
-    function pickNextEdge(edge, options, visited) {
-      const available = options.filter((idx2) => !visited[idx2]);
-      if (!available.length) return null;
-      const cdx = edge.ex - edge.sx;
-      const cdy = edge.ey - edge.sy;
-      let best = null;
-      let bestScore = -Infinity;
-      for (const idx2 of available) {
-        const next = edges[idx2];
-        const ndx = next.ex - next.sx;
-        const ndy = next.ey - next.sy;
-        const dot = cdx * ndx + cdy * ndy;
-        const cross = cdx * ndy - cdy * ndx;
-        let score = -100;
-        if (dot === 1) score = 4;
-        else if (cross === -1) score = 3;
-        else if (cross === 1) score = 1;
-        else if (dot === -1) score = -10;
-        if (score > bestScore) {
-          bestScore = score;
-          best = idx2;
-        }
-      }
-      return best;
-    }
-
-    const visited = new Array(edges.length).fill(false);
-    const cycles = [];
-
-    for (let i = 0; i < edges.length; i++) {
-      if (visited[i]) continue;
-      let current = i;
-      const points = [];
-      let guard = 0;
-      while (current != null && !visited[current] && guard < edges.length + 4) {
-        const edge = edges[current];
-        visited[current] = true;
-        if (!points.length) points.push({x: edge.sx, y: edge.sy});
-        points.push({x: edge.ex, y: edge.ey});
-        const nextKey = edge.ex + "," + edge.ey;
-        const nextOptions = startMap.get(nextKey) || [];
-        current = pickNextEdge(edge, nextOptions, visited);
-        guard += 1;
-      }
-      if (points.length >= 3) {
-        const first = points[0];
-        const last = points[points.length - 1];
-        if (first.x !== last.x || first.y !== last.y) {
-          points.push({x: first.x, y: first.y});
-        }
-        let total = 0;
-        const cumulative = [0];
-        for (let j = 1; j < points.length; j++) {
-          total += Math.hypot(points[j].x - points[j - 1].x, points[j].y - points[j - 1].y);
-          cumulative.push(total);
-        }
-        if (total > 0) cycles.push({points, cumulative, total});
-      }
-    }
-
-    return cycles;
-  }
-
-  function sampleSparxCycle(cycle, progress) {
-    let p = ((progress % cycle.total) + cycle.total) % cycle.total;
-    for (let i = 1; i < cycle.points.length; i++) {
-      const start = cycle.points[i - 1];
-      const end = cycle.points[i];
-      const segStart = cycle.cumulative[i - 1];
-      const segEnd = cycle.cumulative[i];
-      if (p <= segEnd || i === cycle.points.length - 1) {
-        const len = segEnd - segStart || 1;
-        const t = Math.max(0, Math.min(1, (p - segStart) / len));
-        return {
-          x: start.x + (end.x - start.x) * t,
-          y: start.y + (end.y - start.y) * t
-        };
-      }
-    }
-    return cycle.points[0];
-  }
-
-  function nearestProgressOnCycle(cycle, x, y) {
-    let bestDistSq = Infinity;
-    let bestProgress = 0;
-    for (let i = 1; i < cycle.points.length; i++) {
-      const start = cycle.points[i - 1];
-      const end = cycle.points[i];
-      const dx = end.x - start.x;
-      const dy = end.y - start.y;
-      const lenSq = dx * dx + dy * dy || 1;
-      const t = Math.max(0, Math.min(1, ((x - start.x) * dx + (y - start.y) * dy) / lenSq));
-      const px = start.x + dx * t;
-      const py = start.y + dy * t;
-      const distSq = (x - px) * (x - px) + (y - py) * (y - py);
-      if (distSq < bestDistSq) {
-        bestDistSq = distSq;
-        bestProgress = cycle.cumulative[i - 1] + Math.sqrt(lenSq) * t;
-      }
-    }
-    return {progress: bestProgress, distance: Math.sqrt(bestDistSq)};
-  }
-
-  function createSparx(x, y, dir, speed) {
-    return {
-      x: x + 0.5,
-      y: y + 0.5,
-      hintX: x + 0.5,
-      hintY: y + 0.5,
-      dir,
-      speed,
-      cycleIndex: -1,
-      progress: null,
-      dx: dir,
-      dy: 0,
-      soundClock: Math.random() * 0.16,
-      soundInterval: 0.11 + Math.random() * 0.08,
-      phase: Math.random() * Math.PI * 2
-    };
-  }
-
-  function createSparxWave(level, attractMode = false) {
-    const speed = ((attractMode ? 4.8 : 5.6) + level * 0.2) * 1.5;
-    const list = [createSparx(Math.floor(GRID_W * 0.25), 0, 1, speed)];
-    if (level >= 2 || attractMode) {
-      list.push(createSparx(Math.floor(GRID_W * 0.75), 0, -1, speed * 1.03));
-    }
-    return list;
-  }
-
-  function createAttractSparxWave() {
-    const startLeft = Math.random() < 0.5;
-    return [createSparx(Math.floor(GRID_W * (startLeft ? 0.24 : 0.76)), 0, startLeft ? 1 : -1, 6.2)];
-  }
-
-  function projectSparxToCycles(sparx, cycles) {
-    let best = null;
-    for (let i = 0; i < cycles.length; i++) {
-      const projected = nearestProgressOnCycle(cycles[i], sparx.x ?? sparx.hintX, sparx.y ?? sparx.hintY);
-      if (!best || projected.distance < best.distance) {
-        best = {cycleIndex: i, progress: projected.progress, distance: projected.distance};
-      }
-    }
-    if (!best) return false;
-    sparx.cycleIndex = best.cycleIndex;
-    sparx.progress = best.progress;
-    const pos = sampleSparxCycle(cycles[best.cycleIndex], best.progress);
-    sparx.x = pos.x;
-    sparx.y = pos.y;
-    return true;
-  }
-
-  function sparxAt(x, y) {
-    const px = x + 0.5;
-    const py = y + 0.5;
-    return state.sparx.some((sparx) => Math.hypot(sparx.x - px, sparx.y - py) < 0.78);
-  }
-
-  function updateSparx(dt) {
-    if (!state.sparx.length) return;
-    const reachable = computeReachableOpenMap();
-    const cycles = buildSparxCycles(reachable);
-    if (!cycles.length) return;
-
-    for (const sparx of state.sparx) {
-      sparx.phase += dt * 12;
-      sparx.soundClock = (sparx.soundClock || 0) + dt;
-      const cycle = cycles[sparx.cycleIndex];
-      if (!cycle || sparx.progress == null) {
-        if (!projectSparxToCycles(sparx, cycles)) continue;
-      } else {
-        const projected = nearestProgressOnCycle(cycle, sparx.x, sparx.y);
-        if (projected.distance > 1.25) {
-          if (!projectSparxToCycles(sparx, cycles)) continue;
-        }
-      }
-
-      const activeCycle = cycles[sparx.cycleIndex];
-      sparx.progress = ((sparx.progress + sparx.dir * sparx.speed * dt) % activeCycle.total + activeCycle.total) % activeCycle.total;
-      const pos = sampleSparxCycle(activeCycle, sparx.progress);
-      const ahead = sampleSparxCycle(activeCycle, sparx.progress + sparx.dir * 0.2);
-      sparx.x = pos.x;
-      sparx.y = pos.y;
-      if ((state.phase === "playing" || state.phase === "title") && sparx.soundClock >= (sparx.soundInterval || 0.16)) {
-        sparx.soundClock = 0;
-        sparx.soundInterval = 0.1 + Math.random() * 0.1;
-        playTone("sparx");
-      }
-      const dirX = ahead.x - pos.x;
-      const dirY = ahead.y - pos.y;
-      const len = Math.hypot(dirX, dirY) || 1;
-      sparx.dx = dirX / len;
-      sparx.dy = dirY / len;
-
-      if (state.phase === "playing" && state.player.alive && !state.player.drawing && Math.hypot(sparx.x - (state.player.x + 0.5), sparx.y - (state.player.y + 0.5)) < 0.76) {
-        loseLife("A Sparx caught you on the wall.");
-        return;
-      }
-    }
-  }
-
-  function activeDirection() {
-    if (state.phase === "title") return attractDir;
-    return controlDir || keyboardDir;
-  }
-
-  function updatePlayer(dt) {
-    const dirName = activeDirection();
-    if (!dirName) return;
-    state.player.moveClock += dt;
-    const intervalBase = state.player.drawing ? Math.max(0.032, 0.056 - state.level * 0.002) : Math.max(0.026, 0.042 - state.level * 0.0015);
-    const interval = state.phase === "title" ? intervalBase * 0.55 : intervalBase;
-    while (state.player.moveClock >= interval) {
-      state.player.moveClock -= interval;
-      stepPlayer(dirName);
-      if (state.phase !== "playing" && state.phase !== "title") return;
-    }
-  }
-
-  function stepPlayer(dirName) {
-    const dir = DIRS[dirName];
-    if (!dir) return;
-    const nx = state.player.x + dir.x;
-    const ny = state.player.y + dir.y;
-    if (!inBounds(nx, ny)) return;
-
-    const nextCell = getCell(nx, ny);
-    const currentSafe = getCell(state.player.x, state.player.y) === CELL_SAFE;
-
-    if (!state.player.drawing) {
-      if (nextCell === CELL_SAFE && isBorderSafeCell(nx, ny)) {
-        if (sparxAt(nx, ny)) {
-          loseLife("A Sparx caught you on the wall.");
-          return;
-        }
-        movePlayerTo(nx, ny);
-        return;
-      }
-      if (currentSafe && isBorderSafeCell(state.player.x, state.player.y) && nextCell === CELL_EMPTY) {
-        state.player.drawing = true;
-        movePlayerTo(nx, ny);
-        setCell(nx, ny, CELL_TRAIL);
-        state.trail.push({x: nx, y: ny});
-        playTone("draw");
-      }
-      return;
-    }
-
-    if (nextCell === CELL_TRAIL) {
-      state.levelMessage = "You can't reverse through your live cut.";
-      updateHud(true);
-      return;
-    }
-
-    if (nextCell === CELL_EMPTY) {
-      movePlayerTo(nx, ny);
-      setCell(nx, ny, CELL_TRAIL);
-      state.trail.push({x: nx, y: ny});
-      return;
-    }
-
-    if (nextCell === CELL_SAFE) {
-      if (sparxAt(nx, ny)) {
-        loseLife("A Sparx was waiting on the wall.");
-        return;
-      }
-      movePlayerTo(nx, ny);
-      completeCapture();
-    }
-  }
-
-  function movePlayerTo(x, y) {
-    state.player.x = x;
-    state.player.y = y;
-  }
-
-  function relocatePlayerToNearestSafeEdge() {
-    if (isBorderSafeCell(state.player.x, state.player.y)) return;
-    let best = null;
-    for (let y = 0; y < GRID_H; y++) {
-      for (let x = 0; x < GRID_W; x++) {
-        if (!isBorderSafeCell(x, y)) continue;
-        const dist = Math.abs(x - state.player.x) + Math.abs(y - state.player.y);
-        if (!best || dist < best.dist) {
-          best = {x, y, dist};
-        }
-      }
-    }
-    if (best) {
-      movePlayerTo(best.x, best.y);
-    } else {
-      resetPlayer();
-    }
-  }
-
-  function loseLife(message) {
-    if (state.phase !== "playing") return;
-    clearDeathTimer();
-    state.lives -= 1;
-    state.phase = "dying";
-    state.player.alive = false;
-    state.player.drawing = false;
-    state.player.moveClock = 0;
-    state.shake = 0.95;
-    state.screenFlash = 1;
-    spawnBurst(state.player.x, state.player.y, 56, "danger", {speedMin: 7, speedMax: 30, lifeMin: 0.45, spread: Math.PI * 2});
-    spawnBurst(state.player.x, state.player.y, 30, "capture", {speedMin: 4, speedMax: 16, lifeMin: 0.38, spread: Math.PI * 2});
-    state.pulses.push({x: state.player.x + 0.5, y: state.player.y + 0.5, r: 0.8, maxR: 10, life: 0.72});
-    clearTrail();
-    playTone("hit");
-
-    const deathMessage = message || "Trace broken. Re-enter from a safe wall.";
-    deathResolveTimer = setTimeout(() => {
-      deathResolveTimer = 0;
-      if (state.lives <= 0) {
-        triggerGameOver(message || "The Qix line cut through your trace.");
-      } else {
-        resetPlayer();
-        state.phase = "playing";
-        state.levelMessage = deathMessage;
-        updateHud(true);
-      }
-    }, 720);
   }
 
   function floodFillFromSeeds(seeds) {
@@ -1322,64 +1234,396 @@ button.ghost{
     return visited;
   }
 
-  function completeCapture() {
-    if (state.trail.length < 2) {
-      clearTrail();
-      return;
+  function allQixSeeds() {
+    const seeds = [];
+    for (const q of state.qixList) {
+      const shape = getQixEndpoints(q);
+      if (shape) { seeds.push(shape.a, shape.b, shape.center); }
     }
-    const captureHue = (state.qix.hue + Math.random() * 90 + capturedColorSeed()) % 360;
-    for (const cell of state.trail) {
-      setCell(cell.x, cell.y, CELL_SAFE, captureHue);
-    }
+    if (!seeds.length) seeds.push({x: GRID_W * 0.5, y: GRID_H * 0.5});
+    return seeds;
+  }
 
-    const qixShape = getQixEndpoints();
-    const seeds = [
-      qixShape.a,
-      qixShape.b,
-      qixShape.center
-    ];
-    const reachable = floodFillFromSeeds(seeds);
-    let captured = 0;
-    for (let y = 1; y < GRID_H - 1; y++) {
-      for (let x = 1; x < GRID_W - 1; x++) {
-        if (getCell(x, y) !== CELL_EMPTY) continue;
-        if (!reachable[idx(x, y)]) {
-          setCell(x, y, CELL_SAFE, captureHue);
-          captured += 1;
+  function computeReachableOpenMap() {
+    return floodFillFromSeeds(allQixSeeds());
+  }
+  function isReachableSparxOpenCell(x, y, reachable) {
+    return inBounds(x, y) && getCell(x, y) !== CELL_SAFE && !!reachable[idx(x, y)];
+  }
+
+  function buildSparxCycles(reachable) {
+    const edges = [];
+    const pushEdge = (sx, sy, ex, ey) => edges.push({sx, sy, ex, ey});
+    for (let y = 0; y < GRID_H; y++) {
+      for (let x = 0; x < GRID_W; x++) {
+        if (!isReachableSparxOpenCell(x, y, reachable)) continue;
+        if (getCell(x, y - 1) === CELL_SAFE) pushEdge(x + 1, y, x, y);
+        if (getCell(x + 1, y) === CELL_SAFE) pushEdge(x + 1, y + 1, x + 1, y);
+        if (getCell(x, y + 1) === CELL_SAFE) pushEdge(x, y + 1, x + 1, y + 1);
+        if (getCell(x - 1, y) === CELL_SAFE) pushEdge(x, y, x, y + 1);
+      }
+    }
+    const startMap = new Map();
+    edges.forEach((edge, index) => {
+      const key = edge.sx + "," + edge.sy;
+      if (!startMap.has(key)) startMap.set(key, []);
+      startMap.get(key).push(index);
+    });
+    function pickNextEdge(edge, options, visited) {
+      const available = options.filter((idx2) => !visited[idx2]);
+      if (!available.length) return null;
+      const cdx = edge.ex - edge.sx;
+      const cdy = edge.ey - edge.sy;
+      let best = null;
+      let bestScore = -Infinity;
+      for (const idx2 of available) {
+        const next = edges[idx2];
+        const ndx = next.ex - next.sx;
+        const ndy = next.ey - next.sy;
+        const dot = cdx * ndx + cdy * ndy;
+        const cross = cdx * ndy - cdy * ndx;
+        let score = -100;
+        if (dot === 1) score = 4;
+        else if (cross === -1) score = 3;
+        else if (cross === 1) score = 1;
+        else if (dot === -1) score = -10;
+        if (score > bestScore) { bestScore = score; best = idx2; }
+      }
+      return best;
+    }
+    const visited = new Array(edges.length).fill(false);
+    const cycles = [];
+    for (let i = 0; i < edges.length; i++) {
+      if (visited[i]) continue;
+      let current = i;
+      const points = [];
+      let guard = 0;
+      while (current != null && !visited[current] && guard < edges.length + 4) {
+        const edge = edges[current];
+        visited[current] = true;
+        if (!points.length) points.push({x: edge.sx, y: edge.sy});
+        points.push({x: edge.ex, y: edge.ey});
+        const nextKey = edge.ex + "," + edge.ey;
+        const nextOptions = startMap.get(nextKey) || [];
+        current = pickNextEdge(edge, nextOptions, visited);
+        guard += 1;
+      }
+      if (points.length >= 3) {
+        const first = points[0];
+        const last = points[points.length - 1];
+        if (first.x !== last.x || first.y !== last.y) points.push({x: first.x, y: first.y});
+        let total = 0;
+        const cumulative = [0];
+        for (let j = 1; j < points.length; j++) {
+          total += Math.hypot(points[j].x - points[j - 1].x, points[j].y - points[j - 1].y);
+          cumulative.push(total);
         }
+        if (total > 0) cycles.push({points, cumulative, total});
       }
     }
+    return cycles;
+  }
 
-    state.totalClaimedCells += captured + state.trail.length;
-    const captureRatio = captured / ((GRID_W - 2) * (GRID_H - 2));
-    const scoreGain = Math.max(250, Math.round(captured * (8 + state.level * 1.35) + state.trail.length * 22));
-    state.score += scoreGain;
-    state.captureFlash = 1;
-    playTone("capture");
-    spawnCaptureEffect(captureRatio, captured);
-    clearTrail();
-    relocatePlayerToNearestSafeEdge();
-    const cyclesAfterCapture = buildSparxCycles(computeReachableOpenMap());
+  function sampleSparxCycle(cycle, progress) {
+    let p = ((progress % cycle.total) + cycle.total) % cycle.total;
+    for (let i = 1; i < cycle.points.length; i++) {
+      const start = cycle.points[i - 1];
+      const end = cycle.points[i];
+      const segStart = cycle.cumulative[i - 1];
+      const segEnd = cycle.cumulative[i];
+      if (p <= segEnd || i === cycle.points.length - 1) {
+        const len = segEnd - segStart || 1;
+        const t = Math.max(0, Math.min(1, (p - segStart) / len));
+        return {x: start.x + (end.x - start.x) * t, y: start.y + (end.y - start.y) * t};
+      }
+    }
+    return cycle.points[0];
+  }
+
+  function nearestProgressOnCycle(cycle, x, y) {
+    let bestDistSq = Infinity;
+    let bestProgress = 0;
+    for (let i = 1; i < cycle.points.length; i++) {
+      const start = cycle.points[i - 1];
+      const end = cycle.points[i];
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const lenSq = dx * dx + dy * dy || 1;
+      const t = Math.max(0, Math.min(1, ((x - start.x) * dx + (y - start.y) * dy) / lenSq));
+      const px = start.x + dx * t;
+      const py = start.y + dy * t;
+      const distSq = (x - px) * (x - px) + (y - py) * (y - py);
+      if (distSq < bestDistSq) {
+        bestDistSq = distSq;
+        bestProgress = cycle.cumulative[i - 1] + Math.sqrt(lenSq) * t;
+      }
+    }
+    return {progress: bestProgress, distance: Math.sqrt(bestDistSq)};
+  }
+
+  function createSparx(x, y, dir, speed) {
+    return {
+      x: x + 0.5, y: y + 0.5, hintX: x + 0.5, hintY: y + 0.5,
+      dir, speed, cycleIndex: -1, progress: null, dx: dir, dy: 0,
+      soundClock: Math.random() * 0.16, soundInterval: 0.11 + Math.random() * 0.08,
+      phase: Math.random() * Math.PI * 2
+    };
+  }
+  function createSparxWave(level, attractMode = false) {
+    const d = diff();
+    const speed = ((attractMode ? 4.8 : 5.6) + level * 0.2) * 1.5 * (attractMode ? 1 : d.sparxMul);
+    const list = [createSparx(Math.floor(GRID_W * 0.25), 0, 1, speed)];
+    if (level >= d.sparxSecondLevel || attractMode) list.push(createSparx(Math.floor(GRID_W * 0.75), 0, -1, speed * 1.03));
+    if (level >= d.sparxThirdLevel) list.push(createSparx(Math.floor(GRID_W * 0.5), 0, 1, speed * 1.08));
+    return list;
+  }
+  function createAttractSparxWave() {
+    const startLeft = Math.random() < 0.5;
+    return [createSparx(Math.floor(GRID_W * (startLeft ? 0.24 : 0.76)), 0, startLeft ? 1 : -1, 6.2)];
+  }
+
+  function projectSparxToCycles(sparx, cycles) {
+    let best = null;
+    for (let i = 0; i < cycles.length; i++) {
+      const projected = nearestProgressOnCycle(cycles[i], sparx.x ?? sparx.hintX, sparx.y ?? sparx.hintY);
+      if (!best || projected.distance < best.distance) best = {cycleIndex: i, progress: projected.progress, distance: projected.distance};
+    }
+    if (!best) return false;
+    sparx.cycleIndex = best.cycleIndex;
+    sparx.progress = best.progress;
+    const pos = sampleSparxCycle(cycles[best.cycleIndex], best.progress);
+    sparx.x = pos.x;
+    sparx.y = pos.y;
+    return true;
+  }
+  function sparxAt(x, y) {
+    const px = x + 0.5;
+    const py = y + 0.5;
+    return state.sparx.some((sparx) => Math.hypot(sparx.x - px, sparx.y - py) < 0.78);
+  }
+
+  function updateSparx(dt) {
+    if (!state.sparx.length) return;
+    const reachable = computeReachableOpenMap();
+    const cycles = buildSparxCycles(reachable);
+    if (!cycles.length) return;
     for (const sparx of state.sparx) {
-      sparx.cycleIndex = -1;
-      sparx.progress = null;
-      if (cyclesAfterCapture.length) {
-        projectSparxToCycles(sparx, cyclesAfterCapture);
+      sparx.phase += dt * 12;
+      const cycle = cycles[sparx.cycleIndex];
+      if (!cycle || sparx.progress == null) {
+        if (!projectSparxToCycles(sparx, cycles)) continue;
+      } else {
+        const projected = nearestProgressOnCycle(cycle, sparx.x, sparx.y);
+        if (projected.distance > 1.25) { if (!projectSparxToCycles(sparx, cycles)) continue; }
       }
-    }
-    state.claimedRatio = calculateClaimedRatio();
-    state.levelMessage = "Captured " + Math.round(captureRatio * 1000) / 10 + "% for +" + scoreGain + " points.";
-    updateHud(true);
-
-    if (state.claimedRatio >= state.targetRatio) {
-      clearLevel();
+      const activeCycle = cycles[sparx.cycleIndex];
+      sparx.progress = ((sparx.progress + sparx.dir * sparx.speed * dt) % activeCycle.total + activeCycle.total) % activeCycle.total;
+      const pos = sampleSparxCycle(activeCycle, sparx.progress);
+      const ahead = sampleSparxCycle(activeCycle, sparx.progress + sparx.dir * 0.2);
+      sparx.x = pos.x;
+      sparx.y = pos.y;
+      const dirX = ahead.x - pos.x;
+      const dirY = ahead.y - pos.y;
+      const len = Math.hypot(dirX, dirY) || 1;
+      sparx.dx = dirX / len;
+      sparx.dy = dirY / len;
+      if (state.phase === "playing" && state.player.alive && !state.player.drawing && Math.hypot(sparx.x - (state.player.x + 0.5), sparx.y - (state.player.y + 0.5)) < 0.76) {
+        loseLife("A Sparx caught you on the wall.");
+        return;
+      }
     }
   }
 
+  // ---------- Player ----------
+  function resetPlayer() {
+    state.player.x = Math.floor(GRID_W / 2);
+    state.player.y = GRID_H - 1;
+    state.player.alive = true;
+    state.player.drawing = false;
+    state.player.moveClock = 0;
+    state.player.respawnFlash = 1.2;
+    clearTrail();
+  }
+  function clearTrail() {
+    for (const cell of state.trail) {
+      if (getCell(cell.x, cell.y) === CELL_TRAIL) setCell(cell.x, cell.y, CELL_EMPTY);
+    }
+    state.trail.length = 0;
+    state.player.drawing = false;
+    state.fuse.active = false;
+    state.fuse.progress = 0;
+    state.fuse.idle = 0;
+    stopFuseSound();
+  }
+  function clearDeathTimer() {
+    if (deathResolveTimer) { clearTimeout(deathResolveTimer); deathResolveTimer = 0; }
+  }
+
+  function drawSlowActive() {
+    return slowKey || slowTouch || slowPad;
+  }
+
+  function activeDirection() {
+    if (state.phase === "title") return attractDir;
+    return controlDir || keyboardDir || gamepadDir;
+  }
+
+  function updatePlayer(dt) {
+    const dirName = activeDirection();
+    state.player.movedTick = false;
+    if (!dirName) return;
+    state.player.moveClock += dt;
+    let intervalBase = state.player.drawing ? Math.max(0.032, 0.056 - state.level * 0.002) : Math.max(0.026, 0.042 - state.level * 0.0015);
+    if (state.player.drawing && drawSlowActive() && state.phase === "playing") intervalBase *= 1.75;
+    const interval = state.phase === "title" ? intervalBase * 0.55 : intervalBase;
+    while (state.player.moveClock >= interval) {
+      state.player.moveClock -= interval;
+      stepPlayer(dirName);
+      if (state.phase !== "playing" && state.phase !== "title") return;
+    }
+  }
+
+  function stepPlayer(dirName) {
+    const dir = DIRS[dirName];
+    if (!dir) return;
+    const nx = state.player.x + dir.x;
+    const ny = state.player.y + dir.y;
+    if (!inBounds(nx, ny)) return;
+    const nextCell = getCell(nx, ny);
+    const currentSafe = getCell(state.player.x, state.player.y) === CELL_SAFE;
+
+    if (!state.player.drawing) {
+      if (nextCell === CELL_SAFE && isBorderSafeCell(nx, ny)) {
+        if (sparxAt(nx, ny)) { loseLife("A Sparx caught you on the wall."); return; }
+        movePlayerTo(nx, ny);
+        return;
+      }
+      if (currentSafe && isBorderSafeCell(state.player.x, state.player.y) && nextCell === CELL_EMPTY) {
+        state.player.drawing = true;
+        movePlayerTo(nx, ny);
+        setCell(nx, ny, CELL_TRAIL);
+        state.trail.push({x: nx, y: ny, slow: drawSlowActive()});
+        state.fuse.idle = 0;
+        state.player.movedTick = true;
+        state.player.respawnFlash = 0; // starting a cut ends respawn invulnerability (no drawing through the Qix)
+        if (state.phase === "playing") playSfx(drawSlowActive() ? "drawSlow" : "drawFast", 0.7);
+        playTone("draw");
+      }
+      return;
+    }
+
+    if (nextCell === CELL_TRAIL) {
+      state.levelMessage = "You can't reverse through your live cut.";
+      updateHud(true);
+      return;
+    }
+    if (nextCell === CELL_EMPTY) {
+      movePlayerTo(nx, ny);
+      setCell(nx, ny, CELL_TRAIL);
+      state.trail.push({x: nx, y: ny, slow: drawSlowActive()});
+      state.player.movedTick = true;
+      state.fuse.idle = 0;
+      state.fuse.progress = Math.max(0, state.fuse.progress - 1.6);
+      playTone("draw");
+      return;
+    }
+    if (nextCell === CELL_SAFE) {
+      if (sparxAt(nx, ny)) { loseLife("A Sparx was waiting on the wall."); return; }
+      movePlayerTo(nx, ny);
+      completeCapture();
+    }
+  }
+  function movePlayerTo(x, y) { state.player.x = x; state.player.y = y; }
+
+  function relocatePlayerToNearestSafeEdge() {
+    if (isBorderSafeCell(state.player.x, state.player.y)) return;
+    let best = null;
+    for (let y = 0; y < GRID_H; y++) {
+      for (let x = 0; x < GRID_W; x++) {
+        if (!isBorderSafeCell(x, y)) continue;
+        const dist = Math.abs(x - state.player.x) + Math.abs(y - state.player.y);
+        if (!best || dist < best.dist) best = {x, y, dist};
+      }
+    }
+    if (best) movePlayerTo(best.x, best.y);
+    else resetPlayer();
+  }
+
+  // ---------- Fuse ----------
+  function fuseIgniteDelay() {
+    return 0.45 / diff().fuse;
+  }
+  function fuseSpeed() {
+    return (7 + state.level * 0.4) * diff().fuse;
+  }
+  function updateFuse(dt) {
+    const f = state.fuse;
+    if (state.phase !== "playing" || !state.player.drawing || !state.trail.length) {
+      if (f.active) stopFuseSound();
+      f.active = false; f.progress = 0; f.idle = 0;
+      return;
+    }
+    f.idle += dt;
+    if (f.idle >= fuseIgniteDelay()) {
+      if (!f.active) { f.active = true; }
+      startFuseSound();
+      f.progress += dt * fuseSpeed();
+      if (f.progress >= state.trail.length) {
+        stopFuseSound();
+        f.active = false;
+        f.progress = 0;
+        loseLife("The fuse burned down your line.");
+      }
+    } else {
+      if (f.active) stopFuseSound();
+      f.active = false;
+    }
+  }
+  function fusePosition() {
+    if (!state.trail.length) return null;
+    const p = Math.max(0, Math.min(state.trail.length - 0.001, state.fuse.progress));
+    const i = Math.floor(p);
+    const frac = p - i;
+    const a = state.trail[i];
+    const b = state.trail[Math.min(state.trail.length - 1, i + 1)];
+    return {x: a.x + (b.x - a.x) * frac, y: a.y + (b.y - a.y) * frac};
+  }
+
+  function loseLife(message) {
+    if (state.phase !== "playing") return;
+    if (state.player.respawnFlash > 0) return; // brief invulnerability after (re)spawn
+    clearDeathTimer();
+    state.lives -= 1;
+    state.phase = "dying";
+    state.player.alive = false;
+    state.player.drawing = false;
+    state.player.moveClock = 0;
+    state.shake = reduced() ? 0.3 : 0.95;
+    state.screenFlash = 1;
+    spawnBurst(state.player.x, state.player.y, reduced() ? 20 : 56, "danger", {speedMin: 7, speedMax: 30, lifeMin: 0.45, spread: Math.PI * 2});
+    spawnBurst(state.player.x, state.player.y, reduced() ? 10 : 30, "capture", {speedMin: 4, speedMax: 16, lifeMin: 0.38, spread: Math.PI * 2});
+    state.pulses.push({x: state.player.x + 0.5, y: state.player.y + 0.5, r: 0.8, maxR: 10, life: 0.72});
+    clearTrail();
+    playSfx("death");
+    playTone("hit");
+    vibrate(90);
+    const deathMessage = message || "Trace broken. Re-enter from a safe wall.";
+    deathResolveTimer = setTimeout(() => {
+      deathResolveTimer = 0;
+      if (state.lives <= 0) triggerGameOver(message || "The Qix line cut through your trace.");
+      else {
+        resetPlayer();
+        state.phase = "playing";
+        state.levelMessage = deathMessage;
+        updateHud(true);
+      }
+    }, 720);
+  }
+
+  // ---------- Capture ----------
   function capturedColorSeed() {
     return (state.level * 37 + state.score * 0.01) % 360;
   }
-
   function calculateClaimedRatio() {
     let safeInterior = 0;
     const total = (GRID_W - 2) * (GRID_H - 2);
@@ -1391,24 +1635,145 @@ button.ghost{
     return safeInterior / total;
   }
 
-  function clearLevel() {
+  function qixSeparated() {
+    if (state.qixList.length < 2) return false;
+    const first = getQixEndpoints(state.qixList[0]);
+    if (!first) return false;
+    const reach = floodFillFromSeeds([first.a, first.b, first.center]);
+    for (let i = 1; i < state.qixList.length; i++) {
+      const other = state.qixList[i];
+      const cx = Math.max(1, Math.min(GRID_W - 2, Math.round(other.x)));
+      const cy = Math.max(1, Math.min(GRID_H - 2, Math.round(other.y)));
+      if (!reach[idx(cx, cy)]) return true;
+    }
+    return false;
+  }
+
+  function completeCapture() {
+    if (state.trail.length < 2) { clearTrail(); return; }
+    const primary = primaryQix();
+    const captureHue = ((primary ? primary.hue : 200) + Math.random() * 90 + capturedColorSeed()) % 360;
+    let slowCells = 0;
+    for (const cell of state.trail) {
+      setCell(cell.x, cell.y, CELL_SAFE, captureHue);
+      if (cell.slow) slowCells += 1;
+    }
+    const trailLen = state.trail.length;
+    const slowMultiplier = trailLen > 0 && slowCells / trailLen >= 0.55 ? 2 : 1;
+
+    const reachable = floodFillFromSeeds(allQixSeeds());
+    let captured = 0;
+    for (let y = 1; y < GRID_H - 1; y++) {
+      for (let x = 1; x < GRID_W - 1; x++) {
+        if (getCell(x, y) !== CELL_EMPTY) continue;
+        if (!reachable[idx(x, y)]) { setCell(x, y, CELL_SAFE, captureHue); captured += 1; }
+      }
+    }
+
+    state.totalClaimedCells += captured + trailLen;
+    const captureRatio = captured / ((GRID_W - 2) * (GRID_H - 2));
+    let scoreGain = Math.max(250, Math.round(captured * (8 + state.level * 1.35) + trailLen * 22));
+    scoreGain *= slowMultiplier;
+    state.score += scoreGain;
+    state.captureFlash = 1;
+    playSfx("claim");
+    playTone("capture");
+    spawnCaptureEffect(captureRatio, captured);
+    clearTrail();
+    relocatePlayerToNearestSafeEdge();
+
+    const cyclesAfterCapture = buildSparxCycles(computeReachableOpenMap());
+    for (const sparx of state.sparx) {
+      sparx.cycleIndex = -1;
+      sparx.progress = null;
+      if (cyclesAfterCapture.length) projectSparxToCycles(sparx, cyclesAfterCapture);
+    }
+    state.claimedRatio = calculateClaimedRatio();
+    const slowTag = slowMultiplier > 1 ? " (2× slow)" : "";
+    state.levelMessage = "Captured " + Math.round(captureRatio * 1000) / 10 + "% for +" + scoreGain + slowTag + ".";
+    updateHud(true);
+
+    if (qixSeparated()) { awardSplit(); return; }
+    if (state.claimedRatio >= state.targetRatio) clearLevel(false);
+  }
+
+  function awardSplit() {
+    const bonus = 6000 + state.level * 1500;
+    state.score += bonus;
+    state.splitFlash = 1;
+    state.captureFlash = 1;
+    if (!reduced()) spawnBurst(state.player.x, state.player.y, 90, "capture", {speedMin: 6, speedMax: 26, lifeMin: 0.5, spread: Math.PI * 2});
+    state.levelMessage = "QIX SPLIT! Bonus +" + bonus + ".";
+    vibrate([30, 40, 60]);
+    updateHud(true);
+    clearLevel(true);
+  }
+
+  function clearLevel(fromSplit) {
     state.phase = "transition";
     const bonus = 2000 + state.level * 600 + state.lives * 450;
     state.score += bonus;
-    state.levelMessage = "Field cleared. Bonus +" + bonus + ".";
+    state.levelMessage = (fromSplit ? "Qix split! " : "Field cleared. ") + "Bonus +" + bonus + ".";
     updateHud(true);
+    playSfx("level");
     playTone("level");
     levelAdvanceTimer = setTimeout(() => {
       state.phase = "playing";
       levelAdvanceTimer = 0;
       startLevel(state.level + 1, true);
-    }, 1250);
+    }, 1350);
+  }
+
+  function startLevel(level, keepScore) {
+    if (levelAdvanceTimer) { clearTimeout(levelAdvanceTimer); levelAdvanceTimer = 0; }
+    clearDeathTimer();
+    state.level = level;
+    if (!keepScore) { state.score = 0; state.lives = diff().lives; }
+    state.targetRatio = levelGoal(level);
+    state.captureFlash = 0;
+    state.screenFlash = 0;
+    state.shake = 0;
+    state.splitFlash = 0;
+    state.particles.length = 0;
+    state.pulses.length = 0;
+    resetField();
+    resetPlayer();
+    state.sparx = createSparxWave(level, false);
+    state.qixList = createQixList(level, qixCount(level));
+    state.claimedRatio = calculateClaimedRatio();
+    const goalPct = Math.round(state.targetRatio * 100);
+    state.levelMessage = qixCount(level) > 1
+      ? "Two Qix loose — claim " + goalPct + "% or split them apart."
+      : "Claim " + goalPct + "% to clear the field.";
+    updateHud(true);
+  }
+
+  function beginGame() {
+    unlockAudio();
+    hideAllOverlays();
+    pauseButton.textContent = "Pause";
+    state.phase = "playing";
+    startLevel(1, false);
+    playMusic("game");
+    playTone("start");
+  }
+  function restartGame() {
+    unlockAudio();
+    hideAllOverlays();
+    pauseButton.textContent = "Pause";
+    state.phase = "playing";
+    startLevel(1, false);
+    playMusic("game");
+    playTone("start");
   }
 
   function triggerGameOver(message) {
     state.phase = "gameover";
+    stopFuseSound();
+    playSfx("gameover");
+    playMusic("menu");
     gameOverEyebrow.textContent = "Game Over";
-    gameOverText.textContent = message + " Final score: " + state.score + ".";
+    gameOverText.textContent = message + " Final score: " + state.score.toLocaleString() + ".";
     const qualifies = qualifiesForHighScore(state.score);
     state.pendingScore = qualifies ? {score: state.score, level: state.level} : null;
     initialsWrap.style.display = qualifies ? "flex" : "none";
@@ -1416,57 +1781,66 @@ button.ghost{
     restartButton.style.display = qualifies ? "none" : "inline-flex";
     initialsInput.value = "";
     showOverlay(gameOverOverlay);
-    if (qualifies) {
-      safeFocus(initialsInput);
-    }
+    if (qualifies) safeFocus(initialsInput);
     updateHud(true);
   }
-
   function qualifiesForHighScore(score) {
     const scores = loadHighScores();
     return scores.length < 10 || score > scores[scores.length - 1].score;
   }
 
+  // ---------- Overlays ----------
+  function hideAllOverlays() {
+    titleOverlay.classList.remove("show");
+    howOverlay.classList.remove("show");
+    optionsOverlay.classList.remove("show");
+    scoresOverlay.classList.remove("show");
+    creditsOverlay.classList.remove("show");
+    pauseOverlay.classList.remove("show");
+    gameOverOverlay.classList.remove("show");
+  }
+  function showOverlay(el) {
+    hideAllOverlays();
+    el.classList.add("show");
+  }
+  let optionsReturnTo = "title";
+  function openOptions(returnTo) {
+    optionsReturnTo = returnTo || "title";
+    syncOptionsUi();
+    playSfx("navigate");
+    showOverlay(optionsOverlay);
+  }
+  function closeOptions() {
+    playSfx("select");
+    if (optionsReturnTo === "pause") showOverlay(pauseOverlay);
+    else if (state.phase === "title") showOverlay(titleOverlay);
+    else hideAllOverlays();
+  }
+
+  // ---------- Scores ----------
   async function fetchGlobalScores() {
     const now = Date.now();
     if (globalScoresCache && now - globalScoresCacheTime < 30000) return globalScoresCache;
     try {
       const res = await fetch(GLOBAL_SCORES_API);
-      if (res.ok) {
-        globalScoresCache = await res.json();
-        globalScoresCacheTime = now;
-        return globalScoresCache;
-      }
-    } catch (error) {
-    }
+      if (res.ok) { globalScoresCache = await res.json(); globalScoresCacheTime = now; return globalScoresCache; }
+    } catch (error) {}
     return globalScoresCache || [];
   }
-
   async function submitGlobalScore(name, score, level) {
     try {
-      await fetch(GLOBAL_SCORES_API, {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({initials: name, score, level})
-      });
+      await fetch(GLOBAL_SCORES_API, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({initials: name, score, level})});
       globalScoresCache = null;
       globalScoresCacheTime = 0;
-    } catch (error) {
-    }
+    } catch (error) {}
   }
-
   function loadHighScores() {
     try {
       const parsed = JSON.parse(localStorage.getItem(SCORE_KEY) || "[]");
       if (!Array.isArray(parsed)) return [];
-      return parsed
-        .filter((entry) => entry && typeof entry.name === "string" && Number.isFinite(entry.score))
-        .slice(0, 10);
-    } catch (error) {
-      return [];
-    }
+      return parsed.filter((entry) => entry && typeof entry.name === "string" && Number.isFinite(entry.score)).slice(0, 10);
+    } catch (error) { return []; }
   }
-
   function saveHighScore(name, score, level) {
     const scores = loadHighScores();
     const entry = {name, score, level, ts: Date.now()};
@@ -1479,7 +1853,6 @@ button.ghost{
     renderHighScores();
     return entry;
   }
-
   function renderHighScores() {
     const scores = loadHighScores();
     let html = '<div class="score-group-title" style="color:#7df6ff">🏠 Local Top 10</div>';
@@ -1489,32 +1862,21 @@ button.ghost{
     } else {
       html += scores.map((entry, index) => {
         const classes = 'score-row local' + (entry.ts === lastSavedLocalTs ? ' highlight' : '');
-        return '<div class="' + classes + '"><span>' + String(index + 1).padStart(2, "0") +
-          '</span><strong>' + entry.name +
-          '</strong><span>L' + (entry.level || 1) + ' · ' + entry.score.toLocaleString() + '</span></div>';
+        return '<div class="' + classes + '"><span>' + String(index + 1).padStart(2, "0") + '</span><strong>' + entry.name + '</strong><span>L' + (entry.level || 1) + ' · ' + entry.score.toLocaleString() + '</span></div>';
       }).join("");
     }
     html += '<div class="score-group-title" style="color:#ffd56a;margin-top:18px">🌐 Global Top 10</div>';
     html += '<div class="score-note">Shared cabinet board.</div>';
     html += '<div id="globalScoreRows"><div class="score-row global"><span>..</span><strong>SYNC</strong><span>Loading</span></div></div>';
     scoreList.innerHTML = html;
-
-    fetchGlobalScores().then((scores) => {
+    fetchGlobalScores().then((rowsData) => {
       const rows = document.getElementById("globalScoreRows");
       if (!rows) return;
-      if (!scores || !scores.length) {
-        rows.innerHTML = '<div class="score-row global"><span>--</span><strong>EMPTY</strong><span>No scores yet</span></div>';
-        return;
-      }
-      rows.innerHTML = scores.slice(0, 10).map((entry, index) => {
-        const same = lastSubmittedGlobal
-          && (entry.initials || entry.name || "AAA") === lastSubmittedGlobal.name
-          && Number(entry.score || 0) === Number(lastSubmittedGlobal.score || 0)
-          && Number(entry.level || entry.wave || 1) === Number(lastSubmittedGlobal.level || 1);
+      if (!rowsData || !rowsData.length) { rows.innerHTML = '<div class="score-row global"><span>--</span><strong>EMPTY</strong><span>No scores yet</span></div>'; return; }
+      rows.innerHTML = rowsData.slice(0, 10).map((entry, index) => {
+        const same = lastSubmittedGlobal && (entry.initials || entry.name || "AAA") === lastSubmittedGlobal.name && Number(entry.score || 0) === Number(lastSubmittedGlobal.score || 0) && Number(entry.level || entry.wave || 1) === Number(lastSubmittedGlobal.level || 1);
         const classes = 'score-row global' + (same ? ' highlight' : '');
-        return '<div class="' + classes + '"><span>' + String(index + 1).padStart(2, "0") +
-          '</span><strong>' + (entry.initials || entry.name || "AAA") +
-          '</strong><span>L' + (entry.level || entry.wave || 1) + ' · ' + Number(entry.score || 0).toLocaleString() + '</span></div>';
+        return '<div class="' + classes + '"><span>' + String(index + 1).padStart(2, "0") + '</span><strong>' + (entry.initials || entry.name || "AAA") + '</strong><span>L' + (entry.level || entry.wave || 1) + ' · ' + Number(entry.score || 0).toLocaleString() + '</span></div>';
       }).join("");
     }).catch(() => {
       const rows = document.getElementById("globalScoreRows");
@@ -1523,8 +1885,9 @@ button.ghost{
     });
   }
 
+  // ---------- HUD ----------
   function updateHud(force) {
-    const modeLabel = state.player.drawing ? "Live Cut" : state.phase === "paused" ? "Paused" : "Safe Edge";
+    const modeLabel = state.player.drawing ? (drawSlowActive() ? "Slow Cut 2×" : "Live Cut") : state.phase === "paused" ? "Paused" : "Safe Edge";
     const modeText = state.phase === "title"
       ? "Start a run, then cut inward from the border to trap empty space."
       : state.phase === "gameover"
@@ -1532,15 +1895,7 @@ button.ghost{
         : state.phase === "paused"
           ? "Resume when you are ready."
           : state.levelMessage;
-
-    const snapshot = [
-      state.score,
-      state.level,
-      state.lives,
-      Math.round(state.claimedRatio * 1000),
-      modeLabel,
-      modeText
-    ].join("|");
+    const snapshot = [state.score, state.level, state.lives, Math.round(state.claimedRatio * 1000), modeLabel, modeText].join("|");
     if (!force && snapshot === lastHudState) return;
     lastHudState = snapshot;
     scoreValue.textContent = state.score.toLocaleString();
@@ -1550,11 +1905,17 @@ button.ghost{
     statusMode.textContent = modeLabel;
     statusText.textContent = modeText;
   }
+  function updateDrawChip() {
+    const slow = drawSlowActive();
+    drawChip.classList.toggle("slow", slow);
+    drawChip.textContent = slow ? "Slow ×2" : "Fast";
+    drawChip.style.display = (state.phase === "playing") ? "block" : "none";
+  }
 
+  // ---------- Particles ----------
   function spawnParticle(x, y, vx, vy, life, kind) {
     state.particles.push({x, y, vx, vy, life, maxLife: life, kind});
   }
-
   function spawnBurst(x, y, count, kind, options = {}) {
     for (let i = 0; i < count; i++) {
       const angleBase = options.angle ?? Math.random() * Math.PI * 2;
@@ -1566,9 +1927,8 @@ button.ghost{
       spawnParticle(x + 0.5, y + 0.5, Math.cos(angle) * speed, Math.sin(angle) * speed, options.lifeMin ?? 0.2 + Math.random() * 0.18, kind);
     }
   }
-
   function spawnCaptureEffect(captureRatio, captured) {
-    const quantity = Math.min(120, 26 + Math.round(captureRatio * 240));
+    const quantity = reduced() ? 12 : Math.min(120, 26 + Math.round(captureRatio * 240));
     for (let i = 0; i < quantity; i++) {
       const angle = Math.random() * Math.PI * 2;
       const radius = 2 + Math.random() * 12;
@@ -1578,7 +1938,6 @@ button.ghost{
     }
     state.pulses.push({x: state.player.x + 0.5, y: state.player.y + 0.5, r: 1, maxR: 6 + captureRatio * 30 + captured / 200, life: 0.95});
   }
-
   function updateParticles(dt) {
     for (let i = state.particles.length - 1; i >= 0; i--) {
       const p = state.particles[i];
@@ -1608,51 +1967,41 @@ button.ghost{
     const sy = py - iy;
     return Math.sqrt(sx * sx + sy * sy);
   }
-
   function qixHitsTrail() {
-    if (!state.player.drawing || !state.qix) return false;
-    const qixShape = getQixEndpoints();
-    const ax = qixShape.a.x + 0.5;
-    const ay = qixShape.a.y + 0.5;
-    const bx = qixShape.b.x + 0.5;
-    const by = qixShape.b.y + 0.5;
-    if (distToSegment(state.player.x + 0.5, state.player.y + 0.5, ax, ay, bx, by) < 1.1) {
-      return true;
-    }
-    for (let i = 0; i < state.trail.length; i++) {
-      const cell = state.trail[i];
-      if (distToSegment(cell.x + 0.5, cell.y + 0.5, ax, ay, bx, by) < 0.95) {
-        return true;
+    if (!state.player.drawing) return false;
+    for (const q of state.qixList) {
+      const shape = getQixEndpoints(q);
+      const ax = shape.a.x + 0.5, ay = shape.a.y + 0.5, bx = shape.b.x + 0.5, by = shape.b.y + 0.5;
+      if (distToSegment(state.player.x + 0.5, state.player.y + 0.5, ax, ay, bx, by) < 1.1) return true;
+      for (let i = 0; i < state.trail.length; i++) {
+        const cell = state.trail[i];
+        if (distToSegment(cell.x + 0.5, cell.y + 0.5, ax, ay, bx, by) < 0.95) return true;
       }
     }
     return false;
   }
-
   function minQixDistanceToPoint(x, y) {
-    if (!state.qix) return 999;
-    const shape = getQixEndpoints();
-    const px = x + 0.5;
-    const py = y + 0.5;
-    const segment = distToSegment(px, py, shape.a.x + 0.5, shape.a.y + 0.5, shape.b.x + 0.5, shape.b.y + 0.5);
-    const center = Math.hypot(px - (shape.center.x + 0.5), py - (shape.center.y + 0.5));
-    return Math.min(segment, center * 0.9);
-  }
-
-  function minSparxDistanceToPoint(x, y) {
-    if (!state.sparx.length) return 999;
-    const px = x + 0.5;
-    const py = y + 0.5;
+    if (!state.qixList.length) return 999;
+    const px = x + 0.5, py = y + 0.5;
     let best = Infinity;
-    for (const sparx of state.sparx) {
-      best = Math.min(best, Math.hypot(px - sparx.x, py - sparx.y));
+    for (const q of state.qixList) {
+      const shape = getQixEndpoints(q);
+      const segment = distToSegment(px, py, shape.a.x + 0.5, shape.a.y + 0.5, shape.b.x + 0.5, shape.b.y + 0.5);
+      const center = Math.hypot(px - (shape.center.x + 0.5), py - (shape.center.y + 0.5));
+      best = Math.min(best, segment, center * 0.9);
     }
     return best;
   }
-
-  function attractScriptKey(script) {
-    return script.map((point) => point.x + ":" + point.y).join("|");
+  function minSparxDistanceToPoint(x, y) {
+    if (!state.sparx.length) return 999;
+    const px = x + 0.5, py = y + 0.5;
+    let best = Infinity;
+    for (const sparx of state.sparx) best = Math.min(best, Math.hypot(px - sparx.x, py - sparx.y));
+    return best;
   }
 
+  // ---------- Attract director (single Qix demo) ----------
+  function attractScriptKey(script) { return script.map((point) => point.x + ":" + point.y).join("|"); }
   function weightedWallPick(qixX, qixY) {
     const choices = [
       {wall: "left", weight: qixX > GRID_W * 0.5 ? 1.35 : 0.85},
@@ -1661,67 +2010,47 @@ button.ghost{
     ];
     const total = choices.reduce((sum, item) => sum + item.weight, 0);
     let roll = Math.random() * total;
-    for (const item of choices) {
-      roll -= item.weight;
-      if (roll <= 0) return item.wall;
-    }
+    for (const item of choices) { roll -= item.weight; if (roll <= 0) return item.wall; }
     return choices[0].wall;
   }
-
   function buildAttractCandidate() {
-    const qixX = state.qix ? state.qix.x : GRID_W * 0.5;
-    const qixY = state.qix ? state.qix.y : GRID_H * 0.45;
+    const q = primaryQix();
+    const qixX = q ? q.x : GRID_W * 0.5;
+    const qixY = q ? q.y : GRID_H * 0.45;
     const wall = weightedWallPick(qixX, qixY);
     const script = [];
-
     if (wall === "left") {
       const entryY = randomInt(52, GRID_H - 16);
       const offsetY = randomInt(-16, 16) || 8;
       const exitY = Math.max(24, Math.min(GRID_H - 8, entryY + offsetY));
       const depth = randomInt(8, qixX > GRID_W * 0.45 ? 18 : 12);
-      if (state.player.x !== 0 || state.player.y !== entryY) {
-        script.push({x: 0, y: entryY});
-      }
+      if (state.player.x !== 0 || state.player.y !== entryY) script.push({x: 0, y: entryY});
       script.push({x: depth, y: entryY}, {x: depth, y: exitY}, {x: 0, y: exitY});
       return script;
     }
-
     if (wall === "right") {
       const entryY = randomInt(52, GRID_H - 16);
       const offsetY = randomInt(-16, 16) || -8;
       const exitY = Math.max(24, Math.min(GRID_H - 8, entryY + offsetY));
       const depth = randomInt(8, qixX < GRID_W * 0.55 ? 18 : 12);
-      if (state.player.x !== GRID_W - 1 || state.player.y !== entryY) {
-        script.push({x: GRID_W - 1, y: entryY});
-      }
+      if (state.player.x !== GRID_W - 1 || state.player.y !== entryY) script.push({x: GRID_W - 1, y: entryY});
       script.push({x: GRID_W - 1 - depth, y: entryY}, {x: GRID_W - 1 - depth, y: exitY}, {x: GRID_W - 1, y: exitY});
       return script;
     }
-
     const leftSide = qixX > GRID_W * 0.5;
     const entryX = leftSide ? randomInt(7, 22) : randomInt(GRID_W - 23, GRID_W - 8);
     const width = randomInt(10, 22);
     const exitX = leftSide ? Math.min(GRID_W - 2, entryX + width) : Math.max(1, entryX - width);
     const depth = randomInt(10, qixY > GRID_H * 0.65 ? 14 : 24);
     const topY = Math.max(68, GRID_H - 1 - depth);
-    if (state.player.x !== entryX || state.player.y !== GRID_H - 1) {
-      script.push({x: entryX, y: GRID_H - 1});
-    }
+    if (state.player.x !== entryX || state.player.y !== GRID_H - 1) script.push({x: entryX, y: GRID_H - 1});
     script.push({x: entryX, y: topY}, {x: exitX, y: topY}, {x: exitX, y: GRID_H - 1});
     return script;
   }
-
   function scoreAttractScript(script) {
     if (!script.length) return -Infinity;
     const points = [{x: state.player.x, y: state.player.y}, ...script];
-    let minQix = Infinity;
-    let minSparx = Infinity;
-    let widthMin = Infinity;
-    let widthMax = -Infinity;
-    let heightMin = Infinity;
-    let heightMax = -Infinity;
-    let totalLen = 0;
-
+    let minQix = Infinity, minSparx = Infinity, widthMin = Infinity, widthMax = -Infinity, heightMin = Infinity, heightMax = -Infinity, totalLen = 0;
     for (let i = 1; i < points.length; i++) {
       const start = points[i - 1];
       const end = points[i];
@@ -1740,7 +2069,6 @@ button.ghost{
         heightMax = Math.max(heightMax, y);
       }
     }
-
     const width = Math.max(0, widthMax - widthMin);
     const height = Math.max(0, heightMax - heightMin);
     const areaScore = Math.min(14, width * height * 0.06);
@@ -1750,21 +2078,15 @@ button.ghost{
     const repeatPenalty = attractScriptKey(script) === state.attractLastKey ? 14 : 0;
     return safetyScore + areaScore + shapeScore - travelPenalty - repeatPenalty + Math.random() * 0.9;
   }
-
   function buildAttractScript() {
-    let bestScript = null;
-    let bestScore = -Infinity;
+    let bestScript = null, bestScore = -Infinity;
     for (let i = 0; i < 20; i++) {
       const candidate = buildAttractCandidate();
       const score = scoreAttractScript(candidate);
-      if (score > bestScore) {
-        bestScore = score;
-        bestScript = candidate;
-      }
+      if (score > bestScore) { bestScore = score; bestScript = candidate; }
     }
     return bestScript || [{x: state.player.x, y: GRID_H - 1}];
   }
-
   function queueAttractScript() {
     state.attractCycle += 1;
     state.attractStep = 0;
@@ -1776,7 +2098,6 @@ button.ghost{
     state.attractLastY = state.player.y;
     attractDir = null;
   }
-
   function nearestSparxToPlayer() {
     let best = null;
     for (const sparx of state.sparx) {
@@ -1785,77 +2106,50 @@ button.ghost{
     }
     return best;
   }
-
   function attractEvadeWallThreat() {
     if (state.player.drawing) return false;
     const nearest = nearestSparxToPlayer();
     if (!nearest || nearest.dist > 7) return false;
-    if (state.player.y === GRID_H - 1) {
-      attractDir = nearest.sparx.x < state.player.x + 0.5 ? "right" : "left";
-      return true;
-    }
-    if (state.player.x === 0 || state.player.x === GRID_W - 1) {
-      attractDir = nearest.sparx.y < state.player.y + 0.5 ? "down" : "up";
-      return true;
-    }
+    if (state.player.y === GRID_H - 1) { attractDir = nearest.sparx.x < state.player.x + 0.5 ? "right" : "left"; return true; }
+    if (state.player.x === 0 || state.player.x === GRID_W - 1) { attractDir = nearest.sparx.y < state.player.y + 0.5 ? "down" : "up"; return true; }
     return false;
   }
-
   function attractTrailThreat() {
     if (!state.player.drawing) return Infinity;
     let best = minQixDistanceToPoint(state.player.x, state.player.y);
     const stride = Math.max(1, Math.floor(state.trail.length / 6));
-    for (let i = 0; i < state.trail.length; i += stride) {
-      const cell = state.trail[i];
-      best = Math.min(best, minQixDistanceToPoint(cell.x, cell.y));
-    }
+    for (let i = 0; i < state.trail.length; i += stride) { const cell = state.trail[i]; best = Math.min(best, minQixDistanceToPoint(cell.x, cell.y)); }
     const tail = state.trail[state.trail.length - 1];
     if (tail) best = Math.min(best, minQixDistanceToPoint(tail.x, tail.y));
     return best;
   }
-
   function forceAttractCloseOut() {
-    if (!state.player.drawing) {
-      queueAttractScript();
-      return;
-    }
+    if (!state.player.drawing) { queueAttractScript(); return; }
     const exit = state.attractScript[state.attractScript.length - 1] || {x: state.player.x, y: GRID_H - 1};
     state.attractScript = [{x: exit.x, y: exit.y}];
     state.attractStep = 0;
     state.attractCooldown = 0;
     attractDir = null;
   }
-
   function updateAttractDirector() {
-    if (state.attractCooldown > 0) {
-      attractDir = null;
-      return;
-    }
+    if (state.attractCooldown > 0) { attractDir = null; return; }
     const target = state.attractScript[state.attractStep];
-    if (!target) {
-      attractDir = null;
-      return;
-    }
+    if (!target) { attractDir = null; return; }
     if (state.player.x === target.x && state.player.y === target.y) {
       state.attractStep += 1;
       const next = state.attractScript[state.attractStep];
-      if (!next) {
-        attractDir = null;
-        return;
-      }
+      if (!next) { attractDir = null; return; }
       return updateAttractDirector();
     }
     const dx = target.x - state.player.x;
     const dy = target.y - state.player.y;
     attractDir = Math.abs(dx) > 0 ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
   }
-
   function resetAttractDemo() {
     resetField();
     resetPlayer();
     state.sparx = createAttractSparxWave();
-    state.qix = createQix(1);
-    state.qixTrail.length = 0;
+    state.qixList = createQixList(1, 1);
     state.particles.length = 0;
     state.pulses.length = 0;
     state.captureFlash = 0;
@@ -1870,107 +2164,71 @@ button.ghost{
     state.attractLastKey = "";
     queueAttractScript();
   }
-
   function updateAttractMode(dt) {
-    if (!state.qix || !state.sparx.length || !state.attractScript.length) {
-      resetAttractDemo();
-    }
+    if (!primaryQix() || !state.sparx.length || !state.attractScript.length) resetAttractDemo();
     state.attractClock += dt;
     state.captureFlash = Math.max(0, state.captureFlash - dt * 0.8);
     state.attractCooldown = Math.max(0, state.attractCooldown - dt);
-
     if (!state.player.drawing && (!isBorderSafeCell(state.player.x, state.player.y) || getCell(state.player.x, state.player.y) !== CELL_SAFE)) {
-      resetPlayer();
-      queueAttractScript();
-      return;
+      resetPlayer(); queueAttractScript(); return;
     }
-
     updateAttractDirector();
     attractEvadeWallThreat();
-    updateQix(dt * 1.15);
-    if (state.player.drawing && attractTrailThreat() < 9.4) {
-      forceAttractCloseOut();
-    }
+    updateAllQix(dt * 1.15);
+    if (state.player.drawing && attractTrailThreat() < 9.4) forceAttractCloseOut();
     updatePlayer(dt * 1.18);
     updateSparx(dt * 1.15);
     updateParticles(dt);
-
-    if (state.player.x === state.attractLastX && state.player.y === state.attractLastY && attractDir) {
-      state.attractStallClock += dt;
-    } else {
-      state.attractStallClock = 0;
-      state.attractLastX = state.player.x;
-      state.attractLastY = state.player.y;
-    }
-
-    if (qixHitsTrail()) {
-      state.captureFlash = Math.max(state.captureFlash, 0.08);
-      clearTrail();
-      resetPlayer();
-      queueAttractScript();
-      return;
-    }
-
-    if (state.attractStallClock > 0.9) {
-      if (state.player.drawing) clearTrail();
-      resetPlayer();
-      queueAttractScript();
-      return;
-    }
-
+    if (state.player.x === state.attractLastX && state.player.y === state.attractLastY && attractDir) state.attractStallClock += dt;
+    else { state.attractStallClock = 0; state.attractLastX = state.player.x; state.attractLastY = state.player.y; }
+    if (qixHitsTrail()) { state.captureFlash = Math.max(state.captureFlash, 0.08); clearTrail(); resetPlayer(); queueAttractScript(); return; }
+    if (state.attractStallClock > 0.9) { if (state.player.drawing) clearTrail(); resetPlayer(); queueAttractScript(); return; }
     if (!state.player.drawing && state.attractStep >= state.attractScript.length) {
-      if (state.claimedRatio >= 0.24 || state.attractClock >= 18) {
-        resetAttractDemo();
-      } else {
-        queueAttractScript();
-      }
+      if (state.claimedRatio >= 0.24 || state.attractClock >= 18) resetAttractDemo(); else queueAttractScript();
       return;
     }
-
-    if (Math.random() < 0.24) {
-      spawnParticle(state.qix.x, state.qix.y, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10, 0.65, "capture");
-    }
-    if (Math.random() < 0.04) {
-      state.pulses.push({x: state.qix.x + 0.5, y: state.qix.y + 0.5, r: 0.6, maxR: 5 + Math.random() * 4, life: 0.5});
-    }
-    if (Math.random() < 0.01) {
-      state.captureFlash = Math.max(state.captureFlash, 0.18);
-      playTone("attractGlitch");
-    }
+    if (!reduced() && Math.random() < 0.24) spawnParticle(primaryQix().x, primaryQix().y, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10, 0.65, "capture");
+    if (!reduced() && Math.random() < 0.04) state.pulses.push({x: primaryQix().x + 0.5, y: primaryQix().y + 0.5, r: 0.6, maxR: 5 + Math.random() * 4, life: 0.5});
+    if (Math.random() < 0.01) { state.captureFlash = Math.max(state.captureFlash, 0.18); playTone("attractGlitch"); }
   }
 
+  // ---------- Update ----------
   function update(dt) {
-    if (state.phase === "title") {
-      updateAttractMode(dt);
-      updateQixHum(dt);
-      return;
-    }
-    if (state.phase === "paused" || state.phase === "gameover" || state.phase === "dying") {
+    if (state.phase === "title") { updateAttractMode(dt); updateQixHum(dt); return; }
+    if (state.phase === "paused" || state.phase === "gameover" || state.phase === "dying" || state.phase === "transition") {
       updateParticles(dt);
       if (state.player.respawnFlash > 0) state.player.respawnFlash = Math.max(0, state.player.respawnFlash - dt);
       if (state.captureFlash > 0) state.captureFlash = Math.max(0, state.captureFlash - dt * 1.2);
       if (state.screenFlash > 0) state.screenFlash = Math.max(0, state.screenFlash - dt * 2.8);
+      if (state.splitFlash > 0) state.splitFlash = Math.max(0, state.splitFlash - dt * 1.4);
       if (state.shake > 0) state.shake = Math.max(0, state.shake - dt * (state.phase === "dying" ? 1.3 : 2.4));
+      if (state.phase === "transition") updateAllQix(dt);
       updateQixHum(dt);
       return;
     }
-
     if (state.player.respawnFlash > 0) state.player.respawnFlash = Math.max(0, state.player.respawnFlash - dt);
     if (state.captureFlash > 0) state.captureFlash = Math.max(0, state.captureFlash - dt * 1.5);
     if (state.screenFlash > 0) state.screenFlash = Math.max(0, state.screenFlash - dt * 3.2);
+    if (state.splitFlash > 0) state.splitFlash = Math.max(0, state.splitFlash - dt * 1.4);
     if (state.shake > 0) state.shake = Math.max(0, state.shake - dt * 2.4);
 
-    updateQix(dt);
+    updateAllQix(dt);
     updatePlayer(dt);
     updateSparx(dt);
+    updateFuse(dt);
     updateParticles(dt);
-    if (qixHitsTrail()) {
-      loseLife("The Qix line hit your live trace.");
+    if (qixHitsTrail()) loseLife("The Qix line hit your live trace.");
+
+    sparxWarnClock = Math.max(0, sparxWarnClock - dt);
+    if (state.phase === "playing" && state.player.alive && sparxWarnClock <= 0) {
+      const nearest = nearestSparxToPlayer();
+      if (nearest && nearest.dist < 5 && !state.player.drawing) { playSfx("sparx", 0.5); sparxWarnClock = 1.4; }
     }
     updateHud(false);
     updateQixHum(dt);
   }
 
+  // ---------- Render ----------
   function drawBackground(w, h) {
     const grad = ctx.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, "#071426");
@@ -1978,143 +2236,159 @@ button.ghost{
     grad.addColorStop(1, "#03070f");
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, w, h);
-
     const nebula = ctx.createRadialGradient(w * 0.3, h * 0.18, 10, w * 0.3, h * 0.18, w * 0.55);
     nebula.addColorStop(0, "rgba(96,176,255,0.2)");
     nebula.addColorStop(1, "rgba(96,176,255,0)");
     ctx.fillStyle = nebula;
     ctx.fillRect(0, 0, w, h);
-
     const glow = ctx.createRadialGradient(w * 0.68, h * 0.78, 8, w * 0.68, h * 0.78, w * 0.42);
     glow.addColorStop(0, "rgba(255,94,168,0.15)");
     glow.addColorStop(1, "rgba(255,94,168,0)");
     ctx.fillStyle = glow;
     ctx.fillRect(0, 0, w, h);
   }
-
   function drawField(scale, offsetX, offsetY) {
     ctx.save();
     ctx.translate(offsetX, offsetY);
-
+    const shimmer = reduced() ? 0 : Math.sin(performance.now() * 0.002) * 4;
     for (let y = 0; y < GRID_H; y++) {
       for (let x = 0; x < GRID_W; x++) {
         const cell = getCell(x, y);
         if (cell === CELL_SAFE && !isBorderSafeCell(x, y)) {
           const hue = getCellHue(x, y);
-          const px = x * scale;
-          const py = y * scale;
-          ctx.fillStyle = `hsla(${hue}, 62%, 44%, 0.98)`;
-          ctx.fillRect(px, py, scale, scale);
+          ctx.fillStyle = "hsla(" + ((hue + shimmer + 360) % 360) + ", 62%, 44%, 0.98)";
+          ctx.fillRect(x * scale, y * scale, scale, scale);
         }
       }
     }
-
     for (let y = 0; y < GRID_H; y++) {
       for (let x = 0; x < GRID_W; x++) {
         if (!isBorderSafeCell(x, y)) continue;
-        const px = x * scale;
-        const py = y * scale;
-        ctx.fillStyle = (y === 0 || y === GRID_H - 1 || x === 0 || x === GRID_W - 1)
-          ? "rgba(18,42,84,0.985)"
-          : "rgba(8,16,30,0.985)";
-        ctx.fillRect(px, py, scale, scale);
+        ctx.fillStyle = (y === 0 || y === GRID_H - 1 || x === 0 || x === GRID_W - 1) ? "rgba(18,42,84,0.985)" : "rgba(8,16,30,0.985)";
+        ctx.fillRect(x * scale, y * scale, scale, scale);
       }
     }
-
     ctx.strokeStyle = "rgba(125,246,255,0.42)";
     ctx.lineWidth = Math.max(0.7, scale * 0.055);
     ctx.strokeRect(0, 0, GRID_W * scale, GRID_H * scale);
-
     if (state.captureFlash > 0) {
       ctx.fillStyle = "rgba(255,213,106," + (state.captureFlash * 0.16) + ")";
       ctx.fillRect(0, 0, GRID_W * scale, GRID_H * scale);
     }
-
     if (state.trail.length) {
       ctx.lineJoin = "round";
       ctx.lineCap = "round";
-      ctx.strokeStyle = "rgba(255,94,168,0.95)";
+      const slowNow = drawSlowActive();
+      ctx.strokeStyle = slowNow ? "rgba(255,213,106,0.95)" : "rgba(255,94,168,0.95)";
       ctx.lineWidth = Math.max(2, scale * 0.58);
-      ctx.shadowBlur = scale * 2.1;
-      ctx.shadowColor = "rgba(255,94,168,0.75)";
+      ctx.shadowBlur = reduced() ? scale * 0.8 : scale * 2.1;
+      ctx.shadowColor = slowNow ? "rgba(255,213,106,0.8)" : "rgba(255,94,168,0.75)";
       ctx.beginPath();
       ctx.moveTo((state.player.x + 0.5) * scale, (state.player.y + 0.5) * scale);
-      for (let i = state.trail.length - 1; i >= 0; i--) {
-        const cell = state.trail[i];
-        ctx.lineTo((cell.x + 0.5) * scale, (cell.y + 0.5) * scale);
-      }
+      for (let i = state.trail.length - 1; i >= 0; i--) { const cell = state.trail[i]; ctx.lineTo((cell.x + 0.5) * scale, (cell.y + 0.5) * scale); }
       ctx.stroke();
       ctx.shadowBlur = 0;
     }
     ctx.restore();
   }
 
-  function drawQix(scale, offsetX, offsetY) {
-    if (!state.qix) return;
-    const qixShape = getQixEndpoints();
-    const ax = offsetX + (qixShape.a.x + 0.5) * scale;
-    const ay = offsetY + (qixShape.a.y + 0.5) * scale;
-    const bx = offsetX + (qixShape.b.x + 0.5) * scale;
-    const by = offsetY + (qixShape.b.y + 0.5) * scale;
+  function drawFuse(scale, offsetX, offsetY) {
+    if (!state.fuse.active) return;
+    const pos = fusePosition();
+    if (!pos) return;
+    const px = offsetX + (pos.x + 0.5) * scale;
+    const py = offsetY + (pos.y + 0.5) * scale;
+    const t = performance.now() * 0.02;
+    ctx.save();
+    ctx.shadowBlur = scale * 3;
+    ctx.shadowColor = "rgba(255,150,40,0.95)";
+    ctx.fillStyle = "rgba(255,220,120,0.98)";
+    ctx.beginPath();
+    ctx.arc(px, py, Math.max(2.4, scale * 0.7), 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.98)";
+    ctx.beginPath();
+    ctx.arc(px, py, Math.max(1.1, scale * 0.32), 0, Math.PI * 2);
+    ctx.fill();
+    if (!reduced()) {
+      ctx.strokeStyle = "rgba(255,170,60,0.85)";
+      ctx.lineWidth = Math.max(1, scale * 0.14);
+      ctx.beginPath();
+      for (let i = 0; i < 6; i++) {
+        const a = t + i * (Math.PI / 3);
+        const r = scale * (0.8 + Math.sin(t * 1.7 + i) * 0.35);
+        ctx.moveTo(px, py);
+        ctx.lineTo(px + Math.cos(a) * r, py + Math.sin(a) * r);
+      }
+      ctx.stroke();
+      if (Math.random() < 0.6) spawnParticle(pos.x, pos.y, (Math.random() - 0.5) * 6, (Math.random() - 0.5) * 6 - 2, 0.3 + Math.random() * 0.2, "danger");
+    }
+    ctx.restore();
+  }
 
+  function drawQix(scale, offsetX, offsetY) {
+    if (!state.qixList.length) return;
     ctx.save();
     ctx.beginPath();
     for (let y = 0; y < GRID_H; y++) {
       for (let x = 0; x < GRID_W; x++) {
-        if (getCell(x, y) !== CELL_SAFE) {
-          ctx.rect(offsetX + x * scale, offsetY + y * scale, scale, scale);
-        }
+        if (getCell(x, y) !== CELL_SAFE) ctx.rect(offsetX + x * scale, offsetY + y * scale, scale, scale);
       }
     }
     ctx.clip();
-
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
-
-    for (let i = state.qixTrail.length - 1; i >= 0; i--) {
-      const trail = state.qixTrail[i];
-      const alpha = (i + 1) / state.qixTrail.length * 0.45;
-      ctx.strokeStyle = `hsla(${trail.hue}, 95%, 70%, ${alpha})`;
-      ctx.lineWidth = Math.max(1, scale * 0.18);
+    for (const q of state.qixList) {
+      for (let i = q.trail.length - 1; i >= 0; i--) {
+        const trail = q.trail[i];
+        const alpha = (i + 1) / q.trail.length * 0.45;
+        ctx.strokeStyle = "hsla(" + trail.hue + ", 95%, 70%, " + alpha + ")";
+        ctx.lineWidth = Math.max(1, scale * 0.18);
+        ctx.beginPath();
+        ctx.moveTo(offsetX + (trail.ax + 0.5) * scale, offsetY + (trail.ay + 0.5) * scale);
+        ctx.lineTo(offsetX + (trail.bx + 0.5) * scale, offsetY + (trail.by + 0.5) * scale);
+        ctx.stroke();
+      }
+      const shape = getQixEndpoints(q);
+      const ax = offsetX + (shape.a.x + 0.5) * scale;
+      const ay = offsetY + (shape.a.y + 0.5) * scale;
+      const bx = offsetX + (shape.b.x + 0.5) * scale;
+      const by = offsetY + (shape.b.y + 0.5) * scale;
+      const liveHue = (q.hue + Math.sin(q.phase * 1.3) * 40 + Math.cos(q.phase * 0.7) * 25 + 360) % 360;
+      ctx.strokeStyle = "hsla(" + liveHue + ", 100%, 72%, 0.96)";
+      ctx.lineWidth = Math.max(3, scale * q.width);
+      ctx.shadowBlur = reduced() ? scale * 0.6 : scale * 1.6;
+      ctx.shadowColor = "hsla(" + ((liveHue + 24) % 360) + ", 100%, 66%, 0.7)";
       ctx.beginPath();
-      ctx.moveTo(offsetX + (trail.ax + 0.5) * scale, offsetY + (trail.ay + 0.5) * scale);
-      ctx.lineTo(offsetX + (trail.bx + 0.5) * scale, offsetY + (trail.by + 0.5) * scale);
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(bx, by);
+      ctx.stroke();
+      const coreGrad = ctx.createLinearGradient(ax, ay, bx, by);
+      coreGrad.addColorStop(0, "rgba(255,255,255,0.9)");
+      coreGrad.addColorStop(0.5, "rgba(255,213,106,0.95)");
+      coreGrad.addColorStop(1, "rgba(255,255,255,0.9)");
+      ctx.strokeStyle = coreGrad;
+      ctx.lineWidth = Math.max(1.2, scale * 0.26);
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(bx, by);
       ctx.stroke();
     }
-
-    const liveHue = (state.qix.hue + Math.sin(state.qix.phase * 1.3) * 40 + Math.cos(state.qix.phase * 0.7) * 25 + 360) % 360;
-    ctx.strokeStyle = "hsla(" + liveHue + ", 100%, 72%, 0.96)";
-    ctx.lineWidth = Math.max(3, scale * state.qix.width);
-    ctx.shadowBlur = scale * 1.6;
-    ctx.shadowColor = "hsla(" + ((liveHue + 24) % 360) + ", 100%, 66%, 0.7)";
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.lineTo(bx, by);
-    ctx.stroke();
-
-    const coreGrad = ctx.createLinearGradient(ax, ay, bx, by);
-    coreGrad.addColorStop(0, "rgba(255,255,255,0.9)");
-    coreGrad.addColorStop(0.5, "rgba(255,213,106,0.95)");
-    coreGrad.addColorStop(1, "rgba(255,255,255,0.9)");
-    ctx.strokeStyle = coreGrad;
-    ctx.lineWidth = Math.max(1.2, scale * 0.26);
-    ctx.beginPath();
-    ctx.moveTo(ax, ay);
-    ctx.lineTo(bx, by);
-    ctx.stroke();
+    ctx.shadowBlur = 0;
     ctx.restore();
   }
 
   function drawPlayer(scale, offsetX, offsetY) {
     const px = offsetX + (state.player.x + 0.5) * scale;
     const py = offsetY + (state.player.y + 0.5) * scale;
-    const pulse = 1 + Math.sin(performance.now() * 0.012) * 0.08;
+    const pulse = reduced() ? 1 : 1 + Math.sin(performance.now() * 0.012) * 0.08;
     ctx.save();
     ctx.translate(px, py);
     ctx.scale(pulse, pulse);
     const halo = ctx.createRadialGradient(0, 0, 0, 0, 0, Math.max(8, scale * 1.45));
     if (state.player.drawing) {
-      halo.addColorStop(0, "rgba(255,213,106,0.34)");
+      const slowNow = drawSlowActive();
+      halo.addColorStop(0, slowNow ? "rgba(255,213,106,0.4)" : "rgba(255,213,106,0.34)");
       halo.addColorStop(0.55, "rgba(255,94,168,0.22)");
       halo.addColorStop(1, "rgba(255,94,168,0)");
     } else {
@@ -2126,7 +2400,7 @@ button.ghost{
     ctx.beginPath();
     ctx.arc(0, 0, Math.max(8, scale * 1.45), 0, Math.PI * 2);
     ctx.fill();
-    ctx.shadowBlur = scale * 2.2;
+    ctx.shadowBlur = reduced() ? scale * 0.8 : scale * 2.2;
     ctx.shadowColor = state.player.drawing ? "rgba(255,94,168,0.75)" : "rgba(125,246,255,0.75)";
     ctx.fillStyle = state.player.drawing ? "#ffd56a" : "#f2fbff";
     ctx.beginPath();
@@ -2153,10 +2427,8 @@ button.ghost{
       const size = Math.max(3.2, scale * 0.66 * pulse);
       const moveAngle = Math.atan2(sparx.dy || 0, sparx.dx || 1);
       const sparkLen = Math.max(6.4, scale * 1.34);
-
-      ctx.shadowBlur = scale * 4.2;
+      ctx.shadowBlur = reduced() ? scale * 1.5 : scale * 4.2;
       ctx.shadowColor = "rgba(255,213,106,0.98)";
-
       ctx.strokeStyle = "rgba(255,186,72,0.92)";
       ctx.lineWidth = Math.max(1.2, scale * 0.16);
       ctx.beginPath();
@@ -2168,7 +2440,6 @@ button.ghost{
         ctx.lineTo(px + Math.cos(angle) * outer, py + Math.sin(angle) * outer);
       }
       ctx.stroke();
-
       ctx.strokeStyle = "rgba(255,248,210,0.96)";
       ctx.lineWidth = Math.max(0.95, scale * 0.12);
       ctx.beginPath();
@@ -2177,21 +2448,10 @@ button.ghost{
       ctx.moveTo(px, py - scale * 0.66);
       ctx.lineTo(px, py + scale * 0.66);
       ctx.stroke();
-
-      for (let i = 0; i < 4; i++) {
-        const flickerAngle = moveAngle + Math.PI + (i - 1.5) * 0.42 + Math.sin(sparx.phase * 1.9 + i) * 0.12;
-        const flickerDist = scale * (0.78 + i * 0.2);
-        ctx.fillStyle = "rgba(255,213,106," + (0.42 - i * 0.08) + ")";
-        ctx.beginPath();
-        ctx.arc(px + Math.cos(flickerAngle) * flickerDist, py + Math.sin(flickerAngle) * flickerDist, Math.max(0.8, scale * (0.12 + (3 - i) * 0.04)), 0, Math.PI * 2);
-        ctx.fill();
-      }
-
       ctx.fillStyle = "rgba(255,213,106,0.97)";
       ctx.beginPath();
       ctx.arc(px, py, size, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.fillStyle = "rgba(255,255,255,0.98)";
       ctx.beginPath();
       ctx.arc(px, py, Math.max(1.25, size * 0.46), 0, Math.PI * 2);
@@ -2210,15 +2470,12 @@ button.ghost{
       ctx.arc(offsetX + pulse.x * scale, offsetY + pulse.y * scale, pulse.r * scale, 0, Math.PI * 2);
       ctx.stroke();
     }
+    ctx.globalAlpha = 1;
     for (const p of state.particles) {
       if (p.kind === "spark") continue;
       const alpha = Math.max(0, p.life / p.maxLife);
-      const color = p.kind === "danger" ? "255,106,122" : p.kind === "capture" ? "255,213,106" : "125,246,255";
-      const radius = p.kind === "danger"
-        ? Math.max(1.5, scale * (0.34 + alpha * 0.34))
-        : p.kind === "capture"
-          ? Math.max(1.2, scale * (0.26 + alpha * 0.18))
-          : Math.max(1, scale * 0.22);
+      const color = p.kind === "danger" ? "255,150,60" : p.kind === "capture" ? "255,213,106" : "125,246,255";
+      const radius = p.kind === "danger" ? Math.max(1.5, scale * (0.34 + alpha * 0.34)) : p.kind === "capture" ? Math.max(1.2, scale * (0.26 + alpha * 0.18)) : Math.max(1, scale * 0.22);
       ctx.fillStyle = "rgba(" + color + "," + alpha + ")";
       ctx.shadowBlur = p.kind === "danger" ? scale * 2.6 : scale * 1.2;
       ctx.shadowColor = "rgba(" + color + "," + Math.min(alpha * 1.2, 1) + ")";
@@ -2234,25 +2491,32 @@ button.ghost{
     const h = canvas.height;
     ctx.clearRect(0, 0, w, h);
     drawBackground(w, h);
-
-    const fieldW = GRID_W;
-    const fieldH = GRID_H;
-    const scale = Math.floor(Math.min(w / fieldW, h / fieldH));
-    const drawW = fieldW * scale;
-    const drawH = fieldH * scale;
-    const shakeX = state.shake > 0 ? (Math.random() - 0.5) * state.shake * 20 * dpr : 0;
-    const shakeY = state.shake > 0 ? (Math.random() - 0.5) * state.shake * 20 * dpr : 0;
+    const scale = Math.floor(Math.min(w / GRID_W, h / GRID_H));
+    const drawW = GRID_W * scale;
+    const drawH = GRID_H * scale;
+    const shakeAmt = reduced() ? state.shake * 8 : state.shake * 20;
+    const shakeX = state.shake > 0 ? (Math.random() - 0.5) * shakeAmt * dpr : 0;
+    const shakeY = state.shake > 0 ? (Math.random() - 0.5) * shakeAmt * dpr : 0;
     const offsetX = Math.floor((w - drawW) * 0.5 + shakeX);
     const offsetY = Math.floor((h - drawH) * 0.5 + shakeY);
-
     drawField(scale, offsetX, offsetY);
     drawQix(scale, offsetX, offsetY);
     drawParticles(scale, offsetX, offsetY);
+    drawFuse(scale, offsetX, offsetY);
     drawSparx(scale, offsetX, offsetY);
-    if (state.player.alive) {
-      drawPlayer(scale, offsetX, offsetY);
-    }
+    if (state.player.alive) drawPlayer(scale, offsetX, offsetY);
 
+    if (state.splitFlash > 0) {
+      ctx.save();
+      ctx.globalAlpha = state.splitFlash;
+      ctx.fillStyle = "#ffd56a";
+      ctx.font = "700 " + (26 * dpr) + "px Verdana";
+      ctx.textAlign = "center";
+      ctx.shadowBlur = 20 * dpr;
+      ctx.shadowColor = "rgba(255,94,168,0.8)";
+      ctx.fillText("QIX SPLIT!", w * 0.5, offsetY + drawH * 0.5);
+      ctx.restore();
+    }
     if (state.screenFlash > 0) {
       ctx.save();
       ctx.fillStyle = "rgba(255,255,255," + (state.screenFlash * 0.32) + ")";
@@ -2261,94 +2525,105 @@ button.ghost{
       ctx.fillRect(0, 0, w, h);
       ctx.restore();
     }
-
     if (state.phase === "title") {
       ctx.save();
       ctx.textAlign = "center";
       ctx.font = (10 * dpr) + "px Verdana";
       ctx.fillStyle = "rgba(125,246,255,0.8)";
-      ctx.fillText(audioUnlocked ? "ATTRACT MODE ACTIVE, SOUNDTRACK LIVE" : "ATTRACT MODE ACTIVE, TAP ANY BUTTON TO WAKE SOUNDTRACK", w * 0.5, offsetY + drawH - 10 * dpr);
+      ctx.fillText(audioUnlocked ? "ATTRACT MODE — SOUNDTRACK LIVE" : "ATTRACT MODE — TAP ANY BUTTON TO WAKE SOUNDTRACK", w * 0.5, offsetY + drawH - 10 * dpr);
       ctx.restore();
     }
-
     ctx.save();
-    ctx.fillStyle = "rgba(255,255,255,0.04)";
+    ctx.fillStyle = "rgba(255,255,255,0.06)";
     ctx.font = (12 * dpr) + "px Verdana";
     ctx.textAlign = "center";
     ctx.fillText("Target " + Math.round(state.targetRatio * 100) + "%", w * 0.5, offsetY - 8 * dpr);
     ctx.restore();
   }
 
+  // ---------- Loop ----------
   function tick(time) {
     const dt = Math.min(0.033, (time - lastTime) / 1000 || 0.016);
     lastTime = time;
+    frameCount += 1;
+    if (time - lastFpsSample >= 1000) { fps = frameCount * 1000 / (time - lastFpsSample); frameCount = 0; lastFpsSample = time; }
     try {
+      pollGamepad();
       update(dt);
+      updateDrawChip();
       render();
       lastRenderError = "";
     } catch (error) {
       const message = (error && error.message) ? error.message : String(error);
-      if (message !== lastRenderError) {
-        console.error("Neon Qix runtime error:", error);
-        lastRenderError = message;
-      }
-      try {
-        state.phase = "paused";
-        state.levelMessage = "Browser hit an error. Reload and it should recover.";
-        updateHud(true);
-      } catch (error2) {
-      }
+      if (message !== lastRenderError) { console.error("Neon Qix runtime error:", error); lastRenderError = message; }
+      try { state.phase = "paused"; state.levelMessage = "Browser hit an error. Reload and it should recover."; updateHud(true); } catch (error2) {}
     }
     raf = requestAnimationFrame(tick);
   }
 
-  function normalizeInitials(value) {
-    return value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3);
-  }
-
+  // ---------- Score entry ----------
+  function normalizeInitials(value) { return value.toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3); }
   function handleSaveScore() {
     if (!state.pendingScore) return;
     const name = normalizeInitials(initialsInput.value || "AAA");
-    if (name.length !== 3) {
-      initialsInput.value = name;
-      safeFocus(initialsInput);
-      return;
-    }
+    if (name.length !== 3) { initialsInput.value = name; safeFocus(initialsInput); return; }
     const pending = state.pendingScore;
     saveHighScore(name, pending.score, pending.level);
-    submitGlobalScore(name, pending.score, pending.level).then(() => {
-      renderHighScores();
-    });
+    submitGlobalScore(name, pending.score, pending.level).then(() => renderHighScores());
     state.pendingScore = null;
     initialsWrap.style.display = "none";
     saveScoreButton.style.display = "none";
     restartButton.style.display = "inline-flex";
     gameOverEyebrow.textContent = "Score Saved";
     gameOverText.textContent = "Stored " + name + " with " + state.score.toLocaleString() + " points and synced it to global scores.";
+    playSfx("select");
   }
 
-  function togglePause() {
-    if (state.phase === "playing") {
-      state.phase = "paused";
-      pauseButton.textContent = "Resume";
-      playTone("pause");
-    } else if (state.phase === "paused") {
-      state.phase = "playing";
-      pauseButton.textContent = "Pause";
-      playTone("start");
-    }
+  // ---------- Pause ----------
+  function pauseGame() {
+    if (state.phase !== "playing") return;
+    state.phase = "paused";
+    pauseButton.textContent = "Resume";
+    stopFuseSound();
+    playSfx("navigate");
+    playTone("pause");
+    showOverlay(pauseOverlay);
     updateHud(true);
   }
+  function resumeGame() {
+    if (state.phase !== "paused") return;
+    state.phase = "playing";
+    pauseButton.textContent = "Pause";
+    hideAllOverlays();
+    playSfx("select");
+    playTone("start");
+    updateHud(true);
+  }
+  function togglePause() {
+    if (state.phase === "playing") pauseGame();
+    else if (state.phase === "paused") resumeGame();
+  }
+  function goToTitle() {
+    if (levelAdvanceTimer) { clearTimeout(levelAdvanceTimer); levelAdvanceTimer = 0; }
+    clearDeathTimer();
+    stopFuseSound();
+    state.phase = "title";
+    pauseButton.textContent = "Pause";
+    showOverlay(titleOverlay);
+    renderHighScores();
+    seedAttractState();
+    playMusic("menu");
+  }
 
+  // ---------- Web Audio synthesis (texture layer) ----------
   function ensureQixHum() {
-    if (!audioUnlocked || !audioCtx || qixHum) return;
+    if (!audioUnlocked || !audioCtx || qixHum || !sfxGain) return;
     const oscA = audioCtx.createOscillator();
     const oscB = audioCtx.createOscillator();
     const filter = audioCtx.createBiquadFilter();
     const gain = audioCtx.createGain();
     const lfo = audioCtx.createOscillator();
     const lfoGain = audioCtx.createGain();
-
     oscA.type = "square";
     oscB.type = "sawtooth";
     oscA.frequency.value = 92;
@@ -2360,142 +2635,53 @@ button.ghost{
     lfo.type = "triangle";
     lfo.frequency.value = 5.4;
     lfoGain.gain.value = 18;
-
     lfo.connect(lfoGain);
     lfoGain.connect(oscA.detune);
     lfoGain.connect(oscB.detune);
     oscA.connect(filter);
     oscB.connect(filter);
     filter.connect(gain);
-    gain.connect(audioCtx.destination);
-
+    gain.connect(sfxGain);
     oscA.start();
     oscB.start();
     lfo.start();
-
     qixHum = {oscA, oscB, filter, gain, lfo, lfoGain};
   }
-
   function updateQixHum(dt) {
     if (!audioUnlocked || !audioCtx) return;
     ensureQixHum();
     if (!qixHum) return;
-
     const now = audioCtx.currentTime;
-    const active = state.phase === "playing" || state.phase === "title" || state.phase === "paused";
-    if (!state.qix) {
-      qixHum.gain.gain.setTargetAtTime(0.00001, now, 0.09);
-      return;
-    }
-
-    const speed = Math.hypot(state.qix.vx, state.qix.vy) || 0;
-    const qixShape = getQixEndpoints(state.qix);
-    const nearTrail = state.player.drawing
-      ? Math.max(0, 1 - distToSegment(state.player.x + 0.5, state.player.y + 0.5, qixShape.a.x + 0.5, qixShape.a.y + 0.5, qixShape.b.x + 0.5, qixShape.b.y + 0.5) / 13)
-      : 0;
-    const tension = nearTrail + (state.player.drawing ? 0.22 : 0) + (state.phase === "title" ? 0.14 : 0);
-    const targetGain = active ? 0.032 + tension * 0.03 + Math.min(0.016, speed * 0.0008) : 0.00001;
+    const active = state.phase === "playing" || state.phase === "title" || state.phase === "paused" || state.phase === "transition";
+    const q = primaryQix();
+    if (!q) { qixHum.gain.gain.setTargetAtTime(0.00001, now, 0.09); return; }
+    const speed = Math.hypot(q.vx, q.vy) || 0;
+    const shape = getQixEndpoints(q);
+    const nearTrail = state.player.drawing ? Math.max(0, 1 - distToSegment(state.player.x + 0.5, state.player.y + 0.5, shape.a.x + 0.5, shape.a.y + 0.5, shape.b.x + 0.5, shape.b.y + 0.5) / 13) : 0;
+    const tension = nearTrail + (state.player.drawing ? 0.22 : 0) + (state.phase === "title" ? 0.14 : 0) + (state.qixList.length > 1 ? 0.1 : 0);
+    const targetGain = active ? 0.03 + tension * 0.03 + Math.min(0.016, speed * 0.0008) : 0.00001;
     qixHum.gain.gain.setTargetAtTime(targetGain, now, 0.09);
-
-    const broken = Math.sin(state.qix.phase * 1.7) * 18 + Math.cos(state.qix.phase * 0.43) * 9 + Math.sin(performance.now() * 0.013) * 6;
+    const broken = Math.sin(q.phase * 1.7) * 18 + Math.cos(q.phase * 0.43) * 9 + Math.sin(performance.now() * 0.013) * 6;
     const base = 72 + speed * 3.4 + broken + tension * 18;
     qixHum.oscA.frequency.setTargetAtTime(Math.max(42, base), now, 0.05);
-    qixHum.oscB.frequency.setTargetAtTime(Math.max(56, base * 1.43 + Math.sin(state.qix.phase * 3.9) * (14 + tension * 10)), now, 0.07);
-    qixHum.filter.frequency.setTargetAtTime(250 + speed * 26 + Math.abs(Math.sin(state.qix.phase * 2.4)) * 170 + tension * 280, now, 0.08);
+    qixHum.oscB.frequency.setTargetAtTime(Math.max(56, base * 1.43 + Math.sin(q.phase * 3.9) * (14 + tension * 10)), now, 0.07);
+    qixHum.filter.frequency.setTargetAtTime(250 + speed * 26 + Math.abs(Math.sin(q.phase * 2.4)) * 170 + tension * 280, now, 0.08);
     qixHum.filter.Q.setTargetAtTime(6 + tension * 6, now, 0.08);
-    qixHum.lfo.frequency.setTargetAtTime(4.4 + Math.abs(Math.sin(state.qix.phase * 0.52)) * 4.6 + tension * 2.6, now, 0.14);
-    qixHum.lfoGain.gain.setTargetAtTime(10 + Math.abs(Math.cos(state.qix.phase * 1.3)) * 28 + tension * 18, now, 0.14);
+    qixHum.lfo.frequency.setTargetAtTime(4.4 + Math.abs(Math.sin(q.phase * 0.52)) * 4.6 + tension * 2.6, now, 0.14);
+    qixHum.lfoGain.gain.setTargetAtTime(10 + Math.abs(Math.cos(q.phase * 1.3)) * 28 + tension * 18, now, 0.14);
   }
-
-  function unlockAudio() {
-    if (audioUnlocked) {
-      startSoundtrack();
-      return;
-    }
-    try {
-      const AudioCtor = window.AudioContext || window.webkitAudioContext;
-      if (!AudioCtor) return;
-      audioCtx = new AudioCtor();
-      if (audioCtx && audioCtx.state === "suspended") {
-        audioCtx.resume().catch?.(() => {});
-      }
-      audioUnlocked = true;
-      ensureQixHum();
-      startSoundtrack();
-      if (attractCopy) attractCopy.textContent = "Attract mode is live, and the soundtrack is awake. Tap Start when you want control.";
-    } catch (error) {
-      audioUnlocked = false;
-    }
-  }
-
-  function startSoundtrack() {
-    if (!soundtrackStarted) soundtrackStarted = true;
-    soundtrack.volume = MUSIC_VOLUME;
-    const p = soundtrack.play();
-    if (p && p.catch) p.catch(() => { soundtrackStarted = false; });
-  }
-
   function playTone(type) {
-    if (!audioUnlocked || !audioCtx) return;
+    if (!audioUnlocked || !audioCtx || !sfxGain) return;
     ensureQixHum();
     const now = audioCtx.currentTime;
-
-    if (type === "sparx") {
-      const duration = 0.1;
-      const pulse = audioCtx.createOscillator();
-      const sub = audioCtx.createOscillator();
-      const filter = audioCtx.createBiquadFilter();
-      const gain = audioCtx.createGain();
-      const lfo = audioCtx.createOscillator();
-      const lfoGain = audioCtx.createGain();
-
-      pulse.type = "sawtooth";
-      sub.type = "sawtooth";
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(360, now);
-      filter.frequency.exponentialRampToValueAtTime(240, now + duration);
-      filter.Q.value = 1.1;
-
-      pulse.frequency.setValueAtTime(168 + Math.random() * 16, now);
-      pulse.frequency.exponentialRampToValueAtTime(92 + Math.random() * 10, now + duration);
-      sub.frequency.setValueAtTime(88 + Math.random() * 10, now);
-      sub.frequency.exponentialRampToValueAtTime(54 + Math.random() * 8, now + duration);
-
-      lfo.type = "triangle";
-      lfo.frequency.setValueAtTime(13 + Math.random() * 5, now);
-      lfoGain.gain.setValueAtTime(28 + Math.random() * 8, now);
-
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.linearRampToValueAtTime(0.012, now + 0.01);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-
-      lfo.connect(lfoGain);
-      lfoGain.connect(pulse.detune);
-      lfoGain.connect(sub.detune);
-      pulse.connect(filter);
-      sub.connect(filter);
-      filter.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      pulse.start(now);
-      sub.start(now);
-      lfo.start(now);
-      pulse.stop(now + duration + 0.02);
-      sub.stop(now + duration + 0.02);
-      lfo.stop(now + duration + 0.02);
-      return;
-    }
-
     const oscA = audioCtx.createOscillator();
     const oscB = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     const filter = audioCtx.createBiquadFilter();
-
     oscA.type = type === "capture" || type === "level" ? "square" : type === "hit" ? "sawtooth" : "triangle";
     oscB.type = type === "hit" || type === "qixBounce" ? "square" : "sawtooth";
     filter.type = type === "hit" ? "bandpass" : "lowpass";
     filter.Q.value = type === "qixBounce" ? 10 : type === "hit" ? 8 : 5;
-
     const setPair = (aStart, aEnd, bStart, bEnd, attack, decay, peak, cutoff) => {
       oscA.frequency.setValueAtTime(aStart, now);
       oscA.frequency.exponentialRampToValueAtTime(Math.max(30, aEnd), now + decay);
@@ -2507,39 +2693,34 @@ button.ghost{
       gain.gain.exponentialRampToValueAtTime(0.0001, now + decay);
       return decay;
     };
-
     let duration = 0.24;
-    if (type === "start") duration = setPair(210, 340, 315, 120, 0.01, 0.22, 0.022, 980);
-    else if (type === "draw") duration = setPair(880, 610, 442, 318, 0.004, 0.12, 0.012, 1400);
-    else if (type === "capture") duration = setPair(320, 1280, 480, 760, 0.008, 0.34, 0.028, 1800);
-    else if (type === "hit") duration = setPair(180, 58, 267, 91, 0.003, 0.28, 0.03, 520);
-    else if (type === "level") duration = setPair(460, 1240, 690, 930, 0.01, 0.4, 0.026, 1600);
-    else if (type === "pause") duration = setPair(260, 170, 390, 128, 0.008, 0.18, 0.014, 720);
-    else if (type === "qixBounce") duration = setPair(146, 102, 228, 166, 0.003, 0.11, 0.014, 860);
-    else if (type === "attractGlitch") duration = setPair(118, 188, 174, 96, 0.002, 0.09, 0.01, 1040);
-    else duration = setPair(320, 220, 480, 330, 0.008, 0.2, 0.014, 1100);
-
+    if (type === "start") duration = setPair(210, 340, 315, 120, 0.01, 0.22, 0.02, 980);
+    else if (type === "draw") duration = setPair(880, 610, 442, 318, 0.004, 0.1, 0.008, 1400);
+    else if (type === "capture") duration = setPair(320, 1280, 480, 760, 0.008, 0.34, 0.024, 1800);
+    else if (type === "hit") duration = setPair(180, 58, 267, 91, 0.003, 0.28, 0.026, 520);
+    else if (type === "level") duration = setPair(460, 1240, 690, 930, 0.01, 0.4, 0.022, 1600);
+    else if (type === "pause") duration = setPair(260, 170, 390, 128, 0.008, 0.18, 0.012, 720);
+    else if (type === "qixBounce") duration = setPair(146, 102, 228, 166, 0.003, 0.11, 0.012, 860);
+    else if (type === "attractGlitch") duration = setPair(118, 188, 174, 96, 0.002, 0.09, 0.008, 1040);
+    else duration = setPair(320, 220, 480, 330, 0.008, 0.2, 0.012, 1100);
     oscA.detune.setValueAtTime((Math.random() - 0.5) * 34, now);
     oscB.detune.setValueAtTime((Math.random() - 0.5) * 60, now);
     oscB.detune.linearRampToValueAtTime((Math.random() - 0.5) * 140, now + duration * 0.75);
-
     oscA.connect(filter);
     oscB.connect(filter);
     filter.connect(gain);
-    gain.connect(audioCtx.destination);
+    gain.connect(sfxGain);
     oscA.start(now);
     oscB.start(now);
     oscA.stop(now + duration + 0.03);
     oscB.stop(now + duration + 0.03);
   }
 
+  // ---------- Input ----------
   function setControlDirection(dir, source) {
     controlDir = dir;
     controlSource = dir ? source || controlSource : null;
   }
-
-  function updatePadVisuals() {}
-
   function steerTarget(event) {
     const target = event.target;
     return !(target && target.closest && target.closest("button, .overlay, input"));
@@ -2550,17 +2731,10 @@ button.ghost{
       const dx = clientX - canvasStartX;
       const dy = clientY - canvasStartY;
       if (Math.abs(dx) < 14 && Math.abs(dy) < 14) return;
-      const dir = Math.abs(dx) > Math.abs(dy)
-        ? (dx > 0 ? "right" : "left")
-        : (dy > 0 ? "down" : "up");
-      if (dir !== canvasLastDir) {
-        canvasStartX = clientX;
-        canvasStartY = clientY;
-        canvasLastDir = dir;
-      }
+      const dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+      if (dir !== canvasLastDir) { canvasStartX = clientX; canvasStartY = clientY; canvasLastDir = dir; }
       setControlDirection(dir, "canvas");
     }
-
     function beginCanvasDrag(pointerId, clientX, clientY) {
       if (state.phase !== "playing") return;
       unlockAudio();
@@ -2569,7 +2743,6 @@ button.ghost{
       canvasStartY = clientY;
       canvasLastDir = null;
     }
-
     function endCanvasDrag(pointerId = null) {
       if (pointerId != null && canvasPointerId != null && canvasPointerId !== pointerId) return;
       if (controlSource === "canvas") setControlDirection(null);
@@ -2577,33 +2750,22 @@ button.ghost{
       canvasLastDir = null;
       mouseDragActive = false;
     }
-
     canvas.addEventListener("pointerdown", (event) => {
       if (event.pointerType === "mouse") return;
       if (state.phase !== "playing") return;
       event.preventDefault();
       beginCanvasDrag(event.pointerId, event.clientX, event.clientY);
-      try {
-        canvas.setPointerCapture?.(event.pointerId);
-      } catch (error) {
-      }
-    }, {passive:false});
+      try { canvas.setPointerCapture?.(event.pointerId); } catch (error) {}
+    }, {passive: false});
     canvas.addEventListener("pointermove", (event) => {
       if (event.pointerType === "mouse") return;
       if (canvasPointerId !== event.pointerId || state.phase !== "playing") return;
       event.preventDefault();
       applyCanvasDirection(event.clientX, event.clientY);
-    }, {passive:false});
-    canvas.addEventListener("pointerup", (event) => {
-      endCanvasDrag(event.pointerId);
-    });
-    canvas.addEventListener("pointercancel", (event) => {
-      endCanvasDrag(event.pointerId);
-    });
-
+    }, {passive: false});
+    canvas.addEventListener("pointerup", (event) => endCanvasDrag(event.pointerId));
+    canvas.addEventListener("pointercancel", (event) => endCanvasDrag(event.pointerId));
     if (window.PointerEvent) {
-      // Desktop: mouse drags steer from anywhere in the window (buttons/overlays
-      // excluded). Touch and pen keep the original canvas-only handlers above.
       window.addEventListener("pointerdown", (event) => {
         if (event.pointerType !== "mouse") return;
         if (state.phase !== "playing" || !steerTarget(event)) return;
@@ -2615,16 +2777,9 @@ button.ghost{
         if (canvasPointerId !== event.pointerId || state.phase !== "playing") return;
         applyCanvasDirection(event.clientX, event.clientY);
       });
-      window.addEventListener("pointerup", (event) => {
-        if (event.pointerType !== "mouse") return;
-        endCanvasDrag(event.pointerId);
-      });
-      window.addEventListener("pointercancel", (event) => {
-        if (event.pointerType !== "mouse") return;
-        endCanvasDrag(event.pointerId);
-      });
+      window.addEventListener("pointerup", (event) => { if (event.pointerType === "mouse") endCanvasDrag(event.pointerId); });
+      window.addEventListener("pointercancel", (event) => { if (event.pointerType === "mouse") endCanvasDrag(event.pointerId); });
     }
-
     canvas.addEventListener("mousedown", (event) => {
       if (window.PointerEvent) return;
       if (state.phase !== "playing") return;
@@ -2637,11 +2792,7 @@ button.ghost{
       event.preventDefault();
       applyCanvasDirection(event.clientX, event.clientY);
     });
-    window.addEventListener("mouseup", () => {
-      if (window.PointerEvent || !mouseDragActive) return;
-      endCanvasDrag("mouse");
-    });
-
+    window.addEventListener("mouseup", () => { if (!window.PointerEvent && mouseDragActive) endCanvasDrag("mouse"); });
     canvas.addEventListener("touchstart", (event) => {
       if (window.PointerEvent) return;
       if (state.phase !== "playing") return;
@@ -2649,151 +2800,226 @@ button.ghost{
       if (!touch) return;
       event.preventDefault();
       beginCanvasDrag("touch", touch.clientX, touch.clientY);
-    }, {passive:false});
+    }, {passive: false});
     canvas.addEventListener("touchmove", (event) => {
       if (window.PointerEvent || canvasPointerId !== "touch" || state.phase !== "playing") return;
       const touch = event.changedTouches && event.changedTouches[0];
       if (!touch) return;
       event.preventDefault();
       applyCanvasDirection(touch.clientX, touch.clientY);
-    }, {passive:false});
-    canvas.addEventListener("touchend", () => {
-      if (window.PointerEvent) return;
-      endCanvasDrag("touch");
-    });
-    canvas.addEventListener("touchcancel", () => {
-      if (window.PointerEvent) return;
-      endCanvasDrag("touch");
-    });
+    }, {passive: false});
+    canvas.addEventListener("touchend", () => { if (!window.PointerEvent) endCanvasDrag("touch"); });
+    canvas.addEventListener("touchcancel", () => { if (!window.PointerEvent) endCanvasDrag("touch"); });
   }
 
   function bindKeyboard() {
-    const keyMap = {
-      ArrowUp: "up",
-      ArrowDown: "down",
-      ArrowLeft: "left",
-      ArrowRight: "right",
-      w: "up",
-      s: "down",
-      a: "left",
-      d: "right"
-    };
+    const keyMap = {ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", w: "up", s: "down", a: "left", d: "right"};
     const mapDirection = (key) => keyMap[key] || keyMap[String(key).toLowerCase()] || null;
-
     window.addEventListener("keydown", (event) => {
       if (event.target === initialsInput) return;
       if (event.ctrlKey || event.metaKey || event.altKey) return;
+      if (event.key === "Shift") { slowKey = true; return; }
       const key = event.key;
       const mapped = mapDirection(key);
-      if (mapped) {
-        keyboardDir = mapped;
-        event.preventDefault();
-        return;
-      }
-      if (key === "Escape" && (howOverlay.classList.contains("show") || scoresOverlay.classList.contains("show"))) {
-        if (state.phase === "title") showOverlay(titleOverlay);
+      if (mapped) { keyboardDir = mapped; event.preventDefault(); return; }
+      if (key === "Escape" && (howOverlay.classList.contains("show") || scoresOverlay.classList.contains("show") || optionsOverlay.classList.contains("show") || creditsOverlay.classList.contains("show"))) {
+        if (optionsOverlay.classList.contains("show")) closeOptions();
+        else if (state.phase === "title") showOverlay(titleOverlay);
+        else if (state.phase === "paused") showOverlay(pauseOverlay);
         else hideAllOverlays();
         event.preventDefault();
         return;
       }
-      if (key === "p" || key === "P" || key === "Escape" || key === " ") {
-        if (!event.repeat && (state.phase === "playing" || state.phase === "paused")) {
-          togglePause();
-          event.preventDefault();
-        } else if (key === " " && !event.repeat && state.phase === "title" && titleOverlay.classList.contains("show")) {
-          beginGame();
-          event.preventDefault();
-        }
+      if (key === "p" || key === "P" || key === "Escape") {
+        if (!event.repeat && (state.phase === "playing" || state.phase === "paused")) { togglePause(); event.preventDefault(); }
+        return;
+      }
+      if (key === " ") {
+        if (!event.repeat && state.phase === "title" && titleOverlay.classList.contains("show")) { beginGame(); event.preventDefault(); }
+        else if (!event.repeat && (state.phase === "playing" || state.phase === "paused")) { togglePause(); event.preventDefault(); }
         return;
       }
       if (key === "Enter" && !event.repeat) {
-        if (state.phase === "title" && titleOverlay.classList.contains("show")) {
-          beginGame();
-          event.preventDefault();
-        } else if (state.phase === "gameover" && gameOverOverlay.classList.contains("show")) {
-          if (state.pendingScore) handleSaveScore();
-          else restartGame();
-          event.preventDefault();
-        } else if (state.phase === "paused") {
-          togglePause();
-          event.preventDefault();
-        }
+        if (state.phase === "title" && titleOverlay.classList.contains("show")) { beginGame(); event.preventDefault(); }
+        else if (state.phase === "gameover" && gameOverOverlay.classList.contains("show")) { if (state.pendingScore) handleSaveScore(); else restartGame(); event.preventDefault(); }
+        else if (state.phase === "paused") { resumeGame(); event.preventDefault(); }
       }
     });
     window.addEventListener("keyup", (event) => {
+      if (event.key === "Shift") { slowKey = false; return; }
       const mapped = mapDirection(event.key);
-      if (mapped && keyboardDir === mapped) {
-        keyboardDir = null;
-      }
+      if (mapped && keyboardDir === mapped) keyboardDir = null;
     });
   }
 
-  function initUi() {
-    if (versionTag) versionTag.textContent = GAME_VERSION;
-    startButton.addEventListener("click", beginGame);
-    howButton.addEventListener("click", () => {
-      unlockAudio();
-      showOverlay(howOverlay);
+  function bindTouchButtons() {
+    const dpadButtons = touchControls.querySelectorAll(".dpad button");
+    dpadButtons.forEach((btn) => {
+      const dir = btn.getAttribute("data-dir");
+      const press = (e) => { e.preventDefault(); unlockAudio(); setControlDirection(dir, "pad"); btn.classList.add("pressed"); };
+      const release = (e) => { if (e) e.preventDefault(); if (controlSource === "pad") setControlDirection(null); btn.classList.remove("pressed"); };
+      btn.addEventListener("pointerdown", press);
+      btn.addEventListener("pointerup", release);
+      btn.addEventListener("pointerleave", release);
+      btn.addEventListener("pointercancel", release);
     });
-    howCloseButton.addEventListener("click", () => showOverlay(titleOverlay));
-    scoresButton.addEventListener("click", () => {
-      unlockAudio();
-      renderHighScores();
-      showOverlay(scoresOverlay);
-    });
-    miniScoresButton.addEventListener("click", () => {
-      renderHighScores();
-      showOverlay(scoresOverlay);
-    });
-    scoresCloseButton.addEventListener("click", () => {
-      if (state.phase === "title") showOverlay(titleOverlay);
-      else hideAllOverlays();
-    });
-    restartButton.addEventListener("click", restartGame);
-    titleButton.addEventListener("click", () => {
-      if (levelAdvanceTimer) {
-        clearTimeout(levelAdvanceTimer);
-        levelAdvanceTimer = 0;
-      }
-      clearDeathTimer();
-      state.phase = "title";
-      pauseButton.textContent = "Pause";
-      showOverlay(titleOverlay);
-      renderHighScores();
-      seedAttractState();
-    });
-    pauseButton.addEventListener("click", () => {
-      if (state.phase === "playing" || state.phase === "paused") {
-        togglePause();
-      }
-    });
-    saveScoreButton.addEventListener("click", handleSaveScore);
-    initialsInput.addEventListener("input", () => {
-      initialsInput.value = normalizeInitials(initialsInput.value);
-    });
-    initialsInput.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") {
-        handleSaveScore();
-      }
-    });
+    const slowPress = (e) => { e.preventDefault(); slowTouch = true; slowBtn.classList.add("pressed"); };
+    const slowRelease = (e) => { if (e) e.preventDefault(); slowTouch = false; slowBtn.classList.remove("pressed"); };
+    slowBtn.addEventListener("pointerdown", slowPress);
+    slowBtn.addEventListener("pointerup", slowRelease);
+    slowBtn.addEventListener("pointerleave", slowRelease);
+    slowBtn.addEventListener("pointercancel", slowRelease);
   }
 
+  function pollGamepad() {
+    if (!navigator.getGamepads) return;
+    const pads = navigator.getGamepads();
+    let pad = null;
+    for (const p of pads) { if (p) { pad = p; break; } }
+    if (!pad) { gamepadDir = null; slowPad = false; prevPadButtons = {}; return; }
+    const dz = 0.4;
+    const ax = pad.axes[0] || 0;
+    const ay = pad.axes[1] || 0;
+    const btn = (i) => pad.buttons[i] && pad.buttons[i].pressed;
+    const up = btn(12) || ay < -dz;
+    const down = btn(13) || ay > dz;
+    const left = btn(14) || ax < -dz;
+    const right = btn(15) || ax > dz;
+    let dir = null;
+    if (Math.abs(ax) > Math.abs(ay)) { if (left) dir = "left"; else if (right) dir = "right"; else if (up) dir = "up"; else if (down) dir = "down"; }
+    else { if (up) dir = "up"; else if (down) dir = "down"; else if (left) dir = "left"; else if (right) dir = "right"; }
+    gamepadDir = dir;
+    slowPad = btn(2) || btn(1) || btn(6) || btn(7);
+    const pressedNow = {};
+    for (let i = 0; i < pad.buttons.length; i++) pressedNow[i] = pad.buttons[i] && pad.buttons[i].pressed;
+    const edge = (i) => pressedNow[i] && !prevPadButtons[i];
+    if (edge(9)) { if (state.phase === "playing" || state.phase === "paused") togglePause(); else if (state.phase === "title") beginGame(); }
+    if (edge(0)) {
+      if (state.phase === "title") beginGame();
+      else if (state.phase === "gameover") { if (state.pendingScore) handleSaveScore(); else restartGame(); }
+      else if (state.phase === "paused") resumeGame();
+    }
+    if (edge(8) || edge(1)) { if (state.phase === "playing") pauseGame(); }
+    if (dir) unlockAudio();
+    prevPadButtons = pressedNow;
+  }
+
+  // ---------- Options UI ----------
+  function applySettingsToBody() {
+    document.body.classList.toggle("crt-off", !settings.crt);
+    document.body.classList.toggle("reduced-motion", !!settings.reducedMotion);
+    document.body.classList.toggle("show-pad", settings.controlScheme === "pad");
+  }
+  function syncOptionsUi() {
+    sfxRange.value = String(Math.round(settings.sfxVolume * 100));
+    musicRange.value = String(Math.round(settings.musicVolume * 100));
+    sfxVal.textContent = Math.round(settings.sfxVolume * 100) + "%";
+    musicVal.textContent = Math.round(settings.musicVolume * 100) + "%";
+    diffSeg.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.getAttribute("data-diff") === settings.difficulty));
+    ctrlSeg.querySelectorAll("button").forEach((b) => b.classList.toggle("active", b.getAttribute("data-ctrl") === settings.controlScheme));
+    crtSwitch.classList.toggle("on", !!settings.crt);
+    motionSwitch.classList.toggle("on", !!settings.reducedMotion);
+    fsSwitch.classList.toggle("on", !!document.fullscreenElement);
+  }
+  function bindOptions() {
+    sfxRange.addEventListener("input", () => {
+      settings.sfxVolume = Number(sfxRange.value) / 100;
+      sfxVal.textContent = sfxRange.value + "%";
+      applySfxVolume();
+      saveSettings();
+    });
+    sfxRange.addEventListener("change", () => playSfx("select"));
+    musicRange.addEventListener("input", () => {
+      settings.musicVolume = Number(musicRange.value) / 100;
+      musicVal.textContent = musicRange.value + "%";
+      applyMusicVolume();
+      saveSettings();
+    });
+    diffSeg.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        settings.difficulty = btn.getAttribute("data-diff");
+        saveSettings();
+        syncOptionsUi();
+        playSfx("select");
+      });
+    });
+    ctrlSeg.querySelectorAll("button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        settings.controlScheme = btn.getAttribute("data-ctrl");
+        saveSettings();
+        applySettingsToBody();
+        syncOptionsUi();
+        playSfx("select");
+      });
+    });
+    crtSwitch.addEventListener("click", () => { settings.crt = !settings.crt; saveSettings(); applySettingsToBody(); syncOptionsUi(); playSfx("navigate"); });
+    motionSwitch.addEventListener("click", () => { settings.reducedMotion = !settings.reducedMotion; saveSettings(); applySettingsToBody(); syncOptionsUi(); playSfx("navigate"); });
+    fsSwitch.addEventListener("click", () => { toggleFullscreen(); playSfx("navigate"); });
+    document.addEventListener("fullscreenchange", () => { if (optionsOverlay.classList.contains("show")) syncOptionsUi(); });
+  }
+  function toggleFullscreen() {
+    const el = document.documentElement;
+    if (!document.fullscreenElement) {
+      const req = el.requestFullscreen || el.webkitRequestFullscreen;
+      if (req) req.call(el).catch(() => {});
+    } else {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) exit.call(document).catch(() => {});
+    }
+  }
+
+  // ---------- Title / init ----------
   function seedAttractState() {
     state.score = 0;
     state.level = 2;
-    state.lives = 3;
+    state.lives = diff().lives;
     state.levelMessage = "Demo play is live in the background.";
     resetAttractDemo();
     updateHud(true);
     renderHighScores();
   }
 
+  function initUi() {
+    if (versionTag) versionTag.textContent = GAME_VERSION;
+    startButton.addEventListener("click", () => { playSfx("select"); beginGame(); });
+    howButton.addEventListener("click", () => { unlockAudio(); playSfx("navigate"); showOverlay(howOverlay); });
+    howCloseButton.addEventListener("click", () => { playSfx("select"); if (state.phase === "paused") showOverlay(pauseOverlay); else showOverlay(titleOverlay); });
+    optionsButton.addEventListener("click", () => { unlockAudio(); openOptions("title"); });
+    optionsCloseButton.addEventListener("click", closeOptions);
+    scoresButton.addEventListener("click", () => { unlockAudio(); playSfx("navigate"); renderHighScores(); showOverlay(scoresOverlay); });
+    creditsButton.addEventListener("click", () => { unlockAudio(); playSfx("navigate"); showOverlay(creditsOverlay); });
+    creditsCloseButton.addEventListener("click", () => { playSfx("select"); showOverlay(titleOverlay); });
+    miniScoresButton.addEventListener("click", () => { renderHighScores(); playSfx("navigate"); showOverlay(scoresOverlay); });
+    scoresCloseButton.addEventListener("click", () => { playSfx("select"); if (state.phase === "title") showOverlay(titleOverlay); else if (state.phase === "paused") showOverlay(pauseOverlay); else hideAllOverlays(); });
+    restartButton.addEventListener("click", restartGame);
+    titleButton.addEventListener("click", goToTitle);
+    resumeButton.addEventListener("click", resumeGame);
+    pauseOptionsButton.addEventListener("click", () => openOptions("pause"));
+    pauseHowButton.addEventListener("click", () => { playSfx("navigate"); showOverlay(howOverlay); });
+    pauseRestartButton.addEventListener("click", restartGame);
+    pauseTitleButton.addEventListener("click", goToTitle);
+    pauseButton.addEventListener("click", () => { if (state.phase === "playing" || state.phase === "paused") togglePause(); });
+    saveScoreButton.addEventListener("click", handleSaveScore);
+    initialsInput.addEventListener("input", () => { initialsInput.value = normalizeInitials(initialsInput.value); });
+    initialsInput.addEventListener("keydown", (event) => { if (event.key === "Enter") handleSaveScore(); });
+  }
+
+  // ---------- Boot ----------
+  applySettingsToBody();
+  prefetchSfx();
   window.addEventListener("resize", resizeCanvas);
+  window.addEventListener("pointerdown", () => unlockAudio(), {once: false});
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) { if (state.phase === "playing") pauseGame(); }
+  });
   bindCanvasDrag();
   bindKeyboard();
+  bindTouchButtons();
+  bindOptions();
   initUi();
   resizeCanvas();
   seedAttractState();
+  playMusic("menu");
   raf = requestAnimationFrame(tick);
 })();
 </script>
