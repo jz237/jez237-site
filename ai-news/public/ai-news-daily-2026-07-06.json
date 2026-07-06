@@ -1,7 +1,39 @@
 {
   "date": "2026-07-06",
-  "updatedAt": "2026-07-06T10:00:01.502270+00:00",
+  "updatedAt": "2026-07-06T12:57:42.930034+00:00",
   "items": [
+    {
+      "title": "A senior FCA official says Britain should weigh regulating AI models directly",
+      "url": "https://thenextweb.com/news/fca-considers-regulating-ai-models",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Britain should consider whether large language models such as ChatGPT, Claude, and Gemini ought to be regulated as they increasingly influence how consumers make financial decisions, a senior official at the Financial Conduct Authority has said. Sheldon Mills, an executive director at the FCA, argued that the existing rulebook will have to evolve as firms [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-6e390407c245c9971f.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T12:23:38+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.1328,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "A senior FCA official says Britain should weigh regulating AI models directly",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "senior-fca-official-britain-should-weigh",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/Sheldon-Mills.avif"
+    },
     {
       "title": "sqlite-utils 4.0rc3",
       "url": "https://simonwillison.net/2026/Jul/6/sqlite-utils",
@@ -16,10 +48,10 @@
       "featuredLatest": false,
       "published": "2026-07-06T05:40:08+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.8653,
+      "score": 9.7883,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -45,9 +77,9 @@
       "summary": "June is over, and NLW makes the case that it was one of the most consequential months in post-ChatGPT history — a matched pair with May that took AI from the subsidy era into token scarcity, then detonated with Fable 5, a government export-control shutdown, and the first real open-weight DeepSeek moment for the West.",
       "image": "public/thumbnails/news-201a59d5dddc613613.png",
       "featuredLatest": false,
-      "published": "2026-07-06T10:00:09.330037+00:00",
+      "published": "2026-07-06T12:57:47.350252+00:00",
       "firstSeen": "2026-07-05T14:07:10.192702+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 8.332,
@@ -63,6 +95,37 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "big-ways-just-changed"
+    },
+    {
+      "title": "China’s AI companion rules: what Beijing is really going after",
+      "url": "https://www.artificialintelligence-news.com/news/china-ai-companion-rules",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "An AI companion sounds dystopian, but it has become a common thread in the wider conversation about the perils of generative AI. What it refers to is essentially a conversational agent built to sustain an ongoing, personal relationship with a user, with the memory and steady persona that keep it consistent from one session to [&#8230;]\nThe post China&#8217;s AI companion rules: what Beijing is really going after appeared first on AI News.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-06T11:00:00+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.3897,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "China’s AI companion rules: what Beijing is really going after",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Artificial Intelligence News."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "china-companion-rules-what-beijing-really"
     },
     {
       "title": "Samsung’s appliance workers plan a rally over the bonuses going to chip staff",
@@ -81,7 +144,7 @@
       "lastSeen": "2026-07-06T10:00:01.502270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.6188,
+      "score": 4.5344,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -113,7 +176,7 @@
       "lastSeen": "2026-07-06T10:00:01.502270+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.4964,
+      "score": 4.4138,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -127,6 +190,316 @@
       "toolCandidate": false,
       "clusterKey": "samsung-heads-18-fold-profit-jump-memory",
       "imageOriginal": "https://media.thenextweb.com/2026/06/Samsung.avif"
+    },
+    {
+      "title": "ITV sells its broadcasting arm to Comcast’s Sky for up to £1.6bn",
+      "url": "https://thenextweb.com/news/itv-sells-broadcasting-arm-to-sky",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "ITV has agreed to sell its media and entertainment division to Sky, the Comcast-owned broadcaster, in a deal worth up to £1.6bn that redraws the map of British television. The transaction hands Sky the ITV channels and the ITVX streaming service, and leaves the seller as a pure production business, a split that arrives as [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/ITV.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T12:07:39+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5248,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "ITV sells its broadcasting arm to Comcast’s Sky for up to £1.6bn",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "itv-sells-broadcasting-arm-comcast-sky"
+    },
+    {
+      "title": "LeRobot v0.6.0: Imagine, Evaluate, Improve",
+      "url": "https://huggingface.co/blog/lerobot-release-v060",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "",
+      "image": "https://huggingface.co/blog/assets/lerobot-release-v060/thumbnail.png",
+      "featuredLatest": false,
+      "published": "2026-07-07T00:00:00+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.43,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "LeRobot v0.6.0: Imagine, Evaluate, Improve",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Hugging Face Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "lerobot-imagine-evaluate-improve"
+    },
+    {
+      "title": "Taiwan’s Unimicron seeks up to $1.4bn as AI lifts the chip-substrate makers",
+      "url": "https://thenextweb.com/news/unimicron-1-4-billion-gds-offering-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Unimicron Technology is looking to raise as much as $1.4bn from a sale of global depositary shares, joining the long line of companies cashing in on investors’ appetite for anything tied to artificial intelligence. The Taiwanese firm is selling 50 million shares at $26.96 to $27.76 each, a discount of roughly 3% to 6% to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Unimicron.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T11:51:23+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2167,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Taiwan’s Unimicron seeks up to $1.4bn as AI lifts the chip-substrate makers",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "micron-taiwan-unimicron-seeks-4bn-lifts"
+    },
+    {
+      "title": "Apple supplier Luxshare set to price Hong Kong’s biggest IPO of 2026 at the top",
+      "url": "https://thenextweb.com/news/luxshare-hong-kong-ipo-max-price",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Luxshare Precision is set to price its Hong Kong listing at the top of its range, a sign of strong demand for one of the year’s marquee share sales. The Apple supplier plans to fix the offer at the maximum HK$63.28 a share, according to people cited by Bloomberg, raising as much as $3.1bn and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Luxshare.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T11:24:16+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2034,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Apple supplier Luxshare set to price Hong Kong’s biggest IPO of 2026 at the top",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "apple-supplier-luxshare-set-price-hong"
+    },
+    {
+      "title": "Spain’s Sherpa.ai raises $18M for AI that never touches your data",
+      "url": "https://thenextweb.com/news/sherpa-ai-18m-data-sovereign-federated",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Everyone wants the power of AI. Few want to hand their most sensitive data to a foreign cloud to get it. A Basque startup thinks it has the fix. Sherpa.ai has raised $18m to build AI that never sees your raw data, tech.eu reported. The Spanish company sells to banks, hospitals and governments, the customers [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/xabier-uribe-etxebarria-emprendedor-inteligencia-artificial.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T12:27:55+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1349,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Spain’s Sherpa.ai raises $18M for AI that never touches your data",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "spain-sherpa-raises-18m-never-touches"
+    },
+    {
+      "title": "Thought Machine crosses $100M revenue and delays its London IPO to 2028",
+      "url": "https://thenextweb.com/news/thought-machine-100m-revenue-arr-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Most tech founders chase a bigger valuation. Thought Machine’s boss would rather talk about revenue, and he has just crossed a milestone worth boasting about. The London core-banking company has passed $100m in annual revenue for the first time, tech.eu reported. It also took a fresh £30m ($41m) from a “tier 1” bank, and pushed [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/CEO_Paul_Taylor.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T12:18:25+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1302,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Thought Machine crosses $100M revenue and delays its London IPO to 2028",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "thought-machine-crosses-100m-revenue-delays"
+    },
+    {
+      "title": "UK’s Cooper warns of an AI ‘Hiroshima’ and calls for global rules",
+      "url": "https://thenextweb.com/news/cooper-ai-hiroshima-security-warning",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Britain’s foreign secretary has a stark analogy for artificial intelligence. Do not wait for its Hiroshima moment before writing the rules. Yvette Cooper will warn that AI could become the “greatest security challenge of the next decade,” according to Bloomberg. She sets it out in an essay for the Chatham House think tank, published on [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Yvette_Cooper.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T12:02:02+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.122,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "UK’s Cooper warns of an AI ‘Hiroshima’ and calls for global rules",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "cooper-warns-hiroshima-calls-global-rules"
+    },
+    {
+      "title": "Japan’s Turing takes AMD money and AMD chips to loosen Nvidia’s grip",
+      "url": "https://thenextweb.com/news/turing-japan-amd-ventures-self-driving",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Nvidia powers almost every self-driving car project going. A small Japanese startup is quietly handing some of that work to AMD instead. Turing Inc. has added AMD Ventures to its backers and started running its AI on AMD chips, Bloomberg reported. The five-year-old Tokyo firm wants to put self-driving software in consumer cars and robotaxis [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/TuringInc-Development-vehicle.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T11:52:30+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1173,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Japan’s Turing takes AMD money and AMD chips to loosen Nvidia’s grip",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "nvidia-japan-turing-takes-amd-money"
+    },
+    {
+      "title": "Tesla brings its Robotaxi to Miami, and drops the safety monitor",
+      "url": "https://thenextweb.com/news/tesla-robotaxi-miami-no-safety-monitor",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Tesla’s driverless cabs have reached a fifth US city. This time, there is no human minder in the car at all. The company rolled out its Robotaxi service in part of Miami on Friday, it announced on X. A map in the post showed a small patch of West Miami, well away from the busy [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/tesla-robotaxi.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T11:41:10+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1117,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Tesla brings its Robotaxi to Miami, and drops the safety monitor",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "tesla-brings-robotaxi-miami-drops-safety"
+    },
+    {
+      "title": "Midjourney turns the tables, demanding the studios suing it reveal their AI",
+      "url": "https://thenextweb.com/news/midjourney-studios-ai-disclosure-copyright",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The studios suing Midjourney say it trained AI on their characters without permission. Midjourney’s answer: prove you do not do exactly the same thing. The AI image generator wants a US federal judge to intervene. It has asked the court to force the studios suing it to reveal how they use AI internally, Variety reported. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Midjourney-logo-tablet.avif",
+      "featuredLatest": false,
+      "published": "2026-07-06T11:28:40+00:00",
+      "firstSeen": "2026-07-06T12:57:42.930034+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1056,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Midjourney turns the tables, demanding the studios suing it reveal their AI",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "midjourney-turns-tables-demanding-studios-suing"
     },
     {
       "title": "Shampoo and cookies get an AI makeover as consumer giants rewire their labs",
@@ -145,7 +518,7 @@
       "lastSeen": "2026-07-06T10:00:01.502270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.109,
+      "score": 2.0254,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -176,7 +549,7 @@
       "lastSeen": "2026-07-06T10:00:01.502270+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1035,
+      "score": 2.0203,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -189,37 +562,6 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "moving-faster-than-rules-has-report"
-    },
-    {
-      "title": "Is the ‘SaaSpocalypse’ a myth? The real cost of AI-built software",
-      "url": "https://thenextweb.com/news/saaspocalypse-a-myth-the-real-cost-of-ai-built-software",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Before replacing SaaS subscriptions with internally built AI software, executives should evaluate the full lifecycle cost of ownership rather than focusing on development cost alone. The key question is not whether the organisation can build a tool, but whether it has the capacity and resilience to maintain, secure, and continuously evolve it over time. This [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/real-cost-of-AI-software.avif",
-      "featuredLatest": false,
-      "published": "2026-07-06T07:26:22+00:00",
-      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0745,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Is the ‘SaaSpocalypse’ a myth? The real cost of AI-built software",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "saaspocalypse-myth-real-cost-ai-built-software"
     }
   ],
   "tools": [
@@ -237,11 +579,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1335,
+      "score": 14.1315,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -306,10 +648,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2349,
+      "score": 7.2328,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -340,10 +682,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2334,
+      "score": 7.2314,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -377,7 +719,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9205,
+      "score": 6.9195,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -441,10 +783,10 @@
       "featuredLatest": false,
       "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.133,
+      "score": 6.0837,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -459,8 +801,7 @@
       "toolName": "CodeMote",
       "toolLabel": "CodeMote",
       "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
-      "clusterKey": "codemote",
-      "imageOriginal": "https://ph-files.imgix.net/09cc5dd7-f1cf-475a-a464-47758d3811f9.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "codemote"
     },
     {
       "title": "Edgee Claude Code Compressor V2",
@@ -476,10 +817,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9363,
+      "score": 5.9261,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -494,8 +835,7 @@
       "toolName": "Edgee Claude Code Compressor V2",
       "toolLabel": "Edgee Claude Code Compressor V2",
       "toolSummary": "Fewer tokens, same context, 50% cost reduction",
-      "clusterKey": "claude-edgee-claude-code-compressor",
-      "imageOriginal": "https://ph-files.imgix.net/436f689f-6c20-4fb1-ae16-3b820ac64dea.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "claude-edgee-claude-code-compressor"
     }
   ],
   "tryWorthy": [
@@ -513,11 +853,11 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1335,
+      "score": 14.1315,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -582,10 +922,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T20:22:29+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2349,
+      "score": 7.2328,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -616,10 +956,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2334,
+      "score": 7.2314,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -653,7 +993,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9205,
+      "score": 6.9195,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -717,10 +1057,10 @@
       "featuredLatest": false,
       "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.133,
+      "score": 6.0837,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -735,8 +1075,7 @@
       "toolName": "CodeMote",
       "toolLabel": "CodeMote",
       "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
-      "clusterKey": "codemote",
-      "imageOriginal": "https://ph-files.imgix.net/09cc5dd7-f1cf-475a-a464-47758d3811f9.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "codemote"
     },
     {
       "title": "Edgee Claude Code Compressor V2",
@@ -752,10 +1091,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-06T12:57:42.930034+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.9363,
+      "score": 5.9261,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -770,8 +1109,7 @@
       "toolName": "Edgee Claude Code Compressor V2",
       "toolLabel": "Edgee Claude Code Compressor V2",
       "toolSummary": "Fewer tokens, same context, 50% cost reduction",
-      "clusterKey": "claude-edgee-claude-code-compressor",
-      "imageOriginal": "https://ph-files.imgix.net/436f689f-6c20-4fb1-ae16-3b820ac64dea.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "claude-edgee-claude-code-compressor"
     }
   ],
   "sourceHealth": [
@@ -783,7 +1121,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -793,7 +1131,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -803,7 +1141,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -813,7 +1151,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -822,8 +1160,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 815,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "items": 816,
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -833,7 +1171,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -843,7 +1181,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -853,7 +1191,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -863,7 +1201,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -873,7 +1211,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -883,7 +1221,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -893,7 +1231,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "The Next Web",
@@ -903,7 +1241,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -913,7 +1251,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -923,7 +1261,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -933,7 +1271,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -943,7 +1281,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Anthropic News",
@@ -953,7 +1291,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 236,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "The Verge AI",
@@ -963,7 +1301,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -973,7 +1311,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Simon Willison",
@@ -983,7 +1321,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -993,7 +1331,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Latent Space",
@@ -1003,7 +1341,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Import AI",
@@ -1011,9 +1349,10 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "ok",
-      "items": 20,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "status": "error",
+      "items": 0,
+      "error": "HTTP Error 403: Forbidden",
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1023,7 +1362,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 154,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1033,7 +1372,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1043,7 +1382,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1053,7 +1392,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1063,7 +1402,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1073,7 +1412,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1083,7 +1422,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1093,8 +1432,14 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-06T10:00:01.502270+00:00"
+      "checkedAt": "2026-07-06T12:57:42.930034+00:00"
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Import AI",
+      "url": "https://importai.substack.com/feed",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
 }
