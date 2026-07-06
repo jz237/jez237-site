@@ -150,7 +150,7 @@
 
 <div id="start-screen">
   <h1>Lunar Lander</h1>
-  <div class="subtitle">Enhanced Edition - v2.3.1 Desktop Controls</div>
+  <div class="subtitle">Enhanced Edition - v2.4.0 Mission Control</div>
   <div class="controls-info">
     <kbd>&uarr;</kbd>/<kbd>W</kbd>/<kbd>SPACE</kbd> Thrust &nbsp;
     <kbd>&larr;</kbd><kbd>&rarr;</kbd>/<kbd>A</kbd><kbd>D</kbd> Rotate &nbsp;
@@ -168,6 +168,10 @@
     <button class="btn diff-btn" data-diff="cadet" style="padding:8px 20px; font-size:0.85rem; border-color:#4f8; color:#4f8;">Cadet</button>
     <button class="btn diff-btn selected" data-diff="commander" style="padding:8px 20px; font-size:0.85rem;">Commander</button>
     <button class="btn diff-btn" data-diff="apollo13" style="padding:8px 20px; font-size:0.85rem; border-color:#f64; color:#f64;">Apollo 13</button>
+  </div>
+  <div id="audio-select" style="margin:0.4rem 0 0.6rem; display:flex; gap:18px; justify-content:center; align-items:center; font-size:0.7rem; color:#6af;">
+    <label style="display:flex;align-items:center;gap:6px;">MUSIC <input id="llMusicVol" type="range" min="0" max="100" style="width:90px;accent-color:#6af;"></label>
+    <label style="display:flex;align-items:center;gap:6px;">VOICE <input id="llVoiceVol" type="range" min="0" max="100" style="width:90px;accent-color:#6af;"></label>
   </div>
   <div id="badge-display" style="margin:0.5rem 0; min-height:20px; color:#fda; font-size:0.75rem;"></div>
   <button class="btn" id="start-btn">Launch Mission</button>
@@ -219,7 +223,50 @@
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-const GAME_VERSION = 'v2.3.1 DESKTOP CONTROLS';
+const GAME_VERSION = 'v2.4.0 MISSION CONTROL';
+
+// ===== v2.4: mission-control voice + ambient music (targeted; everything else untouched) =====
+const LL_AUDIO_KEY = 'lunarLander_audio_v1';
+let llAudio = (() => { try { return Object.assign({ music: 45, voice: 100 }, JSON.parse(localStorage.getItem(LL_AUDIO_KEY)) || {}); } catch (e) { return { music: 45, voice: 100 }; } })();
+function llSave() { try { localStorage.setItem(LL_AUDIO_KEY, JSON.stringify(llAudio)); } catch (e) {} }
+let llMusic = null, llVoice = null, llMusicReady = false, llVoFuel = false;
+function llInitMusic() {
+  if (llMusicReady) return; llMusicReady = true;
+  try {
+    llMusic = new Audio('assets/ambient-loop.mp3'); llMusic.loop = true; llMusic.volume = 0; llMusic.preload = 'auto';
+    llVoice = new Audio(); llVoice.preload = 'auto';
+    llMusic.play().catch(() => {});
+  } catch (e) {}
+}
+function llUpdateMusic() {
+  if (!llMusic) return;
+  const base = llAudio.music / 100;
+  const target = (state === 'playing' || state === 'start') ? base * 0.55 : base * 0.2;
+  llMusic.volume = Math.max(0, Math.min(1, llMusic.volume + (target - llMusic.volume) * 0.03));
+}
+const LL_VO_TEXT = { 'vo-go-descent': 'GO FOR DESCENT', 'vo-landed': 'TOUCHDOWN CONFIRMED', 'vo-landed-2': 'THE EAGLE HAS LANDED', 'vo-crash': 'WE LOST THE LANDER', 'vo-crash-2': 'IMPACT DETECTED', 'vo-low-fuel': 'FUEL AT 15 PERCENT', 'vo-record': 'NEW RECORD', 'vo-gameover': 'MISSION OVER' };
+const LL_VO_POOLS = { landed: ['vo-landed', 'vo-landed-2'], crash: ['vo-crash', 'vo-crash-2'] };
+const llVoLast = {};
+function llPlayVoice(name) {
+  llInitMusic();
+  if (!llVoice || llAudio.voice <= 0) return;
+  try { llVoice.src = 'assets/' + name + '.mp3'; llVoice.volume = llAudio.voice / 100; llVoice.currentTime = 0; llVoice.play().catch(() => {}); llToastVo(LL_VO_TEXT[name]); } catch (e) {}
+}
+function llAnnounce(event) {
+  const pool = LL_VO_POOLS[event] || [event];
+  let pick = pool[0];
+  if (pool.length > 1) { let g = 0; do { pick = pool[(Math.random() * pool.length) | 0]; } while (pick === llVoLast[event] && ++g < 8); }
+  llVoLast[event] = pick;
+  llPlayVoice(pick);
+}
+let llToastTimer = null;
+function llToastVo(t) {
+  let el = document.getElementById('llVoToast');
+  if (!el) { el = document.createElement('div'); el.id = 'llVoToast'; el.style.cssText = 'position:fixed;left:50%;bottom:15%;transform:translateX(-50%);z-index:40;pointer-events:none;color:#bfe4ff;font:bold 14px monospace;letter-spacing:0.12em;text-shadow:0 0 12px rgba(100,170,255,0.9);opacity:0;transition:opacity .25s;text-align:center;'; document.body.appendChild(el); }
+  if (!t) return;
+  el.textContent = t; el.style.opacity = '1';
+  clearTimeout(llToastTimer); llToastTimer = setTimeout(() => el.style.opacity = '0', 1700);
+}
 
 // --- Responsive canvas ---
 function resize() {
@@ -234,6 +281,7 @@ const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
 function ensureAudio() {
   if (!audioCtx) audioCtx = new AudioCtx();
+  llInitMusic();
 }
 
 // Thrust audio node references
@@ -1147,6 +1195,7 @@ function update(dt) {
     lander.vy -= Math.cos(lander.angle) * thrust;
     lander.fuel -= (boosting ? 0.15 : 0.08) * dt;
     if (lander.fuel < 0) lander.fuel = 0;
+    if (!llVoFuel && state === 'playing' && lander.fuel > 0 && lander.fuel <= 15) { llVoFuel = true; llPlayVoice('vo-low-fuel'); }
 
     // Thrust particles
     for (let i = 0; i < (boosting ? 4 : 2); i++) {
@@ -1445,6 +1494,7 @@ function checkCollision() {
       lander.vy = 0;
       playThrustSound(false);
       playVictoryJingle();
+      llAnnounce('landed');
 
       // Dust
       for (let i = 0; i < 30; i++) {
@@ -1476,6 +1526,7 @@ function checkCollision() {
       // Save ghost if better than best
       if (!bestGhost || score > (bestGhost.score || 0)) {
         bestGhost = { frames: [...ghostData], score: score, level: level };
+        setTimeout(() => llPlayVoice('vo-record'), 1700);
       }
 
       setTimeout(() => showResult('win'), 1200);
@@ -1483,6 +1534,7 @@ function checkCollision() {
       state = 'crashed';
       playThrustSound(false);
       playExplosion();
+      llAnnounce('crash');
       camera.shake = 15;
 
       // Explosion particles
@@ -1550,6 +1602,7 @@ function showResult(type) {
     if (lives <= 0) {
       // Game over
       state = 'gameover';
+      llPlayVoice('vo-gameover');
       document.getElementById('gameover-stats').innerHTML =
         `Final Score: <span style="color:#fda; font-size:1.3rem;">${score}</span><br>` +
         `Reached Level: ${level}<br>` +
@@ -1693,6 +1746,8 @@ function showLeaderboard(highlightScore, source = 'game') {
 }
 
 function resetGame() {
+  llVoFuel = false;
+  llPlayVoice('vo-go-descent');
   const diff = DIFFICULTIES[difficulty];
   level = 1;
   lives = diff.lives;
@@ -3405,6 +3460,7 @@ function gameLoop(timestamp) {
   lastTime = timestamp;
 
   update(dt);
+  llUpdateMusic();
   draw();
   requestAnimationFrame(gameLoop);
 }
@@ -3559,6 +3615,15 @@ window.addEventListener('keydown', (e) => {
 highScores = loadHighScores();
 init();
 updateBadgeDisplay();
+// v2.4: audio slider wiring
+(function llBindAudioUI() {
+  const wire = (id, key) => {
+    const e = document.getElementById(id); if (!e) return;
+    e.value = llAudio[key];
+    e.addEventListener('input', () => { llAudio[key] = parseInt(e.value) || 0; if (llVoice) llVoice.volume = llAudio.voice / 100; llSave(); });
+  };
+  wire('llMusicVol', 'music'); wire('llVoiceVol', 'voice');
+})();
 requestAnimationFrame(gameLoop);
 
 </script>
