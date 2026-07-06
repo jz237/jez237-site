@@ -1,0 +1,13 @@
+{
+  "source": "ElevenLabs text_to_sound_effects",
+  "format": "ogg (vorbis q3), leading silence trimmed",
+  "sounds": {
+    "menu_click": "Soft UI button click / menu select blip",
+    "wave_clear": "Triumphant short victory fanfare on wave clear",
+    "upgrade": "Mechanical module-installed clunk + energizing hum",
+    "achievement": "Warm glassy bell arpeggio, medal earned",
+    "overdrive": "Turbine spin-up + electric surge, overdrive engage",
+    "perfect": "Shimmering crystalline sweep, perfect-wave bonus",
+    "combo": "Rising electronic zing, combo milestone tick"
+  }
+}
