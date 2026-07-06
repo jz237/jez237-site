@@ -7,16 +7,16 @@ const SPR = window.JOUST_SPRITES || {};
 const { WORLD } = DATA;
 const WRAP = WORLD.WRAP_SPAN;
 
-// original ROM palette browns/greys for platforms & lava (matches the sprite palette)
+// original ROM palette (SYSTEM.ASM COLOR1) for platforms & lava
 const PAL = {
-  rockTop: '#9292aa',   // color 13 — grey landing surface
-  rockTopLit: '#b6b6cc',
-  rockA: '#924900',     // color 8
-  rockB: '#b66d55',     // color 10
-  rockC: '#492400',     // color 14
-  rockEdge: '#ff6d00',  // color 12 (lit rim)
-  lavaA: '#ff2400', lavaB: '#ff6d00', lavaC: '#ffdb00', lavaDark: '#7a1200',
-  star: '#5a5a70',
+  rockTop: '#9292aa',   // color 13 — grey/lavender landing surface
+  rockTopLit: '#c8c8dc',
+  rockLt: '#b66d55',    // color 10 (tan)
+  rockMd: '#924900',    // color 8 (brown)
+  rockDk: '#492400',    // color 14 (dark brown)
+  rockHi: '#ff6d00',    // color 12 (lit orange rim)
+  lavaTop: '#ff3b1a', lavaMid: '#e01400', lavaLow: '#8a0a00', lavaGlow: '#ff7a4a', // red lava band
+  star: '#4a4a60',
 };
 
 // enemy recolor maps: remap the buzzard's green body shades to each type's colours
@@ -132,12 +132,18 @@ class Renderer {
 
   drawLava() {
     const ctx = this.ctx, sc = this.scale, y = this.sy(WORLD.LAVA_Y);
-    const g = ctx.createLinearGradient(0, y, 0, this.sy(WORLD.VIEW_H));
-    g.addColorStop(0, PAL.lavaC); g.addColorStop(0.25, PAL.lavaB); g.addColorStop(0.7, PAL.lavaA); g.addColorStop(1, PAL.lavaDark);
-    ctx.fillStyle = g; ctx.fillRect(this.ox, y, WORLD.VIEW_W * sc, (WORLD.VIEW_H - WORLD.LAVA_Y) * sc);
-    // animated flame sprites along the surface
-    const fr = ['FLAME1', 'FLAME2', 'FLAME3'][(this.time >> 3) % 3];
-    for (let fx = 8; fx < WORLD.VIEW_W; fx += 46) this.blit(fr, fx + ((this.time >> 2) % 12), WORLD.LAVA_Y + 2, undefined);
+    const h = (WORLD.VIEW_H - WORLD.LAVA_Y) * sc;
+    // red lava band (mostly red, darker toward the bottom — matches the arcade)
+    const g = ctx.createLinearGradient(0, y, 0, y + h);
+    g.addColorStop(0, PAL.lavaTop); g.addColorStop(0.45, PAL.lavaMid); g.addColorStop(1, PAL.lavaLow);
+    ctx.fillStyle = g; ctx.fillRect(this.ox, y, WORLD.VIEW_W * sc, h);
+    // bright molten surface line + slow glow blobs
+    ctx.fillStyle = PAL.lavaGlow;
+    for (let bx = 0; bx < WORLD.VIEW_W; bx += 6) { const gy = WORLD.LAVA_Y + 0.5 + Math.sin(this.time * 0.06 + bx * 0.3) * 0.8; ctx.globalAlpha = 0.5 + 0.4 * Math.sin(this.time * 0.08 + bx); ctx.fillRect(this.sx(bx), this.sy(gy), 4 * sc, 1.4 * sc); }
+    ctx.globalAlpha = 1;
+    // animated lava flames rising from the surface
+    const fr = ['FLAME1', 'FLAME2', 'FLAME3', 'FLAME2'][(this.time >> 3) % 4];
+    for (let fx = 14; fx < WORLD.VIEW_W; fx += 40) this.blit(fr, fx + ((fx * 7 + (this.time >> 2)) % 10), WORLD.LAVA_Y + 3, undefined);
     ctx.globalAlpha = 1;
   }
 
@@ -147,21 +153,28 @@ class Renderer {
       for (const off of [0, -WRAP, WRAP]) {
         const x1 = this.sx(p.x1 + off), x2 = this.sx(p.x2 + off);
         if (x2 < this.ox - 2 || x1 > this.ox + WORLD.VIEW_W * sc + 2) continue;
-        const w = x2 - x1, top = this.sy(p.y);
-        const bodyH = (p.y > 200 ? (WORLD.FLOOR - p.y) : 9) * sc;
-        // rocky brown body
-        const g = ctx.createLinearGradient(0, top, 0, top + bodyH);
-        g.addColorStop(0, PAL.rockB); g.addColorStop(0.5, PAL.rockA); g.addColorStop(1, PAL.rockC);
-        ctx.fillStyle = g; ctx.fillRect(x1, top + 2.5 * sc, w, bodyH);
-        // jagged brown texture
-        ctx.fillStyle = PAL.rockC;
-        for (let rx = 0; rx < w; rx += 7 * sc) ctx.fillRect(x1 + rx, top + 2.5 * sc + ((rx * 11) % 5) * sc, 2 * sc, (3 + (rx % 3)) * sc);
-        ctx.fillStyle = PAL.rockEdge; ctx.globalAlpha = 0.5;
-        for (let rx = 4 * sc; rx < w; rx += 11 * sc) ctx.fillRect(x1 + rx, top + 3 * sc, 1.5 * sc, 2 * sc);
-        ctx.globalAlpha = 1;
-        // grey landing top
-        ctx.fillStyle = PAL.rockTop; ctx.fillRect(x1, top, w, 2.5 * sc);
+        const w = x2 - x1, top = this.sy(p.y), isBase = p.y > 200;
+        const gT = 2.5 * sc;                                   // grey top thickness
+        const bodyH = (isBase ? (WORLD.FLOOR - p.y - 3) : 8) * sc;
+        // brown rocky body
+        const g = ctx.createLinearGradient(0, top + gT, 0, top + gT + bodyH);
+        g.addColorStop(0, PAL.rockLt); g.addColorStop(0.4, PAL.rockMd); g.addColorStop(1, PAL.rockDk);
+        ctx.fillStyle = g; ctx.fillRect(x1, top + gT, w, bodyH);
+        // vertical rocky crevices + a few lit flecks (deterministic per column)
+        for (let rx = 0; rx < w; rx += 5 * sc) {
+          const seed = ((x1 + rx) * 2654435761) >>> 0;
+          ctx.fillStyle = PAL.rockDk; ctx.fillRect(x1 + rx + (seed % 3) * sc, top + gT + (seed % 4) * 0.4 * sc, 1.4 * sc, bodyH * 0.7);
+          if ((seed >> 3) % 4 === 0) { ctx.fillStyle = PAL.rockHi; ctx.globalAlpha = 0.45; ctx.fillRect(x1 + rx, top + gT + 1 * sc, 1.4 * sc, 1.4 * sc); ctx.globalAlpha = 1; }
+        }
+        // jagged rocky bottom edge (notches to black)
+        ctx.fillStyle = '#000';
+        for (let rx = 0; rx < w; rx += 6 * sc) { const seed = ((x1 + rx + 91) * 40503) >>> 0; ctx.fillRect(x1 + rx, top + gT + bodyH - (1 + seed % 2) * sc, 3 * sc, (1 + seed % 2) * sc); }
+        // base roots dripping toward the lava
+        if (isBase) { ctx.fillStyle = PAL.rockDk; for (let rx = 3 * sc; rx < w; rx += 14 * sc) { const seed = ((x1 + rx) * 2246822519) >>> 0; ctx.fillRect(x1 + rx, top + gT + bodyH - 1 * sc, 2.5 * sc, (3 + seed % 4) * sc); } }
+        // grey landing top + lit edge
+        ctx.fillStyle = PAL.rockTop; ctx.fillRect(x1, top, w, gT);
         ctx.fillStyle = PAL.rockTopLit; ctx.fillRect(x1, top, w, 1 * sc);
+        ctx.fillStyle = PAL.rockDk; ctx.fillRect(x1, top + gT - 0.5 * sc, w, 0.6 * sc); // shadow under top
       }
     }
   }
