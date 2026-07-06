@@ -36,7 +36,7 @@ jobs:
           mkdir -p _site
 
           # The mirror keeps public pages and game assets, but skips source-only
-          # files and large media libraries already served from jez237.com or R2.
+          # files and bulky experiment libraries that make Pages deploys flaky.
           tar \
             --exclude='./_site' \
             --exclude='./.claude' \
@@ -49,9 +49,12 @@ jobs:
             --exclude='./tmp' \
             --exclude='./workers' \
             --exclude='./experiments/amiga-mod-player/audio' \
+            --exclude='./experiments/amiga-mod-player/mods' \
             --exclude='./experiments/image-gen-2-benchmark/__pycache__' \
             --exclude='./experiments/image-gen-2-benchmark/images' \
             --exclude='./experiments/image-gen-2-benchmark/thumbs' \
+            --exclude='./experiments/sid-player/files' \
+            --exclude='./experiments/sid-player/sids' \
             --exclude='./ops/migrate_amiga_audio_to_r2.sh' \
             --exclude='./package.json' \
             --exclude='./package-lock.json' \
