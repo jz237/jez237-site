@@ -66,6 +66,9 @@
     classifiedsLabel: document.querySelector("[data-classifieds-label]"),
     classifiedsTitle: document.querySelector("[data-classifieds-title]"),
     classifieds: document.querySelector("[data-classifieds]"),
+    worldPanel: document.querySelector("[data-world-panel]"),
+    worldHeadline: document.querySelector("[data-world-headline]"),
+    worldSummary: document.querySelector("[data-world-summary]"),
     fallbackPanel: document.querySelector("[data-fallback-panel]"),
     fallbackLabel: document.querySelector("[data-fallback-label]"),
     fallback: document.querySelector("[data-fallback]"),
@@ -612,6 +615,23 @@
     `;
   }
 
+  function renderWorldAnchor(issue) {
+    if (!els.worldPanel) return;
+    const anchor = objectSection(issue && issue.worldAnchor);
+    const headline = anchor && anchor.headline;
+    const summary = anchor && (anchor.summary || "");
+    if (!headline && !summary) {
+      els.worldPanel.hidden = true;
+      setText(els.worldHeadline, "");
+      setText(els.worldSummary, "");
+      return;
+    }
+    els.worldPanel.hidden = false;
+    setText(els.worldHeadline, headline || "");
+    setText(els.worldSummary, summary);
+    if (els.worldSummary) els.worldSummary.hidden = !summary;
+  }
+
   function renderFallback(issue) {
     if (!els.fallback || !els.fallbackPanel) return;
     const fallback = objectSection(issue && issue.worldFallback);
@@ -809,6 +829,7 @@
       if (els.ad) { els.ad.hidden = true; els.ad.innerHTML = ""; }
       if (els.classifiedsPanel) els.classifiedsPanel.hidden = true;
       if (els.fallbackPanel) els.fallbackPanel.hidden = true;
+      if (els.worldPanel) els.worldPanel.hidden = true;
       renderWeekScan(null);
       if (els.frontPageIndex) els.frontPageIndex.innerHTML = "";
       setText(els.editorNote, "Personal computers and personal computer gaming are the editorial priority when source choices compete.");
@@ -821,6 +842,7 @@
 
     renderWeekScan(issue);
     renderGlance(issue);
+    renderWorldAnchor(issue);
     renderLead(issue);
     renderComputerItems(issue);
     renderSoftware(issue);

@@ -282,6 +282,13 @@
             "sourceRefs": [
               8
             ]
+          },
+          {
+            "claim": "President Reagan delivered the Strategic Defense Initiative ('Star Wars') address to the nation on March 23, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              9
+            ]
           }
         ]
       },
@@ -321,6 +328,10 @@
         {
           "label": "Box Office Mojo domestic weekend March 25-27, 1983",
           "url": "https://www.boxofficemojo.com/weekend/1983W12/?sort=gross"
+        },
+        {
+          "label": "Reagan Library - Strategic Defense Initiative (SDI) 'Star Wars' speech, March 23, 1983",
+          "url": "https://www.reaganlibrary.gov/archives/topic-guide/strategic-defense-initiative-sdi-star-wars-speech-03231983"
         }
       ],
       "classifieds": [
@@ -332,7 +343,15 @@
           "headline": "PC demo night",
           "copy": "Dealer offers after-hours Lotus 1-2-3 demonstration on IBM PC hardware by appointment."
         }
-      ]
+      ],
+      "worldAnchor": {
+        "headline": "Reagan proposes the 'Star Wars' missile shield",
+        "summary": "In a televised address on March 23, 1983, President Reagan proposed the Strategic Defense Initiative, calling on scientists to render nuclear missiles impotent and obsolete - a plan critics quickly nicknamed Star Wars.",
+        "confidence": "High",
+        "sourceRefs": [
+          9
+        ]
+      }
     },
     {
       "currentDate": "2026-07-05",

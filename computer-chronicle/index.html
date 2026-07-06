@@ -581,6 +581,32 @@
     }
     .cc-banner p { margin: 0; color: #d5d9f7; font-size: 0.8rem; line-height: 1.5; }
 
+    /* ===== World anchor ===== */
+    .cc-world {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      border: 1px solid var(--cc-line);
+      border-left: 3px solid var(--cc-amber);
+      background: linear-gradient(90deg, rgba(50, 38, 14, 0.32), rgba(9, 10, 30, 0.75) 55%);
+      padding: 12px 14px;
+    }
+    .cc-world .cc-chip { color: var(--cc-amber); }
+    .cc-world-copy { min-width: 0; }
+    .cc-world-kicker {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--cc-amber);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(255, 209, 102, 0.35);
+    }
+    .cc-world-copy strong { display: block; color: #fff; font-size: 0.92rem; line-height: 1.4; overflow-wrap: anywhere; }
+    .cc-world-copy p { margin: 4px 0 0; color: var(--cc-muted); font-size: 0.78rem; line-height: 1.55; overflow-wrap: anywhere; }
+
     /* ===== More sections ===== */
     .cc-sections {
       display: grid;
@@ -941,11 +967,14 @@
       .cc-paper { border-color: #111; background: #fff; box-shadow: none; }
       .cc-paper figcaption { color: #333; }
       .cc-paper figcaption::first-line { color: #333; }
-      .cc-datecard, .cc-panel, .cc-side-panel, .cc-morning, .cc-banner, .cc-card, .cc-glance li, .cc-ad {
+      .cc-datecard, .cc-panel, .cc-side-panel, .cc-morning, .cc-banner, .cc-card, .cc-glance li, .cc-ad, .cc-world {
         border: 1pt solid #111 !important;
         background: #fff !important;
         box-shadow: none !important;
       }
+      .cc-world-kicker { color: #444 !important; text-shadow: none; }
+      .cc-world-copy strong { color: #111 !important; }
+      .cc-world-copy p { color: #333 !important; }
       .cc-datecard [data-current-date], .cc-side-head h2, .cc-rule, .cc-morning-brand strong { color: #111 !important; text-shadow: none; }
       .cc-datecard [data-historic-date], .cc-card strong, .cc-glance strong, .cc-panel h2, .cc-chart strong,
       .cc-list strong, .cc-item-grid h3, .cc-kv strong, .cc-prices .cc-price-row strong, .cc-side-panel .cc-side-body h3,
@@ -1060,6 +1089,15 @@
             View Front Page
             <svg viewBox="0 0 12 12" aria-hidden="true" shape-rendering="crispEdges"><path fill="currentColor" d="M2 1h6l2 2v8H2z"/><path class="cc-i-bg" d="M3 2h4v8h-4zM8 4h1v6H8z"/><path fill="currentColor" d="M4 4h4v1H4zM4 6h4v1H4zM4 8h3v1H4z"/></svg>
           </button>
+        </section>
+
+        <section class="cc-world" data-world-panel aria-label="The world this week" hidden>
+          <span class="cc-chip cc-accent-amber" aria-hidden="true"><svg viewBox="0 0 12 12" shape-rendering="crispEdges"><path fill="currentColor" d="M4 1h4v1H4zM2 2h2v1H2zM8 2h2v1H8zM1 4h1v4H1zM10 4h1v4H10zM2 3h1v1H2zM9 3h1v1H9zM2 8h2v1H2zM8 8h2v1H8zM4 10h4v1H4z"/><path fill="currentColor" d="M5 2h1v8H5zM2 5h8v1H2zM7 3h1v2H7zM3 7h2v1H3z" opacity="0.75"/></svg></span>
+          <div class="cc-world-copy">
+            <span class="cc-world-kicker">The World This Week</span>
+            <strong data-world-headline></strong>
+            <p data-world-summary></p>
+          </div>
         </section>
 
         <h2 class="cc-rule"><span class="cc-rule-deco" aria-hidden="true">///</span> More Sections</h2>
@@ -1224,7 +1262,7 @@
     <img data-lightbox-image alt="">
   </div>
 
-  <script src="assets/chronicle.js?v=20260706-synthwave"></script>
+  <script src="assets/chronicle.js?v=20260706-worldanchor"></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
 </body>
