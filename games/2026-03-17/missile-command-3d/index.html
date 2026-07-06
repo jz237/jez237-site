@@ -174,7 +174,7 @@
         <li>Desktop: <strong>click</strong> to fire &mdash; <strong>Enter</strong> starts, <strong>P</strong>/<strong>Esc</strong> pauses</li>
       </ul>
       <div class="row">
-        <span class="tiny">First tap unlocks sound. &middot; v2.0.0</span>
+        <span class="tiny">First tap unlocks sound. &middot; v2.1.0</span>
         <div class="row" style="margin-top:0">
           <button class="ghost" id="titleScoresBtn">High Scores</button>
           <button class="ghost" id="titleOptionsBtn">Options</button>
@@ -245,7 +245,7 @@
 
 <div id="mcCrt" style="position:fixed;inset:0;z-index:60;pointer-events:none;display:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,0.22) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;"></div>
 <div id="mcToast" style="position:fixed;left:50%;bottom:16%;transform:translateX(-50%);z-index:61;pointer-events:none;color:#bfe4ff;font-family:monospace;font-size:clamp(0.8rem,2.5vw,1.1rem);letter-spacing:0.12em;text-shadow:0 0 12px rgba(80,170,255,0.9);opacity:0;transition:opacity 0.25s;text-align:center;padding:0 1em;"></div>
-<div id="mcVersion" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v2.0.0</div>
+<div id="mcVersion" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v2.1.0</div>
 
 <script>
 (() => {
@@ -460,7 +460,18 @@ function mcApplyAudio(){
   if(mcMusic)mcMusic.volume=(mcSet.master/100)*(mcSet.music/100)*0.9;
 }
 function mcStartMusic(){mcInitMedia();if(mcMusic){mcApplyAudio();mcMusic.play().catch(()=>{});}}
-const MC_VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-city-lost':'CITY LOST','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED'};
+const MC_VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-wave-2':'MULTIPLE CONTACTS ON RADAR','vo-wave-3':'WEAPONS FREE','vo-city-lost':'CITY LOST','vo-city-lost-2':'CITY DOWN — TIGHTEN THE NET','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED','vo-secure-2':'WAVE NEUTRALIZED','vo-secure-3':'ALL CLEAR — REARMING','vo-mirv':'MIRV SEPARATION','vo-mirv-2':'WARHEADS SPLITTING','vo-smart':'SMART WEAPONS — THEY EVADE','vo-bomber':'BOMBER ON APPROACH','vo-ammo-low':'AMMUNITION LOW'};
+// Per-event voice pools: random variant, never the same twice in a row
+const MC_VO_POOLS={wave:['vo-wave','vo-wave-2','vo-wave-3'],secure:['vo-sector-secure','vo-secure-2','vo-secure-3'],cityLost:['vo-city-lost','vo-city-lost-2'],mirv:['vo-mirv','vo-mirv-2']};
+const mcVoLast={};
+const mcVoFlags={mirv:false,smart:false,bomber:false,ammoLow:false};
+function announce(event,priority){
+  const pool=MC_VO_POOLS[event]||[event];
+  let pick=pool[0];
+  if(pool.length>1){let guard=0;do{pick=pool[(Math.random()*pool.length)|0];}while(pick===mcVoLast[event]&&++guard<8);}
+  mcVoLast[event]=pick;
+  playVoice(pick,priority);
+}
 let mcToastT=null;
 function mcToast(t){const el=document.getElementById('mcToast');if(!el||!t)return;el.textContent=t;el.style.opacity='1';clearTimeout(mcToastT);mcToastT=setTimeout(()=>el.style.opacity='0',1700);}
 function playVoice(name,priority){
@@ -684,7 +695,8 @@ function getWaveConfig(wave) {
 
 function startWave() {
   S.wavePhase = 'intro';
-  playVoice(S.wave === 1 ? 'vo-incoming' : 'vo-wave');
+  mcVoFlags.mirv=false;mcVoFlags.smart=false;mcVoFlags.bomber=false;mcVoFlags.ammoLow=false;
+  if (S.wave === 1) announce('vo-incoming', true); else announce('wave');
   mcStartMusic();
   mc3PrevCities = S.buildings.filter(b => b.alive).length;
   S.waveTimer = 2.5;
@@ -745,11 +757,13 @@ function spawnEnemy() {
     value: isMirv ? 25 : 10,
     startY: y
   });
+  if (isSmart && !mcVoFlags.smart) { mcVoFlags.smart = true; announce('vo-smart'); }
 }
 
 function spawnBomber() {
   const dir = Math.random() < 0.5 ? 1 : -1;
   const z = rand(200, 500);
+  if (!mcVoFlags.bomber) { mcVoFlags.bomber = true; announce('vo-bomber', true); }
   S.bombers.push({
     x: dir > 0 ? -100 : W + 100,
     y: VPY + rand(30, 80),
@@ -780,6 +794,10 @@ function launchCounter(sx, sy) {
 
   best.ammo--;
   if (audio) audio.launch();
+  if (!mcVoFlags.ammoLow) {
+    const tot = S.batteries.reduce((s,b)=>s+(b.alive?b.ammo:0),0), max = S.batteries.length * AMMO_PER_WAVE;
+    if (max > 0 && tot / max <= 0.2) { mcVoFlags.ammoLow = true; announce('vo-ammo-low'); }
+  }
 
   // Launch from bottom of screen, behind the city
   const launchX = best.x3;
@@ -942,6 +960,7 @@ function update(dt) {
     if (m.isMirv && !m.mirvSplit && yProgress >= m.mirvFrac) {
       m.mirvSplit = true;
       if (audio) audio.mirvSplit();
+      if (!mcVoFlags.mirv) { mcVoFlags.mirv = true; announce('mirv'); }
       for (let i = 0; i < 3; i++) {
         const tgts = S.buildings.filter(b => b.alive);
         if (!tgts.length) break;
@@ -1136,7 +1155,7 @@ function update(dt) {
     S.wavePhase = 'bonus';
     S.bonusTimer = 2.5;
     if (audio) audio.waveClear();
-    playVoice('vo-sector-secure');
+    announce('secure');
     // Calculate bonuses
     const livingBuildings = S.buildings.filter(b => b.alive);
     let buildingSections = 0;
@@ -1162,7 +1181,7 @@ function update(dt) {
   // HUD
   const ammoStr = S.batteries.map(b => b.alive ? b.ammo : 'X').join('/');
   const cities = S.buildings.filter(b => b.alive).length;
-  if (cities < mc3PrevCities) { if (cities === 1) playVoice('vo-last-city', true); else if (cities >= 1) playVoice('vo-city-lost', true); }
+  if (cities < mc3PrevCities) { if (cities === 1) announce('vo-last-city', true); else if (cities >= 1) announce('cityLost', true); }
   mc3PrevCities = cities;
   hudLine.textContent = `W${S.wave} | Score ${S.score.toLocaleString()} | Cities ${cities} | Ammo ${ammoStr}`;
 }
@@ -1770,6 +1789,17 @@ function drawExplosion(e) {
   const fadeStart = e.maxTime * 0.615;
   const alpha = e.timer < fadeStart ? 0.9 : clamp(1 - (e.timer - fadeStart) / (e.maxTime - fadeStart), 0, 1) * 0.9;
   ctx.globalAlpha = alpha;
+
+  // v2.1: crisp expanding shockwave ring
+  {
+    const rt = clamp(e.timer / e.maxTime, 0, 1);
+    if (rt < 0.75) {
+      const rr = sr * (0.6 + rt * 2.4);
+      ctx.strokeStyle = `rgba(150,240,255,${(1 - rt / 0.75) * 0.5})`;
+      ctx.lineWidth = 1.5 + (1 - rt) * 2.5;
+      ctx.beginPath(); ctx.arc(pr.sx, pr.sy, rr, 0, TAU); ctx.stroke();
+    }
+  }
 
   // Wide outer glow — big visible kill zone
   const g0 = ctx.createRadialGradient(pr.sx, pr.sy, 0, pr.sx, pr.sy, sr * 2.2);
