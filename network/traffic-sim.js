@@ -188,6 +188,7 @@
 
     let timer = null;
     let cb = null;
+    let hourOverride = null;   // day-scrubber: null = follow the wall clock
 
     function scheduleStatus(dev, ts) {
       // Re-decide idle/asleep every 20-90 sim-seconds.
@@ -231,7 +232,7 @@
     function tick() {
       const now = new Date();
       const ts = now.getTime();
-      const hour = now.getHours() + now.getMinutes() / 60;
+      const hour = hourOverride != null ? hourOverride : now.getHours() + now.getMinutes() / 60;
       const events = [];
       const out = {};
 
@@ -292,6 +293,7 @@
     }
 
     return {
+      kind: 'sim',
       start(onSample) {
         cb = onSample;
         if (!timer) { tick(); timer = setInterval(tick, TICK_MS); }
@@ -299,7 +301,10 @@
       stop() {
         if (timer) { clearInterval(timer); timer = null; }
         cb = null;
-      }
+      },
+      /* day-scrubber hook: pass an hour (0-24 float) to preview that time
+         of day, or null to follow the wall clock again */
+      setHour(h) { hourOverride = h; }
     };
   }
 
