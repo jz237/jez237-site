@@ -44,6 +44,9 @@
     priceWatchLabel: document.querySelector("[data-price-watch-label]"),
     priceWatch: document.querySelector("[data-price-watch]"),
     priceFoot: document.querySelector("[data-price-foot]"),
+    budgetPanel: document.querySelector("[data-budget-panel]"),
+    budgetLabel: document.querySelector("[data-budget-label]"),
+    issueBudget: document.querySelector("[data-issue-budget]"),
     bbsPanel: document.querySelector("[data-bbs-panel]"),
     bbsLabel: document.querySelector("[data-bbs-label]"),
     bbs: document.querySelector("[data-bbs]"),
@@ -552,6 +555,18 @@
     `;
   }
 
+  function renderBudget(issue) {
+    if (!els.issueBudget || !els.budgetPanel) return;
+    const entries = Array.isArray(issue && issue.issueBudget) ? issue.issueBudget : [];
+    els.budgetPanel.hidden = entries.length === 0;
+    els.issueBudget.innerHTML = entries.map((item) => `
+      <li>
+        <strong>${escapeHtml(item.slot || item.priority || "Story")}</strong>
+        ${item.title ? `<span class="cc-note">${escapeHtml(item.title)}</span>` : ""}
+      </li>
+    `).join("");
+  }
+
   function renderBbs(issue) {
     if (!els.bbs || !els.bbsPanel) return;
     const bbsNote = objectSection(issue && issue.bbsNote);
@@ -779,6 +794,7 @@
       if (els.softwarePanel) els.softwarePanel.hidden = true;
       if (els.softwareList) els.softwareList.innerHTML = "";
       if (els.marketPanel) els.marketPanel.hidden = true;
+      if (els.budgetPanel) els.budgetPanel.hidden = true;
       if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = "";
       if (els.storeShelves) els.storeShelves.innerHTML = "";
       if (els.priceWatch) els.priceWatch.innerHTML = "";
@@ -816,6 +832,7 @@
     renderBriefs(issue);
     renderPriceWatch(issue);
     renderMarket(issue);
+    renderBudget(issue);
     renderBbs(issue);
     renderCuriosity(issue);
     renderFallback(issue);
