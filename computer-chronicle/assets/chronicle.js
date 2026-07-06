@@ -9,15 +9,16 @@
     historicDate: document.querySelector("[data-historic-date]"),
     currentDate: document.querySelector("[data-current-date]"),
     edition: document.querySelector("[data-edition]"),
+    editionFlag: document.querySelector("[data-edition-flag]"),
     issueNo: document.querySelector("[data-issue-no]"),
     morningLine: document.querySelector("[data-morning-line]"),
-    strapline: document.querySelector("[data-strapline]"),
     mastheadKicker: document.querySelector("[data-masthead-kicker]"),
     mastheadTitle: document.querySelector("[data-masthead-title]"),
     mastheadDeck: document.querySelector("[data-masthead-deck]"),
     heroImage: document.querySelector("[data-hero-image]"),
     heroCaption: document.querySelector("[data-hero-caption]"),
     openHeroImage: document.querySelector("[data-open-hero-image]"),
+    viewFrontPage: document.querySelector("[data-view-front-page]"),
     closeHeroImage: document.querySelector("[data-close-hero-image]"),
     heroLightbox: document.querySelector("[data-hero-lightbox]"),
     lightboxImage: document.querySelector("[data-lightbox-image]"),
@@ -28,34 +29,42 @@
     pictureDesk: document.querySelector("[data-picture-desk]"),
     computerItems: document.querySelector("[data-computer-items]"),
     softwarePanel: document.querySelector("[data-software-panel]"),
+    softwareSectionCard: document.querySelector("[data-software-section-card]"),
     softwareLabel: document.querySelector("[data-software-label]"),
     softwareTitle: document.querySelector("[data-software-title]"),
     softwareList: document.querySelector("[data-software-list]"),
+    marketPanel: document.querySelector("[data-market-panel]"),
+    marketLabel: document.querySelector("[data-market-label]"),
     market: document.querySelector("[data-market]"),
-    issueBudgetLabel: document.querySelector("[data-issue-budget-label]"),
-    issueBudgetTitle: document.querySelector("[data-issue-budget-title]"),
-    issueBudget: document.querySelector("[data-issue-budget]"),
+    storeShelvesPanel: document.querySelector("[data-store-shelves-panel]"),
     storeShelvesLabel: document.querySelector("[data-store-shelves-label]"),
     storeShelvesTitle: document.querySelector("[data-store-shelves-title]"),
     storeShelvesImage: document.querySelector("[data-store-shelves-image]"),
     storeShelves: document.querySelector("[data-store-shelves]"),
     priceWatchLabel: document.querySelector("[data-price-watch-label]"),
-    priceWatchTitle: document.querySelector("[data-price-watch-title]"),
     priceWatch: document.querySelector("[data-price-watch]"),
+    priceFoot: document.querySelector("[data-price-foot]"),
+    bbsPanel: document.querySelector("[data-bbs-panel]"),
+    bbsLabel: document.querySelector("[data-bbs-label]"),
     bbs: document.querySelector("[data-bbs]"),
+    curiosityPanel: document.querySelector("[data-curiosity-panel]"),
+    curiosityLabel: document.querySelector("[data-curiosity-label]"),
     curiosity: document.querySelector("[data-curiosity]"),
     briefsLabel: document.querySelector("[data-briefs-label]"),
-    briefsTitle: document.querySelector("[data-briefs-title]"),
     briefs: document.querySelector("[data-briefs]"),
+    briefsFoot: document.querySelector("[data-briefs-foot]"),
     musicLabel: document.querySelector("[data-music-label]"),
-    musicTitle: document.querySelector("[data-music-title]"),
     musicChartImage: document.querySelector("[data-music-chart-image]"),
     musicChart: document.querySelector("[data-music-chart]"),
+    musicFoot: document.querySelector("[data-music-foot]"),
+    musicFootLink: document.querySelector("[data-music-foot-link]"),
     ad: document.querySelector("[data-period-ad]"),
     classifiedsPanel: document.querySelector("[data-classifieds-panel]"),
     classifiedsLabel: document.querySelector("[data-classifieds-label]"),
     classifiedsTitle: document.querySelector("[data-classifieds-title]"),
     classifieds: document.querySelector("[data-classifieds]"),
+    fallbackPanel: document.querySelector("[data-fallback-panel]"),
+    fallbackLabel: document.querySelector("[data-fallback-label]"),
     fallback: document.querySelector("[data-fallback]"),
     status: document.querySelector("[data-status]"),
     editorNote: document.querySelector("[data-editor-note]"),
@@ -66,9 +75,31 @@
     previousIssue: document.querySelector("[data-previous-issue]"),
     nextIssue: document.querySelector("[data-next-issue]"),
     frontPageIndex: document.querySelector("[data-front-page-index]"),
-    nextCurrentDate: document.querySelector("[data-next-current-date]"),
-    nextHistoricDate: document.querySelector("[data-next-historic-date]"),
-    nextAssignmentList: document.querySelector("[data-next-assignment-list]"),
+    searchForm: document.querySelector("[data-search-form]"),
+    searchInput: document.querySelector("[data-search-input]"),
+  };
+
+  /* ===== 12x12 pixel icons ===== */
+  const ICONS = {
+    computer: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M1 1h10v7H1z"/><path class="cc-i-bg" d="M2 2h8v5H2z"/><path fill="currentColor" d="M3 3h4v1H3zM3 5h3v1H3zM4 9h4v1H4zM3 10h6v1H3z"/></svg>',
+    floppy: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M1 1h8v1h1v1h1v8H1z"/><path class="cc-i-bg" d="M4 2h4v3H4zM3 7h6v3H3z"/><path fill="currentColor" d="M6 2h1v2H6zM4 8h4v1H4z"/></svg>',
+    note: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M4 1h6v2H4zM4 3h1v6H4zM9 3h1v5H9zM2 9h3v2H2zM7 8h3v2H7z"/></svg>',
+    box: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M1 3h10v8H1z"/><path class="cc-i-bg" d="M2 5h8v5H2z"/><path fill="currentColor" d="M5 3h2v4H5zM1 1h10v2H1z"/><path class="cc-i-bg" d="M2 1h8v1H2z"/></svg>',
+    joystick: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M4 1h4v3H4zM5 4h2v4H5zM2 8h8v1H2zM1 9h10v2H1z"/><path class="cc-i-bg" d="M5 2h1v1H5z"/></svg>',
+    film: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M1 2h10v8H1z"/><path class="cc-i-bg" d="M3 4h6v4H3z"/><path class="cc-i-bg" d="M2 3h1v1H2zM2 5h1v1H2zM2 7h1v1H2zM2 9h1v1H2zM9 3h1v1H9zM9 5h1v1H9zM9 7h1v1H9zM9 9h1v1H9z" transform="translate(0 -0.5)"/></svg>',
+    doc: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M2 1h6l2 2v8H2z"/><path class="cc-i-bg" d="M3 2h4v8h-4zM8 4h1v6H8z"/><path fill="currentColor" d="M4 4h4v1H4zM4 6h4v1H4zM4 8h3v1H4z"/></svg>',
+    wave: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M1 5h10v4H1z"/><path class="cc-i-bg" d="M2 6h5v2H2z"/><path fill="currentColor" d="M8 6h1v1H8zM10 6h1v1h-1zM3 2h1v1H3zM5 1h1v1H5zM7 2h1v1H7zM4 3h1v1H4zM6 3h1v1H6zM5 4h1v1H5z"/></svg>',
+    news: '<svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M1 2h8v8H1zM10 4h1v6h-1zM9 10h1v1H9z"/><path class="cc-i-bg" d="M2 3h6v2H2zM2 6h3v1H2zM6 6h2v1H6zM2 8h3v1H2zM6 8h2v1H6z"/></svg>',
+  };
+
+  const SCAN_KINDS = {
+    games: { label: "Games", accent: "cc-accent-amber", icon: "joystick" },
+    computers: { label: "Computers", accent: "cc-accent-cyan", icon: "computer" },
+    software: { label: "Software", accent: "cc-accent-violet", icon: "floppy" },
+    movies: { label: "Movies", accent: "cc-accent-orange", icon: "film" },
+    rock: { label: "Rock", accent: "cc-accent-magenta", icon: "note" },
+    shelf: { label: "Shelf Watch", accent: "cc-accent-green", icon: "box" },
+    modems: { label: "Modems", accent: "cc-accent-cyan", icon: "wave" },
   };
 
   function isoDate(date) {
@@ -82,12 +113,6 @@
     return copy;
   }
 
-  function addDays(date, days) {
-    const copy = new Date(date);
-    copy.setDate(copy.getDate() + days);
-    return copy;
-  }
-
   function escapeHtml(value) {
     return String(value || "")
       .replace(/&/g, "&amp;")
@@ -96,28 +121,154 @@
       .replace(/"/g, "&quot;");
   }
 
-  function confidenceBadge(text) {
-    return "";
+  // Sources and confidence stay in the structured data; the public page keeps copy immersive.
+  function confidenceBadge() { return ""; }
+  function sourceLinks() { return ""; }
+
+  function cleanPublicCopy(value) {
+    return String(value || "")
+      .replace(/\bGenerated art direction cue\s*\d+\s*:\s*/gi, "")
+      .replace(/\s*with confidence labels so [^.]+\.?/gi, ".")
+      .replace(/\s*with confidence labels\.?/gi, ".")
+      .replace(/\s*and confidence labels\.?/gi, ".")
+      .replace(/\s*where exact [^;]+;?/gi, "")
+      .replace(/\s*where exact [^.]+\.?/gi, ".")
+      .replace(/\s*where [^.]*sources are thin;?/gi, "")
+      .replace(/\s{2,}/g, " ")
+      .trim();
   }
 
-  function sourceName(source) {
-    if (!source || !source.name) return "Source";
-    return source.name.replace(/^(InfoWorld|MobyGames|FRED|CountryEconomy|Arcade History|Vintage Paper Ads|Tunecaster|UPI Archives)[:,]?\s*/i, "").trim();
+  function chip(iconName, accentClass) {
+    const icon = ICONS[iconName] || ICONS.doc;
+    return `<span class="cc-chip ${accentClass || ""}" aria-hidden="true">${icon}</span>`;
   }
 
-  function sourceLinks(issue, refs) {
-    return "";
+  function objectSection(value) {
+    if (!value) return null;
+    if (typeof value === "string") return { summary: value };
+    return typeof value === "object" ? value : null;
   }
 
+  function chrome(issue, key, field, fallback) {
+    return (issue && issue.sectionChrome && !Array.isArray(issue.sectionChrome)
+      && issue.sectionChrome[key] && issue.sectionChrome[key][field]) || fallback;
+  }
+
+  function setText(el, value) {
+    if (el) el.textContent = value;
+  }
+
+  function itemTitle(item) {
+    if (!item) return "";
+    if (typeof item === "string") return item;
+    return item.title || item.name || item.item || item.headline || "";
+  }
+
+  function itemLabel(item, fallback) {
+    return (item && (item.label || item.kicker || item.category || item.slot || item.priority)) || fallback || "";
+  }
+
+  function itemSummary(item) {
+    return (item && (item.summary || item.text || item.detail || item.note || item.copy)) || "";
+  }
+
+  /* ===== store shelves: grouped ({label, items:[]}) vs flat entries ===== */
+  function shelfGroups(issue) {
+    const shelves = Array.isArray(issue && issue.storeShelves) ? issue.storeShelves : [];
+    const groups = shelves.filter((entry) => entry && Array.isArray(entry.items));
+    return groups.length ? groups : null;
+  }
+
+  function topGame(issue) {
+    const groups = shelfGroups(issue);
+    if (groups) {
+      const gameGroup = groups.find((group) => /game/i.test(group.label || "")) || groups[0];
+      const first = gameGroup && gameGroup.items && gameGroup.items[0];
+      if (!first) return null;
+      return { title: itemTitle(first), sub: gameGroup.label || "" };
+    }
+    const first = (issue.storeShelves || [])[0];
+    if (!first) return null;
+    return { title: itemTitle(first), sub: first.platform || first.price || "" };
+  }
+
+  function firstBrief(issue, pattern) {
+    return (issue.briefs || []).find((item) => {
+      const haystack = `${item.label || ""} ${item.kicker || ""} ${item.headline || ""} ${item.summary || ""} ${item.text || ""}`.toLowerCase();
+      return pattern.test(haystack);
+    });
+  }
+
+  /* ===== masthead / hero ===== */
+  function applyMasthead(issue) {
+    const masthead = (issue && typeof issue.masthead === "object" && issue.masthead) || {};
+    setText(els.mastheadKicker, masthead.kicker || "Daily Historical Tech Desk");
+    setText(els.mastheadTitle, masthead.title || "Computer Chronicle");
+    const deck = masthead.deck || "A morning-paper style computer section rebuilt week by week from the early 1980s, with games, software, prices, charts, and culture from the historical week.";
+    setText(els.mastheadDeck, cleanPublicCopy(deck));
+  }
+
+  function applyHeroImage(issue) {
+    const image = (issue && issue.heroImage) || {};
+    if (els.heroImage && image.src) {
+      els.heroImage.src = image.src;
+      els.heroImage.alt = image.alt || image.caption || "Computer Chronicle issue-front visual";
+    }
+    if (els.heroCaption) {
+      els.heroCaption.textContent = cleanPublicCopy(image.caption || "Issue-front visual");
+    }
+  }
+
+  /* ===== lightbox ===== */
+  async function openImageLightbox(src, alt, returnFocus) {
+    if (!els.heroLightbox || !els.lightboxImage || !src) return;
+    state.lightboxReturnFocus = returnFocus || null;
+    els.lightboxImage.src = src;
+    els.lightboxImage.alt = alt || "Computer Chronicle newspaper visual";
+    els.heroLightbox.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    if (els.closeHeroImage) els.closeHeroImage.focus({ preventScroll: true });
+
+    if (els.heroLightbox.requestFullscreen && !document.fullscreenElement) {
+      try {
+        await els.heroLightbox.requestFullscreen();
+      } catch (_error) {
+        // Browsers can refuse fullscreen; the fixed overlay still gives a full-window view.
+      }
+    }
+  }
+
+  async function openHeroLightbox(returnFocus) {
+    if (!els.heroImage || !els.heroImage.src) return;
+    await openImageLightbox(
+      els.heroImage.src,
+      els.heroImage.alt || "Computer Chronicle newspaper visual",
+      returnFocus || els.openHeroImage
+    );
+  }
+
+  async function closeHeroLightbox() {
+    if (!els.heroLightbox) return;
+    els.heroLightbox.setAttribute("aria-hidden", "true");
+    document.body.style.overflow = "";
+    if (document.fullscreenElement === els.heroLightbox && document.exitFullscreen) {
+      try {
+        await document.exitFullscreen();
+      } catch (_error) {
+        // Ignore fullscreen exit failures; hiding the overlay is enough.
+      }
+    }
+    if (state.lightboxReturnFocus) state.lightboxReturnFocus.focus({ preventScroll: true });
+    state.lightboxReturnFocus = null;
+  }
+
+  /* ===== shared visuals ===== */
   function articleVisual(image) {
     if (!image || !image.src) return "";
     return `
-      <figure class="article-visual">
+      <figure class="cc-visual">
         <img src="${escapeHtml(image.src)}" alt="${escapeHtml(image.alt || image.caption || "Period-style article image")}" loading="lazy">
-        <figcaption>
-          <span>${escapeHtml(image.caption || "")}</span>
-          ${confidenceBadge(image.confidence || "Visual context")}
-        </figcaption>
+        ${image.caption ? `<figcaption>${escapeHtml(cleanPublicCopy(image.caption))}</figcaption>` : ""}
       </figure>
     `;
   }
@@ -126,8 +277,8 @@
     if (!image || !image.src) return "";
     const alt = image.alt || image.caption || "Computer Chronicle newspaper visual";
     return `
-      <figure class="article-visual picture-desk-visual">
-        <button class="picture-desk-image-button" type="button" data-open-picture-desk-image data-image-src="${escapeHtml(image.src)}" data-image-alt="${escapeHtml(alt)}" aria-label="Open picture desk visual full screen">
+      <figure class="cc-visual">
+        <button class="cc-visual-button" type="button" data-open-picture-desk-image data-image-src="${escapeHtml(image.src)}" data-image-alt="${escapeHtml(alt)}" aria-label="Open picture desk visual full screen">
           <img src="${escapeHtml(image.src)}" alt="${escapeHtml(alt)}" loading="lazy">
         </button>
       </figure>
@@ -150,126 +301,7 @@
     });
   }
 
-  function chrome(issue, key, field, fallback) {
-    return (issue && issue.sectionChrome && issue.sectionChrome[key] && issue.sectionChrome[key][field]) || fallback;
-  }
-
-  function setText(el, value) {
-    if (el) el.textContent = value;
-  }
-
-  function applySectionChrome(issue) {
-    setText(els.storeShelvesLabel, chrome(issue, "storeShelves", "label", "On Store Shelves"));
-    setText(els.storeShelvesTitle, chrome(issue, "storeShelves", "title", "Games, Software & Platforms People Could Talk About"));
-    setText(els.pictureDeskLabel, chrome(issue, "pictureDesk", "label", "Picture Desk"));
-    setText(els.pictureDeskTitle, chrome(issue, "pictureDesk", "title", "Scenes From the Week"));
-    setText(els.softwareLabel, chrome(issue, "software", "label", "Software Top 5"));
-    setText(els.softwareTitle, chrome(issue, "software", "title", "New & Notable Software"));
-    setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Price Watch"));
-    setText(els.priceWatchTitle, chrome(issue, "priceWatch", "title", "What It Cost"));
-    setText(els.issueBudgetLabel, "Shelf Watch");
-    setText(els.issueBudgetTitle, "Games, Gear & Culture Mix");
-    setText(els.briefsLabel, chrome(issue, "briefs", "label", "Small Notices"));
-    setText(els.briefsTitle, chrome(issue, "briefs", "title", "Other Things on the Desk"));
-    setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
-    setText(els.musicTitle, chrome(issue, "music", "title", "Album-Rock Airwaves"));
-    setText(els.classifiedsLabel, chrome(issue, "classifieds", "label", "Classifieds"));
-    setText(els.classifiedsTitle, chrome(issue, "classifieds", "title", "Small Ads"));
-  }
-
-  function applyMasthead(issue) {
-    const masthead = (issue && issue.masthead) || {};
-    setText(els.mastheadKicker, masthead.kicker || "Daily historical tech desk");
-    setText(els.mastheadTitle, masthead.title || "Computer Chronicle");
-    const deck = masthead.deck || "A morning-paper style computer section built from the date 40 years ago today, with games, software, prices, charts, and culture from the historical week.";
-    setText(els.mastheadDeck, cleanPublicCopy(deck));
-  }
-
-  function applyVisualProfile(issue) {
-    const profile = (issue && issue.visualProfile) || {};
-    const layout = profile.layout || "standard";
-    const accent = profile.accent || "amber-blue";
-    const paper = profile.paper || "cream";
-    document.body.dataset.issueLayout = layout;
-    document.body.dataset.issueAccent = accent;
-    document.body.dataset.issuePaper = paper;
-    if (els.strapline) {
-      els.strapline.textContent = profile.strapline || "COMPUTERS • GAMES • SOFTWARE • MARKETS";
-    }
-  }
-
-  function applyHeroImage(issue) {
-    const image = (issue && issue.heroImage) || {};
-    if (els.heroImage && image.src) {
-      els.heroImage.src = image.src;
-      els.heroImage.alt = image.alt || image.caption || "Computer Chronicle issue-front visual";
-    }
-    if (els.heroCaption) {
-      const caption = image.caption || "Issue-front visual";
-      els.heroCaption.textContent = cleanPublicCopy(caption);
-    }
-  }
-
-  async function openImageLightbox(src, alt, returnFocus) {
-    if (!els.heroLightbox || !els.lightboxImage || !src) return;
-    state.lightboxReturnFocus = returnFocus || null;
-    els.lightboxImage.src = src;
-    els.lightboxImage.alt = alt || "Computer Chronicle newspaper visual";
-    els.heroLightbox.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-    if (els.closeHeroImage) els.closeHeroImage.focus({ preventScroll: true });
-
-    if (els.heroLightbox.requestFullscreen && !document.fullscreenElement) {
-      try {
-        await els.heroLightbox.requestFullscreen();
-      } catch (_error) {
-        // Browsers can refuse fullscreen; the fixed overlay still gives a full-window view.
-      }
-    }
-  }
-
-  async function openHeroLightbox() {
-    if (!els.heroImage || !els.heroImage.src) return;
-    await openImageLightbox(
-      els.heroImage.src,
-      els.heroImage.alt || "Computer Chronicle newspaper visual",
-      els.openHeroImage
-    );
-  }
-
-  async function closeHeroLightbox() {
-    if (!els.heroLightbox) return;
-    els.heroLightbox.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    if (document.fullscreenElement === els.heroLightbox && document.exitFullscreen) {
-      try {
-        await document.exitFullscreen();
-      } catch (_error) {
-        // Ignore fullscreen exit failures; hiding the overlay is enough.
-      }
-    }
-    if (state.lightboxReturnFocus) state.lightboxReturnFocus.focus({ preventScroll: true });
-    state.lightboxReturnFocus = null;
-  }
-
-  function applyLayoutPlan(issue) {
-    const defaults = {
-      main: ["editor-note", "lead", "picture-desk", "computer-items", "software", "store-shelves"],
-      sidebar: ["music", "price-watch", "market", "bbs", "curiosity", "briefs", "period-ad", "classifieds", "fallback"],
-    };
-    const plan = (issue && issue.layoutPlan) || {};
-
-    ["main", "sidebar"].forEach((region) => {
-      const order = Array.isArray(plan[region]) ? plan[region] : defaults[region];
-      const nodes = document.querySelectorAll(`[data-${region}-module]`);
-      nodes.forEach((node, index) => {
-        const name = node.getAttribute(`data-${region}-module`);
-        const plannedIndex = order.indexOf(name);
-        node.style.order = String(plannedIndex === -1 ? order.length + index : plannedIndex);
-      });
-    });
-  }
-
+  /* ===== issue number: days since 2026-01-01 ===== */
   function issueNumber(issue, currentIso) {
     const baseDate = new Date("2026-01-01T00:00:00");
     const issueDate = new Date(`${(issue && issue.currentDate) || currentIso}T00:00:00`);
@@ -277,132 +309,18 @@
     return String(days + 1).padStart(3, "0");
   }
 
-  function applyNextAssignment(currentIso, issue) {
-    const currentDate = new Date(`${currentIso}T00:00:00`);
-    const nextCurrent = addDays(currentDate, 1);
-    const issueHistoric = issue && issue.historicDate ? new Date(`${issue.historicDate}T00:00:00`) : minusYears(nextCurrent, 40);
-    const nextHistoric = issue && issue.historicDate ? addDays(issueHistoric, 7) : minusYears(nextCurrent, 40);
-    setText(els.nextCurrentDate, isoDate(nextCurrent));
-    setText(els.nextHistoricDate, issue && issue.historicDate ? `Week of ${isoDate(nextHistoric)}` : isoDate(nextHistoric));
-    if (!els.nextAssignmentList) return;
-    els.nextAssignmentList.innerHTML = [
-      "Archive the current weekly issue before replacing the front page.",
-      "Lead with gaming when there is credible gaming news for the week.",
-      "Include release dates for games and keep same-week context honest in the data.",
-      "Refresh the GPT Image 2 newspaper front image, hero caption, chart lists, and retail-ad flavor.",
-      "Update the accuracy ledger before the web page and Discord image are posted.",
-    ].map((item) => `<li>${escapeHtml(item)}</li>`).join("");
-  }
-
-  function frontPageItems(issue) {
-    if (issue && Array.isArray(issue.frontPageIndex)) return issue.frontPageIndex;
-    if (!issue) return [];
-
-    const gameItem = (issue.computerItems || []).find((item) => /game/i.test(item.label || ""))
-      || (issue.storeShelves || [])[0];
-    const shelfNames = (issue.storeShelves || []).slice(0, 2).map(itemTitle).filter(Boolean).join(" / ");
-    const rockPick = (issue.musicChart || [])[0];
-
-    return [
-      {
-        kicker: "Games",
-        text: gameItem && (gameItem.headline || `${itemTitle(gameItem) || "Games"}${shelfNames ? ` leads a shelf with ${shelfNames}` : ""}`),
-      },
-      {
-        kicker: chrome(issue, "lead", "label", "Top Story"),
-        text: issue.lead && issue.lead.headline,
-      },
-      {
-        kicker: chrome(issue, "bbs", "label", "Modem Desk"),
-        text: issue.bbsNote && issue.bbsNote.headline,
-      },
-      {
-        kicker: chrome(issue, "music", "label", "Rock Radio"),
-        text: rockPick && `${rockPick.title} - ${rockPick.artist}`,
-      },
-    ].filter((item) => item.text);
-  }
-
-  function cleanPublicCopy(value) {
-    return String(value || "")
-      .replace(/\bGenerated art direction cue\s*\d+\s*:\s*/gi, "")
-      .replace(/\s*with confidence labels so [^.]+\.?/gi, ".")
-      .replace(/\s*with confidence labels\.?/gi, ".")
-      .replace(/\s*and confidence labels\.?/gi, ".")
-      .replace(/\s*where exact [^;]+;?/gi, "")
-      .replace(/\s*where exact [^.]+\.?/gi, ".")
-      .replace(/\s*where [^.]*sources are thin;?/gi, "")
-      .replace(/\s{2,}/g, " ")
-      .trim();
-  }
-
-  function firstBrief(issue, pattern) {
-    return (issue.briefs || []).find((item) => {
-      const haystack = `${item.label || ""} ${item.kicker || ""} ${item.headline || ""} ${item.summary || ""}`.toLowerCase();
-      return pattern.test(haystack);
-    });
-  }
-
-  function topGame(issue) {
-    return (issue.storeShelves || [])[0] || null;
-  }
-
-  function itemTitle(item) {
-    return item && (item.title || item.name || item.item || item.headline || "");
-  }
-
-  function itemLabel(item, fallback) {
-    return item && (item.label || item.kicker || item.category || item.slot || item.priority || fallback || "Desk");
-  }
-
-  function itemHeadline(item, fallback) {
-    return item && (item.headline || item.title || item.name || item.item || fallback || "");
-  }
-
-  function itemSummary(item) {
-    return item && (item.summary || item.detail || item.note || item.copy || "");
-  }
-
-  function objectSection(value) {
-    if (!value) return null;
-    if (typeof value === "string") return { summary: value };
-    return typeof value === "object" ? value : null;
-  }
-
-  function gameLead(issue) {
-    const game = topGame(issue);
-    if (!game) return null;
-    const title = game.headline || `${itemTitle(game) || "Games"} Moves Onto the Front Page`;
-    return {
-      label: "Games Lead",
-      headline: title,
-      summary: game.detail || game.note || "",
-      confidence: game.confidence || "",
-      sourceRefs: game.sourceRefs || [],
-      image: game.image || issue.storeShelvesImage || null,
-    };
-  }
-
-  function editorStandfirst(issue) {
-    const game = topGame(issue);
-    const movie = firstBrief(issue, /movie|cinema|box office|marquee|top gun|cobra/);
-    const rock = (issue.musicChart || [])[0];
-    const pieces = [];
-    if (game && itemTitle(game)) pieces.push(`gaming leads with ${itemTitle(game)}`);
-    if (issue.lead && issue.lead.headline) pieces.push(issue.lead.headline);
-    if (movie && movie.headline) pieces.push(movie.headline);
-    if (rock && rock.title && rock.artist) pieces.push(`${rock.title} by ${rock.artist}`);
-    if (!pieces.length) return cleanPublicCopy(issue.editorNote || "");
-    return `This week's front page follows ${pieces.join(", ")}.`;
-  }
-
-  function scanItem(label, title, detail) {
+  /* ===== on this week ===== */
+  function scanCard(kind, title, sub) {
     if (!title) return "";
+    const meta = SCAN_KINDS[kind] || SCAN_KINDS.computers;
     return `
-      <li>
-        <span>${escapeHtml(label)}</span>
+      <li class="cc-card">
+        <div class="cc-card-head">
+          ${chip(meta.icon, meta.accent)}
+          <span class="cc-card-label ${meta.accent}">${escapeHtml(meta.label)}</span>
+        </div>
         <strong>${escapeHtml(title)}</strong>
-        ${detail ? `<em>${escapeHtml(detail)}</em>` : ""}
+        ${sub ? `<em>${escapeHtml(sub)}</em>` : ""}
       </li>
     `;
   }
@@ -416,260 +334,407 @@
 
     const game = topGame(issue);
     const software = (issue.softwareList || [])[0];
-    const movie = firstBrief(issue, /movie|cinema|box office|marquee|top gun|cobra/);
+    const movieBrief = firstBrief(issue, /movie|cinema|box office|marquee|theater|theatre/);
+    const movieChartTop = (issue.movieChart || [])[0];
     const rock = (issue.musicChart || [])[0];
     const price = (issue.priceWatch || [])[0];
-    const bbs = issue.bbsNote;
+    const bbs = objectSection(issue.bbsNote);
 
     els.weekScan.innerHTML = [
-      scanItem("Games", game && itemTitle(game), game && (game.platform || game.price || "")),
-      scanItem("Computers", issue.lead && issue.lead.headline, ""),
-      scanItem("Software", software && software.name, software && software.platform),
-      scanItem("Movies", movie && movie.headline, movie && movie.label),
-      scanItem("Rock", rock && rock.title, rock && rock.artist),
-      scanItem("Shelf Watch", price && price.item, price && price.price),
-      scanItem("Modems", bbs && bbs.headline, ""),
+      scanCard("computers", issue.lead && issue.lead.headline, ""),
+      scanCard("games", game && game.title, game && game.sub),
+      scanCard("software", software && software.name, software && software.platform),
+      scanCard("rock", rock && rock.title, rock && rock.artist),
+      scanCard("movies",
+        (movieBrief && movieBrief.headline) || (movieChartTop && movieChartTop.title),
+        movieBrief ? (movieBrief.kicker || "") : (movieChartTop ? "Top of the marquee" : "")),
+      scanCard("shelf", price && price.item, price && (price.note || price.price)),
+      scanCard("modems", bbs && bbs.headline, ""),
     ].filter(Boolean).join("");
   }
 
+  /* ===== glance row ===== */
+  function frontPageItems(issue) {
+    if (!issue) return [];
+
+    const game = topGame(issue);
+    const rockPick = (issue.musicChart || [])[0];
+    const bbs = objectSection(issue.bbsNote);
+
+    return [
+      {
+        kicker: "Games",
+        icon: "joystick",
+        accent: "cc-accent-magenta",
+        text: game && game.title,
+      },
+      {
+        kicker: chrome(issue, "lead", "label", "Top Story"),
+        icon: "news",
+        accent: "cc-accent-cyan",
+        text: issue.lead && issue.lead.headline,
+      },
+      {
+        kicker: chrome(issue, "bbs", "label", "Modem Desk"),
+        icon: "wave",
+        accent: "cc-accent-green",
+        text: bbs && bbs.headline,
+      },
+      {
+        kicker: chrome(issue, "music", "label", "Rock Radio"),
+        icon: "doc",
+        accent: "cc-accent-cyan",
+        text: rockPick && `${rockPick.title} - ${rockPick.artist}`,
+      },
+    ].filter((item) => item.text);
+  }
+
+  function renderGlance(issue) {
+    if (!els.frontPageIndex) return;
+    els.frontPageIndex.innerHTML = frontPageItems(issue).map((item) => `
+      <li>
+        ${chip(item.icon, item.accent)}
+        <div class="cc-glance-copy">
+          <span class="cc-glance-kicker ${item.accent}">${escapeHtml(item.kicker || "Desk")}</span>
+          <strong>${escapeHtml(item.text)}</strong>
+        </div>
+      </li>
+    `).join("");
+  }
+
+  /* ===== front page banner line ===== */
+  function editorStandfirst(issue) {
+    const game = topGame(issue);
+    const movie = firstBrief(issue, /movie|cinema|box office|marquee|theater|theatre/);
+    const rock = (issue.musicChart || [])[0];
+    const pieces = [];
+    if (game && game.title) pieces.push(`gaming leads with ${game.title}`);
+    if (issue.lead && issue.lead.headline) pieces.push(issue.lead.headline);
+    if (movie && movie.headline) pieces.push(movie.headline);
+    if (rock && rock.title && rock.artist) pieces.push(`${rock.title} by ${rock.artist}`);
+    if (!pieces.length) return cleanPublicCopy(typeof issue.editorNote === "string" ? issue.editorNote : "");
+    return `This week's front page follows ${pieces.join(", ")}.`;
+  }
+
+  /* ===== issue status ===== */
   function applyIssueStatus(issue, currentIso, historicIso) {
     if (!els.status) return;
     const requested = new URLSearchParams(window.location.search).get("date");
     const matchesToday = issue && (issue.currentDate === currentIso || issue.historicDate === historicIso);
 
+    let flag = "First Edition ///";
     if (requested) {
       els.status.textContent = "Archive issue loaded. Use Latest Issue to return to the newest Chronicle.";
       els.status.dataset.statusState = "archive";
+      flag = "Archive Edition ///";
     } else if (matchesToday) {
-      els.status.textContent = "Today’s issue is on the stand.";
+      els.status.textContent = "Today's issue is on the stand.";
       els.status.dataset.statusState = "current";
     } else {
       els.status.textContent = "Latest researched issue shown. Today's exact issue has not been loaded yet.";
       els.status.dataset.statusState = "stale";
+      flag = "Awaiting Edition ///";
+    }
+    setText(els.editionFlag, flag.toUpperCase());
+  }
+
+  /* ===== sidebar: rock radio ===== */
+  function renderMusic(issue) {
+    if (!els.musicChart) return;
+    setText(els.musicLabel, chrome(issue, "music", "label", "Rock Radio Top 10"));
+    if (els.musicChartImage) els.musicChartImage.innerHTML = articleVisual(issue && issue.musicChartImage);
+    const entries = Array.isArray(issue && issue.musicChart) ? issue.musicChart : [];
+    els.musicChart.innerHTML = entries.map((item, index) => `
+      <li${index >= 5 ? ' class="cc-extra"' : ""}>
+        <span class="cc-rank">${escapeHtml(String(item.rank || index + 1))}</span>
+        <div>
+          <strong>${escapeHtml(item.title || "")}</strong>
+          <span class="cc-note">${escapeHtml(item.artist || "")}</span>
+        </div>
+      </li>
+    `).join("");
+
+    const hasExtra = entries.length > 5;
+    if (els.musicFoot) {
+      els.musicFoot.hidden = !hasExtra;
+      els.musicFoot.setAttribute("aria-expanded", "false");
+      els.musicFoot.textContent = "View Full Chart";
+    }
+    if (els.musicFootLink) els.musicFootLink.hidden = hasExtra || !entries.length;
+    const panel = els.musicChart.closest(".cc-side-panel");
+    if (panel) delete panel.dataset.expanded;
+  }
+
+  /* ===== sidebar: this week in 19xx (briefs) ===== */
+  function renderBriefs(issue) {
+    if (!els.briefs) return;
+    const year = issue && issue.historicDate ? String(issue.historicDate).slice(0, 4) : "";
+    setText(els.briefsLabel, year ? `This Week in ${year}` : "This Week");
+    const entries = Array.isArray(issue && issue.briefs) ? issue.briefs : [];
+    els.briefs.innerHTML = entries.map((item) => `
+      <li>
+        <div>
+          ${escapeHtml(item.headline || itemSummary(item))}
+          ${item.headline && itemSummary(item) ? `<span class="cc-note">${escapeHtml(itemSummary(item))}</span>` : ""}
+        </div>
+      </li>
+    `).join("");
+    const panel = els.briefs.closest(".cc-side-panel");
+    if (panel) delete panel.dataset.expanded;
+    if (els.briefsFoot) {
+      els.briefsFoot.hidden = !entries.length;
+      els.briefsFoot.setAttribute("aria-expanded", "false");
+      els.briefsFoot.textContent = "View More";
     }
   }
 
-  function renderIssue(issue, currentIso, historicIso) {
-    els.currentDate.textContent = currentIso;
-    els.historicDate.textContent = issue ? issue.displayDate : historicIso;
-    els.edition.textContent = issue ? issue.edition : "Computer & Business Section";
-    if (els.issueNo) els.issueNo.textContent = issueNumber(issue, currentIso);
-    if (els.morningLine) els.morningLine.textContent = issue ? issue.morningLine || "Morning Edition: a quick daily skim from forty years ago." : "Morning Edition: awaiting a researched issue.";
-    applyMasthead(issue);
-    applyVisualProfile(issue);
-    applyHeroImage(issue);
-    applyLayoutPlan(issue);
-    applySectionChrome(issue);
-    applyNextAssignment(currentIso, issue);
+  /* ===== sidebar: price watch ===== */
+  function compactPrice(price) {
+    const text = String(price || "");
+    const match = text.match(/\$\s?[\d,.]+(?:\s?-\s?\$?\s?[\d,.]+)?(?:\s?[kK]\b)?/);
+    return match ? match[0].replace(/\s+/g, "") : text;
+  }
 
-    if (!issue) {
-      els.status.textContent = "No researched issue has been loaded for this date yet.";
-      if (els.status) els.status.dataset.statusState = "missing";
-      els.lead.innerHTML = `
-        <h2>Research Queue</h2>
-        <p>This date needs a verified computer-news pass before a newspaper image is generated.</p>
-        ${confidenceBadge("Not researched yet")}
+  function renderPriceWatch(issue) {
+    if (!els.priceWatch) return;
+    setText(els.priceWatchLabel, chrome(issue, "priceWatch", "label", "Computer Price Watch"));
+    const entries = Array.isArray(issue && issue.priceWatch) ? issue.priceWatch : [];
+    els.priceWatch.innerHTML = entries.map((item) => {
+      const full = String(item.price || "");
+      const hasMoney = /\$/.test(full);
+      // Keep the right-hand cell compact: dollar figures or short phrases only.
+      const compact = hasMoney ? compactPrice(full) : (full.length <= 12 ? full : "");
+      const noteParts = [];
+      if (full && full !== compact) noteParts.push(full);
+      if (item.note) noteParts.push(item.note);
+      return `
+        <li>
+          <div class="cc-price-row">
+            <strong>${escapeHtml(item.item || "")}</strong>
+            ${compact ? `<span>${escapeHtml(compact)}</span>` : ""}
+          </div>
+          ${noteParts.length ? `<span class="cc-note">${escapeHtml(noteParts.join(" — "))}</span>` : ""}
+        </li>
       `;
-      els.computerItems.innerHTML = "";
-      if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = true;
-      if (els.pictureDesk) els.pictureDesk.innerHTML = "";
-      if (els.softwarePanel) els.softwarePanel.hidden = true;
-      if (els.softwareList) els.softwareList.innerHTML = "";
+    }).join("");
+    const panel = els.priceWatch.closest(".cc-side-panel");
+    if (panel) delete panel.dataset.expanded;
+    if (els.priceFoot) {
+      els.priceFoot.hidden = !entries.length;
+      els.priceFoot.setAttribute("aria-expanded", "false");
+      els.priceFoot.textContent = "View Full Price List";
+    }
+  }
+
+  /* ===== sidebar: market / bbs / curiosity / fallback ===== */
+  function renderMarket(issue) {
+    if (!els.market || !els.marketPanel) return;
+    const market = objectSection(issue && issue.market);
+    if (!market || (!market.headline && !market.summary)) {
+      els.marketPanel.hidden = true;
       els.market.innerHTML = "";
-      if (els.issueBudget) els.issueBudget.innerHTML = "";
-      if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = "";
-      els.storeShelves.innerHTML = "";
-      els.priceWatch.innerHTML = "";
-      els.bbs.innerHTML = "";
-      if (els.curiosity) els.curiosity.innerHTML = "";
-      if (els.briefs) els.briefs.innerHTML = "";
-      if (els.musicChartImage) els.musicChartImage.innerHTML = "";
-      if (els.musicChart) els.musicChart.innerHTML = "";
-      if (els.musicSources) els.musicSources.innerHTML = "";
-      els.ad.innerHTML = "";
-      if (els.classifiedsPanel) els.classifiedsPanel.hidden = true;
-      if (els.classifieds) els.classifieds.innerHTML = "";
-      els.fallback.innerHTML = "";
-      renderWeekScan(null);
-      if (els.frontPageIndex) els.frontPageIndex.innerHTML = "";
-      els.editorNote.textContent = "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
       return;
     }
-
-    applyIssueStatus(issue, currentIso, historicIso);
-    els.editorNote.textContent = editorStandfirst(issue) || "Personal computers and personal computer gaming are the editorial priority when source choices compete.";
-    els.editorNote.textContent = cleanPublicCopy(els.editorNote.textContent);
-    renderWeekScan(issue);
-    if (els.frontPageIndex) {
-      els.frontPageIndex.innerHTML = frontPageItems(issue).map((item) => `
-        <li>
-          <span>${escapeHtml(item.kicker || "Desk")}</span>
-          <strong>${escapeHtml(item.text)}</strong>
-        </li>
-      `).join("");
-    }
-    const lead = gameLead(issue) || issue.lead;
-    els.lead.innerHTML = `
-      <p class="section-label">${escapeHtml(lead.label || chrome(issue, "lead", "label", "Top Story"))}</p>
-      <h2>${escapeHtml(lead.headline)}</h2>
-      ${articleVisual(lead.image)}
-      <p>${escapeHtml(lead.summary)}</p>
-      ${confidenceBadge(lead.confidence)}
-      ${sourceLinks(issue, lead.sourceRefs)}
-    `;
-
-    const pictureDeskItems = visiblePictureDeskItems(issue);
-    if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = pictureDeskItems.length === 0;
-    if (els.pictureDesk) {
-      els.pictureDesk.innerHTML = pictureDeskItems.map((item) => `
-        <article class="picture-desk-item">
-          ${pictureDeskVisual(item.image || item)}
-          <div class="picture-desk-copy">
-            <h3>${escapeHtml(cleanPublicCopy(item.title || item.caption || "Picture"))}</h3>
-            ${item.note ? `<p>${escapeHtml(cleanPublicCopy(item.note))}</p>` : ""}
-            ${sourceLinks(issue, item.sourceRefs)}
-          </div>
-        </article>
-      `).join("");
-    }
-
-    els.computerItems.innerHTML = (issue.computerItems || []).map((item) => `
-      <article class="chronicle-card">
-        <p class="section-label">${escapeHtml(itemLabel(item, "Computer Desk"))}</p>
-        <h3>${escapeHtml(itemHeadline(item, "Computer story"))}</h3>
-        ${articleVisual(item.image)}
-        <p>${escapeHtml(itemSummary(item))}</p>
-        ${confidenceBadge(item.confidence)}
-        ${sourceLinks(issue, item.sourceRefs)}
-      </article>
-    `).join("");
-
-    const softwareItems = Array.isArray(issue.softwareList) ? issue.softwareList : [];
-    if (els.softwarePanel) els.softwarePanel.hidden = softwareItems.length === 0;
-    if (els.softwareList) {
-      els.softwareList.innerHTML = softwareItems.map((item) => `
-        <li>
-          <strong>${escapeHtml(item.name)}</strong>
-          ${item.platform ? `<span class="platform-tag">${escapeHtml(item.platform)}</span>` : ""}
-          <span>${escapeHtml(item.detail)}</span>
-          ${confidenceBadge(item.confidence)}
-          ${sourceLinks(issue, item.sourceRefs)}
-        </li>
-      `).join("");
-    }
-
-    const dow = issue.market.dow || "pending";
-    const nasdaq = issue.market.nasdaq || "pending";
+    setText(els.marketLabel, chrome(issue, "market", "label", "Market Desk"));
+    const dow = market.dow || "";
+    const nasdaq = market.nasdaq || "";
+    els.marketPanel.hidden = false;
     els.market.innerHTML = `
-      <p class="section-label">${escapeHtml(chrome(issue, "market", "label", "Business / Stock Market"))}</p>
-      <h2>${escapeHtml(issue.market.headline)}</h2>
-      <div class="ticker-row">
-        <span>Dow <strong>${escapeHtml(dow)}</strong></span>
-        <span>Nasdaq <strong>${escapeHtml(nasdaq)}</strong></span>
-      </div>
-      ${articleVisual(issue.market.image)}
-      <p>${escapeHtml(issue.market.summary)}</p>
-      ${confidenceBadge(issue.market.confidence)}
-      ${sourceLinks(issue, issue.market.sourceRefs)}
+      ${market.headline ? `<h3>${escapeHtml(market.headline)}</h3>` : ""}
+      ${(dow || nasdaq) ? `
+        <div class="cc-tickers">
+          ${dow ? `<span>Dow <strong>${escapeHtml(dow)}</strong></span>` : ""}
+          ${nasdaq ? `<span>Nasdaq <strong>${escapeHtml(nasdaq)}</strong></span>` : ""}
+        </div>
+      ` : ""}
+      ${articleVisual(market.image)}
+      ${market.summary ? `<p>${escapeHtml(market.summary)}</p>` : ""}
     `;
+  }
 
-    if (els.issueBudget) {
-      els.issueBudget.innerHTML = (issue.issueBudget || []).map((item) => `
-        <li>
-          <span>${escapeHtml(item.priority || item.slot || "Desk")}</span>
-          <p>
-            <strong>${escapeHtml(item.slot || "Story")}</strong>
-            <em>${escapeHtml(item.title || "")}</em>
-          </p>
-        </li>
-      `).join("");
+  function renderBbs(issue) {
+    if (!els.bbs || !els.bbsPanel) return;
+    const bbsNote = objectSection(issue && issue.bbsNote);
+    if (!bbsNote || (!bbsNote.headline && !bbsNote.summary)) {
+      els.bbsPanel.hidden = true;
+      els.bbs.innerHTML = "";
+      return;
     }
-
-    if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = articleVisual(issue.storeShelvesImage);
-
-    els.storeShelves.innerHTML = (issue.storeShelves || []).map((item) => `
-      <li>
-        <strong>${escapeHtml(itemTitle(item))}</strong>
-        ${item.platform ? `<span class="platform-tag">${escapeHtml(item.platform)}</span>` : ""}
-        <span>${escapeHtml(itemSummary(item) || item.price || "")}</span>
-        ${confidenceBadge(item.confidence)}
-        ${sourceLinks(issue, item.sourceRefs)}
-      </li>
-    `).join("");
-
-    els.priceWatch.innerHTML = (issue.priceWatch || []).map((item) => `
-      <li>
-        <strong>${escapeHtml(item.item)}</strong>
-        <span>${escapeHtml(item.price)}</span>
-        <em>${escapeHtml(item.note)}</em>
-      </li>
-    `).join("");
-
-    const bbsNote = objectSection(issue.bbsNote);
-    els.bbs.innerHTML = bbsNote ? `
-      <p class="section-label">${escapeHtml(chrome(issue, "bbs", "label", "Modem Desk"))}</p>
-      <h2>${escapeHtml(bbsNote.headline || "Modem Notes")}</h2>
+    setText(els.bbsLabel, chrome(issue, "bbs", "label", "Modem Desk"));
+    els.bbsPanel.hidden = false;
+    els.bbs.innerHTML = `
+      ${bbsNote.headline ? `<h3>${escapeHtml(bbsNote.headline)}</h3>` : ""}
       ${articleVisual(bbsNote.image)}
-      <p>${escapeHtml(bbsNote.summary || "")}</p>
+      ${bbsNote.summary ? `<p>${escapeHtml(bbsNote.summary)}</p>` : ""}
       ${Array.isArray(bbsNote.posts) ? `
-        <ul class="bbs-list">
+        <ul class="cc-kv">
           ${bbsNote.posts.map((post) => `
             <li>
-              <strong>${escapeHtml(post.topic)}</strong>
-              ${post.platform ? `<span class="platform-tag">${escapeHtml(post.platform)}</span>` : ""}
-              <p>${escapeHtml(post.text)}</p>
+              <strong>${escapeHtml(post.topic || "")}</strong>
+              ${post.platform ? `<span class="cc-tag">${escapeHtml(post.platform)}</span>` : ""}
+              ${post.text ? `<span class="cc-note">${escapeHtml(post.text)}</span>` : ""}
             </li>
           `).join("")}
         </ul>
       ` : ""}
-      ${confidenceBadge(bbsNote.confidence)}
-      ${sourceLinks(issue, bbsNote.sourceRefs)}
-    ` : "";
+    `;
+  }
 
-    if (els.musicChart) {
-      if (els.musicChartImage) els.musicChartImage.innerHTML = articleVisual(issue.musicChartImage);
-      els.musicChart.innerHTML = (issue.musicChart || []).map((item) => `
-        <li>
-          <p>
-            <strong>${escapeHtml(item.title)}</strong>
-            <span>${escapeHtml(item.artist)}</span>
-          </p>
-        </li>
-      `).join("");
+  function renderCuriosity(issue) {
+    if (!els.curiosity || !els.curiosityPanel) return;
+    const curiosity = objectSection(issue && issue.curiosity);
+    if (!curiosity || (!curiosity.headline && !curiosity.summary)) {
+      els.curiosityPanel.hidden = true;
+      els.curiosity.innerHTML = "";
+      return;
     }
+    setText(els.curiosityLabel, chrome(issue, "curiosity", "label", "Today's Curiosity"));
+    els.curiosityPanel.hidden = false;
+    els.curiosity.innerHTML = `
+      ${curiosity.headline ? `<h3>${escapeHtml(curiosity.headline)}</h3>` : ""}
+      ${curiosity.summary ? `<p>${escapeHtml(curiosity.summary)}</p>` : ""}
+      ${curiosity.detail ? `<p style="color:var(--cc-amber)">${escapeHtml(curiosity.detail)}</p>` : ""}
+    `;
+  }
 
-    if (els.curiosity) {
-      els.curiosity.innerHTML = `
-        <p class="section-label">${escapeHtml(chrome(issue, "curiosity", "label", "Today's Curiosity"))}</p>
-        <h2>${escapeHtml(issue.curiosity && issue.curiosity.headline)}</h2>
-        <p>${escapeHtml(issue.curiosity && issue.curiosity.summary)}</p>
-        ${(issue.curiosity && issue.curiosity.detail) ? `<p class="curiosity-detail">${escapeHtml(issue.curiosity.detail)}</p>` : ""}
-        ${confidenceBadge(issue.curiosity && issue.curiosity.confidence)}
-        ${sourceLinks(issue, issue.curiosity && issue.curiosity.sourceRefs)}
+  function renderFallback(issue) {
+    if (!els.fallback || !els.fallbackPanel) return;
+    const fallback = objectSection(issue && issue.worldFallback);
+    if (!fallback || (!fallback.headline && !fallback.summary)) {
+      els.fallbackPanel.hidden = true;
+      els.fallback.innerHTML = "";
+      return;
+    }
+    setText(els.fallbackLabel, chrome(issue, "fallback", "label", "Other News"));
+    els.fallbackPanel.hidden = false;
+    els.fallback.innerHTML = `
+      ${fallback.headline ? `<h3>${escapeHtml(fallback.headline)}</h3>` : ""}
+      ${articleVisual(fallback.image)}
+      ${fallback.summary ? `<p>${escapeHtml(fallback.summary)}</p>` : ""}
+    `;
+  }
+
+  /* ===== main column panels ===== */
+  function renderLead(issue) {
+    if (!els.lead) return;
+    const lead = issue.lead || {};
+    const body = lead.body || lead.summary || "";
+    els.lead.innerHTML = `
+      <div class="cc-panel-head">
+        <span class="cc-panel-label">${escapeHtml(lead.label || chrome(issue, "lead", "label", "Top Story"))}</span>
+      </div>
+      <h2>${escapeHtml(lead.headline || "")}</h2>
+      ${lead.dek ? `<p class="cc-dek">${escapeHtml(lead.dek)}</p>` : ""}
+      ${articleVisual(lead.image)}
+      ${body ? `<p>${escapeHtml(body)}</p>` : ""}
+      ${confidenceBadge(lead.confidence)}
+      ${sourceLinks(issue, lead.sourceRefs)}
+    `;
+  }
+
+  function renderComputerItems(issue) {
+    if (!els.computerItems) return;
+    els.computerItems.innerHTML = (issue.computerItems || []).map((item) => {
+      const label = itemLabel(item, "");
+      return `
+        <article>
+          ${label ? `<span class="cc-panel-label cc-label-cyan">${escapeHtml(label)}</span>` : ""}
+          <h3>${escapeHtml(item.headline || itemTitle(item) || "Computer story")}</h3>
+          ${articleVisual(item.image)}
+          <p>${escapeHtml(itemSummary(item))}</p>
+        </article>
       `;
-    }
+    }).join("");
+  }
 
-    if (els.briefs) {
-      els.briefs.innerHTML = (issue.briefs || []).map((item) => `
+  function renderSoftware(issue) {
+    const softwareItems = Array.isArray(issue.softwareList) ? issue.softwareList : [];
+    if (els.softwarePanel) els.softwarePanel.hidden = softwareItems.length === 0;
+    if (els.softwareSectionCard) els.softwareSectionCard.hidden = softwareItems.length === 0;
+    setText(els.softwareLabel, chrome(issue, "software", "label", "Software Top 5"));
+    setText(els.softwareTitle, chrome(issue, "software", "title", "New & Notable Software"));
+    if (els.softwareList) {
+      els.softwareList.innerHTML = softwareItems.map((item) => `
         <li>
-          <span class="brief-kicker">${escapeHtml(item.kicker || "Brief")}</span>
-          <strong>${escapeHtml(item.headline)}</strong>
-          <p>${escapeHtml(item.summary)}</p>
-          ${confidenceBadge(item.confidence)}
-          ${sourceLinks(issue, item.sourceRefs)}
+          <strong>${escapeHtml(item.name || "")}</strong>
+          ${item.platform ? `<span class="cc-tag">${escapeHtml(item.platform)}</span>` : ""}
+          ${item.detail ? `<span class="cc-note">${escapeHtml(item.detail)}</span>` : ""}
         </li>
       `).join("");
     }
+  }
 
+  function renderStoreShelves(issue) {
+    if (!els.storeShelves) return;
+    setText(els.storeShelvesLabel, chrome(issue, "storeShelves", "label", "On Store Shelves"));
+    setText(els.storeShelvesTitle, chrome(issue, "storeShelves", "title", "Games, Software & Platforms People Could Talk About"));
+    if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = articleVisual(issue.storeShelvesImage);
+
+    const groups = shelfGroups(issue);
+    if (groups) {
+      els.storeShelves.innerHTML = `
+        <div class="cc-shelf-groups">
+          ${groups.map((group) => `
+            <div class="cc-shelf-group">
+              <span class="cc-shelf-label">${escapeHtml(group.label || "Shelf")}</span>
+              <ol>
+                ${(group.items || []).map((entry) => `<li>${escapeHtml(itemTitle(entry))}</li>`).join("")}
+              </ol>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      return;
+    }
+
+    els.storeShelves.innerHTML = `
+      <ul class="cc-list">
+        ${(issue.storeShelves || []).map((item) => `
+          <li>
+            <strong>${escapeHtml(itemTitle(item))}</strong>
+            ${item.platform ? `<span class="cc-tag">${escapeHtml(item.platform)}</span>` : ""}
+            ${(itemSummary(item) || item.price) ? `<span class="cc-note">${escapeHtml(itemSummary(item) || item.price)}</span>` : ""}
+          </li>
+        `).join("")}
+      </ul>
+    `;
+  }
+
+  function renderPictureDesk(issue) {
+    const pictureDeskItems = visiblePictureDeskItems(issue);
+    if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = pictureDeskItems.length === 0;
+    setText(els.pictureDeskLabel, chrome(issue, "pictureDesk", "label", "Picture Desk"));
+    setText(els.pictureDeskTitle, chrome(issue, "pictureDesk", "title", "Scenes From the Week"));
+    if (els.pictureDesk) {
+      els.pictureDesk.innerHTML = pictureDeskItems.map((item) => `
+        <article class="cc-picture-item">
+          ${pictureDeskVisual(item.image || item)}
+          <div>
+            <h3>${escapeHtml(cleanPublicCopy(item.title || item.caption || "Picture"))}</h3>
+            ${item.note ? `<p>${escapeHtml(cleanPublicCopy(item.note))}</p>` : ""}
+          </div>
+        </article>
+      `).join("");
+    }
+  }
+
+  function renderPeriodAd(issue) {
+    if (!els.ad) return;
     const periodAd = objectSection(issue.periodAd);
+    els.ad.hidden = !periodAd;
     els.ad.innerHTML = periodAd ? `
-      <p class="ad-kicker">Advertisement</p>
+      <p class="cc-ad-kicker">Advertisement</p>
       <h2>${escapeHtml(periodAd.headline || "Computer Store Notice")}</h2>
       <p>${escapeHtml(periodAd.summary || "")}</p>
+      ${periodAd.tagline ? `<small>${escapeHtml(periodAd.tagline)}</small>` : ""}
     ` : "";
+  }
 
+  function renderClassifieds(issue) {
     const classifiedItems = Array.isArray(issue.classifieds) ? issue.classifieds : [];
     if (els.classifiedsPanel) els.classifiedsPanel.hidden = classifiedItems.length === 0;
+    setText(els.classifiedsLabel, chrome(issue, "classifieds", "label", "Classifieds"));
+    setText(els.classifiedsTitle, chrome(issue, "classifieds", "title", "Small Ads"));
     if (els.classifieds) {
       els.classifieds.innerHTML = classifiedItems.map((item) => `
         <li>
@@ -679,20 +744,84 @@
         </li>
       `).join("");
     }
-
-    const fallback = objectSection(issue.worldFallback);
-    els.fallback.hidden = !fallback;
-    els.fallback.innerHTML = fallback ? `
-      <p class="section-label">${escapeHtml(chrome(issue, "fallback", "label", "Fallback Lead"))}</p>
-      <h2>${escapeHtml(fallback.headline || "Other News")}</h2>
-      ${articleVisual(fallback.image)}
-      <p>${escapeHtml(fallback.summary || "")}</p>
-      ${confidenceBadge(fallback.confidence)}
-      ${sourceLinks(issue, fallback.sourceRefs)}
-    ` : "";
-
   }
 
+  /* ===== master render ===== */
+  function renderIssue(issue, currentIso, historicIso) {
+    setText(els.currentDate, currentIso);
+    setText(els.historicDate, issue ? issue.displayDate : historicIso);
+    setText(els.edition, issue ? issue.edition : "Computer & Culture Chronicle");
+    if (els.issueNo) els.issueNo.textContent = issueNumber(issue, currentIso);
+    if (els.morningLine) {
+      els.morningLine.textContent = issue
+        ? issue.morningLine || "Morning Edition: a quick skim of the historical week."
+        : "Morning Edition: awaiting a researched issue.";
+    }
+    applyMasthead(issue);
+    applyHeroImage(issue);
+
+    if (!issue) {
+      if (els.status) {
+        els.status.textContent = "No researched issue has been loaded for this date yet.";
+        els.status.dataset.statusState = "missing";
+      }
+      setText(els.editionFlag, "AWAITING EDITION ///");
+      if (els.lead) {
+        els.lead.innerHTML = `
+          <div class="cc-panel-head"><span class="cc-panel-label">Research Queue</span></div>
+          <h2>Research Queue</h2>
+          <p>This date needs a verified computer-news pass before a newspaper image is generated.</p>
+        `;
+      }
+      if (els.computerItems) els.computerItems.innerHTML = "";
+      if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = true;
+      if (els.pictureDesk) els.pictureDesk.innerHTML = "";
+      if (els.softwarePanel) els.softwarePanel.hidden = true;
+      if (els.softwareList) els.softwareList.innerHTML = "";
+      if (els.marketPanel) els.marketPanel.hidden = true;
+      if (els.storeShelvesImage) els.storeShelvesImage.innerHTML = "";
+      if (els.storeShelves) els.storeShelves.innerHTML = "";
+      if (els.priceWatch) els.priceWatch.innerHTML = "";
+      if (els.priceFoot) els.priceFoot.hidden = true;
+      if (els.bbsPanel) els.bbsPanel.hidden = true;
+      if (els.curiosityPanel) els.curiosityPanel.hidden = true;
+      if (els.briefs) els.briefs.innerHTML = "";
+      if (els.briefsFoot) els.briefsFoot.hidden = true;
+      if (els.musicChart) els.musicChart.innerHTML = "";
+      if (els.musicFoot) els.musicFoot.hidden = true;
+      if (els.musicFootLink) els.musicFootLink.hidden = true;
+      if (els.ad) { els.ad.hidden = true; els.ad.innerHTML = ""; }
+      if (els.classifiedsPanel) els.classifiedsPanel.hidden = true;
+      if (els.fallbackPanel) els.fallbackPanel.hidden = true;
+      renderWeekScan(null);
+      if (els.frontPageIndex) els.frontPageIndex.innerHTML = "";
+      setText(els.editorNote, "Personal computers and personal computer gaming are the editorial priority when source choices compete.");
+      return;
+    }
+
+    applyIssueStatus(issue, currentIso, historicIso);
+    setText(els.editorNote, cleanPublicCopy(editorStandfirst(issue)
+      || "Personal computers and personal computer gaming are the editorial priority when source choices compete."));
+
+    renderWeekScan(issue);
+    renderGlance(issue);
+    renderLead(issue);
+    renderComputerItems(issue);
+    renderSoftware(issue);
+    renderStoreShelves(issue);
+    renderPictureDesk(issue);
+    renderPeriodAd(issue);
+    renderClassifieds(issue);
+    renderMusic(issue);
+    renderBriefs(issue);
+    renderPriceWatch(issue);
+    renderMarket(issue);
+    renderBbs(issue);
+    renderCuriosity(issue);
+    renderFallback(issue);
+  }
+
+  /* ===== issue selection / navigation ===== */
   function pickIssue(issues, currentIso, historicIso) {
     const params = new URLSearchParams(window.location.search);
     const requested = params.get("date");
@@ -753,7 +882,6 @@
         els.nextIssue.querySelector("strong").textContent = next.displayDate || next.historicDate || next.currentDate;
       }
     }
-
   }
 
   async function loadIssues() {
@@ -771,11 +899,12 @@
       renderIssueStepNav(state.issues, state.issue);
       renderIssue(state.issue, currentIso, historicIso);
     } catch (error) {
-      els.status.textContent = `Could not load issue data: ${error.message}`;
+      if (els.status) els.status.textContent = `Could not load issue data: ${error.message}`;
       renderIssue(null, currentIso, historicIso);
     }
   }
 
+  /* ===== interactions ===== */
   if (els.issuePicker) {
     els.issuePicker.addEventListener("change", () => {
       const selected = els.issuePicker.value;
@@ -797,7 +926,11 @@
   }
 
   if (els.openHeroImage) {
-    els.openHeroImage.addEventListener("click", openHeroLightbox);
+    els.openHeroImage.addEventListener("click", () => openHeroLightbox(els.openHeroImage));
+  }
+
+  if (els.viewFrontPage) {
+    els.viewFrontPage.addEventListener("click", () => openHeroLightbox(els.viewFrontPage));
   }
 
   if (els.pictureDesk) {
@@ -823,6 +956,57 @@
       closeHeroLightbox();
     }
   });
+
+  function wireSideToggle(button, expandedLabel, collapsedLabel) {
+    if (!button) return;
+    button.addEventListener("click", () => {
+      const panel = button.closest(".cc-side-panel");
+      if (!panel) return;
+      const expanded = panel.dataset.expanded === "true";
+      if (expanded) {
+        delete panel.dataset.expanded;
+      } else {
+        panel.dataset.expanded = "true";
+      }
+      button.setAttribute("aria-expanded", String(!expanded));
+      button.textContent = expanded ? collapsedLabel : expandedLabel;
+    });
+  }
+
+  wireSideToggle(els.musicFoot, "Collapse Chart", "View Full Chart");
+  wireSideToggle(els.briefsFoot, "View Less", "View More");
+  wireSideToggle(els.priceFoot, "Hide Price Notes", "View Full Price List");
+
+  if (els.searchForm && els.searchInput) {
+    els.searchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const query = els.searchInput.value.trim().toLowerCase();
+      if (!query || !state.issues.length) return;
+      const match = state.issues.find((issue) => {
+        const haystack = [
+          issue.currentDate,
+          issue.historicDate,
+          issue.displayDate,
+          issue.edition,
+          issue.morningLine,
+          issue.lead && issue.lead.headline,
+        ].filter(Boolean).join(" ").toLowerCase();
+        return haystack.includes(query);
+      });
+      if (!match) {
+        els.searchInput.value = "";
+        els.searchInput.placeholder = "No match in archive";
+        return;
+      }
+      const url = new URL(window.location.href);
+      if (state.issues[0] && match.currentDate === state.issues[0].currentDate) {
+        url.searchParams.delete("date");
+      } else {
+        url.searchParams.set("date", match.currentDate);
+      }
+      window.location.href = url.toString();
+    });
+  }
 
   loadIssues();
 })();
