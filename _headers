@@ -13,6 +13,12 @@
 /games/*
   Cache-Control: public, max-age=0, must-revalidate
 
+# network map is all self-hosted; if a live traffic exporter is wired in
+# later (see network/traffic-sim.js adapter contract), its origin must be
+# added to connect-src in the CSP above.
+/network/*
+  Cache-Control: public, max-age=0, must-revalidate
+
 /assets/nav.js
   Cache-Control: no-cache, must-revalidate
 
