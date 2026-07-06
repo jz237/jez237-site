@@ -108,6 +108,12 @@
   ],
   "homelab": [
     {
+      "name": "🕸 Home Network Map",
+      "desc": "Living neon map of the home network — topology, simulated traffic, sound.",
+      "status": "live",
+      "link": "/network/"
+    },
+    {
       "name": "Model Runtime Snapshot",
       "desc": "At-a-glance view of model/runtime usage and status.",
       "status": "planned",
