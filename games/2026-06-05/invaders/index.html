@@ -655,7 +655,7 @@
       <div class="overlay" id="overlay">
         <div class="panel">
           <h1>Invaders</h1>
-          <div class="title-version">v2.1 — Daily Ops</div>
+          <div class="title-version">v2.2 — Daily Ops</div>
           <p class="tagline" id="message">A modernized arcade defense run: punch through escalating waves, chain combos into Overdrive, bank smart bombs, and break three rotating boss warships.</p>
           <div class="mode-note" id="dailyNote"></div>
           <p class="hint" id="controlsHint"></p>
@@ -692,7 +692,7 @@
         <button id="pauseButton" type="button" aria-label="Pause" title="Pause (P)">⏸</button>
         <button id="muteButton" type="button" aria-label="Mute sound" aria-pressed="false" title="Mute (M)">🔊</button>
       </div>
-      <div class="version" aria-hidden="true">v2.1</div>
+      <div class="version" aria-hidden="true">v2.2</div>
     </section>
   </main>
 
@@ -723,7 +723,7 @@
       const dailyButton = document.getElementById("dailyButton");
       const bombButton = document.getElementById("bombButton");
 
-      const VERSION = "v2.1";
+      const VERSION = "v2.2";
       const TAU = Math.PI * 2;
       const LOCAL_SCORES_KEY = "neon_invaders_highscores_v1";
       const LAST_INITIALS_KEY = "neon_invaders_last_initials";
@@ -1336,8 +1336,12 @@
         canvasLeft = Math.max(0, Math.round((vw - cssW) / 2));
         game.compact = W < 560 || (H < 560 && navigator.maxTouchPoints > 0);
         game.lowPower = game.compact || (navigator.maxTouchPoints > 0 && Math.min(vw, vh) < 760);
-        const maxDpr = game.lowPower ? 1 : (W * H > 500000 ? 2.4 : 3.2);
-        const dpr = Math.max(1, Math.min(maxDpr, viewScale * (window.devicePixelRatio || 1)));
+        const maxDpr = game.lowPower ? 1 : 2;
+        let dpr = Math.max(1, Math.min(maxDpr, viewScale * (window.devicePixelRatio || 1)));
+        // Cap total backing-store pixels. Fill/particle/glow cost scales with device pixels,
+        // so a 4K or Retina desktop otherwise pays 3-4x the raster cost for little visible gain.
+        const pixelBudget = 2300000;
+        if (W * H * dpr * dpr > pixelBudget) dpr = Math.max(1, Math.sqrt(pixelBudget / (W * H)));
         canvas.width = Math.floor(W * dpr);
         canvas.height = Math.floor(H * dpr);
         canvas.style.width = cssW + "px";
@@ -2365,10 +2369,16 @@
         game.fpsAcc = 0;
         game.fpsFrames = 0;
         game.fpsWindow = 0;
-        // Downgrade only after sustained low fps; recover slowly. Never toggle rapidly and
-        // never rebuild anything on the flip — just relax shadow-blur / particle caps.
+        // The loop clamps dt to 33ms, so a few long "pause" frames barely move the average
+        // fps — a stuttery machine can read ~60fps avg yet feel choppy. Fold in the real
+        // hitch count (frames >45ms, measured unclamped in trackPerf) so periodic pauses
+        // also trigger a downgrade. Downgrade only when sustained; recover slowly; never
+        // rebuild anything on the flip — just relax particle caps / remaining glow.
+        const hitches = game.adaptHitches || 0;
+        game.adaptHitches = 0;
         if (!game.autoLow) {
-          game.lowFpsStreak = fps < 40 ? (game.lowFpsStreak || 0) + 1 : 0;
+          const bad = fps < 40 || hitches >= 4;
+          game.lowFpsStreak = bad ? (game.lowFpsStreak || 0) + 1 : 0;
           if (game.lowFpsStreak >= 3) {
             game.autoLow = true;
             game.fxLow = true;
@@ -2376,7 +2386,7 @@
             game.autoLowFlips = (game.autoLowFlips || 0) + 1;
           }
         } else {
-          game.highFpsStreak = fps > 58 ? (game.highFpsStreak || 0) + 1 : 0;
+          game.highFpsStreak = (fps > 58 && hitches === 0) ? (game.highFpsStreak || 0) + 1 : 0;
           if (game.highFpsStreak >= 6) {
             game.autoLow = false;
             game.fxLow = game.lowPower;
@@ -2995,12 +3005,11 @@
           const alpha = 0.35 + Math.sin(star.twinkle) * 0.22;
           ctx.globalAlpha = clamp(alpha, 0.12, 0.7);
           ctx.fillStyle = star.hue;
-          ctx.shadowColor = star.hue;
-          ctx.shadowBlur = game.fxLow ? 0 : 8;
           ctx.beginPath();
           ctx.arc(star.x, star.y, star.size, 0, TAU);
           ctx.fill();
         }
+        ctx.shadowBlur = 0;
         ctx.restore();
 
         if (game.boss && game.boss.intro > 0) {
@@ -3040,38 +3049,18 @@
         const blink = p.invulnerable > 0 && Math.floor(game.time * 18) % 2 === 0;
         ctx.globalAlpha = blink ? 0.45 : 1;
         const pixel = game.compact ? 3.5 : 4.0;
-        const pattern = [
-          "0000001000000",
-          "0000011100000",
-          "0000111110000",
-          "0001111111000",
-          "0011111111100",
-          "0111011101110",
-          "1111111111111",
-          "1110111110111",
-          "0111111111110",
-          "0011011101100",
-          "0001001001000"
-        ];
-        const ox = -pattern[0].length * pixel / 2;
         const oy = -29.5;
-        glow(colors.player, 20);
-        ctx.fillStyle = colors.player;
-        paintPixelSprite(ctx, pattern, pixel, ox, oy, 0.18);
-        ctx.shadowBlur = 8;
-        ctx.fillStyle = colors.gold;
-        ctx.fillRect(-4.5 * pixel, oy + 7 * pixel, pixel * 2, pixel * 1.4);
-        ctx.fillRect(2.5 * pixel, oy + 7 * pixel, pixel * 2, pixel * 1.4);
-        ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "#ffffff";
-        ctx.fillRect(-1.5 * pixel, oy + 3 * pixel, pixel, pixel);
-        ctx.fillRect(0.5 * pixel, oy + 3 * pixel, pixel, pixel);
+        // Blit the pre-baked hull (glow, gold pods and cockpit included).
+        const sprite = getPlayerSprite(colors.player, pixel);
+        ctx.shadowBlur = 0;
+        ctx.drawImage(sprite, sprite._ox, sprite._oy);
+        // Animated exhaust — additive fire reads as glowing without any shadowBlur.
         ctx.fillStyle = colors.fire;
-        ctx.shadowColor = colors.fire;
-        ctx.globalAlpha = 0.75 + Math.sin(game.time * 42) * 0.18;
+        ctx.globalAlpha = (blink ? 0.45 : 1) * (0.75 + Math.sin(game.time * 42) * 0.18);
         ctx.fillRect(-3.5 * pixel, oy + 10.3 * pixel, pixel * 1.2, pixel * 2.4);
         ctx.fillRect(-0.6 * pixel, oy + 10.5 * pixel, pixel * 1.2, pixel * 3.1);
         ctx.fillRect(2.3 * pixel, oy + 10.3 * pixel, pixel * 1.2, pixel * 2.4);
+        ctx.globalAlpha = blink ? 0.45 : 1;
         if (game.overdrive > 0) {
           ctx.globalAlpha = 0.5 + Math.sin(game.time * 20) * 0.2;
           ctx.strokeStyle = colors.gold;
@@ -3158,6 +3147,56 @@
         sctx.fillRect(width / 2 + 4, height / 2 - 2, 4, 3);
         invaderSpriteCache.set(key, spriteCanvas);
         return spriteCanvas;
+      }
+
+      // The player hull is a ~50-pixel sprite. Painting it pixel-by-pixel with per-pixel
+      // shadowBlur every frame cost ~87 blurred raster draws — more than the whole enemy
+      // fleet. Bake the static hull (glow included) into an offscreen canvas once and blit it;
+      // only the animated thrusters and rings are drawn live.
+      const playerPattern = [
+        "0000001000000",
+        "0000011100000",
+        "0000111110000",
+        "0001111111000",
+        "0011111111100",
+        "0111011101110",
+        "1111111111111",
+        "1110111110111",
+        "0111111111110",
+        "0011011101100",
+        "0001001001000"
+      ];
+      const playerSpriteCache = new Map();
+      function getPlayerSprite(color, pixel) {
+        const key = color + ":" + pixel;
+        if (playerSpriteCache.has(key)) return playerSpriteCache.get(key);
+        const cols = playerPattern[0].length;
+        const rows = playerPattern.length;
+        const pad = 24;
+        const ox = -cols * pixel / 2;
+        const oy = -29.5;
+        const cv = document.createElement("canvas");
+        cv.width = Math.ceil(cols * pixel + pad * 2);
+        cv.height = Math.ceil(rows * pixel + pad * 2);
+        const c = cv.getContext("2d");
+        c.translate(pad - ox, pad - oy); // map player-local coords into the padded sprite
+        c.fillStyle = color;
+        c.shadowColor = color;
+        c.shadowBlur = 20;
+        paintPixelSprite(c, playerPattern, pixel, ox, oy, 0.18);
+        c.shadowBlur = 8;
+        c.fillStyle = colors.gold;
+        c.shadowColor = colors.gold;
+        c.fillRect(-4.5 * pixel, oy + 7 * pixel, pixel * 2, pixel * 1.4);
+        c.fillRect(2.5 * pixel, oy + 7 * pixel, pixel * 2, pixel * 1.4);
+        c.fillStyle = "#ffffff";
+        c.shadowColor = "#ffffff";
+        c.fillRect(-1.5 * pixel, oy + 3 * pixel, pixel, pixel);
+        c.fillRect(0.5 * pixel, oy + 3 * pixel, pixel, pixel);
+        cv._ox = ox - pad;
+        cv._oy = oy - pad;
+        playerSpriteCache.set(key, cv);
+        return cv;
       }
 
       function paintTitleEnemies() {
@@ -3430,6 +3469,7 @@
       function drawBullets() {
         ctx.save();
         ctx.globalCompositeOperation = "lighter";
+        ctx.shadowBlur = 0;
         for (const b of game.bullets) {
           const speed = Math.max(1, Math.hypot(b.vx, b.vy));
           const len = b.damage > 1 ? 34 : 26;
@@ -3441,7 +3481,6 @@
           gradient.addColorStop(0, "rgba(167, 255, 61, 0)");
           gradient.addColorStop(0.45, b.damage > 1 ? "rgba(53, 244, 255, 0.34)" : "rgba(167, 255, 61, 0.34)");
           gradient.addColorStop(1, b.color);
-          glow(b.color, 12);
           ctx.strokeStyle = gradient;
           ctx.lineWidth = b.damage > 1 ? 4 : 3;
           ctx.lineCap = "round";
@@ -3451,11 +3490,8 @@
           ctx.stroke();
           const block = b.damage > 1 ? 7 : 6;
           ctx.fillStyle = b.color;
-          ctx.shadowColor = b.color;
-          ctx.shadowBlur = 12;
           ctx.fillRect(Math.round(b.x - block / 2), Math.round(b.y - block / 2), block, block);
           ctx.fillStyle = "#ffffff";
-          ctx.shadowBlur = 4;
           ctx.fillRect(Math.round(b.x - 1.5), Math.round(b.y - 1.5), 3, 3);
         }
         for (const b of game.enemyBullets) {
@@ -3473,7 +3509,6 @@
           ctx.lineCap = "round";
           ctx.strokeStyle = gradient;
           ctx.lineWidth = isBeam ? 11 : 7;
-          glow(isBeam ? colors.enemy3 : colors.fire, isBeam ? 26 : 18);
           ctx.beginPath();
           ctx.moveTo(tailX, tailY);
           ctx.lineTo(b.x, b.y);
@@ -3485,13 +3520,10 @@
           ctx.lineTo(b.x, b.y);
           ctx.stroke();
           ctx.fillStyle = isBeam ? colors.enemy3 : colors.gold;
-          ctx.shadowColor = isBeam ? colors.enemy3 : colors.gold;
-          ctx.shadowBlur = isBeam ? 26 : 18;
           ctx.beginPath();
           ctx.arc(b.x, b.y, b.r + 1.5, 0, TAU);
           ctx.fill();
           ctx.fillStyle = "#ffffff";
-          ctx.shadowBlur = 6;
           ctx.beginPath();
           ctx.arc(b.x, b.y, Math.max(2, b.r * 0.42), 0, TAU);
           ctx.fill();
@@ -3516,7 +3548,10 @@
           ctx.globalAlpha = 0.55 + ratio * 0.35 + flash * 0.25;
           ctx.fillStyle = color;
           ctx.shadowColor = color;
-          ctx.shadowBlur = 5 + flash * 18;
+          // Per-block glow is the single most expensive thing on screen (dozens of blocks
+          // per bunker). The additive "lighter" blend already makes the mass glow, so only
+          // pay for shadowBlur on blocks that are actively flashing from a hit.
+          ctx.shadowBlur = flash > 0.01 ? 5 + flash * 18 : 0;
           ctx.fillRect(x, y, w, h);
           if (damage > 0) {
             ctx.globalAlpha = 0.5 + damage * 0.35;
@@ -3759,8 +3794,6 @@
         for (const part of game.particles) {
           ctx.globalAlpha = clamp(part.life * 1.8, 0, 1);
           ctx.fillStyle = part.color;
-          ctx.shadowColor = part.color;
-          ctx.shadowBlur = game.fxLow ? 4 : 14;
           ctx.beginPath();
           ctx.arc(part.x, part.y, part.r, 0, TAU);
           ctx.fill();
@@ -3822,7 +3855,7 @@
       function trackPerf(rawMs) {
         if (!(rawMs > 0) || rawMs > 5000) return;
         game.pfWorst = Math.max(game.pfWorst || 0, rawMs);
-        if (rawMs > 45) game.pfHitch = (game.pfHitch || 0) + 1;
+        if (rawMs > 45) { game.pfHitch = (game.pfHitch || 0) + 1; game.adaptHitches = (game.adaptHitches || 0) + 1; }
         game.pfCount = (game.pfCount || 0) + 1;
         game.pfWin = (game.pfWin || 0) + rawMs;
         if (game.pfWin >= 1000) {
