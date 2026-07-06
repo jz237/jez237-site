@@ -9,6 +9,20 @@ SECRET_ENV="$HOME/.config/openclaw/secrets/hidden-reef-cloudflare.env"
 
 cd "$REPO"
 
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "BLOCKED_DIRTY_DEPLOY: refusing to deploy Hidden Reef from a dirty worktree."
+  exit 2
+fi
+
+git fetch origin main
+local_head="$(git rev-parse HEAD)"
+remote_head="$(git rev-parse origin/main)"
+if [ "$local_head" != "$remote_head" ]; then
+  echo "BLOCKED_STALE_DEPLOY: refusing to deploy Hidden Reef from $local_head while origin/main is $remote_head"
+  echo "Push and fast-forward this worktree before deploying Cloudflare Pages."
+  exit 2
+fi
+
 echo "Preflight: JavaScript syntax checks"
 for js_file in "$SOURCE_DIR"/assets/*.js; do
   node --check "$js_file"
