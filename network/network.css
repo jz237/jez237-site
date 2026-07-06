@@ -111,6 +111,19 @@ main.netmap-page {
 .netmap-totals .up b { color: var(--nm-class-browsing); }
 .netmap-totals .clock { opacity: 0.8; }
 
+.netmap-mode {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--nm-node-sub);
+  border: 1px solid var(--nm-trace);
+  background: var(--nm-node-face);
+}
+.netmap-mode.is-live { color: var(--nm-class-browsing); border-color: var(--nm-class-browsing); }
+.netmap-mode.is-offline { color: var(--nm-class-voip); border-color: var(--nm-class-voip); }
+
 .netmap-hud-controls {
   top: 18px;
   right: 18px;
@@ -143,6 +156,110 @@ main.netmap-page {
 }
 .netmap-btn .lbl { font-size: 12.5px; }
 
+.netmap-search {
+  appearance: none;
+  height: 38px;
+  width: clamp(120px, 16vw, 190px);
+  padding: 0 12px;
+  border-radius: 10px;
+  font: 500 13px/1 var(--font-sans, system-ui, sans-serif);
+  color: var(--nm-node-text);
+  background: var(--nm-node-face);
+  border: 1px solid var(--nm-node-edge);
+  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+}
+.netmap-search::placeholder { color: var(--nm-node-sub); }
+.netmap-search:focus { outline: none; border-color: var(--nm-class-streaming); }
+
+/* ---------------- Top talkers ---------------- */
+
+.netmap-toptalkers {
+  top: 68px;
+  right: 18px;
+  width: 205px;
+  padding: 10px 10px 6px;
+  border-radius: 12px;
+  background: var(--nm-node-face);
+  border: 1px solid var(--nm-trace);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.3);
+  pointer-events: auto;
+}
+.netmap-toptalkers .tt-head {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nm-node-sub);
+  margin-bottom: 6px;
+}
+.netmap-toptalkers ol { margin: 0; padding: 0; list-style: none; }
+.netmap-toptalkers button {
+  appearance: none;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 5px;
+  margin-bottom: 2px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  font: 500 12px/1.3 var(--font-sans, system-ui, sans-serif);
+  color: var(--nm-node-text);
+  cursor: pointer;
+  text-align: left;
+}
+.netmap-toptalkers button:hover { background: rgba(64,164,255,0.12); }
+.netmap-toptalkers .tt-dot {
+  width: 7px; height: 7px; flex: none;
+  border-radius: 50%;
+  background: var(--k, #fff);
+  box-shadow: 0 0 6px var(--k, #fff);
+}
+.netmap-toptalkers .tt-label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.netmap-toptalkers .tt-rate {
+  flex: none;
+  color: var(--nm-node-sub);
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+}
+
+/* ---------------- Day scrubber ---------------- */
+
+.netmap-scrubber {
+  right: 18px;
+  bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 12px;
+  border-radius: 12px;
+  background: var(--nm-node-face);
+  border: 1px solid var(--nm-trace);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.3);
+  pointer-events: auto;
+}
+.netmap-scrubber .netmap-btn { height: 28px; min-width: 0; padding: 0 10px; font-size: 12px; box-shadow: none; }
+.netmap-scrubber .netmap-btn[aria-pressed="true"] { border-color: var(--nm-class-browsing); }
+.netmap-scrubber input[type="range"] {
+  width: clamp(110px, 14vw, 190px);
+  accent-color: var(--nm-class-streaming);
+}
+.netmap-scrubber .scrub-label {
+  min-width: 0;
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--nm-class-iot);
+  white-space: nowrap;
+}
+.netmap-scrubber .scrub-label:empty { display: none; }
+.netmap-scrubber[hidden] { display: none; }
+
 .netmap-legend {
   left: 20px;
   bottom: 16px;
@@ -155,14 +272,26 @@ main.netmap-page {
   pointer-events: auto;
 }
 .netmap-legend .key {
+  appearance: none;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 4px 9px;
   border-radius: 999px;
+  font: 500 11.5px/1.3 var(--font-sans, system-ui, sans-serif);
+  color: inherit;
   background: var(--nm-node-face);
   border: 1px solid var(--nm-trace);
+  cursor: pointer;
+  transition: border-color 0.15s ease, opacity 0.15s ease;
 }
+.netmap-legend .key:hover { border-color: var(--k, var(--nm-class-streaming)); }
+.netmap-legend .key.active {
+  border-color: var(--k);
+  color: var(--nm-node-text);
+  box-shadow: 0 0 0 1px var(--k), 0 0 12px color-mix(in srgb, var(--k) 45%, transparent);
+}
+.netmap-legend.filtering .key:not(.active) { opacity: 0.45; }
 .netmap-legend .key i {
   width: 9px;
   height: 9px;
@@ -397,6 +526,26 @@ main.netmap-page {
   background: rgba(64,164,255,0.12);
   border: 1px solid var(--nm-trace);
 }
+.netmap-howreal {
+  margin-top: 20px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--nm-trace);
+  background: rgba(64,164,255,0.05);
+}
+.netmap-howreal summary {
+  cursor: pointer;
+  font-weight: 650;
+  font-size: 14px;
+}
+.netmap-howreal p { font-size: 13.5px; line-height: 1.6; color: var(--wb-muted, #b7c7d9); margin: 10px 0 0; }
+.netmap-howreal code {
+  font-size: 12px;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(64,164,255,0.12);
+  border: 1px solid var(--nm-trace);
+}
 
 .netmap-noscript { padding: 40px; text-align: center; color: var(--nm-node-text); }
 
@@ -416,6 +565,10 @@ main.netmap-page {
   .netmap-stage { height: clamp(420px, 72vh, 640px); }
   .netmap-hud-top { max-width: calc(100% - 130px); }
   .netmap-btn .lbl { display: none; }
+  .netmap-toptalkers { display: none; }
+  .netmap-scrubber { left: 10px; right: 10px; bottom: 52px; }
+  .netmap-scrubber input[type="range"] { flex: 1; width: auto; }
+  .netmap-search { width: 110px; }
   .netmap-inspector {
     top: auto;
     left: 10px;
