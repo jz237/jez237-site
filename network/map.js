@@ -261,6 +261,7 @@
     const subtree = {};            // nodeId -> {rx, tx, classes}
     const particles = [];
     let hoverNode = null, selectedId = null, focusIdx = -1;
+    let highlightSet = null, classFilter = null;
     let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let running = false, visible = true, rafId = 0;
     let lastFrame = 0, fps = 0;
@@ -357,9 +358,11 @@
     function spawnParticles(dt) {
       if (reducedMotion) { particles.length = 0; return; }
       L.links.forEach(link => {
-        if (link.rate < 2) return;
+        if (highlightSet && !(highlightSet.has(link.to.id) || highlightSet.has(link.from.id))) { link.spawnAcc = 0; return; }
+        const fRate = classFilter ? (link.clsMix && link.clsMix[classFilter]) || 0 : link.rate;
+        if (fRate < 2) return;
         // spawn rate grows with log of link traffic
-        const rate = Math.min(26, Math.log10(link.rate + 1) * 6.5);
+        const rate = Math.min(26, Math.log10(fRate + 1) * 6.5);
         link.spawnAcc += rate * dt;
         while (link.spawnAcc >= 1 && particles.length < MAX_PARTICLES) {
           link.spawnAcc -= 1;
@@ -367,6 +370,7 @@
           const mix = link.clsMix || {};
           let cls = link.cls, r = Math.random() * (link.rate || 1), acc = 0;
           for (const k in mix) { acc += mix[k]; if (r <= acc) { cls = k; break; } }
+          if (classFilter) cls = classFilter;
           particles.push({
             link, cls,
             t: down ? 0 : 1,
@@ -463,8 +467,13 @@
 
     function drawLinks(now) {
       L.links.forEach(link => {
-        const intensity = Math.min(1, Math.log10(link.rate + 1) / 4.2);
-        const col = palette.cls[link.cls] || palette.trace;
+        ctx.save();
+        if (highlightSet && !(highlightSet.has(link.to.id) || highlightSet.has(link.from.id))) {
+          ctx.globalAlpha = 0.12;
+        }
+        const fRate = classFilter ? (link.clsMix && link.clsMix[classFilter]) || 0 : link.rate;
+        const intensity = Math.min(1, Math.log10(fRate + 1) / 4.2);
+        const col = palette.cls[classFilter || link.cls] || palette.trace;
         const wifi = link.to.media === 'wifi';
         const offline = sample && sample.devices[link.to.id] && !sample.devices[link.to.id].online && !subtree[link.to.id].rx;
 
@@ -497,8 +506,9 @@
           ctx.font = '500 10px system-ui, sans-serif';
           ctx.textAlign = 'center';
           ctx.fillStyle = palette.sub;
-          ctx.fillText(fmtRate(link.rate), m.x, m.y - 7);
+          ctx.fillText(fmtRate(classFilter ? fRate : link.rate), m.x, m.y - 7);
         }
+        ctx.restore();
       });
     }
 
@@ -532,13 +542,24 @@
         const online = !dev || dev.online;
         const col = n.cluster ? palette.clusterColor(n.cluster) : (palette.cls.streaming || '#29c9ff');
 
+        // search / class-filter dimming
+        let dim = 1;
+        if (highlightSet && !highlightSet.has(n.id)) dim = 0.15;
+        if (classFilter && n.tier !== 0) {
+          const tot = agg.rx + agg.tx;
+          const share = tot > 0 ? ((agg.classes && agg.classes[classFilter]) || 0) / tot : 0;
+          if (share < 0.04) dim = Math.min(dim, 0.25);
+        }
+        ctx.save();
+        ctx.globalAlpha = dim;
+
         if (n.tier === 0) { drawInternet(n, now, activity); }
         else if (n.tier === 1) { drawRouter(n, now, activity); }
         else {
           // module chip
           const r = n.r;
           ctx.save();
-          if (!online) ctx.globalAlpha = 0.55;
+          if (!online) ctx.globalAlpha *= 0.55;
           ctx.fillStyle = palette.face;
           ctx.strokeStyle = isSel || isHover || isFocus ? col : palette.edge;
           ctx.lineWidth = isSel ? 2.6 : 1.4;
@@ -590,6 +611,7 @@
           ctx.stroke();
           ctx.setLineDash([]);
         }
+        ctx.restore();
       });
     }
 
@@ -888,6 +910,10 @@
         animateTo((minX + maxX) / 2, (minY + maxY) / 2, Math.max(MIN_SCALE, s), 0.6);
       },
       setSelected(id) { selectedId = id; },
+      /* search: array of node ids to spotlight, or null to clear */
+      setHighlight(ids) { highlightSet = ids && ids.length ? new Set(ids) : null; },
+      /* legend: traffic class key to isolate, or null to clear */
+      setClassFilter(cls) { classFilter = cls || null; },
       zoomBy(f) { zoomAt(vw / 2, vh / 2, f); },
       nodes: L.nodes,
       byId: L.byId,
