@@ -6,7 +6,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Missile Command (GPT)</title>
+  <title>Missile Command Vector</title>
   <style>
     :root {
       color-scheme: dark;
@@ -162,7 +162,7 @@
 
   <div class="overlay" id="tutorialOverlay">
     <div class="panel">
-      <h1>Missile Command</h1>
+      <h1>Missile Command Vector</h1>
       <p>Defend the skyline. Tap or click anywhere in the sky and the nearest armed base will launch a counter-missile to that point.</p>
       <ul>
         <li>Three bases. Each starts with <strong>15 missiles</strong>.</li>
@@ -173,7 +173,7 @@
         <li>Mobile: rapid multi-touch barrages. Desktop: precise crosshair clicks — <strong>Enter</strong> starts, <strong>P</strong>/<strong>Esc</strong> pauses.</li>
       </ul>
       <div class="row">
-        <span class="tiny">Watch the auto-demo behind this panel. First touch/click unlocks sound. · v1.1.0</span>
+        <span class="tiny">Watch the auto-demo behind this panel. First touch/click unlocks sound &amp; music. · v1.2.0</span>
         <div class="row" style="margin-top:0">
           <button class="ghost" id="dismissTutorial">Practice</button>
           <button id="startButton">Start Defense</button>
@@ -312,6 +312,8 @@
       }
       function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {} }
       let settings = loadSettings();
+      const AUDIO_V = '1';       // bump to cache-bust audio files
+      const MUSIC_VOL = 0.5;     // background music level when sound is on
       const DIFF = {
         easy:   { speed: 0.82, budget: 0.82, ammo: 18, label: 'Easy' },
         normal: { speed: 1.0,  budget: 1.0,  ammo: 15, label: 'Normal' },
@@ -502,14 +504,36 @@
         audio = {
           ac,
           hum,
-          setVolume(v) { master.gain.cancelScheduledValues(ac.currentTime); master.gain.value = v; },
+          sfx: {},          // ElevenLabs sample buffers (loaded async below)
+          music: null,      // HTMLAudioElement background loop
+          setVolume(v) {
+            master.gain.cancelScheduledValues(ac.currentTime); master.gain.value = v;
+            if (audio.music) audio.music.volume = settings.sound ? MUSIC_VOL : 0;
+          },
+          playSample(key, gain = 0.9) {
+            const buf = audio.sfx[key];
+            if (!buf) return false;
+            const src = ac.createBufferSource(); src.buffer = buf;
+            const g = ac.createGain(); g.gain.value = gain;
+            src.connect(g); g.connect(master); src.start();
+            return true;
+          },
+          startMusic() {
+            if (!audio.music) {
+              const a = new Audio('audio/music.mp3?v=' + AUDIO_V);
+              a.loop = true; a.preload = 'auto';
+              audio.music = a;
+            }
+            audio.music.volume = settings.sound ? MUSIC_VOL : 0;
+            audio.music.play().catch(() => {});
+          },
           resume: async () => {
             if (ac.state !== 'running') await ac.resume();
             state.audioUnlocked = true;
-            hum.gain.cancelScheduledValues(ac.currentTime);
-            hum.gain.linearRampToValueAtTime(0.06, ac.currentTime + 1.4);
+            audio.startMusic();
           },
           missileLaunch() {
+            if (audio.playSample('launch', 0.5)) return;
             tone('triangle', 460, 140, 0.22, 0.045, 0.003, 0.09);
             burstNoise({ duration: 0.15, gain: 0.035, filter: 'highpass', freq: 900, decay: 0.08 });
           },
@@ -517,23 +541,37 @@
             tone('sawtooth', 220 + speed * 30, 120 + speed * 18, 0.35, 0.012, 0.003, 0.18);
           },
           explosion(power = 1) {
+            if (audio.playSample('explode', 0.5 * power)) return;
             burstNoise({ duration: 0.45, gain: 0.22 * power, filter: 'bandpass', freq: 280, q: 0.7, decay: 0.32 });
             burstNoise({ duration: 0.18, gain: 0.12 * power, filter: 'highpass', freq: 900, q: 0.8, decay: 0.14 });
             tone('sine', 95 * power + 10, 32, 0.42, 0.08 * power, 0.002, 0.24);
           },
           cityCrash() {
+            if (audio.playSample('citylost', 0.9)) return;
             burstNoise({ duration: 0.5, gain: 0.28, filter: 'lowpass', freq: 420, q: 0.6, decay: 0.45 });
             tone('square', 120, 50, 0.24, 0.03, 0.001, 0.2);
           },
           waveClear() {
+            if (audio.playSample('waveclear', 0.7)) return;
             tone('triangle', 392, 392, 0.11, 0.04);
             setTimeout(() => tone('triangle', 523, 523, 0.12, 0.04), 120);
             setTimeout(() => tone('triangle', 659, 659, 0.15, 0.045), 240);
           },
+          special() { audio.playSample('special', 0.7); },
+          uiClick() { audio.playSample('click', 0.6); },
           combo(level) {
             tone('sine', 420 + level * 45, 320 + level * 30, 0.12, 0.03 + Math.min(0.02, level * 0.002));
           }
         };
+
+        // Load ElevenLabs SFX into decoded buffers (fire-and-forget)
+        ['launch', 'explode', 'citylost', 'waveclear', 'special', 'click'].forEach(key => {
+          fetch('audio/' + key + '.mp3?v=' + AUDIO_V)
+            .then(r => r.arrayBuffer())
+            .then(b => ac.decodeAudioData(b))
+            .then(buf => { audio.sfx[key] = buf; })
+            .catch(() => {});
+        });
       }
 
       function resize() {
@@ -933,7 +971,7 @@
           age: 0,
           trail: [],
           smoked: 0,
-          splitAt: willSplit ? rand(0.35, 0.6) : null,
+          splitY: willSplit ? rand(0.34, 0.5) * state.groundY : null,
           splitDone: false,
           hp: type === 'smart' ? 1 : 1,
           smart: type === 'smart',
@@ -980,6 +1018,7 @@
         });
         if (special) {
           showBanner('★ ' + special.name + ' ★', special.color);
+          audio?.special();
           if (special.key === 'swarm') { spawnSatellite(); spawnSatellite(); }
         } else {
           queuePrompt('WAVE ' + state.wave, state.width / 2, 100, '#9be6ff');
@@ -1076,31 +1115,38 @@
           m.trail.push({ x: m.x, y: m.y, s: rand(1.5, 4) });
           if (m.trail.length > 30) m.trail.shift();
 
-          if (m.splitAt && !m.splitDone && m.age > m.splitAt) {
-            m.splitDone = true;
+          // MIRV split: partway down, the warhead FORKS into fanning children.
+          // No blast here — a blast at this point would instantly detonate the
+          // children spawned at the same spot (the "blew up immediately" bug).
+          if (m.splitY && !m.splitDone && m.y >= m.splitY) {
             const kids = randi(2, 3);
             for (let k = 0; k < kids; k++) {
               const target = randomTarget();
               state.enemyMissiles.push({
                 type: 'mirvChild',
-                x: m.x,
+                x: m.x + rand(-4, 4),
                 y: m.y,
                 sx: m.x,
                 sy: m.y,
-                tx: target.x + rand(-12, 12),
+                tx: target.x + rand(-30, 30),
                 ty: target.y,
-                speed: m.speed * rand(1.12, 1.28),
+                speed: m.speed * rand(1.05, 1.2),
                 age: 0,
                 trail: [],
                 smoked: 0,
-                splitAt: null,
+                splitY: null,
                 splitDone: true,
                 hp: 1,
                 smart: false,
                 dead: false
               });
             }
-            createExplosion(m.x, m.y, 28, 'small', m);
+            // harmless spark puff to sell the split (particles don't collide)
+            for (let p = 0; p < 6; p++) {
+              state.particles.push({ x: m.x, y: m.y, vx: rand(-34, 34), vy: rand(-12, 26), life: rand(0.3, 0.55), age: 0, size: rand(1.5, 3), hue: rand(20, 45), glow: true, gravity: 40 });
+            }
+            state.enemyMissiles.splice(i, 1); // parent becomes its children
+            continue;
           }
 
           if (d <= step) {
@@ -1850,7 +1896,7 @@
             const b = document.createElement('button');
             b.textContent = opt.label;
             if (get() === opt.value) b.classList.add('on');
-            const h = (e) => { e.stopPropagation(); e.preventDefault(); set(opt.value); saveSettings(); btns.forEach(x => x.classList.remove('on')); b.classList.add('on'); };
+            const h = (e) => { e.stopPropagation(); e.preventDefault(); set(opt.value); saveSettings(); audio?.uiClick(); btns.forEach(x => x.classList.remove('on')); b.classList.add('on'); };
             b.addEventListener('click', h); b.addEventListener('touchend', h);
             btns.push(b); segEl.appendChild(b);
           });
