@@ -100,6 +100,33 @@
   #ctl button:hover{opacity:1}
   #ctl button.hot{opacity:1;border-color:rgba(120,220,255,.6);box-shadow:0 0 12px rgba(80,200,255,.3)}
 
+  /* explainer overlay */
+  #explain{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
+    background:rgba(3,1,14,0.72);backdrop-filter:blur(6px);pointer-events:auto;z-index:20;padding:20px}
+  #explain.on{display:flex}
+  #explain .ex-card{position:relative;max-width:540px;width:100%;max-height:90vh;overflow-y:auto;
+    background:linear-gradient(160deg,rgba(16,12,44,0.96),rgba(8,5,26,0.96));
+    border:1px solid var(--hair);border-radius:16px;padding:30px 30px 26px;
+    box-shadow:0 20px 80px rgba(0,0,0,.6),0 0 60px rgba(80,160,255,.12);line-height:1.6}
+  #explain h2{margin:0 0 12px;font-weight:300;font-size:24px;letter-spacing:.14em;
+    color:#eaf6ff;text-shadow:0 0 18px rgba(90,200,255,.5);text-transform:lowercase}
+  #explain p{margin:0 0 14px;font-size:14px;color:#c8dcf2;font-weight:300}
+  #explain p.ex-lead{font-size:15.5px;color:#e6f2ff}
+  #explain b{color:#eaf6ff;font-weight:500}
+  #explain .ex-life{display:flex;flex-direction:column;gap:9px;margin:0 0 16px;
+    padding:14px 16px;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid rgba(255,255,255,.06)}
+  #explain .ex-row{display:flex;gap:12px;align-items:flex-start;font-size:13.5px}
+  #explain .ex-dot{flex:none;width:11px;height:11px;border-radius:50%;margin-top:5px;box-shadow:0 0 10px currentColor}
+  #explain .ex-controls{display:flex;flex-direction:column;gap:7px;margin:16px 0 20px;
+    font-size:12.5px;color:#a9c2dc;letter-spacing:.02em}
+  #explain .ex-go{display:block;width:100%;padding:12px;border-radius:10px;cursor:pointer;
+    background:linear-gradient(90deg,rgba(60,180,255,.22),rgba(255,90,200,.22));
+    border:1px solid rgba(120,200,255,.4);color:#eaf6ff;font-size:14px;letter-spacing:.1em;
+    font-family:inherit;transition:filter .2s}
+  #explain .ex-go:hover{filter:brightness(1.3)}
+  #explain .ex-close{position:absolute;top:16px;right:20px;font-size:20px;opacity:.5;cursor:pointer;line-height:1}
+  #explain .ex-close:hover{opacity:1}
+
   /* title card */
   #title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
     justify-content:center;text-align:center;opacity:0;transition:opacity 1.4s ease;gap:14px}
@@ -130,7 +157,32 @@
   <div id="ctl">
     <button id="btnSound" title="sound (M)">♪</button>
     <button id="btnStats" title="stats (S)">◔</button>
-    <button id="btnHelp" title="how to watch (?)">?</button>
+    <button id="btnHelp" title="what am I watching? (?)">?</button>
+  </div>
+
+  <div id="explain">
+    <div class="ex-card">
+      <span class="ex-close" id="exClose">✕</span>
+      <h2>what am I watching?</h2>
+      <p class="ex-lead">an ecosystem with <b>no scripted behavior</b>. everything you see emerges from a few simple rules, running live.</p>
+      <div class="ex-life">
+        <div class="ex-row"><span class="ex-dot" style="background:var(--plank);color:var(--plank)"></span>
+          <div><b>plankton</b> — drift and bloom where the light falls. food for grazers.</div></div>
+        <div class="ex-row"><span class="ex-dot" style="background:var(--graze);color:var(--graze)"></span>
+          <div><b>grazers</b> — school together as real boids, flee predators, graze the bloom, and breed.</div></div>
+        <div class="ex-row"><span class="ex-dot" style="background:var(--pred);color:var(--pred)"></span>
+          <div><b>predators</b> — hunt the grazers.</div></div>
+      </div>
+      <p>every creature carries <b>genes</b> — speed, size, senses, fear, colour — that mutate a little each time it breeds. the ones that survive pass theirs on, so the population <b>evolves in front of you</b>: watch the grazers grow faster over generations, because the slow ones keep getting eaten.</p>
+      <p>because predators eat grazers and grazers eat plankton, their numbers rise and fall in linked waves — press <b>S</b> to see the population oscilloscope, <b>G</b> for the live gene-drift chart. if everything dies out, a <b>genesis</b> event reseeds the world. it runs forever.</p>
+      <div class="ex-controls">
+        <span>🖱️ <b>click</b> a creature — follow &amp; read its genes</span>
+        <span>✋ <b>drag</b> — stir the current</span>
+        <span>🫧 <b>double-click</b> — drop food</span>
+        <span>⌨️ <b>S</b> stats · <b>G</b> genes · <b>M</b> sound</span>
+      </div>
+      <button class="ex-go" id="exGo">watch it evolve →</button>
+    </div>
   </div>
 
   <div id="caption"></div>
@@ -191,7 +243,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.1.0'; // v1.1: full-frame bloom, brighter bioluminescent creatures/plankton, "what am I watching?" explainer
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -1487,6 +1539,7 @@ function getCreature(uid){ for(const c of creatures)if(c.alive&&c.uid===uid)retu
    RENDERING
 ============================================================================ */
 let bgCanvas=null,bgCtx=null, trailCanvas=null,trailCtx=null, bloomCanvas=null,bloomCtx=null;
+let glowA=null,gaCtx=null, glowB=null,gbCtx=null; // full-frame bloom buffers (1/4, 1/8 res)
 let vignette=null;
 let chroma=0;
 const snow=[[],[],[]]; // 3 depths
@@ -1499,6 +1552,10 @@ function buildBackground(){
   trailCtx=trailCanvas.getContext('2d');
   bloomCanvas=document.createElement('canvas'); bloomCanvas.width=Math.max(2,cv.width>>1); bloomCanvas.height=Math.max(2,cv.height>>1);
   bloomCtx=bloomCanvas.getContext('2d');
+  glowA=document.createElement('canvas'); glowA.width=Math.max(2,cv.width>>2); glowA.height=Math.max(2,cv.height>>2);
+  gaCtx=glowA.getContext('2d');
+  glowB=document.createElement('canvas'); glowB.width=Math.max(2,cv.width>>3); glowB.height=Math.max(2,cv.height>>3);
+  gbCtx=glowB.getContext('2d');
   buildVignette();
 }
 function paintBackground(){
@@ -1521,7 +1578,7 @@ function buildVignette(){
   vx.fillStyle=g;vx.fillRect(0,0,cv.width,cv.height);
 }
 function initSnow(){
-  const depths=[{n:90,cam:0.4,size:0.6,a:0.15},{n:80,cam:1.0,size:1.4,a:0.3},{n:40,cam:1.4,size:5,a:0.12}];
+  const depths=[{n:110,cam:0.4,size:0.8,a:0.22},{n:90,cam:1.0,size:1.6,a:0.4},{n:50,cam:1.4,size:6,a:0.18}];
   for(let d=0;d<3;d++){ snow[d].length=0;
     for(let i=0;i<depths[d].n;i++) snow[d].push({x:rrange(0,CFG.W),y:rrange(0,CFG.H),
       s:depths[d].size,a:depths[d].a,cam:depths[d].cam}); }
@@ -1568,6 +1625,8 @@ function draw(){
   // marine snow (screen-space parallax — drawSnow computes its own screen coords)
   setScreen();
   drawSnow();
+  // BLOOM — downscale the bright frame and add it back, so every glow blooms (neon)
+  bloomPass();
   // vignette + caustics (screen)
   setScreen();
   ctx.globalCompositeOperation='lighter';
@@ -1581,6 +1640,24 @@ function draw(){
   ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
 }
 
+function bloomPass(){
+  if(quality<=1 || !glowA)return; // skip bloom only on the lowest tier
+  // downscale the current (bright) frame into 1/4, then 1/8
+  gaCtx.setTransform(1,0,0,1,0,0); gaCtx.globalCompositeOperation='source-over'; gaCtx.globalAlpha=1;
+  gaCtx.imageSmoothingEnabled=true;
+  gaCtx.clearRect(0,0,glowA.width,glowA.height);
+  gaCtx.drawImage(cv,0,0,glowA.width,glowA.height);
+  gbCtx.setTransform(1,0,0,1,0,0); gbCtx.globalCompositeOperation='source-over'; gbCtx.globalAlpha=1;
+  gbCtx.imageSmoothingEnabled=true;
+  gbCtx.clearRect(0,0,glowB.width,glowB.height);
+  gbCtx.drawImage(glowA,0,0,glowB.width,glowB.height);
+  // add the blurred copies back over the frame with 'lighter' — bright areas bloom
+  ctx.setTransform(1,0,0,1,0,0); ctx.imageSmoothingEnabled=true;
+  ctx.globalCompositeOperation='lighter';
+  ctx.globalAlpha=0.55; ctx.drawImage(glowA,0,0,cv.width,cv.height);
+  ctx.globalAlpha=0.45; ctx.drawImage(glowB,0,0,cv.width,cv.height);
+  ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+}
 function drawNebula(){
   const t=simTime;
   const b1x=CFG.W*0.3+Math.sin(t/200*TAU)*CFG.W*0.3, b1y=CFG.H*0.4+Math.cos(t/170*TAU)*CFG.H*0.2;
@@ -1589,18 +1666,18 @@ function drawNebula(){
   const p1=[cv.width/2-(cam.x-b1x)*s, cv.height/2-(cam.y-b1y)*s];
   const p2=[cv.width/2-(cam.x-b2x)*s, cv.height/2-(cam.y-b2y)*s];
   const R=1500*sc*DPR*(cam.scale+cam.breath)*0.4;
-  ctx.globalAlpha=0.10*(0.6+0.4*dayFactor);
+  ctx.globalAlpha=0.17*(0.6+0.4*dayFactor);
   ctx.drawImage(glowSprites[(300/360*HUEBUCKETS)|0], p1[0]-R,p1[1]-R,R*2,R*2);
   ctx.drawImage(glowSprites[(170/360*HUEBUCKETS)|0], p2[0]-R,p2[1]-R,R*2,R*2);
 }
 function drawShafts(){
   const n = quality>=3?6:quality>=2?4:2;
-  const a=lerp(0.02,0.09,dayFactor);
+  const a=lerp(0.035,0.15,dayFactor);
   if(a<0.012)return;
   ctx.globalCompositeOperation='lighter';
   for(let i=0;i<n;i++){
     const x=CFG.W*(i+0.5)/n + Math.sin(simTime*0.1+i)*40;
-    const w=90+Math.sin(simTime*0.07+i*2)*40;
+    const w=150+Math.sin(simTime*0.07+i*2)*60;
     ctx.globalAlpha=a*(0.7+0.3*Math.sin(simTime*0.2+i));
     const g=ctx.createLinearGradient(x,0,x,CFG.H);
     g.addColorStop(0,'rgba(180,230,255,0.9)');g.addColorStop(1,'rgba(180,230,255,0)');
@@ -1616,13 +1693,15 @@ function drawPlanktonBloom(){
   bloomCtx.setTransform(s,0,0,s, (cv.width/2-(cam.x)*(cam.scale+cam.breath)*sc*DPR)*0.5, (cv.height/2-(cam.y)*(cam.scale+cam.breath)*sc*DPR)*0.5);
   bloomCtx.globalCompositeOperation='lighter';
   for(let i=0;i<CFG.planktonCap;i++){ if(!PL.alive[i])continue;
-    const pr=5+2*Math.sin(PL.pulse[i]);
+    const pr=8+3.5*Math.sin(PL.pulse[i]);
     const spr=glowSprites[((PL.hue[i]/360*HUEBUCKETS)|0)%HUEBUCKETS];
-    bloomCtx.globalAlpha=0.5;
+    bloomCtx.globalAlpha=0.7;
     bloomCtx.drawImage(spr,PL.px[i]-pr,PL.py[i]-pr,pr*2,pr*2);
+    bloomCtx.globalAlpha=0.5; // brighter core so dense blooms read as lush luminous clouds
+    bloomCtx.drawImage(spr,PL.px[i]-pr*0.45,PL.py[i]-pr*0.45,pr*0.9,pr*0.9);
   }
   setScreen();
-  ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=0.85;
+  ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=1.0;
   ctx.imageSmoothingEnabled=true;
   ctx.drawImage(bloomCanvas,0,0,cv.width,cv.height);
   setWorld();
@@ -1663,11 +1742,15 @@ function drawCreatures(){
   for(const c of preds)drawBody(c,scr);
 }
 function underglow(c,scr){
-  if(quality<=2 && c.kind===0 && cam.followId!==c.uid)return;
-  const L=bodyLen(c);
-  glow(c.x,c.y, L*0.9, c.huedeg, 0.30*c.metab*clamp(c.energy/c.cap,0.3,1));
+  const L=bodyLen(c), e=clamp(c.energy/c.cap,0.3,1);
+  if(quality<=2 && c.kind===0 && cam.followId!==c.uid){ // cheap single glow so grazers still read
+    glow(c.x,c.y, L*1.0, c.huedeg, 0.4*e); return;
+  }
+  glow(c.x,c.y, L*1.7, c.huedeg, 0.42*c.metab*e);  // wide bioluminescent halo
+  glow(c.x,c.y, L*0.7, c.huedeg, 0.6*e);           // bright inner core — lit from within
+  if(c.kind===1) glow(c.x,c.y, L*0.4, -1, 0.35*e); // predators get a hot white heart
 }
-function bodyLen(c){ return c.kind===0 ? (10+c.size*14) : (18+c.size*22); }
+function bodyLen(c){ return c.kind===0 ? (12+c.size*16) : (20+c.size*26); }
 function drawBody(c,scr){
   const n=c.kind===0?5:7;
   const L=bodyLen(c);
@@ -2006,7 +2089,7 @@ function toggleSound(){ if(A.on)audioMute(); else audioResume();
   document.getElementById('btnSound').textContent=A.on?'♪':'♪̶'; }
 document.getElementById('btnStats').addEventListener('click',toggleStats);
 document.getElementById('btnSound').addEventListener('click',()=>{firstGesture();toggleSound();});
-document.getElementById('btnHelp').addEventListener('click',showHint);
+document.getElementById('btnHelp').addEventListener('click',openExplain);
 document.getElementById('inspClose').addEventListener('click',closeInspector);
 
 /* settings sliders */
@@ -2024,6 +2107,13 @@ document.getElementById('sVoice').addEventListener('input',e=>{A.voice=+e.target
 const hintEl=document.getElementById('hint'); let hintShown=false;
 function showHint(){ hintEl.classList.add('on'); hintShown=true; }
 function hideHint(){ if(hintShown){ hintEl.classList.remove('on'); localStorage.setItem('primordia_hinted','1'); hintShown=false; } }
+/* explainer overlay */
+const explainEl=document.getElementById('explain');
+function openExplain(){ explainEl.classList.add('on'); }
+function closeExplain(){ explainEl.classList.remove('on'); firstGesture(); }
+document.getElementById('exClose').addEventListener('click',closeExplain);
+document.getElementById('exGo').addEventListener('click',closeExplain);
+explainEl.addEventListener('click',e=>{ if(e.target===explainEl)closeExplain(); });
 
 /* first gesture: start audio + dissolve title */
 let gestured=false;
