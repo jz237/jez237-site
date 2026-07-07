@@ -4181,5 +4181,24 @@
       "description": "A night-blooming orchid propagation room rendered as a physical Prussian-blue cyanotype contact print with ghosted plant silhouettes, rinse marks, paper fibers, and tabletop darkroom scale cues.",
       "template": "Render [SUBJECT_OR_PLACE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls surface chemistry, texture, color behavior, edge quality, scale cues, and lighting. Include [ENVIRONMENTAL_CONTEXT], [FUNCTIONAL_OBJECTS], [TACTILE_DETAILS], [MEDIUM_SPECIFIC_MARKS], and [PHYSICAL_DISPLAY_CONTEXT]. Keep the finished image as a visual example rather than an instruction card."
     }
+  },
+  {
+    "id": "2026-07-07-factual-infographic-factual-infographic-how-a-pistol-shrimp",
+    "title": "Factual infographic: How a Pistol Shrimp Snap Makes a Cavitation Flash",
+    "tests": "Explores real cavitation physics, pistol shrimp claw anatomy, macro water-bubble detail, and museum-grade factual information design.",
+    "prompt": "Create a finished square factual infographic titled \"HOW A PISTOL SHRIMP SNAP MAKES A CAVITATION FLASH\" explaining real-world/non-fiction pistol shrimp claw cavitation using conservative biology and physics. Make it a polished photorealistic science-museum wall chart mounted above a wet marine-biology lab bench with a small seawater tray, ruler, hydrophone, macro lens, and safe observation notes; the physical anchor must be visible, not a flat school poster. Include a central cutaway/specimen panel of the snapping claw, a seven-step snap-to-bubble-collapse sequence, macro windows for claw socket geometry and collapsing vapor bubble, a cause/effect diagram for pressure drop/cavitation/shock/heat-light, a reef-burrow scale vignette, habitat swatches, and a concise safe-observation panel. Use restrained readable labels, accurate non-fiction tone, bright seawater colors, crisp panel hierarchy, photorealistic shrimp textures, translucent bubbles, raking lab light, and dense but coherent detail. No gore, no invented statistics, no genetic claims, no actionable experiment steps, no long paragraphs, no generic icons, no dark evidence board.\n\nReusable template: Create a finished square factual infographic titled \"HOW [REAL SCIENCE PROCESS] WORKS\" explaining [REAL-WORLD/NON-FICTION TOPIC] using conservative science. Anchor it as a photorealistic chart in a relevant real workspace, include a central cutaway/specimen or mechanism panel, a step-by-step sequence, at least two macro/material detail windows, a cause/effect diagram, a scale/context vignette, material or habitat swatches, and a concise safe-observation/care panel. Keep labels restrained and readable, with accurate relationships and no invented statistics.",
+    "image": "images/2026-07-07-factual-infographic-factual-infographic-how-a-pistol-shrimp.jpg",
+    "thumb": "thumbs/2026-07-07-factual-infographic-factual-infographic-how-a-pistol-shrimp.webp",
+    "color": "#65706e",
+    "date": "2026-07-07",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Pistol shrimp claw cavitation and bubble-collapse flash",
+      "description": "A real-world marine biology and physics infographic explaining how a snapping shrimp claw creates a fast water jet, cavitation bubble, pressure pulse, and tiny flash.",
+      "sourceNote": "Conservative summary of established pistol shrimp cavitation observations: rapid claw closure forms a water jet, a vapor bubble collapses, and the collapse can create a pressure wave plus brief sonoluminescent light."
+    }
   }
 ]
