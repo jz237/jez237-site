@@ -239,6 +239,32 @@
     el.innerHTML = '<div class="om-grid om-cols-wide">' + cards + "</div>";
   }
 
+  function renderGpu(el, gpu) {
+    var cards = (gpu.nodes || []).map(function (node) {
+      if (!node.online) {
+        return '<article class="om-tile"><div class="om-k">' + esc(node.name) + "</div>" +
+          '<div class="om-status" style="margin-top:8px">' + dotWord("sleeping") + " · powered down or unreachable</div></article>";
+      }
+      var bits = "";
+      if (node.util_pct != null) {
+        bits += '<div class="om-k" style="margin-top:2px">GPU load <span class="om-v">' + num(node.util_pct, 0) + "%</span></div>" +
+          meterHTML(node.util_pct, thresholdCls(node.util_pct, 80, 95));
+      }
+      if (node.vram_total_gb) {
+        var vramPct = (num(node.vram_used_gb, 0) / node.vram_total_gb) * 100;
+        bits += '<div class="om-sub" style="margin-top:8px">VRAM ' + esc(fmtGB(node.vram_used_gb)) + " of " + esc(fmtGB(node.vram_total_gb)) + "</div>" +
+          meterHTML(vramPct, thresholdCls(vramPct, 85, 95));
+      }
+      var tail = [];
+      if (node.temp_c != null) tail.push(Math.round(node.temp_c) + "°C");
+      if (node.power_w != null) tail.push(num(node.power_w, 0) + " W");
+      if (tail.length) bits += '<div class="om-sub" style="margin-top:8px">' + esc(tail.join(" · ")) + "</div>";
+      return '<article class="om-tile"><div class="om-k">' + esc(node.name) +
+        ' <span class="om-status">' + dotWord("ok") + "</span></div>" + bits + "</article>";
+    }).join("");
+    el.innerHTML = '<div class="om-grid">' + cards + "</div>";
+  }
+
   function renderAgents(el, agents) {
     var cards = (agents.agents || []).map(function (agent) {
       return '<article class="om-tile om-agent">' +
@@ -365,6 +391,7 @@
     { key: "__pulse", sel: "#om-pulse", secSel: "#sec-pulse", render: renderPulse },
     { key: "system", sel: "#om-system", secSel: "#sec-system", render: renderSystem },
     { key: "fleet", sel: "#om-fleet", secSel: "#sec-fleet", render: renderFleet },
+    { key: "gpu", sel: "#om-gpu", secSel: "#sec-gpu", render: renderGpu },
     { key: "agents", sel: "#om-agents", secSel: "#sec-agents", render: renderAgents },
     { key: "models", sel: "#om-models", secSel: "#sec-models", render: renderModels },
     { key: "automations", sel: "#om-autos", secSel: "#sec-autos", render: renderAutomations },

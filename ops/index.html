@@ -136,6 +136,14 @@
       <div class="om-body" id="om-fleet"></div>
     </section>
 
+    <section class="om-sec" id="sec-gpu" hidden>
+      <div class="ops-module-bar">
+        <h2>GPU Telemetry</h2>
+        <span class="muted">live utilization from the lab's GPU nodes · polled with the snapshot</span>
+      </div>
+      <div class="om-body" id="om-gpu"></div>
+    </section>
+
     <section class="om-sec" id="sec-agents" hidden>
       <div class="ops-module-bar">
         <h2>Agent Roster</h2>
@@ -190,18 +198,13 @@
     </div>
     <section class="ops-next" aria-label="Planned dashboard modules">
       <div class="bench-tile">
-        <h3>GPU Telemetry</h3>
-        <p>Live utilization and temperature from the GPU nodes when they wake up for inference work.</p>
-        <span class="badge-planned">Future</span>
-      </div>
-      <div class="bench-tile">
-        <h3>Token &amp; Cost Usage</h3>
-        <p>How much thinking the agents did this week — tokens and model mix, aggregated.</p>
-        <span class="badge-planned">Future</span>
-      </div>
-      <div class="bench-tile">
         <h3>Live Agent Feed</h3>
         <p>A rolling ticker of what the agents just finished — the lab's commit log, in plain English.</p>
+        <span class="badge-planned">Future</span>
+      </div>
+      <div class="bench-tile">
+        <h3>Trend History</h3>
+        <p>Seven-day charts for the system and GPU numbers once enough snapshots pile up.</p>
         <span class="badge-planned">Future</span>
       </div>
     </section>
