@@ -36,22 +36,21 @@ jobs:
           eastern_hour="$(TZ=America/New_York date +%H)"
           eastern_minute="$(TZ=America/New_York date +%M)"
           eastern_total=$((10#$eastern_hour * 60 + 10#$eastern_minute))
-          # GitHub cron can run late, so the window and the
-          # full-refresh band are generous: any run landing between 3:55 PM
-          # and 5:00 PM Eastern rebuilds the full history for the day.
+          # GitHub's scheduler fires only a few of the scheduled slots per
+          # day, at unpredictable times, so accept any weekday run from
+          # 9:30 AM Eastern to end of day. Full-vs-intraday is decided by
+          # the script itself ("auto") from the age of the last full
+          # refresh recorded in stocks.json — pinning the full run to a
+          # time band kept missing when fires were dropped or delayed.
           market_start=$((9 * 60 + 30))
-          market_end=$((17 * 60))
-          close_run=$((15 * 60 + 55))
-          if [ "$eastern_total" -ge "$market_start" ] && [ "$eastern_total" -le "$market_end" ]; then
+          if [ "$eastern_total" -ge "$market_start" ]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Skipping outside 9:30 AM-5:00 PM Eastern refresh window."
+            echo "Skipping before 9:30 AM Eastern."
           fi
-          # Intraday runs refresh quotes and intraday chart ranges only; the
-          # post-close run (and manual dispatch) rebuilds the full history.
-          mode="intraday"
-          if [ "$eastern_total" -ge "$close_run" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          mode="auto"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             mode="full"
           fi
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
