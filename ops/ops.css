@@ -1,0 +1,382 @@
+/* ops.css — Operations & Statistics dashboard modules.
+   Loaded AFTER workbench-theme.css on purpose: everything here uses the
+   om- prefix (plus the page-local ops-* helpers migrated from the old
+   inline block) so none of workbench-theme's !important surface rules
+   (.tile/.card/.panel/…) can grab these elements. Colors come exclusively
+   from the network map's --nm-* variables so both themes work for free. */
+
+:root {
+  --om-ok: var(--nm-class-browsing);
+  --om-warn: var(--nm-class-iot);
+  --om-err: var(--nm-class-voip);
+  --om-info: var(--nm-class-streaming);
+  --om-dim: var(--nm-offline);
+}
+
+/* ---------- page-local helpers (migrated from the old inline <style>) */
+
+.ops-head { margin: 6px 0 20px; }
+.ops-head h1 { margin: 2px 0 8px; font-size: clamp(26px, 4vw, 40px); }
+.ops-head .lede { max-width: 720px; margin: 0; }
+
+.ops-module-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px 14px;
+  margin: 26px 0 12px;
+}
+.ops-module-bar h2 { margin: 0; font-size: 20px; }
+.ops-module-bar .muted { font-size: 13px; }
+.ops-module-bar a.standalone {
+  margin-left: auto;
+  font-size: 13px;
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 999px;
+  color: var(--nm-node-text);
+  background: var(--nm-node-face);
+  border: 1px solid var(--nm-node-edge);
+}
+.ops-module-bar a.standalone:hover { border-color: var(--nm-class-streaming); }
+
+.ops-next {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.ops-next .bench-tile {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--nm-node-face);
+  border: 1px dashed var(--nm-trace);
+}
+.ops-next .bench-tile h3 { margin: 0 0 6px; font-size: 15px; }
+.ops-next .bench-tile p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--nm-node-sub); }
+.ops-next .bench-tile .badge-planned {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nm-node-sub);
+  border: 1px solid var(--nm-trace);
+}
+
+/* ---------- module scaffolding */
+
+.om-sec { margin: 30px 0 6px; }
+.om-sec[hidden] { display: none; }
+
+.om-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+}
+.om-grid.om-cols-wide { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+.om-grid.om-cols-narrow { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+
+.om-tile {
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: var(--nm-node-face);
+  border: 1px solid var(--nm-trace);
+  transition: border-color 0.25s ease;
+}
+.om-tile:hover { border-color: var(--nm-node-edge); }
+
+.om-k {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nm-node-sub);
+}
+.om-v {
+  font-size: 21px;
+  font-weight: 650;
+  color: var(--nm-node-text);
+  font-variant-numeric: tabular-nums;
+}
+.om-v em { font-style: normal; font-size: 13px; color: var(--nm-node-sub); }
+.om-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--nm-node-sub);
+}
+.om-meta-line { margin-top: 12px; font-size: 12.5px; color: var(--nm-node-sub); }
+.om-note { margin: 8px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--nm-node-sub); }
+
+/* ---------- freshness badge + pulse strip */
+
+.om-pulse {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 22px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: var(--nm-node-face);
+  border: 1px solid var(--nm-trace);
+}
+.om-stat { display: flex; flex-direction: column; gap: 1px; min-width: 74px; }
+.om-stat b {
+  font-size: 19px;
+  font-weight: 650;
+  color: var(--nm-node-text);
+  font-variant-numeric: tabular-nums;
+}
+.om-stat b em { font-style: normal; font-size: 13px; font-weight: 500; color: var(--nm-node-sub); }
+.om-stat i {
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--nm-node-sub);
+}
+
+.om-badge {
+  margin-left: auto;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--om-dim);
+  border: 1px solid var(--om-dim);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.om-badge.is-live { color: var(--om-ok); border-color: var(--om-ok); }
+.om-badge.is-stale { color: var(--om-warn); border-color: var(--om-warn); }
+.om-badge.is-warming { color: var(--om-info); border-color: var(--om-info); }
+.om-badge.is-offline { color: var(--om-dim); border-color: var(--om-dim); }
+
+/* ---------- chips, dots, meters, sparklines */
+
+.om-chip {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--nm-node-text);
+  background: color-mix(in srgb, var(--nm-node-sub) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nm-node-sub) 35%, transparent);
+  white-space: nowrap;
+}
+.om-chip.is-ok   { color: var(--om-ok);   background: color-mix(in srgb, var(--om-ok) 14%, transparent);   border-color: color-mix(in srgb, var(--om-ok) 45%, transparent); }
+.om-chip.is-warn { color: var(--om-warn); background: color-mix(in srgb, var(--om-warn) 14%, transparent); border-color: color-mix(in srgb, var(--om-warn) 45%, transparent); }
+.om-chip.is-err  { color: var(--om-err);  background: color-mix(in srgb, var(--om-err) 14%, transparent);  border-color: color-mix(in srgb, var(--om-err) 45%, transparent); }
+.om-chip.is-info { color: var(--om-info); background: color-mix(in srgb, var(--om-info) 14%, transparent); border-color: color-mix(in srgb, var(--om-info) 45%, transparent); }
+.om-chip.is-dim  { color: var(--om-dim);  background: color-mix(in srgb, var(--om-dim) 14%, transparent);  border-color: color-mix(in srgb, var(--om-dim) 45%, transparent); }
+
+.om-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: 1px;
+  background: currentColor;
+  box-shadow: 0 0 6px currentColor;
+}
+.om-status { font-size: 12.5px; color: var(--nm-node-sub); }
+.om-status .is-ok { color: var(--om-ok); }
+.om-status .is-warn { color: var(--om-warn); }
+.om-status .is-err { color: var(--om-err); }
+.om-status .is-info { color: var(--om-info); }
+.om-status .is-dim { color: var(--om-dim); }
+
+.om-meter {
+  display: block;
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nm-node-sub) 18%, transparent);
+  overflow: hidden;
+}
+.om-meter b {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--om-info);
+  transition: width 0.5s ease;
+}
+.om-meter.is-ok b { background: var(--om-ok); }
+.om-meter.is-warn b { background: var(--om-warn); }
+.om-meter.is-err b { background: var(--om-err); }
+
+.om-spark { display: block; width: 100%; height: 36px; margin-top: 8px; color: var(--om-info); }
+.om-spark .om-spark-area { fill: currentColor; fill-opacity: 0.13; }
+.om-spark .om-spark-line { fill: none; stroke: currentColor; stroke-width: 1.6; vector-effect: non-scaling-stroke; }
+
+/* ---------- agents roster */
+
+.om-agent .om-agent-top { display: flex; align-items: center; gap: 8px; }
+.om-agent .om-emoji { font-size: 18px; }
+.om-agent .om-agent-name { font-size: 15px; font-weight: 650; color: var(--nm-node-text); }
+.om-agent .om-agent-role { margin-top: 4px; font-size: 12px; line-height: 1.45; color: var(--nm-node-sub); min-height: 2.6em; }
+.om-agent .om-agent-model { margin-top: 6px; }
+.om-agent .om-status { margin-top: 8px; }
+
+/* ---------- fleet */
+
+.om-machine .om-mach-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.om-machine h3 { margin: 0; font-size: 17px; }
+.om-machine .om-role { margin-top: 2px; font-size: 12px; color: var(--nm-node-sub); text-transform: uppercase; letter-spacing: 0.05em; }
+.om-specs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 3px 12px;
+  margin: 10px 0 0;
+  font-size: 12.5px;
+}
+.om-specs dt { color: var(--nm-node-sub); font-weight: 600; }
+.om-specs dd { margin: 0; color: var(--nm-node-text); }
+
+/* ---------- models */
+
+.om-models-default { font-size: 14px; color: var(--nm-node-text); margin-bottom: 12px; }
+.om-provider {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 0;
+  border-top: 1px solid color-mix(in srgb, var(--nm-node-sub) 15%, transparent);
+  font-size: 13.5px;
+}
+.om-provider:last-child { border-bottom: 1px solid color-mix(in srgb, var(--nm-node-sub) 15%, transparent); }
+.om-provider b { color: var(--nm-node-text); font-weight: 650; min-width: 120px; }
+.om-provider .om-prov-count { margin-left: auto; color: var(--nm-node-sub); font-variant-numeric: tabular-nums; }
+
+/* ---------- automations table-grid */
+
+.om-autos-totals { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-bottom: 14px; }
+
+.om-autos { display: grid; grid-template-columns: minmax(180px, 2fr) minmax(70px, 1fr) minmax(110px, 1.2fr) minmax(80px, 1fr) minmax(110px, 1.4fr) minmax(52px, 0.7fr); gap: 0 14px; font-size: 13px; }
+.om-autos .om-job { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: center; padding: 8px 2px; border-top: 1px solid color-mix(in srgb, var(--nm-node-sub) 14%, transparent); }
+.om-autos .om-job-head { font-size: 10.5px; font-weight: 650; letter-spacing: 0.07em; text-transform: uppercase; color: var(--nm-node-sub); border-top: none; }
+.om-job-name { color: var(--nm-node-text); font-weight: 550; }
+.om-job-agent, .om-job-cad, .om-job-last, .om-job-dur { color: var(--nm-node-sub); font-variant-numeric: tabular-nums; }
+.om-job-rate { display: flex; align-items: center; gap: 8px; color: var(--nm-node-sub); font-variant-numeric: tabular-nums; }
+.om-job-rate .om-meter { flex: 1; margin-top: 0; }
+
+.om-more { margin-top: 10px; }
+.om-more summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--nm-node-sub);
+  padding: 6px 0;
+}
+.om-more summary:hover { color: var(--nm-node-text); }
+
+/* ---------- workshop counters */
+
+.om-counters { display: flex; flex-wrap: wrap; gap: 12px; }
+.om-counter {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 118px;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: var(--nm-node-face);
+  border: 1px solid var(--nm-trace);
+  text-decoration: none;
+}
+a.om-counter:hover { border-color: var(--nm-node-edge); }
+.om-counter b { font-size: 22px; font-weight: 650; color: var(--nm-node-text); font-variant-numeric: tabular-nums; }
+.om-counter i { font-style: normal; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--nm-node-sub); }
+.om-sites { margin-top: 12px; font-size: 13px; color: var(--nm-node-sub); }
+.om-sites a { color: var(--nm-node-text); }
+
+/* ---------- milestones */
+
+.om-miles { list-style: none; margin: 0; padding: 0 0 0 2px; }
+.om-miles li {
+  position: relative;
+  padding: 0 0 14px 18px;
+  border-left: 1px solid var(--nm-trace);
+  font-size: 13.5px;
+}
+.om-miles li::before {
+  content: "";
+  position: absolute;
+  left: -4px;
+  top: 5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--om-info);
+  box-shadow: 0 0 6px var(--om-info);
+}
+.om-miles time { display: block; font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase; color: var(--nm-node-sub); }
+.om-miles span { color: var(--nm-node-text); }
+
+/* ---------- skeleton + noscript */
+
+.om-skel {
+  border-radius: 14px;
+  min-height: 74px;
+  background: linear-gradient(100deg,
+    color-mix(in srgb, var(--nm-node-sub) 10%, transparent) 40%,
+    color-mix(in srgb, var(--nm-node-sub) 20%, transparent) 50%,
+    color-mix(in srgb, var(--nm-node-sub) 10%, transparent) 60%);
+  background-size: 300% 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .om-skel { animation: om-shimmer 1.6s linear infinite; }
+  @keyframes om-shimmer { to { background-position-x: -300%; } }
+}
+
+.om-noscript {
+  margin: 22px 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px dashed var(--nm-trace);
+  color: var(--nm-node-sub);
+  font-size: 13.5px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- responsive + motion + theme spot fixes */
+
+@media (max-width: 720px) {
+  .om-badge { margin-left: 0; }
+  .om-grid { grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+  .om-autos { grid-template-columns: 1fr 1fr; }
+  .om-autos .om-job { grid-template-columns: 1fr 1fr; gap: 3px 12px; padding: 10px 2px; }
+  .om-autos .om-job-head { display: none; }
+  .om-job-name { grid-column: 1 / -1; }
+  .om-job-rate { grid-column: 1 / -1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .om-tile, .om-meter b { transition: none !important; }
+}
+
+/* Light board: serif card headings inherit workbench cream — force readable
+   ink on the light --nm-node-face cards (same fix network.css uses). */
+:root[data-theme="light"] .om-machine h3,
+:root[data-theme="light"] .om-agent .om-agent-name { color: #16202c !important; }
