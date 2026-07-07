@@ -51,7 +51,7 @@ button{touch-action:manipulation;cursor:pointer;-webkit-tap-highlight-color:tran
 'use strict';
 const canvas=document.getElementById('c');
 const ctx=canvas.getContext('2d');
-const VERSION='v2.0.0';
+const VERSION='v2.1.0';
 const FINE_POINTER=window.matchMedia&&matchMedia('(pointer:fine)').matches;
 let W,H,dpr;
 let viewScale=1,canvasLeft=0;
@@ -235,10 +235,11 @@ function updateMusic(){
     el.volume=Math.max(0,Math.min(1,el.volume+(t-el.volume)*0.04));
   }
 }
-const VOICE_TEXT={'vo-level-clear':'LEVEL CLEAR','vo-level-clear-2':'THE WINDOW SHATTERS','vo-level-clear-3':'BEAUTIFUL DESTRUCTION','vo-combo-3':'TRIPLE COMBO','vo-combo-5':'COMBO x5','vo-combo-max':'MAXIMUM COMBO','vo-multiball':'MULTIBALL','vo-fire':'FIREBALL ARMED','vo-wide':'WIDE PADDLE','vo-slow':'TIME CRYSTAL','vo-ball-lost':'BALL LOST','vo-ball-lost-2':'ONE SLIPPED PAST','vo-last-life':'FINAL BALL','vo-moving':'THE PANES ARE MOVING','vo-game-over':'THE STORM ENDS','vo-high-score':'NEW HIGH SCORE'};
+const VOICE_TEXT={'vo-level-clear':'LEVEL CLEAR','vo-level-clear-2':'THE WINDOW SHATTERS','vo-level-clear-3':'BEAUTIFUL DESTRUCTION','vo-combo-3':'TRIPLE COMBO','vo-combo-5':'COMBO x5','vo-combo-max':'MAXIMUM COMBO','vo-multiball':'MULTIBALL','vo-fire':'FIREBALL ARMED','vo-wide':'WIDE PADDLE','vo-slow':'TIME CRYSTAL','vo-ball-lost':'BALL LOST','vo-ball-lost-2':'ONE SLIPPED PAST','vo-last-life':'FINAL BALL','vo-moving':'THE PANES ARE MOVING','vo-game-over':'THE STORM ENDS','vo-high-score':'NEW HIGH SCORE','vo-explosive':'VOLATILE PANES','vo-regen':'SELF-HEALING GLASS','vo-mystery':'MYSTERY PANES','vo-boss-wall':'BOSS WALL — SHATTER THE CORE'};
 // Per-event voice pools: random variant, never the same twice in a row
 const VO_POOLS={levelClear:['vo-level-clear','vo-level-clear-2','vo-level-clear-3'],ballLost:['vo-ball-lost','vo-ball-lost-2']};
 const voLast={};
+let voSeen={};
 let voToastTimer=null;
 function showToast(t){const el=document.getElementById('voToast');if(!el||!t)return;el.textContent=t;el.style.opacity='1';clearTimeout(voToastTimer);voToastTimer=setTimeout(()=>el.style.opacity='0',1700);}
 function playVoice(name,priority){
@@ -376,12 +377,13 @@ function generateLevel(lv){
   const area={x:10,y:topMargin,w:W-20,h:H*0.45};
   let cols,rows,pattern;
 
-  if(lv===1){cols=6;rows=4;pattern='grid';}
-  else if(lv===2){cols=9;rows=6;pattern='diamond';}
-  else if(lv===3){cols=10;rows=8;pattern='circle';}
-  else if(lv===4){cols=10;rows=8;pattern='cross';}
-  else if(lv===5){cols=10;rows=6;pattern='grid';} // boss - moving
-  else{cols=8+Math.min(lv-5,4);rows=6+Math.min(lv-5,4);pattern=['grid','diamond','circle','cross'][(lv-1)%4];}
+  const isBossWall=lv%5===0; // boss wall every 5th level: moving wall + shielded core
+  if(lv===1){cols=8;rows=4;pattern='grid';}
+  else if(lv===2){cols=11;rows=6;pattern='diamond';}
+  else if(lv===3){cols=12;rows=8;pattern='circle';}
+  else if(lv===4){cols=12;rows=8;pattern='cross';}
+  else if(isBossWall){cols=12;rows=6;pattern='grid';}
+  else{cols=10+Math.min(lv-5,4);rows=6+Math.min(lv-5,4);pattern=['grid','diamond','circle','cross'][(lv-1)%4];}
 
   const bw=area.w/cols;
   const bh=Math.min(area.h/rows,28);
@@ -417,23 +419,38 @@ function generateLevel(lv){
       let color=COLOR_VALUES[ci];
       if(hp>=5){color='#888';ci=-1;}
 
-      const moving=(lv===5||(lv>5&&r%3===0));
+      // v2.1: special pane types unlock on a schedule
+      let special=null;
+      if(isBossWall&&r===Math.floor(rows/2)&&c===Math.floor(cols/2)){
+        special='core';hp=10+Math.floor(lv/5)*4;color='#f8f8ff';ci=-1;
+      }
+      else if(lv>=9&&Math.random()<0.05)special='mystery';
+      else if(lv>=7&&Math.random()<0.07&&hp<5)special='regen';
+      else if(lv>=4&&Math.random()<0.08&&hp<5)special='explosive';
+
+      const moving=(isBossWall||(lv>5&&r%3===0));
 
       bricks.push({
         x:area.x+c*bw+gap,y:area.y+r*bh+gap,
         w:bw-gap*2,h:bh-gap*2,
-        hp,maxHp:hp,color,ci,
+        hp,maxHp:hp,color,ci,special,regenTimer:0,
         flash:0,moving,moveDir:c%2===0?1:-1,moveBase:area.x+c*bw+gap,
         alive:true
       });
     }
   }
+
+  // v2.1: announce new pane types on their first appearance this run
+  if(bricks.some(b=>b.special==='core'))playVoice('vo-boss-wall',true);
+  else if(!voSeen.explosive&&bricks.some(b=>b.special==='explosive')){voSeen.explosive=true;playVoice('vo-explosive',true);}
+  else if(!voSeen.regen&&bricks.some(b=>b.special==='regen')){voSeen.regen=true;playVoice('vo-regen',true);}
+  else if(!voSeen.mystery&&bricks.some(b=>b.special==='mystery')){voSeen.mystery=true;playVoice('vo-mystery',true);}
 }
 
 // ---- GAME INIT ----
 function startGame(){
   score=0;lives=diff().lives;level=1;combo=0;comboTimer=0;comboMultiplier=1;
-  breakFlashes=[];
+  breakFlashes=[];voSeen={};
   activePowers={wide:0,fire:0,slow:0};
   powerUps=[];scorePopups=[];
   newHsIndex=-1;
@@ -472,7 +489,7 @@ function update(dt){
     levelTransTime+=step;
     if(levelTransTime>90){
       level++;generateLevel(level);resetBall();state=PLAYING;
-      if(bricks.some(b=>b.moving))playVoice('vo-moving');
+      if(!bricks.some(b=>b.special==='core')&&bricks.some(b=>b.moving))playVoice('vo-moving');
     }
     return;
   }
@@ -500,13 +517,18 @@ function update(dt){
   // Combo timer
   if(comboTimer>0){comboTimer-=step;if(comboTimer<=0){combo=0;comboMultiplier=1;}}
 
-  // Bricks movement
+  // Bricks: flash decay, regen healing, movement
   for(const br of bricks){
-    if(!br.alive||!br.moving)continue;
+    if(!br.alive)continue;
+    if(br.flash>0)br.flash-=step;
+    if(br.special==='regen'&&br.hp<br.maxHp&&br.regenTimer>0){
+      br.regenTimer-=step;
+      if(br.regenTimer<=0){br.hp=br.maxHp;br.flash=6;}
+    }
+    if(!br.moving)continue;
     br.x+=br.moveDir*0.5*diff().brickMove*step;
     if(br.x>br.moveBase+30)br.moveDir=-1;
     if(br.x<br.moveBase-30)br.moveDir=1;
-    if(br.flash>0)br.flash-=step;
   }
 
   // Balls
@@ -584,17 +606,9 @@ function update(dt){
         else if(combo===12)playVoice('vo-combo-max',true);
 
         if(br.hp<=0){
-          br.alive=false;
-          const pts=(br.maxHp*10+level*5)*comboMultiplier;
-          score+=pts;
-          spawnShards(br.x+br.w/2,br.y+br.h/2,br.color,6+Math.floor(Math.random()*3));
-          breakFlashes.push({x:br.x+br.w/2,y:br.y+br.h/2,r:6,color:br.color,life:0,maxLife:14});
-          scorePopups.push({x:br.x+br.w/2,y:br.y+br.h/2,text:'+'+pts,life:0,maxLife:40});
-          sfxBrickBreak();
-          shakeAmount=Math.min(3+comboMultiplier,10);
-          // Power-up drop
-          if(Math.random()<0.15)spawnPowerUp(br.x+br.w/2,br.y+br.h/2);
+          killBrick(br);
         }else{
+          if(br.special==='regen')br.regenTimer=360; // 6s to heal back
           sfxBrickHit(br.ci>=0?br.ci:0);
         }
         if(b.fire)continue;
@@ -675,6 +689,47 @@ function update(dt){
   if(remaining.length===0){
     state=LEVEL_TRANSITION;levelTransTime=0;sfxLevelComplete();
     announce('levelClear');
+  }
+}
+
+// ---- v2.1: BRICK DESTRUCTION (shared by ball hits + explosive chains) ----
+function killBrick(br){
+  if(!br.alive)return;
+  br.alive=false;
+  const cx=br.x+br.w/2,cy=br.y+br.h/2;
+  const pts=(br.maxHp*10+level*5)*comboMultiplier;
+  score+=pts;
+  spawnShards(cx,cy,br.color,6+Math.floor(Math.random()*3));
+  breakFlashes.push({x:cx,y:cy,r:6,color:br.special==='explosive'?'#ff8830':br.color,life:0,maxLife:br.special==='explosive'?20:14});
+  scorePopups.push({x:cx,y:cy,text:'+'+pts,life:0,maxLife:40});
+  sfxBrickBreak();
+  shakeAmount=Math.min(3+comboMultiplier,10);
+  // mystery panes always drop a power-up; others 15%
+  if(br.special==='mystery'||Math.random()<0.15)spawnPowerUp(cx,cy);
+  // explosive panes blast their neighbours (chains through other volatiles)
+  if(br.special==='explosive'){
+    const radius=br.w*1.6;
+    shakeAmount=Math.min(shakeAmount+4,12);
+    playNoise(0.22,0.18);
+    for(const ob of bricks){
+      if(!ob.alive||ob===br)continue;
+      const ox=ob.x+ob.w/2-cx,oy=ob.y+ob.h/2-cy;
+      if(Math.hypot(ox,oy)<=radius){
+        ob.hp--;ob.flash=4;
+        if(ob.hp<=0)killBrick(ob);
+      }
+    }
+  }
+  // shattering the boss core brings the whole wall down
+  if(br.special==='core'){
+    score+=500;
+    scorePopups.push({x:cx,y:cy,text:'+500 CORE',life:0,maxLife:50});
+    shakeAmount=12;
+    for(const ob of bricks){
+      if(!ob.alive)continue;
+      ob.alive=false;
+      spawnShards(ob.x+ob.w/2,ob.y+ob.h/2,ob.color,3);
+    }
   }
 }
 
@@ -931,12 +986,49 @@ function drawBrick(br){
   }
 
   // HP indicator for 3HP
-  if(!false&&br.maxHp>=3){
+  if(!false&&br.maxHp>=3&&br.special!=='core'){
     ctx.strokeStyle='rgba(180,180,180,0.6)';
     ctx.lineWidth=2;
     ctx.beginPath();
     ctx.roundRect(br.x+1,br.y+1,br.w-2,br.h-2,r);
     ctx.stroke();
+  }
+
+  // v2.1: special pane markers
+  const bcx=br.x+br.w/2,bcy=br.y+br.h/2;
+  if(br.special==='explosive'){
+    const pulse=0.6+Math.sin(Date.now()*0.008)*0.4;
+    ctx.fillStyle=`rgba(255,140,40,${0.75*pulse})`;
+    ctx.beginPath();ctx.arc(bcx,bcy,3.5,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle=`rgba(255,170,60,${0.5*pulse})`;
+    ctx.lineWidth=1;
+    ctx.beginPath();ctx.arc(bcx,bcy,6.5,0,Math.PI*2);ctx.stroke();
+  }else if(br.special==='regen'){
+    const pulse=0.4+Math.sin(Date.now()*0.005)*0.3;
+    ctx.strokeStyle=`rgba(160,255,200,${pulse})`;
+    ctx.lineWidth=1.6;
+    ctx.beginPath();ctx.roundRect(br.x+3,br.y+3,br.w-6,br.h-6,Math.max(1,r-1));ctx.stroke();
+  }else if(br.special==='mystery'){
+    ctx.fillStyle='rgba(255,255,255,0.85)';
+    ctx.font='bold 12px monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText('?',bcx,bcy+1);
+    ctx.textBaseline='alphabetic';
+  }else if(br.special==='core'){
+    const pulse=0.7+Math.sin(Date.now()*0.006)*0.3;
+    ctx.shadowColor='#fff';ctx.shadowBlur=14*pulse;
+    ctx.fillStyle='#fff';
+    ctx.beginPath();
+    for(let i=0;i<8;i++){
+      const a=i*Math.PI/4,rr=i%2===0?7:3;
+      const px=bcx+Math.cos(a)*rr,py=bcy+Math.sin(a)*rr;
+      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+    }
+    ctx.closePath();ctx.fill();
+    ctx.shadowBlur=0;
+    ctx.fillStyle='#0a0a14';
+    ctx.font='bold 9px monospace';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(''+br.hp,bcx,bcy+0.5);
+    ctx.textBaseline='alphabetic';
   }
 
   ctx.globalAlpha=1;
