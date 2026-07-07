@@ -1335,7 +1335,7 @@
       { title: 'Glassrail Bastion',             path: '2026-03-06/glassrail-bastion/',         emoji: '🚂', date: 'Mar 6',  cat: 'arcade',   tag: 'featured',     desc: 'v2: abyss vista skies, dispatch voice, music, gamepad, difficulty, pause, global scores' },
 
       // Experimental
-      { title: 'PRIMORDIA',                     path: '2026-07-06/primordia/',             emoji: '🌌', date: 'Jul 6',  cat: 'arcade',   tag: 'experimental', desc: 'Experimental self-running artificial-life aquarium — watch more than play. An unscripted neon-abyss ecosystem: plankton, boid grazers and hunting predators with heritable mutating genes, so real Lotka-Volterra population cycles and a live evolutionary arms race emerge on their own (the grazers get faster than their ancestors, generation by generation). Director camera + click-to-inspect genes/lineage, hydrothermal vents, swaying kelp, cinematic slow-mo kills, a nature-documentary narrator, generative synthwave, and live population + gene-drift charts. A genesis event reseeds the world on extinction; it runs forever. Drag to stir the current, double-click to feed · S stats · G genes · M sound' },
+      { title: 'PRIMORDIA',                     path: '2026-07-06/primordia/',             emoji: '🌌', date: 'Jul 6',  cat: 'arcade',   tag: 'demo',         desc: 'Self-running artificial-life aquarium — watch more than play. An unscripted neon-abyss ecosystem: plankton, boid grazers and hunting predators with heritable mutating genes, so real Lotka-Volterra population cycles and a live evolutionary arms race emerge on their own (the grazers get faster than their ancestors, generation by generation). Director camera + click-to-inspect genes/lineage, hydrothermal vents, swaying kelp, cinematic slow-mo kills, a nature-documentary narrator, generative synthwave, and live population + gene-drift charts. A genesis event reseeds the world on extinction; it runs forever. Drag to stir the current, double-click to feed · S stats · G genes · M sound' },
       { title: 'Choplifter: Rescue Run',        path: '2026-06-09/choplifter/',            emoji: '🚁', date: 'Jun 9',  cat: 'arcade',   tag: 'featured',     desc: 'v2: mission-control voice callouts, 80s synth score, nose spotlight, wave-shifting skies, gamepad, difficulty, global scores' },
       { title: 'GPT 5.5 Fluid Simulator Demo',  path: '2026-06-09/sci-fi-data-chamber-loop/', emoji: '💧', date: 'Jun 9',  cat: 'arcade',   tag: 'demo',         desc: 'High-resolution WebGL2 fluid dynamics lab with ray-lit refraction, caustics, vorticity, pressure solving, and live sliders' },
       { title: 'Subway Siege: Blackout',        path: '2026-06-09/subway-siege-blackout/', emoji: '🔦', date: 'Jun 9',  cat: 'arcade',   tag: 'experimental', desc: 'Top-down blackout tank combat — sweep your searchlight, hunt raider armor hiding in the dark, and hold the subway through escalating waves. One-finger controls, chain-reaction barrels, synth audio, global scores' },
@@ -1360,7 +1360,7 @@
       'super star trek', 'depth charge',
       'subway siege blackout', 'neon invaders', 'vortex storm eater',
       'void surge', 'void echo', 'gravity weaver', 'storm echo', 'vector arena demo',
-      'vector arena 3d', 'vector tempest', 'joust', 'turrican ii', 'primordia'
+      'vector arena 3d', 'vector tempest', 'joust', 'turrican ii'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
