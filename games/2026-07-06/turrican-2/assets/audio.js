@@ -48,6 +48,7 @@
     // ---- SFX --------------------------------------------------------------
     const SFX = {
       shoot: () => blip(680, 0.08, 'square', 0.16, 340),
+      shootb: () => blip(340, 0.11, 'triangle', 0.2, 520),
       eshoot: () => blip(300, 0.12, 'sawtooth', 0.14, 160),
       beam: () => blip(900 + Math.random() * 200, 0.05, 'sawtooth', 0.06, 700),
       jump: () => blip(320, 0.16, 'square', 0.2, 640),
