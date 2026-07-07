@@ -127,12 +127,38 @@
     }
     .hidden { display: none; }
     .tiny { font-size: 12px; opacity: 0.75; }
+    /* Lighter scrim on the title screen so the auto-demo shows through */
+    #tutorialOverlay { background: radial-gradient(circle at 50% 42%, rgba(4,10,20,0.12), rgba(3,6,14,0.5)); }
+    #demoBadge {
+      position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+      z-index: 11; pointer-events: none; display: none;
+      padding: 6px 14px; border-radius: 999px;
+      background: rgba(4,10,20,0.66); color: #cdf3ff;
+      font: 800 13px Inter, system-ui, sans-serif; letter-spacing: 0.09em;
+      border: 1px solid rgba(127,231,255,0.55);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.32);
+    }
+    .optrow {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 10px; padding: 9px 2px; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .optrow:first-child { border-top: 0; }
+    .optrow .lab { font-size: 14px; letter-spacing: 0.02em; }
+    .optrow .sub { font-size: 11px; opacity: 0.6; }
+    .seg { display: inline-flex; border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,0.16); }
+    .seg button {
+      border: 0; border-radius: 0; padding: 7px 13px; font-size: 12px; letter-spacing: 0.04em;
+      text-transform: uppercase; font-weight: 700; cursor: pointer;
+      background: rgba(255,255,255,0.05); color: var(--text); box-shadow: none;
+    }
+    .seg button.on { background: linear-gradient(180deg, #9ff6ff, #57d4ff); color: #04111c; }
   </style>
 </head>
 <body>  <canvas id="game"></canvas>
   <div class="hud" id="hud">
     <span id="hudLine">W1 | Score 0 | Cities 6 | Ammo 15/15/15 | Combo x1 | Bonus @ 12000</span>
   </div>
+  <div id="demoBadge">▶ AUTO-DEMO</div>
 
   <div class="overlay" id="tutorialOverlay">
     <div class="panel">
@@ -142,14 +168,16 @@
         <li>Three bases. Each starts with <strong>15 missiles</strong>.</li>
         <li>Destroy enemy warheads with blast waves and trigger chain reactions for bigger scores.</li>
         <li><strong>MIRVs</strong> arrive on wave 6, <strong>satellites</strong> on wave 8, and <strong>smart bombs</strong> on wave 10.</li>
-        <li>Satellites take <strong>2 hits</strong>. Lose all cities and it’s over.</li>
+        <li>Every <strong>5th wave</strong> is a <strong>★ special wave</strong> — MIRV storms, satellite swarms, smart-bomb blitzes, meteor showers — with a big clear bonus.</li>
+        <li>Satellites take <strong>2 hits</strong>. Lose all cities and it’s over. Scores post to the <strong>global leaderboard</strong>.</li>
         <li>Mobile: rapid multi-touch barrages. Desktop: precise crosshair clicks — <strong>Enter</strong> starts, <strong>P</strong>/<strong>Esc</strong> pauses.</li>
       </ul>
       <div class="row">
-        <span class="tiny">First touch/click also unlocks sound. · v1.0.1</span>
+        <span class="tiny">Watch the auto-demo behind this panel. First touch/click unlocks sound. · v1.1.0</span>
         <div class="row" style="margin-top:0">
           <button class="ghost" id="dismissTutorial">Practice</button>
           <button id="startButton">Start Defense</button>
+          <button class="ghost" id="titleOptBtn">Options</button>
           <button class="ghost" id="titleHsBtn" style="color:#ffd700;border-color:#ffd700">High Scores</button>
         </div>
       </div>
@@ -178,6 +206,16 @@
       <button id="hsOverlayClose">Back</button>
     </div>
   </div>
+  <div id="optOverlay" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.85);align-items:center;justify-content:center">
+    <div class="panel" style="max-width:440px;width:92%">
+      <h1 style="color:#7fe7ff">OPTIONS</h1>
+      <div id="optRows" style="margin:0.6em 0 0.2em"></div>
+      <div class="row" style="justify-content:space-between">
+        <span class="tiny">Settings are saved on this device.</span>
+        <button id="optClose">Done</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     (() => {
@@ -191,6 +229,8 @@
       const startButton = document.getElementById('startButton');
       const dismissTutorial = document.getElementById('dismissTutorial');
       const restartButton = document.getElementById('restartButton');
+      const demoBadge = document.getElementById('demoBadge');
+      function setDemoBadge(on) { demoBadge.style.display = on ? 'block' : 'none'; }
 
       // ===== HIGH SCORES & GLOBAL LEADERBOARD =====
       const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/gpt-missile-command';
@@ -263,6 +303,33 @@
         row.appendChild(ok);
       }
 
+      // ===== SETTINGS (persisted per device) =====
+      const SETTINGS_KEY = 'gpt_missile_command_settings';
+      const DEFAULT_SETTINGS = { sound: true, difficulty: 'normal', shake: true, effects: true, demo: true };
+      function loadSettings() {
+        try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}); }
+        catch (e) { return { ...DEFAULT_SETTINGS }; }
+      }
+      function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {} }
+      let settings = loadSettings();
+      const DIFF = {
+        easy:   { speed: 0.82, budget: 0.82, ammo: 18, label: 'Easy' },
+        normal: { speed: 1.0,  budget: 1.0,  ammo: 15, label: 'Normal' },
+        hard:   { speed: 1.24, budget: 1.30, ammo: 12, label: 'Hard' },
+      };
+      function diff() { return DIFF[settings.difficulty] || DIFF.normal; }
+      function maxAmmo() { return diff().ammo; }
+      function applyAudioSettings() { if (audio && audio.setVolume) audio.setVolume(settings.sound ? 0.32 : 0); }
+
+      // ===== SPECIAL WAVES — every 5th wave is a themed challenge with a big bonus =====
+      const SPECIALS = [
+        { key: 'mirv',   name: 'MIRV STORM',       color: '#ffb347' },
+        { key: 'swarm',  name: 'SATELLITE SWARM',  color: '#8ff2ff' },
+        { key: 'blitz',  name: 'SMART-BOMB BLITZ', color: '#ff7db4' },
+        { key: 'meteor', name: 'METEOR SHOWER',    color: '#ff6b52' },
+      ];
+      function specialFor(wave) { return (wave % 5 === 0) ? SPECIALS[(wave / 5 - 1) % SPECIALS.length] : null; }
+
       const TAU = Math.PI * 2;
       // Flat-vector palettes — one per wave (cycled). Solid fills, no glow/aurora.
       // Wave 1 == the bright "flat vector" reference: blue day sky, white clouds,
@@ -323,6 +390,13 @@
         spawnBudget: 0,
         spawnedThisWave: 0,
         enemyClearedBonusTimer: 0,
+        attract: false,
+        special: null,
+        speedMul: 1,
+        aiCool: 0,
+        bannerTimer: 0,
+        bannerText: '',
+        bannerColor: '#9be6ff',
         stars: [],
         skyline: [],
         clouds: [],
@@ -353,12 +427,13 @@
       function dist(ax, ay, bx, by) { return Math.hypot(ax - bx, ay - by); }
 
       function initAudio() {
+        if (state.attract) return; // stay silent during the title auto-demo
         if (audio) return;
         const AC = window.AudioContext || window.webkitAudioContext;
         if (!AC) return;
         const ac = new AC();
         const master = ac.createGain();
-        master.gain.value = 0.32;
+        master.gain.value = settings.sound ? 0.32 : 0;
         master.connect(ac.destination);
 
         const hum = ac.createGain();
@@ -427,6 +502,7 @@
         audio = {
           ac,
           hum,
+          setVolume(v) { master.gain.cancelScheduledValues(ac.currentTime); master.gain.value = v; },
           resume: async () => {
             if (ac.state !== 'running') await ac.resume();
             state.audioUnlocked = true;
@@ -553,7 +629,7 @@
         const baseY = state.groundY;
         const positions = [0.16, 0.5, 0.84].map(p => p * state.width);
         if (!state.bases.length) {
-          state.bases = positions.map((x, i) => ({ id: i, x, y: baseY, ammo: 15, alive: true, flash: 0 }));
+          state.bases = positions.map((x, i) => ({ id: i, x, y: baseY, ammo: maxAmmo(), alive: true, flash: 0 }));
         } else {
           state.bases.forEach((b, i) => { b.x = positions[i]; b.y = baseY; });
         }
@@ -618,6 +694,11 @@
         state.waveCooldown = 0;
         state.spawnedThisWave = 0;
         state.enemyClearedBonusTimer = 0;
+        state.attract = false;
+        state.special = null;
+        state.speedMul = 1;
+        state.aiCool = 0;
+        state.bannerTimer = 0;
         state.enemyMissiles.length = 0;
         state.playerMissiles.length = 0;
         state.explosions.length = 0;
@@ -631,10 +712,55 @@
         state.bases = [];
         state.cities = [];
         layoutDefenses();
-        state.bases.forEach(base => { base.ammo = 15; base.alive = true; base.flash = 0; });
+        state.bases.forEach(base => { base.ammo = maxAmmo(); base.alive = true; base.flash = 0; });
         state.cities.forEach((city, i) => Object.assign(city, createCity(city.x, i)));
         prepareWave(); // set up wave 1 spawn budget
         gameOverOverlay.classList.add('hidden');
+      }
+
+      // Auto-playing demo shown behind the title screen.
+      function startAttract() {
+        if (!settings.demo) return;
+        resetGame();          // fresh game...
+        state.attract = true; // ...driven by the AI, silent, self-restarting
+        state.aiCool = 0.5;
+        setDemoBadge(true);
+      }
+
+      function stopAttract() {
+        if (!state.attract) return;
+        state.attract = false;
+        state.playing = false;
+        setDemoBadge(false);
+        state.enemyMissiles.length = 0; state.playerMissiles.length = 0;
+        state.satellites.length = 0; state.explosions.length = 0;
+        state.particles.length = 0; state.smoke.length = 0; state.embers.length = 0;
+      }
+
+      // Simple defensive AI: intercept the most urgent threat, keep bases stocked.
+      function aiDefend(dt) {
+        state.bases.forEach(b => { if (b.alive) b.ammo = maxAmmo(); });
+        state.aiCool -= dt;
+        if (state.aiCool > 0 || state.playerMissiles.length > 7) return;
+        state.aiCool = rand(0.16, 0.3);
+        let best = null, bestScore = -Infinity;
+        for (const m of state.enemyMissiles) {
+          const s = m.y + (m.type === 'smart' ? 40 : 0); // closer to ground = more urgent
+          if (s > bestScore) { bestScore = s; best = m; }
+        }
+        for (const sat of state.satellites) {
+          const s = sat.y * 0.5 + 30;
+          if (s > bestScore) { bestScore = s; best = sat; }
+        }
+        if (!best) return;
+        let lx = best.x, ly = best.y;
+        if (best.tx !== undefined) { // lead a little along its heading
+          const dx = best.tx - best.sx, dy = best.ty - best.sy, d = Math.hypot(dx, dy) || 1;
+          lx = best.x + dx / d * 42; ly = best.y + dy / d * 42;
+        }
+        ly = clamp(ly, state.groundY * 0.3, state.groundY - 60);
+        if (state.playerMissiles.some(pm => dist(pm.tx, pm.ty, lx, ly) < 55)) return; // already handled
+        launchDefense(lx, ly);
       }
 
       function nearestBase(targetX) {
@@ -671,7 +797,9 @@
       }
 
       function queuePrompt(text, x, y, color = '#ffffff') {
-        state.prompts.push({ text, x, y, color, life: 1.2 });
+        // age:0 is required — updateParticles ages/removes prompts by age>=life.
+        state.prompts.push({ text, x, y, color, life: 1.2, age: 0 });
+        if (state.prompts.length > 60) state.prompts.splice(0, state.prompts.length - 60);
       }
 
       function createExplosion(x, y, radius, kind = 'defense', source = null) {
@@ -687,7 +815,8 @@
         });
 
         const isMobile = state.width < 768;
-        const burst = isMobile ? (radius < 40 ? 6 : radius < 70 ? 10 : 14) : (radius < 40 ? 12 : radius < 70 ? 18 : 24);
+        let burst = isMobile ? (radius < 40 ? 6 : radius < 70 ? 10 : 14) : (radius < 40 ? 12 : radius < 70 ? 18 : 24);
+        if (!settings.effects) burst = Math.ceil(burst * 0.45);
         for (let i = 0; i < burst; i++) {
           const a = Math.random() * TAU;
           const sp = rand(40, radius * 2.2);
@@ -706,7 +835,7 @@
 
         state.flash = Math.min(1, state.flash + radius / 140);
         state.tint = Math.min(1, state.tint + radius / 220);
-        state.shake = Math.min(18, state.shake + radius / 9);
+        if (settings.shake) state.shake = Math.min(18, state.shake + radius / 9);
         initAudio();
         audio?.explosion(Math.min(1.25, radius / 70));
       }
@@ -737,8 +866,8 @@
             deadCity.smoke = 0;
             queuePrompt('BONUS CITY', deadCity.x, deadCity.y - 36, '#8fffc9');
           } else {
-            const weakestBase = state.bases.find(b => b.alive && b.ammo < 15);
-            if (weakestBase) weakestBase.ammo = Math.min(15, weakestBase.ammo + 6);
+            const weakestBase = state.bases.find(b => b.alive && b.ammo < maxAmmo());
+            if (weakestBase) weakestBase.ammo = Math.min(maxAmmo(), weakestBase.ammo + 6);
             queuePrompt('BONUS SUPPLY', state.width * 0.5, 70, '#8fffc9');
           }
           state.nextBonusScore += 12000;
@@ -786,11 +915,13 @@
         return targets.length ? targets[randi(0, targets.length - 1)] : { x: rand(state.width * 0.08, state.width * 0.92), y: state.groundY };
       }
 
-      function spawnEnemyMissile(type = 'normal', fromX = null, fromY = null, forcedTarget = null) {
+      function spawnEnemyMissile(type = 'normal', fromX = null, fromY = null, forcedTarget = null, forceSplit = false) {
         const t = forcedTarget || randomTarget();
         const sx = fromX ?? rand(state.width * 0.05, state.width * 0.95);
         const sy = fromY ?? rand(20, state.height * 0.14);
-        const speedBase = 38 + state.wave * 3.6;
+        const speedBase = (38 + state.wave * 3.6) * diff().speed * state.speedMul;
+        const willSplit = (forceSplit && type === 'normal') ||
+          (state.wave >= 6 && type === 'normal' && Math.random() < Math.min(0.6, 0.14 + state.wave * 0.03));
         const missile = {
           type,
           x: sx,
@@ -802,7 +933,7 @@
           age: 0,
           trail: [],
           smoked: 0,
-          splitAt: (state.wave >= 6 && type === 'normal' && Math.random() < Math.min(0.6, 0.14 + state.wave * 0.03)) ? rand(0.35, 0.6) : null,
+          splitAt: willSplit ? rand(0.35, 0.6) : null,
           splitDone: false,
           hp: type === 'smart' ? 1 : 1,
           smart: type === 'smart',
@@ -831,38 +962,71 @@
         });
       }
 
+      function showBanner(text, color) { state.bannerText = text; state.bannerColor = color; state.bannerTimer = 2.6; }
+
       function prepareWave() {
         state.spawnedThisWave = 0;
-        state.spawnBudget = Math.round(10 + state.wave * 1.75 + Math.floor(state.wave * 0.3));
+        const special = specialFor(state.wave);
+        state.special = special;
+        state.speedMul = (special && special.key === 'meteor') ? 1.28 : 1;
+        let budget = 10 + state.wave * 1.75 + Math.floor(state.wave * 0.3);
+        budget *= diff().budget;
+        if (special) budget *= 1.3;
+        state.spawnBudget = Math.round(budget);
         state.destroyedThisWave = 0;
-        state.waveIntroTimer = 2.6;
+        state.waveIntroTimer = special ? 3.0 : 2.6;
         state.bases.forEach(base => {
-          if (base.alive) base.ammo = Math.min(15, base.ammo + 6);
+          if (base.alive) base.ammo = Math.min(maxAmmo(), base.ammo + (special ? 9 : 6));
         });
-        queuePrompt('WAVE ' + state.wave, state.width / 2, 100, '#9be6ff');
+        if (special) {
+          showBanner('★ ' + special.name + ' ★', special.color);
+          if (special.key === 'swarm') { spawnSatellite(); spawnSatellite(); }
+        } else {
+          queuePrompt('WAVE ' + state.wave, state.width / 2, 100, '#9be6ff');
+        }
       }
 
       function updateWave(dt) {
+        if (state.bannerTimer > 0) state.bannerTimer -= dt;
         if (state.waveIntroTimer > 0) {
           state.waveIntroTimer -= dt;
           return;
         }
         if (state.spawnedThisWave < state.spawnBudget) {
-          const rate = Math.max(0.24, 1.1 - state.wave * 0.045);
+          const sp = state.special;
+          let rate = Math.max(0.2, 1.1 - state.wave * 0.045);
+          if (sp && sp.key === 'meteor') rate *= 0.55;
+          else if (sp && sp.key === 'swarm') rate *= 0.85;
           state.waveCooldown -= dt;
           if (state.waveCooldown <= 0) {
             state.spawnedThisWave++;
-            const smart = state.wave >= 10 && Math.random() < Math.min(0.35, 0.08 + state.wave * 0.015);
-            spawnEnemyMissile(smart ? 'smart' : 'normal');
-            if (state.wave >= 8 && Math.random() < Math.min(0.22, 0.06 + state.wave * 0.01) && state.satellites.length < 2) spawnSatellite();
+            if (sp) {
+              if (sp.key === 'mirv') spawnEnemyMissile('normal', null, null, null, true);
+              else if (sp.key === 'blitz') spawnEnemyMissile(Math.random() < 0.7 ? 'smart' : 'normal');
+              else if (sp.key === 'swarm') {
+                spawnEnemyMissile('normal');
+                if (state.satellites.length < 4 && Math.random() < 0.45) spawnSatellite();
+              } else spawnEnemyMissile('normal'); // meteor
+            } else {
+              const smart = state.wave >= 10 && Math.random() < Math.min(0.35, 0.08 + state.wave * 0.015);
+              spawnEnemyMissile(smart ? 'smart' : 'normal');
+              if (state.wave >= 8 && Math.random() < Math.min(0.22, 0.06 + state.wave * 0.01) && state.satellites.length < 2) spawnSatellite();
+            }
             state.waveCooldown = rate + rand(0.05, 0.32);
           }
         } else if (!state.enemyMissiles.length && !state.satellites.length && !state.explosions.length) {
-          state.score += 400 + state.cities.filter(c => c.alive).length * 100 + state.bases.reduce((n, b) => n + b.ammo * 6, 0);
+          let clearBonus = 400 + state.cities.filter(c => c.alive).length * 100 + state.bases.reduce((n, b) => n + b.ammo * 6, 0);
+          if (state.special) {
+            const specialBonus = 1500 + state.wave * 120;
+            clearBonus += specialBonus;
+            queuePrompt('SPECIAL CLEARED  +' + specialBonus.toLocaleString(), state.width / 2, 150, state.special.color);
+          }
+          state.score += clearBonus;
           grantBonusCityIfNeeded();
           queuePrompt('WAVE CLEAR', state.width / 2, 120, '#b8ffb3');
           audio?.waveClear();
           state.wave++;
+          if (state.attract && state.wave > 15) { startAttract(); return; } // cycle the demo
           prepareWave();
         }
       }
@@ -1079,6 +1243,7 @@
       function checkGameOver() {
         const aliveCities = state.cities.some(c => c.alive);
         if (!aliveCities && !state.gameOver) {
+          if (state.attract) { startAttract(); return; } // loop the demo instead of ending
           state.gameOver = true;
           state.playing = false;
           const survived = Math.max(1, state.wave - 1);
@@ -1106,6 +1271,7 @@
           return;
         }
         updateWave(dt);
+        if (state.attract) aiDefend(dt);
         updatePlayerMissiles(dt);
         updateEnemyMissiles(dt);
         updateSatellites(dt);
@@ -1494,6 +1660,27 @@
         }
       }
 
+      function drawBanner() {
+        if (state.bannerTimer <= 0) return;
+        const a = clamp(state.bannerTimer / 0.6, 0, 1);
+        const y = state.height * 0.3;
+        ctx.save();
+        ctx.textAlign = 'center';
+        ctx.globalAlpha = a;
+        const size = Math.round(clamp(state.width * 0.055, 22, 48));
+        ctx.font = '800 ' + size + 'px Inter, system-ui, sans-serif';
+        ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(0,0,0,0.55)'; ctx.lineJoin = 'round';
+        ctx.strokeText(state.bannerText, state.width / 2, y);
+        ctx.fillStyle = state.bannerColor;
+        ctx.fillText(state.bannerText, state.width / 2, y);
+        ctx.font = '700 14px Inter, system-ui, sans-serif';
+        ctx.lineWidth = 3;
+        ctx.strokeText('SPECIAL WAVE', state.width / 2, y + 26);
+        ctx.fillStyle = 'rgba(255,255,255,0.92)';
+        ctx.fillText('SPECIAL WAVE', state.width / 2, y + 26);
+        ctx.restore();
+      }
+
       function render() {
         ctx.clearRect(0, 0, state.width, state.height);
         let sx = 0, sy = 0;
@@ -1513,6 +1700,7 @@
         drawPrompts();
         drawFXOverlays();
         ctx.restore();
+        drawBanner();
         if (state.paused) drawPausedOverlay();
         updateHUD();
       }
@@ -1535,7 +1723,7 @@
         const aliveCities = state.cities.filter(c => c.alive).length;
         const ammoText = state.bases.map(b => b.alive ? b.ammo : 'X').join('/');
         const combo = state.comboCount > 1 && state.comboTimer > 0 ? `x${(1 + (state.comboCount - 1) * 0.18).toFixed(1)}` : 'x1';
-        const waveStatus = state.waveIntroTimer > 0 ? `W${state.wave} incoming` : `W${state.wave}`;
+        const waveStatus = state.waveIntroTimer > 0 ? `W${state.wave} incoming` : (state.special ? `W${state.wave} ★` : `W${state.wave}`);
         hudLine.textContent = `${waveStatus} | Score ${state.score.toLocaleString()} | Cities ${aliveCities} | Ammo ${ammoText} | Combo ${combo} | Bonus @ ${state.nextBonusScore.toLocaleString()}`;
       }
 
@@ -1564,6 +1752,8 @@
       }
 
       async function startGame() {
+        state.attract = false; // clear before audio unlock so the gesture initialises sound
+        setDemoBadge(false);
         await unlockAudioAndMaybeStart();
         tutorialOverlay.classList.add('hidden');
         resetGame();
@@ -1596,7 +1786,7 @@
       }
 
       function gameTarget(e) {
-        return !(e.target && e.target.closest && e.target.closest('button, .overlay, #hsOverlay'));
+        return !(e.target && e.target.closest && e.target.closest('button, .overlay, #hsOverlay, #optOverlay'));
       }
 
       // Input listens on the whole window (buttons/overlays opt out) so aiming
@@ -1644,8 +1834,44 @@
       addTouchAndClick(titleHsBtn, openHsOverlay);
       addTouchAndClick(document.getElementById('hsOverlayClose'), closeHsOverlay);
 
+      // Options overlay
+      const optOverlay = document.getElementById('optOverlay');
+      const tutorialHidden = () => tutorialOverlay.classList.contains('hidden');
+      function buildOptions() {
+        const host = document.getElementById('optRows');
+        host.innerHTML = '';
+        const seg = (label, sub, options, get, set) => {
+          const row = document.createElement('div'); row.className = 'optrow';
+          const left = document.createElement('div');
+          left.innerHTML = `<div class="lab">${label}</div>` + (sub ? `<div class="sub">${sub}</div>` : '');
+          const segEl = document.createElement('div'); segEl.className = 'seg';
+          const btns = [];
+          options.forEach(opt => {
+            const b = document.createElement('button');
+            b.textContent = opt.label;
+            if (get() === opt.value) b.classList.add('on');
+            const h = (e) => { e.stopPropagation(); e.preventDefault(); set(opt.value); saveSettings(); btns.forEach(x => x.classList.remove('on')); b.classList.add('on'); };
+            b.addEventListener('click', h); b.addEventListener('touchend', h);
+            btns.push(b); segEl.appendChild(b);
+          });
+          row.appendChild(left); row.appendChild(segEl); host.appendChild(row);
+        };
+        const onoff = [{ label: 'On', value: true }, { label: 'Off', value: false }];
+        seg('Sound', 'Music & effects', onoff, () => settings.sound, v => { settings.sound = v; applyAudioSettings(); });
+        seg('Difficulty', 'Enemy speed & count', [{ label: 'Easy', value: 'easy' }, { label: 'Normal', value: 'normal' }, { label: 'Hard', value: 'hard' }], () => settings.difficulty, v => { settings.difficulty = v; });
+        seg('Screen shake', 'Camera kick on hits', onoff, () => settings.shake, v => { settings.shake = v; if (!v) state.shake = 0; });
+        seg('Extra effects', 'Debris & particles', onoff, () => settings.effects, v => { settings.effects = v; });
+        seg('Title auto-demo', 'Play behind the menu', onoff, () => settings.demo, v => { settings.demo = v; if (v && !tutorialHidden()) startAttract(); else if (!v) stopAttract(); });
+      }
+      function openOptOverlay() { buildOptions(); optOverlay.style.display = 'flex'; }
+      function closeOptOverlay() { optOverlay.style.display = 'none'; }
+      addTouchAndClick(document.getElementById('titleOptBtn'), openOptOverlay);
+      addTouchAndClick(document.getElementById('optClose'), closeOptOverlay);
+
       addTouchAndClick(startButton, startGame);
       addTouchAndClick(dismissTutorial, async () => {
+        state.attract = false;
+        setDemoBadge(false);
         await unlockAudioAndMaybeStart();
         tutorialOverlay.classList.add('hidden');
         resetGame();
@@ -1671,6 +1897,10 @@
           if (k === 'Escape') closeHsOverlay();
           return;
         }
+        if (optOverlay.style.display === 'flex') {
+          if (k === 'Escape') closeOptOverlay();
+          return;
+        }
         if ((k === 'p' || k === 'P' || k === 'Escape') && state.playing && !state.gameOver) {
           setPaused(!state.paused);
           return;
@@ -1684,12 +1914,15 @@
         else if (state.gameOver) await restartGame();
       });
       window.addEventListener('blur', () => setPaused(true));
+      window.addEventListener('focus', () => { if (state.attract) setPaused(false); });
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) setPaused(true);
+        else if (state.attract) setPaused(false); // auto-resume the title demo
       });
 
       resize();
       updateHUD();
+      startAttract(); // self-playing demo behind the title screen
       requestAnimationFrame((t) => {
         state.lastTime = t;
         requestAnimationFrame(frame);
