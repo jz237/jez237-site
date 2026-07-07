@@ -243,7 +243,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.1.0'; // v1.1: full-frame bloom, brighter bioluminescent creatures/plankton, "what am I watching?" explainer
+const VERSION = 'v1.2.0'; // v1.2: hydrothermal vents, swaying kelp, cinematic slow-mo kills, gene-expressed markings
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -459,10 +459,32 @@ const PL={px:new Float32Array(CFG.planktonCap),py:new Float32Array(CFG.planktonC
   cl:new Int16Array(CFG.planktonCap), alive:new Uint8Array(CFG.planktonCap), n:0};
 const clusters=[]; // {x,y,N}
 const clCount=new Int16Array(CFG.clusters); // scratch: per-cluster mote occupancy (rebuilt each step)
+/* environment: hydrothermal vents (glowing seafloor sources) + swaying kelp — the abyss has a place */
+const vents=[]; // {x,y,phase,hue}
+const kelp=[];  // {x,h,seg,phase,sway,hue}
+function seedEnvironment(){
+  vents.length=0;
+  const nv=3;
+  for(let i=0;i<nv;i++){
+    vents.push({x:CFG.W*(i+0.5)/nv + rrange(-120,120), y:CFG.H-rrange(6,20),
+      phase:rnd()*TAU, hue: rnd()<0.5?18:190}); // amber or teal vents
+  }
+  kelp.length=0;
+  const nk=22;
+  for(let i=0;i<nk;i++){
+    kelp.push({x:rrange(30,CFG.W-30), h:rrange(120,300), seg:6, phase:rnd()*TAU,
+      sway:rrange(14,34), hue:90+rnd()*70, depth:rrange(0.55,1.15)});
+  }
+}
 function seedClusters(){
   clusters.length=0;
   for(let i=0;i<CFG.clusters;i++){
-    clusters.push({x:rrange(80,CFG.W-80), y:rrange(70,CFG.H-70), N:rrange(5,CFG.K_c)});
+    // ~40% of clusters gather near a vent (warm, food-rich) — spatial structure, refugia
+    if(vents.length && rnd()<0.4){ const v=vents[(rnd()*vents.length)|0];
+      clusters.push({x:clamp(v.x+rrange(-160,160),60,CFG.W-60), y:clamp(v.y-rrange(40,240),60,CFG.H-60), N:rrange(6,CFG.K_c)});
+    } else {
+      clusters.push({x:rrange(80,CFG.W-80), y:rrange(70,CFG.H-70), N:rrange(5,CFG.K_c)});
+    }
   }
 }
 function planktonCount(){ let n=0; for(let i=0;i<CFG.planktonCap;i++) if(PL.alive[i])n++; return n; }
@@ -899,7 +921,12 @@ function emit(type,x,y,c){
       spawnRing(x,y,60,350,0.6,4);
       cam.shake=Math.max(cam.shake,5); cam.zpunch=0.03; chroma=0.30;
       if(A.on)sfxKill();
-      // hunt streak tracking on the killer isn't passed here; handled in recordHunt
+      // cinematic: if the kill happens in view and we haven't just done one, dilate time briefly
+      if(onScreen(x,y) && simTime-lastCineKill>7){
+        lastCineKill=simTime; slowmoT=SLOWMO_DUR; flash=0.5;
+        cam.zpunch=0.06; cam.shake=Math.max(cam.shake,7);
+        spawnRing(x,y,110,0,0.7,3); // white shock ring
+      }
       break;}
     case 'starve':
       if(A.on)sfxStarve();
@@ -1538,6 +1565,15 @@ function getCreature(uid){ for(const c of creatures)if(c.alive&&c.uid===uid)retu
 /* ============================================================================
    RENDERING
 ============================================================================ */
+// cinematic slow-mo on on-screen kills
+const SLOWMO_DUR=0.6, SLOWMO_MIN=0.32;
+let slowmoT=0, flash=0, lastCineKill=-99;
+function onScreen(x,y){
+  const s=(cam.scale+cam.breath)*sc;
+  const sx=VW/2+(x-cam.x)*s, sy=VH/2+(y-cam.y)*s;
+  const m=60;
+  return sx>-m && sy>-m && sx<VW+m && sy<VH+m;
+}
 let bgCanvas=null,bgCtx=null, trailCanvas=null,trailCtx=null, bloomCanvas=null,bloomCtx=null;
 let glowA=null,gaCtx=null, glowB=null,gbCtx=null; // full-frame bloom buffers (1/4, 1/8 res)
 let vignette=null;
@@ -1610,6 +1646,9 @@ function draw(){
   setWorld();
   // light shafts
   drawShafts();
+  // environment: vents + kelp (behind the life)
+  drawVents();
+  drawKelp();
   // plankton bloom (into bloom buffer)
   drawPlanktonBloom();
   // detritus
@@ -1627,6 +1666,10 @@ function draw(){
   drawSnow();
   // BLOOM — downscale the bright frame and add it back, so every glow blooms (neon)
   bloomPass();
+  // cinematic kill flash (brief full-screen bloom of white)
+  if(flash>0.01){ setScreen(); ctx.globalCompositeOperation='lighter';
+    ctx.globalAlpha=flash*0.5; ctx.fillStyle='#dff2ff'; ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over'; }
   // vignette + caustics (screen)
   setScreen();
   ctx.globalCompositeOperation='lighter';
@@ -1640,6 +1683,42 @@ function draw(){
   ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
 }
 
+function drawKelp(){
+  // swaying bioluminescent strands anchored at the seafloor, parallax by depth
+  ctx.globalCompositeOperation='lighter';
+  for(const k of kelp){
+    const seg=k.seg, baseX=k.x, baseY=CFG.H+6;
+    let px=baseX, py=baseY, hue=k.hue;
+    ctx.strokeStyle=bodyColor(hue,0.5); // constant per strand
+    for(let i=1;i<=seg;i++){
+      const t=i/seg;
+      const fa=flowAngle(baseX, baseY-t*k.h, simTime*0.6);
+      const sway=Math.sin(simTime*0.7 + k.phase + t*3.0)*k.sway*t + Math.cos(fa)*10*t;
+      const nx=baseX+sway, ny=baseY - t*k.h;
+      ctx.globalAlpha=0.20*(0.5+0.5*t);
+      ctx.lineWidth=(1-t)*5+1;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(nx,ny); ctx.stroke();
+      px=nx; py=ny;
+    }
+    // glowing tip
+    glow(px,py, 8, hue, 0.35+0.15*Math.sin(simTime*1.3+k.phase));
+  }
+}
+function drawVents(){
+  // hydrothermal vents: a glowing base + a rising shimmer plume (procedural, no pool)
+  ctx.globalCompositeOperation='lighter';
+  for(const v of vents){
+    glow(v.x, v.y, 34, v.hue, 0.30+0.08*Math.sin(simTime*2+v.phase));    // hot base
+    glow(v.x, v.y, 14, -1, 0.25);                                        // white core
+    for(let i=0;i<10;i++){
+      const life=((simTime*0.35 + i/10 + v.phase)%1);                    // 0..1 rising
+      const rise=life*220;
+      const drift=Math.sin(simTime*0.8 + i*1.7 + v.phase)*18*life;
+      const r=2 + life*7;
+      glow(v.x+drift, v.y - rise, r, v.hue, (1-life)*0.28);
+    }
+  }
+}
 function bloomPass(){
   if(quality<=1 || !glowA)return; // skip bloom only on the lowest tier
   // downscale the current (bright) frame into 1/4, then 1/8
@@ -1821,6 +1900,19 @@ function drawBody(c,scr){
       glow(c.x-dirX*L*0.5,c.y-dirY*L*0.5,L*0.6, c.huedeg, 0.25);
       ctx.globalCompositeOperation='source-over';
     }
+  }
+  // gene-expressed bioluminescent markings — count keyed to the sense gene (which evolves),
+  // so lineages look distinct and you can SEE the drift up close. Only on prominent creatures.
+  if(quality>=3 && L*scr*camMat.a/DPR > 14){
+    const marks = 2 + (clamp((c.sense-G.sense[0])/(G.sense[1]-G.sense[0]),0,1)*3 | 0); // 2..5
+    const mhue = (c.huedeg + 30) % 360;
+    const b = 0.35 + 0.35*clamp(c.energy/c.cap,0,1);
+    ctx.globalCompositeOperation='lighter';
+    for(let m=0;m<marks;m++){
+      const t=(m+1)/(marks+1), si=Math.min(n-1,(t*(n-1))|0);
+      glow(c.segX[si], c.segY[si], L*0.16, mhue, b);
+    }
+    ctx.globalCompositeOperation='source-over';
   }
 }
 
@@ -2135,9 +2227,14 @@ let acc=0, lastT=performance.now(), running=true;
 let titleStart=performance.now();
 function frame(now){
   if(!running){ requestAnimationFrame(frame); return; }
-  let raw=(now-lastT)/1000; lastT=now;
+  let realRaw=(now-lastT)/1000; lastT=now;
   // dt spike guard
-  if(raw>0.1)raw=0; // treat as pause
+  if(realRaw>0.1)realRaw=0; // treat as pause
+  // cinematic time-dilation (eased in REAL time so it always recovers)
+  if(slowmoT>0)slowmoT-=realRaw;
+  const timeScale = slowmoT>0 ? lerp(1,SLOWMO_MIN, clamp(slowmoT/SLOWMO_DUR,0,1)) : 1;
+  if(flash>0)flash=Math.max(0, flash-realRaw*2.2);
+  const raw = realRaw*timeScale;   // dilated dt drives the whole scene
   acc+=raw;
   let steps=0;
   while(acc>=CFG.step && steps<4){
@@ -2151,8 +2248,8 @@ function frame(now){
   // title meta uptime
   if(titleVisible){ const up=((now-titleStart)/1000)|0;
     document.getElementById('titleMeta').textContent=`press anywhere to begin · this world has been alive for ${fmtTime(up)}`; }
-  // adaptive quality
-  avgFrame=avgFrame*0.95+ (raw*1000)*0.05;
+  // adaptive quality (use REAL frame time, not the dilated dt)
+  avgFrame=avgFrame*0.95+ (realRaw*1000)*0.05;
   if(avgFrame>17){ degradeCount++; recoverCount=0; if(degradeCount>60&&quality>0){quality--;degradeCount=0;} }
   else if(avgFrame<13){ recoverCount++; degradeCount=0; if(recoverCount>300&&quality<4){quality++;recoverCount=0;} }
   requestAnimationFrame(frame);
@@ -2167,6 +2264,7 @@ function boot(){
   buildGlow(); buildCaustic(); gridInit(); plgInit();
   loadSettings();
   resize(); initSnow();
+  seedEnvironment();   // vents + kelp persist across genesis — the place endures
   seedClusters();
   // initial world
   for(let i=0;i<CFG.grazeStart;i++){ const pp=nearClusterPos(); spawnCreature(0, pp.x, pp.y, null); }
