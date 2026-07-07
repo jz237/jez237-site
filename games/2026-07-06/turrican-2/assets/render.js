@@ -659,24 +659,55 @@
 
     // ---- entities ---------------------------------------------------------
     function drawPickups(list, cam) {
-      const t = performance.now() / 200;
+      const now = performance.now();
+      const t = now / 200;
       for (const it of list) {
         const sx = it.x - cam.x, sy = it.y - cam.y;
         if (sx < -20 || sx > VIEW_W + 20) continue;
+        const ph = (now / 1000) + (it.baseY || 0);
         bx.save(); bx.translate(sx + 8, sy + 8);
+
+        // pulsing glow halo behind every pickup
         if (it.type === 'gem') {
+          const gr = 9 + Math.sin(ph * 3) * 2;
+          const gg = bx.createRadialGradient(0, 0, 0, 0, 0, gr);
+          gg.addColorStop(0, 'rgba(155,230,255,0.5)'); gg.addColorStop(1, 'rgba(155,230,255,0)');
+          bx.fillStyle = gg; bx.beginPath(); bx.arc(0, 0, gr, 0, 7); bx.fill();
+          // faceted diamond with top/bottom shading
+          bx.save(); bx.rotate(t + it.baseY);
           bx.shadowColor = '#9be6ff'; bx.shadowBlur = 8;
-          bx.rotate(t + it.baseY);
-          bx.fillStyle = '#9be6ff';
+          const dg = bx.createLinearGradient(0, -7, 0, 7);
+          dg.addColorStop(0, '#eafcff'); dg.addColorStop(0.5, '#7cd8ff'); dg.addColorStop(1, '#2a8fc4');
+          bx.fillStyle = dg;
           bx.beginPath(); bx.moveTo(0, -7); bx.lineTo(6, 0); bx.lineTo(0, 7); bx.lineTo(-6, 0); bx.closePath(); bx.fill();
-          bx.fillStyle = '#ffffff'; bx.fillRect(-1, -3, 2, 6);
+          // facet lines
+          bx.strokeStyle = 'rgba(255,255,255,0.55)'; bx.lineWidth = 0.7;
+          bx.beginPath(); bx.moveTo(-6, 0); bx.lineTo(6, 0); bx.moveTo(0, -7); bx.lineTo(0, 7); bx.stroke();
+          bx.fillStyle = '#ffffff'; bx.fillRect(-1, -4, 2, 3);
+          bx.restore();
+          // twinkling sparkle
+          const tw = (Math.sin(ph * 4) + 1) * 0.5;
+          if (tw > 0.6) { bx.globalAlpha = (tw - 0.6) * 2.5; bx.fillStyle = '#ffffff';
+            bx.fillRect(-0.7, -11, 1.4, 5); bx.fillRect(-11, -0.7, 5, 1.4);
+            bx.fillRect(-0.7, 6, 1.4, 5); bx.fillRect(6, -0.7, 5, 1.4); bx.globalAlpha = 1; }
         } else {
           const map = { pu_weapon: ['#ffd23f', 'W'], pu_energy: ['#54e36b', 'E'], pu_life: ['#ff5d7a', '1UP'],
             pu_bomb: ['#8be9ff', 'B'], pu_line: ['#c6ff5d', 'L'] };
           const m = map[it.type] || ['#fff', '?'];
-          bx.shadowColor = m[0]; bx.shadowBlur = 10;
-          bx.fillStyle = 'rgba(0,0,0,0.5)'; roundRect(-9, -9, 18, 18, 4); bx.fill();
-          bx.lineWidth = 2; bx.strokeStyle = m[0]; roundRect(-9, -9, 18, 18, 4); bx.stroke();
+          // pulsing glow via shadow (hex-safe; a radial gradient needs rgba stops)
+          bx.shadowColor = m[0]; bx.shadowBlur = 12 + Math.sin(ph * 3.2) * 4;
+          // orb body: dark rounded panel with a colored gradient sheen
+          const og = bx.createLinearGradient(-9, -9, 9, 9);
+          og.addColorStop(0, 'rgba(10,14,26,0.9)'); og.addColorStop(1, 'rgba(30,40,60,0.9)');
+          bx.fillStyle = og; roundRect(-9, -9, 18, 18, 5); bx.fill();
+          bx.lineWidth = 2; bx.strokeStyle = m[0]; roundRect(-9, -9, 18, 18, 5); bx.stroke();
+          // diagonal shine sweep
+          bx.save(); roundRect(-9, -9, 18, 18, 5); bx.clip();
+          const shx = ((ph * 40) % 40) - 20;
+          bx.globalAlpha = 0.3; bx.strokeStyle = '#ffffff'; bx.lineWidth = 3;
+          bx.beginPath(); bx.moveTo(shx, -12); bx.lineTo(shx + 10, 12); bx.stroke();
+          bx.restore();
+          // icon
           bx.shadowBlur = 0; bx.fillStyle = m[0];
           bx.font = 'bold 8px monospace'; bx.textAlign = 'center'; bx.textBaseline = 'middle';
           bx.fillText(m[1], 0, 1);
