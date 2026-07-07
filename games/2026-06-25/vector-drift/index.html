@@ -317,7 +317,12 @@ function spawnEnemy(kind, lane, depth){
 
 function updateEnemy(e,dt){
   e.birth = Math.min(1, (e.birth ?? 0) + dt/0.4);   // bloom out of the vortex over 0.4s
-  if(e.kind==="pulsar"){ e.pulse += dt*(2.4 + state.level*0.06); }
+  if(e.kind==="pulsar"){
+    e.pulse += dt*(2.4 + state.level*0.06);
+    // when it electrifies its lane, sharing that lane fries you — get off the lane
+    const bright=0.5+0.5*Math.sin(e.pulse);
+    if(bright>0.93 && !e.onRim && e.depth<0.92 && state.mode==="play" && Math.abs(laneWrapDelta(e.lane,state.lane))<0.55) killPlayer();
+  }
   if(e.onRim){
     // crawl along the rim toward the player, flipping lane to lane
     e.flipTimer-=dt;
@@ -343,11 +348,12 @@ function updateEnemy(e,dt){
   }
   if(e.kind==="flipper" || e.kind==="tanker"){
     e.flipTimer-=dt;
-    if(!e.flipping && e.flipTimer<=0 && e.depth<0.9){
-      let dir = (e.depth<0.32) ? Math.sign(laneWrapDelta(e.lane,state.lane))||1 : (Math.random()<0.5?-1:1);
+    // flippers mostly climb straight and flip toward you near the rim
+    if(!e.flipping && e.flipTimer<=0 && e.depth<0.72){
+      let dir = (e.depth<0.34) ? Math.sign(laneWrapDelta(e.lane,state.lane))||1 : (Math.random()<0.5?-1:1);
       if(isOpen()){ if(e.lane+dir>LANES-0.5) dir=-1; else if(e.lane+dir<0.5) dir=1; }  // bounce off strip ends
       e.flipping=true; e.flipFrom=e.lane; e.flipTo=e.lane+dir; e.flipT=0;
-      e.flipTimer=rand(0.9,0.4);
+      e.flipTimer=rand(0.9,0.4) + e.depth*0.9;   // deeper = flips less often
     }
     if(e.flipping){
       e.flipT+=dt/0.28;
@@ -356,10 +362,18 @@ function updateEnemy(e,dt){
     }
   }
   if(e.kind==="fuseball"){
-    e.lane += e.rail*dt*1.6;
-    if(isOpen() && (e.lane<=0.5 || e.lane>=LANES-0.5)) e.rail=-e.rail;
-    else if(Math.random()<dt*0.7) e.rail=-e.rail;
-    e.lane=normLane(e.lane);
+    // rides the lane boundaries; only vulnerable while hopping between them
+    e.hopTimer = (e.hopTimer ?? rand(0.9,0.4)) - dt;
+    if(!e.hopping && e.hopTimer<=0){
+      let dir = Math.random()<0.5?-1:1;
+      if(isOpen()){ if(e.lane+dir>LANES-0.5) dir=-1; else if(e.lane+dir<0.5) dir=1; }
+      e.hopping=true; e.hopFrom=e.lane; e.hopTo=e.lane+dir; e.hopT=0;
+    }
+    if(e.hopping){
+      e.hopT += dt/0.32;
+      e.lane=normLane(e.hopFrom + laneWrapDelta(e.hopFrom,e.hopTo)*Math.min(1,e.hopT));
+      if(e.hopT>=1){ e.hopping=false; e.lane=normLane(e.hopTo); e.hopTimer=rand(1.0,0.45); }
+    }
   }
   if(e.depth<=0){
     // reached the rim
@@ -385,7 +399,10 @@ function drawEnemy(e){
   let grown=false;
   if(born<1){ const c=project(L,d); const g=0.12+0.88*(born*born*(3-2*born)); ctx.save(); ctx.translate(c.x,c.y); ctx.scale(g,g); ctx.translate(-c.x,-c.y); grown=true; }
   if(e.kind==="flipper"){
-    const aT=project(L-hw,d-dz), aB=project(L-hw,d+dz), bT=project(L+hw,d-dz), bB=project(L+hw,d+dz), c=project(L,d);
+    // coin-flip: squash the bowtie edge-on as it tumbles over the lane boundary
+    const fw = e.flipping ? Math.max(0.12, Math.abs(Math.cos(e.flipT*Math.PI))) : 1;
+    const w = hw*fw;
+    const aT=project(L-w,d-dz), aB=project(L-w,d+dz), bT=project(L+w,d-dz), bB=project(L+w,d+dz), c=project(L,d);
     stroke([aT,c,aB],col,2,10,false); stroke([bT,c,bB],col,2,10,false);
     seg(aT,aB,col,2,10); seg(bT,bB,col,2,10);
   } else if(e.kind==="tanker"){
@@ -399,7 +416,8 @@ function drawEnemy(e){
     stroke([p0,p1,p2],col,2,10,false);
   } else if(e.kind==="fuseball"){
     const c=project(L,d), n=6;
-    for(let i=0;i<n;i++){ const a=e.phase + i/n*TAU + state.t*6; const rr=(0.16+0.06*Math.sin(state.t*20+i))* (c.r/nearR)*nearR*0.5; seg({x:c.x,y:c.y},{x:c.x+Math.cos(a)*rr,y:c.y+Math.sin(a)*rr},col,1.6,10); }
+    const fc = e.hopping ? "#ffffff" : col;   // flashes white (vulnerable) while hopping
+    for(let i=0;i<n;i++){ const a=e.phase + i/n*TAU + state.t*6; const rr=(0.16+0.06*Math.sin(state.t*20+i))* (c.r/nearR)*nearR*0.5; seg({x:c.x,y:c.y},{x:c.x+Math.cos(a)*rr,y:c.y+Math.sin(a)*rr},fc,1.6, e.hopping?16:10); }
   } else if(e.kind==="pulsar"){
     const bright = 0.5+0.5*Math.sin(e.pulse);
     const col2 = bright>0.85 ? "#ffffff" : col;
@@ -431,6 +449,7 @@ function updateShots(dt){
     }
     for(const e of enemies){
       if(e.dead || e.onRim) continue;
+      if(e.kind==="fuseball" && !e.hopping) continue;   // invulnerable head-on; only killable mid-hop
       const dl=Math.abs(laneWrapDelta(e.lane, s.lane));
       if(dl<0.55 && Math.abs(e.depth - s.depth)<0.05){ hitEnemy(e,s); break; }
     }
