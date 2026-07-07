@@ -3,770 +3,683 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-<meta name="theme-color" content="#02030a" />
+<meta name="theme-color" content="#000000" />
 <title>Vector Tempest</title>
-<meta name="description" content="A neon 3D Tempest-style tube shooter prototype with auto-fire, touch-to-lane movement, and fast vector explosions." />
+<meta name="description" content="A faithful browser tribute to Atari's 1981 Tempest — a glowing vector tube shooter with flippers, tankers, spikers, fuseballs, pulsars, the superzapper, and the AVOID SPIKES warp." />
 <style>
-:root{color-scheme:dark;--ink:#eaffff;--cyan:#40f7ff;--pink:#ff3bd1;--gold:#ffef75;--green:#6dffad;--red:#ff5277;--panel:rgba(3,7,18,.72);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+:root{color-scheme:dark;--ink:#eaffff;--cyan:#20e0ff;--yellow:#ffe000;--red:#ff3b3b;--green:#39ff5a;--panel:rgba(0,2,8,.86);font-family:"Courier New",ui-monospace,Menlo,Consolas,monospace}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#02030a;color:var(--ink);touch-action:none;user-select:none}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:#02030a;cursor:crosshair}
-.hud{position:fixed;inset:12px 14px auto 14px;z-index:4;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:start;pointer-events:none;text-transform:uppercase;font-weight:950;letter-spacing:.08em;text-shadow:0 0 7px currentColor,0 0 18px currentColor}
-.hud span{min-height:30px;color:#dcfdff;font-size:clamp(10px,2vw,14px);line-height:1.2}.hud span:nth-child(2){text-align:center;color:var(--gold)}.hud span:nth-child(3){text-align:right;color:#ff86e5}
-.overlay{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 35%,rgba(64,247,255,.18),transparent 29%),radial-gradient(circle at 70% 74%,rgba(255,59,209,.18),transparent 30%),linear-gradient(180deg,rgba(2,3,10,.24),rgba(2,3,10,.88));backdrop-filter:blur(4px)}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:var(--ink);touch-action:none;user-select:none}
+canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:#000;cursor:crosshair}
+.hud{position:fixed;inset:10px 16px auto 16px;z-index:4;display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:start;pointer-events:none;text-transform:uppercase;font-weight:700;letter-spacing:.14em;text-shadow:0 0 6px currentColor,0 0 14px currentColor}
+.hud span{min-height:22px;font-size:clamp(11px,2.1vw,17px);line-height:1.1}
+#hudScore{color:var(--cyan)}
+#hudHi{text-align:center;color:var(--yellow)}
+#hudShips{text-align:right;color:var(--red)}
+.corner{position:fixed;left:16px;bottom:12px;z-index:3;color:rgba(120,240,255,.7);font-size:clamp(10px,1.8vw,13px);letter-spacing:.14em;pointer-events:none;text-transform:uppercase;text-shadow:0 0 6px currentColor}
+.overlay{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 40%,rgba(32,224,255,.08),transparent 34%),linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.9))}
 .overlay.hidden{opacity:0;pointer-events:none}
-.panel{width:min(760px,94vw);max-height:90dvh;overflow:auto;padding:24px;border:1px solid rgba(93,241,255,.45);border-radius:10px;background:var(--panel);box-shadow:inset 0 0 28px rgba(0,255,234,.12),0 0 34px rgba(64,223,255,.24),0 0 80px rgba(255,61,213,.14);text-align:center}
-h1{margin:0 0 8px;font-size:clamp(2.55rem,10vw,5.6rem);line-height:.84;letter-spacing:.02em;color:#fff;text-shadow:0 0 8px #fff,0 0 18px var(--cyan),0 0 36px var(--pink)}
-.version{margin:0 0 18px;color:rgba(215,246,255,.62);font-size:10px;font-weight:950;letter-spacing:.18em;text-transform:uppercase}
-.sub{max-width:590px;margin:0 auto 18px;color:#bcf8ff;font-weight:850;line-height:1.42;text-transform:uppercase;letter-spacing:.08em;font-size:clamp(12px,2.6vw,14px)}
-.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px auto;text-align:left}.rule{padding:11px;border:1px solid rgba(136,232,255,.22);border-radius:8px;background:rgba(3,12,26,.68);font-size:12px;line-height:1.35;color:#d8f8ff}.rule b{display:block;color:#fff;margin-bottom:4px;font-size:11px;letter-spacing:.1em}
-.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}button{border:1px solid rgba(255,255,255,.78);border-radius:8px;min-height:46px;padding:12px 20px;background:linear-gradient(135deg,var(--cyan),#6d63ff 48%,var(--pink));color:#fff;font-weight:950;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 0 18px rgba(31,246,255,.45),0 0 34px rgba(255,59,209,.3);cursor:pointer}button.secondary{background:rgba(8,18,34,.82);border-color:rgba(136,232,255,.5);box-shadow:inset 0 0 16px rgba(31,246,255,.08),0 0 18px rgba(31,246,255,.18)}
-.stick{display:none}
-.toast{position:fixed;left:50%;bottom:166px;z-index:6;transform:translateX(-50%) translateY(16px);max-width:min(680px,92vw);padding:10px 14px;border:1px solid rgba(136,232,255,.22);border-radius:8px;background:rgba(3,7,18,.78);color:#eaffff;font-size:13px;line-height:1.35;text-align:center;opacity:0;transition:opacity .18s ease,transform .18s ease;pointer-events:none}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.powers{position:fixed;left:50%;bottom:18px;z-index:5;display:flex;gap:10px;align-items:center;justify-content:center;transform:translateX(-50%);pointer-events:auto}.power{min-width:132px;min-height:40px;padding:9px 12px;border-radius:8px;border:1px solid rgba(136,232,255,.42);background:rgba(5,12,24,.7);color:#dffcff;font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;box-shadow:inset 0 0 18px rgba(64,247,255,.09),0 0 18px rgba(64,247,255,.12)}.power.ready{border-color:rgba(255,239,117,.92);color:#fff1a8;box-shadow:0 0 22px rgba(255,239,117,.3),inset 0 0 18px rgba(255,239,117,.1)}.power:disabled{opacity:.52;cursor:not-allowed}
-.scoreBox{max-width:520px;margin:16px auto 0;padding:12px;border:1px solid rgba(136,232,255,.22);border-radius:8px;background:rgba(3,12,26,.52);text-align:left}.scoreHead{display:flex;justify-content:space-between;margin-bottom:7px;color:#fff;font-size:11px;font-weight:950;letter-spacing:.1em;text-transform:uppercase}.scoreRow{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:5px 0;border-top:1px solid rgba(136,232,255,.11);color:#d8f8ff;font-size:12px}.scoreRow.me{color:#ffef75}.scoreMsg{padding:8px 0;color:rgba(216,248,255,.64);font-size:12px;text-align:center}.scoreForm{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:12px}.scoreForm.hidden{display:none}.scoreForm input{width:86px;min-height:42px;border:1px solid rgba(136,232,255,.42);border-radius:8px;background:rgba(1,7,18,.8);color:#fff;text-align:center;font-size:18px;font-weight:950;letter-spacing:.12em;text-transform:uppercase}
-.corner{position:fixed;right:12px;bottom:10px;z-index:3;color:rgba(215,246,255,.46);font-size:11px;letter-spacing:.08em;pointer-events:none}
-@media(max-width:760px){.hud{inset:10px 8px auto 8px;gap:5px}.hud span{font-size:9px}.rules{grid-template-columns:1fr}.panel{padding:20px}.toast{bottom:96px}.powers{bottom:10px}.power{min-width:112px;font-size:10px}.scoreBox{font-size:11px}.scoreForm{flex-wrap:wrap}.corner{display:none}}
+.panel{width:min(720px,94vw);max-height:92dvh;overflow:auto;padding:24px;border:1px solid rgba(32,224,255,.5);border-radius:4px;background:var(--panel);box-shadow:inset 0 0 26px rgba(32,224,255,.1),0 0 30px rgba(32,224,255,.22);text-align:center}
+h1{margin:0 0 6px;font-size:clamp(2.6rem,11vw,5.8rem);line-height:.86;letter-spacing:.16em;color:var(--yellow);text-shadow:0 0 10px var(--yellow),0 0 26px rgba(255,120,0,.7),0 0 46px rgba(255,60,0,.4)}
+.version{margin:0 0 16px;color:rgba(120,240,255,.72);font-size:11px;font-weight:700;letter-spacing:.34em;text-transform:uppercase}
+.sub{max-width:560px;margin:0 auto 16px;color:#bff6ff;font-weight:700;line-height:1.5;text-transform:uppercase;letter-spacing:.1em;font-size:clamp(11px,2.4vw,13px)}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px auto;text-align:left}
+.rule{padding:11px;border:1px solid rgba(32,224,255,.28);border-radius:4px;background:rgba(0,6,14,.7);font-size:12px;line-height:1.4;color:#d8f8ff}.rule b{display:block;color:var(--yellow);margin-bottom:4px;font-size:11px;letter-spacing:.14em}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:14px}
+button{border:1px solid rgba(32,224,255,.85);border-radius:4px;min-height:46px;padding:12px 22px;background:rgba(0,10,22,.8);color:var(--cyan);font-family:inherit;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 0 14px rgba(32,224,255,.3),inset 0 0 12px rgba(32,224,255,.08);cursor:pointer;text-shadow:0 0 6px currentColor}
+button.primary{border-color:var(--yellow);color:var(--yellow);box-shadow:0 0 18px rgba(255,224,0,.4),inset 0 0 12px rgba(255,224,0,.1)}
+button:active{transform:translateY(1px)}
+.zap{position:fixed;right:14px;bottom:14px;z-index:5;pointer-events:auto}
+.zap button{min-width:150px;min-height:42px;padding:10px 14px;font-size:12px;border-color:var(--red);color:var(--red);box-shadow:0 0 14px rgba(255,59,59,.3),inset 0 0 12px rgba(255,59,59,.08)}
+.zap button.ready{border-color:var(--yellow);color:var(--yellow);box-shadow:0 0 22px rgba(255,224,0,.5),inset 0 0 12px rgba(255,224,0,.12)}
+.zap button:disabled{opacity:.4;cursor:not-allowed}
+.scoreBox{max-width:520px;margin:16px auto 0;padding:12px;border:1px solid rgba(32,224,255,.28);border-radius:4px;background:rgba(0,6,14,.55);text-align:left}
+.scoreHead{display:flex;justify-content:space-between;margin-bottom:7px;color:var(--yellow);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase}
+.scoreRow{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;padding:5px 0;border-top:1px solid rgba(32,224,255,.14);color:#d8f8ff;font-size:13px;letter-spacing:.1em}
+.scoreRow.me{color:var(--yellow)}
+.scoreMsg{padding:8px 0;color:rgba(190,240,255,.66);font-size:12px;text-align:center;letter-spacing:.08em}
+.scoreForm{display:flex;gap:8px;justify-content:center;align-items:center;margin-top:12px}.scoreForm.hidden{display:none}
+.scoreForm input{width:96px;min-height:44px;border:1px solid rgba(32,224,255,.5);border-radius:4px;background:rgba(0,6,14,.85);color:var(--yellow);text-align:center;font-family:inherit;font-size:20px;font-weight:700;letter-spacing:.24em;text-transform:uppercase}
+@media(max-width:760px){.hud{inset:8px 10px auto 10px;gap:5px}.hud span{font-size:11px;letter-spacing:.08em}.rules{grid-template-columns:1fr}.panel{padding:20px}.zap button{min-width:170px;font-size:13px}.corner{font-size:11px}}
 </style>
 </head>
 <body>
 <canvas id="scene"></canvas>
 <div class="hud">
-  <span id="status">Hull 100 | Zaps 00</span>
-  <span id="wave">Wave 01</span>
-  <span id="score">Score 000000</span>
+  <span id="hudScore">SCORE 000000</span>
+  <span id="hudHi">HI 000000</span>
+  <span id="hudShips">SHIPS 3</span>
 </div>
-<div class="toast" id="toast"></div>
-<div class="powers"><button class="power" id="pulseBtn" disabled>Pulse 0/12</button></div>
-<div class="corner">v1.0 tempest prototype</div>
+<div class="corner" id="hudLevel">LEVEL 01</div>
+<div class="zap"><button id="zapBtn" disabled>SUPERZAPPER</button></div>
 <div class="overlay" id="overlay">
   <div class="panel">
-    <h1>VECTOR<br>TEMPEST</h1>
-    <p class="version">Neon tube shooter prototype</p>
-    <p class="sub">Ride the rim, sweep around the web, and let the cannon chew glowing lanes before the climbers reach your edge.</p>
+    <h1>TEMPEST</h1>
+    <p class="version">Vector Tube Shooter</p>
+    <p class="sub">Man the claw on the rim of the web. Zap the flippers, tankers, spikers, fuseballs and pulsars before they crawl up and reach you.</p>
     <div class="rules">
-      <div class="rule"><b>Move</b>Press anywhere on the web. The ship sweeps to that radial lane.</div>
-      <div class="rule"><b>Auto-fire</b>The cannon fires only while you press or hold Space.</div>
-      <div class="rule"><b>Survive</b>Enemies crawl up the web. Hits throw fast wireframe vector blasts.</div>
+      <div class="rule"><b>Move</b>Arrows / A · D sweep the claw around the rim. Or touch the web to spin to that lane.</div>
+      <div class="rule"><b>Fire</b>Space or tap fires bolts down the lane. Superzapper (Z / button) clears the web — once strong, once weak, per level.</div>
+      <div class="rule"><b>Survive</b>Clear the web to warp to the next level — but AVOID SPIKES on the way through.</div>
     </div>
-    <div class="row"><button id="startBtn">Start Tempest</button><button class="secondary" id="practiceBtn">Practice</button><button class="secondary" id="scoresBtn">Scores</button></div>
+    <div class="row"><button class="primary" id="startBtn">Start Game</button><button id="scoresBtn">Scores</button></div>
     <div class="scoreBox" id="titleScores"><div class="scoreMsg">Reading global scores...</div></div>
   </div>
 </div>
 <div class="overlay hidden" id="gameover">
   <div class="panel">
-    <h1 id="overTitle">WEB<br>COLLAPSED</h1>
+    <h1 id="overTitle">GAME OVER</h1>
     <p class="sub" id="overText"></p>
-    <div class="scoreForm hidden" id="scoreForm"><input id="initials" maxlength="3" value="YOU" aria-label="Initials" /><button id="submitScore">Save Score</button></div>
+    <div class="scoreForm hidden" id="scoreForm"><input id="initials" maxlength="3" value="AAA" aria-label="Initials" /><button class="primary" id="submitScore">Save Score</button></div>
     <div class="scoreBox" id="overScores"><div class="scoreMsg">Reading global scores...</div></div>
-    <div class="row"><button id="againBtn">Run Again</button><button class="secondary" id="menuBtn">Title</button></div>
+    <div class="row"><button class="primary" id="againBtn">Play Again</button><button id="menuBtn">Title</button></div>
   </div>
 </div>
-<script type="module">
-import * as THREE from "../../2026-06-10/iron-ridge/vendor/three.module.js";
-
+<script>
+"use strict";
 const $ = id => document.getElementById(id);
-const ui = { status:$("status"), wave:$("wave"), score:$("score"), overlay:$("overlay"), over:$("gameover"), overTitle:$("overTitle"), overText:$("overText"), toast:$("toast"), pulse:$("pulseBtn") };
 const canvas = $("scene");
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x02030a);
-scene.fog = new THREE.Fog(0x02030a, 52, 128);
-const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, powerPreference:"high-performance" });
-renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-const camera = new THREE.PerspectiveCamera(58, 1, .1, 170);
-const clock = new THREE.Clock();
-const cyan=0x40f7ff, pink=0xff3bd1, gold=0xffef75, green=0x6dffad, red=0xff5277, white=0xffffff;
-const lanes = 16, radius = 7.2, nearZ = 10, farZ = -92;
+const ctx = canvas.getContext("2d");
+const TAU = Math.PI * 2;
+
+/* ---------- config ---------- */
+const LANES = 16;
 const SCORE_API = "https://game-scores.jez237.workers.dev/scores/vector-tempest";
 const LOCAL_SCORE_KEY = "vector-tempest-local-scores-v1";
+const HI_KEY = "vector-tempest-hi-v1";
 const SCORE_LIMIT = 8;
-const shapes = [
-  { name:"RECT", points:[[0,-1],[.58,-1],[.58,1],[-.58,1],[-.58,-1],[0,-1]] },
-  { name:"DIAMOND", points:[[0,-1],[1,0],[0,1],[-1,0],[0,-1]] },
-  { name:"HEX", points:[[0,-1],[.86,-.5],[.86,.5],[0,1],[-.86,.5],[-.86,-.5],[0,-1]] },
-  { name:"HOUR", points:[[0,-1],[.9,-.82],[.38,0],[.9,.82],[0,1],[-.9,.82],[-.38,0],[-.9,-.82],[0,-1]] },
-  { name:"WIDE", points:[[0,-.72],[1,-.72],[1,.72],[0,1],[-1,.72],[-1,-.72],[0,-.72]] },
-  { name:"ROUND", circle:true }
-];
-const enemyTypes = {
-  crawler:{ name:"Crawler", color:green, hp:1, points:120, speed:1, spin:1, unlock:1 },
-  weaver:{ name:"Weaver", color:pink, hp:1, points:175, speed:.92, spin:1.35, unlock:2 },
-  splitter:{ name:"Splitter", color:gold, hp:1, points:190, speed:.86, spin:.9, unlock:3 },
-  shield:{ name:"Shield", color:cyan, hp:2, points:260, speed:.72, spin:.65, unlock:4 },
-  bomber:{ name:"Bomber", color:red, hp:1, points:230, speed:.78, spin:1.7, unlock:5 }
+const FAR_RATIO = 0.11;         // far rim radius as fraction of near rim
+const TILT = 0.62;              // perspective tilt: how far the tube's far end floats up
+const BONUS_LIFE = 20000;
+
+/* level colours (well cycles per level, Tempest-style) */
+const WELL_COLORS = ["#2b52ff","#ff2d2d","#19d21a","#ffd400","#12e0ff","#ff36c8","#ff8a00","#9b57ff"];
+const RIM_TINT = "#eaffff";
+const C = {
+  claw:"#ffe000", clawHot:"#ffffff",
+  flipper:"#ff3b3b", tanker:"#ff54e6", spiker:"#39ff5a",
+  fuseball:"#a6ff2e", pulsar:"#28ffe0", spike:"#39ff5a",
+  shot:"#ffffff", shotTip:"#ffe000"
 };
-const keys = new Set();
-const pointer = { down:false };
-const state = { running:false, practice:false, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, heat:0, overheated:false, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:0, messageUntil:0 };
-let audioCtx=null, lastShotSound=0;
-let player, web=[], enemies=[], shots=[], sparks=[], hazards=[], stars=[];
+
+/* ---------- tube shapes (normalised ~unit; closed loops) ---------- */
+function regular(n, rot){ const p=[]; for(let i=0;i<n;i++){ const a=rot + i/n*TAU; p.push([Math.cos(a), Math.sin(a)]); } return p; }
+function starPoly(n, ri){ const p=[]; for(let i=0;i<n*2;i++){ const a=-Math.PI/2 + i/(n*2)*TAU; const r=i%2?ri:1; p.push([Math.cos(a)*r, Math.sin(a)*r]); } return p; }
+const PLUS = (()=>{ const w=.36,L=1; return [[w,-L],[w,-w],[L,-w],[L,w],[w,w],[w,L],[-w,L],[-w,w],[-L,w],[-L,-w],[-w,-w],[-w,-L]]; })();
+const shapes = [
+  { name:"CIRCLE",  circle:true },
+  { name:"SQUARE",  pts:[[-1,-1],[1,-1],[1,1],[-1,1]] },
+  { name:"CROSS",   pts:PLUS },
+  { name:"STAR",    pts:starPoly(5,.44) },
+  { name:"TRIANGLE",pts:[[0,-1.05],[.95,.78],[-.95,.78]] },
+  { name:"HEX",     pts:regular(6,-Math.PI/2) },
+  { name:"DIAMOND", pts:regular(4,-Math.PI/2) },
+  { name:"OCTAGON", pts:regular(8,-Math.PI/2+Math.PI/8) }
+];
+
+/* ---------- state ---------- */
+const state = {
+  mode:"title",          // title | play | dying | warp | over
+  t:0, score:0, hi:0, level:1, shapeIndex:0,
+  lives:3, lane:0, targetLane:0,
+  fireTimer:0, spawnTimer:0, spawnLeft:0,
+  zapCharge:1, zapUsed:0, zapFlash:0,
+  msg:"", msgUntil:0, dieTimer:0, warpT:0, warpDepth:0, spawnGap:1,
+  shakeT:0
+};
+let enemies=[], shots=[], sparks=[], spikes=new Array(LANES).fill(1);
+const keys=new Set();
+const pointer={ down:false };
+let W=0,H=0,cx=0,cy=0,nearR=0,DPR=1;
+let audioCtx=null, master=null, lastShot=0;
 let globalScores=null, globalScoreStatus="loading", pendingScore=0, lastSubmit=null;
 
-function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
-function rand(a=1,b=0){ return b + Math.random() * (a-b); }
+/* ---------- utils ---------- */
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const rand=(a=1,b=0)=>b+Math.random()*(a-b);
+const lerp=(a,b,t)=>a+(b-a)*t;
+function laneWrapDelta(from,to){ let d=((to-from)%LANES+LANES)%LANES; if(d>LANES/2) d-=LANES; return d; }
+
+/* ---------- geometry / projection ---------- */
 function shapePoint(lane){
-  const shape = shapes[state.shapeIndex % shapes.length];
-  const t = ((lane / lanes) % 1 + 1) % 1;
-  if (shape.circle) {
-    const a = t * Math.PI * 2 - Math.PI / 2;
-    return { x:Math.cos(a), y:Math.sin(a) };
-  }
-  const pts = shape.points;
-  const lengths = [];
-  let total = 0;
-  for (let i=0;i<pts.length-1;i++) {
-    const dx = pts[i+1][0]-pts[i][0], dy = pts[i+1][1]-pts[i][1];
-    const len = Math.hypot(dx,dy);
-    lengths.push(len); total += len;
-  }
-  let dist = t * total;
-  for (let i=0;i<lengths.length;i++) {
-    if (dist <= lengths[i]) {
-      const f = lengths[i] ? dist / lengths[i] : 0;
-      return { x:pts[i][0] + (pts[i+1][0]-pts[i][0])*f, y:pts[i][1] + (pts[i+1][1]-pts[i][1])*f };
-    }
-    dist -= lengths[i];
+  const sh = shapes[state.shapeIndex % shapes.length];
+  let t = ((lane/LANES)%1+1)%1;
+  if (sh.circle){ const a=t*TAU - Math.PI/2; return { x:Math.cos(a), y:Math.sin(a) }; }
+  const pts=sh.pts, n=pts.length;
+  if(!sh._len){ const segs=[]; let tot=0; for(let i=0;i<n;i++){ const a=pts[i],b=pts[(i+1)%n]; const l=Math.hypot(b[0]-a[0],b[1]-a[1]); segs.push(l); tot+=l; } sh._len=segs; sh._tot=tot; }
+  let dist=t*sh._tot;
+  for(let i=0;i<n;i++){
+    if(dist<=sh._len[i] || i===n-1){ const a=pts[i],b=pts[(i+1)%n]; const f=sh._len[i]?dist/sh._len[i]:0; return { x:a[0]+(b[0]-a[0])*f, y:a[1]+(b[1]-a[1])*f }; }
+    dist-=sh._len[i];
   }
   return { x:pts[0][0], y:pts[0][1] };
 }
-function angleFor(lane){
-  const a = shapePoint(lane-.06), b = shapePoint(lane+.06);
-  return Math.atan2(b.y-a.y,b.x-a.x);
+// depth 0 = near rim (large), 1 = far rim (small). depth<0 pops toward viewer.
+function radiusAt(depth){
+  const dd = 1 - depth + state.warpDepth;   // warp: tube rushes toward us (fly-through)
+  const k = Math.pow(Math.max(dd,0), 1.28);
+  return nearR*(FAR_RATIO + (1-FAR_RATIO)*k);
 }
-function lanePos(lane,z,scale=1){ const p=shapePoint(lane); return new THREE.Vector3(p.x*radius*scale, p.y*radius*scale, z); }
-function basic(color, opacity=1){ return new THREE.LineBasicMaterial({ color, transparent:true, opacity, blending:THREE.AdditiveBlending, depthWrite:false }); }
-function mat(color, opacity=1){
-  const m = new THREE.MeshStandardMaterial({ color, emissive:color, emissiveIntensity:.62, roughness:.18, metalness:.34, transparent:opacity<1, opacity, flatShading:true });
-  if (opacity < 1) { m.blending = THREE.AdditiveBlending; m.depthWrite = false; }
-  return m;
+function project(lane, depth){
+  const sp = shapePoint(lane);
+  const r = radiusAt(depth);
+  const rr = r/nearR;                       // 1 at near rim, FAR_RATIO at far rim
+  const shiftUp = TILT * nearR * (1-rr);    // far end floats up-and-back (Tempest tilt)
+  return { x:cx + sp.x*r, y:(cy - shiftUp) - sp.y*r, r };
 }
-function line(points, color, opacity=1){ const mesh = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), basic(color, opacity)); scene.add(mesh); return mesh; }
-function toast(text, seconds=1.4){ ui.toast.textContent=text; ui.toast.classList.add("show"); state.messageUntil=state.t+seconds; }
-function cleanInitials(value){ return String(value || "YOU").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,3).padEnd(3,"A"); }
-function localScores(){ try { return JSON.parse(localStorage.getItem(LOCAL_SCORE_KEY) || "[]"); } catch { return []; } }
-function saveLocalScore(entry){
-  const rows = localScores();
-  rows.push(entry);
-  rows.sort((a,b)=>b.score-a.score);
-  localStorage.setItem(LOCAL_SCORE_KEY, JSON.stringify(rows.slice(0,SCORE_LIMIT)));
+
+/* ---------- drawing ---------- */
+function stroke(pts, color, width, glow, close){
+  if(pts.length<2) return;
+  ctx.strokeStyle=color; ctx.lineWidth=width; ctx.shadowColor=color; ctx.shadowBlur=glow;
+  ctx.beginPath(); ctx.moveTo(pts[0].x, pts[0].y);
+  for(let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+  if(close) ctx.closePath();
+  ctx.stroke();
 }
-function normalizeScoreRows(data){
-  const rows = Array.isArray(data) ? data : (data && data.scores || []);
-  return rows.map(row => ({ name:cleanInitials(row.initials || row.name || "???"), score:Math.max(0, Math.floor(Number(row.score) || 0)) }))
-    .sort((a,b)=>b.score-a.score).slice(0,SCORE_LIMIT);
-}
-async function fetchGlobalScores(force=false){
-  if (globalScores && !force) return globalScores;
-  globalScoreStatus = "loading";
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), 7000);
-  try {
-    const response = await fetch(`${SCORE_API}?limit=${SCORE_LIMIT}`, { cache:"no-store", signal:controller.signal });
-    globalScores = normalizeScoreRows(await response.json());
-    globalScoreStatus = "ready";
-  } catch {
-    globalScoreStatus = "offline";
-  } finally {
-    clearTimeout(timer);
+function seg(a,b,color,width,glow){ stroke([a,b],color,width,glow,false); }
+
+function drawWell(){
+  const col = WELL_COLORS[(state.level-1) % WELL_COLORS.length];
+  // radials
+  for(let i=0;i<LANES;i++){
+    seg(project(i,0), project(i,1), col, 1.4, 6);
   }
-  return globalScores;
+  // faint far rim
+  const far=[]; for(let i=0;i<=LANES;i++) far.push(project(i,1));
+  stroke(far, col, 1, 4, false);
+  // bright near rim (the lip the claw rides)
+  const near=[]; for(let i=0;i<=LANES;i++) near.push(project(i,0));
+  stroke(near, RIM_TINT, 2.6, 14, false);
+  stroke(near, col, 4.4, 22, false);
 }
-async function submitGlobalScore(name, score) {
-  lastSubmit = { name, score };
-  const controller = new AbortController();
-  const timer = setTimeout(()=>controller.abort(), 7000);
-  try {
-    await fetch(SCORE_API, { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ initials:name, score }), signal:controller.signal });
-    globalScores = null;
-    await fetchGlobalScores(true);
-    return true;
-  } catch {
-    globalScoreStatus = "offline";
-    return false;
-  } finally {
-    clearTimeout(timer);
+
+function drawSpikes(){
+  for(let i=0;i<LANES;i++){
+    const top = spikes[i];
+    if(top>=0.985) continue;
+    const a=project(i,0.985), b=project(i,top);
+    seg(a,b,C.spike,1.8,8);
+    // little barbs
+    if(top<0.6){ const m=project(i,(top+0.985)/2); const l=project(i-0.12,(top+0.985)/2), r=project(i+0.12,(top+0.985)/2); seg(l,m,C.spike,1,6); seg(r,m,C.spike,1,6); }
   }
 }
-function scoreRows(rows, emptyText) {
-  if (!rows || !rows.length) return `<div class="scoreMsg">${emptyText}</div>`;
-  return rows.slice(0,SCORE_LIMIT).map((row,index)=>{
-    const me = lastSubmit && row.name === lastSubmit.name && row.score === lastSubmit.score;
-    return `<div class="scoreRow ${me ? "me" : ""}"><b>${index+1}.</b><span>${row.name}</span><b>${row.score.toLocaleString()}</b></div>`;
-  }).join("");
+
+function drawClaw(hot){
+  const L=state.lane;
+  const color = hot ? C.clawHot : C.claw;
+  const oL=project(L-0.5,0), oR=project(L+0.5,0);
+  const iL=project(L-0.5,0.14), iR=project(L+0.5,0.14);
+  const ctr=project(L,0.05), tip=project(L,-0.06);
+  // claw body: two prongs meeting a center point, hugging one segment of the rim
+  stroke([oL,iL,ctr,iR,oR], color, 2.4, 16, false);
+  seg(oL,tip,color,2,14); seg(oR,tip,color,2,14);
+  seg(oL,oR,color,1.4,10);
 }
-function renderScores(targetId) {
-  const target = $(targetId);
-  if (!target) return;
-  const globalHtml = globalScoreStatus === "offline" ? `<div class="scoreMsg">Global scores offline. Local scores saved.</div>`
-    : globalScores ? scoreRows(globalScores, "No global scores yet.") : `<div class="scoreMsg">Reading global scores...</div>`;
-  target.innerHTML = `<div class="scoreHead"><span>Global Scores</span><span>Score</span></div>${globalHtml}<div class="scoreHead" style="margin-top:10px"><span>Local Scores</span><span>Score</span></div>${scoreRows(localScores(), "No local scores yet.")}`;
+
+/* ---------- enemies ---------- */
+const KINDS = {
+  flipper:{ color:C.flipper, points:150, hp:1 },
+  tanker: { color:C.tanker,  points:100, hp:1 },
+  spiker: { color:C.spiker,  points:50,  hp:1 },
+  fuseball:{color:C.fuseball,points:250, hp:1 },
+  pulsar: { color:C.pulsar,  points:200, hp:1 }
+};
+function spawnEnemy(kind, lane, depth){
+  const k=KINDS[kind];
+  const e={ kind, lane:(lane??Math.floor(rand(LANES))), depth:(depth??1.02), color:k.color, hp:k.hp,
+    speed:(0.10 + state.level*0.006 + rand(0.05)), flipT:0, flipTimer:rand(1.1,0.4), flipFrom:0, flipTo:0, flipping:false,
+    phase:rand(TAU), onRim:false, rail:0, pulse:0, dead:false };
+  if(kind==="fuseball"){ e.speed*=1.15; e.rail=rand(1,-1); }
+  if(kind==="spiker"){ e.speed*=0.5; }
+  enemies.push(e);
+  return e;
 }
-function showScores(targetId) {
-  renderScores(targetId);
-  fetchGlobalScores().then(()=>renderScores(targetId));
+
+function updateEnemy(e,dt){
+  if(e.kind==="pulsar"){ e.pulse += dt*(2.4 + state.level*0.06); }
+  if(e.onRim){
+    // crawl along the rim toward the player, flipping lane to lane
+    e.flipTimer-=dt;
+    if(!e.flipping && e.flipTimer<=0){
+      const d=laneWrapDelta(e.lane, state.lane);
+      const dir = d===0?0:(d>0?1:-1);
+      if(dir!==0){ e.flipping=true; e.flipFrom=e.lane; e.flipTo=e.lane+dir; e.flipT=0; }
+      e.flipTimer=0.24;
+    }
+    if(e.flipping){
+      e.flipT+=dt/0.24;
+      e.lane=((e.flipFrom + laneWrapDelta(e.flipFrom,e.flipTo)*Math.min(1,e.flipT))%LANES+LANES)%LANES;
+      if(e.flipT>=1){ e.flipping=false; e.lane=((e.flipTo)%LANES+LANES)%LANES; }
+    }
+    if(Math.abs(laneWrapDelta(e.lane, state.lane))<0.35 && state.mode==="play"){ killPlayer(); e.dead=true; }
+    return;
+  }
+  // climb up the tube
+  e.depth -= e.speed*dt;
+  if(e.kind==="spiker"){
+    spikes[((Math.round(e.lane))%LANES+LANES)%LANES] = Math.min(spikes[((Math.round(e.lane))%LANES+LANES)%LANES], clamp(e.depth+0.02,0.08,1));
+  }
+  if(e.kind==="flipper" || e.kind==="tanker"){
+    e.flipTimer-=dt;
+    if(!e.flipping && e.flipTimer<=0 && e.depth<0.9){
+      let dir = (e.depth<0.32) ? Math.sign(laneWrapDelta(e.lane,state.lane))||1 : (Math.random()<0.5?-1:1);
+      e.flipping=true; e.flipFrom=e.lane; e.flipTo=e.lane+dir; e.flipT=0;
+      e.flipTimer=rand(0.9,0.4);
+    }
+    if(e.flipping){
+      e.flipT+=dt/0.28;
+      e.lane=((e.flipFrom + laneWrapDelta(e.flipFrom,e.flipTo)*Math.min(1,e.flipT))%LANES+LANES)%LANES;
+      if(e.flipT>=1){ e.flipping=false; e.lane=((e.flipTo)%LANES+LANES)%LANES; }
+    }
+  }
+  if(e.kind==="fuseball"){
+    e.lane += e.rail*dt*1.6;
+    if(Math.random()<dt*0.7) e.rail=-e.rail;
+    e.lane=((e.lane)%LANES+LANES)%LANES;
+  }
+  if(e.depth<=0){
+    // reached the rim
+    if(e.kind==="tanker"){ // tankers pop into two flippers at the rim edge
+      e.dead=true; splitTanker(e); return;
+    }
+    e.onRim=true; e.depth=0; e.flipTimer=0.1;
+    if(Math.abs(laneWrapDelta(e.lane,state.lane))<0.6 && state.mode==="play"){ killPlayer(); e.dead=true; }
+  }
 }
+function splitTanker(e){
+  spawnEnemy("flipper",(Math.round(e.lane)-1+LANES)%LANES, 0.05);
+  spawnEnemy("flipper",(Math.round(e.lane)+1)%LANES, 0.05);
+  boom(project(e.lane,e.depth), C.tanker, 12);
+}
+
+function drawEnemy(e){
+  const L=e.lane, d=Math.max(e.depth,0);
+  const col=e.color;
+  const dz=0.028 + d*0.02, hw=0.5;
+  if(e.kind==="flipper"){
+    const aT=project(L-hw,d-dz), aB=project(L-hw,d+dz), bT=project(L+hw,d-dz), bB=project(L+hw,d+dz), c=project(L,d);
+    stroke([aT,c,aB],col,2,10,false); stroke([bT,c,bB],col,2,10,false);
+    seg(aT,aB,col,2,10); seg(bT,bB,col,2,10);
+  } else if(e.kind==="tanker"){
+    const aT=project(L-hw,d-dz), aB=project(L-hw,d+dz), bT=project(L+hw,d-dz), bB=project(L+hw,d+dz);
+    stroke([aT,bT,bB,aB],col,2,10,true);
+    seg(aT,bB,col,1.2,6); seg(bT,aB,col,1.2,6);
+  } else if(e.kind==="spiker"){
+    // spinner: a twist along the lane centre
+    const s=Math.sin((state.t*8)+e.phase);
+    const p0=project(L - 0.22*s, d-dz*1.6), p1=project(L + 0.22*s, d), p2=project(L - 0.22*s, d+dz*1.6);
+    stroke([p0,p1,p2],col,2,10,false);
+  } else if(e.kind==="fuseball"){
+    const c=project(L,d), n=6;
+    for(let i=0;i<n;i++){ const a=e.phase + i/n*TAU + state.t*6; const rr=(0.16+0.06*Math.sin(state.t*20+i))* (c.r/nearR)*nearR*0.5; seg({x:c.x,y:c.y},{x:c.x+Math.cos(a)*rr,y:c.y+Math.sin(a)*rr},col,1.6,10); }
+  } else if(e.kind==="pulsar"){
+    const bright = 0.5+0.5*Math.sin(e.pulse);
+    const col2 = bright>0.85 ? "#ffffff" : col;
+    const aT=project(L-hw,d-dz), bB=project(L+hw,d+dz), aB=project(L-hw,d+dz), bT=project(L+hw,d-dz), c=project(L,d);
+    stroke([aT,c,bB],col2,2,10+bright*14,false); stroke([bT,c,aB],col2,2,10+bright*14,false);
+    if(bright>0.9){ // electrified lane
+      seg(project(L,0),project(L,0.9),col2,2,18);
+    }
+  }
+}
+
+/* ---------- combat ---------- */
+function fire(){
+  if(state.mode!=="play" || state.fireTimer>0) return;
+  if(shots.length>=8) return;
+  state.fireTimer=0.11;
+  const L=((Math.round(state.lane))%LANES+LANES)%LANES;
+  shots.push({ lane:L, depth:0.02, speed:1.9, dead:false });
+  sfx("fire");
+}
+function updateShots(dt){
+  for(const s of shots){
+    s.depth += s.speed*dt;
+    // hit a spike tip in this lane?
+    if(spikes[s.lane] < 0.985 && s.depth >= spikes[s.lane]){
+      spikes[s.lane] = Math.min(1, spikes[s.lane]+0.14);
+      s.dead=true; boom(project(s.lane, s.depth), C.spike, 5); addScore(50); continue;
+    }
+    for(const e of enemies){
+      if(e.dead || e.onRim) continue;
+      const dl=Math.abs(laneWrapDelta(e.lane, s.lane));
+      if(dl<0.55 && Math.abs(e.depth - s.depth)<0.05){ hitEnemy(e,s); break; }
+    }
+    if(s.depth>1.02) s.dead=true;
+  }
+}
+function hitEnemy(e,s){
+  s.dead=true; e.hp--;
+  if(e.hp>0){ boom(project(e.lane,e.depth), "#ffffff", 6); return; }
+  e.dead=true;
+  const k=KINDS[e.kind];
+  addScore(k.points + (e.depth<0.2?50:0));
+  boom(project(e.lane,e.depth), e.color, e.kind==="tanker"?16:12);
+  sfx("boom");
+  if(e.kind==="tanker") splitTanker(e);
+}
+function useZap(){
+  if(state.mode!=="play" || state.zapCharge<=0) return;
+  const strong = state.zapUsed===0;
+  state.zapUsed++;
+  state.zapCharge = strong ? 1 : 0;   // strong keeps a weak charge; weak spends it
+  if(!strong) state.zapCharge=0;
+  state.zapFlash=0.5;
+  sfx("zap");
+  if(strong){
+    for(const e of enemies){ if(!e.dead){ e.dead=true; addScore(KINDS[e.kind].points); boom(project(e.lane,e.depth), e.color, 8); } }
+    setMsg("SUPERZAPPER",0.9);
+  } else {
+    // weak: kill nearest one
+    let best=null,bd=9; for(const e of enemies){ if(e.dead)continue; if(e.depth<bd){bd=e.depth;best=e;} }
+    if(best){ best.dead=true; addScore(KINDS[best.kind].points); boom(project(best.lane,best.depth),best.color,8); }
+    setMsg("ZAPPER SPENT",0.9);
+  }
+}
+
+/* ---------- sparks / explosions (screen space vector shards) ---------- */
+function boom(pos, color, count){
+  for(let i=0;i<count;i++){
+    const a=rand(TAU), sp=rand(240,70);
+    sparks.push({ x:pos.x,y:pos.y, vx:Math.cos(a)*sp, vy:Math.sin(a)*sp, len:rand(14,5), color, life:rand(0.5,0.25), max:0.5, ang:a });
+  }
+  // expanding ring
+  sparks.push({ ring:true, x:pos.x,y:pos.y, r:4, vr:rand(320,180), color, life:0.35, max:0.35 });
+}
+function updateSparks(dt){
+  for(const p of sparks){
+    p.life-=dt;
+    if(p.ring){ p.r+=p.vr*dt; }
+    else { p.x+=p.vx*dt; p.y+=p.vy*dt; p.vx*=0.92; p.vy*=0.92; }
+  }
+  sparks=sparks.filter(p=>p.life>0);
+}
+function drawSparks(){
+  for(const p of sparks){
+    const a=clamp(p.life/p.max,0,1);
+    ctx.globalAlpha=a;
+    if(p.ring){ ctx.strokeStyle=p.color; ctx.lineWidth=2; ctx.shadowColor=p.color; ctx.shadowBlur=10; ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,TAU); ctx.stroke(); }
+    else { const dx=Math.cos(p.ang)*p.len, dy=Math.sin(p.ang)*p.len; seg({x:p.x-dx,y:p.y-dy},{x:p.x+dx*0,y:p.y+dy*0},p.color,2,8); seg({x:p.x,y:p.y},{x:p.x+dx,y:p.y+dy},p.color,2,8); }
+  }
+  ctx.globalAlpha=1;
+}
+
+/* ---------- player / lifecycle ---------- */
+function killPlayer(){
+  if(state.mode!=="play") return;
+  state.mode="dying"; state.dieTimer=1.4; state.shakeT=0.5;
+  boom(project(state.lane,-0.02), C.claw, 26);
+  sfx("death");
+  state.lives--;
+  setMsg("SHIP DOWN", 1.2);
+}
+function afterDeath(){
+  if(state.lives<=0){ endGame(); return; }
+  state.mode="play"; enemies=enemies.filter(e=>e.onRim?false:true); state.zapFlash=0;
+}
+
+/* ---------- level flow ---------- */
+function startLevel(n){
+  state.level=n;
+  state.shapeIndex=(n-1)%shapes.length;
+  shapes.forEach(s=>{ s._len=null; });   // recompute arc lengths per shape (cached lazily anyway)
+  spikes=new Array(LANES).fill(1);
+  enemies=[]; shots=[]; sparks=[];
+  state.spawnLeft = 8 + n*2;
+  state.spawnTimer = 1.2;
+  state.spawnGap = Math.max(0.55, 1.5 - n*0.05);
+  state.zapCharge=1; state.zapUsed=0;
+  state.lane=0; state.targetLane=0;
+  state.mode="play";
+  setMsg("SUPERZAPPER RECHARGE", 1.6);
+}
+function spawnTick(dt){
+  if(state.spawnLeft<=0) return;
+  state.spawnTimer-=dt;
+  if(state.spawnTimer<=0){
+    state.spawnTimer = state.spawnGap + rand(0.5);
+    const kind = pickKind();
+    spawnEnemy(kind);
+    state.spawnLeft--;
+  }
+}
+function pickKind(){
+  const lv=state.level, r=Math.random();
+  if(lv>=6 && r>0.86) return "pulsar";
+  if(lv>=5 && r>0.74) return "fuseball";
+  if(lv>=3 && r>0.60) return "spiker";
+  if(lv>=2 && r>0.44) return "tanker";
+  return "flipper";
+}
+function levelCleared(){
+  return state.spawnLeft<=0 && enemies.every(e=>e.dead) && state.mode==="play";
+}
+function startWarp(){
+  state.mode="warp"; state.warpT=0; state.warpDepth=0; setMsg("AVOID SPIKES",1.4); sfx("warp");
+}
+function updateWarp(dt){
+  state.warpT += dt/2.2;
+  state.warpDepth = state.warpT * 1.15;          // pull tube toward viewer
+  // fly-through: spikes rush past; if player's lane still has a tall spike as it passes, collide
+  const pl=((Math.round(state.lane))%LANES+LANES)%LANES;
+  const spikeDepth = spikes[pl];
+  if(spikeDepth<0.6){
+    // the spike front reaches the viewer around warpT crossing (1 - spikeDepth)
+    const cross = 1 - spikeDepth;
+    if(state.warpT>=cross && state.warpT<cross+dt/2.2*4 && !state._warpHit){
+      state._warpHit=true; state.warpDepth=0; state.mode="play";
+      killPlayer(); return;
+    }
+  }
+  if(state.warpT>=1){ state._warpHit=false; state.warpDepth=0; startLevel(state.level+1); }
+}
+
+/* ---------- scoring / ui ---------- */
+function addScore(n){
+  const before=state.score; state.score+=n;
+  if(Math.floor(state.score/BONUS_LIFE)>Math.floor(before/BONUS_LIFE)){ state.lives++; setMsg("BONUS SHIP",1.2); sfx("coin"); }
+  if(state.score>state.hi){ state.hi=state.score; try{ localStorage.setItem(HI_KEY,String(state.hi)); }catch{} }
+}
+function setMsg(t,secs){ state.msg=t; state.msgUntil=state.t+secs; }
+function updateHud(){
+  $("hudScore").textContent = "SCORE " + String(Math.floor(state.score)).padStart(6,"0");
+  $("hudHi").textContent = "HI " + String(Math.floor(state.hi)).padStart(6,"0");
+  $("hudShips").textContent = "SHIPS " + Math.max(0,state.lives);
+  $("hudLevel").textContent = "LEVEL " + String(state.level).padStart(2,"0") + " " + shapes[state.shapeIndex].name;
+  const ready = state.mode==="play" && state.zapCharge>0;
+  const zb=$("zapBtn"); zb.disabled=!ready; zb.classList.toggle("ready", ready && state.zapUsed===0);
+  zb.textContent = state.zapUsed===0 ? "SUPERZAPPER" : (state.zapCharge>0?"ZAPPER (WEAK)":"ZAPPER SPENT");
+}
+
+/* ---------- audio ---------- */
 function ensureAudio(){
-  const AC = window.AudioContext || window.webkitAudioContext;
-  if (!AC) return null;
-  if (!audioCtx) audioCtx = new AC();
-  if (audioCtx.state === "suspended") audioCtx.resume();
+  const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return null;
+  if(!audioCtx){ audioCtx=new AC(); master=audioCtx.createGain(); master.gain.value=0.5; master.connect(audioCtx.destination); }
+  if(audioCtx.state==="suspended") audioCtx.resume();
   return audioCtx;
 }
+function noise(dur){ const c=audioCtx; const b=c.createBuffer(1,Math.max(1,Math.floor(c.sampleRate*dur)),c.sampleRate); const d=b.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*(1-i/d.length); return b; }
 function sfx(kind){
-  if (!audioCtx) return;
-  const ctx = ensureAudio();
-  if (!ctx) return;
-  const now = ctx.currentTime;
-  if (kind === "shoot" && now - lastShotSound < .06) return;
-  if (kind === "shoot") {
-    lastShotSound = now;
-    const g = ctx.createGain(), osc = ctx.createOscillator();
-    osc.type = "triangle"; osc.frequency.setValueAtTime(920, now); osc.frequency.exponentialRampToValueAtTime(1420, now+.035);
-    g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(.035, now+.008); g.gain.exponentialRampToValueAtTime(.0001, now+.07);
-    osc.connect(g).connect(ctx.destination); osc.start(now); osc.stop(now+.075);
-    return;
-  }
-  const dur = kind === "damage" ? .32 : .22;
-  const buffer = ctx.createBuffer(1, Math.max(1, Math.floor(ctx.sampleRate*dur)), ctx.sampleRate);
-  const data = buffer.getChannelData(0);
-  for (let i=0;i<data.length;i++) data[i] = (Math.random()*2-1) * (1 - i/data.length);
-  const src = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), g = ctx.createGain(), osc = ctx.createOscillator();
-  src.buffer = buffer; filter.type = kind === "damage" ? "lowpass" : "bandpass"; filter.frequency.setValueAtTime(kind === "damage" ? 180 : 760, now);
-  osc.type = kind === "damage" ? "sawtooth" : "sine"; osc.frequency.setValueAtTime(kind === "damage" ? 90 : 220, now); osc.frequency.exponentialRampToValueAtTime(kind === "damage" ? 42 : 80, now+dur);
-  g.gain.setValueAtTime(.0001, now); g.gain.exponentialRampToValueAtTime(kind === "damage" ? .09 : .06, now+.012); g.gain.exponentialRampToValueAtTime(.0001, now+dur);
-  src.connect(filter).connect(g); osc.connect(g); g.connect(ctx.destination);
-  src.start(now); src.stop(now+dur); osc.start(now); osc.stop(now+dur);
+  const c=ensureAudio(); if(!c) return; const now=c.currentTime;
+  if(kind==="fire"){ if(now-lastShot<0.04) return; lastShot=now; const o=c.createOscillator(),g=c.createGain(); o.type="square"; o.frequency.setValueAtTime(1250,now); o.frequency.exponentialRampToValueAtTime(340,now+0.11); g.gain.setValueAtTime(0.05,now); g.gain.exponentialRampToValueAtTime(0.0001,now+0.12); o.connect(g).connect(master); o.start(now); o.stop(now+0.13); return; }
+  if(kind==="boom"){ const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain(); s.buffer=noise(0.2); f.type="bandpass"; f.frequency.setValueAtTime(700,now); g.gain.setValueAtTime(0.09,now); g.gain.exponentialRampToValueAtTime(0.0001,now+0.2); s.connect(f).connect(g).connect(master); s.start(now); s.stop(now+0.2); return; }
+  if(kind==="death"){ const o=c.createOscillator(),g=c.createGain(),s=c.createBufferSource(); o.type="sawtooth"; o.frequency.setValueAtTime(300,now); o.frequency.exponentialRampToValueAtTime(50,now+0.6); s.buffer=noise(0.5); g.gain.setValueAtTime(0.12,now); g.gain.exponentialRampToValueAtTime(0.0001,now+0.6); o.connect(g); s.connect(g); g.connect(master); o.start(now); o.stop(now+0.6); s.start(now); s.stop(now+0.5); return; }
+  if(kind==="zap"){ const o=c.createOscillator(),g=c.createGain(); o.type="sawtooth"; o.frequency.setValueAtTime(90,now); o.frequency.exponentialRampToValueAtTime(2400,now+0.35); g.gain.setValueAtTime(0.08,now); g.gain.exponentialRampToValueAtTime(0.0001,now+0.4); o.connect(g).connect(master); o.start(now); o.stop(now+0.4); return; }
+  if(kind==="warp"){ const o=c.createOscillator(),g=c.createGain(); o.type="triangle"; o.frequency.setValueAtTime(160,now); o.frequency.exponentialRampToValueAtTime(1300,now+1.4); g.gain.setValueAtTime(0.06,now); g.gain.exponentialRampToValueAtTime(0.0001,now+1.6); o.connect(g).connect(master); o.start(now); o.stop(now+1.6); return; }
+  if(kind==="coin"){ const o=c.createOscillator(),g=c.createGain(); o.type="square"; o.frequency.setValueAtTime(880,now); o.frequency.setValueAtTime(1320,now+0.08); g.gain.setValueAtTime(0.06,now); g.gain.exponentialRampToValueAtTime(0.0001,now+0.22); o.connect(g).connect(master); o.start(now); o.stop(now+0.22); }
 }
 
-function makeWeb() {
-  clearList(web);
-  for (let i=0;i<lanes;i++) {
-    const major = i % 4 === 0;
-    web.push(line([lanePos(i, nearZ,1.015), lanePos(i, farZ, .18)], major?cyan:0x184660, major?.95:.46));
-    web.push(line([lanePos(i+.5, nearZ,1.01), lanePos(i+.5, farZ, .18)], major?0x6dffad:0x0d2739, major?.18:.14));
-  }
-  for (let z=nearZ; z>=farZ; z-=6.8) {
-    const pts = [];
-    const scale = .2 + .8 * ((z - farZ) / (nearZ - farZ));
-    for (let i=0;i<=lanes;i++) pts.push(lanePos(i%lanes,z,scale));
-    const near = z > nearZ - 1;
-    web.push(line(pts, near?gold:0x225778, near?1:.46));
-    if (near || Math.round(z) % 20 === 0) web.push(line(pts, near?white:cyan, near?.22:.16));
-  }
+/* ---------- input ---------- */
+function aimFromPointer(e){
+  if(state.mode!=="play" && state.mode!=="warp") return;
+  if($("overlay").contains(e.target) || $("gameover").contains(e.target)) return;
+  const r=canvas.getBoundingClientRect();
+  const x=e.clientX-(r.left+cx/DPR*0+ r.width/2), y=e.clientY-(r.top+r.height/2);
+  if(Math.hypot(x,y)<20) return;
+  const angle=Math.atan2(-y,x);
+  state.targetLane=((angle+Math.PI/2)/TAU*LANES + LANES*1000)%LANES;
+}
+function controls(dt){
+  let move=0;
+  if(keys.has("ArrowLeft")||keys.has("KeyA")) move-=1;
+  if(keys.has("ArrowRight")||keys.has("KeyD")) move+=1;
+  if(move){ state.targetLane=((state.targetLane + move*dt*11)%LANES+LANES)%LANES; }
+  const d=laneWrapDelta(state.lane, state.targetLane);
+  state.lane=((state.lane + d*Math.min(1,dt*18))%LANES+LANES)%LANES;
 }
 
-function makeStars() {
-  clearList(stars);
-  const geo = new THREE.BufferGeometry();
-  const pts = [];
-  for (let i=0;i<760;i++) {
-    const a = rand(Math.PI*2), r = rand(46,12), z = rand(10,-120);
-    pts.push(Math.cos(a)*r, Math.sin(a)*r, z);
-  }
-  geo.setAttribute("position", new THREE.Float32BufferAttribute(pts,3));
-  const star = new THREE.Points(geo, new THREE.PointsMaterial({ color:0x9efcff, size:.07, transparent:true, opacity:.72, blending:THREE.AdditiveBlending, depthWrite:false }));
-  scene.add(star); stars.push(star);
-}
+/* ---------- main update ---------- */
+function update(dt){
+  state.t+=dt;
+  if(state.t>state.msgUntil) state.msg="";
+  state.fireTimer=Math.max(0,state.fireTimer-dt);
+  state.zapFlash=Math.max(0,state.zapFlash-dt);
+  state.shakeT=Math.max(0,state.shakeT-dt);
+  updateSparks(dt);
 
-function makePlayer() {
-  const root = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.ConeGeometry(.45,1.25,3), mat(cyan));
-  body.rotation.x = Math.PI / 2;
-  const wing = new THREE.Mesh(new THREE.BoxGeometry(1.35,.12,.22), mat(pink));
-  const crown = new THREE.Mesh(new THREE.OctahedronGeometry(.28,0), mat(gold));
-  crown.position.z = .22;
-  const tail = new THREE.Mesh(new THREE.TorusGeometry(.42,.025,4,18), mat(white,.74));
-  tail.position.z = -.34;
-  for (const mesh of [body,wing,crown,tail]) {
-    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), basic(white,.62));
-    mesh.add(edges); root.add(mesh);
-  }
-  scene.add(root);
-  return root;
-}
-
-function reset(practice=false) {
-  cleanup();
-  Object.assign(state,{ running:true, practice, ended:false, t:0, score:0, wave:1, shapeIndex:0, hull:100, zaps:0, combo:0, bestCombo:0, pulse:0, pulseCooldown:0, heat:0, overheated:false, lane:0, targetLane:0, laneVel:0, fireTimer:0, spawnTimer:practice?2.4:1.8, messageUntil:0 });
-  player = makePlayer();
-  makeWeb();
-  makeStars();
-  makeEnemy(0, -54, "crawler");
-  makeEnemy(9, -74, "weaver");
-  makeEnemy(13, -88, "splitter");
-  ui.overlay.classList.add("hidden"); ui.over.classList.add("hidden");
-  toast(practice ? "Practice web online." : "Tempest web online.");
-}
-
-function cleanup() {
-  if (player) scene.remove(player);
-  clearList(web); clearList(enemies); clearList(shots); clearList(sparks); clearList(hazards); clearList(stars);
-  player=null; enemies=[]; shots=[]; sparks=[]; hazards=[]; stars=[];
-}
-function clearList(list){ for (const o of list) scene.remove(o.root || o.mesh || o); list.length = 0; }
-
-function addLaneScar(lane, duration=3.2) {
-  const safeLane = Math.round(lane + lanes * 1000) % lanes;
-  const pts = [
-    lanePos(safeLane-.22, nearZ+.25,1.1), lanePos(safeLane+.22, nearZ+.25,1.1),
-    lanePos(safeLane, nearZ+.55,1.08), lanePos(safeLane, nearZ-8,.94),
-    lanePos(safeLane-.12, nearZ-1,1.02), lanePos(safeLane+.12, nearZ-5,.97)
-  ];
-  const mesh = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), basic(red, .82));
-  scene.add(mesh);
-  hazards.push({ mesh, lane:safeLane, life:duration, maxLife:duration, tick:0 });
-}
-
-function chooseEnemyType() {
-  const pressure = state.wave + Math.floor(state.t / 28);
-  const available = Object.entries(enemyTypes).filter(([,type]) => pressure >= type.unlock);
-  const roll = Math.random();
-  if (pressure >= 5 && roll > .84) return "bomber";
-  if (pressure >= 4 && roll > .68) return "shield";
-  if (pressure >= 3 && roll > .48) return "splitter";
-  if (pressure >= 2 && roll > .28) return "weaver";
-  return available[Math.floor(rand(available.length))]?.[0] || "crawler";
-}
-
-function enemyVisual(typeKey, color) {
-  const root = new THREE.Group();
-  const addEdges = mesh => {
-    mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry), basic(white,.34)));
-    root.add(mesh);
-  };
-  if (typeKey === "weaver") {
-    addEdges(new THREE.Mesh(new THREE.TetrahedronGeometry(.72,0), mat(color,.94)));
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(.7,.032,5,28), mat(color,.7));
-    ring.rotation.x = Math.PI / 2; root.add(ring);
-    return root;
-  }
-  if (typeKey === "splitter") {
-    const a = new THREE.Mesh(new THREE.OctahedronGeometry(.42,0), mat(color,.94));
-    const b = new THREE.Mesh(new THREE.OctahedronGeometry(.42,0), mat(color,.94));
-    a.position.x = -.28; b.position.x = .28;
-    addEdges(a); addEdges(b);
-    return root;
-  }
-  if (typeKey === "shield") {
-    addEdges(new THREE.Mesh(new THREE.IcosahedronGeometry(.55,0), mat(color,.94)));
-    const shell = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.DodecahedronGeometry(.9,0)), basic(white,.62));
-    root.add(shell);
-    return root;
-  }
-  if (typeKey === "bomber") {
-    addEdges(new THREE.Mesh(new THREE.DodecahedronGeometry(.68,0), mat(color,.95)));
-    const ring = new THREE.Mesh(new THREE.TorusGeometry(.78,.04,3,24), mat(red,.78));
-    ring.rotation.x = Math.PI / 2; root.add(ring);
-    return root;
-  }
-  const core = new THREE.Mesh(new THREE.OctahedronGeometry(.45,0), mat(color,.94));
-  const ring = new THREE.Mesh(new THREE.TorusGeometry(.62,.035,6,24), mat(color,.72));
-  const cage = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(.78,0)), basic(white,.32));
-  ring.rotation.x = Math.PI / 2;
-  root.add(core, ring, cage);
-  return root;
-}
-
-function makeEnemy(lane=Math.floor(rand(lanes)), z=farZ-rand(9,0), typeKey=chooseEnemyType(), child=false) {
-  const type = enemyTypes[typeKey] || enemyTypes.crawler;
-  const root = new THREE.Group();
-  root.add(enemyVisual(typeKey, type.color));
-  scene.add(root);
-  const speed = ((state.practice ? 4.2 : 5.3) + state.wave * .34 + rand(.95,0)) * type.speed * (child ? 1.08 : 1);
-  const enemy = { root, lane, baseLane:lane, z, speed, color:type.color, spin:rand(2.2,.8)*type.spin, typeKey, type, hp:type.hp, child, phase:rand(Math.PI*2), laneShift:0 };
-  enemies.push(enemy);
-  return enemy;
-}
-
-function waveProfile() {
-  if (state.wave >= 5) return { callout:"BOMBERS ON THE WEB", type:"bomber" };
-  if (state.wave >= 4) return { callout:"SHIELDS REQUIRE FOCUS", type:"shield" };
-  if (state.wave >= 3) return { callout:"SPLITTERS FORK LANES", type:"splitter" };
-  if (state.wave >= 2) return { callout:"WEAVERS CROSS LANES", type:"weaver" };
-  return { callout:"CRAWLERS INBOUND", type:"crawler" };
-}
-
-function spawnWavePattern() {
-  const profile = waveProfile();
-  const count = clamp(3 + Math.floor(state.wave / 2), 3, 7);
-  const offset = Math.floor(rand(lanes));
-  for (let i=0;i<count;i++) {
-    const gap = state.wave >= 5 ? 2 : 3;
-    const lane = (offset + i * gap) % lanes;
-    const z = farZ + 8 - i * (state.wave >= 4 ? 5 : 7);
-    makeEnemy(lane, z, profile.type);
-  }
-  toast(`${shapes[state.shapeIndex].name} web: ${profile.callout}`, 1.25);
-}
-
-function hitEnemy(enemy, shot) {
-  shot.life = 0;
-  enemy.hp--;
-  if (enemy.hp > 0) {
-    state.score += 35;
-    burst(enemy.root.position, white, 10);
-    toast("Shield cracked.", .55);
-    return;
-  }
-  enemy.dead = true;
-  state.combo++;
-  state.bestCombo = Math.max(state.bestCombo, state.combo);
-  const multiplier = 1 + Math.min(3, state.combo * .1);
-  const dangerBonus = enemy.z > nearZ - 14 ? 180 : 0;
-  const pts = Math.floor((enemy.type.points + state.wave * 15 + dangerBonus) * multiplier);
-  state.score += pts; state.zaps++;
-  state.pulse = Math.min(12, state.pulse + 1);
-  burst(enemy.root.position, enemy.color, enemy.typeKey === "bomber" ? 38 : 26);
-  if (enemy.typeKey === "bomber") addLaneScar(enemy.lane, dangerBonus ? 3.8 : 2.8);
-  toast(`${enemy.type.name}${dangerBonus ? " save" : ""} +${pts}  x${multiplier.toFixed(1)}`, .65);
-  if (enemy.typeKey === "splitter" && !enemy.child) {
-    makeEnemy((Math.round(enemy.lane)-1+lanes)%lanes, enemy.z-5, "crawler", true);
-    makeEnemy((Math.round(enemy.lane)+1)%lanes, enemy.z-5, "crawler", true);
+  if(state.mode==="play"){
+    controls(dt);
+    if(pointer.down || keys.has("Space")) fire();
+    spawnTick(dt);
+    for(const e of enemies) if(!e.dead) updateEnemy(e,dt);
+    updateShots(dt);
+    enemies=enemies.filter(e=>!e.dead);
+    shots=shots.filter(s=>!s.dead);
+    if(levelCleared()) startWarp();
+  } else if(state.mode==="dying"){
+    state.dieTimer-=dt;
+    for(const e of enemies) if(!e.dead && !e.onRim) updateEnemy(e,dt);
+    enemies=enemies.filter(e=>!e.dead);
+    if(state.dieTimer<=0) afterDeath();
+  } else if(state.mode==="warp"){
+    controls(dt);
+    updateWarp(dt);
   }
 }
 
-function usePulse() {
-  if (!state.running || state.ended || state.pulse < 12 || state.pulseCooldown > 0) return;
-  state.pulse = 0;
-  state.pulseCooldown = 1.6;
-  let cleared = 0;
-  for (const e of enemies) {
-    if (e.dead || e.z < farZ + 12) continue;
-    e.dead = true;
-    cleared++;
-    state.score += 75 + state.wave * 10;
-    burst(e.root.position, e.color, 18);
+/* ---------- render ---------- */
+function render(){
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+  ctx.fillStyle="#000"; ctx.fillRect(0,0,W,H);
+  ctx.save();
+  if(state.shakeT>0){ const s=state.shakeT*10; ctx.translate(rand(s,-s),rand(s,-s)); }
+  ctx.lineJoin="round"; ctx.lineCap="round"; ctx.globalCompositeOperation="lighter";
+
+  if(state.zapFlash>0){ ctx.globalAlpha=state.zapFlash*0.5; ctx.fillStyle=C.claw; ctx.fillRect(0,0,W,H); ctx.globalAlpha=1; }
+
+  drawWell();
+  drawSpikes();
+  for(const e of enemies){ if(!e.dead) drawEnemy(e); }
+  // shots
+  for(const s of shots){ const a=project(s.lane, s.depth-0.03), b=project(s.lane, s.depth+0.03); seg(a,b,C.shot,2.4,12); const c=project(s.lane,s.depth); ctx.fillStyle=C.shotTip; ctx.shadowColor=C.shotTip; ctx.shadowBlur=10; ctx.beginPath(); ctx.arc(c.x,c.y,2.4,0,TAU); ctx.fill(); }
+  drawSparks();
+  if(state.mode==="play") drawClaw(state.fireTimer>0.06);
+  else if(state.mode==="warp") drawClaw(true);
+
+  ctx.shadowBlur=0; ctx.globalCompositeOperation="source-over";
+  // centre message
+  if(state.msg){
+    ctx.globalCompositeOperation="lighter";
+    ctx.fillStyle=C.claw; ctx.shadowColor=C.claw; ctx.shadowBlur=16;
+    ctx.font=`700 ${Math.round(clamp(nearR*0.14,20,44))}px "Courier New",monospace`;
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText(state.msg, cx, Math.max(H*0.12, cy - nearR*1.06));
+    ctx.shadowBlur=0; ctx.globalCompositeOperation="source-over";
   }
-  const rim = lanePos(state.lane, nearZ - 2, 1);
-  addRing(rim, gold, 1.2, .72, 42);
-  addLightning(rim, cyan, 18);
-  toast(cleared ? `Vector pulse cleared ${cleared}.` : "Vector pulse armed the rim.", .9);
+  ctx.restore();
 }
 
-function shotArrowGeometry(visualLane, z, length=.9) {
-  const head = lanePos(visualLane, z - length*.55, .88);
-  const tail = lanePos(visualLane, z + length*.55, 1.02);
-  const left = lanePos(visualLane - .085, z - length*.08, .94);
-  const right = lanePos(visualLane + .085, z - length*.08, .94);
-  return new THREE.BufferGeometry().setFromPoints([tail,head, left,head, right,head]);
+/* ---------- loop ---------- */
+let last=0;
+function frame(ts){
+  const now=ts/1000; let dt=last?now-last:0; last=now; dt=Math.min(0.033,dt);
+  if(state.mode!=="title" && state.mode!=="over") update(dt);
+  render(); updateHud();
+  requestAnimationFrame(frame);
 }
 
-function fire() {
-  if (state.fireTimer > 0 || state.overheated) return;
-  state.fireTimer = .28;
-  state.heat = Math.min(1.15, state.heat + .18);
-  if (state.heat >= 1) {
-    state.overheated = true;
-    toast("Cannon overheated.", .8);
-  }
-  const lane = Math.round(state.lane + lanes * 1000) % lanes;
-  for (const [nudge, zOffset, color, speed] of [[0,0,cyan,82],[.045,.62,gold,76]]) {
-    const visualLane = lane + nudge;
-    const mesh = new THREE.LineSegments(shotArrowGeometry(visualLane, nearZ - 3.2 - zOffset, .88), basic(color, .95));
-    scene.add(mesh);
-    shots.push({ mesh, lane, visualLane, z:nearZ - 3.2 - zOffset, speed, life:1.08, length:.88 });
-  }
-  sfx("shoot");
+/* ---------- sizing ---------- */
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1,2);
+  W=window.innerWidth; H=window.innerHeight;
+  canvas.width=W*DPR; canvas.height=H*DPR;
+  cx=W/2; cy=H*0.55;
+  nearR=Math.min(W,H)*0.37;
 }
+window.addEventListener("resize",resize,{passive:true}); resize();
 
-function addBubble(pos, color, size=.55, life=.62, grow=12) {
-  life *= 1.65;
-  grow *= 1.05;
-  const bubble = new THREE.Mesh(
-    new THREE.IcosahedronGeometry(size,2),
-    new THREE.MeshBasicMaterial({ color, wireframe:true, transparent:true, opacity:.9, blending:THREE.AdditiveBlending, depthWrite:false })
-  );
-  bubble.position.copy(pos);
-  bubble.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
-  scene.add(bubble);
-  sparks.push({ mesh:bubble, life, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(8,-8)), grow });
+/* ---------- game start / over ---------- */
+function newGame(){
+  ensureAudio();
+  Object.assign(state,{ score:0, level:1, lives:3, zapCharge:1, zapUsed:0, msg:"", t:0 });
+  try{ state.hi=Math.max(state.hi, parseInt(localStorage.getItem(HI_KEY)||"0",10)||0); }catch{}
+  $("overlay").classList.add("hidden"); $("gameover").classList.add("hidden");
+  startLevel(1);
 }
-
-function addRing(pos, color, radius=.3, life=.36, grow=22) {
-  life *= 1.55;
-  radius *= 1.25;
-  const pts = [];
-  for (let i=0;i<=40;i++) {
-    const a = i / 40 * Math.PI * 2;
-    pts.push(new THREE.Vector3(Math.cos(a)*radius, Math.sin(a)*radius, 0));
-  }
-  const ring = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), basic(color, .85));
-  ring.position.copy(pos);
-  ring.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
-  scene.add(ring);
-  sparks.push({ mesh:ring, life, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(15,-15),rand(15,-15),rand(15,-15)), grow });
-}
-
-function addRays(pos, color, count=18) {
-  const pts = [];
-  for (let i=0;i<count;i++) {
-    const dir = new THREE.Vector3(rand(1,-1),rand(1,-1),rand(.8,-.8)).normalize();
-    pts.push(new THREE.Vector3(), dir.multiplyScalar(rand(1.8,.62)));
-  }
-  const rays = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), basic(color, .95));
-  rays.position.copy(pos);
-  scene.add(rays);
-  sparks.push({ mesh:rays, life:rand(.72,.38), vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(18,-18),rand(18,-18),rand(18,-18)), grow:rand(18,10) });
-}
-
-function addSpiral(pos, color) {
-  const pts = [];
-  for (let i=0;i<64;i++) {
-    const t = i / 63, a = t * Math.PI * 6;
-    pts.push(new THREE.Vector3(Math.cos(a)*t*1.3, Math.sin(a)*t*1.3, (t-.5)*1.05));
-  }
-  const spiral = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), basic(color, .88));
-  spiral.position.copy(pos);
-  spiral.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
-  scene.add(spiral);
-  sparks.push({ mesh:spiral, life:.78, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(20,-20),rand(20,-20),rand(20,-20)), grow:9 });
-}
-
-function addWireCage(pos, color) {
-  const shape = Math.random()>.5 ? new THREE.BoxGeometry(1.05,1.05,1.05) : new THREE.DodecahedronGeometry(.88,0);
-  const cage = new THREE.LineSegments(new THREE.EdgesGeometry(shape), basic(Math.random()>.5?white:color, .82));
-  cage.position.copy(pos);
-  cage.rotation.set(rand(Math.PI), rand(Math.PI), rand(Math.PI));
-  scene.add(cage);
-  sparks.push({ mesh:cage, life:.7, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(16,-16),rand(16,-16),rand(16,-16)), grow:10 });
-}
-
-function addLightning(pos, color, branches=8) {
-  const pts = [];
-  for (let b=0;b<branches;b++) {
-    const dir = new THREE.Vector3(rand(1,-1),rand(1,-1),rand(.7,-.7)).normalize();
-    let last = new THREE.Vector3();
-    for (let i=1;i<=4;i++) {
-      const next = dir.clone().multiplyScalar(i*.48).add(new THREE.Vector3(rand(.18,-.18),rand(.18,-.18),rand(.18,-.18)));
-      pts.push(last, next);
-      last = next;
-    }
-  }
-  const bolt = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), basic(Math.random()>.5?white:color, .95));
-  bolt.position.copy(pos);
-  scene.add(bolt);
-  sparks.push({ mesh:bolt, life:.5, vel:new THREE.Vector3(), spin:new THREE.Vector3(rand(8,-8),rand(8,-8),rand(8,-8)), grow:5 });
-}
-
-function addAtom(pos, color) {
-  addBubble(pos,color,.34,.5,16);
-  for (let i=0;i<3;i++) addRing(pos, i?white:color, .42+i*.1, .48, 20-i*3);
-}
-
-function burst(pos, color, count=14) {
-  sfx(color === red ? "damage" : "burst");
-  const variant = Math.floor(rand(8));
-  if (variant === 0) { addBubble(pos,color,.7,.7,12); addRing(pos,white,.44,.5,28); addRays(pos,color,count); }
-  if (variant === 1) { addBubble(pos,color,.34,.55,20); addBubble(pos,white,.82,.58,8); addSpiral(pos,color); }
-  if (variant === 2) { for (let i=0;i<6;i++) addRing(pos,i%2?white:color,.28+i*.13,.42+i*.04,20+i*8); addRays(pos,color,Math.ceil(count*.7)); }
-  if (variant === 3) { addWireCage(pos,color); addWireCage(pos,white); addRays(pos,color,count+10); }
-  if (variant === 4) { addSpiral(pos,color); addSpiral(pos,white); addBubble(pos,color,.58,.55,13); }
-  if (variant === 5) { addBubble(pos,color,.74,.62,14); addRing(pos,color,.38,.45,32); addRing(pos,white,.58,.46,20); addWireCage(pos,color); }
-  if (variant === 6) { addLightning(pos,color,count); addBubble(pos,white,.5,.42,18); }
-  if (variant === 7) { addAtom(pos,color); addLightning(pos,white,Math.ceil(count*.45)); }
-  for (let i=0;i<Math.ceil(count*.35);i++) {
-    const dir = new THREE.Vector3(rand(1,-1),rand(1,-1),rand(.8,-.8)).normalize();
-    const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), dir.clone().multiplyScalar(rand(.75,.25))]);
-    const shard = new THREE.LineSegments(geo, basic(Math.random()>.72?white:color, .78));
-    shard.position.copy(pos);
-    scene.add(shard);
-    sparks.push({ mesh:shard, life:rand(.36,.18), vel:dir.multiplyScalar(rand(24,10)), spin:new THREE.Vector3(rand(22,-22),rand(22,-22),rand(22,-22)), grow:0 });
-  }
-}
-
-function controls(dt) {
-  const firing = pointer.down || keys.has("Space");
-  const moveFactor = firing ? .38 : 1;
-  let move = 0;
-  if (keys.has("ArrowLeft") || keys.has("KeyA")) move -= 1;
-  if (keys.has("ArrowRight") || keys.has("KeyD")) move += 1;
-  move = clamp(move,-1,1);
-  if (move) {
-    state.targetLane = (state.targetLane + move * dt * 9.5 * moveFactor + lanes * 1000) % lanes;
-  }
-  let delta = ((state.targetLane - state.lane + lanes * 1.5) % lanes) - lanes * .5;
-  state.lane = (state.lane + delta * Math.min(1, dt*13*moveFactor) + lanes * 1000) % lanes;
-}
-
-function update(dt) {
-  if (!state.running || state.ended || !player) return;
-  state.t += dt;
-  if (state.t > state.messageUntil) ui.toast.classList.remove("show");
-  controls(dt);
-  state.fireTimer = Math.max(0, state.fireTimer - dt);
-  state.heat = Math.max(0, state.heat - dt * (state.overheated ? .34 : .18));
-  if (state.overheated && state.heat <= .32) {
-    state.overheated = false;
-    toast("Cannon cooled.", .55);
-  }
-  state.pulseCooldown = Math.max(0, state.pulseCooldown - dt);
-  if (pointer.down || keys.has("Space")) fire();
-  state.spawnTimer -= dt;
-  const spawnRate = Math.max(.82, (state.practice?1.75:1.28) - state.wave*.035);
-  if (state.spawnTimer <= 0) { makeEnemy(); state.spawnTimer = spawnRate + rand(.65,0); }
-  const nextWave = 1 + Math.floor(state.score / 9000);
-  if (nextWave !== state.wave) {
-    state.wave = nextWave;
-    const nextShape = (state.wave - 1) % shapes.length;
-    if (nextShape !== state.shapeIndex) {
-      state.shapeIndex = nextShape;
-      makeWeb();
-      spawnWavePattern();
-    } else {
-      spawnWavePattern();
-    }
-  }
-
-  const lane = Math.round(state.lane + lanes * 1000) % lanes;
-  const playerPos = lanePos(state.lane, nearZ + .35, 1.03);
-  player.position.copy(playerPos);
-  player.rotation.z = angleFor(state.lane) + Math.PI / 2;
-  player.rotation.y = Math.sin(state.t*8) * .08;
-
-  for (const s of shots) {
-    s.z -= s.speed * dt;
-    s.life -= dt;
-    s.mesh.geometry.dispose();
-    s.mesh.geometry = shotArrowGeometry(s.visualLane, s.z, s.length);
-  }
-
-  for (const e of enemies) {
-    e.z += e.speed * dt;
-    if (e.typeKey === "weaver") {
-      e.laneShift += dt * (1.65 + state.wave * .04);
-      e.lane = (e.baseLane + Math.sin(e.laneShift + e.phase) * 1.35 + lanes * 1000) % lanes;
-    }
-    const scale = .2 + .8 * ((e.z - farZ) / (nearZ - farZ));
-    e.root.position.copy(lanePos(e.lane, e.z, clamp(scale,.2,1.04)));
-    e.root.rotation.z += e.spin * dt;
-    e.root.rotation.x += (e.typeKey === "bomber" ? 2.4 : .45) * dt;
-    e.root.scale.setScalar((e.child ? .58 : .72) + scale*.42);
-    for (const s of shots) {
-      const enemyLane = Math.round(e.lane + lanes * 1000) % lanes;
-      if (s.life > 0 && e.z > s.z - 3.5 && e.z < s.z + 4 && enemyLane === s.lane) {
-        hitEnemy(e, s);
-      }
-    }
-    if (!e.dead && e.z > nearZ - .4) {
-      const dist = Math.min(Math.abs(e.lane-lane), lanes-Math.abs(e.lane-lane));
-      e.dead = true;
-      state.combo = 0;
-      const bomber = e.typeKey === "bomber";
-      state.hull -= state.practice ? (dist<=1?6:2) + (bomber?4:0) : (dist<=1?14:5) + (bomber?8:0);
-      burst(e.root.position, red, bomber?48:dist<=1?34:16);
-      if (bomber) addLaneScar(e.lane, 4.2);
-      toast(bomber ? "Bomber breach." : dist<=1 ? "Rim impact." : "Web damage.", .9);
-      if (state.hull <= 0) endRun();
-    }
-  }
-
-  for (const h of hazards) {
-    h.life -= dt;
-    h.tick -= dt;
-    h.mesh.material.opacity = Math.max(.08, h.life / h.maxLife * .82);
-    const dist = Math.min(Math.abs(h.lane-lane), lanes-Math.abs(h.lane-lane));
-    if (dist <= 0 && h.tick <= 0) {
-      h.tick = .55;
-      state.hull -= state.practice ? 2 : 4;
-      state.combo = 0;
-      toast("Scarred lane.", .45);
-      if (state.hull <= 0) endRun();
-    }
-  }
-
-  for (const p of sparks) {
-    p.life -= dt;
-    p.mesh.position.addScaledVector(p.vel, dt);
-    p.mesh.rotation.x += p.spin.x*dt; p.mesh.rotation.y += p.spin.y*dt; p.mesh.rotation.z += p.spin.z*dt;
-    if (p.grow) p.mesh.scale.addScalar(p.grow * dt);
-    p.mesh.material.opacity = Math.max(0,p.life);
-  }
-  prune(shots, o=>o.life>0 && o.z>farZ-10);
-  prune(enemies, o=>!o.dead && o.z<nearZ+5);
-  prune(sparks, o=>o.life>0);
-  prune(hazards, o=>o.life>0);
-}
-
-function prune(list, keep) {
-  for (let i=list.length-1;i>=0;i--) if (!keep(list[i])) { scene.remove(list[i].root || list[i].mesh || list[i]); list.splice(i,1); }
-}
-
-function updateCamera() {
-  camera.position.set(0,0,innerWidth < 760 ? 39 : 29);
-  camera.lookAt(0,0,-35);
-}
-
-function updateUi() {
-  const multiplier = 1 + Math.min(3, state.combo * .1);
-  const heat = Math.round(clamp(state.heat,0,1) * 100);
-  ui.status.textContent = `Hull ${Math.max(0,Math.round(state.hull))} | Heat ${String(heat).padStart(2,"0")}${state.overheated ? "!" : ""} | x${multiplier.toFixed(1)}`;
-  ui.wave.textContent = `Wave ${String(state.wave).padStart(2,"0")} | ${shapes[state.shapeIndex].name}`;
-  ui.score.textContent = `Score ${String(Math.floor(state.score)).padStart(6,"0")}`;
-  const ready = state.running && state.pulse >= 12 && state.pulseCooldown <= 0;
-  ui.pulse.disabled = !ready;
-  ui.pulse.classList.toggle("ready", ready);
-  ui.pulse.textContent = ready ? "Pulse ready" : `Pulse ${Math.floor(state.pulse)}/12`;
-}
-
-function endRun() {
-  state.ended=true; state.running=false;
-  pendingScore = Math.max(0, Math.floor(state.score));
-  ui.overTitle.innerHTML = "WEB<br>COLLAPSED";
-  ui.overText.textContent = `Score ${Math.floor(state.score).toLocaleString()} | Zaps ${state.zaps} | Wave ${state.wave} | Best combo ${state.bestCombo}.`;
-  $("scoreForm").classList.toggle("hidden", pendingScore <= 0);
-  $("submitScore").disabled = false;
-  $("submitScore").textContent = "Save Score";
-  ui.over.classList.remove("hidden");
+function endGame(){
+  state.mode="over";
+  pendingScore=Math.max(0,Math.floor(state.score));
+  $("overTitle").textContent="GAME OVER";
+  $("overText").textContent = `SCORE ${Math.floor(state.score).toLocaleString()}  ·  LEVEL ${state.level}`;
+  $("scoreForm").classList.toggle("hidden", pendingScore<=0);
+  $("submitScore").disabled=false; $("submitScore").textContent="Save Score";
+  $("gameover").classList.remove("hidden");
   showScores("overScores");
 }
 
-function aimFromPointer(e) {
-  if (!state.running || ui.overlay.contains(e.target) || ui.over.contains(e.target)) return;
-  const r = canvas.getBoundingClientRect();
-  const x = e.clientX - (r.left + r.width / 2);
-  const y = e.clientY - (r.top + r.height / 2);
-  if (Math.hypot(x,y) < 24) return;
-  const angle = Math.atan2(-y,x);
-  state.targetLane = ((angle + Math.PI / 2) / (Math.PI * 2) * lanes + lanes * 1000) % lanes;
+/* ---------- global scores (unchanged API) ---------- */
+function cleanInitials(v){ return String(v||"AAA").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,3).padEnd(3,"A"); }
+function localScores(){ try{ return JSON.parse(localStorage.getItem(LOCAL_SCORE_KEY)||"[]"); }catch{ return []; } }
+function saveLocalScore(entry){ const rows=localScores(); rows.push(entry); rows.sort((a,b)=>b.score-a.score); localStorage.setItem(LOCAL_SCORE_KEY, JSON.stringify(rows.slice(0,SCORE_LIMIT))); }
+function normalizeScoreRows(data){ const rows=Array.isArray(data)?data:(data&&data.scores||[]); return rows.map(r=>({ name:cleanInitials(r.initials||r.name||"???"), score:Math.max(0,Math.floor(Number(r.score)||0)) })).sort((a,b)=>b.score-a.score).slice(0,SCORE_LIMIT); }
+async function fetchGlobalScores(force){
+  if(globalScores && !force) return globalScores;
+  globalScoreStatus="loading"; const ctrl=new AbortController(); const timer=setTimeout(()=>ctrl.abort(),7000);
+  try{ const r=await fetch(`${SCORE_API}?limit=${SCORE_LIMIT}`,{cache:"no-store",signal:ctrl.signal}); globalScores=normalizeScoreRows(await r.json()); globalScoreStatus="ready"; }
+  catch{ globalScoreStatus="offline"; } finally{ clearTimeout(timer); }
+  return globalScores;
 }
+async function submitGlobalScore(name,score){
+  lastSubmit={name,score}; const ctrl=new AbortController(); const timer=setTimeout(()=>ctrl.abort(),7000);
+  try{ await fetch(SCORE_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initials:name,score}),signal:ctrl.signal}); globalScores=null; await fetchGlobalScores(true); return true; }
+  catch{ globalScoreStatus="offline"; return false; } finally{ clearTimeout(timer); }
+}
+function scoreRows(rows,empty){ if(!rows||!rows.length) return `<div class="scoreMsg">${empty}</div>`; return rows.slice(0,SCORE_LIMIT).map((row,i)=>{ const me=lastSubmit&&row.name===lastSubmit.name&&row.score===lastSubmit.score; return `<div class="scoreRow ${me?"me":""}"><b>${i+1}.</b><span>${row.name}</span><b>${row.score.toLocaleString()}</b></div>`; }).join(""); }
+function renderScores(id){ const t=$(id); if(!t) return; const g=globalScoreStatus==="offline"?`<div class="scoreMsg">Global scores offline. Local scores saved.</div>`:globalScores?scoreRows(globalScores,"No global scores yet."):`<div class="scoreMsg">Reading global scores...</div>`; t.innerHTML=`<div class="scoreHead"><span>Global Scores</span><span>Score</span></div>${g}<div class="scoreHead" style="margin-top:10px"><span>Local Scores</span><span>Score</span></div>${scoreRows(localScores(),"No local scores yet.")}`; }
+function showScores(id){ renderScores(id); fetchGlobalScores().then(()=>renderScores(id)); }
 
-function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
-addEventListener("resize", resize, { passive:true }); resize();
-addEventListener("keydown", e => { keys.add(e.code); if(["ArrowLeft","ArrowRight","Space","Enter","KeyE"].includes(e.code)) e.preventDefault(); if(e.code==="Enter"&&!state.running) reset(false); if(e.code==="KeyE") usePulse(); });
-addEventListener("keyup", e => keys.delete(e.code));
-addEventListener("pointerdown", e=>{ pointer.down=true; ensureAudio(); aimFromPointer(e); }, { passive:true });
-addEventListener("pointermove", e=>{ if(pointer.down) aimFromPointer(e); }, { passive:true });
-addEventListener("pointerup", ()=>{ pointer.down=false; }, { passive:true });
-addEventListener("pointercancel", ()=>{ pointer.down=false; }, { passive:true });
-$("startBtn").addEventListener("click",()=>{ ensureAudio(); reset(false); });
-$("practiceBtn").addEventListener("click",()=>{ ensureAudio(); reset(true); });
-$("againBtn").addEventListener("click",()=>{ ensureAudio(); reset(state.practice); });
-$("menuBtn").addEventListener("click",()=>{ cleanup(); state.running=false; state.ended=false; ui.over.classList.add("hidden"); ui.overlay.classList.remove("hidden"); showScores("titleScores"); });
-$("pulseBtn").addEventListener("click",()=>{ ensureAudio(); usePulse(); });
+/* ---------- listeners ---------- */
+window.addEventListener("keydown",e=>{
+  keys.add(e.code);
+  if(["ArrowLeft","ArrowRight","Space","Enter","KeyZ"].includes(e.code)) e.preventDefault();
+  if(e.code==="Enter" && (state.mode==="title"||state.mode==="over")) newGame();
+  if(e.code==="KeyZ") useZap();
+});
+window.addEventListener("keyup",e=>keys.delete(e.code));
+window.addEventListener("pointerdown",e=>{ pointer.down=true; ensureAudio(); aimFromPointer(e); },{passive:true});
+window.addEventListener("pointermove",e=>{ if(pointer.down) aimFromPointer(e); },{passive:true});
+window.addEventListener("pointerup",()=>{ pointer.down=false; },{passive:true});
+window.addEventListener("pointercancel",()=>{ pointer.down=false; },{passive:true});
+$("startBtn").addEventListener("click",newGame);
+$("againBtn").addEventListener("click",newGame);
+$("menuBtn").addEventListener("click",()=>{ state.mode="title"; $("gameover").classList.add("hidden"); $("overlay").classList.remove("hidden"); showScores("titleScores"); });
+$("zapBtn").addEventListener("click",()=>{ ensureAudio(); useZap(); });
 $("scoresBtn").addEventListener("click",()=>showScores("titleScores"));
 $("submitScore").addEventListener("click",async()=>{
-  if (!pendingScore) return;
-  const name = cleanInitials($("initials").value);
-  const score = pendingScore;
-  saveLocalScore({ name, score });
-  $("submitScore").disabled = true;
-  $("submitScore").textContent = "Saving";
-  await submitGlobalScore(name, score);
-  pendingScore = 0;
-  $("scoreForm").classList.add("hidden");
-  showScores("overScores");
+  if(!pendingScore) return;
+  const name=cleanInitials($("initials").value), score=pendingScore;
+  saveLocalScore({name,score}); $("submitScore").disabled=true; $("submitScore").textContent="Saving";
+  await submitGlobalScore(name,score); pendingScore=0; $("scoreForm").classList.add("hidden"); showScores("overScores");
 });
 
-scene.add(new THREE.AmbientLight(0x9fdcff,.58));
-const key = new THREE.DirectionalLight(0xffffff,1.25); key.position.set(5,8,12); scene.add(key);
-const rim = new THREE.PointLight(0xff3bd1,2.8,80); rim.position.set(-8,7,15); scene.add(rim);
-makeWeb(); makeStars(); updateCamera();
-function animate(){ const dt=Math.min(.033, clock.getDelta()); update(dt); updateCamera(); updateUi(); renderer.render(scene,camera); requestAnimationFrame(animate); }
-animate();
+/* ---------- boot ---------- */
+try{ state.hi=parseInt(localStorage.getItem(HI_KEY)||"0",10)||0; }catch{}
 showScores("titleScores");
-const params = new URLSearchParams(location.search);
-if (params.has("autostart")) reset(params.has("practice"));
+requestAnimationFrame(frame);
+window.__vt = { state, enemies:()=>enemies, shots:()=>shots, spikes:()=>spikes, sparks:()=>sparks, shapes, newGame, useZap, startWarp, project, update, render };
+const params=new URLSearchParams(location.search);
+if(params.has("autostart")) newGame();
 </script>
 </body>
 </html>
