@@ -407,8 +407,36 @@
     bind('t-jump', 'jump'); bind('t-fire', 'fire'); bind('t-morph', 'morph'); bind('t-switch', 'switch');
     bind('t-bomb', 'bomb'); bind('t-pause', 'pause');
     // show touch UI on touch devices
-    if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (isTouch) {
       const tc = document.getElementById('touch'); if (tc) tc.style.display = 'flex';
+      // fullscreen + landscape lock (Android requires fullscreen before lock)
+      const fs = document.getElementById('fsbtn');
+      if (fs) {
+        fs.style.display = 'block';
+        fs.addEventListener('click', async () => {
+          try {
+            if (!document.fullscreenElement) {
+              await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+              if (screen.orientation && screen.orientation.lock)
+                await screen.orientation.lock('landscape').catch(() => {});
+              fs.textContent = '🗗';
+            } else {
+              await document.exitFullscreen();
+              fs.textContent = '⛶';
+            }
+          } catch (e) {}
+        });
+      }
+      // tapping the playfield acts as START/confirm on menu screens
+      display.addEventListener('pointerdown', () => {
+        if (mode === 'title' || mode === 'gameover' || mode === 'win' || mode === 'intro' || mode === 'stageclear') {
+          input.setTouch('start', true);
+          setTimeout(() => input.setTouch('start', false), 60);
+        }
+      });
+      // block long-press menus / double-tap zoom inside the stage
+      document.getElementById('stage').addEventListener('contextmenu', (e) => e.preventDefault());
     }
   }
   wireTouch();
