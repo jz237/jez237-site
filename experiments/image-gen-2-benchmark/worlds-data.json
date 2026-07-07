@@ -1646,5 +1646,25 @@
       "continuity": "Preserves Lumenreef turquoise shelf seas, wet basalt islets, glass-coral pontoons, lensleaf rain awnings, shell-bell timing, kelpglass footbridges, and non-human amphibious tide engineers while continuing the late-bell story.",
       "entryDescription": "At Lowbell Harbor Market, families and ferry workers notice causeway stalls falling out of rhythm as reef paths vanish early after the first late shell-bell."
     }
+  },
+  {
+    "id": "2026-07-07-weekly-world-image-lumenreef-causeway-rain-lens-cistern-che",
+    "title": "Lumenreef Causeway: Rain Lens Cistern Check",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; exact PNG source verified non-empty before world-only archive append; advances Lumenreef story order 3.",
+    "prompt": "Create a finished square photorealistic documentary image from the weekly world Lumenreef Causeway, titled \"Rain Lens Cistern Check\". Show a realistic lived-in daily-life view, not a poster, not an infographic, not a cinematic scene: under lensleaf terraces after the second late shell-bell, rain-cistern stewards discover that suspended freshwater lenses are sloshing against their timing marks and no longer matching the shell-bell rhythm. Preserve Lumenreef Causeway canon: warm turquoise shelf seas, black basalt islets, buoyant glass-coral causeways, floating glass-coral mats, transparent lens leaves focusing rainlight, shell-bell transit signals, rainwater lens cisterns, translucent tide-gate membranes, mirror-flat sky-tide lagoons, violet under-reef glow in gaps, saffron float pods, teal reed fans, pearly rain curtains, and rain-polished copper hardware. The inhabitants are non-human amphibious tide engineers, not humanoids: low horizontal blue-green pebble-textured bodies, six jointed walking limbs, two delicate manipulator arms, translucent neck gill fans pulsing alarm colors, broad mirrored eyes, flexible tail rudders, and shell-bell throat sacs. Show cistern stewards working practically: one tide engineer holds a shell-ceramic dip gauge beside a clear suspended water lens, one taps a copper timing bowl, one adjusts a milky lensleaf resin valve, and two juveniles watch from a safe raised glass-coral footbridge while a steward gestures them back from a sloshing basin. Include dense tactile cistern detail: transparent cistern basins nested in glass-coral cradles, floating freshwater lenses visibly tilted and wobbling, copper gauges with no readable numbers, shell tools, pearly ceramic measuring cups, basalt anchor pins, braided kelpglass strain lines, wet maintenance mats, bead-like water droplets, salt crystals, worn shell-ceramic rims, lensleaf awning ribs, tide-marker scratches without text, small shell-bell resonator cups, shallow overflow channels catching rain, and caustic turquoise light pooling on black basalt. Composition: low documentary camera angle from beside a wet cistern platform, three-quarter view through layered transparent basins toward lensleaf terraces and a distant shell-bell tower, bright overcast rainlight, natural depth of field, inspectable materials, believable scale and civic maintenance urgency. No humans, no mermaids, no generic Atlantis fantasy, no dry desert, no mushrooms, no cyberpunk neon, no medieval styling, no brand logos, no readable text, no watermark.\n\nReusable weekly-world template: Show a realistic photographed daily-life storybeat in [WEEKLY_WORLD], preserving the world bible, materials, inhabitants, transit/infrastructure, and previous continuity while advancing [STORY_BEAT] through practical visible action instead of cinematic spectacle.\n\nExample substitution: [WEEKLY_WORLD] = Lumenreef Causeway; [STORY_BEAT] = rain-cistern stewards find freshwater lenses sloshing against their timing marks after the second late bell.",
+    "image": "images/2026-07-07-weekly-world-image-lumenreef-causeway-rain-lens-cistern-che.jpg",
+    "thumb": "thumbs/2026-07-07-weekly-world-image-lumenreef-causeway-rain-lens-cistern-che.webp",
+    "color": "#6e7b7c",
+    "date": "2026-07-07",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago of buoyant glass-coral causeways, shell-bell tide signals, suspended freshwater lenses, and non-human amphibious tide engineers living around warm turquoise shelf seas and black basalt islets.",
+      "continuity": "Continues The Causeway That Rang Late after Lowbell Harbor Market: the shell-bell delay now shows in rain-cistern measurements while the same Lumenreef tide engineers, lensleaf terraces, suspended water lenses, and shell-bell infrastructure remain consistent.",
+      "entryDescription": "Story beat 3: rain-cistern stewards find freshwater lenses sloshing against their timing marks after the second late bell."
+    }
   }
 ]
