@@ -1295,35 +1295,83 @@
     // ---- HUD --------------------------------------------------------------
     function drawHUD(s) {
       const p = s.player;
+      const t = performance.now() / 1000;
       bx.save();
-      // top bar backdrop
-      bx.fillStyle = 'rgba(4,6,16,0.55)'; bx.fillRect(0, 0, VIEW_W, 26);
-      bx.fillStyle = 'rgba(120,180,255,0.25)'; bx.fillRect(0, 26, VIEW_W, 1);
-      // energy bar
-      bx.fillStyle = '#12233a'; bx.fillRect(8, 7, 120, 10);
-      const eg = bx.createLinearGradient(8, 0, 128, 0);
-      eg.addColorStop(0, '#ff4b4b'); eg.addColorStop(0.5, '#ffd23f'); eg.addColorStop(1, '#54e36b');
-      bx.fillStyle = eg; bx.fillRect(9, 8, Math.max(0, (p.energy / p.maxEnergy) * 118), 8);
-      bx.strokeStyle = '#9fb4c9'; bx.lineWidth = 1; bx.strokeRect(8, 7, 120, 10);
-      bx.fillStyle = '#cfe0ff'; bx.font = '7px monospace'; bx.textAlign = 'left'; bx.fillText('ENERGY', 10, 24);
+      // top bar: soft gradient panel with a glowing accent underline
+      const hb = bx.createLinearGradient(0, 0, 0, 28);
+      hb.addColorStop(0, 'rgba(6,10,26,0.82)'); hb.addColorStop(1, 'rgba(6,10,26,0.35)');
+      bx.fillStyle = hb; bx.fillRect(0, 0, VIEW_W, 28);
+      bx.fillStyle = 'rgba(108,180,255,0.5)'; bx.fillRect(0, 27, VIEW_W, 1);
+      bx.fillStyle = 'rgba(108,180,255,0.15)'; bx.fillRect(0, 28, VIEW_W, 2);
 
-      // lives
-      bx.fillStyle = '#8be9ff'; bx.font = 'bold 10px monospace';
-      bx.fillText('♥ ' + p.lives, 140, 16);
-      // weapon indicator
+      // ---- energy bar: segmented, glowing, pulses when low ----
+      const ex = 8, ey = 7, ew = 120, eh = 10;
+      const frac = Math.max(0, p.energy / p.maxEnergy);
+      const low = p.energy < 30;
+      bx.fillStyle = 'rgba(6,20,34,0.9)'; roundRect(ex, ey, ew, eh, 3); bx.fill();
+      const eg = bx.createLinearGradient(ex, 0, ex + ew, 0);
+      eg.addColorStop(0, '#ff4b4b'); eg.addColorStop(0.5, '#ffd23f'); eg.addColorStop(1, '#54e36b');
+      bx.save();
+      roundRect(ex + 1, ey + 1, ew - 2, eh - 2, 2); bx.clip();
+      bx.fillStyle = eg;
+      const fillW = frac * (ew - 2);
+      bx.globalAlpha = low ? 0.6 + 0.4 * Math.sin(t * 8) : 1;
+      bx.fillRect(ex + 1, ey + 1, fillW, eh - 2);
+      // segment ticks
+      bx.globalAlpha = 0.5; bx.fillStyle = 'rgba(6,20,34,0.9)';
+      for (let i = 1; i < 10; i++) bx.fillRect(ex + 1 + i * (ew - 2) / 10, ey + 1, 1, eh - 2);
+      // top gloss
+      bx.globalAlpha = 0.25; bx.fillStyle = '#ffffff'; bx.fillRect(ex + 1, ey + 1, fillW, 2);
+      bx.restore();
+      bx.strokeStyle = low ? '#ff6b6b' : 'rgba(159,180,201,0.8)'; bx.lineWidth = 1;
+      roundRect(ex, ey, ew, eh, 3); bx.stroke();
+      bx.fillStyle = 'rgba(207,224,255,0.85)'; bx.font = '7px monospace'; bx.textAlign = 'left';
+      bx.fillText('ENERGY', ex + 2, ey + 17);
+
+      // ---- lives ----
+      bx.textAlign = 'left'; bx.font = 'bold 10px monospace';
+      bx.save(); bx.shadowColor = '#ff5d7a'; bx.shadowBlur = 5;
+      bx.fillStyle = '#ff8fa5'; bx.fillText('♥', 140, 16);
+      bx.restore();
+      bx.fillStyle = '#e6f0ff'; bx.fillText(String(p.lives), 152, 16);
+
+      // ---- weapon pill w/ level dots ----
       const wcol = { spread: '#ffd23f', beam: '#6cf3ff', bounce: '#ff7ad9' };
-      bx.fillStyle = wcol[p.weapon]; bx.fillText(D.WEAPONS[p.weapon].name + ' ' + p.weapons[p.weapon], 185, 16);
-      // bombs / lines (kept clear of the centered timer)
-      bx.fillStyle = '#8be9ff'; bx.fillText('❄' + p.bombs, 360, 16);
-      bx.fillStyle = '#c6ff5d'; bx.fillText('⌇' + p.lines, 392, 16);
-      // gems
-      bx.fillStyle = '#9be6ff'; bx.textAlign = 'right'; bx.fillText('◆ ' + p.gems, VIEW_W - 96, 16);
-      // score
-      bx.fillStyle = '#fff'; bx.fillText(String(p.score).padStart(7, '0'), VIEW_W - 8, 16);
-      // timer
+      const wc = wcol[p.weapon] || '#fff';
+      const wx = 172, ww = 92;
+      bx.fillStyle = 'rgba(255,255,255,0.06)'; roundRect(wx, 5, ww, 18, 4); bx.fill();
+      bx.strokeStyle = wc; bx.globalAlpha = 0.55; bx.lineWidth = 1; roundRect(wx, 5, ww, 18, 4); bx.stroke(); bx.globalAlpha = 1;
+      bx.fillStyle = wc; bx.font = 'bold 9px monospace'; bx.textAlign = 'left';
+      bx.fillText(D.WEAPONS[p.weapon].name, wx + 6, 16);
+      const lvl = p.weapons[p.weapon];
+      for (let i = 0; i < 3; i++) { bx.fillStyle = i < lvl ? wc : 'rgba(255,255,255,0.2)';
+        bx.beginPath(); bx.arc(wx + ww - 20 + i * 6, 14, 2, 0, 7); bx.fill(); }
+
+      // ---- bombs / lines (icons kept clear of the centered timer) ----
+      bx.font = 'bold 10px monospace'; bx.textAlign = 'left';
+      bx.save(); bx.shadowColor = '#8be9ff'; bx.shadowBlur = 4;
+      bx.fillStyle = '#8be9ff'; bx.fillText('❄' + p.bombs, 356, 16);
+      bx.fillStyle = '#c6ff5d'; bx.shadowColor = '#c6ff5d'; bx.fillText('⌇' + p.lines, 392, 16);
+      bx.restore();
+
+      // ---- gems ----
+      bx.textAlign = 'right';
+      bx.save(); bx.shadowColor = '#9be6ff'; bx.shadowBlur = 5; bx.fillStyle = '#9be6ff';
+      bx.fillText('◆ ' + p.gems, VIEW_W - 96, 16); bx.restore();
+
+      // ---- score ----
+      bx.fillStyle = '#ffffff'; bx.font = 'bold 11px monospace';
+      bx.fillText(String(p.score).padStart(7, '0'), VIEW_W - 8, 16);
+
+      // ---- timer pill (pulses red when low) ----
       const mm = Math.floor(s.time / 60), ss = Math.floor(s.time % 60);
-      bx.fillStyle = s.time < 30 ? '#ff5d5d' : '#cfe0ff'; bx.textAlign = 'center';
-      bx.fillText(mm + ':' + String(ss).padStart(2, '0'), VIEW_W / 2, 16);
+      const tLow = s.time < 30;
+      const tstr = mm + ':' + String(ss).padStart(2, '0');
+      bx.textAlign = 'center'; bx.font = 'bold 11px monospace';
+      if (tLow) { bx.save(); bx.shadowColor = '#ff3b3b'; bx.shadowBlur = 6 + Math.sin(t * 10) * 4; }
+      bx.fillStyle = tLow ? '#ff6b6b' : '#dfe8ff';
+      bx.fillText(tstr, VIEW_W / 2, 16);
+      if (tLow) bx.restore();
 
       // boss HP bar (bottom center) while the fight is live
       const b = s.boss;
