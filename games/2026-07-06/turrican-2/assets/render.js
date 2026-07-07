@@ -34,6 +34,40 @@
       }
       return bossImg[key] || null;
     }
+    // near-parallax painted foreground silhouette strips (one per world)
+    const nearImg = {};
+    function getNearImg(world) {
+      if (nearImg[world] === undefined) {
+        nearImg[world] = null;
+        const im = new Image();
+        im.onload = () => { nearImg[world] = im; };
+        im.onerror = () => { nearImg[world] = false; };
+        im.src = `assets/img/near${world}.png?v=${D.VERSION}`;
+      }
+      return nearImg[world] || null;
+    }
+    function drawNear(cam) {
+      const im = getNearImg(level.world);
+      if (!im) return false;
+      const dw = VIEW_W * 1.25;
+      const dh = dw * (im.height / im.width);
+      const y = Math.round(VIEW_H * 0.99 - dh);   // bottom-anchored in screen space
+      const scroll = cam.x * 0.5;                  // faster than the far plate (0.26)
+      const idx0 = Math.floor(scroll / dw);
+      bx.save();
+      bx.globalAlpha = 0.92;
+      for (let k = -1; ; k++) {
+        const wi = idx0 + k;
+        const sx = wi * dw - scroll;
+        if (sx >= VIEW_W) break;
+        if (sx + dw <= 0) continue;
+        const flip = (((wi % 2) + 2) % 2) === 1;
+        if (flip) { bx.save(); bx.translate(sx + dw, y); bx.scale(-1, 1); bx.drawImage(im, 0, 0, dw, dh); bx.restore(); }
+        else bx.drawImage(im, sx, y, dw, dh);
+      }
+      bx.restore();
+      return true;
+    }
 
     function loadBg(src) {
       const img = new Image();
@@ -243,7 +277,8 @@
       // dark grounding foreground ridge (lower alpha) — the plate supplies the
       // far/mid depth. Without art, draw the full procedural stack.
       if (art) {
-        const a = 0.5;
+        if (drawNear(cam)) return;         // painted near-parallax strip
+        const a = 0.5;                      // fallback procedural ridge until it loads
         if (w === 1) drawRidge(cam.x * 0.68, VIEW_H * 0.88, 34, pal.near, a);
         else if (w === 2) drawRidge(cam.x * 0.7, VIEW_H * 0.9, 46, pal.near, a);
         else if (w === 3) drawTruss(cam.x * 0.55, VIEW_H * 0.82, pal.near, a * 0.7);
