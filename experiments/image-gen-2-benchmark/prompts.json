@@ -4219,5 +4219,45 @@
       "description": "A believable Lumenreef shelf-marsh grazer with rain-collecting glassback plates, basalt-gripping feet, paddle limbs, and algae-scraping mouthparts.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-07-hybrid-creature-infographic-leafscale-tide-pangodragon-deve",
+    "title": "Leafscale Tide Pangodragon: Development Map",
+    "tests": "Hybrid creature development map for a fictional leafy seadragon + Sunda pangolin strain; non-actionable source-trait, stage, anatomy, macro, habitat, and scale panels.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional two-source hybrid creature named \"Leafscale Tide Pangodragon\", using exactly two source organisms: leafy seadragon + Sunda pangolin. Make it a landscape scientific wall chart assembled on a bright coastal field-station bench with shallow seawater trays, eelgrass swatches, nonbranded shell calipers, wet dark wood, glass sample dishes, and restrained concise fictional labels. Include these visual information layers: a source-trait map showing leafy seadragon contributes a vertical S-curved drifting body axis, leaf-like camouflage appendages, tubular snout, translucent fin ribbons, and seaweed-brown green mottling, while Sunda pangolin contributes overlapping keratin scale armor, a strong curled tail, clawed digging/gripping forelimbs, compact mammal torso weight, and a long sticky feeding tongue; a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel; macro texture windows for wet leaf-fins, overlapping bronze keratin scales, tubular snout pores, translucent fin rays, curled tail edge, and algae caught between scale plates; habitat swatches for eelgrass meadow, mangrove root shadow, sandy tide flat, pale shell gravel, amber brackish water, and rain-dark driftwood; plus a small field-context scale vignette with curled track marks in wet sand beside a broken crab shell, eelgrass blades, a hand-sized shell caliper, and a shallow observation tray. The adult phenotype must be non-humanoid and visibly combine both sources: a waist-long amphibious reef-edge clinger with an upright S-curve like a leafy seadragon, four short clawed pangolin-like limbs gripping driftwood and mangrove roots, a heavy curled prehensile tail plated in bronze scales, a narrow tubular seadragon snout, translucent leaf-like fins sprouting from shoulders, spine, and tail margins, mottled olive brown seaweed camouflage over scale armor, small dark mammal eyes, and a thin tongue reaching toward tiny shore invertebrates. Use clean scientific color coding, photorealistic specimen lighting, tactile wet bench detail, restrained arrows, readable but minimal fictional labels, and clear panel hierarchy. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], preserving source traits visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Leafscale Tide Pangodragon; [SOURCE_A] = leafy seadragon; [SOURCE_B] = Sunda pangolin; [HABITAT] = brackish mangrove-root eelgrass edge after rain; adult phenotype = waist-long upright S-curved amphibious clinger with four pangolin-like clawed limbs, bronze scale armor, curled prehensile tail, tubular seadragon snout, translucent leaf-like fin ribbons, olive-brown seaweed camouflage, small dark mammal eyes, and a thin feeding tongue.",
+    "image": "images/2026-07-07-hybrid-creature-infographic-leafscale-tide-pangodragon-deve.jpg",
+    "thumb": "thumbs/2026-07-07-hybrid-creature-infographic-leafscale-tide-pangodragon-deve.webp",
+    "color": "#78705f",
+    "date": "2026-07-07",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Leafscale Tide Pangodragon",
+      "imageKind": "infographic",
+      "description": "A fictional amphibious reef-edge clinger combining leafy seadragon camouflage and pangolin scale armor.",
+      "continuity": "Same adult phenotype across both images: upright S-curved leafy-seadragon body, pangolin scale armor, four clawed limbs, curled plated tail, tubular snout, translucent leaf-fins, and brackish mangrove/eelgrass habitat."
+    }
+  },
+  {
+    "id": "2026-07-07-hybrid-creature-wild-leafscale-tide-pangodragon-in-the-wild",
+    "title": "Leafscale Tide Pangodragon: In the Wild",
+    "tests": "Matching wild field photo for the fictional leafy seadragon + Sunda pangolin hybrid, preserving the development-map phenotype in mangrove/eelgrass habitat.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Leafscale Tide Pangodragon\", a clearly fictional two-source hybrid of leafy seadragon + Sunda pangolin, climbing through a brackish mangrove-root eelgrass edge after rain. Preserve the exact adult phenotype from the development map: a non-humanoid waist-long amphibious reef-edge clinger with an upright S-curved leafy-seadragon body axis, four short clawed pangolin-like limbs gripping wet driftwood and mangrove roots, a heavy curled prehensile tail plated in overlapping bronze pangolin scales, a narrow tubular seadragon snout, small dark mammal eyes, translucent leaf-like fin ribbons sprouting from shoulders, spine, and tail margins, mottled olive brown seaweed camouflage over armored scales, algae caught between scale plates, and a thin sticky feeding tongue reaching toward tiny shore invertebrates. Show it in side profile rather than a crouched front view, partly raised above amber brackish water on black mangrove roots with eelgrass below, shell gravel, rain beads, crab-shell fragments, pale sand ripples, and small ripples from its curled tail tip. Use long-lens wildlife photography at low tide, shallow documentary depth of field, soft overcast rainlight, wet tactile textures of keratin scale, leaf-fin membrane, bark, mud, sand, eelgrass, shell, and water. Include natural scale cues from mangrove roots, eelgrass blades, crab shells, and wet claw marks. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure seadragon or pure pangolin result; it must visibly combine leafy seadragon traits and Sunda pangolin traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Leafscale Tide Pangodragon; [SOURCE_A] = leafy seadragon; [SOURCE_B] = Sunda pangolin; [HABITAT] = brackish mangrove-root eelgrass edge after rain; shared adult phenotype = waist-long S-curved clinger with pangolin scale armor and clawed limbs, curled tail, tubular seadragon snout, translucent leaf fins, olive-brown seaweed camouflage, and a thin feeding tongue.",
+    "image": "images/2026-07-07-hybrid-creature-wild-leafscale-tide-pangodragon-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-07-hybrid-creature-wild-leafscale-tide-pangodragon-in-the-wild.webp",
+    "color": "#645b4d",
+    "date": "2026-07-07",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Leafscale Tide Pangodragon",
+      "imageKind": "wild",
+      "description": "A fictional amphibious reef-edge clinger combining leafy seadragon camouflage and pangolin scale armor.",
+      "continuity": "Same adult phenotype across both images: upright S-curved leafy-seadragon body, pangolin scale armor, four clawed limbs, curled plated tail, tubular snout, translucent leaf-fins, and brackish mangrove/eelgrass habitat."
+    }
   }
 ]
