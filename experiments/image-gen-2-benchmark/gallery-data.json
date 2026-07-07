@@ -4089,5 +4089,19 @@
       "description": "A fictional Lumenreef civic archive-library where shell capsules move through rain-polished copper pneumatic tubes across glass-coral causeways.",
       "template": "Create a clearly fictional [ERA_OR_WORLD] [ARTIFACT_OR_DOCUMENTARY_SCENE] for [IMAGINARY_PLACE_OR_OBJECT], an imaginary [REGION_OR_SETTING] subject from a world that never existed, with [PERIOD_OR_WORLD_MATERIALS], [FUNCTIONAL_SYSTEMS], [WORKERS_OR_INHABITANTS], weathering, and documentary lighting."
     }
+  },
+  {
+    "id": "2026-07-06-miniature-diorama-miniature-rain-station-clockmaker-alley",
+    "title": "Miniature Rain-Station Clockmaker Alley",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; verified exact source PNG path before append; append-entry.py converted/uploaded the archive JPEG.",
+    "prompt": "Create a finished square photorealistic macro image of a handmade miniature diorama called \"Rain-Station Clockmaker Alley\" on a busy model-making workbench. The thumb-scale scene shows a narrow rain-soaked alley squeezed beneath an elevated train platform where tiny clockmakers repair public station clocks: balsa-wood shopfronts with warped awnings, matchstick roof beams, clear resin puddles, copper-wire gutters, seed-bead gear wheels, paper-clay brick walls, translucent acetate windowpanes, thread pulley lines, bottle-cap worktables, hand-painted clock faces with only vague unreadable marks, warm pin LEDs inside the repair stalls, and a tiny ladder leaning against a station clock tower built from foamcore and brass eyelets. Make the handmade scale unmistakable with tweezers, a hobby knife, paint jars, a steel ruler, spare watch gears, glue beads, brush hairs, fingerprints in clay, uneven cut edges, exposed foamcore layers, copper wire scraps, tiny clamps, pin-vise drill bits, and scattered punched-paper shingles around the base. Use close macro lens depth of field, warm interior LEDs against cool blue desk-lamp rain reflections, glossy wet resin, dust motes, tactile craft materials, and a clear three-quarter view down the alley. The finished image should be a believable photographed miniature, not a poster, not a flat document, not a prompt card: no readable text, no labels, no logos, no watermark, no real human subjects, no cinematic battle scene, and no plain centered object display.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Build a miniature diorama of [PLACE_OR_WORKFLOW] with visible scale cues, handmade materials, tiny practical lighting, [WEATHER_OR_ATMOSPHERE], [PRIMARY_STRUCTURE], [WORKBENCH_TOOLS], and tactile evidence of construction. Make it feel like a photographed handmade model rather than a poster, flat document, prompt card, or centered product display.\n\nWhat the reusable visual operation changes or emphasizes: it turns a place or workflow into a tactile macro diorama, emphasizing handmade materials, scale cues, practical miniature lighting, craft tools, and believable photographic depth.\n\nExample substitution: [PLACE_OR_WORKFLOW] = a rain-station clockmaker alley under an elevated train platform; [WEATHER_OR_ATMOSPHERE] = resin puddles, cool blue rain reflections, dust motes, and warm stall LEDs; [PRIMARY_STRUCTURE] = shopfronts, clock tower, matchstick beams, copper-wire gutters, paper-clay brick walls, and acetate windows; [WORKBENCH_TOOLS] = tweezers, hobby knife, paint jars, steel ruler, spare watch gears, glue beads, tiny clamps, pin-vise drill bits, and punched-paper shingles.",
+    "image": "images/2026-07-06-miniature-diorama-miniature-rain-station-clockmaker-alley.jpg",
+    "thumb": "thumbs/2026-07-06-miniature-diorama-miniature-rain-station-clockmaker-alley.webp",
+    "color": "#494745",
+    "date": "2026-07-06",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
