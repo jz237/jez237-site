@@ -111,10 +111,14 @@ const PLUS = (()=>{ const w=.36,L=1; return [[w,-L],[w,-w],[L,-w],[L,w],[w,w],[w
 const shapes = [
   { name:"CIRCLE",  circle:true },
   { name:"SQUARE",  pts:[[-1,-1],[1,-1],[1,1],[-1,1]] },
-  { name:"CROSS",   pts:PLUS },
-  { name:"STAR",    pts:starPoly(5,.44) },
+  { name:"FLAT",    open:true, pts:[[-1,-.35],[-.33,-.35],[.33,-.35],[1,-.35]] },
   { name:"TRIANGLE",pts:[[0,-1.05],[.95,.78],[-.95,.78]] },
+  { name:"BOWL",    open:true, pts:[[-1,.6],[-1,-.3],[-.6,-.8],[0,-.95],[.6,-.8],[1,-.3],[1,.6]] },
+  { name:"CROSS",   pts:PLUS },
+  { name:"VEE",     open:true, pts:[[-1,.7],[0,-.9],[1,.7]] },
+  { name:"STAR",    pts:starPoly(5,.44) },
   { name:"HEX",     pts:regular(6,-Math.PI/2) },
+  { name:"DUBYA",   open:true, pts:[[-1,.5],[-.5,-.6],[0,.2],[.5,-.6],[1,.5]] },
   { name:"DIAMOND", pts:regular(4,-Math.PI/2) },
   { name:"OCTAGON", pts:regular(8,-Math.PI/2+Math.PI/8) }
 ];
@@ -140,18 +144,22 @@ let globalScores=null, globalScoreStatus="loading", pendingScore=0, lastSubmit=n
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const rand=(a=1,b=0)=>b+Math.random()*(a-b);
 const lerp=(a,b,t)=>a+(b-a)*t;
-function laneWrapDelta(from,to){ let d=((to-from)%LANES+LANES)%LANES; if(d>LANES/2) d-=LANES; return d; }
+function isOpen(){ return !!shapes[state.shapeIndex % shapes.length].open; }
+// closed wells wrap around 16 lanes; open wells (FLAT/BOWL/VEE/DUBYA) are a strip — clamp, don't wrap.
+function normLane(l){ return isOpen() ? clamp(l, 0.5, LANES-0.5) : ((l%LANES)+LANES)%LANES; }
+function railIndex(l){ const r=Math.round(l); return isOpen() ? clamp(r,0,LANES-1) : ((r%LANES)+LANES)%LANES; }
+function laneWrapDelta(from,to){ if(isOpen()) return to-from; let d=((to-from)%LANES+LANES)%LANES; if(d>LANES/2) d-=LANES; return d; }
 
 /* ---------- geometry / projection ---------- */
 function shapePoint(lane){
   const sh = shapes[state.shapeIndex % shapes.length];
-  let t = ((lane/LANES)%1+1)%1;
-  if (sh.circle){ const a=t*TAU - Math.PI/2; return { x:Math.cos(a), y:Math.sin(a) }; }
-  const pts=sh.pts, n=pts.length;
-  if(!sh._len){ const segs=[]; let tot=0; for(let i=0;i<n;i++){ const a=pts[i],b=pts[(i+1)%n]; const l=Math.hypot(b[0]-a[0],b[1]-a[1]); segs.push(l); tot+=l; } sh._len=segs; sh._tot=tot; }
+  if (sh.circle){ const a=(((lane/LANES)%1+1)%1)*TAU - Math.PI/2; return { x:Math.cos(a), y:Math.sin(a) }; }
+  const pts=sh.pts, n=pts.length, open=!!sh.open, edges = open ? n-1 : n;
+  if(!sh._len){ const segs=[]; let tot=0; for(let i=0;i<edges;i++){ const a=pts[i],b=pts[(i+1)%n]; const l=Math.hypot(b[0]-a[0],b[1]-a[1]); segs.push(l); tot+=l; } sh._len=segs; sh._tot=tot; }
+  let t = open ? clamp(lane/LANES,0,1) : ((lane/LANES)%1+1)%1;
   let dist=t*sh._tot;
-  for(let i=0;i<n;i++){
-    if(dist<=sh._len[i] || i===n-1){ const a=pts[i],b=pts[(i+1)%n]; const f=sh._len[i]?dist/sh._len[i]:0; return { x:a[0]+(b[0]-a[0])*f, y:a[1]+(b[1]-a[1])*f }; }
+  for(let i=0;i<edges;i++){
+    if(dist<=sh._len[i] || i===edges-1){ const a=pts[i],b=pts[(i+1)%n]; const f=sh._len[i]?dist/sh._len[i]:0; return { x:a[0]+(b[0]-a[0])*f, y:a[1]+(b[1]-a[1])*f }; }
     dist-=sh._len[i];
   }
   return { x:pts[0][0], y:pts[0][1] };
@@ -245,8 +253,9 @@ const pad2=n=>String(Math.max(0,Math.floor(n))).padStart(2,"0");
 
 function drawWell(){
   const col = WELL_COLORS[(state.level-1) % WELL_COLORS.length];
-  // radials
-  for(let i=0;i<LANES;i++){
+  // radials (open strips need the extra rail at the far end)
+  const rN = isOpen() ? LANES : LANES-1;
+  for(let i=0;i<=rN;i++){
     seg(project(i,0), project(i,1), col, 1.4, 6);
   }
   // faint far rim
@@ -291,7 +300,8 @@ const KINDS = {
 };
 function spawnEnemy(kind, lane, depth){
   const k=KINDS[kind];
-  const e={ kind, lane:(lane??Math.floor(rand(LANES))), depth:(depth??1.02), color:k.color, hp:k.hp,
+  const L0 = lane ?? (isOpen() ? 1+Math.floor(rand(LANES-1)) : Math.floor(rand(LANES)));
+  const e={ kind, lane:normLane(L0), depth:(depth??1.02), color:k.color, hp:k.hp,
     speed:(0.10 + state.level*0.006 + rand(0.05)), flipT:0, flipTimer:rand(1.1,0.4), flipFrom:0, flipTo:0, flipping:false,
     phase:rand(TAU), onRim:false, rail:0, pulse:0, dead:false };
   if(kind==="fuseball"){ e.speed*=1.15; e.rail=rand(1,-1); }
@@ -313,8 +323,8 @@ function updateEnemy(e,dt){
     }
     if(e.flipping){
       e.flipT+=dt/0.24;
-      e.lane=((e.flipFrom + laneWrapDelta(e.flipFrom,e.flipTo)*Math.min(1,e.flipT))%LANES+LANES)%LANES;
-      if(e.flipT>=1){ e.flipping=false; e.lane=((e.flipTo)%LANES+LANES)%LANES; }
+      e.lane=normLane(e.flipFrom + laneWrapDelta(e.flipFrom,e.flipTo)*Math.min(1,e.flipT));
+      if(e.flipT>=1){ e.flipping=false; e.lane=normLane(e.flipTo); }
     }
     if(Math.abs(laneWrapDelta(e.lane, state.lane))<0.35 && state.mode==="play"){ killPlayer(); e.dead=true; }
     return;
@@ -322,25 +332,28 @@ function updateEnemy(e,dt){
   // climb up the tube
   e.depth -= e.speed*dt;
   if(e.kind==="spiker"){
-    spikes[((Math.round(e.lane))%LANES+LANES)%LANES] = Math.min(spikes[((Math.round(e.lane))%LANES+LANES)%LANES], clamp(e.depth+0.02,0.08,1));
+    const si=railIndex(e.lane);
+    spikes[si] = Math.min(spikes[si], clamp(e.depth+0.02,0.08,1));
   }
   if(e.kind==="flipper" || e.kind==="tanker"){
     e.flipTimer-=dt;
     if(!e.flipping && e.flipTimer<=0 && e.depth<0.9){
       let dir = (e.depth<0.32) ? Math.sign(laneWrapDelta(e.lane,state.lane))||1 : (Math.random()<0.5?-1:1);
+      if(isOpen()){ if(e.lane+dir>LANES-0.5) dir=-1; else if(e.lane+dir<0.5) dir=1; }  // bounce off strip ends
       e.flipping=true; e.flipFrom=e.lane; e.flipTo=e.lane+dir; e.flipT=0;
       e.flipTimer=rand(0.9,0.4);
     }
     if(e.flipping){
       e.flipT+=dt/0.28;
-      e.lane=((e.flipFrom + laneWrapDelta(e.flipFrom,e.flipTo)*Math.min(1,e.flipT))%LANES+LANES)%LANES;
-      if(e.flipT>=1){ e.flipping=false; e.lane=((e.flipTo)%LANES+LANES)%LANES; }
+      e.lane=normLane(e.flipFrom + laneWrapDelta(e.flipFrom,e.flipTo)*Math.min(1,e.flipT));
+      if(e.flipT>=1){ e.flipping=false; e.lane=normLane(e.flipTo); }
     }
   }
   if(e.kind==="fuseball"){
     e.lane += e.rail*dt*1.6;
-    if(Math.random()<dt*0.7) e.rail=-e.rail;
-    e.lane=((e.lane)%LANES+LANES)%LANES;
+    if(isOpen() && (e.lane<=0.5 || e.lane>=LANES-0.5)) e.rail=-e.rail;
+    else if(Math.random()<dt*0.7) e.rail=-e.rail;
+    e.lane=normLane(e.lane);
   }
   if(e.depth<=0){
     // reached the rim
@@ -352,8 +365,8 @@ function updateEnemy(e,dt){
   }
 }
 function splitTanker(e){
-  spawnEnemy("flipper",(Math.round(e.lane)-1+LANES)%LANES, 0.05);
-  spawnEnemy("flipper",(Math.round(e.lane)+1)%LANES, 0.05);
+  spawnEnemy("flipper", normLane(Math.round(e.lane)-1), 0.05);
+  spawnEnemy("flipper", normLane(Math.round(e.lane)+1), 0.05);
   boom(project(e.lane,e.depth), C.tanker, 12);
 }
 
@@ -393,7 +406,7 @@ function fire(){
   if(state.mode!=="play" || state.fireTimer>0) return;
   if(shots.length>=8) return;
   state.fireTimer=0.11;
-  const L=((Math.round(state.lane))%LANES+LANES)%LANES;
+  const L=railIndex(state.lane);
   shots.push({ lane:L, depth:0.02, speed:1.9, dead:false });
   sfx("fire");
 }
@@ -494,7 +507,7 @@ function startLevel(n){
   state.spawnTimer = 1.2;
   state.spawnGap = Math.max(0.55, 1.5 - n*0.05);
   state.zapCharge=1; state.zapUsed=0;
-  state.lane=0; state.targetLane=0;
+  state.lane=state.targetLane = isOpen() ? LANES/2 : 0;   // open strips: start mid-strip, not at an edge
   state.mode="play";
   setMsg("SUPERZAPPER RECHARGE", 1.6);
 }
@@ -526,7 +539,7 @@ function updateWarp(dt){
   state.warpT += dt/2.2;
   state.warpDepth = state.warpT * 1.15;          // pull tube toward viewer
   // fly-through: spikes rush past; if player's lane still has a tall spike as it passes, collide
-  const pl=((Math.round(state.lane))%LANES+LANES)%LANES;
+  const pl=railIndex(state.lane);
   const spikeDepth = spikes[pl];
   if(spikeDepth<0.6){
     // the spike front reaches the viewer around warpT crossing (1 - spikeDepth)
@@ -576,7 +589,8 @@ function aimFromPointer(e){
   if(state.mode!=="play" && state.mode!=="warp") return;
   if($("overlay").contains(e.target) || $("gameover").contains(e.target)) return;
   const r=canvas.getBoundingClientRect();
-  const x=e.clientX-(r.left+cx/DPR*0+ r.width/2), y=e.clientY-(r.top+r.height/2);
+  if(isOpen()){ state.targetLane = clamp((e.clientX-r.left)/r.width*LANES, 0.5, LANES-0.5); return; }
+  const x=e.clientX-(r.left+r.width/2), y=e.clientY-(r.top+r.height/2);
   if(Math.hypot(x,y)<20) return;
   const angle=Math.atan2(-y,x);
   state.targetLane=((angle+Math.PI/2)/TAU*LANES + LANES*1000)%LANES;
@@ -585,9 +599,9 @@ function controls(dt){
   let move=0;
   if(keys.has("ArrowLeft")||keys.has("KeyA")) move-=1;
   if(keys.has("ArrowRight")||keys.has("KeyD")) move+=1;
-  if(move){ state.targetLane=((state.targetLane + move*dt*11)%LANES+LANES)%LANES; }
+  if(move){ state.targetLane=normLane(state.targetLane + move*dt*11); }
   const d=laneWrapDelta(state.lane, state.targetLane);
-  state.lane=((state.lane + d*Math.min(1,dt*18))%LANES+LANES)%LANES;
+  state.lane=normLane(state.lane + d*Math.min(1,dt*18));
 }
 
 /* ---------- main update ---------- */
