@@ -295,11 +295,21 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px;
-    margin: 12px 0 0;
+    margin: 0 0 12px;
   }
   .mode-select button {
     padding: 10px 6px;
     font-size: 11px;
+  }
+  .mode-select .mode-label {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #ffef75;
+    font-size: 10px;
+    font-weight: 950;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(255, 239, 117, .45);
   }
   .upgrade-panel {
     display: none;
@@ -809,6 +819,13 @@
 	      </div>
 	    </div>
 	    <p class="sub" id="overlaySub">Grid-warping twin-stick survival. Chain geoms into massive multipliers and shatter the swarm before it reaches you.</p>
+    <div class="mode-select" id="modeSelect">
+      <div class="mode-label">Game Mode</div>
+      <button id="modeClassic" class="secondary" type="button">Classic</button>
+      <button id="modeTurret" class="secondary" type="button">Turret</button>
+      <button id="modePacifism" class="secondary" type="button">Pacifism</button>
+      <button id="modeBossRush" class="secondary" type="button">Boss Rush</button>
+    </div>
     <div class="menu-actions" id="mainActions">
       <button id="start">Solo Run</button>
       <button id="fullscreenBtn" class="secondary" type="button">Full Screen</button>
@@ -816,12 +833,6 @@
       <button id="scoresBtn" class="secondary">Scores</button>
       <button id="optionsBtn" class="secondary" type="button">Options</button>
       <button id="helpBtn" class="secondary" type="button">How To Play</button>
-    </div>
-    <div class="mode-select" id="modeSelect">
-      <button id="modeClassic" class="secondary" type="button">Classic</button>
-      <button id="modeTurret" class="secondary" type="button">Turret</button>
-      <button id="modePacifism" class="secondary" type="button">Pacifism</button>
-      <button id="modeBossRush" class="secondary" type="button">Boss Rush</button>
     </div>
     <div class="control-mode" id="controlMode">
       <button id="autoMode" class="secondary" type="button">Auto Fire</button>
