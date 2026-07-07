@@ -1669,7 +1669,7 @@ async function enterFullscreen(force = false) {
   if (!canUseFullscreen() || document.fullscreenElement || (!force && !shouldOfferFullscreen())) return false;
   try {
     await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
-    if (MOBILE_PERF) { try { await screen.orientation?.lock?.('landscape'); } catch {} }
+    // no orientation lock: the game plays in whatever orientation the player holds
     setTimeout(resize, 120);
     return true;
   } catch {
