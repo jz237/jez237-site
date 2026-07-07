@@ -1,0 +1,2130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>PRIMORDIA — an unscripted ocean</title>
+<meta name="description" content="A self-running emergent ecosystem. Boids, predators, energy, and real heritable evolution — nothing is scripted. Neon-abyss art-life at 60fps.">
+<meta name="theme-color" content="#05010f">
+<meta property="og:title" content="PRIMORDIA">
+<meta property="og:description" content="An unscripted ocean — life, death, and evolution, live at 60fps.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --ink:#cfe8ff;
+    --plank:#7cf0b0;
+    --graze:#57e6ff;
+    --pred:#ff5ac8;
+    --glass:rgba(10,8,32,0.82);
+    --hair:rgba(120,200,255,0.22);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:#05010f;overflow:hidden;
+    font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;color:var(--ink);
+    -webkit-user-select:none;user-select:none;touch-action:none;
+    -webkit-tap-highlight-color:transparent;}
+  #wrap{position:fixed;inset:0}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #ui{position:fixed;inset:0;pointer-events:none;z-index:10}
+  .fadeable{transition:opacity .5s ease}
+
+  /* caption lower-third */
+  #caption{position:absolute;left:50%;bottom:14%;transform:translateX(-50%);
+    max-width:min(34ch,86vw);text-align:center;font-weight:300;
+    font-size:clamp(15px,2.4vw,22px);letter-spacing:.14em;line-height:1.45;
+    color:#cfe8ff;text-shadow:0 0 14px rgba(90,200,255,.55);
+    opacity:0;pointer-events:none;}
+  #caption.p0{color:#ffe6ff;text-shadow:0 0 18px rgba(255,120,230,.7);font-size:clamp(17px,2.7vw,25px)}
+  #caption .spglyph{display:inline-block;width:.5em;height:.5em;border-radius:50%;
+    margin-right:.5em;vertical-align:.05em;box-shadow:0 0 8px currentColor}
+  #caption .voglyph{margin-left:.55em;opacity:.7;font-size:.7em;vertical-align:.15em}
+
+  /* corner readouts */
+  .corner{position:absolute;font-size:11px;letter-spacing:.16em;opacity:.5;
+    font-variant:small-caps;text-transform:lowercase}
+  #popread{left:14px;bottom:12px;line-height:1.7}
+  #popread .row{display:flex;align-items:center;gap:7px}
+  #popread .dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 6px currentColor}
+  #clockread{right:14px;bottom:12px;text-align:right}
+
+  /* stats panel (oscilloscope + gene chart) */
+  #stats{position:absolute;left:14px;bottom:64px;display:none;gap:10px;flex-direction:column}
+  #stats.on{display:flex}
+  .scope{background:rgba(6,4,20,.55);border:1px solid var(--hair);border-radius:8px;
+    padding:6px 8px 4px;backdrop-filter:blur(3px)}
+  .scope .lbl{font-size:9px;letter-spacing:.24em;opacity:.55;margin-bottom:3px}
+  #genewrap{display:none}
+  #genewrap.on{display:block}
+
+  /* inspector */
+  #inspect{position:absolute;top:0;right:0;height:100%;width:270px;max-width:82vw;
+    background:var(--glass);border-left:1px solid var(--hair);backdrop-filter:blur(9px);
+    transform:translateX(105%);transition:transform .5s cubic-bezier(.2,.8,.2,1);
+    padding:20px 18px;pointer-events:auto;display:flex;flex-direction:column;gap:13px;
+    font-size:13px;overflow:hidden}
+  #inspect.on{transform:translateX(0)}
+  #inspect .close{position:absolute;top:12px;right:14px;font-size:18px;opacity:.5;cursor:pointer;
+    line-height:1}
+  #inspect .name{font-style:italic;font-size:19px;color:var(--graze);letter-spacing:.02em;
+    text-shadow:0 0 12px rgba(90,200,255,.4);padding-right:20px}
+  #inspect .sub{font-variant:small-caps;letter-spacing:.14em;opacity:.6;font-size:11px;margin-top:2px}
+  #inspect .vitals{display:flex;gap:14px;align-items:center;font-size:12px}
+  #inspect .ebar{flex:1;height:6px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
+  #inspect .ebar>i{display:block;height:100%;width:50%;background:linear-gradient(90deg,#ffb347,#ffe08a);
+    box-shadow:0 0 8px #ffb347}
+  #inspect .status{font-variant:small-caps;letter-spacing:.1em;opacity:.85}
+  #inspect .genes{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+  #inspect .grow{display:flex;align-items:center;gap:8px;font-size:10.5px;letter-spacing:.06em}
+  #inspect .grow .gl{width:52px;opacity:.6;text-transform:uppercase;font-size:9px;letter-spacing:.1em}
+  #inspect .gbar{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.07);position:relative}
+  #inspect .gbar>i{position:absolute;left:0;top:0;height:100%;border-radius:3px;background:var(--graze);
+    box-shadow:0 0 6px currentColor}
+  #inspect .gbar>u{position:absolute;top:-1px;width:1px;height:7px;background:rgba(255,255,255,.5)}
+  #inspect .arrow{width:10px;text-align:center;opacity:.8}
+  #inspect .lineage{opacity:.7;font-size:11px;line-height:1.5}
+  #inspect .foot{margin-top:auto;font-size:9.5px;letter-spacing:.16em;opacity:.4;
+    font-variant:small-caps}
+  #inspect .hueSw{width:12px;height:12px;border-radius:3px;box-shadow:0 0 8px currentColor;display:inline-block}
+
+  /* hint */
+  #hint{position:absolute;left:50%;bottom:6%;transform:translateX(-50%);text-align:center;
+    font-size:11px;letter-spacing:.12em;font-variant:small-caps;opacity:0;line-height:1.9;
+    transition:opacity 1s ease}
+  #hint.on{opacity:.5}
+
+  /* top-right controls */
+  #ctl{position:absolute;top:12px;right:14px;display:flex;gap:10px;pointer-events:auto}
+  #ctl button{background:rgba(10,8,32,.5);border:1px solid var(--hair);color:var(--ink);
+    width:34px;height:34px;border-radius:8px;font-size:15px;cursor:pointer;opacity:.55;
+    backdrop-filter:blur(4px);transition:opacity .2s}
+  #ctl button:hover{opacity:1}
+  #ctl button.hot{opacity:1;border-color:rgba(120,220,255,.6);box-shadow:0 0 12px rgba(80,200,255,.3)}
+
+  /* title card */
+  #title{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;text-align:center;opacity:0;transition:opacity 1.4s ease;gap:14px}
+  #title.on{opacity:1}
+  #title h1{margin:0;font-weight:100;font-size:clamp(34px,8vw,74px);letter-spacing:.42em;
+    text-indent:.42em;color:#eaf6ff;text-shadow:0 0 26px rgba(90,200,255,.6),0 0 60px rgba(255,90,200,.25)}
+  #title .tag{font-size:clamp(12px,2vw,15px);opacity:.7;letter-spacing:.18em;font-weight:300}
+  #title .meta{font-size:11px;opacity:.42;letter-spacing:.14em;font-variant:small-caps}
+  #settings{position:absolute;left:50%;bottom:9%;transform:translateX(-50%);
+    display:flex;gap:22px;pointer-events:auto;opacity:0;transition:opacity 1s ease}
+  #settings.on{opacity:1}
+  #settings label{font-size:10px;letter-spacing:.14em;font-variant:small-caps;opacity:.7;
+    display:flex;flex-direction:column;gap:5px;align-items:center}
+  #settings input[type=range]{width:92px;accent-color:#57e6ff}
+
+  .ver{position:absolute;left:14px;top:12px;font-size:9px;letter-spacing:.2em;opacity:.28;
+    font-variant:small-caps}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <canvas id="cv"></canvas>
+</div>
+
+<div id="ui">
+  <div class="ver" id="ver">primordia v1.0.0</div>
+
+  <div id="ctl">
+    <button id="btnSound" title="sound (M)">♪</button>
+    <button id="btnStats" title="stats (S)">◔</button>
+    <button id="btnHelp" title="how to watch (?)">?</button>
+  </div>
+
+  <div id="caption"></div>
+
+  <div id="popread" class="corner">
+    <div class="row"><span class="dot" style="color:var(--plank)"></span><span id="pPlank">0</span></div>
+    <div class="row"><span class="dot" style="color:var(--graze)"></span><span id="pGraze">0</span></div>
+    <div class="row"><span class="dot" style="color:var(--pred)"></span><span id="pPred">0</span></div>
+  </div>
+  <div id="clockread" class="corner"><span id="clockTxt">gen 0 · day 0</span></div>
+
+  <div id="stats">
+    <div class="scope"><div class="lbl">POPULATION</div><canvas id="scope" width="248" height="78"></canvas></div>
+    <div class="scope" id="genewrap"><div class="lbl">EVOLUTION · grazers vs genesis</div><canvas id="genechart" width="248" height="70"></canvas></div>
+  </div>
+
+  <div id="inspect">
+    <span class="close" id="inspClose">✕</span>
+    <div>
+      <div class="name" id="iName">—</div>
+      <div class="sub" id="iSub">—</div>
+    </div>
+    <div class="vitals">
+      <span class="status" id="iStatus">drifting</span>
+      <div class="ebar"><i id="iEnergy"></i></div>
+      <span id="iAge" style="opacity:.7">0s</span>
+    </div>
+    <div class="genes" id="iGenes"></div>
+    <div class="lineage" id="iLineage">—</div>
+    <div class="foot">esc · release · following</div>
+  </div>
+
+  <div id="hint">
+    click a creature to follow its life<br>
+    drag to stir the current · double-click to feed<br>
+    S stats · G genes · M sound
+  </div>
+
+  <div id="title" class="on">
+    <h1>PRIMORDIA</h1>
+    <div class="tag">an ecosystem — nothing here is scripted</div>
+    <div class="meta" id="titleMeta">press anywhere to begin · this world has been alive for 0s</div>
+    <div id="settings">
+      <label>music <input type="range" id="sMusic" min="0" max="1" step="0.01" value="0.5"></label>
+      <label>sfx <input type="range" id="sSfx" min="0" max="1" step="0.01" value="0.7"></label>
+      <label>voice <input type="range" id="sVoice" min="0" max="1" step="0.01" value="1"></label>
+    </div>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============================================================================
+   PRIMORDIA v1.0.0  —  a self-running emergent ecosystem
+   Single file, vanilla canvas 2D + WebAudio. No libraries, no build.
+   Architecture: fixed-timestep sim -> event bus -> juice + audio + narrator.
+   Design basis: four-lens spec (emergence / juice / audio / narrator).
+   Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
+============================================================================ */
+(function(){
+const VERSION = 'v1.0.0';
+
+/* ---------- tiny math ---------- */
+const TAU = Math.PI*2;
+const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
+const lerp=(a,b,t)=>a+(b-a)*t;
+const smoothstep=(t)=>t*t*(3-2*t);
+
+/* deterministic-ish rng (mulberry32) so a session is reproducible if seeded */
+let _s = (Math.random()*4294967296)>>>0;
+function rnd(){ _s|=0; _s=_s+0x6D2B79F5|0; let t=Math.imul(_s^_s>>>15,1|_s);
+  t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }
+const rrange=(a,b)=>a+(b-a)*rnd();
+const rint=(a,b)=>a+((rnd()*(b-a+1))|0);
+function gauss(){ // Box-Muller, cached
+  if(gauss._c!=null){const v=gauss._c;gauss._c=null;return v;}
+  let u=0,v=0; while(u<1e-9)u=rnd(); v=rnd();
+  const m=Math.sqrt(-2*Math.log(u)); gauss._c=m*Math.sin(TAU*v); return m*Math.cos(TAU*v);
+}
+
+/* smooth-damp (critically damped spring), stable at any dt */
+function smoothDamp(cur,target,velObj,tau,dt){
+  const omega=2/tau;
+  const x=omega*dt;
+  const k=1/(1+x+0.48*x*x);
+  const change=cur-target;
+  const temp=(velObj.v+omega*change)*dt;
+  velObj.v=(velObj.v-omega*temp)*k;
+  return target+(change+temp)*k;
+}
+
+/* cheap smooth flow field: sum of sines -> angle. deterministic, non-repeating enough */
+function flowAngle(x,y,t){
+  return (Math.sin(x*0.0016+t*0.10)+Math.cos(y*0.0014-t*0.08)+
+          Math.sin((x+y)*0.0011+t*0.05)+Math.cos((x-y)*0.0013-t*0.037))*1.15;
+}
+
+/* ---------- config / tuning (from emergence blueprint) ---------- */
+const CFG = {
+  W:1600, H:900,
+  clusters:48, K_c:12, planktonCap:480,
+  r_day:0.30, r_night:0.07,
+  F_p:28,
+  grazeSoft:180,          // soft carrying capacity (density-dependent reproduction backstop)
+  grazeStart:90, grazeCap:600,
+  predStart:10,
+  dayPeriod:150,           // sim-seconds per full day/night cycle (2.5 min)
+  mutSigma:0.05, hueMut:8,
+  step:1/60,
+};
+
+/* gene ranges [min,max] */
+const G = {
+  speed:[30,90], size:[0.7,1.7], sense:[60,180], fear:[0.4,2.4],
+  sep:[0.4,2.2], align:[0.2,1.8], cohere:[0.2,1.6], metab:[0.7,1.5], hue:[0,1],
+};
+
+/* ---------- canvas / view ---------- */
+const cv=document.getElementById('cv'), ctx=cv.getContext('2d',{alpha:false});
+let VW=0,VH=0,DPR=1, sc=1; // sc = design scale min(w,h)/1080
+function resize(){
+  DPR=Math.min(window.devicePixelRatio||1, quality<=1?1.5:2);
+  VW=window.innerWidth; VH=window.innerHeight;
+  cv.width=Math.round(VW*DPR); cv.height=Math.round(VH*DPR);
+  sc=Math.min(VW,VH)/1080;
+  buildBackground();
+}
+window.addEventListener('resize',resize);
+
+/* camera */
+const cam={x:CFG.W/2,y:CFG.H/2,scale:1, tx:CFG.W/2,ty:CFG.H/2,tz:1,
+  vx:{v:0},vy:{v:0},vz:{v:0}, state:'DRIFT', dwell:0, followId:-1,
+  shake:0, zpunch:0, breath:0};
+
+/* ---------- glow sprite cache ---------- */
+const HUEBUCKETS=24;
+const glowSprites=[]; let glowWhite=null;
+function makeGlow(size,r,g,b){
+  const c=document.createElement('canvas'); c.width=c.height=size;
+  const gx=c.getContext('2d');
+  const grd=gx.createRadialGradient(size/2,size/2,0,size/2,size/2,size/2);
+  grd.addColorStop(0,`rgba(${r},${g},${b},1)`);
+  grd.addColorStop(0.28,`rgba(${r},${g},${b},0.55)`);
+  grd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+  gx.fillStyle=grd; gx.fillRect(0,0,size,size);
+  return c;
+}
+function hslToRgb(h,s,l){
+  h/=360; const q=l<0.5?l*(1+s):l+s-l*s, p=2*l-q;
+  const hk=(t)=>{ t=(t%1+1)%1; if(t<1/6)return p+(q-p)*6*t; if(t<0.5)return q;
+    if(t<2/3)return p+(q-p)*(2/3-t)*6; return p; };
+  return [Math.round(hk(h+1/3)*255),Math.round(hk(h)*255),Math.round(hk(h-1/3)*255)];
+}
+function buildGlow(){
+  glowWhite=makeGlow(128,255,255,255);
+  glowSprites.length=0;
+  for(let i=0;i<HUEBUCKETS;i++){
+    const hue=i/HUEBUCKETS*360;
+    const [r,g,b]=hslToRgb(hue,0.9,0.62);
+    glowSprites.push(makeGlow(128,r,g,b));
+  }
+}
+function glow(x,y,rad,hue,alpha){
+  const spr = hue<0 ? glowWhite : glowSprites[((hue/360*HUEBUCKETS)|0)%HUEBUCKETS];
+  ctx.globalAlpha=alpha;
+  ctx.drawImage(spr, x-rad, y-rad, rad*2, rad*2);
+}
+/* cached body fill strings: per hue bucket x 4 lightness */
+const bodyStyle={};
+function bodyColor(hue,light){
+  const hb=(hue/360*HUEBUCKETS|0)%HUEBUCKETS, lb=clamp(Math.round(light*3),0,3);
+  const key=hb*4+lb;
+  let s=bodyStyle[key];
+  if(!s){ s=`hsl(${(hb/HUEBUCKETS*360)|0},85%,${[34,46,58,70][lb]}%)`; bodyStyle[key]=s; }
+  return s;
+}
+
+/* ---------- spatial hash (linked list buckets, zero alloc) ---------- */
+const HGRID={cell:180, cols:0,rows:0, head:null, next:new Int32Array(CFG.grazeCap+64)};
+function gridInit(){
+  HGRID.cols=Math.ceil(CFG.W/HGRID.cell)+1;
+  HGRID.rows=Math.ceil(CFG.H/HGRID.cell)+1;
+  HGRID.head=new Int32Array(HGRID.cols*HGRID.rows);
+}
+function gridCell(x,y){
+  const cx=clamp((x/HGRID.cell)|0,0,HGRID.cols-1);
+  const cy=clamp((y/HGRID.cell)|0,0,HGRID.rows-1);
+  return cy*HGRID.cols+cx;
+}
+function gridBuild(list){
+  HGRID.head.fill(-1);
+  for(let i=0;i<list.length;i++){
+    const c=list[i]; if(!c.alive)continue;
+    const cell=gridCell(c.x,c.y);
+    HGRID.next[c.idx]=HGRID.head[cell];
+    HGRID.head[cell]=c.idx;
+  }
+}
+
+/* ---------- creature pool ---------- */
+const MAXSEG=7;
+const WP_G=[.22,.30,.26,.16,.06], WP_P=[.20,.34,.30,.24,.16,.09,.04]; // spine width profiles (shared, read-only)
+let uidCounter=1;
+function newCreature(){
+  return {
+    idx:0, alive:false, uid:0, kind:0, // 0 grazer, 1 predator
+    x:0,y:0,vx:0,vy:0, energy:0,cap:0, age:0,maxage:0,
+    genus:0, epithet:'', gen:1, serial:0, parentUid:0, offspring:0, kills:0, escapes:0,
+    // genes
+    speed:0,size:0,sense:0,fear:0,sep:0,align:0,cohere:0,metab:0,hue:0, huedeg:0,
+    // parent genes (for inspector arrows)
+    pspeed:0,psize:0,psense:0,pfear:0,
+    // runtime
+    phase:0, state:0, gut:0, dashT:0, dashCd:0, fearFlare:0, matur:0, repro:0,
+    heading:0, angvel:0, chaseId:-1, chaseT:0,
+    segX:new Float32Array(MAXSEG), segY:new Float32Array(MAXSEG), segW:new Float32Array(MAXSEG),
+  };
+}
+const creatures=[]; const freeC=[];
+for(let i=0;i<CFG.grazeCap;i++){ const c=newCreature(); c.idx=i; creatures.push(c); freeC.push(i); }
+const grazers=[]; const preds=[]; // active lists (rebuilt each step)
+
+function spawnCreature(kind,x,y,genesFrom){
+  if(freeC.length===0) return null;
+  const idx=freeC.pop(); const c=creatures[idx];
+  c.alive=true; c.uid=uidCounter++; c.kind=kind; c.x=x; c.y=y;
+  c.vx=rrange(-10,10); c.vy=rrange(-10,10); c.age=0; c.gut=0; c.dashT=0; c.dashCd=0;
+  c.phase=rrange(0,TAU); c.state=0; c.fearFlare=0; c.matur=0; c.repro=0;
+  c.chaseId=-1; c.chaseT=0; c.angvel=0; c.heading=Math.atan2(c.vy,c.vx);
+  c.offspring=0; c.kills=0; c.escapes=0;
+  if(genesFrom){ // inherit + mutate
+    for(const k in G){ let v=genesFrom[k]*(1+gauss()*CFG.mutSigma); c[k]=clamp(v,G[k][0],G[k][1]); }
+    c.hue = clamp(genesFrom.hue + gauss()*(CFG.hueMut/360), 0,1);
+    c.genus=genesFrom.genus; c.gen=genesFrom.gen+1; c.parentUid=genesFrom.uid;
+    c.pspeed=genesFrom.speed; c.psize=genesFrom.size; c.psense=genesFrom.sense; c.pfear=genesFrom.fear;
+  } else { // founder
+    c.speed = kind===0 ? rrange(34,50) : rrange(48,66); // grazers seeded SLOW (arms race)
+    c.size  = kind===0 ? rrange(0.85,1.15): rrange(1.05,1.5);
+    c.sense = kind===0 ? rrange(80,130): rrange(170,240);
+    c.fear  = kind===0 ? rrange(0.7,1.4): rrange(0.4,0.7);
+    c.sep=rrange(0.9,1.5); c.align=rrange(0.7,1.2); c.cohere=rrange(0.6,1.1);
+    c.metab=rrange(0.9,1.2); c.hue=rnd();
+    c.genus = kind===0 ? rint(0,GENUS_G.length-1) : rint(0,GENUS_P.length-1);
+    c.gen=1; c.parentUid=0;
+    c.pspeed=c.speed; c.psize=c.size; c.psense=c.sense; c.pfear=c.fear;
+  }
+  c.huedeg = kind===0 ? (60+c.hue*100) : (280+c.hue*80); // grazer 60..160, pred 280..360
+  c.cap = kind===0 ? 120*c.size*c.size : 200*c.size*c.size;
+  c.energy = genesFrom ? 0 : c.cap*(kind===0?rrange(0.45,0.7):rrange(0.65,0.9));
+  c.maxage = kind===0 ? rrange(180,300) : rrange(300,500);
+  c.serial = ++serialCounter[kind];
+  c.epithet = makeEpithet(c);
+  return c;
+}
+const serialCounter=[0,0];
+function killCreature(c,cause){
+  if(!c.alive)return;
+  c.alive=false; freeC.push(c.idx);
+  emit(cause==='hunt'?'kill':'starve', c.x,c.y, c);
+  // death dissolve -> detritus
+  const n = 8+((c.size*4)|0);
+  for(let i=0;i<n;i++){
+    const a=rnd()*TAU, sp=rrange(4,26);
+    spawnParticle(c.x,c.y, Math.cos(a)*sp+c.vx*0.3, (cause==='hunt'?-1:1)*Math.abs(Math.sin(a)*sp)-8,
+      c.huedeg, rrange(1.2,1.9), i<3?2:0); // type 2 = becomes detritus
+  }
+  if(cam.followId===c.uid){ camReleaseSoon=1.5; }
+}
+
+/* ---------- plankton (motes) ---------- */
+const PL={px:new Float32Array(CFG.planktonCap),py:new Float32Array(CFG.planktonCap),
+  vx:new Float32Array(CFG.planktonCap),vy:new Float32Array(CFG.planktonCap),
+  hue:new Float32Array(CFG.planktonCap),pulse:new Float32Array(CFG.planktonCap),
+  cl:new Int16Array(CFG.planktonCap), alive:new Uint8Array(CFG.planktonCap), n:0};
+const clusters=[]; // {x,y,N}
+const clCount=new Int16Array(CFG.clusters); // scratch: per-cluster mote occupancy (rebuilt each step)
+function seedClusters(){
+  clusters.length=0;
+  for(let i=0;i<CFG.clusters;i++){
+    clusters.push({x:rrange(80,CFG.W-80), y:rrange(70,CFG.H-70), N:rrange(5,CFG.K_c)});
+  }
+}
+function planktonCount(){ let n=0; for(let i=0;i<CFG.planktonCap;i++) if(PL.alive[i])n++; return n; }
+function nearClusterPos(){ const c=clusters[(rnd()*clusters.length)|0];
+  return {x:clamp(c.x+rrange(-90,90),40,CFG.W-40), y:clamp(c.y+rrange(-80,80),40,CFG.H-40)}; }
+function spawnMote(cl){
+  if(PL.n>=CFG.planktonCap) return;
+  let i=-1; for(let k=0;k<CFG.planktonCap;k++){ if(!PL.alive[k]){i=k;break;} }
+  if(i<0)return;
+  const c=clusters[cl];
+  PL.px[i]=c.x+rrange(-46,46); PL.py[i]=c.y+rrange(-40,40);
+  PL.vx[i]=0;PL.vy[i]=0; PL.hue[i]=90+rnd()*80; PL.pulse[i]=rnd()*TAU; PL.cl[i]=cl;
+  PL.alive[i]=1;
+}
+function motesInCluster(cl){ let n=0; for(let i=0;i<CFG.planktonCap;i++) if(PL.alive[i]&&PL.cl[i]===cl)n++; return n; }
+/* plankton spatial hash (own grid, rebuilt each step) for local food queries */
+const PLG={cell:120,cols:0,rows:0,head:null,next:new Int32Array(CFG.planktonCap)};
+function plgInit(){ PLG.cols=Math.ceil(CFG.W/PLG.cell)+1; PLG.rows=Math.ceil(CFG.H/PLG.cell)+1;
+  PLG.head=new Int32Array(PLG.cols*PLG.rows); }
+function plgCell(x,y){ const cx=clamp((x/PLG.cell)|0,0,PLG.cols-1), cy=clamp((y/PLG.cell)|0,0,PLG.rows-1);
+  return cy*PLG.cols+cx; }
+function plgBuild(){ PLG.head.fill(-1);
+  for(let i=0;i<CFG.planktonCap;i++){ if(!PL.alive[i])continue;
+    const c=plgCell(PL.px[i],PL.py[i]); PLG.next[i]=PLG.head[c]; PLG.head[c]=i; } }
+/* nearest mote to (x,y) within radius r, scanning a local neighborhood; returns index or -1 */
+function nearestMote(x,y,r){
+  const reach=Math.max(1,Math.ceil(r/PLG.cell));
+  const cx=clamp((x/PLG.cell)|0,0,PLG.cols-1), cy=clamp((y/PLG.cell)|0,0,PLG.rows-1);
+  let best=-1,bd=r*r;
+  for(let oy=-reach;oy<=reach;oy++)for(let ox=-reach;ox<=reach;ox++){
+    const nx=cx+ox,ny=cy+oy; if(nx<0||ny<0||nx>=PLG.cols||ny>=PLG.rows)continue;
+    let j=PLG.head[ny*PLG.cols+nx];
+    while(j!==-1){ const dx=PL.px[j]-x,dy=PL.py[j]-y,d2=dx*dx+dy*dy;
+      if(d2<bd){bd=d2;best=j;} j=PLG.next[j]; }
+  }
+  return best;
+}
+
+/* ---------- particle pool (SoA) ---------- */
+const PMAX=900;
+const P={px:new Float32Array(PMAX),py:new Float32Array(PMAX),vx:new Float32Array(PMAX),
+  vy:new Float32Array(PMAX),life:new Float32Array(PMAX),max:new Float32Array(PMAX),
+  hue:new Float32Array(PMAX),size:new Float32Array(PMAX),type:new Uint8Array(PMAX)};
+const pFree=[]; for(let i=PMAX-1;i>=0;i--)pFree.push(i);
+const detritus=[]; // {x,y,vx,vy,hue,life}
+function spawnParticle(x,y,vx,vy,hue,life,type){
+  let i; if(pFree.length){i=pFree.pop();} else return;
+  P.px[i]=x;P.py[i]=y;P.vx[i]=vx;P.vy[i]=vy;P.life[i]=life;P.max[i]=life;
+  P.hue[i]=hue;P.size[i]=rrange(1.5,3.2);P.type[i]=type||0;
+}
+/* pulse rings */
+const RMAX=48; const R={x:new Float32Array(RMAX),y:new Float32Array(RMAX),
+  r0:new Float32Array(RMAX),r1:new Float32Array(RMAX),life:new Float32Array(RMAX),
+  max:new Float32Array(RMAX),hue:new Float32Array(RMAX),lw:new Float32Array(RMAX),alive:new Uint8Array(RMAX)};
+function spawnRing(x,y,r1,hue,dur,lw){
+  for(let i=0;i<RMAX;i++){ if(!R.alive[i]){ R.x[i]=x;R.y[i]=y;R.r0[i]=0;R.r1[i]=r1;
+    R.life[i]=dur;R.max[i]=dur;R.hue[i]=hue;R.lw[i]=lw||3;R.alive[i]=1; return; } }
+}
+
+/* ---------- day / night ---------- */
+let simTime=0, dayFactor=1, dayIndex=0, lastPhaseDay=true;
+function updateDay(){
+  const p=(simTime%CFG.dayPeriod)/CFG.dayPeriod; // 0..1
+  dayFactor=0.5-0.5*Math.cos(p*TAU); // smooth 0(night)..1(noon)..0
+  dayIndex=Math.floor(simTime/CFG.dayPeriod);
+  const isDay=dayFactor>0.5;
+  if(isDay!==lastPhaseDay){ lastPhaseDay=isDay; emit(isDay?'dawn':'dusk',cam.x,cam.y,null); }
+}
+
+/* ---------- population tracking ---------- */
+const HIST=180; // seconds of ring buffer, 1 sample/s
+const popPlank=new Float32Array(HIST), popGraze=new Float32Array(HIST), popPred=new Float32Array(HIST);
+let histIdx=0, histAcc=0;
+let peakGraze=1, peakPred=1, peakPlank=1;
+let genesisMeans=null, generationMax=1, extinctions=0;
+const geneHist=[]; // {speed,size,sense,fear} per second (grazers), for chart
+const GHMAX=240;
+function snapshotMeans(){
+  // scan creatures directly (not the active `grazers` list, which is only built inside step())
+  let n=0,sp=0,sz=0,se=0,fe=0,co=0,al=0;
+  for(const c of creatures){ if(!c.alive||c.kind!==0)continue;
+    n++; sp+=c.speed;sz+=c.size;se+=c.sense;fe+=c.fear;co+=c.cohere;al+=c.align; }
+  if(n===0)return null;
+  return {speed:sp/n,size:sz/n,sense:se/n,fear:fe/n,cohere:co/n,align:al/n,n};
+}
+function sampleHistory(){
+  const npl=PL.n, ng=grazers.length, npr=preds.length;
+  popPlank[histIdx]=npl; popGraze[histIdx]=ng; popPred[histIdx]=npr;
+  histIdx=(histIdx+1)%HIST;
+  peakGraze=Math.max(peakGraze*0.999,ng); peakPred=Math.max(peakPred*0.999,npr);
+  peakPlank=Math.max(peakPlank*0.999,npl);
+  const m=snapshotMeans();
+  if(m){ geneHist.push({speed:m.speed,size:m.size,sense:m.sense,fear:m.fear});
+    if(geneHist.length>GHMAX)geneHist.shift();
+    let gm=1; for(const c of grazers) if(c.gen>gm)gm=c.gen;
+    for(const c of preds) if(c.gen>gm)gm=c.gen;
+    generationMax=gm;
+  }
+  checkNarrationStats(m);
+  checkGenMilestone();
+}
+
+/* ---------- flocking order parameter (schooling meter) ---------- */
+let orderParam=0;
+function computeOrder(){
+  let sx=0,sy=0,mag=0,n=0;
+  for(const c of grazers){ const m=Math.hypot(c.vx,c.vy); if(m<1e-3)continue;
+    sx+=c.vx/m; sy+=c.vy/m; mag+=1; n++; }
+  orderParam = n>0 ? Math.hypot(sx,sy)/n : 0;
+}
+
+/* ============================================================================
+   SIMULATION STEP (fixed dt)
+============================================================================ */
+let predMigrateTimer=-1;
+function step(dt){
+  simTime+=dt;
+  updateDay();
+
+  // rebuild active lists + grid
+  grazers.length=0; preds.length=0;
+  for(const c of creatures){ if(!c.alive)continue; if(c.kind===0)grazers.push(c); else preds.push(c); }
+  gridBuild(creatures);
+
+  // plankton logistic growth per cluster
+  const r = lerp(CFG.r_night,CFG.r_day,dayFactor);
+  // one O(planktonCap) tally of per-cluster occupancy, instead of 48 full rescans
+  clCount.fill(0);
+  for(let i=0;i<CFG.planktonCap;i++){ if(PL.alive[i])clCount[PL.cl[i]]++; }
+  for(let ci=0;ci<clusters.length;ci++){
+    const cl=clusters[ci];
+    cl.N += dt*r*cl.N*(1-cl.N/CFG.K_c);
+    if(cl.N<0.3)cl.N=0.3; // refuge seed — low & invisible, but never zero (can't go extinct)
+    if(cl.N>CFG.K_c)cl.N=CFG.K_c;
+    // rendered motes track the integer biomass; spawn represents existing biomass, not new food
+    const want=Math.round(cl.N), have=clCount[ci];
+    if(have<want && PL.n<CFG.planktonCap){ spawnMote(ci); }
+    else if(have>want){ despawnMote(ci); }
+  }
+  // advect + pulse motes
+  PL.n=0;
+  for(let i=0;i<CFG.planktonCap;i++){
+    if(!PL.alive[i]){continue;} PL.n++;
+    const a=flowAngle(PL.px[i],PL.py[i],simTime);
+    PL.px[i]+=Math.cos(a)*10*dt; PL.py[i]+=Math.sin(a)*10*dt;
+    // gentle pull toward home cluster so motes don't wander off
+    const cl=clusters[PL.cl[i]];
+    PL.px[i]+=(cl.x-PL.px[i])*0.4*dt; PL.py[i]+=(cl.y-PL.py[i])*0.4*dt;
+    PL.pulse[i]+=dt*2;
+  }
+  plgBuild();
+
+  // ----- grazers -----
+  for(const c of grazers){ steerGrazer(c,dt); }
+  // ----- predators -----
+  for(const c of preds){ steerPredator(c,dt); }
+
+  // integrate + energy + lifecycle
+  integrate(grazers,dt);
+  integrate(preds,dt);
+
+  // predator migration if they alone go extinct — but only once prey has recovered,
+  // so a fresh wave of hunters doesn't wipe the last few survivors
+  if(preds.length===0 && grazers.length>40){
+    if(predMigrateTimer<0)predMigrateTimer=45;
+    predMigrateTimer-=dt;
+    if(predMigrateTimer<=0){ migratePredators(); predMigrateTimer=-1; }
+  } else predMigrateTimer=-1;
+
+  // total extinction -> genesis
+  if(grazers.length===0 && preds.length===0 && !genesisActive){ triggerGenesis(); }
+
+  computeOrder();
+  detectSchoolPhase(dt);
+
+  // history sampling
+  histAcc+=dt;
+  if(histAcc>=1){ histAcc-=1; sampleHistory(); }
+
+  // update particles/rings/detritus
+  updateParticles(dt);
+  updateDetritus(dt);
+
+  // audio reactive + narrator cooldowns
+  audioTick(dt);
+  narratorTick(dt);
+}
+
+/* neighbor scan into scratch accumulators */
+function steerGrazer(c,dt){
+  let sepx=0,sepy=0,alx=0,aly=0,cohx=0,cohy=0,cnt=0;
+  let fx=0,fy=0, fearx=0,feary=0, foodBest=1e9, fbx=0,fby=0;
+  const cell=gridCell(c.x,c.y); const s2=c.sense*c.sense;
+  const cx=cell%HGRID.cols, cy=(cell/HGRID.cols)|0;
+  let neighbors=0, localGraze=0;
+  for(let oy=-1;oy<=1;oy++)for(let ox=-1;ox<=1;ox++){
+    const nx=cx+ox, ny=cy+oy; if(nx<0||ny<0||nx>=HGRID.cols||ny>=HGRID.rows)continue;
+    let j=HGRID.head[ny*HGRID.cols+nx];
+    while(j!==-1){
+      const o=creatures[j]; j=HGRID.next[j];
+      if(o===c||!o.alive)continue;
+      const dx=o.x-c.x, dy=o.y-c.y, d2=dx*dx+dy*dy;
+      if(d2>s2)continue;
+      if(o.kind===0){ // fellow grazer
+        neighbors++; localGraze++;
+        const d=Math.sqrt(d2)||1;
+        sepx-=dx/d/d*40; sepy-=dy/d/d*40;
+        alx+=o.vx; aly+=o.vy;
+        cohx+=o.x; cohy+=o.y; cnt++;
+      } else { // predator -> fear
+        const d=Math.sqrt(d2)||1;
+        const w=(c.sense-d)/c.sense;
+        fearx-=dx/d*w; feary-=dy/d*w;
+      }
+      if(neighbors>26)break;
+    }
+    if(neighbors>26)break;
+  }
+  // nearest mote (food) via plankton grid
+  {
+    const mi=nearestMote(c.x,c.y,c.sense*1.2);
+    if(mi>=0){ fbx=PL.px[mi]-c.x; fby=PL.py[mi]-c.y; foodBest=fbx*fbx+fby*fby;
+      const d=Math.sqrt(foodBest)||1; fx=fbx/d; fy=fby/d;
+      const reach=10+c.size*7;
+      if(foodBest<reach*reach){ eatMote(mi,c); }
+    }
+  }
+  if(cnt>0){ cohx=cohx/cnt-c.x; cohy=cohy/cnt-c.y;
+    const cm=Math.hypot(cohx,cohy)||1; cohx/=cm; cohy/=cm;
+    const am=Math.hypot(alx,aly)||1; alx/=am; aly/=am; }
+  const feared=Math.hypot(fearx,feary);
+  c.state = feared>0.15 ? 2 : (foodBest<1e8?1:0); // 2 flee,1 graze,0 drift
+  c.fearFlare += ((c.state===2?1:0)-c.fearFlare)*Math.min(1,dt*8);
+
+  // desired accel — food weight scales with hunger so a starving grazer commits to feeding
+  const hunger=1-clamp(c.energy/c.cap,0,1);
+  const fw=16+hunger*44;                 // 16 (full) .. 60 (starving) — dominates flocking when hungry
+  let ax = sepx*c.sep + alx*8*c.align + cohx*10*c.cohere + fx*fw + fearx*34*c.fear;
+  let ay = sepy*c.sep + aly*8*c.align + cohy*10*c.cohere + fy*fw + feary*34*c.fear;
+  // flow field
+  const fa=flowAngle(c.x,c.y,simTime); ax+=Math.cos(fa)*6; ay+=Math.sin(fa)*6;
+  applySteer(c,ax,ay,dt, c.state===2?1.7:1.0);
+  c._local=localGraze;
+}
+
+let eatsCounter=0;
+function despawnMote(cl){ // remove one mote belonging to cluster cl (biomass fell)
+  for(let i=0;i<CFG.planktonCap;i++){ if(PL.alive[i]&&PL.cl[i]===cl){ PL.alive[i]=0; return; } }
+}
+function eatMote(i,c){
+  if(!PL.alive[i])return;
+  const cl=PL.cl[i]; PL.alive[i]=0; // consumed
+  clusters[cl].N=Math.max(0.3, clusters[cl].N-1); // eating removes biomass; regrows at logistic rate
+  c.energy=Math.min(c.cap,c.energy+CFG.F_p);
+  eatsCounter++;
+  emit('eat',PL.px[i],PL.py[i],c);
+}
+
+function steerPredator(c,dt){
+  c.gut=Math.max(0,c.gut-0.05*dt);
+  if(c.dashCd>0)c.dashCd-=dt;
+  if(c.dashT>0)c.dashT-=dt;
+  let ax=0,ay=0;
+  const hunting = c.gut<0.7;
+  let target=null,tbd=1e9;
+  if(hunting){
+    const cell=gridCell(c.x,c.y); const cx=cell%HGRID.cols, cy=(cell/HGRID.cols)|0;
+    const s2=c.sense*c.sense;
+    for(let oy=-1;oy<=1;oy++)for(let ox=-1;ox<=1;ox++){
+      const nx=cx+ox, ny=cy+oy; if(nx<0||ny<0||nx>=HGRID.cols||ny>=HGRID.rows)continue;
+      let j=HGRID.head[ny*HGRID.cols+nx];
+      while(j!==-1){ const o=creatures[j]; j=HGRID.next[j];
+        if(!o.alive||o.kind!==0)continue;
+        const dx=o.x-c.x,dy=o.y-c.y,d2=dx*dx+dy*dy;
+        if(d2<tbd&&d2<s2){tbd=d2;target=o;} }
+    }
+  }
+  if(target){
+    const dx=target.x-c.x,dy=target.y-c.y,d=Math.sqrt(tbd)||1;
+    // lead the prey
+    ax=(dx+target.vx*0.4)/d*30; ay=(dy+target.vy*0.4)/d*30;
+    c.chaseId=target.uid; c.chaseT+=dt;
+    if(c.chaseT>1){ emit('chase',c.x,c.y,c); c.chaseT=0.001; }
+    // dash when close
+    if(d<c.sense*0.55 && c.dashCd<=0 && c.dashT<=0){ c.dashT=2.2; c.dashCd=4; emit('dash',c.x,c.y,c); }
+    // catch attempt
+    if(d<12+c.size*8){ attemptCatch(c,target); }
+  } else {
+    const fa=flowAngle(c.x,c.y,simTime); ax=Math.cos(fa)*8; ay=Math.sin(fa)*8;
+    // wander
+    ax+=Math.cos(c.age*0.6+c.uid)*6; ay+=Math.sin(c.age*0.5+c.uid)*6;
+    if(c.chaseId!==-1){c.chaseId=-1;c.chaseT=0;}
+  }
+  const dashing=c.dashT>0;
+  applySteer(c,ax,ay,dt, dashing?2.2:1.0);
+}
+
+function attemptCatch(c,prey){
+  // gene-based: a faster prey (higher speed gene) is genuinely harder to catch ->
+  // predation selects prey speed UPWARD (the arms race). Flock confusion helps too.
+  const neigh=prey._local||0;
+  const relSpeed = c.speed / prey.speed;                 // >1 predator faster
+  let p=clamp(0.62*relSpeed*(1-0.06*neigh), 0.05, 0.85);
+  if(prey.matur<8)p*=0.5;                                // juvenile spawn protection
+  if(rnd()<p){
+    c.energy=Math.min(c.cap,c.energy+68+0.5*prey.energy);
+    c.gut=Math.min(1,c.gut+0.6); c.kills++;
+    killCreature(prey,'hunt');
+    c.chaseId=-1;c.chaseT=0;
+    recordHunt(c,true);
+  } else {
+    prey.escapes++; recordHunt(c,false);
+    if(prey.escapes>0 && c.chaseT>0.5) emit('escape',prey.x,prey.y,prey);
+    c.chaseId=-1;c.chaseT=0;
+  }
+}
+
+function applySteer(c,ax,ay,dt,speedMul){
+  c.vx+=ax*dt*30; c.vy+=ay*dt*30;
+  let v=Math.hypot(c.vx,c.vy);
+  const vmax=c.speed*speedMul;
+  if(v>vmax){ c.vx=c.vx/v*vmax; c.vy=c.vy/v*vmax; v=vmax; }
+  // heading + angular velocity (for body curl)
+  if(v>1e-3){ const h=Math.atan2(c.vy,c.vx);
+    let dh=h-c.heading; while(dh>Math.PI)dh-=TAU; while(dh<-Math.PI)dh+=TAU;
+    c.angvel=lerp(c.angvel,dh/Math.max(dt,1e-3),0.3); c.heading=h; }
+}
+
+function integrate(list,dt){
+  for(const c of list){
+    if(!c.alive)continue;
+    c.age+=dt; c.matur+=dt;
+    // move
+    c.x+=c.vx*dt; c.y+=c.vy*dt;
+    // wrap-ish: soft bounce at edges
+    if(c.x<20){c.x=20;c.vx=Math.abs(c.vx)*0.6;} if(c.x>CFG.W-20){c.x=CFG.W-20;c.vx=-Math.abs(c.vx)*0.6;}
+    if(c.y<20){c.y=20;c.vy=Math.abs(c.vy)*0.6;} if(c.y>CFG.H-20){c.y=CFG.H-20;c.vy=-Math.abs(c.vy)*0.6;}
+    if(!isFinite(c.x)||!isFinite(c.y)){ killCreature(c,'starve'); continue; }
+    // energy cost
+    const v=Math.hypot(c.vx,c.vy);
+    let cost;
+    if(c.kind===0){
+      cost = 1.0*c.size*c.size*c.size*c.metab + 2.0*c.size*c.size*(v/50)*(v/50) + 0.004*c.sense;
+    } else {
+      cost = 0.85*c.size*c.size*c.size + 2.2*c.size*c.size*(v/50)*(v/50) + 0.004*c.sense;
+    }
+    if(c.age>c.maxage*0.7) cost*=1.5; // senescence
+    c.energy-=cost*dt;
+    if(c.repro>0)c.repro-=dt;
+    // death
+    if(c.energy<=0 || c.age>c.maxage){ killCreature(c,'starve'); continue; }
+    // reproduce
+    const thr = c.kind===0?0.82:0.86, minAge=c.kind===0?20:40;
+    if(c.energy>=thr*c.cap && c.age>minAge && c.matur>minAge && c.repro<=0){
+      reproduce(c);
+    }
+    // spine phase advance
+    const velMag=v;
+    c.phase += dt*(3+ (c.kind===0?c.speed/90:c.speed/66)*9) * (0.4+ velMag/Math.max(c.speed,1)*0.9);
+  }
+}
+
+function reproduce(c){
+  // density-dependent suppression (resource competition proxy) — the honest population brake
+  if(c.kind===0){
+    let chance=1;
+    const local=c._local||0;
+    if(local>6) chance *= 1/(1+(local-6)/3);           // crowded locally -> fewer young
+    const pop=grazers.length, soft=CFG.grazeSoft;
+    if(pop>soft) chance *= Math.max(0.04, 1-(pop-soft)/soft); // global soft carrying capacity
+    if(rnd()>chance){ c.repro=2; return; }
+  } else {
+    if(preds.length>26){ if(rnd()>0.3){ c.repro=3; return; } }
+  }
+  const child=spawnCreature(c.kind, c.x+rrange(-8,8), c.y+rrange(-8,8), c);
+  if(!child){ c.repro=c.kind===0?4:6; return; } // pool full: throttle retries instead of spinning
+  const share=0.45*c.energy;
+  child.energy=share; c.energy=share; // 10% lost
+  c.repro=c.kind===0?11:18; c.offspring++;
+  child.matur=0;
+  emit('birth',child.x,child.y,child);
+}
+
+function migratePredators(){
+  for(let i=0;i<4;i++){ const e=rnd()<0.5?20:CFG.W-20;
+    spawnCreature(1, e, rrange(60,CFG.H-60), null); }
+  emit('migrate',cam.x,cam.y,null);
+}
+
+/* ---------- particles/rings/detritus update ---------- */
+function updateParticles(dt){
+  for(let i=0;i<PMAX;i++){
+    if(P.life[i]<=0)continue;
+    P.life[i]-=dt;
+    if(P.life[i]<=0){
+      if(P.type[i]===2){ detritus.push({x:P.px[i],y:P.py[i],vx:0,vy:0,hue:P.hue[i],life:rrange(14,26)}); }
+      pFree.push(i); continue;
+    }
+    P.px[i]+=P.vx[i]*dt; P.py[i]+=P.vy[i]*dt;
+    P.vx[i]*=0.94; P.vy[i]=P.vy[i]*0.94 - 6*dt; // slight buoyancy
+  }
+}
+function updateDetritus(dt){
+  for(let k=detritus.length-1;k>=0;k--){
+    const d=detritus[k]; d.life-=dt;
+    const a=flowAngle(d.x,d.y,simTime); d.x+=Math.cos(a)*8*dt; d.y+=Math.sin(a)*8*dt+4*dt;
+    if(d.y>CFG.H-10)d.y=CFG.H-10;
+    if(d.life<=0){ detritus.splice(k,1); continue; }
+  }
+  if(detritus.length>60)detritus.splice(0,detritus.length-60);
+}
+
+/* ============================================================================
+   EVENT BUS  (sim -> juice + audio + narrator + director)
+============================================================================ */
+const interest=[]; // {x,y,w,t}
+let huntStreak={id:-1,count:0,t:0};
+function emit(type,x,y,c){
+  switch(type){
+    case 'birth':
+      spawnRing(x,y,(10+ (c?c.size*8:8)), c?c.huedeg:200, 0.5, 2.5);
+      for(let i=0;i<6;i++){ const a=rnd()*TAU,r=rrange(14,30);
+        spawnParticle(x+Math.cos(a)*r,y+Math.sin(a)*r, -Math.cos(a)*18,-Math.sin(a)*18, c?c.huedeg:200, 0.7,1); }
+      if(A.on)sfxBirth(c?c.huedeg:200, x/CFG.W*2-1);
+      if(!firstBirthDone){ firstBirthDone=true; narrate('firstbirth',c); }
+      break;
+    case 'eat':
+      for(let i=0;i<2;i++){ const a=rnd()*TAU;
+        spawnParticle(x,y,Math.cos(a)*14,Math.sin(a)*14-6, c?c.huedeg:120, 0.28,1); }
+      if(A.on)sfxEat();
+      break;
+    case 'kill':{
+      pushInterest(x,y,10);
+      spawnRing(x,y,60,350,0.6,4);
+      cam.shake=Math.max(cam.shake,5); cam.zpunch=0.03; chroma=0.30;
+      if(A.on)sfxKill();
+      // hunt streak tracking on the killer isn't passed here; handled in recordHunt
+      break;}
+    case 'starve':
+      if(A.on)sfxStarve();
+      break;
+    case 'chase': pushInterest(x,y,6); break;
+    case 'dash':
+      if(c){ c._dashFx=0.25; }
+      break;
+    case 'escape': narrate('escape',c); break;
+    case 'dawn': narrate('dawn',null); if(A.on)sfxDawn(); break;
+    case 'dusk': narrate('dusk',null); if(A.on)sfxDusk(); break;
+    case 'migrate': narrate('migrate',null); break;
+  }
+}
+function pushInterest(x,y,w){ interest.push({x,y,w,t:simTime}); if(interest.length>16)interest.shift(); }
+function recordHunt(c,success){
+  if(!success)return;
+  if(huntStreak.id===c.uid && simTime-huntStreak.t<25){ huntStreak.count++; }
+  else { huntStreak.id=c.uid; huntStreak.count=1; }
+  huntStreak.t=simTime;
+  if(huntStreak.count>=3){ narrate('huntstreak',c); huntStreak.count=0; }
+}
+
+/* ============================================================================
+   AUDIO ENGINE (WebAudio, fully synthesized; voice mp3s separate)
+============================================================================ */
+const A={ctx:null,on:false,started:false, music:0.5,sfx:0.7,voice:1.0,
+  masterG:null,musicG:null,sfxG:null,voiceG:null,musicDuck:null,sfxDuck:null,
+  padVoices:[], lfo1:null,lfo2:null, sub:null,subGain:null,pulseGain:null,
+  noiseGain:null, extLP:null, conv:null, revReturn:null,
+  eatBucket:3, eatLast:0, sparkleT:0, chordT:0, chordIdx:0, mode:'lyd',
+  voicePool:[],playingVoice:null};
+
+const MODES={
+  lyd:[0,2,4,6,7,9,11], mixo:[0,2,4,5,7,9,10], dor:[0,2,3,5,7,9,10], aeo:[0,2,3,5,7,8,10]
+};
+const A_ROOT=55; // A1
+function midiHz(semisFromA1){ return A_ROOT*Math.pow(2,semisFromA1/12); }
+
+function audioInit(){
+  if(A.ctx)return;
+  const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
+  A.ctx=new AC();
+  const ctxA=A.ctx, t=ctxA.currentTime;
+  A.masterG=ctxA.createGain(); A.masterG.gain.value=0;
+  const limiter=ctxA.createDynamicsCompressor();
+  limiter.threshold.value=-6; limiter.knee.value=0; limiter.ratio.value=20;
+  limiter.attack.value=0.003; limiter.release.value=0.25;
+  A.masterG.connect(limiter); limiter.connect(ctxA.destination);
+
+  A.musicG=ctxA.createGain(); A.musicG.gain.value=A.music;
+  A.sfxG=ctxA.createGain(); A.sfxG.gain.value=A.sfx;
+  A.voiceG=ctxA.createGain(); A.voiceG.gain.value=A.voice;
+  A.musicDuck=ctxA.createGain(); A.musicDuck.gain.value=1;
+  A.sfxDuck=ctxA.createGain(); A.sfxDuck.gain.value=1;
+  A.extLP=ctxA.createBiquadFilter(); A.extLP.type='lowpass'; A.extLP.frequency.value=18000;
+
+  A.musicG.connect(A.masterG); A.sfxG.connect(A.masterG); A.voiceG.connect(A.masterG);
+  A.musicDuck.connect(A.extLP); A.extLP.connect(A.musicG);
+  A.sfxDuck.connect(A.sfxG);
+
+  // reverb
+  A.conv=ctxA.createConvolver(); A.conv.buffer=makeIR(ctxA);
+  A.revReturn=ctxA.createGain(); A.revReturn.gain.value=0.8;
+  A.conv.connect(A.revReturn); A.revReturn.connect(A.musicDuck);
+
+  // pad bus
+  const padBus=ctxA.createGain(); padBus.gain.value=1; padBus.connect(A.musicDuck);
+  const padRev=ctxA.createGain(); padRev.gain.value=0.5; padBus.connect(padRev); padRev.connect(A.conv);
+  A.padBus=padBus;
+
+  // shared LFOs
+  A.lfo1=ctxA.createOscillator(); A.lfo1.frequency.value=0.06;
+  const lfo1g=ctxA.createGain(); lfo1g.gain.value=400; A.lfo1.connect(lfo1g); A.lfo1.start();
+  A.lfo2=ctxA.createOscillator(); A.lfo2.frequency.value=0.13;
+  const lfo2g=ctxA.createGain(); lfo2g.gain.value=3; A.lfo2.connect(lfo2g); A.lfo2.start();
+
+  // 4 pad voices
+  const baseFreqs=[110,330,554.37,622.25];
+  A.padVoices=baseFreqs.map((f)=>{
+    const o1=ctxA.createOscillator(); o1.type='sawtooth'; o1.frequency.value=f; o1.detune.value=-6;
+    const o2=ctxA.createOscillator(); o2.type='triangle'; o2.frequency.value=f; o2.detune.value=6;
+    const filt=ctxA.createBiquadFilter(); filt.type='lowpass'; filt.frequency.value=1200; filt.Q.value=0.7;
+    const g=ctxA.createGain(); g.gain.value=0.05;
+    o1.connect(filt); o2.connect(filt); filt.connect(g); g.connect(padBus);
+    lfo1g.connect(filt.frequency); lfo2g.connect(o1.detune); lfo2g.connect(o2.detune);
+    o1.start(); o2.start();
+    return {o1,o2,filt,g,base:f};
+  });
+
+  // sub
+  A.sub=ctxA.createOscillator(); A.sub.type='sine'; A.sub.frequency.value=55;
+  const shaper=ctxA.createWaveShaper(); shaper.curve=makeShaper();
+  const hp=ctxA.createBiquadFilter(); hp.type='highpass'; hp.frequency.value=25;
+  A.subGain=ctxA.createGain(); A.subGain.gain.value=0.22;
+  A.pulseGain=ctxA.createGain(); A.pulseGain.gain.value=0;
+  A.sub.connect(shaper); shaper.connect(hp); hp.connect(A.subGain); A.subGain.connect(A.pulseGain);
+  A.pulseGain.connect(A.musicDuck); A.sub.start();
+  A.subRest=0; A.pulseT=0;
+
+  // noise bed
+  const nb=ctxA.createBufferSource(); nb.buffer=makeNoise(ctxA,2); nb.loop=true;
+  const bp=ctxA.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=400; bp.Q.value=0.5;
+  A.noiseLP=ctxA.createBiquadFilter(); A.noiseLP.type='lowpass'; A.noiseLP.frequency.value=1000;
+  A.noiseGain=ctxA.createGain(); A.noiseGain.gain.value=0.04;
+  const npan=ctxA.createStereoPanner?ctxA.createStereoPanner():null;
+  nb.connect(bp); bp.connect(A.noiseLP); A.noiseLP.connect(A.noiseGain);
+  if(npan){A.noiseGain.connect(npan);npan.connect(A.musicDuck);
+    const npl=ctxA.createOscillator();npl.frequency.value=0.03;const npg=ctxA.createGain();npg.gain.value=0.4;
+    npl.connect(npg);npg.connect(npan.pan);npl.start();}
+  else A.noiseGain.connect(A.musicDuck);
+  const nlfo=ctxA.createOscillator(); nlfo.frequency.value=0.07; const nlg=ctxA.createGain(); nlg.gain.value=400;
+  nlfo.connect(nlg); nlg.connect(A.noiseLP.frequency); nlfo.start();
+  nb.start();
+
+  // sub cosine curve for pulses
+  A.pulseCurve=new Float32Array(64);
+  for(let i=0;i<64;i++){ const t=i/63; A.pulseCurve[i]= t<0.28? 0.5-0.5*Math.cos(t/0.28*Math.PI) : 0.5+0.5*Math.cos((t-0.28)/0.72*Math.PI); }
+
+  A.started=true;
+}
+function makeIR(ctxA,dur=3.5,decay=4.5,dark=0.6){
+  const len=Math.floor(ctxA.sampleRate*dur), ir=ctxA.createBuffer(2,len,ctxA.sampleRate);
+  for(let ch=0;ch<2;ch++){ const d=ir.getChannelData(ch); let lp=0;
+    for(let i=0;i<len;i++){ const t=i/len, env=Math.pow(1-t,decay), a=dark*t;
+      lp+=((Math.random()*2-1)-lp)*(1-a*0.95); d[i]=lp*env; } }
+  return ir;
+}
+function makeNoise(ctxA,dur){ const len=(ctxA.sampleRate*dur)|0, b=ctxA.createBuffer(1,len,ctxA.sampleRate);
+  const d=b.getChannelData(0); for(let i=0;i<len;i++)d[i]=Math.random()*2-1; return b; }
+function makeShaper(){ const n=1024,c=new Float32Array(n);
+  for(let i=0;i<n;i++){ const x=i/(n-1)*2-1; c[i]=x+0.15*x*x; } return c; }
+
+function audioResume(){
+  if(!A.ctx)audioInit();
+  if(!A.ctx)return;
+  if(A.ctx.state==='suspended')A.ctx.resume();
+  A.on=true;
+  A.masterG.gain.setTargetAtTime(0.8, A.ctx.currentTime, 1.0);
+}
+function audioMute(){
+  if(!A.ctx)return;
+  A.on=false;
+  if(A.playingVoice){ try{A.playingVoice.pause();}catch(e){} }
+  A.masterG.gain.setTargetAtTime(0, A.ctx.currentTime, 0.15);
+  setTimeout(()=>{ if(!A.on&&A.ctx&&A.ctx.state==='running')A.ctx.suspend(); },500);
+}
+function setBus(which,v){
+  A[which]=v;
+  if(!A.ctx)return;
+  const g={music:A.musicG,sfx:A.sfxG,voice:A.voiceG}[which];
+  if(g)g.gain.setTargetAtTime(v,A.ctx.currentTime,0.05);
+}
+
+/* audio reactive tick */
+function audioTick(dt){
+  if(!A.started||!A.on)return;
+  const ctxA=A.ctx, t=ctxA.currentTime;
+  // ecosystem health
+  const ng=grazers.length, npr=preds.length, npl=PL.n;
+  const balance=(ng>0?1:0)+(npr>0?1:0)+(npl>10?1:0);
+  const H=clamp((balance/3)*0.6 + clamp(ng/CFG.grazeStart,0,1)*0.4, 0,1);
+  A.health = A.health==null?H:lerp(A.health,H,dt*0.5);
+  const mode = A.health>=0.75?'lyd':A.health>=0.5?'mixo':A.health>=0.25?'dor':'aeo';
+  if(mode!==A.mode){ A.mode=mode; }
+  // day/night pad filter — but yield to the slow dawn/dusk gesture for a few seconds
+  const cutoff=lerp(800,2400,dayFactor);
+  if(!(A._padFiltHold && t < A._padFiltHold))
+    for(const v of A.padVoices) v.filt.frequency.setTargetAtTime(cutoff, t, 5);
+  // markov chord change
+  A.chordT-=dt;
+  if(A.chordT<=0){ A.chordT=rrange(20,40); stepChord(); }
+  // sub pulses
+  A.subRest-=dt;
+  A.pulseT-=dt;
+  const busy=clamp(ng/CFG.grazeStart,0,1);
+  const rate=lerp(0.25,0.5,busy);
+  if(A.subRest>-1e6 && A.subRest<0 && simTime>0){
+    // rest cadence: every ~90s rest 8-15s
+  }
+  if(Math.floor(simTime/90)!==A._subRestEpoch){ A._subRestEpoch=Math.floor(simTime/90); A.subRest=rrange(8,15); }
+  if(A.pulseT<=0 && A.subRest<=0){
+    A.pulseT=1/rate;
+    const dur=1.25;
+    try{ A.pulseGain.gain.cancelScheduledValues(t);
+      A.pulseGain.gain.setValueCurveAtTime(A.pulseCurve, t+0.02, dur); }catch(e){}
+  }
+  // sparkle keyed to plankton density (Poisson)
+  A.sparkleT-=dt;
+  if(A.sparkleT<=0){
+    const dens=clamp(npl/CFG.planktonCap,0,1);
+    const mean=lerp(8,0.33,dens); // seconds between notes
+    A.sparkleT=mean*(0.5+rnd());
+    sfxSparkle();
+  }
+  // eat bucket refill
+  A.eatBucket=Math.min(3,A.eatBucket+dt*8);
+}
+function stepChord(){
+  if(!A.started)return;
+  const t=A.ctx.currentTime;
+  const scale=MODES[A.mode];
+  // pick one voice to move to a nearby chord tone
+  const vi=1+((rnd()*3)|0);
+  const v=A.padVoices[vi];
+  const deg=scale[(rnd()*scale.length)|0];
+  const oct=vi>=3 && dayFactor>0.5?24:12;
+  const target=midiHz(12+deg+oct + (vi===3?12:0));
+  v.o1.frequency.setTargetAtTime(target,t,2.5);
+  v.o2.frequency.setTargetAtTime(target,t,2.5);
+}
+
+/* one-shot voice pool for sfx (cap polyphony) */
+function sfxTone(type,freq,peak,attack,decayTau,pan,dest,filtType,filtFreq){
+  if(!A.on)return null;
+  const ctxA=A.ctx,t=ctxA.currentTime+0.02;
+  const o=ctxA.createOscillator(); o.type=type||'sine'; o.frequency.value=freq;
+  const g=ctxA.createGain(); g.gain.value=0;
+  let node=o;
+  if(filtType){ const f=ctxA.createBiquadFilter(); f.type=filtType; f.frequency.value=filtFreq||1000;
+    o.connect(f); f.connect(g); } else o.connect(g);
+  let out=g;
+  if(pan!=null && ctxA.createStereoPanner){ const pn=ctxA.createStereoPanner(); pn.pan.value=clamp(pan,-1,1);
+    g.connect(pn); out=pn; }
+  out.connect(dest||A.sfxDuck);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(peak,t+(attack||0.005));
+  g.gain.setTargetAtTime(0,t+(attack||0.005),decayTau);
+  o.start(t); o.stop(t+(attack||0.005)+decayTau*6+0.1);
+  return {o,g};
+}
+function curTone(deg){ return midiHz(12+MODES[A.mode][((deg%7)+7)%7]+ (deg>=7?12:0)); }
+function sfxBirth(hue,pan){
+  const base=880+((hue%120)/120)*880;
+  const r=sfxTone('triangle',base,0.11,0.005,0.25,pan,null,'highpass',600);
+  if(r)r.o.frequency.setTargetAtTime(base*1.09, A.ctx.currentTime+0.02,0.03);
+  sfxTone('sine',base*2,0.04,0.005,0.25,pan);
+}
+function sfxEat(){
+  if(A.eatBucket<1)return; A.eatBucket-=1;
+  const pitches=[2093,1975.5,2217.5,2349.3];
+  A._eatRR=(A._eatRR||0)+1;
+  sfxTone('sine',pitches[A._eatRR%4],0.03,0.001,0.06,(A._eatRR%2?0.3:-0.3));
+}
+function sfxKill(){
+  const ctxA=A.ctx,t=ctxA.currentTime+0.02;
+  const o=ctxA.createOscillator();o.type='sine';o.frequency.setValueAtTime(160,t);
+  o.frequency.exponentialRampToValueAtTime(50,t+0.12);
+  const g=ctxA.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.35,t+0.003);
+  g.gain.setTargetAtTime(0,t+0.003,0.3);o.connect(g);g.connect(A.sfxDuck);o.start(t);o.stop(t+2);
+  // noise burst
+  const nb=ctxA.createBufferSource();nb.buffer=makeNoise(ctxA,0.1);
+  const bp=ctxA.createBiquadFilter();bp.type='bandpass';bp.frequency.value=300;bp.Q.value=1;
+  const ng=ctxA.createGain();ng.gain.setValueAtTime(0.12,t);ng.gain.setTargetAtTime(0,t,0.05);
+  nb.connect(bp);bp.connect(ng);ng.connect(A.sfxDuck);nb.start(t);nb.stop(t+0.2);
+  // sub drop on music bus
+  const so=ctxA.createOscillator();so.type='sine';so.frequency.setValueAtTime(55,t);
+  so.frequency.exponentialRampToValueAtTime(30,t+0.8);
+  const sg=ctxA.createGain();sg.gain.setValueAtTime(0.2,t);sg.gain.setTargetAtTime(0,t+0.1,0.25);
+  so.connect(sg);sg.connect(A.musicDuck);so.start(t);so.stop(t+1.2);
+  // pad flinch
+  A.padBus.gain.setTargetAtTime(0.8,t,0.02); A.padBus.gain.setTargetAtTime(1,t+0.1,0.3);
+}
+function sfxStarve(){
+  if(simTime-(A._starveLast||-9)<2)return; A._starveLast=simTime;
+  sfxTone('sine',curTone(2),0.08,0.02,1.2,0,null,'lowpass',900);
+  const r=sfxTone('sine',curTone(0),0.07,0.02,1.2,0,null,'lowpass',900);
+}
+function sfxDawn(){
+  const notes=[curTone(0)*2,curTone(4)*2,curTone(8)];
+  notes.forEach((f,i)=>setTimeout(()=>sfxTone('triangle',f,0.12,0.03,1.5,0,null,null,0),i*400));
+  A._padFiltHold=A.ctx.currentTime+3;
+  for(const v of A.padVoices)v.filt.frequency.setTargetAtTime(2400,A.ctx.currentTime,20);
+}
+function sfxDusk(){
+  const notes=[curTone(8),curTone(4)*2,curTone(0)*2];
+  notes.forEach((f,i)=>setTimeout(()=>sfxTone('sine',f,0.1,0.03,2.5,0),i*500));
+  A._padFiltHold=A.ctx.currentTime+3;
+  for(const v of A.padVoices)v.filt.frequency.setTargetAtTime(800,A.ctx.currentTime,20);
+}
+function sfxSparkle(){
+  const pool=[1760,1975.5,2217.5,2637,1661.2];
+  A._spk=(A._spk||0)+((rnd()<0.5?1:-1)); A._spk=((A._spk%pool.length)+pool.length)%pool.length;
+  const f=pool[A._spk];
+  const tau=dayFactor>0.5?0.5:1.1;
+  sfxTone(rnd()<0.5?'sine':'triangle',f,0.06,0.002,tau,rrange(-0.5,0.5),A.sfxDuck,'highpass',1000);
+}
+function sfxEvolveChime(){
+  const ctxA=A.ctx,t=ctxA.currentTime+0.02;
+  const car=ctxA.createOscillator();car.type='sine';car.frequency.value=1318.5;
+  const mod=ctxA.createOscillator();mod.type='sine';mod.frequency.value=1318.5*1.4;
+  const modg=ctxA.createGain();modg.gain.setValueAtTime(200,t);modg.gain.exponentialRampToValueAtTime(20,t+1.5);
+  mod.connect(modg);modg.connect(car.frequency);
+  const g=ctxA.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.15,t+0.002);
+  g.gain.setTargetAtTime(0,t+0.002,1.8);car.connect(g);g.connect(A.sfxDuck);
+  car.start(t);mod.start(t);car.stop(t+4);mod.stop(t+4);
+  sfxTone('sine',1318.5*1.5,0.07,0.005,1.6,0);
+}
+function sfxGenesis(){
+  if(!A.on)return;
+  const ctxA=A.ctx,t=ctxA.currentTime+0.02;
+  const freqs=[55,110,220,440,880,1760];
+  const lp=ctxA.createBiquadFilter();lp.type='lowpass';lp.frequency.setValueAtTime(800,t);
+  lp.frequency.exponentialRampToValueAtTime(8000,t+6);lp.connect(A.sfxDuck);
+  freqs.forEach((f,i)=>{
+    const o=ctxA.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(f,t);
+    o.frequency.exponentialRampToValueAtTime(f*2,t+3);
+    o.frequency.setValueAtTime(f,t+3); o.frequency.exponentialRampToValueAtTime(f*2,t+6);
+    const g=ctxA.createGain();const peak=0.04*Math.exp(-Math.pow(Math.log(f/500),2));
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+1);
+    g.gain.setTargetAtTime(0,t+5,0.8);
+    o.connect(g);g.connect(lp);o.start(t);o.stop(t+7);
+  });
+  // chord bloom
+  setTimeout(()=>{ if(!A.on)return; const tt=A.ctx.currentTime;
+    A.padBus.gain.setTargetAtTime(1.6,tt,0.5); A.padBus.gain.setTargetAtTime(1,tt+2,10); },6000);
+}
+function sfxExtinct(){
+  if(!A.on)return;
+  const ctxA=A.ctx,t=ctxA.currentTime+0.02;
+  A.extLP.frequency.cancelScheduledValues(t);
+  A.extLP.frequency.setValueAtTime(18000,t);
+  A.extLP.frequency.exponentialRampToValueAtTime(150,t+8);
+  A.extLP.frequency.setTargetAtTime(18000,t+16,3);
+  // lone low A
+  const o=ctxA.createOscillator();o.type='sine';o.frequency.value=55;
+  const o2=ctxA.createOscillator();o2.type='sine';o2.frequency.value=110;
+  const g=ctxA.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.3,t+2);
+  g.gain.setValueAtTime(0.3,t+6);g.gain.setTargetAtTime(0,t+6,2);
+  const g2=ctxA.createGain();g2.gain.value=0.3;o2.connect(g2);g2.connect(g);o.connect(g);
+  g.connect(A.sfxG);o.start(t);o2.start(t);o.stop(t+14);o2.stop(t+14);
+}
+
+/* ============================================================================
+   NARRATOR (caption pools + voice; cooldowns, shuffle-bag no-repeat)
+============================================================================ */
+const CAP={
+  genesis:['in the beginning — light, hunger, and current','something stirs in the empty dark',
+    'the void remembers how to make life','first spark. first drift. first appetite'],
+  extinction:['the last of the {sp} goes dark','a lineage ends. the water forgets quickly',
+    'no more {sp}. the deep is quieter now','an entire history, dissolved into the current'],
+  nearext:['the {sp} are down to a handful','a whole species, hanging by a fin',
+    'so few {sp} left. every one matters now','the {sp} flicker at the edge of forever'],
+  firstbirth:['the first birth. it begins again','new light in the water — the first of many',
+    'life, already making more of itself','generation two has arrived'],
+  boom:['the {sp} are thriving — more than ever before','a good season for the {sp}',
+    'the water fills with {sp}. abundance, for now','boom times. the deep can barely hold them'],
+  crash:['half the {sp} gone in a minute','the balance tips hard against the {sp}',
+    'lean times come fast down here','the {sp} pay the price of plenty'],
+  huntstreak:['three kills. this one has learned something','the hunter is having a very good night',
+    'an apex doing exactly what apexes do','efficiency, written in three short chases'],
+  escape:['not today. the small one slips away','four seconds of terror, then open water',
+    'the hunter turns away, hungry','escaped — by less than a body length'],
+  schoolForm:['a thousand small decisions become one shape','the grazers move as a single mind',
+    'watch: no leader, and yet — a school','they turn together now. nobody taught them'],
+  schoolScatter:['the shape shatters. every fish for itself','one shadow, and the school becomes chaos',
+    'panic travels faster than the predator','the single mind breaks into many'],
+  evolution:['the {sp} are changing. evolution, live','these are not their ancestors anymore',
+    'the genes drift, and the bodies follow','selection has been busy while you watched'],
+  dawn:['light returns. the motes begin to bloom','dawn in the trench. the growing hours',
+    'the water warms into color','morning, as the deep understands it'],
+  dusk:['the light thins. hunters like this part','dusk. the honest hour of the deep',
+    'night falls, and appetites rise','the bloom sleeps. the teeth do not'],
+  genmile:['generation {n}. the experiment continues','{n} generations, and no two alike',
+    'the {n}th generation inherits the water','gen {n} — evolution keeps its own calendar'],
+  famine:['the bloom has failed. hunger spreads upward','the pastures are empty. the grazers feel it first',
+    'scarcity is also a kind of selection','thin water. everything gets desperate now'],
+  migrate:['hunters arrive from the deeper dark','new predators drift in from the trench',
+    'the water was calm. it will not stay that way'],
+  detritus:['the dead feed the living. nothing is wasted','a fall of bodies — a feast for the patient',
+    'even endings are edible down here'],
+  followStart:['following {name} — one life among hundreds','staying with this one for a while',
+    'every dot in the dark is a story. here’s one'],
+};
+/* which events have recorded voice, and how many variants exist */
+const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2};
+const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
+  firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
+  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen'};
+const PRIORITY={genesis:0,extinction:0,nearext:1,firstbirth:1,evolution:1,boom:2,crash:2,huntstreak:2,
+  genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3};
+const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
+  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0};
+const bags={}; const evLast={};
+let lastCaptionAt=-100, lastVoiceAt=-100, firstBirthDone=false, warmupUntil=20;
+let queued=null;
+function bagPick(key,pool){
+  if(!bags[key]||bags[key].length===0){ bags[key]=pool.map((_,i)=>i);
+    for(let i=bags[key].length-1;i>0;i--){const j=(rnd()*(i+1))|0;[bags[key][i],bags[key][j]]=[bags[key][j],bags[key][i]];}
+    // pop() draws from the END, so protect the last element from being an immediate repeat
+    const n=bags[key].length;
+    if(bags[key+'_last']!=null && n>1 && bags[key][n-1]===bags[key+'_last'])
+      [bags[key][n-1],bags[key][n-2]]=[bags[key][n-2],bags[key][n-1]];
+  }
+  const idx=bags[key].pop(); bags[key+'_last']=idx; return idx;
+}
+function spName(sp){ return sp==='pred'?'hunters':sp==='plank'?'the motes':'grazers'; }
+function narrate(event,c,data){
+  if(simTime<warmupUntil && event!=='firstbirth' && event!=='genesis')return;
+  const pri=PRIORITY[event]!=null?PRIORITY[event]:3;
+  const gc=simTime-lastCaptionAt;
+  const globalCool=28+rnd()*12;
+  if(pri>=2 && gc<globalCool)return;
+  if(pri===1 && gc<15)return;
+  const ev=EVCOOL[event];
+  if(ev!=null && ev>0 && simTime-(evLast[event]||-1e6)<ev)return;
+  // pick caption
+  const pool=CAP[event]; if(!pool)return;
+  const idx=bagPick(event,pool);
+  let text=pool[idx];
+  const sp = data&&data.sp ? data.sp : (c?(c.kind===1?'pred':'graze'):'graze');
+  text=text.replace('{sp}',spName(sp));
+  if(data&&data.n!=null)text=text.replace('{n}',data.n);
+  if(data&&data.name)text=text.replace('{name}',data.name);
+  if(data&&data.text)text=data.text;
+  evLast[event]=simTime; lastCaptionAt=simTime;
+  // voice?
+  let voGlyph=false;
+  if(VOICE[event] && A.on && A.voice>0 && simTime-lastVoiceAt>90 && rnd()<0.6){
+    playVoice(event); lastVoiceAt=simTime; voGlyph=true;
+  }
+  showCaption(text,pri===0, sp, voGlyph);
+  captionsSinceData++; // space evolution data-lines >=4 captions apart
+}
+function playVoice(event){
+  const n=VOICE[event]; if(!n)return;
+  const key=event+'_vo';
+  const vi=bagPick(key,new Array(n).fill(0))+1;
+  const file=`assets/${VOICE_FILE[event]}_v${vi}.mp3`;
+  const unduck=()=>{ if(A.ctx){ A.musicDuck.gain.setTargetAtTime(1,A.ctx.currentTime,0.6);
+    A.sfxDuck.gain.setTargetAtTime(1,A.ctx.currentTime,0.6);} };
+  try{
+    const au=new Audio(file);
+    // duck music/sfx under the narration
+    if(A.ctx){ A.musicDuck.gain.setTargetAtTime(0.35,A.ctx.currentTime,0.15);
+      A.sfxDuck.gain.setTargetAtTime(0.6,A.ctx.currentTime,0.15); }
+    // route through the graph so the voice slider + master mute affect it live; fall back to element volume
+    let routed=false;
+    if(A.ctx){ try{ const src=A.ctx.createMediaElementSource(au); src.connect(A.voiceG); routed=true; }catch(e){} }
+    if(!routed) au.volume=clamp(A.voice*0.9,0,1);
+    A.playingVoice=au;
+    const done=()=>{ unduck(); if(A.playingVoice===au)A.playingVoice=null; };
+    au.onended=done; au.onerror=done;           // restore on clean end OR decode/load error
+    au.play().then(null,done);                   // ...and on play() rejection
+    setTimeout(()=>{ if(A.playingVoice===au)done(); }, 12000); // final backstop
+  }catch(e){ unduck(); }
+}
+
+/* dynamic data-line narration (evolution / stats) */
+let lastDataAt=-100, captionsSinceData=99;
+function checkNarrationStats(m){
+  if(!m||!genesisMeans)return;
+  if(simTime<40)return;
+  if(simTime-lastDataAt<240 || captionsSinceData<4)return;
+  const spd=(m.speed/genesisMeans.speed-1)*100;
+  const fear=(m.fear/genesisMeans.fear-1)*100;
+  const sense=(m.sense/genesisMeans.sense-1)*100;
+  let fired=false;
+  const round5=(x)=>Math.round(x/5)*5;
+  if(Math.abs(spd)>=20 && generationMax>=8 && Math.abs(spd)>=(dataArmed.speed||20)){
+    narrate('evolution',null,{text:`the grazers now swim ${Math.abs(round5(spd))}% ${spd>0?'faster':'slower'} than their ancestors`,sp:'graze'});
+    dataArmed.speed=Math.abs(spd)+10; fired=true;
+  } else if(Math.abs(fear)>=30 && Math.abs(fear)>=(dataArmed.fear||30)){
+    narrate('evolution',null,{text:`the survivors are the frightened ones — fear up ${Math.abs(round5(fear))}%`,sp:'graze'});
+    dataArmed.fear=Math.abs(fear)+10; fired=true;
+  } else if(Math.abs(sense)>=25 && generationMax>=10 && Math.abs(sense)>=(dataArmed.sense||25)){
+    narrate('evolution',null,{text:`they see ${Math.abs(round5(sense))}% ${sense>0?'farther':'less far'} than generation one`,sp:'graze'});
+    dataArmed.sense=Math.abs(sense)+10; fired=true;
+  }
+  if(fired){ lastDataAt=simTime; captionsSinceData=0; }
+}
+const dataArmed={};
+function maybeEvolutionMilestone(){ /* handled by stat check; chime on big drift */ }
+let genMileHit={};
+function checkGenMilestone(){
+  const mstones=[10,25,50,100,200,300];
+  for(const g of mstones){ if(generationMax>=g && !genMileHit[g]){ genMileHit[g]=true;
+    if(A.on)sfxEvolveChime();
+    narrate('genmile',null,{n:g}); return; } }
+  if(generationMax>=400 && generationMax%100===0 && !genMileHit[generationMax]){
+    genMileHit[generationMax]=true; narrate('genmile',null,{n:generationMax});
+  }
+}
+
+/* boom/crash/near-extinction detection from history */
+let speciesState={graze:{},pred:{}};
+let extinctFlag={graze:false,pred:false};
+function narratorTick(dt){
+  // near extinction & extinction
+  checkSpecies('graze',grazers.length,peakGraze);
+  checkSpecies('pred',preds.length,peakPred);
+  // famine
+  let plTot=0; for(const c of clusters)plTot+=c.N;
+  const cap=CFG.clusters*CFG.K_c;
+  if(plTot<cap*0.10){ if((simTime-(famineT||-999))>20 && !famineNarrated){ narrate('famine',null); famineNarrated=true; famineT=simTime; } }
+  else { famineNarrated=false; }
+  // detritus bloom
+  if(detritus.length>=8 && (simTime-(detrT||-999))>240){ narrate('detritus',null); detrT=simTime; }
+  // caption counter for data-line spacing
+}
+let famineT=-999,famineNarrated=false,detrT=-999;
+function checkSpecies(sp,count,peak){
+  const st=speciesState[sp];
+  if(count===0){
+    if(!extinctFlag[sp]){ extinctFlag[sp]=true; extinctions++;
+      narrate('extinction',null,{sp}); if(sp==='graze'&&A.on)sfxExtinct(); drainPalette(sp); }
+  } else { extinctFlag[sp]=false; }
+  // near extinction (<=4 sustained)
+  if(count>0 && count<=4){ st.nearT=(st.nearT||0)+ (1/60);
+    if(st.nearT>5 && (simTime-(st.nearLast||-999))>120){ narrate('nearext',null,{sp}); st.nearLast=simTime; } }
+  else st.nearT=0;
+  // boom
+  if(count>peak*1.15 && count>CFG.grazeStart*0.5 && (simTime-(st.boomLast||-999))>150){
+    narrate('boom',null,{sp}); st.boomLast=simTime; }
+  // crash: 50% drop from 60s ago
+  const ago=popAt(sp,60);
+  if(ago>10 && count<ago*0.5 && (simTime-(st.crashLast||-999))>150){ narrate('crash',null,{sp}); st.crashLast=simTime; }
+}
+function popAt(sp,secsAgo){
+  const arr=sp==='graze'?popGraze:popPred;
+  const i=((histIdx-secsAgo)%HIST+HIST)%HIST; return arr[i];
+}
+
+/* school phase change detection */
+let schoolState=0;
+function detectSchoolPhase(dt){
+  if(grazers.length<25)return;
+  if(orderParam>0.75 && schoolState===0){ schoolState=1; narrate('schoolForm',null); }
+  else if(orderParam<0.35 && schoolState===1){ schoolState=0; narrate('schoolScatter',null); }
+}
+
+/* ============================================================================
+   GENESIS choreography
+============================================================================ */
+let genesisActive=false, genesisT=0, genesisX=0,genesisY=0, genesisCount=0, camReleaseSoon=0;
+function triggerGenesis(){
+  genesisActive=true; genesisT=0;
+  genesisX=CFG.W/2+rrange(-200,200); genesisY=CFG.H/2+rrange(-120,120);
+  genesisCount=(genesisCount||0)+1;
+  cam.state='GENESIS'; cam.dwell=0;
+  seedClusters();
+  chroma=0; cam.shake=0;
+  narrate('genesis',null);
+  if(A.on)sfxGenesis();
+  warmupUntil=simTime+8;
+  showTitleGhost(`PRIMORDIA — genesis ${roman(genesisCount+1)}`);
+}
+function genesisStep(dt){
+  genesisT+=dt;
+  if(genesisT>1.9 && genesisT-dt<=1.9){ cam.shake=8; chroma=0.5;
+    spawnRing(genesisX,genesisY,2000,45,2.5,40); }
+  // seed particles spiral out then become founders
+  if(genesisT>1.9 && genesisCount!=null){
+    if(!genesisSeeded){ genesisSeeded=true;
+      for(let i=0;i<60;i++){ const a=i*2.399963; const r=20;
+        spawnParticle(genesisX+Math.cos(a)*r,genesisY+Math.sin(a)*r,
+          Math.cos(a)*rrange(30,120),Math.sin(a)*rrange(30,120), 45+i, rrange(1.5,2.6),1); }
+    }
+  }
+  if(genesisT>2.6 && !foundersSpawned){ foundersSpawned=true;
+    for(let i=0;i<CFG.grazeStart;i++){ const pp=nearClusterPos(); spawnCreature(0, pp.x, pp.y, null); }
+    for(let i=0;i<CFG.predStart;i++) spawnCreature(1, rrange(120,CFG.W-120), rrange(90,CFG.H-90), null);
+    genesisMeans=snapshotMeans();
+    peakGraze=CFG.grazeStart; peakPred=CFG.predStart;
+    firstBirthDone=false; schoolState=0; huntStreak.count=0;
+    for(const k in dataArmed)delete dataArmed[k];
+    extinctFlag.graze=false; extinctFlag.pred=false;
+    paletteDrain.graze=0; paletteDrain.pred=0;
+    // re-arm all per-world narration/history state so a new lineage earns its milestones fresh
+    genMileHit={}; generationMax=1;
+    captionsSinceData=99; lastDataAt=-100;
+    popGraze.fill(0); popPred.fill(0); popPlank.fill(0); histIdx=0; histAcc=0;
+    geneHist.length=0; speciesState={graze:{},pred:{}};
+  }
+  if(genesisT>6){ genesisActive=false; genesisSeeded=false; foundersSpawned=false;
+    cam.state='DRIFT'; cam.dwell=0; }
+}
+let genesisSeeded=false, foundersSpawned=false;
+function roman(n){ const m=['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII']; return m[n]||(''+n); }
+
+/* palette drain on species extinction */
+const paletteDrain={graze:0,pred:0};
+function drainPalette(sp){ if(sp==='graze'||sp==='pred')paletteDrain[sp]=1; }
+
+/* ============================================================================
+   DIRECTOR CAMERA
+============================================================================ */
+function updateCamera(dt){
+  cam.dwell+=dt;
+  if(camReleaseSoon>0){ camReleaseSoon-=dt; if(camReleaseSoon<=0){ cam.state='DRIFT'; cam.followId=-1; cam.dwell=0; closeInspector(); } }
+
+  let tx=cam.tx,ty=cam.ty,tz=cam.tz, posTau=2.5, zTau=3.0;
+  if(cam.state==='GENESIS'){
+    tx=genesisX;ty=genesisY;tz=0.75; posTau=1.5; zTau=2.0;
+  } else if(cam.state==='FOLLOW'){
+    const c=getCreature(cam.followId);
+    if(c&&c.alive){ tx=c.x+c.vx*0.4; ty=c.y+c.vy*0.4; tz=1.75; posTau=0.5; zTau=1.2; }
+    else { camReleaseSoon=Math.max(camReleaseSoon,1.2); }
+  } else {
+    // DRIFT / INVESTIGATE scoring
+    let best=null,bestScore=0;
+    for(const e of interest){ const age=simTime-e.t; const w=e.w*Math.exp(-age/4);
+      if(w<=0.5)continue;
+      // cluster: just take the strongest for simplicity
+      if(w>bestScore){bestScore=w;best=e;}
+    }
+    if(cam.state==='INVESTIGATE'){
+      if(bestScore<2 || cam.dwell>9){ cam.state='DRIFT'; cam.dwell=0; }
+      else { tx=best.x;ty=best.y; tz=lerp(1.25,1.5,clamp(bestScore/14,0,1)); posTau=0.9; zTau=1.5; }
+    }
+    if(cam.state==='DRIFT'){
+      const t=simTime;
+      tx=CFG.W/2+Math.sin(t/87*TAU)*CFG.W*0.32;
+      ty=CFG.H/2+Math.sin(t/59*TAU)*CFG.H*0.30;
+      // bias toward population centroid
+      const cen=popCentroid(); if(cen){ tx=lerp(tx,cen.x,0.3); ty=lerp(ty,cen.y,0.3); }
+      tz=lerp(0.85,1.0,0.5+0.5*Math.sin(t*0.05));
+      if(bestScore>8 && cam.dwell>4){ cam.state='INVESTIGATE'; cam.dwell=0; }
+    }
+  }
+  cam.tx=tx;cam.ty=ty;cam.tz=tz;
+  cam.x=smoothDamp(cam.x,tx,cam.vx,posTau,dt);
+  cam.y=smoothDamp(cam.y,ty,cam.vy,posTau,dt);
+  const lz=smoothDamp(Math.log(cam.scale),Math.log(tz),cam.vz,zTau,dt);
+  cam.scale=clamp(Math.exp(lz),0.7,2.0);
+  // breathing (suppressed in follow)
+  cam.breath = cam.state==='FOLLOW'?0: 0.008*Math.sin(simTime*0.35);
+  // decays
+  cam.shake*=Math.pow(0.88,dt*60); if(cam.shake<0.05)cam.shake=0;
+  cam.zpunch*=Math.pow(0.9,dt*60);
+  if(chroma>0)chroma=Math.max(0,chroma-dt*1.2);
+}
+function popCentroid(){ let sx=0,sy=0,n=0; for(const c of grazers){sx+=c.x;sy+=c.y;n++;}
+  if(n===0){for(const c of preds){sx+=c.x;sy+=c.y;n++;}} return n?{x:sx/n,y:sy/n}:null; }
+function getCreature(uid){ for(const c of creatures)if(c.alive&&c.uid===uid)return c; return null; }
+
+/* ============================================================================
+   RENDERING
+============================================================================ */
+let bgCanvas=null,bgCtx=null, trailCanvas=null,trailCtx=null, bloomCanvas=null,bloomCtx=null;
+let vignette=null;
+let chroma=0;
+const snow=[[],[],[]]; // 3 depths
+function buildBackground(){
+  bgCanvas=document.createElement('canvas'); bgCanvas.width=Math.max(2,cv.width); bgCanvas.height=Math.max(2,cv.height);
+  bgCtx=bgCanvas.getContext('2d');
+  paintBackground();
+  // trail + bloom buffers
+  trailCanvas=document.createElement('canvas'); trailCanvas.width=Math.max(2,cv.width); trailCanvas.height=Math.max(2,cv.height);
+  trailCtx=trailCanvas.getContext('2d');
+  bloomCanvas=document.createElement('canvas'); bloomCanvas.width=Math.max(2,cv.width>>1); bloomCanvas.height=Math.max(2,cv.height>>1);
+  bloomCtx=bloomCanvas.getContext('2d');
+  buildVignette();
+}
+function paintBackground(){
+  const w=bgCanvas.width,h=bgCanvas.height,g=bgCtx.createLinearGradient(0,0,0,h);
+  const top=palLerp('#05010f','#071033',dayFactor), mid=palLerp('#0b0530','#0a1240',dayFactor),
+        bot=palLerp('#120a3a','#06122e',dayFactor);
+  g.addColorStop(0,top);g.addColorStop(0.5,mid);g.addColorStop(1,bot);
+  bgCtx.fillStyle=g;bgCtx.fillRect(0,0,w,h);
+}
+function palLerp(a,b,t){
+  const pa=hex(a),pb=hex(b);
+  return `rgb(${Math.round(lerp(pa[0],pb[0],t))},${Math.round(lerp(pa[1],pb[1],t))},${Math.round(lerp(pa[2],pb[2],t))})`;
+}
+function hex(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
+function buildVignette(){
+  vignette=document.createElement('canvas'); vignette.width=Math.max(2,cv.width);vignette.height=Math.max(2,cv.height);
+  const vx=vignette.getContext('2d');
+  const g=vx.createRadialGradient(cv.width/2,cv.height/2,cv.height*0.2,cv.width/2,cv.height/2,cv.height*0.75);
+  g.addColorStop(0,'rgba(2,0,12,0)');g.addColorStop(1,'rgba(2,0,12,0.62)');
+  vx.fillStyle=g;vx.fillRect(0,0,cv.width,cv.height);
+}
+function initSnow(){
+  const depths=[{n:90,cam:0.4,size:0.6,a:0.15},{n:80,cam:1.0,size:1.4,a:0.3},{n:40,cam:1.4,size:5,a:0.12}];
+  for(let d=0;d<3;d++){ snow[d].length=0;
+    for(let i=0;i<depths[d].n;i++) snow[d].push({x:rrange(0,CFG.W),y:rrange(0,CFG.H),
+      s:depths[d].size,a:depths[d].a,cam:depths[d].cam}); }
+}
+
+/* world<->screen transform */
+let camMat={a:1,e:0,f:0};
+function worldToScreen(){
+  const s=(cam.scale+cam.breath)*sc*DPR;
+  const shx=cam.shake?Math.sin(simTime*57)*cam.shake:0, shy=cam.shake?Math.cos(simTime*61)*cam.shake:0;
+  camMat.a=s;
+  camMat.e=cv.width/2 - (cam.x+shx)*s;
+  camMat.f=cv.height/2 - (cam.y+shy)*s;
+}
+function setWorld(){ ctx.setTransform(camMat.a,0,0,camMat.a,camMat.e,camMat.f); }
+function setScreen(){ ctx.setTransform(1,0,0,1,0,0); }
+
+function draw(){
+  if(cv.width<2||cv.height<2||!bgCanvas)return; // hidden/zero-size viewport: nothing to draw
+  worldToScreen();
+  setScreen();
+  ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+  // background (screen-space, stretched)
+  ctx.drawImage(bgCanvas,0,0,cv.width,cv.height);
+  // nebula blobs
+  ctx.globalCompositeOperation='lighter';
+  drawNebula();
+  // world-space additive layers
+  setWorld();
+  // light shafts
+  drawShafts();
+  // plankton bloom (into bloom buffer)
+  drawPlanktonBloom();
+  // detritus
+  ctx.globalCompositeOperation='lighter';
+  for(const d of detritus){ glow(d.x,d.y,3.5, d.hue, 0.4*clamp(d.life/6,0,1)); }
+  // trail layer update + composite
+  drawTrails();
+  // creatures
+  drawCreatures();
+  // rings + particles
+  drawRings();
+  drawParticles();
+  // marine snow (screen-space parallax — drawSnow computes its own screen coords)
+  setScreen();
+  drawSnow();
+  // vignette + caustics (screen)
+  setScreen();
+  ctx.globalCompositeOperation='lighter';
+  drawCaustics();
+  ctx.globalCompositeOperation='source-over';
+  ctx.globalAlpha=1; ctx.drawImage(vignette,0,0);
+  // chromatic aberration burst
+  if(chroma>0.01)drawChroma();
+  // followed halo
+  if(cam.state==='FOLLOW'){ drawInspectHalo(); }
+  ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+}
+
+function drawNebula(){
+  const t=simTime;
+  const b1x=CFG.W*0.3+Math.sin(t/200*TAU)*CFG.W*0.3, b1y=CFG.H*0.4+Math.cos(t/170*TAU)*CFG.H*0.2;
+  const b2x=CFG.W*0.7+Math.cos(t/230*TAU)*CFG.W*0.25, b2y=CFG.H*0.6+Math.sin(t/190*TAU)*CFG.H*0.2;
+  const s=(cam.scale+cam.breath)*sc*DPR*0.15;
+  const p1=[cv.width/2-(cam.x-b1x)*s, cv.height/2-(cam.y-b1y)*s];
+  const p2=[cv.width/2-(cam.x-b2x)*s, cv.height/2-(cam.y-b2y)*s];
+  const R=1500*sc*DPR*(cam.scale+cam.breath)*0.4;
+  ctx.globalAlpha=0.10*(0.6+0.4*dayFactor);
+  ctx.drawImage(glowSprites[(300/360*HUEBUCKETS)|0], p1[0]-R,p1[1]-R,R*2,R*2);
+  ctx.drawImage(glowSprites[(170/360*HUEBUCKETS)|0], p2[0]-R,p2[1]-R,R*2,R*2);
+}
+function drawShafts(){
+  const n = quality>=3?6:quality>=2?4:2;
+  const a=lerp(0.02,0.09,dayFactor);
+  if(a<0.012)return;
+  ctx.globalCompositeOperation='lighter';
+  for(let i=0;i<n;i++){
+    const x=CFG.W*(i+0.5)/n + Math.sin(simTime*0.1+i)*40;
+    const w=90+Math.sin(simTime*0.07+i*2)*40;
+    ctx.globalAlpha=a*(0.7+0.3*Math.sin(simTime*0.2+i));
+    const g=ctx.createLinearGradient(x,0,x,CFG.H);
+    g.addColorStop(0,'rgba(180,230,255,0.9)');g.addColorStop(1,'rgba(180,230,255,0)');
+    ctx.fillStyle=g;
+    ctx.beginPath(); ctx.moveTo(x-w*0.4,0);ctx.lineTo(x+w*0.4,0);ctx.lineTo(x+w,CFG.H);ctx.lineTo(x-w,CFG.H);
+    ctx.closePath(); ctx.fill();
+  }
+}
+function drawPlanktonBloom(){
+  bloomCtx.setTransform(1,0,0,1,0,0);
+  bloomCtx.clearRect(0,0,bloomCanvas.width,bloomCanvas.height);
+  const s=(cam.scale+cam.breath)*sc*DPR*0.5;
+  bloomCtx.setTransform(s,0,0,s, (cv.width/2-(cam.x)*(cam.scale+cam.breath)*sc*DPR)*0.5, (cv.height/2-(cam.y)*(cam.scale+cam.breath)*sc*DPR)*0.5);
+  bloomCtx.globalCompositeOperation='lighter';
+  for(let i=0;i<CFG.planktonCap;i++){ if(!PL.alive[i])continue;
+    const pr=5+2*Math.sin(PL.pulse[i]);
+    const spr=glowSprites[((PL.hue[i]/360*HUEBUCKETS)|0)%HUEBUCKETS];
+    bloomCtx.globalAlpha=0.5;
+    bloomCtx.drawImage(spr,PL.px[i]-pr,PL.py[i]-pr,pr*2,pr*2);
+  }
+  setScreen();
+  ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=0.85;
+  ctx.imageSmoothingEnabled=true;
+  ctx.drawImage(bloomCanvas,0,0,cv.width,cv.height);
+  setWorld();
+}
+function drawTrails(){
+  // fade
+  trailCtx.setTransform(1,0,0,1,0,0);
+  trailCtx.globalCompositeOperation='destination-out';
+  trailCtx.fillStyle='rgba(0,0,0,0.08)';
+  trailCtx.fillRect(0,0,trailCanvas.width,trailCanvas.height);
+  if(simTime-(lastTrailClear||0)>10){ lastTrailClear=simTime; trailCtx.clearRect(0,0,trailCanvas.width,trailCanvas.height); }
+  // draw creature dots into trail (world transform)
+  trailCtx.setTransform(camMat.a,0,0,camMat.a,camMat.e,camMat.f);
+  trailCtx.globalCompositeOperation='lighter';
+  for(const c of grazers){ const v=Math.hypot(c.vx,c.vy); glowTo(trailCtx,c.x,c.y, 2+c.size*1.5, c.huedeg, 0.10+v/c.speed*0.12); }
+  for(const c of preds){ const v=Math.hypot(c.vx,c.vy); glowTo(trailCtx,c.x,c.y, 3+c.size*2, c.huedeg, 0.16+v/c.speed*0.2); }
+  // composite
+  setScreen();
+  ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=0.7;
+  ctx.drawImage(trailCanvas,0,0);
+  setWorld();
+}
+let lastTrailClear=0;
+function glowTo(g,x,y,rad,hue,alpha){
+  const spr=hue<0?glowWhite:glowSprites[((hue/360*HUEBUCKETS)|0)%HUEBUCKETS];
+  g.globalAlpha=alpha; g.drawImage(spr,x-rad,y-rad,rad*2,rad*2);
+}
+
+function drawCreatures(){
+  // underglow pass (lighter)
+  ctx.globalCompositeOperation='lighter';
+  const scr=(cam.scale+cam.breath)*sc;
+  for(const c of grazers)underglow(c,scr);
+  for(const c of preds)underglow(c,scr);
+  // body pass (source-over for solid silhouettes)
+  ctx.globalCompositeOperation='source-over';
+  for(const c of grazers)drawBody(c,scr);
+  for(const c of preds)drawBody(c,scr);
+}
+function underglow(c,scr){
+  if(quality<=2 && c.kind===0 && cam.followId!==c.uid)return;
+  const L=bodyLen(c);
+  glow(c.x,c.y, L*0.9, c.huedeg, 0.30*c.metab*clamp(c.energy/c.cap,0.3,1));
+}
+function bodyLen(c){ return c.kind===0 ? (10+c.size*14) : (18+c.size*22); }
+function drawBody(c,scr){
+  const n=c.kind===0?5:7;
+  const L=bodyLen(c);
+  if(L*scr*camMat.a/DPR<6){ // LOD: just a tick
+    ctx.globalAlpha=1; ctx.fillStyle=bodyColor(c.huedeg,0.5);
+    ctx.fillRect(c.x-1.5,c.y-1.5,3,3); return;
+  }
+  const v=Math.hypot(c.vx,c.vy), vmax=Math.max(c.speed,1);
+  const amp=L*(0.10+0.10*v/vmax);
+  let dirX=c.vx,dirY=c.vy; const dm=Math.hypot(dirX,dirY);
+  if(dm<1e-3){dirX=Math.cos(c.heading);dirY=Math.sin(c.heading);} else {dirX/=dm;dirY/=dm;}
+  const perpX=-dirY,perpY=dirX;
+  const curl=clamp(c.angvel*L*0.006,-0.6,0.6);
+  const wp = c.kind===0?WP_G:WP_P;
+  const gr = c.energy>0.80*c.cap; // gravid glow
+  for(let i=0;i<n;i++){
+    const t=i/(n-1);
+    const along=-t*L;
+    const sway=(Math.sin(c.phase - t*4.2)*amp + curl*L*t)*t*t;
+    c.segX[i]=c.x+dirX*along+perpX*sway;
+    c.segY[i]=c.y+dirY*along+perpY*sway;
+    c.segW[i]=L*wp[i]*(1+ (c.kind===1?0.1:0));
+  }
+  // body path
+  const fill=bodyColor(c.huedeg, gr?0.72:clamp(0.45+ (c.energy/c.cap-0.5)*0.4,0.2,0.7));
+  ctx.globalAlpha=clamp(c.energy/c.cap,0.35,1)*0.55+0.45;
+  ctx.fillStyle=fill;
+  ctx.beginPath();
+  // left side down
+  for(let i=0;i<n;i++){ const px=c.segX[i]+perpX*c.segW[i], py=c.segY[i]+perpY*c.segW[i];
+    if(i===0)ctx.moveTo(px,py); else ctx.lineTo(px,py); }
+  // right side back up
+  for(let i=n-1;i>=0;i--){ const px=c.segX[i]-perpX*c.segW[i], py=c.segY[i]-perpY*c.segW[i]; ctx.lineTo(px,py); }
+  ctx.closePath(); ctx.fill();
+  // tail fin
+  const tx=c.segX[n-1],ty=c.segY[n-1];
+  const finLen=L*0.3 + (c.speed/(c.kind===0?90:66))*L*0.35;
+  const flap=Math.sin(c.phase-4.2)*0.5;
+  const fdx=-dirX*Math.cos(flap)+ -dirY*Math.sin(flap);
+  const fdy=-dirY*Math.cos(flap)+ dirX*Math.sin(flap);
+  ctx.beginPath();
+  ctx.moveTo(tx,ty);
+  ctx.lineTo(tx+fdx*finLen+perpX*finLen*0.5, ty+fdy*finLen+perpY*finLen*0.5);
+  ctx.lineTo(tx+fdx*finLen-perpX*finLen*0.5, ty+fdy*finLen-perpY*finLen*0.5);
+  ctx.closePath(); ctx.fill();
+  // pectorals with fear flare
+  const flare=c.fearFlare*0.6;
+  const px1=c.segX[1],py1=c.segY[1];
+  for(const sgn of [1,-1]){
+    const ang=Math.atan2(dirY,dirX)+sgn*(0.5+flare);
+    ctx.beginPath(); ctx.moveTo(px1,py1);
+    ctx.lineTo(px1-Math.cos(ang)*L*0.28, py1-Math.sin(ang)*L*0.28);
+    ctx.lineTo(px1-Math.cos(ang+sgn*0.3)*L*0.16, py1-Math.sin(ang+sgn*0.3)*L*0.16);
+    ctx.closePath(); ctx.fill();
+  }
+  // predator dorsal + eye + dash afterimages
+  if(c.kind===1){
+    const dx2=c.segX[2],dy2=c.segY[2];
+    ctx.beginPath(); ctx.moveTo(dx2,dy2);
+    ctx.lineTo(dx2+perpX*L*0.34,dy2+perpY*L*0.34);
+    ctx.lineTo(dx2+dirX*L*0.2+perpX*L*0.1,dy2+dirY*L*0.2+perpY*L*0.1);
+    ctx.closePath(); ctx.fill();
+    // eye
+    ctx.globalAlpha=1; ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.arc(c.segX[0]+perpX*c.segW[0]*0.4, c.segY[0]+perpY*c.segW[0]*0.4, 1.6,0,TAU); ctx.fill();
+    if(c._dashFx>0){ c._dashFx-=0.02;
+      ctx.globalCompositeOperation='lighter';
+      glow(c.x-dirX*L*0.5,c.y-dirY*L*0.5,L*0.6, c.huedeg, 0.25);
+      ctx.globalCompositeOperation='source-over';
+    }
+  }
+}
+
+function drawRings(){
+  ctx.globalCompositeOperation='lighter';
+  for(let i=0;i<RMAX;i++){ if(!R.alive[i])continue;
+    const p=1-R.life[i]/R.max[i]; const rad=lerp(R.r0[i],R.r1[i],smoothstep(p));
+    ctx.globalAlpha=(1-p)*0.9;
+    const [r,g,b]=hslToRgb(R.hue[i],0.9,0.65);
+    ctx.strokeStyle=`rgb(${r},${g},${b})`; ctx.lineWidth=lerp(R.lw[i],0.5,p);
+    ctx.beginPath(); ctx.arc(R.x[i],R.y[i],rad,0,TAU); ctx.stroke();
+  }
+}
+function drawParticles(){
+  ctx.globalCompositeOperation='lighter';
+  for(let i=0;i<PMAX;i++){ if(P.life[i]<=0)continue;
+    const a=clamp(P.life[i]/P.max[i],0,1);
+    glow(P.px[i],P.py[i],P.size[i]*2, P.hue[i], a*0.7);
+  }
+}
+function drawSnow(){
+  ctx.globalCompositeOperation='lighter';
+  const base=(cam.scale+cam.breath)*sc*DPR;
+  for(let d=0;d<3;d++){ if(quality<=1 && d===2)continue;
+    for(const p of snow[d]){
+      const s=base*p.cam;
+      const sx=cv.width/2-(cam.x-p.x)*s, sy=cv.height/2-(cam.y-p.y)*s;
+      if(sx<-20||sy<-20||sx>cv.width+20||sy>cv.height+20)continue;
+      if(d===2){ ctx.globalAlpha=p.a; ctx.drawImage(glowWhite,sx-p.s*DPR,sy-p.s*DPR,p.s*2*DPR,p.s*2*DPR); }
+      else { ctx.globalAlpha=p.a; ctx.fillStyle='#bfe6ff'; ctx.fillRect(sx,sy,p.s*DPR,p.s*DPR); }
+    }
+  }
+  // advect snow slowly on flow
+  for(let d=0;d<3;d++)for(const p of snow[d]){ const a=flowAngle(p.x,p.y,simTime);
+    p.x+=Math.cos(a)*3*0.016; p.y+=Math.sin(a)*3*0.016+0.3*0.016;
+    if(p.x<0)p.x+=CFG.W; if(p.x>CFG.W)p.x-=CFG.W; if(p.y<0)p.y+=CFG.H; if(p.y>CFG.H)p.y-=CFG.H; }
+}
+let caustic=null;
+function buildCaustic(){
+  caustic=document.createElement('canvas'); caustic.width=caustic.height=256;
+  const cx=caustic.getContext('2d'); cx.strokeStyle='rgba(150,220,255,0.5)'; cx.lineWidth=1.2;
+  for(let i=0;i<40;i++){ cx.beginPath(); cx.arc(Math.random()*256,Math.random()*256,6+Math.random()*20,0,TAU); cx.stroke(); }
+}
+function drawCaustics(){
+  if(quality<=2||!caustic)return;
+  const a=0.05*dayFactor; if(a<0.008)return;
+  ctx.globalAlpha=a;
+  const off=(simTime*20)%768;
+  for(let x=-768;x<cv.width+768;x+=768){ ctx.drawImage(caustic,x+off,0,768,cv.height*0.5); }
+}
+function drawChroma(){
+  // cheap: two offset tinted glows of whole frame skipped; instead vignette pulse + edge tint
+  ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=chroma*0.25;
+  ctx.fillStyle='rgba(255,40,90,1)'; ctx.fillRect(-6,0,cv.width,cv.height);
+  ctx.fillStyle='rgba(40,200,255,1)'; ctx.fillRect(6,0,cv.width,cv.height);
+  ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+}
+function drawInspectHalo(){
+  const c=getCreature(cam.followId); if(!c)return;
+  setWorld(); ctx.globalCompositeOperation='lighter';
+  ctx.globalAlpha=0.5; ctx.strokeStyle='rgba(150,230,255,0.8)'; ctx.lineWidth=1;
+  ctx.setLineDash([6,8]); ctx.lineDashOffset=-simTime*20;
+  ctx.beginPath(); ctx.arc(c.x,c.y,c.sense,0,TAU); ctx.stroke(); ctx.setLineDash([]);
+  // energy arc
+  ctx.globalAlpha=0.9; ctx.strokeStyle='#ffcf6a'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.arc(c.x,c.y,bodyLen(c)+6,-Math.PI/2,-Math.PI/2+TAU*clamp(c.energy/c.cap,0,1)); ctx.stroke();
+  setScreen();
+}
+
+/* ============================================================================
+   HUD / DOM
+============================================================================ */
+const elCaption=document.getElementById('caption');
+const elPP=document.getElementById('pPlank'),elPG=document.getElementById('pGraze'),elPR=document.getElementById('pPred');
+const elClock=document.getElementById('clockTxt');
+let captionTimer=0;
+function showCaption(text,p0,sp,voGlyph){
+  const spcol = sp==='pred'?'var(--pred)':sp==='plank'?'var(--plank)':'var(--graze)';
+  elCaption.className=p0?'p0':'';
+  elCaption.innerHTML=`<span class="spglyph" style="color:${spcol}"></span>${text}`+(voGlyph?'<span class="voglyph">◉</span>':'');
+  elCaption.style.transition='none'; elCaption.style.opacity='0'; elCaption.style.transform='translateX(-50%) translateY(8px)';
+  requestAnimationFrame(()=>{ elCaption.style.transition='opacity .45s ease,transform .45s ease';
+    elCaption.style.opacity='1'; elCaption.style.transform='translateX(-50%) translateY(0)'; });
+  captionTimer=2.6+0.055*text.length;
+}
+function hudTick(dt){
+  if(captionTimer>0){ captionTimer-=dt; if(captionTimer<=0){ elCaption.style.opacity='0'; } }
+  // pop numbers (throttled)
+  hudAcc=(hudAcc||0)+dt;
+  if(hudAcc>0.25){ hudAcc=0;
+    elPP.textContent=planktonCount(); elPG.textContent=grazers.length; elPR.textContent=preds.length;
+    const phase=dayFactor>0.66?'day':dayFactor<0.33?'night':(lastPhaseDay?'dawn':'dusk');
+    elClock.textContent=`gen ${generationMax} · day ${dayIndex} · ${phase}`;
+    if(statsOn)drawScopes();
+    if(inspTarget)updateInspector();
+  }
+}
+let hudAcc=0;
+
+/* stats scopes */
+const scopeC=document.getElementById('scope'),scopeX=scopeC.getContext('2d');
+const geneC=document.getElementById('genechart'),geneX=geneC.getContext('2d');
+let statsOn=false, geneOn=false;
+function drawScopes(){
+  const w=scopeC.width,h=scopeC.height;
+  scopeX.clearRect(0,0,w,h);
+  const draw=(arr,col,scaleMax)=>{
+    scopeX.strokeStyle=col; scopeX.lineWidth=1; scopeX.globalAlpha=0.9; scopeX.beginPath();
+    for(let i=0;i<HIST;i++){ const idx=(histIdx+i)%HIST; const x=i/HIST*w;
+      const v=Math.log(1+arr[idx])/Math.log(1+scaleMax); const y=h-v*h*0.92-2;
+      if(i===0)scopeX.moveTo(x,y); else scopeX.lineTo(x,y); }
+    scopeX.stroke();
+  };
+  draw(popPlank,'#7cf0b0',CFG.planktonCap);
+  draw(popGraze,'#57e6ff',CFG.grazeStart*2.5);
+  draw(popPred,'#ff5ac8',CFG.predStart*4);
+  if(geneOn)drawGeneChart();
+}
+function drawGeneChart(){
+  const w=geneC.width,h=geneC.height; geneX.clearRect(0,0,w,h);
+  if(!genesisMeans||geneHist.length<2)return;
+  geneX.strokeStyle='rgba(255,255,255,0.2)'; geneX.setLineDash([3,4]); geneX.beginPath();
+  geneX.moveTo(0,h/2); geneX.lineTo(w,h/2); geneX.stroke(); geneX.setLineDash([]);
+  const keys=[['speed','#57e6ff'],['fear','#ff5ac8'],['sense','#ffcf6a'],['size','#7cf0b0']];
+  for(const [k,col] of keys){
+    geneX.strokeStyle=col; geneX.globalAlpha=0.9; geneX.lineWidth=1; geneX.beginPath();
+    for(let i=0;i<geneHist.length;i++){ const ratio=geneHist[i][k]/genesisMeans[k];
+      const x=i/(GHMAX-1)*w; const y=h/2-(ratio-1)*h*1.2;
+      if(i===0)geneX.moveTo(x,clamp(y,0,h)); else geneX.lineTo(x,clamp(y,0,h)); }
+    geneX.stroke();
+  }
+  geneX.globalAlpha=1;
+}
+
+/* inspector */
+const inspEl=document.getElementById('inspect');
+let inspTarget=null, inspUid=-1;
+const GENUS_G=['Velia','Cyanis','Lumora','Thalassa','Argyra','Nerion','Pallida','Ostrea'];
+const GENUS_P=['Umbrax','Ferox','Nyxis','Carcharion','Vantar','Morvax','Scindra','Erebus'];
+function makeEpithet(c){
+  // two most extreme genes -> syllables
+  const norm=(v,r)=>(v-r[0])/(r[1]-r[0]);
+  const feats=[['speed',norm(c.speed,G.speed),'cel'],['size',norm(c.size,G.size),c.size>1.2?'mag':'min'],
+    ['sense',norm(c.sense,G.sense),'ocul'],['fear',norm(c.fear,G.fear),'pav'],['metab',norm(c.metab,G.metab),'ard']];
+  feats.sort((a,b)=>Math.abs(b[1]-0.5)-Math.abs(a[1]-0.5));
+  const suf=['or','ax','is','ura','ens'][(c.uid)%5];
+  return feats[0][2]+feats[1][2].slice(0,3)+suf;
+}
+function creatureName(c){ const bank=c.kind===0?GENUS_G:GENUS_P; return bank[c.genus%bank.length]; }
+function openInspector(c){
+  inspTarget=c; inspUid=c.uid; inspEl.classList.add('on');
+  cam.state='FOLLOW'; cam.followId=c.uid; cam.dwell=0; camReleaseSoon=0;
+  if(!followedEver){ followedEver=true; narrate('followStart',c,{name:creatureName(c)[0]+'. '+c.epithet}); }
+  updateInspector();
+}
+let followedEver=false;
+function closeInspector(){ inspTarget=null; inspUid=-1; inspEl.classList.remove('on');
+  if(cam.state==='FOLLOW'){cam.state='DRIFT';cam.followId=-1;cam.dwell=0;} }
+function updateInspector(){
+  const c=inspTarget; if(!c)return;
+  // dead OR recycled into a different creature (pool slot reused): treat as dissolved
+  if(!c.alive || c.uid!==inspUid){ document.getElementById('iStatus').textContent=`— dissolved, age ${(c.age|0)}s —`;
+    document.getElementById('iEnergy').style.width='0%'; return; }
+  const genus=creatureName(c);
+  document.getElementById('iName').textContent=`${genus} ${c.epithet}`;
+  document.getElementById('iSub').textContent=`${c.kind===0?'grazer':'predator'} · gen ${c.gen} · №${c.serial}`;
+  const st=c.state===2?'fleeing':c.kind===1?(c.chaseId!==-1?'hunting':'drifting'):(c.state===1?'grazing':'drifting');
+  document.getElementById('iStatus').textContent=st;
+  document.getElementById('iEnergy').style.width=(clamp(c.energy/c.cap,0,1)*100)+'%';
+  document.getElementById('iAge').textContent=(c.age|0)+'s';
+  // genes
+  const genes=[['spd','speed',G.speed,c.pspeed],['siz','size',G.size,c.psize],['sns','sense',G.sense,c.psense],
+    ['fear','fear',G.fear,c.pfear]];
+  const meanNow=snapshotMeans();
+  let html='';
+  for(const [lbl,key,rng,par] of genes){
+    const v=(c[key]-rng[0])/(rng[1]-rng[0]);
+    const mean=meanNow?(meanNow[key]-rng[0])/(rng[1]-rng[0]):v;
+    const arr=c[key]>par?'▲':c[key]<par?'▼':'·';
+    html+=`<div class="grow"><span class="gl">${lbl}</span><div class="gbar"><i style="width:${clamp(v*100,3,100)}%;background:var(--graze)"></i><u style="left:${clamp(mean*100,0,100)}%"></u></div><span class="arrow">${arr}</span></div>`;
+  }
+  html+=`<div class="grow"><span class="gl">hue</span><span class="hueSw" style="background:hsl(${c.huedeg|0},85%,60%);color:hsl(${c.huedeg|0},85%,60%)"></span></div>`;
+  document.getElementById('iGenes').innerHTML=html;
+  const lin=c.kind===1?`child of №${c.parentUid?'‹'+c.parentUid+'›':'genesis'} · ${c.offspring} offspring · ${c.kills} kills`
+    :`child of ${c.parentUid?'‹'+c.parentUid+'›':'genesis'} · ${c.offspring} offspring · escapes ${c.escapes}`;
+  document.getElementById('iLineage').textContent=lin;
+}
+
+/* title / ghost */
+const titleEl=document.getElementById('title');
+let titleVisible=true, titleGhostT=0;
+function showTitleGhost(txt){ /* re-title marquee */ }
+let lastInputT=0;
+
+/* ============================================================================
+   INPUT
+============================================================================ */
+function screenToWorld(sx,sy){
+  const s=(cam.scale+cam.breath)*sc; // note: DPR handled since we use CSS px here
+  const wx=cam.x+(sx-VW/2)/s; const wy=cam.y+(sy-VH/2)/s;
+  return {x:wx,y:wy};
+}
+function pickCreature(wx,wy){
+  let best=null,bd=1e9;
+  for(const c of creatures){ if(!c.alive)continue; const d=(c.x-wx)**2+(c.y-wy)**2;
+    if(d<bd){bd=d;best=c;} }
+  const r=(best?bodyLen(best)+18:0); return bd<r*r?best:null;
+}
+let dragging=false,lastDrag=null, downT=0,downPos=null,lastClickT=0;
+function onDown(sx,sy){
+  firstGesture();
+  downT=performance.now(); downPos={x:sx,y:sy}; dragging=false; lastDrag={x:sx,y:sy};
+  lastInputT=simTime;
+}
+function onMove(sx,sy){
+  if(!downPos)return;
+  if(Math.hypot(sx-downPos.x,sy-downPos.y)>8)dragging=true;
+  if(dragging&&lastDrag){ // stir current: nudge nearby creatures
+    const w=screenToWorld(sx,sy), pw=screenToWorld(lastDrag.x,lastDrag.y);
+    const dx=w.x-pw.x,dy=w.y-pw.y;
+    for(const c of creatures){ if(!c.alive)continue; const dd=(c.x-w.x)**2+(c.y-w.y)**2;
+      if(dd<160*160){ const f=1-Math.sqrt(dd)/160; c.vx+=dx*6*f; c.vy+=dy*6*f; } }
+    lastDrag={x:sx,y:sy};
+  }
+}
+function onUp(sx,sy){
+  const now=performance.now();
+  if(!dragging && now-downT<300){
+    // click or double-click
+    if(now-lastClickT<320){ // double: feed
+      const w=screenToWorld(sx,sy); dropFood(w.x,w.y);
+    } else {
+      const w=screenToWorld(sx,sy); const c=pickCreature(w.x,w.y);
+      if(c)openInspector(c); else closeInspector();
+    }
+    lastClickT=now;
+  }
+  downPos=null; dragging=false;
+  hideHint();
+}
+function dropFood(x,y){
+  // create a temporary rich cluster
+  let ci=0,bd=1e9; for(let i=0;i<clusters.length;i++){ const d=(clusters[i].x-x)**2+(clusters[i].y-y)**2; if(d<bd){bd=d;ci=i;} }
+  clusters[ci].x=x; clusters[ci].y=y; clusters[ci].N=CFG.K_c;
+  for(let i=0;i<8;i++)spawnMote(ci);
+  spawnRing(x,y,50,120,0.6,3);
+  for(let i=0;i<10;i++){ const a=rnd()*TAU; spawnParticle(x,y,Math.cos(a)*20,Math.sin(a)*20,120,0.8,1); }
+}
+cv.addEventListener('mousedown',e=>onDown(e.clientX,e.clientY));
+window.addEventListener('mousemove',e=>onMove(e.clientX,e.clientY));
+window.addEventListener('mouseup',e=>onUp(e.clientX,e.clientY));
+cv.addEventListener('touchstart',e=>{const t=e.touches[0];onDown(t.clientX,t.clientY);},{passive:true});
+window.addEventListener('touchmove',e=>{const t=e.touches[0];if(t)onMove(t.clientX,t.clientY);},{passive:true});
+window.addEventListener('touchend',e=>{const t=e.changedTouches[0];onUp(t.clientX,t.clientY);});
+window.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(k==='s')toggleStats();
+  else if(k==='g'){geneOn=!geneOn; document.getElementById('genewrap').classList.toggle('on',geneOn); if(!statsOn)toggleStats();}
+  else if(k==='m')toggleSound();
+  else if(k==='escape')closeInspector();
+});
+function toggleStats(){ statsOn=!statsOn; document.getElementById('stats').classList.toggle('on',statsOn);
+  document.getElementById('btnStats').classList.toggle('hot',statsOn); if(statsOn)drawScopes(); }
+function toggleSound(){ if(A.on)audioMute(); else audioResume();
+  document.getElementById('btnSound').classList.toggle('hot',A.on);
+  document.getElementById('btnSound').textContent=A.on?'♪':'♪̶'; }
+document.getElementById('btnStats').addEventListener('click',toggleStats);
+document.getElementById('btnSound').addEventListener('click',()=>{firstGesture();toggleSound();});
+document.getElementById('btnHelp').addEventListener('click',showHint);
+document.getElementById('inspClose').addEventListener('click',closeInspector);
+
+/* settings sliders */
+function loadSettings(){ try{ const s=JSON.parse(localStorage.getItem('primordia_settings_v1')||'{}');
+  if(s.music!=null){A.music=s.music;document.getElementById('sMusic').value=s.music;}
+  if(s.sfx!=null){A.sfx=s.sfx;document.getElementById('sSfx').value=s.sfx;}
+  if(s.voice!=null){A.voice=s.voice;document.getElementById('sVoice').value=s.voice;} }catch(e){} }
+function saveSettings(){ try{ localStorage.setItem('primordia_settings_v1',
+  JSON.stringify({music:A.music,sfx:A.sfx,voice:A.voice})); }catch(e){} }
+document.getElementById('sMusic').addEventListener('input',e=>{setBus('music',+e.target.value);saveSettings();});
+document.getElementById('sSfx').addEventListener('input',e=>{setBus('sfx',+e.target.value);saveSettings();});
+document.getElementById('sVoice').addEventListener('input',e=>{A.voice=+e.target.value;setBus('voice',A.voice);saveSettings();});
+
+/* hint */
+const hintEl=document.getElementById('hint'); let hintShown=false;
+function showHint(){ hintEl.classList.add('on'); hintShown=true; }
+function hideHint(){ if(hintShown){ hintEl.classList.remove('on'); localStorage.setItem('primordia_hinted','1'); hintShown=false; } }
+
+/* first gesture: start audio + dissolve title */
+let gestured=false;
+function firstGesture(){
+  if(gestured)return; gestured=true;
+  audioResume(); document.getElementById('btnSound').classList.add('hot');
+  document.getElementById('btnSound').textContent='♪';
+  titleEl.classList.remove('on'); titleVisible=false;
+  setTimeout(()=>{ titleEl.style.display='none'; },1500);
+  if(!localStorage.getItem('primordia_hinted')) setTimeout(showHint,600);
+}
+window.addEventListener('pointerdown',()=>{ if(!gestured)firstGesture(); },{once:false});
+
+/* ============================================================================
+   MAIN LOOP (fixed-timestep accumulator + adaptive quality)
+============================================================================ */
+let quality=4, avgFrame=16, degradeCount=0, recoverCount=0;
+let acc=0, lastT=performance.now(), running=true;
+let titleStart=performance.now();
+function frame(now){
+  if(!running){ requestAnimationFrame(frame); return; }
+  let raw=(now-lastT)/1000; lastT=now;
+  // dt spike guard
+  if(raw>0.1)raw=0; // treat as pause
+  acc+=raw;
+  let steps=0;
+  while(acc>=CFG.step && steps<4){
+    if(genesisActive)genesisStep(CFG.step);
+    step(CFG.step); steps++; acc-=CFG.step;
+  }
+  if(steps===4)acc=0; // drop backlog
+  updateCamera(raw||CFG.step);
+  draw();
+  hudTick(raw||CFG.step);
+  // title meta uptime
+  if(titleVisible){ const up=((now-titleStart)/1000)|0;
+    document.getElementById('titleMeta').textContent=`press anywhere to begin · this world has been alive for ${fmtTime(up)}`; }
+  // adaptive quality
+  avgFrame=avgFrame*0.95+ (raw*1000)*0.05;
+  if(avgFrame>17){ degradeCount++; recoverCount=0; if(degradeCount>60&&quality>0){quality--;degradeCount=0;} }
+  else if(avgFrame<13){ recoverCount++; degradeCount=0; if(recoverCount>300&&quality<4){quality++;recoverCount=0;} }
+  requestAnimationFrame(frame);
+}
+function fmtTime(s){ if(s<60)return s+'s'; const m=(s/60)|0; if(m<60)return m+'m '+(s%60)+'s'; const h=(m/60)|0; return h+'h '+(m%60)+'m'; }
+
+/* ============================================================================
+   BOOT
+============================================================================ */
+function boot(){
+  document.getElementById('ver').textContent='primordia '+VERSION;
+  buildGlow(); buildCaustic(); gridInit(); plgInit();
+  loadSettings();
+  resize(); initSnow();
+  seedClusters();
+  // initial world
+  for(let i=0;i<CFG.grazeStart;i++){ const pp=nearClusterPos(); spawnCreature(0, pp.x, pp.y, null); }
+  for(let i=0;i<CFG.predStart;i++) spawnCreature(1, rrange(120,CFG.W-120), rrange(90,CFG.H-90), null);
+  // seed some plankton
+  for(let ci=0;ci<clusters.length;ci++){ const want=Math.round(clusters[ci].N);
+    for(let k=0;k<want;k++)spawnMote(ci); }
+  genesisMeans=snapshotMeans();
+  titleEl.classList.add('on');
+  requestAnimationFrame(frame);
+}
+
+/* debug hook (read state; drive past RAF throttle for verification) */
+window.__prim={
+  get grazers(){return grazers.length;}, get preds(){return preds.length;},
+  get plankton(){return planktonCount();}, get gen(){return generationMax;},
+  get simTime(){return simTime;}, get quality(){return quality;},
+  get means(){return snapshotMeans();}, get genesisMeans(){return genesisMeans;},
+  get order(){return orderParam;}, get day(){return dayFactor;},
+  get meanEnergy(){ let s=0,n=0; for(const c of grazers){s+=c.energy/c.cap;n++;} return n?+(s/n).toFixed(2):0; },
+  get clusterN(){ let s=0; for(const c of clusters)s+=c.N; return Math.round(s); },
+  get eats(){ const e=eatsCounter; eatsCounter=0; return e; },
+  get peaks(){ return {g:Math.round(peakGraze),pr:Math.round(peakPred)}; },
+  get extinctions(){ return extinctions; },
+  step(n){ n=n||1; for(let i=0;i<n;i++){ if(genesisActive)genesisStep(CFG.step); step(CFG.step);} },
+  drive(secs){ const n=Math.round((secs||1)*60); for(let i=0;i<n;i++){ if(genesisActive)genesisStep(CFG.step); step(CFG.step);} },
+  render(){ updateCamera(CFG.step); draw(); hudTick(CFG.step); },
+  extinctAll(){ for(const c of creatures)if(c.alive)killCreature(c,'starve'); },
+  killGrazers(){ for(const c of grazers)killCreature(c,'starve'); },
+  cam, CFG, get state(){return cam.state;}, audioOn(){return A.on;},
+  // force a real render size (headless preview reports 0x0); returns pixel stats for visual verification
+  forceSize(w,h){ VW=w;VH=h;DPR=1; cv.width=w;cv.height=h; sc=Math.min(w,h)/1080; buildBackground(); initSnow(); },
+  feed(x,y){ dropFood(x==null?CFG.W/2:x, y==null?CFG.H/2:y); },
+  followBiggest(){ let b=null; for(const c of grazers)if(!b||c.size>b.size)b=c; if(b){openInspector(b);} return b?b.uid:-1; },
+  frame(q){ return cv.toDataURL('image/jpeg', q||0.6); },
+  pixelStats(){ // sample the live canvas: fraction non-black + rough color spread
+    const s=document.createElement('canvas'); s.width=160;s.height=90;
+    const sx=s.getContext('2d'); sx.drawImage(cv,0,0,160,90);
+    const d=sx.getImageData(0,0,160,90).data; let lit=0,rs=0,gs=0,bs=0,n=160*90,maxL=0;
+    for(let i=0;i<d.length;i+=4){ const L=d[i]+d[i+1]+d[i+2]; if(L>60)lit++; if(L>maxL)maxL=L;
+      rs+=d[i];gs+=d[i+1];bs+=d[i+2]; }
+    return {litFrac:+(lit/n).toFixed(3), maxLum:maxL,
+      avgR:Math.round(rs/n),avgG:Math.round(gs/n),avgB:Math.round(bs/n)};
+  }
+};
+
+boot();
+})();
+</script>
+</body>
+</html>
