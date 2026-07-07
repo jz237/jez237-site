@@ -18,6 +18,18 @@
     const particles = [];
     let flash = 0;
     let banner = null; // { text, sub, t }
+    // painted boss sprites (lazy-loaded per key; procedural body is the fallback)
+    const bossImg = {};
+    function getBossImg(key) {
+      if (bossImg[key] === undefined) {
+        bossImg[key] = null;
+        const im = new Image();
+        im.onload = () => { bossImg[key] = im; };
+        im.onerror = () => { bossImg[key] = false; };
+        im.src = `assets/img/boss-${key}.png?v=${D.VERSION}`;
+      }
+      return bossImg[key] || null;
+    }
 
     function loadBg(src) {
       const img = new Image();
@@ -795,7 +807,13 @@
       // telegraph flare: whole body glows before an attack
       if (b.state === 'tele') { bx.shadowColor = '#ff4d2e'; bx.shadowBlur = 18 + Math.sin(t * 30) * 8; }
 
-      if (b.key === 'warden') {           // rocky guardian mech
+      const bimg = getBossImg(b.key);
+      if (bimg) {
+        // painted boss sprite, scaled ~1.32x the hitbox, centered on the core
+        const dh = b.h * 1.32, dw = dh * (bimg.width / bimg.height);
+        b._sprite = { x: Math.round(cx - dw / 2), y: Math.round(cy - dh / 2), w: dw, h: dh };
+        bx.drawImage(bimg, b._sprite.x, b._sprite.y, dw, dh);
+      } else if (b.key === 'warden') {           // rocky guardian mech
         bx.fillStyle = '#6b4a2a'; roundRect(sx + 6, sy + 40, b.w - 12, b.h - 40, 8); bx.fill();  // hips
         bx.fillStyle = '#8A5A2B'; roundRect(sx, sy + 12, b.w, 36, 10); bx.fill();                // torso
         bx.fillStyle = '#B5793C'; roundRect(sx - 6, sy + 10, 20, 18, 6); bx.fill();              // L shoulder
@@ -877,7 +895,12 @@
 
       if (b.hitFlash > 0) {
         bx.globalCompositeOperation = 'lighter';
-        bx.fillStyle = 'rgba(255,255,255,0.55)'; roundRect(sx, sy, b.w, b.h, 8); bx.fill();
+        bx.fillStyle = 'rgba(255,255,255,0.45)';
+        if (bimg && b._sprite) { const sp = b._sprite;
+          bx.save(); bx.beginPath(); bx.rect(sp.x, sp.y, sp.w, sp.h); bx.clip();
+          bx.drawImage(bimg, sp.x, sp.y, sp.w, sp.h); bx.restore();
+          bx.globalAlpha = 0.5; bx.fillRect(sp.x, sp.y, sp.w, sp.h); bx.globalAlpha = 1;
+        } else { roundRect(sx, sy, b.w, b.h, 8); bx.fill(); }
       }
       bx.restore();
     }
