@@ -312,7 +312,7 @@
       }
       function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {} }
       let settings = loadSettings();
-      const AUDIO_V = '1';       // bump to cache-bust audio files
+      const AUDIO_V = '2';       // bump to cache-bust audio files
       const MUSIC_VOL = 0.5;     // background music level when sound is on
       const DIFF = {
         easy:   { speed: 0.82, budget: 0.82, ammo: 18, label: 'Easy' },
@@ -533,7 +533,7 @@
             audio.startMusic();
           },
           missileLaunch() {
-            if (audio.playSample('launch', 0.5)) return;
+            if (audio.playSample('launch', 0.42)) return;
             tone('triangle', 460, 140, 0.22, 0.045, 0.003, 0.09);
             burstNoise({ duration: 0.15, gain: 0.035, filter: 'highpass', freq: 900, decay: 0.08 });
           },
@@ -541,7 +541,7 @@
             tone('sawtooth', 220 + speed * 30, 120 + speed * 18, 0.35, 0.012, 0.003, 0.18);
           },
           explosion(power = 1) {
-            if (audio.playSample('explode', 0.5 * power)) return;
+            if (audio.playSample('explode', 0.7 * power)) return;
             burstNoise({ duration: 0.45, gain: 0.22 * power, filter: 'bandpass', freq: 280, q: 0.7, decay: 0.32 });
             burstNoise({ duration: 0.18, gain: 0.12 * power, filter: 'highpass', freq: 900, q: 0.8, decay: 0.14 });
             tone('sine', 95 * power + 10, 32, 0.42, 0.08 * power, 0.002, 0.24);
@@ -558,14 +558,14 @@
             setTimeout(() => tone('triangle', 659, 659, 0.15, 0.045), 240);
           },
           special() { audio.playSample('special', 0.7); },
-          uiClick() { audio.playSample('click', 0.6); },
+          uiClick() { tone('square', 720, 680, 0.05, 0.035, 0.001, 0.03); }, // crisp procedural blip
           combo(level) {
             tone('sine', 420 + level * 45, 320 + level * 30, 0.12, 0.03 + Math.min(0.02, level * 0.002));
           }
         };
 
         // Load ElevenLabs SFX into decoded buffers (fire-and-forget)
-        ['launch', 'explode', 'citylost', 'waveclear', 'special', 'click'].forEach(key => {
+        ['launch', 'explode', 'citylost', 'waveclear', 'special'].forEach(key => {
           fetch('audio/' + key + '.mp3?v=' + AUDIO_V)
             .then(r => r.arrayBuffer())
             .then(b => ac.decodeAudioData(b))
