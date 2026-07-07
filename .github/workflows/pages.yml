@@ -55,7 +55,7 @@ jobs:
             --exclude='./experiments/image-gen-2-benchmark/thumbs' \
             --exclude='./experiments/sid-player/files' \
             --exclude='./experiments/sid-player/sids' \
-            --exclude='./ops/migrate_amiga_audio_to_r2.sh' \
+            --exclude='./ops' \
             --exclude='./package.json' \
             --exclude='./package-lock.json' \
             --exclude='./pnpm-lock.yaml' \
