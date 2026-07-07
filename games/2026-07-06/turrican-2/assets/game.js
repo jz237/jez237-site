@@ -17,6 +17,12 @@
   const audio = A.createAudio();
   const input = I.createInput(window);
 
+  // painted title key-art (async; procedural scene is the fallback until ready)
+  const titleImg = new Image();
+  let titleReady = false;
+  titleImg.onload = () => { titleReady = true; };
+  titleImg.src = 'assets/img/title-bg.jpg?v=' + D.VERSION;
+
   const STAGES_PER_WORLD = D.STAGES_PER_WORLD; // faithful blueprint: 5 worlds / 11 stages
   const PLAN = [];
   for (let w = 0; w < STAGES_PER_WORLD.length; w++)
@@ -278,35 +284,60 @@
   }
   function drawTitle() {
     bgPanel();
-    // living backdrop: starfield + drifting desert mesas + sweeping searchlight
     dx.save();
-    for (let i = 0; i < 60; i++) {
-      const sx = ((i * 179 + uiT * (6 + (i % 5) * 4)) % (DW + 20)) - 10;
-      const sy = (i * 97) % (DH * 0.7);
-      dx.globalAlpha = 0.25 + (i % 4) * 0.12;
-      dx.fillStyle = '#cfe0ff';
-      dx.fillRect(DW - sx, sy, 1.6, 1.6);
-    }
-    const mesa = (scroll, baseY, amp, color, alpha) => {
-      dx.globalAlpha = alpha; dx.fillStyle = color;
-      dx.beginPath(); dx.moveTo(-2, DH);
-      for (let x = -8; x <= DW + 8; x += 8) {
-        const wc = x + scroll;
-        const n = Math.sin(wc * 0.004) + Math.sin(wc * 0.0017) * 0.7;
-        dx.lineTo(x, baseY - (Math.round(n * 1.6) / 1.6) * amp);
+    if (titleReady) {
+      // painted hero key-art with a slow cinematic ken-burns drift
+      const kz = 1.07 + Math.sin(uiT * 0.2) * 0.015;
+      const kw = DW * kz, kh = DH * kz;
+      const kx = -(kw - DW) / 2 + Math.sin(uiT * 0.15) * 12;
+      const ky = -(kh - DH) / 2 + Math.cos(uiT * 0.12) * 8;
+      dx.drawImage(titleImg, kx, ky, kw, kh);
+      // legibility vignette: darken top (logo) + bottom (menu)
+      const vg = dx.createLinearGradient(0, 0, 0, DH);
+      vg.addColorStop(0, 'rgba(5,3,15,0.58)'); vg.addColorStop(0.38, 'rgba(5,3,15,0.10)');
+      vg.addColorStop(0.66, 'rgba(5,3,15,0.30)'); vg.addColorStop(1, 'rgba(5,3,15,0.85)');
+      dx.fillStyle = vg; dx.fillRect(0, 0, DW, DH);
+      // rising embers for life
+      for (let i = 0; i < 34; i++) {
+        const ex = ((i * 137 + uiT * (9 + (i % 4) * 6)) % (DW + 20)) - 10;
+        const ey = DH - ((i * 91 + uiT * (22 + (i % 3) * 12)) % (DH + 40));
+        dx.globalAlpha = 0.12 + (i % 3) * 0.1;
+        dx.fillStyle = i % 2 ? '#ff8a3b' : '#ffd23f';
+        dx.fillRect(ex, ey, 2, 2);
       }
-      dx.lineTo(DW + 2, DH); dx.closePath(); dx.fill();
-    };
-    mesa(uiT * 6, DH * 0.86, 46, '#131033', 0.9);
-    mesa(uiT * 14, DH * 0.95, 56, '#1b1440', 0.95);
-    // searchlight sweep
-    const beamA = Math.sin(uiT * 0.35) * 0.9;
-    const bx0 = DW * 0.5 + Math.sin(uiT * 0.35) * DW * 0.3;
-    const grad = dx.createLinearGradient(bx0, DH, bx0 + beamA * 200, 0);
-    grad.addColorStop(0, 'rgba(108,243,255,0.06)'); grad.addColorStop(1, 'rgba(108,243,255,0)');
-    dx.fillStyle = grad;
-    dx.beginPath(); dx.moveTo(bx0 - 30, DH); dx.lineTo(bx0 + beamA * 200 - 90, 0);
-    dx.lineTo(bx0 + beamA * 200 + 90, 0); dx.lineTo(bx0 + 30, DH); dx.closePath(); dx.fill();
+      // rare lightning flash (matches the storm sky)
+      const lt = uiT % 6.3;
+      if (lt < 0.16) { dx.globalAlpha = (0.16 - lt) * 1.4; dx.fillStyle = '#dfe8ff'; dx.fillRect(0, 0, DW, DH); }
+      dx.globalAlpha = 1;
+    } else {
+      // procedural fallback: starfield + drifting mesas + searchlight sweep
+      for (let i = 0; i < 60; i++) {
+        const sx = ((i * 179 + uiT * (6 + (i % 5) * 4)) % (DW + 20)) - 10;
+        const sy = (i * 97) % (DH * 0.7);
+        dx.globalAlpha = 0.25 + (i % 4) * 0.12;
+        dx.fillStyle = '#cfe0ff';
+        dx.fillRect(DW - sx, sy, 1.6, 1.6);
+      }
+      const mesa = (scroll, baseY, amp, color, alpha) => {
+        dx.globalAlpha = alpha; dx.fillStyle = color;
+        dx.beginPath(); dx.moveTo(-2, DH);
+        for (let x = -8; x <= DW + 8; x += 8) {
+          const wc = x + scroll;
+          const n = Math.sin(wc * 0.004) + Math.sin(wc * 0.0017) * 0.7;
+          dx.lineTo(x, baseY - (Math.round(n * 1.6) / 1.6) * amp);
+        }
+        dx.lineTo(DW + 2, DH); dx.closePath(); dx.fill();
+      };
+      mesa(uiT * 6, DH * 0.86, 46, '#131033', 0.9);
+      mesa(uiT * 14, DH * 0.95, 56, '#1b1440', 0.95);
+      const beamA = Math.sin(uiT * 0.35) * 0.9;
+      const bx0 = DW * 0.5 + Math.sin(uiT * 0.35) * DW * 0.3;
+      const grad = dx.createLinearGradient(bx0, DH, bx0 + beamA * 200, 0);
+      grad.addColorStop(0, 'rgba(108,243,255,0.06)'); grad.addColorStop(1, 'rgba(108,243,255,0)');
+      dx.fillStyle = grad;
+      dx.beginPath(); dx.moveTo(bx0 - 30, DH); dx.lineTo(bx0 + beamA * 200 - 90, 0);
+      dx.lineTo(bx0 + beamA * 200 + 90, 0); dx.lineTo(bx0 + 30, DH); dx.closePath(); dx.fill();
+    }
     dx.restore();
     // animated scanline grid
     dx.strokeStyle = 'rgba(120,90,255,0.10)'; dx.lineWidth = 1;
