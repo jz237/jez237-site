@@ -298,10 +298,15 @@ const KINDS = {
   fuseball:{color:C.fuseball,points:250, hp:1 },
   pulsar: { color:C.pulsar,  points:200, hp:1 }
 };
+/* per-level enemy recolour (Tempest tints the whole cast each level) */
+function rgbToHsl(r,g,b){ r/=255;g/=255;b/=255; const mx=Math.max(r,g,b),mn=Math.min(r,g,b); let h,s,l=(mx+mn)/2; if(mx===mn){h=s=0;} else { const d=mx-mn; s=l>0.5?d/(2-mx-mn):d/(mx+mn); switch(mx){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;default:h=(r-g)/d+4;} h/=6; } return [h,s,l]; }
+function hslToRgb(h,s,l){ let r,g,b; if(s===0){ r=g=b=l; } else { const q=l<0.5?l*(1+s):l+s-l*s, p=2*l-q; const f=(p,q,t)=>{ if(t<0)t+=1; if(t>1)t-=1; if(t<1/6)return p+(q-p)*6*t; if(t<1/2)return q; if(t<2/3)return p+(q-p)*(2/3-t)*6; return p; }; r=f(p,q,h+1/3); g=f(p,q,h); b=f(p,q,h-1/3); } return [r*255,g*255,b*255]; }
+function shiftHue(hex, deg){ const n=hex.replace('#',''); const r=parseInt(n.slice(0,2),16),g=parseInt(n.slice(2,4),16),b=parseInt(n.slice(4,6),16); let [h,s,l]=rgbToHsl(r,g,b); h=(h+deg/360+1)%1; const [R,G,B]=hslToRgb(h,s,l); const f=x=>Math.round(clamp(x,0,255)).toString(16).padStart(2,'0'); return '#'+f(R)+f(G)+f(B); }
+function enemyColor(kind){ return shiftHue(KINDS[kind].color, ((state.level-1)*53)%360); }
 function spawnEnemy(kind, lane, depth){
   const k=KINDS[kind];
   const L0 = lane ?? (isOpen() ? 1+Math.floor(rand(LANES-1)) : Math.floor(rand(LANES)));
-  const e={ kind, lane:normLane(L0), depth:(depth??1.02), color:k.color, hp:k.hp,
+  const e={ kind, lane:normLane(L0), depth:(depth??1.02), color:enemyColor(kind), hp:k.hp, birth:0,
     speed:(0.10 + state.level*0.006 + rand(0.05)), flipT:0, flipTimer:rand(1.1,0.4), flipFrom:0, flipTo:0, flipping:false,
     phase:rand(TAU), onRim:false, rail:0, pulse:0, dead:false };
   if(kind==="fuseball"){ e.speed*=1.15; e.rail=rand(1,-1); }
@@ -311,6 +316,7 @@ function spawnEnemy(kind, lane, depth){
 }
 
 function updateEnemy(e,dt){
+  e.birth = Math.min(1, (e.birth ?? 0) + dt/0.4);   // bloom out of the vortex over 0.4s
   if(e.kind==="pulsar"){ e.pulse += dt*(2.4 + state.level*0.06); }
   if(e.onRim){
     // crawl along the rim toward the player, flipping lane to lane
@@ -367,13 +373,17 @@ function updateEnemy(e,dt){
 function splitTanker(e){
   spawnEnemy("flipper", normLane(Math.round(e.lane)-1), 0.05);
   spawnEnemy("flipper", normLane(Math.round(e.lane)+1), 0.05);
-  boom(project(e.lane,e.depth), C.tanker, 12);
+  boom(project(e.lane,e.depth), e.color, 12);
 }
 
 function drawEnemy(e){
   const L=e.lane, d=Math.max(e.depth,0);
   const col=e.color;
   const dz=0.028 + d*0.02, hw=0.5;
+  // bloom out of the vortex: scale the shape up about its centre for the first 0.4s
+  const born = (e.birth==null?1:e.birth);
+  let grown=false;
+  if(born<1){ const c=project(L,d); const g=0.12+0.88*(born*born*(3-2*born)); ctx.save(); ctx.translate(c.x,c.y); ctx.scale(g,g); ctx.translate(-c.x,-c.y); grown=true; }
   if(e.kind==="flipper"){
     const aT=project(L-hw,d-dz), aB=project(L-hw,d+dz), bT=project(L+hw,d-dz), bB=project(L+hw,d+dz), c=project(L,d);
     stroke([aT,c,aB],col,2,10,false); stroke([bT,c,bB],col,2,10,false);
@@ -399,6 +409,7 @@ function drawEnemy(e){
       seg(project(L,0),project(L,0.9),col2,2,18);
     }
   }
+  if(grown) ctx.restore();
 }
 
 /* ---------- combat ---------- */
@@ -763,7 +774,7 @@ $("submitScore").addEventListener("click",async()=>{
 try{ state.hi=parseInt(localStorage.getItem(HI_KEY)||"0",10)||0; }catch{}
 showScores("titleScores");
 requestAnimationFrame(frame);
-window.__vt = { state, enemies:()=>enemies, shots:()=>shots, spikes:()=>spikes, sparks:()=>sparks, shapes, newGame, useZap, startWarp, project, update, render, drawText, ctx };
+window.__vt = { state, enemies:()=>enemies, shots:()=>shots, spikes:()=>spikes, sparks:()=>sparks, shapes, newGame, useZap, startWarp, project, update, render, drawText, ctx, enemyColor, spawnEnemy };
 const params=new URLSearchParams(location.search);
 if(params.has("autostart")) newGame();
 </script>
