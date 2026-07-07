@@ -652,7 +652,8 @@ function sfx(kind){
 /* ---------- input ---------- */
 function aimFromPointer(e){
   if(state.mode!=="play" && state.mode!=="warp") return;
-  if($("overlay").contains(e.target) || $("gameover").contains(e.target)) return;
+  const tgt = e.target instanceof Node ? e.target : null;
+  if(tgt && ($("overlay").contains(tgt) || $("gameover").contains(tgt))) return;
   const r=canvas.getBoundingClientRect();
   if(isOpen()){ state.targetLane = clamp((e.clientX-r.left)/r.width*LANES, 0.5, LANES-0.5); return; }
   const x=e.clientX-(r.left+r.width/2), y=e.clientY-(r.top+r.height/2);
@@ -732,7 +733,7 @@ function render(){
 
   // HUD + messages in the vector stroke font (no camera shake)
   ctx.save(); ctx.lineJoin="round"; ctx.lineCap="round"; ctx.globalCompositeOperation="lighter";
-  const hs = clamp(Math.min(W,H)*0.028, 15, 26);
+  const hs = clamp(W*0.026, 11, 24);   // width-driven so SCORE/HI don't collide on narrow phones
   drawText("SCORE "+pad6(state.score), 16, 12, hs, "#20e0ff", "left", 9);
   drawText("HI "+pad6(state.hi), cx, 12, hs, C.claw, "center", 9);
   const claws = Math.max(0, Math.min(state.lives, 6));
@@ -740,7 +741,8 @@ function render(){
   for(let i=0;i<claws;i++) drawMiniClaw(W-20-i*(cs*2.9)-cs, 12+hs*0.55, cs, C.claw);
   drawText("LEVEL "+pad2(state.level)+" "+shapes[state.shapeIndex].name, 16, H-26, hs*0.72, "rgba(80,220,255,.85)", "left", 6);
   if(state.msg){
-    const ms = clamp(nearR*0.15, 22, 46);
+    const fit = (W*0.9)/Math.max(6, state.msg.length*0.85);   // never let the message run off a narrow screen
+    const ms = clamp(Math.min(nearR*0.15, fit), 14, 46);
     drawText(state.msg, cx, Math.max(H*0.11, cy - nearR*1.08), ms, C.claw, "center", 16);
   }
   ctx.restore();
@@ -767,7 +769,7 @@ function resize(){
   DPR = d;
   canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
   cx=W/2; cy=H*0.55;
-  nearR=Math.min(W,H)*0.37;
+  nearR=Math.min(W*0.46, H*0.37);   // portrait phones: use more width so the tube isn't tiny
 }
 window.addEventListener("resize",resize,{passive:true}); resize();
 
