@@ -144,6 +144,7 @@
       if (ENEMIES[e.type]) {
         const en = makeEnemy(e.type, e.skin, px, py);
         en.hp = en.hp * diff.hp;
+        en.maxHp = en.hp; // damage checks compare against SCALED hp
         enemies.push(en);
       } else if (e.type.startsWith('pu_') || e.type === 'gem') {
         pickups.push({ type: e.type, x: px + 2, y: py + 2, w: 16, h: 16, t: 0, taken: false, baseY: py + 2 });
@@ -170,7 +171,8 @@
     return {
       level, player, enemies, pickups,
       pshots: [], eshots: [], mines: [], floats: [],
-      cam: { x: 0, y: 0 }, time: Math.round(level.timeLimit * diff.time), freeze: 0,
+      cam: { x: 0, y: 0 }, time: Math.round(level.timeLimit * diff.time),
+      timeLimit: Math.round(level.timeLimit * diff.time), freeze: 0,
       won: false, gameOver: false, events: [], frame: 0,
       shake: 0, boss, bossDead: !boss,
       diffDmg: diff.dmg, diffHp: diff.hp,
@@ -366,6 +368,7 @@
           if (d < 320 && !p.dead) { e.x += (dx2 / d) * sp * dt; e.y += (dy2 / d) * sp * dt; }
           if (e.skin === 'bubblemine') e.y -= 14 * dt;          // bubbles rise
           e.y += Math.sin(e.t * 3) * 5 * dt;
+          if (e.y < -30) e.alive = false;                        // drifted off the top
         } else if (e.type === 'eel') {
           // sinuous swimmer: fast horizontal weave, flips at walls
           e.vx = e.facing * e.cfg.speed;
@@ -380,7 +383,8 @@
           // hatches a hugger when approached or damaged
           const near = Math.abs((e.x + e.w / 2) - (p.x + p.w / 2)) < e.cfg.hatchDist &&
                        Math.abs(e.y - p.y) < 80;
-          if ((near || e.hp < e.cfg.hp) && !p.dead) {
+          const hurt = e.hp < (e.maxHp != null ? e.maxHp : e.cfg.hp);
+          if ((near || hurt) && !p.dead) {
             e.alive = false;
             emit(s, 'explosion', e.x + e.w / 2, e.y + e.h / 2);
             emit(s, 'sfx', 0, 0, { name: 'hatch' });
@@ -419,7 +423,8 @@
             const kind = e.skin === 'hivenode' ? 'hugger' : 'flyer';
             const skin = e.skin === 'hivenode' ? 'hugger' : (e.skin === 'armhub' ? 'arcdrone' : null);
             const sp = makeEnemy(kind, skin, e.x, e.y);
-            sp.t = 0; sp.hp *= (s.diffHp || 1);
+            sp.t = 0; sp.hp *= (s.diffHp || 1); sp.maxHp = sp.hp;
+            if (kind === 'flyer') sp.homeY = e.y - 40; // sine above the hub, not into the floor
             s.enemies.push(sp);
           }
         }
@@ -536,7 +541,9 @@
         : (p.x + p.w > b.wakeX);
       if (!p.dead && woken) {
         b.awake = true; b.state = 'idle'; b.stateT = 1.4;
-        sealArena(s, true);
+        // shmup: never seal in FRONT of a ship still left of the wall — defer
+        // until the scroll carries it into the arena
+        if (s.level.type !== 'shmup' || p.x > (b.wallCol + 1) * TILE + 4) sealArena(s, true);
         emit(s, 'banner', 0, 0, { text: 'WARNING', sub: b.name });
         emit(s, 'sfx', 0, 0, { name: 'warning' });
         emit(s, 'music', 0, 0, { name: 'boss' });
@@ -549,10 +556,16 @@
       b.awake = false; b.open = false; b.state = 'idle'; b.stateT = 1.2;
       b.x = b.homeX; b.y = b.homeY; b.attack = null;
       sealArena(s, false);
+      emit(s, 'music', 0, 0, { name: 'world' }); // drop the boss theme
       return;
     }
 
     b.t += dt;
+
+    // deferred shmup seal: close the wall once the ship is inside the arena
+    if (!b.wallSaved && !b.dying && s.level.type === 'shmup' && p.x > (b.wallCol + 1) * TILE + 4) {
+      sealArena(s, true);
+    }
 
     // death sequence
     if (b.dying) {
@@ -638,7 +651,7 @@
           if (b.sweepLeft > 0 && b.sweepTick <= 0) {
             b.sweepTick = 1.3 / atk.sweeps;
             const i = atk.sweeps - b.sweepLeft; b.sweepLeft--;
-            const ang = (-0.9 + (i / (atk.sweeps - 1)) * 1.5); // sweep top->down
+            const ang = (-0.9 + (i / Math.max(1, atk.sweeps - 1)) * 1.5); // sweep top->down
             bossShoot(s, b, Math.cos(ang) * atk.speed * b.sweepDir, Math.sin(ang) * atk.speed, { kind: 'beam' });
           }
         }
@@ -863,10 +876,11 @@
     // variable jump height: a single cut on release (SPEC §2.1 JUMP_CUT_MULT)
     if (input.jumpReleased && p.vy < 0 && !p.inWater) p.vy *= PHYS.jumpCut;
 
-    // wind: open-sky gusts push while airborne (SPEC contextual modifiers)
-    if (s.level.windX && !p.onGround && !p.inWater) {
+    // wind: gust phase always advances (so the streaks never lie about
+    // direction); the push only applies while airborne
+    if (s.level.windX) {
       s.windPhase = Math.sin(s.frame * D.DT * 0.45);
-      p.vx += s.windPhase * s.level.windX * dt;
+      if (!p.onGround && !p.inWater) p.vx += s.windPhase * s.level.windX * dt;
     }
     // vertical wind-climb: the updraft column carries the player skyward
     const ud = s.level.updraft;
@@ -998,9 +1012,12 @@
   }
 
   // the corridor stops scrolling once a blockade boss fills the frame
+  // (threshold capped below the camera clamp so it is actually reachable)
   function shmupHalted(s) {
     const b = s.boss;
-    return !!(b && b.alive && b.awake && s.cam.x >= b.wallCol * TILE - 30);
+    if (!b || !b.alive || !b.awake) return false;
+    const stopAt = Math.min(b.wallCol * TILE - 30, s.level.cols * TILE - D.VIEW_W - 2);
+    return s.cam.x >= stopAt;
   }
 
   // ---- shmup ship control (World 3) ----------------------------------------
@@ -1062,7 +1079,7 @@
       p.y = topY <= botY ? ((topY + botY) / 2) * TILE : (lv.rows / 2) * TILE;
       p.energy = p.maxEnergy; p.invuln = 2.5; p.morph = false;
       s.freeze = 0;
-      s.time = s.level.timeLimit; // fresh clock with the fresh life
+      s.time = s.timeLimit; // fresh clock with the fresh life (difficulty-scaled)
       return;
     }
     const spawn = s.checkpoint || ps;
@@ -1070,7 +1087,7 @@
     p.energy = p.maxEnergy; p.invuln = 2; p.morph = false; p.h = 30; p.w = 14; p.crouch = false;
     // rewind camera near spawn
     s.freeze = 0;
-    s.time = s.level.timeLimit; // fresh clock with the fresh life
+    s.time = s.timeLimit; // fresh clock with the fresh life (difficulty-scaled)
   }
 
   // ---- camera -------------------------------------------------------------
