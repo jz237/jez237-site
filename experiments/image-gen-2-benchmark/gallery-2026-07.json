@@ -38,6 +38,25 @@
     }
   },
   {
+    "id": "2026-07-07-creature-design-sleetfen-glassback-grazer",
+    "title": "Sleetfen Glassback Grazer",
+    "tests": "GPT Image 2 creature-design study; believable invented animal from habitat/adaptation constraints; no prompt-card text.",
+    "prompt": "Create a finished square photorealistic natural-history creature study of a believable invented animal named \"Sleetfen Glassback Grazer\" from the rain-bright Lumenreef Causeway alien archipelago. Design a low, non-humanoid amphibious shelf-marsh grazer adapted to sleet-cold freshwater lenses suspended above warm turquoise reef water: four broad basalt-gripping forefeet and two rear paddle-limbs, a shallow shovel-shaped mouth for scraping mineral algae from glass-coral mats, transparent glassy dorsal plates that collect cold rain and make the spine glow pale blue, pebble-textured blue-green skin, pearl-white belly folds, coppery sensory whiskers, and small lenslike eyes set wide for watching tide pools. Show it as a realistic field/natural-history study photographed at a wet shell-ceramic observation bench beside a black basalt tide flat, not a poster or text card: the adult animal stands three-quarter side view with one forefoot on buoyant glass-coral, rain beads on the glassback plates, scraped algae marks, mud and salt crystals around the toes, a juvenile partly visible under a lensleaf awning, and scale cues from a shell caliper, tide-engineer hand tool, wet basalt sample stones, and a shallow observation tray. Include small habitat details from Lumenreef Causeway: turquoise shelf sea reflections, violet under-reef glow in cracks, saffron float-pod leaves, braided kelpglass fibers, pearly rain curtains, and distant glass-coral causeway arches. Make the anatomy plausible and tactile: translucent plate thickness, capillary channels inside the dorsal glassback, flexible gill-fan slits tucked behind the jaw, algae-stained mouth edges, scuffed toe pads, wet skin pores, and reflected rainlight. Finished image only, no labels, no readable text, no humans, no mermaids, no generic fantasy dragon, no cyberpunk neon, no gore, no brand logos, no watermark, no flat infographic, no cinematic battle scene.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study.\n\nExample substitution: [HABITAT] = rain-bright alien shelf-marsh with sleet-cold freshwater lenses above warm reef water; [ADAPTATION 1] = glassy dorsal rain-collecting plates with visible capillary channels; [ADAPTATION 2] = basalt-gripping forefeet, rear paddle-limbs, and algae-scraping shovel mouth; [TEXTURE/COLOR] = pebble-textured blue-green wet skin, pearl-white belly folds, coppery sensory whiskers, and pale blue translucent glassback glow.",
+    "image": "images/2026-07-07-creature-design-sleetfen-glassback-grazer.jpg",
+    "thumb": "thumbs/2026-07-07-creature-design-sleetfen-glassback-grazer.webp",
+    "color": "#4e5b5c",
+    "date": "2026-07-07",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Sleetfen Glassback Grazer",
+      "description": "A believable Lumenreef shelf-marsh grazer with rain-collecting glassback plates, basalt-gripping feet, paddle limbs, and algae-scraping mouthparts.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
+  },
+  {
     "id": "2026-07-06-world-that-never-was-northbridge-pneumatic-library",
     "title": "Northbridge Pneumatic Library",
     "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; appended through append-entry.py with JPEG conversion and R2 upload.",
