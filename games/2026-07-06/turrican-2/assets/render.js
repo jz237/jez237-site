@@ -39,7 +39,7 @@
       tileAtlas = buildTileAtlas(lv.world);
       // try a world background image (optional, degrades gracefully)
       bgImg = null;
-      loadBg(`assets/img/world${lv.world}-bg.jpg`);
+      loadBg(`assets/img/world${lv.world}-bg.jpg?v=${D.VERSION}`);
     }
 
     // pre-render 4 base + 4 top-capped tile variants per world (crisp identity
@@ -179,32 +179,62 @@
       for (let i = 0; i < sky.length; i++) g.addColorStop(i / (sky.length - 1), sky[i]);
       bx.fillStyle = g; bx.fillRect(0, 0, VIEW_W, VIEW_H);
 
-      // optional AI background, parallax slow
-      if (bgImg) {
-        const pw = VIEW_W * 1.4, ph = VIEW_H;
-        const ox = -(cam.x * 0.15) % pw;
-        bx.globalAlpha = 0.55;
-        for (let x = ox - pw; x < VIEW_W; x += pw) bx.drawImage(bgImg, x, 0, pw, ph);
-        bx.globalAlpha = 1;
+      const art = !!bgImg;
+      if (art) {
+        // hero painted plate: mirror-tiled (hides seams on non-seamless art),
+        // slow horizontal parallax + gentle vertical parallax with overscan
+        const ih = VIEW_H * 1.16;
+        const iw = ih * (bgImg.width / bgImg.height);
+        const scroll = cam.x * 0.26;
+        const worldH = level.rows * TILE - VIEW_H;
+        const vy = worldH > 0 ? -(cam.y / worldH) * (ih - VIEW_H) : 0;
+        const idx0 = Math.floor(scroll / iw);
+        for (let k = -1; ; k++) {
+          const wi = idx0 + k;
+          const sx = wi * iw - scroll;
+          if (sx >= VIEW_W) break;
+          if (sx + iw <= 0) continue;
+          const flip = (((wi % 2) + 2) % 2) === 1;
+          bx.save();
+          if (flip) { bx.translate(sx + iw, vy); bx.scale(-1, 1); bx.drawImage(bgImg, 0, 0, iw, ih); }
+          else bx.drawImage(bgImg, sx, vy, iw, ih);
+          bx.restore();
+        }
+        // subtle atmospheric wash to seat the art into the palette + depth
+        bx.globalAlpha = 0.16; bx.fillStyle = pal.fog || 'rgba(0,0,0,0.1)';
+        bx.fillRect(0, 0, VIEW_W, VIEW_H); bx.globalAlpha = 1;
+      } else {
+        // fallback: distant dust/stars when the plate hasn't loaded
+        bx.save();
+        for (const st of stars) {
+          const x = ((st.x * VIEW_W - cam.x * st.z * 0.3) % VIEW_W + VIEW_W) % VIEW_W;
+          const y = st.y * VIEW_H;
+          bx.globalAlpha = 0.5 * st.z;
+          bx.fillStyle = '#ffffff';
+          bx.fillRect(x, y, st.s, st.s);
+        }
+        bx.restore();
       }
 
-      // distant dust/stars
-      bx.save();
-      for (const st of stars) {
-        const x = ((st.x * VIEW_W - cam.x * st.z * 0.3) % VIEW_W + VIEW_W) % VIEW_W;
-        const y = st.y * VIEW_H;
-        bx.globalAlpha = 0.5 * st.z;
-        bx.fillStyle = '#ffffff';
-        bx.fillRect(x, y, st.s, st.s);
-      }
-      bx.restore();
-
-      // per-world parallax silhouettes
-      drawWorldParallax(cam);
+      // per-world parallax silhouettes (thinned to a grounding ridge when the
+      // painted plate is present, so the art stays the hero)
+      drawWorldParallax(cam, art);
     }
 
-    function drawWorldParallax(cam) {
+    function drawWorldParallax(cam, art) {
       const w = level.world;
+      // with the painted plate present, keep only the nearest silhouette as a
+      // dark grounding foreground ridge (lower alpha) — the plate supplies the
+      // far/mid depth. Without art, draw the full procedural stack.
+      if (art) {
+        const a = 0.5;
+        if (w === 1) drawRidge(cam.x * 0.68, VIEW_H * 0.88, 34, pal.near, a);
+        else if (w === 2) drawRidge(cam.x * 0.7, VIEW_H * 0.9, 46, pal.near, a);
+        else if (w === 3) drawTruss(cam.x * 0.55, VIEW_H * 0.82, pal.near, a * 0.7);
+        else if (w === 4) drawSkyline(cam.x * 0.45, VIEW_H * 0.82, pal.mid, a);
+        else drawRidge(cam.x * 0.72, VIEW_H * 0.9, 46, pal.near, a);
+        return;
+      }
       if (w === 1) {                       // desert: flat-topped mesas
         drawMesa(cam.x * 0.22, VIEW_H * 0.58, 42, pal.far, 0.9);
         drawMesa(cam.x * 0.42, VIEW_H * 0.70, 52, pal.mid, 1);
