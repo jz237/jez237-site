@@ -7,7 +7,7 @@
 <title>Vector Tempest</title>
 <meta name="description" content="A faithful browser tribute to Atari's 1981 Tempest — a glowing vector tube shooter with flippers, tankers, spikers, fuseballs, pulsars, the superzapper, and the AVOID SPIKES warp." />
 <style>
-:root{color-scheme:dark;--ink:#eaffff;--cyan:#20e0ff;--yellow:#ffe000;--red:#ff3b3b;--green:#39ff5a;--panel:rgba(0,2,8,.86);font-family:"Courier New",ui-monospace,Menlo,Consolas,monospace}
+:root{color-scheme:dark;--ink:#eaffff;--cyan:#20e0ff;--yellow:#ffe000;--red:#ff3b3b;--green:#39ff5a;--panel:rgba(1,4,12,.72);font-family:"Courier New",ui-monospace,Menlo,Consolas,monospace}
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:var(--ink);touch-action:none;user-select:none}
 canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:#000;cursor:crosshair}
@@ -19,7 +19,7 @@ canvas{position:fixed;inset:0;width:100%;height:100%;display:block;background:#0
 #hudShips{text-align:right;color:var(--red)}
 .corner{display:none!important}
 .corner-legacy{position:fixed;left:16px;bottom:12px;z-index:3;color:rgba(120,240,255,.7);font-size:clamp(10px,1.8vw,13px);letter-spacing:.14em;pointer-events:none;text-transform:uppercase;text-shadow:0 0 6px currentColor}
-.overlay{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 40%,rgba(32,224,255,.08),transparent 34%),linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.9))}
+.overlay{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:18px;background:radial-gradient(circle at 50% 40%,rgba(32,224,255,.06),transparent 38%),linear-gradient(180deg,rgba(0,0,0,.32),rgba(0,0,0,.72))}
 .overlay.hidden{opacity:0;pointer-events:none}
 .panel{width:min(720px,94vw);max-height:92dvh;overflow:auto;padding:24px;border:1px solid rgba(32,224,255,.5);border-radius:4px;background:var(--panel);box-shadow:inset 0 0 26px rgba(32,224,255,.1),0 0 30px rgba(32,224,255,.22);text-align:center}
 h1{margin:0 0 6px;font-size:clamp(2.6rem,11vw,5.8rem);line-height:.86;letter-spacing:.16em;color:var(--yellow);text-shadow:0 0 10px var(--yellow),0 0 26px rgba(255,120,0,.7),0 0 46px rgba(255,60,0,.4)}
@@ -131,7 +131,7 @@ const state = {
   fireTimer:0, spawnTimer:0, spawnLeft:0,
   zapCharge:1, zapUsed:0, zapFlash:0,
   msg:"", msgUntil:0, dieTimer:0, warpT:0, warpDepth:0, spawnGap:1,
-  shakeT:0
+  shakeT:0, demo:false
 };
 let enemies=[], shots=[], sparks=[], spikes=new Array(LANES).fill(1);
 const keys=new Set();
@@ -495,6 +495,7 @@ function drawSparks(){
 
 /* ---------- player / lifecycle ---------- */
 function killPlayer(){
+  if(state.demo){ boom(project(state.lane,-0.02), C.claw, 14); state.shakeT=0.3; return; }   // attract demo: invincible
   if(state.mode!=="play") return;
   state.mode="dying"; state.dieTimer=1.4; state.shakeT=0.5;
   boom(project(state.lane,-0.02), C.claw, 26);
@@ -565,6 +566,7 @@ function updateWarp(dt){
 
 /* ---------- scoring / ui ---------- */
 function addScore(n){
+  if(state.demo){ state.score+=n; return; }   // demo score doesn't touch hi/bonus
   const before=state.score; state.score+=n;
   if(Math.floor(state.score/BONUS_LIFE)>Math.floor(before/BONUS_LIFE)){ state.lives++; setMsg("BONUS SHIP",1.2); sfx("coin"); }
   if(state.score>state.hi){ state.hi=state.score; try{ localStorage.setItem(HI_KEY,String(state.hi)); }catch{} }
@@ -572,7 +574,8 @@ function addScore(n){
 function setMsg(t,secs){ state.msg=t; state.msgUntil=state.t+secs; }
 function updateHud(){
   // score / hi / lives / level are drawn on the canvas in the vector font (see render)
-  const ready = state.mode==="play" && state.zapCharge>0;
+  document.querySelector(".zap").style.display = state.demo ? "none" : "";   // no controls during attract
+  const ready = state.mode==="play" && !state.demo && state.zapCharge>0;
   const zb=$("zapBtn"); zb.disabled=!ready; zb.classList.toggle("ready", ready && state.zapUsed===0);
   zb.textContent = state.zapUsed===0 ? "SUPERZAPPER" : (state.zapCharge>0?"ZAPPER (WEAK)":"ZAPPER SPENT");
 }
@@ -607,12 +610,23 @@ function aimFromPointer(e){
   state.targetLane=((angle+Math.PI/2)/TAU*LANES + LANES*1000)%LANES;
 }
 function controls(dt){
-  let move=0;
-  if(keys.has("ArrowLeft")||keys.has("KeyA")) move-=1;
-  if(keys.has("ArrowRight")||keys.has("KeyD")) move+=1;
-  if(move){ state.targetLane=normLane(state.targetLane + move*dt*11); }
+  if(state.demo){ demoAI(dt); }
+  else {
+    let move=0;
+    if(keys.has("ArrowLeft")||keys.has("KeyA")) move-=1;
+    if(keys.has("ArrowRight")||keys.has("KeyD")) move+=1;
+    if(move){ state.targetLane=normLane(state.targetLane + move*dt*11); }
+  }
   const d=laneWrapDelta(state.lane, state.targetLane);
   state.lane=normLane(state.lane + d*Math.min(1,dt*18));
+}
+function demoAI(dt){
+  // chase the most-advanced enemy, fire when lined up, zap when swarmed
+  let best=null, bd=99;
+  for(const e of enemies){ if(e.dead) continue; const pr = e.onRim ? -1 : e.depth; if(pr<bd){ bd=pr; best=e; } }
+  if(best) state.targetLane = normLane(best.lane);
+  if(best && Math.abs(laneWrapDelta(state.lane, best.lane))<0.7 && state.mode==="play") fire();
+  if(state.zapCharge>0 && state.zapUsed===0 && enemies.filter(e=>!e.dead && (e.onRim||e.depth<0.22)).length>=4) useZap();
 }
 
 /* ---------- main update ---------- */
@@ -709,9 +723,15 @@ window.addEventListener("resize",resize,{passive:true}); resize();
 /* ---------- game start / over ---------- */
 function newGame(){
   ensureAudio();
-  Object.assign(state,{ score:0, level:1, lives:3, zapCharge:1, zapUsed:0, msg:"", t:0 });
+  Object.assign(state,{ score:0, level:1, lives:3, zapCharge:1, zapUsed:0, msg:"", t:0, demo:false });
   try{ state.hi=Math.max(state.hi, parseInt(localStorage.getItem(HI_KEY)||"0",10)||0); }catch{}
   $("overlay").classList.add("hidden"); $("gameover").classList.add("hidden");
+  startLevel(1);
+}
+// arcade attract mode: an invincible AI plays behind the title screen, cycling levels
+function startDemo(){
+  Object.assign(state,{ demo:true, score:0, lives:3, zapCharge:1, zapUsed:0, msg:"", t:0 });
+  $("gameover").classList.add("hidden"); $("overlay").classList.remove("hidden");
   startLevel(1);
 }
 function endGame(){
@@ -750,7 +770,7 @@ function showScores(id){ renderScores(id); fetchGlobalScores().then(()=>renderSc
 window.addEventListener("keydown",e=>{
   keys.add(e.code);
   if(["ArrowLeft","ArrowRight","Space","Enter","KeyZ"].includes(e.code)) e.preventDefault();
-  if(e.code==="Enter" && (state.mode==="title"||state.mode==="over")) newGame();
+  if(e.code==="Enter" && (state.demo||state.mode==="over")) newGame();
   if(e.code==="KeyZ") useZap();
 });
 window.addEventListener("keyup",e=>keys.delete(e.code));
@@ -760,7 +780,7 @@ window.addEventListener("pointerup",()=>{ pointer.down=false; },{passive:true});
 window.addEventListener("pointercancel",()=>{ pointer.down=false; },{passive:true});
 $("startBtn").addEventListener("click",newGame);
 $("againBtn").addEventListener("click",newGame);
-$("menuBtn").addEventListener("click",()=>{ state.mode="title"; $("gameover").classList.add("hidden"); $("overlay").classList.remove("hidden"); showScores("titleScores"); });
+$("menuBtn").addEventListener("click",()=>{ startDemo(); showScores("titleScores"); });
 $("zapBtn").addEventListener("click",()=>{ ensureAudio(); useZap(); });
 $("scoresBtn").addEventListener("click",()=>showScores("titleScores"));
 $("submitScore").addEventListener("click",async()=>{
@@ -774,9 +794,10 @@ $("submitScore").addEventListener("click",async()=>{
 try{ state.hi=parseInt(localStorage.getItem(HI_KEY)||"0",10)||0; }catch{}
 showScores("titleScores");
 requestAnimationFrame(frame);
-window.__vt = { state, enemies:()=>enemies, shots:()=>shots, spikes:()=>spikes, sparks:()=>sparks, shapes, newGame, useZap, startWarp, project, update, render, drawText, ctx, enemyColor, spawnEnemy };
+window.__vt = { state, enemies:()=>enemies, shots:()=>shots, spikes:()=>spikes, sparks:()=>sparks, shapes, newGame, startDemo, useZap, startWarp, project, update, render, drawText, ctx, enemyColor, spawnEnemy };
 const params=new URLSearchParams(location.search);
 if(params.has("autostart")) newGame();
+else startDemo();   // arcade attract mode behind the title
 </script>
 </body>
 </html>
