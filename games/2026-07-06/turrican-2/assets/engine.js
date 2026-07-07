@@ -728,6 +728,7 @@
     s.hitstop = 0.06; // brief freeze sells the impact
     s.shake = Math.min(9, s.shake + 5);
     emit(s, 'sfx', 0, 0, { name: 'hit' });
+    emit(s, 'hurt', 0, 0); // red damage vignette
     if (p.energy <= 0) killPlayer(s);
   }
 
@@ -759,11 +760,14 @@
 
   function applyPickup(s, type) {
     const p = s.player;
+    const px = p.x + p.w / 2, py = p.y + p.h / 2;
     if (type === 'gem') { p.gems++; p.score += 25;
+      emit(s, 'pickup', px, py, { color: '#9be6ff' });
       if (p.gems % 50 === 0) { p.lives++; emit(s, 'voice', 0, 0, { name: 'oneup' });
         s.floats.push({ x: p.x, y: p.y - 6, text: '1UP', life: 1.2, vy: -24 }); }
       emit(s, 'sfx', 0, 0, { name: 'gem' }); return; }
     emit(s, 'sfx', 0, 0, { name: 'power' });
+    emit(s, 'pickup', px, py, { color: type === 'pu_energy' ? '#54e36b' : type === 'pu_life' ? '#ff5d7a' : '#ffd23f' });
     if (type === 'pu_weapon') {
       emit(s, 'voice', 0, 0, { name: 'weapon' });
       // grant next unowned weapon, else up current
