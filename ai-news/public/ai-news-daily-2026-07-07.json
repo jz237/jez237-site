@@ -1,7 +1,136 @@
 {
   "date": "2026-07-07",
-  "updatedAt": "2026-07-07T04:00:01.505656+00:00",
+  "updatedAt": "2026-07-07T10:00:01.691181+00:00",
   "items": [
+    {
+      "title": "NVIDIA and Hugging Face Bring New Models and Frameworks to LeRobot for the Open Robotics Community",
+      "url": "https://blogs.nvidia.com/blog/hugging-face-lerobot-models-frameworks-open-robotics",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Open source AI has shown how quickly developers can innovate when models, data and tools are shared. Robotics has the same opportunity, but advancements in physical AI development can still be gated by costly and fragmented resources, from large datasets and robot foundation models to simulation, compute and validation tools. NVIDIA and Hugging Face are [&#8230;]",
+      "image": "public/thumbnails/news-f78bc2d901acae90b4.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-07T06:00:26+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 6.6745,
+      "signalGroup": "Model releases",
+      "sourceTier": "Primary source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "NVIDIA and Hugging Face Bring New Models and Frameworks to LeRobot for the Open Robotics Community",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via NVIDIA Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "nvidia-nvidia-hugging-face-bring-models",
+      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/07/nv-gr00t-e2r-letobot-2up-KV-r2-1600x900-1.jpg"
+    },
+    {
+      "title": "TechnologyWire launches PR distribution platform engineered to secure brand visibility in AI search",
+      "url": "https://thenextweb.com/news/technologywire-pr-distribution-ai-search-visibility",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "MediaFuse.org, a newswire network dominant across finance, cybersecurity, blockchain, and gaming, today announced a major disruption to tech PR with the launch of TechnologyWire. TechnologyWire marks the latest expansion for MediaFuse, which scaled the targeted newswire model successfully across several verticals. After capturing a significant footprint in the blockchain and financial sectors through platforms like Chainwire [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-ca04bebad6b92d1f8b.avif",
+      "featuredLatest": false,
+      "published": "2026-07-07T07:00:37+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2623,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "TechnologyWire launches PR distribution platform engineered to secure brand visibility in AI search",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "technologywire-launches-distribution-platform-engineered-secure",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/technologywire-pr-distribution-ai-search-visibility.avif"
+    },
+    {
+      "title": "US cyber agency is using Anthropic’s Mythos to audit government code, sources say",
+      "url": "https://thenextweb.com/news/cisa-anthropic-mythos-government-code-audit",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A federal defender is reportedly pointing a private, offensive-grade AI model at the government’s own software, though almost nothing about the work is on the record. The US Cybersecurity and Infrastructure Security Agency is using Anthropic’s AI model Mythos to hunt for bugs in government software, according to three people familiar with the matter who [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-832b554ba4080d6420.avif",
+      "featuredLatest": false,
+      "published": "2026-07-07T09:39:30+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.1396,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "US cyber agency is using Anthropic’s Mythos to audit government code, sources say",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-cyber-agency-using-anthropic-mythos",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/CISA.avif"
+    },
+    {
+      "title": "Samsung’s Q2 profit jumps 19-fold to 89 trillion won on AI memory demand",
+      "url": "https://thenextweb.com/news/samsung-q2-2026-operating-profit-record-ai-memory",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Samsung Electronics guided to second-quarter operating profit of about 89.4 trillion won ($58.4bn) on Tuesday, roughly 19 times what it made in the same period a year earlier and, by most counts, the largest quarterly operating profit any technology company has ever reported. It is Samsung’s third consecutive record quarter, and it came in ahead of the roughly 84 [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-aea9d52bf6cbeaf487.avif",
+      "featuredLatest": false,
+      "published": "2026-07-07T09:09:42+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.5247,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Samsung’s Q2 profit jumps 19-fold to 89 trillion won on AI memory demand",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "samsung-profit-jumps-19-fold-trillion-won",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/Samsung-Electronics.avif"
+    },
     {
       "title": "The Job Positions of the AI Future",
       "url": "https://aidailybrief.ai/e/2026-07-05",
@@ -14,9 +143,9 @@
       "summary": "Not another jobs-apocalypse episode. NLW builds off a Boris Cherny tweet to sketch the new archetypes of agentic work — the prototypers, builders, sweepers, growers, and maintainers facing the product — then argues Cherny missed the outward-facing half of the org, and lands on the one move to future-proof yourself: become the maker for your function.",
       "image": "public/thumbnails/news-21301be82254cc803d.png",
       "featuredLatest": false,
-      "published": "2026-07-07T04:00:14.466295+00:00",
+      "published": "2026-07-07T10:00:10.591507+00:00",
       "firstSeen": "2026-07-06T16:00:01.230870+00:00",
-      "lastSeen": "2026-07-07T04:00:01.505656+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 4.032,
@@ -32,6 +161,161 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "job-positions-future"
+    },
+    {
+      "title": "TechEx Europe 2026: eight events, 8,000 tech leaders, one enterprise agenda",
+      "url": "https://thenextweb.com/news/techex-europe-2026-preview-amsterdam",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Most large organisations now have the AI budgets approved and the transformation roadmaps drawn up. The harder question is what actually reaches production. That gap between strategy and delivery is the organising idea behind TechEx Europe 2026, which runs on 19 and 20 October at the RAI Amsterdam and gathers senior enterprise technology leaders from [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/TechEx-Europe.avif",
+      "featuredLatest": false,
+      "published": "2026-07-07T07:50:16+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1859,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "TechEx Europe 2026: eight events, 8,000 tech leaders, one enterprise agenda",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "techex-europe-2026-eight-events-000"
+    },
+    {
+      "title": "[AINews] The Field Guide to Fable",
+      "url": "https://www.latent.space/p/ainews-the-field-guide-to-fable",
+      "source": "Latent Space",
+      "sourceUrl": "https://www.latent.space/feed",
+      "sourceWeight": 0.86,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "a quiet day lets us digest the world's most significant model launch... to date.",
+      "image": "https://substackcdn.com/image/youtube/w_728,c_limit/9fubhllmsBU",
+      "featuredLatest": false,
+      "published": "2026-07-07T04:44:53+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8547,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "[AINews] The Field Guide to Fable",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Latent Space."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "ainews-field-guide-fable"
+    },
+    {
+      "title": "Gyre Energy raises $1.3m to make the world’s cold stores work less when power costs most",
+      "url": "https://thenextweb.com/news/gyre-energy-cooling-funding",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Across a scorching European summer, the least glamorous machines in the economy have been quietly straining. In cold stores and distribution depots, compressors run harder as the mercury climbs, pulling more power at exactly the hours power is dearest. It is a problem most operators have simply lived with. Gyre Energy, an Oxford-founded energy tech [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Gyre-Energy-founders.avif",
+      "featuredLatest": false,
+      "published": "2026-07-07T08:55:29+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.4176,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Gyre Energy raises $1.3m to make the world’s cold stores work less when power costs most",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "gyre-energy-raises-make-world-cold"
+    },
+    {
+      "title": "The first American autonomous ground vehicles are fighting in Ukraine",
+      "url": "https://techcrunch.com/2026/07/07/the-first-american-autonomous-ground-vehicles-are-fighting-in-ukraine",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Forterra has deployed more than 100",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-07T09:00:00+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2599,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "The first American autonomous ground vehicles are fighting in Ukraine",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "first-american-autonomous-ground-vehicles-fighting"
+    },
+    {
+      "title": "Australia’s under-16 social media ban stumbles at the first age check, testers find",
+      "url": "https://thenextweb.com/news/australia-teen-social-media-ban-age-check-study",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The world’s first national ban on social media for under-16s is faltering at the very first gate, according to the testers who helped Australia’s government design its age-check regime. In a follow-up study first reported by Reuters, the team opened 50 accounts across nine of the 10 platforms covered by the law, declaring the account [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/australia-fair-work-commission-ai-workload-generative-tribunals.avif",
+      "featuredLatest": false,
+      "published": "2026-07-07T09:03:00+00:00",
+      "firstSeen": "2026-07-07T10:00:01.691181+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1213,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Australia’s under-16 social media ban stumbles at the first age check, testers find",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "australia-under-16-social-media-ban-stumbles"
     }
   ],
   "tools": [
@@ -50,10 +334,9 @@
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
       "lastSeen": "2026-07-07T04:00:01.505656+00:00",
-      "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1235,
+      "score": 14.1211,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -68,7 +351,8 @@
       "toolName": "Claude Sonnet 5",
       "toolLabel": "Claude Sonnet 5",
       "toolSummary": "AI that plans, acts, and gets work done",
-      "clusterKey": "claude-claude-sonnet"
+      "clusterKey": "claude-claude-sonnet",
+      "model_release": true
     },
     {
       "title": "Gemini Spark",
@@ -87,7 +371,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5084,
+      "score": 7.5083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -121,7 +405,7 @@
       "lastSeen": "2026-07-07T04:00:01.505656+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2243,
+      "score": 7.2218,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -155,7 +439,7 @@
       "lastSeen": "2026-07-07T04:00:01.505656+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2234,
+      "score": 7.221,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -189,7 +473,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9156,
+      "score": 6.9144,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -240,40 +524,6 @@
       "clusterKey": "buy-agentcard"
     },
     {
-      "title": "CodeMote",
-      "url": "https://www.producthunt.com/products/codemote-remote-control-for-any-ai",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Claude Code, Codex, any CLI agent. Driven from your iPhone\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-013de8a707527705c4.avif",
-      "featuredLatest": false,
-      "published": "2026-07-05T13:39:06+00:00",
-      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-07T04:00:01.505656+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 5.8871,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "CodeMote",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "CodeMote",
-      "toolLabel": "CodeMote",
-      "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
-      "clusterKey": "codemote"
-    },
-    {
       "title": "Edgee Claude Code Compressor V2",
       "url": "https://www.producthunt.com/products/edgee",
       "source": "Product Hunt AI",
@@ -287,10 +537,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-07T04:00:01.505656+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8858,
+      "score": 5.8739,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -306,6 +556,40 @@
       "toolLabel": "Edgee Claude Code Compressor V2",
       "toolSummary": "Fewer tokens, same context, 50% cost reduction",
       "clusterKey": "claude-edgee-claude-code-compressor"
+    },
+    {
+      "title": "CodeMote",
+      "url": "https://www.producthunt.com/products/codemote-remote-control-for-any-ai",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Claude Code, Codex, any CLI agent. Driven from your iPhone\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-013de8a707527705c4.avif",
+      "featuredLatest": false,
+      "published": "2026-07-05T13:39:06+00:00",
+      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 5.8289,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "CodeMote",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "CodeMote",
+      "toolLabel": "CodeMote",
+      "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
+      "clusterKey": "codemote"
     }
   ],
   "tryWorthy": [
@@ -324,10 +608,9 @@
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
       "lastSeen": "2026-07-07T04:00:01.505656+00:00",
-      "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1235,
+      "score": 14.1211,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -342,7 +625,8 @@
       "toolName": "Claude Sonnet 5",
       "toolLabel": "Claude Sonnet 5",
       "toolSummary": "AI that plans, acts, and gets work done",
-      "clusterKey": "claude-claude-sonnet"
+      "clusterKey": "claude-claude-sonnet",
+      "model_release": true
     },
     {
       "title": "Gemini Spark",
@@ -361,7 +645,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5084,
+      "score": 7.5083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -395,7 +679,7 @@
       "lastSeen": "2026-07-07T04:00:01.505656+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2243,
+      "score": 7.2218,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -429,7 +713,7 @@
       "lastSeen": "2026-07-07T04:00:01.505656+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2234,
+      "score": 7.221,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -463,7 +747,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9156,
+      "score": 6.9144,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -514,40 +798,6 @@
       "clusterKey": "buy-agentcard"
     },
     {
-      "title": "CodeMote",
-      "url": "https://www.producthunt.com/products/codemote-remote-control-for-any-ai",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Claude Code, Codex, any CLI agent. Driven from your iPhone\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-013de8a707527705c4.avif",
-      "featuredLatest": false,
-      "published": "2026-07-05T13:39:06+00:00",
-      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-07T04:00:01.505656+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 5.8871,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "CodeMote",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "CodeMote",
-      "toolLabel": "CodeMote",
-      "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
-      "clusterKey": "codemote"
-    },
-    {
       "title": "Edgee Claude Code Compressor V2",
       "url": "https://www.producthunt.com/products/edgee",
       "source": "Product Hunt AI",
@@ -561,10 +811,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-07T04:00:01.505656+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8858,
+      "score": 5.8739,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -580,6 +830,40 @@
       "toolLabel": "Edgee Claude Code Compressor V2",
       "toolSummary": "Fewer tokens, same context, 50% cost reduction",
       "clusterKey": "claude-edgee-claude-code-compressor"
+    },
+    {
+      "title": "CodeMote",
+      "url": "https://www.producthunt.com/products/codemote-remote-control-for-any-ai",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Claude Code, Codex, any CLI agent. Driven from your iPhone\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-013de8a707527705c4.avif",
+      "featuredLatest": false,
+      "published": "2026-07-05T13:39:06+00:00",
+      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-07T10:00:01.691181+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 5.8289,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "CodeMote",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "CodeMote",
+      "toolLabel": "CodeMote",
+      "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
+      "clusterKey": "codemote"
     }
   ],
   "sourceHealth": [
@@ -591,7 +875,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1028,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -601,7 +885,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -611,7 +895,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -621,7 +905,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -631,7 +915,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 817,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -641,7 +925,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -651,7 +935,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -661,7 +945,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -671,7 +955,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -681,7 +965,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -691,7 +975,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -701,7 +985,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "The Next Web",
@@ -711,7 +995,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -721,7 +1005,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -731,7 +1015,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -741,7 +1025,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -751,7 +1035,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Anthropic News",
@@ -761,7 +1045,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 237,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "The Verge AI",
@@ -771,7 +1055,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -781,7 +1065,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Simon Willison",
@@ -791,7 +1075,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -801,7 +1085,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Latent Space",
@@ -811,7 +1095,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Import AI",
@@ -821,7 +1105,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -831,7 +1115,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 151,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -841,7 +1125,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -851,7 +1135,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -861,7 +1145,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -871,7 +1155,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -881,7 +1165,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -891,7 +1175,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -901,7 +1185,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-07T04:00:01.505656+00:00"
+      "checkedAt": "2026-07-07T10:00:01.691181+00:00"
     }
   ],
   "errors": []
