@@ -47,6 +47,9 @@
 /stock-market-src/*
   X-Robots-Tag: noindex
 
+/stock-market/sw.js
+  Cache-Control: no-cache, must-revalidate
+
 /stock-market/stock-live-refresh.js
   Cache-Control: no-cache, must-revalidate
 
