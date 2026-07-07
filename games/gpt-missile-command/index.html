@@ -39,7 +39,7 @@
       height: 100vh;
       touch-action: none;
       cursor: crosshair;
-      background: radial-gradient(circle at 50% 120%, #0d1322 0%, #04070e 55%, #02040a 100%);
+      background: linear-gradient(180deg, #3f92d6 0%, #a8d8f0 78%, #3c8c48 78%, #3c8c48 100%);
     }
     .hud {
       position: fixed;
@@ -264,20 +264,40 @@
       }
 
       const TAU = Math.PI * 2;
+      // Flat-vector palettes — one per wave (cycled). Solid fills, no glow/aurora.
+      // Wave 1 == the bright "flat vector" reference: blue day sky, white clouds,
+      // green hills, navy skyline, cream+red dome bunkers.
       const SKYSETS = [
-        {
-          top: '#3a2a66', mid: '#f06d62', low: '#ffb96c', glow: 'rgba(255,152,96,0.22)', aurora: ['rgba(118,255,244,0.12)','rgba(161,126,255,0.11)']
+        { // DAY (reference)
+          skyTop: '#4a9bd8', skyBot: '#8eccee', night: false,
+          sun: '#ffe07a', sunRing: '#ffc94e',
+          cloud: '#f4fbff', cloudShade: '#d9ecf7',
+          hillBack: '#57b466', hillFront: '#42984f', ground: '#37813f', groundLine: '#2c6a34',
+          building: '#2c3c60', buildingDark: '#233150', window: '#ffd36b'
         },
-        {
-          top: '#08111f', mid: '#11284d', low: '#183e6d', glow: 'rgba(88,148,255,0.12)', aurora: ['rgba(94,255,215,0.13)','rgba(119,171,255,0.10)']
+        { // SUNSET
+          skyTop: '#f2764f', skyBot: '#ffcf7a', night: false,
+          sun: '#ffec9a', sunRing: '#ffd36b',
+          cloud: '#ffe6cf', cloudShade: '#f4c9a6',
+          hillBack: '#357a4f', hillFront: '#2a6642', ground: '#204d33', groundLine: '#183c28',
+          building: '#241d33', buildingDark: '#1a1526', window: '#ffd36b'
         },
-        {
-          top: '#132243', mid: '#67408e', low: '#ff8c6b', glow: 'rgba(255,188,118,0.16)', aurora: ['rgba(138,255,177,0.11)','rgba(81,220,255,0.10)']
+        { // NIGHT
+          skyTop: '#0f1c3e', skyBot: '#284274', night: true,
+          sun: '#eaf2ff', sunRing: '#c7d8ff',
+          cloud: '#35477a', cloudShade: '#2a3a66',
+          hillBack: '#245c31', hillFront: '#1c4a26', ground: '#153a1d', groundLine: '#0f2b16',
+          building: '#101a34', buildingDark: '#0b1226', window: '#ffdf8a'
         },
-        {
-          top: '#1a254b', mid: '#385b93', low: '#ffcf8a', glow: 'rgba(255,220,155,0.18)', aurora: ['rgba(89,255,209,0.11)','rgba(196,142,255,0.09)']
+        { // DAWN / TEAL
+          skyTop: '#2f7c9c', skyBot: '#b3e6da', night: false,
+          sun: '#ffe487', sunRing: '#ffcf5e',
+          cloud: '#f2fbf8', cloudShade: '#d3ede4',
+          hillBack: '#45a884', hillFront: '#348563', ground: '#2a7053', groundLine: '#215741',
+          building: '#22384a', buildingDark: '#1a2c3a', window: '#ffcf6b'
         }
       ];
+      function currentSet() { return SKYSETS[(state.wave - 1 + SKYSETS.length * 100) % SKYSETS.length]; }
 
       const state = {
         width: 0,
@@ -305,7 +325,8 @@
         enemyClearedBonusTimer: 0,
         stars: [],
         skyline: [],
-        mountains: [],
+        clouds: [],
+        hills: [],
         bases: [],
         cities: [],
         enemyMissiles: [],
@@ -465,42 +486,66 @@
       function generateBackdrop() {
         state.stars = [];
         state.skyline = [];
-        state.mountains = [];
+        state.clouds = [];
+        state.hills = [];
         const isMobile = state.width < 768;
-        const starCount = Math.floor(state.width * state.height / (isMobile ? 14000 : 7000));
+        // Flat stars (only rendered on night palettes)
+        const starCount = Math.floor(state.width * state.height / (isMobile ? 16000 : 9000));
         for (let i = 0; i < starCount; i++) {
-          state.stars.push({ x: Math.random() * state.width, y: Math.random() * state.groundY * 0.72, r: Math.random() * 1.8 + 0.2, a: rand(0.35, 0.95), tw: rand(0.5, 1.8) });
+          state.stars.push({ x: Math.random() * state.width, y: Math.random() * state.groundY * 0.6, r: Math.random() < 0.85 ? 1.4 : 2.4, a: rand(0.5, 1) });
         }
-        for (let i = 0; i < 7; i++) {
-          state.mountains.push({
-            x: i / 6 * state.width,
-            h: rand(state.height * 0.09, state.height * 0.18),
-            w: rand(state.width * 0.13, state.width * 0.24)
-          });
+        // Puffy flat clouds drifting slowly
+        const cloudCount = isMobile ? 4 : 6;
+        for (let i = 0; i < cloudCount; i++) {
+          const cx = rand(0, state.width);
+          const cy = rand(state.height * 0.06, state.groundY * 0.5);
+          const s = rand(0.7, 1.5);
+          const puffs = [];
+          const n = randi(4, 6);
+          let px = 0;
+          for (let p = 0; p < n; p++) {
+            puffs.push({ ox: px, oy: rand(-6, 4) * s, r: rand(16, 30) * s });
+            px += rand(16, 26) * s;
+          }
+          state.clouds.push({ x: cx, y: cy, w: px, speed: rand(3, 9) * (Math.random() < 0.5 ? 1 : -1), puffs });
+        }
+        // Two layers of rolling hills (polyline sampled by sine)
+        for (let layer = 0; layer < 2; layer++) {
+          const baseY = state.groundY - (layer === 0 ? state.height * 0.05 : state.height * 0.015);
+          const amp = layer === 0 ? state.height * 0.05 : state.height * 0.03;
+          const freq = layer === 0 ? 0.6 : 1.0;
+          const phase = rand(0, TAU);
+          const pts = [];
+          const step = Math.max(24, state.width / 26);
+          for (let x = -step; x <= state.width + step; x += step) {
+            pts.push({ x, y: baseY + Math.sin(x / state.width * TAU * freq + phase) * amp + Math.cos(x / state.width * TAU * freq * 2.3 + phase) * amp * 0.35 });
+          }
+          state.hills.push({ pts, back: layer === 0 });
         }
 
         let x = 0;
         while (x < state.width) {
-          const w = rand(20, 62);
-          const h = rand(state.height * 0.06, state.height * 0.18);
+          const w = rand(24, 64);
+          const h = rand(state.height * 0.05, state.height * 0.16);
           const windows = [];
-          const cols = Math.max(1, Math.floor(w / rand(5, 8)));
-          const rows = Math.max(2, Math.floor(h / rand(8, 12)));
+          const cols = Math.max(1, Math.floor(w / rand(9, 12)));
+          const rows = Math.max(2, Math.floor(h / rand(12, 16)));
+          const cellW = (w - 8) / cols, cellH = (h - 12) / rows;
           for (let cx = 0; cx < cols; cx++) {
             for (let cy = 0; cy < rows; cy++) {
-              if (Math.random() < 0.78) {
+              if (Math.random() < 0.9) {
                 windows.push({
-                  x: 4 + cx * ((w - 8) / cols),
-                  y: 5 + cy * ((h - 10) / rows),
-                  w: rand(2, 4),
-                  h: rand(3, 6),
-                  lit: Math.random() < 0.45
+                  x: 5 + cx * cellW,
+                  y: 7 + cy * cellH,
+                  w: Math.min(4, cellW * 0.55),
+                  h: Math.min(6, cellH * 0.55),
+                  lit: Math.random() < 0.5
                 });
               }
             }
           }
-          state.skyline.push({ x, w, h, roof: Math.random(), windows, tone: rand(0.1, 0.32) });
-          x += w + rand(4, 12);
+          state.skyline.push({ x, w, h, roof: Math.random(), windows, tone: Math.random() < 0.5 });
+          x += w + rand(6, 14);
         }
       }
 
@@ -522,27 +567,24 @@
       }
 
       function createCity(x, slot) {
-        const silhouette = Array.from({ length: randi(4, 7) }, (_, i) => ({
-          ox: i * rand(8, 12),
-          w: rand(8, 16),
-          h: rand(18, 42)
-        }));
-        // Pre-generate stable window patterns (avoid per-frame randomization)
-        for (const s of silhouette) {
-          const cols = Math.max(1, Math.floor(s.w / 6));
-          const rows = Math.max(2, Math.floor(s.h / 8));
-          s.windows = [];
+        // A small cluster of flat towers with stable (non-flickering) windows.
+        const n = randi(3, 5);
+        const silhouette = [];
+        let ox = 0;
+        for (let i = 0; i < n; i++) {
+          const w = rand(12, 18);
+          const h = rand(20, 40);
+          const windows = [];
+          const cols = Math.max(1, Math.floor(w / 7));
+          const rows = Math.max(2, Math.floor(h / 10));
+          const cw = (w - 6) / cols, ch = (h - 10) / rows;
           for (let cx = 0; cx < cols; cx++) {
             for (let ry = 0; ry < rows; ry++) {
-              if (Math.random() < 0.5) {
-                s.windows.push({
-                  ox: cx * 4,
-                  oy: 4 + ry * 6,
-                  color: `rgba(255, ${170 + Math.floor(Math.random() * 50)}, 105, ${0.35 + Math.random() * 0.35})`
-                });
-              }
+              if (Math.random() < 0.7) windows.push({ ox: 4 + cx * cw, oy: 6 + ry * ch, lit: Math.random() < 0.7 });
             }
           }
+          silhouette.push({ ox, w, h, roof: Math.random(), windows });
+          ox += w + rand(1, 3);
         }
         return {
           slot,
@@ -553,6 +595,7 @@
           crumble: 0,
           fire: 0,
           smoke: 0,
+          totalW: ox,
           silhouette
         };
       }
@@ -1074,182 +1117,259 @@
       }
 
       function drawSky() {
-        const set = SKYSETS[(state.wave - 1) % SKYSETS.length];
-        const g = ctx.createLinearGradient(0, 0, 0, state.groundY + 80);
-        g.addColorStop(0, set.top);
-        g.addColorStop(0.48, set.mid);
-        g.addColorStop(1, set.low);
+        const set = currentSet();
+        // Flat two-band sky (gentle vertical gradient reads as flat colour fields).
+        // Overscan by 60px so the screen-shake translate never exposes the canvas
+        // CSS background at the edges.
+        const g = ctx.createLinearGradient(0, 0, 0, state.groundY);
+        g.addColorStop(0, set.skyTop);
+        g.addColorStop(1, set.skyBot);
         ctx.fillStyle = g;
-        ctx.fillRect(0, 0, state.width, state.height);
+        ctx.fillRect(-60, -60, state.width + 120, state.groundY + 62);
 
-        const horizon = ctx.createRadialGradient(state.width * 0.5, state.groundY + 10, 30, state.width * 0.5, state.groundY + 10, state.width * 0.7);
-        horizon.addColorStop(0, set.glow);
-        horizon.addColorStop(1, 'rgba(0,0,0,0)');
-        ctx.fillStyle = horizon;
-        ctx.fillRect(0, 0, state.width, state.height);
-
-        for (const star of state.stars) {
-          const tw = 0.65 + 0.35 * Math.sin(state.time * star.tw + star.x * 0.05);
-          ctx.globalAlpha = star.a * tw;
+        // Stars on night palettes
+        if (set.night) {
           ctx.fillStyle = '#ffffff';
-          ctx.fillRect(star.x, star.y, star.r, star.r);
-        }
-        ctx.globalAlpha = 1;
-
-        for (let i = 0; i < 2; i++) {
-          ctx.save();
-          ctx.globalCompositeOperation = 'screen';
-          ctx.globalAlpha = 0.75;
-          ctx.beginPath();
-          for (let x = -50; x <= state.width + 50; x += 24) {
-            const y = state.height * (0.14 + i * 0.08) + Math.sin(x * 0.008 + state.time * 0.2 + i * 0.7) * 18 + Math.cos(x * 0.013 + i * 2.8) * 10;
-            if (x === -50) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
+          for (const star of state.stars) {
+            ctx.globalAlpha = star.a;
+            ctx.fillRect(star.x, star.y, star.r, star.r);
           }
-          ctx.lineTo(state.width + 50, state.height * 0.05);
-          ctx.lineTo(-50, state.height * 0.05);
-          ctx.closePath();
-          const ag = ctx.createLinearGradient(0, state.height * 0.05, 0, state.height * 0.28);
-          ag.addColorStop(0, 'rgba(0,0,0,0)');
-          ag.addColorStop(0.3, set.aurora[i]);
-          ag.addColorStop(1, 'rgba(0,0,0,0)');
-          ctx.fillStyle = ag;
-          ctx.fill();
-          ctx.restore();
+          ctx.globalAlpha = 1;
         }
 
-        ctx.fillStyle = 'rgba(9,12,20,0.38)';
-        for (const m of state.mountains) {
+        // Sun / moon — flat two-tone disc, crisp edges (no translucent glow)
+        const sunX = state.width * 0.8, sunY = state.groundY * 0.26, sunR = Math.max(26, state.width * 0.035);
+        ctx.fillStyle = set.sunRing;
+        ctx.beginPath(); ctx.arc(sunX, sunY, sunR * 1.18, 0, TAU); ctx.fill();
+        ctx.fillStyle = set.sun;
+        ctx.beginPath(); ctx.arc(sunX, sunY, sunR, 0, TAU); ctx.fill();
+        if (set.night) { // carve a crescent for the moon
+          ctx.fillStyle = set.skyTop;
+          ctx.beginPath(); ctx.arc(sunX + sunR * 0.5, sunY - sunR * 0.35, sunR * 1.08, 0, TAU); ctx.fill();
+        }
+
+        // Clouds (flat puffs with a subtle shade band)
+        for (const c of state.clouds) {
+          const cx = ((c.x + state.time * c.speed) % (state.width + c.w + 120) + state.width + c.w + 120) % (state.width + c.w + 120) - c.w - 60;
+          ctx.fillStyle = set.cloudShade;
+          for (const p of c.puffs) { ctx.beginPath(); ctx.arc(cx + p.ox, c.y + p.oy + p.r * 0.28, p.r, 0, TAU); ctx.fill(); }
+          ctx.fillStyle = set.cloud;
+          for (const p of c.puffs) { ctx.beginPath(); ctx.arc(cx + p.ox, c.y + p.oy, p.r, 0, TAU); ctx.fill(); }
+        }
+
+        // Back hill layer (distant, slightly lighter)
+        const back = state.hills.find(h => h.back);
+        if (back) {
+          ctx.fillStyle = set.hillBack;
           ctx.beginPath();
-          ctx.moveTo(m.x - m.w, state.groundY);
-          ctx.lineTo(m.x, state.groundY - m.h);
-          ctx.lineTo(m.x + m.w, state.groundY);
+          ctx.moveTo(-40, state.height);
+          for (const pt of back.pts) ctx.lineTo(pt.x, pt.y);
+          ctx.lineTo(state.width + 40, state.height);
           ctx.closePath();
           ctx.fill();
         }
       }
 
       function drawSkyline() {
+        const set = currentSet();
         for (const b of state.skyline) {
-          ctx.fillStyle = `rgba(8, 14, 24, ${0.72 + b.tone})`;
+          ctx.fillStyle = b.tone ? set.building : set.buildingDark;
           ctx.fillRect(b.x, state.groundY - b.h, b.w, b.h);
-          if (b.roof > 0.66) ctx.fillRect(b.x + b.w * 0.25, state.groundY - b.h - 10, b.w * 0.18, 10);
-          else if (b.roof > 0.33) {
-            ctx.beginPath();
-            ctx.moveTo(b.x + b.w * 0.14, state.groundY - b.h);
-            ctx.lineTo(b.x + b.w * 0.5, state.groundY - b.h - 12);
-            ctx.lineTo(b.x + b.w * 0.86, state.groundY - b.h);
-            ctx.closePath();
-            ctx.fill();
+          if (b.roof > 0.7) { // antenna/box roof
+            ctx.fillRect(b.x + b.w * 0.42, state.groundY - b.h - 12, Math.max(2, b.w * 0.1), 12);
+          } else if (b.roof > 0.4) { // stepped parapet
+            ctx.fillRect(b.x + b.w * 0.2, state.groundY - b.h - 6, b.w * 0.6, 6);
           }
           for (const w of b.windows) {
-            ctx.fillStyle = w.lit ? `rgba(255, ${190 + Math.floor(Math.random() * 20)}, 110, ${0.3 + Math.random() * 0.3})` : 'rgba(25,35,55,0.35)';
+            ctx.fillStyle = w.lit ? set.window : (set.night ? 'rgba(255,220,120,0.14)' : 'rgba(255,255,255,0.10)');
             ctx.fillRect(b.x + w.x, state.groundY - b.h + w.y, w.w, w.h);
           }
         }
       }
 
+      // Flat friendly palette for the cities you defend (distinct from the dark skyline).
+      const CITY_BODY = '#79a6dd', CITY_BODY2 = '#6390cd', CITY_ROOF = '#e2604c', CITY_WIN = '#fff0b0';
+
+      function drawGround() {
+        const set = currentSet();
+        // Solid green ground band (overscanned for screen-shake)
+        ctx.fillStyle = set.ground;
+        ctx.fillRect(-60, state.groundY, state.width + 120, state.height - state.groundY + 60);
+        // A rolling front hill for depth (slightly lighter)
+        ctx.fillStyle = set.hillFront;
+        const front = state.hills.find(h => !h.back);
+        if (front) {
+          ctx.beginPath();
+          ctx.moveTo(-60, state.height + 60);
+          for (const pt of front.pts) ctx.lineTo(pt.x, pt.y);
+          ctx.lineTo(state.width + 60, state.height + 60);
+          ctx.closePath();
+          ctx.fill();
+        }
+        // Ground seam highlight
+        ctx.fillStyle = set.groundLine;
+        ctx.fillRect(-60, state.groundY, state.width + 120, 3);
+      }
+
+      function groundShadow(x, w) {
+        ctx.fillStyle = 'rgba(0,0,0,0.16)';
+        ctx.beginPath();
+        ctx.ellipse(x, state.groundY + 4, w, 5, 0, 0, TAU);
+        ctx.fill();
+      }
+
       function drawCitiesAndBases() {
+        drawGround();
+
         for (const city of state.cities) {
+          if (city.alive) groundShadow(city.x, city.totalW * 0.62);
           ctx.save();
-          ctx.translate(city.x, city.y);
-          if (!city.alive) ctx.globalAlpha = 0.35;
-          for (let i = 0; i < city.silhouette.length; i++) {
-            const s = city.silhouette[i];
-            const crumble = !city.alive ? Math.sin(state.time * 8 + i) * city.crumble * 2 : 0;
-            ctx.fillStyle = !city.alive ? 'rgba(70,52,46,0.7)' : 'rgba(16,21,35,0.95)';
-            ctx.fillRect(-28 + s.ox + crumble, -s.h, s.w, s.h);
-            if (city.alive && s.windows) {
+          ctx.translate(city.x - city.totalW / 2, city.y);
+          if (!city.alive) {
+            // Rubble: short broken stubs
+            for (let i = 0; i < city.silhouette.length; i++) {
+              const s = city.silhouette[i];
+              const hh = Math.min(s.h, 8 + (i % 3) * 4);
+              ctx.fillStyle = '#5f5048';
+              ctx.fillRect(s.ox, -hh, s.w, hh);
+              ctx.fillStyle = '#4a3d37';
+              ctx.fillRect(s.ox, -hh, s.w, 3);
+            }
+          } else {
+            for (let i = 0; i < city.silhouette.length; i++) {
+              const s = city.silhouette[i];
+              ctx.fillStyle = (i % 2) ? CITY_BODY2 : CITY_BODY;
+              ctx.fillRect(s.ox, -s.h, s.w, s.h);
+              // roof accent (red on most blocks so cities pop vs the navy skyline)
+              if (s.roof > 0.4) { ctx.fillStyle = CITY_ROOF; ctx.fillRect(s.ox, -s.h - 4, s.w, 4); }
               for (const win of s.windows) {
-                ctx.fillStyle = win.color;
-                ctx.fillRect(-27 + s.ox + win.ox + crumble, -s.h + win.oy, 2, 3);
+                ctx.fillStyle = win.lit ? CITY_WIN : 'rgba(255,255,255,0.12)';
+                ctx.fillRect(s.ox + win.ox, -s.h + win.oy, 2.5, 3);
               }
             }
-          }
-          if (!city.alive) {
-            ctx.fillStyle = 'rgba(255,120,48,0.55)';
-            ctx.beginPath();
-            ctx.ellipse(0, -12, 18, 8, 0, 0, TAU);
-            ctx.fill();
           }
           ctx.restore();
         }
 
         for (const base of state.bases) {
+          groundShadow(base.x, 32);
           ctx.save();
           ctx.translate(base.x, base.y);
-          const glow = base.flash * 0.8;
-          ctx.fillStyle = base.alive ? `rgba(${Math.floor(90 + glow * 160)}, ${Math.floor(180 + glow * 70)}, 255, 0.95)` : 'rgba(76,58,58,0.6)';
-          ctx.beginPath();
-          ctx.moveTo(-22, 0);
-          ctx.lineTo(-10, -12);
-          ctx.lineTo(10, -12);
-          ctx.lineTo(22, 0);
-          ctx.closePath();
-          ctx.fill();
-          ctx.fillStyle = base.alive ? 'rgba(25,42,68,0.95)' : 'rgba(46,32,32,0.8)';
-          ctx.fillRect(-18, 0, 36, 10);
+          drawBunker(base);
           ctx.restore();
         }
+      }
 
-        ctx.fillStyle = 'rgba(9, 14, 24, 1)';
-        ctx.fillRect(0, state.groundY, state.width, state.height - state.groundY);
+      // Cream dome bunker with red top — the flat-vector launch base.
+      function drawBunker(base) {
+        const alive = base.alive;
+        const body = alive ? '#e9e3d2' : '#8f8577';
+        const bodyShade = alive ? '#cdc4ad' : '#736a5e';
+        const dome = alive ? '#dc5340' : '#7a5148';
+        const domeShade = alive ? '#c3452f' : '#664239';
+        const W = 30, baseH = 16;
+        const domeW = W * 0.82, domeH = W * 0.6; // flatter half-ellipse dome
+        // Body (rounded platform sitting on the ground)
+        ctx.fillStyle = bodyShade;
+        roundRect(-W, -baseH + 2, W * 2, baseH, 6); ctx.fill();
+        ctx.fillStyle = body;
+        roundRect(-W, -baseH, W * 2, baseH - 2, 6); ctx.fill();
+        // Dome (flattened)
+        ctx.fillStyle = domeShade;
+        ctx.beginPath(); ctx.ellipse(0, -baseH + 1, domeW, domeH, 0, Math.PI, TAU); ctx.fill();
+        ctx.fillStyle = dome;
+        ctx.beginPath(); ctx.ellipse(0, -baseH, domeW, domeH, 0, Math.PI, TAU); ctx.fill();
+        // Dome highlight + firing flash
+        ctx.fillStyle = alive ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)';
+        ctx.beginPath(); ctx.ellipse(-domeW * 0.32, -baseH - domeH * 0.42, domeW * 0.26, domeH * 0.34, 0, 0, TAU); ctx.fill();
+        if (alive && base.flash > 0) {
+          ctx.fillStyle = `rgba(255,240,190,${base.flash})`;
+          ctx.beginPath(); ctx.ellipse(0, -baseH, domeW, domeH, 0, Math.PI, TAU); ctx.fill();
+        }
+        // Dark doorway + side vents
+        ctx.fillStyle = alive ? '#2c3550' : '#3a342c';
+        roundRect(-6, -baseH + 2, 12, baseH - 4, 2); ctx.fill();
+        ctx.fillStyle = alive ? '#8fb4d8' : '#6b6357';
+        ctx.fillRect(-W + 7, -baseH + 4, 5, 5);
+        ctx.fillRect(W - 12, -baseH + 4, 5, 5);
+      }
+
+      function roundRect(x, y, w, h, r) {
+        r = Math.min(r, w / 2, h / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+      }
+
+      // Draw a flat rocket pointing along `ang` (tail→nose direction), with a
+      // dark outline so it reads clearly against clouds and bright sky.
+      function drawRocket(x, y, ang, len, w, body, nose, fin) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(ang);
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = 'rgba(22,26,38,0.6)';
+        ctx.lineWidth = Math.max(1.5, w * 0.34);
+        // Fins
+        ctx.beginPath();
+        ctx.moveTo(-len * 0.32, -w * 0.5); ctx.lineTo(-len * 0.56, -w * 1.05); ctx.lineTo(-len * 0.16, -w * 0.5); ctx.closePath();
+        ctx.moveTo(-len * 0.32, w * 0.5); ctx.lineTo(-len * 0.56, w * 1.05); ctx.lineTo(-len * 0.16, w * 0.5); ctx.closePath();
+        ctx.stroke(); ctx.fillStyle = fin; ctx.fill();
+        // Body
+        roundRect(-len * 0.45, -w * 0.5, len * 0.82, w, w * 0.45);
+        ctx.stroke(); ctx.fillStyle = body; ctx.fill();
+        // Nose
+        ctx.beginPath();
+        ctx.moveTo(len * 0.37, -w * 0.5); ctx.lineTo(len * 0.66, 0); ctx.lineTo(len * 0.37, w * 0.5); ctx.closePath();
+        ctx.stroke(); ctx.fillStyle = nose; ctx.fill();
+        ctx.restore();
+      }
+
+      // Puffy smoke trail from a list of trail points (oldest first).
+      function drawSmokeTrail(trail, baseR, tint) {
+        for (let i = 0; i < trail.length; i++) {
+          const t = trail[i];
+          const a = i / Math.max(1, trail.length - 1);      // 0 tail → 1 head
+          ctx.globalAlpha = 0.28 + a * 0.55;
+          ctx.fillStyle = tint;
+          ctx.beginPath();
+          ctx.arc(t.x, t.y, baseR * (0.55 + a * 0.85), 0, TAU);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
       }
 
       function drawMissiles() {
         for (const m of state.enemyMissiles) {
-          ctx.save();
-          ctx.strokeStyle = m.type === 'smart' ? 'rgba(255,120,180,0.95)' : (m.type === 'mirvChild' ? 'rgba(255,208,120,0.95)' : 'rgba(255,110,92,0.98)');
-          ctx.lineWidth = m.type === 'smart' ? 2.6 : 1.6;
-          ctx.beginPath();
-          ctx.moveTo(m.sx, m.sy);
-          ctx.lineTo(m.x, m.y);
-          ctx.stroke();
-          for (let i = 0; i < m.trail.length; i++) {
-            const t = m.trail[i];
-            const a = i / m.trail.length;
-            ctx.fillStyle = `rgba(80,80,80,${a * 0.14})`;
-            ctx.beginPath();
-            ctx.arc(t.x, t.y, t.s || (2 + a * 4), 0, TAU);
-            ctx.fill();
-          }
-          ctx.fillStyle = '#fff3d8';
-          ctx.beginPath();
-          ctx.arc(m.x, m.y, m.type === 'smart' ? 3.2 : 2.2, 0, TAU);
-          ctx.fill();
+          const ang = Math.atan2(m.y - m.sy, m.x - m.sx) || (Math.PI / 2);
+          drawSmokeTrail(m.trail, 3.4, 'rgba(240,244,250,1)');
+          let body = '#dc4a38', nose = '#f4b9ae', fin = '#a8331f';
+          if (m.type === 'mirvChild') { body = '#f0872e'; nose = '#ffd9a8'; fin = '#c25f17'; }
+          if (m.type === 'smart') { body = '#c94bd6'; nose = '#f3c6f7'; fin = '#8f2e9c'; }
           if (m.type === 'smart') {
-            ctx.strokeStyle = 'rgba(255,120,180,0.35)';
-            ctx.beginPath();
-            ctx.arc(m.x, m.y, 7 + Math.sin(state.time * 18) * 1.5, 0, TAU);
-            ctx.stroke();
+            ctx.strokeStyle = 'rgba(201,75,214,0.5)';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(m.x, m.y, 8 + Math.sin(state.time * 16) * 1.5, 0, TAU); ctx.stroke();
           }
-          ctx.restore();
+          const len = m.type === 'smart' ? 21 : 18;
+          drawRocket(m.x, m.y, ang, len, len * 0.46, body, nose, fin);
         }
 
         for (const m of state.playerMissiles) {
-          ctx.save();
-          ctx.lineCap = 'round';
-          for (let i = 1; i < m.trail.length; i++) {
-            const p0 = m.trail[i - 1], p1 = m.trail[i];
-            const a = i / m.trail.length;
-            ctx.strokeStyle = `rgba(110, 230, 255, ${a * 0.55})`;
-            ctx.lineWidth = 1 + a * 3;
-            ctx.beginPath();
-            ctx.moveTo(p0.x, p0.y);
-            ctx.lineTo(p1.x, p1.y);
-            ctx.stroke();
-          }
-          ctx.strokeStyle = 'rgba(166,244,255,0.95)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.moveTo(m.sx, m.sy);
-          ctx.lineTo(m.x, m.y);
-          ctx.stroke();
-          ctx.fillStyle = '#ffffff';
-          ctx.beginPath();
-          ctx.arc(m.x, m.y, 2.5, 0, TAU);
-          ctx.fill();
+          const ang = Math.atan2(m.y - m.sy, m.x - m.sx) || (-Math.PI / 2);
+          drawSmokeTrail(m.trail, 3.0, 'rgba(255,255,255,1)');
+          // tail flame so the rising interceptor reads instantly
+          ctx.save(); ctx.translate(m.x, m.y); ctx.rotate(ang);
+          ctx.fillStyle = '#ffd23f';
+          ctx.beginPath(); ctx.moveTo(-8.2, -2.4); ctx.lineTo(-13, 0); ctx.lineTo(-8.2, 2.4); ctx.closePath(); ctx.fill();
           ctx.restore();
+          // bold cyan interceptor rocket
+          drawRocket(m.x, m.y, ang, 18, 7.5, '#33c6f2', '#eafcff', '#1c86b8');
         }
       }
 
@@ -1257,88 +1377,89 @@
         for (const s of state.satellites) {
           ctx.save();
           ctx.translate(s.x, s.y);
-          for (let i = 1; i < s.trail.length; i++) {
-            const p0 = s.trail[i - 1], p1 = s.trail[i];
-            const a = i / s.trail.length;
-            ctx.strokeStyle = `rgba(130,230,255,${a * 0.18})`;
-            ctx.lineWidth = 1.2 + a;
-            ctx.beginPath();
-            ctx.moveTo(p0.x - s.x, p0.y - s.y);
-            ctx.lineTo(p1.x - s.x, p1.y - s.y);
-            ctx.stroke();
-          }
-          ctx.fillStyle = s.flash > 0 ? 'rgba(210,250,255,0.95)' : 'rgba(140,208,235,0.95)';
-          ctx.beginPath();
-          ctx.ellipse(0, 0, 18, 6, 0, 0, TAU);
-          ctx.fill();
-          ctx.fillStyle = 'rgba(190,235,255,0.8)';
-          ctx.fillRect(-26, -2, 14, 4);
-          ctx.fillRect(12, -2, 14, 4);
-          ctx.fillStyle = s.hp === 1 ? 'rgba(255,120,80,0.9)' : 'rgba(35,52,76,0.95)';
-          ctx.fillRect(-4, -5, 8, 4);
-          if (s.hp === 1) {
-            ctx.strokeStyle = 'rgba(255,90,50,0.95)';
-            ctx.beginPath();
-            ctx.moveTo(-6, -1);
-            ctx.lineTo(7, 3);
-            ctx.stroke();
-          }
+          // Solar panels
+          ctx.fillStyle = '#3a6ea8';
+          roundRect(-30, -6, 16, 12, 2); ctx.fill();
+          roundRect(14, -6, 16, 12, 2); ctx.fill();
+          ctx.fillStyle = 'rgba(255,255,255,0.25)';
+          ctx.fillRect(-30, -1, 16, 2); ctx.fillRect(14, -1, 16, 2);
+          // Booms
+          ctx.fillStyle = '#b9c3cf';
+          ctx.fillRect(-14, -1.5, 6, 3); ctx.fillRect(8, -1.5, 6, 3);
+          // Body
+          ctx.fillStyle = s.hp === 1 ? '#e0503a' : '#cfd8e2';
+          roundRect(-9, -8, 18, 16, 3); ctx.fill();
+          ctx.fillStyle = s.flash > 0 ? '#ffffff' : (s.hp === 1 ? '#ffd0c4' : '#8fb4d8');
+          ctx.beginPath(); ctx.arc(0, 0, 3.4, 0, TAU); ctx.fill();
           ctx.restore();
         }
       }
 
+      // Flat spiky sunburst — layered star polygons, no gradient/glow.
+      function starPath(cx, cy, spikes, outer, inner, rot) {
+        ctx.beginPath();
+        for (let i = 0; i < spikes * 2; i++) {
+          const r = (i % 2 === 0) ? outer : inner;
+          const a = rot + i * Math.PI / spikes;
+          const px = cx + Math.cos(a) * r, py = cy + Math.sin(a) * r;
+          if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+      }
+
       function drawExplosions() {
         for (const e of state.explosions) {
-          const t = e.age / e.life;
-          const alpha = 1 - t;
+          const t = clamp(e.age / e.life, 0, 1);
+          const r = e.r;
+          if (r < 0.5) continue;
+          const rot = (e.source && e.source.sx ? e.source.sx : e.x) * 0.05; // stable per-explosion angle
           ctx.save();
-          ctx.globalCompositeOperation = 'screen';
-          const rg = ctx.createRadialGradient(e.x, e.y, 0, e.x, e.y, e.r);
-          rg.addColorStop(0, `rgba(255,255,255,${alpha * 0.95})`);
-          rg.addColorStop(0.15, `rgba(255,244,170,${alpha * 0.9})`);
-          rg.addColorStop(0.45, `rgba(255,168,70,${alpha * 0.72})`);
-          rg.addColorStop(0.7, `rgba(255,82,22,${alpha * 0.42})`);
-          rg.addColorStop(1, 'rgba(255,0,0,0)');
-          ctx.fillStyle = rg;
-          ctx.beginPath();
-          ctx.arc(e.x, e.y, e.r, 0, TAU);
+          ctx.globalAlpha = 1 - t * t; // fade only late
+          const spikes = e.maxR > 60 ? 12 : 10;
+          // Outer orange burst
+          ctx.fillStyle = '#ff8a1c';
+          starPath(e.x, e.y, spikes, r, r * 0.52, rot);
           ctx.fill();
-          ctx.strokeStyle = `rgba(255,240,220,${alpha * 0.8})`;
-          ctx.lineWidth = Math.max(1, e.maxR * 0.06 * alpha);
-          ctx.beginPath();
-          ctx.arc(e.x, e.y, e.r * 0.74, 0, TAU);
-          ctx.stroke();
-          ctx.strokeStyle = `rgba(255,120,50,${alpha * 0.48})`;
-          ctx.lineWidth = Math.max(1, e.maxR * 0.1 * alpha);
-          ctx.beginPath();
-          ctx.arc(e.x, e.y, e.r * 0.96, 0, TAU);
-          ctx.stroke();
+          // Mid yellow burst
+          ctx.fillStyle = '#ffd23f';
+          starPath(e.x, e.y, spikes, r * 0.72, r * 0.36, rot + 0.28);
+          ctx.fill();
+          // White-hot core
+          ctx.fillStyle = '#fff6de';
+          ctx.beginPath(); ctx.arc(e.x, e.y, r * 0.34, 0, TAU); ctx.fill();
           ctx.restore();
         }
       }
 
       function drawParticles() {
+        // Soft light smoke puffs (kept subtle so the white contrails read)
         for (const s of state.smoke) {
           const a = 1 - s.age / s.life;
-          ctx.fillStyle = `rgba(${20 + s.dark * 40}, ${22 + s.dark * 35}, ${28 + s.dark * 30}, ${a * 0.24})`;
+          const g = Math.floor(198 + s.dark * 30);
+          ctx.fillStyle = `rgba(${g},${g},${g + 6},${a * 0.32})`;
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.size * (0.55 + s.age / s.life), 0, TAU);
+          ctx.arc(s.x, s.y, s.size * (0.5 + s.age / s.life * 0.8), 0, TAU);
           ctx.fill();
         }
+        // Flat debris sparks (orange/yellow squares)
         for (const p of state.particles) {
           const a = 1 - p.age / p.life;
-          ctx.fillStyle = p.glow ? `hsla(${p.hue}, 100%, 65%, ${a})` : `rgba(255,255,255,${a})`;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size * a + 0.4, 0, TAU);
-          ctx.fill();
+          ctx.globalAlpha = a;
+          ctx.fillStyle = p.hue > 45 ? '#ffd23f' : '#ff8a1c';
+          const sz = p.size * (0.6 + a * 0.6);
+          ctx.fillRect(p.x - sz / 2, p.y - sz / 2, sz, sz);
         }
+        ctx.globalAlpha = 1;
+        // Flat embers (small orange dots)
         for (const e of state.embers) {
           const a = 1 - e.age / e.life;
-          ctx.fillStyle = `rgba(255,${120 + Math.floor(a * 90)},60,${a})`;
+          ctx.globalAlpha = a;
+          ctx.fillStyle = a > 0.5 ? '#ffb03a' : '#e0503a';
           ctx.beginPath();
           ctx.arc(e.x, e.y, e.size * a, 0, TAU);
           ctx.fill();
         }
+        ctx.globalAlpha = 1;
       }
 
       function drawPrompts() {
