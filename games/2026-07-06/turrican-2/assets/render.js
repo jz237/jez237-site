@@ -13,6 +13,10 @@
     buf.width = VIEW_W; buf.height = VIEW_H;
     const bx = buf.getContext('2d');
     const dx = display.getContext('2d');
+    // bloom offscreen (quarter-res highlight buffer)
+    const bloomC = document.createElement('canvas');
+    bloomC.width = VIEW_W >> 2; bloomC.height = VIEW_H >> 2;
+    const blx = bloomC.getContext('2d');
     let level = null, pal = null, bgImg = null, tilePattern = null;
     const stars = [];
     const particles = [];
@@ -1334,6 +1338,27 @@
       if (level.world === 5) {
         const hb = Math.pow(Math.max(0, Math.sin(performance.now() / 1000 * 3.2)), 14) * 0.09;
         if (hb > 0.005) { bx.fillStyle = `rgba(178,58,90,${hb.toFixed(3)})`; bx.fillRect(0, 0, VIEW_W, VIEW_H); }
+      }
+
+      // bloom: isolate highlights then add them back as a soft glow (makes
+      // cores, projectiles, neon, bioluminescence, explosions, skies pop).
+      // Skipped in performance mode.
+      if (fx) {
+        const bw = bloomC.width, bh = bloomC.height;
+        blx.globalCompositeOperation = 'source-over';
+        blx.globalAlpha = 1;
+        blx.clearRect(0, 0, bw, bh);
+        blx.drawImage(buf, 0, 0, bw, bh);              // downscale
+        blx.globalCompositeOperation = 'multiply';
+        blx.drawImage(bloomC, 0, 0);                   // square luminance -> isolate brights
+        blx.globalCompositeOperation = 'multiply';
+        blx.drawImage(bloomC, 0, 0);                   // ^4 -> tighter highlight threshold
+        bx.save();
+        bx.globalCompositeOperation = 'lighter';
+        bx.globalAlpha = 0.85;
+        bx.imageSmoothingEnabled = true;
+        bx.drawImage(bloomC, 0, 0, VIEW_W, VIEW_H);    // upscaled blurry additive glow
+        bx.restore();
       }
 
       // vignette (skipped in performance mode)
