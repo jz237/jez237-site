@@ -34,9 +34,22 @@ const historyRanges = [
   ["mmax", "max", "1mo", false]
 ];
 
-// "intraday" refreshes quotes plus the intraday ranges only, reusing the stored
-// daily history (with today's bar merged in). Anything else is a full refresh.
-const intradayOnly = process.env.STOCK_REFRESH_MODE === "intraday";
+// "intraday" refreshes quotes plus the intraday ranges only, reusing the
+// stored daily history (with today's bar merged in); "full" rebuilds all
+// ranges and stamps earnings dates. Any other value means "auto": go full
+// when the last full refresh recorded in stocks.json is missing or older
+// than 20 hours (GitHub cron fires too sparsely and unpredictably to pin
+// the full run to a time band), otherwise stay intraday.
+const FULL_REFRESH_MAX_AGE_MS = 20 * 60 * 60 * 1000;
+
+function resolveMode(stocksData) {
+  const forced = process.env.STOCK_REFRESH_MODE;
+  if (forced === "intraday" || forced === "full") return forced;
+  const last = Date.parse(stocksData.lastFullRefresh || "");
+  return Number.isFinite(last) && Date.now() - last < FULL_REFRESH_MAX_AGE_MS
+    ? "intraday"
+    : "full";
+}
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const round = value => Number.isFinite(value) ? Number(value.toFixed(4)) : null;
@@ -242,6 +255,7 @@ async function adoptPortfolioSymbols(stocksData) {
 
 async function main() {
   const stocksData = await readJson(stocksPath);
+  const intradayOnly = resolveMode(stocksData) === "intraday";
   await adoptPortfolioSymbols(stocksData);
   await fs.mkdir(historyDir, { recursive: true });
 
@@ -309,6 +323,7 @@ async function main() {
 
   stocksData.updatedAt = now;
   stocksData.source = "yahoo-finance-chart";
+  if (!intradayOnly) stocksData.lastFullRefresh = now;
 
   await writeJson(stocksPath, stocksData);
 
