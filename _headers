@@ -19,6 +19,11 @@
 /network/*
   Cache-Control: public, max-age=0, must-revalidate
 
+# ops dashboard code updates alongside deploys; its data comes from the
+# same-origin /api/ops-snapshot Pages Function (headers set by the Function)
+/ops/*
+  Cache-Control: public, max-age=0, must-revalidate
+
 /assets/nav.js
   Cache-Control: no-cache, must-revalidate
 

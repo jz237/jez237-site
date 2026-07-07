@@ -4,12 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Operations &amp; Statistics — Jez237</title>
-  <meta name="description" content="Operations and statistics workspace for Jez237 — home network map with live-simulated traffic, plus upcoming dashboards for agent activity, model runtimes, and system tiles." />
+  <meta name="description" content="Live home-lab dashboard for Jez237 — the network map plus system vitals, the agent roster, model runtimes, automation stats, and reliability checks, refreshed from the lab every few minutes." />
   <meta name="keywords" content="Jez237 operations, home lab dashboard, network map, agent activity, system tiles, personal analytics" />
   <meta name="robots" content="noindex, follow" />
   <link rel="canonical" href="https://jez237.com/ops/" />
   <meta property="og:title" content="Operations and Statistics — Jez237" />
-  <meta property="og:description" content="Home lab workspace: network map with simulated traffic, agent activity, and system dashboards." />
+  <meta property="og:description" content="Home lab workspace: network map, live system vitals, the AI agent roster, model runtimes, and automation stats." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://jez237.com/ops/" />
   <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
@@ -18,58 +18,10 @@
   <link rel="stylesheet" href="../assets/design.css" />
   <link rel="stylesheet" href="../assets/site-enhance.css" />
   <link rel="stylesheet" href="../network/network.css" />
-  <style>
-    .ops-head { margin: 6px 0 20px; }
-    .ops-head h1 { margin: 2px 0 8px; font-size: clamp(26px, 4vw, 40px); }
-    .ops-head .lede { max-width: 720px; margin: 0; }
-    .ops-module-bar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: baseline;
-      gap: 10px 14px;
-      margin: 26px 0 12px;
-    }
-    .ops-module-bar h2 { margin: 0; font-size: 20px; }
-    .ops-module-bar .muted { font-size: 13px; }
-    .ops-module-bar a.standalone {
-      margin-left: auto;
-      font-size: 13px;
-      text-decoration: none;
-      padding: 6px 14px;
-      border-radius: 999px;
-      color: var(--nm-node-text);
-      background: var(--nm-node-face);
-      border: 1px solid var(--nm-node-edge);
-    }
-    .ops-module-bar a.standalone:hover { border-color: var(--nm-class-streaming); }
-    .ops-next {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 14px;
-      margin-top: 14px;
-    }
-    .ops-next .tile {
-      padding: 16px 18px;
-      border-radius: 14px;
-      background: var(--nm-node-face);
-      border: 1px dashed var(--nm-trace);
-    }
-    .ops-next .tile h3 { margin: 0 0 6px; font-size: 15px; }
-    .ops-next .tile p { margin: 0; font-size: 13px; line-height: 1.55; color: var(--wb-muted, #b7c7d9); }
-    .ops-next .tile .badge-planned {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 2px 9px;
-      border-radius: 999px;
-      font-size: 10.5px;
-      font-weight: 650;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--nm-node-sub);
-      border: 1px solid var(--nm-trace);
-    }
-  </style>
   <link rel="stylesheet" href="../assets/workbench-theme.css" />
+  <!-- ops.css loads after workbench-theme on purpose: om- module styles
+       must win the cascade (workbench force-styles .tile/.card/.panel). -->
+  <link rel="stylesheet" href="ops.css" />
 </head>
 <body>
   <header id="site-nav"></header>
@@ -78,7 +30,7 @@
     <header class="ops-head">
       <div class="eyebrow">Home Lab</div>
       <h1>Operations &amp; Statistics</h1>
-      <p class="lede">The workbench dashboard: what the home network is doing right now, with agent activity, model runtimes, and system tiles on the way.</p>
+      <p class="lede">The workbench dashboard: the home network map up top, then a live snapshot from the lab — system vitals, the agent roster, model runtimes, and what the automations have been up to. Numbers refresh every few minutes.</p>
     </header>
 
     <div class="ops-module-bar">
@@ -150,25 +102,107 @@
       </noscript>
     </section>
 
+    <noscript>
+      <p class="om-noscript">The live modules below the map need JavaScript — they read a
+      snapshot the home lab publishes every ~10 minutes.</p>
+    </noscript>
+
+    <!-- Live snapshot pulse strip -->
+    <section class="om-sec" id="sec-pulse" aria-label="Lab snapshot summary">
+      <div class="om-body" id="om-pulse">
+        <div class="om-pulse">
+          <span class="om-stat"><b>—</b><i>uptime</i></span>
+          <span class="om-stat"><b>—</b><i>agents awake</i></span>
+          <span class="om-stat"><b>—</b><i>jobs enabled</i></span>
+          <span class="om-badge" id="om-freshness">CONNECTING…</span>
+        </div>
+      </div>
+      <span class="sr-only" id="om-freshness-live" aria-live="polite"></span>
+    </section>
+
+    <section class="om-sec" id="sec-system" hidden>
+      <div class="ops-module-bar">
+        <h2>System</h2>
+        <span class="muted">vitals from the box that runs the lab · 24 h sparklines</span>
+      </div>
+      <div class="om-body" id="om-system"></div>
+    </section>
+
+    <section class="om-sec" id="sec-fleet" hidden>
+      <div class="ops-module-bar">
+        <h2>Compute Fleet</h2>
+        <span class="muted">the machines behind the lab — same boxes you can find on the map</span>
+      </div>
+      <div class="om-body" id="om-fleet"></div>
+    </section>
+
+    <section class="om-sec" id="sec-agents" hidden>
+      <div class="ops-module-bar">
+        <h2>Agent Roster</h2>
+        <span class="muted" data-om-sub="agents"></span>
+      </div>
+      <div class="om-body" id="om-agents"></div>
+    </section>
+
+    <section class="om-sec" id="sec-models" hidden>
+      <div class="ops-module-bar">
+        <h2>Model Runtimes</h2>
+        <span class="muted">providers wired into the lab · local and cloud</span>
+      </div>
+      <div class="om-body" id="om-models"></div>
+    </section>
+
+    <section class="om-sec" id="sec-autos" hidden>
+      <div class="ops-module-bar">
+        <h2>Automations</h2>
+        <span class="muted">the scheduled jobs that keep the lab humming · real success rates</span>
+      </div>
+      <div class="om-body" id="om-autos"></div>
+    </section>
+
+    <section class="om-sec" id="sec-security" hidden>
+      <div class="ops-module-bar">
+        <h2>Security &amp; Reliability</h2>
+        <span class="muted">scans and service health, straight from the box</span>
+      </div>
+      <div class="om-body" id="om-security"></div>
+    </section>
+
+    <section class="om-sec" id="sec-workshop" hidden>
+      <div class="ops-module-bar">
+        <h2>Workshop</h2>
+        <span class="muted">what the lab has shipped so far</span>
+      </div>
+      <div class="om-body" id="om-workshop"></div>
+    </section>
+
+    <section class="om-sec" id="sec-milestones" hidden>
+      <div class="ops-module-bar">
+        <h2>Milestones</h2>
+        <span class="muted">how this lab grew</span>
+      </div>
+      <div class="om-body" id="om-milestones"></div>
+    </section>
+
     <div class="ops-module-bar" style="margin-top:34px">
       <h2>On the bench</h2>
       <span class="muted">next modules for this dashboard</span>
     </div>
     <section class="ops-next" aria-label="Planned dashboard modules">
-      <div class="tile">
-        <h3>Model Runtime Snapshot</h3>
-        <p>At-a-glance view of model/runtime usage and status across the AI lab machines.</p>
-        <span class="badge-planned">Planned</span>
+      <div class="bench-tile">
+        <h3>GPU Telemetry</h3>
+        <p>Live utilization and temperature from the GPU nodes when they wake up for inference work.</p>
+        <span class="badge-planned">Future</span>
       </div>
-      <div class="tile">
-        <h3>Agent Activity</h3>
-        <p>Quick view of what assistants and agents are working on right now.</p>
-        <span class="badge-planned">Planned</span>
+      <div class="bench-tile">
+        <h3>Token &amp; Cost Usage</h3>
+        <p>How much thinking the agents did this week — tokens and model mix, aggregated.</p>
+        <span class="badge-planned">Future</span>
       </div>
-      <div class="tile">
-        <h3>System Tiles</h3>
-        <p>CPU, memory, and process tiles for home lab visibility.</p>
-        <span class="badge-planned">Planned</span>
+      <div class="bench-tile">
+        <h3>Live Agent Feed</h3>
+        <p>A rolling ticker of what the agents just finished — the lab's commit log, in plain English.</p>
+        <span class="badge-planned">Future</span>
       </div>
     </section>
   </main>
@@ -180,6 +214,7 @@
   <script src="../network/inspector.js" defer></script>
   <script src="../network/audio.js" defer></script>
   <script src="../network/main.js" defer></script>
+  <script src="ops.js" defer></script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
 </body>

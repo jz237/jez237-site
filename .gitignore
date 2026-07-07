@@ -21,6 +21,7 @@ build/
 # Secrets/credentials
 .env
 .env.*
+.dev.vars
 *.pem
 *.key
 *.p12
