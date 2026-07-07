@@ -4103,5 +4103,24 @@
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-07-06-random-image-style-random-rendering-style-lenticular-sticke",
+    "title": "Random rendering style: Lenticular Sticker Tide Pool Workshop",
+    "tests": "Tests GPT Image 2 on a random rendering-style prompt where the chosen medium is a physical lenticular holographic sticker sheet, with prismatic lens effects, vinyl/laminate surface details, die-cut scale cues, and a complete non-paper scene.",
+    "prompt": "Create a finished square image of a rain-bright alien tide-pool repair workshop rendered as richly detailed lenticular holographic sticker art, photographed as a physical die-cut sticker sheet on a dark cutting mat rather than a poster or flat prompt card. The scene inside the main sticker shows a tiny wet workshop built into black basalt tide pools: glass-coral worktables, pearly shell-ceramic trays, braided kelpglass rope coils, rain-polished copper clamps, translucent tide-gate membrane patches, shallow turquoise water basins, violet under-reef glow in the cracks, saffron float-pod buoys, lensleaf awnings beaded with rain, and small non-human amphibious tide engineers with low blue-green bodies, six walking limbs, delicate manipulator arms, translucent gill fans, mirrored eyes, flexible tail rudders, and shell-bell throat sacs repairing a cracked glass-coral causeway module.\n\nMake the lenticular sticker medium unmistakable: prismatic rainbow banding that changes across ridged vertical lens lines, glossy raised vinyl edges, tiny trapped air bubbles under laminate, micro scratches, kiss-cut outlines, holographic foil speckles, white adhesive backing visible on a lifted corner, cast shadows from sticker thickness, and several smaller matching accessory stickers around the main scene showing a copper clamp, shell-bell resonator, lensleaf awning, glass-coral shard, and tide engineer tool bundle. Use a diagonal tabletop composition with a craft knife, metal ruler, squeegee card, and scrap vinyl for scale; colors should mix turquoise water, pearl white, rain-copper, saffron, violet glow, and shifting rainbow highlights. Finished visual example only: no readable captions, no logos, no QR codes, no watermark, no dense text, no flat educational chart, no cinematic scene, no ordinary product photo, no humans or mermaids.\n\nReusable fill-in-the-blank template: Render [SUBJECT] as [STYLE_OR_MEDIUM] with layered physical texture, unexpected scale, and a complete finished scene rather than a flat prompt card. Include [MEDIUM_SPECIFIC_SURFACE_DETAILS], [ENVIRONMENTAL_CONTEXT], [FUNCTIONAL_OBJECTS], [SCALE_CUES], [COLOR_BEHAVIOR], and tactile evidence that the chosen medium controls the image. Avoid readable captions, logos, QR codes, watermarks, dense text, flat educational charts, cinematic scenes, plain centered product photos, and generic filter effects.\n\nExample substitution: [SUBJECT] = a rain-bright alien tide-pool repair workshop on a physical sticker sheet; [STYLE_OR_MEDIUM] = lenticular holographic sticker art; [MEDIUM_SPECIFIC_SURFACE_DETAILS] = ridged lens lines, prismatic rainbow banding, glossy raised vinyl edges, trapped air bubbles, micro scratches, kiss-cut outlines, foil speckles, and lifted adhesive backing; [ENVIRONMENTAL_CONTEXT] = black basalt tide pools, turquoise water basins, violet under-reef glow, and rain-beaded lensleaf awnings; [FUNCTIONAL_OBJECTS] = glass-coral worktables, shell-ceramic trays, kelpglass rope, copper clamps, tide-gate membrane patches, causeway repair tools, and accessory stickers; [SCALE_CUES] = dark cutting mat, craft knife, metal ruler, squeegee card, scrap vinyl, sticker thickness, and cast shadows; [COLOR_BEHAVIOR] = turquoise water, pearl white, rain-copper, saffron, violet glow, and shifting rainbow highlights.",
+    "image": "images/2026-07-06-random-image-style-random-rendering-style-lenticular-sticke.jpg",
+    "thumb": "thumbs/2026-07-06-random-image-style-random-rendering-style-lenticular-sticke.webp",
+    "color": "#4b4c4e",
+    "date": "2026-07-06",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "lenticular holographic sticker art",
+      "description": "A physical die-cut lenticular sticker sheet turns a tiny alien tide-pool repair workshop into glossy prismatic vinyl art with ridged lens lines, foil speckles, and tabletop craft scale cues.",
+      "template": "Render [SUBJECT] as [STYLE_OR_MEDIUM] with layered physical texture, unexpected scale, and a complete finished scene rather than a flat prompt card."
+    }
   }
 ]
