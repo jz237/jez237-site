@@ -1,5 +1,24 @@
 <!doctype html>
 <!--
+  VECTOR ARENA v5.4 — GAME MODES update CHANGELOG
+  ==================================================================
+  MODES (new, selectable from the title screen; choice is persisted)
+  - CLASSIC: the v5.3 game, unchanged. Posts to the existing v2 boards.
+  - TURRET: ship is locked at the arena core. Rotate and blast outward while the
+    swarm converges. Geoms and pickups are vacuumed toward the turret, fire rate
+    and spread get a small buff, incoming damage is reduced, and the shield slowly
+    regenerates — dodging is off the table, so the gun has to carry you.
+  - PACIFISM: firing and bombs are disabled. Neon gates spawn around the arena;
+    fly through one to detonate it, wiping every shape in the blast and dropping
+    geoms. Gravity wells and splitters sit this mode out.
+  - BOSS RUSH: every wave is a boss (with its minion streams). Kill it, take a
+    boss upgrade, meet the next one. Boss HP scales as if 5 classic waves passed
+    per rush wave so the ramp matches upgrade income.
+  - Each non-classic mode posts to its own fresh global leaderboard
+    (neon-vector-arena-{turret|pacifism|bossrush}-v1); local boards are
+    stored per mode too. Custom-settings runs still stay local-only.
+  - Online co-op and the attract demo always run Classic rules.
+
   VECTOR ARENA v5.3 — Geometry Wars-style polish pass CHANGELOG
   ==================================================================
   VISUALS
@@ -44,7 +63,7 @@
 <meta name="theme-color" content="#02030a">
 <link rel="manifest" href="./manifest.webmanifest">
 <title>Vector Arena — Twin-Stick Arena Shooter</title>
-<meta name="description" content="A polished Geometry Wars-style twin-stick shooter for the browser: deforming neon grid, geom multipliers, gravity wells, bosses, procedural synth soundtrack, global leaderboards, and 2-player online co-op. Plays great on desktop, gamepad, and mobile.">
+<meta name="description" content="A polished Geometry Wars-style twin-stick shooter for the browser: four game modes (Classic, Turret, Pacifism, Boss Rush), deforming neon grid, geom multipliers, gravity wells, bosses, procedural synth soundtrack, global leaderboards, and 2-player online co-op. Plays great on desktop, gamepad, and mobile.">
 <meta name="keywords" content="twin stick shooter, geometry wars style game, vector shooter game, retro browser game, arcade shooter online, no download game, Vector Arena">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://jez237.com/games/2026-06-19/neon-vector-arena/">
@@ -272,6 +291,16 @@
     padding: 10px 12px;
     font-size: 11px;
   }
+  .mode-select {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 12px 0 0;
+  }
+  .mode-select button {
+    padding: 10px 6px;
+    font-size: 11px;
+  }
   .upgrade-panel {
     display: none;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -319,7 +348,7 @@
   }
   .score-tools {
     display: grid;
-    grid-template-columns: 1fr 1fr auto;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
     margin: 0 0 10px;
   }
@@ -430,6 +459,7 @@
     .panel { padding-block: 22px; }
     .menu-actions { grid-template-columns: 1fr; }
     .control-mode { grid-template-columns: 1fr; }
+    .mode-select { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .mini-grid { grid-template-columns: 1fr; }
     .score-prompt { text-align: center; }
   }
@@ -727,7 +757,7 @@
       max-height: none;
     }
     .score-tools {
-      grid-template-columns: 1fr 1fr auto;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       margin-bottom: 6px;
       gap: 6px;
     }
@@ -770,7 +800,7 @@
 <div class="overlay" id="overlay">
   <div class="panel">
 	    <h1 id="overlayTitle">VECTOR<br>ARENA</h1>
-	    <div class="title-version" id="titleVersion">v5.3</div>
+	    <div class="title-version" id="titleVersion">v5.4</div>
 	    <div class="photo-note" id="photoNote">
 	      <b>Photosensitivity notice:</b> this game contains rapid flashing lights, screen shake, and pulsing neon effects. A reduced-flash mode is available.
 	      <div class="mini-grid">
@@ -786,6 +816,12 @@
       <button id="scoresBtn" class="secondary">Scores</button>
       <button id="optionsBtn" class="secondary" type="button">Options</button>
       <button id="helpBtn" class="secondary" type="button">How To Play</button>
+    </div>
+    <div class="mode-select" id="modeSelect">
+      <button id="modeClassic" class="secondary" type="button">Classic</button>
+      <button id="modeTurret" class="secondary" type="button">Turret</button>
+      <button id="modePacifism" class="secondary" type="button">Pacifism</button>
+      <button id="modeBossRush" class="secondary" type="button">Boss Rush</button>
     </div>
     <div class="control-mode" id="controlMode">
       <button id="autoMode" class="secondary" type="button">Auto Fire</button>
@@ -816,8 +852,11 @@
     </div>
     <div class="panel-section" id="scorePanel">
       <div class="score-tools" id="scoreTools">
-        <button id="soloScoresBtn" class="secondary" type="button">Solo</button>
-        <button id="multiScoresBtn" class="secondary" type="button">Multiplayer</button>
+        <button id="soloScoresBtn" class="secondary" type="button">Classic</button>
+        <button id="turretScoresBtn" class="secondary" type="button">Turret</button>
+        <button id="pacifismScoresBtn" class="secondary" type="button">Pacifism</button>
+        <button id="bossrushScoresBtn" class="secondary" type="button">Boss Rush</button>
+        <button id="multiScoresBtn" class="secondary" type="button">Multi</button>
         <button id="scoreBackBtn" class="secondary" type="button">Back</button>
       </div>
       <div id="scoreBoard" class="score-board"></div>
@@ -848,7 +887,7 @@
     <p class="fine" id="overlayFine">Dual Stick: left side flies, right side aims and fires. Desktop: WASD plus hold mouse to aim.</p>
   </div>
 </div>
-<div class="version">v5.3</div>
+<div class="version">v5.4</div>
 
 <script>
 'use strict';
@@ -879,8 +918,18 @@ if (!matchMedia('(pointer: fine)').matches) mouseModeBtn.style.display = 'none';
 const scoreSubmit = document.getElementById('scoreSubmit');
 const scorePanel = document.getElementById('scorePanel');
 const soloScoresBtn = document.getElementById('soloScoresBtn');
+const turretScoresBtn = document.getElementById('turretScoresBtn');
+const pacifismScoresBtn = document.getElementById('pacifismScoresBtn');
+const bossrushScoresBtn = document.getElementById('bossrushScoresBtn');
 const multiScoresBtn = document.getElementById('multiScoresBtn');
 const scoreBackBtn = document.getElementById('scoreBackBtn');
+const modeSelectEl = document.getElementById('modeSelect');
+const modeButtons = {
+  classic: document.getElementById('modeClassic'),
+  turret: document.getElementById('modeTurret'),
+  pacifism: document.getElementById('modePacifism'),
+  bossrush: document.getElementById('modeBossRush')
+};
 const onlinePanel = document.getElementById('onlinePanel');
 const scoreBoard = document.getElementById('scoreBoard');
 const initialsInput = document.getElementById('initials');
@@ -918,6 +967,46 @@ let W = 0, H = 0, DPR = 1;
 let running = false;
 let menuState = 'menu';
 let gameMode = 'solo';
+// ---- Run modes (v5.4): classic / turret / pacifism / bossrush ----
+// Online co-op and the attract demo always run classic rules; rm() is the
+// single source of truth for the rules currently simulating.
+const MODE_KEY = 'neon-vector-arena-run-mode';
+const RUN_MODES = {
+  classic: {
+    label: 'Classic',
+    start: 'Solo Run',
+    board: 'solo',
+    sub: 'Grid-warping twin-stick survival. Chain geoms into massive multipliers and shatter the swarm before it reaches you.',
+    fine: ''
+  },
+  turret: {
+    label: 'Turret',
+    start: 'Turret Run',
+    board: 'turret',
+    sub: 'Locked at the arena core. Rotate, blast outward, and let the geoms fly to you — there is nowhere to run.',
+    fine: 'Turret: movement is locked. Aim with the mouse, right stick, or touch; Auto Fire mode aims itself. '
+  },
+  pacifism: {
+    label: 'Pacifism',
+    start: 'Pacifism Run',
+    board: 'pacifism',
+    sub: 'No guns. No bombs. Outfly the swarm and dive through neon gates to detonate it.',
+    fine: 'Pacifism: firing is disabled — fly through the yellow gates to blast everything near them. '
+  },
+  bossrush: {
+    label: 'Boss Rush',
+    start: 'Boss Rush',
+    board: 'bossrush',
+    sub: 'A boss every wave, plus its minion storms. Kill it, grab an upgrade, meet a bigger one.',
+    fine: 'Boss Rush: every wave is a boss fight. Bombs and boss upgrades matter. '
+  }
+};
+const storedRunMode = localStorage.getItem(MODE_KEY);
+let runMode = RUN_MODES[storedRunMode] ? storedRunMode : 'classic';
+// rules mode for the world currently simulating
+function rm() {
+  return (demo || gameMode === 'online') ? 'classic' : runMode;
+}
 let scoreMode = 'solo';
 let globalScoreCache = {};
 let partner = null;
@@ -975,6 +1064,9 @@ let multDecayGrace = 0;
 let geomStreak = 0;
 let geomStreakTimer = 0;
 let geoms = [];
+let gates = [];
+let gateTimer = 0;
+let bossDown = false;
 let nextLifeScore = 0;
 let nextBombScore = 0;
 let hitStopTimer = 0;
@@ -985,7 +1077,7 @@ let wellTimer = 0;
 let demo = false;
 let mouse = { x: 0, y: 0, down: false, seen: false };
 let padState = { active: false, mx: 0, my: 0, ax: 0, ay: 0, fire: false, bombHeld: false, pauseHeld: false, lastSeen: 0 };
-let stats = { runTime: 0, shots: 0, hits: 0, maxMult: 1 };
+let stats = { runTime: 0, shots: 0, hits: 0, maxMult: 1, gates: 0 };
 let waveScore = 0;
 let gridPts = null;
 let gridCols = 0;
@@ -1023,6 +1115,11 @@ const MAX_GEOMS = 150;
 const LIFE_SCORE_STEP = 150000;
 const BOMB_SCORE_STEP = 60000;
 const MAX_MULTIPLIER = 999;
+// Pacifism gates
+const GATE_HALF = 80;
+const GATE_BLAST_RADIUS = 310;
+const MAX_GATES = 4;
+const GATE_LIFETIME = 24;
 
 // ---- Settings model: DEFAULTS -> stored overrides -> applySettings() into live knobs ----
 const SETTINGS_KEY = 'neon-vector-arena-settings-v1';
@@ -1140,8 +1237,13 @@ const NAME_KEY = 'neon-vector-arena-initials';
 const SCORE_MODE_KEY = 'neon-vector-arena-score-mode';
 const SCORE_APIS = {
   solo: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-v2',
-  multiplayer: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-multiplayer-v2'
+  multiplayer: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-multiplayer-v2',
+  turret: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-turret-v1',
+  pacifism: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-pacifism-v1',
+  bossrush: 'https://game-scores.jez237.workers.dev/scores/neon-vector-arena-bossrush-v1'
 };
+const BOARD_LABELS = { solo: 'CLASSIC', multiplayer: 'MULTIPLAYER', turret: 'TURRET', pacifism: 'PACIFISM', bossrush: 'BOSS RUSH' };
+const BOARD_SHORT = { solo: 'classic', multiplayer: 'multi', turret: 'turret', pacifism: 'pacifism', bossrush: 'rush' };
 const SCORE_LIMIT = 100;
 const ONLINE_WS = window.NEON_VECTOR_WS || ((location.hostname === 'localhost' || location.hostname === '127.0.0.1')
   ? 'ws://127.0.0.1:8788/ws'
@@ -1283,7 +1385,16 @@ function unlockedShapeTypes(value = wave) {
 }
 
 function isBossWave(value = wave) {
+  const mode = rm();
+  if (mode === 'bossrush') return true;
+  if (mode === 'pacifism') return false; // gates can't hurt bosses, so none spawn
   return value > 1 && value % BOSS_INTERVAL === 0;
+}
+
+// Boss Rush waves are all bosses, so boss HP/size scale as if BOSS_INTERVAL
+// classic waves passed per rush wave (rush wave 1 == the classic wave-5 boss).
+function bossWaveEquivalent(value = wave) {
+  return rm() === 'bossrush' ? value * BOSS_INTERVAL : value;
 }
 
 function bossTypeForWave(value = wave) {
@@ -1291,7 +1402,8 @@ function bossTypeForWave(value = wave) {
   const preferred = ['crown', 'trident', 'reactor', 'anvil', 'shield', 'quasar', 'compass', 'keyhole', 'star', 'prism', 'gate', 'saucer', 'hourglass', 'bolt', 'blade', 'ring']
     .filter(type => unlocked.includes(type));
   const pool = preferred.length ? preferred : unlocked;
-  return pool[(Math.floor(value / BOSS_INTERVAL) - 1) % pool.length] || 'cube';
+  const index = rm() === 'bossrush' ? value - 1 : Math.floor(value / BOSS_INTERVAL) - 1;
+  return pool[((index % pool.length) + pool.length) % pool.length] || 'cube';
 }
 
 function chooseSizeTier(initial = false) {
@@ -1324,7 +1436,8 @@ function enemyHue(def, tier, type = null, boss = false) {
 }
 
 function chooseEnemyType() {
-  const splitterChance = clamp(.04 + wave * .004 + (activeModifier?.splitter || 0), .04, .25);
+  // Pacifism: splitters would flood a gunless arena with unkillable children
+  const splitterChance = rm() === 'pacifism' ? 0 : clamp(.04 + wave * .004 + (activeModifier?.splitter || 0), .04, .25);
   if (Math.random() < splitterChance) return 'splitter';
   const unlocked = unlockedShapeTypes();
   const total = unlocked.reduce((sum, type) => sum + shapeDef(type).weight, 0);
@@ -1352,11 +1465,12 @@ function blastRadius() {
 
 function fireDelay() {
   const fireLevel = Math.min(runUpgrades.fire || 0, MAX_FIRE_UPGRADES);
-  return Math.max(.05, (.135 - wave * .0012) * Math.pow(.88, fireLevel) / clamp(settings.fireRate, .5, 2));
+  const turretBoost = rm() === 'turret' ? .82 : 1; // stationary gun needs to carry the run
+  return Math.max(.05, (.135 - wave * .0012) * Math.pow(.88, fireLevel) * turretBoost / clamp(settings.fireRate, .5, 2));
 }
 
 function updateBombButton() {
-  const show = running && (MOBILE_PERF || innerWidth < 760);
+  const show = running && rm() !== 'pacifism' && (MOBILE_PERF || innerWidth < 760);
   bombButton.classList.toggle('on', show);
   bombButton.disabled = !show || bombs <= 0 || bombCooldown > 0;
   bombButton.textContent = bombs > 0 ? 'Bomb ' + bombs : 'No Bomb';
@@ -1422,14 +1536,16 @@ function setPanel(section = 'menu') {
   photoNote.classList.toggle('on', section === 'menu' && !localStorage.getItem(PHOTO_KEY));
   mainActions.classList.toggle('menu-hidden', section === 'online' || section === 'scores' || section === 'upgrade' || section === 'options' || section === 'help');
   controlModeEl.style.display = (section === 'menu' || section === 'online') ? 'grid' : 'none';
+  modeSelectEl.style.display = section === 'menu' ? 'grid' : 'none';
   updateUpgradeChoices();
   updateControlModeButtons();
+  updateRunModeButtons();
   startBtn.disabled = false;
   if (section === 'menu') {
     overlayTitle.innerHTML = 'VECTOR<br>ARENA';
-    overlaySub.textContent = 'Grid-warping twin-stick survival. Chain geoms into massive multipliers and shatter the swarm before it reaches you.';
-    overlayFine.textContent = controlHelpText();
-    startBtn.textContent = 'Solo Run';
+    overlaySub.textContent = RUN_MODES[runMode].sub;
+    overlayFine.textContent = RUN_MODES[runMode].fine + controlHelpText();
+    startBtn.textContent = RUN_MODES[runMode].start;
   } else if (section === 'paused') {
     overlayTitle.innerHTML = 'PAUSED';
     overlaySub.textContent = 'The vector storm is frozen. Resume or restart the solo run.';
@@ -1437,18 +1553,23 @@ function setPanel(section = 'menu') {
     startBtn.textContent = 'Resume';
   } else if (section === 'over') {
     overlayTitle.innerHTML = 'RUN<br>COMPLETE';
-    overlaySub.textContent = `${gameMode === 'online' ? 'Multiplayer' : 'Solo'} score ${Math.floor(score).toLocaleString('en-US')} · Wave ${String(wave).padStart(2, '0')} · ${modifiersCleared} mods cleared · ${bombsUsed} bomb${bombsUsed === 1 ? '' : 's'} used.`;
+    const runLabel = gameMode === 'online' ? 'Multiplayer' : RUN_MODES[rm()].label;
+    const waveLabel = rm() === 'bossrush' ? 'Boss' : 'Wave';
+    const finaleStat = rm() === 'pacifism'
+      ? `${stats.gates || 0} gate${stats.gates === 1 ? '' : 's'} detonated`
+      : `${bombsUsed} bomb${bombsUsed === 1 ? '' : 's'} used`;
+    overlaySub.textContent = `${runLabel} score ${Math.floor(score).toLocaleString('en-US')} · ${waveLabel} ${String(wave).padStart(2, '0')} · ${modifiersCleared} mods cleared · ${finaleStat}.`;
     fillStatsGrid();
     customNote.classList.toggle('on', isCustomRun());
     overlayFine.textContent = isCustomRun()
       ? 'Custom gameplay settings: this score saves to the local board only. Reset Options to Normal to compete globally.'
-      : 'Submit to save your score, or restart solo.';
-    startBtn.textContent = 'Restart Solo';
+      : `Submit to save your ${runLabel} score, or restart.`;
+    startBtn.textContent = 'Restart';
     initialsInput.value = cleanInitials(localStorage.getItem(NAME_KEY) || initialsInput.value || 'YOU');
   } else if (section === 'scores') {
     overlayTitle.innerHTML = 'SCORES';
-    overlaySub.textContent = 'Separate solo and multiplayer leaderboards.';
-    overlayFine.textContent = 'Global multiplayer and solo leaderboards are shown when available; local scores appear as fallback.';
+    overlaySub.textContent = 'Separate leaderboards for every mode, plus multiplayer.';
+    overlayFine.textContent = 'Global leaderboards are shown when available; local scores appear as fallback.';
     refreshScoreBoard();
   } else if (section === 'upgrade') {
     overlayTitle.innerHTML = 'BOSS<br>REWARD';
@@ -1488,6 +1609,22 @@ function updateControlModeButtons() {
   mouseModeBtn.classList.toggle('mode-active', controlMode === 'mouse');
 }
 
+function updateRunModeButtons() {
+  for (const [key, btn] of Object.entries(modeButtons)) btn.classList.toggle('mode-active', runMode === key);
+}
+
+function setRunMode(mode) {
+  runMode = RUN_MODES[mode] ? mode : 'classic';
+  localStorage.setItem(MODE_KEY, runMode);
+  updateRunModeButtons();
+  if (!running && menuState === 'menu') {
+    overlaySub.textContent = RUN_MODES[runMode].sub;
+    overlayFine.textContent = RUN_MODES[runMode].fine + controlHelpText();
+    startBtn.textContent = RUN_MODES[runMode].start;
+  }
+  sfx('ui');
+}
+
 function setControlMode(mode) {
   controlMode = ['dual', 'auto', 'mouse'].includes(mode) ? mode : 'auto';
   localStorage.setItem('neon-vector-arena-control-mode', controlMode);
@@ -1499,7 +1636,7 @@ function setControlMode(mode) {
   aimStick.id = null;
   updateControlModeButtons();
   if (!running && (menuState === 'menu' || menuState === 'online')) {
-    overlayFine.textContent = (menuState === 'online' ? 'P1 runs the world; P2 sends controls and receives live snapshots. ' : '') + controlHelpText();
+    overlayFine.textContent = (menuState === 'online' ? 'P1 runs the world; P2 sends controls and receives live snapshots. ' : RUN_MODES[runMode].fine) + controlHelpText();
   }
 }
 
@@ -1613,22 +1750,25 @@ function cleanInitials(raw) {
 }
 
 function normalizeScoreMode(mode) {
-  return mode === 'multiplayer' || mode === 'online' ? 'multiplayer' : 'solo';
+  if (mode === 'multiplayer' || mode === 'online') return 'multiplayer';
+  return SCORE_APIS[mode] ? mode : 'solo';
 }
 
 function currentRunScoreMode() {
-  return normalizeScoreMode(gameMode);
+  if (gameMode === 'online') return 'multiplayer';
+  const mode = rm();
+  return mode === 'classic' ? 'solo' : mode;
 }
 
 function scoreApiFor(mode = scoreMode) {
   return SCORE_APIS[normalizeScoreMode(mode)] || SCORE_APIS.solo;
 }
 
+const scoreModeButtons = { solo: soloScoresBtn, turret: turretScoresBtn, pacifism: pacifismScoresBtn, bossrush: bossrushScoresBtn, multiplayer: multiScoresBtn };
 function setScoreMode(mode, refresh = false) {
   scoreMode = normalizeScoreMode(mode);
   localStorage.setItem(SCORE_MODE_KEY, scoreMode);
-  soloScoresBtn.classList.toggle('mode-active', scoreMode === 'solo');
-  multiScoresBtn.classList.toggle('mode-active', scoreMode === 'multiplayer');
+  for (const [key, btn] of Object.entries(scoreModeButtons)) btn.classList.toggle('mode-active', scoreMode === key);
   if (refresh) refreshScoreBoard();
 }
 
@@ -1717,7 +1857,7 @@ async function submitGlobalScore(name, value, mode = currentRunScoreMode()) {
 
 function scoreRowsHtml(rows, source) {
   if (!rows.length) {
-    return `<div class="score-row"><span>--</span><b>No ${source} scores yet</b><em>${scoreMode === 'multiplayer' ? 'multi' : 'solo'}</em></div>`;
+    return `<div class="score-row"><span>--</span><b>No ${source} scores yet</b><em>${BOARD_SHORT[scoreMode] || 'classic'}</em></div>`;
   }
   return rows.slice(0, SCORE_LIMIT).map((raw, index) => {
     const row = normalizeScoreRow(raw, source === 'global', scoreMode);
@@ -1729,13 +1869,13 @@ function scoreRowsHtml(rows, source) {
 function renderScoreBoard(rows = null, source = 'local') {
   setScoreMode(scoreMode, false);
   const list = (rows || localScores().filter(row => normalizeScoreMode(row.mode) === scoreMode)).slice(0, SCORE_LIMIT);
-  const modeLabel = scoreMode === 'multiplayer' ? 'MULTIPLAYER' : 'SOLO';
+  const modeLabel = BOARD_LABELS[scoreMode] || 'CLASSIC';
   const label = source === 'global' ? `GLOBAL ${modeLabel} SCORES` : `LOCAL ${modeLabel} SCORES`;
   scoreBoard.innerHTML = `<div class="score-row header"><span>#</span><b>${label}</b><em>${list.length}/${SCORE_LIMIT}</em></div>` + scoreRowsHtml(list, source);
 }
 
 async function refreshScoreBoard() {
-  const modeLabel = scoreMode === 'multiplayer' ? 'MULTIPLAYER' : 'SOLO';
+  const modeLabel = BOARD_LABELS[scoreMode] || 'CLASSIC';
   setScoreMode(scoreMode, false);
   scoreBoard.innerHTML = `<div class="score-row header"><span>...</span><b>LOADING ${modeLabel} SCORES</b><em>wait</em></div>`;
   const rows = await fetchGlobalScores(true, scoreMode);
@@ -2300,6 +2440,9 @@ function reset() {
   callouts = [];
   spawnWarnings = [];
   geoms = [];
+  gates = [];
+  gateTimer = 2.4;
+  bossDown = false;
   wallFlashes = [];
   score = 0;
   waveScore = 0;
@@ -2319,7 +2462,7 @@ function reset() {
   geomStreakTimer = 0;
   nextLifeScore = LIFE_SCORE_STEP;
   nextBombScore = BOMB_SCORE_STEP;
-  stats = { runTime: 0, shots: 0, hits: 0, maxMult: 1 };
+  stats = { runTime: 0, shots: 0, hits: 0, maxMult: 1, gates: 0 };
   hitStopTimer = 0;
   zoomPunch = 0;
   chromaPulse = 0;
@@ -2344,8 +2487,18 @@ function reset() {
   camera.x = player.x - innerWidth * .5;
   camera.y = player.y - innerHeight * .52;
   updateCamera(1, true);
-  const openingTypes = unlockedShapeTypes();
-  for (let i = 0; i < waveShapeCount(); i++) spawnEnemy(true, { type: openingTypes[i % openingTypes.length] });
+  const mode = rm();
+  if (mode === 'pacifism') {
+    bombs = 0;
+  }
+  if (mode === 'bossrush') {
+    // no opening crowd — the first boss is the wave
+    waveCooldown = 2;
+    queueBossWarning();
+  } else {
+    const openingTypes = unlockedShapeTypes();
+    for (let i = 0; i < waveShapeCount(); i++) spawnEnemy(true, { type: openingTypes[i % openingTypes.length] });
+  }
   updateHud(true);
 }
 
@@ -2392,9 +2545,9 @@ function updateHud(force = false) {
   scoreEl.textContent = hudParts([
     'Shield ' + String(Math.max(0, Math.ceil(player?.hp ?? 100))).padStart(3, '0'),
     'Lives ' + lives,
-    'Bombs ' + bombs
+    rm() === 'pacifism' ? 'Gates ' + (stats.gates || 0) : 'Bombs ' + bombs
   ], hudSeparator);
-  waveEl.textContent = 'Wave ' + String(wave).padStart(2, '0');
+  waveEl.textContent = (rm() === 'bossrush' ? 'Boss ' : 'Wave ') + String(wave).padStart(2, '0');
   const scoreLabel = gameMode === 'online' && innerWidth >= 520 ? cleanName(online.name || 'Pilot') + ' score' : 'Score';
   const power = player?.power > 0 ? 'Overdrive ' + Math.ceil(player.power) : '';
   const mod = activeModifier && innerWidth >= 620 ? activeModifier.label : '';
@@ -2508,13 +2661,14 @@ function spawnEnemy(initial = false, prepared = null) {
   const tier = SIZE_TIERS.find(item => item.name === prepared?.sizeTier) || chooseSizeTier(initial);
   const eliteChance = clamp(.025 + wave * .0028 + (wave % 5 === 0 ? .05 : 0) + (eliteRushTimer > 0 ? .16 : 0), .025, eliteRushTimer > 0 ? Math.min(.34, .28 + lateSurge() * .002) : Math.min(.3, .11 + lateSurge() * .004));
   const elite = boss || (!initial && !isWell && wave >= 4 && Math.random() < eliteChance);
-  const scale = isWell ? 1 : (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06) * (elite ? 1.16 : 1) * (boss ? 1.78 + Math.min(wave, 40) * .012 : 1);
+  const bossWaveEq = bossWaveEquivalent();
+  const scale = isWell ? 1 : (type === 'splitter' ? tier.splitter : tier.normal) * rand(.94, 1.06) * (elite ? 1.16 : 1) * (boss ? 1.78 + Math.min(bossWaveEq, 40) * .012 : 1);
   const largeSplits = !boss && !isWell && tier.name === 'large';
   const speedBase = rand(def.speed[0], def.speed[1]);
   const trait = enemyTrait(type);
   const speedMod = (activeModifier?.speed || 1) * (elite ? .92 : 1) * (boss ? .58 : 1) * clamp(settings.enemySpeed, .5, 1.8);
   const speed = speedBase / Math.sqrt(scale) * speedMod * (trait?.speedMul || 1);
-  const hp = boss ? Math.round(56 + wave * 4.2 + (trait?.bonusHp || 0) * 8) : isWell ? Math.round(11 + wave * .5) : Math.max(1, (elite ? 2 : 1) + (trait?.bonusHp || 0));
+  const hp = boss ? Math.round(56 + bossWaveEq * 4.2 + (trait?.bonusHp || 0) * 8) : isWell ? Math.round(11 + wave * .5) : Math.max(1, (elite ? 2 : 1) + (trait?.bonusHp || 0));
   enemies.push({
     x, y,
     vx: rand(-20, 20),
@@ -2568,7 +2722,7 @@ function queueBossWarning() {
   const type = bossTypeForWave();
   const def = shapeDef(type);
   const tier = SIZE_TIERS[4];
-  const scale = tier.normal * (1.78 + Math.min(wave, 40) * .012);
+  const scale = tier.normal * (1.78 + Math.min(bossWaveEquivalent(), 40) * .012);
   spawnWarnings.push({
     spot: pickSpawnPoint(false),
     type,
@@ -2611,7 +2765,8 @@ function pickSpawnPoint(initial = false) {
 function fireShot(targetAngle, target = null, shooter = player) {
   const powered = shooter?.power > 0;
   const spread = powered ? .09 : (combo >= 8 ? .16 : .11);
-  const count = powered ? (combo >= 8 ? 7 : 5) : (combo >= 8 ? 5 : 3);
+  const turretLanes = rm() === 'turret' && shooter === player ? 2 : 0;
+  const count = (powered ? (combo >= 8 ? 7 : 5) : (combo >= 8 ? 5 : 3)) + turretLanes;
   for (let i = 0; i < count; i++) {
     const laneOffset = (i - (count - 1) / 2) * spread;
     const a = targetAngle + laneOffset;
@@ -3040,7 +3195,10 @@ function updateGeoms(dt) {
   }
   geomStreakTimer = Math.max(0, geomStreakTimer - dt);
   if (geomStreakTimer <= 0) geomStreak = 0;
-  const magnet = 200;
+  // Turret can't chase geoms, so the magnet reaches most of the screen instead
+  const turretRun = rm() === 'turret';
+  const magnet = turretRun ? 640 : 200;
+  const magnetPull = turretRun ? 3400 : 2400;
   const ships = demo ? [player] : [player, partner].filter(Boolean);
   for (const g of geoms) {
     g.life -= dt;
@@ -3060,8 +3218,8 @@ function updateGeoms(dt) {
       const d = Math.hypot(ddx, ddy) || 1;
       if (d < magnet) {
         const pull = (1 - d / magnet);
-        g.vx += ddx / d * 2400 * pull * dt;
-        g.vy += ddy / d * 2400 * pull * dt;
+        g.vx += ddx / d * magnetPull * pull * dt;
+        g.vy += ddy / d * magnetPull * pull * dt;
       }
       if (d < ship.r + 9) {
         collectGeom(g);
@@ -3247,6 +3405,148 @@ function drawWell(c, e, glowPass = false) {
     c.beginPath();
     c.arc(0, 0, e.r * .55, -Math.PI / 2, -Math.PI / 2 + TAU * fill);
     c.stroke();
+  }
+  c.restore();
+}
+
+// ---- Pacifism gates --------------------------------------------------------------------------
+// GW2-style: firing is disabled, so gates are the only weapon. Fly through the bar
+// between the two posts to detonate it, wiping every shape in the blast radius.
+function gateHue() {
+  return settings.colorBlind ? 60 : 54;
+}
+
+function spawnGate() {
+  const spot = pickSpawnPoint(false);
+  gates.push({
+    x: spot.x,
+    y: spot.y,
+    a: rand(0, TAU),
+    spin: rand(.22, .5) * (Math.random() < .5 ? -1 : 1),
+    life: GATE_LIFETIME,
+    max: GATE_LIFETIME,
+    pulse: rand(0, TAU),
+    hue: gateHue()
+  });
+  addSpark(spot.x, spot.y, 10, gateHue(), .8);
+  gridImpulse(spot.x, spot.y, 220, 900);
+}
+
+function gateEnds(g) {
+  const dx = Math.cos(g.a) * GATE_HALF;
+  const dy = Math.sin(g.a) * GATE_HALF;
+  return { x1: g.x - dx, y1: g.y - dy, x2: g.x + dx, y2: g.y + dy };
+}
+
+function segsCross(ax, ay, bx, by, cx, cy, dx, dy) {
+  const d1 = (bx - ax) * (cy - ay) - (by - ay) * (cx - ax);
+  const d2 = (bx - ax) * (dy - ay) - (by - ay) * (dx - ax);
+  const d3 = (dx - cx) * (ay - cy) - (dy - cy) * (ax - cx);
+  const d4 = (dx - cx) * (by - cy) - (dy - cy) * (bx - cx);
+  return d1 * d2 < 0 && d3 * d4 < 0;
+}
+
+function pointSegDist2(px, py, s) {
+  const dx = s.x2 - s.x1;
+  const dy = s.y2 - s.y1;
+  const len2 = dx * dx + dy * dy || 1;
+  const t = clamp(((px - s.x1) * dx + (py - s.y1) * dy) / len2, 0, 1);
+  return dist2(px, py, s.x1 + dx * t, s.y1 + dy * t);
+}
+
+function detonateGate(g) {
+  g.life = -1;
+  stats.gates = (stats.gates || 0) + 1;
+  let downed = 0;
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    const e = enemies[i];
+    if (e.type === 'well' || e.boss) continue;
+    if (dist2(e.x, e.y, g.x, g.y) > GATE_BLAST_RADIUS * GATE_BLAST_RADIUS) continue;
+    addVectorFragments(e);
+    explode(e.x, e.y, e.hue, false, true);
+    dropGeoms(e.x, e.y, e.elite ? 4 : 2);
+    enemies.splice(i, 1);
+    kills++;
+    downed++;
+  }
+  const gain = Math.round((160 + downed * (34 + wave * 4)) * (activeModifier?.score || 1));
+  waveScore += gain;
+  score += gain * Math.floor(multiplier);
+  combo = clamp(combo + (downed > 6 ? 2 : 1), 1, 12);
+  bestCombo = Math.max(bestCombo, combo);
+  comboTimer = Math.max(comboTimer, 2.2);
+  blastEnemies(g.x, g.y, SHOT_BLAST_FORCE * 1.5, GATE_BLAST_RADIUS * 1.5);
+  gridImpulse(g.x, g.y, 560, 6600);
+  particles.push({ x: g.x, y: g.y, vx: 0, vy: 0, life: .6, max: .6, r: GATE_BLAST_RADIUS, hue: g.hue, kind: 'ring' });
+  particles.push({ x: g.x, y: g.y, vx: 0, vy: 0, life: .85, max: .85, r: GATE_BLAST_RADIUS * 1.3, hue: g.hue + 30, kind: 'ring' });
+  if (fxFlash() > 0) particles.push({ x: g.x, y: g.y, vx: 0, vy: 0, life: .15, max: .15, r: GATE_BLAST_RADIUS * .7, hue: 0, kind: 'flash' });
+  addSpark(g.x, g.y, 40, g.hue, 1.5);
+  shake = Math.max(shake, 7 * fxShake());
+  hitStopTimer = Math.max(hitStopTimer, .06 * fxHitStop());
+  chromaPulse = Math.max(chromaPulse, .7 * fxChroma());
+  zoomPunch = Math.max(zoomPunch, .8);
+  player.inv = Math.max(player.inv, .55);
+  sfx('bomb');
+  rumble(.8, .6, 220);
+  if (downed > 0) addScreenNotice(downed + ' CLEARED', g.hue, .4, 30, .9);
+  if (downed > 0 && Math.random() < .18) pickups.push({ x: g.x, y: g.y, r: 9, life: 6, hue: 54, type: 'shield' });
+  updateHud(true);
+}
+
+function updateGates(dt, prevX, prevY) {
+  if (rm() !== 'pacifism') return;
+  gateTimer -= dt;
+  if (gateTimer <= 0) {
+    if (gates.length < MAX_GATES) spawnGate();
+    gateTimer = rand(3.4, 5.4);
+  }
+  for (const g of gates) {
+    g.life -= dt;
+    g.a += g.spin * dt;
+    g.pulse += dt * 5;
+    if (g.life <= 0) continue;
+    const ends = gateEnds(g);
+    // swept-segment crossing catches fast fly-throughs; the proximity test catches slow drifts
+    if (segsCross(prevX, prevY, player.x, player.y, ends.x1, ends.y1, ends.x2, ends.y2)
+      || pointSegDist2(player.x, player.y, ends) < (player.r + 5) ** 2) {
+      detonateGate(g);
+    }
+  }
+  gates = gates.filter(g => g.life > 0);
+}
+
+function drawGate(c, g, glowPass = false) {
+  const ends = gateEnds(g);
+  const blink = g.life < 3.5 ? (Math.sin(g.life * 14) > 0 ? 1 : .3) : 1;
+  c.save();
+  c.globalAlpha = blink;
+  c.strokeStyle = `hsla(${g.hue},100%,${glowPass ? 64 : 74}%,.85)`;
+  c.lineWidth = glowPass ? 4.4 : 2.2;
+  c.lineCap = 'round';
+  c.setLineDash([10, 7]);
+  c.lineDashOffset = -time * 46;
+  c.beginPath();
+  c.moveTo(ends.x1, ends.y1);
+  c.lineTo(ends.x2, ends.y2);
+  c.stroke();
+  c.setLineDash([]);
+  const postR = 11 + Math.sin(g.pulse) * 1.4;
+  for (const [px, py] of [[ends.x1, ends.y1], [ends.x2, ends.y2]]) {
+    c.save();
+    c.translate(px, py);
+    c.rotate(g.a + g.pulse * .4);
+    c.strokeStyle = `hsla(${g.hue},100%,78%,.95)`;
+    c.fillStyle = `hsla(${g.hue},100%,62%,${glowPass ? .3 : .12})`;
+    c.lineWidth = glowPass ? 3 : 1.8;
+    c.beginPath();
+    c.moveTo(0, -postR * 1.3);
+    c.lineTo(postR, 0);
+    c.lineTo(0, postR * 1.3);
+    c.lineTo(-postR, 0);
+    c.closePath();
+    c.fill();
+    c.stroke();
+    c.restore();
   }
   c.restore();
 }
@@ -3903,6 +4203,7 @@ function blastEnemies(x, y, force, radius, sourceVX = 0, sourceVY = 0) {
 }
 
 function usePanicBomb() {
+  if (rm() === 'pacifism') return false;
   if ((!running && !demo) || bombs <= 0 || bombCooldown > 0 || !player) return false;
   bombs--;
   bombsUsed++;
@@ -4221,17 +4522,18 @@ function shouldSplitEnemy(e) {
 function advanceWave() {
   if (activeModifier) modifiersCleared++;
   wave++;
+  bossDown = false;
   nextWaveScore += 640 + wave * 300;
   activeModifier = modifierForWave(wave);
-  waveCooldown = 11;
+  waveCooldown = rm() === 'bossrush' ? 3.2 : 11;
   waveBreather = BREATHER_SECONDS;
   spawnTimer = Math.max(spawnTimer, BREATHER_SECONDS);
   spawnWarnings = [];
   eliteRushTimer = wave >= 4 && !isBossWave() && wave % 4 === 2 ? ELITE_RUSH_SECONDS : 0;
   player.hp = Math.min(MAX_SHIELD, player.hp + 4);
   if (activeModifier?.shieldCap) player.hp = Math.min(player.hp, activeModifier.shieldCap);
-  if (wave % 4 === 0) bombs = Math.min(maxBombs(), bombs + 1);
-  addBanner('WAVE ' + String(wave).padStart(2, '0'), wave % 2 ? 188 : 316);
+  if (wave % 4 === 0 && rm() !== 'pacifism') bombs = Math.min(maxBombs(), bombs + 1);
+  addBanner((rm() === 'bossrush' ? 'BOSS ' : 'WAVE ') + String(wave).padStart(2, '0'), wave % 2 ? 188 : 316);
   if (activeModifier) setTimeout(() => { if (running && activeModifier) addScreenNotice(activeModifier.label, activeModifier.hue, .63, 34, 1.25); }, 520);
   if (eliteRushTimer > 0) setTimeout(() => { if (running && eliteRushTimer > 0) addScreenNotice('ELITE RUSH', 24, .66, 36, 1.25); }, 620);
   if (isBossWave()) setTimeout(() => { if (running && isBossWave()) queueBossWarning(); }, 760);
@@ -4390,19 +4692,32 @@ function update(dt) {
     ax += dx / d * accel * pull;
     ay += dy / d * accel * pull;
   }
-  player.vx += ax * dt;
-  player.vy += ay * dt;
-  player.vx *= Math.pow(.028, dt);
-  player.vy *= Math.pow(.028, dt);
-  const speed = Math.hypot(player.vx, player.vy);
-  if (speed > PLAYER_MAX_SPEED) {
-    player.vx = player.vx / speed * PLAYER_MAX_SPEED;
-    player.vy = player.vy / speed * PLAYER_MAX_SPEED;
+  const prevPX = player.x;
+  const prevPY = player.y;
+  let speed = 0;
+  if (rm() === 'turret') {
+    // Turret mode: the ship is welded to the arena core. Slow shield regen keeps
+    // long runs possible since repositioning is off the table.
+    player.x = 0;
+    player.y = 0;
+    player.vx = 0;
+    player.vy = 0;
+    player.hp = Math.min(MAX_SHIELD, player.hp + 1.3 * dt);
+  } else {
+    player.vx += ax * dt;
+    player.vy += ay * dt;
+    player.vx *= Math.pow(.028, dt);
+    player.vy *= Math.pow(.028, dt);
+    speed = Math.hypot(player.vx, player.vy);
+    if (speed > PLAYER_MAX_SPEED) {
+      player.vx = player.vx / speed * PLAYER_MAX_SPEED;
+      player.vy = player.vy / speed * PLAYER_MAX_SPEED;
+    }
+    player.x += player.vx * dt;
+    player.y += player.vy * dt;
+    bounceShip(player);
+    if (speed > 130) gridImpulse(player.x, player.y, 60, 120);
   }
-  player.x += player.vx * dt;
-  player.y += player.vy * dt;
-  bounceShip(player);
-  if (speed > 130) gridImpulse(player.x, player.y, 60, 120);
   updateCamera(dt);
   player.inv -= dt;
   player.hitFlash = Math.max(0, (player.hitFlash || 0) - dt);
@@ -4427,8 +4742,9 @@ function update(dt) {
     player.aimAngle = turnTowardAngle(player.aimAngle, player.angle, AIM_TURN_RATE * dt);
     fireAngle = player.aimAngle;
   }
+  if (rm() === 'turret') player.angle = player.aimAngle; // hull tracks the gun
   player.fire -= dt;
-  if (player.fire <= 0 && enemies.length && (demo || controlMode === 'auto' || (controlMode === 'mouse' && (mouse.down || pointer.active)) || localInput.fire)) {
+  if (player.fire <= 0 && rm() !== 'pacifism' && enemies.length && (demo || controlMode === 'auto' || (controlMode === 'mouse' && (mouse.down || pointer.active)) || localInput.fire)) {
     player.fire = fireDelay();
     fireShot(fireAngle, aim);
   }
@@ -4471,15 +4787,24 @@ function update(dt) {
   if (waveBreather <= 0) {
     spawnTimer -= dt;
     if (spawnTimer <= 0) {
-      spawnTimer = Math.max(Math.max(.11, .2 - lateSurge() * .002), (.86 - wave * .015) * (activeModifier?.spawn || 1) / clamp(settings.spawnRate, .4, 2));
+      // Boss Rush thins the regular stream (the boss brings its own minions);
+      // Pacifism thickens it (gates need a crowd to be worth diving through).
+      const modeSpawn = rm() === 'bossrush' ? 2.1 : rm() === 'pacifism' ? .8 : 1;
+      spawnTimer = Math.max(Math.max(.11, .2 - lateSurge() * .002), (.86 - wave * .015) * (activeModifier?.spawn || 1) / clamp(settings.spawnRate, .4, 2)) * modeSpawn;
       queueSpawnWarning();
     }
   }
+  // Boss watchdog: if a boss wave has no boss alive, queued, or killed (e.g. the
+  // advanceWave timeout was skipped by a pause), queue one now.
+  if (isBossWave() && !bossDown && waveBreather <= 0 && !enemies.some(e => e.boss) && !spawnWarnings.some(w => w.boss)) queueBossWarning();
   // Waves pace off the un-multiplied accumulator; boss waves demand the boss kill.
-  const bossHolding = isBossWave() && (enemies.some(e => e.boss) || spawnWarnings.some(w => w.boss));
-  if (waveScore >= nextWaveScore && waveCooldown <= 0 && !bossHolding) advanceWave();
-  // gravity well scheduling
-  if (wave >= 5) {
+  // Boss Rush ignores the score pacing entirely: the boss kill IS the wave.
+  const bossHolding = isBossWave() && !bossDown;
+  if (rm() === 'bossrush') {
+    if (bossDown && waveCooldown <= 0 && !pendingUpgrade) advanceWave();
+  } else if (waveScore >= nextWaveScore && waveCooldown <= 0 && !bossHolding) advanceWave();
+  // gravity well scheduling (pacifism has no guns to pop wells with)
+  if (wave >= 5 && rm() !== 'pacifism') {
     wellTimer -= dt;
     if (wellTimer <= 0) {
       if (activeWells().length + spawnWarnings.filter(w => w.type === 'well').length < 2 && !enemies.some(e => e.boss)) queueWellWarning();
@@ -4501,7 +4826,7 @@ function update(dt) {
     }
     while (score >= nextBombScore) {
       nextBombScore = Math.round(nextBombScore * 1.9);
-      if (bombs < maxBombs()) {
+      if (bombs < maxBombs() && rm() !== 'pacifism') {
         bombs++;
         sfx('pickup');
         addScreenNotice('BONUS BOMB', 188, .34, 28, .9);
@@ -4585,7 +4910,8 @@ function update(dt) {
       if (dist2(e.x, e.y, ship.x, ship.y) < (e.r + ship.r) ** 2) {
         const sizeHit = e.sizeTier === 'giant' ? 5 : e.sizeTier === 'large' ? 3 : e.sizeTier === 'tiny' ? -2 : 0;
         const hitDamage = (e.type === 'splitter' ? 24 : e.type === 'splinter' ? 7 : e.type === 'well' ? 20 : 12) + sizeHit + (e.elite ? 5 : 0) + (trait?.damage || 0);
-        ship.hp -= Math.ceil(hitDamage * DAMAGE_TAKEN_MULT);
+        const turretGuard = rm() === 'turret' && ship === player ? .82 : 1; // no dodging = softer hits
+        ship.hp -= Math.ceil(hitDamage * DAMAGE_TAKEN_MULT * turretGuard);
         ship.inv = HIT_INV_SECONDS;
         ship.hitFlash = .48;
         ship.vx += nx * 150;
@@ -4704,6 +5030,7 @@ function update(dt) {
           gridImpulse(e.x, e.y, 130 + e.r * 3.4, e.boss ? 6800 : 1500 + e.r * 26);
           if (!e.boss) explode(e.x, e.y, e.hue, bigBreak, true);
           if (e.boss) {
+            bossDown = true;
             addBanner('BOSS DOWN', e.hue);
             bombs = Math.min(maxBombs(), bombs + 1);
             pickups.push({ x: e.x, y: e.y, r: 10, life: 7, hue: 188, type: 'bomb' });
@@ -4735,7 +5062,7 @@ function update(dt) {
     const dx = player.x - p.x;
     const dy = player.y - p.y;
     const d = Math.hypot(dx, dy) || 1;
-    const magnet = p.type === 'bomb' ? 190 : p.type === 'overdrive' ? 170 : p.type === 'surge' ? 122 : 145;
+    const magnet = (p.type === 'bomb' ? 190 : p.type === 'overdrive' ? 170 : p.type === 'surge' ? 122 : 145) * (rm() === 'turret' ? 3.4 : 1);
     if (d < magnet) {
       const pull = clamp(1 - d / magnet, .25, 1);
       p.x += dx / d * (260 + 160 * pull) * dt;
@@ -4810,6 +5137,7 @@ function update(dt) {
   fragments = fragments.filter(f => f.life > 0);
   if (fragments.length > MAX_FRAGMENTS) fragments.splice(0, fragments.length - MAX_FRAGMENTS);
   updateWells(dt);
+  updateGates(dt, prevPX, prevPY);
   updateGeoms(dt);
   updateGridMesh(dt);
   for (const f of wallFlashes) f.life -= dt;
@@ -4879,6 +5207,33 @@ function drawGrid(c) {
       c.arc(sx, sy, size * 1.35, 0, TAU);
       c.fill();
     }
+  }
+  c.restore();
+}
+
+// Turret mode: an anchored emplacement ring under the ship at the arena core
+function drawTurretBase(c) {
+  const hue = settings.colorBlind ? 210 : 184;
+  c.save();
+  c.translate(player.x, player.y);
+  c.strokeStyle = `hsla(${hue},100%,72%,.55)`;
+  c.lineWidth = 1.6;
+  c.beginPath();
+  c.arc(0, 0, 30 + Math.sin(time * 2.4) * 1.6, 0, TAU);
+  c.stroke();
+  c.strokeStyle = `hsla(${hue},100%,80%,.7)`;
+  c.lineWidth = 2.4;
+  for (let i = 0; i < 3; i++) {
+    const a = time * .9 + i * TAU / 3;
+    c.beginPath();
+    c.arc(0, 0, 40, a, a + TAU * .2);
+    c.stroke();
+  }
+  c.strokeStyle = `hsla(${hue + 30},100%,78%,.4)`;
+  c.lineWidth = 1.1;
+  for (let i = 0; i < 4; i++) {
+    const a = -time * .5 + i * TAU / 4;
+    line(c, Math.cos(a) * 44, Math.sin(a) * 44, Math.cos(a) * 54, Math.sin(a) * 54, c.strokeStyle, 1.1, 3);
   }
   c.restore();
 }
@@ -5531,6 +5886,7 @@ function render() {
       if (i % shotGlowStride) continue;
       drawShot(gtx, shots[i]);
     }
+    for (const g of gates) drawGate(gtx, g, true);
     for (const warning of spawnWarnings) drawSpawnWarning(gtx, warning);
     for (const e of enemies) drawEnemy(gtx, e);
     for (const p of pickups) drawPickup(gtx, p, true);
@@ -5549,6 +5905,7 @@ function render() {
   ctx.globalCompositeOperation = 'source-over';
   ctx.globalAlpha = 1;
   ctx.filter = 'none';
+  for (const g of gates) drawGate(ctx, g);
   for (const s of shots) drawShot(ctx, s);
   for (const warning of spawnWarnings) drawSpawnWarning(ctx, warning);
   for (const e of enemies) drawEnemy(ctx, e);
@@ -5557,6 +5914,7 @@ function render() {
   for (const p of particles) drawParticle(ctx, p);
   for (const f of fragments) drawFragment(ctx, f);
   for (const o of callouts) if (!o.screen) drawCallout(ctx, o);
+  if (rm() === 'turret') drawTurretBase(ctx);
   if (partner) drawPlayer(ctx, partner);
   drawPlayer(ctx, player);
 
@@ -5862,6 +6220,11 @@ function syncOptionsUI() {
 function buildHelpPanel() {
   const bombKeys = MOBILE_PERF ? 'Bomb button / double-tap bottom-center' : 'B or Shift';
   helpBody.innerHTML = `
+    <h3>Game Modes</h3>
+    <div class="help-row"><span>Classic</span><span>The full twin-stick survival loop: waves, modifiers, wells, and a boss every ${BOSS_INTERVAL} waves.</span></div>
+    <div class="help-row"><span>Turret</span><span>Your ship is locked at the arena core. Aim and fire outward; geoms and pickups fly to you. Fire rate and spread are boosted and the shield slowly regenerates.</span></div>
+    <div class="help-row"><span>Pacifism</span><span>No firing, no bombs. Fly through the yellow gates to detonate every shape near them. Gates are your only weapon - chain them for geoms.</span></div>
+    <div class="help-row"><span>Boss Rush</span><span>Every wave is a boss with minion storms. Each kill grants an upgrade pick and the next boss arrives bigger.</span></div>
     <h3>The Loop</h3>
     <div class="help-row"><span>Geoms</span><span>Kills drop green geoms. Collect them to raise the score multiplier. Death resets it.</span></div>
     <div class="help-row"><span>Spawns</span><span>Enemies flash in harmless for a moment - reposition while they materialize.</span></div>
@@ -5889,13 +6252,16 @@ function fmtRunTime(sec) {
 
 function fillStatsGrid() {
   const accuracy = stats.shots > 0 ? Math.round(stats.hits / stats.shots * 100) : 0;
+  const mode = rm();
+  const thirdStat = mode === 'pacifism' ? [String(stats.gates || 0), 'Gates Detonated'] : [accuracy + '%', 'Accuracy'];
+  const waveStat = mode === 'bossrush' ? ['B' + String(wave).padStart(2, '0'), 'Bosses Reached'] : ['W' + String(wave).padStart(2, '0'), 'Wave Reached'];
   statsGrid.innerHTML = [
     [fmtRunTime(stats.runTime), 'Time Survived'],
     ['x' + Math.floor(stats.maxMult), 'Max Multiplier'],
-    [accuracy + '%', 'Accuracy'],
+    thirdStat,
     [String(kills), 'Enemies Killed'],
     ['x' + bestCombo, 'Best Combo'],
-    ['W' + String(wave).padStart(2, '0'), 'Wave Reached']
+    waveStat
   ].map(([v, l]) => `<div><b>${v}</b><small>${l}</small></div>`).join('');
 }
 
@@ -5960,9 +6326,9 @@ bombButton.addEventListener('click', e => {
 autoModeBtn.addEventListener('click', () => setControlMode('auto'));
 dualModeBtn.addEventListener('click', () => setControlMode('dual'));
 mouseModeBtn.addEventListener('click', () => setControlMode('mouse'));
+for (const [modeKey, btn] of Object.entries(modeButtons)) btn.addEventListener('click', () => setRunMode(modeKey));
 scoresBtn.addEventListener('click', () => showOverlay('scores'));
-soloScoresBtn.addEventListener('click', () => setScoreMode('solo', true));
-multiScoresBtn.addEventListener('click', () => setScoreMode('multiplayer', true));
+for (const [boardKey, btn] of Object.entries(scoreModeButtons)) btn.addEventListener('click', () => setScoreMode(boardKey, true));
 scoreBackBtn.addEventListener('click', () => showOverlay('menu'));
 onlineBtn.addEventListener('click', () => showOverlay('online'));
 document.getElementById('backOnline').addEventListener('click', () => showOverlay('menu'));
@@ -6068,9 +6434,16 @@ window.__neon = {
   stopDemo,
   applySettings,
   settings: () => ({ ...settings }),
-  state: () => ({ running, demo, menuState, gameMode, score, waveScore, multiplier, wave, kills, combo, bestCombo, bombs, lives, activeModifier, waveBreather, geoms: geoms.length, online: { ...online, ws: !!online.ws }, enemies: enemies.length, spawnWarnings: spawnWarnings.length, shots: shots.length, fps: fpsDisplay })
+  setRunMode,
+  state: () => ({ running, demo, menuState, gameMode, runMode, rulesMode: rm(), score, waveScore, multiplier, wave, kills, combo, bestCombo, bombs, lives, activeModifier, waveBreather, bossDown, geoms: geoms.length, gates: gates.length, gatesCleared: stats.gates || 0, gatesPos: gates.map(g => ({ x: Math.round(g.x), y: Math.round(g.y) })), camera: { x: Math.round(camera.x), y: Math.round(camera.y) }, player: player ? { x: Math.round(player.x), y: Math.round(player.y), hp: Math.round(player.hp) } : null, online: { ...online, ws: !!online.ws }, enemies: enemies.length, spawnWarnings: spawnWarnings.length, shots: shots.length, fps: fpsDisplay })
 };
-if (new URLSearchParams(location.search).get('autostart') === '1') {
+const bootParams = new URLSearchParams(location.search);
+const bootMode = bootParams.get('mode');
+if (RUN_MODES[bootMode]) {
+  runMode = bootMode;
+  localStorage.setItem(MODE_KEY, runMode);
+}
+if (bootParams.get('autostart') === '1') {
   startSolo();
 } else if (location.hash === '#scores') {
   showOverlay('scores');
