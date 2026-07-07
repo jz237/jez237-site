@@ -1,0 +1,16 @@
+{
+  "name": "Turrican II — The Final Fight (Tribute)",
+  "short_name": "Turrican II",
+  "description": "Enhanced browser tribute to the 1991 Amiga run-and-gun classic. 5 worlds, 11 stages, 6 bosses.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#05030f",
+  "theme_color": "#05030f",
+  "icons": [
+    { "src": "assets/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
