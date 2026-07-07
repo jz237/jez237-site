@@ -509,7 +509,16 @@
     for (let e = 0; e < enemyCount; e++) {
       const x = 14 + Math.floor(rnd() * (cols - 24));
       const [type, skin] = pickRoster(rnd, world.id);
-      if (type === 'flyer' || type === 'drifter' || type === 'eel') {
+      if (type === 'eel' && world.water) {
+        // eels swim: drop them into the flooded depths, not the sky
+        if (x < arenaStart - 2) {
+          let ey = -1;
+          for (let yy = waterY; yy < rows - 1; yy++)
+            if (tiles[yy * cols + x] === T.WATER) { ey = yy; break; }
+          if (ey > 0) entities.push({ type, skin, tx: x, ty: ey });
+          else entities.push({ type, skin, tx: x, ty: 3 + Math.floor(rnd() * 8) });
+        }
+      } else if (type === 'flyer' || type === 'drifter' || type === 'eel') {
         if (x < arenaStart - 2) entities.push({ type, skin, tx: x, ty: 3 + Math.floor(rnd() * 8) });
       } else if (type === 'spinner') {
         addOnSurface(x, type, skin, 4);                  // orbits above the ground

@@ -233,7 +233,7 @@
       if (!ctx || !musicGain) return;
       const g = musicGain.gain;
       g.cancelScheduledValues(ctx.currentTime);
-      g.setValueAtTime(Math.max(0.02, musicBase * amount), ctx.currentTime);
+      g.setValueAtTime(musicBase * amount, ctx.currentTime); // respects a 0 slider
       g.setTargetAtTime(musicBase, ctx.currentTime + (secs || 0.25), 0.3);
     }
 
@@ -261,15 +261,17 @@
       const lines = VO_LINES[name]; if (!lines) return;
       const now = (typeof performance !== 'undefined' ? performance.now() : Date.now());
       if (!priority && now - lastVoiceAt < 1600) return;
-      if (priority && curVoice && !curVoice.paused) { try { curVoice.pause(); } catch (e) {} }
-      else if (curVoice && !curVoice.paused && !priority) return;
+      const busy = curVoice && !curVoice.paused && !curVoice.ended;
+      if (priority && busy) { try { curVoice.pause(); } catch (e) {} }
+      else if (busy && !priority && now - lastVoiceAt < 8000) return; // 8s failsafe vs stuck elements
       let i = Math.floor(Math.random() * lines.length);
       if (lines.length > 1 && i === lastVoiceIdx[name]) i = (i + 1) % lines.length;
       lastVoiceIdx[name] = i;
       lastVoiceAt = now;
       const a = new Audio(`assets/audio/vo-${name}-${i}.mp3`);
       a.volume = voiceVol;
-      a.play().catch(() => {});
+      a.onerror = () => { if (curVoice === a) curVoice = null; };
+      a.play().catch(() => { if (curVoice === a) curVoice = null; });
       curVoice = a;
       if (toastCb) toastCb(lines[i]);
     }
@@ -277,7 +279,20 @@
     function setVoiceLevel(v) { voiceVol = 0.9 * v; }
     function onVoiceToast(cb) { toastCb = cb; }
 
-    function toggleMute() { muted = !muted; if (muted) stopMusic(); else startMusic(curWorld); return muted; }
+    let wasPlayingBeforeMute = false;
+    function toggleMute() {
+      muted = !muted;
+      if (muted) {
+        wasPlayingBeforeMute = !!schedTimer;
+        stopMusic();
+        if (master) master.gain.value = 0;                    // instant silence incl. tails
+        if (curVoice && !curVoice.paused) { try { curVoice.pause(); } catch (e) {} }
+      } else {
+        if (master) master.gain.value = 0.9;
+        if (wasPlayingBeforeMute) startMusic(curWorld);       // only revive what was playing
+      }
+      return muted;
+    }
     function setMusic(on) { musicOn = on; if (!on) stopMusic(); else startMusic(curWorld); }
     function setSfx(on) { sfxOn = on; }
     function setLevels(music, sfx) {

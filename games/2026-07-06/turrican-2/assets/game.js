@@ -415,6 +415,14 @@
 
   // auto-pause when the window loses focus (keys are also released by input.js)
   window.addEventListener('blur', () => { if (mode === 'playing') mode = 'paused'; });
+  // hidden tabs throttle timers to 1s > the music lookahead — silence cleanly
+  // instead of bursting stacked notes, and resume on return
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { audio.stopMusic(); }
+    else if (!audio.muted && (mode === 'playing' || mode === 'paused' || mode === 'intro')) {
+      audio.startMusic(state && state.boss && state.boss.awake && state.boss.alive ? 'boss' : (state ? state.level.world : 'title'));
+    } else if (!audio.muted && mode === 'title') audio.startMusic('title');
+  });
 
   // unlock WebAudio inside a real user gesture (iOS/Safari requirement)
   const unlockAudio = () => {
