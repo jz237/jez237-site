@@ -42,6 +42,11 @@
 /stock-market/assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# dev source of the stock app is deployed alongside the site; keep it out
+# of search indexes (the built app at /stock-market/ is the canonical page)
+/stock-market-src/*
+  X-Robots-Tag: noindex
+
 /stock-market/stock-live-refresh.js
   Cache-Control: no-cache, must-revalidate
 
