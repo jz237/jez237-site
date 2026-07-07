@@ -21,6 +21,7 @@
     const stars = [];
     const particles = [];
     let flash = 0;
+    let hurtFlash = 0;   // red damage vignette
     let banner = null; // { text, sub, t }
     // painted boss sprites (lazy-loaded per key; procedural body is the fallback)
     const bossImg = {};
@@ -181,13 +182,35 @@
     function consumeEvents(events) {
       for (const e of events) {
         if (e.type === 'explosion') {
-          burst(e.x, e.y, 22, '#ffce54', 220, 0.55, 3.2);
-          burst(e.x, e.y, 12, '#ff6b3b', 150, 0.7, 4);
-          particles.push({ ring: true, x: e.x, y: e.y, r: 2, vr: 260, life: 0.4, max: 0.4, color: '#ffe9a8' });
+          // bright core flash
+          particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: 0.12, max: 0.12, color: '#fffdf0', size: 11, g: 0 });
+          // layered fireball
+          burst(e.x, e.y, 20, '#ffe27a', 200, 0.5, 3.4);
+          burst(e.x, e.y, 16, '#ff8a3b', 150, 0.62, 4.2);
+          burst(e.x, e.y, 10, '#ff4d2e', 110, 0.75, 4.6);
+          // flying debris shards (dark, gravity)
+          for (let i = 0; i < 8; i++) { const a = Math.random() * 7, v = 120 + Math.random() * 130;
+            particles.push({ x: e.x, y: e.y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 40,
+              life: 0.6 + Math.random() * 0.3, max: 0.9, color: '#3a2418', size: 1.6 + Math.random() * 1.4, g: 320 }); }
+          // lingering smoke puffs
+          for (let i = 0; i < 5; i++) particles.push({ x: e.x + (Math.random() - 0.5) * 14, y: e.y + (Math.random() - 0.5) * 14,
+            vx: (Math.random() - 0.5) * 30, vy: -18 - Math.random() * 22, life: 0.7 + Math.random() * 0.4, max: 1.1,
+            color: 'rgba(90,80,75,0.5)', size: 6 + Math.random() * 4, g: -8 });
+          // double shockwave ring
+          particles.push({ ring: true, x: e.x, y: e.y, r: 2, vr: 300, life: 0.35, max: 0.35, color: '#ffe9a8' });
+          particles.push({ ring: true, x: e.x, y: e.y, r: 1, vr: 180, life: 0.5, max: 0.5, color: 'rgba(255,140,60,0.6)' });
         } else if (e.type === 'muzzle') {
-          burst(e.x, e.y, 4, e.color || '#ffd23f', 120, 0.14, 2.4);
+          // star-shaped flash + a couple sparks in the fire direction
+          particles.push({ x: e.x, y: e.y, vx: 0, vy: 0, life: 0.09, max: 0.09, color: e.color || '#fff6c0', size: 6, g: 0 });
+          burst(e.x, e.y, 4, e.color || '#ffd23f', 150, 0.14, 2.2);
         } else if (e.type === 'spark') {
-          burst(e.x, e.y, 5, '#bfefff', 140, 0.22, 1.8);
+          burst(e.x, e.y, 6, '#eaffff', 160, 0.24, 1.9);
+          particles.push({ ring: true, x: e.x, y: e.y, r: 1, vr: 90, life: 0.16, max: 0.16, color: '#bfefff' });
+        } else if (e.type === 'pickup') {
+          burst(e.x, e.y, 9, e.color || '#9be6ff', 130, 0.4, 2.2);
+          particles.push({ ring: true, x: e.x, y: e.y, r: 2, vr: 140, life: 0.35, max: 0.35, color: e.color || '#9be6ff' });
+        } else if (e.type === 'hurt') {
+          hurtFlash = 1;
         } else if (e.type === 'flash') {
           flash = 1;
         } else if (e.type === 'banner') {
@@ -222,6 +245,7 @@
       }
       for (let i = particles.length - 1; i >= 0; i--) if (particles[i].life <= 0) particles.splice(i, 1);
       if (flash > 0) flash -= dt * 3;
+      if (hurtFlash > 0) hurtFlash -= dt * 2.2;
       if (banner) { banner.t -= dt; if (banner.t <= 0) banner = null; }
     }
 
@@ -1000,9 +1024,20 @@
     }
 
     function drawShots(s, cam) {
-      // player shots
+      // player shots with a glowing additive tracer trail (bloom amplifies it)
       for (const b of s.pshots) {
         const sx = b.x - cam.x, sy = b.y - cam.y;
+        const tlx = -(b.vx || 0) * 0.02, tly = -(b.vy || 0) * 0.02; // short trail opposite velocity
+        bx.save();
+        bx.globalCompositeOperation = 'lighter';
+        if (b.kind === 'bounce') {
+          bx.strokeStyle = 'rgba(255,122,217,0.5)'; bx.lineWidth = 3; bx.lineCap = 'round';
+          bx.beginPath(); bx.moveTo(sx + 4, sy + 4); bx.lineTo(sx + 4 + tlx, sy + 4 + tly); bx.stroke();
+        } else {
+          bx.strokeStyle = 'rgba(255,210,63,0.5)'; bx.lineWidth = b.h + 2; bx.lineCap = 'round';
+          bx.beginPath(); bx.moveTo(sx + b.w / 2, sy + b.h / 2); bx.lineTo(sx + b.w / 2 + tlx, sy + b.h / 2 + tly); bx.stroke();
+        }
+        bx.restore();
         bx.save(); bx.shadowBlur = 8;
         if (b.kind === 'bounce') { bx.shadowColor = '#ff7ad9'; bx.fillStyle = '#ffb3ec';
           bx.beginPath(); bx.arc(sx + 4, sy + 4, 4, 0, 7); bx.fill(); }
@@ -1424,6 +1459,13 @@
 
       if (s.freeze > 0) { bx.fillStyle = 'rgba(120,200,255,0.08)'; bx.fillRect(0, 0, VIEW_W, VIEW_H); }
       if (flash > 0) { bx.fillStyle = `rgba(255,255,255,${flash * 0.6})`; bx.fillRect(0, 0, VIEW_W, VIEW_H); }
+      // red damage vignette from the screen edges when the player is hit
+      if (hurtFlash > 0) {
+        const hv = bx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.35, VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.72);
+        hv.addColorStop(0, 'rgba(255,20,40,0)');
+        hv.addColorStop(1, `rgba(255,20,40,${(Math.min(1, hurtFlash) * 0.5).toFixed(3)})`);
+        bx.fillStyle = hv; bx.fillRect(0, 0, VIEW_W, VIEW_H);
+      }
       // alien ship: heartbeat-synced pulsing glow (SPEC §5)
       if (level.world === 5) {
         const hb = Math.pow(Math.max(0, Math.sin(performance.now() / 1000 * 3.2)), 14) * 0.09;
