@@ -174,7 +174,7 @@
         <li>Desktop: <strong>click</strong> to fire &mdash; <strong>Enter</strong> starts, <strong>P</strong>/<strong>Esc</strong> pauses</li>
       </ul>
       <div class="row">
-        <span class="tiny">First tap unlocks sound. &middot; v2.1.0</span>
+        <span class="tiny">First tap unlocks sound. &middot; v2.2.0</span>
         <div class="row" style="margin-top:0">
           <button class="ghost" id="titleScoresBtn">High Scores</button>
           <button class="ghost" id="titleOptionsBtn">Options</button>
@@ -245,7 +245,7 @@
 
 <div id="mcCrt" style="position:fixed;inset:0;z-index:60;pointer-events:none;display:none;background:repeating-linear-gradient(0deg,rgba(0,0,0,0) 0px,rgba(0,0,0,0) 2px,rgba(0,0,0,0.22) 3px,rgba(0,0,0,0) 4px);mix-blend-mode:multiply;"></div>
 <div id="mcToast" style="position:fixed;left:50%;bottom:16%;transform:translateX(-50%);z-index:61;pointer-events:none;color:#bfe4ff;font-family:monospace;font-size:clamp(0.8rem,2.5vw,1.1rem);letter-spacing:0.12em;text-shadow:0 0 12px rgba(80,170,255,0.9);opacity:0;transition:opacity 0.25s;text-align:center;padding:0 1em;"></div>
-<div id="mcVersion" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v2.1.0</div>
+<div id="mcVersion" style="position:fixed;right:8px;bottom:6px;z-index:60;color:#7f97b8;font:11px monospace;pointer-events:none;">v2.2.0</div>
 
 <script>
 (() => {
@@ -460,7 +460,7 @@ function mcApplyAudio(){
   if(mcMusic)mcMusic.volume=(mcSet.master/100)*(mcSet.music/100)*0.9;
 }
 function mcStartMusic(){mcInitMedia();if(mcMusic){mcApplyAudio();mcMusic.play().catch(()=>{});}}
-const MC_VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-wave-2':'MULTIPLE CONTACTS ON RADAR','vo-wave-3':'WEAPONS FREE','vo-city-lost':'CITY LOST','vo-city-lost-2':'CITY DOWN — TIGHTEN THE NET','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED','vo-secure-2':'WAVE NEUTRALIZED','vo-secure-3':'ALL CLEAR — REARMING','vo-mirv':'MIRV SEPARATION','vo-mirv-2':'WARHEADS SPLITTING','vo-smart':'SMART WEAPONS — THEY EVADE','vo-bomber':'BOMBER ON APPROACH','vo-ammo-low':'AMMUNITION LOW'};
+const MC_VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-wave-2':'MULTIPLE CONTACTS ON RADAR','vo-wave-3':'WEAPONS FREE','vo-city-lost':'CITY LOST','vo-city-lost-2':'CITY DOWN — TIGHTEN THE NET','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED','vo-secure-2':'WAVE NEUTRALIZED','vo-secure-3':'ALL CLEAR — REARMING','vo-mirv':'MIRV SEPARATION','vo-mirv-2':'WARHEADS SPLITTING','vo-smart':'SMART WEAPONS — THEY EVADE','vo-bomber':'BOMBER ON APPROACH','vo-ammo-low':'AMMUNITION LOW','vo-mirv-storm':'MIRV STORM — SATURATION ATTACK','vo-bomber-squad':'BOMBER SQUADRON INBOUND','vo-blackout':'CITY BLACKOUT'};
 // Per-event voice pools: random variant, never the same twice in a row
 const MC_VO_POOLS={wave:['vo-wave','vo-wave-2','vo-wave-3'],secure:['vo-sector-secure','vo-secure-2','vo-secure-3'],cityLost:['vo-city-lost','vo-city-lost-2'],mirv:['vo-mirv','vo-mirv-2']};
 const mcVoLast={};
@@ -683,20 +683,38 @@ function getSkyColors(wave) {
 }
 
 // ============ WAVE SETUP ============
+// v2.2: named milestone waves cycle from wave 8 — MIRV STORM / BOMBER SQUADRON / BLACKOUT
+function getMilestone(wave) {
+  if (wave < 8) return null;
+  const m = (wave - 8) % 6;
+  if (m === 0) return 'mirvstorm';
+  if (m === 2) return 'bombersquad';
+  if (m === 4) return 'blackout';
+  return null;
+}
 function getWaveConfig(wave) {
   const base = 6 + wave * 2;
   const count = Math.min(base, 40);
-  const speed = 40 + wave * 4;
-  const mirvChance = wave >= 3 ? Math.min(0.3, (wave - 2) * 0.08) : 0;
-  const smartChance = wave >= 5 ? Math.min(0.25, (wave - 4) * 0.06) : 0;
-  const bomberCount = wave >= 5 ? Math.min(3, Math.floor((wave - 4) / 2) + 1) : 0;
-  return { count, speed: speed * mcDiffMul(), mirvChance, smartChance, bomberCount };
+  let speed = 40 + wave * 4;
+  let mirvChance = wave >= 3 ? Math.min(0.3, (wave - 2) * 0.08) : 0;
+  let smartChance = wave >= 5 ? Math.min(0.25, (wave - 4) * 0.06) : 0;
+  let bomberCount = wave >= 5 ? Math.min(3, Math.floor((wave - 4) / 2) + 1) : 0;
+  const milestone = getMilestone(wave);
+  if (milestone === 'mirvstorm') mirvChance = 0.55;
+  else if (milestone === 'bombersquad') bomberCount += 3;
+  else if (milestone === 'blackout') speed *= 1.08;
+  return { count, speed: speed * mcDiffMul(), mirvChance, smartChance, bomberCount, milestone };
 }
 
 function startWave() {
   S.wavePhase = 'intro';
   mcVoFlags.mirv=false;mcVoFlags.smart=false;mcVoFlags.bomber=false;mcVoFlags.ammoLow=false;
-  if (S.wave === 1) announce('vo-incoming', true); else announce('wave');
+  const ms = getMilestone(S.wave);
+  if (S.wave === 1) announce('vo-incoming', true);
+  else if (ms === 'mirvstorm') playVoice('vo-mirv-storm', true);
+  else if (ms === 'bombersquad') playVoice('vo-bomber-squad', true);
+  else if (ms === 'blackout') playVoice('vo-blackout', true);
+  else announce('wave');
   mcStartMusic();
   mc3PrevCities = S.buildings.filter(b => b.alive).length;
   S.waveTimer = 2.5;
@@ -710,12 +728,17 @@ function startWave() {
   S.bombers = [];
   S.trailPoints = [];
   resetWaveBatteries();
-  waveText.textContent = `WAVE ${S.wave}`;
-  const cfg2 = getWaveConfig(S.wave);
-  const hints = [];
-  if (S.wave >= 3) hints.push('MIRVs incoming');
-  if (S.wave >= 5) hints.push('Smart missiles & bombers');
-  waveSubtext.textContent = hints.join(' | ');
+  S.milestone = cfg.milestone || null;
+  if (S.milestone === 'mirvstorm') { waveText.textContent = 'MIRV STORM'; waveSubtext.textContent = `Wave ${S.wave} — saturation attack, track every split`; }
+  else if (S.milestone === 'bombersquad') { waveText.textContent = 'BOMBER SQUADRON'; waveSubtext.textContent = `Wave ${S.wave} — heavy air presence`; }
+  else if (S.milestone === 'blackout') { waveText.textContent = 'BLACKOUT'; waveSubtext.textContent = `Wave ${S.wave} — the city goes dark`; }
+  else {
+    waveText.textContent = `WAVE ${S.wave}`;
+    const hints = [];
+    if (S.wave >= 3) hints.push('MIRVs incoming');
+    if (S.wave >= 5) hints.push('Smart missiles & bombers');
+    waveSubtext.textContent = hints.join(' | ');
+  }
   waveOverlay.classList.remove('hidden');
   if (audio) audio.setDrone(S.wave);
 }
@@ -1384,6 +1407,14 @@ function draw() {
   }
 
   ctx.globalAlpha = 1;
+
+  // v2.2: BLACKOUT milestone — the city goes dark, only fire lights the sky
+  if (S.milestone === 'blackout' && S.playing) {
+    ctx.globalAlpha = 0.38;
+    ctx.fillStyle = '#020412';
+    ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = 1;
+  }
 
   // Flash overlay
   if (S.flash > 0) {

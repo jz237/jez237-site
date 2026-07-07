@@ -65,7 +65,7 @@ body.touch #mControls.on{display:block;}
 <body>
 <canvas id="gc"></canvas>
 <div id="hud"><span id="scoreDisp">0</span><span id="livesDisp"></span><span id="levelDisp">LV 1</span></div>
-<div id="versionBadge">v4.1.0</div>
+<div id="versionBadge">v4.2.0</div>
 <div id="crt"></div>
 <div id="voiceToast"></div>
 <div id="mControls"></div>
@@ -266,7 +266,7 @@ function playVoice(name,priority){
     showToast(VOICE_TEXT[name]||'');
   }catch(e){}
 }
-const VOICE_TEXT={'vo-wave-cleared':'WAVE CLEARED','vo-wave-cleared-2':'SECTOR CLEAR','vo-wave-cleared-3':'ALL ROCKS VAPORIZED','vo-ufo-warning':'HOSTILE SAUCER INBOUND','vo-ufo-down':'SAUCER DESTROYED','vo-boss-rock':'MASSIVE ASTEROID ON SCOPE','vo-shields':'SHIELDS ONLINE','vo-rapid':'RAPID FIRE ENGAGED','vo-triple':'TRIPLE CANNONS ONLINE','vo-speed':'ENGINES OVERCHARGED','vo-last-ship':'FINAL SHIP — MAKE IT COUNT','vo-high-score':'NEW HIGH SCORE'};
+const VOICE_TEXT={'vo-wave-cleared':'WAVE CLEARED','vo-wave-cleared-2':'SECTOR CLEAR','vo-wave-cleared-3':'ALL ROCKS VAPORIZED','vo-ufo-warning':'HOSTILE SAUCER INBOUND','vo-ufo-down':'SAUCER DESTROYED','vo-boss-rock':'MASSIVE ASTEROID ON SCOPE','vo-shields':'SHIELDS ONLINE','vo-rapid':'RAPID FIRE ENGAGED','vo-triple':'TRIPLE CANNONS ONLINE','vo-speed':'ENGINES OVERCHARGED','vo-last-ship':'FINAL SHIP — MAKE IT COUNT','vo-high-score':'NEW HIGH SCORE','vo-comet':'COMET SHOWER INBOUND','vo-gold':'GOLDEN ASTEROID ON SCOPE','vo-magnet':'MAGNETIC ANOMALY','vo-twin-ufo':'MULTIPLE SAUCERS INBOUND'};
 // Per-event voice pools: random variant, never the same twice in a row
 const VO_POOLS={waveCleared:['vo-wave-cleared','vo-wave-cleared-2','vo-wave-cleared-3']};
 const voLast={};
@@ -564,6 +564,14 @@ let score=0,lives=4,level=1,gameState='attract';
 let invulnTimer=0,shieldTimer=0,rapidTimer=0,tripleTimer=0,speedTimer=0;
 let scorePopups=[];
 let levelAnnounce='',levelAnnounceTimer=0;
+// v4.2: rotating level modifiers from level 6+ — every level has a named threat
+let levelMod=null,levelSubtext='';
+const LEVEL_MODS=[
+  {key:'comet', label:'COMET SHOWER',    vo:'vo-comet'},
+  {key:'gold',  label:'GOLDEN ASTEROID', vo:'vo-gold'},
+  {key:'magnet',label:'MAGNETIC ANOMALY',vo:'vo-magnet'},
+  {key:'twinufo',label:'SAUCER PATROL',  vo:'vo-twin-ufo'},
+];
 let screenFlash=0;
 let fireRate=0.1,fireCooldown=0;
 let ufoSpawnTimer=0,ufoSoundTimer=0;
@@ -624,6 +632,29 @@ function spawnLevel(){
   const count=Math.max(2,Math.min(3+level+diff().extra,13));
   for(let i=0;i<count;i++){spawnAsteroid('large');}
   ufoSpawnTimer=level>=3?rand(8,15)/diff().ufo:9999;
+
+  // v4.2: named level modifier (level 6+, non-boss levels)
+  levelMod=null;levelSubtext='';
+  if(level>=6&&level%5!==0&&gameState!=='attract'){
+    const mod=LEVEL_MODS[(level-6)%LEVEL_MODS.length];
+    levelMod=mod.key;levelSubtext=mod.label;
+    if(mod.key==='comet'){
+      for(let i=0;i<5;i++){
+        const c=spawnAsteroid('small');
+        c.vx*=2.3;c.vy*=2.3;c.rotV*=2;
+        c.palette=['#0a4a5a','#0e7490','#22d3ee','#a5f3fc'];
+      }
+    }else if(mod.key==='gold'){
+      const g=spawnAsteroid('medium');
+      g.golden=true;g.hp=2;
+      g.palette=['#7a5c00','#b8860b','#ffd700','#fff3b0'];
+    }else if(mod.key==='twinufo'){
+      ufoSpawnTimer=rand(3,6);
+    }
+    setTimeout(()=>{if(gameState==='play')playVoice(mod.vo,true);},1500);
+  }else if(level%5===0&&gameState!=='attract'){
+    levelSubtext='BOSS ROCK';
+  }
 }
 
 function spawnAsteroid(size,x,y){
@@ -1111,6 +1142,18 @@ function update(dt){
 
   // Asteroids
   for(const a of asteroids){
+    // v4.2 modifiers: magnetic rocks curve toward the ship; golden asteroids flee it
+    if(ship&&gameState==='play'){
+      if(levelMod==='magnet'&&!a.golden){
+        const dx=ship.x-a.x,dy=ship.y-a.y,d=Math.hypot(dx,dy)||1;
+        if(d<560){a.vx+=(dx/d)*34*dt;a.vy+=(dy/d)*34*dt;}
+      }else if(a.golden){
+        const dx=a.x-ship.x,dy=a.y-ship.y,d=Math.hypot(dx,dy)||1;
+        if(d<320){a.vx+=(dx/d)*90*dt;a.vy+=(dy/d)*90*dt;}
+        const sp=Math.hypot(a.vx,a.vy),cap=170;
+        if(sp>cap){a.vx*=cap/sp;a.vy*=cap/sp;}
+      }
+    }
     a.x+=a.vx*dt;a.y+=a.vy*dt;a.rot+=a.rotV*dt;
     a.rotX+=a.rotXV*dt;a.rotY+=a.rotYV*dt;
     wrap(a);
@@ -1280,18 +1323,18 @@ function update(dt){
   // Level complete check
   if(asteroids.length===0&&ufos.length===0&&gameState==='play'){
     level++;announceLevel();announce('waveCleared');
-    if(level===5){
-      // Boss level
+    if(level%5===0){
+      // v4.2: boss rock every 5th level, scaling up each time
       spawnLevel();
       spawnAsteroid('large');// extra
+      const bossHp=5+Math.floor(level/5-1)*3;
       const bx=rand(0,W),by=rand(0,H);
-      const pal=astPalettes[Math.floor(rand(0,astPalettes.length))];
       asteroids.push({x:bx<W/2?W+80:-80,y:rand(50,H-50),vx:rand(-30,30),vy:rand(-30,30),
         size:'boss',radius:80,shape:makeAstShape(80,16),rot:0,rotV:rand(-1,1),
         rotX:rand(0,6.28),rotY:rand(0,6.28),rotXV:rand(-1,1),rotYV:rand(-0.8,0.8),
         craters:makeCraters(80,7),
         mesh:makeAsteroidMesh(80,15,7),
-        palette:['#880000','#aa2222','#cc4444','#ff6666'],hp:5,mass:140});
+        palette:['#880000','#aa2222','#cc4444','#ff6666'],hp:bossHp,mass:140});
       playVoice('vo-boss-rock',true);
     } else {
       spawnLevel();
@@ -1352,7 +1395,13 @@ function update(dt){
 
 function destroyAsteroid(a,ai){
   asteroids.splice(ai,1);
-  const pts=a.size==='large'?20:a.size==='medium'?50:a.size==='boss'?200:100;
+  let pts=a.size==='large'?20:a.size==='medium'?50:a.size==='boss'?200:100;
+  if(a.golden){
+    pts+=500;
+    scorePopups.push({x:a.x,y:a.y-24,text:'GOLD +500',life:1.4,maxLife:1.4,vy:-35,color:'#ffd700',size:20});
+    const types=['shield','rapid','triple','speed'];
+    powerups.push({x:a.x,y:a.y,vx:rand(-8,8),vy:rand(-8,8),life:12,type:types[Math.floor(rand(0,types.length))]});
+  }
   score+=pts;
   // Floating score popup
   scorePopups.push({x:a.x,y:a.y,text:'+'+pts,life:1.2,maxLife:1.2,vy:-40,color:a.palette[2]||'#fff',size:pts>=200?22:pts>=100?18:pts>=50?15:12});
@@ -1600,6 +1649,14 @@ function draw(){
     ctx.shadowColor='#4488ff';ctx.shadowBlur=30;
     ctx.fillText(levelAnnounce,W/2,H/2);
     ctx.shadowBlur=0;
+    // v4.2: named modifier subtitle
+    if(levelSubtext){
+      ctx.font=`bold ${Math.min(W*0.045,26)}px monospace`;
+      ctx.fillStyle='#ffcf4d';
+      ctx.shadowColor='#ffaa00';ctx.shadowBlur=16;
+      ctx.fillText(levelSubtext,W/2,H/2+Math.min(W*0.09,58));
+      ctx.shadowBlur=0;
+    }
     ctx.globalAlpha=1;
   }
 
