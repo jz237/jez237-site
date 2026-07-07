@@ -241,7 +241,7 @@
         });
       }
       emit(s, 'muzzle', muzzleX, muzzleY, { color: w.color });
-      emit(s, 'sfx', 0, 0, { name: 'shoot' });
+      emit(s, 'sfx', 0, 0, { name: 'shootb' }); // bounce has its own report
     }
   }
 

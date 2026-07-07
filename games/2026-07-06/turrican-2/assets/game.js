@@ -137,6 +137,7 @@
     uiT += dt;
 
     const inp = input.frame();
+    perfWatch(dt);
     // global keys
     if (inp.mutePressed) audio.toggleMute();
 
@@ -277,6 +278,36 @@
   }
   function drawTitle() {
     bgPanel();
+    // living backdrop: starfield + drifting desert mesas + sweeping searchlight
+    dx.save();
+    for (let i = 0; i < 60; i++) {
+      const sx = ((i * 179 + uiT * (6 + (i % 5) * 4)) % (DW + 20)) - 10;
+      const sy = (i * 97) % (DH * 0.7);
+      dx.globalAlpha = 0.25 + (i % 4) * 0.12;
+      dx.fillStyle = '#cfe0ff';
+      dx.fillRect(DW - sx, sy, 1.6, 1.6);
+    }
+    const mesa = (scroll, baseY, amp, color, alpha) => {
+      dx.globalAlpha = alpha; dx.fillStyle = color;
+      dx.beginPath(); dx.moveTo(-2, DH);
+      for (let x = -8; x <= DW + 8; x += 8) {
+        const wc = x + scroll;
+        const n = Math.sin(wc * 0.004) + Math.sin(wc * 0.0017) * 0.7;
+        dx.lineTo(x, baseY - (Math.round(n * 1.6) / 1.6) * amp);
+      }
+      dx.lineTo(DW + 2, DH); dx.closePath(); dx.fill();
+    };
+    mesa(uiT * 6, DH * 0.86, 46, '#131033', 0.9);
+    mesa(uiT * 14, DH * 0.95, 56, '#1b1440', 0.95);
+    // searchlight sweep
+    const beamA = Math.sin(uiT * 0.35) * 0.9;
+    const bx0 = DW * 0.5 + Math.sin(uiT * 0.35) * DW * 0.3;
+    const grad = dx.createLinearGradient(bx0, DH, bx0 + beamA * 200, 0);
+    grad.addColorStop(0, 'rgba(108,243,255,0.06)'); grad.addColorStop(1, 'rgba(108,243,255,0)');
+    dx.fillStyle = grad;
+    dx.beginPath(); dx.moveTo(bx0 - 30, DH); dx.lineTo(bx0 + beamA * 200 - 90, 0);
+    dx.lineTo(bx0 + beamA * 200 + 90, 0); dx.lineTo(bx0 + 30, DH); dx.closePath(); dx.fill();
+    dx.restore();
     // animated scanline grid
     dx.strokeStyle = 'rgba(120,90,255,0.10)'; dx.lineWidth = 1;
     for (let y = (uiT * 40) % 40; y < DH; y += 40) { dx.beginPath(); dx.moveTo(0, y); dx.lineTo(DW, y); dx.stroke(); }
@@ -389,6 +420,15 @@
     centerText(state.level.name, DW / 2, DH / 2 + 14, 26, '#ffd23f', '900');
     dx.shadowBlur = 0;
     centerText(state.level.type === 'shmup' ? '— ON-RAILS ASSAULT —' : state.level.theme, DW / 2, DH / 2 + 52, 13, 'rgba(200,210,255,0.75)', 'normal');
+    // campaign progress: one pip per stage
+    const dotW = 16;
+    const x0 = DW / 2 - (PLAN.length - 1) * dotW / 2;
+    for (let i = 0; i < PLAN.length; i++) {
+      dx.beginPath();
+      dx.arc(x0 + i * dotW, DH / 2 + 72, i === planIdx ? 4.5 : 3, 0, 7);
+      dx.fillStyle = i < planIdx ? '#54e36b' : i === planIdx ? '#ffd23f' : 'rgba(160,180,220,0.35)';
+      dx.fill();
+    }
     dx.restore();
   }
 
@@ -483,6 +523,26 @@
       morph: p.morph, enemies: state.enemies.filter(e => e.alive).length, won: state.won, gameOver: state.gameOver,
       boss: state.boss ? { key: state.boss.key, hp: Math.round(state.boss.hp), awake: state.boss.awake,
         open: state.boss.open, phase: state.boss.phase, alive: state.boss.alive } : null };
+  }
+
+  // installable PWA: offline cache + home-screen app (Android)
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // adaptive quality: sustained slow frames -> drop DPR + heavy FX (one-way)
+  let perfEma = 16, perfSlowT = 0, perfDropped = false;
+  function perfWatch(dt) {
+    if (mode !== 'playing' || perfDropped) return;
+    perfEma = perfEma * 0.95 + dt * 1000 * 0.05;
+    perfSlowT = perfEma > 24 ? perfSlowT + dt : 0;
+    if (perfSlowT > 3) {
+      perfDropped = true;
+      display.width = DW; display.height = DH;               // DPR 1
+      dx.setTransform(1, 0, 0, 1, 0, 0);
+      renderer.setFX(false);
+      console.log('[Turrican II] slow device: dropped to performance mode');
+    }
   }
 
   applySettings();

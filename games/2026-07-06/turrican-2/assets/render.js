@@ -1195,6 +1195,7 @@
 
     // ---- per-world ambient particles ---------------------------------------
     function spawnAmbient(s) {
+      if (!fx && Math.random() < 0.6) return; // performance mode: thin the ambience
       const w = level.world;
       const cx0 = s.cam.x, cy0 = s.cam.y;
       if (w === 1 && Math.random() < 0.25) {          // wind-blown dust motes
@@ -1282,10 +1283,12 @@
         if (hb > 0.005) { bx.fillStyle = `rgba(178,58,90,${hb.toFixed(3)})`; bx.fillRect(0, 0, VIEW_W, VIEW_H); }
       }
 
-      // vignette + scanlines
-      const vg = bx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.3, VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.8);
-      vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.45)');
-      bx.fillStyle = vg; bx.fillRect(0, 0, VIEW_W, VIEW_H);
+      // vignette (skipped in performance mode)
+      if (fx) {
+        const vg = bx.createRadialGradient(VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.3, VIEW_W / 2, VIEW_H / 2, VIEW_H * 0.8);
+        vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.45)');
+        bx.fillStyle = vg; bx.fillRect(0, 0, VIEW_W, VIEW_H);
+      }
 
       drawHUD(s);
       drawBanner();
@@ -1303,10 +1306,11 @@
       }
     }
 
-    let crt = true;
+    let crt = true, fx = true;
     function setCRT(on) { crt = on; }
+    function setFX(on) { fx = on; } // performance mode: skip vignette + halve ambience
 
-    return { setLevel, render, setCRT, get buffer() { return buf; }, particles };
+    return { setLevel, render, setCRT, setFX, get buffer() { return buf; }, particles };
   }
 
   return { createRenderer };
