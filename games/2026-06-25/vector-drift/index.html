@@ -601,9 +601,15 @@ function frame(ts){
 
 /* ---------- sizing ---------- */
 function resize(){
-  DPR=Math.min(window.devicePixelRatio||1,2);
   W=window.innerWidth; H=window.innerHeight;
-  canvas.width=W*DPR; canvas.height=H*DPR;
+  // Render above the device pixel ratio (supersample) so the vector lines stay
+  // razor-crisp; cap at 3x and back off under a pixel budget to protect fill-rate.
+  const dpr = window.devicePixelRatio || 1;
+  const SS = 1.6, MAX_PIXELS = 9e6;
+  let d = Math.min(dpr * SS, 3);
+  if (W*H*d*d > MAX_PIXELS) d = Math.max(dpr, Math.sqrt(MAX_PIXELS/(W*H)));
+  DPR = d;
+  canvas.width=Math.round(W*DPR); canvas.height=Math.round(H*DPR);
   cx=W/2; cy=H*0.55;
   nearR=Math.min(W,H)*0.37;
 }
