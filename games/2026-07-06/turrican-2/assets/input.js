@@ -119,12 +119,15 @@
       if (on && !touch[action]) tapped[(MAP[action] || [])[0] || action] = true;
       touch[action] = on;
     }
-    // gamepad haptics (best effort)
+    // haptics: gamepad rumble, else phone vibration (best effort)
     function rumble(strength, ms) {
-      if (!pad || !pad.vibrationActuator || !pad.vibrationActuator.playEffect) return;
-      pad.vibrationActuator.playEffect('dual-rumble', {
-        duration: ms, strongMagnitude: strength, weakMagnitude: strength * 0.6,
-      }).catch(() => {});
+      if (pad && pad.vibrationActuator && pad.vibrationActuator.playEffect) {
+        pad.vibrationActuator.playEffect('dual-rumble', {
+          duration: ms, strongMagnitude: strength, weakMagnitude: strength * 0.6,
+        }).catch(() => {});
+      } else if (navigator.vibrate && ('ontouchstart' in window || navigator.maxTouchPoints > 0)) {
+        try { navigator.vibrate(Math.min(200, Math.round(ms * strength))); } catch (e) {}
+      }
     }
     function destroy() {
       (target || window).removeEventListener('keydown', onKeyDown);
