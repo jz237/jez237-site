@@ -69,10 +69,13 @@
       return true;
     }
 
-    function loadBg(src) {
+    let bgToken = 0;
+    function loadBg(src, token) {
       const img = new Image();
-      img.onload = () => { bgImg = img; };
-      img.onerror = () => { bgImg = null; };
+      // only commit if this is still the level's current background — a stale
+      // load from a previous world must not clobber the new one
+      img.onload = () => { if (token === bgToken) bgImg = img; };
+      img.onerror = () => { if (token === bgToken) bgImg = null; };
       img.src = src;
     }
 
@@ -89,7 +92,7 @@
       tileAtlas = buildTileAtlas(lv.world);
       // try a world background image (optional, degrades gracefully)
       bgImg = null;
-      loadBg(`assets/img/world${lv.world}-bg.jpg?v=${D.VERSION}`);
+      loadBg(`assets/img/world${lv.world}-bg.jpg?v=${D.VERSION}`, ++bgToken);
     }
 
     // pre-render 4 base + 4 top-capped tile variants per world (crisp identity
@@ -266,9 +269,61 @@
         bx.restore();
       }
 
+      // volumetric god-ray light shafts (atmosphere; behind the near scenery)
+      drawLightShafts(cam);
       // per-world parallax silhouettes (thinned to a grounding ridge when the
       // painted plate is present, so the art stays the hero)
       drawWorldParallax(cam, art);
+      // drifting fog banks (nearest atmospheric haze)
+      drawFog(cam);
+    }
+
+    // per-world god-ray config: n beams, width, tilt (rad), rgb, base alpha
+    const SHAFTS = {
+      1: { n: 3, w: 80, angle: 0.30, rgb: '255,205,130', a: 0.15 },
+      2: { n: 5, w: 58, angle: 0.12, rgb: '160,245,235', a: 0.20 },
+      3: { n: 2, w: 96, angle: 0.52, rgb: '200,215,255', a: 0.11 },
+      4: { n: 3, w: 66, angle: 0.20, rgb: '255,150,80', a: 0.13 },
+      5: { n: 3, w: 64, angle: 0.15, rgb: '150,220,120', a: 0.15 },
+    };
+    function drawLightShafts(cam) {
+      if (!fx) return;
+      const cfg = SHAFTS[level.world]; if (!cfg) return;
+      const t = performance.now() / 1000;
+      bx.save();
+      bx.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < cfg.n; i++) {
+        const cx = (i + 0.5) / cfg.n * VIEW_W + Math.sin(t * 0.08 + i * 1.7) * 26 - cam.x * 0.04 % VIEW_W;
+        bx.save();
+        bx.translate(cx, VIEW_H * 0.5);
+        bx.rotate(cfg.angle);
+        const g = bx.createLinearGradient(-cfg.w / 2, 0, cfg.w / 2, 0);
+        g.addColorStop(0, `rgba(${cfg.rgb},0)`);
+        g.addColorStop(0.5, `rgba(${cfg.rgb},1)`);
+        g.addColorStop(1, `rgba(${cfg.rgb},0)`);
+        bx.fillStyle = g;
+        bx.globalAlpha = cfg.a * (0.65 + 0.35 * Math.sin(t * 0.5 + i * 2));
+        bx.fillRect(-cfg.w / 2, -VIEW_H, cfg.w, VIEW_H * 2);
+        bx.restore();
+      }
+      bx.restore();
+    }
+    function drawFog(cam) {
+      if (!fx) return;
+      const t = performance.now() / 1000;
+      const rgb = level.world === 2 ? '40,90,90' : level.world === 4 ? '60,50,45'
+        : level.world === 5 ? '40,55,35' : level.world === 1 ? '90,70,50' : '40,45,70';
+      bx.save();
+      for (let i = 0; i < 3; i++) {
+        const bxp = ((i * 0.37 + t * 0.012 + i) % 1) * (VIEW_W + 240) - 120;
+        const by = VIEW_H * (0.55 + i * 0.16);
+        const r = 150 + i * 40;
+        const g = bx.createRadialGradient(bxp, by, 0, bxp, by, r);
+        g.addColorStop(0, `rgba(${rgb},${(0.06 + i * 0.015).toFixed(3)})`);
+        g.addColorStop(1, `rgba(${rgb},0)`);
+        bx.fillStyle = g; bx.fillRect(bxp - r, by - r, r * 2, r * 2);
+      }
+      bx.restore();
     }
 
     function drawWorldParallax(cam, art) {
