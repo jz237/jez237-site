@@ -7,6 +7,8 @@
 
   function createAudio() {
     let ctx = null, master = null, musicGain = null, sfxGain = null;
+    let musicWarmth = null, musicComp = null, musicDelay = null, delaySend = null;
+    let musicBase = 0.34;
     let musicOn = true, sfxOn = true, muted = false;
     let seq = null, seqTimer = null, curWorld = 1;
 
@@ -15,9 +17,87 @@
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return;
       ctx = new AC();
-      master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination);
-      musicGain = ctx.createGain(); musicGain.gain.value = 0.32; musicGain.connect(master);
-      sfxGain = ctx.createGain(); sfxGain.gain.value = 0.5; sfxGain.connect(master);
+      master = ctx.createGain(); master.gain.value = 0.85; master.connect(ctx.destination);
+      // glue/limiter so stacked voices + SFX never clip
+      musicComp = ctx.createDynamicsCompressor();
+      musicComp.threshold.value = -13; musicComp.knee.value = 24; musicComp.ratio.value = 3.2;
+      musicComp.attack.value = 0.004; musicComp.release.value = 0.18;
+      musicComp.connect(master);
+      // music bus: musicGain -> warmth lowpass -> comp, with a tempo-synced delay send
+      musicGain = ctx.createGain(); musicGain.gain.value = musicBase;
+      musicWarmth = ctx.createBiquadFilter(); musicWarmth.type = 'lowpass';
+      musicWarmth.frequency.value = 13000; musicWarmth.Q.value = 0.4;
+      musicGain.connect(musicWarmth); musicWarmth.connect(musicComp);
+      musicDelay = ctx.createDelay(1.0); musicDelay.delayTime.value = 0.28;
+      const dfb = ctx.createGain(); dfb.gain.value = 0.32;
+      delaySend = ctx.createGain(); delaySend.gain.value = 1;
+      delaySend.connect(musicDelay); musicDelay.connect(dfb); dfb.connect(musicDelay);
+      const dwet = ctx.createGain(); dwet.gain.value = 0.5; musicDelay.connect(dwet); dwet.connect(musicComp);
+      sfxGain = ctx.createGain(); sfxGain.gain.value = 0.5; sfxGain.connect(musicComp);
+    }
+
+    // ---- rich subtractive synth voice (detuned osc stack + ADSR + filter env
+    //      + optional vibrato + optional delay send) ------------------------
+    function synth(freq, t, dur, o) {
+      if (!ctx || muted) return;
+      o = o || {};
+      const vol = o.vol != null ? o.vol : 0.2;
+      const a = o.a != null ? o.a : 0.01, d = o.d != null ? o.d : 0.08;
+      const sus = o.s != null ? o.s : 0.6, rel = o.r != null ? o.r : 0.12;
+      const hold = Math.max(a + d, dur);
+      const amp = ctx.createGain(); amp.gain.setValueAtTime(0.0001, t);
+      amp.gain.linearRampToValueAtTime(vol, t + a);
+      amp.gain.linearRampToValueAtTime(Math.max(0.0002, vol * sus), t + a + d);
+      amp.gain.setValueAtTime(Math.max(0.0002, vol * sus), t + hold);
+      amp.gain.exponentialRampToValueAtTime(0.0001, t + hold + rel);
+      const flt = ctx.createBiquadFilter(); flt.type = 'lowpass'; flt.Q.value = o.q || 1;
+      const ff = o.ff || 4000, ft = o.ft != null ? o.ft : ff;
+      flt.frequency.setValueAtTime(ff, t);
+      if (ft !== ff) flt.frequency.exponentialRampToValueAtTime(Math.max(80, ft), t + a + d);
+      amp.connect(flt); flt.connect(o.dest || musicGain);
+      if (o.send && delaySend) { const sg = ctx.createGain(); sg.gain.value = o.send; flt.connect(sg); sg.connect(delaySend); }
+      const voices = o.voices || 1; const oscs = [];
+      for (let v = 0; v < voices; v++) {
+        const osc = ctx.createOscillator(); osc.type = o.type || 'sawtooth';
+        osc.frequency.setValueAtTime(freq, t);
+        if (o.slide) osc.frequency.exponentialRampToValueAtTime(Math.max(20, o.slide), t + dur);
+        osc.detune.setValueAtTime(voices === 1 ? 0 : (v / (voices - 1) - 0.5) * 2 * (o.detune || 8), t);
+        osc.connect(amp); osc.start(t); osc.stop(t + hold + rel + 0.03); oscs.push(osc);
+      }
+      if (o.vib) {
+        const lfo = ctx.createOscillator(); lfo.frequency.value = o.vibRate || 5.5;
+        const lg = ctx.createGain(); lg.gain.value = o.vib; lfo.connect(lg);
+        for (const osc of oscs) lg.connect(osc.detune);
+        lfo.start(t); lfo.stop(t + hold + rel + 0.03);
+      }
+    }
+    function noiseBurst(t, dur, vol, ftype, ffreq, q, dest) {
+      if (!ctx || muted) return;
+      const len = Math.floor(ctx.sampleRate * dur);
+      const buf = ctx.createBuffer(1, len, ctx.sampleRate); const dt = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) dt[i] = (Math.random() * 2 - 1) * (1 - i / len);
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const f = ctx.createBiquadFilter(); f.type = ftype; f.frequency.value = ffreq; if (q) f.Q.value = q;
+      const g = ctx.createGain(); g.gain.value = vol;
+      src.connect(f); f.connect(g); g.connect(dest || musicGain); src.start(t); src.stop(t + dur + 0.02);
+    }
+    // punchy drum kit
+    function drum(ch, t) {
+      if (!ctx || muted) return;
+      if (ch === 'k') {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(165, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.11);
+        g.gain.setValueAtTime(0.95, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+        o.connect(g); g.connect(musicGain); o.start(t); o.stop(t + 0.2);
+        noiseBurst(t, 0.012, 0.3, 'highpass', 3200);
+      } else if (ch === 's') {
+        noiseBurst(t, 0.15, 0.5, 'bandpass', 1800, 1.1);
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = 'triangle'; o.frequency.setValueAtTime(200, t); o.frequency.exponentialRampToValueAtTime(120, t + 0.1);
+        g.gain.setValueAtTime(0.32, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.12);
+        o.connect(g); g.connect(musicGain); o.start(t); o.stop(t + 0.13);
+      } else if (ch === 'h') { noiseBurst(t, 0.03, 0.2, 'highpass', 8500); }
+      else if (ch === 'H') { noiseBurst(t, 0.14, 0.16, 'highpass', 7200); }
     }
     function resume() { ensure(); if (ctx && ctx.state === 'suspended') ctx.resume(); }
 
@@ -156,52 +236,29 @@
 
     let schedTimer = null, curTrack = null, stepIdx = 0, nextTime = 0;
 
-    function playDrum(ch, t) {
-      if (ch === 'k') {
-        blip(120, 0.16, 'sine', 0.4, 38, musicGain, t);
-      } else if (ch === 's') {
-        const nb = noiseAt(0.12, 0.2, 2600, t);
-        blip(220, 0.08, 'triangle', 0.12, 110, musicGain, t);
-      } else if (ch === 'h') {
-        noiseAt(0.04, 0.08, 7000, t);
-      } else if (ch === 'H') {
-        noiseAt(0.14, 0.08, 6500, t);
-      }
-    }
-    function noiseAt(dur, vol, filterFreq, when) {
-      if (!ctx || muted) return;
-      const t0 = when != null ? when : ctx.currentTime;
-      const len = Math.floor(ctx.sampleRate * dur);
-      const buf = ctx.createBuffer(1, len, ctx.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
-      const src = ctx.createBufferSource(); src.buffer = buf;
-      const f = ctx.createBiquadFilter(); f.type = filterFreq > 4000 ? 'highpass' : 'lowpass';
-      f.frequency.value = filterFreq;
-      const g = ctx.createGain(); g.gain.value = vol;
-      src.connect(f); f.connect(g); g.connect(musicGain); src.start(t0);
-    }
-
     function scheduleStep(tr, i, t) {
       const b16 = i % 16;
       const stepDur = 60 / tr.bpm / 4;
-      // bass
+      // bass: saw+sub detuned stack with a punchy filter env
       const bnote = tr.bass[b16];
-      if (bnote != null) blip(n(tr.root / 2, bnote), stepDur * 1.8, tr.bassType, 0.3, null, musicGain, t);
-      // lead (32-step phrase)
+      if (bnote != null) synth(n(tr.root / 2, bnote), t, stepDur * 1.7, {
+        type: tr.bassType || 'sawtooth', voices: 2, detune: 5, vol: 0.34,
+        a: 0.005, d: 0.09, s: 0.5, r: 0.08, ff: 900, ft: 380, q: 3.5 });
+      // lead: 2 detuned voices, vibrato, filter "pluck", delay space
       const lnote = tr.lead[i % tr.lead.length];
-      if (lnote != null) {
-        blip(n(tr.root, lnote), stepDur * 1.4, tr.leadType, 0.14, null, musicGain, t);
-        if (tr.echo) blip(n(tr.root, lnote), stepDur * 1.2, tr.leadType, 0.05, null, musicGain, t + stepDur * 3);
-      }
-      // pad chord (once per bar)
+      if (lnote != null) synth(n(tr.root, lnote), t, stepDur * 1.3, {
+        type: tr.leadType || 'square', voices: 2, detune: 11, vol: 0.2,
+        a: 0.008, d: 0.06, s: 0.62, r: 0.12, ff: 5600, ft: 2500, q: 1.4,
+        vib: tr.leadType === 'sine' ? 0 : 6, vibRate: 5.5, send: tr.echo ? 0.4 : 0.16 });
+      // pad: warm 3-voice bed, once per bar
       if (tr.pad && b16 === 0) {
         const chord = tr.pad[Math.floor(i / 16) % tr.pad.length];
-        for (const c of chord) blip(n(tr.root, c), stepDur * 15, 'triangle', 0.045, null, musicGain, t);
+        for (const c of chord) synth(n(tr.root, c), t, stepDur * 15, {
+          type: 'sawtooth', voices: 3, detune: 13, vol: 0.055,
+          a: 0.35, d: 0.5, s: 0.85, r: 0.7, ff: 2300, ft: 1500, q: 0.6 });
       }
-      // drums
       const ch = tr.drums[b16];
-      if (ch && ch !== '.') playDrum(ch, t);
+      if (ch && ch !== '.') drum(ch, t);
     }
 
     function startMusic(trackId) {
@@ -210,6 +267,8 @@
       stopMusic();
       if (!musicOn || muted) return;
       curTrack = TRACKS[trackId] || TRACKS[1];
+      // tempo-synced dotted-eighth delay for that Amiga "space"
+      if (musicDelay) musicDelay.delayTime.setValueAtTime(Math.min(0.9, (60 / curTrack.bpm) * 0.75), ctx.currentTime);
       stepIdx = 0;
       nextTime = ctx.currentTime + 0.08;
       schedTimer = setInterval(() => {
@@ -229,7 +288,6 @@
     }
 
     // duck music briefly under big impacts
-    let musicBase = 0.32;
     function duck(amount, secs) {
       if (!ctx || !musicGain) return;
       const g = musicGain.gain;
