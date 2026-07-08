@@ -136,6 +136,7 @@
   }
 
   // ---- main loop ----------------------------------------------------------
+  let lastInp = null;   // last merged input frame (keyboard+touch+pad) — QA hook
   function loop(ts) {
     requestAnimationFrame(loop);
     if (!last) last = ts;
@@ -143,6 +144,7 @@
     uiT += dt;
 
     const inp = input.frame();
+    lastInp = inp;
     perfWatch(dt);
     // global keys
     if (inp.mutePressed) audio.toggleMute();
@@ -474,9 +476,9 @@
       el.addEventListener('touchcancel', off, { passive: false });
       el.addEventListener('mousedown', on); el.addEventListener('mouseup', off); el.addEventListener('mouseleave', off);
     };
-    bind('t-left', 'left'); bind('t-right', 'right'); bind('t-up', 'up'); bind('t-down', 'down');
     bind('t-jump', 'jump'); bind('t-fire', 'fire'); bind('t-morph', 'morph'); bind('t-switch', 'switch');
     bind('t-bomb', 'bomb'); bind('t-pause', 'pause');
+    wireJoystick();   // left-hand movement is an analog on-screen stick
     // show touch UI on touch devices
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     if (isTouch) {
@@ -510,7 +512,64 @@
       document.getElementById('stage').addEventListener('contextmenu', (e) => e.preventDefault());
     }
   }
+  // analog virtual joystick for movement — multi-touch aware (own touch id, so
+  // the right-hand action buttons work simultaneously), 8-way with a deadzone.
+  function wireJoystick() {
+    const base = document.getElementById('joystick');
+    const knob = document.getElementById('joyknob');
+    if (!base || !knob) return;
+    const R = 40;        // max knob travel in px
+    const DEAD = 0.28;   // deadzone (fraction of R) before any direction registers
+    const T = 0.38;      // per-axis activation threshold -> gives smooth 8-way
+    let touchId = null, mouseOn = false;
+    const setDirs = (l, r, u, d) => {
+      input.setTouch('left', l); input.setTouch('right', r);
+      input.setTouch('up', u); input.setTouch('down', d);
+    };
+    function reset() {
+      touchId = null; mouseOn = false; base.classList.remove('active');
+      knob.style.transform = 'translate(0px,0px)';
+      setDirs(false, false, false, false);
+    }
+    function update(cx, cy) {
+      const rect = base.getBoundingClientRect();
+      const bx = rect.left + rect.width / 2, by = rect.top + rect.height / 2;
+      const dx = cx - bx, dy = cy - by;
+      const len = Math.hypot(dx, dy) || 1;
+      const clamped = Math.min(len, R);
+      knob.style.transform = `translate(${(dx / len) * clamped}px,${(dy / len) * clamped}px)`;
+      if (clamped / R < DEAD) { setDirs(false, false, false, false); return; }
+      const nx = dx / len, ny = dy / len;
+      setDirs(nx < -T, nx > T, ny < -T, ny > T);
+    }
+    base.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (touchId !== null) return;
+      const t = e.changedTouches[0]; touchId = t.identifier;
+      base.classList.add('active'); update(t.clientX, t.clientY);
+    }, { passive: false });
+    window.addEventListener('touchmove', (e) => {
+      if (touchId === null) return;
+      for (const t of e.changedTouches) if (t.identifier === touchId) { e.preventDefault(); update(t.clientX, t.clientY); return; }
+    }, { passive: false });
+    const end = (e) => {
+      if (touchId === null) return;
+      for (const t of e.changedTouches) if (t.identifier === touchId) { reset(); return; }
+    };
+    window.addEventListener('touchend', end); window.addEventListener('touchcancel', end);
+    // mouse fallback for desktop testing
+    base.addEventListener('mousedown', (e) => { e.preventDefault(); mouseOn = true; base.classList.add('active'); update(e.clientX, e.clientY); });
+    window.addEventListener('mousemove', (e) => { if (mouseOn) update(e.clientX, e.clientY); });
+    window.addEventListener('mouseup', () => { if (mouseOn) reset(); });
+  }
   wireTouch();
+
+  // controller feedback: flash a hint when a gamepad connects
+  window.addEventListener('gamepadconnected', () => {
+    const h = document.getElementById('hint'); if (!h) return;
+    h.textContent = '🎮 Controller connected'; h.style.opacity = '1';
+    setTimeout(() => { h.style.transition = 'opacity .6s'; h.style.opacity = '0'; }, 2600);
+  });
 
   // auto-pause when the window loses focus (keys are also released by input.js)
   window.addEventListener('blur', () => { if (mode === 'playing') mode = 'paused'; });
@@ -544,6 +603,8 @@
     step(n, inp) { for (let k = 0; k < (n || 1); k++) E.step(state, inp || {}, D.VIEW_W, D.VIEW_H); return snap(); },
     snapshot: snap, plan: PLAN, D,
     setInput(o) { window.__forceInput = o; },
+    get lastInput() { return lastInp; },        // merged keyboard+touch+joystick+pad
+    padConnected() { return input.padConnected(); },
   };
   function snap() {
     if (!state) return { mode };

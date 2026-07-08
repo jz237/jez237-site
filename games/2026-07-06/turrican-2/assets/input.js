@@ -47,6 +47,9 @@
     (target || window).addEventListener('keyup', onKeyUp);
     window.addEventListener('blur', onBlur);
     document.addEventListener('visibilitychange', () => { if (document.hidden) onBlur(); });
+    // grab a controller the moment it connects (polling also runs every frame)
+    window.addEventListener('gamepadconnected', () => { pollPad(); });
+    window.addEventListener('gamepaddisconnected', () => { pad = null; });
 
     function held(action) {
       const codes = MAP[action] || [];
@@ -134,7 +137,7 @@
       (target || window).removeEventListener('keyup', onKeyUp);
     }
 
-    return { frame, setTouch, rumble, destroy, MAP };
+    return { frame, setTouch, rumble, destroy, MAP, padConnected: () => !!pad };
   }
 
   return { createInput };
