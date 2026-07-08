@@ -14,6 +14,9 @@
     // produced-music (ElevenLabs, original score) streamed layer -> musicGain
     let streamGain = null, curSource = null, curStreamKey = null, loadToken = 0;
     const musicBuffers = {};
+    // produced one-shot SFX (ElevenLabs, original) layered over the synth SFX
+    const sfxBuffers = {};
+    let sfxPreloaded = false;
 
     function ensure() {
       if (ctx) return;
@@ -104,7 +107,7 @@
       } else if (ch === 'h') { noiseBurst(t, 0.03, 0.2, 'highpass', 8500); }
       else if (ch === 'H') { noiseBurst(t, 0.14, 0.16, 'highpass', 7200); }
     }
-    function resume() { ensure(); if (ctx && ctx.state === 'suspended') ctx.resume(); }
+    function resume() { ensure(); if (ctx && ctx.state === 'suspended') ctx.resume(); preloadSfx(); }
 
     // ---- one-shot synth voice --------------------------------------------
     function blip(freq, dur, type, vol, slideTo, dest, when) {
@@ -168,7 +171,47 @@
       victory: () => [0, 1, 2, 3, 4, 5, 6].forEach((i) => setTimeout(() =>
         blip([392, 494, 587, 784, 587, 784, 988][i], i >= 5 ? 0.5 : 0.18, 'square', 0.22), i * 150)),
     };
-    function play(name) { if (!sfxOn || muted) return; ensure(); const f = SFX[name]; if (f) f(); }
+    // ---- produced sample SFX (original ElevenLabs one-shots) --------------
+    // High-impact events use decoded samples; everything else + any load
+    // failure falls back to the synth SFX above.
+    const SFX_URLS = {
+      shoot: 'assets/audio/sfx/sfx-shoot.mp3', hit: 'assets/audio/sfx/sfx-hit.mp3',
+      explode: 'assets/audio/sfx/sfx-explode.mp3', bomb: 'assets/audio/sfx/sfx-bomb.mp3',
+      power: 'assets/audio/sfx/sfx-power.mp3', gem: 'assets/audio/sfx/sfx-gem.mp3',
+      die: 'assets/audio/sfx/sfx-die.mp3', bosshit: 'assets/audio/sfx/sfx-bosshit.mp3',
+      bossdie: 'assets/audio/sfx/sfx-bossdie.mp3', stomp: 'assets/audio/sfx/sfx-stomp.mp3',
+      phase: 'assets/audio/sfx/sfx-phase.mp3',
+    };
+    const SFX_GAIN = { shoot: 0.55, hit: 0.6, gem: 0.7, bomb: 1.0, bossdie: 1.0, stomp: 0.95, explode: 0.9 };
+    const SFX_PITCHVAR = { shoot: 0.12, hit: 0.14, gem: 0.1, bosshit: 0.1, explode: 0.08 }; // repeated: vary pitch
+    function loadSfx(name) {
+      const url = SFX_URLS[name]; if (!url || !ctx) return;
+      if (sfxBuffers[url] !== undefined) return;               // loading / loaded / errored
+      sfxBuffers[url] = 'loading';
+      fetch(url).then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); })
+        .then((ab) => new Promise((res, rej) => ctx.decodeAudioData(ab, res, rej)))
+        .then((buf) => { sfxBuffers[url] = buf; })
+        .catch(() => { sfxBuffers[url] = 'error'; });
+    }
+    function preloadSfx() {
+      if (sfxPreloaded || !ctx) return; sfxPreloaded = true;
+      for (const k in SFX_URLS) loadSfx(k);
+    }
+    function playSample(name, buf) {
+      const src = ctx.createBufferSource(); src.buffer = buf;
+      const pv = SFX_PITCHVAR[name];
+      if (pv) src.playbackRate.value = 1 + (Math.random() - 0.5) * pv;
+      const g = ctx.createGain(); g.gain.value = SFX_GAIN[name] != null ? SFX_GAIN[name] : 0.85;
+      src.connect(g); g.connect(sfxGain); src.start();
+    }
+    function play(name) {
+      if (!sfxOn || muted) return; ensure(); if (!ctx) return;
+      const url = SFX_URLS[name];
+      const buf = url ? sfxBuffers[url] : undefined;
+      if (buf && buf !== 'loading' && buf !== 'error') { playSample(name, buf); return; }
+      if (url && buf === undefined) loadSfx(name);   // first use: kick off load, synth this time
+      const f = SFX[name]; if (f) f();               // synth now (permanent fallback if the file fails)
+    }
 
     // ---- MUSIC ---------------------------------------------------------
     // Original per-world compositions in the spirit of SPEC §6, played by a
@@ -356,6 +399,9 @@
       });
     }
     function stopMusic() {
+      loadToken++;            // invalidate any in-flight produced-track handoff, so an
+                             // mp3 that finishes decoding after an explicit stop (tab
+                             // hidden / win / gameover) can't resurrect a looping track
       stopSynthMusic();
       stopStream();
     }
