@@ -350,6 +350,67 @@
       bx.restore();
     }
 
+    // foreground weather: screen-space procedural atmosphere drawn IN FRONT of
+    // gameplay (low alpha) for a "looking through the world" depth. Cheap,
+    // deterministic scatter, skipped in performance mode.
+    function fgHash(i, m) { const x = Math.sin(i * 12.9898 + m * 78.233) * 43758.5453; return x - Math.floor(x); }
+    function drawForegroundWeather(s, cam) {
+      if (!fx) return;
+      const t = performance.now() / 1000;
+      const w = level.world;
+      bx.save();
+      if (w === 1) {                          // desert: blowing sand streaks
+        const dir = (s.windPhase || 0) >= 0 ? 1 : -1;
+        bx.strokeStyle = '#dec496'; bx.lineWidth = 1;
+        for (let i = 0; i < 16; i++) {
+          const y = fgHash(i, 1) * VIEW_H;
+          const sp = 120 + fgHash(i, 2) * 170;
+          const x = ((fgHash(i, 3) * (VIEW_W + 60) + t * sp * dir) % (VIEW_W + 60) + VIEW_W + 60) % (VIEW_W + 60) - 30;
+          const len = 10 + fgHash(i, 4) * 16;
+          bx.globalAlpha = 0.08 + fgHash(i, 5) * 0.14;
+          bx.beginPath(); bx.moveTo(x, y); bx.lineTo(x + len * dir, y + 1.5); bx.stroke();
+        }
+      } else if (w === 2) {                   // caverns: rising plankton motes
+        bx.fillStyle = '#96f0eb';
+        for (let i = 0; i < 18; i++) {
+          const x = fgHash(i, 1) * VIEW_W + Math.sin(t * 0.5 + i) * 8;
+          const y = ((fgHash(i, 2) * VIEW_H - t * (12 + fgHash(i, 3) * 22)) % VIEW_H + VIEW_H) % VIEW_H;
+          bx.globalAlpha = 0.14 + fgHash(i, 4) * 0.34;
+          bx.beginPath(); bx.arc(x, y, 0.8 + fgHash(i, 5) * 1.6, 0, 7); bx.fill();
+        }
+      } else if (w === 3) {                   // corridor: warp star-streaks
+        bx.globalCompositeOperation = 'lighter'; bx.strokeStyle = '#c8d7ff'; bx.lineWidth = 1;
+        for (let i = 0; i < 22; i++) {
+          const y = fgHash(i, 1) * VIEW_H;
+          const sp = 380 + fgHash(i, 2) * 520;
+          const x = ((fgHash(i, 3) * (VIEW_W + 120) - t * sp) % (VIEW_W + 120) + VIEW_W + 120) % (VIEW_W + 120) - 60;
+          const len = 18 + fgHash(i, 4) * 44;
+          bx.globalAlpha = 0.08 + fgHash(i, 5) * 0.22;
+          bx.beginPath(); bx.moveTo(x, y); bx.lineTo(x + len, y); bx.stroke();
+        }
+      } else if (w === 4) {                   // factory: rising embers (glow)
+        bx.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < 18; i++) {
+          const sway = Math.sin(t * 1.5 + i * 2) * 12;
+          const x = fgHash(i, 1) * VIEW_W + sway;
+          const y = ((fgHash(i, 2) * VIEW_H - t * (24 + fgHash(i, 3) * 36)) % VIEW_H + VIEW_H) % VIEW_H;
+          const fl = 0.4 + 0.6 * Math.abs(Math.sin(t * 4 + i));
+          bx.globalAlpha = (0.18 + fgHash(i, 4) * 0.4) * fl;
+          bx.fillStyle = fgHash(i, 5) < 0.5 ? '#ff8a3b' : '#ffd23f';
+          bx.fillRect(x, y, 1.7, 1.7);
+        }
+      } else {                                // alien: drifting green spores
+        bx.fillStyle = '#96dc78';
+        for (let i = 0; i < 16; i++) {
+          const x = ((fgHash(i, 1) * VIEW_W + Math.sin(t * 0.3 + i) * 22) % VIEW_W + VIEW_W) % VIEW_W;
+          const y = ((fgHash(i, 2) * VIEW_H + Math.cos(t * 0.25 + i * 1.3) * 16 + t * 6) % VIEW_H + VIEW_H) % VIEW_H;
+          bx.globalAlpha = 0.1 + fgHash(i, 3) * 0.28;
+          bx.beginPath(); bx.arc(x, y, 0.8 + fgHash(i, 4) * 1.8, 0, 7); bx.fill();
+        }
+      }
+      bx.restore();
+    }
+
     function drawWorldParallax(cam, art) {
       const w = level.world;
       // with the painted plate present, keep only the nearest silhouette as a
@@ -1535,6 +1596,7 @@
       drawPlayer(s, cam);
       drawParticles(cam);
       drawFloats(s, cam);
+      drawForegroundWeather(s, cam);
 
       if (s.freeze > 0) { bx.fillStyle = 'rgba(120,200,255,0.08)'; bx.fillRect(0, 0, VIEW_W, VIEW_H); }
       if (flash > 0) { bx.fillStyle = `rgba(255,255,255,${flash * 0.6})`; bx.fillRect(0, 0, VIEW_W, VIEW_H); }
