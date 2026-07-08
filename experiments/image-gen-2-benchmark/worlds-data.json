@@ -1726,5 +1726,25 @@
       "continuity": "Preserves the Lumenreef canon: turquoise shelf seas, wet black basalt, buoyant glass-coral beams, lensleaf awnings, shell-bell timing, kelpglass maintenance walkways, and non-human amphibious tide engineers.",
       "entryDescription": "At Tide-Gate Nine, membrane patchers brace and listen to a buckled translucent gate membrane whose ripples reveal the shell-bell network drifting out of phase."
     }
+  },
+  {
+    "id": "2026-07-08-weekly-world-lumenreef-causeway-bridge-apprentice-resonator",
+    "title": "Lumenreef Causeway: Bridge Apprentice Resonators",
+    "tests": "Generated through required openclaw infer image CLI; exact PNG provenance path verified; weekly-world story beat, Lumenreef inhabitants, resonator workbench, and no-readable-text constraints specified.",
+    "prompt": "Create a finished square realistic photographed daily-life image from the weekly alien world \"Lumenreef Causeway\" for the story beat \"Bridge apprentices turn rain cistern bowls into temporary resonators to compare the drifting bell tones.\" Show young non-human amphibious tide engineers with low horizontal blue-green pebble-textured bodies, six jointed walking limbs, two delicate manipulator arms, translucent gill fans, broad mirrored eyes, tail rudders, and small shell-bell throat sacs. They are arranging pearly shell bowls, copper rings, basalt tuning pins, braided kelpglass cords, and milky lensleaf resin pads on a wet black-basalt workbench under transparent lensleaf rain awnings. Rain droplets visibly jump from vibration across the bowl rims; gill fans pulse with subtle teal and violet color as apprentices listen through the bench and compare the late bell tones. Surround the scene with turquoise shelf sea glimpses, buoyant glass-coral footbridge pieces, saffron float pods, shell-bell signal hardware, rain-polished copper tools, caustic reflections, practical scale cues, worn hand-built materials, and dense tactile detail. Bright overcast rainlight, documentary macro-to-midrange lens feel, believable depth of field, no humans, no readable text, no generic Atlantis fantasy, no cyberpunk neon, no mushrooms, no dry desert, no horror, no poster layout, no cinematic battle scene.",
+    "image": "images/2026-07-08-weekly-world-lumenreef-causeway-bridge-apprentice-resonator.jpg",
+    "thumb": "thumbs/2026-07-08-weekly-world-lumenreef-causeway-bridge-apprentice-resonator.webp",
+    "color": "#566162",
+    "date": "2026-07-08",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago where buoyant glass-coral reefs, living lens leaves, and many-limbed tide engineers build settlements along glowing shallow causeways that appear and vanish with the sky tide.",
+      "continuity": "Preserves Lumenreef Causeway materials and society: glass-coral causeways, lensleaf rain awnings, shell-bell timing signals, wet basalt, turquoise rainlight, and low many-limbed tide engineers with pulsing gill fans.",
+      "entryDescription": "Bridge apprentices convert rain cistern bowls into temporary resonators to compare drifting shell-bell tones as the causeway timing problem escalates."
+    }
   }
 ]
