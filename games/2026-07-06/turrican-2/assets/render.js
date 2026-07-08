@@ -1199,9 +1199,22 @@
     }
 
     // ---- player -----------------------------------------------------------
+    // pixel-art hero sprite (idle + 6 run frames); procedural is the fallback
+    const heroImg = { idle: null, run: [], loaded: false, tried: false };
+    function loadHero() {
+      if (heroImg.tried) return; heroImg.tried = true;
+      const chk = () => { if (heroImg.idle && heroImg.run.filter(Boolean).length === 6) heroImg.loaded = true; };
+      const idle = new Image(); idle.onload = () => { heroImg.idle = idle; chk(); };
+      idle.src = `assets/img/hero-idle.png?v=${D.VERSION}`;
+      for (let i = 0; i < 6; i++) { const im = new Image(); const k = i;
+        im.onload = () => { heroImg.run[k] = im; chk(); };
+        im.src = `assets/img/hero-run${k}.png?v=${D.VERSION}`; }
+    }
+
     function drawPlayer(s, cam) {
       const p = s.player;
       if (p.dead && p.deathTimer < 1.2) return;
+      loadHero();
       const sx = Math.round(p.x - cam.x), sy = Math.round(p.y - cam.y);
       if (p.invuln > 0 && Math.floor(p.invuln * 20) % 2 === 0) return;
       bx.save();
@@ -1256,6 +1269,26 @@
         bx.restore();
         return;
       }
+
+      // ---- pixel-art hero sprite (platform mode) ----
+      if (heroImg.loaded) {
+        const face = p.facing;
+        const runningS = Math.abs(p.vx) > 20 && p.onGround;
+        const airborneS = !p.onGround && !p.inWater;
+        let img, dh;
+        if (runningS) { img = heroImg.run[Math.floor(performance.now() / 80) % 6]; dh = 42; }
+        else if (airborneS) { img = heroImg.run[2]; dh = 42; }   // mid-stride leap
+        else if (p.crouch) { img = heroImg.idle; dh = 30; }
+        else { img = heroImg.idle; dh = 42 + Math.sin(performance.now() / 400) * 0.8; } // idle bob
+        const dw = dh * (img.width / img.height);
+        const feetY = sy + p.h;
+        bx.translate(cx, feetY);
+        bx.scale(face, 1);
+        bx.drawImage(img, -dw / 2, -dh, dw, dh);
+        bx.restore();
+        return;
+      }
+
       const face = p.facing;
       const running = Math.abs(p.vx) > 20 && p.onGround;
       const airborne = !p.onGround && !p.inWater;
