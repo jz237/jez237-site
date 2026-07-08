@@ -4311,5 +4311,24 @@
       "description": "A conservative engineering infographic showing how overheating, separator failure, heat/gas generation, venting, and adjacent-cell heat transfer can propagate in lithium-ion cells, plus non-actionable safety design concepts.",
       "sourceNote": "Based on broadly accepted lithium-ion battery safety concepts: layered cell construction, internal shorts, heat and gas generation, venting, thermal barriers, spacing, monitoring, and isolation; labels avoid exact temperatures and procedural failure instructions."
     }
+  },
+  {
+    "id": "2026-07-08-creature-design-cloudforest-barkglider",
+    "title": "Cloudforest Barkglider",
+    "tests": "Generated via required openclaw infer image generate GPT Image 2 CLI; verified exact output path exists before append.",
+    "prompt": "Design a believable cloud-forest canopy creature called the Cloudforest Barkglider with moss-laden rib-glide membranes, dew-combing antenna fans, and bark-gray pebbled skin mottled with copper-green lichen, shown as a realistic natural-history creature study. Create a finished square documentary wildlife photograph in a high-elevation tropical cloud forest after rain: one adult about the size of a housecat clings sideways to a wet mossy tree trunk, with a long flexible body, six short gripping limbs arranged along the torso, curved bark-hook claws, folded rib-supported glide membranes tucked between the limbs like damp mossy fans, two broad feathery antenna fans combing fog droplets from the air, a narrow leaf-shaped head with dark side-set eyes, a small nectar-probing snout, and bark-gray pebbled skin broken by copper-green lichen patches. Show one juvenile tucked under a bromeliad cup nearby, beadlike water droplets collected on the antenna fans, orchid roots, fern fronds, cloud mist, tiny epiphyte flowers, wet bark flakes, a shed membrane scale on the moss for scale, and shafts of cool morning light through fog. Make the adaptations visually legible without labels: the antenna fans catch dew, the hooked claws grip slick bark, the rib membranes fold for gliding between trunks, and the lichen mottling camouflages the animal against bark and moss. Use low natural-history field-camera perspective from a neighboring branch, shallow documentary depth of field, believable anatomy and weight, tactile wet bark, moss, lichen, skin, membrane, and mist textures, and dense but coherent ecological detail. The image itself should be the finished creature study, not a prompt card: no readable text, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra random wings, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nExample substitution: [HABITAT] = high-elevation tropical cloud-forest canopy after rain; [ADAPTATION 1] = moss-laden rib-glide membranes for short trunk-to-trunk glides; [ADAPTATION 2] = dew-combing antenna fans and curved bark-hook claws; [TEXTURE/COLOR] = bark-gray pebbled skin mottled with copper-green lichen; [LIFE STAGE OR GROUPING] = one adult with a juvenile hidden under a bromeliad cup; [SPECIFIC MICROHABITAT] = wet mossy tree trunk among orchids, ferns, epiphytes, cloud mist, and cool morning light.",
+    "image": "images/2026-07-08-creature-design-cloudforest-barkglider.jpg",
+    "thumb": "thumbs/2026-07-08-creature-design-cloudforest-barkglider.webp",
+    "color": "#4e5242",
+    "date": "2026-07-08",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Cloudforest Barkglider",
+      "description": "A believable cloud-forest canopy animal with moss-laden rib-glide membranes, dew-combing antenna fans, hooked bark claws, and bark-gray lichen camouflage.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
