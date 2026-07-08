@@ -1,6 +1,6 @@
 {
   "date": "2026-07-08",
-  "updatedAt": "2026-07-08T11:15:27.856953+00:00",
+  "updatedAt": "2026-07-08T16:00:01.736166+00:00",
   "items": [
     {
       "title": "OpenAI wins US clearance for a broad GPT-5.6 rollout after weeks of government testing",
@@ -17,10 +17,9 @@
       "published": "2026-07-08T08:49:58+00:00",
       "firstSeen": "2026-07-08T10:00:02.008846+00:00",
       "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.0783,
+      "score": 16.9514,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -33,7 +32,72 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "openai-openai-wins-clearance-broad-gpt-5",
-      "imageOriginal": "https://media.thenextweb.com/2026/06/gary-marcus-openai-ipo-ai-stocks-risk.avif"
+      "imageOriginal": "https://media.thenextweb.com/2026/06/gary-marcus-openai-ipo-ai-stocks-risk.avif",
+      "model_release": true
+    },
+    {
+      "title": "Anthropic Can Now Read Claude’s Mind",
+      "url": "https://aidailybrief.ai/e/2026-07-07",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anthropic built a tool that reads Claude's private, unspoken \"thoughts\" — a rare interpretability breakthrough that's exciting for safety, consciousness debates, and, most practically, for making models better. Plus a headline run from the UN's killer-robot ban to NVIDIA's rumored Rubin delay.",
+      "image": "public/thumbnails/news-4df06252a9849c7293.png",
+      "featuredLatest": false,
+      "published": "2026-07-08T16:00:09.721672+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.732,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Anthropic Can Now Read Claude’s Mind",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-claude-anthropic-can-read-claude-mind",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-07-07.png"
+    },
+    {
+      "title": "Entire launches a distributed Git network built for AI coding agents",
+      "url": "https://thenextweb.com/news/entire-distributed-git-network-agents",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Entire, the developer-platform startup founded by former GitHub chief executive Thomas Dohmke, has launched a preview of a distributed Git network built for the age of AI coding agents. The pitch is to spread code hosting across regions rather than lean on a single central provider. The reasoning is a familiar strain in the agent [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-7baab8b0cc8dcb2e25.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T13:00:46+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 10.6624,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Entire launches a distributed Git network built for AI coding agents",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "entire-launches-distributed-git-network-built",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/Former-GitHub-chief-executive-Thomas-Dohmke.avif"
     },
     {
       "title": "Amazon’s secret ‘Moonraker’ project pushes Alexa into the AI-agent race",
@@ -52,7 +116,7 @@
       "lastSeen": "2026-07-08T11:15:27.856953+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.829,
+      "score": 8.6958,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -66,6 +130,262 @@
       "toolCandidate": false,
       "clusterKey": "amazon-secret-moonraker-project-pushes-alexa",
       "imageOriginal": "https://media.thenextweb.com/2026/06/amazon-alexa-plus-india-hindi-beta-testing.avif"
+    },
+    {
+      "title": "OpenAI buys Northslope to put its engineers inside your business",
+      "url": "https://thenextweb.com/news/openai-northslope-acquisition-enterprise-ai-deployment",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI wants the work that once belonged to consultants. Its deployment arm has agreed to buy Northslope, an applied-AI firm, the company told Axios in an exclusive on Wednesday. It did not disclose terms, and the deal still needs regulatory clearance. The purchase marks its second in two months. The OpenAI Deployment Company launched in [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-8e72db52b70a7a61cf.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T14:00:35+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.8908,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "OpenAI buys Northslope to put its engineers inside your business",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-buys-northslope-put-engineers",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/chatgpt-lockdown-mode-prompt-injection.avif"
+    },
+    {
+      "title": "China and the US are now warning against each other’s AI",
+      "url": "https://thenextweb.com/news/us-china-ai-claude-code-chinese-models-warnings",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The US-China AI split hardened this week. Beijing branded Anthropic’s Claude Code a security back-door, just as US lawmakers moved against American firms that lean on cheap Chinese models. China has told companies to drop Anthropic’s Claude Code. Its Ministry of Industry and Information Technology said its cybersecurity platform found the coding tool carries a [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-fd0ca6f3ba6a5e12f6.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T13:05:16+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 6.8645,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "China and the US are now warning against each other’s AI",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "china-warning-against-each-other",
+      "imageOriginal": "https://media.thenextweb.com/2026/04/China-vs-USA.avif"
+    },
+    {
+      "title": "Flint: A visualization language for the AI era",
+      "url": "https://www.microsoft.com/en-us/research/blog/flint-a-visualization-language-for-the-ai-era",
+      "source": "Microsoft Research Blog",
+      "sourceUrl": "https://www.microsoft.com/en-us/research/feed/",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Short chart specifications are easy to write, but often produce uninspiring results. Flint is an open-source visualization language that offers a middle path, letting AI agents create expressive charts from compact, human-editable specifications.\nThe post Flint: A visualization language for the AI era appeared first on Microsoft Research.",
+      "image": "public/thumbnails/news-94a51715874ce540d7.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-08T16:00:00+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.56,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Flint: A visualization language for the AI era",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Microsoft Research Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "flint-visualization-language-era",
+      "imageOriginal": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/07/Flint-TWLIFB-1200x627-1.jpg"
+    },
+    {
+      "title": "Cloudflare spent a year blocking AI crawlers. Now it’s helping OpenAI index the web",
+      "url": "https://thenextweb.com/news/cloudflare-openai-research-pilot-ai-search",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Cloudflare has spent a year arming websites against AI crawlers. Now it wants to help one crawl better. The company said on Wednesday it is running a research pilot with OpenAI to test whether its network data can make AI search more accurate. Cloudflare sits in front of more than a fifth of the web. [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-357af18ac7890def1b.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T15:30:46+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.5352,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Cloudflare spent a year blocking AI crawlers. Now it’s helping OpenAI index the web",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-cloudflare-spent-year-blocking-crawlers",
+      "imageOriginal": "https://media.thenextweb.com/2018/09/cloudflare-ipfs-blockchain-gateway-cryptocurrency.avif"
+    },
+    {
+      "title": "NVIDIA Nemotron Achieves Benchmark-Leading Performance With LangChain Deep Agents Harness",
+      "url": "https://blogs.nvidia.com/blog/nemotron-langchain-agents-open-stack",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "NVIDIA Nemotron 3 Ultra is offering leading performance at lower cost than top closed models with the largest and most widely adopted AI agent orchestration platform.  LangChain tuned its Deep Agents harness for NVIDIA Nemotron 3 Ultra, achieving the highest accuracy among open models, while completing more tasks at higher throughput and running at 10x [&#8230;]",
+      "image": "public/thumbnails/news-f4eb3c45379b2af109.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-08T15:00:27+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3101,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "NVIDIA Nemotron Achieves Benchmark-Leading Performance With LangChain Deep Agents Harness",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via NVIDIA Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "nvidia-nvidia-nemotron-achieves-benchmark-leading-performance",
+      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/07/Nemotron_LangChain-scaled.jpg"
+    },
+    {
+      "title": "AI Chatbot Warnings May Not Stop Hallucinations, Researchers Say",
+      "url": "https://www.techrepublic.com/article/news-ai-chatbot-warning-labels",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A June 2026 research review found that AI chatbot warning labels may be a weak safeguard for organization-backed AI advisors, raising new audit questions for IT, security, and compliance teams.\nThe post AI Chatbot Warnings May Not Stop Hallucinations, Researchers Say appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-bdef7138160c652504.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-08T11:48:44+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.5292,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "AI Chatbot Warnings May Not Stop Hallucinations, Researchers Say",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "chatbot-warnings-may-not-stop-hallucinations",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/side-view-and-close-up-of-laptop-with-glowing-circ-2026-01-11-08-31-08-utc-1024x683.jpg?f=jpeg"
+    },
+    {
+      "title": "Former OpenAI exec Kevin Weil is now on the board of Stoke Space",
+      "url": "https://techcrunch.com/2026/07/08/former-openai-exec-kevin-weil-is-now-on-the-board-of-stoke-space",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Kevin Weil's new role at Stoke Space suggests reusable rockets are the next hot thing in Silicon Valley.",
+      "image": "public/thumbnails/news-a3966b6b5ab9154a34.webp",
+      "featuredLatest": false,
+      "published": "2026-07-08T12:00:00+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.1743,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Former OpenAI exec Kevin Weil is now on the board of Stoke Space",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-former-openai-exec-kevin-weil",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/07/kw_2019-1.jpg?resize=1198%2C1200"
+    },
+    {
+      "title": "RAISE Summit hit by power outage during keynote with Mozilla president and Mistral CEO",
+      "url": "https://thenextweb.com/news/raise-summit-power-outage-mistral-open-source-reliability",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Mistral CEO Arthur Mensch and Mozilla president Mark Surman were making the case for open-source AI’s reliability at RAISE Summit. Then the venue lost power, and their fireside chat finished almost in the dark. It was, in fairness, the perfect cue. Midway through a RAISE Summit fireside chat on open-source AI, the Master Stage lost [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-442b0b8efa46f7a93b.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T13:45:19+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.0835,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "RAISE Summit hit by power outage during keynote with Mozilla president and Mistral CEO",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "mistral-raise-summit-hit-power-outage",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/Arthur-Mensch-Henri-delahaye-mark-surman.avif"
     },
     {
       "title": "Perplexity signs up for Nvidia’s Vera CPU as the chipmaker pushes past AI accelerators",
@@ -84,7 +404,7 @@
       "lastSeen": "2026-07-08T11:15:27.856953+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.1676,
+      "score": 5.042,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -98,6 +418,38 @@
       "toolCandidate": false,
       "clusterKey": "nvidia-perplexity-signs-nvidia-vera-cpu",
       "imageOriginal": "https://media.thenextweb.com/2026/06/perplexity-ipo-2028-openai-anthropic-listings.avif"
+    },
+    {
+      "title": "Securing Amazon Bedrock AgentCore Runtime with AWS WAF",
+      "url": "https://aws.amazon.com/blogs/machine-learning/securing-amazon-bedrock-agentcore-runtime-with-aws-waf",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "This post shows you two architecture patterns that address this problem. Both use an internet-facing ALB with AWS WAF and route traffic through a VPC Interface Endpoint to AgentCore Runtime. Pattern 1 places an AWS Lambda proxy between the ALB and the VPC Endpoint, giving you full control over request transformation. Pattern 2 targets the VPC Endpoint ENI IP addresses directly from the ALB, removing the Lambda hop entirely. You also learn how to close the direct-access backdoor with a resource policy so that traffic flows through AWS WAF only. Both patterns have been tested end-to-end with Sig",
+      "image": "public/thumbnails/news-126061ec2359780bfa.png",
+      "featuredLatest": false,
+      "published": "2026-07-08T15:57:33+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.8067,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Securing Amazon Bedrock AgentCore Runtime with AWS WAF",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "aws-securing-amazon-bedrock-agentcore-runtime",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/25/20885.png"
     },
     {
       "title": "UiPath’s Dines: not hiring juniors is a mistake",
@@ -116,7 +468,7 @@
       "lastSeen": "2026-07-08T11:15:27.856953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.8175,
+      "score": 3.6857,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -147,7 +499,7 @@
       "lastSeen": "2026-07-08T11:15:27.856953+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5073,
+      "score": 3.3768,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -162,283 +514,66 @@
       "clusterKey": "lovable-reportedly-talks-raise-300m-2bn"
     },
     {
-      "title": "Hot French startup ZML releases free product to speed inference across lots of AI chips",
-      "url": "https://techcrunch.com/2026/07/08/hot-french-startup-zml-releases-free-product-to-speed-inference-across-lots-of-ai-chips",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
+      "title": "Manage AI applications on Mac with Jamf’s AI Governance and Amazon Bedrock",
+      "url": "https://aws.amazon.com/blogs/machine-learning/manage-ai-applications-on-mac-with-jamf-ai-governance-and-amazon-bedrock",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "ZML, a hot French AI startup endorsed by Turing Award winner Yann LeCun, has now released ZML/LLMD, software that could make running AI less costly.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/07/ZML-founder-Steeve-Morin.jpg?resize=1200%2C800",
+      "summary": "In this post, we show how you can use Jamf’s AI Governance with Amazon Bedrock to configure, deploy, and validate managed settings for AI applications across a Mac fleet.",
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/08/jamf.png",
       "featuredLatest": false,
-      "published": "2026-07-08T08:00:00+00:00",
-      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
+      "published": "2026-07-08T15:53:08+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.1948,
+      "score": 3.2045,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Manage AI applications on Mac with Jamf’s AI Governance and Amazon Bedrock",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "manage-applications-mac-jamf-governance-amazon"
+    },
+    {
+      "title": "Apple puts a $30bn US-manufacturing flag on its Broadcom chip deal",
+      "url": "https://thenextweb.com/news/apple-broadcom-30-billion-us-chipmaking",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Apple is spending big to make chips at home. It has committed to a multi-year Broadcom deal worth more than $30 billion, Apple announced on Wednesday. That makes it Apple’s largest US manufacturing pledge to date. The scale is the story. The deal should yield more than 15 billion US-made chips and support hundreds of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/apple-smart-glasses-eyewear-market-disruption-watch-playbook.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T13:16:06+00:00",
+      "firstSeen": "2026-07-08T16:00:01.736166+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1696,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
       "brief": {
-        "whatHappened": "Hot French startup ZML releases free product to speed inference across lots of AI chips",
+        "whatHappened": "Apple puts a $30bn US-manufacturing flag on its Broadcom chip deal",
         "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
         "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "hot-french-startup-zml-releases-free"
-    },
-    {
-      "title": "AI Is Making One-Person Million-Dollar Companies More Common",
-      "url": "https://aidailybrief.ai/e/2026-07-06",
-      "source": "The AI Daily Brief",
-      "sourceUrl": "https://aidailybrief.ai/",
-      "sourceWeight": 0.88,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Alex Karp lights into the frontier labs on open weights, Nvidia backstops the Neoclouds, and Tesla reins in token spend — but the real story is in the data: AI is quietly minting a golden age of one-person, million-dollar companies.",
-      "image": "https://aidailybrief.ai/og/2026-07-06.png",
-      "featuredLatest": false,
-      "published": "2026-07-08T11:15:34.519537+00:00",
-      "firstSeen": "2026-07-06T16:00:01.230870+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.332,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "AI Is Making One-Person Million-Dollar Companies More Common",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The AI Daily Brief."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "making-one-person-million-dollar-companies-more-common"
-    },
-    {
-      "title": "AI chip maker SambaNova raises $1B at $11B valuation, 5 months after last mega round",
-      "url": "https://techcrunch.com/2026/07/08/sambanova-draws-1b-at-11b-valuation-in-series-f-first-close",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "AI chip maker SambaNova has raised at an $11B valuation months after Intel was rumored to be trying to buy it for about $1.6 billion.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/07/chip__1_.png?w=940",
-      "featuredLatest": false,
-      "published": "2026-07-08T07:16:00+00:00",
-      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1746,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "AI chip maker SambaNova raises $1B at $11B valuation, 5 months after last mega round",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "chip-maker-sambanova-raises-11b-valuation"
-    },
-    {
-      "title": "UK tech secretary backs driverless cars as Burnham’s team gets cold feet",
-      "url": "https://thenextweb.com/news/liz-kendall-driverless-cars-british-ai-burnham",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Britain’s tech secretary backs driverless cars and British AI startups. The likely next prime minister’s team has doubts, and her own job is on the line. Liz Kendall wants Britain to back its own AI companies before someone else does. In a Sifted podcast, Kendall, the UK’s science and technology secretary, made a pointed case [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Liz-Kendall.avif",
-      "featuredLatest": false,
-      "published": "2026-07-08T10:47:22+00:00",
-      "firstSeen": "2026-07-08T11:15:27.856953+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1358,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "UK tech secretary backs driverless cars as Burnham’s team gets cold feet",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "tech-secretary-backs-driverless-cars-burnham"
-    },
-    {
-      "title": "Fleek raises $25m to build the AI infrastructure behind global secondhand fashion",
-      "url": "https://thenextweb.com/news/fleek-25m-series-b-secondhand-fashion-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Fleek, a London startup building the software plumbing behind the global secondhand clothing trade, has raised $25m in Series B funding to scale the AI it uses to sort, grade and price used garments. The round takes the company’s total funding to $45m. It was led by Burda Principal Investments, an early backer of Vinted and a [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Fleek.avif",
-      "featuredLatest": false,
-      "published": "2026-07-08T09:54:39+00:00",
-      "firstSeen": "2026-07-08T11:15:27.856953+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1096,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "Fleek raises $25m to build the AI infrastructure behind global secondhand fashion",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "fleek-raises-25m-build-infrastructure-behind"
-    },
-    {
-      "title": "A Telstra outage stopped Australian trains and froze taxi payments",
-      "url": "https://thenextweb.com/news/telstra-outage-australia-trains-payments",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "For a few hours on Wednesday morning, chunks of Australia’s daily infrastructure simply stopped answering. A nationwide outage at Telstra, the country’s largest carrier, cut phone service for thousands of customers, froze tap-to-pay terminals and brought regional trains to a halt. The disruption began at about 4.30am and spread through systems that most people never [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Telstra.avif",
-      "featuredLatest": false,
-      "published": "2026-07-08T09:06:25+00:00",
-      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0862,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "A Telstra outage stopped Australian trains and froze taxi payments",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "telstra-outage-stopped-australian-trains-froze"
-    },
-    {
-      "title": "ResMed sells its MatrixCare software business to Frazier for $490m",
-      "url": "https://thenextweb.com/news/resmed-sells-matrixcare-frazier-490-million",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "ResMed has agreed to sell MatrixCare, its home-health and senior-care software business, to the private equity firm Frazier Healthcare Partners for $490m in cash. The deal lets the medical-device maker part with a unit it had owned for years to focus on the machines that remain its core. MatrixCare is a decent-sized business in its [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Redmed.avif",
-      "featuredLatest": false,
-      "published": "2026-07-08T08:58:46+00:00",
-      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0825,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "ResMed sells its MatrixCare software business to Frazier for $490m",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "resmed-sells-matrixcare-software-business-frazier"
-    },
-    {
-      "title": "Amazon returns to the bond market for at least $25bn to fund its AI build-out",
-      "url": "https://thenextweb.com/news/amazon-25-billion-bond-sale-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Amazon has gone back to the debt markets for at least $25bn, its largest bond sale of the year and the clearest sign yet of how much the company is prepared to borrow to keep pace in the artificial intelligence race. The offering is split across eight tranches with maturities running from 2029 out to [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/amazon-ai-frontier-models-catch-up.avif",
-      "featuredLatest": false,
-      "published": "2026-07-08T08:19:29+00:00",
-      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0639,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Amazon returns to the bond market for at least $25bn to fund its AI build-out",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "amazon-returns-bond-market-least-25bn"
-    },
-    {
-      "title": "Hackers can use 9 of the most popular AI tools to assemble massive botnets",
-      "url": "https://arstechnica.com/security/2026/07/hackers-can-use-9-of-the-most-popular-ai-tools-to-assemble-massive-botnets",
-      "source": "Ars Technica (AI/Tech)",
-      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "\"HalluSquatting\" weaponizes LLMs' inability to say \"I don't know.\"",
-      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/07/rogue-ai-agent-1152x648.jpg",
-      "featuredLatest": false,
-      "published": "2026-07-08T07:00:51+00:00",
-      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0277,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Hackers can use 9 of the most popular AI tools to assemble massive botnets",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Ars Technica (AI/Tech)."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "hackers-can-use-most-popular-tools"
+      "clusterKey": "apple-puts-30bn-us-manufacturing-flag-broadcom"
     }
   ],
   "tools": [
@@ -459,7 +594,7 @@
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1145,
+      "score": 14.1137,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -494,7 +629,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5082,
+      "score": 7.5081,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -528,7 +663,7 @@
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2148,
+      "score": 7.214,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -559,10 +694,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2145,
+      "score": 7.2137,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -596,7 +731,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9112,
+      "score": 6.9108,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -614,39 +749,6 @@
       "clusterKey": "pluno"
     },
     {
-      "title": "Buy by Agentcard",
-      "url": "https://www.producthunt.com/products/agent-card",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Order DoorDash from Claude\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "",
-      "published": "2026-06-19T18:14:21+00:00",
-      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 6.508,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Buy by Agentcard",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Buy by Agentcard",
-      "toolLabel": "Buy by Agentcard",
-      "toolSummary": "Order DoorDash from Claude",
-      "clusterKey": "buy-agentcard"
-    },
-    {
       "title": "Edgee Claude Code Compressor V2",
       "url": "https://www.producthunt.com/products/edgee",
       "source": "Product Hunt AI",
@@ -660,10 +762,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8407,
+      "score": 5.8366,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -694,10 +796,10 @@
       "featuredLatest": false,
       "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 5.6671,
+      "score": 5.6475,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -713,6 +815,40 @@
       "toolLabel": "CodeMote",
       "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
       "clusterKey": "codemote"
+    },
+    {
+      "title": "agents-cli",
+      "url": "https://www.producthunt.com/products/agents-cli",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "The CLI your coding agent uses to ship agents\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/de99b074-5b8b-4470-bdf6-b8cb98ab6d44.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "featuredLatest": false,
+      "published": "2026-07-07T15:49:18+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 4.47,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "agents-cli",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "agents-cli",
+      "toolLabel": "agents-cli",
+      "toolSummary": "The CLI your coding agent uses to ship agents",
+      "clusterKey": "agents-cli"
     }
   ],
   "tryWorthy": [
@@ -733,7 +869,7 @@
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1145,
+      "score": 14.1137,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -768,7 +904,7 @@
       "lastSeen": "2026-07-02T07:00:01.243696+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5082,
+      "score": 7.5081,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -802,7 +938,7 @@
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2148,
+      "score": 7.214,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -833,10 +969,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2145,
+      "score": 7.2137,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -870,7 +1006,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9112,
+      "score": 6.9108,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -888,39 +1024,6 @@
       "clusterKey": "pluno"
     },
     {
-      "title": "Buy by Agentcard",
-      "url": "https://www.producthunt.com/products/agent-card",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Order DoorDash from Claude\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "",
-      "published": "2026-06-19T18:14:21+00:00",
-      "firstSeen": "2026-06-25T14:53:44.092288+00:00",
-      "lastSeen": "2026-07-01T07:00:01.645672+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 6.508,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Buy by Agentcard",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Buy by Agentcard",
-      "toolLabel": "Buy by Agentcard",
-      "toolSummary": "Order DoorDash from Claude",
-      "clusterKey": "buy-agentcard"
-    },
-    {
       "title": "Edgee Claude Code Compressor V2",
       "url": "https://www.producthunt.com/products/edgee",
       "source": "Product Hunt AI",
@@ -934,10 +1037,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8407,
+      "score": 5.8366,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -968,10 +1071,10 @@
       "featuredLatest": false,
       "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T11:15:27.856953+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 5.6671,
+      "score": 5.6475,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -987,6 +1090,40 @@
       "toolLabel": "CodeMote",
       "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
       "clusterKey": "codemote"
+    },
+    {
+      "title": "agents-cli",
+      "url": "https://www.producthunt.com/products/agents-cli",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "The CLI your coding agent uses to ship agents\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "https://ph-files.imgix.net/de99b074-5b8b-4470-bdf6-b8cb98ab6d44.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "featuredLatest": false,
+      "published": "2026-07-07T15:49:18+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T16:00:01.736166+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "watchlist_low_signal",
+      "score": 4.47,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "agents-cli",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "agents-cli",
+      "toolLabel": "agents-cli",
+      "toolSummary": "The CLI your coding agent uses to ship agents",
+      "clusterKey": "agents-cli"
     }
   ],
   "sourceHealth": [
@@ -998,7 +1135,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1029,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1008,7 +1145,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1018,7 +1155,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1028,7 +1165,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1037,8 +1174,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 820,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "items": 821,
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1048,7 +1185,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1058,7 +1195,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1066,10 +1203,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "not well-formed (invalid token): line 1, column 158",
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1079,7 +1215,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1089,7 +1225,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1099,7 +1235,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1109,7 +1245,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "The Next Web",
@@ -1119,7 +1255,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1129,7 +1265,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1139,7 +1275,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1149,7 +1285,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1159,7 +1295,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1169,7 +1305,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 237,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1179,7 +1315,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1189,7 +1325,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1199,7 +1335,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1209,7 +1345,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Latent Space",
@@ -1219,7 +1355,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Import AI",
@@ -1227,10 +1363,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1240,7 +1375,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 148,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1250,7 +1385,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1260,7 +1395,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1270,7 +1405,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1280,7 +1415,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1290,7 +1425,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1300,7 +1435,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1310,19 +1445,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-08T11:15:27.856953+00:00"
+      "checkedAt": "2026-07-08T16:00:01.736166+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
