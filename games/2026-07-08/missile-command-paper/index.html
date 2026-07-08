@@ -1642,13 +1642,17 @@
       }
 
       // Torn-paper smoke trail from a list of trail points (oldest first).
-      function drawSmokeTrail(trail, baseR, tint) {
+      // Chunky torn-paper smoke: each puff is a two-tone cut-paper blob (shade
+      // underside + light top) so the trail reads as layered paper, not dots.
+      function drawSmokeTrail(trail, baseR, tint, shade) {
         for (let i = 0; i < trail.length; i++) {
           const t = trail[i];
           const a = i / Math.max(1, trail.length - 1);      // 0 tail → 1 head
-          ctx.globalAlpha = 0.3 + a * 0.55;
+          const r = baseR * (0.6 + a * 0.95);
+          ctx.globalAlpha = 0.34 + a * 0.6;
+          if (shade) { ctx.fillStyle = shade; tornPuffPath(t.x, t.y + r * 0.3, r); ctx.fill(); }
           ctx.fillStyle = tint;
-          tornPuffPath(t.x, t.y, baseR * (0.55 + a * 0.9));
+          tornPuffPath(t.x, t.y - r * 0.05, r * 0.9);
           ctx.fill();
         }
         ctx.globalAlpha = 1;
@@ -1657,7 +1661,7 @@
       function drawMissiles() {
         for (const m of state.enemyMissiles) {
           const ang = Math.atan2(m.y - m.sy, m.x - m.sx) || (Math.PI / 2);
-          drawSmokeTrail(m.trail, 3.4, '#ece2cf');
+          drawSmokeTrail(m.trail, 6, '#ece2cf', '#d6cab0');
           let body = '#c0392b', nose = '#e7ddca', fin = '#8f2a20', stripe = '#e7ddca';
           if (m.type === 'mirvChild') { body = '#d1762e'; nose = '#efe2cd'; fin = '#9c5220'; stripe = '#efe2cd'; }
           if (m.type === 'smart') { body = '#8e5aa8'; nose = '#e6dced'; fin = '#653f7a'; stripe = '#e6dced'; }
@@ -1672,7 +1676,7 @@
 
         for (const m of state.playerMissiles) {
           const ang = Math.atan2(m.y - m.sy, m.x - m.sx) || (-Math.PI / 2);
-          drawSmokeTrail(m.trail, 3.0, '#f2ece0');
+          drawSmokeTrail(m.trail, 6.5, '#f2ece0', '#ddd4c2');
           // tail flame so the rising interceptor reads instantly
           ctx.save(); ctx.translate(m.x, m.y); ctx.rotate(ang);
           ctx.fillStyle = '#e8a53a';
