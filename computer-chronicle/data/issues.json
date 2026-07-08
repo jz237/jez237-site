@@ -1,8 +1,347 @@
 {
-  "generatedAt": "2026-07-07T12:02:53.382Z",
+  "generatedAt": "2026-07-08T12:02:42.411Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-08",
+      "historicDate": "1983-04-11",
+      "displayDate": "Week of April 11-17, 1983",
+      "edition": "Issue 037 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "A warm early-1980s computer-weekly front page with game-news lead, amber terminal accents, red and blue rule lines, dense shelves, and boxed chart modules.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly Computer & Culture Chronicle",
+        "dateline": "Week of April 11-17, 1983",
+        "price": "35 cents",
+        "date": "Week of April 11-17, 1983",
+        "issue": "Issue 037"
+      },
+      "layoutPlan": "Gaming lead with a right-rail culture chart stack, shelf-watch boxes for home computers and business software, a compact price watch, and a small world bulletin.",
+      "sectionChrome": [
+        "Game Rack",
+        "Shelf Watch",
+        "Price Watch",
+        "Culture Dial",
+        "The World This Week"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-04-11.png",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of April 11-17, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Mid-April 1983 found home-computer gaming moving through newsletters and magazines while IBM PC buyers studied hard disks, Lotus worksheets, and the new PC press.",
+      "morningLine": "This week at the counter: TI software policy arguments, Apple II arcade conversions, IBM PC XT talk, and Michael Jackson still holding the radio.",
+      "lead": {
+        "headline": "TI software control sparks game-counter argument",
+        "dek": "Arcade Express reported Texas Instruments wanted tighter control over TI-99/4A software, a sign that cartridge economics and home-computer publishing were colliding.",
+        "body": "The April 10 Arcade Express reached readers at the start of this Chronicle week with a sharp business-of-games lead: Texas Instruments wanted to keep control of software for the TI-99/4A. For dealers, publishers, and families watching the low-cost computer aisle, the question was not academic. A machine could be attractive on price and still be defined by who was allowed to publish for it, how cartridges reached shelves, and whether independent game makers could fill the rack quickly enough.",
+        "confidence": "High",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Arcade Alley widens to computer games",
+          "summary": "The April 1983 Arcade Alley column reviewed Zaxxon and Turbo for Apple II, showing console-and-arcade criticism expanding into home-computer software.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "PC World puts IBM XT in its feature lineup",
+          "summary": "PC World Vol. 1 No. 3 promoted a special report on IBM's XT and an exclusive hands-on look at the upgraded PC line.",
+          "confidence": "High",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 keeps selling the IBM PC story",
+          "summary": "Lotus 1-2-3, released in early 1983, bundled spreadsheet, database, and graphics functions into the sort of business software that made PC hard disks easier to justify.",
+          "confidence": "High",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Commodore 64 gets mainstream electronics attention",
+          "summary": "Computers & Electronics April 1983 put the Commodore 64 as a feature, promising a look at the machine's wonders and potential.",
+          "confidence": "High",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Zaxxon",
+          "detail": "Apple II arcade conversion reviewed in Arcade Alley."
+        },
+        {
+          "name": "Turbo",
+          "detail": "Apple II driving conversion reviewed alongside Zaxxon."
+        },
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC integrated spreadsheet, database, and graphics package."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Still a familiar spreadsheet name at business counters."
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and business word-processing staple still visible in dealer conversations."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 computer games",
+          "items": [
+            "Zaxxon",
+            "Turbo",
+            "Zork I",
+            "Ultima II",
+            "Wizardry"
+          ]
+        },
+        {
+          "label": "Office software",
+          "items": [
+            "Lotus 1-2-3",
+            "VisiCalc",
+            "WordStar",
+            "dBASE II",
+            "Peachtree accounting"
+          ]
+        },
+        {
+          "label": "Home computer watch",
+          "items": [
+            "TI-99/4A",
+            "Commodore 64",
+            "Apple II Plus",
+            "Atari 800",
+            "IBM PC XT"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "A 10 MB fixed disk kept the XT in premium office territory."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "commonly advertised under $600 in 1983",
+          "note": "Aggressive pricing made the C64 a visible home-computer rival."
+        },
+        {
+          "item": "TI-99/4A",
+          "price": "street prices falling through 1983",
+          "note": "Hardware discounts raised the stakes for software control and cartridge supply."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "about $100-$200 depending on brand",
+          "note": "Still a specialty add-on for bulletin-board and game experiments."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Zaxxon crosses to Apple II",
+          "text": "Arcade Alley treated the Apple II conversion as part of a broader move to judge computer games beside cartridge releases."
+        },
+        {
+          "headline": "XT reports fill the PC press",
+          "text": "PC World's May issue kept the new IBM PC XT in front of business readers looking for fixed-disk systems."
+        },
+        {
+          "headline": "C64 gets the feature treatment",
+          "text": "Computers & Electronics used its April issue to frame the Commodore 64 as a machine with broad potential."
+        },
+        {
+          "headline": "Disney opens a world away",
+          "text": "Tokyo Disneyland opened April 15, giving the week a global pop-culture landmark beyond the computer counter."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Billie Jean",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 3,
+          "title": "Mr. Roboto",
+          "artist": "Styx"
+        },
+        {
+          "rank": 4,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        },
+        {
+          "rank": 5,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        }
+      ],
+      "periodAd": {
+        "headline": "This week at the computer counter",
+        "summary": "Ask about TI-99/4A cartridges, Apple II arcade conversions, Commodore 64 starter bundles, IBM PC XT fixed-disk quotes, and Lotus 1-2-3 demonstrations.",
+        "tagline": "Bring a blank disk and compare the game rack before closing time."
+      },
+      "market": {
+        "headline": "Software shelves decide the home-computer fight",
+        "summary": "Mid-April's useful split screen was games on one side and business PCs on the other: TI argued for software control, Apple II arcade conversions drew magazine attention, and IBM PC buyers priced the XT and Lotus 1-2-3.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Tokyo Disneyland opens in Japan",
+        "summary": "Tokyo Disneyland opened April 15, 1983, becoming Disney's first international theme park and giving the week a major global pop-culture marker.",
+        "confidence": "High",
+        "sourceRefs": [
+          8,
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-04-11.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Arcade Express Vol. 1 No. 18 was dated April 10, 1983, and led with Texas Instruments planning to control software for the TI-99/4A.",
+            "confidence": "High",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Arcade Alley April 1983 reviewed Zaxxon and Turbo for Apple II as the column expanded into computer gaming.",
+            "confidence": "High",
+            "sourceRefs": [
+              1
+            ]
+          },
+          {
+            "claim": "PC World May 1983 promoted a special report on IBM's XT and an exclusive hands-on look at the upgraded PC line.",
+            "confidence": "High",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was an early-1983 IBM PC integrated spreadsheet/database/graphics package.",
+            "confidence": "High",
+            "sourceRefs": [
+              3
+            ]
+          },
+          {
+            "claim": "Computers & Electronics April 1983 featured the Commodore 64 as a feature.",
+            "confidence": "High",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Music ranking uses a Cash Box chart mirror for the week ending April 16, 1983.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Movie ranking uses Box Office Mojo domestic weekend April 15-17, 1983; Lone Wolf McQuade opened at number one.",
+            "confidence": "High",
+            "sourceRefs": [
+              6,
+              7
+            ]
+          },
+          {
+            "claim": "Tokyo Disneyland opened April 15, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              8,
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Arcade Express Vol. 1 No. 18, April 10, 1983",
+          "url": "http://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n18.pdf"
+        },
+        {
+          "label": "Arcade Alley, April 1983",
+          "url": "https://ataricompendium.com/archives/articles/arcade_alley/arcade_alley_apr83.pdf"
+        },
+        {
+          "label": "PC World Vol. 1 No. 3, May 1983",
+          "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+        },
+        {
+          "label": "InfoWorld: Lotus 1-2-3 hits the big 3-0",
+          "url": "https://www.infoworld.com/article/2613303/lotus-1-2-3-hits-the-big-3-0.html"
+        },
+        {
+          "label": "Computers & Electronics, April 1983",
+          "url": "https://www.worldradiohistory.com/Archive-Poptronics/80s/1983/CE-1983-04r.pdf"
+        },
+        {
+          "label": "Cash Box Top 100 Singles, week ending April 16, 1983",
+          "url": "https://tropicalglen.com/Archives/80s_files/19830416.html"
+        },
+        {
+          "label": "Box Office Mojo Domestic 1983 Weekend 15",
+          "url": "https://www.boxofficemojo.com/weekend/1983W15/"
+        },
+        {
+          "label": "Salty Popcorn US box office weekend April 15-17, 1983",
+          "url": "https://www.saltypopcorn.co.uk/charts/weekly-us-chart.php?file=19830415"
+        },
+        {
+          "label": "Oriental Land history: Opening of Tokyo Disneyland",
+          "url": "https://www.olc.co.jp/en/company/history/history03.html"
+        },
+        {
+          "label": "D23: Disneyland Goes International, Tokyo Disneyland opening day",
+          "url": "https://d23.com/disneyland-goes-international-the-opening-day-of-tokyo-disneyland/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: TI cartridge news",
+          "copy": "Local TI-99/4A owner seeks reliable word on new games, third-party software, and dealer stock."
+        },
+        {
+          "headline": "Apple II arcade night",
+          "copy": "Bring Zaxxon scores, Turbo tips, and a spare joystick to the club table after supper."
+        }
+      ]
+    },
     {
       "currentDate": "2026-07-07",
       "historicDate": "1983-04-04",
