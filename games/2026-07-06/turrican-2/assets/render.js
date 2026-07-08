@@ -81,8 +81,19 @@
     }
 
     let tileAtlas = null;
+    // painted seamless tile texture (sampled continuously via a repeat pattern);
+    // the procedural atlas is the fallback until it loads (tilePattern is
+    // declared with the renderer state above)
+    let tileToken = 0;
+    function loadTileTex(world, token) {
+      const im = new Image();
+      im.onload = () => { if (token === tileToken) { try { tilePattern = bx.createPattern(im, 'repeat'); } catch (e) { tilePattern = null; } } };
+      im.onerror = () => { if (token === tileToken) tilePattern = null; };
+      im.src = `assets/img/tile${world}.jpg?v=${D.VERSION}`;
+    }
     function setLevel(lv) {
       level = lv; pal = lv.palette;
+      tilePattern = null; loadTileTex(lv.world, ++tileToken);
       // parallax star/dust field
       stars.length = 0;
       for (let i = 0; i < 90; i++) stars.push({
@@ -552,8 +563,17 @@
     function drawBlock(sx, sy, tx, ty) {
       const open = (ddx, ddy) => level.tiles[(ty + ddy) * level.cols + (tx + ddx)] !== T.SOLID;
       const topExposed = ty === 0 || open(0, -1);
-      const v = (tx * 7 + ty * 13) & 3;
-      bx.drawImage(tileAtlas, v * TILE, topExposed ? TILE : 0, TILE, TILE, sx, sy, TILE, TILE);
+      if (tilePattern) {
+        // continuous world-anchored painted texture (pattern wraps seamlessly)
+        bx.save(); bx.translate(sx - tx * TILE, sy - ty * TILE);
+        bx.fillStyle = tilePattern; bx.fillRect(tx * TILE, ty * TILE, TILE, TILE);
+        bx.restore();
+        if (topExposed) { bx.fillStyle = pal.blockTop; bx.fillRect(sx, sy, TILE, 3);
+          bx.fillStyle = 'rgba(255,255,255,0.16)'; bx.fillRect(sx, sy + 3, TILE, 1); }
+      } else {
+        const v = (tx * 7 + ty * 13) & 3;
+        bx.drawImage(tileAtlas, v * TILE, topExposed ? TILE : 0, TILE, TILE, sx, sy, TILE, TILE);
+      }
       // exposed side/bottom edges
       bx.fillStyle = pal.blockEdge;
       if (tx === 0 || open(-1, 0)) bx.fillRect(sx, sy, 2, TILE);
