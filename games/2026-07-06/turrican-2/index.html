@@ -22,21 +22,29 @@
   /* touch controls */
   #touch { display:none; position:absolute; inset:0; pointer-events:none; }
   #touch .pad { position:absolute; bottom:14px; display:flex; gap:8px; pointer-events:auto; }
-  #touch .left { left:14px; flex-direction:column; align-items:center; }
-  #touch .left .row { display:flex; gap:44px; }
   #touch .right { right:14px; flex-wrap:wrap; width:170px; justify-content:flex-end; align-items:flex-end; }
   #touch button { width:52px; height:52px; border-radius:50%; border:1px solid rgba(160,180,255,0.4);
     background:rgba(20,20,50,0.5); color:#cfe0ff; font-size:18px; font-weight:bold; backdrop-filter:blur(4px); }
   #touch button.down { background:rgba(120,160,255,0.5); }
   #touch .right button.small { width:44px; height:44px; font-size:14px; opacity:0.9; }
   #touch .pad { bottom:calc(14px + env(safe-area-inset-bottom, 0px)); }
-  #touch .left { left:calc(14px + env(safe-area-inset-left, 0px)); }
   #touch .right { right:calc(14px + env(safe-area-inset-right, 0px)); }
+  /* virtual movement joystick (bottom-left) */
+  #joystick { position:absolute; pointer-events:auto; touch-action:none;
+    bottom:calc(20px + env(safe-area-inset-bottom, 0px)); left:calc(20px + env(safe-area-inset-left, 0px));
+    width:132px; height:132px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle, rgba(34,40,78,0.42) 0%, rgba(18,20,44,0.30) 72%);
+    border:2px solid rgba(150,175,255,0.34); box-shadow:inset 0 0 18px rgba(90,120,220,0.18); }
+  #joyknob { width:60px; height:60px; border-radius:50%; will-change:transform; transition:transform .06s linear;
+    background:radial-gradient(circle at 38% 32%, rgba(160,196,255,0.92), rgba(64,86,178,0.72));
+    border:1px solid rgba(196,214,255,0.6); box-shadow:0 3px 10px rgba(0,0,0,0.45); }
+  #joystick.active #joyknob { transition:none; }
   /* bigger thumb targets on small screens */
   @media (max-height: 480px) {
     #touch button { width:58px; height:58px; font-size:20px; }
     #touch .right button.small { width:48px; height:48px; }
-    #touch .left .row { gap:52px; }
+    #joystick { width:150px; height:150px; }
+    #joyknob { width:66px; height:66px; }
   }
   /* fullscreen toggle (touch devices only; shown via JS) */
   #fsbtn { display:none; position:absolute; top:calc(8px + env(safe-area-inset-top, 0px)); right:calc(8px + env(safe-area-inset-right, 0px));
@@ -58,14 +66,7 @@
     <canvas id="game" width="960" height="540"></canvas>
     <button id="fsbtn" aria-label="fullscreen">⛶</button>
     <div id="touch">
-      <div class="pad left">
-        <button id="t-up">▲</button>
-        <div class="row">
-          <button id="t-left">◀</button>
-          <button id="t-right">▶</button>
-        </div>
-        <button id="t-down">▼</button>
-      </div>
+      <div id="joystick"><div id="joyknob"></div></div>
       <div class="pad right">
         <button id="t-bomb" class="small">❄</button>
         <button id="t-morph" class="small">◉</button>
@@ -82,11 +83,11 @@
   <div style="font-size:20px;font-weight:bold;color:#ffd23f">ROTATE YOUR PHONE</div>
   <div style="font-size:14px;color:rgba(200,210,255,0.8)">Turrican II plays in landscape</div>
 </div>
-<script src="assets/data.js?v=1.20.0"></script>
-<script src="assets/engine.js?v=1.20.0"></script>
-<script src="assets/render.js?v=1.20.0"></script>
-<script src="assets/audio.js?v=1.20.0"></script>
-<script src="assets/input.js?v=1.20.0"></script>
-<script src="assets/game.js?v=1.20.0"></script>
+<script src="assets/data.js?v=1.21.0"></script>
+<script src="assets/engine.js?v=1.21.0"></script>
+<script src="assets/render.js?v=1.21.0"></script>
+<script src="assets/audio.js?v=1.21.0"></script>
+<script src="assets/input.js?v=1.21.0"></script>
+<script src="assets/game.js?v=1.21.0"></script>
 </body>
 </html>
