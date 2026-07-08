@@ -3,16 +3,16 @@
  * immediately); static assets are cache-first with background fill, so the
  * whole game plays offline once visited.
  */
-const CACHE = 'turrican2-v1.18.0';
+const CACHE = 'turrican2-v1.19.0';
 const CORE = [
   './',
   'manifest.json',
-  'assets/data.js?v=1.18.0',
-  'assets/engine.js?v=1.18.0',
-  'assets/render.js?v=1.18.0',
-  'assets/audio.js?v=1.18.0',
-  'assets/input.js?v=1.18.0',
-  'assets/game.js?v=1.18.0',
+  'assets/data.js?v=1.19.0',
+  'assets/engine.js?v=1.19.0',
+  'assets/render.js?v=1.19.0',
+  'assets/audio.js?v=1.19.0',
+  'assets/input.js?v=1.19.0',
+  'assets/game.js?v=1.19.0',
 ];
 
 self.addEventListener('install', (e) => {

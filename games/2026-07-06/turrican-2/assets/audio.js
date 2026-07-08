@@ -315,15 +315,18 @@
     // a track loads, or permanently if a file 404s / fails to decode.
     const STREAM_URLS = {
       title: 'assets/audio/music/music-title.mp3',
-      action: 'assets/audio/music/music-action.mp3',
-      ambient: 'assets/audio/music/music-ambient.mp3',
+      action: 'assets/audio/music/music-action.mp3',       // W1 desert: driving heroic
+      ambient: 'assets/audio/music/music-ambient.mp3',     // W2 submerged: atmospheric
+      corridor: 'assets/audio/music/music-corridor.mp3',   // W3 shmup: relentless chase
+      factory: 'assets/audio/music/music-factory.mp3',     // W4 factory: industrial groove
+      alien: 'assets/audio/music/music-alien.mp3',         // W5 ship: brooding finale
       boss: 'assets/audio/music/music-boss.mp3',
     };
+    const WORLD_TRACK = { 1: 'action', 2: 'ambient', 3: 'corridor', 4: 'factory', 5: 'alien' };
     function streamKeyFor(trackId) {
       if (trackId === 'title') return 'title';
       if (trackId === 'boss') return 'boss';
-      if (trackId === 2 || trackId === 5) return 'ambient'; // submerged / alien: atmospheric
-      return 'action';                                      // worlds 1,3,4 + default: driving
+      return WORLD_TRACK[trackId] || 'action';             // per-world unique theme (default driving)
     }
     function loadBuffer(url) {
       if (musicBuffers[url]) return Promise.resolve(musicBuffers[url]);
