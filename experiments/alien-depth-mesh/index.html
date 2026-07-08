@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Alien Depth Mesh</title>
-  <meta name="description" content="An orbitable single-image textured depth mesh experiment." />
+  <title>Alien 3D Model</title>
+  <meta name="description" content="Orbitable alien GLB model generated from a cleaned source image." />
   <meta name="robots" content="noindex, nofollow" />
   <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg" />
   <style>
     :root {
       color-scheme: dark;
-      --bg: #080807;
-      --panel: rgba(8, 8, 7, 0.74);
+      --bg: #070707;
+      --panel: rgba(9, 9, 9, 0.78);
       --line: rgba(255, 255, 255, 0.16);
-      --text: #f5f2eb;
-      --muted: #b9afa3;
-      --accent: #f0522e;
+      --text: #f5f3ee;
+      --muted: #bcb5ad;
+      --accent: #df4233;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
@@ -70,7 +70,7 @@
       border-radius: 8px;
       background: var(--panel);
       backdrop-filter: blur(10px);
-      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
     }
 
     .button {
@@ -82,8 +82,9 @@
       border: 1px solid var(--line);
       border-radius: 6px;
       color: var(--text);
-      background: #24211d;
+      background: #201d1a;
       font: 700 12px/1 system-ui, sans-serif;
+      letter-spacing: 0;
       text-decoration: none;
       cursor: pointer;
       user-select: none;
@@ -92,17 +93,13 @@
     .button:hover,
     .button:focus-visible {
       outline: none;
-      background: #343027;
+      background: #302a25;
     }
 
     .button[aria-pressed="true"] {
-      border-color: rgba(240, 82, 46, 0.72);
+      border-color: rgba(223, 66, 51, 0.82);
       color: #fff;
-    }
-
-    .slider {
-      width: clamp(96px, 22vw, 150px);
-      accent-color: var(--accent);
+      box-shadow: inset 0 0 0 1px rgba(223, 66, 51, 0.28);
     }
 
     .status {
@@ -147,24 +144,27 @@
   </script>
 </head>
 <body>
-  <h1 class="visually-hidden">Alien depth mesh viewer</h1>
-  <canvas id="scene" aria-label="Orbitable textured alien depth mesh"></canvas>
+  <h1 class="visually-hidden">Alien 3D model viewer</h1>
+  <canvas id="scene" aria-label="Orbitable alien 3D model"></canvas>
   <nav class="toolbar" aria-label="Viewer controls">
     <button class="button" id="reset" title="Reset camera" type="button">R</button>
-    <button class="button" id="spin" title="Toggle spin" type="button" aria-pressed="false">S</button>
+    <button class="button" id="spin" title="Toggle spin" type="button" aria-pressed="true">S</button>
     <button class="button" id="wire" title="Toggle wireframe" type="button" aria-pressed="false">W</button>
-    <input class="slider" id="depth" title="Depth amount" type="range" min="0" max="90" value="45" />
-    <a class="button" href="./assets/alien-textured-depth-mesh.obj" title="Download OBJ">OBJ</a>
-    <a class="button" href="./assets/alien-orbitable-depth-mesh.zip" title="Download package">ZIP</a>
+    <a class="button" href="./assets/alien-hunyuan3d.glb" title="Download GLB">GLB</a>
+    <a class="button" href="./assets/alien-cutout-source.png" title="Download clean source">PNG</a>
   </nav>
-  <div class="status" id="status" role="status"></div>
+  <div class="status" id="status" role="status">Loading model...</div>
 
   <script type="module">
     import * as THREE from "three";
     import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+    import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
     const canvas = document.querySelector("#scene");
     const status = document.querySelector("#status");
+    const resetButton = document.querySelector("#reset");
+    const spinButton = document.querySelector("#spin");
+    const wireButton = document.querySelector("#wire");
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -175,169 +175,159 @@
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setClearColor(0x080807, 1);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.55;
+    renderer.setClearColor(0x070707, 1);
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x080807);
+    scene.background = new THREE.Color(0x070707);
 
-    const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
-    camera.position.set(0, 0.06, 3.05);
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.01, 100);
+
+    function defaultCameraPosition() {
+      const aspect = window.innerWidth / Math.max(window.innerHeight, 1);
+      const z = aspect < 0.7 ? 5.4 : aspect < 0.95 ? 4.25 : 3.25;
+      return new THREE.Vector3(0.2, 0.18, z);
+    }
+
+    camera.position.copy(defaultCameraPosition());
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.065;
-    controls.minDistance = 1.15;
-    controls.maxDistance = 5.5;
+    controls.dampingFactor = 0.06;
+    controls.minDistance = 1.05;
+    controls.maxDistance = 6.5;
     controls.target.set(0, 0, 0);
 
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x2b170b, 1.7));
-    const key = new THREE.DirectionalLight(0xffe4c2, 1.45);
-    key.position.set(-1.5, 2, 3);
+    const modelRoot = new THREE.Group();
+    scene.add(modelRoot);
+
+    const fill = new THREE.HemisphereLight(0xf2eee6, 0x2a1714, 2.85);
+    scene.add(fill);
+
+    const key = new THREE.DirectionalLight(0xffefe0, 4.2);
+    key.position.set(-1.9, 2.1, 3.4);
     scene.add(key);
 
-    const loader = new THREE.TextureLoader();
-    const texture = loader.load("./assets/alien-texture.jpg", (loaded) => {
-      loaded.colorSpace = THREE.SRGBColorSpace;
-      loaded.anisotropy = renderer.capabilities.getMaxAnisotropy();
-    });
-    texture.colorSpace = THREE.SRGBColorSpace;
+    const rim = new THREE.DirectionalLight(0x8296ff, 1.9);
+    rim.position.set(2.5, 1.1, -2.6);
+    scene.add(rim);
 
-    async function loadImage(src) {
-      const image = new Image();
-      image.src = src;
-      await image.decode();
-      return image;
-    }
+    const redEye = new THREE.PointLight(0xff1919, 2.8, 5);
+    redEye.position.set(0, 0.22, 1.2);
+    scene.add(redEye);
 
-    function imageData(image) {
-      const scratch = document.createElement("canvas");
-      scratch.width = image.naturalWidth;
-      scratch.height = image.naturalHeight;
-      const context = scratch.getContext("2d", { willReadFrequently: true });
-      context.drawImage(image, 0, 0);
-      return context.getImageData(0, 0, scratch.width, scratch.height).data;
-    }
-
-    function buildGeometry(width, height, depthData, liftData, amount) {
-      const nx = 150;
-      const ny = Math.max(8, Math.round(nx * height / width));
-      const aspect = width / height;
-      const sx = 2 * aspect;
-      const sy = 2;
-      const vertices = new Float32Array((nx + 1) * (ny + 1) * 3);
-      const uvs = new Float32Array((nx + 1) * (ny + 1) * 2);
-      let vi = 0;
-      let ui = 0;
-
-      for (let y = 0; y <= ny; y += 1) {
-        const v = y / ny;
-        const py = Math.min(height - 1, Math.round(v * (height - 1)));
-        for (let x = 0; x <= nx; x += 1) {
-          const u = x / nx;
-          const px = Math.min(width - 1, Math.round(u * (width - 1)));
-          const offset = (py * width + px) * 4;
-          const depth = depthData[offset] / 255;
-          const lift = liftData[offset] / 255;
-
-          vertices[vi] = (u - 0.5) * sx;
-          vertices[vi + 1] = (0.5 - v) * sy;
-          vertices[vi + 2] = (depth - 0.55) * amount + lift * amount * 0.5;
-          vi += 3;
-
-          uvs[ui] = u;
-          uvs[ui + 1] = 1 - v;
-          ui += 2;
-        }
-      }
-
-      const indices = [];
-      for (let y = 0; y < ny; y += 1) {
-        for (let x = 0; x < nx; x += 1) {
-          const a = y * (nx + 1) + x;
-          const b = a + 1;
-          const c = a + (nx + 1);
-          const d = c + 1;
-          indices.push(a, c, b, b, c, d);
-        }
-      }
-
-      const geometry = new THREE.BufferGeometry();
-      geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
-      geometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
-      geometry.setIndex(indices);
-      geometry.computeVertexNormals();
-      return geometry;
-    }
-
-    const [depthImage, liftImage] = await Promise.all([
-      loadImage("./assets/alien-depth-map.png"),
-      loadImage("./assets/alien-lift-map.png")
-    ]);
-    const depthData = imageData(depthImage);
-    const liftData = imageData(liftImage);
-
-    const material = new THREE.MeshStandardMaterial({
-      map: texture,
-      roughness: 0.78,
-      metalness: 0.03,
-      side: THREE.DoubleSide
-    });
-    const mesh = new THREE.Mesh(
-      buildGeometry(depthImage.naturalWidth, depthImage.naturalHeight, depthData, liftData, 0.45),
-      material
-    );
-    scene.add(mesh);
-
-    const depthInput = document.querySelector("#depth");
-    depthInput.addEventListener("input", () => {
-      const oldGeometry = mesh.geometry;
-      mesh.geometry = buildGeometry(
-        depthImage.naturalWidth,
-        depthImage.naturalHeight,
-        depthData,
-        liftData,
-        Number(depthInput.value) / 100
-      );
-      oldGeometry.dispose();
-    });
-
-    document.querySelector("#wire").addEventListener("click", (event) => {
-      material.wireframe = !material.wireframe;
-      event.currentTarget.setAttribute("aria-pressed", String(material.wireframe));
-    });
-
-    let spinning = false;
-    document.querySelector("#spin").addEventListener("click", (event) => {
-      spinning = !spinning;
-      event.currentTarget.setAttribute("aria-pressed", String(spinning));
-    });
-
-    document.querySelector("#reset").addEventListener("click", () => {
-      camera.position.set(0, 0.06, 3.05);
-      controls.target.set(0, 0, 0);
-      controls.update();
-      mesh.rotation.set(0, 0, 0);
-    });
+    let alien = null;
+    let spin = true;
+    let wire = false;
+    let initialScale = 1;
 
     function resize() {
-      camera.aspect = window.innerWidth / window.innerHeight;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setSize(width, height);
     }
+
+    function resetCamera() {
+      camera.position.copy(defaultCameraPosition());
+      controls.target.set(0, 0, 0);
+      controls.update();
+    }
+
+    function setWireframe(enabled) {
+      wire = enabled;
+      wireButton.setAttribute("aria-pressed", String(wire));
+      if (!alien) return;
+      alien.traverse((node) => {
+        if (!node.isMesh) return;
+        const materials = Array.isArray(node.material) ? node.material : [node.material];
+        materials.forEach((material) => {
+          if (material) material.wireframe = wire;
+        });
+      });
+    }
+
+    function normalizeModel(root) {
+      const box = new THREE.Box3().setFromObject(root);
+      const size = box.getSize(new THREE.Vector3());
+      const center = box.getCenter(new THREE.Vector3());
+      const maxAxis = Math.max(size.x, size.y, size.z) || 1;
+      initialScale = 1.75 / maxAxis;
+      root.position.sub(center);
+      root.scale.setScalar(initialScale);
+
+      const normalizedBox = new THREE.Box3().setFromObject(root);
+      const normalizedCenter = normalizedBox.getCenter(new THREE.Vector3());
+      root.position.sub(normalizedCenter);
+      root.rotation.y = -0.2;
+      root.rotation.x = -0.04;
+    }
+
+    function prepareMaterials(root) {
+      root.traverse((node) => {
+        if (!node.isMesh) return;
+        node.frustumCulled = false;
+        const materials = Array.isArray(node.material) ? node.material : [node.material];
+        materials.forEach((material) => {
+          if (!material) return;
+          material.side = THREE.DoubleSide;
+          material.roughness = Math.min(material.roughness ?? 0.45, 0.56);
+          material.metalness = Math.max(material.metalness ?? 0.18, 0.2);
+          material.needsUpdate = true;
+        });
+      });
+    }
+
+    const loader = new GLTFLoader();
+    loader.load(
+      "./assets/alien-hunyuan3d.glb",
+      (gltf) => {
+        alien = gltf.scene;
+        prepareMaterials(alien);
+        normalizeModel(alien);
+        modelRoot.add(alien);
+        status.textContent = "";
+        resetCamera();
+      },
+      (event) => {
+        if (!event.total) return;
+        const percent = Math.round((event.loaded / event.total) * 100);
+        status.textContent = `Loading model ${percent}%`;
+      },
+      (error) => {
+        status.textContent = "Model load failed.";
+        console.error(error);
+      }
+    );
+
+    resetButton.addEventListener("click", resetCamera);
+
+    spinButton.addEventListener("click", () => {
+      spin = !spin;
+      spinButton.setAttribute("aria-pressed", String(spin));
+    });
+
+    wireButton.addEventListener("click", () => {
+      setWireframe(!wire);
+    });
+
     window.addEventListener("resize", resize);
     resize();
 
-    function frame() {
-      if (spinning) {
-        mesh.rotation.y += 0.0038;
+    function animate() {
+      requestAnimationFrame(animate);
+      if (alien && spin) {
+        modelRoot.rotation.y += 0.0042;
       }
+      redEye.position.x = Math.sin(performance.now() * 0.0016) * 0.18;
+      redEye.intensity = 1.9 + Math.sin(performance.now() * 0.004) * 0.5;
       controls.update();
       renderer.render(scene, camera);
-      requestAnimationFrame(frame);
     }
 
-    status.textContent = "";
-    frame();
+    animate();
   </script>
 </body>
 </html>
