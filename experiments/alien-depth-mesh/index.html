@@ -148,7 +148,8 @@
   <canvas id="scene" aria-label="Orbitable alien 3D model"></canvas>
   <nav class="toolbar" aria-label="Viewer controls">
     <button class="button" id="reset" title="Reset camera" type="button">R</button>
-    <button class="button" id="spin" title="Toggle spin" type="button" aria-pressed="true">S</button>
+    <button class="button" id="walk" title="Toggle walking motion" type="button" aria-pressed="true">M</button>
+    <button class="button" id="spin" title="Toggle spin" type="button" aria-pressed="false">S</button>
     <button class="button" id="wire" title="Toggle wireframe" type="button" aria-pressed="false">W</button>
     <a class="button" href="./assets/alien-hunyuan3d.glb" title="Download GLB">GLB</a>
     <a class="button" href="./assets/alien-cutout-source.png" title="Download clean source">PNG</a>
@@ -163,6 +164,7 @@
     const canvas = document.querySelector("#scene");
     const status = document.querySelector("#status");
     const resetButton = document.querySelector("#reset");
+    const walkButton = document.querySelector("#walk");
     const spinButton = document.querySelector("#spin");
     const wireButton = document.querySelector("#wire");
 
@@ -202,6 +204,9 @@
     const modelRoot = new THREE.Group();
     scene.add(modelRoot);
 
+    const walkRoot = new THREE.Group();
+    modelRoot.add(walkRoot);
+
     const fill = new THREE.HemisphereLight(0xf2eee6, 0x2a1714, 2.85);
     scene.add(fill);
 
@@ -218,9 +223,11 @@
     scene.add(redEye);
 
     let alien = null;
-    let spin = true;
+    let spin = false;
+    let walk = true;
     let wire = false;
     let initialScale = 1;
+    const walkUniforms = [];
 
     function resize() {
       const width = window.innerWidth;
@@ -275,9 +282,45 @@
           material.side = THREE.DoubleSide;
           material.roughness = Math.min(material.roughness ?? 0.45, 0.56);
           material.metalness = Math.max(material.metalness ?? 0.18, 0.2);
+          addWalkDeformer(material);
           material.needsUpdate = true;
         });
       });
+    }
+
+    function addWalkDeformer(material) {
+      const timeUniform = { value: 0 };
+      const amountUniform = { value: 1 };
+      walkUniforms.push({ time: timeUniform, amount: amountUniform });
+
+      material.onBeforeCompile = (shader) => {
+        shader.uniforms.uWalkTime = timeUniform;
+        shader.uniforms.uWalkAmount = amountUniform;
+        shader.vertexShader = shader.vertexShader.replace(
+          "#include <common>",
+          `#include <common>
+uniform float uWalkTime;
+uniform float uWalkAmount;`
+        );
+        shader.vertexShader = shader.vertexShader.replace(
+          "#include <begin_vertex>",
+          `vec3 transformed = vec3(position);
+float side = position.x < 0.0 ? -1.0 : 1.0;
+float outer = smoothstep(0.07, 0.34, abs(position.x));
+float low = 1.0 - smoothstep(-0.25, 0.03, position.y);
+float high = smoothstep(-0.04, 0.22, position.y);
+float tip = smoothstep(0.18, 0.46, abs(position.x));
+float phase = uWalkTime * 5.8 + side * 3.14159265 + floor(abs(position.x) * 7.0) * 0.55;
+float stride = sin(phase);
+float lift = max(0.0, sin(phase + 1.5707963));
+float limbMask = outer * (low + high * 0.36);
+transformed.x += side * stride * 0.027 * limbMask * uWalkAmount;
+transformed.y += lift * 0.055 * limbMask * uWalkAmount;
+transformed.z += cos(phase) * 0.052 * limbMask * uWalkAmount;
+transformed.y += sin(uWalkTime * 11.6 + abs(position.x) * 5.0) * 0.011 * tip * low * uWalkAmount;
+transformed.z += sin(uWalkTime * 7.4 + position.y * 8.0) * 0.016 * outer * uWalkAmount;`
+        );
+      };
     }
 
     const loader = new GLTFLoader();
@@ -287,7 +330,7 @@
         alien = gltf.scene;
         prepareMaterials(alien);
         normalizeModel(alien);
-        modelRoot.add(alien);
+        walkRoot.add(alien);
         status.textContent = "";
         resetCamera();
       },
@@ -304,6 +347,11 @@
 
     resetButton.addEventListener("click", resetCamera);
 
+    walkButton.addEventListener("click", () => {
+      walk = !walk;
+      walkButton.setAttribute("aria-pressed", String(walk));
+    });
+
     spinButton.addEventListener("click", () => {
       spin = !spin;
       spinButton.setAttribute("aria-pressed", String(spin));
@@ -318,11 +366,27 @@
 
     function animate() {
       requestAnimationFrame(animate);
+      const time = performance.now() * 0.001;
+      const walkAmount = alien && walk ? 1 : 0;
+      walkUniforms.forEach(({ time: timeUniform, amount }) => {
+        timeUniform.value = time;
+        amount.value = walkAmount;
+      });
+
+      if (alien) {
+        const gait = Math.sin(time * 5.8);
+        const bounce = Math.abs(gait);
+        walkRoot.position.y = bounce * 0.045 * walkAmount;
+        walkRoot.position.x = Math.sin(time * 5.8 + 0.7) * 0.018 * walkAmount;
+        walkRoot.rotation.x = -0.012 * gait * walkAmount;
+        walkRoot.rotation.z = 0.026 * Math.sin(time * 5.8 + 0.45) * walkAmount;
+      }
+
       if (alien && spin) {
         modelRoot.rotation.y += 0.0042;
       }
-      redEye.position.x = Math.sin(performance.now() * 0.0016) * 0.18;
-      redEye.intensity = 1.9 + Math.sin(performance.now() * 0.004) * 0.5;
+      redEye.position.x = Math.sin(time * 1.6) * 0.18;
+      redEye.intensity = 1.9 + Math.sin(time * 4.0) * 0.5;
       controls.update();
       renderer.render(scene, camera);
     }
