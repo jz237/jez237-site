@@ -11,6 +11,9 @@
     let musicBase = 0.34;
     let musicOn = true, sfxOn = true, muted = false;
     let seq = null, seqTimer = null, curWorld = 1;
+    // produced-music (ElevenLabs, original score) streamed layer -> musicGain
+    let streamGain = null, curSource = null, curStreamKey = null, loadToken = 0;
+    const musicBuffers = {};
 
     function ensure() {
       if (ctx) return;
@@ -34,6 +37,8 @@
       delaySend.connect(musicDelay); musicDelay.connect(dfb); dfb.connect(musicDelay);
       const dwet = ctx.createGain(); dwet.gain.value = 0.5; musicDelay.connect(dwet); dwet.connect(musicComp);
       sfxGain = ctx.createGain(); sfxGain.gain.value = 0.5; sfxGain.connect(musicComp);
+      // produced-score bus (own gain so it can crossfade in over the synth fallback)
+      streamGain = ctx.createGain(); streamGain.gain.value = 1; streamGain.connect(musicGain);
     }
 
     // ---- rich subtractive synth voice (detuned osc stack + ADSR + filter env
@@ -261,11 +266,53 @@
       if (ch && ch !== '.') drum(ch, t);
     }
 
-    function startMusic(trackId) {
-      ensure(); if (!ctx) return;
-      curWorld = trackId || 1;
-      stopMusic();
-      if (!musicOn || muted) return;
+    // ---- produced-score streaming (original ElevenLabs compositions) -------
+    // Rich, fully-produced original tracks decoded to AudioBuffers and looped
+    // gaplessly through the music bus. Falls back to the synth scheduler while
+    // a track loads, or permanently if a file 404s / fails to decode.
+    const STREAM_URLS = {
+      title: 'assets/audio/music/music-title.mp3',
+      action: 'assets/audio/music/music-action.mp3',
+      ambient: 'assets/audio/music/music-ambient.mp3',
+      boss: 'assets/audio/music/music-boss.mp3',
+    };
+    function streamKeyFor(trackId) {
+      if (trackId === 'title') return 'title';
+      if (trackId === 'boss') return 'boss';
+      if (trackId === 2 || trackId === 5) return 'ambient'; // submerged / alien: atmospheric
+      return 'action';                                      // worlds 1,3,4 + default: driving
+    }
+    function loadBuffer(url) {
+      if (musicBuffers[url]) return Promise.resolve(musicBuffers[url]);
+      return fetch(url)
+        .then((r) => { if (!r.ok) throw 0; return r.arrayBuffer(); })
+        .then((ab) => new Promise((res, rej) => ctx.decodeAudioData(ab, res, rej)))
+        .then((buf) => (musicBuffers[url] = buf))
+        .catch(() => (musicBuffers[url] = 'error'));
+    }
+    function stopStream() {
+      if (curSource) { try { curSource.stop(); } catch (e) {} try { curSource.disconnect(); } catch (e) {} curSource = null; }
+    }
+    function playStream(buf, fadeIn) {
+      if (!ctx || !streamGain) return;
+      stopStream();
+      const src = ctx.createBufferSource();
+      src.buffer = buf; src.loop = true;
+      // skip MP3 encoder padding at both ends so the loop stays seamless
+      const trim = Math.min(0.05, buf.duration * 0.02);
+      src.loopStart = trim; src.loopEnd = Math.max(trim + 1, buf.duration - trim);
+      src.connect(streamGain);
+      const g = streamGain.gain; g.cancelScheduledValues(ctx.currentTime);
+      if (fadeIn) { g.setValueAtTime(0.0001, ctx.currentTime); g.linearRampToValueAtTime(1, ctx.currentTime + 0.7); }
+      else g.setValueAtTime(1, ctx.currentTime);
+      src.start(ctx.currentTime, trim);
+      curSource = src;
+    }
+
+    // ---- synth fallback scheduler -----------------------------------------
+    function startSynthMusic(trackId) {
+      stopSynthMusic();
+      if (!ctx || !musicOn || muted) return;
       curTrack = TRACKS[trackId] || TRACKS[1];
       // tempo-synced dotted-eighth delay for that Amiga "space"
       if (musicDelay) musicDelay.delayTime.setValueAtTime(Math.min(0.9, (60 / curTrack.bpm) * 0.75), ctx.currentTime);
@@ -281,10 +328,36 @@
         }
       }, 45);
     }
-    function stopMusic() {
+    function stopSynthMusic() {
       if (schedTimer) { clearInterval(schedTimer); schedTimer = null; }
       if (seqTimer) { clearTimeout(seqTimer); seqTimer = null; }
       curTrack = null;
+    }
+
+    function startMusic(trackId) {
+      ensure(); if (!ctx) return;
+      curWorld = trackId || 1;
+      stopMusic();
+      if (!musicOn || muted) return;
+      const key = streamKeyFor(trackId);
+      const url = STREAM_URLS[key];
+      curStreamKey = key;
+      const tok = ++loadToken;
+      const cached = musicBuffers[url];
+      if (cached && cached !== 'error') { playStream(cached, false); return; }
+      // instant music now via the synth; upgrade to the produced score once decoded
+      startSynthMusic(trackId);
+      if (cached === 'error') return;                       // known-bad file: stay on synth
+      loadBuffer(url).then((buf) => {
+        if (tok !== loadToken || !musicOn || muted) return; // track changed / stopped / muted
+        if (buf === 'error') return;                        // load failed: stay on synth
+        stopSynthMusic();
+        playStream(buf, true);                              // crossfade up over the synth
+      });
+    }
+    function stopMusic() {
+      stopSynthMusic();
+      stopStream();
     }
 
     // duck music briefly under big impacts
@@ -342,7 +415,7 @@
     function toggleMute() {
       muted = !muted;
       if (muted) {
-        wasPlayingBeforeMute = !!schedTimer;
+        wasPlayingBeforeMute = !!(schedTimer || curSource);
         stopMusic();
         if (master) master.gain.value = 0;                    // instant silence incl. tails
         if (curVoice && !curVoice.paused) { try { curVoice.pause(); } catch (e) {} }
