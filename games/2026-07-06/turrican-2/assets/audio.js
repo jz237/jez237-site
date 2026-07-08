@@ -441,15 +441,14 @@
     };
     let voiceOn = true, voiceVol = 0.9, lastVoiceAt = 0, curVoice = null, toastCb = null;
     const lastVoiceIdx = {};
-    // The announcer is a DIFFERENT voice every game: 6 pre-rendered voice sets
-    // (v0 = original Harry, v1-5 distinct voices) live at assets/audio/vo/v<set>-<event>-<i>.mp3.
-    // rollVoice() is called at the start of each new game (no immediate repeat).
-    const VOICE_SETS = 6;
-    let voiceSet = Math.floor(Math.random() * VOICE_SETS), lastVoiceSet = -1;
+    // The announcer is a DIFFERENT voice every game: Jez's picked voice sets live at
+    // assets/audio/vo/<voice>-<event>-<i>.mp3. rollVoice() picks one per new game (no repeat).
+    const VOICES = ['harry', 'bella', 'brian', 'callum', 'charlie', 'chris', 'eric', 'jessica', 'liam', 'lily', 'matilda'];
+    let voiceName = VOICES[Math.floor(Math.random() * VOICES.length)], lastVoiceName = null;
     function rollVoice() {
-      let v = Math.floor(Math.random() * VOICE_SETS);
-      if (VOICE_SETS > 1 && v === lastVoiceSet) v = (v + 1) % VOICE_SETS;
-      lastVoiceSet = v; voiceSet = v;
+      let v = VOICES[Math.floor(Math.random() * VOICES.length)];
+      if (VOICES.length > 1 && v === lastVoiceName) v = VOICES[(VOICES.indexOf(v) + 1) % VOICES.length];
+      lastVoiceName = v; voiceName = v;
     }
     function playVoice(name, priority) {
       if (!voiceOn || muted) return;
@@ -463,7 +462,7 @@
       if (lines.length > 1 && i === lastVoiceIdx[name]) i = (i + 1) % lines.length;
       lastVoiceIdx[name] = i;
       lastVoiceAt = now;
-      const a = new Audio(`assets/audio/vo/v${voiceSet}-${name}-${i}.mp3`);
+      const a = new Audio(`assets/audio/vo/${voiceName}-${name}-${i}.mp3`);
       a.volume = voiceVol;
       a.onerror = () => {   // selected set missing -> fall back to the legacy flat (Harry) file
         if (curVoice !== a) return;
@@ -504,7 +503,7 @@
     }
 
     return { resume, play, startMusic, stopMusic, toggleMute, setMusic, setSfx, setLevels, duck,
-      playVoice, setVoice, setVoiceLevel, onVoiceToast, rollVoice, getVoiceSet: () => voiceSet,
+      playVoice, setVoice, setVoiceLevel, onVoiceToast, rollVoice, getVoiceSet: () => voiceName,
       get muted() { return muted; }, ensure };
   }
 
