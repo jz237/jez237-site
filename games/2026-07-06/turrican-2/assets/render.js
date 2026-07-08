@@ -796,6 +796,19 @@
     };
     function skinCols(e, defs) { return SKIN_COLORS[e.skin] || defs; }
 
+    // pixel-art enemy sprites (per skin); procedural is the fallback
+    const enemyImg = {};
+    function getEnemyImg(skin) {
+      if (enemyImg[skin] === undefined) {
+        enemyImg[skin] = null;
+        const im = new Image();
+        im.onload = () => { enemyImg[skin] = im; };
+        im.onerror = () => { enemyImg[skin] = false; };
+        im.src = `assets/img/enemy-${skin}.png?v=${D.VERSION}`;
+      }
+      return enemyImg[skin] || null;
+    }
+
     function drawEnemies(list, cam, freeze) {
       const t = performance.now() / 1000;
       for (const e of list) {
@@ -806,6 +819,20 @@
         if (freeze > 0) { bx.globalAlpha = 0.8; }
         if (e.hitFlash > 0) { bx.globalCompositeOperation = 'lighter'; }
         const cx = sx + e.w / 2, cy = sy + e.h / 2;
+
+        // painted sprite path (skips the procedural body)
+        const espr = e.skin ? getEnemyImg(e.skin) : null;
+        if (espr) {
+          bx.globalCompositeOperation = 'source-over';
+          const dh = e.h * 1.55, dw = dh * (espr.width / espr.height);
+          bx.translate(cx, cy);
+          if (e.facing < 0) bx.scale(-1, 1);
+          bx.drawImage(espr, -dw / 2, -dh / 2, dw, dh);
+          if (e.hitFlash > 0) { bx.globalCompositeOperation = 'lighter'; bx.globalAlpha = 0.7;
+            bx.drawImage(espr, -dw / 2, -dh / 2, dw, dh); }
+          bx.restore();
+          continue;
+        }
 
         if (e.type === 'turret') {
           const [body, acc, det] = skinCols(e, ['#3b4a5a', '#9fb4c9', '#ff5d3b']);
