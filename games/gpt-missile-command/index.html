@@ -312,7 +312,7 @@
       }
       function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {} }
       let settings = loadSettings();
-      const AUDIO_V = '2';       // bump to cache-bust audio files
+      const AUDIO_V = '3';       // bump to cache-bust audio files
       const MUSIC_VOL = 0.5;     // background music level when sound is on
       const DIFF = {
         easy:   { speed: 0.82, budget: 0.82, ammo: 18, label: 'Easy' },
@@ -557,7 +557,7 @@
             setTimeout(() => tone('triangle', 523, 523, 0.12, 0.04), 120);
             setTimeout(() => tone('triangle', 659, 659, 0.15, 0.045), 240);
           },
-          special() { audio.playSample('special', 0.7); },
+          special(key) { if (audio.playSample('special_' + key, 0.75)) return; tone('square', 320, 180, 0.5, 0.05, 0.005, 0.1); },
           uiClick() { tone('square', 720, 680, 0.05, 0.035, 0.001, 0.03); }, // crisp procedural blip
           combo(level) {
             tone('sine', 420 + level * 45, 320 + level * 30, 0.12, 0.03 + Math.min(0.02, level * 0.002));
@@ -565,7 +565,7 @@
         };
 
         // Load ElevenLabs SFX into decoded buffers (fire-and-forget)
-        ['launch', 'explode', 'citylost', 'waveclear', 'special'].forEach(key => {
+        ['launch', 'explode', 'citylost', 'waveclear', 'special_mirv', 'special_swarm', 'special_blitz', 'special_meteor'].forEach(key => {
           fetch('audio/' + key + '.mp3?v=' + AUDIO_V)
             .then(r => r.arrayBuffer())
             .then(b => ac.decodeAudioData(b))
@@ -1018,7 +1018,7 @@
         });
         if (special) {
           showBanner('★ ' + special.name + ' ★', special.color);
-          audio?.special();
+          audio?.special(special.key);
           if (special.key === 'swarm') { spawnSatellite(); spawnSatellite(); }
         } else {
           queuePrompt('WAVE ' + state.wave, state.width / 2, 100, '#9be6ff');
