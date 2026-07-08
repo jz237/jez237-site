@@ -181,8 +181,12 @@
       die: 'assets/audio/sfx/sfx-die.mp3', bosshit: 'assets/audio/sfx/sfx-bosshit.mp3',
       bossdie: 'assets/audio/sfx/sfx-bossdie.mp3', stomp: 'assets/audio/sfx/sfx-stomp.mp3',
       phase: 'assets/audio/sfx/sfx-phase.mp3',
+      // musical payoff stings (produced) for the reward/transition moments
+      complete: 'assets/audio/sfx/sfx-complete.mp3', victory: 'assets/audio/sfx/sfx-victory.mp3',
+      gameover: 'assets/audio/sfx/sfx-gameover.mp3',
     };
-    const SFX_GAIN = { shoot: 0.55, hit: 0.6, gem: 0.7, bomb: 1.0, bossdie: 1.0, stomp: 0.95, explode: 0.9 };
+    const SFX_GAIN = { shoot: 0.55, hit: 0.6, gem: 0.7, bomb: 1.0, bossdie: 1.0, stomp: 0.95, explode: 0.9,
+      complete: 0.95, victory: 1.0, gameover: 0.95 };
     const SFX_PITCHVAR = { shoot: 0.12, hit: 0.14, gem: 0.1, bosshit: 0.1, explode: 0.08 }; // repeated: vary pitch
     function loadSfx(name) {
       const url = SFX_URLS[name]; if (!url || !ctx) return;
