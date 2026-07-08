@@ -441,6 +441,16 @@
     };
     let voiceOn = true, voiceVol = 0.9, lastVoiceAt = 0, curVoice = null, toastCb = null;
     const lastVoiceIdx = {};
+    // The announcer is a DIFFERENT voice every game: 6 pre-rendered voice sets
+    // (v0 = original Harry, v1-5 distinct voices) live at assets/audio/vo/v<set>-<event>-<i>.mp3.
+    // rollVoice() is called at the start of each new game (no immediate repeat).
+    const VOICE_SETS = 6;
+    let voiceSet = Math.floor(Math.random() * VOICE_SETS), lastVoiceSet = -1;
+    function rollVoice() {
+      let v = Math.floor(Math.random() * VOICE_SETS);
+      if (VOICE_SETS > 1 && v === lastVoiceSet) v = (v + 1) % VOICE_SETS;
+      lastVoiceSet = v; voiceSet = v;
+    }
     function playVoice(name, priority) {
       if (!voiceOn || muted) return;
       const lines = VO_LINES[name]; if (!lines) return;
@@ -453,9 +463,15 @@
       if (lines.length > 1 && i === lastVoiceIdx[name]) i = (i + 1) % lines.length;
       lastVoiceIdx[name] = i;
       lastVoiceAt = now;
-      const a = new Audio(`assets/audio/vo-${name}-${i}.mp3`);
+      const a = new Audio(`assets/audio/vo/v${voiceSet}-${name}-${i}.mp3`);
       a.volume = voiceVol;
-      a.onerror = () => { if (curVoice === a) curVoice = null; };
+      a.onerror = () => {   // selected set missing -> fall back to the legacy flat (Harry) file
+        if (curVoice !== a) return;
+        const fb = new Audio(`assets/audio/vo-${name}-${i}.mp3`);
+        fb.volume = voiceVol; curVoice = fb;
+        fb.onerror = () => { if (curVoice === fb) curVoice = null; };
+        fb.play().catch(() => { if (curVoice === fb) curVoice = null; });
+      };
       a.play().catch(() => { if (curVoice === a) curVoice = null; });
       curVoice = a;
       if (toastCb) toastCb(lines[i]);
@@ -488,7 +504,7 @@
     }
 
     return { resume, play, startMusic, stopMusic, toggleMute, setMusic, setSfx, setLevels, duck,
-      playVoice, setVoice, setVoiceLevel, onVoiceToast,
+      playVoice, setVoice, setVoiceLevel, onVoiceToast, rollVoice, getVoiceSet: () => voiceSet,
       get muted() { return muted; }, ensure };
   }
 
