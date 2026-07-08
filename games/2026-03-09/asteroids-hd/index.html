@@ -255,15 +255,15 @@ function updateMusic(dt){
   }
 }
 let voiceCooldown=0;
-let voVoice=Math.floor(Math.random()*4),voSetLast=-1; // a different announcer voice every game
-function voRoll(){let v=Math.floor(Math.random()*4);if(v===voSetLast)v=(v+1)%4;voSetLast=v;voVoice=v;}
+const VOARR=['harry','bella','brian','callum','charlie','chris','eric','jessica','liam','lily','matilda']; let voVoice=VOARR[Math.floor(Math.random()*VOARR.length)],voSetLast=null; // Jez's picked announcer voices
+function voRoll(){let v=VOARR[Math.floor(Math.random()*VOARR.length)];if(v===voSetLast)v=VOARR[(VOARR.indexOf(v)+1)%VOARR.length];voSetLast=v;voVoice=v;}
 function playVoice(name,priority){
   if(!voiceEl||settings.voice<=0)return;
   if(voiceCooldown>0&&!priority)return;
   voiceCooldown=1.4;
   try{
     voiceEl.onerror=function(){voiceEl.onerror=null;voiceEl.src='assets/'+name+'.mp3';voiceEl.currentTime=0;voiceEl.play().catch(()=>{});};
-    voiceEl.src='assets/vo/v'+voVoice+'/'+name+'.mp3';
+    voiceEl.src='assets/vo/'+voVoice+'/'+name+'.mp3';
     voiceEl.volume=(settings.master/100)*(settings.voice/100);
     voiceEl.currentTime=0;voiceEl.play().catch(()=>{});
     showToast(VOICE_TEXT[name]||'');
