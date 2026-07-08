@@ -206,6 +206,8 @@ function ballSpeed(){return Math.min(7.5+level*0.45,15)*diff().speed;}
 let sfxGain=null;
 const music={title:null,game:null};
 let voiceEl=null,musicReady=false,voiceCooldown=0; // cooldown in frames (60/s)
+let voVoice=Math.floor(Math.random()*4),voSetLast=-1; // a different announcer voice every game
+function voRoll(){let v=Math.floor(Math.random()*4);if(v===voSetLast)v=(v+1)%4;voSetLast=v;voVoice=v;}
 function applyAudioSettings(){
   if(sfxGain)sfxGain.gain.value=(settings.master/100)*(settings.sfx/100);
   if(voiceEl)voiceEl.volume=(settings.master/100)*(settings.voice/100);
@@ -247,7 +249,7 @@ function playVoice(name,priority){
   if(!voiceEl||settings.voice<=0)return;
   if(voiceCooldown>0&&!priority)return;
   voiceCooldown=90; // 1.5s at 60fps
-  try{voiceEl.src='assets/'+name+'.mp3';voiceEl.volume=(settings.master/100)*(settings.voice/100);voiceEl.currentTime=0;voiceEl.play().catch(()=>{});showToast(VOICE_TEXT[name]||'');}catch(e){}
+  try{voiceEl.onerror=function(){voiceEl.onerror=null;voiceEl.src='assets/'+name+'.mp3';voiceEl.currentTime=0;voiceEl.play().catch(()=>{});};voiceEl.src='assets/vo/v'+voVoice+'/'+name+'.mp3';voiceEl.volume=(settings.master/100)*(settings.voice/100);voiceEl.currentTime=0;voiceEl.play().catch(()=>{});showToast(VOICE_TEXT[name]||'');}catch(e){}
 }
 function announce(event,priority){
   const pool=VO_POOLS[event]||[event];
@@ -449,6 +451,7 @@ function generateLevel(lv){
 
 // ---- GAME INIT ----
 function startGame(){
+  voRoll();
   score=0;lives=diff().lives;level=1;combo=0;comboTimer=0;comboMultiplier=1;
   breakFlashes=[];voSeen={};
   activePowers={wide:0,fire:0,slow:0};
