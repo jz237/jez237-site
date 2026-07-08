@@ -1,7 +1,134 @@
 {
   "date": "2026-07-08",
-  "updatedAt": "2026-07-08T04:00:01.608322+00:00",
+  "updatedAt": "2026-07-08T10:00:02.008846+00:00",
   "items": [
+    {
+      "title": "OpenAI wins US clearance for a broad GPT-5.6 rollout after weeks of government testing",
+      "url": "https://thenextweb.com/news/openai-gpt-5-6-broad-rollout-us-approval",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI has been cleared to release its most advanced model widely, after the US government signed off on a broader rollout of GPT-5.6 that had been held back for weeks under Washington’s new oversight regime for frontier AI. Until now the model had been available only through a restricted preview to about 20 partners whose names were [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-0451aa0cbf00ea6bb1.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T08:49:58+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.1149,
+      "signalGroup": "Model releases",
+      "sourceTier": "Reported source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "OpenAI wins US clearance for a broad GPT-5.6 rollout after weeks of government testing",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-wins-clearance-broad-gpt-5",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/gary-marcus-openai-ipo-ai-stocks-risk.avif"
+    },
+    {
+      "title": "Perplexity signs up for Nvidia’s Vera CPU as the chipmaker pushes past AI accelerators",
+      "url": "https://thenextweb.com/news/perplexity-nvidia-vera-cpu",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Perplexity has become one of the first big AI names to say it will build on Nvidia’s new Vera CPU, the general-purpose chip Nvidia is betting can carry it beyond the accelerators that made it the world’s most valuable company. The AI search firm said it plans to run its agent workloads on Vera, joining [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-4023bdae5bc5061dd6.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T08:27:12+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.2037,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Perplexity signs up for Nvidia’s Vera CPU as the chipmaker pushes past AI accelerators",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "nvidia-perplexity-signs-nvidia-vera-cpu",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/perplexity-ipo-2028-openai-anthropic-listings.avif"
+    },
+    {
+      "title": "Lovable is reportedly in talks to raise $300M at a $13.2bn valuation",
+      "url": "https://thenextweb.com/news/lovable-is-reportedly-in-talks-to-raise-300m-at-a-13-2bn-valuation",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Lovable, the Swedish vibe-coding startup, is in talks to raise $300m at a $13.2bn post-money valuation, Sifted reports, citing two people familiar with the deal. The figure would roughly double the $6.6bn valuation it commanded at its $330m Series B in December. The round is still under discussion rather than done, so the numbers could shift, and [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/lovable-300m-raise-13-billion-valuation.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T09:49:52+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5448,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Lovable is reportedly in talks to raise $300M at a $13.2bn valuation",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "lovable-reportedly-talks-raise-300m-2bn"
+    },
+    {
+      "title": "Hot French startup ZML releases free product to speed inference across lots of AI chips",
+      "url": "https://techcrunch.com/2026/07/08/hot-french-startup-zml-releases-free-product-to-speed-inference-across-lots-of-ai-chips",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "ZML, a hot French AI startup endorsed by Turing Award winner Yann LeCun, has now released ZML/LLMD, software that could make running AI less costly.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/ZML-founder-Steeve-Morin.jpg?resize=1200%2C800",
+      "featuredLatest": false,
+      "published": "2026-07-08T08:00:00+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.2305,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Hot French startup ZML releases free product to speed inference across lots of AI chips",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "hot-french-startup-zml-releases-free"
+    },
     {
       "title": "AI Is Making One-Person Million-Dollar Companies More Common",
       "url": "https://aidailybrief.ai/e/2026-07-06",
@@ -14,9 +141,9 @@
       "summary": "Alex Karp lights into the frontier labs on open weights, Nvidia backstops the Neoclouds, and Tesla reins in token spend — but the real story is in the data: AI is quietly minting a golden age of one-person, million-dollar companies.",
       "image": "https://aidailybrief.ai/og/2026-07-06.png",
       "featuredLatest": false,
-      "published": "2026-07-08T04:00:11.061501+00:00",
+      "published": "2026-07-08T10:00:10.831227+00:00",
       "firstSeen": "2026-07-06T16:00:01.230870+00:00",
-      "lastSeen": "2026-07-08T04:00:01.608322+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
       "score": 2.332,
@@ -32,6 +159,161 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "making-one-person-million-dollar-companies-more-common"
+    },
+    {
+      "title": "AI chip maker SambaNova raises $1B at $11B valuation, 5 months after last mega round",
+      "url": "https://techcrunch.com/2026/07/08/sambanova-draws-1b-at-11b-valuation-in-series-f-first-close",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "AI chip maker SambaNova has raised at an $11B valuation months after Intel was rumored to be trying to buy it for about $1.6 billion.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/chip__1_.png?w=940",
+      "featuredLatest": false,
+      "published": "2026-07-08T07:16:00+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2096,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "AI chip maker SambaNova raises $1B at $11B valuation, 5 months after last mega round",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "chip-maker-sambanova-raises-11b-valuation"
+    },
+    {
+      "title": "A Telstra outage stopped Australian trains and froze taxi payments",
+      "url": "https://thenextweb.com/news/telstra-outage-australia-trains-payments",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "For a few hours on Wednesday morning, chunks of Australia’s daily infrastructure simply stopped answering. A nationwide outage at Telstra, the country’s largest carrier, cut phone service for thousands of customers, froze tap-to-pay terminals and brought regional trains to a halt. The disruption began at about 4.30am and spread through systems that most people never [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Telstra.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T09:06:25+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.123,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "A Telstra outage stopped Australian trains and froze taxi payments",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "telstra-outage-stopped-australian-trains-froze"
+    },
+    {
+      "title": "ResMed sells its MatrixCare software business to Frazier for $490m",
+      "url": "https://thenextweb.com/news/resmed-sells-matrixcare-frazier-490-million",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "ResMed has agreed to sell MatrixCare, its home-health and senior-care software business, to the private equity firm Frazier Healthcare Partners for $490m in cash. The deal lets the medical-device maker part with a unit it had owned for years to focus on the machines that remain its core. MatrixCare is a decent-sized business in its [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Redmed.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T08:58:46+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1192,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "ResMed sells its MatrixCare software business to Frazier for $490m",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "resmed-sells-matrixcare-software-business-frazier"
+    },
+    {
+      "title": "Amazon returns to the bond market for at least $25bn to fund its AI build-out",
+      "url": "https://thenextweb.com/news/amazon-25-billion-bond-sale-ai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Amazon has gone back to the debt markets for at least $25bn, its largest bond sale of the year and the clearest sign yet of how much the company is prepared to borrow to keep pace in the artificial intelligence race. The offering is split across eight tranches with maturities running from 2029 out to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/amazon-ai-frontier-models-catch-up.avif",
+      "featuredLatest": false,
+      "published": "2026-07-08T08:19:29+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Amazon returns to the bond market for at least $25bn to fund its AI build-out",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "amazon-returns-bond-market-least-25bn"
+    },
+    {
+      "title": "Hackers can use 9 of the most popular AI tools to assemble massive botnets",
+      "url": "https://arstechnica.com/security/2026/07/hackers-can-use-9-of-the-most-popular-ai-tools-to-assemble-massive-botnets",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "\"HalluSquatting\" weaponizes LLMs' inability to say \"I don't know.\"",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/07/rogue-ai-agent-1152x648.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-08T07:00:51+00:00",
+      "firstSeen": "2026-07-08T10:00:02.008846+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0624,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Hackers can use 9 of the most popular AI tools to assemble massive botnets",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Ars Technica (AI/Tech)."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "hackers-can-use-most-popular-tools"
     }
   ],
   "tools": [
@@ -50,10 +332,9 @@
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
-      "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1159,
+      "score": 14.1147,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -68,7 +349,8 @@
       "toolName": "Claude Sonnet 5",
       "toolLabel": "Claude Sonnet 5",
       "toolSummary": "AI that plans, acts, and gets work done",
-      "clusterKey": "claude-claude-sonnet"
+      "clusterKey": "claude-claude-sonnet",
+      "model_release": true
     },
     {
       "title": "Gemini Spark",
@@ -121,7 +403,7 @@
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2164,
+      "score": 7.2151,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -152,10 +434,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-07T12:08:52.914805+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2159,
+      "score": 7.2147,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -189,7 +471,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9119,
+      "score": 6.9113,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -253,10 +535,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T04:00:01.608322+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8479,
+      "score": 5.8418,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -287,10 +569,10 @@
       "featuredLatest": false,
       "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T04:00:01.608322+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 5.7026,
+      "score": 5.6728,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -324,10 +606,9 @@
       "published": "2026-06-30T18:30:12+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
-      "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1159,
+      "score": 14.1147,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -342,7 +623,8 @@
       "toolName": "Claude Sonnet 5",
       "toolLabel": "Claude Sonnet 5",
       "toolSummary": "AI that plans, acts, and gets work done",
-      "clusterKey": "claude-claude-sonnet"
+      "clusterKey": "claude-claude-sonnet",
+      "model_release": true
     },
     {
       "title": "Gemini Spark",
@@ -395,7 +677,7 @@
       "lastSeen": "2026-07-08T04:00:01.608322+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2164,
+      "score": 7.2151,
       "signalGroup": "Media generation",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -426,10 +708,10 @@
       "featuredLatest": false,
       "published": "2026-06-30T18:19:10+00:00",
       "firstSeen": "2026-07-01T08:00:01.990182+00:00",
-      "lastSeen": "2026-07-07T12:08:52.914805+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.2159,
+      "score": 7.2147,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -463,7 +745,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9119,
+      "score": 6.9113,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -527,10 +809,10 @@
       "featuredLatest": false,
       "published": "2026-07-03T04:38:17+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T04:00:01.608322+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8479,
+      "score": 5.8418,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -561,10 +843,10 @@
       "featuredLatest": false,
       "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-08T04:00:01.608322+00:00",
+      "lastSeen": "2026-07-08T10:00:02.008846+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 5.7026,
+      "score": 5.6728,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -591,7 +873,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1029,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -601,7 +883,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -611,7 +893,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -621,7 +903,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -631,7 +913,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 820,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -641,7 +923,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -651,7 +933,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -661,7 +943,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -671,7 +953,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -681,7 +963,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -691,7 +973,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -701,7 +983,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "The Next Web",
@@ -711,7 +993,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -721,7 +1003,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -731,7 +1013,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -741,7 +1023,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -751,7 +1033,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Anthropic News",
@@ -761,7 +1043,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 237,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "The Verge AI",
@@ -771,7 +1053,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -781,7 +1063,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Simon Willison",
@@ -791,7 +1073,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -801,7 +1083,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Latent Space",
@@ -811,7 +1093,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Import AI",
@@ -821,7 +1103,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -831,7 +1113,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 148,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -841,7 +1123,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -851,7 +1133,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -861,7 +1143,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -871,7 +1153,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -881,7 +1163,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -891,7 +1173,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -901,7 +1183,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-08T04:00:01.608322+00:00"
+      "checkedAt": "2026-07-08T10:00:02.008846+00:00"
     }
   ],
   "errors": []
