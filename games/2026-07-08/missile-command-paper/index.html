@@ -47,14 +47,13 @@
       right: 8px;
       top: env(safe-area-inset-top, 0px);
       margin-top: 8px;
-      padding: 6px 10px;
-      border: 1px solid var(--hud-border);
-      background: linear-gradient(180deg, rgba(18,26,42,0.72), var(--hud-bg));
-      color: var(--text);
+      padding: 7px 12px;
+      border: 1px solid #b39a68;
+      background: #e0cfa4;
+      color: #3a2c1c;
       font-size: clamp(11px, 1.8vw, 14px);
       letter-spacing: 0.04em;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
+      border-radius: 4px;
       display: flex;
       gap: 10px;
       justify-content: space-between;
@@ -62,9 +61,9 @@
       white-space: nowrap;
       z-index: 5;
       pointer-events: none;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.28);
+      box-shadow: 0 3px 0 #b39a68, 0 6px 14px rgba(0,0,0,0.3);
     }
-    .hud span { opacity: 0.94; }
+    .hud span { opacity: 0.94; font-weight: 700; }
     .overlay {
       position: fixed;
       inset: 0;
@@ -90,6 +89,11 @@
       line-height: 1;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+      color: #f2e8d0;
+      /* stacked drop shadow = cut-paper thickness */
+      text-shadow: 2px 3px 0 rgba(0,0,0,0.42), 3px 5px 0 rgba(0,0,0,0.16);
+      transform: rotate(-1.2deg);
+      transform-origin: left center;
     }
     p { margin: 10px 0; opacity: 0.9; line-height: 1.45; }
     ul {
@@ -132,13 +136,13 @@
     /* Lighter scrim on the title screen so the auto-demo shows through */
     #tutorialOverlay { background: radial-gradient(circle at 50% 42%, rgba(4,10,20,0.12), rgba(3,6,14,0.5)); }
     #demoBadge {
-      position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+      position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%) rotate(-1.5deg);
       z-index: 11; pointer-events: none; display: none;
-      padding: 6px 14px; border-radius: 999px;
-      background: rgba(4,10,20,0.66); color: #cdf3ff;
+      padding: 6px 15px; border-radius: 3px;
+      background: #d8b24a; color: #3a2c10;
       font: 800 13px Inter, system-ui, sans-serif; letter-spacing: 0.09em;
-      border: 1px solid rgba(127,231,255,0.55);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.32);
+      border: 1px solid #b6902f;
+      box-shadow: 0 3px 0 #ab8a34, 0 6px 14px rgba(0,0,0,0.3);
     }
     .optrow {
       display: flex; align-items: center; justify-content: space-between;
@@ -1424,14 +1428,26 @@
           ctx.globalAlpha = 1;
         }
 
-        // Paper sun / moon — torn disc with a soft drop shadow
+        // Paper sun / moon — torn disc with cut-paper rays and a soft drop shadow
         const sunX = state.width * 0.8, sunY = state.groundY * 0.24, sunR = Math.max(24, state.width * 0.032);
         shadowOn(9, 5, 0.22);
+        if (!set.night) { // glued-on paper ray triangles behind the disc
+          ctx.fillStyle = set.sunRing;
+          for (let i = 0; i < 12; i++) {
+            const a = i / 12 * TAU + 0.15;
+            const r0 = sunR * 1.02, r1 = sunR * 1.5, hw = 0.13;
+            ctx.beginPath();
+            ctx.moveTo(sunX + Math.cos(a - hw) * r0, sunY + Math.sin(a - hw) * r0);
+            ctx.lineTo(sunX + Math.cos(a) * r1, sunY + Math.sin(a) * r1);
+            ctx.lineTo(sunX + Math.cos(a + hw) * r0, sunY + Math.sin(a + hw) * r0);
+            ctx.closePath(); ctx.fill();
+          }
+        }
         ctx.fillStyle = set.sun;
         tornPuffPath(sunX, sunY, sunR); ctx.fill();
         shadowOff();
         ctx.fillStyle = set.sunRing; // torn inner ring accent
-        tornPuffPath(sunX, sunY, sunR * 0.72); ctx.fill();
+        tornPuffPath(sunX, sunY, sunR * 0.68); ctx.fill();
         if (set.night) { ctx.fillStyle = set.skyTop; ctx.beginPath(); ctx.arc(sunX + sunR * 0.5, sunY - sunR * 0.4, sunR * 1.05, 0, TAU); ctx.fill(); }
 
         // Distant paper hill (torn top edge) with a soft shadow
@@ -1509,6 +1525,17 @@
         }
         ctx.fillStyle = set.groundLine;
         ctx.fillRect(-60, state.groundY, state.width + 120, 2);
+        // Torn cut-paper grass tufts along the ground seam
+        ctx.fillStyle = set.hillBack;
+        const step = 16;
+        for (let x = -40; x < state.width + 40; x += step) {
+          const h = 5 + (Math.sin(x * 0.7) + 1) * 3;
+          ctx.beginPath();
+          ctx.moveTo(x, state.groundY + 1);
+          ctx.lineTo(x + step * 0.5, state.groundY - h);
+          ctx.lineTo(x + step, state.groundY + 1);
+          ctx.closePath(); ctx.fill();
+        }
       }
 
       function groundShadow(x, w) {
