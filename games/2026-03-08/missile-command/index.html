@@ -331,8 +331,8 @@ button:active { transform: translateY(1px) scale(.99); }
   let diffMul=DIFF_MUL[difficulty]||1;
   const voiceEl=new Audio(); voiceEl.preload='auto';
   let voiceCooldown=0;
-  let voVoice=Math.floor(Math.random()*4),voSetLast=-1; // a different announcer voice every game
-  function voRoll(){let v=Math.floor(Math.random()*4);if(v===voSetLast)v=(v+1)%4;voSetLast=v;voVoice=v;}
+  const VOARR=['harry','bella','brian','callum','charlie','chris','eric','jessica','liam','lily','matilda']; let voVoice=VOARR[Math.floor(Math.random()*VOARR.length)],voSetLast=null; // Jez's picked announcer voices
+  function voRoll(){let v=VOARR[Math.floor(Math.random()*VOARR.length)];if(v===voSetLast)v=VOARR[(VOARR.indexOf(v)+1)%VOARR.length];voSetLast=v;voVoice=v;}
   const VOICE_TEXT={'vo-incoming':'INCOMING — ENGAGE','vo-wave':'HOLD THE LINE','vo-wave-2':'MULTIPLE CONTACTS ON RADAR','vo-wave-3':'WEAPONS FREE','vo-city-lost':'CITY LOST','vo-city-lost-2':'CITY DOWN — TIGHTEN THE NET','vo-last-city':'ONE CITY REMAINING','vo-sector-secure':'SECTOR SECURED','vo-secure-2':'WAVE NEUTRALIZED','vo-secure-3':'ALL CLEAR — REARMING','vo-mirv':'MIRV SEPARATION','vo-mirv-2':'WARHEADS SPLITTING','vo-smart':'SMART WEAPONS — THEY EVADE','vo-bomber':'BOMBER ON APPROACH','vo-orbital':'ORBITAL WEAPON CHARGING','vo-meteor':'METEOR SHOWER INBOUND','vo-stealth':'STEALTH SIGNATURES DETECTED','vo-nuke':'NUCLEAR WARHEADS — STOP THEM','vo-ammo-low':'AMMUNITION LOW','vo-chain':'BEAUTIFUL CHAIN','vo-boss':'BOSS INBOUND — BRACE'};
   // Per-event voice pools: random variant, never the same twice in a row
   const VO_POOLS={wave:['vo-wave','vo-wave-2','vo-wave-3'],secure:['vo-sector-secure','vo-secure-2','vo-secure-3'],cityLost:['vo-city-lost','vo-city-lost-2'],mirv:['vo-mirv','vo-mirv-2']};
@@ -351,7 +351,7 @@ button:active { transform: translateY(1px) scale(.99); }
     if(muted||voiceVolume<=0)return;
     if(voiceCooldown>0&&!priority)return;
     voiceCooldown=1.6;
-    try{voiceEl.onerror=function(){voiceEl.onerror=null;voiceEl.src='assets/'+name+'.mp3';voiceEl.currentTime=0;voiceEl.play().catch(()=>{});};voiceEl.src='assets/vo/v'+voVoice+'/'+name+'.mp3';voiceEl.volume=voiceVolume;voiceEl.currentTime=0;voiceEl.play().catch(()=>{});showVoiceToast(VOICE_TEXT[name]||'');}catch(e){}
+    try{voiceEl.onerror=function(){voiceEl.onerror=null;voiceEl.src='assets/'+name+'.mp3';voiceEl.currentTime=0;voiceEl.play().catch(()=>{});};voiceEl.src='assets/vo/'+voVoice+'/'+name+'.mp3';voiceEl.volume=voiceVolume;voiceEl.currentTime=0;voiceEl.play().catch(()=>{});showVoiceToast(VOICE_TEXT[name]||'');}catch(e){}
   }
   function setVoiceVolume(v){voiceVolume=Math.max(0,Math.min(1,v));localStorage.setItem(VOICE_VOLUME_KEY,String(voiceVolume));updateOptionsUI();}
   function setDifficulty(d){difficulty=d;diffMul=DIFF_MUL[d]||1;localStorage.setItem(DIFF_KEY,d);updateOptionsUI();}
