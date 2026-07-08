@@ -244,5 +244,24 @@
       "description": "A night-blooming orchid propagation room rendered as a physical Prussian-blue cyanotype contact print with ghosted plant silhouettes, rinse marks, paper fibers, and tabletop darkroom scale cues.",
       "template": "Render [SUBJECT_OR_PLACE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls surface chemistry, texture, color behavior, edge quality, scale cues, and lighting. Include [ENVIRONMENTAL_CONTEXT], [FUNCTIONAL_OBJECTS], [TACTILE_DETAILS], [MEDIUM_SPECIFIC_MARKS], and [PHYSICAL_DISPLAY_CONTEXT]. Keep the finished image as a visual example rather than an instruction card."
     }
+  },
+  {
+    "id": "2026-07-08-random-image-style-random-rendering-style-pre-rendered-orch",
+    "title": "Random rendering style: Pre-Rendered Orchid Weather Station",
+    "tests": "Generated with the synchronous openclaw GPT Image 2 CLI on the primary openai/gpt-image-2 route; exact output path verified before append.",
+    "prompt": "Create a finished square image in the style of a 1990s pre-rendered isometric adventure-game background, not a screenshot with UI: a rooftop orchid weather station built above an old brick transit depot after rain. Show a fixed three-quarter isometric camera view with low-poly-to-pre-rendered geometry, hand-painted texture detail, chunky beveled edges, soft baked shadows, slight dithering, tiny practical props, and warm-cool light contrast. The scene should include glass orchid cabinets with condensation, brass rain gauges, a small copper anemometer, tiled maintenance floor puddles, coiled rubber hoses, seedling trays, a cracked skylight patch, enamel tool drawers, damp folded tarps, a work stool, ceramic labels that are too small to read, wires clipped to a nonbranded analog weather panel, rooftop brick parapets, moss in gutter seams, and violet orchid blooms glowing under amber greenhouse lamps while blue storm light enters from the open roof. Make it feel like an explorable but still image from a lost 1990s ecology puzzle game, with dense tactile environmental storytelling and no characters, no readable interface text, no prompt-card text, no posters, no paper layout, no logos, no watermark, no cinematic action, and no modern flat vector look.\n\nReusable fill-in-the-blank template: Create a finished square image in the style of [STYLE_OR_MEDIUM], showing [SPECIFIC_PLACE_OR_WORKSPACE] after [WEATHER_OR_LIGHTING_CONDITION]. Use [CAMERA_OR_COMPOSITION], [STYLE_SPECIFIC_SURFACE_DETAILS], [MATERIALS_AND_PROPS], [COLOR_AND_LIGHT_CONTRAST], and dense tactile environmental storytelling. Keep it as a finished visual example, not a prompt card, poster, UI screenshot, document layout, logo, or cinematic action scene.\n\nExample substitution: [STYLE_OR_MEDIUM] = a 1990s pre-rendered isometric adventure-game background; [SPECIFIC_PLACE_OR_WORKSPACE] = a rooftop orchid weather station above an old brick transit depot; [WEATHER_OR_LIGHTING_CONDITION] = after rain with blue storm light and amber greenhouse lamps; [CAMERA_OR_COMPOSITION] = fixed three-quarter isometric camera view; [STYLE_SPECIFIC_SURFACE_DETAILS] = low-poly-to-pre-rendered geometry, hand-painted textures, chunky bevels, baked shadows, slight dithering; [MATERIALS_AND_PROPS] = glass orchid cabinets, brass rain gauges, copper anemometer, tiled puddles, hoses, seedling trays, cracked skylight, enamel drawers, damp tarps, analog weather panel, brick parapets, mossy gutters, and violet orchids.",
+    "image": "images/2026-07-08-random-image-style-random-rendering-style-pre-rendered-orch.jpg",
+    "thumb": "thumbs/2026-07-08-random-image-style-random-rendering-style-pre-rendered-orch.webp",
+    "color": "#231d1a",
+    "date": "2026-07-08",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "1990s pre-rendered isometric adventure-game background",
+      "description": "A rain-wet rooftop orchid weather station rendered as a nostalgic 1990s pre-rendered isometric adventure-game environment with hand-painted textures, chunky bevels, baked shadows, and dense practical props.",
+      "template": "Create a finished square image in the style of [STYLE_OR_MEDIUM], showing [SPECIFIC_PLACE_OR_WORKSPACE] after [WEATHER_OR_LIGHTING_CONDITION]. Use [CAMERA_OR_COMPOSITION], [STYLE_SPECIFIC_SURFACE_DETAILS], [MATERIALS_AND_PROPS], [COLOR_AND_LIGHT_CONTRAST], and dense tactile environmental storytelling. Keep it as a finished visual example, not a prompt card, poster, UI screenshot, document layout, logo, or cinematic action scene."
+    }
   }
 ]
