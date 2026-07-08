@@ -95,6 +95,7 @@
   }
 
   function newRun() {
+    audio.rollVoice();   // a different announcer voice every game
     planIdx = 0;
     continues = 3;
     newBest = false;
@@ -605,6 +606,9 @@
     setInput(o) { window.__forceInput = o; },
     get lastInput() { return lastInp; },        // merged keyboard+touch+joystick+pad
     padConnected() { return input.padConnected(); },
+    voice: { roll() { audio.rollVoice(); return audio.getVoiceSet(); },
+             set() { return audio.getVoiceSet(); },
+             say(n) { audio.resume(); audio.playVoice(n, true); } },
   };
   function snap() {
     if (!state) return { mode };
