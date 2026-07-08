@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Alien Depth Mesh</title>
+  <meta name="description" content="An orbitable single-image textured depth mesh experiment." />
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080807;
+      --panel: rgba(8, 8, 7, 0.74);
+      --line: rgba(255, 255, 255, 0.16);
+      --text: #f5f2eb;
+      --muted: #b9afa3;
+      --accent: #f0522e;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    #scene {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100dvh;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    #scene:active {
+      cursor: grabbing;
+    }
+
+    .toolbar {
+      position: fixed;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      max-width: calc(100vw - 24px);
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+    }
+
+    .button {
+      display: inline-grid;
+      place-items: center;
+      min-width: 36px;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      color: var(--text);
+      background: #24211d;
+      font: 700 12px/1 system-ui, sans-serif;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      outline: none;
+      background: #343027;
+    }
+
+    .button[aria-pressed="true"] {
+      border-color: rgba(240, 82, 46, 0.72);
+      color: #fff;
+    }
+
+    .slider {
+      width: clamp(96px, 22vw, 150px);
+      accent-color: var(--accent);
+    }
+
+    .status {
+      position: fixed;
+      right: 12px;
+      bottom: 12px;
+      max-width: min(420px, calc(100vw - 24px));
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--muted);
+      background: var(--panel);
+      font-size: 12px;
+      line-height: 1.35;
+      backdrop-filter: blur(10px);
+    }
+
+    .status:empty {
+      display: none;
+    }
+
+    @media (max-width: 520px) {
+      .toolbar {
+        right: 12px;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        min-width: 34px;
+        height: 31px;
+        padding: 0 8px;
+      }
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../blueforest-globe/vendor/three.module.js",
+        "three/addons/": "../blueforest-globe/vendor/addons/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <h1 class="visually-hidden">Alien depth mesh viewer</h1>
+  <canvas id="scene" aria-label="Orbitable textured alien depth mesh"></canvas>
+  <nav class="toolbar" aria-label="Viewer controls">
+    <button class="button" id="reset" title="Reset camera" type="button">R</button>
+    <button class="button" id="spin" title="Toggle spin" type="button" aria-pressed="false">S</button>
+    <button class="button" id="wire" title="Toggle wireframe" type="button" aria-pressed="false">W</button>
+    <input class="slider" id="depth" title="Depth amount" type="range" min="0" max="90" value="45" />
+    <a class="button" href="./assets/alien-textured-depth-mesh.obj" title="Download OBJ">OBJ</a>
+    <a class="button" href="./assets/alien-orbitable-depth-mesh.zip" title="Download package">ZIP</a>
+  </nav>
+  <div class="status" id="status" role="status"></div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+    const canvas = document.querySelector("#scene");
+    const status = document.querySelector("#status");
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      preserveDrawingBuffer: true,
+      powerPreference: "high-performance"
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.setClearColor(0x080807, 1);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x080807);
+
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+    camera.position.set(0, 0.06, 3.05);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.065;
+    controls.minDistance = 1.15;
+    controls.maxDistance = 5.5;
+    controls.target.set(0, 0, 0);
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x2b170b, 1.7));
+    const key = new THREE.DirectionalLight(0xffe4c2, 1.45);
+    key.position.set(-1.5, 2, 3);
+    scene.add(key);
+
+    const loader = new THREE.TextureLoader();
+    const texture = loader.load("./assets/alien-texture.jpg", (loaded) => {
+      loaded.colorSpace = THREE.SRGBColorSpace;
+      loaded.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    });
+    texture.colorSpace = THREE.SRGBColorSpace;
+
+    async function loadImage(src) {
+      const image = new Image();
+      image.src = src;
+      await image.decode();
+      return image;
+    }
+
+    function imageData(image) {
+      const scratch = document.createElement("canvas");
+      scratch.width = image.naturalWidth;
+      scratch.height = image.naturalHeight;
+      const context = scratch.getContext("2d", { willReadFrequently: true });
+      context.drawImage(image, 0, 0);
+      return context.getImageData(0, 0, scratch.width, scratch.height).data;
+    }
+
+    function buildGeometry(width, height, depthData, liftData, amount) {
+      const nx = 150;
+      const ny = Math.max(8, Math.round(nx * height / width));
+      const aspect = width / height;
+      const sx = 2 * aspect;
+      const sy = 2;
+      const vertices = new Float32Array((nx + 1) * (ny + 1) * 3);
+      const uvs = new Float32Array((nx + 1) * (ny + 1) * 2);
+      let vi = 0;
+      let ui = 0;
+
+      for (let y = 0; y <= ny; y += 1) {
+        const v = y / ny;
+        const py = Math.min(height - 1, Math.round(v * (height - 1)));
+        for (let x = 0; x <= nx; x += 1) {
+          const u = x / nx;
+          const px = Math.min(width - 1, Math.round(u * (width - 1)));
+          const offset = (py * width + px) * 4;
+          const depth = depthData[offset] / 255;
+          const lift = liftData[offset] / 255;
+
+          vertices[vi] = (u - 0.5) * sx;
+          vertices[vi + 1] = (0.5 - v) * sy;
+          vertices[vi + 2] = (depth - 0.55) * amount + lift * amount * 0.5;
+          vi += 3;
+
+          uvs[ui] = u;
+          uvs[ui + 1] = 1 - v;
+          ui += 2;
+        }
+      }
+
+      const indices = [];
+      for (let y = 0; y < ny; y += 1) {
+        for (let x = 0; x < nx; x += 1) {
+          const a = y * (nx + 1) + x;
+          const b = a + 1;
+          const c = a + (nx + 1);
+          const d = c + 1;
+          indices.push(a, c, b, b, c, d);
+        }
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+      geometry.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      return geometry;
+    }
+
+    const [depthImage, liftImage] = await Promise.all([
+      loadImage("./assets/alien-depth-map.png"),
+      loadImage("./assets/alien-lift-map.png")
+    ]);
+    const depthData = imageData(depthImage);
+    const liftData = imageData(liftImage);
+
+    const material = new THREE.MeshStandardMaterial({
+      map: texture,
+      roughness: 0.78,
+      metalness: 0.03,
+      side: THREE.DoubleSide
+    });
+    const mesh = new THREE.Mesh(
+      buildGeometry(depthImage.naturalWidth, depthImage.naturalHeight, depthData, liftData, 0.45),
+      material
+    );
+    scene.add(mesh);
+
+    const depthInput = document.querySelector("#depth");
+    depthInput.addEventListener("input", () => {
+      const oldGeometry = mesh.geometry;
+      mesh.geometry = buildGeometry(
+        depthImage.naturalWidth,
+        depthImage.naturalHeight,
+        depthData,
+        liftData,
+        Number(depthInput.value) / 100
+      );
+      oldGeometry.dispose();
+    });
+
+    document.querySelector("#wire").addEventListener("click", (event) => {
+      material.wireframe = !material.wireframe;
+      event.currentTarget.setAttribute("aria-pressed", String(material.wireframe));
+    });
+
+    let spinning = false;
+    document.querySelector("#spin").addEventListener("click", (event) => {
+      spinning = !spinning;
+      event.currentTarget.setAttribute("aria-pressed", String(spinning));
+    });
+
+    document.querySelector("#reset").addEventListener("click", () => {
+      camera.position.set(0, 0.06, 3.05);
+      controls.target.set(0, 0, 0);
+      controls.update();
+      mesh.rotation.set(0, 0, 0);
+    });
+
+    function resize() {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function frame() {
+      if (spinning) {
+        mesh.rotation.y += 0.0038;
+      }
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+
+    status.textContent = "";
+    frame();
+  </script>
+</body>
+</html>
