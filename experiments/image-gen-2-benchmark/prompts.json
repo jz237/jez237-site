@@ -4427,5 +4427,24 @@
       "description": "A glowing acrylic slab photographed as a tactile studio object, engraved with a rooftop rain garden pump-room scene.",
       "template": "Render [SUBJECT_OR_PLACE] as a finished [STYLE_OR_MEDIUM] artwork photographed as a real physical object, with medium-specific materials, lighting, surface texture, and a scene dense enough to reward close inspection, while avoiding poster text, labels, and placeholder instructions."
     }
+  },
+  {
+    "id": "2026-07-09-factual-infographic-factual-infographic-how-electrochromic-",
+    "title": "Factual infographic: How Electrochromic Smart Glass Changes Tint",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw shell CLI. Verified exact output path under tool-image-generation before append. Factual topic checked against existing factual-infographics-data.json for no exact/near duplicate.",
+    "prompt": "Create a finished square factual infographic titled \"How Electrochromic Smart Glass Changes Tint\" explaining real-world/non-fiction electrochromic window technology using conservative materials science. Anchor it as a photorealistic science-museum engineering wall chart beside a window-materials test bench with a small inert smart-glass sample, glass coupons, oxide-coated film swatches, light-box glow, clamp stand, protective acrylic shield, and restrained concise labels. Include a central electrochromic glass cutaway stack, four-step ion-movement/tinting sequence, macro windows for transparent conductor shimmer, tungsten-oxide film grain, polymer electrolyte edge, and sealed perimeter gasket, a clear-versus-tinted comparison panel, a facade/skylight/lab-bench context vignette, material swatches, and a non-actionable observation panel about slow tinting, low switching power, glare/privacy control, and edge unevenness. Keep it educational, real-world, and non-actionable: no exact voltages, no wiring diagram, no DIY build instructions, no brand logos, no QR codes, no dense paragraphs, no invented performance statistics, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a finished factual infographic titled \"How [REAL_WORLD_PROCESS] Works\" explaining [NONFICTION_SCIENCE_OR_ENGINEERING_TOPIC] using conservative real-world information. Anchor it as a photorealistic [LAB/FIELD/MUSEUM/WORKBENCH] wall chart with a central cutaway or main mechanism panel, a step-by-step cause/effect sequence, macro material/detail windows, a comparison panel, real-world context props or scale cues, material swatches, and a short non-actionable observation/safety panel. Use concise labels, clear visual hierarchy, subject-specific materials, and rich tactile detail. Avoid invented facts, exact unsafe instructions, brand logos, dense paragraphs, flat school-poster composition, and prompt-card text.\n\nExample substitution: [REAL_WORLD_PROCESS] = Electrochromic Smart Glass Changes Tint; [NONFICTION_SCIENCE_OR_ENGINEERING_TOPIC] = electrochromic window tinting and ion movement in thin-film glass; [LAB/FIELD/MUSEUM/WORKBENCH] = science-museum window-materials test bench with an inert smart-glass sample, oxide-coated film swatches, clamp stand, light box, protective acrylic shield, and facade/skylight context.",
+    "image": "images/2026-07-09-factual-infographic-factual-infographic-how-electrochromic-.jpg",
+    "thumb": "thumbs/2026-07-09-factual-infographic-factual-infographic-how-electrochromic-.webp",
+    "color": "#9d9c99",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Electrochromic smart glass tinting and ion movement in thin-film windows",
+      "description": "Explains how electrochromic window layers darken and clear through ion movement, color-center formation, conductive coatings, and laminated material design.",
+      "sourceNote": "Real-world/non-fiction materials-science summary based on established electrochromic glass principles; no exact voltages or build instructions included."
+    }
   }
 ]
