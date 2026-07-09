@@ -408,6 +408,9 @@ function diffCh() { return DIFF_CH[settings.difficulty] || DIFF_CH.normal; }
 
 const music = { title: null, game: null };
 let voiceEl = null, musicReady = false, voiceCooldown = 0, voJets = false;
+const VOARR=['harry','bella','brian','callum','charlie','chris','eric','jessica','liam','lily','matilda']; // Jez's picked announcer voices
+let voVoice=VOARR[Math.floor(Math.random()*VOARR.length)],voSetLast=null;
+function voRoll(){let v=VOARR[Math.floor(Math.random()*VOARR.length)];if(v===voSetLast)v=VOARR[(VOARR.indexOf(v)+1)%VOARR.length];voSetLast=v;voVoice=v;}
 function applyAudioSettings() {
   Audio2.setLevel(0.9 * (settings.master / 100) * (settings.sfx / 100));
   if (voiceEl) voiceEl.volume = (settings.master / 100) * (settings.voice / 100);
@@ -449,7 +452,7 @@ function playVoice(name, priority) {
   if (Audio2.isMuted() || !voiceEl || settings.voice <= 0) return;
   if (voiceCooldown > 0 && !priority) return;
   voiceCooldown = 100; // frames (~1.7s)
-  try { voiceEl.src = 'assets/' + name + '.mp3'; voiceEl.volume = (settings.master / 100) * (settings.voice / 100); voiceEl.currentTime = 0; voiceEl.play().catch(() => {}); showVoToast(VOICE_TEXT[name] || ''); } catch (e) {}
+  try { voiceEl.onerror = function(){voiceEl.onerror=null;voiceEl.src='assets/'+name+'.mp3';voiceEl.currentTime=0;voiceEl.play().catch(()=>{});}; voiceEl.src = 'assets/vo/' + voVoice + '/' + name + '.mp3'; voiceEl.volume = (settings.master / 100) * (settings.voice / 100); voiceEl.currentTime = 0; voiceEl.play().catch(() => {}); showVoToast(VOICE_TEXT[name] || ''); } catch (e) {}
 }
 function announceVo(event, priority) {
   const pool = VO_POOLS[event] || [event];
@@ -771,6 +774,7 @@ function spawnParticles(x, y, n, opts) {
 //  GAME FLOW
 // ===========================================================================
 function startGame() {
+  voRoll();
   initMusic();
   G.state = 'play'; G.t = 0; G.score = 0; G.lives = 3; G.wave = 1; G.kills = 0;
   G.savedHome = 0; G.aboard = 0; G.lost = 0; G.cam = 0;
