@@ -1746,5 +1746,25 @@
       "continuity": "Preserves Lumenreef Causeway materials and society: glass-coral causeways, lensleaf rain awnings, shell-bell timing signals, wet basalt, turquoise rainlight, and low many-limbed tide engineers with pulsing gill fans.",
       "entryDescription": "Bridge apprentices convert rain cistern bowls into temporary resonators to compare drifting shell-bell tones as the causeway timing problem escalates."
     }
+  },
+  {
+    "id": "2026-07-09-weekly-world-image-lumenreef-causeway-silt-lantern-steps-ev",
+    "title": "Lumenreef Causeway: Silt Lantern Steps Evacuation",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; verified exact output path before append; archived as weekly-world catalog entry only.",
+    "prompt": "Create a realistic photographed daily-life scene from the invented alien world Lumenreef Causeway, titled \"Silt Lantern Steps Evacuation\". This is not Earth, not Atlantis, and not fantasy humans: show non-human amphibious tide engineers with low horizontal bodies, six jointed walking limbs, two delicate manipulator arms, translucent gill fans along the neck, broad mirrored eyes, pebble-textured blue-green skin, flexible tail rudders, and soft shell-bell throat sacs.\n\nStory beat: families move glowing silt lanterns, shell baskets, and young float pods up wet basalt steps as the shell-bell causeway timing grows unreliable. Show an urgent but orderly evacuation on rain-polished black basalt steps beside glass-coral railings, with harbor families and bridge apprentices carrying nursery supplies away from a low turquoise sky-tide lagoon. Include pearly rain curtains, buoyant glass-coral causeway spans in the background, suspended freshwater lenses overhead, lensleaf awnings bending in wet wind, shell-bell signal towers slightly out of rhythm, braided kelpglass ropes, basalt anchor pins, shell-ceramic baskets, rain-polished copper clasps, translucent tide-gate membrane scraps, and violet under-reef glow visible through gaps near the waterline.\n\nMake the image a lived-in documentary field photograph, not a cinematic action scene and not an infographic. Use a low horizontal camera angle at step height, natural humid storm light, wet caustic reflections, tactile water beads, pearly shell wear, glass-coral translucency, slick black basalt, luminous blue-green silt lanterns, small float pods wrapped in damp kelpglass netting, and believable family-scale body language. Keep the plot readable without labels: the tide engineers are climbing upward, one elder steadies a lantern basket, two juveniles shelter under a milky lensleaf awning, and a young ferry keeper points toward a safe landing while the distant causeway lamps ring late. No humans, no mermaids, no readable text, no logos, no poster layout, no dry desert highlands, no generic underwater palace, no gore, no watermark.\n\nReusable template: Create a realistic photographed lived-in daily-life scene from the invented alien world [WORLD_NAME], showing [NON_HUMAN_INHABITANTS] responding to [STORY_BEAT] in [SPECIFIC_LOCATION]. Preserve the world's ecology, materials, weather, technologies, body plans, and serialized continuity; make the scene tactile and documentary rather than cinematic, with no humans, no logos, no poster layout, and no explanatory text.\n\nExample substitution: [WORLD_NAME] = Lumenreef Causeway; [NON_HUMAN_INHABITANTS] = amphibious tide engineers with six walking limbs, manipulator arms, gill fans, mirrored eyes, blue-green pebbled skin, tail rudders, and shell-bell throat sacs; [STORY_BEAT] = families moving silt lanterns, shell baskets, and young float pods upward because shell-bell causeway timing is drifting late; [SPECIFIC_LOCATION] = wet basalt steps beside glass-coral railings above a turquoise sky-tide lagoon.",
+    "image": "images/2026-07-09-weekly-world-image-lumenreef-causeway-silt-lantern-steps-ev.jpg",
+    "thumb": "thumbs/2026-07-09-weekly-world-image-lumenreef-causeway-silt-lantern-steps-ev.webp",
+    "color": "#3a4e54",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago of turquoise shelf seas, black basalt islets, buoyant glass-coral causeways, lensleaf awnings, shell-bell transit signals, and amphibious tide engineers trying to keep daily life in phase with the sky tide.",
+      "continuity": "Preserves Lumenreef's turquoise shelf seas, wet black basalt, glass-coral causeways, shell-bell signal towers, lensleaf awnings, kelpglass ropes, shell ceramics, freshwater lenses, and non-human amphibious tide engineers.",
+      "entryDescription": "Harbor families carry glowing silt lanterns, shell baskets, and nursery float pods up wet basalt steps as the causeway bell timing slips."
+    }
   }
 ]
