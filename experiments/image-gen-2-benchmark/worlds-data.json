@@ -1786,5 +1786,25 @@
       "continuity": "Preserves Lumenreef Causeway's turquoise shelf seas, black basalt islets, buoyant glass-coral causeways, shell-bell timing network, reef-sled ferry tools, and low horizontal amphibious tide engineers.",
       "entryDescription": "Nali pilots a reef-sled through a narrow sky-tide crossing while carrying a temporary resonator toward Bellwether Lookout."
     }
+  },
+  {
+    "id": "2026-07-09-weekly-world-image-lumenreef-causeway-bellwether-lookout-re",
+    "title": "Lumenreef Causeway: Bellwether Lookout Retuning",
+    "tests": "Weekly world story beat 10/24: Ovek and Nali retune the lookout shell-bells using bridge resonators while the causeway glows beneath them.",
+    "prompt": "Create a finished weekly-world daily-life view for Lumenreef Causeway: Bellwether Lookout Retuning. Show Ovek and Nali retuning shell-bell towers on a rain-wet black basalt lookout using bridge resonators, copper tuning rods, shell-ceramic bowls, braided kelpglass lines, gill-fan color pulses, and luminous glass-coral causeways reappearing below. Preserve the world bible: turquoise shelf seas, black basalt islets, floating glass-coral mats, pearly rain curtains, lensleaf awnings, shell-bell transit logic, rainwater lens cisterns, non-human amphibious tide engineers, pearly shell ceramics, rain-polished copper, milky lensleaf resin, teal reed fans, saffron float pods, violet under-reef glow, and wet caustic reflections. Avoid humans, mermaids, Earth harbor, generic Atlantis fantasy, cyberpunk neon, dry desert, crystal thorns, mushrooms, readable text, labels, logos, and prompt-card framing.\\n\\nReusable prompt template: Create a realistic photographed daily-life image from [WEEKLY_WORLD_NAME], showing [CHARACTER_OR_WORK_CREW] at [WORLD_SPECIFIC_PLACE] while [STORY_BEAT_ACTION]. Include the world bible's non-Earth ecology, inhabitants, materials, infrastructure, color palette, and continuity motifs; make the image a lived-in documentary view with practical work details, not a flat poster or generic sci-fi scene.\\n\\nExample substitution: [WEEKLY_WORLD_NAME] = Lumenreef Causeway; [CHARACTER_OR_WORK_CREW] = Ovek and Nali; [WORLD_SPECIFIC_PLACE] = Bellwether Lookout on a wet basalt islet above glowing glass-coral causeways; [STORY_BEAT_ACTION] = retuning lookout shell-bells with bridge resonators as the causeway returns to phase.",
+    "image": "images/2026-07-09-weekly-world-image-lumenreef-causeway-bellwether-lookout-re.jpg",
+    "thumb": "thumbs/2026-07-09-weekly-world-image-lumenreef-causeway-bellwether-lookout-re.webp",
+    "color": "#565e5b",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago where buoyant glass-coral reefs, living lens leaves, and many-limbed tide engineers build settlements along glowing shallow causeways that appear and vanish with the sky tide.",
+      "continuity": "Preserves Lumenreef's shell-bell tide network, glass-coral causeways, rain-polished copper tools, lensleaf vegetation, turquoise rainlight, and non-human amphibious tide engineers.",
+      "entryDescription": "Ovek and Nali retune Bellwether Lookout's shell-bells with bridge resonators as the luminous causeway returns to phase."
+    }
   }
 ]
