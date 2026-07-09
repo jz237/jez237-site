@@ -678,6 +678,7 @@ function startGame(isAttract){
   document.getElementById('titleScreen').classList.toggle('hidden', !attract);
   document.getElementById('attractTag').classList.add('hidden');
   document.getElementById('hud').style.opacity = attract? '0.5':'1';
+  if(attract) stopMusic(); else startMusic();
   beginWave();
 }
 
@@ -708,7 +709,7 @@ function tickWave(dt){
   }
   state.spawnTimer+=dt;
   for(let i=state.spawnQueue.length-1;i>=0;i--){ const s=state.spawnQueue[i];
-    if(state.spawnTimer>=s.delay){ spawnEnemy(s.sx, s.tx, s.speed, s.mirv); state.spawnQueue.splice(i,1); }
+    if(state.spawnTimer>=s.delay){ spawnEnemy(s.sx, s.tx, s.speed, s.mirv); sfxIncoming(); state.spawnQueue.splice(i,1); }
   }
   const enemiesLeft=enemies.some(e=>e.active) || state.spawnQueue.length>0;
   if(!enemiesLeft){
@@ -785,7 +786,7 @@ function aiThink(dt){
 /* ================= AUDIO (procedural WebAudio) ================= */
 let actx=null, masterGain=null;
 function ensureAudio(){ if(actx||!opts.sound) return; try{ actx=new (window.AudioContext||window.webkitAudioContext)();
-  masterGain=actx.createGain(); masterGain.gain.value=0.5; masterGain.connect(actx.destination); }catch(e){} }
+  masterGain=actx.createGain(); masterGain.gain.value=0.6; masterGain.connect(actx.destination); loadSfx(); }catch(e){} }
 function tone(freq, dur, type, vol, slideTo){ if(!actx||!opts.sound) return;
   const o=actx.createOscillator(), g=actx.createGain(); o.type=type||'sine'; o.frequency.value=freq;
   if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, actx.currentTime+dur);
@@ -799,10 +800,24 @@ function noise(dur, vol, filterFreq){ if(!actx||!opts.sound) return;
   const g=actx.createGain(); g.gain.value=vol||0.3; g.gain.exponentialRampToValueAtTime(0.001, actx.currentTime+dur);
   n.connect(f); f.connect(g); g.connect(masterGain); n.start(); n.stop(actx.currentTime+dur);
 }
-function sfxLaunch(){ if(attract) return; tone(220,0.28,'sawtooth',0.14,880); }
-function sfxBoom(player){ noise(player?0.32:0.42, player?0.28:0.4, player?1200:600); tone(player?120:80,0.3,'sine',0.18,40); }
-function sfxCityLost(){ tone(300,0.5,'square',0.22,60); noise(0.5,0.35,400); }
-function sfxWaveClear(){ if(attract) return; [523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,0.22,'triangle',0.16),i*90)); }
+// ElevenLabs mp3 SFX + looping music (procedural fallback until buffers decode)
+const AUDIO_V='1';
+const sfxBuffers={};
+let musicEl=null, musicOn=false, lastIncoming=0;
+function loadSfx(){ if(!actx) return;
+  ['launch','explode','incoming','citylost','waveclear'].forEach(k=>{ if(k in sfxBuffers) return; sfxBuffers[k]=null;
+    fetch('audio/'+k+'.mp3?v='+AUDIO_V).then(r=>r.arrayBuffer()).then(a=>actx.decodeAudioData(a)).then(b=>{sfxBuffers[k]=b;}).catch(e=>{}); }); }
+function playSfx(key, vol){ if(!actx||!opts.sound) return false; const buf=sfxBuffers[key]; if(!buf) return false;
+  const s=actx.createBufferSource(); s.buffer=buf; const g=actx.createGain(); g.gain.value=vol==null?0.6:vol;
+  s.connect(g); g.connect(masterGain); s.start(); return true; }
+function startMusic(){ if(musicOn||!opts.sound) return; musicOn=true;
+  try{ if(!musicEl){ musicEl=new Audio('audio/music.mp3?v='+AUDIO_V); musicEl.loop=true; musicEl.volume=0.3; } musicEl.play().catch(e=>{}); }catch(e){} }
+function stopMusic(){ musicOn=false; if(musicEl){ try{ musicEl.pause(); }catch(e){} } }
+function sfxIncoming(){ if(attract||!opts.sound) return; const now=performance.now(); if(now-lastIncoming<1700) return; lastIncoming=now; playSfx('incoming',0.4); }
+function sfxLaunch(){ if(attract) return; if(!playSfx('launch',0.45)) tone(220,0.28,'sawtooth',0.14,880); }
+function sfxBoom(player){ if(!playSfx('explode', player?0.5:0.72)){ noise(player?0.32:0.42, player?0.28:0.4, player?1200:600); tone(player?120:80,0.3,'sine',0.18,40); } }
+function sfxCityLost(){ if(!playSfx('citylost',0.7)){ tone(300,0.5,'square',0.22,60); noise(0.5,0.35,400); } }
+function sfxWaveClear(){ if(attract) return; if(!playSfx('waveclear',0.8)) [523,659,784,1046].forEach((f,i)=>setTimeout(()=>tone(f,0.22,'triangle',0.16),i*90)); }
 
 /* ================= SCORES ================= */
 function getLocal(){ try{ return JSON.parse(localStorage.getItem(LS_KEY)||'[]'); }catch(e){ return []; } }
@@ -825,7 +840,7 @@ async function submitGlobal(initials, score){ try{ await fetch(SCORES_API,{metho
 function endGame(){
   if(state.mode!=='play') return;
   const wasAttract=attract;
-  state.mode='over'; attract=false;
+  state.mode='over'; attract=false; stopMusic();
   if(wasAttract){ // attract death → back to title, restart demo shortly
     document.getElementById('titleScreen').classList.remove('hidden');
     document.getElementById('attractTag').classList.add('hidden');
@@ -846,7 +861,7 @@ function segWire(id, key){ const box=document.getElementById(id);
   box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
     box.querySelectorAll('button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
     opts[key]=+b.dataset.v; localStorage.setItem(OPT_KEY, JSON.stringify(opts));
-    if(key==='sound'&&opts.sound) ensureAudio();
+    if(key==='sound'){ if(opts.sound){ ensureAudio(); if(state.mode==='play'&&!attract) startMusic(); } else { stopMusic(); } }
   }));
   // reflect stored
   box.querySelectorAll('button').forEach(b=>b.classList.toggle('on', +b.dataset.v===opts[key]));
