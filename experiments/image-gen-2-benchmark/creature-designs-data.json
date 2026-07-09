@@ -242,5 +242,24 @@
       "description": "A believable cloud-forest canopy animal with moss-laden rib-glide membranes, dew-combing antenna fans, hooked bark claws, and bark-gray lichen camouflage.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-09-creature-design-basalt-seep-lanternmole",
+    "title": "Basalt Seep Lanternmole",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; exact output path verified before append.",
+    "prompt": "Design a believable black-basalt geothermal seep creature called the Basalt Seep Lanternmole with heat-sensing translucent ear cups, mineral-sifting shovel forelimbs, and charcoal-black rubbery skin veined with sulfur yellow and blue-white bioluminescent pinpricks, shown as a realistic natural-history creature study. Create a finished square documentary wildlife photograph in a steaming volcanic seep field at night: one adult about the size of a large rabbit emerges halfway from a warm mineral mud burrow beside black basalt stones, with a low compact body, short powerful shovel-like forelimbs crusted with pale silica grains, smaller rear feet braced in wet mud, a blunt whiskered snout dusted with orange sulfur, beadlike protected eyes, two broad translucent ear cups held open like heat-sensing dishes, a ridge of tiny blue-white glow pores along the flanks, and charcoal rubbery skin patterned with thin sulfur-yellow mineral veins. Include one juvenile peeking from a smaller burrow mouth, steam wisps curling through cool moonlight, mineral crust terraces, wet black rock reflections, orange sulfur crystals, white silica beads stuck to the foreclaws, tiny cave insects near the glow pores, a shed ear-cup membrane fragment on a stone for scale, and ripples in warm seep water around the animal. Make the adaptations visually legible without labels: the ear cups face warm vapor vents, shovel forelimbs sift soft mineral mud, glow pores attract insects in darkness, and dark rubbery skin blends with wet basalt. Use low natural-history field-camera perspective at ground level, shallow documentary depth of field, believable anatomy and weight, tactile wet basalt, mud, mineral crust, steam, skin, claw, ear membrane, and sulfur textures, and dense but coherent ecological detail. The image itself should be the finished creature study, not a prompt card: no readable text, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no extra random wings, no incoherent anatomy, no blank studio background.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nExample substitution: [HABITAT] = black-basalt geothermal seep field at night; [ADAPTATION 1] = heat-sensing translucent ear cups aimed toward warm vapor vents; [ADAPTATION 2] = mineral-sifting shovel forelimbs and blue-white glow pores that attract cave insects; [TEXTURE/COLOR] = charcoal-black rubbery skin veined with sulfur yellow and blue-white bioluminescent pinpricks; [LIFE STAGE OR GROUPING] = one adult emerging from a warm mud burrow with one juvenile nearby; [SPECIFIC MICROHABITAT] = steaming volcanic seep mud among wet basalt stones, mineral crust terraces, sulfur crystals, silica beads, moonlight, and warm seep water.",
+    "image": "images/2026-07-09-creature-design-basalt-seep-lanternmole.jpg",
+    "thumb": "thumbs/2026-07-09-creature-design-basalt-seep-lanternmole.webp",
+    "color": "#42413e",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Basalt Seep Lanternmole",
+      "description": "A believable volcanic geothermal-seep animal with heat-sensing translucent ear cups, mineral-sifting shovel forelimbs, glow pores, and charcoal sulfur-veined skin.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
