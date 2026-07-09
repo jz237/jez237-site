@@ -4465,5 +4465,45 @@
       "description": "A believable volcanic geothermal-seep animal with heat-sensing translucent ear cups, mineral-sifting shovel forelimbs, glow pores, and charcoal sulfur-veined skin.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-09-hybrid-creature-infographic-crimson-crown-iceback-developme",
+    "title": "Crimson Crown Iceback: Development Map",
+    "tests": "Hybrid-creature pair cron; infographic names exactly two source organisms, includes source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture panels, habitat swatches, and field-context scale vignette; no actionable biology.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Crimson Crown Iceback\", using exactly two source organisms: king penguin + Japanese spider crab. Make it a landscape scientific wall chart assembled on a cold rocky subantarctic field-station bench with wet slate, kelp scraps, frost-edged sample trays, nonbranded calipers, seawater droplets, and restrained concise fictional labels. Include a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. King penguin contributes upright insulated body mass, black-white countershading, orange crown and throat patches, dense waterproof feathers, flipper-like shoulder fins, and colony-shore posture; Japanese spider crab contributes extremely long jointed walking legs, spiny red-orange carapace plates, hooked claw tips, segmented limb joints, and tidal-rock climbing stance. Keep it fictional and non-actionable: no real gene names, no lab protocols, no surgery, no gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Crimson Crown Iceback; [SOURCE_A] = king penguin; [SOURCE_B] = Japanese spider crab; [HABITAT] = subantarctic tidal ice and black volcanic shoreline; adult phenotype = chest-high upright penguin-like cold-coast wader with black-white countershading, fiery orange crown and throat markings, wet waterproof feathers, red-orange spiny crab shoulder carapace, four very long spider-crab walking legs, two shorter clawed forelimbs, hooked claw tips, and tracks through tide ice.",
+    "image": "images/2026-07-09-hybrid-creature-infographic-crimson-crown-iceback-developme.jpg",
+    "thumb": "thumbs/2026-07-09-hybrid-creature-infographic-crimson-crown-iceback-developme.webp",
+    "color": "#818082",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Crimson Crown Iceback",
+      "imageKind": "infographic",
+      "description": "A fictional king penguin plus Japanese spider crab cold-coast wader with orange crown markings, wet penguin countershading, spiny red crab armor, long jointed legs, and hooked tidal-rock claws.",
+      "continuity": "Same adult phenotype across both images: chest-high upright penguin body, orange crown and throat patches, black-white wet feathers, red-orange shoulder carapace, four long spider-crab legs, two short clawed forelimbs, hooked claws, and subantarctic tidal-ice shoreline."
+    }
+  },
+  {
+    "id": "2026-07-09-hybrid-creature-wild-crimson-crown-iceback-in-the-wild",
+    "title": "Crimson Crown Iceback: In the Wild",
+    "tests": "Hybrid-creature pair cron; wild photo preserves the infographic phenotype and shows the same fictional king penguin plus Japanese spider crab adult in subantarctic tidal-ice habitat.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Crimson Crown Iceback\", a clearly fictional two-source hybrid of king penguin + Japanese spider crab, moving through cold subantarctic tidal ice beside black volcanic rocks after gray dawn surf. Preserve the shared phenotype: chest-high vertical penguin-like torso, black-white countershading, fiery orange crown and throat markings, narrow dark beak, wet waterproof feathers, red-orange spiny crab shoulder carapace, four very long jointed spider-crab walking legs, two shorter clawed forelimbs, hooked claw tips gripping rock, kelp strands, salt spray, webbed-and-clawed tracks, and distant smaller penguins for scale. No text, labels, lab setting, real genetics, surgery, or gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Crimson Crown Iceback; [SOURCE_A] = king penguin; [SOURCE_B] = Japanese spider crab; [HABITAT] = subantarctic tidal ice and black volcanic shoreline; adult phenotype = chest-high upright penguin-like cold-coast wader with black-white countershading, fiery orange crown and throat markings, wet waterproof feathers, red-orange spiny crab shoulder carapace, four very long spider-crab walking legs, two shorter clawed forelimbs, hooked claw tips, and tracks through tide ice.",
+    "image": "images/2026-07-09-hybrid-creature-wild-crimson-crown-iceback-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-09-hybrid-creature-wild-crimson-crown-iceback-in-the-wild.webp",
+    "color": "#878991",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Crimson Crown Iceback",
+      "imageKind": "wild",
+      "description": "A fictional king penguin plus Japanese spider crab cold-coast wader photographed in tidal ice with orange crown markings, red spiny armor, long crab legs, and wet penguin countershading.",
+      "continuity": "Same adult phenotype across both images: chest-high upright penguin body, orange crown and throat patches, black-white wet feathers, red-orange shoulder carapace, four long spider-crab legs, two short clawed forelimbs, hooked claws, and subantarctic tidal-ice shoreline."
+    }
   }
 ]
