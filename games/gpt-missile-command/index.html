@@ -7,14 +7,16 @@
 <meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Missile Command Vector</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/brand.svg">
   <style>
     :root {
       color-scheme: dark;
-      --hud-bg: rgba(6, 12, 24, 0.58);
-      --hud-border: rgba(255,255,255,0.14);
+      --panel: #1b2a4a;
+      --panel-deep: #16233f;
+      --line: #0c1526;
       --text: #eef7ff;
-      --accent: #7fe7ff;
-      --hot: #ffbf66;
+      --accent: #33c6f2;
+      --gold: #ffd23f;
     }
     * { box-sizing: border-box; }
     html, body {
@@ -39,22 +41,22 @@
       height: 100vh;
       touch-action: none;
       cursor: crosshair;
-      background: linear-gradient(180deg, #3f92d6 0%, #a8d8f0 78%, #3c8c48 78%, #3c8c48 100%);
+      background: linear-gradient(180deg, #37a2f2 0%, #8fd3ff 78%, #4db35e 78%, #4db35e 100%);
     }
     .hud {
       position: fixed;
       left: 8px;
-      right: 8px;
+      right: 58px;
       top: env(safe-area-inset-top, 0px);
       margin-top: 8px;
-      padding: 6px 10px;
-      border: 1px solid var(--hud-border);
-      background: linear-gradient(180deg, rgba(18,26,42,0.72), var(--hud-bg));
+      padding: 7px 12px;
+      border: 2px solid var(--line);
+      background: var(--panel-deep);
       color: var(--text);
       font-size: clamp(11px, 1.8vw, 14px);
-      letter-spacing: 0.04em;
-      border-radius: 999px;
-      backdrop-filter: blur(10px);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border-radius: 12px;
       display: flex;
       gap: 10px;
       justify-content: space-between;
@@ -62,28 +64,64 @@
       white-space: nowrap;
       z-index: 5;
       pointer-events: none;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.28);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.25);
     }
-    .hud span { opacity: 0.94; }
+    .hud span { opacity: 0.97; }
+    @media (max-width: 480px) {
+      .hud { white-space: normal; font-size: 11px; line-height: 1.35; letter-spacing: 0.02em; }
+    }
+    #pauseBtn {
+      position: fixed;
+      top: calc(env(safe-area-inset-top, 0px) + 8px);
+      right: 8px;
+      width: 42px;
+      height: 38px;
+      padding: 0;
+      display: none;
+      z-index: 6;
+      font-size: 15px;
+      line-height: 1;
+      border-radius: 12px;
+      background: var(--panel-deep);
+      color: var(--accent);
+      border: 2px solid var(--line);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.25);
+    }
     .overlay {
       position: fixed;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: radial-gradient(circle at 50% 30%, rgba(40,70,110,0.28), rgba(2,4,10,0.88));
+      background: rgba(9, 16, 32, 0.72);
       z-index: 10;
       padding: 18px;
+      overflow-y: auto;
     }
+    #hsOverlay, #optOverlay { overflow-y: auto; padding: 18px; }
     .panel {
       width: min(92vw, 620px);
-      border-radius: 22px;
-      border: 1px solid rgba(180,220,255,0.18);
-      background: linear-gradient(180deg, rgba(13,22,36,0.94), rgba(6,12,22,0.90));
+      margin: auto;
+      max-height: none;
+      border-radius: 18px;
+      border: 3px solid var(--line);
+      background: var(--panel);
       color: var(--text);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.48), inset 0 1px 0 rgba(255,255,255,0.04);
+      box-shadow: 0 8px 0 rgba(0,0,0,0.30);
       padding: 22px 22px 18px;
     }
+    .backlink {
+      display: inline-block;
+      margin-bottom: 8px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+    .backlink:hover { opacity: 1; text-decoration: underline; }
     h1 {
       margin: 0 0 10px;
       font-size: clamp(24px, 5vw, 40px);
@@ -107,61 +145,78 @@
       margin-top: 16px;
     }
     button {
-      border: 0;
-      border-radius: 999px;
-      padding: 12px 18px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 18px;
       touch-action: manipulation;
       cursor: pointer;
-      color: #04111c;
-      background: linear-gradient(180deg, #9ff6ff, #57d4ff);
+      color: #0b1730;
+      background: var(--accent);
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      box-shadow: 0 14px 34px rgba(87,212,255,0.34);
+      box-shadow: 0 4px 0 var(--line);
     }
+    button:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--line); }
     .ghost {
-      background: rgba(255,255,255,0.06);
+      background: #2a3f66;
       color: var(--text);
-      box-shadow: none;
-      border: 1px solid rgba(255,255,255,0.12);
+      border: 2px solid var(--line);
+      box-shadow: 0 4px 0 var(--line);
     }
     .hidden { display: none; }
     .tiny { font-size: 12px; opacity: 0.75; }
     /* Lighter scrim on the title screen so the auto-demo shows through */
-    #tutorialOverlay { background: radial-gradient(circle at 50% 42%, rgba(4,10,20,0.12), rgba(3,6,14,0.5)); }
+    #tutorialOverlay { background: rgba(9, 16, 32, 0.38); }
     #demoBadge {
       position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
       z-index: 11; pointer-events: none; display: none;
-      padding: 6px 14px; border-radius: 999px;
-      background: rgba(4,10,20,0.66); color: #cdf3ff;
+      padding: 6px 14px; border-radius: 10px;
+      background: var(--panel-deep); color: #9fefff;
       font: 800 13px Inter, system-ui, sans-serif; letter-spacing: 0.09em;
-      border: 1px solid rgba(127,231,255,0.55);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.32);
+      border: 2px solid var(--accent);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.3);
     }
     .optrow {
       display: flex; align-items: center; justify-content: space-between;
-      gap: 10px; padding: 9px 2px; border-top: 1px solid rgba(255,255,255,0.08);
+      gap: 10px; padding: 9px 2px; border-top: 2px solid rgba(12,21,38,0.6);
     }
     .optrow:first-child { border-top: 0; }
-    .optrow .lab { font-size: 14px; letter-spacing: 0.02em; }
+    .optrow .lab { font-size: 14px; letter-spacing: 0.02em; font-weight: 700; }
     .optrow .sub { font-size: 11px; opacity: 0.6; }
-    .seg { display: inline-flex; border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,0.16); }
+    .seg { display: inline-flex; border-radius: 10px; overflow: hidden; border: 2px solid var(--line); }
     .seg button {
       border: 0; border-radius: 0; padding: 7px 13px; font-size: 12px; letter-spacing: 0.04em;
       text-transform: uppercase; font-weight: 700; cursor: pointer;
-      background: rgba(255,255,255,0.05); color: var(--text); box-shadow: none;
+      background: #2a3f66; color: var(--text); box-shadow: none;
     }
-    .seg button.on { background: linear-gradient(180deg, #9ff6ff, #57d4ff); color: #04111c; }
+    .seg button:active { transform: none; }
+    .seg button.on { background: var(--accent); color: #0b1730; }
+    /* Compact layout for short viewports (phone landscape) and narrow portrait phones */
+    @media (max-height: 600px), (max-width: 420px) {
+      .panel { padding: 12px 16px 12px; }
+      h1 { font-size: 22px; margin-bottom: 6px; }
+      .panel p { margin: 6px 0; font-size: 13px; }
+      .panel ul { margin: 6px 0 10px; font-size: 12px; line-height: 1.35; }
+      .row { margin-top: 8px; }
+      button { padding: 9px 14px; font-size: 12px; }
+      .backlink { margin-bottom: 4px; }
+    }
+    @media (max-width: 700px), (max-height: 600px) {
+      .hide-sm { display: none; }
+    }
   </style>
 </head>
 <body>  <canvas id="game"></canvas>
   <div class="hud" id="hud">
     <span id="hudLine">W1 | Score 0 | Cities 6 | Ammo 15/15/15 | Combo x1 | Bonus @ 12000</span>
   </div>
+  <button id="pauseBtn" aria-label="Pause">⏸</button>
   <div id="demoBadge">▶ AUTO-DEMO</div>
 
   <div class="overlay" id="tutorialOverlay">
     <div class="panel">
+      <a class="backlink" href="/games/missile-command/">◂ all editions</a>
       <h1>Missile Command Vector</h1>
       <p>Defend the skyline. Tap or click anywhere in the sky and the nearest armed base will launch a counter-missile to that point.</p>
       <ul>
@@ -173,7 +228,7 @@
         <li>Mobile: rapid multi-touch barrages. Desktop: precise crosshair clicks — <strong>Enter</strong> starts, <strong>P</strong>/<strong>Esc</strong> pauses.</li>
       </ul>
       <div class="row">
-        <span class="tiny">Watch the auto-demo behind this panel. First touch/click unlocks sound &amp; music. · v1.2.0</span>
+        <span class="tiny"><span class="hide-sm">Watch the auto-demo behind this panel. </span>First touch/click unlocks sound &amp; music. · v1.3.0</span>
         <div class="row" style="margin-top:0">
           <button class="ghost" id="dismissTutorial">Practice</button>
           <button id="startButton">Start Defense</button>
@@ -230,6 +285,7 @@
       const dismissTutorial = document.getElementById('dismissTutorial');
       const restartButton = document.getElementById('restartButton');
       const demoBadge = document.getElementById('demoBadge');
+      const pauseBtn = document.getElementById('pauseBtn');
       function setDemoBadge(on) { demoBadge.style.display = on ? 'block' : 'none'; }
 
       // ===== HIGH SCORES & GLOBAL LEADERBOARD =====
@@ -250,14 +306,20 @@
         try { const res = await fetch(SCORES_API); if (res.ok) { globalScoresCache = await res.json(); globalScoresCacheTime = now; return globalScoresCache; } } catch(e) {}
         return globalScoresCache || [];
       }
+      // Escape any server-returned string before it touches innerHTML.
+      const escHtml = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
       async function submitGlobalScore(initials, score, extras) {
-        try { await fetch(SCORES_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({initials, score, ...extras}) }); globalScoresCache = null; } catch(e) {}
+        // Clamp outgoing payload: sanitized initials, finite ints, sane caps.
+        const ini = String(initials).toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3) || 'AAA';
+        const sc = Math.max(0, Math.min(9999999, Math.floor(Number(score) || 0)));
+        const wv = Math.max(1, Math.min(999, Math.floor(Number(extras?.wave) || 1)));
+        try { await fetch(SCORES_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({initials: ini, score: sc, wave: wv}) }); globalScoresCache = null; } catch(e) {}
       }
       function renderHSBoth(container) {
         const list = loadHS();
         let html = '<div style="color:#5be4ff;font-size:0.9em;letter-spacing:0.1em;margin-bottom:0.3em">🏠 LOCAL HIGH SCORES</div>';
         if (!list.length) html += '<div style="color:rgba(255,255,255,0.4);padding:0.2em 0">No scores yet</div>';
-        else list.forEach((e,i) => { html += `<div style="color:#aef;padding:0.15em 0">${String(i+1).padStart(2,' ')}. ${e.initials}  ${String(e.score).padStart(8,' ')}  W${e.wave}</div>`; });
+        else list.forEach((e,i) => { html += `<div style="color:#aef;padding:0.15em 0">${String(i+1).padStart(2,' ')}. ${escHtml(e.initials)}  ${String(Math.floor(Number(e.score)||0)).padStart(8,' ')}  W${Math.floor(Number(e.wave)||1)}</div>`; });
         html += '<div style="color:#ffd700;font-size:0.9em;letter-spacing:0.1em;margin:0.6em 0 0.3em">🌐 GLOBAL HIGH SCORES</div>';
         html += '<div id="globalInner_' + container.id + '"><div style="color:rgba(255,255,255,0.4)">Loading...</div></div>';
         container.innerHTML = html;
@@ -265,7 +327,7 @@
           const el = document.getElementById('globalInner_' + container.id);
           if (!el) return;
           if (!gs || !gs.length) { el.innerHTML = '<div style="color:rgba(255,255,255,0.4)">No scores yet</div>'; return; }
-          el.innerHTML = gs.slice(0,20).map((e,i) => `<div style="color:#ffe082;padding:0.15em 0">${String(i+1).padStart(2,' ')}. ${e.initials}  ${String(e.score).padStart(8,' ')}  W${e.wave||'?'}</div>`).join('');
+          el.innerHTML = gs.slice(0,20).map((e,i) => `<div style="color:#ffe082;padding:0.15em 0">${String(i+1).padStart(2,' ')}. ${escHtml(e.initials)}  ${String(Math.floor(Number(e.score)||0)).padStart(8,' ')}  W${escHtml(e.wave||'?')}</div>`).join('');
         });
       }
       let pendingInitials = [0,0,0];
@@ -283,14 +345,16 @@
           const dn = document.createElement('button');
           dn.textContent = '▼'; dn.style.cssText = 'background:transparent;border:none;color:#ffd700;font-size:1.2rem;cursor:pointer';
           const idx = i;
+          // addTouchAndClick preventDefaults touchend, so each tap steps exactly once
+          // (no synthetic click double-advance).
           function upH(e) { e.stopPropagation(); pendingInitials[idx] = (pendingInitials[idx]+1)%26; letter.textContent = String.fromCharCode(65+pendingInitials[idx]); }
           function dnH(e) { e.stopPropagation(); pendingInitials[idx] = (pendingInitials[idx]+25)%26; letter.textContent = String.fromCharCode(65+pendingInitials[idx]); }
-          up.addEventListener('click', upH); up.addEventListener('touchend', upH);
-          dn.addEventListener('click', dnH); dn.addEventListener('touchend', dnH);
+          addTouchAndClick(up, upH);
+          addTouchAndClick(dn, dnH);
           col.appendChild(up); col.appendChild(letter); col.appendChild(dn); row.appendChild(col);
         }
         const ok = document.createElement('button');
-        ok.textContent = 'OK'; ok.style.cssText = 'margin-left:0.8em;padding:0.3em 1em;cursor:pointer;font-size:1rem;background:#ffd700;border:none;color:#000;border-radius:4px';
+        ok.textContent = 'OK'; ok.style.cssText = 'margin-left:0.8em;padding:0.3em 1em;cursor:pointer;font-size:1rem;background:#ffd700;color:#000';
         function submitH(e) {
           e.stopPropagation();
           const ini = pendingInitials.map(i => String.fromCharCode(65+i)).join('');
@@ -299,7 +363,7 @@
           document.getElementById('hsInitialsSection').classList.add('hidden');
           renderHSBoth(scoreContainer);
         }
-        ok.addEventListener('click', submitH); ok.addEventListener('touchend', submitH);
+        addTouchAndClick(ok, submitH);
         row.appendChild(ok);
       }
 
@@ -320,7 +384,7 @@
         hard:   { speed: 1.24, budget: 1.30, ammo: 12, label: 'Hard' },
       };
       function diff() { return DIFF[settings.difficulty] || DIFF.normal; }
-      function maxAmmo() { return diff().ammo; }
+      function maxAmmo() { return Math.round(diff().ammo * (state.practice ? 1.5 : 1)); }
       function applyAudioSettings() { if (audio && audio.setVolume) audio.setVolume(settings.sound ? 0.32 : 0); }
 
       // ===== SPECIAL WAVES — every 5th wave is a themed challenge with a big bonus =====
@@ -333,50 +397,72 @@
       function specialFor(wave) { return (wave % 5 === 0) ? SPECIALS[(wave / 5 - 1) % SPECIALS.length] : null; }
 
       const TAU = Math.PI * 2;
-      // Flat-vector palettes — one per wave (cycled). Solid fills, no glow/aurora.
-      // Wave 1 == the bright "flat vector" reference: blue day sky, white clouds,
-      // green hills, navy skyline, cream+red dome bunkers.
+      // Flat-vector palettes — one per wave (cycled). Saturated, confident,
+      // poster-flat fills: vivid skies, bright stepped greens, colourful (not
+      // near-black) three-tone skylines. windowsLit picks lit vs punched slots.
       const SKYSETS = [
-        { // DAY (reference)
-          skyTop: '#4a9bd8', skyBot: '#8eccee', night: false,
-          sun: '#ffe07a', sunRing: '#ffc94e',
-          cloud: '#f4fbff', cloudShade: '#d9ecf7',
-          hillBack: '#57b466', hillFront: '#42984f', ground: '#37813f', groundLine: '#2c6a34',
-          building: '#2c3c60', buildingDark: '#233150', window: '#ffd36b'
+        { // DAY — vivid azure, poster greens, cobalt/plum/teal skyline
+          skyTop: '#37a2f2', skyBot: '#8fd3ff', night: false, windowsLit: false,
+          sun: '#ffd23f', sunRing: '#ff9f1c', sunRay: '#ffb830',
+          cloud: '#ffffff', cloudShade: '#d8ecfa',
+          hillBack: '#86dd8d', hillFront: '#6bcf74', ground: '#4db35e', groundLine: '#3b9a4c',
+          building: '#35549e', buildingDark: '#463f96', building3: '#2c6f9e', window: '#ffd36b', windowSlot: '#22376b'
         },
-        { // SUNSET
-          skyTop: '#f2764f', skyBot: '#ffcf7a', night: false,
-          sun: '#ffec9a', sunRing: '#ffd36b',
-          cloud: '#ffe6cf', cloudShade: '#f4c9a6',
-          hillBack: '#357a4f', hillFront: '#2a6642', ground: '#204d33', groundLine: '#183c28',
-          building: '#241d33', buildingDark: '#1a1526', window: '#ffd36b'
+        { // SUNSET — bold coral/amber, plum skyline with lit windows
+          skyTop: '#ff6b4a', skyBot: '#ffc655', night: false, windowsLit: true,
+          sun: '#ff4f2e', sunRing: '#ffe08a', sunRay: '#ff9f1c',
+          cloud: '#ffddc2', cloudShade: '#f6bb92',
+          hillBack: '#67b381', hillFront: '#4d9a68', ground: '#3a8354', groundLine: '#2d6a43',
+          building: '#5a3a78', buildingDark: '#46295e', building3: '#31456e', window: '#ffd36b', windowSlot: '#2c1e42'
         },
-        { // NIGHT
-          skyTop: '#0f1c3e', skyBot: '#284274', night: true,
-          sun: '#eaf2ff', sunRing: '#c7d8ff',
-          cloud: '#35477a', cloudShade: '#2a3a66',
-          hillBack: '#245c31', hillFront: '#1c4a26', ground: '#153a1d', groundLine: '#0f2b16',
-          building: '#101a34', buildingDark: '#0b1226', window: '#ffdf8a'
+        { // NIGHT — deep indigo, crisp stars, saturated dark-cobalt skyline
+          skyTop: '#171e56', skyBot: '#2f3f86', night: true, windowsLit: true,
+          sun: '#f2f6ff', sunRing: '#8fa8e8', sunRay: '#c7d8ff',
+          cloud: '#3b4f8f', cloudShade: '#2e3f78',
+          hillBack: '#2f7a4a', hillFront: '#256540', ground: '#1d5233', groundLine: '#164227',
+          building: '#232e6b', buildingDark: '#1a2354', building3: '#173d5c', window: '#ffdf8a', windowSlot: '#131b42'
         },
-        { // DAWN / TEAL
-          skyTop: '#2f7c9c', skyBot: '#b3e6da', night: false,
-          sun: '#ffe487', sunRing: '#ffcf5e',
-          cloud: '#f2fbf8', cloudShade: '#d3ede4',
-          hillBack: '#45a884', hillFront: '#348563', ground: '#2a7053', groundLine: '#215741',
-          building: '#22384a', buildingDark: '#1a2c3a', window: '#ffcf6b'
+        { // DAWN / TEAL — bright minty morning
+          skyTop: '#2f8fb0', skyBot: '#a5e8d4', night: false, windowsLit: false,
+          sun: '#ffcf4d', sunRing: '#ff8a5c', sunRay: '#ffb069',
+          cloud: '#f4fffa', cloudShade: '#cdeee0',
+          hillBack: '#7fd9a8', hillFront: '#5cc389', ground: '#46a86f', groundLine: '#378a59',
+          building: '#226a80', buildingDark: '#3d4d86', building3: '#1f5c66', window: '#ffcf6b', windowSlot: '#153e4c'
         }
       ];
-      function currentSet() { return SKYSETS[(state.wave - 1 + SKYSETS.length * 100) % SKYSETS.length]; }
+      // Quick 0.5s palette crossfade between waves instead of a hard snap.
+      function hexRgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
+      function mixHex(a, b, t) {
+        const A = hexRgb(a), B = hexRgb(b);
+        return `rgb(${Math.round(A[0] + (B[0] - A[0]) * t)},${Math.round(A[1] + (B[1] - A[1]) * t)},${Math.round(A[2] + (B[2] - A[2]) * t)})`;
+      }
+      let palCache = null, palCacheT = -1, palCacheIdx = -1;
+      function currentSet() {
+        const idx = state.palIdx;
+        if (state.palT >= 1 || !state.palFrom) return SKYSETS[idx];
+        if (palCacheT === state.palT && palCacheIdx === idx) return palCache;
+        const from = state.palFrom, to = SKYSETS[idx], t = state.palT, o = {};
+        for (const k in to) {
+          const tv = to[k], fv = from[k];
+          o[k] = (typeof tv === 'string' && tv[0] === '#' && typeof fv === 'string' && fv[0] === '#') ? mixHex(fv, tv, t) : tv;
+        }
+        palCache = o; palCacheT = t; palCacheIdx = idx;
+        return o;
+      }
 
       const state = {
         width: 0,
         height: 0,
-        hudSafeTop: 0,
         groundY: 0,
         cityBandY: 0,
         playing: false,
         gameOver: false,
+        gameOverAt: 0,
         paused: false,
+        practice: false,
+        palIdx: 0,
+        palFrom: null,
+        palT: 1,
         wave: 1,
         score: 0,
         nextBonusScore: 12000,
@@ -391,7 +477,6 @@
         waveCooldown: 0,
         spawnBudget: 0,
         spawnedThisWave: 0,
-        enemyClearedBonusTimer: 0,
         attract: false,
         special: null,
         speedMul: 1,
@@ -412,18 +497,25 @@
         smoke: [],
         satellites: [],
         embers: [],
-        fires: [],
         prompts: [],
         destroyedThisWave: 0,
         audioUnlocked: false,
-        pendingTouches: new Map(),
-        atmosphereSeed: Math.random() * 9999,
       };
 
       let audio = null;
 
       function rand(min, max) { return min + Math.random() * (max - min); }
       function randi(min, max) { return Math.floor(rand(min, max + 1)); }
+      // Seeded PRNG so resize() regenerates the SAME backdrop layout at the new size.
+      function mulberry32(a) {
+        return function() {
+          a |= 0; a = a + 0x6D2B79F5 | 0;
+          let t = Math.imul(a ^ a >>> 15, 1 | a);
+          t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+          return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        };
+      }
+      let backdropSeed = (Math.random() * 2 ** 31) | 0;
       function clamp(v, min, max) { return Math.max(min, Math.min(max, v)); }
       function lerp(a, b, t) { return a + (b - a) * t; }
       function dist(ax, ay, bx, by) { return Math.hypot(ax - bx, ay - by); }
@@ -588,9 +680,10 @@
         canvas.style.width = vw + 'px';
         canvas.style.height = vh + 'px';
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        compactHud = vw <= 520;
+        lastHudText = ''; // force HUD re-render in the new format
         state.width = w;
         state.height = h;
-        state.hudSafeTop = 16 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)')) || 0);
         state.groundY = state.height * 0.83;
         state.cityBandY = state.groundY + 8;
         generateBackdrop();
@@ -598,6 +691,14 @@
       }
 
       function generateBackdrop() {
+        // Seeded: the same seed regenerates the same layout at any size, so a
+        // mid-game resize/URL-bar toggle doesn't re-randomize the world.
+        // Each section gets its own stream so size-dependent counts (stars,
+        // clouds) can't shift the sequence for the sections after them.
+        const streams = [0x9e37, 0x79b9, 0x85eb, 0xca6b].map(k => mulberry32(backdropSeed ^ k));
+        let sr = streams[0];
+        const srand = (a, b) => a + sr() * (b - a);
+        const srandi = (a, b) => Math.floor(srand(a, b + 1));
         state.stars = [];
         state.skyline = [];
         state.clouds = [];
@@ -606,29 +707,31 @@
         // Flat stars (only rendered on night palettes)
         const starCount = Math.floor(state.width * state.height / (isMobile ? 16000 : 9000));
         for (let i = 0; i < starCount; i++) {
-          state.stars.push({ x: Math.random() * state.width, y: Math.random() * state.groundY * 0.6, r: Math.random() < 0.85 ? 1.4 : 2.4, a: rand(0.5, 1) });
+          state.stars.push({ x: sr() * state.width, y: sr() * state.groundY * 0.6, r: sr() < 0.85 ? 1.4 : 2.4, a: srand(0.5, 1) });
         }
         // Puffy flat clouds drifting slowly
+        sr = streams[1];
         const cloudCount = isMobile ? 4 : 6;
         for (let i = 0; i < cloudCount; i++) {
-          const cx = rand(0, state.width);
-          const cy = rand(state.height * 0.06, state.groundY * 0.5);
-          const s = rand(0.7, 1.5);
+          const cx = srand(0, state.width);
+          const cy = srand(state.height * 0.06, state.groundY * 0.5);
+          const s = srand(0.7, 1.5);
           const puffs = [];
-          const n = randi(4, 6);
+          const n = srandi(4, 6);
           let px = 0;
           for (let p = 0; p < n; p++) {
-            puffs.push({ ox: px, oy: rand(-6, 4) * s, r: rand(16, 30) * s });
-            px += rand(16, 26) * s;
+            puffs.push({ ox: px, oy: srand(-6, 4) * s, r: srand(16, 30) * s });
+            px += srand(16, 26) * s;
           }
-          state.clouds.push({ x: cx, y: cy, w: px, speed: rand(3, 9) * (Math.random() < 0.5 ? 1 : -1), puffs });
+          state.clouds.push({ x: cx, y: cy, w: px, speed: srand(3, 9) * (sr() < 0.5 ? 1 : -1), puffs });
         }
         // Two layers of rolling hills (polyline sampled by sine)
+        sr = streams[2];
         for (let layer = 0; layer < 2; layer++) {
           const baseY = state.groundY - (layer === 0 ? state.height * 0.05 : state.height * 0.015);
           const amp = layer === 0 ? state.height * 0.05 : state.height * 0.03;
           const freq = layer === 0 ? 0.6 : 1.0;
-          const phase = rand(0, TAU);
+          const phase = srand(0, TAU);
           const pts = [];
           const step = Math.max(24, state.width / 26);
           for (let x = -step; x <= state.width + step; x += step) {
@@ -637,29 +740,36 @@
           state.hills.push({ pts, back: layer === 0 });
         }
 
+        sr = streams[3];
         let x = 0;
         while (x < state.width) {
-          const w = rand(24, 64);
-          const h = rand(state.height * 0.05, state.height * 0.16);
+          const w = srand(24, 64);
+          const h = srand(state.height * 0.05, state.height * 0.16);
+          const roof = sr();
+          const tone = srandi(0, 2);
+          // Windows use a per-building sub-stream: their (height-dependent)
+          // draw count can't shift the sequence for later buildings.
+          const wr = mulberry32((sr() * 2 ** 31) | 0);
+          const wrand = (a, b) => a + wr() * (b - a);
           const windows = [];
-          const cols = Math.max(1, Math.floor(w / rand(9, 12)));
-          const rows = Math.max(2, Math.floor(h / rand(12, 16)));
+          const cols = Math.max(1, Math.floor(w / wrand(9, 12)));
+          const rows = Math.max(2, Math.floor(h / wrand(12, 16)));
           const cellW = (w - 8) / cols, cellH = (h - 12) / rows;
           for (let cx = 0; cx < cols; cx++) {
             for (let cy = 0; cy < rows; cy++) {
-              if (Math.random() < 0.9) {
+              if (wr() < 0.9) {
                 windows.push({
                   x: 5 + cx * cellW,
                   y: 7 + cy * cellH,
                   w: Math.min(4, cellW * 0.55),
                   h: Math.min(6, cellH * 0.55),
-                  lit: Math.random() < 0.5
+                  lit: wr() < 0.55
                 });
               }
             }
           }
-          state.skyline.push({ x, w, h, roof: Math.random(), windows, tone: Math.random() < 0.5 });
-          x += w + rand(6, 14);
+          state.skyline.push({ x, w, h, roof, windows, tone });
+          x += w + srand(6, 14);
         }
       }
 
@@ -686,8 +796,8 @@
         const silhouette = [];
         let ox = 0;
         for (let i = 0; i < n; i++) {
-          const w = rand(12, 18);
-          const h = rand(20, 40);
+          const w = rand(14, 20);
+          const h = rand(24, 46);
           const windows = [];
           const cols = Math.max(1, Math.floor(w / 7));
           const rows = Math.max(2, Math.floor(h / 10));
@@ -714,10 +824,17 @@
         };
       }
 
-      function resetGame() {
+      function resetGame(practice = false) {
         state.playing = true;
         state.gameOver = false;
+        state.gameOverAt = 0;
         state.paused = false;
+        state.practice = practice;
+        state.palIdx = 0;
+        state.palFrom = null;
+        state.palT = 1;
+        backdropSeed = (Math.random() * 2 ** 31) | 0;
+        generateBackdrop();
         state.wave = 1;
         state.score = 0;
         state.nextBonusScore = 12000;
@@ -731,7 +848,6 @@
         state.waveIntroTimer = 3.4;
         state.waveCooldown = 0;
         state.spawnedThisWave = 0;
-        state.enemyClearedBonusTimer = 0;
         state.attract = false;
         state.special = null;
         state.speedMul = 1;
@@ -744,7 +860,6 @@
         state.smoke.length = 0;
         state.satellites.length = 0;
         state.embers.length = 0;
-        state.fires.length = 0;
         state.prompts.length = 0;
         state.destroyedThisWave = 0;
         state.bases = [];
@@ -835,6 +950,14 @@
       }
 
       function queuePrompt(text, x, y, color = '#ffffff') {
+        // Stagger overlapping chain popups so they don't overprint each other.
+        let guard = 0, adjusted = true;
+        while (adjusted && guard++ < 12) {
+          adjusted = false;
+          for (const q of state.prompts) {
+            if (Math.abs(q.x - x) < 40 && Math.abs(q.y - y) < 16) { y = q.y - 18; adjusted = true; }
+          }
+        }
         // age:0 is required — updateParticles ages/removes prompts by age>=life.
         state.prompts.push({ text, x, y, color, life: 1.2, age: 0 });
         if (state.prompts.length > 60) state.prompts.splice(0, state.prompts.length - 60);
@@ -957,11 +1080,13 @@
         const t = forcedTarget || randomTarget();
         const sx = fromX ?? rand(state.width * 0.05, state.width * 0.95);
         const sy = fromY ?? rand(20, state.height * 0.14);
-        const speedBase = (38 + state.wave * 3.6) * diff().speed * state.speedMul;
+        const speedBase = (38 + state.wave * 3.6) * diff().speed * state.speedMul * (state.practice ? 0.85 : 1);
         const willSplit = (forceSplit && type === 'normal') ||
           (state.wave >= 6 && type === 'normal' && Math.random() < Math.min(0.6, 0.14 + state.wave * 0.03));
         const missile = {
           type,
+          // METEOR SHOWER warheads get distinct flat-fireball art
+          skin: (state.special && state.special.key === 'meteor' && type === 'normal') ? 'meteor' : null,
           x: sx,
           y: sy,
           sx, sy,
@@ -973,7 +1098,6 @@
           smoked: 0,
           splitY: willSplit ? rand(0.34, 0.5) * state.groundY : null,
           splitDone: false,
-          hp: type === 'smart' ? 1 : 1,
           smart: type === 'smart',
           dead: false
         };
@@ -990,7 +1114,7 @@
           type: 'satellite',
           x: fromLeft ? -60 : state.width + 60,
           y: rand(state.height * 0.13, state.height * 0.32),
-          vx: fromLeft ? rand(34, 60) : -rand(34, 60),
+          vx: (fromLeft ? rand(34, 60) : -rand(34, 60)) * (state.practice ? 0.85 : 1),
           wobble: rand(0, 10),
           hp: 2,
           cool: rand(1.8, 3.4),
@@ -1004,6 +1128,13 @@
 
       function prepareWave() {
         state.spawnedThisWave = 0;
+        // 0.5s palette crossfade into this wave's sky set
+        const palIdx = (state.wave - 1) % SKYSETS.length;
+        if (palIdx !== state.palIdx) {
+          state.palFrom = currentSet();
+          state.palIdx = palIdx;
+          state.palT = 0;
+        }
         const special = specialFor(state.wave);
         state.special = special;
         state.speedMul = (special && special.key === 'meteor') ? 1.28 : 1;
@@ -1013,9 +1144,14 @@
         state.spawnBudget = Math.round(budget);
         state.destroyedThisWave = 0;
         state.waveIntroTimer = special ? 3.0 : 2.6;
+        // Arcade-faithful: destroyed batteries are REBUILT (alive + full ammo)
+        // at the start of every wave. Cities stay dead.
+        let rebuilt = 0;
         state.bases.forEach(base => {
-          if (base.alive) base.ammo = Math.min(maxAmmo(), base.ammo + (special ? 9 : 6));
+          if (!base.alive) { base.alive = true; base.ammo = maxAmmo(); base.flash = 0; rebuilt++; }
+          else base.ammo = Math.min(maxAmmo(), base.ammo + (special ? 9 : 6));
         });
+        if (rebuilt > 0 && state.wave > 1) queuePrompt('BATTERIES REBUILT', state.width / 2, 140, '#8fffc9');
         if (special) {
           showBanner('★ ' + special.name + ' ★', special.color);
           audio?.special(special.key);
@@ -1136,7 +1272,6 @@
                 smoked: 0,
                 splitY: null,
                 splitDone: true,
-                hp: 1,
                 smart: false,
                 dead: false
               });
@@ -1159,7 +1294,8 @@
           m.y += (m.ty - m.y) / d * step;
 
           m.smoked -= dt;
-          if (m.smoked <= 0 && state.smoke.length < 200) {
+          // Meteors skip the white smoke — their dotted ember trail is the look.
+          if (m.smoked <= 0 && !m.skin && state.smoke.length < 200) {
             m.smoked = 0.04;
             state.smoke.push({ x: m.x, y: m.y, vx: rand(-10, 10), vy: rand(-8, 6), age: 0, life: rand(0.45, 0.9), size: rand(5, 11), dark: 0.5 + Math.random() * 0.5 });
           }
@@ -1189,8 +1325,11 @@
             const target = randomTarget();
             spawnEnemyMissile(Math.random() < 0.3 && state.wave >= 10 ? 'smart' : 'normal', s.x, s.y + 6, target);
           }
-          if ((s.vx > 0 && s.x > state.width + 80) || (s.vx < 0 && s.x < -80)) state.satellites.splice(i, 1);
-          if (s.dead) state.satellites.splice(i, 1);
+          // Single splice guard: off-screen AND dead in the same frame must not
+          // remove two entries.
+          if (s.dead || (s.vx > 0 && s.x > state.width + 80) || (s.vx < 0 && s.x < -80)) {
+            state.satellites.splice(i, 1);
+          }
         }
       }
 
@@ -1251,7 +1390,6 @@
         if (state.particles.length > 400) state.particles.splice(0, state.particles.length - 400);
         if (state.smoke.length > 200) state.smoke.splice(0, state.smoke.length - 200);
         if (state.embers.length > 150) state.embers.splice(0, state.embers.length - 150);
-        if (state.fires.length > 30) state.fires.splice(0, state.fires.length - 30);
 
         for (const city of state.cities) {
           if (!city.alive) {
@@ -1268,11 +1406,8 @@
       }
 
       function updatePrompts(dt) {
-        for (let i = state.prompts.length - 1; i >= 0; i--) {
-          const p = state.prompts[i];
-          p.y -= 24 * dt;
-          if (p.life <= 0) state.prompts.splice(i, 1);
-        }
+        // Drift upward; removal happens in updateParticles (age >= life).
+        for (const p of state.prompts) p.y -= 24 * dt;
       }
 
       function updateCombos(dt) {
@@ -1292,14 +1427,19 @@
           if (state.attract) { startAttract(); return; } // loop the demo instead of ending
           state.gameOver = true;
           state.playing = false;
-          const survived = Math.max(1, state.wave - 1);
+          state.gameOverAt = performance.now(); // arms the tap-to-restart delay
+          // Convention: "Reached Wave N" is the wave you died in, and the same
+          // N goes to local + global records.
+          const reached = state.wave;
           gameOverTitle.textContent = 'All Cities Lost';
-          gameOverText.textContent = `Final Score ${state.score.toLocaleString()} · Reached Wave ${survived}`;
+          gameOverText.textContent = state.practice
+            ? `Practice run · Score ${state.score.toLocaleString()} · Reached Wave ${reached} · not recorded`
+            : `Final Score ${state.score.toLocaleString()} · Reached Wave ${reached}`;
           const hsInit = document.getElementById('hsInitialsSection');
           const hsDisp = document.getElementById('hsScoresDisplay');
-          if (isHighScore(state.score) && state.score > 0) {
+          if (!state.practice && isHighScore(state.score) && state.score > 0) {
             hsInit.classList.remove('hidden');
-            buildHSInitials(state.score, state.wave, hsDisp);
+            buildHSInitials(state.score, reached, hsDisp);
           } else {
             hsInit.classList.add('hidden');
             renderHSBoth(hsDisp);
@@ -1310,6 +1450,7 @@
 
       function update(dt) {
         state.time += dt;
+        if (state.palT < 1) state.palT = Math.min(1, state.palT + dt * 2); // 0.5s palette crossfade
         if (!state.playing || state.gameOver) {
           updateParticles(dt);
           updatePrompts(dt);
@@ -1349,15 +1490,24 @@
           ctx.globalAlpha = 1;
         }
 
-        // Sun / moon — flat two-tone disc, crisp edges (no translucent glow)
+        // Sun / moon — bold flat disc with crisp ring; day suns get flat
+        // triangular ray spikes (same star-polygon language as the blasts).
         const sunX = state.width * 0.8, sunY = state.groundY * 0.26, sunR = Math.max(26, state.width * 0.035);
+        if (!set.night) {
+          ctx.fillStyle = set.sunRay;
+          starPath(sunX, sunY, 12, sunR * 1.72, sunR * 1.26, state.time * 0.04);
+          ctx.fill();
+        }
         ctx.fillStyle = set.sunRing;
-        ctx.beginPath(); ctx.arc(sunX, sunY, sunR * 1.18, 0, TAU); ctx.fill();
+        ctx.beginPath(); ctx.arc(sunX, sunY, sunR * 1.2, 0, TAU); ctx.fill();
         ctx.fillStyle = set.sun;
-        ctx.beginPath(); ctx.arc(sunX, sunY, sunR, 0, TAU); ctx.fill();
-        if (set.night) { // carve a crescent for the moon
+        ctx.beginPath(); ctx.arc(sunX, sunY, sunR * 0.96, 0, TAU); ctx.fill();
+        if (set.night) { // carve a crescent for the moon + a crisp offset halo
           ctx.fillStyle = set.skyTop;
           ctx.beginPath(); ctx.arc(sunX + sunR * 0.5, sunY - sunR * 0.35, sunR * 1.08, 0, TAU); ctx.fill();
+          ctx.strokeStyle = set.sunRing;
+          ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.arc(sunX, sunY, sunR * 1.55, 0, TAU); ctx.stroke();
         }
 
         // Clouds (flat puffs with a subtle shade band)
@@ -1384,23 +1534,29 @@
 
       function drawSkyline() {
         const set = currentSet();
+        const tones = [set.building, set.buildingDark, set.building3];
         for (const b of state.skyline) {
-          ctx.fillStyle = b.tone ? set.building : set.buildingDark;
+          ctx.fillStyle = tones[b.tone % 3];
           ctx.fillRect(b.x, state.groundY - b.h, b.w, b.h);
           if (b.roof > 0.7) { // antenna/box roof
             ctx.fillRect(b.x + b.w * 0.42, state.groundY - b.h - 12, Math.max(2, b.w * 0.1), 12);
           } else if (b.roof > 0.4) { // stepped parapet
             ctx.fillRect(b.x + b.w * 0.2, state.groundY - b.h - 6, b.w * 0.6, 6);
           }
+          // Day palettes: crisp punched-slot windows. Night/sunset: lit yellow.
           for (const w of b.windows) {
-            ctx.fillStyle = w.lit ? set.window : (set.night ? 'rgba(255,220,120,0.14)' : 'rgba(255,255,255,0.10)');
+            ctx.fillStyle = set.windowsLit
+              ? (w.lit ? set.window : set.windowSlot)
+              : set.windowSlot;
             ctx.fillRect(b.x + w.x, state.groundY - b.h + w.y, w.w, w.h);
           }
         }
       }
 
-      // Flat friendly palette for the cities you defend (distinct from the dark skyline).
-      const CITY_BODY = '#79a6dd', CITY_BODY2 = '#6390cd', CITY_ROOF = '#e2604c', CITY_WIN = '#fff0b0';
+      // Flat friendly palette for the cities you defend — warm white + teal
+      // towers with coral roofs and the same dark keyline the rockets use.
+      const CITY_BODY = '#f4f7ff', CITY_BODY2 = '#57c9d5', CITY_ROOF = '#ff5f4d', CITY_WIN = '#33507e';
+      const KEYLINE = 'rgba(22,26,38,0.6)';
 
       function drawGround() {
         const set = currentSet();
@@ -1448,15 +1604,22 @@
               ctx.fillRect(s.ox, -hh, s.w, 3);
             }
           } else {
+            ctx.strokeStyle = KEYLINE;
+            ctx.lineWidth = 2;
+            ctx.lineJoin = 'round';
             for (let i = 0; i < city.silhouette.length; i++) {
               const s = city.silhouette[i];
+              // keyline outline first so blocks read like the outlined rockets
+              ctx.strokeRect(s.ox, -s.h, s.w, s.h);
               ctx.fillStyle = (i % 2) ? CITY_BODY2 : CITY_BODY;
               ctx.fillRect(s.ox, -s.h, s.w, s.h);
-              // roof accent (red on most blocks so cities pop vs the navy skyline)
-              if (s.roof > 0.4) { ctx.fillStyle = CITY_ROOF; ctx.fillRect(s.ox, -s.h - 4, s.w, 4); }
+              // coral roof cap on every block so the protected cities pop
+              ctx.strokeRect(s.ox - 1, -s.h - 4, s.w + 2, 4);
+              ctx.fillStyle = CITY_ROOF;
+              ctx.fillRect(s.ox - 1, -s.h - 4, s.w + 2, 4);
               for (const win of s.windows) {
-                ctx.fillStyle = win.lit ? CITY_WIN : 'rgba(255,255,255,0.12)';
-                ctx.fillRect(s.ox + win.ox, -s.h + win.oy, 2.5, 3);
+                ctx.fillStyle = win.lit ? CITY_WIN : 'rgba(41,64,107,0.45)';
+                ctx.fillRect(s.ox + win.ox, -s.h + win.oy, 3, 3.5);
               }
             }
           }
@@ -1481,11 +1644,16 @@
         const domeShade = alive ? '#c3452f' : '#664239';
         const W = 30, baseH = 16;
         const domeW = W * 0.82, domeH = W * 0.6; // flatter half-ellipse dome
+        ctx.strokeStyle = KEYLINE;
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        // Dome keyline (drawn first so the body keyline overlaps cleanly)
+        ctx.beginPath(); ctx.ellipse(0, -baseH, domeW, domeH, 0, Math.PI, TAU); ctx.closePath(); ctx.stroke();
         // Body (rounded platform sitting on the ground)
         ctx.fillStyle = bodyShade;
-        roundRect(-W, -baseH + 2, W * 2, baseH, 6); ctx.fill();
+        roundRect(-W, -baseH + 2, W * 2, baseH, 6); ctx.stroke(); ctx.fill();
         ctx.fillStyle = body;
-        roundRect(-W, -baseH, W * 2, baseH - 2, 6); ctx.fill();
+        roundRect(-W, -baseH, W * 2, baseH - 2, 6); ctx.stroke(); ctx.fill();
         // Dome (flattened)
         ctx.fillStyle = domeShade;
         ctx.beginPath(); ctx.ellipse(0, -baseH + 1, domeW, domeH, 0, Math.PI, TAU); ctx.fill();
@@ -1556,9 +1724,45 @@
         ctx.globalAlpha = 1;
       }
 
+      // Flat fireball wedge + spark line — the METEOR SHOWER's distinct skin.
+      function drawMeteor(m, ang) {
+        // dotted ember trail
+        for (let i = 0; i < m.trail.length; i += 3) {
+          const p = m.trail[i];
+          const a = i / Math.max(1, m.trail.length);
+          ctx.globalAlpha = 0.25 + a * 0.6;
+          ctx.fillStyle = (i % 2) ? '#ffd23f' : '#ff8a1c';
+          ctx.beginPath(); ctx.arc(p.x, p.y, 1.6 + a * 2, 0, TAU); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        ctx.save();
+        ctx.translate(m.x, m.y);
+        ctx.rotate(ang);
+        // flame wedge behind the rock
+        ctx.fillStyle = '#ff8a1c';
+        ctx.beginPath(); ctx.moveTo(-6, -7); ctx.lineTo(-27, 0); ctx.lineTo(-6, 7); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#ffd23f';
+        ctx.beginPath(); ctx.moveTo(-5, -4); ctx.lineTo(-17, 0); ctx.lineTo(-5, 4); ctx.closePath(); ctx.fill();
+        // rocky flat polygon with keyline
+        ctx.strokeStyle = KEYLINE;
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        ctx.fillStyle = '#8a6248';
+        ctx.beginPath();
+        ctx.moveTo(9, 0); ctx.lineTo(5, -6); ctx.lineTo(-2, -7); ctx.lineTo(-8, -3);
+        ctx.lineTo(-7, 4); ctx.lineTo(-1, 7); ctx.lineTo(6, 5);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.fillStyle = '#6b4936'; // facet shading
+        ctx.beginPath(); ctx.moveTo(2, -3); ctx.lineTo(-3, -4); ctx.lineTo(-4, 1); ctx.lineTo(0, 2); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = '#ffb03a'; // hot leading rim
+        ctx.beginPath(); ctx.moveTo(9, 0); ctx.lineTo(5, -6); ctx.lineTo(6, 5); ctx.closePath(); ctx.fill();
+        ctx.restore();
+      }
+
       function drawMissiles() {
         for (const m of state.enemyMissiles) {
           const ang = Math.atan2(m.y - m.sy, m.x - m.sx) || (Math.PI / 2);
+          if (m.skin === 'meteor') { drawMeteor(m, ang); continue; }
           drawSmokeTrail(m.trail, 3.4, 'rgba(240,244,250,1)');
           let body = '#dc4a38', nose = '#f4b9ae', fin = '#a8331f';
           if (m.type === 'mirvChild') { body = '#f0872e'; nose = '#ffd9a8'; fin = '#c25f17'; }
@@ -1587,12 +1791,24 @@
 
       function drawSatellites() {
         for (const s of state.satellites) {
+          // dotted flat path so incoming satellites telegraph their track
+          for (let i = 0; i < s.trail.length; i += 3) {
+            const p = s.trail[i];
+            const a = i / Math.max(1, s.trail.length);
+            ctx.globalAlpha = 0.15 + a * 0.4;
+            ctx.fillStyle = '#8ff2ff';
+            ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, TAU); ctx.fill();
+          }
+          ctx.globalAlpha = 1;
           ctx.save();
           ctx.translate(s.x, s.y);
+          ctx.strokeStyle = KEYLINE;
+          ctx.lineWidth = 2;
+          ctx.lineJoin = 'round';
           // Solar panels
           ctx.fillStyle = '#3a6ea8';
-          roundRect(-30, -6, 16, 12, 2); ctx.fill();
-          roundRect(14, -6, 16, 12, 2); ctx.fill();
+          roundRect(-30, -6, 16, 12, 2); ctx.stroke(); ctx.fill();
+          roundRect(14, -6, 16, 12, 2); ctx.stroke(); ctx.fill();
           ctx.fillStyle = 'rgba(255,255,255,0.25)';
           ctx.fillRect(-30, -1, 16, 2); ctx.fillRect(14, -1, 16, 2);
           // Booms
@@ -1600,7 +1816,7 @@
           ctx.fillRect(-14, -1.5, 6, 3); ctx.fillRect(8, -1.5, 6, 3);
           // Body
           ctx.fillStyle = s.hp === 1 ? '#e0503a' : '#cfd8e2';
-          roundRect(-9, -8, 18, 16, 3); ctx.fill();
+          roundRect(-9, -8, 18, 16, 3); ctx.stroke(); ctx.fill();
           ctx.fillStyle = s.flash > 0 ? '#ffffff' : (s.hp === 1 ? '#ffd0c4' : '#8fb4d8');
           ctx.beginPath(); ctx.arc(0, 0, 3.4, 0, TAU); ctx.fill();
           ctx.restore();
@@ -1626,7 +1842,15 @@
           if (r < 0.5) continue;
           const rot = (e.source && e.source.sx ? e.source.sx : e.x) * 0.05; // stable per-explosion angle
           ctx.save();
-          ctx.globalAlpha = 1 - t * t; // fade only late
+          // Crisp poster pop: solid fills, stepped opacity only at the very end
+          // (no muddy alpha decay). The radius grow+collapse sells the motion.
+          ctx.globalAlpha = t < 0.7 ? 1 : (t < 0.85 ? 0.6 : 0.3);
+          // Big (city/base) blasts open with a crisp white flash ring
+          if (e.kind === 'big' && t < 0.35) {
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 4;
+            ctx.beginPath(); ctx.arc(e.x, e.y, r * 1.3, 0, TAU); ctx.stroke();
+          }
           const spikes = e.maxR > 60 ? 12 : 10;
           // Outer orange burst
           ctx.fillStyle = '#ff8a1c';
@@ -1689,7 +1913,8 @@
 
       function drawFXOverlays() {
         if (state.comboCount > 1 && state.comboTimer > 0) {
-          const a = Math.min(0.22, state.tint * 0.18 + 0.06);
+          // keep the tint light so the flat poster colors stay saturated
+          const a = Math.min(0.10, state.tint * 0.10 + 0.03);
           ctx.fillStyle = `rgba(255, 120, 64, ${a})`;
           ctx.fillRect(0, 0, state.width, state.height);
 
@@ -1701,7 +1926,7 @@
           ctx.restore();
         }
         if (state.flash > 0) {
-          ctx.fillStyle = `rgba(255,245,220,${state.flash * 0.18})`;
+          ctx.fillStyle = `rgba(255,245,220,${state.flash * 0.12})`;
           ctx.fillRect(0, 0, state.width, state.height);
         }
       }
@@ -1738,15 +1963,26 @@
         ctx.translate(sx, sy);
         drawSky();
         drawSkyline();
+        // Ground + cities/bases BEFORE explosions/particles so ground-impact
+        // sunbursts render on top of them (the old order hid every ground blast).
+        drawCitiesAndBases();
         drawMissiles();
         drawSatellites();
         drawExplosions();
         drawParticles();
-        drawCitiesAndBases();
         drawPrompts();
         drawFXOverlays();
         ctx.restore();
         drawBanner();
+        if (state.practice && state.playing && !state.attract) {
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.font = '800 16px Inter, system-ui, sans-serif';
+          ctx.globalAlpha = 0.55;
+          ctx.fillStyle = '#ffffff';
+          ctx.fillText('PRACTICE', state.width / 2, state.height - 14);
+          ctx.restore();
+        }
         if (state.paused) drawPausedOverlay();
         updateHUD();
       }
@@ -1765,18 +2001,48 @@
         ctx.restore();
       }
 
+      let lastHudText = '';
+      let lastPauseVis = null;
+      let compactHud = window.innerWidth <= 520;
       function updateHUD() {
         const aliveCities = state.cities.filter(c => c.alive).length;
         const ammoText = state.bases.map(b => b.alive ? b.ammo : 'X').join('/');
         const combo = state.comboCount > 1 && state.comboTimer > 0 ? `x${(1 + (state.comboCount - 1) * 0.18).toFixed(1)}` : 'x1';
-        const waveStatus = state.waveIntroTimer > 0 ? `W${state.wave} incoming` : (state.special ? `W${state.wave} ★` : `W${state.wave}`);
-        hudLine.textContent = `${waveStatus} | Score ${state.score.toLocaleString()} | Cities ${aliveCities} | Ammo ${ammoText} | Combo ${combo} | Bonus @ ${state.nextBonusScore.toLocaleString()}`;
+        let text;
+        if (compactHud) {
+          // Narrow phones: shorter labels, drop the Bonus segment so
+          // Score/Cities/Ammo/Combo always fit at 390px.
+          const waveStatus = `W${state.wave}${state.special ? '★' : ''}${state.waveIntroTimer > 0 ? '…' : ''}`;
+          text = `${waveStatus} · ${state.score.toLocaleString()} · C${aliveCities} · A ${ammoText} · ${combo}`;
+        } else {
+          const waveStatus = state.waveIntroTimer > 0 ? `W${state.wave} incoming` : (state.special ? `W${state.wave} ★` : `W${state.wave}`);
+          text = `${waveStatus} | Score ${state.score.toLocaleString()} | Cities ${aliveCities} | Ammo ${ammoText} | Combo ${combo} | Bonus @ ${state.nextBonusScore.toLocaleString()}`;
+        }
+        if (text !== lastHudText) { lastHudText = text; hudLine.textContent = text; }
+        // Touch-reachable pause chip, only during real play
+        const pauseVis = state.playing && !state.gameOver && !state.attract && tutorialOverlay.classList.contains('hidden');
+        if (pauseVis !== lastPauseVis) { lastPauseVis = pauseVis; pauseBtn.style.display = pauseVis ? 'block' : 'none'; }
       }
 
+      // Fixed-timestep accumulator: slow rendering skips frames instead of
+      // dilating time (no slow-mo on weak devices).
+      const SIM_STEP = 1 / 60;
+      let simAcc = 0;
       function frame(now) {
-        const dt = clamp((now - state.lastTime) / 1000, 0, 0.033);
+        let dt = (now - state.lastTime) / 1000;
         state.lastTime = now;
-        if (!state.paused) update(dt);
+        if (dt < 0) dt = 0;
+        if (dt > 0.25) dt = 0.25;
+        if (!state.paused) {
+          simAcc += dt;
+          let steps = 0;
+          while (simAcc >= SIM_STEP && steps < 4) {
+            update(SIM_STEP);
+            simAcc -= SIM_STEP;
+            steps++;
+          }
+          if (simAcc >= SIM_STEP) simAcc = 0; // drop the remainder
+        }
         render();
         requestAnimationFrame(frame);
       }
@@ -1797,24 +2063,37 @@
         }
       }
 
-      async function startGame() {
+      async function startGame(practice = false) {
         state.attract = false; // clear before audio unlock so the gesture initialises sound
         setDemoBadge(false);
         await unlockAudioAndMaybeStart();
         tutorialOverlay.classList.add('hidden');
-        resetGame();
+        resetGame(practice === true);
       }
 
       async function restartGame() {
         await unlockAudioAndMaybeStart();
-        resetGame();
+        resetGame(state.practice); // keep the mode of the run being restarted
       }
 
       function setPaused(on) {
         if (on && (!state.playing || state.gameOver)) return;
         if (state.paused === on) return;
         state.paused = on;
+        pauseBtn.textContent = on ? '▶' : '⏸';
+        // Pause/resume the music with the game
+        if (audio && audio.music) {
+          if (on) audio.music.pause();
+          else if (settings.sound && state.audioUnlocked) audio.music.play().catch(() => {});
+        }
         if (!on) state.lastTime = performance.now();
+      }
+
+      // Restart from the game-over screen is disabled while the initials
+      // spinner is open, and for 1.5s after death (no accidental restarts).
+      function canRestartFromOverlay() {
+        const initialsOpen = !document.getElementById('hsInitialsSection').classList.contains('hidden');
+        return !initialsOpen && performance.now() - state.gameOverAt > 1500;
       }
 
       function handlePointer(x, y) {
@@ -1825,7 +2104,7 @@
           return;
         }
         if (state.gameOver) {
-          restartGame();
+          if (canRestartFromOverlay()) restartGame();
           return;
         }
         launchDefense(x, y);
@@ -1914,22 +2193,20 @@
       addTouchAndClick(document.getElementById('titleOptBtn'), openOptOverlay);
       addTouchAndClick(document.getElementById('optClose'), closeOptOverlay);
 
-      addTouchAndClick(startButton, startGame);
-      addTouchAndClick(dismissTutorial, async () => {
-        state.attract = false;
-        setDemoBadge(false);
-        await unlockAudioAndMaybeStart();
-        tutorialOverlay.classList.add('hidden');
-        resetGame();
-      });
+      addTouchAndClick(startButton, () => startGame(false));
+      // Practice is a real mode: +50% ammo, 0.85x enemy speed, no leaderboard.
+      addTouchAndClick(dismissTutorial, () => startGame(true));
       addTouchAndClick(restartButton, restartGame);
+      addTouchAndClick(pauseBtn, () => {
+        if (state.playing && !state.gameOver && !state.attract) setPaused(!state.paused);
+      });
       gameOverOverlay.addEventListener('click', (e) => {
-        if (!e.target.closest('button')) restartGame();
+        if (!e.target.closest('button') && canRestartFromOverlay()) restartGame();
       });
       gameOverOverlay.addEventListener('touchend', (e) => {
         if (!e.target.closest('button')) {
           e.preventDefault();
-          restartGame();
+          if (canRestartFromOverlay()) restartGame();
         }
       }, { passive: false });
 
@@ -1955,9 +2232,9 @@
         const initialsOpen = state.gameOver && !document.getElementById('hsInitialsSection').classList.contains('hidden');
         if (initialsOpen) return; // don't steal Enter/Space from initials entry
         if (e.target && e.target.closest && e.target.closest('button')) e.preventDefault();
-        if (!tutorialOverlay.classList.contains('hidden')) await startGame();
+        if (!tutorialOverlay.classList.contains('hidden')) await startGame(false);
         else if (state.paused) setPaused(false);
-        else if (state.gameOver) await restartGame();
+        else if (state.gameOver && canRestartFromOverlay()) await restartGame();
       });
       window.addEventListener('blur', () => setPaused(true));
       window.addEventListener('focus', () => { if (state.attract) setPaused(false); });
@@ -1965,6 +2242,21 @@
         if (document.hidden) setPaused(true);
         else if (state.attract) setPaused(false); // auto-resume the title demo
       });
+
+      // QA hook, only with ?qa=1
+      if (location.search.includes('qa=1')) {
+        window.__mcQA = {
+          state,
+          fireAt: launchDefense,
+          startGame,
+          resetGame,
+          prepareWave,
+          spawnEnemyMissile,
+          spawnSatellite,
+          setPaused,
+          endGame() { state.cities.forEach(c => { c.alive = false; }); state.attract = false; checkGameOver(); },
+        };
+      }
 
       resize();
       updateHUD();

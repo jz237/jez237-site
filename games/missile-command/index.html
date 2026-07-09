@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Missile Command — Choose Your Edition</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
   <style>
     :root { color-scheme: dark; }
     * { box-sizing: border-box; }
@@ -25,10 +26,11 @@
     .sub { margin: 12px 0 4px; opacity: 0.72; font-size: clamp(13px, 2.4vw, 16px); letter-spacing: 0.03em; }
     .grid {
       margin-top: clamp(22px, 4vh, 40px);
-      display: grid; gap: 16px;
-      grid-template-columns: repeat(6, 1fr);
+      display: grid; gap: 18px;
+      grid-template-columns: repeat(3, 1fr);
+      max-width: 1120px; margin-left: auto; margin-right: auto;
     }
-    @media (max-width: 1080px) { .grid { grid-template-columns: repeat(3, 1fr); max-width: 760px; margin-left: auto; margin-right: auto; } }
+    @media (max-width: 1080px) { .grid { gap: 16px; max-width: 760px; } }
     @media (max-width: 720px) { .grid { grid-template-columns: repeat(2, 1fr); max-width: 480px; } }
     @media (max-width: 460px) { .grid { grid-template-columns: 1fr; max-width: 320px; } }
     .card {
@@ -41,8 +43,10 @@
     .card:hover, .card:focus-visible {
       transform: translateY(-6px);
       box-shadow: 0 20px 48px rgba(0,0,0,0.55), 0 0 0 2px var(--accent);
-      border-color: var(--accent); outline: none;
+      border-color: var(--accent);
     }
+    /* real outline (not just box-shadow) so keyboard focus survives forced-colors mode */
+    .card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
     .preview { position: relative; aspect-ratio: 2 / 1; width: 100%; display: block; }
     .preview svg { width: 100%; height: 100%; display: block; }
     .meta { padding: 14px 16px 16px; text-align: left; border-top: 1px solid rgba(255,255,255,0.07); }
@@ -54,7 +58,7 @@
     }
     .card.vector { --accent: #57d4ff; }
     .card.paper  { --accent: #e0a458; }
-    .card.clay   { --accent: #e58a4c; }
+    .card.clay   { --accent: #d96b3f; }
     .card.aurora { --accent: #66e6b0; }
     .card.toon3d { --accent: #4db2ff; }
     .card.realistic { --accent: #f0a54a; }
@@ -196,7 +200,7 @@
             </g>
           </svg>
         </div>
-        <div class="meta"><h2>3D</h2><div class="style">Toon 3D — real WebGL domes, glossy cloud skies, cauliflower smoke, chunky fireballs.</div><span class="go">Play ▸</span></div>
+        <div class="meta"><h2>Toon 3D</h2><div class="style">Toon 3D — real WebGL domes, glossy cloud skies, cauliflower smoke, chunky fireballs.</div><span class="go">Play ▸</span></div>
       </a>
 
       <!-- ===== VECTOR ===== -->
