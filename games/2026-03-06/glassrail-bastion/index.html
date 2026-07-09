@@ -176,6 +176,9 @@ function diff(){return DIFF[settings.difficulty]||DIFF.normal;}
 let sfxGain=null;
 const music={title:null,game:null};
 let voiceEl=null,musicReady=false,voiceCooldown=0,voLowHp=false;
+const VOARR=['harry','bella','brian','callum','charlie','chris','eric','jessica','liam','lily','matilda']; // Jez's picked announcer voices
+let voVoice=VOARR[Math.floor(Math.random()*VOARR.length)],voSetLast=null;
+function voRoll(){let v=VOARR[Math.floor(Math.random()*VOARR.length)];if(v===voSetLast)v=VOARR[(VOARR.indexOf(v)+1)%VOARR.length];voSetLast=v;voVoice=v;}
 function applyAudioSettings(){
   if(sfxGain)sfxGain.gain.value=(settings.master/100)*(settings.sfx/100);
   if(voiceEl)voiceEl.volume=(settings.master/100)*(settings.voice/100);
@@ -216,7 +219,7 @@ function playVoice(name,priority){
   if(muted||!voiceEl||settings.voice<=0)return;
   if(voiceCooldown>0&&!priority)return;
   voiceCooldown=1.5; // seconds
-  try{voiceEl.src='assets/'+name+'.mp3';voiceEl.volume=(settings.master/100)*(settings.voice/100);voiceEl.currentTime=0;voiceEl.play().catch(()=>{});showToast(VOICE_TEXT[name]||'');}catch(e){}
+  try{voiceEl.onerror=function(){voiceEl.onerror=null;voiceEl.src='assets/'+name+'.mp3';voiceEl.currentTime=0;voiceEl.play().catch(()=>{});};voiceEl.src='assets/vo/'+voVoice+'/'+name+'.mp3';voiceEl.volume=(settings.master/100)*(settings.voice/100);voiceEl.currentTime=0;voiceEl.play().catch(()=>{});showToast(VOICE_TEXT[name]||'');}catch(e){}
 }
 function announceVo(event,priority){
   const pool=VO_POOLS[event]||[event];
@@ -636,6 +639,7 @@ window.addEventListener('keydown',e=>{
 });
 
 function resetGame(){
+  voRoll();
   score=0;shards=0;wave=1;bastionHp=bastionMaxHp=100;shield=maxShield=50;
   fireRate=5;fireDmg=10;fireTimer=0;spreadCount=1;piercing=false;shieldRegen=.5;
   magnetRadius=300;dashCdMax=3;dashCooldown=0;dashActive=0;invuln=0;
