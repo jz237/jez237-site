@@ -1870,6 +1870,12 @@
           sx = rand(-state.shake, state.shake);
           sy = rand(-state.shake * 0.6, state.shake * 0.6);
         }
+        // "boil": tiny hand-repositioned-paper weave reseeded each 12fps step and held
+        // within the frame — real cut-out layers never land in exactly the same spot.
+        if (settings.effects && !state.paused) {
+          sx += rand(-0.9, 0.9);
+          sy += rand(-0.9, 0.9);
+        }
         ctx.save();
         ctx.translate(sx, sy);
         drawSky();
@@ -1919,11 +1925,21 @@
         hudLine.textContent = `${waveStatus} | Score ${state.score.toLocaleString()} | Cities ${aliveCities} | Ammo ${ammoText} | Combo ${combo} | Bonus @ ${state.nextBonusScore.toLocaleString()}`;
       }
 
+      // Stop-motion cadence: simulate at full rate (accurate collisions), but only
+      // REDRAW on a 12fps "on twos" grid so cut-outs snap between held poses like real
+      // construction-paper animation (South Park / Gilliam move parts every ~2 frames).
+      const STOP_FPS = 12, STOP_STEP = 1 / STOP_FPS;
       function frame(now) {
         const dt = clamp((now - state.lastTime) / 1000, 0, 0.033);
         state.lastTime = now;
         if (!state.paused) update(dt);
-        render();
+        state.renderAcc = (state.renderAcc || 0) + dt;
+        if (state.firstDraw !== false || state.renderAcc >= STOP_STEP) {
+          state.renderAcc %= STOP_STEP;
+          state.stopFrame = (state.stopFrame || 0) + 1;
+          state.firstDraw = false;
+          render();
+        }
         requestAnimationFrame(frame);
       }
 
