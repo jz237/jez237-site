@@ -19,6 +19,20 @@
     }
   },
   {
+    "id": "2026-07-09-miniature-diorama-miniature-storm-drain-semaphore-greenhous",
+    "title": "Miniature Storm-Drain Semaphore Greenhouse",
+    "tests": "miniature diorama; macro model; physical scale cues; non-paper finished image",
+    "prompt": "Build a visibly handmade miniature diorama of a storm-drain semaphore greenhouse hidden under a rain-soaked city sidewalk, photographed as a finished macro model on a hobby workbench rather than a full-size place. Show a thumb-sized underground greenhouse chamber built inside a cutaway concrete storm drain: tiny arched acrylic roof panes fogged with condensation, pea-sized fern trays, mossy brick culvert walls, copper-wire semaphore arms linked to little float gauges, bead-and-pin pulley wheels, matchstick catwalks, a thimble-sized sump pump, translucent blue resin water channel, miniature warning lamp glowing amber through a bottle-cap lens, thread roots hanging from sidewalk cracks above, and wet grit collected around drain grates. Make the handmade scale unmistakable with visible foamcore cross-section edges, brush-painted concrete texture, glue beads, laser-cut basswood seams, tweezers, hobby knife, paint jars, a coin, scale ruler, stray static grass fibers, and tiny puddles just outside the set. Use shallow macro depth of field, practical warm LEDs inside the greenhouse and cool rainy window light over the bench, tactile acrylic, copper, moss, brick, resin water, paper clay, and grit. The composition should be dense but readable, a real physical model with no readable labels, no captions, no arrows, no poster layout, no full-size ambiguity, no people or hands, no brand logos, and no watermark.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Build a visibly handmade miniature diorama of [SCENE], with scale cues, tiny props, model-making materials, macro photography, and practical lighting. Make [SCENE] clearly small-scale by including [SCALE_CUES], [TINY_PROPS], [VISIBLE_MATERIAL_EDGES], [CRAFT_TOOLS_OR_WORKBENCH_CUES], [SURFACE_WEAR], and [LIGHTING/MOOD]. Avoid full-size realism without scale cues, flat paper/poster composition, readable text/logos, people or hands, and watermarks.\n\nWhat the reusable visual operation changes or emphasizes: it turns a hidden, everyday, or imaginary place into a tactile small-scale model set, emphasizing handmade construction, tiny props, visible craft materials, macro depth of field, and physical lighting.\n\nExample substitution: [SCENE] = a storm-drain semaphore greenhouse hidden under a rain-soaked city sidewalk; [SCALE_CUES] = tweezers, hobby knife, paint jars, coin, scale ruler, foamcore cross-section edges, glue beads, basswood seams; [TINY_PROPS] = acrylic greenhouse panes, pea-sized fern trays, copper-wire semaphore arms, float gauges, bead-and-pin pulleys, matchstick catwalks, thimble-sized sump pump, blue resin water channel, amber bottle-cap warning lamp, thread roots, wet grit, and drain grates; [LIGHTING/MOOD] = warm LEDs inside the greenhouse mixed with cool rainy window light over the workbench.",
+    "image": "images/2026-07-09-miniature-diorama-miniature-storm-drain-semaphore-greenhous.jpg",
+    "thumb": "thumbs/2026-07-09-miniature-diorama-miniature-storm-drain-semaphore-greenhous.webp",
+    "color": "#423c32",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024"
+  },
+  {
     "id": "2026-07-09-hybrid-creature-wild-crimson-crown-iceback-in-the-wild",
     "title": "Crimson Crown Iceback: In the Wild",
     "tests": "Hybrid-creature pair cron; wild photo preserves the infographic phenotype and shows the same fictional king penguin plus Japanese spider crab adult in subantarctic tidal-ice habitat.",
