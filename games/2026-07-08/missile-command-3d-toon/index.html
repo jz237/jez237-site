@@ -233,9 +233,9 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0xcfeaff, 105, 320);
 
-const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 500);
-camera.position.set(0, 12.5, 40);
-camera.lookAt(0, 10, -6);
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 500);
+camera.position.set(0, 12, 37);
+camera.lookAt(0, 10.5, -6);
 
 // (sky is an AI-generated texture, set once assets load — see TEX block below)
 
@@ -353,6 +353,15 @@ const skylineGroup=new THREE.Group(); scene.add(skylineGroup);
     idx++;
   }
 })();
+// faint distant skyline on the horizon — fog fades it toward the sky for atmospheric depth
+(function(){
+  const m=new THREE.MeshStandardMaterial({color:0xa8c0dc, roughness:1});
+  for(let x=-74;x<=74;x+=4.6){
+    const h=9+Math.abs(Math.sin(x*0.7))*11;
+    const b=new THREE.Mesh(new THREE.BoxGeometry(3.3,h,3), m);
+    b.position.set(x+Math.sin(x*2.1)*1.2, h/2, -74); skylineGroup.add(b);
+  }
+})();
 
 // toon trees scattered on the grass
 function makeTree(x,z,s){
@@ -376,7 +385,7 @@ function makeRock(x,z,s){
 
 // 3D cloud billboards (AI cloud sprite) for parallax depth above the skyline
 (function(){
-  const specs=[[-34,30,-30,11],[31,37,-42,15],[2,43,-52,18],[47,26,-22,9],[-49,34,-27,12],[-15,41,-48,13]];
+  const specs=[[-34,28,-30,15],[31,36,-42,20],[2,44,-54,24],[47,25,-22,13],[-49,33,-27,17],[-15,42,-50,18],[18,30,-34,14],[-6,25,-28,12]];
   specs.forEach(c=>{
     const s=new THREE.Sprite(new THREE.SpriteMaterial({map:TEX.cloud, transparent:true, depthWrite:false, opacity:.97}));
     s.position.set(c[0],c[1],c[2]); s.scale.set(c[3], c[3]*0.56, 1); scene.add(s);
@@ -926,9 +935,9 @@ function frame(now){
   }
   // subtle cinematic camera drift — makes the depth read as genuinely three-dimensional
   const cd=now*0.00013;
-  camera.position.x = Math.sin(cd)*3.4;
-  camera.position.y = 12.5 + Math.sin(cd*1.7)*0.9;
-  camera.lookAt(0, 9.5, -6);
+  camera.position.x = Math.sin(cd)*3.2;
+  camera.position.y = 12 + Math.sin(cd*1.7)*0.8;
+  camera.lookAt(0, 10.3, -6);
   renderer.render(scene, camera);
 }
 
