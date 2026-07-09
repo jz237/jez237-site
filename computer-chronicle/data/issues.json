@@ -1,8 +1,339 @@
 {
-  "generatedAt": "2026-07-08T12:02:42.411Z",
+  "generatedAt": "2026-07-09T12:03:07.285Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-09",
+      "historicDate": "1983-04-18",
+      "displayDate": "Week of April 18-24, 1983",
+      "edition": "Issue 038 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "A warm early-1980s computer-weekly front page with arcade-game lead treatment, amber terminal accents, red and blue rule lines, shelf-watch boxes, chart modules, and a compact world bulletin.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Home computers, arcades, software shelves, and culture",
+        "price": "35 cents",
+        "date": "Week of April 18-24, 1983"
+      },
+      "layoutPlan": "Gaming-led front page with arcade trade-news lead, a right-rail culture stack, shelf-watch boxes for IBM PC and home-computer software, a compact price watch, classifieds, and a small world bulletin.",
+      "sectionChrome": [
+        "Arcade Counter",
+        "Shelf Watch",
+        "Price Watch",
+        "Culture Rack"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-04-18.png",
+        "alt": "GPT Image 2 vintage Computer Chronicle newspaper front page for the week of April 18-24, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Late April 1983 put arcade trade papers, IBM PC business software, and discount home-computer shelves in the same weekend conversation, while the Beirut embassy bombing gave the week a stark world-news backdrop.",
+      "morningLine": "This week at the counter: Pole Position still drives arcade chatter, Lotus 1-2-3 sells the IBM PC as an office machine, Flashdance takes the weekend box office, and Come On Eileen tops the singles chart.",
+      "lead": {
+        "headline": "Pole Position keeps arcade racing in the fast lane",
+        "dek": "Atari/Namco racing cabinets remained a trade-paper and operator touchstone as home-computer aisles tried to borrow arcade excitement.",
+        "body": "By the week of April 18, arcade operators were still talking about the drawing power of Pole Position, the Namco racer Atari distributed in North America. Its sit-down cabinet, qualifying lap, and billboard-style track made it a showroom example of how arcade spectacle could sell a game before a player touched the wheel. For home-computer buyers, that arcade glow mattered: software shelves were filling with conversions and racing titles that promised a slice of the coin-op floor.",
+        "confidence": "High for Pole Position release context; medium for week-specific retail emphasis.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Lotus 1-2-3 defines the IBM PC pitch",
+          "summary": "Lotus 1-2-3, released earlier in 1983, was already becoming the spreadsheet/database/graphics package dealers used to explain why an IBM PC belonged on an office desk.",
+          "confidence": "High",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "IBM PC XT keeps fixed disks in the premium tier",
+          "summary": "The IBM Personal Computer XT, introduced in March 1983 with a 10 MB fixed disk, kept serious storage expensive but made hard-disk office computing easier to demonstrate.",
+          "confidence": "High",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Home-computer game shelves stay crowded",
+          "summary": "Commodore 64, Atari 8-bit, Apple II, and TI-99/4A buyers saw arcade conversions, cartridges, and budget software competing for attention in 1983 dealer ads.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "title": "Bulletin-board curiosity grows at 300 baud",
+          "summary": "Modems remained add-ons for enthusiasts, but the idea of dialing local boards and swapping files was becoming part of the hobby-computer sales pitch.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC spreadsheet, database, and graphics package that became the PC office standard."
+        },
+        {
+          "name": "Zaxxon",
+          "detail": "Arcade name visible in Apple II and home-computer conversion conversations."
+        },
+        {
+          "name": "Pole Position",
+          "detail": "Arcade racing hit anchoring operator and player attention."
+        },
+        {
+          "name": "WordStar",
+          "detail": "Business word processor still prominent in CP/M and office computing."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Familiar spreadsheet name still used as a comparison point for business buyers."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Pole Position",
+            "Zaxxon",
+            "Miner 2049er",
+            "Choplifter!",
+            "Ultima II: The Revenge of the Enchantress"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Lotus 1-2-3",
+            "WordStar",
+            "VisiCalc",
+            "dBASE II",
+            "Microsoft BASIC"
+          ]
+        },
+        {
+          "label": "Home Hardware",
+          "items": [
+            "Commodore 64",
+            "Atari 800",
+            "Apple IIe",
+            "TI-99/4A",
+            "IBM PC XT"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "A 10 MB fixed disk kept the XT in premium office territory."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "commonly advertised under $600 in 1983",
+          "note": "Aggressive pricing made the C64 a visible home-computer rival."
+        },
+        {
+          "item": "TI-99/4A",
+          "price": "street prices falling through 1983",
+          "note": "Discounting made cartridge supply and software support more important."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "about $100-$200 depending on brand",
+          "note": "Still a specialty add-on for bulletin-board experiments."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Arcade glamour sells computers",
+          "text": "Dealers leaned on familiar arcade names and screenshots to make home systems feel less like homework machines."
+        },
+        {
+          "headline": "PC buyers ask for bundles",
+          "text": "The XT and Lotus story pushed shoppers to compare memory, disk, printer, and software totals rather than CPU price alone."
+        },
+        {
+          "headline": "Flashdance opens big",
+          "text": "Paramount’s Flashdance moved to number one at the domestic weekend box office for April 22-24."
+        },
+        {
+          "headline": "Come On Eileen tops radio",
+          "text": "Dexys Midnight Runners led the U.S. singles chart dated April 23, 1983."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 2,
+          "title": "Mr. Roboto",
+          "artist": "Styx"
+        },
+        {
+          "rank": 3,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 4,
+          "title": "Der Kommissar",
+          "artist": "After the Fire"
+        },
+        {
+          "rank": 5,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        }
+      ],
+      "periodAd": {
+        "headline": "Dealer Special: Spreadsheet Morning, Arcade Afternoon",
+        "summary": "Ask for an IBM PC demonstration with Lotus 1-2-3, then try the latest Apple II and Commodore game disks at the counter.",
+        "tagline": "Bring a blank disk. Leave with a wish list."
+      },
+      "market": {
+        "headline": "Software is the margin story",
+        "summary": "As home-computer prices fell and IBM PC systems grew more expensive with disks and monitors, dealers watched software, cartridges, printers, and support carry the profit conversation.",
+        "confidence": "Medium, based on 1983 trade coverage and period price context.",
+        "sourceRefs": [
+          2,
+          4,
+          5,
+          6
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Bomb destroys U.S. Embassy in Beirut",
+        "summary": "On April 18, 1983, a truck bomb devastated the U.S. Embassy in Beirut, killing dozens and bringing Lebanon’s civil war and U.S. presence there to the front pages.",
+        "confidence": "High",
+        "sourceRefs": [
+          7,
+          8
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-04-18.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Pole Position was developed by Namco and distributed by Atari in North America, becoming a major 1982-83 arcade racing title.",
+            "confidence": "High",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was released in 1983 and became a defining IBM PC business application.",
+            "confidence": "High",
+            "sourceRefs": [
+              2,
+              3
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT in March 1983 with a 10 MB hard disk and a roughly $4,995 list price.",
+            "confidence": "High",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Billboard Hot 100 for April 23, 1983 was led by Come On Eileen, with Mr. Roboto, Beat It, Der Kommissar, and Jeopardy in the top five.",
+            "confidence": "High",
+            "sourceRefs": [
+              9
+            ]
+          },
+          {
+            "claim": "Domestic weekend box office for April 22-24, 1983 was led by Flashdance, followed by Lone Wolf McQuade, Tootsie, Gandhi, and Monty Python's The Meaning of Life.",
+            "confidence": "High",
+            "sourceRefs": [
+              10
+            ]
+          },
+          {
+            "claim": "The U.S. Embassy bombing in Beirut occurred on April 18, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              7,
+              8
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Atari: Pole Position arcade flyer and release context",
+          "url": "https://flyers.arcade-museum.com/videogames/show/757"
+        },
+        {
+          "label": "The International Arcade Museum: Pole Position",
+          "url": "https://www.arcade-museum.com/Videogame/pole-position"
+        },
+        {
+          "label": "InfoWorld: Lotus 1-2-3 hits the big 3-0",
+          "url": "https://www.infoworld.com/article/2613303/lotus-1-2-3-hits-the-big-3-0.html"
+        },
+        {
+          "label": "Encyclopaedia Britannica: Lotus 1-2-3",
+          "url": "https://www.britannica.com/technology/Lotus-1-2-3"
+        },
+        {
+          "label": "IBM Archives: IBM Personal Computer XT",
+          "url": "https://www.ibm.com/ibm/history/exhibits/pc25/pc25_birth.html"
+        },
+        {
+          "label": "Computers & Electronics, April 1983",
+          "url": "https://www.worldradiohistory.com/Archive-Poptronics/80s/1983/CE-1983-04r.pdf"
+        },
+        {
+          "label": "PC World Vol. 1 No. 3, May 1983",
+          "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+        },
+        {
+          "label": "Washington Post: Bomb Wrecks U.S. Embassy in Beirut",
+          "url": "https://www.washingtonpost.com/archive/politics/1983/04/19/bomb-wrecks-us-embassy-in-beirut/87889136-e1e9-4d5b-ad11-2e23b3f87511/"
+        },
+        {
+          "label": "Reagan Library: Proclamation 5054, Beirut personnel deaths",
+          "url": "https://www.reaganlibrary.gov/archives/speech/proclamation-5054-death-federal-diplomatic-and-military-personnel-beirut-lebanon"
+        },
+        {
+          "label": "Top40Weekly: US Top 40 Singles, week ending April 23, 1983",
+          "url": "https://top40weekly.com/2013/04/23/us-top-40-singles-for-the-week-ending-april-23-1983/"
+        },
+        {
+          "label": "Box Office Mojo Domestic Weekend 16, April 22-24, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W16/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: Apple II Disk Swaps",
+          "copy": "Local users seek game disks, printer ribbons, and paddles. Leave name at the counter."
+        },
+        {
+          "headline": "Modem Night",
+          "copy": "300-baud demonstrations after closing. Bring questions, not long-distance charges."
+        }
+      ]
+    },
     {
       "currentDate": "2026-07-08",
       "historicDate": "1983-04-11",
