@@ -14,7 +14,7 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       -webkit-font-smoothing: antialiased;
     }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: clamp(28px, 6vh, 64px) 20px 48px; text-align: center; }
+    .wrap { max-width: 1220px; margin: 0 auto; padding: clamp(28px, 6vh, 64px) 20px 48px; text-align: center; }
     h1 {
       margin: 0; font-size: clamp(30px, 7vw, 62px); font-weight: 900;
       letter-spacing: 0.14em; text-transform: uppercase; line-height: 1;
@@ -25,11 +25,12 @@
     .sub { margin: 12px 0 4px; opacity: 0.72; font-size: clamp(13px, 2.4vw, 16px); letter-spacing: 0.03em; }
     .grid {
       margin-top: clamp(22px, 4vh, 40px);
-      display: grid; gap: 18px;
-      grid-template-columns: repeat(4, 1fr);
+      display: grid; gap: 16px;
+      grid-template-columns: repeat(5, 1fr);
     }
-    @media (max-width: 980px) { .grid { grid-template-columns: repeat(2, 1fr); max-width: 720px; margin-left: auto; margin-right: auto; } }
-    @media (max-width: 520px) { .grid { grid-template-columns: 1fr; max-width: 420px; } }
+    @media (max-width: 1080px) { .grid { grid-template-columns: repeat(3, 1fr); max-width: 760px; margin-left: auto; margin-right: auto; } }
+    @media (max-width: 720px) { .grid { grid-template-columns: repeat(2, 1fr); max-width: 480px; } }
+    @media (max-width: 460px) { .grid { grid-template-columns: 1fr; max-width: 320px; } }
     .card {
       display: flex; flex-direction: column; text-decoration: none; color: inherit;
       border-radius: 16px; overflow: hidden; background: #101a2e;
@@ -55,6 +56,7 @@
     .card.paper  { --accent: #e0a458; }
     .card.clay   { --accent: #e58a4c; }
     .card.aurora { --accent: #66e6b0; }
+    .card.toon3d { --accent: #4db2ff; }
     .foot { margin-top: 30px; font-size: 12px; opacity: 0.5; }
     .foot a { color: #9fc4ee; }
   </style>
@@ -62,8 +64,64 @@
 <body>
   <div class="wrap">
     <h1>Missile Command</h1>
-    <p class="sub">One classic, four hand-built looks. Pick your edition.</p>
+    <p class="sub">One classic, five hand-built looks. Pick your edition.</p>
     <div class="grid">
+
+      <!-- ===== TOON 3D ===== -->
+      <a class="card toon3d" href="../2026-07-08/missile-command-3d-toon/">
+        <div class="preview">
+          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Toon 3D style preview">
+            <defs>
+              <linearGradient id="t3sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f74d6"/><stop offset="1" stop-color="#bfe6ff"/></linearGradient>
+              <radialGradient id="t3cloud" cx="50%" cy="38%" r="65%"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#eef5fc"/><stop offset="1" stop-color="#eef5fc" stop-opacity="0"/></radialGradient>
+              <radialGradient id="t3dome" cx="36%" cy="26%" r="85%"><stop offset="0" stop-color="#eef1f4"/><stop offset=".5" stop-color="#a9b1bb"/><stop offset="1" stop-color="#666d77"/></radialGradient>
+              <linearGradient id="t3cap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff6a52"/><stop offset="1" stop-color="#c22a1c"/></linearGradient>
+              <radialGradient id="t3fire" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff7d0"/><stop offset=".4" stop-color="#ffd23f"/><stop offset=".75" stop-color="#ff8a1c"/><stop offset="1" stop-color="#e0480f"/></radialGradient>
+              <linearGradient id="t3grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6bbf4a"/><stop offset="1" stop-color="#4f9c37"/></linearGradient>
+              <radialGradient id="t3eye" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe6a0"/><stop offset=".5" stop-color="#ff9a2a"/><stop offset="1" stop-color="#e0600a"/></radialGradient>
+            </defs>
+            <rect width="300" height="150" fill="url(#t3sky)"/>
+            <ellipse cx="58" cy="32" rx="34" ry="16" fill="url(#t3cloud)"/>
+            <ellipse cx="240" cy="24" rx="40" ry="18" fill="url(#t3cloud)"/>
+            <!-- skyline -->
+            <g>
+              <rect x="28" y="70" width="20" height="48" rx="2" fill="#c94a3d"/><rect x="28" y="70" width="7" height="48" fill="#fff" opacity=".12"/>
+              <rect x="52" y="60" width="18" height="58" rx="2" fill="#4f8fd0"/><rect x="52" y="60" width="6" height="58" fill="#fff" opacity=".12"/>
+              <rect x="150" y="64" width="16" height="54" rx="2" fill="#b98cff"/><rect x="150" y="64" width="5" height="54" fill="#fff" opacity=".12"/>
+              <rect x="206" y="62" width="18" height="56" rx="2" fill="#59b07a"/><rect x="206" y="62" width="6" height="56" fill="#fff" opacity=".12"/>
+              <rect x="230" y="72" width="20" height="46" rx="2" fill="#d7c187"/><rect x="230" y="72" width="7" height="46" fill="#fff" opacity=".12"/>
+            </g>
+            <rect x="0" y="116" width="300" height="34" fill="url(#t3grass)"/>
+            <rect x="66" y="118" width="168" height="9" rx="2" fill="#b7b1a3"/>
+            <!-- domes -->
+            <g transform="translate(96 128)">
+              <ellipse cx="0" cy="1" rx="20" ry="5" fill="#000" opacity=".16"/>
+              <path d="M-17 0 A17 15 0 0 1 17 0 Z" fill="url(#t3dome)"/>
+              <path d="M-11 -8 A11 9 0 0 1 11 -8 Q6 -13 0 -13 Q-6 -13 -11 -8 Z" fill="url(#t3cap)"/>
+              <circle cx="-6" cy="-2" r="1.9" fill="url(#t3eye)"/><circle cx="0" cy="-2" r="1.9" fill="url(#t3eye)"/><circle cx="6" cy="-2" r="1.9" fill="url(#t3eye)"/>
+            </g>
+            <g transform="translate(196 128)">
+              <ellipse cx="0" cy="1" rx="20" ry="5" fill="#000" opacity=".16"/>
+              <path d="M-17 0 A17 15 0 0 1 17 0 Z" fill="url(#t3dome)"/>
+              <path d="M-11 -8 A11 9 0 0 1 11 -8 Q6 -13 0 -13 Q-6 -13 -11 -8 Z" fill="url(#t3cap)"/>
+              <circle cx="-6" cy="-2" r="1.9" fill="url(#t3eye)"/><circle cx="0" cy="-2" r="1.9" fill="url(#t3eye)"/><circle cx="6" cy="-2" r="1.9" fill="url(#t3eye)"/>
+            </g>
+            <!-- interceptor + cauliflower smoke -->
+            <g>
+              <circle cx="118" cy="112" r="4" fill="#eef4fa"/><circle cx="122" cy="100" r="4.5" fill="#eef4fa"/><circle cx="127" cy="88" r="5" fill="#f4f8fc"/><circle cx="132" cy="77" r="4.5" fill="#f8fbfe"/>
+              <g transform="translate(137 66) rotate(26)"><rect x="-4" y="-9" width="8" height="16" rx="3" fill="#f0f2f5"/><polygon points="-4,-9 4,-9 0,-16" fill="#e23b2e"/><polygon points="-4,7 -8,12 -2,7" fill="#e23b2e"/><polygon points="4,7 8,12 2,7" fill="#e23b2e"/></g>
+            </g>
+            <!-- fireball + debris -->
+            <g transform="translate(222 58)">
+              <circle cx="-15" cy="-11" r="5" fill="#e9edf2" opacity=".8"/><circle cx="14" cy="-9" r="6" fill="#e9edf2" opacity=".7"/>
+              <circle r="16" fill="url(#t3fire)"/>
+              <rect x="17" y="-4" width="4" height="4" fill="#8a4a22" transform="rotate(20)"/>
+              <rect x="-21" y="5" width="4" height="4" fill="#d94a12"/>
+            </g>
+          </svg>
+        </div>
+        <div class="meta"><h2>3D</h2><div class="style">Toon 3D — real WebGL domes, glossy cloud skies, cauliflower smoke, chunky fireballs.</div><span class="go">Play ▸</span></div>
+      </a>
 
       <!-- ===== VECTOR ===== -->
       <a class="card vector" href="../gpt-missile-command/">
