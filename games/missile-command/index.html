@@ -26,7 +26,7 @@
     .grid {
       margin-top: clamp(22px, 4vh, 40px);
       display: grid; gap: 16px;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
     }
     @media (max-width: 1080px) { .grid { grid-template-columns: repeat(3, 1fr); max-width: 760px; margin-left: auto; margin-right: auto; } }
     @media (max-width: 720px) { .grid { grid-template-columns: repeat(2, 1fr); max-width: 480px; } }
@@ -57,6 +57,7 @@
     .card.clay   { --accent: #e58a4c; }
     .card.aurora { --accent: #66e6b0; }
     .card.toon3d { --accent: #4db2ff; }
+    .card.realistic { --accent: #f0a54a; }
     .foot { margin-top: 30px; font-size: 12px; opacity: 0.5; }
     .foot a { color: #9fc4ee; }
   </style>
@@ -64,8 +65,83 @@
 <body>
   <div class="wrap">
     <h1>Missile Command</h1>
-    <p class="sub">One classic, five hand-built looks. Pick your edition.</p>
+    <p class="sub">One classic, six hand-built looks. Pick your edition.</p>
     <div class="grid">
+
+      <!-- ===== REALISTIC ===== -->
+      <a class="card realistic" href="../2026-07-09/missile-command-realistic/">
+        <div class="preview">
+          <svg viewBox="0 0 300 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Realistic photoreal 3D style preview">
+            <defs>
+              <linearGradient id="rsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b7cc4"/><stop offset="1" stop-color="#c3e2f5"/></linearGradient>
+              <radialGradient id="rcloud" cx="42%" cy="36%" r="62%"><stop offset="0" stop-color="#ffffff"/><stop offset=".7" stop-color="#f2f8fd"/><stop offset="1" stop-color="#f2f8fd" stop-opacity="0"/></radialGradient>
+              <linearGradient id="rgrass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#72b44e"/><stop offset="1" stop-color="#4c8a34"/></linearGradient>
+              <linearGradient id="rconc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bcc1c7"/><stop offset="1" stop-color="#8b9198"/></linearGradient>
+              <linearGradient id="rbldA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9cbcda"/><stop offset="1" stop-color="#5c8098"/></linearGradient>
+              <linearGradient id="rbldB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cbb08d"/><stop offset="1" stop-color="#8d7053"/></linearGradient>
+              <radialGradient id="rdome" cx="38%" cy="24%" r="90%"><stop offset="0" stop-color="#cf5a44"/><stop offset=".55" stop-color="#9c3323"/><stop offset="1" stop-color="#6f2013"/></radialGradient>
+              <radialGradient id="rbase" cx="40%" cy="26%" r="95%"><stop offset="0" stop-color="#cfd3d9"/><stop offset="1" stop-color="#7b818a"/></radialGradient>
+              <radialGradient id="rfire" cx="50%" cy="46%" r="55%"><stop offset="0" stop-color="#fff7d0"/><stop offset=".4" stop-color="#ffce4a"/><stop offset=".72" stop-color="#ff7a1c"/><stop offset="1" stop-color="#e0480f" stop-opacity="0"/></radialGradient>
+              <radialGradient id="rport" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffe6a0"/><stop offset=".5" stop-color="#ffa42a"/><stop offset="1" stop-color="#e0600a"/></radialGradient>
+            </defs>
+            <rect width="300" height="150" fill="url(#rsky)"/>
+            <ellipse cx="56" cy="28" rx="42" ry="15" fill="url(#rcloud)"/>
+            <ellipse cx="252" cy="22" rx="46" ry="16" fill="url(#rcloud)"/>
+            <!-- photoreal skyline -->
+            <g>
+              <g id="rb">
+                <rect x="24" y="56" width="15" height="40" fill="url(#rbldA)"/><rect x="24" y="56" width="4" height="40" fill="#fff" opacity=".14"/>
+                <rect x="41" y="44" width="13" height="52" fill="url(#rbldB)"/><rect x="41" y="44" width="4" height="52" fill="#fff" opacity=".12"/>
+                <rect x="56" y="60" width="14" height="36" fill="url(#rbldB)"/><rect x="56" y="60" width="4" height="36" fill="#fff" opacity=".12"/>
+                <rect x="72" y="48" width="12" height="48" fill="url(#rbldA)"/><rect x="72" y="48" width="4" height="48" fill="#fff" opacity=".14"/>
+                <rect x="86" y="52" width="15" height="44" fill="url(#rbldB)"/><rect x="86" y="52" width="4" height="44" fill="#fff" opacity=".12"/>
+                <rect x="104" y="38" width="13" height="58" fill="url(#rbldA)"/><rect x="104" y="38" width="4" height="58" fill="#fff" opacity=".14"/>
+                <rect x="138" y="46" width="15" height="50" fill="url(#rbldA)"/><rect x="138" y="46" width="4" height="50" fill="#fff" opacity=".14"/>
+                <rect x="155" y="56" width="12" height="40" fill="url(#rbldB)"/><rect x="155" y="56" width="4" height="40" fill="#fff" opacity=".12"/>
+                <rect x="169" y="50" width="15" height="46" fill="url(#rbldA)"/><rect x="169" y="50" width="4" height="46" fill="#fff" opacity=".14"/>
+                <rect x="204" y="54" width="14" height="42" fill="url(#rbldB)"/><rect x="204" y="54" width="4" height="42" fill="#fff" opacity=".12"/>
+                <rect x="220" y="42" width="15" height="54" fill="url(#rbldA)"/><rect x="220" y="42" width="4" height="54" fill="#fff" opacity=".14"/>
+                <rect x="238" y="52" width="16" height="44" fill="url(#rbldB)"/><rect x="238" y="52" width="4" height="44" fill="#fff" opacity=".12"/>
+                <rect x="258" y="58" width="14" height="38" fill="url(#rbldA)"/><rect x="258" y="58" width="4" height="38" fill="#fff" opacity=".14"/>
+              </g>
+            </g>
+            <!-- green field -->
+            <rect x="0" y="90" width="300" height="26" fill="url(#rgrass)"/>
+            <g><rect x="39" y="90" width="2" height="6" fill="#5a3d22"/><circle cx="40" cy="88" r="5" fill="#3f7d34"/>
+               <rect x="199" y="90" width="2" height="6" fill="#5a3d22"/><circle cx="200" cy="88" r="5" fill="#3f7d34"/>
+               <rect x="123" y="91" width="2" height="5" fill="#5a3d22"/><circle cx="124" cy="89" r="4.5" fill="#468a3a"/></g>
+            <!-- concrete platform -->
+            <rect x="0" y="114" width="300" height="30" fill="url(#rconc)"/>
+            <g stroke="#6b7178" stroke-width="1" opacity=".5"><line x1="0" y1="122" x2="300" y2="122"/><line x1="60" y1="114" x2="60" y2="144"/><line x1="150" y1="114" x2="150" y2="144"/><line x1="240" y1="114" x2="240" y2="144"/></g>
+            <!-- mini city clusters on the platform -->
+            <g>
+              <rect x="96" y="98" width="8" height="18" fill="#6f7d8c"/><rect x="105" y="94" width="9" height="22" fill="#8aa0b4"/><rect x="115" y="100" width="8" height="16" fill="#5f6b78"/>
+              <rect x="176" y="96" width="9" height="20" fill="#8aa0b4"/><rect x="186" y="100" width="8" height="16" fill="#6f7d8c"/><rect x="195" y="94" width="9" height="22" fill="#7c8b9a"/>
+            </g>
+            <!-- red-dome bunkers -->
+            <g transform="translate(46 116)">
+              <ellipse cx="0" cy="1" rx="16" ry="4" fill="#000" opacity=".18"/>
+              <path d="M-14 0 L14 0 L11 -8 L-11 -8 Z" fill="url(#rbase)"/>
+              <path d="M-11 -8 A11 10 0 0 1 11 -8 Z" fill="url(#rdome)"/>
+              <circle cx="-5" cy="-3" r="1.7" fill="url(#rport)"/><circle cx="0" cy="-3" r="1.7" fill="url(#rport)"/><circle cx="5" cy="-3" r="1.7" fill="url(#rport)"/>
+            </g>
+            <g transform="translate(232 116)">
+              <ellipse cx="0" cy="1" rx="16" ry="4" fill="#000" opacity=".18"/>
+              <path d="M-14 0 L14 0 L11 -8 L-11 -8 Z" fill="url(#rbase)"/>
+              <path d="M-11 -8 A11 10 0 0 1 11 -8 Z" fill="url(#rdome)"/>
+              <circle cx="-5" cy="-3" r="1.7" fill="url(#rport)"/><circle cx="0" cy="-3" r="1.7" fill="url(#rport)"/><circle cx="5" cy="-3" r="1.7" fill="url(#rport)"/>
+            </g>
+            <!-- incoming warhead + smoke contrail from the distance -->
+            <g fill="#c2c8d0"><circle cx="70" cy="24" r="2"/><circle cx="80" cy="32" r="2.3"/><circle cx="91" cy="41" r="2.6"/><circle cx="103" cy="50" r="2.9"/></g>
+            <g transform="translate(112 58) rotate(46)"><rect x="-3" y="-6" width="6" height="12" rx="1.5" fill="#2b2530"/><polygon points="-3,-6 3,-6 0,-11" fill="#ff5030"/></g>
+            <!-- interceptor rising into the distance + fireball -->
+            <g fill="#dcecfb"><circle cx="150" cy="104" r="2"/><circle cx="150" cy="92" r="1.9"/><circle cx="149" cy="80" r="1.8"/><circle cx="148" cy="68" r="1.7"/></g>
+            <g transform="translate(147 58) rotate(-8)"><rect x="-2.5" y="-6" width="5" height="12" rx="1.5" fill="#eef1f5"/><polygon points="-2.5,-6 2.5,-6 0,-11" fill="#d23a2a"/></g>
+            <circle cx="150" cy="50" r="14" fill="url(#rfire)"/>
+          </svg>
+        </div>
+        <div class="meta"><h2>Realistic</h2><div class="style">Photoreal 3D — a real city skyline, riveted red-dome silos, and warheads streaking in from the distance.</div><span class="go">Play ▸</span></div>
+      </a>
 
       <!-- ===== TOON 3D ===== -->
       <a class="card toon3d" href="../2026-07-08/missile-command-3d-toon/">
