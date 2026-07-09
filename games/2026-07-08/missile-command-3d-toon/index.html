@@ -43,7 +43,8 @@
   }
   .hud b{color:var(--accent); font-weight:800;}
   .hud .seg{display:flex; align-items:center; gap:6px; white-space:nowrap;}
-  .hud .cities{font-size:1.05em; letter-spacing:1px;}
+  .hud .cities{display:flex; align-items:center; gap:3px;}
+  .hud .cities .heart{filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));}
   #waveBanner{
     position:fixed; left:0; right:0; top:34%; z-index:7; text-align:center;
     color:#fff; font-weight:900; pointer-events:none; opacity:0;
@@ -230,7 +231,7 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0xbfe6ff, 70, 240);
+scene.fog = new THREE.Fog(0xcfeaff, 105, 320);
 
 const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 500);
 camera.position.set(0, 12.5, 40);
@@ -239,9 +240,9 @@ camera.lookAt(0, 10, -6);
 // (sky is an AI-generated texture, set once assets load — see TEX block below)
 
 /* ---- lights: soft toon studio ---- */
-const hemi = new THREE.HemisphereLight(0xbfe6ff, 0x5f8a3f, 0.95);
+const hemi = new THREE.HemisphereLight(0xcfeaff, 0x6f9a4f, 1.08);
 scene.add(hemi);
-const sun = new THREE.DirectionalLight(0xfff2d6, 1.35);
+const sun = new THREE.DirectionalLight(0xfff4dc, 1.5);
 sun.position.set(-26, 44, 26);
 sun.castShadow = true;
 sun.shadow.mapSize.set(opts.quality?2048:1024, opts.quality?2048:1024);
@@ -277,7 +278,9 @@ loadTex('bTan','assets/build_tan.png');
 const FACADES=['bRed','bBlue','bTeal','bTan'];
 const ROOFS=[0x9aa2ac,0x8892a0,0xb0a690,0x8a94a0];
 function buildingMaterials(fi){
-  const face=new THREE.MeshStandardMaterial({map:TEX[FACADES[fi%FACADES.length]], roughness:.74});
+  const tex=TEX[FACADES[fi%FACADES.length]];
+  // emissiveMap = the facade so the bright windows self-glow (matches the reference's lit windows)
+  const face=new THREE.MeshStandardMaterial({map:tex, emissiveMap:tex, emissive:0x9a8850, emissiveIntensity:0.5, roughness:.7});
   const roof=new THREE.MeshStandardMaterial({color:ROOFS[fi%ROOFS.length], roughness:.85});
   return [face,face,roof,roof,face,face]; // +X,-X,+Y(top),-Y,+Z,-Z
 }
@@ -319,6 +322,12 @@ function buildingTexture(hex){
   const p=new THREE.Mesh(new THREE.BoxGeometry(64,0.6,11), new THREE.MeshStandardMaterial({map:TEX.stone, roughness:.9}));
   p.position.set(0,0.3,1.5); p.receiveShadow=true; scene.add(p);
 })();
+// glowing inset runway lights along the platform front edge (like the reference)
+(function(){
+  const lightGeo=new THREE.SphereGeometry(0.15,8,8);
+  const lightMat=new THREE.MeshStandardMaterial({color:0xffe488, emissive:0xffd24a, emissiveIntensity:1.7, roughness:.4});
+  for(let x=-30;x<=30;x+=3.4){ const l=new THREE.Mesh(lightGeo, lightMat); l.position.set(x, 0.62, 6.75); scene.add(l); }
+})();
 // water inset (front-left, like reference)
 let waterMesh=null;
 (function(){
@@ -348,17 +357,22 @@ const skylineGroup=new THREE.Group(); scene.add(skylineGroup);
 // toon trees scattered on the grass
 function makeTree(x,z,s){
   const g=new THREE.Group();
-  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18*s,.24*s,1.1*s,7), mat(0x8a5a2b,.9));
-  trunk.position.y=.55*s; trunk.castShadow=true; g.add(trunk);
-  const greens=[0x5ec24a,0x4fae3c,0x69cf52];
+  const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.13*s,.18*s,.7*s,6), mat(0x8a5a2b,.9));
+  trunk.position.y=.32*s; trunk.castShadow=true; g.add(trunk);
+  const greens=[0x3f9e3a,0x4bb043,0x58c24e];
   for(let i=0;i<3;i++){
-    const r=(.9-i*.16)*s;
-    const f=new THREE.Mesh(new THREE.IcosahedronGeometry(r,0), mat(greens[i%3],.85));
-    f.position.y=(1.15+i*.55)*s; f.castShadow=true; f.rotation.y=Math.random()*3; g.add(f);
+    const cone=new THREE.Mesh(new THREE.ConeGeometry((1.05-i*0.26)*s, 1.0*s, 8), mat(greens[i],.82));
+    cone.position.y=(0.9+i*0.6)*s; cone.castShadow=true; cone.rotation.y=Math.random(); g.add(cone);
   }
   g.position.set(x,0,z); scene.add(g); return g;
 }
-[[-40,4,1.1],[-35,-6,0.9],[34,3,1.05],[41,-4,1.2],[-46,-14,1.0],[45,-13,0.95],[-9,-16,0.8],[8,-17,0.85]].forEach(t=>makeTree(t[0],t[1],t[2]));
+function makeRock(x,z,s){
+  const r=new THREE.Mesh(new THREE.IcosahedronGeometry(0.5*s,0), mat(0x878d94,.95));
+  r.position.set(x,0.2*s,z); r.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);
+  r.scale.set(1,0.68,1); r.castShadow=true; r.receiveShadow=true; scene.add(r); return r;
+}
+[[-40,4,1.1],[-35,-6,0.9],[34,3,1.05],[41,-4,1.2],[-46,-14,1.0],[45,-13,0.95],[-9,-16,0.8],[8,-17,0.85],[-22,8,0.95],[22,7,1.0]].forEach(t=>makeTree(t[0],t[1],t[2]));
+[[-30,6,1.0],[30,5,0.9],[-44,-9,1.3],[43,-8,1.2],[-16,-13,0.8],[14,-14,0.95],[2,-18,1.3],[-52,-4,0.9]].forEach(r=>makeRock(r[0],r[1],r[2]));
 
 // 3D cloud billboards (AI cloud sprite) for parallax depth above the skyline
 (function(){
@@ -500,13 +514,24 @@ function updateRockets(dt){
   }
 }
 
-// enemy missiles
+// enemy missiles — real 3D warheads (dark body, glowing nose + hot tip, fins); nose leads along velocity
 const enemies=[];
-function enemyMat(){ return new THREE.MeshStandardMaterial({color:0xff3b6b, roughness:.4, emissive:0xff2b52, emissiveIntensity:1.1}); }
-let sharedEnemyGeo=new THREE.SphereGeometry(0.28,10,8);
+const _UPY=new THREE.Vector3(0,1,0);
+function buildEnemyMesh(){
+  const g=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(0.17,0.21,0.92,10), mat(0x2e2632,.5,.35)); g.add(body);
+  const band=new THREE.Mesh(new THREE.CylinderGeometry(0.216,0.216,0.14,10), mat(0xcf3b3b,.5)); band.position.y=-0.08; g.add(band);
+  const nose=new THREE.Mesh(new THREE.ConeGeometry(0.21,0.46,12), emat(0xff4a2a,1.5)); nose.position.y=0.63; g.add(nose);
+  const tip=new THREE.Mesh(new THREE.SphereGeometry(0.1,8,7), emat(0xffe07a,2.2)); tip.position.y=0.86; g.add(tip);
+  const finMat=mat(0xcf3b3b,.5);
+  for(let i=0;i<3;i++){ const f=new THREE.Mesh(new THREE.BoxGeometry(0.045,0.32,0.34), finMat);
+    const a=i/3*Math.PI*2; f.position.set(Math.cos(a)*0.17,-0.42,Math.sin(a)*0.17); f.rotation.y=-a; g.add(f); }
+  g.traverse(o=>{ if(o.isMesh) o.castShadow=true; });
+  return g;
+}
 function spawnEnemy(sx, targetX, speed, mirvLevel, sz){
   let e=enemies.find(q=>!q.active);
-  if(!e){ const head=new THREE.Mesh(sharedEnemyGeo, enemyMat()); head.castShadow=false; scene.add(head); e={head, active:false, trail:0}; enemies.push(e); }
+  if(!e){ const head=buildEnemyMesh(); scene.add(head); e={head, active:false, trail:0}; enemies.push(e); }
   e.head.visible=true; e.active=true;
   const z0 = (sz==null) ? (-4 - Math.random()*22) : sz;   // spawn deep in 3D space so missiles descend through real depth
   e.pos=new THREE.Vector3(sx, SKY_TOP, z0);
@@ -520,6 +545,7 @@ function updateEnemies(dt){
   for(const e of enemies){ if(!e.active) continue;
     e.pos.addScaledVector(e.dir, e.speed*dt);
     e.head.position.copy(e.pos);
+    e.head.quaternion.setFromUnitVectors(_UPY, e.dir);
     e.trail+=e.speed*dt;
     if(e.trail>0.7){ e.trail=0; spawnPuff(e.pos.x, e.pos.y, 0.34, 0xff6b7e, -0.05, e.pos.z); }
     // MIRV split
@@ -654,7 +680,9 @@ const el={ score:document.getElementById('score'), wave:document.getElementById(
 
 function addScore(n){ state.score+=Math.round(n); el.score.textContent=state.score.toLocaleString(); }
 function updateAmmo(){ const total=bases.reduce((s,b)=>s+(b.alive?b.ammo:0),0); el.ammo.textContent=total; }
-function updateCityRow(){ el.cityRow.innerHTML=cities.map(c=>c.alive?'🏙️':'💥').join(''); }
+const HEART_PATH='M12 21s-7.6-4.8-10-9.4C.5 8.7 1.9 5.4 5 5.05c2-.22 3.5 1 4 2 .5-1 2-2.22 4-2 3.1.35 4.5 3.65 3 6.55C19.6 16.2 12 21 12 21z';
+function heartSVG(alive){ return '<svg class="heart" viewBox="0 0 24 24" width="19" height="19"><path d="'+HEART_PATH+'" fill="'+(alive?'#8fd2ff':'rgba(255,255,255,0.10)')+'" stroke="'+(alive?'#e6f6ff':'rgba(255,255,255,0.32)')+'" stroke-width="1.3"/></svg>'; }
+function updateCityRow(){ el.cityRow.innerHTML=cities.map(c=>heartSVG(c.alive)).join(''); }
 
 function resetWorld(){
   // clear entities
