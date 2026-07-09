@@ -311,7 +311,7 @@
 
       // ===== SETTINGS (persisted per device) =====
       const SETTINGS_KEY = 'missile_command_clay_settings';
-      const DEFAULT_SETTINGS = { sound: true, difficulty: 'normal', shake: true, effects: true, demo: true };
+      const DEFAULT_SETTINGS = { sound: true, difficulty: 'normal', shake: true, effects: true, demo: true, cadence: 12 };
       function loadSettings() {
         try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}); }
         catch (e) { return { ...DEFAULT_SETTINGS }; }
@@ -1750,6 +1750,9 @@
           if (r < 0.5) continue;
           const rot = (e.source && e.source.sx ? e.source.sx : e.x) * 0.05; // stable per-explosion angle
           ctx.save();
+          // clay impact squash-and-stretch: a quick wide splat that settles (volume-conserving)
+          if (t < 0.28) { const p = t / 0.28, over = Math.sin(p * Math.PI) * 0.16;
+            ctx.translate(e.x, e.y); ctx.scale(1 + over, 1 - over * 0.8); ctx.translate(-e.x, -e.y); }
           ctx.globalAlpha = 1 - t * t; // fade only late
           const spikes = e.maxR > 60 ? 10 : 8;
           // Molded clay blast: chunky rounded starburst, shaded orange->red radial
@@ -1864,7 +1867,7 @@
         }
         // "boil": tiny rig-weave reseeded each 12fps step (held within the held frame),
         // mimicking a physical stop-motion camera/armature never landing identically.
-        if (settings.effects && !state.paused) {
+        if (settings.effects && !state.paused && (settings.cadence || 0) > 0) {
           sx += rand(-0.9, 0.9);
           sy += rand(-0.9, 0.9);
         }
@@ -1920,14 +1923,16 @@
       // Stop-motion cadence: simulate at full rate (accurate collisions), but only
       // REDRAW on a 12fps "on twos" grid so every pose is held ~83ms then snaps —
       // the single biggest cue that reads as hand-shot claymation.
-      const STOP_FPS = 12, STOP_STEP = 1 / STOP_FPS;
       function frame(now) {
         const dt = clamp((now - state.lastTime) / 1000, 0, 0.033);
         state.lastTime = now;
         if (!state.paused) update(dt);
+        const fps = settings.cadence || 0;   // 0 = smooth 60fps; 12 = on twos; 8 = heavy puppet
+        if (fps <= 0) { state.stopFrame = (state.stopFrame || 0) + 1; render(); requestAnimationFrame(frame); return; }
+        const step = 1 / fps;
         state.renderAcc = (state.renderAcc || 0) + dt;
-        if (state.firstDraw !== false || state.renderAcc >= STOP_STEP) {
-          state.renderAcc %= STOP_STEP;
+        if (state.firstDraw !== false || state.renderAcc >= step) {
+          state.renderAcc %= step;
           state.stopFrame = (state.stopFrame || 0) + 1;
           state.firstDraw = false;
           render();
@@ -2062,6 +2067,7 @@
         seg('Screen shake', 'Camera kick on hits', onoff, () => settings.shake, v => { settings.shake = v; if (!v) state.shake = 0; });
         seg('Extra effects', 'Debris & particles', onoff, () => settings.effects, v => { settings.effects = v; });
         seg('Title auto-demo', 'Play behind the menu', onoff, () => settings.demo, v => { settings.demo = v; if (v && !tutorialHidden()) startAttract(); else if (!v) stopAttract(); });
+        seg('Film cadence', 'Stop-motion frame rate', [{ label: '12fps', value: 12 }, { label: '8fps', value: 8 }, { label: 'Smooth', value: 0 }], () => settings.cadence, v => { settings.cadence = v; state.renderAcc = 0; });
       }
       function openOptOverlay() { buildOptions(); optOverlay.style.display = 'flex'; }
       function closeOptOverlay() { optOverlay.style.display = 'none'; }
