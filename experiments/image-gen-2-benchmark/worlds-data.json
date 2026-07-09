@@ -1766,5 +1766,25 @@
       "continuity": "Preserves Lumenreef's turquoise shelf seas, wet black basalt, glass-coral causeways, shell-bell signal towers, lensleaf awnings, kelpglass ropes, shell ceramics, freshwater lenses, and non-human amphibious tide engineers.",
       "entryDescription": "Harbor families carry glowing silt lanterns, shell baskets, and nursery float pods up wet basalt steps as the causeway bell timing slips."
     }
+  },
+  {
+    "id": "2026-07-09-weekly-world-image-lumenreef-causeway-nali-s-narrow-crossin-4",
+    "title": "Lumenreef Causeway: Nali's Narrow Crossing",
+    "tests": "Weekly-world continuity: Lumenreef Causeway canon, Nali ferry crossing story beat, no humans or generic Atlantis, practical alien materials visible.",
+    "prompt": "Show Nali's reef-sled ferry skimming over turquoise shallows between briefly exposed glass-coral causeways, rain curtains, crouched passengers, a temporary shell-bell resonator lashed amidships, and the Bellwether Lookout tower ahead, preserving the Lumenreef Causeway canon of amphibious tide engineers, wet basalt islets, lensleaf awnings, kelpglass fiber, shell ceramics, copper tuning rods, and luminous reef technology.\n\nReusable template: Show [CHARACTER/CREW] crossing [ALIEN WATERWAY OR HAZARDOUS ROUTE] during a narrow timing window, carrying [CRITICAL DEVICE OR SUPPLY], with [LOCAL MATERIALS/TOOLS], [NON-HUMAN INHABITANTS], and [DISTANT DESTINATION] visible, rendered as a realistic photographed lived-in world view that advances a serialized weekly-world story beat.",
+    "image": "images/2026-07-09-weekly-world-image-lumenreef-causeway-nali-s-narrow-crossin-4.jpg",
+    "thumb": "thumbs/2026-07-09-weekly-world-image-lumenreef-causeway-nali-s-narrow-crossin-4.webp",
+    "color": "#687579",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago where amphibious tide engineers maintain luminous glass-coral causeways, shell-bell tide signals, lensleaf awnings, reef-sled ferries, and nursery reefs across turquoise sky-tide lagoons.",
+      "continuity": "Preserves Lumenreef Causeway's turquoise shelf seas, black basalt islets, buoyant glass-coral causeways, shell-bell timing network, reef-sled ferry tools, and low horizontal amphibious tide engineers.",
+      "entryDescription": "Nali pilots a reef-sled through a narrow sky-tide crossing while carrying a temporary resonator toward Bellwether Lookout."
+    }
   }
 ]
