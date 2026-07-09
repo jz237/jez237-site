@@ -157,5 +157,24 @@
       "description": "Imaginary 1934 Art Deco public bathhouse and laundry atrium using heliostat-fed amber glass sun-thread conduits for warm civic light.",
       "template": "Reusable fill-in-the-blank template: Create a finished photorealistic documentary image for a World That Never Was entry: [ARTIFACT_OR_PLACE_NAME], an imaginary [YEAR_OR_ERA] [CIVIC_PLACE_OR_PUBLIC_INFRASTRUCTURE] from [FICTIONAL_REGION_OR_CITY_TYPE] that never existed. Show [PRIMARY_SPACE_OR_OBJECT] in daily use with [PERIOD_DESIGN_LANGUAGE], [SPECULATIVE_BUT_PLAUSIBLE_TECHNOLOGY], [MATERIAL_PALETTE], [VISIBLE_WEAR_AND_MAINTENANCE], [CONTEXTUAL_PEOPLE_OR_SCALE_CUES], and one small clearly fictional integrated sign if needed. Keep it as a believable alternate-history photographed scene, not a poster, document, map, product render, prompt card, or real historical claim."
     }
+  },
+  {
+    "id": "2026-07-08-world-that-never-was-verdigris-fog-engine-conservatory",
+    "title": "Verdigris Fog Engine Conservatory",
+    "tests": "Generated with GPT Image 2 via OpenClaw shell CLI; exact source PNG verified before append; append-entry.py converted to JPEG and uploaded to R2.",
+    "prompt": "Create a realistic documentary photograph of the fictional 1911 harbor engineering experiment called the Verdigris Fog Engine Conservatory: an alternate-history waterfront greenhouse where brass condenser trees and glass fern coils collect night fog to run a tiny municipal tram line. Show the conservatory interior as a physical scene, not a poster: wet green-painted iron ribs, tall arched panes beaded with mist, brass drip trays feeding glazed ceramic cisterns, a half-scale cream-and-teal tram car on embedded rails, two mechanics in oilcloth aprons adjusting exposed valves, shelves of luminous moisture-fed ferns, puddled floor reflections, tiny unreadable gauge tags, overcast dawn light through fog, large-format historical plate photography with modern color restoration, tactile materials, believable wear, dense but readable details. No logos, no modern electronics, no fantasy magic, no explanatory captions, no poster layout.\n\nReusable template: Create a realistic documentary photograph of the fictional [YEAR/ERA] [IMAGINARY PLACE OR INVENTION]: an alternate-history [PHYSICAL SETTING] where [SPECULATIVE BUT PLAUSIBLE TECHNOLOGY] supports [PUBLIC USE OR DAILY RITUAL]. Show it as a tangible lived-in scene with period materials, workers or visitors, visible mechanisms, weathering, environmental context, and dense readable details; avoid poster layouts, modern logos, and explanatory captions.",
+    "image": "images/2026-07-08-world-that-never-was-verdigris-fog-engine-conservatory.jpg",
+    "thumb": "thumbs/2026-07-08-world-that-never-was-verdigris-fog-engine-conservatory.webp",
+    "color": "#565952",
+    "date": "2026-07-08",
+    "batch": "Daily Prompt",
+    "slot": "world-that-never-was",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "worldThatNeverWas": {
+      "artifact": "Verdigris Fog Engine Conservatory",
+      "description": "A fictional 1911 harbor conservatory where fog-condensing brass and glass machinery powers a tiny municipal tram line.",
+      "template": "Create a realistic documentary photograph of the fictional [YEAR/ERA] [IMAGINARY PLACE OR INVENTION]: an alternate-history [PHYSICAL SETTING] where [SPECULATIVE BUT PLAUSIBLE TECHNOLOGY] supports [PUBLIC USE OR DAILY RITUAL]. Show it as a tangible lived-in scene with period materials, workers or visitors, visible mechanisms, weathering, environmental context, and dense readable details."
+    }
   }
 ]
