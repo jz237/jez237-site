@@ -263,5 +263,24 @@
       "description": "A rain-wet rooftop orchid weather station rendered as a nostalgic 1990s pre-rendered isometric adventure-game environment with hand-painted textures, chunky bevels, baked shadows, and dense practical props.",
       "template": "Create a finished square image in the style of [STYLE_OR_MEDIUM], showing [SPECIFIC_PLACE_OR_WORKSPACE] after [WEATHER_OR_LIGHTING_CONDITION]. Use [CAMERA_OR_COMPOSITION], [STYLE_SPECIFIC_SURFACE_DETAILS], [MATERIALS_AND_PROPS], [COLOR_AND_LIGHT_CONTRAST], and dense tactile environmental storytelling. Keep it as a finished visual example, not a prompt card, poster, UI screenshot, document layout, logo, or cinematic action scene."
     }
+  },
+  {
+    "id": "2026-07-09-random-image-style-random-rendering-style-edge-lit-acrylic-",
+    "title": "Random rendering style: Edge-Lit Acrylic Rain Garden Pump Room",
+    "tests": "Generated with openai/gpt-image-2 via OpenClaw CLI; exact output path verified before append; archived JPEG uploaded to R2 by append-entry.py.",
+    "prompt": "Create a finished visual example in the medium of edge-lit laser-etched acrylic illustration photographed as a real object, not a poster: a transparent acrylic slab on a dark maintenance bench, laser-engraved with a dense cutaway-like scene of a rooftop rain garden pump room at night, glowing cyan, lime, amber, and coral from hidden LEDs along the acrylic edges. The engraved scene shows translucent water tanks, coiled irrigation tubes, small brass pump housings, fern trays, rain beads on the acrylic surface, tiny tool shadows, layered etched hatching, and light scattering through scratches and polished edges. Make it look like a high-resolution product/studio photograph of the glowing acrylic artwork standing in a simple metal foot, with shallow depth of field, tactile dust, fingerprints, crisp etched linework, realistic reflections, and no readable text, labels, captions, logos, paper, signage, or instructional placeholder elements. Reusable template: Render [SUBJECT_OR_PLACE] as a finished [STYLE_OR_MEDIUM] artwork photographed as a real physical object, with medium-specific materials, lighting, surface texture, and a scene dense enough to reward close inspection, while avoiding poster text, labels, and placeholder instructions. Example substitution: [STYLE_OR_MEDIUM] = edge-lit laser-etched acrylic illustration; [SUBJECT_OR_PLACE] = a rooftop rain garden pump room at night.",
+    "image": "images/2026-07-09-random-image-style-random-rendering-style-edge-lit-acrylic-.jpg",
+    "thumb": "thumbs/2026-07-09-random-image-style-random-rendering-style-edge-lit-acrylic-.webp",
+    "color": "#26251f",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "randomRenderingStyle": {
+      "medium": "edge-lit laser-etched acrylic illustration",
+      "description": "A glowing acrylic slab photographed as a tactile studio object, engraved with a rooftop rain garden pump-room scene.",
+      "template": "Render [SUBJECT_OR_PLACE] as a finished [STYLE_OR_MEDIUM] artwork photographed as a real physical object, with medium-specific materials, lighting, surface texture, and a scene dense enough to reward close inspection, while avoiding poster text, labels, and placeholder instructions."
+    }
   }
 ]
