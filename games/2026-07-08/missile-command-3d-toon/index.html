@@ -269,6 +269,7 @@ loadTex('grass','assets/grass.png',{repeat:[6,4]});
 loadTex('stone','assets/stone.png',{repeat:[10,2]});
 loadTex('metal','assets/metal.png',{repeat:[2,1]});
 loadTex('cloud','assets/cloud.png');
+loadTex('blast','assets/blast.png');
 loadTex('bRed','assets/build_red.png');
 loadTex('bBlue','assets/build_blue.png');
 loadTex('bTeal','assets/build_teal.png');
@@ -417,11 +418,11 @@ function buildBase(x){
 const smokePuffGeo=new THREE.SphereGeometry(1,8,7);
 const puffs=[]; // {mesh, life, max, growth, vy}
 function makePuffMat(c){ return new THREE.MeshStandardMaterial({color:c, roughness:1, transparent:true, opacity:1, depthWrite:false}); }
-function spawnPuff(x,y,r,color,rise){
+function spawnPuff(x,y,r,color,rise,z){
   let p=puffs.find(q=>!q.active);
   if(!p){ const m=new THREE.Mesh(smokePuffGeo, makePuffMat(color)); scene.add(m); p={mesh:m, active:false}; puffs.push(p); }
   p.mesh.material.color.setHex(color); p.mesh.material.opacity=0.96; p.mesh.visible=true;
-  p.mesh.position.set(x,y,PLANE_Z+(Math.random()-.5)*0.4);
+  p.mesh.position.set(x,y,(z==null?PLANE_Z:z)+(Math.random()-.5)*0.4);
   p.r0=r*(0.7+Math.random()*0.5); p.mesh.scale.setScalar(p.r0);
   p.active=true; p.life=0; p.max=0.9+Math.random()*0.5; p.grow=r*0.8; p.vy=rise||0.25; p.spin=(Math.random()-.5)*2;
   return p;
@@ -455,32 +456,47 @@ function buildRocketMesh(){
   g.userData.flame=flame;
   return g;
 }
-function fireRocket(base, target){
+function fireRocket(base, targetVec, homeEnemy){
   if(!base.alive || base.ammo<=0) return false;
   base.ammo--;
   const start=new THREE.Vector3(base.x, base.muzzleY, PLANE_Z);
   let m=rockets.find(r=>!r.active);
   if(!m){ const mesh=buildRocketMesh(); scene.add(mesh); m={mesh, active:false, trail:0}; rockets.push(m); }
   m.mesh.visible=true; m.active=true;
-  m.pos=start.clone(); m.target=new THREE.Vector3(target.x,target.y,PLANE_Z);
+  m.pos=start.clone();
+  m.target=new THREE.Vector3(targetVec.x, Math.max(targetVec.y||1.2,1.2), (targetVec.z==null?PLANE_Z:targetVec.z));
+  m.homeEnemy=homeEnemy||null;
   const dir=m.target.clone().sub(m.pos); m.dist=dir.length(); m.dir=dir.normalize();
-  m.speed=34; m.travelled=0; m.trail=0;
+  m.speed=42; m.travelled=0; m.trail=0; m.maxTravel=m.dist+50;
   base.cap.scale.set(1.12,0.86,1.12); base._recoil=0.12; // squash on launch
   sfxLaunch();
   return true;
 }
+const _rTmp=new THREE.Vector3();
 function updateRockets(dt){
   for(const r of rockets){ if(!r.active) continue;
+    // homing: keep re-aiming at the live target enemy (slight lead) so a clicked missile gets hunted down in 3D
+    if(r.homeEnemy){
+      if(r.homeEnemy.active){ r.target.copy(r.homeEnemy.pos).addScaledVector(r.homeEnemy.dir, r.homeEnemy.speed*0.12); }
+      else { r.homeEnemy=null; }
+    }
+    if(r.homeEnemy){
+      _rTmp.copy(r.target).sub(r.pos); const d=_rTmp.length();
+      if(d<1.7){ r.active=false; r.mesh.visible=false; detonate(r.target.x,r.target.y,3.9,true,r.target.z); continue; }
+      r.dir.lerp(_rTmp.normalize(), 0.4).normalize();  // steer toward it
+    }
     const step=r.speed*dt;
     r.travelled+=step; r.pos.addScaledVector(r.dir, step);
     r.mesh.position.copy(r.pos);
     // orient along velocity (cylinder's +Y is nose)
     r.mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), r.dir);
     r.mesh.userData.flame.scale.setScalar(0.75+Math.random()*0.6);
-    // puffy smoke column
+    // puffy smoke column that recedes in depth
     r.trail+=step;
-    if(r.trail>0.5){ r.trail=0; spawnPuff(r.pos.x-r.dir.x*0.6, r.pos.y-r.dir.y*0.6, 0.6, 0xf4f7fb, 0.3); }
-    if(r.travelled>=r.dist){ r.active=false; r.mesh.visible=false; detonate(r.target.x, r.target.y, 3.1, true); }
+    if(r.trail>0.45){ r.trail=0; spawnPuff(r.pos.x-r.dir.x*0.6, r.pos.y-r.dir.y*0.6, 0.6, 0xf4f7fb, 0.3, r.pos.z); }
+    if((!r.homeEnemy && r.travelled>=r.dist) || r.travelled>=r.maxTravel){
+      r.active=false; r.mesh.visible=false; detonate(r.target.x, r.target.y, 3.9, true, r.target.z);
+    }
   }
 }
 
@@ -488,11 +504,12 @@ function updateRockets(dt){
 const enemies=[];
 function enemyMat(){ return new THREE.MeshStandardMaterial({color:0xff3b6b, roughness:.4, emissive:0xff2b52, emissiveIntensity:1.1}); }
 let sharedEnemyGeo=new THREE.SphereGeometry(0.28,10,8);
-function spawnEnemy(sx, targetX, speed, mirvLevel){
+function spawnEnemy(sx, targetX, speed, mirvLevel, sz){
   let e=enemies.find(q=>!q.active);
   if(!e){ const head=new THREE.Mesh(sharedEnemyGeo, enemyMat()); head.castShadow=false; scene.add(head); e={head, active:false, trail:0}; enemies.push(e); }
   e.head.visible=true; e.active=true;
-  e.pos=new THREE.Vector3(sx, SKY_TOP, PLANE_Z);
+  const z0 = (sz==null) ? (-4 - Math.random()*22) : sz;   // spawn deep in 3D space so missiles descend through real depth
+  e.pos=new THREE.Vector3(sx, SKY_TOP, z0);
   const tgt=new THREE.Vector3(targetX, GROUND_Y+0.4, PLANE_Z);
   e.dir=tgt.clone().sub(e.pos).normalize();
   e.speed=speed; e.targetX=targetX; e.trail=0; e.mirv=mirvLevel||0; e.splitAt=mirvLevel>0? (18+Math.random()*10):-1;
@@ -504,15 +521,15 @@ function updateEnemies(dt){
     e.pos.addScaledVector(e.dir, e.speed*dt);
     e.head.position.copy(e.pos);
     e.trail+=e.speed*dt;
-    if(e.trail>0.7){ e.trail=0; spawnPuff(e.pos.x, e.pos.y, 0.34, 0xff6b7e, -0.05); }
+    if(e.trail>0.7){ e.trail=0; spawnPuff(e.pos.x, e.pos.y, 0.34, 0xff6b7e, -0.05, e.pos.z); }
     // MIRV split
     if(e.mirv>0 && e.pos.y<=e.splitAt){
       e.active=false; e.head.visible=false;
       const n=2+Math.floor(Math.random()*2);
       for(let i=0;i<n;i++){ const tx=e.targetX+(i-(n-1)/2)*9 + (Math.random()-.5)*4;
-        const c=spawnEnemy(e.pos.x, clampCityX(tx), e.speed*1.05, 0); c.pos.copy(e.pos); c.head.position.copy(e.pos);
+        const c=spawnEnemy(e.pos.x, clampCityX(tx), e.speed*1.05, 0, e.pos.z); c.pos.copy(e.pos); c.head.position.copy(e.pos);
         c.dir=new THREE.Vector3(clampCityX(tx),GROUND_Y+0.4,PLANE_Z).sub(e.pos).normalize(); }
-      flash(e.pos.x,e.pos.y,0.6);
+      flash(e.pos.x,e.pos.y,0.6,e.pos.z);
       continue;
     }
     if(e.pos.y<=GROUND_Y+0.5){ e.active=false; e.head.visible=false; groundHit(e.pos.x); }
@@ -523,47 +540,52 @@ function clampCityX(x){ return Math.max(-26, Math.min(26, x)); }
 // explosions
 const blasts=[];
 const blastGeo=new THREE.IcosahedronGeometry(1,1);
-function detonate(x,y,maxR,fromPlayer){
+function detonate(x,y,maxR,fromPlayer,z){
+  z=(z==null)?PLANE_Z:z;
   let b=blasts.find(q=>!q.active);
   if(!b){
     const core=new THREE.Mesh(blastGeo, new THREE.MeshBasicMaterial({color:0xfff2b0}));
     const ring=new THREE.Mesh(blastGeo, new THREE.MeshStandardMaterial({color:0xff8a1e, emissive:0xff6a10, emissiveIntensity:1.4, roughness:.5, transparent:true, opacity:.95}));
-    scene.add(core); scene.add(ring);
-    const light=new THREE.PointLight(0xffaa44, 0, 22); scene.add(light);
-    b={core, ring, light, active:false, debris:[]};
+    const flare=new THREE.Sprite(new THREE.SpriteMaterial({map:TEX.blast, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, opacity:1}));
+    scene.add(core); scene.add(ring); scene.add(flare);
+    const light=new THREE.PointLight(0xffaa44, 0, 26); scene.add(light);
+    b={core, ring, flare, light, active:false};
     blasts.push(b);
   }
-  b.active=true; b.life=0; b.max=0.62; b.maxR=maxR; b.x=x; b.y=y; b.fromPlayer=fromPlayer; b.killed=(fromPlayer?0:0);
-  b.core.visible=b.ring.visible=true;
-  b.core.position.set(x,y,PLANE_Z); b.ring.position.set(x,y,PLANE_Z);
-  b.core.scale.setScalar(0.2); b.ring.scale.setScalar(0.2);
-  b.light.position.set(x,y,PLANE_Z+2); b.light.intensity=6;
-  // debris chunks
-  spawnDebris(x,y, fromPlayer?7:5);
-  // smoke burst
-  for(let i=0;i<4;i++) spawnPuff(x+(Math.random()-.5)*maxR, y+(Math.random()-.5)*maxR, maxR*0.5, 0xe9edf2, 0.4);
+  b.active=true; b.life=0; b.max=0.6; b.maxR=maxR; b.z=z; b.fromPlayer=fromPlayer; b.harmless=false;
+  b.core.visible=b.ring.visible=b.flare.visible=true;
+  b.core.position.set(x,y,z); b.ring.position.set(x,y,z); b.flare.position.set(x,y,z);
+  b.core.scale.setScalar(0.2); b.ring.scale.setScalar(0.2); b.flare.scale.setScalar(0.5);
+  b.flare.material.rotation=Math.random()*6.28;
+  b.light.position.set(x,y,z+2); b.light.intensity=7;
+  // debris chunks + smoke burst at the blast's real depth
+  spawnDebris(x,y, fromPlayer?9:6, z);
+  for(let i=0;i<5;i++) spawnPuff(x+(Math.random()-.5)*maxR, y+(Math.random()-.5)*maxR, maxR*0.5, 0xe9edf2, 0.4, z);
   sfxBoom(fromPlayer);
   return b;
 }
-function flash(x,y,r){ const b=detonate(x,y,r,false); b.harmless=true; }
+function flash(x,y,r,z){ const b=detonate(x,y,r,false,z); b.harmless=true; }
 function updateBlasts(dt){
   for(const b of blasts){ if(!b.active) continue;
     b.life+=dt; const t=b.life/b.max;
-    if(t>=1){ b.active=false; b.core.visible=b.ring.visible=false; b.light.intensity=0; continue; }
-    const grow = t<0.35 ? (t/0.35) : 1;         // expand fast then hold
+    if(t>=1){ b.active=false; b.core.visible=b.ring.visible=b.flare.visible=false; b.light.intensity=0; continue; }
+    const grow = t<0.3 ? (t/0.3) : 1;           // expand fast then hold
     const r=b.maxR*grow*(t<0.9?1:(1-(t-0.9)/0.1*0.3));
-    b.ring.scale.setScalar(r);
-    b.core.scale.setScalar(r*0.55*(1-t*0.5));
-    b.ring.material.opacity=0.95*(1-Math.max(0,(t-0.55))/0.45);
+    b.ring.scale.setScalar(r*0.66);                    // round molten glow shrunk to an inner core
+    b.core.scale.setScalar(r*0.42*(1-t*0.5));
+    b.flare.scale.setScalar(r*3.3*(0.5+grow*0.5));     // spiky comic-book starburst is the hero
+    b.flare.material.opacity=(1-t*t);
+    b.flare.material.rotation+=dt*1.2;
+    b.ring.material.opacity=0.8*(1-Math.max(0,(t-0.45))/0.55);
     b.ring.rotation.x+=dt*2; b.ring.rotation.y+=dt*1.4;
-    b.light.intensity=6*(1-t);
+    b.light.intensity=7*(1-t);
     // damage: destroy enemies within radius (only from player/harmful blasts, during expansion)
     if(!b.harmless){
       for(const e of enemies){ if(!e.active) continue;
-        if(e.pos.distanceTo(b.ring.position) <= r+0.4){
-          e.active=false; e.head.visible=false; flash(e.pos.x,e.pos.y,0.7);
+        if(e.pos.distanceTo(b.ring.position) <= r+0.6){
+          e.active=false; e.head.visible=false; flash(e.pos.x,e.pos.y,0.7,e.pos.z);
           addScore(25*state.wave*(state.chain>0?2:1)); state.chain++;
-          detonate(e.pos.x,e.pos.y, 2.2, true); // chain reaction
+          detonate(e.pos.x,e.pos.y, 2.4, true, e.pos.z); // chain reaction
         }
       }
     }
@@ -573,13 +595,14 @@ function updateBlasts(dt){
 // debris cubes
 const debris=[];
 const debGeo=new THREE.BoxGeometry(0.24,0.24,0.24);
-function spawnDebris(x,y,n){
+function spawnDebris(x,y,n,z){
+  z=(z==null)?PLANE_Z:z;
   for(let i=0;i<n;i++){
     let d=debris.find(q=>!q.active);
     if(!d){ const m=new THREE.Mesh(debGeo, new THREE.MeshStandardMaterial({color:0x8a4a22, roughness:.8})); scene.add(m); d={mesh:m,active:false}; debris.push(d); }
     d.active=true; d.life=0; d.mesh.visible=true;
     d.mesh.material.color.setHex([0xff8a1e,0xd94a12,0x8a4a22,0xffd257][i%4]);
-    d.pos=new THREE.Vector3(x,y,PLANE_Z);
+    d.pos=new THREE.Vector3(x,y,z);
     const a=Math.random()*Math.PI*2, sp=3+Math.random()*6;
     d.vel=new THREE.Vector3(Math.cos(a)*sp, 2+Math.random()*6, (Math.random()-.5)*3);
     d.rot=new THREE.Vector3(Math.random()*6,Math.random()*6,Math.random()*6);
@@ -715,16 +738,27 @@ function screenToWorld(cx,cy){
   if(raycaster.ray.intersectPlane(aimPlane, hit)) return hit;
   return null;
 }
+const _proj=new THREE.Vector3();
 function playerFire(cx,cy){
   if(state.mode!=='play' || attract) return;
-  const w=screenToWorld(cx,cy); if(!w) return;
-  if(w.y<1.2) w.y=1.2;
+  const rect=canvas.getBoundingClientRect();
+  const nx=((cx-rect.left)/rect.width)*2-1, ny=-((cy-rect.top)/rect.height)*2+1;
+  // pick the active enemy nearest the click on screen → launch a homing interceptor that hunts it in 3D
+  let target=null, bestD=0.16;
+  for(const e of enemies){ if(!e.active) continue;
+    _proj.copy(e.pos).project(camera);
+    if(_proj.z>1) continue; // behind camera
+    const d=Math.hypot(_proj.x-nx, _proj.y-ny);
+    if(d<bestD){ bestD=d; target=e; }
+  }
+  const aimX = target ? target.pos.x : ((screenToWorld(cx,cy)||{x:0}).x);
   let base=null;
   if(selectedBase>=0 && bases[selectedBase] && bases[selectedBase].alive && bases[selectedBase].ammo>0){ base=bases[selectedBase]; }
-  else{ // nearest alive base with ammo, biased to horizontal proximity
-    let best=1e9; for(const b of bases){ if(b.alive&&b.ammo>0){ const dd=Math.abs(b.x-w.x); if(dd<best){best=dd; base=b;} } }
-  }
-  if(base){ fireRocket(base, w); updateAmmo(); }
+  else{ let best=1e9; for(const b of bases){ if(b.alive&&b.ammo>0){ const dd=Math.abs(b.x-aimX); if(dd<best){best=dd; base=b;} } } }
+  if(!base) return;
+  if(target){ fireRocket(base, target.pos, target); }
+  else{ const w=screenToWorld(cx,cy); if(w){ if(w.y<1.2) w.y=1.2; fireRocket(base, w, null); } }
+  updateAmmo();
 }
 canvas.addEventListener('pointerdown', e=>{ ensureAudio(); playerFire(e.clientX,e.clientY); });
 window.addEventListener('keydown', e=>{
@@ -738,17 +772,14 @@ function togglePause(){ if(state.mode!=='play') return; paused=!paused; }
 /* ================= AI (attract + assist) ================= */
 let aiTimer=0;
 function aiThink(dt){
-  aiTimer-=dt; if(aiTimer>0) return; aiTimer=0.28;
-  // find lowest / most-threatening active enemy
+  aiTimer-=dt; if(aiTimer>0) return; aiTimer=0.24;
+  // find lowest / most-threatening active enemy and hunt it with a homing interceptor
   let tgt=null, low=1e9;
   for(const e of enemies){ if(!e.active) continue; if(e.pos.y<low){ low=e.pos.y; tgt=e; } }
   if(!tgt) return;
-  // lead the target a bit
-  const lead=tgt.pos.clone().addScaledVector(tgt.dir, tgt.speed*0.5);
-  if(lead.y<3.5) lead.y=3.5;
   let base=null,best=1e9;
-  for(const b of bases){ if(b.alive&&b.ammo>0){ const dd=Math.abs(b.x-lead.x); if(dd<best){best=dd;base=b;} } }
-  if(base){ fireRocket(base, lead); updateAmmo(); }
+  for(const b of bases){ if(b.alive&&b.ammo>0){ const dd=Math.abs(b.x-tgt.pos.x); if(dd<best){best=dd;base=b;} } }
+  if(base){ fireRocket(base, tgt.pos, tgt); updateAmmo(); }
 }
 
 /* ================= AUDIO (procedural WebAudio) ================= */
@@ -850,6 +881,11 @@ function frame(now){
     // gentle water shimmer
     if(waterMesh){ waterMesh.material.opacity=0.86+Math.sin(now*0.002)*0.06; }
   }
+  // subtle cinematic camera drift — makes the depth read as genuinely three-dimensional
+  const cd=now*0.00013;
+  camera.position.x = Math.sin(cd)*3.4;
+  camera.position.y = 12.5 + Math.sin(cd*1.7)*0.9;
+  camera.lookAt(0, 9.5, -6);
   renderer.render(scene, camera);
 }
 
