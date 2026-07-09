@@ -211,9 +211,9 @@ const SKY_TOP = 46;                // spawn height for enemy missiles
 const CITY_COLORS = [0xff5b52,0x4db2ff,0x9be36b,0xffc24d,0xc77bff,0xff8a5b];
 
 const DIFF = [
-  { name:'Rookie', ammo:12, baseSpeed:2.6, spawnGap:1.5, perWave:8,  grow:2, split:.08 },
-  { name:'Cadet',  ammo:10, baseSpeed:3.2, spawnGap:1.15,perWave:11, grow:3, split:.16 },
-  { name:'Ace',    ammo:8,  baseSpeed:4.0, spawnGap:0.85,perWave:14, grow:4, split:.26 },
+  { name:'Rookie', ammo:14, baseSpeed:2.6, spawnGap:1.5, perWave:8,  grow:2, split:.08 },
+  { name:'Cadet',  ammo:12, baseSpeed:3.2, spawnGap:1.15,perWave:11, grow:3, split:.16 },
+  { name:'Ace',    ammo:10, baseSpeed:4.0, spawnGap:0.85,perWave:14, grow:4, split:.26 },
 ];
 
 let opts = { diff:1, sound:1, quality:1 };
@@ -501,11 +501,13 @@ function updateRockets(dt){
     // homing: keep re-aiming at the live target enemy (slight lead) so a clicked missile gets hunted down in 3D
     if(r.homeEnemy){
       if(r.homeEnemy.active){ r.target.copy(r.homeEnemy.pos).addScaledVector(r.homeEnemy.dir, r.homeEnemy.speed*0.12); }
-      else { r.homeEnemy=null; }
+      else { // target already destroyed — re-acquire the nearest live missile so the shot isn't wasted
+        let best=null,bd=400; for(const e of enemies){ if(!e.active) continue; const dd=e.pos.distanceToSquared(r.pos); if(dd<bd){bd=dd;best=e;} }
+        r.homeEnemy=best; }
     }
     if(r.homeEnemy){
       _rTmp.copy(r.target).sub(r.pos); const d=_rTmp.length();
-      if(d<1.7){ r.active=false; r.mesh.visible=false; detonate(r.target.x,r.target.y,3.9,true,r.target.z); continue; }
+      if(d<1.6){ r.active=false; r.mesh.visible=false; detonate(r.target.x,r.target.y,2.3,true,r.target.z); continue; }
       r.dir.lerp(_rTmp.normalize(), 0.4).normalize();  // steer toward it
     }
     const step=r.speed*dt;
@@ -518,7 +520,7 @@ function updateRockets(dt){
     r.trail+=step;
     if(r.trail>0.45){ r.trail=0; spawnPuff(r.pos.x-r.dir.x*0.6, r.pos.y-r.dir.y*0.6, 0.6, 0xf4f7fb, 0.3, r.pos.z); }
     if((!r.homeEnemy && r.travelled>=r.dist) || r.travelled>=r.maxTravel){
-      r.active=false; r.mesh.visible=false; detonate(r.target.x, r.target.y, 3.9, true, r.target.z);
+      r.active=false; r.mesh.visible=false; detonate(r.target.x, r.target.y, 2.3, true, r.target.z);
     }
   }
 }
@@ -542,7 +544,7 @@ function spawnEnemy(sx, targetX, speed, mirvLevel, sz){
   let e=enemies.find(q=>!q.active);
   if(!e){ const head=buildEnemyMesh(); scene.add(head); e={head, active:false, trail:0}; enemies.push(e); }
   e.head.visible=true; e.active=true;
-  const z0 = (sz==null) ? (-4 - Math.random()*22) : sz;   // spawn deep in 3D space so missiles descend through real depth
+  const z0 = (sz==null) ? (-3 - Math.random()*13) : sz;   // spawn deep in 3D space so missiles descend through real depth
   e.pos=new THREE.Vector3(sx, SKY_TOP, z0);
   const tgt=new THREE.Vector3(targetX, GROUND_Y+0.4, PLANE_Z);
   e.dir=tgt.clone().sub(e.pos).normalize();
@@ -606,21 +608,23 @@ function updateBlasts(dt){
     if(t>=1){ b.active=false; b.core.visible=b.ring.visible=b.flare.visible=false; b.light.intensity=0; continue; }
     const grow = t<0.3 ? (t/0.3) : 1;           // expand fast then hold
     const r=b.maxR*grow*(t<0.9?1:(1-(t-0.9)/0.1*0.3));
-    b.ring.scale.setScalar(r*0.66);                    // round molten glow shrunk to an inner core
-    b.core.scale.setScalar(r*0.42*(1-t*0.5));
-    b.flare.scale.setScalar(r*3.3*(0.5+grow*0.5));     // spiky comic-book starburst is the hero
-    b.flare.material.opacity=(1-t*t);
+    b.ring.scale.setScalar(r);                         // 3D lumpy fireball IS the visible blast = the kill zone
+    b.core.scale.setScalar(r*0.6*(1-t*0.4));
+    b.flare.scale.setScalar(r*1.5);                    // brief flat flash only; the 3D fireball carries the rest
+    b.flare.material.opacity=Math.max(0,1-t/0.3)*0.85;
     b.flare.material.rotation+=dt*1.2;
-    b.ring.material.opacity=0.8*(1-Math.max(0,(t-0.45))/0.55);
-    b.ring.rotation.x+=dt*2; b.ring.rotation.y+=dt*1.4;
+    b.ring.material.opacity=0.95*(1-Math.max(0,(t-0.4))/0.6);
+    b.ring.rotation.x+=dt*1.8; b.ring.rotation.y+=dt*1.3;
     b.light.intensity=7*(1-t);
-    // damage: destroy enemies within radius (only from player/harmful blasts, during expansion)
+    // damage: what you SEE is what kills — radius ~= the visible fireball; z weighted softly so depth-spread missiles get caught
     if(!b.harmless){
+      const kr=r+0.7, kr2=kr*kr;
       for(const e of enemies){ if(!e.active) continue;
-        if(e.pos.distanceTo(b.ring.position) <= r+0.6){
-          e.active=false; e.head.visible=false; flash(e.pos.x,e.pos.y,0.7,e.pos.z);
+        const dx=e.pos.x-b.ring.position.x, dy=e.pos.y-b.ring.position.y, dz=(e.pos.z-b.ring.position.z)*0.55;
+        if(dx*dx+dy*dy+dz*dz <= kr2){
+          e.active=false; e.head.visible=false; flash(e.pos.x,e.pos.y,0.6,e.pos.z);
           addScore(25*state.wave*(state.chain>0?2:1)); state.chain++;
-          detonate(e.pos.x,e.pos.y, 2.4, true, e.pos.z); // chain reaction
+          detonate(e.pos.x,e.pos.y, 1.7, true, e.pos.z); // chain reaction
         }
       }
     }
@@ -741,7 +745,7 @@ function tickWave(dt){
   if(!state.waveActive) {
     // between waves
     state.betweenTimer+=dt;
-    if(state.betweenTimer>2.4){ state.wave++; el.wave.textContent=state.wave; beginWave(); }
+    if(state.betweenTimer>1.8){ state.wave++; el.wave.textContent=state.wave; beginWave(); }
     return;
   }
   state.spawnTimer+=dt;
