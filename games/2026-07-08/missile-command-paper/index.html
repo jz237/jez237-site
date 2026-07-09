@@ -311,7 +311,7 @@
 
       // ===== SETTINGS (persisted per device) =====
       const SETTINGS_KEY = 'missile_command_paper_settings';
-      const DEFAULT_SETTINGS = { sound: true, difficulty: 'normal', shake: true, effects: true, demo: true };
+      const DEFAULT_SETTINGS = { sound: true, difficulty: 'normal', shake: true, effects: true, demo: true, cadence: 12 };
       function loadSettings() {
         try { return Object.assign({}, DEFAULT_SETTINGS, JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}); }
         catch (e) { return { ...DEFAULT_SETTINGS }; }
@@ -408,6 +408,15 @@
         ctx.lineTo(x + w + d(4), y + h + d(5));
         ctx.lineTo(x + d(6), y + h + d(7));
         ctx.closePath();
+        // dark keyline — the shadowed cut-face of the paper edge (research's top 'real paper' cue).
+        // Stroked under the caller's fill so only the thin outer edge survives; shadow paused so it's crisp.
+        if (settings.effects) {
+          const sc = ctx.shadowColor, sb = ctx.shadowBlur, sox = ctx.shadowOffsetX, soy = ctx.shadowOffsetY;
+          ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+          ctx.lineJoin = 'round'; ctx.lineWidth = 1.3; ctx.strokeStyle = 'rgba(48,32,22,0.4)';
+          ctx.stroke();
+          ctx.shadowColor = sc; ctx.shadowBlur = sb; ctx.shadowOffsetX = sox; ctx.shadowOffsetY = soy;
+        }
       }
 
       // Stacked-triangle paper pine tree sitting on the ground line.
@@ -1872,7 +1881,7 @@
         }
         // "boil": tiny hand-repositioned-paper weave reseeded each 12fps step and held
         // within the frame — real cut-out layers never land in exactly the same spot.
-        if (settings.effects && !state.paused) {
+        if (settings.effects && !state.paused && (settings.cadence || 0) > 0) {
           sx += rand(-0.9, 0.9);
           sy += rand(-0.9, 0.9);
         }
@@ -1928,14 +1937,16 @@
       // Stop-motion cadence: simulate at full rate (accurate collisions), but only
       // REDRAW on a 12fps "on twos" grid so cut-outs snap between held poses like real
       // construction-paper animation (South Park / Gilliam move parts every ~2 frames).
-      const STOP_FPS = 12, STOP_STEP = 1 / STOP_FPS;
       function frame(now) {
         const dt = clamp((now - state.lastTime) / 1000, 0, 0.033);
         state.lastTime = now;
         if (!state.paused) update(dt);
+        const fps = settings.cadence || 0;   // 0 = smooth 60fps; 12 = on twos; 8 = heavy puppet
+        if (fps <= 0) { state.stopFrame = (state.stopFrame || 0) + 1; render(); requestAnimationFrame(frame); return; }
+        const step = 1 / fps;
         state.renderAcc = (state.renderAcc || 0) + dt;
-        if (state.firstDraw !== false || state.renderAcc >= STOP_STEP) {
-          state.renderAcc %= STOP_STEP;
+        if (state.firstDraw !== false || state.renderAcc >= step) {
+          state.renderAcc %= step;
           state.stopFrame = (state.stopFrame || 0) + 1;
           state.firstDraw = false;
           render();
@@ -2070,6 +2081,7 @@
         seg('Screen shake', 'Camera kick on hits', onoff, () => settings.shake, v => { settings.shake = v; if (!v) state.shake = 0; });
         seg('Extra effects', 'Debris & particles', onoff, () => settings.effects, v => { settings.effects = v; });
         seg('Title auto-demo', 'Play behind the menu', onoff, () => settings.demo, v => { settings.demo = v; if (v && !tutorialHidden()) startAttract(); else if (!v) stopAttract(); });
+        seg('Film cadence', 'Stop-motion frame rate', [{ label: '12fps', value: 12 }, { label: '8fps', value: 8 }, { label: 'Smooth', value: 0 }], () => settings.cadence, v => { settings.cadence = v; state.renderAcc = 0; });
       }
       function openOptOverlay() { buildOptions(); optOverlay.style.display = 'flex'; }
       function closeOptOverlay() { optOverlay.style.display = 'none'; }
