@@ -1754,23 +1754,22 @@
           if (t < 0.28) { const p = t / 0.28, over = Math.sin(p * Math.PI) * 0.16;
             ctx.translate(e.x, e.y); ctx.scale(1 + over, 1 - over * 0.8); ctx.translate(-e.x, -e.y); }
           ctx.globalAlpha = 1 - t * t; // fade only late
-          const spikes = e.maxR > 60 ? 10 : 8;
-          // Molded clay blast: chunky rounded starburst, shaded orange->red radial
-          shadowOn(6, 3, 0.3);
-          const og = ctx.createRadialGradient(e.x - r * 0.3, e.y - r * 0.3, r * 0.1, e.x, e.y, r);
-          og.addColorStop(0, '#e89a3e'); og.addColorStop(0.6, '#d9612a'); og.addColorStop(1, '#a83b1e');
-          ctx.fillStyle = og;
-          starPath(e.x, e.y, spikes, r, r * 0.68, rot); // higher inner ratio → stubby clay lobes
-          ctx.fill();
+          // Molded clay fireball: a cluster of rounded plasticine lobes around a hot core
+          // (each lobe is a gradient-shaded clayBall, like the rest of the game — no sharp spikes).
+          const lobes = e.maxR > 60 ? 9 : 7;
+          shadowOn(6, 3, 0.28);
+          for (let i = 0; i < lobes; i++) {
+            const a = (i / lobes) * TAU + rot * 3;
+            const rad = r * (0.56 + ((i * 7) % 5) * 0.05);        // uneven distances → lumpy clay
+            const lx = e.x + Math.cos(a) * rad, ly = e.y + Math.sin(a) * rad;
+            const lr = r * (0.36 + ((i * 3) % 4) * 0.05);
+            const col = (i % 3 === 0) ? '#d9612a' : (i % 3 === 1 ? '#e8863a' : '#c24422');
+            clayBall(lx, ly, lr, col, 0.34, -0.22);
+          }
           shadowOff();
-          // Mid yellow clay star
-          const yg = ctx.createRadialGradient(e.x - r * 0.2, e.y - r * 0.2, r * 0.05, e.x, e.y, r * 0.74);
-          yg.addColorStop(0, '#f4d072'); yg.addColorStop(1, '#e0a53c');
-          ctx.fillStyle = yg;
-          starPath(e.x, e.y, spikes, r * 0.74, r * 0.5, rot + 0.3);
-          ctx.fill();
-          // Fat cream clay core
-          clayBall(e.x, e.y, r * 0.42, '#f2e6c8', 0.32, -0.08);
+          // molten inner mass + hot cream clay core
+          clayBall(e.x, e.y, r * 0.62, '#f0a83e', 0.40, -0.16);
+          clayBall(e.x, e.y, r * 0.34, '#f7eccf', 0.42, -0.06);
           ctx.restore();
         }
       }
