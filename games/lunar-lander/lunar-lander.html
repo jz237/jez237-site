@@ -245,12 +245,15 @@ function llUpdateMusic() {
   llMusic.volume = Math.max(0, Math.min(1, llMusic.volume + (target - llMusic.volume) * 0.03));
 }
 const LL_VO_TEXT = { 'vo-go-descent': 'GO FOR DESCENT', 'vo-landed': 'TOUCHDOWN CONFIRMED', 'vo-landed-2': 'THE EAGLE HAS LANDED', 'vo-crash': 'WE LOST THE LANDER', 'vo-crash-2': 'IMPACT DETECTED', 'vo-low-fuel': 'FUEL AT 15 PERCENT', 'vo-record': 'NEW RECORD', 'vo-gameover': 'MISSION OVER' };
+const VOARR=['harry','bella','brian','callum','charlie','chris','eric','jessica','liam','lily','matilda']; // Jez's picked announcer voices
+let voVoice=VOARR[Math.floor(Math.random()*VOARR.length)],voSetLast=null;
+function voRoll(){let v=VOARR[Math.floor(Math.random()*VOARR.length)];if(v===voSetLast)v=VOARR[(VOARR.indexOf(v)+1)%VOARR.length];voSetLast=v;voVoice=v;}
 const LL_VO_POOLS = { landed: ['vo-landed', 'vo-landed-2'], crash: ['vo-crash', 'vo-crash-2'] };
 const llVoLast = {};
 function llPlayVoice(name) {
   llInitMusic();
   if (!llVoice || llAudio.voice <= 0) return;
-  try { llVoice.src = 'assets/' + name + '.mp3'; llVoice.volume = llAudio.voice / 100; llVoice.currentTime = 0; llVoice.play().catch(() => {}); llToastVo(LL_VO_TEXT[name]); } catch (e) {}
+  try { llVoice.onerror = function(){llVoice.onerror=null;llVoice.src='assets/'+name+'.mp3';llVoice.currentTime=0;llVoice.play().catch(()=>{});}; llVoice.src = 'assets/vo/' + voVoice + '/' + name + '.mp3'; llVoice.volume = llAudio.voice / 100; llVoice.currentTime = 0; llVoice.play().catch(() => {}); llToastVo(LL_VO_TEXT[name]); } catch (e) {}
 }
 function llAnnounce(event) {
   const pool = LL_VO_POOLS[event] || [event];
@@ -1746,6 +1749,7 @@ function showLeaderboard(highlightScore, source = 'game') {
 }
 
 function resetGame() {
+  voRoll();
   llVoFuel = false;
   llPlayVoice('vo-go-descent');
   const diff = DIFFICULTIES[difficulty];
