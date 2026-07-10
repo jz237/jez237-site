@@ -1,8 +1,350 @@
 {
-  "generatedAt": "2026-07-09T12:03:07.285Z",
+  "generatedAt": "2026-07-10T12:02:34.362Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-10",
+      "historicDate": "1983-04-25",
+      "displayDate": "Week of April 25-May 1, 1983",
+      "edition": "Issue 039 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "warm aged newsprint with red and blue computer-weekly accents",
+        "motifs": [
+          "arcade cabinet lights",
+          "Apple II disk sleeves",
+          "home-computer retail tags",
+          "column rules"
+        ],
+        "layout": "dense front-page archive issue with gaming lead and compact culture rails"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Friday morning edition for July 10, 2026",
+        "price": "25 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "dominant gaming lead with boxed arcade/computer-game art cue",
+        "secondaryRail": "software, price watch, charts, and world anchor in compact newspaper modules",
+        "archiveNavigation": "newest issue prepended for browseable archive"
+      },
+      "sectionChrome": {
+        "primary": "red rule labels for game and market departments",
+        "secondary": "blue boxed chart headers",
+        "texture": "aged paper, halftone blocks, light ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-04-25.png",
+        "alt": "GPT Image 2 vintage Computer Chronicle newspaper front page for the week of April 25-May 1, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The week opens with home-computer magazines treating arcade-style play as a serious software category while office buyers keep circling Lotus 1-2-3 and the IBM PC XT.",
+      "morningLine": "Arcade names, Apple II disks, and spreadsheet demos share the same dealer counter as April turns into May 1983.",
+      "lead": {
+        "headline": "Arcade Alley widens the lane for computer games",
+        "dek": "Video magazine coverage treats Apple II and home-computer games as part of the same conversation as Zaxxon and Turbo.",
+        "body": "In the spring 1983 game press, the wall between coin-op excitement and personal-computer software kept getting thinner. Electronic Games expanded its Arcade Alley column to cover computer gaming, reviewing Zaxxon, Turbo, and Apple II titles in the same breath. For shoppers with an Apple II, Atari 8-bit, Commodore 64, or VIC-20, that mattered: game disks were no longer just hobby curiosities, but a front-counter reason to compare graphics, joysticks, and disk drives.",
+        "confidence": "High for the April 1983 Arcade Alley coverage; medium for week-specific retail emphasis.",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "KoalaPad points toward home graphics",
+          "summary": "Antic listed Koala Technologies' touch tablet among new Atari-market products, a reminder that drawing and design peripherals were moving into home-computer conversations.",
+          "confidence": "High for product listing; medium for weekly retail emphasis.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 remains the office demo to beat",
+          "summary": "Released earlier in 1983, Lotus 1-2-3 was becoming the IBM PC package dealers could use to make spreadsheet, database, and graphics work feel like one purchase.",
+          "confidence": "High",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "title": "PC XT keeps hard disks aspirational",
+          "summary": "IBM's March 1983 PC XT, with a 10 MB fixed disk and premium price, framed the office-computing end of the market while home systems fought on price.",
+          "confidence": "High",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Computer magazines sell typing-in as culture",
+          "summary": "Compute! and similar magazines still treated reader-entered programs, utilities, and game listings as part of the ordinary home-computer week.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Zaxxon",
+          "detail": "Arcade hit and Apple II/home-computer conversion touchstone in spring 1983 game coverage."
+        },
+        {
+          "name": "Turbo",
+          "detail": "Sega racing game reviewed alongside computer-game coverage in Arcade Alley."
+        },
+        {
+          "name": "Knights of the Desert",
+          "detail": "Strategic Simulations title appearing in 1983 Atari-market new-product listings."
+        },
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC spreadsheet, database, and graphics package defining office PC demos."
+        },
+        {
+          "name": "WordStar",
+          "detail": "Established word processor name still familiar to CP/M and business-computer buyers."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Zaxxon",
+            "Turbo",
+            "Choplifter!",
+            "Miner 2049er",
+            "Ultima II: The Revenge of the Enchantress"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Lotus 1-2-3",
+            "WordStar",
+            "VisiCalc",
+            "dBASE II",
+            "Microsoft BASIC"
+          ]
+        },
+        {
+          "label": "Home Hardware",
+          "items": [
+            "Commodore 64",
+            "Atari 800",
+            "Apple IIe",
+            "VIC-20",
+            "IBM PC XT"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "The 10 MB fixed disk made the XT the premium office reference point."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "commonly advertised under $600 in 1983",
+          "note": "Price pressure kept the C64 central in home-computer comparisons."
+        },
+        {
+          "item": "KoalaPad touch tablet",
+          "price": "about $124.95 list in period listings",
+          "note": "A graphics-tablet accessory aimed at Atari and home creative users."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "about $100-$200 depending on brand",
+          "note": "Still an enthusiast add-on for bulletin-board experiments."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Beat It takes No. 1",
+          "text": "Michael Jackson led the Billboard Hot 100 dated April 30, 1983."
+        },
+        {
+          "headline": "Flashdance keeps the box-office floor",
+          "text": "Flashdance led the domestic weekly box office for April 29-May 5, with Something Wicked This Way Comes and Valley Girl also high on the chart."
+        },
+        {
+          "headline": "Touch tablets reach hobby desks",
+          "text": "KoalaPad listings showed graphics input moving beyond professional workstations into 8-bit home setups."
+        },
+        {
+          "headline": "Strategy disks crowd the shelf",
+          "text": "Knights of the Desert and other boxed computer games gave retailers alternatives to pure arcade conversions."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 3,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        },
+        {
+          "rank": 4,
+          "title": "Mr. Roboto",
+          "artist": "Styx"
+        },
+        {
+          "rank": 5,
+          "title": "Der Kommissar",
+          "artist": "After the Fire"
+        }
+      ],
+      "periodAd": {
+        "headline": "Arcade Names, Disk Drive Prices",
+        "summary": "Try Zaxxon on Apple II, ask about a KoalaPad drawing demo, then price a spreadsheet bundle before closing time.",
+        "tagline": "One counter, two futures: games after school, Lotus after lunch."
+      },
+      "market": {
+        "headline": "Games make the home computer feel less optional",
+        "summary": "As office buyers priced IBM PC systems and Lotus, home dealers could point to arcade-style software, drawing tablets, and magazines full of type-in programs to keep families browsing.",
+        "confidence": "Medium, based on April-May 1983 magazine and product-listing context.",
+        "sourceRefs": [
+          0,
+          2,
+          3,
+          6
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Andropov invites Samantha Smith to the Soviet Union",
+        "summary": "On April 26, 1983, Soviet leader Yuri Andropov answered American schoolgirl Samantha Smith and invited her to visit the USSR, turning a Cold War letter exchange into international news.",
+        "confidence": "High",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-04-25.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Electronic Games expanded Arcade Alley in April 1983 to cover computer gaming, including Zaxxon, Turbo, and Apple II titles.",
+            "confidence": "High",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Antic Vol. 2 No. 4 listed products including KoalaPad and Knights of the Desert.",
+            "confidence": "High",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was released in 1983 and became a defining IBM PC business application.",
+            "confidence": "High",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT in March 1983 with a 10 MB hard disk and roughly $4,995 price.",
+            "confidence": "High",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Billboard Hot 100 for April 30, 1983 was led by Beat It, followed by Come On Eileen, Jeopardy, Mr. Roboto, and Der Kommissar.",
+            "confidence": "High",
+            "sourceRefs": [
+              7
+            ]
+          },
+          {
+            "claim": "Domestic weekly box office for April 29-May 5, 1983 was led by Flashdance, Something Wicked This Way Comes, Valley Girl, The Hunger, and Tootsie.",
+            "confidence": "High",
+            "sourceRefs": [
+              8
+            ]
+          },
+          {
+            "claim": "Andropov answered Samantha Smith on April 26, 1983 and invited her to the Soviet Union.",
+            "confidence": "High",
+            "sourceRefs": [
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Arcade Alley, Electronic Games, April 1983",
+          "url": "https://ataricompendium.com/archives/articles/arcade_alley/arcade_alley_apr83.pdf"
+        },
+        {
+          "label": "The International Arcade Museum: Zaxxon",
+          "url": "https://www.arcade-museum.com/Videogame/zaxxon"
+        },
+        {
+          "label": "Antic Vol. 2 No. 4 New Products, July 1983",
+          "url": "https://www.atarimagazines.com/v2n4/newproducts.php"
+        },
+        {
+          "label": "InfoWorld: Lotus 1-2-3 hits the big 3-0",
+          "url": "https://www.infoworld.com/article/2613303/lotus-1-2-3-hits-the-big-3-0.html"
+        },
+        {
+          "label": "Encyclopaedia Britannica: Lotus 1-2-3",
+          "url": "https://www.britannica.com/technology/Lotus-1-2-3"
+        },
+        {
+          "label": "IBM Archives: IBM Personal Computer XT",
+          "url": "https://www.ibm.com/ibm/history/exhibits/pc25/pc25_birth.html"
+        },
+        {
+          "label": "Compute! Magazine Issue 035, April 1983",
+          "url": "https://archive.org/stream/1983-04-compute-magazine/Compute_Issue_035_1983_Apr_djvu.txt"
+        },
+        {
+          "label": "Music Charts Archive: Singles Chart for April 30, 1983",
+          "url": "https://mail.musicchartsarchive.com/singles-chart/1983-04-30"
+        },
+        {
+          "label": "Box Office Mojo Domestic 1983 Week 17, April 29-May 5",
+          "url": "https://www.boxofficemojo.com/weekly/1983W17/"
+        },
+        {
+          "label": "HISTORY: Andropov writes to U.S. student, April 26, 1983",
+          "url": "https://www.history.com/this-day-in-history/april-26/andropov-writes-to-u-s-student"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Apple II Game Night",
+          "copy": "Bring a joystick and a blank disk. Zaxxon talk starts at seven."
+        },
+        {
+          "headline": "Graphics Tablet Demo",
+          "copy": "Ask the counter about touch-tablet drawing on Atari 8-bit systems."
+        }
+      ]
+    },
     {
       "currentDate": "2026-07-09",
       "historicDate": "1983-04-18",
