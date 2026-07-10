@@ -1,7 +1,12 @@
 import { ChiptuneJsPlayer } from "./vendor/chiptune3.js";
 
 const PLAYER_BASE = new URL("./", window.location.href).href;
-const tracks = Array.isArray(window.AMIGA_MOD_LIBRARY) ? window.AMIGA_MOD_LIBRARY : [];
+// Malformed wind-noise gamerips quarantined 2026-07-10 (see audio-quarantine/README.md).
+// Defense in depth: refuse quarantined paths even if a stale or regenerated
+// tracks.js reintroduces them.
+const QUARANTINED_PATH = /^(?:audio-quarantine\/|audio\/(?:Project-X|Apidya|Turrican_II)\/)/;
+const tracks = (Array.isArray(window.AMIGA_MOD_LIBRARY) ? window.AMIGA_MOD_LIBRARY : [])
+  .filter((track) => !QUARANTINED_PATH.test(String((track && track.path) || "")));
 const composers = Array.isArray(window.AMIGA_MOD_COMPOSERS) ? window.AMIGA_MOD_COMPOSERS : [];
 const FAVORITES_KEY = "amiga-mod-player-favorites";
 const SCOPE_MODE_KEY = "amiga-mod-player-scope-mode";
