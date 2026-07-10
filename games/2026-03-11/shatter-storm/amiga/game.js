@@ -36,7 +36,7 @@
 
   const W = canvas.width;
   const H = canvas.height;
-  const VERSION = "v3.0.3";
+  const VERSION = "v3.0.4";
   const PLAY_LEFT = 34;
   const PLAY_RIGHT = W - 34;
   const PLAY_TOP = 48;
@@ -59,20 +59,20 @@
     S: "SLOW", B: "MULTIBALL", P: "EXTRA VAUS"
   };
   const samplePaths = {
-    brick: ["audio/brick-v301.mp3"],
-    paddle: ["audio/paddle-v301.mp3"],
-    wall: ["audio/wall-v301.mp3"],
-    launch: ["audio/launch-v301.mp3"],
-    laser: ["audio/laser-v301.mp3"],
-    bonus: ["audio/bonus-v301.mp3"],
-    death: ["audio/death-v301.mp3"],
-    round: ["audio/round-v301.mp3"]
+    brick: ["audio/brick-a-v304.mp3", "audio/brick-b-v304.mp3", "audio/brick-c-v304.mp3"],
+    paddle: ["audio/paddle-v304.mp3"],
+    wall: ["audio/wall-v304.mp3"],
+    launch: ["audio/launch-v304.mp3"],
+    laser: ["audio/laser-v304.mp3"],
+    bonus: ["audio/bonus-v304.mp3"],
+    death: ["audio/death-v304.mp3"],
+    round: ["audio/round-v304.mp3"]
   };
   const MUSIC_PLAYLIST = Object.freeze([
-    { src: "audio/project-x-level-2-v303.mp3", title: "Project-X · Level 2", gain: 1 },
-    { src: "audio/apidya-techno-party-v303.mp3", title: "Apidya · Techno Party", gain: .82 },
-    { src: "audio/apidya-title-v303.mp3", title: "Apidya · Title Theme", gain: .84 },
-    { src: "audio/project-x-level-5-v303.mp3", title: "Project-X · Level 5", gain: 1 }
+    { src: "audio/pinball-dreams-ignition-v304.mp3", title: "Pinball Dreams · Ignition", gain: 1 },
+    { src: "audio/lotus-2-title-v304.mp3", title: "Lotus Turbo Challenge 2 · Title", gain: 1 },
+    { src: "audio/xenon-2-megablast-v304.mp3", title: "Xenon 2 · Megablast", gain: 1 },
+    { src: "audio/jim-power-title-v304.mp3", title: "Jim Power · Title Theme", gain: 1 }
   ]);
   const LEVEL_BLUEPRINTS = Object.freeze([
     {
@@ -164,7 +164,7 @@
     expert: { lives: 3, paddleWidth: 102, paddleSpeed: 700, ballSpeed: 1.14, capsuleChance: .13, enemyDelay: .78, enemySpeed: 1.18 }
   });
   const defaultSettings = Object.freeze({
-    version: 2,
+    version: 3,
     difficulty: "classic",
     resolution: "auto",
     masterVolume: .85,
@@ -244,6 +244,7 @@
       if (saved.version !== defaultSettings.version) {
         merged.version = defaultSettings.version;
         merged.musicVolume = defaultSettings.musicVolume;
+        merged.musicEnabled = defaultSettings.musicEnabled;
       }
       if (!difficultyProfiles[merged.difficulty]) merged.difficulty = "classic";
       if (!["auto", "720", "1080", "1440"].includes(merged.resolution)) merged.resolution = "auto";
@@ -343,6 +344,17 @@
     });
   }
 
+  const fallbackTones = {
+    brick: () => tone(230, .05, "square", .028, 60),
+    paddle: () => tone(185, .04, "triangle", .035, 45),
+    wall: () => tone(120, .025, "square", .014, 8),
+    launch: () => tone(540, .08, "square", .04, 170),
+    laser: () => tone(790, .055, "sawtooth", .025, 260),
+    bonus: () => chord([330, 494, 659], .035, .1),
+    death: () => tone(160, .3, "sawtooth", .04, -105),
+    round: () => chord([220, 330, 440], .055, .12)
+  };
+
   function playSample(name, volume = .72, minimumGapMs = 0) {
     if (muted) return false;
     primeSamples();
@@ -355,8 +367,11 @@
     sampleCursor.set(name, cursor + 1);
     const sound = pool[cursor % pool.length].cloneNode(true);
     sound.volume = Math.max(0, Math.min(1, volume * settings.masterVolume * settings.sfxVolume));
-    if (name === "brick") sound.playbackRate = .94 + Math.random() * .12;
-    sound.play().catch(() => {});
+    if (name === "brick") {
+      sound.preservesPitch = false;
+      sound.playbackRate = .94 + Math.random() * .12;
+    }
+    sound.play().catch(() => { fallbackTones[name]?.(); });
     return true;
   }
 
@@ -368,19 +383,21 @@
 
   function ensureMusicTrack() {
     const trackInfo = MUSIC_PLAYLIST[musicTrackIndex];
-    if (musicTrack?.dataset.src === trackInfo.src) return musicTrack;
-    if (musicTrack) musicTrack.pause();
-    musicTrack = new Audio(trackInfo.src);
-    musicTrack.dataset.src = trackInfo.src;
-    musicTrack.preload = "auto";
-    musicTrack.volume = musicVolumeFor(trackInfo);
-    musicButton.title = `Now playing: ${trackInfo.title}`;
-    musicButton.setAttribute("aria-label", `Toggle music. Now playing ${trackInfo.title}`);
-    musicTrack.addEventListener("ended", () => {
-      musicTrackIndex = (musicTrackIndex + 1) % MUSIC_PLAYLIST.length;
-      musicTrack = null;
-      startMusic();
-    });
+    if (!musicTrack) {
+      musicTrack = new Audio();
+      musicTrack.preload = "auto";
+      musicTrack.addEventListener("ended", () => {
+        musicTrackIndex = (musicTrackIndex + 1) % MUSIC_PLAYLIST.length;
+        startMusic();
+      });
+    }
+    if (musicTrack.dataset.src !== trackInfo.src) {
+      musicTrack.dataset.src = trackInfo.src;
+      musicTrack.src = trackInfo.src;
+      musicTrack.volume = musicVolumeFor(trackInfo);
+      musicButton.title = `Now playing: ${trackInfo.title}`;
+      musicButton.setAttribute("aria-label", `Toggle music. Now playing ${trackInfo.title}`);
+    }
     return musicTrack;
   }
 
@@ -1175,7 +1192,7 @@
       shade();
       logo("SHATTER", "STORM · AMIGA EDITION");
       centered("A 68000-ERA BRICK-BREAKING STORM", 374, 17, "#7bb5d9");
-      centered("VERIFIED AMIGA MUSIC · TONAL CHIP SFX · 10 HANDCRAFTED ROUNDS", 410, 15, "#ff8db0");
+      centered("REAL AMIGA MUSIC · GENUINE PAULA SFX · 10 HANDCRAFTED ROUNDS", 410, 15, "#ff8db0");
       centered(VERSION, 442, 13, "#6589a5");
       centered("SELECT START GAME OR OPTIONS", 490, 20, "#e9fbff", true);
       centered("Break every colored block. Gold blocks are indestructible.", 548, 15, "#83a2bb");
@@ -1470,4 +1487,24 @@
   titleStart.focus({ preventScroll: true });
   updateHud();
   requestAnimationFrame(frame);
+
+  if (location.search.indexOf("qa=1") >= 0) {
+    window.__ssQA = {
+      version: VERSION,
+      state: () => state,
+      samplePaths,
+      MUSIC_PLAYLIST,
+      playSample,
+      startGame,
+      startMusic,
+      stopMusic,
+      musicTrack: () => musicTrack,
+      musicTrackIndex: () => musicTrackIndex,
+      setTrack: index => {
+        musicTrackIndex = index % MUSIC_PLAYLIST.length;
+        if (musicTrack) musicTrack.dataset.src = "";
+        startMusic();
+      }
+    };
+  }
 })();
