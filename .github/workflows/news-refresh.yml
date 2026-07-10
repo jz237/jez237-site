@@ -38,7 +38,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git fetch origin main
           git rebase --autostash origin/main
-          git add ai-news/data/items.json ai-news/data/image_cache.json ai-news/public/*.json ai-news/public/index.html
+          git add ai-news/data/items.json ai-news/data/image_cache.json ai-news/public/*.json ai-news/public/index.html ai-news/public/thumbnails/
           if git diff --staged --quiet; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else

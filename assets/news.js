@@ -484,17 +484,23 @@ function renderTools(news) {
   if (!dailyTools.length) return;
   wrap.appendChild(el('h2', 'news-tools-title', 'Tools Worth Trying'));
   const row = el('div', 'news-tools-row');
-  dailyTools.forEach(item => {
+  dailyTools.forEach((item, index) => {
     const a = document.createElement('a');
     a.className = 'news-tool-pill';
     a.href = item.url;
     a.target = '_blank';
     a.rel = 'noopener';
+    const toolName = item.toolLabel || item.title || 'Untitled';
+    const toolDetail = item.toolSummary || item.source || 'AI tool';
+    a.title = `${toolName} - ${toolDetail}`;
+    a.setAttribute('aria-describedby', `news-tool-detail-${index}`);
     const icon = el('span', 'news-tool-icon', toolIconFor(item));
     icon.setAttribute('aria-hidden', 'true');
     const copy = el('span', 'news-tool-copy');
-    const name = el('span', 'news-tool-name', item.toolLabel || item.title || 'Untitled');
-    const meta = el('span', 'news-tool-meta', item.toolSummary || item.source || 'AI tool');
+    const name = el('span', 'news-tool-name', toolName);
+    const meta = el('span', 'news-tool-meta', toolDetail);
+    meta.id = `news-tool-detail-${index}`;
+    meta.setAttribute('role', 'tooltip');
     copy.appendChild(name);
     copy.appendChild(meta);
     a.appendChild(icon);
