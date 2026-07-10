@@ -1,4 +1,4 @@
-# Shatter Storm: Amiga Edition v3.0.2
+# Shatter Storm: Amiga Edition v3.0.3
 
 A standalone enhanced brick breaker derived from the clean-room browser remake
 inspired by Jez's supplied 1987 Amiga disk.
@@ -42,6 +42,6 @@ in `audio/sfx-manifest.json`.
 
 Version 3.0.2 removes two malformed Project-X renders whose sweeping broadband
 content sounded like wind. The optional score now chains four spectrally
-verified Amiga gamerips from Turrican II and Apidya, selected from Jez's
+verified Amiga gamerips from Project-X and Apidya, selected from Jez's
 existing Amiga Sounds archive. It can be switched off or mixed independently
 from the effects.
