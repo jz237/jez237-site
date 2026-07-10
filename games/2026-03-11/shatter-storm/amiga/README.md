@@ -21,11 +21,13 @@ required.
   fire. On-screen Pause, Settings, Fullscreen, Music, and Sound controls remain
   visible.
 
-The launch settings screen provides Relaxed, Classic, and Expert difficulty,
-separate master/music/Paula-effect levels, independent music and SFX switches,
-optional CRT scanlines, and optional screen shake. Settings persist in the
-browser. Fullscreen uses measured viewport fitting so the status bar, complete
-4:3 playfield, and controls remain visible without cropping.
+The separate title screen opens Play, Options, or the Shatter Storm edition
+selector. Options provide Relaxed, Classic, and Expert difficulty; Auto,
+960x720, 1440x1080, and 1920x1440 render resolutions; separate
+master/music/Paula-effect levels; independent music and SFX switches; optional
+CRT scanlines; and optional screen shake. Settings persist in the browser.
+Fullscreen uses measured viewport fitting so the status bar, complete 4:3
+playfield, and controls remain visible without cropping.
 
 The game includes procedural rounds, multi-hit and indestructible bricks,
 enemy drones, six capsule types, multiball, lasers, catch, paddle expansion,
