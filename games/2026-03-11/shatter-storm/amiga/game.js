@@ -36,7 +36,7 @@
 
   const W = canvas.width;
   const H = canvas.height;
-  const VERSION = "v3.0.0";
+  const VERSION = "v3.0.1";
   const PLAY_LEFT = 34;
   const PLAY_RIGHT = W - 34;
   const PLAY_TOP = 48;
@@ -59,14 +59,14 @@
     S: "SLOW", B: "MULTIBALL", P: "EXTRA VAUS"
   };
   const samplePaths = {
-    brick: ["audio/brick.mp3"],
-    paddle: ["audio/paddle.mp3"],
-    wall: ["audio/wall.mp3"],
-    launch: ["audio/launch.mp3"],
-    laser: ["audio/laser.mp3"],
-    bonus: ["audio/bonus.mp3"],
-    death: ["audio/death.mp3"],
-    round: ["audio/round.mp3"]
+    brick: ["audio/brick-v301.mp3"],
+    paddle: ["audio/paddle-v301.mp3"],
+    wall: ["audio/wall-v301.mp3"],
+    launch: ["audio/launch-v301.mp3"],
+    laser: ["audio/laser-v301.mp3"],
+    bonus: ["audio/bonus-v301.mp3"],
+    death: ["audio/death-v301.mp3"],
+    round: ["audio/round-v301.mp3"]
   };
   const MUSIC_PLAYLIST = Object.freeze([
     { src: "audio/project-x-level-2.mp3", title: "Project-X · Level 2", gain: 1 },
@@ -562,7 +562,7 @@
     brick.hp -= 1;
     if (brick.hp > 0) {
       addScore(20);
-      if (!playSample("brick", .6, 28)) tone(210, .045, "square", .025, 35);
+      if (!playSample("brick", .6, 42)) tone(210, .045, "square", .025, 35);
       spark(sourceX, sourceY, "#f2fbff", 6);
       return;
     }
@@ -571,7 +571,7 @@
     remainingBreakable -= 1;
     const points = 50 + brick.colorIndex * 10 + round * 5;
     addScore(points);
-    if (!playSample("brick", .68, 28)) tone(250 + brick.colorIndex * 36, .055, "square", .032, 80);
+    if (!playSample("brick", .68, 42)) tone(250 + brick.colorIndex * 36, .055, "square", .032, 80);
     burst(brick.x + brick.w / 2, brick.y + brick.h / 2, BRICK_COLORS[brick.colorIndex], 14);
     if (Math.random() < difficultyProfile().capsuleChance) spawnCapsule(brick);
 

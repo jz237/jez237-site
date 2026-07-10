@@ -1,4 +1,4 @@
-# Shatter Storm: Amiga Edition v3.0.0
+# Shatter Storm: Amiga Edition v3.0.1
 
 A standalone enhanced brick breaker derived from the clean-room browser remake
 inspired by Jez's supplied 1987 Amiga disk.
@@ -33,11 +33,12 @@ The game includes ten handcrafted Arkanoid-inspired rounds, multi-hit and indest
 enemy drones, six capsule types, multiball, lasers, catch, paddle expansion,
 extra lives, and a persistent local high score.
 
-Version 3 replaces the noisy emulator-capture clips and browser oscillator
-effects with eight clean MP3 arcade samples generated for this game. Brick,
-wall, paddle, launch, laser, capsule, death, and round-clear events each have a
-distinct file. The exact generation prompts and settings are stored in both
-the MP3 metadata and `audio/sfx-manifest.json`.
+Version 3.0.1 replaces the noisy emulator captures and one-second generated
+effects with eight deterministic tonal MP3s. Every sample is under one second,
+has no noise source or ambience, and ends before repeated collisions can build
+into a continuous wash. Brick, wall, paddle, launch, laser, capsule, death, and
+round-clear events each have a distinct file. The synthesis recipes are stored
+in `audio/sfx-manifest.json`.
 
 The optional background score chains four authentic Amiga gamerips from
 Project-X, Turrican II, and Apidya, selected from Jez's existing Amiga Sounds

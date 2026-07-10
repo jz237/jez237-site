@@ -1,16 +1,18 @@
 {
-  "version": "3.0.0",
-  "generator": "Stable Audio 3 Medium",
-  "steps": 60,
-  "format": "44.1 kHz mono MP3",
+  "version": "3.0.1",
+  "generator": "Deterministic FFmpeg aevalsrc chip synthesis",
+  "sampleRate": 44100,
+  "channels": 1,
+  "format": "MP3",
+  "noiseSources": false,
   "effects": {
-    "wall.mp3": { "seed": 237, "prompt": "Clean short 1988 Amiga arcade brick-breaker wall bounce sound effect, bright metallic digital ping, tiny sampled transient, dry mono, no ambience, no music, no hiss, no white noise, one isolated hit" },
-    "brick.mp3": { "seed": 238, "prompt": "Clean short 1988 Amiga arcade brick shatter sound effect, crisp glassy digital crack with a tiny pitched blip, dry mono, no ambience, no music, no hiss, no white noise, one isolated hit" },
-    "paddle.mp3": { "seed": 239, "prompt": "Clean short 1988 Amiga arcade paddle rebound sound effect, warm rubbery electronic thunk with a clear pitched click, dry mono, no ambience, no music, no hiss, no white noise, one isolated hit" },
-    "launch.mp3": { "seed": 240, "prompt": "Clean short 1988 Amiga arcade ball launch sound effect, quick ascending digital zap, energetic and bright, dry mono, no ambience, no music, no hiss, no white noise, one isolated event" },
-    "laser.mp3": { "seed": 241, "prompt": "Clean short 1988 Amiga arcade laser shot sound effect, sharp descending electronic pew with sampled crunch, dry mono, no ambience, no music, no hiss, no white noise, one isolated shot" },
-    "bonus.mp3": { "seed": 242, "prompt": "Clean short 1988 Amiga arcade power-up collection sound effect, cheerful three-note rising digital arpeggio, dry mono, no ambience, no background music, no hiss, no white noise, one isolated event" },
-    "death.mp3": { "seed": 243, "prompt": "Clean short 1988 Amiga arcade life-lost sound effect, dramatic falling electronic pitch and compact digital burst, dry mono, no ambience, no background music, no hiss, no white noise, one isolated event" },
-    "round.mp3": { "seed": 244, "prompt": "Clean short 1988 Amiga arcade round complete fanfare, bright triumphant four-note sampled synth jingle, dry mono, no ambience, no background bed, no hiss, no white noise, one isolated fanfare" }
+    "wall-v301.mp3": { "seconds": 0.055, "description": "Bright 430 Hz wall ping with a short third harmonic and exponential decay" },
+    "brick-v301.mp3": { "seconds": 0.085, "description": "Pitched 760 Hz brick crack with two short harmonics" },
+    "paddle-v301.mp3": { "seconds": 0.095, "description": "Low 185 Hz paddle rebound with a second harmonic" },
+    "launch-v301.mp3": { "seconds": 0.18, "description": "Ascending 260–1160 Hz launch chirp" },
+    "laser-v301.mp3": { "seconds": 0.14, "description": "Descending 1100–260 Hz laser chirp" },
+    "bonus-v301.mp3": { "seconds": 0.33, "description": "Three-note C5–E5–G5 power-up arpeggio" },
+    "death-v301.mp3": { "seconds": 0.58, "description": "Falling 500–94 Hz life-lost tone" },
+    "round-v301.mp3": { "seconds": 0.82, "description": "Four-note G4–C5–E5–G5 round fanfare" }
   }
 }
