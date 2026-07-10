@@ -10,7 +10,25 @@
   const muteButton = document.querySelector("#mute");
   const musicButton = document.querySelector("#music");
   const pauseButton = document.querySelector("#pause-button");
+  const settingsButton = document.querySelector("#settings-button");
   const fullscreenButton = document.querySelector("#fullscreen-button");
+  const gameShell = document.querySelector("#game-shell");
+  const stageWrap = document.querySelector("#stage-wrap");
+  const topbar = document.querySelector(".topbar");
+  const controls = document.querySelector(".controls");
+  const crt = document.querySelector("#crt");
+  const settingsPanel = document.querySelector("#settings-panel");
+  const settingsForm = document.querySelector("#settings-form");
+  const settingsCancel = document.querySelector("#settings-cancel");
+  const settingsStart = document.querySelector("#settings-start");
+  const difficultyInput = document.querySelector("#difficulty");
+  const masterInput = document.querySelector("#master-volume");
+  const musicVolumeInput = document.querySelector("#music-volume");
+  const sfxVolumeInput = document.querySelector("#sfx-volume");
+  const musicEnabledInput = document.querySelector("#music-enabled");
+  const sfxEnabledInput = document.querySelector("#sfx-enabled");
+  const scanlinesInput = document.querySelector("#scanlines-enabled");
+  const shakeInput = document.querySelector("#shake-enabled");
 
   const W = canvas.width;
   const H = canvas.height;
@@ -48,6 +66,21 @@
   const sampleBank = new Map();
   const sampleCursor = new Map();
   const sampleLastPlayed = new Map();
+  const difficultyProfiles = Object.freeze({
+    relaxed: { lives: 4, paddleWidth: 138, paddleSpeed: 780, ballSpeed: .84, capsuleChance: .25, enemyDelay: 1.3, enemySpeed: .85 },
+    classic: { lives: 3, paddleWidth: 116, paddleSpeed: 720, ballSpeed: 1, capsuleChance: .18, enemyDelay: 1, enemySpeed: 1 },
+    expert: { lives: 3, paddleWidth: 102, paddleSpeed: 700, ballSpeed: 1.14, capsuleChance: .13, enemyDelay: .78, enemySpeed: 1.18 }
+  });
+  const defaultSettings = Object.freeze({
+    difficulty: "classic",
+    masterVolume: .85,
+    musicVolume: .78,
+    sfxVolume: .82,
+    musicEnabled: true,
+    sfxEnabled: true,
+    scanlines: true,
+    screenShake: true
+  });
 
   let state = STATES.TITLE;
   let score = 0;
@@ -65,14 +98,17 @@
   let messageTimer = 0;
   let stateTimer = 0;
   let shake = 0;
-  let muted = false;
-  let musicEnabled = true;
+  let settings = readSettings();
+  let muted = !settings.sfxEnabled;
+  let musicEnabled = settings.musicEnabled;
   let audioContext = null;
   let musicBus = null;
   let musicTimer = 0;
   let musicStep = 0;
   let nextMusicTime = 0;
-  let noiseBuffer = null;
+  let trackerSamples = null;
+  let settingsWasPlaying = false;
+  let firstLaunch = true;
   let enemyTimer = 7;
   let remainingBreakable = 0;
   const keys = new Set();
@@ -110,6 +146,28 @@
     }
   }
 
+  function readSettings() {
+    try {
+      const saved = JSON.parse(localStorage.getItem("arkanoid-recoded-settings") || "{}");
+      const merged = { ...defaultSettings, ...saved };
+      if (!difficultyProfiles[merged.difficulty]) merged.difficulty = "classic";
+      ["masterVolume", "musicVolume", "sfxVolume"].forEach(key => {
+        merged[key] = Math.max(0, Math.min(1, Number(merged[key])));
+      });
+      return merged;
+    } catch (_) {
+      return { ...defaultSettings };
+    }
+  }
+
+  function saveSettings() {
+    try { localStorage.setItem("arkanoid-recoded-settings", JSON.stringify(settings)); } catch (_) {}
+  }
+
+  function difficultyProfile() {
+    return difficultyProfiles[settings.difficulty] || difficultyProfiles.classic;
+  }
+
   function saveHighScore() {
     if (score <= highScore) return;
     highScore = score;
@@ -132,7 +190,6 @@
   }
 
   function audio() {
-    if (muted) return null;
     if (!audioContext) {
       const AudioCtor = window.AudioContext || window.webkitAudioContext;
       if (!AudioCtor) return null;
@@ -143,6 +200,7 @@
   }
 
   function tone(frequency, duration = .06, type = "square", volume = .035, slide = 0) {
+    if (muted || settings.masterVolume <= 0 || settings.sfxVolume <= 0) return;
     const ac = audio();
     if (!ac) return;
     const oscillator = ac.createOscillator();
@@ -153,7 +211,7 @@
     oscillator.frequency.exponentialRampToValueAtTime(
       Math.max(20, frequency + slide), now + duration
     );
-    gain.gain.setValueAtTime(volume, now);
+    gain.gain.setValueAtTime(volume * settings.masterVolume * settings.sfxVolume, now);
     gain.gain.exponentialRampToValueAtTime(.0001, now + duration);
     oscillator.connect(gain).connect(ac.destination);
     oscillator.start(now);
@@ -189,22 +247,20 @@
     const cursor = sampleCursor.get(name) || 0;
     sampleCursor.set(name, cursor + 1);
     const sound = pool[cursor % pool.length].cloneNode(true);
-    sound.volume = Math.max(0, Math.min(1, volume));
+    sound.volume = Math.max(0, Math.min(1, volume * settings.masterVolume * settings.sfxVolume));
     sound.play().catch(() => {});
     return true;
   }
 
-  const trackerChords = [
-    [57, 60, 64],
-    [55, 59, 62],
-    [53, 57, 60],
-    [55, 59, 62]
-  ];
+  // A four-channel score built around the restrictions that gave classic
+  // Paula/ProTracker music its character: 8-bit samples, fixed hard panning,
+  // one sample per channel, speed 6 at 125 BPM, and no modern effects stack.
+  const trackerChords = [[45, 48, 52], [41, 45, 48], [48, 52, 55], [43, 47, 50]];
   const trackerLead = [
-    69, null, 72, null, 76, null, 72, 71, 69, null, 67, null, 64, null, 67, null,
-    67, null, 71, null, 74, null, 71, 69, 67, null, 64, null, 62, null, 64, null,
-    65, null, 69, null, 72, null, 69, 67, 65, null, 64, null, 60, null, 64, null,
-    67, null, 71, null, 74, 76, 74, 71, 69, null, 67, 64, 62, 64, 67, null
+    69, null, 72, 76, null, 72, 71, null, 69, 67, 64, null, 67, 69, null, 64,
+    69, null, 72, 74, 76, null, 74, 72, 71, null, 69, 67, 64, 67, null, 69,
+    72, null, 76, 77, 76, 72, null, 69, 67, null, 64, 65, 64, null, 60, 64,
+    67, 69, 71, null, 74, 76, 74, 71, 69, 67, 64, null, 62, 64, 67, null
   ];
 
   function midiFrequency(note) {
@@ -216,83 +272,103 @@
     musicBus = ac.createGain();
     musicBus.gain.value = 0;
     musicBus.connect(ac.destination);
-    noiseBuffer = ac.createBuffer(1, Math.floor(ac.sampleRate * .12), ac.sampleRate);
-    const data = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < data.length; i += 1) data[i] = Math.random() * 2 - 1;
+    trackerSamples = makeTrackerSamples(ac);
     return musicBus;
   }
 
-  function trackerVoice(note, when, duration, type, volume, pan = 0) {
+  function quantize8(value) {
+    return Math.round(Math.max(-1, Math.min(1, value)) * 127) / 127;
+  }
+
+  function makeSample(ac, length, render, sampleRate = 11025) {
+    const buffer = ac.createBuffer(1, length, sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < length; i += 1) data[i] = quantize8(render(i, length, sampleRate));
+    return buffer;
+  }
+
+  function makeTrackerSamples(ac) {
+    let noise = 0x4a3b;
+    const random = () => {
+      noise ^= noise << 7; noise ^= noise >>> 9; noise ^= noise << 8;
+      return ((noise & 0xffff) / 32767.5) - 1;
+    };
+    return {
+      bass: makeSample(ac, 64, (i, length) => {
+        const phase = i / length;
+        return (Math.sin(phase * Math.PI * 2) * .72) + (Math.sin(phase * Math.PI * 4) * .18);
+      }),
+      lead: makeSample(ac, 64, (i, length) => (i / length < .27 ? .78 : -.62) + Math.sin(i / length * Math.PI * 2) * .12),
+      arp: makeSample(ac, 32, (i, length) => ((i / length) * 2 - 1) * .72),
+      kick: makeSample(ac, 1543, (i, length, sampleRate) => {
+        const t = i / sampleRate;
+        const phase = Math.PI * 2 * (74 * t - 175 * t * t);
+        return Math.sin(phase) * Math.pow(1 - i / length, 2.6);
+      }),
+      snare: makeSample(ac, 1323, (i, length) => random() * Math.pow(1 - i / length, 2.1)),
+      hat: makeSample(ac, 441, (i, length) => random() * Math.pow(1 - i / length, 3.4))
+    };
+  }
+
+  function trackerVoice(sampleName, note, when, duration, volume, pan) {
     const ac = audioContext;
-    if (!ac || !musicBus) return;
-    const oscillator = ac.createOscillator();
+    if (!ac || !musicBus || !trackerSamples) return;
+    const source = ac.createBufferSource();
     const gain = ac.createGain();
     const panner = ac.createStereoPanner?.();
-    oscillator.type = type;
-    oscillator.frequency.setValueAtTime(midiFrequency(note), when);
+    source.buffer = trackerSamples[sampleName];
+    source.loop = true;
+    source.playbackRate.value = midiFrequency(note) / midiFrequency(53);
     gain.gain.setValueAtTime(.0001, when);
-    gain.gain.exponentialRampToValueAtTime(volume, when + .008);
+    gain.gain.exponentialRampToValueAtTime(volume, when + .004);
+    gain.gain.setValueAtTime(volume * .82, Math.max(when + .005, when + duration - .025));
     gain.gain.exponentialRampToValueAtTime(.0001, when + duration);
     if (panner) {
       panner.pan.value = pan;
-      oscillator.connect(gain).connect(panner).connect(musicBus);
+      source.connect(gain).connect(panner).connect(musicBus);
     } else {
-      oscillator.connect(gain).connect(musicBus);
+      source.connect(gain).connect(musicBus);
     }
-    oscillator.start(when);
-    oscillator.stop(when + duration + .02);
-  }
-
-  function trackerKick(when) {
-    const ac = audioContext;
-    if (!ac || !musicBus) return;
-    const oscillator = ac.createOscillator();
-    const gain = ac.createGain();
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(92, when);
-    oscillator.frequency.exponentialRampToValueAtTime(38, when + .1);
-    gain.gain.setValueAtTime(.08, when);
-    gain.gain.exponentialRampToValueAtTime(.0001, when + .12);
-    oscillator.connect(gain).connect(musicBus);
-    oscillator.start(when);
-    oscillator.stop(when + .13);
-  }
-
-  function trackerSnare(when) {
-    const ac = audioContext;
-    if (!ac || !musicBus || !noiseBuffer) return;
-    const source = ac.createBufferSource();
-    const filter = ac.createBiquadFilter();
-    const gain = ac.createGain();
-    source.buffer = noiseBuffer;
-    filter.type = "bandpass";
-    filter.frequency.value = 1900;
-    filter.Q.value = .7;
-    gain.gain.setValueAtTime(.035, when);
-    gain.gain.exponentialRampToValueAtTime(.0001, when + .09);
-    source.connect(filter).connect(gain).connect(musicBus);
     source.start(when);
-    source.stop(when + .1);
+    source.stop(when + duration + .01);
+  }
+
+  function trackerDrum(sampleName, when, volume) {
+    const ac = audioContext;
+    if (!ac || !musicBus || !trackerSamples) return;
+    const source = ac.createBufferSource();
+    const gain = ac.createGain();
+    const panner = ac.createStereoPanner?.();
+    source.buffer = trackerSamples[sampleName];
+    gain.gain.value = volume;
+    if (panner) {
+      panner.pan.value = -.78;
+      source.connect(gain).connect(panner).connect(musicBus);
+    } else source.connect(gain).connect(musicBus);
+    source.start(when);
   }
 
   function scheduleTrackerStep(step, when) {
     const chord = trackerChords[Math.floor(step / 16) % trackerChords.length];
     const localStep = step % 16;
-    trackerVoice(chord[step % 3] + 12, when, .075, "square", .008, -.35);
-    if (localStep % 4 === 0) {
-      trackerVoice(chord[0] - 12, when, .31, "square", .035, -.12);
-      trackerKick(when);
-    }
-    if (localStep === 4 || localStep === 12) trackerSnare(when);
-    if (localStep % 2 === 1) trackerVoice(84, when, .025, "square", .0035, .65);
+    const row = 2.5 * 6 / 125;
+    if (localStep % 4 === 0) trackerVoice("bass", chord[0], when, row * 3.85, .24, -.78);
+    trackerVoice("arp", chord[step % 3] + 12, when, row * .9, .095, .78);
     const lead = trackerLead[step % trackerLead.length];
-    if (lead != null && localStep % 2 === 0) trackerVoice(lead, when, .19, "sawtooth", .013, .32);
+    if (lead != null) trackerVoice("lead", lead, when, row * .88, .15, .78);
+    if (localStep % 4 === 0) {
+      trackerDrum("kick", when, .34);
+    } else if (localStep === 4 || localStep === 12) {
+      trackerDrum("snare", when, .23);
+    } else if (localStep % 2 === 0) {
+      trackerDrum("hat", when, .12);
+    }
   }
 
   function musicScheduler() {
     const ac = audioContext;
-    if (!ac || !musicEnabled || muted) return;
-    const stepDuration = 60 / 126 / 4;
+    if (!ac || !musicEnabled || settings.masterVolume <= 0 || settings.musicVolume <= 0) return;
+    const stepDuration = 2.5 * 6 / 125;
     while (nextMusicTime < ac.currentTime + .16) {
       scheduleTrackerStep(musicStep, nextMusicTime);
       nextMusicTime += stepDuration;
@@ -301,12 +377,12 @@
   }
 
   function startMusic() {
-    if (!musicEnabled || muted || (state !== STATES.PLAYING && state !== STATES.LEVEL_CLEAR)) return;
+    if (!musicEnabled || (state !== STATES.PLAYING && state !== STATES.LEVEL_CLEAR)) return;
     const ac = audio();
     if (!ac) return;
     const bus = ensureMusicBus(ac);
     bus.gain.cancelScheduledValues(ac.currentTime);
-    bus.gain.setTargetAtTime(.72, ac.currentTime, .08);
+    bus.gain.setTargetAtTime(.92 * settings.masterVolume * settings.musicVolume, ac.currentTime, .08);
     if (musicTimer) return;
     nextMusicTime = ac.currentTime + .06;
     musicTimer = window.setInterval(musicScheduler, 40);
@@ -377,14 +453,16 @@
   }
 
   function startGame() {
+    const profile = difficultyProfile();
     score = 0;
     round = 0;
-    lives = 3;
+    lives = profile.lives;
     particles = [];
     capsules = [];
     lasers = [];
     drones = [];
-    paddle.w = 116;
+    paddle.w = profile.paddleWidth;
+    paddle.speed = profile.paddleSpeed;
     paddle.laserTimer = 0;
     paddle.catchTimer = 0;
     startRound();
@@ -398,7 +476,7 @@
     capsules = [];
     lasers = [];
     drones = [];
-    enemyTimer = Math.max(4, 8 - round * .25);
+    enemyTimer = Math.max(4, 8 - round * .25) * difficultyProfile().enemyDelay;
     paddle.x = W / 2 - paddle.w / 2;
     paddle.targetX = W / 2;
     paddle.laserTimer = 0;
@@ -428,7 +506,7 @@
     balls.forEach(ball => {
       if (!ball.stuck) return;
       ball.stuck = false;
-      const speed = 430 + Math.min(round * 15, 105);
+      const speed = (430 + Math.min(round * 15, 105)) * difficultyProfile().ballSpeed;
       const angle = (Math.random() * .46 - .23);
       ball.vx = Math.sin(angle) * speed;
       ball.vy = -Math.cos(angle) * speed;
@@ -439,6 +517,7 @@
   }
 
   function primaryAction() {
+    if (!settingsPanel.hidden) return;
     audio();
     primeSamples();
     if (state === STATES.TITLE || state === STATES.GAME_OVER) {
@@ -506,7 +585,7 @@
     addScore(points);
     if (!playSample("brick", .68, 28)) tone(250 + brick.colorIndex * 36, .055, "square", .032, 80);
     burst(brick.x + brick.w / 2, brick.y + brick.h / 2, BRICK_COLORS[brick.colorIndex], 14);
-    if (Math.random() < .18) spawnCapsule(brick);
+    if (Math.random() < difficultyProfile().capsuleChance) spawnCapsule(brick);
 
     if (remainingBreakable <= 0) completeRound();
   }
@@ -554,7 +633,7 @@
   function multiball() {
     const source = balls.find(ball => !ball.stuck) || balls[0];
     if (!source) return;
-    const speed = Math.max(390, Math.hypot(source.vx, source.vy));
+    const speed = Math.max(390 * difficultyProfile().ballSpeed, Math.hypot(source.vx, source.vy));
     const base = Math.atan2(source.vy, source.vx);
     [-.42, .42].forEach(delta => {
       balls.push({
@@ -692,7 +771,8 @@
         if (ball.vy > 0 && previousY + ball.r <= paddle.y + 3 && circleRect(ball, paddle)) {
           ball.y = paddle.y - ball.r - 1;
           const relative = Math.max(-1, Math.min(1, (ball.x - (paddle.x + paddle.w / 2)) / (paddle.w / 2)));
-          const newSpeed = Math.min(690, Math.max(420, Math.hypot(ball.vx, ball.vy) * 1.008));
+          const speedFactor = difficultyProfile().ballSpeed;
+          const newSpeed = Math.min(690 * speedFactor, Math.max(420 * speedFactor, Math.hypot(ball.vx, ball.vy) * 1.008));
           const angle = relative * 1.08;
           ball.vx = Math.sin(angle) * newSpeed;
           ball.vy = -Math.abs(Math.cos(angle) * newSpeed);
@@ -806,12 +886,12 @@
       drones.push({
         x: fromLeft ? PLAY_LEFT + 22 : PLAY_RIGHT - 22,
         y: 78,
-        vx: fromLeft ? 62 : -62,
-        vy: 54 + Math.random() * 28,
+        vx: (fromLeft ? 62 : -62) * difficultyProfile().enemySpeed,
+        vy: (54 + Math.random() * 28) * difficultyProfile().enemySpeed,
         r: 14,
         spin: 0
       });
-      enemyTimer = Math.max(4, 8.5 - round * .3) + Math.random() * 3;
+      enemyTimer = (Math.max(4, 8.5 - round * .3) + Math.random() * 3) * difficultyProfile().enemyDelay;
     }
 
     drones.forEach(drone => {
@@ -839,7 +919,7 @@
   }
 
   function burst(x, y, color, count) {
-    shake = Math.max(shake, 2.4);
+    if (settings.screenShake) shake = Math.max(shake, 2.4);
     for (let i = 0; i < count; i += 1) {
       const angle = Math.random() * Math.PI * 2;
       const speed = 65 + Math.random() * 210;
@@ -1226,6 +1306,7 @@
   canvas.addEventListener("pointercancel", releasePointer);
 
   function togglePause() {
+    if (!settingsPanel.hidden) return;
     if (state === STATES.TITLE || state === STATES.GAME_OVER || state === STATES.LEVEL_CLEAR) return;
     state = state === STATES.PAUSED ? STATES.PLAYING : STATES.PAUSED;
     if (state === STATES.PAUSED) stopMusic(); else startMusic();
@@ -1252,28 +1333,126 @@
 
   function toggleFullscreen() {
     if (!document.fullscreenElement) {
-      document.querySelector("#game-shell").requestFullscreen?.();
+      const request = gameShell.requestFullscreen?.();
+      request?.catch(() => {});
     } else {
       document.exitFullscreen?.();
     }
   }
 
+  function fitFullscreenStage() {
+    if (document.fullscreenElement !== gameShell) {
+      stageWrap.style.removeProperty("width");
+      stageWrap.style.removeProperty("height");
+      fullscreenButton.textContent = "FULLSCREEN";
+      return;
+    }
+    const shellStyle = getComputedStyle(gameShell);
+    const horizontalPadding = parseFloat(shellStyle.paddingLeft) + parseFloat(shellStyle.paddingRight);
+    const verticalPadding = parseFloat(shellStyle.paddingTop) + parseFloat(shellStyle.paddingBottom);
+    const rowGap = parseFloat(shellStyle.rowGap) || 0;
+    const availableWidth = Math.max(1, gameShell.clientWidth - horizontalPadding);
+    const availableHeight = Math.max(1, gameShell.clientHeight - verticalPadding - topbar.offsetHeight - controls.offsetHeight - rowGap * 2);
+    const scale = Math.min(availableWidth / W, availableHeight / H);
+    stageWrap.style.width = `${Math.floor(W * scale)}px`;
+    stageWrap.style.height = `${Math.floor(H * scale)}px`;
+    fullscreenButton.textContent = "EXIT FULLSCREEN";
+  }
+
+  function updateVolumeLabels() {
+    document.querySelector("#master-value").textContent = `${masterInput.value}%`;
+    document.querySelector("#music-value").textContent = `${musicVolumeInput.value}%`;
+    document.querySelector("#sfx-value").textContent = `${sfxVolumeInput.value}%`;
+  }
+
+  function syncSettingsForm() {
+    difficultyInput.value = settings.difficulty;
+    masterInput.value = Math.round(settings.masterVolume * 100);
+    musicVolumeInput.value = Math.round(settings.musicVolume * 100);
+    sfxVolumeInput.value = Math.round(settings.sfxVolume * 100);
+    musicEnabledInput.checked = settings.musicEnabled;
+    sfxEnabledInput.checked = settings.sfxEnabled;
+    scanlinesInput.checked = settings.scanlines;
+    shakeInput.checked = settings.screenShake;
+    updateVolumeLabels();
+  }
+
+  function applySettingsFromForm() {
+    settings = {
+      difficulty: difficultyInput.value,
+      masterVolume: Number(masterInput.value) / 100,
+      musicVolume: Number(musicVolumeInput.value) / 100,
+      sfxVolume: Number(sfxVolumeInput.value) / 100,
+      musicEnabled: musicEnabledInput.checked,
+      sfxEnabled: sfxEnabledInput.checked,
+      scanlines: scanlinesInput.checked,
+      screenShake: shakeInput.checked
+    };
+    muted = !settings.sfxEnabled;
+    musicEnabled = settings.musicEnabled;
+    crt.classList.toggle("crt-off", !settings.scanlines);
+    muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
+    musicButton.textContent = musicEnabled ? "MUSIC ON" : "MUSIC OFF";
+    saveSettings();
+    if (musicEnabled) startMusic(); else stopMusic();
+  }
+
+  function openSettings() {
+    if (!settingsPanel.hidden) return;
+    settingsWasPlaying = state === STATES.PLAYING;
+    if (settingsWasPlaying) state = STATES.PAUSED;
+    stopMusic();
+    syncSettingsForm();
+    settingsCancel.hidden = firstLaunch;
+    settingsStart.textContent = firstLaunch ? "START GAME" : (settingsWasPlaying ? "SAVE & RESUME" : "SAVE SETTINGS");
+    settingsPanel.hidden = false;
+    settingsStart.focus({ preventScroll: true });
+  }
+
+  function closeSettings(resume) {
+    settingsPanel.hidden = true;
+    if (firstLaunch) {
+      firstLaunch = false;
+      startGame();
+      return;
+    }
+    if (resume && settingsWasPlaying) state = STATES.PLAYING;
+    lastTime = performance.now();
+    if (state === STATES.PLAYING || state === STATES.LEVEL_CLEAR) startMusic();
+  }
+
   function toggleMute() {
     muted = !muted;
+    settings.sfxEnabled = !muted;
     muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
-    if (muted) stopMusic(); else startMusic();
+    saveSettings();
   }
 
   function toggleMusic() {
     musicEnabled = !musicEnabled;
+    settings.musicEnabled = musicEnabled;
     musicButton.textContent = musicEnabled ? "MUSIC ON" : "MUSIC OFF";
+    saveSettings();
     if (musicEnabled) startMusic(); else stopMusic();
   }
 
   muteButton.addEventListener("click", toggleMute);
   musicButton.addEventListener("click", toggleMusic);
   pauseButton.addEventListener("click", togglePause);
+  settingsButton.addEventListener("click", openSettings);
   fullscreenButton.addEventListener("click", toggleFullscreen);
+  settingsForm.addEventListener("submit", event => {
+    event.preventDefault();
+    applySettingsFromForm();
+    closeSettings(true);
+  });
+  settingsCancel.addEventListener("click", () => {
+    syncSettingsForm();
+    closeSettings(true);
+  });
+  [masterInput, musicVolumeInput, sfxVolumeInput].forEach(input => input.addEventListener("input", updateVolumeLabels));
+  document.addEventListener("fullscreenchange", () => requestAnimationFrame(fitFullscreenStage));
+  window.addEventListener("resize", () => requestAnimationFrame(fitFullscreenStage));
 
   function frame(now) {
     const dt = Math.min(.033, Math.max(0, (now - lastTime) / 1000));
@@ -1283,6 +1462,11 @@
     requestAnimationFrame(frame);
   }
 
+  syncSettingsForm();
+  crt.classList.toggle("crt-off", !settings.scanlines);
+  muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
+  musicButton.textContent = musicEnabled ? "MUSIC ON" : "MUSIC OFF";
+  settingsStart.focus({ preventScroll: true });
   updateHud();
   requestAnimationFrame(frame);
 })();

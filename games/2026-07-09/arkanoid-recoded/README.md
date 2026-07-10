@@ -23,7 +23,14 @@ required.
 - F: full screen
 - M: mute
 - On phones/tablets: drag anywhere on the playfield to move; tap to launch or
-  fire. On-screen Pause, Fullscreen, Music, and Sound controls remain visible.
+  fire. On-screen Pause, Settings, Fullscreen, Music, and Sound controls remain
+  visible.
+
+The launch settings screen provides Relaxed, Classic, and Expert difficulty,
+separate master/music/Paula-effect levels, independent music and SFX switches,
+optional CRT scanlines, and optional screen shake. Settings persist in the
+browser. Fullscreen uses measured viewport fitting so the status bar, complete
+4:3 playfield, and controls remain visible without cropping.
 
 The game includes procedural rounds, multi-hit and indestructible bricks,
 enemy drones, six capsule types, multiball, lasers, catch, paddle expansion,
@@ -35,6 +42,8 @@ Mechanical virtual-floppy noise was disabled during capture. A few procedural
 synth cues remain as fallbacks and accents when an original sample is not a
 good match for a new remake-only event.
 
-The optional background score is a newly composed four-channel Web Audio
-tracker-style loop inspired by late-1980s Amiga game music. It is not copied
-from Arkanoid and can be switched off independently from the original effects.
+The optional background score is newly composed and obeys characteristic
+Amiga tracker constraints: four hard-panned Paula-style channels, quantized
+8-bit sample buffers, and ProTracker speed 6 at 125 BPM. It uses no oscillators,
+modern reverb, or unlimited polyphony. It is not copied from Arkanoid and can
+be switched off or mixed independently from the original effects.
