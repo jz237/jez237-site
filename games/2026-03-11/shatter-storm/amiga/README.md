@@ -1,4 +1,4 @@
-# Shatter Storm: Amiga Edition
+# Shatter Storm: Amiga Edition v3.0.0
 
 A standalone enhanced brick breaker derived from the clean-room browser remake
 inspired by Jez's supplied 1987 Amiga disk.
@@ -29,16 +29,16 @@ CRT scanlines; and optional screen shake. Settings persist in the browser.
 Fullscreen uses measured viewport fitting so the status bar, complete 4:3
 playfield, and controls remain visible without cropping.
 
-The game includes procedural rounds, multi-hit and indestructible bricks,
+The game includes ten handcrafted Arkanoid-inspired rounds, multi-hit and indestructible bricks,
 enemy drones, six capsule types, multiball, lasers, catch, paddle expansion,
 extra lives, and a persistent local high score.
 
-The `audio/` effects were captured directly from Jez's supplied original
-Arkanoid disk running through FS-UAE's emulated Amiga Paula audio hardware.
-Mechanical virtual-floppy noise was disabled during capture. A few procedural
-synth cues remain as fallbacks and accents when an original sample is not a
-good match for a new remake-only event.
+Version 3 replaces the noisy emulator-capture clips and browser oscillator
+effects with eight clean MP3 arcade samples generated for this game. Brick,
+wall, paddle, launch, laser, capsule, death, and round-clear events each have a
+distinct file. The exact generation prompts and settings are stored in both
+the MP3 metadata and `audio/sfx-manifest.json`.
 
-The optional background score is the authentic Amiga gamerip of Project-X
-"Level 1-1," selected from Jez's existing Amiga Sounds archive. It can be
-switched off or mixed independently from the original Paula effects.
+The optional background score chains four authentic Amiga gamerips from
+Project-X, Turrican II, and Apidya, selected from Jez's existing Amiga Sounds
+archive. It can be switched off or mixed independently from the effects.
