@@ -4595,5 +4595,45 @@
       "description": "A plausible hypersaline moonpool shore animal with salt-shedding veil fins, tripod brine-sensing legs, and pearly blue-black rose-salt-crusted skin.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-10-hybrid-creature-infographic-glasswing-canopy-sentry-develop",
+    "title": "Glasswing Canopy Sentry: Development Map",
+    "tests": "Hybrid creature pair slot: colorful fictional development-map infographic; exactly two sources stated; non-actionable trait map; stage strip, adult panel, macro windows, habitat swatches, and field-context vignette included.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Glasswing Canopy Sentry\", using exactly two source organisms: glass frog + dragonfly. Make it a 1536x1024 landscape scientific wall chart assembled on a humid cloud-forest field-station bench with damp black slate, bromeliad leaves, clean acrylic specimen trays, mist droplets, colored habitat swatches, macro lens rings, and concise restrained fictional labels. Include a source-trait map, juvenile-to-adult stage strip, adult anatomy/specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Glass frog contributes translucent lime skin, visible internal silhouettes, sticky toe pads, crouched amphibian body, and underside leaf-clinging posture; dragonfly contributes four clear veined wings, large compound eyes, segmented abdomen, iridescent wing nodes, and rapid aerial hunting posture. Keep it fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Glasswing Canopy Sentry; [SOURCE_A] = glass frog; [SOURCE_B] = dragonfly; [HABITAT] = wet cloud-forest stream leaves at blue dusk; adult phenotype = palm-length horizontal leaf-clinging amphibian with translucent lime frog skin, visible internal silhouettes, sticky toe pads, four clear veined dragonfly wings, bronze-green compound eyes, and a slim banded dragonfly abdomen.",
+    "image": "images/2026-07-10-hybrid-creature-infographic-glasswing-canopy-sentry-develop.jpg",
+    "thumb": "thumbs/2026-07-10-hybrid-creature-infographic-glasswing-canopy-sentry-develop.webp",
+    "color": "#313728",
+    "date": "2026-07-10",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glasswing Canopy Sentry",
+      "imageKind": "infographic",
+      "description": "A fictional glass frog plus dragonfly cloud-forest sentry with translucent frog skin, sticky toe pads, folded clear dragonfly wings, compound eyes, and a slim banded abdomen.",
+      "continuity": "Same adult phenotype across both images: palm-length leaf-clinging amphibian, translucent lime skin, toe pads, four clear veined wings, bronze-green compound eyes, banded abdomen, dew beads, and cloud-forest stream habitat."
+    }
+  },
+  {
+    "id": "2026-07-10-hybrid-creature-wild-glasswing-canopy-sentry-in-the-wild",
+    "title": "Glasswing Canopy Sentry: In the Wild",
+    "tests": "Hybrid creature pair slot: matching in-the-wild field photo; same Glasswing Canopy Sentry adult phenotype and cloud-forest habitat as the development map; no labels or lab content.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Glasswing Canopy Sentry\", a clearly fictional two-source hybrid of glass frog + dragonfly, clinging under a broad wet leaf above a misty cloud-forest stream at blue dusk. Preserve the shared phenotype: palm-length horizontal amphibian body, translucent lime glass-frog skin with subtle visible internal silhouettes but no gore, delicate sticky toe pads, four folded clear dragonfly wings with fine iridescent venation, large bronze-green compound eyes, slim banded dragonfly abdomen, dew beads, bromeliads, moss, wet bark, fern fronds, tiny dusk insects, and a plain field ruler tucked into moss for scale. No text, labels, lab setting, real genetics, surgery, or gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Glasswing Canopy Sentry; [SOURCE_A] = glass frog; [SOURCE_B] = dragonfly; [HABITAT] = wet cloud-forest stream leaves at blue dusk; adult phenotype = palm-length horizontal leaf-clinging amphibian with translucent lime frog skin, visible internal silhouettes, sticky toe pads, four clear veined dragonfly wings, bronze-green compound eyes, and a slim banded dragonfly abdomen.",
+    "image": "images/2026-07-10-hybrid-creature-wild-glasswing-canopy-sentry-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-10-hybrid-creature-wild-glasswing-canopy-sentry-in-the-wild.webp",
+    "color": "#2b3c34",
+    "date": "2026-07-10",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glasswing Canopy Sentry",
+      "imageKind": "wild",
+      "description": "A fictional glass frog plus dragonfly cloud-forest sentry photographed under wet leaves above a misty stream.",
+      "continuity": "Same adult phenotype across both images: palm-length leaf-clinging amphibian, translucent lime skin, toe pads, four clear veined wings, bronze-green compound eyes, banded abdomen, dew beads, and cloud-forest stream habitat."
+    }
   }
 ]
