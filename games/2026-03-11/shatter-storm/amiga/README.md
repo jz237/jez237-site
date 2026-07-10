@@ -1,4 +1,4 @@
-# Shatter Storm: Amiga Edition v3.0.3
+# Shatter Storm: Amiga Edition v3.0.4
 
 A standalone enhanced brick breaker derived from the clean-room browser remake
 inspired by Jez's supplied 1987 Amiga disk.
@@ -45,3 +45,18 @@ content sounded like wind. The optional score now chains four spectrally
 verified Amiga gamerips from Project-X and Apidya, selected from Jez's
 existing Amiga Sounds archive. It can be switched off or mixed independently
 from the effects.
+
+Version 3.0.4 fixes the wind noise for good. The entire Project-X, Apidya, and
+Turrican II render folders in the Amiga Sounds archive turned out to be
+malformed at the source (frequency sweeps over broadband noise — spectral
+flatness screening was fooled because swept tones measure "tonal"). The
+playlist is rebuilt from four tracks that were verified by reading their
+spectrograms (harmonic and rhythmic structure, no sweeps or wash): Pinball
+Dreams "Ignition", Lotus Turbo Challenge 2 title, Xenon 2 "Megablast"
+(in-game), and Jim Power title, all loudness-normalized to -14 LUFS. The tonal
+chip effects are replaced with genuine Amiga Paula sound: FS-UAE emulator
+captures (brick x3 variants, paddle, wall, launch, laser, bonus, death, round),
+peak-normalized and encoded to MP3 for Safari compatibility. The music player
+now reuses a single audio element so the playlist keeps advancing on iOS, and
+a failed sample playback falls back to a chip tone instead of silence.
+Provenance for every file is recorded in `audio/sfx-manifest.json`.
