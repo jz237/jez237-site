@@ -60,13 +60,95 @@
   const samplePaths = {
     brick: ["audio/brick-1.ogg", "audio/brick-2.ogg", "audio/brick-3.ogg"],
     paddle: ["audio/paddle.ogg"],
-    wall: ["audio/wall.ogg"],
-    launch: ["audio/launch.ogg"],
-    death: ["audio/death.ogg"],
-    laser: ["audio/laser.ogg"],
-    bonus: ["audio/bonus.ogg"],
-    round: ["audio/round-clear.ogg"]
+    wall: ["audio/wall.ogg"]
   };
+  const MUSIC_PLAYLIST = Object.freeze([
+    { src: "audio/project-x-level-2.mp3", title: "Project-X · Level 2", gain: 1 },
+    { src: "audio/turrican-ii-concerto.mp3", title: "Turrican II · Concerto for Lasers", gain: .82 },
+    { src: "audio/project-x-level-3.mp3", title: "Project-X · Level 3", gain: 1 },
+    { src: "audio/apidya-techno-party.mp3", title: "Apidya · Techno Party", gain: .82 }
+  ]);
+  const LEVEL_BLUEPRINTS = Object.freeze([
+    {
+      name: "RAINBOW WALL",
+      rows: [
+        "00000000000000", "11111111111111", "33333333333333",
+        "66666666666666", "77777777777777", "44444444444444"
+      ]
+    },
+    {
+      name: "CIRCUIT BREAKER",
+      rows: [
+        "SS..SS..SS..SS", "GG11GG11GG11GG", ".333..333..333",
+        "66..SS..SS..66", ".777..777..777", "44GG44..44GG44",
+        "..55..SS..55.."
+      ]
+    },
+    {
+      name: "VAUS PYRAMID",
+      rows: [
+        "......00......", ".....0000.....", "....666666....",
+        "...666SS666...", "..666SSSS666..", ".666SSGGSS666.",
+        "66666666666666"
+      ]
+    },
+    {
+      name: "IRON FORTRESS",
+      rows: [
+        "GGGGGGGGGGGGGG", "G111111111111G", "G1..........1G",
+        "G1.SSSSSSSS.1G", "G1.S......S.1G", "G1.S.7777.S.1G",
+        "G1.SSSSSSSS.1G", "G111111111111G"
+      ]
+    },
+    {
+      name: "TWIN REACTORS",
+      rows: [
+        ".3333....3333.", "333333..333333", "33SS33..33SS33",
+        "33GG33..33GG33", ".3333....3333.", "..66..SS..66..",
+        ".6666....6666."
+      ]
+    },
+    {
+      name: "DIAMOND MINE",
+      rows: [
+        "......44......", ".....4444.....", "....445544....",
+        "...455SS554...", "..45SSGGSS54..", "...455SS554...",
+        "....445544....", ".....4444.....", "......44......"
+      ]
+    },
+    {
+      name: "ALIEN SIGNAL",
+      rows: [
+        "..77......77..", "...77....77...", "....777777....",
+        "..777S77S777..", ".777777777777.", ".77..7777..77.",
+        ".....G..G.....", "....77..77...."
+      ]
+    },
+    {
+      name: "NEON CAUSEWAY",
+      rows: [
+        "SSSSSSSSSSSSSS", "1.2.3.4.5.6.7.", ".2.3.4.5.6.7.1",
+        "22GG33GG44GG55", "..66..77..11..", "5555..SS..5555",
+        "..4444444444.."
+      ]
+    },
+    {
+      name: "SPLIT CHAMBER",
+      rows: [
+        "111111..111111", "1SSSS1..1SSSS1", "1S..S1..1S..S1",
+        "1S.GS1..1SG.S1", "1S..S1..1S..S1", "1SSSS1..1SSSS1",
+        "111111..111111"
+      ]
+    },
+    {
+      name: "STORM CROWN",
+      rows: [
+        "G..G..GG..G..G", "GG.G.GSSG.G.GG", ".GGG666666GGG.",
+        "..666SSSS666..", ".66SS7777SS66.", "666777GG777666",
+        "..3333333333..", "...44444444..."
+      ]
+    }
+  ]);
   const sampleBank = new Map();
   const sampleCursor = new Map();
   const sampleLastPlayed = new Map();
@@ -76,10 +158,11 @@
     expert: { lives: 3, paddleWidth: 102, paddleSpeed: 700, ballSpeed: 1.14, capsuleChance: .13, enemyDelay: .78, enemySpeed: 1.18 }
   });
   const defaultSettings = Object.freeze({
+    version: 2,
     difficulty: "classic",
     resolution: "auto",
     masterVolume: .85,
-    musicVolume: .9,
+    musicVolume: .95,
     sfxVolume: .82,
     musicEnabled: true,
     sfxEnabled: true,
@@ -108,6 +191,7 @@
   let musicEnabled = settings.musicEnabled;
   let audioContext = null;
   let musicTrack = null;
+  let musicTrackIndex = 0;
   let settingsWasPlaying = false;
   let renderScale = 1;
   let enemyTimer = 7;
@@ -151,6 +235,10 @@
     try {
       const saved = JSON.parse(localStorage.getItem("shatter-storm-amiga-settings") || "{}");
       const merged = { ...defaultSettings, ...saved };
+      if (saved.version !== defaultSettings.version) {
+        merged.version = defaultSettings.version;
+        merged.musicVolume = defaultSettings.musicVolume;
+      }
       if (!difficultyProfiles[merged.difficulty]) merged.difficulty = "classic";
       if (!["auto", "720", "1080", "1440"].includes(merged.resolution)) merged.resolution = "auto";
       ["masterVolume", "musicVolume", "sfxVolume"].forEach(key => {
@@ -265,19 +353,34 @@
     return true;
   }
 
+  function musicVolumeFor(trackInfo = MUSIC_PLAYLIST[musicTrackIndex]) {
+    return Math.max(0, Math.min(1,
+      settings.masterVolume * settings.musicVolume * (trackInfo?.gain || 1)
+    ));
+  }
+
   function ensureMusicTrack() {
-    if (musicTrack) return musicTrack;
-    musicTrack = new Audio("audio/project-x-level-1-1.mp3");
-    musicTrack.loop = true;
+    const trackInfo = MUSIC_PLAYLIST[musicTrackIndex];
+    if (musicTrack?.dataset.src === trackInfo.src) return musicTrack;
+    if (musicTrack) musicTrack.pause();
+    musicTrack = new Audio(trackInfo.src);
+    musicTrack.dataset.src = trackInfo.src;
     musicTrack.preload = "auto";
-    musicTrack.volume = 0;
+    musicTrack.volume = musicVolumeFor(trackInfo);
+    musicButton.title = `Now playing: ${trackInfo.title}`;
+    musicButton.setAttribute("aria-label", `Toggle music. Now playing ${trackInfo.title}`);
+    musicTrack.addEventListener("ended", () => {
+      musicTrackIndex = (musicTrackIndex + 1) % MUSIC_PLAYLIST.length;
+      musicTrack = null;
+      startMusic();
+    });
     return musicTrack;
   }
 
   function startMusic() {
     if (!musicEnabled || (state !== STATES.PLAYING && state !== STATES.LEVEL_CLEAR)) return;
     const track = ensureMusicTrack();
-    track.volume = Math.max(0, Math.min(1, settings.masterVolume * settings.musicVolume));
+    track.volume = musicVolumeFor();
     track.play().catch(() => {});
   }
 
@@ -288,40 +391,25 @@
 
   function makeLevel(levelIndex) {
     const cols = 14;
-    const rows = 10;
     const gap = 5;
     const marginX = 57;
     const top = 92;
     const brickW = (W - marginX * 2 - gap * (cols - 1)) / cols;
     const brickH = 23;
-    const pattern = levelIndex % 8;
+    const blueprint = LEVEL_BLUEPRINTS[levelIndex % LEVEL_BLUEPRINTS.length];
+    const cycle = Math.floor(levelIndex / LEVEL_BLUEPRINTS.length);
     const levelBricks = [];
     remainingBreakable = 0;
 
-    for (let row = 0; row < rows; row += 1) {
+    for (let row = 0; row < blueprint.rows.length; row += 1) {
       for (let col = 0; col < cols; col += 1) {
-        const centerDistance = Math.abs(col - (cols - 1) / 2);
-        let filled = true;
-        let gold = false;
-        let hp = 1;
-
-        if (pattern === 0) filled = row < 7;
-        if (pattern === 1) filled = ((row + col) % 2 === 0) || row < 2;
-        if (pattern === 2) filled = centerDistance <= 5 - Math.abs(row - 4.5) * .75;
-        if (pattern === 3) filled = row < 8 && (col < 3 || col > 10 || row < 3 || row > 6);
-        if (pattern === 4) filled = row < 9 && ((col + Math.floor(row / 2)) % 4 !== 0);
-        if (pattern === 5) filled = row < 9 && (row % 3 !== 2 || col % 3 !== 1);
-        if (pattern === 6) filled = row < 9 && (centerDistance > 1.4 || row % 2 === 0);
-        if (pattern === 7) filled = row < 9 && (Math.sin(col * .9 + row * 1.4) > -.55);
-        if (!filled) continue;
-
-        if (levelIndex > 0 && row > 1 && ((row * 17 + col * 11 + levelIndex * 7) % 29 === 0)) {
-          gold = true;
-        } else if (levelIndex >= 2 && ((row * 13 + col * 5 + levelIndex) % 17 === 0)) {
-          hp = 2;
-        }
-
-        const colorIndex = 1 + ((row + Math.floor(levelIndex / 2)) % 7);
+        const symbol = blueprint.rows[row][col] || ".";
+        if (symbol === ".") continue;
+        const gold = symbol === "G";
+        const silver = symbol === "S";
+        let hp = silver ? 2 : 1;
+        if (!gold && cycle > 0 && (row * 5 + col * 3 + levelIndex) % 11 < Math.min(cycle, 3)) hp += 1;
+        const colorIndex = gold ? 3 : silver ? 0 : Number(symbol);
         levelBricks.push({
           x: marginX + col * (brickW + gap),
           y: top + row * (brickH + gap),
@@ -338,6 +426,10 @@
       }
     }
     return levelBricks;
+  }
+
+  function levelName(levelIndex) {
+    return LEVEL_BLUEPRINTS[levelIndex % LEVEL_BLUEPRINTS.length].name;
   }
 
   function startGame() {
@@ -372,7 +464,7 @@
     paddle.catchTimer = 0;
     balls = [];
     serveBall();
-    setMessage(`ROUND ${round + 1}`, 1.35);
+    setMessage(`ROUND ${round + 1} · ${levelName(round)}`, 1.55);
     if (!playSample("round", .58, 500)) chord([220, 330, 440], .055, .12);
     updateHud();
   }
@@ -1076,7 +1168,7 @@
       shade();
       logo("SHATTER", "STORM · AMIGA EDITION");
       centered("A 68000-ERA BRICK-BREAKING STORM", 374, 17, "#7bb5d9");
-      centered("ORIGINAL PAULA SFX · AUTHENTIC AMIGA MUSIC", 410, 15, "#ff8db0");
+      centered("AMIGA MIX · VERIFIED PAULA IMPACTS · 10 HANDCRAFTED ROUNDS", 410, 15, "#ff8db0");
       centered("SELECT START GAME OR OPTIONS", 490, 20, "#e9fbff", true);
       centered("Break every colored block. Gold blocks are indestructible.", 548, 15, "#83a2bb");
       centered("Catch falling capsules for expansion, lasers, multiball and more.", 574, 15, "#83a2bb");
@@ -1270,6 +1362,7 @@
 
   function applySettingsFromForm() {
     settings = {
+      version: defaultSettings.version,
       difficulty: difficultyInput.value,
       resolution: resolutionInput.value,
       masterVolume: Number(masterInput.value) / 100,
@@ -1284,7 +1377,7 @@
     musicEnabled = settings.musicEnabled;
     applyRenderResolution();
     crt.classList.toggle("crt-off", !settings.scanlines);
-    muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
+    muteButton.textContent = muted ? "SOUND OFF" : "SOUND ON";
     musicButton.textContent = musicEnabled ? "MUSIC ON" : "MUSIC OFF";
     saveSettings();
     if (musicEnabled) startMusic(); else stopMusic();
@@ -1313,7 +1406,7 @@
   function toggleMute() {
     muted = !muted;
     settings.sfxEnabled = !muted;
-    muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
+    muteButton.textContent = muted ? "SOUND OFF" : "SOUND ON";
     saveSettings();
   }
 
@@ -1363,7 +1456,7 @@
   syncSettingsForm();
   applyRenderResolution();
   crt.classList.toggle("crt-off", !settings.scanlines);
-  muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
+  muteButton.textContent = muted ? "SOUND OFF" : "SOUND ON";
   musicButton.textContent = musicEnabled ? "MUSIC ON" : "MUSIC OFF";
   titleMenu.hidden = false;
   titleStart.focus({ preventScroll: true });
