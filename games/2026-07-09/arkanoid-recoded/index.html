@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#050817">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="description" content="Play Arkanoid: Recoded, an enhanced mobile-friendly browser brick breaker with original Amiga Paula effects and a new tracker-style score.">
+  <link rel="canonical" href="https://jez237.com/games/2026-07-09/arkanoid-recoded/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Arkanoid: Recoded — Enhanced Amiga-Style Browser Game">
+  <meta property="og:description" content="A touch-friendly clean-room Arkanoid remake with original Amiga Paula effects, tracker-style music, power-ups, lasers and multiball.">
+  <meta property="og:url" content="https://jez237.com/games/2026-07-09/arkanoid-recoded/">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <title>Arkanoid: Recoded</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="game-shell">
+    <header class="topbar" aria-label="Game status">
+      <div><span>SCORE</span><strong id="score">000000</strong></div>
+      <div><span>HIGH</span><strong id="high-score">000000</strong></div>
+      <div><span>ROUND</span><strong id="round">01</strong></div>
+      <div><span>VAUS</span><strong id="lives">●●●</strong></div>
+    </header>
+
+    <section id="stage-wrap">
+      <canvas id="game" width="960" height="720" aria-label="Arkanoid game area"></canvas>
+      <div id="crt" aria-hidden="true"></div>
+    </section>
+
+    <footer class="controls">
+      <span class="desktop-help">MOVE <b>Mouse / ← →</b></span>
+      <span class="desktop-help">LAUNCH / FIRE <b>Click / Space</b></span>
+      <span class="touch-help">DRAG TO MOVE · TAP TO LAUNCH / FIRE</span>
+      <button id="pause-button" type="button" aria-label="Pause or resume game">PAUSE</button>
+      <button id="fullscreen-button" type="button" aria-label="Toggle full screen">FULLSCREEN</button>
+      <button id="music" type="button" aria-label="Toggle tracker music">MUSIC ON</button>
+      <button id="mute" type="button" aria-label="Toggle sound">AMIGA SOUND ON</button>
+    </footer>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
