@@ -28,6 +28,11 @@
     <section id="stage-wrap">
       <canvas id="game" width="960" height="720" aria-label="Shatter Storm Amiga Edition game area"></canvas>
       <div id="crt" aria-hidden="true"></div>
+      <nav id="title-menu" aria-label="Shatter Storm Amiga Edition title menu">
+        <button id="title-start" type="button">START GAME</button>
+        <button id="title-options" type="button">OPTIONS</button>
+        <a href="../">SHATTER STORM</a>
+      </nav>
     </section>
 
     <footer class="controls">
@@ -36,13 +41,13 @@
       <span class="touch-help">DRAG TO MOVE · TAP TO LAUNCH / FIRE</span>
       <button id="pause-button" type="button" aria-label="Pause or resume game">PAUSE</button>
       <button id="settings-button" type="button" aria-label="Open game settings">SETTINGS</button>
-      <a class="menu-link" href="../" aria-label="Return to Shatter Storm edition menu">EDITIONS</a>
+      <a class="menu-link" href="../" aria-label="Return to Shatter Storm edition menu">SHATTER STORM</a>
       <button id="fullscreen-button" type="button" aria-label="Toggle full screen">FULLSCREEN</button>
       <button id="music" type="button" aria-label="Toggle authentic Amiga music">MUSIC ON</button>
       <button id="mute" type="button" aria-label="Toggle sound">AMIGA SOUND ON</button>
     </footer>
 
-    <section id="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <section id="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title" hidden>
       <form id="settings-form" class="settings-card">
         <div class="settings-heading">
           <p>SHATTER STORM · AMIGA EDITION</p>
@@ -57,6 +62,16 @@
               <option value="relaxed">Relaxed — wider Vaus, slower ball</option>
               <option value="classic" selected>Classic — intended balance</option>
               <option value="expert">Expert — fast ball, fewer bonuses</option>
+            </select>
+          </label>
+
+          <label class="setting setting-wide" for="resolution">
+            <span>RENDER RESOLUTION</span>
+            <select id="resolution" name="resolution">
+              <option value="auto" selected>Auto — match this display</option>
+              <option value="720">Classic — 960 × 720</option>
+              <option value="1080">HD — 1440 × 1080</option>
+              <option value="1440">Ultra — 1920 × 1440</option>
             </select>
           </label>
 
@@ -85,8 +100,8 @@
 
         <p class="settings-note">Authentic Amiga soundtrack: Project-X — Level 1-1, selected from the Amiga Sounds archive.</p>
         <div class="settings-actions">
-          <button id="settings-cancel" type="button" hidden>CANCEL</button>
-          <button id="settings-start" type="submit">START GAME</button>
+          <button id="settings-cancel" type="button">CANCEL</button>
+          <button id="settings-start" type="submit">SAVE SETTINGS</button>
         </div>
       </form>
     </section>

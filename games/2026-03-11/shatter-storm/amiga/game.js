@@ -12,6 +12,9 @@
   const pauseButton = document.querySelector("#pause-button");
   const settingsButton = document.querySelector("#settings-button");
   const fullscreenButton = document.querySelector("#fullscreen-button");
+  const titleMenu = document.querySelector("#title-menu");
+  const titleStart = document.querySelector("#title-start");
+  const titleOptions = document.querySelector("#title-options");
   const gameShell = document.querySelector("#game-shell");
   const stageWrap = document.querySelector("#stage-wrap");
   const topbar = document.querySelector(".topbar");
@@ -22,6 +25,7 @@
   const settingsCancel = document.querySelector("#settings-cancel");
   const settingsStart = document.querySelector("#settings-start");
   const difficultyInput = document.querySelector("#difficulty");
+  const resolutionInput = document.querySelector("#resolution");
   const masterInput = document.querySelector("#master-volume");
   const musicVolumeInput = document.querySelector("#music-volume");
   const sfxVolumeInput = document.querySelector("#sfx-volume");
@@ -73,6 +77,7 @@
   });
   const defaultSettings = Object.freeze({
     difficulty: "classic",
+    resolution: "auto",
     masterVolume: .85,
     musicVolume: .9,
     sfxVolume: .82,
@@ -104,7 +109,7 @@
   let audioContext = null;
   let musicTrack = null;
   let settingsWasPlaying = false;
-  let firstLaunch = true;
+  let renderScale = 1;
   let enemyTimer = 7;
   let remainingBreakable = 0;
   const keys = new Set();
@@ -147,6 +152,7 @@
       const saved = JSON.parse(localStorage.getItem("shatter-storm-amiga-settings") || "{}");
       const merged = { ...defaultSettings, ...saved };
       if (!difficultyProfiles[merged.difficulty]) merged.difficulty = "classic";
+      if (!["auto", "720", "1080", "1440"].includes(merged.resolution)) merged.resolution = "auto";
       ["masterVolume", "musicVolume", "sfxVolume"].forEach(key => {
         merged[key] = Math.max(0, Math.min(1, Number(merged[key])));
       });
@@ -162,6 +168,17 @@
 
   function difficultyProfile() {
     return difficultyProfiles[settings.difficulty] || difficultyProfiles.classic;
+  }
+
+  function applyRenderResolution() {
+    const scaleByMode = { "720": 1, "1080": 1.5, "1440": 2 };
+    const nextScale = settings.resolution === "auto"
+      ? Math.max(1, Math.min(2, window.devicePixelRatio || 1))
+      : scaleByMode[settings.resolution] || 1;
+    if (renderScale === nextScale && canvas.width === Math.round(W * nextScale)) return;
+    renderScale = nextScale;
+    canvas.width = Math.round(W * renderScale);
+    canvas.height = Math.round(H * renderScale);
   }
 
   function saveHighScore() {
@@ -325,6 +342,7 @@
 
   function startGame() {
     const profile = difficultyProfile();
+    titleMenu.hidden = true;
     score = 0;
     round = 0;
     lives = profile.lives;
@@ -811,6 +829,7 @@
   }
 
   function draw() {
+    ctx.setTransform(renderScale, 0, 0, renderScale, 0, 0);
     ctx.save();
     if (shake > 0) ctx.translate((Math.random() - .5) * shake, (Math.random() - .5) * shake);
     drawBackground();
@@ -1058,7 +1077,7 @@
       logo("SHATTER", "STORM · AMIGA EDITION");
       centered("A 68000-ERA BRICK-BREAKING STORM", 374, 17, "#7bb5d9");
       centered("ORIGINAL PAULA SFX · AUTHENTIC AMIGA MUSIC", 410, 15, "#ff8db0");
-      centered("CLICK / TAP OR PRESS SPACE TO START", 490, 22, "#e9fbff", true);
+      centered("SELECT START GAME OR OPTIONS", 490, 20, "#e9fbff", true);
       centered("Break every colored block. Gold blocks are indestructible.", 548, 15, "#83a2bb");
       centered("Catch falling capsules for expansion, lasers, multiball and more.", 574, 15, "#83a2bb");
     } else if (state === STATES.PAUSED) {
@@ -1238,6 +1257,7 @@
 
   function syncSettingsForm() {
     difficultyInput.value = settings.difficulty;
+    resolutionInput.value = settings.resolution;
     masterInput.value = Math.round(settings.masterVolume * 100);
     musicVolumeInput.value = Math.round(settings.musicVolume * 100);
     sfxVolumeInput.value = Math.round(settings.sfxVolume * 100);
@@ -1251,6 +1271,7 @@
   function applySettingsFromForm() {
     settings = {
       difficulty: difficultyInput.value,
+      resolution: resolutionInput.value,
       masterVolume: Number(masterInput.value) / 100,
       musicVolume: Number(musicVolumeInput.value) / 100,
       sfxVolume: Number(sfxVolumeInput.value) / 100,
@@ -1261,6 +1282,7 @@
     };
     muted = !settings.sfxEnabled;
     musicEnabled = settings.musicEnabled;
+    applyRenderResolution();
     crt.classList.toggle("crt-off", !settings.scanlines);
     muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
     musicButton.textContent = musicEnabled ? "MUSIC ON" : "MUSIC OFF";
@@ -1274,20 +1296,16 @@
     if (settingsWasPlaying) state = STATES.PAUSED;
     stopMusic();
     syncSettingsForm();
-    settingsCancel.hidden = firstLaunch;
-    settingsStart.textContent = firstLaunch ? "START GAME" : (settingsWasPlaying ? "SAVE & RESUME" : "SAVE SETTINGS");
+    titleMenu.hidden = true;
+    settingsStart.textContent = settingsWasPlaying ? "SAVE & RESUME" : "SAVE SETTINGS";
     settingsPanel.hidden = false;
     settingsStart.focus({ preventScroll: true });
   }
 
   function closeSettings(resume) {
     settingsPanel.hidden = true;
-    if (firstLaunch) {
-      firstLaunch = false;
-      startGame();
-      return;
-    }
     if (resume && settingsWasPlaying) state = STATES.PLAYING;
+    titleMenu.hidden = state !== STATES.TITLE;
     lastTime = performance.now();
     if (state === STATES.PLAYING || state === STATES.LEVEL_CLEAR) startMusic();
   }
@@ -1312,6 +1330,12 @@
   pauseButton.addEventListener("click", togglePause);
   settingsButton.addEventListener("click", openSettings);
   fullscreenButton.addEventListener("click", toggleFullscreen);
+  titleStart.addEventListener("click", () => {
+    audio();
+    primeSamples();
+    startGame();
+  });
+  titleOptions.addEventListener("click", openSettings);
   settingsForm.addEventListener("submit", event => {
     event.preventDefault();
     applySettingsFromForm();
@@ -1323,7 +1347,10 @@
   });
   [masterInput, musicVolumeInput, sfxVolumeInput].forEach(input => input.addEventListener("input", updateVolumeLabels));
   document.addEventListener("fullscreenchange", () => requestAnimationFrame(fitFullscreenStage));
-  window.addEventListener("resize", () => requestAnimationFrame(fitFullscreenStage));
+  window.addEventListener("resize", () => {
+    if (settings.resolution === "auto") applyRenderResolution();
+    requestAnimationFrame(fitFullscreenStage);
+  });
 
   function frame(now) {
     const dt = Math.min(.033, Math.max(0, (now - lastTime) / 1000));
@@ -1334,10 +1361,12 @@
   }
 
   syncSettingsForm();
+  applyRenderResolution();
   crt.classList.toggle("crt-off", !settings.scanlines);
   muteButton.textContent = muted ? "AMIGA SOUND OFF" : "AMIGA SOUND ON";
   musicButton.textContent = musicEnabled ? "MUSIC ON" : "MUSIC OFF";
-  settingsStart.focus({ preventScroll: true });
+  titleMenu.hidden = false;
+  titleStart.focus({ preventScroll: true });
   updateHud();
   requestAnimationFrame(frame);
 })();

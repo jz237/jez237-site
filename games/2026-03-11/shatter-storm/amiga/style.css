@@ -33,7 +33,7 @@ body {
 
 #game-shell {
   position: relative;
-  width: min(100%, 1040px, calc((100dvh - 94px) * 4 / 3));
+  width: min(100%, 1040px, calc((100dvh - 164px) * 4 / 3));
   display: grid;
   gap: 8px;
   user-select: none;
@@ -105,7 +105,42 @@ body {
 
 #crt.crt-off { opacity: 0; }
 
+#title-menu {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  bottom: 6%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  width: min(94%, 560px);
+  transform: translateX(-50%);
+}
+
+#title-menu button,
+#title-menu a {
+  flex: 1 1 0;
+  min-height: 42px;
+  border: 1px solid #5e9aca;
+  border-radius: 2px;
+  padding: 8px 10px;
+  color: #dff9ff;
+  background: linear-gradient(180deg, rgba(18, 68, 108, .96), rgba(6, 25, 48, .96));
+  box-shadow: 0 0 16px #139bd347;
+  font: bold 11px/1.15 monospace;
+  letter-spacing: .07em;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+#title-menu button:hover,
+#title-menu a:hover { background: linear-gradient(180deg, #17618e, #0a3458); }
+
 .controls {
+  position: relative;
+  z-index: 6;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -269,6 +304,8 @@ body {
   .desktop-help { display: none; }
   .touch-help { display: inline; width: 100%; text-align: center; }
   #mute, #music, #pause-button, #settings-button, #game-shell .menu-link, #fullscreen-button { padding: 6px 8px; font-size: 9px; }
+  #title-menu { gap: 5px; width: 97%; }
+  #title-menu button, #title-menu a { min-height: 36px; padding: 5px 3px; font-size: 8px; letter-spacing: .02em; }
   #settings-panel { position: fixed; width: 100vw; height: 100dvh; }
   .settings-card { padding: 14px; }
   .settings-grid { gap: 11px 14px; margin-top: 15px; }
@@ -307,6 +344,8 @@ body {
   .controls { min-height: 26px; padding: 1px; gap: 3px; }
   .touch-help { display: none; }
   #mute, #music, #pause-button, #settings-button, #game-shell .menu-link, #fullscreen-button { min-height: 28px; padding: 4px 6px; font-size: 8px; }
+  #title-menu { bottom: 3%; }
+  #title-menu button, #title-menu a { min-height: 30px; font-size: 7px; }
   #settings-panel { position: fixed; width: 100vw; height: 100dvh; align-items: start; padding: 4px; }
   .settings-card { width: min(100%, 710px); padding: 8px 12px; }
   .settings-heading p, .settings-heading > span, .settings-note { display: none; }
