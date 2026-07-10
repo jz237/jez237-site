@@ -36,6 +36,7 @@
 
   const W = canvas.width;
   const H = canvas.height;
+  const VERSION = "v3.0.0";
   const PLAY_LEFT = 34;
   const PLAY_RIGHT = W - 34;
   const PLAY_TOP = 48;
@@ -58,9 +59,14 @@
     S: "SLOW", B: "MULTIBALL", P: "EXTRA VAUS"
   };
   const samplePaths = {
-    brick: ["audio/brick-1.ogg", "audio/brick-2.ogg", "audio/brick-3.ogg"],
-    paddle: ["audio/paddle.ogg"],
-    wall: ["audio/wall.ogg"]
+    brick: ["audio/brick.mp3"],
+    paddle: ["audio/paddle.mp3"],
+    wall: ["audio/wall.mp3"],
+    launch: ["audio/launch.mp3"],
+    laser: ["audio/laser.mp3"],
+    bonus: ["audio/bonus.mp3"],
+    death: ["audio/death.mp3"],
+    round: ["audio/round.mp3"]
   };
   const MUSIC_PLAYLIST = Object.freeze([
     { src: "audio/project-x-level-2.mp3", title: "Project-X · Level 2", gain: 1 },
@@ -349,6 +355,7 @@
     sampleCursor.set(name, cursor + 1);
     const sound = pool[cursor % pool.length].cloneNode(true);
     sound.volume = Math.max(0, Math.min(1, volume * settings.masterVolume * settings.sfxVolume));
+    if (name === "brick") sound.playbackRate = .94 + Math.random() * .12;
     sound.play().catch(() => {});
     return true;
   }
@@ -548,7 +555,7 @@
     if (!brick.alive) return;
     brick.flash = .12;
     if (brick.gold) {
-      if (!playSample("wall", .34, 65)) tone(145, .05, "square", .022, -25);
+      if (!playSample("wall", .52, 65)) tone(145, .05, "square", .022, -25);
       spark(sourceX, sourceY, "#ffd76a", 5);
       return;
     }
@@ -737,16 +744,16 @@
         if (ball.x - ball.r < PLAY_LEFT) {
           ball.x = PLAY_LEFT + ball.r;
           ball.vx = Math.abs(ball.vx);
-          if (!playSample("wall", .2, 80)) tone(118, .02, "square", .012, 5);
+          if (!playSample("wall", .4, 70)) tone(118, .02, "square", .012, 5);
         } else if (ball.x + ball.r > PLAY_RIGHT) {
           ball.x = PLAY_RIGHT - ball.r;
           ball.vx = -Math.abs(ball.vx);
-          if (!playSample("wall", .2, 80)) tone(118, .02, "square", .012, 5);
+          if (!playSample("wall", .4, 70)) tone(118, .02, "square", .012, 5);
         }
         if (ball.y - ball.r < PLAY_TOP) {
           ball.y = PLAY_TOP + ball.r;
           ball.vy = Math.abs(ball.vy);
-          if (!playSample("wall", .22, 80)) tone(128, .025, "square", .014, 8);
+          if (!playSample("wall", .42, 70)) tone(128, .025, "square", .014, 8);
         }
 
         if (ball.vy > 0 && previousY + ball.r <= paddle.y + 3 && circleRect(ball, paddle)) {
@@ -1168,7 +1175,8 @@
       shade();
       logo("SHATTER", "STORM · AMIGA EDITION");
       centered("A 68000-ERA BRICK-BREAKING STORM", 374, 17, "#7bb5d9");
-      centered("AMIGA MIX · VERIFIED PAULA IMPACTS · 10 HANDCRAFTED ROUNDS", 410, 15, "#ff8db0");
+      centered("AMIGA MIX · CLEAN MP3 ARCADE SFX · 10 HANDCRAFTED ROUNDS", 410, 15, "#ff8db0");
+      centered(VERSION, 442, 13, "#6589a5");
       centered("SELECT START GAME OR OPTIONS", 490, 20, "#e9fbff", true);
       centered("Break every colored block. Gold blocks are indestructible.", 548, 15, "#83a2bb");
       centered("Catch falling capsules for expansion, lasers, multiball and more.", 574, 15, "#83a2bb");
