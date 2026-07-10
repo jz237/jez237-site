@@ -329,5 +329,24 @@
       "description": "Explains how electrochromic window layers darken and clear through ion movement, color-center formation, conductive coatings, and laminated material design.",
       "sourceNote": "Real-world/non-fiction materials-science summary based on established electrochromic glass principles; no exact voltages or build instructions included."
     }
+  },
+  {
+    "id": "2026-07-10-factual-infographic-factual-infographic-how-termite-mounds-",
+    "title": "Factual infographic: How Termite Mounds Breathe Without Fans",
+    "tests": "GPT Image 2 factual infographic prompt archive; exact CLI output verified before append; high-detail information architecture with central cutaway, process sequence, macro windows, gas exchange, context vignette, and comparison strip.",
+    "prompt": "Create a factual, real-world/non-fiction scientific infographic titled \"How Termite Mounds Breathe Without Fans\" as a colorful photorealistic museum-lab wall chart, anchored to a sunlit field research table beside a cut-open termite mound sample, not a flat school poster. Use accurate conservative biology: termite mounds help buffer temperature, humidity, oxygen and carbon dioxide exchange through porous walls, tunnels, chimney-like shafts, and daily temperature/wind gradients; avoid claiming termites use mechanical fans or exact universal numbers.\n\nInformation architecture with distinct visual layers: (1) central large cutaway of a cathedral termite mound showing outer porous buttresses, inner nest chambers, vertical chimney passages, lateral galleries, fungal comb/nursery zones, and tiny termites for scale; (2) a left-to-right day/night breathing sequence with warm daytime sun heating the outer wall and cooler night air reversing pressure and convection patterns, shown with restrained blue/orange airflow arrows; (3) two macro windows, one of porous soil pellets and one of moist fungal comb texture with beadlike humidity, photographed through a field macro lens; (4) a gas-exchange comparison panel showing oxygen-rich outside air and carbon-dioxide-rich nest air moving through wall pores without real lab protocol; (5) habitat/context vignette with savanna grass, shade line, wind ribbon, thermometer/hygrometer icons, and a field notebook partly visible but not text-heavy; (6) small comparison strip of sealed clay wall vs porous mound wall to explain why permeability matters. Clean concise labels only, crisp panel hierarchy, lively earth red, mineral yellow, cool cyan airflow, leaf green habitat swatches, realistic soil grains, termites visible but not oversized, no invented statistics, no dense paragraphs, no gore, no humans.\n\nReusable template: Create a factual, real-world/non-fiction scientific infographic titled \"How [NATURAL_SYSTEM] Works\" as a colorful photorealistic museum-lab wall chart anchored to [FIELD_OR_LAB_CONTEXT]. Include a central cutaway, a day/night or cause/effect sequence, macro texture windows, a material or gas/energy exchange panel, a habitat/context vignette with scale cues, concise labels, and no invented statistics.",
+    "image": "images/2026-07-10-factual-infographic-factual-infographic-how-termite-mounds-.jpg",
+    "thumb": "thumbs/2026-07-10-factual-infographic-factual-infographic-how-termite-mounds-.webp",
+    "color": "#6f6250",
+    "date": "2026-07-10",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Termite mound ventilation and gas exchange",
+      "description": "Explains how termite mounds buffer heat, humidity, oxygen, and carbon dioxide through porous walls, galleries, chimney passages, and temperature-driven airflow.",
+      "sourceNote": "General conservative biology: termite mounds vary by species, but many combine porosity, tunnels, thermal gradients, wind, and humidity buffering to support nest gas exchange."
+    }
   }
 ]
