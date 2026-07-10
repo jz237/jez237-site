@@ -2,94 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#050817">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="description" content="Play Arkanoid: Recoded, an enhanced mobile-friendly browser brick breaker with original Amiga Paula effects and a new tracker-style score.">
-  <link rel="canonical" href="https://jez237.com/games/2026-07-09/arkanoid-recoded/">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Arkanoid: Recoded — Enhanced Amiga-Style Browser Game">
-  <meta property="og:description" content="A touch-friendly clean-room Arkanoid remake with original Amiga Paula effects, tracker-style music, power-ups, lasers and multiball.">
-  <meta property="og:url" content="https://jez237.com/games/2026-07-09/arkanoid-recoded/">
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <title>Arkanoid: Recoded</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="refresh" content="0;url=../../2026-03-11/shatter-storm/">
+  <link rel="canonical" href="https://jez237.com/games/2026-03-11/shatter-storm/">
+  <title>Shatter Storm</title>
+  <style>html{color-scheme:dark;background:#02040c;color:#dff8ff;font:14px monospace}body{min-height:100vh;display:grid;place-items:center;margin:0}a{color:#70dcff}</style>
 </head>
 <body>
-  <main id="game-shell">
-    <header class="topbar" aria-label="Game status">
-      <div><span>SCORE</span><strong id="score">000000</strong></div>
-      <div><span>HIGH</span><strong id="high-score">000000</strong></div>
-      <div><span>ROUND</span><strong id="round">01</strong></div>
-      <div><span>VAUS</span><strong id="lives">●●●</strong></div>
-    </header>
-
-    <section id="stage-wrap">
-      <canvas id="game" width="960" height="720" aria-label="Arkanoid game area"></canvas>
-      <div id="crt" aria-hidden="true"></div>
-    </section>
-
-    <footer class="controls">
-      <span class="desktop-help">MOVE <b>Mouse / ← →</b></span>
-      <span class="desktop-help">LAUNCH / FIRE <b>Click / Space</b></span>
-      <span class="touch-help">DRAG TO MOVE · TAP TO LAUNCH / FIRE</span>
-      <button id="pause-button" type="button" aria-label="Pause or resume game">PAUSE</button>
-      <button id="settings-button" type="button" aria-label="Open game settings">SETTINGS</button>
-      <button id="fullscreen-button" type="button" aria-label="Toggle full screen">FULLSCREEN</button>
-      <button id="music" type="button" aria-label="Toggle tracker music">MUSIC ON</button>
-      <button id="mute" type="button" aria-label="Toggle sound">AMIGA SOUND ON</button>
-    </footer>
-
-    <section id="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title">
-      <form id="settings-form" class="settings-card">
-        <div class="settings-heading">
-          <p>ARKANOID: RECODED</p>
-          <h1 id="settings-title">GAME SETTINGS</h1>
-          <span>Configure the cabinet, then launch.</span>
-        </div>
-
-        <div class="settings-grid">
-          <label class="setting setting-wide" for="difficulty">
-            <span>DIFFICULTY</span>
-            <select id="difficulty" name="difficulty">
-              <option value="relaxed">Relaxed — wider Vaus, slower ball</option>
-              <option value="classic" selected>Classic — intended balance</option>
-              <option value="expert">Expert — fast ball, fewer bonuses</option>
-            </select>
-          </label>
-
-          <label class="setting" for="master-volume">
-            <span>MASTER VOLUME <output id="master-value" for="master-volume">85%</output></span>
-            <input id="master-volume" name="masterVolume" type="range" min="0" max="100" value="85">
-          </label>
-
-          <label class="setting" for="music-volume">
-            <span>MUSIC VOLUME <output id="music-value" for="music-volume">78%</output></span>
-            <input id="music-volume" name="musicVolume" type="range" min="0" max="100" value="78">
-          </label>
-
-          <label class="setting" for="sfx-volume">
-            <span>PAULA SFX <output id="sfx-value" for="sfx-volume">82%</output></span>
-            <input id="sfx-volume" name="sfxVolume" type="range" min="0" max="100" value="82">
-          </label>
-
-          <div class="setting toggles" aria-label="Display and audio options">
-            <label><input id="music-enabled" type="checkbox" checked> TRACKER MUSIC</label>
-            <label><input id="sfx-enabled" type="checkbox" checked> AMIGA SFX</label>
-            <label><input id="scanlines-enabled" type="checkbox" checked> CRT SCANLINES</label>
-            <label><input id="shake-enabled" type="checkbox" checked> SCREEN SHAKE</label>
-          </div>
-        </div>
-
-        <p class="settings-note">New original score: four hard-panned, 8-bit sampled channels following classic Paula/ProTracker limits.</p>
-        <div class="settings-actions">
-          <button id="settings-cancel" type="button" hidden>CANCEL</button>
-          <button id="settings-start" type="submit">START GAME</button>
-        </div>
-      </form>
-    </section>
-  </main>
-  <script src="game.js"></script>
+  <p>This game is now <a href="../../2026-03-11/shatter-storm/">Shatter Storm</a>.</p>
 </body>
 </html>
