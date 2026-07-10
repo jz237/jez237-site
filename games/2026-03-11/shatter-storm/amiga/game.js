@@ -36,7 +36,7 @@
 
   const W = canvas.width;
   const H = canvas.height;
-  const VERSION = "v3.0.2";
+  const VERSION = "v3.0.3";
   const PLAY_LEFT = 34;
   const PLAY_RIGHT = W - 34;
   const PLAY_TOP = 48;
@@ -69,10 +69,10 @@
     round: ["audio/round-v301.mp3"]
   };
   const MUSIC_PLAYLIST = Object.freeze([
-    { src: "audio/turrican-ii-metal-stars-v302.mp3", title: "Turrican II · Metal Stars", gain: 1 },
-    { src: "audio/turrican-ii-hypercycle-v302.mp3", title: "Turrican II · Hypercycle Drive", gain: .82 },
-    { src: "audio/apidya-techno-party-v302.mp3", title: "Apidya · Techno Party", gain: .68 },
-    { src: "audio/turrican-ii-concerto-v302.mp3", title: "Turrican II · Concerto for Lasers", gain: .69 }
+    { src: "audio/project-x-level-2-v303.mp3", title: "Project-X · Level 2", gain: 1 },
+    { src: "audio/apidya-techno-party-v303.mp3", title: "Apidya · Techno Party", gain: .82 },
+    { src: "audio/apidya-title-v303.mp3", title: "Apidya · Title Theme", gain: .84 },
+    { src: "audio/project-x-level-5-v303.mp3", title: "Project-X · Level 5", gain: 1 }
   ]);
   const LEVEL_BLUEPRINTS = Object.freeze([
     {
