@@ -22,7 +22,11 @@ body {
   place-items: center;
   min-height: 100vh;
   min-height: 100dvh;
-  padding: 12px;
+  padding:
+    max(12px, env(safe-area-inset-top, 0px))
+    max(12px, env(safe-area-inset-right, 0px))
+    max(12px, env(safe-area-inset-bottom, 0px))
+    max(12px, env(safe-area-inset-left, 0px));
   overscroll-behavior: none;
 }
 
@@ -105,6 +109,7 @@ body {
   font: inherit;
   cursor: pointer;
   touch-action: manipulation;
+  min-height: 32px;
 }
 
 #mute:hover,
@@ -115,7 +120,13 @@ body {
 .touch-help { display: none; color: #9dc8e7; }
 
 @media (max-width: 700px) {
-  body { padding: 4px; }
+  body {
+    padding:
+      max(4px, env(safe-area-inset-top, 0px))
+      max(4px, env(safe-area-inset-right, 0px))
+      max(4px, env(safe-area-inset-bottom, 0px))
+      max(4px, env(safe-area-inset-left, 0px));
+  }
   #game-shell { gap: 4px; }
   .topbar { padding: 5px 4px; font-size: 11px; letter-spacing: .02em; }
   .topbar div { gap: .35em; }
@@ -126,10 +137,22 @@ body {
 }
 
 @media (max-height: 560px) and (orientation: landscape) {
-  body { padding: 2px; }
-  #game-shell { width: min(100vw, calc((100dvh - 68px) * 4 / 3)); gap: 2px; }
+  body {
+    padding:
+      max(2px, env(safe-area-inset-top, 0px))
+      max(2px, env(safe-area-inset-right, 0px))
+      max(2px, env(safe-area-inset-bottom, 0px))
+      max(2px, env(safe-area-inset-left, 0px));
+  }
+  #game-shell {
+    width: min(
+      100%,
+      calc((100dvh - 90px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 4 / 3)
+    );
+    gap: 2px;
+  }
   .topbar { padding: 3px 5px; font-size: 9px; }
   .controls { min-height: 26px; padding: 1px; gap: 3px; }
   .touch-help { display: none; }
-  #mute, #music, #pause-button, #fullscreen-button { padding: 4px 6px; font-size: 8px; }
+  #mute, #music, #pause-button, #fullscreen-button { min-height: 28px; padding: 4px 6px; font-size: 8px; }
 }
