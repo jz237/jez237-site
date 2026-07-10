@@ -1806,5 +1806,25 @@
       "continuity": "Preserves Lumenreef's shell-bell tide network, glass-coral causeways, rain-polished copper tools, lensleaf vegetation, turquoise rainlight, and non-human amphibious tide engineers.",
       "entryDescription": "Ovek and Nali retune Bellwether Lookout's shell-bells with bridge resonators as the luminous causeway returns to phase."
     }
+  },
+  {
+    "id": "2026-07-09-weekly-world-lumenreef-causeway-nursery-reef-refloats",
+    "title": "Lumenreef Causeway: Nursery Reef Refloats",
+    "tests": "gpt-image-2 weekly-world archive cron; square photorealistic lived-in alien world continuity image; no first-class image_generate tool used",
+    "prompt": "Create a finished square photorealistic documentary field image from the fictional weekly world \"Lumenreef Causeway\". Story beat: the young glass-coral nursery refloats as the corrected shell-bell rhythm brings rainwater and tide back together. Show Coralbridge Nursery at dawn on a warm turquoise shelf sea: buoyant glass-coral nursery modules lifting gently from mirror-flat water, suspended freshwater rain lenses spilling safely through milky lensleaf cistern channels, shell-bell ropes taut between pearly ceramic signal towers, and relieved non-human amphibious tide engineers guiding the modules with practical tools. Keep the inhabitants clearly non-human: low horizontal bodies, six jointed walking limbs braced on wet glass-coral pontoons, two delicate manipulator arms handling kelpglass lines and shell-ceramic valves, translucent gill fans pulsing soft teal and saffron, broad mirrored eyes, pebble-textured blue-green skin, flexible tail rudders, and visible shell-bell throat sacs. Include Sirr and several nursery caretakers as working figures, not portraits, with different gill-fan colors and body markings. Use Lumenreef Causeway canon throughout: black basalt islets with rain sheen, floating glass-coral mats, luminous reef causeways just emerging from the sky tide, violet under-reef glow in cracks, braided teal reed fans, saffron float pods, pearl-veined bladder vines, copper anchor pins, pearly shell ceramics, translucent tide-gate membranes, braided kelpglass fiber, rain-polished copper hardware, and hand-tuned shell-bell instruments. Add dense inspectable practical detail: water beads on lens leaves, wet shell-ceramic tool trays, nursery coral polyps glowing through clear glass-coral walls, small reef-sled ferry moored nearby, fresh repair patches on a tide-gate membrane, floating measuring floats with unreadable marks, woven footbridge vibration slats, and caustic reflections under bright overcast turquoise rainlight. Make it feel like a realistic lived-in alien daily-life photograph with natural lens depth, tactile wet materials, believable scale, working caretakers, and a hopeful recovery mood. Avoid humans, mermaids, dry desert highlands, crystal thorns, mushrooms, generic Atlantis fantasy, medieval styling, cyberpunk neon, horror, brand logos, readable text, charts, posters, prompt-card framing, and cinematic battle/action staging.\n\nReusable fill-in-the-blank template: Create a finished realistic photographed daily-life image from the fictional weekly world [WORLD_NAME]. Show [STORY_BEAT] at [SPECIFIC_PLACE] using the world's established geography, inhabitants, materials, infrastructure, palette, recurring motifs, and hard avoid rules. Make it a lived-in scene with practical work, tactile environmental detail, believable scale cues, and continuity from the previous story beat, not a poster, chart, prompt card, or generic fantasy scene.\n\nExample substitution: [WORLD_NAME] = Lumenreef Causeway; [STORY_BEAT] = the young glass-coral nursery refloating after corrected shell-bell timing brings rainwater and tide back together; [SPECIFIC_PLACE] = Coralbridge Nursery at dawn on the turquoise shelf sea.",
+    "image": "images/2026-07-09-weekly-world-lumenreef-causeway-nursery-reef-refloats.jpg",
+    "thumb": "thumbs/2026-07-09-weekly-world-lumenreef-causeway-nursery-reef-refloats.webp",
+    "color": "#4c6661",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago of buoyant glass-coral reefs, lensleaf rain systems, shell-bell causeways, and non-human amphibious tide engineers living by the sky tide.",
+      "continuity": "Preserves Lumenreef's turquoise shelf seas, glass-coral modules, shell-bell signal network, lensleaf cisterns, tide-gate repairs, and low-bodied amphibious tide engineers.",
+      "entryDescription": "Sirr and nursery caretakers guide glass-coral nursery modules back afloat as corrected shell-bell timing restores rainwater flow and tide rhythm."
+    }
   }
 ]
