@@ -56,6 +56,27 @@
   #genewrap{display:none}
   #genewrap.on{display:block}
 
+  /* chronicle — the story so far */
+  #chronicle{position:absolute;top:56px;right:14px;width:300px;max-width:84vw;max-height:70vh;
+    background:rgba(8,6,26,.86);border:1px solid var(--hair);border-radius:10px;backdrop-filter:blur(9px);
+    padding:14px 4px 12px 16px;display:none;flex-direction:column;pointer-events:auto;
+    box-shadow:0 8px 40px rgba(0,0,0,.5)}
+  #chronicle.on{display:flex}
+  .chron-head{font-variant:small-caps;letter-spacing:.14em;font-size:13px;color:var(--graze);
+    margin-bottom:10px;padding-right:12px;text-shadow:0 0 12px rgba(90,200,255,.4)}
+  .chron-sub{opacity:.5;font-size:11px;color:var(--ink)}
+  .chron-list{overflow-y:auto;padding-right:10px;display:flex;flex-direction:column;gap:9px;
+    scrollbar-width:thin;scrollbar-color:rgba(120,200,255,.3) transparent}
+  .chron-list::-webkit-scrollbar{width:5px}
+  .chron-list::-webkit-scrollbar-thumb{background:rgba(120,200,255,.3);border-radius:3px}
+  .chron-row{display:flex;gap:9px;font-size:12px;line-height:1.4;opacity:0;transform:translateY(6px);
+    transition:opacity .5s ease,transform .5s ease}
+  .chron-row.in{opacity:1;transform:none}
+  .chron-row .cg{width:1.15em;flex:none;text-align:center;filter:drop-shadow(0 0 5px currentColor)}
+  .chron-row .ct{flex:1;color:var(--ink)}
+  .chron-row .cd{font-variant:small-caps;letter-spacing:.08em;opacity:.42;font-size:10px;margin-top:1px}
+  .chron-empty{opacity:.4;font-size:12px;font-style:italic;padding:6px 12px 0 0}
+
   /* inspector */
   #inspect{position:absolute;top:0;right:0;height:100%;width:270px;max-width:82vw;
     background:var(--glass);border-left:1px solid var(--hair);backdrop-filter:blur(9px);
@@ -157,7 +178,12 @@
   <div id="ctl">
     <button id="btnSound" title="sound (M)">♪</button>
     <button id="btnStats" title="stats (S)">◔</button>
+    <button id="btnChron" title="chronicle — the story so far (C)">❧</button>
     <button id="btnHelp" title="what am I watching? (?)">?</button>
+  </div>
+  <div id="chronicle">
+    <div class="chron-head">the chronicle <span class="chron-sub">— deep time in this trench</span></div>
+    <div class="chron-list" id="chronList"></div>
   </div>
 
   <div id="explain">
@@ -219,7 +245,7 @@
   <div id="hint">
     click a creature to follow its life<br>
     drag to stir the current · double-click to feed<br>
-    S stats · G genes · M sound
+    S stats · G genes · C chronicle · M sound
   </div>
 
   <div id="title" class="on">
@@ -244,7 +270,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.6.0'; // v1.6: THE LEVIATHAN — a rare, vast bioluminescent visitor from the deeper dark that crosses the world every few minutes, scattering the living (fear steering) while the camera pulls wide to frame it. Deterministic spectacle, framed honestly as a visitor, with a deep sub-bass motif + voice.
+const VERSION = 'v1.7.0'; // v1.7: THE CHRONICLE — a persistent 'story so far' log (button/❧/key C) that records the run's momentous events (genesis epochs, generation milestones, extinctions, speciation, evolution & ornament milestones, famines, leviathan visits) with day+gen stamps. Deep-time made legible.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -657,7 +683,8 @@ function detectSpecies(){
     sp2Streak++;
     if(sp2Streak===8 && !speciatedAnnounced){ speciatedAnnounced=true;
       narrate('speciation',null,{sizeGap:Math.round((speciesInfo[1].size/speciesInfo[0].size-1)*100)});
-      if(A.on)sfxEvolveChime(); pushInterest(cam.x,cam.y,7); }
+      if(A.on)sfxEvolveChime(); pushInterest(cam.x,cam.y,7);
+      logChronicle('one kind of grazer became two — speciation', '⋔'); }
   } else {
     speciesCount=1; speciesSplitSize=0; for(const c of gz)c.speciesId=0; sp2Streak=0;
     if(speciatedAnnounced){ speciatedAnnounced=false; narrate('speciationLoss',null); }
@@ -1018,6 +1045,7 @@ function spawnLeviathan(){
   LEV.life = (CFG.W+560)/speed + 3;
   LEV.hue = 178+rnd()*36;
   emit('leviathan', LEV.x, LEV.y, null);
+  logChronicle('a leviathan passed through the trench', '≈');
 }
 function updateLeviathan(dt){
   if(!LEV.active){ LEV.cooldown-=dt;
@@ -1584,23 +1612,23 @@ function checkNarrationStats(m){
   let fired=false;
   const round5=(x)=>Math.round(x/5)*5;
   const orn=m.ornament;                                  // absolute display level (starts ~0.2)
+  let evoLine=null, evoGlyph='✦';
   if(orn>=0.34 && generationMax>=6 && orn>=(dataArmed.orn||0.34)){
-    const line = orn>=0.6  ? 'the display has run away — extravagance the deep can barely afford'
-               : orn>=0.46 ? 'the grazers are gaudy now — beauty chosen, not designed'
-               : 'ornament is spreading — the choosy are shaping the beautiful';
-    narrate('ornament',null,{text:line,sp:'graze'});
-    dataArmed.orn=orn+0.12; fired=true;
+    evoLine = orn>=0.6  ? 'the display has run away — extravagance the deep can barely afford'
+            : orn>=0.46 ? 'the grazers are gaudy now — beauty chosen, not designed'
+            : 'ornament is spreading — the choosy are shaping the beautiful';
+    evoGlyph='❋'; narrate('ornament',null,{text:evoLine,sp:'graze'}); dataArmed.orn=orn+0.12; fired=true;
   } else if(Math.abs(spd)>=20 && generationMax>=8 && Math.abs(spd)>=(dataArmed.speed||20)){
-    narrate('evolution',null,{text:`the grazers now swim ${Math.abs(round5(spd))}% ${spd>0?'faster':'slower'} than their ancestors`,sp:'graze'});
-    dataArmed.speed=Math.abs(spd)+10; fired=true;
+    evoLine=`the grazers now swim ${Math.abs(round5(spd))}% ${spd>0?'faster':'slower'} than their ancestors`;
+    narrate('evolution',null,{text:evoLine,sp:'graze'}); dataArmed.speed=Math.abs(spd)+10; fired=true;
   } else if(Math.abs(fear)>=30 && Math.abs(fear)>=(dataArmed.fear||30)){
-    narrate('evolution',null,{text:`the survivors are the frightened ones — fear up ${Math.abs(round5(fear))}%`,sp:'graze'});
-    dataArmed.fear=Math.abs(fear)+10; fired=true;
+    evoLine=`the survivors are the frightened ones — fear up ${Math.abs(round5(fear))}%`;
+    narrate('evolution',null,{text:evoLine,sp:'graze'}); dataArmed.fear=Math.abs(fear)+10; fired=true;
   } else if(Math.abs(sense)>=25 && generationMax>=10 && Math.abs(sense)>=(dataArmed.sense||25)){
-    narrate('evolution',null,{text:`they see ${Math.abs(round5(sense))}% ${sense>0?'farther':'less far'} than generation one`,sp:'graze'});
-    dataArmed.sense=Math.abs(sense)+10; fired=true;
+    evoLine=`they see ${Math.abs(round5(sense))}% ${sense>0?'farther':'less far'} than generation one`;
+    narrate('evolution',null,{text:evoLine,sp:'graze'}); dataArmed.sense=Math.abs(sense)+10; fired=true;
   }
-  if(fired){ lastDataAt=simTime; captionsSinceData=0; }
+  if(fired){ lastDataAt=simTime; captionsSinceData=0; if(evoLine)logChronicle(evoLine, evoGlyph); }
 }
 const dataArmed={};
 function maybeEvolutionMilestone(){ /* handled by stat check; chime on big drift */ }
@@ -1609,9 +1637,10 @@ function checkGenMilestone(){
   const mstones=[10,25,50,100,200,300];
   for(const g of mstones){ if(generationMax>=g && !genMileHit[g]){ genMileHit[g]=true;
     if(A.on)sfxEvolveChime();
-    narrate('genmile',null,{n:g}); return; } }
+    narrate('genmile',null,{n:g}); logChronicle(`generation ${g} — ${g} lifetimes of descent`, '❈'); return; } }
   if(generationMax>=400 && generationMax%100===0 && !genMileHit[generationMax]){
     genMileHit[generationMax]=true; narrate('genmile',null,{n:generationMax});
+    logChronicle(`generation ${generationMax}`, '❈');
   }
 }
 
@@ -1625,7 +1654,7 @@ function narratorTick(dt){
   // famine
   let plTot=0; for(const c of clusters)plTot+=c.N;
   const cap=CFG.clusters*CFG.K_c;
-  if(plTot<cap*0.10){ if((simTime-(famineT||-999))>20 && !famineNarrated){ narrate('famine',null); famineNarrated=true; famineT=simTime; } }
+  if(plTot<cap*0.10){ if((simTime-(famineT||-999))>20 && !famineNarrated){ narrate('famine',null); famineNarrated=true; famineT=simTime; logChronicle('a famine gripped the trench', '◷'); } }
   else { famineNarrated=false; }
   // detritus bloom
   if(detritus.length>=8 && (simTime-(detrT||-999))>240){ narrate('detritus',null); detrT=simTime; }
@@ -1636,7 +1665,8 @@ function checkSpecies(sp,count,peak){
   const st=speciesState[sp];
   if(count===0){
     if(!extinctFlag[sp]){ extinctFlag[sp]=true; extinctions++;
-      narrate('extinction',null,{sp}); if(sp==='graze'&&A.on)sfxExtinct(); drainPalette(sp); }
+      narrate('extinction',null,{sp}); if(sp==='graze'&&A.on)sfxExtinct(); drainPalette(sp);
+      logChronicle(`the ${sp==='pred'?'hunters':'grazers'} went extinct`, '☠'); }
   } else { extinctFlag[sp]=false; }
   // near extinction (<=4 sustained)
   if(count>0 && count<=4){ st.nearT=(st.nearT||0)+ (1/60);
@@ -1676,6 +1706,7 @@ function triggerGenesis(){
   narrate('genesis',null);
   if(A.on)sfxGenesis();
   warmupUntil=simTime+8;
+  logChronicle(`genesis ${roman(genesisCount+1)} — the world begins again`, '✺');
   showTitleGhost(`PRIMORDIA — genesis ${roman(genesisCount+1)}`);
 }
 function genesisStep(dt){
@@ -2289,6 +2320,7 @@ function hudTick(dt){
     const phase=dayFactor>0.66?'day':dayFactor<0.33?'night':(lastPhaseDay?'dawn':'dusk');
     elClock.textContent=`gen ${generationMax} · ${SEASON_NAMES[seasonIdx]} · ${phase}`+(speciesCount>1?' · 2 species':'');
     if(statsOn)drawScopes();
+    if(chronOn)renderChronicle();
     if(inspTarget)updateInspector();
   }
 }
@@ -2482,10 +2514,33 @@ window.addEventListener('keydown',e=>{
   if(k==='s')toggleStats();
   else if(k==='g'){geneOn=!geneOn; document.getElementById('genewrap').classList.toggle('on',geneOn); if(!statsOn)toggleStats();}
   else if(k==='m')toggleSound();
-  else if(k==='escape')closeInspector();
+  else if(k==='c')toggleChron();
+  else if(k==='escape'){closeInspector(); if(chronOn)toggleChron();}
 });
 function toggleStats(){ statsOn=!statsOn; document.getElementById('stats').classList.toggle('on',statsOn);
   document.getElementById('btnStats').classList.toggle('hot',statsOn); if(statsOn)drawScopes(); }
+
+/* ---------- the chronicle: a persistent deep-time log of the run's momentous events ---------- */
+const chronicle=[]; const CHRON_MAX=60;
+const chronListEl=document.getElementById('chronList');
+let chronDirty=true, chronOn=false;
+function logChronicle(text, glyph){
+  chronicle.push({text, glyph:glyph||'·', day:dayIndex, gen:generationMax});
+  if(chronicle.length>CHRON_MAX)chronicle.shift();
+  chronDirty=true;
+}
+function renderChronicle(){
+  if(!chronDirty||!chronOn)return; chronDirty=false;
+  if(chronicle.length===0){ chronListEl.innerHTML='<div class="chron-empty">the trench is quiet, for now…</div>'; return; }
+  let html='';
+  for(const e of chronicle)
+    html+=`<div class="chron-row in"><span class="cg">${e.glyph}</span><div><div class="ct">${e.text}</div><div class="cd">day ${e.day} · gen ${e.gen}</div></div></div>`;
+  chronListEl.innerHTML=html;
+  chronListEl.scrollTop=chronListEl.scrollHeight;
+}
+function toggleChron(){ chronOn=!chronOn; document.getElementById('chronicle').classList.toggle('on',chronOn);
+  document.getElementById('btnChron').classList.toggle('hot',chronOn); chronDirty=true; renderChronicle(); }
+document.getElementById('btnChron').addEventListener('click',toggleChron);
 function toggleSound(){ if(A.on)audioMute(); else audioResume();
   document.getElementById('btnSound').classList.toggle('hot',A.on);
   document.getElementById('btnSound').textContent=A.on?'♪':'♪̶'; }
@@ -2583,6 +2638,7 @@ function boot(){
   for(let ci=0;ci<clusters.length;ci++){ const want=Math.round(clusters[ci].N);
     for(let k=0;k<want;k++)spawnMote(ci); }
   genesisMeans=snapshotMeans(); predGenesisMeans=snapshotPredMeans();
+  logChronicle('the world begins — light, hunger, and current', '✺');
   titleEl.classList.add('on');
   requestAnimationFrame(frame);
 }
@@ -2597,6 +2653,7 @@ window.__prim={
   get season(){return SEASON_NAMES[seasonIdx];}, get seasonFactor(){return +seasonFactor.toFixed(2);},
   get leviathan(){return LEV.active?{x:Math.round(LEV.x),y:Math.round(LEV.y),life:Math.round(LEV.life)}:null;},
   summonLeviathan(){ spawnLeviathan(); },
+  get chronicle(){ return chronicle.map(e=>`day ${e.day} · gen ${e.gen} — ${e.text}`); },
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
   get ornament(){ const m=snapshotMeans(); return m?+m.ornament.toFixed(3):0; },
