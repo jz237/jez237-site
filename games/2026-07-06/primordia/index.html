@@ -244,7 +244,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.5.0'; // v1.5: seasonal cycles — a slow abundance rhythm (the lean/thaw/high bloom/bloomfall) over ~5.5min that swells & thins the plankton, shifts the colour temperature, and reshapes selection across the year. A second timescale beneath the day/night.
+const VERSION = 'v1.6.0'; // v1.6: THE LEVIATHAN — a rare, vast bioluminescent visitor from the deeper dark that crosses the world every few minutes, scattering the living (fear steering) while the camera pulls wide to frame it. Deterministic spectacle, framed honestly as a visitor, with a deep sub-bass motif + voice.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -737,6 +737,7 @@ function step(dt){
 
   computeOrder();
   detectSchoolPhase(dt);
+  updateLeviathan(dt);
 
   // history sampling
   histAcc+=dt;
@@ -793,7 +794,11 @@ function steerGrazer(c,dt){
   if(cnt>0){ cohx=cohx/cnt-c.x; cohy=cohy/cnt-c.y;
     const cm=Math.hypot(cohx,cohy)||1; cohx/=cm; cohy/=cm;
     const am=Math.hypot(alx,aly)||1; alx/=am; aly/=am; }
+  // terror of the leviathan overrides everything nearby
+  const lw=leviathanFear(c,_levF);
+  if(lw>0){ fearx+=_levF.x*lw*4; feary+=_levF.y*lw*4; }
   const feared=Math.hypot(fearx,feary);
+  const panic = lw>0.55;
   c.state = feared>0.15 ? 2 : (foodBest<1e8?1:0); // 2 flee,1 graze,0 drift
   c.fearFlare += ((c.state===2?1:0)-c.fearFlare)*Math.min(1,dt*8);
 
@@ -804,7 +809,7 @@ function steerGrazer(c,dt){
   let ay = sepy*c.sep + aly*8*c.align + cohy*10*c.cohere + fy*fw + feary*34*c.fear;
   // flow field
   const fa=flowAngle(c.x,c.y,simTime); ax+=Math.cos(fa)*6; ay+=Math.sin(fa)*6;
-  applySteer(c,ax,ay,dt, c.state===2?1.7:1.0);
+  applySteer(c,ax,ay,dt, panic?2.1:(c.state===2?1.7:1.0));
   c._local=localGraze;
 }
 
@@ -856,8 +861,11 @@ function steerPredator(c,dt){
     ax+=Math.cos(c.age*0.6+c.uid)*6; ay+=Math.sin(c.age*0.5+c.uid)*6;
     if(c.chaseId!==-1){c.chaseId=-1;c.chaseT=0;}
   }
+  // even apex predators flee the leviathan
+  const lw=leviathanFear(c,_levF);
+  if(lw>0){ ax+=_levF.x*lw*90; ay+=_levF.y*lw*90; }
   const dashing=c.dashT>0;
-  applySteer(c,ax,ay,dt, dashing?2.2:1.0);
+  applySteer(c,ax,ay,dt, (dashing||lw>0.35)?2.2:1.0);
 }
 
 function attemptCatch(c,prey){
@@ -994,6 +1002,49 @@ function migratePredators(){
   emit('migrate',cam.x,cam.y,null);
 }
 
+/* ---------- THE LEVIATHAN — a rare, vast visitor from the deeper dark ----------
+   Not part of the evolving pool: a transient spectacle that crosses the world, scatters the
+   living, and passes on. Deterministic (we spawn it) so it's reliable drama, framed honestly
+   by the narrator as a visitor. Its scatter works through the normal steering fear terms. */
+const LEVSEG=10;
+const LEV={active:false, x:0,y:0, vx:0,vy:0, phase:0, size:150, life:0, cooldown:rrange(150,300),
+  hue:190, glow:0, ate:0, dir:1, segX:new Float32Array(LEVSEG), segY:new Float32Array(LEVSEG)};
+function spawnLeviathan(){
+  const fromLeft=rnd()<0.5; const speed=rrange(26,38);
+  LEV.active=true; LEV.glow=0; LEV.ate=0; LEV.phase=0;
+  LEV.x = fromLeft ? -260 : CFG.W+260;
+  LEV.y = rrange(CFG.H*0.35, CFG.H*0.65);
+  LEV.dir = fromLeft?1:-1; LEV.vx=LEV.dir*speed; LEV.vy=rrange(-5,5);
+  LEV.life = (CFG.W+560)/speed + 3;
+  LEV.hue = 178+rnd()*36;
+  emit('leviathan', LEV.x, LEV.y, null);
+}
+function updateLeviathan(dt){
+  if(!LEV.active){ LEV.cooldown-=dt;
+    if(LEV.cooldown<=0 && grazers.length>42 && !genesisActive){ spawnLeviathan(); }
+    return; }
+  LEV.life-=dt; LEV.phase+=dt*0.9; LEV.glow=Math.min(1,LEV.glow+dt*0.4);
+  LEV.vy += Math.sin(LEV.phase*0.6)*3*dt;
+  LEV.x+=LEV.vx*dt; LEV.y=clamp(LEV.y+LEV.vy*dt, CFG.H*0.22, CFG.H*0.78);
+  // rare drama: engulf a predator that strays too close (scatter itself is via steering fear)
+  const r2=(LEV.size*0.85)*(LEV.size*0.85);
+  for(const c of preds){ if(!c.alive)continue;
+    const dx=c.x-LEV.x, dy=c.y-LEV.y; if(dx*dx+dy*dy<r2 && LEV.ate<2 && rnd()<0.02){ LEV.ate++; killCreature(c,'hunt'); } }
+  pushInterest(LEV.x, LEV.y, 16);
+  if(rnd()<0.6) spawnParticle(LEV.x+rrange(-LEV.size,LEV.size), LEV.y+rrange(-50,50),
+    LEV.vx*0.15+rrange(-6,6), rrange(-8,4), LEV.hue, rrange(1.6,2.8), 1);
+  if(A.on && Math.floor(LEV.phase*2)!==LEV._au){ LEV._au=Math.floor(LEV.phase*2); sfxLeviathanPulse(); }
+  if(LEV.life<=0 || LEV.x<-320 || LEV.x>CFG.W+320){ LEV.active=false; LEV.cooldown=rrange(300,480); }
+}
+// a fear vector away from the leviathan, added into a creature's steering (returns strength or 0)
+function leviathanFear(c, out){
+  if(!LEV.active) return 0;
+  const dx=c.x-LEV.x, dy=c.y-LEV.y, d2=dx*dx+dy*dy, R=LEV.size*1.9;
+  if(d2>R*R) return 0;
+  const d=Math.sqrt(d2)||1, w=(R-d)/R; out.x=dx/d*w; out.y=dy/d*w; return w;
+}
+const _levF={x:0,y:0};
+
 /* ---------- particles/rings/detritus update ---------- */
 function updateParticles(dt){
   for(let i=0;i<PMAX;i++){
@@ -1060,6 +1111,7 @@ function emit(type,x,y,c){
     case 'dusk': narrate('dusk',null); if(A.on)sfxDusk(); break;
     case 'migrate': narrate('migrate',null); break;
     case 'season': narrate('season',null,{name:SEASON_NAMES[seasonIdx]}); break;
+    case 'leviathan': narrate('leviathan',null); if(A.on)sfxLeviathanEnter(); pushInterest(x,y,16); break;
   }
 }
 function pushInterest(x,y,w){ interest.push({x,y,w,t:simTime}); if(interest.length>16)interest.shift(); }
@@ -1345,6 +1397,20 @@ function sfxEvolveChime(){
   car.start(t);mod.start(t);car.stop(t+4);mod.stop(t+4);
   sfxTone('sine',1318.5*1.5,0.07,0.005,1.6,0);
 }
+function sfxLeviathanEnter(){ // a vast, slow rise from the deep
+  if(!A.on)return; const ctxA=A.ctx,t=ctxA.currentTime+0.02;
+  const o=ctxA.createOscillator();o.type='sine';o.frequency.setValueAtTime(28,t);
+  o.frequency.exponentialRampToValueAtTime(44,t+5);
+  const o2=ctxA.createOscillator();o2.type='triangle';o2.frequency.setValueAtTime(41,t);
+  const g=ctxA.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.34,t+3);
+  g.gain.setValueAtTime(0.34,t+6);g.gain.setTargetAtTime(0,t+6,4);
+  const g2=ctxA.createGain();g2.gain.value=0.12;o2.connect(g2);g2.connect(g);
+  o.connect(g);g.connect(A.musicDuck);o.start(t);o2.start(t);o.stop(t+14);o2.stop(t+14);
+  A.padBus&&A.padBus.gain.setTargetAtTime(0.7,t,0.1); A.padBus&&A.padBus.gain.setTargetAtTime(1,t+8,4);
+}
+function sfxLeviathanPulse(){ // periodic deep heartbeat while it passes
+  if(!A.on)return; sfxTone('sine',rrange(33,39),0.16,0.05,0.9,rrange(-0.4,0.4),A.musicDuck);
+}
 function sfxGenesis(){
   if(!A.on)return;
   const ctxA=A.ctx,t=ctxA.currentTime+0.02;
@@ -1424,20 +1490,23 @@ const CAP={
     'the water was calm. it will not stay that way'],
   season:['the long rhythm turns — {name} settles over the deep','{name} arrives; the water changes its terms',
     'a slower season shifts — {name} now','the deep keeps its own calendar — {name}'],
+  leviathan:['something vast moves in the dark','a leviathan passes through — older than any lineage here',
+    'the whole trench holds its breath','out of the deeper dark, a giant drifts by',
+    'everything small remembers, suddenly, that it is small'],
   detritus:['the dead feed the living. nothing is wasted','a fall of bodies — a feast for the patient',
     'even endings are edible down here'],
   followStart:['following {name} — one life among hundreds','staying with this one for a while',
     'every dot in the dark is a story. here’s one'],
 };
 /* which events have recorded voice, and how many variants exist */
-const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2};
+const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2,leviathan:2};
 const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
-  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament'};
-const PRIORITY={genesis:0,extinction:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
+  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament',leviathan:'e22_leviathan'};
+const PRIORITY={genesis:0,extinction:0,leviathan:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
   genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3,season:3};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
-  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70};
+  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70,leviathan:0};
 const bags={}; const evLast={};
 let lastCaptionAt=-100, lastVoiceAt=-100, firstBirthDone=false, warmupUntil=20;
 let queued=null;
@@ -1636,6 +1705,7 @@ function genesisStep(dt){
     popGraze.fill(0); popPred.fill(0); popPlank.fill(0); histIdx=0; histAcc=0;
     geneHist.length=0; speciesState={graze:{},pred:{}};
     speciesCount=1; speciesSplitSize=0; sp2Streak=0; speciatedAnnounced=false;
+    LEV.active=false; LEV.cooldown=rrange(150,300); // the leviathan doesn't outlast a genesis
   }
   if(genesisT>6){ genesisActive=false; genesisSeeded=false; foundersSpawned=false;
     cam.state='DRIFT'; cam.dwell=0; }
@@ -1682,6 +1752,10 @@ function updateCamera(dt){
       tz=lerp(0.85,1.0,0.5+0.5*Math.sin(t*0.05));
       if(bestScore>8 && cam.dwell>4){ cam.state='INVESTIGATE'; cam.dwell=0; }
     }
+  }
+  // the leviathan commandeers the camera — pull WIDE to frame its scale (unless user is following)
+  if(LEV.active && cam.state!=='FOLLOW' && cam.state!=='GENESIS'){
+    tx=LEV.x - LEV.dir*LEV.size*0.4; ty=LEV.y; tz=0.72; posTau=1.3; zTau=2.0;
   }
   cam.tx=tx;cam.ty=ty;cam.tz=tz;
   cam.x=smoothDamp(cam.x,tx,cam.vx,posTau,dt);
@@ -1793,6 +1867,8 @@ function draw(){
   for(const d of detritus){ glow(d.x,d.y,3.5, d.hue, 0.4*clamp(d.life/6,0,1)); }
   // trail layer update + composite
   drawTrails();
+  // the leviathan drifts behind the small life
+  if(LEV.active)drawLeviathan();
   // creatures
   drawCreatures();
   // rings + particles
@@ -1955,6 +2031,47 @@ function glowTo(g,x,y,rad,hue,alpha){
   g.globalAlpha=alpha; g.drawImage(spr,x-rad,y-rad,rad*2,rad*2);
 }
 
+function drawLeviathan(){
+  const L=LEV.size, n=LEVSEG, dir=LEV.dir;
+  // build a long tapered undulating spine, head-forward
+  for(let i=0;i<n;i++){ const t=i/(n-1);
+    LEV.segX[i]=LEV.x - dir*t*L*2.1;
+    LEV.segY[i]=LEV.y + Math.sin(LEV.phase - t*3.0)*L*(0.28+0.22*t);
+  }
+  ctx.globalCompositeOperation='lighter';
+  // vast soft aura
+  glow(LEV.x - dir*L*0.6, LEV.y, L*2.8, LEV.hue, 0.16*LEV.glow);
+  // translucent body (whale-like taper): head wide -> tail thin
+  const [r,g,b]=hslToRgb(LEV.hue,0.6,0.62);
+  ctx.globalAlpha=0.22*LEV.glow; ctx.fillStyle=`rgb(${r},${g},${b})`;
+  ctx.beginPath();
+  for(let i=0;i<n;i++){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.42+4;
+    if(i===0)ctx.moveTo(LEV.segX[i],LEV.segY[i]-w); else ctx.lineTo(LEV.segX[i],LEV.segY[i]-w); }
+  for(let i=n-1;i>=0;i--){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.42+4;
+    ctx.lineTo(LEV.segX[i],LEV.segY[i]+w); }
+  ctx.closePath(); ctx.fill();
+  // a brighter inner core ribbon
+  ctx.globalAlpha=0.16*LEV.glow; ctx.fillStyle='#dff6ff';
+  ctx.beginPath();
+  for(let i=0;i<n;i++){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.14+2;
+    if(i===0)ctx.moveTo(LEV.segX[i],LEV.segY[i]-w); else ctx.lineTo(LEV.segX[i],LEV.segY[i]-w); }
+  for(let i=n-1;i>=0;i--){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.14+2;
+    ctx.lineTo(LEV.segX[i],LEV.segY[i]+w); }
+  ctx.closePath(); ctx.fill();
+  // bioluminescent spots down the flanks
+  for(let i=1;i<n;i++){ const s=Math.sin(LEV.phase*1.4+i)*0.5+0.7;
+    glow(LEV.segX[i], LEV.segY[i]-Math.sin(LEV.phase+i)*L*0.12, 7+3*s, LEV.hue, 0.55*LEV.glow*s);
+    glow(LEV.segX[i], LEV.segY[i]+Math.sin(LEV.phase+i)*L*0.12, 7+3*s, LEV.hue, 0.55*LEV.glow*s); }
+  // tail fluke
+  const tx=LEV.segX[n-1],ty=LEV.segY[n-1], fl=Math.sin(LEV.phase-3)*0.5;
+  ctx.globalAlpha=0.2*LEV.glow; ctx.fillStyle=`rgb(${r},${g},${b})`;
+  ctx.beginPath(); ctx.moveTo(tx,ty);
+  ctx.lineTo(tx+dir*L*0.5, ty-L*0.4+fl*L*0.2); ctx.lineTo(tx+dir*L*0.5, ty+L*0.4+fl*L*0.2);
+  ctx.closePath(); ctx.fill();
+  // slow, ancient eye
+  glow(LEV.x + dir*L*0.15, LEV.y - L*0.18, 9, 42, 0.75*LEV.glow);
+  ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+}
 function drawCreatures(){
   // underglow pass (lighter)
   ctx.globalCompositeOperation='lighter';
@@ -2478,6 +2595,8 @@ window.__prim={
   get means(){return snapshotMeans();}, get genesisMeans(){return genesisMeans;},
   get predMeans(){return snapshotPredMeans();}, get predGenesisMeans(){return predGenesisMeans;},
   get season(){return SEASON_NAMES[seasonIdx];}, get seasonFactor(){return +seasonFactor.toFixed(2);},
+  get leviathan(){return LEV.active?{x:Math.round(LEV.x),y:Math.round(LEV.y),life:Math.round(LEV.life)}:null;},
+  summonLeviathan(){ spawnLeviathan(); },
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
   get ornament(){ const m=snapshotMeans(); return m?+m.ornament.toFixed(3):0; },
