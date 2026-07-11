@@ -120,6 +120,9 @@
     backdrop-filter:blur(4px);transition:opacity .2s}
   #ctl button:hover{opacity:1}
   #ctl button.hot{opacity:1;border-color:rgba(120,220,255,.6);box-shadow:0 0 12px rgba(80,200,255,.3)}
+  #ctl button.pulse{opacity:.95;animation:chronpulse 1.6s ease-in-out infinite}
+  @keyframes chronpulse{0%,100%{border-color:var(--hair);box-shadow:0 0 4px rgba(120,200,255,.15)}
+    50%{border-color:rgba(140,230,255,.85);box-shadow:0 0 16px rgba(90,210,255,.55)}}
 
   /* explainer overlay */
   #explain{position:absolute;inset:0;display:none;align-items:center;justify-content:center;
@@ -270,7 +273,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.7.1'; // v1.7.1: harden pass (5-dim adversarial review). Fixed: season narration named the season LEAVING not arriving; gen-400+ milestone skipped on overshoot; per-frame draw allocs (ornament streamer hslToRgb/rgba-string + hoisted SGN2/SGN3 loop arrays, cached hueRGB); per-birth for..in -> GKEYS. Genesis-reset verified complete.
+const VERSION = 'v1.7.2'; // v1.7.2: polish. Leviathan redrawn as a clearly majestic whale-form — head-steady traveling-wave undulation, whale taper, big pectoral flippers, layered aura, flowing biolum spots, forked fluke, amber eye (was a uniform-wave blob). Chronicle button gently pulses when new deep-time events are logged while closed.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -2072,45 +2075,59 @@ function glowTo(g,x,y,rad,hue,alpha){
   g.globalAlpha=alpha; g.drawImage(spr,x-rad,y-rad,rad*2,rad*2);
 }
 
+const LEVW=new Float32Array(LEVSEG); // scratch: per-segment half-width
 function drawLeviathan(){
-  const L=LEV.size, n=LEVSEG, dir=LEV.dir;
-  // build a long tapered undulating spine, head-forward
+  const L=LEV.size, n=LEVSEG, dir=LEV.dir, gl=LEV.glow;
+  // head steady, undulation a traveling wave that grows toward the tail (whale/eel swim)
   for(let i=0;i<n;i++){ const t=i/(n-1);
-    LEV.segX[i]=LEV.x - dir*t*L*2.1;
-    LEV.segY[i]=LEV.y + Math.sin(LEV.phase - t*3.0)*L*(0.28+0.22*t);
+    LEV.segX[i]=LEV.x - dir*t*L*2.4;
+    LEV.segY[i]=LEV.y + Math.sin(LEV.phase - t*3.6)*L*(0.04+0.34*t*t);
+    // whale taper: moderate blunt head, widest ~40% back, thin tail
+    LEVW[i]=L*(0.42*Math.pow(Math.sin((t*0.9+0.08)*Math.PI),0.82)+0.03);
   }
   ctx.globalCompositeOperation='lighter';
-  // vast soft aura
-  glow(LEV.x - dir*L*0.6, LEV.y, L*2.8, LEV.hue, 0.16*LEV.glow);
-  // translucent body (whale-like taper): head wide -> tail thin
-  const [r,g,b]=hslToRgb(LEV.hue,0.6,0.62);
-  ctx.globalAlpha=0.22*LEV.glow; ctx.fillStyle=`rgb(${r},${g},${b})`;
+  // layered aura for depth
+  glow(LEV.x - dir*L*0.7, LEV.y, L*3.2, LEV.hue, 0.10*gl);
+  glow(LEV.x - dir*L*0.4, LEV.y, L*1.7, LEV.hue, 0.13*gl);
+  const [r,g,b]=hslToRgb(LEV.hue,0.62,0.60), col=`rgb(${r},${g},${b})`;
+  // pectoral flippers (near the head, t~0.22) — big and slow
+  const hi=2, fx=LEV.segX[hi], fy=LEV.segY[hi], flap=Math.sin(LEV.phase*0.9)*0.5;
+  ctx.globalAlpha=0.16*gl; ctx.fillStyle=col;
+  for(let s=0;s<2;s++){ const sgn=SGN2[s];
+    ctx.beginPath(); ctx.moveTo(fx,fy);
+    ctx.quadraticCurveTo(fx-dir*L*0.2, fy+sgn*(L*0.5+flap*L*0.15),
+      fx-dir*L*0.6, fy+sgn*(L*0.62+flap*L*0.2));
+    ctx.quadraticCurveTo(fx-dir*L*0.35, fy+sgn*L*0.34, fx-dir*L*0.05, fy+sgn*L*0.12);
+    ctx.closePath(); ctx.fill(); }
+  // translucent body (smooth via quadratic curves through segment edges)
+  ctx.globalAlpha=0.24*gl; ctx.fillStyle=col;
   ctx.beginPath();
-  for(let i=0;i<n;i++){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.42+4;
-    if(i===0)ctx.moveTo(LEV.segX[i],LEV.segY[i]-w); else ctx.lineTo(LEV.segX[i],LEV.segY[i]-w); }
-  for(let i=n-1;i>=0;i--){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.42+4;
-    ctx.lineTo(LEV.segX[i],LEV.segY[i]+w); }
+  ctx.moveTo(LEV.segX[0],LEV.segY[0]-LEVW[0]);
+  for(let i=1;i<n;i++)ctx.lineTo(LEV.segX[i],LEV.segY[i]-LEVW[i]);
+  for(let i=n-1;i>=0;i--)ctx.lineTo(LEV.segX[i],LEV.segY[i]+LEVW[i]);
   ctx.closePath(); ctx.fill();
-  // a brighter inner core ribbon
-  ctx.globalAlpha=0.16*LEV.glow; ctx.fillStyle='#dff6ff';
+  // brighter inner core ribbon (the glow within)
+  ctx.globalAlpha=0.14*gl; ctx.fillStyle='#e6f8ff';
   ctx.beginPath();
-  for(let i=0;i<n;i++){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.14+2;
-    if(i===0)ctx.moveTo(LEV.segX[i],LEV.segY[i]-w); else ctx.lineTo(LEV.segX[i],LEV.segY[i]-w); }
-  for(let i=n-1;i>=0;i--){ const t=i/(n-1); const w=Math.sin((1-t)*1.4)*L*0.14+2;
-    ctx.lineTo(LEV.segX[i],LEV.segY[i]+w); }
+  ctx.moveTo(LEV.segX[0],LEV.segY[0]-LEVW[0]*0.32);
+  for(let i=1;i<n;i++)ctx.lineTo(LEV.segX[i],LEV.segY[i]-LEVW[i]*0.32);
+  for(let i=n-1;i>=0;i--)ctx.lineTo(LEV.segX[i],LEV.segY[i]+LEVW[i]*0.32);
   ctx.closePath(); ctx.fill();
-  // bioluminescent spots down the flanks
-  for(let i=1;i<n;i++){ const s=Math.sin(LEV.phase*1.4+i)*0.5+0.7;
-    glow(LEV.segX[i], LEV.segY[i]-Math.sin(LEV.phase+i)*L*0.12, 7+3*s, LEV.hue, 0.55*LEV.glow*s);
-    glow(LEV.segX[i], LEV.segY[i]+Math.sin(LEV.phase+i)*L*0.12, 7+3*s, LEV.hue, 0.55*LEV.glow*s); }
-  // tail fluke
-  const tx=LEV.segX[n-1],ty=LEV.segY[n-1], fl=Math.sin(LEV.phase-3)*0.5;
-  ctx.globalAlpha=0.2*LEV.glow; ctx.fillStyle=`rgb(${r},${g},${b})`;
-  ctx.beginPath(); ctx.moveTo(tx,ty);
-  ctx.lineTo(tx+dir*L*0.5, ty-L*0.4+fl*L*0.2); ctx.lineTo(tx+dir*L*0.5, ty+L*0.4+fl*L*0.2);
-  ctx.closePath(); ctx.fill();
-  // slow, ancient eye
-  glow(LEV.x + dir*L*0.15, LEV.y - L*0.18, 9, 42, 0.75*LEV.glow);
+  // twin rows of bioluminescent spots that pulse in a wave down the flanks
+  for(let i=1;i<n-1;i++){ const s=Math.sin(LEV.phase*1.6 - i*0.7)*0.5+0.6;
+    glow(LEV.segX[i], LEV.segY[i]-LEVW[i]*0.6, 5+4*s, LEV.hue, 0.5*gl*s);
+    glow(LEV.segX[i], LEV.segY[i]+LEVW[i]*0.6, 5+4*s, LEV.hue, 0.5*gl*s); }
+  // grand forked tail fluke
+  const tx=LEV.segX[n-1],ty=LEV.segY[n-1], fl=Math.sin(LEV.phase-3.6)*0.5;
+  ctx.globalAlpha=0.22*gl; ctx.fillStyle=col;
+  for(let s=0;s<2;s++){ const sgn=SGN2[s];
+    ctx.beginPath(); ctx.moveTo(tx,ty);
+    ctx.quadraticCurveTo(tx+dir*L*0.2, ty+sgn*L*0.1, tx+dir*L*0.55, ty+sgn*(L*0.5)+fl*L*0.18);
+    ctx.quadraticCurveTo(tx+dir*L*0.3, ty+sgn*L*0.16, tx+dir*L*0.08, ty);
+    ctx.closePath(); ctx.fill(); }
+  // blunt head cap + slow ancient eye + a faint dorsal glow-line
+  glow(LEV.x+dir*L*0.05, LEV.y, LEVW[0]*1.5, LEV.hue, 0.3*gl);
+  glow(LEV.x + dir*L*0.16, LEV.y - LEVW[0]*0.45, 8, 45, 0.85*gl);   // eye (warm amber)
   ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
 }
 function drawCreatures(){
@@ -2540,6 +2557,7 @@ function logChronicle(text, glyph){
   chronicle.push({text, glyph:glyph||'·', day:dayIndex, gen:generationMax});
   if(chronicle.length>CHRON_MAX)chronicle.shift();
   chronDirty=true;
+  if(!chronOn){ const b=document.getElementById('btnChron'); if(b)b.classList.add('pulse'); } // nudge: new history
 }
 function renderChronicle(){
   if(!chronDirty||!chronOn)return; chronDirty=false;
@@ -2551,7 +2569,8 @@ function renderChronicle(){
   chronListEl.scrollTop=chronListEl.scrollHeight;
 }
 function toggleChron(){ chronOn=!chronOn; document.getElementById('chronicle').classList.toggle('on',chronOn);
-  document.getElementById('btnChron').classList.toggle('hot',chronOn); chronDirty=true; renderChronicle(); }
+  const b=document.getElementById('btnChron'); b.classList.toggle('hot',chronOn); if(chronOn)b.classList.remove('pulse');
+  chronDirty=true; renderChronicle(); }
 document.getElementById('btnChron').addEventListener('click',toggleChron);
 function toggleSound(){ if(A.on)audioMute(); else audioResume();
   document.getElementById('btnSound').classList.toggle('hot',A.on);
