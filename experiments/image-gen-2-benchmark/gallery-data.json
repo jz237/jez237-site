@@ -4687,5 +4687,24 @@
       "description": "A handmade fiber-art macro scene of a thumb-scale glowrail repair bay, built from felt, thread, beads, copper wire, wool roving, and visible craft-table scale cues.",
       "template": "Create a finished square image for the daily random rendering-style slot using [STYLE_OR_MEDIUM]. Show [SUBJECT_OR_PLACE] as a tactile finished scene with [PRIMARY_MATERIALS], [VISIBLE_PROCESS_OR_CONSTRUCTION_DETAILS], [SCALE_CUES_OR_CONTEXT_PROPS], [COLOR_PALETTE], and [LIGHTING_OR_CAMERA_STYLE]. Make the image read as [STYLE_OR_MEDIUM] applied to a complete visual example, not a poster, prompt card, flat document, or plain centered object."
     }
+  },
+  {
+    "id": "2026-07-11-factual-infographic-factual-infographic-how-solar-sails-get",
+    "title": "Factual infographic: How Solar Sails Get Thrust From Sunlight",
+    "tests": "GPT Image 2 factual infographic cron, primary OpenAI route succeeded on attempt 2 after socket failure on attempt 1; verified exact generated PNG path before append.",
+    "prompt": "Create a finished square factual infographic titled \"HOW SOLAR SAILS GET THRUST FROM SUNLIGHT\" explaining the real-world/non-fiction physics of photon momentum and reflective light sails using conservative spaceflight science. Make it a colorful photorealistic science-museum engineering wall chart mounted beside a spacecraft materials test bench, not a flat classroom poster: visible carbon-fiber tabletop, rolled silver sail film, small mirror sample coupons, a nonbranded laser pointer used only as a visual scale prop, gloved-free handling tools, a tiny spacecraft model, and dark space-test fabric behind the chart.\n\nInformation architecture with distinct visual layers: (1) a central cutaway/specimen panel of a reflective solar-sail spacecraft with four ultrathin triangular sail quadrants, booms, bus, attitude vanes, and sunlight striking the shiny surface; (2) a step-by-step photon-momentum sequence showing incoming sunlight, reflection, tiny momentum transfer, continuous acceleration, and steering by changing sail angle, with restrained yellow and cyan arrows; (3) macro material windows for crinkled aluminized film, boom hinge detail, edge seam reinforcement, micrometeorite pinhole patch texture, and specular mirror reflection; (4) a cause/effect comparison panel showing absorbing dark surface versus reflective bright sail and why reflection gives greater momentum change, without precise invented numbers; (5) a scale/context vignette showing a small sailcraft near Earth orbit and then farther from the Sun with weakening light pressure; (6) habitat/material swatches for vacuum-black space, gold sunlight, silver sail film, graphite boom composite, blue Earth limb, and amber test-bench light; (7) a concise safe-observation/accuracy note panel saying the thrust is tiny but continuous and needs no onboard propellant. Use crisp panel hierarchy, readable short labels, accurate non-fiction tone, tactile film wrinkles, realistic glare, orbital depth, clean engineering color coding, and dense but coherent visual detail. No fantasy warp drive, no rockets firing, no invented statistics, no dense paragraphs, no corporate logos, no QR code, no dark evidence board, no gore, no humans.\n\nReusable template: Create a finished square factual infographic titled \"HOW [REAL SPACE_OR_PHYSICS_SYSTEM] WORKS\" explaining [REAL-WORLD/NON-FICTION TOPIC] using conservative science. Anchor it as a photorealistic chart in a relevant real workspace, include a central cutaway/specimen or mechanism panel, a step-by-step process sequence, at least two macro material/detail windows, a cause/effect comparison panel, a scale/context vignette, material swatches, and a concise safe-observation/accuracy note. Keep labels restrained and readable, with accurate relationships and no invented statistics.",
+    "image": "images/2026-07-11-factual-infographic-factual-infographic-how-solar-sails-get.jpg",
+    "thumb": "thumbs/2026-07-11-factual-infographic-factual-infographic-how-solar-sails-get.webp",
+    "color": "#2d3032",
+    "date": "2026-07-11",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Solar sail photon momentum and reflective light-pressure propulsion",
+      "description": "A real-world physics infographic explaining how reflective solar sails use photon momentum for tiny continuous thrust without onboard propellant.",
+      "sourceNote": "Conservative summary of standard solar-sail physics: photons carry momentum; reflection changes photon momentum and transfers a small continuous force to the sail; steering changes sail angle; sunlight weakens with distance from the Sun."
+    }
   }
 ]
