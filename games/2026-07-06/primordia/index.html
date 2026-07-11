@@ -244,7 +244,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.4.0'; // v1.4: sexual SELECTION — heritable mate choice (choosy) on a costly display gene (ornament) -> Fisherian runaway; grazers evolve gaudy glowing tail-streamers, checked by a predation+energy cost. Visible, reliable divergence.
+const VERSION = 'v1.5.0'; // v1.5: seasonal cycles — a slow abundance rhythm (the lean/thaw/high bloom/bloomfall) over ~5.5min that swells & thins the plankton, shifts the colour temperature, and reshapes selection across the year. A second timescale beneath the day/night.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -291,6 +291,7 @@ const CFG = {
   grazeStart:90, grazeCap:600,
   predStart:10,
   dayPeriod:150,           // sim-seconds per full day/night cycle (2.5 min)
+  seasonPeriod:330,        // sim-seconds per full seasonal cycle (5.5 min) — the slower rhythm
   mutSigma:0.05, hueMut:8,
   step:1/60,
 };
@@ -552,12 +553,21 @@ function spawnRing(x,y,r1,hue,dur,lw){
 
 /* ---------- day / night ---------- */
 let simTime=0, dayFactor=1, dayIndex=0, lastPhaseDay=true;
+// seasons: a slower rhythm than day/night. seasonFactor 0(deep lean)..1(peak abundance);
+// drives plankton productivity, mood and, over long runs, which traits pay off.
+let seasonFactor=1, seasonIdx=-1;
+const SEASON_NAMES=['bloomfall','the lean','the thaw','high bloom']; // trough → rising → peak → falling
 function updateDay(){
   const p=(simTime%CFG.dayPeriod)/CFG.dayPeriod; // 0..1
   dayFactor=0.5-0.5*Math.cos(p*TAU); // smooth 0(night)..1(noon)..0
   dayIndex=Math.floor(simTime/CFG.dayPeriod);
   const isDay=dayFactor>0.5;
   if(isDay!==lastPhaseDay){ lastPhaseDay=isDay; emit(isDay?'dawn':'dusk',cam.x,cam.y,null); }
+  // seasonal cycle
+  const sp=(simTime%CFG.seasonPeriod)/CFG.seasonPeriod;
+  seasonFactor=0.5-0.5*Math.cos(sp*TAU);               // 0 at sp=0 (trough) → 1 at sp=0.5 (peak)
+  const si = sp<0.25?1 : sp<0.5?2 : sp<0.75?3 : 0;     // lean → thaw → high bloom → bloomfall
+  if(si!==seasonIdx){ if(seasonIdx>=0)emit('season',cam.x,cam.y,null); seasonIdx=si; }
 }
 
 /* ---------- population tracking ---------- */
@@ -565,8 +575,8 @@ const HIST=180; // seconds of ring buffer, 1 sample/s
 const popPlank=new Float32Array(HIST), popGraze=new Float32Array(HIST), popPred=new Float32Array(HIST);
 let histIdx=0, histAcc=0;
 let peakGraze=1, peakPred=1, peakPlank=1;
-let genesisMeans=null, generationMax=1, extinctions=0;
-const geneHist=[]; // {speed,size,sense,fear} per second (grazers), for chart
+let genesisMeans=null, predGenesisMeans=null, generationMax=1, extinctions=0;
+const geneHist=[]; // {speed,size,sense,fear,predSpeed} per second, for chart
 const GHMAX=240;
 function snapshotMeans(){
   // scan creatures directly (not the active `grazers` list, which is only built inside step())
@@ -576,20 +586,29 @@ function snapshotMeans(){
   if(n===0)return null;
   return {speed:sp/n,size:sz/n,sense:se/n,fear:fe/n,cohere:co/n,align:al/n,ornament:or/n,choosy:ch/n,n};
 }
+function snapshotPredMeans(){ // predator gene means — the other half of the arms race
+  let n=0,sp=0,sz=0,se=0;
+  for(const c of creatures){ if(!c.alive||c.kind!==1)continue; n++; sp+=c.speed;sz+=c.size;se+=c.sense; }
+  if(n===0)return null;
+  return {speed:sp/n,size:sz/n,sense:se/n,n};
+}
+function checkArmsRace(m,pm){ /* filled in after verifying predators co-evolve */ }
 function sampleHistory(){
   const npl=PL.n, ng=grazers.length, npr=preds.length;
   popPlank[histIdx]=npl; popGraze[histIdx]=ng; popPred[histIdx]=npr;
   histIdx=(histIdx+1)%HIST;
   peakGraze=Math.max(peakGraze*0.999,ng); peakPred=Math.max(peakPred*0.999,npr);
   peakPlank=Math.max(peakPlank*0.999,npl);
-  const m=snapshotMeans();
-  if(m){ geneHist.push({speed:m.speed,size:m.size,sense:m.sense,fear:m.fear});
+  const m=snapshotMeans(), pm=snapshotPredMeans();
+  if(m){ geneHist.push({speed:m.speed,size:m.size,sense:m.sense,fear:m.fear,
+      predSpeed: pm?pm.speed:null});
     if(geneHist.length>GHMAX)geneHist.shift();
     let gm=1; for(const c of grazers) if(c.gen>gm)gm=c.gen;
     for(const c of preds) if(c.gen>gm)gm=c.gen;
     generationMax=gm;
   }
   checkNarrationStats(m);
+  checkArmsRace(m,pm);
   checkGenMilestone();
   detectSpecies();
 }
@@ -668,7 +687,8 @@ function step(dt){
   gridBuild(creatures);
 
   // plankton logistic growth per cluster
-  const r = lerp(CFG.r_night,CFG.r_day,dayFactor);
+  // plankton productivity: fast daily rhythm × slow seasonal rhythm (lean months grow ~30% less)
+  const r = lerp(CFG.r_night,CFG.r_day,dayFactor) * lerp(0.68,1.28,seasonFactor);
   // one O(planktonCap) tally of per-cluster occupancy, instead of 48 full rescans
   clCount.fill(0);
   for(let i=0;i<CFG.planktonCap;i++){ if(PL.alive[i])clCount[PL.cl[i]]++; }
@@ -1039,6 +1059,7 @@ function emit(type,x,y,c){
     case 'dawn': narrate('dawn',null); if(A.on)sfxDawn(); break;
     case 'dusk': narrate('dusk',null); if(A.on)sfxDusk(); break;
     case 'migrate': narrate('migrate',null); break;
+    case 'season': narrate('season',null,{name:SEASON_NAMES[seasonIdx]}); break;
   }
 }
 function pushInterest(x,y,w){ interest.push({x,y,w,t:simTime}); if(interest.length>16)interest.shift(); }
@@ -1401,6 +1422,8 @@ const CAP={
     'scarcity is also a kind of selection','thin water. everything gets desperate now'],
   migrate:['hunters arrive from the deeper dark','new predators drift in from the trench',
     'the water was calm. it will not stay that way'],
+  season:['the long rhythm turns — {name} settles over the deep','{name} arrives; the water changes its terms',
+    'a slower season shifts — {name} now','the deep keeps its own calendar — {name}'],
   detritus:['the dead feed the living. nothing is wasted','a fall of bodies — a feast for the patient',
     'even endings are edible down here'],
   followStart:['following {name} — one life among hundreds','staying with this one for a while',
@@ -1412,9 +1435,9 @@ const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_ne
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
   evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament'};
 const PRIORITY={genesis:0,extinction:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
-  genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3};
+  genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3,season:3};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
-  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240};
+  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70};
 const bags={}; const evLast={};
 let lastCaptionAt=-100, lastVoiceAt=-100, firstBirthDone=false, warmupUntil=20;
 let queued=null;
@@ -1601,7 +1624,7 @@ function genesisStep(dt){
   if(genesisT>2.6 && !foundersSpawned){ foundersSpawned=true;
     for(let i=0;i<CFG.grazeStart;i++){ const pp=nearClusterPos(); spawnCreature(0, pp.x, pp.y, null); }
     for(let i=0;i<CFG.predStart;i++) spawnCreature(1, rrange(120,CFG.W-120), rrange(90,CFG.H-90), null);
-    genesisMeans=snapshotMeans();
+    genesisMeans=snapshotMeans(); predGenesisMeans=snapshotPredMeans();
     peakGraze=CFG.grazeStart; peakPred=CFG.predStart;
     firstBirthDone=false; schoolState=0; huntStreak.count=0;
     for(const k in dataArmed)delete dataArmed[k];
@@ -1790,6 +1813,15 @@ function draw(){
   drawCaustics();
   ctx.globalCompositeOperation='source-over';
   ctx.globalAlpha=1; ctx.drawImage(vignette,0,0);
+  // seasonal colour temperature: warm/golden at high bloom, cold/indigo in the lean (subtle)
+  const warm=(seasonFactor-0.5)*2;                      // -1 lean .. +1 peak
+  if(Math.abs(warm)>0.05){
+    ctx.globalCompositeOperation = warm>0 ? 'lighter' : 'multiply';
+    ctx.globalAlpha=Math.abs(warm)*0.09;
+    ctx.fillStyle = warm>0 ? '#ffb347' : '#3048a0';
+    ctx.fillRect(0,0,cv.width,cv.height);
+    ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+  }
   // chromatic aberration burst
   if(chroma>0.01)drawChroma();
   // followed halo
@@ -2138,7 +2170,7 @@ function hudTick(dt){
   if(hudAcc>0.25){ hudAcc=0;
     elPP.textContent=planktonCount(); elPG.textContent=grazers.length; elPR.textContent=preds.length;
     const phase=dayFactor>0.66?'day':dayFactor<0.33?'night':(lastPhaseDay?'dawn':'dusk');
-    elClock.textContent=`gen ${generationMax} · day ${dayIndex} · ${phase}`+(speciesCount>1?' · 2 species':'');
+    elClock.textContent=`gen ${generationMax} · ${SEASON_NAMES[seasonIdx]} · ${phase}`+(speciesCount>1?' · 2 species':'');
     if(statsOn)drawScopes();
     if(inspTarget)updateInspector();
   }
@@ -2433,7 +2465,7 @@ function boot(){
   // seed some plankton
   for(let ci=0;ci<clusters.length;ci++){ const want=Math.round(clusters[ci].N);
     for(let k=0;k<want;k++)spawnMote(ci); }
-  genesisMeans=snapshotMeans();
+  genesisMeans=snapshotMeans(); predGenesisMeans=snapshotPredMeans();
   titleEl.classList.add('on');
   requestAnimationFrame(frame);
 }
@@ -2444,6 +2476,8 @@ window.__prim={
   get plankton(){return planktonCount();}, get gen(){return generationMax;},
   get simTime(){return simTime;}, get quality(){return quality;},
   get means(){return snapshotMeans();}, get genesisMeans(){return genesisMeans;},
+  get predMeans(){return snapshotPredMeans();}, get predGenesisMeans(){return predGenesisMeans;},
+  get season(){return SEASON_NAMES[seasonIdx];}, get seasonFactor(){return +seasonFactor.toFixed(2);},
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
   get ornament(){ const m=snapshotMeans(); return m?+m.ornament.toFixed(3):0; },
