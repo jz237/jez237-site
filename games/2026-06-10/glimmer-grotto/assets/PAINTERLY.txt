@@ -1,3 +1,0 @@
-# Assets listed here are painterly art drop-ins (see ASSET_PROMPTS.md).
-# tools/gen_assets.py will NOT overwrite them when regenerating placeholders.
-miner
