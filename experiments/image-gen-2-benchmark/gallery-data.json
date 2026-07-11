@@ -4725,5 +4725,45 @@
       "description": "A believable volcanic reed-marsh animal with heat-sensing translucent ear cups, webbed digging forefeet, ash-shedding dorsal plates, and mineral-freckled wet skin.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-11-hybrid-creature-infographic-inkveil-marsh-stilt-development",
+    "title": "Inkveil Marsh Stilt: Development Map",
+    "tests": "Hybrid creature development-map infographic; fictional non-actionable two-source source-trait map; exact sources secretary bird + flamboyant cuttlefish.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Inkveil Marsh Stilt\", using exactly two source organisms: secretary bird + flamboyant cuttlefish. Make it a landscape scientific wall chart assembled on a wet salt-marsh field-station table with black mud trays, reed stems, shell fragments, rain-specked glass, nonbranded measuring calipers, a shallow tide-pool dish, watercolor habitat swatches, and restrained concise fictional labels. Include a source-trait map, juvenile-to-adult stage strip, large adult anatomy/specimen panel, macro texture panels for scaled legs/quill crest/chromatophore skin/mantle edge/beak/mud, habitat swatches, field-context scale vignette, and a concise non-actionable fictional observation panel. Secretary bird contributes tall stalking posture, long scaled legs, black quill crest, hooked raptor beak, and ground-hunting kick posture; flamboyant cuttlefish contributes rippling chromatophore skin, W-shaped eyes, soft mantle cloak, undulating fin skirt, and short exploratory arm fringe. Keep it fictional and non-actionable: no real gene names, no lab protocols, no surgery, no gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Inkveil Marsh Stilt; [SOURCE_A] = secretary bird; [SOURCE_B] = flamboyant cuttlefish; [HABITAT] = storm-lit salt marsh at low tide; adult phenotype = knee-high reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and a short mud-probing arm fringe.",
+    "image": "images/2026-07-11-hybrid-creature-infographic-inkveil-marsh-stilt-development.jpg",
+    "thumb": "thumbs/2026-07-11-hybrid-creature-infographic-inkveil-marsh-stilt-development.webp",
+    "color": "#89847d",
+    "date": "2026-07-11",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Inkveil Marsh Stilt",
+      "imageKind": "infographic",
+      "description": "A fictional secretary bird plus flamboyant cuttlefish salt-marsh reed-walker with stilt legs, quill crest, hooked beak, W-shaped eyes, chromatophore mantle cloak, fin ripples, and mud-probing arm fringe.",
+      "continuity": "Same adult phenotype across both images: knee-high salt-marsh reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and short mud-probing arm fringe."
+    }
+  },
+  {
+    "id": "2026-07-11-hybrid-creature-wild-inkveil-marsh-stilt-in-the-wild",
+    "title": "Inkveil Marsh Stilt: In the Wild",
+    "tests": "Hybrid creature in-the-wild field photo; matching adult phenotype from development map; exact sources secretary bird + flamboyant cuttlefish.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Inkveil Marsh Stilt\", a clearly fictional two-source hybrid of secretary bird + flamboyant cuttlefish, stalking through a storm-lit salt marsh at low tide. Preserve the exact adult phenotype from the development map: a knee-high vertical marsh hunter with two extremely long yellow scaled birdlike stilt legs, compact forward-leaning torso, hooked raptor beak, raised black quill crest, alert W-shaped cuttlefish eyes, broad soft mantle cloak draped over the shoulders and flanks, rippling fin-like mantle edge, blue-green and copper-brown chromatophore flashes across wet skin, and a short fringe of flexible cuttlefish arms tucked below the chest probing black tidal mud. Show one leg lifted above glossy mud, copper reeds, gray tidal water, pale shell grit, crab holes, rain rings, foam, low storm clouds, and tactile wet natural-history detail. No labels, no text, no people, no lab setting, no gore, no logos, no real genetics, no extra source animals, no pure bird, no pure cephalopod, no human-like anatomy.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Inkveil Marsh Stilt; [SOURCE_A] = secretary bird; [SOURCE_B] = flamboyant cuttlefish; [HABITAT] = storm-lit salt marsh at low tide; shared adult phenotype = knee-high reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and a short mud-probing arm fringe.",
+    "image": "images/2026-07-11-hybrid-creature-wild-inkveil-marsh-stilt-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-11-hybrid-creature-wild-inkveil-marsh-stilt-in-the-wild.webp",
+    "color": "#4f4e4f",
+    "date": "2026-07-11",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Inkveil Marsh Stilt",
+      "imageKind": "wild",
+      "description": "A fictional secretary bird plus flamboyant cuttlefish salt-marsh reed-walker photographed in storm-lit tidal reeds with stilt legs, quill crest, hooked beak, W-shaped eyes, chromatophore mantle cloak, and mud-probing arm fringe.",
+      "continuity": "Same adult phenotype across both images: knee-high salt-marsh reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and short mud-probing arm fringe."
+    }
   }
 ]
