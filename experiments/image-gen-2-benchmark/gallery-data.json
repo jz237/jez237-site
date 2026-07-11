@@ -4706,5 +4706,24 @@
       "description": "A real-world physics infographic explaining how reflective solar sails use photon momentum for tiny continuous thrust without onboard propellant.",
       "sourceNote": "Conservative summary of standard solar-sail physics: photons carry momentum; reflection changes photon momentum and transfers a small continuous force to the sail; steering changes sail angle; sunlight weakens with distance from the Sun."
     }
+  },
+  {
+    "id": "2026-07-11-creature-design-cinderfen-ripplemole",
+    "title": "Cinderfen Ripplemole",
+    "tests": "Creature design study: believable original volcanic reed-marsh animal with heat-sensing ear cups, webbed digging forefeet, ash-shedding dorsal plates, clear scale cues, and no text-forward layout.",
+    "prompt": "Create a finished square photorealistic natural-history creature study of a believable invented animal named \"Cinderfen Ripplemole\". Design a low badger-sized animal from a warm volcanic reed-marsh where shallow black-water channels run over pumice mud and mineral steam vents. It has four broad webbed digging forefeet for swimming through soft ash silt, two compact rear bracing legs, a flexible spoon-shaped muzzle for stirring insect larvae from mud, paired translucent heat-sensing ear cups held sideways like small glass bowls, a row of ridged pumice-colored dorsal plates that shed wet ash, tiny blue-gray eyes protected by clear nictitating lids, and charcoal brown skin mottled with rusty orange mineral freckles and pale reed-green algae stains. Show the animal as a realistic field/natural-history photograph, not a poster or text card: one adult emerges half out of a shallow steaming channel in three-quarter side view, forefeet pressing into glossy black mud, muzzle rippling the water surface, ash droplets clinging to the dorsal plates, and two juveniles tucked beneath overhanging red reeds. Include ecological scale cues and field context: broken pumice pebbles, sulfur-yellow mineral crust, reed roots, tiny insect larvae in the disturbed water, a shed translucent ear-cup membrane on the mud, a plain metal field caliper partly buried with no readable text, and soft dawn steam backlit over the marsh. Make the adaptations visually legible without labels: heat-sensing ear cups facing a vent, webbed digging toes pushing through silt, ash-shedding plates beaded with mud, and the spoon muzzle making concentric ripples. Use low natural-history field-camera perspective at water level, shallow documentary depth of field, believable anatomy and weight, tactile wet mud, pumice, reed, mineral crust, skin pore, membrane, steam, and algae textures, dense but coherent ecological detail, and varied warm/cool color contrast. Finished image only, no readable text, no captions, no arrows, no poster layout, no fantasy monster styling, no gore, no logos, no watermark, no people, no blank studio background, no extra random wings or incoherent limbs.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nExample substitution: [HABITAT] = warm volcanic reed-marsh with shallow black-water channels over pumice mud and mineral steam vents; [ADAPTATION 1] = translucent heat-sensing ear cups angled toward vents; [ADAPTATION 2] = webbed digging forefeet, compact rear bracing legs, ash-shedding dorsal plates, and a spoon-shaped larva-stirring muzzle; [TEXTURE/COLOR] = charcoal brown wet skin with rusty orange mineral freckles, pale reed-green algae stains, and pumice-colored ridged plates; [LIFE STAGE OR GROUPING] = one adult with two juveniles; [SPECIFIC MICROHABITAT] = glossy ash mud, red reeds, sulfur-yellow mineral crust, broken pumice pebbles, insect larvae, and dawn steam.",
+    "image": "images/2026-07-11-creature-design-cinderfen-ripplemole.jpg",
+    "thumb": "thumbs/2026-07-11-creature-design-cinderfen-ripplemole.webp",
+    "color": "#483e33",
+    "date": "2026-07-11",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Cinderfen Ripplemole",
+      "description": "A believable volcanic reed-marsh animal with heat-sensing translucent ear cups, webbed digging forefeet, ash-shedding dorsal plates, and mineral-freckled wet skin.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
   }
 ]
