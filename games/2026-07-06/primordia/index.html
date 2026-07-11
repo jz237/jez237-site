@@ -244,7 +244,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.3.0'; // v1.3: sexual reproduction (assortative mating + genetic recombination), frequency-dependent competition -> a diversifying gene pool, live GENOME scatter; two species can emerge (rare) and are detected + narrated
+const VERSION = 'v1.4.0'; // v1.4: sexual SELECTION — heritable mate choice (choosy) on a costly display gene (ornament) -> Fisherian runaway; grazers evolve gaudy glowing tail-streamers, checked by a predation+energy cost. Visible, reliable divergence.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -299,6 +299,8 @@ const CFG = {
 const G = {
   speed:[30,90], size:[0.7,1.7], sense:[60,180], fear:[0.4,2.4],
   sep:[0.4,2.2], align:[0.2,1.8], cohere:[0.2,1.6], metab:[0.7,1.5], hue:[0,1],
+  // sexual selection: a costly display trait + the heritable preference for it -> Fisherian runaway
+  ornament:[0,1], choosy:[0,1],
 };
 
 /* ---------- canvas / view ---------- */
@@ -428,6 +430,7 @@ function spawnCreature(kind,x,y,genesFrom,mate){
     c.fear  = kind===0 ? rrange(0.7,1.4): rrange(0.4,0.7);
     c.sep=rrange(0.9,1.5); c.align=rrange(0.7,1.2); c.cohere=rrange(0.6,1.1);
     c.metab=rrange(0.9,1.2); c.hue=rnd();
+    c.ornament=rrange(0.1,0.28); c.choosy=rrange(0.35,0.75); // plain, but with real initial preference
     c.genus = kind===0 ? rint(0,GENUS_G.length-1) : rint(0,GENUS_P.length-1);
     c.gen=1; c.parentUid=0; c.speciesId=0;
     c.pspeed=c.speed; c.psize=c.size; c.psense=c.sense; c.pfear=c.fear;
@@ -567,11 +570,11 @@ const geneHist=[]; // {speed,size,sense,fear} per second (grazers), for chart
 const GHMAX=240;
 function snapshotMeans(){
   // scan creatures directly (not the active `grazers` list, which is only built inside step())
-  let n=0,sp=0,sz=0,se=0,fe=0,co=0,al=0;
+  let n=0,sp=0,sz=0,se=0,fe=0,co=0,al=0,or=0,ch=0;
   for(const c of creatures){ if(!c.alive||c.kind!==0)continue;
-    n++; sp+=c.speed;sz+=c.size;se+=c.sense;fe+=c.fear;co+=c.cohere;al+=c.align; }
+    n++; sp+=c.speed;sz+=c.size;se+=c.sense;fe+=c.fear;co+=c.cohere;al+=c.align;or+=c.ornament;ch+=c.choosy; }
   if(n===0)return null;
-  return {speed:sp/n,size:sz/n,sense:se/n,fear:fe/n,cohere:co/n,align:al/n,n};
+  return {speed:sp/n,size:sz/n,sense:se/n,fear:fe/n,cohere:co/n,align:al/n,ornament:or/n,choosy:ch/n,n};
 }
 function sampleHistory(){
   const npl=PL.n, ng=grazers.length, npr=preds.length;
@@ -848,7 +851,8 @@ function attemptCatch(c,prey){
   const sizeNorm=(prey.size-G.size[0])/(G.size[1]-G.size[0]);
   const edge=Math.abs(sizeNorm-0.5)*2;                 // 0 at mid-size, 1 at the extremes
   const sizeVuln=1.0-0.55*edge;                        // extremes escape better (down to ~0.45x)
-  let p=clamp(0.62*relSpeed*(1-0.06*neigh)*sizeVuln, 0.05, 0.9);
+  const showy=1+prey.ornament*0.15;                    // a gaudy display is a bit easier to spot (mild)
+  let p=clamp(0.62*relSpeed*(1-0.06*neigh)*sizeVuln*showy, 0.05, 0.95);
   if(prey.matur<8)p*=0.5;                                // juvenile spawn protection
   if(rnd()<p){
     c.energy=Math.min(c.cap,c.energy+68+0.5*prey.energy);
@@ -888,7 +892,9 @@ function integrate(list,dt){
     const v=Math.hypot(c.vx,c.vy);
     let cost;
     if(c.kind===0){
-      cost = 1.0*c.size*c.size*c.size*c.metab + 2.0*c.size*c.size*(v/50)*(v/50) + 0.004*c.sense;
+      cost = 1.0*c.size*c.size*c.size*c.metab + 2.0*c.size*c.size*(v/50)*(v/50) + 0.004*c.sense
+             + 0.6*c.ornament;                          // the display's steady cost — a consistent
+                                                        // counterforce that sets a stable equilibrium
     } else {
       cost = 0.85*c.size*c.size*c.size + 2.2*c.size*c.size*(v/50)*(v/50) + 0.004*c.sense;
     }
@@ -918,9 +924,12 @@ function genomeDist(a,b){
   return Math.sqrt(ds*ds+dv*dv);
 }
 function findMate(c){
-  // nearest genetically-compatible, mature grazer within sense radius (uses the neighbor grid)
+  // MATE CHOICE (Fisherian sexual selection): among genetically-compatible neighbours, a chooser
+  // weights candidates by their ornament, scaled by its OWN heritable choosiness. Since both the
+  // ornament and the preference are inherited (recombined) together, they co-evolve -> runaway
+  // exaggeration of the display, checked only by the survival cost of being conspicuous.
   const cell=gridCell(c.x,c.y); const cx=cell%HGRID.cols, cy=(cell/HGRID.cols)|0;
-  const s2=c.sense*c.sense; let best=null,bd=1e9;
+  const s2=c.sense*c.sense; let best=null,bestScore=-1e9;
   for(let oy=-1;oy<=1;oy++)for(let ox=-1;ox<=1;ox++){
     const nx=cx+ox,ny=cy+oy; if(nx<0||ny<0||nx>=HGRID.cols||ny>=HGRID.rows)continue;
     let j=HGRID.head[ny*HGRID.cols+nx];
@@ -928,7 +937,11 @@ function findMate(c){
       if(o===c||!o.alive||o.kind!==0||o.matur<20)continue;
       const dx=o.x-c.x,dy=o.y-c.y,d2=dx*dx+dy*dy; if(d2>s2)continue;
       if(genomeDist(c,o)>MATE_THRESH)continue;          // incompatible: reproductively isolated
-      if(d2<bd){bd=d2;best=o;} }
+      // score = preference for the ornament (strongly weighted by choosiness) minus a mild distance
+      // penalty. A choosy chooser will cross the whole sense radius for a gaudier mate -> the
+      // ornamented get chosen far more often -> their display genes spread -> runaway.
+      const score = o.ornament*(0.4+6.5*c.choosy) - (d2/s2)*0.12;
+      if(score>bestScore){bestScore=score;best=o;} }
   }
   return best;
 }
@@ -1376,6 +1389,8 @@ const CAP={
     'a new species, born of pressure and distance','they no longer breed across the divide'],
   speciationLoss:['the two forms collapse back into one','one of the two lineages is gone now',
     'the divide closes — a single kind again'],
+  ornament:['the display is spreading — beauty, chosen not designed','the choosy are shaping the beautiful',
+    'sexual selection, live — extravagance for its own sake','they grow gaudy — mates prefer it, so it persists'],
   dawn:['light returns. the motes begin to bloom','dawn in the trench. the growing hours',
     'the water warms into color','morning, as the deep understands it'],
   dusk:['the light thins. hunters like this part','dusk. the honest hour of the deep',
@@ -1392,14 +1407,14 @@ const CAP={
     'every dot in the dark is a story. here’s one'],
 };
 /* which events have recorded voice, and how many variants exist */
-const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2};
+const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2};
 const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
-  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation'};
-const PRIORITY={genesis:0,extinction:0,nearext:1,firstbirth:1,evolution:1,speciation:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
+  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament'};
+const PRIORITY={genesis:0,extinction:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
   genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
-  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200};
+  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240};
 const bags={}; const evLast={};
 let lastCaptionAt=-100, lastVoiceAt=-100, firstBirthDone=false, warmupUntil=20;
 let queued=null;
@@ -1476,7 +1491,14 @@ function checkNarrationStats(m){
   const sense=(m.sense/genesisMeans.sense-1)*100;
   let fired=false;
   const round5=(x)=>Math.round(x/5)*5;
-  if(Math.abs(spd)>=20 && generationMax>=8 && Math.abs(spd)>=(dataArmed.speed||20)){
+  const orn=m.ornament;                                  // absolute display level (starts ~0.2)
+  if(orn>=0.34 && generationMax>=6 && orn>=(dataArmed.orn||0.34)){
+    const line = orn>=0.6  ? 'the display has run away — extravagance the deep can barely afford'
+               : orn>=0.46 ? 'the grazers are gaudy now — beauty chosen, not designed'
+               : 'ornament is spreading — the choosy are shaping the beautiful';
+    narrate('ornament',null,{text:line,sp:'graze'});
+    dataArmed.orn=orn+0.12; fired=true;
+  } else if(Math.abs(spd)>=20 && generationMax>=8 && Math.abs(spd)>=(dataArmed.speed||20)){
     narrate('evolution',null,{text:`the grazers now swim ${Math.abs(round5(spd))}% ${spd>0?'faster':'slower'} than their ancestors`,sp:'graze'});
     dataArmed.speed=Math.abs(spd)+10; fired=true;
   } else if(Math.abs(fear)>=30 && Math.abs(fear)>=(dataArmed.fear||30)){
@@ -1956,9 +1978,10 @@ function drawBody(c,scr){
   // right side back up
   for(let i=n-1;i>=0;i--){ const px=c.segX[i]-perpX*c.segW[i], py=c.segY[i]-perpY*c.segW[i]; ctx.lineTo(px,py); }
   ctx.closePath(); ctx.fill();
-  // tail fin
+  // tail fin — grazers grow it with their ornament gene (sexual display)
   const tx=c.segX[n-1],ty=c.segY[n-1];
-  const finLen=L*0.3 + (c.speed/(c.kind===0?90:66))*L*0.35;
+  const orn = c.kind===0 ? c.ornament : 0;
+  const finLen=L*0.3 + (c.speed/(c.kind===0?90:66))*L*0.35 + orn*L*0.7;
   const flap=Math.sin(c.phase-4.2)*0.5;
   const fdx=-dirX*Math.cos(flap)+ -dirY*Math.sin(flap);
   const fdy=-dirY*Math.cos(flap)+ dirX*Math.sin(flap);
@@ -1967,6 +1990,24 @@ function drawBody(c,scr){
   ctx.lineTo(tx+fdx*finLen+perpX*finLen*0.5, ty+fdy*finLen+perpY*finLen*0.5);
   ctx.lineTo(tx+fdx*finLen-perpX*finLen*0.5, ty+fdy*finLen-perpY*finLen*0.5);
   ctx.closePath(); ctx.fill();
+  // ornament flourish: bright trailing streamers whose length & glow scale with the display gene.
+  // This is what makes sexual selection VISIBLE — a gaudy population reads instantly.
+  if(orn>0.22){
+    ctx.globalCompositeOperation='lighter';
+    const [rr,gg,bb]=hslToRgb(c.huedeg,0.95,0.66);
+    ctx.strokeStyle=`rgba(${rr},${gg},${bb},${clamp(orn*0.9,0,0.9)})`;
+    ctx.lineWidth=Math.max(0.6,L*0.05);
+    const sLen=orn*L*1.4;
+    for(const sgn of [-1,0,1]){
+      const wob=Math.sin(c.phase*1.3 - sgn*0.6)*0.5*sgn;
+      const ex=tx+(fdx*Math.cos(wob)-fdy*Math.sin(wob))*sLen + perpX*sgn*L*0.22;
+      const ey=ty+(fdy*Math.cos(wob)+fdx*Math.sin(wob))*sLen + perpY*sgn*L*0.22;
+      ctx.beginPath(); ctx.moveTo(tx+perpX*sgn*L*0.12, ty+perpY*sgn*L*0.12);
+      ctx.quadraticCurveTo(tx+fdx*sLen*0.5, ty+fdy*sLen*0.5, ex, ey); ctx.stroke();
+    }
+    glow(tx+fdx*sLen, ty+fdy*sLen, L*0.5*orn, c.huedeg, orn*0.5); // bright tip
+    ctx.globalCompositeOperation='source-over';
+  }
   // pectorals with fear flare
   const flare=c.fearFlare*0.6;
   const px1=c.segX[1],py1=c.segY[1];
@@ -2405,6 +2446,8 @@ window.__prim={
   get means(){return snapshotMeans();}, get genesisMeans(){return genesisMeans;},
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
+  get ornament(){ const m=snapshotMeans(); return m?+m.ornament.toFixed(3):0; },
+  get choosy(){ const m=snapshotMeans(); return m?+m.choosy.toFixed(3):0; },
   get sizeSpread(){ let mn=9,mx=0; for(const c of grazers){if(c.size<mn)mn=c.size;if(c.size>mx)mx=c.size;}
     return grazers.length?+(mx-mn).toFixed(2):0; },
   get meanEnergy(){ let s=0,n=0; for(const c of grazers){s+=c.energy/c.cap;n++;} return n?+(s/n).toFixed(2):0; },
