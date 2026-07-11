@@ -196,6 +196,7 @@
 
   <div id="stats">
     <div class="scope"><div class="lbl">POPULATION</div><canvas id="scope" width="248" height="78"></canvas></div>
+    <div class="scope"><div class="lbl" id="genomeLbl">GENOME · size × speed</div><canvas id="genome" width="248" height="94"></canvas></div>
     <div class="scope" id="genewrap"><div class="lbl">EVOLUTION · grazers vs genesis</div><canvas id="genechart" width="248" height="70"></canvas></div>
   </div>
 
@@ -243,7 +244,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.2.0'; // v1.2: hydrothermal vents, swaying kelp, cinematic slow-mo kills, gene-expressed markings
+const VERSION = 'v1.3.0'; // v1.3: sexual reproduction (assortative mating + genetic recombination), frequency-dependent competition -> a diversifying gene pool, live GENOME scatter; two species can emerge (rare) and are detected + narrated
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -285,8 +286,8 @@ const CFG = {
   W:1600, H:900,
   clusters:48, K_c:12, planktonCap:480,
   r_day:0.30, r_night:0.07,
-  F_p:28,
-  grazeSoft:180,          // soft carrying capacity (density-dependent reproduction backstop)
+  F_p:30,
+  grazeSoft:210,          // soft carrying capacity (density-dependent reproduction backstop)
   grazeStart:90, grazeCap:600,
   predStart:10,
   dayPeriod:150,           // sim-seconds per full day/night cycle (2.5 min)
@@ -397,7 +398,7 @@ function newCreature(){
     pspeed:0,psize:0,psense:0,pfear:0,
     // runtime
     phase:0, state:0, gut:0, dashT:0, dashCd:0, fearFlare:0, matur:0, repro:0,
-    heading:0, angvel:0, chaseId:-1, chaseT:0,
+    heading:0, angvel:0, chaseId:-1, chaseT:0, speciesId:0, mateUid:0,
     segX:new Float32Array(MAXSEG), segY:new Float32Array(MAXSEG), segW:new Float32Array(MAXSEG),
   };
 }
@@ -405,18 +406,20 @@ const creatures=[]; const freeC=[];
 for(let i=0;i<CFG.grazeCap;i++){ const c=newCreature(); c.idx=i; creatures.push(c); freeC.push(i); }
 const grazers=[]; const preds=[]; // active lists (rebuilt each step)
 
-function spawnCreature(kind,x,y,genesFrom){
+function spawnCreature(kind,x,y,genesFrom,mate){
   if(freeC.length===0) return null;
   const idx=freeC.pop(); const c=creatures[idx];
   c.alive=true; c.uid=uidCounter++; c.kind=kind; c.x=x; c.y=y;
   c.vx=rrange(-10,10); c.vy=rrange(-10,10); c.age=0; c.gut=0; c.dashT=0; c.dashCd=0;
   c.phase=rrange(0,TAU); c.state=0; c.fearFlare=0; c.matur=0; c.repro=0;
   c.chaseId=-1; c.chaseT=0; c.angvel=0; c.heading=Math.atan2(c.vy,c.vx);
-  c.offspring=0; c.kills=0; c.escapes=0;
-  if(genesFrom){ // inherit + mutate
-    for(const k in G){ let v=genesFrom[k]*(1+gauss()*CFG.mutSigma); c[k]=clamp(v,G[k][0],G[k][1]); }
-    c.hue = clamp(genesFrom.hue + gauss()*(CFG.hueMut/360), 0,1);
+  c.offspring=0; c.kills=0; c.escapes=0; c.mateUid=mate?mate.uid:0;
+  if(genesFrom){ // inherit + mutate — with a mate, each gene recombines from either parent (sexual)
+    for(const k in G){ const base = mate ? (rnd()<0.5?genesFrom[k]:mate[k]) : genesFrom[k];
+      let v=base*(1+gauss()*CFG.mutSigma); c[k]=clamp(v,G[k][0],G[k][1]); }
+    c.hue = clamp((mate?(rnd()<0.5?genesFrom.hue:mate.hue):genesFrom.hue) + gauss()*(CFG.hueMut/360), 0,1);
     c.genus=genesFrom.genus; c.gen=genesFrom.gen+1; c.parentUid=genesFrom.uid;
+    c.speciesId=genesFrom.speciesId;
     c.pspeed=genesFrom.speed; c.psize=genesFrom.size; c.psense=genesFrom.sense; c.pfear=genesFrom.fear;
   } else { // founder
     c.speed = kind===0 ? rrange(34,50) : rrange(48,66); // grazers seeded SLOW (arms race)
@@ -426,7 +429,7 @@ function spawnCreature(kind,x,y,genesFrom){
     c.sep=rrange(0.9,1.5); c.align=rrange(0.7,1.2); c.cohere=rrange(0.6,1.1);
     c.metab=rrange(0.9,1.2); c.hue=rnd();
     c.genus = kind===0 ? rint(0,GENUS_G.length-1) : rint(0,GENUS_P.length-1);
-    c.gen=1; c.parentUid=0;
+    c.gen=1; c.parentUid=0; c.speciesId=0;
     c.pspeed=c.speed; c.psize=c.size; c.psense=c.sense; c.pfear=c.fear;
   }
   c.huedeg = kind===0 ? (60+c.hue*100) : (280+c.hue*80); // grazer 60..160, pred 280..360
@@ -585,6 +588,58 @@ function sampleHistory(){
   }
   checkNarrationStats(m);
   checkGenMilestone();
+  detectSpecies();
+}
+
+/* ---------- speciation detection ----------
+   Cluster grazers by body size (the trait under disruptive selection). When a clear bimodal
+   gap opens and both sides are populous, the population has split into two size-morphs — and
+   because mating is assortative on that same trait (findMate), they no longer interbreed.
+   That is a real biological species boundary, discovered from state, not scripted. */
+let speciesCount=1, speciesSplitSize=0, sp2Streak=0, speciatedAnnounced=false;
+const speciesInfo=[{n:0,size:0,speed:0,hue:120},{n:0,size:0,speed:0,hue:120}];
+// frequency-dependent competition: a size-niche histogram, rebuilt each sample. A grazer in a
+// crowded size class competes harder for food (gains less) -> rare sizes are rewarded -> the
+// modal centre is penalised -> the trait distribution is pushed apart. This is what makes a
+// single population actually SPLIT (Dieckmann-Doebeli), not just widen.
+const SIZEBINS=12; const sizeHist=new Float32Array(SIZEBINS); let sizeHistTotal=1;
+function sizeBin(sz){ let b=((sz-G.size[0])/(G.size[1]-G.size[0])*SIZEBINS)|0; return b<0?0:(b>=SIZEBINS?SIZEBINS-1:b); }
+function foodCompMul(sz){ // energy multiplier for a grazer of this size, given the crowding
+  const crowd=sizeHist[sizeBin(sz)]/sizeHistTotal;      // fraction of grazers sharing this niche
+  return clamp(1.2-1.8*crowd, 0.6, 1.2);                // rewards rare sizes; floor 0.6 keeps it stable
+}
+function detectSpecies(){
+  const gz=grazers, n=gz.length;
+  // rebuild the size-niche histogram (used every step by eatMote for competition)
+  sizeHist.fill(0); for(let i=0;i<n;i++)sizeHist[sizeBin(gz[i].size)]++; sizeHistTotal=Math.max(1,n);
+  if(n<24){ for(const c of gz)c.speciesId=0; speciesCount=1; speciesSplitSize=0; sp2Streak=0;
+    if(speciatedAnnounced){ speciatedAnnounced=false; } return; }
+  // largest gap in the central 70% of the sorted size distribution
+  const sizes=new Float64Array(n); for(let i=0;i<n;i++)sizes[i]=gz[i].size;
+  sizes.sort();
+  const lo=(n*0.15)|0, hi=(n*0.85)|0; let gap=0,gapAt=0;
+  for(let i=lo;i<hi;i++){ const g=sizes[i+1]-sizes[i]; if(g>gap){gap=g;gapAt=(sizes[i]+sizes[i+1])*0.5;} }
+  const range=G.size[1]-G.size[0];
+  let two=false;
+  if(gap>0.11*range){
+    let a=0,b=0; for(const c of gz){ if(c.size<gapAt)a++; else b++; }
+    if(a>=10 && b>=10) two=true;
+  }
+  if(two){
+    speciesCount=2; speciesSplitSize=gapAt;
+    let a=0,b=0,as=0,bs=0,asp=0,bsp=0,ah=0,bh=0;
+    for(const c of gz){ if(c.size<gapAt){c.speciesId=0;a++;as+=c.size;asp+=c.speed;ah+=c.huedeg;}
+      else {c.speciesId=1;b++;bs+=c.size;bsp+=c.speed;bh+=c.huedeg;} }
+    speciesInfo[0]={n:a,size:as/a,speed:asp/a,hue:ah/a};
+    speciesInfo[1]={n:b,size:bs/b,speed:bsp/b,hue:bh/b};
+    sp2Streak++;
+    if(sp2Streak===8 && !speciatedAnnounced){ speciatedAnnounced=true;
+      narrate('speciation',null,{sizeGap:Math.round((speciesInfo[1].size/speciesInfo[0].size-1)*100)});
+      if(A.on)sfxEvolveChime(); pushInterest(cam.x,cam.y,7); }
+  } else {
+    speciesCount=1; speciesSplitSize=0; for(const c of gz)c.speciesId=0; sp2Streak=0;
+    if(speciatedAnnounced){ speciatedAnnounced=false; narrate('speciationLoss',null); }
+  }
 }
 
 /* ---------- flocking order parameter (schooling meter) ---------- */
@@ -738,7 +793,7 @@ function eatMote(i,c){
   if(!PL.alive[i])return;
   const cl=PL.cl[i]; PL.alive[i]=0; // consumed
   clusters[cl].N=Math.max(0.3, clusters[cl].N-1); // eating removes biomass; regrows at logistic rate
-  c.energy=Math.min(c.cap,c.energy+CFG.F_p);
+  c.energy=Math.min(c.cap,c.energy+CFG.F_p*foodCompMul(c.size)); // frequency-dependent competition
   eatsCounter++;
   emit('eat',PL.px[i],PL.py[i],c);
 }
@@ -787,7 +842,13 @@ function attemptCatch(c,prey){
   // predation selects prey speed UPWARD (the arms race). Flock confusion helps too.
   const neigh=prey._local||0;
   const relSpeed = c.speed / prey.speed;                 // >1 predator faster
-  let p=clamp(0.62*relSpeed*(1-0.06*neigh), 0.05, 0.85);
+  // DISRUPTIVE selection on size: the small-agile and the large-tough both get a predation
+  // refuge; mid-sized prey stay at baseline. Two fitness peaks -> the engine of sympatric
+  // speciation. Only ever REDUCES catch (never raises mean predation), so it can't destabilize.
+  const sizeNorm=(prey.size-G.size[0])/(G.size[1]-G.size[0]);
+  const edge=Math.abs(sizeNorm-0.5)*2;                 // 0 at mid-size, 1 at the extremes
+  const sizeVuln=1.0-0.55*edge;                        // extremes escape better (down to ~0.45x)
+  let p=clamp(0.62*relSpeed*(1-0.06*neigh)*sizeVuln, 0.05, 0.9);
   if(prey.matur<8)p*=0.5;                                // juvenile spawn protection
   if(rnd()<p){
     c.energy=Math.min(c.cap,c.energy+68+0.5*prey.energy);
@@ -847,6 +908,30 @@ function integrate(list,dt){
   }
 }
 
+// genome distance on the ecologically-selected traits (normalized). Assortative mating uses this:
+// like mates with like, so once two size-morphs diverge past MATE_THRESH they stop interbreeding =
+// real reproductive isolation = speciation, not a cosmetic label.
+const MATE_THRESH=0.19;
+function genomeDist(a,b){
+  const ds=(a.size-b.size)/(G.size[1]-G.size[0]);
+  const dv=(a.speed-b.speed)/(G.speed[1]-G.speed[0]);
+  return Math.sqrt(ds*ds+dv*dv);
+}
+function findMate(c){
+  // nearest genetically-compatible, mature grazer within sense radius (uses the neighbor grid)
+  const cell=gridCell(c.x,c.y); const cx=cell%HGRID.cols, cy=(cell/HGRID.cols)|0;
+  const s2=c.sense*c.sense; let best=null,bd=1e9;
+  for(let oy=-1;oy<=1;oy++)for(let ox=-1;ox<=1;ox++){
+    const nx=cx+ox,ny=cy+oy; if(nx<0||ny<0||nx>=HGRID.cols||ny>=HGRID.rows)continue;
+    let j=HGRID.head[ny*HGRID.cols+nx];
+    while(j!==-1){ const o=creatures[j]; j=HGRID.next[j];
+      if(o===c||!o.alive||o.kind!==0||o.matur<20)continue;
+      const dx=o.x-c.x,dy=o.y-c.y,d2=dx*dx+dy*dy; if(d2>s2)continue;
+      if(genomeDist(c,o)>MATE_THRESH)continue;          // incompatible: reproductively isolated
+      if(d2<bd){bd=d2;best=o;} }
+  }
+  return best;
+}
 function reproduce(c){
   // density-dependent suppression (resource competition proxy) — the honest population brake
   if(c.kind===0){
@@ -859,7 +944,9 @@ function reproduce(c){
   } else {
     if(preds.length>26){ if(rnd()>0.3){ c.repro=3; return; } }
   }
-  const child=spawnCreature(c.kind, c.x+rrange(-8,8), c.y+rrange(-8,8), c);
+  // grazers reproduce sexually when a compatible mate is near; else bud asexually (never stalls)
+  const mate = c.kind===0 ? findMate(c) : null;
+  const child=spawnCreature(c.kind, c.x+rrange(-8,8), c.y+rrange(-8,8), c, mate);
   if(!child){ c.repro=c.kind===0?4:6; return; } // pool full: throttle retries instead of spinning
   const share=0.45*c.energy;
   child.energy=share; c.energy=share; // 10% lost
@@ -1285,6 +1372,10 @@ const CAP={
     'panic travels faster than the predator','the single mind breaks into many'],
   evolution:['the {sp} are changing. evolution, live','these are not their ancestors anymore',
     'the genes drift, and the bodies follow','selection has been busy while you watched'],
+  speciation:['one kind of grazer has become two','the lineage splits — two ways to be a grazer now',
+    'a new species, born of pressure and distance','they no longer breed across the divide'],
+  speciationLoss:['the two forms collapse back into one','one of the two lineages is gone now',
+    'the divide closes — a single kind again'],
   dawn:['light returns. the motes begin to bloom','dawn in the trench. the growing hours',
     'the water warms into color','morning, as the deep understands it'],
   dusk:['the light thins. hunters like this part','dusk. the honest hour of the deep',
@@ -1301,14 +1392,14 @@ const CAP={
     'every dot in the dark is a story. here’s one'],
 };
 /* which events have recorded voice, and how many variants exist */
-const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2};
+const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2};
 const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
-  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen'};
-const PRIORITY={genesis:0,extinction:0,nearext:1,firstbirth:1,evolution:1,boom:2,crash:2,huntstreak:2,
+  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation'};
+const PRIORITY={genesis:0,extinction:0,nearext:1,firstbirth:1,evolution:1,speciation:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
   genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
-  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0};
+  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200};
 const bags={}; const evLast={};
 let lastCaptionAt=-100, lastVoiceAt=-100, firstBirthDone=false, warmupUntil=20;
 let queued=null;
@@ -1499,6 +1590,7 @@ function genesisStep(dt){
     captionsSinceData=99; lastDataAt=-100;
     popGraze.fill(0); popPred.fill(0); popPlank.fill(0); histIdx=0; histAcc=0;
     geneHist.length=0; speciesState={graze:{},pred:{}};
+    speciesCount=1; speciesSplitSize=0; sp2Streak=0; speciatedAnnounced=false;
   }
   if(genesisT>6){ genesisActive=false; genesisSeeded=false; foundersSpawned=false;
     cam.state='DRIFT'; cam.dwell=0; }
@@ -2005,7 +2097,7 @@ function hudTick(dt){
   if(hudAcc>0.25){ hudAcc=0;
     elPP.textContent=planktonCount(); elPG.textContent=grazers.length; elPR.textContent=preds.length;
     const phase=dayFactor>0.66?'day':dayFactor<0.33?'night':(lastPhaseDay?'dawn':'dusk');
-    elClock.textContent=`gen ${generationMax} · day ${dayIndex} · ${phase}`;
+    elClock.textContent=`gen ${generationMax} · day ${dayIndex} · ${phase}`+(speciesCount>1?' · 2 species':'');
     if(statsOn)drawScopes();
     if(inspTarget)updateInspector();
   }
@@ -2015,7 +2107,34 @@ let hudAcc=0;
 /* stats scopes */
 const scopeC=document.getElementById('scope'),scopeX=scopeC.getContext('2d');
 const geneC=document.getElementById('genechart'),geneX=geneC.getContext('2d');
+const genomeC=document.getElementById('genome'),genomeX=genomeC.getContext('2d');
+const genomeLbl=document.getElementById('genomeLbl');
 let statsOn=false, geneOn=false;
+/* genome scatter — every grazer plotted at (size, speed); watch one cloud split into two species */
+function drawGenomeScatter(){
+  const w=genomeC.width,h=genomeC.height; genomeX.clearRect(0,0,w,h);
+  // axes hint
+  genomeX.globalAlpha=1;
+  const S0=G.size[0],S1=G.size[1],V0=G.speed[0],V1=G.speed[1];
+  // split line if two species
+  if(speciesCount===2 && speciesSplitSize>0){
+    const sx=(speciesSplitSize-S0)/(S1-S0)*w;
+    genomeX.strokeStyle='rgba(255,255,255,0.28)'; genomeX.setLineDash([2,3]); genomeX.lineWidth=1;
+    genomeX.beginPath(); genomeX.moveTo(sx,0); genomeX.lineTo(sx,h); genomeX.stroke(); genomeX.setLineDash([]);
+  }
+  genomeX.globalCompositeOperation='lighter';
+  for(const c of grazers){
+    const x=clamp((c.size-S0)/(S1-S0),0,1)*w;
+    const y=h-clamp((c.speed-V0)/(V1-V0),0,1)*h;
+    genomeX.fillStyle = speciesCount===2 ? (c.speciesId===0?'rgba(87,230,255,0.7)':'rgba(255,206,106,0.75)')
+                                         : 'rgba(120,240,180,0.6)';
+    genomeX.beginPath(); genomeX.arc(x,y,1.6,0,TAU); genomeX.fill();
+  }
+  genomeX.globalCompositeOperation='source-over';
+  genomeLbl.textContent = speciesCount===2
+    ? `GENOME · 2 SPECIES — small×fast vs large×tough`
+    : `GENOME · size × speed`;
+}
 function drawScopes(){
   const w=scopeC.width,h=scopeC.height;
   scopeX.clearRect(0,0,w,h);
@@ -2029,6 +2148,7 @@ function drawScopes(){
   draw(popPlank,'#7cf0b0',CFG.planktonCap);
   draw(popGraze,'#57e6ff',CFG.grazeStart*2.5);
   draw(popPred,'#ff5ac8',CFG.predStart*4);
+  drawGenomeScatter();
   if(geneOn)drawGeneChart();
 }
 function drawGeneChart(){
@@ -2284,6 +2404,9 @@ window.__prim={
   get simTime(){return simTime;}, get quality(){return quality;},
   get means(){return snapshotMeans();}, get genesisMeans(){return genesisMeans;},
   get order(){return orderParam;}, get day(){return dayFactor;},
+  get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
+  get sizeSpread(){ let mn=9,mx=0; for(const c of grazers){if(c.size<mn)mn=c.size;if(c.size>mx)mx=c.size;}
+    return grazers.length?+(mx-mn).toFixed(2):0; },
   get meanEnergy(){ let s=0,n=0; for(const c of grazers){s+=c.energy/c.cap;n++;} return n?+(s/n).toFixed(2):0; },
   get clusterN(){ let s=0; for(const c of clusters)s+=c.N; return Math.round(s); },
   get eats(){ const e=eatsCounter; eatsCounter=0; return e; },
