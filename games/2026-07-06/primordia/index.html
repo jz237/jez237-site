@@ -270,7 +270,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.7.0'; // v1.7: THE CHRONICLE — a persistent 'story so far' log (button/❧/key C) that records the run's momentous events (genesis epochs, generation milestones, extinctions, speciation, evolution & ornament milestones, famines, leviathan visits) with day+gen stamps. Deep-time made legible.
+const VERSION = 'v1.7.1'; // v1.7.1: harden pass (5-dim adversarial review). Fixed: season narration named the season LEAVING not arriving; gen-400+ milestone skipped on overshoot; per-frame draw allocs (ornament streamer hslToRgb/rgba-string + hoisted SGN2/SGN3 loop arrays, cached hueRGB); per-birth for..in -> GKEYS. Genesis-reset verified complete.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -329,6 +329,7 @@ const G = {
   // sexual selection: a costly display trait + the heritable preference for it -> Fisherian runaway
   ornament:[0,1], choosy:[0,1],
 };
+const GKEYS=Object.keys(G); // static gene-key list — iterated by index on every birth (avoids for..in)
 
 /* ---------- canvas / view ---------- */
 const cv=document.getElementById('cv'), ctx=cv.getContext('2d',{alpha:false});
@@ -389,6 +390,12 @@ function bodyColor(hue,light){
   if(!s){ s=`hsl(${(hb/HUEBUCKETS*360)|0},85%,${[34,46,58,70][lb]}%)`; bodyStyle[key]=s; }
   return s;
 }
+// cached bright rgb string per hue bucket (for ornament streamers) — avoids per-frame hslToRgb+string alloc
+const hueRGBCache={};
+function hueRGB(hue){ const hb=((hue/360*HUEBUCKETS)|0)%HUEBUCKETS; let s=hueRGBCache[hb];
+  if(!s){ const c=hslToRgb(hb/HUEBUCKETS*360,0.95,0.66); s=`rgb(${c[0]},${c[1]},${c[2]})`; hueRGBCache[hb]=s; } return s; }
+// hoisted small loop-index arrays — avoids per-creature-per-frame array literal alloc in drawBody
+const SGN2=[1,-1], SGN3=[-1,0,1];
 
 /* ---------- spatial hash (linked list buckets, zero alloc) ---------- */
 const HGRID={cell:180, cols:0,rows:0, head:null, next:new Int32Array(CFG.grazeCap+64)};
@@ -444,7 +451,8 @@ function spawnCreature(kind,x,y,genesFrom,mate){
   c.chaseId=-1; c.chaseT=0; c.angvel=0; c.heading=Math.atan2(c.vy,c.vx);
   c.offspring=0; c.kills=0; c.escapes=0; c.mateUid=mate?mate.uid:0;
   if(genesFrom){ // inherit + mutate — with a mate, each gene recombines from either parent (sexual)
-    for(const k in G){ const base = mate ? (rnd()<0.5?genesFrom[k]:mate[k]) : genesFrom[k];
+    for(let gi=0;gi<GKEYS.length;gi++){ const k=GKEYS[gi];
+      const base = mate ? (rnd()<0.5?genesFrom[k]:mate[k]) : genesFrom[k];
       let v=base*(1+gauss()*CFG.mutSigma); c[k]=clamp(v,G[k][0],G[k][1]); }
     c.hue = clamp((mate?(rnd()<0.5?genesFrom.hue:mate.hue):genesFrom.hue) + gauss()*(CFG.hueMut/360), 0,1);
     c.genus=genesFrom.genus; c.gen=genesFrom.gen+1; c.parentUid=genesFrom.uid;
@@ -593,7 +601,8 @@ function updateDay(){
   const sp=(simTime%CFG.seasonPeriod)/CFG.seasonPeriod;
   seasonFactor=0.5-0.5*Math.cos(sp*TAU);               // 0 at sp=0 (trough) → 1 at sp=0.5 (peak)
   const si = sp<0.25?1 : sp<0.5?2 : sp<0.75?3 : 0;     // lean → thaw → high bloom → bloomfall
-  if(si!==seasonIdx){ if(seasonIdx>=0)emit('season',cam.x,cam.y,null); seasonIdx=si; }
+  // advance the index BEFORE emitting so the (synchronous) narrator names the season ARRIVING, not the one leaving
+  if(si!==seasonIdx){ const wasFirst=seasonIdx<0; seasonIdx=si; if(!wasFirst)emit('season',cam.x,cam.y,null); }
 }
 
 /* ---------- population tracking ---------- */
@@ -1638,9 +1647,10 @@ function checkGenMilestone(){
   for(const g of mstones){ if(generationMax>=g && !genMileHit[g]){ genMileHit[g]=true;
     if(A.on)sfxEvolveChime();
     narrate('genmile',null,{n:g}); logChronicle(`generation ${g} — ${g} lifetimes of descent`, '❈'); return; } }
-  if(generationMax>=400 && generationMax%100===0 && !genMileHit[generationMax]){
-    genMileHit[generationMax]=true; narrate('genmile',null,{n:generationMax});
-    logChronicle(`generation ${generationMax}`, '❈');
+  const g100=Math.floor(generationMax/100)*100;         // tolerate overshoot (gen can jump >1 between 1Hz samples)
+  if(g100>=400 && !genMileHit[g100]){
+    genMileHit[g100]=true; narrate('genmile',null,{n:g100});
+    logChronicle(`generation ${g100}`, '❈');
   }
 }
 
@@ -2174,11 +2184,12 @@ function drawBody(c,scr){
   // This is what makes sexual selection VISIBLE — a gaudy population reads instantly.
   if(orn>0.22){
     ctx.globalCompositeOperation='lighter';
-    const [rr,gg,bb]=hslToRgb(c.huedeg,0.95,0.66);
-    ctx.strokeStyle=`rgba(${rr},${gg},${bb},${clamp(orn*0.9,0,0.9)})`;
+    const ga=ctx.globalAlpha;                       // preserve the body-fill alpha for the pectorals below
+    ctx.strokeStyle=hueRGB(c.huedeg);               // cached per hue bucket (no per-frame alloc)
+    ctx.globalAlpha=clamp(orn*0.9,0,0.9);
     ctx.lineWidth=Math.max(0.6,L*0.05);
     const sLen=orn*L*1.4;
-    for(const sgn of [-1,0,1]){
+    for(let s=0;s<3;s++){ const sgn=SGN3[s];
       const wob=Math.sin(c.phase*1.3 - sgn*0.6)*0.5*sgn;
       const ex=tx+(fdx*Math.cos(wob)-fdy*Math.sin(wob))*sLen + perpX*sgn*L*0.22;
       const ey=ty+(fdy*Math.cos(wob)+fdx*Math.sin(wob))*sLen + perpY*sgn*L*0.22;
@@ -2186,12 +2197,13 @@ function drawBody(c,scr){
       ctx.quadraticCurveTo(tx+fdx*sLen*0.5, ty+fdy*sLen*0.5, ex, ey); ctx.stroke();
     }
     glow(tx+fdx*sLen, ty+fdy*sLen, L*0.5*orn, c.huedeg, orn*0.5); // bright tip
-    ctx.globalCompositeOperation='source-over';
+    ctx.globalAlpha=ga; ctx.globalCompositeOperation='source-over';
+    ctx.fillStyle=fill;                             // glow() left globalAlpha touched; fill was intact but be explicit
   }
   // pectorals with fear flare
   const flare=c.fearFlare*0.6;
   const px1=c.segX[1],py1=c.segY[1];
-  for(const sgn of [1,-1]){
+  for(let s=0;s<2;s++){ const sgn=SGN2[s];
     const ang=Math.atan2(dirY,dirX)+sgn*(0.5+flare);
     ctx.beginPath(); ctx.moveTo(px1,py1);
     ctx.lineTo(px1-Math.cos(ang)*L*0.28, py1-Math.sin(ang)*L*0.28);
