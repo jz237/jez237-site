@@ -273,7 +273,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.7.2'; // v1.7.2: polish. Leviathan redrawn as a clearly majestic whale-form — head-steady traveling-wave undulation, whale taper, big pectoral flippers, layered aura, flowing biolum spots, forked fluke, amber eye (was a uniform-wave blob). Chronicle button gently pulses when new deep-time events are logged while closed.
+const VERSION = 'v1.7.3'; // v1.7.3: accessibility — honour prefers-reduced-motion: the living aquarium stays, but screenshake, zoom-punch, zoom-breathing and chromatic-aberration bursts are suppressed (vestibular triggers). Reacts live to OS setting changes.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -350,6 +350,11 @@ window.addEventListener('resize',resize);
 const cam={x:CFG.W/2,y:CFG.H/2,scale:1, tx:CFG.W/2,ty:CFG.H/2,tz:1,
   vx:{v:0},vy:{v:0},vz:{v:0}, state:'DRIFT', dwell:0, followId:-1,
   shake:0, zpunch:0, breath:0};
+// accessibility: honour prefers-reduced-motion — the living aquarium stays, but the vestibular
+// triggers (screenshake, zoom-punch, zoom-breathing, chromatic-aberration bursts) are removed.
+let reduceMotion=false;
+try{ const mq=window.matchMedia('(prefers-reduced-motion: reduce)'); reduceMotion=mq.matches;
+  mq.addEventListener('change',e=>{reduceMotion=e.matches;}); }catch(e){}
 
 /* ---------- glow sprite cache ---------- */
 const HUEBUCKETS=24;
@@ -1812,6 +1817,7 @@ function updateCamera(dt){
   cam.shake*=Math.pow(0.88,dt*60); if(cam.shake<0.05)cam.shake=0;
   cam.zpunch*=Math.pow(0.9,dt*60);
   if(chroma>0)chroma=Math.max(0,chroma-dt*1.2);
+  if(reduceMotion){ cam.shake=0; cam.zpunch=0; cam.breath=0; chroma=0; } // accessibility: no jolts
 }
 function popCentroid(){ let sx=0,sy=0,n=0; for(const c of grazers){sx+=c.x;sy+=c.y;n++;}
   if(n===0){for(const c of preds){sx+=c.x;sy+=c.y;n++;}} return n?{x:sx/n,y:sy/n}:null; }
@@ -2684,6 +2690,8 @@ window.__prim={
   get season(){return SEASON_NAMES[seasonIdx];}, get seasonFactor(){return +seasonFactor.toFixed(2);},
   get leviathan(){return LEV.active?{x:Math.round(LEV.x),y:Math.round(LEV.y),life:Math.round(LEV.life)}:null;},
   summonLeviathan(){ spawnLeviathan(); },
+  get reduceMotion(){return reduceMotion;}, set reduceMotion(v){reduceMotion=!!v;},
+  get camMotion(){return {shake:+cam.shake.toFixed(2),zpunch:+cam.zpunch.toFixed(3),breath:+cam.breath.toFixed(4),chroma:+chroma.toFixed(2)};},
   get chronicle(){ return chronicle.map(e=>`day ${e.day} · gen ${e.gen} — ${e.text}`); },
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
