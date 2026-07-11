@@ -4668,5 +4668,24 @@
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
     "size": "1536x1024"
+  },
+  {
+    "id": "2026-07-11-random-image-style-random-rendering-style-needle-felted-glo",
+    "title": "Random rendering style: Needle-Felted Glowrail Workshop",
+    "tests": "Random rendering-style slot; medium is needle-felted wool macro art; non-paper tactile handmade scene; exact GPT Image 2 CLI output path verified under tool-image-generation; reusable [STYLE_OR_MEDIUM] template included.",
+    "prompt": "Create a finished square image for the daily random rendering-style slot using the medium \"needle-felted wool macro art\". Scene title: \"Needle-Felted Glowrail Workshop\". Show a tactile miniature transit maintenance workshop made entirely as needle-felted wool, felt sheets, embroidery thread, glass seed beads, tiny stitched copper-wire accents, and soft fiber fuzz, photographed with macro depth of field on a real craft table. The subject is a thumb-scale glowrail repair bay: a little curved rail track of dark felt, bead-like signal lamps glowing amber and teal, felted tool racks, tiny stitched work gloves, wool cable coils, felt inspection pits, cotton batting steam, a stitched maintenance cart, translucent bead insulators, fuzzy lint dust, visible needle-punched fiber texture, small loose fibers catching the light, and a few real scale cues around the handmade scene such as felting needles in a cork holder, thread snips, a thimble, bead tray, wool roving tufts, and a metal ruler at the edge. Make the whole image read as a photographed handmade fiber-art scene, not a full-size workshop, not a flat illustration, not a poster, not a paper craft, and not a prompt card. Use a varied palette: charcoal rail felt, warm amber lamp beads, teal signal glass, crimson stitched warning tabs without readable text, cream wool steam, brass/copper wire glints, and a pale maple craft-table background. The composition should be richly detailed but coherent, with the tiny repair bay angled diagonally across the square frame, shallow macro focus, soft side light, tactile fiber shadows, visible handmade imperfections, and no people, no hands, no readable labels, no logos, no watermark, no cinematic action scene, no generic toy train, no flat document layout.\n\nSource photo needed: none.\n\nReusable fill-in-the-blank template: Create a finished square image for the daily random rendering-style slot using [STYLE_OR_MEDIUM]. Show [SUBJECT_OR_PLACE] as a tactile finished scene with [PRIMARY_MATERIALS], [VISIBLE_PROCESS_OR_CONSTRUCTION_DETAILS], [SCALE_CUES_OR_CONTEXT_PROPS], [COLOR_PALETTE], and [LIGHTING_OR_CAMERA_STYLE]. Make the image read as [STYLE_OR_MEDIUM] applied to a complete visual example, not a poster, prompt card, flat document, or plain centered object.\n\nExample substitution: [STYLE_OR_MEDIUM] = needle-felted wool macro art; [SUBJECT_OR_PLACE] = a thumb-scale glowrail repair bay; [PRIMARY_MATERIALS] = needle-felted wool, felt sheets, embroidery thread, glass seed beads, stitched copper-wire accents, and cotton batting steam; [VISIBLE_PROCESS_OR_CONSTRUCTION_DETAILS] = needle-punched fibers, stitched work gloves, wool cable coils, felt inspection pits, bead signal lamps, fuzzy lint dust, and handmade imperfections; [SCALE_CUES_OR_CONTEXT_PROPS] = felting needles in a cork holder, thread snips, thimble, bead tray, wool roving tufts, and metal ruler; [COLOR_PALETTE] = charcoal felt, amber lamp beads, teal signal glass, crimson stitched tabs, cream wool steam, copper glints, and pale maple; [LIGHTING_OR_CAMERA_STYLE] = square macro photograph with shallow depth of field and soft side light.",
+    "image": "images/2026-07-11-random-image-style-random-rendering-style-needle-felted-glo.jpg",
+    "thumb": "thumbs/2026-07-11-random-image-style-random-rendering-style-needle-felted-glo.webp",
+    "color": "#634d3a",
+    "date": "2026-07-11",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "needle-felted wool macro art",
+      "description": "A handmade fiber-art macro scene of a thumb-scale glowrail repair bay, built from felt, thread, beads, copper wire, wool roving, and visible craft-table scale cues.",
+      "template": "Create a finished square image for the daily random rendering-style slot using [STYLE_OR_MEDIUM]. Show [SUBJECT_OR_PLACE] as a tactile finished scene with [PRIMARY_MATERIALS], [VISIBLE_PROCESS_OR_CONSTRUCTION_DETAILS], [SCALE_CUES_OR_CONTEXT_PROPS], [COLOR_PALETTE], and [LIGHTING_OR_CAMERA_STYLE]. Make the image read as [STYLE_OR_MEDIUM] applied to a complete visual example, not a poster, prompt card, flat document, or plain centered object."
+    }
   }
 ]
