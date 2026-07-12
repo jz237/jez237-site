@@ -1850,9 +1850,11 @@ function D1() {
     }
     (E.position.set(v, He(v, y), y),
       (E.rotation.y = Math.atan2(-v, -y) + (Math.random() - 0.5) * 0.5),
+      crowdSys.stands.push({ x: v, z: y, yaw: E.rotation.y, w: T, gy: E.position.y }),
       et.add(E),
       kn("grandstand", v, y, 40, 30));
   }
+  crowdSys.init();
   const x = [16731486, 16765503, 16777215, 11824127];
   for (let h = 0; h < 90; h++) {
     const _ = zn(() => ({ x: -900 + Math.random() * 1800, z: -300 - Math.random() * 1500 }), 3, 20, 16);
@@ -2243,6 +2245,93 @@ const plateSys = {
 // the walk swing for free. Kit choice is pedIndex % pool, so a pedestrian
 // always gets the same face/shoe variety back when re-promoted. All parts
 // share vcMats' opaque material: promoted cost is 5 small draws per kit.
+// ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
+// tier), but the nearest grandstand within 70m gets a pool of seated figures —
+// two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
+// plane, doing a traveling wave. Invisible when no stand is near: zero cost at
+// the race-start perf gate, honors the permanent-geometry freeze.
+const crowdSys = {
+  stands: [],
+  torsos: null,
+  heads: null,
+  active: -1,
+  cap: 0,
+  figures: 0,
+  _seats: [],
+  init() {
+    if (this.torsos || !this.stands.length) return;
+    this.cap = mobilePerf ? 140 : 280;
+    const { opaque } = vcMats();
+    const torsoGeo = vcBake(new BoxGeometry(0.52, 0.6, 0.38), null, 16777215),
+      headGeo = vcBake(new SphereGeometry(0.17, 7, 5), vcAt(0, 0.45, 0), 12947299);
+    ((this.torsos = new InstancedMesh(torsoGeo, opaque, this.cap)), (this.heads = new InstancedMesh(headGeo, opaque, this.cap)));
+    const shirt = new Color(),
+      shirts = [16731486, 16765503, 4111086, 16777215, 15121483, 5025616, 16744576, 3392239];
+    for (let k = 0; k < this.cap; k++) this.torsos.setColorAt(k, shirt.set(shirts[k % shirts.length]));
+    this.torsos.instanceColor && (this.torsos.instanceColor.needsUpdate = !0);
+    for (const m of [this.torsos, this.heads])
+      ((m.frustumCulled = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.visible = !1), (m.count = 0), et.add(m));
+    Bn(this.torsos, (t) => this.update(t));
+  },
+  _layout(st) {
+    // seats in crowd-plane space: plane at stand-local (0,12,6), rotX(-0.85)
+    this._seats.length = 0;
+    const cosT = Math.cos(-0.85),
+      sinT = Math.sin(-0.85),
+      cy = Math.cos(st.yaw),
+      sy = Math.sin(st.yaw),
+      cols = Math.min(46, Math.floor((st.w * 0.9) / 1.7)),
+      rows = Math.min(6, Math.floor(this.cap / cols));
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++) {
+        if (this._seats.length >= this.cap) break;
+        const px = -((cols - 1) * 1.7) / 2 + c * 1.7,
+          py = -9.5 + r * 3.4,
+          lx = px,
+          ly = 12 + py * cosT + 0.35 * -sinT,
+          lz = 6 + py * sinT + 0.35 * cosT;
+        this._seats.push({
+          x: st.x + lx * cy + lz * sy,
+          y: st.gy + ly,
+          z: st.z - lx * sy + lz * cy,
+          ph: c * 0.42 + r * 0.9,
+        });
+      }
+    this.figures = this._seats.length;
+  },
+  update(t) {
+    if (!this.torsos) return;
+    const cx = Xe.position.x,
+      cz = Xe.position.z;
+    let best = -1,
+      bd = 70 * 70;
+    for (let i = 0; i < this.stands.length; i++) {
+      const s = this.stands[i],
+        d = (s.x - cx) * (s.x - cx) + (s.z - cz) * (s.z - cz);
+      d < bd && ((bd = d), (best = i));
+    }
+    if (best < 0) {
+      if (this.active >= 0) ((this.active = -1), (this.torsos.visible = !1), (this.heads.visible = !1));
+      return;
+    }
+    if (best !== this.active) {
+      this.active = best;
+      this._layout(this.stands[best]);
+      ((this.torsos.count = this.figures), (this.heads.count = this.figures));
+      ((this.torsos.visible = !0), (this.heads.visible = !0));
+    }
+    // traveling wave (matrices recomposed only while a stand is promoted)
+    const m = new Matrix4();
+    for (let k = 0; k < this.figures; k++) {
+      const s = this._seats[k],
+        lift = Math.max(0, Math.sin(t * 2.2 - s.ph)) * 0.5;
+      m.makeRotationY(this.stands[this.active].yaw + Math.PI);
+      m.setPosition(s.x, s.y + lift, s.z);
+      (this.torsos.setMatrixAt(k, m), this.heads.setMatrixAt(k, m));
+    }
+    ((this.torsos.instanceMatrix.needsUpdate = !0), (this.heads.instanceMatrix.needsUpdate = !0));
+  },
+};
 const PED_KIT_RADIUS = 40;
 // Fictional, family-friendly two-bubble chats shown on texting pedestrians'
 // phone screens (one per kit, drawn into a single shared atlas).
@@ -8997,6 +9086,12 @@ window.__steelRibbonDebug = {
       furniture: { ...furnitureSys.counts, sample: furnitureSys.sample.slice(0, 4) },
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
+      crowd: {
+        stands: crowdSys.stands.length,
+        promoted: crowdSys.active >= 0 ? 1 : 0,
+        figures: crowdSys.active >= 0 ? crowdSys.figures : 0,
+        sample: crowdSys.stands.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), z: +s.z.toFixed(1), gy: +s.gy.toFixed(1), w: +s.w.toFixed(0) })),
+      },
       peds: {
         pool: pedKitSys.pool,
         promoted: pedKitSys.promotedCount(),
