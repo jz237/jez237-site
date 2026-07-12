@@ -355,3 +355,14 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   reorder note: item 11 road decals deferred (permanent geometry) — next
   freeze-compliant picks: 3b bags/cups, 14 birds, 15 steam (sprites), 4b needs
   a facade change (careful), 13 blimp banner (texture swap on existing mesh).
+- **12 pedestrian bags & cups — item 3b (2026-07-12)**: the prop system now
+  PARTITIONS every promoted pedestrian by pedIndex % 3 — texters (phone, item
+  03), SHOPPERS (paper bag in a kit color hanging from the left arm on handle
+  strips — swings with the stride), and COFFEE-WALKERS (white cup with a colored
+  sleeve held at the left hand; enlarged ~30% over realistic scale to read in
+  the toy aesthetic). attach()/detach() take a prop kind; detailReport().peds
+  gains bags/cups + sample[].p. Verified by looking (`loop-shots/12-bags-cups/`):
+  bag swing shot + cup close-up both unambiguous. Smoke probe asserts
+  texting+bags+cups === promoted. Head-tilt while texting remains deferred
+  (needs a neck split in U1). Dogs-on-leashes remain future (second synced
+  walker). This completes the original item-3 vision.
