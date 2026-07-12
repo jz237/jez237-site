@@ -2026,9 +2026,24 @@ function I1(i, e) {
   for (const x of [-s.w * 0.28, s.w * 0.28])
     (opq.push(vcBake(headGeo, vcAt(x, 0.95, -s.l * 0.52 - 0.04), 16774064, 16765788, 1.7)),
       opq.push(vcBake(tailGeo, vcAt(x, 0.98, s.l * 0.52 + 0.04), 16725033, 16717325, 1.45)));
+  // driver silhouette + steering wheel baked into the same body merge (zoom-detail
+  // item 04): zero extra draws. ONLY for glass-cabin vehicles (bus) — car cabins
+  // are solid opaque boxes with glass quads on the faces, so a driver inside them
+  // can never be seen (verified the hard way; see DETAIL-LOOP.md item 4b).
+  if (s.bus) {
+    // the bus body is solid to y≈1.95; its glass band sits at y≈2.08 — the driver
+    // is a head + cap at window height behind the windshield glass
+    const skin = [11893070, 9657655, 13018202, 8541761][(e >>> 4) % 4],
+      dx = -s.cabin[0] * 0.27,
+      dz = s.cabinZ - s.cabin[2] / 2 + 0.55;
+    opq.push(vcBake(new SphereGeometry(0.155, 8, 6), vcAt(dx, 2.06, dz), skin));
+    const capGeo = new SphereGeometry(0.145, 8, 5);
+    capGeo.scale(1, 0.55, 1);
+    opq.push(vcBake(capGeo, vcAt(dx, 2.18, dz), 1119001));
+  }
   (t.add(new Mesh(mergeGeometries(opq, !1), opaque)), gls.length && t.add(new Mesh(mergeGeometries(gls, !1), glass)));
   return (
-    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2 }),
+    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !!s.bus }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
       ((x.castShadow = !1), (x.receiveShadow = !0));
@@ -8461,6 +8476,10 @@ window.__steelRibbonDebug = {
             sample: plateSys.texts.slice(0, 5),
           }
         : null,
+      drivers: {
+        cars: Rc.length,
+        withDriver: Rc.reduce((n, c) => n + (c.mesh?.userData?.hasDriver ? 1 : 0), 0),
+      },
       peds: {
         pool: pedKitSys.pool,
         promoted: pedKitSys.promotedCount(),
