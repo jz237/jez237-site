@@ -369,3 +369,15 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 - **DEPLOY BATCH 3 (2026-07-12): v3.10.0 LIVE** — items 09-12 (ped signals,
   stadium crowds, photo mode, pedestrian props) verified first-probe
   (index-BryU4oV0.js, bundle 200).
+- **13 birds that scatter — backlog item 14 (2026-07-12)**: one pooled flock of
+  6-9 instanced pigeons (grey/white tints via setColorAt, orange beaks, static
+  V-wings with a flight roll-oscillation) pecks on the ground ~19m ahead of the
+  roam player; drive within 9m and they burst up and away (per-bird velocities,
+  gravity-capped ~14m ceiling), despawning once all clear 11m or after the
+  timer. Spawns keyed on roam mode + player speed < 45; deactivates beyond 60m.
+  One InstancedMesh visible only while active — zero permanent cost. Debug:
+  spawnBirds(x,z) + detailReport().birds {active,state,count,spot}. Rotation
+  math note: Quaternion.setFromEuler needs a REAL Euler (underscore internals) —
+  compose rotY×rotZ matrices instead. Verified by looking
+  (`loop-shots/13-birds/`): pecking cluster + mid-scatter flutter around the
+  car both read clearly. Smoke probe covers spawn→peck→scatter.

@@ -308,6 +308,27 @@ const browser = await chromium.launch({
     JSON.stringify({ h: fr?.hydrants, m: fr?.meters, b: fr?.benches, c: fr?.cans }),
   );
 
+  // zoom-detail item 13: birds spawn, scatter on approach, then despawn
+  const birdSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    deb.setRoamPos(60, -420, 0, 0);
+    deb.spawnBirds(60, -432);
+    const s0 = deb.detailReport().birds;
+    deb.setRoamPos(59, -431, 0, 0); // step into the flock
+    let s1 = null;
+    for (let i = 0; i < 40 && !s1; i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      const b = deb.detailReport().birds;
+      if (b.state === "scatter") s1 = b;
+    }
+    return { spawned: s0.count, state0: s0.state, scattered: !!s1 };
+  });
+  check(
+    "birds: flock pecks then scatters on approach",
+    birdSeq.spawned >= 6 && birdSeq.state0 === "peck" && birdSeq.scattered,
+    JSON.stringify(birdSeq),
+  );
+
   // zoom-detail item 11: photo mode — orbit camera moves, exit restores control
   const orbit = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
