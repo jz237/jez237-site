@@ -78,9 +78,13 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 2. ~~Pedestrian near-tier v1 — bodies~~ **DONE 2026-07-12 (iteration 02)** — faces/
    hands/shoes via attach-on kit pool. Skin-tone VARIETY deferred (needs per-ped
    head/arm rebake — fold into item 3 props work). See iteration log.
-3. **Pedestrian props — phones first**: lit phone screen with readable 2-bubble chat
-   (6–8 canned fictional exchanges, seed-picked), head tilted down while reading;
-   then shopping bags, coffee cups, umbrellas as seed variants.
+3. ~~Pedestrian props — phones~~ **DONE 2026-07-12 (iteration 03)** — lit readable
+   chat screens on the texting third of promoted peds. See iteration log.
+3b. **Pedestrian props — bags & cups** (split from 3): shopping bags (box +
+   handle loop) in the LEFT hand of a non-texting subset, coffee cups for others;
+   same kit-attachment pattern, deterministic by ped index. Head-tilt while
+   texting also parked here (head is merged into the body mesh — needs a neck
+   split or a cap-brim shadow trick).
 4. **Drivers in cars**: head + shoulders + hands-on-wheel in traffic cars and race
    rivals (near pool; rivals always near → they get it permanently within budget).
 5. **Taxi identity**: lit roof sign with medallion number ("TAXI 27"), rooflight,
@@ -175,3 +179,23 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   facing = local -Z, world dir = axis/dir fields (ns → z, ew → x). Ideas: phones
   (item 3) should parent to the arm mesh mid-swing → hand raises phone naturally
   when we pose the arm; dogs-on-leashes want a second walker synced to a ped.
+- **03 pedestrian phones (2026-07-12)**: a third of promoted pedestrians
+  (pedIndex % 3 === 0) now stand out as TEXTERS — right arm pose-overridden every
+  tick (rotation.x = -2.05, re-applied after ze() rewrites the swing in the same
+  Bn callback), a dark phone with a GLOWING readable chat screen in the raised
+  hand (position (0.34,1.47,-0.36) group space, screen quaternion-aimed at the
+  head via setFromUnitVectors — no euler-order guessing). 8 fictional 2-3-bubble
+  chats (PED_CHATS) drawn into ONE 512x512 atlas (4x2 slots), each kit's screen
+  plane gets slot UVs rewritten at BUILD time (geometry-level — simpler than the
+  plates' shader path since kits are individual meshes, not instanced). Screen =
+  shared MeshBasicMaterial → reads lit at dusk. detailReport().peds.texting +
+  sample[].t/phone{xyz}. **Perf**: chase 1757 / 540,647 vs baseline 1794 /
+  543,646 PASS; textures 240 (plates atlas + chat atlas + world noise — pooled,
+  bounded). **Verified by looking** (`loop-shots/03-phones/`): screen-close shot
+  shows "chat / running late ag… / the ribbon jam?? / every. time." clearly
+  legible; front shot shows raised arm + phone silhouette; far tier untouched
+  (kit-audit invariant). **Camera gotchas for texters**: the phone→head sight
+  line is blocked by the skull — over-shoulder shots need ~0.5m lateral offset
+  past the shoulder; at sub-1m the lookAt up-vector rolls the frame. Head-tilt
+  while texting deferred (head merged into body mesh) → item 3b. Smoke probe
+  hops ped clusters until a texter is promoted; suite green (see commit).
