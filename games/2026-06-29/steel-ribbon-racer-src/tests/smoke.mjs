@@ -249,6 +249,29 @@ const browser = await chromium.launch({
     JSON.stringify(kitAudit),
   );
 
+  // zoom-detail item 03: texting pedestrians hold lit chat phones (idx % 3 === 0
+  // subset — hop between ped clusters until one is promoted)
+  let texting = kitState?.texting ?? 0;
+  if (!texting) {
+    const seeds = await page.evaluate(() => {
+      const list = [];
+      window.__steelRibbonScene.traverse((o) => {
+        if (o.userData && o.userData.limbs && o.visible && list.length < 8) {
+          const v = o.getWorldPosition(new o.position.constructor());
+          list.push({ x: +v.x.toFixed(1), z: +v.z.toFixed(1) });
+        }
+      });
+      return list;
+    });
+    for (const sd of seeds) {
+      await page.evaluate(([x, z]) => window.__steelRibbonDebug.setRoamPos(x + 4, z + 4, 0, 0), [sd.x, sd.z]);
+      const st = await poll(page, () => window.__steelRibbonDebug.detailReport().peds, (p) => (p?.texting ?? 0) > 0, 20);
+      texting = st?.texting ?? 0;
+      if (texting) break;
+    }
+  }
+  check("ped kits: texting pedestrians hold chat phones", texting > 0, `texting=${texting}`);
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
