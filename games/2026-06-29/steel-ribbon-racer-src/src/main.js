@@ -11138,3 +11138,113 @@ u.lastSafeDistance = u.totalDistance;
 dl(0.016);
 vr();
 nu();
+
+// ─── Photo mode (zoom-detail item 11): orbit the camera around the car to savor
+// the near-tier detail. O key or the 📷 button toggles; drag orbits, wheel/pinch
+// dollies. Rides the __freeCam override — the promotion systems key on camera
+// position, so plates/faces/chats/crowds resolve around wherever you point it.
+const photoRig = {
+  active: !1,
+  yaw: 0.6,
+  pitch: 0.32,
+  radius: 9,
+  target: new Vector3(),
+  entryMode: null,
+  _drag: null,
+  _pinch: 0,
+};
+window.__photoRig = photoRig;
+const photoBtn = document.createElement("button");
+((photoBtn.id = "photoBtn"), (photoBtn.type = "button"), (photoBtn.textContent = "📷"));
+photoBtn.style.cssText =
+  "position:fixed;right:12px;bottom:96px;z-index:30;font-size:20px;padding:6px 10px;background:rgba(10,14,22,0.72);color:#cfe6ff;border:1px solid rgba(140,180,220,0.35);border-radius:10px;display:none;cursor:pointer;";
+document.body.appendChild(photoBtn);
+const photoHint = document.createElement("div");
+photoHint.textContent = "PHOTO MODE — drag to orbit · scroll/pinch to zoom · O or 📷 to exit";
+photoHint.style.cssText =
+  "position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:30;font:600 12px/1.4 system-ui,sans-serif;color:#dff0ff;background:rgba(8,12,20,0.62);padding:6px 12px;border-radius:8px;display:none;pointer-events:none;letter-spacing:0.04em;";
+document.body.appendChild(photoHint);
+function photoModeSet(on) {
+  if (on === photoRig.active) return;
+  if (on) {
+    if (!(u.mode === "race" || u.mode === "roam" || u.mode === "paused")) return;
+    photoRig.entryMode = u.mode;
+    u.mode === "roam"
+      ? photoRig.target.set(u.roamPos.x, u.roamPos.y + 1.1, u.roamPos.z)
+      : (cn.getWorldPosition(photoRig.target), (photoRig.target.y += 1.0));
+    photoRig.minR = u.mode === "roam" && u.vehicle === "foot" ? 2.2 : 5.4;
+    ((photoRig.pitch = 0.3), (photoRig.radius = 9), (photoRig.active = !0), (window.__freeCam = !0));
+    ((photoHint.style.display = "block"), (photoBtn.textContent = "✕"));
+  } else {
+    ((photoRig.active = !1), (window.__freeCam = !1));
+    ((photoHint.style.display = "none"), (photoBtn.textContent = "📷"));
+  }
+}
+photoBtn.addEventListener("click", (ev) => {
+  (ev.stopPropagation(), photoModeSet(!photoRig.active));
+});
+window.addEventListener("keydown", (ev) => {
+  ev.code === "KeyO" && photoModeSet(!photoRig.active);
+});
+window.addEventListener("pointerdown", (ev) => {
+  photoRig.active && ev.target === Lr && (photoRig._drag = { x: ev.clientX, y: ev.clientY });
+});
+window.addEventListener("pointermove", (ev) => {
+  if (!photoRig.active || !photoRig._drag) return;
+  const dx = ev.clientX - photoRig._drag.x,
+    dy = ev.clientY - photoRig._drag.y;
+  photoRig._drag = { x: ev.clientX, y: ev.clientY };
+  photoRig.yaw -= dx * 0.005;
+  photoRig.pitch = MathUtils.clamp(photoRig.pitch + dy * 0.004, -0.15, 1.25);
+});
+window.addEventListener("pointerup", () => (photoRig._drag = null));
+window.addEventListener(
+  "wheel",
+  (ev) => {
+    photoRig.active && (photoRig.radius = MathUtils.clamp(photoRig.radius * (1 + Math.sign(ev.deltaY) * 0.12), photoRig.minR ?? 2.2, 70));
+  },
+  { passive: !0 },
+);
+window.addEventListener(
+  "touchmove",
+  (ev) => {
+    if (!photoRig.active || ev.touches.length !== 2) return;
+    const d = Math.hypot(ev.touches[0].clientX - ev.touches[1].clientX, ev.touches[0].clientY - ev.touches[1].clientY);
+    (photoRig._pinch > 0 && (photoRig.radius = MathUtils.clamp(photoRig.radius * (photoRig._pinch / d), photoRig.minR ?? 2.2, 70)),
+      (photoRig._pinch = d));
+  },
+  { passive: !0 },
+);
+window.addEventListener("touchend", () => (photoRig._pinch = 0));
+setInterval(() => {
+  photoBtn.style.display = u.mode === "race" || u.mode === "roam" || u.mode === "paused" ? "block" : "none";
+}, 800);
+{
+  const photoAnchor = new Object3D();
+  et.add(photoAnchor);
+  Bn(photoAnchor, () => {
+    if (!photoRig.active) return;
+    if (u.mode !== photoRig.entryMode) {
+      photoModeSet(!1);
+      return;
+    }
+    const r = Math.max(photoRig.minR ?? 2.2, photoRig.radius),
+      cp = Math.cos(photoRig.pitch);
+    Xe.position.set(
+      photoRig.target.x + Math.sin(photoRig.yaw) * cp * r,
+      photoRig.target.y + Math.sin(photoRig.pitch) * r,
+      photoRig.target.z + Math.cos(photoRig.yaw) * cp * r,
+    );
+    Xe.lookAt(photoRig.target);
+    window.__freeCam = !0;
+  });
+}
+window.__steelRibbonDebug.photoMode = function (on) {
+  photoModeSet(on ?? !photoRig.active);
+  return {
+    active: photoRig.active,
+    radius: photoRig.radius,
+    yaw: +photoRig.yaw.toFixed(2),
+    cam: { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) },
+  };
+};
