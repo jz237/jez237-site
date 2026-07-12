@@ -228,3 +228,210 @@ main.page > section[aria-labelledby="paths-title"] {
     margin-right: 0 !important;
   }
 }
+
+/* 2026 visual refresh: the illustrated masthead remains the arrival moment,
+   while the navigation becomes a compact, useful control surface on scroll. */
+.header.masthead + .main-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 80 !important;
+  isolation: isolate;
+  transition: border-radius 220ms ease, box-shadow 220ms ease,
+    background-color 220ms ease, transform 220ms ease !important;
+}
+
+.header.masthead + .main-nav .main-nav__compact-brand,
+.main-nav__actions,
+.main-nav__menu {
+  display: none !important;
+}
+
+.main-nav__compact-brand {
+  gap: 8px;
+  color: #fff !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.main-nav__compact-brand::before {
+  content: "";
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  border: 1px solid rgba(116,205,235,0.42);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 68% 38%, #fff 0 2px, transparent 2.5px),
+    linear-gradient(145deg, #40d9ff 0 46%, #796ce1 47% 100%);
+  box-shadow: 0 0 14px rgba(64,217,255,0.24);
+  clip-path: polygon(0 22%, 68% 22%, 100% 50%, 68% 78%, 0 78%, 24% 50%);
+}
+
+.main-nav__actions {
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  padding: 4px 7px;
+}
+
+.main-nav__actions a {
+  gap: 5px;
+  min-width: 34px !important;
+  min-height: 32px !important;
+  padding: 5px 8px !important;
+  border: 1px solid rgba(116,205,235,0.2) !important;
+  border-radius: 999px;
+  font-size: 16px !important;
+  line-height: 1;
+}
+
+.main-nav__menu {
+  min-width: 42px;
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 0;
+  border-left: 1px solid rgba(116,205,235,0.18);
+  color: #dff8ff;
+  background: transparent;
+  font: inherit;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.has-compact-masthead .header.masthead + .main-nav {
+  position: fixed !important;
+  top: 8px !important;
+  left: 50% !important;
+  grid-template-columns: minmax(146px, auto) repeat(10, minmax(0, 1fr)) auto !important;
+  width: min(1240px, calc(100% - 18px)) !important;
+  max-width: 1240px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  border: 1px solid rgba(116,205,235,0.34) !important;
+  border-radius: 0 0 10px 10px !important;
+  background: rgba(2,17,31,0.93) !important;
+  box-shadow: 0 16px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(16px) saturate(1.18);
+  transform: translateX(-50%);
+}
+
+.has-compact-masthead .header.masthead + .main-nav .main-nav__compact-brand,
+.has-compact-masthead .main-nav__actions {
+  display: flex !important;
+}
+
+.has-compact-masthead .header.masthead + .main-nav > a:not(.main-nav__compact-brand) {
+  min-height: 38px !important;
+  padding-top: 7px !important;
+  padding-bottom: 7px !important;
+  font-size: 12px !important;
+}
+
+@media (max-width: 1180px) and (min-width: 761px) {
+  .has-compact-masthead .header.masthead + .main-nav {
+    grid-template-columns: minmax(136px, auto) repeat(10, minmax(0, 1fr)) !important;
+  }
+
+  .has-compact-masthead .main-nav__actions {
+    display: none !important;
+  }
+}
+
+@media (max-width: 980px) and (min-width: 761px) {
+  .header.masthead + .main-nav:not(.is-open) > a:not(.main-nav__compact-brand):last-of-type {
+    grid-column: 1 / -1 !important;
+  }
+
+  .has-compact-masthead .header.masthead + .main-nav > a:not(.main-nav__compact-brand):last-of-type {
+    grid-column: auto !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .header.masthead {
+    display: none !important;
+  }
+
+  .header.masthead + .main-nav,
+  .has-compact-masthead .header.masthead + .main-nav {
+    position: fixed !important;
+    top: max(8px, env(safe-area-inset-top)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    width: calc(100% - 16px) !important;
+    max-width: none !important;
+    margin: 8px auto 12px !important;
+    border: 1px solid rgba(116,205,235,0.3) !important;
+    border-radius: 9px !important;
+    background: rgba(2,17,31,0.94) !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.42), inset 0 1px 0 rgba(255,255,255,0.04) !important;
+    backdrop-filter: blur(16px) saturate(1.18);
+  }
+
+  main.page {
+    padding-top: calc(58px + env(safe-area-inset-top)) !important;
+  }
+
+  .header.masthead + .main-nav .main-nav__compact-brand,
+  .main-nav__menu {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .main-nav__compact-brand {
+    justify-content: flex-start !important;
+    min-height: 46px !important;
+    padding: 8px 12px !important;
+    border: 0 !important;
+  }
+
+  .main-nav__menu {
+    justify-content: center;
+  }
+
+  .header.masthead + .main-nav > a:not(.main-nav__compact-brand),
+  .header.masthead + .main-nav .main-nav__actions {
+    display: none !important;
+  }
+
+  .header.masthead + .main-nav.is-open > a:not(.main-nav__compact-brand) {
+    display: flex !important;
+    min-height: 40px !important;
+    padding: 8px 10px !important;
+    border-top: 1px solid rgba(116,205,235,0.12) !important;
+    border-left: 1px solid rgba(116,205,235,0.12) !important;
+    white-space: normal !important;
+  }
+
+  .header.masthead + .main-nav.is-open > a:nth-of-type(even) {
+    border-left: 0 !important;
+  }
+
+  .header.masthead + .main-nav.is-open > a:last-of-type {
+    grid-column: auto !important;
+  }
+
+  .header.masthead + .main-nav.is-open .main-nav__actions {
+    display: flex !important;
+    grid-column: 1 / -1;
+    justify-content: stretch;
+    padding: 8px;
+    border-top: 1px solid rgba(116,205,235,0.14);
+  }
+
+  .header.masthead + .main-nav.is-open .main-nav__actions a {
+    flex: 1 1 0;
+    gap: 7px;
+    min-height: 38px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header.masthead + .main-nav {
+    transition: none !important;
+  }
+}

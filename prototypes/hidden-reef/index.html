@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Hidden Reef - Aquariums, Fish, Coral, Ponds</title>
   <link rel="icon" type="image/png" href="assets/site/logo.png" />
-  <link rel="stylesheet" href="assets/thr-cards.css?v=20260604-sale-prices" />
+  <link rel="stylesheet" href="assets/thr-cards.css?v=20260712-visual-refresh" />
   <style>
     :root {
       --blue-950: #003b63;
@@ -2730,6 +2730,175 @@
         margin-right: 0 !important;
       }
     }
+
+    /* 2026 visual refresh: localized motion and clearer glass hierarchy. */
+    .hero {
+      --hero-pointer-x: 0px;
+      --hero-pointer-y: 0px;
+      min-height: 360px;
+      background-color: #021421;
+    }
+    .hero-slides {
+      transform: translate3d(var(--hero-pointer-x), var(--hero-pointer-y), 0);
+      transition: transform .5s cubic-bezier(.22,.8,.25,1);
+    }
+    .hero-slides::before,
+    .hero-slides::after {
+      content: "";
+      position: absolute;
+      inset: -12%;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .hero-slides::before {
+      opacity: .48;
+      mix-blend-mode: screen;
+      background:
+        repeating-linear-gradient(112deg, transparent 0 12%, rgba(120,232,255,.09) 15%, transparent 20% 30%),
+        radial-gradient(ellipse at 72% 0%, rgba(117,230,255,.18), transparent 44%);
+      filter: blur(1px);
+      animation: heroCaustics 11s ease-in-out infinite alternate;
+    }
+    .hero-slides::after {
+      inset: 0;
+      opacity: .52;
+      background:
+        radial-gradient(circle at 73% 68%, rgba(255,255,255,.64) 0 1px, rgba(80,220,255,.26) 2px, transparent 4px),
+        radial-gradient(circle at 82% 42%, rgba(255,255,255,.5) 0 1px, rgba(80,220,255,.2) 2px, transparent 3px),
+        radial-gradient(circle at 61% 27%, rgba(255,255,255,.44) 0 1px, rgba(80,220,255,.17) 2px, transparent 3px),
+        radial-gradient(circle at 92% 79%, rgba(255,255,255,.48) 0 1px, rgba(80,220,255,.2) 2px, transparent 4px);
+      animation: heroBubbles 9s linear infinite;
+    }
+    .hero-content {
+      z-index: 5;
+      width: min(520px, calc(100% - 48px));
+      max-width: 520px;
+      margin: 28px 0 28px clamp(18px, 4vw, 42px);
+      padding: 28px clamp(20px, 3vw, 34px);
+      border: 1px solid rgba(116,205,235,.28);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 0 0, rgba(64,217,255,.08), transparent 40%),
+        linear-gradient(135deg, rgba(1,18,31,.93), rgba(1,26,46,.72));
+      box-shadow: 0 22px 46px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.07);
+      backdrop-filter: blur(12px) saturate(1.12);
+    }
+    .hero .btn {
+      position: relative;
+      isolation: isolate;
+    }
+    .hero .button-row .btn:first-child::after {
+      content: "";
+      position: absolute;
+      inset: -7px;
+      z-index: -1;
+      border: 1px solid rgba(255,180,92,.64);
+      border-radius: 10px;
+      opacity: 0;
+      transform: scale(.84);
+      pointer-events: none;
+    }
+    .hero .button-row .btn:first-child:hover::after,
+    .hero .button-row .btn:first-child:focus-visible::after {
+      animation: ctaRipple .72s ease-out;
+    }
+    .specials-progress {
+      height: 3px;
+      margin: -3px 2px 12px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(116,205,235,.12);
+    }
+    .specials-progress span {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #40d9ff, #8d6cff);
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+    .specials-progress span.is-running {
+      animation: specialsProgress 9s linear forwards;
+    }
+    .special-control.is-paused {
+      color: #ffdd9a;
+      border-color: rgba(255,180,92,.5);
+    }
+    .store-gallery {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr .72fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .store-gallery figure {
+      position: relative;
+      min-height: 172px;
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,.22);
+      border-radius: 9px;
+      background: rgba(3,24,39,.8);
+      box-shadow: -7px 10px 16px rgba(0,0,0,.34);
+    }
+    .store-gallery img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .48s cubic-bezier(.22,.8,.25,1), filter .48s ease;
+    }
+    .store-gallery figure:last-child img {
+      object-position: center 18%;
+    }
+    .store-gallery figcaption {
+      position: absolute;
+      inset: auto 0 0;
+      padding: 18px 11px 9px;
+      color: #fff;
+      background: linear-gradient(180deg, transparent, rgba(1,12,21,.9));
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .04em;
+    }
+    .store-gallery figure:hover img {
+      transform: scale(1.045);
+      filter: saturate(1.08) contrast(1.03);
+    }
+    @keyframes heroCaustics {
+      from { transform: translate3d(-1.5%, -1%, 0) rotate(-1deg) scale(1.02); }
+      to { transform: translate3d(1.5%, 1%, 0) rotate(1deg) scale(1.08); }
+    }
+    @keyframes heroBubbles {
+      from { transform: translateY(18px); opacity: .28; }
+      50% { opacity: .56; }
+      to { transform: translateY(-24px); opacity: .22; }
+    }
+    @keyframes ctaRipple {
+      0% { opacity: .8; transform: scale(.84); }
+      100% { opacity: 0; transform: scale(1.18); }
+    }
+    @keyframes specialsProgress {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+    @media (max-width: 900px) {
+      .store-gallery { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 760px) {
+      .hero { min-height: 420px; }
+      .hero-content {
+        width: calc(100% - 28px);
+        margin: 74px 14px 18px;
+        padding: 20px 18px;
+        backdrop-filter: blur(8px) saturate(1.08);
+      }
+      .hero-slides::before { opacity: .32; }
+      .store-gallery {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 8px;
+      }
+      .store-gallery figure { min-height: 132px; }
+    }
     @keyframes heroCopyIn {
       from {
         opacity: 0;
@@ -2757,7 +2926,7 @@
     }
     .reveal-on-scroll.is-visible {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
     @media (prefers-reduced-motion: reduce) {
       html {
@@ -2785,12 +2954,21 @@
         animation: none !important;
         transition: opacity 2.4s ease-in-out !important;
       }
+      .hero-slides::before,
+      .hero-slides::after,
+      .specials-progress span,
+      .hero .button-row .btn:first-child::after {
+        animation: none !important;
+      }
+      .hero-slides {
+        transform: none !important;
+      }
       .reveal-on-scroll {
         opacity: 1;
       }
     }
   </style>
-  <link rel="stylesheet" href="assets/site-masthead.css?v=20260525-learning-path-frame" />
+  <link rel="stylesheet" href="assets/site-masthead.css?v=20260712-visual-refresh" />
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
@@ -2845,6 +3023,7 @@
         <span id="specials-title">Current specials</span>
         <a href="sales/">View all sale departments</a>
       </div>
+      <div class="specials-progress" aria-hidden="true"><span id="specials-progress-bar"></span></div>
       <div class="specials-carousel">
         <div class="specials-track" id="specials-track">
           <article class="special-card">
@@ -2895,6 +3074,7 @@
         <div class="special-arrows">
           <button class="special-control" type="button" data-special-dir="-1" aria-label="Previous special">‹</button>
           <button class="special-control" type="button" data-special-dir="1" aria-label="Next special">›</button>
+          <button class="special-control" id="specials-pause" type="button" aria-label="Pause automatic specials">||</button>
         </div>
         <div class="special-dots" id="special-dots" aria-label="Choose special"></div>
       </div>
@@ -2950,6 +3130,12 @@
         <p>4501 New Falls Rd, Levittown, PA 19056 · Open daily 10 AM–7 PM · Call <a href="tel:+12152694930">(215) 269-4930</a> to confirm price or stock before a special trip.</p>
       </div>
       <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
+      </div>
+      <div class="store-gallery" aria-label="Explore the Hidden Reef experience">
+        <figure><img src="assets/department/lighting.jpg" alt="Rows of illuminated aquarium systems" loading="lazy" /><figcaption>See aquarium systems in person</figcaption></figure>
+        <figure><img src="assets/department/saltwater-reef.jpg" alt="Colorful saltwater reef aquarium" loading="lazy" /><figcaption>Reef and coral inspiration</figcaption></figure>
+        <figure><img src="assets/department/pond.jpg" alt="Koi swimming in a landscaped pond" loading="lazy" /><figcaption>Plan a pond that feels alive</figcaption></figure>
+        <figure><img src="assets/site/ziggy-portrait.png" alt="Illustrated portrait of Ziggy from The Hidden Reef" loading="lazy" /><figcaption>Ask Ziggy and the team</figcaption></figure>
       </div>
     </section>
 
@@ -3042,6 +3228,21 @@
 	      'assets/site/hero-aquatic-world-5.jpg'
 	    ];
 	    const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
+	    const hero = document.querySelector('.hero');
+	    const reducedHeroMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	    if (hero && !reducedHeroMotion) {
+	      hero.addEventListener('pointermove', event => {
+	        const rect = hero.getBoundingClientRect();
+	        const x = ((event.clientX - rect.left) / rect.width - 0.5) * -9;
+	        const y = ((event.clientY - rect.top) / rect.height - 0.5) * -6;
+	        hero.style.setProperty('--hero-pointer-x', x.toFixed(2) + 'px');
+	        hero.style.setProperty('--hero-pointer-y', y.toFixed(2) + 'px');
+	      });
+	      hero.addEventListener('pointerleave', () => {
+	        hero.style.setProperty('--hero-pointer-x', '0px');
+	        hero.style.setProperty('--hero-pointer-y', '0px');
+	      });
+	    }
 	    const preloadedHeroImages = new Set([heroImages[0]]);
 	    function preloadHeroImage(src) {
 	      if (!src || preloadedHeroImages.has(src)) return;
@@ -3053,7 +3254,6 @@
 	    if (heroSlides.length >= 2 && heroImages.length > 1) {
 	      let activeHeroImage = 0;
 	      let activeHeroLayer = 0;
-	      const reducedHeroMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 	      const rotateHero = async () => {
 	        activeHeroImage = (activeHeroImage + 1) % heroImages.length;
 	        const nextHeroLayer = activeHeroLayer === 0 ? 1 : 0;
@@ -3087,6 +3287,11 @@
 	    const specialDots = document.getElementById('special-dots');
 	    if (specialsTrack && specialSlides.length && specialDots) {
 	      let activeSpecial = 0;
+	      let specialTimer = null;
+	      let specialsPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	      const specialsDuration = 9000;
+	      const specialsProgress = document.getElementById('specials-progress-bar');
+	      const specialsPause = document.getElementById('specials-pause');
 	      specialDots.innerHTML = specialSlides.map((slide, index) =>
 	        '<button class="special-dot' + (index === 0 ? ' is-active' : '') + '" type="button" data-special-index="' + index + '" aria-label="Show special ' + (index + 1) + '"></button>'
 	      ).join('');
@@ -3096,12 +3301,23 @@
 	      if (specialSlides.length <= 1 && controlsWrap) {
 	        controlsWrap.hidden = true;
 	      }
+	      function restartSpecials() {
+	        window.clearTimeout(specialTimer);
+	        if (specialsProgress) {
+	          specialsProgress.classList.remove('is-running');
+	          void specialsProgress.offsetWidth;
+	        }
+	        if (specialsPaused || specialSlides.length <= 1) return;
+	        specialsProgress?.classList.add('is-running');
+	        specialTimer = window.setTimeout(() => setSpecial(activeSpecial + 1), specialsDuration);
+	      }
 	      function setSpecial(index) {
 	        activeSpecial = (index + specialSlides.length) % specialSlides.length;
 	        specialsTrack.style.transform = 'translateX(' + (-100 * activeSpecial) + '%)';
 	        dots.forEach((dot, dotIndex) => {
 	          dot.classList.toggle('is-active', dotIndex === activeSpecial);
 	        });
+	        restartSpecials();
 	      }
 	      controls.forEach(button => {
 	        button.addEventListener('click', () => {
@@ -3112,6 +3328,13 @@
 	        dot.addEventListener('click', () => {
 	          setSpecial(Number(dot.dataset.specialIndex || 0));
 	        });
+	      });
+	      specialsPause?.addEventListener('click', () => {
+	        specialsPaused = !specialsPaused;
+	        specialsPause.classList.toggle('is-paused', specialsPaused);
+	        specialsPause.setAttribute('aria-label', specialsPaused ? 'Resume automatic specials' : 'Pause automatic specials');
+	        specialsPause.textContent = specialsPaused ? '>' : '||';
+	        restartSpecials();
 	      });
 	      let specialTouchX = null;
 	      let specialTouchY = null;
@@ -3129,6 +3352,7 @@
 	          setSpecial(activeSpecial + (dx < 0 ? 1 : -1));
 	        }
 	      }, { passive: true });
+	      restartSpecials();
 	    }
 	    const revealTargets = Array.from(document.querySelectorAll('.section-band, .footer'));
 	    const reducedPageMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -3152,7 +3376,7 @@
 	      document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
 	    });
 	  </script>
-	  <script src="assets/reef-background.js?v=20260705-deepblue"></script>
+	  <script src="assets/reef-background.js?v=20260712-visual-refresh"></script>
 		  <script src="assets/category.js?v=20260604-sale-prices"></script>
 </body>
 	</html>

@@ -1665,9 +1665,201 @@
       gap: 12px;
       align-content: start;
     }
+    .triage-aquarium {
+      position: relative;
+      isolation: isolate;
+      min-height: 190px;
+      margin-top: 2px;
+      overflow: hidden;
+      border: 2px solid rgba(116,205,235,.34);
+      border-radius: 12px 12px 18px 18px;
+      background:
+        radial-gradient(circle at 22% 22%, rgba(90,225,218,.14), transparent 28%),
+        linear-gradient(180deg, rgba(28,125,163,.54), rgba(3,34,57,.92));
+      box-shadow: inset 0 0 34px rgba(64,217,255,.09), 0 14px 30px rgba(0,0,0,.28);
+      transition: background .28s ease, border-color .28s ease;
+    }
+    .triage-aquarium[data-biome="reef"],
+    .triage-aquarium[data-biome="saltwater"] {
+      background:
+        radial-gradient(circle at 78% 72%, rgba(166,94,232,.22), transparent 30%),
+        linear-gradient(180deg, rgba(24,116,171,.68), rgba(2,25,54,.96));
+    }
+    .triage-aquarium[data-biome="pond"] {
+      background:
+        radial-gradient(circle at 22% 12%, rgba(255,206,98,.2), transparent 30%),
+        linear-gradient(180deg, rgba(70,139,128,.66), rgba(15,54,48,.96));
+    }
+    .triage-aquarium__surface {
+      position: absolute;
+      inset: 15px 8px auto;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(185,246,255,.58);
+      box-shadow: 0 0 14px rgba(116,225,244,.44);
+    }
+    .triage-aquarium__surface::after {
+      content: "";
+      position: absolute;
+      inset: -8px 0;
+      background: repeating-radial-gradient(ellipse at center, transparent 0 12px, rgba(207,251,255,.14) 13px 14px, transparent 15px 25px);
+      animation: triageWater 5s ease-in-out infinite alternate;
+    }
+    .triage-aquarium__filter {
+      position: absolute;
+      right: 14px;
+      top: 34px;
+      width: 32px;
+      height: 72px;
+      border: 1px solid rgba(173,235,245,.38);
+      border-radius: 6px;
+      background: linear-gradient(90deg, rgba(3,20,33,.86), rgba(17,73,93,.86));
+      box-shadow: -8px 8px 18px rgba(0,0,0,.24);
+    }
+    .triage-aquarium__filter::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      bottom: -46px;
+      width: 4px;
+      height: 52px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(151,235,248,.65), transparent);
+    }
+    .triage-aquarium__substrate {
+      position: absolute;
+      inset: auto 0 0;
+      height: 46px;
+      background:
+        radial-gradient(circle at 12% 48%, #9f825d 0 3px, transparent 4px),
+        radial-gradient(circle at 32% 60%, #c0a071 0 4px, transparent 5px),
+        radial-gradient(circle at 67% 36%, #6e665b 0 3px, transparent 4px),
+        radial-gradient(circle at 86% 64%, #b09366 0 4px, transparent 5px),
+        linear-gradient(180deg, #6e5b45, #342a25);
+      box-shadow: 0 -9px 18px rgba(0,0,0,.18);
+    }
+    .triage-aquarium__plant {
+      position: absolute;
+      left: 24px;
+      bottom: 30px;
+      width: 34px;
+      height: 82px;
+      border-left: 4px solid #4fb88b;
+      border-radius: 50%;
+      transform: rotate(-6deg);
+    }
+    .triage-aquarium__plant::before,
+    .triage-aquarium__plant::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 11px;
+      border-radius: 100% 0 100% 0;
+      background: #61c99b;
+      box-shadow: 5px 25px 0 #55b889, -7px 49px 0 #3b9c75;
+      transform: rotate(-22deg);
+    }
+    .triage-aquarium__plant::after {
+      left: -25px;
+      top: 12px;
+      transform: scaleX(-1) rotate(-16deg);
+    }
+    .triage-aquarium__fish {
+      position: absolute;
+      left: 34%;
+      top: 43%;
+      width: 42px;
+      height: 20px;
+      border-radius: 55% 48% 48% 55%;
+      background: linear-gradient(135deg, #ffb45c, #ff7b32);
+      box-shadow: 0 5px 12px rgba(0,0,0,.2);
+      animation: triageFish 6s ease-in-out infinite alternate;
+    }
+    .triage-aquarium__fish::before {
+      content: "";
+      position: absolute;
+      left: -13px;
+      top: 2px;
+      border-top: 8px solid transparent;
+      border-right: 16px solid #e7612c;
+      border-bottom: 8px solid transparent;
+    }
+    .triage-aquarium__fish::after {
+      content: "";
+      position: absolute;
+      right: 7px;
+      top: 5px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #071a27;
+    }
+    .triage-aquarium__bubble {
+      position: absolute;
+      left: 54%;
+      bottom: 43px;
+      width: 7px;
+      height: 7px;
+      border: 1px solid rgba(210,249,255,.72);
+      border-radius: 50%;
+      box-shadow: 10px -18px 0 -1px rgba(210,249,255,.28), -5px -38px 0 -2px rgba(210,249,255,.38);
+      animation: triageBubbles 4.4s linear infinite;
+    }
+    .triage-hotspot {
+      position: absolute;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 7px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px;
+      color: rgba(232,250,255,.72);
+      background: rgba(2,19,32,.62);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: color .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease, transform .22s ease;
+    }
+    .triage-hotspot[data-zone="surface"] { left: 12px; top: 27px; }
+    .triage-hotspot[data-zone="water"] { left: 12px; top: 82px; }
+    .triage-hotspot[data-zone="livestock"] { right: 55px; top: 112px; }
+    .triage-hotspot[data-zone="substrate"] { right: 12px; bottom: 9px; }
+    .triage-aquarium[data-zone="surface"] .triage-hotspot[data-zone="surface"],
+    .triage-aquarium[data-zone="water"] .triage-hotspot[data-zone="water"],
+    .triage-aquarium[data-zone="livestock"] .triage-hotspot[data-zone="livestock"],
+    .triage-aquarium[data-zone="substrate"] .triage-hotspot[data-zone="substrate"] {
+      color: #fff;
+      border-color: rgba(255,180,92,.82);
+      background: rgba(255,123,50,.28);
+      box-shadow: 0 0 0 4px rgba(255,123,50,.08), 0 0 18px rgba(255,180,92,.26);
+      transform: scale(1.04);
+    }
+    .triage-visual__sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+    @keyframes triageWater { to { transform: translateX(14px) scaleX(1.04); } }
+    @keyframes triageFish { to { transform: translate(46px,-10px) rotate(-2deg); } }
+    @keyframes triageBubbles { to { transform: translateY(-82px); opacity: .1; } }
     .triage-field {
       display: grid;
       gap: 6px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .triage-aquarium__surface::after,
+      .triage-aquarium__fish,
+      .triage-aquarium__bubble {
+        animation: none !important;
+      }
     }
     .triage-field label,
     .triage-result__eyebrow {
@@ -2154,7 +2346,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260525-learning-path-frame" />
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260712-visual-refresh" />
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
@@ -2324,6 +2516,19 @@
               <option value="medication">Medication or chemical added</option>
               <option value="overfeed">Extra food or missed cleanup</option>
             </select>
+          </div>
+          <div class="triage-aquarium" data-triage-visual data-zone="surface" data-biome="freshwater" role="img" aria-label="Aquarium diagram highlighting the water surface">
+            <span class="triage-aquarium__surface" aria-hidden="true"></span>
+            <span class="triage-aquarium__filter" aria-hidden="true"></span>
+            <span class="triage-aquarium__substrate" aria-hidden="true"></span>
+            <span class="triage-aquarium__plant" aria-hidden="true"></span>
+            <span class="triage-aquarium__fish" aria-hidden="true"></span>
+            <span class="triage-aquarium__bubble" aria-hidden="true"></span>
+            <span class="triage-hotspot" data-zone="surface" aria-hidden="true">Surface</span>
+            <span class="triage-hotspot" data-zone="water" aria-hidden="true">Water</span>
+            <span class="triage-hotspot" data-zone="livestock" aria-hidden="true">Livestock</span>
+            <span class="triage-hotspot" data-zone="substrate" aria-hidden="true">Substrate</span>
+            <span class="triage-visual__sr" data-triage-visual-label>Check the water surface first.</span>
           </div>
         </div>
         <article class="triage-result" data-triage-result aria-live="polite">
@@ -3145,7 +3350,23 @@
         visit: document.querySelector('[data-triage-visit]'),
         copy: document.querySelector('[data-triage-copy]'),
         print: document.querySelector('[data-triage-print]'),
-        copyStatus: document.querySelector('[data-triage-copy-status]')
+        copyStatus: document.querySelector('[data-triage-copy-status]'),
+        visual: document.querySelector('[data-triage-visual]'),
+        visualLabel: document.querySelector('[data-triage-visual-label]')
+      };
+
+      const triageVisualZones = {
+        breathing: ['surface', 'the water surface and oxygen exchange'],
+        death: ['surface', 'the water surface and oxygen exchange'],
+        cloudy: ['water', 'the water column and filtration'],
+        green: ['water', 'the water column and light exposure'],
+        cycling: ['water', 'the water column and biological filtration'],
+        temperature: ['water', 'the water column and temperature'],
+        algae: ['substrate', 'the substrate, hardscape, and trapped waste'],
+        smell: ['substrate', 'the substrate and hidden decaying material'],
+        sick: ['livestock', 'the fish and visible symptoms'],
+        coral: ['livestock', 'the coral, flow, and lighting'],
+        inverts: ['livestock', 'the invertebrates and medication safety']
       };
 
       function uniqueList(items) {
@@ -3196,11 +3417,23 @@
         if (triageEls.print) triageEls.print.disabled = !enabled;
       }
 
+      function updateTriageVisual(symptom, tankType) {
+        if (!triageEls.visual) return;
+        const visualState = triageVisualZones[symptom] || triageVisualZones.breathing;
+        const tankLabel = selectedOptionText(triageEls.tank, tankType);
+        triageEls.visual.dataset.zone = visualState[0];
+        triageEls.visual.dataset.biome = tankType;
+        const description = 'Aquarium diagram highlighting ' + visualState[1] + ' for a ' + tankLabel + ' aquarium.';
+        triageEls.visual.setAttribute('aria-label', description);
+        if (triageEls.visualLabel) triageEls.visualLabel.textContent = description;
+      }
+
       function renderTankMismatch(base, selectedTankType) {
         const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
         const validTankLabels = validTankTypes.map((type) => selectedOptionText(triageEls.tank, type));
         const validTankText = humanList(validTankLabels, 'or');
         const selectedTankLabel = selectedOptionText(triageEls.tank, selectedTankType);
+        updateTriageVisual(triageEls.symptom.value, selectedTankType);
         triageEls.result?.classList.add('is-mismatch');
         triageEls.label.textContent = 'Selection mismatch';
         triageEls.title.textContent = `${base.title.replace(/\.$/, '')} - but check the selections first.`;
@@ -3239,6 +3472,7 @@
         if (options.sync) syncTriageUrl();
         const base = triageData[triageEls.symptom.value] || triageData.breathing;
         const selectedTankType = triageEls.tank.value;
+        updateTriageVisual(triageEls.symptom.value, selectedTankType);
         const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
         if (!validTankTypes.includes(selectedTankType)) {
           renderTankMismatch(base, selectedTankType);
@@ -3411,6 +3645,6 @@
       });
     })();
   </script>
-  <script src="../assets/reef-background.js?v=20260705-deepblue"></script>
+  <script src="../assets/reef-background.js?v=20260712-visual-refresh"></script>
 </body>
 </html>
