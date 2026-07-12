@@ -141,8 +141,12 @@
 
     const actions = document.createElement('div');
     actions.className = 'main-nav__actions';
+    const hasPreviewDrawer = Boolean(window.THR && window.THR.openProductModal);
     actions.innerHTML = [
       '<a href="/category/" aria-label="Search products"><span aria-hidden="true">&#8981;</span><span>Search</span></a>',
+      hasPreviewDrawer
+        ? '<button class="cart-button main-nav__preview" type="button" aria-label="Open empty preview list"><span>0</span><strong>Preview</strong></button>'
+        : '<a href="/category/?preview=open" aria-label="Open preview list"><span aria-hidden="true">&#9776;</span><span>Preview</span></a>',
       '<a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on the official Hidden Reef site"><span aria-hidden="true">&#8599;</span><span>Shop</span></a>'
     ].join('');
 
@@ -158,7 +162,7 @@
     });
 
     nav.addEventListener('click', function(event) {
-      if (!event.target.closest('a') || window.innerWidth > 760) return;
+      if (!event.target.closest('a,button.cart-button') || window.innerWidth > 760) return;
       nav.classList.remove('is-open');
       menu.setAttribute('aria-expanded', 'false');
       menu.setAttribute('aria-label', 'Open store navigation');
@@ -428,6 +432,87 @@
     if (fishItem.direction < 0 && fishItem.x < -margin) fishItem.x = width + margin;
   }
 
+  function drawFreshwaterPlants(time) {
+    const swayTime = time * motionScale * 0.00045;
+    ctx.save();
+    ctx.globalAlpha = 0.12;
+    ctx.lineCap = 'round';
+    for (let plant = 0; plant < (width >= 900 ? 13 : 7); plant += 1) {
+      const baseX = width * (0.04 + plant / (width >= 900 ? 12.5 : 6.5));
+      const baseY = height + 12;
+      const stemHeight = height * (0.1 + (plant % 4) * 0.025);
+      const sway = Math.sin(swayTime + plant * 0.72) * (8 + plant % 3 * 3);
+      ctx.strokeStyle = rgba(biome.secondary, 0.8);
+      ctx.lineWidth = 2 + (plant % 2);
+      ctx.beginPath();
+      ctx.moveTo(baseX, baseY);
+      ctx.bezierCurveTo(baseX - sway * 0.2, baseY - stemHeight * 0.38, baseX + sway, baseY - stemHeight * 0.72, baseX + sway * 0.58, baseY - stemHeight);
+      ctx.stroke();
+      for (let leaf = 1; leaf <= 3; leaf += 1) {
+        const leafY = baseY - stemHeight * (0.24 + leaf * 0.18);
+        const side = leaf % 2 ? -1 : 1;
+        ctx.beginPath();
+        ctx.moveTo(baseX + sway * leaf * 0.08, leafY);
+        ctx.quadraticCurveTo(baseX + side * 13 + sway * 0.3, leafY - 8, baseX + side * 21 + sway * 0.42, leafY - 3);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  function drawPondKoiShadows(time) {
+    ctx.save();
+    ctx.fillStyle = rgba(biome.fish, 1);
+    for (let koi = 0; koi < (width >= 900 ? 5 : 3); koi += 1) {
+      const phase = time * motionScale * 0.00009 + koi * 1.31;
+      const x = width * (0.12 + koi * 0.2) + Math.sin(phase) * width * 0.07;
+      const y = height * (0.14 + (koi % 3) * 0.08) + Math.cos(phase * 1.4) * 18;
+      const size = 18 + (koi % 3) * 6;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(Math.sin(phase * 0.7) * 0.28);
+      ctx.globalAlpha = 0.055 + (koi % 2) * 0.018;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, size * 1.6, size * 0.52, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(-size * 1.3, 0);
+      ctx.lineTo(-size * 2.05, -size * 0.72);
+      ctx.lineTo(-size * 2.05, size * 0.72);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  function drawSaltwaterSchool(time) {
+    ctx.save();
+    ctx.fillStyle = rgba(biome.fish, 1);
+    for (let anthias = 0; anthias < (width >= 900 ? 15 : 7); anthias += 1) {
+      const row = anthias % 5;
+      const drift = (time * motionScale * 0.006 + anthias * 67) % (width + 180);
+      const x = drift - 90;
+      const y = height * (0.18 + row * 0.06) + Math.sin(time * 0.0007 + anthias) * 8;
+      const size = 2.6 + (anthias % 3) * 0.7;
+      ctx.globalAlpha = 0.055 + row * 0.006;
+      ctx.beginPath();
+      ctx.ellipse(x, y, size * 2.2, size, 0, 0, Math.PI * 2);
+      ctx.moveTo(x - size * 1.8, y);
+      ctx.lineTo(x - size * 3.4, y - size * 1.3);
+      ctx.lineTo(x - size * 3.4, y + size * 1.3);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  function drawBiomeAccent(time) {
+    if (biomeName === 'freshwater') drawFreshwaterPlants(time);
+    if (biomeName === 'pond') drawPondKoiShadows(time);
+    if (biomeName === 'saltwater') drawSaltwaterSchool(time);
+  }
+
   function draw(time) {
     const dt = Math.min(48, time - last);
     last = time;
@@ -449,6 +534,7 @@
 
     drawLightRays(time);
     drawCaustics(time);
+    drawBiomeAccent(time);
 
     // Darken the left/right gutters so the content column reads as framed
     // deep blue instead of a flat wash. Bubbles still float over the sides.

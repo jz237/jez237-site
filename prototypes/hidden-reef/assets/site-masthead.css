@@ -276,15 +276,54 @@ main.page > section[aria-labelledby="paths-title"] {
   padding: 4px 7px;
 }
 
-.main-nav__actions a {
+.main-nav__actions a,
+.main-nav__actions button {
   gap: 5px;
   min-width: 34px !important;
   min-height: 32px !important;
   padding: 5px 8px !important;
   border: 1px solid rgba(116,205,235,0.2) !important;
   border-radius: 999px;
+  color: #dff8ff !important;
+  background: rgba(5,28,45,0.72) !important;
+  box-shadow: none !important;
+  cursor: pointer;
+  font-family: inherit;
   font-size: 16px !important;
   line-height: 1;
+}
+
+.main-nav__actions button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-nav__actions .main-nav__preview span {
+  position: static;
+  display: grid;
+  place-items: center;
+  min-width: 19px;
+  height: 19px;
+  border-radius: 999px;
+  color: #02111f;
+  background: #40d9ff;
+  font-size: 10px;
+  font-weight: 950;
+}
+
+.main-nav__actions .main-nav__preview strong {
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.main-nav__actions a:hover,
+.main-nav__actions button:hover,
+.main-nav__actions a:focus-visible,
+.main-nav__actions button:focus-visible {
+  border-color: rgba(116,205,235,0.52) !important;
+  background: rgba(18,83,108,0.76) !important;
 }
 
 .main-nav__menu {
@@ -422,7 +461,8 @@ main.page > section[aria-labelledby="paths-title"] {
     border-top: 1px solid rgba(116,205,235,0.14);
   }
 
-  .header.masthead + .main-nav.is-open .main-nav__actions a {
+  .header.masthead + .main-nav.is-open .main-nav__actions a,
+  .header.masthead + .main-nav.is-open .main-nav__actions button {
     flex: 1 1 0;
     gap: 7px;
     min-height: 38px !important;
@@ -430,8 +470,66 @@ main.page > section[aria-labelledby="paths-title"] {
   }
 }
 
+/* Product quick view becomes a useful right-side drawer. The product image
+   briefly travels from its card into the drawer when motion is permitted. */
+.link-modal {
+  justify-content: flex-end !important;
+  padding: 0 !important;
+}
+
+.link-modal__panel {
+  width: min(920px, 96vw) !important;
+  max-width: none !important;
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  border-width: 0 0 0 1px !important;
+  border-radius: 0 !important;
+  opacity: 0;
+  transform: translateX(34px);
+  transition: transform 280ms cubic-bezier(.22,.8,.25,1), opacity 180ms ease !important;
+}
+
+.link-modal.is-open .link-modal__panel {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.link-modal__gallery.is-shared-opening {
+  transform-origin: top left;
+  animation: sharedProductImageIn 520ms cubic-bezier(.18,.82,.22,1) both;
+}
+
+@keyframes sharedProductImageIn {
+  from {
+    opacity: .35;
+    transform: translate(var(--shared-from-x), var(--shared-from-y))
+      scale(var(--shared-from-scale-x), var(--shared-from-scale-y));
+    filter: saturate(.82) brightness(.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0,0) scale(1);
+    filter: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .link-modal__panel {
+    width: 100% !important;
+    border-left: 0 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .header.masthead + .main-nav {
     transition: none !important;
+  }
+
+  .link-modal__panel {
+    transition: none !important;
+  }
+
+  .link-modal__gallery.is-shared-opening {
+    animation: none !important;
   }
 }

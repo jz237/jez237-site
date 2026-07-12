@@ -799,6 +799,7 @@
     const departmentName = context.category.groupName || 'Hidden Reef catalog';
     const desc = card?.dataset.info || context.category.description || card?.querySelector('p, em')?.textContent?.trim() || 'Check the product page for current details, options, and availability.';
     const img = card?.querySelector('img');
+    const sourceImageRect = img?.getBoundingClientRect();
     const productImages = getProductImages(product, img?.getAttribute('src') || 'assets/site/hero-aquatic-world.jpg');
     const price = product.price || card?.dataset.price || card?.querySelector('.price, .thr-price')?.textContent?.trim() || 'See site';
     const source = card?.dataset.source || 'Original Hidden Reef page';
@@ -839,6 +840,21 @@
     document.body.classList.add('link-modal-open');
     modal.querySelector('.link-modal__panel').scrollTop = 0;
     modal.querySelector('.link-modal__close').focus();
+    if (sourceImageRect && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.requestAnimationFrame(() => {
+        const gallery = modal.querySelector('.link-modal__gallery');
+        const targetRect = modal.querySelector('.link-modal__image')?.getBoundingClientRect();
+        if (!gallery || !targetRect || !targetRect.width || !targetRect.height) return;
+        gallery.style.setProperty('--shared-from-x', (sourceImageRect.left - targetRect.left).toFixed(1) + 'px');
+        gallery.style.setProperty('--shared-from-y', (sourceImageRect.top - targetRect.top).toFixed(1) + 'px');
+        gallery.style.setProperty('--shared-from-scale-x', Math.max(0.12, sourceImageRect.width / targetRect.width).toFixed(3));
+        gallery.style.setProperty('--shared-from-scale-y', Math.max(0.12, sourceImageRect.height / targetRect.height).toFixed(3));
+        gallery.classList.remove('is-shared-opening');
+        void gallery.offsetWidth;
+        gallery.classList.add('is-shared-opening');
+        window.setTimeout(() => gallery.classList.remove('is-shared-opening'), 560);
+      });
+    }
     syncProductUrl(href);
   }
 
@@ -870,6 +886,7 @@
 
   function boot() {
     initDemoCart();
+    if (new URLSearchParams(window.location.search).get('preview') === 'open') openCart();
     openProductFromUrl();
   }
 
