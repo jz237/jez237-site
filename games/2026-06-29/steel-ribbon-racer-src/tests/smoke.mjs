@@ -300,6 +300,16 @@ const browser = await chromium.launch({
     JSON.stringify({ h: fr?.hydrants, m: fr?.meters, b: fr?.benches, c: fr?.cans }),
   );
 
+  // zoom-detail item 10: stadium crowd v2 — figures promote on the nearest stand
+  const cr0 = await page.evaluate(() => window.__steelRibbonDebug.detailReport().crowd);
+  check("crowd: grandstands registered", (cr0?.stands ?? 0) >= 1, `stands=${cr0?.stands}`);
+  if (cr0?.sample?.[0]) {
+    const cs = cr0.sample[0];
+    await page.evaluate(([s]) => window.__steelRibbonDebug.setRoamPos(s.x + 18, s.z + 18, 0, 0), [cs]);
+    const crp = await poll(page, () => window.__steelRibbonDebug.detailReport().crowd, (c) => (c?.promoted ?? 0) > 0, 40);
+    check("crowd: nearest stand fills with figures", (crp?.figures ?? 0) > 100, `figures=${crp?.figures}`);
+  } else check("crowd: nearest stand fills with figures", false, "no stand sample");
+
   // zoom-detail item 09: WALK/DON'T-WALK ped signals synced to the lamp phase
   const pss = await page.evaluate(() => window.__steelRibbonDebug.detailReport().pedSignals);
   check("ped signals: boxes at signaled intersections", (pss?.count ?? 0) > 4, `count=${pss?.count}`);

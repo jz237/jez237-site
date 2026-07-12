@@ -105,8 +105,7 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 9. ~~Traffic-signal detail~~ **DONE 2026-07-12 (iteration 09)** — the 3-lamp
    heads turned out to ALREADY exist and be live-synced; what shipped is the
    missing half: WALK/DON'T-WALK ped signals. See iteration log.
-10. **Stadium crowd v2**: near tier = instanced seated figures (wave animation);
-    far tier keeps the noise texture.
+10. ~~Stadium crowd v2~~ **DONE 2026-07-12 (iteration 10)** — see iteration log.
 11. **Road micro-detail**: manholes, storm drains, turn arrows, worn patches,
     crosswalk wear decals.
 12. **Photo mode**: pause + orbit/zoom camera (wheel + pinch) reusing __freeCam
@@ -325,3 +324,17 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   past the shoulder; at sub-1m the lookAt up-vector rolls the frame. Head-tilt
   while texting deferred (head merged into body mesh) → item 3b. Smoke probe
   hops ped clusters until a texter is promoted; suite green (see commit).
+- **10 stadium crowd v2 (2026-07-12)**: the nearest grandstand within 70m fills
+  with ~276 seated figures — colorful tinted torso boxes + skin-tone heads in
+  rows on the tilted crowd plane, doing a traveling wave; the noise texture
+  stays underneath and reads as crowd shimmer between figures. TWO
+  InstancedMeshes (torsos tinted via setColorAt — separate from heads so the
+  tint doesn't color skin), visible ONLY while a stand is promoted → zero
+  race-start cost, freeze-compliant. Layout computed from the stand's plane
+  frame (translate(0,12,6)∘rotX(-0.85) inside the yawed group); one stand
+  promoted at a time, pool refills on switch. Grandstands are BOOT-built
+  (et.add, not per-world) → no reset dance; stand count varies 2-4 per world.
+  **Verified by looking** (`loop-shots/10-crowd/`): 26m shot shows rows of
+  figures mid-wave over the noise; 100m shot = noise only, promoted:0. Perf:
+  race start 1740 / 572k (unchanged band). Ideas: crowd murmur + horns when
+  promoted (fits the ≥80% audio rule); team-color flags per figure.
