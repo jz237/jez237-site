@@ -204,7 +204,7 @@
       </div>
       <p>every creature carries <b>genes</b> — speed, size, senses, fear, colour — that mutate a little each time it breeds. the ones that survive pass theirs on, so the population <b>evolves in front of you</b>: watch the grazers grow faster over generations, because the slow ones keep getting eaten.</p>
       <p>because predators eat grazers and grazers eat plankton, their numbers rise and fall in linked waves — press <b>S</b> to see the population oscilloscope, <b>G</b> for the live gene-drift chart. if everything dies out, a <b>genesis</b> event reseeds the world. it runs forever.</p>
-      <p>and the world itself ages: as days and generations pass, <b>new kinds of life arrive</b> — drifting bells, scavengers of the fallen, and older things that hunt up from the dark. each arrival is written into the chronicle (❧).</p>
+      <p>and the world itself ages: as days and generations pass, <b>new kinds of life arrive</b> — drifting bells, scavengers of the fallen, older things that hunt up from the dark, and reefs that slowly build themselves. each arrival is written into the chronicle (❧).</p>
       <div class="ex-controls">
         <span>🖱️ <b>click</b> a creature — the lens racks focus onto it; follow &amp; read its genes</span>
         <span>✋ <b>drag</b> — stir the current</span>
@@ -274,7 +274,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v2.0.0'; // v2.0: DEEP TIME — the world now grows NEW LIFE as it ages. Eras unlock with world age or lineage depth: the age of drifters (pulsing medusae that strain real biomass from the bloom and bud when fed), the cleansing (seafloor scavengers that eat the dead and return nutrients to the plankton — a closed loop), and the deep hunger (an abyssal ambusher that lurks far down the z column, rises with a glowing lure, and strikes). Each arrival is narrated + chronicled; era progress persists, and a returning world re-runs its arrivals quickly. The HUD grows rows as the cast grows. (v1.10 god-rays; v1.9 depth of field; v1.8 volumetric depth.)
+const VERSION = 'v2.1.0'; // v2.1: THE LIVING REEF — a fourth era. Coral gardens take root beside the vents and ACCRETE in real time, one branch every ~2 seconds: colonies fork upward toward the light, old branches thicken with age, and the youngest growth glows with pulsing polyps. The world now visibly BUILDS itself the longer it runs. (v2.0 deep time: drifters/scavengers/abyssal hunter; v1.10 god-rays; v1.9 depth of field; v1.8 volumetric depth.)
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -792,6 +792,7 @@ function step(dt){
   updateJellies(dt);
   updateScavs(dt);
   updateAbyss(dt);
+  updateCoral(dt);
 
   // history sampling
   histAcc+=dt;
@@ -1133,6 +1134,7 @@ const ERAS=[
   {key:'drifters',   day:2, gen:10, evt:'era_drifters',   glyph:'✤', chron:'new life — soft bells ride the current: the drifters arrive'},
   {key:'scavengers', day:4, gen:20, evt:'era_scavengers', glyph:'✜', chron:'the cleansing — scavengers walk the floor, and the dead feed the bloom'},
   {key:'abyss',      day:7, gen:32, evt:'era_abyss',      glyph:'◆', chron:'the deep hunger — something patient hunts up from the dark'},
+  {key:'reef',       day:10, gen:45, evt:'era_reef',      glyph:'✿', chron:'the living reef — coral gardens take root beside the vents'},
 ];
 let eraLevel=0, eraSavedLevel=0, eraAcc=0;
 function loadWorldAge(){ try{ eraSavedLevel=(JSON.parse(localStorage.getItem('primordia_age_v1')||'{}').era|0)||0; }catch(e){} }
@@ -1154,6 +1156,7 @@ function unlockEra(i,announce){
   else if(e.key==='scavengers'){ cx=rrange(250,CFG.W-250); cy=CFG.H-40;
     for(let k=0;k<3;k++) spawnScav(cx+rrange(-90,90), CFG.H-rrange(18,70), null); }
   else if(e.key==='abyss'){ ABY.cooldown=rrange(15,35); cx=CFG.W/2; cy=CFG.H*0.62; }
+  else if(e.key==='reef'){ seedReef(); if(CORAL.colonies.length){ cx=CORAL.colonies[0].x; cy=CFG.H-60; } }
   if(announce){ narrate(e.evt,null); logChronicle(e.chron,e.glyph);
     interest.push({x:cx,y:cy,w:16,t:simTime}); }
   ensureEraRows();
@@ -1412,6 +1415,58 @@ function drawAbyss(){
     ctx.globalCompositeOperation='source-over'; }
   ctx.globalAlpha=1;
 }
+
+/* ---- the living reef: coral colonies that ACCRETE, one branch at a time.
+   Purely environmental — the world visibly builds itself the longer it runs.
+   Branches extend from random tips (biased upward) and THICKEN with age. */
+const CORAL={colonies:[],acc:0};
+function seedReef(){
+  CORAL.colonies.length=0;
+  for(const v of vents){
+    const hue = rnd()<0.5 ? rrange(300,345) : rrange(10,40);   // magenta-pink or orange colonies
+    CORAL.colonies.push({x:clamp(v.x+rrange(-90,90),40,CFG.W-40), y:CFG.H-8, hue, segs:[], cap:34+((rnd()*10)|0)});
+  }
+  for(let i=0;i<2;i++)                                          // plus two free-standing patches
+    CORAL.colonies.push({x:rrange(150,CFG.W-150), y:CFG.H-8, hue:rrange(160,200), segs:[], cap:24});
+}
+function growCoral(){
+  let c=null, tries=0;
+  while(tries++<6){ const k=CORAL.colonies[(rnd()*CORAL.colonies.length)|0];
+    if(k.segs.length<k.cap){ c=k; break; } }
+  if(!c)return;
+  let x,y,ang;
+  if(c.segs.length===0){ x=c.x; y=c.y; ang=-Math.PI/2+gauss()*0.2; }
+  else { const p=c.segs[(rnd()*c.segs.length)|0];
+    x=p.x2; y=p.y2; ang=p.ang+gauss()*0.55;
+    if(Math.sin(ang)>0.25) ang=-Math.PI/2+gauss()*0.5;          // coral reaches for the light
+  }
+  const len=rrange(7,13);
+  c.segs.push({x1:x,y1:y,x2:x+Math.cos(ang)*len,y2:y+Math.sin(ang)*len,ang,born:simTime,
+    hue:clamp(c.hue+gauss()*8,0,359)});
+}
+function updateCoral(dt){
+  if(eraLevel<4)return;
+  CORAL.acc+=dt;
+  if(CORAL.acc>2.2){ CORAL.acc=0; growCoral(); }
+}
+function drawCoral(){
+  if(eraLevel<4)return;
+  for(const c of CORAL.colonies){
+    for(const s of c.segs){
+      const w=Math.min(3.2, 0.7+(simTime-s.born)*0.008);        // old branches thicken
+      ctx.globalAlpha=0.72; ctx.strokeStyle=hueRGB(s.hue); ctx.lineWidth=w;
+      ctx.beginPath(); ctx.moveTo(s.x1,s.y1); ctx.lineTo(s.x2,s.y2); ctx.stroke();
+    }
+  }
+  ctx.globalCompositeOperation='lighter';                       // glowing polyps on the young growth
+  for(const c of CORAL.colonies){
+    const n=c.segs.length;
+    for(let i=Math.max(0,n-8);i<n;i++){ const s=c.segs[i];
+      glow(s.x2,s.y2, 5+2*Math.sin(simTime*1.7+s.x2), s.hue, 0.45); }
+  }
+  ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+}
+function reefSegs(){ let n=0; for(const c of CORAL.colonies)n+=c.segs.length; return n; }
 
 /* dynamic HUD rows: the population readout grows as the world does */
 let eraRowsBuilt=0;
@@ -1855,18 +1910,19 @@ const CAP={
   era_drifters:['new life enters the water — soft bells riding the current','the age of drifters begins: the first medusae pulse through the bloom'],
   era_scavengers:['the fallen no longer lie still — scavengers walk the floor','small mouths find the dead: the world learns to clean itself'],
   era_abyss:['something patient has learned to hunt from the dark below','the deep opens its eye — an abyssal hunter rises'],
+  era_reef:['life takes hold of stone — a reef begins beside the vents','coral gardens take root: the world is building itself now'],
   abyssStrike:['taken — pulled down into the dark','the lure was a lie. the deep feeds','one light goes out, below the thermocline'],
 };
 /* which events have recorded voice, and how many variants exist */
 const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2,leviathan:2,
-  era_drifters:2,era_scavengers:2,era_abyss:2};
+  era_drifters:2,era_scavengers:2,era_abyss:2,era_reef:2};
 const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
   evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament',leviathan:'e22_leviathan',
-  era_drifters:'e23_drifters',era_scavengers:'e24_scavengers',era_abyss:'e25_abyss'};
+  era_drifters:'e23_drifters',era_scavengers:'e24_scavengers',era_abyss:'e25_abyss',era_reef:'e26_reef'};
 const PRIORITY={genesis:0,extinction:0,leviathan:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
   genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3,season:3,
-  era_drifters:0,era_scavengers:0,era_abyss:0,abyssStrike:2};
+  era_drifters:0,era_scavengers:0,era_abyss:0,era_reef:0,abyssStrike:2};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
   evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70,leviathan:0,
   abyssStrike:120};
@@ -2247,8 +2303,9 @@ function draw(){
   setWorld();
   // light shafts
   drawShafts();
-  // environment: vents + kelp (behind the life)
+  // environment: vents + coral + kelp (behind the life)
   drawVents();
+  drawCoral();
   drawKelp();
   // plankton bloom (into bloom buffer)
   drawPlanktonBloom();
@@ -3115,6 +3172,7 @@ window.__prim={
   resetWorldAge(){ eraLevel=0; eraSavedLevel=0; try{localStorage.removeItem('primordia_age_v1');}catch(e){} },
   summonAbyss(){ ABY.cooldown=0; },
   get detritusN(){ return detritus.length; },
+  get reef(){ return {segs:reefSegs(), colonies:CORAL.colonies.length}; },
   get deepLife(){ const out={j:[],s:[]};
     for(const j of jellies)if(j.alive)out.j.push([Math.round(j.x),Math.round(j.y),+j.z.toFixed(2)]);
     for(const s of scavs)if(s.alive)out.s.push([Math.round(s.x),Math.round(s.y)]);
