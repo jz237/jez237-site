@@ -212,7 +212,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   constants) is deterministic. TWO InstancedMeshes total (poles + blades); blades
   sample an 8x4 name atlas via aSignSlot instanced attribute (plate shader
   pattern, customProgramCacheKey 'street-sign-atlas'); each blade = front+back
-  quads so text reads from both sides. ~8k tris. **Perf**: chase 1750 /
+  quads so text reads from both sides. ~8k tris.
+- **DEPLOY BATCH 2 (2026-07-12): v3.9.0 LIVE** — items 05-08 deployed and
+  verified first-probe (index-D9DAYQ6Q.js, bundle 200). **Perf**: chase 1750 /
   570,072 / 237 vs baseline 1794 / 543,646 / 227 — PASS but the ~5% tris budget
   (571k) is now nearly consumed: future PERMANENT-geometry items must be very
   lean (or renegotiate the budget with real FPS data — headless can't measure
