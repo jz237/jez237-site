@@ -2410,6 +2410,80 @@ const pedKitSys = {
     }
   },
 };
+// ─── Taxi identity (zoom-detail item 05): dark cutout "TAXI ##" text on both
+// faces of the glowing roof-sign box plus door decals — a pooled set of 8
+// pre-built 4-quad meshes (one draw per taxi) over a single atlas texture.
+// Medallion numbers are per-slot deterministic; pool meshes recycle across
+// world rebuilds so no geometry/texture creep.
+let taxiSignAtlas = null;
+function buildTaxiSignAtlas() {
+  if (taxiSignAtlas) return taxiSignAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  const nums = [];
+  for (let s = 0; s < 8; s++) {
+    const x = (s % 4) * 256,
+      y = ((s / 4) | 0) * 256,
+      num = ((s * 97 + 13) % 90) + 10;
+    nums.push(num);
+    ((g.fillStyle = "#14203a"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    ((g.font = "bold 88px sans-serif"), g.fillText(`TAXI ${num}`, x + 128, y + 96));
+    ((g.font = "bold 34px sans-serif"), g.fillText("STEEL CITY CAB", x + 128, y + 178));
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  taxiSignAtlas = {
+    texture,
+    nums,
+    mat: new MeshBasicMaterial({ map: texture, transparent: !0, alphaTest: 0.25 }),
+  };
+  return taxiSignAtlas;
+}
+const taxiSignSys = {
+  pool: null,
+  used: 0,
+  ensure() {
+    if (this.pool) return;
+    const atlas = buildTaxiSignAtlas();
+    this.pool = [];
+    for (let s = 0; s < 8; s++) {
+      const su = (s % 4) * 0.25,
+        sv = 1 - (((s / 4) | 0) + 1) * 0.5,
+        quads = [];
+      // roof sign faces (box at (0, 2.2, -0.35), size 1 x 0.24 x 0.46)
+      for (const [z, ry] of [[-0.585, Math.PI], [-0.115, 0]]) {
+        const q = new PlaneGeometry(0.94, 0.2);
+        const uv = q.attributes.uv;
+        // top half of the slot: the big "TAXI ##" line
+        for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, su + uv.getX(vi) * 0.25, sv + 0.25 + uv.getY(vi) * 0.25);
+        (ry && q.rotateY(ry), q.translate(0, 2.2, z), quads.push(q));
+      }
+      // door decals (body sides at x ±1.125)
+      for (const [x, ry] of [[1.13, Math.PI / 2], [-1.13, -Math.PI / 2]]) {
+        const q = new PlaneGeometry(0.62, 0.3);
+        const uv = q.attributes.uv;
+        for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, su + uv.getX(vi) * 0.25, sv + uv.getY(vi) * 0.5);
+        (q.rotateY(ry), q.translate(x, 1.05, -0.2), quads.push(q));
+      }
+      const mesh = new Mesh(mergeGeometries(quads, !1), atlas.mat);
+      ((mesh.castShadow = !1), (mesh.receiveShadow = !1), (mesh.userData.taxiSign = s));
+      this.pool.push(mesh);
+    }
+  },
+  reset() {
+    if (this.pool) for (const m of this.pool) m.removeFromParent();
+    this.used = 0;
+  },
+  attach(carMesh) {
+    this.ensure();
+    if (this.used >= this.pool.length) return;
+    carMesh.add(this.pool[this.used++]);
+  },
+  count() {
+    return this.pool ? this.pool.reduce((n, m) => n + (m.parent ? 1 : 0), 0) : 0;
+  },
+};
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
     d = [12139059, 3109053, 15263967, 3818573, 4695133, 14793024, 9261235, 16767293],
@@ -2439,7 +2513,8 @@ function F1(i, e, t) {
     (qe.trafficLights = 0),
     (qe.stopSigns = 0),
     plateSys.resetDynamic(),
-    pedKitSys.reset());
+    pedKitSys.reset(),
+    taxiSignSys.reset());
   const y = (I) => I[(Math.random() * I.length) | 0],
     E = (I) => (I > 0 ? -1 : 1) * c * 0.23,
     T = (I, ye) => {
@@ -2568,6 +2643,7 @@ function F1(i, e, t) {
       Rc.push(K),
       i.add(K.mesh),
       plateSys.addDynamic(K.mesh, I),
+      Me === "taxi" && taxiSignSys.attach(K.mesh),
       (qe.types[Me] = (qe.types[Me] || 0) + 1));
   }
   function te(I, ye = 0, Me = 0) {
@@ -8479,6 +8555,10 @@ window.__steelRibbonDebug = {
       drivers: {
         cars: Rc.length,
         withDriver: Rc.reduce((n, c) => n + (c.mesh?.userData?.hasDriver ? 1 : 0), 0),
+      },
+      taxis: {
+        count: Rc.reduce((n, c) => n + (c.type === "taxi" ? 1 : 0), 0),
+        signed: taxiSignSys.count(),
       },
       peds: {
         pool: pedKitSys.pool,
