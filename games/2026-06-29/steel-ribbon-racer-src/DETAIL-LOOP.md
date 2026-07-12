@@ -67,13 +67,14 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 - The gauge-cluster HUD at screen bottom is persistent DOM — expected in shots.
 - Playwright chromium renders this WebGL fine; for raw chrome use
   `--use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader`.
+- `npm run build` rewrites `../steel-ribbon-racer/index.html` with flipped line
+  endings even when nothing changed (asset hashes identical) — `git checkout --` that
+  churn; only commit build output whose bundle hash actually moved.
 
 ## Backlog (top = next)
 
-1. **License plates** on traffic cars, race rivals, and parked cars — front + rear,
-   procedural canvas atlas, per-car deterministic seed, `AAA-000` fictional format,
-   profanity-filtered letter pool. Readable ≤10m. First exercise of the promotion
-   pool on the simplest entity. Add `detailReport()` debug fn with plate counts.
+1. ~~License plates~~ **DONE 2026-07-12 (iteration 01)** — traffic + parked cars
+   (NOT rivals: they're race cars — see new item: roundels). See iteration log.
 2. **Pedestrian near-tier v1 — bodies**: skin-tone + outfit variety, simple face
    (eyes/brows/mouth), hands, shoes, knee/elbow bend in the walk pose (pool ~8).
 3. **Pedestrian props — phones first**: lit phone screen with readable 2-bubble chat
@@ -106,6 +107,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
     rooftop pigeons.
 18. **Race roadside life**: pit boards, marshals with flags, camera crews near the
     track edge (they're what you zoom past at speed).
+18b. **Rival race-number roundels + liveries** (split from item 1): rivals are
+    race cars, not street cars — door/hood number circles + sponsor-style fictional
+    liveries via the same atlas technique; player car gets one too.
 19. **Building facade near-tier**: window mullions/sills + a few lit rooms with
     silhouette furniture on the closest facades (promotion by building).
 20. **Ambient near-field audio** (ONLY after visual backlog ≥80% done): phone
@@ -115,3 +119,37 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 
 - **00 bootstrap (2026-07-12)**: survey only. Shot rig added (`tests/detail-shots.mjs`),
   baselines + backlog above. Shots in `loop-shots/00-bootstrap/`. No game code touched.
+- **01 license plates (2026-07-12)**: every traffic car (30) and parked car (130)
+  now carries a readable front + rear plate ("CHP 405"-style, "STEEL STATE" header,
+  occasional yellow commercial variant). Visible up close in roam drive-bys; nothing
+  at distance. **Architecture** (reuse for future flat micro-detail): ONE
+  InstancedMesh of 340 plate quads + ONE 1024x512 canvas atlas (8x8 slots, 64 unique
+  texts); per-instance UV slot via `aPlateSlot` InstancedBufferAttribute +
+  `onBeforeCompile` on MeshBasicMaterial (MUST set `customProgramCacheKey` or
+  three's program cache serves the un-patched shader). Consonant-only letter pool
+  (BCDFGHJKLMNPRSTVWXZ) = profanity-impossible, plus blocklist. Traffic plates
+  re-composed each city tick from mesh position+quaternion (parent group is
+  identity); parked plates static, zero-scaled when their steal-spot is `taken`.
+  Fixed instance ranges: parked 0-259, traffic 260-339. **Plate mount**: traffic
+  cars have a bumper bar protruding to ±(l/2+0.14) at y=0.62 — plates sit at outset
+  0.155 ON the bumper face (first attempt at +0.02 was buried inside it). Parked
+  bodies have no bumper: outset 0.03. **Perf**: chase gate 1767 calls / 537,522
+  tris / 232 textures vs baseline 1794 / 543,646 / 227 — +1 call +1 texture from
+  plates, rest is world-gen randomness. PASS. **Verification**: straight-on shots
+  of parked front+rear and traffic rear all show crisp readable plates
+  (`loop-shots/01-plates/probe-*.png`); 4 new smoke probes lock counts, uniqueness,
+  format, and live scene presence. **Collateral repairs (pre-existing, suite was
+  RED at v3.7 HEAD)**: (a) smoke's audio-gesture click at (500,500) doubles as a
+  menu action on the v3.7 title screen, killing the later roamBtn click — pond
+  section now reloads to a fresh menu first; (b) pond drag test held full throttle
+  while asserting drag <45 (impossible under engine v2) — now enter→coast (drag
+  must bite)→throttle (must power out, never trapped). **New gotchas**: shots that
+  fly to a parked car can catch a NEIGHBOR (they park in rows, colors differ per
+  instance — verify by color match or shoot straight-on close); moving traffic
+  drifts between evaluate and screenshot (slow-mo helps; buses can drive over the
+  camera). Ideas discovered: parked-car colors come from `setColorAt` — per-car
+  dirt/rust decals could ride the same instanced-attribute trick; taxis (yellow,
+  `sign: !0`) are trivially identifiable for item 5. Final smoke: 109/109 PASS.
+  Suite flakiness observed: "stunt jump lands a bonus" is world-luck (failed 1 of
+  3 runs, its own comment admits random layouts block approaches) — on a red run,
+  check whether the failure is plausibly yours before rerunning once.

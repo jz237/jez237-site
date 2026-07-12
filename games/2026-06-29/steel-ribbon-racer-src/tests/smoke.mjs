@@ -187,6 +187,33 @@ const browser = await chromium.launch({
     }
   }
   await page.keyboard.up("ArrowUp");
+
+  // zoom-detail item 01: license plates on traffic + parked cars
+  const dr = await page.evaluate(() => window.__steelRibbonDebug.detailReport());
+  check("plates: traffic cars plated", dr?.plates?.traffic === 30, JSON.stringify(dr?.plates ?? null));
+  check("plates: parked cars plated", (dr?.plates?.parked ?? 0) >= 60, `parked=${dr?.plates?.parked}`);
+  check(
+    "plates: atlas texts unique + clean format",
+    dr?.plates?.uniqueTexts === 64 && (dr?.plates?.sample ?? []).every((t) => /^[BCDFGHJKLMNPRSTVWXZ]{3} \d{3}$/.test(t)),
+    JSON.stringify(dr?.plates?.sample),
+  );
+  const plateWorld = await page.evaluate(() => {
+    let pm = null;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.isInstancedMesh && o.geometry?.attributes?.aPlateSlot) pm = o;
+    });
+    if (!pm) return null;
+    const m = pm.instanceMatrix.array;
+    let placed = 0;
+    for (let i = 0; i < pm.count; i++) if (m[i * 16] || m[i * 16 + 8]) placed++;
+    return { count: pm.count, placed, visible: pm.visible };
+  });
+  check(
+    "plates: instanced mesh live in scene",
+    !!plateWorld && plateWorld.visible && plateWorld.placed >= 180,
+    JSON.stringify(plateWorld),
+  );
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
@@ -228,7 +255,11 @@ const browser = await chromium.launch({
   const ti = await page.evaluate(() => window.__steelRibbonDebug.trafficInfo());
   check("traffic cars have wheels", ti.wheels >= 4, JSON.stringify(ti));
 
-  // water: drive into a city pond — deep drag but never a dead stop
+  // water: drive into a city pond — deep drag but never a dead stop.
+  // The v3.7 title screen treats the audio-gesture click above as a menu action,
+  // so return to a fresh menu first (and read pond coords from the new world).
+  await page.goto(url, { waitUntil: "networkidle" });
+  await ready(page);
   const pondsList = await page.evaluate(() => window.__steelRibbonDebug.listPonds());
   const cityPond = pondsList.find((p) => p.rx < 50);
   if (cityPond) {
@@ -239,21 +270,42 @@ const browser = await chromium.launch({
       ([x, z]) => window.__steelRibbonDebug.setRoamPos(x, z, 0, 55),
       [cityPond.x, cityPond.z + cityPond.rz * 0.9],
     );
+    // enter under throttle → coast in deep water (drag must bite) → throttle
+    // again (must still be able to power out — "drags but never traps")
     await page.keyboard.down("ArrowUp");
     let maxDepth = 0,
-      minDeepSpeed = 999;
-    for (let i = 0; i < 70; i++) {
+      coastMin = 999,
+      recoverMax = 0,
+      coastEnd = 999,
+      phase = "enter";
+    for (let i = 0; i < 90; i++) {
       await page.waitForTimeout(250);
       const t = await page.evaluate(() => ({
         d: window.__steelRibbonTelemetry.waterDepth || 0,
         s: Math.abs(window.__steelRibbonTelemetry.speed),
       }));
       maxDepth = Math.max(maxDepth, t.d);
-      if (t.d > 0.3) minDeepSpeed = Math.min(minDeepSpeed, t.s);
-      if (maxDepth > 0.3 && i > 35) break;
+      if (phase === "enter" && t.d > 0.3) {
+        await page.keyboard.up("ArrowUp");
+        phase = "coast";
+        coastEnd = i + 12;
+      } else if (phase === "coast") {
+        if (t.d > 0.25) coastMin = Math.min(coastMin, t.s);
+        if (i >= coastEnd) {
+          await page.keyboard.down("ArrowUp");
+          phase = "recover";
+        }
+      } else if (phase === "recover") {
+        recoverMax = Math.max(recoverMax, t.s);
+        if (recoverMax > 2 && i > coastEnd + 6) break;
+      }
     }
     await page.keyboard.up("ArrowUp");
-    check("pond drags but never traps", maxDepth > 0.3 && minDeepSpeed > 2 && minDeepSpeed < 45, `depth=${maxDepth.toFixed(2)} minSpeed=${minDeepSpeed.toFixed(1)}`);
+    check(
+      "pond drags but never traps",
+      maxDepth > 0.3 && coastMin < 45 && recoverMax > 2,
+      `depth=${maxDepth.toFixed(2)} coastMin=${coastMin.toFixed(1)} recover=${recoverMax.toFixed(1)}`,
+    );
     const mmVis = await page.locator("#minimap").isVisible();
     check("minimap visible in roam", mmVis);
   } else check("pond drags but never traps", false, "no city pond found");
