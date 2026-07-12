@@ -273,7 +273,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.7.3'; // v1.7.3: accessibility — honour prefers-reduced-motion: the living aquarium stays, but screenshake, zoom-punch, zoom-breathing and chromatic-aberration bursts are suppressed (vestibular triggers). Reacts live to OS setting changes.
+const VERSION = 'v1.8.0'; // v1.8: VOLUMETRIC DEPTH — every creature gets a z (water column); near ones are large & vivid, far ones shrink, dim & blue-shift into the abyss (aerial perspective), drawn back-to-front. Offspring inherit depth so schools hold together. Plus richer full-scene caustic light dapple (tileable interference, two crossing layers). The flat plane becomes a deep volume.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -442,7 +442,7 @@ function newCreature(){
     pspeed:0,psize:0,psense:0,pfear:0,
     // runtime
     phase:0, state:0, gut:0, dashT:0, dashCd:0, fearFlare:0, matur:0, repro:0,
-    heading:0, angvel:0, chaseId:-1, chaseT:0, speciesId:0, mateUid:0,
+    heading:0, angvel:0, chaseId:-1, chaseT:0, speciesId:0, mateUid:0, z:0.5,
     segX:new Float32Array(MAXSEG), segY:new Float32Array(MAXSEG), segW:new Float32Array(MAXSEG),
   };
 }
@@ -458,6 +458,9 @@ function spawnCreature(kind,x,y,genesFrom,mate){
   c.phase=rrange(0,TAU); c.state=0; c.fearFlare=0; c.matur=0; c.repro=0;
   c.chaseId=-1; c.chaseT=0; c.angvel=0; c.heading=Math.atan2(c.vy,c.vx);
   c.offspring=0; c.kills=0; c.escapes=0; c.mateUid=mate?mate.uid:0;
+  // visual depth (z: 0 far/deep .. 1 near) — offspring stay near their parent's depth so schools
+  // hold together in the water column; founders spread through the volume. Purely cosmetic.
+  c.z = genesFrom ? clamp(genesFrom.z + gauss()*0.12, 0.04, 1) : rrange(0.08,1);
   if(genesFrom){ // inherit + mutate — with a mate, each gene recombines from either parent (sexual)
     for(let gi=0;gi<GKEYS.length;gi++){ const k=GKEYS[gi];
       const base = mate ? (rnd()<0.5?genesFrom[k]:mate[k]) : genesFrom[k];
@@ -2136,27 +2139,36 @@ function drawLeviathan(){
   glow(LEV.x + dir*L*0.16, LEV.y - LEVW[0]*0.45, 8, 45, 0.85*gl);   // eye (warm amber)
   ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
 }
+// ---- volumetric depth (z: 0 far/deep .. 1 near). Purely visual: turns the flat plane into a
+// water column via aerial perspective — far creatures shrink, dim, and blue-shift into the abyss.
+function dScale(z){ return 0.58+0.58*z; }              // far ~0.58x .. near ~1.16x
+function dAlpha(z){ return 0.42+0.58*z; }              // far dimmer
+function dHue(hue,z){ let d=hue+(214-hue)*(1-z)*0.5;   // shift toward deep-blue when far
+  return d<0?d+360:(d>=360?d-360:d); }
+const zsorted=[];
+function cmpZ(a,b){ return a.z-b.z; }
 function drawCreatures(){
-  // underglow pass (lighter)
+  // merge grazers+preds and sort far→near so nearer creatures occlude farther ones
+  zsorted.length=0;
+  for(let i=0;i<grazers.length;i++)zsorted.push(grazers[i]);
+  for(let i=0;i<preds.length;i++)zsorted.push(preds[i]);
+  zsorted.sort(cmpZ);
   ctx.globalCompositeOperation='lighter';
   const scr=(cam.scale+cam.breath)*sc;
-  for(const c of grazers)underglow(c,scr);
-  for(const c of preds)underglow(c,scr);
-  // body pass (source-over for solid silhouettes)
+  for(let i=0;i<zsorted.length;i++)underglow(zsorted[i],scr);
   ctx.globalCompositeOperation='source-over';
-  for(const c of grazers)drawBody(c,scr);
-  for(const c of preds)drawBody(c,scr);
+  for(let i=0;i<zsorted.length;i++)drawBody(zsorted[i],scr);
 }
 function underglow(c,scr){
-  const L=bodyLen(c), e=clamp(c.energy/c.cap,0.3,1);
+  const L=bodyLen(c), e=clamp(c.energy/c.cap,0.3,1), da=dAlpha(c.z), hz=dHue(c.huedeg,c.z);
   if(quality<=2 && c.kind===0 && cam.followId!==c.uid){ // cheap single glow so grazers still read
-    glow(c.x,c.y, L*1.0, c.huedeg, 0.4*e); return;
+    glow(c.x,c.y, L*1.0, hz, 0.4*e*da); return;
   }
-  glow(c.x,c.y, L*1.7, c.huedeg, 0.42*c.metab*e);  // wide bioluminescent halo
-  glow(c.x,c.y, L*0.7, c.huedeg, 0.6*e);           // bright inner core — lit from within
-  if(c.kind===1) glow(c.x,c.y, L*0.4, -1, 0.35*e); // predators get a hot white heart
+  glow(c.x,c.y, L*1.7, hz, 0.42*c.metab*e*da);  // wide bioluminescent halo
+  glow(c.x,c.y, L*0.7, hz, 0.6*e*da);           // bright inner core — lit from within
+  if(c.kind===1) glow(c.x,c.y, L*0.4, -1, 0.35*e*da); // predators get a hot white heart
 }
-function bodyLen(c){ return c.kind===0 ? (12+c.size*16) : (20+c.size*26); }
+function bodyLen(c){ return (c.kind===0 ? (12+c.size*16) : (20+c.size*26)) * dScale(c.z); }
 function drawBody(c,scr){
   const n=c.kind===0?5:7;
   const L=bodyLen(c);
@@ -2180,9 +2192,9 @@ function drawBody(c,scr){
     c.segY[i]=c.y+dirY*along+perpY*sway;
     c.segW[i]=L*wp[i]*(1+ (c.kind===1?0.1:0));
   }
-  // body path
-  const fill=bodyColor(c.huedeg, gr?0.72:clamp(0.45+ (c.energy/c.cap-0.5)*0.4,0.2,0.7));
-  ctx.globalAlpha=clamp(c.energy/c.cap,0.35,1)*0.55+0.45;
+  // body path — aerial perspective: far creatures blue-shift and fade toward the abyss
+  const fill=bodyColor(dHue(c.huedeg,c.z), gr?0.72:clamp(0.45+ (c.energy/c.cap-0.5)*0.4,0.2,0.7));
+  ctx.globalAlpha=(clamp(c.energy/c.cap,0.35,1)*0.55+0.45)*dAlpha(c.z);
   ctx.fillStyle=fill;
   ctx.beginPath();
   // left side down
@@ -2300,16 +2312,27 @@ function drawSnow(){
 }
 let caustic=null;
 function buildCaustic(){
-  caustic=document.createElement('canvas'); caustic.width=caustic.height=256;
-  const cx=caustic.getContext('2d'); cx.strokeStyle='rgba(150,220,255,0.5)'; cx.lineWidth=1.2;
-  for(let i=0;i<40;i++){ cx.beginPath(); cx.arc(Math.random()*256,Math.random()*256,6+Math.random()*20,0,TAU); cx.stroke(); }
+  // a seamless, tileable caustic texture: interference of integer-cycle sine waves -> bright veins
+  const S=256; caustic=document.createElement('canvas'); caustic.width=caustic.height=S;
+  const cx=caustic.getContext('2d'), img=cx.createImageData(S,S), d=img.data, T=TAU/S;
+  for(let y=0;y<S;y++)for(let x=0;x<S;x++){
+    let v=Math.sin(x*T*3)+Math.sin(y*T*4)+Math.sin((x+y)*T*3)+Math.sin((x-y)*T*2)+Math.sin(x*T*5+y*T*2);
+    v=v/5*0.5+0.5;                                   // -> 0..1
+    const b=Math.pow(Math.max(0,v-0.42)/0.58, 2.4);  // sparse bright veins
+    const i=(y*S+x)*4; d[i]=200; d[i+1]=236; d[i+2]=255; d[i+3]=Math.min(255,b*255)|0;
+  }
+  cx.putImageData(img,0,0);
 }
 function drawCaustics(){
-  if(quality<=2||!caustic)return;
-  const a=0.05*dayFactor; if(a<0.008)return;
-  ctx.globalAlpha=a;
-  const off=(simTime*20)%768;
-  for(let x=-768;x<cv.width+768;x+=768){ ctx.drawImage(caustic,x+off,0,768,cv.height*0.5); }
+  if(quality<=1||!caustic)return;
+  const a=0.075*(0.35+0.65*dayFactor); if(a<0.01)return;   // light comes from above; fades at night
+  const H=cv.height*0.66, S=520*DPR;                        // top-weighted; light dapples the shallows
+  ctx.globalAlpha=a;                                        // layer 1: drifts down-right
+  const o1=(simTime*22)%S, o1v=(simTime*7)%S;
+  for(let x=-S;x<cv.width;x+=S)for(let y=-S;y<H;y+=S)ctx.drawImage(caustic,x+o1,y-o1v,S,S);
+  ctx.globalAlpha=a*0.65;                                   // layer 2: crosses it (down-left) -> shimmer
+  const o2=(simTime*15)%S, o2v=(simTime*11)%S;
+  for(let x=-S;x<cv.width;x+=S)for(let y=-S;y<H;y+=S)ctx.drawImage(caustic,x-o2,y-o2v,S,S);
 }
 function drawChroma(){
   // cheap: two offset tinted glows of whole frame skipped; instead vignette pulse + edge tint
@@ -2691,6 +2714,9 @@ window.__prim={
   get leviathan(){return LEV.active?{x:Math.round(LEV.x),y:Math.round(LEV.y),life:Math.round(LEV.life)}:null;},
   summonLeviathan(){ spawnLeviathan(); },
   get reduceMotion(){return reduceMotion;}, set reduceMotion(v){reduceMotion=!!v;},
+  get zSpread(){ let mn=9,mx=-9,n=0,near=0,far=0; for(const c of creatures){ if(!c.alive)continue; n++;
+    if(c.z<mn)mn=c.z; if(c.z>mx)mx=c.z; if(c.z>0.66)near++; else if(c.z<0.33)far++; }
+    return n?{min:+mn.toFixed(2),max:+mx.toFixed(2),far,near,mid:n-near-far,n}:null; },
   get camMotion(){return {shake:+cam.shake.toFixed(2),zpunch:+cam.zpunch.toFixed(3),breath:+cam.breath.toFixed(4),chroma:+chroma.toFixed(2)};},
   get chronicle(){ return chronicle.map(e=>`day ${e.day} · gen ${e.gen} — ${e.text}`); },
   get order(){return orderParam;}, get day(){return dayFactor;},
