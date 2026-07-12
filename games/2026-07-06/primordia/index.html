@@ -205,7 +205,7 @@
       <p>every creature carries <b>genes</b> — speed, size, senses, fear, colour — that mutate a little each time it breeds. the ones that survive pass theirs on, so the population <b>evolves in front of you</b>: watch the grazers grow faster over generations, because the slow ones keep getting eaten.</p>
       <p>because predators eat grazers and grazers eat plankton, their numbers rise and fall in linked waves — press <b>S</b> to see the population oscilloscope, <b>G</b> for the live gene-drift chart. if everything dies out, a <b>genesis</b> event reseeds the world. it runs forever.</p>
       <div class="ex-controls">
-        <span>🖱️ <b>click</b> a creature — follow &amp; read its genes</span>
+        <span>🖱️ <b>click</b> a creature — the lens racks focus onto it; follow &amp; read its genes</span>
         <span>✋ <b>drag</b> — stir the current</span>
         <span>🫧 <b>double-click</b> — drop food</span>
         <span>⌨️ <b>S</b> stats · <b>G</b> genes · <b>M</b> sound</span>
@@ -273,7 +273,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.8.0'; // v1.8: VOLUMETRIC DEPTH — every creature gets a z (water column); near ones are large & vivid, far ones shrink, dim & blue-shift into the abyss (aerial perspective), drawn back-to-front. Offspring inherit depth so schools hold together. Plus richer full-scene caustic light dapple (tileable interference, two crossing layers). The flat plane becomes a deep volume.
+const VERSION = 'v1.9.0'; // v1.9: DEPTH OF FIELD — the camera becomes a real lens. A smoothed focal plane racks onto whatever the director follows (click a creature: it snaps crisp while every other depth melts into soft bokeh); while drifting, the lens slowly scans the water column so whole layers of the school swim in and out of focus. Out-of-focus creatures dissolve into luminous discs, marine snow blooms into true bokeh dots. Zero extra render passes — all per-sprite modulation.
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -1821,6 +1821,25 @@ function updateCamera(dt){
   cam.zpunch*=Math.pow(0.9,dt*60);
   if(chroma>0)chroma=Math.max(0,chroma-dt*1.2);
   if(reduceMotion){ cam.shake=0; cam.zpunch=0; cam.breath=0; chroma=0; } // accessibility: no jolts
+
+  // --- depth-of-field focus pull ---
+  let fz=dofTZ, fs=dofTStr, fTau=2.2;
+  if(cam.state==='FOLLOW'){
+    const c=getCreature(cam.followId);
+    if(c){ fz=c.z; fs=1.0; fTau=4.5; }                 // rack focus hard onto the subject
+  } else if(LEV.active){ fz=0.5; fs=0.15;              // leviathan: wide establishing shot, deep focus
+  } else if(cam.state==='INVESTIGATE'){
+    let bz=-1,bd=1e9;                                  // focus at the depth where the action is
+    for(const c of creatures){ if(!c.alive)continue;
+      const dx=c.x-cam.tx, dy=c.y-cam.ty, d2=dx*dx+dy*dy; if(d2<bd){bd=d2;bz=c.z;} }
+    fz=bz>=0?bz:0.6; fs=0.65; fTau=3.0;
+  } else if(cam.state==='GENESIS'){ fz=0.6; fs=0.5;
+  } else {                                             // DRIFT: the lens slowly scans the column
+    fz=0.6+0.28*Math.sin(simTime*0.11); fs=0.5;
+  }
+  dofTZ=fz; dofTStr=fs;
+  dofZ+=(dofTZ-dofZ)*clamp(fTau*dt,0,1);
+  dofStr+=(dofTStr-dofStr)*clamp(1.6*dt,0,1);
 }
 function popCentroid(){ let sx=0,sy=0,n=0; for(const c of grazers){sx+=c.x;sy+=c.y;n++;}
   if(n===0){for(const c of preds){sx+=c.x;sy+=c.y;n++;}} return n?{x:sx/n,y:sy/n}:null; }
@@ -2145,6 +2164,13 @@ function dScale(z){ return 0.58+0.58*z; }              // far ~0.58x .. near ~1.
 function dAlpha(z){ return 0.42+0.58*z; }              // far dimmer
 function dHue(hue,z){ let d=hue+(214-hue)*(1-z)*0.5;   // shift toward deep-blue when far
   return d<0?d+360:(d>=360?d-360:d); }
+// ---- depth of field (v1.9): a cinematic focal plane over the z column. The director racks
+// focus onto whatever it follows; adrift, the lens slowly scans the column so depth layers
+// melt in and out of focus. defocus() -> 0 crisp .. 1 fully melted into bokeh.
+let dofZ=0.6, dofStr=0, dofTZ=0.6, dofTStr=0;
+function defocus(z){
+  return (dofStr<=0.02||quality<=1) ? 0 : clamp(Math.abs(z-dofZ)*2.4,0,1)*dofStr;
+}
 const zsorted=[];
 function cmpZ(a,b){ return a.z-b.z; }
 function drawCreatures(){
@@ -2161,12 +2187,13 @@ function drawCreatures(){
 }
 function underglow(c,scr){
   const L=bodyLen(c), e=clamp(c.energy/c.cap,0.3,1), da=dAlpha(c.z), hz=dHue(c.huedeg,c.z);
+  const df=defocus(c.z), rB=1+df*1.1, aB=1-df*0.38; // out of focus: the glow spreads into a soft bokeh disc
   if(quality<=2 && c.kind===0 && cam.followId!==c.uid){ // cheap single glow so grazers still read
-    glow(c.x,c.y, L*1.0, hz, 0.4*e*da); return;
+    glow(c.x,c.y, L*1.0*rB, hz, 0.4*e*da*aB); return;
   }
-  glow(c.x,c.y, L*1.7, hz, 0.42*c.metab*e*da);  // wide bioluminescent halo
-  glow(c.x,c.y, L*0.7, hz, 0.6*e*da);           // bright inner core — lit from within
-  if(c.kind===1) glow(c.x,c.y, L*0.4, -1, 0.35*e*da); // predators get a hot white heart
+  glow(c.x,c.y, L*1.7*rB, hz, 0.42*c.metab*e*da*aB);  // wide bioluminescent halo
+  glow(c.x,c.y, L*0.7*rB, hz, 0.6*e*da*aB);           // bright inner core — lit from within
+  if(c.kind===1) glow(c.x,c.y, L*0.4*rB, -1, 0.35*e*da*aB); // predators get a hot white heart
 }
 function bodyLen(c){ return (c.kind===0 ? (12+c.size*16) : (20+c.size*26)) * dScale(c.z); }
 function drawBody(c,scr){
@@ -2192,9 +2219,11 @@ function drawBody(c,scr){
     c.segY[i]=c.y+dirY*along+perpY*sway;
     c.segW[i]=L*wp[i]*(1+ (c.kind===1?0.1:0));
   }
-  // body path — aerial perspective: far creatures blue-shift and fade toward the abyss
+  // body path — aerial perspective: far creatures blue-shift and fade toward the abyss.
+  // defocus melts the crisp silhouette away (the bokeh glow from underglow() takes over).
+  const df=defocus(c.z);
   const fill=bodyColor(dHue(c.huedeg,c.z), gr?0.72:clamp(0.45+ (c.energy/c.cap-0.5)*0.4,0.2,0.7));
-  ctx.globalAlpha=(clamp(c.energy/c.cap,0.35,1)*0.55+0.45)*dAlpha(c.z);
+  ctx.globalAlpha=(clamp(c.energy/c.cap,0.35,1)*0.55+0.45)*dAlpha(c.z)*(1-df*0.6);
   ctx.fillStyle=fill;
   ctx.beginPath();
   // left side down
@@ -2221,7 +2250,7 @@ function drawBody(c,scr){
     ctx.globalCompositeOperation='lighter';
     const ga=ctx.globalAlpha;                       // preserve the body-fill alpha for the pectorals below
     ctx.strokeStyle=hueRGB(c.huedeg);               // cached per hue bucket (no per-frame alloc)
-    ctx.globalAlpha=clamp(orn*0.9,0,0.9);
+    ctx.globalAlpha=clamp(orn*0.9,0,0.9)*(1-df*0.7); // streamers are fine detail — lost to defocus
     ctx.lineWidth=Math.max(0.6,L*0.05);
     const sLen=orn*L*1.4;
     for(let s=0;s<3;s++){ const sgn=SGN3[s];
@@ -2252,8 +2281,8 @@ function drawBody(c,scr){
     ctx.lineTo(dx2+perpX*L*0.34,dy2+perpY*L*0.34);
     ctx.lineTo(dx2+dirX*L*0.2+perpX*L*0.1,dy2+dirY*L*0.2+perpY*L*0.1);
     ctx.closePath(); ctx.fill();
-    // eye
-    ctx.globalAlpha=1; ctx.fillStyle='#fff';
+    // eye (a pin-sharp highlight reads wrong on a defocused body — fade it out)
+    ctx.globalAlpha=Math.max(0,1-df*1.3); ctx.fillStyle='#fff';
     ctx.beginPath(); ctx.arc(c.segX[0]+perpX*c.segW[0]*0.4, c.segY[0]+perpY*c.segW[0]*0.4, 1.6,0,TAU); ctx.fill();
     if(c._dashFx>0){ c._dashFx-=0.02;
       ctx.globalCompositeOperation='lighter';
@@ -2263,7 +2292,7 @@ function drawBody(c,scr){
   }
   // gene-expressed bioluminescent markings — count keyed to the sense gene (which evolves),
   // so lineages look distinct and you can SEE the drift up close. Only on prominent creatures.
-  if(quality>=3 && L*scr*camMat.a/DPR > 14){
+  if(quality>=3 && df<0.4 && L*scr*camMat.a/DPR > 14){
     const marks = 2 + (clamp((c.sense-G.sense[0])/(G.sense[1]-G.sense[0]),0,1)*3 | 0); // 2..5
     const mhue = (c.huedeg + 30) % 360;
     const b = 0.35 + 0.35*clamp(c.energy/c.cap,0,1);
@@ -2272,6 +2301,12 @@ function drawBody(c,scr){
       const t=(m+1)/(marks+1), si=Math.min(n-1,(t*(n-1))|0);
       glow(c.segX[si], c.segY[si], L*0.16, mhue, b);
     }
+    ctx.globalCompositeOperation='source-over';
+  }
+  // defocus veil: a soft wash of the body's own light over everything above — completes the melt
+  if(df>0.25){
+    ctx.globalCompositeOperation='lighter';
+    glow(c.x,c.y, L*(0.8+df*0.6), dHue(c.huedeg,c.z), df*0.30);
     ctx.globalCompositeOperation='source-over';
   }
 }
@@ -2293,15 +2328,19 @@ function drawParticles(){
     glow(P.px[i],P.py[i],P.size[i]*2, P.hue[i], a*0.7);
   }
 }
+const SNOWZ=[0.12,0.55,0.92]; // nominal z of each parallax layer, for the lens
 function drawSnow(){
   ctx.globalCompositeOperation='lighter';
   const base=(cam.scale+cam.breath)*sc*DPR;
   for(let d=0;d<3;d++){ if(quality<=1 && d===2)continue;
+    const df=defocus(SNOWZ[d]);          // out-of-focus snow blooms into true bokeh dots
+    const bok=df>0.18, ga=1-df*0.45;
     for(const p of snow[d]){
       const s=base*p.cam;
       const sx=cv.width/2-(cam.x-p.x)*s, sy=cv.height/2-(cam.y-p.y)*s;
       if(sx<-20||sy<-20||sx>cv.width+20||sy>cv.height+20)continue;
-      if(d===2){ ctx.globalAlpha=p.a; ctx.drawImage(glowWhite,sx-p.s*DPR,sy-p.s*DPR,p.s*2*DPR,p.s*2*DPR); }
+      if(d===2){ ctx.globalAlpha=p.a*ga; const R=p.s*DPR*(1+df*1.2); ctx.drawImage(glowWhite,sx-R,sy-R,R*2,R*2); }
+      else if(bok){ ctx.globalAlpha=p.a*ga; const R=Math.max(2,p.s*DPR*(1+df*2.6)*2.2); ctx.drawImage(glowWhite,sx-R,sy-R,R*2,R*2); }
       else { ctx.globalAlpha=p.a; ctx.fillStyle='#bfe6ff'; ctx.fillRect(sx,sy,p.s*DPR,p.s*DPR); }
     }
   }
@@ -2708,6 +2747,7 @@ window.__prim={
   get grazers(){return grazers.length;}, get preds(){return preds.length;},
   get plankton(){return planktonCount();}, get gen(){return generationMax;},
   get simTime(){return simTime;}, get quality(){return quality;},
+  set quality(v){quality=clamp(v|0,0,4);degradeCount=0;recoverCount=0;}, // pin for headless verify (degrade artifact)
   get means(){return snapshotMeans();}, get genesisMeans(){return genesisMeans;},
   get predMeans(){return snapshotPredMeans();}, get predGenesisMeans(){return predGenesisMeans;},
   get season(){return SEASON_NAMES[seasonIdx];}, get seasonFactor(){return +seasonFactor.toFixed(2);},
@@ -2718,6 +2758,7 @@ window.__prim={
     if(c.z<mn)mn=c.z; if(c.z>mx)mx=c.z; if(c.z>0.66)near++; else if(c.z<0.33)far++; }
     return n?{min:+mn.toFixed(2),max:+mx.toFixed(2),far,near,mid:n-near-far,n}:null; },
   get camMotion(){return {shake:+cam.shake.toFixed(2),zpunch:+cam.zpunch.toFixed(3),breath:+cam.breath.toFixed(4),chroma:+chroma.toFixed(2)};},
+  get dof(){return {z:+dofZ.toFixed(2),strength:+dofStr.toFixed(2),targetZ:+dofTZ.toFixed(2),targetStrength:+dofTStr.toFixed(2)};},
   get chronicle(){ return chronicle.map(e=>`day ${e.day} · gen ${e.gen} — ${e.text}`); },
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
