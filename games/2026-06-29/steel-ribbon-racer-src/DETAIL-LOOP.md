@@ -366,3 +366,6 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   texting+bags+cups === promoted. Head-tilt while texting remains deferred
   (needs a neck split in U1). Dogs-on-leashes remain future (second synced
   walker). This completes the original item-3 vision.
+- **DEPLOY BATCH 3 (2026-07-12): v3.10.0 LIVE** — items 09-12 (ped signals,
+  stadium crowds, photo mode, pedestrian props) verified first-probe
+  (index-BryU4oV0.js, bundle 200).
