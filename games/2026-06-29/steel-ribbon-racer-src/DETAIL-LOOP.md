@@ -101,7 +101,7 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 7. ~~Street furniture~~ **DONE 2026-07-12 (iteration 07)** — hydrants, meters,
    benches, cans (newspaper boxes + near-tier decals folded into a future polish
    pass). See iteration log.
-8. **Street-name signs** at intersections — readable fictional names, canvas.
+8. ~~Street-name signs~~ **DONE 2026-07-12 (iteration 08)** — see iteration log.
 9. **Traffic-signal detail**: 3-lamp housings + WALK/DON'T-WALK crosswalk signals
    synced to the existing signal AI state.
 10. **Stadium crowd v2**: near tier = instanced seated figures (wave animation);
@@ -205,6 +205,23 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   FIRST placements = far map corner — sample mid-list for pretty shots. Ideas:
   newspaper boxes + meter near-tier decals later; bus-stop shelters near bench
   spots; hydrants could gush when hit by the car (gameplay flourish).
+- **08 street-name signs (2026-07-12)**: every intersection corner (151 of them)
+  now carries a classic double-blade street sign — white-on-green blades reading
+  crossed fictional names ("RIBBON AVE" x "MANIFOLD AVE"), 32 themed names
+  (STREET_NAMES), each street LINE keeps its name forever because the grid (di
+  constants) is deterministic. TWO InstancedMeshes total (poles + blades); blades
+  sample an 8x4 name atlas via aSignSlot instanced attribute (plate shader
+  pattern, customProgramCacheKey 'street-sign-atlas'); each blade = front+back
+  quads so text reads from both sides. ~8k tris. **Perf**: chase 1750 /
+  570,072 / 237 vs baseline 1794 / 543,646 / 227 — PASS but the ~5% tris budget
+  (571k) is now nearly consumed: future PERMANENT-geometry items must be very
+  lean (or renegotiate the budget with real FPS data — headless can't measure
+  FPS). **Verified by looking** (`loop-shots/08-signs/`): blades-close shot reads
+  both names crisply, correct crossed orientation, item-07 meter visible beside
+  the pole. Suite probe: poles>60, blades==2x, ns!=ew names. NOTE: my python3
+  string-replace edits make the Edit tool warn 'modified on disk' next
+  iteration — that's SELF-inflicted, check git status/log before invoking the
+  foreign-agent abort rule.
 
 - **00 bootstrap (2026-07-12)**: survey only. Shot rig added (`tests/detail-shots.mjs`),
   baselines + backlog above. Shots in `loop-shots/00-bootstrap/`. No game code touched.

@@ -300,6 +300,14 @@ const browser = await chromium.launch({
     JSON.stringify({ h: fr?.hydrants, m: fr?.meters, b: fr?.benches, c: fr?.cans }),
   );
 
+  // zoom-detail item 08: named double-blade street signs at intersections
+  const ssg = await page.evaluate(() => window.__steelRibbonDebug.detailReport().streetSigns);
+  check(
+    "street signs: named blades at intersections",
+    !!ssg && ssg.poles > 60 && ssg.blades === ssg.poles * 2 && (ssg.sample?.[0]?.ns ?? "") !== (ssg.sample?.[0]?.ew ?? ""),
+    JSON.stringify({ poles: ssg?.poles, blades: ssg?.blades, s0: ssg?.sample?.[0] }),
+  );
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
