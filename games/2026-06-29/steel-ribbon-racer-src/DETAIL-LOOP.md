@@ -98,9 +98,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 6. ~~Storefront near-tier~~ **DONE 2026-07-12 (iteration 06)** — see iteration log.
    (Shop names already existed via the neon marquee signs — the missing pieces
    were interiors/doors, which is what shipped.)
-7. **Street furniture**: hydrants, parking meters, benches, trash cans, newspaper
-   boxes seeded along sidewalks (static merge friendly — these can be far-tier
-   merged, near tier adds decals/labels).
+7. ~~Street furniture~~ **DONE 2026-07-12 (iteration 07)** — hydrants, meters,
+   benches, cans (newspaper boxes + near-tier decals folded into a future polish
+   pass). See iteration log.
 8. **Street-name signs** at intersections — readable fictional names, canvas.
 9. **Traffic-signal detail**: 3-lamp housings + WALK/DON'T-WALK crosswalk signals
    synced to the existing signal AI state.
@@ -188,6 +188,23 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   not the reverse. Polish ideas: richer silhouettes per style, hanging lamps
   read as arrows at distance; teleport the player PERPENDICULAR to the shot
   axis or its hood photobombs close-ups.
+- **07 street furniture (2026-07-12)**: 185 pieces along the sidewalk lines —
+  red fire hydrants (base/barrel/dome/side-nub/brass top), parking meters
+  (pole + head + display face), slat park benches (back posts carry the
+  backrest — first draft's slats floated), trash cans with lid rings. FOUR
+  InstancedMeshes sharing the vertex-colored opaque material = 4 extra draws
+  total; placement walks every street line both sides (seeded plateRng, 15-25m
+  spacing, skips 13m around intersections, Pn() clearance check — called AFTER
+  the building grid loop so blocks are collidable). Permanent like plates:
+  real objects up close, dots at distance. **Perf war**: first cut (275 pieces,
+  chunkier geo) hit +5.8% tris — over the gate; two trims (segment counts,
+  caps 275→185) landed 1745 calls / 559,829 tris ✓. **Verification**:
+  `loop-shots/07-furniture/probe-*.png` — hydrant/bench/meter close-ups all
+  read instantly. **Gotchas**: shots must aim with the INSTANCE y (probeDown
+  missed again at the far-corner sample); detailReport sample records the
+  FIRST placements = far map corner — sample mid-list for pretty shots. Ideas:
+  newspaper boxes + meter near-tier decals later; bus-stop shelters near bench
+  spots; hydrants could gush when hit by the car (gameplay flourish).
 
 - **00 bootstrap (2026-07-12)**: survey only. Shot rig added (`tests/detail-shots.mjs`),
   baselines + backlog above. Shots in `loop-shots/00-bootstrap/`. No game code touched.

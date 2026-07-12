@@ -2630,6 +2630,103 @@ const storefrontSys = {
     }
   },
 };
+// ─── Street furniture (zoom-detail item 07): hydrants, parking meters, benches
+// and trash cans seeded along the sidewalk lines — four InstancedMeshes sharing
+// the vertex-colored opaque material (4 extra draws for ~200 objects). Permanent
+// like the plates: real objects up close, sub-pixel dots at distance. Built AFTER
+// the building grid loop so clearance checks see the finished blocks.
+const furnitureSys = { meshes: null, counts: { hydrants: 0, meters: 0, benches: 0, cans: 0 }, sample: [] };
+function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt) {
+  const { opaque } = vcMats();
+  const hydrantGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.11, 0.13, 0.1, 6), vcAt(0, 0.05, 0), 2894892),
+      vcBake(new CylinderGeometry(0.09, 0.1, 0.34, 6), vcAt(0, 0.27, 0), 15021620),
+      vcBake(new SphereGeometry(0.095, 6, 4), vcAt(0, 0.47, 0), 15021620),
+      vcBake(new CylinderGeometry(0.035, 0.035, 0.3, 6), vcAt(0, 0.33, 0, Math.PI / 2), 13840175),
+      vcBake(new CylinderGeometry(0.03, 0.03, 0.08, 6), vcAt(0, 0.56, 0), 16765778),
+    ],
+    !1,
+  );
+  const meterGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.024, 0.03, 1.04, 6), vcAt(0, 0.52, 0), 3092306),
+      vcBake(new BoxGeometry(0.15, 0.22, 0.09), vcAt(0, 1.13, 0), 5395032),
+      vcBake(new BoxGeometry(0.11, 0.1, 0.02), vcAt(0, 1.16, -0.047), 13036239),
+    ],
+    !1,
+  );
+  const benchGeo = mergeGeometries(
+    [
+      vcBake(new BoxGeometry(0.14, 0.42, 0.42), vcAt(-0.62, 0.21, 0), 2432796),
+      vcBake(new BoxGeometry(0.14, 0.42, 0.42), vcAt(0.62, 0.21, 0), 2432796),
+      // back posts carry the backrest slats
+      vcBake(new BoxGeometry(0.12, 0.62, 0.06), vcAt(-0.62, 0.7, 0.21), 2432796),
+      vcBake(new BoxGeometry(0.12, 0.62, 0.06), vcAt(0.62, 0.7, 0.21), 2432796),
+      vcBake(new BoxGeometry(1.55, 0.05, 0.16), vcAt(0, 0.44, -0.12), 9130315),
+      vcBake(new BoxGeometry(1.55, 0.05, 0.16), vcAt(0, 0.44, 0.08), 9130315),
+      vcBake(new BoxGeometry(1.55, 0.16, 0.05), vcAt(0, 0.68, 0.2), 9130315),
+      vcBake(new BoxGeometry(1.55, 0.16, 0.05), vcAt(0, 0.9, 0.22), 9130315),
+    ],
+    !1,
+  );
+  const canGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.19, 0.16, 0.52, 8), vcAt(0, 0.26, 0), 3225437),
+      vcBake(new CylinderGeometry(0.2, 0.2, 0.05, 8), vcAt(0, 0.55, 0), 4936027),
+      vcBake(new CylinderGeometry(0.13, 0.13, 0.03, 8), vcAt(0, 0.57, 0), 1118996),
+    ],
+    !1,
+  );
+  const defs = [
+    { key: "hydrants", geo: hydrantGeo, cap: 46 },
+    { key: "meters", geo: meterGeo, cap: 60 },
+    { key: "benches", geo: benchGeo, cap: 33 },
+    { key: "cans", geo: canGeo, cap: 46 },
+  ];
+  if (furnitureSys.meshes) for (const m of furnitureSys.meshes) (m.removeFromParent(), m.geometry.dispose());
+  ((furnitureSys.meshes = []), (furnitureSys.sample = []));
+  const meshes = {},
+    dummy = new Object3D(),
+    rng = plateRng(0xf00d);
+  for (const d of defs) {
+    const im = new InstancedMesh(d.geo, opaque, d.cap);
+    ((im.frustumCulled = !1), (im.castShadow = !1), (im.receiveShadow = !0), (im.userData.furniture = d.key), (im.userData.used = 0));
+    ((meshes[d.key] = im), furnitureSys.meshes.push(im), group.add(im));
+  }
+  const put = (key, x, z, yaw) => {
+    const im = meshes[key];
+    if (im.userData.used >= im.count) return;
+    (dummy.position.set(x, He(x, z) + 0.02, z), (dummy.rotation.y = yaw), dummy.updateMatrix());
+    im.setMatrixAt(im.userData.used++, dummy.matrix);
+    furnitureSys.sample.length < 8 && furnitureSys.sample.push({ key, x: +x.toFixed(1), z: +z.toFixed(1) });
+  };
+  const placeAlong = (isNS, line) => {
+    const from = isNS ? zLow + 9 : x0 + 9,
+      to = isNS ? zHigh - 9 : x1 - 9;
+    for (let v = from; v <= to; v += 15 + rng() * 10) {
+      // skip intersections: near a crossing street line
+      const cross = isNS ? Math.abs(((v - zHigh) % pitch) + pitch) % pitch : Math.abs(((v - x0) % pitch) + pitch) % pitch;
+      if (cross < 13 || cross > pitch - 13) continue;
+      const side = rng() < 0.5 ? -1 : 1,
+        off = side * (sw * 0.66 + 1.35),
+        px = isNS ? line + off : v,
+        pz = isNS ? v : line + off;
+      if (clearanceAt(px, pz, 0.6).clearance < 0.8) continue;
+      const pick = rng();
+      if (pick < 0.27) put("hydrants", px, pz, rng() * 6.28);
+      else if (pick < 0.58) put("meters", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      else if (pick < 0.76) put("benches", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      else put("cans", px, pz, rng() * 6.28);
+    }
+  };
+  for (let x = x0; x <= x1 + 1; x += pitch) placeAlong(!0, Math.round(x));
+  for (let z = zHigh; z >= zLow - 1; z -= pitch) placeAlong(!1, Math.round(z));
+  for (const d of defs) {
+    const im = meshes[d.key];
+    ((im.count = im.userData.used), (im.instanceMatrix.needsUpdate = !0), (furnitureSys.counts[d.key] = im.userData.used));
+  }
+}
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
     d = [12139059, 3109053, 15263967, 3818573, 4695133, 14793024, 9261235, 16767293],
@@ -3396,6 +3493,7 @@ function N1() {
         }
       }
     }
+  buildStreetFurniture(i, t, n, r, s, a, o, Pn);
   for (let N = 0; N < 3; N++) {
     if (!pe[N].length) continue;
     const O = new InstancedMesh(de, ie[N], pe[N].length);
@@ -8721,6 +8819,7 @@ window.__steelRibbonDebug = {
         pool: storefrontSys.pool,
         sample: storefrontSys.spots.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), yaw: +s.yaw.toFixed(2), w: +s.w.toFixed(1) })),
       },
+      furniture: { ...furnitureSys.counts, sample: furnitureSys.sample.slice(0, 4) },
       peds: {
         pool: pedKitSys.pool,
         promoted: pedKitSys.promotedCount(),

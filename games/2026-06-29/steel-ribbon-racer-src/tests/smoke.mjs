@@ -292,6 +292,14 @@ const browser = await chromium.launch({
   }
   check("storefronts: nearest facade dressed up close", sfDressed > 0, `dressed=${sfDressed}`);
 
+  // zoom-detail item 07: street furniture seeded along the sidewalk lines
+  const fr = await page.evaluate(() => window.__steelRibbonDebug.detailReport().furniture);
+  check(
+    "furniture: hydrants/meters/benches/cans placed",
+    !!fr && fr.hydrants > 8 && fr.meters > 8 && fr.benches > 4 && fr.cans > 8,
+    JSON.stringify({ h: fr?.hydrants, m: fr?.meters, b: fr?.benches, c: fr?.cans }),
+  );
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
