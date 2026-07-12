@@ -2229,6 +2229,52 @@ const plateSys = {
 // always gets the same face/shoe variety back when re-promoted. All parts
 // share vcMats' opaque material: promoted cost is 5 small draws per kit.
 const PED_KIT_RADIUS = 40;
+// Fictional, family-friendly two-bubble chats shown on texting pedestrians'
+// phone screens (one per kit, drawn into a single shared atlas).
+const PED_CHATS = [
+  [["running late again", "me"], ["the ribbon jam??", "them"], ["every. time.", "me"]],
+  [["pizza tonight?", "them"], ["obviously", "me"], ["extra olives", "them"]],
+  [["did u see that stunt", "me"], ["the triple flip?!", "them"], ["unreal", "me"]],
+  [["buy milk pls", "them"], ["on it", "me"], ["and cookies", "them"]],
+  [["gate 8 is glowing", "me"], ["on my way!!", "them"]],
+  [["new high score", "me"], ["screenshot or it", "them"], ["didn't happen", "them"]],
+  [["taxi 27 honked at me", "me"], ["classic 27", "them"]],
+  [["lost my parking spot", "me"], ["someone STOLE it??", "them"], ["drove right off", "me"]],
+];
+let pedChatAtlas = null;
+function buildPedChatAtlas() {
+  if (pedChatAtlas) return pedChatAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 512));
+  const g = cv.getContext("2d");
+  for (let s = 0; s < 8; s++) {
+    const x = (s % 4) * 128,
+      y = ((s / 4) | 0) * 256,
+      chat = PED_CHATS[s % PED_CHATS.length];
+    // screen background + status bar
+    ((g.fillStyle = "#101823"), g.fillRect(x, y, 128, 256));
+    ((g.fillStyle = "#1c2a3a"), g.fillRect(x, y, 128, 26));
+    ((g.fillStyle = "#9fd6ff"), (g.font = "bold 14px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText("chat", x + 64, y + 14);
+    ((g.font = "bold 16px sans-serif"), (g.textAlign = "left"));
+    let by = y + 42;
+    for (const [text, who] of chat) {
+      const mine = who === "me",
+        w = Math.min(116, g.measureText(text).width + 14),
+        bx = mine ? x + 124 - w : x + 4;
+      g.fillStyle = mine ? "#2f7fd4" : "#2a3546";
+      g.beginPath();
+      g.roundRect(bx, by, w, 34, 10);
+      g.fill();
+      ((g.fillStyle = "#eaf4ff"), g.fillText(text, bx + 7, by + 18));
+      by += 42;
+    }
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  pedChatAtlas = { texture, mat: new MeshBasicMaterial({ map: texture }) };
+  return pedChatAtlas;
+}
 const pedKitSys = {
   kits: null,
   pool: 0,
@@ -2262,13 +2308,30 @@ const pedKitSys = {
         shoeR = new Mesh(shoeGeo, opaque);
       (handL.position.set(0, -0.38, 0), handR.position.set(0, -0.38, 0));
       (shoeL.position.set(0, -0.42, -0.045), shoeR.position.set(0, -0.42, -0.045));
-      const kit = { face, handL, handR, shoeL, shoeR, ped: null };
-      for (const part of [face, handL, handR, shoeL, shoeR])
+      // phone: dark body + lit chat screen (shared atlas material, per-kit UVs).
+      // Group-parented at chest height facing up-back toward the head; the right
+      // arm is pose-overridden every tick while texting so the hand "holds" it.
+      const chatAtlas = buildPedChatAtlas(),
+        phone = new Group(),
+        phoneBody = new Mesh(vcBake(new BoxGeometry(0.075, 0.15, 0.014), null, 1315356), opaque),
+        screenGeo = new PlaneGeometry(0.062, 0.128),
+        su = (k % 4) * 0.25,
+        sv = 1 - (((k / 4) | 0) + 1) * 0.5,
+        uvArr = screenGeo.attributes.uv;
+      for (let vi = 0; vi < uvArr.count; vi++) uvArr.setXY(vi, su + uvArr.getX(vi) * 0.25, sv + uvArr.getY(vi) * 0.5);
+      const screen = new Mesh(screenGeo, chatAtlas.mat);
+      ((screen.position.z = 0.0095), phone.add(phoneBody), phone.add(screen));
+      // in the raised right hand (pose puts it at ~(0.38, 1.48, -0.33)), screen
+      // aimed at the head so it reads over the shoulder
+      phone.position.set(0.34, 1.47, -0.36);
+      phone.quaternion.setFromUnitVectors(new Vector3(0, 0, 1), new Vector3(-0.34, 0.55, 0.36).normalize());
+      const kit = { face, handL, handR, shoeL, shoeR, phone, texting: !1, ped: null };
+      for (const part of [face, handL, handR, shoeL, shoeR, phone, phoneBody, screen])
         ((part.userData.kitPart = !0), (part.castShadow = !1), (part.receiveShadow = !0));
       this.kits.push(kit);
     }
   },
-  attach(kit, actor) {
+  attach(kit, actor, texting) {
     const g = actor.mesh,
       limbs = g.userData.limbs || [];
     (g.add(kit.face),
@@ -2276,11 +2339,13 @@ const pedKitSys = {
       limbs[1]?.mesh.add(kit.shoeR),
       limbs[2]?.mesh.add(kit.handL),
       limbs[3]?.mesh.add(kit.handR),
+      (kit.texting = !!texting),
+      kit.texting && g.add(kit.phone),
       (kit.ped = actor));
   },
   detach(kit) {
-    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR]) part.removeFromParent();
-    kit.ped = null;
+    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR, kit.phone]) part.removeFromParent();
+    ((kit.ped = null), (kit.texting = !1));
   },
   reset() {
     if (this.kits) for (const k of this.kits) k.ped && this.detach(k);
@@ -2293,6 +2358,14 @@ const pedKitSys = {
       this.reset();
       return;
     }
+    // pose pass runs EVERY tick: ze() rewrites limb swing each frame, so the
+    // texting arm must be re-raised after it (same Bn callback, later in order)
+    if (this.kits)
+      for (const k of this.kits)
+        if (k.ped && k.texting) {
+          const arm = k.ped.mesh.userData.limbs?.[3]?.mesh;
+          arm && ((arm.rotation.x = -2.05), (arm.position.y = 1.33));
+        }
     this._timer -= dt;
     if (this._timer > 0) return;
     this._timer = 0.35;
@@ -2318,7 +2391,7 @@ const pedKitSys = {
       const k = this.kits[w.idx % this.pool];
       if (k.ped === w.a) continue;
       if (k.ped && wantSet.has(k.ped)) continue; // kit busy with an equally-near ped
-      (k.ped && this.detach(k), this.attach(k, w.a));
+      (k.ped && this.detach(k), this.attach(k, w.a, w.idx % 3 === 0));
     }
   },
 };
@@ -8391,11 +8464,19 @@ window.__steelRibbonDebug = {
       peds: {
         pool: pedKitSys.pool,
         promoted: pedKitSys.promotedCount(),
+        texting: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.texting ? 1 : 0), 0),
         radius: PED_KIT_RADIUS,
         sample: (pedKitSys.kits || [])
           .filter((k) => k.ped)
           .slice(0, 3)
-          .map((k) => ({ x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir })),
+          .map((k) => {
+            const o = { x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir, t: k.texting ? 1 : 0 };
+            if (k.texting) {
+              const pv = k.phone.getWorldPosition(new Vector3());
+              o.phone = { x: +pv.x.toFixed(2), y: +pv.y.toFixed(2), z: +pv.z.toFixed(2) };
+            }
+            return o;
+          }),
       },
     };
   },
