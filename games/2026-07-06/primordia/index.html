@@ -204,6 +204,7 @@
       </div>
       <p>every creature carries <b>genes</b> — speed, size, senses, fear, colour — that mutate a little each time it breeds. the ones that survive pass theirs on, so the population <b>evolves in front of you</b>: watch the grazers grow faster over generations, because the slow ones keep getting eaten.</p>
       <p>because predators eat grazers and grazers eat plankton, their numbers rise and fall in linked waves — press <b>S</b> to see the population oscilloscope, <b>G</b> for the live gene-drift chart. if everything dies out, a <b>genesis</b> event reseeds the world. it runs forever.</p>
+      <p>and the world itself ages: as days and generations pass, <b>new kinds of life arrive</b> — drifting bells, scavengers of the fallen, and older things that hunt up from the dark. each arrival is written into the chronicle (❧).</p>
       <div class="ex-controls">
         <span>🖱️ <b>click</b> a creature — the lens racks focus onto it; follow &amp; read its genes</span>
         <span>✋ <b>drag</b> — stir the current</span>
@@ -273,7 +274,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.10.0'; // v1.10: GOD-RAYS — the sun now crosses the sky. Volumetric light shafts slant with it through the day: long golden rays at dawn, bright white-cyan verticals at noon, leaning the other way into an amber dusk; at night the moon takes over with faint silver near-vertical beams. Plus the surface itself — a shimmering bright ceiling seen from below. The whole light field visibly swings across each 2.5-minute day. (v1.9: depth-of-field lens; v1.8: volumetric depth.)
+const VERSION = 'v2.0.0'; // v2.0: DEEP TIME — the world now grows NEW LIFE as it ages. Eras unlock with world age or lineage depth: the age of drifters (pulsing medusae that strain real biomass from the bloom and bud when fed), the cleansing (seafloor scavengers that eat the dead and return nutrients to the plankton — a closed loop), and the deep hunger (an abyssal ambusher that lurks far down the z column, rises with a glowing lure, and strikes). Each arrival is narrated + chronicled; era progress persists, and a returning world re-runs its arrivals quickly. The HUD grows rows as the cast grows. (v1.10 god-rays; v1.9 depth of field; v1.8 volumetric depth.)
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -786,6 +787,12 @@ function step(dt){
   detectSchoolPhase(dt);
   updateLeviathan(dt);
 
+  // deep time: eras + the life they brought
+  eraTick(dt);
+  updateJellies(dt);
+  updateScavs(dt);
+  updateAbyss(dt);
+
   // history sampling
   histAcc+=dt;
   if(histAcc>=1){ histAcc-=1; sampleHistory(); }
@@ -1114,6 +1121,306 @@ function updateDetritus(dt){
     if(d.life<=0){ detritus.splice(k,1); continue; }
   }
   if(detritus.length>60)detritus.splice(0,detritus.length-60);
+}
+
+/* ============================================================================
+   DEEP TIME — the world grows NEW LIFE as it ages (v2.0)
+   Eras unlock by world age (days) or lineage depth (generations), whichever
+   comes first. Unlocks persist in localStorage; a returning world re-runs the
+   arrivals quickly (accelerated re-arrival) so every session still SEES them.
+============================================================================ */
+const ERAS=[
+  {key:'drifters',   day:2, gen:10, evt:'era_drifters',   glyph:'✤', chron:'new life — soft bells ride the current: the drifters arrive'},
+  {key:'scavengers', day:4, gen:20, evt:'era_scavengers', glyph:'✜', chron:'the cleansing — scavengers walk the floor, and the dead feed the bloom'},
+  {key:'abyss',      day:7, gen:32, evt:'era_abyss',      glyph:'◆', chron:'the deep hunger — something patient hunts up from the dark'},
+];
+let eraLevel=0, eraSavedLevel=0, eraAcc=0;
+function loadWorldAge(){ try{ eraSavedLevel=(JSON.parse(localStorage.getItem('primordia_age_v1')||'{}').era|0)||0; }catch(e){} }
+function saveWorldAge(){ try{ localStorage.setItem('primordia_age_v1', JSON.stringify({era:Math.max(eraLevel,eraSavedLevel)})); }catch(e){} }
+function eraTick(dt){
+  eraAcc+=dt; if(eraAcc<1)return; eraAcc=0;
+  if(eraLevel>=ERAS.length || genesisActive)return;
+  const i=eraLevel, e=ERAS[i];
+  const needDay = eraSavedLevel>i ? 0.35*(i+1) : e.day;   // old worlds re-populate fast
+  if(simTime/CFG.dayPeriod>=needDay || generationMax>=e.gen) unlockEra(i,true);
+}
+function unlockEra(i,announce){
+  if(i!==eraLevel || i>=ERAS.length)return;
+  eraLevel=i+1; saveWorldAge();
+  const e=ERAS[i];
+  let cx=CFG.W/2, cy=CFG.H/2;
+  if(e.key==='drifters'){ cx=rrange(300,CFG.W-300); cy=rrange(160,CFG.H*0.45);
+    for(let k=0;k<4;k++) spawnJelly(cx+rrange(-70,70), cy+rrange(-50,50), null); }
+  else if(e.key==='scavengers'){ cx=rrange(250,CFG.W-250); cy=CFG.H-40;
+    for(let k=0;k<3;k++) spawnScav(cx+rrange(-90,90), CFG.H-rrange(18,70), null); }
+  else if(e.key==='abyss'){ ABY.cooldown=rrange(15,35); cx=CFG.W/2; cy=CFG.H*0.62; }
+  if(announce){ narrate(e.evt,null); logChronicle(e.chron,e.glyph);
+    interest.push({x:cx,y:cy,w:16,t:simTime}); }
+  ensureEraRows();
+}
+
+/* ---- drifters (medusae): pulse through the bloom, strain REAL biomass from
+   the clusters (they compete with grazers), bud when fed, dissolve when spent */
+const JMAX=14;
+const jellies=[];
+for(let i=0;i<JMAX;i++)jellies.push({alive:false,x:0,y:0,z:0.5,vx:0,vy:0,phase:0,size:1,energy:60,cap:110,hue:205,age:0,maxage:260,feedT:0,fbx:null,fby:null});
+function jCount(){ let n=0; for(const j of jellies)if(j.alive)n++; return n; }
+function spawnJelly(x,y,parent){
+  for(const j of jellies){ if(j.alive)continue;
+    j.alive=true; j.x=x; j.y=y; j.vx=0; j.vy=0;
+    j.size=parent?clamp(parent.size*(1+gauss()*0.08),0.6,1.5):rrange(0.75,1.25);
+    j.hue=parent?clamp(parent.hue+gauss()*6,185,255):rrange(190,245);
+    j.z=parent?clamp(parent.z+gauss()*0.1,0.05,1):rrange(0.15,0.95);
+    j.cap=110*j.size; j.energy=parent?j.cap*0.4:j.cap*rrange(0.5,0.75);
+    j.age=0; j.maxage=rrange(220,340); j.phase=rrange(0,TAU); j.feedT=rrange(0,0.5);
+    j.fbx=null; j.fby=null;
+    return j; }
+  return null;
+}
+function updateJellies(dt){
+  if(eraLevel<1)return;
+  for(const j of jellies){ if(!j.alive)continue;
+    j.age+=dt; j.phase+=dt*(1.4/j.size);
+    const contr=Math.sin(j.phase);
+    if(contr>0.55) j.vy-=26*dt*(contr-0.55)/0.45;   // bell contraction: upward pulse
+    j.vy+=6.5*dt;                                    // slow sink between pulses
+    const fa=flowAngle(j.x,j.y,simTime);
+    j.vx+=Math.cos(fa)*8*dt; j.vy+=Math.sin(fa)*3*dt;
+    const dmp=Math.pow(0.5,dt/0.9); j.vx*=dmp; j.vy*=dmp;
+    j.x+=j.vx*dt; j.y+=j.vy*dt;
+    if(j.x<30){j.x=30;j.vx=Math.abs(j.vx);} else if(j.x>CFG.W-30){j.x=CFG.W-30;j.vx=-Math.abs(j.vx);}
+    if(j.y<50){j.y=50;j.vy=Math.abs(j.vy)*0.4;} else if(j.y>CFG.H-30){j.y=CFG.H-30;j.vy=-Math.abs(j.vy);}
+    j.feedT-=dt;
+    if(j.feedT<=0){ j.feedT=0.5;
+      let best=-1,bd=1e9, rich=-1, rd=1e9;
+      for(let ci=0;ci<clusters.length;ci++){ const cl=clusters[ci];
+        const dx=cl.x-j.x, dy=cl.y-j.y, d2=dx*dx+dy*dy;
+        if(d2<bd){bd=d2;best=ci;}
+        if(cl.N>2.2 && d2<rd){rd=d2;rich=ci;} }     // nearest bloom still worth straining
+      if(best>=0 && bd<340*340){ const cl=clusters[best];
+        const take=Math.min(0.22,Math.max(0,cl.N-0.3));
+        if(take>0){ cl.N-=take; j.energy=Math.min(j.cap,j.energy+take*CFG.F_p*0.7); } }
+      const tgt = rich>=0?clusters[rich]:(best>=0?clusters[best]:null);
+      if(tgt){ j.fbx=tgt.x; j.fby=tgt.y; }          // hungry taxis heads for FOOD, not bare water
+    }
+    if(j.energy<0.65*j.cap && j.fbx!=null){
+      const hx=j.fbx-j.x, hy=j.fby-j.y, hd=Math.hypot(hx,hy)||1;
+      j.vx+=(hx/hd)*12*dt; j.vy+=(hy/hd)*8*dt;
+    }
+    j.energy-=dt*1.25*j.size;
+    if(j.energy>0.8*j.cap && j.age>40 && jCount()<JMAX){
+      j.energy*=0.5; spawnJelly(j.x+rrange(-20,20), j.y+rrange(-16,16), j); }
+    if(j.energy<=0 || j.age>j.maxage){ j.alive=false;
+      for(let i=0;i<7;i++){ const a=rnd()*TAU, sp=rrange(3,18);
+        spawnParticle(j.x,j.y,Math.cos(a)*sp,Math.sin(a)*sp-6, j.hue, rrange(1.2,1.8), i<2?2:0); } }
+  }
+}
+function drawJellies(){
+  if(eraLevel<1)return;
+  for(const j of jellies){ if(!j.alive)continue;
+    const da=dAlpha(j.z)*(0.55+0.45*clamp(j.energy/j.cap,0,1));
+    const hz=dHue(j.hue,j.z), df=defocus(j.z);
+    const L=26*j.size*dScale(j.z);
+    const contr=Math.max(0,Math.sin(j.phase));
+    const bw=L*(1-0.16*contr), bh=L*(0.72+0.2*contr);
+    ctx.globalCompositeOperation='lighter';
+    glow(j.x,j.y,L*(1.5+df*1.1), hz, (0.30-0.10*df)*da);
+    glow(j.x,j.y-L*0.15,L*0.5, hz, 0.5*da*(1-df*0.4));
+    ctx.globalCompositeOperation='source-over';
+    ctx.globalAlpha=0.30*da*(1-df*0.5); ctx.fillStyle=hueRGB(hz);
+    ctx.beginPath(); ctx.ellipse(j.x,j.y,bw,bh,0,Math.PI,0); ctx.closePath(); ctx.fill();
+    ctx.globalAlpha=0.55*da*(1-df*0.5); ctx.strokeStyle=hueRGB(hz); ctx.lineWidth=Math.max(0.6,L*0.06);
+    ctx.beginPath(); ctx.ellipse(j.x,j.y,bw,bh*0.32,0,0,TAU); ctx.stroke();
+    ctx.globalAlpha=0.35*da*(1-df*0.6); ctx.lineWidth=Math.max(0.5,L*0.035);
+    for(let t=0;t<4;t++){ const off=(t-1.5)*bw*0.42;
+      const sway=Math.sin(j.phase*0.9+t*1.7)*L*0.3;
+      ctx.beginPath(); ctx.moveTo(j.x+off,j.y+bh*0.2);
+      ctx.quadraticCurveTo(j.x+off+sway*0.5, j.y+L*0.9, j.x+off+sway, j.y+L*(1.5+0.12*t));
+      ctx.stroke(); }
+    ctx.globalAlpha=1;
+  }
+}
+
+/* ---- scavengers: walk the seafloor, eat detritus, and RETURN ITS NUTRIENTS
+   to the nearest plankton cluster — death feeds the bloom (a real closed loop) */
+const SMAX=10;
+const scavs=[];
+for(let i=0;i<SMAX;i++)scavs.push({alive:false,x:0,y:0,z:0.6,vx:0,vy:0,phase:0,size:1,energy:60,cap:90,hue:38,age:0,maxage:300,seekT:0,tx:-1,ty:-1,heading:1});
+function sCount(){ let n=0; for(const s of scavs)if(s.alive)n++; return n; }
+function spawnScav(x,y,parent){
+  for(const s of scavs){ if(s.alive)continue;
+    s.alive=true; s.x=x; s.y=Math.min(y,CFG.H-16); s.vx=0; s.vy=0;
+    s.size=parent?clamp(parent.size*(1+gauss()*0.08),0.7,1.4):rrange(0.8,1.2);
+    s.hue=rrange(28,48); s.z=rrange(0.3,0.95);
+    s.cap=90*s.size; s.energy=parent?s.cap*0.4:s.cap*0.6;
+    s.age=0; s.maxage=rrange(260,380); s.phase=rrange(0,TAU); s.seekT=rrange(0,0.6); s.tx=-1;
+    s.heading=rnd()<0.5?-1:1;
+    return s; }
+  return null;
+}
+function updateScavs(dt){
+  if(eraLevel<2)return;
+  for(const s of scavs){ if(!s.alive)continue;
+    s.age+=dt; s.phase+=dt*7;
+    s.seekT-=dt;
+    if(s.seekT<=0){ s.seekT=0.6; s.tx=-1;
+      let bd=1e9;
+      for(const d of detritus){ const dx=d.x-s.x, dy=d.y-s.y, dd=dx*dx+dy*dy;
+        if(dd<bd){bd=dd; s.tx=d.x; s.ty=d.y;} }
+    }
+    if(s.tx>=0){ const dx=s.tx-s.x, dy=s.ty-s.y, dd=Math.hypot(dx,dy)||1;
+      s.vx+=(dx/dd)*66*dt; s.vy+=(dy/dd)*36*dt;
+      if(dd<14){
+        for(let k=detritus.length-1;k>=0;k--){ const d=detritus[k];
+          const ex=d.x-s.x, ey=d.y-s.y;
+          if(ex*ex+ey*ey<18*18){ detritus.splice(k,1);
+            s.energy=Math.min(s.cap,s.energy+16);
+            let best=-1,cb=1e9;
+            for(let ci=0;ci<clusters.length;ci++){ const cl=clusters[ci];
+              const qx=cl.x-s.x, qy=cl.y-s.y, cd=qx*qx+qy*qy; if(cd<cb){cb=cd;best=ci;} }
+            if(best>=0)clusters[best].N=Math.min(CFG.K_c, clusters[best].N+0.5);
+            spawnParticle(s.x,s.y-4, rrange(-6,6), -rrange(4,12), s.hue+20, 1.0, 0);
+            break; } }
+        s.tx=-1;
+      }
+    } else { s.vx+=s.heading*8*dt; if(rnd()<0.005)s.heading*=-1; }
+    s.vy+=14*dt;                                     // heavy: settles back to the floor
+    if(s.y<CFG.H*0.55)s.vy+=30*dt;
+    const dmp=Math.pow(0.5,dt/0.5); s.vx*=dmp; s.vy*=dmp;
+    s.x+=s.vx*dt; s.y+=s.vy*dt;
+    if(s.x<20){s.x=20;s.heading=1;} else if(s.x>CFG.W-20){s.x=CFG.W-20;s.heading=-1;}
+    if(s.y>CFG.H-12){s.y=CFG.H-12;s.vy=0;}
+    s.energy-=dt*1.1*s.size;
+    if(s.energy>0.85*s.cap && sCount()<SMAX){ s.energy*=0.55; spawnScav(s.x+rrange(-24,24), s.y, s); }
+    if(s.energy<=0 || s.age>s.maxage){ s.alive=false;
+      for(let i=0;i<5;i++){ const a=rnd()*TAU, v=rrange(3,14);
+        spawnParticle(s.x,s.y,Math.cos(a)*v,-Math.abs(Math.sin(a)*v), s.hue, rrange(1,1.6), i<2?2:0); } }
+  }
+}
+function drawScavs(){
+  if(eraLevel<2)return;
+  for(const s of scavs){ if(!s.alive)continue;
+    const da=dAlpha(s.z), hz=dHue(s.hue,s.z), df=defocus(s.z);
+    const L=11*s.size*dScale(s.z), dir=(s.vx>=0?1:-1);
+    const bob=Math.sin(s.phase)*L*0.08;
+    ctx.globalCompositeOperation='lighter';
+    glow(s.x,s.y,L*1.1,hz,(0.22-0.08*df)*da);
+    ctx.globalCompositeOperation='source-over';
+    ctx.globalAlpha=0.6*da*(1-df*0.5); ctx.fillStyle=hueRGB(hz);
+    for(let seg=0;seg<3;seg++){ const sx=s.x-dir*seg*L*0.5, w=L*(0.55-seg*0.12);
+      ctx.beginPath(); ctx.ellipse(sx, s.y+bob*(seg?0.5:1), w, w*0.55, 0, 0, TAU); ctx.fill(); }
+    ctx.globalAlpha=0.4*da*(1-df*0.5); ctx.strokeStyle=hueRGB(hz); ctx.lineWidth=Math.max(0.5,L*0.08);
+    for(let lg=0;lg<3;lg++){ const lx=s.x-dir*(lg*L*0.45);
+      const lp=Math.sin(s.phase+lg*2.1)*L*0.18;
+      ctx.beginPath(); ctx.moveTo(lx,s.y+L*0.25); ctx.lineTo(lx+lp,s.y+L*0.55); ctx.stroke(); }
+    ctx.beginPath(); ctx.moveTo(s.x+dir*L*0.5,s.y-L*0.1);
+    ctx.lineTo(s.x+dir*L*0.95, s.y-L*0.45+Math.sin(s.phase*1.3)*L*0.1); ctx.stroke();
+    ctx.globalAlpha=1;
+  }
+}
+
+/* ---- the abyssal hunter: lurks far in the z column (small, dim, blue — the
+   depth system makes it materialize for free as it rises), lures, strikes, sinks */
+const ABYSEG=7;
+const ABY={active:false,x:0,y:0,z:0.08,vx:0,vy:0,phase:0,size:1.6,state:0, // 0 lurk, 1 rise, 2 sink
+  t:0,cooldown:rrange(40,80),energy:100,targetUid:-1,misses:0,lure:0,
+  segX:new Float32Array(ABYSEG),segY:new Float32Array(ABYSEG)};
+function updateAbyss(dt){
+  if(eraLevel<3)return;
+  if(!ABY.active){
+    ABY.cooldown-=dt;
+    if(ABY.cooldown<=0 && grazers.length>26 && !genesisActive){
+      ABY.active=true; ABY.state=0; ABY.t=rrange(6,12); ABY.z=0.06;
+      ABY.x=rrange(300,CFG.W-300); ABY.y=rrange(CFG.H*0.35,CFG.H*0.8);
+      ABY.energy=100; ABY.misses=0; ABY.lure=0; ABY.targetUid=-1;
+    }
+    return;
+  }
+  ABY.phase+=dt*2.2;
+  const fa=flowAngle(ABY.x,ABY.y,simTime);
+  if(ABY.state===0){
+    ABY.vx+=Math.cos(fa)*6*dt; ABY.vy+=Math.sin(fa)*4*dt;
+    ABY.lure=Math.max(0,ABY.lure-dt*0.5);
+    ABY.t-=dt;
+    if(ABY.t<=0){
+      let best=null,bd=1e9;
+      for(const g of grazers){ const dx=g.x-ABY.x,dy=g.y-ABY.y,d2=dx*dx+dy*dy; if(d2<bd){bd=d2;best=g;} }
+      if(best){ ABY.targetUid=best.uid; ABY.state=1; ABY.t=7; }
+      else ABY.t=6;
+    }
+  } else if(ABY.state===1){
+    const tgt=getCreature(ABY.targetUid);
+    ABY.t-=dt;
+    if(!tgt || ABY.t<=0){ ABY.misses++; ABY.state=2; }
+    else {
+      ABY.z=Math.min(1,ABY.z+dt*0.28);
+      ABY.lure=Math.min(1,ABY.lure+dt*0.7);
+      const dx=tgt.x-ABY.x, dy=tgt.y-ABY.y, dd=Math.hypot(dx,dy)||1;
+      const sp=dd<140?120:62;
+      ABY.vx+=(dx/dd)*sp*dt*2.2; ABY.vy+=(dy/dd)*sp*dt*2.2;
+      if(dd<26 && ABY.z>tgt.z-0.25){
+        killCreature(tgt,'hunt');
+        ABY.energy=Math.min(140,ABY.energy+50);
+        narrate('abyssStrike',null);
+        ABY.state=2;
+      }
+    }
+  } else {
+    ABY.z=Math.max(0.06,ABY.z-dt*0.16);
+    ABY.lure=Math.max(0,ABY.lure-dt*0.8);
+    ABY.vy+=10*dt; ABY.vx+=Math.cos(fa)*4*dt;
+    if(ABY.z<=0.07){
+      if(ABY.misses>=3 || ABY.energy<30){ ABY.active=false; ABY.cooldown=rrange(70,140); }
+      else { ABY.state=0; ABY.t=rrange(8,16); }
+    }
+  }
+  ABY.energy-=dt*1.4;
+  if(ABY.energy<=0){ ABY.active=false; ABY.cooldown=rrange(90,160); }
+  const dmp=Math.pow(0.5,dt/0.8); ABY.vx*=dmp; ABY.vy*=dmp;
+  ABY.x+=ABY.vx*dt; ABY.y+=ABY.vy*dt;
+  ABY.x=clamp(ABY.x,60,CFG.W-60); ABY.y=clamp(ABY.y,80,CFG.H-40);
+}
+function drawAbyss(){
+  if(eraLevel<3 || !ABY.active)return;
+  const da=dAlpha(ABY.z), df=defocus(ABY.z);
+  const L=52*ABY.size*dScale(ABY.z);
+  const dir=ABY.vx>=0?1:-1;
+  for(let i=0;i<ABYSEG;i++){ const t=i/(ABYSEG-1);
+    ABY.segX[i]=ABY.x-dir*t*L;
+    ABY.segY[i]=ABY.y+Math.sin(ABY.phase-t*3.2)*L*0.10*(0.3+t); }
+  const hz=dHue(258,ABY.z);
+  ctx.globalCompositeOperation='lighter';
+  glow(ABY.x,ABY.y,L*0.9,hz,(0.10+0.14*ABY.lure)*da*(1-df*0.3)); // cold aura swells as it hunts
+  ctx.globalCompositeOperation='source-over';
+  // the body reads as a SILHOUETTE — a darkness moving against the bloom
+  ctx.fillStyle='rgba(12,8,34,1)';
+  ctx.globalAlpha=(0.55+0.3*ABY.lure)*da*(1-df*0.4);
+  for(let i=0;i<ABYSEG;i++){ const t=i/(ABYSEG-1);
+    const w=L*0.16*(1-t*0.8)+L*0.02;
+    ctx.beginPath(); ctx.ellipse(ABY.segX[i],ABY.segY[i],w*1.6,w,0,0,TAU); ctx.fill(); }
+  // pale rim light along the back
+  ctx.globalAlpha=0.5*da*(1-df*0.5); ctx.strokeStyle=hueRGB(hz); ctx.lineWidth=Math.max(0.6,L*0.02);
+  ctx.beginPath();
+  for(let i=0;i<ABYSEG;i++){ const t=i/(ABYSEG-1), w=L*0.16*(1-t*0.8)+L*0.02;
+    if(i===0)ctx.moveTo(ABY.segX[i],ABY.segY[i]-w); else ctx.lineTo(ABY.segX[i],ABY.segY[i]-w); }
+  ctx.stroke();
+  ctx.globalAlpha=0.9*da; ctx.fillStyle='#dfe9ff';
+  ctx.beginPath(); ctx.arc(ABY.x+dir*L*0.08, ABY.y-L*0.03, Math.max(1.2,L*0.03),0,TAU); ctx.fill();
+  if(ABY.lure>0.02){ ctx.globalCompositeOperation='lighter';
+    const lx=ABY.x+dir*L*0.30, ly=ABY.y-L*0.10+Math.sin(ABY.phase*2.3)*L*0.05;
+    glow(lx,ly, L*0.22*(0.6+0.4*Math.sin(ABY.phase*3.1))*(0.5+ABY.lure), -1, 0.95*ABY.lure*da);
+    ctx.globalCompositeOperation='source-over'; }
+  ctx.globalAlpha=1;
+}
+
+/* dynamic HUD rows: the population readout grows as the world does */
+let eraRowsBuilt=0;
+function ensureEraRows(){
+  const pr=document.getElementById('popread'); if(!pr)return;
+  if(eraLevel>=1 && eraRowsBuilt<1){ pr.insertAdjacentHTML('beforeend',
+    '<div class="row"><span class="dot" style="color:#8fd8ff;background:#8fd8ff"></span><span id="pJelly">0</span></div>'); eraRowsBuilt=1; }
+  if(eraLevel>=2 && eraRowsBuilt<2){ pr.insertAdjacentHTML('beforeend',
+    '<div class="row"><span class="dot" style="color:#e0a95e;background:#e0a95e"></span><span id="pScav">0</span></div>'); eraRowsBuilt=2; }
 }
 
 /* ============================================================================
@@ -1545,16 +1852,24 @@ const CAP={
     'even endings are edible down here'],
   followStart:['following {name} — one life among hundreds','staying with this one for a while',
     'every dot in the dark is a story. here’s one'],
+  era_drifters:['new life enters the water — soft bells riding the current','the age of drifters begins: the first medusae pulse through the bloom'],
+  era_scavengers:['the fallen no longer lie still — scavengers walk the floor','small mouths find the dead: the world learns to clean itself'],
+  era_abyss:['something patient has learned to hunt from the dark below','the deep opens its eye — an abyssal hunter rises'],
+  abyssStrike:['taken — pulled down into the dark','the lure was a lie. the deep feeds','one light goes out, below the thermocline'],
 };
 /* which events have recorded voice, and how many variants exist */
-const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2,leviathan:2};
+const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2,leviathan:2,
+  era_drifters:2,era_scavengers:2,era_abyss:2};
 const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
-  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament',leviathan:'e22_leviathan'};
+  evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament',leviathan:'e22_leviathan',
+  era_drifters:'e23_drifters',era_scavengers:'e24_scavengers',era_abyss:'e25_abyss'};
 const PRIORITY={genesis:0,extinction:0,leviathan:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
-  genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3,season:3};
+  genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3,season:3,
+  era_drifters:0,era_scavengers:0,era_abyss:0,abyssStrike:2};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
-  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70,leviathan:0};
+  evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70,leviathan:0,
+  abyssStrike:120};
 const bags={}; const evLast={};
 let lastCaptionAt=-100, lastVoiceAt=-100, firstBirthDone=false, warmupUntil=20;
 let queued=null;
@@ -1758,6 +2073,9 @@ function genesisStep(dt){
     geneHist.length=0; speciesState={graze:{},pred:{}};
     speciesCount=1; speciesSplitSize=0; sp2Streak=0; speciatedAnnounced=false;
     LEV.active=false; LEV.cooldown=rrange(150,300); // the leviathan doesn't outlast a genesis
+    // deep-time life ENDURES a genesis (the ages are the world's, not one lineage's) —
+    // but the abyssal hunter retreats until the new prey base recovers
+    ABY.active=false; ABY.cooldown=rrange(60,120);
   }
   if(genesisT>6){ genesisActive=false; genesisSeeded=false; foundersSpawned=false;
     cam.state='DRIFT'; cam.dwell=0; }
@@ -1941,6 +2259,10 @@ function draw(){
   drawTrails();
   // the leviathan drifts behind the small life
   if(LEV.active)drawLeviathan();
+  // deep-time life: the abyssal hunter (far), then drifters and scavengers
+  drawAbyss();
+  drawJellies();
+  drawScavs();
   // creatures
   drawCreatures();
   // rings + particles
@@ -2437,6 +2759,8 @@ function hudTick(dt){
   hudAcc=(hudAcc||0)+dt;
   if(hudAcc>0.25){ hudAcc=0;
     elPP.textContent=planktonCount(); elPG.textContent=grazers.length; elPR.textContent=preds.length;
+    if(eraRowsBuilt>=1){ const e=document.getElementById('pJelly'); if(e)e.textContent=jCount(); }
+    if(eraRowsBuilt>=2){ const e=document.getElementById('pScav'); if(e)e.textContent=sCount(); }
     const phase=dayFactor>0.66?'day':dayFactor<0.33?'night':(lastPhaseDay?'dawn':'dusk');
     elClock.textContent=`gen ${generationMax} · ${SEASON_NAMES[seasonIdx]} · ${phase}`+(speciesCount>1?' · 2 species':'');
     if(statsOn)drawScopes();
@@ -2749,7 +3073,7 @@ function fmtTime(s){ if(s<60)return s+'s'; const m=(s/60)|0; if(m<60)return m+'m
 function boot(){
   document.getElementById('ver').textContent='primordia '+VERSION;
   buildGlow(); buildCaustic(); gridInit(); plgInit();
-  loadSettings();
+  loadSettings(); loadWorldAge();
   resize(); initSnow();
   seedEnvironment();   // vents + kelp persist across genesis — the place endures
   seedClusters();
@@ -2784,6 +3108,17 @@ window.__prim={
   get dof(){return {z:+dofZ.toFixed(2),strength:+dofStr.toFixed(2),targetZ:+dofTZ.toFixed(2),targetStrength:+dofTStr.toFixed(2)};},
   get sun(){const p=(simTime%CFG.dayPeriod)/CFG.dayPeriod, sunT=clamp((p-0.5)/0.25,-1,1);
     return {p:+p.toFixed(3),sunT:+sunT.toFixed(2),day:dayFactor>0.5,dayFactor:+dayFactor.toFixed(2)};},
+  get era(){ return {level:eraLevel, saved:eraSavedLevel, names:ERAS.map(e=>e.key)}; },
+  get jellies(){ return jCount(); }, get scavs(){ return sCount(); },
+  get abyssal(){ return ABY.active?{x:Math.round(ABY.x),y:Math.round(ABY.y),z:+ABY.z.toFixed(2),state:ABY.state,lure:+ABY.lure.toFixed(2),energy:Math.round(ABY.energy),misses:ABY.misses}:{cooldown:+ABY.cooldown.toFixed(1)}; },
+  forceEra(n){ n=n|0; while(eraLevel<n && eraLevel<ERAS.length) unlockEra(eraLevel,true); },
+  resetWorldAge(){ eraLevel=0; eraSavedLevel=0; try{localStorage.removeItem('primordia_age_v1');}catch(e){} },
+  summonAbyss(){ ABY.cooldown=0; },
+  get detritusN(){ return detritus.length; },
+  get deepLife(){ const out={j:[],s:[]};
+    for(const j of jellies)if(j.alive)out.j.push([Math.round(j.x),Math.round(j.y),+j.z.toFixed(2)]);
+    for(const s of scavs)if(s.alive)out.s.push([Math.round(s.x),Math.round(s.y)]);
+    return out; },
   get chronicle(){ return chronicle.map(e=>`day ${e.day} · gen ${e.gen} — ${e.text}`); },
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
