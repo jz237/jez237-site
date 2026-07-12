@@ -2727,6 +2727,102 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     ((im.count = im.userData.used), (im.instanceMatrix.needsUpdate = !0), (furnitureSys.counts[d.key] = im.userData.used));
   }
 }
+// ─── Street-name signs (zoom-detail item 08): a double-blade sign at every
+// intersection corner. The street GRID is deterministic (di constants), so each
+// line keeps its themed fictional name forever. Two InstancedMeshes total: poles
+// and text blades — blades sample one 8x4 name atlas via a per-instance slot
+// attribute (same shader pattern as the license plates).
+const STREET_NAMES = [
+  "RIBBON AVE", "COIL ST", "PISTON BLVD", "TORQUE WAY", "APEX DR", "CHICANE CT",
+  "GEARBOX ST", "TURBINE AVE", "SPOKE LN", "CAMBER RD", "NITRO AVE", "DYNAMO ST",
+  "CLUTCH ST", "MANIFOLD AVE", "OCTANE BLVD", "SPOILER ST", "DOWNSHIFT DR",
+  "HAIRPIN RD", "SLIPSTREAM AVE", "REDLINE ST", "IGNITION WAY", "FLYWHEEL RD",
+  "BANKED AVE", "PIT LANE", "VELOCITY BLVD", "CHROME ST", "SPROCKET ST", "AERO WAY",
+  "MEDALLION RD", "CROSSWALK CT", "OVERPASS AVE", "STEEL RIBBON PKWY",
+];
+let streetSignAtlas = null;
+function buildStreetSignAtlas() {
+  if (streetSignAtlas) return streetSignAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 256));
+  const g = cv.getContext("2d");
+  for (let s = 0; s < 32; s++) {
+    const x = (s % 8) * 128,
+      y = ((s / 8) | 0) * 64;
+    ((g.fillStyle = "#175430"), g.fillRect(x + 2, y + 14, 124, 36));
+    ((g.strokeStyle = "#e8f4ea"), (g.lineWidth = 2.5), g.strokeRect(x + 4.5, y + 16.5, 119, 31));
+    ((g.fillStyle = "#f2fbf4"), (g.font = "bold 17px Arial, sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(STREET_NAMES[s % STREET_NAMES.length], x + 64, y + 33, 112);
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  const mat = new MeshBasicMaterial({ map: texture });
+  mat.customProgramCacheKey = () => "street-sign-atlas";
+  mat.onBeforeCompile = (sh) => {
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nattribute vec2 aSignSlot;\nvarying vec2 vSignUv;")
+      .replace("#include <uv_vertex>", "#include <uv_vertex>\nvSignUv = uv * vec2(0.125, 0.25) + aSignSlot;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying vec2 vSignUv;")
+      .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vSignUv );");
+  };
+  streetSignAtlas = { texture, mat };
+  return streetSignAtlas;
+}
+const streetSignSys = { poles: 0, blades: 0, meshes: null, sample: [] };
+function buildStreetSigns(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt) {
+  const atlas = buildStreetSignAtlas(),
+    { opaque } = vcMats();
+  if (streetSignSys.meshes) for (const m of streetSignSys.meshes) (m.removeFromParent(), m.geometry.dispose());
+  ((streetSignSys.meshes = []), (streetSignSys.sample = []));
+  const xLines = [],
+    zLines = [];
+  for (let x = x0; x <= x1 + 1; x += pitch) xLines.push(Math.round(x));
+  for (let z = zHigh; z >= zLow - 1; z -= pitch) zLines.push(Math.round(z));
+  const cap = xLines.length * zLines.length + 4;
+  const poleGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.035, 0.045, 2.55, 6), vcAt(0, 1.275, 0), 1590848),
+      vcBake(new CylinderGeometry(0.05, 0.05, 0.06, 6), vcAt(0, 2.58, 0), 2894377),
+    ],
+    !1,
+  );
+  const poles = new InstancedMesh(poleGeo, opaque, cap);
+  // blade = front + back quads (back rotated so text reads correctly both sides)
+  const bladeFront = new PlaneGeometry(0.92, 0.17),
+    bladeBack = new PlaneGeometry(0.92, 0.17);
+  bladeBack.rotateY(Math.PI);
+  const bladeGeo = mergeGeometries([bladeFront, bladeBack], !1);
+  bladeGeo.setAttribute("aSignSlot", new InstancedBufferAttribute(new Float32Array(cap * 2 * 2), 2));
+  const blades = new InstancedMesh(bladeGeo, atlas.mat, cap * 2);
+  const slotAttr = bladeGeo.getAttribute("aSignSlot");
+  for (const im of [poles, blades])
+    ((im.frustumCulled = !1), (im.castShadow = !1), (im.receiveShadow = !0), group.add(im), streetSignSys.meshes.push(im));
+  const dummy = new Object3D();
+  let np = 0,
+    nb = 0;
+  const nameIdx = (isNS, k) => (isNS ? k : xLines.length + k) % 32;
+  for (let xi = 0; xi < xLines.length; xi++)
+    for (let zi = 0; zi < zLines.length; zi++) {
+      const cx = xLines[xi] + sw * 0.66 + 1.5,
+        cz = zLines[zi] + sw * 0.66 + 1.5;
+      if (clearanceAt(cx, cz, 0.5).clearance < 0.7) continue;
+      if (np >= cap || nb + 2 > blades.count) continue;
+      const gy = He(cx, cz) + 0.02;
+      (dummy.position.set(cx, gy, cz), (dummy.rotation.y = 0), dummy.updateMatrix(), poles.setMatrixAt(np++, dummy.matrix));
+      // NS street blade (runs along z → plane faces ±x)
+      const sNS = nameIdx(!0, xi),
+        sEW = nameIdx(!1, zi);
+      (dummy.position.set(cx, gy + 2.4, cz), (dummy.rotation.y = Math.PI / 2), dummy.updateMatrix());
+      (blades.setMatrixAt(nb, dummy.matrix), slotAttr.setXY(nb, (sNS % 8) * 0.125, (3 - ((sNS / 8) | 0)) * 0.25), nb++);
+      (dummy.position.set(cx, gy + 2.56, cz), (dummy.rotation.y = 0), dummy.updateMatrix());
+      (blades.setMatrixAt(nb, dummy.matrix), slotAttr.setXY(nb, (sEW % 8) * 0.125, (3 - ((sEW / 8) | 0)) * 0.25), nb++);
+      streetSignSys.sample.length < 4 &&
+        streetSignSys.sample.push({ x: +cx.toFixed(1), y: +gy.toFixed(2), z: +cz.toFixed(1), ns: STREET_NAMES[sNS], ew: STREET_NAMES[sEW] });
+    }
+  ((poles.count = np), (blades.count = nb), (poles.instanceMatrix.needsUpdate = !0), (blades.instanceMatrix.needsUpdate = !0), (slotAttr.needsUpdate = !0));
+  ((streetSignSys.poles = np), (streetSignSys.blades = nb));
+}
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
     d = [12139059, 3109053, 15263967, 3818573, 4695133, 14793024, 9261235, 16767293],
@@ -3494,6 +3590,7 @@ function N1() {
       }
     }
   buildStreetFurniture(i, t, n, r, s, a, o, Pn);
+  buildStreetSigns(i, t, n, r, s, a, o, Pn);
   for (let N = 0; N < 3; N++) {
     if (!pe[N].length) continue;
     const O = new InstancedMesh(de, ie[N], pe[N].length);
@@ -8820,6 +8917,7 @@ window.__steelRibbonDebug = {
         sample: storefrontSys.spots.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), yaw: +s.yaw.toFixed(2), w: +s.w.toFixed(1) })),
       },
       furniture: { ...furnitureSys.counts, sample: furnitureSys.sample.slice(0, 4) },
+      streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       peds: {
         pool: pedKitSys.pool,
         promoted: pedKitSys.promotedCount(),
