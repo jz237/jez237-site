@@ -272,6 +272,14 @@ const browser = await chromium.launch({
   }
   check("ped kits: texting pedestrians hold chat phones", texting > 0, `texting=${texting}`);
 
+  // zoom-detail item 3b: every promoted ped carries exactly one prop family
+  const props = await page.evaluate(() => window.__steelRibbonDebug.detailReport().peds);
+  check(
+    "ped kits: props partition the promoted set (text/bag/cup)",
+    !!props && props.promoted > 0 && props.texting + props.bags + props.cups === props.promoted,
+    JSON.stringify({ promoted: props?.promoted, t: props?.texting, b: props?.bags, c: props?.cups }),
+  );
+
   // zoom-detail item 04: bus drivers (head+cap behind the windshield glass band)
   const drv = await page.evaluate(() => window.__steelRibbonDebug.detailReport().drivers);
   check("drivers: all buses crewed", !!drv && drv.cars === 30 && drv.withDriver === 5, JSON.stringify(drv));
