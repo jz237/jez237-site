@@ -16,6 +16,17 @@
     return price;
   }
 
+  function usefulDetail(product, brand) {
+    var name = String(product?.name || '');
+    var size = name.match(/\b\d+(?:\.\d+)?\s*(?:gal(?:lon)?s?|oz|ml|liters?|litres?|lb|lbs|g|kg|w|watts?|in|inch|pk|pack|ct|count)\b/i);
+    if (product?.variants?.length > 1) return product.variants.length + ' options - choose exact size or color';
+    if (size) return 'Listed size: ' + size[0].toUpperCase() + ' - confirm fit';
+    if (/filter|cartridge|insert|media|impeller|replacement|foam|pad/i.test(name)) return 'Check filter model compatibility';
+    if (/heater|light|lamp|pump|powerhead|skimmer|wavemaker/i.test(name)) return 'Match output to tank size';
+    if (/food|flake|pellet|wafer|treat|frozen/i.test(name)) return 'Match food to species and mouth size';
+    return brand ? 'Brand: ' + brand + ' - open for full details' : 'Open for size, stock, and compatibility';
+  }
+
   function escapeHtml(value) {
     return String(value || '').replace(/[&<>"']/g, function(char) {
       return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char];
@@ -98,6 +109,7 @@
       var url = escapeHtml(p.productUrl || '#');
       var brandHtml = brand ? '<span class="thr-brand">' + escapeHtml(brand) + '</span>' : '';
       var optionBadge = p.variants && p.variants.length > 1 ? '<span class="thr-options">' + p.variants.length + ' options</span>' : '';
+      var detail = escapeHtml(usefulDetail(p, brand));
 
       html += '<a class="thr-product" href="' + url + '" target="_blank" rel="noopener">'
         + '<span class="thr-ext" title="View on Hidden Reef">↗</span>'
@@ -109,6 +121,7 @@
         + '<div class="thr-info">'
         + '<span class="thr-price">' + price + '</span>'
         + '<h3 class="thr-name">' + name + '</h3>'
+        + '<span class="thr-detail">' + detail + '</span>'
         + '</div>'
         + '</a>';
     });
