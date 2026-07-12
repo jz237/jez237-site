@@ -276,6 +276,10 @@ const browser = await chromium.launch({
   const drv = await page.evaluate(() => window.__steelRibbonDebug.detailReport().drivers);
   check("drivers: all buses crewed", !!drv && drv.cars === 30 && drv.withDriver === 5, JSON.stringify(drv));
 
+  // zoom-detail item 05: every taxi carries a lit medallion roof sign + door decals
+  const tx = await page.evaluate(() => window.__steelRibbonDebug.detailReport().taxis);
+  check("taxis: all signed with medallion numbers", !!tx && tx.count > 0 && tx.signed === tx.count, JSON.stringify(tx));
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
