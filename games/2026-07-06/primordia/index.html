@@ -273,7 +273,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v1.9.0'; // v1.9: DEPTH OF FIELD — the camera becomes a real lens. A smoothed focal plane racks onto whatever the director follows (click a creature: it snaps crisp while every other depth melts into soft bokeh); while drifting, the lens slowly scans the water column so whole layers of the school swim in and out of focus. Out-of-focus creatures dissolve into luminous discs, marine snow blooms into true bokeh dots. Zero extra render passes — all per-sprite modulation.
+const VERSION = 'v1.10.0'; // v1.10: GOD-RAYS — the sun now crosses the sky. Volumetric light shafts slant with it through the day: long golden rays at dawn, bright white-cyan verticals at noon, leaning the other way into an amber dusk; at night the moon takes over with faint silver near-vertical beams. Plus the surface itself — a shimmering bright ceiling seen from below. The whole light field visibly swings across each 2.5-minute day. (v1.9: depth-of-field lens; v1.8: volumetric depth.)
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -2044,18 +2044,41 @@ function drawNebula(){
   ctx.drawImage(glowSprites[(170/360*HUEBUCKETS)|0], p2[0]-R,p2[1]-R,R*2,R*2);
 }
 function drawShafts(){
-  const n = quality>=3?6:quality>=2?4:2;
-  const a=lerp(0.035,0.15,dayFactor);
-  if(a<0.012)return;
+  // v1.10: directional god-rays from a sun that CROSSES THE SKY each day.
+  // sunT: -1 dawn .. 0 noon .. +1 dusk — the whole light field slants with it,
+  // amber when the sun is low, white-cyan at noon; silver moonbeams at night.
+  const p=(simTime%CFG.dayPeriod)/CFG.dayPeriod;      // 0 midnight .. 0.5 noon
+  const sunT=clamp((p-0.5)/0.25,-1,1);
+  const slope=sunT*0.55;                              // ray dx per dy — leans away from the low sun
+  const warm=Math.pow(Math.abs(sunT),1.6)*dayFactor;  // low sun = golden hour
+  const R=Math.round(lerp(180,255,warm)), Gc=Math.round(lerp(230,200,warm)), B=Math.round(lerp(255,145,warm));
   ctx.globalCompositeOperation='lighter';
+  // the surface itself, seen from below: a bright shimmering ceiling on the world
+  const sa=(0.10*dayFactor+0.028)*(1+0.12*Math.sin(simTime*0.9));
+  const scol=`${R},${Gc},${B}`;
+  const sg=ctx.createLinearGradient(0,-70,0,95);   // soft waterline glow, fading both ways (no hard slab edge)
+  sg.addColorStop(0,`rgba(${scol},0)`);
+  sg.addColorStop(0.45,`rgba(${scol},${(Math.min(1,sa*1.6)).toFixed(3)})`);
+  sg.addColorStop(1,`rgba(${scol},0)`);
+  ctx.globalAlpha=1; ctx.fillStyle=sg;
+  ctx.fillRect(-200,-70,CFG.W+400,165);
+  // god-rays / moonbeams
+  const day=dayFactor>0.5;
+  const n = day ? (quality>=3?7:quality>=2?5:3) : (quality>=2?3:2);
+  const a = day ? lerp(0.035,0.16,dayFactor) : 0.030*(1-dayFactor);
+  if(a<0.010)return;
+  const rslope = day?slope:0.06;                      // the moon hangs high — near-vertical beams
+  const cTop = day ? `rgba(${R},${Gc},${B},0.9)` : 'rgba(190,214,255,0.8)';
+  const cEnd = day ? `rgba(${R},${Gc},${B},0)`   : 'rgba(190,214,255,0)';
   for(let i=0;i<n;i++){
-    const x=CFG.W*(i+0.5)/n + Math.sin(simTime*0.1+i)*40;
-    const w=150+Math.sin(simTime*0.07+i*2)*60;
-    ctx.globalAlpha=a*(0.7+0.3*Math.sin(simTime*0.2+i));
-    const g=ctx.createLinearGradient(x,0,x,CFG.H);
-    g.addColorStop(0,'rgba(180,230,255,0.9)');g.addColorStop(1,'rgba(180,230,255,0)');
+    const x=CFG.W*(i+0.5)/n - sunT*CFG.W*0.08 + Math.sin(simTime*0.1+i)*40;
+    const w=(day?150:70)+Math.sin(simTime*0.07+i*2)*(day?60:20);
+    ctx.globalAlpha=a*(0.7+0.3*Math.sin(simTime*0.2+i*1.7));
+    const bx=x+rslope*CFG.H;                          // bottom center, slanted with the sun
+    const g=ctx.createLinearGradient(x,0,bx,CFG.H);
+    g.addColorStop(0,cTop); g.addColorStop(1,cEnd);
     ctx.fillStyle=g;
-    ctx.beginPath(); ctx.moveTo(x-w*0.4,0);ctx.lineTo(x+w*0.4,0);ctx.lineTo(x+w,CFG.H);ctx.lineTo(x-w,CFG.H);
+    ctx.beginPath(); ctx.moveTo(x-w*0.4,0);ctx.lineTo(x+w*0.4,0);ctx.lineTo(bx+w,CFG.H);ctx.lineTo(bx-w,CFG.H);
     ctx.closePath(); ctx.fill();
   }
 }
@@ -2759,6 +2782,8 @@ window.__prim={
     return n?{min:+mn.toFixed(2),max:+mx.toFixed(2),far,near,mid:n-near-far,n}:null; },
   get camMotion(){return {shake:+cam.shake.toFixed(2),zpunch:+cam.zpunch.toFixed(3),breath:+cam.breath.toFixed(4),chroma:+chroma.toFixed(2)};},
   get dof(){return {z:+dofZ.toFixed(2),strength:+dofStr.toFixed(2),targetZ:+dofTZ.toFixed(2),targetStrength:+dofTStr.toFixed(2)};},
+  get sun(){const p=(simTime%CFG.dayPeriod)/CFG.dayPeriod, sunT=clamp((p-0.5)/0.25,-1,1);
+    return {p:+p.toFixed(3),sunT:+sunT.toFixed(2),day:dayFactor>0.5,dayFactor:+dayFactor.toFixed(2)};},
   get chronicle(){ return chronicle.map(e=>`day ${e.day} · gen ${e.gen} — ${e.text}`); },
   get order(){return orderParam;}, get day(){return dayFactor;},
   get species(){return speciesCount;}, get speciesInfo(){return speciesCount>1?speciesInfo:null;},
