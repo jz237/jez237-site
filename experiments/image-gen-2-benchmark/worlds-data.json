@@ -1826,5 +1826,25 @@
       "continuity": "Preserves Lumenreef's turquoise shelf seas, glass-coral modules, shell-bell signal network, lensleaf cisterns, tide-gate repairs, and low-bodied amphibious tide engineers.",
       "entryDescription": "Sirr and nursery caretakers guide glass-coral nursery modules back afloat as corrected shell-bell timing restores rainwater flow and tide rhythm."
     }
+  },
+  {
+    "id": "2026-07-12-weekly-world-image-lumenreef-causeway-dawn-bell-procession",
+    "title": "Lumenreef Causeway: Dawn Bell Procession",
+    "tests": "gpt-image-2 weekly-world archive cron; square photorealistic lived-in alien world continuity image; no first-class image_generate tool used",
+    "prompt": "Create a finished square photorealistic documentary field photograph from the fictional weekly world \"Lumenreef Causeway\". Story beat: a dawn procession carries the repaired resonator through Prism Quay as the weekly shell-bell rhythm returns. Show wet black basalt quay stones under turquoise dawn rainlight, a low luminous glass-coral footbridge still beaded with spray, and a procession of non-human amphibious tide engineers moving carefully along the quay. At the center, several engineers carry a repaired pearly shell-ceramic resonator frame lashed with braided kelpglass rope and rain-polished copper tuning pins; shell-bell instruments hang from the frame and catch soft caustic reflections. Include Nali near the front as a working ferry keeper figure, not a portrait, guiding the pace with a practical reef-sled ferry moored just offshore, and a few apprentices with differently colored translucent gill fans and distinct pebble-textured blue-green body markings. Keep inhabitants clearly non-human: low horizontal bodies, six jointed walking limbs braced on wet basalt and glass-coral, two delicate manipulator arms handling the resonator, broad mirrored eyes, flexible tail rudders, shell-bell throat sacs, and gill fans pulsing soft teal and saffron. Lensleaf banners and translucent rain awnings drip pearl spray above the procession; saffron float pods and teal reed fans edge the quay; a shell-bell signal tower and buoyant glass-coral pontoons appear in the mid-distance with the corrected dawn bells in phase. Use naturalistic camera language: 35mm documentary lens, shallow but readable depth of field, wet material detail, tactile shell-ceramic wear, copper corrosion highlights, glass-coral translucency, atmospheric rain mist, and dense lived-in environmental clutter. No humans, no mermaids, no mushrooms, no cyberpunk neon, no medieval fantasy, no brand logos, no readable text, no cinematic hero pose, no prompt card or instructional layout.\n\nReusable template: Show a non-human procession across wet glass-coral footbridges with shell-bell instruments, lensleaf banners, young tide engineers, and turquoise dawn caustics in [WEEKLY_WORLD], advancing [STORY_BEAT] with [CHARACTER_FOCUS] and practical [TRANSIT_TOOL] continuity props.\n\nWhat this changes/emphasizes: serial alien-world continuity through a lived-in dawn procession and repaired resonator, not a generic scenic vista.\n\nExample substitution: [WEEKLY_WORLD]=Lumenreef Causeway; [STORY_BEAT]=the repaired resonator returns the shell-bell rhythm; [CHARACTER_FOCUS]=Nali and apprentices; [TRANSIT_TOOL]=reef-sled ferry.",
+    "image": "images/2026-07-12-weekly-world-image-lumenreef-causeway-dawn-bell-procession.jpg",
+    "thumb": "thumbs/2026-07-12-weekly-world-image-lumenreef-causeway-dawn-bell-procession.webp",
+    "color": "#4d5a5f",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world-image",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago where buoyant glass-coral reefs, living lens leaves, and many-limbed tide engineers build settlements along glowing shallow causeways that appear and vanish with the sky tide.",
+      "continuity": "Preserves Lumenreef Causeway turquoise shelf seas, black basalt islets, buoyant glass-coral causeways, shell-bell timing network, lensleaf rain awnings, reef-sled ferries, and low horizontal amphibious tide engineers with gill fans and shell-bell throat sacs.",
+      "entryDescription": "Nali and apprentices lead a dawn procession through Prism Quay carrying the repaired resonator as the corrected shell-bell rhythm returns."
+    }
   }
 ]
