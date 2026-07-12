@@ -308,6 +308,22 @@ const browser = await chromium.launch({
     JSON.stringify({ h: fr?.hydrants, m: fr?.meters, b: fr?.benches, c: fr?.cans }),
   );
 
+  // zoom-detail item 14: steam vents activate near the camera
+  const steamSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const st = deb.detailReport().steam;
+    if (!st.sample?.[0]) return { spots: st.spots, activated: 0 };
+    const sp = st.sample[0];
+    deb.setRoamPos(sp.x - 10, sp.z + 10, 0, 0);
+    let act = 0;
+    for (let i = 0; i < 30 && !act; i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      act = deb.detailReport().steam.active;
+    }
+    return { spots: st.spots, activated: act };
+  });
+  check("steam: vents seeded and activate up close", steamSeq.spots >= 6 && steamSeq.activated > 0, JSON.stringify(steamSeq));
+
   // zoom-detail item 13: birds spawn, scatter on approach, then despawn
   const birdSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;

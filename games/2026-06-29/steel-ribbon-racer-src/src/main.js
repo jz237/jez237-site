@@ -2447,6 +2447,92 @@ const birdSys = {
     }
   },
 };
+// ─── Steam grates (zoom-detail item 14 / backlog 15): ~12 vent spots seeded
+// along the curbs; the nearest 3 within 55m show a dark grate disc and a rising
+// column of soft steam puffs (pooled sprites, cycling y/scale/opacity). Nothing
+// renders when no vent is near — freeze-safe.
+const steamSys = {
+  spots: [],
+  vents: null,
+  active: 0,
+  PUFFS: 5,
+  _timer: 0,
+  ensure() {
+    if (this.vents) return;
+    const cv = document.createElement("canvas");
+    ((cv.width = 64), (cv.height = 64));
+    const g = cv.getContext("2d"),
+      grad = g.createRadialGradient(32, 32, 4, 32, 32, 30);
+    (grad.addColorStop(0, "rgba(235,240,245,0.55)"), grad.addColorStop(0.6, "rgba(225,232,240,0.22)"), grad.addColorStop(1, "rgba(220,228,238,0)"));
+    ((g.fillStyle = grad), g.fillRect(0, 0, 64, 64));
+    const tex = new CanvasTexture(cv);
+    tex.colorSpace = SRGBColorSpace;
+    const { opaque } = vcMats();
+    const grateGeo = mergeGeometries(
+      [
+        vcBake(new CylinderGeometry(0.44, 0.44, 0.025, 10), vcAt(0, 0.012, 0), 1512727),
+        vcBake(new CylinderGeometry(0.34, 0.34, 0.03, 10), vcAt(0, 0.016, 0), 3158322),
+      ],
+      !1,
+    );
+    this.vents = [];
+    const n = mobilePerf ? 2 : 3;
+    for (let v = 0; v < n; v++) {
+      const grate = new Mesh(grateGeo, opaque);
+      ((grate.visible = !1), (grate.castShadow = !1), (grate.receiveShadow = !0), et.add(grate));
+      const puffs = [];
+      for (let k = 0; k < this.PUFFS; k++) {
+        const sp = new Sprite(new SpriteMaterial({ map: tex, transparent: !0, depthWrite: !1, opacity: 0 }));
+        ((sp.visible = !1), (sp.renderOrder = 4), et.add(sp), puffs.push(sp));
+      }
+      this.vents.push({ grate, puffs, spot: null, ph: v * 0.37 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer <= 0) {
+      this._timer = 0.5;
+      this.ensure();
+      const cx = Xe.position.x,
+        cz = Xe.position.z,
+        R2 = 55 * 55,
+        cand = [];
+      for (const s of this.spots) {
+        const dx = s.x - cx,
+          dz = s.z - cz,
+          d2 = dx * dx + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+      cand.sort((a, b) => a.d2 - b.d2);
+      this.active = 0;
+      for (let v = 0; v < this.vents.length; v++) {
+        const vent = this.vents[v],
+          s = cand[v]?.s ?? null;
+        vent.spot = s;
+        if (s) {
+          (vent.grate.position.set(s.x, s.y + 0.01, s.z), (vent.grate.visible = !0), this.active++);
+          for (const sp of vent.puffs) sp.visible = !0;
+        } else {
+          vent.grate.visible = !1;
+          for (const sp of vent.puffs) sp.visible = !1;
+        }
+      }
+    }
+    if (!this.vents) return;
+    for (const vent of this.vents) {
+      if (!vent.spot) continue;
+      for (let k = 0; k < vent.puffs.length; k++) {
+        const p = ((t * 0.32 + vent.ph + k / this.PUFFS) % 1 + 1) % 1,
+          sp = vent.puffs[k];
+        sp.position.set(vent.spot.x + Math.sin(t * 0.8 + k * 2.1) * 0.22 * p, vent.spot.y + 0.25 + p * 2.6, vent.spot.z + Math.cos(t * 0.7 + k * 1.7) * 0.2 * p);
+        const sc = 0.55 + p * 1.9;
+        sp.scale.set(sc, sc, 1);
+        sp.material.opacity = (p < 0.1 ? p / 0.1 : 1 - (p - 0.1) / 0.9) * 0.42;
+      }
+    }
+  },
+};
 const PED_KIT_RADIUS = 40;
 // Fictional, family-friendly two-bubble chats shown on texting pedestrians'
 // phone screens (one per kit, drawn into a single shared atlas).
@@ -2955,6 +3041,21 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
   };
   for (let x = x0; x <= x1 + 1; x += pitch) placeAlong(!0, Math.round(x));
   for (let z = zHigh; z >= zLow - 1; z -= pitch) placeAlong(!1, Math.round(z));
+  // steam vent spots: on the road edge near the curb, sparse and seeded
+  steamSys.spots.length = 0;
+  const vrng = plateRng(0x57ea0);
+  for (let i = 0; i < 90 && steamSys.spots.length < 12; i++) {
+    const isNS = vrng() < 0.5,
+      lines = isNS ? Math.floor((x1 - x0) / pitch) : Math.floor((zHigh - zLow) / pitch),
+      line = (isNS ? x0 : zHigh) + (isNS ? 1 : -1) * pitch * (1 + ((vrng() * (lines - 1)) | 0)),
+      along = (isNS ? zLow : x0) + 30 + vrng() * ((isNS ? zHigh - zLow : x1 - x0) - 60),
+      side = vrng() < 0.5 ? -1 : 1,
+      off = side * (sw * 0.5 - 0.9),
+      px = isNS ? line + off : along,
+      pz = isNS ? along : line + off;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    steamSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.02).toFixed(2), z: +pz.toFixed(1) });
+  }
   for (const d of defs) {
     const im = meshes[d.key];
     ((im.count = im.userData.used), (im.instanceMatrix.needsUpdate = !0), (furnitureSys.counts[d.key] = im.userData.used));
@@ -3415,6 +3516,7 @@ function F1(i, e, t) {
       pedKitSys.update(ye);
       storefrontSys.update(ye);
       birdSys.update(I, ye);
+      steamSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -9235,6 +9337,7 @@ window.__steelRibbonDebug = {
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
+      steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       crowd: {
         stands: crowdSys.stands.length,
         promoted: crowdSys.active >= 0 ? 1 : 0,

@@ -381,3 +381,22 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   compose rotY×rotZ matrices instead. Verified by looking
   (`loop-shots/13-birds/`): pecking cluster + mid-scatter flutter around the
   car both read clearly. Smoke probe covers spawn→peck→scatter.
+- **14 steam grates — backlog item 15 (2026-07-12)**: 12 vent spots seeded along
+  the curbs (in buildStreetFurniture where street math + clearance live); the
+  nearest 3 within 55m (2 mobile) show a dark grate disc + a column of 5 pooled
+  steam sprites cycling rise/expand/fade with a little drift. Radial-gradient
+  puff canvas, SpriteMaterial depthWrite:false renderOrder 4, opacity ≤0.42 —
+  wispy dusk ambience, not fog. Nothing renders when no vent is near.
+  detailReport().steam {spots,active,sample} + smoke probe. Verified by looking
+  (`loop-shots/14-steam/`): grate-2m shot shows the disc + rising puff; the
+  ground-haze reading at distance is intentional. REMINDER THAT BIT AGAIN:
+  teleport the player PERPENDICULAR to the shot axis (first framing had the
+  parked player car filling the lens). VISUAL BACKLOG NOW >80% COMPLETE →
+  ambient audio (item 20) is UNLOCKED for a future iteration.
+- **LOOP PAUSED BY USER (2026-07-12, after item 14 steam grates)**: "finish up
+  for now" — iteration 14 committed on green smoke, loop stopped cleanly.
+  Nothing half-shipped. To resume: re-run the /loop prompt (see memory
+  steel-ribbon-detail-loop); next up per re-rank = 16 parked-car variety or
+  20 ambient audio (unlocked), then 13-blimp, 17, 18, 18b, 19, and the
+  freeze-sensitive pair 4b/11 after real-FPS renegotiation. Deploy batch 4
+  (~v3.11.0, items 13-14+) still pending — do it early next session.
