@@ -2429,13 +2429,39 @@ const pedKitSys = {
       // aimed at the head so it reads over the shoulder
       phone.position.set(0.34, 1.47, -0.36);
       phone.quaternion.setFromUnitVectors(new Vector3(0, 0, 1), new Vector3(-0.34, 0.55, 0.36).normalize());
-      const kit = { face, handL, handR, shoeL, shoeR, phone, texting: !1, ped: null };
-      for (const part of [face, handL, handR, shoeL, shoeR, phone, phoneBody, screen])
+      // item 3b props: a paper shopping bag that hangs from the left arm and a
+      // coffee cup held at the hand — one per kit, colored by kit index
+      const bagTone = [10120994, 13391656, 4886754, 11893070, 5987163, 12744766, 8355711, 14192963][k % 8],
+        bag = new Mesh(
+          mergeGeometries(
+            [
+              vcBake(new BoxGeometry(0.26, 0.32, 0.15), vcAt(0, -0.62, 0), bagTone),
+              vcBake(new BoxGeometry(0.02, 0.16, 0.02), vcAt(-0.09, -0.4, 0), 3355443),
+              vcBake(new BoxGeometry(0.02, 0.16, 0.02), vcAt(0.09, -0.4, 0), 3355443),
+            ],
+            !1,
+          ),
+          opaque,
+        ),
+        sleeveTone = [7952694, 3116150, 10702874, 5122622][k % 4],
+        cup = new Mesh(
+          mergeGeometries(
+            [
+              vcBake(new CylinderGeometry(0.056, 0.048, 0.15, 8), vcAt(0, -0.4, 0), 16447738),
+              vcBake(new CylinderGeometry(0.06, 0.06, 0.06, 8), vcAt(0, -0.405, 0), sleeveTone),
+              vcBake(new CylinderGeometry(0.058, 0.058, 0.016, 8), vcAt(0, -0.318, 0), 6902849),
+            ],
+            !1,
+          ),
+          opaque,
+        );
+      const kit = { face, handL, handR, shoeL, shoeR, phone, bag, cup, prop: null, texting: !1, ped: null };
+      for (const part of [face, handL, handR, shoeL, shoeR, phone, phoneBody, screen, bag, cup])
         ((part.userData.kitPart = !0), (part.castShadow = !1), (part.receiveShadow = !0));
       this.kits.push(kit);
     }
   },
-  attach(kit, actor, texting) {
+  attach(kit, actor, prop) {
     const g = actor.mesh,
       limbs = g.userData.limbs || [];
     (g.add(kit.face),
@@ -2443,13 +2469,16 @@ const pedKitSys = {
       limbs[1]?.mesh.add(kit.shoeR),
       limbs[2]?.mesh.add(kit.handL),
       limbs[3]?.mesh.add(kit.handR),
-      (kit.texting = !!texting),
+      (kit.prop = prop),
+      (kit.texting = prop === "text"),
       kit.texting && g.add(kit.phone),
+      prop === "bag" && limbs[2]?.mesh.add(kit.bag),
+      prop === "cup" && limbs[2]?.mesh.add(kit.cup),
       (kit.ped = actor));
   },
   detach(kit) {
-    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR, kit.phone]) part.removeFromParent();
-    ((kit.ped = null), (kit.texting = !1));
+    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR, kit.phone, kit.bag, kit.cup]) part.removeFromParent();
+    ((kit.ped = null), (kit.texting = !1), (kit.prop = null));
   },
   reset() {
     if (this.kits) for (const k of this.kits) k.ped && this.detach(k);
@@ -2495,7 +2524,7 @@ const pedKitSys = {
       const k = this.kits[w.idx % this.pool];
       if (k.ped === w.a) continue;
       if (k.ped && wantSet.has(k.ped)) continue; // kit busy with an equally-near ped
-      (k.ped && this.detach(k), this.attach(k, w.a, w.idx % 3 === 0));
+      (k.ped && this.detach(k), this.attach(k, w.a, ["text", "bag", "cup"][w.idx % 3]));
     }
   },
 };
@@ -9096,12 +9125,14 @@ window.__steelRibbonDebug = {
         pool: pedKitSys.pool,
         promoted: pedKitSys.promotedCount(),
         texting: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.texting ? 1 : 0), 0),
+        bags: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "bag" ? 1 : 0), 0),
+        cups: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "cup" ? 1 : 0), 0),
         radius: PED_KIT_RADIUS,
         sample: (pedKitSys.kits || [])
           .filter((k) => k.ped)
           .slice(0, 3)
           .map((k) => {
-            const o = { x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir, t: k.texting ? 1 : 0 };
+            const o = { x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir, t: k.texting ? 1 : 0, p: k.prop };
             if (k.texting) {
               const pv = k.phone.getWorldPosition(new Vector3());
               o.phone = { x: +pv.x.toFixed(2), y: +pv.y.toFixed(2), z: +pv.z.toFixed(2) };
