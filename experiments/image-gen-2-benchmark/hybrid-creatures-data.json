@@ -746,5 +746,45 @@
       "description": "A fictional secretary bird plus flamboyant cuttlefish salt-marsh reed-walker photographed in storm-lit tidal reeds with stilt legs, quill crest, hooked beak, W-shaped eyes, chromatophore mantle cloak, and mud-probing arm fringe.",
       "continuity": "Same adult phenotype across both images: knee-high salt-marsh reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and short mud-probing arm fringe."
     }
+  },
+  {
+    "id": "2026-07-12-hybrid-creature-infographic-mooncurrent-ribbonwing-developm",
+    "title": "Mooncurrent Ribbonwing: Development Map",
+    "tests": "two-source trait continuity; colorful photorealistic infographic; six-plus information layers; fictional non-actionable biology",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for the fictional Mooncurrent Ribbonwing, combining exactly electric eel + luna moth. On a humid freshwater field-station bench, include an explicit source-trait map; aquatic larva-to-winged-adult stage strip; large side-profile adult specimen with a limbless charcoal eel body, paddle tail, four pale mint luna-moth wing panels, feathery antennae, crescent eyespots, and trailing wing tails; macro skin, pore, wing-scale, antenna, eyespot, and membrane windows; blackwater/cypress habitat swatches; field scale vignette; and aquatic-fold versus surface-glide comparison. Keep labels concise, colorful, photorealistic, clearly fictional, and non-actionable, with no real genetics, protocols, surgery, or gore. Reusable fill-in-the-blank template: Create a colorful photorealistic development-map infographic for [HYBRID_NAME], combining exactly [SOURCE_A] + [SOURCE_B]. Include a non-actionable source-trait map, juvenile-to-adult stage strip, adult anatomy/specimen panel, macro texture/color panels, habitat swatches, a field-context scale vignette, and a locomotion comparison, visibly preserving at least two traits from each source. Then create a matching field photo of the same adult phenotype in [HABITAT].",
+    "image": "images/2026-07-12-hybrid-creature-infographic-mooncurrent-ribbonwing-developm.jpg",
+    "thumb": "thumbs/2026-07-12-hybrid-creature-infographic-mooncurrent-ribbonwing-developm.webp",
+    "color": "#262b26",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Mooncurrent Ribbonwing",
+      "imageKind": "infographic",
+      "description": "A fictional electric eel and luna moth hybrid whose paired moth wings serve as aquatic stabilizers before brief moonlit surface glides.",
+      "continuity": "Same limbless charcoal eel body, paddle tail, four mint-green crescent-marked wings, feathery antennae, and blackwater cypress habitat in both images."
+    }
+  },
+  {
+    "id": "2026-07-12-hybrid-creature-wild-mooncurrent-ribbonwing-in-the-wild",
+    "title": "Mooncurrent Ribbonwing: In the Wild",
+    "tests": "exact phenotype continuity with development map; eel and luna moth traits visible; natural-history field photography; no text",
+    "prompt": "Create a matching square photorealistic in-the-wild documentary photo of the adult Mooncurrent Ribbonwing, a fictional hybrid combining exactly electric eel + luna moth, making a brief shallow glide through a moonlit tannin-black cypress swamp. Preserve the development-map phenotype: waist-long limbless muscular charcoal eel body, smooth wet pore-dotted skin, blunt head, paddle tail, four broad mint-green luna-moth wings with translucent veins, powdery scales, crescent eyespots and long trailing tips, plus feathery antennae. Show a low strict side profile between flooded cypress knees with duckweed, amber reflections, moss, mist, leaf litter, and ripples. No text, people, lab, gore, costume, dragon, or single-source result. Reusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues in [HABITAT]. Avoid text, gore, lab context, and any result that reads as a costume or pure single-source animal.",
+    "image": "images/2026-07-12-hybrid-creature-wild-mooncurrent-ribbonwing-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-12-hybrid-creature-wild-mooncurrent-ribbonwing-in-the-wild.webp",
+    "color": "#2a2b27",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Mooncurrent Ribbonwing",
+      "imageKind": "wild",
+      "description": "The adult hybrid glides just above a tannin-black flooded cypress pool under moonlight.",
+      "continuity": "Same limbless charcoal eel body, paddle tail, four mint-green crescent-marked wings, feathery antennae, and blackwater cypress habitat in both images."
+    }
   }
 ]
