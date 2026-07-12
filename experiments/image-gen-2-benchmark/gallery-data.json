@@ -4843,5 +4843,19 @@
       "description": "The adult hybrid glides just above a tannin-black flooded cypress pool under moonlight.",
       "continuity": "Same limbless charcoal eel body, paddle tail, four mint-green crescent-marked wings, feathery antennae, and blackwater cypress habitat in both images."
     }
+  },
+  {
+    "id": "2026-07-12-miniature-diorama-miniature-kelp-lantern-ferry-depot",
+    "title": "Miniature Kelp-Lantern Ferry Depot",
+    "tests": "Tests miniature-scale legibility, tactile material realism, active narrative staging, water rendering, tilt-shift depth, and coherent dense detail.",
+    "prompt": "Create a finished macro photograph of an intricate 1:24 scale miniature diorama called the Kelp-Lantern Ferry Depot: a tiny working tidal ferry terminal inside a shallow glazed ceramic basin, with curved brass footbridges, translucent hand-cut resin kelp, amber seed-pod lanterns, walnut-shell passenger skiffs, sea-blue maintenance workers repairing a pulley winch, wet tide steps, salt crystals, beadwork barnacles, thread ropes, an open tool chest, and a cutaway pump beneath the dock. Use low-eye-level tilt-shift macro photography, warm lantern light against cool turquoise water, tactile handmade seams, and dense coherent detail; no readable signage or full-size harbor. Reusable prompt template: Create a finished macro photograph of an intricate [SCALE] miniature diorama called [PLACE NAME], built inside [UNEXPECTED CONTAINER OR SETTING], with [PRIMARY STRUCTURES], [HANDMADE NATURAL ELEMENTS], [TINY VEHICLES OR FIGURES] actively performing [VISIBLE TASK], plus [WEATHERED MATERIAL DETAILS] and a cutaway glimpse of [HIDDEN MECHANISM]. Use [CAMERA/FRAMING], [WARM/COOL LIGHTING CONTRAST], visible handmade scale cues, and dense coherent detail; avoid readable signage and full-size realism.",
+    "image": "images/2026-07-12-miniature-diorama-miniature-kelp-lantern-ferry-depot.jpg",
+    "thumb": "thumbs/2026-07-12-miniature-diorama-miniature-kelp-lantern-ferry-depot.webp",
+    "color": "#51452f",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
