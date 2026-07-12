@@ -149,6 +149,11 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   for ns-facing cars — shoot BOTH ends instead. detailReport().drivers + smoke
   probe (30 cars / 5 buses crewed). Police cars, stolen parked cars, and
   multiplayer ghosts are all I1-built → they inherit whatever I1 gains in 4b.
+- **DEPLOY BATCH 1 (2026-07-12): v3.8.0 LIVE** — items 01-04 deployed via
+  deploy_cloudflare_pages_site.sh from this worktree (clean @ origin/main),
+  verified at https://jez237-site.pages.dev/games/2026-06-29/steel-ribbon-racer/
+  (HTML references index-DrFzZ1cU.js, bundle 200). Note: the pages.dev ALIAS can
+  404 new assets for ~30s after deploy — retry before diagnosing.
 
 - **00 bootstrap (2026-07-12)**: survey only. Shot rig added (`tests/detail-shots.mjs`),
   baselines + backlog above. Shots in `loop-shots/00-bootstrap/`. No game code touched.
