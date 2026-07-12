@@ -300,6 +300,21 @@ const browser = await chromium.launch({
     JSON.stringify({ h: fr?.hydrants, m: fr?.meters, b: fr?.benches, c: fr?.cans }),
   );
 
+  // zoom-detail item 11: photo mode — orbit camera moves, exit restores control
+  const orbit = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    deb.photoMode(true);
+    ((window.__photoRig.yaw = 0), (window.__photoRig.radius = 12));
+    await new Promise((r) => setTimeout(r, 700));
+    const a = deb.photoMode(true).cam;
+    window.__photoRig.yaw = Math.PI;
+    await new Promise((r) => setTimeout(r, 700));
+    const b = deb.photoMode(true).cam;
+    const st = deb.photoMode(false);
+    return { moved: +Math.hypot(a.x - b.x, a.z - b.z).toFixed(1), active: st.active };
+  });
+  check("photo mode: orbit moves camera and exits clean", orbit.moved > 8 && orbit.active === false, JSON.stringify(orbit));
+
   // zoom-detail item 10: stadium crowd v2 — figures promote on the nearest stand
   const cr0 = await page.evaluate(() => window.__steelRibbonDebug.detailReport().crowd);
   check("crowd: grandstands registered", (cr0?.stands ?? 0) >= 1, `stands=${cr0?.stands}`);
