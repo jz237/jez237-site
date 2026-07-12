@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow,noarchive">
   <meta name="theme-color" content="#031b2a">
-  <title>Water Background Lab — The Hidden Reef</title>
+  <title>Water Background Lab - The Hidden Reef</title>
   <style>
     :root {
       color-scheme: dark;
@@ -37,6 +37,7 @@
     .water-photo,
     .water-depth,
     .surface-light,
+    #water-renderer,
     #bubbles {
       position: fixed;
       inset: 0;
@@ -51,6 +52,7 @@
     }
 
     .water-photo {
+      z-index: 0;
       opacity: 0;
       background-position: center top;
       background-size: cover;
@@ -80,6 +82,17 @@
     body.motion-on .water-photo {
       animation: water-drift 28s ease-in-out infinite alternate;
     }
+
+    #water-renderer {
+      z-index: 0;
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 500ms ease;
+    }
+
+    body.refractive-water #water-renderer { opacity: 1; }
+    body.refractive-water .water-photo { opacity: 0 !important; }
 
     @keyframes water-drift {
       from { transform: scale(1.035) translate3d(-.35%, -.15%, 0); }
@@ -433,6 +446,7 @@
     <div class="water-photo" data-water="reef"></div>
     <div class="water-photo" data-water="deep"></div>
     <div class="water-photo" data-water="pond"></div>
+    <canvas id="water-renderer"></canvas>
     <div class="water-depth"></div>
     <div class="surface-light"></div>
     <canvas id="bubbles"></canvas>
@@ -445,7 +459,7 @@
         <span class="lab-label">Water<br>Background Lab</span>
       </div>
       <div class="header-actions">
-        <button class="quiet-button" id="motion-toggle" type="button" aria-pressed="true">Pause motion</button>
+        <button class="quiet-button" id="motion-toggle" type="button" aria-pressed="true">Pause water</button>
       </div>
     </header>
 
@@ -471,15 +485,15 @@
       <div class="chooser" role="group" aria-label="Choose a water background">
         <button class="water-choice" type="button" data-select="reef" aria-pressed="true">
           <span class="water-swatch" aria-hidden="true"></span>
-          <span class="choice-copy"><strong>Clear Reef</strong><small>Bright and versatile</small></span>
+          <span class="choice-copy"><strong>Clear Reef</strong><small>Preferred - bright and versatile</small></span>
         </button>
         <button class="water-choice" type="button" data-select="deep" aria-pressed="false">
           <span class="water-swatch" aria-hidden="true"></span>
-          <span class="choice-copy"><strong>Deep Aquarium</strong><small>Dramatic and premium</small></span>
+          <span class="choice-copy"><strong>Deep Aquarium</strong><small>Preferred - dramatic and premium</small></span>
         </button>
         <button class="water-choice" type="button" data-select="pond" aria-pressed="false">
           <span class="water-swatch" aria-hidden="true"></span>
-          <span class="choice-copy"><strong>Sunlit Pond</strong><small>Natural and warm</small></span>
+          <span class="choice-copy"><strong>Sunlit Pond</strong><small>Comparison - natural and warm</small></span>
         </button>
       </div>
       <p class="status-note"><strong>Concept page only.</strong><br>The current website background has not been changed.</p>
@@ -491,11 +505,11 @@
       const modes = {
         reef: {
           kicker: "Clear reef water",
-          description: "Bright, clean and welcoming. This direction gives the storefront an immediate underwater feeling without competing with the content."
+          description: "Bright, clean and welcoming. Moving refraction now bends the surface and light continuously, so the page reads as water instead of a still photograph."
         },
         deep: {
           kicker: "Deep aquarium water",
-          description: "Darker, quieter and more cinematic. This version makes photography and glass panels feel especially polished while preserving strong contrast."
+          description: "Darker, quieter and more cinematic. Slower refractive currents give this option real depth while preserving strong contrast behind the content."
         },
         pond: {
           kicker: "Sunlit pond water",
@@ -509,6 +523,7 @@
       const motionToggle = document.getElementById("motion-toggle");
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
       let motionEnabled = !prefersReducedMotion.matches;
+      let waterRenderer = null;
 
       function setMode(mode, updateUrl = true) {
         if (!modes[mode]) return;
@@ -516,13 +531,14 @@
         kicker.textContent = modes[mode].kicker;
         description.textContent = modes[mode].description;
         buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.select === mode)));
+        waterRenderer?.setMode(mode);
         if (updateUrl) history.replaceState(null, "", `?water=${mode}`);
       }
 
       function syncMotion() {
         document.body.classList.toggle("motion-on", motionEnabled);
         motionToggle.setAttribute("aria-pressed", String(motionEnabled));
-        motionToggle.textContent = motionEnabled ? "Pause motion" : "Play motion";
+        motionToggle.textContent = motionEnabled ? "Pause water" : "Play water";
       }
 
       buttons.forEach((button) => button.addEventListener("click", () => setMode(button.dataset.select)));
@@ -530,15 +546,186 @@
       prefersReducedMotion.addEventListener?.("change", (event) => { motionEnabled = !event.matches; syncMotion(); });
 
       const initialMode = new URLSearchParams(location.search).get("water");
-      if (modes[initialMode]) setMode(initialMode, false);
+      setMode(modes[initialMode] ? initialMode : "reef", false);
       syncMotion();
 
-      const preload = () => [
-        "../assets/water-lab/clear-reef-water-gpt-image-2.webp",
-        "../assets/water-lab/deep-aquarium-water-gpt-image-2.webp",
-        "../assets/water-lab/sunlit-pond-water-gpt-image-2.webp"
-      ].forEach((src) => { const image = new Image(); image.src = src; });
-      (window.requestIdleCallback || window.setTimeout)(preload, 600);
+      function createWaterRenderer() {
+        const rendererCanvas = document.getElementById("water-renderer");
+        const gl = rendererCanvas.getContext("webgl", {
+          alpha: false,
+          antialias: false,
+          depth: false,
+          powerPreference: "high-performance"
+        });
+        if (!gl) return null;
+
+        const vertexSource = `
+          attribute vec2 aPosition;
+          varying vec2 vUv;
+          void main() {
+            vUv = aPosition * .5 + .5;
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+          }
+        `;
+
+        const fragmentSource = `
+          precision highp float;
+          varying vec2 vUv;
+          uniform sampler2D uTexture;
+          uniform vec2 uResolution;
+          uniform vec2 uImageSize;
+          uniform float uTime;
+          uniform float uIntensity;
+
+          vec2 coverUv(vec2 screenUv) {
+            vec2 ratio = uResolution / uImageSize;
+            float scale = max(ratio.x, ratio.y);
+            vec2 visible = uResolution / (uImageSize * scale);
+            return (screenUv - .5) * visible + .5;
+          }
+
+          void main() {
+            float surface = smoothstep(.12, 1.04, vUv.y);
+            float broadX = sin(vUv.y * 19.0 + uTime * .82)
+              + .52 * sin(vUv.y * 47.0 - uTime * 1.12)
+              + .28 * sin((vUv.x + vUv.y) * 31.0 + uTime * .66);
+            float broadY = sin(vUv.x * 17.0 - uTime * .58)
+              + .44 * sin(vUv.x * 38.0 + uTime * .91)
+              + .22 * sin((vUv.x - vUv.y) * 53.0 - uTime * .48);
+            float amplitude = mix(.0015, .0074, surface) * uIntensity;
+            vec2 distortion = vec2(broadX, broadY) * amplitude;
+            vec2 sampleUv = clamp(coverUv(vUv + distortion), .002, .998);
+            vec3 color = texture2D(uTexture, sampleUv).rgb;
+
+            float slowLight = sin(vUv.x * 12.0 + vUv.y * 15.0 + uTime * .54)
+              + .55 * sin(vUv.x * 27.0 - vUv.y * 10.0 - uTime * .43);
+            color += slowLight * .0085 * uIntensity * (.34 + surface * .66);
+            gl_FragColor = vec4(color, 1.0);
+          }
+        `;
+
+        function compile(type, source) {
+          const shader = gl.createShader(type);
+          gl.shaderSource(shader, source);
+          gl.compileShader(shader);
+          if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            throw new Error(gl.getShaderInfoLog(shader) || "Water shader failed to compile.");
+          }
+          return shader;
+        }
+
+        let program;
+        try {
+          program = gl.createProgram();
+          gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+          gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+          gl.linkProgram(program);
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+        } catch (error) {
+          console.warn(error);
+          return null;
+        }
+
+        gl.useProgram(program);
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+          -1, -1, 1, -1, -1, 1,
+          -1, 1, 1, -1, 1, 1
+        ]), gl.STATIC_DRAW);
+        const position = gl.getAttribLocation(program, "aPosition");
+        gl.enableVertexAttribArray(position);
+        gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+        const uniforms = {
+          resolution: gl.getUniformLocation(program, "uResolution"),
+          imageSize: gl.getUniformLocation(program, "uImageSize"),
+          time: gl.getUniformLocation(program, "uTime"),
+          intensity: gl.getUniformLocation(program, "uIntensity")
+        };
+
+        const texture = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.uniform1i(gl.getUniformLocation(program, "uTexture"), 0);
+
+        const sources = {
+          reef: "../assets/water-lab/clear-reef-water-gpt-image-2.webp",
+          deep: "../assets/water-lab/deep-aquarium-water-gpt-image-2.webp",
+          pond: "../assets/water-lab/sunlit-pond-water-gpt-image-2.webp"
+        };
+        const intensities = { reef: 1, deep: .72, pond: .84 };
+        const loadedImages = {};
+        let imageWidth = 1;
+        let imageHeight = 1;
+        let elapsedTime = 0;
+        let previousFrame = performance.now();
+
+        function upload(mode) {
+          const image = loadedImages[mode];
+          if (!image || document.body.dataset.water !== mode) return;
+          gl.bindTexture(gl.TEXTURE_2D, texture);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+          imageWidth = image.naturalWidth;
+          imageHeight = image.naturalHeight;
+          gl.uniform1f(uniforms.intensity, intensities[mode]);
+          rendererCanvas.dataset.waterRenderer = "active";
+          document.body.classList.add("refractive-water");
+        }
+
+        function setRendererMode(mode) {
+          if (loadedImages[mode]) {
+            upload(mode);
+            return;
+          }
+          const image = new Image();
+          image.decoding = "async";
+          image.onload = () => { loadedImages[mode] = image; upload(mode); };
+          image.src = sources[mode];
+        }
+
+        Object.keys(sources).forEach((mode) => {
+          if (mode === document.body.dataset.water) return;
+          const image = new Image();
+          image.decoding = "async";
+          image.onload = () => { loadedImages[mode] = image; };
+          image.src = sources[mode];
+        });
+
+        function resizeRenderer() {
+          const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+          const nextWidth = Math.round(innerWidth * ratio);
+          const nextHeight = Math.round(innerHeight * ratio);
+          if (rendererCanvas.width !== nextWidth || rendererCanvas.height !== nextHeight) {
+            rendererCanvas.width = nextWidth;
+            rendererCanvas.height = nextHeight;
+            gl.viewport(0, 0, nextWidth, nextHeight);
+          }
+        }
+
+        function render(frameTime) {
+          resizeRenderer();
+          const delta = Math.min((frameTime - previousFrame) / 1000, .05);
+          previousFrame = frameTime;
+          if (motionEnabled) elapsedTime += delta;
+          gl.uniform2f(uniforms.resolution, rendererCanvas.width, rendererCanvas.height);
+          gl.uniform2f(uniforms.imageSize, imageWidth, imageHeight);
+          gl.uniform1f(uniforms.time, elapsedTime);
+          gl.drawArrays(gl.TRIANGLES, 0, 6);
+          requestAnimationFrame(render);
+        }
+
+        setRendererMode(document.body.dataset.water);
+        requestAnimationFrame(render);
+        return { setMode: setRendererMode };
+      }
+
+      waterRenderer = createWaterRenderer();
 
       const canvas = document.getElementById("bubbles");
       const context = canvas.getContext("2d");
@@ -546,6 +733,7 @@
       let height = 0;
       let bubbles = [];
       let lastTime = performance.now();
+      let bubbleTime = lastTime;
 
       function makeBubble(randomY = true) {
         const radius = 2 + Math.random() * 10;
@@ -600,11 +788,12 @@
       function animate(time) {
         const elapsed = Math.min((time - lastTime) / 1000, .05);
         lastTime = time;
+        if (motionEnabled) bubbleTime += elapsed * 1000;
         context.clearRect(0, 0, width, height);
         bubbles.forEach((bubble, index) => {
           if (motionEnabled) bubble.y -= bubble.speed * elapsed;
           if (bubble.y < -bubble.radius * 2) bubbles[index] = makeBubble(false);
-          drawBubble(bubble, time);
+          drawBubble(bubble, bubbleTime);
         });
         requestAnimationFrame(animate);
       }
