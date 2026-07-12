@@ -274,7 +274,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v2.1.0'; // v2.1: THE LIVING REEF — a fourth era. Coral gardens take root beside the vents and ACCRETE in real time, one branch every ~2 seconds: colonies fork upward toward the light, old branches thicken with age, and the youngest growth glows with pulsing polyps. The world now visibly BUILDS itself the longer it runs. (v2.0 deep time: drifters/scavengers/abyssal hunter; v1.10 god-rays; v1.9 depth of field; v1.8 volumetric depth.)
+const VERSION = 'v2.2.0'; // v2.2: THE CHAINED ONES — a fifth era. Siphonophores: colonial drifters, a chain of twelve glowing zooids crossing the middle water with bioluminescent pulses running down the colony. They strain FALLING detritus before it reaches the floor (what lands belongs to the scavengers) — the last gap in the nutrient cycle, closed. (v2.1 living reef; v2.0 deep time: drifters/scavengers/abyssal hunter; v1.10 god-rays; v1.9 depth of field; v1.8 volumetric depth.)
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -793,6 +793,7 @@ function step(dt){
   updateScavs(dt);
   updateAbyss(dt);
   updateCoral(dt);
+  updateSiphs(dt);
 
   // history sampling
   histAcc+=dt;
@@ -1135,6 +1136,7 @@ const ERAS=[
   {key:'scavengers', day:4, gen:20, evt:'era_scavengers', glyph:'✜', chron:'the cleansing — scavengers walk the floor, and the dead feed the bloom'},
   {key:'abyss',      day:7, gen:32, evt:'era_abyss',      glyph:'◆', chron:'the deep hunger — something patient hunts up from the dark'},
   {key:'reef',       day:10, gen:45, evt:'era_reef',      glyph:'✿', chron:'the living reef — coral gardens take root beside the vents'},
+  {key:'chains',     day:14, gen:60, evt:'era_chains',    glyph:'❋', chron:'the chained ones — a colony of many, drifting as one'},
 ];
 let eraLevel=0, eraSavedLevel=0, eraAcc=0;
 function loadWorldAge(){ try{ eraSavedLevel=(JSON.parse(localStorage.getItem('primordia_age_v1')||'{}').era|0)||0; }catch(e){} }
@@ -1157,6 +1159,8 @@ function unlockEra(i,announce){
     for(let k=0;k<3;k++) spawnScav(cx+rrange(-90,90), CFG.H-rrange(18,70), null); }
   else if(e.key==='abyss'){ ABY.cooldown=rrange(15,35); cx=CFG.W/2; cy=CFG.H*0.62; }
   else if(e.key==='reef'){ seedReef(); if(CORAL.colonies.length){ cx=CORAL.colonies[0].x; cy=CFG.H-60; } }
+  else if(e.key==='chains'){ const s=spawnSiph(); siphCooldown=rrange(60,140);
+    if(s){ cx=clamp(s.x,100,CFG.W-100); cy=s.y; } }
   if(announce){ narrate(e.evt,null); logChronicle(e.chron,e.glyph);
     interest.push({x:cx,y:cy,w:16,t:simTime}); }
   ensureEraRows();
@@ -1414,6 +1418,93 @@ function drawAbyss(){
     glow(lx,ly, L*0.22*(0.6+0.4*Math.sin(ABY.phase*3.1))*(0.5+ABY.lure), -1, 0.95*ABY.lure*da);
     ctx.globalCompositeOperation='source-over'; }
   ctx.globalAlpha=1;
+}
+
+/* ---- the chained ones (siphonophores): colonial drifters — a chain of glowing
+   zooids crossing the mid-water, catching FALLING detritus before it reaches the
+   floor (the scavengers keep what lands). Bioluminescent pulses run down the chain. */
+const SIPHMAX=2, SIPHSEG=12;
+const siphs=[];
+for(let i=0;i<SIPHMAX;i++)siphs.push({alive:false,x:0,y:0,z:0.5,vx:0,vy:0,phase:0,wave:0,energy:0,age:0,maxage:300,hue:185,dir:1,entered:false,
+  sx:new Float32Array(SIPHSEG), sy:new Float32Array(SIPHSEG)});
+let siphCooldown=30;
+function siphCount(){ let n=0; for(const s of siphs)if(s.alive)n++; return n; }
+function spawnSiph(){
+  for(const s of siphs){ if(s.alive)continue;
+    s.alive=true;
+    const fromLeft=rnd()<0.5;
+    s.dir=fromLeft?1:-1;
+    s.x=fromLeft?-40:CFG.W+40; s.y=rrange(CFG.H*0.2,CFG.H*0.6);
+    s.vx=s.dir*9; s.vy=0;
+    s.z=rrange(0.3,0.75); s.hue=rrange(170,210);
+    s.phase=rnd()*TAU; s.wave=rrange(0,SIPHSEG); s.energy=70; s.age=0; s.maxage=rrange(240,420);
+    s.entered=false;
+    for(let i=0;i<SIPHSEG;i++){ s.sx[i]=s.x-s.dir*i*11; s.sy[i]=s.y; }
+    return s; }
+  return null;
+}
+function updateSiphs(dt){
+  if(eraLevel<5)return;
+  siphCooldown-=dt;
+  if(siphCooldown<=0 && siphCount()<SIPHMAX){ spawnSiph(); siphCooldown=rrange(70,150); }
+  for(const s of siphs){ if(!s.alive)continue;
+    s.age+=dt; s.phase+=dt*1.3; s.wave+=dt*6;
+    const fa=flowAngle(s.x,s.y,simTime);
+    if(!s.entered && s.x>110 && s.x<CFG.W-110) s.entered=true;
+    const push=s.entered?2.5:9;                       // shove hard until it's truly inside
+    s.vx+=Math.cos(fa)*5*dt + s.dir*push*dt;          // keeps crossing the world
+    s.vy+=Math.sin(fa)*3*dt + Math.sin(s.phase)*4*dt;
+    const dmp=Math.pow(0.5,dt/1.4); s.vx*=dmp; s.vy*=dmp;
+    s.x+=s.vx*dt; s.y+=s.vy*dt;
+    s.y=clamp(s.y,70,CFG.H-70);
+    s.sx[0]=s.x; s.sy[0]=s.y;                         // the head leads; the colony follows
+    for(let i=1;i<SIPHSEG;i++){
+      const dx=s.sx[i]-s.sx[i-1], dy=s.sy[i]-s.sy[i-1], d=Math.hypot(dx,dy)||1;
+      const f=(d-11)/d;
+      s.sx[i]-=dx*f; s.sy[i]-=dy*f;
+    }
+    // strain falling detritus from the middle water
+    for(let k=detritus.length-1;k>=0;k--){ const d=detritus[k];
+      if(d.y>CFG.H*0.75)continue;
+      const hx=d.x-s.x, hy=d.y-s.y;
+      if(hx*hx+hy*hy<150*150){
+        for(let i=0;i<SIPHSEG;i++){ const ex=d.x-s.sx[i], ey=d.y-s.sy[i];
+          if(ex*ex+ey*ey<15*15){ detritus.splice(k,1);
+            s.energy=Math.min(120,s.energy+10); s.wave=0;   // a pulse of light runs the chain
+            break; } }
+      }
+    }
+    s.energy-=dt*0.8;
+    if(s.energy<=0 || s.age>s.maxage || (s.entered && (s.x<-90 || s.x>CFG.W+90))){
+      s.alive=false;
+      for(let i=0;i<SIPHSEG;i+=2)
+        spawnParticle(s.sx[i],s.sy[i],rrange(-8,8),rrange(-8,8), s.hue, rrange(1.2,1.7), i<2?2:0);
+    }
+  }
+}
+function drawSiphs(){
+  if(eraLevel<5)return;
+  for(const s of siphs){ if(!s.alive)continue;
+    const ds=dScale(s.z), da=dAlpha(s.z), hz=dHue(s.hue,s.z), df=defocus(s.z);
+    ctx.globalCompositeOperation='lighter';
+    ctx.globalAlpha=0.30*da*(1-df*0.5); ctx.strokeStyle=hueRGB(hz); ctx.lineWidth=Math.max(0.6,2*ds);
+    ctx.beginPath();
+    for(let i=0;i<SIPHSEG;i++){ if(i===0)ctx.moveTo(s.sx[i],s.sy[i]); else ctx.lineTo(s.sx[i],s.sy[i]); }
+    ctx.stroke();
+    for(let i=0;i<SIPHSEG;i++){                       // zooids, with a travelling light pulse
+      const pulse=Math.max(0, 1-Math.abs((s.wave%(SIPHSEG+6))-i)*0.35);
+      const r=(4+(i===0?2.5:0))*ds*(1+pulse*0.7);
+      glow(s.sx[i],s.sy[i], r*2.2, hz, (0.26+0.5*pulse)*da*(1-df*0.4));
+    }
+    ctx.globalAlpha=0.22*da*(1-df*0.6); ctx.lineWidth=Math.max(0.5,1.2*ds);
+    for(let i=2;i<SIPHSEG;i+=3){                      // trailing stinging filaments
+      const sw=Math.sin(s.phase+i)*6;
+      ctx.beginPath(); ctx.moveTo(s.sx[i],s.sy[i]);
+      ctx.quadraticCurveTo(s.sx[i]+sw, s.sy[i]+14*ds, s.sx[i]+sw*1.5, s.sy[i]+26*ds);
+      ctx.stroke();
+    }
+    ctx.globalCompositeOperation='source-over'; ctx.globalAlpha=1;
+  }
 }
 
 /* ---- the living reef: coral colonies that ACCRETE, one branch at a time.
@@ -1911,18 +2002,19 @@ const CAP={
   era_scavengers:['the fallen no longer lie still — scavengers walk the floor','small mouths find the dead: the world learns to clean itself'],
   era_abyss:['something patient has learned to hunt from the dark below','the deep opens its eye — an abyssal hunter rises'],
   era_reef:['life takes hold of stone — a reef begins beside the vents','coral gardens take root: the world is building itself now'],
+  era_chains:['a colony of many drifts as one — the chained ones have come','a chain of lights crosses the middle water, catching what falls'],
   abyssStrike:['taken — pulled down into the dark','the lure was a lie. the deep feeds','one light goes out, below the thermocline'],
 };
 /* which events have recorded voice, and how many variants exist */
 const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2,leviathan:2,
-  era_drifters:2,era_scavengers:2,era_abyss:2,era_reef:2};
+  era_drifters:2,era_scavengers:2,era_abyss:2,era_reef:2,era_chains:2};
 const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
   evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament',leviathan:'e22_leviathan',
-  era_drifters:'e23_drifters',era_scavengers:'e24_scavengers',era_abyss:'e25_abyss',era_reef:'e26_reef'};
+  era_drifters:'e23_drifters',era_scavengers:'e24_scavengers',era_abyss:'e25_abyss',era_reef:'e26_reef',era_chains:'e27_chains'};
 const PRIORITY={genesis:0,extinction:0,leviathan:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
   genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3,season:3,
-  era_drifters:0,era_scavengers:0,era_abyss:0,era_reef:0,abyssStrike:2};
+  era_drifters:0,era_scavengers:0,era_abyss:0,era_reef:0,era_chains:0,abyssStrike:2};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
   evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70,leviathan:0,
   abyssStrike:120};
@@ -2318,6 +2410,7 @@ function draw(){
   if(LEV.active)drawLeviathan();
   // deep-time life: the abyssal hunter (far), then drifters and scavengers
   drawAbyss();
+  drawSiphs();
   drawJellies();
   drawScavs();
   // creatures
@@ -3173,6 +3266,8 @@ window.__prim={
   summonAbyss(){ ABY.cooldown=0; },
   get detritusN(){ return detritus.length; },
   get reef(){ return {segs:reefSegs(), colonies:CORAL.colonies.length}; },
+  get siphs(){ const out=[]; for(const s of siphs)if(s.alive)out.push([Math.round(s.x),Math.round(s.y),+s.z.toFixed(2)]); return out; },
+  summonSiph(){ return !!spawnSiph(); },
   get deepLife(){ const out={j:[],s:[]};
     for(const j of jellies)if(j.alive)out.j.push([Math.round(j.x),Math.round(j.y),+j.z.toFixed(2)]);
     for(const s of scavs)if(s.alive)out.s.push([Math.round(s.x),Math.round(s.y)]);
