@@ -94,8 +94,7 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
    recess. Touches the mid-distance look (darker windshields) — verify carefully
    against far-tier pixel-equivalence. Also fold in: driver head for the stolen
    parked car the PLAYER drives (same I1 path).
-5. **Taxi identity**: lit roof sign with medallion number ("TAXI 27"), rooflight,
-   simple door decal — per-taxi seed.
+5. ~~Taxi identity~~ **DONE 2026-07-12 (iteration 05)** — see iteration log.
 6. **Storefront near-tier**: shop names (fictional, canvas), lit window interiors
    (shelves/tables as cheap boxes or interior-texture v1), doors with handles,
    OPEN/CLOSED variety.
@@ -154,6 +153,20 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   verified at https://jez237-site.pages.dev/games/2026-06-29/steel-ribbon-racer/
   (HTML references index-DrFzZ1cU.js, bundle 200). Note: the pages.dev ALIAS can
   404 new assets for ~30s after deploy — retry before diagnosing.
+- **05 taxi identity (2026-07-12)**: every taxi now wears dark cutout "TAXI ##"
+  text on BOTH faces of its glowing roof-sign box plus a small "TAXI ## / STEEL
+  CITY CAB" door decal on each side. Pool of 8 pre-built 4-quad meshes (one
+  1024x512 atlas, alphaTest 0.25 cutout — no transparency sorting issues), one
+  extra draw per taxi (5 in the city), recycled across world rebuilds so zero
+  geometry/texture creep. Medallion numbers deterministic per slot
+  ((s*97+13)%90+10 → 23,30,37,44,51,58,65,72). detailReport().taxis
+  {count, signed} + smoke probe. **Perf**: chase 1719 / 542,926 / 232 textures
+  vs baseline 1794 / 543,646 / 227 PASS. **Verified by looking**
+  (`loop-shots/05-taxi/`): stopped-taxi side shot reads "TAXI 2x" crisply on the
+  lit sign; rear-quarter shows far-face text + door decal. The stopped-at-signal
+  playbook from item 04 worked FIRST TRY — taxi hunt (k%6===1) found one in a
+  single pass. Idea: the same pooled-decal pattern fits van/boxTruck side
+  "STEEL FREIGHT" liveries and bus route numbers.
 
 - **00 bootstrap (2026-07-12)**: survey only. Shot rig added (`tests/detail-shots.mjs`),
   baselines + backlog above. Shots in `loop-shots/00-bootstrap/`. No game code touched.
