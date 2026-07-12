@@ -4,7 +4,10 @@
 // every ~10 minutes. Bearer token lives in the OPS_SNAPSHOT_TOKEN project
 // secret; the snapshot itself is built and firewalled at the source, and
 // re-scanned here as a second layer.
-// GET (public, same-origin from /ops/): returns the latest snapshot.
+// GET (Cloudflare Access protected, same-origin from /ops/): returns the
+// latest snapshot only on the production custom hostname. The pages.dev
+// hostname remains available for authenticated publisher POSTs but must never
+// expose snapshot reads.
 
 const KV_KEY = "latest";
 const MAX_BODY_BYTES = 100 * 1024;
@@ -73,6 +76,9 @@ export async function onRequest({ request, env }) {
   }
 
   if (method === "GET" || method === "HEAD") {
+    if (new URL(request.url).hostname !== "jez237.com") {
+      return json(404, { error: "not found" }, { "Cache-Control": "no-store" });
+    }
     if (!env.OPS_KV) return json(503, { error: "storage not configured" }, { "Cache-Control": "no-store" });
     const value = await env.OPS_KV.get(KV_KEY, { type: "text", cacheTtl: 60 });
     if (value === null) {
@@ -82,7 +88,7 @@ export async function onRequest({ request, env }) {
       status: 200,
       headers: {
         "Content-Type": "application/json; charset=utf-8",
-        "Cache-Control": "public, max-age=30",
+        "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
         "X-Robots-Tag": "noindex",
       },
