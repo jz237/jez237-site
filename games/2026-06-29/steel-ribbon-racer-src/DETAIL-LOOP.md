@@ -338,3 +338,20 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   figures mid-wave over the noise; 100m shot = noise only, promoted:0. Perf:
   race start 1740 / 572k (unchanged band). Ideas: crowd murmur + horns when
   promoted (fits the ≥80% audio rule); team-color flags per figure.
+- **11 photo mode (2026-07-12, backlog item 12 pulled forward under the geometry
+  freeze — zero new geometry)**: press O (or the 📷 button) in race/roam to enter
+  an orbit camera around the car — drag orbits, wheel/pinch dollies (min radius
+  5.4 in a vehicle so the camera can't clip inside the glass, 2.2 on foot),
+  hint banner explains the controls, ✕/O exits and the game camera resumes.
+  Rides __freeCam + a Bn tick; exits automatically on any mode change (menus).
+  The promotion systems key on camera position, so plates/faces/chats/crowds
+  resolve around wherever the photo camera flies — this is the feature that
+  makes the whole detail pass discoverable. QA: __photoRig +
+  __steelRibbonDebug.photoMode(on). **STRICT-MODE TRAP**: the file is an ES
+  module — a bare `__steelRibbonDebug.x = ...` (without window.) THROWS at boot
+  and kills the game; always window-qualify the debug object. **Verified by
+  looking** (`loop-shots/11-photomode/`): default/orbited/high-angle shots show
+  the car from three angles with hint + button; exit restores chase view. Mode
+  reorder note: item 11 road decals deferred (permanent geometry) — next
+  freeze-compliant picks: 3b bags/cups, 14 birds, 15 steam (sprites), 4b needs
+  a facade change (careful), 13 blimp banner (texture swap on existing mesh).
