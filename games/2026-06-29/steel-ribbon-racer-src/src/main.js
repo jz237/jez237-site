@@ -2332,6 +2332,121 @@ const crowdSys = {
     ((this.torsos.instanceMatrix.needsUpdate = !0), (this.heads.instanceMatrix.needsUpdate = !0));
   },
 };
+// ─── Birds that scatter (zoom-detail item 13 / backlog 14): one pooled flock
+// of instanced pigeons pecking on the ground ahead of the roam player; drive
+// within 9m and they burst upward, flutter away and despawn. Roam-only, one
+// InstancedMesh visible only while a flock is active — zero permanent cost.
+const birdSys = {
+  mesh: null,
+  cap: 9,
+  active: !1,
+  state: "idle",
+  birds: [],
+  spot: { x: 0, z: 0 },
+  _timer: 0,
+  _m: null,
+  _q: null,
+  ensure() {
+    if (this.mesh) return;
+    const { opaque } = vcMats();
+    const geo = mergeGeometries(
+      [
+        vcBake(new SphereGeometry(0.085, 6, 5), vcAt(0, 0.1, 0), 9145227),
+        vcBake(new SphereGeometry(0.055, 6, 5), vcAt(0, 0.17, -0.09), 6118749),
+        vcBake(new ConeGeometry(0.02, 0.06, 4), vcAt(0, 0.16, -0.15, Math.PI / 2), 15379494),
+        vcBake(new BoxGeometry(0.16, 0.012, 0.09), vcAt(-0.1, 0.13, 0.01), 7763064),
+        vcBake(new BoxGeometry(0.16, 0.012, 0.09), vcAt(0.1, 0.13, 0.01), 7763064),
+        vcBake(new BoxGeometry(0.05, 0.012, 0.1), vcAt(0, 0.12, 0.12), 5460309),
+      ],
+      !1,
+    );
+    this.mesh = new InstancedMesh(geo, opaque, this.cap);
+    const tint = new Color(),
+      tones = [16777215, 11119017, 9143160, 12961221, 8355711];
+    for (let k = 0; k < this.cap; k++) this.mesh.setColorAt(k, tint.set(tones[k % tones.length]));
+    this.mesh.instanceColor && (this.mesh.instanceColor.needsUpdate = !0);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.visible = !1), (this.mesh.count = 0));
+    et.add(this.mesh);
+    ((this._m = new Matrix4()), (this._q = new Matrix4()));
+  },
+  spawn(x, z) {
+    this.ensure();
+    ((this.spot.x = x), (this.spot.z = z));
+    this.birds.length = 0;
+    const n = 6 + ((Math.abs(x + z) | 0) % (this.cap - 5));
+    for (let k = 0; k < n; k++) {
+      const a = (k / n) * Math.PI * 2 + 0.7,
+        r = 0.5 + (k % 3) * 0.55;
+      this.birds.push({
+        x: x + Math.cos(a) * r,
+        y: He(x + Math.cos(a) * r, z + Math.sin(a) * r) + 0.02,
+        z: z + Math.sin(a) * r,
+        yaw: a + Math.PI / 2,
+        vx: 0,
+        vy: 0,
+        vz: 0,
+        ph: k * 1.3,
+        flying: !1,
+      });
+    }
+    ((this.active = !0), (this.state = "peck"), (this.mesh.visible = !0), (this.mesh.count = this.birds.length));
+  },
+  deactivate() {
+    ((this.active = !1), (this.state = "idle"), (this.mesh && ((this.mesh.visible = !1), (this.mesh.count = 0))));
+  },
+  update(t, dt) {
+    if (!dt) return;
+    if (!this.active) {
+      this._timer -= dt;
+      if (this._timer > 0 || u.mode !== "roam" || Math.abs(u.speed) > 45) return;
+      this._timer = 2.2;
+      // spawn a pecking flock a little ahead of the player, off to one side
+      const fx = -Math.sin(u.roamYaw ?? 0),
+        fz = -Math.cos(u.roamYaw ?? 0),
+        side = ((t | 0) % 2 ? 1 : -1) * (5 + ((t * 7) % 6)),
+        sx = u.roamPos.x + fx * 19 - fz * side,
+        sz = u.roamPos.z + fz * 19 + fx * side;
+      this.spawn(sx, sz);
+      return;
+    }
+    const pdx = u.roamPos.x - this.spot.x,
+      pdz = u.roamPos.z - this.spot.z,
+      pd2 = pdx * pdx + pdz * pdz;
+    if (this.state === "peck" && u.mode === "roam" && pd2 < 81) {
+      this.state = "scatter";
+      for (const b of this.birds) {
+        const away = Math.atan2(b.x - u.roamPos.x, b.z - u.roamPos.z);
+        ((b.vx = Math.sin(away) * (3.2 + (b.ph % 2))), (b.vz = Math.cos(away) * (3.2 + ((b.ph * 1.7) % 2))), (b.vy = 3.4 + (b.ph % 1.6)), (b.flying = !0), (b.yaw = away));
+      }
+    }
+    if (pd2 > 3600 || u.mode !== "roam") {
+      this.deactivate();
+      return;
+    }
+    let k = 0,
+      allGone = this.state === "scatter";
+    for (const b of this.birds) {
+      if (this.state === "peck") {
+        b.y = He(b.x, b.z) + 0.02 + Math.max(0, Math.sin(t * 5 + b.ph)) * 0.05;
+        b.yaw += Math.sin(t * 0.7 + b.ph) * 0.01;
+      } else if (b.flying) {
+        ((b.x += b.vx * dt), (b.z += b.vz * dt), (b.y += b.vy * dt), (b.vy -= 0.4 * dt));
+        if (b.y > He(b.x, b.z) + 14) b.vy = Math.min(b.vy, 0.6);
+        b.y < He(b.x, b.z) + 11 && (allGone = !1);
+      }
+      const roll = b.flying ? Math.sin(t * 16 + b.ph) * 0.5 : 0;
+      this._m.makeRotationY(b.yaw);
+      roll && (this._q.makeRotationZ(roll), this._m.multiply(this._q));
+      this._m.setPosition(b.x, b.y, b.z);
+      this.mesh.setMatrixAt(k++, this._m);
+    }
+    this.mesh.instanceMatrix.needsUpdate = !0;
+    if (this.state === "scatter") {
+      this._timer -= dt;
+      (allGone || this._timer < -6) && this.deactivate();
+    }
+  },
+};
 const PED_KIT_RADIUS = 40;
 // Fictional, family-friendly two-bubble chats shown on texting pedestrians'
 // phone screens (one per kit, drawn into a single shared atlas).
@@ -3299,6 +3414,7 @@ function F1(i, e, t) {
       for (const Me of Q) ze(Me, I, ye);
       pedKitSys.update(ye);
       storefrontSys.update(ye);
+      birdSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -9087,6 +9203,9 @@ window.__steelRibbonDebug = {
   stats() {
     return { trafficCrashes: qe.trafficCrashes, splats: qe.splats, roamPos: { x: +u.roamPos.x.toFixed(1), y: +u.roamPos.y.toFixed(1), z: +u.roamPos.z.toFixed(1) }, speed: +u.speed.toFixed(2), cooldown: +u.collisionCooldown.toFixed(2) };
   },
+  spawnBirds(x, z) {
+    return (birdSys.spawn(x, z), { active: birdSys.active, count: birdSys.birds.length });
+  },
   detailReport() {
     return {
       plates: plateSys.mesh
@@ -9115,6 +9234,7 @@ window.__steelRibbonDebug = {
       furniture: { ...furnitureSys.counts, sample: furnitureSys.sample.slice(0, 4) },
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
+      birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       crowd: {
         stands: crowdSys.stands.length,
         promoted: crowdSys.active >= 0 ? 1 : 0,
