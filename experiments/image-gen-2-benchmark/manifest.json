@@ -1,11 +1,15 @@
 {
-  "total": 302,
+  "total": 303,
   "months": [
     {
       "key": "2026-07",
       "file": "gallery-2026-07.json",
-      "count": 72,
+      "count": 73,
       "dates": [
+        {
+          "date": "2026-07-12",
+          "count": 1
+        },
         {
           "date": "2026-07-11",
           "count": 6
