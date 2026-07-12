@@ -2220,6 +2220,108 @@ const plateSys = {
     this.mesh.instanceMatrix.needsUpdate = !0;
   },
 };
+// ─── Pedestrian near-tier kits (zoom-detail item 02): a small pool of face/
+// hand/shoe add-on kits that attach to the pedestrian groups nearest the
+// camera. Far pedestrians render exactly as built; a promoted one gains a
+// merged face mesh (child of the group — heads never move relative to it)
+// plus hands and shoes parented onto the animated limb meshes so they inherit
+// the walk swing for free. Kit choice is pedIndex % pool, so a pedestrian
+// always gets the same face/shoe variety back when re-promoted. All parts
+// share vcMats' opaque material: promoted cost is 5 small draws per kit.
+const PED_KIT_RADIUS = 40;
+const pedKitSys = {
+  kits: null,
+  pool: 0,
+  _timer: 0,
+  ensure() {
+    if (this.kits) return;
+    this.pool = mobilePerf ? 4 : 8;
+    const { opaque } = vcMats(),
+      shoeTones = [1976625, 3153952, 5985575, 2503224, 4400680, 1710618, 5124895, 3355970],
+      mouthTones = [9067082, 7952701, 10707786, 8341813, 9067082, 7952701, 10707786, 8341813],
+      browTones = [3087378, 1975326, 4022546, 3087378, 1975326, 4022546, 3087378, 1975326];
+    this.kits = [];
+    for (let k = 0; k < this.pool; k++) {
+      const faceParts = [],
+        eyeGeo = new SphereGeometry(0.038, 6, 5),
+        browGeo = new BoxGeometry(0.078, 0.02, 0.02),
+        noseGeo = new SphereGeometry(0.03, 6, 5),
+        mouthGeo = new BoxGeometry(0.09, 0.022, 0.02);
+      for (const ex of [-0.085, 0.085]) {
+        faceParts.push(vcBake(eyeGeo, vcAt(ex, 2.06, -0.198), 1842476));
+        faceParts.push(vcBake(browGeo, vcAt(ex, 2.118, -0.207), browTones[k % browTones.length]));
+      }
+      faceParts.push(vcBake(noseGeo, vcAt(0, 2.0, -0.229), 11893070));
+      faceParts.push(vcBake(mouthGeo, vcAt(0, 1.935, -0.216), mouthTones[k % mouthTones.length]));
+      const face = new Mesh(mergeGeometries(faceParts, !1), opaque),
+        handGeo = vcBake(new SphereGeometry(0.056, 6, 5), null, 12947299),
+        shoeGeo = vcBake(new BoxGeometry(0.13, 0.07, 0.24), null, shoeTones[k % shoeTones.length]),
+        handL = new Mesh(handGeo, opaque),
+        handR = new Mesh(handGeo, opaque),
+        shoeL = new Mesh(shoeGeo, opaque),
+        shoeR = new Mesh(shoeGeo, opaque);
+      (handL.position.set(0, -0.38, 0), handR.position.set(0, -0.38, 0));
+      (shoeL.position.set(0, -0.42, -0.045), shoeR.position.set(0, -0.42, -0.045));
+      const kit = { face, handL, handR, shoeL, shoeR, ped: null };
+      for (const part of [face, handL, handR, shoeL, shoeR])
+        ((part.userData.kitPart = !0), (part.castShadow = !1), (part.receiveShadow = !0));
+      this.kits.push(kit);
+    }
+  },
+  attach(kit, actor) {
+    const g = actor.mesh,
+      limbs = g.userData.limbs || [];
+    (g.add(kit.face),
+      limbs[0]?.mesh.add(kit.shoeL),
+      limbs[1]?.mesh.add(kit.shoeR),
+      limbs[2]?.mesh.add(kit.handL),
+      limbs[3]?.mesh.add(kit.handR),
+      (kit.ped = actor));
+  },
+  detach(kit) {
+    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR]) part.removeFromParent();
+    kit.ped = null;
+  },
+  reset() {
+    if (this.kits) for (const k of this.kits) k.ped && this.detach(k);
+  },
+  promotedCount() {
+    return this.kits ? this.kits.reduce((n, k) => n + (k.ped ? 1 : 0), 0) : 0;
+  },
+  update(dt) {
+    if (!Rr.length) {
+      this.reset();
+      return;
+    }
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.35;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = PED_KIT_RADIUS * PED_KIT_RADIUS,
+      cand = [];
+    for (let idx = 0; idx < Rr.length; idx++) {
+      const a = Rr[idx];
+      if (!a.active || !a.mesh.visible) continue;
+      const dx = a.x - cx,
+        dz = a.z - cz,
+        d2 = dx * dx + dz * dz;
+      d2 < R2 && cand.push({ a, idx, d2 });
+    }
+    cand.sort((p, q) => p.d2 - q.d2);
+    const want = cand.slice(0, this.pool),
+      wantSet = new Set(want.map((w) => w.a));
+    for (const k of this.kits)
+      k.ped && (!wantSet.has(k.ped) || !k.ped.active || !k.ped.mesh.visible) && this.detach(k);
+    for (const w of want) {
+      const k = this.kits[w.idx % this.pool];
+      if (k.ped === w.a) continue;
+      if (k.ped && wantSet.has(k.ped)) continue; // kit busy with an equally-near ped
+      (k.ped && this.detach(k), this.attach(k, w.a));
+    }
+  },
+};
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
     d = [12139059, 3109053, 15263967, 3818573, 4695133, 14793024, 9261235, 16767293],
@@ -2248,7 +2350,8 @@ function F1(i, e, t) {
     (qe.streetLights = 0),
     (qe.trafficLights = 0),
     (qe.stopSigns = 0),
-    plateSys.resetDynamic());
+    plateSys.resetDynamic(),
+    pedKitSys.reset());
   const y = (I) => I[(Math.random() * I.length) | 0],
     E = (I) => (I > 0 ? -1 : 1) * c * 0.23,
     T = (I, ye) => {
@@ -2528,6 +2631,7 @@ function F1(i, e, t) {
   ((qe.pedestrians = Q.length),
     Bn(i, (I, ye) => {
       for (const Me of Q) ze(Me, I, ye);
+      pedKitSys.update(ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -8284,6 +8388,15 @@ window.__steelRibbonDebug = {
             sample: plateSys.texts.slice(0, 5),
           }
         : null,
+      peds: {
+        pool: pedKitSys.pool,
+        promoted: pedKitSys.promotedCount(),
+        radius: PED_KIT_RADIUS,
+        sample: (pedKitSys.kits || [])
+          .filter((k) => k.ped)
+          .slice(0, 3)
+          .map((k) => ({ x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir })),
+      },
     };
   },
   viewInfo() {
