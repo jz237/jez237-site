@@ -35,6 +35,7 @@ import {
   Quaternion,
   SphereGeometry,
   PlaneGeometry,
+  InstancedBufferAttribute,
   Raycaster,
   PMREMGenerator,
   Clock,
@@ -2027,7 +2028,7 @@ function I1(i, e) {
       opq.push(vcBake(tailGeo, vcAt(x, 0.98, s.l * 0.52 + 0.04), 16725033, 16717325, 1.45)));
   (t.add(new Mesh(mergeGeometries(opq, !1), opaque)), gls.length && t.add(new Mesh(mergeGeometries(gls, !1), glass)));
   return (
-    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55 }),
+    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2 }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
       ((x.castShadow = !1), (x.receiveShadow = !0));
@@ -2075,6 +2076,150 @@ function U1(i, e) {
     t
   );
 }
+// ─── License plates (zoom-detail item 01): ONE InstancedMesh of plate quads
+// (front+rear per car) sampling an 8x8 canvas atlas via a per-instance UV slot
+// attribute — a single extra draw call and texture for every plated car in the
+// world. Traffic cars sync matrices each city tick; parked cars are static and
+// only re-apply when their steal-spot `taken` flag flips. Instance ranges are
+// fixed (parked 0..259, traffic 260..339) so the two builders can reset
+// independently in any order. Letters are consonant-only so no real word (or
+// profanity) can ever appear; a blocklist catches vowel-free offenders.
+const PLATE_LETTERS = "BCDFGHJKLMNPRSTVWXZ";
+const PLATE_BANNED = ["FCK", "SHT", "DCK", "CNT", "KKK", "WTF", "FML", "NGR", "FGT", "SLT", "DMN", "BTC", "JZZ"];
+const PLATE_CAP = 340;
+function plateRng(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+let plateAtlas = null;
+function buildPlateAtlas() {
+  if (plateAtlas) return plateAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d"),
+    texts = [];
+  for (let s = 0; s < 64; s++) {
+    const rng = plateRng(0x51ee1 + s * 2654435761);
+    let text = "";
+    do {
+      text = "";
+      for (let k = 0; k < 3; k++) text += PLATE_LETTERS[(rng() * PLATE_LETTERS.length) | 0];
+    } while (PLATE_BANNED.includes(text));
+    text += " ";
+    for (let k = 0; k < 3; k++) text += (rng() * 10) | 0;
+    texts.push(text);
+    const x = (s % 8) * 128,
+      y = ((s / 8) | 0) * 64,
+      commercial = s % 9 === 3;
+    ((g.fillStyle = commercial ? "#f3d268" : "#ece9dc"), g.fillRect(x + 6, y + 8, 116, 48));
+    ((g.strokeStyle = "#25304d"), (g.lineWidth = 3), g.strokeRect(x + 7.5, y + 9.5, 113, 45));
+    ((g.fillStyle = "#1c2848"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    ((g.font = "bold 30px 'Courier New', monospace"), g.fillText(text, x + 64, y + 38));
+    ((g.font = "bold 10px sans-serif"), g.fillText("STEEL STATE", x + 64, y + 17));
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  plateAtlas = { texture, texts };
+  return plateAtlas;
+}
+const _plateOne = new Vector3(1, 1, 1),
+  _plateCar = new Matrix4(),
+  _plateOut = new Matrix4();
+const plateSys = {
+  mesh: null,
+  texts: null,
+  statics: [],
+  dynamics: [],
+  _zero: new Matrix4().makeScale(0, 0, 0),
+  ensure() {
+    if (this.mesh) return;
+    const { texture, texts } = buildPlateAtlas();
+    this.texts = texts;
+    const geo = new PlaneGeometry(0.55, 0.17);
+    geo.setAttribute("aPlateSlot", new InstancedBufferAttribute(new Float32Array(PLATE_CAP * 2), 2));
+    const mat = new MeshBasicMaterial({ map: texture });
+    mat.customProgramCacheKey = () => "plate-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute vec2 aPlateSlot;\nvarying vec2 vPlateUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvPlateUv = uv * 0.125 + aPlateSlot;");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vPlateUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vPlateUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, PLATE_CAP);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1));
+    for (let k = 0; k < PLATE_CAP; k++) this.mesh.setMatrixAt(k, this._zero);
+    et.add(this.mesh);
+  },
+  _slot(seed) {
+    const s = seed % 64;
+    return { u: (s % 8) * 0.125, v: (7 - ((s / 8) | 0)) * 0.125, s };
+  },
+  // outset clears the car's own bumper bar (traffic cars: bumper face at halfL+0.14)
+  _offsets(halfL, outset = 0.03) {
+    return {
+      offF: new Matrix4().makeRotationY(Math.PI).setPosition(0, 0.62, -(halfL + outset)),
+      offR: new Matrix4().setPosition(0, 0.62, halfL + outset),
+    };
+  },
+  resetStatic() {
+    this.ensure();
+    this.statics.length = 0;
+    for (let k = 0; k < 260; k++) this.mesh.setMatrixAt(k, this._zero);
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+  resetDynamic() {
+    this.ensure();
+    this.dynamics.length = 0;
+    for (let k = 260; k < PLATE_CAP; k++) this.mesh.setMatrixAt(k, this._zero);
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+  addStatic(matrix, halfL, seed, spot) {
+    this.ensure();
+    if (this.statics.length >= 130) return;
+    const base = this.statics.length * 2,
+      { u, v, s } = this._slot(seed * 13 + 29),
+      reg = { matrix: matrix.clone(), spot, wasTaken: null, iF: base, iR: base + 1, slot: s, ...this._offsets(halfL) },
+      attr = this.mesh.geometry.getAttribute("aPlateSlot");
+    (attr.setXY(reg.iF, u, v), attr.setXY(reg.iR, u, v), (attr.needsUpdate = !0));
+    (this.statics.push(reg), this._applyStatic(reg));
+  },
+  _applyStatic(reg) {
+    reg.wasTaken = !!(reg.spot && reg.spot.taken);
+    if (reg.wasTaken) (this.mesh.setMatrixAt(reg.iF, this._zero), this.mesh.setMatrixAt(reg.iR, this._zero));
+    else {
+      this.mesh.setMatrixAt(reg.iF, _plateOut.multiplyMatrices(reg.matrix, reg.offF));
+      this.mesh.setMatrixAt(reg.iR, _plateOut.multiplyMatrices(reg.matrix, reg.offR));
+    }
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+  addDynamic(carMesh, seed) {
+    this.ensure();
+    if (this.dynamics.length >= 40) return;
+    const base = 260 + this.dynamics.length * 2,
+      { u, v, s } = this._slot(seed * 37 + 11),
+      attr = this.mesh.geometry.getAttribute("aPlateSlot");
+    (attr.setXY(base, u, v), attr.setXY(base + 1, u, v), (attr.needsUpdate = !0));
+    this.dynamics.push({ carMesh, iF: base, iR: base + 1, slot: s, ...this._offsets(carMesh.userData.plateHalfL || 2.2, 0.155) });
+  },
+  update() {
+    if (!this.mesh || !this.dynamics.length) return;
+    for (const d of this.dynamics) {
+      _plateCar.compose(d.carMesh.position, d.carMesh.quaternion, _plateOne);
+      this.mesh.setMatrixAt(d.iF, _plateOut.multiplyMatrices(_plateCar, d.offF));
+      this.mesh.setMatrixAt(d.iR, _plateOut.multiplyMatrices(_plateCar, d.offR));
+    }
+    for (const r of this.statics) if (!!(r.spot && r.spot.taken) !== r.wasTaken) this._applyStatic(r);
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+};
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
     d = [12139059, 3109053, 15263967, 3818573, 4695133, 14793024, 9261235, 16767293],
@@ -2102,7 +2247,8 @@ function F1(i, e, t) {
     (qe.trafficCrashes = 0),
     (qe.streetLights = 0),
     (qe.trafficLights = 0),
-    (qe.stopSigns = 0));
+    (qe.stopSigns = 0),
+    plateSys.resetDynamic());
   const y = (I) => I[(Math.random() * I.length) | 0],
     E = (I) => (I > 0 ? -1 : 1) * c * 0.23,
     T = (I, ye) => {
@@ -2230,6 +2376,7 @@ function F1(i, e, t) {
       p.push(K),
       Rc.push(K),
       i.add(K.mesh),
+      plateSys.addDynamic(K.mesh, I),
       (qe.types[Me] = (qe.types[Me] || 0) + 1));
   }
   function te(I, ye = 0, Me = 0) {
@@ -2296,6 +2443,7 @@ function F1(i, e, t) {
   ((qe.traffic = p.length),
     Bn(i, (I, ye) => {
       for (const Me of p) te(Me, I, ye);
+      plateSys.update();
     }));
   const ne = [14703451, 5217256, 15779915, 6535022, 12284639, 15724527, 15764053],
     X = [2437188, 3092787, 4930093, 2244434],
@@ -2948,6 +3096,7 @@ function N1() {
     ae = 130,
     Ve = new InstancedMesh(fe, new MeshStandardMaterial({ roughness: 0.42, metalness: 0.36 }), ae),
     VeW = new InstancedMesh(feWheels, new MeshStandardMaterial({ color: 1512727, roughness: 0.9 }), ae);
+  plateSys.resetStatic();
   let Re = 0,
     Je = 0;
   for (; Re < ae && Je < ae * 6;) {
@@ -2969,6 +3118,7 @@ function N1() {
       VeW.setMatrixAt(Re, e.matrix),
       Ve.setColorAt(Re, new Color(le[(Math.random() * le.length) | 0])),
       rideSys.spots.push({ x: O, z: Y, yaw: N ? 0 : -Math.PI / 2, idx: Re, taken: !1 }),
+      plateSys.addStatic(e.matrix, 2.3, Re, rideSys.spots[rideSys.spots.length - 1]),
       Re++);
   }
   ((Ve.count = Re),
@@ -8122,6 +8272,19 @@ window.__steelRibbonDebug = {
   },
   stats() {
     return { trafficCrashes: qe.trafficCrashes, splats: qe.splats, roamPos: { x: +u.roamPos.x.toFixed(1), y: +u.roamPos.y.toFixed(1), z: +u.roamPos.z.toFixed(1) }, speed: +u.speed.toFixed(2), cooldown: +u.collisionCooldown.toFixed(2) };
+  },
+  detailReport() {
+    return {
+      plates: plateSys.mesh
+        ? {
+            atlasSlots: 64,
+            traffic: plateSys.dynamics.length,
+            parked: plateSys.statics.length,
+            uniqueTexts: new Set(plateSys.texts).size,
+            sample: plateSys.texts.slice(0, 5),
+          }
+        : null,
+    };
   },
   viewInfo() {
     const i = St(u.s),
