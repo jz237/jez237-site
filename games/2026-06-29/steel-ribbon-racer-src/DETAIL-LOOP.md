@@ -85,8 +85,15 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
    same kit-attachment pattern, deterministic by ped index. Head-tilt while
    texting also parked here (head is merged into the body mesh — needs a neck
    split or a cap-brim shadow trick).
-4. **Drivers in cars**: head + shoulders + hands-on-wheel in traffic cars and race
-   rivals (near pool; rivals always near → they get it permanently within budget).
+4. ~~Drivers~~ **DONE (scoped to buses) 2026-07-12 (iteration 04)** — see log; the
+   full-scope version continues as 4b.
+4b. **Visible drivers in opaque-cabin cars** (compact/taxi/pickup/van/boxTruck):
+   their cabins are SOLID boxes with glass quads on the faces — a baked driver is
+   sealed invisible inside (proven in it.04). Needs a windshield recess: shrink
+   the opaque cabin box ~0.3 in z, dark interior panel, driver head/wheel in the
+   recess. Touches the mid-distance look (darker windshields) — verify carefully
+   against far-tier pixel-equivalence. Also fold in: driver head for the stolen
+   parked car the PLAYER drives (same I1 path).
 5. **Taxi identity**: lit roof sign with medallion number ("TAXI 27"), rooflight,
    simple door decal — per-taxi seed.
 6. **Storefront near-tier**: shop names (fictional, canvas), lit window interiors
@@ -121,6 +128,27 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
     chirps, crowd murmur near stadium, signal-crossing ticks, distant sirens.
 
 ## Iteration log
+
+- **04 bus drivers (2026-07-12)**: every bus now has a visible DRIVER — head + cap
+  behind the windshield at window height, baked into the body merge (zero extra
+  draws, tones seeded by car color). **Scoped down from "drivers in all cars"**
+  after visual verification failed twice and revealed the root cause: non-bus
+  cabins are SOLID opaque boxes with glass quads on their faces — a driver inside
+  can never render. Full-scope continues as backlog item 4b (windshield recess).
+  **Perf**: chase 1729 / 539,581 / 227 textures vs baseline 1794 / 543,646 / 227
+  PASS. **Verified by looking** (`loop-shots/04-drivers/`): stopped school-bus
+  shots show the capped head through the windshield, absent at the rear; plate
+  "GDD 133" identical front/rear (item-01 re-verification for free). **Camera
+  playbook for traffic close-ups (hard-won)**: (1) moving cars ALWAYS overrun a
+  front camera — even 140ms settle loses; (2) parking the player in a car's lane
+  ends in TRAFFIC CRASH wobble, unusable; (3) THE method: wait for a car to stop
+  at a signal — sample my plate-instance matrices twice (0.7s apart, delta <
+  0.03) and shoot during the red phase; hunt needs ~60-90 rounds because wall
+  time >> sim time in slow-mo; (4) scale standoff by vehicle size (bus needs
+  8m end / 5.2m side, compacts 3.4m); (5) the e0<0 front-plate trick only works
+  for ns-facing cars — shoot BOTH ends instead. detailReport().drivers + smoke
+  probe (30 cars / 5 buses crewed). Police cars, stolen parked cars, and
+  multiplayer ghosts are all I1-built → they inherit whatever I1 gains in 4b.
 
 - **00 bootstrap (2026-07-12)**: survey only. Shot rig added (`tests/detail-shots.mjs`),
   baselines + backlog above. Shots in `loop-shots/00-bootstrap/`. No game code touched.
