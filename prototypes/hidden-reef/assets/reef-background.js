@@ -11,15 +11,15 @@
     'saltwater', 'freshwater', 'pond', 'equipment', 'food', 'decor', 'maintenance', 'learn'
   ].find(function(name) { return pathAndQuery.includes(name); }) || 'open-water';
   const biomeThemes = {
-    'open-water': { primary: [64, 217, 255], secondary: [121, 108, 225], fish: [133, 226, 244] },
-    saltwater: { primary: [70, 220, 255], secondary: [145, 105, 238], fish: [129, 225, 244] },
-    freshwater: { primary: [66, 224, 184], secondary: [84, 174, 116], fish: [152, 235, 197] },
-    pond: { primary: [120, 210, 166], secondary: [230, 171, 74], fish: [239, 185, 88] },
-    equipment: { primary: [88, 205, 255], secondary: [93, 130, 232], fish: [137, 213, 243] },
-    food: { primary: [96, 220, 225], secondary: [242, 144, 76], fish: [240, 185, 110] },
-    decor: { primary: [104, 211, 204], secondary: [183, 111, 231], fish: [173, 219, 218] },
-    maintenance: { primary: [79, 208, 237], secondary: [88, 174, 166], fish: [139, 221, 226] },
-    learn: { primary: [78, 218, 240], secondary: [255, 153, 78], fish: [154, 224, 232] }
+    'open-water': { primary: [64, 217, 255], secondary: [121, 108, 225] },
+    saltwater: { primary: [70, 220, 255], secondary: [145, 105, 238] },
+    freshwater: { primary: [66, 224, 184], secondary: [84, 174, 116] },
+    pond: { primary: [120, 210, 166], secondary: [230, 171, 74] },
+    equipment: { primary: [88, 205, 255], secondary: [93, 130, 232] },
+    food: { primary: [96, 220, 225], secondary: [242, 144, 76] },
+    decor: { primary: [104, 211, 204], secondary: [183, 111, 231] },
+    maintenance: { primary: [79, 208, 237], secondary: [88, 174, 166] },
+    learn: { primary: [78, 218, 240], secondary: [255, 153, 78] }
   };
   const biome = biomeThemes[biomeName];
   const rgba = function(rgb, alpha) {
@@ -146,8 +146,7 @@
       '<a href="/category/" aria-label="Search products"><span aria-hidden="true">&#8981;</span><span>Search</span></a>',
       hasPreviewDrawer
         ? '<button class="cart-button main-nav__preview" type="button" aria-label="Open empty preview list"><span>0</span><strong>Preview</strong></button>'
-        : '<a href="/category/?preview=open" aria-label="Open preview list"><span aria-hidden="true">&#9776;</span><span>Preview</span></a>',
-      '<a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" aria-label="Shop on the official Hidden Reef site"><span aria-hidden="true">&#8599;</span><span>Shop</span></a>'
+        : '<a href="/category/?preview=open" aria-label="Open preview list"><span aria-hidden="true">&#9776;</span><span>Preview</span></a>'
     ].join('');
 
     nav.insertBefore(compactBrand, nav.firstChild);
@@ -273,7 +272,6 @@
   let height = 0;
   let dpr = 1;
   let bubbles = [];
-  let fish = [];
   let raf = 0;
   let last = performance.now();
 
@@ -294,9 +292,9 @@
     const isDesktop = width >= 900;
     const count = prefersReducedMotion
       ? 0
-      : Math.round(Math.min(isDesktop ? 88 : 24, Math.max(isDesktop ? 46 : 12, width / (isDesktop ? 22 : 24))));
+      : Math.round(Math.min(isDesktop ? 110 : 34, Math.max(isDesktop ? 58 : 18, width / (isDesktop ? 18 : 16))));
     bubbles = Array.from({ length: count }, function(_, index) {
-      const featured = isDesktop && index % 9 === 0;
+      const featured = isDesktop && index % 8 === 0;
       return {
         x: random(-40, width + 40),
         y: random(-height * 0.2, height * 1.15),
@@ -305,19 +303,6 @@
         wobble: random(8, isDesktop ? 36 : 26),
         phase: random(0, Math.PI * 2),
         alpha: random(isDesktop ? 0.08 : 0.07, isDesktop ? 0.27 : 0.21)
-      };
-    });
-
-    fish = prefersReducedMotion ? [] : Array.from({ length: isDesktop ? 5 : 2 }, function(_, index) {
-      const direction = index % 2 === 0 ? 1 : -1;
-      return {
-        x: direction > 0 ? random(-width * 0.3, width * 0.45) : random(width * 0.55, width * 1.3),
-        y: random(height * 0.16, height * 0.82),
-        size: random(isDesktop ? 8 : 6, isDesktop ? 15 : 10),
-        speed: random(isDesktop ? 4 : 3, isDesktop ? 9 : 6),
-        alpha: random(0.035, 0.085),
-        direction: direction,
-        phase: random(0, Math.PI * 2)
       };
     });
   }
@@ -400,38 +385,6 @@
     ctx.stroke();
   }
 
-  function drawFish(fishItem, time, dt) {
-    const bob = Math.sin(time * 0.00055 + fishItem.phase) * fishItem.size * 0.5;
-    ctx.save();
-    ctx.translate(fishItem.x, fishItem.y + bob);
-    ctx.scale(fishItem.direction, 1);
-    ctx.globalAlpha = fishItem.alpha;
-    ctx.fillStyle = rgba(biome.fish, 1);
-
-    ctx.beginPath();
-    ctx.ellipse(0, 0, fishItem.size * 1.45, fishItem.size * 0.58, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(-fishItem.size * 1.2, 0);
-    ctx.lineTo(-fishItem.size * 2.05, -fishItem.size * 0.72);
-    ctx.lineTo(-fishItem.size * 2.05, fishItem.size * 0.72);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.globalAlpha = fishItem.alpha * 1.8;
-    ctx.fillStyle = 'rgba(255,255,255,0.82)';
-    ctx.beginPath();
-    ctx.arc(fishItem.size * 0.82, -fishItem.size * 0.13, Math.max(0.7, fishItem.size * 0.08), 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    fishItem.x += fishItem.speed * fishItem.direction * motionScale * dt / 1000;
-    const margin = fishItem.size * 3;
-    if (fishItem.direction > 0 && fishItem.x > width + margin) fishItem.x = -margin;
-    if (fishItem.direction < 0 && fishItem.x < -margin) fishItem.x = width + margin;
-  }
-
   function drawFreshwaterPlants(time) {
     const swayTime = time * motionScale * 0.00045;
     ctx.save();
@@ -460,57 +413,8 @@
     ctx.restore();
   }
 
-  function drawPondKoiShadows(time) {
-    ctx.save();
-    ctx.fillStyle = rgba(biome.fish, 1);
-    for (let koi = 0; koi < (width >= 900 ? 5 : 3); koi += 1) {
-      const phase = time * motionScale * 0.00009 + koi * 1.31;
-      const x = width * (0.12 + koi * 0.2) + Math.sin(phase) * width * 0.07;
-      const y = height * (0.14 + (koi % 3) * 0.08) + Math.cos(phase * 1.4) * 18;
-      const size = 18 + (koi % 3) * 6;
-      ctx.save();
-      ctx.translate(x, y);
-      ctx.rotate(Math.sin(phase * 0.7) * 0.28);
-      ctx.globalAlpha = 0.055 + (koi % 2) * 0.018;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, size * 1.6, size * 0.52, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.moveTo(-size * 1.3, 0);
-      ctx.lineTo(-size * 2.05, -size * 0.72);
-      ctx.lineTo(-size * 2.05, size * 0.72);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    }
-    ctx.restore();
-  }
-
-  function drawSaltwaterSchool(time) {
-    ctx.save();
-    ctx.fillStyle = rgba(biome.fish, 1);
-    for (let anthias = 0; anthias < (width >= 900 ? 15 : 7); anthias += 1) {
-      const row = anthias % 5;
-      const drift = (time * motionScale * 0.006 + anthias * 67) % (width + 180);
-      const x = drift - 90;
-      const y = height * (0.18 + row * 0.06) + Math.sin(time * 0.0007 + anthias) * 8;
-      const size = 2.6 + (anthias % 3) * 0.7;
-      ctx.globalAlpha = 0.055 + row * 0.006;
-      ctx.beginPath();
-      ctx.ellipse(x, y, size * 2.2, size, 0, 0, Math.PI * 2);
-      ctx.moveTo(x - size * 1.8, y);
-      ctx.lineTo(x - size * 3.4, y - size * 1.3);
-      ctx.lineTo(x - size * 3.4, y + size * 1.3);
-      ctx.closePath();
-      ctx.fill();
-    }
-    ctx.restore();
-  }
-
   function drawBiomeAccent(time) {
     if (biomeName === 'freshwater') drawFreshwaterPlants(time);
-    if (biomeName === 'pond') drawPondKoiShadows(time);
-    if (biomeName === 'saltwater') drawSaltwaterSchool(time);
   }
 
   function draw(time) {
@@ -549,9 +453,6 @@
 
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
-    fish.forEach(function(fishItem) {
-      drawFish(fishItem, time, dt);
-    });
     bubbles.forEach(function(bubble) {
       drawBubble(bubble, time);
       bubble.y -= bubble.speed * motionScale * dt / 1000;

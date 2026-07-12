@@ -1764,36 +1764,6 @@
       top: 12px;
       transform: scaleX(-1) rotate(-16deg);
     }
-    .triage-aquarium__fish {
-      position: absolute;
-      left: 34%;
-      top: 43%;
-      width: 42px;
-      height: 20px;
-      border-radius: 55% 48% 48% 55%;
-      background: linear-gradient(135deg, #ffb45c, #ff7b32);
-      box-shadow: 0 5px 12px rgba(0,0,0,.2);
-      animation: triageFish 6s ease-in-out infinite alternate;
-    }
-    .triage-aquarium__fish::before {
-      content: "";
-      position: absolute;
-      left: -13px;
-      top: 2px;
-      border-top: 8px solid transparent;
-      border-right: 16px solid #e7612c;
-      border-bottom: 8px solid transparent;
-    }
-    .triage-aquarium__fish::after {
-      content: "";
-      position: absolute;
-      right: 7px;
-      top: 5px;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: #071a27;
-    }
     .triage-aquarium__bubble {
       position: absolute;
       left: 54%;
@@ -1848,8 +1818,22 @@
       border: 0;
     }
     @keyframes triageWater { to { transform: translateX(14px) scaleX(1.04); } }
-    @keyframes triageFish { to { transform: translate(46px,-10px) rotate(-2deg); } }
     @keyframes triageBubbles { to { transform: translateY(-82px); opacity: .1; } }
+    .triage-aquarium,
+    .triage-aquarium[data-biome="reef"],
+    .triage-aquarium[data-biome="saltwater"],
+    .triage-aquarium[data-biome="pond"] {
+      background:
+        linear-gradient(90deg, rgba(2,18,31,.08), rgba(2,18,31,.5)),
+        url("../assets/learn/aquarium-system-routines-gpt-image-2.webp") left center / cover no-repeat;
+    }
+    .triage-aquarium__surface,
+    .triage-aquarium__filter,
+    .triage-aquarium__substrate,
+    .triage-aquarium__plant,
+    .triage-aquarium__bubble {
+      display: none;
+    }
     .triage-field {
       display: grid;
       gap: 6px;
@@ -1881,145 +1865,67 @@
       color: #a7cbd8;
       line-height: 1.5;
     }
-    .learn-motion-guide__grid {
+    .learn-system-art {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,.28);
+      border-radius: 10px;
+      background: #031522;
+      box-shadow: 0 20px 40px rgba(0,0,0,.34);
+    }
+    .learn-system-art img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 2.1 / 1;
+      object-fit: cover;
+    }
+    .learn-system-art figcaption {
+      padding: 10px 14px;
+      color: #a9c9d6;
+      background: rgba(2,16,28,.92);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .learn-system-notes {
       display: grid;
       grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 10px;
+      margin-top: 10px;
     }
-    .motion-guide-card {
-      display: grid;
-      grid-template-rows: 150px auto;
-      overflow: hidden;
-      border: 1px solid rgba(116,205,235,.2);
-      border-radius: 9px;
-      background: rgba(2,16,28,.76);
+    .learn-system-note {
+      padding: 14px;
+      border: 1px solid rgba(116,205,235,.18);
+      border-radius: 8px;
+      background: rgba(2,16,28,.72);
     }
-    .motion-guide-card__art {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(180deg, rgba(19,84,112,.56), rgba(3,25,42,.9));
-    }
-    .motion-guide-card__body {
-      padding: 13px;
-    }
-    .motion-guide-card__body span {
+    .learn-system-note > span {
       color: #74d9ee;
       font-size: 10px;
       font-weight: 950;
       letter-spacing: .09em;
       text-transform: uppercase;
     }
-    .motion-guide-card__body h3 {
+    .learn-system-note h3 {
       margin: 5px 0 6px;
       color: #fff;
       font-family: Georgia, "Times New Roman", serif;
       font-size: 20px;
     }
-    .motion-guide-card__body p {
+    .learn-system-note p {
       margin: 0 0 9px;
       color: #a9c9d6;
       font-size: 12px;
       line-height: 1.45;
     }
-    .motion-guide-card__body a {
+    .learn-system-note a {
       color: #63e5f4;
       font-size: 12px;
       font-weight: 900;
     }
-    .cycle-node {
-      position: absolute;
-      top: 52px;
-      display: grid;
-      place-items: center;
-      width: 58px;
-      height: 58px;
-      border: 1px solid rgba(255,255,255,.28);
-      border-radius: 50%;
-      color: #fff;
-      background: rgba(5,31,47,.86);
-      box-shadow: 0 0 20px rgba(64,217,255,.12);
-      font-size: 10px;
-      font-weight: 950;
-    }
-    .cycle-node:nth-child(1) { left: 7%; border-color: rgba(255,132,82,.7); }
-    .cycle-node:nth-child(2) { left: calc(50% - 29px); border-color: rgba(255,204,92,.7); }
-    .cycle-node:nth-child(3) { right: 7%; border-color: rgba(87,220,176,.7); }
-    .cycle-flow,
-    .filter-flow,
-    .testing-pulse {
-      position: absolute;
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #dffcff;
-      box-shadow: 0 0 13px #40d9ff;
-      animation: guideFlow 3.6s linear infinite;
-    }
-    .cycle-flow { left: 15%; top: 78px; }
-    .filter-tank {
-      position: absolute;
-      left: 12%;
-      top: 27px;
-      width: 48%;
-      height: 94px;
-      border: 2px solid rgba(146,230,245,.48);
-      border-top: 0;
-      border-radius: 0 0 8px 8px;
-      background: linear-gradient(180deg, rgba(45,166,203,.38), rgba(8,74,104,.64));
-    }
-    .filter-box {
-      position: absolute;
-      right: 12%;
-      top: 37px;
-      width: 23%;
-      height: 74px;
-      border: 1px solid rgba(116,205,235,.45);
-      border-radius: 7px;
-      background: repeating-linear-gradient(180deg, #2c5262 0 9px, #75b3c4 10px 13px);
-    }
-    .filter-flow { left: 34%; top: 40px; animation-name: filterLoop; }
-    .test-vial {
-      position: absolute;
-      top: 37px;
-      width: 35px;
-      height: 76px;
-      border: 2px solid rgba(226,250,255,.65);
-      border-top: 0;
-      border-radius: 0 0 13px 13px;
-      overflow: hidden;
-      background: linear-gradient(to top, var(--vial-color) 0 46%, transparent 47%);
-    }
-    .test-vial:nth-child(1) { left: 18%; --vial-color: rgba(86,220,176,.82); }
-    .test-vial:nth-child(2) { left: calc(50% - 18px); --vial-color: rgba(255,204,92,.82); }
-    .test-vial:nth-child(3) { right: 18%; --vial-color: rgba(94,155,240,.84); }
-    .testing-pulse { left: calc(50% - 3px); top: 19px; animation-name: testingDrop; animation-duration: 2.8s; }
-    @keyframes guideFlow {
-      0% { transform: translateX(0); opacity: 0; }
-      10%,90% { opacity: 1; }
-      100% { transform: translateX(210px); opacity: 0; }
-    }
-    @keyframes filterLoop {
-      0% { transform: translate(0,0); opacity: 0; }
-      12% { opacity: 1; }
-      45% { transform: translate(94px,0); }
-      70% { transform: translate(94px,66px); }
-      100% { transform: translate(-8px,66px); opacity: 0; }
-    }
-    @keyframes testingDrop {
-      0% { transform: translateY(0) scale(.7); opacity: 0; }
-      22% { opacity: 1; }
-      75% { transform: translateY(84px) scale(1); opacity: .9; }
-      100% { transform: translateY(92px) scale(1.8); opacity: 0; }
-    }
     @media (prefers-reduced-motion: reduce) {
       .triage-aquarium__surface::after,
-      .triage-aquarium__fish,
       .triage-aquarium__bubble {
-        animation: none !important;
-      }
-      .cycle-flow,
-      .filter-flow,
-      .testing-pulse {
         animation: none !important;
       }
     }
@@ -2434,7 +2340,7 @@
       .triage-visit,
       .triage-visit ul,
       .learn-motion-guide__head,
-      .learn-motion-guide__grid {
+      .learn-system-notes {
         grid-template-columns: 1fr;
       }
       .starter-section__head {
@@ -2510,7 +2416,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260712-complete-refresh" />
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260712-premium-art" />
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
@@ -2682,12 +2588,6 @@
             </select>
           </div>
           <div class="triage-aquarium" data-triage-visual data-zone="surface" data-biome="freshwater" role="img" aria-label="Aquarium diagram highlighting the water surface">
-            <span class="triage-aquarium__surface" aria-hidden="true"></span>
-            <span class="triage-aquarium__filter" aria-hidden="true"></span>
-            <span class="triage-aquarium__substrate" aria-hidden="true"></span>
-            <span class="triage-aquarium__plant" aria-hidden="true"></span>
-            <span class="triage-aquarium__fish" aria-hidden="true"></span>
-            <span class="triage-aquarium__bubble" aria-hidden="true"></span>
             <span class="triage-hotspot" data-zone="surface" aria-hidden="true">Surface</span>
             <span class="triage-hotspot" data-zone="water" aria-hidden="true">Water</span>
             <span class="triage-hotspot" data-zone="livestock" aria-hidden="true">Livestock</span>
@@ -2734,27 +2634,16 @@
     <section class="learn-motion-guide" aria-labelledby="visual-guides-title">
       <div class="learn-motion-guide__head">
         <h2 id="visual-guides-title">See the System, Not Just the Symptom</h2>
-        <p>These animated mini-guides show the three routines behind most healthy aquariums. Motion becomes static when reduced motion is enabled.</p>
+        <p>A healthy aquarium connects its living substrate, filtration, and testing routine. This GPT Image 2 illustration replaces the old animated diagrams.</p>
       </div>
-      <div class="learn-motion-guide__grid">
-        <article class="motion-guide-card">
-          <div class="motion-guide-card__art" role="img" aria-label="Nitrogen cycle moving from ammonia to nitrite to nitrate">
-            <span class="cycle-node">Ammonia</span><span class="cycle-node">Nitrite</span><span class="cycle-node">Nitrate</span><span class="cycle-flow" aria-hidden="true"></span>
-          </div>
-          <div class="motion-guide-card__body"><span>Cycling</span><h3>Waste becomes manageable</h3><p>Beneficial bacteria change dangerous ammonia and nitrite into nitrate that maintenance can remove.</p><a href="ammonia-nitrite/">Understand the cycle</a></div>
-        </article>
-        <article class="motion-guide-card">
-          <div class="motion-guide-card__art" role="img" aria-label="Water circulating from an aquarium through filter media and back">
-            <span class="filter-tank" aria-hidden="true"></span><span class="filter-box" aria-hidden="true"></span><span class="filter-flow" aria-hidden="true"></span>
-          </div>
-          <div class="motion-guide-card__body"><span>Filtration</span><h3>Water follows a complete loop</h3><p>Flow should carry debris and dissolved waste through mechanical, biological, and optional chemical media.</p><a href="which-filter/">Choose a filter</a></div>
-        </article>
-        <article class="motion-guide-card">
-          <div class="motion-guide-card__art" role="img" aria-label="Aquarium water testing vials changing color">
-            <span class="test-vial" aria-hidden="true"></span><span class="test-vial" aria-hidden="true"></span><span class="test-vial" aria-hidden="true"></span><span class="testing-pulse" aria-hidden="true"></span>
-          </div>
-          <div class="motion-guide-card__body"><span>Testing</span><h3>Trends matter more than one number</h3><p>Record results consistently so changes in ammonia, nitrate, pH, temperature, and salinity are easy to spot.</p><a href="track-parameters/">Build a testing rhythm</a></div>
-        </article>
+      <figure class="learn-system-art">
+        <img src="../assets/learn/aquarium-system-routines-gpt-image-2.webp" alt="Premium scientific aquarium illustration showing a planted living substrate, layered aquarium filter media, and professional water testing vials" loading="lazy" />
+        <figcaption>From left to right: the living aquarium ecosystem, layered filtration, and repeatable water testing.</figcaption>
+      </figure>
+      <div class="learn-system-notes">
+        <article class="learn-system-note"><span>Cycling</span><h3>Waste becomes manageable</h3><p>Beneficial bacteria change dangerous ammonia and nitrite into nitrate that maintenance can remove.</p><a href="ammonia-nitrite/">Understand the cycle</a></article>
+        <article class="learn-system-note"><span>Filtration</span><h3>Water follows a complete loop</h3><p>Flow should carry debris and dissolved waste through mechanical, biological, and optional chemical media.</p><a href="which-filter/">Choose a filter</a></article>
+        <article class="learn-system-note"><span>Testing</span><h3>Trends matter more than one number</h3><p>Record results consistently so changes in ammonia, nitrate, pH, temperature, and salinity are easy to spot.</p><a href="track-parameters/">Build a testing rhythm</a></article>
       </div>
     </section>
 
@@ -3836,6 +3725,6 @@
       });
     })();
   </script>
-  <script src="../assets/reef-background.js?v=20260712-complete-refresh"></script>
+  <script src="../assets/reef-background.js?v=20260712-premium-art"></script>
 </body>
 </html>
