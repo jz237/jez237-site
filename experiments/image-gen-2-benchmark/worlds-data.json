@@ -1846,5 +1846,25 @@
       "continuity": "Preserves Lumenreef Causeway turquoise shelf seas, black basalt islets, buoyant glass-coral causeways, shell-bell timing network, lensleaf rain awnings, reef-sled ferries, and low horizontal amphibious tide engineers with gill fans and shell-bell throat sacs.",
       "entryDescription": "Nali and apprentices lead a dawn procession through Prism Quay carrying the repaired resonator as the corrected shell-bell rhythm returns."
     }
+  },
+  {
+    "id": "2026-07-12-weekly-world-lumenreef-causeway-new-tide-keeper-launch",
+    "title": "Lumenreef Causeway: New Tide Keeper Launch",
+    "tests": "weekly-world continuity; realistic alien daily life; serialized story resolution; non-human body-plan consistency; tactile materials",
+    "prompt": "Create a finished square photorealistic documentary daily-life image from the invented alien world Lumenreef Causeway, titled “New Tide Keeper Launch.” At Prism Quay just after rain, show Nali’s low reef-sled ferry beginning its practical launch across a newly exposed luminous glass-coral causeway while synchronized shell-bell towers ring at the correct sky-tide interval. Nali and the ferry crew are non-human amphibious tide engineers with low horizontal blue-green pebble-textured bodies, six jointed walking limbs, two delicate manipulator arms, translucent gill-fan collars pulsing saffron and teal, broad mirrored eyes, flexible tail rudders, and shell-bell throat sacs. Identify Nali as the new keeper through a braided copper-and-kelpglass bell harness on the ferry rail. Show crew tensioning kelpglass mooring ropes, checking shell-ceramic cargo cradles, folding lensleaf awnings, securing basalt pins, and boarding passengers. In the middle distance show the refloated glass-coral nursery, and align Bellwether Lookout and Lowbell Harbor towers with clappers at the same phase. Use warm turquoise shelf seas, black basalt islets, saffron float pods, teal reed fans, violet under-reef glow, pearly rain curtains, copper hardware, wet material wear, 35mm documentary photography, bright overcast rainlight, and dense tactile detail. No humans, readable text, logos, generic Atlantis, cyberpunk, medieval styling, horror, poster layout, infographic layout, miniature look, or cinematic action.\n\nReusable fill-in-the-blank template: Create a finished photorealistic lived-in daily-life view from [WEEKLY_WORLD_NAME], using its world bible and serialized story as canon. Show [CHARACTER_OR_WORK_CREW] carrying out [STORY_BEAT] at [SPECIFIC_PLACE], with [NON_EARTH_ECOLOGY], [INHABITANT_BODY_PLAN], [MATERIALS_AND_TECHNOLOGY], [PRACTICAL_WORK_DETAILS], [CONTINUITY_CUES_FROM_PREVIOUS_BEAT], and [LIGHTING_OR_WEATHER]. Render it as believable documentary photography with tactile wear and scale cues, not a cinematic scene, poster, generic sci-fi setting, or human society.\n\nExample substitution: [WEEKLY_WORLD_NAME] = Lumenreef Causeway; [CHARACTER_OR_WORK_CREW] = Nali and the reef-sled ferry crew; [STORY_BEAT] = launch beneath properly synchronized shell-bells as Nali becomes keeper of the new tide rhythm; [SPECIFIC_PLACE] = Prism Quay and the exposed glass-coral causeway; [NON_EARTH_ECOLOGY] = lensleaf awnings, saffron float pods, teal reed fans, and the refloated glass-coral nursery; [INHABITANT_BODY_PLAN] = low blue-green amphibious tide engineers with six walking limbs, two manipulator arms, gill fans, mirrored eyes, tail rudders, and bell sacs; [MATERIALS_AND_TECHNOLOGY] = glass-coral, shell ceramic, kelpglass rope, basalt pins, copper fittings, and shell-bell towers; [PRACTICAL_WORK_DETAILS] = mooring, cargo checks, awning folding, anchor securing, and passenger boarding; [CONTINUITY_CUES_FROM_PREVIOUS_BEAT] = refloated nursery and bell clappers aligned in phase; [LIGHTING_OR_WEATHER] = bright turquoise overcast rainlight after a shower.",
+    "image": "images/2026-07-12-weekly-world-lumenreef-causeway-new-tide-keeper-launch.jpg",
+    "thumb": "thumbs/2026-07-12-weekly-world-lumenreef-causeway-new-tide-keeper-launch.webp",
+    "color": "#5e696c",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "world": {
+      "name": "Lumenreef Causeway",
+      "description": "A rain-bright alien archipelago where buoyant glass-coral reefs, living lens leaves, and many-limbed tide engineers build settlements along glowing shallow causeways that appear and vanish with the sky tide.",
+      "continuity": "Preserves the amphibious six-limbed tide engineers, shell-bell network, glass-coral causeways, rain ecology, and the refloated nursery after the successful retuning.",
+      "entryDescription": "Nali launches the reef-sled from Prism Quay beneath synchronized bells, visibly taking up the role of keeper of the new tide rhythm."
+    }
   }
 ]
