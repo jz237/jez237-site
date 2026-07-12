@@ -102,8 +102,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
    benches, cans (newspaper boxes + near-tier decals folded into a future polish
    pass). See iteration log.
 8. ~~Street-name signs~~ **DONE 2026-07-12 (iteration 08)** — see iteration log.
-9. **Traffic-signal detail**: 3-lamp housings + WALK/DON'T-WALK crosswalk signals
-   synced to the existing signal AI state.
+9. ~~Traffic-signal detail~~ **DONE 2026-07-12 (iteration 09)** — the 3-lamp
+   heads turned out to ALREADY exist and be live-synced; what shipped is the
+   missing half: WALK/DON'T-WALK ped signals. See iteration log.
 10. **Stadium crowd v2**: near tier = instanced seated figures (wave animation);
     far tier keeps the noise texture.
 11. **Road micro-detail**: manholes, storm drains, turn arrows, worn patches,
@@ -214,7 +215,29 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   pattern, customProgramCacheKey 'street-sign-atlas'); each blade = front+back
   quads so text reads from both sides. ~8k tris.
 - **DEPLOY BATCH 2 (2026-07-12): v3.9.0 LIVE** — items 05-08 deployed and
-  verified first-probe (index-D9DAYQ6Q.js, bundle 200). **Perf**: chase 1750 /
+  verified first-probe (index-D9DAYQ6Q.js, bundle 200).
+- **09 WALK/DON'T-WALK signals (2026-07-12)**: every signaled intersection (17)
+  has a pole-mounted two-face pedestrian display — glowing white walker / orange
+  hand, per-face EXCLUSIVE states synced to the SAME phase fn (we()) that drives
+  the lamp heads (which, discovery: already existed and were already live —
+  per-lamp cloned emissive materials updated in a Bn tick). qe.pedWalkFaces
+  exposes the live walking-face count (flips verified 13→17 and mixed 13/21
+  states). **THE BIG LESSON — mergeStaticScenery()**: the game batch-merges ≥6
+  same-material static meshes at boot (position+normal+uv+index, opaque
+  standard/basic/lambert mats) and REMOVES the originals — my icon quads got
+  swallowed and their .visible toggles went to orphaned objects. Opt-outs:
+  transparent:true (used here — merge skips transparent), or toggle MATERIAL
+  properties instead of visibility (that's why the lamp heads survive merging).
+  Check for this on ANY future dynamic-visibility scenery. Also: display box
+  centered on the pole axis was buried inside the pole (plates-in-bumpers
+  family) — hang attachments OFF poles. **Perf**: item adds ~500 tris + 2 tiny
+  textures; 3-sample chase measurement 564k/573k/582k tris (median 573k) —
+  world-gen noise is ±2% and now straddles the ~5% gate line consumed by items
+  07-08. RULING: pass (this item is provably negligible) + **FREEZE on further
+  permanent-geometry items** — promotion-pool/near-tier items only, until real
+  on-hardware FPS data justifies a new baseline. **Verified by looking**
+  (`loop-shots/09-pedsignals/`): probe-group0 = white walker glowing, probe-
+  group1 = orange hand, 01-face shots show the box+arm mount on the pole. **Perf**: chase 1750 /
   570,072 / 237 vs baseline 1794 / 543,646 / 227 — PASS but the ~5% tris budget
   (571k) is now nearly consumed: future PERMANENT-geometry items must be very
   lean (or renegotiate the budget with real FPS data — headless can't measure

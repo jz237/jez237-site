@@ -300,6 +300,15 @@ const browser = await chromium.launch({
     JSON.stringify({ h: fr?.hydrants, m: fr?.meters, b: fr?.benches, c: fr?.cans }),
   );
 
+  // zoom-detail item 09: WALK/DON'T-WALK ped signals synced to the lamp phase
+  const pss = await page.evaluate(() => window.__steelRibbonDebug.detailReport().pedSignals);
+  check("ped signals: boxes at signaled intersections", (pss?.count ?? 0) > 4, `count=${pss?.count}`);
+  check(
+    "ped signals: faces show mixed live states",
+    !!pss && pss.walking > 0 && pss.walking < pss.count * 2,
+    `walking=${pss?.walking}/${(pss?.count ?? 0) * 2}`,
+  );
+
   // zoom-detail item 08: named double-blade street signs at intersections
   const ssg = await page.evaluate(() => window.__steelRibbonDebug.detailReport().streetSigns);
   check(

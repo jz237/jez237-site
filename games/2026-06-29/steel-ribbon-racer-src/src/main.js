@@ -2823,6 +2823,51 @@ function buildStreetSigns(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt) {
   ((poles.count = np), (blades.count = nb), (poles.instanceMatrix.needsUpdate = !0), (blades.instanceMatrix.needsUpdate = !0), (slotAttr.needsUpdate = !0));
   ((streetSignSys.poles = np), (streetSignSys.blades = nb));
 }
+// ─── WALK / DON'T-WALK pedestrian signals (zoom-detail item 09): small two-face
+// display boxes on the existing signal poles, synced to the same phase function
+// that drives the (already live) red/amber/green lamp heads. Icons are two tiny
+// pooled canvas textures; each face toggles a white walker / orange hand quad.
+const pedSignalMeta = { count: 0, sample: [] };
+let pedIconMats = null;
+function buildPedIconMats() {
+  if (pedIconMats) return pedIconMats;
+  const mk = (draw) => {
+    const c = document.createElement("canvas");
+    ((c.width = 64), (c.height = 64));
+    const g = c.getContext("2d");
+    ((g.fillStyle = "#0a0c10"), g.fillRect(0, 0, 64, 64));
+    draw(g);
+    const t = new CanvasTexture(c);
+    t.colorSpace = SRGBColorSpace;
+    // transparent:true opts these quads OUT of mergeStaticScenery() — merged
+    // copies can't toggle .visible per phase (the merge skips transparent mats)
+    return new MeshBasicMaterial({ map: t, transparent: !0 });
+  };
+  const walk = mk((g) => {
+    ((g.fillStyle = "#f4f8ff"), (g.strokeStyle = "#f4f8ff"), (g.lineWidth = 5), (g.lineCap = "round"));
+    (g.beginPath(), g.arc(34, 13, 6, 0, 7), g.fill());
+    (g.beginPath(),
+      g.moveTo(34, 19),
+      g.lineTo(30, 35),
+      g.moveTo(30, 35),
+      g.lineTo(20, 52),
+      g.moveTo(30, 35),
+      g.lineTo(41, 50),
+      g.moveTo(33, 25),
+      g.lineTo(20, 32),
+      g.moveTo(33, 25),
+      g.lineTo(45, 33),
+      g.stroke());
+  });
+  const hand = mk((g) => {
+    g.fillStyle = "#ff7a26";
+    g.fillRect(22, 26, 22, 24);
+    for (let f = 0; f < 4; f++) g.fillRect(22 + f * 5.7, 11, 4.4, 19);
+    g.fillRect(15, 30, 8, 13);
+  });
+  pedIconMats = { walk, hand };
+  return pedIconMats;
+}
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
     d = [12139059, 3109053, 15263967, 3818573, 4695133, 14793024, 9261235, 16767293],
@@ -3762,13 +3807,36 @@ function N1() {
           : { green: null, yellow: "ew" };
   }
   function nt() {
+    ((pedSignalMeta.count = 0), (pedSignalMeta.sample.length = 0));
     const N = [],
+      PS = [],
+      pedMats = buildPedIconMats(),
       O = new MeshStandardMaterial({ color: 1120028, roughness: 0.38, metalness: 0.62 }),
       Y = new MeshStandardMaterial({ color: 1382685, roughness: 0.34, metalness: 0.38 }),
       j = A1(),
       ee = new MeshBasicMaterial({ map: j, transparent: !0, side: DoubleSide }),
       oe = new MeshStandardMaterial({ color: 5050642, roughness: 0.48, metalness: 0.12 }),
       re = (se, $) => new MeshStandardMaterial({ color: se, roughness: 0.16, metalness: 0.02, emissive: $, emissiveIntensity: 0.2 }),
+      addPedSignals = (xe, Ce, Ke, rt, wx, wz, wy) => {
+        // hang the display box OFF the pole (pole radius 0.24 — centering it on
+        // the axis buries the faces, same failure family as plates-in-bumpers)
+        const bx = Ke - 0.26,
+          bz = rt - 0.26;
+        const pb = new Mesh(new BoxGeometry(0.3, 0.52, 0.3), Y);
+        (pb.position.set(bx, 2.55, bz), xe.add(pb));
+        const arm = new Mesh(new BoxGeometry(0.34, 0.06, 0.34), Y);
+        (arm.position.set(Ke - 0.13, 2.84, rt - 0.13), xe.add(arm));
+        const mk = (mat) => new Mesh(new PlaneGeometry(0.2, 0.2), mat);
+        const walkA = mk(pedMats.walk),
+          handA = mk(pedMats.hand),
+          walkB = mk(pedMats.walk),
+          handB = mk(pedMats.hand);
+        for (const q of [walkA, handA]) ((q.position.set(bx - 0.16, 2.55, bz)), (q.rotation.y = -Math.PI / 2), xe.add(q));
+        for (const q of [walkB, handB]) ((q.position.set(bx, 2.55, bz - 0.16)), (q.rotation.y = Math.PI), xe.add(q));
+        PS.push({ control: Ce, walkA, handA, walkB, handB });
+        pedSignalMeta.count++;
+        pedSignalMeta.sample.length < 3 && pedSignalMeta.sample.push({ x: +(wx + bx).toFixed(1), y: +(wy + 2.55).toFixed(2), z: +(wz + bz).toFixed(1) });
+      },
       w = (se, $, me, ue, Ce, Pe) => {
         const xe = new Group(),
           Ke = new Mesh(new BoxGeometry(1.15, 2.85, 0.75), Y);
@@ -3806,6 +3874,7 @@ function N1() {
           w(xe, "ns", Ke - o * 0.18, 7.52, -rt, Math.PI),
           w(xe, "ew", Ke, 7.05, rt - o * 1.24, Math.PI / 2),
           w(xe, "ew", -Ke, 7.05, rt - o * 0.18, -Math.PI / 2),
+          addPedSignals(xe, Ce, Ke, rt, se, $, Pe),
           xe.position.set(se, Pe, $),
           xe.traverse((ke) => {
             ((ke.castShadow = !0), (ke.receiveShadow = !0));
@@ -3853,6 +3922,15 @@ function N1() {
             ($.yellow.emissiveIntensity = me.yellow === $.axis ? 2.6 : 0.12),
             ($.green.emissiveIntensity = me.green === $.axis ? 2.6 : 0.1));
         }
+        let walking = 0;
+        for (const P of PS) {
+          const st = we(P.control, se),
+            aW = st.green === "ew",
+            bW = st.green === "ns";
+          ((P.walkA.visible = aW), (P.handA.visible = !aW), (P.walkB.visible = bW), (P.handB.visible = !bW));
+          walking += (aW ? 1 : 0) + (bW ? 1 : 0);
+        }
+        qe.pedWalkFaces = walking;
       }),
       { trafficLights: H, stopSigns: z }
     );
@@ -8918,6 +8996,7 @@ window.__steelRibbonDebug = {
       },
       furniture: { ...furnitureSys.counts, sample: furnitureSys.sample.slice(0, 4) },
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
+      pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       peds: {
         pool: pedKitSys.pool,
         promoted: pedKitSys.promotedCount(),
