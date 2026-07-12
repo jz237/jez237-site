@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Hidden Reef - Aquariums, Fish, Coral, Ponds</title>
   <link rel="icon" type="image/png" href="assets/site/logo.png" />
-  <link rel="stylesheet" href="assets/thr-cards.css?v=20260712-complete-refresh" />
+  <link rel="stylesheet" href="assets/thr-cards.css?v=20260712-premium-art" />
   <style>
     :root {
       --blue-950: #003b63;
@@ -2765,37 +2765,6 @@
     .hero-depth__mid {
       inset: 0;
     }
-    .hero-depth__fish {
-      position: absolute;
-      top: 31%;
-      left: -12%;
-      width: 58px;
-      height: 23px;
-      border-radius: 58% 46% 48% 58%;
-      background: linear-gradient(90deg, rgba(44,157,198,.06), rgba(157,236,247,.32));
-      box-shadow: 0 0 24px rgba(73,206,237,.12);
-      animation: heroFishCross 17s linear infinite;
-    }
-    .hero-depth__fish::before {
-      content: "";
-      position: absolute;
-      left: -19px;
-      top: 2px;
-      border-top: 10px solid transparent;
-      border-right: 22px solid rgba(96,208,229,.2);
-      border-bottom: 10px solid transparent;
-    }
-    .hero-depth__fish::after {
-      content: "";
-      position: absolute;
-      right: 10px;
-      top: 6px;
-      width: 4px;
-      height: 4px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.72);
-      box-shadow: 0 0 5px rgba(255,255,255,.5);
-    }
     .hero-depth__foreground {
       inset: 34% -5% -16%;
       opacity: .78;
@@ -3012,13 +2981,6 @@
       50% { opacity: .56; }
       to { transform: translateY(-24px); opacity: .22; }
     }
-    @keyframes heroFishCross {
-      0% { transform: translateX(0) translateY(0) scale(.8); opacity: 0; }
-      10% { opacity: .76; }
-      52% { transform: translateX(62vw) translateY(-18px) scale(1); opacity: .72; }
-      90% { opacity: .66; }
-      100% { transform: translateX(126vw) translateY(8px) scale(.88); opacity: 0; }
-    }
     @keyframes ctaBubbleBurst {
       from { opacity: .9; transform: translate(-50%,0) scale(.55); }
       to { opacity: 0; transform: translate(-50%,-20px) scale(1.18); }
@@ -3115,7 +3077,6 @@
       }
       .hero-slides::before,
       .hero-slides::after,
-      .hero-depth__fish,
       .specials-progress span,
       .hero .button-row .btn:first-child::after,
       .hero .cta-bubbles::before,
@@ -3135,7 +3096,7 @@
       }
     }
   </style>
-  <link rel="stylesheet" href="assets/site-masthead.css?v=20260712-complete-refresh" />
+  <link rel="stylesheet" href="assets/site-masthead.css?v=20260712-premium-art" />
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
@@ -3175,7 +3136,7 @@
       </div>
       <div class="hero-depth" aria-hidden="true">
         <div class="hero-depth__plane hero-depth__deep" data-hero-depth="0.28"></div>
-        <div class="hero-depth__plane hero-depth__mid" data-hero-depth="0.72"><span class="hero-depth__fish"></span></div>
+        <div class="hero-depth__plane hero-depth__mid" data-hero-depth="0.72"></div>
         <div class="hero-depth__plane hero-depth__foreground" data-hero-depth="1.18"></div>
       </div>
       <div class="hero-content">
@@ -3386,8 +3347,8 @@
 	  <script src="assets/new-arrivals.js?v=20260604-full-list"></script>
 	  <script src="assets/sale-data.js?v=20260603-sales-menu"></script>
 	  <script src="assets/catalog-utils.js"></script>
-	  <script src="assets/thr-cards.js?v=20260712-complete-refresh"></script>
-	  <script src="assets/link-modal.js?v=20260712-complete-refresh"></script>
+	  <script src="assets/thr-cards.js?v=20260712-premium-art"></script>
+	  <script src="assets/link-modal.js?v=20260712-premium-art"></script>
 	  <script>
 	    window.THR_CATEGORY_CONFIG = {
 	      assetBase: 'assets',
@@ -3580,7 +3541,7 @@
 	      document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
 	    });
 	  </script>
-	  <script src="assets/reef-background.js?v=20260712-complete-refresh"></script>
+	  <script src="assets/reef-background.js?v=20260712-premium-art"></script>
 		  <script src="assets/category.js?v=20260604-sale-prices"></script>
 </body>
 	</html>
