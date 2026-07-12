@@ -75,8 +75,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 
 1. ~~License plates~~ **DONE 2026-07-12 (iteration 01)** — traffic + parked cars
    (NOT rivals: they're race cars — see new item: roundels). See iteration log.
-2. **Pedestrian near-tier v1 — bodies**: skin-tone + outfit variety, simple face
-   (eyes/brows/mouth), hands, shoes, knee/elbow bend in the walk pose (pool ~8).
+2. ~~Pedestrian near-tier v1 — bodies~~ **DONE 2026-07-12 (iteration 02)** — faces/
+   hands/shoes via attach-on kit pool. Skin-tone VARIETY deferred (needs per-ped
+   head/arm rebake — fold into item 3 props work). See iteration log.
 3. **Pedestrian props — phones first**: lit phone screen with readable 2-bubble chat
    (6–8 canned fictional exchanges, seed-picked), head tilted down while reading;
    then shopping bags, coffee cups, umbrellas as seed variants.
@@ -153,3 +154,24 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   Suite flakiness observed: "stunt jump lands a bonus" is world-luck (failed 1 of
   3 runs, its own comment admits random layouts block approaches) — on a red run,
   check whether the failure is plausibly yours before rerunning once.
+- **02 pedestrian kits (2026-07-12)**: the nearest pedestrians are now individuals —
+  eyes/brows/nose/mouth on the head, skin-tone hands on the arm ends, colored shoes
+  on the legs (mid-stride toe-forward). **Architecture** (reuse for entity add-on
+  detail): pedestrians are per-ped Groups (not instanced), so a pool of 8 kits
+  (4 under mobilePerf) ATTACHES parts as children — face merged to one mesh on the
+  group (heads are static in group space), hands/shoes parented onto the animated
+  limb meshes so they inherit the walk swing for free. Promotion re-ranked every
+  0.35s sim time by camera distance (radius 40m), stable kit-per-ped via
+  pedIndex % pool, hysteresis via "kit busy with an equally-near ped" skip. All
+  parts share vcMats opaque (vertex-baked) — promoted cost 5 small draws/kit, race
+  view cost ZERO (no peds within 40m of the ribbon camera). detailReport().peds =
+  {pool, promoted, radius, sample[x/y/z/axis/dir]}. **Perf**: chase 1752 calls /
+  539,083 tris vs baseline 1794 / 543,646 PASS. **Verification**: face legible at
+  2-4m, profile shows swing, low rear-quarter shows shoes+hands, 45m shot = bare
+  capsules unchanged; analytic audit kitted===promoted (far-tier purity) both in
+  shots script and as a smoke probe (`loop-shots/02-ped-kits/`). **Gotcha**:
+  probeDown() near the ribbon returns the DECK height, not street level — for
+  pedestrian aiming use the ped's own mesh y (now in detailReport sample). Walk
+  facing = local -Z, world dir = axis/dir fields (ns → z, ew → x). Ideas: phones
+  (item 3) should parent to the arm mesh mid-swing → hand raises phone naturally
+  when we pose the arm; dogs-on-leashes want a second walker synced to a ped.

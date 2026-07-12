@@ -214,6 +214,41 @@ const browser = await chromium.launch({
     JSON.stringify(plateWorld),
   );
 
+  // zoom-detail item 02: pedestrian near-tier kits (faces/hands/shoes)
+  const pedTarget = await page.evaluate(() => {
+    let best = null;
+    window.__steelRibbonScene.traverse((o) => {
+      if (!best && o.userData && o.userData.limbs && o.visible) {
+        const v = o.getWorldPosition(new o.position.constructor());
+        best = { x: +v.x.toFixed(1), z: +v.z.toFixed(1) };
+      }
+    });
+    return best;
+  });
+  let kitState = null;
+  if (pedTarget) {
+    await page.evaluate(([x, z]) => window.__steelRibbonDebug.setRoamPos(x + 5, z + 5, 0, 0), [pedTarget.x, pedTarget.z]);
+    kitState = await poll(page, () => window.__steelRibbonDebug.detailReport().peds, (p) => (p?.promoted ?? 0) > 0, 40);
+  }
+  check("ped kits: nearest pedestrians promoted", (kitState?.promoted ?? 0) > 0 && kitState.pool >= 4, JSON.stringify(kitState));
+  const kitAudit = await page.evaluate(() => {
+    let kitted = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.userData && o.userData.limbs) {
+        let has = !1;
+        o.traverse((c) => c.userData?.kitPart && (has = !0));
+        has && kitted++;
+      }
+    });
+    const p = window.__steelRibbonDebug.detailReport().peds;
+    return { kitted, promoted: p.promoted, pool: p.pool };
+  });
+  check(
+    "ped kits: only promoted peds carry kits (far tier pure)",
+    kitAudit.kitted === kitAudit.promoted && kitAudit.kitted <= kitAudit.pool,
+    JSON.stringify(kitAudit),
+  );
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
