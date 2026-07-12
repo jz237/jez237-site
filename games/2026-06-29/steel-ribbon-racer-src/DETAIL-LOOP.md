@@ -95,9 +95,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
    against far-tier pixel-equivalence. Also fold in: driver head for the stolen
    parked car the PLAYER drives (same I1 path).
 5. ~~Taxi identity~~ **DONE 2026-07-12 (iteration 05)** — see iteration log.
-6. **Storefront near-tier**: shop names (fictional, canvas), lit window interiors
-   (shelves/tables as cheap boxes or interior-texture v1), doors with handles,
-   OPEN/CLOSED variety.
+6. ~~Storefront near-tier~~ **DONE 2026-07-12 (iteration 06)** — see iteration log.
+   (Shop names already existed via the neon marquee signs — the missing pieces
+   were interiors/doors, which is what shipped.)
 7. **Street furniture**: hydrants, parking meters, benches, trash cans, newspaper
    boxes seeded along sidewalks (static merge friendly — these can be far-tier
    merged, near tier adds decals/labels).
@@ -167,6 +167,27 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   playbook from item 04 worked FIRST TRY — taxi hunt (k%6===1) found one in a
   single pass. Idea: the same pooled-decal pattern fits van/boxTruck side
   "STEEL FREIGHT" liveries and bus route numbers.
+- **06 storefront dress kits (2026-07-12)**: walk up to a commercial storefront
+  and it now has a warmly LIT interior window (4 canvas styles: cafe/garage/
+  shelves/arcade — bright glazing, dark frame + mullions, silhouettes), a proper
+  doorway (cream trim + maroon door + pale pane + brass handle) and a glowing
+  OPEN/CLOSED/BACK IN 5 door sign. **Architecture** (3rd promotion variant):
+  buildings are STATIC-MERGED so kits can't parent to them — spots {x,y,z,yaw,w}
+  are recorded in the commercial builder A() exactly where it places the marquee
+  sign (street-facing wall + yaw precomputed there), and 4 pooled kits (2 mobile)
+  are WORLD-positioned onto the nearest spots within 45m, kit scale clamped to
+  wall width. Far tier: flat facade exactly as before (dressedFar=0 verified).
+  **ORDER GOTCHA (cost a run)**: the city builder runs parked cars BEFORE
+  buildings — resetSpots() must sit at the BUILDING grid loop, not next to
+  plateSys.resetStatic(), or every recorded spot gets wiped. **Perf**: chase
+  1730 / 538,814 / 233 textures vs baseline 1794 / 543,646 / 227 PASS.
+  **Verified by looking** (`loop-shots/06-storefront/`): door-2m shot is
+  unambiguous (trim/door/pane/handle/OPEN sign); window-3m shows lit glazing.
+  First interior draft read as a black void (gradient fell to near-black and
+  dark silhouettes vanished) — keep interior textures BRIGHT with dark shapes,
+  not the reverse. Polish ideas: richer silhouettes per style, hanging lamps
+  read as arrows at distance; teleport the player PERPENDICULAR to the shot
+  axis or its hood photobombs close-ups.
 
 - **00 bootstrap (2026-07-12)**: survey only. Shot rig added (`tests/detail-shots.mjs`),
   baselines + backlog above. Shots in `loop-shots/00-bootstrap/`. No game code touched.

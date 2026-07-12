@@ -2484,6 +2484,152 @@ const taxiSignSys = {
     return this.pool ? this.pool.reduce((n, m) => n + (m.parent ? 1 : 0), 0) : 0;
   },
 };
+// ─── Storefront near-tier (zoom-detail item 06): commercial storefronts get a
+// promotion pool of 4 "dress kits" — a glowing interior window (4 canvas
+// styles: cafe / garage / shelves / arcade), a door with pane + brass handle,
+// and an OPEN/CLOSED/BACK IN 5 sign. Buildings are static-merged, so kits are
+// positioned in WORLD space from spots recorded at build time; promotion is
+// camera-distance keyed like the pedestrian kits. Far tier: the flat facade
+// band, exactly as today.
+let storefrontAtlas = null;
+function buildStorefrontAtlas() {
+  if (storefrontAtlas) return storefrontAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  const drawInterior = (x, y, style) => {
+    const W = 512,
+      H = 224,
+      warm = ["#e8a45c", "#7fb8d8", "#e8c087", "#c77bd8"][style],
+      glow = ["#ffdba4", "#c8ecff", "#ffe9c4", "#ffb3ec"][style];
+    const grad = g.createLinearGradient(x, y, x, y + H);
+    (grad.addColorStop(0, glow), grad.addColorStop(0.55, warm), grad.addColorStop(1, ["#8a5a2c", "#3f6c86", "#8a6a3c", "#6c3f86"][style]));
+    ((g.fillStyle = grad), g.fillRect(x, y, W, H));
+    // window frame so the quad reads as glazing, not a floating band
+    ((g.strokeStyle = "#221a14"), (g.lineWidth = 10), g.strokeRect(x + 5, y + 5, W - 10, H - 10));
+    ((g.lineWidth = 4), g.beginPath(), g.moveTo(x + W / 2, y), g.lineTo(x + W / 2, y + H), g.moveTo(x, y + H / 2), g.lineTo(x + W, y + H / 2), g.stroke());
+    g.fillStyle = "rgba(255, 230, 180, 0.85)";
+    for (let l = x + 60; l < x + W - 40; l += 110) {
+      g.fillRect(l, y + 8, 3, 26);
+      (g.beginPath(), g.moveTo(l - 12, y + 34), g.lineTo(l + 15, y + 34), g.lineTo(l + 1.5, y + 48), g.fill());
+    }
+    g.fillStyle = "rgba(10, 8, 12, 0.88)";
+    if (style === 0)
+      for (let t2 = x + 70; t2 < x + W - 60; t2 += 150)
+        (g.fillRect(t2, y + 150, 74, 8), g.fillRect(t2 + 33, y + 158, 8, 52), g.fillRect(t2 - 18, y + 168, 26, 42), g.fillRect(t2 + 66, y + 168, 26, 42));
+    else if (style === 1)
+      for (let t2 = x + 50; t2 < x + W - 60; t2 += 90)
+        (g.fillRect(t2, y + 60, 12, 60), g.fillRect(t2 - 14, y + 76, 40, 10), g.beginPath(), g.arc(t2 + 6, y + 180, 26, 0, 7), g.fill());
+    else if (style === 2) {
+      for (const sy of [80, 130, 180]) g.fillRect(x + 40, y + sy, W - 80, 8);
+      g.fillStyle = "rgba(30, 22, 16, 0.9)";
+      for (const sy of [56, 106, 156])
+        for (let bx = x + 56; bx < x + W - 70; bx += 44) g.fillRect(bx, y + sy, 26, 22);
+    } else
+      for (let t2 = x + 60; t2 < x + W - 80; t2 += 120) {
+        g.fillRect(t2, y + 90, 62, 120);
+        ((g.fillStyle = ["#4ff3ff", "#ff4fb7", "#68ff8f"][((t2 / 120) | 0) % 3]), g.fillRect(t2 + 10, y + 104, 42, 34));
+        g.fillStyle = "rgba(10, 8, 12, 0.88)";
+      }
+  };
+  (drawInterior(0, 0, 0), drawInterior(512, 0, 1), drawInterior(0, 224, 2), drawInterior(512, 224, 3));
+  // bottom strip: door-hang signs
+  const sign = (x, w, text, bg, fg) => {
+    ((g.fillStyle = bg), g.fillRect(x + 4, 452, w - 8, 56));
+    ((g.strokeStyle = fg), (g.lineWidth = 3), g.strokeRect(x + 7, 455, w - 14, 50));
+    ((g.fillStyle = fg), (g.font = "900 26px Arial, sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(text, x + w / 2, 481, w - 24);
+  };
+  (sign(0, 150, "OPEN", "#1d3a24", "#7dffa5"), sign(150, 150, "CLOSED", "#3a1d1d", "#ff8d7d"), sign(300, 190, "BACK IN 5", "#33301d", "#ffe27d"));
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  storefrontAtlas = { texture, mat: new MeshBasicMaterial({ map: texture }) };
+  return storefrontAtlas;
+}
+const storefrontSys = {
+  spots: [],
+  kits: null,
+  pool: 0,
+  _timer: 0,
+  resetSpots() {
+    this.spots.length = 0;
+    if (this.kits) for (const k of this.kits) ((k.group.visible = !1), (k.spot = null));
+  },
+  addSpot(x, y, z, yaw, w) {
+    this.spots.push({ x, y, z, yaw, w });
+  },
+  ensure() {
+    if (this.kits) return;
+    this.pool = mobilePerf ? 2 : 4;
+    const atlas = buildStorefrontAtlas();
+    this.kits = [];
+    for (let k = 0; k < this.pool; k++) {
+      const group = new Group(),
+        su = (k % 2) * 0.5,
+        sv = k < 2 ? 0.5625 : 0.125, // interior slots: rows y=0..224 → v 0.5625..1, y=224..448 → 0.125..0.5625
+        win = new PlaneGeometry(5.6, 1.9),
+        uv = win.attributes.uv;
+      for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, su + uv.getX(vi) * 0.5, sv + uv.getY(vi) * 0.4375);
+      const winMesh = new Mesh(win, atlas.mat);
+      (winMesh.position.set(-0.7, 1.55, 0.06), group.add(winMesh));
+      // cream trim backing makes the doorway read against ANY facade paint
+      const trim = new Mesh(new BoxGeometry(1.3, 2.3, 0.03), new MeshStandardMaterial({ color: 15326941, roughness: 0.7, metalness: 0.05 }));
+      (trim.position.set(2.75, 1.15, 0.03), group.add(trim));
+      const door = new Mesh(new BoxGeometry(1.02, 2.14, 0.05), new MeshStandardMaterial({ color: 5910302, roughness: 0.55, metalness: 0.15 }));
+      (door.position.set(2.75, 1.07, 0.05), group.add(door));
+      const pane = new Mesh(new PlaneGeometry(0.6, 0.8), new MeshStandardMaterial({ color: 10217727, roughness: 0.1, metalness: 0.1, emissive: 2963258, emissiveIntensity: 0.5 }));
+      (pane.position.set(2.75, 1.5, 0.081), group.add(pane));
+      const handle = new Mesh(new BoxGeometry(0.035, 0.17, 0.045), new MeshStandardMaterial({ color: 13092431, roughness: 0.3, metalness: 0.85 }));
+      (handle.position.set(3.14, 1.02, 0.09), group.add(handle));
+      const signW = [150, 150, 190][k % 3] / 150,
+        signGeo = new PlaneGeometry(0.34 * signW, 0.14),
+        suv = signGeo.attributes.uv,
+        sx0 = [0, 150 / 1024, 300 / 1024][k % 3],
+        sw = [150 / 1024, 150 / 1024, 190 / 1024][k % 3];
+      for (let vi = 0; vi < suv.count; vi++) suv.setXY(vi, sx0 + suv.getX(vi) * sw, (512 - 508 + suv.getY(vi) * 56) / 512);
+      const signMesh = new Mesh(signGeo, atlas.mat);
+      (signMesh.position.set(2.75, 0.62, 0.085), group.add(signMesh));
+      group.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1), (o.userData.dressKit = !0)));
+      ((group.visible = !1), et.add(group));
+      this.kits.push({ group, spot: null });
+    }
+  },
+  dressedCount() {
+    return this.kits ? this.kits.reduce((n, k) => n + (k.spot ? 1 : 0), 0) : 0;
+  },
+  update(dt) {
+    if (!this.spots.length) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.4;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = 45 * 45,
+      cand = [];
+    for (const s of this.spots) {
+      const dx = s.x - cx,
+        dz = s.z - cz,
+        d2 = dx * dx + dz * dz;
+      d2 < R2 && cand.push({ s, d2 });
+    }
+    cand.sort((p, q) => p.d2 - q.d2);
+    const want = cand.slice(0, this.pool).map((c) => c.s),
+      wantSet = new Set(want);
+    for (const k of this.kits)
+      if (k.spot && !wantSet.has(k.spot)) ((k.spot = null), (k.group.visible = !1));
+    for (const s of want) {
+      if (this.kits.some((k) => k.spot === s)) continue;
+      const free = this.kits.find((k) => !k.spot);
+      if (!free) break;
+      ((free.spot = s),
+        free.group.position.set(s.x, s.y, s.z),
+        (free.group.rotation.y = s.yaw),
+        free.group.scale.setScalar(Math.min(1, (s.w * 0.72) / 7)),
+        (free.group.visible = !0));
+    }
+  },
+};
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
     d = [12139059, 3109053, 15263967, 3818573, 4695133, 14793024, 9261235, 16767293],
@@ -2796,6 +2942,7 @@ function F1(i, e, t) {
     Bn(i, (I, ye) => {
       for (const Me of Q) ze(Me, I, ye);
       pedKitSys.update(ye);
+      storefrontSys.update(ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -3184,11 +3331,19 @@ function N1() {
         : (Ce.position.set(N, re + ee * 0.66, O + $ * (j * 0.5 + 0.2)), (Ce.rotation.y = $ < 0 ? Math.PI : 0)),
       i.add(Ce),
       Xi("storefront-sign", Ce.position.x, Ce.position.y, Ce.position.z),
+      storefrontSys.addSpot(
+        se ? N + $ * (Y * 0.5) : N,
+        re,
+        se ? O : O + $ * (j * 0.5),
+        se ? ($ > 0 ? Math.PI / 2 : -Math.PI / 2) : $ < 0 ? Math.PI : 0,
+        se ? j : Y,
+      ),
       Mn.push({ x: N, z: O, hw: Y * 0.5, hd: j * 0.5, maxY: re + ee + 2 }),
       Dt(oe, "brickStorefront"),
       !0
     );
   }
+  storefrontSys.resetSpots();
   for (let N = t + a / 2; N <= n - a / 2; N += a)
     for (let O = s - a / 2; O >= r + a / 2; O -= a) {
       const Y = Pn(N, O, c * 0.5).clearance;
@@ -8559,6 +8714,12 @@ window.__steelRibbonDebug = {
       taxis: {
         count: Rc.reduce((n, c) => n + (c.type === "taxi" ? 1 : 0), 0),
         signed: taxiSignSys.count(),
+      },
+      storefronts: {
+        spots: storefrontSys.spots.length,
+        dressed: storefrontSys.dressedCount(),
+        pool: storefrontSys.pool,
+        sample: storefrontSys.spots.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), yaw: +s.yaw.toFixed(2), w: +s.w.toFixed(1) })),
       },
       peds: {
         pool: pedKitSys.pool,

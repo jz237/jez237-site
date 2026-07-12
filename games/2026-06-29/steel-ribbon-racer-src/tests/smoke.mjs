@@ -280,6 +280,18 @@ const browser = await chromium.launch({
   const tx = await page.evaluate(() => window.__steelRibbonDebug.detailReport().taxis);
   check("taxis: all signed with medallion numbers", !!tx && tx.count > 0 && tx.signed === tx.count, JSON.stringify(tx));
 
+  // zoom-detail item 06: storefront dress kits (lit interior, door, sign) near the camera
+  const sf0 = await page.evaluate(() => window.__steelRibbonDebug.detailReport().storefronts);
+  check("storefronts: spots recorded", (sf0?.spots ?? 0) > 5, `spots=${sf0?.spots}`);
+  let sfDressed = sf0?.dressed ?? 0;
+  if (!sfDressed && sf0?.sample?.[0]) {
+    const sp = sf0.sample[0];
+    await page.evaluate(([s]) => window.__steelRibbonDebug.setRoamPos(s.x + Math.sin(s.yaw) * 8, s.z + Math.cos(s.yaw) * 8, 0, 0), [sp]);
+    const after = await poll(page, () => window.__steelRibbonDebug.detailReport().storefronts, (p) => (p?.dressed ?? 0) > 0, 30);
+    sfDressed = after?.dressed ?? 0;
+  }
+  check("storefronts: nearest facade dressed up close", sfDressed > 0, `dressed=${sfDressed}`);
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
