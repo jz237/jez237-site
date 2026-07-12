@@ -272,6 +272,10 @@ const browser = await chromium.launch({
   }
   check("ped kits: texting pedestrians hold chat phones", texting > 0, `texting=${texting}`);
 
+  // zoom-detail item 04: bus drivers (head+cap behind the windshield glass band)
+  const drv = await page.evaluate(() => window.__steelRibbonDebug.detailReport().drivers);
+  check("drivers: all buses crewed", !!drv && drv.cars === 30 && drv.withDriver === 5, JSON.stringify(drv));
+
   check("no console errors (roam)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
 }
