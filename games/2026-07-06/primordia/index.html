@@ -274,7 +274,7 @@
    Debug hook: window.__prim (read state; drive update/draw past RAF throttle).
 ============================================================================ */
 (function(){
-const VERSION = 'v2.3.0'; // v2.3: THE RESTLESS EARTH — a sixth era. The stage itself now changes: every few minutes a hydrothermal vent gutters out and a new one erupts elsewhere (shockwave, quake, rising fire). The plankton clusters that lived at the dead vent re-home to the new one — the bloom visibly MIGRATES across the world and the whole food web follows it. Coral takes hold at each new vent while the old reefs remain: the seafloor becomes a fossil record of everywhere the earth has breathed. (v2.2 chained ones; v2.1 living reef; v2.0 deep time; v1.8-1.10 volumetric depth/DOF/god-rays.)
+const VERSION = 'v2.4.0'; // v2.4: THE BURNING TIDE — a seventh era. On rare nights a wave of bioluminescence sweeps out from one bloom and IGNITES the whole plankton field, mote by mote — an expanding front of green fire crossing the dark, flickering, then dying away. It is also a spawning event: the bloom regrows half again as fast while the sea burns. (v2.3 restless earth; v2.2 chained ones; v2.1 living reef; v2.0 deep time; v1.8-1.10 volumetric depth/DOF/god-rays.)
 
 /* ---------- tiny math ---------- */
 const TAU = Math.PI*2;
@@ -736,7 +736,8 @@ function step(dt){
 
   // plankton logistic growth per cluster
   // plankton productivity: fast daily rhythm × slow seasonal rhythm (lean months grow ~30% less)
-  const r = lerp(CFG.r_night,CFG.r_day,dayFactor) * lerp(0.68,1.28,seasonFactor);
+  const r = lerp(CFG.r_night,CFG.r_day,dayFactor) * lerp(0.68,1.28,seasonFactor)
+    * (STORM.active?1.6:1); // the burning tide is a spawning event
   // one O(planktonCap) tally of per-cluster occupancy, instead of 48 full rescans
   clCount.fill(0);
   for(let i=0;i<CFG.planktonCap;i++){ if(PL.alive[i])clCount[PL.cl[i]]++; }
@@ -800,6 +801,7 @@ function step(dt){
   updateCoral(dt);
   updateSiphs(dt);
   updateVents(dt);
+  updateStorm(dt);
 
   // history sampling
   histAcc+=dt;
@@ -1144,6 +1146,7 @@ const ERAS=[
   {key:'reef',       day:10, gen:45, evt:'era_reef',      glyph:'✿', chron:'the living reef — coral gardens take root beside the vents'},
   {key:'chains',     day:14, gen:60, evt:'era_chains',    glyph:'❋', chron:'the chained ones — a colony of many, drifting as one'},
   {key:'quake',      day:18, gen:75, evt:'era_quake',     glyph:'⌇', chron:'the restless earth — the floor itself begins to change'},
+  {key:'storm',      day:22, gen:90, evt:'era_storm',     glyph:'☄', chron:'the burning tide — the bloom has learned to make light'},
 ];
 let eraLevel=0, eraSavedLevel=0, eraAcc=0;
 function loadWorldAge(){ try{ eraSavedLevel=(JSON.parse(localStorage.getItem('primordia_age_v1')||'{}').era|0)||0; }catch(e){} }
@@ -1169,6 +1172,7 @@ function unlockEra(i,announce){
   else if(e.key==='chains'){ const s=spawnSiph(); siphCooldown=rrange(60,140);
     if(s){ cx=clamp(s.x,100,CFG.W-100); cy=s.y; } }
   else if(e.key==='quake'){ ventCooldown=rrange(30,60); cx=CFG.W/2; cy=CFG.H-80; }
+  else if(e.key==='storm'){ STORM.cool=rrange(20,50); cx=CFG.W/2; cy=CFG.H/2; }
   if(announce){ narrate(e.evt,null); logChronicle(e.chron,e.glyph);
     interest.push({x:cx,y:cy,w:16,t:simTime}); }
   ensureEraRows();
@@ -1609,6 +1613,39 @@ function eruptVent(v){
   }
   narrate('ventShift',null);
   logChronicle('the earth shifts — a vent dies and another erupts','⌇');
+}
+
+/* ---- the burning tide: on rare nights a wave of bioluminescence sweeps out
+   from one bloom and IGNITES the whole plankton field, mote by mote. It is also
+   a spawning event — the bloom regrows half again as fast while the sea burns. */
+const STORM={active:false,t:0,dur:0,x:0,y:0,cool:rrange(240,400)};
+function updateStorm(dt){
+  if(eraLevel<7)return;
+  if(STORM.active){
+    STORM.t+=dt;
+    if(STORM.t>STORM.dur){ STORM.active=false; STORM.cool=rrange(300,520); }
+    return;
+  }
+  STORM.cool-=dt;
+  if(STORM.cool<=0){
+    if(dayFactor<0.35 && !genesisActive){
+      STORM.active=true; STORM.t=0; STORM.dur=rrange(24,36);
+      const cl=clusters[(rnd()*clusters.length)|0];
+      STORM.x=cl.x; STORM.y=cl.y;
+      interest.push({x:STORM.x,y:STORM.y,w:14,t:simTime});
+      narrate('stormNight',null);
+      logChronicle('the sea ignited — a burning tide swept the night','☄');
+    } else STORM.cool=20;                             // wait for dark
+  }
+}
+function stormGlow(x,y){                              // 0..1 ignition at a point
+  if(!STORM.active)return 0;
+  const R=STORM.t*140;                                // the wave front expands
+  const dx=x-STORM.x, dy=y-STORM.y;
+  const behind=R-Math.sqrt(dx*dx+dy*dy);
+  if(behind<0)return 0;
+  const fade=clamp(1.4-STORM.t/STORM.dur*1.4,0,1);    // dies away late in the storm
+  return clamp(behind/260,0,1)*fade;
 }
 
 /* dynamic HUD rows: the population readout grows as the world does */
@@ -2057,21 +2094,23 @@ const CAP={
   era_chains:['a colony of many drifts as one — the chained ones have come','a chain of lights crosses the middle water, catching what falls'],
   era_quake:['the ground itself wakes — nothing here is permanent','the restless earth stirs: vents will die, and vents will be born'],
   ventShift:['the earth closes one hand and opens another','a vent dies; another erupts — the bloom must move','the floor remakes itself, and the living follow'],
+  era_storm:['the nights will burn now — the bloom has learned light','a new fire sleeps in the plankton, waiting for dark'],
+  stormNight:['the sea ignites — a burning tide','every mote a lantern: the bloom is aflame','the night turns to green fire'],
   abyssStrike:['taken — pulled down into the dark','the lure was a lie. the deep feeds','one light goes out, below the thermocline'],
 };
 /* which events have recorded voice, and how many variants exist */
 const VOICE={genesis:3,extinction:3,nearext:2,firstbirth:3,boom:2,huntstreak:2,evolution:3,dusk:1,genmile:2,speciation:2,ornament:2,leviathan:2,
-  era_drifters:2,era_scavengers:2,era_abyss:2,era_reef:2,era_chains:2,era_quake:2};
+  era_drifters:2,era_scavengers:2,era_abyss:2,era_reef:2,era_chains:2,era_quake:2,era_storm:2};
 const VOICE_FILE={genesis:'e01_genesis',extinction:'e02_extinct',nearext:'e03_nearext',
   firstbirth:'e04_firstbirth',boom:'e05_boom',huntstreak:'e07_huntstreak',
   evolution:'e11_evolution',dusk:'e14_dusk',genmile:'e15_gen',speciation:'e20_speciation',ornament:'e21_ornament',leviathan:'e22_leviathan',
-  era_drifters:'e23_drifters',era_scavengers:'e24_scavengers',era_abyss:'e25_abyss',era_reef:'e26_reef',era_chains:'e27_chains',era_quake:'e28_quake'};
+  era_drifters:'e23_drifters',era_scavengers:'e24_scavengers',era_abyss:'e25_abyss',era_reef:'e26_reef',era_chains:'e27_chains',era_quake:'e28_quake',era_storm:'e29_storm'};
 const PRIORITY={genesis:0,extinction:0,leviathan:0,nearext:1,firstbirth:1,evolution:1,speciation:1,ornament:1,speciationLoss:2,boom:2,crash:2,huntstreak:2,
   genmile:2,famine:2,migrate:2,escape:3,schoolForm:3,schoolScatter:3,dawn:3,dusk:3,detritus:3,followStart:3,season:3,
-  era_drifters:0,era_scavengers:0,era_abyss:0,era_reef:0,era_chains:0,era_quake:0,ventShift:1,abyssStrike:2};
+  era_drifters:0,era_scavengers:0,era_abyss:0,era_reef:0,era_chains:0,era_quake:0,era_storm:0,ventShift:1,stormNight:1,abyssStrike:2};
 const EVCOOL={nearext:120,boom:150,crash:150,huntstreak:120,escape:90,schoolForm:180,schoolScatter:180,
   evolution:240,dawn:9999,dusk:9999,famine:240,detritus:240,migrate:120,genmile:0,speciation:300,speciationLoss:200,ornament:240,season:70,leviathan:0,
-  abyssStrike:120,ventShift:150};
+  abyssStrike:120,ventShift:150,stormNight:200};
 const bags={}; const evLast={};
 let lastCaptionAt=-100, lastVoiceAt=-100, firstBirthDone=false, warmupUntil=20;
 let queued=null;
@@ -2617,10 +2656,17 @@ function drawPlanktonBloom(){
   const s=(cam.scale+cam.breath)*sc*DPR*0.5;
   bloomCtx.setTransform(s,0,0,s, (cv.width/2-(cam.x)*(cam.scale+cam.breath)*sc*DPR)*0.5, (cv.height/2-(cam.y)*(cam.scale+cam.breath)*sc*DPR)*0.5);
   bloomCtx.globalCompositeOperation='lighter';
+  const storming=STORM.active;
   for(let i=0;i<CFG.planktonCap;i++){ if(!PL.alive[i])continue;
-    const pr=8+3.5*Math.sin(PL.pulse[i]);
+    let pr=8+3.5*Math.sin(PL.pulse[i]);
     const spr=glowSprites[((PL.hue[i]/360*HUEBUCKETS)|0)%HUEBUCKETS];
-    bloomCtx.globalAlpha=0.7;
+    let a=0.7;
+    if(storming){                                     // the burning tide: motes IGNITE as the wave passes
+      const sg=stormGlow(PL.px[i],PL.py[i]);
+      if(sg>0){ const flick=0.75+0.25*Math.sin(simTime*9+PL.pulse[i]*3);
+        pr*=(1+sg*1.6*flick); a=Math.min(1,0.7+sg*0.5); }
+    }
+    bloomCtx.globalAlpha=a;
     bloomCtx.drawImage(spr,PL.px[i]-pr,PL.py[i]-pr,pr*2,pr*2);
     bloomCtx.globalAlpha=0.5; // brighter core so dense blooms read as lush luminous clouds
     bloomCtx.drawImage(spr,PL.px[i]-pr*0.45,PL.py[i]-pr*0.45,pr*0.9,pr*0.9);
@@ -3327,6 +3373,9 @@ window.__prim={
   get ventsInfo(){ return vents.map(v=>({x:Math.round(v.x),y:Math.round(v.y),on:+(v.on==null?1:v.on).toFixed(2)})); },
   forceVentShift(){ ventCooldown=0; },
   get migrating(){ let n=0; for(const cl of clusters)if(cl.tx!=null)n++; return n; },
+  get storm(){ return STORM.active?{t:+STORM.t.toFixed(1),dur:STORM.dur,x:Math.round(STORM.x),y:Math.round(STORM.y)}:{cool:+STORM.cool.toFixed(1)}; },
+  summonStorm(){ STORM.active=true; STORM.t=0; STORM.dur=30;
+    const cl=clusters[(rnd()*clusters.length)|0]; STORM.x=cl.x; STORM.y=cl.y; },
   summonSiph(){ return !!spawnSiph(); },
   get deepLife(){ const out={j:[],s:[]};
     for(const j of jellies)if(j.alive)out.j.push([Math.round(j.x),Math.round(j.y),+j.z.toFixed(2)]);
