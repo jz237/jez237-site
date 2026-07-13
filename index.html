@@ -108,55 +108,6 @@
     .ai-sounds-card-animation i {
       display: none;
     }
-    .globe-card-animation {
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
-      background:
-        radial-gradient(circle at 18% 24%, rgba(120,238,255,.72) 0 1px, transparent 1.8px),
-        radial-gradient(circle at 78% 32%, rgba(255,255,255,.64) 0 1px, transparent 1.7px),
-        radial-gradient(circle at 67% 78%, rgba(69,231,255,.46) 0 1px, transparent 1.7px),
-        linear-gradient(145deg, #020811 0%, #031827 52%, #010509 100%);
-    }
-    .globe-card-animation::before {
-      content: "";
-      position: absolute;
-      width: 96px;
-      aspect-ratio: 1;
-      left: 50%;
-      top: 50%;
-      translate: -50% -50%;
-      border-radius: 50%;
-      background-image:
-        radial-gradient(circle at 29% 25%, rgba(255,255,255,.24), transparent 30%, rgba(0,17,28,.08) 52%, rgba(0,5,10,.85) 82%),
-        url('assets/home-cards/rotating-globe-texture-20260713.webp');
-      background-size: 100% 100%, 200% 100%;
-      background-position: center, 0 center;
-      box-shadow:
-        inset -17px -5px 24px rgba(0,3,8,.76),
-        0 0 12px rgba(69,231,255,.72),
-        0 0 34px rgba(0,150,255,.34);
-      animation: homeGlobeSpin 24s linear infinite;
-    }
-    .globe-card-animation::after {
-      content: "";
-      position: absolute;
-      width: 142px;
-      height: 46px;
-      left: 50%;
-      top: 50%;
-      translate: -50% -50%;
-      rotate: -16deg;
-      border: 1px solid rgba(69,231,255,.58);
-      border-radius: 50%;
-      box-shadow: 0 0 10px rgba(69,231,255,.24);
-    }
-    @keyframes homeGlobeSpin {
-      to { background-position: center, 200% center; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .globe-card-animation::before { animation: none; }
-    }
   </style>
   <link rel="stylesheet" href="assets/workbench-theme.css" />
 </head>
@@ -215,12 +166,6 @@
             <h2>Daily GPT Image 2 Prompts</h2>
             <p>A growing archive of creative prompts and generated images.</p>
             <span>Explore →</span>
-          </a>
-          <a class="hub-card" href="experiments/blueforest-globe/">
-            <div class="hub-card-media globe-card-animation" aria-hidden="true"></div>
-            <h2>Rotating Globe</h2>
-            <p>An interactive digital Earth with city lights, connection arcs, and orbital rings.</p>
-            <span>Launch →</span>
           </a>
           <a class="hub-card" href="https://baudersigns.com/" target="_blank" rel="noopener">
             <div class="hub-card-media" style="background-image:url('assets/home-cards/bauder-signs-thumb-20260530.webp')"></div>
