@@ -282,6 +282,7 @@ function sfxGameOver(){ playTone(50, 1.5, 0.15, "sine"); playTone(52, 1.5, 0.1, 
 function loadHS(){
   try { return JSON.parse(localStorage.getItem("void_surge_highscores")) || []; } catch(e){ return []; }
 }
+const SCORES_API = "https://game-scores.jez237.workers.dev/scores/void-surge";
 function saveHS(list){
   try { localStorage.setItem("void_surge_highscores", JSON.stringify(list)); } catch(e){}
 }
@@ -295,7 +296,10 @@ function addHS(initials, s, w, o){
   hs.sort((a,b) => b.score - a.score);
   if(hs.length > 10) hs.length = 10;
   saveHS(hs);
+  submitGlobalScore(initials, s, w, o);
 }
+async function fetchGlobalScores(){try{const r=await fetch(SCORES_API);return r.ok?await r.json():[]}catch(e){return[]}}
+async function submitGlobalScore(initials, s, w, o){try{await fetch(SCORES_API,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({initials,score:s,wallsCleared:w,orbsCollected:o,difficulty})})}catch(e){}}
 
 // === UI ===
 const titleScreen = document.getElementById("titleScreen");
@@ -325,15 +329,19 @@ function updateHUD(){
 function renderHSList(){
   const hs = loadHS();
   const el = document.getElementById("hsList");
-  if(hs.length === 0){
-    el.innerHTML = '<div class="stats">No scores yet</div>';
-    return;
-  }
   let html = "";
+  html += '<div class="stats" style="color:#0ff">LOCAL SCORES</div>';
+  if(hs.length === 0) html += '<div class="stats">No local scores yet</div>';
   for(let i = 0; i < hs.length; i++){
     html += `<div class="hs-entry"><span class="pos">${i+1}.</span><span class="initials">${hs[i].initials}</span><span class="hs-score">${hs[i].score}</span></div>`;
   }
+  html += '<div class="stats" style="color:#0ff;margin-top:12px">GLOBAL SCORES</div><div id="globalHS">Loading...</div>';
   el.innerHTML = html;
+  fetchGlobalScores().then(rows=>{
+    const box=document.getElementById("globalHS"); if(!box)return;
+    const top=(Array.isArray(rows)?rows:[]).slice(0,10);
+    box.innerHTML=top.length?top.map((h,i)=>`<div class="hs-entry"><span class="pos">${i+1}.</span><span class="initials">${h.initials||h.name||"???"}</span><span class="hs-score">${h.score||0}</span></div>`).join(""):'<div class="stats">No global scores yet</div>';
+  });
 }
 
 // Difficulty buttons

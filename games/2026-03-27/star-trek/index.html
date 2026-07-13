@@ -78,6 +78,7 @@ else if(type==='dock'){const o1=audioCtx.createOscillator();const o2=audioCtx.cr
 const QUADRANT_NAMES=["Antares","Rigel","Procyon","Vega","Canopus","Aldebaran","Altair","Sagittarius","Pollux","Sirius","Deneb","Capella","Betelgeuse","Fomalhaut","Arcturus","Regulus","Spica","Castor","Achernar","Polaris","Mizar","Alcor","Elnath","Mintaka","Bellatrix","Alnilam","Alnitak","Saiph","Naos","Wezen","Adhara","Aludra","Mirzam","Phact","Arneb","Nihal","Hadar","Menkent","Nunki","Ascella","Kaus","Shaula","Sargas","Dschubba","Acrab","Zuben","Unukalhai","Rasalhague","Cebalrai","Yed","Sabik","Marfik","Graffias","Kornephoros","Rutilicus","Sarin","Maasym","Rasalgethi","Kajam","Cujam","Gianfar","Thuban","Eltanin","Rastaban"];
 const SYSTEM_NAMES=["Warp Engines","Short Range Sensors","Long Range Sensors","Phasers","Photon Torpedoes","Damage Control","Shield Control","Computer"];
 const HS_KEY='startrek_highscores';
+const SCORES_API='https://game-scores.jez237.workers.dev/scores/super-star-trek';
 
 // ===================== GAME STATE =====================
 let galaxy=[],visited=[],enterprise={},klingonsTotal=0,starbasesTotal=0,stardateStart=0,stardateEnd=0,stardate=0,gameOver=false,gameWon=false,score=0;
@@ -297,6 +298,16 @@ function doShields(amount){
 function endGame(won){
   gameOver=true;gameWon=won;mode='gameover';
   if(won){score+=Math.max(0,(stardateEnd-stardate))*50;score+=starbasesTotal*200}
+}
+
+async function fetchGlobalScores(){try{const r=await fetch(SCORES_API);return r.ok?await r.json():[]}catch(e){return[]}}
+async function submitGlobalScore(name){try{await fetch(SCORES_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initials:name,score,won:gameWon,stardate})})}catch(e){}}
+function renderGlobalScores(){
+  fetchGlobalScores().then(rows=>{
+    const el=document.getElementById('global-hs-display'); if(!el)return;
+    const top=(Array.isArray(rows)?rows:[]).slice(0,10);
+    el.innerHTML=top.length?top.map((h,i)=>`<div>${i+1}. ${h.initials||h.name||'???'} — ${h.score||0}</div>`).join(''):'<div>No global scores yet</div>';
+  });
 }
 
 function getQuadName(r,c){return QUADRANT_NAMES[(r*8+c)%QUADRANT_NAMES.length]}
@@ -621,9 +632,11 @@ function showGameOver(){
     `<p>${gameWon?'All Klingons destroyed! The Federation is safe.':'The Enterprise has fallen...'}</p>`+
     `<p style="font-size:16px;color:#ffcc00">SCORE: ${score}</p>`+
     (isHigh?`<p>HIGH SCORE! Enter initials:</p><input id="hs-input" maxlength="3" value="AAA"><br><button onclick="saveHS()">SAVE</button>`:'') +
-    `<div class="hs-list" id="hs-display">${hs.map((h,i)=>`<div>${i+1}. ${h.name} — ${h.score}</div>`).join('')}</div>`+
+    `<div style="margin-top:10px;color:#88ccff">LOCAL SCORES</div><div class="hs-list" id="hs-display">${hs.map((h,i)=>`<div>${i+1}. ${h.name} — ${h.score}</div>`).join('')}</div>`+
+    `<div style="margin-top:10px;color:#88ccff">GLOBAL SCORES</div><div class="hs-list" id="global-hs-display">Loading...</div>`+
     `<button onclick="document.getElementById('go-overlay').remove();initGame();updateUI()">NEW GAME</button></div>`;
   document.body.appendChild(overlay);
+  renderGlobalScores();
 }
 
 function saveHS(){
@@ -632,6 +645,7 @@ function saveHS(){
   hs.push({name,score});hs.sort((a,b)=>b.score-a.score);hs=hs.slice(0,10);
   localStorage.setItem(HS_KEY,JSON.stringify(hs));
   document.getElementById('hs-display').innerHTML=hs.map((h,i)=>`<div>${i+1}. ${h.name} — ${h.score}</div>`).join('');
+  submitGlobalScore(name).then(renderGlobalScores);
 }
 
 // ===================== KEYBOARD =====================

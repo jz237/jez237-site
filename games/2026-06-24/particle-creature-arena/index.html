@@ -56,6 +56,7 @@ body.playing .bomb{display:block}
   <div class="panel">
     <h1 id="overTitle">GAME<br>OVER</h1>
     <p class="sub" id="overText"></p>
+    <div class="sub" id="globalScores" style="font-size:12px;text-align:left;margin:0 auto 8px;max-width:320px"></div>
     <div class="row"><button id="againBtn">Run Again</button><button class="secondary" id="menuBtn">Title</button></div>
   </div>
 </div>
@@ -63,8 +64,11 @@ body.playing .bomb{display:block}
 import * as THREE from "../../2026-06-10/iron-ridge/vendor/three.module.js";
 
 const $ = id => document.getElementById(id);
+const SCORES_API = "https://game-scores.jez237.workers.dev/scores/vector-arena-3d";
+const NAME_KEY = "vector_arena_3d_initials";
 const ui = {
   status:$("status"), wave:$("wave"), score:$("score"), overlay:$("overlay"), over:$("gameover"), overTitle:$("overTitle"), overText:$("overText"),
+  globalScores:$("globalScores"),
   start:$("startBtn"), practice:$("practiceBtn"), again:$("againBtn"), menu:$("menuBtn"), bomb:$("bombButton"), toast:$("toast"),
   moveStick:$("moveStick"), moveKnob:$("moveKnob"), aimStick:$("aimStick"), aimKnob:$("aimKnob")
 };
@@ -481,7 +485,30 @@ function updateUi() {
 }
 
 function toast(text, seconds=2.4){ ui.toast.textContent=text; ui.toast.classList.add("show"); state.messageUntil=state.t+seconds; }
-function endRun(title,text){ state.ended=true; state.running=false; document.body.classList.remove("playing"); ui.overTitle.innerHTML=title.replace(" ","<br>"); ui.overText.textContent=`${text} Score ${Math.floor(state.score).toLocaleString()} | Wave ${state.wave} | Kills ${state.kills}.`; ui.over.classList.remove("hidden"); }
+function endRun(title,text){
+  state.ended=true; state.running=false; document.body.classList.remove("playing");
+  const finalScore=Math.floor(state.score);
+  ui.overTitle.innerHTML=title.replace(" ","<br>");
+  ui.overText.textContent=`${text} Score ${finalScore.toLocaleString()} | Wave ${state.wave} | Kills ${state.kills}.`;
+  ui.over.classList.remove("hidden");
+  submitAndRenderGlobal(finalScore);
+}
+
+function cleanInitials(raw){ return (raw || "AAA").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 3) || "AAA"; }
+async function submitAndRenderGlobal(finalScore) {
+  ui.globalScores.textContent = "Global scores loading...";
+  if (finalScore > 0 && !state.practice) {
+    const initials = cleanInitials(prompt("Global score initials?", localStorage.getItem(NAME_KEY) || "AAA"));
+    localStorage.setItem(NAME_KEY, initials);
+    try { await fetch(SCORES_API, { method:"POST", headers:{ "Content-Type":"application/json" }, body:JSON.stringify({ initials, score:finalScore, wave:state.wave, kills:state.kills }) }); } catch(e) {}
+  }
+  try {
+    const res = await fetch(SCORES_API);
+    const rows = res.ok ? await res.json() : [];
+    const top = (Array.isArray(rows) ? rows : []).slice(0, 8);
+    ui.globalScores.innerHTML = "GLOBAL SCORES<br>" + (top.length ? top.map((r,i)=>`${i+1}. ${(r.initials||r.name||"???").slice(0,3)} ${r.score||0}`).join("<br>") : "No global scores yet");
+  } catch(e) { ui.globalScores.textContent = "Global scores offline"; }
+}
 
 function resize(){ const w=innerWidth,h=innerHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix(); }
 addEventListener("resize",resize,{passive:true}); resize();
