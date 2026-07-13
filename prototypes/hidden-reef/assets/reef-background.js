@@ -42,7 +42,7 @@
     const style = document.createElement('style');
     style.id = 'reef-background-glass-style';
     style.textContent = [
-      '.has-reef-background{background:#03182c!important;}',
+      '.has-reef-background{background:#03182c url("/assets/water-lab/clear-reef-water-gpt-image-2.webp") center top/cover fixed no-repeat!important;}',
       '.has-reef-background body{background:transparent!important;}',
       '.has-reef-background .page{background:transparent!important;}',
       '.has-reef-background .header:not(.masthead),',
@@ -265,6 +265,187 @@
   enhancePreviewNotice();
   enhanceMobileFilters();
 
+  function createRefractiveWaterRenderer() {
+    const waterCanvas = document.createElement('canvas');
+    waterCanvas.className = 'reef-water-image';
+    waterCanvas.setAttribute('aria-hidden', 'true');
+    Object.assign(waterCanvas.style, {
+      position: 'fixed',
+      inset: '0',
+      zIndex: '0',
+      width: '100%',
+      height: '100%',
+      opacity: '0',
+      pointerEvents: 'none',
+      transition: 'opacity 700ms ease'
+    });
+    canvas.parentNode.insertBefore(waterCanvas, canvas);
+
+    const gl = waterCanvas.getContext('webgl', {
+      alpha: false,
+      antialias: false,
+      depth: false,
+      powerPreference: 'high-performance'
+    });
+    if (!gl) return null;
+
+    const vertexSource = [
+      'attribute vec2 aPosition;',
+      'varying vec2 vUv;',
+      'void main(){',
+      'vUv=aPosition*.5+.5;',
+      'gl_Position=vec4(aPosition,0.0,1.0);',
+      '}'
+    ].join('');
+    const fragmentSource = [
+      'precision highp float;',
+      'varying vec2 vUv;',
+      'uniform sampler2D uClear;',
+      'uniform sampler2D uDeep;',
+      'uniform vec2 uResolution;',
+      'uniform vec2 uClearSize;',
+      'uniform vec2 uDeepSize;',
+      'uniform float uTime;',
+      'uniform float uDepth;',
+      'vec2 coverUv(vec2 screenUv,vec2 imageSize){',
+      'vec2 ratio=uResolution/imageSize;',
+      'float scale=max(ratio.x,ratio.y);',
+      'vec2 visible=uResolution/(imageSize*scale);',
+      'return(screenUv-.5)*visible+.5;',
+      '}',
+      'void main(){',
+      'float surface=smoothstep(.1,1.04,vUv.y);',
+      'float intensity=mix(1.0,.72,uDepth);',
+      'float waveX=sin(vUv.y*19.0+uTime*.82)+.52*sin(vUv.y*47.0-uTime*1.12)+.28*sin((vUv.x+vUv.y)*31.0+uTime*.66);',
+      'float waveY=sin(vUv.x*17.0-uTime*.58)+.44*sin(vUv.x*38.0+uTime*.91)+.22*sin((vUv.x-vUv.y)*53.0-uTime*.48);',
+      'float amplitude=mix(.0015,.0074,surface)*intensity;',
+      'vec2 distortion=vec2(waveX,waveY)*amplitude;',
+      'vec2 clearUv=clamp(coverUv(vUv+distortion,uClearSize),.002,.998);',
+      'vec2 deepUv=clamp(coverUv(vUv+distortion*.78,uDeepSize),.002,.998);',
+      'vec3 clearColor=texture2D(uClear,clearUv).rgb;',
+      'vec3 deepColor=texture2D(uDeep,deepUv).rgb;',
+      'float blend=smoothstep(0.0,1.0,uDepth);',
+      'vec3 color=mix(clearColor,deepColor,blend);',
+      'float light=sin(vUv.x*12.0+vUv.y*15.0+uTime*.54)+.55*sin(vUv.x*27.0-vUv.y*10.0-uTime*.43);',
+      'color+=light*.0085*intensity*(.34+surface*.66);',
+      'gl_FragColor=vec4(color,1.0);',
+      '}'
+    ].join('');
+
+    function compile(type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(shader) || 'Water shader failed to compile.');
+      }
+      return shader;
+    }
+
+    let program;
+    try {
+      program = gl.createProgram();
+      gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+      gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+    } catch (error) {
+      console.warn(error);
+      waterCanvas.remove();
+      return null;
+    }
+
+    gl.useProgram(program);
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+      -1, -1, 1, -1, -1, 1,
+      -1, 1, 1, -1, 1, 1
+    ]), gl.STATIC_DRAW);
+    const position = gl.getAttribLocation(program, 'aPosition');
+    gl.enableVertexAttribArray(position);
+    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+    const uniforms = {
+      resolution: gl.getUniformLocation(program, 'uResolution'),
+      clearSize: gl.getUniformLocation(program, 'uClearSize'),
+      deepSize: gl.getUniformLocation(program, 'uDeepSize'),
+      time: gl.getUniformLocation(program, 'uTime'),
+      depth: gl.getUniformLocation(program, 'uDepth')
+    };
+    const imageSizes = {
+      clear: [1774, 887],
+      deep: [1983, 793]
+    };
+    let loaded = 0;
+    let ready = false;
+
+    function loadTexture(unit, uniformName, source, sizeName) {
+      const texture = gl.createTexture();
+      gl.activeTexture(gl.TEXTURE0 + unit);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.uniform1i(gl.getUniformLocation(program, uniformName), unit);
+      const image = new Image();
+      image.decoding = 'async';
+      image.onload = function() {
+        gl.activeTexture(gl.TEXTURE0 + unit);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+        imageSizes[sizeName] = [image.naturalWidth, image.naturalHeight];
+        loaded += 1;
+        if (loaded === 2) {
+          ready = true;
+          waterCanvas.dataset.waterRenderer = 'active';
+          waterCanvas.style.opacity = '1';
+        }
+      };
+      image.src = source;
+    }
+
+    loadTexture(0, 'uClear', '/assets/water-lab/clear-reef-water-gpt-image-2.webp', 'clear');
+    loadTexture(1, 'uDeep', '/assets/water-lab/deep-aquarium-water-gpt-image-2.webp', 'deep');
+
+    function resizeWaterCanvas() {
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+      const nextWidth = Math.max(1, Math.round(window.innerWidth * ratio));
+      const nextHeight = Math.max(1, Math.round(window.innerHeight * ratio));
+      if (waterCanvas.width === nextWidth && waterCanvas.height === nextHeight) return;
+      waterCanvas.width = nextWidth;
+      waterCanvas.height = nextHeight;
+      gl.viewport(0, 0, nextWidth, nextHeight);
+    }
+
+    waterCanvas.addEventListener('webglcontextlost', function(event) {
+      event.preventDefault();
+      ready = false;
+      waterCanvas.style.opacity = '0';
+      waterCanvas.dataset.waterRenderer = 'fallback';
+    });
+
+    return {
+      render: function(time, depth) {
+        if (!ready) return;
+        resizeWaterCanvas();
+        gl.useProgram(program);
+        gl.uniform2f(uniforms.resolution, waterCanvas.width, waterCanvas.height);
+        gl.uniform2f(uniforms.clearSize, imageSizes.clear[0], imageSizes.clear[1]);
+        gl.uniform2f(uniforms.deepSize, imageSizes.deep[0], imageSizes.deep[1]);
+        gl.uniform1f(uniforms.time, time * 0.001);
+        gl.uniform1f(uniforms.depth, depth);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+      },
+      resize: resizeWaterCanvas,
+      canvas: waterCanvas
+    };
+  }
+
+  const waterRenderer = createRefractiveWaterRenderer();
+
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
 
@@ -274,6 +455,7 @@
   let bubbles = [];
   let raf = 0;
   let last = performance.now();
+  let depthMix = 0;
 
   function random(min, max) {
     return min + Math.random() * (max - min);
@@ -292,17 +474,18 @@
     const isDesktop = width >= 900;
     const count = prefersReducedMotion
       ? 0
-      : Math.round(Math.min(isDesktop ? 110 : 34, Math.max(isDesktop ? 58 : 18, width / (isDesktop ? 18 : 16))));
+      : Math.round(Math.min(isDesktop ? 135 : 46, Math.max(isDesktop ? 82 : 28, width / (isDesktop ? 12 : 11))));
+    canvas.dataset.reefBubbleCount = String(count);
     bubbles = Array.from({ length: count }, function(_, index) {
-      const featured = isDesktop && index % 8 === 0;
+      const featured = isDesktop && index % 10 === 0;
       return {
         x: random(-40, width + 40),
         y: random(-height * 0.2, height * 1.15),
         radius: random(featured ? 3.2 : 1.1, featured ? 7.4 : 4.2),
-        speed: random(isDesktop ? 9 : 8, isDesktop ? 28 : 23),
+        speed: random(isDesktop ? 7 : 7, isDesktop ? 25 : 21),
         wobble: random(8, isDesktop ? 36 : 26),
         phase: random(0, Math.PI * 2),
-        alpha: random(isDesktop ? 0.08 : 0.07, isDesktop ? 0.27 : 0.21)
+        alpha: random(isDesktop ? 0.055 : 0.05, isDesktop ? 0.21 : 0.18)
       };
     });
   }
@@ -417,17 +600,25 @@
     if (biomeName === 'freshwater') drawFreshwaterPlants(time);
   }
 
+  function getScrollDepth() {
+    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    if (maxScroll <= 1) return 0;
+    const raw = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+    return raw * raw * (3 - 2 * raw);
+  }
+
   function draw(time) {
     const dt = Math.min(48, time - last);
     last = time;
     ctx.clearRect(0, 0, width, height);
 
-    const bg = ctx.createLinearGradient(0, 0, 0, height);
-    bg.addColorStop(0, 'rgba(5,38,68,1)');
-    bg.addColorStop(0.5, 'rgba(3,21,43,1)');
-    bg.addColorStop(1, 'rgba(0,5,13,1)');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, width, height);
+    const targetDepth = getScrollDepth();
+    depthMix = prefersReducedMotion
+      ? targetDepth
+      : depthMix + (targetDepth - depthMix) * Math.min(1, dt * 0.0065);
+    canvas.dataset.reefDepth = depthMix.toFixed(3);
+    document.documentElement.style.setProperty('--reef-depth', depthMix.toFixed(3));
+    if (waterRenderer) waterRenderer.render(time * motionScale, depthMix);
 
     const topLight = ctx.createRadialGradient(width * 0.5, -height * 0.12, 0, width * 0.5, -height * 0.12, Math.max(width, height) * 0.75);
     topLight.addColorStop(0, rgba(biome.primary, 0.17));
@@ -438,7 +629,6 @@
 
     drawLightRays(time);
     drawCaustics(time);
-    drawBiomeAccent(time);
 
     // Darken the left/right gutters so the content column reads as framed
     // deep blue instead of a flat wash. Bubbles still float over the sides.
@@ -470,8 +660,12 @@
 
   window.addEventListener('resize', function() {
     resize();
+    if (waterRenderer) waterRenderer.resize();
     if (prefersReducedMotion) draw(0);
   }, { passive: true });
+  if (prefersReducedMotion) {
+    window.addEventListener('scroll', function() { draw(performance.now()); }, { passive: true });
+  }
   resize();
   draw(prefersReducedMotion ? 0 : performance.now());
 })();
