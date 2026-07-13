@@ -5,6 +5,7 @@
     plants: '<path d="M12 21V11"/><path d="M12 12c-4.5 0-7-2.6-7.5-7.5C9.4 5 12 7.5 12 12Z"/><path d="M12 14c4.5 0 7-2.4 7.5-7C15 7 12 9.4 12 14Z"/>',
     garden: '<path d="M7 3v4"/><path d="M17 3v4"/><path d="M4.5 8h15"/><rect x="4.5" y="5" width="15" height="15.5" rx="2"/><path d="M8 12h2.5M13.5 12H16M8 16h2.5M13.5 16H16"/>',
     imageGen: '<rect x="4" y="5" width="16" height="14" rx="2"/><path d="m7 16 3.4-3.4 2.6 2.6 2.2-2.2L19 16.8"/><circle cx="15.5" cy="9.5" r="1.4"/>',
+    globe: '<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17M12 3.5c2.4 2.3 3.7 5.1 3.7 8.5S14.4 18.2 12 20.5M12 3.5C9.6 5.8 8.3 8.6 8.3 12s1.3 6.2 3.7 8.5"/>',
     aiNews: '<path d="M12 4v16"/><path d="M8.2 7.2a3 3 0 0 0-1.8 5.4 3 3 0 0 0 1.4 5.8"/><path d="M15.8 7.2a3 3 0 0 1 1.8 5.4 3 3 0 0 1-1.4 5.8"/><path d="M8.2 7.2A3.6 3.6 0 0 1 12 4"/><path d="M15.8 7.2A3.6 3.6 0 0 0 12 4"/><path d="M8.5 12h7"/><path d="M8.8 16h6.4"/>',
     chronicle: '<path d="M6 4h12a2 2 0 0 1 2 2v13H8a2 2 0 0 0-2 2V4Z"/><path d="M6 4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h2"/><path d="M9 8h7"/><path d="M9 12h7"/><path d="M9 16h4"/>',
     aiSounds: '<path d="M4 14v-4"/><path d="M8 18V6"/><path d="M12 21V3"/><path d="M16 18V6"/><path d="M20 14v-4"/><path d="M3 20c3-2 5-2 8 0s5 2 10 0"/>',
@@ -40,6 +41,7 @@
       tone: 'media',
       items: [
         ['image-gen', 'experiments/image-gen-2-benchmark/', 'imageGen', 'GPT Image 2 Gallery'],
+        ['globe', 'experiments/blueforest-globe/', 'globe', 'Rotating Globe'],
         ['ai-news', 'ai-news/', 'aiNews', 'AI News'],
         ['computer-chronicle', 'computer-chronicle/', 'chronicle', 'Computer Chronicle'],
         ['ai-sounds', 'ai-sounds/', 'aiSounds', 'AI Generated Sounds'],

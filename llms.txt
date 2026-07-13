@@ -28,6 +28,8 @@ use these instructions before writing code or snippets.
   manifest, never to the album HTML. See `photos/README.md`.
 - `/experiments/image-gen-2-benchmark/` - daily GPT Image 2 prompts and
   generated image gallery.
+- `/experiments/blueforest-globe/` - interactive rotating digital globe
+  with city lights, connection arcs, and orbital rings.
 - `/experiments/image-gen-2-benchmark/worlds.html` - fictional-world
   image archive views.
 - `/experiments/image-gen-2-benchmark/hybrid-creatures.html` - hybrid
