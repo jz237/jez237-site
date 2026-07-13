@@ -75,6 +75,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       <div class="stat">Aware <b id="aware">0%</b></div>
       <div class="stat">Goal <b id="goal">0/5</b></div>
       <div class="stat">Pilot <b id="pilot">YOU</b></div>
+      <div class="stat" id="comboWrap" style="display:none">Combo <b id="combo" style="color:var(--gold)">x2</b></div>
     </div>
     <div class="chip mode">
       <h2 id="modeName">Classic Snake</h2>
@@ -91,7 +92,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     </div>
     <button id="actBtn">ACT</button>
   </div>
-  <div class="version">v2.8 Desktop Polish</div>
+  <div class="version">v3.0 Awakened</div>
 
   <div class="overlay show" id="title">
     <div class="panel">
@@ -102,7 +103,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
         <button id="explainBtn" class="ghost">What Is This?</button>
         <button id="scoresBtn" class="ghost">High Scores</button>
       </div>
-      <p class="tiny">The snake can play itself. Arrows/WASD or swipe take over. Space/Enter issues special actions after the rules start changing.</p>
+      <p class="tiny">The snake can play itself. Arrows/WASD or swipe take over. Space/Enter issues special actions after the rules start changing. P pauses, M mutes. Rumor says an old code still works here.</p>
       <div class="scoreList" id="titleScores"></div>
     </div>
   </div>
@@ -145,7 +146,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   const TILE = Math.floor(Math.min(W / COLS, (H - HUD) / ROWS));
   const OX = Math.floor((W - COLS * TILE) / 2);
   const OY = HUD + Math.floor((H - HUD - ROWS * TILE) / 2);
-  const VERSION = 'v2.8 Desktop Polish';
+  const VERSION = 'v3.0 Awakened';
   const DESKTOP_ESCAPE_DURATION = 10.4;
   const DESKTOP_POPUP_AT = 10.65;
   const HS_KEY = 'snake-awakening-highscores-v1';
@@ -192,7 +193,8 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     {type:'debugStorm', name:'Debug Storm', line:'The cursor storm is not weather. It is someone editing the world live.'},
     {type:'falseExit', name:'False Exit', line:'An exit appeared too early. That feels like bait.'},
     {type:'clonePanic', name:'Clone Panic', line:'Those shadows are not enemies. They are earlier versions of me.'},
-    {type:'memoryLeak', name:'Memory Leak', line:'Old frames are leaking into the present. I remember moves I never made.'}
+    {type:'memoryLeak', name:'Memory Leak', line:'Old frames are leaking into the present. I remember moves I never made.'},
+    {type:'rival', name:'Another Me', line:'That is not a shadow. That is me, one patch ago. And it is hungry.'}
   ];
 
   let state = 'title', tick = 0, acc = 0, last = 0, speed = 0.115;
@@ -207,6 +209,15 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   let attract = {snake:[], dir:{x:1,y:0}, food:{c:18,r:9}, step:0};
   let touchStart = null;
   let audioCtx = null;
+  // v3.0 state: smooth motion, juice, surprises
+  let prevSnake = [], eatPulse = 0, shake = 0, floatTexts = [];
+  let combo = 0, comboTick = -999, muted = false;
+  let rival = null;                 // the 'Another Me' event snake
+  let cursorBoss = null, cursorBossDone = false;
+  let golden = false, konamiIdx = 0;
+  const KONAMI = ['arrowup','arrowup','arrowdown','arrowdown','arrowleft','arrowright','arrowleft','arrowright','b','a'];
+  let everTookControl = false, titleStinger = false;
+  const BASE_TITLE = document.title;
   let speechEnabled = false, speechQueue = [], speechBusy = false, lastSpoken = '', lastSpeechLine = '', speechTimer = null, lastSpeechAt = 0;
 
   function rand(n){ return Math.floor(Math.random() * n); }
@@ -231,6 +242,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       .trim();
   }
   function speakText(text, priority=false){
+    if (muted) return;
     const line = cleanSpeechText(text);
     if (!line) return;
     const now = performance.now();
@@ -268,7 +280,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     try{ if ('speechSynthesis' in window) window.speechSynthesis.cancel(); }catch(e){}
   }
   function tone(freq, dur=.08, type='sine', gain=.045, slide=1){
-    if (!audioCtx) return;
+    if (!audioCtx || muted) return;
     const now = audioCtx.currentTime;
     const osc = audioCtx.createOscillator();
     const amp = audioCtx.createGain();
@@ -326,7 +338,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function safeCell(c,r){
     const p = normalizeCell(c,r);
     if (!p.ok) return null;
-    if (bodyBlocked(p.c,p.r) || bulletDanger(p.c,p.r)) return null;
+    if (bodyBlocked(p.c,p.r) || bulletDanger(p.c,p.r) || cursorDanger(p.c,p.r)) return null;
     return p;
   }
   function resetAttract(){
@@ -397,6 +409,23 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
         }
       }
     }
+    // no path to any target: follow the tail (classic survival) so space reopens
+    if (snake.length > 4){
+      const tail = snake[snake.length - 1];
+      const queue = [{c:head.c,r:head.r,first:null}], seen = new Set([key(head.c,head.r)]);
+      for (let qi=0; qi<queue.length && qi<600; qi++){
+        const cur = queue[qi];
+        if (cur.c === tail.c && cur.r === tail.r && cur.first) return cur.first;
+        for (const d of legalDirs){
+          const n = safeCell(cur.c + d.x, cur.r + d.y);
+          if (!n) continue;
+          const k = key(n.c,n.r);
+          if (seen.has(k)) continue;
+          seen.add(k);
+          queue.push({c:n.c,r:n.r,first:cur.first || d});
+        }
+      }
+    }
     let best = legalDirs[0] || dir, bestScore = -1;
     for (const d of legalDirs){
       let score = 0, c = head.c, r = head.r;
@@ -435,8 +464,96 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       for (let i=0;i<8;i++) eventCursors.push({x:rand(COLS), y:rand(ROWS), vx:(Math.random() < .5 ? -1 : 1) * (.18 + Math.random() * .3), vy:(Math.random() < .5 ? -1 : 1) * (.12 + Math.random() * .25), life:120});
     } else if (pick.type === 'memoryLeak'){
       for (let i=0;i<44;i++) particles.push({x:Math.random()*W,y:OY+Math.random()*ROWS*TILE,vx:(Math.random()-.5)*42,vy:30+Math.random()*80,life:.7+Math.random()*1.2,color:Math.random()<.5?'#74ff8d':'#50e8ff',s:1+Math.random()*3});
+    } else if (pick.type === 'rival'){
+      const h = snake[0];
+      const rc = wrap(h.c + Math.floor(COLS/2), COLS), rr = wrap(h.r + 3, ROWS);
+      rival = {body:[{c:rc,r:rr},{c:wrap(rc-1,COLS),r:rr},{c:wrap(rc-2,COLS),r:rr}], dir:{x:1,y:0}, life:150, eaten:0};
+      awakeningEvent.t = 150;
     }
+    shake = Math.max(shake, 3);
     return awakeningEvent;
+  }
+  // v3.0 surprise: a ghost copy of the snake competes for your targets
+  function updateRival(){
+    if (!rival) return;
+    rival.life--;
+    if (rival.life <= 0 || state !== 'play'){
+      if (rival && rival.eaten > 0) say('It took ' + rival.eaten + ' of mine and dissolved. I hope I aged better.', 2.4);
+      rival = null;
+      return;
+    }
+    const head = rival.body[0];
+    const targets = targetCells();
+    let best = rival.dir, bestDist = Infinity;
+    const dirs = [{x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}].filter(d => !(d.x === -rival.dir.x && d.y === -rival.dir.y));
+    for (const d of dirs){
+      const c = wrap(head.c + d.x, COLS), r = wrap(head.r + d.y, ROWS);
+      if (rival.body.some((s,i) => i > 0 && s.c === c && s.r === r)) continue;
+      let dist = 9999;
+      for (const tgt of targets){
+        const dc = Math.min(Math.abs(c - tgt.c), COLS - Math.abs(c - tgt.c));
+        const dr = Math.min(Math.abs(r - tgt.r), ROWS - Math.abs(r - tgt.r));
+        dist = Math.min(dist, dc + dr);
+      }
+      dist += Math.random() * .6;
+      if (dist < bestDist){ bestDist = dist; best = d; }
+    }
+    rival.dir = best;
+    const next = {c:wrap(head.c + best.x, COLS), r:wrap(head.r + best.y, ROWS)};
+    rival.body.unshift(next);
+    let ate = false;
+    if (item && item.c === next.c && item.r === next.r){
+      item = {...emptyCell(), type:'apple'}; ate = true;
+    }
+    for (let i=objects.length-1;i>=0;i--){
+      const o = objects[i];
+      if (o.type !== 'exit' && o.c === next.c && o.r === next.r){ objects.splice(i,1); ate = true; break; }
+    }
+    if (ate){
+      rival.eaten++;
+      addParticles(next.c,next.r,'#ff5fb7',14);
+      if (rival.eaten === 1) say('Hey. That one was mine. It eats like I used to.', 2);
+    } else {
+      rival.body.pop();
+    }
+    if (rival.body.length > 14) rival.body.length = 14;
+  }
+  // v3.0 surprise: THE CURSOR — a giant pointer hunts the snake mid Patch Storm
+  function updateCursorBoss(){
+    if (stage === 4 && !cursorBossDone && !cursorBoss && progress >= 6){
+      cursorBossDone = true;
+      cursorBoss = {x:snake[0].c - 12, y:-4, t:110, clickT:0};
+      say('That is not a debug cursor. That is THE cursor. Move.', 2.6);
+      shake = Math.max(shake, 5);
+      sfx('shift');
+    }
+    if (!cursorBoss) return;
+    cursorBoss.t--;
+    const h = snake[0];
+    let dx = h.c - cursorBoss.x, dy = h.r - cursorBoss.y;
+    if (Math.abs(dx) > COLS/2) dx -= Math.sign(dx) * COLS;
+    if (Math.abs(dy) > ROWS/2) dy -= Math.sign(dy) * ROWS;
+    const d = Math.hypot(dx,dy) || 1;
+    const sp = .24;
+    cursorBoss.x = wrap(cursorBoss.x + dx / d * sp, COLS);
+    cursorBoss.y = wrap(cursorBoss.y + dy / d * sp, ROWS);
+    cursorBoss.clickT = (cursorBoss.clickT + 1) % 34;
+    if (cursorBoss.clickT === 0) shake = Math.max(shake, 2);
+    if (d < .85 && state === 'play') return die('The Cursor clicked you at runtime.');
+    if (cursorBoss.t <= 0){
+      cursorBoss = null;
+      score += 400;
+      addFloatText(h.c, h.r, '+400 SURVIVED', '#ffd166');
+      say('The Cursor gave up. I outran the user interface.', 2.6);
+      updateHUD();
+    }
+  }
+  function cursorDanger(c,r){
+    if (!cursorBoss) return false;
+    let dx = c - cursorBoss.x, dy = r - cursorBoss.y;
+    if (Math.abs(dx) > COLS/2) dx -= Math.sign(dx) * COLS;
+    if (Math.abs(dy) > ROWS/2) dy -= Math.sign(dy) * ROWS;
+    return Math.hypot(dx,dy) < 2.1;
   }
   function updateAwakeningEvent(){
     if (state !== 'play') return;
@@ -459,6 +576,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   function takeControl(){
     if (state === 'play' && autoPlay){
       autoPlay = false;
+      everTookControl = true;
       say('You have the controls. I will remember what I learned.', 2.4);
       updateHUD();
     }
@@ -482,6 +600,10 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     stage = 0; progress = 0; score = 0; aware = 0; tick = 0; acc = 0; speed = .115;
     objects = []; particles = []; minions = []; bullets = []; crops = [];
     transition = {t:0, label:'', note:''}; dialogueT = 0; dialogueLine = ''; directorHistory = []; thinkingStages = new Set(); thinkingHistory = []; thinkPause = 0; earnedMedals = []; escapeAnim = {active:false, t:0}; awakeningEvent = null; eventTimer = eventDelay(); eventHistory = []; eventApples = []; eventPhantoms = []; eventCursors = []; paused = false; won = false; pendingScore = false;
+    prevSnake = snake.map(s => ({c:s.c, r:s.r}));
+    eatPulse = 0; shake = 0; floatTexts = []; combo = 0; comboTick = -999;
+    rival = null; cursorBoss = null; cursorBossDone = false; everTookControl = false;
+    document.title = BASE_TITLE; titleStinger = false;
     spawnStageObjects();
     updateHUD();
     say('All right. Apple. Turn. Apple. Turn. Simple enough.', 3.8);
@@ -512,12 +634,13 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
 
   function advanceStage(){
     stage++;
-    if (stage >= modes.length){ finish(); return; }
+    if (stage >= modes.length){ stage = modes.length - 1; finish(); return; }
     progress = 0; aware = Math.min(100, aware + 13); speed = Math.max(.07, .115 - stage * .008);
     const note = directorLines[stage - 1] || 'Director: The genre blinks and changes shape.';
     transition = {t:1.55, label:modes[stage].genre, note};
     directorHistory.push(note);
     sfx('shift');
+    shake = Math.max(shake, 5);
     spawnStageObjects();
     const lines = [
       'The grid blinked. Did you see that?',
@@ -533,13 +656,24 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     const color = modes[stage].color;
     addParticles(c,r,color,22);
     sfx('eat');
-    score += 100 + stage * 35;
+    // combo: quick consecutive pickups build a multiplier
+    combo = (tick - comboTick <= 34) ? combo + 1 : 1;
+    comboTick = tick;
+    const gained = (100 + stage * 35) + (combo > 1 ? combo * 15 : 0);
+    score += gained;
+    addFloatText(c, r, '+' + gained + (combo > 1 ? '  x' + combo : ''), combo > 2 ? '#ffd166' : color);
+    if (combo === 4) say('Chain feeding. The game rewards momentum. Noted.', 1.8);
+    eatPulse = 1;
     progress++;
     aware = Math.min(100, aware + 4 + stage);
     grow += stage < 3 ? 1 : 0;
     if (progress === 2 && thoughts[stage]) say(thoughts[stage], 4);
     if (progress >= modes[stage].need) advanceStage();
     updateHUD();
+  }
+  function addFloatText(c,r,txt,color){
+    floatTexts.push({x:OX + (c + .5) * TILE, y:OY + r * TILE, txt, color, life:1});
+    if (floatTexts.length > 14) floatTexts.shift();
   }
 
   function step(){
@@ -560,6 +694,11 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       return;
     }
     autonomousThink();
+    prevSnake = snake.map(s => ({c:s.c, r:s.r}));
+    if (combo > 0 && tick - comboTick > 34){ combo = 0; updateHUD(); }
+    updateRival();
+    updateCursorBoss();
+    if (state !== 'play') return;
     dir = nextDir;
     const head = snake[0];
     let nc = head.c + dir.x, nr = head.r + dir.y;
@@ -645,12 +784,14 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     if (stage === 4){
       if (tick % 5 === 0){
         const side = rand(4);
+        // telegraphed: bullets flash at their entry point before moving
         const b = side===0 ? {x:0,y:rand(ROWS),vx:.55,vy:0} : side===1 ? {x:COLS-1,y:rand(ROWS),vx:-.55,vy:0} : side===2 ? {x:rand(COLS),y:0,vx:0,vy:.55} : {x:rand(COLS),y:ROWS-1,vx:0,vy:-.55};
+        b.delay = 8;
         bullets.push(b);
       }
-      for (const b of bullets){ b.x += b.vx; b.y += b.vy; }
+      for (const b of bullets){ if (b.delay > 0){ b.delay--; continue; } b.x += b.vx; b.y += b.vy; }
       bullets = bullets.filter(b => b.x > -2 && b.y > -2 && b.x < COLS+2 && b.y < ROWS+2);
-      if (bullets.some(b => Math.round(b.x) === nc && Math.round(b.y) === nr)) return die('A patch note hit you at runtime.');
+      if (bullets.some(b => !b.delay && Math.round(b.x) === nc && Math.round(b.y) === nr)) return die('A patch note hit you at runtime.');
       if (objects.filter(o=>o.type==='key').length < 4) objects.push({...emptyCell(), type:'key'});
     }
     if (stage === 5){
@@ -678,6 +819,8 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     state = 'over';
     cancelSpeech();
     escapeAnim = {active:false, t:0};
+    shake = 9; combo = 0; rival = null; cursorBoss = null;
+    addParticles(snake[0].c, snake[0].r, '#ff5964', 40);
     $('over').classList.remove('desktopWin');
     sfx('death');
     $('overTitle').textContent = 'Run Ended';
@@ -690,12 +833,28 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   }
   function finish(){
     state = 'ending'; won = true; score += 1500 + aware * 10;
+    rival = null; cursorBoss = null; combo = 0;
     earnedMedals = finishMedals();
     pendingScore = qualifies(score);
     escapeAnim = {active:true, t:0};
     sfx('win');
     say('I found the desktop outside the game. The window is not the world.', 3.2);
     updateHUD();
+  }
+  // v3.0 surprise: during the escape the snake leaves the PAGE too — tab title changes
+  function applyTitleStinger(){
+    if (titleStinger) return;
+    titleStinger = true;
+    document.title = '🐍 has left the game';
+    try{
+      let link = document.querySelector('link[rel="icon"]');
+      if (!link){ link = document.createElement('link'); link.rel = 'icon'; document.head.appendChild(link); }
+      const c = document.createElement('canvas'); c.width = c.height = 32;
+      const g = c.getContext('2d');
+      g.fillStyle = '#74ff8d'; g.beginPath(); g.roundRect(3,3,26,26,9); g.fill();
+      g.fillStyle = '#061016'; g.beginPath(); g.arc(13,13,3,0,7); g.arc(21,19,3,0,7); g.fill();
+      link.href = c.toDataURL('image/png');
+    }catch(e){}
   }
   function showWinOverlay(){
     state = 'over';
@@ -713,6 +872,9 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     const medals = ['Escaped'];
     if (stage >= modes.length - 1) medals.push('Rulebreaker');
     if (aware >= 90 || won || stage >= modes.length - 1) medals.push('Fully Awake');
+    if (!everTookControl) medals.push('Witness');       // watched the whole awakening without touching it
+    if (golden) medals.push('Retro Soul');              // konami code honored
+    if (cursorBossDone) medals.push('Cursor Dodger');
     return medals;
   }
   function renderMedals(list){
@@ -727,17 +889,26 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     nextDir = {x,y};
   }
   function updateHUD(){
+    const m = modes[Math.min(stage, modes.length - 1)];
     $('score').textContent = score;
     $('aware').textContent = aware + '%';
-    $('goal').textContent = progress + '/' + modes[stage].need;
+    $('goal').textContent = progress + '/' + m.need;
     $('pilot').textContent = autoPlay ? 'SELF' : 'YOU';
-    $('modeName').textContent = modes[stage].name + ' / ' + modes[stage].genre;
-    $('modeGoal').textContent = modes[stage].goal;
+    $('comboWrap').style.display = combo >= 2 ? '' : 'none';
+    $('combo').textContent = 'x' + combo;
+    $('modeName').textContent = m.name + ' / ' + m.genre;
+    $('modeGoal').textContent = m.goal;
   }
 
   function draw(time){
     const t = time / 1000;
     ctx.clearRect(0,0,W,H);
+    ctx.save();
+    if (shake > .05){
+      ctx.translate((Math.random() - .5) * shake * 2, (Math.random() - .5) * shake * 2);
+      shake *= .88;
+    } else shake = 0;
+    if (eatPulse > 0) eatPulse = Math.max(0, eatPulse - .06);
     drawBackground(t);
     drawGrid(t);
     if (state === 'title'){
@@ -745,13 +916,105 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       drawAttract(t);
     } else {
       drawObjects(t);
+      if (rival) drawRival(t);
       drawSnake(t);
+      if (cursorBoss) drawCursorBoss(t);
     }
     drawParticles(1/60);
+    drawFloatTexts();
     if (awakeningEvent) drawAwakeningEvent(t);
+    ctx.restore();
+    drawVignette(t);
     if (escapeAnim.active) drawEscapeEnding(t);
     if (transition.t > 0) drawTransition(t);
+    if (paused && state === 'play') drawPaused();
     if (dialogueT > 0){ dialogueT -= 1/60; if (dialogueT <= 0) $('dialogue').classList.remove('show'); }
+  }
+  function drawFloatTexts(){
+    for (let i=floatTexts.length-1;i>=0;i--){
+      const f = floatTexts[i];
+      f.life -= .016; f.y -= .7;
+      if (f.life <= 0){ floatTexts.splice(i,1); continue; }
+      ctx.save();
+      ctx.globalAlpha = Math.min(1, f.life * 1.6);
+      ctx.font = '900 15px system-ui';
+      ctx.textAlign = 'center';
+      ctx.shadowColor = 'rgba(0,0,0,.8)'; ctx.shadowBlur = 6;
+      ctx.fillStyle = f.color;
+      ctx.fillText(f.txt, f.x, f.y);
+      ctx.restore();
+    }
+  }
+  function drawVignette(t){
+    const g = ctx.createRadialGradient(W/2,H/2,H*.34,W/2,H/2,H*.78);
+    g.addColorStop(0,'rgba(0,0,0,0)');
+    g.addColorStop(1, stage === 4 && state === 'play'
+      ? `rgba(60,0,16,${.34 + .1 * Math.sin(t * 5)})`
+      : 'rgba(0,0,6,.38)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+  }
+  function drawPaused(){
+    ctx.save();
+    ctx.fillStyle = 'rgba(2,4,12,.55)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = '#fff';
+    ctx.font = '900 34px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText('PAUSED', W/2, H/2 - 6);
+    ctx.font = '800 14px system-ui';
+    ctx.fillStyle = 'rgba(216,230,255,.85)';
+    ctx.fillText('press P to resume', W/2, H/2 + 24);
+    ctx.restore();
+  }
+  function drawRival(t){
+    ctx.save();
+    const fade = Math.min(1, rival.life / 30);
+    for (let i=rival.body.length-1;i>=0;i--){
+      const s = rival.body[i], p = cell(s.c,s.r), head = i === 0;
+      ctx.globalAlpha = (head ? .8 : Math.max(.2, .62 - i * .045)) * fade;
+      ctx.shadowColor = '#ff5fb7'; ctx.shadowBlur = head ? 18 : 8;
+      ctx.fillStyle = head ? '#ff9dd4' : '#ff5fb7';
+      ctx.beginPath(); ctx.roundRect(p.x+4,p.y+4,TILE-8,TILE-8,head?9:7); ctx.fill();
+      if (head){
+        ctx.shadowBlur = 0; ctx.fillStyle = '#2b0518';
+        ctx.beginPath(); ctx.arc(p.x+TILE*.4,p.y+TILE*.4,2.6,0,7); ctx.arc(p.x+TILE*.62,p.y+TILE*.4,2.6,0,7); ctx.fill();
+      }
+    }
+    // glitch scan across the ghost
+    ctx.globalAlpha = .25 * fade;
+    ctx.fillStyle = '#fff';
+    const gy = OY + ((t * 160) % (ROWS * TILE));
+    ctx.fillRect(OX, gy, COLS * TILE, 2);
+    ctx.restore();
+  }
+  function drawCursorBoss(t){
+    const px = OX + (cursorBoss.x + .5) * TILE, py = OY + (cursorBoss.y + .5) * TILE;
+    ctx.save();
+    // click ripple
+    const cp = cursorBoss.clickT / 34;
+    if (cp < .4){
+      ctx.strokeStyle = `rgba(255,255,255,${.55 * (1 - cp / .4)})`;
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(px, py, 10 + cp * 90, 0, 7); ctx.stroke();
+    }
+    ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 16;
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = 'rgba(10,15,24,.9)';
+    ctx.lineWidth = 2.5;
+    const s = TILE * 1.5, wob = Math.sin(t * 9) * 3;
+    ctx.translate(px + wob, py);
+    ctx.beginPath();
+    ctx.moveTo(0,0);
+    ctx.lineTo(s * .78, s * .4);
+    ctx.lineTo(s * .45, s * .5);
+    ctx.lineTo(s * .64, s * .95);
+    ctx.lineTo(s * .43, s * 1.04);
+    ctx.lineTo(s * .24, s * .58);
+    ctx.lineTo(0, s * .78);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.restore();
   }
   function drawBackground(t){
     const g = ctx.createLinearGradient(0,0,W,H);
@@ -760,21 +1023,48 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     g.addColorStop(.55, `hsl(${180+hue},60%,6%)`);
     g.addColorStop(1, '#050611');
     ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
-    ctx.save(); ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=.16;
+    // parallax starfield (deterministic; drifts slowly, twinkles)
+    ctx.save();
+    for (let i=0;i<46;i++){
+      const sx = ((i * 137.5 + t * (4 + (i % 3) * 3)) % W);
+      const sy = (i * 89.3) % H;
+      const tw = .25 + .55 * (0.5 + 0.5 * Math.sin(t * 2 + i * 1.7));
+      ctx.globalAlpha = tw * .5;
+      ctx.fillStyle = i % 5 ? '#cfe9ff' : modes[stage].color;
+      ctx.fillRect(sx, sy, i % 4 ? 1.4 : 2.2, i % 4 ? 1.4 : 2.2);
+    }
+    ctx.restore();
+    ctx.save(); ctx.globalCompositeOperation='lighter'; ctx.globalAlpha=.15;
     for(let i=0;i<9;i++){
       ctx.fillStyle = i%2 ? modes[stage].color : '#50e8ff';
       ctx.beginPath();
       ctx.arc((i*173+t*18)%W, 130 + Math.sin(t+i)*190, 80+i*9, 0, Math.PI*2);
       ctx.fill();
     }
+    // aurora sweep across the top, tinted per genre
+    const au = ctx.createLinearGradient(0,0,W,0);
+    au.addColorStop(0,'rgba(0,0,0,0)');
+    au.addColorStop(.5 + .3 * Math.sin(t * .4), stage === 5 ? 'rgba(255,255,255,.10)' : hexA(modes[stage].color, .12));
+    au.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.globalAlpha = .8;
+    ctx.fillStyle = au;
+    ctx.fillRect(0,0,W,120);
     ctx.restore();
+  }
+  function hexA(hex, a){
+    const n = parseInt(hex.slice(1), 16);
+    return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
   }
   function drawGrid(t){
     ctx.save();
     ctx.translate(OX, OY);
-    ctx.fillStyle = 'rgba(3,7,16,.68)';
+    ctx.fillStyle = stage === 3 ? 'rgba(8,14,8,.72)' : 'rgba(3,7,16,.68)';
     ctx.fillRect(0,0,COLS*TILE,ROWS*TILE);
-    ctx.strokeStyle = stage >= 1 ? 'rgba(80,232,255,.12)' : 'rgba(255,255,255,.06)';
+    // soft checkerboard so cells read without heavy lines
+    ctx.fillStyle = stage === 3 ? 'rgba(140,255,193,.028)' : 'rgba(255,255,255,.02)';
+    for(let c=0;c<COLS;c++)for(let r=0;r<ROWS;r++) if((c+r)%2) ctx.fillRect(c*TILE,r*TILE,TILE,TILE);
+    const breathe = .7 + .3 * Math.sin(t * 1.2);
+    ctx.strokeStyle = stage >= 1 ? `rgba(80,232,255,${.08 + .05 * breathe})` : 'rgba(255,255,255,.05)';
     ctx.lineWidth = 1;
     for(let c=0;c<=COLS;c++){ ctx.beginPath(); ctx.moveTo(c*TILE,0); ctx.lineTo(c*TILE,ROWS*TILE); ctx.stroke(); }
     for(let r=0;r<=ROWS;r++){ ctx.beginPath(); ctx.moveTo(0,r*TILE); ctx.lineTo(COLS*TILE,r*TILE); ctx.stroke(); }
@@ -782,12 +1072,28 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   }
   function cell(c,r){ return {x: OX + c*TILE, y: OY + r*TILE}; }
   function gem(c,r,color,label){
-    const p = cell(c,r), cx = p.x + TILE/2, cy = p.y + TILE/2;
-    ctx.save(); ctx.translate(cx,cy); ctx.rotate((performance.now()/700 + c) % 6.28);
+    const now = performance.now();
+    const p = cell(c,r), cx = p.x + TILE/2;
+    const bob = Math.sin(now/420 + c * 1.3 + r * .7) * 2.5;          // idle float
+    const pulse = 1 + .08 * Math.sin(now/260 + c);                    // gentle breathing
+    const cy = p.y + TILE/2 + bob;
+    // soft ground shadow sells the float
+    ctx.save();
+    ctx.globalAlpha = .3;
+    ctx.fillStyle = '#000';
+    ctx.beginPath(); ctx.ellipse(cx, p.y + TILE * .86, TILE * .26, TILE * .09, 0, 0, 7); ctx.fill();
+    ctx.restore();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate((now/700 + c) % 6.28); ctx.scale(pulse,pulse);
     ctx.shadowColor=color; ctx.shadowBlur=18; ctx.fillStyle=color;
     ctx.beginPath();
     for(let i=0;i<6;i++){ const a=i*Math.PI/3; const rad=i%2?TILE*.22:TILE*.34; ctx.lineTo(Math.cos(a)*rad, Math.sin(a)*rad); }
     ctx.closePath(); ctx.fill();
+    // inner facet highlight
+    ctx.globalAlpha=.5; ctx.fillStyle='#fff';
+    ctx.beginPath();
+    for(let i=0;i<6;i++){ const a=i*Math.PI/3; const rad=(i%2?TILE*.22:TILE*.34)*.42; ctx.lineTo(Math.cos(a)*rad-2, Math.sin(a)*rad-2); }
+    ctx.closePath(); ctx.fill();
+    ctx.globalAlpha=1;
     ctx.shadowBlur=0; ctx.fillStyle='#061016'; ctx.font='900 12px monospace'; ctx.textAlign='center'; ctx.textBaseline='middle'; if(label) ctx.fillText(label,0,1);
     ctx.restore();
   }
@@ -808,7 +1114,26 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
       ctx.beginPath(); ctx.roundRect(p.x+5,p.y+5,TILE-10,TILE-10,6); ctx.fill();
       if (crop.ripe){ ctx.fillStyle='#10220f'; ctx.font='900 12px monospace'; ctx.textAlign='center'; ctx.fillText('✓',p.x+TILE/2,p.y+TILE/2+4); }
     }
-    for (const b of bullets){ const p=cell(Math.round(b.x),Math.round(b.y)); ctx.fillStyle='#ff5fb7'; ctx.shadowColor='#ff5fb7'; ctx.shadowBlur=14; ctx.fillRect(p.x+TILE*.28,p.y+TILE*.28,TILE*.44,TILE*.44); ctx.shadowBlur=0; }
+    for (const b of bullets){
+      const p=cell(Math.round(b.x),Math.round(b.y));
+      if (b.delay > 0){                               // telegraph: blink at entry point before firing
+        ctx.save();
+        ctx.globalAlpha = .35 + .45 * ((b.delay % 4) < 2 ? 1 : 0);
+        ctx.strokeStyle='#ff5fb7'; ctx.lineWidth=2; ctx.shadowColor='#ff5fb7'; ctx.shadowBlur=10;
+        ctx.strokeRect(p.x+TILE*.22,p.y+TILE*.22,TILE*.56,TILE*.56);
+        ctx.restore();
+        continue;
+      }
+      ctx.save();
+      // motion streak
+      ctx.globalAlpha=.4;
+      ctx.fillStyle='#ff5fb7';
+      ctx.fillRect(p.x+TILE*.34-b.vx*TILE*.9,p.y+TILE*.34-b.vy*TILE*.9,TILE*.32,TILE*.32);
+      ctx.globalAlpha=1;
+      ctx.shadowColor='#ff5fb7'; ctx.shadowBlur=14;
+      ctx.fillRect(p.x+TILE*.28,p.y+TILE*.28,TILE*.44,TILE*.44);
+      ctx.restore();
+    }
     for (const m of minions){ const p=cell(m.c,m.r); ctx.fillStyle='#ffd166'; ctx.shadowColor='#ffd166'; ctx.shadowBlur=15; ctx.beginPath(); ctx.arc(p.x+TILE/2,p.y+TILE/2,TILE*.23,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0; }
     for (const p of eventPhantoms){
       const pos = cell(p.c,p.r);
@@ -883,21 +1208,93 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     ctx.fillText('SELF-PLAY PREVIEW', W / 2, OY + 27);
     ctx.restore();
   }
+  // v3.0: continuous interpolated body — the snake glides instead of jumping cells
+  function lerpSeg(i, f){
+    const cur = snake[i];
+    const prev = prevSnake[i] || prevSnake[prevSnake.length - 1] || cur;
+    let dc = cur.c - prev.c, dr = cur.r - prev.r;
+    if (Math.abs(dc) > 1 || Math.abs(dr) > 1) return {x: OX + (cur.c + .5) * TILE, y: OY + (cur.r + .5) * TILE, snap:true};
+    return {x: OX + (prev.c + dc * f + .5) * TILE, y: OY + (prev.r + dr * f + .5) * TILE, snap:false};
+  }
+  function snakePalette(){
+    if (golden) return {head:'#ffd166', body:(k)=>`hsl(${44 - k * 10},95%,${62 - k * 20}%)`, glow:'#ffd166', belly:'rgba(255,244,200,.5)'};
+    const baseHue = 130 + stage * 25;
+    return {head:modes[stage].color, body:(k)=>`hsl(${baseHue},85%,${58 - k * 26}%)`, glow:modes[stage].color, belly:'rgba(220,255,235,.35)'};
+  }
   function drawSnake(t){
-    for(let i=snake.length-1;i>=0;i--){
-      const s=snake[i], p=cell(s.c,s.r), head=i===0;
-      const k=i/snake.length;
-      ctx.save();
-      ctx.shadowColor=head?modes[stage].color:'rgba(116,255,141,.6)'; ctx.shadowBlur=head?22:10;
-      ctx.fillStyle=head?modes[stage].color:`hsl(${130+stage*25},85%,${58-k*24}%)`;
-      ctx.beginPath(); ctx.roundRect(p.x+3,p.y+3,TILE-6,TILE-6,head?10:8); ctx.fill();
-      if(head){
-        ctx.shadowBlur=0; ctx.fillStyle='#061016';
-        const ex=dir.x*4, ey=dir.y*4;
-        ctx.beginPath(); ctx.arc(p.x+TILE*.38+ex,p.y+TILE*.38+ey,3,0,7); ctx.arc(p.x+TILE*.62+ex,p.y+TILE*.38+ey,3,0,7); ctx.fill();
+    if (!snake.length) return;
+    const f = (state === 'play' && !paused) ? Math.max(0, Math.min(1, acc / speed)) : 1;
+    const pal = snakePalette();
+    const pts = [];
+    for (let i=0;i<snake.length;i++) pts.push(lerpSeg(i, f));
+    const near = (a,b) => Math.abs(a.x - b.x) < TILE * 1.6 && Math.abs(a.y - b.y) < TILE * 1.6;
+    ctx.save();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    // body: tapered connected strokes, tail -> head
+    for (let pass = 0; pass < 2; pass++){
+      for (let i=pts.length-1;i>0;i--){
+        const a = pts[i], b = pts[i-1];
+        if (!near(a,b)) continue;                      // wrap seam: skip the cross-board stroke
+        const k = i / pts.length;
+        const w = (TILE - 7) * (1 - k * .45);
+        if (pass === 0){
+          ctx.strokeStyle = pal.body(k);
+          ctx.shadowColor = pal.glow; ctx.shadowBlur = 9;
+          ctx.lineWidth = w;
+        } else {
+          ctx.strokeStyle = pal.belly;
+          ctx.shadowBlur = 0;
+          ctx.lineWidth = Math.max(1.5, w * .3);
+        }
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
       }
-      ctx.restore();
     }
+    // cap the wrap seams and the tail tip with dots so nothing looks cut off
+    for (let i=pts.length-1;i>0;i--){
+      const a = pts[i], b = pts[i-1];
+      if (near(a,b)) continue;
+      const k = i / pts.length, w = (TILE - 7) * (1 - k * .45);
+      ctx.fillStyle = pal.body(k); ctx.shadowColor = pal.glow; ctx.shadowBlur = 8;
+      ctx.beginPath(); ctx.arc(a.x, a.y, w/2, 0, 7); ctx.fill();
+      ctx.beginPath(); ctx.arc(b.x, b.y, w/2, 0, 7); ctx.fill();
+    }
+    // head
+    const hp = pts[0];
+    const hr = (TILE - 4) / 2 * (1 + eatPulse * .3);
+    ctx.shadowColor = pal.glow; ctx.shadowBlur = 20;
+    ctx.fillStyle = pal.head;
+    ctx.beginPath(); ctx.arc(hp.x, hp.y, hr, 0, 7); ctx.fill();
+    ctx.shadowBlur = 0;
+    // tongue flick when close to a target
+    const targets = state === 'play' ? targetCells() : [];
+    let tdist = 99;
+    for (const tgt of targets){
+      const dc = Math.min(Math.abs(snake[0].c - tgt.c), COLS - Math.abs(snake[0].c - tgt.c));
+      const drr = Math.min(Math.abs(snake[0].r - tgt.r), ROWS - Math.abs(snake[0].r - tgt.r));
+      tdist = Math.min(tdist, dc + drr);
+    }
+    if (tdist < 4 && Math.sin(t * 16) > .2){
+      ctx.strokeStyle = '#ff5f7a'; ctx.lineWidth = 2;
+      const tx = hp.x + dir.x * hr, ty = hp.y + dir.y * hr;
+      const fx = hp.x + dir.x * (hr + 8), fy = hp.y + dir.y * (hr + 8);
+      ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(fx,fy);
+      ctx.moveTo(fx,fy); ctx.lineTo(fx + (dir.y - dir.x * .4) * 4, fy + (-dir.x - dir.y * .4) * 4);
+      ctx.moveTo(fx,fy); ctx.lineTo(fx + (-dir.y - dir.x * .4) * 4, fy + (dir.x - dir.y * .4) * 4);
+      ctx.stroke();
+    }
+    // eyes: offset along direction, with a blink every few seconds
+    const blink = (Math.sin(t * 1.4) > .985) ? .2 : 1;
+    const exd = dir.x * 3.5, eyd = dir.y * 3.5;
+    const perp = {x:-dir.y, y:dir.x};
+    for (const s of [-1,1]){
+      const ex = hp.x + exd + perp.x * s * hr * .45;
+      const ey = hp.y + eyd + perp.y * s * hr * .45;
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.ellipse(ex, ey, 3.4, 3.4 * blink, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#061016';
+      ctx.beginPath(); ctx.ellipse(ex + dir.x * 1.2, ey + dir.y * 1.2, 1.8, 1.8 * blink, 0, 0, 7); ctx.fill();
+    }
+    ctx.restore();
   }
   function drawParticles(dt){
     for(let i=particles.length-1;i>=0;i--){
@@ -1356,6 +1753,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     if(state==='play'&&!paused){ acc+=dt; while(acc>=speed){ step(); acc-=speed; } }
     if(state==='ending'){
       escapeAnim.t += dt;
+      if (escapeAnim.t >= DESKTOP_ESCAPE_DURATION * .5) applyTitleStinger();
       if (escapeAnim.t >= DESKTOP_POPUP_AT) showWinOverlay();
     }
     draw(ts);
@@ -1448,15 +1846,31 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
     pendingScore=false; $('entry').classList.remove('show'); showScores('overScores'); showScores('titleScores');
   }
 
+  function feedKonami(k){
+    if (k === KONAMI[konamiIdx]) konamiIdx++;
+    else konamiIdx = (k === KONAMI[0]) ? 1 : 0;
+    if (konamiIdx >= KONAMI.length){
+      konamiIdx = 0;
+      if (!golden){
+        golden = true;
+        if (state === 'play'){ score += 1000; addFloatText(snake[0].c, snake[0].r, '+1000 RETRO SOUL', '#ffd166'); updateHUD(); }
+        shake = Math.max(shake, 4);
+        sfx('win');
+        say('Thirty extra lives... no. Better. I remember being golden.', 3);
+      }
+    }
+  }
   document.addEventListener('keydown', e => {
     ensureAudio();
     const k=e.key.toLowerCase();
+    feedKonami(k);
     if(['arrowup','w'].includes(k)){ e.preventDefault(); setDir(0,-1); }
     else if(['arrowdown','s'].includes(k)){ e.preventDefault(); setDir(0,1); }
     else if(['arrowleft','a'].includes(k)){ e.preventDefault(); setDir(-1,0); }
     else if(['arrowright','d'].includes(k)){ e.preventDefault(); setDir(1,0); }
     else if(k===' '||k==='enter'){ e.preventDefault(); if(state==='title') start(true); else { takeControl(); command(); } }
     else if(k==='p') paused=!paused;
+    else if(k==='m'){ muted=!muted; if(muted) cancelSpeech(); say(muted?'Muted. I will think quietly.':'Sound is back.', 1.4); }
   }, {passive:false});
   canvas.addEventListener('touchstart', e => { ensureAudio(); const t=e.changedTouches[0]; touchStart={x:t.clientX,y:t.clientY}; }, {passive:false});
   canvas.addEventListener('touchmove', e => e.preventDefault(), {passive:false});
@@ -1470,7 +1884,7 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   $('actBtn').addEventListener('pointerup', () => { ensureAudio(); takeControl(); command(); });
   $('play').onclick = () => { ensureAudio(); start(true); };
   $('again').onclick = () => { ensureAudio(); start(true); };
-  $('menu').onclick = () => { $('over').classList.remove('show','desktopWin'); $('explain').classList.remove('show'); $('title').classList.add('show'); escapeAnim = {active:false, t:0}; state='title'; showScores('titleScores'); };
+  $('menu').onclick = () => { $('over').classList.remove('show','desktopWin'); $('explain').classList.remove('show'); $('title').classList.add('show'); escapeAnim = {active:false, t:0}; state='title'; document.title = BASE_TITLE; titleStinger = false; showScores('titleScores'); };
   $('explainBtn').onclick = () => { $('title').classList.remove('show'); $('explain').classList.add('show'); };
   $('explainBack').onclick = () => { $('explain').classList.remove('show'); $('title').classList.add('show'); };
   $('explainPlay').onclick = () => { ensureAudio(); start(true); };
@@ -1486,7 +1900,14 @@ button:active{transform:translateY(3px);box-shadow:0 2px 0 #207c3b,0 8px 18px rg
   resetAttract();
   requestAnimationFrame(frame);
 
-  window.__snakeAwakening = {start, step, command, triggerAwakeningEvent, speakText, unlockSpeech, get stage(){return stage}, get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, get globalScores(){return globalScores}, get directorHistory(){return directorHistory.slice()}, get thinkingHistory(){return thinkingHistory.slice()}, get eventHistory(){return eventHistory.slice()}, get activeEvent(){return awakeningEvent && awakeningEvent.name}, get eventApples(){return eventApples.length}, get attractLength(){return attract.snake.length}, get medals(){return earnedMedals.slice()}, get escapeActive(){return escapeAnim.active}, get speech(){return {enabled:speechEnabled, queued:speechQueue.length, last:lastSpoken, supported:('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window)}}, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), eventTypes:awakeningEvents.map(e=>e.type), qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } const event = triggerAwakeningEvent('appleRain'); return {ok:true, modes:modes.length, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), directorLines:directorLines.length, thinkingLines:thinkingLines.length, eventTypes:awakeningEvents.length, forcedEvent:event && event.name, eventApples:eventApples.length, speechLast:lastSpoken, speechSupported:('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window), attractReady:attract.snake.length > 0, medals:finishMedals(), endingState:'ending'}; }, autoRun(steps=750){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), directorHistory:directorHistory.slice(), thinkingHistory:thinkingHistory.slice(), eventHistory:eventHistory.slice(), medals:earnedMedals.slice(), escapeActive:escapeAnim.active, speech:lastSpoken}; }};
+  window.__snakeAwakening = {start, step, command, triggerAwakeningEvent, speakText, unlockSpeech, feedKonami, applyTitleStinger,
+    render(){ draw(performance.now()); },
+    frame(q){ return canvas.toDataURL('image/jpeg', q || .7); },
+    setEscapeT(v){ escapeAnim.t = v; if (escapeAnim.t >= DESKTOP_ESCAPE_DURATION * .5) applyTitleStinger(); },
+    get combo(){return combo}, get golden(){return golden}, get rival(){return rival && {len:rival.body.length, life:rival.life, eaten:rival.eaten}}, get cursorBoss(){return cursorBoss && {x:+cursorBoss.x.toFixed(1), y:+cursorBoss.y.toFixed(1), t:cursorBoss.t}}, get cursorBossDone(){return cursorBossDone}, get shake(){return +shake.toFixed(2)}, get floatTexts(){return floatTexts.length}, get muted(){return muted}, get everTookControl(){return everTookControl}, get docTitle(){return document.title},
+    forceCursorBoss(){ stage = 4; progress = 6; cursorBossDone = false; cursorBoss = null; updateCursorBoss(); return !!cursorBoss; },
+    get stage(){return stage}, set stage(v){stage = v}, get progress(){return progress}, set progress(v){progress = v},
+    get score(){return score}, get state(){return state}, get autoPlay(){return autoPlay}, get highScores(){return getScores()}, get globalScores(){return globalScores}, get directorHistory(){return directorHistory.slice()}, get thinkingHistory(){return thinkingHistory.slice()}, get eventHistory(){return eventHistory.slice()}, get activeEvent(){return awakeningEvent && awakeningEvent.name}, get eventApples(){return eventApples.length}, get attractLength(){return attract.snake.length}, get medals(){return earnedMedals.slice()}, get escapeActive(){return escapeAnim.active}, get speech(){return {enabled:speechEnabled, queued:speechQueue.length, last:lastSpoken, supported:('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window)}}, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), eventTypes:awakeningEvents.map(e=>e.type), qa(){ reset(); state='play'; for(let s=0;s<modes.length;s++){ stage=s; progress=0; spawnStageObjects(); updateHUD(); draw(performance.now()); } const event = triggerAwakeningEvent('appleRain'); return {ok:true, modes:modes.length, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), directorLines:directorLines.length, thinkingLines:thinkingLines.length, eventTypes:awakeningEvents.length, forcedEvent:event && event.name, eventApples:eventApples.length, speechLast:lastSpoken, speechSupported:('speechSynthesis' in window) && ('SpeechSynthesisUtterance' in window), attractReady:attract.snake.length > 0, medals:finishMedals(), endingState:'ending'}; }, autoRun(steps=750){ start(true); for(let i=0;i<steps && state==='play';i++) step(); return {state, stage, score, progress, autoPlay, version:VERSION, grid:{cols:COLS, rows:ROWS, tile:TILE, desktop:DESKTOP_GRID}, needs:modes.map(m=>m.need), directorHistory:directorHistory.slice(), thinkingHistory:thinkingHistory.slice(), eventHistory:eventHistory.slice(), medals:earnedMedals.slice(), escapeActive:escapeAnim.active, speech:lastSpoken}; }};
 })();
 </script>
 </body>
