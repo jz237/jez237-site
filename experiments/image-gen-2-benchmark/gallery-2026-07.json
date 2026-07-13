@@ -38,6 +38,25 @@
     }
   },
   {
+    "id": "2026-07-13-creature-design-gypsum-windvault-listener",
+    "title": "Gypsum Windvault Listener",
+    "tests": "Natural-history plausibility; adaptation readability without labels; coherent four-limbed anatomy; gypsum-cave material detail; non-paper finished image",
+    "prompt": "Design a believable desert gypsum-cave creature called the Gypsum Windvault Listener with airflow-sensing whisker fans, broad crystal-scraping forefeet, and ivory semi-translucent scales crossed by rust-red mineral seams, shown as a realistic natural-history creature study. Create a finished square documentary wildlife photograph inside a wind-carved gypsum cavern at late afternoon: one hare-sized adult moves in strict side profile across soft white crystal sand beneath a narrow skylight. Give it a low long-backed four-limbed body, flat comb-edged forefeet scraping cave-cricket eggs and seeds from gypsum crust, smaller rear feet braced against the slope, a blunt muzzle, protected copper eyes beneath clear inner lids, two semicircular cheek whisker fans bending toward a cool fissure draft, overlapping ivory translucent scales with rust-red mineral seams, a chalk-gray belly, and a sand-brushing tail fringe. Include one juvenile under a curled gypsum shelf, fresh trackways, tiny cave crickets, a scraped feeding patch, wind-rippled crystal sand, satin-spar gypsum blades, rust-stained wall bands, a shed cheek filament beside a seed husk, dust caught in the foot combs, and warm amber skylight crossing cool blue cave shadow. Make the airflow sensing, feeding, dust protection, and camouflage visually legible without labels. Use a low ground-level natural-history camera, believable anatomy and weight, restrained depth of field, and crisp tactile gypsum, scale, keratin, whisker, dust, seed, and stone detail. No readable text, captions, arrows, poster, paper, labels, fantasy monster styling, gore, logos, watermark, people, extra limbs, wings, horns, blank studio background, or wet tropical habitat.\n\nReusable fill-in-the-blank template: Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study. Make the finished image show [LIFE STAGE OR GROUPING] in [SPECIFIC MICROHABITAT], with visible anatomy, scale cues, habitat traces, material textures, and lighting that explain how the adaptations work without turning the image into a labeled prompt card.\n\nExample substitution: [HABITAT] = wind-carved desert gypsum cavern; [ADAPTATION 1] = semicircular airflow-sensing cheek whisker fans; [ADAPTATION 2] = broad comb-edged crystal-scraping forefeet and clear dust-excluding inner eyelids; [TEXTURE/COLOR] = ivory semi-translucent scales crossed by rust-red mineral seams; [LIFE STAGE OR GROUPING] = one hare-sized adult with one juvenile; [SPECIFIC MICROHABITAT] = a sloping bank of wind-rippled gypsum sand beneath a narrow amber skylight and cool fissure draft.",
+    "image": "images/2026-07-13-creature-design-gypsum-windvault-listener.jpg",
+    "thumb": "thumbs/2026-07-13-creature-design-gypsum-windvault-listener.webp",
+    "color": "#64594e",
+    "date": "2026-07-13",
+    "batch": "Daily Prompt",
+    "slot": "creature-design",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "creatureDesign": {
+      "name": "Gypsum Windvault Listener",
+      "description": "A believable desert gypsum-cave animal with airflow-sensing cheek whisker fans, comb-edged crystal-scraping forefeet, dust-protected eyes, and mineral-camouflaged translucent scales.",
+      "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
+    }
+  },
+  {
     "id": "2026-07-12-world-that-never-was-the-asterwick-fog-organ-tram-depot",
     "title": "The Asterwick Fog-Organ Tram Depot",
     "tests": "World That Never Was; fictional alternate-history documentary scene; tactile period engineering; readable integrated place sign; non-paper composition",
