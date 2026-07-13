@@ -4857,5 +4857,24 @@
     "slot": "miniature-diorama",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-07-12-world-that-never-was-the-asterwick-fog-organ-tram-depot",
+    "title": "The Asterwick Fog-Organ Tram Depot",
+    "tests": "World That Never Was; fictional alternate-history documentary scene; tactile period engineering; readable integrated place sign; non-paper composition",
+    "prompt": "Create a finished square photorealistic documentary image for a World That Never Was entry titled \"The Asterwick Fog-Organ Tram Depot\", an imaginary 1913 municipal tram depot from a steep Atlantic port city that never existed. Show a vast damp brick maintenance hall where compressed sea fog powers pipe-organ signal chords guiding electric trams through harbor mist: cream-and-oxide-red tramcars over inspection pits, verdigris organ pipes connected to glass condensers, ceramic drip channels, belt-driven bellows, brass governors, braided cables, wet slate reflections, oak tool chests, carbon brushes, oil cans, towing rope, mechanics at work, and iron roof trusses fading into sea fog. Use believable worn 1913 civic materials and one integrated sign reading \"ASTERWICK FOG-ORGAN DEPOT\". Clearly fictional; no modern screens, fantasy magic, dense text, logos, or watermark.\\n\\nReusable fill-in-the-blank template: Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for \"[IMAGINARY_PLACE_OR_OBJECT]\", an imaginary [REGION_OR_SETTING] subject from a world that never existed. Make it feel like a tactile documentary photograph with [PERIOD_MATERIALS], [MECHANISM_OR_PUBLIC_USE], [WEATHERING_OR_SURFACE_TEXTURE], [NATURAL_SIGNAGE_OR_LOCAL_DESIGN_DETAILS], [ENVIRONMENTAL_CONTEXT], and active workers or users where appropriate, while clearly framing it as imaginary rather than real. Avoid modern objects, generic steampunk costume clichés, flat document composition, cinematic action, brand logos, and dense readable text.\\n\\nExample substitution: [ERA] = 1913; [ARTIFACT_OR_DOCUMENTARY_SCENE] = municipal tram maintenance depot; [IMAGINARY_PLACE_OR_OBJECT] = The Asterwick Fog-Organ Tram Depot; [REGION_OR_SETTING] = steep Atlantic port city; [PERIOD_MATERIALS] = damp brick, wet slate, varnished tram wood, verdigris copper, smoky glass, brass, greasy steel, and damp wool; [MECHANISM_OR_PUBLIC_USE] = compressed sea fog powering organ signal chords for trams in harbor mist; [WEATHERING_OR_SURFACE_TEXTURE] = salt bloom, oxidized copper, worn varnish, grease, puddles, and condensation; [ENVIRONMENTAL_CONTEXT] = inspection pits, fog condensers, bellows, tool chests, mechanics, rain-dark clerestory windows, and iron trusses.",
+    "image": "images/2026-07-12-world-that-never-was-the-asterwick-fog-organ-tram-depot.jpg",
+    "thumb": "thumbs/2026-07-12-world-that-never-was-the-asterwick-fog-organ-tram-depot.webp",
+    "color": "#3a3531",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "world-that-never-was",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "worldThatNeverWas": {
+      "artifact": "The Asterwick Fog-Organ Tram Depot",
+      "description": "An imaginary 1913 Atlantic-port tram depot where municipal engineers use condensed sea fog to sound organ chords that guide streetcars through harbor mist.",
+      "template": "Create a clearly fictional [ERA] [ARTIFACT_OR_DOCUMENTARY_SCENE] for \"[IMAGINARY_PLACE_OR_OBJECT]\", an imaginary [REGION_OR_SETTING] subject from a world that never existed. Make it feel like a tactile documentary photograph with [PERIOD_MATERIALS], [MECHANISM_OR_PUBLIC_USE], [WEATHERING_OR_SURFACE_TEXTURE], [NATURAL_SIGNAGE_OR_LOCAL_DESIGN_DETAILS], [ENVIRONMENTAL_CONTEXT], and active workers or users where appropriate, while clearly framing it as imaginary rather than real. Avoid modern objects, generic steampunk costume clichés, flat document composition, cinematic action, brand logos, and dense readable text."
+    }
   }
 ]
