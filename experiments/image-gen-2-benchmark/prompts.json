@@ -4933,5 +4933,45 @@
       "description": "A believable desert gypsum-cave animal with airflow-sensing cheek whisker fans, comb-edged crystal-scraping forefeet, dust-protected eyes, and mineral-camouflaged translucent scales.",
       "template": "Design a believable [HABITAT] creature with [ADAPTATION 1], [ADAPTATION 2], and [TEXTURE/COLOR], shown as a realistic natural-history creature study."
     }
+  },
+  {
+    "id": "2026-07-13-hybrid-creature-infographic-ivory-trench-rook-development-m",
+    "title": "Ivory Trench Rook: Development Map",
+    "tests": "Two explicit source organisms; visible traits from both sources; colorful photorealistic development map; source-trait map; four-stage development strip; adult specimen; seven macro windows; habitat swatches; scale vignette; locomotion comparison; field context; fictional and non-actionable continuity.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for the clearly fictional Ivory Trench Rook, combining exactly narwhal + giant isopod. Assemble the landscape chart across a cold Arctic marine-research bench with wet black slate, frost-edged trays, an ice core, shell grit, depth line, cold seawater droplets, and blue task-light reflections. Show a source-trait map: narwhal contributes the helical tusk, mottled marine skin, paddlelike foreflippers, rounded forehead, and tail-fluke thrust posture; giant isopod contributes seven pairs of walking legs, overlapping dorsal armor, hooked feet, paired antennae, and a broad segmented rear shield. Include a four-stage juvenile-to-adult strip, a large strict side-profile adult specimen, macro windows for tusk ridges, skin, armor seams, feet, antenna hairs, flipper edge and rear shield, Arctic habitat swatches, a physical scale vignette, a seafloor-walk versus swimming-burst comparison, and a small under-ice context view. The adult is a seal-length low horizontal armored marine crawler with one ivory tusk, two antennae, charcoal-and-cream skin between blue-gray plates, two foreflippers, fourteen short walking legs, hooked feet, and a segmented rear shield integrated with a split tail fluke. Use lively credible scientific colors, restrained labels, photorealistic specimen lighting, strong hierarchy, and no real genetics, procedures, surgery, gore, dense paragraphs, logos, QR codes, evidence-board styling, or flat school-poster composition.\\n\\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture and color panels, habitat swatches, field-context scale vignette, and locomotion comparison. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], visibly preserving at least two traits from each source in body plan, texture, posture, locomotion, and habitat interaction. Keep it clearly fictional and non-actionable: no real gene names, protocols, surgery, or gore.",
+    "image": "images/2026-07-13-hybrid-creature-infographic-ivory-trench-rook-development-m.jpg",
+    "thumb": "thumbs/2026-07-13-hybrid-creature-infographic-ivory-trench-rook-development-m.webp",
+    "color": "#4d555b",
+    "date": "2026-07-13",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Ivory Trench Rook",
+      "imageKind": "infographic",
+      "description": "A fictional narwhal and giant-isopod hybrid mapped from tusk and flipper traits to segmented armor and fourteen walking legs.",
+      "continuity": "Seal-length low horizontal Arctic crawler with one helical ivory tusk, paired antennae, mottled skin between blue-gray armor plates, two foreflippers, fourteen hooked walking legs, and a segmented rear shield integrated with a split tail fluke."
+    }
+  },
+  {
+    "id": "2026-07-13-hybrid-creature-wild-ivory-trench-rook-in-the-wild",
+    "title": "Ivory Trench Rook: In the Wild",
+    "tests": "Matching adult phenotype; narwhal tusk, forehead, skin, flippers and tail posture; giant-isopod armor, antennae, fourteen legs, hooked feet and rear shield; strict side profile; Arctic under-ice habitat; natural-history realism.",
+    "prompt": "Create a matching square photorealistic in-the-wild documentary field photo of the adult Ivory Trench Rook, a clearly fictional hybrid combining exactly narwhal + giant isopod, crossing black basalt beneath pressure-ridged Arctic sea ice. Preserve the exact shared phenotype: a seal-length low horizontal armored marine crawler with a rounded narwhal-like forehead, one long helical ivory tusk, two fine antennae, charcoal-and-cream mottled wet skin between overlapping blue-gray isopod plates, paired paddlelike foreflippers, seven pairs of short jointed walking legs with hooked feet, and a broad segmented rear shield integrated with a muscular split tail fluke. Show a strict low side profile with olive benthic sponges, rust-orange amphipods, ivory shell hash, a brittle star, trapped silver bubbles, suspended ice crystals, cyan light, tusk scrape marks, and a distant plain depth-line weight for scale. Use a seafloor-height natural-history camera, believable cold-water haze, tactile underwater detail, and no text, people, lab, gore, logos, costume look, pure single-source animal, humanoid anatomy, attack, or battle. Reusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from exactly [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues in [HABITAT]. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.",
+    "image": "images/2026-07-13-hybrid-creature-wild-ivory-trench-rook-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-13-hybrid-creature-wild-ivory-trench-rook-in-the-wild.webp",
+    "color": "#385660",
+    "date": "2026-07-13",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Ivory Trench Rook",
+      "imageKind": "wild",
+      "description": "The same fictional narwhal and giant-isopod adult walking across an Arctic under-ice basalt seafloor.",
+      "continuity": "Seal-length low horizontal Arctic crawler with one helical ivory tusk, paired antennae, mottled skin between blue-gray armor plates, two foreflippers, fourteen hooked walking legs, and a segmented rear shield integrated with a split tail fluke."
+    }
   }
 ]
