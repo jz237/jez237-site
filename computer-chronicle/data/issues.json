@@ -1,8 +1,89 @@
 {
-  "generatedAt": "2026-07-12T12:03:26.664Z",
+  "generatedAt": "2026-07-13T12:00:00.000Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-13",
+      "historicDate": "1983-05-16",
+      "displayDate": "Week of May 16-22, 1983",
+      "edition": "Issue 042 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "busy early-1980s computer weekly with Apple II game-shop energy and colorful budget-micro accents",
+        "motifs": ["Apple II game disks and joysticks", "Lode Runner platform maze", "Panasonic JR-200 and VZ200 keyboards", "300-baud modem terminal copy"],
+        "layout": "masthead, wide Apple II gaming lead, narrow culture rail, boxed shelf, price, market, and world modules"
+      },
+      "masthead": {"title": "Computer Chronicle", "subtitle": "Weekly 1982 Computer & Culture Chronicle", "dateline": "Week of May 16-22, 1983", "price": "35 cents"},
+      "layoutPlan": {"leadPlacement": "wide upper-left gaming lead with Apple II disk and maze artwork", "secondaryRail": "right rail for music, movies, computer games, and world bulletin", "archiveNavigation": "previous and next issue controls plus archive shelf browsing"},
+      "sectionChrome": {"primary": "red and blue rules with amber computer-store accents", "secondary": "thin black column rules and small boxed labels", "texture": "warm newsprint, halftone blocks, light ink gain"},
+      "heroImage": {"src": "media/computer-chronicle-gpt-image-2-week-1983-05-16.png", "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of May 16-22, 1983", "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.", "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"},
+      "editorNote": "Late May 1983 finds Apple II players digging through new mazes while inexpensive home computers crowd the review bench and music software pushes the machine toward the studio.",
+      "morningLine": "Lode Runner climbs the Apple II conversation as budget micros and music systems fill the May magazines.",
+      "lead": {"headline": "Lode Runner gives Apple II players 150 rooms to conquer", "dek": "Softalk's 1983 software record puts Doug Smith's run-climb-dig game among the year's defining Apple II releases, complete with a construction set for making new levels.", "body": "Broderbund's Lode Runner turns a simple chase into a toolbox: collect the gold, outwit the guards, and then design another screen. Its mix of arcade pace and player-made levels captures the spring's most exciting computer-game idea—software that lets the owner become part designer.", "confidence": "1983 Softalk software record and contemporary Apple II coverage; treated as May 1983 shelf context rather than an exact release-day claim.", "sourceRefs": [0,1]},
+      "computerItems": [
+        {"title": "Softalk tunes the Apple II for the studio", "summary": "The May issue profiles Herbie Hancock and the Syntauri professional music system, showing the Apple II reaching beyond games and ledgers into composition and performance.", "confidence": "May 1983 issue profile and period magazine text.", "sourceRefs": [2,3]},
+        {"title": "Creative Computing tests another wave of budget micros", "summary": "May reviews put the Panasonic JR-200, Video Technology VZ200, and TI 99/4A side by side in an increasingly crowded low-cost home-computer field.", "confidence": "May 1983 magazine index and reviews.", "sourceRefs": [4,5,6]},
+        {"title": "Atari BASIC pilots race through Starshot", "summary": "COMPUTE!'s May Starshot program sends Atari owners down a trench in a type-in game that also demonstrates how machine-language help can lift BASIC action.", "confidence": "May 1983 COMPUTE! program article.", "sourceRefs": [7]},
+        {"title": "Modem games enter the hobbyist playbook", "summary": "Computer Gaming World's May-June cover makes modem gaming part of the dedicated computer-gamer's agenda alongside adventures, baseball leagues, and strategy titles.", "confidence": "May-June 1983 issue cover and contents.", "sourceRefs": [8]}
+      ],
+      "softwareList": [
+        {"name": "Lode Runner", "detail": "Broderbund arcade game with 150 levels and a level editor."},
+        {"name": "Zork I", "detail": "Infocom's text adventure remains a durable Apple II shelf title."},
+        {"name": "Choplifter!", "detail": "Broderbund's rescue action game keeps joystick players busy."},
+        {"name": "VisiCalc", "detail": "The spreadsheet remains the Apple II productivity benchmark."},
+        {"name": "Music Construction Set", "detail": "Electronic Arts' 1983 notation program reflects the growing home-computer music aisle."}
+      ],
+      "storeShelves": [
+        {"label": "Top 5 Computer Games", "items": ["Lode Runner", "Zork I", "Choplifter!", "Ultima II", "Wizardry"]},
+        {"label": "Top 5 Movies", "items": ["Spacehunter: Adventures in the Forbidden Zone", "Blue Thunder", "Breathless", "Flashdance", "My Tutor"]},
+        {"label": "On The Rack", "items": ["Softalk May 1983", "COMPUTE! May 1983", "Creative Computing May 1983", "Computer Gaming World May-June 1983"]},
+        {"label": "Hardware Talk", "items": ["Panasonic JR-200", "Video Technology VZ200", "TI 99/4A", "Apple II music boards"]},
+        {"label": "Software Counter", "items": ["VisiCalc", "Apple Writer", "Syntauri music tools", "Music Construction Set"]}
+      ],
+      "priceWatch": [
+        {"item": "Panasonic JR-200", "price": "$349.95 suggested retail", "note": "Creative Computing's May review places the compact color micro in the starter-computer fight."},
+        {"item": "Video Technology VZ200", "price": "$99 advertised price", "note": "The May review emphasizes its exceptionally low entry price."},
+        {"item": "COMPUTE! single issue", "price": "$2.95 cover price", "note": "May 1983 newsstand computer magazine."},
+        {"item": "Computer Gaming World", "price": "$2.75 cover price", "note": "May-June 1983 issue."}
+      ],
+      "briefs": [
+        {"headline": "Construction sets change the game", "text": "Lode Runner's editor makes designing a maze part of the entertainment, not an afterthought."},
+        {"headline": "Herbie Hancock meets the Apple II", "text": "Softalk's May cover story treats computer-controlled music as a professional creative system."},
+        {"headline": "Color micros squeeze below $400", "text": "Panasonic and Video Technology join Commodore and TI in the fight for the family television."},
+        {"headline": "Bowie dances to No. 1", "text": "Let's Dance leads the Billboard Hot 100 for the chart week ending May 21."}
+      ],
+      "musicChart": [
+        {"rank": 1, "title": "Let's Dance", "artist": "David Bowie"},
+        {"rank": 2, "title": "Beat It", "artist": "Michael Jackson"},
+        {"rank": 3, "title": "Flashdance... What a Feeling", "artist": "Irene Cara"},
+        {"rank": 4, "title": "Overkill", "artist": "Men at Work"},
+        {"rank": 5, "title": "She Blinded Me with Science", "artist": "Thomas Dolby"}
+      ],
+      "periodAd": {"headline": "Build the maze after you beat it", "summary": "A disk, a joystick, and an Apple II turn the player into a level designer after the gold is collected.", "tagline": "Run it. Dig it. Draw the next room."},
+      "market": {"headline": "The starter-computer counter gets crowded", "summary": "Creative Computing's May test bench—from the $99 VZ200 to Panasonic's color JR-200—shows manufacturers chasing families who want a first programmable machine without business-computer prices.", "confidence": "Period May 1983 reviews; prices are quoted from those reviews.", "sourceRefs": [4,5,6]},
+      "worldAnchor": {"headline": "Lebanon and Israel sign a U.S.-mediated agreement", "summary": "On May 17, Lebanese and Israeli negotiators signed an agreement calling for Israeli withdrawal from Lebanon; Syria rejected the accord and its implementation remained uncertain.", "confidence": "Dated UPI and Washington Post reports from May 17, 1983.", "sourceRefs": [12,13]},
+      "accuracyLedger": {"items": ["Historic issue date comes from the Chronicle state file: 1983-05-16 through 1983-05-22.", "Magazine and software items are labeled as May 1983 or 1983 shelf context unless a precise day is verified.", "Music chart uses the Billboard Hot 100 week ending May 21, 1983.", "Movie list follows the domestic weekend chart for May 20-22, 1983; game list is a period shelf snapshot rather than a claimed nationwide weekly ranking."]},
+      "sources": [
+        {"label": "Apple II History: 1983 software and Lode Runner", "url": "https://www.apple2history.org/appendix/aha/aha83/"},
+        {"label": "Softalk May 1983 full text", "url": "https://archive.org/stream/softalkv3n09may1983/softalkv3n09may1983_djvu.txt"},
+        {"label": "Softalk Apple Project: May 1983 issue profile", "url": "https://softalkapple.com/issue_profiles/v_3_n_9_may-1983.html"},
+        {"label": "Softalk, Volume 3 Number 9 catalog record", "url": "https://library.gamehistory.org/repositories/2/archival_objects/11543"},
+        {"label": "Creative Computing May 1983 index", "url": "https://www.atarimagazines.com/creative/index/index.php?issue=v9n5"},
+        {"label": "Creative Computing: Panasonic JR-200 review", "url": "https://www.atarimagazines.com/creative/v9n5/16_Panasonic_JR200.php"},
+        {"label": "Creative Computing: Video Technology VZ200 review", "url": "http://www.atarimagazines.com/creative/v9n5/26_Video_Technology_VZ200_pe.php"},
+        {"label": "COMPUTE!: Atari Starshot", "url": "http://www.atarimagazines.com/compute/issue36/039_Atari_Starshot.php"},
+        {"label": "Computer Gaming World Vol. 3 No. 3, May-June 1983", "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"},
+        {"label": "Billboard Hot 100 chart week ending May 21, 1983", "url": "https://elpee.jp/hot100/week/1983-05-21/"},
+        {"label": "Cash Box Top 100, May 21, 1983", "url": "https://tropicalglen.com/Archives/80s_files/19830521.html"},
+        {"label": "Box Office Mojo weekend chart, May 20-22, 1983", "url": "https://www.boxofficemojo.com/weekend/1983W20/"},
+        {"label": "UPI Archive: Lebanon-Israel agreement, May 17, 1983", "url": "https://www.upi.com/Archives/1983/05/17/Lebanese-and-Israeli-negotiators-signed-an-historic-US-mediated-agreement/5705421992000/"},
+        {"label": "Washington Post: Lebanon, Israel sign agreement", "url": "https://www.washingtonpost.com/archive/politics/1983/05/18/lebanon-israel-sign-agreement/a0323f5f-ab7a-4caf-94f7-bcae9b13a078/"}
+      ],
+      "classifieds": [
+        {"headline": "Apple II disks wanted", "copy": "Trade boxed adventures and arcade originals; send list by mail."},
+        {"headline": "Modem game night", "copy": "300-baud callers invited for weekend match scheduling and file swaps."}
+      ]
+    },
     {
       "currentDate": "2026-07-12",
       "historicDate": "1983-05-09",
