@@ -47,6 +47,8 @@ function sndPowerup(){playSound(1200,0.05,'sine',0.2);setTimeout(()=>playSound(1
 
 // Game constants
 const VERSION='v1.0.1';
+const SCORES_API='https://game-scores.jez237.workers.dev/scores/plasma-pong';
+const NAME_KEY='plasma_pong_initials';
 const DESKTOP=window.matchMedia&&window.matchMedia('(hover:hover) and (pointer:fine)').matches;
 const WINNING_SCORE=11;const BEST_OF=3;
 const PADDLE_W_R=0.015;const PADDLE_H_R=0.12;
@@ -67,6 +69,7 @@ let shieldTimer=0;let shieldSide='';
 let titleTime=0;
 let roundEndMsg='';let roundEndTimer=0;
 let touchActive=false;
+let finalScoreSubmitted=false;
 
 function resize(){
 // Desktop: cap the logical resolution so fixed-pixel tuning (paddle deflection,
@@ -405,8 +408,21 @@ addParticles(W/2,H/2,winner==='player'?'#00ffff':'#ff00ff',100,300);
 if(playerRounds>=2||aiRounds>=2){
 state='gameOver';
 roundEndMsg=playerRounds>=2?'VICTORY!':'DEFEAT';
+finalScoreSubmitted=false;
 }else{
 state='roundEnd';roundEndTimer=2.5;
+}
+}
+
+function finalScore(){return playerRounds*1000+playerScore*100-aiScore*50+Math.max(0,playerRounds-aiRounds)*500}
+function cleanInitials(raw){return (raw||'AAA').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3)||'AAA'}
+async function submitGlobalScore(){
+if(finalScoreSubmitted)return;finalScoreSubmitted=true;
+const score=Math.max(0,finalScore());
+if(score>0){
+const initials=cleanInitials(prompt('Global score initials?',localStorage.getItem(NAME_KEY)||'AAA'));
+localStorage.setItem(NAME_KEY,initials);
+try{await fetch(SCORES_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initials,score,playerRounds,aiRounds,playerScore,aiScore})})}catch(e){}
 }
 }
 
@@ -566,6 +582,7 @@ ctx.fillText('Next round starting...',W/2,H/2+50);
 
 // Game over
 if(state==='gameOver'){
+submitGlobalScore();
 ctx.textAlign='center';ctx.textBaseline='middle';
 ctx.font='bold 56px "Courier New",monospace';
 const col=roundEndMsg==='VICTORY!'?'#00ffff':'#ff00ff';
@@ -574,9 +591,12 @@ ctx.fillStyle=col;
 ctx.fillText(roundEndMsg,W/2,H/2-20);
 ctx.shadowBlur=0;
 ctx.font='18px "Courier New",monospace';
+ctx.fillStyle='rgba(255,255,255,0.8)';
+ctx.fillText('GLOBAL SCORE '+finalScore(),W/2,H/2+24);
+ctx.font='18px "Courier New",monospace';
 ctx.globalAlpha=0.5+Math.sin(Date.now()/300)*0.5;
 ctx.fillStyle='#fff';
-ctx.fillText(DESKTOP?'CLICK OR PRESS ENTER TO PLAY AGAIN':'TAP TO PLAY AGAIN',W/2,H/2+40);
+ctx.fillText(DESKTOP?'CLICK OR PRESS ENTER TO PLAY AGAIN':'TAP TO PLAY AGAIN',W/2,H/2+64);
 ctx.globalAlpha=1;
 }
 

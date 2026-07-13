@@ -21,6 +21,7 @@ canvas{display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;touch-
 #overlay h2{font-size:2em;margin-bottom:10px}
 #overlay button,#mute-btn{touch-action:manipulation;cursor:pointer}
 #overlay button{margin-top:16px;min-height:48px;min-width:190px;padding:14px 34px;background:#0a0518;color:#aa88ff;border:2px solid #aa88ff;border-radius:24px;font-size:1em;font-family:monospace}
+#global-scores{margin-top:14px;color:#b9a5ff;font-size:.78em;line-height:1.5;text-align:left;min-width:230px}
 #mute-btn{position:fixed;top:6px;right:10px;z-index:15;background:none;border:none;color:#aa88ff;font-size:1.4em;padding:8px;line-height:1;opacity:.7}
 #mute-btn:active{opacity:1}
 </style>
@@ -45,6 +46,8 @@ canvas{display:block;position:fixed;top:0;left:0;width:100vw;height:100vh;touch-
 <script>
 // --- Sizing ---
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
+const SCORES_API='https://game-scores.jez237.workers.dev/scores/gravity-weaver';
+const NAME_KEY='gravity_weaver_initials';
 let W,H,viewScale=1;
 function resize(){
   // Logic is tuned for phone-scale pixels; on big monitors cap the logical
@@ -356,11 +359,28 @@ function endGame(won){
   state.gameOver=true;stopAmbient();
   if(won)sndLevelUp();else sndGameOver();
   const ov=document.getElementById('overlay');
-  ov.innerHTML=`<h2 style='color:${won?'#ffdd44':'#ff4466'}'>${won?'✦ MISSION COMPLETE':'✖ LOST IN SPACE'}</h2><p style='font-size:1.15em;color:#fff'>Score: ${state.score}</p><p style='margin-top:6px;color:#99a'>${won?'You mastered gravity itself!':'The void claims another ship.'}</p><button id="restart-btn">↺ Try Again</button>`;
+  const finalScore=state.score, finalLevel=state.lvl+1;
+  ov.innerHTML=`<h2 style='color:${won?'#ffdd44':'#ff4466'}'>${won?'✦ MISSION COMPLETE':'✖ LOST IN SPACE'}</h2><p style='font-size:1.15em;color:#fff'>Score: ${finalScore}</p><p style='margin-top:6px;color:#99a'>${won?'You mastered gravity itself!':'The void claims another ship.'}</p><div id="global-scores">GLOBAL SCORES<br>Loading...</div><button id="restart-btn">↺ Try Again</button>`;
   ov.style.display='flex';
+  submitAndRenderGlobal(finalScore, finalLevel, won);
   const rb=document.getElementById('restart-btn');
   rb.addEventListener('click',e=>{e.stopPropagation();startGame(0)});
   rb.addEventListener('touchend',e=>{e.stopPropagation();e.preventDefault();startGame(0)});
+}
+
+function cleanInitials(raw){return (raw||'AAA').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3)||'AAA'}
+async function submitAndRenderGlobal(finalScore, finalLevel, won){
+  if(finalScore>0){
+    const initials=cleanInitials(prompt('Global score initials?',localStorage.getItem(NAME_KEY)||'AAA'));
+    localStorage.setItem(NAME_KEY,initials);
+    try{await fetch(SCORES_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initials,score:finalScore,level:finalLevel,won})});}catch(e){}
+  }
+  const box=document.getElementById('global-scores'); if(!box)return;
+  try{
+    const res=await fetch(SCORES_API), rows=res.ok?await res.json():[];
+    const top=(Array.isArray(rows)?rows:[]).slice(0,8);
+    box.innerHTML='GLOBAL SCORES<br>'+(top.length?top.map((r,i)=>`${i+1}. ${(r.initials||r.name||'???').slice(0,3)} ${r.score||0}`).join('<br>'):'No global scores yet');
+  }catch(e){box.innerHTML='GLOBAL SCORES<br>Offline';}
 }
 
 function render(){

@@ -57,8 +57,38 @@
 
   // ---- high scores (local top 5) -------------------------------------------
   const HISCORE_KEY = 'turrican2_hiscores_v1';
+  const LB_URL = 'https://game-scores.jez237.workers.dev/scores/turrican-2';
+  const NAME_KEY = 'turrican2_initials_v1';
+  let globalBest = null, globalFetchStarted = false;
   function loadScores() {
     try { return JSON.parse(localStorage.getItem(HISCORE_KEY)) || []; } catch (e) { return []; }
+  }
+  function cleanInitials(raw) {
+    return (raw || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'AAA';
+  }
+  async function fetchGlobalScores() {
+    if (globalFetchStarted) return;
+    globalFetchStarted = true;
+    try {
+      const res = await fetch(LB_URL);
+      if (!res.ok) return;
+      const rows = await res.json();
+      globalBest = Array.isArray(rows) && rows.length ? rows[0] : null;
+    } catch (e) {}
+  }
+  async function submitGlobalScore(score, stageLabel) {
+    if (!score) return;
+    const initials = cleanInitials(prompt('Global score initials?', localStorage.getItem(NAME_KEY) || 'AAA'));
+    localStorage.setItem(NAME_KEY, initials);
+    try {
+      await fetch(LB_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initials, score, stage: stageLabel, diff: settings.difficulty })
+      });
+      globalFetchStarted = false;
+      fetchGlobalScores();
+    } catch (e) {}
   }
   function pushScore(score, stageLabel) {
     if (!score) return false;
@@ -67,6 +97,7 @@
     scores.sort((a, b) => b.score - a.score);
     const top = scores.slice(0, 5);
     try { localStorage.setItem(HISCORE_KEY, JSON.stringify(top)); } catch (e) {}
+    submitGlobalScore(score, stageLabel);
     return top[0] && top[0].score === score;
   }
   function stageLabel() {
@@ -286,6 +317,7 @@
     dx.fillStyle = g; dx.fillRect(0, 0, DW, DH);
   }
   function drawTitle() {
+    fetchGlobalScores();
     bgPanel();
     dx.save();
     if (titleReady) {
@@ -369,6 +401,7 @@
     centerText('DIFFICULTY: ' + D.DIFFICULTY[settings.difficulty].label, DW / 2, DH / 2 + 122, 13, 'rgba(255,210,63,0.7)', 'bold');
     const best = loadScores()[0];
     if (best) centerText('HI-SCORE  ' + String(best.score).padStart(7, '0') + '  (' + best.stage + ')', DW / 2, 40, 15, 'rgba(139,233,255,0.8)', 'bold');
+    if (globalBest) centerText('GLOBAL  ' + String(globalBest.score || 0).padStart(7, '0') + '  ' + (globalBest.initials || globalBest.name || '???'), DW / 2, 62, 13, 'rgba(255,210,63,0.75)', 'bold');
     centerText('MOVE ←→ · JUMP SPACE · FIRE J/X · AIM ↑↓ · MORPH SHIFT · SWITCH Q · FREEZE C · PAUSE P', DW / 2, DH / 2 + 150, 12, 'rgba(200,210,255,0.65)', 'normal');
     centerText('v' + D.VERSION, DW - 40, DH - 20, 12, 'rgba(255,255,255,0.4)', 'normal');
   }

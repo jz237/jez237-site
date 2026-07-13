@@ -85,9 +85,12 @@ const muteBtn=document.getElementById('muteBtn');
 
 // === HIGH SCORES ===
 const HS_KEY='asteroids_classic_highscores';
+const SCORES_API='https://game-scores.jez237.workers.dev/scores/asteroids-classic';
 function getHighScores(){try{return JSON.parse(localStorage.getItem(HS_KEY))||[]}catch(e){return[]}}
 function saveHighScores(hs){localStorage.setItem(HS_KEY,JSON.stringify(hs))}
 function isHighScore(s){const hs=getHighScores();return hs.length<10||s>hs[hs.length-1].score}
+async function fetchGlobalScores(){try{const r=await fetch(SCORES_API);return r.ok?await r.json():[]}catch(e){return[]}}
+async function submitGlobalScore(initials, score, wave){try{await fetch(SCORES_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initials,score,wave})})}catch(e){}}
 
 let newHighScoreIndex=-1;
 
@@ -125,6 +128,7 @@ function showHighScoreEntry(finalScore,finalWave){
       if(hs.length>10)hs.length=10;
       newHighScoreIndex=hs.indexOf(entry);
       saveHighScores(hs);
+      submitGlobalScore(initials, finalScore, finalWave);
       showLeaderboard(true);
     };
     sub.addEventListener('click',submitHandler);
@@ -143,7 +147,12 @@ function showLeaderboard(afterEntry){
     if(e)rows+=`<tr class="${cls}"><td class="hs-rank">${i+1}.</td><td class="hs-name">${e.name}</td><td class="hs-score-col">${e.score}</td><td class="hs-wave">W${e.wave}</td></tr>`;
     else rows+=`<tr><td class="hs-rank">${i+1}.</td><td class="hs-name">---</td><td class="hs-score-col">0</td><td class="hs-wave">W0</td></tr>`;
   }
-  hsOverlay.innerHTML=`<div class="hs-board"><h2>HIGH SCORES</h2><table>${rows}</table><button id="hsBack" style="margin-top:20px">BACK</button></div>`;
+  hsOverlay.innerHTML=`<div class="hs-board"><h2>LOCAL HIGH SCORES</h2><table>${rows}</table><h2 style="margin-top:18px">GLOBAL HIGH SCORES</h2><table id="globalScoreRows"><tr><td>Loading...</td></tr></table><button id="hsBack" style="margin-top:20px">BACK</button></div>`;
+  fetchGlobalScores().then(gs=>{
+    const table=document.getElementById('globalScoreRows'); if(!table)return;
+    const top=(Array.isArray(gs)?gs:[]).slice(0,10);
+    table.innerHTML=top.length?top.map((e,i)=>`<tr><td class="hs-rank">${i+1}.</td><td class="hs-name">${e.initials||e.name||'???'}</td><td class="hs-score-col">${e.score||0}</td><td class="hs-wave">W${e.wave||'?'}</td></tr>`).join(''):'<tr><td>No global scores yet</td></tr>';
+  });
   const backHandler=()=>{
     hsOverlay.classList.add('hidden');
     newHighScoreIndex=-1;
