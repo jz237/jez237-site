@@ -125,11 +125,20 @@
 
     if (!nav.id) nav.id = 'hidden-reef-main-nav';
 
+    const homeLink = Array.from(nav.children).find(function(child) {
+      return child.tagName === 'A' && child.textContent.trim().toLowerCase() === 'home';
+    });
+
     const compactBrand = document.createElement('a');
     compactBrand.className = 'main-nav__compact-brand';
     compactBrand.href = brand.href;
     compactBrand.textContent = 'Hidden Reef';
     compactBrand.setAttribute('aria-label', 'The Hidden Reef home');
+    if (homeLink && homeLink.classList.contains('active')) {
+      compactBrand.classList.add('active');
+      compactBrand.setAttribute('aria-current', 'page');
+    }
+    if (homeLink) homeLink.remove();
 
     const menu = document.createElement('button');
     menu.className = 'main-nav__menu';
