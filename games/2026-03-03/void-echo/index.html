@@ -30,9 +30,10 @@ button{touch-action:manipulation}
 #initialsEntry{display:none;flex-direction:column;align-items:center;margin-bottom:16px}
 #initialsEntry label{color:#0ff;font-family:sans-serif;margin-bottom:8px}
 #initialsInput{background:#111;border:2px solid #0ff;color:#0ff;font-family:monospace;font-size:2rem;width:100px;text-align:center;padding:6px;text-transform:uppercase;border-radius:6px}
-#leaderboard{color:#ccc;font-family:monospace;font-size:0.9rem;margin-bottom:20px;text-align:left;max-height:200px;overflow-y:auto}
+#leaderboard{color:#ccc;font-family:monospace;font-size:0.9rem;margin-bottom:20px;text-align:left;max-height:240px;overflow-y:auto}
 #leaderboard div{padding:2px 0}
 #leaderboard .hl{color:#ff0}
+#leaderboard .board-title{color:#0ff;margin-top:8px;text-transform:uppercase;letter-spacing:.12em}
 </style>
 </head>
 <body>
@@ -810,6 +811,26 @@ function applyUpgrade(id) {
 }
 
 // ── Game Over ──
+const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/void-echo';
+let globalScores = [];
+async function fetchGlobalScores() {
+  try {
+    const res = await fetch(SCORES_API);
+    if (res.ok) globalScores = await res.json();
+  } catch(e) {}
+  return Array.isArray(globalScores) ? globalScores : [];
+}
+async function submitGlobalScore(initials, finalScore, finalWave) {
+  try {
+    await fetch(SCORES_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initials, score: finalScore, wave: finalWave })
+    });
+    globalScores = [];
+  } catch(e) {}
+}
+
 function gameOver() {
   state = 'gameover';
   bombBtn.style.display = 'none';
@@ -834,13 +855,21 @@ function gameOver() {
 
 function renderLeaderboard(scores, hlIdx) {
   const lb = document.getElementById('leaderboard');
-  if (!scores.length) { lb.innerHTML = '<div>No scores yet</div>'; return; }
-  lb.innerHTML = scores.map((s, i) =>
+  const localHtml = scores.length ? scores.map((s, i) =>
     `<div class="${i===hlIdx?'hl':''}">${(i+1+'').padStart(2,' ')}. ${s.initials} — ${s.score}</div>`
-  ).join('');
+  ).join('') : '<div>No local scores yet</div>';
+  lb.innerHTML = '<div class="board-title">Local</div>' + localHtml + '<div class="board-title">Global</div><div id="globalLeaderboard">Loading...</div>';
+  fetchGlobalScores().then(rows => {
+    const target = document.getElementById('globalLeaderboard');
+    if (!target) return;
+    const top = rows.slice(0, 10);
+    target.innerHTML = top.length ? top.map((s, i) =>
+      `<div>${(i+1+'').padStart(2,' ')}. ${(s.initials||s.name||'???').slice(0,3)} — ${s.score||0}</div>`
+    ).join('') : '<div>No global scores yet</div>';
+  });
 }
 
-function submitScore() {
+async function submitScore() {
   const initials = document.getElementById('initialsInput').value.toUpperCase().replace(/[^A-Z]/g,'').substring(0,3) || 'AAA';
   const finalScore = Math.floor(score);
   let scores = JSON.parse(localStorage.getItem('voidecho_highscores') || '[]');
@@ -850,6 +879,7 @@ function submitScore() {
   localStorage.setItem('voidecho_highscores', JSON.stringify(scores));
   const hlIdx = scores.findIndex(s => s.initials === initials && s.score === finalScore);
   document.getElementById('initialsEntry').style.display = 'none';
+  await submitGlobalScore(initials, finalScore, wave);
   renderLeaderboard(scores, hlIdx);
 }
 

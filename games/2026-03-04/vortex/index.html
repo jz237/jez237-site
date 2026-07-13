@@ -24,6 +24,7 @@
   #endMsg h2 { font-size:40px; letter-spacing:6px; margin-bottom:10px; }
   #endMsg p { font-size:14px; color:#b090e0; }
   #endMsg button { margin-top:24px; padding:12px 36px; font-size:16px; letter-spacing:3px; cursor:pointer; border-radius:4px; background:transparent; }
+  #globalBoard { margin-top:16px; color:#d6c0ff; font-size:12px; line-height:1.6; text-align:left; min-width:220px; }
 </style>
 </head>
 <body><div id="hud">
@@ -56,6 +57,8 @@
 <script>
 const canvas=document.getElementById('c');
 const ctx=canvas.getContext('2d');
+const SCORES_API='https://game-scores.jez237.workers.dev/scores/vortex-storm-eater';
+const NAME_KEY='vortex_initials';
 let W,H,viewScale=1;
 function resize(){
   // Gameplay sizes are phone-tuned: cap the logical resolution on big desktop
@@ -319,12 +322,41 @@ function loop(ts) {
 function gameOver() {
   gameActive=false;
   const el=document.getElementById('endMsg');
+  const finalScore=vortex.score;
   document.getElementById('endTitle').textContent='DISSIPATED';
   document.getElementById('endTitle').style.color='#ff4060';
-  document.getElementById('endSub').textContent=`Final Score: ${vortex.score} · Level ${vortex.level}`;
+  document.getElementById('endSub').textContent=`Final Score: ${finalScore} · Level ${vortex.level}`;
   document.getElementById('endBtn').style.color='#a060ff';
   document.getElementById('endBtn').style.border='1px solid #a060ff';
+  if(!document.getElementById('globalBoard')){
+    const board=document.createElement('div');
+    board.id='globalBoard';
+    el.insertBefore(board, document.getElementById('endBtn'));
+  }
+  saveGlobalScore(finalScore, vortex.level);
+  renderGlobalBoard();
   el.style.display='flex';
+}
+
+function cleanInitials(raw){return (raw||'AAA').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3)||'AAA'}
+async function saveGlobalScore(score, level){
+  if(score<=0)return;
+  let initials=localStorage.getItem(NAME_KEY)||'AAA';
+  if(score>=100){
+    initials=cleanInitials(prompt('Global score initials?', initials));
+    localStorage.setItem(NAME_KEY, initials);
+  }
+  try{await fetch(SCORES_API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({initials,score,level})});}catch(e){}
+}
+async function renderGlobalBoard(){
+  const board=document.getElementById('globalBoard'); if(!board)return;
+  board.innerHTML='<b>GLOBAL SCORES</b><br>Loading...';
+  try{
+    const res=await fetch(SCORES_API);
+    const rows=res.ok?await res.json():[];
+    const top=(Array.isArray(rows)?rows:[]).slice(0,8);
+    board.innerHTML='<b>GLOBAL SCORES</b><br>'+(top.length?top.map((r,i)=>`${i+1}. ${(r.initials||r.name||'???').slice(0,3)} ${r.score||0}`).join('<br>'):'No global scores yet');
+  }catch(e){board.innerHTML='<b>GLOBAL SCORES</b><br>Offline';}
 }
 
 let loopRunning=false;

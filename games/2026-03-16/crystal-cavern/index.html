@@ -44,6 +44,7 @@ const pauseOverlay = document.getElementById('pauseOverlay');
 // --- Constants ---
 const VERSION = 'v1.0.1';
 const LS_KEY = 'crystal_cavern_highscores';
+const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/crystal-cavern';
 const MAX_SCORES = 10;
 const TAU = Math.PI * 2;
 const DEG = Math.PI / 180;
@@ -154,6 +155,9 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 // Leaderboard
 let highScores = [];
+let globalScores = [];
+let globalScoresLoading = false;
+let globalScoresLoaded = false;
 
 // Offscreen canvas for lighting
 let lightCanvas = null;
@@ -376,6 +380,33 @@ function insertHighScore(initials, s, d) {
     if (highScores.length > MAX_SCORES) highScores.length = MAX_SCORES;
     hsNewIndex = highScores.findIndex(e => e.initials === initials && e.score === s && e.depth === d);
     saveHighScores();
+    submitGlobalScore(initials, s, d);
+}
+
+async function fetchGlobalScores() {
+    if (globalScoresLoading || globalScoresLoaded) return;
+    globalScoresLoading = true;
+    try {
+        const res = await fetch(SCORES_API);
+        if (res.ok) {
+            globalScores = await res.json();
+            globalScoresLoaded = true;
+        }
+    } catch(e) {}
+    globalScoresLoading = false;
+}
+
+async function submitGlobalScore(initials, s, d) {
+    try {
+        await fetch(SCORES_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ initials, score: s, depth: d })
+        });
+        globalScores = [];
+        globalScoresLoaded = false;
+        fetchGlobalScores();
+    } catch(e) {}
 }
 
 // ============================================================
@@ -2035,13 +2066,14 @@ function handleButtonTap(pos) {
 }
 
 function drawLeaderboard(startY) {
+    fetchGlobalScores();
     ctx.save();
     ctx.textAlign = 'center';
     ctx.fillStyle = '#4fc3f7';
     ctx.font = 'bold 16px Orbitron, monospace';
     ctx.shadowColor = '#4fc3f7';
     ctx.shadowBlur = 8;
-    ctx.fillText('LEADERBOARD', W / 2, startY);
+    ctx.fillText('LOCAL LEADERBOARD', W / 2, startY);
 
     ctx.font = '12px Orbitron, monospace';
     ctx.shadowBlur = 0;
@@ -2050,7 +2082,7 @@ function drawLeaderboard(startY) {
         ctx.fillStyle = 'rgba(79,195,247,0.5)';
         ctx.fillText('No scores yet', W / 2, startY + 30);
     } else {
-        for (let i = 0; i < highScores.length; i++) {
+        for (let i = 0; i < Math.min(highScores.length, 5); i++) {
             const entry = highScores[i];
             const ey = startY + 28 + i * 24;
             if (ey > H - 80) break;
@@ -2067,6 +2099,30 @@ function drawLeaderboard(startY) {
 
             const rank = `${i + 1}.`.padStart(3);
             const text = `${rank} ${entry.initials}  ${String(entry.score).padStart(6)}  D:${String(entry.depth).padStart(5)}`;
+            ctx.fillText(text, W / 2, ey);
+        }
+    }
+    const globalY = startY + 170;
+    ctx.fillStyle = '#4fc3f7';
+    ctx.font = 'bold 16px Orbitron, monospace';
+    ctx.shadowColor = '#4fc3f7';
+    ctx.shadowBlur = 8;
+    ctx.fillText('GLOBAL LEADERBOARD', W / 2, globalY);
+    ctx.font = '12px Orbitron, monospace';
+    ctx.shadowBlur = 0;
+    const rows = Array.isArray(globalScores) ? globalScores.slice(0, 5) : [];
+    if (rows.length === 0) {
+        ctx.fillStyle = 'rgba(79,195,247,0.5)';
+        ctx.fillText(globalScoresLoading ? 'Loading...' : 'No global scores yet', W / 2, globalY + 30);
+    } else {
+        for (let i = 0; i < rows.length; i++) {
+            const entry = rows[i];
+            const ey = globalY + 28 + i * 24;
+            if (ey > H - 80) break;
+            ctx.fillStyle = 'rgba(224,247,250,0.7)';
+            const rank = `${i + 1}.`.padStart(3);
+            const name = (entry.initials || entry.name || '???').slice(0, 3);
+            const text = `${rank} ${name}  ${String(entry.score || 0).padStart(6)}  D:${String(entry.depth || 0).padStart(5)}`;
             ctx.fillText(text, W / 2, ey);
         }
     }
