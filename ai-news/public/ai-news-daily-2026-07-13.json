@@ -1,7 +1,40 @@
 {
   "date": "2026-07-13",
-  "updatedAt": "2026-07-13T16:00:01.718701+00:00",
+  "updatedAt": "2026-07-13T22:00:02.024478+00:00",
   "items": [
+    {
+      "title": "OpenAI GPT-5.6 Sol, Terra, and Luna are now generally available on Amazon Bedrock",
+      "url": "https://aws.amazon.com/blogs/machine-learning/openai-gpt-5-6-sol-terra-and-luna-are-now-generally-available-on-amazon-bedrock",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Today, GPT-5.6 Sol, Terra, and Luna from OpenAI are generally available on Amazon Bedrock, bringing the smartest family of models from OpenAI yet to Amazon Bedrock’s next-generation inference engine built for high-performance, security and reliability.",
+      "image": "public/thumbnails/news-ada38b7acfaea5611b.png",
+      "featuredLatest": false,
+      "published": "2026-07-13T21:01:20+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.7785,
+      "signalGroup": "Model releases",
+      "sourceTier": "Reported source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "OpenAI GPT-5.6 Sol, Terra, and Luna are now generally available on Amazon Bedrock",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-gpt-5-sol-terra-luna",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/13/ML-21359.png"
+    },
     {
       "title": "Anthropic starts localizing Claude pricing for India, its biggest market after the US",
       "url": "https://techcrunch.com/2026/07/13/anthropic-starts-localizing-claude-pricing-for-india-its-biggest-market-after-the-us",
@@ -16,10 +49,10 @@
       "featuredLatest": false,
       "published": "2026-07-13T15:34:59+00:00",
       "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.2773,
+      "score": 11.1104,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -31,8 +64,71 @@
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "anthropic-claude-anthropic-starts-localizing-claude-pricing",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024"
+      "clusterKey": "anthropic-claude-anthropic-starts-localizing-claude-pricing"
+    },
+    {
+      "title": "datasette code-frequency chart on GitHub",
+      "url": "https://simonwillison.net/2026/Jul/13/datasette-code-frequency",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "datasette code-frequency chart on GitHub\nOut of curiosity I decided to see if I could find a useful illustration of the impact of coding agents and Opus 4.5 class models on my own output. The best I've found so far is this GitHub chart of frequency of code changes to my Datasette open source project:\n\nThe big spike in activity at the end aligns with Opus 4.8, GPT-5.5, Fable 5 and GPT-5.6 Sol.\n\n\n    Tags: github, ai, datasette, generative-ai, llms, ai-assisted-programming, coding-agents",
+      "image": "public/thumbnails/news-fbc5b20b1e1f5bfd06.png",
+      "featuredLatest": false,
+      "published": "2026-07-13T21:45:27+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.0826,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "datasette code-frequency chart on GitHub",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "datasette-code-frequency-chart-github",
+      "imageOriginal": "https://static.simonwillison.net/static/2026/datasette-code-frequency.png"
+    },
+    {
+      "title": "Google’s big Waze AI update includes a button that makes the app shut up",
+      "url": "https://thenextweb.com/news/waze-gemini-less-chatty-motorcycle-mode",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google has given Waze a batch of new features, most of them powered by Gemini. The headline additions are a motorcycle mode, personalised routing, conversational map editing, and Gemini-powered destination search, The Verge reports. The most interesting one does the opposite of what you would expect. It is called less chatty mode, and it makes the [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-09d5c2f1b26676221e.avif",
+      "featuredLatest": false,
+      "published": "2026-07-13T19:38:59+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.5805,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Google’s big Waze AI update includes a button that makes the app shut up",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-google-big-waze-update-includes",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/waze-gemini-less-chatty-motorcycle-mode.avif"
     },
     {
       "title": "Waze adds new AI-powered features and customization updates",
@@ -48,10 +144,10 @@
       "featuredLatest": false,
       "published": "2026-07-13T14:18:16+00:00",
       "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.4394,
+      "score": 8.2783,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -63,8 +159,7 @@
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "waze-adds-ai-powered-features-customization-updates",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2022/08/GettyImages-1235613908.jpg?resize=1200%2C806"
+      "clusterKey": "waze-adds-ai-powered-features-customization-updates"
     },
     {
       "title": "Waze is getting a bunch of new AI-powered features",
@@ -80,10 +175,10 @@
       "featuredLatest": false,
       "published": "2026-07-13T09:00:00+00:00",
       "firstSeen": "2026-07-13T12:16:19.531523+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.3656,
+      "score": 8.2266,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -96,6 +191,166 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "waze-getting-bunch-ai-powered-features"
+    },
+    {
+      "title": "Microsoft Study Finds AI Coding Agents Lift Pull Requests by 24%",
+      "url": "https://www.techrepublic.com/article/news-ai-coding-agents-microsoft-pull-requests",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A Microsoft study found command-line AI coding agents were linked to more merged pull requests, but adoption and review capacity shaped the results.\nThe post Microsoft Study Finds AI Coding Agents Lift Pull Requests by 24% appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-3a9c0c43205250ccfd.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-13T17:00:16+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.2075,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Microsoft Study Finds AI Coding Agents Lift Pull Requests by 24%",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "microsoft-study-finds-coding-agents-lift",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2025/10/tr-10092025-news-microsoft-scraps-caledonia-data-center-plan.jpg?f=jpeg"
+    },
+    {
+      "title": "AI is ending older workers’ careers early, and it is coming for the well-paid ones first",
+      "url": "https://thenextweb.com/news/ai-older-workers-careers-cut-short-research",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The debate about AI and jobs has focused on graduates. New research suggests it should also be looking at people in their late fifties, CNBC reports. Workers aged 55 and over in AI-exposed occupations are now exiting work at higher rates than before ChatGPT launched. The finding comes from Geoffrey Sanzenbacher at Boston College’s Center for [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-40c7cb5c216b9d75bf.avif",
+      "featuredLatest": false,
+      "published": "2026-07-13T18:56:20+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.1603,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "AI is ending older workers’ careers early, and it is coming for the well-paid ones first",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "ending-older-workers-careers-early-coming",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/ai-older-workers-careers-cut-short-research.avif"
+    },
+    {
+      "title": "The 6 wildest claims in Apple&#8217;s lawsuit against OpenAI",
+      "url": "https://www.theverge.com/tech/964843/apple-openai-lawsuit-wildest-claims",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "When Apple employees interviewed for jobs at OpenAI, the AI startup's hardware head allegedly asked them to show up with something unusual: components they were working on and unreleased product samples. That's according to a blockbuster lawsuit filed by Apple, which accuses OpenAI of stealing confidential documents, spying on hardware prototypes, and tricking one of [&#8230;]",
+      "image": "public/thumbnails/news-ba5e5e436de1c8ab3d.webp",
+      "featuredLatest": false,
+      "published": "2026-07-13T17:00:00+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.0173,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "The 6 wildest claims in Apple&#8217;s lawsuit against OpenAI",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-aws-wildest-claims-apple-8217-lawsuit",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/gettyimages-2236544097.jpg?quality=90&strip=all&crop=0%2C10.737892056687%2C100%2C78.524215886627&w=1200"
+    },
+    {
+      "title": "Building an agentic AI solution at Bluesight with Amazon Bedrock",
+      "url": "https://aws.amazon.com/blogs/machine-learning/building-an-agentic-ai-solution-at-bluesight-with-amazon-bedrock",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "In this post, we describe how Bluesight used two AWS engagements and Amazon Bedrock AgentCore to evolve from a single-product AI prototype to Prism, a unified agentic AI solution spanning six healthcare compliance products. Prism Assistant for ControlCheck launched in May 2026 and is already in use by 20 health systems. A more complex multi-product agentic solution is on track for later in 2026.",
+      "image": "public/thumbnails/news-50f28c1745b6e1796e.png",
+      "featuredLatest": false,
+      "published": "2026-07-13T17:34:38+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.4808,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Building an agentic AI solution at Bluesight with Amazon Bedrock",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "building-agentic-solution-bluesight-amazon-bedrock",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/13/ml-21092.png"
+    },
+    {
+      "title": "The wildest allegations in Apple’s trade secrets lawsuit against OpenAI",
+      "url": "https://techcrunch.com/2026/07/13/the-wildest-allegations-in-apples-trade-secrets-lawsuit-against-openai",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Apple’s trade secrets lawsuit against OpenAI contains allegations that range from employees joking about unauthorized access to Apple’s systems to claims that job candidates were asked to bring Apple hardware to interviews. Here are the complaint’s most eye-catching claims.",
+      "image": "public/thumbnails/news-0e170066ded449be98.webp",
+      "featuredLatest": false,
+      "published": "2026-07-13T18:22:10+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2845,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "The wildest allegations in Apple’s trade secrets lawsuit against OpenAI",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-aws-wildest-allegations-apple-trade-secrets",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/07/tim-cook-sam-altman-GettyImages-2233062347.jpg?w=1024"
     },
     {
       "title": "Apple’s lawsuit is already hurting OpenAI, long before a verdict",
@@ -114,7 +369,7 @@
       "lastSeen": "2026-07-13T16:00:01.718701+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1931,
+      "score": 6.033,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -128,6 +383,38 @@
       "toolCandidate": false,
       "clusterKey": "openai-aws-apple-lawsuit-already-hurting-openai",
       "imageOriginal": "https://media.thenextweb.com/2026/05/openai-apple-partnership-legal-fight-siri-chatgpt.avif"
+    },
+    {
+      "title": "Implement on-behalf-of token exchange for multi-tenant agents with Amazon Bedrock AgentCore Gateway",
+      "url": "https://aws.amazon.com/blogs/machine-learning/implement-on-behalf-of-token-exchange-for-multi-tenant-agents-with-amazon-bedrock-agentcore-gateway",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Building multi-tenant agents with Amazon Bedrock AgentCore and Apply fine-grained access control with Bedrock AgentCore Gateway interceptors establish the conceptual foundation for on-behalf-of (OBO) token exchange in agentic systems. This post is the implementation guide. It walks through a complete multi-tenant OBO setup against Okta, shows the JSON Web Token (JWT) claim transformations on each hop, and demonstrates how audience binding produces defense in depth that scales across tenants.",
+      "image": "public/thumbnails/news-4b40e278822099fa79.png",
+      "featuredLatest": false,
+      "published": "2026-07-13T17:27:40+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7777,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Implement on-behalf-of token exchange for multi-tenant agents with Amazon Bedrock AgentCore Gateway",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "implement-on-behalf-of-token-exchange-multi-tenant-agents",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/13/ML-20860.png"
     },
     {
       "title": "Never-skilling: the research says juniors using AI never learn to debug",
@@ -146,7 +433,7 @@
       "lastSeen": "2026-07-13T16:00:01.718701+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.5434,
+      "score": 5.3909,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -162,6 +449,38 @@
       "imageOriginal": "https://media.thenextweb.com/2026/07/AI-developers-skills.avif"
     },
     {
+      "title": "Siri AI is already changing how I use my iPhone",
+      "url": "https://www.theverge.com/tech/964714/siri-ai-public-beta-preview-ios-27-hands-on",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "iOS 27 escaped the developer world today with the launch of the first public beta. I've been testing the new operating system since early June, looking for quirks and seeing if it can live up to the hype Apple promised in the keynote. This year's iOS upgrades are what one might call a Snow Leopard [&#8230;]",
+      "image": "public/thumbnails/news-b6d2ae76be5beded27.webp",
+      "featuredLatest": false,
+      "published": "2026-07-13T20:43:20+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.2216,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Siri AI is already changing how I use my iPhone",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "siri-already-changing-how-use-iphone",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/Siri-AI-Being-invoked-3.jpg?quality=90&strip=all&crop=0%2C10.727837220746%2C100%2C78.544325558509&w=1200"
+    },
+    {
       "title": "Verifying Rust cryptography in SymCrypt, from standards to code",
       "url": "https://www.microsoft.com/en-us/research/blog/verifying-rust-cryptography-in-symcrypt-from-standards-to-code",
       "source": "Microsoft Research Blog",
@@ -175,10 +494,10 @@
       "featuredLatest": false,
       "published": "2026-07-13T16:00:00+00:00",
       "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.86,
+      "score": 4.6911,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -190,72 +509,45 @@
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "verifying-rust-cryptography-symcrypt-standards-code",
-      "imageOriginal": "https://www.microsoft.com/en-us/research/wp-content/uploads/2026/07/RustSymCrypt-TWLIFB-1200x627-1-scaled.jpg"
+      "clusterKey": "verifying-rust-cryptography-symcrypt-standards-code"
     },
     {
-      "title": "Meta’s AI detector can’t catch its own cropped fakes",
-      "url": "https://thenextweb.com/news/meta-ai-detector-cropped-images-watermark",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "Google Will Now Tell You If That Ad Was Made With AI",
+      "url": "https://www.techrepublic.com/article/news-google-ai-ad-disclosure-labels",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "The Meta AI detector promises to catch Meta’s own fakes. Crop the image, and more than half slip straight past it. The tool was meant to be a fix for the deepfake problem, not an example of it. This week Meta previewed an image detector alongside Muse Image, its most advanced image generator yet, and [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-0e1c0dd51225669c89.avif",
+      "summary": "Google is adding AI disclosure labels to ads on Search, YouTube, and Discover, but third-party AI use still depends on advertiser reporting.\nThe post Google Will Now Tell You If That Ad Was Made With AI appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-4641e3ab24cda4b3ed.jpg",
       "featuredLatest": false,
-      "published": "2026-07-13T14:30:43+00:00",
-      "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "published": "2026-07-13T14:46:09+00:00",
+      "firstSeen": "2026-07-13T22:00:02.024478+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.1054,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Meta’s AI detector can’t catch its own cropped fakes",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "meta-meta-detector-can-catch-own",
-      "imageOriginal": "https://media.thenextweb.com/2026/04/Meta.avif"
-    },
-    {
-      "title": "‘Scam Altman’: inside Musk and Altman’s weekend war on X",
-      "url": "https://thenextweb.com/news/musk-altman-scam-altman-fight-on-x",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Elon Musk lost his case against Sam Altman in court. This weekend, he tried to win it back on X, one insult at a time. The two men who founded OpenAI spent the weekend calling each other frauds in public. It played out on X, in real time, in front of millions. By the end [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-278fd206ec8f90299f.avif",
-      "featuredLatest": false,
-      "published": "2026-07-13T13:40:39+00:00",
-      "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.0813,
+      "score": 4.4498,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
       "brief": {
-        "whatHappened": "‘Scam Altman’: inside Musk and Altman’s weekend war on X",
+        "whatHappened": "Google Will Now Tell You If That Ad Was Made With AI",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
+        "sourceFrame": "Seen via TechRepublic AI."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "scam-altman-inside-musk-altman-weekend",
-      "imageOriginal": "https://media.thenextweb.com/2026/04/musk-altman-openai-trial-opening-arguments.avif"
+      "clusterKey": "google-google-will-tell-you-made",
+      "clusterTitle": "Google Will Now Tell You If That Ad Was Made With AI",
+      "clusterSize": 2,
+      "relatedSources": [
+        "TechRepublic AI",
+        "The Verge AI"
+      ],
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/ai-ad.jpg?f=jpeg"
     },
     {
       "title": "How to Help People Thrive with AI",
@@ -269,9 +561,9 @@
       "summary": "A weekend long-read on the human side of AI: David Brooks says only the mental marathoners survive the AI age — NLW pushes back, arguing the real opportunity is using AI to do things you couldn't do before, with Uber's Agentic Pods as the proof of concept.",
       "image": "public/thumbnails/news-9a7311764c99b95b88.png",
       "featuredLatest": false,
-      "published": "2026-07-13T16:00:10.657880+00:00",
+      "published": "2026-07-13T22:00:14.437516+00:00",
       "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 4.032,
@@ -286,287 +578,7 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "how-help-people-thrive",
-      "imageOriginal": "https://aidailybrief.ai/og/2026-07-12.png"
-    },
-    {
-      "title": "TCS bets on 8,900 AI deployment engineers to defend India’s IT services model",
-      "url": "https://thenextweb.com/news/tcs-forward-deployed-ai-engineers-acquisitions",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Tata Consultancy Services plans to build a team of up to 8,900 forward-deployed AI engineers and is looking for acquisition targets in AI and cybersecurity, chief executive K Krithivasan said. The move is India’s largest IT firm answering the question that has hung over the sector since the arrival of agentic AI in enterprise stacks, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/chief-executive-K-Krithivasan.avif",
-      "featuredLatest": false,
-      "published": "2026-07-13T08:30:03+00:00",
-      "firstSeen": "2026-07-13T12:16:19.531523+00:00",
-      "lastSeen": "2026-07-13T12:16:19.531523+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.6431,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "TCS bets on 8,900 AI deployment engineers to defend India’s IT services model",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "tcs-bets-900-deployment-engineers-defend"
-    },
-    {
-      "title": "Apple’s Failed Car Project Reportedly Shapes M7 AI Chips",
-      "url": "https://www.techrepublic.com/article/news-apple-car-project-m7-ai-chips",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Apple’s failed car project reportedly shaped its Neural Engine, future M7 chips, and plans for more powerful AI server infrastructure.\nThe post Apple’s Failed Car Project Reportedly Shapes M7 AI Chips appeared first on TechRepublic.",
-      "image": "https://assets.techrepublic.com/uploads/2026/07/tr-07132026-apple-car-project-m7-ai-chips.jpg?f=jpeg",
-      "featuredLatest": false,
-      "published": "2026-07-13T13:22:49+00:00",
-      "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1728,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Apple’s Failed Car Project Reportedly Shapes M7 AI Chips",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechRepublic AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "apple-failed-car-project-reportedly-shapes"
-    },
-    {
-      "title": "The most innovative calorie tracking apps of 2026",
-      "url": "https://thenextweb.com/news/nnovative-calorie-tracking-apps-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Back in the mid-2000s, calorie and macro tracking was a niche practice. You weighed your food, looked it up in a database, and wrote down how many calories and how many grams of protein, fat, and carbohydrates you were eating each day. It was the domain of bodybuilders, strength athletes, and competitors trying to stay [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/innovative-calorie-tracking-apps-2026.avif",
-      "featuredLatest": false,
-      "published": "2026-07-13T10:31:27+00:00",
-      "firstSeen": "2026-07-13T12:16:19.531523+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0948,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "The most innovative calorie tracking apps of 2026",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "most-innovative-calorie-tracking-apps-2026"
-    },
-    {
-      "title": "Shein is set for its Hong Kong listing hearing on Thursday",
-      "url": "https://thenextweb.com/news/shein-hong-kong-ipo-listing-hearing",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Shein is scheduled to face the Hong Kong stock exchange’s listing committee on Thursday, Reuters reported on Monday, citing people familiar with the matter. It is the final procedural gate before the fast-fashion group, which has spent three years and two continents trying to go public, can actually price a deal. The hearing follows approval from the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Shein.avif",
-      "featuredLatest": false,
-      "published": "2026-07-13T10:01:39+00:00",
-      "firstSeen": "2026-07-13T12:16:19.531523+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0818,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "Shein is set for its Hong Kong listing hearing on Thursday",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "shein-set-hong-kong-listing-hearing"
-    },
-    {
-      "title": "Xi Jinping will give the keynote at China’s flagship AI summit for the first time",
-      "url": "https://thenextweb.com/news/xi-jinping-keynote-world-ai-conference-shanghai-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Xi Jinping will attend the opening ceremony of the 2026 World Artificial Intelligence Conference in Shanghai and deliver a keynote speech, a Chinese foreign ministry spokesperson announced on Monday. It is the first time China’s leader has appeared at the country’s flagship AI event, and it comes at a moment when Beijing has been busy restricting overseas [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2025/03/Untitled-design-44.avif",
-      "featuredLatest": false,
-      "published": "2026-07-13T09:38:23+00:00",
-      "firstSeen": "2026-07-13T12:16:19.531523+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0718,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Xi Jinping will give the keynote at China’s flagship AI summit for the first time",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "jinping-will-give-keynote-china-flagship"
-    },
-    {
-      "title": "Scientists discovered the brain doesn't make decisions the way we thought",
-      "url": "https://www.sciencedaily.com/releases/2026/07/260712011757.htm",
-      "source": "ScienceDaily AI",
-      "sourceUrl": "https://www.sciencedaily.com/rss/computers_math/artificial_intelligence.xml",
-      "sourceWeight": 0.8,
-      "sourceRole": "watchlist",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "A new study suggests the brain begins making decisions much earlier than scientists previously thought. Researchers found that even primary sensory regions are influenced by higher brain areas through rapid feedback loops, rather than simply passing information forward. This more dynamic view of brain function could help engineers design future AI systems that think more like biological brains while using far less power.",
-      "image": "https://www.sciencedaily.com/images/1920/functional-brain-mapping.webp",
-      "featuredLatest": false,
-      "published": "2026-07-13T12:12:27+00:00",
-      "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "watchlist_low_signal",
-      "score": 3.01,
-      "signalGroup": "Research",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
-      "brief": {
-        "whatHappened": "Scientists discovered the brain doesn't make decisions the way we thought",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
-        "sourceFrame": "Seen via ScienceDaily AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "scientists-discovered-brain-doesn-make-decisions"
-    },
-    {
-      "title": "AI agent crawlers now need permission. Here’s how to get it",
-      "url": "https://www.artificialintelligence-news.com/news/ai-agent-crawlers-cloudflare-rules",
-      "source": "Artificial Intelligence News",
-      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "sourceWeight": 0.82,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "AI agent crawlers, the bots that fetch pages in real time on behalf of a person waiting for an answer, will be blocked by default on a slice of the web from September 15 onwards. Cloudflare&#160;announced&#160;the change on July 1, and most of the coverage since then has focused on Google. The more useful part [&#8230;]\nThe post AI agent crawlers now need permission. Here&#8217;s how to get it appeared first on AI News.",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-07-13T11:00:00+00:00",
-      "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 2.8053,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "AI agent crawlers now need permission. Here’s how to get it",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Artificial Intelligence News."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "agent-crawlers-need-permission-here-how"
-    },
-    {
-      "title": "Australia’s AI copyright fight now has a datacentre price tag",
-      "url": "https://thenextweb.com/news/australia-ai-copyright-datacentres-carve-out",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The fight over Australia AI copyright has a price tag: tens of billions in datacentres. The prize for AI firms is the right to train on the country’s books, music and journalism. Australia has become the latest test of a question every government now faces. How much of a nation’s creative work can AI companies [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Australian-Parliament-House.avif",
-      "featuredLatest": false,
-      "published": "2026-07-13T15:07:10+00:00",
-      "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1234,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Australia’s AI copyright fight now has a datacentre price tag",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "australia-copyright-fight-has-datacentre-price"
-    },
-    {
-      "title": "Yann LeCun’s new VC fund lasted eight hours. Then it vanished",
-      "url": "https://thenextweb.com/news/yann-lecun-extelligence-invest-fund-collapse",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "A shiny new VC firm named the AI pioneer as a partner on Friday morning. By Friday night, the fund did not exist. Yann LeCun has had a busy year. Now he has had a strange one. On Friday, a new venture firm called Extelligence Invest named the man often dubbed a “godfather of AI” [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/yann-lecun-new-vc-firm.avif",
-      "featuredLatest": false,
-      "published": "2026-07-13T12:09:50+00:00",
-      "firstSeen": "2026-07-13T16:00:01.718701+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0388,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Yann LeCun’s new VC fund lasted eight hours. Then it vanished",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "yann-lecun-fund-lasted-eight-hours"
+      "clusterKey": "how-help-people-thrive"
     }
   ],
   "tools": [
@@ -619,10 +631,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T15:01:28+00:00",
       "firstSeen": "2026-07-10T10:00:01.533642+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6824,
+      "score": 7.671,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -755,10 +767,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T17:16:44+00:00",
       "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8872,
+      "score": 5.875,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -792,7 +804,7 @@
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.809,
+      "score": 5.8089,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -826,7 +838,7 @@
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 5.513,
+      "score": 5.5122,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -894,10 +906,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T15:01:28+00:00",
       "firstSeen": "2026-07-10T10:00:01.533642+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6824,
+      "score": 7.671,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1030,10 +1042,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T17:16:44+00:00",
       "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-13T16:00:01.718701+00:00",
+      "lastSeen": "2026-07-13T22:00:02.024478+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8872,
+      "score": 5.875,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1067,7 +1079,7 @@
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.809,
+      "score": 5.8089,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1101,7 +1113,7 @@
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 5.513,
+      "score": 5.5122,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1128,7 +1140,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1040,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1138,7 +1150,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1148,7 +1160,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1158,7 +1170,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1168,7 +1180,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 823,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1178,7 +1190,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1188,7 +1200,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1198,7 +1210,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1208,7 +1220,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1218,7 +1230,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1228,7 +1240,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1238,7 +1250,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "The Next Web",
@@ -1248,7 +1260,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1258,7 +1270,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1268,7 +1280,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1278,7 +1290,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1288,7 +1300,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1298,7 +1310,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 241,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1308,7 +1320,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1318,7 +1330,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1328,7 +1340,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1338,7 +1350,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Latent Space",
@@ -1348,7 +1360,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Import AI",
@@ -1358,7 +1370,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1368,7 +1380,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 153,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1378,7 +1390,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1388,7 +1400,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1398,7 +1410,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1408,7 +1420,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1418,7 +1430,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1428,7 +1440,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1438,7 +1450,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
     }
   ],
   "errors": []
