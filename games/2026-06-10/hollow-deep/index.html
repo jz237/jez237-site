@@ -905,6 +905,55 @@ const World={
     x2.putImageData(id,0,0);
     x2.imageSmoothingEnabled=true;
     x2.drawImage(c,0,0,HR,HR,0,0,S,S);
+    /* ---- full-res detail pass, clipped to rock via source-atop ----
+       strata, flecks and fractures derive from world coordinates so
+       they join seamlessly across chunk borders */
+    x2.globalCompositeOperation='source-atop';
+    x2.save();x2.translate(-ox,-oy);
+    /* sedimentary strata: slow wavy bands pressed into the rock */
+    const bandH=26,by0=Math.floor(oy/bandH)*bandH;
+    for(let byy=by0;byy<=oy+S+bandH;byy+=bandH){
+      const bh=hash2i(1,byy/bandH,this.seed+77);
+      if(bh<0.35)continue;
+      const dark=bh>0.7;
+      x2.strokeStyle=dark?`rgba(8,10,14,${0.14+bh*0.12})`:`rgba(190,205,220,${0.04+bh*0.05})`;
+      x2.lineWidth=dark?2.4:1.2;
+      x2.beginPath();
+      for(let wx=ox;wx<=ox+S;wx+=8){
+        const wy2=byy+(vnoise(wx*0.006,byy*0.13)-0.5)*30+(vnoise(wx*0.028,byy*0.31)-0.5)*8;
+        wx===ox?x2.moveTo(wx,wy2):x2.lineTo(wx,wy2);
+      }
+      x2.stroke();
+    }
+    /* mineral flecks: calcite glitter up top, bone chips, throat embers */
+    const fleckCol=throatK>0.4?'255,140,70':fungalK>0.4?'170,235,190':'205,225,245';
+    for(let wy2=oy-(oy%6|0);wy2<oy+S;wy2+=6)for(let wx=ox-(ox%6|0);wx<ox+S;wx+=6){
+      const h=hash2i(wx/6,wy2/6,this.seed+913);
+      if(h>0.052)continue;
+      const jx=wx+(hash2i(wx,wy2,3)-0.5)*5,jy=wy2+(hash2i(wy2,wx,4)-0.5)*5;
+      x2.fillStyle=`rgba(${fleckCol},${0.14+(h/0.052)*0.5})`;
+      const fs2=h<0.014?1.6:1;
+      x2.fillRect(jx,jy,fs2,fs2);
+    }
+    /* hairline fractures: short seeded cracks with a lit lip */
+    for(let gy=Math.floor(oy/48);gy<=Math.floor((oy+S)/48);gy++)
+    for(let gx=Math.floor(ox/48);gx<=Math.floor((ox+S)/48);gx++){
+      const h=hash2i(gx,gy,this.seed+331);
+      if(h>0.24)continue;
+      let cxx=gx*48+h*190,cyy=gy*48+hash2i(gy,gx,5)*47,ang=hash2i(gx,gy,9)*TAU;
+      const a0=ang,pts=[[cxx,cyy]];
+      for(let k2=0,st=4+(h*80|0);k2<st;k2++){
+        ang+=(vnoise(cxx*0.05,cyy*0.05,3)-0.5)*1.5;
+        ang=clamp(ang,a0-1,a0+1); /* cracks jag, they don't curl */
+        cxx+=Math.cos(ang)*6;cyy+=Math.sin(ang)*6;
+        pts.push([cxx,cyy]);
+      }
+      const trace=(dx2,dy2)=>{x2.beginPath();x2.moveTo(pts[0][0]+dx2,pts[0][1]+dy2);for(let k2=1;k2<pts.length;k2++)x2.lineTo(pts[k2][0]+dx2,pts[k2][1]+dy2);x2.stroke()};
+      x2.strokeStyle='rgba(165,185,205,0.12)';x2.lineWidth=1.6;trace(0.8,1.3);
+      x2.strokeStyle='rgba(5,7,11,0.55)';x2.lineWidth=1;trace(0,0);
+    }
+    x2.restore();
+    x2.globalCompositeOperation='source-over';
     /* edge strokes from segments (wet rims) */
     x2.save();x2.translate(-ox,-oy);
     const arr=this.segs.get(ci2+','+cj)||[];
@@ -1061,6 +1110,16 @@ const Particles={
   },
   update(dt){
     this.ensureMotes();
+    /* the deep breathes: spores drift in the gardens, embers climb the throat */
+    const dz=clamp((Cam.y-World.startY)/(World.H*CELL),0,1);
+    if(dz>0.24&&dz<0.52&&this.list.length<840&&Math.random()<0.12){
+      const vr=viewRect(0);
+      this.spawn({type:'spore',x:rnd(vr.l,vr.r),y:rnd(vr.t,vr.b),vx:rnd(-6,6),vy:rnd(-4,8),life:rnd(2.5,4.5),t:0,r:rnd(0.7,1.5)});
+    }
+    if(dz>0.72&&this.list.length<840&&Math.random()<0.1){
+      const vr=viewRect(0);
+      this.spawn({type:'ember',x:rnd(vr.l,vr.r),y:vr.b+rnd(10,60),vx:rnd(-8,8),vy:rnd(-36,-14),life:rnd(3,6),t:0,r:rnd(0.6,1.4),ph:rnd(TAU)});
+    }
     for(const m of this.motes){
       m.ph+=dt;
       m.x+=Math.sin(m.ph*0.7)*6*dt;
@@ -1080,6 +1139,10 @@ const Particles={
         case 'spore':
           p.vy+=8*dt;p.vx+=(vnoise(p.t*2+p.x,3)-0.5)*60*dt;
           p.vx*=1-1.2*dt;p.vy*=1-1.2*dt;
+          p.x+=p.vx*dt;p.y+=p.vy*dt;break;
+        case 'ember':
+          p.vx+=(vnoise(p.t*2.6+p.ph,6)-0.5)*70*dt;
+          p.vx*=1-1.1*dt;
           p.x+=p.vx*dt;p.y+=p.vy*dt;break;
         case 'spark':
           p.vy+=500*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
@@ -1945,8 +2008,10 @@ void main(){
     float nearFloor=clamp(wDepth/max(wH,1.0),0.0,1.0);
     col+=light*vec3(0.12,0.3,0.34)*max(caus,0.0)*nearFloor*0.6*underwater;
   }
-  /* dither last: kill gradient banding everywhere, water included */
-  col+=(fract(sin(dot(frag,vec2(12.9898,78.233)))*43758.5453)-0.5)*(2.5/255.0);
+  /* dither last: kill gradient banding everywhere, water included.
+     interleaved gradient noise — sin-hash moires on some GPUs */
+  float ign=fract(52.9829189*fract(0.06711056*frag.x+0.00583715*frag.y));
+  col+=(ign-0.5)*(4.0/255.0);
   gl_FragColor=vec4(col,1.0);
 }`;
       const sh=(type,src)=>{
@@ -2174,6 +2239,30 @@ function drawScene(){
     sctx.globalAlpha=1;
   }
   applyCam(sctx,1);
+  /* daylight shafts at the mouth: drawn behind the terrain so rock occludes
+     them, and the light pass fades them with the dying daylight */
+  if(Cam.y<1500&&!Perf.lowFx){
+    const fadeAll=clamp(1-Cam.y/1300,0,1);
+    sctx.globalCompositeOperation='screen';
+    for(let k=0;k<5;k++){
+      const sway=vnoise(Game.t*0.11+k*3.7,k*9.1)-0.5;
+      const bx=World.mouthX+(k-2)*46+sway*30;
+      const slant=(k-2)*0.16+sway*0.1;
+      const len=480+k*50,w0=10+k*4,w1=w0+len*0.22;
+      const a=(0.16+0.13*vnoise(Game.t*0.23+k*7,3.3))*fadeAll;
+      const g=sctx.createLinearGradient(bx,-40,bx+Math.sin(slant)*len,-40+len);
+      g.addColorStop(0,`rgba(185,205,228,${a})`);
+      g.addColorStop(0.7,`rgba(150,175,205,${a*0.45})`);
+      g.addColorStop(1,'rgba(0,0,0,0)');
+      sctx.fillStyle=g;
+      sctx.beginPath();
+      sctx.moveTo(bx-w0,-40);sctx.lineTo(bx+w0,-40);
+      sctx.lineTo(bx+Math.sin(slant)*len+w1,-40+len);
+      sctx.lineTo(bx+Math.sin(slant)*len-w1,-40+len);
+      sctx.closePath();sctx.fill();
+    }
+    sctx.globalCompositeOperation='source-over';
+  }
   /* terrain chunks */
   const c0x=Math.floor(vr.l/CHUNK),c1x=Math.floor(vr.r/CHUNK);
   const c0y=Math.floor(vr.t/CHUNK),c1y=Math.floor(vr.b/CHUNK);
@@ -2293,6 +2382,58 @@ function drawScene(){
       sctx.beginPath();sctx.arc(pf.x+Math.sin(pf.ph+k*2.4)*pf.r*0.5,pf.y-pf.r*0.2+Math.cos(pf.ph+k*1.7)*pf.r*0.3,0.9,0,TAU);sctx.fill();
     }
   }
+  /* glow fungus bodies: mushrooms in the gardens, ember vents in the throat
+     (their light already exists — these give it something to come from) */
+  for(const fg of World.fungi){
+    if(fg.x<vr.l-30||fg.x>vr.r+30||fg.y<vr.t-30||fg.y>vr.b+30)continue;
+    const pul=0.55+0.45*Math.sin(Game.t*0.9+fg.ph);
+    if(fg.hue===2){
+      /* charred blister, cracks breathing red */
+      sctx.fillStyle='rgba(20,12,10,0.85)';
+      sctx.beginPath();sctx.ellipse(fg.x,fg.y,fg.r*2.2,fg.r*1.4,fg.ph,0,TAU);sctx.fill();
+      sctx.strokeStyle=`rgba(255,${70+pul*60|0},30,${0.35+pul*0.5})`;
+      sctx.lineWidth=1.1;
+      for(let k=0;k<3;k++){
+        const a0=fg.ph+k*2.1;
+        sctx.beginPath();
+        sctx.moveTo(fg.x+Math.cos(a0)*fg.r*0.4,fg.y+Math.sin(a0)*fg.r*0.3);
+        sctx.lineTo(fg.x+Math.cos(a0+0.5)*fg.r*1.7,fg.y+Math.sin(a0+0.5)*fg.r*1.1);
+        sctx.stroke();
+      }
+    }else{
+      /* bioluminescent mushrooms: stems out of the rock, caps hold the light */
+      const col=fg.hue?'150,255,190':'110,225,255';
+      let ux=0,uy=-1;
+      if(!World.solid(fg.x,fg.y+fg.r+9)){
+        if(World.solid(fg.x,fg.y-fg.r-9)){ux=0;uy=1}
+        else if(World.solid(fg.x-fg.r-9,fg.y)){ux=1;uy=0}
+        else if(World.solid(fg.x+fg.r+9,fg.y)){ux=-1;uy=0}
+      }
+      for(let k=0;k<3;k++){
+        const hk=hash2i(fg.x*10+k,fg.y*10,5);
+        if(k>0&&hk>0.72)continue;
+        const off=(k-1)*fg.r*0.9+(hk-0.5)*3;
+        const hgt=fg.r*(0.9+hk*0.9),cw=fg.r*(0.55+hk*0.5);
+        const bx=fg.x+(ux===0?off:0),by2=fg.y+(uy===0?off:0);
+        const bend=Math.sin(Game.t*0.7+fg.ph+k)*0.8;
+        const tipX=bx+ux*hgt+(uy!==0?bend:0),tipY=by2+uy*hgt+(ux!==0?bend:0);
+        sctx.strokeStyle='rgba(205,215,200,0.5)';
+        sctx.lineWidth=Math.max(1,cw*0.32);
+        sctx.beginPath();sctx.moveTo(bx-ux*fg.r*0.6,by2-uy*fg.r*0.6);
+        sctx.quadraticCurveTo(bx+ux*hgt*0.5,by2+uy*hgt*0.5,tipX,tipY);
+        sctx.stroke();
+        const g2=sctx.createRadialGradient(tipX,tipY,0.4,tipX,tipY,cw*1.5);
+        g2.addColorStop(0,`rgba(${col},${0.75+0.2*pul})`);
+        g2.addColorStop(0.65,`rgba(${col},0.3)`);
+        g2.addColorStop(1,'rgba(20,30,30,0.25)');
+        sctx.fillStyle=g2;
+        sctx.beginPath();sctx.ellipse(tipX,tipY,cw*1.5,cw*1.15,0,0,TAU);sctx.fill();
+        sctx.fillStyle=`rgba(235,255,245,${0.5+pul*0.3})`;
+        sctx.fillRect(tipX-cw*0.5,tipY-cw*0.4,1,1);
+        sctx.fillRect(tipX+cw*0.3,tipY+cw*0.2,1,1);
+      }
+    }
+  }
   /* bone chimes: someone hung the dead up to listen */
   for(const ch of World.chimes){
     if(ch.x<vr.l-40||ch.x>vr.r+40||ch.y<vr.t-80||ch.y>vr.b+80)continue;
@@ -2366,6 +2507,28 @@ function drawScene(){
     }
     sctx.stroke();
   }
+  /* light on the water: a broken column of reflected fire */
+  const wLights=[];
+  if(P.oil>0)wLights.push([P.lightX,P.lightY,P.lightR(),'255,205,130',0.55*Game.flick]);
+  for(const f of flares)wLights.push([f.x,f.y,flareLight(f),'255,130,70',0.5]);
+  sctx.globalCompositeOperation='screen';
+  for(const w of World.water){
+    if(w.x>vr.r||w.x+w.w<vr.l||w.y>vr.b||w.y+w.h<vr.t)continue;
+    for(const[lx,ly,lr,lcol,la]of wLights){
+      if(ly>w.y||lx<w.x-40||lx>w.x+w.w+40)continue;
+      const d=w.y-ly;if(d>lr)continue;
+      const k=1-d/lr;
+      const reach=Math.min(60+k*50,w.h-2);
+      for(let yy=2;yy<reach;yy+=4){
+        const t2=yy/reach;
+        const wob=Math.sin(yy*0.31+Game.t*2.6)*(1.5+yy*0.12)+Math.sin(yy*0.13-Game.t*1.7)*1.2;
+        const ww=(1-t2)*(6+k*4);
+        sctx.fillStyle=`rgba(${lcol},${la*k*(1-t2)*(0.6+0.4*Math.sin(yy*0.7-Game.t*3.1))})`;
+        sctx.fillRect(lx+wob-ww/2,w.y+yy,ww,2.6);
+      }
+    }
+  }
+  sctx.globalCompositeOperation='source-over';
   /* volumetric air-scatter: the lantern's halo hangs in the damp air
      (canvas fallback only — the shader computes true in-scatter) */
   if(!GLR.on&&P.oil>0){
@@ -2384,9 +2547,13 @@ function drawScene(){
     sctx.fillStyle=sg;
     sctx.beginPath();sctx.arc(f.x,f.y,R*0.8,0,TAU);sctx.fill();
   }
-  /* dust motes (drift in the air, lit later by multiply) */
+  /* dust motes (drift in the air, lit later by multiply) — tinted by biome */
+  const mpz=clamp(depth*4,0,3.999),mpi=mpz|0,mpk=mpz-mpi;
+  const MCOLS=[[190,195,205],[170,215,165],[215,205,175],[255,160,95]];
+  const mca=MCOLS[mpi],mcb=MCOLS[Math.min(mpi+1,3)];
+  const moteCol=`rgba(${lerp(mca[0],mcb[0],mpk)|0},${lerp(mca[1],mcb[1],mpk)|0},${lerp(mca[2],mcb[2],mpk)|0},0.35)`;
   for(const m of Particles.motes){
-    sctx.fillStyle='rgba(190,190,180,0.35)';
+    sctx.fillStyle=moteCol;
     sctx.beginPath();sctx.arc(m.x,m.y,m.r,0,TAU);sctx.fill();
   }
   /* floating pickup texts */
@@ -2568,6 +2735,37 @@ function drawLights(){
 function glowPass(){
   applyCam(ctx,1);
   ctx.globalCompositeOperation='screen';
+  /* wet rock glitter: calcite catching the lantern */
+  if(!Perf.lowFx&&P.oil>0){
+    const GR2=P.lightR()*0.8;
+    World.segsNear(P.lightX,P.lightY,GR2,segScratch);
+    let gn=0;
+    for(const s of segScratch){
+      if(gn>=36)break;
+      const h=hash2i(s.ax*2.7,s.by*2.7,11);
+      if(h<0.5)continue;
+      const gx2=lerp(s.ax,s.bx,h),gy2=lerp(s.ay,s.by,(h*7)%1);
+      const dx=P.lightX-gx2,dy=P.lightY-gy2,d=hyp(dx,dy)||1;
+      if(d>GR2)continue;
+      const face=(dx*s.nx+dy*s.ny)/d;
+      if(face<0.2)continue;
+      const tw=Math.max(0,Math.sin(Game.t*(1.5+h*4)+h*47));
+      const a=face*(1-d/GR2)*tw*tw*Game.flick;
+      if(a<0.03)continue;
+      gn++;
+      const sz=0.7+h*1.2;
+      ctx.fillStyle=`rgba(255,235,200,${Math.min(1,a)})`;
+      ctx.beginPath();ctx.arc(gx2,gy2,sz,0,TAU);ctx.fill();
+      if(h>0.9){
+        ctx.strokeStyle=`rgba(255,240,210,${a*0.55})`;
+        ctx.lineWidth=0.7;
+        ctx.beginPath();
+        ctx.moveTo(gx2-sz*3,gy2);ctx.lineTo(gx2+sz*3,gy2);
+        ctx.moveTo(gx2,gy2-sz*3);ctx.lineTo(gx2,gy2+sz*3);
+        ctx.stroke();
+      }
+    }
+  }
   /* lantern flame */
   if(P.oil>0){
     const fx=P.lightX,fy=P.lightY;
@@ -2595,6 +2793,11 @@ function glowPass(){
     }else if(p.type==='spore'){
       const k=1-p.t/p.life;
       ctx.fillStyle=`rgba(150,255,170,${0.55*k})`;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.fill();
+    }else if(p.type==='ember'){
+      const k=1-p.t/p.life;
+      const fl2=0.55+0.45*Math.sin(Game.t*11+p.ph);
+      ctx.fillStyle=`rgba(255,${90+k*90|0},40,${k*fl2})`;
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,TAU);ctx.fill();
     }
   }
@@ -2957,7 +3160,7 @@ function drawTitle(){
   ctx.fillStyle='rgba(110,118,126,0.45)';
   ctx.font='10px "Courier New",monospace';
   ctx.textAlign='right';
-  ctx.fillText('v1.0.1',VIEW.w-10,VIEW.h-8);
+  ctx.fillText('v1.1.0',VIEW.w-10,VIEW.h-8);
   ctx.textAlign='center';
 }
 const STORY=[
