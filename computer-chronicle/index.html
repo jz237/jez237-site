@@ -693,6 +693,11 @@
     .cc-item-grid article { border: 1px solid var(--cc-line-soft); background: rgba(10, 12, 36, 0.55); padding: 13px; }
     .cc-item-grid h3 { margin: 8px 0 7px; color: #fff !important; font-family: var(--cc-mono) !important; font-size: 0.94rem; line-height: 1.4; overflow-wrap: anywhere; }
     .cc-item-grid p { margin: 0; color: var(--cc-muted); font-size: 0.78rem; line-height: 1.55; }
+    .cc-stories { display: flex; flex-direction: column; gap: 16px; }
+    .cc-stories .cc-story { border-top: 1px dashed var(--cc-line-soft); padding-top: 14px; }
+    .cc-stories .cc-story:first-child { border-top: 0; padding-top: 0; }
+    .cc-stories .cc-story h3 { margin: 6px 0 8px; color: #fff !important; font-family: var(--cc-mono) !important; font-size: 1rem; line-height: 1.45; overflow-wrap: anywhere; }
+    .cc-stories .cc-pullquote { margin: 10px 0 12px; padding: 6px 12px; border-left: 3px solid var(--cc-amber); color: var(--cc-text); font-style: italic; font-size: 0.88rem; line-height: 1.55; }
 
     .cc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
     .cc-list > li { border-top: 1px solid var(--cc-line-soft); padding: 10px 2px; }
@@ -978,7 +983,8 @@
       .cc-datecard [data-current-date], .cc-side-head h2, .cc-rule, .cc-morning-brand strong { color: #111 !important; text-shadow: none; }
       .cc-datecard [data-historic-date], .cc-card strong, .cc-glance strong, .cc-panel h2, .cc-chart strong,
       .cc-list strong, .cc-item-grid h3, .cc-kv strong, .cc-prices .cc-price-row strong, .cc-side-panel .cc-side-body h3,
-      .cc-bullets li, .cc-shelf-group ol li { color: #111 !important; }
+      .cc-bullets li, .cc-shelf-group ol li, .cc-stories .cc-story h3 { color: #111 !important; }
+      .cc-stories .cc-pullquote { color: #333 !important; border-color: #444; }
       .cc-datecard [data-edition], .cc-card-label, .cc-glance span.cc-glance-kicker, .cc-panel-label, .cc-shelf-group .cc-shelf-label { color: #444 !important; border-color: #444; }
       .cc-panel p, .cc-card em, .cc-morning p, .cc-banner p, .cc-chart .cc-note, .cc-list .cc-note, .cc-prices .cc-note,
       .cc-bullets .cc-note, .cc-item-grid p, .cc-kv .cc-note, .cc-side-panel .cc-side-body p, .cc-deck, .cc-ticker [data-status] { color: #333 !important; }
@@ -1121,6 +1127,14 @@
         </ul>
 
         <article class="cc-panel" id="top-story" data-lead></article>
+
+        <section class="cc-panel" id="feature-desk" aria-labelledby="feature-desk-title" data-stories-panel hidden>
+          <div class="cc-panel-head">
+            <span class="cc-panel-label" data-stories-label>Feature Desk</span>
+          </div>
+          <h2 id="feature-desk-title" data-stories-title>The Week's Stories</h2>
+          <div class="cc-stories" data-stories></div>
+        </section>
 
         <section class="cc-panel" id="hardware-history" aria-labelledby="computer-desk-title">
           <div class="cc-panel-head" style="margin-bottom:14px">
