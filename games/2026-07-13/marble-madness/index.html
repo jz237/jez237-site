@@ -34,14 +34,18 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics,
    dynamic (animated) wave bands, multi-race chain with time carryover, Steelie rival AI. */
-const VERSION = '0.6.0';
+const VERSION = '0.7.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
-const AXx = 15, AXy = 3;      // +v (across course) screen delta
-const AUx = -6, AUy = 10;     // +u (down course) screen delta
+let AXx = 15, AXy = 3;        // +v (across course) screen delta
+let AUx = -6, AUy = 10;       // +u (down course) screen delta
 const AZ  = 16;               // pixels per height unit
-const DET = AXx*AUy - AUx*AXy;
+let DET = AXx*AUy - AUx*AXy;
+let FLIP = false;             // true when +u renders up-screen (Silly race)
+const BASIS_STD={axx:15,axy:3,aux:-6,auy:10}, BASIS_FLIP={axx:15,axy:3,aux:6,auy:-10};
+function setBasis(b){ AXx=b.axx; AXy=b.axy; AUx=b.aux; AUy=b.auy;
+  DET=AXx*AUy-AUx*AXy; FLIP=AUy<0; }
 function projX(v,u){ return v*AXx + u*AUx; }
 function projY(v,u,z){ return v*AXy + u*AUy - z*AZ; }
 function screenToGrid(sx,sy){ return { dv:(AUy*sx - AUx*sy)/DET, du:(-AXy*sx + AXx*sy)/DET }; }
@@ -52,7 +56,7 @@ const ABYSS=-2.5;
 let CV=0, CU=0, cells=null, dynBand=null, decorFn=null, simT=0;
 function newGrid(cv,cu){ CV=cv; CU=cu; dynBand=null; decorFn=null; hazards=[];
   cells=new Array(CU); for(let u=0;u<CU;u++) cells[u]=new Array(CV).fill(null); }
-function put(v,u,h00,h10,h01,h11,o){ cells[u][v]={h00,h10,h01,h11,type:(o&&o.type)||NORMAL,tint:(o&&o.tint)||null,tex:(o&&o.tex)||null}; }
+function put(v,u,h00,h10,h01,h11,o){ cells[u][v]={h00,h10,h01,h11,type:(o&&o.type)||NORMAL,tint:(o&&o.tint)||null,tex:(o&&o.tex)||null,dots:!!(o&&o.dots)}; }
 function carve(v0,u0,v1,u1){ for(let u=u0;u<=u1;u++)for(let v=v0;v<=v1;v++) cells[u][v]=null; }
 function slab(v0,u0,v1,u1,h,o){ for(let u=u0;u<=u1;u++)for(let v=v0;v<=v1;v++) put(v,u,h,h,h,h,o); }
 function rampU(v0,u0,v1,u1,hTop,hBot,o){ const n=(u1+1-u0);
@@ -228,8 +232,8 @@ function goalText(g,v,u,z,ox,oy){
   tg.font='900 44px "Arial Black",Arial,sans-serif'; tg.textAlign='center'; tg.textBaseline='middle';
   tg.lineJoin='round'; tg.strokeStyle='#3a0d12'; tg.lineWidth=9; tg.strokeText('GOAL',120,30);
   tg.fillStyle='#e33049'; tg.fillText('GOAL',120,30);
-  const cx=projX(v,u)+ox, cy=projY(v,u,z)+oy, sc=1/22;
-  g.setTransform(AXx*sc,AXy*sc,AUx*sc,AUy*sc,cx,cy); g.drawImage(t,-120,-28); g.setTransform(1,0,0,1,0,0);
+  const cx=projX(v,u)+ox, cy=projY(v,u,z)+oy, sc=1/22, fu=FLIP?-1:1;
+  g.setTransform(AXx*sc,AXy*sc,AUx*sc*fu,AUy*sc*fu,cx,cy); g.drawImage(t,-120,-28); g.setTransform(1,0,0,1,0,0);
 }
 function buildAerial(){ newGrid(26,112);
   const REDC={tex:'check',tint:'#a83a30'}, CAT={tex:'grid',tint:'#9aa0b4'}, REDW={tint:'#8f2f28'};
@@ -284,6 +288,31 @@ function buildAerial(){ newGrid(26,112);
   slab(3,104,3,111,2.2); slab(22,104,22,111,2.2); slab(4,111,21,111,2.4);
   decorFn=(g,ox,oy)=>{ goalText(g,12.5,107.6,0.6,ox,oy); };
 }
+function buildSilly(){ newGrid(26,58);
+  const GOLD={tex:'grid',tint:'#c9a23c'}, GOLDW={tint:'#c9a23c',dots:true}, GREY={tex:'grid',tint:'#9aa0b4'};
+  rampU(9,0,16,5,22,21,GOLD);                                   // start deck (bottom of screen)
+  rampU(4,6,21,13,21,17.8,GOLD);                                // open field
+  slab(4,10,5,11,19.6,GOLD); pyramid(4,10,19.6,21.4,{tint:'#22242e'});
+  slab(20,7,21,8,20.6,GOLD); pyramid(20,7,20.6,22.4,{tint:'#22242e'});
+  slab(5,14,20,23,17.5,GREY);                                   // critter room floor
+  slab(4,14,4,23,20.5,GOLDW); slab(21,14,21,23,20.5,GOLDW);     // dotted room walls
+  pyramid(7,16,17.5,19.3,{tint:'#22242e'}); pyramid(17,20,17.5,19.3,{tint:'#22242e'});
+  for(let i=0;i<12;i++){
+    const cv=6.5+(i*137%13), cu=15+(i*89%8);
+    hazards.push({type:'critter',v:cv,u:cu,zone:{v0:6,v1:19.5,u0:14.5,u1:22.5},
+      dv:0,du:0,phase:i*0.7,alive:true,splatT:0,pink:i%3===2});
+  }
+  rampU(5,24,18,33,17.5,13,{tex:'grid',tint:'#b0894a'});        // polka cliff ledges
+  carve(9,26,14,31);                                            // central void: pick a ledge
+  rampU(4,34,21,43,13,9,GOLD);                                  // castle plateau
+  for(let u=34;u<=43;u+=2){ const h=13-(u-34+0.5)*0.4;
+    slab(4,u,4,u,h+1.3,GOLDW); slab(21,u,21,u,h+1.3,GOLDW); }   // crenellations
+  rampU(6,44,19,51,9,5.4,GOLD);                                 // final run
+  slab(6,52,19,55,5.2,GOLD);
+  slab(7,53,18,54,5.2,{type:GOAL});
+  slab(5,52,5,55,7.2,GOLDW); slab(20,52,20,55,7.2,GOLDW); slab(6,55,19,55,7.4,GOLDW);
+  decorFn=(g,ox,oy)=>{ goalText(g,12.5,52.6,5.5,ox,oy); };
+}
 const RACES=[
   { name:'PRACTICE RACE', time:60, start:[11.5,4], build:buildPractice, steelie:null },
   { name:'BEGINNER RACE', time:60, start:[12.5,3], build:buildBeginner,
@@ -291,6 +320,7 @@ const RACES=[
   { name:'INTERMEDIATE RACE', time:35, start:[6.5,1], build:buildIntermediate,
     steelie:{ v:12, u:56, triggerU:48 } },
   { name:'AERIAL RACE', time:30, start:[6.5,2], build:buildAerial, steelie:null },
+  { name:'SILLY RACE', time:20, start:[12.5,1], build:buildSilly, steelie:null, basis:BASIS_FLIP },
 ];
 
 /* ---------- prerender ---------- */
@@ -311,12 +341,21 @@ function drawCellC(g,v,u,ox,oy,c){
   const x10=projX(v+1,u)+ox, y10=projY(v+1,u,c.h10)+oy;
   const x01=projX(v,u+1)+ox, y01=projY(v,u+1,c.h01)+oy;
   const x11=projX(v+1,u+1)+ox,y11=projY(v+1,u+1,c.h11)+oy;
-  const S=(u+1<CU)?cells[u+1][v]:null;
-  const sA=S?S.h00:ABYSS, sB=S?S.h10:ABYSS;
-  if(c.h01>sA+0.01||c.h11>sB+0.01){ g.fillStyle=wallColor(c,0.32); g.beginPath();
-    g.moveTo(x01,y01); g.lineTo(x11,y11);
-    g.lineTo(x11,projY(v+1,u+1,Math.min(sB,c.h11))+oy); g.lineTo(x01,projY(v,u+1,Math.min(sA,c.h01))+oy);
-    g.closePath(); g.fill(); }
+  if(!FLIP){
+    const S=(u+1<CU)?cells[u+1][v]:null;
+    const sA=S?S.h00:ABYSS, sB=S?S.h10:ABYSS;
+    if(c.h01>sA+0.01||c.h11>sB+0.01){ g.fillStyle=wallColor(c,0.32); g.beginPath();
+      g.moveTo(x01,y01); g.lineTo(x11,y11);
+      g.lineTo(x11,projY(v+1,u+1,Math.min(sB,c.h11))+oy); g.lineTo(x01,projY(v,u+1,Math.min(sA,c.h01))+oy);
+      g.closePath(); g.fill(); dots(g,c,x01,y01,x11,projY(v,u+1,Math.min(sA,c.h01))+oy,v,u); }
+  } else {
+    const S=(u-1>=0)?cells[u-1][v]:null;
+    const sA=S?S.h01:ABYSS, sB=S?S.h11:ABYSS;
+    if(c.h00>sA+0.01||c.h10>sB+0.01){ g.fillStyle=wallColor(c,0.32); g.beginPath();
+      g.moveTo(x00,y00); g.lineTo(x10,y10);
+      g.lineTo(x10,projY(v+1,u,Math.min(sB,c.h10))+oy); g.lineTo(x00,projY(v,u,Math.min(sA,c.h00))+oy);
+      g.closePath(); g.fill(); dots(g,c,x00,y00,x10,projY(v,u,Math.min(sA,c.h00))+oy,v,u); }
+  }
   const E=(v+1<CV)?cells[u][v+1]:null;
   const eA=E?E.h00:ABYSS, eB=E?E.h01:ABYSS;
   if(c.h10>eA+0.01||c.h11>eB+0.01){ g.fillStyle=wallColor(c,0.54); g.beginPath();
@@ -351,6 +390,15 @@ function drawCellC(g,v,u,ox,oy,c){
       g.moveTo(x00,y00); g.lineTo(x10,y10); g.lineTo(x11,y11); g.lineTo(x01,y01); g.closePath(); g.stroke(); }
   }
 }
+function dots(g,c,x0,y0,x1,yBot,v,u){ if(!c.dots) return;
+  const cols=['#d94b30','#e08a2c','#b8386e'];
+  const H=Math.abs(yBot-y0); if(H<10) return;
+  const n=1+((v*7+u*13)%2);
+  for(let i=0;i<n;i++){ const hsh=(v*31+u*17+i*53)%97;
+    const dx=x0+6+(hsh%23), dy=y0+8+((hsh*7)%Math.max(8,H-14));
+    if(dx>Math.max(x0,x1)-5) continue;
+    g.fillStyle=cols[hsh%3]; g.beginPath(); g.arc(dx,dy,3.2+(hsh%3),0,Math.PI*2); g.fill(); }
+}
 function drawCell(g,v,u,ox,oy){ const c=cells[u][v]; if(!c) return; drawCellC(g,v,u,ox,oy,c); }
 function dynCellAt(v,u){ const c=cells[u][v]; if(!c) return null;
   return {h00:dynH(v,u,simT),h10:dynH(v+1,u,simT),h01:dynH(v,u+1,simT),h11:dynH(v+1,u+1,simT),
@@ -364,7 +412,8 @@ function prerender(){
   const pad=26; offX=pad-mnx; offY=pad-mny; offW=Math.ceil(mxx-mnx)+pad*2; offH=Math.ceil(mxy-mny)+pad*2;
   off=document.createElement('canvas'); off.width=offW; off.height=offH;
   const g=off.getContext('2d');
-  for(let u=0;u<CU;u++)for(let v=0;v<CV;v++) drawCell(g,v,u,offX,offY);
+  if(!FLIP){ for(let u=0;u<CU;u++)for(let v=0;v<CV;v++) drawCell(g,v,u,offX,offY); }
+  else { for(let u=CU-1;u>=0;u--)for(let v=0;v<CV;v++) drawCell(g,v,u,offX,offY); }
   if(decorFn) decorFn(g,offX,offY);
 }
 
@@ -406,6 +455,7 @@ const Snd=(()=>{ let ac=null,master=null,rollGain=null,rollFilt=null,muted=QA;
     count(){ env('square',1320,0,0.025,0.12); },
     gulp(){ env('square',300,90,0.18,0.3); env('sine',150,60,0.28,0.25,0.07); },
     boing(){ env('square',160,420,0.2,0.24); env('triangle',90,260,0.22,0.2,0.02); },
+    squish(){ noise(0.09,500,0.3); env('sine',520,140,0.12,0.2); },
     vac(){ env('sawtooth',180,950,0.55,0.22); },
     sizzle(){ noise(0.5,1900,0.42); env('sawtooth',220,70,0.5,0.1); },
     over(){ env('sawtooth',330,110,0.9,0.25); }
@@ -466,7 +516,7 @@ function pollInput(){
 
 /* ---------- flow ---------- */
 function loadRace(i){ raceIdx=i; const R=RACES[i];
-  R.build(); prerender();
+  setBasis(R.basis||BASIS_STD); R.build(); prerender();
   player.v=R.start[0]; player.u=R.start[1]; player.z=groundH(player.v,player.u);
   player.vv=0; player.vu=0; player.vz=0; player.grounded=true; player.alive=true; player.dropIn=false; player.hidden=false;
   steelie.active=false; steelie.alive=false;
@@ -512,12 +562,14 @@ function marblePhysics(m,dt,accV,accU){
   // axis-separated wall checks
   let nv=m.v+m.vv*dt, nu=m.u+m.vu*dt;
   const h0=groundH(m.v,m.u);
-  if(m.grounded){
-    const pv=nv+Math.sign(m.vv)*m.r*0.6, hv=groundH(pv,m.u);
-    if(!isNaN(hv)&&!isNaN(h0)&&hv-h0>0.55){ if(Math.abs(m.vv)>2&&m.kind==='player')Snd.clack(Math.abs(m.vv)); m.vv*=-0.38; nv=m.v; }
-    const pu=nu+Math.sign(m.vu)*m.r*0.6, hu=groundH(m.v,pu);
-    if(!isNaN(hu)&&!isNaN(h0)&&hu-h0>0.55){ if(Math.abs(m.vu)>2&&m.kind==='player')Snd.clack(Math.abs(m.vu)); m.vu*=-0.38; nu=m.u; }
-  }
+  const pv=nv+Math.sign(m.vv)*m.r*0.6, hv=groundH(pv,m.u);
+  const blockedV = m.grounded ? (!isNaN(hv)&&!isNaN(h0)&&hv-h0>0.55)
+                              : (!isNaN(hv)&&hv>m.z+0.3);
+  if(blockedV){ if(Math.abs(m.vv)>2&&m.kind==='player')Snd.clack(Math.abs(m.vv)); m.vv*=-0.38; nv=m.v; }
+  const pu=nu+Math.sign(m.vu)*m.r*0.6, hu=groundH(m.v,pu);
+  const blockedU = m.grounded ? (!isNaN(hu)&&!isNaN(h0)&&hu-h0>0.55)
+                              : (!isNaN(hu)&&hu>m.z+0.3);
+  if(blockedU){ if(Math.abs(m.vu)>2&&m.kind==='player')Snd.clack(Math.abs(m.vu)); m.vu*=-0.38; nu=m.u; }
   m.v=nv; m.u=nu;
   const h2=groundH(m.v,m.u);
   if(m.grounded){
@@ -607,6 +659,16 @@ function updateHazards(dt){
         h.busyT=0.35; player.hidden=true; player.vv=0; player.vu=0;
         if(h.snap){ player.v=h.snap.v; player.u=h.snap.u; }
       }
+    } else if(h.type==='critter'){
+      if(!h.alive){ h.splatT+=dt; continue; }
+      h.phase+=dt;
+      if(h.phase>1.1){ h.phase=0;
+        const a=Math.random()*Math.PI*2; h.dv=Math.cos(a)*1.3; h.du=Math.sin(a)*1.3; }
+      h.v+=h.dv*dt; h.u+=h.du*dt;
+      if(h.v<h.zone.v0||h.v>h.zone.v1){ h.dv*=-1; h.v=Math.max(h.zone.v0,Math.min(h.zone.v1,h.v)); }
+      if(h.u<h.zone.u0||h.u>h.zone.u1){ h.du*=-1; h.u=Math.max(h.zone.u0,Math.min(h.zone.u1,h.u)); }
+      if(player.alive&&!player.hidden&&player.grounded&&Math.hypot(player.v-h.v,player.u-h.u)<1.0){
+        h.alive=false; h.splatT=0; score+=h.pink?800:500; timeLeft+=1; Snd.squish(); }
     } else if(h.type==='tube'){
       if(h.busyT>0){ h.busyT-=dt;
         if(h.busyT<=0){
@@ -701,7 +763,7 @@ function physics(dt){
 function marbleScreen(m){ return { x:projX(m.v,m.u)+offX-camX, y:projY(m.v,m.u,m.z)+offY-camY-m.r*AZ*0.55 }; }
 function updateCam(){
   const px=projX(player.v,player.u)+offX, py=projY(player.v,player.u,player.z)+offY;
-  const tx=Math.max(0,Math.min(offW-640,px-320)), ty=Math.max(0,Math.min(offH-400,py-170));
+  const tx=Math.max(0,Math.min(offW-640,px-320)), ty=Math.max(0,Math.min(offH-400,py-(FLIP?230:170)));
   if(!camInit){ camX=tx; camY=ty; camInit=true; }
   camX+=(tx-camX)*0.14; camY+=(ty-camY)*0.14;
 }
@@ -722,7 +784,8 @@ function drawMarbleG(g,m){
 }
 function redrawFront(g,m){
   const mu=Math.floor(m.u), px=projX(m.v,m.u)+offX;
-  for(let u=mu+1;u<Math.min(CU,mu+5);u++)for(let v=0;v<CV;v++){ const c=cells[u][v]; if(!c) continue;
+  const u0=Math.max(0,FLIP?mu-4:mu+1), u1=Math.min(CU-1,FLIP?mu-1:mu+4);
+  for(let u=u0;u<=u1;u++)for(let v=0;v<CV;v++){ const c=cells[u]&&cells[u][v]; if(!c) continue;
     const cx=projX(v+0.5,u)+offX; if(Math.abs(cx-px)>90) continue;
     const ch=Math.max(c.h00,c.h10,c.h01,c.h11); if(ch<=m.z+0.2) continue;
     g.save(); g.translate(-camX,-camY);
@@ -806,6 +869,20 @@ function drawVacuum(g,h){
     const sx=px-38*(1-k)*Math.sign(1), sy=py-8;
     g.beginPath(); g.arc(px-38+38*k,sy,1.8,0,Math.PI*2); g.fill(); }
 }
+function drawCritter(g,h){
+  const gh=groundH(h.v,h.u); if(isNaN(gh)) return;
+  const px=projX(h.v,h.u)+offX-camX, py=projY(h.v,h.u,gh)+offY-camY;
+  if(!h.alive){ if(h.splatT<1.2){ g.globalAlpha=Math.max(0,1-h.splatT/1.2);
+      g.fillStyle=h.pink?'#d968b0':'#6fc258'; g.beginPath(); g.ellipse(px,py-2,8,3.5,0,0,Math.PI*2); g.fill();
+      g.globalAlpha=1; } return; }
+  const wob=Math.sin(h.phase*14)*1.2;
+  g.fillStyle='rgba(8,10,8,.3)'; g.beginPath(); g.ellipse(px,py-1,5,2.2,0,0,Math.PI*2); g.fill();
+  const c1=h.pink?'#e88ac4':'#8fd07a', c2=h.pink?'#a03d78':'#3f7a34';
+  g.fillStyle=c2; g.beginPath(); g.ellipse(px+wob*0.4,py-4,4.5,3.4,0,0,Math.PI*2); g.fill();
+  g.fillStyle=c1; g.beginPath(); g.ellipse(px+wob*0.6,py-7,3.2,2.6,0,0,Math.PI*2); g.fill();
+  g.strokeStyle=c2; g.lineWidth=1;
+  g.beginPath(); g.moveTo(px-4,py-2); g.lineTo(px-6-wob,py); g.moveTo(px+4,py-2); g.lineTo(px+6+wob,py); g.stroke();
+}
 function text(g,s,x,y,size,color,align,font){
   g.font=`900 ${size}px ${font||'"Courier New",monospace'}`; g.textAlign=align||'center'; g.textBaseline='middle';
   g.fillStyle='rgba(0,0,0,.75)'; g.fillText(s,x+2,y+2); g.fillStyle=color; g.fillText(s,x,y);
@@ -836,14 +913,15 @@ function render(dt){
   // marbles + munchers back-to-front
   const ents=[];
   for(const m of marbles) if(m.active&&!m.hidden&&(m.alive||(m.kind==='player'&&m.deathKind==='fall'&&stateT<0.9)))
-    ents.push({k:m.v+m.u,m});
-  for(const h of hazards) if(['muncher','hammer','piston','vacuum'].includes(h.type)) ents.push({k:h.v+h.u,h});
+    ents.push({k:m.v*AXy+m.u*AUy,m});
+  for(const h of hazards) if(['muncher','hammer','piston','vacuum','critter'].includes(h.type)) ents.push({k:h.v*AXy+h.u*AUy,h});
   ents.sort((a,b)=>a.k-b.k);
   for(const e of ents){ if(e.m){ drawMarbleG(g,e.m); redrawFront(g,e.m); }
     else if(e.h.type==='muncher') drawMuncher(g,e.h);
     else if(e.h.type==='hammer') drawHammer(g,e.h);
     else if(e.h.type==='piston') drawPiston(g,e.h);
-    else if(e.h.type==='vacuum') drawVacuum(g,e.h); }
+    else if(e.h.type==='vacuum') drawVacuum(g,e.h);
+    else if(e.h.type==='critter') drawCritter(g,e.h); }
   for(const s of shards){ s.t+=dt; s.x+=s.vx*dt; s.y+=s.vy*dt; s.vy+=460*dt;
     g.globalAlpha=Math.max(0,1-s.t/1.1); g.fillStyle=s.col||'#c9d6ff';
     g.beginPath(); g.arc(s.x,s.y,s.r,0,Math.PI*2); g.fill(); g.globalAlpha=1; }
@@ -869,7 +947,7 @@ function render(dt){
     if(timeLeft<=0.01&&stateT>2.4){
       if(raceIdx+1<RACES.length){ loadRace(raceIdx+1); }
       else {
-        text(g,'SILLY RACE is under construction in this build',320,246,14,'#9fb0e8');
+        text(g,'ULTIMATE RACE is under construction in this build',320,246,14,'#9fb0e8');
         if(stateT>5.2){ state='title'; stateT=0; } } } }
   if(state==='timeup'){ stateT+=dt;
     text(g,"TIME'S UP",320,160,34,'#ff4a60');
@@ -887,7 +965,7 @@ function renderTitle(g){
   g.strokeStyle='#1a0508'; g.lineWidth=10; g.strokeText('MARBLE',320,120); g.strokeText('MADNESS',320,186);
   g.fillStyle=grad; g.fillText('MARBLE',320,120); g.fillText('MADNESS',320,186);
   text(g,'A M I G A   T R I B U T E',320,232,13,'#9fb0e8');
-  text(g,'PRACTICE BUILD v'+VERSION+' — 4 races · Steelie · munchers · acid · hills · hammers · catapult',320,258,12,'#66708f');
+  text(g,'PRACTICE BUILD v'+VERSION+' — 5 races incl. the upside-down SILLY RACE',320,258,12,'#66708f');
   if(Math.floor(demoT*1.6)%2===0) text(g,'CLICK  OR  PRESS  SPACE',320,300,18,'#ffd23a');
   text(g,'arrows / WASD roll the marble · click = mouse trackball · drag on touch · gamepad stick',320,338,12,'#8d97b8');
   text(g,'reach the GOAL before the clock runs out — big drops smash the marble',320,358,12,'#8d97b8');
