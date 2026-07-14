@@ -1,0 +1,471 @@
+{
+  "currentDate": "2026-06-24",
+  "historicDate": "1982-12-20",
+  "displayDate": "Week of December 20-26, 1982",
+  "edition": "Issue 021 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "A holiday-week 1982 computer newspaper front page: warm newsprint, red and blue department rules, boxed chart rails, retail price tags, arcade and home-computer imagery, and a TIME-style newsstand cue for the computer entering the living room.",
+  "masthead": "Computer Chronicle",
+  "layoutPlan": {
+    "leadTreatment": "Lead with the computer-as-Machine-of-the-Year newsstand moment, using a large halftone of a home computer beside holiday retail tags.",
+    "secondaryModules": [
+      "Shelf Watch: cartridges, disks, and budget software",
+      "Price Watch: Atari, Commodore, TI, and IBM PC store tags",
+      "Culture rail: Top 5 music, movies, and computer games"
+    ],
+    "visualCues": [
+      "TIME magazine rack card dated Jan. 3, 1983",
+      "Atari 2600 cartridge stack",
+      "Commodore 64 keyboard and cassette deck",
+      "Arcade token and Zaxxon-style cabinet silhouette"
+    ]
+  },
+  "sectionChrome": {
+    "lead": {
+      "label": "Lead Story"
+    },
+    "pictureDesk": {
+      "label": "Picture Desk",
+      "title": "Scenes From the Week"
+    },
+    "computerItems": {
+      "label": "Computers & Hardware",
+      "title": "Personal Computing Desk"
+    },
+    "software": {
+      "label": "Software Top 5",
+      "title": "Programs on the Editor's Pad"
+    },
+    "storeShelves": {
+      "label": "Top Games This Week",
+      "title": "Arcade, Console & Computer Games"
+    },
+    "priceWatch": {
+      "label": "Price Watch",
+      "title": "What It Cost"
+    },
+    "bbs": {
+      "label": "Modem Desk"
+    },
+    "curiosity": {
+      "label": "Movies / TV / Culture"
+    },
+    "briefs": {
+      "label": "Magazine Rack",
+      "title": "Culture & Shelf Talk"
+    },
+    "music": {
+      "label": "Top Rock This Week",
+      "title": "Hot 100, November 20"
+    },
+    "periodAd": {
+      "label": "Retail / Ads"
+    },
+    "classifieds": {
+      "label": "Classifieds",
+      "title": "Small Ads"
+    },
+    "fallback": {
+      "label": "Editorial Screen"
+    },
+    "accuracy": {
+      "label": "Accuracy Ledger",
+      "title": "What Is Date-Specific"
+    },
+    "sources": {
+      "label": "Source Trail",
+      "title": "Research Log"
+    },
+    "market": {
+      "label": "Retail / Ads",
+      "title": "Counter Watch"
+    }
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1982-12-20.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the Computer Chronicle week of December 20-26, 1982",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of December 20-26, 1982.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Christmas week finds the personal computer moving from hobby counter to mainstream symbol, with TIME preparing to crown the computer as its Machine of the Year while shoppers compare Atari, Commodore, TI, and IBM-compatible possibilities.",
+  "morningLine": "On newsstands and shop counters this week: the home computer becomes a holiday conversation piece, Tootsie leads the movie weekend, and Maneater keeps its hold on pop radio.",
+  "lead": {
+    "headline": "The Computer Moves In for Christmas Week",
+    "summary": "TIME's Jan. 3, 1983 cover package names the computer its Machine of the Year, matching what holiday shoppers can see in stores: personal machines are being sold as family, school, office, and game-room tools rather than as curiosities for specialists.",
+    "confidence": "High for TIME issue date and theme; same-week retail framing is contextual from period advertising and 1982 product availability.",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "TIME puts the computer on the year-end pedestal",
+      "summary": "The Jan. 3, 1983 issue carries “The Computer, Machine of the Year,” describing computers moving into offices, schools, and homes after a breakout 1982.",
+      "confidence": "High",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Commodore 64 becomes a holiday counter contender",
+      "summary": "Commodore's 64K home computer, introduced in 1982, gives shoppers a lower-cost color machine with strong game and BASIC appeal heading into Christmas.",
+      "confidence": "Medium; product timing verified, week-specific retail mix varies by market.",
+      "sourceRefs": [
+        5,
+        10
+      ]
+    },
+    {
+      "title": "Atari cartridges remain a gift-table staple",
+      "summary": "Atari VCS/2600 games and licensed arcade names keep console software prominent in toy and electronics aisles even as home computers crowd the same ads.",
+      "confidence": "Medium; reflects 1982 retail and chart context.",
+      "sourceRefs": [
+        6,
+        7
+      ]
+    },
+    {
+      "title": "IBM PC keeps office computing in the background",
+      "summary": "The IBM PC is no toy-counter impulse buy, but business buyers and magazines increasingly use it as the reference point for serious microcomputer work.",
+      "confidence": "High for 1982 business-computing context; not a single-day release.",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "platform": "Apple II / Atari / IBM PC families",
+      "detail": "The spreadsheet remains the shorthand for why a personal computer belongs on a desk.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "WordStar",
+      "platform": "CP/M and microcomputer systems",
+      "detail": "Word processing keeps pulling small offices toward microcomputers.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "Microsoft BASIC",
+      "platform": "Home and personal computers",
+      "detail": "BASIC is still the language many owners meet first when the machine boots.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "Zork I",
+      "platform": "Personal computer adventure shelves",
+      "detail": "Infocom's text adventure gives the game shelf a literary computer-only flavor.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "name": "AtariWriter",
+      "platform": "Atari 8-bit family",
+      "detail": "A practical cartridge-style word processor pitch for home-computer owners.",
+      "confidence": "Medium; period-appropriate software cue.",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Game Counter",
+      "items": [
+        "Atari 2600 cartridges",
+        "Intellivision sports and arcade titles",
+        "ColecoVision launch-season arcade ports",
+        "Zaxxon and Donkey Kong name recognition"
+      ],
+      "sourceRefs": [
+        6,
+        4
+      ]
+    },
+    {
+      "label": "Computer Counter",
+      "items": [
+        "Commodore 64 starter setups",
+        "TI-99/4A holiday bundles",
+        "Atari 400/800 family displays",
+        "IBM PC demonstrations for office buyers"
+      ],
+      "sourceRefs": [
+        5,
+        1
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64",
+      "price": "about $595 list in 1982",
+      "note": "Street pricing varied, but the 64K pitch mattered in holiday comparisons.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "TI-99/4A",
+      "price": "under-$300 holiday discounting seen in late 1982 ads",
+      "note": "Aggressive discounting helped make the TI a visible mass-market computer.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "item": "Atari 2600 cartridge",
+      "price": "roughly $25-$35 in many retail ads",
+      "note": "Popular console games stayed in gift range beside pricier computer software.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "item": "IBM PC base system",
+      "price": "over $1,500 before a full monitor/storage setup",
+      "note": "A business purchase rather than a casual Christmas gift.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "market": {
+    "headline": "The microcomputer becomes mainstream shorthand",
+    "summary": "By the end of 1982, the industry story is no longer just which machine is fastest. The cultural shift is that magazines, schools, offices, and department stores are all treating computers as ordinary household decisions.",
+    "confidence": "High",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "bbsNote": "Local bulletin-board culture is still a modem-owner pursuit, but the week's broader signal is that many families are about to meet computing through a store display, magazine cover, or gifted cartridge.",
+  "curiosity": "TIME broke precedent by choosing a machine instead of a person for its year-end honor, a sign of how visibly personal computers changed the 1982 conversation.",
+  "briefs": [
+    {
+      "title": "Tootsie leads Christmas weekend theaters",
+      "summary": "Box Office Mojo lists Tootsie at No. 1 for the Dec. 24-26, 1982 domestic weekend.",
+      "confidence": "High",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "Maneater holds the singles chart",
+      "summary": "Cash Box's Dec. 25, 1982 chart has Daryl Hall & John Oates at No. 1 with Maneater, followed by Toni Basil's Mickey.",
+      "confidence": "High",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "Arcade names drive home-game wish lists",
+      "summary": "Donkey Kong, Zaxxon, Pac-Man family names, and console conversions keep arcade imagery central to holiday game shopping.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        6,
+        7
+      ]
+    },
+    {
+      "title": "Computers share the shelf with practical software",
+      "summary": "Spreadsheet and word-processing packages help stores sell computers as useful purchases, not just game machines.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Maneater",
+      "artist": "Daryl Hall & John Oates"
+    },
+    {
+      "rank": 2,
+      "title": "Mickey",
+      "artist": "Toni Basil"
+    },
+    {
+      "rank": 3,
+      "title": "Dirty Laundry",
+      "artist": "Don Henley"
+    },
+    {
+      "rank": 4,
+      "title": "The Girl Is Mine",
+      "artist": "Michael Jackson and Paul McCartney"
+    },
+    {
+      "rank": 5,
+      "title": "Gloria",
+      "artist": "Laura Branigan"
+    }
+  ],
+  "movieChart": [
+    {
+      "rank": 1,
+      "title": "Tootsie"
+    },
+    {
+      "rank": 2,
+      "title": "The Toy"
+    },
+    {
+      "rank": 3,
+      "title": "48 Hrs."
+    },
+    {
+      "rank": 4,
+      "title": "The Dark Crystal"
+    },
+    {
+      "rank": 5,
+      "title": "Airplane II: The Sequel"
+    }
+  ],
+  "periodAd": {
+    "headline": "WHAT CAN A PERSONAL COMPUTER DO?",
+    "summary": "Holiday counter copy promises school reports, household budgets, games after dinner, and a first taste of programming at the kitchen table.",
+    "confidence": "Constructed from verified period product and TIME article cues.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "classifieds": [
+    {
+      "headline": "Wanted: Used Atari 810 disk drive",
+      "copy": "Will trade cartridges plus cash; DOS manuals preferred."
+    },
+    {
+      "headline": "Club Notice: BASIC cassette swap",
+      "copy": "Bring a short program for the January home-computer meeting."
+    },
+    {
+      "headline": "For Sale: WordStar office lot",
+      "copy": "Manuals, CP/M disks, and printer ribbons from a small-office upgrade."
+    }
+  ],
+  "worldFallback": null,
+  "accuracyLedger": {
+    "items": [
+      "TIME Jan. 3, 1983 cover names the computer Machine of the Year. (verified)",
+      "Tootsie ranked No. 1 for the Dec. 24-26, 1982 domestic weekend. (verified)",
+      "Maneater ranked No. 1 on the Dec. 25, 1982 Cash Box singles chart. (verified)",
+      "Holiday store-shelf mix is reconstructed from period product availability and 1982 retail context rather than one national circular. (contextual)"
+    ]
+  },
+  "sources": [
+    {
+      "title": "TIME cover: The Computer, Machine of the Year, Jan. 3, 1983",
+      "url": "https://content.time.com/time/covers/0,16641,19830103,00.html",
+      "note": "magazine archive"
+    },
+    {
+      "title": "TIME: The Computer Moves In, Jan. 3, 1983",
+      "url": "https://content.time.com/time/subscriber/printout/0,8816,953632,00.html",
+      "note": "magazine archive"
+    },
+    {
+      "title": "History of Information: TIME Magazine's 1983 Machine of the Year is a Personal Computer",
+      "url": "https://www.historyofinformation.com/detail.php?id=3794",
+      "note": "reference"
+    },
+    {
+      "title": "Cash Box Top 100 Singles, week ending Dec. 25, 1982",
+      "url": "http://www.tropicalglen.com/Archives/80s_files/19821225.html",
+      "note": "chart archive"
+    },
+    {
+      "title": "Box Office Mojo domestic weekend chart, Dec. 24-26, 1982",
+      "url": "https://www.boxofficemojo.com/weekend/1982W52/",
+      "note": "box office archive"
+    },
+    {
+      "title": "Old-Computers.com Commodore 64 profile",
+      "url": "https://www.old-computers.com/museum/computer.asp?c=98",
+      "note": "hardware reference"
+    },
+    {
+      "title": "Billboard video games coverage and arcade/console chart context, 1982",
+      "url": "https://books.google.com/books?id=AiQEAAAAMBAJ",
+      "note": "period magazine"
+    },
+    {
+      "title": "AtariAge 1982 cartridge and release reference context",
+      "url": "https://www.atariage.com/software_list.php?SystemID=2600",
+      "note": "software reference"
+    },
+    {
+      "title": "MobyGames Zork I release/platform reference",
+      "url": "https://www.mobygames.com/game/50/zork-the-great-underground-empire/",
+      "note": "software reference"
+    },
+    {
+      "title": "Atarimania AtariWriter reference",
+      "url": "https://www.atarimania.com/utility-atari-400-800-xl-xe-atariwriter_12572.html",
+      "note": "software reference"
+    },
+    {
+      "title": "1982 home-computer retail-ad context for Commodore/TI pricing",
+      "url": "https://archive.org/details/creativecomputing-1982-12",
+      "note": "period magazine archive"
+    }
+  ],
+  "pictureDesk": [
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1982-12-20.jpg",
+      "alt": "GPT Image 2 vintage newspaper front page for the Computer Chronicle week of December 20-26, 1982",
+      "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of December 20-26, 1982.",
+      "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+    }
+  ],
+  "frontPageStories": [
+    {
+      "headline": "The Computer Moves In for Christmas Week",
+      "deck": "TIME's year-end cover makes the home computer the symbol of 1982.",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "headline": "Holiday Shelves Split Between Cartridges and Keyboards",
+      "deck": "Families compare console gifts with Commodore, Atari, TI, and IBM-style computer pitches.",
+      "sourceRefs": [
+        5,
+        1
+      ]
+    },
+    {
+      "headline": "Tootsie and Maneater Top the Culture Rails",
+      "deck": "Christmas weekend entertainment charts give the issue its radio-and-theater soundtrack.",
+      "sourceRefs": [
+        4,
+        3
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    3
+  ]
+}

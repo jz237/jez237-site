@@ -1,0 +1,335 @@
+{
+  "currentDate": "2026-07-07",
+  "historicDate": "1983-04-04",
+  "displayDate": "Week of April 4-10, 1983",
+  "edition": "Issue 036 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "Warm early-1980s computer-weekly front page with aged newsprint, red and blue section flags, dense modular columns, and a game-shelf lead.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Weekly Computer & Culture Chronicle",
+    "dateline": "Week of April 4-10, 1983",
+    "price": "35 cents",
+    "date": "Week of April 4-10, 1983",
+    "issue": "Issue 036"
+  },
+  "layoutPlan": "Lead with the spring computer-game shelf, flank it with IBM PC XT and Lotus office notes, then scan culture charts, prices, classifieds, and a small world bulletin.",
+  "sectionChrome": [
+    "Front Page",
+    "On This Week",
+    "Shelf Watch",
+    "Price Watch",
+    "Culture Ledger"
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-04-04.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of April 4-10, 1983.",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The week opens with Challenger on the pad and computer stores selling two futures at once: deeper games for home micros and fixed-disk IBM PC systems for offices.",
+  "morningLine": "Computer Gaming World's May-June issue is arriving with modem gaming and baseball-league copy, while PC dealers keep explaining why a hard disk changes the office desk.",
+  "lead": {
+    "headline": "Modem games and baseball leagues reach the game rack",
+    "dek": "Computer Gaming World's May-June 1983 number put modem gaming, an adventure-games contest, and computer baseball league coverage in front of Apple II and strategy players.",
+    "body": "During the week of April 4-10, 1983, the liveliest personal-computer story was still at the game rack. Computer Gaming World Vol. 3 No. 3 carried cover lines for modem gaming, an adventure games contest, and a computer baseball league, with SSI strategy titles such as Knights of the Desert sharing space with reader-driven play. The shelf message was clear: home-computer games were becoming longer, more social, and more magazine-mediated than the arcade conversions beside them.",
+    "confidence": "High",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "CGW previews connected play",
+      "summary": "The May-June Computer Gaming World cover promoted modem gaming beside adventure contests and computer baseball, a compact snapshot of game culture moving through magazines, mail, and phone lines.",
+      "confidence": "High",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "IBM PC XT remains the office aspirational machine",
+      "summary": "IBM's March PC XT announcement was still fresh in April, giving dealers a fixed-disk, expanded PC configuration to pitch to businesses.",
+      "confidence": "High",
+      "sourceRefs": [
+        2,
+        3
+      ]
+    },
+    {
+      "title": "Lotus 1-2-3 drives the IBM PC software conversation",
+      "summary": "Lotus 1-2-3's integrated spreadsheet, charting, and database pitch made the PC sound less like a hobby machine and more like a daily business tool.",
+      "confidence": "High",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "May micro magazines widen the low-cost shelf",
+      "summary": "Creative Computing's May issue listed machines including the Panasonic JR-200, Video Technology VZ200, and TI 99/4A, showing how crowded the inexpensive home-computer aisle had become.",
+      "confidence": "High",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "IBM PC: integrated spreadsheet, database, and graphics package gaining business attention."
+    },
+    {
+      "name": "Zork I",
+      "detail": "Apple II/TRS-80/CP/M and other micros: Infocom text adventure still defining parser play."
+    },
+    {
+      "name": "Ultima II",
+      "detail": "Apple II and other micros: role-playing sequel still prominent in computer-game coverage."
+    },
+    {
+      "name": "Knights of the Desert",
+      "detail": "Apple II/Atari: SSI World War II strategy title advertised to Computer Gaming World readers."
+    },
+    {
+      "name": "WordStar",
+      "detail": "CP/M and IBM PC: word-processing staple still quoted in business-software ads."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 computer games",
+      "items": [
+        "Zork I",
+        "Ultima II",
+        "Wizardry",
+        "Knights of the Desert",
+        "Choplifter"
+      ]
+    },
+    {
+      "label": "Top 5 movies",
+      "items": [
+        "Tootsie",
+        "Spring Break",
+        "The Outsiders",
+        "Max Dugan Returns",
+        "High Road to China"
+      ]
+    },
+    {
+      "label": "Top 5 music",
+      "items": [
+        "Billie Jean - Michael Jackson",
+        "You Are - Lionel Richie",
+        "Come On Eileen - Dexys Midnight Runners",
+        "Hungry Like the Wolf - Duran Duran",
+        "Do You Really Want to Hurt Me - Culture Club"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM Personal Computer XT",
+      "price": "about $4,995 as introduced",
+      "note": "A 10 MB fixed disk made the XT a premium office quote."
+    },
+    {
+      "item": "Computer Gaming World",
+      "price": "$2.75 cover price",
+      "note": "The May-June 1983 issue carried modem gaming and strategy-game coverage."
+    },
+    {
+      "item": "300-baud modem",
+      "price": "commonly a premium add-on",
+      "note": "Modem play still required patience, phone time, and compatible software."
+    },
+    {
+      "item": "Blank 5.25-inch disks",
+      "price": "shop-counter staple",
+      "note": "Game saves, BASIC programs, and office files kept disk boxes moving."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Adventure contest fills the mailbag",
+      "text": "CGW tied adventure play to reader submissions, maps, and magazine-mediated competition."
+    },
+    {
+      "headline": "Baseball season reaches the keyboard",
+      "text": "Computer baseball league coverage matched April's real-world opening-week mood."
+    },
+    {
+      "headline": "Hard disks become a sales demo",
+      "text": "The PC XT made fixed storage easier to explain to managers who had outgrown floppy-only routines."
+    },
+    {
+      "headline": "Low-cost micros crowd the aisle",
+      "text": "May magazine coverage kept inexpensive home computers visible beside Apple II and Atari software."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Billie Jean",
+      "artist": "Michael Jackson"
+    },
+    {
+      "rank": 2,
+      "title": "You Are",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 3,
+      "title": "Come On Eileen",
+      "artist": "Dexys Midnight Runners"
+    },
+    {
+      "rank": 4,
+      "title": "Hungry Like the Wolf",
+      "artist": "Duran Duran"
+    },
+    {
+      "rank": 5,
+      "title": "Do You Really Want to Hurt Me",
+      "artist": "Culture Club"
+    }
+  ],
+  "periodAd": {
+    "headline": "This week at the computer counter",
+    "summary": "Ask for Apple II adventures, SSI strategy games, Lotus 1-2-3 demonstrations, 300-baud modem options, and IBM PC XT fixed-disk quotes.",
+    "tagline": "Bring this notice for a blank-disk and printer-paper estimate."
+  },
+  "market": {
+    "headline": "Games grow social as offices ask for hard disks",
+    "summary": "Early April 1983 set a useful split screen: magazines promoted modem play and league gaming for home-computer owners while office buyers weighed the IBM PC XT and Lotus 1-2-3.",
+    "confidence": "High",
+    "sourceRefs": [
+      0,
+      2,
+      4
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Challenger launches on STS-6",
+    "summary": "Space shuttle Challenger lifted off on its maiden flight April 4, 1983, and the mission included the first U.S. spacewalk of the shuttle program on April 7.",
+    "confidence": "High",
+    "sourceRefs": [
+      8,
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Issue date follows Chronicle state file next_start_date=1983-04-04.",
+        "confidence": "High",
+        "sourceRefs": []
+      },
+      {
+        "claim": "Computer Gaming World Vol. 3 No. 3 was the May-June 1983 issue and advertised modem gaming, an adventure games contest, and computer baseball league coverage.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "claim": "IBM introduced the PC XT in March 1983 with a 10 MB fixed disk and a roughly $4,995 entry configuration.",
+        "confidence": "High",
+        "sourceRefs": [
+          2,
+          3
+        ]
+      },
+      {
+        "claim": "Lotus 1-2-3 was an early-1983 IBM PC integrated spreadsheet/database/graphics package.",
+        "confidence": "High",
+        "sourceRefs": [
+          4
+        ]
+      },
+      {
+        "claim": "Creative Computing May 1983 listed coverage of Panasonic JR-200, Video Technology VZ200, and TI 99/4A machines.",
+        "confidence": "High",
+        "sourceRefs": [
+          5
+        ]
+      },
+      {
+        "claim": "Music ranking uses a Cash Box chart mirror for the week ending April 9, 1983.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          6
+        ]
+      },
+      {
+        "claim": "Movie ranking uses Box Office Mojo domestic weekend April 8-10, 1983.",
+        "confidence": "High",
+        "sourceRefs": [
+          7
+        ]
+      },
+      {
+        "claim": "NASA records STS-6 as Challenger's maiden flight, launched April 4, 1983, with the first U.S. shuttle-program spacewalk on April 7.",
+        "confidence": "High",
+        "sourceRefs": [
+          8,
+          9
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Computer Gaming World Vol. 3 No. 3 May-June 1983 PDF",
+      "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+    },
+    {
+      "label": "Video Game History Foundation catalog record for Computer Gaming World Vol. 3 No. 3",
+      "url": "https://library.gamehistory.org/repositories/2/archival_objects/8953"
+    },
+    {
+      "label": "Christian Science Monitor: IBM upgrades its Personal Computer, March 9 1983",
+      "url": "https://www.csmonitor.com/1983/0309/030939.html"
+    },
+    {
+      "label": "PC World May 1983 IBM XT special report scan",
+      "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+    },
+    {
+      "label": "Christian Science Monitor: software makers and Lotus Development, February 15 1983",
+      "url": "https://www.csmonitor.com/1983/0215/021539.html"
+    },
+    {
+      "label": "Creative Computing May 1983 article index",
+      "url": "https://www.atarimagazines.com/creative/index/index.php?issue=v9n5"
+    },
+    {
+      "label": "Cash Box Top 100 Singles, week ending April 9 1983",
+      "url": "http://www.tropicalglen.com/Archives/80s_files/19830409.html"
+    },
+    {
+      "label": "Box Office Mojo domestic weekend April 8-10 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W14/"
+    },
+    {
+      "label": "NASA STS-6 mission archive",
+      "url": "https://www.nasa.gov/mission/sts-6/"
+    },
+    {
+      "label": "NASA Space Shuttle mission chronology, STS-6",
+      "url": "https://science.ksc.nasa.gov/shuttle/missions/sts-6/mission-sts-6.html"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Wanted: modem opponents",
+      "copy": "Local Apple II owner seeks 300-baud games, strategy opponents, and patient evening callers."
+    },
+    {
+      "headline": "For sale: office upgrade fund",
+      "copy": "Two floppy drives, printer stand, and boxed manuals; proceeds go toward a fixed-disk PC quote."
+    }
+  ]
+}

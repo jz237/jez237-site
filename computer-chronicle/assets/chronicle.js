@@ -924,13 +924,14 @@
     }
 
     els.issuePicker.disabled = false;
+    const selectedKey = selectedIssue && (selectedIssue.historicDate || selectedIssue.currentDate);
     issues.forEach((issue, index) => {
       const label = index === 0 ? "Latest" : "Archive";
-      const headline = issue.lead && issue.lead.headline ? issue.lead.headline : issue.morningLine || "";
+      const headline = (issue.lead && issue.lead.headline) || issue.leadHeadline || issue.morningLine || "";
       const option = document.createElement("option");
-      option.value = issue.currentDate;
+      option.value = issue.historicDate || issue.currentDate;
       option.textContent = `${label}: ${issue.currentDate} / ${issue.displayDate || issue.historicDate}${headline ? ` - ${headline}` : ""}`;
-      option.selected = selectedIssue && selectedIssue.currentDate === issue.currentDate;
+      option.selected = Boolean(selectedKey) && option.value === selectedKey;
       els.issuePicker.append(option);
     });
   }
@@ -942,12 +943,13 @@
       return;
     }
 
-    const selectedIndex = issues.findIndex((issue) => selectedIssue && issue.currentDate === selectedIssue.currentDate);
+    const selectedKey = selectedIssue && (selectedIssue.historicDate || selectedIssue.currentDate);
+    const selectedIndex = issues.findIndex((issue) => (issue.historicDate || issue.currentDate) === selectedKey);
     if (els.previousIssue) {
       const previous = selectedIndex >= 0 ? issues[selectedIndex + 1] : null;
       els.previousIssue.hidden = !previous;
       if (previous) {
-        els.previousIssue.href = `?date=${encodeURIComponent(previous.currentDate)}`;
+        els.previousIssue.href = `?date=${encodeURIComponent(previous.historicDate || previous.currentDate)}`;
         els.previousIssue.querySelector("strong").textContent = previous.displayDate || previous.historicDate || previous.currentDate;
       }
     }
@@ -955,10 +957,25 @@
       const next = selectedIndex > 0 ? issues[selectedIndex - 1] : null;
       els.nextIssue.hidden = !next;
       if (next) {
-        els.nextIssue.href = `?date=${encodeURIComponent(next.currentDate)}`;
+        els.nextIssue.href = `?date=${encodeURIComponent(next.historicDate || next.currentDate)}`;
         els.nextIssue.querySelector("strong").textContent = next.displayDate || next.historicDate || next.currentDate;
       }
     }
+  }
+
+  async function fetchJson(path, options) {
+    const response = await fetch(path, options);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }
+
+  async function loadFullArchive(currentIso, historicIso) {
+    const data = await fetchJson("data/issues.json", { cache: "no-store" });
+    state.issues = Array.isArray(data) ? data : (data.issues || []);
+    state.issue = pickIssue(state.issues, currentIso, historicIso);
+    renderIssuePicker(state.issues, state.issue);
+    renderIssueStepNav(state.issues, state.issue);
+    renderIssue(state.issue, currentIso, historicIso);
   }
 
   async function loadIssues() {
@@ -967,14 +984,38 @@
     const historicIso = isoDate(minusYears(today, 40));
 
     try {
-      const response = await fetch("data/issues.json", { cache: "no-store" });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      state.issues = Array.isArray(data) ? data : (data.issues || []);
-      state.issue = pickIssue(state.issues, currentIso, historicIso);
-      renderIssuePicker(state.issues, state.issue);
-      renderIssueStepNav(state.issues, state.issue);
-      renderIssue(state.issue, currentIso, historicIso);
+      // Fast path: small archive index + one full issue file. Any miss falls
+      // back to the legacy whole-archive fetch so the page keeps working even
+      // if the derived files are absent or stale.
+      let index = null;
+      try {
+        const data = await fetchJson("data/index.json", { cache: "no-store" });
+        index = data && Array.isArray(data.issues) && data.issues.length ? data.issues : null;
+      } catch (_error) {
+        index = null;
+      }
+
+      if (index) {
+        const selected = pickIssue(index, currentIso, historicIso);
+        let issue = null;
+        if (selected && selected.historicDate) {
+          try {
+            issue = await fetchJson(`data/issues/${encodeURIComponent(selected.historicDate)}.json`);
+          } catch (_error) {
+            issue = null;
+          }
+        }
+        if (!selected || issue) {
+          state.issues = index;
+          state.issue = issue;
+          renderIssuePicker(index, issue || selected);
+          renderIssueStepNav(index, issue || selected);
+          renderIssue(issue, currentIso, historicIso);
+          return;
+        }
+      }
+
+      await loadFullArchive(currentIso, historicIso);
     } catch (error) {
       if (els.status) els.status.textContent = `Could not load issue data: ${error.message}`;
       renderIssue(null, currentIso, historicIso);
@@ -987,7 +1028,7 @@
       const selected = els.issuePicker.value;
       if (!selected) return;
       const url = new URL(window.location.href);
-      if (state.issues[0] && selected === state.issues[0].currentDate) {
+      if (state.issues[0] && selected === (state.issues[0].historicDate || state.issues[0].currentDate)) {
         url.searchParams.delete("date");
       } else {
         url.searchParams.set("date", selected);
@@ -1067,7 +1108,9 @@
           issue.edition,
           issue.morningLine,
           issue.lead && issue.lead.headline,
+          issue.leadHeadline,
           ...(Array.isArray(issue.stories) ? issue.stories : []).map((story) => story && story.headline),
+          ...(Array.isArray(issue.storyHeadlines) ? issue.storyHeadlines : []),
         ].filter(Boolean).join(" ").toLowerCase();
         return haystack.includes(query);
       });
@@ -1077,10 +1120,11 @@
         return;
       }
       const url = new URL(window.location.href);
-      if (state.issues[0] && match.currentDate === state.issues[0].currentDate) {
+      const matchKey = match.historicDate || match.currentDate;
+      if (state.issues[0] && matchKey === (state.issues[0].historicDate || state.issues[0].currentDate)) {
         url.searchParams.delete("date");
       } else {
-        url.searchParams.set("date", match.currentDate);
+        url.searchParams.set("date", matchKey);
       }
       window.location.href = url.toString();
     });

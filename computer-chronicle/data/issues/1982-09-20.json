@@ -1,0 +1,496 @@
+{
+  "currentDate": "2026-06-14",
+  "historicDate": "1982-09-20",
+  "displayDate": "Week of September 20-26, 1982",
+  "edition": "Issue 008 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "layout": "weekly-newsprint-front",
+    "accent": "black-red-blue",
+    "paper": "halftone-cream",
+    "strapline": "Atari VCS tank battles, fall arcade charts, home-computer shelves, and pop culture from one 1982 week"
+  },
+  "masthead": {
+    "kicker": "A weekly 1982 archive dispatch",
+    "title": "Computer Chronicle",
+    "deck": "Video games, home computers, software counters, and culture for the week of September 20-26, 1982"
+  },
+  "layoutPlan": {
+    "main": [
+      "editor-note",
+      "lead",
+      "picture-desk",
+      "computer-items",
+      "software",
+      "store-shelves"
+    ],
+    "sidebar": [
+      "price-watch",
+      "market",
+      "bbs",
+      "curiosity",
+      "briefs",
+      "music",
+      "period-ad",
+      "classifieds",
+      "fallback",
+      "accuracy",
+      "sources"
+    ]
+  },
+  "sectionChrome": {
+    "lead": {
+      "label": "Lead Story"
+    },
+    "pictureDesk": {
+      "label": "Picture Desk",
+      "title": "Scenes From the Week"
+    },
+    "computerItems": {
+      "label": "Computers & Hardware",
+      "title": "Personal Computing Desk"
+    },
+    "software": {
+      "label": "Software Top 5",
+      "title": "Programs on the Editor's Pad"
+    },
+    "storeShelves": {
+      "label": "Top Games This Week",
+      "title": "Arcade, Console & Computer Games"
+    },
+    "priceWatch": {
+      "label": "Price Watch",
+      "title": "What It Cost"
+    },
+    "bbs": {
+      "label": "Modem Desk"
+    },
+    "curiosity": {
+      "label": "Movies / TV / Culture"
+    },
+    "briefs": {
+      "label": "Magazine Rack",
+      "title": "Culture & Shelf Talk"
+    },
+    "music": {
+      "label": "Top Rock This Week",
+      "title": "Hot 100, September 18"
+    },
+    "periodAd": {
+      "label": "Retail / Ads"
+    },
+    "classifieds": {
+      "label": "Classifieds",
+      "title": "Small Ads"
+    },
+    "fallback": {
+      "label": "Editorial Screen"
+    },
+    "accuracy": {
+      "label": "Accuracy Ledger",
+      "title": "What Is Date-Specific"
+    },
+    "sources": {
+      "label": "Source Trail",
+      "title": "Research Log"
+    },
+    "market": {
+      "label": "Retail / Ads",
+      "title": "Computer Store Market"
+    }
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1982-09-20.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of September 20-26, 1982",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of September 20-26, 1982.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "This issue follows the chronological 1982 series into the week beginning September 20, with Mattel's Atari-compatible M-Network cartridges, coin-op chart powerhouses, and early fall computer magazines sharing the same retail counter.",
+  "morningLine": "M-Network turns Atari VCS tank combat into the week's shelf story while Abracadabra returns to No. 1 and E.T. keeps leading the box office week.",
+  "lead": {
+    "headline": "M-Network Tanks Roll Onto Atari Shelves",
+    "summary": "Armor Ambush, Mattel's Atari VCS adaptation of the Intellivision tank game Armor Battle, gives the blue-label M-Network line a clear September talking point: rival console makers are no longer just fighting with hardware, they are fighting for cartridge slots on Atari's own wall. For buyers, it made a familiar Combat-style duel look newly branded, with mines, changing battlefields, and the novelty of Mattel software running on the VCS.",
+    "confidence": "Armor Ambush is dated to September 1982 in Atari VCS release references; used as exact-month shelf context for this weekly issue",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "computerItems": [
+    {
+      "label": "Atari Desk",
+      "headline": "Armor Ambush Carries Intellivision DNA to the VCS",
+      "summary": "The M-Network cartridge translates Mattel's tank-battle idea for Atari players, extending the VCS beyond Atari-published games and making third-party identity visible on the pegboard.",
+      "confidence": "September 1982 Atari VCS release and M-Network context",
+      "sourceRefs": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "label": "Arcade Route",
+      "headline": "Donkey Kong, Ms. Pac-Man, Zaxxon, and Defender Still Drive Quarters",
+      "summary": "Period arcade charts for 1982 show the route dominated by familiar names, with Nintendo, Midway, Sega, Williams, Atari, and Namco titles defining what home-cartridge makers were chasing.",
+      "confidence": "1982 arcade chart summary context",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "label": "Computer Store",
+      "headline": "Compute! Keeps Multi-Machine Programming in Print",
+      "summary": "The September Compute! issue covers Atari GTIA graphics, VIC-20 joystick work, Commodore 64 sprites and sound, Color Computer graphics, and Apple Turtle PILOT, showing how one magazine served several incompatible home machines.",
+      "confidence": "September 1982 magazine issue context",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "label": "Apple Desk",
+      "headline": "Apple II Sales Reporting Gets Quieter",
+      "summary": "Apple II history notes that in September 1982 Apple stopped publicly announcing annual system sales, a small sign that the personal-computer business was maturing beyond hobbyist bragging rights.",
+      "confidence": "Month-specific Apple II chronology",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "platform": "Apple II / business micros",
+      "detail": "Still the showroom answer for buyers asking how a computer could justify office money.",
+      "confidence": "Period business-software context",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "WordStar",
+      "platform": "CP/M word processing",
+      "detail": "The practical word-processing name behind many printer and office demonstrations.",
+      "confidence": "Period business-software context",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "name": "Turtle PILOT",
+      "platform": "Apple / educational programming",
+      "detail": "A September Compute! feature kept turtle-style educational programming on the home-computer workbench.",
+      "confidence": "September 1982 magazine context",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "Atari Microsoft BASIC",
+      "platform": "Atari 8-bit",
+      "detail": "A language-shelf upgrade for Atari owners who wanted more than cartridge games.",
+      "confidence": "Period Atari software context",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "Commodore 64 sprite and sound examples",
+      "platform": "Commodore 64",
+      "detail": "Early coverage turned the new 64K machine's custom chips into type-in learning material.",
+      "confidence": "September 1982 magazine context",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "name": "Armor Ambush",
+      "platform": "M-Network / Atari VCS",
+      "detail": "September 1982 tank combat release and the issue's home-console anchor.",
+      "confidence": "September 1982 release reference",
+      "sourceRefs": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "Donkey Kong",
+      "platform": "Nintendo arcade / home-licensing magnet",
+      "detail": "Still one of the names that made every store ask when a convincing home version would arrive.",
+      "confidence": "1982 arcade chart context",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "Ms. Pac-Man",
+      "platform": "Midway arcade",
+      "detail": "A dominant 1982 coin-op name and a route staple for operators.",
+      "confidence": "1982 arcade chart context",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "Zaxxon",
+      "platform": "Sega arcade / ColecoVision showcase",
+      "detail": "The isometric space shooter remained a premium-looking proof that arcade spectacle could sell hardware.",
+      "confidence": "1982 arcade chart context",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "Defender",
+      "platform": "Williams arcade / Atari VCS",
+      "detail": "A demanding arcade hit whose home version kept serious players talking.",
+      "confidence": "1982 arcade chart context",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64 computer",
+      "price": "$595 list price",
+      "note": "The new 64K machine made memory size the headline."
+    },
+    {
+      "item": "Atari 2600 / VCS cartridges",
+      "price": "about $25-$40 typical retail range",
+      "note": "Licensed arcade names and third-party cartridges stayed premium shelf goods."
+    },
+    {
+      "item": "VIC-20 computer",
+      "price": "$299.95 advertised/list-era price",
+      "note": "Commodore kept the low-cost home-computer pitch visible."
+    },
+    {
+      "item": "Compute! magazine",
+      "price": "$2.50 cover price",
+      "note": "A monthly stack of type-in programs cost less than one cartridge."
+    }
+  ],
+  "market": {
+    "headline": "Third-Party Console Software Becomes the Main Event",
+    "summary": "Armor Ambush shows the 1982 VCS aisle turning into a publisher contest. Hardware makers, arcade licensors, and independent labels all wanted the same Atari customers, and the shelf was beginning to look crowded before the holiday rush.",
+    "confidence": "September 1982 M-Network release and broader 1982 console-market context",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "bbsNote": {
+    "headline": "Local Boards Trade Release Notes After Dark",
+    "summary": "The practical modem conversation is still small and local: cartridge impressions, type-in fixes, and who has a working printer driver."
+  },
+  "curiosity": {
+    "headline": "Movie Theaters Still Belong to E.T.",
+    "summary": "For the box-office week beginning September 24, E.T. the Extra-Terrestrial remains the top domestic release, ahead of An Officer and a Gentleman and Amityville II.",
+    "confidence": "Dated weekly box-office source",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "briefs": [
+    {
+      "label": "Music",
+      "headline": "Abracadabra Returns to No. 1",
+      "summary": "Steve Miller Band leads the September 25 Hot 100, followed by John Cougar, Chicago, Survivor, and Melissa Manchester.",
+      "confidence": "Dated singles chart source",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "label": "Movies",
+      "headline": "Amityville II Opens Strong for the Weekend",
+      "summary": "The September 24 weekend chart puts Amityville II at No. 1 for the weekend frame, while the full box-office week still has E.T. on top.",
+      "confidence": "Dated weekend and weekly box-office sources",
+      "sourceRefs": [
+        9,
+        10
+      ]
+    },
+    {
+      "label": "Programming",
+      "headline": "One Magazine, Many Machines",
+      "summary": "Compute!'s September table of contents reads like a dealer counter: Apple, Atari, VIC-20, Commodore 64, and Color Computer owners all get something to type.",
+      "confidence": "September 1982 magazine context",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "title": "Abracadabra",
+      "artist": "Steve Miller Band"
+    },
+    {
+      "title": "Jack & Diane",
+      "artist": "John Cougar"
+    },
+    {
+      "title": "Hard To Say I'm Sorry",
+      "artist": "Chicago"
+    },
+    {
+      "title": "Eye Of The Tiger",
+      "artist": "Survivor"
+    },
+    {
+      "title": "You Should Hear How She Talks About You",
+      "artist": "Melissa Manchester"
+    }
+  ],
+  "periodAd": {
+    "headline": "ARMOR AMBUSH FOR YOUR ATARI VCS",
+    "summary": "Two tanks, shifting battlefields, mines, and blue-label M-Network action for the Atari wall.",
+    "finePrint": "Period-style advertisement copy; not a reproduced historical ad."
+  },
+  "classifieds": [
+    {
+      "headline": "TANK DUEL NIGHT",
+      "copy": "Bring joysticks and fresh opinions on M-Network carts. Winner keeps bragging rights."
+    },
+    {
+      "headline": "C-64 SPRITE HELP",
+      "copy": "New owner seeks typed examples and cassette advice after 7 PM."
+    },
+    {
+      "headline": "CP/M PRINTER SETUP",
+      "copy": "WordStar margins need taming. Will pay in disks or coffee."
+    }
+  ],
+  "worldFallback": {
+    "headline": "No Hard-News Detour",
+    "summary": "This issue keeps the front page on games, home computers, software, prices, and culture rather than routine world or sports items."
+  },
+  "accuracyLedger": {
+    "items": [
+      "Historic week comes from the Chronicle state file: 1982-09-20 through 1982-09-26.",
+      "Lead story uses September 1982 Armor Ambush release references and M-Network context, labeled as exact-month shelf context.",
+      "Music chart uses the September 25, 1982 Hot 100 ranking.",
+      "Movie chart uses the domestic box-office week and weekend beginning September 24, 1982.",
+      "Compute! material uses the September 1982 issue as period home-computer context.",
+      "Price Watch uses list or typical period retail prices and is labeled as such."
+    ],
+    "note": "Webpage text and sources are canonical; the generated image is an art-directed newspaper artifact."
+  },
+  "sources": [
+    {
+      "name": "Armor Ambush release and publisher reference",
+      "url": "https://en.wikipedia.org/wiki/Armor_Ambush"
+    },
+    {
+      "name": "AtariAge Armor Ambush manual page, Mattel 1982 manual text",
+      "url": "https://atariage.com/manual_html_page.php?SoftwareID=821"
+    },
+    {
+      "name": "Atari Gaming Headquarters third-party profile: M-Network/Mattel for Atari VCS context",
+      "url": "https://www.atarihq.com/2678/3party/mnetwork.html"
+    },
+    {
+      "name": "1982 video-game chart and arcade context summary",
+      "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+    },
+    {
+      "name": "Compute! Issue 28, September 1982 magazine archive",
+      "url": "https://archive.org/details/1982-09-compute-magazine"
+    },
+    {
+      "name": "Apple II History chronology, September 1982",
+      "url": "https://www.apple2history.org/appendix/ahb/ahb3/"
+    },
+    {
+      "name": "VisiCalc history and period business-software context",
+      "url": "https://en.wikipedia.org/wiki/VisiCalc"
+    },
+    {
+      "name": "WordStar history and CP/M word-processing context",
+      "url": "https://en.wikipedia.org/wiki/WordStar"
+    },
+    {
+      "name": "Billboard Hot 100 chart for September 25, 1982",
+      "url": "https://www.billboard.com/charts/hot-100/1982-09-25/"
+    },
+    {
+      "name": "Box Office Mojo weekly domestic box office beginning September 24, 1982",
+      "url": "https://www.boxofficemojo.com/date/1982-09-24/weekly/"
+    },
+    {
+      "name": "The Numbers weekend box office chart beginning September 24, 1982",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/09/24"
+    }
+  ],
+  "frontPageStories": [
+    {
+      "headline": "M-Network Tanks Roll Onto Atari Shelves",
+      "summary": "Armor Ambush makes Mattel's Atari-compatible line the week's cartridge-counter story.",
+      "sourceRefs": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "headline": "Arcade Names Still Rule the Route",
+      "summary": "Donkey Kong, Ms. Pac-Man, Zaxxon, Defender, and other 1982 hits define the quarter economy.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "headline": "Compute! Serves Five Home Machines",
+      "summary": "September programming coverage spans Apple, Atari, VIC-20, Commodore 64, and Color Computer readers.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "movieChart": [
+    {
+      "title": "E.T. the Extra-Terrestrial",
+      "detail": "No. 1 for the domestic box-office week beginning September 24.",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "title": "An Officer and a Gentleman",
+      "detail": "No. 2 for the same weekly frame.",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "title": "Amityville II: The Possession",
+      "detail": "New horror sequel opens No. 1 on the September 24 weekend chart.",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "title": "Fast Times at Ridgemont High",
+      "detail": "Still in the weekend top five.",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "title": "Pink Floyd: The Wall",
+      "detail": "Continues drawing late-summer music-film crowds.",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    8
+  ]
+}
