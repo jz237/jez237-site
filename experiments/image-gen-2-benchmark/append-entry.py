@@ -33,6 +33,7 @@ MACHINE_DREAMS = ROOT / "machine-dreams-data.json"
 IMPOSSIBLE_DOCUMENTARY = ROOT / "impossible-documentary-data.json"
 STRANGE_BOTANICALS = ROOT / "strange-botanicals-data.json"
 CINEMATIC_CATS = ROOT / "cinematic-cats-data.json"
+QUIETLY_UNCANNY_DOMESTIC = ROOT / "quietly-uncanny-domestic-data.json"
 IMAGES = ROOT / "images"
 THUMBS = ROOT / "thumbs"
 MANIFEST = ROOT / "manifest.json"
@@ -309,6 +310,8 @@ def main() -> None:
             paths = (*paths, STRANGE_BOTANICALS)
         if args.slot == "serious-cinematic-cat":
             paths = (*paths, CINEMATIC_CATS)
+        if args.slot == "quietly-uncanny-domestic":
+            paths = (*paths, QUIETLY_UNCANNY_DOMESTIC)
     for path in paths:
         data = load(path)
         data.append(entry)
