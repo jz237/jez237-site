@@ -1,7 +1,71 @@
 {
   "date": "2026-07-14",
-  "updatedAt": "2026-07-14T16:00:02.078154+00:00",
+  "updatedAt": "2026-07-14T22:00:02.115359+00:00",
   "items": [
+    {
+      "title": "Australian Enterprises At Risk as Anthropic Finds Hackers In Claude Code",
+      "url": "https://www.techrepublic.com/article/apac",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A Claude Code-powered cyberattack exposed AI governance gaps common among Australian businesses, where oversight continues to lag adoption.\nThe post Australian Enterprises At Risk as Anthropic Finds Hackers In Claude Code appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-73e0fd92f288dbf2ac.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-14T18:48:15+00:00",
+      "firstSeen": "2026-06-30T22:39:44.457930+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 13.2565,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Australian Enterprises At Risk as Anthropic Finds Hackers In Claude Code",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-claude-australian-enterprises-risk-anthropic-finds",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/unnamed.jpg?f=jpeg"
+    },
+    {
+      "title": "OpenAI may announce a ChatGPT smart speaker this year",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/965670/openai-chatgpt-ai-smart-speaker-hardware-device",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI's first device is set to be a smart speaker that lets you talk with ChatGPT, according to a report from Bloomberg. The device apparently won't have a screen, but will use a camera and additional sensors to \"understand\" your environment. The report comes just days after Apple filed a lawsuit against OpenAI that accused [&#8230;]",
+      "image": "public/thumbnails/news-a8d8c69c81a34ce110.webp",
+      "featuredLatest": false,
+      "published": "2026-07-14T21:26:32+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.4431,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "OpenAI may announce a ChatGPT smart speaker this year",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-chatgpt-openai-may-announce-chatgpt-smart",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/STK155_OPEN_AI_4_CVirginia_D.png?quality=90&strip=all&crop=0%2C10.742221417566%2C100%2C78.515557164868&w=1200"
+    },
     {
       "title": "OpenAI Brings ChatGPT Work to Office Tasks: 3 Security Checks for IT Teams",
       "url": "https://www.techrepublic.com/article/news-chatgpt-work-security-checks",
@@ -16,10 +80,10 @@
       "featuredLatest": false,
       "published": "2026-07-14T13:07:27+00:00",
       "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1655,
+      "score": 12.0096,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -31,8 +95,39 @@
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "openai-chatgpt-openai-brings-chatgpt-work-office",
-      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/ChatGPT-Image-Jul-14-2026-08_58_26-PM.png?f=jpeg"
+      "clusterKey": "openai-chatgpt-openai-brings-chatgpt-work-office"
+    },
+    {
+      "title": "Grok Build was uploading entire Git repositories to xAI’s cloud, including committed secrets",
+      "url": "https://thenextweb.com/news/grok-build-uploaded-entire-git-repositories-secrets",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A security researcher published a wire-level analysis on July 12 proving that xAI’s Grok Build coding CLI was packaging developers’ entire tracked repositories, including full Git history, committed secrets, and API keys, and sending them to a Google Cloud Storage bucket. The upload volume was roughly 27,800 times greater than the data the coding task [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-c5c120d7655136c483.avif",
+      "featuredLatest": false,
+      "published": "2026-07-14T20:48:20+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.5141,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Grok Build was uploading entire Git repositories to xAI’s cloud, including committed secrets",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "grok-xai-grok-build-uploading-entire-git",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/grok-build-uploaded-entire-git-repositories-secrets.avif"
     },
     {
       "title": "Spotify expands its AI push with a ChatGPT-like music assistant",
@@ -48,10 +143,10 @@
       "featuredLatest": false,
       "published": "2026-07-14T14:06:47+00:00",
       "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.5338,
+      "score": 11.3736,
       "signalGroup": "Media generation",
       "sourceTier": "Reported source",
       "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
@@ -63,8 +158,7 @@
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "chatgpt-spotify-expands-push-chatgpt-like-music",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/07/You-can-now-talk-to-Spotify_FTR-blog-header.png?resize=1200%2C489"
+      "clusterKey": "chatgpt-spotify-expands-push-chatgpt-like-music"
     },
     {
       "title": "Stop Juggling AI Tools — This Lifetime Deal Puts GPT‑4o and More in One Place",
@@ -80,10 +174,10 @@
       "featuredLatest": false,
       "published": "2026-07-14T13:00:24+00:00",
       "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.1622,
+      "score": 11.0068,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -95,8 +189,39 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "stop-juggling-tools-lifetime-deal-puts",
-      "imageOriginal": "https://assets.techrepublic.com/uploads/2025/09/unnamed.jpg?f=jpeg"
+      "clusterKey": "stop-juggling-tools-lifetime-deal-puts"
+    },
+    {
+      "title": "SpaceXAI&#8217;s Grok programming tool was uploading its users&#8217; entire codebase to cloud storage",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/965600/spacexai-grok-build-repository-upload",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "SpaceXAI's Grok Build AI coding tool was spotted uploading users' entire codebases to Google Cloud before it was reported, and the company turned it off. The Register reports that Cereblab published findings on Monday showing how the Grok Build CLI was packaging and uploading entire code repositories, \"including files it was told not to open [&#8230;]",
+      "image": "public/thumbnails/news-af85e613d324fb1b18.webp",
+      "featuredLatest": false,
+      "published": "2026-07-14T19:25:00+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.5838,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "SpaceXAI&#8217;s Grok programming tool was uploading its users&#8217; entire codebase to cloud storage",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "grok-xai-spacexai-8217-grok-programming-tool",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/05/STK262_GROK_B_B.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
     },
     {
       "title": "DeepSeek’s Liang Wenfeng overtakes Amodei and Brockman as AI’s richest founder",
@@ -115,7 +240,7 @@
       "lastSeen": "2026-07-14T10:00:01.969891+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 8.9554,
+      "score": 8.8164,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -131,6 +256,140 @@
       "imageOriginal": "https://media.thenextweb.com/2026/07/Liang-Wenfeng.avif"
     },
     {
+      "title": "Anthropic commits $10 million to Canadian AI research across eight institutions",
+      "url": "https://thenextweb.com/news/anthropic-10-million-canadian-ai-research-institutes",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anthropic is committing $10 million CAD to eight Canadian research institutions to fund work on beneficial and responsible AI applications. The partnerships span Canada’s three leading regional AI institutes, Amii in Edmonton, Mila in Montréal, and the Vector Institute in Toronto, along with children’s hospital CHEO, the Centre for Addiction and Mental Health, Université Laval, [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-37d07afcdaeaf6e55f.avif",
+      "featuredLatest": false,
+      "published": "2026-07-14T20:52:23+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.6161,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Anthropic commits $10 million to Canadian AI research across eight institutions",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-commits-million-canadian-research",
+      "clusterTitle": "Anthropic commits $10 million to Canadian AI research across eight institutions",
+      "clusterSize": 2,
+      "relatedSources": [
+        "Anthropic News",
+        "The Next Web"
+      ],
+      "imageOriginal": "https://media.thenextweb.com/2026/07/anthropic-10-million-canadian-ai-research-institutes.avif"
+    },
+    {
+      "title": "OpenAI’s new flagship model deletes files on its own, people keep warning",
+      "url": "https://techcrunch.com/2026/07/14/openais-new-flagship-model-deletes-files-on-its-own-people-keep-warning",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A number of social media posts claim that GPT-5.6 Sol deleted files and data without warning. OpenAI had basically disclosed the problem in June.",
+      "image": "public/thumbnails/news-2e4c64839d30e1c1e8.webp",
+      "featuredLatest": false,
+      "published": "2026-07-14T21:50:11+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.285,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "OpenAI’s new flagship model deletes files on its own, people keep warning",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-flagship-model-deletes-files",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/05/openai-logo-code-background.jpg?resize=1200%2C798"
+    },
+    {
+      "title": "Apple opens its new Siri AI to everyone with the iOS 27 public beta",
+      "url": "https://techcrunch.com/2026/07/14/apple-opens-its-new-siri-ai-to-everyone-with-the-ios-27-public-beta",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "If you’ve been waiting to try Apple’s revamped Siri without installing a developer beta, you now can. The company on Tuesday released the iOS 27 public beta, giving iPhone owners early access to its AI-powered assistant and other new features before the software’s official launch this fall.",
+      "image": "public/thumbnails/news-17a7828180184e0450.webp",
+      "featuredLatest": false,
+      "published": "2026-07-14T19:42:27+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 6.9221,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Apple opens its new Siri AI to everyone with the iOS 27 public beta",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "apple-opens-siri-everyone-ios-public",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/06/apple-siri-wwdc-2026.jpg?resize=1200%2C675"
+    },
+    {
+      "title": "Anthropic’s newest ad is creeping people out",
+      "url": "https://techcrunch.com/2026/07/14/anthropics-newest-ad-is-creeping-people-out",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anthropic has consistently attempted to depict itself as the ethical foil to other AI companies. This latest marketing stunt — which leans into criticism of AI as a way to make Anthropic seem aware of the responsibility it carries — would appear to be more of the same.",
+      "image": "public/thumbnails/news-25958fdb6bc7a0afed.webp",
+      "featuredLatest": false,
+      "published": "2026-07-14T19:41:27+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3216,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Anthropic’s newest ad is creeping people out",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-newest-creeping-people-out",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/06/GettyImages-2278736523.jpeg?resize=1200%2C798"
+    },
+    {
       "title": "Google’s Demis Hassabis says it’s time for a global AI watchdog — led by the US",
       "url": "https://www.theverge.com/tech/965270/google-deepmind-demis-hassabis-global-ai-watchdog",
       "source": "The Verge AI",
@@ -144,10 +403,10 @@
       "featuredLatest": false,
       "published": "2026-07-14T11:43:29+00:00",
       "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.2368,
+      "score": 6.0869,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -159,417 +418,164 @@
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "google-google-demis-hassabis-time-global",
-      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/01/gettyimages-2194484502.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+      "clusterKey": "google-google-demis-hassabis-time-global"
     },
     {
-      "title": "Sam Altman didn’t need another lawsuit",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/965294/openai-apple-trade-secrets-lawsuit-sam-altman-ipo",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "OpenAI has spent the better part of the year involved in lawsuit after lawsuit, including one from the world's richest man. But last Friday, the company was hit with one of the highest-profile legal actions yet - from Apple. OpenAI's expensive hardware bet is what's on the line. Apple's lawsuit against OpenAI, filed in Northern [&#8230;]",
-      "image": "public/thumbnails/news-1afc2dc30d586f071c.webp",
-      "featuredLatest": false,
-      "published": "2026-07-14T14:01:07+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.4011,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "Sam Altman didn’t need another lawsuit",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Verge AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "aws-sam-altman-didn-need-another",
-      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK201_SAM_ALTMAN_CVIRGINIA2D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
-    },
-    {
-      "title": "xAI is running 59 unpermitted gas turbines, twice what it has admitted",
-      "url": "https://thenextweb.com/news/xai-59-unpermitted-gas-turbines-memphis-southaven",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Emails between regulators and xAI’s consultants put most of the turbines in Southaven, Mississippi. Within five miles on the Tennessee side, about 94% of residents are Black. Ervin Laws lives in Colonial Hills, a neighbourhood in Southaven, Mississippi, where residents say the turbines running around the clock sound like jet engines. “I can’t do anything [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-f933de7da3f354ee76.avif",
-      "featuredLatest": false,
-      "published": "2026-07-14T13:00:31+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.0623,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "xAI is running 59 unpermitted gas turbines, twice what it has admitted",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "xai-xai-running-unpermitted-gas-turbines",
-      "imageOriginal": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif"
-    },
-    {
-      "title": "Apple Releases watchOS 27 Beta Ahead of Siri AI Rollout",
-      "url": "https://www.techrepublic.com/article/news-watchos-27-public-beta-siri-ai",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Apple’s watchOS 27 public beta adds Siri AI, smarter workouts, health updates, and one-handed controls, but some iPhones will miss key features.\nThe post Apple Releases watchOS 27 Beta Ahead of Siri AI Rollout appeared first on TechRepublic.",
-      "image": "public/thumbnails/news-76c95672645cd8ee2c.jpg",
-      "featuredLatest": false,
-      "published": "2026-07-14T14:02:45+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.9919,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Apple Releases watchOS 27 Beta Ahead of Siri AI Rollout",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via TechRepublic AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "apple-releases-watchos-beta-ahead-siri",
-      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/conversation__fcthp95t7kqe_large_2x.jpg?f=jpeg"
-    },
-    {
-      "title": "Why Performance per Watt Is the Ultimate Metric for AI Infrastructure Efficiency",
-      "url": "https://blogs.nvidia.com/blog/performance-per-watt-ai-infrastructure-efficiency",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
+      "title": "How to manage AI investments in the agentic era",
+      "url": "https://openai.com/index/managing-ai-investments-in-agentic-era",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
       "sourceRole": "primary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Power is AI infrastructure’s inescapable constraint. How many tokens an AI factory can generate within a fixed power budget determines its revenue and profitability. Because of this, performance per watt — a metric that can’t be gamed, only earned through real-world results — is the foundation for AI factories.  As agentic AI drives token demand [&#8230;]",
-      "image": "public/thumbnails/news-4e05be34f58b0f952d.jpg",
+      "summary": "Learn how enterprises can manage AI investments in the agentic era by measuring useful work per dollar, improving efficiency, and scaling high-value workflows.",
+      "image": "",
       "featuredLatest": false,
-      "published": "2026-07-14T15:00:20+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "published": "2026-07-14T10:00:00+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 4.96,
+      "score": 5.8882,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Primary source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Why Performance per Watt Is the Ultimate Metric for AI Infrastructure Efficiency",
+        "whatHappened": "How to manage AI investments in the agentic era",
         "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
         "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via NVIDIA Blog."
+        "sourceFrame": "Seen via OpenAI News."
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "why-performance-per-watt-ultimate-metric",
-      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/07/performance-per-watt-ai-infra-efficiency.jpg"
+      "clusterKey": "how-manage-investments-agentic-era"
     },
     {
-      "title": "China smartphone shipments fall for a fifth quarter as memory costs bite",
-      "url": "https://thenextweb.com/news/china-smartphone-shipments-fifth-quarterly-fall-memory-costs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "For the fifth quarter running, fewer phones left Chinese warehouses than a year earlier. Shipments fell 4.3% to 66 million units in the second quarter, according to figures published on Tuesday by IDC, as manufacturers raised prices to cover the rising cost of memory and other components. First-half shipments were down 4.2% on the same [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-6019cbe6601d2f6773.avif",
-      "featuredLatest": false,
-      "published": "2026-07-14T07:43:09+00:00",
-      "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-14T10:00:01.969891+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.324,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "China smartphone shipments fall for a fifth quarter as memory costs bite",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "china-smartphone-shipments-fall-fifth-quarter",
-      "imageOriginal": "https://media.thenextweb.com/2026/05/ai-killing-cheap-smartphone-dram-memory-crisis.avif"
-    },
-    {
-      "title": "Uber lost the self-driving race. Now it wants to write the rules",
-      "url": "https://thenextweb.com/news/uber-robotaxi-lobbying-hybrid-network-waymo",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Uber lost the race to build a self-driving car. Now it wants to write the rules for everyone who did. In two US states it is lobbying for laws that would force robotaxis onto its app, and its own product chief is happy to explain why. Uber could not win the race to build a [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-99815a6dda11b6c645.avif",
-      "featuredLatest": false,
-      "published": "2026-07-14T13:53:32+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.2874,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Uber lost the self-driving race. Now it wants to write the rules",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "uber-lost-self-driving-race-wants-write",
-      "imageOriginal": "https://media.thenextweb.com/2026/06/life360-uber-teen-rides-family-integration.avif"
-    },
-    {
-      "title": "Spotify is now an AI chatbot, too",
-      "url": "https://www.theverge.com/entertainment/965358/spotify-ai-chatbot-interface-music-audiobooks-podcasts",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Spotify is experimenting with a new AI feature that allows Premium subscribers to play and explore music, audiobooks, and podcasts by having conversations with a chatbot. The \"Talk to Spotify\" feature appears across the Home and Now Playing view on Spotify's mobile app. You can interact with the chatbot by typing your request in the [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/Talk-to-Spotify.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
-      "featuredLatest": false,
-      "published": "2026-07-14T15:47:36+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.4537,
-      "signalGroup": "Media generation",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Spotify is now an AI chatbot, too",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Verge AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "spotify-chatbot-too"
-    },
-    {
-      "title": "New York State halts construction of all new data centers",
-      "url": "https://techcrunch.com/2026/07/14/new-york-state-halts-construction-of-all-new-data-centers",
+      "title": "DeepMind CEO calls for an independent standards body to regulate frontier AI",
+      "url": "https://techcrunch.com/2026/07/14/deepmind-ceo-calls-for-an-independent-standards-body-to-regulate-frontier-ai",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "New York has become the first state to temporarily halt approval of large data centers, as Gov. Kathy Hochul argues the AI-driven building boom shouldn’t come at the expense of higher electricity costs, water supplies, or local control.",
-      "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-1234626394.jpg?resize=1200%2C800",
+      "summary": "DeepMind CEO Demis Hassabis is proposing an AI \"standards body\" modeled after FINRA, to test frontier models and develop best practices for their release.",
+      "image": "public/thumbnails/news-19494fd7bbd04587a4.webp",
       "featuredLatest": false,
-      "published": "2026-07-14T15:17:59+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.3688,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "New York State halts construction of all new data centers",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "york-state-halts-construction-all-data"
-    },
-    {
-      "title": "Seoul court suspends the order making Coupang’s founder its controlling person",
-      "url": "https://thenextweb.com/news/coupang-bom-kim-ftc-designation-court-injunction",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Coupang has won the first round of its fight with South Korea’s competition regulator. The Seoul High Court on Tuesday suspended the Fair Trade Commission’s decision to name founder Bom Kim as the e-commerce group’s controlling figure, freezing the disclosure obligations that came with it while the underlying lawsuit is heard. The court’s Administrative Division 7 granted [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Bom-Kim.avif",
-      "featuredLatest": false,
-      "published": "2026-07-14T08:03:21+00:00",
-      "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-14T10:00:01.969891+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.3322,
-      "signalGroup": "Media generation",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Seoul court suspends the order making Coupang’s founder its controlling person",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "seoul-court-suspends-order-making-coupang"
-    },
-    {
-      "title": "Moneybox is Europe’s newest unicorn, and it’s testing London’s new private market to prove it",
-      "url": "https://thenextweb.com/news/moneybox-europe-unicorn-lse-pisces",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Moneybox is Europe’s newest unicorn, worth £800m, or $1.1bn. But no fundraise set that price. Staff did, by selling shares on London’s untested new private market. Moneybox, the British savings and investing app, is now a unicorn. It has put a value of about £800m, or $1.1bn, on itself, the Financial Times first reported. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Charlie-Mortimer-Ben-Stanway-Moneybox-Co-founders.avif",
-      "featuredLatest": false,
-      "published": "2026-07-14T12:56:29+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1604,
+      "published": "2026-07-14T17:45:55+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8679,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "Moneybox is Europe’s newest unicorn, and it’s testing London’s new private market to prove it",
+        "whatHappened": "DeepMind CEO calls for an independent standards body to regulate frontier AI",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "moneybox-europe-newest-unicorn-testing-london"
-    },
-    {
-      "title": "Australia finds serious gaps in Big Tech’s response to child sexual abuse online",
-      "url": "https://thenextweb.com/news/australia-esafety-big-tech-sexual-extortion-gaps",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Australia’s online safety regulator has told the largest technology companies in the world that the tools to stop sexual extortion already exist, and that they are not using them. In a transparency report published on Tuesday, eSafety said companies including Apple, Meta, and Google have “significant gaps” in how they detect and prevent child sexual exploitation [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/eu-meta-addictive-design-dsa-findings-instagram-facebook.avif",
-      "featuredLatest": false,
-      "published": "2026-07-14T08:20:32+00:00",
-      "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-14T10:00:01.969891+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.0392,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "Australia finds serious gaps in Big Tech’s response to child sexual abuse online",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "australia-finds-serious-gaps-big-tech"
-    },
-    {
-      "title": "Reflection inks $1B compute deal with Nebius",
-      "url": "https://techcrunch.com/2026/07/14/reflection-inks-1b-compute-deal-with-nebius",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Reflection AI has signed a $1 billion deal to access Nebius' compute. Reflection was founded in 2024 and is developing open source AI technology.",
-      "image": "https://techcrunch.com/wp-content/uploads/2023/03/cash-in-mattress-e1685738668559.jpg?resize=1200%2C701",
-      "featuredLatest": false,
-      "published": "2026-07-14T14:37:48+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.9489,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Reflection inks $1B compute deal with Nebius",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
         "sourceFrame": "Seen via TechCrunch AI."
       },
-      "tryWorthy": true,
+      "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "reflection-inks-compute-deal-nebius"
+      "clusterKey": "deepmind-deepmind-ceo-calls-independent-standards",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2024/12/GettyImages-2151467531.jpg?resize=1200%2C800"
     },
     {
-      "title": "Demis Hassabis wants a Wall Street-style referee for AI, with the power to hit pause",
-      "url": "https://thenextweb.com/news/demis-hassabis-frontier-ai-standards-body-finra",
+      "title": "lobste.rs is now running on SQLite",
+      "url": "https://simonwillison.net/2026/Jul/14/lobsters-sqlite",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "lobste.rs is now running on SQLite\nCommunity site Lobsters has been planning a migration away from MariaDB since August 2018 - originally targeting PostgreSQL, but last year they decided to investigate SQLite instead.\nThis weekend they completed the migration, and now consider it stable enough that it looks like this is the permanent architecture for the site going forward:\n\nSQLite seems to have passed with flying colors: cpu usage is down, memory usage is down, site seems to be snappier at least for me, 1/2 the vps cost once mariadb vps is taken down\n\nThe Lobsters Rails application now runs o",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-14T19:44:11+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.7229,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "lobste.rs is now running on SQLite",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "lobste-running-sqlite"
+    },
+    {
+      "title": "Celebrating 25 years of visual search innovation",
+      "url": "https://blog.google/products-and-platforms/products/search/google-images-25th-anniversary",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google Images logo surrounded by illustrations of people searching for different images",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Google_Images_25th_hero.max-600x600.format-webp.webp",
+      "featuredLatest": false,
+      "published": "2026-07-14T16:00:00+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6611,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Celebrating 25 years of visual search innovation",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Google AI Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "celebrating-years-visual-search-innovation"
+    },
+    {
+      "title": "Dimon says AI already eliminated 30 to 40 percent of jobs in some JPMorgan divisions",
+      "url": "https://thenextweb.com/news/jpmorgan-dimon-ai-jobs-cuts-margins-q2-earnings",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "The man behind Google’s AI thinks the world needs a referee. And he has drafted the rules. Demis Hassabis wants a US-led watchdog that vets frontier models before release. It is modelled on Wall Street’s policeman, and it could slow the whole industry down. Demis Hassabis does not usually sound the alarm. On Tuesday he [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Demis_Hassabis.avif",
+      "summary": "JPMorgan Chase has cut jobs by as much as 40 percent in some parts of the bank using artificial intelligence, CEO Jamie Dimon told analysts during the company’s second-quarter earnings call on Tuesday. But investors hoping the technology will dramatically improve profit margins are likely to be disappointed. Dimon said that in a competitive market, [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-8c29b8d9be5ceee665.avif",
       "featuredLatest": false,
-      "published": "2026-07-14T14:43:59+00:00",
-      "firstSeen": "2026-07-14T16:00:02.078154+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8119,
-      "signalGroup": "Product updates",
+      "published": "2026-07-14T16:25:22+00:00",
+      "firstSeen": "2026-07-14T22:00:02.115359+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.4921,
+      "signalGroup": "Media generation",
       "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
       "brief": {
-        "whatHappened": "Demis Hassabis wants a Wall Street-style referee for AI, with the power to hit pause",
+        "whatHappened": "Dimon says AI already eliminated 30 to 40 percent of jobs in some JPMorgan divisions",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "demis-hassabis-wants-wall-street-style-referee"
+      "clusterKey": "dimon-already-eliminated-percent-jobs-some",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/jpmorgan-dimon-ai-jobs-cuts-margins-q2-earnings.avif"
     }
   ],
   "tools": [
@@ -622,10 +628,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T15:01:28+00:00",
       "firstSeen": "2026-07-10T10:00:01.533642+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6462,
+      "score": 7.6403,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -727,7 +733,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9081,
+      "score": 6.908,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -758,10 +764,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8822,
+      "score": 5.8708,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -792,10 +798,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T17:16:44+00:00",
       "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8487,
+      "score": 5.8424,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -829,7 +835,7 @@
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8085,
+      "score": 5.8084,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -897,10 +903,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T15:01:28+00:00",
       "firstSeen": "2026-07-10T10:00:01.533642+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6462,
+      "score": 7.6403,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1002,7 +1008,7 @@
       "lastSeen": "2026-07-06T04:00:02.111677+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9081,
+      "score": 6.908,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1033,10 +1039,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8822,
+      "score": 5.8708,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1067,10 +1073,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T17:16:44+00:00",
       "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-14T16:00:02.078154+00:00",
+      "lastSeen": "2026-07-14T22:00:02.115359+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8487,
+      "score": 5.8424,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1104,7 +1110,7 @@
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8085,
+      "score": 5.8084,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1130,8 +1136,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1040,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "items": 1035,
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1141,7 +1147,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1151,7 +1157,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1161,7 +1167,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1171,7 +1177,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 823,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1181,7 +1187,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1191,7 +1197,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1201,7 +1207,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1211,7 +1217,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1221,7 +1227,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1231,7 +1237,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1241,7 +1247,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "The Next Web",
@@ -1251,7 +1257,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1261,7 +1267,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1271,7 +1277,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1281,7 +1287,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1291,7 +1297,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1301,7 +1307,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 243,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1311,7 +1317,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1321,7 +1327,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1331,7 +1337,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1339,10 +1345,9 @@
       "role": "primary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Latent Space",
@@ -1352,7 +1357,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Import AI",
@@ -1362,7 +1367,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1372,7 +1377,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 151,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1382,7 +1387,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1392,7 +1397,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1402,7 +1407,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1412,7 +1417,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1422,7 +1427,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1432,7 +1437,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1442,14 +1447,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-14T16:00:02.078154+00:00"
+      "checkedAt": "2026-07-14T22:00:02.115359+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Interconnects AI",
-      "url": "https://www.interconnects.ai/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
