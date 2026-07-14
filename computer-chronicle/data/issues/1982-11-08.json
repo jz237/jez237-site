@@ -1,0 +1,464 @@
+{
+  "currentDate": "2026-06-19",
+  "historicDate": "1982-11-08",
+  "displayDate": "Week of November 8-14, 1982",
+  "edition": "Issue 015 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "layout": "weekly-newsprint-front",
+    "accent": "black-red-blue",
+    "paper": "halftone-cream",
+    "strapline": "Compaq makes the PC portable, Creepshow opens wide, and arcade racers crowd the holiday floor"
+  },
+  "masthead": {
+    "kicker": "A weekly 1982 archive dispatch",
+    "title": "Computer Chronicle",
+    "deck": "Video games, home computers, software counters, and culture for the week of November 8-14, 1982"
+  },
+  "layoutPlan": {
+    "lead": "Compaq Portable and IBM-compatible software move into the main column",
+    "secondary": [
+      "Vectrex and Atari 5200 crowd the console counter",
+      "Creepshow tops the weekend box office",
+      "Top 40 radio keeps Joe Cocker and Jennifer Warnes at No. 1"
+    ],
+    "rails": [
+      "Top 5 games",
+      "Price watch",
+      "Software shelf"
+    ]
+  },
+  "sectionChrome": {
+    "lead": {
+      "label": "Lead Story"
+    },
+    "pictureDesk": {
+      "label": "Picture Desk",
+      "title": "Scenes From the Week"
+    },
+    "computerItems": {
+      "label": "Computers & Hardware",
+      "title": "Personal Computing Desk"
+    },
+    "software": {
+      "label": "Software Top 5",
+      "title": "Programs on the Editor's Pad"
+    },
+    "storeShelves": {
+      "label": "Top Games This Week",
+      "title": "Arcade, Console & Computer Games"
+    },
+    "priceWatch": {
+      "label": "Price Watch",
+      "title": "What It Cost"
+    },
+    "bbs": {
+      "label": "Modem Desk"
+    },
+    "curiosity": {
+      "label": "Movies / TV / Culture"
+    },
+    "briefs": {
+      "label": "Magazine Rack",
+      "title": "Culture & Shelf Talk"
+    },
+    "music": {
+      "label": "Top Rock This Week",
+      "title": "Hot 100, November 6"
+    },
+    "periodAd": {
+      "label": "Retail / Ads"
+    },
+    "classifieds": {
+      "label": "Classifieds",
+      "title": "Small Ads"
+    },
+    "fallback": {
+      "label": "Editorial Screen"
+    },
+    "accuracy": {
+      "label": "Accuracy Ledger",
+      "title": "What Is Date-Specific"
+    },
+    "sources": {
+      "label": "Source Trail",
+      "title": "Research Log"
+    },
+    "market": {
+      "label": "Retail / Ads",
+      "title": "Counter Watch"
+    }
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1982-11-08.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 8-14, 1982",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The week opens with Compaq turning the IBM PC compatibility race into a portable-machine story while game shoppers see new console hardware, vector displays, and arcade conversions fighting for holiday attention.",
+  "morningLine": "A 28-pound IBM-compatible portable, a built-in-vector console, and a horror anthology opening weekend make the computer counter feel crowded before Thanksgiving.",
+  "lead": {
+    "headline": "Compaq Turns PC Compatibility Into a Portable Pitch",
+    "summary": "Compaq announced its first Portable in November 1982, promising a luggable IBM PC-compatible machine built around a legally reverse-engineered BIOS. The $2,995-and-up system was not expected to ship until 1983, but the announcement signaled that IBM compatibility was becoming a market category, not just a single-company product line.",
+    "confidence": "Month-specific November 1982 product announcement; pricing and ship timing from historical Compaq Portable summaries.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "computerItems": [
+    {
+      "label": "Console Counter",
+      "headline": "Vectrex Brings Its Own Vector Screen",
+      "summary": "General Consumer Electronics put the Vectrex into the crowded 1982 console field with a built-in monochrome vector monitor and plastic screen overlays, a sharp contrast to cartridge boxes fighting for the family television.",
+      "confidence": "Month-specific November 1982 hardware launch.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "label": "Atari Desk",
+      "headline": "Atari 5200 Enters the Supersystem Race",
+      "summary": "Atari also pushed the 5200 SuperSystem in November, using Atari 8-bit computer-derived hardware and analog controllers as ColecoVision and Intellivision competed for holiday shelf space.",
+      "confidence": "Month-specific November 1982 console release.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "label": "Arcade Floor",
+      "headline": "Pole Position Keeps Racing Cabinets Busy",
+      "summary": "Namco and Atari's Pole Position remained one of 1982's defining arcade stories, using pseudo-3D racing and unusually powerful 16-bit arcade hardware for the period.",
+      "confidence": "1982 arcade release and annual performance context.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "platform": "Apple II / IBM PC",
+      "detail": "Still the spreadsheet name shoppers use to explain why offices buy personal computers.",
+      "confidence": "Period-appropriate software context.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "EasyWriter",
+      "platform": "IBM PC",
+      "detail": "Bundled in IBM PC launch-era discussion as word processing becomes a practical home-office pitch.",
+      "confidence": "IBM historical source.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "Microsoft Flight Simulator",
+      "platform": "IBM PC",
+      "detail": "A 1982 PC title that doubles as a compatibility test for the growing IBM-compatible market.",
+      "confidence": "1982 release context.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "WordStar",
+      "platform": "CP/M and microcomputers",
+      "detail": "A familiar office word processor name on dealer shelves as CP/M and IBM PC buyers compare ecosystems.",
+      "confidence": "Period-appropriate software context.",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "name": "Zork",
+      "platform": "Personal computers",
+      "detail": "Infocom adventures remain a text-game staple for disk-drive owners.",
+      "confidence": "Period-appropriate software context.",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "rank": 1,
+      "title": "Pole Position",
+      "platform": "Arcade",
+      "note": "Namco/Atari racing cabinet with pseudo-3D road action.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Q*bert",
+      "platform": "Arcade",
+      "note": "Gottlieb's isometric hopper remains a fresh arcade draw.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Super Pac-Man",
+      "platform": "Arcade",
+      "note": "North American Pac-Man follow-up continuing the maze craze.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Donkey Kong",
+      "platform": "ColecoVision / Arcade",
+      "note": "ColecoVision owners prize the packed-in arcade conversion.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Pitfall!",
+      "platform": "Atari VCS",
+      "note": "Activision's jungle platform hit keeps the VCS software wall lively.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Compaq Portable announced price",
+      "price": "from $2,995",
+      "note": "Single-drive configuration; shipping followed in 1983.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "IBM PC base configuration",
+      "price": "$1,565",
+      "note": "IBM launch-era base price before display, drives, and printer.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Video game cartridges",
+      "price": "about $25-$40",
+      "note": "Holiday 1982 retail range cited in period toy-market coverage.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Game hardware",
+      "price": "about $150-$300",
+      "note": "Typical console hardware range in late-1982 holiday coverage.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "market": {
+    "headline": "Holiday Shelves Get Crowded",
+    "summary": "Retailers are selling a split story: office buyers ask about IBM compatibility and spreadsheets, while families compare Atari, ColecoVision, Intellivision, and the new self-contained Vectrex.",
+    "confidence": "Synthesized from November 1982 hardware launches and period retail reporting.",
+    "sourceRefs": [
+      2,
+      4
+    ]
+  },
+  "bbsNote": {
+    "headline": "Modem Desk",
+    "summary": "Local bulletin-board culture remains small but sticky: microcomputer owners trade tips, public-domain utilities, and game hints after the phone rates quiet down.",
+    "confidence": "Period context; not tied to a single dated item.",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "curiosity": {
+    "headline": "Creepshow Opens at No. 1",
+    "summary": "George A. Romero and Stephen King's comic-book horror anthology led the November 12 weekend box office, ahead of First Blood and E.T.",
+    "confidence": "Weekend-specific box-office chart for November 12, 1982.",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "briefs": [
+    {
+      "headline": "Electronic Fun Debuts on the Magazine Rack",
+      "summary": "Electronic Fun with Computers and Games reached Volume 1, Number 1 in November 1982, another sign that games and home computers could support their own newsstand culture.",
+      "confidence": "Month-specific magazine issue.",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "headline": "C&VG Tracks the UK Micro Scene",
+      "summary": "Computer & Video Games issue 13 carried November 1982 coverage for readers following arcade and home-micro titles across the Atlantic.",
+      "confidence": "Month-specific magazine issue.",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "headline": "Pac-Man Merchandising Fills Toy Aisles",
+      "summary": "Holiday coverage groups Pac-Man merchandise with E.T. dolls, Atari, ColecoVision, and Intellivision as the video-game boom spills beyond cartridges.",
+      "confidence": "Period holiday retail reporting.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Up Where We Belong",
+      "artist": "Joe Cocker and Jennifer Warnes"
+    },
+    {
+      "rank": 2,
+      "title": "Truly",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 3,
+      "title": "Heart Attack",
+      "artist": "Olivia Newton-John"
+    },
+    {
+      "rank": 4,
+      "title": "Gloria",
+      "artist": "Laura Branigan"
+    },
+    {
+      "rank": 5,
+      "title": "Heartlight",
+      "artist": "Neil Diamond"
+    }
+  ],
+  "movieChart": [
+    {
+      "rank": 1,
+      "title": "Creepshow"
+    },
+    {
+      "rank": 2,
+      "title": "First Blood"
+    },
+    {
+      "rank": 3,
+      "title": "E.T.: The Extra-Terrestrial"
+    },
+    {
+      "rank": 4,
+      "title": "An Officer and a Gentleman"
+    },
+    {
+      "rank": 5,
+      "title": "The Missionary"
+    }
+  ],
+  "periodAd": {
+    "headline": "Portable IBM Compatibility",
+    "summary": "Dealer copy this week practically writes itself: run the programs buyers already know, then fold the machine into a suitcase-sized case.",
+    "confidence": "Ad-style copy derived from Compaq Portable announcement facts.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "classifieds": [
+    {
+      "headline": "Wanted: Extra Atari Controllers",
+      "copy": "Analog sticks and worn fire buttons keep repair counters busy."
+    },
+    {
+      "headline": "For Sale: Used 300-baud Modem",
+      "copy": "Evening calls only; includes terminal notes."
+    }
+  ],
+  "worldFallback": null,
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Compaq announced the Portable in November 1982 at $2,995-and-up pricing, shipping in 1983.",
+        "status": "Verified month-specific"
+      },
+      {
+        "claim": "Creepshow led the domestic box office weekend dated November 12, 1982.",
+        "status": "Verified week-specific"
+      },
+      {
+        "claim": "Top 5 singles for November 13, 1982 are listed from a dated Top 40 chart page.",
+        "status": "Verified week-specific"
+      },
+      {
+        "claim": "Vectrex and Atari 5200 are treated as November 1982 hardware launches.",
+        "status": "Verified month-specific"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "name": "Tom's Hardware - Compaq Portable announced in November 1982",
+      "url": "https://www.tomshardware.com/desktops/pc-building/this-week-in-1982-compaq-announced-the-first-true-ibm-pc-clone-it-was-a-portable-too-as-long-as-you-were-comfortable-lugging-28-pounds"
+    },
+    {
+      "name": "Compaq Portable historical summary",
+      "url": "https://encyclopedia.pub/entry/32009"
+    },
+    {
+      "name": "1982 in video games",
+      "url": "https://en.wikipedia.org/wiki/1982_in_video_games"
+    },
+    {
+      "name": "IBM History - The IBM PC",
+      "url": "https://www.ibm.com/history/personal-computer"
+    },
+    {
+      "name": "The New Yorker - Under the Children's Christmas Tree",
+      "url": "https://www.newyorker.com/magazine/1982/12/13/under-the-childrens-christmas-tree"
+    },
+    {
+      "name": "Top40Weekly - US Top 40 Singles for November 13, 1982",
+      "url": "https://top40weekly.com/2013/11/13/us-top-40-singles-for-the-week-ending-november-13-1982/"
+    },
+    {
+      "name": "The Numbers - Weekend Domestic Box Office November 12, 1982",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/11/12"
+    },
+    {
+      "name": "Internet Archive - Electronic Fun with Computers and Games, November 1982",
+      "url": "https://archive.org/details/electronic-fun-with-computers-and-games-volume-1-number-1-november-1982"
+    },
+    {
+      "name": "World of Spectrum - Computer & Video Games Issue 13, November 1982",
+      "url": "https://worldofspectrum.org/archive/magazines/computer--video-games/13/0/1982/11/0"
+    },
+    {
+      "name": "Period software context from Chronicle archive research",
+      "url": "https://jez237.com/computer-chronicle/"
+    }
+  ],
+  "pictureDesk": [
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1982-11-08.jpg",
+      "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 8-14, 1982",
+      "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+      "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+    }
+  ],
+  "frontPageStories": [
+    "Compaq Turns PC Compatibility Into a Portable Pitch",
+    "Vectrex Brings Its Own Vector Screen",
+    "Creepshow Opens at No. 1",
+    "Up Where We Belong stays on top"
+  ],
+  "musicChartSourceRefs": [
+    5
+  ]
+}

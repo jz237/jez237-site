@@ -1,0 +1,476 @@
+{
+  "currentDate": "2026-06-18",
+  "historicDate": "1982-10-25",
+  "displayDate": "Week of October 25-31, 1982",
+  "edition": "Issue 013 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "layout": "weekly-newsprint-front",
+    "accent": "black-red-blue",
+    "paper": "halftone-cream",
+    "strapline": "InfoWorld hits the October desk, First Blood leads theaters, and Men at Work takes over radio"
+  },
+  "masthead": {
+    "kicker": "A weekly 1982 archive dispatch",
+    "title": "Computer Chronicle",
+    "deck": "Video games, home computers, software counters, and culture for the week of October 25-31, 1982"
+  },
+  "layoutPlan": {
+    "main": [
+      "editor-note",
+      "lead",
+      "picture-desk",
+      "computer-items",
+      "software",
+      "store-shelves"
+    ],
+    "sidebar": [
+      "price-watch",
+      "market",
+      "bbs",
+      "curiosity",
+      "briefs",
+      "music",
+      "period-ad",
+      "classifieds",
+      "fallback",
+      "accuracy",
+      "sources"
+    ]
+  },
+  "sectionChrome": {
+    "lead": {
+      "label": "Lead Story"
+    },
+    "pictureDesk": {
+      "label": "Picture Desk",
+      "title": "Scenes From the Week"
+    },
+    "computerItems": {
+      "label": "Computers & Hardware",
+      "title": "Personal Computing Desk"
+    },
+    "software": {
+      "label": "Software Top 5",
+      "title": "Programs on the Editor's Pad"
+    },
+    "storeShelves": {
+      "label": "Top Games This Week",
+      "title": "Arcade, Console & Computer Games"
+    },
+    "priceWatch": {
+      "label": "Price Watch",
+      "title": "What It Cost"
+    },
+    "bbs": {
+      "label": "Modem Desk"
+    },
+    "curiosity": {
+      "label": "Movies / TV / Culture"
+    },
+    "briefs": {
+      "label": "Magazine Rack",
+      "title": "Culture & Shelf Talk"
+    },
+    "music": {
+      "label": "Top Rock This Week",
+      "title": "Hot 100, October 30"
+    },
+    "periodAd": {
+      "label": "Retail / Ads"
+    },
+    "classifieds": {
+      "label": "Classifieds",
+      "title": "Small Ads"
+    },
+    "fallback": {
+      "label": "Editorial Screen"
+    },
+    "accuracy": {
+      "label": "Accuracy Ledger",
+      "title": "What Is Date-Specific"
+    },
+    "sources": {
+      "label": "Source Trail",
+      "title": "Research Log"
+    },
+    "market": {
+      "label": "Retail / Ads",
+      "title": "Counter Watch"
+    }
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1982-10-25.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of October 25-31, 1982",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Halloween week finds personal computing wedged between serious office software and games that are becoming household shopping-list items. The magazine rack is full of CP/M, IBM PC, Apple II, Atari, and Commodore clues, while the entertainment counter keeps pulling buyers toward cartridges, arcades, and computer games.",
+  "morningLine": "On the desk this week: the October 25 InfoWorld, Apple II game lists, First Blood at the box office, and Men at Work on top of the Hot 100.",
+  "lead": {
+    "headline": "Magazine Rack Makes the Micro Feel Like a Storefront",
+    "summary": "The October 25 InfoWorld issue shows the business side of the microcomputer boom: IBM PC, Apple, CP/M, databases, word processors, printers, modems, and spreadsheet names all sharing the same weekly trade-paper vocabulary. For a home buyer or small-office manager, the late-October computer counter is no single machine; it is a messy shelf of hardware, software, peripherals, and promises.",
+    "confidence": "Exact-date InfoWorld issue used for same-week business-computing context",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "computerItems": [
+    {
+      "label": "Trade Paper",
+      "headline": "InfoWorld Lands on October 25",
+      "summary": "The issue dated October 25, 1982 runs as the week’s hard-date anchor, with IBM Personal Computer, Apple, CP/M, databases, printers, modems, VisiCalc, WordStar, SuperCalc, and dBASE all visible in its indexed vocabulary.",
+      "confidence": "Exact issue date and Google Books issue metadata",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "label": "Portable Computing",
+      "headline": "Kaypro II Keeps the Luggable Fight Alive",
+      "summary": "The Kaypro II belongs to 1982’s portable CP/M story, competing with Osborne-style transportable systems and selling a bundled-software idea to business users.",
+      "confidence": "Year-specific 1982 computer history context",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "label": "Home Computer Shelf",
+      "headline": "Commodore 64 Turns 64K Into a Sales Hook",
+      "summary": "The C64’s 1982 arrival made memory size a retail headline and gave home buyers a new machine to compare against Atari, Apple, VIC-20, and Timex/Sinclair options.",
+      "confidence": "1982 machine context, not an exact-week release claim",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "label": "Office Software",
+      "headline": "Spreadsheets and Word Processors Set the Pace",
+      "summary": "VisiCalc, SuperCalc, WordStar, dBASE, and Apple Writer-style productivity software frame the practical argument for buying a micro instead of only a game machine.",
+      "confidence": "Same-week InfoWorld vocabulary and period software context",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "platform": "Apple II / business micros",
+      "detail": "Still the showroom proof that a micro could do office work.",
+      "confidence": "Period business-software context",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "WordStar",
+      "platform": "CP/M / business micros",
+      "detail": "A word-processing name visible in the October 25 InfoWorld issue vocabulary.",
+      "confidence": "Exact-date issue vocabulary",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "SuperCalc",
+      "platform": "CP/M / business micros",
+      "detail": "A spreadsheet name sharing the same business-software shelf as VisiCalc.",
+      "confidence": "Exact-date issue vocabulary",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "dBASE",
+      "platform": "CP/M / business micros",
+      "detail": "Database software appears in the issue vocabulary as offices organize microcomputer data.",
+      "confidence": "Exact-date issue vocabulary",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Apple Writer II",
+      "platform": "Apple II",
+      "detail": "A period Apple II word processor for buyers weighing practical software against games.",
+      "confidence": "Period Apple II software context",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "name": "Choplifter",
+      "platform": "Apple II",
+      "detail": "A leading Apple II action game in 1982 bestseller memory.",
+      "confidence": "1982 Apple II game context",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "Wizardry",
+      "platform": "Apple II",
+      "detail": "Fantasy role-playing remained a key Apple II software-counter name.",
+      "confidence": "1982 Apple II game context",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "David’s Midnight Magic",
+      "platform": "Apple II",
+      "detail": "A 1982 computer-game standout later recognized by Electronic Games.",
+      "confidence": "1982 award-period context",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "name": "Snack Attack",
+      "platform": "Apple II",
+      "detail": "Arcade-style computer play that fit the Pac-Man era on home micros.",
+      "confidence": "1982 award-period context",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "name": "K-razy Shoot-Out",
+      "platform": "Atari 400/800",
+      "detail": "Atari 8-bit arcade action from the 1982 computer-game conversation.",
+      "confidence": "1982 award-period context",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64 computer",
+      "price": "$595 list price",
+      "note": "64K memory made the new home computer easy to advertise."
+    },
+    {
+      "item": "Game cartridges",
+      "price": "About $25-$40 in late-1982 retail talk",
+      "note": "Cartridges competed directly with boxed computer games and typed-in listings."
+    },
+    {
+      "item": "Transportable CP/M systems",
+      "price": "Around the low-thousands for bundled luggables",
+      "note": "Kaypro and Osborne-style machines sold portability and included software as part of the pitch."
+    }
+  ],
+  "market": {
+    "headline": "Halloween Week Splits the Counter Between Work and Play",
+    "summary": "The office side talks about word processors, databases, printers, and modems. The home side talks about Apple II action games, Atari and Commodore machines, and cartridge shelves getting ready for holiday traffic.",
+    "confidence": "Exact-date InfoWorld plus period games and retail context",
+    "sourceRefs": [
+      0,
+      4,
+      5
+    ]
+  },
+  "bbsNote": {
+    "headline": "Modem Desk",
+    "summary": "Modems appear in the October 25 InfoWorld vocabulary, a reminder that microcomputers were already being sold as communications tools for offices and ambitious hobbyists.",
+    "confidence": "Exact-date issue vocabulary",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "curiosity": {
+    "headline": "Halloween Box Office Belongs to First Blood",
+    "summary": "The domestic weekend chart for October 29, 1982 put First Blood first, followed by Halloween III: Season of the Witch and National Lampoon’s Class Reunion.",
+    "confidence": "Dated October 29, 1982 weekend chart",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "briefs": [
+    {
+      "headline": "Men at Work Reaches No. 1",
+      "summary": "Billboard’s Hot 100 dated October 30, 1982 put “Who Can It Be Now?” at No. 1.",
+      "confidence": "Dated October 30, 1982 Hot 100 chart",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "headline": "First Blood Leads the Weekend",
+      "summary": "The October 29 domestic weekend chart listed First Blood at No. 1 with $4,565,972.",
+      "confidence": "Dated weekend chart",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "headline": "Halloween III Holds Second Place",
+      "summary": "Season of the Witch stayed near the top of the movie chart for Halloween weekend.",
+      "confidence": "Dated weekend chart",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "headline": "Computer Gaming World Turns to November/December",
+      "summary": "CGW’s next issue slot for 1982 was November/December, keeping computer games in the specialist-magazine lane as the holiday season approached.",
+      "confidence": "Issue-list context",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Who Can It Be Now?",
+      "artist": "Men at Work"
+    },
+    {
+      "rank": 2,
+      "title": "Jack & Diane",
+      "artist": "John Cougar"
+    },
+    {
+      "rank": 3,
+      "title": "Eye in the Sky",
+      "artist": "The Alan Parsons Project"
+    },
+    {
+      "rank": 4,
+      "title": "I Keep Forgettin’ (Every Time You’re Near)",
+      "artist": "Michael McDonald"
+    },
+    {
+      "rank": 5,
+      "title": "Up Where We Belong",
+      "artist": "Joe Cocker and Jennifer Warnes"
+    }
+  ],
+  "movieChart": [
+    {
+      "title": "First Blood"
+    },
+    {
+      "title": "Halloween III: Season of the Witch"
+    },
+    {
+      "title": "National Lampoon’s Class Reunion"
+    },
+    {
+      "title": "E.T. the Extra-Terrestrial"
+    },
+    {
+      "title": "An Officer and a Gentleman"
+    }
+  ],
+  "periodAd": {
+    "headline": "This Week at the Micro Counter",
+    "summary": "Ask for WordStar, SuperCalc, dBASE, Apple Writer II, and the Apple II games every clerk keeps hearing about.",
+    "confidence": "Styled from same-week and period software context",
+    "sourceRefs": [
+      0,
+      4
+    ]
+  },
+  "classifieds": [
+    {
+      "headline": "Apple II Games Wanted",
+      "copy": "Choplifter, Wizardry, pinball, and arcade-style disks sought for weekend swap."
+    },
+    {
+      "headline": "CP/M Help After Hours",
+      "copy": "WordStar setup, printer cables, and backup disks explained by appointment."
+    }
+  ],
+  "worldFallback": null,
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "InfoWorld issue date is October 25, 1982",
+        "status": "Exact-date Google Books issue metadata"
+      },
+      {
+        "claim": "Movie chart uses the domestic weekend chart for October 29, 1982",
+        "status": "Dated weekend chart"
+      },
+      {
+        "claim": "Music chart uses Billboard Hot 100 dated October 30, 1982",
+        "status": "Dated chart"
+      },
+      {
+        "claim": "Apple II and Electronic Games items are period context around 1982, not exact release-day claims",
+        "status": "Clearly labeled context"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "name": "InfoWorld, October 25, 1982 issue metadata and indexed terms",
+      "url": "https://books.google.co.bw/books?atm_aiy=1975&cad=1&id=DjAEAAAAMBAJ&source=gbs_all_issues_r"
+    },
+    {
+      "name": "Apple II History: 1982-1985 timeline",
+      "url": "https://www.apple2history.org/appendix/ahb/ahb3/"
+    },
+    {
+      "name": "Commodore 64 history and launch context",
+      "url": "https://en.wikipedia.org/wiki/Commodore_64"
+    },
+    {
+      "name": "Apple Writer period software context",
+      "url": "https://en.wikipedia.org/wiki/Apple_Writer"
+    },
+    {
+      "name": "Apple II History: 1982 games list",
+      "url": "https://www.apple2history.org/appendix/aha/aha82/"
+    },
+    {
+      "name": "Electronic Games Arcade Awards 1983 context",
+      "url": "https://en.wikipedia.org/wiki/Electronic_Games"
+    },
+    {
+      "name": "The Numbers weekend domestic box office chart, October 29, 1982",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/10/29"
+    },
+    {
+      "name": "Billboard Hot 100, October 30, 1982",
+      "url": "https://www.billboard.com/charts/hot-100/1982-10-30/"
+    },
+    {
+      "name": "Retromags Computer Gaming World issue list",
+      "url": "https://www.retromags.com/magazines/usa/computer-gaming-world/"
+    }
+  ],
+  "pictureDesk": [
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1982-10-25.jpg",
+      "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of October 25-31, 1982",
+      "caption": "GPT Image 2 front-page artifact showing a late-1982 computer counter with games, business software, and newspaper modules.",
+      "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+    }
+  ],
+  "frontPageStories": [
+    {
+      "headline": "InfoWorld Makes the Micro Feel Like a Storefront",
+      "summary": "The October 25 issue puts IBM PC, Apple, CP/M, printers, modems, spreadsheets, word processors, and databases in one busy business-computing frame.",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Game Shelves Warm Up for the Holidays",
+      "summary": "Choplifter, Wizardry, David’s Midnight Magic, Snack Attack, and K-razy Shoot-Out represent the software-counter pull of 1982 computer play.",
+      "sourceRefs": [
+        4,
+        5
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    7
+  ]
+}

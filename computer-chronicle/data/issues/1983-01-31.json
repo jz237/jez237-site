@@ -1,0 +1,342 @@
+{
+  "currentDate": "2026-06-29",
+  "historicDate": "1983-01-31",
+  "displayDate": "Week of January 31-February 6, 1983",
+  "edition": "Issue 027 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "Early-February 1983 computer weekly: post-CES home-computer shelves, IBM PC office software momentum, arcade and cartridge boxes, warm newsprint, red and blue section furniture.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+    "dateline": "Week of January 31-February 6, 1983",
+    "price": "25 cents"
+  },
+  "layoutPlan": "Lead with the crowded post-CES home-computer race, give prominent shelf space to Atari, Commodore, Mattel, TI, and game-software cues, then scan radio, movies, prices, and office software.",
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "blue ink",
+    "texture": "aged newsprint, halftone photos, tight column rules"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-01-31.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of January 31-February 6, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The week reads like a dealer counter after Winter CES: Commodore, Texas Instruments, Mattel, Timex, and Spectravideo chase low-cost home buyers while IBM PC software keeps making the office machine harder to ignore.",
+  "morningLine": "Home-computer makers are crowding the price cards, Lotus 1-2-3 is still the desk-side conversation, and Tootsie holds the box-office crown as Africa takes over radio.",
+  "lead": {
+    "headline": "Home-computer race spills from CES to store counters",
+    "summary": "Reports from January 1983 show a packed home-computer field after Winter CES: Commodore showed portable C64 ideas, Texas Instruments pushed a low-cost TI-99/2, Mattel promoted Aquarius, Timex brought a Spectrum-derived machine toward North America, and Spectravideo pitched a cartridge-friendly microcomputer.",
+    "confidence": "High",
+    "sourceRefs": [
+      1,
+      2
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "Commodore pushes both low-cost and portable stories",
+      "summary": "Commodore had the VIC-20 milestone and C64 momentum on one side, while CES reports described portable C64-family machines such as the SX-64/SX-100 concept for buyers who wanted a luggable color computer.",
+      "confidence": "High",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "Mattel Aquarius courts budget home users",
+      "summary": "Mattel Electronics demonstrated the Aquarius at Winter CES with a Z80A processor, 4K RAM, and an expected $200 price, linking the toy-and-game aisle to the home-computer shelf.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "TI aims below the usual computer price",
+      "summary": "Texas Instruments announced the TI-99/2 at Winter CES as a simplified, low-cost machine expected around $100, a signal of how fiercely companies were chasing first-time home buyers.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Lotus keeps the IBM PC in office talk",
+      "summary": "Lotus 1-2-3, shipped in late January for MS-DOS, remained the week's serious software story by tying spreadsheet, charting, and database features to the IBM PC.",
+      "confidence": "High",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "Integrated spreadsheet, charting, and database package for MS-DOS and the IBM PC; late-January 1983 release.",
+      "confidence": "High",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "name": "VisiCalc",
+      "detail": "The established spreadsheet name facing new pressure from integrated IBM PC packages.",
+      "confidence": "High",
+      "sourceRefs": [
+        1,
+        3
+      ]
+    },
+    {
+      "name": "Microsoft Multiplan",
+      "detail": "A current spreadsheet competitor in the same office-software conversation.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "WordStar",
+      "detail": "A familiar CP/M and microcomputer word-processing staple for business buyers.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "name": "A+ magazine",
+      "detail": "Ziff-Davis began publishing A+ for Apple Computer products in January 1983, reflecting the strength of platform-specific Apple coverage.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "item": "Space Shuttle: A Journey into Space",
+      "price": "New 1983 title",
+      "note": "Activision simulation for Atari 2600, later remembered as one of the company's serious console simulations.",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "Repton",
+      "price": "New 1983 title",
+      "note": "Sirius Software shooter for Apple II with ports to Atari 8-bit and Commodore 64.",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "item": "The Quest",
+      "price": "New 1983 title",
+      "note": "Penguin Software graphic adventure for Apple II, Atari 8-bit, Commodore 64, MS-DOS, and Macintosh families.",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "item": "Mattel Aquarius",
+      "price": "expected around $200",
+      "note": "CES budget computer pitch with Z80A CPU and 4K RAM.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Spectravideo SV-318",
+      "price": "about $300",
+      "note": "CES microcomputer with Microsoft BASIC, CP/M ambitions, and a Coleco cartridge adapter option.",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Mattel Aquarius",
+      "price": "expected US$200",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "Winter CES preview price."
+    },
+    {
+      "item": "TI-99/2",
+      "price": "about US$100 expected",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "Announced as a stripped-down low-cost TI home computer."
+    },
+    {
+      "item": "Timex/Sinclair 2000",
+      "price": "US$149 for 16K model",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "North American repackaging of the Sinclair Spectrum line."
+    },
+    {
+      "item": "Spectravideo SV-318",
+      "price": "US$300; optional disk drive US$525",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "CES announcement pricing."
+    },
+    {
+      "item": "Commodore SX-64",
+      "price": "reported around US$1600",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "Portable color C64-family machine pricing from January chronology."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Africa reaches No. 1",
+      "summary": "Toto's Africa topped the Billboard Hot 100 dated February 5, 1983, with Men at Work's Down Under at No. 2.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "Tootsie passes $100 million",
+      "summary": "For the February 4-6 domestic weekend, Tootsie stayed No. 1 and crossed $100 million in total gross.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "The Entity opens in second",
+      "summary": "The Entity opened at No. 2 for the February 4-6 weekend, behind Tootsie and ahead of 48 Hrs.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "Videodrome reaches theaters",
+      "summary": "Videodrome appeared as a new wide-release item on the February 4-6 domestic weekend chart.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Africa",
+      "artist": "Toto"
+    },
+    {
+      "rank": 2,
+      "title": "Down Under",
+      "artist": "Men at Work"
+    },
+    {
+      "rank": 3,
+      "title": "Shame on the Moon",
+      "artist": "Bob Seger & The Silver Bullet Band"
+    },
+    {
+      "rank": 4,
+      "title": "Baby, Come to Me",
+      "artist": "Patti Austin and James Ingram"
+    },
+    {
+      "rank": 5,
+      "title": "Stray Cat Strut",
+      "artist": "Stray Cats"
+    }
+  ],
+  "periodAd": {
+    "headline": "Home Computer Price Fight",
+    "summary": "Aquarius around $200, TI aiming near $100, Timex/Sinclair 2000 at $149, and Spectravideo at $300. Ask the dealer what plugs into your television.",
+    "style": "boxed retail ad with small computer sketches, cartridge icons, and red sale rules"
+  },
+  "market": {
+    "headline": "Low-price micros chase the living room",
+    "summary": "January CES announcements show manufacturers using price, cartridge compatibility, and bundled BASIC to pull families toward home computers, while business buyers keep watching IBM PC software.",
+    "confidence": "High",
+    "sourceRefs": [
+      1,
+      2,
+      3
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Historic date comes from the Chronicle weekly state file: 1983-01-31 through 1983-02-06.",
+      "Computer hardware and pricing items are drawn from January 1983 personal-computer chronology and Winter CES reports.",
+      "Lotus 1-2-3 is treated as a continuing late-January IBM PC software story, not a new February release.",
+      "Movie ranking uses Box Office Mojo domestic weekend February 4-6, 1983.",
+      "Music ranking uses Billboard Hot 100 dated February 5, 1983 references."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Chronology of Personal Computers (1983) - January entries",
+      "url": "http://kpolsson.com/comphist/comp1983.htm",
+      "note": "Winter CES announcements, pricing, Commodore, Mattel, TI, Spectravideo, Timex, Lotus, and A+ magazine entries."
+    },
+    {
+      "title": "Video Game Newsroom Time Machine - January 1983",
+      "url": "https://videogamenewsroomtimemachine.libsyn.com/january-1983",
+      "note": "Period gaming and electronic-games news context for January 1983."
+    },
+    {
+      "title": "Centre for Computing History - Lotus releases Lotus 1-2-3",
+      "url": "https://www.computinghistory.org.uk/det/6189/Lotus%20releases%20spreadsheet%20software%20Lotus%201-2-3",
+      "note": "Dates Lotus 1-2-3 to January 26, 1983."
+    },
+    {
+      "title": "This Day in Tech History - Lotus 1-2-3 Goes on Sale",
+      "url": "https://thisdayintechhistory.com/01/26/lotus-1-2-3-goes-on-sale/",
+      "note": "Secondary date and context for Lotus 1-2-3."
+    },
+    {
+      "title": "WordStar - Britannica",
+      "url": "https://www.britannica.com/technology/WordStar",
+      "note": "Background on WordStar as a microcomputer word processor."
+    },
+    {
+      "title": "MobyGames - Space Shuttle: A Journey into Space",
+      "url": "https://www.mobygames.com/game/11991/space-shuttle-a-journey-into-space/",
+      "note": "Game title, publisher, and 1983 release context."
+    },
+    {
+      "title": "Repton (1983 video game)",
+      "url": "https://en.wikipedia.org/wiki/Repton_(1983_video_game)",
+      "note": "Title, publisher, platforms, and 1983 release context."
+    },
+    {
+      "title": "The Quest (1983 video game)",
+      "url": "https://en.wikipedia.org/wiki/The_Quest_(1983_video_game)",
+      "note": "Title, publisher, platforms, and 1983 release context."
+    },
+    {
+      "title": "HOT100 / 1983-02-05",
+      "url": "https://www.elpee.jp/hot100/week/1983-02-05",
+      "note": "Billboard Hot 100 chart for February 5, 1983."
+    },
+    {
+      "title": "Box Office Mojo - Domestic 1983 Weekend 5",
+      "url": "https://www.boxofficemojo.com/weekend/1983W05/",
+      "note": "Domestic weekend chart for February 4-6, 1983."
+    }
+  ]
+}

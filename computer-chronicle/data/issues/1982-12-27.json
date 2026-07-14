@@ -1,0 +1,404 @@
+{
+  "currentDate": "2026-06-25",
+  "historicDate": "1982-12-27",
+  "displayDate": "Week of December 27, 1982-January 2, 1983",
+  "edition": "Issue 022 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "Aged 1980s computer-weekly front page with red and blue section furniture, halftone retail art, arcade cabinet cues, and dense newsprint columns.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Personal Computers, Video Games, Software, and Pop Culture",
+    "dateline": "Week of December 27, 1982-January 2, 1983",
+    "price": "35 cents"
+  },
+  "layoutPlan": "Gaming and holiday home-computer retail lead; side rails for charts, box office, software, prices, and short technical briefs.",
+  "sectionChrome": {
+    "primary": "red rule",
+    "secondary": "blue rule",
+    "texture": "warm newsprint"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1982-12-27.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the Computer Chronicle week of December 27, 1982-January 2, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of December 27, 1982-January 2, 1983.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The calendar turns with computers on the front-page of the national conversation: bargain micros, console games, and office PCs all crowd the same holiday counter.",
+  "morningLine": "New Year shoppers are comparing game cartridges, budget BASIC machines, and serious office systems in the same electronics aisles.",
+  "lead": {
+    "headline": "New Year Counters Sell Computers as Machine of the Year",
+    "summary": "TIME's Jan. 3 issue crowns the computer as Machine of the Year just as holiday buyers weigh the Timex Sinclair 1000, VIC-20, Commodore 64, IBM PC, Atari consoles, and game cartridges as mainstream gifts rather than specialist curiosities.",
+    "confidence": "High for TIME issue date and hardware guide; week framing is anchored to the Dec. 27-Jan. 2 issue window and holiday retail context.",
+    "sourceRefs": [
+      0,
+      1,
+      3
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "TIME turns the annual spotlight from a person to a machine",
+      "summary": "The Jan. 3, 1983 Jan. 3 issue package treats the computer as the defining force of 1982, emphasizing its spread through homes, schools, and offices.",
+      "confidence": "High",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Atari shock still hangs over game makers",
+      "summary": "Trade front-pageage in early January points back to Atari lowering expectations in December and to Imagic delaying a stock offering, a warning sign beneath strong cartridge sales.",
+      "confidence": "Medium; reported shortly after this week and tied to late-1982 events.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Budget computers pull first-time buyers toward BASIC",
+      "summary": "TIME lists the Timex Sinclair 1000 at $99 and the VIC-20 at $299, showing how low-cost machines are being sold as entry points for programming and games.",
+      "confidence": "High for model and list-price context.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Arcade hits keep shaping home wish lists",
+      "summary": "Pac-Man, River Raid, Donkey Kong, and other arcade-derived names remain the language shoppers use when comparing cartridges and consoles.",
+      "confidence": "Medium; product availability verified, exact store ranking varies by market.",
+      "sourceRefs": [
+        3,
+        6,
+        9
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "detail": "Apple II / personal computers: The spreadsheet remains the business-software shorthand for why offices buy micros.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "Microsoft Flight Simulator 1.0",
+      "detail": "IBM PC: A serious simulation showpiece for IBM PC owners.",
+      "confidence": "High",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "name": "Choplifter!",
+      "detail": "Apple II / Atari family: Broderbund action game with strong computer-store visibility.",
+      "confidence": "High",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "name": "River Raid",
+      "detail": "Atari VCS / 2600: Activision shooter gives console shelves a strong late-1982 title.",
+      "confidence": "High",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "Pac-Man",
+      "detail": "Atari VCS / 2600: Despite criticism, the brand remains a mass-market cartridge draw.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "item": "Timex Sinclair 1000",
+      "price": "$99 list",
+      "note": "Low-cost BASIC entry machine highlighted by TIME.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Commodore VIC-20",
+      "price": "$299 list",
+      "note": "Aggressively marketed color home computer.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Commodore 64",
+      "price": "about $595 list",
+      "note": "64K color computer moving from launch buzz into retail competition.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Atari VCS cartridges",
+      "price": "varies by title and store",
+      "note": "Holiday shoppers continue comparing arcade-name cartridges.",
+      "sourceRefs": [
+        3,
+        9
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Timex Sinclair 1000",
+      "price": "$99",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "High"
+    },
+    {
+      "item": "Commodore VIC-20",
+      "price": "$299",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "High"
+    },
+    {
+      "item": "Commodore 64",
+      "price": "about $595",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "High"
+    },
+    {
+      "item": "IBM Personal Computer",
+      "price": "complete systems often cost far above base unit pricing",
+      "confidence": "Medium; configuration-dependent.",
+      "sourceRefs": [
+        1
+      ],
+      "note": "Medium; configuration-dependent."
+    }
+  ],
+  "market": {
+    "headline": "Hardware aisles widen while game stocks wobble",
+    "summary": "Home-computer demand looks broad, but the video-game business enters 1983 with investor nerves after Atari disappointed Wall Street in December.",
+    "confidence": "Medium",
+    "sourceRefs": [
+      1,
+      2
+    ]
+  },
+  "bbsNote": "Local modem culture remains a hobbyist lane: owners trade tips, public-domain BASIC programs, and game hints over slow dial-up connections.",
+  "curiosity": "For the first time, TIME selected a non-human Machine of the Year, making the personal computer a year-end newsstand symbol.",
+  "briefs": [
+    {
+      "title": "Tootsie wins New Year weekend",
+      "summary": "Tootsie leads the domestic weekend box office for Dec. 31-Jan. 2, ahead of The Dark Crystal and The Toy.",
+      "confidence": "High",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "The Dark Crystal holds holiday fantasy crowds",
+      "summary": "Jim Henson and Frank Oz’s fantasy film ranks second on the Dec. 31-Jan. 2 weekend chart.",
+      "confidence": "High",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "E.T. still refuses to leave theaters",
+      "summary": "E.T. remains in the weekend top ten after 30 weeks, with a domestic total above $317 million by Jan. 2.",
+      "confidence": "High",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Maneater",
+      "artist": "Daryl Hall & John Oates"
+    },
+    {
+      "rank": 2,
+      "title": "Mickey",
+      "artist": "Toni Basil"
+    },
+    {
+      "rank": 3,
+      "title": "Sexual Healing",
+      "artist": "Marvin Gaye"
+    },
+    {
+      "rank": 4,
+      "title": "The Girl Is Mine",
+      "artist": "Michael Jackson / Paul McCartney"
+    },
+    {
+      "rank": 5,
+      "title": "Dirty Laundry",
+      "artist": "Don Henley"
+    }
+  ],
+  "movieChart": [
+    {
+      "rank": 1,
+      "title": "Tootsie"
+    },
+    {
+      "rank": 2,
+      "title": "The Dark Crystal"
+    },
+    {
+      "rank": 3,
+      "title": "The Toy"
+    },
+    {
+      "rank": 4,
+      "title": "Best Friends"
+    },
+    {
+      "rank": 5,
+      "title": "The Verdict"
+    }
+  ],
+  "periodAd": {
+    "headline": "Start the New Year in BASIC",
+    "summary": "Bring home a starter computer, a cassette recorder, and a beginner book. Ask about memory packs, joysticks, and classroom software.",
+    "style": "small boxed electronics-store advertisement"
+  },
+  "classifieds": [
+    {
+      "headline": "Wanted",
+      "copy": "Apple II games and manuals; will trade blank disks or BASIC books."
+    },
+    {
+      "headline": "For Sale",
+      "copy": "Used Atari VCS with paddles and assorted cartridges; call evenings."
+    }
+  ],
+  "worldFallback": null,
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "TIME Jan. 3, 1983 computer front-page and hardware guide",
+        "status": "verified",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "claim": "Dec. 31-Jan. 2 box-office ranking led by Tootsie",
+        "status": "verified",
+        "sourceRefs": [
+          4
+        ]
+      },
+      {
+        "claim": "Game-market caution tied to Atari and Imagic",
+        "status": "reported shortly after week, tied to late-1982 events",
+        "sourceRefs": [
+          2
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "title": "TIME archive: The Computer, Machine of the Year, Jan. 3, 1983",
+      "url": "https://content.time.com/time/front-pages/0,16641,19830103,00.html",
+      "note": "magazine front-page archive"
+    },
+    {
+      "title": "TIME: The Hottest-Selling Hardware, Jan. 3, 1983",
+      "url": "https://time.com/archive/6699322/the-hottest-selling-hardware/",
+      "note": "period hardware guide"
+    },
+    {
+      "title": "Arcade Express, Volume 1 Number 12, Jan. 16, 1983",
+      "url": "https://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n12a.pdf",
+      "note": "electronic games trade newsletter reporting late-1982 Atari and Imagic fallout"
+    },
+    {
+      "title": "Christian Science Monitor: Zap! Pow! Video games sparkle in holiday market, Dec. 10, 1982",
+      "url": "https://www.csmonitor.com/1982/1210/121043.html",
+      "note": "holiday video-game retail context"
+    },
+    {
+      "title": "Box Office Mojo: Domestic 1982 Weekend 53",
+      "url": "https://www.boxofficemojo.com/weekend/1982W53/",
+      "note": "weekend chart for Dec. 31-Jan. 2, 1983"
+    },
+    {
+      "title": "Billboard Hot 100, week of Jan. 1, 1983",
+      "url": "https://www.billboard.com/charts/hot-100/1983-01-01/",
+      "note": "weekly singles chart"
+    },
+    {
+      "title": "Atari 2600: River Raid release record",
+      "url": "https://www.mobygames.com/game/8244/river-raid/",
+      "note": "period game release reference"
+    },
+    {
+      "title": "MobyGames: Choplifter!",
+      "url": "https://www.mobygames.com/game/185/choplifter/",
+      "note": "period computer game reference"
+    },
+    {
+      "title": "MobyGames: Microsoft Flight Simulator 1.0",
+      "url": "https://www.mobygames.com/game/504/microsoft-flight-simulator-v10/",
+      "note": "IBM PC software reference"
+    },
+    {
+      "title": "AtariAge: Atari 2600 Pac-Man",
+      "url": "https://www.atariage.com/software_page.php?SoftwareLabelID=340",
+      "note": "1982 console game reference"
+    }
+  ],
+  "pictureDesk": [
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1982-12-27.jpg",
+      "alt": "Halftone electronics-store counter with home computer boxes, cartridges, and a small monitor running blocky game graphics.",
+      "caption": "Generated art direction cue 1: Halftone electronics-store counter with home computer boxes, cartridges, and a small monitor running blocky game graphics.",
+      "confidence": "Generated visual based on structured issue data"
+    },
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1982-12-27.jpg",
+      "alt": "Boxed chart rail with Top 5 Music, Movies, and Computer Games.",
+      "caption": "Generated art direction cue 2: Boxed chart rail with Top 5 Music, Movies, and Computer Games.",
+      "confidence": "Generated visual based on structured issue data"
+    }
+  ],
+  "frontPageStories": [
+    {
+      "headline": "New Year Counters Sell Computers as the Machine of the Year",
+      "summary": "TIME’s front-page meets holiday retail reality as small computers and game systems become mainstream gifts.",
+      "sourceRefs": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "headline": "Atari Warning Rattles Game Boom",
+      "summary": "December’s lowered Atari outlook and Imagic’s delayed offering hint at pressure under the cartridge rush.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    5
+  ]
+}
