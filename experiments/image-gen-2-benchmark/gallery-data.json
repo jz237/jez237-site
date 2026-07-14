@@ -5025,5 +5025,24 @@
       "description": "A geomicrobiology workbench infographic showing how magnetite or greigite magnetosome chains orient swimming bacteria while flagella and chemical sensing help them navigate sediment oxygen gradients.",
       "sourceNote": "Real-world non-fiction overview based on established geomicrobiology: magnetotactic bacteria biomineralize magnetite or greigite magnetosomes; magnetic alignment works with active swimming and chemical sensing, with behavior varying among species and environments."
     }
+  },
+  {
+    "id": "2026-07-14-factual-infographic-factual-infographic-how-basalt-columns-",
+    "title": "Factual infographic: How Basalt Columns Crack Into Polygons",
+    "tests": "Real-world geology; central basalt-flow cutaway; five-stage cooling and fracture sequence; plan-view polygons versus side-view columns; four macro rock windows; blocky-joint comparison; cooling-surface orientation panel; Giant's Causeway scale vignette; basalt specimen swatches; conservative anti-repeat topic and no invented rates.",
+    "prompt": "Create a finished square factual infographic titled \"How Basalt Columns Crack Into Polygons\" explaining the real-world, non-fiction geology of columnar jointing with conservative scientific information. Anchor the display as a photorealistic volcanology specimen bench in a museum preparation lab: a heavy polygonal basalt hand sample, two drill cores, an infrared cooling image on a small unbranded lightbox, calipers, a rock hammer, a loupe, black volcanic sand, and cool raking task light. Build a large central three-dimensional cutaway of a thick basalt lava flow with inward-moving cooling fronts and contraction cracks propagating roughly perpendicular to the cooling surfaces. Include a five-stage sequence from hot lava through cooling, contraction, polygonal crack initiation, and crack-front advance; a top-down polygon mosaic beside a cliff-face side view; orderly-column versus irregular-joint comparison; macro windows for glassy rind, fine-grained interior, fracture growth bands, and weathered joint edges; a column-orientation panel; a Giant's Causeway field-scale vignette; and basalt specimen swatches. Use concise labels, restrained arrows, photorealistic rock textures, and strong science-museum hierarchy. Make clear that columns are commonly five- or six-sided but not uniformly perfect hexagons, and that the pattern records cooling and fracture propagation rather than crystal growth. Avoid invented exact rates, fake statistics, unsafe instructions, logos, dense paragraphs, eruption spectacle, and flat school-poster styling.\n\nReusable fill-in-the-blank template: Create a finished factual infographic titled \"How [REAL_GEOLOGIC_PROCESS] Works\" explaining [NONFICTION_GEOLOGY_TOPIC] with conservative real-world information. Anchor it as a photorealistic [GEOLOGY_LAB/FIELD_STATION/MUSEUM_BENCH] display with a central cutaway, a step-by-step cause-and-effect sequence, at least two macro rock or mineral windows, a comparison panel, field-scale context, specimen swatches, and a concise observation note. Use subject-specific tools, restrained labels, accurate relationships, and rich tactile detail. Avoid invented statistics, unsafe instructions, logos, dense paragraphs, flat school-poster composition, and prompt-card text.\n\nExample substitution: [REAL_GEOLOGIC_PROCESS] = Basalt Columns Crack Into Polygons; [NONFICTION_GEOLOGY_TOPIC] = how cooling, thermal contraction, tensile stress, and advancing fracture fronts create columnar joints in basalt; [GEOLOGY_LAB/FIELD_STATION/MUSEUM_BENCH] = a volcanology specimen bench with basalt cores, polygonal hand sample, infrared cooling image, calipers, rock hammer, loupe, and Giant's Causeway field-scale view.",
+    "image": "images/2026-07-14-factual-infographic-factual-infographic-how-basalt-columns-.jpg",
+    "thumb": "thumbs/2026-07-14-factual-infographic-factual-infographic-how-basalt-columns-.webp",
+    "color": "#3e3731",
+    "date": "2026-07-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Columnar jointing in cooling basalt lava flows",
+      "description": "A volcanology-bench infographic showing how cooling and thermal contraction organize fractures into polygonal basalt columns.",
+      "sourceNote": "Conservative synthesis of established geology: cooling lava contracts, tensile fractures form polygonal joint networks, and cracks advance as the cooling front moves through the rock."
+    }
   }
 ]
