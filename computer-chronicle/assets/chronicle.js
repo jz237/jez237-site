@@ -23,6 +23,10 @@
     heroLightbox: document.querySelector("[data-hero-lightbox]"),
     lightboxImage: document.querySelector("[data-lightbox-image]"),
     lead: document.querySelector("[data-lead]"),
+    storiesPanel: document.querySelector("[data-stories-panel]"),
+    storiesLabel: document.querySelector("[data-stories-label]"),
+    storiesTitle: document.querySelector("[data-stories-title]"),
+    stories: document.querySelector("[data-stories]"),
     pictureDeskPanel: document.querySelector("[data-picture-desk-panel]"),
     pictureDeskLabel: document.querySelector("[data-picture-desk-label]"),
     pictureDeskTitle: document.querySelector("[data-picture-desk-title]"),
@@ -176,6 +180,15 @@
 
   function itemSummary(item) {
     return (item && (item.summary || item.text || item.detail || item.note || item.copy)) || "";
+  }
+
+  /* ===== article bodies: string OR array of paragraph strings/objects ===== */
+  function bodyParagraphs(value) {
+    const parts = Array.isArray(value) ? value : [value];
+    return parts
+      .map((part) => (typeof part === "string" ? part : itemSummary(part)))
+      .map((part) => cleanPublicCopy(part))
+      .filter(Boolean);
   }
 
   /* ===== store shelves: grouped ({label, items:[]}) vs flat entries ===== */
@@ -653,7 +666,7 @@
   function renderLead(issue) {
     if (!els.lead) return;
     const lead = issue.lead || {};
-    const body = lead.body || lead.summary || "";
+    const paragraphs = bodyParagraphs(lead.body || lead.summary || "");
     els.lead.innerHTML = `
       <div class="cc-panel-head">
         <span class="cc-panel-label">${escapeHtml(lead.label || chrome(issue, "lead", "label", "Top Story"))}</span>
@@ -661,10 +674,32 @@
       <h2>${escapeHtml(lead.headline || "")}</h2>
       ${lead.dek ? `<p class="cc-dek">${escapeHtml(lead.dek)}</p>` : ""}
       ${articleVisual(lead.image)}
-      ${body ? `<p>${escapeHtml(body)}</p>` : ""}
+      ${paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("")}
       ${confidenceBadge(lead.confidence)}
       ${sourceLinks(issue, lead.sourceRefs)}
     `;
+  }
+
+  function renderStories(issue) {
+    if (!els.stories || !els.storiesPanel) return;
+    const stories = Array.isArray(issue && issue.stories) ? issue.stories : [];
+    els.storiesPanel.hidden = stories.length === 0;
+    setText(els.storiesLabel, chrome(issue, "stories", "label", "Feature Desk"));
+    setText(els.storiesTitle, chrome(issue, "stories", "title", "The Week's Stories"));
+    els.stories.innerHTML = stories.map((story) => {
+      const paragraphs = bodyParagraphs(story.body || story.summary || story.text || "");
+      const kicker = itemLabel(story, "");
+      return `
+        <article class="cc-story">
+          ${kicker ? `<span class="cc-panel-label cc-label-cyan">${escapeHtml(kicker)}</span>` : ""}
+          <h3>${escapeHtml(story.headline || itemTitle(story) || "Story")}</h3>
+          ${story.dek ? `<p class="cc-dek">${escapeHtml(cleanPublicCopy(story.dek))}</p>` : ""}
+          ${articleVisual(story.image)}
+          ${paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("")}
+          ${story.pullQuote ? `<blockquote class="cc-pullquote">${escapeHtml(cleanPublicCopy(story.pullQuote))}</blockquote>` : ""}
+        </article>
+      `;
+    }).join("");
   }
 
   function renderComputerItems(issue) {
@@ -808,6 +843,8 @@
           <p>This date needs a verified computer-news pass before a newspaper image is generated.</p>
         `;
       }
+      if (els.storiesPanel) els.storiesPanel.hidden = true;
+      if (els.stories) els.stories.innerHTML = "";
       if (els.computerItems) els.computerItems.innerHTML = "";
       if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = true;
       if (els.pictureDesk) els.pictureDesk.innerHTML = "";
@@ -844,6 +881,7 @@
     renderGlance(issue);
     renderWorldAnchor(issue);
     renderLead(issue);
+    renderStories(issue);
     renderComputerItems(issue);
     renderSoftware(issue);
     renderStoreShelves(issue);
@@ -1029,6 +1067,7 @@
           issue.edition,
           issue.morningLine,
           issue.lead && issue.lead.headline,
+          ...(Array.isArray(issue.stories) ? issue.stories : []).map((story) => story && story.headline),
         ].filter(Boolean).join(" ").toLowerCase();
         return haystack.includes(query);
       });
