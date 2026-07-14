@@ -34,7 +34,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics,
    dynamic (animated) wave bands, multi-race chain with time carryover, Steelie rival AI. */
-const VERSION = '0.5.0';
+const VERSION = '0.6.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
@@ -231,12 +231,66 @@ function goalText(g,v,u,z,ox,oy){
   const cx=projX(v,u)+ox, cy=projY(v,u,z)+oy, sc=1/22;
   g.setTransform(AXx*sc,AXy*sc,AUx*sc,AUy*sc,cx,cy); g.drawImage(t,-120,-28); g.setTransform(1,0,0,1,0,0);
 }
+function buildAerial(){ newGrid(26,112);
+  const REDC={tex:'check',tint:'#a83a30'}, CAT={tex:'grid',tint:'#9aa0b4'}, REDW={tint:'#8f2f28'};
+  // twin start knolls with a half-pipe valley between
+  waves(4,0,9,6,15,14.4,0.5,5,7,REDC); waves(16,0,21,6,15,14.4,0.5,5,7,REDC);
+  rampV(10,0,12,6,14.4,13,REDC); rampV(13,0,15,6,13,14.4,REDC);
+  slab(4,7,21,8,13,REDC);
+  slab(9,9,16,10,13,REDC);
+  // X crossing narrows to catwalk
+  slab(11,11,14,16,13,CAT);
+  // zigzag catwalk 1 with hammers
+  rampU(12,17,15,22,13,11,CAT);
+  slab(5,23,15,24,11,CAT);
+  rampU(5,25,9,26,11,10.5,CAT);
+  rampU(5,27,8,30,10.5,9.5,CAT);
+  hazards.push({type:'hammer',v:14.8,u:19.5,phase:0.0});
+  hazards.push({type:'hammer',v:12.2,u:23.5,phase:0.6});
+  hazards.push({type:'hammer',v:5.8,u:27,phase:1.2});
+  // vacuum straight
+  slab(5,31,8,32,9.5,CAT);
+  slab(5,33,13,34,9.5,CAT);
+  rampU(10,35,13,40,9.5,8.5,CAT);
+  hazards.push({type:'vacuum',v:15.8,u:37.5,zone:{v0:9,v1:15.5,u0:35.5,u1:39.5},pull:6});
+  // piston deck
+  slab(6,41,19,52,8,REDC);
+  hazards.push({type:'piston',v:9,u:44,phase:0});
+  hazards.push({type:'piston',v:14,u:47,phase:0.8});
+  hazards.push({type:'piston',v:11,u:50,phase:1.6});
+  // doorway wall band
+  slab(6,53,19,54,10,REDW);
+  slab(8,53,11,54,8,REDC);
+  // forked narrow catwalks
+  rampU(5,55,8,70,8,5,CAT); rampU(15,55,18,70,8,5,CAT);
+  slab(7,63,16,64,6.6,CAT);
+  slab(5,71,18,74,5,CAT);
+  // catapult over the big gap
+  slab(9,75,16,81,5,REDC);
+  slab(11,79,13,81,5.02,{tex:'grid',tint:'#d8b04a'});
+  hazards.push({type:'catapult',rect:{v0:11,v1:14,u0:79,u1:82},launch:{vv:0,vu:10.8,vz:8},snap:{v:12.5,u:80.5},busyT:0});
+  // landing deck after the void
+  slab(8,89,17,93,4,REDC);
+  // twin curved chutes down
+  rampU(5,94,9,103,4,1,{tint:'#b03a30'}); rampU(16,94,20,103,4,1,{tint:'#b03a30'});
+  slab(4,94,4,103,6,REDW); slab(10,94,10,103,6,REDW);
+  slab(15,94,15,103,6,REDW); slab(21,94,21,103,6,REDW);
+  slab(10,92,15,93,4,REDC);
+  // goal
+  slab(4,104,21,106,1,REDC);
+  rampU(4,107,21,108,1,0.2,REDC);
+  slab(4,109,21,111,0.2,REDC);
+  slab(5,109,20,110,0.2,{type:GOAL});
+  slab(3,104,3,111,2.2); slab(22,104,22,111,2.2); slab(4,111,21,111,2.4);
+  decorFn=(g,ox,oy)=>{ goalText(g,12.5,107.6,0.6,ox,oy); };
+}
 const RACES=[
   { name:'PRACTICE RACE', time:60, start:[11.5,4], build:buildPractice, steelie:null },
   { name:'BEGINNER RACE', time:60, start:[12.5,3], build:buildBeginner,
     steelie:{ v:18, u:68, triggerU:62 } },
   { name:'INTERMEDIATE RACE', time:35, start:[6.5,1], build:buildIntermediate,
     steelie:{ v:12, u:56, triggerU:48 } },
+  { name:'AERIAL RACE', time:30, start:[6.5,2], build:buildAerial, steelie:null },
 ];
 
 /* ---------- prerender ---------- */
@@ -351,6 +405,8 @@ const Snd=(()=>{ let ac=null,master=null,rollGain=null,rollFilt=null,muted=QA;
     tick(){ env('square',1000,0,0.03,0.14); },
     count(){ env('square',1320,0,0.025,0.12); },
     gulp(){ env('square',300,90,0.18,0.3); env('sine',150,60,0.28,0.25,0.07); },
+    boing(){ env('square',160,420,0.2,0.24); env('triangle',90,260,0.22,0.2,0.02); },
+    vac(){ env('sawtooth',180,950,0.55,0.22); },
     sizzle(){ noise(0.5,1900,0.42); env('sawtooth',220,70,0.5,0.1); },
     over(){ env('sawtooth',330,110,0.9,0.25); }
   };
@@ -427,6 +483,9 @@ function die(m,kind){ if(!m.alive) return; m.alive=false; m.deathKind=kind; m.de
     else if(kind==='dissolved'){ Snd.sizzle(); const p=marbleScreen(m);
       for(let i=0;i<10;i++) shards.push({x:p.x,y:p.y+4,vx:(Math.random()*2-1)*60,vy:-Math.random()*90-20,r:1.5+Math.random()*2.5,t:0,col:'#7fd28a'}); }
     else if(kind==='eaten'){ Snd.gulp(); }
+    else if(kind==='smashed'){ Snd.shatter(); const p=marbleScreen(m);
+      for(let i=0;i<12;i++) shards.push({x:p.x,y:p.y,vx:(Math.random()*2-1)*150,vy:-Math.random()*120-20,r:2+Math.random()*3.5,t:0}); }
+    else if(kind==='sucked'){ Snd.vac(); }
     else Snd.fall();
   } else { m.aiRespawnT=3; }
 }
@@ -467,8 +526,9 @@ function marblePhysics(m,dt,accV,accU){
     else { m.z=h2; }
   }
   if(!m.grounded){
+    const zPrev=m.z;
     m.z+=m.vz*dt;
-    if(!isNaN(h2)&&m.z<=h2){
+    if(!isNaN(h2)&&m.z<=h2&&(zPrev>=h2-0.3||h2-m.z<1.4)){
       const impact=-m.vz;
       if(impact>14&&!m.dropIn){ m.z=h2; die(m,'shatter'); return; }
       m.z=h2; m.grounded=true; m.dropIn=false;
@@ -510,6 +570,42 @@ function updateHazards(dt){
           if(player.alive&&!player.hidden&&player.grounded&&Math.hypot(player.v-h.v,player.u-h.u)<1.3)
             die(player,'eaten');
         }
+      }
+    } else if(h.type==='hammer'){
+      h.phase=(h.phase+dt)%1.7;
+      // slam window just after t=1.2
+      if(h.phase>=1.2&&h.phase<1.32&&!h.hit){
+        h.hit=true; if(player.alive&&!player.hidden&&player.grounded&&
+          Math.hypot(player.v-h.v,player.u-h.u)<1.35) die(player,'smashed');
+        if(Math.hypot(player.v-h.v,player.u-h.u)<7) Snd.thud();
+      }
+      if(h.phase<1.2) h.hit=false;
+    } else if(h.type==='piston'){
+      h.phase=(h.phase+dt)%2.2;
+      if(h.phase<0.1&&!h.hit){ h.hit=true;
+        if(player.alive&&!player.hidden&&Math.hypot(player.v-h.v,player.u-h.u)<1.35){
+          const dv=player.v-h.v||0.3, du=player.u-h.u||0.3, d=Math.hypot(dv,du);
+          player.vv+=dv/d*6.5; player.vu+=du/d*6.5; player.vz=5.5; player.grounded=false;
+          Snd.boing(); }
+      }
+      if(h.phase>0.5) h.hit=false;
+    } else if(h.type==='vacuum'){
+      if(player.alive&&!player.hidden&&player.grounded&&
+        player.v>=h.zone.v0&&player.v<=h.zone.v1&&player.u>=h.zone.u0&&player.u<=h.zone.u1){
+        const dv=h.v-player.v, du=h.u-player.u, d=Math.hypot(dv,du)||1;
+        player.vv+=dv/d*h.pull*dt; player.vu+=du/d*h.pull*dt;
+        if(d<1.0) die(player,'sucked');
+      }
+    } else if(h.type==='catapult'){
+      if(h.busyT>0){ h.busyT-=dt;
+        if(h.busyT<=0){
+          player.hidden=false; player.grounded=false;
+          player.vv=h.launch.vv; player.vu=h.launch.vu; player.vz=h.launch.vz;
+          player.z+=0.15; Snd.boing(); }
+      } else if(player.alive&&!player.hidden&&player.grounded&&
+        player.v>=h.rect.v0&&player.v<=h.rect.v1&&player.u>=h.rect.u0&&player.u<=h.rect.u1){
+        h.busyT=0.35; player.hidden=true; player.vv=0; player.vu=0;
+        if(h.snap){ player.v=h.snap.v; player.u=h.snap.u; }
       }
     } else if(h.type==='tube'){
       if(h.busyT>0){ h.busyT-=dt;
@@ -591,9 +687,9 @@ function physics(dt){
   if(safeT>0.4&&player.grounded&&Math.hypot(player.vv,player.vu)<7&&!inDyn(player.v,player.u)){ safeT=0;
     const c=cellAt(player.v,player.u);
     if(c&&c.type===NORMAL){ let ok=true;
-      for(const [dv,du] of [[1.2,0],[-1.2,0],[0,1.2],[0,-1.2]]){
+      for(const [dv,du] of [[0.9,0],[-0.9,0],[0,0.9],[0,-0.9]]){
         const hh=groundH(player.v+dv,player.u+du);
-        if(isNaN(hh)||Math.abs(hh-(isNaN(h2)?0:h2))>0.7){ ok=false; break; } }
+        if(isNaN(hh)||Math.abs(hh-(isNaN(h2)?0:h2))>0.8){ ok=false; break; } }
       if(ok) lastSafe={v:player.v,u:player.u}; } }
   // goal
   const c=cellAt(player.v,player.u);
@@ -670,6 +766,46 @@ function drawMuncher(g,h){
   g.fillStyle='#12240f'; g.beginPath();
   g.arc(px-3,ey-2,1.6,0,Math.PI*2); g.arc(px+3,ey-2,1.6,0,Math.PI*2); g.fill();
 }
+function drawHammer(g,h){
+  const gh=groundH(h.v,h.u); const base=isNaN(gh)?8:gh;
+  const ph=h.phase, lift=ph<1.0?ph:(ph<1.2?1:(ph<1.32?1-(ph-1.2)/0.12:0));
+  const hz=base+0.25+lift*2.1;
+  const px=projX(h.v,h.u)+offX-camX;
+  const gy=projY(h.v,h.u,base)+offY-camY, py=projY(h.v,h.u,hz)+offY-camY;
+  g.fillStyle='rgba(10,6,4,.4)'; g.beginPath();
+  g.ellipse(px,gy-1,10*(1-lift*0.35),4.5*(1-lift*0.35),0,0,Math.PI*2); g.fill();
+  g.strokeStyle='#5c5648'; g.lineWidth=3; g.beginPath(); g.moveTo(px,gy-46); g.lineTo(px,py-8); g.stroke();
+  const grd=g.createLinearGradient(px-13,py-16,px+13,py);
+  grd.addColorStop(0,'#f2d878'); grd.addColorStop(0.5,'#cfa53a'); grd.addColorStop(1,'#8f6d1c');
+  g.fillStyle=grd; g.beginPath();
+  if(g.roundRect) g.roundRect(px-13,py-17,26,15,4); else g.rect(px-13,py-17,26,15);
+  g.fill(); g.strokeStyle='#4d3c10'; g.lineWidth=1; g.stroke();
+}
+function drawPiston(g,h){
+  const gh=groundH(h.v,h.u); if(isNaN(gh)) return;
+  const ph=h.phase, ext=ph<0.1?1:(ph<0.5?1-(ph-0.1)/0.4:(ph>1.9?(ph-1.9)/0.3*0.25:0));
+  const px=projX(h.v,h.u)+offX-camX, gy=projY(h.v,h.u,gh)+offY-camY;
+  g.fillStyle='rgba(10,6,4,.35)'; g.beginPath(); g.ellipse(px,gy-1,11,4.5,0,0,Math.PI*2); g.fill();
+  const n=4;
+  for(let i=0;i<n;i++){
+    const yy=gy-4-i*(4+ext*7);
+    const grd=g.createLinearGradient(px-11,yy-4,px+11,yy+2);
+    grd.addColorStop(0,'#f2d878'); grd.addColorStop(0.6,'#cfa53a'); grd.addColorStop(1,'#8f6d1c');
+    g.fillStyle=grd; g.beginPath(); g.ellipse(px,yy,11-i*1.1,4.2,0,0,Math.PI*2); g.fill(); }
+}
+function drawVacuum(g,h){
+  const gh=groundH(h.v,h.u); const base=isNaN(gh)?8:gh;
+  const px=projX(h.v,h.u)+offX-camX, py=projY(h.v,h.u,base)+offY-camY;
+  for(let i=0;i<3;i++){
+    const grd=g.createLinearGradient(px-14,py-10-i*8,px+14,py-2-i*8);
+    grd.addColorStop(0,'#f2d878'); grd.addColorStop(0.6,'#cfa53a'); grd.addColorStop(1,'#8f6d1c');
+    g.fillStyle=grd; g.beginPath(); g.ellipse(px,py-6-i*8,14-i*2,5.5,0,0,Math.PI*2); g.fill(); }
+  const t=simT*3%1;
+  g.fillStyle='rgba(230,230,255,.5)';
+  for(let i=0;i<3;i++){ const k=(t+i/3)%1;
+    const sx=px-38*(1-k)*Math.sign(1), sy=py-8;
+    g.beginPath(); g.arc(px-38+38*k,sy,1.8,0,Math.PI*2); g.fill(); }
+}
 function text(g,s,x,y,size,color,align,font){
   g.font=`900 ${size}px ${font||'"Courier New",monospace'}`; g.textAlign=align||'center'; g.textBaseline='middle';
   g.fillStyle='rgba(0,0,0,.75)'; g.fillText(s,x+2,y+2); g.fillStyle=color; g.fillText(s,x,y);
@@ -701,9 +837,13 @@ function render(dt){
   const ents=[];
   for(const m of marbles) if(m.active&&!m.hidden&&(m.alive||(m.kind==='player'&&m.deathKind==='fall'&&stateT<0.9)))
     ents.push({k:m.v+m.u,m});
-  for(const h of hazards) if(h.type==='muncher') ents.push({k:h.v+h.u,h});
+  for(const h of hazards) if(['muncher','hammer','piston','vacuum'].includes(h.type)) ents.push({k:h.v+h.u,h});
   ents.sort((a,b)=>a.k-b.k);
-  for(const e of ents){ if(e.m){ drawMarbleG(g,e.m); redrawFront(g,e.m); } else drawMuncher(g,e.h); }
+  for(const e of ents){ if(e.m){ drawMarbleG(g,e.m); redrawFront(g,e.m); }
+    else if(e.h.type==='muncher') drawMuncher(g,e.h);
+    else if(e.h.type==='hammer') drawHammer(g,e.h);
+    else if(e.h.type==='piston') drawPiston(g,e.h);
+    else if(e.h.type==='vacuum') drawVacuum(g,e.h); }
   for(const s of shards){ s.t+=dt; s.x+=s.vx*dt; s.y+=s.vy*dt; s.vy+=460*dt;
     g.globalAlpha=Math.max(0,1-s.t/1.1); g.fillStyle=s.col||'#c9d6ff';
     g.beginPath(); g.arc(s.x,s.y,s.r,0,Math.PI*2); g.fill(); g.globalAlpha=1; }
@@ -718,7 +858,7 @@ function render(dt){
     text(g,'GET READY!',320,196,20,'#eef2ff');
     if(stateT>1.5){ state='race'; stateT=0; Snd.ready(2); } }
   if(state==='race'&&!player.alive){
-    const dm={shatter:'SMASHED!',fall:'OFF THE EDGE!',eaten:'GULPED!',dissolved:'DISSOLVED!'};
+    const dm={shatter:'SMASHED!',fall:'OFF THE EDGE!',eaten:'GULPED!',dissolved:'DISSOLVED!',smashed:'HAMMERED!',sucked:'VACUUMED!'};
     text(g,dm[player.deathKind]||'OUCH!',320,168,22,'#ff97a5'); }
   if(state==='race'&&paused){ text(g,'PAUSED',320,180,30,'#eef2ff'); text(g,'press P or click',320,214,14,'#9fb0e8'); }
   if(state==='goal'){ stateT+=dt;
@@ -729,7 +869,7 @@ function render(dt){
     if(timeLeft<=0.01&&stateT>2.4){
       if(raceIdx+1<RACES.length){ loadRace(raceIdx+1); }
       else {
-        text(g,'AERIAL RACE is under construction in this build',320,246,14,'#9fb0e8');
+        text(g,'SILLY RACE is under construction in this build',320,246,14,'#9fb0e8');
         if(stateT>5.2){ state='title'; stateT=0; } } } }
   if(state==='timeup'){ stateT+=dt;
     text(g,"TIME'S UP",320,160,34,'#ff4a60');
@@ -747,7 +887,7 @@ function renderTitle(g){
   g.strokeStyle='#1a0508'; g.lineWidth=10; g.strokeText('MARBLE',320,120); g.strokeText('MADNESS',320,186);
   g.fillStyle=grad; g.fillText('MARBLE',320,120); g.fillText('MADNESS',320,186);
   text(g,'A M I G A   T R I B U T E',320,232,13,'#9fb0e8');
-  text(g,'PRACTICE BUILD v'+VERSION+' — 3 races · Steelie, munchers, acid pools, moving hills',320,258,12,'#66708f');
+  text(g,'PRACTICE BUILD v'+VERSION+' — 4 races · Steelie · munchers · acid · hills · hammers · catapult',320,258,12,'#66708f');
   if(Math.floor(demoT*1.6)%2===0) text(g,'CLICK  OR  PRESS  SPACE',320,300,18,'#ffd23a');
   text(g,'arrows / WASD roll the marble · click = mouse trackball · drag on touch · gamepad stick',320,338,12,'#8d97b8');
   text(g,'reach the GOAL before the clock runs out — big drops smash the marble',320,358,12,'#8d97b8');
