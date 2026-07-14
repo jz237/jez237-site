@@ -34,7 +34,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics,
    dynamic (animated) wave bands, multi-race chain with time carryover, Steelie rival AI. */
-const VERSION = '0.7.0';
+const VERSION = '0.8.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
@@ -313,6 +313,51 @@ function buildSilly(){ newGrid(26,58);
   slab(5,52,5,55,7.2,GOLDW); slab(20,52,20,55,7.2,GOLDW); slab(6,55,19,55,7.4,GOLDW);
   decorFn=(g,ox,oy)=>{ goalText(g,12.5,52.6,5.5,ox,oy); };
 }
+function buildUltimate(){ newGrid(26,102);
+  const DOTF={tint:'#cf8a3a',dots:true}, GRID={tex:'grid',tint:'#9aa0b4'};
+  const RCHK={tex:'check',tint:'#b8452f'}, BLUE={tint:'#3d7ce0'};
+  // polka-dot start plateau with an L-notch
+  slab(6,0,19,8,26,DOTF); carve(6,0,10,3);
+  rampU(9,9,12,11,26,24,GRID);
+  // floating islands over the starfield
+  slab(8,12,15,16,24,GRID);
+  slab(11,17,12,18,23.6,GRID);
+  slab(4,19,11,24,23,GRID);
+  hazards.push({type:'muncher',v:7,u:21,homeV:7,homeU:21,phase:0,state:'idle',hopT:0,tv:7,tu:21});
+  slab(12,22,13,23,22.6,GRID);
+  slab(13,24,20,29,22,GRID);
+  slab(15,30,16,31,21.6,GRID);
+  slab(8,32,17,36,21,GRID);
+  // red checker terraces
+  rampU(5,37,20,40,21,19,RCHK);
+  slab(5,41,20,44,17.5,RCHK);
+  hazards.push({type:'muncher',v:12,u:42,homeV:12,homeU:42,phase:0.9,state:'idle',hopT:0,tv:12,tu:42});
+  rampU(5,45,20,48,17.5,15.5,RCHK);
+  slab(5,49,20,52,14,RCHK);
+  for(const [av,au,dv,du] of [[9,50,2.6,1.2],[16,51,-2.2,1.5]])
+    hazards.push({type:'acid',v:av,u:au,dv,du,zone:{v0:6,v1:19,u0:49,u1:52},r:1.0,wob:Math.random()*6});
+  // blue pyramid field
+  rampU(4,53,21,55,14,13.5,GRID);
+  slab(4,56,21,66,13.5,GRID);
+  pyramid(6,58,13.5,15.6,BLUE); pyramid(12,57,13.5,15.6,BLUE); pyramid(18,59,13.5,15.6,BLUE);
+  pyramid(9,62,13.5,15.6,BLUE); pyramid(15,63,13.5,15.6,BLUE);
+  // hammer & piston alley
+  rampU(7,67,18,69,13.5,12.5,GRID);
+  slab(7,70,18,79,12.5,GRID);
+  hazards.push({type:'hammer',v:10,u:72,phase:0.2});
+  hazards.push({type:'hammer',v:15,u:76,phase:1.0});
+  hazards.push({type:'piston',v:12.5,u:74,phase:0.5});
+  hazards.push({type:'piston',v:9,u:78,phase:1.4});
+  // wave finale
+  rampU(5,80,20,82,12.5,11,RCHK);
+  dynWaves(5,83,20,92,11,9.5,0.5,6,7,2.2,{tex:'grid',tint:'#79b6b9'});
+  // final checker descent + goal
+  rampU(5,93,20,96,9.5,8,RCHK);
+  slab(5,97,20,98,8,RCHK);
+  slab(6,97,19,98,8,{type:GOAL});
+  slab(4,93,4,99,10,RCHK); slab(21,93,21,99,10,RCHK); slab(5,99,20,99,10.2,RCHK);
+  decorFn=(g,ox,oy)=>{ goalText(g,12.5,94.8,8.3,ox,oy); };
+}
 const RACES=[
   { name:'PRACTICE RACE', time:60, start:[11.5,4], build:buildPractice, steelie:null },
   { name:'BEGINNER RACE', time:60, start:[12.5,3], build:buildBeginner,
@@ -321,6 +366,8 @@ const RACES=[
     steelie:{ v:12, u:56, triggerU:48 } },
   { name:'AERIAL RACE', time:30, start:[6.5,2], build:buildAerial, steelie:null },
   { name:'SILLY RACE', time:20, start:[12.5,1], build:buildSilly, steelie:null, basis:BASIS_FLIP },
+  { name:'ULTIMATE RACE', time:20, start:[14,2], build:buildUltimate,
+    steelie:{ v:12, u:50, triggerU:42 }, stars:true },
 ];
 
 /* ---------- prerender ---------- */
@@ -386,6 +433,10 @@ function drawCellC(g,v,u,ox,oy,c){
     g.fillStyle=topColor(c); g.strokeStyle=g.fillStyle; g.lineWidth=1; g.beginPath();
     g.moveTo(x00,y00); g.lineTo(x10,y10); g.lineTo(x11,y11); g.lineTo(x01,y01);
     g.closePath(); g.fill(); g.stroke();
+    if(c.dots){ const hsh=(v*31+u*17)%97;
+      if(hsh%3!==2){ const cols=['#d94b30','#a8382a','#b8386e'];
+        g.fillStyle=cols[hsh%3]; g.beginPath();
+        g.arc((x00+x11)/2+((hsh%7)-3),(y00+y11)/2+((hsh%5)-2),2.6+(hsh%2),0,Math.PI*2); g.fill(); } }
     if(c.tex==='grid'){ g.strokeStyle=c.tint?'rgba(30,50,54,.45)':'rgba(52,60,102,.5)'; g.lineWidth=1; g.beginPath();
       g.moveTo(x00,y00); g.lineTo(x10,y10); g.lineTo(x11,y11); g.lineTo(x01,y01); g.closePath(); g.stroke(); }
   }
@@ -482,12 +533,14 @@ let inpV=0,inpU=0, qaInp=null, mouseDV=0,mouseDU=0;
 addEventListener('keydown',e=>{ if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key)) e.preventDefault();
   keys[e.key.toLowerCase()]=true;
   if(e.key===' '&&(state==='title'||state==='timeup')) startGame();
+  if(e.key===' '&&state==='ending'&&stateT>1.2){ state='title'; stateT=0; }
   if(e.key.toLowerCase()==='p'&&state==='race'){ paused=!paused; }
   if(e.key.toLowerCase()==='m'){ Snd.setMuted(!Snd.muted); }
   Snd.unlock(); });
 addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
 cv.addEventListener('click',()=>{ Snd.unlock();
   if(state==='title'||state==='timeup'){ startGame(); return; }
+  if(state==='ending'&&stateT>1.2){ state='title'; stateT=0; return; }
   if(state==='race'&&!('ontouchstart' in window)){ cv.requestPointerLock&&cv.requestPointerLock(); }
   if(paused) paused=false; });
 addEventListener('mousemove',e=>{ if(document.pointerLockElement!==cv||state!=='race') return;
@@ -891,6 +944,11 @@ function render(dt){
   const g=ctx2; g.clearRect(0,0,640,400);
   if(state==='title'){ renderTitle(g); return; }
   updateCam();
+  if(RACES[raceIdx].stars){
+    for(let i=0;i<90;i++){ const hx=(i*127)%offW, hy=(i*211)%offH;
+      const sx=hx-camX, sy=hy-camY; if(sx<0||sx>640||sy<0||sy>400) continue;
+      g.fillStyle=i%4?'rgba(200,210,255,.5)':'rgba(255,240,200,.7)';
+      g.fillRect(sx,sy,i%3?1:2,i%3?1:2); } }
   g.drawImage(off,camX,camY,640,400,0,0,640,400);
   // animated wave band redraw (only cells near viewport)
   if(dynBand){ g.save(); g.translate(-camX,-camY);
@@ -946,9 +1004,19 @@ function render(dt){
     text(g,'TIME BONUS  '+String(Math.ceil(timeLeft)).padStart(2,'0')+'  ×100',320,196,16,'#c8d2f8');
     if(timeLeft<=0.01&&stateT>2.4){
       if(raceIdx+1<RACES.length){ loadRace(raceIdx+1); }
-      else {
-        text(g,'ULTIMATE RACE is under construction in this build',320,246,14,'#9fb0e8');
-        if(stateT>5.2){ state='title'; stateT=0; } } } }
+      else { state='ending'; stateT=0; shards=[]; Snd.goal(); } } }
+  if(state==='ending'){ stateT+=dt;
+    if(Math.random()<dt*6){ const fx=80+Math.random()*480, fy=60+Math.random()*200;
+      const hue=['#ffd23a','#7fd4ff','#ff7a8a','#8fd07a'][Math.floor(Math.random()*4)];
+      for(let i=0;i<14;i++){ const a=i/14*Math.PI*2;
+        shards.push({x:fx,y:fy,vx:Math.cos(a)*(60+Math.random()*60),vy:Math.sin(a)*(60+Math.random()*60)-30,r:2,t:0,col:hue}); }
+      if(Math.random()<0.5) Snd.count(); }
+    text(g,'CONGRATULATIONS!',320,130,34,'#ffd23a');
+    text(g,'YOU BEAT ALL SIX RACES',320,172,20,'#eef2ff');
+    text(g,'FINAL SCORE  '+score,320,212,22,'#7fd4ff');
+    text(g,'the Amiga secret level, 2-player mode and music are still on the way',320,252,13,'#9aa6cc');
+    if(stateT>2){ text(g,'CLICK OR PRESS SPACE',320,300,16,'#ffd23a'); }
+    if(stateT>2&&(keys[' ']||false)){ state='title'; stateT=0; } }
   if(state==='timeup'){ stateT+=dt;
     text(g,"TIME'S UP",320,160,34,'#ff4a60');
     text(g,'FINAL SCORE  '+score,320,206,18,'#eef2ff');
@@ -965,7 +1033,7 @@ function renderTitle(g){
   g.strokeStyle='#1a0508'; g.lineWidth=10; g.strokeText('MARBLE',320,120); g.strokeText('MADNESS',320,186);
   g.fillStyle=grad; g.fillText('MARBLE',320,120); g.fillText('MADNESS',320,186);
   text(g,'A M I G A   T R I B U T E',320,232,13,'#9fb0e8');
-  text(g,'PRACTICE BUILD v'+VERSION+' — 5 races incl. the upside-down SILLY RACE',320,258,12,'#66708f');
+  text(g,'PRACTICE BUILD v'+VERSION+' — ALL SIX RACES · beat the Ultimate to finish',320,258,12,'#66708f');
   if(Math.floor(demoT*1.6)%2===0) text(g,'CLICK  OR  PRESS  SPACE',320,300,18,'#ffd23a');
   text(g,'arrows / WASD roll the marble · click = mouse trackball · drag on touch · gamepad stick',320,338,12,'#8d97b8');
   text(g,'reach the GOAL before the clock runs out — big drops smash the marble',320,358,12,'#8d97b8');
