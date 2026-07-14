@@ -19,6 +19,20 @@
     }
   },
   {
+    "id": "2026-07-13-miniature-diorama-miniature-saffron-wind-kite-maker-courtya",
+    "title": "Miniature Saffron Wind Kite-Maker Courtyard",
+    "tests": "miniature scale fidelity,active multi-figure workflow,tactile handmade materials,cutaway mechanism,macro depth and lighting",
+    "prompt": "Create a finished square photorealistic macro photograph of an intricate 1:32 scale handmade miniature diorama called the Saffron Wind Kite-Maker Courtyard, built inside the concave channel of a split sun-baked terracotta roof tile on a model-maker workbench. Show a tiny stepped desert courtyard with pale lime-plaster walls, carved cork sandstone arches, basswood balconies, woven-thread shade canopies, paper-thin silk kites on bamboo-splinter frames, and three tiny artisan figurines actively cutting a swallowtail sail, steaming a curved spar, and testing a geometric kite in a visible desk-fan breeze. Add saffron and indigo fabric scraps, pinhead dye bowls, hair-thin rigging, a matchstick winding rack, seed-bead spools, sun-bleached baskets, miniature desert herbs, chalky pigment dust, and a cutaway brass-wire counterweight reel beneath the courtyard. Make the small scale unmistakable with tweezers, a size 000 paintbrush, miniature clamps, a steel ruler, a thimble, loose splinters, glue beads, crooked hand-cut edges, brush texture, paper-clay fingerprints, and the broken tile edge. Use low three-quarter macro framing, crisp late-afternoon simulated sunlight, striped canopy shadows, warm apricot and saffron against cobalt and turquoise, tactile fibers, clay, brass, translucent kite paper, and dense coherent active-workflow detail. No readable signage, captions, poster, prompt card, full-size ambiguity, logos, watermark, or cinematic action. Reusable fill-in-the-blank template: Create a finished macro photograph of an intricate [SCALE] miniature diorama called [PLACE_NAME], built inside [UNEXPECTED_CONTAINER_OR_SETTING], with [PRIMARY_STRUCTURES], [HANDMADE_MATERIALS], [TINY_FIGURES_OR_VEHICLES] actively performing [VISIBLE_WORKFLOW], [WEATHERED_SURFACE_DETAILS], visible scale cues, and a cutaway glimpse of [HIDDEN_MECHANISM]. Use [CAMERA_OR_FRAMING], [LIGHTING_CONTRAST], tactile handmade seams, and dense coherent detail; avoid readable signage, full-size ambiguity, prompt-card composition, logos, and watermark. Example substitution: [SCALE] = 1:32; [PLACE_NAME] = Saffron Wind Kite-Maker Courtyard; [UNEXPECTED_CONTAINER_OR_SETTING] = the concave channel of a split terracotta roof tile; [PRIMARY_STRUCTURES] = stepped lime-plaster courtyard, cork arches, basswood balconies, and thread canopies; [HANDMADE_MATERIALS] = translucent kite paper, bamboo splinters, thread rigging, seed-bead spools, paper clay, brass wire, pigment dust, and fabric scraps; [TINY_FIGURES_OR_VEHICLES] = three kite artisans; [VISIBLE_WORKFLOW] = cutting a sail, steaming a spar, and wind-testing a finished kite; [WEATHERED_SURFACE_DETAILS] = sun-bleached baskets, chalk dust, brush texture, glue beads, and crooked hand-cut edges; [HIDDEN_MECHANISM] = a counterweight reel and pulley beneath the launch platform; [CAMERA_OR_FRAMING] = low three-quarter courtyard-level macro view; [LIGHTING_CONTRAST] = crisp apricot late-afternoon light, striped shadows, cobalt fabric, and turquoise accents.",
+    "image": "images/2026-07-13-miniature-diorama-miniature-saffron-wind-kite-maker-courtya.jpg",
+    "thumb": "thumbs/2026-07-13-miniature-diorama-miniature-saffron-wind-kite-maker-courtya.webp",
+    "color": "#75583f",
+    "date": "2026-07-13",
+    "batch": "Daily Prompt",
+    "slot": "miniature-diorama",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
+  },
+  {
     "id": "2026-07-13-hybrid-creature-wild-ivory-trench-rook-in-the-wild",
     "title": "Ivory Trench Rook: In the Wild",
     "tests": "Matching adult phenotype; narwhal tusk, forehead, skin, flippers and tail posture; giant-isopod armor, antennae, fourteen legs, hooked feet and rear shield; strict side profile; Arctic under-ice habitat; natural-history realism.",
