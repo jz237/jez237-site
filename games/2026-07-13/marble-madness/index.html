@@ -33,7 +33,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
 "use strict";
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics. */
-const VERSION = '0.2.0';
+const VERSION = '0.3.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
@@ -48,33 +48,60 @@ function screenToGrid(sx,sy){ return { dv:(AUy*sx - AUx*sy)/DET, du:(-AXy*sx + A
 
 /* ---------- course model ---------- */
 const NORMAL=0, GOAL=1;
-const CV=22, CU=64;                 // cells across / down
-const cells = new Array(CU);        // cells[u][v] = {h00,h10,h01,h11,type} or null
+const CV=24, CU=88;                 // cells across / down
+const cells = new Array(CU);        // cells[u][v] = {h00,h10,h01,h11,type,tint,tex} or null
 for(let u=0;u<CU;u++){ cells[u]=new Array(CV).fill(null); }
-function slab(v0,u0,v1,u1,h,type){ for(let u=u0;u<=u1;u++)for(let v=v0;v<=v1;v++) cells[u][v]={h00:h,h10:h,h01:h,h11:h,type:type||NORMAL}; }
-function rampU(v0,u0,v1,u1,hTop,hBot){ const n=(u1+1-u0);
+function put(v,u,h00,h10,h01,h11,o){ cells[u][v]={h00,h10,h01,h11,type:(o&&o.type)||NORMAL,tint:(o&&o.tint)||null,tex:(o&&o.tex)||null}; }
+function slab(v0,u0,v1,u1,h,o){ for(let u=u0;u<=u1;u++)for(let v=v0;v<=v1;v++) put(v,u,h,h,h,h,o); }
+function rampU(v0,u0,v1,u1,hTop,hBot,o){ const n=(u1+1-u0);
   for(let u=u0;u<=u1;u++){ const a=hTop+(hBot-hTop)*(u-u0)/n, b=hTop+(hBot-hTop)*(u+1-u0)/n;
-    for(let v=v0;v<=v1;v++) cells[u][v]={h00:a,h10:a,h01:b,h11:b,type:NORMAL}; } }
+    for(let v=v0;v<=v1;v++) put(v,u,a,a,b,b,o); } }
+function rampV(v0,u0,v1,u1,hL,hR,o){ const n=(v1+1-v0);
+  for(let v=v0;v<=v1;v++){ const a=hL+(hR-hL)*(v-v0)/n, b=hL+(hR-hL)*(v+1-v0)/n;
+    for(let u=u0;u<=u1;u++) put(v,u,a,b,a,b,o); } }
+/* continuous field: base slopes u0->u1, sine waves with amplitude eased to 0 at both u ends */
+function waves(v0,u0,v1,u1,hTop,hBot,amp,perV,perU,o){
+  const f=(v,u)=>{ const t=(u-u0)/(u1+1-u0);
+    const eased=Math.min(1,Math.min(u-u0,(u1+1)-u)/2.2);
+    return hTop+(hBot-hTop)*t + amp*Math.max(0,eased)*Math.sin(v*Math.PI*2/perV)*Math.sin(u*Math.PI*2/perU); };
+  for(let u=u0;u<=u1;u++)for(let v=v0;v<=v1;v++) put(v,u,f(v,u),f(v+1,u),f(v,u+1),f(v+1,u+1),o);
+}
+function pyramid(v,u,base,peak,o){ const oo=o||{};
+  put(v,u,  base,base,base,peak,oo); put(v+1,u,  base,base,peak,base,oo);
+  put(v,u+1,base,peak,base,base,oo); put(v+1,u+1,peak,base,base,base,oo); }
 
-/* Practice Race — layout approximates the arcade/Amiga practice course.
-   Sections: start plateau -> ramp -> open shelf -> ramp -> walled trench ->
-   field with bumper blocks -> long ramp -> goal apron. */
-slab(3,0,18,7,12);                 // start plateau
-slab(2,0,2,7,13); slab(19,0,19,7,13); slab(3,0,18,0,13);   // rims
-rampU(3,8,18,15,12,8);             // ramp 1
-rampU(2,8,2,15,13,9); rampU(19,8,19,15,13,9);              // sloped rims
-slab(5,16,16,21,8);                // open shelf (edges bare — you can fall)
-rampU(5,22,16,27,8,5);             // ramp 2
-slab(7,28,14,35,5);                // trench floor
-slab(5,28,6,35,7); slab(15,28,16,35,7);                    // trench walls
-slab(4,36,17,43,5);                // field
-slab(8,39,9,40,6); slab(12,41,13,42,6);                    // bumper blocks
-rampU(4,44,17,51,5,1);             // long ramp
-slab(2,52,19,58,1);                // goal apron
-slab(3,55,18,56,1,GOAL);           // goal strip (checker)
-slab(1,52,1,58,2); slab(20,52,20,58,2);                    // apron rims
-slab(2,59,19,60,3);                // end wall
-const START_V=10.5, START_U=3, RACE_TIME=24;
+/* Practice Race — rebuilt to the arcade/NES course structure (VGMaps reference):
+   wavy grid start plateau -> slope -> pyramid+fort zone -> long rolling wave descent ->
+   ledge runout -> switchback chute (2 hairpin lanes) -> goal basin bottom-left. */
+const RED={tint:'#b34852'}, DARK={tint:'#79809f'}, GRID={tex:'grid'};
+waves(3,0,20,13,12,12,0.55,7,9,GRID);                     // start plateau (bumpy graph-paper)
+rampU(3,14,20,19,12,10,GRID);                             // slope down
+slab(3,20,20,27,10);                                      // fort zone floor
+pyramid(5,21,10,12.2); pyramid(17,21,10,12.2);            // flanking pyramids
+slab(8,22,15,24,12.6,RED);                                // fort block
+slab(10,22,11,24,10);  slab(13,22,14,24,10);              // two slots through the fort
+slab(8,22,8,24,12.6,RED); slab(12,22,12,24,12.6,RED); slab(15,22,15,24,12.6,RED); // fort piers
+waves(3,28,20,43,10,5,0.6,6,8,GRID);                      // long rolling descent
+rampU(3,44,20,50,5,4);                                    // runout
+slab(16,45,19,49,5.6,RED);                                // raised red ledge (right side)
+/* switchback chute */
+slab(14,51,17,51,4,DARK);                                 // entry gap floor (right)
+slab(3,51,13,51,6,DARK);                                  // entry rim (gap at right v14-17)
+rampV(4,52,17,56,2.5,4,DARK);                             // lane A: descends to the left
+slab(4,57,7,57,2.5,DARK);                                 // hairpin gap floor (left)
+slab(8,57,17,57,6,DARK);                                  // hairpin divider (gap left v4-7)
+rampV(4,58,17,62,2.5,1,DARK);                             // lane B: descends to the right
+slab(14,63,17,63,1,DARK);                                 // exit gap floor (right)
+slab(3,63,13,63,4,DARK);                                  // exit rim (gap right v14-17)
+slab(3,52,3,63,6,DARK); slab(18,52,18,63,6,DARK);         // chute side walls
+/* runout + goal basin (bottom-left) */
+rampU(3,64,18,72,1,0.5);
+slab(19,64,19,72,3); slab(2,64,2,72,3);                   // runout side rims
+rampU(2,73,13,77,0.5,0);
+slab(2,78,13,82,0);
+slab(3,78,12,79,0,{type:GOAL});                           // goal checker strip
+slab(14,73,14,83,2.5); slab(1,73,1,83,2.5); slab(2,83,13,83,2.5);  // basin walls
+const START_V=11.5, START_U=4, RACE_TIME=60;
 
 function cellAt(v,u){ const iu=Math.floor(u), iv=Math.floor(v);
   if(iu<0||iu>=CU||iv<0||iv>=CV) return null; return cells[iu][iv]; }
@@ -83,14 +110,18 @@ function groundH(v,u){ const c=cellAt(v,u); if(!c) return NaN;
   return (c.h00*(1-fv)+c.h10*fv)*(1-fu) + (c.h01*(1-fv)+c.h11*fv)*fu; }
 
 /* ---------- prerender course ---------- */
-const WALL_U='#333c6b', WALL_V='#57639f', ABYSS=-2.5;
-function topColor(c){ // shade by down-course slope; raised ledges lighter
-  const s=(c.h01+c.h11-c.h00-c.h10)/2; const base=(c.h00+c.h10+c.h01+c.h11)/4;
-  let r=160,g=174,b=222;
+const ABYSS=-2.5;
+function hex2rgb(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
+function baseRGB(c){ if(c.tint) return hex2rgb(c.tint);
+  const avg=(c.h00+c.h10+c.h01+c.h11)/4;
+  return avg>=11.9?[176,188,232]:[160,174,222]; }
+function topColor(c){ // shade by down-course slope
+  const s=(c.h01+c.h11-c.h00-c.h10)/2; const [r,g,b]=baseRGB(c);
   const k=1 + Math.max(-1.2,Math.min(0,s))*-0.13 + Math.min(1.2,Math.max(0,s))*-0.08;
-  if(base>=6.5){ r=186;g=197;b=238; }
   return `rgb(${Math.round(r*k)},${Math.round(g*k)},${Math.round(b*k)})`;
 }
+function wallColor(c,f){ const [r,g,b]=baseRGB(c);
+  return `rgb(${Math.round(r*f)},${Math.round(g*f)},${Math.round(b*f)})`; }
 let off,offX,offY,offW,offH;
 function drawCell(g,v,u,ox,oy){ const c=cells[u][v]; if(!c) return;
   const x00=projX(v,u)+ox,   y00=projY(v,u,c.h00)+oy;
@@ -100,14 +131,14 @@ function drawCell(g,v,u,ox,oy){ const c=cells[u][v]; if(!c) return;
   // +u wall (front face)
   const S=(u+1<CU)?cells[u+1][v]:null;
   const sA=S?S.h00:ABYSS, sB=S?S.h10:ABYSS;
-  if(c.h01>sA+0.01||c.h11>sB+0.01){ g.fillStyle=WALL_U; g.beginPath();
+  if(c.h01>sA+0.01||c.h11>sB+0.01){ g.fillStyle=wallColor(c,0.32); g.beginPath();
     g.moveTo(x01,y01); g.lineTo(x11,y11);
     g.lineTo(x11,projY(v+1,u+1,Math.min(sB,c.h11))+oy); g.lineTo(x01,projY(v,u+1,Math.min(sA,c.h01))+oy);
     g.closePath(); g.fill(); }
   // +v wall (right face)
   const E=(v+1<CV)?cells[u][v+1]:null;
   const eA=E?E.h00:ABYSS, eB=E?E.h01:ABYSS;
-  if(c.h10>eA+0.01||c.h11>eB+0.01){ g.fillStyle=WALL_V; g.beginPath();
+  if(c.h10>eA+0.01||c.h11>eB+0.01){ g.fillStyle=wallColor(c,0.54); g.beginPath();
     g.moveTo(x10,y10); g.lineTo(x11,y11);
     g.lineTo(x11,projY(v+1,u+1,Math.min(eB,c.h11))+oy); g.lineTo(x10,projY(v+1,u,Math.min(eA,c.h10))+oy);
     g.closePath(); g.fill(); }
@@ -122,6 +153,8 @@ function drawCell(g,v,u,ox,oy){ const c=cells[u][v]; if(!c) return;
     g.fillStyle=topColor(c); g.strokeStyle=g.fillStyle; g.lineWidth=1; g.beginPath();
     g.moveTo(x00,y00); g.lineTo(x10,y10); g.lineTo(x11,y11); g.lineTo(x01,y01);
     g.closePath(); g.fill(); g.stroke();
+    if(c.tex==='grid'){ g.strokeStyle='rgba(52,60,102,.5)'; g.lineWidth=1; g.beginPath();
+      g.moveTo(x00,y00); g.lineTo(x10,y10); g.lineTo(x11,y11); g.lineTo(x01,y01); g.closePath(); g.stroke(); }
   }
 }
 function prerender(){
@@ -134,16 +167,18 @@ function prerender(){
   off=document.createElement('canvas'); off.width=offW; off.height=offH;
   const g=off.getContext('2d');
   for(let u=0;u<CU;u++)for(let v=0;v<CV;v++) drawCell(g,v,u,offX,offY);
-  // start line (dashed) across plateau at u=6
-  g.strokeStyle='rgba(240,244,255,.85)'; g.lineWidth=2.5; g.setLineDash([9,7]); g.beginPath();
-  g.moveTo(projX(3.2,6)+offX,projY(3.2,6,12)+offY); g.lineTo(projX(18.8,6)+offX,projY(18.8,6,12)+offY);
+  // start line (dashed), following the wavy surface at u=8
+  g.strokeStyle='rgba(240,244,255,.85)'; g.lineWidth=2.5; g.setLineDash([8,6]); g.beginPath();
+  for(let i=0;i<=30;i++){ const v=3.4+(20.4-3.4)*i/30; const h=groundH(v,8);
+    const x=projX(v,8)+offX, y=projY(v,8,isNaN(h)?12:h+0.03)+offY;
+    if(i===0) g.moveTo(x,y); else g.lineTo(x,y); }
   g.stroke(); g.setLineDash([]);
-  // GOAL lettering on apron
+  // GOAL lettering before the checker strip in the basin
   const t=document.createElement('canvas'); t.width=240; t.height=56; const tg=t.getContext('2d');
   tg.font='900 44px "Arial Black",Arial,sans-serif'; tg.textAlign='center'; tg.textBaseline='middle';
   tg.lineJoin='round'; tg.strokeStyle='#3a0d12'; tg.lineWidth=9; tg.strokeText('GOAL',120,30);
   tg.fillStyle='#e33049'; tg.fillText('GOAL',120,30);
-  const cx=projX(10.8,53.4)+offX, cy=projY(10.8,53.4,1)+offY, sc=1/17;
+  const cx=projX(8,75.6)+offX, cy=projY(8,75.6,0.28)+offY, sc=1/22;
   g.setTransform(AXx*sc,AXy*sc,AUx*sc,AUy*sc,cx,cy); g.drawImage(t,-120,-28); g.setTransform(1,0,0,1,0,0);
 }
 
