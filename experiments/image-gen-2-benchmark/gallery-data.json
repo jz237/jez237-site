@@ -5044,5 +5044,24 @@
       "description": "A volcanology-bench infographic showing how cooling and thermal contraction organize fractures into polygonal basalt columns.",
       "sourceNote": "Conservative synthesis of established geology: cooling lava contracts, tensile fractures form polygonal joint networks, and cracks advance as the cooling front moves through the rock."
     }
+  },
+  {
+    "id": "2026-07-14-factual-infographic-factual-infographic-why-spider-silk-shr",
+    "title": "Factual infographic: Why Spider Silk Shrinks When Humid",
+    "tests": "Real-world/non-fiction biomaterials topic; physical natural-history lab anchor; central molecular cutaway; four-stage humidity process; two macro windows; before/after web comparison; field-context vignette; scale ladder; humidity swatches; conservative species-variation note; distinct from all archived factual topics.",
+    "prompt": "Create a finished square factual infographic titled \"WHY SPIDER SILK SHRINKS WHEN HUMID\" explaining the real-world, non-fiction biomaterials science of humidity-driven supercontraction in many orb-weaver dragline silks. Anchor the display as a photorealistic natural-history materials lab bench with an orb-weaver web in a black specimen frame, clear humidity chamber, force gauge, silk spool cards, tweezers, calibration ruler, field specimen photographs, and warm museum task lighting. Include a central whole-fiber-to-protein cutaway showing ordered beta-sheet-rich reinforcing zones among more mobile amorphous regions; a four-stage dry-to-humid sequence showing water entering, altering some molecular interactions, increasing chain mobility, and allowing shortening; matched before-and-after web vignettes; macro windows for wet dragline and bundled dry fibers; a comparison panel separating dragline silk, other web silks, and species variation; a misted field-web vignette; a scale ladder; and humidity swatches. State conservatively that strong supercontraction is characteristic of many orb-weaver dragline silks and varies among species and silk types. Use concise labels and rich tactile lab detail. Avoid invented statistics, gene names, protocols, dense paragraphs, fantasy spiders, logos, QR codes, prompt-card instructions, and flat school-poster styling.\n\nReusable prompt template: Create a finished square factual infographic titled \"WHY [BIOLOGICAL MATERIAL] CHANGES WITH [ENVIRONMENTAL CONDITION]\" explaining [REAL-WORLD/NON-FICTION MATERIALS-SCIENCE TOPIC] with conservative science. Anchor it as a photorealistic display beside a specimen and tensile-test bench; include a central fiber-and-protein cutaway, a dry-to-condition process sequence, at least two macro or microscopy windows, a material comparison panel, a field-context vignette with scale cues, condition swatches, and a concise accuracy note.\n\nExample substitution: [BIOLOGICAL MATERIAL] = orb-weaver dragline spider silk; [ENVIRONMENTAL CONDITION] = high humidity; [REAL-WORLD/NON-FICTION MATERIALS-SCIENCE TOPIC] = water-sensitive molecular interactions, protein-chain rearrangement, supercontraction, and web-tension response.",
+    "image": "images/2026-07-14-factual-infographic-factual-infographic-why-spider-silk-shr.jpg",
+    "thumb": "thumbs/2026-07-14-factual-infographic-factual-infographic-why-spider-silk-shr.webp",
+    "color": "#38352e",
+    "date": "2026-07-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Humidity-driven supercontraction in orb-weaver dragline spider silk",
+      "description": "A real-world biomaterials infographic explaining why many orb-weaver dragline silks shorten and tighten when exposed to high humidity.",
+      "sourceNote": "Conservative synthesis of established spider-silk research: absorbed water alters hydrogen-bonded and other molecular interactions in dragline silk, permitting protein chains to rearrange and the fiber to contract; magnitude varies among species and silk types."
+    }
   }
 ]
