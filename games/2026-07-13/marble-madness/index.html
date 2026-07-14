@@ -34,7 +34,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics,
    dynamic (animated) wave bands, multi-race chain with time carryover, Steelie rival AI. */
-const VERSION = '0.14.0';
+const VERSION = '0.15.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
@@ -144,6 +144,20 @@ function buildPractice(){ newGrid(24,88);
       const x=projX(v,8)+ox, y=projY(v,8,isNaN(h)?12:h+0.03)+oy;
       if(i===0) g.moveTo(x,y); else g.lineTo(x,y); }
     g.stroke(); g.setLineDash([]);
+    for(const av of [3.6,20.2]){
+      const h=groundH(av,8); if(isNaN(h)) continue;
+      const bx=projX(av,8)+ox, by=projY(av,8,h)+oy;
+      g.strokeStyle='#c23a44'; g.lineWidth=4;
+      g.beginPath(); g.moveTo(bx-9,by); g.lineTo(bx-9,by-30);
+      g.arc(bx,by-30,9,Math.PI,0); g.lineTo(bx+9,by); g.stroke(); }
+    for(const [cv,cu] of [[10.5,53.5],[10.5,55.5],[10.5,59],[10.5,61]]){
+      const h=groundH(cv,cu); if(isNaN(h)) continue;
+      const px=projX(cv,cu)+ox, py=projY(cv,cu,h+0.05)+oy;
+      g.save(); g.setTransform(AXx,AXy,AUx,AUy,px,py);
+      g.strokeStyle='rgba(255,255,255,.75)'; g.lineWidth=0.16;
+      const dir=(cu<57)?-1:1;
+      g.beginPath(); g.moveTo(dir*0.5,-0.4); g.lineTo(-dir*0.3,0); g.lineTo(dir*0.5,0.4); g.stroke();
+      g.restore(); }
     goalText(g,8,75.6,0.28,ox,oy);
   };
 }
@@ -454,7 +468,11 @@ function drawCellC(g,v,u,ox,oy,c){
         g.fillStyle=cols[hsh%3]; g.beginPath();
         g.arc((x00+x11)/2+((hsh%7)-3),(y00+y11)/2+((hsh%5)-2),2.6+(hsh%2),0,Math.PI*2); g.fill(); } }
     if(c.tex==='grid'){ g.strokeStyle=c.tint?'rgba(30,50,54,.45)':'rgba(64,74,96,.55)'; g.lineWidth=1; g.beginPath();
-      g.moveTo(x00,y00); g.lineTo(x10,y10); g.lineTo(x11,y11); g.lineTo(x01,y01); g.closePath(); g.stroke(); }
+      g.moveTo(x00,y00); g.lineTo(x10,y10); g.lineTo(x11,y11); g.lineTo(x01,y01); g.closePath();
+      const mv0x=(x00+x10)/2,mv0y=(y00+y10)/2,mv1x=(x01+x11)/2,mv1y=(y01+y11)/2;
+      const mu0x=(x00+x01)/2,mu0y=(y00+y01)/2,mu1x=(x10+x11)/2,mu1y=(y10+y11)/2;
+      g.moveTo(mv0x,mv0y); g.lineTo(mv1x,mv1y); g.moveTo(mu0x,mu0y); g.lineTo(mu1x,mu1y);
+      g.stroke(); }
   }
   if(c.type!==GOAL) edgeContours(g,v,u,ox,oy,c,x00,y00,x10,y10,x01,y01,x11,y11);
 }
@@ -1241,12 +1259,11 @@ function render(dt){
     g.globalAlpha=Math.max(0,1-f.t/1.1);
     text(g,f.txt,px,py,15,f.col); g.globalAlpha=1; }
   floaters=floaters.filter(f=>f.t<1.1);
-  // HUD
+  // HUD (arcade layout: blue score top-left, big timer top-center)
   if(numPlayers===1){
-    text(g,'SCORE',60,22,15,'#9fb0e8','center');
-    text(g,String(player.score).padStart(6,'0'),60,42,20,'#eef2ff','center');
-    text(g,'TIME',580,22,15,player.timeLeft<=6?'#ff7a8a':'#9fb0e8','center');
-    text(g,String(Math.ceil(player.timeLeft)),580,46,30,player.timeLeft<=6?'#ff4a60':'#eef2ff','center');
+    text(g,'SCORE',14,20,14,'#4f7dff','left','"Courier New",monospace');
+    text(g,player.score.toLocaleString('en-US'),14,40,19,'#8fb2ff','left');
+    text(g,String(Math.ceil(player.timeLeft)),320,30,38,player.timeLeft<=6?'#ff4a60':'#eef2ff','center');
   } else {
     text(g,'P1',26,20,13,'#8fa8f0','center');
     text(g,String(player.score).padStart(6,'0'),78,20,15,'#dfe8ff','center');
