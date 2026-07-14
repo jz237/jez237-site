@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-13T22:00:02.024478+00:00",
+  "updatedAt": "2026-07-14T10:55:30.516549+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -7075,7 +7075,7 @@
     },
     "https://openai.com/academy/codex-for-work/how-sales-teams-use-codex": {
       "image": "",
-      "checkedAt": "2026-05-16T08:00:01.469718+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://openai.com/academy/codex-for-work/how-business-operations-teams-use-codex": {
       "image": "",
@@ -7083,7 +7083,7 @@
     },
     "https://openai.com/academy/codex-for-work/how-data-science-teams-use-codex": {
       "image": "",
-      "checkedAt": "2026-05-16T08:00:01.469718+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://openai.com/index/malta-chatgpt-plus-partnership": {
       "image": "",
@@ -11611,7 +11611,7 @@
     "thumb:https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/04/anthropic-claude-opus-4-7-coding-agentic-benchmarks-release.avif",
       "localPath": "public/thumbnails/news-fdaf37413ebf2a320e.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&%3Bstrip=all&%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&%3Bw=1200": {
       "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/MetaGlasses_1.jpg?quality=90&%3Bstrip=all&%3Bcrop=8.55%2C24.971192772515%2C82.25546875%2C66.205436991061&%3Bw=1200",
@@ -12371,7 +12371,7 @@
     "thumb:https://media.thenextweb.com/2026/06/chatgpt-lockdown-mode-prompt-injection.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/06/chatgpt-lockdown-mode-prompt-injection.avif",
       "localPath": "public/thumbnails/news-8e72db52b70a7a61cf.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://aws.amazon.com/blogs/machine-learning/amazon-bedrock-agentcore-harness-is-now-generally-available-go-from-idea-to-production-grade-agent-in-minutes": {
       "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/17/ml-20804.png",
@@ -12571,7 +12571,7 @@
     "thumb:https://media.thenextweb.com/2026/06/Google-mockup.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/06/Google-mockup.avif",
       "localPath": "public/thumbnails/news-ad6c77e162986a45b1.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://techcrunch.com/2026/06/25/amazon-ups-india-bet-with-fresh-13b-ai-infrastructure-investment": {
       "image": "https://techcrunch.com/wp-content/uploads/2025/06/GettyImages-844105434.jpg?w=1024",
@@ -13293,7 +13293,7 @@
     "thumb:https://media.thenextweb.com/2026/04/Anthropic.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/04/Anthropic.avif",
       "localPath": "public/thumbnails/news-0faa5ab84d757cca24.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/06/eu-dma-aws-azure-cloud-gatekeeper-probe.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/06/eu-dma-aws-azure-cloud-gatekeeper-probe.avif",
@@ -16374,7 +16374,7 @@
     "thumb:https://media.thenextweb.com/2026/07/ollama-founders.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/ollama-founders.avif",
       "localPath": "public/thumbnails/news-2c7c2d31ef7dfb009f.avif",
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2024/07/ai-deals.jpg?resize=1200%2C675": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2024/07/ai-deals.jpg?resize=1200%2C675",
@@ -16514,7 +16514,7 @@
     "thumb:https://static.simonwillison.net/static/2026/gpt-5.6-pelicans.webp": {
       "sourceImage": "https://static.simonwillison.net/static/2026/gpt-5.6-pelicans.webp",
       "localPath": "public/thumbnails/news-ed27958952a1b7aab0.webp",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/05/meta-ai-GettyImages-2264943773.jpg?w=1024": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/05/meta-ai-GettyImages-2264943773.jpg?w=1024",
@@ -16529,7 +16529,7 @@
     "thumb:https://media.thenextweb.com/2026/07/palo-alto-arora-ai-token-pricing-must-fall.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/palo-alto-arora-ai-token-pricing-must-fall.avif",
       "localPath": "public/thumbnails/news-a10bee3b570e5b7d1e.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/STK155_OPEN_AI_4_CVirginia_A.png?quality=90&strip=all&crop=0%2C10.742221417566%2C100%2C78.515557164868&w=1200": {
       "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/02/STK155_OPEN_AI_4_CVirginia_A.png?quality=90&strip=all&crop=0%2C10.742221417566%2C100%2C78.515557164868&w=1200",
@@ -16544,7 +16544,7 @@
     "thumb:https://static.simonwillison.net/static/2026/muse-spark-1.1.png": {
       "sourceImage": "https://static.simonwillison.net/static/2026/muse-spark-1.1.png",
       "localPath": "public/thumbnails/news-40abbc741708e75d68.png",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://aidailybrief.ai/e/2026-07-09": {
       "image": "https://aidailybrief.ai/og/2026-07-09.png",
@@ -16737,27 +16737,27 @@
     "thumb:https://media.thenextweb.com/2026/05/United-Nations.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/05/United-Nations.avif",
       "localPath": "public/thumbnails/news-21c6a588d30000b52d.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/Fidji-Simo.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/Fidji-Simo.avif",
       "localPath": "public/thumbnails/news-50a92acd2f170484ac.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/ChatGPT-work.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/ChatGPT-work.avif",
       "localPath": "public/thumbnails/news-c25b70c98f2321ce1f.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/ChatGPT-Atlas.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/ChatGPT-Atlas.avif",
       "localPath": "public/thumbnails/news-b630134f5d862b4e89.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://substackcdn.com/image/youtube/w_728,c_limit/-MPGU2a67Ls": {
       "sourceImage": "https://substackcdn.com/image/youtube/w_728,c_limit/-MPGU2a67Ls",
       "localPath": "public/thumbnails/news-bd23237521868f21a5.jpg",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://aws.amazon.com/blogs/machine-learning/fine-tune-nvidia-nemotron-3-models-with-amazon-sagemaker-ai-serverless-model-customization": {
       "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/09/ml-21327.png",
@@ -16899,7 +16899,7 @@
     "thumb:https://media.thenextweb.com/2026/07/SixtyFour-cofounders-Saarth-Shah-and-Christopher-Price-at-Y-Combinators-Demo-Day-.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/SixtyFour-cofounders-Saarth-Shah-and-Christopher-Price-at-Y-Combinators-Demo-Day-.avif",
       "localPath": "public/thumbnails/news-5efe513ef5242fe9ce.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://assets.techrepublic.com/uploads/2026/07/90bb4159-359e-4271-b2a6-3f7ed60d82ef.png?f=jpeg": {
       "sourceImage": "https://assets.techrepublic.com/uploads/2026/07/90bb4159-359e-4271-b2a6-3f7ed60d82ef.png?f=jpeg",
@@ -16909,7 +16909,7 @@
     "thumb:https://images.ctfassets.net/kftzwdyauwt9/7Bf5twKHcGsjM0T5u43cg6/35ba64ea71cbb3590f551f7727c6cf71/Frame-1.png?w=1600&h=900&fit=fill": {
       "sourceImage": "https://images.ctfassets.net/kftzwdyauwt9/7Bf5twKHcGsjM0T5u43cg6/35ba64ea71cbb3590f551f7727c6cf71/Frame-1.png?w=1600&h=900&fit=fill",
       "localPath": "public/thumbnails/news-bf6de478858ae1b52e.png",
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://ph-files.imgix.net/44f6a821-899e-4ecb-a3f0-bdbf61cde95a.png?auto=format&fit=crop&frame=1&h=512&w=1024": {
       "sourceImage": "https://ph-files.imgix.net/44f6a821-899e-4ecb-a3f0-bdbf61cde95a.png?auto=format&fit=crop&frame=1&h=512&w=1024",
@@ -16919,7 +16919,7 @@
     "thumb:https://images.ctfassets.net/kftzwdyauwt9/3dibW4TSEOQpjByxBjnpr2/6ba1a2ed9346620e8788b3e013594469/bug_bounty_16_9.png?w=1600&h=900&fit=fill": {
       "sourceImage": "https://images.ctfassets.net/kftzwdyauwt9/3dibW4TSEOQpjByxBjnpr2/6ba1a2ed9346620e8788b3e013594469/bug_bounty_16_9.png?w=1600&h=900&fit=fill",
       "localPath": "public/thumbnails/news-0595a316adb14119f1.png",
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://techcrunch.com/2026/07/10/meta-removes-controversial-ai-feature-on-instagram-after-backlash": {
       "image": "https://techcrunch.com/wp-content/uploads/2026/05/instagram-header.jpg?resize=1200%2C800",
@@ -16965,7 +16965,7 @@
     "thumb:https://ph-files.imgix.net/63e46d86-91c2-47ce-b208-78eae05d1ea2.png?auto=format&fit=crop&frame=1&h=512&w=1024": {
       "sourceImage": "https://ph-files.imgix.net/63e46d86-91c2-47ce-b208-78eae05d1ea2.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "localPath": "public/thumbnails/news-b86229c4518ab11280.avif",
-      "checkedAt": "2026-07-13T16:00:01.718701+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://www.anthropic.com/api/opengraph-illustration?name=Hand+Build&backgroundColor=coral": {
       "sourceImage": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Build&backgroundColor=coral",
@@ -16999,12 +16999,12 @@
     "thumb:https://opengraph.githubassets.com/1524c359ffce16016e7b8f970b3ff38689da66af3ce8be7e3b011e027463c8a3/huggingface/transformers/releases/tag/v5.13.1": {
       "sourceImage": "https://opengraph.githubassets.com/1524c359ffce16016e7b8f970b3ff38689da66af3ce8be7e3b011e027463c8a3/huggingface/transformers/releases/tag/v5.13.1",
       "localPath": "public/thumbnails/news-892f7d5221f6fd2c15.png",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/apple-sues-openai-trade-secrets-theft-hardware.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/apple-sues-openai-trade-secrets-theft-hardware.avif",
       "localPath": "public/thumbnails/news-233fe249f81b8e4533.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://ph-files.imgix.net/fe295c12-43bb-4b77-b6cd-9de77652c161.webp?auto=format&fit=crop&frame=1&h=512&w=1024": {
       "sourceImage": "https://ph-files.imgix.net/fe295c12-43bb-4b77-b6cd-9de77652c161.webp?auto=format&fit=crop&frame=1&h=512&w=1024",
@@ -17035,12 +17035,12 @@
     "thumb:https://media.thenextweb.com/2026/04/openai-chatgpt-pro-100-codex-claude-max.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/04/openai-chatgpt-pro-100-codex-claude-max.avif",
       "localPath": "public/thumbnails/news-7ff1fb0fcf9b0e8e11.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/meta-muse-image-instagram-privacy-backlash-pulled.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/meta-muse-image-instagram-privacy-backlash-pulled.avif",
       "localPath": "public/thumbnails/news-b9fb9dd204ba152c01.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "thumb:https://assets.techrepublic.com/uploads/2026/07/google-ai-model.jpg?f=jpeg": {
       "sourceImage": "https://assets.techrepublic.com/uploads/2026/07/google-ai-model.jpg?f=jpeg",
@@ -17070,7 +17070,7 @@
     "thumb:https://media.thenextweb.com/2026/05/openai-malta-chatgpt-plus-free-citizens.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/05/openai-malta-chatgpt-plus-free-citizens.avif",
       "localPath": "public/thumbnails/news-9130a61a07e71939bb.avif",
-      "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://simonwillison.net/2026/Jul/12/bump": {
       "image": "",
@@ -17092,7 +17092,7 @@
     "thumb:https://substack-post-media.s3.amazonaws.com/public/images/2e40ce14-a532-4db6-a855-caee778250f7_3182x1790.png": {
       "sourceImage": "https://substack-post-media.s3.amazonaws.com/public/images/2e40ce14-a532-4db6-a855-caee778250f7_3182x1790.png",
       "localPath": "public/thumbnails/news-9c7671b4a1fcaaceb5.png",
-      "checkedAt": "2026-07-12T22:00:01.518156+00:00"
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     },
     "https://www.theverge.com/transportation/964132/waze-gemini-ai-voice-commands-less-chatty": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25708121/waze_conversational_report.png?quality=90&strip=all&crop=0%2C3.2347601883764%2C100%2C93.530479623247&w=1200",
@@ -17339,6 +17339,93 @@
       "sourceImage": "https://assets.techrepublic.com/uploads/2026/07/ai-ad.jpg?f=jpeg",
       "localPath": "public/thumbnails/news-4641e3ab24cda4b3ed.jpg",
       "checkedAt": "2026-07-13T22:00:02.024478+00:00"
+    },
+    "https://www.theverge.com/policy/965110/new-york-ai-data-center-moratorium": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://github.com/BerriAI/litellm/releases/tag/v1.90.4": {
+      "image": "https://opengraph.githubassets.com/0345d2764e148fd4c1f6c89e5c16302e68b8d98692bef2d68b45290ec13f8615/BerriAI/litellm/releases/tag/v1.90.4",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://www.producthunt.com/products/agent-card": {
+      "image": "https://ph-files.imgix.net/d379d1b0-0450-4a2d-83e5-e9c5ae31c656.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://www.sciencedaily.com/releases/2026/07/260713084850.htm": {
+      "image": "https://www.sciencedaily.com/images/1920/human-vs-ai-brain-thinking-understanding.webp",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://techcrunch.com/2026/07/13/already-rich-already-successful-why-the-last-wave-of-tech-winners-is-grinding-again": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/04/53679979052_da1066fe91_o.jpg?w=1200",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://www.producthunt.com/products/branda-open-source-on-brand-ad-maker": {
+      "image": "https://ph-files.imgix.net/9516fcdf-a73f-46a8-993c-472e0277084e.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://simonwillison.net/2026/Jul/14/uvx-github-actions-cache": {
+      "image": "",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://techcrunch.com/2026/07/13/ubers-product-chief-on-hotels-robotaxis-and-why-the-company-doesnt-want-to-be-everything-for-everyone": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/Sachin-Kansal.jpg?w=1024",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://techcrunch.com/2026/07/13/video-generation-startup-pixverse-raises-439m-valuation-soars-past-2b": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/69c14912d8f2b4b74d7b13ba_Copy-of-Red-Yellow-Retro-Vibrant-2025-Monthly-Calendar-1280-x-720-px-1200-x-630-px-8.jpeg?w=1200",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://techcrunch.com/2026/07/13/hermes-agent-maker-nous-research-in-talks-for-new-funding-at-1-5b-valuation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2025/02/GjsjauvbsAAgUtD.jpeg?w=900",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://www.producthunt.com/products/loopclub": {
+      "image": "https://ph-files.imgix.net/f9c49371-36cc-498d-a38e-b1667060319b.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://www.producthunt.com/products/vocalvia": {
+      "image": "https://ph-files.imgix.net/681fbc36-2c6b-4841-ba9a-d3544af5c97f.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "https://aidailybrief.ai/e/2026-07-12#uber-agentic-pods": {
+      "image": "https://aidailybrief.ai/og/2026-07-12.png",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/07/Liang-Wenfeng.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/07/Liang-Wenfeng.avif",
+      "localPath": "public/thumbnails/news-0608ad04ea80d310f4.avif",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/ai-killing-cheap-smartphone-dram-memory-crisis.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/ai-killing-cheap-smartphone-dram-memory-crisis.avif",
+      "localPath": "public/thumbnails/news-6019cbe6601d2f6773.avif",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "thumb:https://substackcdn.com/image/fetch/$s_!cqvt!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F09c078c3-d47d-4ab1-91e5-b09ad5d082dd_1388x902.png": {
+      "sourceImage": "https://substackcdn.com/image/fetch/$s_!cqvt!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F09c078c3-d47d-4ab1-91e5-b09ad5d082dd_1388x902.png",
+      "localPath": "public/thumbnails/news-399b628eb716456dcc.jpg",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2025/02/GjsjauvbsAAgUtD.jpeg?w=900": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2025/02/GjsjauvbsAAgUtD.jpeg?w=900",
+      "localPath": "public/thumbnails/news-7ed6bc0161682df3cd.webp",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/doomql-window.png": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/doomql-window.png",
+      "localPath": "public/thumbnails/news-c502f7d7da241f5d9b.png",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "thumb:https://ph-files.imgix.net/f9c49371-36cc-498d-a38e-b1667060319b.png?auto=format&fit=crop&frame=1&h=512&w=1024": {
+      "sourceImage": "https://ph-files.imgix.net/f9c49371-36cc-498d-a38e-b1667060319b.png?auto=format&fit=crop&frame=1&h=512&w=1024",
+      "localPath": "public/thumbnails/news-72221526b87e119c5e.avif",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
+    },
+    "thumb:https://lh3.googleusercontent.com/0BYvIo8ObViyRtRGOYajXHdEGUFX6cKMTQ6lxys98kN0sB6H7rrTo1pdW8M4kCUGnBnidJWbIr6VvcxGKDEDD4YxOVqYRlyxj_a48uqNw_AytF7c-A=w528-h297-n-nu-rw-lo": {
+      "sourceImage": "https://lh3.googleusercontent.com/0BYvIo8ObViyRtRGOYajXHdEGUFX6cKMTQ6lxys98kN0sB6H7rrTo1pdW8M4kCUGnBnidJWbIr6VvcxGKDEDD4YxOVqYRlyxj_a48uqNw_AytF7c-A=w528-h297-n-nu-rw-lo",
+      "localPath": "public/thumbnails/news-a868a5d17ebefc01de.webp",
+      "checkedAt": "2026-07-14T10:55:30.516549+00:00"
     }
   }
 }
