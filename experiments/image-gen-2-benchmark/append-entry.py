@@ -29,6 +29,10 @@ HYBRID_CREATURES = ROOT / "hybrid-creatures-data.json"
 CREATURE_DESIGNS = ROOT / "creature-designs-data.json"
 RANDOM_RENDERING_STYLES = ROOT / "random-rendering-style-data.json"
 WORLD_THAT_NEVER_WAS = ROOT / "world-that-never-was-data.json"
+MACHINE_DREAMS = ROOT / "machine-dreams-data.json"
+IMPOSSIBLE_DOCUMENTARY = ROOT / "impossible-documentary-data.json"
+STRANGE_BOTANICALS = ROOT / "strange-botanicals-data.json"
+CINEMATIC_CATS = ROOT / "cinematic-cats-data.json"
 IMAGES = ROOT / "images"
 THUMBS = ROOT / "thumbs"
 MANIFEST = ROOT / "manifest.json"
@@ -297,6 +301,14 @@ def main() -> None:
             paths = (*paths, RANDOM_RENDERING_STYLES)
         if entry.get("worldThatNeverWas"):
             paths = (*paths, WORLD_THAT_NEVER_WAS)
+        if args.slot == "machine-dream":
+            paths = (*paths, MACHINE_DREAMS)
+        if args.slot == "impossible-documentary":
+            paths = (*paths, IMPOSSIBLE_DOCUMENTARY)
+        if args.slot == "strange-botanical":
+            paths = (*paths, STRANGE_BOTANICALS)
+        if args.slot == "serious-cinematic-cat":
+            paths = (*paths, CINEMATIC_CATS)
     for path in paths:
         data = load(path)
         data.append(entry)
