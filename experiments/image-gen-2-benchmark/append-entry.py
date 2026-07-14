@@ -42,6 +42,7 @@ DEFAULT_R2_BUCKET = "jez237-site-media"
 DEFAULT_R2_PREFIX = "image-gen-2-benchmark/images"
 DEFAULT_R2_THUMB_PREFIX = "image-gen-2-benchmark/thumbs"
 DEFAULT_R2_PUBLIC_BASE_URL = "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/"
+GENERATED_SOURCE_ROOT = Path("/home/jez237/.openclaw/media/tool-image-generation").resolve()
 
 
 def slugify(value: str) -> str:
@@ -178,6 +179,11 @@ def main() -> None:
     ap.add_argument("--world-that-never-was-template", default="")
     ap.add_argument("--world-that-never-was-only", action="store_true", help="Append to world-that-never-was-data.json only, not the main prompt gallery")
     ap.add_argument("--skip-r2-upload", action="store_true", help="Copy the image locally but do not upload it to Cloudflare R2")
+    ap.add_argument(
+        "--delete-source-after-success",
+        action="store_true",
+        help="Delete the exact generated source after JPEG conversion, R2 upload, and archive writes succeed",
+    )
     ap.add_argument("--r2-bucket", default=os.environ.get("IMAGE_ARCHIVE_R2_BUCKET", DEFAULT_R2_BUCKET))
     ap.add_argument("--r2-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_PREFIX", DEFAULT_R2_PREFIX))
     ap.add_argument("--r2-thumb-prefix", default=os.environ.get("IMAGE_ARCHIVE_R2_THUMB_PREFIX", DEFAULT_R2_THUMB_PREFIX))
@@ -188,6 +194,11 @@ def main() -> None:
     src = Path(args.image).expanduser().resolve()
     if not src.exists():
         raise SystemExit(f"Image not found: {src}")
+    if args.delete_source_after_success and GENERATED_SOURCE_ROOT not in src.parents:
+        raise SystemExit(
+            "Refusing source deletion outside the generated-image directory: "
+            f"{GENERATED_SOURCE_ROOT}"
+        )
 
     IMAGES.mkdir(parents=True, exist_ok=True)
     base_slug = slugify(f"{args.date}-{args.slot}-{args.title}")
@@ -318,6 +329,10 @@ def main() -> None:
         save(path, data)
         if path == DATA:
             rebuild_monthly(data)
+
+    if args.delete_source_after_success:
+        src.unlink()
+        print(f"Deleted generated source after successful archive transaction: {src}")
 
     if r2_key:
         base = args.r2_public_base_url.rstrip("/") + "/"
