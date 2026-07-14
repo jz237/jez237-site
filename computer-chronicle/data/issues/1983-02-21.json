@@ -1,0 +1,339 @@
+{
+  "currentDate": "2026-07-02",
+  "historicDate": "1983-02-21",
+  "displayDate": "Week of February 21-27, 1983",
+  "edition": "Issue 030 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "Warm early-1983 newsprint with arcade-game callouts, IBM PC software boxes, home-computer retail tags, red and blue section rules, halftone monitor photos, dense chart modules, and classified-style shelf listings.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Weekly Computer & Culture Chronicle",
+    "dateline": "Week of February 21-27, 1983",
+    "price": "35 cents"
+  },
+  "layoutPlan": "Lead with Computer Gaming World and the expanding computer-game shelf as the visual anchor, then connect the same week to Lotus 1-2-3 business software momentum, home-computer price comparisons, music charts, movie grosses, and compact retail modules.",
+  "sectionChrome": [
+    "On This Week",
+    "Game Shelf",
+    "Software Counter",
+    "Price Watch",
+    "Charts"
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-02-21.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of February 21-27, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The late-February counter makes games the liveliest reason to browse home computers, while IBM PC software keeps office buyers close to the same shelf.",
+  "morningLine": "Computer-game magazines, boxed adventures, joysticks, disks, and Lotus 1-2-3 make one store aisle feel split between play and paperwork.",
+  "lead": {
+    "headline": "Computer games claim the brightest shelf space",
+    "dek": "As February closes, Computer Gaming World points readers toward deeper strategy and adventure titles while home-computer stores keep selling machines through games, BASIC, and office software promises.",
+    "body": "During the week of February 21-27, 1983, the home-computer story is not a single launch so much as a crowded shelf. Computer Gaming World's winter issue keeps strategy, simulation, and adventure games in front of serious players, with Serpentine, Cosmic Balance, S.E.U.I.S., Armor Assault, and other computer titles showing how far the market had moved beyond simple arcade imitation. Across the same counter, Lotus 1-2-3 was still fresh for IBM PC shoppers after its January on-sale date, while Commodore, TI, and Atari machines competed for families through memory, price, games, and programming.",
+    "confidence": "Medium",
+    "sourceRefs": [
+      0,
+      1,
+      2,
+      3
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "Computer Gaming World keeps strategy players reading",
+      "summary": "The January-February 1983 issue covered computer games such as Serpentine, Cosmic Balance, S.E.U.I.S., and Armor Assault, showing a market for deeper home-computer play.",
+      "confidence": "High",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Lotus 1-2-3 remains the IBM PC software hook",
+      "summary": "After going on sale on January 26, Lotus 1-2-3 was still a new early-1983 sales argument for the IBM PC as a spreadsheet, database, and graphics machine.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Commodore 64 and TI-99/4A continue the family-computer price fight",
+      "summary": "Period advertising and retrospectives place Commodore, TI, and Atari in an aggressive early-1983 contest over memory, color, games, BASIC, and price.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "title": "Arcade names still steer home shoppers",
+      "summary": "Ms. Pac-Man, Donkey Kong Jr., Zaxxon, Pole Position, and Super Pac-Man remained familiar arcade names as stores and magazines connected coin-op play to home systems.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        0,
+        5
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "IBM PC spreadsheet/database/graphics package newly on sale from January 26, 1983.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "name": "Serpentine",
+      "detail": "Broderbund computer game reviewed in Computer Gaming World's January-February 1983 issue.",
+      "confidence": "High",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "The Cosmic Balance",
+      "detail": "Strategic Simulations title covered by Computer Gaming World in early 1983.",
+      "confidence": "High",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "name": "Ultima II: The Revenge of the Enchantress",
+      "detail": "A major Apple II role-playing game circulating in the 1982-83 computer-game conversation.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "WordStar",
+      "detail": "Established microcomputer word processor still central to business software shelves.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "item": "Computer Gaming World",
+      "price": "about $3.00 cover",
+      "note": "Game magazine shelf for computer owners and players.",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Lotus 1-2-3 for IBM PC",
+      "price": "$495 list",
+      "note": "Launch-era office package with spreadsheet, charting, and database features.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Commodore 64",
+      "price": "about $595",
+      "note": "High-visibility home computer promoted around 64K memory, color, sound, and games.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "TI-99/4A",
+      "price": "often under $200 after promotions",
+      "note": "Aggressive pricing kept TI in family-computer comparisons.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Atari 400 / 800 family",
+      "price": "varied by bundle",
+      "note": "Atari remained tied to games, BASIC, and home-computer demonstrations.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Lotus 1-2-3",
+      "price": "$495 list",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ],
+      "note": "Launch-era list price for the IBM PC office package."
+    },
+    {
+      "item": "Commodore 64",
+      "price": "about $595",
+      "confidence": "Medium",
+      "sourceRefs": [
+        2
+      ],
+      "note": "Representative early-1983 advertised price before later cuts."
+    },
+    {
+      "item": "TI-99/4A",
+      "price": "under $200 after promotions",
+      "confidence": "Medium",
+      "sourceRefs": [
+        3
+      ],
+      "note": "Representative rebate-era retail posture."
+    },
+    {
+      "item": "Computer Gaming World",
+      "price": "about $3.00 cover",
+      "confidence": "Medium",
+      "sourceRefs": [
+        0
+      ],
+      "note": "Period magazine counter item for computer-game buyers."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Radio counter: Baby, Come to Me holds No. 1",
+      "summary": "The Billboard Hot 100 week dated February 26, 1983 kept Patti Austin and James Ingram at No. 1, with Culture Club and Men at Work near the top.",
+      "confidence": "High",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "headline": "Movie counter: Tootsie wins the weekend",
+      "summary": "For February 25-27, 1983, Box Office Mojo lists Tootsie first domestically, followed by Gandhi, The Lords of Discipline, Lovesick, and Sophie's Choice.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "Office buyers ask for integrated software",
+      "summary": "Lotus 1-2-3 bundled spreadsheet, charting, and database ideas into one IBM PC package, sharpening the business counter pitch.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "headline": "Game shelves stretch beyond arcades",
+      "summary": "Computer Gaming World's early-1983 reviews emphasized strategy, adventure, simulation, and wargame play alongside arcade habits.",
+      "confidence": "High",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Baby, Come to Me",
+      "artist": "Patti Austin with James Ingram"
+    },
+    {
+      "rank": 2,
+      "title": "Do You Really Want to Hurt Me",
+      "artist": "Culture Club"
+    },
+    {
+      "rank": 3,
+      "title": "Down Under",
+      "artist": "Men at Work"
+    },
+    {
+      "rank": 4,
+      "title": "Stray Cat Strut",
+      "artist": "Stray Cats"
+    },
+    {
+      "rank": 5,
+      "title": "Shame on the Moon",
+      "artist": "Bob Seger & The Silver Bullet Band"
+    }
+  ],
+  "periodAd": {
+    "headline": "Computer Game Week",
+    "summary": "Browse strategy games, adventures, joysticks, disks, Commodore 64 memory, TI savings, Atari BASIC, and IBM PC software in one late-February counter display.",
+    "style": "boxed retail ad with an Apple II-style monitor, joystick, floppy disks, cartridge stack, magazine cover, red sale burst, and blue price rules"
+  },
+  "market": {
+    "headline": "Play and paperwork share the micro shelf",
+    "summary": "The week shows early-1983 microcomputing split between families buying games and programming access and offices following IBM PC software momentum.",
+    "confidence": "Medium",
+    "sourceRefs": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Historic week set from state file: 1983-02-21 through 1983-02-27.",
+      "Lead story uses same-period magazine and retail evidence rather than a claimed exact-day launch.",
+      "Lotus 1-2-3 is included as fresh launch-era context after its January 26, 1983 on-sale date.",
+      "Music chart uses a published Hot 100 listing for the week ending February 26, 1983.",
+      "Movie note uses Box Office Mojo domestic weekend data for February 25-27, 1983."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Computer Gaming World Issue 3.1, January-February 1983",
+      "url": "https://cgwmuseum.org/galleries/issues/cgw_3.1.pdf",
+      "note": "Period computer-game reviews and market context."
+    },
+    {
+      "title": "This Day in Tech History - Lotus 1-2-3 Goes on Sale",
+      "url": "https://thisdayintechhistory.com/01/26/lotus-1-2-3-goes-on-sale/",
+      "note": "Launch date and package context for Lotus 1-2-3."
+    },
+    {
+      "title": "BYTE Magazine, February 1983",
+      "url": "https://archive.org/details/byte-magazine-1983-02",
+      "note": "Period advertising and home-computer retail context."
+    },
+    {
+      "title": "TI-99/4A history overview",
+      "url": "https://en.wikipedia.org/wiki/TI-99/4A",
+      "note": "Early-1983 price-war and rebate context."
+    },
+    {
+      "title": "Atari 8-bit family overview",
+      "url": "https://en.wikipedia.org/wiki/Atari_8-bit_computers",
+      "note": "Atari BASIC and home-computer context."
+    },
+    {
+      "title": "Arcade History - 1983 arcade context",
+      "url": "https://www.arcade-history.com/",
+      "note": "Period arcade title context."
+    },
+    {
+      "title": "Computer Gaming World 3.2 Ultima II review listing",
+      "url": "https://www.oldgames.sk/en/mags/article/11511",
+      "note": "Early-1983 computer role-playing game coverage."
+    },
+    {
+      "title": "WordStar history overview",
+      "url": "https://en.wikipedia.org/wiki/WordStar",
+      "note": "Period software context."
+    },
+    {
+      "title": "US Top 40 Singles for the week ending February 26, 1983",
+      "url": "https://top40weekly.com/2013/02/26/us-top-40-singles-for-the-week-ending-february-26-1983/",
+      "note": "Top singles chart for the week."
+    },
+    {
+      "title": "Box Office Mojo weekend chart, February 25-27, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W08/",
+      "note": "Domestic weekend movie context."
+    }
+  ]
+}

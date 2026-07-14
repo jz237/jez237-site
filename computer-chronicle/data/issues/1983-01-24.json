@@ -1,0 +1,403 @@
+{
+  "currentDate": "2026-06-28",
+  "historicDate": "1983-01-24",
+  "displayDate": "Week of January 24-30, 1983",
+  "edition": "Issue 026 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "Late-January 1983 office-and-arcade weekly: IBM PC software momentum, home-computer shelf notes, red and blue newsprint furniture, and retail ad boxes.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+    "dateline": "Week of January 24-30, 1983",
+    "price": "25 cents"
+  },
+  "layoutPlan": "Lead with Lotus 1-2-3 as the IBM PC software story, then scan shelves for Atari, Commodore, adventure games, box office, radio, and store prices.",
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "blue ink",
+    "texture": "aged newsprint, halftone photos, tight column rules"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of January 24-30, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The week belongs to IBM PC software: Lotus 1-2-3 reaches buyers while home-computer shelves keep mixing adventures, arcade conversions, and practical utilities.",
+  "morningLine": "Software counters are talking spreadsheets, game shelves are still bright with Atari and Commodore boxes, and Tootsie keeps packing theaters.",
+  "lead": {
+    "headline": "Lotus 1-2-3 reaches IBM PC desks",
+    "summary": "Lotus Development released Lotus 1-2-3 on January 26, 1983, tying spreadsheet, charting, and database features into one IBM PC package that quickly became a defining business reason to buy a PC-compatible machine.",
+    "confidence": "High",
+    "sourceRefs": [
+      1,
+      2
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "IBM PC software gets its showcase app",
+      "summary": "Lotus 1-2-3 arrived as an integrated spreadsheet package for the IBM PC, a sharper pitch than single-purpose office programs and a sign that PC business software was becoming the hardware story.",
+      "confidence": "High",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "Commodore 64 game catalogs widen",
+      "summary": "1983 releases for the Commodore 64 and Atari 8-bit lines include shooters, adventures, and strategy titles such as Attack of the Mutant Camels, Dragonriders of Pern, and Gateway to Apshai.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "title": "Arcade-to-home demand stays visible",
+      "summary": "Retail shelves and magazine ads continue to lean on recognizable arcade action while publishers court home-computer buyers with disk and cartridge editions.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        4,
+        5
+      ]
+    },
+    {
+      "title": "The spreadsheet fight moves beyond VisiCalc",
+      "summary": "Lotus 1-2-3 enters a market VisiCalc made famous, but with IBM PC focus and integrated graphics/database features that changed buyer expectations.",
+      "confidence": "High",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "Integrated spreadsheet, charting, and database package released for the IBM PC on January 26, 1983.",
+      "confidence": "High",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "VisiCalc",
+      "detail": "The established spreadsheet name now faces a major IBM PC challenger.",
+      "confidence": "High",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "Microsoft Multiplan",
+      "detail": "A period spreadsheet competitor in the same office-software conversation.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "name": "WordStar",
+      "detail": "Still a familiar business word-processing title on microcomputer shelves.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "dBASE II",
+      "detail": "Database software remains part of the small-business microcomputer pitch.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "item": "Attack of the Mutant Camels",
+      "price": "New 1983 title",
+      "note": "Jeff Minter shooter for Commodore 64 and Atari 8-bit computers.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Gateway to Apshai",
+      "price": "New 1983 title",
+      "note": "Epyx action-adventure for Commodore 64, ColecoVision, and Atari 8-bit computers.",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "Dragonriders of Pern",
+      "price": "New 1983 title",
+      "note": "Epyx game for Atari 8-bit computers and Commodore 64.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Lotus 1-2-3",
+      "price": "Office counter feature",
+      "note": "IBM PC package becomes the week's software headline.",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64",
+      "price": "often advertised around $595 at launch-era retail",
+      "confidence": "Medium",
+      "sourceRefs": [
+        7
+      ],
+      "note": "Street prices varied by dealer and bundle."
+    },
+    {
+      "item": "Atari 800",
+      "price": "commonly discounted as newer home computers crowded shelves",
+      "confidence": "Medium",
+      "sourceRefs": [
+        7
+      ],
+      "note": "Dealer ads varied widely."
+    },
+    {
+      "item": "IBM PC",
+      "price": "business system price depends heavily on memory, display, and drives",
+      "confidence": "High",
+      "sourceRefs": [
+        8
+      ],
+      "note": "Software value is becoming part of the sales pitch."
+    },
+    {
+      "item": "5.25-inch floppy disks",
+      "price": "sold by box for home and office users",
+      "confidence": "Medium",
+      "sourceRefs": [
+        7
+      ],
+      "note": "Routine consumable for disk-based software."
+    }
+  ],
+  "market": {
+    "headline": "Software becomes the IBM PC sales argument",
+    "summary": "Lotus 1-2-3 shows how a single business package can pull attention toward IBM-compatible machines, while home-computer publishers keep chasing games and education shelves.",
+    "confidence": "High",
+    "sourceRefs": [
+      1,
+      2
+    ]
+  },
+  "bbsNote": "Late-night modem callers trade Lotus rumors, C64 game tips, and requests for clean 5.25-inch disks.",
+  "curiosity": "The office phrase of the week is integrated software: one box promising worksheet, charts, and data handling.",
+  "briefs": [
+    {
+      "headline": "Tootsie stays on top",
+      "summary": "For the January 28-30 weekend, Tootsie led the domestic box office ahead of 48 Hrs. and The Verdict.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "Men at Work hold radio peak",
+      "summary": "Down Under by Men at Work was No. 1 on the Billboard Hot 100 dated January 29, 1983.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "Gandhi keeps drawing awards-season crowds",
+      "summary": "Gandhi ranked fourth at the January 28-30 domestic weekend box office.",
+      "confidence": "High",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "headline": "Home-computer games keep multiplying",
+      "summary": "C64 and Atari 8-bit catalogs for 1983 show publishers testing arcade action, licensed fantasy, and dungeon adventures.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Down Under",
+      "artist": "Men at Work"
+    },
+    {
+      "rank": 2,
+      "title": "Africa",
+      "artist": "Toto"
+    },
+    {
+      "rank": 3,
+      "title": "Maneater",
+      "artist": "Daryl Hall & John Oates"
+    },
+    {
+      "rank": 4,
+      "title": "Shame on the Moon",
+      "artist": "Bob Seger & The Silver Bullet Band"
+    },
+    {
+      "rank": 5,
+      "title": "Baby, Come to Me",
+      "artist": "Patti Austin and James Ingram"
+    }
+  ],
+  "movieChart": [
+    {
+      "rank": 1,
+      "title": "Tootsie"
+    },
+    {
+      "rank": 2,
+      "title": "48 Hrs."
+    },
+    {
+      "rank": 3,
+      "title": "The Verdict"
+    },
+    {
+      "rank": 4,
+      "title": "Gandhi"
+    },
+    {
+      "rank": 5,
+      "title": "The Dark Crystal"
+    }
+  ],
+  "periodAd": {
+    "headline": "Lotus 1-2-3 for the IBM PC",
+    "summary": "Spreadsheet, charts, and data lists in one serious office package. Ask your computer dealer for a demonstration disk.",
+    "style": "boxed two-column software advertisement with IBM PC monitor sketch and blue rule"
+  },
+  "classifieds": [
+    {
+      "headline": "BBS after 10 p.m.",
+      "copy": "300 baud callers welcome. Leave BASIC tips and swap adventure-game hints."
+    },
+    {
+      "headline": "Wanted: IBM PC memory",
+      "copy": "Small office seeks expansion cards and monochrome display. Cash or software trade."
+    },
+    {
+      "headline": "C64 game night",
+      "copy": "Bring joysticks, blank disks, and your best high-score notebook."
+    }
+  ],
+  "worldFallback": "",
+  "accuracyLedger": {
+    "items": [
+      "Historic date comes from the Chronicle weekly state file: 1983-01-24 through 1983-01-30.",
+      "Lotus 1-2-3 release date is sourced to January 26, 1983 references.",
+      "Movie ranking uses Box Office Mojo domestic weekend January 28-30, 1983.",
+      "Music ranking uses Billboard Hot 100 dated January 29, 1983 references."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Centre for Computing History - Lotus releases Lotus 1-2-3",
+      "url": "https://www.computinghistory.org.uk/det/6189/Lotus%20releases%20spreadsheet%20software%20Lotus%201-2-3",
+      "note": "Dates Lotus 1-2-3 to 26 January 1983."
+    },
+    {
+      "title": "This Day in Tech History - Lotus 1-2-3 Goes on Sale",
+      "url": "https://thisdayintechhistory.com/01/26/lotus-1-2-3-goes-on-sale/",
+      "note": "Secondary date and context for Lotus 1-2-3."
+    },
+    {
+      "title": "Attack of the Mutant Camels",
+      "url": "https://en.wikipedia.org/wiki/Attack_of_the_Mutant_Camels",
+      "note": "1983 Commodore 64 and Atari 8-bit release context."
+    },
+    {
+      "title": "Dragonriders of Pern video game",
+      "url": "https://en.wikipedia.org/wiki/Dragonriders_of_Pern_(video_game)",
+      "note": "1983 Epyx Atari/C64 release context."
+    },
+    {
+      "title": "Gateway to Apshai",
+      "url": "https://en.wikipedia.org/wiki/Gateway_to_Apshai",
+      "note": "1983 Epyx platform and genre context."
+    },
+    {
+      "title": "Period microcomputer software reference",
+      "url": "https://en.wikipedia.org/wiki/History_of_word_processors",
+      "note": "General period context for office software categories."
+    },
+    {
+      "title": "Period retail-ad price context",
+      "url": "https://archive.org/details/byte-magazine-1983-01",
+      "note": "Dealer price-watch context varies by advertisement and configuration."
+    },
+    {
+      "title": "IBM Personal Computer",
+      "url": "https://en.wikipedia.org/wiki/IBM_Personal_Computer",
+      "note": "IBM PC configuration and market context."
+    },
+    {
+      "title": "Box Office Mojo - Domestic 1983 Weekend 4",
+      "url": "https://www.boxofficemojo.com/weekend/1983W04/?sort=rank",
+      "note": "Domestic weekend box office January 28-30, 1983."
+    },
+    {
+      "title": "Top40Weekly - US Top 40 Singles Week Ending January 29, 1983",
+      "url": "https://top40weekly.com/2013/01/29/us-top-40-singles-for-the-week-ending-january-29-1983/",
+      "note": "Billboard Hot 100 top-five reference for January 29, 1983."
+    }
+  ],
+  "pictureDesk": [
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.jpg",
+      "alt": "Generated halftone front page with IBM PC software and home-computer shelf modules",
+      "caption": "Generated newspaper front page treatment for the week Lotus 1-2-3 reached IBM PC buyers.",
+      "confidence": "Generated visual based on structured issue data."
+    },
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.jpg",
+      "alt": "Generated newspaper modules for charts, games, and price watch",
+      "caption": "Inset modules visualize the week's charts, store shelves, and price notes.",
+      "confidence": "Generated visual based on structured issue data."
+    }
+  ],
+  "frontPageStories": [
+    {
+      "headline": "Lotus 1-2-3 reaches IBM PC desks",
+      "summary": "A new integrated spreadsheet package turns office software into the week's computer headline.",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "headline": "Home-computer shelves fill with 1983 game boxes",
+      "summary": "C64 and Atari 8-bit buyers see new shooters, adventures, and licensed fantasy games entering the catalog.",
+      "sourceRefs": [
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    9
+  ]
+}

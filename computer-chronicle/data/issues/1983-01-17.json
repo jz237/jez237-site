@@ -1,0 +1,457 @@
+{
+  "currentDate": "2026-06-27",
+  "historicDate": "1983-01-17",
+  "displayDate": "Week of January 17-23, 1983",
+  "edition": "Issue 025 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "A late-January 1983 computer-weekly front page: cartridge-industry nerves, Apple IIe counters, Commodore 64 price pressure, IBM PC software boxes, warm newsprint, red and blue rules.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Personal computing, games, software, and shop-window culture",
+    "dateline": "Week of January 17-23, 1983",
+    "price": "25 cents"
+  },
+  "layoutPlan": "Gaming-industry finance leads the page, backed by home-computer retail, software shelves, price watch, market notes, charts, and classifieds in dense newspaper modules.",
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "blue ink",
+    "texture": "aged newsprint, halftone photos, tight column rules"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for Week of January 17-23, 1983.",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "This week keeps one eye on cartridge publishers after Atari’s December warning and another on the computer counter, where Apple IIe, Commodore 64, Atari, and IBM PC software all compete for post-holiday attention.",
+  "morningLine": "Game cartridges still draw the biggest crowd, but the serious money at the counter increasingly asks about keyboards, disks, printers, and software boxes.",
+  "lead": {
+    "headline": "Imagic Stock Delay Shows the Cartridge Boom Losing Its Shine",
+    "summary": "Arcade Express reported that Imagic delayed its planned stock offering after Atari’s December sales warning shook confidence in the video-game business, a sign that 1983’s cartridge plans were meeting a colder financial market.",
+    "confidence": "High for the Arcade Express report; broader market interpretation is contextual.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "Apple IIe enters dealer conversations",
+      "summary": "Apple’s January 1983 IIe refresh gives buyers a more polished Apple II keyboard computer while preserving the software base schools and homes already know.",
+      "confidence": "High for January 1983 introduction; week-level retail emphasis is contextual.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Commodore 64 keeps pressure on the price board",
+      "summary": "The C64’s color graphics, sound, and aggressive pricing make it the value comparison every home-computer shopper hears.",
+      "confidence": "High for early-1983 market position.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "Atari 1200XL tries to look premium",
+      "summary": "Atari’s 1200XL remains part of early-1983 counter talk, with a higher announced price and a keyboard-computer pitch beside Atari’s console fame.",
+      "confidence": "Medium; launch timing and store presence varied.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "IBM PC software boxes sell the office case",
+      "summary": "For business buyers, spreadsheets and word processing continue to turn the PC from hardware purchase into office tool.",
+      "confidence": "High for period trend; not a single-day announcement.",
+      "sourceRefs": [
+        5,
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "detail": "Spreadsheet work remains the standard office demonstration for microcomputers.",
+      "confidence": "High",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "WordStar",
+      "detail": "Word processing keeps CP/M and business-micro buyers asking about printers and disks.",
+      "confidence": "High",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "Microsoft Multiplan",
+      "detail": "Spreadsheet competition spreads across Apple II, CP/M, and IBM PC buying conversations.",
+      "confidence": "Medium",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "Zork I",
+      "detail": "Infocom adventure boxes stay visible on home-computer shelves.",
+      "confidence": "High for period availability.",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "name": "Choplifter!",
+      "detail": "Broderbund’s Apple II action game remains a recognizable computer-game title.",
+      "confidence": "High for period availability.",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "item": "Commodore 64",
+      "price": "about $595 list",
+      "note": "Often advertised below list as competition sharpened.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "Apple IIe",
+      "price": "about $1,395 base",
+      "note": "New January model keeps Apple II compatibility central.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Atari 1200XL",
+      "price": "about $899 list",
+      "note": "Premium Atari 8-bit computer discussed for early-1983 buyers.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "IBM PC 5150",
+      "price": "from about $1,565 base",
+      "note": "Entry configuration before monitor, storage, and software add-ons.",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64",
+      "price": "$595 list",
+      "confidence": "High",
+      "sourceRefs": [
+        3
+      ],
+      "note": "Street prices often undercut list."
+    },
+    {
+      "item": "Apple IIe",
+      "price": "$1,395 base",
+      "confidence": "High",
+      "sourceRefs": [
+        2
+      ],
+      "note": "Commonly cited January 1983 introduction price."
+    },
+    {
+      "item": "Atari 1200XL",
+      "price": "$899 list",
+      "confidence": "Medium",
+      "sourceRefs": [
+        4
+      ],
+      "note": "Early-1983 announced/list pricing."
+    },
+    {
+      "item": "IBM PC",
+      "price": "$1,565 base",
+      "confidence": "High",
+      "sourceRefs": [
+        5
+      ],
+      "note": "Base system before common upgrades."
+    }
+  ],
+  "market": {
+    "headline": "Cartridge optimism meets Wall Street caution",
+    "summary": "Game publishers still promise busy 1983 release calendars, but Atari’s warning and Imagic’s postponed offering show how quickly the boom’s finance story changed.",
+    "confidence": "High for Imagic delay; medium for wider market synthesis.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "bbsNote": {
+    "headline": "Local boards trade tips after store hours",
+    "summary": "Modem owners keep swapping game hints, BASIC snippets, and hardware advice while most families still discover computing through magazines and retail counters.",
+    "confidence": "Medium; period-culture context.",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "curiosity": {
+    "headline": "The keyboard is becoming the upsell",
+    "summary": "Dealers can move a cartridge in minutes, but a computer sale invites disks, monitors, printers, joysticks, manuals, and software.",
+    "confidence": "Medium; synthesized from period retail economics.",
+    "sourceRefs": [
+      1,
+      6
+    ]
+  },
+  "briefs": [
+    {
+      "headline": "Arcade Express flags Imagic’s postponed stock plan",
+      "summary": "The January 16 trade newsletter tied the delay to market worries after Atari’s late-1982 sales warning.",
+      "confidence": "High",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "headline": "Computer Entertainer tracks ambitious 1983 game plans",
+      "summary": "The January issue surveys publishers preparing fuller cartridge and computer-game lines for the year.",
+      "confidence": "High",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "headline": "Apple IIe gives Apple II buyers a new version to ask for",
+      "summary": "The updated model refreshes Apple’s established 8-bit line without abandoning its software base.",
+      "confidence": "High",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "headline": "Tootsie stays on top at the movies",
+      "summary": "Domestic weekend grosses for January 21-23 put Tootsie ahead of 48 Hrs. and The Verdict.",
+      "confidence": "High",
+      "sourceRefs": [
+        11
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Down Under",
+      "artist": "Men at Work"
+    },
+    {
+      "rank": 2,
+      "title": "The Girl Is Mine",
+      "artist": "Michael Jackson & Paul McCartney"
+    },
+    {
+      "rank": 3,
+      "title": "Dirty Laundry",
+      "artist": "Don Henley"
+    },
+    {
+      "rank": 4,
+      "title": "Baby, Come to Me",
+      "artist": "Patti Austin & James Ingram"
+    },
+    {
+      "rank": 5,
+      "title": "Maneater",
+      "artist": "Daryl Hall & John Oates"
+    }
+  ],
+  "movieChart": [
+    {
+      "rank": 1,
+      "title": "Tootsie"
+    },
+    {
+      "rank": 2,
+      "title": "48 Hrs."
+    },
+    {
+      "rank": 3,
+      "title": "The Verdict"
+    },
+    {
+      "rank": 4,
+      "title": "Gandhi"
+    },
+    {
+      "rank": 5,
+      "title": "The Dark Crystal"
+    }
+  ],
+  "periodAd": {
+    "headline": "Turn Cartridge Money Into a Computer Desk",
+    "summary": "Ask about Commodore 64 color, Apple IIe compatibility, Atari graphics, and IBM PC office software before the spring catalogs arrive.",
+    "style": "Boxed retail ad with red rule, blue price bursts, dot-matrix coupon copy, and a tiny joystick-and-disk illustration."
+  },
+  "classifieds": [
+    {
+      "headline": "Apple II club forming",
+      "copy": "Bring disks, BASIC questions, and monitor recommendations. Beginners welcome."
+    },
+    {
+      "headline": "Wanted: used modem",
+      "copy": "300 baud acoustic coupler or direct-connect unit for bulletin board experiments."
+    },
+    {
+      "headline": "Trade cartridges",
+      "copy": "Seeking Activision and Imagic titles; will swap clean Atari VCS doubles."
+    }
+  ],
+  "worldFallback": {
+    "headline": "Consumer electronics mood cools after the holiday rush",
+    "summary": "Retail attention turns from December sell-through to which 1983 machines and cartridges can keep buyers coming back.",
+    "confidence": "Medium; background only.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Arcade Express Vol. 1 No. 12, dated January 16, 1983, reported Imagic delayed its stock offering after Atari’s sales warning",
+        "status": "verified",
+        "sourceRefs": [
+          0
+        ]
+      },
+      {
+        "claim": "Computer Entertainer January 1983 covered publishers’ 1983 game plans",
+        "status": "verified",
+        "sourceRefs": [
+          1
+        ]
+      },
+      {
+        "claim": "Apple IIe was introduced in January 1983",
+        "status": "verified",
+        "sourceRefs": [
+          2
+        ]
+      },
+      {
+        "claim": "Domestic weekend January 21-23, 1983 was led by Tootsie, followed by 48 Hrs. and The Verdict",
+        "status": "verified",
+        "sourceRefs": [
+          11
+        ]
+      },
+      {
+        "claim": "Billboard Hot 100 for January 22, 1983 was led by Down Under",
+        "status": "verified",
+        "sourceRefs": [
+          10
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "title": "Arcade Express, Vol. 1 No. 12, January 16, 1983",
+      "url": "https://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n12a.pdf",
+      "note": "period electronic games newsletter; Imagic stock-offering report"
+    },
+    {
+      "title": "Computer Entertainer, Vol. 1 No. 10, January 1983",
+      "url": "https://retrocdn.net/images/5/59/ComputerEntertainer_US_Vol.1_10.pdf",
+      "note": "period game newsletter and 1983 game-plan coverage"
+    },
+    {
+      "title": "Apple IIe historical summary",
+      "url": "https://en.wikipedia.org/wiki/Apple_IIe",
+      "note": "January 1983 introduction and launch pricing reference"
+    },
+    {
+      "title": "Commodore 64 historical summary",
+      "url": "https://en.wikipedia.org/wiki/Commodore_64",
+      "note": "early-1980s price and market context"
+    },
+    {
+      "title": "Atari 1200XL historical summary",
+      "url": "https://en.wikipedia.org/wiki/Atari_1200XL",
+      "note": "announced pricing and early-1983 context"
+    },
+    {
+      "title": "IBM Archives: IBM Personal Computer",
+      "url": "https://www.ibm.com/history/personal-computer",
+      "note": "IBM PC background and base price context"
+    },
+    {
+      "title": "Jeremy Reimer, personal computer market history",
+      "url": "https://arstechnica.com/features/2005/12/total-share/",
+      "note": "period personal-computer market context"
+    },
+    {
+      "title": "Infocom game release summaries",
+      "url": "https://en.wikipedia.org/wiki/Zork_I",
+      "note": "Zork I period availability"
+    },
+    {
+      "title": "Choplifter historical summary",
+      "url": "https://en.wikipedia.org/wiki/Choplifter",
+      "note": "Broderbund Apple II game context"
+    },
+    {
+      "title": "Jason Scott, BBS: The Documentary background",
+      "url": "https://archive.org/details/BBS.The.Documentary",
+      "note": "period BBS culture context"
+    },
+    {
+      "title": "Billboard Hot 100, week of January 22, 1983",
+      "url": "https://elpee.jp/hot100/week/1983-01-22",
+      "note": "music chart reference"
+    },
+    {
+      "title": "Box Office Mojo: Domestic 1983 Weekend 3",
+      "url": "https://www.boxofficemojo.com/weekend/1983W03/",
+      "note": "January 21-23, 1983 domestic weekend grosses"
+    }
+  ],
+  "pictureDesk": [
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.jpg",
+      "alt": "Halftone of a crowded game-shop counter with cartridge boxes, joystick, and a calculator-like stock ticker strip marked Imagic delayed.",
+      "caption": "Halftone of a crowded game-shop counter with cartridge boxes, joystick, and a calculator-like stock ticker strip marked Imagic delayed.",
+      "confidence": "Generated visual direction based on structured issue data."
+    },
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.jpg",
+      "alt": "Apple IIe and Commodore 64 boxes sketched as competing shop-window machines.",
+      "caption": "Apple IIe and Commodore 64 boxes sketched as competing shop-window machines.",
+      "confidence": "Generated visual direction based on structured issue data."
+    }
+  ],
+  "frontPageStories": [
+    {
+      "headline": "Imagic Stock Delay Shows the Cartridge Boom Losing Its Shine",
+      "summary": "A January trade report turns Atari’s December warning into a wider market caution sign for game publishers.",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "headline": "Apple IIe Gives Apple Buyers a New Keyboard for 1983",
+      "summary": "Apple refreshes its durable 8-bit platform as home and school computer shopping continues.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    10
+  ]
+}
