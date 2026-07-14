@@ -34,7 +34,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics,
    dynamic (animated) wave bands, multi-race chain with time carryover, Steelie rival AI. */
-const VERSION = '0.13.0';
+const VERSION = '0.14.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
@@ -243,58 +243,46 @@ function goalText(g,v,u,z,ox,oy){
     g.fillStyle='#3d7ce0'; g.beginPath();
     g.moveTo(fx,top); g.lineTo(fx+13,top+5); g.lineTo(fx,top+10); g.closePath(); g.fill(); }
 }
-function buildAerial(){ newGrid(26,112);
+function buildAerial(){ newGrid(26,76);
   const REDC={tex:'check',tint:'#a83a30'}, CAT={tex:'grid',tint:'#9aa0b4'}, REDW={tint:'#8f2f28'};
-  // twin start knolls with a half-pipe valley between
-  waves(4,0,9,6,15,14.4,0.5,5,7,REDC); waves(16,0,21,6,15,14.4,0.5,5,7,REDC);
-  rampV(10,0,12,6,14.4,13,REDC); rampV(13,0,15,6,13,14.4,REDC);
-  slab(4,7,21,8,13,REDC);
-  slab(9,9,16,10,13,REDC);
-  // X crossing narrows to catwalk
-  slab(11,11,14,16,13,CAT);
-  // zigzag catwalk 1 with hammers
-  rampU(12,17,15,22,13,11,CAT);
-  slab(5,23,15,24,11,CAT);
-  rampU(5,25,9,26,11,10.5,CAT);
-  rampU(5,27,8,30,10.5,9.5,CAT);
-  hazards.push({type:'hammer',v:14.8,u:19.5,phase:0.0});
-  hazards.push({type:'hammer',v:12.2,u:23.5,phase:0.6});
-  hazards.push({type:'hammer',v:5.8,u:27,phase:1.2});
-  // vacuum straight
-  slab(5,31,8,32,9.5,CAT);
-  slab(5,33,13,34,9.5,CAT);
-  rampU(10,35,13,40,9.5,8.5,CAT);
-  hazards.push({type:'vacuum',v:15.8,u:37.5,zone:{v0:9,v1:15.5,u0:35.5,u1:39.5},pull:6});
-  // piston deck
-  slab(6,41,19,52,8,REDC);
-  hazards.push({type:'piston',v:9,u:44,phase:0});
-  hazards.push({type:'piston',v:14,u:47,phase:0.8});
-  hazards.push({type:'piston',v:11,u:50,phase:1.6});
-  // doorway wall band
-  slab(6,53,19,54,10,REDW);
-  slab(8,53,11,54,8,REDC);
-  // forked narrow catwalks
-  rampU(5,55,8,70,8,5,CAT); rampU(15,55,18,70,8,5,CAT);
-  slab(7,63,16,64,6.6,CAT);
-  slab(5,71,18,74,5,CAT);
-  // catapult over the big gap
-  slab(9,75,16,81,5,REDC);
-  slab(11,79,13,81,5.02,{tex:'grid',tint:'#d8b04a'});
-  hazards.push({type:'catapult',rect:{v0:11,v1:14,u0:79,u1:82},launch:{vv:0,vu:10.8,vz:8},snap:{v:12.5,u:80.5},busyT:0});
-  // landing deck after the void
-  slab(8,89,17,93,4,REDC);
-  // twin curved chutes down
-  rampU(5,94,9,103,4,1,{tint:'#b03a30'}); rampU(16,94,20,103,4,1,{tint:'#b03a30'});
-  slab(4,94,4,103,6,REDW); slab(10,94,10,103,6,REDW);
-  slab(15,94,15,103,6,REDW); slab(21,94,21,103,6,REDW);
-  slab(10,92,15,93,4,REDC);
-  // goal
-  slab(4,104,21,106,1,REDC);
-  rampU(4,107,21,108,1,0.2,REDC);
-  slab(4,109,21,111,0.2,REDC);
-  slab(5,109,20,110,0.2,{type:GOAL});
-  slab(3,104,3,111,2.2); slab(22,104,22,111,2.2); slab(4,111,21,111,2.4);
-  decorFn=(g,ox,oy)=>{ goalText(g,12.5,107.6,0.6,ox,oy); };
+  waves(4,0,9,4,15,14.4,0.5,5,7,REDC); waves(16,0,21,4,15,14.4,0.5,5,7,REDC);
+  rampV(10,0,12,4,14.4,13,REDC); rampV(13,0,15,4,13,14.4,REDC);
+  slab(4,5,21,6,13,REDC);
+  slab(6,7,19,8,13,REDC);
+  slab(9,9,16,10,13,CAT);
+  rampU(11,11,15,14,13,11,CAT);
+  slab(5,15,15,17,11,CAT);
+  rampU(5,18,10,20,11,9.5,CAT);
+  hazards.push({type:'hammer',v:15.5,u:12.5,phase:0.0});
+  hazards.push({type:'hammer',v:13.8,u:16.8,phase:0.6});
+  hazards.push({type:'hammer',v:5.8,u:19.5,phase:1.2});
+  slab(5,21,10,22,9.5,CAT);
+  slab(5,23,13,24,9.5,CAT);
+  rampU(10,25,13,28,9.5,8.5,CAT);
+  hazards.push({type:'vacuum',v:15.8,u:26.5,zone:{v0:9,v1:15.5,u0:25,u1:28.5},pull:6});
+  slab(6,29,19,36,8,REDC);
+  hazards.push({type:'piston',v:9,u:30,phase:0});
+  hazards.push({type:'piston',v:14,u:32.5,phase:0.8});
+  hazards.push({type:'piston',v:11,u:35,phase:1.6});
+  slab(6,37,19,38,10,REDW);
+  slab(8,37,11,38,8,REDC);
+  rampU(5,39,8,48,8,5,CAT); rampU(15,39,18,48,8,5,CAT);
+  slab(7,43,16,44,6.6,CAT);
+  slab(3,49,18,50,5,CAT);
+  slab(9,51,16,54,5,REDC);
+  slab(11,53,13,54,5.02,{tex:'grid',tint:'#d8b04a'});
+  hazards.push({type:'catapult',rect:{v0:11,v1:14,u0:53,u1:55},launch:{vv:0,vu:8.2,vz:8},snap:{v:12.5,u:54},busyT:0});
+  slab(8,60,17,63,4,REDC);
+  rampU(5,64,9,69,4,1,{tint:'#b03a30'}); rampU(16,64,20,69,4,1,{tint:'#b03a30'});
+  slab(4,64,4,69,6,REDW); slab(10,64,10,69,6,REDW);
+  slab(15,64,15,69,6,REDW); slab(21,64,21,69,6,REDW);
+  slab(10,62,15,63,4,REDC);
+  slab(4,70,21,71,1,REDC);
+  rampU(4,72,21,72,1,0.2,REDC);
+  slab(4,73,21,75,0.2,REDC);
+  slab(5,73,20,74,0.2,{type:GOAL});
+  slab(3,70,3,75,2.2); slab(22,70,22,75,2.2); slab(4,75,21,75,2.4);
+  decorFn=(g,ox,oy)=>{ goalText(g,12.5,72.4,0.6,ox,oy); };
 }
 function buildSilly(){ newGrid(26,58);
   const GOLD={tex:'grid',tint:'#c9a23c'}, GOLDW={tint:'#c9a23c',dots:true}, GREY={tex:'grid',tint:'#9aa0b4'};
@@ -321,61 +309,61 @@ function buildSilly(){ newGrid(26,58);
   slab(5,52,5,55,7.2,GOLDW); slab(20,52,20,55,7.2,GOLDW); slab(6,55,19,55,7.4,GOLDW);
   decorFn=(g,ox,oy)=>{ goalText(g,12.5,52.6,5.5,ox,oy); };
 }
-function buildUltimate(){ newGrid(26,102);
+function buildUltimate(){ newGrid(26,72);
   const DOTF={tint:'#cf8a3a',dots:true}, GRID={tex:'grid',tint:'#9aa0b4'};
   const RCHK={tex:'check',tint:'#b8452f'}, BLUE={tint:'#3d7ce0'};
-  // polka-dot start plateau with an L-notch
-  slab(6,0,19,8,26,DOTF); carve(6,0,10,3);
-  rampU(9,9,12,11,26,24,GRID);
+  // polka-dot start plateau
+  slab(6,0,19,5,26,DOTF); carve(6,0,8,1);
+  rampU(8,6,14,7,26,24,GRID);
   // floating islands over the starfield
-  slab(8,12,15,16,24,GRID);
-  slab(11,17,12,18,23.6,GRID);
-  slab(4,19,11,24,23,GRID);
-  hazards.push({type:'muncher',v:7,u:21,homeV:7,homeU:21,phase:0,state:'idle',hopT:0,tv:7,tu:21});
-  slab(12,22,13,23,22.6,GRID);
-  slab(13,24,20,29,22,GRID);
-  slab(15,30,16,31,21.6,GRID);
-  slab(8,32,17,36,21,GRID);
+  slab(8,8,15,10,24,GRID);
+  slab(10,11,13,11,24,GRID);
+  slab(4,12,11,15,23,GRID);
+  hazards.push({type:'muncher',v:16.5,u:18.5,homeV:16.5,homeU:18.5,phase:0,state:'idle',hopT:0,tv:16.5,tu:18.5});
+  slab(9,16,14,16,23,GRID);
+  slab(13,17,20,20,22,GRID);
+  slab(14,21,17,21,22,GRID);
+  slab(8,22,17,25,21,GRID);
   // red checker terraces
-  rampU(5,37,20,40,21,19,RCHK);
-  slab(5,41,20,44,17.5,RCHK);
-  hazards.push({type:'muncher',v:12,u:42,homeV:12,homeU:42,phase:0.9,state:'idle',hopT:0,tv:12,tu:42});
-  rampU(5,45,20,48,17.5,15.5,RCHK);
-  slab(5,49,20,52,14,RCHK);
-  for(const [av,au,dv,du] of [[9,50,2.6,1.2],[16,51,-2.2,1.5]])
-    hazards.push({type:'acid',v:av,u:au,dv,du,zone:{v0:6,v1:19,u0:49,u1:52},r:1.0,wob:Math.random()*6});
+  rampU(5,26,20,28,21,19,RCHK);
+  slab(5,29,20,31,17.5,RCHK);
+  hazards.push({type:'muncher',v:12,u:30,homeV:12,homeU:30,phase:0.9,state:'idle',hopT:0,tv:12,tu:30});
+  rampU(5,32,20,33,17.5,15.5,RCHK);
+  slab(5,34,20,36,14,RCHK);
+  for(const [av,au,dv,du] of [[9,35,2.6,1.2],[16,35.5,-2.2,1.5]])
+    hazards.push({type:'acid',v:av,u:au,dv,du,zone:{v0:6,v1:19,u0:34,u1:36.5},r:1.0,wob:Math.random()*6});
   // blue pyramid field
-  rampU(4,53,21,55,14,13.5,GRID);
-  slab(4,56,21,66,13.5,GRID);
-  pyramid(6,58,13.5,15.6,BLUE); pyramid(12,57,13.5,15.6,BLUE); pyramid(18,59,13.5,15.6,BLUE);
-  pyramid(9,62,13.5,15.6,BLUE); pyramid(15,63,13.5,15.6,BLUE);
+  rampU(4,37,21,38,14,13.5,GRID);
+  slab(4,39,21,44,13.5,GRID);
+  pyramid(6,40,13.5,15.6,BLUE); pyramid(12,39,13.5,15.6,BLUE); pyramid(18,41,13.5,15.6,BLUE);
+  pyramid(9,42,13.5,15.6,BLUE); pyramid(15,43,13.5,15.6,BLUE);
   // hammer & piston alley
-  rampU(7,67,18,69,13.5,12.5,GRID);
-  slab(7,70,18,79,12.5,GRID);
-  hazards.push({type:'hammer',v:10,u:72,phase:0.2});
-  hazards.push({type:'hammer',v:15,u:76,phase:1.0});
-  hazards.push({type:'piston',v:12.5,u:74,phase:0.5});
-  hazards.push({type:'piston',v:9,u:78,phase:1.4});
+  rampU(7,45,18,46,13.5,12.5,GRID);
+  slab(7,47,18,52,12.5,GRID);
+  hazards.push({type:'hammer',v:10,u:48,phase:0.2});
+  hazards.push({type:'hammer',v:15,u:51,phase:1.0});
+  hazards.push({type:'piston',v:12.5,u:49.5,phase:0.5});
+  hazards.push({type:'piston',v:9,u:52,phase:1.4});
   // wave finale
-  rampU(5,80,20,82,12.5,11,RCHK);
-  dynWaves(5,83,20,92,11,9.5,0.5,6,7,2.2,{tex:'grid',tint:'#79b6b9'});
+  rampU(5,53,20,54,12.5,11,RCHK);
+  dynWaves(5,55,20,61,11,9.5,0.5,6,7,2.2,{tex:'grid',tint:'#79b6b9'});
   // final checker descent + goal
-  rampU(5,93,20,96,9.5,8,RCHK);
-  slab(5,97,20,98,8,RCHK);
-  slab(6,97,19,98,8,{type:GOAL});
-  slab(4,93,4,99,10,RCHK); slab(21,93,21,99,10,RCHK); slab(5,99,20,99,10.2,RCHK);
-  decorFn=(g,ox,oy)=>{ goalText(g,12.5,94.8,8.3,ox,oy); };
+  rampU(5,62,20,64,9.5,8,RCHK);
+  slab(5,65,20,66,8,RCHK);
+  slab(6,65,19,66,8,{type:GOAL});
+  slab(4,62,4,67,10,RCHK); slab(21,62,21,67,10,RCHK); slab(5,67,20,67,10.2,RCHK);
+  decorFn=(g,ox,oy)=>{ goalText(g,12.5,63.6,8.3,ox,oy); };
 }
 const RACES=[
   { name:'PRACTICE RACE', time:60, start:[11.5,4], build:buildPractice, steelie:null },
   { name:'BEGINNER RACE', time:60, start:[12.5,3], build:buildBeginner,
     steelie:{ v:18, u:68, triggerU:62 } },
-  { name:'INTERMEDIATE RACE', time:50, start:[6.5,1], build:buildIntermediate,
+  { name:'INTERMEDIATE RACE', time:45, start:[6.5,1], build:buildIntermediate,
     steelie:{ v:12, u:56, triggerU:48 } },
-  { name:'AERIAL RACE', time:90, start:[6.5,2], build:buildAerial, steelie:null },
-  { name:'SILLY RACE', time:35, start:[12.5,1], build:buildSilly, steelie:null, basis:BASIS_FLIP },
-  { name:'ULTIMATE RACE', time:75, start:[14,2], build:buildUltimate,
-    steelie:{ v:12, u:50, triggerU:42 }, stars:true },
+  { name:'AERIAL RACE', time:45, start:[6.5,1], build:buildAerial, steelie:null },
+  { name:'SILLY RACE', time:30, start:[12.5,1], build:buildSilly, steelie:null, basis:BASIS_FLIP },
+  { name:'ULTIMATE RACE', time:40, start:[14,1], build:buildUltimate,
+    steelie:{ v:12, u:35, triggerU:29 }, stars:true },
 ];
 
 /* ---------- prerender ---------- */
