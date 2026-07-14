@@ -2791,36 +2791,63 @@ function drawPlayer(){
   const wp=P.walkPhase*2;
   const la=P.grounded&&Math.abs(P.vx)>26?Math.sin(wp)*0.55:(P.grounded?0:0.3);
   const lb=P.grounded&&Math.abs(P.vx)>26?Math.sin(wp+Math.PI)*0.55:(P.grounded?0:-0.45);
-  /* legs */
+  /* legs + boots */
   c.strokeStyle='#1c2026';c.lineWidth=3.4;c.lineCap='round';
-  c.beginPath();c.moveTo(0,2);c.lineTo(Math.sin(la)*7,10);c.stroke();
-  c.beginPath();c.moveTo(0,2);c.lineTo(Math.sin(lb)*7,10);c.stroke();
+  const f1x=Math.sin(la)*7,f2x=Math.sin(lb)*7;
+  c.beginPath();c.moveTo(0,2);c.lineTo(f1x,10);c.stroke();
+  c.beginPath();c.moveTo(0,2);c.lineTo(f2x,10);c.stroke();
+  c.fillStyle='#131519';
+  c.beginPath();c.ellipse(f1x+1,10.4,2.6,1.5,0,0,TAU);c.fill();
+  c.beginPath();c.ellipse(f2x+1,10.4,2.6,1.5,0,0,TAU);c.fill();
   /* torso */
   c.fillStyle='#262d36';
   c.beginPath();c.ellipse(0,-4,5,8,0,0,TAU);c.fill();
-  /* backpack */
+  /* backpack + bedroll strapped on top */
   c.fillStyle='#33291e';
   c.fillRect(-8,-9,4,10);
-  /* head + helmet */
+  c.fillStyle='#3e3226';
+  c.beginPath();c.ellipse(-6,-11,3.6,2,0,0,TAU);c.fill();
+  c.strokeStyle='#211a12';c.lineWidth=0.8;
+  c.beginPath();c.moveTo(-7.6,-12.6);c.lineTo(-7.2,-9.4);c.moveTo(-4.6,-12.7);c.lineTo(-4.2,-9.5);c.stroke();
+  /* chest strap holds the pack on */
+  c.strokeStyle='#3b3020';c.lineWidth=1.3;
+  c.beginPath();c.moveTo(-4,-10);c.lineTo(4,-1);c.stroke();
+  /* head + helmet with brim */
   c.fillStyle='#9a8468';
   c.beginPath();c.arc(2,-13,4,0,TAU);c.fill();
   c.fillStyle='#4e4536';
   c.beginPath();c.arc(2,-14,4.4,Math.PI*0.95,Math.PI*2.05);c.fill();
+  c.strokeStyle='#5c5240';c.lineWidth=1.1;
+  c.beginPath();c.moveTo(4.5,-14.6);c.lineTo(7.4,-14.2);c.stroke();
   /* lantern arm */
   c.strokeStyle='#262d36';c.lineWidth=3;
   c.beginPath();c.moveTo(2,-7);c.lineTo(9,-2+P.bob*0.5);c.stroke();
-  /* rope arm */
+  /* rope arm reaches for the anchor, not just upward */
   if(P.rope.on){
-    c.beginPath();c.moveTo(0,-8);c.lineTo(6,-16);c.stroke();
+    let rdx=(P.rope.anx-P.x)*P.face,rdy=P.rope.any-(P.y-6);
+    const rl=hyp(rdx,rdy)||1;rdx/=rl;rdy/=rl;
+    c.beginPath();c.moveTo(0,-8);c.lineTo(rdx*9,-8+rdy*9);c.stroke();
   }
-  /* lantern */
-  c.save();c.translate(10,-2+P.bob*0.5);c.rotate(-lean*0.8+Math.sin(Game.t*1.3)*0.08);
+  /* lantern swings on its handle with real momentum */
+  if(P.lsw===undefined){P.lsw=0;P.lswV=0}
+  const swTgt=clamp(-P.vx*P.face*0.0011,-0.55,0.55)-lean*0.5;
+  P.lswV+=((swTgt-P.lsw)*30-P.lswV*4.2)*(1/60);
+  P.lsw+=P.lswV*(1/60);
+  c.save();c.translate(10,-2+P.bob*0.5);c.rotate(P.lsw+Math.sin(Game.t*1.3)*0.06);
   c.strokeStyle='#54493a';c.lineWidth=1.4;
   c.strokeRect(-3.2,-1,6.4,8);
   c.beginPath();c.arc(0,-2.4,2.6,Math.PI,0);c.stroke();
+  /* cage bars catch the light */
+  c.strokeStyle='rgba(30,24,16,0.8)';c.lineWidth=0.9;
+  c.beginPath();c.moveTo(-1,-1);c.lineTo(-1,7);c.moveTo(1.2,-1);c.lineTo(1.2,7);c.stroke();
   if(P.oil>0){
     c.fillStyle=`rgba(255,200,110,${0.85*Game.flick})`;
     c.fillRect(-2.2,0,4.4,6);
+    /* the flame itself, leaning against the swing */
+    c.fillStyle=`rgba(255,244,205,${0.9*Game.flick})`;
+    c.beginPath();
+    c.moveTo(-1.2,5);c.quadraticCurveTo(-P.lsw*3,1.2,1.4-P.lsw*4,2.4);
+    c.quadraticCurveTo(1.4,4.4,1.2,5);c.closePath();c.fill();
   }else{
     c.fillStyle='rgba(120,60,30,0.5)';
     c.fillRect(-2.2,3.4,4.4,2.6);
@@ -3340,6 +3367,62 @@ function drawTitle(){
   ctx.fillStyle=g;ctx.fillRect(0,0,VIEW.w,VIEW.h);
   ctx.textAlign='center';
   if(Game.showStory){drawStory();return}
+  /* ---- the mouth of the Hollow, staged behind the text ---- */
+  /* stalactites fringe the top edge — ragged, clustered, uneven */
+  ctx.fillStyle='rgba(10,13,18,0.9)';
+  for(let i=0;i<16;i++){
+    const h0=hash2i(i*17,3,11);
+    if(h0<0.28)continue;
+    const sx=VIEW.w*(i+0.5)/16+(h0-0.5)*54;
+    const big=h0>0.72;
+    const ln=(big?26+h0*52:8+h0*22)*clamp(VIEW.h/700,0.7,1.3);
+    const wd=(big?7+h0*11:3+h0*6);
+    const tip=sx+(hash2i(i,9,5)-0.5)*wd*1.2;
+    ctx.beginPath();ctx.moveTo(sx-wd,0);ctx.lineTo(sx+wd,0);
+    ctx.quadraticCurveTo(sx+wd*0.3,ln*0.55,tip,ln);
+    ctx.quadraticCurveTo(sx-wd*0.55,ln*0.4,sx-wd,0);
+    ctx.closePath();ctx.fill();
+  }
+  /* dust hangs in the mouth-light */
+  ctx.fillStyle='rgba(170,185,200,0.22)';
+  for(let i=0;i<14;i++){
+    const mx=((vnoise(i*13.7,3.3)*1.2+Game.t*0.006*(i%3?1:-1))%1.2+1.2)%1.2*VIEW.w-VIEW.w*0.1;
+    const my=((vnoise(i*7.1,6.6)+Game.t*0.008*(0.4+(i%4)*0.2))%1+1)%1*VIEW.h;
+    ctx.fillRect(mx,my,1.4,1.4);
+  }
+  /* a ledge, a rope, and someone small about to go down */
+  const lgy=VIEW.h*0.8;
+  const fx2=VIEW.w*0.15,fy2=lgy-2;
+  const fl2=0.72+0.28*vnoise(Game.t*2.6,3.9);
+  const lg2=ctx.createRadialGradient(fx2+7,fy2-4,1,fx2+7,fy2-4,90);
+  lg2.addColorStop(0,`rgba(255,195,115,${0.15*fl2})`);
+  lg2.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=lg2;ctx.beginPath();ctx.arc(fx2+7,fy2-4,90,0,TAU);ctx.fill();
+  ctx.fillStyle='rgba(8,11,15,0.95)';
+  ctx.beginPath();ctx.moveTo(0,VIEW.h);ctx.lineTo(0,lgy);
+  for(let x=0;x<=VIEW.w*0.28;x+=14)ctx.lineTo(x,lgy+(vnoise(x*0.02,5.5)-0.5)*7);
+  ctx.quadraticCurveTo(VIEW.w*0.315,lgy+10,VIEW.w*0.33,VIEW.h);
+  ctx.closePath();ctx.fill();
+  ctx.strokeStyle='rgba(120,104,78,0.45)';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(VIEW.w*0.29,lgy+4);
+  ctx.quadraticCurveTo(VIEW.w*0.30+Math.sin(Game.t*0.5)*4,(lgy+VIEW.h)/2,VIEW.w*0.295,VIEW.h);
+  ctx.stroke();
+  ctx.strokeStyle='#0c0f14';ctx.lineWidth=2.6;ctx.lineCap='round';
+  ctx.beginPath();ctx.moveTo(fx2,fy2);ctx.lineTo(fx2,fy2-8);ctx.stroke();
+  ctx.fillStyle='#0c0f14';
+  ctx.beginPath();ctx.arc(fx2,fy2-10.5,2.4,0,TAU);ctx.fill();
+  ctx.fillStyle=`rgba(255,205,125,${0.9*fl2})`;
+  ctx.fillRect(fx2+6,fy2-6.5,2.6,3.4);
+  /* every so often, something in the dark looks back */
+  const ew=vnoise(Game.t*0.07,7.7);
+  if(ew>0.64){
+    const ea=Math.min((ew-0.64)*6,0.5)*(0.7+0.3*vnoise(Game.t*6,2.2));
+    ctx.fillStyle=`rgba(190,230,200,${ea})`;
+    ctx.beginPath();
+    ctx.arc(VIEW.w*0.84-4,VIEW.h*0.68,1.4,0,TAU);
+    ctx.arc(VIEW.w*0.84+4,VIEW.h*0.68,1.4,0,TAU);
+    ctx.fill();
+  }
   const T='HOLLOW DEEP';
   const fs=Math.min(64,VIEW.w/9);
   ctx.font=`${fs}px Georgia,serif`;
@@ -3385,7 +3468,7 @@ function drawTitle(){
   ctx.fillStyle='rgba(110,118,126,0.45)';
   ctx.font='10px "Courier New",monospace';
   ctx.textAlign='right';
-  ctx.fillText('v1.3.0',VIEW.w-10,VIEW.h-8);
+  ctx.fillText('v1.4.0',VIEW.w-10,VIEW.h-8);
   ctx.textAlign='center';
 }
 const STORY=[
