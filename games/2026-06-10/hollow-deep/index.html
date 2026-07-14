@@ -462,7 +462,7 @@ function zoneAt(y){
 const World={
   seed:1,W:140,H:720,F:null,
   segs:new Map(),chunks:new Map(),
-  water:[],chambers:[],pickups:[],fungi:[],vines:[],stals:[],bones:[],chalk:[],pathPts:[],
+  water:[],chambers:[],pickups:[],fungi:[],vines:[],stals:[],bones:[],megabones:[],chalk:[],pathPts:[],
   puffs:[],chimes:[],notes:[],setp:null,
   startX:0,startY:0,campX:0,campY:0,mouthX:0,
   plx1:null,plx2:null,
@@ -714,6 +714,30 @@ const World={
       if(!inBoneZone&&k>=12)continue;
       const fy=floorAt(pp.x+rnd(-40,40),pp.y);
       if(fy!==null)this.bones.push({x:pp.x+rnd(-30,30),y:fy+6,k:R()*3|0,fl:R()<0.5});
+    }
+    /* colossal remains: whatever died down here was not small */
+    this.megabones=[];
+    for(let k=0;k<this.pathPts.length&&this.megabones.length<5;k+=4){
+      const pp=this.pathPts[k];
+      if(pp.y<H*CELL*0.48||pp.y>H*CELL*0.76)continue;
+      if(R()>0.34)continue;
+      const span=60+R()*70,n=4+(R()*3|0),dir=R()<0.5?-1:1;
+      const fy=floorAt(pp.x,pp.y);
+      if(fy===null)continue;
+      if(this.megabones.some(m=>Math.abs(m.x-pp.x)<300&&Math.abs(m.y-pp.y)<300))continue;
+      /* each rib settles onto its own patch of floor — the dead drape
+         over the terrain, they don't level it */
+      const ribs=[];let ok=true;
+      for(let i=0;i<n;i++){
+        const rx=pp.x+dir*((i/(n-1))-0.5)*span;
+        const ry=floorAt(rx,pp.y);
+        if(ry===null||Math.abs(ry-fy)>60){ok=false;break}
+        ribs.push(ry+2);
+      }
+      if(!ok)continue;
+      const sx=pp.x+dir*span*0.72,sy=floorAt(sx,pp.y);
+      const skullY=(sy!==null&&Math.abs(sy-fy)<60&&R()<0.65)?sy+2:null;
+      this.megabones.push({x:pp.x,y:fy+2,span,h:26+R()*34,n,dir,ribs,skullY,ph:R()*TAU});
     }
     /* Mark's chalk on the early floors: the rules, written by a dead man */
     this.notes.length=0;
@@ -987,8 +1011,11 @@ const World={
       const h=hash2i(gx,gy,this.seed+501);
       if(h<0.10&&this.solid(wx,wy-CELL)&&!this.solid(wx,wy+CELL*0.6)&&!this.solid(wx,wy)){
         const ln=8+h*400*0.18,wd=3+h*70*0.1;
+        /* in the bone fields the cave grows teeth of ivory */
+        const boneK2=clamp(1-Math.abs(clamp(wy/(this.H*CELL),0,1)-0.61)/0.13,0,1);
         const g2=x2.createLinearGradient(wx,wy-6,wx,wy+ln);
-        g2.addColorStop(0,'rgba(58,66,80,0.95)');g2.addColorStop(1,'rgba(30,34,44,0.9)');
+        g2.addColorStop(0,`rgba(${lerp(58,150,boneK2)|0},${lerp(66,142,boneK2)|0},${lerp(80,120,boneK2)|0},0.95)`);
+        g2.addColorStop(1,`rgba(${lerp(30,90,boneK2)|0},${lerp(34,84,boneK2)|0},${lerp(44,68,boneK2)|0},0.9)`);
         x2.fillStyle=g2;
         const tx=wx+hash2i(gx,gy,7)*2-1;
         x2.beginPath();x2.moveTo(wx-wd,wy-6);x2.lineTo(wx+wd,wy-6);
@@ -1008,7 +1035,8 @@ const World={
         x2.fillRect(tx-0.6,wy+ln-1.6,1.2,1.6);
       }else if(h>0.93&&this.solid(wx,wy+CELL)&&!this.solid(wx,wy-CELL*0.6)&&!this.solid(wx,wy)){
         const ln=6+(h-0.93)*230,wd=3.5+(1-h)*40;
-        x2.fillStyle='rgba(48,56,68,0.9)';
+        const boneK2=clamp(1-Math.abs(clamp(wy/(this.H*CELL),0,1)-0.61)/0.13,0,1);
+        x2.fillStyle=`rgba(${lerp(48,140,boneK2)|0},${lerp(56,132,boneK2)|0},${lerp(68,110,boneK2)|0},0.9)`;
         x2.beginPath();x2.moveTo(wx-wd,wy+6);x2.lineTo(wx+wd,wy+6);
         x2.lineTo(wx,wy-ln);x2.closePath();x2.fill();
         /* growth rings where the drips built it up */
@@ -2362,6 +2390,62 @@ function drawScene(){
     }
     sctx.restore();
   }
+  /* colossal remains: half-buried ribcages arcing out of the bone fields */
+  for(const mb of World.megabones||[]){
+    if(mb.x+mb.span<vr.l-60||mb.x-mb.span>vr.r+60||mb.y<vr.t-120||mb.y>vr.b+120)continue;
+    sctx.lineCap='round';
+    for(let i=0;i<mb.n;i++){
+      const t2=i/(mb.n-1);
+      const rx=mb.x+mb.dir*(t2-0.5)*mb.span;
+      const ry=mb.ribs[i];
+      const rh=mb.h*(1-t2*0.55)*(0.85+hash2i(mb.x+i,mb.y,3)*0.3);
+      const lean=mb.dir*(0.12+t2*0.2)*rh;
+      const rw=3.2*(1-t2*0.4);
+      /* shadowed side first, bone face on top */
+      sctx.strokeStyle='rgba(96,88,72,0.85)';
+      sctx.lineWidth=rw+1.6;
+      sctx.beginPath();sctx.moveTo(rx,ry);
+      sctx.quadraticCurveTo(rx-lean*1.4,ry-rh*0.85,rx-lean-rw,ry-rh);
+      sctx.stroke();
+      sctx.strokeStyle='rgba(206,198,178,0.9)';
+      sctx.lineWidth=rw;
+      sctx.beginPath();sctx.moveTo(rx,ry);
+      sctx.quadraticCurveTo(rx-lean*1.4,ry-rh*0.85,rx-lean-rw,ry-rh);
+      sctx.stroke();
+    }
+    /* vertebrae breaking the ground along the spine */
+    sctx.fillStyle='rgba(188,180,160,0.85)';
+    for(let i=0;i<mb.n+2;i++){
+      const ft=clamp((i/(mb.n+1))*(mb.n-1),0,mb.n-1);
+      const fi=ft|0,ff=ft-fi;
+      const vy2=lerp(mb.ribs[fi],mb.ribs[Math.min(fi+1,mb.n-1)],ff);
+      const vx=mb.x+mb.dir*((i/(mb.n+1))-0.5)*mb.span*1.2;
+      const vh=2+hash2i(mb.x,i*31,5)*2.5;
+      sctx.beginPath();sctx.ellipse(vx,vy2-1,3.4,vh,0,Math.PI,0);sctx.fill();
+    }
+    /* the skull, cheek-down in the dirt where it fell */
+    if(mb.skullY!==null){
+      const sx=mb.x+mb.dir*(mb.span*0.72),sr=9+mb.h*0.22;
+      const ky=mb.skullY;
+      sctx.fillStyle='rgba(200,192,172,0.92)';
+      sctx.beginPath();
+      sctx.arc(sx,ky-sr*0.5,sr,Math.PI*0.95,Math.PI*2.15);
+      sctx.quadraticCurveTo(sx+mb.dir*sr*1.5,ky-sr*0.15,sx+mb.dir*sr*1.6,ky);
+      sctx.lineTo(sx-mb.dir*sr,ky);
+      sctx.closePath();sctx.fill();
+      /* long jaw, teeth half sunk */
+      sctx.fillStyle='rgba(178,170,150,0.85)';
+      for(let i=0;i<4;i++){
+        const tx2=sx+mb.dir*(sr*0.45+i*sr*0.32);
+        sctx.beginPath();sctx.moveTo(tx2-1.4,ky);
+        sctx.lineTo(tx2,ky-3.4-(i%2));sctx.lineTo(tx2+1.4,ky);
+        sctx.closePath();sctx.fill();
+      }
+      /* the socket stares at nothing */
+      sctx.fillStyle='rgba(14,14,18,0.9)';
+      sctx.beginPath();sctx.ellipse(sx+mb.dir*sr*0.1,ky-sr*0.62,sr*0.3,sr*0.36,0,0,TAU);sctx.fill();
+    }
+  }
   /* loose stalactites */
   for(const s of World.stals){
     if(s.x<vr.l-40||s.x>vr.r+40||s.y<vr.t-120||s.y>vr.b+120)continue;
@@ -2648,10 +2732,48 @@ function drawCamp(vr){
   /* bedroll */
   sctx.fillStyle='#2e2620';
   sctx.fillRect(12,-5,30,5);
+  /* fire pit: a ring of stones around dying embers (the light was
+     already here — now the fire is too) */
+  sctx.fillStyle='#1a1512';
+  sctx.beginPath();sctx.ellipse(28,-1,11,3.5,0,0,TAU);sctx.fill();
+  sctx.fillStyle='#3d4148';
+  for(let i=0;i<7;i++){
+    const a=i/7*TAU+0.4;
+    sctx.beginPath();sctx.ellipse(28+Math.cos(a)*11,-1+Math.sin(a)*3.2,2.4,1.8,a,0,TAU);sctx.fill();
+  }
+  /* charred sticks + a breathing ember */
+  sctx.strokeStyle='#241d18';sctx.lineWidth=1.8;
+  sctx.beginPath();sctx.moveTo(22,-2);sctx.lineTo(33,-4);sctx.moveTo(24,-4);sctx.lineTo(32,-1);sctx.stroke();
+  const embP=0.6+0.4*vnoise(Game.t*3,8.8);
+  sctx.fillStyle=`rgba(255,110,50,${0.35+0.4*embP})`;
+  sctx.fillRect(27,-4,2,2);sctx.fillRect(30,-3,1.4,1.4);
   /* dead lantern */
   sctx.strokeStyle='#4e4636';sctx.lineWidth=1.6;
   sctx.strokeRect(50,-12,9,12);
   sctx.beginPath();sctx.arc(54.5,-13,4,Math.PI,0);sctx.stroke();
+  /* supply crate, lid pried off; empty cans beside it */
+  sctx.fillStyle='#2b2822';
+  sctx.fillRect(-72,-16,22,16);
+  sctx.strokeStyle='#1c1a15';sctx.lineWidth=1;
+  sctx.strokeRect(-72,-16,22,16);
+  sctx.beginPath();sctx.moveTo(-72,-8);sctx.lineTo(-50,-8);sctx.stroke();
+  sctx.fillStyle='#332f27';
+  sctx.save();sctx.translate(-76,-17);sctx.rotate(-0.9);sctx.fillRect(0,0,22,3);sctx.restore();
+  sctx.fillStyle='#4a453a';
+  sctx.fillRect(-46,-4,4,4);sctx.fillRect(-40,-3,4,3);
+  /* rope coil + pick leaning on the tent */
+  sctx.strokeStyle='rgba(120,104,78,0.85)';sctx.lineWidth=1.4;
+  for(let i=0;i<3;i++){sctx.beginPath();sctx.ellipse(-56,-1,6-i*1.5,2.6-i*0.7,0,0,TAU);sctx.stroke()}
+  sctx.strokeStyle='#4a4238';sctx.lineWidth=1.6;
+  sctx.beginPath();sctx.moveTo(4,-2);sctx.lineTo(-8,-26);sctx.stroke();
+  sctx.strokeStyle='#6a6258';sctx.lineWidth=2;
+  sctx.beginPath();sctx.arc(-8,-27,5,Math.PI*1.15,Math.PI*1.85);sctx.stroke();
+  /* pages torn from the journal, pinned under a stone */
+  sctx.fillStyle='rgba(210,204,188,0.75)';
+  sctx.save();sctx.translate(66,-2);sctx.rotate(0.12);sctx.fillRect(0,0,7,5);sctx.restore();
+  sctx.save();sctx.translate(72,-3);sctx.rotate(-0.2);sctx.fillRect(0,0,7,5);sctx.restore();
+  sctx.fillStyle='#3a3e46';
+  sctx.beginPath();sctx.arc(70,-1,2.4,0,TAU);sctx.fill();
   /* chalk on the wall */
   sctx.fillStyle='rgba(222,218,204,0.62)';
   sctx.font='italic 13px Georgia,serif';sctx.textAlign='center';
@@ -2724,13 +2846,17 @@ function drawCreatureBody(){
     ctx.fillStyle=g;
     ctx.beginPath();ctx.arc(Cr.x+ox,Cr.y+oy,r,0,TAU);ctx.fill();
   }
-  /* tendrils */
+  /* tendrils: they drift, but they drift toward you */
+  const pa2=Math.atan2(P.y-Cr.y,P.x-Cr.x);
+  const reachK=clamp(1.3-d/700,0.15,1);
   ctx.strokeStyle='rgba(3,3,6,0.55)';
   ctx.lineCap='round';
-  for(let i=0;i<5;i++){
-    const a=i/5*TAU+t*0.4;
-    const ln=34+vnoise(t*1.6+i*11,2.2)*30;
-    ctx.lineWidth=3.5-i*0.4;
+  for(let i=0;i<7;i++){
+    /* fan narrows toward the prey as it closes in */
+    const fan=TAU*lerp(1,0.32,reachK*0.75);
+    const a=pa2+(i/6-0.5)*fan+(vnoise(t*0.6+i*3.1,7.7)-0.5)*1.1;
+    const ln=(34+vnoise(t*1.6+i*11,2.2)*30)*(1+reachK*0.5);
+    ctx.lineWidth=3.5-i*0.35;
     ctx.beginPath();
     ctx.moveTo(Cr.x,Cr.y);
     ctx.quadraticCurveTo(
@@ -2738,6 +2864,27 @@ function drawCreatureBody(){
       Cr.y+Math.sin(a)*ln*0.5+(vnoise(t*2.2+i,4)-0.5)*22,
       Cr.x+Math.cos(a)*ln,Cr.y+Math.sin(a)*ln);
     ctx.stroke();
+  }
+  /* close enough and the dark opens: two rows of needles, then nothing */
+  if(d<240){
+    const mk=clamp(1-d/240,0,1)*(0.5+0.5*vnoise(t*9,6.1));
+    if(mk>0.08){
+      const ux=Math.cos(pa2),uy=Math.sin(pa2),vx=-uy,vy=ux;
+      const mx=Cr.x+ux*10,my=Cr.y+uy*10;
+      const gape=(3+mk*7)/2;
+      ctx.fillStyle=`rgba(186,182,168,${0.5*mk})`;
+      for(let i=-3;i<=3;i++){
+        const off=i*3.1,tl=(3.5+(3-Math.abs(i))*2.2)*mk;
+        for(const s2 of[-1,1]){ /* near jaw and far jaw, needles pointing in */
+          const bx=mx+vx*off+ux*gape*s2,by2=my+vy*off+uy*gape*s2;
+          ctx.beginPath();
+          ctx.moveTo(bx-vx*1.1,by2-vy*1.1);
+          ctx.lineTo(bx+vx*1.1,by2+vy*1.1);
+          ctx.lineTo(bx-ux*tl*s2,by2-uy*tl*s2);
+          ctx.closePath();ctx.fill();
+        }
+      }
+    }
   }
 }
 
@@ -3238,7 +3385,7 @@ function drawTitle(){
   ctx.fillStyle='rgba(110,118,126,0.45)';
   ctx.font='10px "Courier New",monospace';
   ctx.textAlign='right';
-  ctx.fillText('v1.2.0',VIEW.w-10,VIEW.h-8);
+  ctx.fillText('v1.3.0',VIEW.w-10,VIEW.h-8);
   ctx.textAlign='center';
 }
 const STORY=[
