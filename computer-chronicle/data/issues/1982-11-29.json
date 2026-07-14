@@ -1,0 +1,488 @@
+{
+  "currentDate": "2026-06-22",
+  "historicDate": "1982-11-29",
+  "displayDate": "Week of November 29-December 5, 1982",
+  "edition": "Issue 018 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "layout": "weekly-newsprint-front",
+    "accent": "black-red-blue",
+    "paper": "halftone-cream",
+    "strapline": "Vectrex vectors, Atari holiday shelves, Choplifter on the Apple II, and Lionel Richie at No. 1"
+  },
+  "masthead": {
+    "kicker": "A weekly 1982 archive dispatch",
+    "title": "Computer Chronicle",
+    "deck": "Video games, home computers, software counters, and culture for the week of November 22-28, 1982"
+  },
+  "layoutPlan": {
+    "lead": "Vectrex turns a built-in vector screen into a holiday counter spectacle",
+    "secondary": [
+      "Atari 5200 and the renamed 2600 share the November aisle",
+      "Choplifter keeps the Apple II game chart lively"
+    ],
+    "rails": [
+      "Top 5 games",
+      "Price watch"
+    ]
+  },
+  "sectionChrome": {
+    "lead": {
+      "label": "Lead Story"
+    },
+    "pictureDesk": {
+      "label": "Picture Desk",
+      "title": "Scenes From the Week"
+    },
+    "computerItems": {
+      "label": "Computers & Hardware",
+      "title": "Personal Computing Desk"
+    },
+    "software": {
+      "label": "Software Top 5",
+      "title": "Programs on the Editor's Pad"
+    },
+    "storeShelves": {
+      "label": "Top Games This Week",
+      "title": "Arcade, Console & Computer Games"
+    },
+    "priceWatch": {
+      "label": "Price Watch",
+      "title": "What It Cost"
+    },
+    "bbs": {
+      "label": "Modem Desk"
+    },
+    "curiosity": {
+      "label": "Movies / TV / Culture"
+    },
+    "briefs": {
+      "label": "Magazine Rack",
+      "title": "Culture & Shelf Talk"
+    },
+    "music": {
+      "label": "Top Rock This Week",
+      "title": "Hot 100, November 20"
+    },
+    "periodAd": {
+      "label": "Retail / Ads"
+    },
+    "classifieds": {
+      "label": "Classifieds",
+      "title": "Small Ads"
+    },
+    "fallback": {
+      "label": "Editorial Screen"
+    },
+    "accuracy": {
+      "label": "Accuracy Ledger",
+      "title": "What Is Date-Specific"
+    },
+    "sources": {
+      "label": "Source Trail",
+      "title": "Research Log"
+    },
+    "market": {
+      "label": "Retail / Ads",
+      "title": "Counter Watch"
+    }
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1982-11-29.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 29-December 5, 1982",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data for the week of November 29-December 5, 1982.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The 1982 holiday counter is crowded: Atari movie cartridges and premium consoles share space with home-computer memory claims, while E.T. keeps the box-office crown and Lionel Richie tops the singles chart.",
+  "morningLine": "Atari movie games and 64K home-computer pitches crowd the early-December holiday shelf.",
+  "lead": {
+    "headline": "Atari Movie Cartridges Crowd the Holiday Counter",
+    "summary": "Atari entered the Christmas aisle with high-profile licensed cartridges including E.T. the Extra-Terrestrial and Raiders of the Lost Ark for the 2600, turning familiar movie names into front-of-store game pitches as buyers compared consoles, cartridges, and new home computers.",
+    "confidence": "November 1982 release records for both Atari 2600 cartridges; holiday-week retail framing inferred from the December shopping calendar.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "computerItems": [
+    {
+      "label": "Game Shelf",
+      "headline": "E.T. Arrives as a Fast-Turnaround Atari Bet",
+      "summary": "The Atari 2600 E.T. cartridge, released in November 1982, gives stores a direct tie to the year's biggest film even as buyers still have to learn its maze-like play from the manual.",
+      "confidence": "November 1982 release verified; gameplay and retail emphasis are period context.",
+      "sourceRefs": [
+        0,
+        2
+      ]
+    },
+    {
+      "label": "Adventure Counter",
+      "headline": "Raiders of the Lost Ark Joins the 2600 Map",
+      "summary": "Howard Scott Warshaw's Raiders of the Lost Ark cartridge brings an inventory-and-map adventure to the 2600, another sign that licensed film properties are becoming a major console strategy.",
+      "confidence": "November 1982 Atari 2600 release verified.",
+      "sourceRefs": [
+        1,
+        3
+      ]
+    },
+    {
+      "label": "Home Computer Desk",
+      "headline": "Commodore 64 Keeps Selling 64K as the Hook",
+      "summary": "Commodore's 1982 machine gives dealers a simple comparison line: 64K RAM, color graphics, sound, and a price that can be weighed against game consoles and lower-memory home computers.",
+      "confidence": "1982 launch and period positioning; not exact-day specific.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "label": "Vector Corner",
+      "headline": "Vectrex Demonstrations Still Stop Shoppers",
+      "summary": "General Consumer Electronics' self-contained Vectrex remains a distinctive holiday-floor display because its built-in vector monitor looks unlike television-based cartridge systems.",
+      "confidence": "November 1982 launch window; December retail presence inferred.",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "platform": "Apple II / personal computers",
+      "detail": "Still the spreadsheet name many buyers recognize when a computer is justified for home finance or small business.",
+      "confidence": "Period-appropriate leading application.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "WordStar",
+      "platform": "CP/M systems",
+      "detail": "A familiar word-processing package in office and serious home-computing conversations.",
+      "confidence": "Period-appropriate software.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "name": "AtariWriter",
+      "platform": "Atari 8-bit family",
+      "detail": "Atari's word processor gives the home-computer aisle a practical pitch beyond games.",
+      "confidence": "1982 Atari software context.",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "Microsoft BASIC",
+      "platform": "Home computers",
+      "detail": "Built-in or bundled BASIC remains the language many shoppers expect to see demonstrated.",
+      "confidence": "Broad 1982 home-computer context.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "E.T. the Extra-Terrestrial - Atari 2600",
+        "Raiders of the Lost Ark - Atari 2600",
+        "Pac-Man - Atari 2600",
+        "Zaxxon - arcade",
+        "Donkey Kong - arcade / ColecoVision"
+      ]
+    },
+    {
+      "label": "Hardware Watch",
+      "items": [
+        "Atari 2600",
+        "Atari 5200 SuperSystem",
+        "ColecoVision",
+        "Commodore 64",
+        "Vectrex"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64",
+      "price": "about $595 at introduction",
+      "note": "Aggressive 64K memory pitch for the home-computer aisle.",
+      "confidence": "Commonly cited 1982 launch price.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Atari 5200 SuperSystem",
+      "price": "about $269 at launch",
+      "note": "Premium console positioning for the holiday season.",
+      "confidence": "Period launch-price context.",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "Atari 2600 cartridges",
+      "price": "often around $30-$40",
+      "note": "Licensed movie games compete for gift budgets.",
+      "confidence": "Representative early-1980s cartridge retail range."
+    }
+  ],
+  "market": {
+    "headline": "Holiday Buyers Compare Consoles With Computers",
+    "summary": "The early-December sales floor is less about one clear winner than about competing promises: arcade-style cartridges, famous movie licenses, 64K home computers, and practical software for families trying to justify the purchase.",
+    "confidence": "Synthesis from verified 1982 product releases and holiday timing."
+  },
+  "bbsNote": {
+    "headline": "Modem Note",
+    "summary": "The mass market is still focused on consoles and low-cost computers, while 300-baud callers trade settings, game hints, and local phone numbers after hours.",
+    "confidence": "Period-appropriate home-computing context.",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "curiosity": {
+    "headline": "Cinema Lobby",
+    "summary": "Box Office Mojo lists E.T. the Extra-Terrestrial as the No. 1 domestic film for the December 3-5, 1982 weekend, keeping the movie in front of families seeing E.T. cartridge pitches.",
+    "confidence": "Weekend-specific box-office chart.",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "briefs": [
+    {
+      "headline": "E.T. Still Leads Theaters",
+      "summary": "Box Office Mojo lists E.T. the Extra-Terrestrial at No. 1 for the December 3-5 domestic weekend, ahead of An Officer and a Gentleman and First Blood.",
+      "confidence": "Weekend chart dated December 3-5, 1982.",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "headline": "Empire Re-Release Holds Fourth",
+      "summary": "The 1982 re-release of The Empire Strikes Back remains in the top five for the same weekend, adding another familiar movie brand to the season.",
+      "confidence": "Weekend chart dated December 3-5, 1982.",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "headline": "Maneater Climbs the Singles Race",
+      "summary": "Music Charts Archive lists Daryl Hall and John Oates' Maneater at No. 4 on the December 4 Billboard Hot 100 chart.",
+      "confidence": "Chart dated December 4, 1982.",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Truly",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 2,
+      "title": "Gloria",
+      "artist": "Laura Branigan"
+    },
+    {
+      "rank": 3,
+      "title": "Mickey",
+      "artist": "Toni Basil"
+    },
+    {
+      "rank": 4,
+      "title": "Maneater",
+      "artist": "Daryl Hall & John Oates"
+    },
+    {
+      "rank": 5,
+      "title": "Heartlight",
+      "artist": "Neil Diamond"
+    }
+  ],
+  "movieChart": [
+    {
+      "rank": 1,
+      "title": "E.T. the Extra-Terrestrial"
+    },
+    {
+      "rank": 2,
+      "title": "An Officer and a Gentleman"
+    },
+    {
+      "rank": 3,
+      "title": "First Blood"
+    },
+    {
+      "rank": 4,
+      "title": "Star Wars: Episode V - The Empire Strikes Back (1982 re-release)"
+    },
+    {
+      "rank": 5,
+      "title": "Creepshow"
+    }
+  ],
+  "periodAd": {
+    "headline": "Holiday Special: Bring The Arcade Home",
+    "summary": "Ask for Atari movie cartridges, ColecoVision arcade favorites, Vectrex vector action, and Commodore 64 demonstrations at your local computer counter.",
+    "confidence": "Composite period-style advertisement based on verified products.",
+    "sourceRefs": [
+      0,
+      1,
+      4,
+      5
+    ]
+  },
+  "classifieds": [
+    {
+      "headline": "BASIC tutoring",
+      "copy": "Evening lessons for new home-computer owners. Bring your manual and cassette recorder."
+    },
+    {
+      "headline": "Cartridge swap",
+      "copy": "2600 owners meet Saturday to trade duplicates before Christmas."
+    }
+  ],
+  "worldFallback": {
+    "headline": "Editors Hold the Front to Games",
+    "summary": "No routine world or sports item displaces this week's console, software, and culture story.",
+    "confidence": "Editorial scope note."
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Historic issue date follows the Chronicle state file: week beginning 1982-11-29.",
+        "status": "Series state verified"
+      },
+      {
+        "claim": "Atari 2600 E.T. and Raiders releases are treated as November 1982 items with holiday retail emphasis, not exact December release-day events.",
+        "status": "Verified month-specific"
+      },
+      {
+        "claim": "Music chart uses Billboard Hot 100 positions for December 4, 1982 from Music Charts Archive.",
+        "status": "Verified week-specific"
+      },
+      {
+        "claim": "Movie chart uses Box Office Mojo domestic weekend results for December 3-5, 1982.",
+        "status": "Verified week-specific"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "title": "MobyGames - E.T. the Extra-Terrestrial (1982)",
+      "url": "https://www.mobygames.com/game/8874/et-the-extra-terrestrial/",
+      "note": "Release month and platform for Atari 2600 E.T."
+    },
+    {
+      "title": "MobyGames - Raiders of the Lost Ark (1982)",
+      "url": "https://www.mobygames.com/game/14996/raiders-of-the-lost-ark/",
+      "note": "Release month and platform for Atari 2600 Raiders."
+    },
+    {
+      "title": "AtariAge - E.T. The Extra-Terrestrial",
+      "url": "https://www.atariage.com/software_page.php?SoftwareLabelID=157",
+      "note": "Atari 2600 cartridge context."
+    },
+    {
+      "title": "AtariAge - Raiders of the Lost Ark",
+      "url": "https://www.atariage.com/software_page.php?SoftwareLabelID=401",
+      "note": "Atari 2600 cartridge context."
+    },
+    {
+      "title": "Computer History Museum - Commodore 64",
+      "url": "https://www.computerhistory.org/revolution/personal-computers/17/297",
+      "note": "Commodore 64 context."
+    },
+    {
+      "title": "The Centre for Computing History - Vectrex",
+      "url": "https://www.computinghistory.org.uk/det/4008/Vectrex/",
+      "note": "Vectrex hardware context."
+    },
+    {
+      "title": "Atari 5200 SuperSystem launch context",
+      "url": "https://en.wikipedia.org/wiki/Atari_5200",
+      "note": "Atari 5200 release and launch-price context."
+    },
+    {
+      "title": "Box Office Mojo - Domestic 1982 Weekend 49",
+      "url": "https://www.boxofficemojo.com/weekend/1982W49/",
+      "note": "Domestic weekend movie rankings for December 3-5, 1982."
+    },
+    {
+      "title": "Music Charts Archive - Singles Chart for 1982-12-04",
+      "url": "https://www.musicchartsarchive.com/singles-chart/1982-12-04",
+      "note": "Billboard Hot 100 top songs for December 4, 1982."
+    }
+  ],
+  "pictureDesk": [
+    {
+      "src": "media/computer-chronicle-gpt-image-2-week-1982-11-29.jpg",
+      "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of November 29-December 5, 1982",
+      "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data for the week of November 29-December 5, 1982.",
+      "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+    }
+  ],
+  "frontPageStories": [
+    {
+      "headline": "Atari Movie Cartridges Crowd the Holiday Counter",
+      "summary": "Atari entered the Christmas aisle with high-profile licensed cartridges including E.T. the Extra-Terrestrial and Raiders of the Lost Ark for the 2600, turning familiar movie names into front-of-store game pitches as buyers compared consoles, cartridges, and new home computers.",
+      "confidence": "November 1982 release records for both Atari 2600 cartridges; holiday-week retail framing inferred from the December shopping calendar.",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "Game Shelf",
+      "headline": "E.T. Arrives as a Fast-Turnaround Atari Bet",
+      "summary": "The Atari 2600 E.T. cartridge, released in November 1982, gives stores a direct tie to the year's biggest film even as buyers still have to learn its maze-like play from the manual.",
+      "confidence": "November 1982 release verified; gameplay and retail emphasis are period context.",
+      "sourceRefs": [
+        0,
+        2
+      ]
+    },
+    {
+      "label": "Adventure Counter",
+      "headline": "Raiders of the Lost Ark Joins the 2600 Map",
+      "summary": "Howard Scott Warshaw's Raiders of the Lost Ark cartridge brings an inventory-and-map adventure to the 2600, another sign that licensed film properties are becoming a major console strategy.",
+      "confidence": "November 1982 Atari 2600 release verified.",
+      "sourceRefs": [
+        1,
+        3
+      ]
+    },
+    {
+      "label": "Home Computer Desk",
+      "headline": "Commodore 64 Keeps Selling 64K as the Hook",
+      "summary": "Commodore's 1982 machine gives dealers a simple comparison line: 64K RAM, color graphics, sound, and a price that can be weighed against game consoles and lower-memory home computers.",
+      "confidence": "1982 launch and period positioning; not exact-day specific.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "headline": "E.T. Still Leads Theaters",
+      "summary": "Box Office Mojo lists E.T. the Extra-Terrestrial at No. 1 for the December 3-5 domestic weekend, ahead of An Officer and a Gentleman and First Blood.",
+      "confidence": "Weekend chart dated December 3-5, 1982.",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "headline": "Empire Re-Release Holds Fourth",
+      "summary": "The 1982 re-release of The Empire Strikes Back remains in the top five for the same weekend, adding another familiar movie brand to the season.",
+      "confidence": "Weekend chart dated December 3-5, 1982.",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    8
+  ]
+}

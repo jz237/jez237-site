@@ -1,0 +1,350 @@
+{
+  "currentDate": "2026-07-06",
+  "historicDate": "1983-03-21",
+  "displayDate": "Week of March 21-27, 1983",
+  "edition": "Issue 034 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "Warm aged newsprint with red and blue section flags, dense classified-style modules, arcade and home-computer retail cues, and halftone photo blocks.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Weekly Computer & Culture Chronicle",
+    "dateline": "Week of March 21-27, 1983",
+    "price": "35 cents",
+    "date": "Week of March 21-27, 1983",
+    "issue": "Issue 034"
+  },
+  "layoutPlan": "Lead with the March-April Computer Gaming World shelf story, then flank it with IBM PC XT/Lotus office notes, store-shelf lists, charts, prices, and classifieds.",
+  "sectionChrome": [
+    "Arcade & Apple II",
+    "IBM PC Counter",
+    "Shelf Watch",
+    "Price Watch",
+    "Culture Ledger"
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-03-21.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of March 21-27, 1983.",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "A late-March 1983 browse through the computer counter finds adventure games, IBM PC fixed-disk talk, and 300-baud communications competing for the same readers.",
+  "morningLine": "Computer-game magazines keep Apple II adventures in the window while office buyers ask whether the IBM PC XT and Lotus 1-2-3 belong on the spring budget.",
+  "lead": {
+    "headline": "Game shelves lean into adventures and strategy",
+    "dek": "Computer Gaming World's March-April issue put Zork, Ultima II, The Cosmic Balance, and a 1983 game-industry report in front of readers as stores balanced arcade action with deeper Apple II play.",
+    "body": "During the week of March 21-27, 1983, the strongest personal-computer culture signal came from the game rack. Computer Gaming World Vol. 3 No. 2 carried a report on computer games in 1983, coverage of The Cosmic Balance, an overview of Zork, and a review of Ultima II. The mix shows why late-March shoppers saw computer games as more than arcade imitations: role-playing, text adventures, and strategy titles were becoming durable reasons to own a disk drive.",
+    "confidence": "High",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "CGW spotlights computer games in 1983",
+      "summary": "Computer Gaming World Vol. 3 No. 2 led with a 1983 games report and coverage of strategy, adventure, and role-playing titles.",
+      "confidence": "High",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Ultima II keeps Apple II RPGs visible",
+      "summary": "The March-April Computer Gaming World issue included an Ultima II review, keeping Sierra's time-travel role-playing game prominent on Apple II shelves.",
+      "confidence": "High",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "IBM PC XT remains the office question",
+      "summary": "IBM's March 1983 PC XT introduction kept fixed-disk personal computers in the business press and dealer conversations.",
+      "confidence": "High",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "title": "Lotus 1-2-3 anchors PC software talk",
+      "summary": "Early 1983 office buyers paired IBM PC hardware comparisons with Lotus 1-2-3, the integrated spreadsheet/database/graphics package that shipped for the IBM PC.",
+      "confidence": "High",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "IBM PC: integrated spreadsheet, database, and graphics package for office buyers."
+    },
+    {
+      "name": "Ultima II",
+      "detail": "Apple II: role-playing sequel visible in Computer Gaming World's March-April issue."
+    },
+    {
+      "name": "Zork I",
+      "detail": "Apple II, TRS-80, and other micros: Infocom text adventure with strong shelf life."
+    },
+    {
+      "name": "The Cosmic Balance",
+      "detail": "Apple II and Atari 8-bit: strategic space combat covered by Computer Gaming World."
+    },
+    {
+      "name": "WordStar",
+      "detail": "CP/M and IBM PC: word processing mainstay for small offices."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 computer games",
+      "items": [
+        "Ultima II",
+        "Zork I",
+        "The Cosmic Balance",
+        "Wizardry",
+        "Choplifter"
+      ]
+    },
+    {
+      "label": "Top 5 movies",
+      "items": [
+        "Spring Break",
+        "The Outsiders",
+        "High Road to China",
+        "Tootsie",
+        "The Black Stallion Returns"
+      ]
+    },
+    {
+      "label": "IBM PC counter",
+      "items": [
+        "IBM PC XT",
+        "Lotus 1-2-3",
+        "dBASE II",
+        "WordStar",
+        "10 MB fixed disk"
+      ]
+    },
+    {
+      "label": "Home-computer rack",
+      "items": [
+        "Apple II disks",
+        "Commodore 64",
+        "Atari 800 software",
+        "VIC-20 cartridges",
+        "300-baud modem ads"
+      ]
+    },
+    {
+      "label": "Magazines",
+      "items": [
+        "Computer Gaming World",
+        "BYTE",
+        "Softline",
+        "Creative Computing",
+        "Compute!"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM Personal Computer XT",
+      "price": "about $4,995 as introduced",
+      "note": "The fixed-disk XT remained a premium office purchase."
+    },
+    {
+      "item": "Lotus 1-2-3",
+      "price": "about $495 list",
+      "note": "A high-priced but fast-moving IBM PC productivity package."
+    },
+    {
+      "item": "Commodore 64",
+      "price": "under $600 street in many 1983 ads",
+      "note": "Aggressive pricing kept the C64 prominent at home-computer counters."
+    },
+    {
+      "item": "Atari 2600 cartridges",
+      "price": "often $20-$35",
+      "note": "Console game markdowns and new computer-game shelves competed for the same shoppers."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Zork still sells the parser",
+      "text": "Infocom adventures gave computer stores a word-driven contrast to arcade-style action games."
+    },
+    {
+      "headline": "Strategy gets shelf space",
+      "text": "The Cosmic Balance coverage showed that tactical play had an audience beyond joystick reflexes."
+    },
+    {
+      "headline": "Spring Break opens first",
+      "text": "Spring Break led the March 25-27 domestic weekend box office, ahead of The Outsiders."
+    },
+    {
+      "headline": "Billie Jean stays No. 1",
+      "text": "Michael Jackson's single remained atop the late-March pop chart."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Billie Jean",
+      "artist": "Michael Jackson"
+    },
+    {
+      "rank": 2,
+      "title": "Do You Really Want to Hurt Me",
+      "artist": "Culture Club"
+    },
+    {
+      "rank": 3,
+      "title": "Shame on the Moon",
+      "artist": "Bob Seger & The Silver Bullet Band"
+    },
+    {
+      "rank": 4,
+      "title": "Hungry Like the Wolf",
+      "artist": "Duran Duran"
+    },
+    {
+      "rank": 5,
+      "title": "Back on the Chain Gang",
+      "artist": "Pretenders"
+    }
+  ],
+  "periodAd": {
+    "headline": "This week at the computer counter",
+    "summary": "Ask about Apple II adventures, Lotus 1-2-3 demonstrations, 300-baud modem software, and IBM PC XT fixed-disk quotes before Saturday.",
+    "tagline": "Bring this notice for a blank-disk and printer-paper estimate."
+  },
+  "market": {
+    "headline": "Games and office software share the spring window",
+    "summary": "Late March 1983 put two different sales pitches side by side: deeper Apple II games for the home shelf and fixed-disk IBM PC systems with integrated software for the office.",
+    "confidence": "High",
+    "sourceRefs": [
+      0,
+      3,
+      5
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Issue date follows Chronicle state file next_start_date=1983-03-21.",
+        "confidence": "High",
+        "sourceRefs": []
+      },
+      {
+        "claim": "Computer Gaming World Vol. 3 No. 2 was the March-April 1983 issue and listed Computer Games in 1983, The Cosmic Balance, Zork, and Ultima II coverage.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "claim": "IBM introduced the PC XT in March 1983 at about $4,995, making fixed-disk IBM PC configurations current late-March sales-floor news.",
+        "confidence": "High",
+        "sourceRefs": [
+          3,
+          4
+        ]
+      },
+      {
+        "claim": "Lotus 1-2-3 was an early-1983 IBM PC integrated spreadsheet/database/graphics package.",
+        "confidence": "High",
+        "sourceRefs": [
+          5
+        ]
+      },
+      {
+        "claim": "Music ranking uses Billboard Hot 100 and chart mirrors for March 26, 1983.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          6,
+          7
+        ]
+      },
+      {
+        "claim": "Movie ranking uses Box Office Mojo domestic weekend March 25-27, 1983.",
+        "confidence": "High",
+        "sourceRefs": [
+          8
+        ]
+      },
+      {
+        "claim": "President Reagan delivered the Strategic Defense Initiative ('Star Wars') address to the nation on March 23, 1983.",
+        "confidence": "High",
+        "sourceRefs": [
+          9
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Computer Gaming World Vol. 3 No. 2 March-April 1983 issue listing",
+      "url": "https://cgwmuseum.org/galleries/index.php?id=9&pub=2&year=1983"
+    },
+    {
+      "label": "Computer Gaming World March-April 1983 table of contents mirror",
+      "url": "http://pdf.textfiles.com/zines/CGW/1983_0304_issue9.pdf"
+    },
+    {
+      "label": "OldGames.sk - Ultima II review in Computer Gaming World 3.2",
+      "url": "https://www.oldgames.sk/en/mags/article/11511"
+    },
+    {
+      "label": "Christian Science Monitor - IBM upgrades its Personal Computer",
+      "url": "https://www.csmonitor.com/1983/0309/030939.html"
+    },
+    {
+      "label": "This Day in Tech History - IBM Introduces PC-XT",
+      "url": "https://thisdayintechhistory.com/03/08/ibm-introduces-pc-xt/"
+    },
+    {
+      "label": "Lotus 1-2-3 overview and 1983 release context",
+      "url": "https://www.britannica.com/technology/Lotus-1-2-3"
+    },
+    {
+      "label": "Billboard Hot 100 mirror for March 26, 1983",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-03-26"
+    },
+    {
+      "label": "Music Charts Archive singles chart March 26, 1983",
+      "url": "https://musicchartsarchive.com/singles-chart/1983-03-26"
+    },
+    {
+      "label": "Box Office Mojo domestic weekend March 25-27, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W12/?sort=gross"
+    },
+    {
+      "label": "Reagan Library - Strategic Defense Initiative (SDI) 'Star Wars' speech, March 23, 1983",
+      "url": "https://www.reaganlibrary.gov/archives/topic-guide/strategic-defense-initiative-sdi-star-wars-speech-03231983"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Wanted: Infocom maps",
+      "copy": "Local adventure club seeks Zork hints, sealed clue books, and clean Apple II disks."
+    },
+    {
+      "headline": "PC demo night",
+      "copy": "Dealer offers after-hours Lotus 1-2-3 demonstration on IBM PC hardware by appointment."
+    }
+  ],
+  "worldAnchor": {
+    "headline": "Reagan proposes the 'Star Wars' missile shield",
+    "summary": "In a televised address on March 23, 1983, President Reagan proposed the Strategic Defense Initiative, calling on scientists to render nuclear missiles impotent and obsolete - a plan critics quickly nicknamed Star Wars.",
+    "confidence": "High",
+    "sourceRefs": [
+      9
+    ]
+  }
+}

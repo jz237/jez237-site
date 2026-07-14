@@ -1,0 +1,545 @@
+{
+  "currentDate": "2026-06-09",
+  "historicDate": "1982-08-16",
+  "displayDate": "Week of August 16-22, 1982",
+  "edition": "Issue 003 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "layout": "weekly-newsprint-front",
+    "accent": "black-red-blue",
+    "paper": "halftone-cream",
+    "strapline": "WEEKLY DESK - C64 - IBM PC - ARCADES - SOFTWARE - MOVIES - ROCK RADIO"
+  },
+  "masthead": {
+    "kicker": "Morning archive for Jez",
+    "title": "Computer Chronicle",
+    "deck": "The August 16-22 desk: Commodore 64 retail chatter gets louder, IBM PC anniversary afterglow keeps compatibility in the room, E.T. leads the weekend box office, and Billy Squier tops album-rock radio."
+  },
+  "layoutPlan": {
+    "main": [
+      "editor-note",
+      "lead",
+      "picture-desk",
+      "computer-items",
+      "software",
+      "store-shelves"
+    ],
+    "sidebar": [
+      "price-watch",
+      "market",
+      "bbs",
+      "curiosity",
+      "briefs",
+      "music",
+      "period-ad",
+      "classifieds",
+      "fallback",
+      "accuracy",
+      "sources"
+    ]
+  },
+  "sectionChrome": {
+    "lead": {
+      "label": "Lead Story"
+    },
+    "pictureDesk": {
+      "label": "Picture Desk",
+      "title": "Scenes From the Week"
+    },
+    "computerItems": {
+      "label": "Computers & Hardware",
+      "title": "Personal Computing Desk"
+    },
+    "software": {
+      "label": "Software Top 5",
+      "title": "Programs on the Editor's Pad"
+    },
+    "storeShelves": {
+      "label": "Top Games This Week",
+      "title": "Arcade, Console & Computer Games"
+    },
+    "priceWatch": {
+      "label": "Price Watch",
+      "title": "What It Cost"
+    },
+    "bbs": {
+      "label": "Modem Desk"
+    },
+    "curiosity": {
+      "label": "Movies / TV / Culture"
+    },
+    "briefs": {
+      "label": "Magazine Rack",
+      "title": "Culture & Shelf Talk"
+    },
+    "music": {
+      "label": "Top Rock This Week",
+      "title": "Rock Radio Chart, August 14"
+    },
+    "periodAd": {
+      "label": "Retail / Ads"
+    },
+    "classifieds": {
+      "label": "Classifieds",
+      "title": "Small Ads"
+    },
+    "fallback": {
+      "label": "Editorial Screen"
+    },
+    "accuracy": {
+      "label": "Accuracy Ledger",
+      "title": "What Is Date-Specific"
+    },
+    "sources": {
+      "label": "Source Trail",
+      "title": "Research Log"
+    },
+    "market": {
+      "label": "Retail / Ads",
+      "title": "Computer Store Market"
+    }
+  },
+  "heroImage": {
+    "src": "media/1982-computer-chronicle-issue-003.jpg",
+    "alt": "GPT Image 2 vertical 1982 Computer Chronicle front page for the week of August 16-22, 1982 with Commodore 64, IBM PC compatibility, arcade and computer games, E.T., The Beastmaster, and rock-radio departments",
+    "caption": "GPT Image 2 issue-front visual generated from structured Chronicle issue data for August 16-22, 1982.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Issue #3 covers Monday, August 16 through Sunday, August 22, 1982. The desk leads with the Commodore 64 moving from announcement into retail-era reality, keeps the IBM PC compatibility story on page one, and uses dated August 21 chart and August 20-22 box-office sources for the culture rail.",
+  "morningLine": "This week: Commodore 64 shelf talk grows louder, the IBM PC afterglow keeps compatibility on buyers' minds, E.T. returns to the top of the weekend box office, The Beastmaster opens, and Billy Squier rules album-rock radio.",
+  "lead": {
+    "headline": "Commodore 64 Moves From Spec Sheet to Store Talk",
+    "summary": "By mid-August 1982, the Commodore 64 is no longer just a CES promise. The machine's 64K memory headline, color graphics, SID sound chip, cartridge slot, and aggressive home-computer price point give computer stores a fresh answer to Atari, Apple, TI, and IBM conversations. The real story is not one launch-day ribbon cutting; it is the moment when the C64 starts becoming a retail question families can actually ask across the counter.",
+    "confidence": "August 1982 retail-era context; exact-day launch claims avoided",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "computerItems": [
+    {
+      "label": "Home computers",
+      "headline": "Commodore 64 Enters the Retail Conversation",
+      "summary": "Commodore's 64K machine gives stores a new pitch: more memory than many rivals, color graphics, SID sound, and a family-computer price that can sit beside game-machine and schoolwork arguments.",
+      "confidence": "August 1982 retail-era context",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "IBM PC",
+      "headline": "Compatibility Becomes the Real Anniversary Story",
+      "summary": "The IBM PC's first year turns into a compatibility lesson: buyers care less about romance and more about expansion cards, printers, DOS disks, spreadsheets, and whether the whole desk behaves on Monday morning.",
+      "confidence": "One-year IBM PC context carried from August 12 anniversary week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "label": "Peripherals",
+      "headline": "Disk Drives and Printers Eat the Budget",
+      "summary": "Home-computer price tags rarely end at the keyboard. Disk drives, cassette decks, monitors, modems, printers, paper, and blank media turn the real purchase into a desk-sized system.",
+      "confidence": "Period retail context",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "label": "Software",
+      "headline": "Type-In Programs Still Matter",
+      "summary": "Magazine listings and user-group code remain part of the weekly software economy, especially for families waiting for commercial C64 and Atari shelves to fill in.",
+      "confidence": "Period magazine context",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "#1 VisiCalc",
+      "platform": "Apple II / IBM PC / business micros",
+      "detail": "Still the spreadsheet name buyers use to explain why a personal computer belongs in an office.",
+      "confidence": "Period business-software context",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "#2 WordStar",
+      "platform": "CP/M and business micros",
+      "detail": "The word-processing staple for offices where printer setup matters as much as the program.",
+      "confidence": "Period business-software context",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "#3 Microsoft BASIC",
+      "platform": "Home computers / IBM PC",
+      "detail": "The common language of type-in listings, learning books, and after-dinner experiments.",
+      "confidence": "Period software context",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "#4 AtariWriter",
+      "platform": "Atari 8-bit",
+      "detail": "A named home word-processing package in the kind of software aisle families asked about beside printers.",
+      "confidence": "Period software context",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "name": "#5 Deadline",
+      "platform": "Apple II / Atari / TRS-80 / IBM PC",
+      "detail": "Infocom's 1982 mystery keeps text adventures in the serious-games conversation.",
+      "confidence": "1982 game/software context",
+      "sourceRefs": [
+        7
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "name": "Pac-Man",
+      "platform": "Arcade / Atari VCS",
+      "detail": "Still the mascot-level reference point for parents, arcades, and cartridge shoppers.",
+      "confidence": "Period context",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "name": "Donkey Kong",
+      "platform": "Arcade / ColecoVision conversation",
+      "detail": "Nintendo's cabinet and home-license buzz keep the platform-and-ports argument alive.",
+      "confidence": "Period context",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "name": "Deadline",
+      "platform": "Infocom text adventure",
+      "detail": "A 1982 detective story for players who want the computer to be a parser, not just a joystick box.",
+      "confidence": "1982 release context",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "name": "Wizardry",
+      "platform": "Apple II",
+      "detail": "Still the computer-RPG benchmark people use when comparing serious fantasy games.",
+      "confidence": "Period context",
+      "sourceRefs": [
+        9
+      ]
+    },
+    {
+      "name": "Zork I",
+      "platform": "Apple II / TRS-80 / IBM PC and others",
+      "detail": "The text-adventure shelf keeps selling the idea that a computer can be a world made of words.",
+      "confidence": "Period context",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64 computer",
+      "price": "$595",
+      "note": "Introductory-era list price often quoted for the new 64K home computer."
+    },
+    {
+      "item": "IBM PC base system",
+      "price": "$1,565+",
+      "note": "Base configuration before the desk grows into drives, display, printer, and software."
+    },
+    {
+      "item": "1541-style disk-drive budget",
+      "price": "$399-$599",
+      "note": "Disk storage could rival the computer itself in the family budget."
+    },
+    {
+      "item": "Dot-matrix printer",
+      "price": "$399-$799",
+      "note": "The practical line between playing with a computer and producing school or office pages."
+    }
+  ],
+  "market": {
+    "headline": "Store Desk: The Computer Is Only the First Box",
+    "summary": "The week's retail math is not just C64 versus Atari, Apple, TI, or IBM. It is the stack of add-ons: monitor, storage, printer, paper, joysticks, modem, and named software that make the machine useful.",
+    "confidence": "Period retail context",
+    "sourceRefs": [
+      0,
+      1,
+      3
+    ]
+  },
+  "bbsNote": {
+    "headline": "Sysop Log: 64K Questions and Movie Weekend Chatter",
+    "summary": "Callers ask whether 64K changes the home-computer shelf, trade text-adventure hints, and compare arcade scores after seeing E.T., The Beastmaster, or Friday the 13th Part 3 at the mall.",
+    "posts": [
+      {
+        "topic": "Home Computer Counter",
+        "text": "Is 64K enough to make the new Commodore machine the family pick?",
+        "platform": "Commodore 64"
+      },
+      {
+        "topic": "Text Adventure Desk",
+        "text": "Deadline and Zork hints circulate without spoiling the whole map.",
+        "platform": "Apple II / TRS-80 / IBM PC"
+      },
+      {
+        "topic": "Arcade Scoreboard",
+        "text": "Pac-Man and Donkey Kong scores fill the after-movie calls.",
+        "platform": "Arcade"
+      }
+    ],
+    "confidence": "Period-style weekly digest",
+    "sourceRefs": [
+      0,
+      7,
+      8,
+      10
+    ]
+  },
+  "curiosity": {
+    "headline": "E.T. Takes the Weekend Back",
+    "summary": "The August 20-22 domestic weekend returns E.T. to No. 1, a reminder that the summer's biggest movie still has enough gravity to bend the rest of the culture page around it.",
+    "confidence": "Exact weekend box-office source",
+    "sourceRefs": [
+      4
+    ]
+  },
+  "briefs": [
+    {
+      "label": "Movies",
+      "headline": "The Beastmaster Opens",
+      "summary": "The Beastmaster enters the August 20-22 weekend at No. 4, adding sword-and-beast fantasy to a marquee still ruled by E.T.",
+      "confidence": "Exact weekend box-office source",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "label": "Movies",
+      "headline": "Fast Times Keeps the Mall Current",
+      "summary": "Fast Times at Ridgemont High remains in the weekend top ten, which makes the arcade-and-mall atmosphere feel less like set dressing and more like the week's natural habitat.",
+      "confidence": "Exact weekend box-office context",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "label": "Magazine Rack",
+      "headline": "Compute! Keeps C64 on the Page",
+      "summary": "The September 1982 issue preview/rack cycle keeps Commodore 64 software and peripherals in the magazine conversation as the machine reaches buyers.",
+      "confidence": "Period magazine source",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "title": "#1 Everybody Wants You",
+      "artist": "Billy Squier"
+    },
+    {
+      "title": "#2 Think I'm in Love",
+      "artist": "Eddie Money"
+    },
+    {
+      "title": "#3 Hold Me",
+      "artist": "Fleetwood Mac"
+    },
+    {
+      "title": "#4 Only Time Will Tell",
+      "artist": "Asia"
+    },
+    {
+      "title": "#5 Take It Away",
+      "artist": "Paul McCartney"
+    }
+  ],
+  "periodAd": {
+    "headline": "64K Home Computer: Bring Your Own Peripherals",
+    "summary": "The ad desk imagines the real August 1982 sale: a computer price large enough to impress, then the disk drive, monitor, printer, and software questions that follow.",
+    "finePrint": "Period-style retail summary based on documented early C64 and personal-computer pricing context."
+  },
+  "classifieds": [
+    {
+      "headline": "64K Buyer Seeks Advice",
+      "copy": "Family comparing Commodore, Atari, TI, and Apple. Must run games, school papers, and something Dad can call practical."
+    },
+    {
+      "headline": "Printer Wanted",
+      "copy": "Dot-matrix unit for newsletters, homework, and invoices. Must accept tractor paper and not shake table to pieces."
+    },
+    {
+      "headline": "Adventure Hints",
+      "copy": "Trade Zork and Deadline clues by modem after 9 p.m. No full solutions unless caller sounds truly defeated."
+    }
+  ],
+  "worldFallback": {
+    "headline": "Editorial Screen",
+    "summary": "No world-news bulletin displaces the home-computer and culture desk for this weekly issue.",
+    "confidence": "Editorial choice"
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "value": "Exact",
+        "label": "Series anchor",
+        "detail": "Chronicle state advanced from Issue #2 to Issue #3, week of August 16-22, 1982."
+      },
+      {
+        "value": "Weekly",
+        "label": "Issue range",
+        "detail": "The issue covers Monday, August 16 through Sunday, August 22, 1982."
+      },
+      {
+        "value": "Exact weekend",
+        "label": "Movies",
+        "detail": "The movie chart uses the August 20-22, 1982 domestic weekend."
+      },
+      {
+        "value": "Dated chart",
+        "label": "Rock radio",
+        "detail": "The rock-radio list uses the August 21, 1982 weekly rock chart."
+      },
+      {
+        "value": "Generated",
+        "label": "Newspaper artifact",
+        "detail": "The hero and picture-desk images are GPT Image 2 visuals; webpage text and sources remain canonical."
+      }
+    ],
+    "note": "This is a chronological weekly 1982 issue. It is not a 40-years-ago-today mapping."
+  },
+  "sources": [
+    {
+      "name": "Commodore 64 reference: introduced at CES and marketed in August 1982",
+      "url": "https://en.wikipedia.org/wiki/Commodore_64"
+    },
+    {
+      "name": "The Video Game Critic: Commodore 64 launch date August 1982",
+      "url": "https://videogamecritic.com/c64info.htm"
+    },
+    {
+      "name": "IBM Archives: IBM Personal Computer announcement and first-year context",
+      "url": "https://www.ibm.com/history/personal-computer"
+    },
+    {
+      "name": "COMPUTE! Issue 028, September 1982, C64 software/peripherals rack context",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20%28Clean%29/Compute_Issue_028_1982_Sep.pdf"
+    },
+    {
+      "name": "The Numbers: Weekend Domestic Box Office, August 20-22, 1982",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1982/08/20"
+    },
+    {
+      "name": "Tunecaster: Weekly Rock Top 20 for August 21, 1982",
+      "url": "https://tunecaster.com/charts/80/rock8234.html"
+    },
+    {
+      "name": "VC&G: Remembering VisiCalc and early spreadsheet context",
+      "url": "https://www.vintagecomputing.com/index.php/archives/56/retroscan-of-the-week-visicalc"
+    },
+    {
+      "name": "MobyGames: Deadline by Infocom release/platform context",
+      "url": "https://www.mobygames.com/game/51/deadline/"
+    },
+    {
+      "name": "MobyGames: Pac-Man platform and release context",
+      "url": "https://www.mobygames.com/game/108/pac-man/"
+    },
+    {
+      "name": "MobyGames: Wizardry platform and release context",
+      "url": "https://www.mobygames.com/game/120/wizardry-proving-grounds-of-the-mad-overlord/"
+    },
+    {
+      "name": "MobyGames: Zork I platform and release context",
+      "url": "https://www.mobygames.com/game/50/zork-the-great-underground-empire/"
+    }
+  ],
+  "frontPageStories": [
+    {
+      "label": "Home Computers",
+      "headline": "Commodore 64 Turns Into the Week's Store Question",
+      "summary": "August 1982 puts the C64 into the practical buyer conversation: 64K, color, sound, cartridges, cassette/disk choices, and a price that made families compare it with Atari, Apple, TI, and PC desks.",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "label": "IBM PC",
+      "headline": "PC Compatibility Still Sells the Desk",
+      "summary": "One week after the IBM PC's first birthday, the question remains which boards, printers, DOS disks, and business programs will behave together without making the buyer become the service department.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "label": "Movies",
+      "headline": "E.T. Reclaims the Weekend Lead",
+      "summary": "For August 20-22, E.T. leads the domestic weekend again, with Friday the 13th Part 3 and An Officer and a Gentleman close behind and The Beastmaster opening into the fantasy-adventure slot.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "label": "Rock Radio",
+      "headline": "Billy Squier Stays on Top Tracks",
+      "summary": "The August 21 album-rock chart has Billy Squier's Everybody Wants You at No. 1, a perfect radio-room companion to the week's store-counter electronics mood.",
+      "sourceRefs": [
+        5
+      ]
+    }
+  ],
+  "movieChart": [
+    {
+      "title": "#1 E.T. the Extra-Terrestrial",
+      "detail": "$7.62M weekend",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "#2 Friday the 13th Part 3",
+      "detail": "$5.38M weekend",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "#3 An Officer and a Gentleman",
+      "detail": "$5.34M weekend",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "#4 The Beastmaster",
+      "detail": "$2.96M weekend",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "#5 The Best Little Whorehouse in Texas",
+      "detail": "$2.93M weekend",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "musicChartSourceRefs": [
+    5
+  ]
+}

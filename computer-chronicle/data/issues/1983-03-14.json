@@ -1,0 +1,330 @@
+{
+  "currentDate": "2026-07-05",
+  "historicDate": "1983-03-14",
+  "displayDate": "Week of March 14-20, 1983",
+  "edition": "Issue 033 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": "Mid-March 1983 computer-weekly front page: warm newsprint, game-magazine shelf cues, Bell 103 modem parts, Apple II and Commodore software racks, red and blue section flags.",
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "Weekly Computer & Culture Chronicle",
+    "dateline": "Week of March 14-20, 1983",
+    "price": "35 cents",
+    "date": "Week of March 14-20, 1983",
+    "issue": "Issue 033"
+  },
+  "layoutPlan": "Lead with BYTE magazine modem-building and home telecommunications, then give large shelf space to computer games, Apple II and Commodore software, home-computer prices, movie/music charts, and retail notes.",
+  "sectionChrome": [
+    "On This Week",
+    "Game Shelf",
+    "Software Counter",
+    "Price Watch",
+    "Charts"
+  ],
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-03-14.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of March 14-20, 1983.",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "This issue catches personal computing in a hands-on week: BYTE readers study a Bell 103 modem project, game shelves keep selling adventures and arcade conversions, and the IBM PC XT announcement still shapes office-counter talk.",
+  "morningLine": "Modem projects, Apple II adventures, Commodore price pressure, and Billie Jean at number one give the computer counter its mid-March rhythm.",
+  "lead": {
+    "headline": "Home-computer readers wire up for the modem age",
+    "dek": "BYTE's March 1983 issue put a Bell 103-compatible originate/answer modem project in front of hobbyists as personal-computer communications moved from curiosity toward routine use.",
+    "body": "During the week of March 14-20, 1983, the computer press kept one eye on telecommunications. BYTE Volume 8 Number 3 listed Steve Ciarcia's Build the ECM-103, an Originate/Answer Modem, a Texas Instruments TMS99532-based Bell 103-compatible project. The article sat beside VIC-20 expansion, COMDEX impressions, storage technology, and retail advertising, a useful snapshot of how hobbyist building, home-computer upgrades, and business microcomputing shared the same magazine rack.",
+    "confidence": "High",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "BYTE builds a Bell 103 modem",
+      "summary": "BYTE's March 1983 contents list Steve Ciarcia's ECM-103 originate/answer modem project using the Texas Instruments TMS99532.",
+      "confidence": "High",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "VIC-20 expansion stays practical",
+      "summary": "The same BYTE issue listed a second part on adding a 3K-byte memory board to the VIC-20, a reminder that small home machines were often upgraded by hand.",
+      "confidence": "High",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Computer Gaming World keeps Ultima II visible",
+      "summary": "The March-April 1983 Computer Gaming World issue carried Ultima II coverage while adventure and strategy games remained strong Apple II shelf draws.",
+      "confidence": "High",
+      "sourceRefs": [
+        2,
+        3
+      ]
+    },
+    {
+      "title": "IBM PC XT talk reaches the sales floor",
+      "summary": "After IBM's March 8 PC XT introduction, office buyers spent mid-March comparing fixed-disk IBM configurations with software such as Lotus 1-2-3.",
+      "confidence": "High",
+      "sourceRefs": [
+        4,
+        5
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "IBM PC: integrated spreadsheet, database, and graphics package for office buyers."
+    },
+    {
+      "name": "VisiCalc",
+      "detail": "Apple II and other micros: the spreadsheet standard still visible in stores."
+    },
+    {
+      "name": "dBASE II",
+      "detail": "CP/M and IBM PC: database software for small-business records."
+    },
+    {
+      "name": "WordStar",
+      "detail": "CP/M and IBM PC: word processing mainstay."
+    },
+    {
+      "name": "Apple DOS 3.3",
+      "detail": "Apple II: the disk system behind many games, utilities, and education titles."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 computer games",
+      "items": [
+        "Ultima II",
+        "Zork I",
+        "Miner 2049er",
+        "Choplifter",
+        "Wizardry"
+      ]
+    },
+    {
+      "label": "Top 5 movies",
+      "items": [
+        "High Road to China",
+        "Tootsie",
+        "10 to Midnight",
+        "Gandhi",
+        "48 Hrs."
+      ]
+    },
+    {
+      "label": "IBM PC counter",
+      "items": [
+        "IBM PC XT",
+        "Lotus 1-2-3",
+        "dBASE II",
+        "WordStar",
+        "monochrome display"
+      ]
+    },
+    {
+      "label": "Home-computer rack",
+      "items": [
+        "Commodore 64",
+        "VIC-20 memory board",
+        "Atari 800 software",
+        "Apple II disks",
+        "Bell 103 modem kits"
+      ]
+    },
+    {
+      "label": "Magazines",
+      "items": [
+        "BYTE",
+        "Computer Gaming World",
+        "Creative Computing",
+        "Softalk",
+        "Compute!"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Bell 103-compatible modem kits",
+      "price": "project and kit pricing varied by supplier",
+      "note": "BYTE's ECM-103 article shows modem building entering hobbyist conversation."
+    },
+    {
+      "item": "Commodore 64",
+      "price": "under $600 street in many 1983 ads",
+      "note": "Aggressive pricing kept the C64 prominent at home-computer counters."
+    },
+    {
+      "item": "IBM Personal Computer XT",
+      "price": "about $4,995 as introduced",
+      "note": "The fixed-disk XT remained a business-class purchase."
+    },
+    {
+      "item": "Atari 2600 cartridges",
+      "price": "often $20-$35",
+      "note": "Console games still sat beside computer-game shelves."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Modems become a project",
+      "text": "Bell 103-compatible hardware gave hobbyists a concrete way to think about computer-to-computer communication."
+    },
+    {
+      "headline": "VIC-20 owners add memory",
+      "text": "Small memory expansions promised more breathing room for BASIC programs and utilities."
+    },
+    {
+      "headline": "Adventure games keep shelf pull",
+      "text": "Ultima II, Zork, and Wizardry gave stores story-driven alternatives to arcade action."
+    },
+    {
+      "headline": "High Road opens first",
+      "text": "High Road to China led the March 18-20 domestic weekend box office."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Billie Jean",
+      "artist": "Michael Jackson"
+    },
+    {
+      "rank": 2,
+      "title": "Do You Really Want to Hurt Me",
+      "artist": "Culture Club"
+    },
+    {
+      "rank": 3,
+      "title": "Shame on the Moon",
+      "artist": "Bob Seger & The Silver Bullet Band"
+    },
+    {
+      "rank": 4,
+      "title": "Hungry Like the Wolf",
+      "artist": "Duran Duran"
+    },
+    {
+      "rank": 5,
+      "title": "Back on the Chain Gang",
+      "artist": "Pretenders"
+    }
+  ],
+  "periodAd": {
+    "headline": "This week at the computer counter",
+    "summary": "Ask about Apple II adventures, Commodore memory, a Bell 103 modem project, and an IBM PC XT fixed-disk quote before Saturday.",
+    "tagline": "Bring this notice for a disk-drive and printer estimate."
+  },
+  "market": {
+    "headline": "Communications joins the home-computer pitch",
+    "summary": "Modem projects and magazine coverage showed telecommunications becoming part of the hobbyist upgrade path, while IBM PC XT talk kept business buyers focused on fixed disks and integrated software.",
+    "confidence": "High",
+    "sourceRefs": [
+      0,
+      4,
+      5
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Issue date follows Chronicle state file next_start_date=1983-03-14.",
+        "confidence": "High",
+        "sourceRefs": []
+      },
+      {
+        "claim": "BYTE Volume 8 Number 3 listed Steve Ciarcia's Bell 103-compatible ECM-103 modem article and a VIC-20 memory-board article.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "claim": "Computer Gaming World 3.2 supports the named Ultima II and early-1983 game-shelf context.",
+        "confidence": "High",
+        "sourceRefs": [
+          2,
+          3
+        ]
+      },
+      {
+        "claim": "IBM introduced the PC XT the prior week, making fixed-disk IBM PC configurations current mid-March sales-floor news.",
+        "confidence": "High",
+        "sourceRefs": [
+          4,
+          5
+        ]
+      },
+      {
+        "claim": "Music ranking uses Cash Box and Billboard Hot 100 mirrors for March 19, 1983.",
+        "confidence": "Medium",
+        "sourceRefs": [
+          6,
+          7
+        ]
+      },
+      {
+        "claim": "Movie ranking uses Box Office Mojo domestic weekend March 18-20, 1983.",
+        "confidence": "High",
+        "sourceRefs": [
+          8
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "BYTE Magazine Volume 08 Number 03 contents - March 1983",
+      "url": "https://archive.org/details/byte-magazine-1983-03"
+    },
+    {
+      "label": "BYTE March 1983 ECM-103 modem contents listing",
+      "url": "https://archive.org/details/byte-magazine-1983-03"
+    },
+    {
+      "label": "Computer Gaming World 3.2 issue listing",
+      "url": "https://www.oldgames.sk/en/mag/cgw-9"
+    },
+    {
+      "label": "Computer Gaming World 3.2 - Ultima II review listing",
+      "url": "https://www.oldgames.sk/en/mags/article/11511"
+    },
+    {
+      "label": "Christian Science Monitor - IBM upgrades its Personal Computer",
+      "url": "https://www.csmonitor.com/1983/0309/030939.html"
+    },
+    {
+      "label": "This Day in Tech History - IBM Introduces PC-XT",
+      "url": "https://thisdayintechhistory.com/03/08/ibm-introduces-pc-xt/"
+    },
+    {
+      "label": "Cash Box Top 100 week ending March 19, 1983",
+      "url": "https://tropicalglen.com/Archives/80s_files/19830319.html"
+    },
+    {
+      "label": "Billboard Hot 100 mirror for March 19, 1983",
+      "url": "https://elpee.jp/hot100/week/1983-03-19/"
+    },
+    {
+      "label": "Box Office Mojo domestic weekend March 18-20, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W11/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Wanted: Apple II adventure disks",
+      "copy": "Local user group seeks clean copies with manuals; trade BASIC books or blank floppies."
+    },
+    {
+      "headline": "Modem evenings",
+      "copy": "Dealer offers after-hours demonstration of 300-baud terminal software and phone-line setup."
+    }
+  ]
+}

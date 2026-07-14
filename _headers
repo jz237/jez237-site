@@ -68,3 +68,12 @@
 /experiments/amiga-mod-player/audio/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=604800
+
+# chronicle hero art is written once per issue (rare same-day replacement
+# reuses the filename, so cap at a day); per-issue data files only change
+# on their publish day
+/computer-chronicle/media/*
+  Cache-Control: public, max-age=86400
+
+/computer-chronicle/data/issues/*
+  Cache-Control: public, max-age=300, must-revalidate
