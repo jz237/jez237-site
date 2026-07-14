@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-07-14-random-image-style-random-rendering-style-sand-lightbox-alp",
+    "title": "Random rendering style: Sand-Lightbox Alpine Funicular Wash Depot",
+    "tests": "Physical sand-lightbox medium fidelity; diagonal funicular-depot composition; tactile granular materials; coherent wash machinery; no readable text or paper-poster framing",
+    "prompt": "Create a finished square image of a nocturnal alpine funicular wash depot rendered as richly detailed sand-animation lightbox art, photographed as a real physical artwork on illuminated glass rather than a paper poster or generic digital filter. Show a steep little rail depot tucked beneath snow-heavy fir trees: two ribbed funicular cars on diagonal tracks, rotating wash brushes, meltwater channels, a maintenance gantry, cable wheels exposed behind an open service hatch, tiny warm depot windows, a tool trolley, hanging hoses, snowbanks, mountain ridgelines, and drifting clouds. Make the medium unmistakable: translucent amber backlight shining through swept clear-glass paths; dense black volcanic sand forming roofs, machinery, trees, shadows, and cable housings; pale quartz sand for snow; rusty red mineral grains for car panels; teal glass grit for meltwater; finger-dragged contours, combed parallel rail marks, pinched sand ridges, stippled spray, scattered grains, and softly feathered tonal gradients. Let the physical lightbox edge and a few small wooden shaping tools appear subtly at the margins as scale and process cues, while the artwork itself remains the main subject. Use a bold diagonal composition following the track, layered depth from granular foreground machinery to soft mountain silhouettes, warm amber underlight against cold teal and charcoal, crisp tactile grains near the camera, and coherent dense detail throughout. Finished visual example only: no readable text, captions, arrows, labels, logos, watermark, people, prompt-card elements, flat sheet of paper, plain centered object display, cinematic action framing, or photorealistic full-size ambiguity.\n\nReusable fill-in-the-blank template: Render [SUBJECT_OR_PLACE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, flat paper/document composition, plain centered object display, cinematic scene framing, and a generic filter effect.\n\nExample substitution: [SUBJECT_OR_PLACE] = a nocturnal alpine funicular wash depot beneath snow-heavy fir trees; [STYLE_OR_MEDIUM] = sand-animation lightbox art photographed on illuminated glass; [FORMAT_SPECIFIC_MARKS_OR_MATERIALS] = amber backlight, black volcanic sand, pale quartz snow, rusty red mineral grains, teal glass grit, swept clear-glass paths, finger-dragged contours, combed rail marks, pinched ridges, stippled spray, scattered grains, and shaping tools; [ENVIRONMENTAL_CONTEXT] = steep tracks, mountain ridgelines, wash bay, maintenance gantry, cable wheels, snowbanks, meltwater channels, and warm depot windows; [ACTIVE_USE_OR_DISPLAY_SYSTEM] = funicular cars passing through rotating brushes beside an open service hatch and tool trolley; [SPECIFIC_PALETTE] = warm amber, charcoal black, quartz white, rusty red, and cold teal.",
+    "image": "images/2026-07-14-random-image-style-random-rendering-style-sand-lightbox-alp.jpg",
+    "thumb": "thumbs/2026-07-14-random-image-style-random-rendering-style-sand-lightbox-alp.webp",
+    "color": "#664e32",
+    "date": "2026-07-14",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "sand-animation lightbox art",
+      "description": "A snowy alpine funicular wash depot built from volcanic sand, quartz grains, colored mineral grit, and amber light on a physical glass lightbox.",
+      "template": "Render [SUBJECT_OR_PLACE] as richly detailed [STYLE_OR_MEDIUM], where the chosen medium visibly controls construction, lighting, surface texture, edges, scale cues, and spatial logic. Include [FORMAT_SPECIFIC_MARKS_OR_MATERIALS], [ENVIRONMENTAL_CONTEXT], [ACTIVE_USE_OR_DISPLAY_SYSTEM], [SPECIFIC_PALETTE], and tactile fine detail. Avoid readable text, logos, prompt-card layout, flat paper/document composition, plain centered object display, cinematic scene framing, and a generic filter effect."
+    }
+  },
+  {
     "id": "2026-07-13-random-image-style-random-rendering-style-rubber-hose-reefs",
     "title": "Random rendering style: Rubber-Hose Reefside Bicycle Repair",
     "tests": "Test authentic medium control, coherent multi-arm task staging, dense readable workshop detail, non-paper composition, and absence of readable text.",
