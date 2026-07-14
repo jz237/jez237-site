@@ -1,0 +1,471 @@
+{
+  "currentDate": "2026-06-15",
+  "historicDate": "1982-09-27",
+  "displayDate": "Week of September 27-October 3, 1982",
+  "edition": "Issue 009 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "layout": "weekly-newsprint-front",
+    "accent": "black-red-blue",
+    "paper": "halftone-cream",
+    "strapline": "M-Network maze chases, Apple II bestsellers, Commodore 64 shelf pressure, and October pop culture"
+  },
+  "masthead": {
+    "kicker": "A weekly 1982 archive dispatch",
+    "title": "Computer Chronicle",
+    "deck": "Video games, home computers, software counters, and culture for the week of September 27-October 3, 1982"
+  },
+  "layoutPlan": {
+    "main": [
+      "editor-note",
+      "lead",
+      "picture-desk",
+      "computer-items",
+      "software",
+      "store-shelves"
+    ],
+    "sidebar": [
+      "price-watch",
+      "market",
+      "bbs",
+      "curiosity",
+      "briefs",
+      "music",
+      "period-ad",
+      "classifieds",
+      "fallback",
+      "accuracy",
+      "sources"
+    ]
+  },
+  "sectionChrome": {
+    "lead": {
+      "label": "Lead Story"
+    },
+    "pictureDesk": {
+      "label": "Picture Desk",
+      "title": "Scenes From the Week"
+    },
+    "computerItems": {
+      "label": "Computers & Hardware",
+      "title": "Personal Computing Desk"
+    },
+    "software": {
+      "label": "Software Top 5",
+      "title": "Programs on the Editor's Pad"
+    },
+    "storeShelves": {
+      "label": "Top Games This Week",
+      "title": "Arcade, Console & Computer Games"
+    },
+    "priceWatch": {
+      "label": "Price Watch",
+      "title": "What It Cost"
+    },
+    "bbs": {
+      "label": "Modem Desk"
+    },
+    "curiosity": {
+      "label": "Movies / TV / Culture"
+    },
+    "briefs": {
+      "label": "Magazine Rack",
+      "title": "Culture & Shelf Talk"
+    },
+    "music": {
+      "label": "Top Rock This Week",
+      "title": "Hot 100, September 18"
+    },
+    "periodAd": {
+      "label": "Retail / Ads"
+    },
+    "classifieds": {
+      "label": "Classifieds",
+      "title": "Small Ads"
+    },
+    "fallback": {
+      "label": "Editorial Screen"
+    },
+    "accuracy": {
+      "label": "Accuracy Ledger",
+      "title": "What Is Date-Specific"
+    },
+    "sources": {
+      "label": "Source Trail",
+      "title": "Research Log"
+    },
+    "market": {
+      "label": "Retail / Ads",
+      "title": "Computer Store Market"
+    }
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1982-09-27.jpg",
+    "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of September 27-October 3, 1982",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "This issue follows the last week of September 1982 into the first October chart date: Atari VCS shelves fill with licensed and third-party games, Apple II owners keep buying arcade and fantasy titles, and Commodore's 64K machine keeps changing the price conversation.",
+  "morningLine": "M-Network turns a Data East maze chase into an Atari VCS shelf story while Jack & Diane takes over the radio and E.T. keeps ruling theaters.",
+  "lead": {
+    "headline": "Lock 'n' Chase Joins the Atari VCS Maze Rush",
+    "summary": "Mattel's M-Network brought Data East's Lock 'n' Chase to the Atari VCS in October 1982, giving Atari owners another arcade-style maze game just as third-party console shelves were becoming crowded. The cartridge put a thief, police pursuit, doors, and gold bars into the home-console aisle, and it showed how aggressively Intellivision's parent company was now chasing Atari households with software.",
+    "confidence": "Lock 'n' Chase is listed as an October 1982 M-Network Atari 2600 release; used as exact-month shelf context for this weekly issue",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "computerItems": [
+    {
+      "label": "Console Shelf",
+      "headline": "M-Network Crosses the Aisle",
+      "summary": "Lock 'n' Chase made the Atari VCS wall feel less like an Atari-only space and more like a publisher contest, with Mattel selling arcade-licensed cartridges directly to Atari families.",
+      "confidence": "October 1982 Atari 2600 release listing and Mattel manual context",
+      "sourceRefs": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "label": "Apple II Games",
+      "headline": "Choplifter Leads the Softalk Crowd",
+      "summary": "Softalk-derived 1982 Apple II bestseller summaries put Choplifter, Wizardry, Cannonball Blitz, Knight of Diamonds, and Night Mission Pinball near the front of the Apple II games conversation.",
+      "confidence": "Annual 1982 Softalk bestseller summary; same-year rather than exact-week chart",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "label": "Home Computer Desk",
+      "headline": "Commodore 64 Keeps the 64K Pitch Simple",
+      "summary": "With U.S. marketing under way at a $595 list price, the Commodore 64 made memory capacity a retail headline alongside the Apple II, Atari 400/800, and VIC-20.",
+      "confidence": "C64 marketing and list-price references for 1982",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "label": "Software Counter",
+      "headline": "Business Buyers Still Ask for VisiCalc",
+      "summary": "Even in a game-heavy week, the spreadsheet remained the plain demonstration of why a microcomputer belonged in a small office.",
+      "confidence": "Period business-software context",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "VisiCalc",
+      "platform": "Apple II / business micros",
+      "detail": "The spreadsheet still turned showroom demos into office purchases.",
+      "confidence": "Period business-software context",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "name": "Apple Writer",
+      "platform": "Apple II",
+      "detail": "Word processing stayed a practical reason to add disk drives, printers, and extra memory.",
+      "confidence": "Period Apple II software context",
+      "sourceRefs": [
+        7
+      ]
+    },
+    {
+      "name": "Wizardry: Proving Grounds of the Mad Overlord",
+      "platform": "Apple II",
+      "detail": "A fantasy staple still showing up in 1982 Apple II bestseller discussions.",
+      "confidence": "1982 Apple II bestseller summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "name": "Knight of Diamonds",
+      "platform": "Apple II",
+      "detail": "The second Wizardry scenario remained part of the same Apple II role-playing shelf.",
+      "confidence": "1982 Apple II bestseller summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "name": "Night Mission Pinball",
+      "platform": "Apple II",
+      "detail": "SubLogic's pinball program appears among the notable 1982 Apple II game sellers.",
+      "confidence": "1982 Apple II bestseller summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    }
+  ],
+  "storeShelves": [
+    {
+      "name": "Lock 'n' Chase",
+      "platform": "M-Network / Atari VCS",
+      "detail": "October 1982 Data East-licensed maze chase for Atari households.",
+      "confidence": "October 1982 release listing",
+      "sourceRefs": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "name": "Choplifter",
+      "platform": "Apple II",
+      "detail": "Broderbund rescue action at the top of 1982 Apple II game sales summaries.",
+      "confidence": "1982 Softalk bestseller summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "name": "Wizardry",
+      "platform": "Apple II",
+      "detail": "Dungeon exploration remained a core Apple II sales draw.",
+      "confidence": "1982 Softalk bestseller summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "name": "Cannonball Blitz",
+      "platform": "Apple II",
+      "detail": "Sierra arcade action listed among leading 1982 Apple II games.",
+      "confidence": "1982 Softalk bestseller summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    },
+    {
+      "name": "Night Mission Pinball",
+      "platform": "Apple II",
+      "detail": "SubLogic pinball kept the simulation/arcade shelf lively.",
+      "confidence": "1982 Softalk bestseller summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64 computer",
+      "price": "$595 list price",
+      "note": "The new 64K computer made memory size the sales hook."
+    },
+    {
+      "item": "Atari VCS cartridges",
+      "price": "often around $25-$35 at retail",
+      "note": "Licensed arcade and third-party titles made the cartridge wall crowded."
+    },
+    {
+      "item": "Apple II disk games",
+      "price": "commonly sold as premium disk software",
+      "note": "Fantasy and arcade titles justified disk-drive ownership."
+    }
+  ],
+  "market": {
+    "headline": "Third-Party Console Shelves Keep Tightening",
+    "summary": "Lock 'n' Chase underlines the late-1982 Atari VCS story: publishers were using licenses, arcade names, and recognizable play styles to fight for the same cartridge buyer before the holiday rush.",
+    "confidence": "October 1982 M-Network release plus broader 1982 console-market context",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ]
+  },
+  "bbsNote": {
+    "headline": "Modem Desk: Local Boards Trade Game Tips",
+    "summary": "The same buyers comparing Apple II disks and Atari cartridges increasingly used local bulletin boards and user groups to swap hints, prices, and rumors.",
+    "confidence": "General early-1980s microcomputer culture context",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "curiosity": {
+    "headline": "E.T. Still Owns the Weekend",
+    "summary": "For the weekly box-office frame ending October 1, E.T. led U.S. theaters ahead of An Officer and a Gentleman, Amityville II, Fast Times at Ridgemont High, and The Best Little Whorehouse in Texas.",
+    "confidence": "Dated weekly box-office chart",
+    "sourceRefs": [
+      8
+    ]
+  },
+  "briefs": [
+    {
+      "label": "Music",
+      "headline": "Jack & Diane Reaches No. 1",
+      "summary": "John Cougar takes the October 2 Hot 100 lead, followed by Chicago, Steve Miller Band, Survivor, and Melissa Manchester.",
+      "confidence": "Dated singles chart source",
+      "sourceRefs": [
+        9,
+        10
+      ]
+    },
+    {
+      "label": "Movies",
+      "headline": "E.T. Leads the Weekly Box Office Again",
+      "summary": "The weekly domestic chart for October 1 keeps E.T. in first place with An Officer and a Gentleman second.",
+      "confidence": "Dated weekly box-office chart",
+      "sourceRefs": [
+        8
+      ]
+    },
+    {
+      "label": "Games",
+      "headline": "Apple II Bestsellers Mix Arcade and Fantasy",
+      "summary": "Choplifter, Wizardry, Cannonball Blitz, Knight of Diamonds, and Night Mission Pinball show the range of Apple II games selling in 1982.",
+      "confidence": "Annual Softalk-derived summary",
+      "sourceRefs": [
+        3,
+        4
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "title": "Jack & Diane",
+      "artist": "John Cougar"
+    },
+    {
+      "title": "Hard To Say I'm Sorry",
+      "artist": "Chicago"
+    },
+    {
+      "title": "Abracadabra",
+      "artist": "Steve Miller Band"
+    },
+    {
+      "title": "Eye Of The Tiger",
+      "artist": "Survivor"
+    },
+    {
+      "title": "You Should Hear How She Talks About You",
+      "artist": "Melissa Manchester"
+    }
+  ],
+  "periodAd": {
+    "headline": "This Week at the Counter",
+    "summary": "Ask about Lock 'n' Chase for Atari VCS, Apple II disk adventures, and the new 64K Commodore machine. Bring a blank disk for the user-group demo night.",
+    "style": "small boxed 1982 computer-store advertisement"
+  },
+  "classifieds": [
+    {
+      "headline": "Wanted",
+      "copy": "Apple II game disks, especially Wizardry scenarios and arcade titles. Will trade manuals and hint sheets."
+    },
+    {
+      "headline": "For Sale",
+      "copy": "Atari VCS cartridges, two joysticks, paddles, and carrying case. Call after 6 p.m."
+    }
+  ],
+  "worldFallback": {
+    "headline": "No Hard-News Detour",
+    "summary": "This issue keeps the front page on games, home computers, software, prices, and culture rather than routine world or sports items."
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Lock 'n' Chase for Atari VCS is treated as the lead",
+        "status": "Exact-month October 1982 release; weekly placement is shelf-context"
+      },
+      {
+        "claim": "Music chart uses October 2, 1982 Hot 100 order",
+        "status": "Dated chart"
+      },
+      {
+        "claim": "Movie list uses weekly domestic box office dated October 1, 1982",
+        "status": "Dated chart"
+      },
+      {
+        "claim": "Apple II games use 1982 Softalk-derived bestseller summaries",
+        "status": "Same-year context, not exact-week ranking"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "name": "AtariAge Lock 'N Chase manual page, Mattel 1982 manual text",
+      "url": "https://atariage.com/manual_html_page.php?SoftwareLabelID=273"
+    },
+    {
+      "name": "Atari 2600 game release list: Lock n Chase, M Network, October 1982",
+      "url": "https://en.wikipedia.org/wiki/List_of_Atari_2600_games"
+    },
+    {
+      "name": "PriceCharting Lock n Chase identifier and 1982 M Network listing",
+      "url": "https://www.pricecharting.com/game/atari-2600/lock-%27n-chase"
+    },
+    {
+      "name": "Apple II History 1982 Softalk top games summary",
+      "url": "https://www.apple2history.org/appendix/aha/aha82/"
+    },
+    {
+      "name": "Classic Apple II Games analysis of Softalk bestseller lists",
+      "url": "https://allincolorforaquarter.blogspot.com/2015/08/classic-apple-ii-games-analyis-of.html"
+    },
+    {
+      "name": "Commodore 64 release and $595 launch price summary",
+      "url": "https://en.wikipedia.org/wiki/Commodore_64"
+    },
+    {
+      "name": "VisiCalc historical context",
+      "url": "https://en.wikipedia.org/wiki/VisiCalc"
+    },
+    {
+      "name": "Apple II software and user culture context",
+      "url": "https://www.gamedeveloper.com/business/a-history-of-gaming-platforms-the-apple-ii"
+    },
+    {
+      "name": "The Numbers weekly domestic box office chart for October 1, 1982",
+      "url": "https://www.the-numbers.com/box-office-chart/weekly/1982/10/01"
+    },
+    {
+      "name": "Top40Weekly Hot 100 for week ending October 2, 1982",
+      "url": "https://top40weekly.com/2013/10/02/us-top-40-singles-for-the-week-ending-october-2-1982/"
+    },
+    {
+      "name": "Billboard Hot 100 number-one history for October 2, 1982",
+      "url": "https://en.wikipedia.org/wiki/List_of_Billboard_Hot_100_number_ones_of_1982"
+    }
+  ],
+  "frontPageStories": [
+    "Lock 'n' Chase Joins the Atari VCS Maze Rush",
+    "Apple II Bestsellers Mix Arcade and Fantasy",
+    "Commodore 64 Keeps the 64K Pitch Simple",
+    "Jack & Diane Reaches No. 1"
+  ],
+  "movieChart": [
+    {
+      "title": "E.T. The Extra-Terrestrial"
+    },
+    {
+      "title": "An Officer and a Gentleman"
+    },
+    {
+      "title": "Amityville II: The Possession"
+    },
+    {
+      "title": "Fast Times at Ridgemont High"
+    },
+    {
+      "title": "The Best Little Whorehouse in Texas"
+    }
+  ],
+  "musicChartSourceRefs": [
+    9,
+    10
+  ]
+}

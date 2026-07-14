@@ -1,0 +1,325 @@
+{
+  "currentDate": "2026-07-14",
+  "historicDate": "1983-05-23",
+  "displayDate": "Week of May 23–29, 1983",
+  "edition": "Issue 043 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Warm newsprint with arcade-red and terminal-blue accents",
+    "motifs": [
+      "graph paper",
+      "joystick diagrams",
+      "5¼-inch disks",
+      "halftone cinema marquee"
+    ],
+    "layout": "Gaming-led metropolitan computer weekly with dense shelf and chart rails"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+    "dateline": "Week of May 23–29, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Game-design lead across the upper fold with an Apple II sketchbook halftone",
+    "secondaryRail": "Return of the Jedi, charts, shelf watch, and prices",
+    "archiveNavigation": "Previous/next weekly issue controls and calendar archive"
+  },
+  "sectionChrome": {
+    "primary": "Arcade red",
+    "secondary": "CRT blue",
+    "texture": "Aged newsprint, fine rules, halftone dots, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-05-23.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of May 23–29, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "This week the keyboard becomes a workshop: game makers explain how rules, maps, prose, and player imagination turn modest home computers into whole worlds.",
+  "morningLine": "Tuesday, May 24, 1983: game design reaches the science pages while shoppers compare disks, joysticks, and the new IBM PC XT.",
+  "lead": {
+    "headline": "Game Makers Map the Imaginative Path",
+    "dek": "Designers turn tiny memories into puzzles, adventures, and worlds the player helps complete.",
+    "body": "A May 24 New York Times personal-computing column puts game design in the spotlight. The craft is less a matter of spectacle than of carefully chosen rules, feedback, surprise, and room for the player’s imagination. Across the month’s computer magazines, the same inventive energy appears in adventure contests, modem play, construction sets, and reviews of strategy simulations—proof that the home computer is becoming a medium, not merely a machine.",
+    "confidence": "Exact-day article verified; surrounding game-design context is corroborated by May–June 1983 period magazines.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "computerItems": [
+    {
+      "title": "Modem Gaming Links Distant Players",
+      "summary": "Computer Gaming World examines play over telephone lines, an early glimpse of networked competition and companionship.",
+      "confidence": "Verified in the May–June 1983 issue contents.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Apple II Meets the Music Studio",
+      "summary": "Softalk’s May cover package follows Herbie Hancock and professional music systems, showing the microcomputer becoming an instrument and production partner.",
+      "confidence": "Verified from the May 1983 Softalk issue profile.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "IBM PC XT Gets the Hands-On Treatment",
+      "summary": "PC World devotes a special report to IBM’s expanded PC, with its built-in hard disk and updated operating environment.",
+      "confidence": "Verified from the May 1983 PC World cover and Computer History Museum catalog.",
+      "sourceRefs": [
+        3,
+        13
+      ]
+    },
+    {
+      "title": "Color Plotters Reach the Home Desk",
+      "summary": "Compute! surveys lower-cost multicolor plotters while asking whether memory expansion is becoming a status symbol.",
+      "confidence": "Verified from the May 1983 Compute! cover.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lode Runner",
+      "detail": "Brøderbund’s run-climb-dig action game and level editor for the Apple II."
+    },
+    {
+      "name": "Zork III",
+      "detail": "Infocom’s text adventure continues the Great Underground Empire on disk."
+    },
+    {
+      "name": "VisiCalc",
+      "detail": "The spreadsheet that still defines a practical reason to own an Apple II."
+    },
+    {
+      "name": "WordStar",
+      "detail": "MicroPro’s widely used CP/M word processor for serious desk work."
+    },
+    {
+      "name": "The Print Shop",
+      "detail": "Brøderbund’s Apple II page-design package for signs, cards, and banners."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Lode Runner",
+        "Zork III",
+        "Wizardry",
+        "Choplifter!",
+        "Ultima II"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Return of the Jedi",
+        "Blue Thunder",
+        "Spacehunter: Adventures in the Forbidden Zone",
+        "Flashdance",
+        "Breathless"
+      ]
+    },
+    {
+      "label": "Home Computers",
+      "items": [
+        "Commodore 64",
+        "Apple IIe",
+        "Atari 800",
+        "TI-99/4A",
+        "Radio Shack TRS-80 Color Computer"
+      ]
+    },
+    {
+      "label": "Office Software",
+      "items": [
+        "VisiCalc",
+        "WordStar",
+        "dBASE II",
+        "Lotus 1-2-3",
+        "MultiPlan"
+      ]
+    },
+    {
+      "label": "Adventure & Strategy",
+      "items": [
+        "Zork III",
+        "Wizardry",
+        "Ultima II",
+        "Computer Ambush",
+        "Knights of the Desert"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64",
+      "price": "$595 list",
+      "note": "Color home computer with 64K RAM."
+    },
+    {
+      "item": "Apple IIe",
+      "price": "$1,395 list",
+      "note": "Base system; monitor and drives extra."
+    },
+    {
+      "item": "IBM PC XT",
+      "price": "From $4,995",
+      "note": "Includes 10MB hard disk in the announced configuration."
+    },
+    {
+      "item": "Atari 800",
+      "price": "$899 list",
+      "note": "Retail discounts vary as the home-computer price war sharpens."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Jedi Crowds the Marquees",
+      "text": "Return of the Jedi opens May 25 and immediately becomes the week’s cinema event."
+    },
+    {
+      "headline": "The Electronic Office",
+      "text": "BYTE’s May number asks how computers, communications, and printers will reshape desk work."
+    },
+    {
+      "headline": "Adventure Contest",
+      "text": "Computer Gaming World challenges readers with a puzzle built around the booming adventure genre."
+    },
+    {
+      "headline": "Hard Disk on the Desk",
+      "text": "The IBM PC XT makes fixed storage a centerpiece of the business microcomputer conversation."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Flashdance... What a Feeling",
+      "artist": "Irene Cara"
+    },
+    {
+      "rank": 2,
+      "title": "Let's Dance",
+      "artist": "David Bowie"
+    },
+    {
+      "rank": 3,
+      "title": "Beat It",
+      "artist": "Michael Jackson"
+    },
+    {
+      "rank": 4,
+      "title": "Little Red Corvette",
+      "artist": "Prince"
+    },
+    {
+      "rank": 5,
+      "title": "Overkill",
+      "artist": "Men at Work"
+    }
+  ],
+  "periodAd": {
+    "headline": "Put a World on Your Floppy",
+    "summary": "Adventure, arcade action, and strategy now share the same shelf—bring home a blank disk, a joystick, and an idea.",
+    "tagline": "Your next great game begins at the keyboard."
+  },
+  "market": {
+    "headline": "PC XT Raises the Business-Micro Stakes",
+    "summary": "IBM’s XT packages a 10-megabyte hard disk with the familiar PC architecture, pushing small offices toward larger programs and local data storage even as home-computer makers battle on price.",
+    "confidence": "Product configuration and May 1983 coverage verified; market interpretation is contemporary context.",
+    "sourceRefs": [
+      3,
+      13
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Sea of Japan Quake Sends Destructive Tsunami",
+    "summary": "On May 26, a magnitude 7.8 earthquake off northern Honshu generates a tsunami and leaves roughly 100 people dead, the week’s gravest international news.",
+    "confidence": "Date, magnitude, tsunami, and approximate death toll are documented by USGS and historical records.",
+    "sourceRefs": [
+      10
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Exact-day lead is anchored to the May 24, 1983 New York Times column.",
+      "Music ranking follows the Billboard Hot 100 dated May 28, 1983.",
+      "Movie shelf reflects the May 27–29 domestic weekend, led by Return of the Jedi.",
+      "Game and software shelves use named titles documented in period magazines and contemporary Apple II records.",
+      "Prices are period list prices and may differ from dealer advertisements."
+    ]
+  },
+  "sources": [
+    {
+      "label": "The New York Times — “The Imaginative Path to Designing Games,” May 24, 1983",
+      "url": "https://www.nytimes.com/1983/05/24/science/personal-computers-the-imaginative-path-to-designing-games.html"
+    },
+    {
+      "label": "Computer Gaming World, May–June 1983",
+      "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+    },
+    {
+      "label": "Softalk, May 1983 issue profile",
+      "url": "https://softalkapple.com/issue_profiles/v_3_n_9_may-1983.html"
+    },
+    {
+      "label": "PC World, May 1983",
+      "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+    },
+    {
+      "label": "Compute!, May 1983",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_036_1983_May.pdf"
+    },
+    {
+      "label": "BYTE, May 1983 — The Electronic Office",
+      "url": "https://archive.org/details/byte-magazine-1983-05"
+    },
+    {
+      "label": "Billboard Hot 100, week of May 28, 1983",
+      "url": "https://www.elpee.jp/hot100/week/1983-05-28"
+    },
+    {
+      "label": "Cash Box Top 100, May 28, 1983",
+      "url": "https://cashboxarchives.com/archives/80s_files/19830528.html"
+    },
+    {
+      "label": "Box Office Mojo — May 27–29, 1983 weekend",
+      "url": "https://www.boxofficemojo.com/weekend/1983W21/"
+    },
+    {
+      "label": "Apple II History — 1983 software",
+      "url": "https://www.apple2history.org/appendix/aha/aha83/"
+    },
+    {
+      "label": "United States Geological Survey — 1983 Sea of Japan earthquake",
+      "url": "https://earthquake.usgs.gov/earthquakes/eventpage/official19830526035959_30/executive"
+    },
+    {
+      "label": "Encyclopaedia Britannica — Return of the Jedi",
+      "url": "https://www.britannica.com/topic/Return-of-the-Jedi"
+    },
+    {
+      "label": "Internet Archive — Personal Computing, May 1983",
+      "url": "https://archive.org/details/PersonalComputing198305"
+    },
+    {
+      "label": "Computer History Museum — IBM PC XT",
+      "url": "https://www.computerhistory.org/collections/catalog/102716225"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM PLAYERS WANTED",
+      "copy": "Apple and Atari owners seek evening strategy matches. Local calls preferred. Leave baud rate and hours."
+    },
+    {
+      "headline": "DISKS & JOYSTICKS",
+      "copy": "Fresh 5¼-inch media, storage cases, paddles, and repair service at the neighborhood computer counter."
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from "node:fs";
 import path from "node:path";
+import { spawnSync } from "node:child_process";
 
 const root = path.dirname(new URL(import.meta.url).pathname);
 const dataPath = path.join(root, "data", "issues.json");
@@ -247,6 +248,16 @@ warnings.forEach((message) => console.warn(`Warning: ${message}`));
 if (errors.length) {
   errors.forEach((message) => console.error(`Error: ${message}`));
   process.exit(1);
+}
+
+// Keep data/index.json and data/issues/ in sync with issues.json whenever
+// validation passes, so the split files can never drift from the archive.
+if (process.env.CHRONICLE_SKIP_DERIVE !== "1") {
+  const derive = spawnSync(process.execPath, [path.join(root, "build-data-index.mjs")], { stdio: "inherit" });
+  if (derive.status !== 0) {
+    console.error("Error: failed to derive data/index.json and data/issues/ from issues.json.");
+    process.exit(1);
+  }
 }
 
 console.log(`Computer Chronicle issue data ok: ${issues.length} issue(s), ${warnings.length} warning(s).`);
