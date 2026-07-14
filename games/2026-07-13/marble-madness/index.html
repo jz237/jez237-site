@@ -34,7 +34,7 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics,
    dynamic (animated) wave bands, multi-race chain with time carryover, Steelie rival AI. */
-const VERSION = '0.15.0';
+const VERSION = '0.16.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
@@ -174,20 +174,29 @@ function buildBeginner(){ newGrid(26,110);
   slab(3,16,12,24,10,GRID);
   slab(15,16,22,24,10,GRID);
   slab(13,19,14,20,10,GRID);                       // bridge between halves
-  // pyramid zone
+  // pyramid zone (reference map shows green munchers here)
   slab(3,25,22,31,10,GRID);
   pyramid(6,26,10,12); pyramid(12,26,10,12); pyramid(18,26,10,12);
+  hazards.push({type:'muncher',v:9,u:27.5,homeV:9,homeU:27.5,phase:0,state:'idle',hopT:0,tv:9,tu:27.5,docile:true});
+  hazards.push({type:'muncher',v:13,u:30,homeV:13,homeU:30,phase:0.9,state:'idle',hopT:0,tv:13,tu:30,docile:true});
   // narrow to right-side channel, then pink slide down
   slab(14,32,21,38,10,GRID);
   rampU(15,39,20,46,10,4,PINK);
   slab(14,39,14,46,12,PINK); slab(21,39,21,46,12,PINK);   // slide walls
   // lower deck, twin narrow bridges over the big void
   slab(3,47,22,56,4,GRID);
+  // pink tunnel-house: drop in, come out past the bridges (the map's doorway shortcut)
+  slab(3,48,6,51,6.4,{tint:'#c95f9d'});
+  slab(4,48,5,48,4,GRID);
+  carve(4,49,5,50);
+  hazards.push({type:'tube',rect:{v0:4,v1:6,u0:49,u1:51},exit:{v:12.5,u:62},busyT:0});
   rampU(5,57,6,60,4,3); rampU(17,57,18,60,4,3);           // two 2-wide bridges
   slab(3,61,22,64,3,GRID);
-  // steelie zone
+  // steelie zone with a catapult flinger (map shows pink catapults here)
   slab(3,65,22,74,3,GRID);
   slab(8,68,9,69,4.2,GRID); slab(15,71,16,72,4.2,GRID);
+  slab(11,66,13,67,3.02,{tex:'grid',tint:'#d8b04a'});
+  hazards.push({type:'catapult',rect:{v0:11,v1:14,u0:66,u1:68},launch:{vv:0,vu:8.5,vz:5.5},snap:{v:12.5,u:67},busyT:0});
   // descent to the waves
   rampU(3,75,22,80,3,1.2,GRID);
   slab(3,81,22,82,1.2,GRID);
@@ -880,10 +889,10 @@ function updateHazards(dt){
         h.hopT+=dt;
         if(h.hopT>0.85){ h.hopT=0;
           let tv=h.homeV+Math.sin(h.phase*0.7)*1.6, tu=h.homeU+Math.cos(h.phase*0.5)*1.2;
-          let best=null,bd=7.5;
-          for(const pl of players) if(pl.alive&&!pl.hidden){ const d=Math.hypot(pl.v-h.v,pl.u-h.u);
-            if(d<bd){ bd=d; best=pl; } }
-          if(best){ tv=best.v; tu=best.u; }
+          if(!h.docile){ let best=null,bd=7.5;
+            for(const pl of players) if(pl.alive&&!pl.hidden){ const d=Math.hypot(pl.v-h.v,pl.u-h.u);
+              if(d<bd){ bd=d; best=pl; } }
+            if(best){ tv=best.v; tu=best.u; } }
           const dd=Math.hypot(tv-h.v,tu-h.u)||1, L=Math.min(1.7,dd);
           h.sv=h.v; h.su=h.u; h.tv=h.v+(tv-h.v)/dd*L; h.tu=h.u+(tu-h.u)/dd*L;
           h.state='hop'; h.hopK=0;
