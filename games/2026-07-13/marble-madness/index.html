@@ -28,13 +28,13 @@ canvas{position:absolute;inset:0;width:100%;height:100%;display:block;background
   <div><a href="../../">&larr; jez237 games</a></div>
 </div>
 <div id="stage"><canvas id="game" width="640" height="400"></canvas></div>
-<div class="hint"><span>Arrows/WASD</span> roll &middot; <span>click</span> for mouse-trackball (Esc releases) &middot; <span>drag</span> on touch &middot; gamepad left stick &middot; <span>P</span> pause &middot; <span>M</span> mute</div>
+<div class="hint"><span>Arrows/WASD</span> roll &middot; <span>click</span> for mouse-trackball (Esc releases) &middot; <span>drag</span> on touch &middot; gamepad left stick &middot; <span>P</span> pause &middot; <span>M</span> mute (music + sfx)</div>
 <script>
 "use strict";
 /* MARBLE MADNESS — practice build. Clean-room recreation: all code + art original.
    Engine: axonometric per-cell heightfield, painter-order prerender, fixed-step physics,
    dynamic (animated) wave bands, multi-race chain with time carryover, Steelie rival AI. */
-const VERSION = '0.9.0';
+const VERSION = '0.10.0';
 const QA = new URLSearchParams(location.search).has('qa');
 
 /* ---------- projection basis (trimetric-ish; tune vs reference later) ---------- */
@@ -469,9 +469,11 @@ function prerender(){
 }
 
 /* ---------- audio ---------- */
-const Snd=(()=>{ let ac=null,master=null,rollGain=null,rollFilt=null,muted=QA;
+const Snd=(()=>{ let ac=null,master=null,rollGain=null,rollFilt=null,muted=QA,musicBus=null;
   function ctx(){ if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)();
       master=ac.createGain(); master.gain.value=0.5; master.connect(ac.destination);
+      musicBus=ac.createGain(); musicBus.gain.value=muted?0:0.5; musicBus.connect(master);
+      if(window.__bindMusic) window.__bindMusic(ac,musicBus);
       const len=ac.sampleRate*1.2, buf=ac.createBuffer(1,len,ac.sampleRate), d=buf.getChannelData(0);
       for(let i=0;i<len;i++) d[i]=Math.random()*2-1;
       const src=ac.createBufferSource(); src.buffer=buf; src.loop=true;
@@ -491,7 +493,8 @@ const Snd=(()=>{ let ac=null,master=null,rollGain=null,rollFilt=null,muted=QA;
     const gn=a.createGain(); gn.gain.value=vol; src.connect(f).connect(gn).connect(master); src.start(t); }
   return {
     unlock(){ const a=ctx(); if(a&&a.state==='suspended') a.resume(); },
-    setMuted(m){ muted=m; if(rollGain) rollGain.gain.value=0; }, get muted(){ return muted; },
+    setMuted(m){ muted=m; if(rollGain) rollGain.gain.value=0;
+      if(musicBus) musicBus.gain.value=m?0:0.5; }, get muted(){ return muted; },
     roll(speed,grounded){ if(!ac||muted||!rollGain) return;
       const target=grounded?Math.min(1,speed/9)*0.32:0;
       rollGain.gain.setTargetAtTime(target,ac.currentTime,0.06);
@@ -513,6 +516,121 @@ const Snd=(()=>{ let ac=null,master=null,rollGain=null,rollFilt=null,muted=QA;
   };
 })();
 
+/* ---------- music: tiny FM sequencer, all original compositions ---------- */
+const Music=(()=>{
+  const NOTE=(m)=>440*Math.pow(2,(m-69)/12);
+  // tracks: bpm + channels (fm lead / tri bass / pulse arp) + drum pattern (16ths)
+  // notes: [midi(or null=rest), sixteenths]
+  const T={
+    title:{bpm:96,ch:[
+      {t:'fm',r:2,i:60,g:.16,n:[[69,4],[76,4],[72,4],[71,4],[69,4],[64,4],[67,6],[69,2],[null,4],[76,4],[74,4],[71,4],[72,8],[null,8]]},
+      {t:'tri',g:.2,n:[[45,8],[40,8],[41,8],[43,8],[45,8],[40,8],[43,8],[43,8]]},
+      {t:'sq',g:.05,n:[[57,2],[60,2],[64,2],[60,2],[57,2],[60,2],[64,2],[60,2],[53,2],[57,2],[60,2],[57,2],[55,2],[59,2],[62,2],[59,2]]}],
+      dr:{k:[0,8,16,24,32,40,48,56],h:[4,12,20,28,36,44,52,60]}},
+    practice:{bpm:112,ch:[
+      {t:'fm',r:3,i:80,g:.15,n:[[72,2],[76,2],[79,2],[76,2],[81,4],[79,2],[76,2],[77,2],[81,2],[84,2],[81,2],[79,4],[76,2],[74,2],[72,2],[76,2],[79,4],[83,2],[81,2],[79,2],[77,2],[76,2],[74,2],[72,8]]},
+      {t:'tri',g:.22,n:[[48,4],[55,4],[53,4],[60,4],[55,4],[62,4],[48,4],[55,4],[48,4],[55,4],[53,4],[60,4],[55,4],[59,4],[48,8]]},
+      {t:'sq',g:.045,n:[[64,2],[67,2],[72,2],[67,2],[65,2],[69,2],[72,2],[69,2],[67,2],[71,2],[74,2],[71,2],[64,2],[67,2],[72,2],[67,2]]}],
+      dr:{k:[0,8,16,24,32,40,48,56],s:[8,24,40,56],h:[2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62]}},
+    beginner:{bpm:120,ch:[
+      {t:'fm',r:2,i:95,g:.15,n:[[67,3],[67,1],[70,2],[72,2],[74,4],[72,2],[70,2],[67,4],[65,2],[67,2],[70,6],[67,2],[74,3],[74,1],[77,2],[79,2],[77,4],[74,2],[72,2],[74,8]]},
+      {t:'tri',g:.24,n:[[43,2],[43,2],[50,2],[43,2],[46,2],[43,2],[50,2],[46,2],[43,2],[43,2],[50,2],[43,2],[48,2],[46,2],[45,2],[46,2]]},
+      {t:'sq',g:.04,n:[[62,2],[65,2],[67,2],[65,2],[62,2],[65,2],[67,2],[65,2],[60,2],[63,2],[67,2],[63,2],[62,2],[65,2],[67,2],[65,2]]}],
+      dr:{k:[0,6,16,22,32,38,48,54],s:[8,24,40,56],h:[0,4,8,12,16,20,24,28,32,36,40,44,48,52,56,60]}},
+    intermediate:{bpm:126,ch:[
+      {t:'fm',r:2.01,i:110,g:.15,n:[[62,2],[65,2],[69,2],[65,2],[70,3],[69,1],[65,4],[62,2],[65,2],[69,2],[72,2],[73,3],[72,1],[69,4],[74,4],[73,2],[72,2],[70,2],[69,2],[67,2],[65,2],[62,2],[61,2],[62,12]]},
+      {t:'tri',g:.24,n:[[38,2],[38,2],[45,2],[38,2],[41,2],[38,2],[46,2],[45,2],[38,2],[38,2],[45,2],[38,2],[43,2],[45,2],[46,2],[49,2]]},
+      {t:'sq',g:.04,n:[[57,2],[62,2],[65,2],[62,2],[58,2],[62,2],[65,2],[62,2],[57,2],[62,2],[65,2],[62,2],[58,2],[61,2],[65,2],[61,2]]}],
+      dr:{k:[0,8,16,20,32,40,48,52],s:[8,24,40,56],h:[2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62]}},
+    aerial:{bpm:108,ch:[
+      {t:'fm',r:5,i:45,g:.12,n:[[76,2],[79,2],[83,2],[86,2],[83,2],[79,2],[76,2],[79,2],[74,2],[78,2],[81,2],[86,2],[81,2],[78,2],[74,2],[78,2],[76,2],[79,2],[83,2],[88,2],[83,2],[79,2],[76,2],[79,2],[81,4],[79,4],[78,4],[74,4]]},
+      {t:'tri',g:.2,n:[[40,16],[38,16],[40,16],[38,8],[35,8]]},
+      {t:'sq',g:.035,n:[[64,4],[67,4],[64,4],[66,4],[64,4],[67,4],[66,4],[62,4]]}],
+      dr:{k:[0,16,32,48],h:[8,12,24,28,40,44,56,60]}},
+    silly:{bpm:132,ch:[
+      {t:'fm',r:3,i:70,g:.15,n:[[65,2],[69,2],[72,2],[71,2],[72,2],[76,2],[77,4],[76,2],[72,2],[69,3],[68,1],[69,4],[65,2],[69,2],[72,2],[74,2],[75,2],[76,2],[81,4],[77,2],[76,2],[72,2],[69,2],[65,4]]},
+      {t:'tri',g:.24,n:[[41,2],[48,2],[53,2],[48,2],[41,2],[48,2],[53,2],[48,2],[46,2],[53,2],[58,2],[53,2],[48,2],[53,2],[55,2],[48,2]]},
+      {t:'sq',g:.045,n:[[60,1],[null,1],[65,1],[null,1],[60,1],[null,1],[65,1],[null,1],[62,1],[null,1],[65,1],[null,1],[62,1],[null,1],[65,1],[null,1],[60,1],[null,1],[65,1],[null,1],[60,1],[null,1],[65,1],[null,1],[65,1],[null,1],[70,1],[null,1],[67,1],[null,1],[65,1],[null,1]]}],
+      dr:{k:[0,8,16,24,32,40,48,56],s:[4,12,20,28,36,44,52,60]}},
+    ultimate:{bpm:138,ch:[
+      {t:'fm',r:2,i:130,g:.15,n:[[60,2],[60,2],[63,2],[65,2],[66,2],[65,2],[63,2],[60,2],[58,2],[58,2],[62,2],[63,2],[65,4],[63,2],[62,2],[60,2],[60,2],[63,2],[65,2],[68,2],[67,2],[65,2],[63,2],[62,4],[63,4],[65,4],[67,4]]},
+      {t:'tri',g:.26,n:[[36,1],[36,1],[43,1],[36,1],[36,1],[43,1],[36,1],[43,1],[34,1],[34,1],[41,1],[34,1],[34,1],[41,1],[34,1],[41,1],[36,1],[36,1],[43,1],[36,1],[36,1],[43,1],[36,1],[43,1],[38,1],[38,1],[43,1],[38,1],[39,1],[39,1],[46,1],[39,1]]},
+      {t:'sq',g:.04,n:[[60,2],[63,2],[67,2],[63,2],[60,2],[63,2],[67,2],[63,2],[58,2],[62,2],[65,2],[62,2],[60,2],[63,2],[67,2],[63,2]]}],
+      dr:{k:[0,6,8,16,22,24,32,38,40,48,54,56],s:[8,24,40,56],h:[0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62]}},
+    ending:{bpm:116,ch:[
+      {t:'fm',r:3,i:85,g:.16,n:[[72,4],[76,4],[79,4],[84,6],[83,2],[84,8],[79,4],[76,4],[72,4],[74,4],[76,12],[null,4]]},
+      {t:'tri',g:.24,n:[[48,8],[55,8],[53,8],[55,8],[48,8],[53,8],[55,8],[48,8]]},
+      {t:'sq',g:.05,n:[[64,2],[67,2],[72,2],[67,2],[65,2],[69,2],[72,2],[69,2],[64,2],[67,2],[72,2],[67,2],[62,2],[67,2],[71,2],[67,2]]}],
+      dr:{k:[0,8,16,24,32,40,48,56],s:[8,24,40,56],h:[4,12,20,28,36,44,52,60]}}
+  };
+  let ac=null,master=null,cur=null,timer=null,pos={},nextT=0,tempoMul=1;
+  function bind(a,m){ ac=a; master=m; nextT=a.currentTime+0.1; }
+  window.__bindMusic=bind;
+  function stepDur(tr){ return 60/(tr.bpm*4*tempoMul); }
+  function playNote(ch,midi,t,dur){
+    if(midi===null) return;
+    const f=NOTE(midi), g=ac.createGain();
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.linearRampToValueAtTime(ch.g,t+0.012);
+    g.gain.setTargetAtTime(0.0001,t+dur*0.82,0.03);
+    g.connect(master);
+    if(ch.t==='fm'){
+      const c=ac.createOscillator(); c.type='sine'; c.frequency.value=f;
+      const mo=ac.createOscillator(); mo.type='sine'; mo.frequency.value=f*ch.r;
+      const mg=ac.createGain(); mg.gain.setValueAtTime(ch.i,t);
+      mg.gain.setTargetAtTime(ch.i*0.25,t+0.02,0.09);
+      mo.connect(mg).connect(c.frequency);
+      c.connect(g); c.start(t); mo.start(t); c.stop(t+dur+0.1); mo.stop(t+dur+0.1);
+    } else {
+      const o=ac.createOscillator();
+      o.type=ch.t==='tri'?'triangle':'square';
+      o.frequency.value=f; o.connect(g); o.start(t); o.stop(t+dur+0.1);
+    }
+  }
+  function drum(kind,t){
+    if(kind==='k'){ const o=ac.createOscillator(),g=ac.createGain();
+      o.type='sine'; o.frequency.setValueAtTime(120,t); o.frequency.exponentialRampToValueAtTime(38,t+0.1);
+      g.gain.setValueAtTime(0.32,t); g.gain.exponentialRampToValueAtTime(0.001,t+0.12);
+      o.connect(g).connect(master); o.start(t); o.stop(t+0.14); return; }
+    const len=ac.sampleRate*0.06, b=ac.createBuffer(1,len,ac.sampleRate), d=b.getChannelData(0);
+    for(let i=0;i<len;i++) d[i]=(Math.random()*2-1)*(1-i/len);
+    const src=ac.createBufferSource(); src.buffer=b;
+    const f=ac.createBiquadFilter(); f.type='highpass'; f.frequency.value=kind==='s'?1500:6000;
+    const g=ac.createGain(); g.gain.value=kind==='s'?0.2:0.09;
+    src.connect(f).connect(g).connect(master); src.start(t);
+  }
+  function schedule(){
+    if(!ac||ac.state!=='running'||!cur||Snd.muted) return;
+    const tr=T[cur];
+    while(nextT<ac.currentTime+0.25){
+      const sd=stepDur(tr);
+      for(let ci=0;ci<tr.ch.length;ci++){
+        const ch=tr.ch[ci], st=pos.ch[ci];
+        if(st.wait<=0){
+          const [m,len]=ch.n[st.i];
+          playNote(ch,m,nextT,len*sd*0.95);
+          st.wait=len; st.i=(st.i+1)%ch.n.length;
+        }
+        st.wait--;
+      }
+      const dp=pos.step%64;
+      if(tr.dr){ for(const k of Object.keys(tr.dr)) if(tr.dr[k].includes(dp)) drum(k,nextT); }
+      pos.step++;
+      nextT+=sd;
+    }
+  }
+  function play(name){
+    if(cur===name) return;
+    cur=name; tempoMul=1;
+    if(!T[name]){ cur=null; return; }
+    pos={step:0,ch:T[name].ch.map(()=>({i:0,wait:0}))};
+    if(ac) nextT=Math.max(nextT,ac.currentTime+0.06);
+    if(!timer) timer=setInterval(schedule,80);
+  }
+  function stop(){ cur=null; }
+  return { bind, play, stop, get current(){ return cur; },
+    set tempo(x){ tempoMul=x; }, get tempo(){ return tempoMul; } };
+})();
 /* ---------- marbles ---------- */
 function makeMarble(kind){ return { kind, v:0,u:0,z:0,vv:0,vu:0,vz:0,grounded:true,alive:true,hidden:false,active:kind==='player',
   r:1.05, mass:kind==='steelie'?2.3:1, dropIn:false, deathKind:'', deathT:0, aiRespawnT:0,
@@ -525,7 +643,7 @@ let players=[player], numPlayers=1, finishOrder=[], deathMsg='', deathMsgT=0;
 
 /* ---------- game state ---------- */
 const cv=document.getElementById('game'), ctx2=cv.getContext('2d');
-let state='title', stateT=0, raceIdx=0, deaths=0;
+let state='title', stateT=0, raceIdx=0, deaths=0, raceT=0;
 let shards=[], paused=false, lastTickSec=99;
 let camX=0,camY=0,camInit=false;
 const GRAV=22, ACC=20, FRICT=3.2, MAXSP=11, MOUSE_GAIN=0.012, STEP=1/120;
@@ -593,7 +711,7 @@ function loadRace(i){ raceIdx=i; const R=RACES[i];
     pl.lastSafe={v:pl.v,u:pl.u}; pl.maxU=0; pl.finished=false;
     pl.timeLeft=R.time+pl.carry; });
   steelie.active=false; steelie.alive=false;
-  finishOrder=[]; shards=[]; camInit=false; lastTickSec=99; deathMsgT=0;
+  finishOrder=[]; shards=[]; camInit=false; lastTickSec=99; deathMsgT=0; raceT=0;
   state='ready'; stateT=0; paused=false; qaInp=null; qaInp2=null;
   Snd.ready(0); Snd.ready(1); }
 function startGame(n){ numPlayers=n||1;
@@ -782,7 +900,7 @@ function collideMarbles(a,b){
 function racersRacing(){ return players.filter(pl=>!pl.out&&!pl.finished); }
 function physics(dt){
   if(state!=='race'||paused) return;
-  simT+=dt;
+  simT+=dt; raceT+=dt;
   if(deathMsgT>0) deathMsgT-=dt;
   let anyLow=false;
   for(const pl of players){ if(pl.out||pl.finished) continue;
@@ -1000,6 +1118,7 @@ function text(g,s,x,y,size,color,align,font){
   g.fillStyle='rgba(0,0,0,.75)'; g.fillText(s,x+2,y+2); g.fillStyle=color; g.fillText(s,x,y);
 }
 function render(dt){
+  updateMusic();
   const g=ctx2; g.clearRect(0,0,640,400);
   if(state==='title'){ renderTitle(g); return; }
   updateCam();
@@ -1122,6 +1241,16 @@ function renderTitle(g){
 
 /* ---------- main loop ---------- */
 let last=performance.now(), acc=0, autoStep=true;
+const RACE_TRACKS=['practice','beginner','intermediate','aerial','silly','ultimate'];
+let lastMusicKey='';
+function updateMusic(){
+  let key='';
+  if(state==='title') key='title';
+  else if(state==='ready'||state==='race'||state==='goal') key=RACE_TRACKS[raceIdx]||'';
+  else if(state==='ending') key='ending';
+  if(key!==lastMusicKey){ lastMusicKey=key; if(key) Music.play(key); else Music.stop(); }
+  Music.tempo=(state==='race'&&raceIdx===4)?1+Math.min(0.6,raceT*0.025):1;
+}
 function frame(now){
   let dt=(now-last)/1000; last=now; if(dt>0.25) dt=0.25;
   if(autoStep){ acc+=dt; while(acc>=STEP){ physics(STEP); acc-=STEP; } }
@@ -1146,6 +1275,7 @@ if(QA){
     get p2(){ return {active:player2.active,v:player2.v,u:player2.u,t:player2.timeLeft,score:player2.score,
       finished:player2.finished,out:player2.out,alive:player2.alive}; },
     get finishOrder(){ return finishOrder.slice(); },
+    get music(){ return {track:Music.current,tempo:+Music.tempo.toFixed(2)}; },
     start2(){ startGame(2); state='race'; },
     input2(gv,gu){ qaInp2=(gv===null)?null:{v:gv,u:gu}; },
     warp2(v,u){ player2.v=v; player2.u=u; const h=groundH(v,u); player2.z=isNaN(h)?6:h;
