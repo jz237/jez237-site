@@ -130,6 +130,23 @@ function checkRendererShapes(issue, issueIndex) {
     }
   });
 
+  if (issue.stories && !Array.isArray(issue.stories)) {
+    fail(`Issue ${issueIndex}: stories must be an array when present.`);
+  }
+  (Array.isArray(issue.stories) ? issue.stories : []).forEach((story, storyIndex) => {
+    if (!story || !story.headline) {
+      fail(`Issue ${issueIndex}: stories[${storyIndex}] must include a headline.`);
+      return;
+    }
+    const body = story.body || story.summary || story.text;
+    const hasBody = typeof body === "string"
+      ? body.trim().length > 0
+      : Array.isArray(body) && body.some((part) => typeof part === "string" ? part.trim() : part);
+    if (!hasBody) {
+      fail(`Issue ${issueIndex}: stories[${storyIndex}] must include body text (string or array of paragraphs).`);
+    }
+  });
+
   if (!issue.periodAd || !issue.periodAd.headline || !issue.periodAd.summary) {
     fail(`Issue ${issueIndex}: periodAd must include headline and summary.`);
   }
