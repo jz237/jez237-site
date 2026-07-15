@@ -243,6 +243,7 @@
     <p class="tagline" style="margin-bottom:18px">The grid is down. Raider armor is rolling on the station. Sweep your searchlight, hunt them in the dark, and hold the line.</p>
     <div class="menu-col">
       <button class="btn" id="btn-start">▶ DEPLOY</button>
+      <button class="btn secondary" id="btn-daily">📅 DAILY PATROL</button>
       <button class="btn secondary" id="btn-garage">GARAGE</button>
       <button class="btn secondary" id="btn-options">OPTIONS</button>
       <button class="btn secondary" id="btn-records">RECORDS</button>
@@ -356,7 +357,7 @@
    WASD + mouse on desktop. Darkness/searchlight lighting engine.
    ========================================================================== */
 (function () {
-const VERSION = 'v3.4.0';
+const VERSION = 'v3.5.0';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/subway-siege-blackout';
 const HS_KEY = 'ssb_tank_highscores_v1';
 const MUTE_KEY = 'ssb_tank_muted';
@@ -401,7 +402,9 @@ const Snd = (function () {
   const SFX = ['fire','explode_small','explode_big','barrel','pickup','player_hit','wave_clear','boss_horn','upgrade','achievement','menu_click','combo','overdrive','perfect',
     'fire_scatter','fire_railgun','fire_flame','fire_tesla','flare_launch','emp_blast','impact_metal',
     'amb_city','amb_rain','amb_industrial'];
-  const MUSIC = { title:{el:null,file:'music_title.mp3',base:.55}, patrol:{el:null,file:'music_patrol.mp3',base:.45}, boss:{el:null,file:'music_boss.mp3',base:.62} };
+  const MUSIC = { title:{el:null,file:'music_title.mp3',base:.55}, patrol:{el:null,file:'music_patrol.mp3',base:.45},
+    patrol_b:{el:null,file:'music_patrol_b.mp3',base:.45}, patrol_c:{el:null,file:'music_patrol_c.mp3',base:.45},
+    boss:{el:null,file:'music_boss.mp3',base:.62} };
   let curMusic = null, musicDuck = 1, musicDuckT = 0;
   let ambSrc = null, ambWant = null, ambGain = null;
   function ensure() {
@@ -510,7 +513,7 @@ const ARENA_W = 1900, ARENA_H = 1500;
 const P_RADIUS = 20, SHELL_SPEED = 9.5;
 let P_SPEED = 2.6, P_FIRE_CD = 26;
 let CONE_LEN = 470, CONE_HALF = 0.42;
-const SETTINGS_KEY='ssb_settings_v2', TANK_KEY='ssb_tank', ACH_KEY='ssb_ach', LIFE_KEY='ssb_life', WEAPON_KEY='ssb_weapon', AUDIO_V='3.3.0';
+const SETTINGS_KEY='ssb_settings_v2', TANK_KEY='ssb_tank', ACH_KEY='ssb_ach', LIFE_KEY='ssb_life', WEAPON_KEY='ssb_weapon', AUDIO_V='3.5.0';
 // ===== SETTINGS =====
 const settings = { musicVol: .8, sfxVol: 1, shake: 'full', particles: 'auto', showFps: false, flash: 'full' };
 try { const o = JSON.parse(localStorage.getItem(SETTINGS_KEY)); if (o && typeof o==='object') Object.assign(settings, o);
@@ -753,9 +756,9 @@ function buildDistrictLayer() {
   districtFx.surgeState = 0;
   districtFx.surgeT = d.hazard === 'surge' ? rnd(900, 1400) : -1;
   if (districtFx.weather === 'fog') for (let i = 0; i < 10; i++)
-    districtFx.wp.push({ x: Math.random() * VW, y: Math.random() * VH, r: rnd(160, 300), v: rnd(0.15, 0.45), ph: rnd(0, 6.28) });
+    districtFx.wp.push({ x: RNG() * VW, y: RNG() * VH, r: rnd(160, 300), v: rnd(0.15, 0.45), ph: rnd(0, 6.28) });
   else if (districtFx.weather !== 'none') for (let i = 0; i < 42; i++)
-    districtFx.wp.push({ x: Math.random() * VW, y: Math.random() * VH, v: rnd(2.5, 6), l: rnd(8, 18), ph: rnd(0, 6.28) });
+    districtFx.wp.push({ x: RNG() * VW, y: RNG() * VH, v: rnd(2.5, 6), l: rnd(8, 18), ph: rnd(0, 6.28) });
 }
 function surgeK() { return districtFx.surgeState === 2 ? 0.55 : 1; }
 // District hazards: steam vents scald machines and slow the tank; power surges shrink the light.
@@ -930,7 +933,14 @@ function moveInput() {
 // ===========================================================================
 //  HELPERS
 // ===========================================================================
-function rnd(a, b) { return a + Math.random() * (b - a); }
+let RNG = Math.random; // world-gen randomness routes through this; daily mode swaps in a seeded stream
+function rnd(a, b) { return a + RNG() * (b - a); }
+// ===== DAILY PATROL: everyone gets the same city + wave order for the UTC day =====
+let dailyMode = false, dailySeedStr = '', seedStream = null;
+function todayUTC() { const d = new Date(); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0'); }
+function seedHash(s) { let h = 1779033703 ^ s.length; for (let i = 0; i < s.length; i++) { h = Math.imul(h ^ s.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return h >>> 0; }
+function mulberry32(a) { return function () { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function scoresUrl() { return SCORES_API + (dailyMode ? '-daily-' + dailySeedStr : ''); }
 function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
 function dist2(ax, ay, bx, by) { const dx = ax - bx, dy = ay - by; return dx * dx + dy * dy; }
 function angDiff(a, b) { let d = a - b; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; }
@@ -1068,10 +1078,13 @@ function mkEnemy(type, x, y) {
   if (type === 'boss') return Object.assign(base, { hp: 60, r: 34, speed: 0.7, dmg: 14, range: 560, score: 1500, hue: '#5c3a78' });
   if (type === 'stalker') return Object.assign(base, { hp: 2, r: 14, speed: 2.35, dmg: 14, range: 300, score: 260, hue: '#8a4fb0', cloak: true });
   if (type === 'mortar') return Object.assign(base, { hp: 4, r: 20, speed: 0.85, dmg: 22, range: 640, score: 320, hue: '#c8a04a', mortar: true, fireCd: rnd(90, 150) });
+  if (type === 'hunter') return Object.assign(base, { hp: 3, r: 16, speed: 2.0, dmg: 16, range: 260, score: 300, hue: '#d84fd8' });
+  if (type === 'smasher') return Object.assign(base, { hp: 5, r: 19, speed: 1.7, dmg: 14, range: 220, score: 340, hue: '#4f8ad8' });
   return base;
 }
 
 function startWave(n) {
+  const _R = RNG; if (seedStream) RNG = seedStream;
   G.wave = n;
   const list = [];
   const scouts = 2 + n;
@@ -1079,14 +1092,18 @@ function startWave(n) {
   const drones = n >= 3 ? Math.min(n - 2, 6) : 0;
   const stalkers = n >= 3 ? Math.min(1 + Math.floor((n - 3) / 2), 4) : 0;
   const mortars = n >= 4 ? Math.min(1 + Math.floor((n - 4) / 3), 3) : 0;
+  const hunters = n >= 7 ? Math.min(1 + Math.floor((n - 7) / 3), 4) : 0;
+  const smashers = n >= 9 ? Math.min(1 + Math.floor((n - 9) / 4), 3) : 0;
   for (let i = 0; i < scouts; i++) list.push('scout');
   for (let i = 0; i < brutes; i++) list.push('brute');
   for (let i = 0; i < drones; i++) list.push('drone');
   for (let i = 0; i < stalkers; i++) list.push('stalker');
   for (let i = 0; i < mortars; i++) list.push('mortar');
+  for (let i = 0; i < hunters; i++) list.push('hunter');
+  for (let i = 0; i < smashers; i++) list.push('smasher');
   if (n % 5 === 0) list.push('boss');
   // shuffle
-  for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+  for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(RNG() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
   G.pending = list; G.spawnTick = 0;
   placeBarrels();
   G.waveHit = false;
@@ -1095,6 +1112,7 @@ function startWave(n) {
   toast('WAVE ' + n + (n % 5 === 0 ? ' — HEAVY ARMOR INBOUND' : ''), 110);
   if (n % 5 === 0) Snd.horn(); else Snd.ui('boss_horn', .35);
   updateMusic();
+  RNG = _R;
 }
 
 function updateSpawning() {
@@ -1148,18 +1166,32 @@ function updateEnemies() {
       }
     } else {
       // tanks: approach to preferred range, then hold & fire
-      const want = e.type === 'scout' ? 300 : e.type === 'boss' ? 380 : e.type === 'stalker' ? 190 : e.type === 'mortar' ? 560 : 360;
-      let moveDir = toPlayer;
-      if (d < want - 60) moveDir = toPlayer + Math.PI;            // back off
-      else if (d < want + 60) moveDir = toPlayer + Math.PI / 2;   // strafe orbit
+      let want = e.type === 'scout' ? 300 : e.type === 'boss' ? 380 : e.type === 'stalker' ? 190 : e.type === 'mortar' ? 560 : e.type === 'hunter' ? 130 : e.type === 'smasher' ? 150 : 360;
+      let aimA = toPlayer, aimD = d;
+      if ((e.type === 'hunter' || e.type === 'smasher') && flares.length) { // light-interacting: moths and lamp-killers
+        let bf = null, bd = Infinity;
+        for (const f of flares) { if (f.flight > 0) continue; const fd = Math.hypot(f.x - e.x, f.y - e.y); if (fd < (e.type === 'hunter' ? 420 : 1e9) && fd < bd) { bd = fd; bf = f; } }
+        if (bf) { aimA = Math.atan2(bf.y - e.y, bf.x - e.x); aimD = bd; if (e.type === 'smasher') want = 10; }
+      }
+      let moveDir = aimA;
+      if (aimD < want - 60) moveDir = aimA + Math.PI;            // back off
+      else if (aimD < want + 60) moveDir = aimA + Math.PI / 2;   // strafe orbit
       e.hull = turnToward(e.hull, moveDir, e.type === 'stalker' ? 0.08 : 0.05);
-      const sp = e.speed * (d > want + 60 ? 1 : 0.55) * (e.type === 'mortar' ? 0.4 : 1);
+      const lit = (e.type === 'hunter' && e.reveal > 40) ? 1.55 : 1; // your light makes it FASTER
+      const sp = e.speed * (aimD > want + 60 ? 1 : 0.55) * (e.type === 'mortar' ? 0.4 : 1) * lit;
       const nx = e.x + Math.cos(e.hull) * sp, ny = e.y + Math.sin(e.hull) * sp;
       const c = circleVsRects(nx, ny, e.r); e.x = c.x; e.y = c.y;
       e.dist += sp;
       // aim & fire
       e.turret = turnToward(e.turret, toPlayer, 0.04);
       e.fireCd--;
+      if (e.type === 'smasher') for (const f of flares) { // stomp lights out
+        if (f.flight <= 0 && f.t > 45 && dist2(e.x, e.y, f.x, f.y) < 34 * 34) {
+          f.t = 40;
+          spawnParticles(f.x, f.y, 10, { color: '#3a3430', smax: 2.6, lmax: 20, fade: 'smoke' });
+          Snd.ping();
+        }
+      }
       const canFire = e.type === 'mortar' ? (d < e.range && d > 120) : (d < e.range && Math.abs(angDiff(e.turret, toPlayer)) < 0.2 && losClear(e.x, e.y, player.x, player.y));
       if (e.fireCd <= 0 && canFire && player.alive) {
         if (e.type === 'mortar') {
@@ -1179,7 +1211,7 @@ function updateEnemies() {
               vx: Math.cos(a + off) * (e.type === 'brute' ? 5.2 : 6.4), vy: Math.sin(a + off) * (e.type === 'brute' ? 5.2 : 6.4),
               enemy: true, dmg: e.dmg, life: 130, big: e.type !== 'scout' && e.type !== 'stalker' });
           }
-          e.fireCd = e.type === 'scout' ? rnd(120, 180) : e.type === 'boss' ? rnd(95, 130) : e.type === 'stalker' ? rnd(90, 150) : rnd(150, 220);
+          e.fireCd = e.type === 'scout' ? rnd(120, 180) : e.type === 'boss' ? rnd(95, 130) : e.type === 'stalker' ? rnd(90, 150) : e.type === 'hunter' ? rnd(110, 170) : e.type === 'smasher' ? rnd(170, 230) : rnd(150, 220);
           e.reveal = Math.max(e.reveal, 150);
           flashes.push({ x: e.x + Math.cos(a) * (e.r + 10), y: e.y + Math.sin(a) * (e.r + 10), r: 70, life: 8, max: 8, c: '#ff9a6a' });
           Snd.enemyFire();
@@ -1465,7 +1497,8 @@ function updateParticles() {
 //  GAME FLOW
 // ===========================================================================
 function isBossWave() { return G.wave % 5 === 0 && (enemies.some(e => e.type === 'boss' && !e.dead) || G.pending.includes('boss')); }
-function musicForState() { return (G.state === 'play' || G.state === 'pause') ? (isBossWave() ? 'boss' : 'patrol') : 'title'; }
+function patrolFor() { return ['patrol', 'patrol_b', 'patrol_c'][Math.floor(Math.max(0, DISTRICTS.indexOf(curDistrict)) / 3) % 3]; }
+function musicForState() { return (G.state === 'play' || G.state === 'pause') ? (isBossWave() ? 'boss' : patrolFor()) : 'title'; }
 function updateMusic() { if (settings.musicVol > 0 && !Snd.isMuted()) Snd.playMusic(musicForState()); else Snd.stopMusic(); updateAmbient(); }
 function updateAmbient() { // district ambience rides the sfx bus; stays up through pause, stops on title/over
   if (G.state === 'play' || G.state === 'pause') Snd.startAmbient('amb_' + (curDistrict.ambKey || 'city'));
@@ -1505,6 +1538,9 @@ function showUpgrade() {
   showScreen('screen-upgrade');
 }
 function startGame() {
+  dailySeedStr = todayUTC();
+  seedStream = dailyMode ? mulberry32(seedHash('SSB-' + dailySeedStr)) : null;
+  if (seedStream) RNG = seedStream;
   G.state = 'play'; G.t = 0; G.score = 0; G.kills = 0; G.startT = Date.now();
   enemies = []; bullets = []; beams = []; flares = []; particles = []; pickups = []; flashes = []; spawnFlashes = [];
   G.ordAmmo = 2; G.empAmmo = 1; empFx = null; updateOrdHud();
@@ -1525,6 +1561,8 @@ function startGame() {
   hideAllScreens();
   Snd.resume(); updateMusic();
   startWave(1);
+  RNG = Math.random;
+  if (dailyMode) toast('DAILY PATROL — ' + dailySeedStr, 130);
 }
 function endGame() {
   if (G.state === 'over') return;
@@ -2328,7 +2366,8 @@ function togglePause() {
   else if (G.state === 'pause') { G.state = 'play'; updateMusic(); hideAllScreens(); }
 }
 
-document.getElementById('btn-start').onclick = () => { Snd.resume(); click(); startGame(); };
+document.getElementById('btn-start').onclick = () => { Snd.resume(); click(); dailyMode = false; startGame(); };
+document.getElementById('btn-daily').onclick = () => { Snd.resume(); click(); dailyMode = true; startGame(); };
 document.getElementById('btn-howto').onclick = () => { click(); showScreen('screen-howto'); };
 document.getElementById('btn-howback').onclick = () => { click(); showScreen('screen-title'); };
 document.getElementById('btn-resume').onclick = () => togglePause();
@@ -2464,6 +2503,7 @@ document.getElementById('howto-body').innerHTML =
   + '<br><br>🔫 <b>Armament:</b> pick your gun in the GARAGE — CANNON all-round, SCATTER up close, RAILGUN skewers lines, INCINERATOR sets packs alight, TESLA chains crowds. Weapon crates swap your gun mid-patrol.'
   + '<br><br>🧨 <b>Ordnance:</b> Q lobs a FLARE (a pool of light that exposes cloaked stalkers), E fires the EMP (reveals and stuns everything — the whole blackout lifts for a beat). Watch the buttons bottom-right on touch.'
   + '<br><br>⚠️ <b>District hazards:</b> steam vents scald anything standing in them and slow your treads; power surges shrink your searchlight while the city goes dark. Flares still burn through a surge.'
+  + '<br><br>🦋 <b>Light-feeders:</b> HUNTERS charge harder the moment your beam touches them, and swarm to flares like moths — bait them away. SMASHERS hunt your flares and stomp them dark — guard your light or drop a fresh one.'
   + '<br>⛓️ <b>Combo:</b> chain kills to build a multiplier. Hit <b>×12</b> to trigger <b style="color:#9adcff">OVERDRIVE</b> — piercing rapid fire.'
   + '<br>🏙️ <b>Districts:</b> the map shifts every 5 waves. Every 5th wave a <b style="color:#d8a8ff">boss</b> rolls in; beat it to pick a permanent upgrade.'
   + '<br>🎖️ Clear a wave without losing armor for a <b>FLAWLESS</b> bonus.'
@@ -2504,7 +2544,7 @@ document.getElementById('btn-submit').onclick = async () => {
   document.getElementById('lb-block').classList.remove('hidden');
   document.getElementById('lb-list').innerHTML = '<div style="text-align:center;padding:20px"><span class="spin"></span></div>';
   try {
-    await fetch(SCORES_API, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    await fetch(scoresUrl(), { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ initials: name, score: pendingScore, extra: 'w' + G.wave + ' k' + G.kills }) });
     globalCache = null;
   } catch (e) {}
@@ -2513,7 +2553,7 @@ document.getElementById('btn-submit').onclick = async () => {
 async function fetchGlobal() {
   if (globalCache) return globalCache;
   try {
-    const r = await fetch(SCORES_API);
+    const r = await fetch(scoresUrl());
     const data = await r.json();
     globalCache = Array.isArray(data) ? data : (data.scores || []);
   } catch (e) { globalCache = null; }
@@ -2568,7 +2608,7 @@ function loop(ts) {
 document.querySelectorAll('.version').forEach(el => { el.textContent = VERSION; });
 
 if (new URLSearchParams(location.search).has('qa')) window.__blackoutQA = { // family convention: QA hooks gated behind ?qa=1
-  snapshot() { return { version: VERSION, state: G.state, score: G.score, wave: G.wave, kills: G.kills, combo: G.combo, comboMax: G.comboMax, overdrive: player.overdrive, overdriveArmed: G.overdriveArmed, hitStop: G.hitStop, hp: player.hp, hpMax: player.hpMax, shield: player.shield, alive: player.alive, waveHit: G.waveHit, upgradePending: G.upgradePending, tank: curTank().id, weapon: curWeapon().id, weapons: WEAPONS.length, district: curDistrict.name, enemies: enemies.filter(e => !e.dead).length, enemyTypes: enemies.filter(e=>!e.dead).map(e=>e.type), pending: G.pending.length, bossActive: isBossWave(), fxLow: fxLow, fps: Math.round(fpsAvg), ach: Object.keys(unlockedAch), medals: Object.keys(unlockedAch).length, lifetime: lifetime, mortarMarks: mortarMarks.length, beams: beams.length, flares: flares.length, ordAmmo: G.ordAmmo, empAmmo: G.empAmmo, empActive: !!empFx, dProps: districtFx.props.length, dLights: districtFx.lights.length, weather: districtFx.weather, hazard: curDistrict.hazard || 'none', surgeState: districtFx.surgeState, vents: districtFx.vents.length, audioBuffers: Snd.loadedCount(), music: Snd.curMusic(), ambient: Snd.curAmbient(), slug: SCORES_API }; },
+  snapshot() { return { version: VERSION, state: G.state, score: G.score, wave: G.wave, kills: G.kills, combo: G.combo, comboMax: G.comboMax, overdrive: player.overdrive, overdriveArmed: G.overdriveArmed, hitStop: G.hitStop, hp: player.hp, hpMax: player.hpMax, shield: player.shield, alive: player.alive, waveHit: G.waveHit, upgradePending: G.upgradePending, tank: curTank().id, weapon: curWeapon().id, weapons: WEAPONS.length, district: curDistrict.name, enemies: enemies.filter(e => !e.dead).length, enemyTypes: enemies.filter(e=>!e.dead).map(e=>e.type), pending: G.pending.length, bossActive: isBossWave(), fxLow: fxLow, fps: Math.round(fpsAvg), ach: Object.keys(unlockedAch), medals: Object.keys(unlockedAch).length, lifetime: lifetime, mortarMarks: mortarMarks.length, beams: beams.length, flares: flares.length, ordAmmo: G.ordAmmo, empAmmo: G.empAmmo, empActive: !!empFx, dProps: districtFx.props.length, dLights: districtFx.lights.length, weather: districtFx.weather, hazard: curDistrict.hazard || 'none', surgeState: districtFx.surgeState, vents: districtFx.vents.length, audioBuffers: Snd.loadedCount(), music: Snd.curMusic(), ambient: Snd.curAmbient(), daily: dailyMode, dailySeed: dailySeedStr, slug: SCORES_API }; },
   tick(n) { n = n || 1; const wr = window.__blackoutQA._noloop; for (let i = 0; i < n; i++) update(); render(); return this.snapshot(); },
   start() { Snd.resume(); startGame(); qaGod = true; return this.snapshot(); },
   setWave(w) { enemies = []; bullets = []; beams = []; flares = []; G.pending = []; G.intermission = 0; startWave(w); return this.snapshot(); },
@@ -2577,6 +2617,7 @@ if (new URLSearchParams(location.search).has('qa')) window.__blackoutQA = { // f
   fireEmp() { fireEmp(); return this.snapshot(); },
   addEmp(n) { G.empAmmo = Math.min(3, (G.empAmmo | 0) + (n || 1)); updateOrdHud(); return G.empAmmo; },
   triggerSurge() { if (districtFx.surgeT > 0) districtFx.surgeT = 1; return districtFx.surgeT; },
+  daily(v) { dailyMode = v !== false; return dailyMode; },
   ventBurst() { const v = districtFx.vents[0]; if (v && v.ph <= 0) v.t = 1; return districtFx.vents.length; },
   spawn(type) { const e = mkEnemy(type, clamp(player.x + 300, 60, ARENA_W - 60), player.y); e.dormant = 0; enemies.push(e); return type; },
   killAll(end) { for (const e of enemies.slice()) if (!e.dead) killEnemy(e); G.pending = []; if (end) endGame(); return this.snapshot(); },
@@ -2594,7 +2635,7 @@ if (new URLSearchParams(location.search).has('qa')) window.__blackoutQA = { // f
   opt(k, v) { settings[k] = v; saveSettings(); Snd.applyVolumes(); },
   recTab(w) { setRecTab(w); },
   clickBtn(id) { const b = document.getElementById(id); if (b) b.click(); return !!b; },
-  get enemies() { return enemies; }, get player() { return player; }, get settings() { return settings; }, get G() { return G; }, get flares() { return flares; }, get districtFx() { return districtFx; }
+  get enemies() { return enemies; }, get player() { return player; }, get settings() { return settings; }, get G() { return G; }, get flares() { return flares; }, get districtFx() { return districtFx; }, get obstacles() { return obstacles; }
 };
 resize();
 buildWorld();
