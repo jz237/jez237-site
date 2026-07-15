@@ -2,6 +2,19 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-15",
+      "historicDate": "1983-05-30",
+      "displayDate": "Week of May 30–June 5, 1983",
+      "edition": "Issue 044 - Weekly 1982 Computer & Culture Chronicle",
+      "morningLine": "Games get album covers, computers get briefcases, and WarGames puts dialing into the movies.",
+      "leadHeadline": "Electronic Arts' First Five Games Reach Players",
+      "storyHeadlines": [
+        "WarGames Makes Home Computing a Summer-Movie Star",
+        "Portable and 16-Bit Machines Crowd the June BYTE",
+        "Modems Bring Computer Gamers Together"
+      ]
+    },
+    {
       "currentDate": "2026-07-14",
       "historicDate": "1983-05-23",
       "displayDate": "Week of May 23–29, 1983",
