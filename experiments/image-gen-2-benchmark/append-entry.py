@@ -30,6 +30,7 @@ CREATURE_DESIGNS = ROOT / "creature-designs-data.json"
 RANDOM_RENDERING_STYLES = ROOT / "random-rendering-style-data.json"
 WORLD_THAT_NEVER_WAS = ROOT / "world-that-never-was-data.json"
 MACHINE_DREAMS = ROOT / "machine-dreams-data.json"
+VISUAL_THOUGHT_EXPERIMENTS = ROOT / "visual-thought-experiments-data.json"
 IMPOSSIBLE_DOCUMENTARY = ROOT / "impossible-documentary-data.json"
 STRANGE_BOTANICALS = ROOT / "strange-botanicals-data.json"
 CINEMATIC_CATS = ROOT / "cinematic-cats-data.json"
@@ -315,6 +316,8 @@ def main() -> None:
             paths = (*paths, WORLD_THAT_NEVER_WAS)
         if args.slot == "machine-dream":
             paths = (*paths, MACHINE_DREAMS)
+        if args.slot == "visual-thought-experiment":
+            paths = (*paths, VISUAL_THOUGHT_EXPERIMENTS)
         if args.slot == "impossible-documentary":
             paths = (*paths, IMPOSSIBLE_DOCUMENTARY)
         if args.slot == "strange-botanical":
