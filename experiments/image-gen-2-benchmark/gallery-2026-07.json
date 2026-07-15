@@ -38,6 +38,25 @@
     }
   },
   {
+    "id": "2026-07-14-factual-infographic-factual-infographic-how-trees-pull-wate",
+    "title": "Factual infographic: How Trees Pull Water Upward",
+    "tests": "Real-world/non-fiction plant physiology; central root-to-crown cutaway; five-stage cohesion-tension sequence; xylem anatomy; root-hair, vessel, leaf-vein, and stomata macro windows; molecular cohesion; day/night comparison; cavitation bypass panel; arborist field-bench anchor; scale ladder; conservative species-and-condition caveat; no invented statistics or root-pump myth.",
+    "prompt": "Create a finished square factual infographic titled \"HOW TREES PULL WATER UPWARD\" explaining the real-world, non-fiction cohesion-tension mechanism of xylem transport with conservative plant physiology. Anchor it as a photorealistic arborist field-lab display beside a mature tree trunk: a fresh branch cross-section, leafy twig in a water-pressure chamber, hand lens, microscope slide, measuring tape, soil core, humidity sensor, and translucent tubing demonstrations arranged on a weathered green workbench. Build at least eight distinct visual layers: (1) a central root-to-crown cutaway of a tall tree with a continuous highlighted xylem pathway; (2) a five-step sequence showing soil water entering fine roots, movement into xylem, cohesion within narrow conduits, evaporation from moist leaf-cell walls, and diffusion through open stomata; (3) an exploded xylem panel distinguishing vessels, tracheids, lignified walls, and bordered pits; (4) macro windows of root hairs, vessel perforations, leaf veins, and stomatal pores; (5) a molecule-scale cohesion-and-adhesion diagram; (6) a day-versus-night comparison of stronger and weaker transpiration demand without invented numbers; (7) a cavitation panel showing an air embolism interrupting a conduit and neighboring pathways bypassing it; (8) a field-context scale ladder from whole tree to branch to vessel to water molecule, plus soil-moisture and leaf-humidity swatches. Use concise readable labels, crisp museum hierarchy, bark brown, leaf green, xylem amber, soil umber, and cool cyan water paths. Keep claims conservative: evaporation from leaves creates tension transmitted through cohesive water columns; roots do not mechanically pump water to the canopy; transport varies with species and conditions. No invented statistics, no universal height claim, no actionable tree treatment, no dense paragraphs, no flat school-poster styling, no fantasy glow, no logos or QR codes. Reusable template: Create a finished factual infographic titled \"HOW [PLANT_PROCESS] WORKS\" explaining [REAL-WORLD PLANT-PHYSIOLOGY TOPIC] with conservative science. Anchor it at a photorealistic [FIELD-STATION/ARBORIST-BENCH/GREENHOUSE] with a whole-organism cutaway, a five-step process strip, an exploded tissue panel, at least two macro or microscopy windows, a molecule-scale mechanism, a condition comparison, a failure-or-limitation panel, a field scale ladder, and habitat swatches. Example substitution: [PLANT_PROCESS] = trees pull water upward; [TOPIC] = cohesion-tension transport through xylem; [FIELD-STATION] = arborist bench beside a mature tree.",
+    "image": "images/2026-07-14-factual-infographic-factual-infographic-how-trees-pull-wate.jpg",
+    "thumb": "thumbs/2026-07-14-factual-infographic-factual-infographic-how-trees-pull-wate.webp",
+    "color": "#434231",
+    "date": "2026-07-14",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Cohesion-tension transport of water through tree xylem",
+      "description": "A field-lab infographic showing how transpiration tension, water cohesion, and xylem anatomy move water from soil to a tree canopy, including stomata, pit membranes, and cavitation limits.",
+      "sourceNote": "Real-world/non-fiction plant physiology presented conservatively; transport anatomy and behavior vary among plant groups and environmental conditions."
+    }
+  },
+  {
     "id": "2026-07-14-factual-infographic-factual-infographic-how-mantis-shrimp-d",
     "title": "Factual infographic: How Mantis Shrimp Detect Polarized Light",
     "tests": "Real-world/non-fiction marine sensory biology; central stalked-eye cutaway; light-to-receptor sequence; exploded ommatidium; four macro/optics windows; brightness/color/linear/circular comparison; reef context; scale ladder; human-vision comparison; conservative species-variation caveat; photorealistic aquarium optics bench; no invented statistics or animal-harm protocol.",
