@@ -4,6 +4,345 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-07-15",
+      "historicDate": "1983-05-30",
+      "displayDate": "Week of May 30–June 5, 1983",
+      "edition": "Issue 044 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Energetic game-publisher launch with summer-movie suspense",
+        "motifs": [
+          "album-like game boxes",
+          "Atari joystick",
+          "acoustic-coupler modem",
+          "portable computer"
+        ],
+        "layout": "Dense 1983 computer weekly with a gaming lead, boxed charts, blue rules, and red spot color"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of May 30–June 5, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Electronic Arts launch lead across the upper fold with game-box halftones",
+        "secondaryRail": "WarGames, portable machines, charts, shelf watch, and prices",
+        "archiveNavigation": "Previous/next weekly issue controls and calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "Arcade red",
+        "secondary": "CRT blue",
+        "texture": "Warm aged newsprint, column rules, halftone dots, and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-05-30.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of May 30 to June 5, 1983",
+        "caption": "A GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Five unusually distinctive games arrive under a new label while Hollywood turns a modem and a home computer into summer suspense.",
+      "morningLine": "Games get album covers, computers get briefcases, and WarGames puts dialing into the movies.",
+      "lead": {
+        "headline": "Electronic Arts' First Five Games Reach Players",
+        "dek": "A young publisher treats programmers like recording artists—and ships a remarkably varied opening slate.",
+        "body": [
+          "SOUTH SAN FRANCISCO — Ten days before this week began, the small company called Electronic Arts made its first shipment. Its May 20 slate carried five titles—Archon: The Light and the Dark, Hard Hat Mack, M.U.L.E., Worms?, and Axis Assassin—out of a warehouse and toward computer stores. The boxes announced the company’s ambition before a disk was loaded: creators’ names appeared prominently, and the packages borrowed the scale and visual confidence of record albums.",
+          "The selection makes a case for the computer as a broad game machine rather than a single-purpose arcade substitute. M.U.L.E. turns settlement-building into a competitive economy in which supply, demand, land, and luck keep changing the table. Archon begins with the outline of a chessboard, then lets opposing pieces fight their own action contests. Hard Hat Mack brings construction-site timing and hazards to the Apple II, while Axis Assassin and Worms? push in still other directions.",
+          "Electronic Arts is selling an identity as much as a catalog. By placing designers in the foreground, the publisher asks buyers to recognize the people behind the software in the way music listeners recognize performers. That approach also gives the first five games a family resemblance without forcing them into one genre.",
+          "The first shipping day was hardly glamorous. Company recollections describe the whole crew loading boxes for hours; Nancy Fong remembered, “We all worked all day long,” while Bing Gordon joked that they were terrible warehouse workers. Yet the improvised labor sent out a lineup whose variety and presentation suggest where packaged computer entertainment may be headed."
+        ],
+        "confidence": "Same-month; EA records date the first shipment to May 20, 1983.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "stories": [
+        {
+          "headline": "WarGames Makes Home Computing a Summer-Movie Star",
+          "kicker": "At the movies",
+          "dek": "A teenager, a modem, and a military computer carry a new kind of thriller.",
+          "body": [
+            "WarGames opens June 3 with a home computer and telephone modem at the center of its suspense. Its teenage protagonist reaches a military system while looking for games, then discovers that simulated nuclear conflict can be mistaken for the real thing.",
+            "The picture earns $6,227,804 from 843 theaters on its opening weekend, ranking third behind Return of the Jedi and Psycho II. Whatever audiences make of its technical details, the film gives dialing, passwords, artificial intelligence, and computer security a place in the summer-movie vocabulary."
+          ],
+          "confidence": "Exact-date opening and weekend grosses verified.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "Portable and 16-Bit Machines Crowd the June BYTE",
+          "kicker": "Hardware desk",
+          "dek": "Greater memory, new processors, and battery power widen the definition of a microcomputer.",
+          "body": [
+            "BYTE’s June cover package surveys 16-bit designs promising more memory and stronger management of it. The featured field ranges from Digital’s Professional 325 and 350 to HP’s Series 200 Model 16, the Intel 80186-based Pronto Series 16, and Olivetti’s Z8000-based M20.",
+            "Portability is becoming a serious design claim. The battery-powered Gavilan Mobile Computer can be paired with an optional printer small enough to share a standard briefcase. The same issue also examines the NEC PC-8201, Tim Paterson’s account of MS-DOS, VisiCorp’s Visi On environment, and Digital Research’s DR Logo."
+          ],
+          "confidence": "Same-month BYTE issue.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "Modems Bring Computer Gamers Together",
+          "kicker": "Connected play",
+          "dek": "Telephone lines and organized leagues hint at a social future for home games.",
+          "body": [
+            "Computer Gaming World’s May–June issue places modem gaming and a computer baseball league on its cover, treating remote play as a culture worth watching rather than a laboratory curiosity. Players are beginning to imagine opponents and teammates beyond the room containing the machine.",
+            "The $2.75 issue also reviews Computer Ambush, Close Assault, and Germany 1985 and advertises SSI’s Knights of the Desert. Strategy remains central, but the telephone line adds a new possibility: a game community assembled through computers before consumer online services become ordinary."
+          ],
+          "confidence": "Period May–June magazine evidence.",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Gavilan Goes Mobile",
+          "summary": "A battery-powered 16-bit computer offers an optional briefcase-fitting printer.",
+          "confidence": "Same-month BYTE coverage.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "TI Shows a Sub-$100 99/2",
+          "summary": "Texas Instruments promotes a basic 16-bit home computer compatible with TI-99/4A software.",
+          "confidence": "Same-month BYTE coverage.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Visi On Tours the Screen",
+          "summary": "BYTE takes a guided look at VisiCorp’s graphical operating environment.",
+          "confidence": "Same-month BYTE coverage.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "ProFile Adds Five Megabytes",
+          "summary": "Apple’s hard disk promises roughly 35 floppy disks of storage for the Apple III.",
+          "confidence": "Period advertisement.",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "MS-DOS",
+          "detail": "Tim Paterson explains the operating system’s history, mechanics, and direction in BYTE."
+        },
+        {
+          "name": "Visi On",
+          "detail": "VisiCorp’s graphical environment receives a guided tour."
+        },
+        {
+          "name": "DR Logo",
+          "detail": "Gary Kildall and David Thornburg present Digital Research’s Logo."
+        },
+        {
+          "name": "M.U.L.E.",
+          "detail": "Multiplayer colony economics for Atari 400/800."
+        },
+        {
+          "name": "Archon",
+          "detail": "Board strategy meets direct arcade combat."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "M.U.L.E.",
+            "Archon: The Light and the Dark",
+            "Hard Hat Mack",
+            "Computer Ambush",
+            "Close Assault"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Return of the Jedi",
+            "Psycho II",
+            "WarGames",
+            "Spacehunter: Adventures in the Forbidden Zone",
+            "Blue Thunder"
+          ]
+        },
+        {
+          "label": "Home & Portable Computers",
+          "items": [
+            "Texas Instruments 99/2",
+            "Gavilan Mobile Computer",
+            "NEC PC-8201",
+            "Commodore 64",
+            "Apple IIe"
+          ]
+        },
+        {
+          "label": "Office Software",
+          "items": [
+            "MS-DOS",
+            "Visi On",
+            "DR Logo",
+            "Lotus 1-2-3",
+            "WordStar"
+          ]
+        },
+        {
+          "label": "Strategy Shelf",
+          "items": [
+            "Computer Ambush",
+            "Close Assault",
+            "Germany 1985",
+            "Knights of the Desert",
+            "Archon"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "TI 99/2 Basic Computer",
+          "price": "Under $100",
+          "note": "Promoted price for the basic home computer."
+        },
+        {
+          "item": "BYTE, June 1983",
+          "price": "$2.95",
+          "note": "U.S. single-copy price."
+        },
+        {
+          "item": "Computer Gaming World, May–June 1983",
+          "price": "$2.75",
+          "note": "Period cover price."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Jedi Holds No. 1",
+          "text": "Return of the Jedi leads the June 3–5 domestic weekend."
+        },
+        {
+          "headline": "Psycho II Opens Second",
+          "text": "The sequel takes $8.3 million, ahead of WarGames in third."
+        },
+        {
+          "headline": "Logo for a Friendly Machine",
+          "text": "Digital Research presents DR Logo as an approachable programming environment."
+        },
+        {
+          "headline": "Apple Expands the Peripherals Desk",
+          "text": "The five-megabyte ProFile hard disk promises speed and room beyond floppy storage."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Flashdance... What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 2,
+          "title": "Let's Dance",
+          "artist": "David Bowie"
+        },
+        {
+          "rank": 3,
+          "title": "Time (Clock of the Heart)",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 4,
+          "title": "Overkill",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 5,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        }
+      ],
+      "periodAd": {
+        "headline": "The Programmer Is the Star",
+        "summary": "Five new Electronic Arts games arrive in packages made to stand beside record albums.",
+        "tagline": "Meet the artists behind the software."
+      },
+      "market": {
+        "headline": "Sixteen Bits Move Beyond the Spec Sheet",
+        "summary": "June’s new machines compete on memory, speed, portability, and business software rather than processor width alone.",
+        "confidence": "Interpretation grounded in BYTE’s June 1983 16-bit survey.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Williamsburg Summit Closes with Reagan Discussing Soviet Relations",
+        "summary": "On May 31, after the Williamsburg economic summit, President Reagan says he foresees improved Soviet relations based on a more realistic view; summit discussions also range across economic cooperation and Central America.",
+        "confidence": "Exact-date reporting and presidential diary record.",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "EA’s first shipment date and five-title slate come from company history and contemporary retrospective reporting.",
+          "WarGames opening date, theater count, gross, and movie ranking use the June 3–5 domestic weekend.",
+          "Music ranking follows the Billboard Hot 100 dated June 4, 1983.",
+          "Hardware and software notes come from the June 1983 BYTE issue.",
+          "Prices are period cover or promoted prices and may differ by dealer."
+        ]
+      },
+      "sources": [
+        {
+          "label": "28 Years of EA History",
+          "url": "https://www.ea.com/news/today-in-ea-history"
+        },
+        {
+          "label": "Computer Gaming World Vol. 3 No. 3",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+        },
+        {
+          "label": "BYTE Vol. 8 No. 6",
+          "url": "https://archive.org/stream/byte-magazine-1983-06-rescan/1983_06_BYTE_08-06_16-Bit_Designs_djvu.txt"
+        },
+        {
+          "label": "Billboard Hot 100, June 4, 1983",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-06-04"
+        },
+        {
+          "label": "Domestic Weekend 22, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W22/?sort=rank"
+        },
+        {
+          "label": "Reagan on U.S.-Soviet detente",
+          "url": "https://www.upi.com/Archives/1983/05/31/President-Reagan-denied-Tuesday-he-has-wrecked-US-Soviet-detente/6787423201600/"
+        },
+        {
+          "label": "Heat wave keeps pressure on Northwest floods, fires",
+          "url": "https://www.upi.com/Archives/1983/05/30/Heat-wave-keeps-pressure-on-Northwest-floods-fires/4741423115200/"
+        },
+        {
+          "label": "Angolan rebels go on offensive",
+          "url": "https://www.csmonitor.com/1983/0531/053135.html"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "MODEM OPPONENT WANTED",
+          "copy": "Strategy player seeks friendly games by telephone line. Evenings preferred."
+        },
+        {
+          "headline": "DISK BOXES",
+          "copy": "Keep your newest game worlds labeled, upright, and ready to load."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-07-14",
       "historicDate": "1983-05-23",
       "displayDate": "Week of May 23–29, 1983",
