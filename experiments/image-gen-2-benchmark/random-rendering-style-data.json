@@ -396,5 +396,24 @@
       "description": "A full-bleed alpine avalanche observatory scene whose snow, mountain goats, fences, instrument housings, dawn sky, and distant peaks are constructed entirely from layered wax crayon and scratched-back sgraffito marks.",
       "template": "Reusable fill-in-the-blank template: Render [SUBJECT_OR_PLACE] as richly layered wax-crayon sgraffito illustration, using dense colored-wax strata, dark overcrayon, scratched linework, broken pigment crumbs, and visible paper tooth to build [COMPOSITION], [PALETTE], [LIGHTING], and [TACTILE_DETAILS]. Keep it a finished full-bleed scene rather than a poster, diagram, or generic digital filter. Avoid readable text, logos, borders, smooth vector surfaces, and blank backgrounds."
     }
+  },
+  {
+    "id": "2026-07-15-random-image-style-random-rendering-style-scratchboard-cabl",
+    "title": "Random rendering style: Scratchboard Cable-Laying Deck",
+    "tests": "Core concept: active subsea-cable repair on a storm-wet ship deck. Style logic: authentic hand-scraped black-ink scratchboard with white hatching and rust-orange spot color. Anti-repeat variables: maritime industrial subject, high oblique overhead composition, night rain, physically coherent cable machinery, limited palette, visible varied crew, text-free finished scene.",
+    "prompt": "Filled-in ready-to-use prompt: Create a finished square illustration of an active ocean-cable repair operation on the stern deck of a working cable-laying ship at night, rendered entirely as authentic hand-scraped black-ink scratchboard. Use dense white scraped hatching, stipple, cross-contour cuts, dry burrs, and bold black negative space, with only a restrained rust-orange spot color on safety rails, cable markings, and wet reflections. Compose from a high oblique overhead angle so the deck becomes an intricate field of physically coherent machinery: enormous coils of armored subsea cable, a powered capstan, paired sheaves, tension rollers, open tool chests, shackles, chain, wet steel grating, drainage channels, work lamps, and spray breaking over the stern. Show a varied night crew in practical rain gear actively guiding the cable through the machinery at believable scale. Make sea spray, rain, reflected light, rope fibers, cable armor, rust, grease, and worn deck paint legible through hand-cut marks. The scratchboard medium must control every edge, texture, light, shadow, and depth cue. No cinematic hero pose, photorealism, smooth gradients, poster border, captions, logos, or readable text.\n\nReusable prompt template: Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] scene in which the medium controls every edge, light, texture, and depth cue. Include [ACTIVE_PROCESS], [SPECIALIZED_TOOLS], [WEATHER_OR_ENVIRONMENT], [SCALE_CUES], and [LIMITED_ACCENT_COLOR]. Keep it a finished visual example rather than a poster or generic filter.",
+    "image": "images/2026-07-15-random-image-style-random-rendering-style-scratchboard-cabl.jpg",
+    "thumb": "thumbs/2026-07-15-random-image-style-random-rendering-style-scratchboard-cabl.webp",
+    "color": "#312d2a",
+    "date": "2026-07-15",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "hand-scraped black-ink scratchboard with rust-orange spot color",
+      "description": "A storm-wet cable-laying ship deck rendered in dense scraped white linework over black ink, with restrained rust-orange accents and a working crew guiding armored subsea cable through capstans and sheaves.",
+      "template": "Render [SUBJECT_OR_PLACE] as a richly detailed [STYLE_OR_MEDIUM] scene in which the medium controls every edge, light, texture, and depth cue. Include [ACTIVE_PROCESS], [SPECIALIZED_TOOLS], [WEATHER_OR_ENVIRONMENT], [SCALE_CUES], and [LIMITED_ACCENT_COLOR]. Keep it a finished visual example rather than a poster or generic filter."
+    }
   }
 ]
