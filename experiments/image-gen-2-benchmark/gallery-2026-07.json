@@ -38,6 +38,25 @@
     }
   },
   {
+    "id": "2026-07-15-random-image-style-random-rendering-style-cut-paper-alpine-",
+    "title": "Random rendering style: Cut-Paper Alpine Weather Station",
+    "tests": "Medium family: dimensional cut-paper shadow-box photography. Central mechanism: visibly separated hand-cut paper planes and their real cast shadows. Subject: active alpine weather-station maintenance after snowfall. Composition: lower-left snow-pit cutaway to upper-right mountain diagonal. Palette: cold cyan/cobalt/white/violet with red-orange structure and amber practical glow. Anti-repeat: not wax-crayon sgraffito, scratchboard, flat vector art, a poster, a plain object display, or a generic cinematic scene.",
+    "prompt": "Filled-in ready-to-use prompt: Create a finished square image titled \"Cut-Paper Alpine Weather Station\": a richly dimensional, physically handmade cut-paper shadow-box scene of a remote alpine weather station during active instrument maintenance after fresh snowfall. Photograph the actual paper theater at a high three-quarter angle so its layered depth, folded support tabs, knife-cut edges, tiny fibers, glue seams, and deep cast shadows are unmistakable. Build the foreground from torn cold-white cotton paper snowbanks and charcoal deckled-paper rock; arrange staggered midground layers containing a compact cobalt weather hut, a red-orange lattice mast, a cup anemometer, wind vane, shielded thermometer screen, precipitation gauge, solar panel, snow stakes, thread guy wires, cable runs, an open tool case, spare sensor housings, and two tiny technicians in distinct practical parkas adjusting the mast and checking a junction box. Use translucent vellum for blown snow, cloud bands, ice haze, frost patterns, and a pale cyan distant glacier; use metallic paper glints only on fasteners and instrument cups. Compose along a strong diagonal from a cutaway snow pit through the maintenance platform to layered violet mountain ridges. Side-light the construction with crisp winter-white light and warm amber hut glow, producing real shadows between at least eight paper planes. Include animal tracks, wind-scoured ridges, snow accumulation, tool silhouettes, and a distant route marker without text. Every element must obey cut, folded, curled, layered paper construction. No full-size photorealism, flat vector art, poster, diagram, labels, readable text, logos, border, smooth CGI, or watermark.\n\nReusable prompt template: Build [SUBJECT_OR_PLACE] as a layered cut-paper shadow-box scene using [PAPER_TYPES], [LAYERED_DEPTH], [LIGHTING], [PALETTE], and [ACTIVE_DETAIL]. Make the physical construction, handmade edges, folded supports, and cast shadows visibly govern the image. Photograph the dimensional paper theater as a finished scene, not a poster or diagram.\n\nExample substitution: [SUBJECT_OR_PLACE] = an alpine weather station during instrument maintenance after snowfall; [PAPER_TYPES] = torn cotton paper snow, deckled charcoal rock, cobalt card buildings, red-orange structural card, translucent vellum weather, metallic paper fasteners, and thread guy wires; [LAYERED_DEPTH] = a foreground snow-pit cutaway, midground maintenance deck and mast, distant glacier, and eight separated mountain and cloud planes; [LIGHTING] = crisp winter-white side light plus warm amber hut glow; [PALETTE] = glacier cyan, cobalt, charcoal, cold white, muted violet, signal red-orange, and lemon-yellow accents; [ACTIVE_DETAIL] = two tiny technicians adjusting instruments amid tools, cables, animal tracks, frost patterns, and wind-blown snow.",
+    "image": "images/2026-07-15-random-image-style-random-rendering-style-cut-paper-alpine-.jpg",
+    "thumb": "thumbs/2026-07-15-random-image-style-random-rendering-style-cut-paper-alpine-.webp",
+    "color": "#7c7578",
+    "date": "2026-07-15",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "dimensional cut-paper shadow-box photography",
+      "description": "A physically handmade alpine weather-station maintenance scene built from torn cotton paper, cut card, translucent vellum, metallic-paper details, thread, folded supports, and eight cast-shadow depth planes.",
+      "template": "Build [SUBJECT_OR_PLACE] as a layered cut-paper shadow-box scene using [PAPER_TYPES], [LAYERED_DEPTH], [LIGHTING], [PALETTE], and [ACTIVE_DETAIL]. Make the physical construction, handmade edges, folded supports, and cast shadows visibly govern the image."
+    }
+  },
+  {
     "id": "2026-07-14-random-image-style-random-rendering-style-sand-lightbox-alp",
     "title": "Random rendering style: Sand-Lightbox Alpine Funicular Wash Depot",
     "tests": "Physical sand-lightbox medium fidelity; diagonal funicular-depot composition; tactile granular materials; coherent wash machinery; no readable text or paper-poster framing",
