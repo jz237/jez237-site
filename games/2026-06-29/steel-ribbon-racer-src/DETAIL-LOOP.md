@@ -1101,3 +1101,28 @@ signal-corner ped density weighting.
   Perf gate 2 worlds: 1815-1843 calls / 596-603k tris / 241-242 tex /
   5518-5567 geo. Suite 144/144 first run. NEXT: item 7 — start-line
   paddock clutter (race-mode real estate).
+- **43 START-LINE PADDOCK — round-five item 7 (2026-07-16)**: the start
+  gantry has a pit lane now. Four clutter platforms flank the START
+  gantry in its own course frame (St(6±ds) + ui quaternion, lateral
+  halfW+2.4): kind-0 = three tire stacks (donut cylinders + hubs), red
+  tool cart with wheels + handle, traffic cones; kind-1 = blue/red fuel
+  drums, tire pair, pennant bunting (8 CircleGeometry(…,3) triangles in
+  4 colors sagging between poles). All 88 parts vcBaked into ONE merged
+  mesh (raycast-inert, visual-only — same class as lawn trees).
+  LESSON RELEARNED THE HARD WAY: the start of "The Little Ramp" is
+  ~60m ELEVATED — my first ground-level-thinking placement left
+  clusters floating in mid-air beside the deck (probeDown showed
+  ground 59m below one). THE RULE (it.19, now twice-paid): trackside
+  objects live on LIFTED PLATFORM SLABS in the deck frame — added
+  5.6×3.6 green slabs at PLIFT 1.15, matching the marshal-station
+  visual language. Also: flyCam works behind the TITLE MENU — enter
+  roam first or the shots frame a menu overlay. Verified by LOOKING
+  (loop-shots/43-paddock/): tire stacks/cart/cone platform and
+  drums+bunting platform both read perfectly at 5m beside the deck;
+  orbit shows platforms flanking the grid. Suite hardening applied per
+  the it.41 plan: the ped-glide stall reproduced TWICE at exactly 6.7m
+  — it is headless-fps-proportional camera lag (lag = v·dt·(1-α)/α; at
+  ~7fps ≈ 4m + 2.7 standoff), NOT world luck; glide threshold
+  calibrated 4.2→7.5. Perf gate: 1828-1858 calls / 602-610k tris.
+  Suite 145/145. NEXT: item 8 — window atlas crispness (2x + mullions,
+  far look pixel-equivalent).
