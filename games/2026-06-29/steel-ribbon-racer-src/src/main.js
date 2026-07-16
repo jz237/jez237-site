@@ -2963,6 +2963,163 @@ const rooftopSys = {
     for (const k of this.kits) k.idx < 0 && (k.g.visible = !1);
   },
 };
+// race roadside life (zoom-detail item 18): marshals with checkered flags,
+// pit boards, camera crews on small platforms bolted to the deck edge — the
+// stuff you zoom past at speed. Pooled kits promoted to the nearest of ~14
+// stations seeded along the course; ~1-2 draw calls per kit.
+let roadsideBoardAtlas = null;
+const ROADSIDE_BOARDS = ["P3  +1.2", "LAP 2  PUSH"];
+function buildRoadsideBoardAtlas() {
+  if (roadsideBoardAtlas) return roadsideBoardAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 256));
+  const g = cv.getContext("2d");
+  for (let r = 0; r < 2; r++) {
+    const y = r * 128;
+    ((g.fillStyle = "#101726"), g.fillRect(0, y, 512, 128));
+    ((g.strokeStyle = "#3a4a68"), (g.lineWidth = 6), g.strokeRect(3, y + 3, 506, 122));
+    ((g.fillStyle = "#f2f4f8"), (g.font = "900 72px monospace"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(ROADSIDE_BOARDS[r], 256, y + 66, 480);
+  }
+  roadsideBoardAtlas = new CanvasTexture(cv);
+  roadsideBoardAtlas.colorSpace = SRGBColorSpace;
+  return roadsideBoardAtlas;
+}
+const roadsideSys = {
+  spots: [],
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 220,
+  sample: [],
+  _timer: 0,
+  buildStations() {
+    this.spots.length = 0;
+    const n = 14,
+      rng = plateRng(0x70ad51);
+    for (let k = 0; k < n; k++) {
+      const s = ((k + 0.3 + rng() * 0.4) * ce.length) / n,
+        sideSign = rng() < 0.5 ? -1 : 1;
+      if (s % ce.length < 40 || railSkipZone(s % ce.length, sideSign)) continue;
+      const c = St(s % ce.length),
+        p = c.p
+          .clone()
+          .addScaledVector(c.side, sideSign * (ce.width * 0.5 + 2.0))
+          .addScaledVector(on, 0.58);
+      this.spots.push({ i: this.spots.length, x: p.x, y: p.y, z: p.z, yaw: Math.atan2(-c.side.x * sideSign, -c.side.z * sideSign), v: this.spots.length % 3 });
+    }
+  },
+  LIFT: 1.3, // platform deck rides this high over the station point so the
+  // figures stand clear of the ribbon's raised rim wall (flush platforms
+  // proved invisible from the deck — only a head-sliver peeked over)
+  _figure(parts, x, z, vest) {
+    const L = this.LIFT;
+    (parts.push(vcBake(new BoxGeometry(0.34, 0.5, 0.22), vcAt(x, L + 0.25, z), 2500134)),
+      parts.push(vcBake(new CylinderGeometry(0.22, 0.26, 0.72, 8), vcAt(x, L + 0.96, z), vest)),
+      parts.push(vcBake(new SphereGeometry(0.17, 8, 6), vcAt(x, L + 1.5, z), 15250572)),
+      parts.push(vcBake(new CylinderGeometry(0.18, 0.18, 0.08, 8), vcAt(x, L + 1.63, z), 2500134)));
+  },
+  _platform(parts) {
+    const L = this.LIFT;
+    parts.push(vcBake(new BoxGeometry(3.0, 0.14, 2.4), vcAt(0, L - 0.07, 0), 4022096));
+    for (const px of [-1.35, 1.35]) parts.push(vcBake(new BoxGeometry(0.05, 0.62, 0.05), vcAt(px, L + 0.31, -1.14), 2500134));
+    parts.push(vcBake(new BoxGeometry(2.8, 0.05, 0.05), vcAt(0, L + 0.64, -1.14), 2500134));
+    for (const px of [-0.9, 0.9]) {
+      const m = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(px, L * 0.42, 0.9), new Matrix4().makeRotationX(0.55));
+      parts.push(vcBake(new BoxGeometry(0.1, 0.1, 2.2), m, 4022096));
+    }
+  },
+  ensure() {
+    if (this.kits) return;
+    const { opaque } = vcMats();
+    const marshal = () => {
+      const parts = [];
+      (this._platform(parts), this._figure(parts, 0, 0.25, 15231516));
+      const stick = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(0.45, this.LIFT + 1.42, 0.3), new Matrix4().makeRotationZ(-0.65));
+      parts.push(vcBake(new CylinderGeometry(0.024, 0.024, 0.95, 6), stick, 2500134));
+      for (let row = 0; row < 2; row++)
+        for (let col = 0; col < 4; col++)
+          parts.push(vcBake(new PlaneGeometry(0.2, 0.2), vcAt(0.78 + col * 0.2, this.LIFT + 1.9 - row * 0.2, 0.3), (row + col) % 2 ? 2500134 : 15921906));
+      return new Mesh(mergeGeometries(parts, !1), opaque);
+    };
+    const pitBoard = () => {
+      const parts = [];
+      (this._platform(parts), this._figure(parts, 1.1, 0.2, 15231516));
+      for (const px of [-0.75, 0.75]) parts.push(vcBake(new BoxGeometry(0.07, 1.3, 0.07), vcAt(px - 0.3, this.LIFT + 0.65, 0.25), 2500134));
+      parts.push(vcBake(new BoxGeometry(1.8, 1.05, 0.07), vcAt(-0.3, this.LIFT + 1.5, 0.25), 1974824));
+      return new Mesh(mergeGeometries(parts, !1), opaque);
+    };
+    const camCrew = () => {
+      const parts = [];
+      (this._platform(parts), this._figure(parts, -0.62, 0.05, 3104680));
+      for (let k = 0; k < 3; k++) {
+        const a = (k * Math.PI * 2) / 3,
+          m = new Matrix4().multiplyMatrices(
+            new Matrix4().makeTranslation(0.15 + Math.sin(a) * 0.28, this.LIFT + 0.55, 0.2 + Math.cos(a) * 0.28),
+            new Matrix4().multiplyMatrices(new Matrix4().makeRotationY(a), new Matrix4().makeRotationX(0.3)),
+          );
+        parts.push(vcBake(new CylinderGeometry(0.028, 0.034, 1.15, 6), m, 2500134));
+      }
+      parts.push(vcBake(new BoxGeometry(0.5, 0.3, 0.34), vcAt(0.15, this.LIFT + 1.28, 0.2), 1974824));
+      const lens = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(0.15, this.LIFT + 1.28, 0.45), new Matrix4().makeRotationX(Math.PI / 2));
+      parts.push(vcBake(new CylinderGeometry(0.09, 0.1, 0.26, 10), lens, 2500134));
+      return new Mesh(mergeGeometries(parts, !1), opaque);
+    };
+    const boardMat = new MeshBasicMaterial({ map: buildRoadsideBoardAtlas(), toneMapped: !1 });
+    this.kits = [];
+    const n = mobilePerf ? 3 : 6;
+    let boardIdx = 0;
+    for (let k = 0; k < n; k++) {
+      const variant = k % 3,
+        g = new Group(),
+        base = variant === 0 ? marshal() : variant === 1 ? pitBoard() : camCrew();
+      g.add(base);
+      if (variant === 1) {
+        const row = boardIdx++ % 2,
+          tg = new PlaneGeometry(1.68, 0.95),
+          uv = tg.attributes.uv;
+        for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, uv.getX(vi), 1 - (row + (1 - uv.getY(vi))) / 2);
+        const tq = new Mesh(tg, boardMat);
+        (tq.position.set(-0.3, this.LIFT + 1.5, 0.3), g.add(tq));
+      }
+      ((g.visible = !1), g.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1))), et.add(g));
+      this.kits.push({ g, variant, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cy = Xe.position.y,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled)
+      for (const s of this.spots) {
+        const dx = s.x - cx,
+          dy = s.y - cy,
+          dz = s.z - cz,
+          d2 = dx * dx + dy * dy + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    const free = { 0: [], 1: [], 2: [] };
+    for (const k of this.kits) ((k.idx = -1), free[k.variant].push(k));
+    for (const c of cand) {
+      if (this.promoted >= this.kits.length) break;
+      const s = c.s,
+        kit = free[s.v].pop() || free[(s.v + 1) % 3].pop() || free[(s.v + 2) % 3].pop();
+      if (!kit) break;
+      (kit.g.position.set(s.x, s.y, s.z), (kit.g.rotation.y = s.yaw), (kit.g.visible = !0), (kit.idx = s.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: s.i, x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), v: kit.variant });
+    }
+    for (const k of this.kits) k.idx < 0 && (k.g.visible = !1);
+  },
+};
 const PED_KIT_RADIUS = 40;
 // Fictional, family-friendly two-bubble chats shown on texting pedestrians'
 // phone screens (one per kit, drawn into a single shared atlas).
@@ -3950,6 +4107,7 @@ function F1(i, e, t) {
       parkedKitSys.update(I, ye);
       ambientSys.update(I, ye);
       rooftopSys.update(I, ye);
+      roadsideSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -6488,6 +6646,7 @@ function buildGuardrails(parent) {
   }
   ((postIM.count = postCount), (postIM.instanceMatrix.needsUpdate = !0), parent.add(postIM));
   ((qe.railRuns = railRuns), (qe.railPosts = postCount));
+  roadsideSys.buildStations();
 }
 function buildTrackGear() {
   ((boostPads.length = 0), (gapBeaconMats.length = 0));
@@ -9750,9 +9909,14 @@ window.__steelRibbonDebug = {
     rooftopSys.enabled = !!on;
     return rooftopSys.enabled;
   },
+  roadsideEnable(on) {
+    roadsideSys.enabled = !!on;
+    return roadsideSys.enabled;
+  },
   camWorld() {
     return { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) };
   },
+  __BasicMat: MeshBasicMaterial,
   parkedKitDump() {
     if (!parkedKitSys.kits) return null;
     const v = new Vector3();
@@ -9846,6 +10010,14 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      roadside: {
+        spots: roadsideSys.spots.length,
+        promoted: roadsideSys.promoted,
+        pool: roadsideSys.kits ? roadsideSys.kits.length : 0,
+        radius: roadsideSys.RADIUS,
+        sample: roadsideSys.sample.slice(0, 3),
+        stations: roadsideSys.spots.slice(0, 3).map((s) => ({ i: s.i, x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), v: s.v })),
       },
       rooftops: {
         spots: rooftopSys.spots.length,
