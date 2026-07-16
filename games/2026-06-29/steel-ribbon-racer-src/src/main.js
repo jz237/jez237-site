@@ -2533,6 +2533,183 @@ const steamSys = {
     }
   },
 };
+// parked-car variety (near tier): pooled add-on kits promoted onto the nearest
+// parked instances — roof racks (some with cargo boxes), rocker-panel grime,
+// door dents, antennas, side mirrors. Features seeded by spot idx so a car
+// keeps its look; base instanced silhouette (and the far view) untouched.
+let carGrimeAtlas = null;
+function buildCarGrimeAtlas() {
+  if (carGrimeAtlas) return carGrimeAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 256));
+  const g = cv.getContext("2d"),
+    r = plateRng(0xca7d1e);
+  for (let col = 0; col < 4; col++) {
+    // row 0: rocker grime strips — sooty/rust streaks hugging the lower edge
+    const x0 = col * 128;
+    for (let i = 0; i < 46; i++) {
+      const bx = x0 + 6 + r() * 116,
+        by = 78 + r() * 40,
+        bw = 5 + r() * (12 + col * 5),
+        bh = 3 + r() * 9,
+        rust = r() < 0.45;
+      ((g.fillStyle = rust ? `rgba(96,58,30,${0.1 + r() * 0.3})` : `rgba(28,30,34,${0.08 + r() * 0.26})`),
+        g.beginPath(),
+        g.ellipse(bx, by, bw, bh, r() * 3.14, 0, 6.29),
+        g.fill());
+    }
+    for (let i = 0; i < 9; i++) {
+      const sx = x0 + 10 + r() * 108;
+      ((g.strokeStyle = `rgba(70,46,26,${0.12 + r() * 0.22})`), (g.lineWidth = 1 + r() * 2), g.beginPath(), g.moveTo(sx, 70 + r() * 20), g.lineTo(sx + (r() - 0.5) * 10, 118), g.stroke());
+    }
+    // row 1: door dents — dark crease + a rust bloom, centered in the cell
+    const cx = x0 + 64,
+      cy = 192;
+    for (let i = 0; i < 7; i++)
+      ((g.fillStyle = `rgba(20,22,26,${0.1 + r() * 0.2})`), g.beginPath(), g.ellipse(cx + (r() - 0.5) * 44, cy + (r() - 0.5) * 34, 14 + r() * 22, 8 + r() * 12, r() * 3.14, 0, 6.29), g.fill());
+    ((g.strokeStyle = "rgba(14,15,18,0.5)"), (g.lineWidth = 2.5), g.beginPath(), g.moveTo(cx - 26 - r() * 12, cy + (r() - 0.5) * 16), g.quadraticCurveTo(cx + (r() - 0.5) * 18, cy + (r() - 0.5) * 20, cx + 26 + r() * 12, cy + (r() - 0.5) * 16), g.stroke());
+    r() < 0.6 && ((g.fillStyle = "rgba(110,64,32,0.34)"), g.beginPath(), g.ellipse(cx + (r() - 0.5) * 30, cy + (r() - 0.5) * 22, 7 + r() * 8, 5 + r() * 6, r() * 3.14, 0, 6.29), g.fill());
+  }
+  carGrimeAtlas = new CanvasTexture(cv);
+  carGrimeAtlas.colorSpace = SRGBColorSpace;
+  return carGrimeAtlas;
+}
+const parkedKitSys = {
+  kits: null,
+  promoted: 0,
+  racks: 0,
+  grimeN: 0,
+  dents: 0,
+  antennas: 0,
+  RADIUS: 34,
+  sample: [],
+  _timer: 0,
+  _slotPlane(w, h, col, row) {
+    const g = new PlaneGeometry(w, h),
+      uv = g.attributes.uv;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, (col + uv.getX(i)) / 4, 1 - (row + (1 - uv.getY(i))) / 2);
+    return g;
+  },
+  ensure() {
+    if (this.kits) return;
+    const atlas = buildCarGrimeAtlas(),
+      decalMat = new MeshStandardMaterial({ map: atlas, transparent: !0, depthWrite: !1, roughness: 0.92, metalness: 0, polygonOffset: !0, polygonOffsetFactor: -2 }),
+      railMat = new MeshStandardMaterial({ color: 2699316, roughness: 0.46, metalness: 0.58 }),
+      darkMat = new MeshStandardMaterial({ color: 1381656, roughness: 0.6, metalness: 0.3 });
+    this._grimeGeos = [0, 1, 2, 3].map((c) => this._slotPlane(3.9, 0.55, c, 0));
+    this._dentGeos = [0, 1, 2, 3].map((c) => this._slotPlane(0.72, 0.46, c, 1));
+    const railGeo = new BoxGeometry(0.06, 0.05, 1.85),
+      barGeo = new BoxGeometry(1.38, 0.04, 0.05),
+      cargoGeo = new BoxGeometry(1.15, 0.34, 1.5),
+      mirrorGeo = mergeGeometries([
+        new BoxGeometry(0.2, 0.03, 0.03).translate(-0.12, 0, 0),
+        new BoxGeometry(0.13, 0.09, 0.045).translate(0, 0, 0),
+      ]),
+      antGeo = new CylinderGeometry(0.012, 0.018, 0.55, 5);
+    this.kits = [];
+    const n = mobilePerf ? 3 : 7;
+    for (let k = 0; k < n; k++) {
+      const kit = new Group(),
+        rack = new Group();
+      for (const rx of [-0.66, 0.66]) {
+        const rail = new Mesh(railGeo, railMat);
+        (rail.position.set(rx, 1.76, -0.22), rack.add(rail));
+      }
+      for (const bz of [-0.9, -0.22, 0.5]) {
+        const bar = new Mesh(barGeo, railMat);
+        (bar.position.set(0, 1.79, bz), rack.add(bar));
+      }
+      const cargoMat = new MeshStandardMaterial({ roughness: 0.72, metalness: 0.08 }),
+        cargo = new Mesh(cargoGeo, cargoMat);
+      (cargo.position.set(0, 1.98, -0.25), rack.add(cargo), kit.add(rack));
+      const grimeL = new Mesh(this._grimeGeos[0], decalMat),
+        grimeR = new Mesh(this._grimeGeos[0], decalMat);
+      (grimeL.position.set(-1.112, 0.66, 0), (grimeL.rotation.y = -Math.PI / 2), grimeR.position.set(1.112, 0.66, 0), (grimeR.rotation.y = Math.PI / 2), (grimeL.renderOrder = 2), (grimeR.renderOrder = 2), kit.add(grimeL), kit.add(grimeR));
+      const dent = new Mesh(this._dentGeos[0], decalMat);
+      ((dent.renderOrder = 2), kit.add(dent));
+      const ant = new Mesh(antGeo, darkMat);
+      (ant.position.set(0.72, 1.42, 1.72), (ant.rotation.x = -0.14), kit.add(ant));
+      for (const mx of [-1.08, 1.08]) {
+        const mir = new Mesh(mirrorGeo, darkMat);
+        (mir.position.set(mx, 1.5, -1.16), (mir.rotation.y = mx < 0 ? Math.PI : 0), kit.add(mir));
+      }
+      ((kit.visible = !1), kit.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1))), et.add(kit));
+      this.kits.push({ g: kit, rack, cargo, cargoMat, grimeL, grimeR, dent, ant, idx: -1 });
+    }
+  },
+  enabled: !0,
+  update(t, dt) {
+    if (!rideSys.spots.length || !rideSys.im || !dt) return;
+    if (!this.enabled) {
+      if (this.kits) for (const k of this.kits) ((k.g.visible = !1), (k.idx = -1));
+      ((this.promoted = 0), (this.racks = 0), (this.grimeN = 0), (this.dents = 0), (this.antennas = 0), (this.sample.length = 0));
+      return;
+    }
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    // altitude gate: the race ribbon runs ~64m above the city — never promote
+    // under a high camera (2D distance alone would match cars directly below)
+    if (Xe.position.y <= 26)
+      for (const s of rideSys.spots) {
+        if (s.taken) continue;
+        const dx = s.x - cx,
+          dz = s.z - cz,
+          d2 = dx * dx + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.racks = 0), (this.grimeN = 0), (this.dents = 0), (this.antennas = 0), (this.sample.length = 0));
+    const CARGO_COLS = [8079146, 3100523, 3818058, 7042934];
+    for (let k = 0; k < this.kits.length; k++) {
+      const kit = this.kits[k],
+        s = cand[k]?.s ?? null;
+      if (!s) {
+        ((kit.g.visible = !1), (kit.idx = -1));
+        continue;
+      }
+      rideSys.im.getMatrixAt(s.idx, _pkM);
+      _pkM.decompose(kit.g.position, kit.g.quaternion, _pkV);
+      const r = plateRng((((s.idx + 1) * 2654435761) ^ 0x9a4b17) >>> 0),
+        rRack = r(),
+        rCargo = r(),
+        rCargoCol = r(),
+        rGrime = r(),
+        rGrimeV = r(),
+        rDent = r(),
+        rDentV = r(),
+        rDentSide = r(),
+        rDentZ = r(),
+        rAnt = r();
+      const hasRack = rRack < 0.34,
+        hasGrime = rGrime < 0.62,
+        hasDent = rDent < 0.3,
+        hasAnt = rAnt < 0.42;
+      ((kit.rack.visible = hasRack), (kit.cargo.visible = rCargo < 0.5), kit.cargoMat.color.setHex(CARGO_COLS[(rCargoCol * 4) | 0]));
+      ((kit.grimeL.visible = hasGrime), (kit.grimeR.visible = hasGrime));
+      if (hasGrime) {
+        const gv = (rGrimeV * 4) | 0;
+        ((kit.grimeL.geometry = this._grimeGeos[gv]), (kit.grimeR.geometry = this._grimeGeos[gv]));
+      }
+      kit.dent.visible = hasDent;
+      if (hasDent) {
+        const side = rDentSide < 0.5 ? -1 : 1;
+        (kit.dent.position.set(side * 1.112, 0.86, -0.7 + rDentZ * 1.8), (kit.dent.rotation.y = (side * Math.PI) / 2), (kit.dent.geometry = this._dentGeos[(rDentV * 4) | 0]));
+      }
+      kit.ant.visible = hasAnt;
+      ((kit.g.visible = !0), (kit.idx = s.idx), this.promoted++);
+      (hasRack && this.racks++, hasGrime && this.grimeN++, hasDent && this.dents++, hasAnt && this.antennas++);
+      this.sample.length < 3 && this.sample.push({ idx: s.idx, x: +s.x.toFixed(1), y: +kit.g.position.y.toFixed(2), z: +s.z.toFixed(1), yaw: +Math.atan2(2 * (kit.g.quaternion.w * kit.g.quaternion.y + kit.g.quaternion.x * kit.g.quaternion.z), 1 - 2 * (kit.g.quaternion.y * kit.g.quaternion.y + kit.g.quaternion.x * kit.g.quaternion.x)).toFixed(2), rack: hasRack, grime: hasGrime, dent: hasDent });
+    }
+  },
+};
+const _pkM = new Matrix4(),
+  _pkV = new Vector3();
 const PED_KIT_RADIUS = 40;
 // Fictional, family-friendly two-bubble chats shown on texting pedestrians'
 // phone screens (one per kit, drawn into a single shared atlas).
@@ -3517,6 +3694,7 @@ function F1(i, e, t) {
       storefrontSys.update(ye);
       birdSys.update(I, ye);
       steamSys.update(I, ye);
+      parkedKitSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -9267,6 +9445,23 @@ window.__steelRibbonDebug = {
       hoop: r.hoop ? { x: +r.hoop.x.toFixed(1), y: +r.hoop.y.toFixed(1), z: +r.hoop.z.toFixed(1), r: r.hoop.r } : null,
     }));
   },
+  parkedKitEnable(on) {
+    parkedKitSys.enabled = !!on;
+    return parkedKitSys.enabled;
+  },
+  parkedKitDump() {
+    if (!parkedKitSys.kits) return null;
+    const v = new Vector3();
+    return parkedKitSys.kits.map((k) => ({
+      idx: k.idx,
+      visible: k.g.visible,
+      pos: { x: +k.g.position.x.toFixed(2), y: +k.g.position.y.toFixed(2), z: +k.g.position.z.toFixed(2) },
+      kids: k.g.children.map((o, i) => {
+        o.getWorldPosition(v);
+        return { i, type: o.type, vis: o.visible, x: +v.x.toFixed(2), y: +v.y.toFixed(2), z: +v.z.toFixed(2) };
+      }),
+    }));
+  },
   nearestParkedSpot(x, z) {
     let best = null;
     for (const s of rideSys.spots) {
@@ -9338,6 +9533,16 @@ window.__steelRibbonDebug = {
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
+      parked: {
+        spots: rideSys.spots.length,
+        promoted: parkedKitSys.promoted,
+        racks: parkedKitSys.racks,
+        grime: parkedKitSys.grimeN,
+        dents: parkedKitSys.dents,
+        antennas: parkedKitSys.antennas,
+        radius: parkedKitSys.RADIUS,
+        sample: parkedKitSys.sample.slice(0, 3),
+      },
       crowd: {
         stands: crowdSys.stands.length,
         promoted: crowdSys.active >= 0 ? 1 : 0,
