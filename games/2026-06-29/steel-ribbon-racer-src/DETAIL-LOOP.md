@@ -1020,3 +1020,28 @@ signal-corner ped density weighting.
   parksEnable(on). Suite 141/141 (parks probe: cells≥4, trees≥8,
   toggle). NEXT: item 4 — park furniture (benches/flowerbeds along the
   new paths). New idea for the wishlist: path-side lamp posts at dusk.
+- **40 PARK FURNITURE — round-five item 4 (2026-07-16)**: the park paths
+  got benches and flowerbeds. Path-joint spine math seeds them (bench at
+  s2=3 facing the path via yaw from the strip normal, second bench at
+  s2=6 on odd cells, flowerbed opposite at s2=5); every part vcBaked
+  under a placement Matrix4 (place × vcAt local) into ONE merged
+  vertex-colored mesh (+1 draw, raycast-inert). Bench = the street
+  benchGeo recipe; flowerbed = two-tone timber planter + 6 stem+bloom
+  pairs in 4 sRGB-hex bloom-safe colors (hex colors via vcBake are
+  color-managed — the LINEAR float trap only bites raw attribute
+  floats). BIG FIX FOUND BY INSTRUMENTATION: furniture yield was 3/18 —
+  rejection counters (parkSys._rej, now permanent in the report) showed
+  ka killing 20/30 — **the z street lattice anchors at zNear (380)
+  DESCENDING, but cell rows anchored at zLo ascending → every cell row
+  sat ~5m off a street centerline in z**. Cells now anchor at zTop;
+  rej.ka === 0 and the probe LOCKS it (a ka spike = lattice drift).
+  Cell ribbon-clearance also raised (Pn(c,26) ≥ 20). Yields: 8-12
+  cells, 10-16 benches, 7-12 beds, trees at the 56 cap. Aim close-ups
+  with probeDown().ground (NOT camWorld().y minus a guess — that missed
+  twice; .ground is the field, .y does not exist). Verified by LOOKING
+  (loop-shots/40-park-furniture/): bench at 3m = redwood slats facing
+  the path, pines behind; flowerbed = planter with yellow/purple/red/
+  orange blooms beside the walkway; both grounded, both oriented right.
+  Perf gate 2 worlds: 1811-1860 calls / 588-596k tris / 231-237 tex /
+  5510-5568 geo. Suite 142/142. NEXT: item 5 — ped outfit + skin
+  variety (round-one deferral), then DEPLOY BATCH 12 (v3.19.0).

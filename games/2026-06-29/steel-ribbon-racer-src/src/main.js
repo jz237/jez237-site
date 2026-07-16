@@ -3863,16 +3863,20 @@ const storefrontSys = {
 // footprints), ponds, outskirt scenery (Sa) and the ribbon corridor (Pn);
 // trees additionally stay ≥4m off street edges (ka) and register in the Sa
 // audit with a small margin so the road-safety probe stays clean.
-const parkSys = { cells: 0, trees: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
+const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
-    zHi = Math.min(Math.max(zA, zB), 240),
+    zTop = Math.max(zA, zB),
+    zCap = Math.min(zTop, 240),
     rng = plateRng(0x9a4b17),
     cells = [];
+  // z street rows anchor at the TOP of the grid (zNear) and descend — cell
+  // centers must anchor there too, or every row sits ~5m off a centerline
   for (let cx = x0 + pitch * 0.5; cx < x1; cx += pitch)
-    for (let cz = zLo + pitch * 0.5; cz < zHi; cz += pitch) {
-      if (Pn(cx, cz, 26).clearance < 0) continue;
+    for (let cz = zTop - pitch * 0.5; cz > zLo; cz -= pitch) {
+      if (cz >= zCap) continue;
+      if (Pn(cx, cz, 26).clearance < 20) continue;
       let ok = !0;
       for (const b of Mn)
         if (Math.abs(b.x - cx) < b.hw + 52 && Math.abs(b.z - cz) < b.hd + 52) {
@@ -3904,6 +3908,7 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
     col = [],
     idx = [],
     treePts = [],
+    furnPts = [],
     half = pitch * 0.5 - sw * 0.5 - 12;
   for (let n2 = 0; n2 < picked.length; n2++) {
     const { cx, cz } = picked[n2],
@@ -3938,6 +3943,17 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
       if (s2 > 0 && s2 < SEG) {
         const lat = (4.5 + rng() * 4.5) * (s2 % 2 ? 1 : -1);
         treePts.push({ tx: px + (vert ? lat : rng() * 6 - 3), tz: pz + (vert ? rng() * 6 - 3 : lat) });
+        // benches face the path from just off its edge; flowerbeds sit opposite
+        if (s2 === 3 || (s2 === 6 && n2 % 2)) {
+          const sd = s2 === 3 ? 1 : -1,
+            nxu = nx / W,
+            nzu = nz / W;
+          furnPts.push({ kind: "bench", fx: px + nxu * 2.3 * sd, fz: pz + nzu * 2.3 * sd, yaw: Math.atan2(-sd * nxu, -sd * nzu) + Math.PI });
+        } else if (s2 === 5) {
+          const nxu = nx / W,
+            nzu = nz / W;
+          furnPts.push({ kind: "bed", fx: px - nxu * 3.1, fz: pz - nzu * 3.1, yaw: Math.atan2(nxu, nzu) });
+        }
       }
     }
     parkSys.cells++;
@@ -3982,6 +3998,62 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
   ((trunkIM.castShadow = !0), (canopyIM.castShadow = !0), (trunkIM.raycast = () => {}), (canopyIM.raycast = () => {}));
   (group.add(trunkIM), group.add(canopyIM), parkSys._vis.push(trunkIM, canopyIM));
   parkSys.trees = ci;
+  // benches + flowerbeds (round-five item 4): same safety filters as trees,
+  // every part baked into ONE merged vertex-colored mesh (shared vc opaque)
+  const fparts = [],
+    F = (geo, place, lx, ly, lz, colr) => fparts.push(vcBake(geo, new Matrix4().multiplyMatrices(place, vcAt(lx, ly, lz)), colr)),
+    FLOWERS = [15021620, 16765778, 10233776, 16744272];
+  parkSys._rej = { total: furnPts.length, ka: 0, pn: 0, mn: 0 };
+  parkSys._furnSample = [];
+  for (const fp of furnPts) {
+    if (ka(fp.fx, fp.fz, 3)) {
+      parkSys._rej.ka++;
+      continue;
+    }
+    if (Pn(fp.fx, fp.fz, 4).clearance < 10) {
+      parkSys._rej.pn++;
+      continue;
+    }
+    let hitB = !1;
+    for (const b of Mn)
+      if (Math.abs(b.x - fp.fx) < b.hw + 2 && Math.abs(b.z - fp.fz) < b.hd + 2) {
+        hitB = !0;
+        break;
+      }
+    if (hitB) {
+      parkSys._rej.mn++;
+      continue;
+    }
+    const place = new Matrix4().makeRotationY(fp.yaw);
+    place.setPosition(fp.fx, He(fp.fx, fp.fz), fp.fz);
+    if (fp.kind === "bench") {
+      parkSys._furnSample.length < 4 && parkSys._furnSample.push({ k: "bench", x: +fp.fx.toFixed(1), z: +fp.fz.toFixed(1) });
+      for (const px2 of [-0.62, 0.62]) {
+        F(new BoxGeometry(0.14, 0.42, 0.42), place, px2, 0.21, 0, 2432796);
+        F(new BoxGeometry(0.12, 0.62, 0.06), place, px2, 0.7, 0.21, 2432796);
+      }
+      F(new BoxGeometry(1.55, 0.05, 0.16), place, 0, 0.44, -0.12, 9130315);
+      F(new BoxGeometry(1.55, 0.05, 0.16), place, 0, 0.44, 0.08, 9130315);
+      F(new BoxGeometry(1.55, 0.16, 0.05), place, 0, 0.68, 0.2, 9130315);
+      F(new BoxGeometry(1.55, 0.16, 0.05), place, 0, 0.9, 0.22, 9130315);
+      parkSys.benches++;
+    } else {
+      F(new BoxGeometry(1.7, 0.26, 1.0), place, 0, 0.13, 0, 5789222);
+      F(new BoxGeometry(1.54, 0.1, 0.84), place, 0, 0.29, 0, 3548956);
+      for (let fl = 0; fl < 6; fl++) {
+        const lx = -0.58 + (fl % 3) * 0.58,
+          lz = fl < 3 ? -0.2 : 0.2;
+        F(new BoxGeometry(0.1, 0.16, 0.1), place, lx, 0.4, lz, 4022096);
+        F(new SphereGeometry(0.09, 5, 4), place, lx, 0.5, lz, FLOWERS[(fl + ((fp.fx | 0) & 3)) % 4]);
+      }
+      parkSys.beds++;
+      parkSys._furnSample.length < 4 && parkSys._furnSample.push({ k: "bed", x: +fp.fx.toFixed(1), z: +fp.fz.toFixed(1) });
+    }
+  }
+  if (fparts.length) {
+    const fm = new Mesh(mergeGeometries(fparts, !1), vcMats().opaque);
+    ((fm.castShadow = !0), (fm.receiveShadow = !0), (fm.raycast = () => {}), group.add(fm), parkSys._vis.push(fm));
+  }
   if (!parkSys.enabled) for (const m2 of parkSys._vis) m2.visible = !1;
 }
 // ─── Street furniture (zoom-detail item 07): hydrants, parking meters, benches
@@ -10728,7 +10800,7 @@ window.__steelRibbonDebug = {
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
-      parks: { cells: parkSys.cells, trees: parkSys.trees, pathTris: parkSys.pathTris, enabled: parkSys.enabled, sample: parkSys.sample.slice(0, 3) },
+      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
