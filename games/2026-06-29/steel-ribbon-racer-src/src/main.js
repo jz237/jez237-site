@@ -2710,6 +2710,129 @@ const parkedKitSys = {
 };
 const _pkM = new Matrix4(),
   _pkV = new Vector3();
+// near-field ambience (zoom-detail item 20): crowd murmur near the stands,
+// steam hiss at active vents, WALK-signal crossing ticks, phone chirps from
+// texting pedestrians. All procedural WebAudio on the existing `mi` bus (so
+// mute/volume come free), all gated to the city camera — the race view and
+// the at-distance soundscape are untouched.
+const ambientSys = {
+  signals: null, // live PS array (the signal tick stamps walkEW/walkNS per box)
+  nodes: null,
+  enabled: !0,
+  _timer: 0,
+  _nextTick: 0,
+  _nextChirp: 0,
+  tickCount: 0,
+  chirpCount: 0,
+  levels: { murmur: 0, hiss: 0 },
+  ticksActive: 0,
+  ensure() {
+    if (this.nodes || !mi) return;
+    const ctx = mi.ctx,
+      bus = ctx.createGain();
+    ((bus.gain.value = 0.9), bus.connect(mi.master));
+    const nb = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate),
+      nd = nb.getChannelData(0);
+    let v = 0;
+    for (let k = 0; k < nd.length; k++) nd[k] = v = v * 0.965 + (Math.random() * 2 - 1) * 0.28;
+    const mkLoop = (type, freq, q) => {
+      const src = ctx.createBufferSource(),
+        f = ctx.createBiquadFilter(),
+        g = ctx.createGain();
+      ((src.buffer = nb), (src.loop = !0), (f.type = type), (f.frequency.value = freq), (f.Q.value = q), (g.gain.value = 1e-4));
+      (src.connect(f), f.connect(g), g.connect(bus), src.start());
+      return { src, f, g };
+    };
+    this.nodes = { ctx, bus, murmur: mkLoop("lowpass", 430, 0.4), hiss: mkLoop("bandpass", 3300, 0.8) };
+  },
+  _pan(x, z) {
+    // camera-relative stereo: project the source onto the camera right vector
+    const e = Xe.matrixWorld.elements,
+      dx = x - Xe.position.x,
+      dz = z - Xe.position.z,
+      d = Math.hypot(dx, dz) || 1;
+    return MathUtils.clamp(((dx * e[0] + dz * e[2]) / d) * 0.8, -0.9, 0.9);
+  },
+  blip(freq, dur, vol, pan, freq2) {
+    const n = this.nodes;
+    if (!n) return;
+    const t0 = n.ctx.currentTime,
+      o = n.ctx.createOscillator(),
+      g = n.ctx.createGain(),
+      p = n.ctx.createStereoPanner();
+    ((o.type = "sine"), o.frequency.setValueAtTime(freq, t0), freq2 && o.frequency.setValueAtTime(freq2, t0 + dur * 0.5));
+    (g.gain.setValueAtTime(1e-4, t0), g.gain.exponentialRampToValueAtTime(Math.max(vol, 2e-4), t0 + 0.008), g.gain.exponentialRampToValueAtTime(1e-4, t0 + dur));
+    ((p.pan.value = pan || 0), o.connect(g), g.connect(p), p.connect(n.bus), o.start(t0), o.stop(t0 + dur + 0.03));
+  },
+  update(t, dt) {
+    if (!mi || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.25;
+    this.ensure();
+    const n = this.nodes;
+    if (!n) return;
+    const now = n.ctx.currentTime,
+      cx = Xe.position.x,
+      cz = Xe.position.z,
+      cityCam = this.enabled && (u.mode === "roam" || u.mode === "race" || u.mode === "paused") && Xe.position.y <= 26;
+    // crowd murmur — nearest grandstand, slow swell so it breathes
+    let mg = 1e-4;
+    if (cityCam && crowdSys.stands.length) {
+      let d2b = 1e9;
+      for (const s of crowdSys.stands) {
+        const d2 = (s.x - cx) * (s.x - cx) + (s.z - cz) * (s.z - cz);
+        d2 < d2b && (d2b = d2);
+      }
+      const d = Math.sqrt(d2b);
+      d < 90 && (mg = 0.15 * (1 - d / 90) * (0.72 + 0.28 * Math.sin(t * 0.6)));
+    }
+    n.murmur.g.gain.setTargetAtTime(mg, now, 0.3);
+    // steam hiss — nearest active vent
+    let hg = 1e-4;
+    if (cityCam && steamSys.vents)
+      for (const v of steamSys.vents) {
+        if (!v.spot) continue;
+        // 26m: the roam CAR camera trails ~17m behind the player, so a
+        // tighter radius would make vent hiss a foot-mode-only detail
+        const d = Math.hypot(v.spot.x - cx, v.spot.z - cz);
+        d < 26 && (hg = Math.max(hg, 0.05 * (1 - d / 26)));
+      }
+    n.hiss.g.gain.setTargetAtTime(hg, now, 0.5);
+    // WALK-signal crossing ticks — nearest walking box, metronome cadence
+    this.ticksActive = 0;
+    if (cityCam && this.signals) {
+      let best = null,
+        bd = 26;
+      for (const P of this.signals) {
+        if (!P.walkEW && !P.walkNS) continue;
+        const d = Math.hypot(P.x - cx, P.z - cz);
+        d < bd && ((bd = d), (best = P));
+      }
+      if (best) {
+        this.ticksActive = 1;
+        t >= this._nextTick && ((this._nextTick = t + 0.55), this.tickCount++, this.blip(940, 0.05, 0.13 * (1 - bd / 26), this._pan(best.x, best.z)));
+      }
+    }
+    // phone chirps — a nearby texting pedestrian gets a reply every few seconds
+    if (cityCam && !mobilePerf && pedKitSys.kits && t >= this._nextChirp) {
+      let best = null,
+        bd = 15;
+      for (const k of pedKitSys.kits) {
+        if (!k.ped || !k.texting || !k.ped.mesh) continue;
+        const p = k.ped.mesh.position,
+          d = Math.hypot(p.x - cx, p.z - cz);
+        d < bd && ((bd = d), (best = p));
+      }
+      if (best) {
+        this._nextChirp = t + 4 + Math.random() * 5;
+        this.chirpCount++;
+        this.blip(1318, 0.17, 0.1 * (1 - bd / 15), this._pan(best.x, best.z), 1760);
+      }
+    }
+    ((this.levels.murmur = +mg.toFixed(3)), (this.levels.hiss = +hg.toFixed(3)));
+  },
+};
 const PED_KIT_RADIUS = 40;
 // Fictional, family-friendly two-bubble chats shown on texting pedestrians'
 // phone screens (one per kit, drawn into a single shared atlas).
@@ -3695,6 +3818,7 @@ function F1(i, e, t) {
       birdSys.update(I, ye);
       steamSys.update(I, ye);
       parkedKitSys.update(I, ye);
+      ambientSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -4347,7 +4471,7 @@ function N1() {
           handB = mk(pedMats.hand);
         for (const q of [walkA, handA]) ((q.position.set(bx - 0.16, 2.55, bz)), (q.rotation.y = -Math.PI / 2), xe.add(q));
         for (const q of [walkB, handB]) ((q.position.set(bx, 2.55, bz - 0.16)), (q.rotation.y = Math.PI), xe.add(q));
-        PS.push({ control: Ce, walkA, handA, walkB, handB });
+        PS.push({ control: Ce, walkA, handA, walkB, handB, x: wx + bx, y: wy + 2.55, z: wz + bz, walkEW: !1, walkNS: !1 });
         pedSignalMeta.count++;
         pedSignalMeta.sample.length < 3 && pedSignalMeta.sample.push({ x: +(wx + bx).toFixed(1), y: +(wy + 2.55).toFixed(2), z: +(wz + bz).toFixed(1) });
       },
@@ -4442,9 +4566,10 @@ function N1() {
             aW = st.green === "ew",
             bW = st.green === "ns";
           ((P.walkA.visible = aW), (P.handA.visible = !aW), (P.walkB.visible = bW), (P.handB.visible = !bW));
+          ((P.walkEW = aW), (P.walkNS = bW));
           walking += (aW ? 1 : 0) + (bW ? 1 : 0);
         }
-        qe.pedWalkFaces = walking;
+        ((qe.pedWalkFaces = walking), (ambientSys.signals = PS));
       }),
       { trafficLights: H, stopSigns: z }
     );
@@ -9449,6 +9574,13 @@ window.__steelRibbonDebug = {
     parkedKitSys.enabled = !!on;
     return parkedKitSys.enabled;
   },
+  ambientEnable(on) {
+    ambientSys.enabled = !!on;
+    return ambientSys.enabled;
+  },
+  camWorld() {
+    return { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) };
+  },
   parkedKitDump() {
     if (!parkedKitSys.kits) return null;
     const v = new Vector3();
@@ -9542,6 +9674,16 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      ambient: {
+        ready: !!ambientSys.nodes,
+        ctxState: ambientSys.nodes ? ambientSys.nodes.ctx.state : null,
+        enabled: ambientSys.enabled,
+        signals: ambientSys.signals ? ambientSys.signals.length : 0,
+        ticksActive: ambientSys.ticksActive,
+        tickCount: ambientSys.tickCount,
+        chirpCount: ambientSys.chirpCount,
+        levels: { ...ambientSys.levels },
       },
       crowd: {
         stands: crowdSys.stands.length,
