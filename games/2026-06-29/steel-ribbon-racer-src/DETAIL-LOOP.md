@@ -630,3 +630,28 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   notes logged per iteration (leashed dogs, texting head-tilt, rooftop
   pigeons, newspaper-box decals). Restart anytime with the /loop prompt in
   memory steel-ribbon-detail-loop.
+
+## Round two (loop resumed 2026-07-16, "continue")
+
+Reopened mini-backlog: 4b-lite driver silhouettes (pooled — the freeze-safe
+reading of blocked item 4b), 11-lite road decals (pooled), then polish notes
+(leashed dogs, rooftop pigeons, texting head-tilt). Original 4b/11 full-fat
+versions stay blocked on the perf renegotiation.
+
+- **23 driver silhouettes — item 4b-lite (2026-07-16)**: `driverSilSys` —
+  pool of 8 windshield decals (mobile 4) attached/detached as CHILDREN of
+  the nearest moving traffic cars ≤34m (city camera only, altitude gate).
+  One 256×128 alphaTest atlas, two cells: driver w/ wheel arc, driver +
+  passenger; quad scaled per cabin (I1 now stashes userData.cab {w,h,l,z})
+  and parked 1cm in front of the windshield glass slab facing -z — reads
+  as occupants behind glass at any gameplay distance. Skips buses (real
+  drivers since it.04) and the stolen actor (cockpit view would show a
+  backwards silhouette). raycast-inert per the it.20 rule. Verified by
+  looking (`loop-shots/23-driver-sil/`): oncoming red compact with driver +
+  passenger silhouettes crisp behind the windshield, front plate below —
+  the charter's "visible drivers" line is now fully delivered. PROBE
+  LESSON: 30 traffic cars on a huge grid = the nearest one can idle 180m
+  away and headless slow-mo means it never comes to you — go TO the car
+  (setRoamPos beside __nearestTraffic(), hop up to 4 times). detailReport
+  ().drivers gains silhouettes/silPool; driverSilEnable(on);
+  __nearestTraffic() debug helper. Suite 134/134 expected.
