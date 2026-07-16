@@ -3169,83 +3169,72 @@ const _rdRay = new Raycaster(),
   _rdFrom = new Vector3();
 const roadDecalSys = {
   spots: [],
-  kits: null,
-  promoted: 0,
+  mesh: null,
+  placed: 0,
+  placedDone: !1,
   enabled: !0,
-  RADIUS: 40,
   sample: [],
-  _timer: 0,
-  _geos: null,
-  // the street SLAB rides ~0.5m above the He() terrain function — find the
-  // real surface with one cached raycast per spot (band-filtered so a car
-  // roof passing overhead can't poison the cache)
-  _surfaceY(s) {
-    if (s.ySurf !== undefined) return s.ySurf;
-    (_rdFrom.set(s.x, s.y + 40, s.z), _rdRay.set(_rdFrom, _rdDown));
-    ((_rdRay.far = 80), (_rdRay.camera = Xe));
-    const hits = _rdRay.intersectObjects(et.children, !0);
-    let best = null;
-    for (const h of hits) {
-      if (h.object.isSprite) continue;
-      if (h.point.y > s.y + 1.0 || h.point.y < s.y - 0.5) continue;
-      (best === null || h.point.y > best) && (best = h.point.y);
-    }
-    return (s.ySurf = best === null ? s.y : +(best + 0.025).toFixed(3));
-  },
   _SCALES: [
     [1.5, 1.5],
     [1.8, 1.1],
     [1.5, 3.4],
     [2.8, 2.3],
   ],
-  ensure() {
-    if (this.kits) return;
-    const mat = new MeshBasicMaterial({ map: buildRoadDecalAtlas(), transparent: !0, alphaTest: 0.15, polygonOffset: !0, polygonOffsetFactor: -3 });
-    this._geos = [0, 1, 2, 3].map((c) => {
-      const geo = new PlaneGeometry(1, 1),
-        uv = geo.attributes.uv;
-      for (let i = 0; i < uv.count; i++) uv.setXY(i, (c + uv.getX(i)) / 4, uv.getY(i));
-      return geo.rotateX(-Math.PI / 2);
-    });
-    this.kits = [];
-    const n = mobilePerf ? 5 : 10;
-    for (let k = 0; k < n; k++) {
-      const m = new Mesh(this._geos[0], mat);
-      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.raycast = () => {}), (m.renderOrder = 1), et.add(m));
-      this.kits.push({ m, idx: -1 });
+  // full-fat (round four, freeze lifted): every seeded decal is PERMANENT —
+  // one InstancedMesh, per-instance atlas slot (plate pattern; the
+  // customProgramCacheKey is MANDATORY or the cache serves unpatched
+  // shaders). Arrows and manholes now read at mid distance, not just ≤40m.
+  _surfaceY(sp) {
+    if (sp.ySurf !== undefined) return sp.ySurf;
+    (_rdFrom.set(sp.x, sp.y + 40, sp.z), _rdRay.set(_rdFrom, _rdDown));
+    ((_rdRay.far = 80), (_rdRay.camera = Xe));
+    const hits = _rdRay.intersectObjects(et.children, !0);
+    let best = null;
+    for (const h of hits) {
+      if (h.object.isSprite) continue;
+      if (h.point.y > sp.y + 1.0 || h.point.y < sp.y - 0.5) continue;
+      (best === null || h.point.y > best) && (best = h.point.y);
     }
+    return (sp.ySurf = best === null ? sp.y : +(best + 0.025).toFixed(3));
+  },
+  ensure() {
+    if (this.mesh) return;
+    const geo = new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+    geo.setAttribute("aDecalSlot", new InstancedBufferAttribute(new Float32Array(48), 1));
+    const mat = new MeshBasicMaterial({ map: buildRoadDecalAtlas(), transparent: !0, alphaTest: 0.15, polygonOffset: !0, polygonOffsetFactor: -3 });
+    mat.customProgramCacheKey = () => "road-decal-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute float aDecalSlot;\nvarying vec2 vDecalUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvDecalUv = vec2((aDecalSlot + uv.x) * 0.25, uv.y);");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vDecalUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vDecalUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, 48);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1), (this.mesh.raycast = () => {}), (this.mesh.renderOrder = 1), (this.mesh.count = 0));
+    et.add(this.mesh);
+  },
+  place() {
+    const dummy = new Object3D();
+    let n = 0;
+    ((this.sample.length = 0));
+    for (const sp of this.spots) {
+      if (n >= 48) break;
+      const sc = this._SCALES[sp.v];
+      (dummy.position.set(sp.x, this._surfaceY(sp), sp.z), (dummy.rotation.y = sp.yaw), dummy.scale.set(sc[0], 1, sc[1]), dummy.updateMatrix());
+      this.mesh.setMatrixAt(n, dummy.matrix);
+      this.mesh.geometry.attributes.aDecalSlot.setX(n, sp.v);
+      this.sample.length < 3 && this.sample.push({ i: sp.i, x: sp.x, y: sp.ySurf, z: sp.z, v: sp.v });
+      n++;
+    }
+    ((this.mesh.count = n), (this.mesh.instanceMatrix.needsUpdate = !0), (this.mesh.geometry.attributes.aDecalSlot.needsUpdate = !0), (this.placed = n), (this.placedDone = !0));
   },
   update(t, dt) {
     if (!this.spots.length || !dt) return;
-    this._timer -= dt;
-    if (this._timer > 0) return;
-    this._timer = 0.5;
-    this.ensure();
-    const cx = Xe.position.x,
-      cz = Xe.position.z,
-      R2 = this.RADIUS * this.RADIUS,
-      cand = [];
-    if (this.enabled && Xe.position.y <= 26)
-      for (const s of this.spots) {
-        const dx = s.x - cx,
-          dz = s.z - cz,
-          d2 = dx * dx + dz * dz;
-        d2 < R2 && cand.push({ s, d2 });
-      }
-    cand.sort((a, b) => a.d2 - b.d2);
-    ((this.promoted = 0), (this.sample.length = 0));
-    for (let k = 0; k < this.kits.length; k++) {
-      const kit = this.kits[k],
-        c = cand[k];
-      if (!c) {
-        ((kit.m.visible = !1), (kit.idx = -1));
-        continue;
-      }
-      const s = c.s,
-        sc = this._SCALES[s.v];
-      ((kit.m.geometry = this._geos[s.v]), kit.m.scale.set(sc[0], 1, sc[1]), kit.m.position.set(s.x, this._surfaceY(s), s.z), (kit.m.rotation.y = s.yaw), (kit.m.visible = !0), (kit.idx = s.i), this.promoted++);
-      this.sample.length < 3 && this.sample.push({ i: s.i, x: s.x, y: s.y, z: s.z, v: s.v });
-    }
+    if (this.mesh) this.mesh.visible = this.enabled;
+    if (this.placedDone) return;
+    (this.ensure(), this.place());
   },
 };
 // (4b-lite driver silhouettes retired in round four: every cabin now has
@@ -4086,7 +4075,7 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     steamSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.02).toFixed(2), z: +pz.toFixed(1) });
   }
   // road decal spots: manholes/drains/arrows/wear seeded on the same street math
-  roadDecalSys.spots.length = 0;
+  ((roadDecalSys.spots.length = 0), (roadDecalSys.placedDone = !1));
   const drng = plateRng(0xdeca1);
   for (let i = 0; i < 240 && roadDecalSys.spots.length < 36; i++) {
     const isNS = drng() < 0.5,
@@ -10594,8 +10583,8 @@ window.__steelRibbonDebug = {
       },
       roadDecals: {
         spots: roadDecalSys.spots.length,
-        promoted: roadDecalSys.promoted,
-        pool: roadDecalSys.kits ? roadDecalSys.kits.length : 0,
+        placed: roadDecalSys.placed,
+        visible: roadDecalSys.mesh ? roadDecalSys.mesh.visible : !1,
         sample: roadDecalSys.sample.slice(0, 3),
         stations: [0, 1, 2, 3].map((v) => roadDecalSys.spots.find((s2) => s2.v === v)).filter(Boolean).map((s2) => ({ i: s2.i, x: s2.x, z: s2.z, v: s2.v })),
       },
