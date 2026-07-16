@@ -2,6 +2,19 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-16",
+      "historicDate": "1983-06-06",
+      "displayDate": "Week of June 6–12, 1983",
+      "edition": "Issue 045 - Weekly 1982 Computer & Culture Chronicle",
+      "morningLine": "Chicago’s summer electronics show belongs to a game maker’s ambitious new computer.",
+      "leadHeadline": "Coleco’s $600 Adam Steals the Summer CES",
+      "storyHeadlines": [
+        "Atari Answers With XL Computers and a Writing System",
+        "Software Price War Breaks Out at CES",
+        "WarGames Makes the Home Modem a Movie Star"
+      ]
+    },
+    {
       "currentDate": "2026-07-15",
       "historicDate": "1983-05-30",
       "displayDate": "Week of May 30–June 5, 1983",
