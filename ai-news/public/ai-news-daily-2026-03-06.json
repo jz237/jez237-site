@@ -1,0 +1,111 @@
+{
+  "date": "2026-03-06",
+  "updatedAt": "2026-03-06T23:54:39.383659+00:00",
+  "items": [
+    {
+      "title": "How Balyasny Asset Management built an AI research engine for investing",
+      "url": "https://openai.com/index/balyasny-asset-management",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "summary": "See how Balyasny built an AI research system with GPT-5.4, rigorous model evaluation, and agent workflows to transform investment analysis at scale.",
+      "image": "",
+      "published": "2026-03-06T07:00:00+00:00",
+      "firstSeen": "2026-03-06T15:57:03.808499+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.7377
+    },
+    {
+      "title": "Codex Security: now in research preview",
+      "url": "https://openai.com/index/codex-security-now-in-research-preview",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "summary": "Codex Security is an AI application security agent that analyzes project context to detect, validate, and patch complex vulnerabilities with higher confidence and less noise.",
+      "image": "",
+      "published": "2026-03-06T10:00:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.4474
+    },
+    {
+      "title": "How our open-source AI model SpeciesNet is helping to promote wildlife conservation",
+      "url": "https://blog.google/company-news/outreach-and-initiatives/sustainability/speciesnet-open-source-ai-wildlife",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
+      "summary": "Photos of animals being identified by the SpeciesNet AI model",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/specieshero_v2.max-600x600.format-webp.webp",
+      "published": "2026-03-06T18:00:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.2634
+    },
+    {
+      "title": "Is the Pentagon allowed to surveil Americans with AI?",
+      "url": "https://www.technologyreview.com/2026/03/06/1134012/is-the-pentagon-allowed-to-surveil-americans-with-ai",
+      "source": "MIT Technology Review AI",
+      "sourceUrl": "https://www.technologyreview.com/topic/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "summary": "The ongoing public feud between the Department of Defense and the AI company Anthropic has raised a deep and still unanswered question: Does the law actually allow the US government to conduct mass surveillance on Americans? Surprisingly, the answer is not straightforward. More than a decade after Edward Snowden exposed the NSA\u2019s collection of bulk&#8230;",
+      "image": "https://wp.technologyreview.com/wp-content/uploads/2026/03/crawl-data2.jpg?resize=1200%2C600",
+      "published": "2026-03-06T19:21:22+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.1593
+    },
+    {
+      "title": "How Descript enables multilingual video dubbing at scale",
+      "url": "https://openai.com/index/descript",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "summary": "Descript uses OpenAI models to scale multilingual video dubbing, optimizing translations for both meaning and timing so dubbed speech sounds natural across languages.",
+      "image": "",
+      "published": "2026-03-06T10:00:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.1474
+    },
+    {
+      "title": "Grammarly is using our identities without permission",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/890921/grammarly-ai-expert-reviews",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "Grammarly's \"expert review\" feature offers to give users writing advice \"inspired by\" subject matter experts, including recently deceased professors, as Wired reported on Wednesday. When I tried the feature out myself, I found some experts that came as a surprise for a different reason - one of them was my boss. The AI-generated feedback included [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/grammr-crop.jpg?quality=90&amp%3Bstrip=all&amp%3Bcrop=9.622877930477%2C0%2C80.754244139046%2C100",
+      "published": "2026-03-06T20:58:24+00:00",
+      "firstSeen": "2026-03-06T21:01:32.334449+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.0638
+    },
+    {
+      "title": "Feds take notice of iOS vulnerabilities exploited under mysterious circumstances",
+      "url": "https://arstechnica.com/security/2026/03/cisa-adds-3-ios-flaws-to-its-catalog-of-known-exploited-vulnerabilities",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "summary": "The long, strange trip of a large assembly of advanced iOS exploits.",
+      "image": "https://cdn.arstechnica.net/wp-content/uploads/2026/03/iphone-14-1152x648.jpg",
+      "published": "2026-03-06T19:41:33+00:00",
+      "firstSeen": "2026-03-06T21:01:32.334449+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.0284
+    },
+    {
+      "title": "The AI Doc is an overwrought hype piece for doomers and accelerationists alike",
+      "url": "https://www.theverge.com/entertainment/890806/the-ai-doc-or-how-i-became-an-apocaloptimist-review",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.75,
+      "summary": "We are in the thick of a massive push to incorporate generative AI into almost every aspect of our lives, but it is still easy to be confused about what it is and how it works. It doesn't help that many of gen AI's proponents and detractors both speak about it with a feverish hyperbole [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/03/Screenshot-2026-03-06-at-1.32.13%E2%80%AFPM.png?quality=90&amp%3Bstrip=all&amp%3Bcrop=0%2C2.6342944624415%2C100%2C94.731411075117&amp%3Bw=1200",
+      "published": "2026-03-06T19:05:00+00:00",
+      "firstSeen": "2026-03-06T19:50:19.764312+00:00",
+      "lastSeen": "2026-03-06T23:54:39.383659+00:00",
+      "score": 2.012
+    }
+  ],
+  "errors": []
+}

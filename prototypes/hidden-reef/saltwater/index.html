@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Saltwater & Reef - The Hidden Reef</title>
+  <link rel="canonical" href="../category/?cat=saltwater" />
+  <meta http-equiv="refresh" content="0; url=../category/?cat=saltwater" />
+  <script>window.location.replace('../category/?cat=saltwater');</script>
+  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="stylesheet" href="../assets/category.css?v=20260601-touch-pan" />
+  <link rel="stylesheet" href="../assets/thr-cards.css?v=20260712-premium-art" />
+  <style>
+    :root {
+      --reef-bg: #03111d;
+      --reef-panel: #071a27;
+      --reef-panel-2: #0a2435;
+      --reef-line: rgba(116,205,235,.2);
+      --reef-text: #f0fbff;
+      --reef-muted: #a9cbd9;
+      --reef-cyan: #40d9ff;
+      --reef-teal: #00a7b7;
+      --reef-orange: #ff7b32;
+    }
+    body {
+      color: var(--reef-text);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    .page {
+      max-width: 1180px;
+      background: transparent;
+    }
+    .header {
+      grid-template-columns: auto minmax(260px,1fr) auto;
+      gap: 18px;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px,2.5vw,28px) * -1);
+      border-bottom: 1px solid var(--reef-line);
+      background: linear-gradient(180deg, rgba(8,31,47,.98), rgba(5,22,34,.98));
+    }
+    .brand {
+      grid-column: auto;
+      min-width: 235px;
+      min-height: 0;
+      justify-content: flex-start;
+      padding: 0;
+      margin: 0;
+      background: none;
+      border: 0;
+      box-shadow: none;
+    }
+    .brand img {
+      display: block;
+      width: clamp(190px,24vw,278px);
+      height: auto;
+      object-fit: contain;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .brand > span { display: none; }
+    .brand strong {
+      font-size: 28px;
+      line-height: .9;
+      color: #fff;
+      text-shadow: 0 3px 14px rgba(0,0,0,.5);
+    }
+    .brand span span {
+      margin-top: 7px;
+      color: #bdefff;
+      font-size: 11px;
+      letter-spacing: .13em;
+      text-align: left;
+      text-transform: uppercase;
+    }
+    .search-box {
+      grid-column: auto;
+      max-width: none;
+      justify-self: stretch;
+      height: 44px;
+      background: #102b3b;
+      border-color: rgba(116,205,235,.26);
+    }
+    .search-box input {
+      color: #eaf8fc;
+      background: transparent;
+    }
+    .search-box input::placeholder { color: #8bb1bf; }
+    .header-actions {
+      grid-column: auto;
+      color: #b8dbea;
+      align-self: center;
+    }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 0;
+      margin: 0 calc(clamp(12px,2.5vw,28px) * -1);
+      padding: 0;
+      border-top: 0;
+      border-bottom: 1px solid var(--reef-line);
+      background: rgba(3,18,29,.98);
+      color: #a9d6e6;
+    }
+    .main-nav a {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 10px;
+      border-left: 1px solid rgba(116,205,235,.12);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active { color: var(--reef-cyan); }
+
+    .category-hero {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(360px, 1fr);
+      gap: 24px;
+      min-height: 390px;
+      margin-top: 18px;
+      padding: clamp(22px, 4vw, 46px);
+      border: 1px solid var(--reef-line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(1,13,27,.96), rgba(1,31,51,.6) 46%, rgba(0,48,75,.04) 74%),
+        url("../assets/department/saltwater-reef.jpg") right center/cover no-repeat;
+      box-shadow: 0 22px 54px rgba(0,0,0,.34);
+    }
+    .category-hero .copy {
+      max-width: 570px;
+      padding: 0;
+      align-self: center;
+    }
+    .category-hero h1 {
+      max-width: 560px;
+      font-size: clamp(42px, 5vw, 68px);
+    }
+    .category-hero p {
+      max-width: 520px;
+      color: #d6f4fb;
+      font-size: 15px;
+    }
+    .hero-card {
+      align-self: end;
+      display: grid;
+      gap: 12px;
+      padding: 18px;
+      border: 1px solid rgba(126,232,255,.22);
+      border-radius: 8px;
+      background: rgba(3,18,29,.76);
+      backdrop-filter: blur(8px);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    .hero-card strong {
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+    }
+    .hero-card span {
+      color: var(--reef-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .crumbs { color: var(--reef-muted); }
+    .section-head h2,
+    .sidebar h3,
+    .panel h2,
+    .product h3,
+    .drawer h2 {
+      color: #fff;
+    }
+    .section-head p { color: #8fdcf0; }
+
+    .layout {
+      grid-template-columns: 260px minmax(0,1fr);
+      align-items: start;
+    }
+    .sidebar {
+      position: sticky;
+      top: 14px;
+      display: grid;
+      gap: 0;
+      padding: 0;
+      border-color: var(--reef-line);
+      background: var(--reef-panel);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .sidebar-section {
+      border-bottom: 1px solid rgba(116,205,235,.12);
+    }
+    .sidebar-section:last-child { border-bottom: none; }
+    .sidebar-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 16px;
+      border: 0;
+      background: transparent;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .sidebar-toggle:hover { background: rgba(64,217,255,.08); }
+    .sidebar-toggle .arrow {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      transition: transform .2s;
+      font-size: 10px;
+      opacity: .6;
+    }
+    .sidebar-toggle[aria-expanded="true"] .arrow { transform: rotate(90deg); }
+    .sidebar-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .25s ease;
+    }
+    .sidebar-body.open {
+      max-height: 600px;
+    }
+    .sidebar-body-inner {
+      padding: 0 16px 14px;
+    }
+    .sidebar-body-inner a,
+    .sidebar-body-inner span {
+      display: block;
+      padding: 5px 0;
+      border-top: 1px solid rgba(116,205,235,.08);
+      color: #9fb8c7;
+      font-size: 13px;
+      font-weight: 750;
+    }
+    .sidebar-body-inner a:hover { color: #40d9ff; }
+    .sidebar-body-inner .active-filter {
+      color: #40d9ff;
+      font-weight: 850;
+    }
+    .sidebar-body-inner p {
+      margin: 0 0 6px;
+      color: #a9cbd9;
+      font-size: 12.5px;
+      line-height: 1.45;
+    }
+    .sidebar-body-inner .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      color: #d8f4fb;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .sidebar-body-inner .check-item::before {
+      content: "✓";
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      background: rgba(0,167,183,.2);
+      color: #40d9ff;
+      font-size: 11px;
+    }
+    .section-band {
+      padding: 24px 0 16px;
+      margin-top: 8px;
+    }
+    .path-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 14px;
+      margin: 18px 0 26px;
+    }
+    .path-card {
+      min-height: 150px;
+      padding: 18px;
+      border: 1px solid var(--reef-line);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,.16), transparent 38%),
+        var(--reef-panel);
+      box-shadow: 0 12px 21px rgba(0,0,0,.22);
+    }
+    .path-card span {
+      color: var(--reef-cyan);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .path-card h3 {
+      margin: 8px 0 6px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.05;
+    }
+    .path-card p {
+      margin: 0;
+      color: var(--reef-muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .feature-row {
+      grid-template-columns: repeat(3, minmax(0,1fr));
+    }
+    .panel {
+      border-color: var(--reef-line);
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,.12), transparent 38%),
+        var(--reef-panel);
+    }
+    .panel p { color: var(--reef-muted); }
+    .visit-band {
+      display: grid;
+      grid-template-columns: auto minmax(0,1fr) auto;
+      gap: 18px;
+      align-items: center;
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid var(--reef-line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(1,37,61,.95), rgba(0,91,122,.72)),
+        url("../assets/site/hero-store.jpg") center/cover no-repeat;
+      color: #fff;
+      box-shadow: 0 16px 34px rgba(0,0,0,.3);
+    }
+    .visit-band h2 {
+      margin: 0 0 5px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+    }
+    .visit-band p {
+      margin: 0;
+      color: #dff8ff;
+      font-size: 14px;
+    }
+    .pin {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      color: #004c7c;
+      font-size: 24px;
+    }
+
+    @media (max-width: 1040px) {
+      .header { grid-template-columns: 1fr; }
+      .brand { justify-content: center; text-align: center; }
+      .brand span span { text-align: center; }
+      .header-actions { justify-content: center; }
+      .category-hero { grid-template-columns: 1fr; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .path-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .feature-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 1180px) and (min-width: 981px) {
+      .main-nav a { padding-inline: 7px; font-size: 12px; }
+    }
+    @media (max-width: 980px) {
+      .main-nav {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        justify-content: stretch;
+        overflow: visible;
+        scrollbar-width: none;
+      }
+      .main-nav::-webkit-scrollbar { display: none; }
+      .main-nav a {
+        flex: 0 1 auto;
+        min-width: 0;
+        white-space: normal;
+        text-align: center;
+        border-top: 1px solid rgba(116,205,235,.1);
+      }
+      .main-nav a:nth-child(3n+1) { border-left: 0; }
+    }
+    @media (max-width: 760px) {
+      .header { padding: 14px 12px; }
+      .brand { justify-content: flex-start; text-align: left; }
+      .brand strong { font-size: clamp(25px, 8vw, 34px); }
+      .brand span span { text-align: left; font-size: 10px; }
+      .category-hero {
+        min-height: 330px;
+        padding: 28px 18px;
+        background-position: 58% center;
+      }
+      .hero-card { display: none; }
+      .path-grid,
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .section-head {
+        display: block;
+      }
+      .section-head p {
+        margin-top: 6px;
+      }
+      .visit-band { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260712-unified-nav" />
+</head>
+<body>
+  <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../">
+        <img src="../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
+      <a href="../category/?cat=freshwater">Freshwater</a>
+      <a class="active" href="../category/?cat=saltwater">Saltwater</a>
+      <a href="../category/?cat=pond">Pond</a>
+      <a href="../category/?cat=equipment">Equipment</a>
+      <a href="../category/?cat=food">Food</a>
+      <a href="../category/?cat=decor">Decorations</a>
+      <a href="../category/?cat=maintenance">Maintenance</a>
+      <a href="../learn/">Help</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="category-hero">
+      <div class="copy">
+        <span class="eyebrow">Saltwater & reef</span>
+        <h1>Build a reef that survives past the first month.</h1>
+        <p>Saltwater shoppers need confidence: livestock compatibility, lighting, flow, filtration, salt, test kits, food, and a maintenance rhythm that actually fits their tank.</p>
+        <a class="btn" href="#products">Shop reef essentials</a>
+      </div>
+      <aside class="hero-card">
+        <strong>Local reef guidance, not just a product wall.</strong>
+        <span>Choose the right tank size, light spread, salt mix, cleanup crew, and maintenance supplies before you buy.</span>
+      </aside>
+    </section>
+
+    <div class="crumbs"><a href="../">Home</a><span>/</span><span>Saltwater & Reef</span></div>
+
+    <section class="section-band" aria-label="Saltwater paths">
+      <div class="section-head">
+        <h2>Shop Saltwater</h2>
+        <p>Guided category paths for serious reef shoppers</p>
+      </div>
+    <section class="path-grid" aria-label="Saltwater shopping paths">
+      <a class="path-card" href="#products"><span>Systems</span><h3>Complete Reef Builds</h3><p>Tanks, stands, sumps, pumps, lighting, and starter gear grouped as a setup path.</p></a>
+      <a class="path-card" href="../#visit"><span>Livestock</span><h3>Fish & Coral Care</h3><p>Compatibility, feeding, acclimation, and weekly-changing in-store livestock.</p></a>
+      <a class="path-card" href="../category/?cat=equipment"><span>Equipment</span><h3>Light, Flow & Filtration</h3><p>Lighting spread, flow rates, skimmers, media, and refugium guidance.</p></a>
+      <a class="path-card" href="../category/?cat=maintenance"><span>Maintenance</span><h3>Salt, Tests & Dosing</h3><p>Salt mix, refractometers, test kits, water changes, dosing, and stability.</p></a>
+    </section>
+
+    <section class="section-band" aria-label="Reef products">
+      <div class="section-head">
+        <h2>Reef Essentials</h2>
+        <div class="section-actions">
+          <p>Saltwater supplies for lighting, flow, testing, and stability</p>
+          <a class="section-action-link" href="../category/">View all products</a>
+        </div>
+      </div>
+    <div class="layout">
+      <aside class="sidebar" aria-label="Saltwater filters">
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="true" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Saltwater & Reef <span class="arrow">▶</span></button>
+          <div class="sidebar-body open">
+            <div class="sidebar-body-inner">
+              <a href="#products" class="active-filter">All Saltwater & Reef</a>
+              <div class="check-item">Fish & Livestock (in-store)</div>
+              <div class="check-item">Corals & Frags (in-store)</div>
+              <div class="check-item">Invertebrates (in-store)</div>
+              <div class="check-item">Cleanup Crew (in-store)</div>
+              <a href="../category/?cat=saltwater&amp;sub=starter-kits">Reef Systems & Tanks</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Equipment <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="../category/?cat=protein-skimmers&amp;sub=skimmers">Skimmers & Filtration</a>
+              <a href="../category/?cat=equipment">Lighting & Spectrum</a>
+              <a href="../category/?cat=wave-makers">Flow & Powerheads</a>
+              <a href="../category/?cat=controllers">Controllers & Monitors</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Food & Care <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <a href="../category/?cat=food">Salt Mix & Additives</a>
+              <a href="../category/?cat=maintenance">Test Kits & Refractometers</a>
+              <a href="../category/?cat=maintenance">Calcium, Alk & Magnesium</a>
+              <a href="../category/?cat=maintenance">Water Conditioner</a>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <button class="sidebar-toggle" aria-expanded="false" onclick="this.nextElementSibling.classList.toggle('open');this.setAttribute('aria-expanded',this.nextElementSibling.classList.contains('open'))">Quick Tips <span class="arrow">▶</span></button>
+          <div class="sidebar-body">
+            <div class="sidebar-body-inner">
+              <div class="check-item">Tank size and sump plan</div>
+              <div class="check-item">Lighting for coral goals</div>
+              <div class="check-item">Flow and dead spots</div>
+              <div class="check-item">Salt, testing, stability</div>
+              <div class="check-item">Livestock compatibility</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <div class="thr-product-grid" id="products"></div>
+    </div>
+    
+
+    <section class="feature-row">
+      <article class="panel"><h2>Before You Buy</h2><p>Ask about tank size, target coral, livestock temperament, water source, lighting spread, and maintenance budget.</p></article>
+      <article class="panel"><h2>Bring a Water Sample</h2><p>Turn online interest into a useful store visit with testing, diagnosis, and a realistic next-step shopping list.</p></article>
+      <article class="panel"><h2>Weekly Reef Room Picks</h2><p>Use this category page to highlight fresh livestock and coral without rebuilding the whole site every week.</p></article>
+    </section>
+
+    <section class="section-band" aria-label="Visit the store">
+      <div class="visit-band">
+      <div class="pin">⌖</div>
+      <div>
+        <h2>Visit the Levittown reef room</h2>
+        <p>4501 New Falls Rd, Levittown, PA 19056 · Bring tank details or a water sample and get staff guidance before buying.</p>
+      </div>
+      <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current Site</a>
+      </div>
+    </section>
+
+    <footer class="footer"><div class="footer-top"><div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div><div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div><div><h4>Customer Service</h4><div class="footer-link-grid"><a href="../contact/">Visit the store</a><a href="../contact/">Contact &amp; Hours</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../lightspeed-integration/">Checkout info</a></div></div><div><h4>Helpful Info</h4><a href="../learn/">Help Center</a><a href="../contact/">Visit Us</a></div></div></footer>
+  </main>
+
+  <aside class="drawer"><div class="drawer-head"><h2>Preview list</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your preview list is empty.</p><a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef site →</a></aside>
+  <script src="../assets/products.js"></script>
+  <script src="../assets/product-data.js"></script>
+  <script src="../assets/catalog-utils.js"></script>
+  <script src="../assets/thr-cards.js?v=20260712-premium-art"></script>
+  <script src="../assets/link-modal.js?v=20260712-premium-art"></script>
+  <script>
+    // Render saltwater department products from live data
+    THR.renderProducts('products', ['skimmers', 'coral-supplements', 'marine-test-kits', 'led-fixtures']);
+  </script>
+  <script src="../assets/reef-background.js?v=20260712-unified-nav"></script>
+</body>
+</html>

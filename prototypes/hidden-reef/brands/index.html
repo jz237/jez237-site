@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Brands We Carry - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../assets/site/logo.png" />
+  <style>
+    :root {
+      --blue-950: #f0fbff;
+      --blue-900: #7ddfff;
+      --blue-700: #27c2e8;
+      --teal: #00a7b7;
+      --surface: #071a27;
+      --page: #04101a;
+      --ink: #f0fbff;
+      --muted: #a9cbd9;
+      --line: rgba(116,205,235,.2);
+      --orange: #ff7b32;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { overflow-x: hidden; scroll-behavior: smooth; }
+    body {
+      overflow-x: hidden;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,.22), transparent 32%),
+        linear-gradient(180deg,#031f42 0%,#021833 48%,#010b1c 100%);
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .hero-section {
+      position: relative;
+      display: grid;
+      align-content: end;
+      min-height: 230px;
+      margin: 0 0 22px;
+      overflow: hidden;
+      padding: clamp(24px,4vw,38px) 24px;
+      border: 1px solid rgba(116,205,235,.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg,rgba(1,13,27,.96),rgba(1,31,51,.6) 50%,rgba(0,48,75,.04) 74%),
+        url("../assets/site/hero-aquatic-world.jpg") right center/cover no-repeat,
+        linear-gradient(90deg,#021421,#05344f);
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .hero-section h1 {
+      max-width: 720px;
+      margin: 0 0 10px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(32px, 5vw, 48px);
+      line-height: 1;
+      text-shadow: 0 8px 30px rgba(0,0,0,.58);
+    }
+    .hero-section p {
+      max-width: 650px;
+      margin: 0;
+      color: #d6f4fb;
+      font-size: 17px;
+    }
+    .brand-panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: radial-gradient(circle at 100% 0%, rgba(64,217,255,.1), transparent 34%), var(--surface);
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .brand-panel h2 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+    }
+    .brand-panel p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .brand-groups {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .brand-group {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,.18);
+      border-radius: 8px;
+      background: rgba(2, 19, 32, .66);
+    }
+    .brand-group h3 {
+      margin: 0 0 10px;
+      color: #40d9ff;
+      font-size: 17px;
+      line-height: 1;
+    }
+    .brand-group ul {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .brand-group li {
+      color: #e2f7fc;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .brand-group a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      color: #e2f7fc;
+      text-decoration: none;
+    }
+    .brand-group a:hover,
+    .brand-group a:focus-visible {
+      color: #40d9ff;
+      text-decoration: underline;
+    }
+    .next-step {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+      padding: 18px;
+      border: 1px solid rgba(116,205,235,.18);
+      border-radius: 8px;
+      background: linear-gradient(135deg, #052137, #083c57);
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .next-step p { margin: 0; color: #c2e9f4; font-weight: 800; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    footer.footer {
+      margin-top: 24px;
+      background: linear-gradient(180deg,#052137,#031321);
+      border-top: 1px solid rgba(116,205,235,.14);
+      color: #c2e9f4;
+      font-size: 13px;
+      box-shadow: -10px 14px 18px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    footer.footer h3,
+    footer.footer h4 { margin: 0 0 9px; color: #fff; }
+    footer.footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(194,233,244,.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); column-gap: 8px; }
+    .footer-link-grid a, footer.footer h4 + a { position: relative; padding-left: 12px; }
+    .footer-link-grid a::before, footer.footer h4 + a::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .72em;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #40d9ff;
+    }
+    @media (max-width: 1040px) {
+      .brand-groups { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .footer-top { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    }
+    @media (max-width: 760px) {
+      .brand-panel { padding: 16px; }
+      .brand-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .brand-group { padding: 14px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      .page { padding-inline: 8px; }
+      .brand-groups { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260712-unified-nav" />
+</head>
+<body>
+  <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../">
+        <img src="../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
+      <a href="../category/?cat=freshwater">Freshwater</a>
+      <a href="../category/?cat=saltwater">Saltwater</a>
+      <a href="../category/?cat=pond">Pond</a>
+      <a href="../category/?cat=equipment">Equipment</a>
+      <a href="../category/?cat=food">Food</a>
+      <a href="../category/?cat=decor">Decorations</a>
+      <a href="../category/?cat=maintenance">Maintenance</a>
+      <a href="../learn/">Help</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="hero-section" aria-labelledby="page-title">
+      <h1 id="page-title">Brands We Carry</h1>
+      <p>A full list of aquarium, pond, reptile, food, care, and equipment brands carried by The Hidden Reef.</p>
+    </section>
+
+    <section class="brand-panel" aria-labelledby="brand-list-title">
+      <h2 id="brand-list-title">Full Brand List</h2>
+      <p>Grouped alphabetically from The Hidden Reef's current brands page.</p>
+
+      <div class="brand-groups">
+        <section class="brand-group"><h3>A</h3><ul><li><a href="../category/?brand=A%20%26%20E%20CAGES">A &amp; E CAGES</a></li><li><a href="../category/?brand=Acurel">Acurel</a></li><li><a href="../category/?brand=ADA">ADA</a></li><li><a href="../category/?brand=Advatec%20Int.">Advatec Int.</a></li><li><a href="../category/?brand=Algae%20Barn">Algae Barn</a></li><li><a href="../category/?brand=Algone">Algone</a></li><li><a href="../category/?brand=Allied%20Precision">Allied Precision</a></li><li><a href="../category/?brand=American%20Sealant">American Sealant</a></li><li><a href="../category/?brand=Ani%20Mate">Ani Mate</a></li><li><a href="../category/?brand=Anjon%20Manufacturing">Anjon Manufacturing</a></li><li><a href="../category/?brand=API">API</a></li><li><a href="../category/?brand=Aqua%20One">Aqua One</a></li><li><a href="../category/?brand=AquaClear">AquaClear</a></li><li><a href="../category/?brand=Aquael">Aquael</a></li><li><a href="../category/?brand=Aquaillumination">Aquaillumination</a></li><li><a href="../category/?brand=Aquarium%20Master">Aquarium Master</a></li><li><a href="../category/?brand=Aquarium%20Solution">Aquarium Solution</a></li><li><a href="../category/?brand=Aquascape">Aquascape</a></li><li><a href="../category/?brand=Aquatic%20Life">Aquatic Life</a></li><li><a href="../category/?brand=Aquatop">Aquatop</a></li><li><a href="../category/?brand=AquaZen">AquaZen</a></li><li><a href="../category/?brand=Aqueon">Aqueon</a></li><li><a href="../category/?brand=ATASUKI">ATASUKI</a></li><li><a href="../category/?brand=Atlantic%20Water%20Gardens">Atlantic Water Gardens</a></li></ul></section>
+        <section class="brand-group"><h3>B</h3><ul><li><a href="../category/?brand=Bashsea">Bashsea</a></li><li><a href="../category/?brand=Blue%20Ribbon">Blue Ribbon</a></li><li><a href="../category/?brand=Boyd%20Enterprises">Boyd Enterprises</a></li></ul></section>
+        <section class="brand-group"><h3>C</h3><ul><li><a href="../category/?brand=Carib%20Sea">Carib Sea</a></li><li><a href="../category/?brand=Cepex">Cepex</a></li><li><a href="../category/?brand=Chihiros">Chihiros</a></li><li><a href="../category/?brand=Co2%20Art">Co2 Art</a></li><li><a href="../category/?brand=Coralife">Coralife</a></li><li><a href="../category/?brand=CoralRX">CoralRX</a></li></ul></section>
+        <section class="brand-group"><h3>D</h3><ul><li><a href="../category/?brand=D%20D%20Aquarium%20Solution">D D Aquarium Solution</a></li><li><a href="../category/?brand=Danner%20Manufacturing">Danner Manufacturing</a></li><li><a href="../category/?brand=Dennerle">Dennerle</a></li><li><a href="../category/?brand=DeWitt">DeWitt</a></li><li><a href="../category/?brand=Dinovite">Dinovite</a></li><li><a href="../category/?brand=Dr.%20Tim's">Dr. Tim's</a></li><li><a href="../category/?brand=Dymax">Dymax</a></li></ul></section>
+        <section class="brand-group"><h3>E</h3><ul><li><a href="../category/?brand=EasyPro">EasyPro</a></li><li><a href="../category/?brand=EcoTech%20Marine">EcoTech Marine</a></li><li><a href="../category/?brand=Eheim">Eheim</a></li><li><a href="../category/?brand=Eshopps">Eshopps</a></li><li><a href="../category/?brand=Ethical%20Pet">Ethical Pet</a></li><li><a href="../category/?brand=Evolution%20Aqua">Evolution Aqua</a></li><li><a href="../category/?brand=Exo%20Terra">Exo Terra</a></li></ul></section>
+        <section class="brand-group"><h3>F</h3><ul><li><a href="../category/?brand=Farm%20Innovators">Farm Innovators</a></li><li><a href="../category/?brand=Fauna%20Marin">Fauna Marin</a></li><li><a href="../category/?brand=FIJI%20CUBE">FIJI CUBE</a></li><li><a href="../category/?brand=Flipper">Flipper</a></li><li><a href="../category/?brand=FLORIDA%20MARINE%20RESEARCH">FLORIDA MARINE RESEARCH</a></li><li><a href="../category/?brand=Fluker%20Farm">Fluker Farm</a></li><li><a href="../category/?brand=Fluval">Fluval</a></li><li><a href="../category/?brand=Fritz%20Aquatics">Fritz Aquatics</a></li></ul></section>
+        <section class="brand-group"><h3>G</h3><ul><li><a href="../category/?brand=Galapagos">Galapagos</a></li><li><a href="../category/?brand=GloFish">GloFish</a></li><li><a href="../category/?brand=Griffin's%20Wing%20Sauce">Griffin's Wing Sauce</a></li><li><a href="../category/?brand=Gulfstream%20Tropical%20Aquarium">Gulfstream Tropical Aquarium</a></li></ul></section>
+        <section class="brand-group"><h3>H</h3><ul><li><a href="../category/?brand=Hanna%20Instruments">Hanna Instruments</a></li><li><a href="../category/?brand=Hikari">Hikari</a></li><li><a href="../category/?brand=Hydrofarm">Hydrofarm</a></li><li><a href="../category/?brand=Hygger">Hygger</a></li></ul></section>
+        <section class="brand-group"><h3>I</h3><ul><li><a href="../category/?brand=IceCap">IceCap</a></li><li><a href="../category/?brand=Innovative%20Marine">Innovative Marine</a></li><li><a href="../category/?brand=Instant%20Ocean">Instant Ocean</a></li><li><a href="../category/?brand=Ista">Ista</a></li></ul></section>
+        <section class="brand-group"><h3>J</h3><ul><li><a href="../category/?brand=Jack%20%26%20Pup">Jack &amp; Pup</a></li><li><a href="../category/?brand=JBJ">JBJ</a></li><li><a href="../category/?brand=Joe's%20Juice">Joe's Juice</a></li><li><a href="../category/?brand=Juwel">Juwel</a></li></ul></section>
+        <section class="brand-group"><h3>K</h3><ul><li><a href="../category/?brand=KatsAquatics">KatsAquatics</a></li><li><a href="../category/?brand=Komodo">Komodo</a></li><li><a href="../category/?brand=Kordon">Kordon</a></li></ul></section>
+        <section class="brand-group"><h3>L</h3><ul><li><a href="../category/?brand=Laguna">Laguna</a></li><li><a href="../category/?brand=Larry's%20Reef%20Service">Larry's Reef Service</a></li><li><a href="../category/?brand=Lee's">Lee's</a></li><li><a href="../category/?brand=Level%20One%20Pets">Level One Pets</a></li><li><a href="../category/?brand=LifegardAquatics">LifegardAquatics</a></li><li><a href="../category/?brand=Loc-Line">Loc-Line</a></li></ul></section>
+        <section class="brand-group"><h3>M</h3><ul><li><a href="../category/?brand=Marina">Marina</a></li><li><a href="../category/?brand=Marine%20Pure">Marine Pure</a></li><li><a href="../category/?brand=Marineland">Marineland</a></li><li><a href="../category/?brand=Maxspect">Maxspect</a></li><li><a href="../category/?brand=Microbe-Lift">Microbe-Lift</a></li><li><a href="../category/?brand=Mossify">Mossify</a></li></ul></section>
+        <section class="brand-group"><h3>N</h3><ul><li><a href="../category/?brand=Neptune%20System">Neptune System</a></li><li><a href="../category/?brand=New%20Life%20Spectrum">New Life Spectrum</a></li><li><a href="../category/?brand=Northfin">Northfin</a></li><li><a href="../category/?brand=Nyos">Nyos</a></li></ul></section>
+        <section class="brand-group"><h3>O</h3><ul><li><a href="../category/?brand=Oase">Oase</a></li><li><a href="../category/?brand=Oatey">Oatey</a></li><li><a href="../category/?brand=Ocean%20Nutrition">Ocean Nutrition</a></li><li><a href="../category/?brand=Omega%20One%20Aquatics">Omega One Aquatics</a></li></ul></section>
+        <section class="brand-group"><h3>P</h3><ul><li><a href="../category/?brand=Penn%20Plax">Penn Plax</a></li><li><a href="../category/?brand=Poly%20Bio%20Marine">Poly Bio Marine</a></li><li><a href="../category/?brand=PolypLab">PolypLab</a></li><li><a href="../category/?brand=PondMaster">PondMaster</a></li><li><a href="../category/?brand=Pro%20Clear">Pro Clear</a></li><li><a href="../category/?brand=Python">Python</a></li></ul></section>
+        <section class="brand-group"><h3>R</h3><ul><li><a href="../category/?brand=Red%20Flag%20Products">Red Flag Products</a></li><li><a href="../category/?brand=Red%20Sea">Red Sea</a></li><li><a href="../category/?brand=Reef%20Factory">Reef Factory</a></li><li><a href="../category/?brand=Reef%20Octopus">Reef Octopus</a></li><li><a href="../category/?brand=Rep-Cal">Rep-Cal</a></li><li><a href="../category/?brand=Ruby%20Reef">Ruby Reef</a></li></ul></section>
+        <section class="brand-group"><h3>S</h3><ul><li><a href="../category/?brand=Salifert">Salifert</a></li><li><a href="../category/?brand=San%20Francisco">San Francisco</a></li><li><a href="../category/?brand=Seachem">Seachem</a></li><li><a href="../category/?brand=Sera">Sera</a></li><li><a href="../category/?brand=Sicce">Sicce</a></li><li><a href="../category/?brand=Sol%20Soils">Sol Soils</a></li><li><a href="../category/?brand=Spot">Spot</a></li><li><a href="../category/?brand=Summit">Summit</a></li></ul></section>
+        <section class="brand-group"><h3>T</h3><ul><li><a href="../category/?brand=Tetra">Tetra</a></li><li><a href="../category/?brand=Tetra%20Pond">Tetra Pond</a></li><li><a href="../category/?brand=Tideline">Tideline</a></li><li><a href="../category/?brand=Tropic%20Marine">Tropic Marine</a></li><li><a href="../category/?brand=Tunze">Tunze</a></li><li><a href="../category/?brand=Twinstar%20Eu">Twinstar Eu</a></li><li><a href="../category/?brand=Two%20Little%20Fishies">Two Little Fishies</a></li></ul></section>
+        <section class="brand-group"><h3>U</h3><ul><li><a href="../category/?brand=Ultralife">Ultralife</a></li><li><a href="../category/?brand=Ultum%20Nature%20System">Ultum Nature System</a></li><li><a href="../category/?brand=Underwater%20Treasures">Underwater Treasures</a></li></ul></section>
+        <section class="brand-group"><h3>V-Z</h3><ul><li><a href="../category/?brand=Vetericyn">Vetericyn</a></li><li><a href="../category/?brand=Xtreme%20Aquatics%20Food">Xtreme Aquatics Food</a></li><li><a href="../category/?brand=Zilla">Zilla</a></li><li><a href="../category/?brand=Zoo%20Med">Zoo Med</a></li></ul></section>
+      </div>
+    </section>
+
+    <div class="next-step">
+      <p>Looking for a specific product line?</p>
+      <a class="btn" href="../category/">Browse Products</a>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Customer Service</h4><div class="footer-link-grid"><a href="../contact/">Visit the store</a><a href="../contact/">Contact &amp; Hours</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../lightspeed-integration/">Checkout info</a></div></div>
+        <div><h4>Helpful Info</h4><a href="../learn/">Help Center</a><a href="../contact/">Visit Us</a></div>
+      </div>
+    </footer>
+  </main>
+  <script src="../assets/reef-background.js?v=20260712-unified-nav"></script>
+</body>
+</html>

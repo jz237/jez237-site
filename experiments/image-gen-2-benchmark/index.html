@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Daily Image Prompts — GPT Image Experiments</title>
+  <meta name="description" content="A browsable archive of GPT image prompts, AI image prompt examples, photo transformation prompt ideas, generated worlds, and visual experiments from Jez237.">
+  <meta name="keywords" content="AI image prompts, GPT image prompts, ChatGPT image prompts, GPT Image prompts, image generation prompts, photo transformation prompts, AI art prompt examples, prompt gallery, generated image archive">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jez237.com/experiments/image-gen-2-benchmark/">
+  <meta property="og:title" content="Daily Image Prompts — GPT Image Experiments">
+  <meta property="og:description" content="AI image prompt examples, photo transformation ideas, generated worlds, and daily GPT image experiments.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jez237.com/experiments/image-gen-2-benchmark/">
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/design.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0e0b08;
+      --bg-2: #0a0806;
+      --panel: #16120d;
+      --panel-2: #0f0c08;
+      --text: #e9e2d4;
+      --ivory: #f3ead8;
+      --muted: #9a8f7c;
+      --gold: #c9a24b;
+      --gold-bright: #d8b96a;
+      --hair: rgba(201, 162, 75, .22);
+      --hair-strong: rgba(201, 162, 75, .45);
+      --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    }
+    :root[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f4eee1;
+      --bg-2: #ece4d2;
+      --panel: #fdfaf1;
+      --panel-2: #f6f0e2;
+      --text: #2e2718;
+      --ivory: #241e12;
+      --muted: #7a6f58;
+      --gold: #8a6a1f;
+      --gold-bright: #74580f;
+      --hair: rgba(138, 106, 31, .3);
+      --hair-strong: rgba(138, 106, 31, .55);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(ellipse at 50% -8%, rgba(201,162,75,.09), transparent 46%),
+        linear-gradient(180deg, var(--bg), var(--bg-2) 58%, var(--bg)) !important;
+      color: var(--text) !important;
+      line-height: 1.5;
+    }
+    header#site-nav {
+      background: rgba(12,10,7,.92) !important;
+      border-bottom: 1px solid var(--hair-strong) !important;
+      box-shadow: 0 14px 34px rgba(0,0,0,.35) !important;
+    }
+    main, footer { max-width: 1180px; margin: 0 auto; }
+
+    /* --- hero: dark museum wall --- */
+    .gallery-hero {
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: clamp(22px, 3.4vw, 38px) 22px 26px;
+      border: 1px solid var(--hair);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      background: #0a0806;
+      box-shadow: 0 26px 54px rgba(0,0,0,.4);
+    }
+    .hero-backdrop {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+    .hero-scrim {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(9,7,5,.62), rgba(9,7,5,.30) 42%, rgba(9,7,5,.94));
+    }
+    .gallery-hero-inner { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; }
+    h1 {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 600;
+      color: #f3ead8;
+      font-size: clamp(2.5rem, 6vw, 4.6rem);
+      letter-spacing: -0.015em;
+      line-height: 1.02;
+      text-shadow: 0 4px 30px rgba(0,0,0,.65);
+    }
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 11px auto 10px;
+      max-width: 420px;
+      color: var(--gold-bright);
+      font-size: .8rem;
+    }
+    .ornament::before, .ornament::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(216,185,106,.7));
+    }
+    .ornament::after { background: linear-gradient(90deg, rgba(216,185,106,.7), transparent); }
+    .lede {
+      margin: 0 auto;
+      max-width: 640px;
+      color: #cbb684;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: clamp(.68rem, 1.6vw, .82rem);
+      font-weight: 600;
+      text-shadow: 0 2px 12px rgba(0,0,0,.7);
+    }
+    .hero-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin: 18px auto 0;
+      max-width: 860px;
+    }
+    .hero-controls #search { flex: 1 1 240px; min-width: 0; }
+    .hero-controls #date-filter { flex: 0 1 220px; width: 220px; min-width: 0; }
+    .hero-controls #density-toggle { flex: 0 0 auto; white-space: nowrap; }
+    .series-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      column-gap: 22px;
+      row-gap: 9px;
+      margin: 14px auto 0;
+      max-width: 980px;
+    }
+    .series-nav a {
+      color: #cbb684;
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: .72rem;
+      letter-spacing: .14em;
+      font-weight: 700;
+      padding: 2px 0;
+      border-bottom: 1px solid transparent;
+      white-space: nowrap;
+      text-shadow: 0 2px 10px rgba(0,0,0,.6);
+    }
+    .series-nav a:hover { color: var(--gold-bright); border-bottom-color: var(--hair-strong); }
+    .series-nav a[aria-current="page"] { color: var(--ivory); border-bottom-color: var(--gold-bright); }
+    .meta { margin-top: 10px; }
+
+    /* --- controls, pills, buttons --- */
+    .pill, .control, button.control {
+      border: 1px solid var(--hair-strong);
+      background: rgba(16,13,9,.72);
+      color: var(--text);
+      padding: 9px 14px;
+      border-radius: 6px;
+      font: inherit;
+      font-size: .92rem;
+    }
+    :root[data-theme="light"] .pill,
+    :root[data-theme="light"] .control,
+    :root[data-theme="light"] button.control {
+      background: rgba(253,250,241,.85);
+    }
+    .gallery-hero .pill, .gallery-hero .control { background: rgba(12,10,7,.72); backdrop-filter: blur(6px); }
+    .gallery-hero .pill, .gallery-hero .control, .gallery-hero button.control { color: #e9e2d4; }
+    a.pill { text-decoration: none; }
+    .pill.stat {
+      display: inline-block;
+      border: none;
+      background: none !important;
+      color: #cbb684;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: .74rem;
+      font-weight: 650;
+    }
+    .pill.featured {
+      color: #d8b96a;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .74rem;
+      font-weight: 700;
+      padding: 8px 13px;
+      border-radius: 999px;
+    }
+    .pill.featured:hover { border-color: var(--gold-bright); background: rgba(201,162,75,.12); }
+    select.control, input.control { outline: none; min-height: 42px; }
+    input.control::placeholder { color: var(--muted); opacity: 1; }
+    button.control { cursor: pointer; }
+    button.control:hover { border-color: var(--gold-bright); }
+
+    /* --- compact toolbar --- */
+    .compact-toolbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      top: var(--nav-height, 54px);
+      z-index: 9;
+      padding: 8px clamp(12px, 2vw, 22px);
+      background: rgba(12,10,7,.93);
+      border-bottom: 1px solid var(--hair-strong);
+      box-shadow: 0 16px 38px rgba(0,0,0,.4);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity .16s ease, transform .16s ease;
+    }
+    :root[data-theme="light"] .compact-toolbar { background: rgba(244,238,225,.94); }
+    .compact-toolbar.is-visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .compact-toolbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: auto minmax(220px, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+    }
+    .compact-title {
+      font-family: var(--serif);
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--ivory);
+      letter-spacing: .02em;
+    }
+    :root:not([data-theme="light"]) .compact-title { color: #f3ead8; }
+    .compact-controls { display: flex; flex-wrap: nowrap; gap: 8px; min-width: 0; }
+    .compact-controls .control { min-height: 34px; padding: 6px 10px; font-size: .88rem; }
+    #toolbar-search { width: min(38vw, 380px); }
+    .compact-count {
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      color: #cbb684;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .7rem;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    :root[data-theme="light"] .compact-count { color: var(--gold); }
+
+    /* --- day dividers --- */
+    main { padding: 6px 22px 70px; }
+    .gallery-list { display: block; }
+    .day-group { margin-top: 34px; }
+    .day-heading {
+      position: sticky;
+      top: calc(var(--nav-height, 54px) + 52px);
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 4px;
+      margin: 0 0 20px;
+      background: linear-gradient(180deg, rgba(13,10,7,.88), rgba(13,10,7,.82));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    :root[data-theme="light"] .day-heading { background: linear-gradient(180deg, rgba(244,238,225,.92), rgba(244,238,225,.86)); }
+    .day-heading::before, .day-heading::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--hair-strong));
+    }
+    .day-heading::after { background: linear-gradient(90deg, var(--hair-strong), transparent); }
+    .day-heading h2 {
+      margin: 0;
+      font-family: var(--serif);
+      font-weight: 550;
+      color: var(--gold-bright);
+      font-size: clamp(1.02rem, 2.4vw, 1.4rem);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .day-heading h2::before { content: "✦"; margin-right: 14px; font-size: .72em; opacity: .85; }
+    .day-heading h2::after { content: "✦"; margin-left: 14px; font-size: .72em; opacity: .85; }
+    .day-heading span {
+      color: var(--muted);
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* --- cards: framed artwork --- */
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; }
+    body[data-density="3"] .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+    body[data-density="3"] .content { padding: 14px 16px 16px; }
+    body[data-density="3"] h3 { font-size: 1.14rem; }
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--hair);
+      background: var(--panel);
+      border-radius: 6px;
+      box-shadow: 0 22px 48px rgba(0,0,0,.45), inset 0 1px 0 rgba(216,185,106,.08);
+      transition: border-color .2s ease, transform .2s ease;
+    }
+    .card:hover { border-color: var(--hair-strong); }
+    .image-wrap { background: #0b0906; aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center; position: relative; border-bottom: 1px solid var(--hair); }
+    .image-wrap.portrait { aspect-ratio: 2 / 3; }
+    .image-wrap.landscape { aspect-ratio: 3 / 2; }
+    .image-wrap.landscape img { object-fit: contain; background: #0b0906; }
+    .image-wrap::before {
+      content: "";
+      position: absolute;
+      inset: 9px;
+      border: 1px solid rgba(216,185,106,.35);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .image-wrap::after {
+      content: "Click to enlarge";
+      position: absolute;
+      left: 16px;
+      bottom: 16px;
+      z-index: 2;
+      padding: 7px 11px;
+      border: 1px solid rgba(216,185,106,.4);
+      border-radius: 999px;
+      background: rgba(9,7,5,.72);
+      color: #e6d7ae;
+      font-size: .74rem;
+      letter-spacing: .06em;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events: none;
+    }
+    .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-wrap img { opacity: 0; transition: opacity .35s ease; cursor: zoom-in; }
+    .image-wrap img.loaded { opacity: 1; }
+    .image-wrap.portrait img { object-fit: contain; background: #0b0906; }
+    .content { padding: 18px 20px 20px; }
+    .kicker-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .kicker { color: var(--gold); text-transform: uppercase; font-size: .68rem; letter-spacing: .17em; font-weight: 750; }
+    .copy-btn {
+      flex: 0 0 auto;
+      border: 1px solid var(--hair-strong);
+      background: transparent;
+      color: var(--gold-bright);
+      font: inherit;
+      font-size: .68rem;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      padding: 5px 11px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    .copy-btn:hover { border-color: var(--gold-bright); background: rgba(201,162,75,.12); }
+    .copy-btn.copied { border-color: rgba(140,190,120,.7); color: #a9d193; }
+    :root[data-theme="light"] .copy-btn.copied { color: #3d7a2a; border-color: rgba(61,122,42,.6); }
+    h3 {
+      margin: 9px 0 10px;
+      font-family: var(--serif);
+      font-weight: 560;
+      color: var(--ivory);
+      font-size: 1.32rem;
+      line-height: 1.12;
+      letter-spacing: .005em;
+    }
+    .tests { color: var(--muted); margin: 0 0 14px; font-size: .92rem; }
+    .tests strong { color: var(--gold); font-weight: 700; }
+    details { border-top: 1px solid var(--hair); padding-top: 13px; }
+    summary { cursor: pointer; color: var(--text); font-weight: 650; margin-bottom: 10px; font-size: .92rem; letter-spacing: .02em; }
+    summary:hover { color: var(--gold-bright); }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #d9d0bd;
+      background: var(--panel-2);
+      border: 1px solid var(--hair);
+      border-radius: 4px;
+      padding: 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: .83rem;
+      line-height: 1.55;
+    }
+    :root[data-theme="light"] pre { color: #4a4130; }
+    .empty { color: var(--muted); padding: 32px; border: 1px dashed var(--hair-strong); border-radius: 6px; text-align: center; }
+
+    /* --- load more --- */
+    .load-more-row { display: flex; justify-content: center; margin: 40px 0 0; }
+    #load-more {
+      border: 1px solid var(--hair-strong);
+      background: transparent;
+      color: var(--gold-bright);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: .8rem;
+      font-weight: 750;
+      padding: 15px 34px;
+      border-radius: 3px;
+      transition: background .15s ease, border-color .15s ease;
+    }
+    #load-more:hover { border-color: var(--gold-bright); background: rgba(201,162,75,.1); }
+    #load-more:disabled { opacity: .5; }
+
+    footer { padding: 34px 22px 50px; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--hair); margin-top: 60px; }
+
+    /* --- lightbox --- */
+    .lightbox { position: fixed; inset: 0; z-index: 50; display: none; background: rgba(7,5,4,.95); backdrop-filter: blur(14px); color: var(--text); }
+    .lightbox.open { display: grid; grid-template-rows: auto 1fr; }
+    .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid rgba(216,185,106,.28); background: rgba(14,11,8,.85); }
+    .lightbox-title { min-width: 0; font-family: var(--serif); font-weight: 560; color: #f3ead8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: #9a8f7c; font-size: .85rem; font-weight: 500; }
+    .lightbox-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+    .lightbox-btn { border: 1px solid rgba(216,185,106,.4); border-radius: 3px; background: transparent; color: #d8b96a; padding: 8px 13px; cursor: pointer; font: inherit; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; }
+    .lightbox-btn:hover { background: rgba(201,162,75,.12); }
+    .lightbox-btn.copied { border-color: rgba(140,190,120,.7); color: #a9d193; }
+    .lightbox-stage { min-height: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .lightbox-stage img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 30px 100px rgba(0,0,0,.7); cursor: zoom-in; border: 1px solid rgba(216,185,106,.25); }
+    .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
+    .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 51;
+      border: 1px solid rgba(216,185,106,.4);
+      border-radius: 999px;
+      background: rgba(12,9,6,.7);
+      color: #e6d7ae;
+      width: 46px;
+      height: 46px;
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+    }
+    .lightbox-nav:hover { background: rgba(60,45,20,.8); }
+    .lightbox-nav[hidden] { display: none; }
+    .lightbox-nav.prev { left: 14px; }
+    .lightbox-nav.next { right: 14px; }
+
+    @media (max-width: 680px) {
+      .hero-controls { gap: 8px; }
+      .pill, .control, button.control { padding: 8px 10px; }
+      .compact-toolbar-inner { grid-template-columns: 1fr; align-items: stretch; }
+      #toolbar-search { width: 100%; }
+      .grid, body[data-density="3"] .grid { grid-template-columns: 1fr; }
+      .day-heading { top: calc(var(--nav-height, 54px) + 2px); }
+      .day-heading span { display: none; }
+      .lightbox-hint { display: none; }
+      .lightbox-nav { width: 40px; height: 40px; }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <header class="gallery-hero">
+    <img class="hero-backdrop" src="hero-banner.webp?v=museum1" alt="" aria-hidden="true">
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="gallery-hero-inner">
+      <h1>Daily Image Prompts</h1>
+      <div class="ornament" aria-hidden="true">✦</div>
+      <p class="lede">A daily archive of AI image prompts &amp; generated worlds</p>
+      <div class="hero-controls" aria-label="Gallery controls">
+        <input class="control" id="search" type="search" placeholder="Search prompts, themes, keywords...">
+        <select class="control" id="date-filter"><option value="all">All dates</option></select>
+        <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
+      </div>
+      <nav class="series-nav" aria-label="Image series">
+        <a href="index.html" aria-current="page">Image archive</a>
+        <a href="worlds.html">Fictional worlds</a>
+        <a href="factual-infographics.html">Factual infographics</a>
+        <a href="hybrid-creatures.html">Hybrid creatures</a>
+        <a href="creature-designs.html">Creature designs</a>
+        <a href="random-rendering-style.html">Random rendering style</a>
+        <a href="machine-dreams.html">Machine dreams</a>
+        <a href="visual-thought-experiments.html">Visual thought experiments</a>
+        <a href="impossible-documentary.html">Impossible documentary</a>
+        <a href="strange-botanicals.html">Strange botanicals</a>
+        <a href="cinematic-cats.html">Cinematic cats</a>
+        <a href="quietly-uncanny-domestic.html">Quietly uncanny</a>
+        <a href="world-that-never-was.html">World that never was</a>
+        <a href="subject-artifacts.html">Subject as artifact</a>
+        <a href="data-artifacts.html">Data as artifact</a>
+      </nav>
+      <div class="meta">
+        <span class="pill stat" id="count-pill">Images: loading...</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="compact-toolbar" id="compact-toolbar" aria-label="Gallery quick controls">
+    <div class="compact-toolbar-inner">
+      <div class="compact-title">Daily Image Prompts</div>
+      <div class="compact-controls">
+        <input class="control" id="toolbar-search" type="search" placeholder="Search prompts...">
+        <select class="control" id="toolbar-date-filter"><option value="all">All dates</option></select>
+      </div>
+      <span class="compact-count" id="toolbar-count">Images: loading...</span>
+    </div>
+  </div>
+
+  <main>
+    <div id="gallery" class="gallery-list" aria-live="polite"></div>
+    <div class="load-more-row" id="load-more-row">
+      <button class="control" id="load-more" type="button">Load more</button>
+    </div>
+  </main>
+
+  <footer>
+    Prompt metadata is chunked by month (<code>manifest.json</code> + <code>gallery-YYYY-MM.json</code>); images and thumbnails are served from the configured media base. Click any image for fullscreen, then click it again for true 1:1 size.
+  </footer>
+
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">← → to browse · Click image: fit screen ⇄ 1:1 · Esc closes</div>
+      <div class="lightbox-actions">
+        <button class="lightbox-btn" type="button" id="lightbox-copy">Copy prompt</button>
+        <button class="lightbox-btn" type="button" id="lightbox-close">Close</button>
+      </div>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+    <button class="lightbox-nav prev" type="button" id="lightbox-prev" aria-label="Previous image">‹</button>
+    <button class="lightbox-nav next" type="button" id="lightbox-next" aria-label="Next image">›</button>
+  </div>
+
+  <script>
+    (function () {
+      const gallery = document.getElementById('gallery');
+      const countPill = document.getElementById('count-pill');
+      const search = document.getElementById('search');
+      const dateFilter = document.getElementById('date-filter');
+      const toolbar = document.getElementById('compact-toolbar');
+      const toolbarSearch = document.getElementById('toolbar-search');
+      const toolbarDateFilter = document.getElementById('toolbar-date-filter');
+      const toolbarCount = document.getElementById('toolbar-count');
+      const loadMore = document.getElementById('load-more');
+      const loadMoreRow = document.getElementById('load-more-row');
+      const densityToggle = document.getElementById('density-toggle');
+      const hero = document.querySelector('.gallery-hero');
+      const siteNav = document.getElementById('site-nav');
+      const pageSize = 24;
+
+      const MEDIA_BASE = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/';
+      const IMAGE_BASE_URL = MEDIA_BASE + 'images/';
+      const THUMB_BASE_URL = MEDIA_BASE + 'thumbs/';
+
+      let manifest = null;
+      let allItems = [];
+      let visibleCount = pageSize;
+      let renderedCount = 0;
+      const itemsById = new Map();
+      const monthLoads = new Map();
+      let loadedMonthCount = 0;
+      let ticking = false;
+
+      function updateHeroChrome() {
+        if (siteNav) document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight || 54}px`);
+        if (!toolbar || !hero) return;
+        const threshold = hero.offsetTop + hero.offsetHeight - 40;
+        toolbar.classList.toggle('is-visible', window.scrollY > threshold);
+      }
+      window.addEventListener('scroll', () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => { updateHeroChrome(); ticking = false; });
+      }, { passive: true });
+      window.addEventListener('resize', updateHeroChrome);
+      window.addEventListener('load', updateHeroChrome);
+      setTimeout(updateHeroChrome, 0);
+      setTimeout(updateHeroChrome, 150);
+
+      const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      const resolveMedia = (value, base) => {
+        const path = String(value || '');
+        if (/^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('/')) return path;
+        const slash = path.indexOf('/');
+        if (slash === -1) return path;
+        return base + path.slice(slash + 1);
+      };
+      const imageUrl = (item) => resolveMedia(item.image, IMAGE_BASE_URL);
+      const thumbUrl = (item) => item.thumb ? resolveMedia(item.thumb, THUMB_BASE_URL) : imageUrl(item);
+      const formatDate = (value) => {
+        if (!value || value === 'undated') return 'Undated';
+        const [y, m, d] = value.split('-').map(Number);
+        const dt = new Date(y, (m || 1) - 1, d || 1);
+        return dt.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      };
+      const formatMonth = (key) => {
+        if (!key || key === 'undated') return 'Undated';
+        const [y, m] = key.split('-').map(Number);
+        return new Date(y, (m || 1) - 1, 1).toLocaleDateString(undefined, { year: 'numeric', month: 'long' });
+      };
+      const sortItems = (items) => items.sort((a, b) =>
+        String(b.date || '').localeCompare(String(a.date || '')) ||
+        String(b.slot || '').localeCompare(String(a.slot || '')) ||
+        String(b.id || '').localeCompare(String(a.id || '')));
+
+      // --- data loading (month chunks, newest first) ---
+      function loadMonth(monthMeta) {
+        if (!monthLoads.has(monthMeta.key)) {
+          // current (first) month changes daily; bust with its count
+          const bust = `?v=${monthMeta.count}`;
+          monthLoads.set(monthMeta.key, fetch(monthMeta.file + bust)
+            .then((r) => r.ok ? r.json() : Promise.reject(new Error(`Could not load ${monthMeta.file}`)))
+            .then((items) => {
+              const fresh = items.filter((it) => !itemsById.has(it.id));
+              fresh.forEach((it) => itemsById.set(it.id, it));
+              allItems.push(...fresh);
+              sortItems(allItems);
+              loadedMonthCount += 1;
+            }));
+        }
+        return monthLoads.get(monthMeta.key);
+      }
+      const monthOf = (date) => manifest.months.find((m) => m.key === String(date).slice(0, 7));
+      const nextUnloadedMonth = () => manifest.months.find((m) => !monthLoads.has(m.key));
+      const allMonthsLoaded = () => loadedMonthCount >= manifest.months.length;
+
+      async function ensureData() {
+        const q = search.value.trim();
+        const date = dateFilter.value;
+        if (q) {
+          await Promise.all(manifest.months.map(loadMonth));
+        } else if (date !== 'all') {
+          const m = monthOf(date);
+          if (m) await loadMonth(m);
+        } else {
+          while (filteredItems().length < visibleCount && !allMonthsLoaded()) {
+            await loadMonth(nextUnloadedMonth());
+          }
+        }
+      }
+
+      function filteredItems() {
+        const q = search.value.trim().toLowerCase();
+        const date = dateFilter.value;
+        return allItems.filter((item) => {
+          if (date !== 'all' && item.date !== date) return false;
+          if (!q) return true;
+          const world = item.world || {};
+          return [item.title, item.prompt, item.tests, item.batch, world.name, world.description, world.continuity, world.entryDescription].some((v) => String(v || '').toLowerCase().includes(q));
+        });
+      }
+
+      function totalForCurrentFilter(filtered) {
+        const q = search.value.trim();
+        const date = dateFilter.value;
+        if (!q && date === 'all') return manifest ? manifest.total : filtered.length;
+        return filtered.length;
+      }
+
+      // --- rendering (append-only) ---
+      function cardHtml(item) {
+        const sizeMatch = String(item.size || '').match(/^(\d+)x(\d+)$/);
+        const portrait = sizeMatch ? Number(sizeMatch[2]) > Number(sizeMatch[1]) : (String(item.size || '').includes('portrait') || String(item.image || '').includes('almanac'));
+        const landscape = sizeMatch ? Number(sizeMatch[1]) > Number(sizeMatch[2]) : false;
+        const color = /^#[0-9a-f]{6}$/i.test(String(item.color || '')) ? item.color : '#0b0906';
+        return `
+          <article class="card" id="${escapeHtml(item.id)}">
+            <div class="image-wrap${portrait ? ' portrait' : landscape ? ' landscape' : ''}" style="background:${color}"><img src="${escapeHtml(thumbUrl(item))}" data-item-id="${escapeHtml(item.id)}" data-full="${escapeHtml(imageUrl(item))}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="content">
+              <div class="kicker-row">
+                <div class="kicker">${escapeHtml(item.batch || 'Daily Prompt')} · ${escapeHtml(item.slot || '')}</div>
+                <button class="copy-btn" type="button" data-copy-id="${escapeHtml(item.id)}">Copy prompt</button>
+              </div>
+              <h3>${escapeHtml(item.title)}</h3>
+              ${item.tests ? `<p class="tests"><strong>Explores:</strong> ${escapeHtml(item.tests)}</p>` : ''}
+              <details>
+                <summary>Show prompt</summary>
+                <pre>${escapeHtml(item.prompt)}</pre>
+              </details>
+            </div>
+          </article>`;
+      }
+
+      function appendCards(filtered) {
+        const slice = filtered.slice(renderedCount, visibleCount);
+        if (!slice.length) return;
+        slice.forEach((item) => {
+          const dayKey = item.date || 'undated';
+          let section = gallery.lastElementChild;
+          if (!section || section.dataset.date !== dayKey) {
+            const dayTotal = filtered.filter((it) => (it.date || 'undated') === dayKey).length;
+            section = document.createElement('section');
+            section.className = 'day-group';
+            section.dataset.date = dayKey;
+            section.innerHTML = `
+              <div class="day-heading"><h2>${escapeHtml(formatDate(dayKey))}</h2><span>${dayTotal} image${dayTotal === 1 ? '' : 's'}</span></div>
+              <div class="grid"></div>`;
+            gallery.appendChild(section);
+          }
+          section.querySelector('.grid').insertAdjacentHTML('beforeend', cardHtml(item));
+        });
+        renderedCount = Math.min(visibleCount, filtered.length);
+        bindImages();
+        pollPendingFades();
+      }
+
+      function render(reset) {
+        const filtered = filteredItems();
+        if (reset) {
+          gallery.innerHTML = '';
+          renderedCount = 0;
+        }
+        const total = totalForCurrentFilter(filtered);
+        if (manifest) {
+          countPill.textContent = `Images: ${manifest.total}`;
+          toolbarCount.textContent = `Images: ${manifest.total}`;
+        }
+        if (!filtered.length) {
+          gallery.innerHTML = '<p class="empty">No matching prompts yet.</p>';
+          loadMoreRow.hidden = true;
+          return;
+        }
+        if (reset && gallery.querySelector('.empty')) gallery.innerHTML = '';
+        appendCards(filtered);
+        const shown = Math.min(renderedCount, total);
+        loadMoreRow.hidden = shown >= total;
+        loadMore.textContent = `Load more · showing ${shown} of ${total}`;
+      }
+
+      // --- filters + URL state ---
+      function syncUrl() {
+        const params = new URLSearchParams();
+        if (search.value.trim()) params.set('q', search.value.trim());
+        if (dateFilter.value !== 'all') params.set('date', dateFilter.value);
+        const qs = params.toString();
+        history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+      }
+
+      let filterToken = 0;
+      async function applyFilters(nextSearch, nextDate) {
+        search.value = nextSearch;
+        toolbarSearch.value = nextSearch;
+        dateFilter.value = nextDate;
+        toolbarDateFilter.value = nextDate;
+        visibleCount = pageSize;
+        syncUrl();
+        const token = ++filterToken;
+        await ensureData();
+        if (token !== filterToken) return;
+        render(true);
+      }
+
+      search.addEventListener('input', () => applyFilters(search.value, dateFilter.value));
+      toolbarSearch.addEventListener('input', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
+      dateFilter.addEventListener('change', () => applyFilters(search.value, dateFilter.value));
+      toolbarDateFilter.addEventListener('change', () => applyFilters(toolbarSearch.value, toolbarDateFilter.value));
+      loadMore.addEventListener('click', async () => {
+        visibleCount += pageSize;
+        loadMore.disabled = true;
+        try { await ensureData(); } finally { loadMore.disabled = false; }
+        render(false);
+      });
+
+      // prefetch the next month's data when the user nears the bottom (no auto-render)
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          if (!entries.some((e) => e.isIntersecting)) return;
+          if (!manifest || search.value.trim() || dateFilter.value !== 'all') return;
+          const next = nextUnloadedMonth();
+          if (next) loadMonth(next);
+        }, { rootMargin: '600px' }).observe(loadMoreRow);
+      }
+
+      // --- density toggle ---
+      function setDensity(cols, persist) {
+        document.body.dataset.density = cols;
+        densityToggle.textContent = `Grid: ${cols} column${cols === '1' ? '' : 's'}`;
+        if (persist) try { localStorage.setItem('gallery-density', cols); } catch (e) {}
+      }
+      let density = '3';
+      try { density = localStorage.getItem('gallery-density') || '3'; } catch (e) {}
+      setDensity(density === '2' ? '2' : '3', false);
+      densityToggle.addEventListener('click', () => {
+        setDensity(document.body.dataset.density === '3' ? '2' : '3', true);
+      });
+
+      // --- copy prompt (cards) ---
+      async function copyPrompt(text, button) {
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = button.dataset.label || button.textContent;
+          button.dataset.label = original;
+          button.textContent = 'Copied ✓';
+          button.classList.add('copied');
+          setTimeout(() => { button.textContent = original; button.classList.remove('copied'); }, 1400);
+        } catch (e) {
+          window.prompt('Copy prompt:', text);
+        }
+      }
+      gallery.addEventListener('click', (event) => {
+        const btn = event.target.closest('.copy-btn');
+        if (!btn) return;
+        const item = itemsById.get(btn.dataset.copyId);
+        if (item) copyPrompt(item.prompt || '', btn);
+      });
+
+      // --- date dropdown from manifest (grouped by month) ---
+      function populateDates() {
+        let html = '<option value="all">All dates</option>';
+        manifest.months.forEach((m) => {
+          html += `<optgroup label="${escapeHtml(formatMonth(m.key))} · ${m.count}">`;
+          m.dates.forEach((d) => {
+            html += `<option value="${escapeHtml(d.date)}">${escapeHtml(formatDate(d.date))} (${d.count})</option>`;
+          });
+          html += '</optgroup>';
+        });
+        dateFilter.innerHTML = html;
+        toolbarDateFilter.innerHTML = html;
+      }
+
+      // --- lightbox with prev/next ---
+      const viewer = document.getElementById('image-lightbox');
+      const stage = document.getElementById('lightbox-stage');
+      const image = document.getElementById('lightbox-image');
+      const title = document.getElementById('lightbox-title');
+      const close = document.getElementById('lightbox-close');
+      const copyBtn = document.getElementById('lightbox-copy');
+      const prevBtn = document.getElementById('lightbox-prev');
+      const nextBtn = document.getElementById('lightbox-next');
+      let viewerList = [];
+      let viewerIndex = -1;
+
+      let fadePoll = null;
+      function pollPendingFades() {
+        // safety net: 'load' events can be missed on cached images; poll completion
+        if (fadePoll) return;
+        fadePoll = setInterval(() => {
+          const pending = [...document.querySelectorAll('.image-wrap img:not(.loaded)')];
+          pending.forEach((img) => { if (img.complete && img.naturalWidth) img.classList.add('loaded'); });
+          if (!pending.length) { clearInterval(fadePoll); fadePoll = null; }
+        }, 400);
+      }
+      function bindImages() {
+        document.querySelectorAll('.image-wrap img').forEach((thumb) => {
+          if (thumb.dataset.bound === '1') return;
+          thumb.dataset.bound = '1';
+          thumb.setAttribute('tabindex', '0');
+          if (thumb.complete && thumb.naturalWidth) thumb.classList.add('loaded');
+          else thumb.addEventListener('load', () => thumb.classList.add('loaded'), { once: true });
+          thumb.addEventListener('error', () => {
+            if (thumb.dataset.fellBack === '1') return;
+            thumb.dataset.fellBack = '1';
+            thumb.src = thumb.dataset.full || thumb.src;
+          }, { once: true });
+          const open = () => openViewerAt(thumb.dataset.itemId);
+          thumb.addEventListener('click', open);
+          thumb.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); open(); }
+          });
+        });
+      }
+
+      function currentDomOrder() {
+        return [...gallery.querySelectorAll('.image-wrap img')].map((el) => el.dataset.itemId);
+      }
+      function preloadNeighbor(offset) {
+        const id = viewerList[viewerIndex + offset];
+        const item = id && itemsById.get(id);
+        if (item) { const im = new Image(); im.src = imageUrl(item); }
+      }
+      function showViewerItem() {
+        const item = itemsById.get(viewerList[viewerIndex]);
+        if (!item) return;
+        image.src = imageUrl(item);
+        image.alt = item.title || 'Expanded generated image';
+        title.textContent = `${item.title || 'Generated image'} · ${formatDate(item.date)}`;
+        viewer.classList.remove('actual');
+        prevBtn.hidden = viewerIndex <= 0;
+        nextBtn.hidden = viewerIndex >= viewerList.length - 1;
+        preloadNeighbor(1);
+        preloadNeighbor(-1);
+      }
+      function openViewerAt(itemId) {
+        viewerList = currentDomOrder();
+        viewerIndex = viewerList.indexOf(itemId);
+        if (viewerIndex === -1) return;
+        viewer.classList.add('open');
+        viewer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        showViewerItem();
+        close.focus({ preventScroll: true });
+      }
+      function stepViewer(delta) {
+        const next = viewerIndex + delta;
+        if (next < 0 || next >= viewerList.length) return;
+        viewerIndex = next;
+        showViewerItem();
+      }
+      function closeViewer() {
+        viewer.classList.remove('open', 'actual');
+        viewer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        image.removeAttribute('src');
+        viewerIndex = -1;
+      }
+      prevBtn.addEventListener('click', () => stepViewer(-1));
+      nextBtn.addEventListener('click', () => stepViewer(1));
+      copyBtn.addEventListener('click', () => {
+        const item = itemsById.get(viewerList[viewerIndex]);
+        if (item) copyPrompt(item.prompt || '', copyBtn);
+      });
+      image.addEventListener('click', (event) => {
+        event.stopPropagation();
+        viewer.classList.toggle('actual');
+        if (viewer.classList.contains('actual')) {
+          stage.scrollLeft = Math.max(0, (image.naturalWidth - stage.clientWidth) / 2);
+          stage.scrollTop = Math.max(0, (image.naturalHeight - stage.clientHeight) / 2);
+        }
+      });
+      stage.addEventListener('click', (event) => { if (event.target === stage) closeViewer(); });
+      close.addEventListener('click', closeViewer);
+      document.addEventListener('keydown', (event) => {
+        if (!viewer.classList.contains('open')) return;
+        if (event.key === 'Escape') closeViewer();
+        else if (event.key === 'ArrowLeft') stepViewer(-1);
+        else if (event.key === 'ArrowRight') stepViewer(1);
+      });
+
+      // --- boot ---
+      (async function init() {
+        try {
+          const r = await fetch('manifest.json', { cache: 'no-cache' });
+          if (!r.ok) throw new Error('Could not load manifest.json');
+          manifest = await r.json();
+          populateDates();
+          const params = new URLSearchParams(location.search);
+          const q = params.get('q') || '';
+          let date = params.get('date') || 'all';
+          if (date !== 'all' && ![...dateFilter.options].some((o) => o.value === date)) date = 'all';
+          await applyFilters(q, date);
+        } catch (err) {
+          gallery.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`;
+          loadMoreRow.hidden = true;
+        }
+      })();
+    })();
+  </script>
+  <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+</body>
+</html>
