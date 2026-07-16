@@ -324,6 +324,43 @@ const browser = await chromium.launch({
   });
   check("steam: vents seeded and activate up close", steamSeq.spots >= 6 && steamSeq.activated > 0, JSON.stringify(steamSeq));
 
+  // zoom-detail item 16: parked-car variety kits promote up close, toggle off/on
+  const parkedSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const p0 = deb.detailReport().parked;
+    const rp = deb.stats().roamPos;
+    const s = deb.nearestParkedSpot(rp.x, rp.z);
+    if (!s) return { spots: p0.spots, promoted: -1 };
+    deb.setRoamPos(s.x + 7, s.z + 7, 0, 0);
+    let rep = null;
+    for (let i = 0; i < 40 && !(rep && rep.promoted > 0); i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      rep = deb.detailReport().parked;
+    }
+    const promoted = rep?.promoted ?? 0;
+    const kids = (deb.parkedKitDump() || []).find((k) => k.visible)?.kids?.length ?? 0;
+    deb.parkedKitEnable(false);
+    let off = -1;
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      off = deb.detailReport().parked.promoted;
+      if (off === 0) break;
+    }
+    deb.parkedKitEnable(true);
+    let back = 0;
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      back = deb.detailReport().parked.promoted;
+      if (back > 0) break;
+    }
+    return { spots: p0.spots, promoted, kids, off, back };
+  });
+  check(
+    "parked variety: kits promote near cars and toggle clean",
+    parkedSeq.spots >= 60 && parkedSeq.promoted > 0 && parkedSeq.kids === 7 && parkedSeq.off === 0 && parkedSeq.back > 0,
+    JSON.stringify(parkedSeq),
+  );
+
   // zoom-detail item 13: birds spawn, scatter on approach, then despawn
   const birdSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
