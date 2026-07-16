@@ -715,3 +715,15 @@ versions stay blocked on the perf renegotiation.
   probe asserts texter tilt > 0.3. Suite 137/137 expected. ALL ROUND-TWO
   ITEMS COMPLETE — next: second fresh-eyes survey + deploy batch 8
   (v3.15.0, items 26-27) + loop stop.
+- **28 SECOND SURVEY + DEPLOY BATCH 8 + ROUND TWO END (2026-07-16)**:
+  fresh-eyes survey (`loop-shots/28-final-survey-2/`) — race pack, steaming
+  street beside the #7 car, clean mid/far tiers; nothing left in scope.
+  **v3.15.0 LIVE** (batch 8: pigeons + head-tilt, index-B9kASrj3.js, 200).
+  ROUND TWO COMPLETE: 5 iterations (23-27), 5 items — driver silhouettes,
+  road decals, leashed dogs, rooftop pigeons, texting head-tilt — suite
+  133→137 probes, 2 deploy batches (v3.14.0, v3.15.0). Grand total across
+  both rounds: 28 iterations, 24 items, suite 120→137, 8 live deploys
+  (v3.8.0→v3.15.0). Remaining wishlist crumb: newspaper boxes + their
+  decals (folded out of item 07 long ago). Full-fat 4b (recessed cabin
+  drivers) and 11 (painted road decals) still await the real-FPS perf
+  renegotiation; their -lite pooled versions shipped in round two.
