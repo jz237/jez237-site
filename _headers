@@ -77,3 +77,6 @@
 
 /computer-chronicle/data/issues/*
   Cache-Control: public, max-age=300, must-revalidate
+
+/computer-chronicle/feed.xml
+  Cache-Control: public, max-age=300, must-revalidate

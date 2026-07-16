@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Jez237 — Computer Chronicle Newsstand</title>
+  <meta name="description" content="Browse every Computer Chronicle front page — a weekly early-1980s computer newspaper rebuilt from the historical record, issue by issue." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://jez237.com/computer-chronicle/newsstand" />
+  <meta property="og:title" content="Computer Chronicle Newsstand — Jez237" />
+  <meta property="og:description" content="Every front page of the weekly 1980s Computer Chronicle, browseable like a newsstand." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jez237.com/computer-chronicle/newsstand" />
+  <link rel="alternate" type="application/rss+xml" title="Computer Chronicle" href="feed.xml" />
+  <link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+  <link rel="stylesheet" href="../assets/styles.css" />
+  <link rel="stylesheet" href="../assets/design.css" />
+  <link rel="stylesheet" href="../assets/site-enhance.css" />
+  <link rel="stylesheet" href="../assets/workbench-theme.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap" />
+  <style>
+    :root {
+      --ns-bg: #060714;
+      --ns-bg-2: #0a0b22;
+      --ns-line: #2b2a63;
+      --ns-line-soft: #1d1d48;
+      --ns-cyan: #5fe8ff;
+      --ns-magenta: #ff41d9;
+      --ns-amber: #ffd166;
+      --ns-text: #eef0ff;
+      --ns-muted: #9aa2d4;
+      --ns-px: "Press Start 2P", "IBM Plex Mono", monospace;
+      --ns-mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+    }
+    body { background: var(--ns-bg); }
+    .ns-frame { max-width: 1180px; margin: 0 auto; padding: 22px 18px 60px; font-family: var(--ns-mono); color: var(--ns-text); }
+    .ns-masthead { border: 1px solid var(--ns-line); background: linear-gradient(180deg, var(--ns-bg-2), var(--ns-bg)); padding: 26px 24px; margin-bottom: 26px; }
+    .ns-kicker { margin: 0 0 10px; color: var(--ns-magenta); font-family: var(--ns-px) !important; font-size: 0.58rem; letter-spacing: 0.18em; text-transform: uppercase; }
+    .ns-masthead h1 { margin: 0 0 12px; color: #fff !important; font-family: var(--ns-px) !important; font-size: clamp(1.1rem, 3.4vw, 1.9rem); line-height: 1.35; text-shadow: 0 0 18px rgba(95, 232, 255, 0.35); }
+    .ns-masthead p { margin: 0 0 14px; color: var(--ns-muted); font-size: 0.9rem; line-height: 1.6; max-width: 66ch; }
+    .ns-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .ns-actions a { display: inline-block; border: 1px solid var(--ns-cyan); color: var(--ns-cyan) !important; padding: 8px 14px; font-family: var(--ns-mono) !important; font-size: 0.78rem; text-decoration: none; }
+    .ns-actions a:hover { background: rgba(95, 232, 255, 0.12); color: var(--ns-cyan) !important; }
+    .ns-status { color: var(--ns-muted); font-size: 0.85rem; margin: 0 0 18px; }
+    .ns-month { margin: 30px 0 14px; padding-bottom: 8px; border-bottom: 1px dashed var(--ns-line-soft); display: flex; align-items: baseline; gap: 12px; }
+    .ns-month h2 { margin: 0; color: var(--ns-amber) !important; font-family: var(--ns-px) !important; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+    .ns-month span { color: var(--ns-muted); font-size: 0.74rem; }
+    .ns-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 16px; margin: 0; padding: 0; list-style: none; }
+    .ns-card { margin: 0; }
+    .ns-card a { display: block; border: 1px solid var(--ns-line-soft); background: var(--ns-bg-2); text-decoration: none; transition: border-color 120ms ease, transform 120ms ease; }
+    .ns-card a:hover { border-color: var(--ns-cyan); transform: translateY(-2px); }
+    .ns-card img { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: #0e102e; }
+    .ns-card-copy { padding: 10px 11px 12px; }
+    .ns-issue-no { display: inline-block; margin-bottom: 6px; color: var(--ns-magenta); font-family: var(--ns-px) !important; font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .ns-card-copy strong { display: block; color: #fff; font-size: 0.72rem; line-height: 1.45; font-weight: 600; overflow-wrap: anywhere; }
+    .ns-card-copy em { display: block; margin-top: 5px; color: var(--ns-muted); font-size: 0.66rem; font-style: normal; line-height: 1.4; }
+    @media (max-width: 520px) { .ns-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <div class="ns-frame">
+    <section class="ns-masthead">
+      <p class="ns-kicker">Jez237 Historical Tech Desk</p>
+      <h1>Computer Chronicle — The Newsstand</h1>
+      <p>Every front page in the archive, one week of the early 1980s at a time. Pick an issue to read the full paper: lead stories, features, shelf watch, price watch, charts, and the world beyond the machine room.</p>
+      <div class="ns-actions">
+        <a href="./">Read the Latest Issue</a>
+        <a href="feed.xml">Subscribe (RSS)</a>
+      </div>
+    </section>
+
+    <p class="ns-status" data-newsstand-status>Loading the archive…</p>
+    <div data-newsstand></div>
+  </div>
+
+  <script>
+    (function () {
+      const MONTHS = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+      const statusEl = document.querySelector("[data-newsstand-status]");
+      const rootEl = document.querySelector("[data-newsstand]");
+
+      function escapeHtml(value) {
+        return String(value || "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function issueNo(entry) {
+        const match = /issue\s*0*(\d+)/i.exec(entry.edition || "");
+        return match ? `Issue ${match[1].padStart(3, "0")}` : "";
+      }
+
+      function monthLabel(historicDate) {
+        const [year, month] = String(historicDate || "").split("-");
+        const name = MONTHS[Number(month) - 1] || "";
+        return name ? `${name} ${year}` : year || "Undated";
+      }
+
+      function card(entry) {
+        const href = `./?date=${encodeURIComponent(entry.historicDate)}`;
+        const thumb = entry.thumb || entry.hero || "";
+        const fallback = entry.thumb && entry.hero && entry.thumb !== entry.hero
+          ? ` onerror="this.onerror=null;this.src='${escapeHtml(entry.hero)}'"` : "";
+        const number = issueNo(entry);
+        return `
+          <li class="ns-card">
+            <a href="${escapeHtml(href)}">
+              ${thumb ? `<img src="${escapeHtml(thumb)}" alt="Front page: ${escapeHtml(entry.displayDate || entry.historicDate)}" loading="lazy"${fallback}>` : ""}
+              <span class="ns-card-copy">
+                ${number ? `<span class="ns-issue-no">${escapeHtml(number)}</span>` : ""}
+                <strong>${escapeHtml(entry.leadHeadline || "Computer Chronicle")}</strong>
+                <em>${escapeHtml(entry.displayDate || entry.historicDate)}</em>
+              </span>
+            </a>
+          </li>
+        `;
+      }
+
+      async function load() {
+        try {
+          const response = await fetch("data/index.json", { cache: "no-store" });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          const issues = Array.isArray(data.issues) ? data.issues : [];
+          if (!issues.length) throw new Error("archive index is empty");
+
+          const groups = [];
+          const byMonth = new Map();
+          issues.forEach((entry) => {
+            const label = monthLabel(entry.historicDate);
+            if (!byMonth.has(label)) {
+              byMonth.set(label, []);
+              groups.push(label);
+            }
+            byMonth.get(label).push(entry);
+          });
+
+          rootEl.innerHTML = groups.map((label) => {
+            const entries = byMonth.get(label);
+            return `
+              <section>
+                <div class="ns-month">
+                  <h2>${escapeHtml(label)}</h2>
+                  <span>${entries.length} issue${entries.length === 1 ? "" : "s"}</span>
+                </div>
+                <ul class="ns-grid">${entries.map(card).join("")}</ul>
+              </section>
+            `;
+          }).join("");
+          statusEl.textContent = `${issues.length} issues on the stand, newest first.`;
+        } catch (error) {
+          statusEl.textContent = `Could not load the archive: ${error.message}`;
+        }
+      }
+
+      load();
+    })();
+  </script>
+  <script src="../assets/nav.js?v=nav-20260702b" defer></script>
+</body>
+</html>

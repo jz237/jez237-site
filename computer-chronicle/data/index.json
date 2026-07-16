@@ -12,7 +12,9 @@
         "Atari Answers With XL Computers and a Writing System",
         "Software Price War Breaks Out at CES",
         "WarGames Makes the Home Modem a Movie Star"
-      ]
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-06-06.jpg",
+      "thumb": "media/thumbs/1983-06-06.webp"
     },
     {
       "currentDate": "2026-07-15",
@@ -25,7 +27,9 @@
         "WarGames Makes Home Computing a Summer-Movie Star",
         "Portable and 16-Bit Machines Crowd the June BYTE",
         "Modems Bring Computer Gamers Together"
-      ]
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-05-30.jpg",
+      "thumb": "media/thumbs/1983-05-30.webp"
     },
     {
       "currentDate": "2026-07-14",
@@ -34,7 +38,9 @@
       "edition": "Issue 043 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Tuesday, May 24, 1983: game design reaches the science pages while shoppers compare disks, joysticks, and the new IBM PC XT.",
       "leadHeadline": "Game Makers Map the Imaginative Path",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-05-23.jpg",
+      "thumb": "media/thumbs/1983-05-23.webp"
     },
     {
       "currentDate": "2026-07-13",
@@ -43,7 +49,9 @@
       "edition": "Issue 042 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Lode Runner climbs the Apple II conversation as budget micros and music systems fill the May magazines.",
       "leadHeadline": "Lode Runner gives Apple II players 150 rooms to conquer",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-05-16.jpg",
+      "thumb": "media/thumbs/1983-05-16.webp"
     },
     {
       "currentDate": "2026-07-12",
@@ -52,7 +60,9 @@
       "edition": "Issue 041 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Atari courts VCS owners as low-cost home computers and Apple II games crowd the spring newsstand.",
       "leadHeadline": "Atari pitches a computer add-on for the VCS crowd",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-05-09.jpg",
+      "thumb": "media/thumbs/1983-05-09.webp"
     },
     {
       "currentDate": "2026-07-11",
@@ -61,7 +71,9 @@
       "edition": "Issue 040 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Vector cockpits, spreadsheet desks, and discount home-computer ads all compete for attention in the first week of May 1983.",
       "leadHeadline": "Star Wars lines up for Atari vector cabinets",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-05-02.jpg",
+      "thumb": "media/thumbs/1983-05-02.webp"
     },
     {
       "currentDate": "2026-07-10",
@@ -70,7 +82,9 @@
       "edition": "Issue 039 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Arcade names, Apple II disks, and spreadsheet demos share the same dealer counter as April turns into May 1983.",
       "leadHeadline": "Arcade Alley widens the lane for computer games",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-04-25.jpg",
+      "thumb": "media/thumbs/1983-04-25.webp"
     },
     {
       "currentDate": "2026-07-09",
@@ -79,7 +93,9 @@
       "edition": "Issue 038 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week at the counter: Pole Position still drives arcade chatter, Lotus 1-2-3 sells the IBM PC as an office machine, Flashdance takes the weekend box office, and Come On Eileen tops the singles chart.",
       "leadHeadline": "Pole Position keeps arcade racing in the fast lane",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-04-18.jpg",
+      "thumb": "media/thumbs/1983-04-18.webp"
     },
     {
       "currentDate": "2026-07-08",
@@ -88,7 +104,9 @@
       "edition": "Issue 037 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week at the counter: TI software policy arguments, Apple II arcade conversions, IBM PC XT talk, and Michael Jackson still holding the radio.",
       "leadHeadline": "TI software control sparks game-counter argument",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-04-11.jpg",
+      "thumb": "media/thumbs/1983-04-11.webp"
     },
     {
       "currentDate": "2026-07-07",
@@ -97,7 +115,9 @@
       "edition": "Issue 036 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Computer Gaming World's May-June issue is arriving with modem gaming and baseball-league copy, while PC dealers keep explaining why a hard disk changes the office desk.",
       "leadHeadline": "Modem games and baseball leagues reach the game rack",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-04-04.jpg",
+      "thumb": "media/thumbs/1983-04-04.webp"
     },
     {
       "currentDate": "2026-07-06",
@@ -106,7 +126,9 @@
       "edition": "Issue 034 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Computer-game magazines keep Apple II adventures in the window while office buyers ask whether the IBM PC XT and Lotus 1-2-3 belong on the spring budget.",
       "leadHeadline": "Game shelves lean into adventures and strategy",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-03-21.jpg",
+      "thumb": "media/thumbs/1983-03-21.webp"
     },
     {
       "currentDate": "2026-07-05",
@@ -115,7 +137,9 @@
       "edition": "Issue 033 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Modem projects, Apple II adventures, Commodore price pressure, and Billie Jean at number one give the computer counter its mid-March rhythm.",
       "leadHeadline": "Home-computer readers wire up for the modem age",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-03-14.jpg",
+      "thumb": "media/thumbs/1983-03-14.webp"
     },
     {
       "currentDate": "2026-07-04",
@@ -124,7 +148,9 @@
       "edition": "Issue 032 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "IBM adds the PC XT, Lotus keeps selling the office pitch, and store shelves make room for adventures, strategy games, and arcade conversions.",
       "leadHeadline": "IBM puts a hard disk in the personal-computer aisle",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-03-07.jpg",
+      "thumb": "media/thumbs/1983-03-07.webp"
     },
     {
       "currentDate": "2026-07-03",
@@ -133,7 +159,9 @@
       "edition": "Issue 031 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Computer stores start March with game boxes in the window, Lotus 1-2-3 talk at the IBM counter, and price tags doing as much selling as specifications.",
       "leadHeadline": "Game shelves carry the home-computer pitch",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-02-28.jpg",
+      "thumb": "media/thumbs/1983-02-28.webp"
     },
     {
       "currentDate": "2026-07-02",
@@ -142,7 +170,9 @@
       "edition": "Issue 030 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Computer-game magazines, boxed adventures, joysticks, disks, and Lotus 1-2-3 make one store aisle feel split between play and paperwork.",
       "leadHeadline": "Computer games claim the brightest shelf space",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-02-21.jpg",
+      "thumb": "media/thumbs/1983-02-21.webp"
     },
     {
       "currentDate": "2026-07-01",
@@ -151,7 +181,9 @@
       "edition": "Issue 029 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Retail pages make the home computer feel less like a laboratory box and more like a family purchase, while arcade names still pull shoppers toward the game aisle.",
       "leadHeadline": "Home-computer price fight moves to the family counter",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-02-14.jpg",
+      "thumb": "media/thumbs/1983-02-14.webp"
     },
     {
       "currentDate": "2026-06-30",
@@ -160,7 +192,9 @@
       "edition": "Issue 028 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Atari adds a computer keyboard to the VCS conversation, Lotus 1-2-3 keeps pulling office buyers toward the IBM PC, Down Under leads the singles chart, and Tootsie stays atop the weekend box office.",
       "leadHeadline": "Atari pitches a keyboard path from game console to computer",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-02-07.jpg",
+      "thumb": "media/thumbs/1983-02-07.webp"
     },
     {
       "currentDate": "2026-06-29",
@@ -169,7 +203,9 @@
       "edition": "Issue 027 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Home-computer makers are crowding the price cards, Lotus 1-2-3 is still the desk-side conversation, and Tootsie holds the box-office crown as Africa takes over radio.",
       "leadHeadline": "Home-computer race spills from CES to store counters",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-01-31.jpg",
+      "thumb": "media/thumbs/1983-01-31.webp"
     },
     {
       "currentDate": "2026-06-28",
@@ -178,7 +214,9 @@
       "edition": "Issue 026 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Software counters are talking spreadsheets, game shelves are still bright with Atari and Commodore boxes, and Tootsie keeps packing theaters.",
       "leadHeadline": "Lotus 1-2-3 reaches IBM PC desks",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-01-24.jpg",
+      "thumb": "media/thumbs/1983-01-24.webp"
     },
     {
       "currentDate": "2026-06-27",
@@ -187,7 +225,9 @@
       "edition": "Issue 025 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Game cartridges still draw the biggest crowd, but the serious money at the counter increasingly asks about keyboards, disks, printers, and software boxes.",
       "leadHeadline": "Imagic Stock Delay Shows the Cartridge Boom Losing Its Shine",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-01-17.jpg",
+      "thumb": "media/thumbs/1983-01-17.webp"
     },
     {
       "currentDate": "2026-06-26",
@@ -196,7 +236,9 @@
       "edition": "Issue 024 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "After CES, buyers ask which machines, cartridges, and software boxes will still matter by spring.",
       "leadHeadline": "CES Afterglow Puts Game Cartridges and Home Micros on the Same Counter",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-01-10.jpg",
+      "thumb": "media/thumbs/1983-01-10.webp"
     },
     {
       "currentDate": "2026-06-26",
@@ -205,7 +247,9 @@
       "edition": "Issue 023 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "The new year opens with computers on magazine covers, cartridges in living rooms, and shoppers learning the price difference between starter micros and office PCs.",
       "leadHeadline": "Machine of the Year Sends Home Computers Into 1983",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-01-03.jpg",
+      "thumb": "media/thumbs/1983-01-03.webp"
     },
     {
       "currentDate": "2026-06-25",
@@ -214,7 +258,9 @@
       "edition": "Issue 022 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "New Year shoppers are comparing game cartridges, budget BASIC machines, and serious office systems in the same electronics aisles.",
       "leadHeadline": "New Year Counters Sell Computers as Machine of the Year",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-12-27.jpg",
+      "thumb": "media/thumbs/1982-12-27.webp"
     },
     {
       "currentDate": "2026-06-24",
@@ -223,7 +269,9 @@
       "edition": "Issue 021 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "On newsstands and shop counters this week: the home computer becomes a holiday conversation piece, Tootsie leads the movie weekend, and Maneater keeps its hold on pop radio.",
       "leadHeadline": "The Computer Moves In for Christmas Week",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-12-20.jpg",
+      "thumb": "media/thumbs/1982-12-20.webp"
     },
     {
       "currentDate": "2026-06-23",
@@ -232,7 +280,9 @@
       "edition": "Issue 020 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Atari puts a new 64K XL machine in the showroom while shoppers compare cartridges, modems, and practical software before Christmas.",
       "leadHeadline": "Atari Unveils the 1200XL for Christmas Computer Shoppers",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-12-13.jpg",
+      "thumb": "media/thumbs/1982-12-13.webp"
     },
     {
       "currentDate": "2026-06-22",
@@ -241,7 +291,9 @@
       "edition": "Issue 019 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Movie cartridges and 64K home computers define the December 6 holiday counter.",
       "leadHeadline": "Movie Cartridges Meet the 64K Christmas Pitch",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-12-06.jpg",
+      "thumb": "media/thumbs/1982-12-06.webp"
     },
     {
       "currentDate": "2026-06-22",
@@ -250,7 +302,9 @@
       "edition": "Issue 018 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Atari movie games and 64K home-computer pitches crowd the early-December holiday shelf.",
       "leadHeadline": "Atari Movie Cartridges Crowd the Holiday Counter",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-11-29.jpg",
+      "thumb": "media/thumbs/1982-11-29.webp"
     },
     {
       "currentDate": "2026-06-21",
@@ -259,7 +313,9 @@
       "edition": "Issue 017 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "A built-in vector monitor, a crowded Atari cartridge wall, Apple II rescue missions, E.T. at the box office, and Lionel Richie on the radio define the week of November 22, 1982.",
       "leadHeadline": "Vectrex Brings Vector Arcade Lines Home",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-11-22.jpg",
+      "thumb": "media/thumbs/1982-11-22.webp"
     },
     {
       "currentDate": "2026-06-20",
@@ -268,7 +324,9 @@
       "edition": "Issue 016 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "A black Atari 2600 nameplate, Carol Shaw's River Raid, and a built-in-vector Vectrex give holiday shoppers plenty to compare before they ever reach the office-software shelf.",
       "leadHeadline": "Atari Puts the 2600 Name on the VCS Era",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-11-15.jpg",
+      "thumb": "media/thumbs/1982-11-15.webp"
     },
     {
       "currentDate": "2026-06-19",
@@ -277,7 +335,9 @@
       "edition": "Issue 015 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "A 28-pound IBM-compatible portable, a built-in-vector console, and a horror anthology opening weekend make the computer counter feel crowded before Thanksgiving.",
       "leadHeadline": "Compaq Turns PC Compatibility Into a Portable Pitch",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-11-08.jpg",
+      "thumb": "media/thumbs/1982-11-08.webp"
     },
     {
       "currentDate": "2026-06-19",
@@ -286,7 +346,9 @@
       "edition": "Issue 014 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week the luggable PC clone becomes the serious office rumor, while game departments prepare Atari 5200 and Vectrex demonstrations for Christmas shoppers.",
       "leadHeadline": "Compaq Shows a Portable Route Into the IBM PC World",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-11-01.jpg",
+      "thumb": "media/thumbs/1982-11-01.webp"
     },
     {
       "currentDate": "2026-06-18",
@@ -295,7 +357,9 @@
       "edition": "Issue 013 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "On the desk this week: the October 25 InfoWorld, Apple II game lists, First Blood at the box office, and Men at Work on top of the Hot 100.",
       "leadHeadline": "Magazine Rack Makes the Micro Feel Like a Storefront",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-10-25.jpg",
+      "thumb": "media/thumbs/1982-10-25.webp"
     },
     {
       "currentDate": "2026-06-17",
@@ -304,7 +368,9 @@
       "edition": "Issue 012 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "On the radio, John Cougar holds No. 1; at theaters, First Blood opens ahead of Halloween III; on the computer shelf, October magazines keep game programming, Atari reviews, and Commodore 64 notes in front of new owners.",
       "leadHeadline": "Fall Shelves Turn Games Into Computer Lessons",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-10-18.jpg",
+      "thumb": "media/thumbs/1982-10-18.webp"
     },
     {
       "currentDate": "2026-06-16",
@@ -313,7 +379,9 @@
       "edition": "Issue 011 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "On the radio, John Cougar holds No. 1; at theaters, E.T. retakes the weekend; on the computer shelf, October magazines turn game making into a practical lesson.",
       "leadHeadline": "COMPUTE! Turns Game Making Into the Main Story",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-10-11.jpg",
+      "thumb": "media/thumbs/1982-10-11.webp"
     },
     {
       "currentDate": "2026-06-16",
@@ -322,7 +390,9 @@
       "edition": "Issue 010 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Maze chases, baseball cartridges, Apple II shelf leaders, E.T. at the theater, and John Cougar on every Top 40 radio.",
       "leadHeadline": "Coleco Sends Mouse Trap Into the Atari Maze",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-10-04.jpg",
+      "thumb": "media/thumbs/1982-10-04.webp"
     },
     {
       "currentDate": "2026-06-15",
@@ -331,7 +401,9 @@
       "edition": "Issue 009 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "M-Network turns a Data East maze chase into an Atari VCS shelf story while Jack & Diane takes over the radio and E.T. keeps ruling theaters.",
       "leadHeadline": "Lock 'n' Chase Joins the Atari VCS Maze Rush",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-09-27.jpg",
+      "thumb": "media/thumbs/1982-09-27.webp"
     },
     {
       "currentDate": "2026-06-14",
@@ -340,7 +412,9 @@
       "edition": "Issue 008 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "M-Network turns Atari VCS tank combat into the week's shelf story while Abracadabra returns to No. 1 and E.T. keeps leading the box office week.",
       "leadHeadline": "M-Network Tanks Roll Onto Atari Shelves",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-09-20.jpg",
+      "thumb": "media/thumbs/1982-09-20.webp"
     },
     {
       "currentDate": "2026-06-13",
@@ -349,7 +423,9 @@
       "edition": "Issue 007 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Mattel's M-Network turns the Atari VCS aisle into a compatibility story while Chicago holds No. 1 and E.T. keeps winning weekends.",
       "leadHeadline": "M-Network Trouble Hits the Atari Shelf",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-09-13.jpg",
+      "thumb": "media/thumbs/1982-09-13.webp"
     },
     {
       "currentDate": "2026-06-12",
@@ -358,7 +434,9 @@
       "edition": "Issue 006 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "Frogger jumps from coin-op fame to the Atari VCS counter as Chicago reaches No. 1 and E.T. retakes the weekend box office.",
       "leadHeadline": "Frogger Hops Onto the VCS Counter",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-09-06.jpg",
+      "thumb": "media/thumbs/1982-09-06.webp"
     },
     {
       "currentDate": "2026-06-11",
@@ -367,7 +445,9 @@
       "edition": "Issue 005 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week: Donkey Kong cartridge trouble lands in the trade press, fall-console talk starts crowding the counter, September computer magazines push databases and hard disks, An Officer and a Gentleman tops Labor Day weekend, and Jack & Diane takes the rock-radio No. 1 slot.",
       "leadHeadline": "Donkey Kong Cartridge Trouble Hits the Counter",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-08-30.jpg",
+      "thumb": "media/thumbs/1982-08-30.webp"
     },
     {
       "currentDate": "2026-06-10",
@@ -376,7 +456,9 @@
       "edition": "Issue 004 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week: Tron lights up the arcade aisle, ColecoVision makes older coin-op cabinets feel new at home, Commodore 64 production hits its August stride, E.T. stays on top at the box office, and Jackson Browne takes the rock-radio No. 1 slot.",
       "leadHeadline": "Tron Glow Pulls Arcades Into the Computer Age",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1982-08-23.jpg",
+      "thumb": "media/thumbs/1982-08-23.webp"
     },
     {
       "currentDate": "2026-06-09",
@@ -385,7 +467,9 @@
       "edition": "Issue 003 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week: Commodore 64 shelf talk grows louder, the IBM PC afterglow keeps compatibility on buyers' minds, E.T. returns to the top of the weekend box office, The Beastmaster opens, and Billy Squier rules album-rock radio.",
       "leadHeadline": "Commodore 64 Moves From Spec Sheet to Store Talk",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/1982-computer-chronicle-issue-003.jpg",
+      "thumb": "media/thumbs/1982-08-16.webp"
     },
     {
       "currentDate": "2026-06-07",
@@ -394,7 +478,9 @@
       "edition": "Issue 002 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week: the IBM PC reaches its first birthday, August magazines put new home machines and software on the rack, computer-store math still belongs to peripherals, and August 13 crowds the movie marquee.",
       "leadHeadline": "IBM PC Turns One With the Clone Question Already in the Room",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/1982-computer-chronicle-issue-002.jpg",
+      "thumb": "media/thumbs/1982-08-09.webp"
     },
     {
       "currentDate": "2026-06-07",
@@ -403,7 +489,9 @@
       "edition": "Issue 001 - Weekly 1982 Computer & Culture Chronicle",
       "morningLine": "This week: the Commodore 64 reaches its August launch window, IBM PC momentum turns into a compatibility race, Timex puts a computer under $100, and rock radio has Eddie Money at number one.",
       "leadHeadline": "Commodore 64 Reaches the August 1982 Retail Moment",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/1982-computer-chronicle-issue-001.jpg",
+      "thumb": "media/thumbs/1982-08-02.webp"
     },
     {
       "currentDate": "1986-06-07",
@@ -412,7 +500,9 @@
       "edition": "Saturday Computer & Culture Section",
       "morningLine": "Saturday Edition: the computer desk is quiet, the game shelf is loud, rock radio has the date stamp, and the market box carries Friday's close because Wall Street is shut.",
       "leadHeadline": "Saturday Desk: The PC Standard Keeps Spreading While VisiCalc Leaves the Counter",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/retro-computer-desk-1986.webp",
+      "thumb": "media/thumbs/1986-06-07.webp"
     },
     {
       "currentDate": "1986-06-06",
@@ -421,7 +511,9 @@
       "edition": "Computer & Business Section",
       "morningLine": "Morning Edition: five-minute skim for personal-computer people, game-shelf watchers, and anyone who still hears a modem handshake in their soul.",
       "leadHeadline": "Lotus Ends VisiCalc as 1-2-3 Era Takes Hold",
-      "storyHeadlines": []
+      "storyHeadlines": [],
+      "hero": "media/retro-computer-desk-1986.webp",
+      "thumb": "media/thumbs/1986-06-06.webp"
     }
   ]
 }
