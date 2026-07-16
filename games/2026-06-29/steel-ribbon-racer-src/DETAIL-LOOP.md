@@ -935,3 +935,26 @@ Findings (what still breaks the "closer = more" promise):
     gear struts; helicopter/banner-flyby payoff.
 Stretch seeds (unranked): curb strips at park edges, cockpit cowl detail,
 signal-corner ped density weighting.
+- **37 SIGNAL LAMP STATES — round-five item 1 (2026-07-16)**: traffic
+  lights now show ONE lit lamp per head. The phase machine already
+  existed (we() 15.5s cycle + per-head cloned materials + per-frame
+  emissive writes) — the all-three-lit look was DIFFUSE: unlit lenses
+  kept vivid body colors (0xFF3B28 etc.) that read bright in daylight
+  regardless of emissive. Fix: state-cached tick swap (_st per head) —
+  lit lens keeps vivid color + emissive 2.3/2.6, unlit drops to
+  dark-glass hexes (0x2E0B08/0x332608/0x0A2A18) + emissive 0. Plus
+  sun-visor hoods (shared hoodGeo box, housing material Y → static-
+  merged, zero new draws). signalLampSys + signalLampsEnable(on) A/B
+  toggle (legacy "x" state restores the old vivid look) +
+  signalHeadStates() + detailReport.signalHeads. Verified by LOOKING
+  (loop-shots/37-signal-lamps/): 01 vs 03-LEGACY is night-and-day —
+  one orange-red top lamp + dark lenses vs three burning circles; 04
+  mid-40m reads as a working intersection (single red one way, green
+  the other); 05 far unchanged. Cycling proven by counters (34g/0y →
+  26g/8y across 8s; a single intersection can sit in one phase for a
+  15.5s cycle — staggered offsets mean the FLEET always shows both).
+  Perf 2 worlds: 1835-1863 calls / 579-590k tris / 240-242 tex /
+  5545-5591 geo — all inside gates. Suite 138/138 (new probe: heads>8,
+  g+y+r===heads, both g and r present; first run had 1 world-luck
+  flake, rerun clean). NEXT: item 2 — inspect mode for cars/dogs/
+  marshals.

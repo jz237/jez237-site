@@ -605,6 +605,20 @@ const browser = await chromium.launch({
     `walking=${pss?.walking}/${(pss?.count ?? 0) * 2}`,
   );
 
+  // zoom-detail 37 (round five item 1): one lit lamp per signal head, phases cycling
+  const shs = await page.evaluate(() => window.__steelRibbonDebug.signalHeadStates());
+  check(
+    "signal heads: exactly one lit lamp each, both phases present",
+    !!shs &&
+      shs.heads > 8 &&
+      shs.enabled &&
+      shs.states.g + shs.states.y + shs.states.r === shs.heads &&
+      shs.states.g > 0 &&
+      shs.states.r > 0 &&
+      shs.sample.every((h) => ["g", "y", "r"].includes(h.st)),
+    JSON.stringify({ heads: shs?.heads, states: shs?.states }),
+  );
+
   // zoom-detail item 08: named double-blade street signs at intersections
   const ssg = await page.evaluate(() => window.__steelRibbonDebug.detailReport().streetSigns);
   check(
