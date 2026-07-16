@@ -361,6 +361,27 @@ const browser = await chromium.launch({
     JSON.stringify(parkedSeq),
   );
 
+  // zoom-detail item 20: near-field ambience — audio bus live, crossing ticks
+  // accrue while standing at a WALK signal (walk faces are lit ~80% of the cycle)
+  const ambSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const sig = deb.detailReport().pedSignals.sample[0];
+    if (!sig) return null;
+    deb.setRoamPos(sig.x + 5, sig.z + 5, 0, 0);
+    let a = null;
+    for (let i = 0; i < 60; i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      a = deb.detailReport().ambient;
+      if (a.ready && a.tickCount > 1) break;
+    }
+    return a;
+  });
+  check(
+    "ambient: audio bus live and crossing ticks accrue near WALK signals",
+    !!ambSeq && ambSeq.ready && ambSeq.ctxState === "running" && ambSeq.signals > 5 && ambSeq.tickCount > 1,
+    JSON.stringify({ ready: ambSeq?.ready, st: ambSeq?.ctxState, sig: ambSeq?.signals, ticks: ambSeq?.tickCount }),
+  );
+
   // zoom-detail item 13: birds spawn, scatter on approach, then despawn
   const birdSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
