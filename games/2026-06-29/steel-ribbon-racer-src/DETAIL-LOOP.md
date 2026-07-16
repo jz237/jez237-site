@@ -104,13 +104,9 @@ staticMerge ~130 groups — do not break that merge.
    split or a cap-brim shadow trick).
 4. ~~Drivers~~ **DONE (scoped to buses) 2026-07-12 (iteration 04)** — see log; the
    full-scope version continues as 4b.
-4b. **Visible drivers in opaque-cabin cars** (compact/taxi/pickup/van/boxTruck):
-   their cabins are SOLID boxes with glass quads on the faces — a baked driver is
-   sealed invisible inside (proven in it.04). Needs a windshield recess: shrink
-   the opaque cabin box ~0.3 in z, dark interior panel, driver head/wheel in the
-   recess. Touches the mid-distance look (darker windshields) — verify carefully
-   against far-tier pixel-equivalence. Also fold in: driver head for the stolen
-   parked car the PLAYER drives (same I1 path).
+4b. ~~Visible drivers in opaque-cabin cars~~ **DONE FULL-FAT 2026-07-16
+   (iteration 33, round four)** — recessed cabins with baked drivers in
+   every non-bus car; pooled silhouettes retired. See iteration log.
 5. ~~Taxi identity~~ **DONE 2026-07-12 (iteration 05)** — see iteration log.
 6. ~~Storefront near-tier~~ **DONE 2026-07-12 (iteration 06)** — see iteration log.
    (Shop names already existed via the neon marquee signs — the missing pieces
@@ -815,3 +811,25 @@ versions stay blocked on the perf renegotiation.
   11 (painted road detail, assess after). No game code changed this
   iteration — measurement + bookkeeping only, so no smoke rerun needed
   beyond the standing green.
+- **33 FULL-FAT RECESSED DRIVERS — item 4b complete (2026-07-16)**: with the
+  freeze lifted, every non-bus cabin is now genuinely recessed: the opaque
+  cabin box is 0.34 shorter, the old front face is rebuilt as A-pillars +
+  header + sill in the trim color, and the recess holds a near-black back
+  panel, a dash shelf, a tilted steering wheel, and a BAKED DRIVER (seeded
+  skin tone + cap + shoulders in the dimmed body color) — all vcBaked into
+  the existing per-car merges, ZERO new draw calls, ~3k tris across 25
+  cars (invisible inside world noise: post-change race samples 1798-1835
+  calls / 563.9-586.8k tris vs gates 1975/620k). The existing windshield
+  glass slab now floats over a real dark interior — mid-distance
+  windshields read darker exactly as the 2026-07-12 spec predicted, far
+  tier unchanged (cabin = 2px). hasDriver is now true for ALL cars
+  (userData.bus carries the bus flag — __nearestTraffic(skipBus) was
+  silently skipping EVERYTHING when hasDriver became universal; flags must
+  not double as type markers). driverSilSys (4b-lite) RETIRED: system,
+  toggle, report fields and probe removed — the full-fat version covers
+  every car at every distance instead of 8 pooled decals ≤34m. Verified
+  by looking (`loop-shots/33-recessed-drivers/`): oncoming compact at 9m
+  shows the driver's head behind glass in a dark cabin with trim-framed
+  windshield + plate; 40m reads as a normal darker windshield. Crewed
+  probe updated: withDriver === 30. Suite 138/138 expected (one probe
+  removed).
