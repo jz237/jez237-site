@@ -692,6 +692,15 @@ const browser = await chromium.launch({
     JSON.stringify({ cells: pk?.cells, trees: pk?.trees, tris: pk?.pathTris }),
   );
 
+  // zoom-detail 40 (round five item 4): benches + flowerbeds along park paths.
+  // rej.ka === 0 locks the z-lattice anchoring — a ka spike means cell rows
+  // drifted off the street grid again.
+  check(
+    "parks: benches + flowerbeds placed path-side, street-lattice aligned",
+    !!pk && pk.benches >= 4 && pk.beds >= 3 && pk.rej && pk.rej.ka === 0,
+    JSON.stringify({ benches: pk?.benches, beds: pk?.beds, rej: pk?.rej }),
+  );
+
   // zoom-detail item 08: named double-blade street signs at intersections
   const ssg = await page.evaluate(() => window.__steelRibbonDebug.detailReport().streetSigns);
   check(
