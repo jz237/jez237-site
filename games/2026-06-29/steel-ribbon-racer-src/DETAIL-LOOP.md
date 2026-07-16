@@ -676,3 +676,16 @@ versions stay blocked on the perf renegotiation.
   cell strengthened after the first draw was invisible on dark asphalt
   (0.30 alpha blobs → 0.55 rounded patch with tar-seam outline). Suite
   135/135 expected.
+- **25 leashed dogs (2026-07-16)**: the pedestrian prop partition widens to
+  idx%4 — text/bag/cup/DOG. Every 4th promoted ped walks a small merged-mesh
+  dog (seeded brown/black/tan/grey; body, head+snout+ears, four legs,
+  tail-up via vcAt rotZ) trotting at heel (0.52, -0.1 actor-local, facing
+  the ped's forward -z), with a static taut leash hip→collar (quaternion
+  setFromUnitVectors on a thin box — both endpoints actor-local so no
+  per-frame update needed). Trot = |sin| bob + slight pitch in the pose
+  pass, keyed off an accumulated clock. All kit parts now raycast-inert
+  (it.20 rule swept across face/hands/shoes/props too). Partition probe
+  updated: t+b+c+d === promoted. Verified by looking
+  (`loop-shots/25-dogs/`): green-shirt ped + white dog on leash reads
+  instantly at 4m. Suite 136/136 expected. DEPLOY BATCH 7 (v3.14.0) this
+  iteration: items 23-25 (silhouettes, road decals, dogs).
