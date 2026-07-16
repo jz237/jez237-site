@@ -757,3 +757,19 @@ versions stay blocked on the perf renegotiation.
   live (index-CjKqE_H2.js, 200). Round three continues: next = newspaper
   boxes (the last wishlist crumb from item 07), then a fresh-eyes pass over
   the inspect feature on more personas.
+- **30 newspaper boxes (2026-07-16)**: the last wishlist crumb. 5th street
+  furniture type (cap 24, classic red vcBaked box on legs, 14% of the
+  placement share) seeded on the same curb lines; `newsSys` pool of 4
+  front-page decals (mobile 2) promotes onto the nearest boxes ≤22m (the
+  it.16 car-camera lesson applied from the start... after re-learning it
+  once at 14m). Front pages = 4-cell atlas, Georgia serif masthead + rule
+  + 2-line headline + column stubs, all in-world fiction: THE RIBBON
+  DAILY (Ribbon Cup Sunday / pigeons adopt water tower) + CITY HERALD
+  (Gate 8 glows / local dog Biscuit wins everything). toneMapped:!1,
+  raycast-inert. Verified by looking (`loop-shots/30-newsboxes/`):
+  masthead + headline fully readable at 1m, red box reads at 7m. Perf:
+  +1 InstancedMesh (+1 call), ~24×140 tris permanent — item-07 precedent.
+  detailReport().news {spots, promoted, stations} + newsEnable + probe.
+  Suite 139/139 expected. PYTHON-HEREDOC GOTCHA: a "\\n" in a python
+  replacement string lands as a literal backslash-n in JS and vite fails
+  with "Expected unicode escape" — use real newlines in the new text.
