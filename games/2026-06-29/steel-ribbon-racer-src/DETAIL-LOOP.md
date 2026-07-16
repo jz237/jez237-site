@@ -584,3 +584,10 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   mesh. RULE FOR ALL FUTURE CAR-ATTACHED GEOMETRY: anything parented to
   cn/rivals must be raycast-inert. Post-fix run: pond drags again
   (coastMin 0.0, recover 6.2). Suite 132/132.
+  ADDENDUM 2: the OpenClaw sweeper DOES operate in this worktree (previous
+  assumption "worktree is safe" is dead) — during the long triple-smoke
+  window it committed my WIP as its own "zoom-detail 20" commit (own build,
+  own message) and it reached origin/main. My final commit superseded it
+  and `git diff origin/main HEAD` converged to empty — verify exactly that
+  (plus fix/ledger greps + bundle hash match) whenever a rebase reports
+  "patch contents already upstream". Keep uncommitted windows short.
