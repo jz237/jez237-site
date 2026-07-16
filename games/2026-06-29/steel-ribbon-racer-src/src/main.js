@@ -2855,6 +2855,7 @@ const rooftopSys = {
     (Math.min(s.w, s.d) >= 10 && elig.push(0), s.h >= 14 && elig.push(1), s.w >= 14 && s.d >= 14 && s.h >= 26 && elig.push(2));
     return elig.length ? elig[(r * elig.length) | 0] : 0;
   },
+  PIGEONS: 7,
   ensure() {
     if (this.kits) return;
     const { opaque } = vcMats(),
@@ -2865,6 +2866,15 @@ const rooftopSys = {
       TAN = 13213802,
       TEAL = 6197130,
       RUST = 8079150;
+    // perched pigeons, baked straight into the kit merges (zero extra draws)
+    const pigeon = (x, y, z, yaw) => {
+      const m = (gx, gy, gz) => new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(x, y, z), new Matrix4().multiplyMatrices(new Matrix4().makeRotationY(yaw), new Matrix4().makeTranslation(gx, gy, gz)));
+      return [
+        vcBake(new BoxGeometry(0.14, 0.13, 0.22), m(0, 0.07, 0), 8949654),
+        vcBake(new BoxGeometry(0.08, 0.08, 0.08), m(0, 0.17, -0.13), 5926502),
+        vcBake(new BoxGeometry(0.08, 0.028, 0.13), m(0, 0.1, 0.15), 5926502),
+      ];
+    };
     const ac = (x, z, w, h, d) => [
       vcBake(new BoxGeometry(w, h, d), vcAt(x, h / 2, z), GALV),
       vcBake(new CylinderGeometry(Math.min(w, d) * 0.33, Math.min(w, d) * 0.33, 0.06, 12), vcAt(x, h + 0.02, z), DARK),
@@ -2878,6 +2888,8 @@ const rooftopSys = {
           vcBake(new BoxGeometry(0.5, 1.4, 0.5), vcAt(1.5, 0.7, -1.8), DUCT),
           vcBake(new CylinderGeometry(0.16, 0.18, 0.9, 8), vcAt(-2.4, 0.45, 1.2), RUST),
           vcBake(new CylinderGeometry(0.14, 0.16, 0.7, 8), vcAt(2.6, 0.35, -0.5), DARK),
+          ...pigeon(0.7, 1.3, 0.3, 0.7),
+          ...pigeon(1.8, 1.3, 0.9, -1.9),
         ],
         !1,
       );
@@ -2893,6 +2905,8 @@ const rooftopSys = {
           vcBake(new BoxGeometry(0.5, 0.12, 0.12), vcAt(0.85, 1.35, 0.6), STEEL),
           vcBake(new CylinderGeometry(0.02, 0.03, 1.5, 6), vcAt(-1.2, 0.95, 0.9), DARK),
           vcBake(new BoxGeometry(0.5, 0.7, 0.28), vcAt(-1.2, 0.35, 0.9), STEEL),
+          ...pigeon(0.3, 0.5, -0.3, 2.4),
+          ...pigeon(-0.28, 0.5, 0.25, -0.5),
         ],
         !1,
       );
@@ -2911,6 +2925,7 @@ const rooftopSys = {
         parts.push(vcBake(new CylinderGeometry(2.14, 2.14, 0.1, 14), vcAt(0, 4.7, 0), DARK)),
         parts.push(vcBake(new ConeGeometry(2.28, 1.1, 14), vcAt(0, 5.85, 0), STEEL)),
         parts.push(vcBake(new CylinderGeometry(0.06, 0.06, 0.5, 6), vcAt(0, 6.6, 0), DARK)));
+      (parts.push(...pigeon(1.85, 5.3, 0.7, 1.2)), parts.push(...pigeon(-1.6, 5.3, -1.1, -2.6)), parts.push(...pigeon(0.28, 6.5, 0.1, 0.4)));
       for (const rz of [-0.18, 0.18]) parts.push(vcBake(new BoxGeometry(0.06, 3.4, 0.06), vcAt(2.2, 1.7, rz), DARK));
       for (let k = 0; k < 6; k++) parts.push(vcBake(new BoxGeometry(0.05, 0.05, 0.44), vcAt(2.2, 0.5 + k * 0.5, 0), DARK));
       return mergeGeometries(parts, !1);
@@ -10538,6 +10553,7 @@ window.__steelRibbonDebug = {
         promoted: rooftopSys.promoted,
         pool: rooftopSys.kits ? rooftopSys.kits.length : 0,
         radius: rooftopSys.RADIUS,
+        pigeons: rooftopSys.PIGEONS,
         sample: rooftopSys.sample.slice(0, 3),
         tall: rooftopSys.spots
           .slice()
