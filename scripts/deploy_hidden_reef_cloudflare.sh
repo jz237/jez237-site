@@ -50,10 +50,16 @@ fi
 CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:-39a03cfe0f3854622f3a4f72491f48a6}"
 export CLOUDFLARE_ACCOUNT_ID
 
-npx --yes wrangler@latest pages deploy "$BUILD_DIR" \
-  --project-name hidden-reef \
-  --branch main \
-  --commit-dirty=true
+# Run Wrangler from the disposable upload directory. Running it from the repo
+# root writes Hidden Reef's account/project selection into .wrangler/cache,
+# which can make later jez237-site Pages commands use the wrong account.
+(
+  cd "$BUILD_DIR"
+  npx --yes wrangler@latest pages deploy . \
+    --project-name hidden-reef \
+    --branch main \
+    --commit-dirty=true
+)
 
 curl -A "Mozilla/5.0 Hidden Reef Cloudflare verify" -fsSI --max-time 20 \
   https://hidden-reef.pages.dev/ >/dev/null
