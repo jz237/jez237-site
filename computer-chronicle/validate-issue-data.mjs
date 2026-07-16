@@ -160,6 +160,10 @@ function checkRendererShapes(issue, issueIndex) {
     fail(`Issue ${issueIndex}: worldAnchor must include headline and summary when present.`);
   }
 
+  if (issue.gadgetWatch && typeof issue.gadgetWatch === "object" && !issue.gadgetWatch.headline && !issue.gadgetWatch.summary) {
+    fail(`Issue ${issueIndex}: gadgetWatch must include a headline or summary when present.`);
+  }
+
   if (!issue.accuracyLedger || !Array.isArray(issue.accuracyLedger.items)) {
     fail(`Issue ${issueIndex}: accuracyLedger must be an object with an items array.`);
   }

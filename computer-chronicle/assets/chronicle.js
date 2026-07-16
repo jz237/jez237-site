@@ -57,6 +57,9 @@
     curiosityPanel: document.querySelector("[data-curiosity-panel]"),
     curiosityLabel: document.querySelector("[data-curiosity-label]"),
     curiosity: document.querySelector("[data-curiosity]"),
+    gadgetPanel: document.querySelector("[data-gadget-panel]"),
+    gadgetLabel: document.querySelector("[data-gadget-label]"),
+    gadget: document.querySelector("[data-gadget]"),
     briefsLabel: document.querySelector("[data-briefs-label]"),
     briefs: document.querySelector("[data-briefs]"),
     briefsFoot: document.querySelector("[data-briefs-foot]"),
@@ -638,6 +641,24 @@
     `;
   }
 
+  function renderGadgetWatch(issue) {
+    if (!els.gadget || !els.gadgetPanel) return;
+    const gadget = objectSection(issue && issue.gadgetWatch);
+    if (!gadget || (!gadget.headline && !gadget.summary)) {
+      els.gadgetPanel.hidden = true;
+      els.gadget.innerHTML = "";
+      return;
+    }
+    setText(els.gadgetLabel, chrome(issue, "gadget", "label", "Gadget Desk"));
+    els.gadgetPanel.hidden = false;
+    els.gadget.innerHTML = `
+      ${gadget.headline ? `<h3>${escapeHtml(gadget.headline)}</h3>` : ""}
+      ${articleVisual(gadget.image)}
+      ${gadget.summary ? `<p>${escapeHtml(cleanPublicCopy(gadget.summary))}</p>` : ""}
+      ${gadget.detail ? `<p>${escapeHtml(cleanPublicCopy(gadget.detail))}</p>` : ""}
+    `;
+  }
+
   function renderWorldAnchor(issue) {
     if (!els.worldPanel) return;
     const anchor = objectSection(issue && issue.worldAnchor);
@@ -867,6 +888,8 @@
       if (els.priceWatch) els.priceWatch.innerHTML = "";
       if (els.priceFoot) els.priceFoot.hidden = true;
       if (els.bbsPanel) els.bbsPanel.hidden = true;
+      if (els.gadgetPanel) els.gadgetPanel.hidden = true;
+      if (els.gadget) els.gadget.innerHTML = "";
       if (els.curiosityPanel) els.curiosityPanel.hidden = true;
       if (els.briefs) els.briefs.innerHTML = "";
       if (els.briefsFoot) els.briefsFoot.hidden = true;
@@ -904,6 +927,7 @@
     renderMarket(issue);
     renderBudget(issue);
     renderBbs(issue);
+    renderGadgetWatch(issue);
     renderCuriosity(issue);
     renderFallback(issue);
   }

@@ -118,6 +118,13 @@ function cultureBullet(issue) {
   return "";
 }
 
+function gadgetBullet(issue) {
+  const headline = clean(issue.gadgetWatch?.headline);
+  if (!headline) return "";
+  const summary = shorten(issue.gadgetWatch?.summary);
+  return summary ? `Gadget Desk: ${headline} - ${summary}` : `Gadget Desk: ${headline}`;
+}
+
 function buildCaption(issue, index) {
   const number = issueNumber(issue, index);
   const displayDate = clean(issue.displayDate || issue.historicDate || "");
@@ -126,6 +133,7 @@ function buildCaption(issue, index) {
     leadBullet(issue),
     namedBullet("Software", issue.softwareList?.[0]),
     cultureBullet(issue),
+    gadgetBullet(issue),
     namedBullet("Price Watch", issue.priceWatch?.[0])
   ].filter(Boolean);
 
