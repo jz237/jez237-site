@@ -655,3 +655,24 @@ versions stay blocked on the perf renegotiation.
   (setRoamPos beside __nearestTraffic(), hop up to 4 times). detailReport
   ().drivers gains silhouettes/silPool; driverSilEnable(on);
   __nearestTraffic() debug helper. Suite 134/134 expected.
+- **24 road micro-detail — item 11-lite (2026-07-16)**: `roadDecalSys` — 36
+  spots seeded on the street math beside the steam vents (manholes near
+  centerline, drains at the curb line, worn turn arrows in lanes with
+  axis-aligned yaw, asphalt repair patches; plateRng(0xdeca1)). Pool of 10
+  flat quads (mobile 5), 4-cell alphaTest atlas, promoted ≤40m at city
+  camera; raycast-inert (they sit directly under the ground-probe ray —
+  the it.20 pond lesson applies doubly here). THE FINDING OF THE
+  ITERATION: the street SLAB rides ~0.5m ABOVE the He() terrain function —
+  decals seeded at He+0.03 were buried half a meter under the road
+  (probeDown showed road surface -4.23 vs He -4.77). Fix: _surfaceY(spot) —
+  one cached raycast per spot at promote time, band-filtered ±(1.0/-0.5)m
+  so passing car roofs can't poison the cache, isSprite hits skipped AND
+  Raycaster.camera set (steam sprites throw without it). Steam grates got
+  lucky at He+0.02 (curb edge ≈ terrain); road CENTER is not terrain.
+  detailReport().roadDecals {spots, promoted, pool, sample, stations —
+  one per variant}. Verified by looking (`loop-shots/24-road-decals/`):
+  worn white turn arrow crisp on the lane at 3m; iron manhole with rim +
+  spokes beside the centerline; demoted to bare asphalt at 55m. Wear-patch
+  cell strengthened after the first draw was invisible on dark asphalt
+  (0.30 alpha blobs → 0.55 rounded patch with tar-seam outline). Suite
+  135/135 expected.

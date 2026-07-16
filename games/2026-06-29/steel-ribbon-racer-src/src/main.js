@@ -3083,6 +3083,134 @@ const facadeSys = {
     }
   },
 };
+// road micro-detail (zoom-detail item 11-lite): manholes, storm drains, worn
+// turn arrows and asphalt patches as pooled flat decals promoted around the
+// street camera — the full painted-road version stays freeze-blocked, but
+// the near-tier reading costs nothing at race altitude.
+let roadDecalTex = null;
+function buildRoadDecalAtlas() {
+  if (roadDecalTex) return roadDecalTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 128));
+  const g = cv.getContext("2d");
+  g.clearRect(0, 0, 512, 128);
+  // cell 0: manhole cover
+  ((g.fillStyle = "#23262b"), g.beginPath(), g.arc(64, 64, 52, 0, 6.29), g.fill());
+  ((g.strokeStyle = "#3a3e46"), (g.lineWidth = 5), g.beginPath(), g.arc(64, 64, 46, 0, 6.29), g.stroke());
+  g.lineWidth = 3;
+  for (let k = 0; k < 8; k++) {
+    const a = (k * Math.PI) / 4;
+    (g.beginPath(), g.moveTo(64 + Math.cos(a) * 14, 64 + Math.sin(a) * 14), g.lineTo(64 + Math.cos(a) * 42, 64 + Math.sin(a) * 42), g.stroke());
+  }
+  (g.beginPath(), g.arc(64, 64, 10, 0, 6.29), g.stroke());
+  // cell 1: storm drain grate
+  ((g.fillStyle = "#1c1f24"), g.fillRect(140, 34, 104, 60));
+  ((g.fillStyle = "#3a3e46"));
+  for (let k = 0; k < 5; k++) g.fillRect(148 + k * 19, 40, 9, 48);
+  ((g.strokeStyle = "#101216"), (g.lineWidth = 4), g.strokeRect(140, 34, 104, 60));
+  // cell 2: worn white turn arrow (pointing up)
+  ((g.fillStyle = "rgba(232,232,224,0.82)"));
+  (g.beginPath(), g.moveTo(320, 12), g.lineTo(348, 52), g.lineTo(330, 52), g.lineTo(330, 116), g.lineTo(310, 116), g.lineTo(310, 52), g.lineTo(292, 52), g.closePath(), g.fill());
+  ((g.globalCompositeOperation = "destination-out"), (g.fillStyle = "rgba(0,0,0,0.55)"));
+  for (let k = 0; k < 14; k++) (g.beginPath(), g.arc(292 + ((k * 53) % 60), 16 + ((k * 37) % 100), 3 + (k % 3) * 2, 0, 6.29), g.fill());
+  g.globalCompositeOperation = "source-over";
+  // cell 3: asphalt repair patch — darker rectangle with tar-seam edges
+  ((g.fillStyle = "rgba(14,15,18,0.55)"), g.beginPath(), g.roundRect(396, 22, 104, 84, 10), g.fill());
+  ((g.strokeStyle = "rgba(8,9,11,0.85)"), (g.lineWidth = 6), g.beginPath(), g.roundRect(399, 25, 98, 78, 9), g.stroke());
+  g.fillStyle = "rgba(60,62,68,0.35)";
+  for (let k = 0; k < 6; k++) {
+    const bx = 410 + ((k * 47) % 80),
+      by = 34 + ((k * 31) % 60);
+    (g.beginPath(), g.ellipse(bx, by, 8 + (k % 3) * 4, 6 + (k % 2) * 4, k, 0, 6.29), g.fill());
+  }
+  roadDecalTex = new CanvasTexture(cv);
+  roadDecalTex.colorSpace = SRGBColorSpace;
+  return roadDecalTex;
+}
+const _rdRay = new Raycaster(),
+  _rdDown = new Vector3(0, -1, 0),
+  _rdFrom = new Vector3();
+const roadDecalSys = {
+  spots: [],
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 40,
+  sample: [],
+  _timer: 0,
+  _geos: null,
+  // the street SLAB rides ~0.5m above the He() terrain function — find the
+  // real surface with one cached raycast per spot (band-filtered so a car
+  // roof passing overhead can't poison the cache)
+  _surfaceY(s) {
+    if (s.ySurf !== undefined) return s.ySurf;
+    (_rdFrom.set(s.x, s.y + 40, s.z), _rdRay.set(_rdFrom, _rdDown));
+    ((_rdRay.far = 80), (_rdRay.camera = Xe));
+    const hits = _rdRay.intersectObjects(et.children, !0);
+    let best = null;
+    for (const h of hits) {
+      if (h.object.isSprite) continue;
+      if (h.point.y > s.y + 1.0 || h.point.y < s.y - 0.5) continue;
+      (best === null || h.point.y > best) && (best = h.point.y);
+    }
+    return (s.ySurf = best === null ? s.y : +(best + 0.025).toFixed(3));
+  },
+  _SCALES: [
+    [1.5, 1.5],
+    [1.8, 1.1],
+    [1.5, 3.4],
+    [2.8, 2.3],
+  ],
+  ensure() {
+    if (this.kits) return;
+    const mat = new MeshBasicMaterial({ map: buildRoadDecalAtlas(), transparent: !0, alphaTest: 0.15, polygonOffset: !0, polygonOffsetFactor: -3 });
+    this._geos = [0, 1, 2, 3].map((c) => {
+      const geo = new PlaneGeometry(1, 1),
+        uv = geo.attributes.uv;
+      for (let i = 0; i < uv.count; i++) uv.setXY(i, (c + uv.getX(i)) / 4, uv.getY(i));
+      return geo.rotateX(-Math.PI / 2);
+    });
+    this.kits = [];
+    const n = mobilePerf ? 5 : 10;
+    for (let k = 0; k < n; k++) {
+      const m = new Mesh(this._geos[0], mat);
+      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.raycast = () => {}), (m.renderOrder = 1), et.add(m));
+      this.kits.push({ m, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled && Xe.position.y <= 26)
+      for (const s of this.spots) {
+        const dx = s.x - cx,
+          dz = s.z - cz,
+          d2 = dx * dx + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    for (let k = 0; k < this.kits.length; k++) {
+      const kit = this.kits[k],
+        c = cand[k];
+      if (!c) {
+        ((kit.m.visible = !1), (kit.idx = -1));
+        continue;
+      }
+      const s = c.s,
+        sc = this._SCALES[s.v];
+      ((kit.m.geometry = this._geos[s.v]), kit.m.scale.set(sc[0], 1, sc[1]), kit.m.position.set(s.x, this._surfaceY(s), s.z), (kit.m.rotation.y = s.yaw), (kit.m.visible = !0), (kit.idx = s.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: s.i, x: s.x, y: s.y, z: s.z, v: s.v });
+    }
+  },
+};
 // driver silhouettes (zoom-detail item 4b-lite): the original recessed-driver
 // plan is freeze-blocked, but a pooled dark head-and-shoulders decal riding
 // 1cm in front of the windshield glass reads as "driver behind glass" from
@@ -3846,6 +3974,23 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
     steamSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.02).toFixed(2), z: +pz.toFixed(1) });
   }
+  // road decal spots: manholes/drains/arrows/wear seeded on the same street math
+  roadDecalSys.spots.length = 0;
+  const drng = plateRng(0xdeca1);
+  for (let i = 0; i < 240 && roadDecalSys.spots.length < 36; i++) {
+    const isNS = drng() < 0.5,
+      lines = isNS ? Math.floor((x1 - x0) / pitch) : Math.floor((zHigh - zLow) / pitch),
+      line = (isNS ? x0 : zHigh) + (isNS ? 1 : -1) * pitch * (1 + ((drng() * (lines - 1)) | 0)),
+      along = (isNS ? zLow : x0) + 30 + drng() * ((isNS ? zHigh - zLow : x1 - x0) - 60),
+      v = (drng() * 4) | 0,
+      side = drng() < 0.5 ? -1 : 1,
+      off = v === 1 ? side * (sw * 0.5 - 0.6) : v === 0 ? side * sw * 0.1 : side * sw * 0.24,
+      px = isNS ? line + off : along,
+      pz = isNS ? along : line + off;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    const yaw = v === 2 ? (isNS ? (drng() < 0.5 ? 0 : Math.PI) : ((drng() < 0.5 ? 1 : -1) * Math.PI) / 2) : drng() * 6.28;
+    roadDecalSys.spots.push({ i: roadDecalSys.spots.length, x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw, v });
+  }
   for (const d of defs) {
     const im = meshes[d.key];
     ((im.count = im.userData.used), (im.instanceMatrix.needsUpdate = !0), (furnitureSys.counts[d.key] = im.userData.used));
@@ -4313,6 +4458,7 @@ function F1(i, e, t) {
       roadsideSys.update(I, ye);
       facadeSys.update(I, ye);
       driverSilSys.update(I, ye);
+      roadDecalSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -10216,6 +10362,10 @@ window.__steelRibbonDebug = {
     driverSilSys.enabled = !!on;
     return driverSilSys.enabled;
   },
+  roadDecalEnable(on) {
+    roadDecalSys.enabled = !!on;
+    return roadDecalSys.enabled;
+  },
   __nearestTraffic() {
     let best = null;
     for (const a of Rc) {
@@ -10324,6 +10474,13 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      roadDecals: {
+        spots: roadDecalSys.spots.length,
+        promoted: roadDecalSys.promoted,
+        pool: roadDecalSys.kits ? roadDecalSys.kits.length : 0,
+        sample: roadDecalSys.sample.slice(0, 3),
+        stations: [0, 1, 2, 3].map((v) => roadDecalSys.spots.find((s2) => s2.v === v)).filter(Boolean).map((s2) => ({ i: s2.i, x: s2.x, z: s2.z, v: s2.v })),
       },
       facades: {
         eligible: rooftopSys.spots.reduce((n, sp) => n + (Math.min(sp.w, sp.d) >= 12 ? 1 : 0), 0),
