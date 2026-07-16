@@ -382,6 +382,14 @@ const browser = await chromium.launch({
     JSON.stringify({ ready: ambSeq?.ready, st: ambSeq?.ctxState, sig: ambSeq?.signals, ticks: ambSeq?.tickCount }),
   );
 
+  // zoom-detail item 13: every prop plane tows a distinct fictional ad banner
+  const planes = await page.evaluate(() => window.__steelRibbonDebug.detailReport().planes);
+  check(
+    "planes: all four tow distinct ad banners",
+    !!planes && planes.count === 4 && new Set(planes.banners).size === 4 && planes.banners.every((b) => b && b.length > 5),
+    JSON.stringify({ count: planes?.count, banners: planes?.banners }),
+  );
+
   // zoom-detail item 13: birds spawn, scatter on approach, then despawn
   const birdSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
