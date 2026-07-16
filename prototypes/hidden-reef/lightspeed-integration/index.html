@@ -1,0 +1,484 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cart Handoff and Lightspeed POS Plan - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../assets/site/logo.png" />
+  <style>
+    :root {
+      --blue-950: #f0fbff;
+      --blue-900: #7ddfff;
+      --blue-800: #27c2e8;
+      --blue-700: #40d9ff;
+      --teal: #00a7b7;
+      --aqua: #13b8df;
+      --sky: rgba(64,217,255,.1);
+      --surface: #071a27;
+      --page: #04101a;
+      --ink: #f0fbff;
+      --muted: #a9cbd9;
+      --line: rgba(116,205,235,.2);
+      --orange: #ff7b32;
+      --green: #23a86b;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,.22), transparent 32%),
+        linear-gradient(180deg,#031f42 0%,#021833 48%,#010b1c 100%);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: var(--teal); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 14px;
+      color: #fff;
+      background: linear-gradient(90deg, #007498, #00a7b7);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .page-nav {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .page-nav a.back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .page-nav a.back:hover { color: var(--teal); }
+    .page-nav img {
+      height: 76px;
+      max-width: 280px;
+      object-fit: contain;
+    }
+
+    .hero {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 26px 24px 24px;
+    }
+    .hero h1 {
+      font-size: clamp(27px, 3.2vw, 38px);
+      font-weight: 900;
+      margin: 0 0 12px;
+      color: #fff;
+      line-height: 1.15;
+      text-shadow: 0 8px 30px rgba(0,0,0,.58);
+    }
+    .hero p.sub {
+      font-size: 16px;
+      color: #d6f4fb;
+      margin: 0;
+      max-width: 780px;
+    }
+
+    .content {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+    .content h2 {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin: 48px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+    .content h2 .badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      vertical-align: middle;
+      margin-left: 10px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .badge-easy { background: rgba(35,168,107,.18); color: #76e6ad; border: 1px solid rgba(35,168,107,.28); }
+    .badge-medium { background: rgba(255,123,50,.16); color: #ffb27f; border: 1px solid rgba(255,123,50,.28); }
+    .badge-advanced { background: rgba(255,89,89,.14); color: #ffaaaa; border: 1px solid rgba(255,89,89,.24); }
+    .content h3 {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--blue-700);
+      margin: 24px 0 8px;
+    }
+    .content p {
+      margin: 0 0 16px;
+      font-size: 16px;
+      color: #d9f1f8;
+    }
+    .content ul {
+      margin: 0 0 20px;
+      padding-left: 20px;
+    }
+    .content li {
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .option-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px 24px 20px;
+      margin: 24px 0;
+      width: 100%;
+      box-sizing: border-box;
+      box-shadow: -10px 14px 18px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .option-card h3 {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+    .option-card .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .option-card p { margin: 0 0 14px; }
+    .option-card ul { margin: 0 0 0; }
+    .option-card .pros-cons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .option-card .pros-cons h4 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin: 0 0 6px;
+      font-weight: 700;
+    }
+    .option-card .pros-cons .pros h4 { color: var(--green); }
+    .option-card .pros-cons .cons h4 { color: #ffb27f; }
+    .option-card .pros-cons ul { padding-left: 16px; font-size: 14px; }
+    .option-card .pros-cons li { margin-bottom: 4px; }
+
+    @media (max-width: 600px) {
+      .option-card .pros-cons { grid-template-columns: 1fr; }
+    }
+
+    .callout {
+      background: var(--sky);
+      border-left: 4px solid var(--teal);
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 24px 0;
+      font-size: 15px;
+      color: #d9f1f8;
+    }
+    .callout strong { color: #fff; }
+
+    .next-step {
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,.14), transparent 38%),
+        linear-gradient(135deg, #052137, #071a27);
+      color: #fff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 28px 28px;
+      margin: 48px 0 0;
+      box-shadow: -10px 14px 18px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+    .next-step h3 { margin: 0 0 8px; font-size: 20px; }
+    .next-step p { color: #c2e9f4; margin: 0 0 16px; }
+    .next-step a.btn {
+      display: inline-block;
+      background: var(--orange);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .next-step a.btn:hover { background: #e86a1c; text-decoration: none; }
+
+    footer.footer {
+      background: linear-gradient(180deg,#052137,#031321);
+      color: #c2e9f4;
+      font-size: 13px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 26px;
+    }
+    footer.footer h3,
+    footer.footer h4 { margin: 0 0 9px; color: #fff; }
+    footer.footer p,
+    footer.footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(194,233,244,.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); column-gap:8px; }
+    .footer-link-grid a, footer.footer h4 + a { position: relative; padding-left: 12px; }
+    .footer-link-grid a::before, footer.footer h4 + a::before { content: ""; position: absolute; left: 0; top: .72em; width: 4px; height: 4px; border-radius: 50%; background: #40d9ff; }
+    @media (max-width: 1040px) { .footer-top { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+    @media (max-width: 760px) { .footer-top { grid-template-columns: 1fr; } }
+
+    body.lightspeed-page .header.masthead,
+    body.lightspeed-page .header.masthead + .main-nav {
+      width: min(1180px, calc(100% - 32px)) !important;
+      max-width: calc(100% - 32px) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+
+    body.lightspeed-page .header.masthead {
+      margin-top: 10px !important;
+    }
+
+    body.lightspeed-page .header.masthead + .main-nav {
+      margin-bottom: 22px !important;
+    }
+
+    body.lightspeed-page .hero {
+      width: min(920px, calc(100% - 32px));
+      max-width: calc(100% - 32px);
+      margin: 0 auto 26px;
+      padding: 28px 24px 24px;
+      border: 1px solid rgba(116,205,235,.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(1,13,27,.96), rgba(1,31,51,.72) 56%, rgba(0,48,75,.18)),
+        url("../assets/site/hero-aquatic-world.jpg") right center/cover no-repeat,
+        linear-gradient(90deg,#021421,#05344f);
+      box-shadow: -10px 14px 18px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.035);
+    }
+
+    @media (max-width: 760px) {
+      body.lightspeed-page .header.masthead,
+      body.lightspeed-page .header.masthead + .main-nav {
+        width: calc(100% - 16px) !important;
+        max-width: calc(100% - 16px) !important;
+      }
+
+      body.lightspeed-page .hero {
+        width: calc(100% - 16px);
+        max-width: calc(100% - 16px);
+        margin-bottom: 24px;
+        padding: 24px 16px 22px;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260712-unified-nav" />
+</head>
+<body class="lightspeed-page">
+  <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
+
+  <header class="header masthead">
+      <a class="brand" href="../">
+        <img src="../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
+      <a href="../category/?cat=freshwater">Freshwater</a>
+      <a href="../category/?cat=saltwater">Saltwater</a>
+      <a href="../category/?cat=pond">Pond</a>
+      <a href="../category/?cat=equipment">Equipment</a>
+      <a href="../category/?cat=food">Food</a>
+      <a href="../category/?cat=decor">Decorations</a>
+      <a href="../category/?cat=maintenance">Maintenance</a>
+      <a href="../learn/">Help</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+  <div class="hero">
+    <h1>Cart Handoff and Lightspeed POS Plan</h1>
+    <p class="sub">A practical way this redesigned storefront could work next to the existing Lightspeed site while keeping checkout, discounts, customer accounts, and inventory inside the system Hidden Reef already uses.</p>
+  </div>
+
+  <div class="content">
+
+    <p>The current Hidden Reef website runs on <strong>Lightspeed eCom</strong> (Shop ID 648211), which is connected to the store's point-of-sale workflow. Product inventory, sale pricing, orders, checkout, customer accounts, and customer-specific discounts already belong in Lightspeed.</p>
+
+    <p>The safest approach is not to replace that system. The redesigned site can run beside the existing Lightspeed site as a better shopping front end, while Lightspeed remains the final source of truth.</p>
+
+    <div class="callout">
+      <strong>Recommended direction:</strong> let customers browse and build a cart on the new site, then hand that cart to Lightspeed checkout. At checkout, Lightspeed handles login, final pricing, customer discounts, taxes, payment, and the order record.
+    </div>
+
+    <h2>Step 1: Keep The Existing Store Live <span class="badge badge-easy">Lowest Risk</span></h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>The redesigned site runs on a separate domain or subdomain, such as <strong>new.thehiddenreef.com</strong> or <strong>shop.thehiddenreef.com</strong>. The current Lightspeed site stays online and continues to work normally.</p>
+      <p>If the new site has a problem, customers and staff still have the existing tested store available.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>What stays safe</h4>
+          <ul>
+            <li>Existing checkout remains available</li>
+            <li>Staff keep using the Lightspeed admin they already know</li>
+            <li>No payment or order workflow changes are required at launch</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Boundary</h4>
+          <ul>
+            <li>The new site should launch as an optional front end first</li>
+            <li>The old site should not be turned off until the new flow is proven</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 2: Let The Demo Cart Behave Like A Real Cart</h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>Customers browse the redesigned site and add products to the cart here. The cart can show product names, quantities, images, and an estimated subtotal.</p>
+      <p>The cart should also make the pricing boundary clear: <strong>log in at checkout to see account discounts, rewards, and final pricing.</strong></p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Customer experience</h4>
+          <ul>
+            <li>Browsing feels modern and fast</li>
+            <li>Customers can build a cart before leaving the new site</li>
+            <li>The site can show public prices and sale badges</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Boundary</h4>
+          <ul>
+            <li>Customer-specific discounts should not be guessed on the new site</li>
+            <li>Lightspeed checkout should calculate the final total after login</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 3: Send The Cart To Lightspeed Checkout <span class="badge badge-medium">API Phase</span></h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>Each product on the redesigned site needs to map to its real Lightspeed product or variant ID. When the customer clicks checkout, a small private backend sends those cart items to Lightspeed and then redirects the customer to the Lightspeed cart or checkout page.</p>
+      <p>API credentials stay on the private backend. They should never be placed in browser JavaScript.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>What Lightspeed handles</h4>
+          <ul>
+            <li>Customer login</li>
+            <li>Special customer discounts</li>
+            <li>Final price, tax, and shipping rules</li>
+            <li>Payment and order creation</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>What must be confirmed</h4>
+          <ul>
+            <li>The exact Lightspeed API/cart capabilities available on their plan</li>
+            <li>How product variants are represented</li>
+            <li>Whether cart creation or checkout links are supported directly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 4: Sync Inventory And Sale Items</h2>
+
+    <div class="option-card">
+      <h3>How it works</h3>
+      <p>Lightspeed should remain the place where staff add products, receive stock, change inventory, and create or remove sale items. The redesigned site should copy that information from Lightspeed instead of becoming another admin system.</p>
+      <p>For inventory that changes constantly, the best setup is a combination of webhooks and scheduled checks. Webhooks catch updates quickly; scheduled checks are the backup in case any webhook is missed.</p>
+      <div class="pros-cons">
+        <div class="pros">
+          <h4>Can sync from Lightspeed</h4>
+          <ul>
+            <li>Product names, images, categories, and brands</li>
+            <li>Inventory availability</li>
+            <li>Sale products and sale pricing</li>
+            <li>Product additions and removals</li>
+          </ul>
+        </div>
+        <div class="cons">
+          <h4>Boundary</h4>
+          <ul>
+            <li>The new site should not require staff to update products twice</li>
+            <li>If the API is unavailable, checkout should still fall back to Lightspeed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2>Step 5: Keep Store Management In Lightspeed</h2>
+
+    <div class="option-card">
+      <h3>Operational boundary</h3>
+      <p>The new site should be built so regular store work still happens in Lightspeed. Product updates, inventory changes, sale pricing, customer records, and order management should remain in the system staff already uses.</p>
+      <ul>
+        <li>Hidden Reef keeps managing products, customers, sales, and orders in Lightspeed.</li>
+        <li>The redesigned site automatically reads from Lightspeed where possible.</li>
+        <li>Any custom code should be limited to the storefront, cart handoff, and sync layer.</li>
+      </ul>
+    </div>
+
+    <h2>Getting Lightspeed API Access</h2>
+
+    <p>To move beyond simple product links, Hidden Reef would need API access from the Lightspeed admin area:</p>
+
+    <ul>
+      <li>Log into <strong>Lightspeed eCom admin</strong></li>
+      <li>Go to <strong>Settings - Apps</strong></li>
+      <li>Create or locate an API integration</li>
+      <li>Store the generated client ID and secret on a private backend only</li>
+    </ul>
+
+    <p>The exact integration depends on the Lightspeed plan and API features available to this store. The first technical check should confirm product, variant, inventory, cart, customer, and sale-data access.</p>
+
+    <div class="callout">
+      <strong>Practical first milestone:</strong> keep the current demo cart, add checkout messaging about account discounts, map demo products to real Lightspeed product IDs, and test whether a cart can be created or prefilled in Lightspeed checkout.
+    </div>
+
+    <div class="next-step">
+      <h3>Current demo behavior</h3>
+      <p>Browse the demo storefront and try adding items to the cart. The next improvement would be handing that cart to Lightspeed checkout while keeping final discounts and payment inside Lightspeed.</p>
+      <a class="btn" href="../">Browse the Demo Store →</a>
+    </div>
+
+  </div>
+
+  <footer class="footer">
+    <div class="footer-top">
+      <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+      <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
+      <div><h4>Customer Service</h4><div class="footer-link-grid"><a href="../contact/">Visit the store</a><a href="../contact/">Contact &amp; Hours</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../lightspeed-integration/">Cart handoff</a></div></div>
+      <div><h4>About This Demo</h4><a href="../lightspeed-integration/">Cart handoff and Lightspeed plan</a></div>
+    </div>
+  </footer>
+  <script src="../assets/reef-background.js?v=20260712-unified-nav"></script>
+</body>
+</html>

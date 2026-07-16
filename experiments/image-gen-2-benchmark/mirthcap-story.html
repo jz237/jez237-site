@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>The Heartglass Rue - A Mirthcap Story</title>
+  <meta name="description" content="Watch The Heartglass Rue, an animated Mirthcap storybook movie with narration, music, and selected Gemini Omni video scenes.">
+  <meta property="og:title" content="The Heartglass Rue - A Mirthcap Story Movie">
+  <meta property="og:description" content="Animated storybook cut with narrated scenes, music, and selected Gemini Omni video inserts from Mirthcap Lookingglass Village.">
+  <meta property="og:type" content="video.other">
+  <meta property="og:url" content="https://jez237.com/experiments/image-gen-2-benchmark/mirthcap-story.html">
+  <meta property="og:image" content="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he-identity-corrected.jpg">
+  <meta property="og:video" content="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/videos/mirthcap_heartglass_rue_v7_omni_mixed.mp4">
+  <meta property="og:video:type" content="video/mp4">
+  <meta property="og:video:width" content="1280">
+  <meta property="og:video:height" content="720">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Heartglass Rue - A Mirthcap Story Movie">
+  <meta name="twitter:description" content="Animated storybook cut with narrated scenes, music, and selected Gemini Omni video inserts from Mirthcap Lookingglass Village.">
+  <meta name="twitter:image" content="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he-identity-corrected.jpg">
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/design.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --story-bg: #06110d;
+      --story-bg-2: #132019;
+      --paper: #f8f3e7;
+      --ink: #243024;
+      --muted-ink: #66735f;
+      --moss: #527445;
+      --gold: #b98935;
+      --line: #d8cdb7;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .34);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 14% 2%, rgba(150, 198, 113, .18), transparent 32%),
+        radial-gradient(circle at 88% 10%, rgba(48, 137, 145, .16), transparent 34%),
+        linear-gradient(180deg, var(--story-bg), var(--story-bg-2) 58%, #080c0a);
+      color: var(--paper);
+      line-height: 1.62;
+    }
+    header#site-nav {
+      background: rgba(6, 12, 10, .88) !important;
+      border-bottom: 1px solid rgba(185, 137, 53, .26) !important;
+    }
+    .wrap { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+    .hero {
+      position: relative;
+      min-height: 76vh;
+      display: flex;
+      align-items: flex-end;
+      padding: 72px 0 34px;
+      overflow: hidden;
+      background: #0b120e;
+      border-bottom: 1px solid rgba(216, 205, 183, .24);
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(4, 9, 7, .92), rgba(4, 9, 7, .54) 46%, rgba(4, 9, 7, .22)),
+        linear-gradient(0deg, rgba(4, 9, 7, .96), rgba(4, 9, 7, .08) 58%),
+        url("https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he-identity-corrected.jpg") center/cover no-repeat;
+      z-index: 0;
+    }
+    .hero .wrap { position: relative; z-index: 1; }
+    .kicker {
+      color: #d5b260;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: .78rem;
+      font-weight: 850;
+    }
+    h1 {
+      max-width: 880px;
+      margin: 8px 0 14px;
+      font-family: var(--font-serif);
+      font-size: clamp(3rem, 9vw, 7.6rem);
+      line-height: .9;
+      letter-spacing: 0;
+      color: #fff9e9;
+      text-shadow: 0 24px 70px rgba(0, 0, 0, .52);
+    }
+    .lede {
+      max-width: 760px;
+      margin: 0;
+      color: rgba(248, 243, 231, .88);
+      font-size: clamp(1.02rem, 2vw, 1.22rem);
+      font-weight: 560;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      border: 1px solid rgba(248, 243, 231, .24);
+      border-radius: 8px;
+      padding: 8px 12px;
+      background: rgba(7, 13, 10, .54);
+      color: #fff4d1;
+      text-decoration: none;
+      font-weight: 750;
+      backdrop-filter: blur(10px);
+    }
+    .pill:hover { text-decoration: none; border-color: rgba(213, 178, 96, .62); }
+    main { padding: 34px 0 76px; }
+    .story-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 28px;
+      align-items: start;
+    }
+    .paper {
+      background: linear-gradient(180deg, #fffaf0, var(--paper));
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(22px, 4vw, 46px);
+    }
+    .paper h2 {
+      margin: 0 0 16px;
+      font-family: var(--font-serif);
+      color: #31422e;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .paper h3 {
+      margin: 34px 0 8px;
+      color: #3c5336;
+      font-size: 1.25rem;
+    }
+    .paper p { margin: 0 0 17px; }
+    .paper .chapter-note {
+      margin: 0 0 24px;
+      color: var(--muted-ink);
+      font-weight: 650;
+    }
+    .movie-section {
+      margin: 0 0 34px;
+      padding: 16px;
+      border: 1px solid rgba(82, 116, 69, .28);
+      border-radius: 8px;
+      background: rgba(82, 116, 69, .08);
+    }
+    .movie-section h2 {
+      margin-bottom: 8px;
+    }
+    .movie-section p {
+      color: var(--muted-ink);
+      font-weight: 620;
+    }
+    .movie-frame {
+      overflow: hidden;
+      margin: 16px 0 12px;
+      border: 1px solid rgba(36, 48, 36, .22);
+      border-radius: 8px;
+      background: #050806;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, .22);
+    }
+    .movie-frame video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #050806;
+    }
+    .movie-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid rgba(82, 116, 69, .44);
+      border-radius: 8px;
+      color: #31422e;
+      background: rgba(255, 250, 240, .62);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .movie-link:hover {
+      text-decoration: none;
+      border-color: rgba(185, 137, 53, .76);
+      color: #1f2d1d;
+    }
+    .aside {
+      position: sticky;
+      top: 78px;
+      display: grid;
+      gap: 16px;
+    }
+    .note-card,
+    .scene-card {
+      overflow: hidden;
+      background: rgba(248, 243, 231, .95);
+      color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .note-card { padding: 16px; }
+    .note-card h2,
+    .note-card h3 {
+      margin: 0 0 8px;
+      color: #31422e;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+    .note-card p,
+    .note-card li { color: var(--muted-ink); }
+    .note-card ul { margin: 8px 0 0; padding-left: 18px; }
+    .scene-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 26px;
+    }
+    .scene-card img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      display: block;
+      background: #0b120e;
+    }
+    .scene-card strong {
+      display: block;
+      padding: 10px 11px 0;
+      font-size: .92rem;
+      line-height: 1.2;
+    }
+    .scene-card span {
+      display: block;
+      padding: 5px 11px 12px;
+      color: var(--muted-ink);
+      font-size: .82rem;
+      line-height: 1.35;
+    }
+    .ending {
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid rgba(82, 116, 69, .34);
+      border-radius: 8px;
+      background: rgba(82, 116, 69, .1);
+    }
+    footer { padding: 0 22px 46px; color: rgba(248, 243, 231, .7); }
+    @media (max-width: 900px) {
+      .story-layout { grid-template-columns: 1fr; }
+      .aside { position: static; }
+      .scene-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px) {
+      .hero { min-height: 68vh; }
+      .scene-strip { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header id="site-nav"></header>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="kicker">Mirthcap Lookingglass Village</div>
+      <h1>The Heartglass Rue</h1>
+      <p class="lede">A current story draft assembled from the Mirthcap image sequence: a tiny village, a dying healer, a hidden map, and Finnel Buttonby's race to save Luma and the people Marlow kept alive.</p>
+      <div class="meta">
+        <a class="pill" href="worlds.html">Fictional Worlds</a>
+        <a class="pill" href="index.html">GPT Image 2 Archive</a>
+        <a class="pill" href="../../">Home</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="story-layout">
+      <article class="paper">
+        <h2>The Story So Far</h2>
+        <p class="chapter-note">Working prose draft. The TV cut keeps the plot moving. The King cut leaves room for Marlow's funeral, village rituals, and a longer road through the outer garden.</p>
+
+        <section class="movie-section" aria-labelledby="movie-title">
+          <h2 id="movie-title">The Heartglass Rue Movie</h2>
+          <p>Animated storybook cut with narrated scenes, music, and selected Gemini Omni video inserts.</p>
+          <div class="movie-frame">
+            <video controls preload="metadata" poster="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he-identity-corrected.jpg">
+              <source src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/videos/mirthcap_heartglass_rue_v7_omni_mixed.mp4" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </div>
+          <a class="movie-link" href="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/videos/mirthcap_heartglass_rue_v7_omni_mixed.mp4">Open full MP4</a>
+        </section>
+
+        <p>Mirthcap was never meant to be found. It sat beneath jewel-colored mushroom caps and moss terraces, tucked into a garden so large that a fallen teacup could become a hall and a pocketwatch gear could become civic machinery. Its people were tiny, practical, stubborn, and kind. They lived by lantern gnats, checkerboard paths, shell-fruit drinks, and the quiet law of the Under-Cap Circle.</p>
+
+        <p>Mayor Tansy Thimblegate kept the paths repaired, the lanterns lit, and the arguments short. But the person Mirthcap truly depended on was Doctor Marlow Dewmoss, the old healer in the mushroom-and-root hut at the edge of the village. Marlow knew which moss cooled a fever, which dew sealed a wound, and which herbs had to be harvested only when Bellivane stood opposite the sun at twilight.</p>
+
+        <p>When Finnel Buttonby was young, Marlow saved his life. The boy had been pale and fading, his worried parents standing close while the doctor worked by the glow of thimble jars and green-gold tinctures. Finnel recovered just in time for Vesperfall Hour, and the village celebrated beneath a sky of luminous insects. The children drank from ribbed shell-fruits, the adults raised wine, and Finnel learned that being saved by someone else leaves a debt that grows with you.</p>
+
+        <p>Finnel grew up beside Luma Purl, the next-door girl who knew how to slip past sleeping doors and chase lantern gnats without crushing them. Together they carried herbs back from Hearthpetal Thicket, rode briarwings over Lookingglass Pond, and learned the edges of the village by heart. Luma was braver than she pretended. Finnel was quieter than the songs made him sound. Between them, the world felt wide but not impossible.</p>
+
+        <p>Ten years later, Finnel and Luma stood in the village circle and took their vows while Mayor Tansy officiated. Native luminous insects formed bright patterns in the twilight sky. For one evening, Mirthcap looked untouched by age, sickness, or fear. Even Marlow, older now and narrow as a winter stem, smiled as if the sight had given him one more season.</p>
+
+        <p>But Marlow's medicines had done more than heal small hurts. They had kept Mirthcap alive for generations. He knew this, and near the end of his life he called Finnel close. Surrounded by worried villagers, Marlow whispered the secret recipes into Finnel's ear: roots, dew, moss, heat, timing, and the old warning that one final ingredient must never be lost.</p>
+
+        <p>Then Glassmoss Fever returned.</p>
+
+        <p>It did not make monsters of the villagers. That would have been easier. Instead it made them frail and strange, their skin pale, their eyes glassy, their veins faintly traced with green moss-light. They lay beneath awnings in the rain. They leaned against doorframes and stared past the lanterns. Their voices thinned. Mirthcap did not rage. It faded.</p>
+
+        <p>Luma fell sick too. She was pregnant, weak, and trying to smile when Finnel came to say goodbye. He kissed her in the mist outside their home and promised he would return with the missing ingredient. It was the kind of promise no one should have to make, because it had no room in it for failure.</p>
+
+        <p>Before leaving, Finnel stopped at Marlow's old hut. Marlow had been buried a while back, and the room was empty in the way only a healer's room can be empty: full of tools, jars, old labels, and the shape of hands that would never use them again. Finnel stood there grieving until a tiny glow stirred in the corner: a small wooden box, half pipe-case and half pocketwatch mechanism, ticking without time.</p>
+
+        <p>When Finnel opened it, the gears woke. Light climbed the walls and unfolded across the ceiling into a map. The final ingredient had a name: Heartglass Rue. It grew beyond Hearthpetal Thicket, past the safe paths, in the outer garden where Mirthcap stories turned from warnings into teeth.</p>
+
+        <p>Finnel rode out on his blue briarwing with Marlow's recipes, a coil of bolas, a survival dagger, and the map's glow burned into his memory. The outer garden rose around him like a hostile forest of thorn stems, wet leaves, black dew, and root caverns. There he met the thornmaw, a plant-reptile predator with bark armor, huge teeth, and claws that tore the moss open beneath it.</p>
+
+        <p>Finnel did not win because he was larger. He won because he was desperate, clever, and fast. He cast the bolas around the thornmaw's legs and brought the beast down. Then he climbed onto it, drove his dagger into its heart, and ended the thing before it could rise again. The blue briarwing screamed into the rain, and Finnel kept moving.</p>
+
+        <p>At last he found Heartglass Rue: a small, glassy herb with heart-shaped leaves, shining as if it remembered every life it had ever saved. Finnel carried it home like a flame cupped against the wind.</p>
+
+        <p>When Finnel returned, Marlow's hut was still empty of him, but not of his work. Finnel stood at the old bench, surrounded by jars, hanging herbs, thimble bottles, and the tools that had saved him as a child. He lifted the Heartglass Rue, then ground it into Marlow's recipe and brewed the healing tonic until the whole hut glowed green-gold.</p>
+
+        <p>Outside, the Mirthcap people lined up in the rain. They came pale, shaking, and wrapped in shawls. Finnel served them one by one from the doorway of Marlow's hut. The line moved slowly. At the end stood Luma, pregnant and weak, one hand on her belly, waiting because everyone else in Mirthcap needed saving too.</p>
+
+        <p>When Finnel finally reached her, the rain had begun to soften. Luma drank the tonic. The glassy veins faded from her skin. Her eyes cleared. Around them, the village stirred as if waking from a long, cold dream.</p>
+
+        <div class="ending">
+          <p>By dawn, Luma was alive, the village was healing, and their son was born into Mirthcap while warm light filled the hut. Then the doors opened, lantern gnats rose into the sky, and all of Mirthcap gathered outside Finnel and Luma's home to celebrate the end of Glassmoss Fever. Marlow was gone, but his work had become Finnel's hands. The healer saved the hero. Then the hero saved everyone.</p>
+        </div>
+
+        <h3>Version Notes</h3>
+        <p><strong>TV cut:</strong> Marlow passes the recipes, Glassmoss Fever returns, Finnel finds the map, defeats the thornmaw, brews the tonic, saves Luma and Mirthcap, their son is born, and the village celebrates the eradication of the disease.</p>
+        <p><strong>King cut:</strong> Add Marlow's funeral, longer village grief, more outer-garden trials, and more time with Luma waiting at the end of the medicine line.</p>
+
+        <div class="scene-strip" aria-label="Selected Mirthcap story scenes">
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-01-mirthcap-lookingglass-village-first-view.jpg" alt="Mirthcap village first view" loading="lazy">
+            <strong>Mirthcap</strong>
+            <span>The hidden village beneath jewel-colored mushroom caps.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-15-mirthcap-lookingglass-village-marlow-s-secret-rec.jpg" alt="Marlow whispers the recipes to Finnel" loading="lazy">
+            <strong>The Secret Recipes</strong>
+            <span>Marlow gives Finnel the knowledge that kept Mirthcap alive.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-17-mirthcap-lookingglass-village-finnel-leaves-for-t.jpg" alt="Finnel says goodbye to pregnant Luma" loading="lazy">
+            <strong>The Goodbye</strong>
+            <span>Finnel leaves sick, pregnant Luma to find the missing herb.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-23-mirthcap-lookingglass-village-finnel-kills-the-th-identity-corrected.jpg" alt="Finnel defeats the thornmaw" loading="lazy">
+            <strong>The Thornmaw</strong>
+            <span>Finnel brings down the beast and survives the outer garden.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-24-mirthcap-lookingglass-village-finnel-brews-the-he-identity-corrected.jpg" alt="Finnel brews the Heartglass tonic" loading="lazy">
+            <strong>The Tonic</strong>
+            <span>Heartglass Rue becomes the medicine Marlow trusted him to make.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-25-mirthcap-lookingglass-village-line-for-the-healin-luma-corrected.jpg" alt="Villagers line up for the healing tonic" loading="lazy">
+            <strong>The Line</strong>
+            <span>The village waits for the cure, with Luma last.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-26-mirthcap-lookingglass-village-luma-drinks-the-ton.jpg" alt="Luma drinks the Heartglass tonic" loading="lazy">
+            <strong>The Cure</strong>
+            <span>Finnel gives Luma the Heartglass tonic and she drinks it.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-27-mirthcap-lookingglass-village-healing-dawn-newbor.jpg" alt="Finnel and Luma with their newborn" loading="lazy">
+            <strong>Healing Dawn</strong>
+            <span>Luma holds their newborn while Finnel sits beside them.</span>
+          </div>
+          <div class="scene-card">
+            <img src="https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/2026-06-14-manual-28-mirthcap-lookingglass-village-happily-ever-after-.jpg" alt="Mirthcap celebrates the end of Glassmoss Fever" loading="lazy">
+            <strong>Happily Ever After</strong>
+            <span>The whole village celebrates the end of Glassmoss Fever.</span>
+          </div>
+        </div>
+      </article>
+
+      <aside class="aside">
+        <section class="note-card">
+          <h2>Current Canon</h2>
+          <p>Heartglass Rue is the missing last herb. Marlow's pocketwatch box reveals the map. Finnel kills the thornmaw, brews the tonic, and saves Mirthcap.</p>
+        </section>
+        <section class="note-card">
+          <h3>Ending Status</h3>
+          <p>The TV cut now has its final epilogue: Mirthcap celebrates the eradication of Glassmoss Fever with Finnel, Luma, and their newborn.</p>
+        </section>
+        <section class="note-card">
+          <h3>World Links</h3>
+          <p><a href="worlds.html">Image catalog</a></p>
+          <p><a href="index.html">Prompt archive</a></p>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="wrap">
+    Story draft assembled from the Mirthcap Lookingglass Village image sequence in the GPT Image 2 archive.
+  </footer>
+
+  <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+</body>
+</html>

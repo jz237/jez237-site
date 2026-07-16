@@ -1,0 +1,3730 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Help Center - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../assets/site/logo.png" />
+  <style>
+    :root {
+      --teal: #00a7b7;
+      --aqua: #40d9ff;
+      --ink: #f0fbff;
+      --muted: #9fc6d6;
+      --line: rgba(116,205,235,0.2);
+      --orange: #ff7b32;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 clamp(12px, 2.5vw, 28px) 42px;
+    }
+    .header {
+      display: grid;
+      grid-template-columns: auto minmax(260px, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px 20px;
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: linear-gradient(180deg, rgba(8,31,47,0.98), rgba(5,22,34,0.98));
+    }
+    .brand { display: flex; align-items: center; min-width: 230px; }
+    .brand img { width: clamp(190px, 24vw, 278px); height: auto; display: block; }
+    .search-box {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      height: 44px;
+      border: 2px solid rgba(116,205,235,0.24);
+      border-radius: 999px;
+      overflow: hidden;
+      background: #102b3b;
+    }
+    .search-box input {
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      padding: 0 18px;
+      color: #eaf8fc;
+      background: transparent;
+    }
+    .search-box input::placeholder { color: #89aab8; }
+    .search-box button {
+      width: 54px;
+      border: 0;
+      color: #fff;
+      background: var(--teal);
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .cart-button {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 45px;
+      height: 40px;
+      border: 0;
+      background: transparent;
+      color: #7ddfff;
+      font-size: 24px;
+    }
+    .cart-button span {
+      position: absolute;
+      top: -2px;
+      right: 0;
+      display: grid;
+      place-items: center;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--teal);
+      font-size: 11px;
+      font-weight: 900;
+    }
+    .main-nav {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      margin: 0 calc(clamp(12px, 2.5vw, 28px) * -1);
+      border-bottom: 1px solid rgba(116,205,235,0.18);
+      background: rgba(3,18,29,0.98);
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .main-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 0;
+      padding: 10px 12px;
+      border-left: 1px solid rgba(116,205,235,0.12);
+      text-align: center;
+      white-space: nowrap;
+    }
+    .main-nav a:first-child { border-left: 0; }
+    .main-nav a.active,
+    .main-nav a:hover { color: #fff; background: rgba(0,167,183,0.18); }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 440px);
+      gap: 24px;
+      align-items: end;
+      margin-top: 18px;
+      padding: clamp(24px, 4vw, 44px);
+      border: 1px solid rgba(105,237,255,0.5);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(1,13,27,0.95) 0%, rgba(1,35,62,0.58) 48%, rgba(0,48,75,0.14) 76%),
+        url("../assets/site/hero-aquatic-world.jpg") center/cover no-repeat;
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24), 0 0 28px rgba(64,217,255,0.22);
+    }
+    .hero span,
+    .guide-card span {
+      color: var(--aqua);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 680px;
+      margin: 8px 0 12px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 5vw, 64px);
+      line-height: 0.98;
+    }
+    .hero p {
+      max-width: 620px;
+      margin: 0;
+      color: #dff8ff;
+      font-size: 15px;
+      line-height: 1.55;
+    }
+    .hero-card {
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background: rgba(7,26,39,0.78);
+    }
+    .hero-card strong {
+      display: block;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+    }
+    .hero-card p {
+      margin-top: 8px;
+      color: #b9d9e7;
+      font-size: 13px;
+    }
+    .hero-card .btn {
+      width: fit-content;
+      margin: 14px 0 0;
+    }
+    .path-grid,
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .problem-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .path-card,
+    .problem-card,
+    .checklist-card {
+      display: grid;
+      gap: 9px;
+      min-height: 172px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.11), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 21px rgba(0,0,0,0.22);
+    }
+    .path-card span,
+    .problem-card span,
+    .checklist-card span {
+      color: var(--aqua);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .path-card h3,
+    .problem-card h3,
+    .checklist-card h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .path-card p,
+    .problem-card p,
+    .checklist-card p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .path-card a,
+    .problem-card a {
+      align-self: end;
+      color: #dff8ff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: underline;
+      text-decoration-color: rgba(64,217,255,0.42);
+      text-underline-offset: 4px;
+    }
+    .store-help {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      margin-top: 28px;
+      padding: 20px;
+      border: 1px solid rgba(116,205,235,0.24);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.13), transparent 38%),
+        linear-gradient(180deg, #071f32 0%, #041827 100%);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .store-help h2 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+    .store-help p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .store-help__actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .store-help__actions .btn {
+      margin: 0;
+      white-space: nowrap;
+    }
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .checklist-card ul {
+      display: grid;
+      gap: 7px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .checklist-card li {
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .checklist-card li::before {
+      content: "• ";
+      color: var(--aqua);
+      font-weight: 900;
+    }
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 30px 0 14px;
+    }
+    .learn-disclosure {
+      margin-top: 22px;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(141,108,255,0.1), transparent 34%),
+        rgba(5,24,38,0.72);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.2);
+    }
+    .learn-disclosure summary {
+      display: block;
+      padding: 0 16px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .learn-disclosure summary::-webkit-details-marker {
+      display: none;
+    }
+    .learn-disclosure summary .section-head {
+      margin: 0;
+      padding: 18px 0;
+      align-items: center;
+    }
+    .learn-disclosure summary h2 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .learn-disclosure summary h2::before {
+      content: "+";
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid rgba(147,112,255,0.36);
+      border-radius: 7px;
+      color: #fff;
+      background: rgba(141,108,255,0.18);
+      box-shadow: 0 0 18px rgba(147,112,255,0.18);
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 20px;
+      line-height: 1;
+    }
+    .learn-disclosure[open] summary h2::before {
+      content: "-";
+    }
+    .learn-disclosure__body {
+      display: grid;
+      gap: 14px;
+      padding: 0 16px 18px;
+    }
+    .learn-disclosure__body > .section-head:first-child {
+      margin-top: 4px;
+    }
+    .section-head h2 {
+      margin: 0;
+      color: #f7fcff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+    }
+    .section-head p {
+      margin: 0;
+      color: #9fc6d6;
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+    .guide-card {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.12), transparent 38%),
+        #071a27;
+      box-shadow: 0 12px 21px rgba(0,0,0,0.22);
+    }
+    .guide-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1.18;
+      object-fit: cover;
+      object-position: 50% 10%;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+      background: #fff;
+    }
+    .guide-card div { padding: 16px; }
+    .guide-card h3 {
+      margin: 8px 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.05;
+    }
+    .guide-card p {
+      margin: 0;
+      color: #b9d9e7;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      align-self: end;
+      min-height: 40px;
+      margin: 0 16px 16px;
+      padding: 10px 18px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--orange);
+      font-weight: 900;
+    }
+    .diagram-list {
+      display: grid;
+      gap: 22px;
+      margin-top: 14px;
+    }
+    .diagram {
+      display: grid;
+      grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding: 18px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background: #071a27;
+      box-shadow: 0 12px 21px rgba(0,0,0,0.22);
+      scroll-margin-top: 22px;
+    }
+    .diagram-empty {
+      display: none;
+    }
+    .diagram-img-col {
+      display: grid;
+      gap: 6px;
+    }
+    .diagram img {
+      width: 100%;
+      height: auto;
+      border: 1px solid rgba(195,222,232,0.74);
+      border-radius: 8px;
+      background: #fff;
+      cursor: zoom-in;
+      transition: box-shadow 0.2s ease;
+    }
+    .diagram img:hover {
+      box-shadow: 0 0 18px rgba(64,217,255,0.45);
+    }
+    .diagram-zoom-hint {
+      display: block;
+      margin-top: 6px;
+      padding: 5px 9px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 999px;
+      width: fit-content;
+      color: #9eeeff;
+      background: rgba(1,12,20,0.72);
+      font-size: 11px;
+      font-weight: 900;
+      text-align: center;
+    }
+    .diagram-copy {
+      display: grid;
+      gap: 10px;
+    }
+    .diagram h2 {
+      margin: 0 0 10px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+      line-height: 1.05;
+    }
+    .diagram p {
+      margin: 0 0 14px;
+      color: #b9d9e7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .diagram ul {
+      display: grid;
+      gap: 9px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .diagram li {
+      position: relative;
+      padding-left: 17px;
+      color: #d9f5fc;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .diagram li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--aqua);
+      box-shadow: 0 0 12px rgba(64,217,255,0.6);
+    }
+    .filter-accordion {
+      display: grid;
+      gap: 10px;
+    }
+    .filter-accordion--freshwater {
+      --filter-accent: #53d6c4;
+      --filter-accent-soft: rgba(83,214,196,0.16);
+      --filter-accent-line: rgba(83,214,196,0.46);
+      --filter-card-bg: rgba(4,38,59,0.78);
+      --filter-card-open-bg: rgba(5,58,82,0.55);
+    }
+    .filter-accordion--saltwater {
+      --filter-accent: #ffb45c;
+      --filter-accent-soft: rgba(255,180,92,0.16);
+      --filter-accent-line: rgba(255,180,92,0.46);
+      --filter-card-bg: rgba(48,24,56,0.78);
+      --filter-card-open-bg: rgba(72,38,70,0.55);
+    }
+    .filter-card {
+      border: 1px solid var(--filter-accent-line, rgba(74,152,221,0.34));
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, var(--filter-accent-soft, rgba(164,137,255,0.12)), transparent 34%),
+        var(--filter-card-bg, rgba(3,24,54,0.76));
+      overflow: hidden;
+      scroll-margin-top: 18px;
+    }
+    .filter-card summary {
+      position: relative;
+      box-sizing: border-box;
+      display: grid;
+      grid-template-columns: minmax(130px, 0.42fr) minmax(170px, 0.62fr) minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      min-height: 76px;
+      padding: 14px 54px 14px 28px;
+      cursor: pointer;
+      list-style: none;
+    }
+    .filter-card summary::-webkit-details-marker {
+      display: none;
+    }
+    .filter-card summary::after {
+      content: "+";
+      position: absolute;
+      top: 50%;
+      right: 14px;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      color: #fff;
+      background: var(--filter-accent-soft, rgba(164,137,255,0.2));
+      font-size: 20px;
+      font-weight: 900;
+    }
+    .filter-card[open] summary {
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+      background: var(--filter-card-open-bg, rgba(4,39,79,0.52));
+    }
+    .filter-card[open] summary::after {
+      content: "-";
+    }
+    .filter-card summary span {
+      color: var(--filter-accent, #bdaaff);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .filter-card summary strong {
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 21px;
+      line-height: 1.05;
+    }
+    .filter-card summary p {
+      margin: 0;
+      padding-right: 34px;
+      color: #c9d9d7;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .filter-card__body {
+      display: grid;
+      grid-template-columns: minmax(180px, 280px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
+      padding: 16px;
+    }
+    .filter-card .diagram {
+      padding: 16px;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .poster-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: clamp(14px, 3vw, 34px);
+      background: rgba(0,8,18,0.86);
+      backdrop-filter: blur(7px);
+    }
+    .poster-modal[hidden] {
+      display: none;
+    }
+    .poster-modal__panel {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      max-width: min(1100px, 96vw);
+      max-height: 94vh;
+    }
+    .poster-modal__panel img {
+      display: block;
+      max-width: 100%;
+      max-height: calc(94vh - 54px);
+      object-fit: contain;
+      border: 1px solid rgba(195,222,232,0.74);
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.54);
+    }
+    .poster-modal__close {
+      justify-self: end;
+      min-width: 44px;
+      min-height: 38px;
+      border: 1px solid rgba(116,205,235,0.32);
+      border-radius: 7px;
+      color: #fff;
+      background: rgba(5,24,38,0.92);
+      font-size: 22px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    body.poster-modal-open {
+      overflow: hidden;
+    }
+    main.page > section:not(.hero):not(.diagram-list):not(.store-help) {
+      margin-top: 28px;
+      padding: clamp(16px, 2vw, 22px);
+      border: 1px solid rgba(116,205,235,0.14);
+      border-left: 6px solid rgba(64,217,255,0.72);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(64,217,255,0.075), transparent 34%),
+        rgba(2,14,24,0.58);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.18);
+    }
+    main.page > section:not(.hero):not(.diagram-list):not(.store-help) .section-head {
+      margin-top: 0;
+    }
+    .section-head h2 {
+      line-height: 1.05;
+    }
+    .section-head p {
+      max-width: 380px;
+      color: #c7d8d2;
+    }
+    .hero span,
+    .guide-card span,
+    .path-card span,
+    .problem-card span,
+    .checklist-card span {
+      display: inline-flex;
+      width: fit-content;
+      padding: 4px 8px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 6px;
+      color: #9eeeff;
+      background: rgba(1,12,20,0.72);
+      line-height: 1;
+    }
+    .path-card,
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      border-color: rgba(180,213,219,0.16);
+      background:
+        linear-gradient(180deg, rgba(15,44,61,0.72), rgba(4,16,26,0.88)),
+        #06141d;
+    }
+    .path-card {
+      border-top: 4px solid #40d9ff;
+      background:
+        linear-gradient(180deg, rgba(64,217,255,0.09), rgba(7,21,30,0.74) 42%),
+        #06141d;
+    }
+    .path-card:nth-child(2) {
+      border-top-color: #ff7b32;
+      background:
+        linear-gradient(180deg, rgba(255,123,50,0.11), rgba(22,15,10,0.74) 42%),
+        #120f0b;
+    }
+    .path-card:nth-child(3) {
+      border-top-color: #a489ff;
+      background:
+        linear-gradient(180deg, rgba(164,137,255,0.1), rgba(12,16,29,0.76) 42%),
+        #090f1e;
+    }
+    .path-card:nth-child(4) {
+      border-top-color: #72d389;
+      background:
+        linear-gradient(180deg, rgba(114,211,137,0.1), rgba(7,21,30,0.72) 42%),
+        #061712;
+    }
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      position: relative;
+      border-top: 0;
+      border-left: 4px solid var(--section-accent, var(--aqua));
+      background:
+        linear-gradient(90deg, var(--section-card-wash, rgba(64,217,255,0.09)), transparent 42%),
+        linear-gradient(180deg, rgba(9,30,44,0.9), rgba(4,15,24,0.92));
+    }
+    .problem-card span,
+    .checklist-card span,
+    .guide-card span {
+      color: #dff8ff;
+      border-color: var(--section-chip-border, rgba(116,205,235,0.28));
+      background: var(--section-chip-bg, rgba(1,12,20,0.82));
+    }
+    .path-card p,
+    .problem-card p,
+    .checklist-card li,
+    .guide-card p,
+    .diagram p,
+    .diagram li {
+      color: #c9d9d7;
+    }
+    .learn-disclosure {
+      --section-accent: #ff7b32;
+      --section-card-wash: rgba(255,123,50,0.09);
+      --section-chip-border: rgba(255,123,50,0.34);
+      --section-chip-bg: rgba(83,34,17,0.48);
+      position: relative;
+      overflow: hidden;
+      border-left: 6px solid var(--section-accent);
+      background:
+        linear-gradient(90deg, rgba(255,123,50,0.1), transparent 36%),
+        rgba(20,12,8,0.58);
+    }
+    .learn-disclosure::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      pointer-events: none;
+      box-shadow: 0 0 42px rgba(255,123,50,0.2);
+    }
+    .learn-disclosure summary {
+      background: rgba(1,12,20,0.24);
+    }
+    .learn-disclosure[open] summary {
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(1,12,20,0.54);
+    }
+    .learn-disclosure summary h2::before {
+      color: #04121d;
+      border-color: transparent;
+      background: #ff7b32;
+    }
+    .learn-disclosure__body {
+      padding-top: 16px;
+    }
+    #starter-checklists {
+      --section-accent: #72d389;
+      --section-card-wash: rgba(114,211,137,0.08);
+      --section-chip-border: rgba(114,211,137,0.34);
+      --section-chip-bg: rgba(19,72,43,0.44);
+      border-left-color: var(--section-accent);
+      background:
+        linear-gradient(90deg, rgba(114,211,137,0.09), transparent 36%),
+        rgba(5,17,13,0.62);
+    }
+    #starter-checklists::before {
+      box-shadow: 0 0 42px rgba(114,211,137,0.18);
+    }
+    #starter-checklists summary h2::before {
+      background: #72d389;
+    }
+    #filtration-equipment {
+      --section-accent: #a489ff;
+      --section-card-wash: rgba(164,137,255,0.09);
+      --section-chip-border: rgba(164,137,255,0.36);
+      --section-chip-bg: rgba(51,42,99,0.44);
+      border-left-color: var(--section-accent);
+      background:
+        linear-gradient(90deg, rgba(164,137,255,0.1), transparent 36%),
+        rgba(10,9,25,0.62);
+    }
+    #filtration-equipment::before {
+      box-shadow: 0 0 42px rgba(164,137,255,0.18);
+    }
+    #filtration-equipment summary h2::before {
+      background: #a489ff;
+    }
+    .diagram-list {
+      padding: 4px 0;
+    }
+    .diagram {
+      border-left: 6px solid #a489ff;
+      background:
+        linear-gradient(90deg, rgba(164,137,255,0.08), transparent 34%),
+        #07131f;
+    }
+
+    .store-help {
+      border-left: 6px solid #ffb45c;
+      background:
+        linear-gradient(90deg, rgba(255,180,92,0.12), transparent 38%),
+        #150f0b;
+    }
+    /* Help Center anti-card pass: use shelves, rows, and notes instead of repeated framed cards. */
+    .hero {
+      min-height: 330px;
+      align-items: center;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
+      border-bottom: 1px solid rgba(116,205,235,0.32);
+    }
+    .hero-card {
+      align-self: end;
+      padding: 14px 0 0 18px;
+      border: 0;
+      border-left: 3px solid rgba(255,123,50,0.86);
+      border-radius: 0;
+      background: transparent;
+    }
+    main.page > section:not(.hero):not(.diagram-list):not(.store-help) {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .section-head {
+      margin: 36px 0 12px;
+      padding-bottom: 11px;
+      border-bottom: 1px solid rgba(116,205,235,0.22);
+    }
+    .section-head h2 {
+      font-size: 30px;
+    }
+    .path-grid,
+    .problem-grid,
+    .checklist-grid,
+    .guide-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      border-top: 1px solid rgba(116,205,235,0.14);
+    }
+    .path-card,
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      display: grid;
+      grid-template-columns: 150px minmax(180px, 250px) minmax(0, 1fr);
+      gap: 18px;
+      align-items: center;
+      min-height: 0;
+      padding: 16px 0;
+      border: 0;
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      border-left: 0;
+    }
+    .path-card:nth-child(n),
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      background: transparent;
+      border-top: 0;
+    }
+    .path-card span,
+    .problem-card span,
+    .checklist-card span,
+    .guide-card span,
+    .hero span {
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      color: #74d9ee;
+      letter-spacing: 0.09em;
+    }
+    .path-card h3,
+    .problem-card h3,
+    .checklist-card h3,
+    .guide-card h3 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .path-card p,
+    .problem-card p,
+    .guide-card p {
+      max-width: 560px;
+      font-size: 14px;
+    }
+    .path-card a,
+    .problem-card a,
+    .checklist-card p a {
+      justify-self: end;
+      align-self: center;
+      white-space: nowrap;
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(255,123,50,0.82);
+    }
+    .checklist-card {
+      grid-template-columns: 145px minmax(170px, 230px) minmax(0, 1fr);
+    }
+    .checklist-card p {
+      grid-column: 3;
+      margin-top: 0;
+    }
+    .checklist-card ul {
+      gap: 6px;
+    }
+    .checklist-card li::before {
+      color: #ffb45c;
+    }
+    .learn-disclosure {
+      margin-top: 28px;
+      overflow: visible;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+    #troubleshooting,
+    #starter-checklists,
+    #filtration-equipment {
+      border-left: 0;
+      background: transparent;
+    }
+    .learn-disclosure::before {
+      display: none;
+    }
+    .learn-disclosure summary {
+      padding: 0;
+      background: transparent;
+      border-top: 2px solid var(--section-accent, rgba(116,205,235,0.3));
+    }
+    .learn-disclosure[open] summary {
+      border-bottom: 0;
+      background: transparent;
+    }
+    .learn-disclosure summary .section-head {
+      padding: 16px 0 12px;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+    }
+    .learn-disclosure summary h2::before {
+      width: auto;
+      height: auto;
+      border: 0;
+      background: transparent !important;
+      color: var(--section-accent, var(--aqua));
+      box-shadow: none;
+    }
+    .learn-disclosure__body {
+      padding: 2px 0 6px;
+    }
+    .guide-card {
+      grid-template-columns: 160px minmax(190px, 250px) minmax(0, 1fr);
+    }
+    .guide-card div {
+      display: contents;
+        }
+    .btn {
+      border: 1px solid rgba(255,123,50,0.5);
+      background: rgba(255,123,50,0.16);
+    }
+    .diagram {
+      border: 0;
+      border-top: 2px solid #a489ff;
+      border-radius: 0;
+      background: rgba(5,18,30,0.72);
+      box-shadow: none;
+    }
+
+    .store-help {
+      border: 0;
+      border-top: 2px solid #ffb45c;
+      border-radius: 0;
+      background: rgba(21,15,11,0.68);
+      box-shadow: none;
+    }
+    .footer {
+      margin-top: 28px;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.14);
+      border-radius: 8px 8px 0 0;
+      color: #d8f6ff;
+      background: linear-gradient(180deg, #052137, #031321);
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr;
+      gap: 24px;
+      padding: 26px;
+    }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) {
+      .header,
+      .hero,
+      .diagram { grid-template-columns: 1fr; }
+      .guide-grid,
+      .problem-grid,
+      .checklist-grid,
+      .path-grid { grid-template-columns: 1fr; }
+      .path-card,
+      .problem-card,
+      .checklist-card,
+      .guide-card {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        align-items: start;
+      }
+      .guide-card div {
+        display: grid;
+        gap: 8px;
+        padding: 0;
+      }
+      .path-card a,
+      .problem-card a,
+      .checklist-card p a {
+        justify-self: start;
+        white-space: normal;
+      }
+      .checklist-card p {
+        grid-column: auto;
+      }
+      .footer-top { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 980px) {
+      .main-nav { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .main-nav a { white-space: normal; }
+    }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .header, .main-nav { margin-left: 0; margin-right: 0; }
+      .header { padding: 14px 12px; }
+      .brand img { width: min(100%, 246px); }
+      .hero { margin-top: 12px; padding: 24px 18px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .path-grid,
+      .problem-grid,
+      .guide-grid,
+      .checklist-grid { grid-template-columns: 1fr; gap: 10px; }
+      .path-card,
+      .problem-card,
+      .checklist-card { min-height: 0; padding: 14px; }
+      .path-card,
+      .problem-card,
+      .checklist-card,
+      .guide-card,
+      .guide-card div {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 14px 0;
+      }
+      .guide-card div {
+        display: grid;
+      }
+      .checklist-card p {
+        grid-column: auto;
+      }
+      .path-card a,
+      .problem-card a,
+      .checklist-card p a {
+        justify-self: start;
+      }
+      .store-help { grid-template-columns: 1fr; padding: 16px; }
+      .store-help__actions { justify-content: stretch; }
+      .store-help__actions .btn { width: 100%; margin: 0; }
+      .learn-disclosure summary,
+      .learn-disclosure__body { padding-left: 12px; padding-right: 12px; }
+      .learn-disclosure summary .section-head { padding: 14px 0; }
+      .learn-disclosure summary h2::before {
+        width: 24px;
+        height: 24px;
+        font-size: 18px;
+      }
+      .diagram { padding: 12px; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+    /* Help Center image-reference pass. */
+    body {
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(0,167,183,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    .page {
+      max-width: 1180px;
+      padding-bottom: 28px;
+    }
+    .hero {
+      display: grid;
+      min-height: 300px;
+      margin-top: 14px;
+      padding: clamp(28px, 4vw, 46px);
+      overflow: hidden;
+      border: 1px solid rgba(42,177,234,0.42);
+      border-radius: 10px;
+      background:
+        linear-gradient(90deg, rgba(1,12,28,0.94) 0%, rgba(2,27,58,0.82) 46%, rgba(2,27,58,0.3) 100%),
+        url("../assets/site/hero-aquatic-world.jpg") center 42%/cover no-repeat;
+      box-shadow: inset 0 0 42px rgba(21,126,201,0.22), 0 16px 38px rgba(0,0,0,0.24);
+    }
+    .hero-card {
+      align-self: end;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-left: 3px solid rgba(255,123,50,0.86);
+      border-radius: 8px;
+      background: rgba(1,17,34,0.68);
+      box-shadow: inset 0 0 18px rgba(64,217,255,0.08);
+      backdrop-filter: blur(3px);
+    }
+    section[aria-labelledby="paths-title"] {
+      margin-top: 16px !important;
+      padding: 0 !important;
+    }
+    section[aria-labelledby="paths-title"] .section-head {
+      display: block;
+      margin: 8px auto 10px;
+      padding: 0;
+      border: 0;
+      text-align: center;
+    }
+    #paths-title {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 0;
+      color: #f7fbff;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.45);
+      font-size: clamp(28px, 4vw, 38px);
+      line-height: 0.98;
+    }
+    #paths-title::before,
+    #paths-title::after {
+      content: "";
+      width: min(22vw, 150px);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,218,139,0.78));
+    }
+    #paths-title::after {
+      background: linear-gradient(90deg, rgba(255,218,139,0.78), transparent);
+    }
+    section[aria-labelledby="paths-title"] .section-head p {
+      max-width: none;
+      margin-top: 6px;
+      color: #d7e9f7;
+      font-size: 14px;
+      font-weight: 650;
+    }
+    .path-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      border: 0;
+    }
+    .path-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-items: center;
+      gap: 10px;
+      align-content: start;
+      min-height: 286px;
+      padding: 12px 12px 16px;
+      overflow: hidden;
+      border: 1px solid rgba(32,179,244,0.72) !important;
+      border-radius: 8px;
+      text-align: center;
+      background-color: #021737;
+      background-image:
+        radial-gradient(circle at 50% 14%, rgba(64,217,255,0.28), transparent 34%),
+        linear-gradient(180deg, rgba(4,46,94,0.92), rgba(2,23,55,0.96));
+      box-shadow: inset 0 0 22px rgba(17,104,176,0.32), 0 10px 28px rgba(0,0,0,0.26);
+    }
+    .path-card__art {
+      position: relative;
+      z-index: 2;
+      display: block;
+      width: min(100%, 158px);
+      aspect-ratio: 1 / 1;
+      height: auto;
+      margin: 0 0 4px;
+      border: 1px solid rgba(86,222,255,0.82);
+      border-radius: 6px;
+      object-fit: contain;
+      object-position: center;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(64,217,255,0.16), transparent 62%),
+        #031224;
+      box-shadow:
+        0 0 24px rgba(64,217,255,0.3),
+        inset 0 0 18px rgba(0,0,0,0.28);
+    }
+    .path-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        linear-gradient(180deg, rgba(1,9,21,0.03) 0%, rgba(1,10,24,0.08) 38%, rgba(1,11,24,0.38) 72%, rgba(1,9,20,0.74) 100%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), transparent 22%);
+      pointer-events: none;
+    }
+    .path-card span {
+      display: none;
+    }
+    .path-card h3,
+    .path-card p,
+    .path-card a {
+      position: relative;
+      z-index: 2;
+    }
+    .path-card h3 {
+      color: #f6fbff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+      font-size: 20px;
+      line-height: 1.05;
+    }
+    .path-card p {
+      max-width: 170px;
+      min-height: 54px;
+      color: #d8e9f5;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .path-card a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      justify-self: center;
+      min-height: 34px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(108,187,234,0.24);
+      border-bottom: 0;
+      color: #40f0ff;
+      font-size: 13px;
+      font-weight: 950;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .path-card a::after,
+    .store-help__actions .btn::after {
+      content: "›";
+      font-size: 25px;
+      line-height: 0.8;
+    }
+    .guide-library {
+      margin-top: 14px;
+      padding: 10px 12px 12px;
+      border: 1px solid rgba(31,142,218,0.6);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(24,111,179,0.26), transparent 34%),
+        rgba(2,27,63,0.78);
+      box-shadow: inset 0 0 28px rgba(23,90,164,0.22), 0 14px 32px rgba(0,0,0,0.22);
+    }
+    .guide-library__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: baseline;
+      padding: 0 4px 8px;
+    }
+    .guide-library__head h2 {
+      margin: 0;
+      color: #f7fbff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 25px;
+      line-height: 1.05;
+    }
+    .guide-library__head p {
+      margin: 0;
+      color: #c7d9eb;
+      font-size: 13px;
+    }
+    .learn-disclosure {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(72,142,214,0.46) !important;
+      border-radius: 12px;
+      background: rgba(3,35,77,0.54) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .learn-disclosure + .learn-disclosure {
+      margin-top: -1px;
+    }
+    .learn-disclosure summary {
+      padding: 0;
+      border: 0;
+    }
+    .learn-disclosure summary .section-head {
+      display: grid;
+      grid-template-columns: 44px minmax(210px, 1fr) minmax(260px, 1.3fr) 28px;
+      gap: 16px;
+      align-items: center;
+      margin: 0;
+      padding: 10px 12px;
+      border: 0;
+    }
+    .learn-disclosure summary .section-head::before {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      color: #fff;
+      background: linear-gradient(145deg, var(--row-accent, #0fb7d5), var(--row-accent-dark, #0a5fb8));
+      box-shadow: inset 0 0 14px rgba(255,255,255,0.18), 0 0 14px rgba(25,184,232,0.18);
+      font-size: 21px;
+      font-weight: 950;
+      content: var(--row-icon, "?");
+    }
+    .learn-disclosure summary .section-head::after {
+      content: "⌄";
+      justify-self: center;
+      color: #cce7fb;
+      font-size: 29px;
+      line-height: 1;
+    }
+    .learn-disclosure[open] summary .section-head::after {
+      transform: rotate(180deg);
+    }
+    .learn-disclosure summary h2 {
+      display: block;
+      margin: 0;
+      color: #f4f9ff;
+      font-size: 23px;
+      line-height: 1.05;
+    }
+    .learn-disclosure summary h2::before {
+      display: none;
+    }
+    .learn-disclosure summary p {
+      max-width: none;
+      margin: 0;
+      color: #c4d5e8;
+      font-size: 13px;
+      font-weight: 550;
+      line-height: 1.35;
+    }
+    #filtration-equipment .filter-card summary {
+      border: 0;
+      padding: 14px 54px 14px 28px;
+    }
+    #filtration-equipment .filter-card[open] summary {
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+      background: var(--filter-card-open-bg, rgba(4,39,79,0.52));
+    }
+    #filtration-equipment .filter-card summary span {
+      color: var(--filter-accent, #bdaaff);
+    }
+    #filtration-equipment .filter-card summary p {
+      padding-right: 34px;
+      color: #c9d9d7;
+      font-weight: 500;
+    }
+    #troubleshooting { --row-icon: "✚"; --row-accent: #df343d; --row-accent-dark: #a9172a; }
+    #starter-checklists { --row-icon: "☑"; --row-accent: #19c1c9; --row-accent-dark: #0f778c; }
+    #filtration-equipment { --row-icon: "▥"; --row-accent: #965cf2; --row-accent-dark: #5630bf; }
+    #food-feeding { --row-icon: "🐟"; --row-accent: #2688f2; --row-accent-dark: #0d52a8; }
+    #health-water-quality { --row-icon: "✓"; --row-accent: #28bf8d; --row-accent-dark: #12815e; }
+    .learn-disclosure__body {
+      padding: 4px 14px 16px;
+      border-top: 1px solid rgba(116,205,235,0.14);
+    }
+    .learn-disclosure__body .section-head {
+      margin: 20px 0 10px;
+    }
+    .problem-grid,
+    .checklist-grid,
+    .guide-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      border: 0;
+    }
+    .problem-card,
+    .checklist-card,
+    .guide-card {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      align-items: start;
+      padding: 14px;
+      border: 1px solid rgba(74,152,221,0.34);
+      border-radius: 8px;
+      background: rgba(3,24,54,0.76);
+    }
+    .guide-card div {
+      display: grid;
+      gap: 7px;
+      padding: 0;
+    }
+    .problem-card a,
+    .checklist-card p a {
+      justify-self: start;
+      white-space: normal;
+    }
+    .learn-disclosure__body .checklist-grid {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      align-items: stretch;
+    }
+    .learn-disclosure__body .checklist-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 100%;
+      padding: 16px;
+    }
+    .learn-disclosure__body .checklist-card__media {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: #061a27;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .learn-disclosure__body .checklist-card__media img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .learn-disclosure__body .checklist-card h3 {
+      max-width: 12.5em;
+      font-size: 25px;
+      line-height: 1.08;
+    }
+    .learn-disclosure__body .checklist-card ul {
+      gap: 9px;
+      margin-top: 2px;
+    }
+    .learn-disclosure__body .checklist-card li {
+      position: relative;
+      padding-left: 14px;
+      font-size: 14px;
+      line-height: 1.42;
+    }
+    .learn-disclosure__body .checklist-card li::before {
+      position: absolute;
+      left: 0;
+      content: "•";
+      color: #ffb45c;
+    }
+    .learn-disclosure__body .checklist-card p {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+    .learn-disclosure__body .checklist-card p a {
+      display: inline-flex;
+      width: fit-content;
+      justify-self: start;
+      align-self: start;
+      white-space: normal;
+    }
+    .equipment-feature-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(230px, 280px);
+      gap: 12px;
+      align-items: stretch;
+      margin: 4px 0 18px;
+    }
+    .problem-grid--filter-links {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin: 0;
+    }
+    .problem-grid--filter-links .problem-card {
+      min-height: 100%;
+    }
+    .equipment-choice {
+      display: grid;
+      align-content: space-between;
+      align-self: start;
+      justify-self: end;
+      gap: 12px;
+      width: min(100%, 280px);
+      min-height: 0;
+      aspect-ratio: 1 / 1;
+      padding: 15px;
+      border: 1px solid rgba(164,137,255,0.3);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(164,137,255,0.13), transparent 34%),
+        rgba(9,15,39,0.62);
+      box-shadow: inset 0 0 24px rgba(164,137,255,0.07);
+    }
+    .equipment-choice__intro h3 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.05;
+    }
+    .equipment-choice__intro p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 12.5px;
+      line-height: 1.4;
+    }
+    .equipment-choice__grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .equipment-choice__item span {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 5px 8px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 999px;
+      color: #dcd4ff;
+      background: rgba(3,35,77,0.36);
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .triage-board {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 10px;
+    }
+    .triage-primary,
+    .triage-steps {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background:
+        linear-gradient(180deg, rgba(5,43,73,0.78), rgba(2,18,31,0.9)),
+        #061a27;
+    }
+    .triage-primary {
+      display: grid;
+      align-content: start;
+      gap: 16px;
+      padding: 18px;
+      border-left: 6px solid #ff7b32;
+    }
+    .triage-primary span,
+    .triage-card span {
+      color: #74d9ee;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .triage-primary h3 {
+      margin: 6px 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+    .triage-primary p,
+    .triage-card p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .triage-primary__links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .triage-primary__links a,
+    .triage-card a {
+      display: inline-flex;
+      width: fit-content;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(255,123,50,0.82);
+    }
+    .triage-steps {
+      display: grid;
+      gap: 0;
+      overflow: hidden;
+    }
+    .triage-card {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-bottom: 1px solid rgba(116,205,235,0.14);
+    }
+    .triage-card:last-child {
+      border-bottom: 0;
+    }
+    .triage-card h3 {
+      margin: 3px 0 5px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.05;
+    }
+    .triage-card a {
+      white-space: nowrap;
+    }
+    .triage-tool {
+      display: grid;
+      grid-template-columns: minmax(260px, 330px) minmax(0, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid rgba(116,205,235,0.22);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(64,217,255,0.12), transparent 34%),
+        rgba(3,24,54,0.78);
+    }
+    .triage-tool__controls {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+    .triage-aquarium {
+      position: relative;
+      isolation: isolate;
+      min-height: 190px;
+      margin-top: 2px;
+      overflow: hidden;
+      border: 2px solid rgba(116,205,235,.34);
+      border-radius: 12px 12px 18px 18px;
+      background:
+        radial-gradient(circle at 22% 22%, rgba(90,225,218,.14), transparent 28%),
+        linear-gradient(180deg, rgba(28,125,163,.54), rgba(3,34,57,.92));
+      box-shadow: inset 0 0 34px rgba(64,217,255,.09), 0 14px 30px rgba(0,0,0,.28);
+      transition: background .28s ease, border-color .28s ease;
+    }
+    .triage-aquarium[data-biome="reef"],
+    .triage-aquarium[data-biome="saltwater"] {
+      background:
+        radial-gradient(circle at 78% 72%, rgba(166,94,232,.22), transparent 30%),
+        linear-gradient(180deg, rgba(24,116,171,.68), rgba(2,25,54,.96));
+    }
+    .triage-aquarium[data-biome="pond"] {
+      background:
+        radial-gradient(circle at 22% 12%, rgba(255,206,98,.2), transparent 30%),
+        linear-gradient(180deg, rgba(70,139,128,.66), rgba(15,54,48,.96));
+    }
+    .triage-aquarium__surface {
+      position: absolute;
+      inset: 15px 8px auto;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(185,246,255,.58);
+      box-shadow: 0 0 14px rgba(116,225,244,.44);
+    }
+    .triage-aquarium__surface::after {
+      content: "";
+      position: absolute;
+      inset: -8px 0;
+      background: repeating-radial-gradient(ellipse at center, transparent 0 12px, rgba(207,251,255,.14) 13px 14px, transparent 15px 25px);
+      animation: triageWater 5s ease-in-out infinite alternate;
+    }
+    .triage-aquarium__filter {
+      position: absolute;
+      right: 14px;
+      top: 34px;
+      width: 32px;
+      height: 72px;
+      border: 1px solid rgba(173,235,245,.38);
+      border-radius: 6px;
+      background: linear-gradient(90deg, rgba(3,20,33,.86), rgba(17,73,93,.86));
+      box-shadow: -8px 8px 18px rgba(0,0,0,.24);
+    }
+    .triage-aquarium__filter::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      bottom: -46px;
+      width: 4px;
+      height: 52px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(151,235,248,.65), transparent);
+    }
+    .triage-aquarium__substrate {
+      position: absolute;
+      inset: auto 0 0;
+      height: 46px;
+      background:
+        radial-gradient(circle at 12% 48%, #9f825d 0 3px, transparent 4px),
+        radial-gradient(circle at 32% 60%, #c0a071 0 4px, transparent 5px),
+        radial-gradient(circle at 67% 36%, #6e665b 0 3px, transparent 4px),
+        radial-gradient(circle at 86% 64%, #b09366 0 4px, transparent 5px),
+        linear-gradient(180deg, #6e5b45, #342a25);
+      box-shadow: 0 -9px 18px rgba(0,0,0,.18);
+    }
+    .triage-aquarium__plant {
+      position: absolute;
+      left: 24px;
+      bottom: 30px;
+      width: 34px;
+      height: 82px;
+      border-left: 4px solid #4fb88b;
+      border-radius: 50%;
+      transform: rotate(-6deg);
+    }
+    .triage-aquarium__plant::before,
+    .triage-aquarium__plant::after {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 11px;
+      border-radius: 100% 0 100% 0;
+      background: #61c99b;
+      box-shadow: 5px 25px 0 #55b889, -7px 49px 0 #3b9c75;
+      transform: rotate(-22deg);
+    }
+    .triage-aquarium__plant::after {
+      left: -25px;
+      top: 12px;
+      transform: scaleX(-1) rotate(-16deg);
+    }
+    .triage-aquarium__bubble {
+      position: absolute;
+      left: 54%;
+      bottom: 43px;
+      width: 7px;
+      height: 7px;
+      border: 1px solid rgba(210,249,255,.72);
+      border-radius: 50%;
+      box-shadow: 10px -18px 0 -1px rgba(210,249,255,.28), -5px -38px 0 -2px rgba(210,249,255,.38);
+      animation: triageBubbles 4.4s linear infinite;
+    }
+    .triage-hotspot {
+      position: absolute;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 7px;
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 999px;
+      color: rgba(232,250,255,.72);
+      background: rgba(2,19,32,.62);
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: color .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease, transform .22s ease;
+    }
+    .triage-hotspot[data-zone="surface"] { left: 12px; top: 27px; }
+    .triage-hotspot[data-zone="water"] { left: 12px; top: 82px; }
+    .triage-hotspot[data-zone="livestock"] { right: 55px; top: 112px; }
+    .triage-hotspot[data-zone="substrate"] { right: 12px; bottom: 9px; }
+    .triage-aquarium[data-zone="surface"] .triage-hotspot[data-zone="surface"],
+    .triage-aquarium[data-zone="water"] .triage-hotspot[data-zone="water"],
+    .triage-aquarium[data-zone="livestock"] .triage-hotspot[data-zone="livestock"],
+    .triage-aquarium[data-zone="substrate"] .triage-hotspot[data-zone="substrate"] {
+      color: #fff;
+      border-color: rgba(255,180,92,.82);
+      background: rgba(255,123,50,.28);
+      box-shadow: 0 0 0 4px rgba(255,123,50,.08), 0 0 18px rgba(255,180,92,.26);
+      transform: scale(1.04);
+    }
+    .triage-visual__sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+    @keyframes triageWater { to { transform: translateX(14px) scaleX(1.04); } }
+    @keyframes triageBubbles { to { transform: translateY(-82px); opacity: .1; } }
+    .triage-aquarium,
+    .triage-aquarium[data-biome="reef"],
+    .triage-aquarium[data-biome="saltwater"],
+    .triage-aquarium[data-biome="pond"] {
+      background:
+        linear-gradient(90deg, rgba(2,18,31,.08), rgba(2,18,31,.5)),
+        url("../assets/learn/aquarium-system-routines-gpt-image-2.webp") left center / cover no-repeat;
+    }
+    .triage-aquarium__surface,
+    .triage-aquarium__filter,
+    .triage-aquarium__substrate,
+    .triage-aquarium__plant,
+    .triage-aquarium__bubble {
+      display: none;
+    }
+    .triage-field {
+      display: grid;
+      gap: 6px;
+    }
+    .learn-motion-guide {
+      margin-top: 18px;
+      padding: clamp(16px, 2.5vw, 24px);
+      border: 1px solid rgba(116,205,235,.24);
+      border-radius: 10px;
+      background:
+        radial-gradient(circle at 90% 0, rgba(64,217,255,.09), transparent 32%),
+        rgba(4,24,39,.82);
+    }
+    .learn-motion-guide__head {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(240px,.65fr);
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+    .learn-motion-guide__head h2 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(24px, 3vw, 36px);
+    }
+    .learn-motion-guide__head p {
+      margin: 0;
+      color: #a7cbd8;
+      line-height: 1.5;
+    }
+    .learn-system-art {
+      margin: 0;
+      overflow: hidden;
+      border: 1px solid rgba(116,205,235,.28);
+      border-radius: 10px;
+      background: #031522;
+      box-shadow: 0 20px 40px rgba(0,0,0,.34);
+    }
+    .learn-system-art img {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 2.1 / 1;
+      object-fit: cover;
+    }
+    .learn-system-art figcaption {
+      padding: 10px 14px;
+      color: #a9c9d6;
+      background: rgba(2,16,28,.92);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .learn-system-notes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .learn-system-note {
+      padding: 14px;
+      border: 1px solid rgba(116,205,235,.18);
+      border-radius: 8px;
+      background: rgba(2,16,28,.72);
+    }
+    .learn-system-note > span {
+      color: #74d9ee;
+      font-size: 10px;
+      font-weight: 950;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .learn-system-note h3 {
+      margin: 5px 0 6px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+    }
+    .learn-system-note p {
+      margin: 0 0 9px;
+      color: #a9c9d6;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .learn-system-note a {
+      color: #63e5f4;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .triage-aquarium__surface::after,
+      .triage-aquarium__bubble {
+        animation: none !important;
+      }
+    }
+    .triage-field label,
+    .triage-result__eyebrow {
+      color: #74d9ee;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+    }
+    .triage-field select {
+      width: 100%;
+      min-height: 42px;
+      padding: 0 12px;
+      border: 1px solid rgba(116,205,235,0.28);
+      border-radius: 7px;
+      color: #effcff;
+      background: #061b2b;
+      font: inherit;
+      font-weight: 750;
+    }
+    .triage-result {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid rgba(255,123,50,0.24);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(255,123,50,0.08), transparent 42%),
+        rgba(2,14,24,0.72);
+    }
+    .triage-result.is-mismatch {
+      border-color: rgba(255,196,92,0.74);
+      background:
+        linear-gradient(90deg, rgba(255,196,92,0.14), transparent 42%),
+        rgba(28,20,13,0.84);
+    }
+    .triage-result h3 {
+      margin: 2px 0 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+    .triage-result p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .triage-result__grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .triage-result__block {
+      padding: 12px;
+      border: 1px solid rgba(116,205,235,0.16);
+      border-radius: 8px;
+      background: rgba(4,25,40,0.8);
+    }
+    .triage-result__block strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #fff;
+      font-size: 13px;
+    }
+    .triage-result__block ul {
+      display: grid;
+      gap: 5px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .triage-result__block li {
+      color: #c9d9d7;
+      font-size: 12.5px;
+      line-height: 1.36;
+    }
+    .triage-result__block li::before {
+      content: "• ";
+      color: #ffb45c;
+      font-weight: 900;
+    }
+    .triage-result__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .triage-result__actions [data-triage-links] {
+      display: contents;
+    }
+    .triage-result__actions a,
+    .triage-copy-button {
+      display: inline-flex;
+      width: fit-content;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(255,123,50,0.82);
+    }
+    .triage-copy-button {
+      padding: 0;
+      border-top: 0;
+      border-right: 0;
+      border-left: 0;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+    }
+    .triage-copy-button[disabled] {
+      opacity: 0.45;
+      cursor: not-allowed;
+      border-bottom-color: rgba(255,255,255,0.28);
+    }
+    .triage-copy-status {
+      align-self: center;
+      color: #ffdd9a;
+      font-size: 12px;
+      font-weight: 850;
+    }
+    .triage-visit {
+      display: grid;
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      gap: 12px;
+      padding: 14px;
+      border: 1px solid rgba(255,180,92,0.26);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(255,180,92,0.1), transparent 42%),
+        rgba(18,16,10,0.62);
+    }
+    .triage-visit h4 {
+      margin: 4px 0 7px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 22px;
+      line-height: 1.05;
+    }
+    .triage-visit p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    .triage-visit ul {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 7px 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .triage-visit li {
+      position: relative;
+      padding-left: 16px;
+      color: #dff8ff;
+      font-size: 12.5px;
+      line-height: 1.34;
+    }
+    .triage-visit li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.48em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ffb45c;
+      box-shadow: 0 0 10px rgba(255,180,92,0.4);
+    }
+    .store-help {
+      position: relative;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 22px;
+      min-height: 130px;
+      margin-top: 16px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(44,155,231,0.68);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(36,205,255,0.2), transparent 32%),
+        linear-gradient(90deg, rgba(3,35,78,0.98), rgba(3,35,78,0.9)),
+        rgba(2,25,61,0.92);
+      box-shadow: inset 0 0 26px rgba(32,156,226,0.18), 0 14px 32px rgba(0,0,0,0.24);
+    }
+    .store-help::before {
+      display: none;
+    }
+    .store-help h2 {
+      margin-top: 0;
+      font-size: 26px;
+    }
+    .store-help p {
+      max-width: 560px;
+      color: #e5f4ff;
+    }
+    .store-help__actions {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+      justify-content: stretch;
+    }
+    .store-help__actions .btn {
+      justify-content: space-between;
+      width: 100%;
+      min-height: 46px;
+      margin: 0;
+      padding: 0 18px;
+      border-radius: 7px;
+      color: #fff;
+      background: linear-gradient(180deg, rgba(31,198,239,0.92), rgba(10,96,168,0.92));
+      box-shadow: inset 0 0 12px rgba(255,255,255,0.18), 0 0 16px rgba(42,217,255,0.18);
+    }
+    .store-help__actions .btn.secondary {
+      border-color: rgba(255,201,86,0.72);
+      background: rgba(3,33,76,0.86);
+    }
+    .starter-section {
+      display: grid;
+      gap: 14px;
+    }
+    .starter-section__head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      padding: 2px 0 12px;
+      border-bottom: 1px solid rgba(116,205,235,0.16);
+    }
+    .starter-section__head h3 {
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27px;
+      line-height: 1.05;
+    }
+    .starter-section__head p {
+      max-width: 560px;
+      margin: 6px 0 0;
+      color: #c9d9d7;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+    .starter-section__meta {
+      color: #72d389;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .starter-topic-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .starter-topic-card {
+      display: grid;
+      gap: 7px;
+      min-height: 132px;
+      padding: 13px;
+      border: 1px solid rgba(114,211,137,0.26);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(114,211,137,0.14), transparent 38%),
+        rgba(3,28,31,0.72);
+      box-shadow: inset 0 0 20px rgba(114,211,137,0.06);
+    }
+    .starter-topic-card span {
+      color: #91f0b0;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .starter-topic-card strong {
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 20px;
+      line-height: 1.05;
+    }
+    .starter-topic-card p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+    .starter-guide-panel {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.78fr) minmax(0, 1fr);
+      gap: 18px;
+      padding: 18px;
+      border: 1px solid rgba(114,211,137,0.28);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(114,211,137,0.1), transparent 42%),
+        rgba(2,20,23,0.76);
+      box-shadow: inset 0 0 28px rgba(114,211,137,0.07);
+    }
+    .starter-guide-panel h4 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 25px;
+      line-height: 1.05;
+    }
+    .starter-guide-panel p {
+      margin: 0;
+      color: #c9d9d7;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .starter-quick-list {
+      display: grid;
+      gap: 8px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .starter-quick-list li {
+      position: relative;
+      padding-left: 18px;
+      color: #dff8ff;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .starter-quick-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #72d389;
+      box-shadow: 0 0 12px rgba(114,211,137,0.46);
+    }
+    .starter-step-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .starter-step-card {
+      padding: 13px;
+      border: 1px solid rgba(116,205,235,0.18);
+      border-radius: 8px;
+      background: rgba(3,35,77,0.36);
+    }
+    .starter-step-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #fff;
+      font-size: 14px;
+    }
+    .starter-step-card p {
+      color: #c9d9d7;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+    @media (max-width: 1040px) {
+      .path-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .starter-topic-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .starter-guide-panel {
+        grid-template-columns: 1fr;
+      }
+      .equipment-choice {
+        grid-template-columns: 1fr;
+      }
+      .filter-card summary,
+      .filter-card__body {
+        grid-template-columns: 1fr;
+      }
+      .store-help {
+        grid-template-columns: minmax(0, 1fr) 250px;
+      }
+      .store-help__actions {
+        grid-column: 2;
+      }
+    }
+      @media (max-width: 820px) {
+      #paths-title::before,
+      #paths-title::after {
+        width: 52px;
+      }
+      .path-grid,
+      .problem-grid,
+      .checklist-grid,
+      .guide-grid,
+      .triage-board,
+      .starter-topic-grid,
+      .starter-step-grid {
+        grid-template-columns: 1fr;
+      }
+      .triage-card {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+      .triage-card a {
+        white-space: normal;
+      }
+      .triage-tool,
+      .triage-result__grid,
+      .triage-visit,
+      .triage-visit ul,
+      .learn-motion-guide__head,
+      .learn-system-notes {
+        grid-template-columns: 1fr;
+      }
+      .starter-section__head {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .equipment-choice__grid {
+        grid-template-columns: 1fr;
+      }
+      .equipment-feature-grid {
+        grid-template-columns: 1fr;
+      }
+      .equipment-choice {
+        justify-self: stretch;
+        width: 100%;
+        aspect-ratio: auto;
+      }
+      .starter-section__meta {
+        white-space: normal;
+      }
+      .starter-guide-panel {
+        padding: 14px;
+      }
+      .path-card {
+        min-height: 296px;
+      }
+      .guide-library__head,
+      .learn-disclosure summary .section-head {
+        grid-template-columns: 1fr;
+      }
+      .learn-disclosure summary .section-head {
+        gap: 8px;
+      }
+      .learn-disclosure summary .section-head::after {
+        position: absolute;
+        right: 18px;
+      }
+      .store-help {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+      .store-help__actions {
+        grid-column: auto;
+      }
+    }
+    @media (max-width: 760px) {
+      section[aria-labelledby="paths-title"] .path-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+      section[aria-labelledby="paths-title"] .path-card {
+        min-height: 0;
+        padding: 8px 7px 10px;
+        gap: 6px;
+      }
+      section[aria-labelledby="paths-title"] .path-card__art {
+        width: min(100%, 118px);
+      }
+      section[aria-labelledby="paths-title"] .path-card h3 {
+        font-size: 15px;
+      }
+      section[aria-labelledby="paths-title"] .path-card p {
+        max-width: 18em;
+        min-height: 46px;
+        font-size: 11.5px;
+        line-height: 1.25;
+      }
+      section[aria-labelledby="paths-title"] .path-card a {
+        min-height: 30px;
+        padding-top: 7px;
+        font-size: 11.5px;
+        white-space: normal;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260712-unified-nav" />
+</head>
+<body>
+  <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../">
+        <img src="../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
+      </a>
+    </header>
+
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../">Home</a>
+      <a href="../category/?cat=freshwater">Freshwater</a>
+      <a href="../category/?cat=saltwater">Saltwater</a>
+      <a href="../category/?cat=pond">Pond</a>
+      <a href="../category/?cat=equipment">Equipment</a>
+      <a href="../category/?cat=food">Food</a>
+      <a href="../category/?cat=decor">Decorations</a>
+      <a href="../category/?cat=maintenance">Maintenance</a>
+      <a class="active" href="../learn/">Help</a>
+      <a href="../#visit">Visit Us</a>
+    </nav>
+
+    <section class="hero">
+      <div>
+        <span>Help Center</span>
+        <h1>Start smarter, fix problems faster.</h1>
+        <p>Practical care guides for choosing equipment, understanding water quality, and troubleshooting the problems you actually run into at home.</p>
+      </div>
+      <aside class="hero-card">
+        <strong>Ask the right question first</strong>
+        <p>Are you starting a tank, fixing a problem, choosing gear, or building a better routine? Start with what you are trying to do today.</p>
+        <a class="btn secondary" href="#tank-triage">Start tank triage</a>
+      </aside>
+    </section>
+
+    <section aria-labelledby="paths-title">
+      <div class="section-head">
+        <h2 id="paths-title">Choose a Learning Path</h2>
+      </div>
+      <div class="path-grid">
+        <article class="path-card">
+          <img class="path-card__art" src="../assets/site/learn-paths/start-tank-gpt2-square.jpg" alt="" loading="lazy" />
+          <span>New setup</span>
+          <h3>Start a Tank</h3>
+          <p>Step-by-step guidance for setting up a healthy, thriving aquarium.</p>
+          <a href="#starter-checklists">Start here</a>
+        </article>
+        <article class="path-card">
+          <img class="path-card__art" src="../assets/site/learn-paths/fix-problem-gpt2-square.jpg" alt="" loading="lazy" />
+          <span>Diagnosis</span>
+          <h3>Fix a Problem</h3>
+          <p>Find solutions to common issues and get your tank back on track.</p>
+          <a href="#tank-triage">Start triage</a>
+        </article>
+        <article class="path-card">
+          <img class="path-card__art" src="../assets/site/learn-paths/choose-equipment-gpt2-square.jpg" alt="" loading="lazy" />
+          <span>Gear help</span>
+          <h3>Equipment</h3>
+          <p>Compare filters, pumps, heaters, lighting, and more to find what's right.</p>
+          <a href="#filtration-equipment">Explore gear</a>
+        </article>
+        <article class="path-card">
+          <img class="path-card__art" src="../assets/site/learn-paths/care-guides-gpt2-square.jpg" alt="" loading="lazy" />
+          <span>Routine care</span>
+          <h3>Care Guides</h3>
+          <p>Weekly routines, water changes, feeding, testing, and quarantine basics.</p>
+          <a href="feeding-basics/">Feeding basics</a>
+        </article>
+        <article class="path-card">
+          <img class="path-card__art" src="../assets/site/learn-paths/all-topics-gpt2-square.jpg" alt="" loading="lazy" />
+          <span>Library</span>
+          <h3>All Topics</h3>
+          <p>Browse every guide and resource in one complete library.</p>
+          <a href="#guide-library">Browse all</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="tank-triage" aria-labelledby="triage-title">
+      <div class="section-head">
+        <h2 id="triage-title">What Is Happening In Your Tank?</h2>
+        <p>Start with the symptom, then move to tests, likely causes, and the safest first action.</p>
+      </div>
+      <div class="triage-board">
+        <article class="triage-primary">
+          <div>
+            <span>Use this first</span>
+            <h3>Bring the problem down to one next step.</h3>
+            <p>Most aquarium issues look similar at first. Water trouble, oxygen trouble, disease, overfeeding, light, and dirty filtration can overlap. The goal is to check the urgent basics before buying treatments.</p>
+          </div>
+          <div class="triage-primary__links">
+            <a href="track-parameters/">Know what to test</a>
+            <a href="ammonia-nitrite/">Emergency water issue</a>
+          </div>
+        </article>
+        <div class="triage-steps" aria-label="Problem triage shortcuts">
+          <article class="triage-card">
+            <span>Fish at surface</span>
+            <div>
+              <h3>Breathing hard or crowding the top</h3>
+              <p>Treat oxygen, ammonia, nitrite, temperature, and recent chemical additions as urgent.</p>
+            </div>
+            <a href="fish-gasping/">Start here</a>
+          </article>
+          <article class="triage-card">
+            <span>Water changed</span>
+            <div>
+              <h3>Cloudy, green, milky, or smelly water</h3>
+              <p>Separate bacterial bloom, green-water algae, excess food, dirty substrate, and decay.</p>
+            </div>
+            <a href="cloudy-water/">Compare causes</a>
+          </article>
+          <article class="triage-card">
+            <span>Fish look sick</span>
+            <div>
+              <h3>White spots, flashing, clamped fins, or hiding</h3>
+              <p>Check water first, then separate parasites, stress, injury, and treatment safety.</p>
+            </div>
+            <a href="ich/">Diagnose symptoms</a>
+          </article>
+          <article class="triage-card">
+            <span>Growth problem</span>
+            <div>
+              <h3>Algae, mats, hair algae, or green water</h3>
+              <p>Look at light schedule, nutrient fuel, flow, filtration, and whether UV makes sense.</p>
+            </div>
+            <a href="algae/">Identify algae</a>
+          </article>
+        </div>
+      </div>
+      <div class="triage-tool" aria-label="Interactive aquarium problem triage">
+        <div class="triage-tool__controls">
+          <div class="triage-field">
+            <label for="triage-symptom">Main symptom</label>
+            <select id="triage-symptom" data-triage-symptom>
+              <option value="breathing">Fish breathing hard or at surface</option>
+              <option value="death">Fish died suddenly</option>
+              <option value="cloudy">Cloudy, milky, or hazy water</option>
+              <option value="green">Water itself looks green</option>
+              <option value="algae">Hair algae, mats, or heavy growth</option>
+              <option value="sick">White spots, flashing, or clamped fins</option>
+              <option value="coral">Coral not opening</option>
+              <option value="inverts">Snails or shrimp dying</option>
+              <option value="smell">Tank smells bad</option>
+              <option value="cycling">New tank still cycling</option>
+              <option value="temperature">Temperature or heater problem</option>
+            </select>
+          </div>
+          <div class="triage-field">
+            <label for="triage-tank">Tank type</label>
+            <select id="triage-tank" data-triage-tank>
+              <option value="freshwater">Freshwater</option>
+              <option value="saltwater">Saltwater fish-only</option>
+              <option value="reef">Reef or coral system</option>
+              <option value="pond">Pond</option>
+            </select>
+          </div>
+          <div class="triage-field">
+            <label for="triage-change">Recent change</label>
+            <select id="triage-change" data-triage-change>
+              <option value="none">Nothing obvious</option>
+              <option value="newLivestock">New livestock added</option>
+              <option value="waterChange">Recent water change</option>
+              <option value="filterClean">Filter was cleaned or replaced</option>
+              <option value="medication">Medication or chemical added</option>
+              <option value="overfeed">Extra food or missed cleanup</option>
+            </select>
+          </div>
+          <div class="triage-aquarium" data-triage-visual data-zone="surface" data-biome="freshwater" role="img" aria-label="Aquarium diagram highlighting the water surface">
+            <span class="triage-hotspot" data-zone="surface" aria-hidden="true">Surface</span>
+            <span class="triage-hotspot" data-zone="water" aria-hidden="true">Water</span>
+            <span class="triage-hotspot" data-zone="livestock" aria-hidden="true">Livestock</span>
+            <span class="triage-hotspot" data-zone="substrate" aria-hidden="true">Substrate</span>
+            <span class="triage-visual__sr" data-triage-visual-label>Check the water surface first.</span>
+          </div>
+        </div>
+        <article class="triage-result" data-triage-result aria-live="polite">
+          <span class="triage-result__eyebrow" data-triage-label>First check</span>
+          <h3 data-triage-title>Start with oxygen and water quality.</h3>
+          <p data-triage-summary>Increase surface movement, then test ammonia, nitrite, pH, and temperature before adding medication.</p>
+          <div class="triage-result__grid">
+            <div class="triage-result__block">
+              <strong>Test first</strong>
+              <ul data-triage-tests></ul>
+            </div>
+            <div class="triage-result__block">
+              <strong>Do today</strong>
+              <ul data-triage-actions></ul>
+            </div>
+            <div class="triage-result__block">
+              <strong>Avoid</strong>
+              <ul data-triage-avoid></ul>
+            </div>
+          </div>
+          <div class="triage-result__actions">
+            <div data-triage-links></div>
+            <button class="triage-copy-button" type="button" data-triage-copy>Copy checklist</button>
+            <button class="triage-copy-button" type="button" data-triage-print>Print checklist</button>
+            <span class="triage-copy-status" data-triage-copy-status aria-live="polite"></span>
+          </div>
+          <div class="triage-visit">
+            <div>
+              <span class="triage-result__eyebrow">Bring this in</span>
+              <h4>Store visit checklist</h4>
+              <p>Good notes make the conversation faster and keep the first fix safer.</p>
+            </div>
+            <ul data-triage-visit></ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="learn-motion-guide" aria-labelledby="visual-guides-title">
+      <div class="learn-motion-guide__head">
+        <h2 id="visual-guides-title">See the System, Not the Symptom</h2>
+        <p>A healthy aquarium connects its living substrate, filtration, and testing routine.</p>
+      </div>
+      <figure class="learn-system-art">
+        <img src="../assets/learn/aquarium-system-routines-gpt-image-2.webp" alt="Premium scientific aquarium illustration showing a planted living substrate, layered aquarium filter media, and professional water testing vials" loading="lazy" />
+        <figcaption>From left to right: the living aquarium ecosystem, layered filtration, and repeatable water testing.</figcaption>
+      </figure>
+      <div class="learn-system-notes">
+        <article class="learn-system-note"><span>Cycling</span><h3>Waste becomes manageable</h3><p>Beneficial bacteria change dangerous ammonia and nitrite into nitrate that maintenance can remove.</p><a href="ammonia-nitrite/">Understand the cycle</a></article>
+        <article class="learn-system-note"><span>Filtration</span><h3>Water follows a complete loop</h3><p>Flow should carry debris and dissolved waste through mechanical, biological, and optional chemical media.</p><a href="which-filter/">Choose a filter</a></article>
+        <article class="learn-system-note"><span>Testing</span><h3>Trends matter more than one number</h3><p>Record results consistently so changes in ammonia, nitrate, pH, temperature, and salinity are easy to spot.</p><a href="track-parameters/">Build a testing rhythm</a></article>
+      </div>
+    </section>
+
+    <section class="guide-library" id="guide-library" aria-labelledby="library-title">
+      <div class="guide-library__head">
+        <h2 id="library-title">Explore Our Guide Library</h2>
+        <p>Expand a category to see what's inside.</p>
+      </div>
+
+    <details class="learn-disclosure" id="starter-checklists">
+      <summary aria-labelledby="checklists-title">
+        <div class="section-head">
+          <h2 id="checklists-title">Starter & Care Checklists</h2>
+          <p>Choose the guide you need, then open the full page or supporting section.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
+        <div class="problem-grid">
+          <article class="problem-card">
+            <span>Freshwater start</span>
+            <h3>First Tank Checklist</h3>
+            <p>The full beginner setup guide: first shopping trip, equipment, water prep, cycling, and first livestock.</p>
+            <a href="first-tank/">Open guide</a>
+          </article>
+          <article class="problem-card">
+            <span>Reef start</span>
+            <h3>Saltwater Setup Basics</h3>
+            <p>Start with the core saltwater plan: prepared water or RO/DI, salinity tools, flow, rock, sand, and testing.</p>
+            <a href="saltwater-basics/">Open guide</a>
+          </article>
+          <article class="problem-card" id="care-routines">
+            <span>Routine care</span>
+            <h3>Weekly Maintenance</h3>
+            <p>A simple weekly rhythm for testing, water changes, glass cleaning, filter checks, and catching problems early.</p>
+            <a href="weekly-maintenance/">Open guide</a>
+          </article>
+          <article class="problem-card">
+            <span>Daily care</span>
+            <h3>Feeding Basics</h3>
+            <p>Portion size, food rotation, warning signs of overfeeding, and how to match food to the fish in the tank.</p>
+            <a href="feeding-basics/">Open guide</a>
+          </article>
+        </div>
+      </div>
+    </details>
+
+    <details class="learn-disclosure" id="filtration-equipment">
+      <summary aria-labelledby="guides-title">
+        <div class="section-head">
+          <h2 id="guides-title">Filtration & Equipment</h2>
+          <p>One consolidated filtration area for freshwater, planted displays, saltwater, reef systems, UV, reactors, skimmers, and sumps.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
+      <div class="equipment-feature-grid">
+        <div class="problem-grid problem-grid--filter-links">
+          <article class="problem-card">
+            <span>Filter choice</span>
+            <h3>Which Filter Do I Need?</h3>
+            <p>Compare HOB filters, sponge filters, canisters, sumps, all-in-one chambers, flow needs, and maintenance tradeoffs.</p>
+            <a href="which-filter/">Open guide</a>
+          </article>
+          <article class="problem-card">
+            <span>Media roles</span>
+            <h3>Filter Media Types</h3>
+            <p>Understand sponge, floss, ceramic bio media, carbon, phosphate remover, and safe replacement habits.</p>
+            <a href="filter-media/">Open guide</a>
+          </article>
+        </div>
+        <aside class="equipment-choice" aria-label="Equipment choice note">
+          <div class="equipment-choice__intro">
+            <h3>There's not always one right answer</h3>
+            <p>Filter choice depends on tank size, livestock, noise, access, budget, and whether you want simple service or room to expand later.</p>
+          </div>
+          <div class="equipment-choice__grid" aria-label="Equipment choice factors">
+            <div class="equipment-choice__item"><span>Service</span></div>
+            <div class="equipment-choice__item"><span>Flow</span></div>
+            <div class="equipment-choice__item"><span>Space</span></div>
+            <div class="equipment-choice__item"><span>Growth</span></div>
+          </div>
+        </aside>
+      </div>
+
+      <div class="section-head">
+        <h2>Freshwater &amp; General</h2>
+        <p>Click a filtration system to open its diagram, use case, and maintenance notes.</p>
+      </div>
+      <div class="filter-accordion filter-accordion--freshwater" aria-label="Freshwater and general filtration diagrams">
+        <details class="filter-card" id="internal-power-filter">
+          <summary>
+            <span>Compact filter</span>
+            <strong>Internal Power Filter</strong>
+            <p>Best for compact tanks where the filter sits inside the aquarium and keeps equipment out of sight behind plants or hardscape.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/internal-power-filter.png" alt="Internal power filter aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Internal Power Filter</h2>
+                    <p>Best for compact tanks where the filter sits inside the aquarium and keeps equipment out of sight behind plants or hardscape.</p>
+                    <ul>
+                      <li>Good beginner visual for mechanical, biological, and optional chemical filtration.</li>
+                      <li>Pairs naturally with filter media, replacement sponges, cartridges, and water conditioners.</li>
+                      <li>Maintenance message is strong: rinse sponge in tank water and do not replace all biological media at once.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="sponge-filter">
+          <summary>
+            <span>Gentle biological filter</span>
+            <strong>Sponge Filter</strong>
+            <p>Best for low-flow tanks, fry, shrimp, quarantine systems, and simple biological filtration powered by an air pump.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/sponge-filter.png" alt="Sponge filter aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Sponge Filter</h2>
+                    <p>Best for low-flow tanks, fry, shrimp, quarantine systems, and simple biological filtration powered by an air pump.</p>
+                    <ul>
+                      <li>Shows why the air pump, check valve, airline, uplift tube, and sponge all matter.</li>
+                      <li>Clear path for choosing air pumps, valves, tubing, replacement sponge, and brushes.</li>
+                      <li>Useful beginner note: old sponges are beneficial bacteria colonies, not trash.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="freshwater-filter">
+          <summary>
+            <span>External filter</span>
+            <strong>Canister Filter</strong>
+            <p>Best when you want to understand an external canister system: intake, media layers, return flow, and routine maintenance.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/freshwater-filter.png" alt="Canister aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Canister Filter</h2>
+                    <p>Best when you want to understand an external canister system: intake, media layers, return flow, and routine maintenance.</p>
+                    <ul>
+                      <li>Good bridge between simple internal filters and larger external filter systems.</li>
+                      <li>Clear path for choosing sponge media, ceramic rings, activated carbon, replacement parts, and impeller cleaning tools.</li>
+                      <li>Strong maintenance note: preserve biological media and keep water changes part of the routine.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="hang-on-back-filter">
+          <summary>
+            <span>Easy all-around filter</span>
+            <strong>Hang-On-Back Filter</strong>
+            <p>Best for small to medium freshwater tanks when you want simple setup, easy access, and visible waterfall return flow.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/hang-on-back-filter.png" alt="Hang-on-back aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Hang-On-Back Filter</h2>
+                    <p>Best for small to medium freshwater tanks when you want simple setup, easy access, and visible waterfall return flow.</p>
+                    <ul>
+                      <li>Shows exactly why intake strainers, impellers, media order, and water level matter.</li>
+                      <li>Natural fit for cartridge/media replacement, intake sponges, carbon, ceramic media, and flow troubleshooting.</li>
+                      <li>Useful explanation for reducing noise, keeping flow strong, and avoiding tap-water media rinses.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="sump-filter">
+          <summary>
+            <span>High-capacity system</span>
+            <strong>Sump Filtration</strong>
+            <p>Best for larger freshwater planted tanks, high bioload displays, reef tanks, and systems that need room for pumps, media, and hidden equipment.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/sump-filter.png" alt="Sump aquarium filtration system diagram for a planted freshwater aquarium" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Sump Filtration</h2>
+                    <p>Best for larger freshwater planted tanks, high bioload displays, reef tanks, and systems that need room for pumps, media, and hidden equipment.</p>
+                    <ul>
+                      <li>Explains the full water path from overflow to drain line, sump chambers, return pump, and display tank.</li>
+                      <li>Supports serious setup planning for plumbing, filter socks, ceramic media, carbon, pumps, and top-off habits.</li>
+                      <li>Works as a general sump visual because the same plumbing idea can support freshwater, planted, or reef systems with different media choices.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="uv-sterilizer">
+          <summary>
+            <span>Water clarity support</span>
+            <strong>UV Sterilizer</strong>
+            <p>Best as a supplemental water-clarity and free-floating organism control tool for freshwater, saltwater, pond, and quarantine systems when matched to the right flow rate.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/uv-sterilizer.png" alt="UV sterilizer aquarium system diagram showing UV-C lamp, quartz sleeve, flow path, and return plumbing" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>UV Sterilizer</h2>
+                    <p>Best as a supplemental water-clarity and free-floating organism control tool for freshwater, saltwater, pond, and quarantine systems when matched to the right flow rate.</p>
+                    <ul>
+                      <li>Shows the feed pump or manifold, inlet line, UV housing, quartz sleeve, UV-C lamp, water path, outlet line, and return to the aquarium or sump.</li>
+                      <li>Helps you compare UV wattage, replacement bulbs, pumps, tubing, flow control, and routine sleeve cleaning.</li>
+                      <li>Clear husbandry note: slower flow increases contact time, but UV does not replace biological filtration, quarantine, or good maintenance.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+      </div>
+
+      <div class="section-head">
+        <h2 id="saltwater-guides-title">Saltwater &amp; Reef</h2>
+        <p>Click a reef or saltwater system to compare live rock, sumps, reactors, skimmers, and compact all-in-one filtration.</p>
+      </div>
+      <div class="filter-accordion filter-accordion--saltwater" aria-label="Saltwater and reef filtration diagrams">
+        <details class="filter-card" id="live-rock-saltwater">
+          <summary>
+            <span>Natural biofilter</span>
+            <strong>Live Rock Biofiltration</strong>
+            <p>Best for reef aquariums where live rock is both habitat and a biological filter that supports bacteria, microfauna, and long-term stability.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/live-rock-saltwater.png" alt="Live rock saltwater biological filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Live Rock Biofiltration</h2>
+                    <p>Best for reef aquariums where live rock is both habitat and a biological filter that supports bacteria, microfauna, and long-term stability.</p>
+                    <ul>
+                      <li>Explains why porous rock, water movement, microfauna, and bacterial colonies all matter in a saltwater system.</li>
+                      <li>Natural path for choosing live rock, reef-safe flow pumps, protein skimmers, saltwater test kits, and quarantine supplies.</li>
+                      <li>Strong husbandry message: never sterilize or replace all live rock at once, and keep detritus from building up.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="sump-saltwater">
+          <summary>
+            <span>Reef-ready sump</span>
+            <strong>Saltwater Sump</strong>
+            <p>Best for reef-ready tanks that need more water volume, cleaner equipment placement, protein skimming, refugium space, and stronger nutrient export.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/sump-saltwater.png" alt="Sump saltwater aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Saltwater Sump</h2>
+                    <p>Best for reef-ready tanks that need more water volume, cleaner equipment placement, protein skimming, refugium space, and stronger nutrient export.</p>
+                    <ul>
+                      <li>Shows the full reef water path: overflow, drain line, mechanical stage, skimmer, live rock rubble, refugium, return pump, and return line.</li>
+                      <li>Helps you compare skimmers, socks, return pumps, macroalgae, live rock, and RO/DI top-off habits.</li>
+                      <li>Good planning visual when you are moving from basic filtration into a serious reef system.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="hang-on-back-saltwater">
+          <summary>
+            <span>Same HOB, marine use</span>
+            <strong>Using a HOB on Saltwater</strong>
+            <p>The filter body is not fundamentally different from a freshwater HOB. This guide shows how the same style of filter is used on small marine tanks, quarantine systems, nano reefs, hospital tanks, and fish-only saltwater aquariums.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/hang-on-back-saltwater.png" alt="Hang-on-back filter used on a saltwater aquarium diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Using a HOB on Saltwater</h2>
+                    <p>The filter body is not fundamentally different from a freshwater HOB. This guide shows how the same style of filter is used on small marine tanks, quarantine systems, nano reefs, hospital tanks, and fish-only saltwater aquariums.</p>
+                    <ul>
+                      <li>Shows intake, strainer, impeller, filter floss, carbon, live rock rubble, and waterfall return in one easy-to-follow layout.</li>
+                      <li>Highlights saltwater-specific care: rinse media in saltwater or removed tank water, monitor salinity, and add flow when needed.</li>
+                      <li>Useful bridge when you want marine filtration without drilling or plumbing.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="all-in-one-saltwater">
+          <summary>
+            <span>Nano reef setup</span>
+            <strong>All-In-One Saltwater</strong>
+            <p>Best for nano and medium reef aquariums where the display and filtration chambers are combined into one compact footprint.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/all-in-one-saltwater.png" alt="All-in-one saltwater aquarium filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>All-In-One Saltwater</h2>
+                    <p>Best for nano and medium reef aquariums where the display and filtration chambers are combined into one compact footprint.</p>
+                    <ul>
+                      <li>Explains rear-chamber filtration: overflow slots, filter floss, media basket, biological media, optional skimmer, baffles, heater, return pump, and nozzle.</li>
+                      <li>Natural fit for nano reef kits, media baskets, floss, carbon/GFO, small skimmers, heaters, and return-pump maintenance.</li>
+                      <li>Good beginner reef visual because it makes the hidden back chambers understandable.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="media-reactor-saltwater">
+          <summary>
+            <span>Targeted chemical media</span>
+            <strong>Media Reactor</strong>
+            <p>Best for reef and saltwater aquariums that need targeted phosphate, dissolved organics, or specialty media control with predictable flow.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/media-reactor-saltwater.png" alt="Media reactor saltwater filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Media Reactor</h2>
+                    <p>Best for reef and saltwater aquariums that need targeted phosphate, dissolved organics, or specialty media control with predictable flow.</p>
+                    <ul>
+                      <li>Shows feed pump, inlet line, reactor body, lower sponge, media bed, diffuser, flow-control valve, outlet line, and return to sump.</li>
+                      <li>Helps you compare activated carbon, GFO/phosphate remover, biopellets, tubing, valves, pumps, and replacement sponges.</li>
+                      <li>Strong maintenance message: rinse media first, set flow correctly, avoid tumbling GFO too aggressively, and replace exhausted media.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+        <details class="filter-card" id="protein-skimmer-saltwater">
+          <summary>
+            <span>Nutrient export</span>
+            <strong>Protein Skimmer</strong>
+            <p>Best for reef tanks and saltwater aquariums where foam fractionation removes dissolved organics before they break down into nutrients.</p>
+          </summary>
+          <div class="filter-card__body diagram">
+          <div class="diagram-img-col">
+                    <img src="../assets/learn/protein-skimmer-saltwater.png" alt="Protein skimmer saltwater filtration system diagram" />
+                    <span class="diagram-zoom-hint">Click to enlarge</span>
+                  </div>
+                  <div>
+                    <h2>Protein Skimmer</h2>
+                    <p>Best for reef tanks and saltwater aquariums where foam fractionation removes dissolved organics before they break down into nutrients.</p>
+                    <ul>
+                      <li>Explains water inlet, air intake, venturi, pump, reaction chamber, rising microbubbles, foam head, neck, collection cup, and clean water outlet.</li>
+                      <li>Useful for choosing skimmers, replacement pumps, air-intake cleaning tools, collection-cup maintenance supplies, saltwater test kits, and nutrient-control options.</li>
+                      <li>Clear husbandry note: tune water level and airflow for stable foam, empty the cup regularly, and keep biological filtration in place.</li>
+                    </ul>
+                  </div>
+          </div>
+        </details>
+      </div>
+      </div>
+    </details>
+
+    <details class="learn-disclosure" id="food-feeding">
+      <summary aria-labelledby="food-feeding-title">
+        <div class="section-head">
+          <h2 id="food-feeding-title">Food &amp; Feeding</h2>
+          <p>Feeding guides, food types, and how to avoid common mistakes.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
+        <div class="checklist-grid">
+          <article class="checklist-card">
+            <a class="checklist-card__media" href="feeding-basics/#portion-size" aria-label="Open Feed Less Than You Think guide">
+              <img src="../assets/learn/feed-less-than-you-think-gpt-image-2.jpg" alt="Small aquarium feeding portion with uneaten food warning illustration" loading="lazy" />
+            </a>
+            <span>Daily feeding</span>
+            <h3>Feed Less Than You Think</h3>
+            <ul>
+              <li>Most fish do better with small portions they finish quickly</li>
+              <li>Remove uneaten food before it breaks down into ammonia</li>
+              <li>Match food type to species, mouth size, and tank level</li>
+            </ul>
+            <p><a href="feeding-basics/#portion-size">Open portion guide</a></p>
+          </article>
+          <article class="checklist-card">
+            <a class="checklist-card__media" href="rotate-food-types/" aria-label="Open Rotate Food Types guide">
+              <img src="../assets/learn/rotate-food-types-gpt-image-2.jpg" alt="Weekly aquarium food rotation schedule illustration" loading="lazy" />
+            </a>
+            <span>Variety</span>
+            <h3>Rotate Food Types</h3>
+            <ul>
+              <li>Use pellets, flakes, frozen, and specialty foods where appropriate</li>
+              <li>Check herbivore, carnivore, reef, and pond needs separately</li>
+              <li>Watch body condition, behavior, and water quality together</li>
+            </ul>
+            <p><a href="rotate-food-types/">Open rotation guide</a></p>
+          </article>
+        </div>
+      </div>
+    </details>
+
+    <details class="learn-disclosure" id="health-water-quality">
+      <summary aria-labelledby="health-water-quality-title">
+        <div class="section-head">
+          <h2 id="health-water-quality-title">Health &amp; Water Quality</h2>
+          <p>Water testing, parameters, algae, parasites, and building a stable tank.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
+        <div class="checklist-grid">
+          <article class="checklist-card">
+            <a class="checklist-card__media" href="track-parameters/" aria-label="Open Track Parameters guide">
+              <img src="../assets/learn/track-parameters-dashboard-gpt-image-2.jpg" alt="Aquarium parameter testing dashboard illustration" loading="lazy" />
+            </a>
+            <span>Testing rhythm</span>
+            <h3>Track Parameters</h3>
+            <ul>
+              <li>Test ammonia, nitrite, nitrate, pH, and temperature first</li>
+              <li>Use salinity, alkalinity, calcium, and phosphate for reef systems</li>
+              <li>React to trends instead of chasing one unusual reading</li>
+            </ul>
+            <p><a href="track-parameters/">Open guide</a></p>
+          </article>
+          <article class="checklist-card">
+            <a class="checklist-card__media" href="prevent-crash/" aria-label="Open Prevent the Crash guide">
+              <img src="../assets/learn/prevent-crash-chain-gpt-image-2.jpg" alt="Aquarium crash chain prevention illustration" loading="lazy" />
+            </a>
+            <span>Stability</span>
+            <h3>Prevent the Crash</h3>
+            <ul>
+              <li>Keep biological media wet and avoid replacing everything at once</li>
+              <li>Do regular partial water changes matched to the system</li>
+              <li>Quarantine when possible and slow down major livestock additions</li>
+            </ul>
+            <p><a href="prevent-crash/">Open guide</a></p>
+          </article>
+        </div>
+      </div>
+    </details>
+
+    <details class="learn-disclosure" id="troubleshooting">
+      <summary aria-labelledby="troubleshooting-title">
+        <div class="section-head">
+          <h2 id="troubleshooting-title">Troubleshooting Center</h2>
+          <p>Diagnosis-style guides for the most common aquarium problems.</p>
+        </div>
+      </summary>
+      <div class="learn-disclosure__body">
+      <div class="problem-grid">
+        <article class="problem-card">
+          <span>Water clarity</span>
+          <h3>Cloudy Water</h3>
+          <p>Separate new-tank bacterial bloom, overfeeding, dirty substrate, filter problems, and green-water algae.</p>
+          <a href="cloudy-water/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Algae control</span>
+          <h3>Algae Taking Over</h3>
+          <p>Check light duration, nutrients, phosphate, maintenance habits, plant competition, and cleanup crew fit.</p>
+          <a href="algae/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Fish health</span>
+          <h3>Sick Fish & Parasites</h3>
+          <p>Spot symptoms like white dots, flashing, clamped fins, rapid breathing, fin damage, and appetite loss.</p>
+          <a href="ich/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Emergency</span>
+          <h3>Ammonia or Nitrite Spike</h3>
+          <p>Test immediately, protect livestock, reduce feeding, check filtration, and avoid replacing all media at once.</p>
+          <a href="ammonia-nitrite/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Behavior clue</span>
+          <h3>Fish Gasping at Surface</h3>
+          <p>Prioritize oxygen, temperature, ammonia, nitrite, flow, surface agitation, and recent chemical additions.</p>
+          <a href="fish-gasping/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Reef stress</span>
+          <h3>Coral Not Opening</h3>
+          <p>Review salinity, alkalinity, nitrate, phosphate, lighting changes, flow, pests, and recent dips or moves.</p>
+          <a href="coral-not-opening/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Green water</span>
+          <h3>Green Water Bloom</h3>
+          <p>Check light, direct sun, nutrients, filtration, water changes, and whether a UV sterilizer fits the system.</p>
+          <a href="green-water/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Inverts</span>
+          <h3>Snails or Shrimp Dying</h3>
+          <p>Look at copper, ammonia, nitrite, parameter swings, acclimation, medication exposure, and missing minerals.</p>
+          <a href="snails-shrimp-dying/">Open guide</a>
+        </article>
+        <article class="problem-card">
+          <span>Bad smell</span>
+          <h3>Tank Smells Bad</h3>
+          <p>Find hidden decay, clogged filters, dirty substrate, stagnant areas, dead livestock, and overfeeding before adding chemicals.</p>
+          <a href="bad-smell/">Open guide</a>
+        </article>
+      </div>
+      </div>
+    </details>
+    </section>
+
+    <section class="store-help" aria-labelledby="store-help-title">
+      <div>
+        <h2 id="store-help-title">Still not sure what is happening?</h2>
+        <p>Bring a fresh water sample, tank size, livestock list, recent test results, and clear photos of the tank or affected fish. That gives the store a much better starting point than guessing from one symptom.</p>
+      </div>
+      <div class="store-help__actions">
+        <a class="btn" href="../contact/">Plan a visit</a>
+        <a class="btn secondary" href="../category/?cat=maintenance">Shop test kits</a>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div>
+        <div><h4>Help</h4><div class="footer-link-grid"><a href="#tank-triage">Tank triage</a><a href="#troubleshooting">Troubleshooting</a><a href="#starter-checklists">Starter checklists</a><a href="which-filter/">Filter choice</a><a href="filter-media/">Filter media</a><a href="#uv-sterilizer">UV sterilizers</a></div></div>
+        <div><h4>Helpful Info</h4><a href="../learn/">Help Center</a><a href="../contact/">Visit Us</a></div>
+      </div>
+    </footer>
+  <div class="poster-modal" hidden>
+      <div class="poster-modal__panel">
+        <button class="poster-modal__close" type="button" aria-label="Close">&times;</button>
+        <img alt="" />
+      </div>
+    </div>
+  </main>
+  <script>
+    (() => {
+      /* Open the disclosure that contains a hash-linked diagram */
+      function openDisclosureFor(id) {
+        if (!id) return null;
+        const target = document.getElementById(id);
+        const disclosure = target?.matches('details.learn-disclosure')
+          ? target
+          : target?.closest('details.learn-disclosure');
+        if (disclosure) disclosure.open = true;
+        const filterCard = target?.matches('details.filter-card')
+          ? target
+          : target?.closest('details.filter-card');
+        if (filterCard) filterCard.open = true;
+        return target;
+      }
+
+      /* Scroll to a hash-linked diagram on load or hash change */
+      function scrollToDiagram(id) {
+        const target = openDisclosureFor(id);
+        if (target) {
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              const top = target.getBoundingClientRect().top + window.pageYOffset - 18;
+              window.scrollTo({ top, left: 0, behavior: 'auto' });
+            });
+          });
+        }
+      }
+
+      document.querySelectorAll('.filter-card').forEach((card) => {
+        card.addEventListener('toggle', () => {
+          if (!card.open) return;
+          const group = card.closest('.filter-accordion');
+          group?.querySelectorAll('.filter-card[open]').forEach((otherCard) => {
+            if (otherCard !== card) otherCard.open = false;
+          });
+        });
+      });
+
+      window.addEventListener('hashchange', () => {
+        const id = decodeURIComponent(window.location.hash.replace('#', ''));
+        scrollToDiagram(id);
+      });
+
+      const initialId = decodeURIComponent(window.location.hash.replace('#', ''));
+      if (initialId) scrollToDiagram(initialId);
+
+      const triageData = {
+        breathing: {
+          label: 'Emergency check',
+          title: 'Start with oxygen and water quality.',
+          summary: 'Fish at the surface or breathing hard need oxygen and water checks before disease guessing.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'Temperature', 'pH'],
+          actions: ['Increase surface movement', 'Add aeration if available', 'Stop feeding briefly', 'Check recent chemical additions'],
+          avoid: ['Do not medicate before testing', 'Do not shut off filters', 'Do not make several changes at once'],
+          visit: ['Fresh sample of tank water', 'Short video of breathing', 'Tank size and temperature', 'Recent additive or medication list'],
+          links: [['Open gasping guide', 'fish-gasping/'], ['Shop air and filtration', '../category/?cat=filtration']]
+        },
+        cloudy: {
+          label: 'Water clarity check',
+          title: 'Separate bloom, waste, and filtration issues.',
+          summary: 'Cloudy water can be bacteria, suspended debris, overfeeding, filter trouble, or green-water algae.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'Nitrate', 'Recent feeding amount'],
+          actions: ['Reduce feeding', 'Check filter flow', 'Rinse mechanical media safely', 'Look for dirty substrate'],
+          avoid: ['Do not replace all media', 'Do not over-clean biological filtration', 'Do not add clarifier before checking cause'],
+          visit: ['Fresh sample of tank water', 'Photo of water color', 'Filter model or photo', 'Feeding amount and schedule'],
+          links: [['Open cloudy water guide', 'cloudy-water/'], ['Shop maintenance', '../category/?cat=maintenance']]
+        },
+        green: {
+          label: 'Free-floating algae check',
+          title: 'Look for light plus nutrient fuel.',
+          summary: 'Green water usually means free-floating algae. Light schedule, direct sun, nutrients, and UV sizing matter.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Nitrate', 'Phosphate', 'Light schedule', 'Direct sun exposure'],
+          actions: ['Shorten light schedule', 'Block direct sunlight', 'Service mechanical media', 'Compare UV options if persistent'],
+          avoid: ['Do not dose algaecide blindly', 'Do not blackout without checking oxygen', 'Do not ignore overfeeding'],
+          visit: ['Photo of full tank', 'Light schedule', 'Window or sun exposure notes', 'Nitrate/phosphate results'],
+          links: [['Open green water guide', 'green-water/'], ['View UV support', '../category/?cat=equipment']]
+        },
+        algae: {
+          label: 'Algae balance check',
+          title: 'Identify the algae before treating it.',
+          summary: 'Hair algae, green film, cyano, diatoms, and pond algae point to different light, nutrient, and flow problems.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Nitrate', 'Phosphate', 'Light duration', 'Flow dead spots'],
+          actions: ['Remove loose algae', 'Set a timer', 'Clean trapped debris', 'Improve flow where waste settles'],
+          avoid: ['Do not scrub and dose only', 'Do not overdose algaecide', 'Do not ignore phosphate or sunlight'],
+          visit: ['Close photo of algae', 'Full tank photo', 'Light schedule', 'Nitrate/phosphate results'],
+          links: [['Open algae guide', 'algae/'], ['Shop maintenance', '../category/?cat=maintenance']]
+        },
+        sick: {
+          label: 'Sick fish check',
+          title: 'Rule out water trouble before choosing medication.',
+          summary: 'White spots, flashing, clamped fins, and hiding can be parasites, stress, injury, or poor water.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'pH', 'Temperature'],
+          actions: ['Increase aeration', 'Observe spots or behavior closely', 'Consider a hospital tank', 'Bring clear photos or video'],
+          avoid: ['Do not mix medications', 'Do not dose display tanks blindly', 'Do not skip water tests'],
+          visit: ['Clear fish photos or video', 'Fresh sample of tank water', 'Livestock list', 'Medication history'],
+          links: [['Open sick fish guide', 'ich/'], ['Shop maintenance', '../category/?cat=maintenance']]
+        },
+        coral: {
+          label: 'Reef stability check',
+          title: 'Check stability before moving or dipping coral.',
+          summary: 'Coral staying closed often follows salinity, alkalinity, nutrients, lighting, flow, pests, or recent moves.',
+          validTankTypes: ['reef'],
+          tests: ['Salinity', 'Alkalinity', 'Nitrate', 'Phosphate'],
+          actions: ['Review recent light changes', 'Check flow around the coral', 'Look for pests or irritation', 'Compare trends before correcting'],
+          avoid: ['Do not chase one reading aggressively', 'Do not dip repeatedly without cause', 'Do not change light intensity fast'],
+          visit: ['Coral photo under normal lights', 'Salinity and alkalinity results', 'Lighting schedule', 'Recent dip or move notes'],
+          links: [['Open coral guide', 'coral-not-opening/'], ['Shop saltwater', '../category/?cat=saltwater']]
+        },
+        inverts: {
+          label: 'Invertebrate safety check',
+          title: 'Look for toxins, swings, and acclimation stress.',
+          summary: 'Shrimp and snails often react first to copper, medication, ammonia, nitrite, temperature swings, or poor acclimation.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'pH', 'Copper if medication was used'],
+          actions: ['Review recent dosing', 'Check acclimation history', 'Stabilize temperature', 'Use clean source water'],
+          avoid: ['Do not dose copper in invert systems', 'Do not make rapid parameter changes', 'Do not assume it is only lack of food'],
+          visit: ['Fresh sample of tank water', 'Medication or copper history', 'Acclimation method', 'Source water notes'],
+          links: [['Open invert guide', 'snails-shrimp-dying/'], ['Shop water care', '../category/?cat=maintenance']]
+        },
+        death: {
+          label: 'Emergency loss check',
+          title: 'Protect the survivors first, then find the cause.',
+          summary: 'Sudden deaths usually trace to ammonia or nitrite, oxygen, temperature swings, or something added to the water.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'Temperature', 'Oxygen and surface movement'],
+          actions: ['Remove dead livestock right away', 'Increase aeration', 'Do a partial water change with matched temperature', 'Review everything added in the last 48 hours'],
+          avoid: ['Do not medicate without a test result', 'Do not do a full teardown in a panic', 'Do not restock until the cause is known'],
+          visit: ['Fresh sample of tank water', 'Timeline of the losses', 'List of recent additions or dosing', 'Photos of remaining livestock'],
+          links: [['Open crash guide', 'prevent-crash/'], ['Shop testing', '../category/?cat=testing']]
+        },
+        cycling: {
+          label: 'New tank check',
+          title: 'Confirm the cycle before adding or changing anything.',
+          summary: 'New tanks swing through ammonia and nitrite before the filter bacteria catch up. Most early problems are cycle problems, not disease.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'Nitrate', 'Days since setup'],
+          actions: ['Test daily during the first weeks', 'Feed lightly', 'Add a bacteria starter if levels climb', 'Do partial water changes when ammonia or nitrite rise'],
+          avoid: ['Do not add more livestock yet', 'Do not deep-clean the filter during the cycle', 'Do not chase pH while ammonia is present'],
+          visit: ['Days since setup', 'Full test results', 'Livestock list and dates added', 'Filter model and tank size'],
+          links: [['Open first tank guide', 'first-tank/'], ['Shop water care', '../category/?cat=maintenance']]
+        },
+        temperature: {
+          label: 'Temperature check',
+          title: 'Verify the reading before trusting the heater.',
+          summary: 'Temperature trouble shows up as stress, gasping, or sudden behavior changes. Confirm with a second thermometer before changing equipment.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Actual temperature on a second thermometer', 'Heater indicator and setting', 'Ammonia', 'Nitrite'],
+          actions: ['Compare two thermometers', 'Adjust temperature slowly', 'Increase aeration if the tank ran warm', 'Check for direct sun or equipment heat'],
+          avoid: ['Do not swing temperature quickly', 'Do not trust a single stuck thermometer', 'Do not leave a suspect heater running unwatched'],
+          visit: ['Tank size and current temperature', 'Heater brand and wattage', 'Recent temperature readings', 'Livestock list'],
+          links: [['Open parameter guide', 'track-parameters/'], ['Shop heating', '../category/?cat=heating-temperature']]
+        },
+        smell: {
+          label: 'Odor source check',
+          title: 'Find decay or trapped waste first.',
+          summary: 'A bad smell usually means hidden decay, clogged filtration, dirty substrate, stagnant flow, or overfeeding.',
+          validTankTypes: ['freshwater', 'saltwater', 'reef', 'pond'],
+          tests: ['Ammonia', 'Nitrite', 'Filter flow', 'Missing livestock'],
+          actions: ['Inspect behind decor and intakes', 'Remove dead material', 'Siphon debris', 'Clean mechanical media safely'],
+          avoid: ['Do not mask odor with additives', 'Do not deep-clean every filter stage', 'Do not ignore rotten-egg smells'],
+          visit: ['Fresh sample of tank water', 'Filter photo or model', 'Missing livestock notes', 'Feeding and cleaning schedule'],
+          links: [['Open bad smell guide', 'bad-smell/'], ['Shop maintenance', '../category/?cat=maintenance']]
+        }
+      };
+
+      const tankNotes = {
+        freshwater: {
+          tests: ['Nitrate'],
+          actions: ['Keep conditioner ready for water changes'],
+          avoid: ['Do not rinse bio media in untreated tap water'],
+          visit: ['Tank size in gallons']
+        },
+        saltwater: {
+          tests: ['Salinity'],
+          actions: ['Match temperature and salinity before water changes'],
+          avoid: ['Do not make fast salinity corrections'],
+          visit: ['Salinity reading']
+        },
+        reef: {
+          tests: ['Alkalinity'],
+          actions: ['Protect coral and invertebrates from unsafe medication'],
+          avoid: ['Do not dose reef displays like fish-only tanks'],
+          visit: ['Alkalinity and salinity readings']
+        },
+        pond: {
+          tests: ['Dissolved oxygen if possible'],
+          actions: ['Check pumps, waterfalls, and seasonal debris'],
+          avoid: ['Do not treat a pond without checking volume and aeration'],
+          visit: ['Approximate pond volume']
+        }
+      };
+
+      const changeNotes = {
+        none: {
+          actions: ['Bring recent test results if visiting the store'],
+          visit: ['Recent test numbers']
+        },
+        newLivestock: {
+          tests: ['Compatibility and acclimation history'],
+          actions: ['Check for stress, bullying, and quarantine gaps'],
+          avoid: ['Do not add more livestock until stable'],
+          visit: ['Date new livestock was added']
+        },
+        waterChange: {
+          tests: ['Source water and temperature match'],
+          actions: ['Confirm conditioner, source water, temperature, and pH match'],
+          avoid: ['Do not repeat large changes without a test result'],
+          visit: ['Water-change amount and source']
+        },
+        filterClean: {
+          tests: ['Filter flow and media condition'],
+          actions: ['Keep old biological media wet and in service'],
+          avoid: ['Do not replace all biological media at once'],
+          visit: ['What filter media was changed']
+        },
+        medication: {
+          tests: ['Medication label and carbon status'],
+          actions: ['Check whether livestock is medication-safe'],
+          avoid: ['Do not mix treatments or dose invertebrate systems blindly'],
+          visit: ['Medication name and dose']
+        },
+        overfeed: {
+          tests: ['Uneaten food and nitrate'],
+          actions: ['Remove leftovers and feed smaller portions'],
+          avoid: ['Do not keep feeding normally during ammonia or nitrite problems'],
+          visit: ['Food type and feeding amount']
+        }
+      };
+
+      const triageEls = {
+        symptom: document.querySelector('[data-triage-symptom]'),
+        tank: document.querySelector('[data-triage-tank]'),
+        change: document.querySelector('[data-triage-change]'),
+        result: document.querySelector('[data-triage-result]'),
+        label: document.querySelector('[data-triage-label]'),
+        title: document.querySelector('[data-triage-title]'),
+        summary: document.querySelector('[data-triage-summary]'),
+        tests: document.querySelector('[data-triage-tests]'),
+        actions: document.querySelector('[data-triage-actions]'),
+        avoid: document.querySelector('[data-triage-avoid]'),
+        links: document.querySelector('[data-triage-links]'),
+        visit: document.querySelector('[data-triage-visit]'),
+        copy: document.querySelector('[data-triage-copy]'),
+        print: document.querySelector('[data-triage-print]'),
+        copyStatus: document.querySelector('[data-triage-copy-status]'),
+        visual: document.querySelector('[data-triage-visual]'),
+        visualLabel: document.querySelector('[data-triage-visual-label]')
+      };
+
+      const triageVisualZones = {
+        breathing: ['surface', 'the water surface and oxygen exchange'],
+        death: ['surface', 'the water surface and oxygen exchange'],
+        cloudy: ['water', 'the water column and filtration'],
+        green: ['water', 'the water column and light exposure'],
+        cycling: ['water', 'the water column and biological filtration'],
+        temperature: ['water', 'the water column and temperature'],
+        algae: ['substrate', 'the substrate, hardscape, and trapped waste'],
+        smell: ['substrate', 'the substrate and hidden decaying material'],
+        sick: ['livestock', 'the fish and visible symptoms'],
+        coral: ['livestock', 'the coral, flow, and lighting'],
+        inverts: ['livestock', 'the invertebrates and medication safety']
+      };
+
+      function uniqueList(items) {
+        return [...new Set(items.filter(Boolean))];
+      }
+
+      function renderList(container, items) {
+        if (!container) return;
+        container.innerHTML = '';
+        items.forEach((item) => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          container.appendChild(li);
+        });
+      }
+
+      function readList(container) {
+        return [...(container?.querySelectorAll('li') || [])].map((item) => item.textContent.trim());
+      }
+
+      function selectedOptionText(select, value = select?.value) {
+        return [...(select?.options || [])].find((option) => option.value === value)?.textContent.trim() || value;
+      }
+
+      function humanList(items, conjunction) {
+        const list = items.filter(Boolean);
+        if (list.length <= 1) return list.join('');
+        if (list.length === 2) return `${list[0]} ${conjunction} ${list[1]}`;
+        return `${list.slice(0, -1).join(', ')}, ${conjunction} ${list[list.length - 1]}`;
+      }
+
+      /* Keep the address bar shareable after user changes without adding history entries */
+      function syncTriageUrl() {
+        if (typeof window.history?.replaceState !== 'function') return;
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('symptom', triageEls.symptom.value);
+          url.searchParams.set('tank', triageEls.tank.value);
+          url.searchParams.set('change', triageEls.change.value);
+          window.history.replaceState(null, '', url.toString());
+        } catch (error) {
+          /* Leave the address bar unchanged if the URL cannot be rebuilt. */
+        }
+      }
+
+      function setTriageChecklistEnabled(enabled) {
+        if (triageEls.copy) triageEls.copy.disabled = !enabled;
+        if (triageEls.print) triageEls.print.disabled = !enabled;
+      }
+
+      function updateTriageVisual(symptom, tankType) {
+        if (!triageEls.visual) return;
+        const visualState = triageVisualZones[symptom] || triageVisualZones.breathing;
+        const tankLabel = selectedOptionText(triageEls.tank, tankType);
+        triageEls.visual.dataset.zone = visualState[0];
+        triageEls.visual.dataset.biome = tankType;
+        const description = 'Aquarium diagram highlighting ' + visualState[1] + ' for a ' + tankLabel + ' aquarium.';
+        triageEls.visual.setAttribute('aria-label', description);
+        if (triageEls.visualLabel) triageEls.visualLabel.textContent = description;
+      }
+
+      function renderTankMismatch(base, selectedTankType) {
+        const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
+        const validTankLabels = validTankTypes.map((type) => selectedOptionText(triageEls.tank, type));
+        const validTankText = humanList(validTankLabels, 'or');
+        const selectedTankLabel = selectedOptionText(triageEls.tank, selectedTankType);
+        updateTriageVisual(triageEls.symptom.value, selectedTankType);
+        triageEls.result?.classList.add('is-mismatch');
+        triageEls.label.textContent = 'Selection mismatch';
+        triageEls.title.textContent = `${base.title.replace(/\.$/, '')} - but check the selections first.`;
+        triageEls.summary.textContent = `${selectedOptionText(triageEls.symptom)} does not fit ${selectedTankLabel} guidance. If the tank really is ${selectedTankLabel}, pick a different symptom. If not, switch the tank type to ${validTankText}.`;
+        renderList(triageEls.tests, ['Confirm the aquarium type', 'Re-select the matching tank type or symptom']);
+        renderList(triageEls.actions, ['Do not follow this checklist until the selections match', `Switch the tank type if this should be ${validTankText}`, `Keep ${selectedTankLabel} and pick a different symptom if the tank type is right`]);
+        renderList(triageEls.avoid, ['Do not use tests or treatments meant for a different aquarium type', `Do not treat ${selectedTankLabel} livestock as ${validTankText}`]);
+        renderList(triageEls.visit, ['Photo of the tank and livestock', 'Tank type and setup notes', 'Recent test numbers']);
+
+        triageEls.links.innerHTML = '';
+        validTankTypes.forEach((tankType) => {
+          const button = document.createElement('button');
+          button.className = 'triage-copy-button';
+          button.type = 'button';
+          button.textContent = `Use ${selectedOptionText(triageEls.tank, tankType)}`;
+          button.addEventListener('click', () => {
+            triageEls.tank.value = tankType;
+            updateTriageResult({ sync: true });
+          });
+          triageEls.links.appendChild(button);
+        });
+        const keepTankButton = document.createElement('button');
+        keepTankButton.className = 'triage-copy-button';
+        keepTankButton.type = 'button';
+        keepTankButton.textContent = `Keep ${selectedTankLabel}, change symptom`;
+        keepTankButton.addEventListener('click', () => {
+          triageEls.symptom.focus();
+        });
+        triageEls.links.appendChild(keepTankButton);
+        setTriageChecklistEnabled(false);
+        if (triageEls.copyStatus) triageEls.copyStatus.textContent = '';
+      }
+
+      function updateTriageResult(options = {}) {
+        if (!triageEls.symptom) return;
+        if (options.sync) syncTriageUrl();
+        const base = triageData[triageEls.symptom.value] || triageData.breathing;
+        const selectedTankType = triageEls.tank.value;
+        updateTriageVisual(triageEls.symptom.value, selectedTankType);
+        const validTankTypes = base.validTankTypes || ['freshwater', 'saltwater', 'reef', 'pond'];
+        if (!validTankTypes.includes(selectedTankType)) {
+          renderTankMismatch(base, selectedTankType);
+          return;
+        }
+
+        const tank = tankNotes[triageEls.tank.value] || tankNotes.freshwater;
+        const change = changeNotes[triageEls.change.value] || changeNotes.none;
+        triageEls.result?.classList.remove('is-mismatch');
+
+        triageEls.label.textContent = base.label;
+        triageEls.title.textContent = base.title;
+        triageEls.summary.textContent = base.summary;
+
+        renderList(triageEls.tests, uniqueList([...base.tests, ...(tank.tests || []), ...(change.tests || [])]).slice(0, 6));
+        renderList(triageEls.actions, uniqueList([...base.actions, ...(tank.actions || []), ...(change.actions || [])]).slice(0, 6));
+        renderList(triageEls.avoid, uniqueList([...base.avoid, ...(tank.avoid || []), ...(change.avoid || [])]).slice(0, 6));
+        renderList(triageEls.visit, uniqueList([...base.visit, ...(tank.visit || []), ...(change.visit || [])]).slice(0, 8));
+
+        triageEls.links.innerHTML = '';
+        base.links.forEach(([label, href]) => {
+          const link = document.createElement('a');
+          link.href = href;
+          link.textContent = label;
+          triageEls.links.appendChild(link);
+        });
+        setTriageChecklistEnabled(true);
+        if (triageEls.copyStatus) triageEls.copyStatus.textContent = '';
+      }
+
+      [triageEls.symptom, triageEls.tank, triageEls.change].forEach((select) => {
+        select?.addEventListener('change', () => updateTriageResult({ sync: true }));
+      });
+      const triageParams = new URLSearchParams(window.location.search);
+      [
+        [triageEls.symptom, triageParams.get('symptom')],
+        [triageEls.tank, triageParams.get('tank')],
+        [triageEls.change, triageParams.get('change')]
+      ].forEach(([select, value]) => {
+        if (select && value && [...select.options].some((option) => option.value === value)) {
+          select.value = value;
+        }
+      });
+      updateTriageResult();
+
+      function buildTriageChecklistText() {
+        const symptom = triageEls.symptom.options[triageEls.symptom.selectedIndex]?.textContent.trim();
+        const tank = triageEls.tank.options[triageEls.tank.selectedIndex]?.textContent.trim();
+        const change = triageEls.change.options[triageEls.change.selectedIndex]?.textContent.trim();
+        const guideLines = [...(triageEls.links?.querySelectorAll('a') || [])]
+          .map((link) => `- ${link.textContent.trim()}: ${link.href}`);
+        const lines = [
+          'Hidden Reef tank triage',
+          `Symptom: ${symptom}`,
+          `Tank type: ${tank}`,
+          `Recent change: ${change}`,
+          '',
+          triageEls.title.textContent.trim(),
+          triageEls.summary.textContent.trim(),
+          '',
+          'Test first:',
+          ...readList(triageEls.tests).map((item) => `- ${item}`),
+          '',
+          'Do today:',
+          ...readList(triageEls.actions).map((item) => `- ${item}`),
+          '',
+          'Avoid:',
+          ...readList(triageEls.avoid).map((item) => `- ${item}`),
+          '',
+          'Bring to the store:',
+          ...readList(triageEls.visit).map((item) => `- ${item}`)
+        ];
+        if (guideLines.length) lines.push('', 'Guides:', ...guideLines);
+        return lines.join('\n');
+      }
+
+      async function copyTriageChecklist() {
+        if (!triageEls.copy || triageEls.copy.disabled) return;
+        const text = buildTriageChecklistText();
+
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+          } else {
+            const field = document.createElement('textarea');
+            field.value = text;
+            field.setAttribute('readonly', '');
+            field.style.position = 'fixed';
+            field.style.left = '-9999px';
+            document.body.appendChild(field);
+            field.select();
+            document.execCommand('copy');
+            field.remove();
+          }
+          if (triageEls.copyStatus) triageEls.copyStatus.textContent = 'Copied';
+        } catch (error) {
+          if (triageEls.copyStatus) triageEls.copyStatus.textContent = 'Copy failed';
+        }
+      }
+
+      function printTriageChecklist() {
+        if (!triageEls.print || triageEls.print.disabled) return;
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+          if (triageEls.copyStatus) triageEls.copyStatus.textContent = 'Allow pop-ups to print';
+          return;
+        }
+        const doc = printWindow.document;
+        doc.open();
+        doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Hidden Reef tank triage checklist</title><style>body{font-family:Arial,Helvetica,sans-serif;margin:32px;color:#111}h1{font-size:20px;margin:0 0 6px}p.meta{color:#555;margin:0 0 18px;font-size:12px}pre{white-space:pre-wrap;font:14px/1.5 Arial,Helvetica,sans-serif}</style></head><body><h1>The Hidden Reef - Tank Triage Checklist</h1><p class="meta">Bring this with a fresh water sample. Store staff can run the tests with you.</p><pre></pre></body></html>');
+        doc.close();
+        doc.querySelector('pre').textContent = buildTriageChecklistText();
+        printWindow.focus();
+        printWindow.print();
+      }
+
+      triageEls.copy?.addEventListener('click', copyTriageChecklist);
+      triageEls.print?.addEventListener('click', printTriageChecklist);
+
+      /* Click-to-zoom: clicking a diagram image opens the poster modal fullscreen */
+      const modal = document.querySelector('.poster-modal');
+      const modalImg = modal?.querySelector('img');
+      const modalClose = modal?.querySelector('.poster-modal__close');
+
+      function openModal(src, alt) {
+        if (!modal || !modalImg) return;
+        modalImg.src = src;
+        modalImg.alt = alt || '';
+        modal.hidden = false;
+        document.body.classList.add('poster-modal-open');
+      }
+
+      function closeModal() {
+        if (!modal) return;
+        modal.hidden = true;
+        modalImg.removeAttribute('src');
+        document.body.classList.remove('poster-modal-open');
+      }
+
+      document.addEventListener('click', (event) => {
+        /* Click on a diagram image or its zoom hint */
+        const img = event.target.closest('.diagram img');
+        const hint = event.target.closest('.diagram-zoom-hint');
+        if (img || hint) {
+          const diagram = (img || hint).closest('.diagram');
+          const diagramImg = diagram?.querySelector('img');
+          if (diagramImg) {
+            openModal(diagramImg.src, diagramImg.alt);
+            event.preventDefault();
+          }
+          return;
+        }
+
+        /* Close modal via close button or clicking outside the image */
+        if (modal && !modal.hidden) {
+          const panel = event.target.closest('.poster-modal__panel');
+          const closeBtn = event.target.closest('.poster-modal__close');
+          if (closeBtn || !panel) {
+            closeModal();
+            event.preventDefault();
+          }
+        }
+      });
+
+      /* Close modal on Escape */
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && modal && !modal.hidden) {
+          closeModal();
+        }
+      });
+    })();
+  </script>
+  <script src="../assets/reef-background.js?v=20260712-unified-nav"></script>
+</body>
+</html>

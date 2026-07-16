@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Filter Media Types - The Hidden Reef</title>
+  <link rel="icon" type="image/png" href="../../assets/site/logo.png" />
+  <style>
+    :root {
+      --aqua: #40d9ff;
+      --violet: #a489ff;
+      --green: #72d389;
+      --orange: #ff7b32;
+      --ink: #f0fbff;
+      --muted: #b9d9e7;
+      --panel: #071a27;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 50% -18%, rgba(17,119,190,0.48), transparent 38%),
+        radial-gradient(circle at 0% 18%, rgba(0,69,135,0.36), transparent 34%),
+        radial-gradient(circle at 100% 12%, rgba(164,137,255,0.22), transparent 32%),
+        linear-gradient(180deg, #031f42 0%, #021833 48%, #010b1c 100%);
+    }
+    a { color: inherit; text-decoration: none; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 0 clamp(12px, 2.5vw, 28px) 42px; }
+    .crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 12px; color: #9fc6d6; font-size: 13px; font-weight: 850; }
+    .crumbs a { color: #dff8ff; text-decoration: underline; text-decoration-color: rgba(64,217,255,0.36); text-underline-offset: 4px; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(360px, 1.12fr);
+      gap: clamp(22px, 3vw, 34px);
+      align-items: stretch;
+      padding: clamp(22px, 4vw, 40px);
+      border: 1px solid rgba(164,137,255,0.46);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 94% 0%, rgba(164,137,255,0.2), transparent 28%),
+        linear-gradient(180deg, rgba(7,31,50,0.96), rgba(4,19,32,0.96));
+      box-shadow: 0 18px 44px rgba(0,0,0,0.26), 0 0 30px rgba(164,137,255,0.18);
+    }
+    .eyebrow, .section-head span, .media-card span, .routine-card span {
+      color: var(--violet);
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1 { max-width: 650px; margin: 8px 0 12px; color: #fff; font-family: Georgia, "Times New Roman", serif; font-size: clamp(38px, 4.7vw, 58px); line-height: 0.98; }
+    p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 10px 16px; border-radius: 6px; color: #fff; background: var(--orange); font-weight: 900; }
+    .btn.secondary { border: 1px solid rgba(116,205,235,0.32); background: rgba(8,35,52,0.72); }
+    .hero-visual, .diagram-panel, .media-card, .routine-card, .callout {
+      border: 1px solid rgba(116,205,235,0.2);
+      border-radius: 8px;
+      background: radial-gradient(circle at 100% 0%, rgba(164,137,255,0.12), transparent 36%), var(--panel);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .hero-visual { display: block; min-height: 330px; padding: 0; margin: 0; overflow: hidden; background: #061a27; }
+    .hero-visual img { display: block; width: 100%; height: 100%; min-height: 330px; object-fit: cover; object-position: center; }
+    .hero-visual svg, .diagram-panel svg { width: 100%; height: auto; display: block; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin: 30px 0 14px; padding-bottom: 11px; border-bottom: 1px solid rgba(116,205,235,0.2); }
+    .section-head h2 { margin: 5px 0 0; color: #f7fcff; font-family: Georgia, "Times New Roman", serif; font-size: 30px; line-height: 1.05; }
+    .section-head p { max-width: 450px; }
+    .media-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+    .routine-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .media-card, .routine-card { padding: 16px; }
+    .media-card h3, .routine-card h3, .callout h2 { margin: 8px 0 8px; color: #fff; font-family: Georgia, "Times New Roman", serif; font-size: 24px; line-height: 1.05; }
+    .media-card ul, .routine-card ul { display: grid; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .media-card li, .routine-card li { position: relative; padding-left: 17px; color: #d9f5fc; font-size: 13px; line-height: 1.4; }
+    .media-card li::before, .routine-card li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 7px; height: 7px; border-radius: 50%; background: var(--violet); }
+    .diagram-panel { margin-top: 28px; padding: 18px; background: #f8fbff; }
+    .important-note {
+      display: grid;
+      gap: 10px;
+      margin-top: 28px;
+      padding: 18px;
+      border: 1px solid rgba(255,180,92,0.42);
+      border-left: 6px solid var(--orange);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(255,123,50,0.16), transparent 42%),
+        rgba(42,24,11,0.88);
+      box-shadow: 0 16px 34px rgba(0,0,0,0.22);
+    }
+    .important-note span {
+      color: #ffb45c;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .important-note h2 {
+      max-width: 760px;
+      margin: 0;
+      color: #fff;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1.05;
+    }
+    .important-note p {
+      max-width: 840px;
+      color: #f3d9c3;
+    }
+    .important-note ul {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin: 4px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .important-note li {
+      position: relative;
+      padding-left: 16px;
+      color: #fff3e8;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .important-note li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+    .callout { margin-top: 28px; padding: 20px; border-left: 6px solid var(--orange); background: linear-gradient(90deg, rgba(255,123,50,0.12), transparent 38%), #150f0b; }
+    .footer { margin-top: 28px; overflow: hidden; border: 1px solid rgba(116,205,235,0.14); border-radius: 8px 8px 0 0; color: #d8f6ff; background: linear-gradient(180deg, #052137, #031321); }
+    .footer-top { display: grid; grid-template-columns: 1.45fr 1.35fr 1.35fr 1fr; gap: 24px; padding: 26px; }
+    .footer h3, .footer h4 { margin: 0 0 9px; color: #fff; }
+    .footer a { display: block; margin: 0 0 6px; color: #c2e9f4; font-size: 13px; line-height: 1.45; }
+    .footer-contact { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(206,194,246,0.2); }
+    .footer-link-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 8px; }
+    @media (max-width: 1040px) { .hero, .media-grid, .routine-grid, .footer-top { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) {
+      .page { padding-inline: 8px; }
+      .hero, .diagram-panel, .important-note, .callout { padding: 14px; }
+      .hero-visual img { min-height: 250px; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 6px; }
+      .important-note ul { grid-template-columns: 1fr; }
+      .footer-link-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  <link rel="stylesheet" href="../../assets/site-masthead.css?v=20260712-unified-nav" />
+</head>
+<body>
+  <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
+  <main class="page">
+    <header class="header masthead">
+      <a class="brand" href="../../">
+        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
+        <span><strong>The Hidden Reef</strong><span>Aquariums &middot; Fish &middot; Coral &middot; Ponds</span></span>
+      </a>
+    </header>
+    <nav class="main-nav" aria-label="Store categories">
+      <a href="../../">Home</a><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=food">Food</a><a href="../../category/?cat=decor">Decorations</a><a href="../../category/?cat=maintenance">Maintenance</a><a class="active" href="../">Help</a><a href="../../#visit">Visit Us</a>
+    </nav>
+    <div class="crumbs"><a href="../">Help Center</a><span>/</span><span>Filter Media Types</span></div>
+
+    <section class="hero">
+      <div>
+        <span class="eyebrow">Filtration &amp; equipment</span>
+        <h1>Filter media is not all doing the same job</h1>
+        <p>Sponges, floss, ceramic rings, carbon, and phosphate removers all sound like “filter stuff,” but they solve different problems. The safest filters use media in the right order and avoid replacing all bacteria-bearing media at once.</p>
+        <div class="hero-actions">
+          <a class="btn" href="../../category/?cat=maintenance">Shop media</a>
+          <a class="btn secondary" href="../which-filter/">Choose a filter</a>
+        </div>
+      </div>
+      <figure class="hero-visual" aria-label="Aquarium filter media types in a filter basket">
+        <img src="../../assets/learn/filter-media-types-gpt-image-2.jpg" alt="Aquarium filter media in a basket with sponge, floss, ceramic rings, carbon, and specialty media bags" />
+      </figure>
+    </section>
+
+    <section aria-labelledby="types-title">
+      <div class="section-head">
+        <div><span>Media roles</span><h2 id="types-title">Use each media type for the right job</h2></div>
+        <p>A filter can hold several media types, but adding more is not always better. Pick media for a clear reason.</p>
+      </div>
+      <div class="media-grid">
+        <article class="media-card"><span>Mechanical</span><h3>Sponges, pads, floss</h3><p>These catch particles before they break down or clog deeper media.</p><ul><li>Rinse reusable sponge in tank water</li><li>Replace fine floss when loaded</li><li>Clean before flow drops badly</li></ul></article>
+        <article class="media-card"><span>Biological</span><h3>Ceramic and porous media</h3><p>This is home base for bacteria that process ammonia and nitrite.</p><ul><li>Keep it wet</li><li>Do not replace it all at once</li><li>Protect it during cleaning</li></ul></article>
+        <article class="media-card"><span>Chemical</span><h3>Carbon and resins</h3><p>Use chemical media for specific polishing, odor, medication removal, or targeted water cleanup.</p><ul><li>Replace when exhausted</li><li>Remove carbon during some treatments</li><li>Do not use it as a cure-all</li></ul></article>
+        <article class="media-card"><span>Specialty</span><h3>GFO, peat, nitrate media</h3><p>Specialty media should solve a known problem, not compensate for unknown water quality.</p><ul><li>Test before and after use</li><li>Start conservatively</li><li>Watch livestock response</li></ul></article>
+      </div>
+    </section>
+
+    <section class="important-note" aria-labelledby="replace-title">
+      <span>Important</span>
+      <h2 id="replace-title">Replace disposable media without resetting the filter</h2>
+      <p>Swap dirty floss, pads, or carbon when they are spent, but keep seasoned biological media wet and in use. Replacing every layer at once can remove too much helpful bacteria.</p>
+      <ul>
+        <li>Change disposable polishing media as needed</li>
+        <li>Keep ceramic rings and bio media wet</li>
+        <li>Retest ammonia and nitrite after big changes</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="routine-title">
+      <div class="section-head">
+        <div><span>Cleaning rhythm</span><h2 id="routine-title">Clean media by what it is doing</h2></div>
+        <p>The same cleaning rule should not apply to every layer of the filter.</p>
+      </div>
+      <div class="routine-grid">
+        <article class="routine-card"><span>Weekly check</span><h3>Look at flow first</h3><p>Reduced flow usually means the first mechanical layer is loaded with debris.</p><ul><li>Check intake strainers</li><li>Rinse coarse sponges</li><li>Replace fine floss if packed</li></ul></article>
+        <article class="routine-card"><span>Monthly habit</span><h3>Preserve bio media</h3><p>Biological media does not need to look new. It needs water flow and oxygen.</p><ul><li>Swish gently if clogged</li><li>Keep it in dechlorinated water</li><li>Never let it dry out</li></ul></article>
+        <article class="routine-card"><span>As needed</span><h3>Use chemical media intentionally</h3><p>Carbon, resins, and phosphate media have a purpose and a useful lifespan.</p><ul><li>Label install dates</li><li>Replace exhausted media</li><li>Test targeted nutrients</li></ul></article>
+      </div>
+    </section>
+
+    <aside class="callout">
+      <h2>Bring a photo of your filter basket</h2>
+      <p>If you are unsure what goes where, bring a photo of the filter, tank size, livestock, and current water test results. Staff can help match media order to the actual filter instead of guessing from the box.</p>
+      <div class="hero-actions"><a class="btn" href="../../category/?cat=maintenance">Browse maintenance</a><a class="btn secondary" href="../prevent-crash/">Prevent filter crashes</a></div>
+    </aside>
+
+    <footer class="footer">
+      <div class="footer-top">
+        <div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div>
+        <div><h4>Shop</h4><div class="footer-link-grid"><a href="../../category/?cat=equipment">Equipment</a><a href="../../category/?cat=maintenance">Filter media</a><a href="../../category/?cat=freshwater">Freshwater</a><a href="../../category/?cat=saltwater">Saltwater</a><a href="../../category/?cat=pond">Pond</a><a href="../../category/?cat=food">Food &amp; Care</a></div></div>
+        <div><h4>Help</h4><div class="footer-link-grid"><a href="../">Help Center</a><a href="../which-filter/">Which Filter</a><a href="../track-parameters/">Track Parameters</a><a href="../prevent-crash/">Prevent Crash</a><a href="../weekly-maintenance/">Maintenance</a><a href="../cloudy-water/">Cloudy Water</a></div></div>
+        <div><h4>Helpful Info</h4><a href="../../learn/">Help Center</a><a href="../../contact/">Visit Us</a></div>
+      </div>
+    </footer>
+  </main>
+  <script src="../../assets/reef-background.js?v=20260712-unified-nav"></script>
+</body>
+</html>

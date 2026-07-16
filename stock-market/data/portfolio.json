@@ -1,0 +1,58 @@
+{
+  "positions": [
+    {
+      "symbol": "ARM"
+    },
+    {
+      "symbol": "AVGO"
+    },
+    {
+      "symbol": "CRWV"
+    },
+    {
+      "symbol": "GOOG"
+    },
+    {
+      "symbol": "INTC"
+    },
+    {
+      "symbol": "META"
+    },
+    {
+      "symbol": "MSFT"
+    },
+    {
+      "symbol": "NVDA"
+    },
+    {
+      "symbol": "QCOM"
+    },
+    {
+      "symbol": "VRT"
+    },
+    {
+      "symbol": "AMZN"
+    },
+    {
+      "symbol": "TSM"
+    },
+    {
+      "symbol": "PLTR"
+    },
+    {
+      "symbol": "NVTS"
+    },
+    {
+      "symbol": "ORCL"
+    },
+    {
+      "symbol": "SOUN"
+    },
+    {
+      "symbol": "BA"
+    },
+    {
+      "symbol": "AAPL"
+    }
+  ]
+}
