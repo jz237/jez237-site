@@ -130,8 +130,10 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 18b. ~~Rival race-number roundels + liveries~~ **DONE 2026-07-15 (iteration
     20)** — door/roof/tail roundels, rival name strips, twin trim-tinted
     racing stripes; player carries #7. See iteration log.
-19. **Building facade near-tier**: window mullions/sills + a few lit rooms with
-    silhouette furniture on the closest facades (promotion by building).
+19. ~~Building facade near-tier~~ **DONE 2026-07-16 (iteration 21)** — lobby
+    bands (entrance, address plate, lanterns, mullioned lit windows w/
+    silhouettes) as transparent cutout panels on the nearest towers at
+    street level. See iteration log.
 20. ~~Ambient near-field audio~~ **DONE 2026-07-15 (iteration 16)** — crossing
     ticks, crowd murmur, steam hiss, phone chirps on the existing WebAudio bus
     (police sirens already existed via the cruiser system). See iteration log.
@@ -591,3 +593,25 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   and `git diff origin/main HEAD` converged to empty — verify exactly that
   (plus fix/ledger greps + bundle hash match) whenever a rebase reports
   "patch contents already upstream". Keep uncommitted windows short.
+- **21 facade near-tier — backlog item 19 (2026-07-16)**: `facadeSys` — pool
+  of 5 lobby-band panels (mobile 2) promoted onto the CAMERA-FACING wall of
+  the nearest wide buildings (min(w,d)≥12, reusing rooftopSys.spots as the
+  building registry; footprint-aware distance ≤30m; altitude gate ≤26 →
+  street-only, the race view is untouched by construction). Panel = one
+  11×5.5 alphaTest-cutout quad on a 1024×512 two-variant atlas: red/blue
+  canopy + address plate (214/387), double glass door with warm-lit lobby
+  silhouettes (counter/figure/pendant), two glowing wall lanterns, two
+  mullioned lobby windows with sills + furniture silhouettes. EVERYTHING
+  BETWEEN THE FIXTURES IS TRANSPARENT so the building's own wall color and
+  ambient window grid show through — no visible panel rectangle on ANY
+  facade color (same trick as the car grime decals). Wall pick per promote:
+  compare camera offset against footprint half-extents, offset +0.08 out,
+  yaw to face. raycast-inert (the iteration-20 rule). Verified by looking
+  (`loop-shots/21-facades/`): at 8m the band reads as a real entrance —
+  "214", canopy, lit door with people/furniture shapes, lanterns; at 45m
+  the target demotes to base facade while a neighbor within radius shows
+  its own tiny entrance (streets read naturally). detailReport().facades
+  {eligible, promoted, pool, radius, sample} + facadeEnable(on). Suite
+  133/133 expected. THE VISUAL BACKLOG IS NOW COMPLETE except the two
+  freeze-blocked items (4b recessed drivers, 11 road decals) — next:
+  final fresh-eyes survey + deploy batch 6 (v3.13.0), then loop end.
