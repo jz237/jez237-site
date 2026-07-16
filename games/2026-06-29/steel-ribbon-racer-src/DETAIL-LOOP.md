@@ -400,3 +400,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   20 ambient audio (unlocked), then 13-blimp, 17, 18, 18b, 19, and the
   freeze-sensitive pair 4b/11 after real-FPS renegotiation. Deploy batch 4
   (~v3.11.0, items 13-14+) still pending — do it early next session.
+- **LOOP RESUMED (2026-07-15) + DEPLOY BATCH 4: v3.11.0 LIVE** — items 13-14
+  (scattering birds, steam grates) verified first-probe (index-Dr6K1Okv.js,
+  bundle 200). Rebuild after 3-day pause was bit-identical to the committed
+  output; no foreign commits touched the game during the pause. Next per
+  re-rank: 16 parked-car variety, 20 ambient audio (unlocked), 13-blimp,
+  17, 18, 18b, 19; 4b/11 remain freeze-blocked.
