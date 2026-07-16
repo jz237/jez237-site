@@ -275,9 +275,9 @@ const browser = await chromium.launch({
   // zoom-detail item 3b: every promoted ped carries exactly one prop family
   const props = await page.evaluate(() => window.__steelRibbonDebug.detailReport().peds);
   check(
-    "ped kits: props partition the promoted set (text/bag/cup)",
-    !!props && props.promoted > 0 && props.texting + props.bags + props.cups === props.promoted,
-    JSON.stringify({ promoted: props?.promoted, t: props?.texting, b: props?.bags, c: props?.cups }),
+    "ped kits: props partition the promoted set (text/bag/cup/dog)",
+    !!props && props.promoted > 0 && props.texting + props.bags + props.cups + props.dogs === props.promoted,
+    JSON.stringify({ promoted: props?.promoted, t: props?.texting, b: props?.bags, c: props?.cups, d: props?.dogs }),
   );
 
   // zoom-detail item 04: bus drivers (head+cap behind the windshield glass band)
