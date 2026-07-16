@@ -2076,27 +2076,41 @@ function I1(i, e) {
     t
   );
 }
-function U1(i, e) {
+function U1(i, e, idx = 0) {
+  // zoom-detail 41 (round-five item 5): walkers become individuals — 4-tone
+  // skin, cap-or-hair, two-tone jacket/waist, sleeve variety. All deterministic
+  // per idx; the stacked cylinders keep the original body's silhouette envelope.
   const t = new Group(),
     { opaque } = vcMats(),
+    SKIN = [11893070, 9657655, 13018202, 8541761],
+    CAPS = [1119001, 4728103, 2110297, 6960969],
+    HAIRS = [2036767, 4924443, 7359290, 9992782],
+    WAIST = [3236447, 7887430, 5987111, 8012354],
+    skin = SKIN[idx % 4],
+    hair = idx % 3 === 1,
+    capCol = hair ? HAIRS[(idx >> 2) % 4] : CAPS[(idx >> 2) % 4],
+    waist = WAIST[(idx * 3 + 1) % 4],
+    sleeves = idx % 5 < 2 ? skin : i,
     hatGeo = new SphereGeometry(0.25, 8, 5);
-  hatGeo.scale(1, 0.5, 1);
+  hatGeo.scale(1, hair ? 0.42 : 0.5, 1);
   t.add(
     new Mesh(
       mergeGeometries(
         [
-          vcBake(new CylinderGeometry(0.28, 0.34, 0.95, 8), vcAt(0, 1.35, 0), i),
-          vcBake(new SphereGeometry(0.24, 10, 8), vcAt(0, 2.02, 0), 12947299),
-          vcBake(hatGeo, vcAt(0, 2.17, 0), 1119001),
+          vcBake(new CylinderGeometry(0.28, 0.315, 0.62, 8), vcAt(0, 1.515, 0), i),
+          vcBake(new CylinderGeometry(0.315, 0.34, 0.34, 8), vcAt(0, 1.04, 0), waist),
+          vcBake(new SphereGeometry(0.24, 10, 8), vcAt(0, 2.02, 0), skin),
+          vcBake(hatGeo, vcAt(0, hair ? 2.13 : 2.17, 0), capCol),
         ],
         !1,
       ),
       opaque,
     ),
   );
+  t.userData.style = { skin: idx % 4, hair, cap: capCol, waist, sleeves: sleeves === skin ? "short" : "long" };
   const d = [],
     legGeo = vcBake(new CylinderGeometry(0.075, 0.09, 0.78, 6), null, e),
-    armGeo = vcBake(new CylinderGeometry(0.055, 0.065, 0.72, 6), null, 12947299);
+    armGeo = vcBake(new CylinderGeometry(0.055, 0.065, 0.72, 6), null, sleeves);
   for (const f of [-0.16, 0.16]) {
     const p = new Mesh(legGeo, opaque);
     (p.position.set(f, 0.58, 0), t.add(p), d.push({ mesh: p, side: Math.sign(f), baseY: 0.58, amp: 0.28 }));
@@ -4691,7 +4705,7 @@ function F1(i, e, t) {
         x: 0,
         z: 0,
         hitRadius: 0.9,
-        mesh: U1(ne[I % ne.length], X[(I * 2) % X.length]),
+        mesh: U1(ne[I % ne.length], X[(I * 2) % X.length], I),
       };
     (I < 14 &&
       ((be.axis = "ns"),

@@ -317,6 +317,27 @@ const browser = await chromium.launch({
     JSON.stringify({ promoted: props?.promoted, t: props?.texting, b: props?.bags, c: props?.cups, d: props?.dogs }),
   );
 
+  // zoom-detail 41 (round five item 5): walkers are individuals — skin/hat/outfit mix
+  const pv = await page.evaluate(() => {
+    const s = [];
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.userData && o.userData.limbs && o.userData.style) s.push(o.userData.style);
+    });
+    return {
+      n: s.length,
+      skins: [...new Set(s.map((q) => q.skin))].length,
+      hair: s.filter((q) => q.hair).length,
+      caps: s.filter((q) => !q.hair).length,
+      short: s.filter((q) => q.sleeves === "short").length,
+      long: s.filter((q) => q.sleeves === "long").length,
+    };
+  });
+  check(
+    "ped variety: 4 skin tones, caps and hair, sleeve mix across walkers",
+    !!pv && pv.n > 30 && pv.skins === 4 && pv.hair > 3 && pv.caps > 3 && pv.short > 3 && pv.long > 3,
+    JSON.stringify(pv),
+  );
+
   // zoom-detail 38 (round five item 2): inspect extends to cars (follows the
   // mover, plate echo matches plateSys) and marshals (station persona).
   // Runs AFTER the partition probe — these teleport away from the ped cluster.

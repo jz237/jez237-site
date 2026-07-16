@@ -1045,3 +1045,27 @@ signal-corner ped density weighting.
   Perf gate 2 worlds: 1811-1860 calls / 588-596k tris / 231-237 tex /
   5510-5568 geo. Suite 142/142. NEXT: item 5 — ped outfit + skin
   variety (round-one deferral), then DEPLOY BATCH 12 (v3.19.0).
+- **41 PED VARIETY — round-five item 5, the round-one deferral
+  (2026-07-16)**: walkers are individuals now. U1 gains an idx param
+  (spawner passes the Rr index — the same seed personas use):
+  4-tone skin palette on head + hands (the drivers' palette
+  11893070/9657655/13018202/8541761), cap-OR-hair (idx%3===1 → flatter
+  dome in 4 hair colors hugging the head; else 4 cap colors), two-tone
+  outfit (jacket cylinder over a contrasting waist band — stacked
+  cylinders keep the exact silhouette envelope), and sleeve variety
+  (idx%5<2 → skin arms = short sleeves, else body-colored = long).
+  userData.style stamps the choices for probes. Verified by LOOKING
+  (loop-shots/41-ped-variety/): four portraits, four genuinely
+  different people — coral jacket/brown waist/black cap short-sleeve;
+  blue jacket/teal waist/dark hair with shopping bag; yellow
+  long-sleeve with phone; mint long-sleeve deep-brown-skinned walker
+  with the dog. Far tier: body-color palette unchanged, new colors
+  sub-pixel at 150m. Perf gate: 1828-1854 calls / 595-607k tris. Suite
+  143/143 (variety probe: 4 skins + hair/cap + sleeve mix present).
+  SUITE FLAKE NOTE: runs 1-2 each had a DIFFERENT single flake (ped
+  glide 6.7m>4.2 once; pond recover-window starvation once — depth
+  0.73, coast reached, clock ran out) — each passed in the other runs;
+  run 3 was 143/143 clean. Physics probes in slow-motion headless are
+  the flaky family; if this repeats, widen the pond recover window and
+  glide threshold as a suite-hardening item. v3.19.0. DEPLOY BATCH 12
+  next in this iteration.
