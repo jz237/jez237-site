@@ -425,6 +425,35 @@ const browser = await chromium.launch({
     JSON.stringify({ count: planes?.count, banners: planes?.banners }),
   );
 
+  // zoom-detail item 18: roadside marshal/pit-board/camera kits at deck-edge stations
+  const roadSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const r0 = deb.detailReport().roadside;
+    const st = (r0.stations || [])[0];
+    if (!st) return { spots: r0.spots, promoted: -1 };
+    deb.flyCam(st.x + 20, st.y + 6, st.z + 16, st.x, st.y + 1, st.z);
+    let rep = null;
+    for (let i = 0; i < 30 && !(rep && rep.promoted > 0); i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      rep = deb.detailReport().roadside;
+    }
+    const promoted = rep?.promoted ?? 0;
+    deb.roadsideEnable(false);
+    let off = -1;
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      off = deb.detailReport().roadside.promoted;
+      if (off === 0) break;
+    }
+    (deb.roadsideEnable(true), (window.__freeCam = !1));
+    return { spots: r0.spots, promoted, off };
+  });
+  check(
+    "roadside: station kits promote at the deck edge and toggle off",
+    roadSeq.spots >= 8 && roadSeq.promoted > 0 && roadSeq.off === 0,
+    JSON.stringify(roadSeq),
+  );
+
   // zoom-detail item 13: birds spawn, scatter on approach, then despawn
   const birdSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
