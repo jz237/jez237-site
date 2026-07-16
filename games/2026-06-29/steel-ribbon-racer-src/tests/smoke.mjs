@@ -309,13 +309,71 @@ const browser = await chromium.launch({
     !!insSeq && insSeq.active && !!insSeq.name && insSeq.hasThought && insSeq.close < 4.2 && insSeq.exited,
     JSON.stringify(insSeq),
   );
-
   // zoom-detail item 3b: every promoted ped carries exactly one prop family
   const props = await page.evaluate(() => window.__steelRibbonDebug.detailReport().peds);
   check(
     "ped kits: props partition the promoted set (text/bag/cup/dog)",
     !!props && props.promoted > 0 && props.texting + props.bags + props.cups + props.dogs === props.promoted,
     JSON.stringify({ promoted: props?.promoted, t: props?.texting, b: props?.bags, c: props?.cups, d: props?.dogs }),
+  );
+
+  // zoom-detail 38 (round five item 2): inspect extends to cars (follows the
+  // mover, plate echo matches plateSys) and marshals (station persona).
+  // Runs AFTER the partition probe — these teleport away from the ped cluster.
+  const insCar = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const n = deb.__nearestTraffic(false);
+    if (!n) return { fail: "no traffic" };
+    deb.setRoamPos(n.x + 6, n.z + 6, 0, 0);
+    await new Promise((r) => setTimeout(r, 1600));
+    let info = null;
+    for (let i = 0; i < 30 && !(info && info.active && info.kind === "car"); i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      info = deb.inspectNearest("car");
+    }
+    if (!info || !info.active) return { fail: "no enter" };
+    const p0 = { ...info.ped };
+    let close = 999,
+      moved = 0;
+    for (let i = 0; i < 40; i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      const s2 = deb.inspectPed("info");
+      if (!s2.active || !s2.ped) break;
+      close = Math.min(close, Math.hypot(s2.cam.x - s2.ped.x, s2.cam.z - s2.ped.z));
+      moved = Math.max(moved, Math.hypot(s2.ped.x - p0.x, s2.ped.z - p0.z));
+      if (close < 9 && moved > 2) break;
+    }
+    const out = { kind: info.kind, name: info.name, plate: info.plate, hasThought: !!info.thought, close: +close.toFixed(1), moved: +moved.toFixed(1) };
+    deb.inspectPed(!1);
+    out.exited = !deb.inspectPed("info").active;
+    return out;
+  });
+  check(
+    "inspect: cars — persona + plate echo, camera follows the mover, exits clean",
+    !!insCar && insCar.kind === "car" && !!insCar.name && insCar.hasThought && typeof insCar.plate === "string" && insCar.close < 9 && insCar.exited,
+    JSON.stringify(insCar),
+  );
+  const insMar = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const st = deb.detailReport().roadside.stations[0];
+    if (!st) return { fail: "no stations" };
+    deb.setRoamPos(st.x - 10, st.z - 10, 0, 0);
+    await new Promise((r) => setTimeout(r, 2000));
+    let info = null;
+    for (let i = 0; i < 30 && !(info && info.active && info.kind === "marshal"); i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      info = deb.inspectNearest("marshal");
+    }
+    if (!info || !info.active) return { fail: "no marshal promoted" };
+    const out = { kind: info.kind, name: info.name, activity: info.activity, hasThought: !!info.thought };
+    deb.inspectPed(!1);
+    out.exited = !deb.inspectPed("info").active;
+    return out;
+  });
+  check(
+    "inspect: marshals — station persona enters and exits clean",
+    !!insMar && insMar.kind === "marshal" && !!insMar.name && /station \d/.test(insMar.activity ?? "") && insMar.hasThought && insMar.exited,
+    JSON.stringify(insMar),
   );
 
   // zoom-detail item 04: bus drivers (head+cap behind the windshield glass band)

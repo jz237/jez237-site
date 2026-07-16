@@ -12845,7 +12845,45 @@ const INSPECT_THOUGHTS = {
   dog: ["{DOG} found a smell. Could be a while.", "Who is a good {DOG}? You are.", "{DOG} barks at every race car. Every single one.", "One more block, then treats."],
   walk: ["Nice night for a walk.", "Was that car doing two hundred?!", "I never get tired of this skyline.", "Gate 8 looked extra glowy tonight."],
 };
-const inspectRig = { active: !1, actor: null, idx: -1, persona: null, entryPos: new Vector3(), _look: new Vector3() };
+// zoom-detail 38: inspect extends to cars, dogs and marshals — same rig, a
+// kind dimension picks persona, camera framing and alive-checks per subject.
+const CAR_RADIO = [
+  "Tuned to 88.7 The Ribbon. All synth, all night.",
+  "Caller nine wins pit passes. I am ALWAYS caller nine.",
+  "Traffic report says I am the traffic.",
+  "This song again? ...turns it up anyway.",
+];
+const CAR_ERRANDS = [
+  "Birthday cake on the back seat. No sudden brakes.",
+  "Left the oven off. Pretty sure. Mostly sure.",
+  "New wiper blades today. Living the dream.",
+  "Shortcut? I know a guy who knows a shortcut.",
+];
+const TAXI_LINES = [
+  "Fare to the stadium — tip is looking promising.",
+  "Two hundred laps of this city and I still love the skyline.",
+  "The meter is fair. The meter is always fair.",
+  "Airport run at nine. Plenty of time. Probably.",
+];
+const BUS_LINES = [
+  "Two minutes ahead of schedule. Do not tell dispatch.",
+  "Crosstown 14: every stop, every time, no exceptions.",
+  "Someone left an umbrella again. Third one this week.",
+  "Smooth stops tonight. The passengers applaud. Inwardly.",
+];
+const DOG_THOUGHTS = [
+  "Seven hydrants today. A personal record.",
+  "The human walks slow, but I love them anyway.",
+  "That pigeon knows exactly what it did.",
+  "Treats are statistically imminent. I can feel it.",
+];
+const MARSHAL_LINES = [
+  "Blue flag ready — someone is about to get lapped.",
+  "Best seat on the whole ribbon, honestly.",
+  "Sector clear. Beautiful racing out there tonight.",
+  "Radio check every lap. The crackle means it works.",
+];
+const inspectRig = { active: !1, actor: null, idx: -1, kind: "ped", persona: null, entryPos: new Vector3(), _look: new Vector3() };
 const inspectBubble = document.createElement("div");
 inspectBubble.style.cssText =
   "position:fixed;z-index:31;display:none;max-width:270px;background:rgba(250,250,246,0.96);color:#1c2028;font:600 13px/1.45 system-ui,sans-serif;padding:9px 12px;border-radius:12px;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,0.35);transform:translate(-50%,-112%);";
@@ -12871,18 +12909,80 @@ function pedPersona(idx) {
   } else ((activity = "on a coffee run"), (thought = INSPECT_THOUGHTS.cup[idx % 4]));
   return { name, prop, activity, thought };
 }
+function carPlateText(mesh) {
+  const d = plateSys.dynamics.find((q) => q.carMesh === mesh);
+  return d && plateSys.texts ? plateSys.texts[d.slot % plateSys.texts.length] : null;
+}
+function carPersona(car, i) {
+  const name = PED_NAMES[(i * 7 + 3) % PED_NAMES.length],
+    plate = carPlateText(car.mesh),
+    bus = !!car.mesh.userData.bus,
+    taxi = car.type === "taxi";
+  const activity = bus ? "driving the Crosstown 14" : taxi ? "on shift" + (plate ? ", cab " + plate : "") : "out for a drive";
+  const thought = bus ? BUS_LINES[i % 4] : taxi ? TAXI_LINES[i % 4] : (i % 2 ? CAR_RADIO : CAR_ERRANDS)[(i >> 1) % 4];
+  return { name, prop: bus ? "bus" : taxi ? "taxi" : "car", activity, thought, plate };
+}
+function dogPersona(idx) {
+  const dog = DOG_NAMES[idx % DOG_NAMES.length];
+  return { name: dog, prop: "dog", activity: "being a very good dog", thought: DOG_THOUGHTS[idx % 4], plate: null };
+}
+function marshalPersona(si) {
+  const name = PED_NAMES[(si * 5 + 11) % PED_NAMES.length];
+  return { name, prop: "marshal", activity: "flag marshal, station " + ((si % 14) + 1), thought: MARSHAL_LINES[si % 4], plate: null };
+}
+const _insW = new Vector3();
+// One framing table for enter-snap, the follow tick and the bubble: head
+// point, forward x/z, camera standoff/side/height and bubble lift per kind.
+function inspectSubject(kind, a) {
+  if (kind === "car") {
+    const m = a.mesh,
+      bus = !!m.userData.bus;
+    _insW.set(0, 0, 1).applyQuaternion(m.quaternion);
+    return { hx: m.position.x, hy: m.position.y + (bus ? 1.9 : 1.0), hz: m.position.z, fx: _insW.x, fz: _insW.z, off: bus ? 7.2 : 4.6, side: 1.7, ty: 0.55, drop: 0.35, lift: bus ? 1.0 : 0.8 };
+  }
+  if (kind === "dog") {
+    a.dog.getWorldPosition(_insW);
+    const w = a.ped.mesh;
+    return { hx: _insW.x, hy: _insW.y + 0.42, hz: _insW.z, fx: -Math.sin(w.rotation.y), fz: -Math.cos(w.rotation.y), off: 1.7, side: 0.6, ty: 0.12, drop: 0.05, lift: 0.35 };
+  }
+  if (kind === "marshal") {
+    // frame from the viewer's approach side — a fixed forward vector can point
+    // straight into the deck rim wall and bury the camera in the platform
+    const g = a.g,
+      dx = Xe.position.x - g.position.x,
+      dz = Xe.position.z - g.position.z,
+      L = Math.hypot(dx, dz) || 1;
+    return { hx: g.position.x, hy: g.position.y + roadsideSys.LIFT + 1.45, hz: g.position.z, fx: dx / L, fz: dz / L, off: 3.1, side: 0.4, ty: 0.6, drop: 0.25, lift: 0.5 };
+  }
+  const m = a.mesh;
+  return { hx: m.position.x, hy: m.position.y + 1.62, hz: m.position.z, fx: -Math.sin(m.rotation.y), fz: -Math.cos(m.rotation.y), off: 2.5, side: 0.95, ty: 0.25, drop: 0.15, lift: 0.42 };
+}
+function inspectAlive(kind, a) {
+  if (kind === "car") return !!(a.mesh && a.mesh.visible);
+  if (kind === "dog") return !!(a.ped && a.prop === "dog" && a.ped.active && a.ped.mesh.visible);
+  if (kind === "marshal") return !!(a.g && a.g.visible && a.idx >= 0);
+  return !!(a.active && a.mesh.visible);
+}
 function inspectExit() {
   if (!inspectRig.active) return;
   ((inspectRig.active = !1), (inspectRig.actor = null), (window.__freeCam = !1));
   ((inspectBubble.style.display = "none"), (inspectCard.style.display = "none"));
 }
-function inspectEnter(actor, idx) {
+function inspectEnter(actor, idx, kind = "ped") {
   if (photoRig.active || u.mode !== "roam") return !1;
-  ((inspectRig.actor = actor), (inspectRig.idx = idx), (inspectRig.persona = pedPersona(idx)), (inspectRig.active = !0));
+  const persona = kind === "car" ? carPersona(actor, idx) : kind === "dog" ? dogPersona(idx) : kind === "marshal" ? marshalPersona(idx) : pedPersona(idx);
+  ((inspectRig.actor = actor), (inspectRig.idx = idx), (inspectRig.kind = kind), (inspectRig.persona = persona), (inspectRig.active = !0));
   inspectRig.entryPos.copy(u.roamPos);
-  inspectRig._look.set(actor.mesh.position.x, actor.mesh.position.y + 1.47, actor.mesh.position.z);
+  const s0 = inspectSubject(kind, actor);
+  inspectRig._look.set(s0.hx, s0.hy - s0.drop, s0.hz);
   const pp = inspectRig.persona;
-  inspectCard.innerHTML = "\uD83D\uDC41 <b>" + pp.name + "</b> \u00B7 " + pp.activity + " &nbsp;\u2014&nbsp; click away or Esc to close";
+  inspectCard.innerHTML =
+    "\uD83D\uDC41 <b>" +
+    pp.name +
+    "</b> \u00B7 " +
+    pp.activity +
+    (pp.plate && pp.prop !== "taxi" ? ' \u00B7 <span style="background:#e8e4d8;color:#222;padding:1px 6px;border-radius:3px;font-family:monospace">' + pp.plate + "</span>" : "") +
+    " &nbsp;\u2014&nbsp; click away or Esc to close";
   ((inspectBubble.textContent = pp.thought), (inspectBubble.style.whiteSpace = "pre-line"));
   ((inspectBubble.style.display = "block"), (inspectCard.style.display = "block"), (window.__freeCam = !0));
   return !0;
@@ -12899,21 +12999,36 @@ function inspectNearestPed(maxDist = 60) {
 }
 const _insV = new Vector3();
 function inspectScreenPick(px, py) {
+  const rect = Lr.getBoundingClientRect(),
+    cx = Xe.position.x,
+    cz = Xe.position.z;
   let best = null;
-  const rect = Lr.getBoundingClientRect();
-  for (let i = 0; i < Rr.length; i++) {
-    const a = Rr[i];
-    if (!a.active || !a.mesh.visible) continue;
-    const dW = Math.hypot(a.x - Xe.position.x, a.z - Xe.position.z);
-    if (dW > 55) continue;
-    _insV.set(a.mesh.position.x, a.mesh.position.y + 1.5, a.mesh.position.z).project(Xe);
-    if (_insV.z > 1) continue;
+  const consider = (kind, a, i, wx, wy, wz, maxD, acc) => {
+    if (i < 0 || Math.hypot(wx - cx, wz - cz) > maxD) return;
+    _insV.set(wx, wy, wz).project(Xe);
+    if (_insV.z > 1) return;
     const sx = rect.left + ((_insV.x + 1) / 2) * rect.width,
       sy = rect.top + ((1 - _insV.y) / 2) * rect.height,
       dPx = Math.hypot(sx - px, sy - py);
-    (!best || dPx < best.dPx) && (best = { a, i, dPx });
+    dPx <= acc && (!best || dPx < best.dPx) && (best = { kind, a, i, dPx });
+  };
+  for (let i = 0; i < Rr.length; i++) {
+    const a = Rr[i];
+    a.active && a.mesh.visible && consider("ped", a, i, a.mesh.position.x, a.mesh.position.y + 1.5, a.mesh.position.z, 55, 46);
   }
-  return best && best.dPx <= 46 ? best : null;
+  for (const k of pedKitSys.kits || [])
+    if (k.ped && k.prop === "dog" && k.ped.mesh.visible) {
+      k.dog.getWorldPosition(_insW);
+      consider("dog", k, Rr.indexOf(k.ped), _insW.x, _insW.y + 0.3, _insW.z, 38, 40);
+    }
+  for (let i = 0; i < Rc.length; i++) {
+    const c = Rc[i];
+    c.mesh && c.mesh.visible && consider("car", c, i, c.mesh.position.x, c.mesh.position.y + 0.9, c.mesh.position.z, 55, 62);
+  }
+  if (roadsideSys.kits)
+    for (const k of roadsideSys.kits)
+      k.variant === 0 && k.g.visible && k.idx >= 0 && consider("marshal", k, k.idx, k.g.position.x, k.g.position.y + roadsideSys.LIFT + 1.35, k.g.position.z, 60, 46);
+  return best;
 }
 let inspectDown = null;
 window.addEventListener("pointerdown", (ev) => {
@@ -12926,7 +13041,7 @@ window.addEventListener("pointerup", (ev) => {
   if (Math.hypot(ev.clientX - dn.x, ev.clientY - dn.y) > 7 || performance.now() - dn.t > 420) return;
   if (!inspectRig.active && !(u.vehicle === "foot" || Math.abs(u.speed) < 8)) return;
   const hit = inspectScreenPick(ev.clientX, ev.clientY);
-  if (hit) inspectEnter(hit.a, hit.i);
+  if (hit) inspectEnter(hit.a, hit.i, hit.kind);
   else inspectExit();
 });
 window.addEventListener("keydown", (ev) => {
@@ -12937,23 +13052,23 @@ window.addEventListener("keydown", (ev) => {
   et.add(inspectAnchor);
   Bn(inspectAnchor, () => {
     if (!inspectRig.active) return;
-    const a = inspectRig.actor;
-    if (u.mode !== "roam" || photoRig.active || !a || !a.active || !a.mesh.visible || u.roamPos.distanceTo(inspectRig.entryPos) > 3) {
+    const a = inspectRig.actor,
+      kind = inspectRig.kind;
+    if (u.mode !== "roam" || photoRig.active || !a || !inspectAlive(kind, a) || u.roamPos.distanceTo(inspectRig.entryPos) > (kind === "car" ? 12 : 3)) {
       inspectExit();
       return;
     }
-    const m = a.mesh,
-      fx = -Math.sin(m.rotation.y),
-      fz = -Math.cos(m.rotation.y),
-      hx = m.position.x,
-      hy = m.position.y + 1.62,
-      hz = m.position.z,
-      tx = hx + fx * 2.5 + fz * 0.95,
-      ty = hy + 0.25,
-      tz = hz + fz * 2.5 - fx * 0.95;
-    (Xe.position.lerp(_insV.set(tx, ty, tz), 0.14), inspectRig._look.lerp(_insV.set(hx, hy - 0.15, hz), 0.3), Xe.lookAt(inspectRig._look));
+    const s = inspectSubject(kind, a);
+    if (kind === "car" && Math.hypot(s.hx - inspectRig.entryPos.x, s.hz - inspectRig.entryPos.z) > 130) {
+      inspectExit();
+      return;
+    }
+    const tx = s.hx + s.fx * s.off + s.fz * s.side,
+      ty = s.hy + s.ty,
+      tz = s.hz + s.fz * s.off - s.fx * s.side;
+    (Xe.position.lerp(_insV.set(tx, ty, tz), kind === "car" ? 0.22 : 0.14), inspectRig._look.lerp(_insV.set(s.hx, s.hy - s.drop, s.hz), kind === "car" ? 0.45 : 0.3), Xe.lookAt(inspectRig._look));
     window.__freeCam = !0;
-    _insV.set(hx, hy + 0.42, hz).project(Xe);
+    _insV.set(s.hx, s.hy + s.lift, s.hz).project(Xe);
     if (_insV.z <= 1) {
       const rect = Lr.getBoundingClientRect();
       ((inspectBubble.style.left = rect.left + ((_insV.x + 1) / 2) * rect.width + "px"), (inspectBubble.style.top = rect.top + ((1 - _insV.y) / 2) * rect.height + "px"), (inspectBubble.style.display = "block"));
@@ -12970,14 +13085,57 @@ window.__steelRibbonDebug.inspectPed = function (on) {
     n && inspectEnter(n.a, n.i);
   }
   const pp = inspectRig.persona;
+  let sub = null;
+  if (inspectRig.actor && inspectRig.active) {
+    const s = inspectSubject(inspectRig.kind, inspectRig.actor);
+    sub = { x: +s.hx.toFixed(1), y: +s.hy.toFixed(2), z: +s.hz.toFixed(1) };
+  }
   return {
     active: inspectRig.active,
     idx: inspectRig.idx,
+    kind: inspectRig.kind,
     name: pp ? pp.name : null,
     prop: pp ? pp.prop : null,
     activity: pp ? pp.activity : null,
     thought: pp ? pp.thought : null,
-    ped: inspectRig.actor ? { x: +inspectRig.actor.mesh.position.x.toFixed(1), y: +inspectRig.actor.mesh.position.y.toFixed(2), z: +inspectRig.actor.mesh.position.z.toFixed(1) } : null,
+    plate: pp ? (pp.plate ?? null) : null,
+    ped: sub,
     cam: { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) },
   };
+};
+window.__steelRibbonDebug.inspectNearest = function (kind) {
+  inspectRig.active && inspectExit();
+  const cx = Xe.position.x,
+    cz = Xe.position.z;
+  let ent = null,
+    b = null;
+  if (kind === "car") {
+    for (let i = 0; i < Rc.length; i++) {
+      const c = Rc[i];
+      if (!c.mesh || !c.mesh.visible) continue;
+      const d = Math.hypot(c.mesh.position.x - cx, c.mesh.position.z - cz);
+      (!b || d < b.d) && (b = { a: c, i, d });
+    }
+    b && b.d <= 140 && (ent = [b.a, b.i, "car"]);
+  } else if (kind === "dog") {
+    for (const k of pedKitSys.kits || []) {
+      if (!k.ped || k.prop !== "dog" || !k.ped.mesh.visible) continue;
+      const d = Math.hypot(k.ped.mesh.position.x - cx, k.ped.mesh.position.z - cz),
+        i = Rr.indexOf(k.ped);
+      i >= 0 && (!b || d < b.d) && (b = { a: k, i, d });
+    }
+    b && b.d <= 60 && (ent = [b.a, b.i, "dog"]);
+  } else if (kind === "marshal") {
+    for (const k of roadsideSys.kits || []) {
+      if (k.variant !== 0 || !k.g.visible || k.idx < 0) continue;
+      const d = Math.hypot(k.g.position.x - cx, k.g.position.z - cz);
+      (!b || d < b.d) && (b = { a: k, i: k.idx, d });
+    }
+    b && b.d <= 240 && (ent = [b.a, b.i, "marshal"]);
+  } else {
+    const n = inspectNearestPed(80);
+    n && (ent = [n.a, n.i, "ped"]);
+  }
+  ent && inspectEnter(ent[0], ent[1], ent[2]);
+  return window.__steelRibbonDebug.inspectPed("info");
 };
