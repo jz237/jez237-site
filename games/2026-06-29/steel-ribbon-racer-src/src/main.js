@@ -3632,6 +3632,19 @@ const pedKitSys = {
       (kit.prop = prop),
       (kit.texting = prop === "text"),
       kit.texting && g.add(kit.phone),
+      // head-tilt illusion: pitch the face overlay about the HEAD CENTRE so
+      // the features slide down the sphere toward the phone (the merged head
+      // itself cannot rotate)
+      (() => {
+        if (kit.texting) {
+          const th = 0.35,
+            c = Math.cos(th),
+            s2 = Math.sin(th),
+            hy = 2.04,
+            hz = -0.03;
+          ((kit.face.rotation.x = th), kit.face.position.set(0, hy - (hy * c - hz * s2), hz - (hy * s2 + hz * c)));
+        } else ((kit.face.rotation.x = 0), kit.face.position.set(0, 0, 0));
+      })(),
       prop === "bag" && limbs[2]?.mesh.add(kit.bag),
       prop === "cup" && limbs[2]?.mesh.add(kit.cup),
       prop === "dog" && (g.add(kit.dog), g.add(kit.leash)),
@@ -10594,7 +10607,7 @@ window.__steelRibbonDebug = {
           .filter((k) => k.ped)
           .slice(0, 3)
           .map((k) => {
-            const o = { x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir, t: k.texting ? 1 : 0, p: k.prop };
+            const o = { x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir, t: k.texting ? 1 : 0, p: k.prop, tilt: +k.face.rotation.x.toFixed(2) };
             if (k.texting) {
               const pv = k.phone.getWorldPosition(new Vector3());
               o.phone = { x: +pv.x.toFixed(2), y: +pv.y.toFixed(2), z: +pv.z.toFixed(2) };

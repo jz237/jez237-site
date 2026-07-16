@@ -271,6 +271,8 @@ const browser = await chromium.launch({
     }
   }
   check("ped kits: texting pedestrians hold chat phones", texting > 0, `texting=${texting}`);
+  const tiltRow = await page.evaluate(() => (window.__steelRibbonDebug.detailReport().peds.sample || []).find((c) => c.t === 1));
+  check("ped kits: texting heads bow toward the phone", !tiltRow || tiltRow.tilt > 0.3, JSON.stringify(tiltRow));
 
   // zoom-detail item 3b: every promoted ped carries exactly one prop family
   const props = await page.evaluate(() => window.__steelRibbonDebug.detailReport().peds);
