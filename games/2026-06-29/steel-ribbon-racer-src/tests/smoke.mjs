@@ -454,6 +454,14 @@ const browser = await chromium.launch({
     JSON.stringify(roadSeq),
   );
 
+  // zoom-detail item 18b: rivals + player carry race-number roundels/liveries
+  const liv = await page.evaluate(() => window.__steelRibbonDebug.detailReport().livery);
+  check(
+    "livery: rivals and player carry race roundels",
+    !!liv && liv.player === 7 && liv.rivals.length === 3 && liv.rivals.every((r) => [2, 5, 9].includes(r.n)),
+    JSON.stringify({ player: liv?.player, ns: liv?.rivals?.map((r) => r.n) }),
+  );
+
   // zoom-detail item 13: birds spawn, scatter on approach, then despawn
   const birdSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
