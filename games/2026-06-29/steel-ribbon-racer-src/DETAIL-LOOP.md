@@ -860,3 +860,78 @@ versions stay blocked on the perf renegotiation.
   retire with the systems they cover), 11 live deploy batches
   (v3.8.0→v3.18.0). Nothing known remains. The loop rests until the next
   "continue".
+
+## ROUND FIVE (2026-07-16, "continue" after round-four close)
+
+**36 BOOTSTRAP SURVEY (2026-07-16)**: fresh-eyes battery
+(`loop-shots/36-survey-5/`, shots-36.mjs + 36b/36c follow-ups): race chase,
+rival close, eye-level street, ped close, parked 3m, signal 6m, facade
+midband 16m, rooftop 9m, road decal, mid 40m, far 150m, plane abeam,
+traffic close. Baseline THIS world: **1937 calls / 588.2k tris / 243 tex /
+5609 geo** vs gates 1975/620k/252/5650 — headroom is THIN (≈38 calls /
+32k tris); round-five items must be atlas/instance-frugal, and any item
+that genuinely needs more presents fresh renegotiation data instead of
+squeezing.
+
+Findings (what still breaks the "closer = more" promise):
+- **Traffic signals show all three lamps lit at once** on every head, every
+  intersection (07-signal-6m). Up close it reads broken. The ambient
+  system's PS registry already stamps walkEW/walkNS per intersection —
+  the visual state can key off the exact same data.
+- **Park/lawn blocks are featureless green voids** at every distance
+  (03/04/10/11/12). No paths, no benches, scattered trees only in a few
+  outskirt spots. Biggest empty canvas left in the game.
+- **Peds up close are single-color untextured cylinders** (04-ped-close):
+  no outfit split, no skin-tone variety — the one sub-item explicitly
+  deferred from round-one item 2.
+- **Parked cars at 3m are windowless boxes** (05-parked-3m): grime/dents/
+  rack/antenna/plate all present, but no side/rear glass, no door seams,
+  no tail lamps.
+- **Building windows blur into soft streaks at ~16m** (08-facade-midband):
+  the baked window texture has no frames/mullions to resolve; mid-band
+  walls are the biggest surface players hover beside in helicopter mode.
+- **Big roofs read empty at 9m** (09-rooftop-9m): one kit per roof on a
+  blank slab; helicopter mode looks straight down at these.
+- **Start-line aprons are bare concrete** (02 background): race mode's
+  most-seen real estate has no paddock life.
+- **Prop planes are bare boxes up close** (13-plane-banner): banner + rope
+  read great, but no registration marks, prop disc, or gear struts.
+- Signal-corner sidewalks can be person-empty (nearest ped 136m from one
+  signal) — noted, but ped routing is out of charter (AI risk); density
+  weighting only if an easy hook appears.
+- 14-traffic-close missed its subject (pickup drove off; fresh-read + fly
+  isn't enough for movers — ledger's chase-hop pattern remains the tool).
+
+**ROUND FIVE BACKLOG** (one per iteration, ranked):
+1. Functional traffic-signal lamp states — one lit lamp per head, cycling
+   with the existing walkEW/walkNS registry (green/amber/red opposite the
+   WALK phase). Prefer zero-new-draw vertex/instance recolor; small
+   at-distance delta (3 glow dots → 1 per head) is a FIX, not a break —
+   note it in the verify shots.
+2. Inspect mode extended to cars + dogs + marshals (user-suggested seed):
+   click a car → glide-zoom, driver name + plate echo + fictional radio
+   station/destination card; dogs get their existing names + activity;
+   marshals get flag-duty lines. Reuses inspectRig/enter/exit machinery.
+3. Park paths + tree clusters — baked pale gravel path polygons through
+   large lawn blocks + instanced trees along them (world-gen bake, far
+   tier IS the feature; near tier free).
+4. Park furniture — benches/cans/flowerbeds along the new paths via the
+   existing furniture defs + a flowerbed vcBake (promotion pool only if
+   needed; prefer static merge).
+5. Ped outfit + skin variety — two-tone outfit split (jacket/shirt),
+   4-tone skin palette (drivers already ship it: 11893070/9657655/
+   13018202/8541761), vertex-color only, silhouette unchanged at far.
+6. Parked-car glass + door seams + tail lamps — parkedKitSys additions
+   (pool exists): dark side/rear glass quads, seam decals from the grime
+   atlas, lamp dots.
+7. Start-line paddock clutter — stacked tires, tool carts, bunting near
+   the start gantry (static merged, race-visible every launch).
+8. Building window atlas crispness — 2× resolution + frame/mullion lines
+   + occasional curtain variation on lit cells; far look must stay
+   pixel-equivalent (mipmap converges) — verify far shot A/B.
+9. Rooftop dressing density — area-scaled 2–3 kits on large roofs + a
+   roof-access hatch box; helicopter-mode payoff.
+10. Prop-plane close detail — wing registration codes (SR-##), prop disc,
+    gear struts; helicopter/banner-flyby payoff.
+Stretch seeds (unranked): curb strips at park edges, cockpit cowl detail,
+signal-corner ped density weighting.
