@@ -320,7 +320,7 @@ const browser = await chromium.launch({
 
   // zoom-detail item 04: bus drivers (head+cap behind the windshield glass band)
   const drv = await page.evaluate(() => window.__steelRibbonDebug.detailReport().drivers);
-  check("drivers: all buses crewed", !!drv && drv.cars === 30 && drv.withDriver === 5, JSON.stringify(drv));
+  check("drivers: every car crewed (recessed cabins)", !!drv && drv.cars === 30 && drv.withDriver === 30, JSON.stringify(drv));
 
   // zoom-detail item 05: every taxi carries a lit medallion roof sign + door decals
   const tx = await page.evaluate(() => window.__steelRibbonDebug.detailReport().taxis);
@@ -550,36 +550,6 @@ const browser = await chromium.launch({
     "newsboxes: seeded on curbs, front pages promote and toggle off",
     !!newsSeq && newsSeq.spots >= 10 && newsSeq.promoted > 0 && newsSeq.off === 0,
     JSON.stringify(newsSeq),
-  );
-
-  // zoom-detail item 4b-lite: driver silhouettes on nearby traffic windshields
-  const silSeq = await page.evaluate(async () => {
-    const deb = window.__steelRibbonDebug;
-    let rep = null;
-    for (let hop = 0; hop < 4 && !(rep && rep.silhouettes > 0); hop++) {
-      const c0 = deb.__nearestTraffic(!0); // skip buses — they have real drivers and never promote silhouettes
-      if (!c0) break;
-      deb.setRoamPos(c0.x + 8, c0.z + 8, 0, 0);
-      for (let i = 0; i < 40 && !(rep && rep.silhouettes > 0); i++) {
-        await new Promise((r) => setTimeout(r, 400));
-        rep = deb.detailReport().drivers;
-      }
-    }
-    const promoted = rep?.silhouettes ?? 0;
-    deb.driverSilEnable(false);
-    let off = -1;
-    for (let i = 0; i < 20; i++) {
-      await new Promise((r) => setTimeout(r, 250));
-      off = deb.detailReport().drivers.silhouettes;
-      if (off === 0) break;
-    }
-    deb.driverSilEnable(true);
-    return { promoted, off, pool: rep?.silPool ?? 0 };
-  });
-  check(
-    "drivers: windshield silhouettes promote on nearby traffic and toggle off",
-    silSeq.promoted > 0 && silSeq.off === 0 && silSeq.pool >= 4,
-    JSON.stringify(silSeq),
   );
 
   // zoom-detail item 19: facade lobby bands promote on the nearest towers

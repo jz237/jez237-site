@@ -1976,10 +1976,32 @@ function I1(i, e) {
     opq = [],
     gls = [];
   opq.push(vcBake(new BoxGeometry(s.w, s.h, s.l), vcAt(0, 0.95, 0), bodyColor));
+  // full-fat 4b (round four, freeze lifted): non-bus cabins are RECESSED —
+  // the box is 0.34 shorter, the old front face is rebuilt as A-pillars +
+  // header + sill around the windshield, and a baked driver sits in the
+  // dark interior behind the glass. Every car is visibly crewed at any
+  // distance the cabin resolves.
   (s.bus ? gls : opq).push(
-    vcBake(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2]), vcAt(0, 1.65, s.cabinZ), s.bus ? 10217727 : e),
+    s.bus
+      ? vcBake(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2]), vcAt(0, 1.65, s.cabinZ), 10217727)
+      : vcBake(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2] - 0.34), vcAt(0, 1.65, s.cabinZ + 0.17), e),
   );
   if (!s.bus) {
+    const czF = s.cabinZ - s.cabin[2] / 2;
+    (opq.push(vcBake(new BoxGeometry(s.cabin[0], s.cabin[1] * 0.22, 0.06), vcAt(0, 1.65 + s.cabin[1] * 0.39, czF + 0.03), e)),
+      opq.push(vcBake(new BoxGeometry(s.cabin[0], s.cabin[1] * 0.18, 0.06), vcAt(0, 1.65 - s.cabin[1] * 0.41, czF + 0.03), e)));
+    for (const h of [-1, 1]) opq.push(vcBake(new BoxGeometry(s.cabin[0] * 0.12, s.cabin[1], 0.06), vcAt(h * s.cabin[0] * 0.44, 1.65, czF + 0.03), e));
+    (opq.push(vcBake(new BoxGeometry(s.cabin[0] * 0.92, s.cabin[1] * 0.86, 0.05), vcAt(0, 1.65, czF + 0.31), 1052688)),
+      opq.push(vcBake(new BoxGeometry(s.cabin[0] * 0.86, 0.09, 0.22), vcAt(0, 1.65 - s.cabin[1] * 0.18, czF + 0.15), 1974824)));
+    const skin = [11893070, 9657655, 13018202, 8541761][(e >>> 4) % 4],
+      dxD = -s.cabin[0] * 0.2;
+    opq.push(vcBake(new SphereGeometry(0.105, 8, 6), vcAt(dxD, 1.65 + s.cabin[1] * 0.12, czF + 0.2), skin));
+    const capG = new SphereGeometry(0.1, 8, 5);
+    capG.scale(1, 0.55, 1);
+    (opq.push(vcBake(capG, vcAt(dxD, 1.65 + s.cabin[1] * 0.12 + 0.08, czF + 0.2), 1119001)),
+      opq.push(vcBake(new BoxGeometry(0.3, 0.16, 0.1), vcAt(dxD, 1.65 - s.cabin[1] * 0.05, czF + 0.22), dimColor)));
+    const whM = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(dxD, 1.62, czF + 0.1), new Matrix4().makeRotationX(1.25));
+    opq.push(vcBake(new CylinderGeometry(0.075, 0.075, 0.018, 10), whM, 1381656));
     gls.push(
       vcBake(
         new BoxGeometry(s.cabin[0] * 0.78, s.cabin[1] * 0.55, 0.08),
@@ -2046,7 +2068,7 @@ function I1(i, e) {
   }
   (t.add(new Mesh(mergeGeometries(opq, !1), opaque)), gls.length && t.add(new Mesh(mergeGeometries(gls, !1), glass)));
   return (
-    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !!s.bus, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
+    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
       ((x.castShadow = !1), (x.receiveShadow = !0));
@@ -3226,89 +3248,8 @@ const roadDecalSys = {
     }
   },
 };
-// driver silhouettes (zoom-detail item 4b-lite): the original recessed-driver
-// plan is freeze-blocked, but a pooled dark head-and-shoulders decal riding
-// 1cm in front of the windshield glass reads as "driver behind glass" from
-// any gameplay distance — attach/detach onto the nearest moving traffic cars.
-let driverSilTex = null;
-function buildDriverSilAtlas() {
-  if (driverSilTex) return driverSilTex;
-  const cv = document.createElement("canvas");
-  ((cv.width = 256), (cv.height = 128));
-  const g = cv.getContext("2d");
-  g.clearRect(0, 0, 256, 128);
-  const person = (cx, y0, s2) => {
-    ((g.fillStyle = "rgba(22,24,30,0.92)"), g.beginPath(), g.arc(cx, y0 + 34 * s2, 17 * s2, 0, 6.29), g.fill());
-    (g.beginPath(), g.moveTo(cx - 30 * s2, y0 + 128), g.quadraticCurveTo(cx - 28 * s2, y0 + 52 * s2, cx, y0 + 50 * s2), g.quadraticCurveTo(cx + 28 * s2, y0 + 52 * s2, cx + 30 * s2, y0 + 128), g.fill());
-  };
-  // cell 0: driver on the left, hands-on-wheel arc
-  person(42, 0, 1);
-  ((g.strokeStyle = "rgba(22,24,30,0.85)"), (g.lineWidth = 7), g.beginPath(), g.arc(42, 128, 30, Math.PI * 1.15, Math.PI * 1.85), g.stroke());
-  // cell 1: driver + passenger
-  (person(170, 0, 1), person(232, 6, 0.88));
-  ((g.lineWidth = 7), g.beginPath(), g.arc(170, 128, 30, Math.PI * 1.15, Math.PI * 1.85), g.stroke());
-  driverSilTex = new CanvasTexture(cv);
-  driverSilTex.colorSpace = SRGBColorSpace;
-  return driverSilTex;
-}
-const driverSilSys = {
-  kits: null,
-  promoted: 0,
-  enabled: !0,
-  RADIUS: 34,
-  _timer: 0,
-  ensure() {
-    if (this.kits) return;
-    const mat = new MeshBasicMaterial({ map: buildDriverSilAtlas(), transparent: !0, alphaTest: 0.25, polygonOffset: !0, polygonOffsetFactor: -2 });
-    this.kits = [];
-    const n = mobilePerf ? 4 : 8;
-    for (let k = 0; k < n; k++) {
-      const geo = new PlaneGeometry(1, 1),
-        uv = geo.attributes.uv,
-        col = k % 2;
-      for (let i = 0; i < uv.count; i++) uv.setXY(i, (col + uv.getX(i)) / 2, uv.getY(i));
-      const m = new Mesh(geo, mat);
-      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.raycast = () => {}), (m.rotation.y = Math.PI));
-      this.kits.push({ m, actor: null });
-    }
-  },
-  _detach(kit) {
-    (kit.m.parent && kit.m.parent.remove(kit.m), (kit.m.visible = !1), (kit.actor = null));
-  },
-  update(t, dt) {
-    if (!Rc.length || !dt) return;
-    this._timer -= dt;
-    if (this._timer > 0) return;
-    this._timer = 0.5;
-    this.ensure();
-    const cx = Xe.position.x,
-      cz = Xe.position.z,
-      R2 = this.RADIUS * this.RADIUS,
-      cand = [];
-    if (this.enabled && Xe.position.y <= 26)
-      for (const a of Rc) {
-        if (!a.mesh || !a.mesh.visible || a.mesh.userData.hasDriver || !a.mesh.userData.cab) continue;
-        if (stolenRide && stolenRide.actor === a) continue;
-        const dx = a.mesh.position.x - cx,
-          dz = a.mesh.position.z - cz,
-          d2 = dx * dx + dz * dz;
-        d2 < R2 && cand.push({ a, d2 });
-      }
-    cand.sort((p, q) => p.d2 - q.d2);
-    const want = new Set(cand.slice(0, this.kits.length).map((c) => c.a));
-    for (const kit of this.kits) kit.actor && !want.has(kit.actor) && this._detach(kit);
-    const free = this.kits.filter((k) => !k.actor),
-      have = new Set(this.kits.map((k) => k.actor).filter(Boolean));
-    for (const c of cand) {
-      if (!free.length) break;
-      if (have.has(c.a)) continue;
-      const kit = free.pop(),
-        cab = c.a.mesh.userData.cab;
-      (kit.m.scale.set(cab.w * 0.72, cab.h * 0.55, 1), kit.m.position.set(0, 1.68, cab.z - cab.l / 2 - 0.1), c.a.mesh.add(kit.m), (kit.m.visible = !0), (kit.actor = c.a));
-    }
-    this.promoted = this.kits.reduce((n, k) => n + (k.actor ? 1 : 0), 0);
-  },
-};
+// (4b-lite driver silhouettes retired in round four: every cabin now has
+// a real recessed driver baked in — see full-fat 4b.)
 // race roadside life (zoom-detail item 18): marshals with checkered flags,
 // pit boards, camera crews on small platforms bolted to the deck edge — the
 // stuff you zoom past at speed. Pooled kits promoted to the nearest of ~14
@@ -4627,7 +4568,6 @@ function F1(i, e, t) {
       rooftopSys.update(I, ye);
       roadsideSys.update(I, ye);
       facadeSys.update(I, ye);
-      driverSilSys.update(I, ye);
       roadDecalSys.update(I, ye);
       newsSys.update(I, ye);
       for (const Me of Ps) {
@@ -10529,10 +10469,6 @@ window.__steelRibbonDebug = {
     facadeSys.enabled = !!on;
     return facadeSys.enabled;
   },
-  driverSilEnable(on) {
-    driverSilSys.enabled = !!on;
-    return driverSilSys.enabled;
-  },
   roadDecalEnable(on) {
     roadDecalSys.enabled = !!on;
     return roadDecalSys.enabled;
@@ -10545,7 +10481,7 @@ window.__steelRibbonDebug = {
     let best = null;
     for (const a of Rc) {
       if (!a.mesh || !a.mesh.visible) continue;
-      if (skipBus && a.mesh.userData.hasDriver) continue;
+      if (skipBus && a.mesh.userData.bus) continue;
       const d = Math.hypot(a.mesh.position.x - Xe.position.x, a.mesh.position.z - Xe.position.z);
       (!best || d < best.d) && (best = { d: +d.toFixed(1), x: +a.mesh.position.x.toFixed(1), z: +a.mesh.position.z.toFixed(1), type: a.type });
     }
@@ -10623,8 +10559,6 @@ window.__steelRibbonDebug = {
       drivers: {
         cars: Rc.length,
         withDriver: Rc.reduce((n, c) => n + (c.mesh?.userData?.hasDriver ? 1 : 0), 0),
-        silhouettes: driverSilSys.promoted,
-        silPool: driverSilSys.kits ? driverSilSys.kits.length : 0,
       },
       taxis: {
         count: Rc.reduce((n, c) => n + (c.type === "taxi" ? 1 : 0), 0),
