@@ -4,13 +4,24 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev https://www.google-analytics.com; connect-src 'self' https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev https://cloudflareinsights.com https://*.cloudflareinsights.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://game-scores.jez237.workers.dev https://steel-duel-online.jez237.workers.dev wss://steel-duel-online.jez237.workers.dev https://neon-vector-arena-online.jez237.workers.dev wss://neon-vector-arena-online.jez237.workers.dev https://iron-ridge-online.jez237.workers.dev wss://iron-ridge-online.jez237.workers.dev https://api.open-meteo.com https://air-quality-api.open-meteo.com https://api.weather.gov https://api.zippopotam.us https://raw.githubusercontent.com; font-src 'self' https://fonts.gstatic.com; media-src 'self' blob: https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev; worker-src 'self' blob:; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://www.googletagmanager.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev https://www.google-analytics.com; connect-src 'self' https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev https://cloudflareinsights.com https://*.cloudflareinsights.com https://www.google-analytics.com https://analytics.google.com https://stats.g.doubleclick.net https://www.google.com https://game-scores.jez237.workers.dev https://steel-duel-online.jez237.workers.dev wss://steel-duel-online.jez237.workers.dev https://neon-vector-arena-online.jez237.workers.dev wss://neon-vector-arena-online.jez237.workers.dev https://iron-ridge-online.jez237.workers.dev wss://iron-ridge-online.jez237.workers.dev https://api.open-meteo.com https://air-quality-api.open-meteo.com https://api.weather.gov https://api.zippopotam.us https://raw.githubusercontent.com; font-src 'self' https://fonts.gstatic.com; media-src 'self' blob: https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev; worker-src 'self' blob:; frame-src 'self' https://embed.windy.com; frame-ancestors 'self'; base-uri 'self'; object-src 'none'; form-action 'self'; upgrade-insecure-requests
 
 /assets/*
   Cache-Control: public, max-age=300, must-revalidate
 
 # game code updates often — always revalidate (etag 304s keep this cheap)
 /games/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# network map is all self-hosted; if a live traffic exporter is wired in
+# later (see network/traffic-sim.js adapter contract), its origin must be
+# added to connect-src in the CSP above.
+/network/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# ops dashboard code updates alongside deploys; its data comes from the
+# same-origin /api/ops-snapshot Pages Function (headers set by the Function)
+/ops/*
   Cache-Control: public, max-age=0, must-revalidate
 
 /assets/nav.js
@@ -31,6 +42,14 @@
 /stock-market/assets/*
   Cache-Control: public, max-age=31536000, immutable
 
+# dev source of the stock app is deployed alongside the site; keep it out
+# of search indexes (the built app at /stock-market/ is the canonical page)
+/stock-market-src/*
+  X-Robots-Tag: noindex
+
+/stock-market/sw.js
+  Cache-Control: no-cache, must-revalidate
+
 /stock-market/stock-live-refresh.js
   Cache-Control: no-cache, must-revalidate
 
@@ -49,3 +68,15 @@
 /experiments/amiga-mod-player/audio/*
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=604800
+
+# chronicle hero art is written once per issue (rare same-day replacement
+# reuses the filename, so cap at a day); per-issue data files only change
+# on their publish day
+/computer-chronicle/media/*
+  Cache-Control: public, max-age=86400
+
+/computer-chronicle/data/issues/*
+  Cache-Control: public, max-age=300, must-revalidate
+
+/computer-chronicle/feed.xml
+  Cache-Control: public, max-age=300, must-revalidate
