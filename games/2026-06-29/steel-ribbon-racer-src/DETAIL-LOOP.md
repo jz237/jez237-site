@@ -848,3 +848,15 @@ versions stay blocked on the perf renegotiation.
   placed === spots + toggle. THE ORIGINAL BACKLOG IS NOW 100% COMPLETE —
   every item from the 2026-07-12 survey, full-fat, no compromises left.
   Next: closing survey + deploy batch 11 (v3.18.0) + stop.
+- **35 FINAL SURVEY + DEPLOY BATCH 11 + ROUND FOUR END (2026-07-16)**:
+  closing survey (`loop-shots/35-final-survey-4/`) — the #7 car by a
+  steaming vent under the COIL CAFE marquee; race/mid/far all read right;
+  nothing left in scope. **v3.18.0 LIVE** (batch 11, index-B7GTrSpU.js,
+  200 after the usual ~40s alias lag). ROUND FOUR COMPLETE: perf
+  renegotiation (new gates), full-fat recessed drivers, full-fat
+  permanent road paint — the 2026-07-12 survey backlog is 100% shipped
+  with zero remaining compromises. GRAND TOTAL across four rounds: 35
+  iterations, 29 items + 1 renegotiation, suite 120→137 probes (probes
+  retire with the systems they cover), 11 live deploy batches
+  (v3.8.0→v3.18.0). Nothing known remains. The loop rests until the next
+  "continue".
