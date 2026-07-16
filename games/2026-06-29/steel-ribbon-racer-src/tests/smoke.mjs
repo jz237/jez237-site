@@ -523,12 +523,41 @@ const browser = await chromium.launch({
     JSON.stringify(rdSeq),
   );
 
+  // round 3: newspaper boxes — front pages promote up close, toggle off
+  const newsSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const n0 = deb.detailReport().news;
+    const st = (n0.stations || [])[0];
+    if (!st) return { spots: n0.spots, promoted: -1 };
+    deb.setRoamPos(st.x + 2, st.z + 2, 0, 0);
+    let rep = null;
+    for (let i = 0; i < 50 && !(rep && rep.promoted > 0); i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      rep = deb.detailReport().news;
+    }
+    const promoted = rep?.promoted ?? 0;
+    deb.newsEnable(false);
+    let off = -1;
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      off = deb.detailReport().news.promoted;
+      if (off === 0) break;
+    }
+    deb.newsEnable(true);
+    return { spots: n0.spots, promoted, off, boxes: deb.detailReport().furniture.newsboxes ?? deb.detailReport().furniture.counts?.newsboxes };
+  });
+  check(
+    "newsboxes: seeded on curbs, front pages promote and toggle off",
+    !!newsSeq && newsSeq.spots >= 10 && newsSeq.promoted > 0 && newsSeq.off === 0,
+    JSON.stringify(newsSeq),
+  );
+
   // zoom-detail item 4b-lite: driver silhouettes on nearby traffic windshields
   const silSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
     let rep = null;
     for (let hop = 0; hop < 4 && !(rep && rep.silhouettes > 0); hop++) {
-      const c0 = deb.__nearestTraffic();
+      const c0 = deb.__nearestTraffic(!0); // skip buses — they have real drivers and never promote silhouettes
       if (!c0) break;
       deb.setRoamPos(c0.x + 8, c0.z + 8, 0, 0);
       for (let i = 0; i < 40 && !(rep && rep.silhouettes > 0); i++) {

@@ -3933,6 +3933,99 @@ const storefrontSys = {
 // like the plates: real objects up close, sub-pixel dots at distance. Built AFTER
 // the building grid loop so clearance checks see the finished blocks.
 const furnitureSys = { meshes: null, counts: { hydrants: 0, meters: 0, benches: 0, cans: 0 }, sample: [] };
+// newspaper boxes (round 3 wishlist): a 5th furniture type; the nearest few
+// show a READABLE front page — the zoom reward.
+let newsAtlasTex = null;
+const NEWS_HEADLINES = [
+  ["THE RIBBON DAILY", "RIBBON CUP SUNDAY:", "CROWTHER FAVOURED"],
+  ["THE RIBBON DAILY", "PIGEONS ADOPT WATER", "TOWER, REFUSE COMMENT"],
+  ["CITY HERALD", "GATE 8 GLOWS AGAIN —", "EXPERTS DELIGHTED"],
+  ["CITY HERALD", "LOCAL DOG 'BISCUIT'", "WINS EVERYTHING"],
+];
+function buildNewsAtlas() {
+  if (newsAtlasTex) return newsAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 128));
+  const g = cv.getContext("2d");
+  for (let c = 0; c < 4; c++) {
+    const x = c * 128,
+      H = NEWS_HEADLINES[c];
+    ((g.fillStyle = "#efeadd"), g.fillRect(x, 0, 128, 128));
+    ((g.fillStyle = "#191b20"), (g.font = "900 13px Georgia,serif"), (g.textAlign = "center"));
+    g.fillText(H[0], x + 64, 18, 120);
+    ((g.strokeStyle = "#191b20"), (g.lineWidth = 1.5), g.beginPath(), g.moveTo(x + 8, 24), g.lineTo(x + 120, 24), g.stroke());
+    ((g.font = "bold 12px Georgia,serif"));
+    (g.fillText(H[1], x + 64, 42, 120), g.fillText(H[2], x + 64, 57, 120));
+    g.fillStyle = "#8a8578";
+    for (let r = 0; r < 8; r++) {
+      const w = 46 + ((r * 31) % 60);
+      g.fillRect(x + 10 + (r % 2) * 62, 68 + r * 7, Math.min(w, 52), 2.5);
+    }
+  }
+  newsAtlasTex = new CanvasTexture(cv);
+  newsAtlasTex.colorSpace = SRGBColorSpace;
+  return newsAtlasTex;
+}
+const newsSys = {
+  spots: [],
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 22, // the roam CAR camera trails ~17m behind the player (it.16 lesson)
+  sample: [],
+  _timer: 0,
+  _geos: null,
+  ensure() {
+    if (this.kits) return;
+    const mat = new MeshBasicMaterial({ map: buildNewsAtlas(), toneMapped: !1, polygonOffset: !0, polygonOffsetFactor: -2 });
+    this._geos = [0, 1, 2, 3].map((c) => {
+      const geo = new PlaneGeometry(0.3, 0.28),
+        uv = geo.attributes.uv;
+      for (let i = 0; i < uv.count; i++) uv.setXY(i, (c + uv.getX(i)) / 4, uv.getY(i));
+      return geo;
+    });
+    this.kits = [];
+    const n = mobilePerf ? 2 : 4;
+    for (let k = 0; k < n; k++) {
+      const m = new Mesh(this._geos[0], mat);
+      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.raycast = () => {}), et.add(m));
+      this.kits.push({ m, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled && Xe.position.y <= 26)
+      for (const sp of this.spots) {
+        const dx = sp.x - cx,
+          dz = sp.z - cz,
+          d2 = dx * dx + dz * dz;
+        d2 < R2 && cand.push({ sp, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    for (let k = 0; k < this.kits.length; k++) {
+      const kit = this.kits[k],
+        c = cand[k];
+      if (!c) {
+        ((kit.m.visible = !1), (kit.idx = -1));
+        continue;
+      }
+      const sp = c.sp,
+        fx = -Math.sin(sp.yaw),
+        fz = -Math.cos(sp.yaw);
+      ((kit.m.geometry = this._geos[sp.i % 4]), kit.m.position.set(sp.x + fx * 0.21, sp.y + 0.62, sp.z + fz * 0.21), (kit.m.rotation.y = sp.yaw + Math.PI), (kit.m.visible = !0), (kit.idx = sp.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: sp.i, x: sp.x, y: sp.y, z: sp.z, yaw: sp.yaw });
+    }
+  },
+};
 function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt) {
   const { opaque } = vcMats();
   const hydrantGeo = mergeGeometries(
@@ -3975,12 +4068,27 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     ],
     !1,
   );
+  const newsboxGeo = mergeGeometries(
+    [
+      vcBake(new BoxGeometry(0.42, 0.6, 0.38), vcAt(0, 0.52, 0), 11746096),
+      vcBake(new BoxGeometry(0.34, 0.32, 0.03), vcAt(0, 0.62, -0.19), 1183769),
+      vcBake(new BoxGeometry(0.34, 0.05, 0.02), vcAt(0, 0.84, -0.195), 15921139),
+      vcBake(new BoxGeometry(0.05, 0.05, 0.05), vcAt(0.12, 0.88, -0.12), 3355970),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(-0.16, 0.12, -0.14), 2500134),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(0.16, 0.12, -0.14), 2500134),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(-0.16, 0.12, 0.14), 2500134),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(0.16, 0.12, 0.14), 2500134),
+    ],
+    !1,
+  );
   const defs = [
     { key: "hydrants", geo: hydrantGeo, cap: 46 },
     { key: "meters", geo: meterGeo, cap: 60 },
     { key: "benches", geo: benchGeo, cap: 33 },
     { key: "cans", geo: canGeo, cap: 46 },
+    { key: "newsboxes", geo: newsboxGeo, cap: 24 },
   ];
+  newsSys.spots.length = 0;
   if (furnitureSys.meshes) for (const m of furnitureSys.meshes) (m.removeFromParent(), m.geometry.dispose());
   ((furnitureSys.meshes = []), (furnitureSys.sample = []));
   const meshes = {},
@@ -3996,6 +4104,7 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     if (im.userData.used >= im.count) return;
     (dummy.position.set(x, He(x, z) + 0.02, z), (dummy.rotation.y = yaw), dummy.updateMatrix());
     im.setMatrixAt(im.userData.used++, dummy.matrix);
+    key === "newsboxes" && newsSys.spots.push({ i: newsSys.spots.length, x: +x.toFixed(1), y: +(He(x, z) + 0.02).toFixed(2), z: +z.toFixed(1), yaw });
     furnitureSys.sample.length < 8 && furnitureSys.sample.push({ key, x: +x.toFixed(1), z: +z.toFixed(1) });
   };
   const placeAlong = (isNS, line) => {
@@ -4011,9 +4120,10 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
         pz = isNS ? v : line + off;
       if (clearanceAt(px, pz, 0.6).clearance < 0.8) continue;
       const pick = rng();
-      if (pick < 0.27) put("hydrants", px, pz, rng() * 6.28);
-      else if (pick < 0.58) put("meters", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
-      else if (pick < 0.76) put("benches", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      if (pick < 0.24) put("hydrants", px, pz, rng() * 6.28);
+      else if (pick < 0.52) put("meters", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      else if (pick < 0.68) put("benches", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      else if (pick < 0.82) put("newsboxes", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
       else put("cans", px, pz, rng() * 6.28);
     }
   };
@@ -4519,6 +4629,7 @@ function F1(i, e, t) {
       facadeSys.update(I, ye);
       driverSilSys.update(I, ye);
       roadDecalSys.update(I, ye);
+      newsSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -10426,10 +10537,15 @@ window.__steelRibbonDebug = {
     roadDecalSys.enabled = !!on;
     return roadDecalSys.enabled;
   },
-  __nearestTraffic() {
+  newsEnable(on) {
+    newsSys.enabled = !!on;
+    return newsSys.enabled;
+  },
+  __nearestTraffic(skipBus) {
     let best = null;
     for (const a of Rc) {
       if (!a.mesh || !a.mesh.visible) continue;
+      if (skipBus && a.mesh.userData.hasDriver) continue;
       const d = Math.hypot(a.mesh.position.x - Xe.position.x, a.mesh.position.z - Xe.position.z);
       (!best || d < best.d) && (best = { d: +d.toFixed(1), x: +a.mesh.position.x.toFixed(1), z: +a.mesh.position.z.toFixed(1), type: a.type });
     }
@@ -10534,6 +10650,13 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      news: {
+        spots: newsSys.spots.length,
+        promoted: newsSys.promoted,
+        pool: newsSys.kits ? newsSys.kits.length : 0,
+        sample: newsSys.sample.slice(0, 2),
+        stations: newsSys.spots.slice(0, 2).map((sp) => ({ i: sp.i, x: sp.x, z: sp.z })),
       },
       roadDecals: {
         spots: roadDecalSys.spots.length,
