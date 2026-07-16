@@ -1,4 +1,4 @@
-# Hard Hat Mac - Remastered (v2.2) Design Doc
+# Hard Hat Mac - Remastered (v2.3) Design Doc
 
 ## Overview
 
@@ -98,13 +98,16 @@ possible rather than merely fast.
 
 - Desktop: remappable arrows/WASD, Space/Z jump, Down work/duck, P/Escape pause, and
   M mute. Canvas menus support keyboard focus and semantic button activation.
-- Touch: multi-touch D-pad and Jump, pointer capture, slide-between-button input,
-  haptics, pause, size/opacity controls, and a drag editor. Portrait and landscape
-  positions are saved independently.
+- Touch: an invisible floating joystick on the left side of the screen (drag to
+  walk with analog speed, climb, and duck/jackhammer with a firmer downward pull)
+  and tap-to-jump on the right side, with multi-touch so one thumb steers while
+  the other jumps. Subtle stick/tap indicators render on the canvas only while
+  touching, honoring the joystick size/opacity settings, plus haptics and a
+  pause button. A one-time toast teaches the gesture scheme.
 - Gamepad: analog stick/D-pad, A/B jump, Start pause, menu navigation, adjustable
   deadzone, disconnect cleanup, and supported vibration.
-- Portrait reserves a control shelf. Landscape touch uses side gutters so controls
-  do not cover the playfield.
+- The playfield always uses the full screen; touch input overlays the game rather
+  than reserving a control shelf or side gutters.
 
 ## Accessibility
 
@@ -122,8 +125,8 @@ possible rather than merely fast.
 - Input frames are run-length encoded and checksummed.
 - The best local run stores sparse ghost positions and can be shown as a translucent
   competitor on a matching seed.
-- Medals, achievements, settings, bindings, touch layouts, best replay, local scores,
-  and resumable progress use versioned/sanitized local storage.
+- Medals, achievements, settings, bindings, best replay, local scores, and
+  resumable progress use versioned/sanitized local storage.
 
 ## Scores
 
