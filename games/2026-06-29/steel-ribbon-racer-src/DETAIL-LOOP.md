@@ -693,3 +693,14 @@ versions stay blocked on the perf renegotiation.
   (driver silhouettes, road decals, leashed dogs) verified live
   (index-B58PNnx7.js, 200). Remaining polish notes: rooftop pigeons,
   texting head-tilt, newspaper-box decals.
+- **26 rooftop pigeons (2026-07-16)**: perched pigeons baked STRAIGHT INTO
+  the rooftop kit merges (pigeon(x,y,z,yaw) helper — body/head/tail boxes,
+  composed rotY matrices; grey 0x888f96 + dark 0x5a6266): 2 on the HVAC
+  boxes, 2 on the antenna base, 3 on the water tower (two rim, one beside
+  the finial). Zero new systems, zero extra draw calls — they ride the
+  existing pooled kits. Sized 1.4x realistic (the toy world oversizes its
+  props; true scale read as subliminal bumps). Verified by looking
+  (`loop-shots/26-pigeons/05-tower-pigeons-7m.png`): three birds crisp on
+  the tank from above. detailReport().rooftops.pigeons=7 + probe. Suite
+  136/136 expected. Remaining polish note: texting head-tilt, then second
+  fresh-eyes survey → stop.
