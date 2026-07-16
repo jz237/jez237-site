@@ -1,8 +1,4046 @@
 {
-  "generatedAt": "2026-07-04T12:02:08.695Z",
+  "generatedAt": "2026-07-13T12:00:00.000Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-16",
+      "historicDate": "1983-06-06",
+      "displayDate": "Week of June 6–12, 1983",
+      "edition": "Issue 045 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Summer CES home-computer showdown with arcade energy",
+        "motifs": [
+          "Coleco Adam keyboard and printer",
+          "ColecoVision cartridge",
+          "Atari XL computer",
+          "software boxes"
+        ],
+        "layout": "Dense 1983 computer weekly with the Adam lead, gaming artwork, boxed charts, blue rules, and red spot color"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of June 6–12, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Coleco Adam CES sensation across the upper fold with a large home-computing halftone",
+        "secondaryRail": "Atari XL, software price war, WarGames, charts, shelf watch, and prices",
+        "archiveNavigation": "Previous/next weekly issue controls and calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "Arcade red",
+        "secondary": "CRT blue",
+        "texture": "Warm aged newsprint, column rules, halftone dots, and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-06-06.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of June 6–12, 1983, led by the Coleco Adam at Summer CES",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Summer CES puts complete home-computer systems—not bare specifications—at the center of the sales pitch.",
+      "morningLine": "Chicago’s summer electronics show belongs to a game maker’s ambitious new computer.",
+      "lead": {
+        "headline": "Coleco’s $600 Adam Steals the Summer CES",
+        "dek": "A complete computer, word processor, fast tape drive and letter-quality printer promises to turn a ColecoVision household into a home office.",
+        "body": [
+          "The busiest conversation at Chicago’s June 5–8 Consumer Electronics Show begins with an unlikely challenger. Coleco, best known for ColecoVision, has unveiled Adam: an under-$600 home-computer package built around a Z80 processor, a full-size 75-key keyboard, SmartWriter word processing, BASIC, a Digital Data Pack recorder and a daisy-wheel printer.",
+          "That bundle is the point. Buyers accustomed to pricing a computer, storage unit, software and printer separately are being shown the whole desk at once. Coleco says existing ColecoVision cartridges will work, includes Buck Rogers: Planet of Zoom, and promises an expansion route below $400 for current console owners.",
+          "Inside, Coleco describes 80K of total memory and an “Adamnet” communications circuit coordinating the system’s processors. The proprietary tape promises far faster transfers than an ordinary cassette, while the printer is rated near ten characters per second. Additional drives are projected at $150 and tapes around $10.",
+          "The applause comes with an important reservation: these are show prototypes, not production machines available for a full test. Delivery, reliability and the real retail price will determine whether Adam becomes a family computer or merely the most memorable promise of CES.",
+          "Still, Coleco has changed the argument for the week. Atari and Commodore now face a rival selling a complete activity—writing, printing, programming and playing—rather than asking shoppers to assemble a system one peripheral at a time."
+        ],
+        "confidence": "Exact-week announcement; specifications and prices are period claims for prototype hardware.",
+        "sourceRefs": [
+          0,
+          2,
+          3
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari Answers With XL Computers and a Writing System",
+          "kicker": "Hardware Desk",
+          "dek": "The 600XL and 800XL lead a refreshed line, while a $600 bundle makes word processing the competitive measure.",
+          "body": [
+            "Atari’s June 5 announcement brings new computers, peripherals, video accessories and 28 games to the same Chicago floor. The 600XL and 800XL are positioned as successors to the 400 and 800, retaining the value of Atari’s existing software library while offering a cleaner route into the next generation.",
+            "Its $600 Writing System combines a 600XL, AtariWriter cartridge, guide, paper and a letter-quality printer rated at 20 characters per second. A television and cassette or disk storage remain extra, but Atari argues that separately useful components give owners more freedom to expand than an all-in-one package."
+          ],
+          "confidence": "Exact-week product announcement with period follow-up coverage.",
+          "sourceRefs": [
+            1,
+            2,
+            4
+          ]
+        },
+        {
+          "headline": "Software Price War Breaks Out at CES",
+          "kicker": "Software Counter",
+          "dek": "Cross-platform publishing and sharp price cuts make low-cost computers more useful.",
+          "body": [
+            "The hardware contest is spilling onto the software shelves. Creative Computing reports Datamost Gentry programs for Apple and Atari at $14.95–$19.95, Synapse Showcase titles for VIC-20 at $19.95, and TI-99/4A cassette programs below $10.",
+            "Commodore announces 70 titles, Easy Script 64 below $50 and Multiplan for the Commodore 64 at a quoted price that falls toward $50 during the show. Atari, Mattel, Imagic, Activision, Parker Brothers, Broderbund and Sega are all widening platform support as publishers chase the expanding installed base."
+          ],
+          "confidence": "Same-week CES reporting published in a period magazine.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "headline": "WarGames Makes the Home Modem a Movie Star",
+          "kicker": "Screen & Keyboard",
+          "dek": "A teen, an acoustic coupler and a military computer carry dial-up culture into packed theaters.",
+          "body": [
+            "WarGames enters its second weekend just as home computers dominate the CES conversation. Matthew Broderick plays David Lightman, whose password guessing and modem exploration reach a military system and turn an innocent search for games into a nuclear crisis.",
+            "The film ranks fifth for June 10–12 with $4.8 million from 843 theaters and $14.2 million cumulative. Its thriller machinery makes passwords, dial-up exploration and connected systems understandable—and alarming—to audiences far beyond the computer club."
+          ],
+          "confidence": "Same-week film and box-office records.",
+          "sourceRefs": [
+            7,
+            8
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Buck Rogers: Planet of Zoom",
+          "summary": "The arcade-derived game is bundled with Adam, which also accepts ColecoVision cartridges.",
+          "confidence": "Same-week CES announcement.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Electronic Arts’ First Wave",
+          "summary": "Archon and Pinball Construction Set remain fresh arrivals from EA’s first May 20 shipment.",
+          "confidence": "Same-month company history.",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "title": "Modem Gaming",
+          "summary": "Computer Gaming World’s May–June issue follows games played across telephone lines.",
+          "confidence": "Period issue.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Computer Museum",
+          "summary": "InfoWorld profiles Boston’s young Computer Museum and the people already preserving obsolete machines.",
+          "confidence": "Exact-date June 6 coverage.",
+          "sourceRefs": [
+            10
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "SmartWriter",
+          "detail": "Built-in Adam word processor with dedicated keyboard commands."
+        },
+        {
+          "name": "AtariWriter",
+          "detail": "Cartridge word processor in Atari’s Writing System."
+        },
+        {
+          "name": "Easy Script 64",
+          "detail": "Commodore 64 word processor announced below $50."
+        },
+        {
+          "name": "Multiplan for Commodore 64",
+          "detail": "Microsoft spreadsheet quoted near $50 by the show’s end."
+        },
+        {
+          "name": "Archon",
+          "detail": "Electronic Arts strategy game mixing board play with arcade combat."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Archon: The Light and the Dark",
+            "Pinball Construction Set",
+            "M.U.L.E.",
+            "Close Assault",
+            "Computer Ambush"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Return of the Jedi",
+            "Octopussy",
+            "Trading Places",
+            "Psycho II",
+            "WarGames"
+          ]
+        },
+        {
+          "label": "Home Computers",
+          "items": [
+            "Coleco Adam",
+            "Atari 600XL",
+            "Atari 800XL",
+            "Commodore 64",
+            "Mattel Aquarius"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "SmartWriter",
+            "AtariWriter",
+            "Easy Script 64",
+            "Multiplan for Commodore 64",
+            "Datamost Gentry"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Coleco Adam full package",
+          "price": "Under $600",
+          "note": "Announced price for computer, storage, software and printer."
+        },
+        {
+          "item": "ColecoVision Adam expansion",
+          "price": "Under $400",
+          "note": "Announced upgrade route for console owners."
+        },
+        {
+          "item": "Atari Writing System",
+          "price": "$600",
+          "note": "Television and storage device still required."
+        },
+        {
+          "item": "Commodore 64 complete system",
+          "price": "$799",
+          "note": "Period post-CES advertisement with disk drive, datasette and 17-inch color monitor."
+        },
+        {
+          "item": "Datamost Gentry software",
+          "price": "$14.95–$19.95",
+          "note": "CES price range for Apple and Atari programs."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "IBM Trims Office Prices",
+          "text": "A June 8 report signals intensifying competition across IBM office products."
+        },
+        {
+          "headline": "Computer Collecting Is Already News",
+          "text": "Boston’s Computer Museum preserves yesterday’s machines while the microcomputer boom is still young."
+        },
+        {
+          "headline": "Jedi Holds No. 1",
+          "text": "Return of the Jedi leads the June 10–12 domestic weekend."
+        },
+        {
+          "headline": "Octopussy Opens Second",
+          "text": "The new Bond film debuts ahead of Trading Places, Psycho II and WarGames."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Flashdance... What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 2,
+          "title": "Let’s Dance",
+          "artist": "David Bowie"
+        },
+        {
+          "rank": 3,
+          "title": "Time (Clock of the Heart)",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 4,
+          "title": "Overkill",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 5,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        }
+      ],
+      "periodAd": {
+        "headline": "A Whole Computer Room in One Box",
+        "summary": "Adam promises keyboard, storage, word processing, BASIC, printer and game compatibility as a single family purchase.",
+        "tagline": "Write it. Print it. Play it."
+      },
+      "market": {
+        "headline": "Bundles Replace Specifications as the Sales Pitch",
+        "summary": "Coleco and Atari both use $600 packages to compete on complete writing and printing systems, while publishers cut prices and spread software across rival machines.",
+        "confidence": "Interpretation grounded in same-week CES announcements and period reports.",
+        "sourceRefs": [
+          1,
+          2,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Margaret Thatcher Wins a Second Term in Britain",
+        "summary": "Britain’s June 9 general election returns Thatcher’s Conservatives with a landslide parliamentary majority.",
+        "confidence": "Exact-date historical record.",
+        "sourceRefs": [
+          12
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Adam and Atari specifications are period announcement claims; CES machines and prices could change before retail release.",
+          "Software names and price ranges follow period CES reporting.",
+          "The movie ranking uses the June 10–12 domestic weekend.",
+          "Music ranking follows the Billboard Hot 100 dated June 11, 1983.",
+          "Game shelf titles are named period releases or titles covered in the May–June Computer Gaming World issue."
+        ]
+      },
+      "sources": [
+        {
+          "label": "1983 International Summer Consumer Electronics Show directory",
+          "url": "https://library.gamehistory.org/repositories/2/archival_objects/21411"
+        },
+        {
+          "label": "Atari Introduces Inexpensive Computer System",
+          "url": "http://archive.org/details/19830605AtariIntroducesInexpensiveComputerSystem"
+        },
+        {
+          "label": "Popular Science: Two stunning new $600 computer packages",
+          "url": "http://oldcomputers.net/popsciadam.html"
+        },
+        {
+          "label": "Creative Computing: Reflections on CES",
+          "url": "https://www.atarimagazines.com/creative/v9n9/224_Reflections_on_CES.php"
+        },
+        {
+          "label": "New Atari Product Line",
+          "url": "https://www.atarimagazines.com/v2n3/newatari.php"
+        },
+        {
+          "label": "Computer Gaming World Vol. 3 No. 3",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+        },
+        {
+          "label": "Today in EA History",
+          "url": "https://www.ea.com/news/today-in-ea-history"
+        },
+        {
+          "label": "AFI Catalog: WarGames",
+          "url": "https://catalog.afi.com/Catalog/moviedetails/67139"
+        },
+        {
+          "label": "Domestic Weekend 23, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W23/?sort=rank"
+        },
+        {
+          "label": "Billboard Hot 100, June 11, 1983",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-06-11"
+        },
+        {
+          "label": "Computer collecting in 1983",
+          "url": "https://www.timexsinclair.com/article/the-people-who-collect-obsolete-computers-for-old-times-sake/index.html"
+        },
+        {
+          "label": "I.B.M. Cuts Prices Of Office Products",
+          "url": "https://www.nytimes.com/1983/06/08/business/ibm-cuts-prices-of-office-products.html"
+        },
+        {
+          "label": "British general election of 1983",
+          "url": "https://www.britannica.com/event/British-general-election-of-1983"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "MODEM OPPONENT WANTED",
+          "copy": "Strategy player seeks friendly games by telephone line. Evenings preferred."
+        },
+        {
+          "headline": "DATA PACK LABELS",
+          "copy": "Keep programs, letters and high-speed tapes indexed beside the keyboard."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-15",
+      "historicDate": "1983-05-30",
+      "displayDate": "Week of May 30–June 5, 1983",
+      "edition": "Issue 044 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Energetic game-publisher launch with summer-movie suspense",
+        "motifs": [
+          "album-like game boxes",
+          "Atari joystick",
+          "acoustic-coupler modem",
+          "portable computer"
+        ],
+        "layout": "Dense 1983 computer weekly with a gaming lead, boxed charts, blue rules, and red spot color"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of May 30–June 5, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Electronic Arts launch lead across the upper fold with game-box halftones",
+        "secondaryRail": "WarGames, portable machines, charts, shelf watch, and prices",
+        "archiveNavigation": "Previous/next weekly issue controls and calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "Arcade red",
+        "secondary": "CRT blue",
+        "texture": "Warm aged newsprint, column rules, halftone dots, and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-05-30.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of May 30 to June 5, 1983",
+        "caption": "A GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Five unusually distinctive games arrive under a new label while Hollywood turns a modem and a home computer into summer suspense.",
+      "morningLine": "Games get album covers, computers get briefcases, and WarGames puts dialing into the movies.",
+      "lead": {
+        "headline": "Electronic Arts' First Five Games Reach Players",
+        "dek": "A young publisher treats programmers like recording artists—and ships a remarkably varied opening slate.",
+        "body": [
+          "SOUTH SAN FRANCISCO — Ten days before this week began, the small company called Electronic Arts made its first shipment. Its May 20 slate carried five titles—Archon: The Light and the Dark, Hard Hat Mack, M.U.L.E., Worms?, and Axis Assassin—out of a warehouse and toward computer stores. The boxes announced the company’s ambition before a disk was loaded: creators’ names appeared prominently, and the packages borrowed the scale and visual confidence of record albums.",
+          "The selection makes a case for the computer as a broad game machine rather than a single-purpose arcade substitute. M.U.L.E. turns settlement-building into a competitive economy in which supply, demand, land, and luck keep changing the table. Archon begins with the outline of a chessboard, then lets opposing pieces fight their own action contests. Hard Hat Mack brings construction-site timing and hazards to the Apple II, while Axis Assassin and Worms? push in still other directions.",
+          "Electronic Arts is selling an identity as much as a catalog. By placing designers in the foreground, the publisher asks buyers to recognize the people behind the software in the way music listeners recognize performers. That approach also gives the first five games a family resemblance without forcing them into one genre.",
+          "The first shipping day was hardly glamorous. Company recollections describe the whole crew loading boxes for hours; Nancy Fong remembered, “We all worked all day long,” while Bing Gordon joked that they were terrible warehouse workers. Yet the improvised labor sent out a lineup whose variety and presentation suggest where packaged computer entertainment may be headed."
+        ],
+        "confidence": "Same-month; EA records date the first shipment to May 20, 1983.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "stories": [
+        {
+          "headline": "WarGames Makes Home Computing a Summer-Movie Star",
+          "kicker": "At the movies",
+          "dek": "A teenager, a modem, and a military computer carry a new kind of thriller.",
+          "body": [
+            "WarGames opens June 3 with a home computer and telephone modem at the center of its suspense. Its teenage protagonist reaches a military system while looking for games, then discovers that simulated nuclear conflict can be mistaken for the real thing.",
+            "The picture earns $6,227,804 from 843 theaters on its opening weekend, ranking third behind Return of the Jedi and Psycho II. Whatever audiences make of its technical details, the film gives dialing, passwords, artificial intelligence, and computer security a place in the summer-movie vocabulary."
+          ],
+          "confidence": "Exact-date opening and weekend grosses verified.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "headline": "Portable and 16-Bit Machines Crowd the June BYTE",
+          "kicker": "Hardware desk",
+          "dek": "Greater memory, new processors, and battery power widen the definition of a microcomputer.",
+          "body": [
+            "BYTE’s June cover package surveys 16-bit designs promising more memory and stronger management of it. The featured field ranges from Digital’s Professional 325 and 350 to HP’s Series 200 Model 16, the Intel 80186-based Pronto Series 16, and Olivetti’s Z8000-based M20.",
+            "Portability is becoming a serious design claim. The battery-powered Gavilan Mobile Computer can be paired with an optional printer small enough to share a standard briefcase. The same issue also examines the NEC PC-8201, Tim Paterson’s account of MS-DOS, VisiCorp’s Visi On environment, and Digital Research’s DR Logo."
+          ],
+          "confidence": "Same-month BYTE issue.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "Modems Bring Computer Gamers Together",
+          "kicker": "Connected play",
+          "dek": "Telephone lines and organized leagues hint at a social future for home games.",
+          "body": [
+            "Computer Gaming World’s May–June issue places modem gaming and a computer baseball league on its cover, treating remote play as a culture worth watching rather than a laboratory curiosity. Players are beginning to imagine opponents and teammates beyond the room containing the machine.",
+            "The $2.75 issue also reviews Computer Ambush, Close Assault, and Germany 1985 and advertises SSI’s Knights of the Desert. Strategy remains central, but the telephone line adds a new possibility: a game community assembled through computers before consumer online services become ordinary."
+          ],
+          "confidence": "Period May–June magazine evidence.",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Gavilan Goes Mobile",
+          "summary": "A battery-powered 16-bit computer offers an optional briefcase-fitting printer.",
+          "confidence": "Same-month BYTE coverage.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "TI Shows a Sub-$100 99/2",
+          "summary": "Texas Instruments promotes a basic 16-bit home computer compatible with TI-99/4A software.",
+          "confidence": "Same-month BYTE coverage.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Visi On Tours the Screen",
+          "summary": "BYTE takes a guided look at VisiCorp’s graphical operating environment.",
+          "confidence": "Same-month BYTE coverage.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "ProFile Adds Five Megabytes",
+          "summary": "Apple’s hard disk promises roughly 35 floppy disks of storage for the Apple III.",
+          "confidence": "Period advertisement.",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "MS-DOS",
+          "detail": "Tim Paterson explains the operating system’s history, mechanics, and direction in BYTE."
+        },
+        {
+          "name": "Visi On",
+          "detail": "VisiCorp’s graphical environment receives a guided tour."
+        },
+        {
+          "name": "DR Logo",
+          "detail": "Gary Kildall and David Thornburg present Digital Research’s Logo."
+        },
+        {
+          "name": "M.U.L.E.",
+          "detail": "Multiplayer colony economics for Atari 400/800."
+        },
+        {
+          "name": "Archon",
+          "detail": "Board strategy meets direct arcade combat."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "M.U.L.E.",
+            "Archon: The Light and the Dark",
+            "Hard Hat Mack",
+            "Computer Ambush",
+            "Close Assault"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Return of the Jedi",
+            "Psycho II",
+            "WarGames",
+            "Spacehunter: Adventures in the Forbidden Zone",
+            "Blue Thunder"
+          ]
+        },
+        {
+          "label": "Home & Portable Computers",
+          "items": [
+            "Texas Instruments 99/2",
+            "Gavilan Mobile Computer",
+            "NEC PC-8201",
+            "Commodore 64",
+            "Apple IIe"
+          ]
+        },
+        {
+          "label": "Office Software",
+          "items": [
+            "MS-DOS",
+            "Visi On",
+            "DR Logo",
+            "Lotus 1-2-3",
+            "WordStar"
+          ]
+        },
+        {
+          "label": "Strategy Shelf",
+          "items": [
+            "Computer Ambush",
+            "Close Assault",
+            "Germany 1985",
+            "Knights of the Desert",
+            "Archon"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "TI 99/2 Basic Computer",
+          "price": "Under $100",
+          "note": "Promoted price for the basic home computer."
+        },
+        {
+          "item": "BYTE, June 1983",
+          "price": "$2.95",
+          "note": "U.S. single-copy price."
+        },
+        {
+          "item": "Computer Gaming World, May–June 1983",
+          "price": "$2.75",
+          "note": "Period cover price."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Jedi Holds No. 1",
+          "text": "Return of the Jedi leads the June 3–5 domestic weekend."
+        },
+        {
+          "headline": "Psycho II Opens Second",
+          "text": "The sequel takes $8.3 million, ahead of WarGames in third."
+        },
+        {
+          "headline": "Logo for a Friendly Machine",
+          "text": "Digital Research presents DR Logo as an approachable programming environment."
+        },
+        {
+          "headline": "Apple Expands the Peripherals Desk",
+          "text": "The five-megabyte ProFile hard disk promises speed and room beyond floppy storage."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Flashdance... What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 2,
+          "title": "Let's Dance",
+          "artist": "David Bowie"
+        },
+        {
+          "rank": 3,
+          "title": "Time (Clock of the Heart)",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 4,
+          "title": "Overkill",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 5,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        }
+      ],
+      "periodAd": {
+        "headline": "The Programmer Is the Star",
+        "summary": "Five new Electronic Arts games arrive in packages made to stand beside record albums.",
+        "tagline": "Meet the artists behind the software."
+      },
+      "market": {
+        "headline": "Sixteen Bits Move Beyond the Spec Sheet",
+        "summary": "June’s new machines compete on memory, speed, portability, and business software rather than processor width alone.",
+        "confidence": "Interpretation grounded in BYTE’s June 1983 16-bit survey.",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Williamsburg Summit Closes with Reagan Discussing Soviet Relations",
+        "summary": "On May 31, after the Williamsburg economic summit, President Reagan says he foresees improved Soviet relations based on a more realistic view; summit discussions also range across economic cooperation and Central America.",
+        "confidence": "Exact-date reporting and presidential diary record.",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "EA’s first shipment date and five-title slate come from company history and contemporary retrospective reporting.",
+          "WarGames opening date, theater count, gross, and movie ranking use the June 3–5 domestic weekend.",
+          "Music ranking follows the Billboard Hot 100 dated June 4, 1983.",
+          "Hardware and software notes come from the June 1983 BYTE issue.",
+          "Prices are period cover or promoted prices and may differ by dealer."
+        ]
+      },
+      "sources": [
+        {
+          "label": "28 Years of EA History",
+          "url": "https://www.ea.com/news/today-in-ea-history"
+        },
+        {
+          "label": "Computer Gaming World Vol. 3 No. 3",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+        },
+        {
+          "label": "BYTE Vol. 8 No. 6",
+          "url": "https://archive.org/stream/byte-magazine-1983-06-rescan/1983_06_BYTE_08-06_16-Bit_Designs_djvu.txt"
+        },
+        {
+          "label": "Billboard Hot 100, June 4, 1983",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-06-04"
+        },
+        {
+          "label": "Domestic Weekend 22, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W22/?sort=rank"
+        },
+        {
+          "label": "Reagan on U.S.-Soviet detente",
+          "url": "https://www.upi.com/Archives/1983/05/31/President-Reagan-denied-Tuesday-he-has-wrecked-US-Soviet-detente/6787423201600/"
+        },
+        {
+          "label": "Heat wave keeps pressure on Northwest floods, fires",
+          "url": "https://www.upi.com/Archives/1983/05/30/Heat-wave-keeps-pressure-on-Northwest-floods-fires/4741423115200/"
+        },
+        {
+          "label": "Angolan rebels go on offensive",
+          "url": "https://www.csmonitor.com/1983/0531/053135.html"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "MODEM OPPONENT WANTED",
+          "copy": "Strategy player seeks friendly games by telephone line. Evenings preferred."
+        },
+        {
+          "headline": "DISK BOXES",
+          "copy": "Keep your newest game worlds labeled, upright, and ready to load."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-14",
+      "historicDate": "1983-05-23",
+      "displayDate": "Week of May 23–29, 1983",
+      "edition": "Issue 043 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Warm newsprint with arcade-red and terminal-blue accents",
+        "motifs": [
+          "graph paper",
+          "joystick diagrams",
+          "5¼-inch disks",
+          "halftone cinema marquee"
+        ],
+        "layout": "Gaming-led metropolitan computer weekly with dense shelf and chart rails"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of May 23–29, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Game-design lead across the upper fold with an Apple II sketchbook halftone",
+        "secondaryRail": "Return of the Jedi, charts, shelf watch, and prices",
+        "archiveNavigation": "Previous/next weekly issue controls and calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "Arcade red",
+        "secondary": "CRT blue",
+        "texture": "Aged newsprint, fine rules, halftone dots, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-05-23.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of May 23–29, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This week the keyboard becomes a workshop: game makers explain how rules, maps, prose, and player imagination turn modest home computers into whole worlds.",
+      "morningLine": "Tuesday, May 24, 1983: game design reaches the science pages while shoppers compare disks, joysticks, and the new IBM PC XT.",
+      "lead": {
+        "headline": "Game Makers Map the Imaginative Path",
+        "dek": "Designers turn tiny memories into puzzles, adventures, and worlds the player helps complete.",
+        "body": "A May 24 New York Times personal-computing column puts game design in the spotlight. The craft is less a matter of spectacle than of carefully chosen rules, feedback, surprise, and room for the player’s imagination. Across the month’s computer magazines, the same inventive energy appears in adventure contests, modem play, construction sets, and reviews of strategy simulations—proof that the home computer is becoming a medium, not merely a machine.",
+        "confidence": "Exact-day article verified; surrounding game-design context is corroborated by May–June 1983 period magazines.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Modem Gaming Links Distant Players",
+          "summary": "Computer Gaming World examines play over telephone lines, an early glimpse of networked competition and companionship.",
+          "confidence": "Verified in the May–June 1983 issue contents.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Apple II Meets the Music Studio",
+          "summary": "Softalk’s May cover package follows Herbie Hancock and professional music systems, showing the microcomputer becoming an instrument and production partner.",
+          "confidence": "Verified from the May 1983 Softalk issue profile.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "IBM PC XT Gets the Hands-On Treatment",
+          "summary": "PC World devotes a special report to IBM’s expanded PC, with its built-in hard disk and updated operating environment.",
+          "confidence": "Verified from the May 1983 PC World cover and Computer History Museum catalog.",
+          "sourceRefs": [
+            3,
+            13
+          ]
+        },
+        {
+          "title": "Color Plotters Reach the Home Desk",
+          "summary": "Compute! surveys lower-cost multicolor plotters while asking whether memory expansion is becoming a status symbol.",
+          "confidence": "Verified from the May 1983 Compute! cover.",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lode Runner",
+          "detail": "Brøderbund’s run-climb-dig action game and level editor for the Apple II."
+        },
+        {
+          "name": "Zork III",
+          "detail": "Infocom’s text adventure continues the Great Underground Empire on disk."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "The spreadsheet that still defines a practical reason to own an Apple II."
+        },
+        {
+          "name": "WordStar",
+          "detail": "MicroPro’s widely used CP/M word processor for serious desk work."
+        },
+        {
+          "name": "The Print Shop",
+          "detail": "Brøderbund’s Apple II page-design package for signs, cards, and banners."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Lode Runner",
+            "Zork III",
+            "Wizardry",
+            "Choplifter!",
+            "Ultima II"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Return of the Jedi",
+            "Blue Thunder",
+            "Spacehunter: Adventures in the Forbidden Zone",
+            "Flashdance",
+            "Breathless"
+          ]
+        },
+        {
+          "label": "Home Computers",
+          "items": [
+            "Commodore 64",
+            "Apple IIe",
+            "Atari 800",
+            "TI-99/4A",
+            "Radio Shack TRS-80 Color Computer"
+          ]
+        },
+        {
+          "label": "Office Software",
+          "items": [
+            "VisiCalc",
+            "WordStar",
+            "dBASE II",
+            "Lotus 1-2-3",
+            "MultiPlan"
+          ]
+        },
+        {
+          "label": "Adventure & Strategy",
+          "items": [
+            "Zork III",
+            "Wizardry",
+            "Ultima II",
+            "Computer Ambush",
+            "Knights of the Desert"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64",
+          "price": "$595 list",
+          "note": "Color home computer with 64K RAM."
+        },
+        {
+          "item": "Apple IIe",
+          "price": "$1,395 list",
+          "note": "Base system; monitor and drives extra."
+        },
+        {
+          "item": "IBM PC XT",
+          "price": "From $4,995",
+          "note": "Includes 10MB hard disk in the announced configuration."
+        },
+        {
+          "item": "Atari 800",
+          "price": "$899 list",
+          "note": "Retail discounts vary as the home-computer price war sharpens."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Jedi Crowds the Marquees",
+          "text": "Return of the Jedi opens May 25 and immediately becomes the week’s cinema event."
+        },
+        {
+          "headline": "The Electronic Office",
+          "text": "BYTE’s May number asks how computers, communications, and printers will reshape desk work."
+        },
+        {
+          "headline": "Adventure Contest",
+          "text": "Computer Gaming World challenges readers with a puzzle built around the booming adventure genre."
+        },
+        {
+          "headline": "Hard Disk on the Desk",
+          "text": "The IBM PC XT makes fixed storage a centerpiece of the business microcomputer conversation."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Flashdance... What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 2,
+          "title": "Let's Dance",
+          "artist": "David Bowie"
+        },
+        {
+          "rank": 3,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 4,
+          "title": "Little Red Corvette",
+          "artist": "Prince"
+        },
+        {
+          "rank": 5,
+          "title": "Overkill",
+          "artist": "Men at Work"
+        }
+      ],
+      "periodAd": {
+        "headline": "Put a World on Your Floppy",
+        "summary": "Adventure, arcade action, and strategy now share the same shelf—bring home a blank disk, a joystick, and an idea.",
+        "tagline": "Your next great game begins at the keyboard."
+      },
+      "market": {
+        "headline": "PC XT Raises the Business-Micro Stakes",
+        "summary": "IBM’s XT packages a 10-megabyte hard disk with the familiar PC architecture, pushing small offices toward larger programs and local data storage even as home-computer makers battle on price.",
+        "confidence": "Product configuration and May 1983 coverage verified; market interpretation is contemporary context.",
+        "sourceRefs": [
+          3,
+          13
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Sea of Japan Quake Sends Destructive Tsunami",
+        "summary": "On May 26, a magnitude 7.8 earthquake off northern Honshu generates a tsunami and leaves roughly 100 people dead, the week’s gravest international news.",
+        "confidence": "Date, magnitude, tsunami, and approximate death toll are documented by USGS and historical records.",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Exact-day lead is anchored to the May 24, 1983 New York Times column.",
+          "Music ranking follows the Billboard Hot 100 dated May 28, 1983.",
+          "Movie shelf reflects the May 27–29 domestic weekend, led by Return of the Jedi.",
+          "Game and software shelves use named titles documented in period magazines and contemporary Apple II records.",
+          "Prices are period list prices and may differ from dealer advertisements."
+        ]
+      },
+      "sources": [
+        {
+          "label": "The New York Times — “The Imaginative Path to Designing Games,” May 24, 1983",
+          "url": "https://www.nytimes.com/1983/05/24/science/personal-computers-the-imaginative-path-to-designing-games.html"
+        },
+        {
+          "label": "Computer Gaming World, May–June 1983",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+        },
+        {
+          "label": "Softalk, May 1983 issue profile",
+          "url": "https://softalkapple.com/issue_profiles/v_3_n_9_may-1983.html"
+        },
+        {
+          "label": "PC World, May 1983",
+          "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+        },
+        {
+          "label": "Compute!, May 1983",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_036_1983_May.pdf"
+        },
+        {
+          "label": "BYTE, May 1983 — The Electronic Office",
+          "url": "https://archive.org/details/byte-magazine-1983-05"
+        },
+        {
+          "label": "Billboard Hot 100, week of May 28, 1983",
+          "url": "https://www.elpee.jp/hot100/week/1983-05-28"
+        },
+        {
+          "label": "Cash Box Top 100, May 28, 1983",
+          "url": "https://cashboxarchives.com/archives/80s_files/19830528.html"
+        },
+        {
+          "label": "Box Office Mojo — May 27–29, 1983 weekend",
+          "url": "https://www.boxofficemojo.com/weekend/1983W21/"
+        },
+        {
+          "label": "Apple II History — 1983 software",
+          "url": "https://www.apple2history.org/appendix/aha/aha83/"
+        },
+        {
+          "label": "United States Geological Survey — 1983 Sea of Japan earthquake",
+          "url": "https://earthquake.usgs.gov/earthquakes/eventpage/official19830526035959_30/executive"
+        },
+        {
+          "label": "Encyclopaedia Britannica — Return of the Jedi",
+          "url": "https://www.britannica.com/topic/Return-of-the-Jedi"
+        },
+        {
+          "label": "Internet Archive — Personal Computing, May 1983",
+          "url": "https://archive.org/details/PersonalComputing198305"
+        },
+        {
+          "label": "Computer History Museum — IBM PC XT",
+          "url": "https://www.computerhistory.org/collections/catalog/102716225"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "MODEM PLAYERS WANTED",
+          "copy": "Apple and Atari owners seek evening strategy matches. Local calls preferred. Leave baud rate and hours."
+        },
+        {
+          "headline": "DISKS & JOYSTICKS",
+          "copy": "Fresh 5¼-inch media, storage cases, paddles, and repair service at the neighborhood computer counter."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-13",
+      "historicDate": "1983-05-16",
+      "displayDate": "Week of May 16-22, 1983",
+      "edition": "Issue 042 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "busy early-1980s computer weekly with Apple II game-shop energy and colorful budget-micro accents",
+        "motifs": [
+          "Apple II game disks and joysticks",
+          "Lode Runner platform maze",
+          "Panasonic JR-200 and VZ200 keyboards",
+          "300-baud modem terminal copy"
+        ],
+        "layout": "masthead, wide Apple II gaming lead, narrow culture rail, boxed shelf, price, market, and world modules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Week of May 16-22, 1983",
+        "price": "35 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "wide upper-left gaming lead with Apple II disk and maze artwork",
+        "secondaryRail": "right rail for music, movies, computer games, and world bulletin",
+        "archiveNavigation": "previous and next issue controls plus archive shelf browsing"
+      },
+      "sectionChrome": {
+        "primary": "red and blue rules with amber computer-store accents",
+        "secondary": "thin black column rules and small boxed labels",
+        "texture": "warm newsprint, halftone blocks, light ink gain"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-05-16.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of May 16-22, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Late May 1983 finds Apple II players digging through new mazes while inexpensive home computers crowd the review bench and music software pushes the machine toward the studio.",
+      "morningLine": "Lode Runner climbs the Apple II conversation as budget micros and music systems fill the May magazines.",
+      "lead": {
+        "headline": "Lode Runner gives Apple II players 150 rooms to conquer",
+        "dek": "Softalk's 1983 software record puts Doug Smith's run-climb-dig game among the year's defining Apple II releases, complete with a construction set for making new levels.",
+        "body": "Broderbund's Lode Runner turns a simple chase into a toolbox: collect the gold, outwit the guards, and then design another screen. Its mix of arcade pace and player-made levels captures the spring's most exciting computer-game idea—software that lets the owner become part designer.",
+        "confidence": "1983 Softalk software record and contemporary Apple II coverage; treated as May 1983 shelf context rather than an exact release-day claim.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Softalk tunes the Apple II for the studio",
+          "summary": "The May issue profiles Herbie Hancock and the Syntauri professional music system, showing the Apple II reaching beyond games and ledgers into composition and performance.",
+          "confidence": "May 1983 issue profile and period magazine text.",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "Creative Computing tests another wave of budget micros",
+          "summary": "May reviews put the Panasonic JR-200, Video Technology VZ200, and TI 99/4A side by side in an increasingly crowded low-cost home-computer field.",
+          "confidence": "May 1983 magazine index and reviews.",
+          "sourceRefs": [
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "title": "Atari BASIC pilots race through Starshot",
+          "summary": "COMPUTE!'s May Starshot program sends Atari owners down a trench in a type-in game that also demonstrates how machine-language help can lift BASIC action.",
+          "confidence": "May 1983 COMPUTE! program article.",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "title": "Modem games enter the hobbyist playbook",
+          "summary": "Computer Gaming World's May-June cover makes modem gaming part of the dedicated computer-gamer's agenda alongside adventures, baseball leagues, and strategy titles.",
+          "confidence": "May-June 1983 issue cover and contents.",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lode Runner",
+          "detail": "Broderbund arcade game with 150 levels and a level editor."
+        },
+        {
+          "name": "Zork I",
+          "detail": "Infocom's text adventure remains a durable Apple II shelf title."
+        },
+        {
+          "name": "Choplifter!",
+          "detail": "Broderbund's rescue action game keeps joystick players busy."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "The spreadsheet remains the Apple II productivity benchmark."
+        },
+        {
+          "name": "Music Construction Set",
+          "detail": "Electronic Arts' 1983 notation program reflects the growing home-computer music aisle."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Lode Runner",
+            "Zork I",
+            "Choplifter!",
+            "Ultima II",
+            "Wizardry"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Spacehunter: Adventures in the Forbidden Zone",
+            "Blue Thunder",
+            "Breathless",
+            "Flashdance",
+            "My Tutor"
+          ]
+        },
+        {
+          "label": "On The Rack",
+          "items": [
+            "Softalk May 1983",
+            "COMPUTE! May 1983",
+            "Creative Computing May 1983",
+            "Computer Gaming World May-June 1983"
+          ]
+        },
+        {
+          "label": "Hardware Talk",
+          "items": [
+            "Panasonic JR-200",
+            "Video Technology VZ200",
+            "TI 99/4A",
+            "Apple II music boards"
+          ]
+        },
+        {
+          "label": "Software Counter",
+          "items": [
+            "VisiCalc",
+            "Apple Writer",
+            "Syntauri music tools",
+            "Music Construction Set"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Panasonic JR-200",
+          "price": "$349.95 suggested retail",
+          "note": "Creative Computing's May review places the compact color micro in the starter-computer fight."
+        },
+        {
+          "item": "Video Technology VZ200",
+          "price": "$99 advertised price",
+          "note": "The May review emphasizes its exceptionally low entry price."
+        },
+        {
+          "item": "COMPUTE! single issue",
+          "price": "$2.95 cover price",
+          "note": "May 1983 newsstand computer magazine."
+        },
+        {
+          "item": "Computer Gaming World",
+          "price": "$2.75 cover price",
+          "note": "May-June 1983 issue."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Construction sets change the game",
+          "text": "Lode Runner's editor makes designing a maze part of the entertainment, not an afterthought."
+        },
+        {
+          "headline": "Herbie Hancock meets the Apple II",
+          "text": "Softalk's May cover story treats computer-controlled music as a professional creative system."
+        },
+        {
+          "headline": "Color micros squeeze below $400",
+          "text": "Panasonic and Video Technology join Commodore and TI in the fight for the family television."
+        },
+        {
+          "headline": "Bowie dances to No. 1",
+          "text": "Let's Dance leads the Billboard Hot 100 for the chart week ending May 21."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Let's Dance",
+          "artist": "David Bowie"
+        },
+        {
+          "rank": 2,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 3,
+          "title": "Flashdance... What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 4,
+          "title": "Overkill",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 5,
+          "title": "She Blinded Me with Science",
+          "artist": "Thomas Dolby"
+        }
+      ],
+      "periodAd": {
+        "headline": "Build the maze after you beat it",
+        "summary": "A disk, a joystick, and an Apple II turn the player into a level designer after the gold is collected.",
+        "tagline": "Run it. Dig it. Draw the next room."
+      },
+      "market": {
+        "headline": "The starter-computer counter gets crowded",
+        "summary": "Creative Computing's May test bench—from the $99 VZ200 to Panasonic's color JR-200—shows manufacturers chasing families who want a first programmable machine without business-computer prices.",
+        "confidence": "Period May 1983 reviews; prices are quoted from those reviews.",
+        "sourceRefs": [
+          4,
+          5,
+          6
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Lebanon and Israel sign a U.S.-mediated agreement",
+        "summary": "On May 17, Lebanese and Israeli negotiators signed an agreement calling for Israeli withdrawal from Lebanon; Syria rejected the accord and its implementation remained uncertain.",
+        "confidence": "Dated UPI and Washington Post reports from May 17, 1983.",
+        "sourceRefs": [
+          12,
+          13
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Historic issue date comes from the Chronicle state file: 1983-05-16 through 1983-05-22.",
+          "Magazine and software items are labeled as May 1983 or 1983 shelf context unless a precise day is verified.",
+          "Music chart uses the Billboard Hot 100 week ending May 21, 1983.",
+          "Movie list follows the domestic weekend chart for May 20-22, 1983; game list is a period shelf snapshot rather than a claimed nationwide weekly ranking."
+        ]
+      },
+      "sources": [
+        {
+          "label": "Apple II History: 1983 software and Lode Runner",
+          "url": "https://www.apple2history.org/appendix/aha/aha83/"
+        },
+        {
+          "label": "Softalk May 1983 full text",
+          "url": "https://archive.org/stream/softalkv3n09may1983/softalkv3n09may1983_djvu.txt"
+        },
+        {
+          "label": "Softalk Apple Project: May 1983 issue profile",
+          "url": "https://softalkapple.com/issue_profiles/v_3_n_9_may-1983.html"
+        },
+        {
+          "label": "Softalk, Volume 3 Number 9 catalog record",
+          "url": "https://library.gamehistory.org/repositories/2/archival_objects/11543"
+        },
+        {
+          "label": "Creative Computing May 1983 index",
+          "url": "https://www.atarimagazines.com/creative/index/index.php?issue=v9n5"
+        },
+        {
+          "label": "Creative Computing: Panasonic JR-200 review",
+          "url": "https://www.atarimagazines.com/creative/v9n5/16_Panasonic_JR200.php"
+        },
+        {
+          "label": "Creative Computing: Video Technology VZ200 review",
+          "url": "http://www.atarimagazines.com/creative/v9n5/26_Video_Technology_VZ200_pe.php"
+        },
+        {
+          "label": "COMPUTE!: Atari Starshot",
+          "url": "http://www.atarimagazines.com/compute/issue36/039_Atari_Starshot.php"
+        },
+        {
+          "label": "Computer Gaming World Vol. 3 No. 3, May-June 1983",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+        },
+        {
+          "label": "Billboard Hot 100 chart week ending May 21, 1983",
+          "url": "https://elpee.jp/hot100/week/1983-05-21/"
+        },
+        {
+          "label": "Cash Box Top 100, May 21, 1983",
+          "url": "https://tropicalglen.com/Archives/80s_files/19830521.html"
+        },
+        {
+          "label": "Box Office Mojo weekend chart, May 20-22, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W20/"
+        },
+        {
+          "label": "UPI Archive: Lebanon-Israel agreement, May 17, 1983",
+          "url": "https://www.upi.com/Archives/1983/05/17/Lebanese-and-Israeli-negotiators-signed-an-historic-US-mediated-agreement/5705421992000/"
+        },
+        {
+          "label": "Washington Post: Lebanon, Israel sign agreement",
+          "url": "https://www.washingtonpost.com/archive/politics/1983/05/18/lebanon-israel-sign-agreement/a0323f5f-ab7a-4caf-94f7-bcae9b13a078/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Apple II disks wanted",
+          "copy": "Trade boxed adventures and arcade originals; send list by mail."
+        },
+        {
+          "headline": "Modem game night",
+          "copy": "300-baud callers invited for weekend match scheduling and file swaps."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-12",
+      "historicDate": "1983-05-09",
+      "displayDate": "Week of May 9-15, 1983",
+      "edition": "Issue 041 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "busy early-1980s computer weekly with arcade color and mail-order catalog energy",
+        "motifs": [
+          "Atari VCS keyboard add-on sketches",
+          "Apple II game shelves",
+          "VIC-20 price tags",
+          "modem terminal copy"
+        ],
+        "layout": "masthead, wide gaming/computing lead, narrow culture rail, boxed shelf and price modules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Week of May 9-15, 1983",
+        "price": "35 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "wide upper-left lead with Atari living-room computer artwork",
+        "secondaryRail": "right rail for music, movies, computer games, and world bulletin",
+        "archiveNavigation": "previous and next issue controls plus archive shelf browsing"
+      },
+      "sectionChrome": {
+        "primary": "red and blue rules with amber computer-store accents",
+        "secondary": "thin black column rules and small boxed labels",
+        "texture": "warm newsprint, halftone blocks, light ink gain"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-05-09.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of May 9-15, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Mid-May 1983 finds the home-computer aisle trying to meet game players where they already are: in front of televisions, joysticks, cassette decks, and Apple II disks.",
+      "morningLine": "Atari courts VCS owners as low-cost home computers and Apple II games crowd the spring newsstand.",
+      "lead": {
+        "headline": "Atari pitches a computer add-on for the VCS crowd",
+        "dek": "COMPUTE! gives May readers a close look at Atari's planned add-on computer for the 2600 game machine, a sign that console makers still want a bridge into home computing.",
+        "body": "The pitch is pure 1983 living room: keep the familiar VCS base, add a keyboard and computing capability, and turn game hardware into a starter machine. For families comparing cartridges, cassette software, and sub-$100 computer ads, the idea captures the week's uneasy overlap between console gaming and personal computing.",
+        "confidence": "Period magazine coverage; product timing treated as May 1983 context rather than a confirmed ship date.",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "COMPUTE! watches low-cost printer/plotters",
+          "summary": "Tom R. Halfhill surveys new low-cost printer/plotters, reflecting how home users were beginning to ask for paper output from inexpensive machines.",
+          "confidence": "May 1983 magazine index.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Creative Computing tests budget micros",
+          "summary": "Creative Computing's May issue covers machines including the Panasonic JR-200, Video Technology VZ200, and TI 99/4A as the inexpensive-computer field keeps widening.",
+          "confidence": "May 1983 magazine index.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Apple II gaming keeps the review bench full",
+          "summary": "Creative Computing's Apple adventure and arcade roundup underlines how the Apple II shelf was becoming a serious games aisle, not just an education and utility corner.",
+          "confidence": "May 1983 article listing.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Computer Gaming World leans into modem play",
+          "summary": "The May-June Computer Gaming World cover flags modem gaming, adventure contests, computer baseball leagues, and SSI war games for dedicated hobbyists.",
+          "confidence": "May-June 1983 issue cover and listing.",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Zork I",
+          "detail": "Infocom text adventure still defining the Apple II adventure shelf."
+        },
+        {
+          "name": "Choplifter!",
+          "detail": "Broderbund action title remains a recognizable Apple II seller."
+        },
+        {
+          "name": "Ultima II",
+          "detail": "Sierra fantasy role-playing game keeps long-form disk play in view."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "The business spreadsheet remains the reference point for Apple II productivity."
+        },
+        {
+          "name": "Syntauri music software",
+          "detail": "Softalk's May cover story points to Apple II music systems and MIDI-era ambition."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Zork I",
+            "Choplifter!",
+            "Ultima II",
+            "Wizardry",
+            "Deadline"
+          ]
+        },
+        {
+          "label": "On The Rack",
+          "items": [
+            "COMPUTE! May 1983",
+            "Creative Computing May 1983",
+            "Computer Gaming World May-June 1983",
+            "Softalk May 1983"
+          ]
+        },
+        {
+          "label": "Hardware Talk",
+          "items": [
+            "Atari VCS computer add-on",
+            "VIC-20 budget pricing",
+            "TI 99/4A closeouts",
+            "Apple II music boards"
+          ]
+        },
+        {
+          "label": "Software Counter",
+          "items": [
+            "VisiCalc",
+            "Apple Writer",
+            "Syntauri music tools",
+            "SSI Knights of the Desert"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore VIC-20",
+          "price": "Under $100 street price cited in May 1983 reporting",
+          "note": "Aggressive low-end pricing keeps pressure on rival starter machines."
+        },
+        {
+          "item": "COMPUTE! single issue",
+          "price": "$2.95 cover price",
+          "note": "May 1983 newsstand computer magazine."
+        },
+        {
+          "item": "Computer Gaming World",
+          "price": "$2.75 cover price",
+          "note": "May-June 1983 issue."
+        },
+        {
+          "item": "Arcade Express",
+          "price": "$1.50 single issue",
+          "note": "Bi-weekly electronic games newsletter price in May 1983."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Softalk puts Herbie Hancock on the Apple cover",
+          "text": "The May issue frames music hardware and software as a serious Apple II frontier."
+        },
+        {
+          "headline": "Arcade Express tracks licensing deals",
+          "text": "The late-May newsletter reports Milton Bradley arrangements tied to Atari and Texas Instruments software plans."
+        },
+        {
+          "headline": "New coin-op coverage stays crowded",
+          "text": "Creative Computing Video & Arcade Games surveys fresh arcade cabinets as operators rotate machines quickly."
+        },
+        {
+          "headline": "SSI war games hold the hobbyist shelf",
+          "text": "Computer Gaming World advertising and coverage keep titles such as Knights of the Desert in front of strategy players."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Let's Dance",
+          "artist": "David Bowie"
+        },
+        {
+          "rank": 3,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        },
+        {
+          "rank": 4,
+          "title": "Overkill",
+          "artist": "Men at Work"
+        },
+        {
+          "rank": 5,
+          "title": "She Blinded Me With Science",
+          "artist": "Thomas Dolby"
+        }
+      ],
+      "periodAd": {
+        "headline": "Turn the family television into a computer desk",
+        "summary": "Keyboard add-ons, cassette programs, and printer/plotter ads promise a practical next step after the cartridge habit.",
+        "tagline": "Bring home computing to the set you already own."
+      },
+      "market": {
+        "headline": "Low-price micros squeeze the spring counter",
+        "summary": "VIC-20 discounts, TI 99/4A promotions, and Atari's VCS-computer idea all point toward a market chasing first-time home users before the next shakeout.",
+        "confidence": "Same-month period reporting and magazine coverage.",
+        "sourceRefs": [
+          0,
+          1,
+          10
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Everest climbs make the week's wire",
+        "summary": "UPI reported on May 14 that two Americans and a Nepalese guide reached Mount Everest's summit, the second American success on the mountain in a week.",
+        "confidence": "Dated UPI archive story from May 14, 1983.",
+        "sourceRefs": [
+          11
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Historic issue date comes from the Chronicle state file: 1983-05-09 through 1983-05-15.",
+          "Magazine items are treated as May 1983 shelf context unless a precise day is cited.",
+          "Music chart uses the May 14, 1983 singles chart week.",
+          "Movie and computer-game lists are period shelf snapshots, not exact nationwide sales charts unless noted."
+        ]
+      },
+      "sources": [
+        {
+          "label": "COMPUTE! Issue 36, May 1983 index",
+          "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue36"
+        },
+        {
+          "label": "Creative Computing Vol. 9 No. 5, May 1983 index",
+          "url": "https://www.atarimagazines.com/creative/index/index.php?issue=v9n5"
+        },
+        {
+          "label": "Creative Computing: Apple adventure and arcade action",
+          "url": "https://www.atarimagazines.com/creative/v9n5/106_Apple_adventure_and_arcad.php"
+        },
+        {
+          "label": "Computer Gaming World Vol. 3 No. 3, May-June 1983",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+        },
+        {
+          "label": "Softalk Apple Project: May 1983 issue profile",
+          "url": "https://softalkapple.com/issue_profiles/v_3_n_9_may-1983.html"
+        },
+        {
+          "label": "Softalk May 1983 full text",
+          "url": "https://archive.org/stream/softalkv3n09may1983/softalkv3n09may1983_djvu.txt"
+        },
+        {
+          "label": "Music chart archive: May 14, 1983 singles",
+          "url": "https://www.musicchartsarchive.com/singles-chart/1983-05-14"
+        },
+        {
+          "label": "Cash Box Top 100, May 14, 1983",
+          "url": "http://www.tropicalglen.com/Archives/80s_files/19830514.html"
+        },
+        {
+          "label": "Box Office Mojo daily chart, May 13, 1983",
+          "url": "https://www.boxofficemojo.com/date/1983-05-13/"
+        },
+        {
+          "label": "Arcade Express Vol. 1 No. 21, May 22, 1983",
+          "url": "http://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n21.pdf"
+        },
+        {
+          "label": "Video Game Newsroom Time Machine: May 1983 summary",
+          "url": "https://www.palcomp3.com.br/podcast/421161-video-game-newsroom-time-machine/329981848-may-1983/"
+        },
+        {
+          "label": "UPI Archive: Everest summit report, May 14, 1983",
+          "url": "https://www.upi.com/Archives/1983/05/14/Two-Americans-and-their-Nepalese-guide-reached-the-summit/7791421732800/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Apple II disks wanted",
+          "copy": "Trade adventure originals for boxed utilities; send list by mail."
+        },
+        {
+          "headline": "Modem club forming",
+          "copy": "300-baud callers invited for weekend game scheduling and file swaps."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-11",
+      "historicDate": "1983-05-02",
+      "displayDate": "Week of May 2-8, 1983",
+      "edition": "Issue 040 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "May 1983 home-computer weekly with arcade energy, mail-order price boxes, and dense newsprint columns.",
+        "motifs": [
+          "vector arcade cabinet",
+          "8-bit home computer desk",
+          "mail-order software shelf",
+          "red and blue section rules"
+        ],
+        "layout": "Masthead, lead game story, three-column computer briefs, shelf-watch boxes, price watch, charts, classifieds, and a small world anchor."
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Week of May 2-8, 1983",
+        "price": "35 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Top-left banner with an Atari vector-arcade photo treatment and a home-computer sidebar.",
+        "secondaryRail": "Right rail carries Top 5 Music, Top 5 Movies, Top 5 Computer Games, and The World This Week.",
+        "archiveNavigation": "Previous and next issue controls remain available in the archive shell."
+      },
+      "sectionChrome": {
+        "primary": "red rules and small blue labels",
+        "secondary": "boxed shelf-watch modules",
+        "texture": "warm aged newsprint with light halftone screens"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-05-02.jpg",
+        "alt": "GPT Image 2 newspaper-style front page for Computer Chronicle, week of May 2-8, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This week follows the Chronicle state file to May 2-8, 1983, when the home-computer aisle and the arcade aisle increasingly shared the same customers.",
+      "morningLine": "Vector cockpits, spreadsheet desks, and discount home-computer ads all compete for attention in the first week of May 1983.",
+      "lead": {
+        "headline": "Star Wars lines up for Atari vector cabinets",
+        "dek": "Atari's Star Wars arcade machine gives the week its clearest computer-culture image: a 3-D vector trench run landing just as home computers borrow more of the arcade shelf.",
+        "body": "Trade and collector records place Atari's Star Wars arcade release in 1983, with May widely used for the cabinet's arrival. Its color-vector cockpit fantasy made a natural front-page emblem for a spring when home-computer owners were also buying arcade conversions, strategy disks, and BASIC-friendly machines from the same stores.",
+        "confidence": "High for 1983 release and period significance; medium for exact May-week placement.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Commodore 64 keeps squeezing the home shelf",
+          "summary": "By spring 1983 the C64 had become a price-pressure machine: color graphics, SID sound, and falling street prices put it beside game cartridges, monitors, and cassette drives in mainstream ads.",
+          "confidence": "High for 1983 market position; medium for week-specific ad timing.",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "IBM PC XT sets the office reference price",
+          "summary": "The March 1983 PC XT, with a 10 MB fixed disk, remained the machine to beat in office computing even while hobby columns watched cheaper home systems.",
+          "confidence": "High",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 turns the PC into a spreadsheet desk",
+          "summary": "Lotus 1-2-3 was now the 1983 software name that explained why businesses were buying IBM-compatible desks instead of treating personal computers as experiments.",
+          "confidence": "High",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "title": "Infocom adventures prove text still sells",
+          "summary": "Infocom's 1983 catalog, including Planetfall, kept parser adventures prominent on computer-store shelves while arcade licenses fought for attention.",
+          "confidence": "High for 1983 release; medium for exact week placement.",
+          "sourceRefs": [
+            7
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "1983 spreadsheet/database/graphics package defining the IBM PC office pitch."
+        },
+        {
+          "name": "WordStar",
+          "detail": "A familiar word-processing standard across CP/M and early business machines."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Still the spreadsheet reference point as Lotus gained momentum."
+        },
+        {
+          "name": "Planetfall",
+          "detail": "Infocom's 1983 science-fiction adventure for parser fans."
+        },
+        {
+          "name": "Microsoft BASIC",
+          "detail": "Bundled or expected on many home systems and still the beginner language of the shelf."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Star Wars",
+            "Zaxxon",
+            "Choplifter!",
+            "Miner 2049er",
+            "Planetfall"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Flashdance",
+            "Blue Thunder",
+            "Valley Girl",
+            "The Outsiders",
+            "Tootsie"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Lotus 1-2-3",
+            "WordStar",
+            "VisiCalc",
+            "Planetfall",
+            "Microsoft BASIC"
+          ]
+        },
+        {
+          "label": "Home Hardware",
+          "items": [
+            "Commodore 64",
+            "Apple IIe",
+            "Atari 800",
+            "VIC-20",
+            "IBM PC XT"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64",
+          "price": "commonly advertised below $600 in 1983",
+          "note": "Aggressive pricing made the C64 the home-computer benchmark."
+        },
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "The fixed disk kept the XT in the premium office lane."
+        },
+        {
+          "item": "Atari 1200XL",
+          "price": "about $899 list at introduction",
+          "note": "Atari's new 8-bit keyboard machine faced a tough price fight."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "about $100-$200 depending on brand",
+          "note": "Still a hobbyist add-on for bulletin-board calls."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Beat It holds the radio lead",
+          "text": "Michael Jackson led the Billboard Hot 100 dated May 7, 1983, ahead of Dexys Midnight Runners and Thomas Dolby."
+        },
+        {
+          "headline": "Flashdance remains the film to catch",
+          "text": "Flashdance was the dominant early-May box-office title, with Valley Girl and The Outsiders still part of the spring movie conversation."
+        },
+        {
+          "headline": "Famicom nears its Japanese debut",
+          "text": "Nintendo's Family Computer was still weeks from its July 1983 launch, but the hardware path toward a new console era was forming."
+        },
+        {
+          "headline": "Text adventures stay printable",
+          "text": "Infocom packaging and feelies gave computer games a bookstore-like presence that arcade cartridges could not copy."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 3,
+          "title": "She Blinded Me With Science",
+          "artist": "Thomas Dolby"
+        },
+        {
+          "rank": 4,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        },
+        {
+          "rank": 5,
+          "title": "Overkill",
+          "artist": "Men at Work"
+        }
+      ],
+      "periodAd": {
+        "headline": "Bring the arcade home, keep the ledger at work",
+        "summary": "One dealer window can sell a joystick, a spreadsheet, a disk drive, and a monitor to the same household this month.",
+        "tagline": "Computer Chronicle classifieds: software, modems, repairs, and used drives."
+      },
+      "market": {
+        "headline": "The home-computer price war becomes the week's business story",
+        "summary": "Commodore, Atari, Texas Instruments, and Apple were forcing shoppers to compare memory, color, keyboards, and software libraries as much as brand names.",
+        "confidence": "High for 1983 trend; medium for exact week.",
+        "sourceRefs": [
+          2,
+          3,
+          8
+        ]
+      },
+      "worldAnchor": {
+        "headline": "U.S. jobless rate dips to 10.2 percent",
+        "summary": "The Labor Department reported the U.S. unemployment rate fell to 10.2 percent in April 1983, a small but widely noted sign in the early Reagan-era recovery.",
+        "confidence": "High",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-05-02.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Atari Star Wars is a 1983 color-vector arcade release, commonly dated to May 1983 in arcade references.",
+            "confidence": "High/Medium for exact week",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Billboard Hot 100 dated May 7, 1983 was led by Beat It, Come On Eileen, She Blinded Me With Science, Jeopardy, and Overkill.",
+            "confidence": "High",
+            "sourceRefs": [
+              10
+            ]
+          },
+          {
+            "claim": "Flashdance was the leading domestic box-office film in early May 1983; Blue Thunder opened the following week and is listed as a near-week movie cue.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              11
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT in March 1983 with a 10 MB hard disk and about $4,995 base price.",
+            "confidence": "High",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was released in 1983 and became a defining IBM PC application.",
+            "confidence": "High",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          },
+          {
+            "claim": "April 1983 U.S. unemployment was reported at 10.2 percent in early May.",
+            "confidence": "High",
+            "sourceRefs": [
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Atari Star Wars arcade overview",
+          "url": "https://www.arcade-museum.com/Videogame/star-wars"
+        },
+        {
+          "label": "Atari Star Wars release context",
+          "url": "https://en.wikipedia.org/wiki/Star_Wars_(1983_video_game)"
+        },
+        {
+          "label": "Commodore 64 market context",
+          "url": "https://www.commodore.ca/commodore-products/commodore-64-the-best-selling-computer-in-history/"
+        },
+        {
+          "label": "Commodore 64 history",
+          "url": "https://en.wikipedia.org/wiki/Commodore_64"
+        },
+        {
+          "label": "IBM PC XT announcement and price context",
+          "url": "https://www.ibm.com/history/personal-computer-xt"
+        },
+        {
+          "label": "Lotus 1-2-3 history",
+          "url": "https://en.wikipedia.org/wiki/Lotus_1-2-3"
+        },
+        {
+          "label": "Computer History Museum software timeline",
+          "url": "https://www.computerhistory.org/timeline/software-languages/"
+        },
+        {
+          "label": "Infocom Planetfall release context",
+          "url": "https://en.wikipedia.org/wiki/Planetfall"
+        },
+        {
+          "label": "1983 home-computer price war context",
+          "url": "https://en.wikipedia.org/wiki/Video_game_crash_of_1983"
+        },
+        {
+          "label": "BLS unemployment historical context",
+          "url": "https://www.bls.gov/opub/mlr/1984/02/art1full.pdf"
+        },
+        {
+          "label": "Billboard Hot 100 week of May 7, 1983",
+          "url": "https://www.billboard.com/charts/hot-100/1983-05-07/"
+        },
+        {
+          "label": "Box Office Mojo weekly box office May 1983",
+          "url": "https://www.boxofficemojo.com/weekly/1983W18/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: Hayes-compatible modem",
+          "copy": "Local user group seeks 300-baud modem for bulletin-board testing. Leave message after 6 p.m."
+        },
+        {
+          "headline": "Disk drive tune-up",
+          "copy": "Alignment checks for Apple, Atari, and Commodore drives. Bring your own diagnostic disk."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-10",
+      "historicDate": "1983-04-25",
+      "displayDate": "Week of April 25-May 1, 1983",
+      "edition": "Issue 039 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "warm aged newsprint with red and blue computer-weekly accents",
+        "motifs": [
+          "arcade cabinet lights",
+          "Apple II disk sleeves",
+          "home-computer retail tags",
+          "column rules"
+        ],
+        "layout": "dense front-page archive issue with gaming lead and compact culture rails"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Friday morning edition for July 10, 2026",
+        "price": "25 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "dominant gaming lead with boxed arcade/computer-game art cue",
+        "secondaryRail": "software, price watch, charts, and world anchor in compact newspaper modules",
+        "archiveNavigation": "newest issue prepended for browseable archive"
+      },
+      "sectionChrome": {
+        "primary": "red rule labels for game and market departments",
+        "secondary": "blue boxed chart headers",
+        "texture": "aged paper, halftone blocks, light ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-04-25.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle newspaper front page for the week of April 25-May 1, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The week opens with home-computer magazines treating arcade-style play as a serious software category while office buyers keep circling Lotus 1-2-3 and the IBM PC XT.",
+      "morningLine": "Arcade names, Apple II disks, and spreadsheet demos share the same dealer counter as April turns into May 1983.",
+      "lead": {
+        "headline": "Arcade Alley widens the lane for computer games",
+        "dek": "Video magazine coverage treats Apple II and home-computer games as part of the same conversation as Zaxxon and Turbo.",
+        "body": "In the spring 1983 game press, the wall between coin-op excitement and personal-computer software kept getting thinner. Electronic Games expanded its Arcade Alley column to cover computer gaming, reviewing Zaxxon, Turbo, and Apple II titles in the same breath. For shoppers with an Apple II, Atari 8-bit, Commodore 64, or VIC-20, that mattered: game disks were no longer just hobby curiosities, but a front-counter reason to compare graphics, joysticks, and disk drives.",
+        "confidence": "High for the April 1983 Arcade Alley coverage; medium for week-specific retail emphasis.",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "KoalaPad points toward home graphics",
+          "summary": "Antic listed Koala Technologies' touch tablet among new Atari-market products, a reminder that drawing and design peripherals were moving into home-computer conversations.",
+          "confidence": "High for product listing; medium for weekly retail emphasis.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 remains the office demo to beat",
+          "summary": "Released earlier in 1983, Lotus 1-2-3 was becoming the IBM PC package dealers could use to make spreadsheet, database, and graphics work feel like one purchase.",
+          "confidence": "High",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "title": "PC XT keeps hard disks aspirational",
+          "summary": "IBM's March 1983 PC XT, with a 10 MB fixed disk and premium price, framed the office-computing end of the market while home systems fought on price.",
+          "confidence": "High",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Computer magazines sell typing-in as culture",
+          "summary": "Compute! and similar magazines still treated reader-entered programs, utilities, and game listings as part of the ordinary home-computer week.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Zaxxon",
+          "detail": "Arcade hit and Apple II/home-computer conversion touchstone in spring 1983 game coverage."
+        },
+        {
+          "name": "Turbo",
+          "detail": "Sega racing game reviewed alongside computer-game coverage in Arcade Alley."
+        },
+        {
+          "name": "Knights of the Desert",
+          "detail": "Strategic Simulations title appearing in 1983 Atari-market new-product listings."
+        },
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC spreadsheet, database, and graphics package defining office PC demos."
+        },
+        {
+          "name": "WordStar",
+          "detail": "Established word processor name still familiar to CP/M and business-computer buyers."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Zaxxon",
+            "Turbo",
+            "Choplifter!",
+            "Miner 2049er",
+            "Ultima II: The Revenge of the Enchantress"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Lotus 1-2-3",
+            "WordStar",
+            "VisiCalc",
+            "dBASE II",
+            "Microsoft BASIC"
+          ]
+        },
+        {
+          "label": "Home Hardware",
+          "items": [
+            "Commodore 64",
+            "Atari 800",
+            "Apple IIe",
+            "VIC-20",
+            "IBM PC XT"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "The 10 MB fixed disk made the XT the premium office reference point."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "commonly advertised under $600 in 1983",
+          "note": "Price pressure kept the C64 central in home-computer comparisons."
+        },
+        {
+          "item": "KoalaPad touch tablet",
+          "price": "about $124.95 list in period listings",
+          "note": "A graphics-tablet accessory aimed at Atari and home creative users."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "about $100-$200 depending on brand",
+          "note": "Still an enthusiast add-on for bulletin-board experiments."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Beat It takes No. 1",
+          "text": "Michael Jackson led the Billboard Hot 100 dated April 30, 1983."
+        },
+        {
+          "headline": "Flashdance keeps the box-office floor",
+          "text": "Flashdance led the domestic weekly box office for April 29-May 5, with Something Wicked This Way Comes and Valley Girl also high on the chart."
+        },
+        {
+          "headline": "Touch tablets reach hobby desks",
+          "text": "KoalaPad listings showed graphics input moving beyond professional workstations into 8-bit home setups."
+        },
+        {
+          "headline": "Strategy disks crowd the shelf",
+          "text": "Knights of the Desert and other boxed computer games gave retailers alternatives to pure arcade conversions."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 3,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        },
+        {
+          "rank": 4,
+          "title": "Mr. Roboto",
+          "artist": "Styx"
+        },
+        {
+          "rank": 5,
+          "title": "Der Kommissar",
+          "artist": "After the Fire"
+        }
+      ],
+      "periodAd": {
+        "headline": "Arcade Names, Disk Drive Prices",
+        "summary": "Try Zaxxon on Apple II, ask about a KoalaPad drawing demo, then price a spreadsheet bundle before closing time.",
+        "tagline": "One counter, two futures: games after school, Lotus after lunch."
+      },
+      "market": {
+        "headline": "Games make the home computer feel less optional",
+        "summary": "As office buyers priced IBM PC systems and Lotus, home dealers could point to arcade-style software, drawing tablets, and magazines full of type-in programs to keep families browsing.",
+        "confidence": "Medium, based on April-May 1983 magazine and product-listing context.",
+        "sourceRefs": [
+          0,
+          2,
+          3,
+          6
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Andropov invites Samantha Smith to the Soviet Union",
+        "summary": "On April 26, 1983, Soviet leader Yuri Andropov answered American schoolgirl Samantha Smith and invited her to visit the USSR, turning a Cold War letter exchange into international news.",
+        "confidence": "High",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-04-25.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Electronic Games expanded Arcade Alley in April 1983 to cover computer gaming, including Zaxxon, Turbo, and Apple II titles.",
+            "confidence": "High",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Antic Vol. 2 No. 4 listed products including KoalaPad and Knights of the Desert.",
+            "confidence": "High",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was released in 1983 and became a defining IBM PC business application.",
+            "confidence": "High",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT in March 1983 with a 10 MB hard disk and roughly $4,995 price.",
+            "confidence": "High",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Billboard Hot 100 for April 30, 1983 was led by Beat It, followed by Come On Eileen, Jeopardy, Mr. Roboto, and Der Kommissar.",
+            "confidence": "High",
+            "sourceRefs": [
+              7
+            ]
+          },
+          {
+            "claim": "Domestic weekly box office for April 29-May 5, 1983 was led by Flashdance, Something Wicked This Way Comes, Valley Girl, The Hunger, and Tootsie.",
+            "confidence": "High",
+            "sourceRefs": [
+              8
+            ]
+          },
+          {
+            "claim": "Andropov answered Samantha Smith on April 26, 1983 and invited her to the Soviet Union.",
+            "confidence": "High",
+            "sourceRefs": [
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Arcade Alley, Electronic Games, April 1983",
+          "url": "https://ataricompendium.com/archives/articles/arcade_alley/arcade_alley_apr83.pdf"
+        },
+        {
+          "label": "The International Arcade Museum: Zaxxon",
+          "url": "https://www.arcade-museum.com/Videogame/zaxxon"
+        },
+        {
+          "label": "Antic Vol. 2 No. 4 New Products, July 1983",
+          "url": "https://www.atarimagazines.com/v2n4/newproducts.php"
+        },
+        {
+          "label": "InfoWorld: Lotus 1-2-3 hits the big 3-0",
+          "url": "https://www.infoworld.com/article/2613303/lotus-1-2-3-hits-the-big-3-0.html"
+        },
+        {
+          "label": "Encyclopaedia Britannica: Lotus 1-2-3",
+          "url": "https://www.britannica.com/technology/Lotus-1-2-3"
+        },
+        {
+          "label": "IBM Archives: IBM Personal Computer XT",
+          "url": "https://www.ibm.com/ibm/history/exhibits/pc25/pc25_birth.html"
+        },
+        {
+          "label": "Compute! Magazine Issue 035, April 1983",
+          "url": "https://archive.org/stream/1983-04-compute-magazine/Compute_Issue_035_1983_Apr_djvu.txt"
+        },
+        {
+          "label": "Music Charts Archive: Singles Chart for April 30, 1983",
+          "url": "https://mail.musicchartsarchive.com/singles-chart/1983-04-30"
+        },
+        {
+          "label": "Box Office Mojo Domestic 1983 Week 17, April 29-May 5",
+          "url": "https://www.boxofficemojo.com/weekly/1983W17/"
+        },
+        {
+          "label": "HISTORY: Andropov writes to U.S. student, April 26, 1983",
+          "url": "https://www.history.com/this-day-in-history/april-26/andropov-writes-to-u-s-student"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Apple II Game Night",
+          "copy": "Bring a joystick and a blank disk. Zaxxon talk starts at seven."
+        },
+        {
+          "headline": "Graphics Tablet Demo",
+          "copy": "Ask the counter about touch-tablet drawing on Atari 8-bit systems."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-09",
+      "historicDate": "1983-04-18",
+      "displayDate": "Week of April 18-24, 1983",
+      "edition": "Issue 038 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "A warm early-1980s computer-weekly front page with arcade-game lead treatment, amber terminal accents, red and blue rule lines, shelf-watch boxes, chart modules, and a compact world bulletin.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly 1982 Computer & Culture Chronicle",
+        "dateline": "Home computers, arcades, software shelves, and culture",
+        "price": "35 cents",
+        "date": "Week of April 18-24, 1983"
+      },
+      "layoutPlan": "Gaming-led front page with arcade trade-news lead, a right-rail culture stack, shelf-watch boxes for IBM PC and home-computer software, a compact price watch, classifieds, and a small world bulletin.",
+      "sectionChrome": [
+        "Arcade Counter",
+        "Shelf Watch",
+        "Price Watch",
+        "Culture Rack"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-04-18.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle newspaper front page for the week of April 18-24, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Late April 1983 put arcade trade papers, IBM PC business software, and discount home-computer shelves in the same weekend conversation, while the Beirut embassy bombing gave the week a stark world-news backdrop.",
+      "morningLine": "This week at the counter: Pole Position still drives arcade chatter, Lotus 1-2-3 sells the IBM PC as an office machine, Flashdance takes the weekend box office, and Come On Eileen tops the singles chart.",
+      "lead": {
+        "headline": "Pole Position keeps arcade racing in the fast lane",
+        "dek": "Atari/Namco racing cabinets remained a trade-paper and operator touchstone as home-computer aisles tried to borrow arcade excitement.",
+        "body": "By the week of April 18, arcade operators were still talking about the drawing power of Pole Position, the Namco racer Atari distributed in North America. Its sit-down cabinet, qualifying lap, and billboard-style track made it a showroom example of how arcade spectacle could sell a game before a player touched the wheel. For home-computer buyers, that arcade glow mattered: software shelves were filling with conversions and racing titles that promised a slice of the coin-op floor.",
+        "confidence": "High for Pole Position release context; medium for week-specific retail emphasis.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Lotus 1-2-3 defines the IBM PC pitch",
+          "summary": "Lotus 1-2-3, released earlier in 1983, was already becoming the spreadsheet/database/graphics package dealers used to explain why an IBM PC belonged on an office desk.",
+          "confidence": "High",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "IBM PC XT keeps fixed disks in the premium tier",
+          "summary": "The IBM Personal Computer XT, introduced in March 1983 with a 10 MB fixed disk, kept serious storage expensive but made hard-disk office computing easier to demonstrate.",
+          "confidence": "High",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Home-computer game shelves stay crowded",
+          "summary": "Commodore 64, Atari 8-bit, Apple II, and TI-99/4A buyers saw arcade conversions, cartridges, and budget software competing for attention in 1983 dealer ads.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        },
+        {
+          "title": "Bulletin-board curiosity grows at 300 baud",
+          "summary": "Modems remained add-ons for enthusiasts, but the idea of dialing local boards and swapping files was becoming part of the hobby-computer sales pitch.",
+          "confidence": "Medium",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC spreadsheet, database, and graphics package that became the PC office standard."
+        },
+        {
+          "name": "Zaxxon",
+          "detail": "Arcade name visible in Apple II and home-computer conversion conversations."
+        },
+        {
+          "name": "Pole Position",
+          "detail": "Arcade racing hit anchoring operator and player attention."
+        },
+        {
+          "name": "WordStar",
+          "detail": "Business word processor still prominent in CP/M and office computing."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Familiar spreadsheet name still used as a comparison point for business buyers."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Pole Position",
+            "Zaxxon",
+            "Miner 2049er",
+            "Choplifter!",
+            "Ultima II: The Revenge of the Enchantress"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Lotus 1-2-3",
+            "WordStar",
+            "VisiCalc",
+            "dBASE II",
+            "Microsoft BASIC"
+          ]
+        },
+        {
+          "label": "Home Hardware",
+          "items": [
+            "Commodore 64",
+            "Atari 800",
+            "Apple IIe",
+            "TI-99/4A",
+            "IBM PC XT"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "A 10 MB fixed disk kept the XT in premium office territory."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "commonly advertised under $600 in 1983",
+          "note": "Aggressive pricing made the C64 a visible home-computer rival."
+        },
+        {
+          "item": "TI-99/4A",
+          "price": "street prices falling through 1983",
+          "note": "Discounting made cartridge supply and software support more important."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "about $100-$200 depending on brand",
+          "note": "Still a specialty add-on for bulletin-board experiments."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Arcade glamour sells computers",
+          "text": "Dealers leaned on familiar arcade names and screenshots to make home systems feel less like homework machines."
+        },
+        {
+          "headline": "PC buyers ask for bundles",
+          "text": "The XT and Lotus story pushed shoppers to compare memory, disk, printer, and software totals rather than CPU price alone."
+        },
+        {
+          "headline": "Flashdance opens big",
+          "text": "Paramount’s Flashdance moved to number one at the domestic weekend box office for April 22-24."
+        },
+        {
+          "headline": "Come On Eileen tops radio",
+          "text": "Dexys Midnight Runners led the U.S. singles chart dated April 23, 1983."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 2,
+          "title": "Mr. Roboto",
+          "artist": "Styx"
+        },
+        {
+          "rank": 3,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 4,
+          "title": "Der Kommissar",
+          "artist": "After the Fire"
+        },
+        {
+          "rank": 5,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        }
+      ],
+      "periodAd": {
+        "headline": "Dealer Special: Spreadsheet Morning, Arcade Afternoon",
+        "summary": "Ask for an IBM PC demonstration with Lotus 1-2-3, then try the latest Apple II and Commodore game disks at the counter.",
+        "tagline": "Bring a blank disk. Leave with a wish list."
+      },
+      "market": {
+        "headline": "Software is the margin story",
+        "summary": "As home-computer prices fell and IBM PC systems grew more expensive with disks and monitors, dealers watched software, cartridges, printers, and support carry the profit conversation.",
+        "confidence": "Medium, based on 1983 trade coverage and period price context.",
+        "sourceRefs": [
+          2,
+          4,
+          5,
+          6
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Bomb destroys U.S. Embassy in Beirut",
+        "summary": "On April 18, 1983, a truck bomb devastated the U.S. Embassy in Beirut, killing dozens and bringing Lebanon’s civil war and U.S. presence there to the front pages.",
+        "confidence": "High",
+        "sourceRefs": [
+          7,
+          8
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-04-18.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Pole Position was developed by Namco and distributed by Atari in North America, becoming a major 1982-83 arcade racing title.",
+            "confidence": "High",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was released in 1983 and became a defining IBM PC business application.",
+            "confidence": "High",
+            "sourceRefs": [
+              2,
+              3
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT in March 1983 with a 10 MB hard disk and a roughly $4,995 list price.",
+            "confidence": "High",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Billboard Hot 100 for April 23, 1983 was led by Come On Eileen, with Mr. Roboto, Beat It, Der Kommissar, and Jeopardy in the top five.",
+            "confidence": "High",
+            "sourceRefs": [
+              9
+            ]
+          },
+          {
+            "claim": "Domestic weekend box office for April 22-24, 1983 was led by Flashdance, followed by Lone Wolf McQuade, Tootsie, Gandhi, and Monty Python's The Meaning of Life.",
+            "confidence": "High",
+            "sourceRefs": [
+              10
+            ]
+          },
+          {
+            "claim": "The U.S. Embassy bombing in Beirut occurred on April 18, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              7,
+              8
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Atari: Pole Position arcade flyer and release context",
+          "url": "https://flyers.arcade-museum.com/videogames/show/757"
+        },
+        {
+          "label": "The International Arcade Museum: Pole Position",
+          "url": "https://www.arcade-museum.com/Videogame/pole-position"
+        },
+        {
+          "label": "InfoWorld: Lotus 1-2-3 hits the big 3-0",
+          "url": "https://www.infoworld.com/article/2613303/lotus-1-2-3-hits-the-big-3-0.html"
+        },
+        {
+          "label": "Encyclopaedia Britannica: Lotus 1-2-3",
+          "url": "https://www.britannica.com/technology/Lotus-1-2-3"
+        },
+        {
+          "label": "IBM Archives: IBM Personal Computer XT",
+          "url": "https://www.ibm.com/ibm/history/exhibits/pc25/pc25_birth.html"
+        },
+        {
+          "label": "Computers & Electronics, April 1983",
+          "url": "https://www.worldradiohistory.com/Archive-Poptronics/80s/1983/CE-1983-04r.pdf"
+        },
+        {
+          "label": "PC World Vol. 1 No. 3, May 1983",
+          "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+        },
+        {
+          "label": "Washington Post: Bomb Wrecks U.S. Embassy in Beirut",
+          "url": "https://www.washingtonpost.com/archive/politics/1983/04/19/bomb-wrecks-us-embassy-in-beirut/87889136-e1e9-4d5b-ad11-2e23b3f87511/"
+        },
+        {
+          "label": "Reagan Library: Proclamation 5054, Beirut personnel deaths",
+          "url": "https://www.reaganlibrary.gov/archives/speech/proclamation-5054-death-federal-diplomatic-and-military-personnel-beirut-lebanon"
+        },
+        {
+          "label": "Top40Weekly: US Top 40 Singles, week ending April 23, 1983",
+          "url": "https://top40weekly.com/2013/04/23/us-top-40-singles-for-the-week-ending-april-23-1983/"
+        },
+        {
+          "label": "Box Office Mojo Domestic Weekend 16, April 22-24, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W16/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: Apple II Disk Swaps",
+          "copy": "Local users seek game disks, printer ribbons, and paddles. Leave name at the counter."
+        },
+        {
+          "headline": "Modem Night",
+          "copy": "300-baud demonstrations after closing. Bring questions, not long-distance charges."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-08",
+      "historicDate": "1983-04-11",
+      "displayDate": "Week of April 11-17, 1983",
+      "edition": "Issue 037 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "A warm early-1980s computer-weekly front page with game-news lead, amber terminal accents, red and blue rule lines, dense shelves, and boxed chart modules.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly Computer & Culture Chronicle",
+        "dateline": "Week of April 11-17, 1983",
+        "price": "35 cents",
+        "date": "Week of April 11-17, 1983",
+        "issue": "Issue 037"
+      },
+      "layoutPlan": "Gaming lead with a right-rail culture chart stack, shelf-watch boxes for home computers and business software, a compact price watch, and a small world bulletin.",
+      "sectionChrome": [
+        "Game Rack",
+        "Shelf Watch",
+        "Price Watch",
+        "Culture Dial",
+        "The World This Week"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-04-11.jpg",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of April 11-17, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Mid-April 1983 found home-computer gaming moving through newsletters and magazines while IBM PC buyers studied hard disks, Lotus worksheets, and the new PC press.",
+      "morningLine": "This week at the counter: TI software policy arguments, Apple II arcade conversions, IBM PC XT talk, and Michael Jackson still holding the radio.",
+      "lead": {
+        "headline": "TI software control sparks game-counter argument",
+        "dek": "Arcade Express reported Texas Instruments wanted tighter control over TI-99/4A software, a sign that cartridge economics and home-computer publishing were colliding.",
+        "body": "The April 10 Arcade Express reached readers at the start of this Chronicle week with a sharp business-of-games lead: Texas Instruments wanted to keep control of software for the TI-99/4A. For dealers, publishers, and families watching the low-cost computer aisle, the question was not academic. A machine could be attractive on price and still be defined by who was allowed to publish for it, how cartridges reached shelves, and whether independent game makers could fill the rack quickly enough.",
+        "confidence": "High",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "Arcade Alley widens to computer games",
+          "summary": "The April 1983 Arcade Alley column reviewed Zaxxon and Turbo for Apple II, showing console-and-arcade criticism expanding into home-computer software.",
+          "confidence": "High",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "PC World puts IBM XT in its feature lineup",
+          "summary": "PC World Vol. 1 No. 3 promoted a special report on IBM's XT and an exclusive hands-on look at the upgraded PC line.",
+          "confidence": "High",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 keeps selling the IBM PC story",
+          "summary": "Lotus 1-2-3, released in early 1983, bundled spreadsheet, database, and graphics functions into the sort of business software that made PC hard disks easier to justify.",
+          "confidence": "High",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Commodore 64 gets mainstream electronics attention",
+          "summary": "Computers & Electronics April 1983 put the Commodore 64 as a feature, promising a look at the machine's wonders and potential.",
+          "confidence": "High",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Zaxxon",
+          "detail": "Apple II arcade conversion reviewed in Arcade Alley."
+        },
+        {
+          "name": "Turbo",
+          "detail": "Apple II driving conversion reviewed alongside Zaxxon."
+        },
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC integrated spreadsheet, database, and graphics package."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Still a familiar spreadsheet name at business counters."
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and business word-processing staple still visible in dealer conversations."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 computer games",
+          "items": [
+            "Zaxxon",
+            "Turbo",
+            "Zork I",
+            "Ultima II",
+            "Wizardry"
+          ]
+        },
+        {
+          "label": "Office software",
+          "items": [
+            "Lotus 1-2-3",
+            "VisiCalc",
+            "WordStar",
+            "dBASE II",
+            "Peachtree accounting"
+          ]
+        },
+        {
+          "label": "Home computer watch",
+          "items": [
+            "TI-99/4A",
+            "Commodore 64",
+            "Apple II Plus",
+            "Atari 800",
+            "IBM PC XT"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "A 10 MB fixed disk kept the XT in premium office territory."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "commonly advertised under $600 in 1983",
+          "note": "Aggressive pricing made the C64 a visible home-computer rival."
+        },
+        {
+          "item": "TI-99/4A",
+          "price": "street prices falling through 1983",
+          "note": "Hardware discounts raised the stakes for software control and cartridge supply."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "about $100-$200 depending on brand",
+          "note": "Still a specialty add-on for bulletin-board and game experiments."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Zaxxon crosses to Apple II",
+          "text": "Arcade Alley treated the Apple II conversion as part of a broader move to judge computer games beside cartridge releases."
+        },
+        {
+          "headline": "XT reports fill the PC press",
+          "text": "PC World's May issue kept the new IBM PC XT in front of business readers looking for fixed-disk systems."
+        },
+        {
+          "headline": "C64 gets the feature treatment",
+          "text": "Computers & Electronics used its April issue to frame the Commodore 64 as a machine with broad potential."
+        },
+        {
+          "headline": "Disney opens a world away",
+          "text": "Tokyo Disneyland opened April 15, giving the week a global pop-culture landmark beyond the computer counter."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Billie Jean",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 3,
+          "title": "Mr. Roboto",
+          "artist": "Styx"
+        },
+        {
+          "rank": 4,
+          "title": "Jeopardy",
+          "artist": "Greg Kihn Band"
+        },
+        {
+          "rank": 5,
+          "title": "Beat It",
+          "artist": "Michael Jackson"
+        }
+      ],
+      "periodAd": {
+        "headline": "This week at the computer counter",
+        "summary": "Ask about TI-99/4A cartridges, Apple II arcade conversions, Commodore 64 starter bundles, IBM PC XT fixed-disk quotes, and Lotus 1-2-3 demonstrations.",
+        "tagline": "Bring a blank disk and compare the game rack before closing time."
+      },
+      "market": {
+        "headline": "Software shelves decide the home-computer fight",
+        "summary": "Mid-April's useful split screen was games on one side and business PCs on the other: TI argued for software control, Apple II arcade conversions drew magazine attention, and IBM PC buyers priced the XT and Lotus 1-2-3.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Tokyo Disneyland opens in Japan",
+        "summary": "Tokyo Disneyland opened April 15, 1983, becoming Disney's first international theme park and giving the week a major global pop-culture marker.",
+        "confidence": "High",
+        "sourceRefs": [
+          8,
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-04-11.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Arcade Express Vol. 1 No. 18 was dated April 10, 1983, and led with Texas Instruments planning to control software for the TI-99/4A.",
+            "confidence": "High",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Arcade Alley April 1983 reviewed Zaxxon and Turbo for Apple II as the column expanded into computer gaming.",
+            "confidence": "High",
+            "sourceRefs": [
+              1
+            ]
+          },
+          {
+            "claim": "PC World May 1983 promoted a special report on IBM's XT and an exclusive hands-on look at the upgraded PC line.",
+            "confidence": "High",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was an early-1983 IBM PC integrated spreadsheet/database/graphics package.",
+            "confidence": "High",
+            "sourceRefs": [
+              3
+            ]
+          },
+          {
+            "claim": "Computers & Electronics April 1983 featured the Commodore 64 as a feature.",
+            "confidence": "High",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Music ranking uses a Cash Box chart mirror for the week ending April 16, 1983.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Movie ranking uses Box Office Mojo domestic weekend April 15-17, 1983; Lone Wolf McQuade opened at number one.",
+            "confidence": "High",
+            "sourceRefs": [
+              6,
+              7
+            ]
+          },
+          {
+            "claim": "Tokyo Disneyland opened April 15, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              8,
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Arcade Express Vol. 1 No. 18, April 10, 1983",
+          "url": "http://www.digitpress.com/library/newsletters/arcadeexpress/arcade_express_v1n18.pdf"
+        },
+        {
+          "label": "Arcade Alley, April 1983",
+          "url": "https://ataricompendium.com/archives/articles/arcade_alley/arcade_alley_apr83.pdf"
+        },
+        {
+          "label": "PC World Vol. 1 No. 3, May 1983",
+          "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+        },
+        {
+          "label": "InfoWorld: Lotus 1-2-3 hits the big 3-0",
+          "url": "https://www.infoworld.com/article/2613303/lotus-1-2-3-hits-the-big-3-0.html"
+        },
+        {
+          "label": "Computers & Electronics, April 1983",
+          "url": "https://www.worldradiohistory.com/Archive-Poptronics/80s/1983/CE-1983-04r.pdf"
+        },
+        {
+          "label": "Cash Box Top 100 Singles, week ending April 16, 1983",
+          "url": "https://tropicalglen.com/Archives/80s_files/19830416.html"
+        },
+        {
+          "label": "Box Office Mojo Domestic 1983 Weekend 15",
+          "url": "https://www.boxofficemojo.com/weekend/1983W15/"
+        },
+        {
+          "label": "Salty Popcorn US box office weekend April 15-17, 1983",
+          "url": "https://www.saltypopcorn.co.uk/charts/weekly-us-chart.php?file=19830415"
+        },
+        {
+          "label": "Oriental Land history: Opening of Tokyo Disneyland",
+          "url": "https://www.olc.co.jp/en/company/history/history03.html"
+        },
+        {
+          "label": "D23: Disneyland Goes International, Tokyo Disneyland opening day",
+          "url": "https://d23.com/disneyland-goes-international-the-opening-day-of-tokyo-disneyland/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: TI cartridge news",
+          "copy": "Local TI-99/4A owner seeks reliable word on new games, third-party software, and dealer stock."
+        },
+        {
+          "headline": "Apple II arcade night",
+          "copy": "Bring Zaxxon scores, Turbo tips, and a spare joystick to the club table after supper."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-07",
+      "historicDate": "1983-04-04",
+      "displayDate": "Week of April 4-10, 1983",
+      "edition": "Issue 036 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "Warm early-1980s computer-weekly front page with aged newsprint, red and blue section flags, dense modular columns, and a game-shelf lead.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly Computer & Culture Chronicle",
+        "dateline": "Week of April 4-10, 1983",
+        "price": "35 cents",
+        "date": "Week of April 4-10, 1983",
+        "issue": "Issue 036"
+      },
+      "layoutPlan": "Lead with the spring computer-game shelf, flank it with IBM PC XT and Lotus office notes, then scan culture charts, prices, classifieds, and a small world bulletin.",
+      "sectionChrome": [
+        "Front Page",
+        "On This Week",
+        "Shelf Watch",
+        "Price Watch",
+        "Culture Ledger"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-04-04.jpg",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of April 4-10, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The week opens with Challenger on the pad and computer stores selling two futures at once: deeper games for home micros and fixed-disk IBM PC systems for offices.",
+      "morningLine": "Computer Gaming World's May-June issue is arriving with modem gaming and baseball-league copy, while PC dealers keep explaining why a hard disk changes the office desk.",
+      "lead": {
+        "headline": "Modem games and baseball leagues reach the game rack",
+        "dek": "Computer Gaming World's May-June 1983 number put modem gaming, an adventure-games contest, and computer baseball league coverage in front of Apple II and strategy players.",
+        "body": "During the week of April 4-10, 1983, the liveliest personal-computer story was still at the game rack. Computer Gaming World Vol. 3 No. 3 carried cover lines for modem gaming, an adventure games contest, and a computer baseball league, with SSI strategy titles such as Knights of the Desert sharing space with reader-driven play. The shelf message was clear: home-computer games were becoming longer, more social, and more magazine-mediated than the arcade conversions beside them.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "CGW previews connected play",
+          "summary": "The May-June Computer Gaming World cover promoted modem gaming beside adventure contests and computer baseball, a compact snapshot of game culture moving through magazines, mail, and phone lines.",
+          "confidence": "High",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "IBM PC XT remains the office aspirational machine",
+          "summary": "IBM's March PC XT announcement was still fresh in April, giving dealers a fixed-disk, expanded PC configuration to pitch to businesses.",
+          "confidence": "High",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 drives the IBM PC software conversation",
+          "summary": "Lotus 1-2-3's integrated spreadsheet, charting, and database pitch made the PC sound less like a hobby machine and more like a daily business tool.",
+          "confidence": "High",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "May micro magazines widen the low-cost shelf",
+          "summary": "Creative Computing's May issue listed machines including the Panasonic JR-200, Video Technology VZ200, and TI 99/4A, showing how crowded the inexpensive home-computer aisle had become.",
+          "confidence": "High",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC: integrated spreadsheet, database, and graphics package gaining business attention."
+        },
+        {
+          "name": "Zork I",
+          "detail": "Apple II/TRS-80/CP/M and other micros: Infocom text adventure still defining parser play."
+        },
+        {
+          "name": "Ultima II",
+          "detail": "Apple II and other micros: role-playing sequel still prominent in computer-game coverage."
+        },
+        {
+          "name": "Knights of the Desert",
+          "detail": "Apple II/Atari: SSI World War II strategy title advertised to Computer Gaming World readers."
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and IBM PC: word-processing staple still quoted in business-software ads."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 computer games",
+          "items": [
+            "Zork I",
+            "Ultima II",
+            "Wizardry",
+            "Knights of the Desert",
+            "Choplifter"
+          ]
+        },
+        {
+          "label": "Top 5 movies",
+          "items": [
+            "Tootsie",
+            "Spring Break",
+            "The Outsiders",
+            "Max Dugan Returns",
+            "High Road to China"
+          ]
+        },
+        {
+          "label": "Top 5 music",
+          "items": [
+            "Billie Jean - Michael Jackson",
+            "You Are - Lionel Richie",
+            "Come On Eileen - Dexys Midnight Runners",
+            "Hungry Like the Wolf - Duran Duran",
+            "Do You Really Want to Hurt Me - Culture Club"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "A 10 MB fixed disk made the XT a premium office quote."
+        },
+        {
+          "item": "Computer Gaming World",
+          "price": "$2.75 cover price",
+          "note": "The May-June 1983 issue carried modem gaming and strategy-game coverage."
+        },
+        {
+          "item": "300-baud modem",
+          "price": "commonly a premium add-on",
+          "note": "Modem play still required patience, phone time, and compatible software."
+        },
+        {
+          "item": "Blank 5.25-inch disks",
+          "price": "shop-counter staple",
+          "note": "Game saves, BASIC programs, and office files kept disk boxes moving."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Adventure contest fills the mailbag",
+          "text": "CGW tied adventure play to reader submissions, maps, and magazine-mediated competition."
+        },
+        {
+          "headline": "Baseball season reaches the keyboard",
+          "text": "Computer baseball league coverage matched April's real-world opening-week mood."
+        },
+        {
+          "headline": "Hard disks become a sales demo",
+          "text": "The PC XT made fixed storage easier to explain to managers who had outgrown floppy-only routines."
+        },
+        {
+          "headline": "Low-cost micros crowd the aisle",
+          "text": "May magazine coverage kept inexpensive home computers visible beside Apple II and Atari software."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Billie Jean",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "You Are",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 3,
+          "title": "Come On Eileen",
+          "artist": "Dexys Midnight Runners"
+        },
+        {
+          "rank": 4,
+          "title": "Hungry Like the Wolf",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 5,
+          "title": "Do You Really Want to Hurt Me",
+          "artist": "Culture Club"
+        }
+      ],
+      "periodAd": {
+        "headline": "This week at the computer counter",
+        "summary": "Ask for Apple II adventures, SSI strategy games, Lotus 1-2-3 demonstrations, 300-baud modem options, and IBM PC XT fixed-disk quotes.",
+        "tagline": "Bring this notice for a blank-disk and printer-paper estimate."
+      },
+      "market": {
+        "headline": "Games grow social as offices ask for hard disks",
+        "summary": "Early April 1983 set a useful split screen: magazines promoted modem play and league gaming for home-computer owners while office buyers weighed the IBM PC XT and Lotus 1-2-3.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          2,
+          4
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Challenger launches on STS-6",
+        "summary": "Space shuttle Challenger lifted off on its maiden flight April 4, 1983, and the mission included the first U.S. spacewalk of the shuttle program on April 7.",
+        "confidence": "High",
+        "sourceRefs": [
+          8,
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-04-04.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Computer Gaming World Vol. 3 No. 3 was the May-June 1983 issue and advertised modem gaming, an adventure games contest, and computer baseball league coverage.",
+            "confidence": "High",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT in March 1983 with a 10 MB fixed disk and a roughly $4,995 entry configuration.",
+            "confidence": "High",
+            "sourceRefs": [
+              2,
+              3
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was an early-1983 IBM PC integrated spreadsheet/database/graphics package.",
+            "confidence": "High",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Creative Computing May 1983 listed coverage of Panasonic JR-200, Video Technology VZ200, and TI 99/4A machines.",
+            "confidence": "High",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Music ranking uses a Cash Box chart mirror for the week ending April 9, 1983.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              6
+            ]
+          },
+          {
+            "claim": "Movie ranking uses Box Office Mojo domestic weekend April 8-10, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              7
+            ]
+          },
+          {
+            "claim": "NASA records STS-6 as Challenger's maiden flight, launched April 4, 1983, with the first U.S. shuttle-program spacewalk on April 7.",
+            "confidence": "High",
+            "sourceRefs": [
+              8,
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Computer Gaming World Vol. 3 No. 3 May-June 1983 PDF",
+          "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+        },
+        {
+          "label": "Video Game History Foundation catalog record for Computer Gaming World Vol. 3 No. 3",
+          "url": "https://library.gamehistory.org/repositories/2/archival_objects/8953"
+        },
+        {
+          "label": "Christian Science Monitor: IBM upgrades its Personal Computer, March 9 1983",
+          "url": "https://www.csmonitor.com/1983/0309/030939.html"
+        },
+        {
+          "label": "PC World May 1983 IBM XT special report scan",
+          "url": "https://vintageapple.org/pcworld/pdf/PC_World_8305_V1N3_May_1983.pdf"
+        },
+        {
+          "label": "Christian Science Monitor: software makers and Lotus Development, February 15 1983",
+          "url": "https://www.csmonitor.com/1983/0215/021539.html"
+        },
+        {
+          "label": "Creative Computing May 1983 article index",
+          "url": "https://www.atarimagazines.com/creative/index/index.php?issue=v9n5"
+        },
+        {
+          "label": "Cash Box Top 100 Singles, week ending April 9 1983",
+          "url": "http://www.tropicalglen.com/Archives/80s_files/19830409.html"
+        },
+        {
+          "label": "Box Office Mojo domestic weekend April 8-10 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W14/"
+        },
+        {
+          "label": "NASA STS-6 mission archive",
+          "url": "https://www.nasa.gov/mission/sts-6/"
+        },
+        {
+          "label": "NASA Space Shuttle mission chronology, STS-6",
+          "url": "https://science.ksc.nasa.gov/shuttle/missions/sts-6/mission-sts-6.html"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: modem opponents",
+          "copy": "Local Apple II owner seeks 300-baud games, strategy opponents, and patient evening callers."
+        },
+        {
+          "headline": "For sale: office upgrade fund",
+          "copy": "Two floppy drives, printer stand, and boxed manuals; proceeds go toward a fixed-disk PC quote."
+        }
+      ]
+    },
+    {
+      "currentDate": "2026-07-06",
+      "historicDate": "1983-03-21",
+      "displayDate": "Week of March 21-27, 1983",
+      "edition": "Issue 034 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "Warm aged newsprint with red and blue section flags, dense classified-style modules, arcade and home-computer retail cues, and halftone photo blocks.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly Computer & Culture Chronicle",
+        "dateline": "Week of March 21-27, 1983",
+        "price": "35 cents",
+        "date": "Week of March 21-27, 1983",
+        "issue": "Issue 034"
+      },
+      "layoutPlan": "Lead with the March-April Computer Gaming World shelf story, then flank it with IBM PC XT/Lotus office notes, store-shelf lists, charts, prices, and classifieds.",
+      "sectionChrome": [
+        "Arcade & Apple II",
+        "IBM PC Counter",
+        "Shelf Watch",
+        "Price Watch",
+        "Culture Ledger"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-03-21.jpg",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of March 21-27, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A late-March 1983 browse through the computer counter finds adventure games, IBM PC fixed-disk talk, and 300-baud communications competing for the same readers.",
+      "morningLine": "Computer-game magazines keep Apple II adventures in the window while office buyers ask whether the IBM PC XT and Lotus 1-2-3 belong on the spring budget.",
+      "lead": {
+        "headline": "Game shelves lean into adventures and strategy",
+        "dek": "Computer Gaming World's March-April issue put Zork, Ultima II, The Cosmic Balance, and a 1983 game-industry report in front of readers as stores balanced arcade action with deeper Apple II play.",
+        "body": "During the week of March 21-27, 1983, the strongest personal-computer culture signal came from the game rack. Computer Gaming World Vol. 3 No. 2 carried a report on computer games in 1983, coverage of The Cosmic Balance, an overview of Zork, and a review of Ultima II. The mix shows why late-March shoppers saw computer games as more than arcade imitations: role-playing, text adventures, and strategy titles were becoming durable reasons to own a disk drive.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "CGW spotlights computer games in 1983",
+          "summary": "Computer Gaming World Vol. 3 No. 2 led with a 1983 games report and coverage of strategy, adventure, and role-playing titles.",
+          "confidence": "High",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Ultima II keeps Apple II RPGs visible",
+          "summary": "The March-April Computer Gaming World issue included an Ultima II review, keeping Sierra's time-travel role-playing game prominent on Apple II shelves.",
+          "confidence": "High",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "title": "IBM PC XT remains the office question",
+          "summary": "IBM's March 1983 PC XT introduction kept fixed-disk personal computers in the business press and dealer conversations.",
+          "confidence": "High",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "title": "Lotus 1-2-3 anchors PC software talk",
+          "summary": "Early 1983 office buyers paired IBM PC hardware comparisons with Lotus 1-2-3, the integrated spreadsheet/database/graphics package that shipped for the IBM PC.",
+          "confidence": "High",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC: integrated spreadsheet, database, and graphics package for office buyers."
+        },
+        {
+          "name": "Ultima II",
+          "detail": "Apple II: role-playing sequel visible in Computer Gaming World's March-April issue."
+        },
+        {
+          "name": "Zork I",
+          "detail": "Apple II, TRS-80, and other micros: Infocom text adventure with strong shelf life."
+        },
+        {
+          "name": "The Cosmic Balance",
+          "detail": "Apple II and Atari 8-bit: strategic space combat covered by Computer Gaming World."
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and IBM PC: word processing mainstay for small offices."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 computer games",
+          "items": [
+            "Ultima II",
+            "Zork I",
+            "The Cosmic Balance",
+            "Wizardry",
+            "Choplifter"
+          ]
+        },
+        {
+          "label": "Top 5 movies",
+          "items": [
+            "Spring Break",
+            "The Outsiders",
+            "High Road to China",
+            "Tootsie",
+            "The Black Stallion Returns"
+          ]
+        },
+        {
+          "label": "IBM PC counter",
+          "items": [
+            "IBM PC XT",
+            "Lotus 1-2-3",
+            "dBASE II",
+            "WordStar",
+            "10 MB fixed disk"
+          ]
+        },
+        {
+          "label": "Home-computer rack",
+          "items": [
+            "Apple II disks",
+            "Commodore 64",
+            "Atari 800 software",
+            "VIC-20 cartridges",
+            "300-baud modem ads"
+          ]
+        },
+        {
+          "label": "Magazines",
+          "items": [
+            "Computer Gaming World",
+            "BYTE",
+            "Softline",
+            "Creative Computing",
+            "Compute!"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "The fixed-disk XT remained a premium office purchase."
+        },
+        {
+          "item": "Lotus 1-2-3",
+          "price": "about $495 list",
+          "note": "A high-priced but fast-moving IBM PC productivity package."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "under $600 street in many 1983 ads",
+          "note": "Aggressive pricing kept the C64 prominent at home-computer counters."
+        },
+        {
+          "item": "Atari 2600 cartridges",
+          "price": "often $20-$35",
+          "note": "Console game markdowns and new computer-game shelves competed for the same shoppers."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Zork still sells the parser",
+          "text": "Infocom adventures gave computer stores a word-driven contrast to arcade-style action games."
+        },
+        {
+          "headline": "Strategy gets shelf space",
+          "text": "The Cosmic Balance coverage showed that tactical play had an audience beyond joystick reflexes."
+        },
+        {
+          "headline": "Spring Break opens first",
+          "text": "Spring Break led the March 25-27 domestic weekend box office, ahead of The Outsiders."
+        },
+        {
+          "headline": "Billie Jean stays No. 1",
+          "text": "Michael Jackson's single remained atop the late-March pop chart."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Billie Jean",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Do You Really Want to Hurt Me",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 3,
+          "title": "Shame on the Moon",
+          "artist": "Bob Seger & The Silver Bullet Band"
+        },
+        {
+          "rank": 4,
+          "title": "Hungry Like the Wolf",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 5,
+          "title": "Back on the Chain Gang",
+          "artist": "Pretenders"
+        }
+      ],
+      "periodAd": {
+        "headline": "This week at the computer counter",
+        "summary": "Ask about Apple II adventures, Lotus 1-2-3 demonstrations, 300-baud modem software, and IBM PC XT fixed-disk quotes before Saturday.",
+        "tagline": "Bring this notice for a blank-disk and printer-paper estimate."
+      },
+      "market": {
+        "headline": "Games and office software share the spring window",
+        "summary": "Late March 1983 put two different sales pitches side by side: deeper Apple II games for the home shelf and fixed-disk IBM PC systems with integrated software for the office.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          3,
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-03-21.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "Computer Gaming World Vol. 3 No. 2 was the March-April 1983 issue and listed Computer Games in 1983, The Cosmic Balance, Zork, and Ultima II coverage.",
+            "confidence": "High",
+            "sourceRefs": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT in March 1983 at about $4,995, making fixed-disk IBM PC configurations current late-March sales-floor news.",
+            "confidence": "High",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "Lotus 1-2-3 was an early-1983 IBM PC integrated spreadsheet/database/graphics package.",
+            "confidence": "High",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Music ranking uses Billboard Hot 100 and chart mirrors for March 26, 1983.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              6,
+              7
+            ]
+          },
+          {
+            "claim": "Movie ranking uses Box Office Mojo domestic weekend March 25-27, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              8
+            ]
+          },
+          {
+            "claim": "President Reagan delivered the Strategic Defense Initiative ('Star Wars') address to the nation on March 23, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Computer Gaming World Vol. 3 No. 2 March-April 1983 issue listing",
+          "url": "https://cgwmuseum.org/galleries/index.php?id=9&pub=2&year=1983"
+        },
+        {
+          "label": "Computer Gaming World March-April 1983 table of contents mirror",
+          "url": "http://pdf.textfiles.com/zines/CGW/1983_0304_issue9.pdf"
+        },
+        {
+          "label": "OldGames.sk - Ultima II review in Computer Gaming World 3.2",
+          "url": "https://www.oldgames.sk/en/mags/article/11511"
+        },
+        {
+          "label": "Christian Science Monitor - IBM upgrades its Personal Computer",
+          "url": "https://www.csmonitor.com/1983/0309/030939.html"
+        },
+        {
+          "label": "This Day in Tech History - IBM Introduces PC-XT",
+          "url": "https://thisdayintechhistory.com/03/08/ibm-introduces-pc-xt/"
+        },
+        {
+          "label": "Lotus 1-2-3 overview and 1983 release context",
+          "url": "https://www.britannica.com/technology/Lotus-1-2-3"
+        },
+        {
+          "label": "Billboard Hot 100 mirror for March 26, 1983",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-03-26"
+        },
+        {
+          "label": "Music Charts Archive singles chart March 26, 1983",
+          "url": "https://musicchartsarchive.com/singles-chart/1983-03-26"
+        },
+        {
+          "label": "Box Office Mojo domestic weekend March 25-27, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W12/?sort=gross"
+        },
+        {
+          "label": "Reagan Library - Strategic Defense Initiative (SDI) 'Star Wars' speech, March 23, 1983",
+          "url": "https://www.reaganlibrary.gov/archives/topic-guide/strategic-defense-initiative-sdi-star-wars-speech-03231983"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: Infocom maps",
+          "copy": "Local adventure club seeks Zork hints, sealed clue books, and clean Apple II disks."
+        },
+        {
+          "headline": "PC demo night",
+          "copy": "Dealer offers after-hours Lotus 1-2-3 demonstration on IBM PC hardware by appointment."
+        }
+      ],
+      "worldAnchor": {
+        "headline": "Reagan proposes the 'Star Wars' missile shield",
+        "summary": "In a televised address on March 23, 1983, President Reagan proposed the Strategic Defense Initiative, calling on scientists to render nuclear missiles impotent and obsolete - a plan critics quickly nicknamed Star Wars.",
+        "confidence": "High",
+        "sourceRefs": [
+          9
+        ]
+      }
+    },
+    {
+      "currentDate": "2026-07-05",
+      "historicDate": "1983-03-14",
+      "displayDate": "Week of March 14-20, 1983",
+      "edition": "Issue 033 - Weekly 1982 Computer & Culture Chronicle",
+      "visualProfile": "Mid-March 1983 computer-weekly front page: warm newsprint, game-magazine shelf cues, Bell 103 modem parts, Apple II and Commodore software racks, red and blue section flags.",
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "Weekly Computer & Culture Chronicle",
+        "dateline": "Week of March 14-20, 1983",
+        "price": "35 cents",
+        "date": "Week of March 14-20, 1983",
+        "issue": "Issue 033"
+      },
+      "layoutPlan": "Lead with BYTE magazine modem-building and home telecommunications, then give large shelf space to computer games, Apple II and Commodore software, home-computer prices, movie/music charts, and retail notes.",
+      "sectionChrome": [
+        "On This Week",
+        "Game Shelf",
+        "Software Counter",
+        "Price Watch",
+        "Charts"
+      ],
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-03-14.jpg",
+        "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of March 14-20, 1983.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "This issue catches personal computing in a hands-on week: BYTE readers study a Bell 103 modem project, game shelves keep selling adventures and arcade conversions, and the IBM PC XT announcement still shapes office-counter talk.",
+      "morningLine": "Modem projects, Apple II adventures, Commodore price pressure, and Billie Jean at number one give the computer counter its mid-March rhythm.",
+      "lead": {
+        "headline": "Home-computer readers wire up for the modem age",
+        "dek": "BYTE's March 1983 issue put a Bell 103-compatible originate/answer modem project in front of hobbyists as personal-computer communications moved from curiosity toward routine use.",
+        "body": "During the week of March 14-20, 1983, the computer press kept one eye on telecommunications. BYTE Volume 8 Number 3 listed Steve Ciarcia's Build the ECM-103, an Originate/Answer Modem, a Texas Instruments TMS99532-based Bell 103-compatible project. The article sat beside VIC-20 expansion, COMDEX impressions, storage technology, and retail advertising, a useful snapshot of how hobbyist building, home-computer upgrades, and business microcomputing shared the same magazine rack.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "computerItems": [
+        {
+          "title": "BYTE builds a Bell 103 modem",
+          "summary": "BYTE's March 1983 contents list Steve Ciarcia's ECM-103 originate/answer modem project using the Texas Instruments TMS99532.",
+          "confidence": "High",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "VIC-20 expansion stays practical",
+          "summary": "The same BYTE issue listed a second part on adding a 3K-byte memory board to the VIC-20, a reminder that small home machines were often upgraded by hand.",
+          "confidence": "High",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Computer Gaming World keeps Ultima II visible",
+          "summary": "The March-April 1983 Computer Gaming World issue carried Ultima II coverage while adventure and strategy games remained strong Apple II shelf draws.",
+          "confidence": "High",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "IBM PC XT talk reaches the sales floor",
+          "summary": "After IBM's March 8 PC XT introduction, office buyers spent mid-March comparing fixed-disk IBM configurations with software such as Lotus 1-2-3.",
+          "confidence": "High",
+          "sourceRefs": [
+            4,
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC: integrated spreadsheet, database, and graphics package for office buyers."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Apple II and other micros: the spreadsheet standard still visible in stores."
+        },
+        {
+          "name": "dBASE II",
+          "detail": "CP/M and IBM PC: database software for small-business records."
+        },
+        {
+          "name": "WordStar",
+          "detail": "CP/M and IBM PC: word processing mainstay."
+        },
+        {
+          "name": "Apple DOS 3.3",
+          "detail": "Apple II: the disk system behind many games, utilities, and education titles."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 computer games",
+          "items": [
+            "Ultima II",
+            "Zork I",
+            "Miner 2049er",
+            "Choplifter",
+            "Wizardry"
+          ]
+        },
+        {
+          "label": "Top 5 movies",
+          "items": [
+            "High Road to China",
+            "Tootsie",
+            "10 to Midnight",
+            "Gandhi",
+            "48 Hrs."
+          ]
+        },
+        {
+          "label": "IBM PC counter",
+          "items": [
+            "IBM PC XT",
+            "Lotus 1-2-3",
+            "dBASE II",
+            "WordStar",
+            "monochrome display"
+          ]
+        },
+        {
+          "label": "Home-computer rack",
+          "items": [
+            "Commodore 64",
+            "VIC-20 memory board",
+            "Atari 800 software",
+            "Apple II disks",
+            "Bell 103 modem kits"
+          ]
+        },
+        {
+          "label": "Magazines",
+          "items": [
+            "BYTE",
+            "Computer Gaming World",
+            "Creative Computing",
+            "Softalk",
+            "Compute!"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Bell 103-compatible modem kits",
+          "price": "project and kit pricing varied by supplier",
+          "note": "BYTE's ECM-103 article shows modem building entering hobbyist conversation."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "under $600 street in many 1983 ads",
+          "note": "Aggressive pricing kept the C64 prominent at home-computer counters."
+        },
+        {
+          "item": "IBM Personal Computer XT",
+          "price": "about $4,995 as introduced",
+          "note": "The fixed-disk XT remained a business-class purchase."
+        },
+        {
+          "item": "Atari 2600 cartridges",
+          "price": "often $20-$35",
+          "note": "Console games still sat beside computer-game shelves."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Modems become a project",
+          "text": "Bell 103-compatible hardware gave hobbyists a concrete way to think about computer-to-computer communication."
+        },
+        {
+          "headline": "VIC-20 owners add memory",
+          "text": "Small memory expansions promised more breathing room for BASIC programs and utilities."
+        },
+        {
+          "headline": "Adventure games keep shelf pull",
+          "text": "Ultima II, Zork, and Wizardry gave stores story-driven alternatives to arcade action."
+        },
+        {
+          "headline": "High Road opens first",
+          "text": "High Road to China led the March 18-20 domestic weekend box office."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Billie Jean",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Do You Really Want to Hurt Me",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 3,
+          "title": "Shame on the Moon",
+          "artist": "Bob Seger & The Silver Bullet Band"
+        },
+        {
+          "rank": 4,
+          "title": "Hungry Like the Wolf",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 5,
+          "title": "Back on the Chain Gang",
+          "artist": "Pretenders"
+        }
+      ],
+      "periodAd": {
+        "headline": "This week at the computer counter",
+        "summary": "Ask about Apple II adventures, Commodore memory, a Bell 103 modem project, and an IBM PC XT fixed-disk quote before Saturday.",
+        "tagline": "Bring this notice for a disk-drive and printer estimate."
+      },
+      "market": {
+        "headline": "Communications joins the home-computer pitch",
+        "summary": "Modem projects and magazine coverage showed telecommunications becoming part of the hobbyist upgrade path, while IBM PC XT talk kept business buyers focused on fixed disks and integrated software.",
+        "confidence": "High",
+        "sourceRefs": [
+          0,
+          4,
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Issue date follows Chronicle state file next_start_date=1983-03-14.",
+            "confidence": "High",
+            "sourceRefs": []
+          },
+          {
+            "claim": "BYTE Volume 8 Number 3 listed Steve Ciarcia's Bell 103-compatible ECM-103 modem article and a VIC-20 memory-board article.",
+            "confidence": "High",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Computer Gaming World 3.2 supports the named Ultima II and early-1983 game-shelf context.",
+            "confidence": "High",
+            "sourceRefs": [
+              2,
+              3
+            ]
+          },
+          {
+            "claim": "IBM introduced the PC XT the prior week, making fixed-disk IBM PC configurations current mid-March sales-floor news.",
+            "confidence": "High",
+            "sourceRefs": [
+              4,
+              5
+            ]
+          },
+          {
+            "claim": "Music ranking uses Cash Box and Billboard Hot 100 mirrors for March 19, 1983.",
+            "confidence": "Medium",
+            "sourceRefs": [
+              6,
+              7
+            ]
+          },
+          {
+            "claim": "Movie ranking uses Box Office Mojo domestic weekend March 18-20, 1983.",
+            "confidence": "High",
+            "sourceRefs": [
+              8
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "BYTE Magazine Volume 08 Number 03 contents - March 1983",
+          "url": "https://archive.org/details/byte-magazine-1983-03"
+        },
+        {
+          "label": "BYTE March 1983 ECM-103 modem contents listing",
+          "url": "https://archive.org/details/byte-magazine-1983-03"
+        },
+        {
+          "label": "Computer Gaming World 3.2 issue listing",
+          "url": "https://www.oldgames.sk/en/mag/cgw-9"
+        },
+        {
+          "label": "Computer Gaming World 3.2 - Ultima II review listing",
+          "url": "https://www.oldgames.sk/en/mags/article/11511"
+        },
+        {
+          "label": "Christian Science Monitor - IBM upgrades its Personal Computer",
+          "url": "https://www.csmonitor.com/1983/0309/030939.html"
+        },
+        {
+          "label": "This Day in Tech History - IBM Introduces PC-XT",
+          "url": "https://thisdayintechhistory.com/03/08/ibm-introduces-pc-xt/"
+        },
+        {
+          "label": "Cash Box Top 100 week ending March 19, 1983",
+          "url": "https://tropicalglen.com/Archives/80s_files/19830319.html"
+        },
+        {
+          "label": "Billboard Hot 100 mirror for March 19, 1983",
+          "url": "https://elpee.jp/hot100/week/1983-03-19/"
+        },
+        {
+          "label": "Box Office Mojo domestic weekend March 18-20, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W11/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: Apple II adventure disks",
+          "copy": "Local user group seeks clean copies with manuals; trade BASIC books or blank floppies."
+        },
+        {
+          "headline": "Modem evenings",
+          "copy": "Dealer offers after-hours demonstration of 300-baud terminal software and phone-line setup."
+        }
+      ]
+    },
     {
       "currentDate": "2026-07-04",
       "historicDate": "1983-03-07",
@@ -26,7 +4064,7 @@
         "Charts"
       ],
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-03-07.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-03-07.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of March 7-13, 1983.",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -331,7 +4369,7 @@
       ],
       "pictureDesk": [
         {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-03-07.png",
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-03-07.jpg",
           "alt": "Generated halftone newspaper front page for the week of March 7-13, 1983",
           "caption": "GPT Image 2 visual direction: IBM PC XT business counter with boxed software and a busy home-computer game shelf.",
           "confidence": "Generated visual based on structured issue data."
@@ -371,7 +4409,7 @@
         "Charts"
       ],
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-28.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-28.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of February 28-March 6, 1983",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -716,7 +4754,7 @@
       ],
       "pictureDesk": [
         {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-02-28.png",
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-02-28.jpg",
           "alt": "Generated halftone newspaper front page for the week of February 28-March 6, 1983",
           "caption": "GPT Image 2 visual direction: home-computer game shelf with joystick, disk sleeves, and boxed software.",
           "confidence": "Generated visual based on structured issue data."
@@ -754,7 +4792,7 @@
         "Charts"
       ],
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-21.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-21.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of February 21-27, 1983",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -1093,7 +5131,7 @@
         "Market Note"
       ],
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-14.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-14.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of February 14-20, 1983",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -1427,7 +5465,7 @@
         "texture": "aged newsprint, halftone photos, tight column rules"
       },
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-07.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-02-07.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of February 7-13, 1983",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -1756,7 +5794,7 @@
         "texture": "aged newsprint, halftone photos, tight column rules"
       },
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-31.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-31.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for the week of January 31-February 6, 1983",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -2098,7 +6136,7 @@
         "texture": "aged newsprint, halftone photos, tight column rules"
       },
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.jpg",
         "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of January 24-30, 1983",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -2447,13 +6485,13 @@
       ],
       "pictureDesk": [
         {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.png",
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.jpg",
           "alt": "Generated halftone front page with IBM PC software and home-computer shelf modules",
           "caption": "Generated newspaper front page treatment for the week Lotus 1-2-3 reached IBM PC buyers.",
           "confidence": "Generated visual based on structured issue data."
         },
         {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.png",
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-24.jpg",
           "alt": "Generated newspaper modules for charts, games, and price watch",
           "caption": "Inset modules visualize the week's charts, store shelves, and price notes.",
           "confidence": "Generated visual based on structured issue data."
@@ -2501,7 +6539,7 @@
         "texture": "aged newsprint, halftone photos, tight column rules"
       },
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for Week of January 17-23, 1983.",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -2906,13 +6944,13 @@
       ],
       "pictureDesk": [
         {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.png",
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.jpg",
           "alt": "Halftone of a crowded game-shop counter with cartridge boxes, joystick, and a calculator-like stock ticker strip marked Imagic delayed.",
           "caption": "Halftone of a crowded game-shop counter with cartridge boxes, joystick, and a calculator-like stock ticker strip marked Imagic delayed.",
           "confidence": "Generated visual direction based on structured issue data."
         },
         {
-          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.png",
+          "src": "media/computer-chronicle-gpt-image-2-week-1983-01-17.jpg",
           "alt": "Apple IIe and Commodore 64 boxes sketched as competing shop-window machines.",
           "caption": "Apple IIe and Commodore 64 boxes sketched as competing shop-window machines.",
           "confidence": "Generated visual direction based on structured issue data."
@@ -2958,7 +6996,7 @@
         "texture": "aged newsprint, halftone photos, tight column rules"
       },
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-10.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-10.jpg",
         "alt": "GPT Image 2 newspaper-style Computer Chronicle front page for Week of January 10-16, 1983.",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
@@ -3366,7 +7404,7 @@
         "texture": "warm newsprint"
       },
       "heroImage": {
-        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-03.png",
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-01-03.jpg",
         "alt": "GPT Image 2 vintage newspaper front page for the Computer Chronicle week of January 3-9, 1983",
         "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data for the week of January 3-9, 1983.",
         "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
