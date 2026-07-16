@@ -958,3 +958,35 @@ signal-corner ped density weighting.
   g+y+r===heads, both g and r present; first run had 1 world-luck
   flake, rerun clean). NEXT: item 2 — inspect mode for cars/dogs/
   marshals.
+- **38 INSPECT EVERYTHING — round-five item 2, user seed (2026-07-16)**:
+  the click-to-inspect rig now covers CARS, DOGS and MARSHALS alongside
+  peds — one rig, a `kind` dimension (inspectSubject framing table +
+  inspectAlive checks per kind). Cars: ¾ standoff that FOLLOWS the
+  mover (faster lerps 0.22/0.45; player-leash widened to 12m, subject
+  flee-exit at 130m), persona = driver name + plate echo (plateSys
+  dynamics lookup, monospace badge on the card) + radio/errand lines;
+  taxis get fare lines, buses get Crosstown 14 lines. Dogs: low 1.7m
+  framing on the kit dog, DOG_NAMES persona ("WAFFLE · being a very
+  good dog"), thought pool. Marshals: station persona ("flag marshal,
+  station N" + blue-flag lines) — framing comes from the VIEWER'S
+  approach side, not a fixed forward vector (first attempt buried the
+  camera in the deck rim wall; approach-side framing is the rule for
+  platform-mounted subjects). Screen pick generalized: per-kind accept
+  radii (cars 62px, dogs 40px ≤38m, marshals ≤60m), argmin across all
+  candidates, i<0 guard. inspectPed contract unchanged (info gains
+  kind/plate); NEW debug inspectNearest("car"|"dog"|"marshal"|"ped").
+  Content: CAR_RADIO/CAR_ERRANDS/TAXI_LINES/BUS_LINES/DOG_THOUGHTS/
+  MARSHAL_LINES — all fictional, family-friendly. Verified by LOOKING
+  (loop-shots/38-inspect-all/): 01 van with bubble + card badge GHM 278
+  MATCHING the visible rear plate; 02 follow after 2.5s; 03 WAFFLE low
+  portrait with leash + towering walker; 04 MIRA on her platform beside
+  the golden deck; 05 BASIL-walking-Waffle ped regression. Dog-hunt
+  lesson: city walkers are SPARSE (often promoted:1 at a cluster) — to
+  find a dog, teleport to walkers at traversal indices 3,7,11,...
+  (partition is idx%4===3), not to arbitrary clusters. Suite lesson:
+  the ped-kit partition probe relies on residual camera position from
+  the ped-inspect probe — position-dependent probes must not be
+  separated by teleporting probes (new block moved AFTER it; suite
+  140/140: car probe asserts follow moved 8.4m/close 8.3m, marshal
+  probe asserts station persona). Perf: zero renderables added (logic +
+  DOM only), gate probe green. NEXT: item 3 — park paths + trees.
