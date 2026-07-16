@@ -113,7 +113,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 13. **Balloons/blimp near detail** + fictional banner text.
 14. **Birds** that scatter off sidewalks/wires when the player drives close (roam).
 15. **Steam grates** + vent steam sprites in the city, near-gated.
-16. **Parked-car variety**: plates (reuse #1), roof racks, per-seed dents/rust.
+16. ~~Parked-car variety~~ **DONE 2026-07-15 (iteration 15)** — roof racks/cargo
+    boxes, rocker grime, dents, antennas, mirrored-arm wing mirrors via
+    promotion-pool kits. See iteration log.
 17. **Rooftop detail** visible from the ribbon: AC units, antennas, water towers,
     rooftop pigeons.
 18. **Race roadside life**: pit boards, marshals with flags, camera crews near the
@@ -406,3 +408,35 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   output; no foreign commits touched the game during the pause. Next per
   re-rank: 16 parked-car variety, 20 ambient audio (unlocked), 13-blimp,
   17, 18, 18b, 19; 4b/11 remain freeze-blocked.
+- **15 parked-car variety — backlog item 16 (2026-07-15)**: `parkedKitSys` —
+  pool of 7 add-on kits (mobile 3) promoted onto the nearest untaken parked
+  instances within 34m of the camera (0.5s cadence, plus an ALTITUDE GATE
+  `Xe.position.y <= 26` so the elevated race camera can never promote — the
+  chase view is untouched by construction). Per-kit contents, seeded by spot
+  idx via plateRng so a car keeps its look: roof rack (34%, half carry a
+  colored cargo box), rocker-grime decal quads both sides (62%, 4 atlas
+  variants), door dent decal (30%, seeded side + position), whip antenna
+  (42%), and wing mirrors WITH ARMS (always). Grime/dent atlas =
+  deterministic 512×256 canvas (`buildCarGrimeAtlas`), decal material
+  polygonOffset -2, renderOrder 2, depthWrite off. Debug additions:
+  `detailReport().parked` {spots, promoted, racks, grime, dents, antennas,
+  radius, sample incl y/yaw}, `parkedKitDump()` (kit children world
+  positions), `parkedKitEnable(on)` A/B toggle. Verified by looking
+  (`loop-shots/15-parked-variety/`): quarter = rack rails+bars + attached
+  mirror + antenna + rear plate; side = rust-brown rocker grime band
+  between the wheels; mid-40m = base silhouette (kit demoted past 34m);
+  far-150m unchanged. Dent uses the identical decal path as the verified
+  grime; a sunlit dent close-up needs a dent+light coincidence — polish
+  pass note. GOTCHAS for future probes: (1) the roam camera TWEENS after
+  setRoamPos teleports (seconds for km hops) — poll for the OUTCOME (fresh
+  promotion near the target), never fixed waits; telemetry cameraWorld is
+  NOT Xe in roam. (2) small attachments without visible support (mirrors
+  sans arms) read as floating debris at 5m; the parkedKitEnable A/B
+  screenshot diff is THE tool for "what is that pixel" mysteries. (3)
+  derive shot-hunt anchors from steam/storefront/furniture samples (real
+  curbs — the world offset varies per boot), not hardcoded coords. Perf:
+  chase 1713–1746 calls (base 1794), tris 565.5k–575.1k across two fresh
+  worlds (item-09 accepted median 573k, world noise ±2%; race-view
+  contribution is zero by the altitude gate + lazy build), textures 238–240
+  at chase pre-atlas (the grime atlas doesn't exist until the first roam
+  promotion). Suite 127/127.
