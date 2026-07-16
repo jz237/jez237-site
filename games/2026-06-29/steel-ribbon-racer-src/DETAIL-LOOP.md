@@ -615,3 +615,18 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   133/133 expected. THE VISUAL BACKLOG IS NOW COMPLETE except the two
   freeze-blocked items (4b recessed drivers, 11 road decals) — next:
   final fresh-eyes survey + deploy batch 6 (v3.13.0), then loop end.
+- **22 FINAL SURVEY + DEPLOY BATCH 6 + LOOP END (2026-07-16)**: fresh-eyes
+  survey at all three distances in both modes (`loop-shots/22-final-survey/`):
+  the live race frame shows the pack with name strips/roundels, marshal
+  stations and rooftop kits along the skyline; the street frame shows the
+  #7 player car beside a steaming vent under the NEON DINER marquee; mid
+  and far frames read exactly as the original city. NOTHING in the
+  charter's scope is missing. **v3.13.0 LIVE** (batch 6: items 19/20/21 +
+  probe hardening; index-BndqnYLK.js, 200, 878KB). THE LOOP IS COMPLETE:
+  22 iterations, 19 backlog items shipped (01 plates → 21 facades), suite
+  grown 120 → 133 probes, all deployed. Remaining as FUTURE WORK (outside
+  this loop's charter): 4b recessed drivers + 11 road decals (blocked on a
+  real-FPS perf renegotiation — the geometry freeze stands), plus polish
+  notes logged per iteration (leashed dogs, texting head-tilt, rooftop
+  pigeons, newspaper-box decals). Restart anytime with the /loop prompt in
+  memory steel-ribbon-detail-loop.
