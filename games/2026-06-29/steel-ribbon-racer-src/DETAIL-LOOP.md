@@ -1076,3 +1076,28 @@ signal-corner ped density weighting.
   benches + flowerbeds, ped skin/outfit/hair variety. Round five is
   5/10 shipped. NEXT: item 6 — parked-car glass + door seams + tail
   lamps (parkedKitSys additions).
+- **42 PARKED GLASS + SEAMS + LAMPS — round-five item 6 (2026-07-16)**:
+  parked cars stop being windowless boxes at 3m. parkedKitSys gains TWO
+  meshes per kit on SHARED merged geometries (+2 draws per visible kit
+  max, zero at the gated chase view thanks to the y≤26 altitude gate):
+  (1) glass+seams — per side two dark-glass door windows split by a
+  B-pillar gap, raked-flat windshield (nose = -z on parked bodies) and
+  rear glass, plus 4 thin door-seam strips at x ±1.106 (body face 1.1;
+  seams need ≥0.006 offset or they z-fight); 10 quads, one dark-glass
+  material (0x101A1C-family, rough 0.22 metal 0.55). (2) lamp lenses —
+  vcBaked into the shared vc opaque: 2 dark-red tail (0x681A14) + 2
+  pale head (0xD0D0D0) at the body corners; parked = never lit. Always
+  on when a kit promotes (100% of near cars get windows — that was THE
+  survey finding). Verified by LOOKING (loop-shots/42-parked-glass/):
+  side 3m = two windows + pillar + seams; nose 3m = windshield, pale
+  lenses, mirrors AND the front plate STEEL STATE BBP 281 readable
+  (the "missing" rear plate in one frame was angle/lighting — plates
+  report 130/130, front shot proves the system); kit ON/OFF pair =
+  survey box vs real car, night and day. Bonus frame: full kit (glass
+  + seams + grime + dent + mirror) on one yellow sedan. Probe-contract
+  note: the parked-variety probe asserts kit CHILD COUNT — kids 7→9
+  with the two new meshes (legitimate contract bump, not probe-gaming).
+  New probe locks glassVerts===40 / lampVerts===16 on promoted kits.
+  Perf gate 2 worlds: 1815-1843 calls / 596-603k tris / 241-242 tex /
+  5518-5567 geo. Suite 144/144 first run. NEXT: item 7 — start-line
+  paddock clutter (race-mode real estate).
