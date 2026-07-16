@@ -55,6 +55,45 @@
   let newBest = false;
   let stageCarry = null;     // snapshot at stage entry (for RESTART STAGE)
 
+  // ---- attract mode (the autopilot demo) -----------------------------------
+  // Boots to the title; if nobody touches anything, the demo pilot plays the
+  // whole campaign, then hands the title back and waits to do it again. Any
+  // input at all drops the player straight back to the menu.
+  const ATTRACT_IDLE = 10;   // seconds of quiet on the title before the demo runs
+  const DEMO_DIFF = 'normal';
+  let isDemo = false, pilot = null, demoAbort = false, idleT = 0, demoRetry = 0, winT = 0;
+  const canDemo = () => !!(window.TDemo && window.TDemo.createPilot);
+  const grabbed = (i) => i.startPressed || i.firePressed || i.jumpPressed || i.pausePressed ||
+    i.leftPressed || i.rightPressed || i.upPressed || i.downPressed ||
+    i.morphPressed || i.switchPressed || i.bombPressed || i.linePressed;
+  // catch every key/tap, not just the mapped ones — "press any key" should mean it
+  window.addEventListener('keydown', () => { if (isDemo) demoAbort = true; });
+  window.addEventListener('pointerdown', () => { if (isDemo) demoAbort = true; });
+
+  function startDemo() {
+    if (!canDemo()) return;
+    isDemo = true; demoAbort = false; demoRetry = 0; winT = 0;
+    pilot = window.TDemo.createPilot();
+    audio.rollVoice();
+    planIdx = 0; continues = 0; newBest = false;
+    carry = { lives: 3, score: 0, gems: 0, weapons: { spread: 2, beam: 0, bounce: 0 },
+      weapon: 'spread', bombs: 3, lines: 3 };
+    loadStage();
+  }
+  function endDemo() {
+    isDemo = false; pilot = null; demoAbort = false; idleT = 0;
+    mode = 'title'; menuIdx = 0;
+    audio.startMusic('title');
+  }
+  // the pilot ran out of lives: re-arm quietly and keep the show on the road
+  function demoWiped() {
+    if (++demoRetry > 2) { demoRetry = 0; planIdx++; }
+    if (planIdx >= PLAN.length) { endDemo(); return; }
+    const base = stageCarry ? JSON.parse(JSON.stringify(stageCarry)) : {};
+    carry = Object.assign(base, { lives: 3, energy: 100 });
+    loadStage();
+  }
+
   // ---- high scores (local top 5) -------------------------------------------
   const HISCORE_KEY = 'turrican2_hiscores_v1';
   const LB_URL = 'https://game-scores.jez237.workers.dev/scores/turrican-2';
@@ -139,7 +178,8 @@
     const level = D.buildLevel(p.world, p.stage);
     if (carry) carry.energy = 100;
     stageCarry = JSON.parse(JSON.stringify(carry));
-    state = E.createGame(level, carry, { difficulty: settings.difficulty });
+    state = E.createGame(level, carry, { difficulty: isDemo ? DEMO_DIFF : settings.difficulty });
+    if (isDemo && pilot) pilot.reset();
     renderer.setLevel(level);
     audio.startMusic(level.world);
     if (level.type === 'shmup' && p.stage === 0) audio.playVoice('shmup', true);
@@ -159,9 +199,10 @@
     carry = { lives: p.lives, score: p.score, gems: p.gems, weapons: p.weapons,
       weapon: p.weapon, bombs: p.bombs, lines: p.lines, energy: 100 };
     planIdx++;
+    demoRetry = 0;
     if (planIdx >= PLAN.length) {
-      mode = 'win'; audio.stopMusic(); audio.play('victory'); audio.playVoice('victory', true);
-      newBest = pushScore(p.score, 'CLEAR');
+      mode = 'win'; winT = 0; audio.stopMusic(); audio.play('victory'); audio.playVoice('victory', true);
+      newBest = isDemo ? false : pushScore(p.score, 'CLEAR');   // the demo doesn't get a high score
       return;
     }
     mode = 'stageclear'; stageClearT = 2.2; audio.play('complete'); audio.playVoice('clear');
@@ -181,16 +222,27 @@
     // global keys
     if (inp.mutePressed) audio.toggleMute();
 
+    // the demo yields the moment a human touches anything
+    if (isDemo && (demoAbort || grabbed(inp))) { endDemo(); drawTitle(); return; }
+
     if (mode === 'title') {
-      if (inp.upPressed) { menuIdx = (menuIdx + 1) % 2; audio.play('gem'); }
-      if (inp.downPressed) { menuIdx = (menuIdx + 1) % 2; audio.play('gem'); }
+      const N = 3;
+      if (inp.upPressed) { menuIdx = (menuIdx + N - 1) % N; audio.play('gem'); }
+      if (inp.downPressed) { menuIdx = (menuIdx + 1) % N; audio.play('gem'); }
       if (inp.startPressed || inp.firePressed) {
         audio.resume();
         if (menuIdx === 0) newRun();
+        else if (menuIdx === 1) startDemo();
         else { mode = 'options'; optIdx = 0; }
         audio.play('power');
+        idleT = 0;
+      } else if (grabbed(inp)) {
+        idleT = 0;                                   // somebody's there — hold the attract off
+      } else {
+        idleT += dt;
+        if (idleT > ATTRACT_IDLE && canDemo()) startDemo();
       }
-      drawTitle();
+      if (mode === 'title') drawTitle();
       return;
     }
     if (mode === 'options') {
@@ -228,18 +280,21 @@
       return;
     }
     if (mode === 'win') {
-      if (inp.startPressed) { mode = 'title'; audio.startMusic('title'); }
+      if (isDemo) { winT += dt; if (winT > 9) { endDemo(); drawTitle(); return; } }
+      else if (inp.startPressed) { mode = 'title'; audio.startMusic('title'); }
       renderer.render(state, 0);
       drawWin();
       drawVoiceToast(dt);
+      if (isDemo) drawDemoTag();
       return;
     }
     if (mode === 'intro') {
       introT -= dt;
       renderer.render(state, dt);
       drawIntroCard();
-      if (introT <= 0 || inp.startPressed) mode = 'playing';
+      if (introT <= 0 || (!isDemo && inp.startPressed)) mode = 'playing';
       drawVoiceToast(dt);
+      if (isDemo) drawDemoTag();
       return;
     }
     if (mode === 'stageclear') {
@@ -247,6 +302,7 @@
       renderer.render(state, dt);
       drawStageClear();
       if (stageClearT <= 0) loadStage();
+      if (isDemo) drawDemoTag();
       return;
     }
     if (mode === 'paused') {
@@ -272,7 +328,9 @@
     acc += dt;
     let steps = 0;
     while (acc >= D.DT && steps < 5) {
-      E.step(state, inp, D.VIEW_W, D.VIEW_H);
+      // the autopilot writes a fresh input frame per tick, exactly like a pad
+      const tick = isDemo && pilot ? pilot.frame(state) : inp;
+      E.step(state, tick, D.VIEW_W, D.VIEW_H);
       acc -= D.DT; steps++;
       // consume sfx / music events
       for (const ev of state.events) {
@@ -292,10 +350,13 @@
         }
       }
       // one-shot edges must not replay into catch-up steps (double bomb bug)
-      inp.jumpPressed = inp.firePressed = inp.morphPressed = inp.switchPressed = false;
-      inp.bombPressed = inp.linePressed = inp.jumpReleased = false;
+      if (!isDemo) {
+        inp.jumpPressed = inp.firePressed = inp.morphPressed = inp.switchPressed = false;
+        inp.bombPressed = inp.linePressed = inp.jumpReleased = false;
+      }
       if (state.won) { nextStage(); break; }
       if (state.gameOver) {
+        if (isDemo) { demoWiped(); break; }
         mode = 'gameover'; audio.stopMusic(); audio.play('gameover'); audio.playVoice('gameover', true);
         newBest = pushScore(state.player.score, stageLabel());
         break;
@@ -303,6 +364,7 @@
     }
     if (mode === 'playing') renderer.render(state, dt);
     drawVoiceToast(dt);
+    if (isDemo && mode === 'playing') drawDemoTag();
   }
 
   // ---- menu / overlay drawing --------------------------------------------
@@ -387,10 +449,10 @@
     dx.restore();
     centerText('— enhanced browser tribute —', DW / 2, DH / 2 - 10, 14, 'rgba(200,210,255,0.6)', 'normal');
     // menu
-    const items = ['START MISSION', 'OPTIONS'];
+    const items = ['START MISSION', 'WATCH DEMO', 'OPTIONS'];
     for (let i = 0; i < items.length; i++) {
       const sel = i === menuIdx;
-      const y = DH / 2 + 46 + i * 34;
+      const y = DH / 2 + 40 + i * 32;
       if (sel) {
         dx.save(); dx.shadowColor = '#ffd23f'; dx.shadowBlur = 10;
         centerText('▶ ' + items[i] + ' ◀', DW / 2, y, 22, '#ffd23f', '900'); dx.restore();
@@ -398,12 +460,36 @@
         centerText(items[i], DW / 2, y, 20, 'rgba(200,210,255,0.75)', 'bold');
       }
     }
-    centerText('DIFFICULTY: ' + D.DIFFICULTY[settings.difficulty].label, DW / 2, DH / 2 + 122, 13, 'rgba(255,210,63,0.7)', 'bold');
+    centerText('DIFFICULTY: ' + D.DIFFICULTY[settings.difficulty].label, DW / 2, DH / 2 + 134, 13, 'rgba(255,210,63,0.7)', 'bold');
     const best = loadScores()[0];
     if (best) centerText('HI-SCORE  ' + String(best.score).padStart(7, '0') + '  (' + best.stage + ')', DW / 2, 40, 15, 'rgba(139,233,255,0.8)', 'bold');
     if (globalBest) centerText('GLOBAL  ' + String(globalBest.score || 0).padStart(7, '0') + '  ' + (globalBest.initials || globalBest.name || '???'), DW / 2, 62, 13, 'rgba(255,210,63,0.75)', 'bold');
-    centerText('MOVE ←→ · JUMP SPACE · FIRE J/X · AIM ↑↓ · MORPH SHIFT · SWITCH Q · FREEZE C · PAUSE P', DW / 2, DH / 2 + 150, 12, 'rgba(200,210,255,0.65)', 'normal');
+    centerText('MOVE ←→ · JUMP SPACE · FIRE J/X · AIM ↑↓ · MORPH SHIFT · SWITCH Q · FREEZE C · PAUSE P', DW / 2, DH / 2 + 158, 12, 'rgba(200,210,255,0.65)', 'normal');
     centerText('v' + D.VERSION, DW - 40, DH - 20, 12, 'rgba(255,255,255,0.4)', 'normal');
+  }
+  // attract-mode badge: below the HUD strip, above the boss bar's turf
+  function drawDemoTag() {
+    const pulse = 0.55 + Math.sin(uiT * 3.2) * 0.45;
+    dx.save();
+    dx.textAlign = 'center'; dx.textBaseline = 'middle';
+    const label = 'DEMO PLAY';
+    dx.font = '900 15px "Trebuchet MS", system-ui, sans-serif';
+    const w = dx.measureText(label).width + 54;
+    dx.globalAlpha = 0.9;
+    dx.fillStyle = 'rgba(6,8,22,0.66)';
+    dx.fillRect(DW / 2 - w / 2, 50, w, 28);
+    dx.strokeStyle = 'rgba(108,243,255,0.45)'; dx.lineWidth = 1;
+    dx.strokeRect(DW / 2 - w / 2 + 0.5, 50.5, w - 1, 27);
+    dx.globalAlpha = 0.55 + Math.sin(uiT * 2) * 0.2;
+    dx.fillStyle = '#ff5d7a';
+    dx.beginPath(); dx.arc(DW / 2 - w / 2 + 18, 64, 5, 0, 7); dx.fill();
+    dx.globalAlpha = 1;
+    dx.fillStyle = '#6cf3ff'; dx.fillText(label, DW / 2 + 9, 65);
+    dx.globalAlpha = pulse;
+    dx.font = 'bold 14px "Trebuchet MS", system-ui, sans-serif';
+    dx.fillStyle = '#ffd23f';
+    dx.fillText('PRESS ANY KEY TO PLAY', DW / 2, 96);
+    dx.restore();
   }
   function drawOptions() {
     bgPanel();
@@ -642,6 +728,8 @@
     voice: { roll() { audio.rollVoice(); return audio.getVoiceSet(); },
              set() { return audio.getVoiceSet(); },
              say(n) { audio.resume(); audio.playVoice(n, true); } },
+    demo: { start: startDemo, stop: endDemo, get on() { return isDemo; },
+            get idle() { return idleT; }, get stage() { return planIdx; } },
   };
   function snap() {
     if (!state) return { mode };
