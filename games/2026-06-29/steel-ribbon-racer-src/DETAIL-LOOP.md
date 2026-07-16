@@ -753,3 +753,7 @@ versions stay blocked on the perf renegotiation.
   masks a miss); Esc exit verified; ped-click switch verified. HUD
   elements eat clicks (pointer target guard) — by design. Zero render
   cost (DOM + one screen-space pass per click). Suite 138/138 expected.
+- **DEPLOY BATCH 9 (2026-07-16): v3.16.0 LIVE** — ped inspect mode verified
+  live (index-CjKqE_H2.js, 200). Round three continues: next = newspaper
+  boxes (the last wishlist crumb from item 07), then a fresh-eyes pass over
+  the inspect feature on more personas.
