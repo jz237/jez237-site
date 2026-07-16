@@ -773,3 +773,14 @@ versions stay blocked on the perf renegotiation.
   Suite 139/139 expected. PYTHON-HEREDOC GOTCHA: a "\\n" in a python
   replacement string lands as a literal backslash-n in JS and vite fails
   with "Expected unicode escape" — use real newlines in the new text.
+- **31 FINAL SURVEY + DEPLOY BATCH 10 + ROUND THREE END (2026-07-16)**:
+  closing survey (`loop-shots/31-final-survey-3/`) — the race frame shows
+  #9's tail roundel dead ahead with the pack and a marshal station on the
+  rail; street/mid/far all read right. **v3.17.0 LIVE** (batch 10,
+  index-BYPPv-nh.js, 200). ROUND THREE COMPLETE: ped inspect mode (the
+  user's headline ask) + newspaper boxes, suite 137→139, deploys v3.16.0
+  + v3.17.0. GRAND TOTAL across three rounds: 31 iterations, 27 items,
+  suite 120→139 probes, 10 live deploy batches (v3.8.0→v3.17.0). The
+  only remaining known work: full-fat 4b/11 behind the real-FPS perf
+  renegotiation. The world looks back when you look closely — and now it
+  talks, too.
