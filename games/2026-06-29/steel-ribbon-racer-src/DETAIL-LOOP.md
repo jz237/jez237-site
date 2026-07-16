@@ -990,3 +990,33 @@ signal-corner ped density weighting.
   140/140: car probe asserts follow moved 8.4m/close 8.3m, marshal
   probe asserts station persona). Perf: zero renderables added (logic +
   DOM only), gate probe green. NEXT: item 3 — park paths + trees.
+- **39 PARK PATHS + TREES — round-five item 3 (2026-07-16)**: the empty
+  lawn blocks finally have life. parkSys/buildParks runs in the world
+  build right after buildStreetSigns: grid cells qualify when clear of
+  the ribbon corridor (Pn ≥26m), ALL building footprints (the Mn
+  registry — rooftopSys.spots only holds TALL towers; Mn carries every
+  placer incl. suburban houses A/D and shops ot, with true hw/hd),
+  ponds and outskirt Sa scenery; 12 cells picked deterministically
+  (plateRng 0x9a4b17, mobile 6). Each cell gets a bowed 2.3m gravel
+  path strip (8 segs, terrain-following He()+0.05, ALL cells merged
+  into ONE vertex-colored mesh — raycast-inert so the roam ground/water
+  ray never sees it) and pine clusters along the path (fresh
+  trunk/canopy InstancedMesh pair reusing the outskirt conifer recipe
+  at 0.5-0.9 scale; trees stay ≥3m off street edges via ka, ≥10 Pn
+  clearance, ≥4m from any Mn footprint, and register kn("tree",...,10)
+  so the road-safety audit stays clean — margin 10, NOT the outskirt
+  145, or every city tree flags unsafe). TWO LESSONS: (1) vertex colors
+  are LINEAR — my 0.8-range "gravel" rendered as a BLOWN-OUT WHITE
+  RIBBON under sun+bloom (banner-washout family); linear ~0.4 reads as
+  proper pale gravel. (2) rooftopSys.spots is NOT the building registry
+  — Mn is (houses/garages included). Verified by LOOKING
+  (loop-shots/39-parks/): near = pocket green with flanking pines and
+  a sandy strip; mid 45m = two paths + pine pairs beside the roam car;
+  far 150m = multiple cells read as genuine aerial parkland (the
+  deliberate at-distance delta reads natural, not noisy). Perf gate 2
+  worlds: 1832-1890 calls / 581-598k tris / 234-240 tex / 5514-5561
+  geo — parks cost +3 draws (path mesh + 2 IMs) and ~5k tris, absorbed
+  in world noise. detailReport.parks {cells,trees,pathTris,sample} +
+  parksEnable(on). Suite 141/141 (parks probe: cells≥4, trees≥8,
+  toggle). NEXT: item 4 — park furniture (benches/flowerbeds along the
+  new paths). New idea for the wishlist: path-side lamp posts at dusk.

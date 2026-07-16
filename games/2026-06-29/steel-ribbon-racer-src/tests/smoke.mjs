@@ -677,6 +677,21 @@ const browser = await chromium.launch({
     JSON.stringify({ heads: shs?.heads, states: shs?.states }),
   );
 
+  // zoom-detail 39 (round five item 3): park paths + trees dress the lawn blocks
+  const pk = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().parks,
+      off = deb.parksEnable(false),
+      offRep = deb.detailReport().parks.enabled;
+    deb.parksEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "parks: gravel paths + tree clusters seeded in lawn cells, toggle works",
+    !!pk && pk.cells >= 4 && pk.trees >= 8 && pk.pathTris > 60 && pk.off === false && pk.offRep === false,
+    JSON.stringify({ cells: pk?.cells, trees: pk?.trees, tris: pk?.pathTris }),
+  );
+
   // zoom-detail item 08: named double-blade street signs at intersections
   const ssg = await page.evaluate(() => window.__steelRibbonDebug.detailReport().streetSigns);
   check(

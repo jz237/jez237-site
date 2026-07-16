@@ -3857,6 +3857,133 @@ const storefrontSys = {
     }
   },
 };
+// ─── Park dressing (zoom-detail 39, round-five item 3): the empty lawn blocks
+// between streets get baked gravel paths + instanced tree clusters. World-gen
+// bake — the far tier IS the feature. Cells must dodge buildings (rooftopSys
+// footprints), ponds, outskirt scenery (Sa) and the ribbon corridor (Pn);
+// trees additionally stay ≥4m off street edges (ka) and register in the Sa
+// audit with a small margin so the road-safety probe stays clean.
+const parkSys = { cells: 0, trees: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
+function buildParks(group, x0, x1, zA, zB, pitch, sw) {
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
+  const zLo = Math.min(zA, zB),
+    zHi = Math.min(Math.max(zA, zB), 240),
+    rng = plateRng(0x9a4b17),
+    cells = [];
+  for (let cx = x0 + pitch * 0.5; cx < x1; cx += pitch)
+    for (let cz = zLo + pitch * 0.5; cz < zHi; cz += pitch) {
+      if (Pn(cx, cz, 26).clearance < 0) continue;
+      let ok = !0;
+      for (const b of Mn)
+        if (Math.abs(b.x - cx) < b.hw + 52 && Math.abs(b.z - cz) < b.hd + 52) {
+          ok = !1;
+          break;
+        }
+      if (ok)
+        for (const p of ponds)
+          if (Math.abs(p.x - cx) < (p.rx || 20) + 56 && Math.abs(p.z - cz) < (p.rz || 20) + 56) {
+            ok = !1;
+            break;
+          }
+      if (ok)
+        for (const s2 of Sa)
+          if (Math.hypot(s2.x - cx, s2.z - cz) < (s2.radius || 6) + 52) {
+            ok = !1;
+            break;
+          }
+      ok && cells.push({ cx, cz });
+    }
+  for (let k = cells.length - 1; k > 0; k--) {
+    const j = (rng() * (k + 1)) | 0,
+      tmp = cells[k];
+    ((cells[k] = cells[j]), (cells[j] = tmp));
+  }
+  const picked = cells.slice(0, mobilePerf ? 6 : 12);
+  if (!picked.length) return;
+  const pos = [],
+    col = [],
+    idx = [],
+    treePts = [],
+    half = pitch * 0.5 - sw * 0.5 - 12;
+  for (let n2 = 0; n2 < picked.length; n2++) {
+    const { cx, cz } = picked[n2],
+      vert = rng() < 0.5,
+      bow = (rng() - 0.5) * 40,
+      SEG = 8,
+      W = 1.15,
+      base = pos.length / 3;
+    for (let s2 = 0; s2 <= SEG; s2++) {
+      const t2 = s2 / SEG,
+        along = -half + t2 * 2 * half,
+        across = Math.sin(t2 * Math.PI) * bow,
+        px = cx + (vert ? across : along),
+        pz = cz + (vert ? along : across),
+        dS = (2 * half) / SEG,
+        dC = ((Math.cos(t2 * Math.PI) * Math.PI) / SEG) * bow,
+        dX = vert ? dC : dS,
+        dZ = vert ? dS : dC,
+        L = Math.hypot(dX, dZ) || 1,
+        nx = (-dZ / L) * W,
+        nz = (dX / L) * W,
+        sh = s2 % 2 ? 0 : -0.03,
+        cr = 0.4 + sh,
+        cg = 0.365 + sh,
+        cb = 0.285 + sh;
+      pos.push(px - nx, He(px - nx, pz - nz) + 0.05, pz - nz, px + nx, He(px + nx, pz + nz) + 0.05, pz + nz);
+      col.push(cr, cg, cb, cr, cg, cb);
+      if (s2 < SEG) {
+        const b2 = base + s2 * 2;
+        idx.push(b2, b2 + 1, b2 + 2, b2 + 1, b2 + 3, b2 + 2);
+      }
+      if (s2 > 0 && s2 < SEG) {
+        const lat = (4.5 + rng() * 4.5) * (s2 % 2 ? 1 : -1);
+        treePts.push({ tx: px + (vert ? lat : rng() * 6 - 3), tz: pz + (vert ? rng() * 6 - 3 : lat) });
+      }
+    }
+    parkSys.cells++;
+    parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
+  }
+  const pg = new BufferGeometry();
+  (pg.setAttribute("position", new Float32BufferAttribute(pos, 3)), pg.setAttribute("color", new Float32BufferAttribute(col, 3)), pg.setIndex(idx), pg.computeVertexNormals());
+  const pm = new Mesh(pg, new MeshStandardMaterial({ vertexColors: !0, roughness: 0.96 }));
+  ((pm.receiveShadow = !0), (pm.raycast = () => {}), group.add(pm), parkSys._vis.push(pm));
+  parkSys.pathTris = idx.length / 3;
+  const trunkGeo = new CylinderGeometry(0.28, 0.42, 1, 6).translate(0, 0.5, 0),
+    canopyGeo = mergeGeometries([
+      new ConeGeometry(2.7, 5.4, 7).translate(0, 1.9, 0),
+      new ConeGeometry(2.1, 4.9, 7).rotateY(0.6).translate(0, 3.35, 0),
+      new ConeGeometry(1.55, 4.1, 7).rotateY(1.2).translate(0, 4.7, 0),
+    ]),
+    canopyColors = [2055221, 3109954, 1589042].map((cc) => new Color(cc)),
+    cap = Math.max(Math.min(treePts.length, mobilePerf ? 24 : 56), 1),
+    trunkIM = new InstancedMesh(trunkGeo, new MeshStandardMaterial({ color: 4926748, roughness: 0.9 }), cap),
+    canopyIM = new InstancedMesh(canopyGeo, new MeshStandardMaterial({ roughness: 0.92 }), cap),
+    dum = new Object3D();
+  let ci = 0;
+  for (const tp of treePts) {
+    if (ci >= cap) break;
+    if (ka(tp.tx, tp.tz, 3)) continue;
+    if (Pn(tp.tx, tp.tz, 6).clearance < 10) continue;
+    let hitB = !1;
+    for (const b of Mn)
+      if (Math.abs(b.x - tp.tx) < b.hw + 4 && Math.abs(b.z - tp.tz) < b.hd + 4) {
+        hitB = !0;
+        break;
+      }
+    if (hitB) continue;
+    const M = 0.5 + rng() * 0.4,
+      y = He(tp.tx, tp.tz),
+      T = 1.7 + rng() * 2.2;
+    (dum.position.set(tp.tx, y, tp.tz), (dum.rotation.y = rng() * Math.PI), dum.scale.set(M, T, M), dum.updateMatrix(), trunkIM.setMatrixAt(ci, dum.matrix));
+    (dum.position.set(tp.tx, y + T, tp.tz), dum.scale.set(M, M, M), dum.updateMatrix(), canopyIM.setMatrixAt(ci, dum.matrix));
+    (canopyIM.setColorAt(ci, canopyColors[ci % 3]), kn("tree", tp.tx, tp.tz, 8 * M, 10), ci++);
+  }
+  ((trunkIM.count = ci), (canopyIM.count = ci), (trunkIM.instanceMatrix.needsUpdate = !0), (canopyIM.instanceMatrix.needsUpdate = !0), canopyIM.instanceColor && (canopyIM.instanceColor.needsUpdate = !0));
+  ((trunkIM.castShadow = !0), (canopyIM.castShadow = !0), (trunkIM.raycast = () => {}), (canopyIM.raycast = () => {}));
+  (group.add(trunkIM), group.add(canopyIM), parkSys._vis.push(trunkIM, canopyIM));
+  parkSys.trees = ci;
+  if (!parkSys.enabled) for (const m2 of parkSys._vis) m2.visible = !1;
+}
 // ─── Street furniture (zoom-detail item 07): hydrants, parking meters, benches
 // and trash cans seeded along the sidewalk lines — four InstancedMeshes sharing
 // the vertex-colored opaque material (4 extra draws for ~200 objects). Permanent
@@ -5019,6 +5146,7 @@ function N1() {
     }
   buildStreetFurniture(i, t, n, r, s, a, o, Pn);
   buildStreetSigns(i, t, n, r, s, a, o, Pn);
+  buildParks(i, t, n, r, s, a, o);
   for (let N = 0; N < 3; N++) {
     if (!pe[N].length) continue;
     const O = new InstancedMesh(de, ie[N], pe[N].length);
@@ -10489,6 +10617,11 @@ window.__steelRibbonDebug = {
     signalLampSys.enabled = on !== !1;
     return signalLampSys.enabled;
   },
+  parksEnable(on) {
+    parkSys.enabled = !!on;
+    for (const m of parkSys._vis) m.visible = parkSys.enabled;
+    return parkSys.enabled;
+  },
   signalHeadStates() {
     const heads = signalLampSys.headsRef || [];
     return {
@@ -10595,6 +10728,7 @@ window.__steelRibbonDebug = {
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
+      parks: { cells: parkSys.cells, trees: parkSys.trees, pathTris: parkSys.pathTris, enabled: parkSys.enabled, sample: parkSys.sample.slice(0, 3) },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
