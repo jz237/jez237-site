@@ -1,4 +1,4 @@
-const CACHE = 'hard-hat-mac-v2.2.2';
+const CACHE = 'hard-hat-mac-v2.3.0';
 const CORE = ['./', './index.html', './game-support.js?v=2.2.0', './manifest.webmanifest', './icon.svg', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', event => {

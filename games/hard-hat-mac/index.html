@@ -20,14 +20,8 @@ html,body{position:fixed;width:100%;height:100%;overflow:hidden;overscroll-behav
 canvas{display:block}
 #c{position:absolute;top:0;left:0;outline:none}
 #c.boxed{outline:1px solid rgba(255,190,60,.16);box-shadow:0 0 44px rgba(255,150,30,.12)}
-#controls{position:fixed;bottom:var(--safe-bottom);left:0;right:0;height:132px;background:linear-gradient(0deg,rgba(6,8,18,.72),rgba(6,8,18,0));display:none;z-index:10;touch-action:none;pointer-events:none;opacity:var(--control-opacity)}
 .ctrl-btn{position:absolute;border-radius:50%;border:2px solid rgba(255,255,255,.46);background:rgba(20,26,46,.64);color:#ffe9c4;font-size:21px;font-weight:bold;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:pointer;-webkit-tap-highlight-color:transparent;pointer-events:auto;backdrop-filter:blur(3px);font-family:inherit;padding:0;transform:scale(var(--control-scale))}
-.ctrl-btn:active,.ctrl-btn.held{background:rgba(255,180,40,.45);border-color:rgba(255,210,90,.9);color:#fff}
-#btn-up{width:56px;height:56px;left:calc(66px + var(--gutter) + var(--safe-left));top:0;transform-origin:center}
-#btn-down{width:56px;height:56px;left:calc(66px + var(--gutter) + var(--safe-left));top:70px;transform-origin:center}
-#btn-left{width:56px;height:56px;left:calc(8px + var(--gutter) + var(--safe-left));top:35px;transform-origin:center}
-#btn-right{width:56px;height:56px;left:calc(124px + var(--gutter) + var(--safe-left));top:35px;transform-origin:center}
-#btn-jump{width:82px;height:82px;right:calc(18px + var(--gutter) + var(--safe-right));top:28px;background:rgba(255,150,20,.52);border-color:rgba(255,210,100,.86);font-size:15px;letter-spacing:1px;transform-origin:center}
+.ctrl-btn:active{background:rgba(255,180,40,.45);border-color:rgba(255,210,90,.9);color:#fff}
 #btn-pause{position:fixed;top:calc(56px + var(--safe-top));right:calc(8px + var(--gutter) + var(--safe-right));width:42px;height:42px;font-size:17px;display:none;z-index:20;transform-origin:center}
 #btn-mute{position:fixed;top:calc(8px + var(--safe-top));right:calc(8px + var(--gutter) + var(--safe-right));width:42px;height:42px;font-size:19px;display:flex;z-index:20;transform-origin:center}
 .sr-only{position:fixed!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
@@ -37,29 +31,13 @@ canvas{display:block}
 #a11y-menu button:focus{outline:3px solid #ffc116;outline-offset:1px}
 #sound-caption{position:fixed;left:50%;bottom:calc(18px + var(--safe-bottom));z-index:24;transform:translateX(-50%);max-width:min(620px,88vw);padding:7px 12px;border:1px solid #ffc11688;border-radius:8px;background:#090d18e8;color:#fff2c7;font:700 13px/1.25 system-ui,sans-serif;text-align:center;pointer-events:none;opacity:0;transition:opacity .12s}
 #sound-caption.show{opacity:1}
-.touch-edit .ctrl-btn{outline:3px dashed #fff7;cursor:move}
-.touch-edit #controls{background:linear-gradient(0deg,#14213bdd,#0a1022bb)}
 .high-contrast #c{filter:contrast(1.12) saturate(1.12)}
 .high-contrast .ctrl-btn{background:rgba(0,0,0,.88);border-color:#fff;color:#fff}
-html.landscape-touch #controls{height:100%;top:0;bottom:0;background:none;opacity:var(--control-opacity)}
-html.landscape-touch #btn-up{left:calc(66px + var(--safe-left));top:calc(50% - 76px)}
-html.landscape-touch #btn-down{left:calc(66px + var(--safe-left));top:calc(50% + 8px)}
-html.landscape-touch #btn-left{left:calc(8px + var(--safe-left));top:calc(50% - 34px)}
-html.landscape-touch #btn-right{left:calc(124px + var(--safe-left));top:calc(50% - 34px)}
-html.landscape-touch #btn-jump{right:calc(22px + var(--safe-right));top:calc(50% - 41px)}
-html.landscape-touch #btn-pause,html.landscape-touch #btn-mute{right:calc(122px + var(--safe-right))}
 @media (prefers-reduced-motion:reduce){.ctrl-btn{backdrop-filter:none}}
 </style>
 </head>
 <body>
 <canvas id="c" tabindex="0" role="application" aria-label="Hard Hat Mac game. Use the menu controls or keyboard to begin."></canvas>
-<div id="controls">
-  <button class="ctrl-btn" id="btn-up" type="button" aria-label="Climb up">▲</button>
-  <button class="ctrl-btn" id="btn-down" type="button" aria-label="Climb down, duck, or jackhammer">▼</button>
-  <button class="ctrl-btn" id="btn-left" type="button" aria-label="Move left">◀</button>
-  <button class="ctrl-btn" id="btn-right" type="button" aria-label="Move right">▶</button>
-  <button class="ctrl-btn" id="btn-jump" type="button" aria-label="Jump">JUMP</button>
-</div>
 <button class="ctrl-btn" id="btn-pause" type="button" aria-label="Pause game">Ⅱ</button>
 <button class="ctrl-btn" id="btn-mute" type="button" aria-label="Mute sound">🔊</button>
 <div id="live-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
@@ -73,12 +51,12 @@ html.landscape-touch #btn-pause,html.landscape-touch #btn-mute{right:calc(122px 
 <script>
 'use strict';
 /* ============================================================
-   HARD HAT MAC — REMASTERED  v2.2
+   HARD HAT MAC — REMASTERED  v2.3
    Complete modern rewrite of the 1983 Apple II classic.
    All original mechanics + new Level 4, power-ups, combos,
    procedural music, global leaderboards, gamepad support.
    ============================================================ */
-const VERSION = 'v2.2.0';
+const VERSION = 'v2.3.0';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/hard-hat-mac';
 const HS_KEY = 'hhm2_highscores';
 const NAME_KEY = 'hhm2_initials';
@@ -91,11 +69,10 @@ const BINDINGS_KEY = 'hhm2_bindings';
 const RESUME_KEY = 'hhm2_resume_v1';
 const REPLAY_KEY = 'hhm2_best_replay_v1';
 const ACHIEVEMENTS_KEY = 'hhm2_achievements_v1';
-const TOUCH_LAYOUT_KEY = 'hhm2_touch_layout_v1';
+const TOUCH_HINT_KEY = 'hhm2_touch_hint_v1';
 
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
-const controlsDiv = document.getElementById('controls');
 const muteBtn = document.getElementById('btn-mute');
 const pauseBtn = document.getElementById('btn-pause');
 const liveStatus = document.getElementById('live-status');
@@ -105,8 +82,6 @@ const coarsePointer = matchMedia('(pointer:coarse)');
 const anyFinePointer = matchMedia('(any-pointer:fine)');
 const forcedTouchMode = new URLSearchParams(location.search).has('touch');
 let touchMode = forcedTouchMode || (coarsePointer.matches && !anyFinePointer.matches);
-let landscapeTouch = false;
-let touchGameplayLayout = false;
 
 // ---------- helpers ----------
 const TAU = Math.PI * 2;
@@ -192,31 +167,16 @@ function saveSettings() {
 let adaptiveFps = 60;
 saveSettings();
 
-let touchLayout={portrait:{},landscape:{}};
-try{touchLayout={...touchLayout,...JSON.parse(localStorage.getItem(TOUCH_LAYOUT_KEY)||'{}')};}catch(e){}
-const movableControlIds=['btn-up','btn-down','btn-left','btn-right','btn-jump'];
-function touchLayoutMode(){return landscapeTouch?'landscape':'portrait';}
-function saveTouchLayout(){try{localStorage.setItem(TOUCH_LAYOUT_KEY,JSON.stringify(touchLayout));}catch(e){}}
-function applyTouchLayout(){
-  const custom=touchLayout[touchLayoutMode()]||{},rect=controlsDiv.getBoundingClientRect();
-  for(const id of movableControlIds){const el=document.getElementById(id),pos=custom[id];if(!pos||!rect.width||!rect.height){el.style.left='';el.style.right='';el.style.top='';continue;}const w=el.offsetWidth||56,h=el.offsetHeight||56;el.style.right='auto';el.style.left=Math.round(clamp(pos.x,0,1)*rect.width-w/2)+'px';el.style.top=Math.round(clamp(pos.y,0,1)*rect.height-h/2)+'px';}
-}
+try{localStorage.removeItem('hhm2_touch_layout_v1');}catch(e){} // pre-v2.3 draggable button layout
 
 // ---------- responsive viewport ----------
 let DPR = 1, W = 0, H = 0, viewW = 0, viewH = 0, viewScale = 1, canvasLeft = 0;
-let controlReserve = 0;
 function resize() {
   const vw = window.innerWidth, vh = window.innerHeight;
   H = Math.min(vh, 960);
   viewScale = vh / H;
-  landscapeTouch = touchMode && vw > vh * 1.28 && vh <= 600;
-  document.documentElement.classList.toggle('landscape-touch',landscapeTouch);
-  controlReserve = touchMode && touchGameplayLayout && !landscapeTouch ? Math.min(136, Math.max(112, H * .17)) : 0;
   const logicalAvailW = Math.floor(vw / viewScale);
-  if (landscapeTouch) {
-    const sideReserve = Math.min(360, Math.max(300, logicalAvailW * .38));
-    W = clamp(logicalAvailW - sideReserve, 420, Math.max(420, Math.round(H * 1.42)));
-  } else if (logicalAvailW > H * 1.05) {
+  if (logicalAvailW > H * 1.05) {
     W = Math.min(logicalAvailW, Math.max(640, Math.round(H * 1.34)));
   } else {
     W = logicalAvailW;
@@ -231,8 +191,7 @@ function resize() {
   canvas.classList.toggle('boxed', canvasLeft > 0);
   document.documentElement.style.setProperty('--gutter', canvasLeft + 'px');
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  viewW = W; viewH = H - controlReserve;
-  requestAnimationFrame(applyTouchLayout);
+  viewW = W; viewH = H;
 }
 resize();
 window.addEventListener('resize', resize);
@@ -546,51 +505,100 @@ function setBinding(action, key, persist=true) {
   if (persist) saveBindings();
 }
 function mergeKeys() {
+  if ((joyTouch || jumpTouches.size) && !(touchMode && (state === 'playing' || state === 'levelIntro'))) clearTouchInput();
   for (const k in keys) keys[k] = kKeys[k] || tKeys[k] || gKeys[k];
   if (jumpQueued) keys.jump=true;
   jumpQueued=false;
 }
-const touchButtonKeys = {'btn-up':'up','btn-down':'down','btn-left':'left','btn-right':'right','btn-jump':'jump'};
-const touchPointers = new Map();
-let touchDrag=null;
-function syncTouchPointers() {
-  for (const key in tKeys) tKeys[key] = false;
-  document.querySelectorAll('#controls .ctrl-btn').forEach(el => el.classList.remove('held'));
-  for (const key of touchPointers.values()) {
-    if (!key) continue;
-    tKeys[key] = true;
-    const id = Object.keys(touchButtonKeys).find(k => touchButtonKeys[k] === key);
-    if (id) document.getElementById(id).classList.add('held');
+// --- touch gameplay: invisible floating joystick (left side) + tap-to-jump (right side) ---
+const JOY_ZONE = 0.55;         // touches starting left of this screen fraction steer, the rest jump
+let joyTouch = null;           // {id, ox, oy, x, y} in client px; ox/oy is the stick base
+let joyEngaged = false;        // deadzone hysteresis
+let touchJoyX = 0;             // analog walk input, -1..1
+const jumpTouches = new Map(); // pointerId -> {x, y} client px, for feedback rings
+function joyRadius() { return 52 * clamp(Number(settings.controlScale) || 1, .85, 1.25); }
+function clearTouchInput() {
+  joyTouch = null; joyEngaged = false; touchJoyX = 0; jumpTouches.clear();
+  for (const k in tKeys) tKeys[k] = false;
+}
+function updateTouchKeys() {
+  for (const k in tKeys) tKeys[k] = false;
+  touchJoyX = 0;
+  if (joyTouch) {
+    const r = joyRadius();
+    let dx = joyTouch.x - joyTouch.ox, dy = joyTouch.y - joyTouch.oy;
+    const len = Math.hypot(dx, dy);
+    if (len > r) { // floating stick: the base trails the thumb past the rim so reversals are instant
+      joyTouch.ox = joyTouch.x - dx / len * r; joyTouch.oy = joyTouch.y - dy / len * r;
+      dx = dx / len * r; dy = dy / len * r;
+    }
+    if (!joyEngaged && len >= r * .22) joyEngaged = true;
+    else if (joyEngaged && len <= r * .12) joyEngaged = false;
+    if (joyEngaged && len > 0) {
+      const nx = dx / len, ny = dy / len;
+      tKeys.left = nx < -.42; tKeys.right = nx > .42;
+      tKeys.up = ny < -.5; tKeys.down = ny > .6; // duck/climb-down needs a firmer downward pull
+      if (tKeys.left || tKeys.right) touchJoyX = clamp(dx / (r * .7), -1, 1);
+    }
   }
+  tKeys.jump = jumpTouches.size > 0;
 }
-function touchKeyAt(x, y) {
-  const el = document.elementFromPoint(x, y)?.closest?.('#controls .ctrl-btn');
-  return el ? touchButtonKeys[el.id] || null : null;
+function gameplayTouch(e) {
+  return touchMode && (state === 'playing' || state === 'levelIntro') && !e.target.closest?.('.ctrl-btn');
 }
-for (const [id, key] of Object.entries(touchButtonKeys)) {
-  const el = document.getElementById(id);
-  el.addEventListener('pointerdown', e => {
-    e.preventDefault(); initAudio(); touchMode = true; resize();
-    if(state==='touchSetup'){touchDrag={id,pointerId:e.pointerId};el.setPointerCapture?.(e.pointerId);return;}
-    if (key==='jump') jumpQueued=true;
-    touchPointers.set(e.pointerId, key); el.setPointerCapture?.(e.pointerId); syncTouchPointers();
-  });
-}
+window.addEventListener('pointerdown', e => {
+  if (!gameplayTouch(e)) return;
+  e.preventDefault(); initAudio();
+  if (!joyTouch && e.clientX < window.innerWidth * JOY_ZONE) {
+    joyTouch = { id: e.pointerId, ox: e.clientX, oy: e.clientY, x: e.clientX, y: e.clientY };
+    joyEngaged = false;
+  } else {
+    jumpTouches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    jumpQueued = true; // preserves taps shorter than one frame
+  }
+  updateTouchKeys();
+});
 window.addEventListener('pointermove', e => {
-  if(touchDrag&&touchDrag.pointerId===e.pointerId){
-    e.preventDefault();const rect=controlsDiv.getBoundingClientRect(),mode=touchLayoutMode();if(rect.width&&rect.height){touchLayout[mode]||={};touchLayout[mode][touchDrag.id]={x:clamp((e.clientX-rect.left)/rect.width,.04,.96),y:clamp((e.clientY-rect.top)/rect.height,.06,.94)};applyTouchLayout();}return;
-  }
-  if (!touchPointers.has(e.pointerId)) return;
-  e.preventDefault(); touchPointers.set(e.pointerId, touchKeyAt(e.clientX, e.clientY)); syncTouchPointers();
+  if (!joyTouch || joyTouch.id !== e.pointerId) return;
+  e.preventDefault();
+  joyTouch.x = e.clientX; joyTouch.y = e.clientY;
+  updateTouchKeys();
 }, {passive:false});
 function releaseTouchPointer(e) {
-  if(touchDrag&&touchDrag.pointerId===e.pointerId){saveTouchLayout();touchDrag=null;announce('Touch control position saved.');return;}
-  if (!touchPointers.has(e.pointerId)) return;
-  touchPointers.delete(e.pointerId); syncTouchPointers();
+  if (joyTouch && joyTouch.id === e.pointerId) { joyTouch = null; joyEngaged = false; }
+  else if (!jumpTouches.delete(e.pointerId)) return;
+  updateTouchKeys();
 }
 window.addEventListener('pointerup', releaseTouchPointer);
 window.addEventListener('pointercancel', releaseTouchPointer);
-window.addEventListener('lostpointercapture', releaseTouchPointer);
+// subtle canvas feedback for the invisible joystick / jump taps, only while touching
+function drawTouchOverlay() {
+  if (!touchMode || (state !== 'playing' && state !== 'levelIntro') || (!joyTouch && !jumpTouches.size)) return;
+  const alpha = clamp(Number(settings.controlOpacity) || .72, .45, 1);
+  ctx.save();
+  if (joyTouch) {
+    const r = joyRadius() / viewScale;
+    const ox = (joyTouch.ox - canvasLeft) / viewScale, oy = joyTouch.oy / viewScale;
+    let dx = (joyTouch.x - joyTouch.ox) / viewScale, dy = (joyTouch.y - joyTouch.oy) / viewScale;
+    const len = Math.hypot(dx, dy);
+    if (len > r) { dx = dx / len * r; dy = dy / len * r; }
+    ctx.globalAlpha = alpha * .16;
+    ctx.fillStyle = '#141a2e';
+    ctx.beginPath(); ctx.arc(ox, oy, r, 0, TAU); ctx.fill();
+    ctx.globalAlpha = alpha * .5;
+    ctx.strokeStyle = '#ffe9c4'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(ox, oy, r, 0, TAU); ctx.stroke();
+    ctx.globalAlpha = alpha * (joyEngaged ? .8 : .5);
+    ctx.fillStyle = joyEngaged ? '#ffc94f' : '#ffe9c4';
+    ctx.beginPath(); ctx.arc(ox + dx, oy + dy, r * .34, 0, TAU); ctx.fill();
+  }
+  for (const t of jumpTouches.values()) {
+    ctx.globalAlpha = alpha * .55;
+    ctx.strokeStyle = '#ffc94f'; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.arc((t.x - canvasLeft) / viewScale, t.y / viewScale, 30, 0, TAU); ctx.stroke();
+  }
+  ctx.restore();
+}
 pauseBtn.addEventListener('click', e => { e.preventDefault(); initAudio(); if (state==='playing') pauseGame(); else if (state==='paused') resumeGame(); });
 
 let state = 'title';
@@ -638,7 +646,7 @@ document.addEventListener('keyup', e => {
 window.addEventListener('blur', () => {
   for (const k in kKeys) kKeys[k]=false;
   jumpQueued=false;
-  clearGamepadKeys(); touchPointers.clear(); syncTouchPointers();
+  clearGamepadKeys(); clearTouchInput();
   if (state==='playing') pauseGame(true);
 });
 document.addEventListener('visibilitychange', () => {
@@ -720,7 +728,6 @@ function navigateBack() {
   SFX.ui();
   if (state === 'controlsSetup') { state='settings';uiFocusId=null;remapAction=null;return; }
   if (state === 'settings') { state = settingsReturnState; uiFocusId = null; return; }
-  if (state === 'touchSetup') { state='settings';uiFocusId=null;document.documentElement.classList.remove('touch-edit');return; }
   if (state==='achievements'){state='settings';uiFocusId=null;return;}
   if (state === 'hsView' || state === 'howto') { goTitle(); return; }
   if (state === 'paused') { resumeGame(); return; }
@@ -733,7 +740,7 @@ let lastPointer = {x:-99, y:-99};
 function stateHasCanvasButtons() {
   return state === 'title' || state === 'paused' || state === 'levelComplete' ||
     state === 'roundComplete' || state === 'gameOver' || state === 'hsEntry' ||
-    state === 'hsView' || state === 'howto' || state === 'settings' || state === 'controlsSetup' || state==='achievements' || state==='touchSetup';
+    state === 'hsView' || state === 'howto' || state === 'settings' || state === 'controlsSetup' || state==='achievements';
 }
 window.addEventListener('pointerdown', e => {
   if (e.target.closest && e.target.closest('.ctrl-btn')) return;
@@ -785,6 +792,8 @@ let camX = 0, camY = 0, camInit = false;
 let gameTime = 0;
 let firstRun = true;
 try { firstRun = !localStorage.getItem(SEEN_KEY); } catch(e) {}
+let touchHintShown = false;
+try { touchHintShown = localStorage.getItem(TOUCH_HINT_KEY) === '1'; } catch(e) {}
 
 const ACHIEVEMENTS={
   firstPaycheck:['FIRST PAYCHECK','Score your first points.'],
@@ -1084,7 +1093,7 @@ function drawBackdrop() {
     // furnace glow along bottom
     const fg = ctx.createLinearGradient(0, viewH-160, 0, viewH+60);
     fg.addColorStop(0, 'rgba(255,90,20,0)'); fg.addColorStop(1, 'rgba(255,110,30,0.28)');
-    ctx.fillStyle = fg; ctx.fillRect(0, viewH-160, viewW, 220+controlReserve);
+    ctx.fillStyle = fg; ctx.fillRect(0, viewH-160, viewW, 220);
     const pulse = 0.1 + 0.05*Math.sin(gameTime*3);
     glow(viewW*0.25 - par2, viewH - 30, 200, '#ff7030', pulse);
     glow(viewW*0.75 - par2, viewH - 30, 240, '#ff8840', pulse);
@@ -1503,10 +1512,10 @@ function genL1(en, tm) {
   resetPlayer(3.2*TILE, 21*TILE - P_H);
   bonusTimerMax = Math.round(110 * tm);
   if (firstRun) {
-    hint(3.2*TILE, 19.6*TILE, touchMode ? 'WALK with ◀ ▶ · JUMP to hop' : `${bindingLabel('left')} + ${bindingLabel('right')} walk · ${bindingLabel('jump')} jump`, () => true);
-    hint(4*TILE+24, 18.4*TILE, touchMode ? '▲ ▼ to climb' : '↑ ↓ / W S to climb', () => true);
+    hint(3.2*TILE, 19.6*TILE, touchMode ? 'DRAG left side to walk · TAP right side to jump' : `${bindingLabel('left')} + ${bindingLabel('right')} walk · ${bindingLabel('jump')} jump`, () => true);
+    hint(4*TILE+24, 18.4*TILE, touchMode ? 'DRAG ▲ ▼ to climb' : '↑ ↓ / W S to climb', () => true);
     hint(13*TILE, 16*TILE, 'Carry girders to the gaps!', () => !!player.carrying);
-    hint(13*TILE, 16*TILE, 'HOLD ▼ on the girder to rivet it!', () => holes.some(h => h.filled && !h.riveted));
+    hint(13*TILE, 16*TILE, touchMode ? 'HOLD drag ▼ on the girder to rivet it!' : 'HOLD ▼ on the girder to rivet it!', () => holes.some(h => h.filled && !h.riveted));
   }
 }
 
@@ -1942,8 +1951,9 @@ function updatePlayer(dt) {
   // horizontal movement (accel-based for feel)
   let target = 0;
   if (!p.jacking) {
-    const keyboardOrTouch = kKeys.left||kKeys.right||tKeys.left||tKeys.right;
-    if (!keyboardOrTouch && Math.abs(gamepadX)>.01) { target=WALK*speedMult*gamepadX;p.facing=Math.sign(gamepadX);p.idleTime=0; }
+    const keyboard = kKeys.left||kKeys.right, touchSteer = tKeys.left||tKeys.right;
+    if (!keyboard && touchSteer && Math.abs(touchJoyX)>.01) { target=WALK*speedMult*touchJoyX;p.facing=Math.sign(touchJoyX);p.idleTime=0; }
+    else if (!keyboard && !touchSteer && Math.abs(gamepadX)>.01) { target=WALK*speedMult*gamepadX;p.facing=Math.sign(gamepadX);p.idleTime=0; }
     else {
       if (keys.left) { target = -WALK * speedMult; p.facing = -1; p.idleTime = 0; }
       if (keys.right) { target = WALK * speedMult; p.facing = 1; p.idleTime = 0; }
@@ -3609,7 +3619,7 @@ function drawHowto(dt) {
     ['🔥', 'Chain pickups fast for a ×5 combo. Extra life at 10k.'],
     ['☀', 'Daily Shift shares one UTC job. Difficulty changes risk and score.'],
     ['', ''],
-    [touchMode ? '📱' : '⌨', touchMode ? 'D-pad walks & climbs · JUMP hops · ▼ ducks / jackhammers'
+    [touchMode ? '📱' : '⌨', touchMode ? 'Drag left side = walk & climb · Tap right side = jump · Drag ▼ = duck / work'
                           : controlSummary()],
   ];
   ctx.textAlign = 'left';
@@ -3648,8 +3658,8 @@ function drawSettings() {
     [
       ['setSfxVolume','SFX VOLUME: '+Math.round(settings.sfxVolume*100)+'%'],['setMusicVolume','MUSIC VOLUME: '+Math.round(settings.musicVolume*100)+'%'],
       ['setCaptions','SOUND CAPTIONS: '+(settings.captions?'ON':'OFF')],['setDeadzone','GAMEPAD DEADZONE: '+Math.round(settings.gamepadDeadzone*100)+'%'],
-      ['setCtrlScale','TOUCH SIZE: '+Math.round(settings.controlScale*100)+'%'],['setCtrlOpacity','TOUCH OPACITY: '+Math.round(settings.controlOpacity*100)+'%'],
-      ['touchSetup','✥  MOVE TOUCH CONTROLS'],['controlsSetup','⌨  REMAP CONTROLS'],
+      ['setCtrlScale','JOYSTICK SIZE: '+Math.round(settings.controlScale*100)+'%'],['setCtrlOpacity','JOYSTICK OPACITY: '+Math.round(settings.controlOpacity*100)+'%'],
+      ['controlsSetup','⌨  REMAP CONTROLS'],
     ],
     [
       ['setGhost','BEST-RUN GHOST: '+(settings.ghost?'ON':'OFF')],['toggleFullscreen',(document.fullscreenElement?'EXIT':'ENTER')+' FULLSCREEN'],
@@ -3683,10 +3693,6 @@ function drawAchievements(){
   const gap=compact?10:9,bw=cols===1?Math.min(520,viewW-54):(viewW-54-gap)/2,bh=compact?49:52,x0=(viewW-(cols*bw+(cols-1)*gap))/2,y0=compact?58:72;
   entries.forEach(([id,[name,desc]],i)=>{const col=i%cols,row=Math.floor(i/cols),x=x0+col*(bw+gap),y=y0+row*(bh+gap),on=!!achievements[id];ctx.fillStyle=on?'rgba(99,145,78,.85)':'rgba(35,43,66,.86)';rr(ctx,x,y,bw,bh,8);ctx.fill();ctx.strokeStyle=on?'#d7ff9b':'#63708f';ctx.stroke();ctx.textAlign='left';ctx.fillStyle=on?'#fff6b0':'#aeb7ca';ctx.font='bold '+(compact?11:13)+'px sans-serif';ctx.fillText((on?'✓ ':'○ ')+name,x+12,y+19,bw-24);ctx.font=(compact?'9':'11')+'px sans-serif';ctx.fillStyle=on?'#e8f6d8':'#8791aa';ctx.fillText(desc,x+12,y+37,bw-24);});
   const backW=Math.min(260,viewW-80);panelBtn('achievementsBack','◀  BACK',viewW/2-backW/2,viewH-(compact?50:66),backW,compact?38:46,true);
-}
-function drawTouchSetup(){
-  drawMenuBackdrop('✥  MOVE TOUCH CONTROLS');uiButtons=[];ctx.textAlign='center';ctx.fillStyle='#e8edf8';ctx.font='14px sans-serif';ctx.fillText('Drag each control to a comfortable position.',viewW/2,viewH<540?62:88,viewW-40);ctx.fillStyle='#9da9c3';ctx.font='12px sans-serif';ctx.fillText('Portrait and landscape layouts are saved separately.',viewW/2,viewH<540?82:112,viewW-40);
-  const bw=Math.min(240,viewW-50),compact=viewH<540;panelBtn('touchReset','RESET THIS LAYOUT',viewW/2-bw/2,compact?96:132,bw,compact?38:44);panelBtn('touchDone','✓  DONE',viewW/2-bw/2,compact?142:188,bw,compact?38:46,true);
 }
 let a11ySignature='';
 let canvasAria='';
@@ -3740,9 +3746,6 @@ function handleUIButton(id) {
   if (id === 'achievements') { state='achievements';uiFocusId=null;SFX.ui();return; }
   if (id === 'achievementsBack') { state='settings';uiFocusId=null;SFX.ui();return; }
   if (id === 'clearResume') { clearResume();announce('Saved shift cleared.');SFX.ui();return; }
-  if (id === 'touchSetup') { touchMode=true;state='touchSetup';uiFocusId=null;document.documentElement.classList.add('touch-edit');resize();SFX.ui();return; }
-  if (id === 'touchReset') { touchLayout[touchLayoutMode()]={};saveTouchLayout();applyTouchLayout();announce('Touch layout reset.');SFX.ui();return; }
-  if (id === 'touchDone') { state='settings';uiFocusId=null;document.documentElement.classList.remove('touch-edit');SFX.ui();return; }
   if (id === 'controlsSetup') { state='controlsSetup';uiFocusId=null;SFX.ui();return; }
   if (id === 'settingsBack') { state=settingsReturnState;uiFocusId=null;SFX.ui();return; }
   if (id === 'controlsBack') { state='settings';uiFocusId=null;SFX.ui();return; }
@@ -3863,6 +3866,11 @@ function updateFixed(dt) {
       toast('📻 '+msg); announce('Level '+level+'. '+LEVEL_NAMES[level-1]+'. '+LEVEL_OBJ[level-1]);
     }
   } else if (state === 'playing') {
+    if (touchMode && !touchHintShown) {
+      touchHintShown = true;
+      try { localStorage.setItem(TOUCH_HINT_KEY, '1'); } catch(e) {}
+      toast('👆 Drag left side to move · tap right side to jump');
+    }
     let simDt=dt;
     if (hitStop>0) { hitStop=Math.max(0,hitStop-dt); simDt=.001; }
     gameTime += simDt;runElapsed+=simDt;comboTimer -= simDt;
@@ -3896,16 +3904,12 @@ function updateFixed(dt) {
     if(tallyShown<1&&tallyTickTimer<=0){SFX.tick();tallyTickTimer=.085;}
   } else if (state === 'gameOver') {
     gameOverT+=dt; gameTime+=dt; updateParticles(dt);
-  } else if (state === 'hsEntry' || state === 'hsView' || state === 'howto' || state === 'settings' || state === 'controlsSetup' || state==='achievements' || state==='touchSetup') {
+  } else if (state === 'hsEntry' || state === 'hsView' || state === 'howto' || state === 'settings' || state === 'controlsSetup' || state==='achievements') {
     gameTime+=dt;
   }
 }
 function renderFrame() {
-  const showTouch = touchMode && (state==='playing'||state==='levelIntro'||state==='touchSetup');
-  if (touchGameplayLayout !== showTouch) { touchGameplayLayout=showTouch; resize(); }
-  controlsDiv.style.display = showTouch ? 'block' : 'none';
   pauseBtn.style.display = touchMode&&(state==='playing'||state==='levelIntro') ? 'flex' : 'none';
-  if(showTouch)applyTouchLayout();
   ctx.clearRect(0, 0, W, H);
   ctx.fillStyle = '#0b0e1a';
   ctx.fillRect(0, 0, W, H);
@@ -3933,9 +3937,8 @@ function renderFrame() {
     drawControlsSetup();
   } else if (state === 'achievements') {
     drawAchievements();
-  } else if (state === 'touchSetup') {
-    drawTouchSetup();
   }
+  drawTouchOverlay();
   ensureUIFocus(); syncA11yMenu();
 }
 requestAnimationFrame(frame);
