@@ -125,8 +125,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
     liveries via the same atlas technique; player car gets one too.
 19. **Building facade near-tier**: window mullions/sills + a few lit rooms with
     silhouette furniture on the closest facades (promotion by building).
-20. **Ambient near-field audio** (ONLY after visual backlog ≥80% done): phone
-    chirps, crowd murmur near stadium, signal-crossing ticks, distant sirens.
+20. ~~Ambient near-field audio~~ **DONE 2026-07-15 (iteration 16)** — crossing
+    ticks, crowd murmur, steam hiss, phone chirps on the existing WebAudio bus
+    (police sirens already existed via the cruiser system). See iteration log.
 
 ## Iteration log
 
@@ -440,3 +441,31 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   contribution is zero by the altitude gate + lazy build), textures 238–240
   at chase pre-atlas (the grime atlas doesn't exist until the first roam
   promotion). Suite 127/127.
+- **16 ambient near-field audio — backlog item 20 (2026-07-15)**: `ambientSys`
+  on the existing `mi` WebAudio bus (mute/volume free; police sirens already
+  existed via the cruiser system — not duplicated). Four layers, all
+  procedural (zero assets, zero rendering footprint), all gated to
+  enabled && mode∈{roam,race,paused} && camera y ≤ 26 (silent at race
+  altitude AND over the post-game menu attract cam — mi persists once
+  created): (1) WALK-signal crossing ticks — PS registry entries now carry
+  x/y/z + walkEW/walkNS stamped by the existing signal tick; nearest
+  walking box ≤26m ticks a panned 940Hz blip every 0.55s. (2) Crowd murmur —
+  brown-noise loop through 430Hz lowpass, gain by nearest grandstand ≤90m
+  with a slow swell. (3) Steam hiss — same noise buffer through 3.3kHz
+  bandpass at active vents ≤26m (NOT 14: the roam CAR camera trails ~17m
+  behind the player; a tighter radius is foot-mode-only). (4) Phone chirps —
+  nearest texting promoted ped ≤15m gets a two-tone 1318→1760Hz blip every
+  4–9s (intentionally intimate: a foot/photo-mode reward; skipped under
+  mobilePerf). Stereo width via per-blip StereoPanner projected on the
+  camera right vector. Debug: detailReport().ambient {ready, ctxState,
+  signals, ticksActive, tickCount, chirpCount, levels}, ambientEnable(on),
+  and camWorld() — USE camWorld FOR ALL FUTURE ARRIVAL POLLS (telemetry
+  cameraWorld is not Xe in roam). Verified by MEASURING
+  (loop-shots/16-ambient/report*.json — audio's screenshot equivalent):
+  ticks 3+ and rising at a signal, murmur 0.062 at a stand, hiss 0.011 on a
+  drive-by vent, chirp fired beside a texter (ped seeds via scene traversal
+  for userData.limbs — the suite's own trick), disable floors all levels,
+  ctx "running", zero page errors. Audio init rides Yd/Va (La() runs on
+  roam AND race start — chirps/ticks work without ever racing). Perf: no
+  meshes/textures/draw calls added; one 1s mono noise buffer (~176KB) built
+  lazily on first city-camera frame with mi present. Suite 128/128.
