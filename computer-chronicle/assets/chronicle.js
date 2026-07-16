@@ -454,7 +454,17 @@
       els.status.dataset.statusState = "stale";
       flag = "Awaiting Edition ///";
     }
+    if (issue && issue.milestone) flag = "Extra Edition ///";
     setText(els.editionFlag, flag.toUpperCase());
+    if (els.editionFlag) {
+      if (issue && issue.milestone) {
+        els.editionFlag.dataset.extra = "true";
+        els.editionFlag.title = issue.milestone.note || issue.milestone.title || "";
+      } else {
+        delete els.editionFlag.dataset.extra;
+        els.editionFlag.removeAttribute("title");
+      }
+    }
   }
 
   /* ===== sidebar: rock radio ===== */

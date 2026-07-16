@@ -131,6 +131,10 @@ function checkRendererShapes(issue, issueIndex) {
     }
   });
 
+  if (issue.milestone && (typeof issue.milestone !== "object" || Array.isArray(issue.milestone) || !issue.milestone.title)) {
+    fail(`Issue ${issueIndex}: milestone must be an object with a title when present.`);
+  }
+
   if (issue.stories && !Array.isArray(issue.stories)) {
     fail(`Issue ${issueIndex}: stories must be an array when present.`);
   }

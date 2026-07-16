@@ -71,6 +71,7 @@ const index = {
         .filter(Boolean),
       hero: (issue.heroImage && issue.heroImage.src) || "",
       thumb: fs.existsSync(path.join(root, thumbName)) ? thumbName : "",
+      milestone: Boolean(issue.milestone),
     };
   }),
 };
