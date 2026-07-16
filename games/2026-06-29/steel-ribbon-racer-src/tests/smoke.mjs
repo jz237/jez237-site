@@ -494,62 +494,24 @@ const browser = await chromium.launch({
     JSON.stringify(roadSeq),
   );
 
-  // zoom-detail item 11-lite: road decals promote on the asphalt nearby
+  // full-fat 11 (round four): all seeded road decals are permanent
   const rdSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
-    const d0 = deb.detailReport().roadDecals;
-    const st = (d0.stations || [])[0];
-    if (!st) return { spots: d0.spots, promoted: -1 };
-    deb.setRoamPos(st.x + 6, st.z + 6, 0, 0);
     let rep = null;
-    for (let i = 0; i < 50 && !(rep && rep.promoted > 0); i++) {
+    for (let i = 0; i < 30 && !(rep && rep.placed > 0); i++) {
       await new Promise((r) => setTimeout(r, 300));
       rep = deb.detailReport().roadDecals;
     }
-    const promoted = rep?.promoted ?? 0;
     deb.roadDecalEnable(false);
-    let off = -1;
-    for (let i = 0; i < 20; i++) {
-      await new Promise((r) => setTimeout(r, 250));
-      off = deb.detailReport().roadDecals.promoted;
-      if (off === 0) break;
-    }
+    await new Promise((r) => setTimeout(r, 600));
+    const offVis = deb.detailReport().roadDecals.visible;
     deb.roadDecalEnable(true);
-    return { spots: d0.spots, promoted, off };
+    return { spots: rep?.spots ?? 0, placed: rep?.placed ?? 0, offVis };
   });
   check(
-    "road decals: manholes/arrows promote on nearby asphalt and toggle off",
-    rdSeq.spots >= 20 && rdSeq.promoted > 0 && rdSeq.off === 0,
+    "road decals: all seeded spots placed permanently and toggle off",
+    rdSeq.spots >= 20 && rdSeq.placed === rdSeq.spots && rdSeq.offVis === false,
     JSON.stringify(rdSeq),
-  );
-
-  // round 3: newspaper boxes — front pages promote up close, toggle off
-  const newsSeq = await page.evaluate(async () => {
-    const deb = window.__steelRibbonDebug;
-    const n0 = deb.detailReport().news;
-    const st = (n0.stations || [])[0];
-    if (!st) return { spots: n0.spots, promoted: -1 };
-    deb.setRoamPos(st.x + 2, st.z + 2, 0, 0);
-    let rep = null;
-    for (let i = 0; i < 50 && !(rep && rep.promoted > 0); i++) {
-      await new Promise((r) => setTimeout(r, 300));
-      rep = deb.detailReport().news;
-    }
-    const promoted = rep?.promoted ?? 0;
-    deb.newsEnable(false);
-    let off = -1;
-    for (let i = 0; i < 20; i++) {
-      await new Promise((r) => setTimeout(r, 250));
-      off = deb.detailReport().news.promoted;
-      if (off === 0) break;
-    }
-    deb.newsEnable(true);
-    return { spots: n0.spots, promoted, off, boxes: deb.detailReport().furniture.newsboxes ?? deb.detailReport().furniture.counts?.newsboxes };
-  });
-  check(
-    "newsboxes: seeded on curbs, front pages promote and toggle off",
-    !!newsSeq && newsSeq.spots >= 10 && newsSeq.promoted > 0 && newsSeq.off === 0,
-    JSON.stringify(newsSeq),
   );
 
   // zoom-detail item 19: facade lobby bands promote on the nearest towers

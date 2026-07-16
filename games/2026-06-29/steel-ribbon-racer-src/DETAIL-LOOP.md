@@ -119,8 +119,9 @@ staticMerge ~130 groups — do not break that merge.
    heads turned out to ALREADY exist and be live-synced; what shipped is the
    missing half: WALK/DON'T-WALK ped signals. See iteration log.
 10. ~~Stadium crowd v2~~ **DONE 2026-07-12 (iteration 10)** — see iteration log.
-11. **Road micro-detail**: manholes, storm drains, turn arrows, worn patches,
-    crosswalk wear decals.
+11. ~~Road micro-detail~~ **DONE FULL-FAT 2026-07-16 (iteration 34, round
+    four)** — all 36 decals permanent via one instanced atlas mesh; the
+    it.24 pooled version was the stepping stone. See iteration log.
 12. ~~Photo mode~~ **DONE 2026-07-12 (iteration 11)** — O key / 📷 button
     orbit+dolly camera. See iteration log.
 13. ~~Balloons/blimp near detail + fictional banner text~~ **DONE 2026-07-15
@@ -833,3 +834,17 @@ versions stay blocked on the perf renegotiation.
   windshield + plate; 40m reads as a normal darker windshield. Crewed
   probe updated: withDriver === 30. Suite 138/138 expected (one probe
   removed).
+- **34 FULL-FAT ROAD PAINT — item 11 complete (2026-07-16)**: the pooled
+  roadDecalSys is upgraded to PERMANENT — all 36 seeded decals live in ONE
+  InstancedMesh with a per-instance atlas slot (the plate shader pattern;
+  customProgramCacheKey mandatory), placed once on the first tick after
+  each world build via the cached band-filtered surface raycast
+  (placedDone resets when spots reseed). Turn arrows and manholes now
+  read at mid distance like real street paint — verified by looking
+  (`loop-shots/34-permanent-decals/`): arrow visible at 45m by the
+  crosswalk. Cost: +1 draw call, ~72 tris — noise under the new gates.
+  Pool/promotion machinery removed; roadDecalEnable now toggles the
+  instanced mesh; report {spots, placed, visible}; probe asserts
+  placed === spots + toggle. THE ORIGINAL BACKLOG IS NOW 100% COMPLETE —
+  every item from the 2026-07-12 survey, full-fat, no compromises left.
+  Next: closing survey + deploy batch 11 (v3.18.0) + stop.
