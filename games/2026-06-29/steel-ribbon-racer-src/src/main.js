@@ -2833,6 +2833,136 @@ const ambientSys = {
     ((this.levels.murmur = +mg.toFixed(3)), (this.levels.hiss = +hg.toFixed(3)));
   },
 };
+// rooftop detail (zoom-detail item 17): pooled kits promoted onto the roofs
+// nearest the camera — HVAC clusters, antenna masts, water towers. Each kit
+// is ONE vcBaked merged mesh (single draw call on the shared opaque
+// material), so six kits cost six calls; visible from the ribbon where the
+// race actually flies past the skyline.
+const rooftopSys = {
+  spots: [],
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 130,
+  sample: [],
+  _timer: 0,
+  resetSpots() {
+    this.spots.length = 0;
+  },
+  _variantFor(s, r) {
+    const elig = [];
+    (Math.min(s.w, s.d) >= 10 && elig.push(0), s.h >= 14 && elig.push(1), s.w >= 14 && s.d >= 14 && s.h >= 26 && elig.push(2));
+    return elig.length ? elig[(r * elig.length) | 0] : 0;
+  },
+  ensure() {
+    if (this.kits) return;
+    const { opaque } = vcMats(),
+      GALV = 11974326,
+      DARK = 3423298,
+      DUCT = 9211020,
+      STEEL = 4022096,
+      TAN = 13213802,
+      TEAL = 6197130,
+      RUST = 8079150;
+    const ac = (x, z, w, h, d) => [
+      vcBake(new BoxGeometry(w, h, d), vcAt(x, h / 2, z), GALV),
+      vcBake(new CylinderGeometry(Math.min(w, d) * 0.33, Math.min(w, d) * 0.33, 0.06, 12), vcAt(x, h + 0.02, z), DARK),
+    ];
+    const v0 = () =>
+      mergeGeometries(
+        [
+          ...ac(-1.3, -0.7, 1.8, 1.1, 1.4),
+          ...ac(1.2, 0.6, 2.4, 1.3, 1.6),
+          vcBake(new BoxGeometry(0.5, 0.5, 3.6), vcAt(-0.2, 0.25, -1.8), DUCT),
+          vcBake(new BoxGeometry(0.5, 1.4, 0.5), vcAt(1.5, 0.7, -1.8), DUCT),
+          vcBake(new CylinderGeometry(0.16, 0.18, 0.9, 8), vcAt(-2.4, 0.45, 1.2), RUST),
+          vcBake(new CylinderGeometry(0.14, 0.16, 0.7, 8), vcAt(2.6, 0.35, -0.5), DARK),
+        ],
+        !1,
+      );
+    const v1 = () => {
+      const dishM = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(1.3, 1.35, 0.6), new Matrix4().makeRotationZ(1.15));
+      return mergeGeometries(
+        [
+          vcBake(new BoxGeometry(0.9, 0.5, 0.9), vcAt(0, 0.25, 0), STEEL),
+          vcBake(new CylinderGeometry(0.1, 0.14, 2.2, 8), vcAt(0, 1.6, 0), DARK),
+          vcBake(new CylinderGeometry(0.07, 0.1, 1.8, 8), vcAt(0, 3.6, 0), DARK),
+          vcBake(new CylinderGeometry(0.035, 0.07, 1.6, 6), vcAt(0, 5.3, 0), DARK),
+          vcBake(new ConeGeometry(0.85, 0.4, 12), dishM, 14212594),
+          vcBake(new BoxGeometry(0.5, 0.12, 0.12), vcAt(0.85, 1.35, 0.6), STEEL),
+          vcBake(new CylinderGeometry(0.02, 0.03, 1.5, 6), vcAt(-1.2, 0.95, 0.9), DARK),
+          vcBake(new BoxGeometry(0.5, 0.7, 0.28), vcAt(-1.2, 0.35, 0.9), STEEL),
+        ],
+        !1,
+      );
+    };
+    const v2 = (tank) => {
+      const parts = [];
+      for (const [lx, lz] of [
+        [-1.5, -1.5],
+        [1.5, -1.5],
+        [-1.5, 1.5],
+        [1.5, 1.5],
+      ])
+        parts.push(vcBake(new CylinderGeometry(0.12, 0.14, 2.8, 8), vcAt(lx, 1.4, lz), STEEL));
+      (parts.push(vcBake(new CylinderGeometry(2.1, 2.1, 2.5, 14), vcAt(0, 4.05, 0), tank)),
+        parts.push(vcBake(new CylinderGeometry(2.14, 2.14, 0.1, 14), vcAt(0, 3.3, 0), DARK)),
+        parts.push(vcBake(new CylinderGeometry(2.14, 2.14, 0.1, 14), vcAt(0, 4.7, 0), DARK)),
+        parts.push(vcBake(new ConeGeometry(2.28, 1.1, 14), vcAt(0, 5.85, 0), STEEL)),
+        parts.push(vcBake(new CylinderGeometry(0.06, 0.06, 0.5, 6), vcAt(0, 6.6, 0), DARK)));
+      for (const rz of [-0.18, 0.18]) parts.push(vcBake(new BoxGeometry(0.06, 3.4, 0.06), vcAt(2.2, 1.7, rz), DARK));
+      for (let k = 0; k < 6; k++) parts.push(vcBake(new BoxGeometry(0.05, 0.05, 0.44), vcAt(2.2, 0.5 + k * 0.5, 0), DARK));
+      return mergeGeometries(parts, !1);
+    };
+    const geos = [v0(), v1(), v2(TAN), v0(), v1(), v2(TEAL)],
+      n = mobilePerf ? 3 : 6;
+    this.kits = [];
+    for (let k = 0; k < n; k++) {
+      const m = new Mesh(geos[k], opaque);
+      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), et.add(m));
+      this.kits.push({ g: m, variant: k % 3, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cy = Xe.position.y,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled)
+      for (const s of this.spots) {
+        const dx = s.x - cx,
+          dy = s.top - cy,
+          dz = s.z - cz,
+          d2 = dx * dx + dy * dy + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    const used = new Set(),
+      free = { 0: [], 1: [], 2: [] };
+    for (const k of this.kits) ((k.idx = -1), free[k.variant].push(k));
+    for (const c of cand) {
+      if (this.promoted >= this.kits.length) break;
+      if (used.has(c.s.i)) continue;
+      const r = plateRng((((c.s.i + 1) * 2654435761) ^ 0x700f70) >>> 0),
+        v = this._variantFor(c.s, r()),
+        kit = free[v].pop();
+      if (!kit) continue;
+      used.add(c.s.i);
+      const ox = (r() - 0.5) * Math.max(0, c.s.w - 8) * 0.3,
+        oz = (r() - 0.5) * Math.max(0, c.s.d - 8) * 0.3;
+      (kit.g.position.set(c.s.x + ox, c.s.top, c.s.z + oz), (kit.g.rotation.y = r() < 0.5 ? 0 : Math.PI / 2), (kit.g.visible = !0), (kit.idx = c.s.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: c.s.i, x: +c.s.x.toFixed(1), z: +c.s.z.toFixed(1), top: +c.s.top.toFixed(1), v });
+    }
+    for (const k of this.kits) k.idx < 0 && (k.g.visible = !1);
+  },
+};
 const PED_KIT_RADIUS = 40;
 // Fictional, family-friendly two-bubble chats shown on texting pedestrians'
 // phone screens (one per kit, drawn into a single shared atlas).
@@ -3819,6 +3949,7 @@ function F1(i, e, t) {
       steamSys.update(I, ye);
       parkedKitSys.update(I, ye);
       ambientSys.update(I, ye);
+      rooftopSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -4082,6 +4213,7 @@ function N1() {
           ye.push(w));
       Math.random() < 0.34 && Me.push({ px: N, pz: O, w: Y, d: j, h: ee, gy: re, zSide: Math.random() < 0.5 ? -1 : 1 });
     }
+    ee > 10 && rooftopSys.spots.push({ i: rooftopSys.spots.length, x: N, z: O, top: re + ee + 1.2, w: Y, d: j, h: ee });
     if (ee > 14 && Math.random() < 0.48) {
       const w = Math.random() < 0.5 ? "x" : "z";
       Se.push({ px: N, pz: O, w: Y, d: j, h: ee, gy: re, axis: w, side: Math.random() < 0.5 ? -1 : 1 });
@@ -4220,6 +4352,7 @@ function N1() {
     );
   }
   storefrontSys.resetSpots();
+  rooftopSys.resetSpots();
   for (let N = t + a / 2; N <= n - a / 2; N += a)
     for (let O = s - a / 2; O >= r + a / 2; O -= a) {
       const Y = Pn(N, O, c * 0.5).clearance;
@@ -9613,6 +9746,10 @@ window.__steelRibbonDebug = {
     ambientSys.enabled = !!on;
     return ambientSys.enabled;
   },
+  rooftopEnable(on) {
+    rooftopSys.enabled = !!on;
+    return rooftopSys.enabled;
+  },
   camWorld() {
     return { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) };
   },
@@ -9709,6 +9846,18 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      rooftops: {
+        spots: rooftopSys.spots.length,
+        promoted: rooftopSys.promoted,
+        pool: rooftopSys.kits ? rooftopSys.kits.length : 0,
+        radius: rooftopSys.RADIUS,
+        sample: rooftopSys.sample.slice(0, 3),
+        tall: rooftopSys.spots
+          .slice()
+          .sort((a, b) => b.top - a.top)
+          .slice(0, 5)
+          .map((s) => ({ x: +s.x.toFixed(1), z: +s.z.toFixed(1), top: +s.top.toFixed(1), w: +s.w.toFixed(0) })),
       },
       planes: {
         count: propPlaneMeta.length,

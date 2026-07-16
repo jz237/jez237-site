@@ -121,8 +121,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 16. ~~Parked-car variety~~ **DONE 2026-07-15 (iteration 15)** — roof racks/cargo
     boxes, rocker grime, dents, antennas, mirrored-arm wing mirrors via
     promotion-pool kits. See iteration log.
-17. **Rooftop detail** visible from the ribbon: AC units, antennas, water towers,
-    rooftop pigeons.
+17. ~~Rooftop detail~~ **DONE 2026-07-15 (iteration 18)** — pooled vcBaked
+    HVAC/antenna/water-tower kits on the roofs nearest the camera; rooftop
+    pigeons deferred (birdSys covers ground flocks). See iteration log.
 18. **Race roadside life**: pit boards, marshals with flags, camera crews near the
     track edge (they're what you zoom past at speed).
 18b. **Rival race-number roundels + liveries** (split from item 1): rivals are
@@ -494,3 +495,28 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   these render there: 0.46% call delta, within gate. Banners show under
   mobilePerf too (not a pool; one shared material). Suite 129/129.
   DEPLOY BATCH 5 (v3.12.0) due next iteration (items 15-17 + next).
+- **18 rooftop detail — backlog item 17 (2026-07-15)**: `rooftopSys` — 245-262
+  roof spots registered by the building placer ($e pushes {x, z, top:
+  re+ee+1.2, w, d, h} for every ee>10 building; reset alongside
+  storefrontSys at the grid loop). Pool of 6 kits (mobile 3), each ONE
+  vcBaked merged mesh on the shared vcMats().opaque material — single draw
+  call per kit. Three variants, seeded per spot idx among size-eligible
+  options (_variantFor): V0 HVAC cluster (2 AC boxes w/ fan rings, duct
+  run + riser, vent stacks; roofs min(w,d)≥10), V1 antenna mast (3-segment
+  tapered mast, tilted dish via composed Matrix4 — vcAt only does rotZ —,
+  whip, junction box; h≥14), V2 water tower (4 legs, banded tank tan/teal,
+  cone roof, finial, ladder w/ rungs; w,d≥14 && h≥26). Promotion: 3D
+  distance (roofs are ABOVE the street camera and BELOW nothing — no
+  altitude gate) to (x, top, z) < 130m, 0.5s cadence, kits matched
+  variant→spot via per-variant free lists, seeded offset/rotation.
+  Verified by looking (`loop-shots/18-rooftops/`): teal water tower with
+  ladder crisp at 12m on a 257m tower; ribbon-height flyby at 45m shows it
+  scaled right against the skyline (previously a bare slab); far vista
+  250m = clean slabs, skyline unchanged. Race-chase perf WITH the system
+  live: 1809–1823 calls (gate 1884), 569–573k tris (accepted band),
+  textures 238 — the start section sampled roof:0 (no tall neighbors in
+  range there); worst case +6 calls when downtown stretches promote.
+  Debug: detailReport().rooftops {spots, promoted, pool, radius, sample,
+  tall[5]}, rooftopEnable(on). Suite 130/130 expected. Rooftop pigeons
+  deferred (birdSys is ground-only; a roof-perch variant is a future
+  polish note).

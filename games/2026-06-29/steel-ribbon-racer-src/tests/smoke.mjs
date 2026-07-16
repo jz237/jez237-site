@@ -382,6 +382,41 @@ const browser = await chromium.launch({
     JSON.stringify({ ready: ambSeq?.ready, st: ambSeq?.ctxState, sig: ambSeq?.signals, ticks: ambSeq?.tickCount }),
   );
 
+  // zoom-detail item 17: rooftop kits promote onto roofs near the camera
+  const roofSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    const r0 = deb.detailReport().rooftops;
+    const t0 = (r0.tall || [])[0];
+    if (!t0) return { spots: r0.spots, promoted: -1 };
+    deb.setRoamPos(t0.x + 10, t0.z + 10, 0, 0);
+    let rep = null;
+    for (let i = 0; i < 50 && !(rep && rep.promoted > 0); i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      rep = deb.detailReport().rooftops;
+    }
+    const promoted = rep?.promoted ?? 0;
+    deb.rooftopEnable(false);
+    let off = -1;
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      off = deb.detailReport().rooftops.promoted;
+      if (off === 0) break;
+    }
+    deb.rooftopEnable(true);
+    let back = 0;
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      back = deb.detailReport().rooftops.promoted;
+      if (back > 0) break;
+    }
+    return { spots: r0.spots, promoted, off, back };
+  });
+  check(
+    "rooftops: kits promote downtown and toggle clean",
+    roofSeq.spots >= 50 && roofSeq.promoted > 0 && roofSeq.off === 0 && roofSeq.back > 0,
+    JSON.stringify(roofSeq),
+  );
+
   // zoom-detail item 13: every prop plane tows a distinct fictional ad banner
   const planes = await page.evaluate(() => window.__steelRibbonDebug.detailReport().planes);
   check(
