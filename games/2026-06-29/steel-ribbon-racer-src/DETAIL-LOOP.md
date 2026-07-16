@@ -574,3 +574,13 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   textures 240. detailReport().livery {rivals incl live positions, player}.
   Suite 132/132 expected. Visual backlog now COMPLETE except item 19
   facade near-tier + the freeze-blocked pair (4b, 11).
+  ADDENDUM (the catch of the loop): the first two suite runs failed the
+  pond probe with coastMin=999 in two DIFFERENT worlds — not world luck.
+  The livery ROOF quad rides just above the player car, and the roam
+  physics finds ground/water by raycasting DOWN through the car position:
+  the DoubleSide quad intercepted the ray and ponds silently stopped
+  dragging (no error anywhere — a pure behavior regression a visual-only
+  change "couldn't" cause). Fix: `add.raycast = () => {}` on the livery
+  mesh. RULE FOR ALL FUTURE CAR-ATTACHED GEOMETRY: anything parented to
+  cn/rivals must be raycast-inert. Post-fix run: pond drags again
+  (coastMin 0.0, recover 6.2). Suite 132/132.
