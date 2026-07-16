@@ -4197,6 +4197,9 @@ function buildStreetSigns(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt) {
 // that drives the (already live) red/amber/green lamp heads. Icons are two tiny
 // pooled canvas textures; each face toggles a white walker / orange hand quad.
 const pedSignalMeta = { count: 0, sample: [] };
+// zoom-detail 37: one-lamp-lit signal heads (unlit lenses go dark-glass; the
+// legacy look kept vivid diffuse on all three, reading "all lit" in daylight)
+const signalLampSys = { enabled: !0, heads: 0, states: { g: 0, y: 0, r: 0 }, headsRef: null };
 let pedIconMats = null;
 function buildPedIconMats() {
   if (pedIconMats) return pedIconMats;
@@ -5197,6 +5200,7 @@ function N1() {
       ee = new MeshBasicMaterial({ map: j, transparent: !0, side: DoubleSide }),
       oe = new MeshStandardMaterial({ color: 5050642, roughness: 0.48, metalness: 0.12 }),
       re = (se, $) => new MeshStandardMaterial({ color: se, roughness: 0.16, metalness: 0.02, emissive: $, emissiveIntensity: 0.2 }),
+      hoodGeo = new BoxGeometry(0.68, 0.09, 0.46),
       addPedSignals = (xe, Ce, Ke, rt, wx, wz, wy) => {
         // hang the display box OFF the pole (pole radius 0.24 — centering it on
         // the axis buries the faces, same failure family as plates-in-bumpers)
@@ -5228,11 +5232,13 @@ function N1() {
         for (let ke = 0; ke < 3; ke++) {
           const yt = new Mesh(new SphereGeometry(0.28, 12, 8), ut[ke]);
           (yt.position.set(0, 0.78 - ke * 0.78, -0.42), xe.add(yt));
+          const hd = new Mesh(hoodGeo, Y);
+          (hd.position.set(0, 0.78 - ke * 0.78 + 0.33, -0.5), xe.add(hd));
         }
         (xe.position.set(me, ue, Ce),
           (xe.rotation.y = Pe),
           se.add(xe),
-          N.push({ axis: $, red: rt, yellow: vt, green: Mt, control: se.userData.control }));
+          N.push({ axis: $, red: rt, yellow: vt, green: Mt, control: se.userData.control, _st: "" }));
       },
       U = (se, $, me) => {
         const ue = ge(se, $),
@@ -5296,11 +5302,24 @@ function N1() {
       }
     return (
       Bn(i, (se) => {
+        ((signalLampSys.headsRef = N), (signalLampSys.heads = N.length));
+        ((signalLampSys.states.g = 0), (signalLampSys.states.y = 0), (signalLampSys.states.r = 0));
         for (const $ of N) {
-          const me = we($.control, se);
-          (($.red.emissiveIntensity = me.green === $.axis || me.yellow === $.axis ? 0.12 : 2.3),
-            ($.yellow.emissiveIntensity = me.yellow === $.axis ? 2.6 : 0.12),
-            ($.green.emissiveIntensity = me.green === $.axis ? 2.6 : 0.1));
+          const me = we($.control, se),
+            st2 = signalLampSys.enabled ? (me.green === $.axis ? "g" : me.yellow === $.axis ? "y" : "r") : "x";
+          if ((signalLampSys.states[st2] !== void 0 && signalLampSys.states[st2]++, $._st !== st2)) {
+            $._st = st2;
+            if (st2 === "x")
+              (($.red.color.setHex(16724008), $.yellow.color.setHex(16767053), $.green.color.setHex(4521842)),
+                (($.red.emissiveIntensity = 0.12), ($.yellow.emissiveIntensity = 0.12), ($.green.emissiveIntensity = 0.1)));
+            else
+              (($.red.color.setHex(st2 === "r" ? 16724008 : 3017480),
+                $.yellow.color.setHex(st2 === "y" ? 16767053 : 3352072),
+                $.green.color.setHex(st2 === "g" ? 4521842 : 666136)),
+                (($.red.emissiveIntensity = st2 === "r" ? 2.3 : 0),
+                  ($.yellow.emissiveIntensity = st2 === "y" ? 2.6 : 0),
+                  ($.green.emissiveIntensity = st2 === "g" ? 2.6 : 0)));
+          }
         }
         let walking = 0;
         for (const P of PS) {
@@ -10466,6 +10485,19 @@ window.__steelRibbonDebug = {
     newsSys.enabled = !!on;
     return newsSys.enabled;
   },
+  signalLampsEnable(on) {
+    signalLampSys.enabled = on !== !1;
+    return signalLampSys.enabled;
+  },
+  signalHeadStates() {
+    const heads = signalLampSys.headsRef || [];
+    return {
+      heads: heads.length,
+      enabled: signalLampSys.enabled,
+      states: { ...signalLampSys.states },
+      sample: heads.slice(0, 6).map(($) => ({ axis: $.axis, st: $._st })),
+    };
+  },
   __nearestTraffic(skipBus) {
     let best = null;
     for (const a of Rc) {
@@ -10562,6 +10594,7 @@ window.__steelRibbonDebug = {
       furniture: { ...furnitureSys.counts, sample: furnitureSys.sample.slice(0, 4) },
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
+      signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
