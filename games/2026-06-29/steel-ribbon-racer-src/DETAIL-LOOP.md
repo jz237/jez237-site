@@ -689,3 +689,7 @@ versions stay blocked on the perf renegotiation.
   (`loop-shots/25-dogs/`): green-shirt ped + white dog on leash reads
   instantly at 4m. Suite 136/136 expected. DEPLOY BATCH 7 (v3.14.0) this
   iteration: items 23-25 (silhouettes, road decals, dogs).
+- **DEPLOY BATCH 7 (2026-07-16): v3.14.0 LIVE** — round-two items 23-25
+  (driver silhouettes, road decals, leashed dogs) verified live
+  (index-B58PNnx7.js, 200). Remaining polish notes: rooftop pigeons,
+  texting head-tilt, newspaper-box decals.
