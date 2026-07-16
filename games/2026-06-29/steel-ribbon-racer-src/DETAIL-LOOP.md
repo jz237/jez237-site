@@ -520,3 +520,8 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   tall[5]}, rooftopEnable(on). Suite 130/130 expected. Rooftop pigeons
   deferred (birdSys is ground-only; a roof-perch variant is a future
   polish note).
+- **DEPLOY BATCH 5 (2026-07-15): v3.12.0 LIVE** — items 15-18 (parked-car
+  variety, ambient near-field audio, prop-plane banners, rooftop kits)
+  verified live (index-CkhnbQdS.js, bundle 200, 867KB). Alias lag showed
+  the STALE index + 404 on the deleted old bundle for ~30s — the retry
+  rule stands.
