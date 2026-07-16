@@ -274,6 +274,42 @@ const browser = await chromium.launch({
   const tiltRow = await page.evaluate(() => (window.__steelRibbonDebug.detailReport().peds.sample || []).find((c) => c.t === 1));
   check("ped kits: texting heads bow toward the phone", !tiltRow || tiltRow.tilt > 0.3, JSON.stringify(tiltRow));
 
+  // round 3: ped inspect — programmatic enter, camera glide, persona, clean exit
+  const insSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    let seed = null;
+    window.__steelRibbonScene.traverse((o) => {
+      if (!seed && o.userData?.limbs && o.visible) {
+        const v = o.getWorldPosition(new o.position.constructor());
+        seed = { x: v.x, z: v.z };
+      }
+    });
+    if (!seed) return { fail: "no peds" };
+    deb.setRoamPos(seed.x + 5, seed.z + 5, 0, 0);
+    await new Promise((r) => setTimeout(r, 1500));
+    let info = null;
+    for (let i = 0; i < 40 && !(info && info.active); i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      info = deb.inspectPed();
+    }
+    let close = 999;
+    for (let i = 0; i < 40; i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      const s2 = deb.inspectPed("info");
+      if (s2.active && s2.ped) close = Math.min(close, Math.hypot(s2.cam.x - s2.ped.x, s2.cam.z - s2.ped.z));
+      if (close < 4.2) break;
+    }
+    const out = { active: !!(info && info.active), name: info?.name ?? null, hasThought: !!(info && info.thought), close: +close.toFixed(1) };
+    deb.inspectPed(!1);
+    out.exited = !deb.inspectPed("info").active;
+    return out;
+  });
+  check(
+    "inspect: click-a-ped zoom shows persona and exits clean",
+    !!insSeq && insSeq.active && !!insSeq.name && insSeq.hasThought && insSeq.close < 4.2 && insSeq.exited,
+    JSON.stringify(insSeq),
+  );
+
   // zoom-detail item 3b: every promoted ped carries exactly one prop family
   const props = await page.evaluate(() => window.__steelRibbonDebug.detailReport().peds);
   check(

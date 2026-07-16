@@ -12754,3 +12754,151 @@ window.__steelRibbonDebug.photoMode = function (on) {
     cam: { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) },
   };
 };
+// ─── Ped inspect (zoom-detail round 3): click a pedestrian in roam and the
+// camera glides to them while a thought bubble shows what they're doing,
+// thinking or reading. Personas are seeded by the ped's Rr index, so the
+// same person keeps their name, dog and chat all session. ───
+const PED_NAMES = ["MARGO", "FELIX", "JUNIPER", "OTTO", "WREN", "CASSIA", "BRUNO", "POPPY", "EZRA", "LOTTIE", "GUS", "MIRA", "THEO", "SAGE", "NELL", "REMY", "IVY", "COLE", "FERN", "BASIL", "OPAL", "HUGO", "DOT", "ASH"];
+const DOG_NAMES = ["BISCUIT", "PICKLE", "NOODLE", "WAFFLE", "MOCHI", "PEPPER", "BEAN", "ZIGGY"];
+const INSPECT_THOUGHTS = {
+  bag: ["Got the last one at Pixel Pawn.", "Should have bought two, honestly.", "This bag weighs a metric ton.", "Wait till they see this at home."],
+  cup: ["Triple shot kind of day.", "Do not spill. Do not spill.", "The Neon Diner does it better, but shhh.", "Warm hands, warm heart."],
+  dog: ["{DOG} found a smell. Could be a while.", "Who is a good {DOG}? You are.", "{DOG} barks at every race car. Every single one.", "One more block, then treats."],
+  walk: ["Nice night for a walk.", "Was that car doing two hundred?!", "I never get tired of this skyline.", "Gate 8 looked extra glowy tonight."],
+};
+const inspectRig = { active: !1, actor: null, idx: -1, persona: null, entryPos: new Vector3(), _look: new Vector3() };
+const inspectBubble = document.createElement("div");
+inspectBubble.style.cssText =
+  "position:fixed;z-index:31;display:none;max-width:270px;background:rgba(250,250,246,0.96);color:#1c2028;font:600 13px/1.45 system-ui,sans-serif;padding:9px 12px;border-radius:12px;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,0.35);transform:translate(-50%,-112%);";
+document.body.appendChild(inspectBubble);
+const inspectCard = document.createElement("div");
+inspectCard.style.cssText =
+  "position:fixed;left:12px;bottom:96px;z-index:31;display:none;background:rgba(8,12,20,0.78);color:#dff0ff;font:600 13px/1.5 system-ui,sans-serif;padding:9px 13px;border-radius:10px;border:1px solid rgba(140,180,220,0.3);letter-spacing:0.03em;pointer-events:none;";
+document.body.appendChild(inspectCard);
+function pedPersona(idx) {
+  const prop = ["text", "bag", "cup", "dog"][idx % 4],
+    name = PED_NAMES[idx % PED_NAMES.length],
+    dog = DOG_NAMES[idx % DOG_NAMES.length];
+  let activity, thought;
+  if (prop === "text") {
+    const chat = PED_CHATS[idx % 8 % PED_CHATS.length];
+    activity = "texting a friend";
+    thought = chat.map(([line, who]) => (who === "me" ? "▸ " : "  ") + line).join("\n");
+  } else if (prop === "dog") {
+    activity = "walking " + dog.charAt(0) + dog.slice(1).toLowerCase();
+    thought = INSPECT_THOUGHTS.dog[idx % 4].replaceAll("{DOG}", dog.charAt(0) + dog.slice(1).toLowerCase());
+  } else if (prop === "bag") {
+    ((activity = "hauling shopping"), (thought = INSPECT_THOUGHTS.bag[idx % 4]));
+  } else ((activity = "on a coffee run"), (thought = INSPECT_THOUGHTS.cup[idx % 4]));
+  return { name, prop, activity, thought };
+}
+function inspectExit() {
+  if (!inspectRig.active) return;
+  ((inspectRig.active = !1), (inspectRig.actor = null), (window.__freeCam = !1));
+  ((inspectBubble.style.display = "none"), (inspectCard.style.display = "none"));
+}
+function inspectEnter(actor, idx) {
+  if (photoRig.active || u.mode !== "roam") return !1;
+  ((inspectRig.actor = actor), (inspectRig.idx = idx), (inspectRig.persona = pedPersona(idx)), (inspectRig.active = !0));
+  inspectRig.entryPos.copy(u.roamPos);
+  inspectRig._look.set(actor.mesh.position.x, actor.mesh.position.y + 1.47, actor.mesh.position.z);
+  const pp = inspectRig.persona;
+  inspectCard.innerHTML = "\uD83D\uDC41 <b>" + pp.name + "</b> \u00B7 " + pp.activity + " &nbsp;\u2014&nbsp; click away or Esc to close";
+  ((inspectBubble.textContent = pp.thought), (inspectBubble.style.whiteSpace = "pre-line"));
+  ((inspectBubble.style.display = "block"), (inspectCard.style.display = "block"), (window.__freeCam = !0));
+  return !0;
+}
+function inspectNearestPed(maxDist = 60) {
+  let best = null;
+  for (let i = 0; i < Rr.length; i++) {
+    const a = Rr[i];
+    if (!a.active || !a.mesh.visible) continue;
+    const d = Math.hypot(a.x - Xe.position.x, a.z - Xe.position.z);
+    (!best || d < best.d) && (best = { a, i, d });
+  }
+  return best && best.d <= maxDist ? best : null;
+}
+const _insV = new Vector3();
+function inspectScreenPick(px, py) {
+  let best = null;
+  const rect = Lr.getBoundingClientRect();
+  for (let i = 0; i < Rr.length; i++) {
+    const a = Rr[i];
+    if (!a.active || !a.mesh.visible) continue;
+    const dW = Math.hypot(a.x - Xe.position.x, a.z - Xe.position.z);
+    if (dW > 55) continue;
+    _insV.set(a.mesh.position.x, a.mesh.position.y + 1.5, a.mesh.position.z).project(Xe);
+    if (_insV.z > 1) continue;
+    const sx = rect.left + ((_insV.x + 1) / 2) * rect.width,
+      sy = rect.top + ((1 - _insV.y) / 2) * rect.height,
+      dPx = Math.hypot(sx - px, sy - py);
+    (!best || dPx < best.dPx) && (best = { a, i, dPx });
+  }
+  return best && best.dPx <= 46 ? best : null;
+}
+let inspectDown = null;
+window.addEventListener("pointerdown", (ev) => {
+  ev.target === Lr && !photoRig.active && u.mode === "roam" && (inspectDown = { x: ev.clientX, y: ev.clientY, t: performance.now() });
+});
+window.addEventListener("pointerup", (ev) => {
+  const dn = inspectDown;
+  inspectDown = null;
+  if (!dn || ev.target !== Lr || photoRig.active || u.mode !== "roam") return;
+  if (Math.hypot(ev.clientX - dn.x, ev.clientY - dn.y) > 7 || performance.now() - dn.t > 420) return;
+  if (!inspectRig.active && !(u.vehicle === "foot" || Math.abs(u.speed) < 8)) return;
+  const hit = inspectScreenPick(ev.clientX, ev.clientY);
+  if (hit) inspectEnter(hit.a, hit.i);
+  else inspectExit();
+});
+window.addEventListener("keydown", (ev) => {
+  ev.code === "Escape" && inspectExit();
+});
+{
+  const inspectAnchor = new Object3D();
+  et.add(inspectAnchor);
+  Bn(inspectAnchor, () => {
+    if (!inspectRig.active) return;
+    const a = inspectRig.actor;
+    if (u.mode !== "roam" || photoRig.active || !a || !a.active || !a.mesh.visible || u.roamPos.distanceTo(inspectRig.entryPos) > 3) {
+      inspectExit();
+      return;
+    }
+    const m = a.mesh,
+      fx = -Math.sin(m.rotation.y),
+      fz = -Math.cos(m.rotation.y),
+      hx = m.position.x,
+      hy = m.position.y + 1.62,
+      hz = m.position.z,
+      tx = hx + fx * 2.5 + fz * 0.95,
+      ty = hy + 0.25,
+      tz = hz + fz * 2.5 - fx * 0.95;
+    (Xe.position.lerp(_insV.set(tx, ty, tz), 0.14), inspectRig._look.lerp(_insV.set(hx, hy - 0.15, hz), 0.3), Xe.lookAt(inspectRig._look));
+    window.__freeCam = !0;
+    _insV.set(hx, hy + 0.42, hz).project(Xe);
+    if (_insV.z <= 1) {
+      const rect = Lr.getBoundingClientRect();
+      ((inspectBubble.style.left = rect.left + ((_insV.x + 1) / 2) * rect.width + "px"), (inspectBubble.style.top = rect.top + ((1 - _insV.y) / 2) * rect.height + "px"), (inspectBubble.style.display = "block"));
+    } else inspectBubble.style.display = "none";
+  });
+}
+window.__steelRibbonDebug.inspectPed = function (on) {
+  if (on === !1) {
+    inspectExit();
+    return { active: !1 };
+  }
+  if (on !== "info" && !inspectRig.active) {
+    const n = inspectNearestPed(80);
+    n && inspectEnter(n.a, n.i);
+  }
+  const pp = inspectRig.persona;
+  return {
+    active: inspectRig.active,
+    idx: inspectRig.idx,
+    name: pp ? pp.name : null,
+    prop: pp ? pp.prop : null,
+    activity: pp ? pp.activity : null,
+    thought: pp ? pp.thought : null,
+    ped: inspectRig.actor ? { x: +inspectRig.actor.mesh.position.x.toFixed(1), y: +inspectRig.actor.mesh.position.y.toFixed(2), z: +inspectRig.actor.mesh.position.z.toFixed(1) } : null,
+    cam: { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) },
+  };
+};

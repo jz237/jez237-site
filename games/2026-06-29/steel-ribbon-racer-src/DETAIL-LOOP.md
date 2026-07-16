@@ -727,3 +727,29 @@ versions stay blocked on the perf renegotiation.
   decals (folded out of item 07 long ago). Full-fat 4b (recessed cabin
   drivers) and 11 (painted road decals) still await the real-FPS perf
   renegotiation; their -lite pooled versions shipped in round two.
+
+## Round three (loop resumed 2026-07-16, user ask: click-a-person inspect)
+
+- **29 ped inspect (2026-07-16)**: click any pedestrian in roam → the camera
+  glides to a 3/4 portrait and a THOUGHT BUBBLE shows what they're doing,
+  thinking or reading. `inspectRig` reuses the photoRig pattern (__freeCam
+  + per-frame Bn tick; look target SNAPS to the head on enter — lerping it
+  from origin left the ped at frame edge in slow-mo). Picking is
+  screen-space (project every ped head ≤55m, accept ≤46px — forgiving,
+  raycast-free); clicking another ped SWITCHES, clicking empty canvas or
+  Esc exits, walking >3m auto-exits, mode change/photo mode auto-exits.
+  Personas seed off the ped's stable Rr index: name (PED_NAMES 24), prop =
+  idx%4 (matches the kit partition), TEXTERS show their real PED_CHATS
+  conversation (kit = idx%8 — fully deterministic), dog walkers get their
+  dog's name (DOG_NAMES), bag/cup/dog thought pools all original +
+  family-friendly. DOM bubble projected over the head each frame
+  (hidden when behind camera), persona card bottom-left. Entry guarded:
+  roam only, on foot or speed<8. Debug: inspectPed(on|"info"|false) —
+  "info" is read-only (calling with no arg ENTERS; probes must poll with
+  "info"). Verified by looking (`loop-shots/29-ped-inspect/`): MARGO
+  3/4 portrait, phone in hand, her actual chat in the bubble ("running
+  late again / the ribbon jam?? / every. time."), card + hint; real
+  mouse-click entry verified via click-sweep (DOM-read state so nothing
+  masks a miss); Esc exit verified; ped-click switch verified. HUD
+  elements eat clicks (pointer target guard) — by design. Zero render
+  cost (DOM + one screen-space pass per click). Suite 138/138 expected.
