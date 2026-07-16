@@ -416,6 +416,8 @@ const browser = await chromium.launch({
     roofSeq.spots >= 50 && roofSeq.promoted > 0 && roofSeq.off === 0 && roofSeq.back > 0,
     JSON.stringify(roofSeq),
   );
+  const roofPigeons = await page.evaluate(() => window.__steelRibbonDebug.detailReport().rooftops.pigeons);
+  check("rooftops: perched pigeons baked into the kits", roofPigeons === 7, `pigeons=${roofPigeons}`);
 
   // zoom-detail item 13: every prop plane tows a distinct fictional ad banner
   const planes = await page.evaluate(() => window.__steelRibbonDebug.detailReport().planes);
