@@ -1069,3 +1069,10 @@ signal-corner ped density weighting.
   the flaky family; if this repeats, widen the pond recover window and
   glide threshold as a suite-hardening item. v3.19.0. DEPLOY BATCH 12
   next in this iteration.
+- **DEPLOY BATCH 12 (2026-07-16)**: **v3.19.0 LIVE**
+  (index-VQA40QJo.js, 200 after alias lag, 904,569 bytes) — round-five
+  items 1-5 in production: one-lamp signal heads + visors,
+  inspect-everything (cars/dogs/marshals), park paths + pines, park
+  benches + flowerbeds, ped skin/outfit/hair variety. Round five is
+  5/10 shipped. NEXT: item 6 — parked-car glass + door seams + tail
+  lamps (parkedKitSys additions).
