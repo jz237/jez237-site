@@ -6835,6 +6835,28 @@ function buildStuntRamps() {
 buildStuntRamps();
 // ─── Ambient propeller planes: low-poly single-props cruising over the map with a
 // gentle bank and visibly spinning propellers. Pure scenery. ───
+// aerial ad banners towed behind the prop planes (zoom-detail item 13):
+// fictional, world-consistent copy — big unlit lettering so it reads from the
+// ribbon deck ~105m below the lanes. Back face mirrors like real fabric.
+const PLANE_BANNERS = ["RIBBON CUP SUNDAY", "FLY ZEPHYR AIRWAYS", "PIXEL PAWN PAYS BEST", "SKYLINE PIER IS OPEN"];
+const propPlaneMeta = [];
+function buildPlaneBannerAtlas() {
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  for (let r = 0; r < 4; r++) {
+    const y = r * 128;
+    ((g.fillStyle = "#e8b93a"), g.fillRect(0, y, 1024, 128));
+    ((g.fillStyle = "#232a3d"), g.fillRect(0, y, 16, 128), g.fillRect(1008, y, 16, 128));
+    ((g.fillStyle = "#16181f"), (g.font = "900 96px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(PLANE_BANNERS[r], 512, y + 66, 950);
+    g.fillStyle = "#6f6a58";
+    for (const gx of [38, 986]) for (const gy of [y + 18, y + 110]) (g.beginPath(), g.arc(gx, gy, 6, 0, 6.29), g.fill());
+  }
+  const tex = new CanvasTexture(cv);
+  tex.colorSpace = SRGBColorSpace;
+  return tex;
+}
 function buildPropPlanes() {
   const lanes = [
     { z: -220, alt: 170, dir: 1, speed: 30, color: 16733525 },
@@ -6842,6 +6864,9 @@ function buildPropPlanes() {
     { z: -1150, alt: 190, dir: 1, speed: 34, color: 9096933 },
     { z: 120, alt: 240, dir: -1, speed: 24, color: 5817343 },
   ];
+  const bannerAtlas = buildPlaneBannerAtlas(),
+    bannerMat = new MeshBasicMaterial({ map: bannerAtlas, side: DoubleSide, toneMapped: !1 }),
+    laneIdxRef = { i: 0 };
   qe.propPlanes = 0;
   for (const lane of lanes) {
     const plane = new Group(),
@@ -6864,6 +6889,16 @@ function buildPropPlanes() {
       b1 = new Mesh(bladeGeo, darkMat),
       b2 = new Mesh(bladeGeo, darkMat);
     ((b2.rotation.z = Math.PI / 2), prop.add(b1), prop.add(b2), (prop.position.z = -5.75), plane.add(prop));
+    // towed ad banner: rope + one double-sided quad reading its atlas row
+    const laneIdx = laneIdxRef.i++;
+    const bGeo = new PlaneGeometry(12, 2.5),
+      bUv = bGeo.attributes.uv;
+    for (let vi = 0; vi < bUv.count; vi++) bUv.setXY(vi, bUv.getX(vi), 1 - (laneIdx + (1 - bUv.getY(vi))) / 4);
+    const banner = new Mesh(bGeo, bannerMat);
+    ((banner.rotation.y = Math.PI / 2), banner.position.set(0, -0.4, 10), plane.add(banner));
+    const rope = new Mesh(new BoxGeometry(0.05, 0.05, 1.6), darkMat);
+    (rope.position.set(0, -0.1, 3.9), plane.add(rope));
+    propPlaneMeta.push({ plane, text: PLANE_BANNERS[laneIdx], alt: lane.alt });
     plane.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1)));
     plane.scale.setScalar(2.6);
     ((plane.rotation.y = lane.dir > 0 ? -Math.PI / 2 : Math.PI / 2),
@@ -9674,6 +9709,11 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      planes: {
+        count: propPlaneMeta.length,
+        banners: propPlaneMeta.map((p) => p.text),
+        sample: propPlaneMeta.slice(0, 4).map((p) => ({ x: +p.plane.position.x.toFixed(1), y: +p.plane.position.y.toFixed(1), z: +p.plane.position.z.toFixed(1), text: p.text })),
       },
       ambient: {
         ready: !!ambientSys.nodes,
