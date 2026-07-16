@@ -454,6 +454,36 @@ const browser = await chromium.launch({
     JSON.stringify(roadSeq),
   );
 
+  // zoom-detail item 4b-lite: driver silhouettes on nearby traffic windshields
+  const silSeq = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    let rep = null;
+    for (let hop = 0; hop < 4 && !(rep && rep.silhouettes > 0); hop++) {
+      const c0 = deb.__nearestTraffic();
+      if (!c0) break;
+      deb.setRoamPos(c0.x + 8, c0.z + 8, 0, 0);
+      for (let i = 0; i < 40 && !(rep && rep.silhouettes > 0); i++) {
+        await new Promise((r) => setTimeout(r, 400));
+        rep = deb.detailReport().drivers;
+      }
+    }
+    const promoted = rep?.silhouettes ?? 0;
+    deb.driverSilEnable(false);
+    let off = -1;
+    for (let i = 0; i < 20; i++) {
+      await new Promise((r) => setTimeout(r, 250));
+      off = deb.detailReport().drivers.silhouettes;
+      if (off === 0) break;
+    }
+    deb.driverSilEnable(true);
+    return { promoted, off, pool: rep?.silPool ?? 0 };
+  });
+  check(
+    "drivers: windshield silhouettes promote on nearby traffic and toggle off",
+    silSeq.promoted > 0 && silSeq.off === 0 && silSeq.pool >= 4,
+    JSON.stringify(silSeq),
+  );
+
   // zoom-detail item 19: facade lobby bands promote on the nearest towers
   const facSeq = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
