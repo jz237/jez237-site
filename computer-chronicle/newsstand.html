@@ -55,6 +55,7 @@
     .ns-card img { display: block; width: 100%; aspect-ratio: 2 / 3; object-fit: cover; background: #0e102e; }
     .ns-card-copy { padding: 10px 11px 12px; }
     .ns-issue-no { display: inline-block; margin-bottom: 6px; color: var(--ns-magenta); font-family: var(--ns-px) !important; font-size: 0.5rem; letter-spacing: 0.14em; text-transform: uppercase; }
+    .ns-extra { display: inline-block; margin: 0 0 6px 8px; padding: 2px 6px; border: 1px solid var(--ns-amber); color: var(--ns-amber); font-family: var(--ns-px) !important; font-size: 0.44rem; letter-spacing: 0.14em; text-transform: uppercase; }
     .ns-card-copy strong { display: block; color: #fff; font-size: 0.72rem; line-height: 1.45; font-weight: 600; overflow-wrap: anywhere; }
     .ns-card-copy em { display: block; margin-top: 5px; color: var(--ns-muted); font-size: 0.66rem; font-style: normal; line-height: 1.4; }
     @media (max-width: 520px) { .ns-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -115,7 +116,7 @@
             <a href="${escapeHtml(href)}">
               ${thumb ? `<img src="${escapeHtml(thumb)}" alt="Front page: ${escapeHtml(entry.displayDate || entry.historicDate)}" loading="lazy"${fallback}>` : ""}
               <span class="ns-card-copy">
-                ${number ? `<span class="ns-issue-no">${escapeHtml(number)}</span>` : ""}
+                ${number ? `<span class="ns-issue-no">${escapeHtml(number)}</span>` : ""}${entry.milestone ? `<span class="ns-extra">Extra</span>` : ""}
                 <strong>${escapeHtml(entry.leadHeadline || "Computer Chronicle")}</strong>
                 <em>${escapeHtml(entry.displayDate || entry.historicDate)}</em>
               </span>
