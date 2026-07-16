@@ -704,3 +704,14 @@ versions stay blocked on the perf renegotiation.
   the tank from above. detailReport().rooftops.pigeons=7 + probe. Suite
   136/136 expected. Remaining polish note: texting head-tilt, then second
   fresh-eyes survey → stop.
+- **27 texting head-tilt (2026-07-16)**: the last polish note. The merged
+  head can't rotate, but the kit FACE overlay can — texting peds get the
+  face pitched 0.35 rad about the HEAD CENTRE (rigid rotation about the
+  sphere centre keeps the features ON the head surface; pivot correction
+  position = H - R·H computed in attach, reset for non-texters). The
+  features slide low and angle down toward the phone = a convincing bowed
+  head. Verified by looking (`loop-shots/27-head-tilt/`): eyes/brows sit
+  at the head's lower half, gaze down. peds.sample rows gain `tilt`;
+  probe asserts texter tilt > 0.3. Suite 137/137 expected. ALL ROUND-TWO
+  ITEMS COMPLETE — next: second fresh-eyes survey + deploy batch 8
+  (v3.15.0, items 26-27) + loop stop.
