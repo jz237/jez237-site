@@ -127,9 +127,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 18. ~~Race roadside life~~ **DONE 2026-07-15 (iteration 19)** — marshals with
     checkered flags, pit boards, camera crews on lifted deck-edge platforms
     at ~14 stations along the course. See iteration log.
-18b. **Rival race-number roundels + liveries** (split from item 1): rivals are
-    race cars, not street cars — door/hood number circles + sponsor-style fictional
-    liveries via the same atlas technique; player car gets one too.
+18b. ~~Rival race-number roundels + liveries~~ **DONE 2026-07-15 (iteration
+    20)** — door/roof/tail roundels, rival name strips, twin trim-tinted
+    racing stripes; player carries #7. See iteration log.
 19. **Building facade near-tier**: window mullions/sills + a few lit rooms with
     silhouette furniture on the closest facades (promotion by building).
 20. ~~Ambient near-field audio~~ **DONE 2026-07-15 (iteration 16)** — crossing
@@ -552,3 +552,25 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   stations}, roadsideEnable(on); smoke probe releases __freeCam=false
   after flyCam (the flag is live-read by the camera controller). Suite
   131/131 expected.
+- **20 rival roundels + liveries — backlog item 18b (2026-07-15)**:
+  `addRaceLivery(mesh, key)` — ONE merged add-on mesh per car (5 draw calls
+  total: 3 rivals + player, re-attached when applyCarSelection rebuilds the
+  player car): door roundels both sides, roof + TAIL roundels (the chase
+  camera stares at rival tails all race), rival NAME strips above the door
+  (CROWTHER/BISHOP/MADDOCK — the canonical season names), twin racing
+  stripes over the roofline tinted via per-car solid cells in the shared
+  512x512 atlas (numbers: crowther 2, bishop 5, maddock 9, player 7).
+  MeshBasicMaterial alphaTest .3 cutouts, toneMapped:!1, polygonOffset -2;
+  quads anchored parametrically from a runtime Box3 so all five car shapes
+  work. TWO LESSONS: (1) Box3 wasn't in the three import block — module
+  eval threw and the page never booted; bootcheck.mjs (bare page-error
+  printer) is now in loop-shots for instant boot triage. (2) These car
+  builds put local +z at the NOSE — the "tail" quad first landed on the
+  hood; flipped to min.z + rotateY(pi). Verified by looking
+  (`loop-shots/20-livery/`): pack shot with #7 and #9 tail roundels crisp
+  in chase view + stripes on the trunk; abeam shot with the door #9 and
+  MADDOCK strip. Race perf 1841-1846 calls (gate 1884; this world merged
+  fewer static groups — 118 vs 131 — world noise), tris 574.7k top-of-band,
+  textures 240. detailReport().livery {rivals incl live positions, player}.
+  Suite 132/132 expected. Visual backlog now COMPLETE except item 19
+  facade near-tier + the freeze-blocked pair (4b, 11).

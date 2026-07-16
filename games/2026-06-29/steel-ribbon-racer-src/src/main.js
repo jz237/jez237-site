@@ -1,5 +1,6 @@
 import {
   Fog,
+  Box3,
   CanvasTexture,
   InstancedMesh,
   Group,
@@ -6481,6 +6482,90 @@ const RIVAL_DEFS = [
   { key: "bishop", label: "Bishop", body: 3244268, trim: 1400130, lane: -0.3, base: 92, wave: 9, waveFreq: 0.95 },
   { key: "maddock", label: "Maddock", body: 16770387, trim: 5723991, lane: 0.3, base: 91, wave: 6, waveFreq: 0.5 },
 ];
+// race-number roundels + livery (zoom-detail item 18b): rivals are race cars
+// and they sit ~10m ahead of the player for the whole race — give them door,
+// roof and tail roundels, name strips and twin racing stripes. One merged
+// add-on mesh per car (alphaTest cutouts), one shared atlas, player included.
+const RACE_LIVERY = { crowther: { n: 2, col: 0, trim: 7740696 }, bishop: { n: 5, col: 1, trim: 1400130 }, maddock: { n: 9, col: 2, trim: 5723991 }, you: { n: 7, col: 3, trim: 13120044 } };
+let liveryAtlasTex = null,
+  liveryMat = null;
+function buildLiveryAtlas() {
+  if (liveryMat) return liveryMat;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 512));
+  const g = cv.getContext("2d"),
+    ks = ["crowther", "bishop", "maddock", "you"];
+  g.clearRect(0, 0, 512, 512);
+  for (let c = 0; c < 4; c++) {
+    const x = c * 128,
+      L = RACE_LIVERY[ks[c]];
+    ((g.fillStyle = "#f6f4ec"), g.beginPath(), g.arc(x + 64, 64, 56, 0, 6.29), g.fill());
+    ((g.strokeStyle = "#20242c"), (g.lineWidth = 5), g.beginPath(), g.arc(x + 64, 64, 53, 0, 6.29), g.stroke());
+    ((g.fillStyle = "#16181e"), (g.font = "900 78px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(String(L.n), x + 64, 70);
+    const t = "#" + L.trim.toString(16).padStart(6, "0");
+    ((g.fillStyle = t), g.fillRect(x + 8, 136, 112, 48));
+  }
+  ((g.font = "900 44px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+  const names = ["CROWTHER", "BISHOP", "MADDOCK"];
+  for (let i = 0; i < 3; i++) {
+    const y = 200 + i * 64;
+    ((g.fillStyle = "rgba(246,244,236,0.92)"), g.fillRect(4, y, 248, 56), (g.fillStyle = "#16181e"));
+    g.fillText(names[i], 128, y + 30, 236);
+  }
+  liveryAtlasTex = new CanvasTexture(cv);
+  liveryAtlasTex.colorSpace = SRGBColorSpace;
+  liveryMat = new MeshBasicMaterial({ map: liveryAtlasTex, transparent: !0, alphaTest: 0.3, toneMapped: !1, polygonOffset: !0, polygonOffsetFactor: -2, side: DoubleSide });
+  return liveryMat;
+}
+const _lbb = new Box3(),
+  _lsz = new Vector3(),
+  _lct = new Vector3();
+function _uvCell(geo, u0, v0, u1, v1) {
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, u0 + uv.getX(i) * (u1 - u0), v0 + uv.getY(i) * (v1 - v0));
+  return geo;
+}
+function addRaceLivery(mesh, key) {
+  const L = RACE_LIVERY[key];
+  if (!L || mesh.userData.liveryN) return;
+  const mat = buildLiveryAtlas();
+  (_lbb.setFromObject(mesh), _lbb.getSize(_lsz), _lbb.getCenter(_lct));
+  const cy = _lct.y - mesh.position.y,
+    topY = _lbb.max.y - mesh.position.y,
+    halfW = _lsz.x / 2,
+    rearZ = _lbb.min.z - mesh.position.z, // local +z is the NOSE on these builds
+    u0 = L.col / 4,
+    u1 = (L.col + 1) / 4,
+    rv0 = 1 - 128 / 512,
+    parts = [];
+  // door roundels (both sides)
+  for (const sx of [-1, 1]) {
+    const q = _uvCell(new PlaneGeometry(0.62, 0.62), u0, rv0, u1, 1);
+    (q.rotateY((sx * Math.PI) / 2), q.translate(sx * (halfW + 0.012), cy + 0.12, 0.1), parts.push(q));
+  }
+  // roof + tail roundels (the chase camera stares at these)
+  const roof = _uvCell(new PlaneGeometry(0.72, 0.72), u0, rv0, u1, 1);
+  (roof.rotateX(-Math.PI / 2), roof.translate(0, topY + 0.015, 0.15), parts.push(roof));
+  const tail = _uvCell(new PlaneGeometry(0.5, 0.5), u0, rv0, u1, 1);
+  (tail.rotateY(Math.PI), tail.translate(0, cy + 0.18, rearZ - 0.012), parts.push(tail));
+  // twin racing stripes over the roofline, tinted via the solid trim cell
+  const su0 = L.col / 4 + 0.02,
+    su1 = (L.col + 1) / 4 - 0.02;
+  for (const sx of [-0.24, 0.24]) {
+    const st = _uvCell(new PlaneGeometry(0.2, _lsz.z * 0.55), su0, 1 - 184 / 512, su1, 1 - 140 / 512);
+    (st.rotateX(-Math.PI / 2), st.translate(sx, topY + 0.012, 0), parts.push(st));
+  }
+  // rival name strip above the door roundel
+  if (L.col < 3)
+    for (const sx of [-1, 1]) {
+      const nv0 = 1 - (256 + L.col * 64) / 512,
+        ns = _uvCell(new PlaneGeometry(1.35, 0.3), 8 / 512, nv0, 252 / 512, nv0 + 56 / 512);
+      (ns.rotateY((sx * Math.PI) / 2), ns.translate(sx * (halfW + 0.012), cy + 0.62, 0.1), parts.push(ns));
+    }
+  const add = new Mesh(mergeGeometries(parts, !1), mat);
+  ((add.castShadow = !1), (add.receiveShadow = !1), mesh.add(add), (mesh.userData.liveryN = L.n));
+}
 const rivals = RIVAL_DEFS.map((d, idx) => ({
   ...d,
   idx,
@@ -6493,13 +6578,16 @@ const rivals = RIVAL_DEFS.map((d, idx) => ({
   progEl: null,
 }));
 const es = rivals[0].mesh;
+for (const r of rivals) addRaceLivery(r.mesh, r.key);
 let cn = CAR_MODELS[carModelIndex].build();
+addRaceLivery(cn, "you");
 function applyCarSelection(idx) {
   ((carModelIndex = MathUtils.clamp(idx, 0, CAR_MODELS.length - 1)),
     localStorage.setItem("steel-ribbon-carmodel", String(carModelIndex)));
   const wasVisible = cn.visible;
   Po(cn);
   ((cn = CAR_MODELS[carModelIndex].build()), (cn.visible = wasVisible));
+  addRaceLivery(cn, "you");
   typeof refreshCarUI == "function" && refreshCarUI();
 }
 for (const r of rivals) ((r.mesh.visible = !1), et.add(r.mesh));
@@ -10010,6 +10098,10 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      livery: {
+        rivals: rivals.map((r) => ({ key: r.key, n: r.mesh.userData.liveryN ?? 0, x: +r.mesh.position.x.toFixed(1), y: +r.mesh.position.y.toFixed(1), z: +r.mesh.position.z.toFixed(1), visible: r.mesh.visible })),
+        player: cn.userData.liveryN ?? 0,
       },
       roadside: {
         spots: roadsideSys.spots.length,
