@@ -34,10 +34,27 @@ rendering architecture must survive intact.
 | race, chase, course0 (canonical) | 1794 | 543,646 | 5447 | 227 |
 | roam                | 1201      | 492,692   | 1777       | 229      |
 
-Perf gate: canonical view ≤ ~1884 calls / ≤ ~571k tris (+5%); textures may grow only
-by bounded pooled amounts; `renderInfo().geometries` must not creep across iterations.
+Perf gate (ORIGINAL, superseded 2026-07-16): ≤ ~1884 calls / ≤ ~571k tris (+5%).
+
+## Renegotiated baseline (2026-07-16, v3.17.0, 5 fresh worlds x 2 samples)
+
+| metric     | observed range      | median  | NEW GATE |
+|------------|---------------------|---------|----------|
+| draw calls | 1814 – 1889         | ~1846   | ≤ 1975   |
+| triangles  | 564,294 – 593,920   | ~576k   | ≤ 620k   |
+| textures   | 235 – 245           | 240     | ≤ 252    |
+| geometries | 5503 – 5552         | ~5520   | ≤ 5650   |
+
+Rationale: the v3.7 gate was consumed by world-gen variance (item 09 verdict);
+current worlds straddle it through pure noise (world 3 above: 1889/593.9k with
+ZERO uncommitted changes). Real-hardware FPS is unmeasurable headlessly — the
+static gate is a REGRESSION TRIPWIRE, not a hardware promise — so it is
+re-anchored to current reality with explicit headroom earmarked for the
+full-fat freeze-blocked items (4b recessed drivers ~5k tris, 11 painted road
+detail ~4k). THE GEOMETRY FREEZE IS LIFTED within this budget. Post-item checks
+compare against THIS table.
 World: 45 pedestrians, 30 traffic colliders, city grid pitch 130 / street width 20,
-staticMerge 130 groups (5372 meshes removed) — do not break that merge.
+staticMerge ~130 groups — do not break that merge.
 
 ## What the world looks like today (shots: loop-shots/00-bootstrap/)
 
@@ -784,3 +801,17 @@ versions stay blocked on the perf renegotiation.
   only remaining known work: full-fat 4b/11 behind the real-FPS perf
   renegotiation. The world looks back when you look closely — and now it
   talks, too.
+
+## Round four (loop resumed 2026-07-16, "continue"): the renegotiation
+
+- **32 PERF RENEGOTIATION (2026-07-16)**: measured v3.17.0 across 5 fresh
+  worlds (probe-32-baseline.mjs, 2 samples each): calls 1814-1889 (median
+  1846), tris 564.3k-593.9k (median ~576k), textures 235-245, geometries
+  5503-5552. World 3 EXCEEDED the old gate with zero pending changes —
+  the old tripwire was measuring world-gen dice rolls, not regressions.
+  New gates written into the baseline section (calls ≤1975, tris ≤620k,
+  textures ≤252, geometries ≤5650); geometry freeze LIFTED with headroom
+  earmarked for full-fat 4b (recessed cabin drivers, next) and full-fat
+  11 (painted road detail, assess after). No game code changed this
+  iteration — measurement + bookkeeping only, so no smoke rerun needed
+  beyond the standing green.
