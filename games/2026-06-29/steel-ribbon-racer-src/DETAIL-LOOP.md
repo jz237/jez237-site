@@ -124,8 +124,9 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 17. ~~Rooftop detail~~ **DONE 2026-07-15 (iteration 18)** — pooled vcBaked
     HVAC/antenna/water-tower kits on the roofs nearest the camera; rooftop
     pigeons deferred (birdSys covers ground flocks). See iteration log.
-18. **Race roadside life**: pit boards, marshals with flags, camera crews near the
-    track edge (they're what you zoom past at speed).
+18. ~~Race roadside life~~ **DONE 2026-07-15 (iteration 19)** — marshals with
+    checkered flags, pit boards, camera crews on lifted deck-edge platforms
+    at ~14 stations along the course. See iteration log.
 18b. **Rival race-number roundels + liveries** (split from item 1): rivals are
     race cars, not street cars — door/hood number circles + sponsor-style fictional
     liveries via the same atlas technique; player car gets one too.
@@ -525,3 +526,29 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   verified live (index-CkhnbQdS.js, bundle 200, 867KB). Alias lag showed
   the STALE index + 404 on the deleted old bundle for ~30s — the retry
   rule stands.
+- **19 race roadside life — backlog item 18 (2026-07-15)**: `roadsideSys` —
+  buildStations() samples ~14 course stations after the rail build (St(s)
+  centerline + side vector, lateral width/2+2.0 just outside the rails,
+  skipping railSkipZone + the first 40m; stations rebuild with the course).
+  Pool of 6 kits (mobile 3), each ONE vcBaked merged mesh (+1 text quad on
+  pit boards): V0 marshal with a TRUE-GEOMETRY 2x4 checkered flag (baked
+  alternating quads — no texture needed), V1 pit board (posts + frame +
+  atlas text quad "P3 +1.2"/"LAP 2 PUSH", toneMapped:!1), V2 camera crew
+  (tripod, camera + lens, blue-vest operator). Promotion: 3D distance
+  ≤220m, 0.5s cadence, variant preference with cross-variant fallback.
+  THE LESSON OF THE ITERATION: platforms flush with the deck are INVISIBLE
+  from the deck — the ribbon's raised rim wall occludes them (only a head
+  sliver peeked over; a x10-scale magenta beacon + camWorld() cross-check
+  isolated it after scene dumps showed a perfectly healthy mesh). Fix:
+  LIFT=1.3 — platform top rides level with the rim so figures stand fully
+  visible. ALSO: probe servers must include ".css" in their MIME map — a
+  css-less page renders DOM-only and the canvas screenshot is garbage
+  (looked like WebGL failure; wasn't). Verified by looking
+  (`loop-shots/19-roadside/`): marshal + checkered flag legible at race
+  eye 18m and unmistakable at 6m; from-below reads as bolt-on maintenance
+  ledges; far 300m demotes clean. Race perf WITH stations live on the
+  course: 1801–1819 calls (gate 1884), 560–565k tris, textures 236.
+  Debug: detailReport().roadside {spots, promoted, pool, radius, sample,
+  stations}, roadsideEnable(on); smoke probe releases __freeCam=false
+  after flyCam (the flag is live-read by the camera controller). Suite
+  131/131 expected.
