@@ -1,0 +1,367 @@
+{
+  "currentDate": "2026-07-16",
+  "historicDate": "1983-06-06",
+  "displayDate": "Week of June 6–12, 1983",
+  "edition": "Issue 045 - Weekly 1982 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Summer CES home-computer showdown with arcade energy",
+    "motifs": [
+      "Coleco Adam keyboard and printer",
+      "ColecoVision cartridge",
+      "Atari XL computer",
+      "software boxes"
+    ],
+    "layout": "Dense 1983 computer weekly with the Adam lead, gaming artwork, boxed charts, blue rules, and red spot color"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+    "dateline": "Week of June 6–12, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Coleco Adam CES sensation across the upper fold with a large home-computing halftone",
+    "secondaryRail": "Atari XL, software price war, WarGames, charts, shelf watch, and prices",
+    "archiveNavigation": "Previous/next weekly issue controls and calendar archive"
+  },
+  "sectionChrome": {
+    "primary": "Arcade red",
+    "secondary": "CRT blue",
+    "texture": "Warm aged newsprint, column rules, halftone dots, and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-06-06.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week of June 6–12, 1983, led by the Coleco Adam at Summer CES",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Summer CES puts complete home-computer systems—not bare specifications—at the center of the sales pitch.",
+  "morningLine": "Chicago’s summer electronics show belongs to a game maker’s ambitious new computer.",
+  "lead": {
+    "headline": "Coleco’s $600 Adam Steals the Summer CES",
+    "dek": "A complete computer, word processor, fast tape drive and letter-quality printer promises to turn a ColecoVision household into a home office.",
+    "body": [
+      "The busiest conversation at Chicago’s June 5–8 Consumer Electronics Show begins with an unlikely challenger. Coleco, best known for ColecoVision, has unveiled Adam: an under-$600 home-computer package built around a Z80 processor, a full-size 75-key keyboard, SmartWriter word processing, BASIC, a Digital Data Pack recorder and a daisy-wheel printer.",
+      "That bundle is the point. Buyers accustomed to pricing a computer, storage unit, software and printer separately are being shown the whole desk at once. Coleco says existing ColecoVision cartridges will work, includes Buck Rogers: Planet of Zoom, and promises an expansion route below $400 for current console owners.",
+      "Inside, Coleco describes 80K of total memory and an “Adamnet” communications circuit coordinating the system’s processors. The proprietary tape promises far faster transfers than an ordinary cassette, while the printer is rated near ten characters per second. Additional drives are projected at $150 and tapes around $10.",
+      "The applause comes with an important reservation: these are show prototypes, not production machines available for a full test. Delivery, reliability and the real retail price will determine whether Adam becomes a family computer or merely the most memorable promise of CES.",
+      "Still, Coleco has changed the argument for the week. Atari and Commodore now face a rival selling a complete activity—writing, printing, programming and playing—rather than asking shoppers to assemble a system one peripheral at a time."
+    ],
+    "confidence": "Exact-week announcement; specifications and prices are period claims for prototype hardware.",
+    "sourceRefs": [
+      0,
+      2,
+      3
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Atari Answers With XL Computers and a Writing System",
+      "kicker": "Hardware Desk",
+      "dek": "The 600XL and 800XL lead a refreshed line, while a $600 bundle makes word processing the competitive measure.",
+      "body": [
+        "Atari’s June 5 announcement brings new computers, peripherals, video accessories and 28 games to the same Chicago floor. The 600XL and 800XL are positioned as successors to the 400 and 800, retaining the value of Atari’s existing software library while offering a cleaner route into the next generation.",
+        "Its $600 Writing System combines a 600XL, AtariWriter cartridge, guide, paper and a letter-quality printer rated at 20 characters per second. A television and cassette or disk storage remain extra, but Atari argues that separately useful components give owners more freedom to expand than an all-in-one package."
+      ],
+      "confidence": "Exact-week product announcement with period follow-up coverage.",
+      "sourceRefs": [
+        1,
+        2,
+        4
+      ]
+    },
+    {
+      "headline": "Software Price War Breaks Out at CES",
+      "kicker": "Software Counter",
+      "dek": "Cross-platform publishing and sharp price cuts make low-cost computers more useful.",
+      "body": [
+        "The hardware contest is spilling onto the software shelves. Creative Computing reports Datamost Gentry programs for Apple and Atari at $14.95–$19.95, Synapse Showcase titles for VIC-20 at $19.95, and TI-99/4A cassette programs below $10.",
+        "Commodore announces 70 titles, Easy Script 64 below $50 and Multiplan for the Commodore 64 at a quoted price that falls toward $50 during the show. Atari, Mattel, Imagic, Activision, Parker Brothers, Broderbund and Sega are all widening platform support as publishers chase the expanding installed base."
+      ],
+      "confidence": "Same-week CES reporting published in a period magazine.",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "headline": "WarGames Makes the Home Modem a Movie Star",
+      "kicker": "Screen & Keyboard",
+      "dek": "A teen, an acoustic coupler and a military computer carry dial-up culture into packed theaters.",
+      "body": [
+        "WarGames enters its second weekend just as home computers dominate the CES conversation. Matthew Broderick plays David Lightman, whose password guessing and modem exploration reach a military system and turn an innocent search for games into a nuclear crisis.",
+        "The film ranks fifth for June 10–12 with $4.8 million from 843 theaters and $14.2 million cumulative. Its thriller machinery makes passwords, dial-up exploration and connected systems understandable—and alarming—to audiences far beyond the computer club."
+      ],
+      "confidence": "Same-week film and box-office records.",
+      "sourceRefs": [
+        7,
+        8
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Buck Rogers: Planet of Zoom",
+      "summary": "The arcade-derived game is bundled with Adam, which also accepts ColecoVision cartridges.",
+      "confidence": "Same-week CES announcement.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Electronic Arts’ First Wave",
+      "summary": "Archon and Pinball Construction Set remain fresh arrivals from EA’s first May 20 shipment.",
+      "confidence": "Same-month company history.",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "title": "Modem Gaming",
+      "summary": "Computer Gaming World’s May–June issue follows games played across telephone lines.",
+      "confidence": "Period issue.",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "title": "Computer Museum",
+      "summary": "InfoWorld profiles Boston’s young Computer Museum and the people already preserving obsolete machines.",
+      "confidence": "Exact-date June 6 coverage.",
+      "sourceRefs": [
+        10
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "SmartWriter",
+      "detail": "Built-in Adam word processor with dedicated keyboard commands."
+    },
+    {
+      "name": "AtariWriter",
+      "detail": "Cartridge word processor in Atari’s Writing System."
+    },
+    {
+      "name": "Easy Script 64",
+      "detail": "Commodore 64 word processor announced below $50."
+    },
+    {
+      "name": "Multiplan for Commodore 64",
+      "detail": "Microsoft spreadsheet quoted near $50 by the show’s end."
+    },
+    {
+      "name": "Archon",
+      "detail": "Electronic Arts strategy game mixing board play with arcade combat."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Archon: The Light and the Dark",
+        "Pinball Construction Set",
+        "M.U.L.E.",
+        "Close Assault",
+        "Computer Ambush"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Return of the Jedi",
+        "Octopussy",
+        "Trading Places",
+        "Psycho II",
+        "WarGames"
+      ]
+    },
+    {
+      "label": "Home Computers",
+      "items": [
+        "Coleco Adam",
+        "Atari 600XL",
+        "Atari 800XL",
+        "Commodore 64",
+        "Mattel Aquarius"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "SmartWriter",
+        "AtariWriter",
+        "Easy Script 64",
+        "Multiplan for Commodore 64",
+        "Datamost Gentry"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Coleco Adam full package",
+      "price": "Under $600",
+      "note": "Announced price for computer, storage, software and printer."
+    },
+    {
+      "item": "ColecoVision Adam expansion",
+      "price": "Under $400",
+      "note": "Announced upgrade route for console owners."
+    },
+    {
+      "item": "Atari Writing System",
+      "price": "$600",
+      "note": "Television and storage device still required."
+    },
+    {
+      "item": "Commodore 64 complete system",
+      "price": "$799",
+      "note": "Period post-CES advertisement with disk drive, datasette and 17-inch color monitor."
+    },
+    {
+      "item": "Datamost Gentry software",
+      "price": "$14.95–$19.95",
+      "note": "CES price range for Apple and Atari programs."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "IBM Trims Office Prices",
+      "text": "A June 8 report signals intensifying competition across IBM office products."
+    },
+    {
+      "headline": "Computer Collecting Is Already News",
+      "text": "Boston’s Computer Museum preserves yesterday’s machines while the microcomputer boom is still young."
+    },
+    {
+      "headline": "Jedi Holds No. 1",
+      "text": "Return of the Jedi leads the June 10–12 domestic weekend."
+    },
+    {
+      "headline": "Octopussy Opens Second",
+      "text": "The new Bond film debuts ahead of Trading Places, Psycho II and WarGames."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Flashdance... What a Feeling",
+      "artist": "Irene Cara"
+    },
+    {
+      "rank": 2,
+      "title": "Let’s Dance",
+      "artist": "David Bowie"
+    },
+    {
+      "rank": 3,
+      "title": "Time (Clock of the Heart)",
+      "artist": "Culture Club"
+    },
+    {
+      "rank": 4,
+      "title": "Overkill",
+      "artist": "Men at Work"
+    },
+    {
+      "rank": 5,
+      "title": "Beat It",
+      "artist": "Michael Jackson"
+    }
+  ],
+  "periodAd": {
+    "headline": "A Whole Computer Room in One Box",
+    "summary": "Adam promises keyboard, storage, word processing, BASIC, printer and game compatibility as a single family purchase.",
+    "tagline": "Write it. Print it. Play it."
+  },
+  "market": {
+    "headline": "Bundles Replace Specifications as the Sales Pitch",
+    "summary": "Coleco and Atari both use $600 packages to compete on complete writing and printing systems, while publishers cut prices and spread software across rival machines.",
+    "confidence": "Interpretation grounded in same-week CES announcements and period reports.",
+    "sourceRefs": [
+      1,
+      2,
+      3
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Margaret Thatcher Wins a Second Term in Britain",
+    "summary": "Britain’s June 9 general election returns Thatcher’s Conservatives with a landslide parliamentary majority.",
+    "confidence": "Exact-date historical record.",
+    "sourceRefs": [
+      12
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Adam and Atari specifications are period announcement claims; CES machines and prices could change before retail release.",
+      "Software names and price ranges follow period CES reporting.",
+      "The movie ranking uses the June 10–12 domestic weekend.",
+      "Music ranking follows the Billboard Hot 100 dated June 11, 1983.",
+      "Game shelf titles are named period releases or titles covered in the May–June Computer Gaming World issue."
+    ]
+  },
+  "sources": [
+    {
+      "label": "1983 International Summer Consumer Electronics Show directory",
+      "url": "https://library.gamehistory.org/repositories/2/archival_objects/21411"
+    },
+    {
+      "label": "Atari Introduces Inexpensive Computer System",
+      "url": "http://archive.org/details/19830605AtariIntroducesInexpensiveComputerSystem"
+    },
+    {
+      "label": "Popular Science: Two stunning new $600 computer packages",
+      "url": "http://oldcomputers.net/popsciadam.html"
+    },
+    {
+      "label": "Creative Computing: Reflections on CES",
+      "url": "https://www.atarimagazines.com/creative/v9n9/224_Reflections_on_CES.php"
+    },
+    {
+      "label": "New Atari Product Line",
+      "url": "https://www.atarimagazines.com/v2n3/newatari.php"
+    },
+    {
+      "label": "Computer Gaming World Vol. 3 No. 3",
+      "url": "https://cgwmuseum.org/galleries/issues/cgw_3.3.pdf"
+    },
+    {
+      "label": "Today in EA History",
+      "url": "https://www.ea.com/news/today-in-ea-history"
+    },
+    {
+      "label": "AFI Catalog: WarGames",
+      "url": "https://catalog.afi.com/Catalog/moviedetails/67139"
+    },
+    {
+      "label": "Domestic Weekend 23, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W23/?sort=rank"
+    },
+    {
+      "label": "Billboard Hot 100, June 11, 1983",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-06-11"
+    },
+    {
+      "label": "Computer collecting in 1983",
+      "url": "https://www.timexsinclair.com/article/the-people-who-collect-obsolete-computers-for-old-times-sake/index.html"
+    },
+    {
+      "label": "I.B.M. Cuts Prices Of Office Products",
+      "url": "https://www.nytimes.com/1983/06/08/business/ibm-cuts-prices-of-office-products.html"
+    },
+    {
+      "label": "British general election of 1983",
+      "url": "https://www.britannica.com/event/British-general-election-of-1983"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM OPPONENT WANTED",
+      "copy": "Strategy player seeks friendly games by telephone line. Evenings preferred."
+    },
+    {
+      "headline": "DATA PACK LABELS",
+      "copy": "Keep programs, letters and high-speed tapes indexed beside the keyboard."
+    }
+  ]
+}
