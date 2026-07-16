@@ -1,6 +1,6 @@
 {
   "date": "2026-07-16",
-  "updatedAt": "2026-07-16T16:00:01.750493+00:00",
+  "updatedAt": "2026-07-16T22:00:01.837097+00:00",
   "items": [
     {
       "title": "Claude can now use your 1Password credentials for you",
@@ -16,10 +16,10 @@
       "featuredLatest": false,
       "published": "2026-07-16T13:00:00+00:00",
       "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 17.772,
+      "score": 17.6167,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -31,8 +31,103 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "claude-claude-can-use-your-1password",
-      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+      "clusterKey": "claude-claude-can-use-your-1password"
+    },
+    {
+      "title": "SpaceXAI Open-Sources Grok Build After Privacy Backlash",
+      "url": "https://www.techrepublic.com/article/news-spacexai-grok-build-open-source-privacy",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "SpaceXAI open-sourced Grok Build under Apache 2.0 after privacy backlash over broad directory uploads from its terminal AI coding agent.\nThe post SpaceXAI Open-Sources Grok Build After Privacy Backlash appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-a7ece37f91e1d96a9d.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-16T16:44:16+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 15.2004,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "SpaceXAI Open-Sources Grok Build After Privacy Backlash",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "grok-xai-spacexai-open-sources-grok-build-privacy",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/mariia-shalabaieva-9rDIpHOE9IY-unsplash-1.jpg?f=jpeg"
+    },
+    {
+      "title": "Kimi K3, and what we can still learn from the pelican benchmark",
+      "url": "https://simonwillison.net/2026/Jul/16/kimi-k3",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Chinese AI lab Moonshot AI announced Kimi K3 this morning, describing it as their \"most capable model to date, with 2.8 trillion parameters\". It's currently available via their website and API, but an open weight release is promised \"by July 27, 2026\".\nMoonshot are calling this the first \"open 3T-class model\" (I guess they're rounding 2.8 trillion up to 3 trillion), taking the crown from DeepSeek's 1.6T v4 Pro. Their self-reported benchmarks have K3 mostly beating Claude Opus 4.8 max and GPT-5.5 high, while losing out to Claude Fable 5 and GPT-5.6 Sol.\nA few highlights from the Artificial Anal",
+      "image": "public/thumbnails/news-19ba00d9ce089262ff.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-16T20:19:30+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.99,
+      "signalGroup": "Research",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Kimi K3, and what we can still learn from the pelican benchmark",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "kimi-what-can-still-learn-pelican",
+      "imageOriginal": "https://static.simonwillison.net/static/2026/kimi-3-pelican.jpg"
+    },
+    {
+      "title": "1Password lets Claude log you into websites without ever seeing your passwords",
+      "url": "https://thenextweb.com/news/1password-claude-credential-zero-exposure-agentic-mode",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "1Password has launched a browser integration that lets Anthropic’s Claude use stored credentials to complete tasks on the web without the passwords ever reaching the AI model, according to a blog post published on Thursday. The company calls it a zero-exposure architecture: when Claude needs to sign in, 1Password shows the user which credential is [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-ebedc142e663d89827.avif",
+      "featuredLatest": false,
+      "published": "2026-07-16T21:00:18+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.22,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "1Password lets Claude log you into websites without ever seeing your passwords",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "claude-1password-lets-claude-log-you",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/1password-claude-credential-zero-exposure-agentic-mode.avif"
     },
     {
       "title": "How a former DeepMind researcher raised at a $300M pre-seed valuation before launching a product",
@@ -48,10 +143,10 @@
       "featuredLatest": false,
       "published": "2026-07-16T15:02:00+00:00",
       "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.3608,
+      "score": 12.1964,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -63,8 +158,7 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "deepmind-how-former-deepmind-researcher-raised",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/07/BMs3e2-featured-pic.png?resize=1200%2C675"
+      "clusterKey": "deepmind-how-former-deepmind-researcher-raised"
     },
     {
       "title": "Why is OpenAI selling a ChatGPT basketball?",
@@ -80,10 +174,10 @@
       "featuredLatest": false,
       "published": "2026-07-16T15:31:09+00:00",
       "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 11.9754,
+      "score": 11.8088,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -95,8 +189,39 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "openai-chatgpt-why-openai-selling-chatgpt-basketball",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/07/chatgpt-basketball.jpg?resize=1200%2C675"
+      "clusterKey": "openai-chatgpt-why-openai-selling-chatgpt-basketball"
+    },
+    {
+      "title": "Introducing Grok on Amazon Bedrock",
+      "url": "https://aws.amazon.com/blogs/machine-learning/introducing-grok-on-amazon-bedrock",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "This post covers what makes Grok 4.3 a great fit for agentic and enterprise workloads, how you access it through Amazon Bedrock, and how to use the capabilities most teams reach for first: a basic chat request, configurable reasoning effort, tool calling, structured output, image input, and stateful multi-turn conversations.",
+      "image": "public/thumbnails/news-e1e643bfa3ab42ec0e.png",
+      "featuredLatest": false,
+      "published": "2026-07-16T19:29:26+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.4339,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Introducing Grok on Amazon Bedrock",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "grok-introducing-grok-amazon-bedrock",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/06/30/21284.png"
     },
     {
       "title": "Applied Computing raises $20m to build a foundation model for the refinery",
@@ -115,7 +240,7 @@
       "lastSeen": "2026-07-16T11:10:38.275918+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 11.3501,
+      "score": 11.2119,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -130,6 +255,38 @@
       "clusterKey": "applied-computing-raises-20m-build-foundation",
       "imageOriginal": "https://media.thenextweb.com/2026/07/Applied-Computing.avif",
       "model_release": true
+    },
+    {
+      "title": "Google’s next Gemini Pro is months behind schedule as coding capabilities fall short of internal goals",
+      "url": "https://thenextweb.com/news/google-gemini-pro-delayed-coding-falls-short",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google is months behind schedule on delivering the next version of its flagship AI model, Gemini Pro, because the technology has fallen short of internal goals in coding, Bloomberg reported on Thursday citing 10 current and former employees. The company was widely expected to release the upgrade at its May developer conference but has been [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-9eeea20eeac12cdfb4.avif",
+      "featuredLatest": false,
+      "published": "2026-07-16T19:43:40+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1827,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Google’s next Gemini Pro is months behind schedule as coding capabilities fall short of internal goals",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "google-gemini-google-next-gemini-pro-months",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/google-gemini-pro-delayed-coding-falls-short.avif"
     },
     {
       "title": "xAI’s first lawsuit against a user tests who is responsible for what Grok makes",
@@ -148,7 +305,7 @@
       "lastSeen": "2026-07-16T11:10:38.275918+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9353,
+      "score": 10.7994,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -164,6 +321,164 @@
       "imageOriginal": "https://media.thenextweb.com/2026/05/xai-cursor-gun-jumping-antitrust-spacex-ipo.avif"
     },
     {
+      "title": "Google is renaming NotebookLM to Gemini Notebook",
+      "url": "https://www.theverge.com/tech/966112/google-gemini-notebook-notebooklm",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google is giving its AI note-taking app a new name. The company announced on Thursday that NotebookLM is becoming Gemini Notebook, but will remain a standalone app even as it integrates more deeply across Gemini and Google Search. Google first revealed Gemini Notebook - then called Project Tailwind - in May 2023 before widely releasing [&#8230;]",
+      "image": "public/thumbnails/news-77521724b425c9cf14.webp",
+      "featuredLatest": false,
+      "published": "2026-07-16T16:00:00+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.6911,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Google is renaming NotebookLM to Gemini Notebook",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-gemini-google-renaming-notebooklm-gemini-notebook",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/gemininotebook.png?quality=90&strip=all&crop=0%2C3.479841264548%2C100%2C93.040317470904&w=1200"
+    },
+    {
+      "title": "Claude for Chrome Flaw Puts Gmail at Risk From Rogue Extensions",
+      "url": "https://www.techrepublic.com/article/news-claude-chrome-flaw-rogue-extensions-gmail",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Researchers say a Claude for Chrome flaw lets rogue extensions trigger Gmail, Docs, and Calendar tasks, with greater risk in unattended mode.\nThe post Claude for Chrome Flaw Puts Gmail at Risk From Rogue Extensions appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-28ef89db64003d6daf.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-16T16:23:01+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.4911,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Claude for Chrome Flaw Puts Gmail at Risk From Rogue Extensions",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "claude-claude-chrome-flaw-puts-gmail",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/unnamed-26.png?f=jpeg"
+    },
+    {
+      "title": "Why teens deserve access to safe AI",
+      "url": "https://openai.com/index/why-teens-deserve-access-safe-ai",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Learn how OpenAI is making ChatGPT safer for teens with age-appropriate protections, learning tools, parental controls, and expert partnerships.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-16T16:00:00+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.4311,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Why teens deserve access to safe AI",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "why-teens-deserve-access-safe"
+    },
+    {
+      "title": "The EU is forcing Google to open Android to rival AI and share its search data",
+      "url": "https://thenextweb.com/news/eu-google-android-ai-search-data-digital-markets-act",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google will have to let rival AI assistants run on Android the way its own Gemini does. It must also hand some of its search data to competitors. The European Commission set out both requirements on Thursday. The two decisions fall under the EU’s Digital Markets Act (DMA), the Commission said. The law forces “gatekeeper” [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-28ad5783d9fdcd6f44.avif",
+      "featuredLatest": false,
+      "published": "2026-07-16T18:16:53+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.542,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "The EU is forcing Google to open Android to rival AI and share its search data",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-forcing-google-open-android-rival",
+      "imageOriginal": "https://media.thenextweb.com/2024/02/google-ai-skills-europe.avif"
+    },
+    {
+      "title": "Quoting Thibault Sottiaux",
+      "url": "https://simonwillison.net/2026/Jul/16/bad-codex-bug",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "On file deletions. We’ve investigated a handful of reports where GPT-5.6 unexpectedly deleted files. \nWhat we have  found is that this most commonly occurs when:\n\nFull access mode is enabled and codex is run without sandboxing protections, including without auto review being enabled\nThe model attempts  to override the $HOME env var to define a temporary directory.\nThe model makes an honest mistake and mistakenly deletes $HOME instead.\n\n&mdash; Thibault Sottiaux, describing a pretty gnarly Codex bug\n\n    Tags: codex, coding-agents, generative-ai, ai, llms",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-16T17:45:59+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.2679,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Quoting Thibault Sottiaux",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "quoting-thibault-sottiaux"
+    },
+    {
       "title": "Our approach to bioresilience",
       "url": "https://deepmind.google/blog/our-approach-to-bioresilience",
       "source": "Google DeepMind Blog",
@@ -177,10 +492,10 @@
       "featuredLatest": false,
       "published": "2026-07-16T09:30:42+00:00",
       "firstSeen": "2026-07-16T11:10:38.275918+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "big_name_with_impact",
-      "score": 8.3486,
+      "score": 8.2076,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -209,10 +524,10 @@
       "featuredLatest": false,
       "published": "2026-07-16T15:38:55+00:00",
       "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
-      "score": 7.7793,
+      "score": 7.6121,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -224,360 +539,38 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "yes-you-can-order-doordash-command",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2019/01/dasher_ps_horiz_5.jpg?w=1200"
+      "clusterKey": "yes-you-can-order-doordash-command"
     },
     {
-      "title": "Microsoft is coaching its salespeople to talk down the models it still runs on",
-      "url": "https://thenextweb.com/news/microsoft-sales-playbook-fy27-openai-anthropic",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Microsoft executives spent an internal meeting on Tuesday teaching the sales force how to run down OpenAI, Google, and Anthropic, which would be unremarkable except that two of those companies supply the models inside Microsoft’s own products. The session was billed as a strategy kickoff for the fiscal year that began this month, and it leaned [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-d50c4276e52247d0f5.avif",
-      "featuredLatest": false,
-      "published": "2026-07-16T08:57:21+00:00",
-      "firstSeen": "2026-07-16T11:10:38.275918+00:00",
-      "lastSeen": "2026-07-16T11:10:38.275918+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.9545,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "Microsoft is coaching its salespeople to talk down the models it still runs on",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "microsoft-coaching-salespeople-talk-down-models",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/microsoft-frontier-company-2-5-billion-ai-deployment.avif"
-    },
-    {
-      "title": "Anthropic and Blackstone bet the next fortune in AI is implementation, not models",
-      "url": "https://thenextweb.com/news/ode-anthropic-blackstone-ai-implementation",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The race in AI has been about who builds the best model. A new company backed by Anthropic thinks the real money sits elsewhere: in getting those models to actually work inside big companies. That company is Ode with Anthropic, and it launched under its full name this week, the partners said. Anthropic, Blackstone, and [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-22a6c7cc1f34074307.avif",
-      "featuredLatest": false,
-      "published": "2026-07-16T14:23:10+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8018,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "Anthropic and Blackstone bet the next fortune in AI is implementation, not models",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "anthropic-anthropic-blackstone-bet-next-fortune",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/anthropic-ODE.avif"
-    },
-    {
-      "title": "Google ordered to open Android and Search to rivals in Europe",
-      "url": "https://www.theverge.com/policy/966438/eu-google-android-ai-interoperability-search-data-dma",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Google must give rival AI assistants and search engines greater access to key parts of Android and Google Search after the European Union ordered the company to comply with the bloc's digital antitrust rules. The two decisions, handed down Thursday, could weaken Google's control over two of the tech industry's most important platforms and have [&#8230;]",
-      "image": "public/thumbnails/news-75c5c3292e94c1f575.webp",
-      "featuredLatest": false,
-      "published": "2026-07-16T12:06:51+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.7474,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "Google ordered to open Android and Search to rivals in Europe",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Verge AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "google-google-ordered-open-android-search",
-      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/STK450_EU_E-2-1.jpg?quality=90&strip=all&crop=0%2C9.9676601489831%2C100%2C80.064679702034&w=1200"
-    },
-    {
-      "title": "Inkling: Our open-weights model",
-      "url": "https://simonwillison.net/2026/Jul/16/inkling",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
+      "title": "Create, edit and star in videos with two Google Vids updates",
+      "url": "https://blog.google/products-and-platforms/products/workspace/gemini-omni-personal-avatars",
+      "source": "Google AI Blog",
+      "sourceUrl": "https://blog.google/technology/ai/rss/",
+      "sourceWeight": 0.95,
       "sourceRole": "primary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Inkling: Our open-weights model\nMira Murati's Thinking Machines Lab just released their first open-weights model. Inkling is \"a Mixture-of-Experts transformer with 975B total parameters, 41B active\" - an Apache-2.0 licensed multimodal model trained on 45 trillion tokens of text, images, audio and video.\nThey're also promising Inkling-Small, a 276B (12B active) model, but that's still being tested and the weights will be released \"once that work is complete\".\nThe model card is much shorter than I've come to expect from US AI labs. It links to even shorter Training Data Documentation with almost",
-      "image": "public/thumbnails/news-10264f8e2675bf33fc.jpg",
+      "summary": "Text \"Gemini Omni and Personal Avatars in Google Vids\" surrounded by various images",
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/omni-blog-header_OarEe2t.max-600x600.format-webp.webp",
       "featuredLatest": false,
-      "published": "2026-07-16T15:35:25+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "published": "2026-07-16T16:00:00+00:00",
+      "firstSeen": "2026-07-16T22:00:01.837097+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.6775,
-      "signalGroup": "Media generation",
-      "sourceTier": "Primary source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Inkling: Our open-weights model",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Simon Willison."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "inkling-our-open-weights-model",
-      "imageOriginal": "https://static.simonwillison.net/static/2026/inkling-pelican.jpg"
-    },
-    {
-      "title": "Moonshot’s upcoming Kimi 3 is expected to close the gap with Anthropic’s Opus 4.8",
-      "url": "https://techcrunch.com/2026/07/16/moonshots-upcoming-kimi-3-is-expected-to-close-the-gap-with-anthropics-opus-4-8",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The FT reports Kimi K3 will be the largest open AI model from China, with a parameter count between 2 trillion and 3 trillion.",
-      "image": "public/thumbnails/news-42c8ddccf57925fb1d.webp",
-      "featuredLatest": false,
-      "published": "2026-07-16T14:26:29+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.2434,
+      "score": 7.2611,
       "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
+      "sourceTier": "Primary source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
       "brief": {
-        "whatHappened": "Moonshot’s upcoming Kimi 3 is expected to close the gap with Anthropic’s Opus 4.8",
+        "whatHappened": "Create, edit and star in videos with two Google Vids updates",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via TechCrunch AI."
+        "sourceFrame": "Seen via Google AI Blog."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "anthropic-moonshot-upcoming-kimi-expected-close",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024"
-    },
-    {
-      "title": "[AINews] Thinky's Inkling: 975B-A41B multimodal, new best American Apache 2.0 open model (with Inkling-Small, 276B-A12B)",
-      "url": "https://www.latent.space/p/ainews-thinkys-inkling-975b-a41b",
-      "source": "Latent Space",
-      "sourceUrl": "https://www.latent.space/feed",
-      "sourceWeight": 0.86,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Thinky's first full LLM release is a banger and bonus: it's open weights!",
-      "image": "public/thumbnails/news-2744ab9ff292b16583.png",
-      "featuredLatest": false,
-      "published": "2026-07-16T06:18:05+00:00",
-      "firstSeen": "2026-07-16T11:10:38.275918+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.1442,
-      "signalGroup": "Media generation",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "[AINews] Thinky's Inkling: 975B-A41B multimodal, new best American Apache 2.0 open model (with Inkling-Small, 276B-A12B)",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Latent Space."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "ainews-thinky-inkling-975b-a41b-multimodal-best",
-      "imageOriginal": "https://substackcdn.com/image/fetch/$s_!AvrX!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F90048da3-a87f-44d8-8ad4-e954031d2721_2540x1692.png"
-    },
-    {
-      "title": "Sharpen the Sword, Skip the Downloads — ‘Onimusha: Way of the Sword’ Is Coming to GeForce NOW",
-      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-onimusha-coming",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "primary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Onimusha: Way of the Sword is coming to GeForce NOW at launch, with the playable demo available this week. It’s joined by Denshattack! rolling in with five new games arriving in the cloud. Plus, GeForce NOW officially launches in India, moving from beta to public availability — meaning gamers can sign up without a waitlist. [&#8230;]",
-      "image": "public/thumbnails/news-da6b6adfc53b2a505e.jpg",
-      "featuredLatest": false,
-      "published": "2026-07-16T13:00:34+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.0023,
-      "signalGroup": "Product updates",
-      "sourceTier": "Primary source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Sharpen the Sword, Skip the Downloads — ‘Onimusha: Way of the Sword’ Is Coming to GeForce NOW",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via NVIDIA Blog."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "sharpen-sword-skip-downloads-onimusha-way",
-      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/07/blog-1920x1080-no-copy.jpg"
-    },
-    {
-      "title": "Oak raised $60M to give every user, machine, and AI agent one identity system",
-      "url": "https://thenextweb.com/news/oak-60m-seed-ai-native-identity-platform",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Most companies still cannot say who, or what, has access to their systems at any given moment. Oak, an Israeli startup, has raised $60M to fix that, and it is betting AI agents make the problem urgent. The company came out of stealth with the seed round, it said. Its aim is an “identity operating [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-72061123336b5c0cc5.avif",
-      "featuredLatest": false,
-      "published": "2026-07-16T14:33:25+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.8068,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Oak raised $60M to give every user, machine, and AI agent one identity system",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "oak-raised-60m-give-every-user",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/Oak-team.avif"
-    },
-    {
-      "title": "Building a restaurant telephony AI host with Amazon Bedrock AgentCore and Amazon Nova 2 Sonic",
-      "url": "https://aws.amazon.com/blogs/machine-learning/building-a-restaurant-telephony-ai-host-with-amazon-bedrock-agentcore-and-amazon-nova-2-sonic",
-      "source": "AWS Machine Learning Blog",
-      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-      "sourceWeight": 0.72,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "In this post, we show you how to build a voice ordering system that answers a phone number and takes the order from greeting to confirmation. The system uses Amazon Bedrock AgentCore to host and run the agent and Amazon Nova 2 Sonic for real-time speech, connected to a restaurant backend through the Model Context Protocol (MCP). The walkthrough covers deploying the full stack with AWS Cloud Development Kit (AWS CDK) and bridging a phone call into the agent through a Session Initiation Protocol (SIP) gateway on Amazon Elastic Container Service (Amazon ECS) and AWS Fargate. It also warms the age",
-      "image": "public/thumbnails/news-843203c9a04faa9fff.png",
-      "featuredLatest": false,
-      "published": "2026-07-16T15:50:52+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.8033,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Building a restaurant telephony AI host with Amazon Bedrock AgentCore and Amazon Nova 2 Sonic",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via AWS Machine Learning Blog."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "building-restaurant-telephony-host-amazon-bedrock",
-      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/16/ml-21038.png"
-    },
-    {
-      "title": "A father of the internet wants to give AI agents an identity",
-      "url": "https://thenextweb.com/news/vint-cerf-ai-agent-identity-innovation-labs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Soon the internet will be full of AI agents acting on our behalf. Right now, there is no reliable way to tell who stands behind any of them. Vint Cerf, one of the people who built the internet, wants to fix that. Cerf co-designed TCP/IP, the protocol that lets the internet’s independent systems talk to [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-bc4a7b88f5a1c432ec.avif",
-      "featuredLatest": false,
-      "published": "2026-07-16T14:16:09+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.7984,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "A father of the internet wants to give AI agents an identity",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "father-internet-wants-give-agents-identity",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/vint-cerf-ai.avif"
-    },
-    {
-      "title": "The UK won’t restrict VPNs after all, and its own research is why",
-      "url": "https://thenextweb.com/news/uk-drops-vpn-restrictions-online-safety",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The UK looked set to crack down on VPNs as it tightens the rules for children online. Instead it has backed off, and its own research is the reason why. Online Safety Minister Kanishka Narayan put it plainly on the BBC. “We decided not to limit VPNs,” he said. A VPN hides a user’s real [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-709e493b3a6fe7a1ab.avif",
-      "featuredLatest": false,
-      "published": "2026-07-16T14:56:56+00:00",
-      "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.5183,
-      "signalGroup": "Research",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
-      "brief": {
-        "whatHappened": "The UK won’t restrict VPNs after all, and its own research is why",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "won-restrict-vpns-all-own-research",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/Liz-Kendall-official-portrait.avif"
+      "clusterKey": "google-create-edit-star-videos-two"
     }
   ],
   "tools": [
@@ -630,10 +623,10 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8112,
+      "score": 7.8107,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -667,7 +660,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6181,
+      "score": 7.6165,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -753,40 +746,6 @@
       "clusterKey": "claude-claude-science"
     },
     {
-      "title": "Pluno",
-      "url": "https://www.producthunt.com/products/pluno",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Browser agent that’s 10x faster than Claude\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
-      "featuredLatest": false,
-      "published": "2026-06-29T16:54:09+00:00",
-      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-06T04:00:02.111677+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 6.908,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Pluno",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Pluno",
-      "toolLabel": "Pluno",
-      "toolSummary": "Browser agent that’s 10x faster than Claude",
-      "clusterKey": "pluno"
-    },
-    {
       "title": "Claude Overlay",
       "url": "https://www.producthunt.com/products/claude-overlay",
       "source": "Product Hunt AI",
@@ -800,10 +759,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8275,
+      "score": 5.8245,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -834,10 +793,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T17:16:44+00:00",
       "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-16T04:00:02.028386+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8187,
+      "score": 5.8171,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -853,6 +812,40 @@
       "toolLabel": "ChatGPT Work",
       "toolSummary": "Partner for your most ambitious work",
       "clusterKey": "chatgpt-chatgpt-work"
+    },
+    {
+      "title": "Edgee Claude Code Compressor V2",
+      "url": "https://www.producthunt.com/products/edgee",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Fewer tokens, same context, 50% cost reduction\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-706ad7089f96fd98e1.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T04:38:17+00:00",
+      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-12T22:00:01.518156+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8081,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Edgee Claude Code Compressor V2",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Edgee Claude Code Compressor V2",
+      "toolLabel": "Edgee Claude Code Compressor V2",
+      "toolSummary": "Fewer tokens, same context, 50% cost reduction",
+      "clusterKey": "claude-edgee-claude-code-compressor"
     }
   ],
   "tryWorthy": [
@@ -905,10 +898,10 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8112,
+      "score": 7.8107,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -942,7 +935,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6181,
+      "score": 7.6165,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1028,40 +1021,6 @@
       "clusterKey": "claude-claude-science"
     },
     {
-      "title": "Pluno",
-      "url": "https://www.producthunt.com/products/pluno",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Browser agent that’s 10x faster than Claude\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-099aa7484406bdf5f9.avif",
-      "featuredLatest": false,
-      "published": "2026-06-29T16:54:09+00:00",
-      "firstSeen": "2026-06-30T08:00:01.738579+00:00",
-      "lastSeen": "2026-07-06T04:00:02.111677+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 6.908,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Pluno",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Pluno",
-      "toolLabel": "Pluno",
-      "toolSummary": "Browser agent that’s 10x faster than Claude",
-      "clusterKey": "pluno"
-    },
-    {
       "title": "Claude Overlay",
       "url": "https://www.producthunt.com/products/claude-overlay",
       "source": "Product Hunt AI",
@@ -1075,10 +1034,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-16T16:00:01.750493+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8275,
+      "score": 5.8245,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1109,10 +1068,10 @@
       "featuredLatest": false,
       "published": "2026-07-09T17:16:44+00:00",
       "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-16T04:00:02.028386+00:00",
+      "lastSeen": "2026-07-16T22:00:01.837097+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8187,
+      "score": 5.8171,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1128,6 +1087,40 @@
       "toolLabel": "ChatGPT Work",
       "toolSummary": "Partner for your most ambitious work",
       "clusterKey": "chatgpt-chatgpt-work"
+    },
+    {
+      "title": "Edgee Claude Code Compressor V2",
+      "url": "https://www.producthunt.com/products/edgee",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Fewer tokens, same context, 50% cost reduction\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-706ad7089f96fd98e1.avif",
+      "featuredLatest": false,
+      "published": "2026-07-03T04:38:17+00:00",
+      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
+      "lastSeen": "2026-07-12T22:00:01.518156+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.8081,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Edgee Claude Code Compressor V2",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Edgee Claude Code Compressor V2",
+      "toolLabel": "Edgee Claude Code Compressor V2",
+      "toolSummary": "Fewer tokens, same context, 50% cost reduction",
+      "clusterKey": "claude-edgee-claude-code-compressor"
     }
   ],
   "sourceHealth": [
@@ -1138,8 +1131,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1036,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "items": 1038,
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1149,7 +1142,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1159,7 +1152,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1169,7 +1162,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1179,7 +1172,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 829,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1189,7 +1182,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1199,7 +1192,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1209,7 +1202,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1219,7 +1212,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1229,7 +1222,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1239,7 +1232,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1249,7 +1242,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "The Next Web",
@@ -1259,7 +1252,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1269,7 +1262,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1279,7 +1272,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1289,7 +1282,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1298,8 +1291,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 19,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "items": 18,
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1309,7 +1302,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 243,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1319,7 +1312,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1329,7 +1322,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1339,7 +1332,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1349,7 +1342,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Latent Space",
@@ -1359,7 +1352,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Import AI",
@@ -1369,7 +1362,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1379,7 +1372,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 151,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1389,7 +1382,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1399,7 +1392,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1409,7 +1402,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1419,7 +1412,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1429,7 +1422,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1439,7 +1432,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1449,7 +1442,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "checkedAt": "2026-07-16T22:00:01.837097+00:00"
     }
   ],
   "errors": []
