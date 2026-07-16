@@ -2643,6 +2643,35 @@ const parkedKitSys = {
         new BoxGeometry(0.13, 0.09, 0.045).translate(0, 0, 0),
       ]),
       antGeo = new CylinderGeometry(0.012, 0.018, 0.55, 5);
+    // shared glass+seam geometry (parked body: nose -z, cabin x ±0.85 y 1.14-1.70,
+    // z -1.295..0.855; body sides x ±1.1, tail z 2.3) and vc-baked lamp lenses
+    {
+      const gp = [];
+      for (const sx of [-1, 1])
+        for (const [zc, zw] of [
+          [-0.75, 0.8],
+          [0.28, 0.85],
+        ])
+          gp.push(new PlaneGeometry(zw, 0.4).rotateY((sx * Math.PI) / 2).translate(sx * 0.856, 1.42, zc));
+      gp.push(new PlaneGeometry(1.5, 0.42).rotateY(Math.PI).translate(0, 1.42, -1.301));
+      gp.push(new PlaneGeometry(1.5, 0.38).translate(0, 1.44, 0.861));
+      for (const sx of [-1, 1]) for (const zs of [-0.35, 0.85]) gp.push(new PlaneGeometry(0.025, 0.6).rotateY((sx * Math.PI) / 2).translate(sx * 1.106, 0.76, zs));
+      this._glassGeo = mergeGeometries(gp, !1);
+      this._glassMat = new MeshStandardMaterial({ color: 1054236, roughness: 0.22, metalness: 0.55 });
+      const lampAt = (x, y, z, flip) => {
+        const m = new Matrix4().makeRotationY(flip ? Math.PI : 0);
+        return (m.setPosition(x, y, z), m);
+      };
+      this._lampGeo = mergeGeometries(
+        [
+          vcBake(new PlaneGeometry(0.3, 0.15), lampAt(-0.78, 0.98, 2.302, !1), 6822420),
+          vcBake(new PlaneGeometry(0.3, 0.15), lampAt(0.78, 0.98, 2.302, !1), 6822420),
+          vcBake(new PlaneGeometry(0.32, 0.15), lampAt(-0.76, 0.98, -2.302, !0), 13684944),
+          vcBake(new PlaneGeometry(0.32, 0.15), lampAt(0.76, 0.98, -2.302, !0), 13684944),
+        ],
+        !1,
+      );
+    }
     this.kits = [];
     const n = mobilePerf ? 3 : 7;
     for (let k = 0; k < n; k++) {
@@ -2670,6 +2699,12 @@ const parkedKitSys = {
         const mir = new Mesh(mirrorGeo, darkMat);
         (mir.position.set(mx, 1.5, -1.16), (mir.rotation.y = mx < 0 ? Math.PI : 0), kit.add(mir));
       }
+      // zoom-detail 42 (round-five item 6): glass + door seams + lamp lenses.
+      // Two meshes per kit on SHARED merged geometries — every promoted car
+      // stops being a windowless box at 3m. Parked = lenses dark, never lit.
+      const glass = new Mesh(this._glassGeo, this._glassMat),
+        lamps = new Mesh(this._lampGeo, vcMats().opaque);
+      ((glass.raycast = () => {}), (lamps.raycast = () => {}), kit.add(glass), kit.add(lamps));
       ((kit.visible = !1), kit.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1))), et.add(kit));
       this.kits.push({ g: kit, rack, cargo, cargoMat, grimeL, grimeR, dent, ant, idx: -1 });
     }
@@ -10825,6 +10860,8 @@ window.__steelRibbonDebug = {
         dents: parkedKitSys.dents,
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
+        glassVerts: parkedKitSys._glassGeo ? parkedKitSys._glassGeo.attributes.position.count : 0,
+        lampVerts: parkedKitSys._lampGeo ? parkedKitSys._lampGeo.attributes.position.count : 0,
         sample: parkedKitSys.sample.slice(0, 3),
       },
       news: {

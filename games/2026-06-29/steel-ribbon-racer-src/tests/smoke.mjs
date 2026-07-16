@@ -474,8 +474,20 @@ const browser = await chromium.launch({
   });
   check(
     "parked variety: kits promote near cars and toggle clean",
-    parkedSeq.spots >= 60 && parkedSeq.promoted > 0 && parkedSeq.kids === 7 && parkedSeq.off === 0 && parkedSeq.back > 0,
+    parkedSeq.spots >= 60 && parkedSeq.promoted > 0 && parkedSeq.kids === 9 && parkedSeq.off === 0 && parkedSeq.back > 0,
     JSON.stringify(parkedSeq),
+  );
+
+  // zoom-detail 42 (round five item 6): glass + door seams + lamp lenses on
+  // every promoted parked car (shared merged geometries: 10 quads + 4 lenses)
+  const pg2 = await page.evaluate(() => {
+    const p2 = window.__steelRibbonDebug.detailReport().parked;
+    return { promoted: p2.promoted, glassVerts: p2.glassVerts, lampVerts: p2.lampVerts };
+  });
+  check(
+    "parked glass: shared glass/seam + lamp geometries live on promoted kits",
+    !!pg2 && pg2.promoted > 0 && pg2.glassVerts === 40 && pg2.lampVerts === 16,
+    JSON.stringify(pg2),
   );
 
   // zoom-detail item 20: near-field ambience — audio bus live, crossing ticks
