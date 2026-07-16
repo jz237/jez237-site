@@ -3913,6 +3913,8 @@ const storefrontSys = {
 // trees additionally stay ≥4m off street edges (ka) and register in the Sa
 // audit with a small margin so the road-safety probe stays clean.
 const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
+// zoom-detail 43 (round-five item 7): start-line paddock clutter registry
+const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: [] };
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
   ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
@@ -6334,6 +6336,92 @@ function z1() {
       T.position.copy(_),
       T.quaternion.copy(v),
       i.add(T));
+  }
+  // zoom-detail 43 (round-five item 7): paddock clutter on the start aprons —
+  // tire stacks, tool carts, fuel drums, cones, pennant bunting. Static
+  // vcBaked single mesh in the same course frame the START gantry uses;
+  // visual-only (raycast-inert, no colliders — same class as lawn trees).
+  {
+    ((paddockSys.clusters = 0), (paddockSys.parts = 0), (paddockSys.sample.length = 0));
+    const pparts = [],
+      pOne = new Vector3(1, 1, 1),
+      prng = plateRng(0x9add0c),
+      tireG = new CylinderGeometry(0.42, 0.42, 0.26, 10),
+      hubG = new CylinderGeometry(0.16, 0.16, 0.27, 8),
+      cartG = new BoxGeometry(0.92, 0.62, 0.56),
+      wheelG = new CylinderGeometry(0.09, 0.09, 0.06, 8).rotateZ(Math.PI / 2),
+      handleG = new BoxGeometry(0.05, 0.72, 0.05).rotateX(-0.5),
+      coneG = new ConeGeometry(0.17, 0.42, 8),
+      drumG = new CylinderGeometry(0.3, 0.3, 0.86, 10),
+      poleG = new CylinderGeometry(0.03, 0.04, 2.3, 6),
+      penG = new CircleGeometry(0.17, 3).rotateZ(Math.PI),
+      PLIFT = 1.15,
+      P = (geo, aM, lx, ly, lz, col, ry = 0) => {
+        const m2 = new Matrix4().makeRotationY(ry);
+        (m2.setPosition(lx, ly + PLIFT, lz), pparts.push(vcBake(geo, new Matrix4().multiplyMatrices(aM, m2), col)));
+      },
+      slabG = new BoxGeometry(5.6, 0.16, 3.6),
+      PEN_COLS = [15021620, 16765778, 2780370, 13684944];
+    for (const cd of [
+      { ds: -9, side: -1, kind: 0 },
+      { ds: -4, side: 1, kind: 1 },
+      { ds: 4, side: 1, kind: 0 },
+      { ds: 9, side: -1, kind: 1 },
+    ]) {
+      const sA = 6 + cd.ds;
+      if (Li(sA)) continue;
+      const a2 = St(sA),
+        b2 = St(sA + l),
+        qq = ui(a2, b2).q,
+        right = new Vector3(1, 0, 0).applyQuaternion(qq),
+        base = a2.p.clone().addScaledVector(right, cd.side * (ce.width * 0.5 + 2.4)),
+        aM = new Matrix4().compose(base, qq, pOne);
+      paddockSys.sample.length < 4 && paddockSys.sample.push({ x: +base.x.toFixed(1), y: +base.y.toFixed(1), z: +base.z.toFixed(1), kind: cd.kind });
+      P(slabG, aM, 0.5, -0.08, 0, 4022096);
+      if (cd.kind === 0) {
+        for (const [tx, tz, n2] of [
+          [-1.1, -0.4, 3],
+          [0, 0.5, 4],
+          [1.0, -0.2, 2],
+        ])
+          for (let t2 = 0; t2 < n2; t2++) {
+            P(tireG, aM, tx + (prng() - 0.5) * 0.09, 0.13 + t2 * 0.26, tz + (prng() - 0.5) * 0.09, 1381400);
+            P(hubG, aM, tx, 0.13 + t2 * 0.26, tz, 6316135);
+          }
+        P(cartG, aM, 2.1, 0.4, 0.3, 9315878, 0.3);
+        for (const [wx, wz] of [
+          [1.75, 0.62],
+          [2.45, 0.62],
+          [1.75, -0.02],
+          [2.45, -0.02],
+        ])
+          P(wheelG, aM, wx, 0.09, wz, 1381400, 0.3);
+        P(handleG, aM, 2.62, 0.62, 0.32, 6316135, 0.3);
+        P(coneG, aM, 0.42, 0.21, 1.45, 14248476);
+        P(coneG, aM, 1.5, 0.21, -1.05, 14248476);
+      } else {
+        P(drumG, aM, -0.82, 0.43, 0, 4886754);
+        P(drumG, aM, -0.14, 0.43, 0.36, 9315878);
+        for (let t2 = 0; t2 < 2; t2++) {
+          P(tireG, aM, 1.05, 0.13 + t2 * 0.26, -0.2, 1381400);
+          P(hubG, aM, 1.05, 0.13 + t2 * 0.26, -0.2, 6316135);
+        }
+        P(poleG, aM, -1.65, 1.15, -1.25, 6316135);
+        P(poleG, aM, 1.85, 1.15, -1.25, 6316135);
+        for (let pn = 0; pn < 8; pn++) {
+          const t3 = (pn + 0.5) / 8,
+            px2 = -1.65 + t3 * 3.5,
+            py2 = 2.12 - Math.sin(t3 * Math.PI) * 0.16;
+          P(penG, aM, px2, py2, -1.25, PEN_COLS[pn % 4]);
+        }
+      }
+      paddockSys.clusters++;
+    }
+    if (pparts.length) {
+      const pm2 = new Mesh(mergeGeometries(pparts, !1), vcMats().opaque);
+      ((pm2.castShadow = !0), (pm2.receiveShadow = !0), (pm2.raycast = () => {}), i.add(pm2), (paddockSys._mesh = pm2), (paddockSys.parts = pparts.length));
+      if (!paddockSys.enabled) pm2.visible = !1;
+    }
   }
   if (d.length) {
     const g = new CylinderGeometry(0.18, 0.24, 3, 6);
@@ -10743,6 +10831,11 @@ window.__steelRibbonDebug = {
     for (const m of parkSys._vis) m.visible = parkSys.enabled;
     return parkSys.enabled;
   },
+  paddockEnable(on) {
+    paddockSys.enabled = !!on;
+    paddockSys._mesh && (paddockSys._mesh.visible = paddockSys.enabled);
+    return paddockSys.enabled;
+  },
   signalHeadStates() {
     const heads = signalLampSys.headsRef || [];
     return {
@@ -10850,6 +10943,7 @@ window.__steelRibbonDebug = {
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
       parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
+      paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

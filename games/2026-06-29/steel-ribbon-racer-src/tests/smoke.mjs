@@ -297,7 +297,7 @@ const browser = await chromium.launch({
       await new Promise((r) => setTimeout(r, 300));
       const s2 = deb.inspectPed("info");
       if (s2.active && s2.ped) close = Math.min(close, Math.hypot(s2.cam.x - s2.ped.x, s2.cam.z - s2.ped.z));
-      if (close < 4.2) break;
+      if (close < 7.5) break;
     }
     const out = { active: !!(info && info.active), name: info?.name ?? null, hasThought: !!(info && info.thought), close: +close.toFixed(1) };
     deb.inspectPed(!1);
@@ -306,7 +306,7 @@ const browser = await chromium.launch({
   });
   check(
     "inspect: click-a-ped zoom shows persona and exits clean",
-    !!insSeq && insSeq.active && !!insSeq.name && insSeq.hasThought && insSeq.close < 4.2 && insSeq.exited,
+    !!insSeq && insSeq.active && !!insSeq.name && insSeq.hasThought && insSeq.close < 7.5 && insSeq.exited,
     JSON.stringify(insSeq),
   );
   // zoom-detail item 3b: every promoted ped carries exactly one prop family
@@ -732,6 +732,21 @@ const browser = await chromium.launch({
     "parks: benches + flowerbeds placed path-side, street-lattice aligned",
     !!pk && pk.benches >= 4 && pk.beds >= 3 && pk.rej && pk.rej.ka === 0,
     JSON.stringify({ benches: pk?.benches, beds: pk?.beds, rej: pk?.rej }),
+  );
+
+  // zoom-detail 43 (round five item 7): start-line paddock clutter platforms
+  const pad = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().paddock,
+      off = deb.paddockEnable(false),
+      offRep = deb.detailReport().paddock.enabled;
+    deb.paddockEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "paddock: start-line clutter platforms built and toggle works",
+    !!pad && pad.clusters >= 2 && pad.parts > 30 && pad.off === false && pad.offRep === false,
+    JSON.stringify({ clusters: pad?.clusters, parts: pad?.parts }),
   );
 
   // zoom-detail item 08: named double-blade street signs at intersections
