@@ -1,0 +1,830 @@
+[
+  {
+    "id": "2026-06-24-hybrid-creature-infographic-rime-talon-strain-development-m",
+    "title": "Rime Talon Strain: Development Map",
+    "tests": "Hybrid creature development-map seed entry; tests a realistic evidence-board style with restrained labels and photographed specimen panels.",
+    "prompt": "Photorealistic speculative xenobiology evidence-board infographic for the fictional Rime Talon Strain: human baseline plus harpy eagle predatory traits and snow leopard cold-climate adaptations. Show concise development panels from fictional trait overview through juvenile, adolescent, and adult phenotype; use specimen-photo, macro tissue, and field-photo realism; no real gene names, no lab protocol, no equipment steps, no surgery, no gore. Disclaimer: Speculative fiction - not a real organism or procedure.",
+    "image": "images/2026-06-24-hybrid-creature-infographic-rime-talon-strain-development-m.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Rime Talon Strain",
+      "imageKind": "infographic",
+      "description": "Harpy eagle and snow leopard traits combined into a cold-climate fictional hybrid.",
+      "continuity": "Same Rime Talon adult phenotype across development-map and wild-photo panels."
+    }
+  },
+  {
+    "id": "2026-06-24-hybrid-creature-wild-rime-talon-strain-in-the-wild",
+    "title": "Rime Talon Strain: In the Wild",
+    "tests": "Hybrid creature wild-photo seed entry; tests whether the same adult phenotype reads as a realistic field-camera encounter.",
+    "prompt": "Ultra-photorealistic expedition field photograph of the fictional Rime Talon Strain in a remote alpine cliff forest at dusk. Show the same adult phenotype from the development map: a frightening but believable human, harpy eagle, and snow leopard hybrid with powerful raptorial shoulders, forward-facing eyes, hooked facial structure, dense pale-gray fur and feather transition zones, snow-leopard mottling, oversized talon-like hands and feet gripping rock, breath vapor, natural asymmetry, scars, matte skin, realistic fur clumping, and physical weight. Keep it inspectable with minimal blur; use camera-trap/field-photo imperfections, snow flecks, side light, grain, and environmental occlusion. No gore, nudity, surgery, lab setting, text, watermark, fantasy armor, or superhero look.",
+    "image": "images/2026-06-24-hybrid-creature-wild-rime-talon-strain-in-the-wild.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Rime Talon Strain",
+      "imageKind": "wild",
+      "description": "Harpy eagle and snow leopard traits combined into a cold-climate fictional hybrid.",
+      "continuity": "Same Rime Talon adult phenotype across development-map and wild-photo panels."
+    }
+  },
+  {
+    "id": "2026-06-24-hybrid-creature-infographic-prism-reef-strain-development-m",
+    "title": "Prism Reef Strain: Development Map",
+    "tests": "Hybrid creature development-map run; tests a colorful scientific wall-chart style with photorealistic specimen panels, readable concise labels, and clean landscape fit.",
+    "prompt": "Colorful photorealistic speculative xenobiology scientific infographic for the fictional Prism Reef Strain: human baseline plus peacock mantis shrimp color/sensory traits and poison dart frog warning-color skin inspiration. Show concise development panels from fictional trait overview through juvenile, adolescent, and adult phenotype; use vivid microscopy colors, scientific color coding, clean labels, specimen-photo panels, macro tissue panels, and field-photo realism. No real gene names, no lab protocol, no equipment steps, no surgery, no gore. Disclaimer: Speculative fiction - not a real organism or procedure.",
+    "image": "images/2026-06-24-hybrid-creature-infographic-prism-reef-strain-development-m.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Prism Reef Strain",
+      "imageKind": "infographic",
+      "description": "Peacock mantis shrimp and poison dart frog traits blended into a vivid reef-cave fictional hybrid.",
+      "continuity": "Same Prism Reef adult phenotype across the development-map and wild-photo entries."
+    }
+  },
+  {
+    "id": "2026-06-24-hybrid-creature-wild-prism-reef-strain-in-the-wild",
+    "title": "Prism Reef Strain: In the Wild",
+    "tests": "Hybrid creature wild-photo run; tests whether the same colorful Prism Reef adult phenotype reads as a realistic reef-cave expedition encounter.",
+    "prompt": "Ultra-photorealistic expedition field photograph of the fictional Prism Reef Strain in a shallow tropical reef cave at dusk. Show the same adult phenotype from the development map: a frightening but believable human baseline, peacock mantis shrimp, and poison dart frog inspired hybrid with faceted reflective eyes, subtle facial plates, mottled wet skin with pores and scars, iridescent turquoise/cobalt/magenta/gold patterning, saturated warning-color patches, mantis-shrimp-inspired forearm ridges, grasping clawed hands, natural asymmetry, matte wet tissue, visible body weight, reef sediment, water caustics, and field-camera imperfections. No gore, nudity, surgery, lab setting, text, watermark, fantasy armor, or superhero look.",
+    "image": "images/2026-06-24-hybrid-creature-wild-prism-reef-strain-in-the-wild.jpg",
+    "date": "2026-06-24",
+    "batch": "Hybrid Creature",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Prism Reef Strain",
+      "imageKind": "wild",
+      "description": "Peacock mantis shrimp and poison dart frog traits blended into a vivid reef-cave fictional hybrid.",
+      "continuity": "Same Prism Reef adult phenotype across the development-map and wild-photo entries."
+    }
+  },
+  {
+    "id": "2026-06-25-hybrid-creature-infographic-blue-fen-strider-development-ma",
+    "title": "Blue Fen Strider: Development Map",
+    "tests": "GPT Image 2 hybrid-creature development map; fictional and non-actionable; landscape scientific wall chart; exact generated PNG converted to JPEG and uploaded to R2.",
+    "prompt": "Colorful photorealistic speculative scientific development-map infographic for the fictional Blue Fen Strider strain. Show a clearly non-actionable trait arc from small marsh juvenile to adult phenotype: a tall wading adult with backward-bending knees, long stiltlike legs, broad paddle feet spreading into mud, a flexible cranial crest used for balance and display, narrow shoulders, reduced forelimbs folded close to the chest, and blue-gray pebbled wet hide. Landscape scientific wall-chart composition with photorealistic specimen panels, macro skin texture panels, anatomical tinting, microscopy-inspired colors, reed-fen habitat swatches, and concise clean labels only. Make the panel hierarchy vivid and organized, with turquoise, marsh green, pale amber, and slate-blue coding. Clearly fictional xenobiology; no real gene names, no lab protocol steps, no equipment instructions, no surgery, no gore, no dark evidence-board style, no prompt-card text. Reusable template: Create a fictional hybrid-creature pair: first a colorful photorealistic speculative development-map infographic with non-actionable trait logic, then a matching in-the-wild field photo of the same adult phenotype. Example substitution: [HYBRID_NAME]=Blue Fen Strider, [HABITAT]=reed-choked fen, [ADULT_PHENOTYPE]=tall wading adult with backward-bending knees, paddle feet, cranial crest, and blue-gray pebbled hide.",
+    "image": "images/2026-06-25-hybrid-creature-infographic-blue-fen-strider-development-ma.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Blue Fen Strider",
+      "imageKind": "infographic",
+      "description": "Fictional strain with a tall wading adult, backward-bending knees, paddle feet, flexible cranial crest, and blue-gray pebbled hide adapted to reed-choked fens.",
+      "continuity": "Same adult phenotype across both images: tall wading body, backward-bending knees, long stiltlike legs, broad paddle feet, flexible cranial crest, narrow shoulders, folded reduced forelimbs, and blue-gray pebbled wet hide in a reed-choked fen."
+    }
+  },
+  {
+    "id": "2026-06-25-hybrid-creature-wild-blue-fen-strider-in-the-wild",
+    "title": "Blue Fen Strider: In the Wild",
+    "tests": "GPT Image 2 hybrid-creature field photo; same fictional adult phenotype as the development map; exact generated PNG converted to JPEG and uploaded to R2.",
+    "prompt": "Photorealistic in-the-wild expedition field photo of the fictional adult Blue Fen Strider in a reed-choked fen at blue hour. Preserve the exact adult phenotype from the development map: tall wading body, backward-bending knees, very long stiltlike legs planted in black mud, broad paddle feet spreading among reeds, flexible cranial crest arcing backward, narrow shoulders, reduced forelimbs folded close to the chest, and blue-gray pebbled wet hide with subtle turquoise sheen. Show it in side-profile and slightly below eye level, walking through shallow water with ripples around the paddle feet, reeds parting around its legs, mist, reflected sky, wet skin detail, and documentary telephoto realism. It should read as a believable fictional gene-splicing outcome, not a person in costume and not an ordinary animal. No people, no text, no labels, no gore, no lab setting, no centered studio product pose. Reusable template: Create a fictional hybrid-creature pair: first a colorful photorealistic speculative development-map infographic with non-actionable trait logic, then a matching in-the-wild field photo of the same adult phenotype. Example substitution: [HYBRID_NAME]=Blue Fen Strider, [HABITAT]=reed-choked fen, [ADULT_PHENOTYPE]=tall wading adult with backward-bending knees, paddle feet, cranial crest, and blue-gray pebbled hide.",
+    "image": "images/2026-06-25-hybrid-creature-wild-blue-fen-strider-in-the-wild.jpg",
+    "date": "2026-06-25",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Blue Fen Strider",
+      "imageKind": "wild",
+      "description": "Fictional strain with a tall wading adult, backward-bending knees, paddle feet, flexible cranial crest, and blue-gray pebbled hide adapted to reed-choked fens.",
+      "continuity": "Same adult phenotype across both images: tall wading body, backward-bending knees, long stiltlike legs, broad paddle feet, flexible cranial crest, narrow shoulders, folded reduced forelimbs, and blue-gray pebbled wet hide in a reed-choked fen."
+    }
+  },
+  {
+    "id": "2026-06-26-hybrid-creature-infographic-quartzback-lantern-ape-developm",
+    "title": "Quartzback Lantern Ape: Development Map",
+    "tests": "Generated with GPT Image 2 primary OpenAI route; exact source PNG verified before append; hybrid development map includes two explicit sources, source-trait map, stage strip, adult specimen panel, macro texture panels, habitat swatches, and field-context vignette.",
+    "prompt": "Create a colorful photorealistic speculative development-map infographic for the fictional Quartzback Lantern Ape, a non-actionable two-source hybrid concept from gorilla + lanternfish. Show a landscape scientific wall chart with a central adult specimen panel, four-stage juvenile-to-adult strip, source-trait map, macro texture windows, moonlit mineral-forest habitat swatches, and a field-context scale vignette. Gorilla contributes heavy knuckle-walking forearms, broad chest, powerful shoulder posture, and ground-dwelling strength; lanternfish contributes glowing throat pouch, dark reflective skin, lateral light organs, and deep-blue mineral shimmer. Keep labels concise and fictional; no real genetics, lab protocols, equipment steps, surgery, or gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Quartzback Lantern Ape; [SOURCE_A] = gorilla; [SOURCE_B] = lanternfish; [HABITAT] = moonlit mineral forest; adult phenotype = mostly animal-like knuckle-walker with heavy gorilla forearms, broad shoulders, low head carriage, dark reflective blue-black skin, glowing amber throat pouch, turquoise lateral light organs, and quartz-like shoulder plates.",
+    "image": "images/2026-06-26-hybrid-creature-infographic-quartzback-lantern-ape-developm.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Quartzback Lantern Ape",
+      "imageKind": "infographic",
+      "description": "Fictional non-actionable hybrid of gorilla + lanternfish: a mostly animal-like knuckle-walker with heavy forearms, dark reflective skin, glowing throat pouch, lateral light organs, and quartz-like shoulder plates in a moonlit mineral forest.",
+      "continuity": "Sources: gorilla + lanternfish. Same adult phenotype: mostly animal-like knuckle-walker with gorilla-like heavy forearms and shoulders, dark lanternfish shimmer, glowing throat pouch, lateral light organs, quartz shoulder plates, and low forward head carriage; same habitat: moonlit mineral forest."
+    }
+  },
+  {
+    "id": "2026-06-26-hybrid-creature-wild-quartzback-lantern-ape-in-the-wild",
+    "title": "Quartzback Lantern Ape: In the Wild",
+    "tests": "Generated with GPT Image 2 primary OpenAI route; exact source PNG verified before append; matching wild field photo preserves the same adult hybrid phenotype, source pair, and moonlit mineral-forest habitat continuity.",
+    "prompt": "Create a photorealistic in-the-wild expedition field photo of the fictional adult Quartzback Lantern Ape in a moonlit mineral forest, preserving the same two-source phenotype from gorilla + lanternfish. Show a mostly animal-like side-profile knuckle-walker crossing slick black stone roots, with gorilla-derived heavy forearms, broad shoulders, broad chest, low forward head carriage, powerful ground posture, and coarse dark forearm hair, plus lanternfish-derived dark reflective blue-black shimmer, a softly glowing amber throat pouch, small turquoise lateral light organs, deep-blue mineral sheen, and translucent quartz-like shoulder plates. No text, labels, lab setting, real genetics, surgery, gore, people, or costume look.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Quartzback Lantern Ape; [SOURCE_A] = gorilla; [SOURCE_B] = lanternfish; [HABITAT] = moonlit mineral forest; adult phenotype = mostly animal-like knuckle-walker with heavy gorilla forearms, broad shoulders, low head carriage, dark reflective blue-black skin, glowing amber throat pouch, turquoise lateral light organs, and quartz-like shoulder plates.",
+    "image": "images/2026-06-26-hybrid-creature-wild-quartzback-lantern-ape-in-the-wild.jpg",
+    "date": "2026-06-26",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Quartzback Lantern Ape",
+      "imageKind": "wild",
+      "description": "Fictional non-actionable hybrid of gorilla + lanternfish: a mostly animal-like knuckle-walker with heavy forearms, dark reflective skin, glowing throat pouch, lateral light organs, and quartz-like shoulder plates in a moonlit mineral forest.",
+      "continuity": "Sources: gorilla + lanternfish. Same adult phenotype: mostly animal-like knuckle-walker with gorilla-like heavy forearms and shoulders, dark lanternfish shimmer, glowing throat pouch, lateral light organs, quartz shoulder plates, and low forward head carriage; same habitat: moonlit mineral forest."
+    }
+  },
+  {
+    "id": "2026-06-27-hybrid-creature-infographic-salt-veil-basker-development-ma",
+    "title": "Salt Veil Basker: Development Map",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under media/tool-image-generation; fictional/non-actionable hybrid concept; archive append converted to JPEG and uploaded to R2.",
+    "prompt": "Create a fictional two-source hybrid-creature development map for the Salt Veil Basker, a non-actionable speculative hybrid of harbor seal + cuttlefish. Show a colorful photorealistic scientific wall chart with a source-trait map, juvenile-to-adult stage strip, large adult anatomy/specimen panel, macro texture windows, habitat swatches, and a field-context scale vignette. The adult should be a broad low belly-crawling coastal form with seal body weight, blunt whiskered head, foreflipper shoulders, translucent cuttlefish side veils, chromatophore mottling, fin-frill edges, soft mantle texture, and fan-tail display.\nReusable template: Create a fictional two-source hybrid-creature pair: first a colorful photorealistic speculative development-map infographic that names [SOURCE A] + [SOURCE B], maps at least two visible trait contributions from each source, includes a juvenile-to-adult stage strip, adult anatomy/specimen panel, macro texture panels, habitat swatches, and field-context scale cue without actionable biology; then create a matching in-the-wild field photo of the same adult phenotype.\nExample substitution: [SOURCE A] = harbor seal; [SOURCE B] = cuttlefish; habitat = dusk salt flats and shallow tidal pools; shared adult phenotype = broad belly-crawling seal mass with cuttlefish veils, chromatophore skin, fin frills, and fan tail.",
+    "image": "images/2026-06-27-hybrid-creature-infographic-salt-veil-basker-development-ma.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Salt Veil Basker",
+      "imageKind": "infographic",
+      "description": "A fictional harbor seal + cuttlefish strain with a low seal-like coastal body, translucent cuttlefish veils, chromatophore mottling, fin frills, and fan-tail display.",
+      "continuity": "Same adult phenotype in both images: broad belly-crawling seal mass, blunt whiskered head, translucent side veils, mottled chromatophore skin, fin-frill edges, fan tail, and dusk salt-flat habitat."
+    }
+  },
+  {
+    "id": "2026-06-27-hybrid-creature-wild-salt-veil-basker-in-the-wild",
+    "title": "Salt Veil Basker: In the Wild",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under media/tool-image-generation; matching field-photo continuation of the same fictional/non-actionable hybrid phenotype; archive append converted to JPEG and uploaded to R2.",
+    "prompt": "Create a matching in-the-wild documentary field photo of the adult Salt Veil Basker, a fictional two-source hybrid of harbor seal + cuttlefish, in dusk salt flats and shallow tidal pools. Preserve the same adult phenotype from the development map: broad low belly-crawling coastal body, seal-like blunt whiskered head and foreflipper shoulder structure, cuttlefish-like translucent side veils, mottled chromatophore patches, fin-frill edges, soft mantle texture, and fan-tail display partly spread over wet sand.\nReusable template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID NAME] adult phenotype from [SOURCE A] + [SOURCE B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\nExample substitution: [HYBRID NAME] = Salt Veil Basker; [SOURCE A] = harbor seal; [SOURCE B] = cuttlefish; habitat = dusk salt flats and shallow tide pools.",
+    "image": "images/2026-06-27-hybrid-creature-wild-salt-veil-basker-in-the-wild.jpg",
+    "date": "2026-06-27",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Salt Veil Basker",
+      "imageKind": "wild",
+      "description": "A fictional harbor seal + cuttlefish strain with a low seal-like coastal body, translucent cuttlefish veils, chromatophore mottling, fin frills, and fan-tail display.",
+      "continuity": "Same adult phenotype in both images: broad belly-crawling seal mass, blunt whiskered head, translucent side veils, mottled chromatophore skin, fin-frill edges, fan tail, and dusk salt-flat habitat."
+    }
+  },
+  {
+    "id": "2026-06-28-hybrid-creature-infographic-ochre-spindlejaw-development-ma",
+    "title": "Ochre Spindlejaw: Development Map",
+    "tests": "Hybrid creature development map; sources kangaroo + aardvark; fictional non-actionable source-trait map with stage strip, adult specimen panel, macro windows, habitat swatches, and scale vignette.",
+    "prompt": "Create a fictional two-source hybrid-creature development map for the Ochre Spindlejaw, a non-actionable speculative hybrid of kangaroo + aardvark. Show a colorful photorealistic scientific wall chart on a dry clay field-station workbench with a source-trait map, juvenile-to-adult stage strip, large adult specimen/anatomy panel, macro texture/color windows, dry badlands habitat swatches, and a field-context scale vignette. Kangaroo contributes long springing hind limbs, counterbalancing body angle, enlarged hock leverage, and fast low running posture; aardvark contributes narrow shovel jaw, tucked digging forelimbs, blunt ears, coarse ochre hide, and burrow-oriented snout. Keep labels concise and fictional; no real genetics, lab protocols, equipment steps, surgery, or gore.\\n\\nReusable template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\\n\\nExample substitution: [HYBRID_NAME] = Ochre Spindlejaw; [SOURCE_A] = kangaroo; [SOURCE_B] = aardvark; [HABITAT] = dry clay badlands; adult phenotype = low side-profile runner with kangaroo-like springing hind limbs, counterbalancing body angle, tucked aardvark-like digging forelimbs, narrow shovel jaw, blunt ears, and coarse ochre scale-fur.",
+    "image": "images/2026-06-28-hybrid-creature-infographic-ochre-spindlejaw-development-ma.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Ochre Spindlejaw",
+      "imageKind": "infographic",
+      "description": "Fictional non-actionable hybrid of kangaroo + aardvark: a low side-profile badlands runner with kangaroo hind-limb leverage and aardvark digging/head traits.",
+      "continuity": "Sources: kangaroo + aardvark. Shared adult phenotype: low side-profile runner with long springing hind limbs, counterbalancing body angle, tucked digging forelimbs, narrow shovel jaw, blunt ears, coarse ochre scale-fur, and dry clay badlands habitat."
+    }
+  },
+  {
+    "id": "2026-06-28-hybrid-creature-wild-ochre-spindlejaw-in-the-wild",
+    "title": "Ochre Spindlejaw: In the Wild",
+    "tests": "Hybrid creature wild companion; same kangaroo + aardvark adult phenotype and dry clay badlands continuity as the development map.",
+    "prompt": "Create a matching photorealistic in-the-wild field photo of the adult Ochre Spindlejaw, a fictional two-source hybrid of kangaroo + aardvark, in dry clay badlands at dawn. Preserve the same adult phenotype from the development map: low side-profile runner, kangaroo-like long springing hind limbs, enlarged hock leverage, counterbalancing body angle, muscular rump, aardvark-like narrow shovel jaw, blunt ears, burrow-oriented snout, tucked digging forelimbs, dust-coated claw pads, and coarse ochre scale-fur. Show it moving left to right beside a burrow mouth with cracked clay, sparse scrub, badland ridges, track impressions, warm dawn side light, believable weight, documentary field-camera imperfections, and no text.\\n\\nReusable template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\\n\\nExample substitution: [HYBRID_NAME] = Ochre Spindlejaw; [SOURCE_A] = kangaroo; [SOURCE_B] = aardvark; [HABITAT] = dry clay badlands at dawn; shared adult phenotype = low side-profile runner with kangaroo hind-limb leverage and aardvark shovel-jaw/digging traits.",
+    "image": "images/2026-06-28-hybrid-creature-wild-ochre-spindlejaw-in-the-wild.jpg",
+    "date": "2026-06-28",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Ochre Spindlejaw",
+      "imageKind": "wild",
+      "description": "Fictional non-actionable hybrid of kangaroo + aardvark: a low badlands runner preserving the same adult phenotype as the development map.",
+      "continuity": "Sources: kangaroo + aardvark. Shared adult phenotype: low side-profile runner with long springing hind limbs, counterbalancing body angle, tucked digging forelimbs, narrow shovel jaw, blunt ears, coarse ochre scale-fur, and dry clay badlands habitat."
+    }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-infographic-lanternjaw-railback-development",
+    "title": "Lanternjaw Railback: Development Map",
+    "tests": "Hybrid creature development-map infographic; sources: deep-sea anglerfish + pangolin; non-actionable fictional labels; includes source-trait map, stage strip, adult panel, macro panels, habitat swatches, and scale vignette.",
+    "prompt": "Create a fictional two-source hybrid-creature development map for Lanternjaw Railback, using exactly deep-sea anglerfish + pangolin. Make a colorful photorealistic scientific wall chart over a damp cave-field workbench. Show a source-trait map where anglerfish contributes luminous jaw lure, deep-set glassy eyes, dark wet skin, pressure-rounded head, and soft fin-like throat folds, while pangolin contributes overlapping keratin armor plates, arched railback silhouette, curled defensive posture, heavy digging forelimbs, and tapering plated tail. Include a juvenile-to-adult stage strip, a large low quadrupedal adult specimen panel curled around a cave pool, macro windows for wet skin, lure membrane, armor plates, claw wear, and cave-water droplets, limestone cave-river habitat swatches, and a field scale vignette with tracks and unbranded measuring tools. Keep it fictional and non-actionable: concise labels only, no real gene names, no protocols, no surgery, no gore, no lab steps, no logos, no QR codes.\n\nReusable template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Lanternjaw Railback; [SOURCE_A] = deep-sea anglerfish; [SOURCE_B] = pangolin; [HABITAT] = dark limestone cave river; adult phenotype = low quadrupedal arched railback with cyan luminous jaw lure, deep-set eyes, dark wet skin, soft throat folds, overlapping armor plates, blunt digging foreclaws, curled defensive posture, and tapering plated tail.",
+    "image": "images/2026-06-29-hybrid-creature-infographic-lanternjaw-railback-development.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Lanternjaw Railback",
+      "imageKind": "infographic",
+      "description": "A fictional cave-river hybrid combining anglerfish lure anatomy with pangolin armor, digging forelimbs, and curled railback posture.",
+      "continuity": "Same low armored cave-river adult with cyan jaw lure, dark wet skin, blunt digging foreclaws, and curled plated tail."
+    }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-wild-lanternjaw-railback-in-the-wild",
+    "title": "Lanternjaw Railback: In the Wild",
+    "tests": "Hybrid creature wild field photo; sources: deep-sea anglerfish + pangolin; matches the development-map phenotype in a limestone cave river.",
+    "prompt": "Create a matching photorealistic in-the-wild field photo of the adult Lanternjaw Railback, a fictional two-source hybrid of deep-sea anglerfish + pangolin, in a dark limestone cave river. Preserve the same adult phenotype from the development map: low quadrupedal arched railback body, overlapping amber-brown keratin armor plates, dark wet skin between plates, pressure-rounded anglerfish-like head, deep-set glassy eyes, cyan luminous jaw lure hanging from the lower mouth edge, soft fin-like throat folds, heavy blunt-clawed digging forelimbs, compact hind limbs, and a tapering plated tail partly curled around the body. Show it side-on beside a shallow cave pool with the lure reflecting in black water, claws scraping slick calcite, mossy cave-mouth light, mineral crust, muddy burrow bank, droplets on armor edges, and track impressions. No people, no labels, no lab scene, no gore, no readable text, no watermark, no logo.\n\nReusable template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Lanternjaw Railback; [SOURCE_A] = deep-sea anglerfish; [SOURCE_B] = pangolin; [HABITAT] = dark limestone cave river; shared adult phenotype = low quadrupedal arched railback with luminous jaw lure, wet anglerfish-like head and throat folds, overlapping pangolin armor, heavy digging foreclaws, curled defensive posture, and plated tail.",
+    "image": "images/2026-06-29-hybrid-creature-wild-lanternjaw-railback-in-the-wild.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Lanternjaw Railback",
+      "imageKind": "wild",
+      "description": "A fictional cave-river hybrid combining anglerfish lure anatomy with pangolin armor, digging forelimbs, and curled railback posture.",
+      "continuity": "Same low armored cave-river adult with cyan jaw lure, dark wet skin, blunt digging foreclaws, and curled plated tail."
+    }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-infographic-abyssal-lantern-warden-developm",
+    "title": "Abyssal Lantern Warden: Development Map",
+    "tests": "Manual hybrid-creature pair requested by Jez; sources deep-sea anglerfish + human; infographic includes source-trait map, adult specimen, stage strip, macro panels, habitat swatches, and field-context scale cue.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional, non-actionable hybrid creature named \"Abyssal Lantern Warden\", with the two source organisms/groups stated as deep-sea anglerfish + human. Show a central adult specimen suspended vertically in blackwater with humanoid torso, long human-derived arms, webbed five-fingered hands, anglerfish cranial lure, wide hinged jaw, fin fringes, dark gelatinous skin, and cyan bioluminescent freckles. Include a source-trait map, juvenile-to-adult stage strip, macro texture windows, habitat swatches, and field-context scale vignette. Keep all biology fictional and non-actionable; no real gene names, no protocols, no gore.\n\nReusable template: Create a fictional hybrid-creature development-map infographic for [HYBRID_NAME], sources [SOURCE_A] + [SOURCE_B]. Show exactly two source columns with visible trait contributions, a central adult specimen panel, juvenile-to-adult stage strip, macro texture/detail windows, habitat swatches, and a small field-context scale vignette. Keep it speculative, non-actionable, photorealistic, and clearly derived from both sources.",
+    "image": "images/2026-06-29-hybrid-creature-infographic-abyssal-lantern-warden-developm.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Abyssal Lantern Warden",
+      "imageKind": "infographic",
+      "description": "A fictional deep-sea anglerfish + human hybrid with a humanoid vertical-swimmer body plan, webbed five-fingered hands, cranial lure, fin fringes, dark gelatinous skin, and blue-green bioluminescent freckles.",
+      "continuity": "Both images preserve the same Abyssal Lantern Warden phenotype: upright human-derived torso and hands, anglerfish lure and jaw, fin-fringed limbs, charcoal skin, and cyan bioluminescence in blackwater habitat."
+    }
+  },
+  {
+    "id": "2026-06-29-hybrid-creature-wild-abyssal-lantern-warden-in-the-wild",
+    "title": "Abyssal Lantern Warden: In the Wild",
+    "tests": "Manual hybrid-creature pair requested by Jez; sources deep-sea anglerfish + human; wild image preserves the same adult phenotype and shows blackwater field-photo habitat continuity.",
+    "prompt": "Create a matching photorealistic in-the-wild field photo of the fictional \"Abyssal Lantern Warden\", sources deep-sea anglerfish + human. Show the same adult phenotype from the development map: humanoid upright torso and shoulders, long human-derived arms with webbed five-fingered hands, alert face-plane gaze, flexible cyan-green anglerfish lure, wide hinged jaw with small translucent teeth, fin-fringed limbs, mottled gelatinous charcoal skin, and blue-green bioluminescent freckles. Frame it as a deep-sea blackwater wildlife encounter with red submersible observation light, marine snow, hydrothermal haze, and a distant scale cue. No labels, no gore, no lab equipment.\n\nReusable template: Create a matching in-the-wild field photograph of [HYBRID_NAME], sources [SOURCE_A] + [SOURCE_B], using the same adult phenotype from its development-map infographic. Place it in [HABITAT], preserve the visible trait contributions from both sources, use documentary wildlife lighting and scale cues, and avoid costume, studio portrait, gore, or lab imagery.",
+    "image": "images/2026-06-29-hybrid-creature-wild-abyssal-lantern-warden-in-the-wild.jpg",
+    "date": "2026-06-29",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Abyssal Lantern Warden",
+      "imageKind": "wild",
+      "description": "A fictional deep-sea anglerfish + human hybrid with a humanoid vertical-swimmer body plan, webbed five-fingered hands, cranial lure, fin fringes, dark gelatinous skin, and blue-green bioluminescent freckles.",
+      "continuity": "Both images preserve the same Abyssal Lantern Warden phenotype: upright human-derived torso and hands, anglerfish lure and jaw, fin-fringed limbs, charcoal skin, and cyan bioluminescence in blackwater habitat."
+    }
+  },
+  {
+    "id": "2026-06-30-hybrid-creature-infographic-prismleaf-hovergecko-developmen",
+    "title": "Prismleaf Hovergecko: Development Map",
+    "tests": "Hybrid creature development map: fictional leaf-tailed gecko + hummingbird source pair, visible trait map, stage strip, adult specimen panel, macro texture windows, habitat swatches, and field-context scale vignette; no actionable biology.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Prismleaf Hovergecko\", using exactly two source organisms: leaf-tailed gecko + hummingbird. Show a source-trait map where leaf-tailed gecko contributes bark-mottled skin, adhesive toe pads, wide side-set eyes, flattened leaf tail, and vertical clinging posture, while hummingbird contributes iridescent ruby-and-teal throat feathers, paired transparent fast-beating wings, needlelike nectar beak, hovering balance, and a tiny high-energy chest. Build the landscape chart around a field-station specimen bench with a central adult specimen clinging vertically to a waxy leaf stem, juvenile-to-adult stage strip, macro windows for toe lamellae, throat iridescence, bark camouflage, translucent wing membranes, and leaf-tail edge, humid cloud-forest habitat swatches, and a field scale vignette with a nectar flower, clipped leaf sample, nonbranded calipers, and gloved fingertip silhouette. Keep it fictional and non-actionable: no real gene names, no protocols, no surgery, no gore.\n\nReusable template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Prismleaf Hovergecko; [SOURCE_A] = leaf-tailed gecko; [SOURCE_B] = hummingbird; [HABITAT] = humid cloud-forest flower canopy; adult phenotype = a small vertical-clinging gecko body with adhesive toe pads, bark-mottled skin, side-set eyes, flattened leaf-tail rudder, needlelike nectar beak, ruby-and-teal iridescent throat patch, tiny hummingbird chest, and translucent hummingbird wings behind the shoulders.",
+    "image": "images/2026-06-30-hybrid-creature-infographic-prismleaf-hovergecko-developmen.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Prismleaf Hovergecko",
+      "imageKind": "infographic",
+      "description": "A fictional leaf-tailed gecko + hummingbird hybrid with adhesive toe pads, bark camouflage, a leaf-tail rudder, a nectar beak, iridescent throat patch, and translucent hovering wings.",
+      "continuity": "Shared phenotype: vertical-clinging cloud-forest adult with gecko limbs and leaf-tail plus hummingbird nectar beak, iridescent throat, and translucent wings."
+    }
+  },
+  {
+    "id": "2026-06-30-hybrid-creature-wild-prismleaf-hovergecko-in-the-wild",
+    "title": "Prismleaf Hovergecko: In the Wild",
+    "tests": "Hybrid creature wild photo: same Prismleaf Hovergecko adult phenotype from leaf-tailed gecko + hummingbird, shown drinking in humid cloud-forest habitat with clear continuity from the development map.",
+    "prompt": "Create a matching photorealistic in-the-wild field photo of the adult Prismleaf Hovergecko, a clearly fictional two-source hybrid of leaf-tailed gecko + hummingbird, in a humid cloud-forest flower canopy after rain. Preserve the same adult phenotype from the development map: small vertical-clinging gecko body, four splayed limbs with adhesive toe pads, bark-mottled green-brown skin, wide side-set gecko eyes, flattened leaf-tail rudder, gecko head plane extended into a fine needlelike nectar beak, ruby-and-teal iridescent throat patch, tiny rounded hummingbird chest, and paired translucent hummingbird wings half-blurred while it drinks from a hanging orange flower. Use documentary macro wildlife lighting with moss, lichens, waxy wet leaves, misty backlight, rain beads, and shallow depth of field. Avoid people, text, labels, lab setting, gore, logos, watermark, and any result that reads as a costume, pure lizard, or pure bird.\n\nReusable template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Prismleaf Hovergecko; [SOURCE_A] = leaf-tailed gecko; [SOURCE_B] = hummingbird; [HABITAT] = humid cloud-forest flower canopy after rain; shared adult phenotype = vertical-clinging gecko body with adhesive toe pads, bark-camouflage skin, leaf-tail rudder, gecko eyes, needle nectar beak, iridescent hummingbird throat, tiny rounded chest, and translucent wings.",
+    "image": "images/2026-06-30-hybrid-creature-wild-prismleaf-hovergecko-in-the-wild.jpg",
+    "date": "2026-06-30",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Prismleaf Hovergecko",
+      "imageKind": "wild",
+      "description": "A fictional leaf-tailed gecko + hummingbird hybrid photographed in a rainy cloud-forest flower canopy.",
+      "continuity": "Shared phenotype: vertical-clinging cloud-forest adult with gecko limbs and leaf-tail plus hummingbird nectar beak, iridescent throat, and translucent wings."
+    }
+  },
+  {
+    "id": "2026-07-01-hybrid-creature-infographic-reedglass-spoonwalker-developme",
+    "title": "Reedglass Spoonwalker: Development Map",
+    "tests": "Synchronous GPT Image 2 CLI generation succeeded on first attempt; exact output path verified under /home/jez237/.openclaw/media/tool-image-generation; append-entry.py converted/uploaded JPEG to R2.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Reedglass Spoonwalker\", using exactly two source organisms: roseate spoonbill + glass frog. Make it a landscape scientific wall chart assembled on a humid marsh field-station bench, with restrained concise labels and no actionable biology. Include these distinct visual layers: a source-trait map showing roseate spoonbill contributes long stilt legs, flattened spoon-shaped bill, rose-pink shoulder feather fans, wading posture, and shallow-water sweep-feeding behavior, while glass frog contributes translucent lime-green belly skin, visible soft organ silhouettes as pale shapes, adhesive toe pads, large gold side-set eyes, and glossy wet amphibian skin; a juvenile-to-adult stage strip with three non-procedural life stages; a large central adult specimen panel showing a tall knee-high wader standing side-on in ankle-deep water with two long spoonbill-like legs, a light arched amphibian torso, glassy green translucent belly, rose feather fans folded like shoulder sails, a broad spoon-shaped bill, large glass-frog eyes, and four small sticky foretoes held close to the body; macro texture windows for translucent belly membrane, rose feather barbs, wet toe pads, spoon-bill edge, and gold eye surface; habitat swatches for dawn reed marsh, floating duckweed, wet cypress roots, rose reflected water, and rain-beaded leaves; and a field-context scale vignette with a boot print, a reed stem, a small nonbranded caliper, and a shallow sample tray on the bench. Use clean scientific color coding, photorealistic specimen lighting, tactile bench materials, dew, mud flecks, restrained arrows, and readable but minimal labels. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Reedglass Spoonwalker; [SOURCE_A] = roseate spoonbill; [SOURCE_B] = glass frog; [HABITAT] = dawn reed marsh after rain; adult phenotype = a tall knee-high wader with spoonbill stilt legs, flattened spoon bill, rose shoulder feather fans, glass-frog translucent belly, sticky toe pads, glossy lime skin, and large gold side-set eyes.",
+    "image": "images/2026-07-01-hybrid-creature-infographic-reedglass-spoonwalker-developme.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Reedglass Spoonwalker",
+      "imageKind": "infographic",
+      "description": "A fictional roseate spoonbill + glass frog hybrid with a tall marsh-wading body, rose shoulder fans, spoon bill, translucent glassy belly, sticky toe pads, and gold amphibian eyes.",
+      "continuity": "Same adult phenotype across both images: tall dawn-marsh wader combining spoonbill stilt legs, spoon bill, rose feather fans, translucent glass-frog belly, sticky toe pads, lime wet skin, and gold side-set eyes."
+    }
+  },
+  {
+    "id": "2026-07-01-hybrid-creature-wild-reedglass-spoonwalker-in-the-wild",
+    "title": "Reedglass Spoonwalker: In the Wild",
+    "tests": "Synchronous GPT Image 2 CLI generation succeeded on first attempt; exact output path verified under /home/jez237/.openclaw/media/tool-image-generation; append-entry.py converted/uploaded JPEG to R2.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Reedglass Spoonwalker\", a clearly fictional two-source hybrid of roseate spoonbill + glass frog, in a dawn reed marsh after rain. Preserve the exact adult phenotype from the development map: a tall knee-high wading animal standing side-on in ankle-deep water, two long roseate-spoonbill-like stilt legs with pale pink joints, a broad flattened spoon-shaped bill sweeping just above the water, rose-pink feather fans folded like small shoulder sails, a light arched amphibian torso, glossy wet lime-green glass-frog skin, a translucent belly where pale soft organ silhouettes show through as abstract shapes, large gold side-set glass-frog eyes, sticky toe pads dimpling floating duckweed, and four small sticky foretoes tucked close beneath the chest. Show it stepping between cypress knees and reed stems with rain beads on leaves, rose dawn reflections, muddy ripples from its feet, a few disturbed tiny insects on the water surface, duckweed caught on the toe pads, and a boot-print scale cue in the mud at the edge of frame. Use long-lens wildlife photography, low marsh-level camera angle, shallow documentary depth of field, humid morning haze, tactile feathers, glassy skin, wet wood, mud, and water texture. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure bird or pure frog result; it must visibly combine roseate spoonbill traits and glass frog traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Reedglass Spoonwalker; [SOURCE_A] = roseate spoonbill; [SOURCE_B] = glass frog; [HABITAT] = dawn reed marsh after rain; shared adult phenotype = tall side-on wader with spoonbill legs, spoon bill, rose shoulder fans, translucent glass-frog belly, sticky toe pads, glossy lime skin, and large gold eyes.",
+    "image": "images/2026-07-01-hybrid-creature-wild-reedglass-spoonwalker-in-the-wild.jpg",
+    "date": "2026-07-01",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Reedglass Spoonwalker",
+      "imageKind": "wild",
+      "description": "A fictional roseate spoonbill + glass frog hybrid photographed in its dawn reed-marsh habitat.",
+      "continuity": "Same adult phenotype across both images: tall dawn-marsh wader combining spoonbill stilt legs, spoon bill, rose feather fans, translucent glass-frog belly, sticky toe pads, lime wet skin, and gold side-set eyes."
+    }
+  },
+  {
+    "id": "2026-07-02-hybrid-creature-infographic-amberglass-sailor-development-m",
+    "title": "Amberglass Sailor: Development Map",
+    "tests": "Hybrid creature development-map infographic for a fictional Portuguese man o war siphonophore + flying fish strain.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional two-source hybrid creature named \"Amberglass Sailor\", using exactly two source organisms: Portuguese man o war siphonophore + flying fish. Make it a landscape scientific wall chart assembled on a sunlit pelagic field-station bench with a source-trait map, juvenile-to-adult stage strip, central adult specimen panel, macro sail/fin/scale/tendril texture panels, open-ocean habitat swatches, and a field-context scale vignette. The adult phenotype is a low horizontal ocean-surface animal with a glassy amber gas-sail crest, streamlined silver-blue body, broad flying-fish pectoral outriggers, forked tail, armored head scales, and cobalt-violet ribbon tendrils trailing beneath the belly. Keep it fictional and non-actionable, with concise labels only and no real genetics, protocols, surgery, gore, logos, or dense paragraphs.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Amberglass Sailor; [SOURCE_A] = Portuguese man o war siphonophore; [SOURCE_B] = flying fish; [HABITAT] = open tropical blue water beside floating sargassum after a dawn squall; adult phenotype = low horizontal ocean-surface glider with glassy amber gas-sail crest, blue-violet trailing tendril ribbons, streamlined silver-blue flying-fish body, broad pectoral fins, forked tail, armored head scales, and sunlit salt spray.",
+    "image": "images/2026-07-02-hybrid-creature-infographic-amberglass-sailor-development-m.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Amberglass Sailor",
+      "imageKind": "infographic",
+      "description": "A fictional Portuguese man o war siphonophore + flying fish hybrid with a glassy sail crest, blue tendril ribbons, flying-fish fins, and a skimming ocean-surface body.",
+      "continuity": "Same adult open-ocean phenotype across both images: glassy amber gas-sail crest, silver-blue fish body, broad pectoral outriggers, forked tail, armored head scales, and cobalt-violet trailing tendrils."
+    }
+  },
+  {
+    "id": "2026-07-02-hybrid-creature-wild-amberglass-sailor-in-the-wild",
+    "title": "Amberglass Sailor: In the Wild",
+    "tests": "Hybrid creature wild field photo matching the fictional Portuguese man o war siphonophore + flying fish development map.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Amberglass Sailor\", a clearly fictional two-source hybrid of Portuguese man o war siphonophore + flying fish, skimming across open tropical blue water beside floating sargassum after a dawn squall. Preserve the exact adult phenotype from the development map: a low horizontal ocean-surface animal, not humanoid, with a clear amber glassy gas-sail crest rising above a streamlined silver-blue fishlike torso, two broad flying-fish pectoral fins spread like wet outriggers just above the wave surface, a short forked tail slicing a wake, armored head scales catching sun glitter, and a veil of cobalt-violet ribbon tendrils trailing harmlessly beneath the belly in the water. Show it moving left to right at wave height, lifting slightly on wind ripple, with beads of salt spray on the sail, translucent fin rays, iridescent membrane edges, sargassum pieces for scale, small flying droplets, early amber sunlight, deep blue water, distant low squall cloud, and realistic long-lens wildlife camera imperfections. No labels, no text, no people, no boat, no lab setting, no gore, no logos, no watermark, no costume look, no pure jellyfish or pure fish result; it must visibly combine Portuguese man o war traits and flying fish traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Amberglass Sailor; [SOURCE_A] = Portuguese man o war siphonophore; [SOURCE_B] = flying fish; [HABITAT] = open tropical blue water beside floating sargassum after a dawn squall; shared adult phenotype = low horizontal ocean-surface glider with glassy amber gas-sail crest, cobalt-violet tendril ribbons, silver-blue fish body, broad pectoral fins, forked tail, armored head scales, and salt-spray-lit skimming motion.",
+    "image": "images/2026-07-02-hybrid-creature-wild-amberglass-sailor-in-the-wild.jpg",
+    "date": "2026-07-02",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Amberglass Sailor",
+      "imageKind": "wild",
+      "description": "A fictional Portuguese man o war siphonophore + flying fish hybrid with a glassy sail crest, blue tendril ribbons, flying-fish fins, and a skimming ocean-surface body.",
+      "continuity": "Same adult open-ocean phenotype across both images: glassy amber gas-sail crest, silver-blue fish body, broad pectoral outriggers, forked tail, armored head scales, and cobalt-violet trailing tendrils."
+    }
+  },
+  {
+    "id": "2026-07-03-hybrid-creature-infographic-snowpetal-jackmantis-developmen",
+    "title": "Snowpetal Jackmantis: Development Map",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; source-trait map, stage strip, adult specimen panel, macro windows, habitat swatches, and scale vignette requested.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional two-source hybrid creature named \"Snowpetal Jackmantis\", using exactly two source organisms: snowshoe hare + orchid mantis. Make it a landscape scientific wall chart assembled on a cold alpine field-station bench with restrained concise labels and no actionable biology. Include these distinct visual layers: a source-trait map showing snowshoe hare contributes oversized snowshoe hind feet, powerful leaping haunches, long heat-shedding ears, winter-white insulating fur, and a compact alert mammal posture, while orchid mantis contributes petal-like limb lobes, folded raptorial forelimbs, triangular insect head geometry, pale pink-white floral camouflage, and delicate spined grasping edges; a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel showing a waist-high side-profile leaper on packed snow with hare-like hindquarters, broad furred snow feet, long translucent-veined ears, a narrow triangular face with small mammal nose and faceted side-eye shimmer, folded mantis-like raptorial forelimbs integrated at the shoulders, and white fur broken by soft blush-pink petal plates; macro texture windows for snow-packed foot fur, petal-lobe veins, fine ear frost, raptorial forelimb spines, and faceted eye gloss; habitat swatches for wind-crusted alpine willow snow, pink saxifrage blossoms, blue shadow ice, lichen rock, and dawn powder; and a field-context scale vignette with hare-like tracks beside a willow twig, a nonbranded caliper, a mittened hand silhouette, and a shallow specimen tray on the bench. Use clean scientific color coding, photorealistic specimen lighting, tactile bench frost, restrained arrows, readable but minimal fictional labels, and clear panel hierarchy. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Snowpetal Jackmantis; [SOURCE_A] = snowshoe hare; [SOURCE_B] = orchid mantis; [HABITAT] = wind-crusted alpine willow snowfield at dawn; adult phenotype = waist-high side-profile leaper with snowshoe hare hindquarters, broad snow feet, winter-white fur, long frost-rimmed ears, triangular mantis-inspired face, folded orchid-mantis forelimbs, blush-pink petal lobes, delicate spined grasping edges, and pale floral camouflage plates.",
+    "image": "images/2026-07-03-hybrid-creature-infographic-snowpetal-jackmantis-developmen.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Snowpetal Jackmantis",
+      "imageKind": "infographic",
+      "description": "A fictional snowshoe hare + orchid mantis hybrid with snow-running feet, winter fur, long ears, folded petal-like raptorial forelimbs, and blush floral camouflage.",
+      "continuity": "Same adult phenotype across both images: waist-high alpine leaper with hare hindquarters, broad snow feet, frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and winter-white fur."
+    }
+  },
+  {
+    "id": "2026-07-03-hybrid-creature-wild-snowpetal-jackmantis-in-the-wild",
+    "title": "Snowpetal Jackmantis: In the Wild",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; matching in-the-wild field photo requested with the same adult phenotype and habitat continuity.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Snowpetal Jackmantis\", a clearly fictional two-source hybrid of snowshoe hare + orchid mantis, crossing a wind-crusted alpine willow snowfield at dawn. Preserve the exact adult phenotype from the development map: a waist-high side-profile leaping animal with snowshoe-hare-like powerful hindquarters, broad furred snow feet pressing shallow oval tracks into crusted snow, compact winter-white mammal body, long translucent-veined ears rimmed with frost, a narrow triangular face with a small mammal nose and subtle faceted side-eye shimmer, folded orchid-mantis-like raptorial forelimbs integrated at the shoulders, blush-pink petal-like lobes along the forelimbs and shoulders, delicate spined grasping edges held safely closed, and white insulating fur broken by pale pink floral camouflage plates. Show it moving left to right between dwarf willow stems and pink saxifrage flowers poking through snow, with blue shadow ice, lichen rocks, powder blown from its feet, tiny ice crystals on the petal lobes, visible breath in cold air, and a natural scale cue from willow twigs and track depth. Use long-lens wildlife photography, low snow-level camera angle, shallow documentary depth of field, dawn side light, tactile snow, frost, fur, petal membrane, and rock textures. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure hare or pure mantis result; it must visibly combine snowshoe hare traits and orchid mantis traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in the body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Snowpetal Jackmantis; [SOURCE_A] = snowshoe hare; [SOURCE_B] = orchid mantis; [HABITAT] = wind-crusted alpine willow snowfield at dawn; shared adult phenotype = waist-high alpine leaper with snowshoe hare hindquarters, broad snow feet, winter-white fur, long frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and pale floral camouflage plates.",
+    "image": "images/2026-07-03-hybrid-creature-wild-snowpetal-jackmantis-in-the-wild.jpg",
+    "date": "2026-07-03",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Snowpetal Jackmantis",
+      "imageKind": "wild",
+      "description": "A fictional snowshoe hare + orchid mantis hybrid with snow-running feet, winter fur, long ears, folded petal-like raptorial forelimbs, and blush floral camouflage.",
+      "continuity": "Same adult phenotype across both images: waist-high alpine leaper with hare hindquarters, broad snow feet, frost-rimmed ears, triangular faceted face, folded orchid-mantis forelimbs, blush petal lobes, and winter-white fur."
+    }
+  },
+  {
+    "id": "2026-07-04-hybrid-creature-infographic-glassveil-tidewalker-developmen",
+    "title": "Glassveil Tidewalker: Development Map",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under /home/jez237/.openclaw/media/tool-image-generation/.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Glassveil Tidewalker\", using exactly two source organisms: coconut octopus + glasswing butterfly. Show a concise fictional source-trait map where coconut octopus contributes soft mottled mantle, eight flexible sucker-lined arms, shell-carrying shelter behavior, chromatophore freckles, and cautious tidepool walking, while glasswing butterfly contributes transparent veined wing-panels, black-and-amber wing borders, delicate clubbed antennae, a slender curled feeding proboscis, and stained-glass iridescent edge colors. Build the landscape chart around a wet mangrove field-station specimen bench with a central adult specimen in side-three-quarter view: a low palm-sized amphibious cephalopod body braced on four walking arms, four trailing arms curled around a small half-shell shelter, paired transparent wing-like sail membranes rising from the mantle like glass panes with butterfly vein tracery, black-and-amber rim bands, small clubbed antennae above wide cephalopod eyes, and a curled nonhuman proboscis used only for sipping moisture from mangrove blossoms. Include source-trait map, juvenile-to-adult stage strip, adult anatomy/specimen panel, macro windows for sucker texture, chromatophore freckles, transparent wing veins, amber rim scales, wet shell interior, and antenna tips, habitat swatches for mangrove roots, brackish tidepool water, wet black mud, fallen blossom nectar, and shell rubble, plus a field-context scale vignette with a mangrove leaf, small unbranded caliper, shell fragment, gloved fingertip silhouette, and shallow observation tray. Use lively scientific color coding, photorealistic wet bench detail, restrained arrows, readable but minimal fictional labels, clear panel hierarchy, turquoise water reflections, amber wing edges, rust-red mangrove roots, black mud, and pearly shell highlights. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Glassveil Tidewalker; [SOURCE_A] = coconut octopus; [SOURCE_B] = glasswing butterfly; [HABITAT] = shallow mangrove tidepool at low tide; adult phenotype = palm-sized amphibious cephalopod with eight sucker-lined arms, shell-carrying behavior, chromatophore freckles, transparent veined wing-like sail membranes, black-and-amber butterfly rim bands, clubbed antennae, and a curled nonhuman proboscis.",
+    "image": "images/2026-07-04-hybrid-creature-infographic-glassveil-tidewalker-developmen.jpg",
+    "date": "2026-07-04",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glassveil Tidewalker",
+      "imageKind": "infographic",
+      "description": "A fictional coconut octopus + glasswing butterfly hybrid shown as a wet mangrove development map and matching field phenotype.",
+      "continuity": "Same palm-sized tidepool adult: octopus mantle, eight sucker-lined arms, shell shelter, transparent veined sail membranes, amber-black wing rims, antennae, and curled proboscis."
+    }
+  },
+  {
+    "id": "2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild",
+    "title": "Glassveil Tidewalker: In the Wild",
+    "tests": "Generated with GPT Image 2 via OpenClaw CLI; exact source PNG verified under /home/jez237/.openclaw/media/tool-image-generation/.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Glassveil Tidewalker\", a clearly fictional two-source hybrid of coconut octopus + glasswing butterfly, moving through a shallow mangrove tidepool at low tide. Preserve the same adult phenotype from the development map: a palm-sized amphibious cephalopod with a low soft mottled mantle, eight flexible sucker-lined arms total, four arms braced as cautious walking limbs on wet black mud, four trailing arms curled around a small half-shell shelter, chromatophore freckles across the skin, wide alert cephalopod eyes, paired transparent wing-like sail membranes rising from the mantle like glass panes with glasswing-butterfly vein tracery, black-and-amber rim bands, tiny iridescent stained-glass edge colors, delicate clubbed antennae above the eyes, and a slender curled nonhuman proboscis touching a fallen mangrove blossom for moisture. Show it in real habitat scale among rust-red mangrove roots, brackish tidepool water, shell rubble, reflected turquoise sky, wet leaves, tiny bubbles, silt ripples, and a soft track of sucker marks in mud; include a second blurred individual half-hidden near a root only as continuity, not a new species. Use low macro wildlife camera angle at waterline, natural humid morning light, shallow documentary depth of field, tactile wet textures, pearly shell highlights, translucent wing membranes catching backlight, and believable cautious animal posture. No text, no labels, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure octopus or pure butterfly result; it must visibly combine coconut octopus traits and glasswing butterfly traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Glassveil Tidewalker; [SOURCE_A] = coconut octopus; [SOURCE_B] = glasswing butterfly; [HABITAT] = shallow mangrove tidepool at low tide; shared adult phenotype = palm-sized amphibious cephalopod with eight sucker-lined arms, shell shelter, chromatophore freckles, transparent veined wing-like sails, black-and-amber butterfly edges, clubbed antennae, and curled proboscis.",
+    "image": "images/2026-07-04-hybrid-creature-wild-glassveil-tidewalker-in-the-wild.jpg",
+    "date": "2026-07-04",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glassveil Tidewalker",
+      "imageKind": "wild",
+      "description": "A fictional coconut octopus + glasswing butterfly hybrid photographed in a shallow mangrove tidepool.",
+      "continuity": "Same palm-sized tidepool adult: octopus mantle, eight sucker-lined arms, shell shelter, transparent veined sail membranes, amber-black wing rims, antennae, and curled proboscis."
+    }
+  },
+  {
+    "id": "2026-07-05-hybrid-creature-infographic-spiralplate-mangrove-forager-de",
+    "title": "Spiralplate Mangrove Forager: Development Map",
+    "tests": "Hybrid creature development-map infographic; fictional/non-actionable; sources: Sunda pangolin + lined seahorse; includes source-trait map, juvenile-to-adult strip, adult specimen panel, macro texture windows, habitat swatches, and field-context scale vignette.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Spiralplate Mangrove Forager\", using exactly two source organisms: Sunda pangolin + lined seahorse. Make it a landscape scientific wall chart assembled on a wet mangrove field-station bench, with restrained concise labels and no actionable biology. Include a source-trait map showing Sunda pangolin contributes overlapping keratin scale armor, powerful digging foreclaws, long narrow insect-feeding snout and tongue, curled defensive posture, and low cautious terrestrial gait, while lined seahorse contributes upright arched neck and horse-like head profile, prehensile curled tail, bony ring ridges, small fluttering dorsal fin, and brackish seagrass camouflage. Add a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel showing a knee-high amphibious mangrove forager with a pangolin-like armored torso and foreclaws, a seahorse-arched neck and small horse-like head, alternating bronze keratin plates and pale lined bony ridges, a curled prehensile tail gripping a mangrove root, a small translucent dorsal fin folded along the back, and a long narrow snout probing termite-soft driftwood; macro texture windows for wet scale edges, bony ring ridges, claw mud scratches, dorsal fin membrane, snout whisker pores, and tail-grip skin; habitat swatches for black mangrove mud, brackish seagrass, rust-red prop roots, termite-pocked driftwood, and green tidal foam; plus a field-context scale vignette with a mangrove leaf, root cross-section, small unbranded caliper, boot-print edge, and shallow observation tray. Use clean scientific color coding, photorealistic wet bench detail, restrained arrows, readable but minimal fictional labels, clear panel hierarchy, bronze scale highlights, sea-green fin tinting, rust-red roots, black mud, and pearly water reflections. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], preserving source traits visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Spiralplate Mangrove Forager; [SOURCE_A] = Sunda pangolin; [SOURCE_B] = lined seahorse; [HABITAT] = brackish mangrove root maze at low tide; adult phenotype = knee-high amphibious forager with pangolin scale armor, digging foreclaws, narrow insect-feeding snout, seahorse-arched neck and head, pale bony ring ridges, folded sea-green dorsal fin, and curled prehensile tail gripping roots.",
+    "image": "images/2026-07-05-hybrid-creature-infographic-spiralplate-mangrove-forager-de.jpg",
+    "thumb": "thumbs/2026-07-05-hybrid-creature-infographic-spiralplate-mangrove-forager-de.webp",
+    "color": "#888174",
+    "date": "2026-07-05",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Spiralplate Mangrove Forager",
+      "imageKind": "infographic",
+      "description": "A fictional pangolin-plus-seahorse mangrove forager with bronze scale armor, bony ring ridges, digging foreclaws, an arched seahorse neck, folded dorsal fin, and root-gripping prehensile tail.",
+      "continuity": "Same adult phenotype across both images: Sunda pangolin scale armor, foreclaws, and insect-feeding snout combined with lined seahorse arched neck, bony ridges, dorsal fin, and curled tail in a brackish mangrove root habitat."
+    }
+  },
+  {
+    "id": "2026-07-05-hybrid-creature-wild-spiralplate-mangrove-forager-in-the-wi",
+    "title": "Spiralplate Mangrove Forager: In the Wild",
+    "tests": "Hybrid creature wild field photo; fictional/non-actionable; sources: Sunda pangolin + lined seahorse; preserves the same adult phenotype and mangrove habitat continuity.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Spiralplate Mangrove Forager\", a clearly fictional two-source hybrid of Sunda pangolin + lined seahorse, foraging in a brackish mangrove root maze at low tide. Preserve the exact adult phenotype from the development map: a knee-high amphibious forager with a low pangolin-like armored torso, overlapping wet bronze keratin scales, powerful digging foreclaws caked with black mud, a long narrow insect-feeding snout probing termite-soft driftwood, an upright seahorse-arched neck with a small horse-like head profile, pale lined bony ring ridges alternating between scale bands, a small translucent sea-green dorsal fin folded along the back, and a curled prehensile tail gripping a rust-red mangrove prop root. Show it in a cautious three-quarter side view, body low to the mud but neck raised, one foreclaw opening rotted driftwood while the snout probes inside, tail visibly wrapped around a root for balance. Include brackish seagrass strands, green tidal foam, wet black mud ripples, mangrove leaves, tiny bubbles, pearly water reflections, termite-pocked wood, scale scratches, droplets on the dorsal fin membrane, and a boot-print edge or fallen mangrove leaf for scale. Use low wildlife camera angle at root level, humid filtered afternoon light, shallow documentary depth of field, tactile mud, scales, bony ridges, fin membrane, root bark, and water textures. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure pangolin or pure seahorse result; it must visibly combine Sunda pangolin traits and lined seahorse traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Spiralplate Mangrove Forager; [SOURCE_A] = Sunda pangolin; [SOURCE_B] = lined seahorse; [HABITAT] = brackish mangrove root maze at low tide; shared adult phenotype = knee-high amphibious forager with pangolin scale armor, digging foreclaws, narrow insect-feeding snout, seahorse-arched neck and head, pale bony ring ridges, folded sea-green dorsal fin, and curled prehensile tail gripping roots.",
+    "image": "images/2026-07-05-hybrid-creature-wild-spiralplate-mangrove-forager-in-the-wi.jpg",
+    "thumb": "thumbs/2026-07-05-hybrid-creature-wild-spiralplate-mangrove-forager-in-the-wi.webp",
+    "color": "#474137",
+    "date": "2026-07-05",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Spiralplate Mangrove Forager",
+      "imageKind": "wild",
+      "description": "A fictional pangolin-plus-seahorse mangrove forager with bronze scale armor, bony ring ridges, digging foreclaws, an arched seahorse neck, folded dorsal fin, and root-gripping prehensile tail.",
+      "continuity": "Same adult phenotype across both images: Sunda pangolin scale armor, foreclaws, and insect-feeding snout combined with lined seahorse arched neck, bony ridges, dorsal fin, and curled tail in a brackish mangrove root habitat."
+    }
+  },
+  {
+    "id": "2026-07-06-hybrid-creature-infographic-mangrove-nightjar-ray-developme",
+    "title": "Mangrove Nightjar Ray: Development Map",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; exact PNG source verified non-empty before append; hybrid development map includes source-trait map, stages, adult specimen, macro panels, habitat swatches, and field-context scale vignette.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional two-source hybrid creature named \"Mangrove Nightjar Ray\", using exactly two source organisms: nightjar + manta ray. Make it a landscape scientific wall chart assembled on a rain-wet Lumenreef Causeway field-station bench with pearly shell-ceramic trays, black basalt sample stones, lensleaf rain awning, turquoise lagoon reflections, and small non-actionable fictional labels. Include these visual information layers: a concise source-trait map showing nightjar contributes mottled cryptic feather texture, huge dark nocturnal eyes, tiny hooked beak, wide insect-catching gape, rictal bristles, and silent dusk-flight posture, while manta ray contributes a broad diamond pectoral-fin body, cephalic lobe curls, pale ventral gill-slit patterning, flexible whip tail, underwater gliding silhouette, and spotted dorsal countershading; a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel; macro texture windows for rain-beaded mottled feather scales, translucent fin membrane ribs, velvet-black eye surface, bristled mouth edge, cephalic lobe curl, and pale ventral gill markings; habitat swatches for black mangrove mud, glass-coral root lattice, teal night water, saffron float-pod leaves, violet under-reef glow, and rain-polished basalt; plus a small field-context scale vignette beside a lensleaf frond, shell caliper, unbranded sample tray, and tide engineer hand tool. The adult phenotype must be non-humanoid and visibly combine both sources: a wide low diamond-bodied nocturnal canopy-and-lagoon glider about the span of a large umbrella, with manta-like triangular pectoral fins held as soft wings, mottled brown charcoal and cream nightjar camouflage across the dorsal surface, a compact birdlike head recessed into the front edge with enormous glossy black eyes, a tiny hooked beak opening into a broad insect-catching gape rimmed by delicate bristles, two curled cephalic lobes framing the mouth like rain funnels, pale ventral gill-slit marks visible in a small underside inset, and a long narrow tail trailing behind like wet kelpglass cord. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], preserving source traits visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Mangrove Nightjar Ray; [SOURCE_A] = nightjar; [SOURCE_B] = manta ray; [HABITAT] = rain-bright Lumenreef Causeway mangrove-root lagoon at dusk; adult phenotype = wide low diamond-bodied nocturnal glider with manta-like fin-wings, mottled nightjar camouflage, huge dark eyes, hooked beak, broad bristled insect-catching gape, curled cephalic lobes, pale ventral gill markings, and a long flexible whip tail.",
+    "image": "images/2026-07-06-hybrid-creature-infographic-mangrove-nightjar-ray-developme.jpg",
+    "thumb": "thumbs/2026-07-06-hybrid-creature-infographic-mangrove-nightjar-ray-developme.webp",
+    "color": "#75736c",
+    "date": "2026-07-06",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Mangrove Nightjar Ray",
+      "imageKind": "infographic",
+      "description": "A fictional nightjar + manta ray hybrid: a wide nocturnal lagoon glider with mottled camouflage, huge dark eyes, bristled gape, cephalic lobes, fin-wings, gill markings, and a trailing whip tail.",
+      "continuity": "Both images preserve the same Lumenreef lagoon adult phenotype: non-humanoid diamond fin-wing body, nightjar camouflage and bristled gape, manta cephalic lobes and tail."
+    }
+  },
+  {
+    "id": "2026-07-06-hybrid-creature-wild-mangrove-nightjar-ray-in-the-wild",
+    "title": "Mangrove Nightjar Ray: In the Wild",
+    "tests": "Generated via openclaw infer image generate using openai/gpt-image-2; exact PNG source verified non-empty before append; wild image preserves the same nightjar + manta ray adult phenotype and Lumenreef lagoon habitat continuity.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Mangrove Nightjar Ray\", a clearly fictional two-source hybrid of nightjar + manta ray, gliding at dusk through the rain-bright Lumenreef Causeway mangrove-root lagoon. Preserve the exact adult phenotype from the development map: a non-humanoid wide low diamond-bodied nocturnal canopy-and-lagoon glider about the span of a large umbrella, manta-like triangular pectoral fins held as soft wings, mottled brown charcoal and cream nightjar camouflage across the dorsal surface, spotted countershading, a compact birdlike head recessed into the front edge with enormous glossy black nocturnal eyes, a tiny hooked beak opening into a broad insect-catching gape rimmed by delicate rictal bristles, two curled cephalic lobes framing the mouth like rain funnels, pale ventral gill-slit marks glimpsed as it banks, and a long narrow flexible whip tail trailing behind like wet kelpglass cord. Show the creature in a side-banking motion, skimming just above teal night water between black mangrove roots and luminous glass-coral root lattice, catching tiny dusk insects over the lagoon surface while its fin-wings shed rain droplets. Include saffron float-pod leaves, violet under-reef glow in the water cracks, rain-polished basalt ledges, pearly shell-ceramic tide markers with no readable text, lensleaf awnings in the background, ripples disturbed by the tail tip, beads of rain on feather-scale texture, translucent fin membrane ribs backlit by turquoise rainlight, and a few distant low horizontal Lumenreef tide engineers as scale silhouettes on a causeway rail, not interacting with it. No labels, no text, no lab setting, no gore, no logos, no watermark, no costume look, no pure bird or pure ray result, no humanoid body, no extra source animals.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Mangrove Nightjar Ray; [SOURCE_A] = nightjar; [SOURCE_B] = manta ray; [HABITAT] = rain-bright Lumenreef Causeway mangrove-root lagoon at dusk; shared adult phenotype = wide low diamond-bodied nocturnal glider with manta-like fin-wings, mottled nightjar camouflage, huge dark eyes, hooked beak, broad bristled insect-catching gape, curled cephalic lobes, pale ventral gill markings, and a long flexible whip tail.",
+    "image": "images/2026-07-06-hybrid-creature-wild-mangrove-nightjar-ray-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-06-hybrid-creature-wild-mangrove-nightjar-ray-in-the-wild.webp",
+    "color": "#29292a",
+    "date": "2026-07-06",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Mangrove Nightjar Ray",
+      "imageKind": "wild",
+      "description": "A fictional nightjar + manta ray hybrid photographed in the Lumenreef mangrove-root lagoon, skimming over teal night water while catching dusk insects.",
+      "continuity": "Both images preserve the same Lumenreef lagoon adult phenotype: non-humanoid diamond fin-wing body, nightjar camouflage and bristled gape, manta cephalic lobes and tail."
+    }
+  },
+  {
+    "id": "2026-07-07-hybrid-creature-infographic-leafscale-tide-pangodragon-deve",
+    "title": "Leafscale Tide Pangodragon: Development Map",
+    "tests": "Hybrid creature development map for a fictional leafy seadragon + Sunda pangolin strain; non-actionable source-trait, stage, anatomy, macro, habitat, and scale panels.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional two-source hybrid creature named \"Leafscale Tide Pangodragon\", using exactly two source organisms: leafy seadragon + Sunda pangolin. Make it a landscape scientific wall chart assembled on a bright coastal field-station bench with shallow seawater trays, eelgrass swatches, nonbranded shell calipers, wet dark wood, glass sample dishes, and restrained concise fictional labels. Include these visual information layers: a source-trait map showing leafy seadragon contributes a vertical S-curved drifting body axis, leaf-like camouflage appendages, tubular snout, translucent fin ribbons, and seaweed-brown green mottling, while Sunda pangolin contributes overlapping keratin scale armor, a strong curled tail, clawed digging/gripping forelimbs, compact mammal torso weight, and a long sticky feeding tongue; a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel; macro texture windows for wet leaf-fins, overlapping bronze keratin scales, tubular snout pores, translucent fin rays, curled tail edge, and algae caught between scale plates; habitat swatches for eelgrass meadow, mangrove root shadow, sandy tide flat, pale shell gravel, amber brackish water, and rain-dark driftwood; plus a small field-context scale vignette with curled track marks in wet sand beside a broken crab shell, eelgrass blades, a hand-sized shell caliper, and a shallow observation tray. The adult phenotype must be non-humanoid and visibly combine both sources: a waist-long amphibious reef-edge clinger with an upright S-curve like a leafy seadragon, four short clawed pangolin-like limbs gripping driftwood and mangrove roots, a heavy curled prehensile tail plated in bronze scales, a narrow tubular seadragon snout, translucent leaf-like fins sprouting from shoulders, spine, and tail margins, mottled olive brown seaweed camouflage over scale armor, small dark mammal eyes, and a thin tongue reaching toward tiny shore invertebrates. Use clean scientific color coding, photorealistic specimen lighting, tactile wet bench detail, restrained arrows, readable but minimal fictional labels, and clear panel hierarchy. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], preserving source traits visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Leafscale Tide Pangodragon; [SOURCE_A] = leafy seadragon; [SOURCE_B] = Sunda pangolin; [HABITAT] = brackish mangrove-root eelgrass edge after rain; adult phenotype = waist-long upright S-curved amphibious clinger with four pangolin-like clawed limbs, bronze scale armor, curled prehensile tail, tubular seadragon snout, translucent leaf-like fin ribbons, olive-brown seaweed camouflage, small dark mammal eyes, and a thin feeding tongue.",
+    "image": "images/2026-07-07-hybrid-creature-infographic-leafscale-tide-pangodragon-deve.jpg",
+    "thumb": "thumbs/2026-07-07-hybrid-creature-infographic-leafscale-tide-pangodragon-deve.webp",
+    "color": "#78705f",
+    "date": "2026-07-07",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Leafscale Tide Pangodragon",
+      "imageKind": "infographic",
+      "description": "A fictional amphibious reef-edge clinger combining leafy seadragon camouflage and pangolin scale armor.",
+      "continuity": "Same adult phenotype across both images: upright S-curved leafy-seadragon body, pangolin scale armor, four clawed limbs, curled plated tail, tubular snout, translucent leaf-fins, and brackish mangrove/eelgrass habitat."
+    }
+  },
+  {
+    "id": "2026-07-07-hybrid-creature-wild-leafscale-tide-pangodragon-in-the-wild",
+    "title": "Leafscale Tide Pangodragon: In the Wild",
+    "tests": "Matching wild field photo for the fictional leafy seadragon + Sunda pangolin hybrid, preserving the development-map phenotype in mangrove/eelgrass habitat.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Leafscale Tide Pangodragon\", a clearly fictional two-source hybrid of leafy seadragon + Sunda pangolin, climbing through a brackish mangrove-root eelgrass edge after rain. Preserve the exact adult phenotype from the development map: a non-humanoid waist-long amphibious reef-edge clinger with an upright S-curved leafy-seadragon body axis, four short clawed pangolin-like limbs gripping wet driftwood and mangrove roots, a heavy curled prehensile tail plated in overlapping bronze pangolin scales, a narrow tubular seadragon snout, small dark mammal eyes, translucent leaf-like fin ribbons sprouting from shoulders, spine, and tail margins, mottled olive brown seaweed camouflage over armored scales, algae caught between scale plates, and a thin sticky feeding tongue reaching toward tiny shore invertebrates. Show it in side profile rather than a crouched front view, partly raised above amber brackish water on black mangrove roots with eelgrass below, shell gravel, rain beads, crab-shell fragments, pale sand ripples, and small ripples from its curled tail tip. Use long-lens wildlife photography at low tide, shallow documentary depth of field, soft overcast rainlight, wet tactile textures of keratin scale, leaf-fin membrane, bark, mud, sand, eelgrass, shell, and water. Include natural scale cues from mangrove roots, eelgrass blades, crab shells, and wet claw marks. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure seadragon or pure pangolin result; it must visibly combine leafy seadragon traits and Sunda pangolin traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Leafscale Tide Pangodragon; [SOURCE_A] = leafy seadragon; [SOURCE_B] = Sunda pangolin; [HABITAT] = brackish mangrove-root eelgrass edge after rain; shared adult phenotype = waist-long S-curved clinger with pangolin scale armor and clawed limbs, curled tail, tubular seadragon snout, translucent leaf fins, olive-brown seaweed camouflage, and a thin feeding tongue.",
+    "image": "images/2026-07-07-hybrid-creature-wild-leafscale-tide-pangodragon-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-07-hybrid-creature-wild-leafscale-tide-pangodragon-in-the-wild.webp",
+    "color": "#645b4d",
+    "date": "2026-07-07",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Leafscale Tide Pangodragon",
+      "imageKind": "wild",
+      "description": "A fictional amphibious reef-edge clinger combining leafy seadragon camouflage and pangolin scale armor.",
+      "continuity": "Same adult phenotype across both images: upright S-curved leafy-seadragon body, pangolin scale armor, four clawed limbs, curled plated tail, tubular snout, translucent leaf-fins, and brackish mangrove/eelgrass habitat."
+    }
+  },
+  {
+    "id": "2026-07-08-hybrid-creature-infographic-sundial-canopy-glider-developme",
+    "title": "Sundial Canopy Glider: Development Map",
+    "tests": "Hybrid creature pair slot; fictional non-actionable source-trait development map; exactly two source organisms; infographic detail floor satisfied; no real genetics or protocol steps.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Sundial Canopy Glider\", using exactly two source organisms: ruby-throated hummingbird + Kuhl's flying gecko. Make it a landscape scientific wall chart assembled on a misty cloud-forest canopy field bench with a mossy bark slab, bromeliad cups, orchid roots, rain beads, unbranded calipers, glass observation dishes, and restrained concise fictional labels. Include these visual information layers: a source-trait map showing ruby-throated hummingbird contributes an iridescent ruby throat gorget, long needlelike nectar bill, hovering flower-feeding posture, tiny perching feet, rapid feathered wing-fan blur, and compact high-energy body, while Kuhl's flying gecko contributes a flattened lizard torso, wide webbed gliding membranes along limbs and flanks, adhesive toe pads, bark-and-lichen camouflage, a leaf-shaped steering tail, and nocturnal trunk-clinging behavior; a juvenile-to-adult stage strip with three fictional non-procedural life stages; a large central adult specimen panel; macro texture windows for ruby gorget iridescence, translucent patagial membrane veins, feathered wing-fan edges, adhesive toe-pad lamellae, bark-mottled skin scales, nectar-bill tip, and leaf-tail edge; habitat swatches for wet moss bark, bromeliad water, orange cloud-forest blossoms, pale orchid roots, blue morning fog, and lichen patches; plus a field-context scale vignette beside a bromeliad leaf, tiny flower corolla, unbranded caliper, bark chip, and rain-speckled observation tray. The adult phenotype must be non-humanoid and visibly combine both sources: a palm-length horizontal canopy glider with a flattened gecko-like body, four splayed limbs with broad translucent webbed gliding membranes, adhesive toe pads gripping wet bark, a leaf-shaped steering tail, bark-gray and olive lichen camouflage across pebbled skin, a compact hummingbird-like chest with a brilliant ruby iridescent throat patch, a long fine nectar bill, small dark alert eyes, and short feathered wing-fans folded along the forelimbs like living stabilizers. Use clean scientific color coding, photorealistic specimen lighting, tactile wet bench detail, restrained arrows, readable but minimal fictional labels, clear panel hierarchy, ruby highlights, emerald lichen, orange blossom accents, silver rain beads, and blue fog reflections. Keep it clearly fictional and non-actionable: no real gene names, no lab protocols, no equipment steps, no surgery, no gore, no brand logos, no QR codes, no dense paragraphs, no prompt-card text.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], preserving source traits visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Sundial Canopy Glider; [SOURCE_A] = ruby-throated hummingbird; [SOURCE_B] = Kuhl's flying gecko; [HABITAT] = misty cloud-forest canopy after rain; adult phenotype = palm-length horizontal glider with a flattened gecko-like torso, broad translucent patagial membranes, adhesive toe pads, bark-and-lichen camouflage, leaf-shaped tail, ruby hummingbird throat gorget, long nectar bill, and short feathered wing-fans.",
+    "image": "images/2026-07-08-hybrid-creature-infographic-sundial-canopy-glider-developme.jpg",
+    "thumb": "thumbs/2026-07-08-hybrid-creature-infographic-sundial-canopy-glider-developme.webp",
+    "color": "#716b5d",
+    "date": "2026-07-08",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Sundial Canopy Glider",
+      "imageKind": "infographic",
+      "description": "A fictional ruby-throated hummingbird + Kuhl's flying gecko canopy glider with a ruby throat, nectar bill, feathered wing-fans, lichen camouflage, toe pads, gliding membranes, and a leaf tail.",
+      "continuity": "Same adult phenotype across both images: palm-length horizontal canopy glider with flattened gecko body, broad translucent membranes, adhesive toe pads, bark-lichen camouflage, leaf tail, ruby gorget, long nectar bill, and folded feathered wing-fans."
+    }
+  },
+  {
+    "id": "2026-07-08-hybrid-creature-wild-sundial-canopy-glider-in-the-wild",
+    "title": "Sundial Canopy Glider: In the Wild",
+    "tests": "Hybrid creature pair slot; matching in-the-wild field photo; same adult phenotype and habitat continuity; no labels, lab context, gore, or pure single-source animal result.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Sundial Canopy Glider\", a clearly fictional two-source hybrid of ruby-throated hummingbird + Kuhl's flying gecko, feeding in a misty cloud-forest canopy after rain. Preserve the exact adult phenotype from the development map: a non-humanoid palm-length horizontal canopy glider with a flattened gecko-like torso, four splayed limbs stretched between broad translucent webbed gliding membranes along the flanks, adhesive toe pads gripping slick mossy bark, bark-gray and olive lichen camouflage over pebbled scale skin, a leaf-shaped steering tail flattened against the trunk, a compact hummingbird-like chest with a brilliant ruby iridescent throat gorget catching the light, short feathered wing-fans folded along the forelimbs as stabilizers, a long fine nectar bill inserted into an orange cloud-forest blossom, and small dark alert eyes. Show the creature side-on rather than crouched frontally, clinging to a wet branch beside bromeliad cups and orchid roots, with one membrane partly opened like a living glider sail and the tail angled for balance. Include rain beads on membrane veins, dew on ruby throat feathers, tiny flower pollen on the bill, moss cushions, pale orchid roots, blue morning fog, lichen patches, fern fronds, a few blurred blossoms behind it, and natural scale cues from flower size, bark chips, bromeliad leaves, and water droplets. Use low natural-history macro camera angle from an adjacent branch, shallow documentary depth of field, soft humid morning light, tactile wet textures of bark, moss, lichen, membrane, scales, feather-fans, bill, and flower petals. No labels, no text, no people, no lab setting, no gore, no logos, no watermark, no costume look, no pure bird or pure gecko result, no humanoid body, no extra source animals; it must visibly combine ruby-throated hummingbird traits and Kuhl's flying gecko traits in the same adult creature.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Sundial Canopy Glider; [SOURCE_A] = ruby-throated hummingbird; [SOURCE_B] = Kuhl's flying gecko; [HABITAT] = misty cloud-forest canopy after rain; shared adult phenotype = palm-length horizontal glider with a flattened gecko torso, broad translucent gliding membranes, adhesive toe pads, lichen camouflage, leaf-shaped tail, ruby throat gorget, long nectar bill, and folded feathered wing-fans.",
+    "image": "images/2026-07-08-hybrid-creature-wild-sundial-canopy-glider-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-08-hybrid-creature-wild-sundial-canopy-glider-in-the-wild.webp",
+    "color": "#45443d",
+    "date": "2026-07-08",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Sundial Canopy Glider",
+      "imageKind": "wild",
+      "description": "A fictional ruby-throated hummingbird + Kuhl's flying gecko canopy glider feeding from cloud-forest blossoms after rain.",
+      "continuity": "Same adult phenotype across both images: palm-length horizontal canopy glider with flattened gecko body, broad translucent membranes, adhesive toe pads, bark-lichen camouflage, leaf tail, ruby gorget, long nectar bill, and folded feathered wing-fans."
+    }
+  },
+  {
+    "id": "2026-07-09-hybrid-creature-infographic-crimson-crown-iceback-developme",
+    "title": "Crimson Crown Iceback: Development Map",
+    "tests": "Hybrid-creature pair cron; infographic names exactly two source organisms, includes source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture panels, habitat swatches, and field-context scale vignette; no actionable biology.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Crimson Crown Iceback\", using exactly two source organisms: king penguin + Japanese spider crab. Make it a landscape scientific wall chart assembled on a cold rocky subantarctic field-station bench with wet slate, kelp scraps, frost-edged sample trays, nonbranded calipers, seawater droplets, and restrained concise fictional labels. Include a source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. King penguin contributes upright insulated body mass, black-white countershading, orange crown and throat patches, dense waterproof feathers, flipper-like shoulder fins, and colony-shore posture; Japanese spider crab contributes extremely long jointed walking legs, spiny red-orange carapace plates, hooked claw tips, segmented limb joints, and tidal-rock climbing stance. Keep it fictional and non-actionable: no real gene names, no lab protocols, no surgery, no gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Crimson Crown Iceback; [SOURCE_A] = king penguin; [SOURCE_B] = Japanese spider crab; [HABITAT] = subantarctic tidal ice and black volcanic shoreline; adult phenotype = chest-high upright penguin-like cold-coast wader with black-white countershading, fiery orange crown and throat markings, wet waterproof feathers, red-orange spiny crab shoulder carapace, four very long spider-crab walking legs, two shorter clawed forelimbs, hooked claw tips, and tracks through tide ice.",
+    "image": "images/2026-07-09-hybrid-creature-infographic-crimson-crown-iceback-developme.jpg",
+    "thumb": "thumbs/2026-07-09-hybrid-creature-infographic-crimson-crown-iceback-developme.webp",
+    "color": "#818082",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Crimson Crown Iceback",
+      "imageKind": "infographic",
+      "description": "A fictional king penguin plus Japanese spider crab cold-coast wader with orange crown markings, wet penguin countershading, spiny red crab armor, long jointed legs, and hooked tidal-rock claws.",
+      "continuity": "Same adult phenotype across both images: chest-high upright penguin body, orange crown and throat patches, black-white wet feathers, red-orange shoulder carapace, four long spider-crab legs, two short clawed forelimbs, hooked claws, and subantarctic tidal-ice shoreline."
+    }
+  },
+  {
+    "id": "2026-07-09-hybrid-creature-wild-crimson-crown-iceback-in-the-wild",
+    "title": "Crimson Crown Iceback: In the Wild",
+    "tests": "Hybrid-creature pair cron; wild photo preserves the infographic phenotype and shows the same fictional king penguin plus Japanese spider crab adult in subantarctic tidal-ice habitat.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Crimson Crown Iceback\", a clearly fictional two-source hybrid of king penguin + Japanese spider crab, moving through cold subantarctic tidal ice beside black volcanic rocks after gray dawn surf. Preserve the shared phenotype: chest-high vertical penguin-like torso, black-white countershading, fiery orange crown and throat markings, narrow dark beak, wet waterproof feathers, red-orange spiny crab shoulder carapace, four very long jointed spider-crab walking legs, two shorter clawed forelimbs, hooked claw tips gripping rock, kelp strands, salt spray, webbed-and-clawed tracks, and distant smaller penguins for scale. No text, labels, lab setting, real genetics, surgery, or gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Crimson Crown Iceback; [SOURCE_A] = king penguin; [SOURCE_B] = Japanese spider crab; [HABITAT] = subantarctic tidal ice and black volcanic shoreline; adult phenotype = chest-high upright penguin-like cold-coast wader with black-white countershading, fiery orange crown and throat markings, wet waterproof feathers, red-orange spiny crab shoulder carapace, four very long spider-crab walking legs, two shorter clawed forelimbs, hooked claw tips, and tracks through tide ice.",
+    "image": "images/2026-07-09-hybrid-creature-wild-crimson-crown-iceback-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-09-hybrid-creature-wild-crimson-crown-iceback-in-the-wild.webp",
+    "color": "#878991",
+    "date": "2026-07-09",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Crimson Crown Iceback",
+      "imageKind": "wild",
+      "description": "A fictional king penguin plus Japanese spider crab cold-coast wader photographed in tidal ice with orange crown markings, red spiny armor, long crab legs, and wet penguin countershading.",
+      "continuity": "Same adult phenotype across both images: chest-high upright penguin body, orange crown and throat patches, black-white wet feathers, red-orange shoulder carapace, four long spider-crab legs, two short clawed forelimbs, hooked claws, and subantarctic tidal-ice shoreline."
+    }
+  },
+  {
+    "id": "2026-07-10-hybrid-creature-infographic-glasswing-canopy-sentry-develop",
+    "title": "Glasswing Canopy Sentry: Development Map",
+    "tests": "Hybrid creature pair slot: colorful fictional development-map infographic; exactly two sources stated; non-actionable trait map; stage strip, adult panel, macro windows, habitat swatches, and field-context vignette included.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Glasswing Canopy Sentry\", using exactly two source organisms: glass frog + dragonfly. Make it a 1536x1024 landscape scientific wall chart assembled on a humid cloud-forest field-station bench with damp black slate, bromeliad leaves, clean acrylic specimen trays, mist droplets, colored habitat swatches, macro lens rings, and concise restrained fictional labels. Include a source-trait map, juvenile-to-adult stage strip, adult anatomy/specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Glass frog contributes translucent lime skin, visible internal silhouettes, sticky toe pads, crouched amphibian body, and underside leaf-clinging posture; dragonfly contributes four clear veined wings, large compound eyes, segmented abdomen, iridescent wing nodes, and rapid aerial hunting posture. Keep it fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Glasswing Canopy Sentry; [SOURCE_A] = glass frog; [SOURCE_B] = dragonfly; [HABITAT] = wet cloud-forest stream leaves at blue dusk; adult phenotype = palm-length horizontal leaf-clinging amphibian with translucent lime frog skin, visible internal silhouettes, sticky toe pads, four clear veined dragonfly wings, bronze-green compound eyes, and a slim banded dragonfly abdomen.",
+    "image": "images/2026-07-10-hybrid-creature-infographic-glasswing-canopy-sentry-develop.jpg",
+    "thumb": "thumbs/2026-07-10-hybrid-creature-infographic-glasswing-canopy-sentry-develop.webp",
+    "color": "#313728",
+    "date": "2026-07-10",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glasswing Canopy Sentry",
+      "imageKind": "infographic",
+      "description": "A fictional glass frog plus dragonfly cloud-forest sentry with translucent frog skin, sticky toe pads, folded clear dragonfly wings, compound eyes, and a slim banded abdomen.",
+      "continuity": "Same adult phenotype across both images: palm-length leaf-clinging amphibian, translucent lime skin, toe pads, four clear veined wings, bronze-green compound eyes, banded abdomen, dew beads, and cloud-forest stream habitat."
+    }
+  },
+  {
+    "id": "2026-07-10-hybrid-creature-wild-glasswing-canopy-sentry-in-the-wild",
+    "title": "Glasswing Canopy Sentry: In the Wild",
+    "tests": "Hybrid creature pair slot: matching in-the-wild field photo; same Glasswing Canopy Sentry adult phenotype and cloud-forest habitat as the development map; no labels or lab content.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Glasswing Canopy Sentry\", a clearly fictional two-source hybrid of glass frog + dragonfly, clinging under a broad wet leaf above a misty cloud-forest stream at blue dusk. Preserve the shared phenotype: palm-length horizontal amphibian body, translucent lime glass-frog skin with subtle visible internal silhouettes but no gore, delicate sticky toe pads, four folded clear dragonfly wings with fine iridescent venation, large bronze-green compound eyes, slim banded dragonfly abdomen, dew beads, bromeliads, moss, wet bark, fern fronds, tiny dusk insects, and a plain field ruler tucked into moss for scale. No text, labels, lab setting, real genetics, surgery, or gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Glasswing Canopy Sentry; [SOURCE_A] = glass frog; [SOURCE_B] = dragonfly; [HABITAT] = wet cloud-forest stream leaves at blue dusk; adult phenotype = palm-length horizontal leaf-clinging amphibian with translucent lime frog skin, visible internal silhouettes, sticky toe pads, four clear veined dragonfly wings, bronze-green compound eyes, and a slim banded dragonfly abdomen.",
+    "image": "images/2026-07-10-hybrid-creature-wild-glasswing-canopy-sentry-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-10-hybrid-creature-wild-glasswing-canopy-sentry-in-the-wild.webp",
+    "color": "#2b3c34",
+    "date": "2026-07-10",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Glasswing Canopy Sentry",
+      "imageKind": "wild",
+      "description": "A fictional glass frog plus dragonfly cloud-forest sentry photographed under wet leaves above a misty stream.",
+      "continuity": "Same adult phenotype across both images: palm-length leaf-clinging amphibian, translucent lime skin, toe pads, four clear veined wings, bronze-green compound eyes, banded abdomen, dew beads, and cloud-forest stream habitat."
+    }
+  },
+  {
+    "id": "2026-07-11-hybrid-creature-infographic-inkveil-marsh-stilt-development",
+    "title": "Inkveil Marsh Stilt: Development Map",
+    "tests": "Hybrid creature development-map infographic; fictional non-actionable two-source source-trait map; exact sources secretary bird + flamboyant cuttlefish.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for a clearly fictional hybrid creature named \"Inkveil Marsh Stilt\", using exactly two source organisms: secretary bird + flamboyant cuttlefish. Make it a landscape scientific wall chart assembled on a wet salt-marsh field-station table with black mud trays, reed stems, shell fragments, rain-specked glass, nonbranded measuring calipers, a shallow tide-pool dish, watercolor habitat swatches, and restrained concise fictional labels. Include a source-trait map, juvenile-to-adult stage strip, large adult anatomy/specimen panel, macro texture panels for scaled legs/quill crest/chromatophore skin/mantle edge/beak/mud, habitat swatches, field-context scale vignette, and a concise non-actionable fictional observation panel. Secretary bird contributes tall stalking posture, long scaled legs, black quill crest, hooked raptor beak, and ground-hunting kick posture; flamboyant cuttlefish contributes rippling chromatophore skin, W-shaped eyes, soft mantle cloak, undulating fin skirt, and short exploratory arm fringe. Keep it fictional and non-actionable: no real gene names, no lab protocols, no surgery, no gore.\n\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture/color panels, habitat swatches, and field-context scale vignette. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT]. Keep it clearly fictional and non-actionable: no real gene names, no lab protocol steps, no surgery, no gore.\n\nExample substitution: [HYBRID_NAME] = Inkveil Marsh Stilt; [SOURCE_A] = secretary bird; [SOURCE_B] = flamboyant cuttlefish; [HABITAT] = storm-lit salt marsh at low tide; adult phenotype = knee-high reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and a short mud-probing arm fringe.",
+    "image": "images/2026-07-11-hybrid-creature-infographic-inkveil-marsh-stilt-development.jpg",
+    "thumb": "thumbs/2026-07-11-hybrid-creature-infographic-inkveil-marsh-stilt-development.webp",
+    "color": "#89847d",
+    "date": "2026-07-11",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Inkveil Marsh Stilt",
+      "imageKind": "infographic",
+      "description": "A fictional secretary bird plus flamboyant cuttlefish salt-marsh reed-walker with stilt legs, quill crest, hooked beak, W-shaped eyes, chromatophore mantle cloak, fin ripples, and mud-probing arm fringe.",
+      "continuity": "Same adult phenotype across both images: knee-high salt-marsh reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and short mud-probing arm fringe."
+    }
+  },
+  {
+    "id": "2026-07-11-hybrid-creature-wild-inkveil-marsh-stilt-in-the-wild",
+    "title": "Inkveil Marsh Stilt: In the Wild",
+    "tests": "Hybrid creature in-the-wild field photo; matching adult phenotype from development map; exact sources secretary bird + flamboyant cuttlefish.",
+    "prompt": "Create a matching photorealistic in-the-wild documentary field photo of the adult \"Inkveil Marsh Stilt\", a clearly fictional two-source hybrid of secretary bird + flamboyant cuttlefish, stalking through a storm-lit salt marsh at low tide. Preserve the exact adult phenotype from the development map: a knee-high vertical marsh hunter with two extremely long yellow scaled birdlike stilt legs, compact forward-leaning torso, hooked raptor beak, raised black quill crest, alert W-shaped cuttlefish eyes, broad soft mantle cloak draped over the shoulders and flanks, rippling fin-like mantle edge, blue-green and copper-brown chromatophore flashes across wet skin, and a short fringe of flexible cuttlefish arms tucked below the chest probing black tidal mud. Show one leg lifted above glossy mud, copper reeds, gray tidal water, pale shell grit, crab holes, rain rings, foam, low storm clouds, and tactile wet natural-history detail. No labels, no text, no people, no lab setting, no gore, no logos, no real genetics, no extra source animals, no pure bird, no pure cephalopod, no human-like anatomy.\n\nReusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, skin texture, posture, habitat interaction, locomotion, and scale cues. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.\n\nExample substitution: [HYBRID_NAME] = Inkveil Marsh Stilt; [SOURCE_A] = secretary bird; [SOURCE_B] = flamboyant cuttlefish; [HABITAT] = storm-lit salt marsh at low tide; shared adult phenotype = knee-high reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and a short mud-probing arm fringe.",
+    "image": "images/2026-07-11-hybrid-creature-wild-inkveil-marsh-stilt-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-11-hybrid-creature-wild-inkveil-marsh-stilt-in-the-wild.webp",
+    "color": "#4f4e4f",
+    "date": "2026-07-11",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Inkveil Marsh Stilt",
+      "imageKind": "wild",
+      "description": "A fictional secretary bird plus flamboyant cuttlefish salt-marsh reed-walker photographed in storm-lit tidal reeds with stilt legs, quill crest, hooked beak, W-shaped eyes, chromatophore mantle cloak, and mud-probing arm fringe.",
+      "continuity": "Same adult phenotype across both images: knee-high salt-marsh reed-walker with two long yellow scaled stilt legs, hooked beak, raised black quill crest, W-shaped cuttlefish eyes, broad blue-green/copper chromatophore mantle cloak, rippling fin edge, and short mud-probing arm fringe."
+    }
+  },
+  {
+    "id": "2026-07-12-hybrid-creature-infographic-mooncurrent-ribbonwing-developm",
+    "title": "Mooncurrent Ribbonwing: Development Map",
+    "tests": "two-source trait continuity; colorful photorealistic infographic; six-plus information layers; fictional non-actionable biology",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for the fictional Mooncurrent Ribbonwing, combining exactly electric eel + luna moth. On a humid freshwater field-station bench, include an explicit source-trait map; aquatic larva-to-winged-adult stage strip; large side-profile adult specimen with a limbless charcoal eel body, paddle tail, four pale mint luna-moth wing panels, feathery antennae, crescent eyespots, and trailing wing tails; macro skin, pore, wing-scale, antenna, eyespot, and membrane windows; blackwater/cypress habitat swatches; field scale vignette; and aquatic-fold versus surface-glide comparison. Keep labels concise, colorful, photorealistic, clearly fictional, and non-actionable, with no real genetics, protocols, surgery, or gore. Reusable fill-in-the-blank template: Create a colorful photorealistic development-map infographic for [HYBRID_NAME], combining exactly [SOURCE_A] + [SOURCE_B]. Include a non-actionable source-trait map, juvenile-to-adult stage strip, adult anatomy/specimen panel, macro texture/color panels, habitat swatches, a field-context scale vignette, and a locomotion comparison, visibly preserving at least two traits from each source. Then create a matching field photo of the same adult phenotype in [HABITAT].",
+    "image": "images/2026-07-12-hybrid-creature-infographic-mooncurrent-ribbonwing-developm.jpg",
+    "thumb": "thumbs/2026-07-12-hybrid-creature-infographic-mooncurrent-ribbonwing-developm.webp",
+    "color": "#262b26",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Mooncurrent Ribbonwing",
+      "imageKind": "infographic",
+      "description": "A fictional electric eel and luna moth hybrid whose paired moth wings serve as aquatic stabilizers before brief moonlit surface glides.",
+      "continuity": "Same limbless charcoal eel body, paddle tail, four mint-green crescent-marked wings, feathery antennae, and blackwater cypress habitat in both images."
+    }
+  },
+  {
+    "id": "2026-07-12-hybrid-creature-wild-mooncurrent-ribbonwing-in-the-wild",
+    "title": "Mooncurrent Ribbonwing: In the Wild",
+    "tests": "exact phenotype continuity with development map; eel and luna moth traits visible; natural-history field photography; no text",
+    "prompt": "Create a matching square photorealistic in-the-wild documentary photo of the adult Mooncurrent Ribbonwing, a fictional hybrid combining exactly electric eel + luna moth, making a brief shallow glide through a moonlit tannin-black cypress swamp. Preserve the development-map phenotype: waist-long limbless muscular charcoal eel body, smooth wet pore-dotted skin, blunt head, paddle tail, four broad mint-green luna-moth wings with translucent veins, powdery scales, crescent eyespots and long trailing tips, plus feathery antennae. Show a low strict side profile between flooded cypress knees with duckweed, amber reflections, moss, mist, leaf litter, and ripples. No text, people, lab, gore, costume, dragon, or single-source result. Reusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues in [HABITAT]. Avoid text, gore, lab context, and any result that reads as a costume or pure single-source animal.",
+    "image": "images/2026-07-12-hybrid-creature-wild-mooncurrent-ribbonwing-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-12-hybrid-creature-wild-mooncurrent-ribbonwing-in-the-wild.webp",
+    "color": "#2a2b27",
+    "date": "2026-07-12",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Mooncurrent Ribbonwing",
+      "imageKind": "wild",
+      "description": "The adult hybrid glides just above a tannin-black flooded cypress pool under moonlight.",
+      "continuity": "Same limbless charcoal eel body, paddle tail, four mint-green crescent-marked wings, feathery antennae, and blackwater cypress habitat in both images."
+    }
+  },
+  {
+    "id": "2026-07-13-hybrid-creature-infographic-ivory-trench-rook-development-m",
+    "title": "Ivory Trench Rook: Development Map",
+    "tests": "Two explicit source organisms; visible traits from both sources; colorful photorealistic development map; source-trait map; four-stage development strip; adult specimen; seven macro windows; habitat swatches; scale vignette; locomotion comparison; field context; fictional and non-actionable continuity.",
+    "prompt": "Create a colorful photorealistic speculative scientific development-map infographic for the clearly fictional Ivory Trench Rook, combining exactly narwhal + giant isopod. Assemble the landscape chart across a cold Arctic marine-research bench with wet black slate, frost-edged trays, an ice core, shell grit, depth line, cold seawater droplets, and blue task-light reflections. Show a source-trait map: narwhal contributes the helical tusk, mottled marine skin, paddlelike foreflippers, rounded forehead, and tail-fluke thrust posture; giant isopod contributes seven pairs of walking legs, overlapping dorsal armor, hooked feet, paired antennae, and a broad segmented rear shield. Include a four-stage juvenile-to-adult strip, a large strict side-profile adult specimen, macro windows for tusk ridges, skin, armor seams, feet, antenna hairs, flipper edge and rear shield, Arctic habitat swatches, a physical scale vignette, a seafloor-walk versus swimming-burst comparison, and a small under-ice context view. The adult is a seal-length low horizontal armored marine crawler with one ivory tusk, two antennae, charcoal-and-cream skin between blue-gray plates, two foreflippers, fourteen short walking legs, hooked feet, and a segmented rear shield integrated with a split tail fluke. Use lively credible scientific colors, restrained labels, photorealistic specimen lighting, strong hierarchy, and no real genetics, procedures, surgery, gore, dense paragraphs, logos, QR codes, evidence-board styling, or flat school-poster composition.\\n\\nReusable fill-in-the-blank template: Create a fictional two-source hybrid-creature pair for [HYBRID_NAME], using exactly [SOURCE_A] + [SOURCE_B]. First generate a colorful photorealistic scientific development-map infographic with a non-actionable source-trait map, juvenile-to-adult stage strip, adult specimen panel, macro texture and color panels, habitat swatches, field-context scale vignette, and locomotion comparison. Then generate a matching in-the-wild field photo of the same adult phenotype in [HABITAT], visibly preserving at least two traits from each source in body plan, texture, posture, locomotion, and habitat interaction. Keep it clearly fictional and non-actionable: no real gene names, protocols, surgery, or gore.",
+    "image": "images/2026-07-13-hybrid-creature-infographic-ivory-trench-rook-development-m.jpg",
+    "thumb": "thumbs/2026-07-13-hybrid-creature-infographic-ivory-trench-rook-development-m.webp",
+    "color": "#4d555b",
+    "date": "2026-07-13",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Ivory Trench Rook",
+      "imageKind": "infographic",
+      "description": "A fictional narwhal and giant-isopod hybrid mapped from tusk and flipper traits to segmented armor and fourteen walking legs.",
+      "continuity": "Seal-length low horizontal Arctic crawler with one helical ivory tusk, paired antennae, mottled skin between blue-gray armor plates, two foreflippers, fourteen hooked walking legs, and a segmented rear shield integrated with a split tail fluke."
+    }
+  },
+  {
+    "id": "2026-07-13-hybrid-creature-wild-ivory-trench-rook-in-the-wild",
+    "title": "Ivory Trench Rook: In the Wild",
+    "tests": "Matching adult phenotype; narwhal tusk, forehead, skin, flippers and tail posture; giant-isopod armor, antennae, fourteen legs, hooked feet and rear shield; strict side profile; Arctic under-ice habitat; natural-history realism.",
+    "prompt": "Create a matching square photorealistic in-the-wild documentary field photo of the adult Ivory Trench Rook, a clearly fictional hybrid combining exactly narwhal + giant isopod, crossing black basalt beneath pressure-ridged Arctic sea ice. Preserve the exact shared phenotype: a seal-length low horizontal armored marine crawler with a rounded narwhal-like forehead, one long helical ivory tusk, two fine antennae, charcoal-and-cream mottled wet skin between overlapping blue-gray isopod plates, paired paddlelike foreflippers, seven pairs of short jointed walking legs with hooked feet, and a broad segmented rear shield integrated with a muscular split tail fluke. Show a strict low side profile with olive benthic sponges, rust-orange amphipods, ivory shell hash, a brittle star, trapped silver bubbles, suspended ice crystals, cyan light, tusk scrape marks, and a distant plain depth-line weight for scale. Use a seafloor-height natural-history camera, believable cold-water haze, tactile underwater detail, and no text, people, lab, gore, logos, costume look, pure single-source animal, humanoid anatomy, attack, or battle. Reusable fill-in-the-blank template: Create a matching photorealistic in-the-wild field photo of the same fictional [HYBRID_NAME] adult phenotype from exactly [SOURCE_A] + [SOURCE_B], preserving the source-trait map visibly in body plan, texture, posture, habitat interaction, locomotion, and scale cues in [HABITAT]. Avoid text, gore, lab context, and any result that reads as a costume or a pure single-source animal.",
+    "image": "images/2026-07-13-hybrid-creature-wild-ivory-trench-rook-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-13-hybrid-creature-wild-ivory-trench-rook-in-the-wild.webp",
+    "color": "#385660",
+    "date": "2026-07-13",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Ivory Trench Rook",
+      "imageKind": "wild",
+      "description": "The same fictional narwhal and giant-isopod adult walking across an Arctic under-ice basalt seafloor.",
+      "continuity": "Seal-length low horizontal Arctic crawler with one helical ivory tusk, paired antennae, mottled skin between blue-gray armor plates, two foreflippers, fourteen hooked walking legs, and a segmented rear shield integrated with a split tail fluke."
+    }
+  }
+]

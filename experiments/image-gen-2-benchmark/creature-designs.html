@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Creature Designs</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/design.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07100c;
+      --bg-2: #122019;
+      --text: #172f27;
+      --muted: #60766d;
+      --accent: #287d56;
+      --accent-strong: #15593b;
+      --line: #d8e8dd;
+      --shadow: -10px 14px 18px rgba(7,48,36,.16), inset 0 1px 0 rgba(255,255,255,.7);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 14% 0%, rgba(52,180,128,.18), transparent 31%),
+        radial-gradient(circle at 84% 10%, rgba(132,171,83,.16), transparent 30%),
+        linear-gradient(180deg, var(--bg), var(--bg-2) 64%, var(--bg)) !important;
+      color: var(--text) !important;
+      line-height: 1.5;
+    }
+    header#site-nav {
+      position: static !important;
+      top: auto !important;
+      background: rgba(6,17,24,.88) !important;
+      border-bottom: 1px solid rgba(80,150,126,.34) !important;
+      box-shadow: 0 14px 34px rgba(0,0,0,.22) !important;
+    }
+    .hero, main, footer { max-width: 1180px; margin: 0 auto; }
+    .hero {
+      padding: 30px 22px 24px;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(57,163,114,.18), transparent 25rem),
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(240,248,244,.9)) !important;
+      border: 1px solid rgba(216,232,221,.9) !important;
+      border-radius: 0 0 8px 8px;
+      box-shadow: var(--shadow);
+    }
+    h1 { margin: 0 0 10px; color: var(--accent-strong); font-size: clamp(2rem, 5vw, 3.9rem); letter-spacing: 0; line-height: .96; }
+    .lede { max-width: 720px; color: #4d675e; font-size: clamp(.98rem, 2.1vw, 1.08rem); font-weight: 560; margin: 0; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .pill {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.82);
+      color: var(--accent);
+      padding: 8px 11px;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 8px 18px rgba(7,48,36,.08);
+      font: inherit;
+    }
+    .pill.stat { color: #31564a; font-weight: 760; }
+    .pill.featured {
+      border-color: rgba(40,125,86,.38);
+      background: linear-gradient(135deg, #ffffff, #e6f8ef);
+      color: #15593b;
+      font-weight: 850;
+      box-shadow: 0 12px 26px rgba(40,125,86,.15);
+    }
+    main { padding: 26px 22px 70px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.9), rgba(234,247,240,.84));
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .image-wrap { background: #05070a; aspect-ratio: 1 / 1; display:flex; align-items:center; justify-content:center; position: relative; }
+    .image-wrap.portrait { aspect-ratio: 2 / 3; }
+    .image-wrap.landscape { aspect-ratio: 3 / 2; }
+    .image-wrap::after {
+      content: "Click to enlarge";
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(5,7,10,.62);
+      color: rgba(238,243,251,.86);
+      font-size: .78rem;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events: none;
+    }
+    .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
+    img { width: 100%; height: 100%; object-fit: contain; display: block; background: #05070a; }
+    .image-wrap img { cursor: zoom-in; }
+    .content { padding: 18px; background: linear-gradient(180deg, rgba(248,252,249,.97), rgba(235,247,240,.9)); }
+    .kicker { color: var(--accent); text-transform: uppercase; font-size: .74rem; letter-spacing: .14em; font-weight: 800; }
+    h3 { margin: 7px 0 10px; font-size: 1.28rem; line-height: 1.1; }
+    .desc, .tests, .template { color: var(--muted); margin: 0 0 13px; }
+    details { border-top: 1px solid var(--line); padding-top: 13px; }
+    summary { cursor: pointer; color: var(--text); font-weight: 750; margin-bottom: 10px; }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #17342d;
+      background: rgba(255,255,255,.64);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: .84rem;
+    }
+    .empty { color: #d8e9df; padding: 26px 4px; }
+    footer { padding: 0 22px 50px; color: #c1d3cb; }
+    .lightbox { position: fixed; inset: 0; z-index: 50; display: none; background: rgba(3,5,8,.94); backdrop-filter: blur(14px); color: #f5fbf7; }
+    .lightbox.open { display: grid; grid-template-rows: auto 1fr; }
+    .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(12,15,20,.78); }
+    .lightbox-title { min-width: 0; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: #c1d3cb; font-size: .88rem; font-weight: 500; }
+    .lightbox-close { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.06); color: #f5fbf7; padding: 8px 12px; cursor: pointer; font: inherit; }
+    .lightbox-stage { min-height: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .lightbox-stage img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 28px 90px rgba(0,0,0,.55); cursor: zoom-in; }
+    .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
+    .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
+    @media (max-width: 680px) {
+      .grid { grid-template-columns: 1fr; }
+      .meta { gap: 8px; margin-top: 16px; }
+      .pill { padding: 8px 10px; }
+      .lightbox-hint { display: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="museum-theme.css?v=3">
+</head>
+<body>
+  <header id="site-nav"></header>
+  <header class="hero museum-hero">
+    <img class="hero-backdrop" src="hero-banner.webp?v=museum1" alt="" aria-hidden="true">
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <h1>Creature Designs</h1>
+    <div class="ornament" aria-hidden="true">✦</div>
+    <p class="lede">Believable animals from habitat and adaptation sets.</p>
+    <div class="hero-controls" aria-label="Page controls">
+      <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
+    </div>
+    <nav class="series-nav" aria-label="Image series">
+      <a href="index.html">Image archive</a>
+      <a href="worlds.html">Fictional worlds</a>
+      <a href="factual-infographics.html">Factual infographics</a>
+      <a href="hybrid-creatures.html">Hybrid creatures</a>
+      <a href="creature-designs.html" aria-current="page">Creature designs</a>
+      <a href="random-rendering-style.html">Random rendering style</a>
+      <a href="machine-dreams.html">Machine dreams</a>
+      <a href="visual-thought-experiments.html">Visual thought experiments</a>
+      <a href="impossible-documentary.html">Impossible documentary</a>
+      <a href="strange-botanicals.html">Strange botanicals</a>
+      <a href="cinematic-cats.html">Cinematic cats</a>
+      <a href="quietly-uncanny-domestic.html">Quietly uncanny</a>
+      <a href="world-that-never-was.html">World that never was</a>
+      <a href="subject-artifacts.html">Subject as artifact</a>
+      <a href="data-artifacts.html">Data as artifact</a>
+    </nav>
+    <div class="meta">
+      <span class="pill stat" id="creature-count-pill">Images: loading...</span>
+    </div>
+  </header>
+  <main>
+    <div id="creatures" class="grid" aria-live="polite">
+      <p class="empty">Loading creature designs...</p>
+    </div>
+  </main>
+  <footer></footer>
+
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen / 1:1 size · Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+  </div>
+
+  <script>
+    (function () {
+      const listRoot = document.getElementById('creatures');
+      const countPill = document.getElementById('creature-count-pill');
+      const viewer = document.getElementById('image-lightbox');
+      const stage = document.getElementById('lightbox-stage');
+      const image = document.getElementById('lightbox-image');
+      const title = document.getElementById('lightbox-title');
+      const close = document.getElementById('lightbox-close');
+      const IMAGE_BASE_URL = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/';
+      const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      const imageUrl = (value) => {
+        const path = String(value || '');
+        if (/^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('/')) return path;
+        if (!path.startsWith('images/')) return path;
+        return `${IMAGE_BASE_URL}${path.slice('images/'.length)}`;
+      };
+      function sizeClass(value) {
+        const match = String(value || '').match(/^(\d+)x(\d+)$/);
+        if (!match) return '';
+        const w = Number(match[1]);
+        const h = Number(match[2]);
+        if (h > w) return ' portrait';
+        if (w > h) return ' landscape';
+        return '';
+      }
+      function cardHtml(item) {
+        const creature = item.creatureDesign || {};
+        const src = imageUrl(item.image);
+        return `
+          <article class="card">
+            <div class="image-wrap${sizeClass(item.size)}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="content">
+              <div class="kicker">${escapeHtml(item.date || '')} · Creature design</div>
+              <h3>${escapeHtml(item.title)}</h3>
+              ${creature.description ? `<p class="desc">${escapeHtml(creature.description)}</p>` : ''}
+              ${creature.template ? `<p class="template"><strong>Template:</strong> ${escapeHtml(creature.template)}</p>` : ''}
+              ${item.tests ? `<p class="tests"><strong>Checks:</strong> ${escapeHtml(item.tests)}</p>` : ''}
+              <details>
+                <summary>Show prompt</summary>
+                <pre>${escapeHtml(item.prompt)}</pre>
+              </details>
+            </div>
+          </article>`;
+      }
+      function render(items) {
+        if (!items.length) {
+          listRoot.innerHTML = '<p class="empty">No creature designs have been archived yet.</p>';
+          countPill.textContent = 'Images: 0';
+          return;
+        }
+        countPill.textContent = `Images: ${items.length}`;
+        listRoot.innerHTML = items.map(cardHtml).join('');
+        bindImages();
+      }
+      function bindImages() {
+        document.querySelectorAll('.image-wrap img').forEach((thumb) => {
+          thumb.setAttribute('tabindex', '0');
+          thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
+          thumb.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openViewer(thumb.currentSrc || thumb.src, thumb.alt);
+            }
+          });
+        });
+      }
+      function openViewer(src, alt) {
+        image.src = src;
+        image.alt = alt || 'Expanded generated image';
+        title.textContent = alt || 'Generated image';
+        viewer.classList.add('open');
+        viewer.classList.remove('actual');
+        viewer.setAttribute('aria-hidden', 'false');
+        stage.scrollTo(0, 0);
+        document.body.style.overflow = 'hidden';
+        close.focus({ preventScroll: true });
+      }
+      function closeViewer() {
+        viewer.classList.remove('open', 'actual');
+        viewer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        image.removeAttribute('src');
+        stage.scrollTo(0, 0);
+      }
+      image.addEventListener('click', (event) => {
+        event.stopPropagation();
+        viewer.classList.toggle('actual');
+        if (viewer.classList.contains('actual')) {
+          requestAnimationFrame(() => stage.scrollTo(Math.max(0, (image.offsetWidth - stage.clientWidth) / 2), Math.max(0, (image.offsetHeight - stage.clientHeight) / 2)));
+        }
+      });
+      stage.addEventListener('click', (event) => { if (event.target === stage) closeViewer(); });
+      close.addEventListener('click', closeViewer);
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && viewer.classList.contains('open')) closeViewer(); });
+
+      fetch('creature-designs-data.json', { cache: 'no-cache' })
+        .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load creature-designs-data.json')))
+        .then((items) => render(items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')) || String(b.id || '').localeCompare(String(a.id || '')))))
+        .catch((err) => { listRoot.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
+    })();
+  </script>
+  <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="museum-theme.js?v=3" defer></script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>(function(){try{if(localStorage.getItem("theme")==="light")document.documentElement.setAttribute("data-theme","light");}catch(e){}})();</script>
+  <title>Data as Artifact</title>
+  <link rel="icon" type="image/svg+xml" href="../../assets/brand.svg">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <link rel="stylesheet" href="../../assets/design.css">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #020813;
+      --bg-2: #071629;
+      --panel: #f7fbff;
+      --text: #123044;
+      --muted: #657d8d;
+      --accent: #007ab0;
+      --accent-strong: #004c7c;
+      --line: #d8e8ef;
+      --shadow: -10px 14px 18px rgba(0,65,105,.18), inset 0 1px 0 rgba(255,255,255,.68);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 0%, rgba(22,98,214,0.2), transparent 34%),
+        radial-gradient(circle at 82% 12%, rgba(0,205,255,0.16), transparent 32%),
+        linear-gradient(180deg, var(--bg), var(--bg-2) 64%, var(--bg)) !important;
+      color: var(--text) !important;
+      line-height: 1.5;
+    }
+    header#site-nav {
+      background: rgba(6,17,24,.88) !important;
+      border-bottom: 1px solid rgba(62,121,222,.34) !important;
+      box-shadow: 0 14px 34px rgba(0,0,0,.22) !important;
+    }
+    .hero, main, footer { max-width: 1180px; margin: 0 auto; }
+    .hero {
+      padding: 30px 22px 24px;
+      background:
+        radial-gradient(circle at 82% 0%, rgba(19,184,223,.2), transparent 25rem),
+        linear-gradient(180deg, rgba(255,255,255,.94), rgba(233,248,252,.88)) !important;
+      border: 1px solid rgba(216,232,239,.9) !important;
+      border-radius: 0 0 8px 8px;
+      box-shadow: var(--shadow);
+    }
+    .hero-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 410px);
+      gap: clamp(18px, 4vw, 36px);
+      align-items: end;
+    }
+    h1 { margin: 0 0 10px; color: var(--accent-strong); font-size: clamp(2rem, 5vw, 3.9rem); letter-spacing: -.04em; line-height: .96; }
+    .lede { max-width: 760px; color: #4e6f82; font-size: clamp(.98rem, 2.1vw, 1.08rem); font-weight: 560; margin: 0; }
+    .meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .pill, .control {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.82);
+      color: var(--accent);
+      padding: 8px 11px;
+      border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 8px 18px rgba(0,65,105,.08);
+      font: inherit;
+    }
+    .pill.stat { color: #31546a; font-weight: 760; }
+    .pill.featured {
+      border-color: rgba(0,122,176,.4);
+      background: linear-gradient(135deg, #ffffff, #dff8ff);
+      color: #005f8c;
+      font-weight: 850;
+      box-shadow: 0 12px 26px rgba(0,122,176,.16);
+    }
+    .hero-panel {
+      border: 1px solid rgba(216,232,239,.92);
+      border-radius: 8px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 12px 24px rgba(0,65,105,.09);
+      padding: 12px;
+    }
+    .hero-panel-label {
+      margin: 0 0 8px;
+      color: #31546a;
+      font-size: .78rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .control { width: 100%; min-height: 40px; color: #47677a; outline: none; }
+    main { padding: 26px 22px 70px; }
+    .featured-artifact {
+      display: grid;
+      grid-template-columns: minmax(0, .95fr) minmax(280px, .55fr);
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 24px;
+      border: 1px solid rgba(216,232,239,.86);
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(247,251,255,.95), rgba(231,244,255,.88));
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .featured-media {
+      min-height: 300px;
+      max-height: 460px;
+      background: #05070a;
+    }
+    .featured-media img { object-fit: cover; cursor: zoom-in; }
+    .featured-copy {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: clamp(18px, 3vw, 30px);
+    }
+    .featured-copy .kicker { margin-bottom: 8px; }
+    .featured-copy h2 {
+      margin: 0 0 10px;
+      color: #183b52;
+      font-size: clamp(1.8rem, 4vw, 3.4rem);
+      line-height: .96;
+      letter-spacing: -.04em;
+    }
+    .featured-copy p { margin: 0; color: var(--muted); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
+    .card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, rgba(255,255,255,.88), rgba(230,244,255,.82));
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+    .image-wrap { background: #05070a; aspect-ratio: 1 / 1; display:flex; align-items:center; justify-content:center; position: relative; }
+    .image-wrap.portrait { aspect-ratio: 2 / 3; }
+    .image-wrap::after {
+      content: "Click to enlarge";
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      background: rgba(5,7,10,.62);
+      color: rgba(238,243,251,.86);
+      font-size: .78rem;
+      backdrop-filter: blur(10px);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .2s ease, transform .2s ease;
+      pointer-events: none;
+    }
+    .image-wrap:hover::after { opacity: 1; transform: translateY(0); }
+    img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .image-wrap.portrait img { object-fit: contain; background: #05070a; }
+    .image-wrap img { cursor: zoom-in; }
+    .content { padding: 18px; background: linear-gradient(180deg, rgba(248,252,255,.97), rgba(231,244,255,.9)); }
+    .kicker { color: var(--accent); text-transform: uppercase; font-size: .74rem; letter-spacing: .14em; font-weight: 800; }
+    h3 { margin: 7px 0 10px; font-size: 1.28rem; line-height: 1.1; }
+    .desc, .tests { color: var(--muted); margin: 0 0 13px; }
+    details { border-top: 1px solid var(--line); padding-top: 13px; }
+    summary { cursor: pointer; color: var(--text); font-weight: 750; margin-bottom: 10px; }
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+      color: #17334f;
+      background: rgba(255,255,255,.62);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: .84rem;
+    }
+    .empty { color: #d7e8f6; padding: 26px 4px; }
+    footer { padding: 0 22px 50px; color: #b7c7d9; }
+    .lightbox { position: fixed; inset: 0; z-index: 50; display: none; background: rgba(3,5,8,.94); backdrop-filter: blur(14px); color: var(--text); }
+    .lightbox.open { display: grid; grid-template-rows: auto 1fr; }
+    .lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(12,15,20,.78); }
+    .lightbox-title { min-width: 0; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .lightbox-hint { color: var(--muted); font-size: .88rem; font-weight: 500; }
+    .lightbox-close { border: 1px solid rgba(255,255,255,.18); border-radius: 999px; background: rgba(255,255,255,.06); color: var(--text); padding: 8px 12px; cursor: pointer; font: inherit; }
+    .lightbox-stage { min-height: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .lightbox-stage img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 28px 90px rgba(0,0,0,.55); cursor: zoom-in; }
+    .lightbox.actual .lightbox-stage { align-items: flex-start; justify-content: flex-start; }
+    .lightbox.actual .lightbox-stage img { max-width: none; max-height: none; cursor: zoom-out; }
+    @media (max-width: 680px) {
+      .hero { padding-top: 24px; }
+      .hero-layout { grid-template-columns: 1fr; gap: 18px; }
+      .meta { gap: 8px; margin-top: 16px; }
+      .pill, .control { padding: 8px 10px; }
+      .pill.stat { font-size: .92rem; }
+      .featured-artifact { grid-template-columns: 1fr; }
+      .featured-media { min-height: 230px; max-height: 340px; }
+      .grid { grid-template-columns: 1fr; }
+      .lightbox-hint { display: none; }
+    }
+  </style>
+  <link rel="stylesheet" href="museum-theme.css?v=3">
+</head>
+<body>
+  <header id="site-nav"></header>
+  <header class="hero museum-hero">
+    <img class="hero-backdrop" src="hero-banner.webp?v=museum1" alt="" aria-hidden="true">
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <h1>Data as Artifact</h1>
+    <div class="ornament" aria-hidden="true">✦</div>
+    <p class="lede">Images where information becomes a believable object: almanacs, specimens, tickets, maps, ledgers, labels, and other data with a physical life.</p>
+    <div class="hero-controls" aria-label="Page controls">
+      <button class="control" id="density-toggle" type="button" title="Toggle grid density">Grid: 3 columns</button>
+    </div>
+    <nav class="series-nav" aria-label="Image series">
+      <a href="index.html">Image archive</a>
+      <a href="worlds.html">Fictional worlds</a>
+      <a href="factual-infographics.html">Factual infographics</a>
+      <a href="hybrid-creatures.html">Hybrid creatures</a>
+      <a href="creature-designs.html">Creature designs</a>
+      <a href="random-rendering-style.html">Random rendering style</a>
+      <a href="machine-dreams.html">Machine dreams</a>
+      <a href="visual-thought-experiments.html">Visual thought experiments</a>
+      <a href="impossible-documentary.html">Impossible documentary</a>
+      <a href="strange-botanicals.html">Strange botanicals</a>
+      <a href="cinematic-cats.html">Cinematic cats</a>
+      <a href="quietly-uncanny-domestic.html">Quietly uncanny</a>
+      <a href="world-that-never-was.html">World that never was</a>
+      <a href="subject-artifacts.html">Subject as artifact</a>
+      <a href="data-artifacts.html" aria-current="page">Data as artifact</a>
+    </nav>
+    <div class="meta">
+      <span class="pill stat" id="artifact-count-pill">Artifacts: loading...</span>
+      <span class="pill stat" id="image-count-pill">Images: loading...</span>
+    </div>
+  </header>
+  <main>
+    <section class="featured-artifact" id="featured-artifact" aria-live="polite"></section>
+    <div id="artifacts" class="grid" aria-live="polite">
+      <p class="empty">Loading data artifacts...</p>
+    </div>
+  </main>
+  <footer>
+    Artifact entries are generated from <code>data-artifacts-data.json</code>. Click any image for fullscreen, then click it again for true 1:1 size.
+  </footer>
+
+  <div class="lightbox" id="image-lightbox" aria-hidden="true" role="dialog" aria-label="Expanded image viewer">
+    <div class="lightbox-bar">
+      <div class="lightbox-title" id="lightbox-title">Image preview</div>
+      <div class="lightbox-hint">Click image: fit screen ⇄ 1:1 size · Esc closes</div>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-stage" id="lightbox-stage"><img id="lightbox-image" alt=""></div>
+  </div>
+
+  <script>
+    (function () {
+      const artifactsRoot = document.getElementById('artifacts');
+      const featuredRoot = document.getElementById('featured-artifact');
+      const artifactCountPill = document.getElementById('artifact-count-pill');
+      const imageCountPill = document.getElementById('image-count-pill');
+      const siteNav = document.getElementById('site-nav');
+      const viewer = document.getElementById('image-lightbox');
+      const stage = document.getElementById('lightbox-stage');
+      const image = document.getElementById('lightbox-image');
+      const title = document.getElementById('lightbox-title');
+      const close = document.getElementById('lightbox-close');
+      const IMAGE_BASE_URL = 'https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/';
+      const escapeHtml = (value) => String(value || '').replace(/[&<>'"]/g, (ch) => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
+      const imageUrl = (value) => {
+        const path = String(value || '');
+        if (/^(?:[a-z]+:)?\/\//i.test(path) || path.startsWith('data:') || path.startsWith('/')) return path;
+        if (!path.startsWith('images/')) return path;
+        const base = IMAGE_BASE_URL.endsWith('/') ? IMAGE_BASE_URL : `${IMAGE_BASE_URL}/`;
+        return `${base}${path.slice('images/'.length)}`;
+      };
+
+      function updateNavHeight() {
+        if (siteNav) document.documentElement.style.setProperty('--nav-height', `${siteNav.offsetHeight || 64}px`);
+      }
+      window.addEventListener('resize', updateNavHeight);
+      window.addEventListener('load', updateNavHeight);
+      setTimeout(updateNavHeight, 0);
+
+      function cardHtml(item) {
+        const artifact = item.artifact || {};
+        const sizeMatch = String(item.size || '').match(/^(\d+)x(\d+)$/);
+        const portrait = sizeMatch ? Number(sizeMatch[2]) > Number(sizeMatch[1]) : (String(item.size || '').includes('portrait') || String(item.image || '').includes('almanac'));
+        const landscape = sizeMatch ? Number(sizeMatch[1]) > Number(sizeMatch[2]) : false;
+        const src = imageUrl(item.image);
+        return `
+          <article class="card">
+            <div class="image-wrap${portrait ? ' portrait' : landscape ? ' landscape' : ''}"><img src="${escapeHtml(src)}" alt="${escapeHtml(item.title)}" loading="lazy"></div>
+            <div class="content">
+              <div class="kicker">${escapeHtml(item.date || '')} · ${escapeHtml(item.slot || '')}</div>
+              <h3>${escapeHtml(item.title)}</h3>
+              ${artifact.description ? `<p class="desc">${escapeHtml(artifact.description)}</p>` : ''}
+              ${item.tests ? `<p class="tests"><strong>Explores:</strong> ${escapeHtml(item.tests)}</p>` : ''}
+              <details>
+                <summary>Show prompt</summary>
+                <pre>${escapeHtml(item.prompt)}</pre>
+              </details>
+            </div>
+          </article>`;
+      }
+
+      function render(items) {
+        if (!items.length) {
+          featuredRoot.innerHTML = '';
+          artifactsRoot.innerHTML = '<p class="empty">No data artifact images have been archived yet.</p>';
+          artifactCountPill.textContent = 'Artifacts: 0';
+          imageCountPill.textContent = 'Images: 0';
+          return;
+        }
+        const [featured, ...rest] = items;
+        const featuredArtifact = featured.artifact || {};
+        const featuredSrc = imageUrl(featured.image);
+        featuredRoot.innerHTML = `
+          <div class="featured-media"><img src="${escapeHtml(featuredSrc)}" alt="${escapeHtml(featured.title)}"></div>
+          <div class="featured-copy">
+            <div class="kicker">Latest artifact · ${escapeHtml(featured.date || '')}</div>
+            <h2>${escapeHtml(featured.title)}</h2>
+            ${featuredArtifact.description ? `<p>${escapeHtml(featuredArtifact.description)}</p>` : ''}
+          </div>
+        `;
+        artifactCountPill.textContent = `Artifacts: ${items.length}`;
+        imageCountPill.textContent = `Images: ${items.length}`;
+        artifactsRoot.innerHTML = rest.length ? rest.map(cardHtml).join('') : '<p class="empty">No older artifacts yet.</p>';
+        bindImages();
+        updateNavHeight();
+      }
+
+      function bindImages() {
+        document.querySelectorAll('.image-wrap img, .featured-media img').forEach((thumb) => {
+          thumb.setAttribute('tabindex', '0');
+          thumb.addEventListener('click', () => openViewer(thumb.currentSrc || thumb.src, thumb.alt));
+          thumb.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              openViewer(thumb.currentSrc || thumb.src, thumb.alt);
+            }
+          });
+        });
+      }
+      function openViewer(src, alt) {
+        image.src = src;
+        image.alt = alt || 'Expanded generated image';
+        title.textContent = alt || 'Generated image';
+        viewer.classList.add('open');
+        viewer.classList.remove('actual');
+        viewer.setAttribute('aria-hidden', 'false');
+        stage.scrollTo(0, 0);
+        document.body.style.overflow = 'hidden';
+        close.focus({ preventScroll: true });
+      }
+      function closeViewer() {
+        viewer.classList.remove('open', 'actual');
+        viewer.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        image.removeAttribute('src');
+        stage.scrollTo(0, 0);
+      }
+      image.addEventListener('click', (event) => {
+        event.stopPropagation();
+        viewer.classList.toggle('actual');
+        if (viewer.classList.contains('actual')) {
+          requestAnimationFrame(() => stage.scrollTo(Math.max(0, (image.offsetWidth - stage.clientWidth) / 2), Math.max(0, (image.offsetHeight - stage.clientHeight) / 2)));
+        }
+      });
+      stage.addEventListener('click', (event) => { if (event.target === stage) closeViewer(); });
+      close.addEventListener('click', closeViewer);
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && viewer.classList.contains('open')) closeViewer(); });
+
+      fetch('data-artifacts-data.json', { cache: 'no-cache' })
+        .then((r) => r.ok ? r.json() : Promise.reject(new Error('Could not load data-artifacts-data.json')))
+        .then((items) => render(items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')))))
+        .catch((err) => { artifactsRoot.innerHTML = `<p class="empty">${escapeHtml(err.message)}</p>`; });
+    })();
+  </script>
+  <script src="../../assets/nav.js?v=nav-20260702b" defer></script>
+  <script src="museum-theme.js?v=3" defer></script>
+</body>
+</html>
