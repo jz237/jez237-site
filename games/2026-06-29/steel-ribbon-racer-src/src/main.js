@@ -6564,7 +6564,10 @@ function addRaceLivery(mesh, key) {
       (ns.rotateY((sx * Math.PI) / 2), ns.translate(sx * (halfW + 0.012), cy + 0.62, 0.1), parts.push(ns));
     }
   const add = new Mesh(mergeGeometries(parts, !1), mat);
-  ((add.castShadow = !1), (add.receiveShadow = !1), mesh.add(add), (mesh.userData.liveryN = L.n));
+  // raycast-invisible: the roof quad rides just above the player car and the
+  // roam physics probes ground/water by raycasting down through the car —
+  // a hit here reads as "ground at roof height" and ponds never drag
+  ((add.raycast = () => {}), (add.castShadow = !1), (add.receiveShadow = !1), mesh.add(add), (mesh.userData.liveryN = L.n));
 }
 const rivals = RIVAL_DEFS.map((d, idx) => ({
   ...d,
