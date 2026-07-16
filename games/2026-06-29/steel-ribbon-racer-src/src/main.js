@@ -2964,6 +2964,125 @@ const rooftopSys = {
     for (const k of this.kits) k.idx < 0 && (k.g.visible = !1);
   },
 };
+// building facade near-tier (zoom-detail item 19): lobby-band panels promoted
+// onto the camera-facing wall of the nearest towers at street level — glass
+// entrance with lit interior silhouettes, canopy, seeded address plate, wall
+// lanterns, mullioned lobby windows. Everything between the fixtures is
+// TRANSPARENT so the building's own wall color shows through (any facade
+// color works). Street-only: altitude gate keeps the race view untouched.
+let facadeAtlasTex = null;
+function buildFacadeAtlas() {
+  if (facadeAtlasTex) return facadeAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  for (let v = 0; v < 2; v++) {
+    const y0 = v * 256,
+      warm = v === 0;
+    g.clearRect(0, y0, 1024, 256);
+    // canopy bar over the entrance
+    ((g.fillStyle = warm ? "#7a2f2a" : "#24455f"), g.fillRect(392, y0 + 52, 240, 26));
+    ((g.fillStyle = "rgba(0,0,0,0.35)"), g.fillRect(392, y0 + 78, 240, 8));
+    // double glass door, lit lobby behind
+    ((g.fillStyle = "#f3c988"), g.fillRect(432, y0 + 86, 160, 150));
+    ((g.fillStyle = "rgba(30,26,20,0.9)"),
+      g.fillRect(452, y0 + 150, 26, 86),
+      g.fillRect(506, y0 + 128, 8, 62),
+      (g.beginPath(), g.arc(560, y0 + 170, 17, 0, 6.29), g.fill()),
+      g.fillRect(552, y0 + 186, 16, 50));
+    ((g.strokeStyle = "#2c2c30"), (g.lineWidth = 8), g.strokeRect(432, y0 + 86, 160, 150), g.beginPath(), g.moveTo(512, y0 + 86), g.lineTo(512, y0 + 236), g.stroke());
+    ((g.fillStyle = "#d8c060"), g.fillRect(498, y0 + 158, 6, 26), g.fillRect(520, y0 + 158, 6, 26));
+    // address plate
+    ((g.fillStyle = "#20242c"), g.fillRect(452, y0 + 20, 120, 30));
+    ((g.fillStyle = "#e8e4d8"), (g.font = "bold 26px monospace"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(String(214 + v * 173), 512, y0 + 36);
+    // wall lanterns each side of the door
+    for (const lx of [404, 620]) {
+      ((g.fillStyle = "#2c2c30"), g.fillRect(lx - 3, y0 + 96, 6, 22));
+      const gr = g.createRadialGradient(lx, y0 + 130, 3, lx, y0 + 130, 22);
+      (gr.addColorStop(0, "rgba(255,214,140,0.95)"), gr.addColorStop(1, "rgba(255,214,140,0)"));
+      ((g.fillStyle = gr), g.beginPath(), g.arc(lx, y0 + 130, 22, 0, 6.29), g.fill());
+    }
+    // mullioned lobby windows with sills + furniture silhouettes
+    for (const wx of [120, 744]) {
+      ((g.fillStyle = warm ? "#e8b45c" : "#9fd0e8"), g.fillRect(wx, y0 + 96, 160, 110));
+      g.fillStyle = "rgba(24,22,28,0.88)";
+      if (warm) (g.fillRect(wx + 18, y0 + 156, 52, 50), g.beginPath(), g.arc(wx + 116, y0 + 150, 15, 0, 6.29), g.fill(), g.fillRect(wx + 110, y0 + 162, 12, 44));
+      else (g.fillRect(wx + 96, y0 + 130, 44, 76), g.fillRect(wx + 20, y0 + 180, 56, 26), g.beginPath(), g.arc(wx + 48, y0 + 160, 12, 0, 6.29), g.fill());
+      ((g.strokeStyle = "#33363e"), (g.lineWidth = 7), g.strokeRect(wx, y0 + 96, 160, 110));
+      (g.beginPath(), g.moveTo(wx + 80, y0 + 96), g.lineTo(wx + 80, y0 + 206), g.moveTo(wx, y0 + 150), g.lineTo(wx + 160, y0 + 150), g.stroke());
+      ((g.fillStyle = "#4a4e58"), g.fillRect(wx - 8, y0 + 206, 176, 10));
+    }
+  }
+  facadeAtlasTex = new CanvasTexture(cv);
+  facadeAtlasTex.colorSpace = SRGBColorSpace;
+  return facadeAtlasTex;
+}
+const facadeSys = {
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 30,
+  sample: [],
+  _timer: 0,
+  ensure() {
+    if (this.kits) return;
+    const mat = new MeshBasicMaterial({ map: buildFacadeAtlas(), transparent: !0, alphaTest: 0.25, toneMapped: !1, polygonOffset: !0, polygonOffsetFactor: -2 });
+    this.kits = [];
+    const n = mobilePerf ? 2 : 5;
+    for (let k = 0; k < n; k++) {
+      const geo = new PlaneGeometry(11, 5.5),
+        uv = geo.attributes.uv,
+        row = k % 2;
+      for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i), 1 - (row + (1 - uv.getY(i))) / 2);
+      const m = new Mesh(geo, mat);
+      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.raycast = () => {}), et.add(m));
+      this.kits.push({ g: m, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!rooftopSys.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled && Xe.position.y <= 26)
+      for (const s of rooftopSys.spots) {
+        if (Math.min(s.w, s.d) < 12) continue;
+        const hw = s.w / 2,
+          hd = s.d / 2,
+          ddx = Math.max(Math.abs(cx - s.x) - hw, 0),
+          ddz = Math.max(Math.abs(cz - s.z) - hd, 0),
+          d2 = ddx * ddx + ddz * ddz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    for (let k = 0; k < this.kits.length; k++) {
+      const kit = this.kits[k],
+        c = cand[k];
+      if (!c) {
+        ((kit.g.visible = !1), (kit.idx = -1));
+        continue;
+      }
+      const s = c.s,
+        gy = s.top - 1.2 - s.h,
+        relX = (cx - s.x) / (s.w / 2),
+        relZ = (cz - s.z) / (s.d / 2);
+      let px = s.x,
+        pz = s.z,
+        yaw = 0;
+      if (Math.abs(relX) > Math.abs(relZ)) ((px += Math.sign(relX) * (s.w / 2 + 0.08)), (yaw = (Math.sign(relX) * Math.PI) / 2));
+      else ((pz += Math.sign(relZ) * (s.d / 2 + 0.08)), (yaw = relZ >= 0 ? 0 : Math.PI));
+      (kit.g.position.set(px, gy + 2.9, pz), (kit.g.rotation.y = yaw), (kit.g.visible = !0), (kit.idx = s.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: s.i, x: +px.toFixed(1), y: +(gy + 2.9).toFixed(1), z: +pz.toFixed(1) });
+    }
+  },
+};
 // race roadside life (zoom-detail item 18): marshals with checkered flags,
 // pit boards, camera crews on small platforms bolted to the deck edge — the
 // stuff you zoom past at speed. Pooled kits promoted to the nearest of ~14
@@ -4109,6 +4228,7 @@ function F1(i, e, t) {
       ambientSys.update(I, ye);
       rooftopSys.update(I, ye);
       roadsideSys.update(I, ye);
+      facadeSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -10004,6 +10124,10 @@ window.__steelRibbonDebug = {
     roadsideSys.enabled = !!on;
     return roadsideSys.enabled;
   },
+  facadeEnable(on) {
+    facadeSys.enabled = !!on;
+    return facadeSys.enabled;
+  },
   camWorld() {
     return { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) };
   },
@@ -10101,6 +10225,13 @@ window.__steelRibbonDebug = {
         antennas: parkedKitSys.antennas,
         radius: parkedKitSys.RADIUS,
         sample: parkedKitSys.sample.slice(0, 3),
+      },
+      facades: {
+        eligible: rooftopSys.spots.reduce((n, sp) => n + (Math.min(sp.w, sp.d) >= 12 ? 1 : 0), 0),
+        promoted: facadeSys.promoted,
+        pool: facadeSys.kits ? facadeSys.kits.length : 0,
+        radius: facadeSys.RADIUS,
+        sample: facadeSys.sample.slice(0, 3),
       },
       livery: {
         rivals: rivals.map((r) => ({ key: r.key, n: r.mesh.userData.liveryN ?? 0, x: +r.mesh.position.x.toFixed(1), y: +r.mesh.position.y.toFixed(1), z: +r.mesh.position.z.toFixed(1), visible: r.mesh.visible })),
