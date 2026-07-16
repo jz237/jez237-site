@@ -108,11 +108,16 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
 10. ~~Stadium crowd v2~~ **DONE 2026-07-12 (iteration 10)** — see iteration log.
 11. **Road micro-detail**: manholes, storm drains, turn arrows, worn patches,
     crosswalk wear decals.
-12. **Photo mode**: pause + orbit/zoom camera (wheel + pinch) reusing __freeCam
-    plumbing, small UI hint — lets players actually savor all of the above.
-13. **Balloons/blimp near detail** + fictional banner text.
-14. **Birds** that scatter off sidewalks/wires when the player drives close (roam).
-15. **Steam grates** + vent steam sprites in the city, near-gated.
+12. ~~Photo mode~~ **DONE 2026-07-12 (iteration 11)** — O key / 📷 button
+    orbit+dolly camera. See iteration log.
+13. ~~Balloons/blimp near detail + fictional banner text~~ **DONE 2026-07-15
+    (iteration 17)** — the "blimps" are the four prop planes: each now tows a
+    distinct fictional ad banner. Hot-air balloons remain pure background
+    scenery (fine as-is). See iteration log.
+14. ~~Birds~~ **DONE 2026-07-12 (iteration 13)** — pooled instanced flock,
+    peck/scatter/despawn. See iteration log.
+15. ~~Steam grates~~ **DONE 2026-07-12 (iteration 14)** — 12 curb vents,
+    nearest-3 pooled sprite columns. See iteration log.
 16. ~~Parked-car variety~~ **DONE 2026-07-15 (iteration 15)** — roof racks/cargo
     boxes, rocker grime, dents, antennas, mirrored-arm wing mirrors via
     promotion-pool kits. See iteration log.
@@ -469,3 +474,23 @@ staticMerge 130 groups (5372 meshes removed) — do not break that merge.
   roam AND race start — chirps/ticks work without ever racing). Perf: no
   meshes/textures/draw calls added; one 1s mono noise buffer (~176KB) built
   lazily on first city-camera frame with mi present. Suite 128/128.
+- **17 prop-plane ad banners — backlog item 13 (2026-07-15)**: the survey's
+  "blimps" are the four prop planes (lanes at alt 170–240). Each now tows a
+  towed-fabric ad banner: rope + one 12×2.5 double-sided quad (back mirrors
+  like real fabric), reading its row of a shared 1024×512 canvas atlas —
+  banner-yellow ground, 900-weight near-black lettering, navy edge bars,
+  grommets. Copy is fictional and world-consistent (PLANE_BANNERS: RIBBON
+  CUP SUNDAY / FLY ZEPHYR AIRWAYS / PIXEL PAWN PAYS BEST / SKYLINE PIER IS
+  OPEN — Pixel Pawn echoes the existing billboard). Fixed lane→text mapping,
+  no rng. KEY RENDER LESSON: a bright canvas quad under the game's tone
+  mapping/bloom washes to white and kills text contrast — `toneMapped: !1`
+  on the MeshBasicMaterial + saturated mid-tone ground + max-weight glyphs
+  is the fix (first cream/navy attempt was unreadable at 10m). Verified by
+  looking (`loop-shots/17-plane-banner/`): crisp at 10–16m, clearly an ad
+  strip with big glanceable lettering from ribbon height (~108m — these are
+  toy-scale giants: 30m wingspan), tiny cheerful strip from the ground.
+  detailReport().planes {count, banners, sample}. Perf: +8 draw calls
+  (banner+rope × 4), ~40 tris, +1 texture — the sky IS visible at chase so
+  these render there: 0.46% call delta, within gate. Banners show under
+  mobilePerf too (not a pool; one shared material). Suite 129/129.
+  DEPLOY BATCH 5 (v3.12.0) due next iteration (items 15-17 + next).
