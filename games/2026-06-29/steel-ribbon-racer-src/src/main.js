@@ -3574,9 +3574,35 @@ const pedKitSys = {
           ),
           opaque,
         );
-      const kit = { face, handL, handR, shoeL, shoeR, phone, bag, cup, prop: null, texting: !1, ped: null };
-      for (const part of [face, handL, handR, shoeL, shoeR, phone, phoneBody, screen, bag, cup])
-        ((part.userData.kitPart = !0), (part.castShadow = !1), (part.receiveShadow = !0));
+      // item: leashed dogs — a small trotting companion beside every 4th
+      // promoted ped, one merged mesh + a static taut leash hip→collar
+      const dogTone = [7029795, 2499102, 12884588, 12104876][k % 4],
+        dog = new Mesh(
+          mergeGeometries(
+            [
+              vcBake(new BoxGeometry(0.16, 0.2, 0.36), vcAt(0, 0.3, 0), dogTone),
+              vcBake(new BoxGeometry(0.13, 0.13, 0.14), vcAt(0, 0.44, -0.24), dogTone),
+              vcBake(new BoxGeometry(0.08, 0.06, 0.08), vcAt(0, 0.4, -0.33), 2499102),
+              vcBake(new BoxGeometry(0.04, 0.07, 0.03), vcAt(0.05, 0.54, -0.22), dogTone),
+              vcBake(new BoxGeometry(0.04, 0.07, 0.03), vcAt(-0.05, 0.54, -0.22), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(0.05, 0.1, -0.13), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(-0.05, 0.1, -0.13), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(0.05, 0.1, 0.13), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(-0.05, 0.1, 0.13), dogTone),
+              vcBake(new BoxGeometry(0.04, 0.16, 0.04), vcAt(0, 0.44, 0.2, 0.5), dogTone),
+            ],
+            !1,
+          ),
+          opaque,
+        );
+      dog.position.set(0.52, 0, -0.1);
+      const leashDir = new Vector3(0.52 - 0.24, 0.5 - 0.88, -0.28 - 0.02),
+        leashLen = leashDir.length(),
+        leash = new Mesh(vcBake(new BoxGeometry(0.016, leashLen, 0.016), null, 2105376), opaque);
+      (leash.position.set((0.24 + 0.52) / 2, (0.88 + 0.5) / 2, (0.02 - 0.28) / 2), leash.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), leashDir.normalize()));
+      const kit = { face, handL, handR, shoeL, shoeR, phone, bag, cup, dog, leash, prop: null, texting: !1, ped: null };
+      for (const part of [face, handL, handR, shoeL, shoeR, phone, phoneBody, screen, bag, cup, dog, leash])
+        ((part.userData.kitPart = !0), (part.castShadow = !1), (part.receiveShadow = !0), (part.raycast = () => {}));
       this.kits.push(kit);
     }
   },
@@ -3593,10 +3619,11 @@ const pedKitSys = {
       kit.texting && g.add(kit.phone),
       prop === "bag" && limbs[2]?.mesh.add(kit.bag),
       prop === "cup" && limbs[2]?.mesh.add(kit.cup),
+      prop === "dog" && (g.add(kit.dog), g.add(kit.leash)),
       (kit.ped = actor));
   },
   detach(kit) {
-    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR, kit.phone, kit.bag, kit.cup]) part.removeFromParent();
+    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR, kit.phone, kit.bag, kit.cup, kit.dog, kit.leash]) part.removeFromParent();
     ((kit.ped = null), (kit.texting = !1), (kit.prop = null));
   },
   reset() {
@@ -3612,11 +3639,16 @@ const pedKitSys = {
     }
     // pose pass runs EVERY tick: ze() rewrites limb swing each frame, so the
     // texting arm must be re-raised after it (same Bn callback, later in order)
+    this._t = (this._t || 0) + dt;
     if (this.kits)
       for (const k of this.kits)
         if (k.ped && k.texting) {
           const arm = k.ped.mesh.userData.limbs?.[3]?.mesh;
           arm && ((arm.rotation.x = -2.05), (arm.position.y = 1.33));
+        } else if (k.ped && k.prop === "dog") {
+          // trot: quick bob + a touch of pitch, keyed off the shared clock
+          const ph = this._t * 8 + k.dog.position.x * 7;
+          ((k.dog.position.y = Math.abs(Math.sin(ph)) * 0.035), (k.dog.rotation.x = Math.sin(ph * 2) * 0.05));
         }
     this._timer -= dt;
     if (this._timer > 0) return;
@@ -3643,7 +3675,7 @@ const pedKitSys = {
       const k = this.kits[w.idx % this.pool];
       if (k.ped === w.a) continue;
       if (k.ped && wantSet.has(k.ped)) continue; // kit busy with an equally-near ped
-      (k.ped && this.detach(k), this.attach(k, w.a, ["text", "bag", "cup"][w.idx % 3]));
+      (k.ped && this.detach(k), this.attach(k, w.a, ["text", "bag", "cup", "dog"][w.idx % 4]));
     }
   },
 };
@@ -10540,6 +10572,7 @@ window.__steelRibbonDebug = {
         texting: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.texting ? 1 : 0), 0),
         bags: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "bag" ? 1 : 0), 0),
         cups: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "cup" ? 1 : 0), 0),
+        dogs: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "dog" ? 1 : 0), 0),
         radius: PED_KIT_RADIUS,
         sample: (pedKitSys.kits || [])
           .filter((k) => k.ped)
