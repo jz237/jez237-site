@@ -5,13 +5,13 @@ import { Sim, DT } from './sim.js';
 import { Renderer } from './renderer.js';
 import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
-import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
+import { saveLocal, submitGlobal, cleanInitials, dailyInfo } from './scores.js';
 import { AudioEngine } from './audio.js';
 import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.11.0';
+export const VERSION = 'v2.12.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -83,7 +83,7 @@ class Game {
     document.getElementById('gosubmit').onclick = async () => {
       const init = cleanInitials(document.getElementById('goinit').value);
       const s = this.sim;
-      const entry = { initials: init, score: s.score(), wave: s.wave, kills: s.kills, map: MAPS[this.mapIndex].id, mode: s.campaignDone ? 'endless' : 'campaign' };
+      const entry = { initials: init, score: s.score(), wave: s.wave, kills: s.kills, map: MAPS[this.mapIndex].id, mode: this.daily ? 'daily' : (s.campaignDone ? 'endless' : 'campaign'), board: this.daily ? dailyInfo().board : undefined };
       saveLocal(entry);
       document.getElementById('gonote').textContent = 'etching…';
       const ok = await submitGlobal(entry);
@@ -92,7 +92,9 @@ class Game {
     };
   }
 
-  selectMap(i) { this.mapIndex = i; }
+  selectMap(i) { this.mapIndex = i; this.daily = false; }
+
+  selectDaily() { this.daily = true; }
 
   // the grove defends itself behind the title — arcade attract tradition
   startAttract() {
@@ -106,7 +108,8 @@ class Game {
   }
 
   newRun() {
-    this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
+    if (this.daily) { const d = dailyInfo(); this.mapIndex = d.mapIndex; this.sim = new Sim(d.mapIndex, d.seed); }
+    else this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
     this.renderer.pathMesh = null; // forces map mesh rebuild on next frame
     this.renderer.clearStains(); // fresh ground for a fresh story
     this.armed = null; this.selected = null;
@@ -132,7 +135,25 @@ class Game {
     cv.addEventListener('mousemove', e => {
       this.mouse.world = toWorld(e);
     });
-    cv.addEventListener('pointerdown', e => { this.lastPointerType = e.pointerType; }, { capture: true });
+    cv.addEventListener('pointerdown', e => {
+      this.lastPointerType = e.pointerType;
+      if (this.photo) { this.dragFrom = { x: e.clientX, y: e.clientY }; }
+    }, { capture: true });
+    cv.addEventListener('pointermove', e => {
+      if (this.photo && this.dragFrom && e.buttons) {
+        const r = cv.getBoundingClientRect();
+        const k = WORLD_W / r.width / (this.photoCam ? this.photoCam.zoom : 1);
+        this.photoCam.dx -= (e.clientX - this.dragFrom.x) * k;
+        this.photoCam.dy -= (e.clientY - this.dragFrom.y) * k;
+        this.dragFrom = { x: e.clientX, y: e.clientY };
+      }
+    });
+    cv.addEventListener('pointerup', () => { this.dragFrom = null; });
+    cv.addEventListener('wheel', e => {
+      if (!this.photo || !this.photoCam) return;
+      e.preventDefault();
+      this.photoCam.zoom = Math.max(1.0, Math.min(1.8, this.photoCam.zoom * (e.deltaY > 0 ? 0.94 : 1.06)));
+    }, { passive: false });
     const cancelBtn = document.getElementById('tapCancel');
     cancelBtn.addEventListener('click', () => {
       this.armed = null; this.pendingSpot = null;
@@ -189,6 +210,7 @@ class Game {
       if (e.key === 'u' && this.selected) this.upgradeSelected();
       if (e.key === 'm' || e.key === 'M') { const m = this.audio.toggleMute(); this.ui.toast(m ? 'the grove falls silent' : 'the grove sings again'); }
       if (e.key === 'p' || e.key === 'P') this.togglePause();
+      if (e.key === 'c' || e.key === 'C') this.togglePhoto();
       if (e.key === 'f' || e.key === 'F') this.cycleSpeed();
     });
     // publish the truly-visible viewport height (mobile URL bars shrink it
@@ -202,6 +224,16 @@ class Game {
     window.addEventListener('resize', fitViewport);
     window.addEventListener('orientationchange', () => setTimeout(fitViewport, 120));
     if (window.visualViewport) window.visualViewport.addEventListener('resize', fitViewport);
+  }
+
+  togglePhoto() {
+    if (!this.started) return;
+    this.photo = !this.photo;
+    document.body.classList.toggle('photo', this.photo);
+    if (this.photo) {
+      this.photoCam = { dx: this.cam.dx, dy: this.cam.dy, zoom: Math.max(1.1, this.cam.zoom) };
+      this.ui.toast('photo mode — drag to pan · scroll to zoom · C to exit');
+    }
   }
 
   togglePause() {
@@ -380,7 +412,14 @@ class Game {
 
     // camera feel: slow drift + breathing, decaying shake
     const t = this.fx.wallTime;
-    if (this.nsCam) {
+    if (this.photo && this.photoCam) {
+      const pc = this.photoCam;
+      const mx = Math.max(0, (WORLD_W - WORLD_W / pc.zoom) / 2 - 4);
+      const my = Math.max(0, (WORLD_H - WORLD_H / pc.zoom) / 2 - 4);
+      pc.dx = Math.max(-mx, Math.min(mx, pc.dx));
+      pc.dy = Math.max(-my, Math.min(my, pc.dy));
+      this.cam.dx = pc.dx; this.cam.dy = pc.dy; this.cam.zoom = pc.zoom;
+    } else if (this.nsCam) {
       // staged-shot composition: locked frame with only a faint breath
       this.cam.dx = this.nsCam.dx;
       this.cam.dy = this.nsCam.dy;
