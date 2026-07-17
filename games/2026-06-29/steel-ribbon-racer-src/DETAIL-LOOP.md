@@ -1524,3 +1524,17 @@ signal-corner ped density weighting.
   no car braked in its 9s — widened to 15s per the calibration
   pattern). NEXT: item 5 — road oil stains, then items 6-10 → deploy
   batch 18 + closing survey.
+- **63 OIL STAINS — round-seven item 5 (2026-07-17)**: the roads carry
+  history now. oilSys clones the roadDecalSys pattern small: ONE
+  InstancedMesh (cap 24), 2-cell 256x128 atlas of layered radial dark
+  blots (big spill cluster / drip trail), 20 spots seeded on
+  intersection APPROACH LANES (lattice intersections ± 12-21m back,
+  lane offset ±sw*0.24, plateRng 0x011f00d) with per-spot scale
+  variance, placed once on the first tick via roadDecalSys._surfaceY
+  (reused directly — the band-filtered slab raycast). depthWrite off +
+  polygonOffset -3; dark-on-grey = dusk-safe by design. Verified by
+  LOOKING (loop-shots/63-oil/): an irregular blot on the lane beside
+  the newspaper decal, gone in the OFF pair. Perf gate: 1861-1890
+  calls / 599-608k tris (+1 draw, +1 texture). Suite 160/160 (probe:
+  placed===spots ≥10 + toggle). NEXT: item 6 — suburban shop facades,
+  then 7-10 → DEPLOY BATCH 18 (v3.25.0) + closing survey.

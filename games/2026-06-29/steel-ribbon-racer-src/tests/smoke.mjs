@@ -778,6 +778,21 @@ const browser = await chromium.launch({
     JSON.stringify(blp),
   );
 
+  // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
+  const oil = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().oil,
+      off = deb.oilEnable(false),
+      offRep = deb.detailReport().oil.enabled;
+    deb.oilEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "oil stains: instanced blots placed on approach lanes, toggle works",
+    !!oil && oil.placed >= 10 && oil.placed === oil.spots && oil.off === false && oil.offRep === false,
+    JSON.stringify({ spots: oil?.spots, placed: oil?.placed }),
+  );
+
   // zoom-detail 62 (round seven item 4): strollers walk the park paths
   const str = await page.evaluate(() => {
     const pk2 = window.__steelRibbonDebug.detailReport().parks;
