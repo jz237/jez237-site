@@ -1,7 +1,10 @@
 // HTML HUD wiring: resource bar, tower cards, surge button, tower inspect,
 // toasts. Pure DOM — the canvas stays untouched by UI concerns.
 
-import { TOWERS, ECON } from './content.js';
+import { TOWERS, ECON, MAPS } from './content.js';
+import { localScores, fetchGlobal } from './scores.js';
+
+const GLYPHS = { coral: '❋', tesla: '✺', spire: '❆', urchin: '✴', bloom: '❁', bramble: '✿', bulb: '◉' };
 
 export class UI {
   constructor(root, game) {
@@ -20,9 +23,52 @@ export class UI {
       fps: root.querySelector('#fps'),
     };
     this.buildCards();
+    this.buildMapPicker();
     this.el.surge.addEventListener('click', () => game.callSurge());
     this.lastVals = {};
   }
+
+  buildMapPicker() {
+    const wrap = document.getElementById('maps');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    MAPS.forEach((m, i) => {
+      const b = document.createElement('button');
+      b.className = 'mapcard' + (i === this.game.mapIndex ? ' sel' : '');
+      b.innerHTML = `<div class="mname">${m.name}</div><div class="mblurb">${m.blurb}</div>`;
+      b.addEventListener('click', () => {
+        this.game.selectMap(i);
+        for (const c of wrap.children) c.classList.remove('sel');
+        b.classList.add('sel');
+      });
+      wrap.appendChild(b);
+    });
+  }
+
+  async renderBoard() {
+    const el = document.getElementById('board');
+    if (!el) return;
+    const local = localScores();
+    el.innerHTML = '<div class="btitle">BRIGHTEST GROVES</div><div class="dim" style="opacity:0.5">reaching into the dark…</div>';
+    const global = await fetchGlobal();
+    const list = (global && global.length ? global : local).slice(0, 8);
+    if (!list.length) { el.innerHTML = '<div class="btitle">BRIGHTEST GROVES</div><div style="opacity:0.5;font-size:12px">no lights etched yet — be first</div>'; return; }
+    const rows = list.map((s, i) =>
+      `<tr><td class="rk">${i + 1}</td><td>${(s.initials || '???')}</td><td class="sc">${s.score}</td><td class="rk">${(s.extra && s.extra.wave) ? 'w' + s.extra.wave : ''}</td></tr>`).join('');
+    el.innerHTML = `<div class="btitle">BRIGHTEST GROVES ${global && global.length ? '· GLOBAL' : '· THIS GROVE'}</div><table>${rows}</table>`;
+  }
+
+  showGameOver(sim, won) {
+    const g = document.getElementById('gameover');
+    document.getElementById('gotitle').textContent = won ? 'THE GROVE ENDURES' : 'THE LIGHT GOES OUT';
+    document.getElementById('gosub').textContent =
+      `${won ? 'campaign complete' : 'overrun'} · wave ${sim.wave} · ${sim.kills} fallen · ${MAPS[this.game.mapIndex].name}`;
+    document.getElementById('goscore').textContent = `✦ ${sim.score()}`;
+    document.getElementById('gonote').textContent = '';
+    g.classList.add('open');
+  }
+
+  hideGameOver() { document.getElementById('gameover').classList.remove('open'); }
 
   buildCards() {
     this.el.cards.innerHTML = '';
@@ -34,7 +80,7 @@ export class UI {
       card.dataset.tower = id;
       const cssColor = `rgb(${t.color.map(c => Math.floor(Math.pow(c, 0.7) * 255)).join(',')})`;
       card.style.setProperty('--glow', cssColor);
-      card.innerHTML = `<span class="key">${i}</span><span class="cname">${t.name}</span><span class="cost">◈ ${t.cost}</span>`;
+      card.innerHTML = `<span class="key">${i}</span><span class="glyph">${GLYPHS[id] || '❖'}</span><span class="cname">${t.name}</span><span class="cost">◈ ${t.cost}</span>`;
       card.title = t.desc;
       card.addEventListener('click', () => this.game.armTower(id));
       this.el.cards.appendChild(card);
