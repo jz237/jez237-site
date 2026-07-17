@@ -1167,3 +1167,22 @@ signal-corner ped density weighting.
   ground-floor windows clear. Suite 146/146 (no probe changes needed —
   heights move together). Deployed as v3.20.0 (batch 13, EARLY — user
   fix; items 9/10 will ride batch 14).
+- **46 ROOFTOP DENSITY — round-five item 9 (2026-07-16)**: big roofs
+  stopped being one-kit ponds. The promotion pass's used-Set became a
+  per-roof allowance Map: min(w,d) ≥22 → 3 kits, ≥14 → 2, else 1; a
+  placed candidate RE-QUEUES itself (pushing into cand mid-for..of
+  extends iteration deterministically) with quadrant offsets per
+  placement index and a variant-fallback pop so the 2nd/3rd kit can
+  borrow a neighboring pool. Pool 6→8 meshes (geos reused modulo — the
+  6 merged geometries serve 8 kits). Every kit variant also gained a
+  ROOF-ACCESS HATCH merged in (galv box + dark lid + stub rail, per-geo
+  offset/yaw) — zero extra draws, ~60 tris total. Verified by LOOKING
+  (loop-shots/46-rooftop-density/): the 43m roof carries water tower
+  (ladder + pigeon), AC/dish cluster AND a second vent cluster with
+  hatch — a real mechanical rooftop. Perf gate: 1811-1835 calls /
+  591-612k tris / 244 tex / 5507-5571 geo (the +2 pool kits cost ~3k
+  tris worst case, inside the tight gate). Suite 147/147 (probe flies
+  over the widest tall roof, asserts promoted ≥2 && multi ≥1;
+  skip-passes on narrow-roof worlds). NEXT: item 10 — plane close
+  detail (registration codes, prop disc, gear struts), then DEPLOY
+  BATCH 14 (v3.21.0) and the round-five closing survey.
