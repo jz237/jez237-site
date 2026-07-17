@@ -1281,3 +1281,22 @@ signal-corner ped density weighting.
   across the park cells at mid; far reads as parkland texture, not
   noise; OFF pair = the old felt. Perf: 1829-1867 calls / 591-601k
   tris. Suite 150/150. NEXT: item 4 — sports-field markings.
+- **51 SOCCER PITCHES — round-six item 4 (2026-07-16)**: the survey's
+  "field markings" idea, redirected — the mint "field" slabs are
+  outskirt FARM fields (crop strips); sports grounds belong in the
+  city. buildParks gains a SECOND cell scan (rect-fitted margins: Mn
+  +33/+23, ponds likewise, Sa +36, Pn ≥12 — cells rejected for paths
+  can still host a pitch; the path pass consumes every path-qualifying
+  cell, so leftovers were ZERO) + per-cell 7-spot flatness search
+  (58x38 corner span ≤1.6, pinned at the local MAX + 0.09 per the
+  flat-decal rule). Up to 2 pitches per world: white-line canvas
+  (512x336: touchlines/halfway/center circle/boxes/spots, toneMapped
+  off — the lines GLOW slightly at dusk and read as floodlit grounds,
+  a happy accident kept deliberately) + vcBaked goal frames (posts +
+  crossbar both ends) merged into the park furniture mesh. Verified by
+  LOOKING (loop-shots/51-pitches/): aerial = a complete pitch between
+  the boulevards; ground = goal frame against the skyline. Perf:
+  1819-1880 calls / 594-604k tris / tex 252 max (new gate 260). Suite
+  151/151 (probe: pitches 0-2 by terrain luck, scene quads match
+  count). NEXT: item 5 — neon sign glow, then DEPLOY BATCH 15
+  (v3.22.0).

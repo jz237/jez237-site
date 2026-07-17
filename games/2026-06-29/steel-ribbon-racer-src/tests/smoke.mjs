@@ -764,6 +764,21 @@ const browser = await chromium.launch({
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
   );
 
+  // zoom-detail 51 (round six item 4): soccer pitches in flat park cells
+  const pit = await page.evaluate(() => {
+    const pk2 = window.__steelRibbonDebug.detailReport().parks;
+    let quad = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.isMesh && o.geometry && o.geometry.parameters && o.geometry.parameters.width === 58 && o.geometry.parameters.height === 38) quad++;
+    });
+    return { pitches: pk2.pitches, quad };
+  });
+  check(
+    "pitches: soccer fields placed on flat lawn cells (0-2 by terrain luck), quads match",
+    !!pit && pit.pitches >= 0 && pit.pitches <= 2 && pit.quad === pit.pitches,
+    JSON.stringify(pit) + (pit.pitches === 0 ? " (hilly world — none flat enough)" : ""),
+  );
+
   // zoom-detail 50 (round six item 3): lawn mowing stripes + worn patches
   const lw = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
