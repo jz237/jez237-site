@@ -8,7 +8,7 @@ import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
 
-export const VERSION = 'v1.6.0';
+export const VERSION = 'v1.7.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -34,6 +34,15 @@ class Game {
     this.cam = { dx: 0, dy: 0, zoom: 1.0, shakeX: 0, shakeY: 0 };
     this.frameMs = 16;
     this.started = false;
+    // adaptive quality: drop tiers on sustained slow frames, climb back shyly
+    this.qSlow = 0; this.qFast = 0; this.qRaises = 0;
+    // vestibular safety: honour prefers-reduced-motion, live
+    this.reduceMotion = false;
+    try {
+      const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+      this.reduceMotion = mq.matches;
+      mq.addEventListener('change', e => { this.reduceMotion = e.matches; });
+    } catch { }
     // browsers require a gesture before audio — arm on the first of any
     const armAudio = () => this.audio.start();
     window.addEventListener('pointerdown', armAudio, { once: true });
@@ -244,6 +253,20 @@ class Game {
     }
     this.fx.shake = Math.max(0, this.fx.shake - raw * 14);
     this.fx.aberr = Math.max(0, this.fx.aberr - raw * 0.02);
+    if (this.reduceMotion) { this.fx.shake = 0; this.fx.aberr = 0; this.cam.dx = 0; this.cam.dy = 0; this.cam.zoom = 1.0; }
+    // quality controller (pinned to full for staged shots)
+    if (!NS_MODE) {
+      const pref = this.audio.settings.quality || 'auto';
+      if (pref !== 'auto') {
+        const want = pref === 'high' ? 3 : pref === 'med' ? 2 : 1;
+        this.renderer.setQuality(want);
+      } else {
+        // time-based so slow machines react in seconds, not frame counts
+        if (this.frameMs > 22) { this.qSlow += raw; this.qFast = 0; } else if (this.frameMs < 12) { this.qFast += raw; this.qSlow = 0; } else { this.qSlow = 0; this.qFast = 0; }
+        if (this.qSlow > 3 && this.renderer.quality > 1) { this.renderer.setQuality(this.renderer.quality - 1); this.qSlow = -3; /* grace while EMA settles */ }
+        else if (this.qFast > 25 && this.renderer.quality < 3 && this.qRaises < 3) { this.renderer.setQuality(this.renderer.quality + 1); this.qFast = 0; this.qRaises++; }
+      }
+    }
     const sh = this.fx.shake;
     this.cam.shakeX = (Math.random() - 0.5) * sh;
     this.cam.shakeY = (Math.random() - 0.5) * sh;
@@ -392,6 +415,8 @@ class Game {
       startWave() { return g.sim.startWave(true); },
       start() { g.started = true; document.getElementById('title').classList.remove('open'); },
       audioState() { return g.audio.state(); },
+      quality() { return g.renderer.quality; },
+      qState() { return { qSlow: g.qSlow, qFast: g.qFast, frameMs: +g.frameMs.toFixed(1), q: g.renderer.quality, pref: g.audio.settings.quality || 'auto' }; },
       pixelStats() {
         const gl = g.renderer.gl;
         const w = 64, h = 36;
