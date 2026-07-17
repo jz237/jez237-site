@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.6.0';
+export const VERSION = 'v2.6.1';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -191,7 +191,17 @@ class Game {
       if (e.key === 'p' || e.key === 'P') this.togglePause();
       if (e.key === 'f' || e.key === 'F') this.cycleSpeed();
     });
-    window.addEventListener('resize', () => this.renderer.resize());
+    // publish the truly-visible viewport height (mobile URL bars shrink it
+    // without 100vh noticing) and re-fit the frame whenever it changes
+    const fitViewport = () => {
+      const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+      document.documentElement.style.setProperty('--vph', h + 'px');
+      this.renderer.resize();
+    };
+    fitViewport();
+    window.addEventListener('resize', fitViewport);
+    window.addEventListener('orientationchange', () => setTimeout(fitViewport, 120));
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', fitViewport);
   }
 
   togglePause() {
