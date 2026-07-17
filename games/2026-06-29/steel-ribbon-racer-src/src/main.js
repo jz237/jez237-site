@@ -4047,6 +4047,34 @@ const raceWearSys = { segs: 0, patches: 0, enabled: !0, _mesh: null };
 const lawnSys = { striped: 0, enabled: !0, mat: null };
 // zoom-detail 52 (round-six item 5): neon halos + flicker
 const neonSys = { halos: 0, flicker: 0, enabled: !0, _meshes: [], _flick: [] };
+// zoom-detail 53 (round-six item 6): zebra crosswalks in three wear tiers
+const xwalkSys = { fresh: 0, worn: 0, chipped: 0, enabled: !0, _mats: [] };
+function buildXwalkTextures() {
+  const out = [];
+  for (let tier = 0; tier < 3; tier++) {
+    const cv = document.createElement("canvas");
+    ((cv.width = 256), (cv.height = 64));
+    const g = cv.getContext("2d"),
+      alpha = [0.95, 0.66, 0.45][tier];
+    g.fillStyle = `rgba(238, 240, 235, ${alpha})`;
+    for (let x = 6; x < 250; x += 32) g.fillRect(x, 4, 18, 56);
+    if (tier > 0) {
+      // chip away paint: erase speckles, heavier on the chipped tier
+      g.globalCompositeOperation = "destination-out";
+      const n2 = tier === 1 ? 90 : 220;
+      for (let k = 0; k < n2; k++) {
+        const rx = Math.random() * 256,
+          ry = Math.random() * 64,
+          rs = 1 + Math.random() * (tier === 1 ? 2.5 : 4);
+        g.fillRect(rx, ry, rs, rs * (0.6 + Math.random()));
+      }
+      g.globalCompositeOperation = "source-over";
+    }
+    const t = new CanvasTexture(cv);
+    ((t.colorSpace = SRGBColorSpace), out.push(t));
+  }
+  return out;
+}
 let neonHaloTex = null;
 function buildHaloTexture() {
   if (neonHaloTex) return neonHaloTex;
@@ -5153,6 +5181,15 @@ function N1() {
     side: DoubleSide,
   });
   i.add(new Mesh(m(f, 0.4, 0.62), b));
+  {
+    const xt = buildXwalkTextures();
+    ((xwalkSys._mats = xt.map((t2) => new MeshStandardMaterial({ map: t2, transparent: !0, roughness: 0.6, metalness: 0.02, emissive: 3158064, emissiveIntensity: 0.05, depthWrite: !1 }))),
+      (xwalkSys.fresh = 0),
+      (xwalkSys.worn = 0),
+      (xwalkSys.chipped = 0));
+  }
+  const xwalkGeoA = new PlaneGeometry(o * 0.92, 2.6).rotateX(-Math.PI / 2),
+    xwalkGeoB = new PlaneGeometry(2.6, o * 0.92).rotateX(-Math.PI / 2);
   let S = 0,
     L = 0,
     F = 0;
@@ -5161,11 +5198,17 @@ function N1() {
       const Y = l[N],
         j = d[O];
       if (!(Pn(Y, j, o * 0.75).clearance < 2))
+        // zoom-detail 53: zebra-stripe planes in a deterministic per-intersection
+        // wear tier (fresh / worn / chipped alpha textures on shared materials —
+        // the materials survive the static merge, so the A/B toggle lives there)
         for (const ee of [-1, 1]) {
-          const oe = new Mesh(new BoxGeometry(o * 0.92, 0.07, 1.15), h);
-          (oe.position.set(Y, He(Y, j + ee * 13) + 0.83, j + ee * 13), (oe.receiveShadow = !0), i.add(oe));
-          const re = new Mesh(new BoxGeometry(1.15, 0.07, o * 0.92), h);
-          (re.position.set(Y + ee * 13, He(Y + ee * 13, j) + 0.83, j), (re.receiveShadow = !0), i.add(re), (S += 2));
+          const tier = (Math.abs((Y * 7919 + j * 104729) | 0) >>> 3) % 3,
+            xm = xwalkSys._mats[tier];
+          (tier === 0 ? xwalkSys.fresh++ : tier === 1 ? xwalkSys.worn++ : xwalkSys.chipped++);
+          const oe = new Mesh(xwalkGeoA, xm);
+          (oe.position.set(Y, He(Y, j + ee * 13) + 0.83, j + ee * 13), (oe.receiveShadow = !0), (oe.raycast = () => {}), i.add(oe));
+          const re = new Mesh(xwalkGeoB, xm);
+          (re.position.set(Y + ee * 13, He(Y + ee * 13, j) + 0.83, j), (re.receiveShadow = !0), (re.raycast = () => {}), i.add(re), (S += 2));
         }
     }
   const W = new Shape();
@@ -11272,6 +11315,11 @@ window.__steelRibbonDebug = {
     if (!neonSys.enabled) for (const f of neonSys._flick) ((f.sign.opacity = 1), (f.halo.opacity = 0.4));
     return neonSys.enabled;
   },
+  xwalkEnable(on) {
+    xwalkSys.enabled = !!on;
+    for (const m of xwalkSys._mats) ((m.opacity = xwalkSys.enabled ? 1 : 0), (m.needsUpdate = !0));
+    return xwalkSys.enabled;
+  },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
     const hd = on === !1 ? 1 : 2;
@@ -11396,6 +11444,7 @@ window.__steelRibbonDebug = {
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },
+      xwalks: { fresh: xwalkSys.fresh, worn: xwalkSys.worn, chipped: xwalkSys.chipped, enabled: xwalkSys.enabled },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

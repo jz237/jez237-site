@@ -1318,3 +1318,19 @@ signal-corner ped density weighting.
   599-610k tris / tex 252 max. Suite 152/152 (one world-luck pond
   flake — cityPonds=1 world — rerun clean). v3.22.0. DEPLOY BATCH 15
   next in this iteration.
+- **53 CROSSWALK WEAR — round-six item 6 (2026-07-17)**: the solid
+  white crossing bars became real ZEBRA crossings in three wear tiers.
+  The old bars (one solid box per approach) are now flat planes with
+  an 8-stripe alpha canvas — three shared materials: fresh (0.95),
+  worn (0.66 + destination-out speckle erosion), chipped (0.45 + heavy
+  erosion). Wear tier is deterministic per INTERSECTION (hash of the
+  lattice coords >>3 %3, all four approaches match) — distribution
+  this world 60/62/60. Same mesh count as before, +3 small textures,
+  raycast-inert; the A/B toggle drives material opacity because the
+  MESHES static-merge at boot (visibility toggles die in the merge —
+  materials survive, the it.52/53 pattern). Verified by LOOKING
+  (loop-shots/53-xwalk/): one crossing crisp/bright, another visibly
+  chipped and faded toward its end; the giant glowing arrow in frame
+  is the pre-existing roam-gate marker, not paint. Perf gate:
+  1838-1883 calls / 596-608k tris / tex 249 max. Suite 153/153. NEXT:
+  item 7 — tower-shop awnings.
