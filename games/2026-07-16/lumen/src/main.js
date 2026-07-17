@@ -11,7 +11,9 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.1.0';
+export const VERSION = 'v2.2.0';
+
+const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -129,9 +131,35 @@ class Game {
     cv.addEventListener('mousemove', e => {
       this.mouse.world = toWorld(e);
     });
+    cv.addEventListener('pointerdown', e => { this.lastPointerType = e.pointerType; }, { capture: true });
+    const cancelBtn = document.getElementById('tapCancel');
+    cancelBtn.addEventListener('click', () => {
+      this.armed = null; this.pendingSpot = null;
+      cancelBtn.classList.remove('show');
+    });
     cv.addEventListener('click', e => {
       const w = toWorld(e);
       if (this.armed) {
+        // touch flow: first tap aims (ghost + range), second tap nearby grows
+        if (this.lastPointerType === 'touch') {
+          const p = this.pendingSpot;
+          if (!p || Math.hypot(p.x - w.x, p.y - w.y) > 70) {
+            this.pendingSpot = { x: w.x, y: w.y };
+            document.getElementById('tapCancel').classList.add('show');
+            return;
+          }
+          const t = this.sim.place(this.armed, p.x, p.y);
+          if (t) {
+            this.juicePlace(t);
+            this.armed = null; this.pendingSpot = null;
+            document.getElementById('tapCancel').classList.remove('show');
+          } else if (this.sim.gold < TOWERS[this.armed].cost) {
+            this.ui.toast('not enough light', 'warn');
+          } else {
+            this.ui.toast('the ground refuses this spot', 'warn');
+          }
+          return;
+        }
         const t = this.sim.place(this.armed, w.x, w.y);
         if (t) {
           this.juicePlace(t);
@@ -180,7 +208,14 @@ class Game {
     document.getElementById('btnSpeed').classList.toggle('active', this.speed > 1);
   }
 
-  armTower(id) { this.armed = this.armed === id ? null : id; this.selected = null; this.ui.showInspect(null); }
+  armTower(id) {
+    this.armed = this.armed === id ? null : id;
+    this.selected = null; this.pendingSpot = null;
+    this.ui.showInspect(null);
+    const chip = document.getElementById('tapCancel');
+    if (this.armed && COARSE) { chip.classList.add('show'); this.ui.toast('tap to aim · tap again to grow'); }
+    else chip.classList.remove('show');
+  }
   callSurge() { if (this.sim.startWave(true)) this.ui.banner(`WAVE ${this.sim.wave}`, 'the dark comes flowing'); }
   upgradeSelected() { if (this.selected && this.sim.upgrade(this.selected)) { this.ui.showInspect(this.selected, this.sim); this.juiceUpgrade(this.selected); this.audio.on({ type: 'upgrade' }); } }
   sellSelected() { if (this.selected) { this.sim.sell(this.selected); this.selected = null; this.ui.showInspect(null); this.audio.on({ type: 'sell' }); } }
@@ -335,7 +370,7 @@ class Game {
     // placement ghost + selection range ring for the renderer
     if (this.armed && this.started && !NS_MODE) {
       const def = TOWERS[this.armed];
-      const w = this.mouse.world;
+      const w = this.pendingSpot || this.mouse.world;
       this.fx.ghost = {
         x: w.x, y: w.y, def,
         valid: this.sim.canPlace(w.x, w.y) && this.sim.gold >= def.cost,
