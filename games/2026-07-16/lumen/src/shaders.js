@@ -89,6 +89,7 @@ void main(){
 export const FS_BG = COMMON + `
 uniform float uT; uniform vec2 uReso; uniform float uHorizon; uniform vec2 uPar;
 uniform float uMood; // 0 dusk → 1 deep night → 2 violet pre-dawn
+uniform vec3 uMapTint;
 in vec2 vUv; out vec4 frag;
 // sky gradient, aurora-nebula, far ridgelines, spore-stars
 void main(){
@@ -137,13 +138,13 @@ void main(){
   }
   // bioluminescent haze rising off the world — drawn over ridge bases
   float hg = exp(-max(0.0, uv.y-horizonLine)*26.0);
-  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood);
+  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood) * uMapTint;
   sky += hgCol * hg * (0.8 + 0.2*sin(uT*0.23));
   // god-ray shafts rising out of the glow, slowly wandering
   float shaftN = pow(0.5+0.5*sin(uv.x*34.0 + fbm(vec2(uv.x*6.0, uT*0.02))*11.0 + uT*0.05), 3.5);
   sky += hgCol * shaftN * exp(-max(0.0, uv.y-horizonLine)*9.0) * 0.4;
   // below the horizon, converge on the ground's far-haze colour
-  vec3 hazeCol = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood);
+  vec3 hazeCol = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood) * uMapTint;
   float below = smoothstep(0.0, 0.012, horizonLine - uv.y);
   sky = mix(sky, hazeCol, below);
   frag = vec4(sky, 1.0);
@@ -153,6 +154,7 @@ void main(){
 // ---------------------------------------------------------------- ground
 export const FS_GROUND = COMMON + `
 uniform float uT; uniform float uHorizon; uniform vec2 uReso; uniform float uMood;
+uniform vec3 uMapTint;
 uniform sampler2D uStain; uniform vec2 uWorldSize;
 in vec2 vUv; in vec2 vWorld; out vec4 frag;
 // vUv here: x across screen, y 0 at horizon → 1 at bottom (near)
@@ -174,7 +176,7 @@ void main(){
   float crackN = fbm(p*2.4+77.0);
   float crack = smoothstep(0.70,0.92,crackN);
   base = mix(base, vec3(0.015,0.030,0.036), crack*0.65);
-  base += vec3(0.04,0.22,0.20) * smoothstep(0.86,0.98,crackN) * (0.55+0.45*sin(uT*0.6+p.x*4.0)) * near;
+  base += vec3(0.04,0.22,0.20) * mix(vec3(1.0), uMapTint*1.4, 0.6) * smoothstep(0.86,0.98,crackN) * (0.55+0.45*sin(uT*0.6+p.x*4.0)) * near;
   // faint teal ambient sheen so the plane never reads as void
   base += vec3(0.012,0.030,0.034);
   // the run's history: chemistry and deaths bloom into the ground itself
@@ -191,15 +193,16 @@ void main(){
     vec3 mc = mix(vec3(0.1,0.7,0.55), vec3(0.5,0.8,0.2), step(0.978,d));
     base += mc * smoothstep(0.12,0.0,r) * breathe * 0.5 * near;
   }
-  // mood tint on the plane itself
+  // mood tint on the plane itself, then the map's own colour identity
   base *= tri(vec3(1.0), vec3(0.55,0.7,1.05), vec3(1.05,0.75,0.95), uMood);
+  base *= uMapTint;
   // atmospheric haze toward horizon — far edge must equal the bg's
   // below-horizon colour or a seam appears
-  vec3 haze = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood);
+  vec3 haze = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood) * uMapTint;
   base = mix(haze, base, smoothstep(0.0, 0.42, near));
   // continuation of the bg horizon glow onto the far ground (same colour +
   // time modulation as FS_BG's hg term, decay matched across the seam)
-  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood);
+  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood) * uMapTint;
   base += hgCol * (0.8 + 0.2*sin(uT*0.23)) * exp(-near*22.0);
   frag = vec4(base, 1.0);
 }
@@ -207,7 +210,7 @@ void main(){
 
 // ---------------------------------------------------------------- path ribbon
 export const FS_PATH = COMMON + `
-uniform float uT;
+uniform float uT; uniform vec3 uMapTint;
 uniform sampler2D uStain; uniform vec2 uWorldSize;
 in vec2 vUv; in float vDepth; in vec2 vWorld; out vec4 frag;
 // vUv.x = along path (0 spawn → 1 heart), vUv.y = across (-1..1)
@@ -239,7 +242,7 @@ void main(){
   // rim lichen: bright organic edge where path meets ground
   float rim = smoothstep(0.30,0.06,abs(edge - er*0.35 - 0.10));
   veinCol += vec3(0.10,0.45,0.40) * rim * (0.4+0.25*sin(uT*0.9 + along*80.0));
-  vec3 col = bed + veinCol;
+  vec3 col = bed + veinCol * mix(vec3(1.0), uMapTint, 0.5);
   // battle stains soak into the riverbed too
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
   col += (stain / (1.0 + stain*0.55)) * 0.75;

@@ -272,6 +272,7 @@ export const MAPS = [
     heart: [1690, 880],
     portal: [-40, 330],
     floraCount: 46,
+    tint: [1, 1, 1], // baseline teal-dusk
   },
   {
     id: 'twinveins', name: 'Twin Veins',
@@ -291,6 +292,7 @@ export const MAPS = [
     heart: [1660, 870],
     portal: [-40, 420],
     floraCount: 56,
+    tint: [0.84, 0.97, 1.16], // colder — the abyssal veins
   },
   {
     id: 'caldera', name: 'Emberfall Caldera',
@@ -312,6 +314,7 @@ export const MAPS = [
     heart: [370, 950],
     portal: [-40, 265],
     floraCount: 50,
+    tint: [1.32, 0.92, 0.72], // ember-warm — the caldera smoulders
   },
 ];
 

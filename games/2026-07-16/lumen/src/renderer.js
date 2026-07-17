@@ -254,6 +254,8 @@ export class Renderer {
     gl.uniform1f(this.pBg.u.uHorizon, skyFrac);
     gl.uniform2f(this.pBg.u.uPar, cam.dx * 60, cam.dy * 60);
     gl.uniform1f(this.pBg.u.uMood, mood);
+    const mt = sim.map.tint || [1, 1, 1];
+    gl.uniform3f(this.pBg.u.uMapTint, mt[0], mt[1], mt[2]);
     gl.bindVertexArray(this.quad);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
@@ -262,6 +264,7 @@ export class Renderer {
     gl.uniform1f(this.pGround.u.uHorizon, skyFrac);
     gl.uniform2f(this.pGround.u.uReso, this.w, this.h);
     gl.uniform1f(this.pGround.u.uMood, mood);
+    gl.uniform3f(this.pGround.u.uMapTint, mt[0], mt[1], mt[2]);
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, this.fStainA.tex);
     gl.uniform1i(this.pGround.u.uStain, 1);
@@ -274,6 +277,7 @@ export class Renderer {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     bindWorld(this.pPath);
+    gl.uniform3f(this.pPath.u.uMapTint, mt[0], mt[1], mt[2]);
     gl.activeTexture(gl.TEXTURE1);
     gl.bindTexture(gl.TEXTURE_2D, this.fStainA.tex);
     gl.uniform1i(this.pPath.u.uStain, 1);
