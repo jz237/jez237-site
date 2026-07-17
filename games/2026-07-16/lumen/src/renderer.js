@@ -123,6 +123,29 @@ export class Renderer {
         size: rng.range(120, 300), seed: rng.next(), phase: rng.range(0, 6.28),
       });
     }
+    // mid-ground props: crystal clusters + rock outcrops in the open ground
+    this.props = [];
+    const prng = new Rng(sim.map.seed ^ 0xC0FFEE);
+    const PALETTE = [[0.16, 0.95, 1.0], [0.62, 0.3, 1.0], [1.0, 0.72, 0.2], [0.62, 1.0, 0.18]];
+    let tries = 0;
+    while (this.props.length < 9 && tries++ < 500) {
+      const x = prng.range(120, WORLD_W - 120);
+      const y = prng.range(HORIZON_Y + 110, WORLD_H - 90);
+      const d = sim.distToPath(x, y);
+      if (d < sim.map.pathW + 90) continue;
+      // keep props apart so they read as landmarks, not clutter
+      if (this.props.some(o => Math.hypot(o.x - x, o.y - y) < 260)) continue;
+      const [hx, hy] = sim.map.heart;
+      if (Math.hypot(hx - x, hy - y) < 200) continue;
+      // crystals only — rock mounds kept reading as flat holes in tests
+      this.props.push({
+        x, y, kind: 27,
+        size: prng.range(50, 115),
+        seed: prng.next(), phase: prng.range(0, 6.28),
+        color: prng.pick(PALETTE),
+        glow: prng.range(0.5, 1.0),
+      });
+    }
   }
 
   meshFrom(data, count) {
@@ -234,7 +257,7 @@ export class Renderer {
     gl.viewport(0, 0, B.w, B.h);
     gl.disable(gl.BLEND);
     gl.useProgram(this.pDecay.prog);
-    const decay = Math.pow(0.028, dt); // ~0.94/frame at 60
+    const decay = Math.pow(0.05, dt); // ~0.95/frame at 60 — longer ribbons
     gl.uniform1f(this.pDecay.u.uDecayR, decay * 0.985);
     gl.uniform1f(this.pDecay.u.uDecayG, decay * 0.997);
     gl.uniform1f(this.pDecay.u.uDecayB, decay);
@@ -376,6 +399,13 @@ export class Renderer {
 
   pushEntities(sim, t, fx) {
     const E = [];
+    // mid-ground props (crystals, outcrops)
+    if (this.props) {
+      for (const pr of this.props) {
+        const ds = depthScale(pr.y);
+        E.push({ y: pr.y, k: pr.kind, x: pr.x, sx: pr.size * ds, sy: pr.size * ds, rot: 0, phase: t * 0.8 + pr.phase, aux: pr.glow, c: pr.color, seed: pr.seed });
+      }
+    }
     // flora
     for (const f of sim.flora) {
       const ds = depthScale(f.y);
@@ -426,10 +456,11 @@ export class Renderer {
 
   pushEffects(sim, t) {
     const A = this.additive;
-    // projectiles
+    // projectiles (mortars fly an arc — render at lofted height)
     for (const pr of sim.projectiles) {
       const ds = depthScale(pr.y);
-      A.push(pr.x, pr.y, 26 * ds, 26 * ds, pr.rot || 0, t * 4, KIND.PROJ, 1, pr.color[0], pr.color[1], pr.color[2], 0.5);
+      const py = pr.y - (pr.height || 0);
+      A.push(pr.x, py, 26 * ds, 26 * ds, pr.rot || 0, t * 4, KIND.PROJ, 1, pr.color[0], pr.color[1], pr.color[2], 0.5);
     }
     // death motes
     for (const p of sim.particles) {
@@ -493,7 +524,7 @@ export class Renderer {
       const st = e.st;
       if (!st) continue;
       if (st.freeze > 0) {
-        A.push(e.x, e.y, e.def.size * 1.6 * ds, e.def.size * 1.6 * ds, 0, e.phase, KIND.GLOW, 1, 0.5, 0.75, 0.9, 0);
+        A.push(e.x, e.y, e.def.size * 1.5 * ds, e.def.size * 1.5 * ds, 0, e.phase, KIND.GLOW, 1, 0.26, 0.42, 0.5, 0);
       } else if (st.chill > 0) {
         const f = Math.min(1, st.chill);
         A.push(e.x, e.y, e.def.size * 1.35 * ds, e.def.size * 1.35 * ds, 0, e.phase, KIND.GLOW, 1, 0.06 * f, 0.35 * f, 0.42 * f, 0);
@@ -565,8 +596,9 @@ export class Renderer {
     const T = this.trailEm;
     for (const pr of sim.projectiles) {
       const ds = depthScale(pr.y);
-      T.push(pr.x, pr.y, 16 * ds, 16 * ds, 0, 0, KIND.GLOW, 1,
-        pr.color[0] * 0.55, pr.color[1] * 0.55, pr.color[2] * 0.55, 0);
+      const py = pr.y - (pr.height || 0);
+      T.push(pr.x, py, 20 * ds, 20 * ds, 0, 0, KIND.GLOW, 1,
+        pr.color[0] * 0.75, pr.color[1] * 0.75, pr.color[2] * 0.75, 0);
     }
     for (const e of sim.enemies) {
       if (e.type !== 'wisp') continue;
