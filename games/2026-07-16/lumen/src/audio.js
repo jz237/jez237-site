@@ -281,6 +281,11 @@ export class AudioEngine {
         this.tone({ freq: 55, dur: 1.0, gain: 0.3, glide: 30 });
         this.noise({ dur: 0.6, freq: 400, gain: 0.14, sweep: 90, type: 'lowpass' });
         break;
+      case 'fuse':
+        this.chord([262, 392, 523, 659, 1046], 2.0, 0.1, 'triangle', 0.1);
+        this.noise({ dur: 1.2, freq: 800, gain: 0.1, sweep: 4200 });
+        this.tone({ freq: 70, dur: 1.4, gain: 0.18, glide: 240 });
+        break;
       case 'bossSplit':
         this.noise({ dur: 0.6, freq: this.v(420), q: 0.7, gain: 0.12, sweep: 120, type: 'lowpass' });
         this.tone({ freq: this.v(160), dur: 0.5, gain: 0.1, glide: 70, type: 'triangle' });

@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.8.0';
+export const VERSION = 'v2.9.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -229,6 +229,16 @@ class Game {
   }
   callSurge() { if (this.sim.startWave(true)) this.ui.banner(`WAVE ${this.sim.wave}`, 'the dark comes flowing'); }
   upgradeSelected() { if (this.selected && this.sim.upgrade(this.selected)) { this.ui.showInspect(this.selected, this.sim); this.juiceUpgrade(this.selected); this.audio.on({ type: 'upgrade' }); } }
+  fuseSelected() {
+    if (!this.selected) return;
+    const apex = this.sim.fuse(this.selected);
+    if (apex) {
+      this.selected = apex;
+      this.ui.showInspect(apex, this.sim);
+      this.fx.shake = 10; this.fx.aberr = 0.02;
+    }
+  }
+
   sellSelected() { if (this.selected) { this.sim.sell(this.selected); this.selected = null; this.ui.showInspect(null); this.audio.on({ type: 'sell' }); } }
 
   // --- juice ----------------------------------------------------------------
@@ -276,6 +286,11 @@ class Game {
         case 'bossSpawn':
           this.ui.banner(ev.name, ev.boss ? 'the grove holds its breath' : 'something vast crawls out');
           this.fx.shake = Math.min(9, this.fx.shake + 4);
+          break;
+        case 'fuse':
+          this.ui.banner(ev.name, 'apex — the grove exceeds itself');
+          this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 220, i: 0.9, color: ev.color });
+          this.audio.on(ev);
           break;
         case 'bossSplit':
           this.ui.toast('it divides — burn the pieces', 'warn');

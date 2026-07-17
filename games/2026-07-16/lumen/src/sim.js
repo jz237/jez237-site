@@ -3,7 +3,7 @@
 // never writes back.
 
 import { Rng } from './rng.js';
-import { ECON, TOWERS, ENEMIES, MAPS, waveComp, depthScale, WORLD_W, WORLD_H, HORIZON_Y, COLORS, STATUS, MIXES } from './content.js';
+import { ECON, TOWERS, ENEMIES, MAPS, waveComp, depthScale, WORLD_W, WORLD_H, HORIZON_Y, COLORS, STATUS, MIXES, APEX, FUSION_COST } from './content.js';
 
 export const DT = 1 / 60;
 
@@ -214,6 +214,42 @@ export class Sim {
     return t;
   }
 
+  // fusion: max-level tower + adjacent max-level partner with a defined pair
+  canFuse(tower) {
+    if (!tower || tower.def.apex) return null;
+    if (tower.level !== tower.def.levels.length - 1) return null;
+    for (const o of this.towers) {
+      if (o === tower || o.def.apex) continue;
+      if (o.level !== o.def.levels.length - 1) continue;
+      if (Math.hypot(o.x - tower.x, o.y - tower.y) > 130) continue;
+      const key = [tower.type, o.type].sort().join('+');
+      if (APEX[key]) return { partner: o, apexDef: APEX[key], key };
+    }
+    return null;
+  }
+
+  fuse(tower) {
+    const f = this.canFuse(tower);
+    if (!f || this.gold < FUSION_COST) return null;
+    this.gold -= FUSION_COST;
+    const { partner, apexDef } = f;
+    const x = (tower.x + partner.x) / 2, y = (tower.y + partner.y) / 2;
+    this.towers = this.towers.filter(t => t !== tower && t !== partner);
+    const apex = {
+      id: this.nextId++, type: apexDef.id, def: apexDef,
+      x, y, level: 0, cool: 0, charge: 0,
+      phase: this.rng.range(0, 6.28), seed: this.rng.next(),
+      kills: tower.kills + partner.kills,
+      spent: tower.spent + partner.spent + FUSION_COST,
+    };
+    this.towers.push(apex);
+    this.rings.push({ x, y, t: 0, dur: 1.3, color: apexDef.color, max: 380 });
+    this.rings.push({ x, y, t: -0.25, dur: 1.1, color: [1, 0.97, 0.9], max: 300 });
+    this.burst(x, y, apexDef.color, 40, 190);
+    this.emit('fuse', { id: apex.id, name: apexDef.name, x, y, color: apexDef.color });
+    return apex;
+  }
+
   upgrade(tower) {
     const lv = tower.def.levels[tower.level + 1];
     if (!lv || this.gold < lv.cost) return false;
@@ -269,6 +305,11 @@ export class Sim {
   }
 
   // --- status chemistry ------------------------------------------------------
+  applyTowerStatuses(e, def) {
+    if (def.statusBoth) { for (const st of def.statusBoth) this.applyStatus(e, st); }
+    else if (def.status) this.applyStatus(e, def.status);
+  }
+
   applyStatus(e, kind) {
     if (!kind || e.hp <= 0 || e.shield > 0) return; // shields block chemistry
     const st = e.st;
@@ -485,7 +526,7 @@ export class Sim {
     for (let c = 0; c < st.chain && cur; c++) {
       hits.push({ from: { ...src }, to: { x: cur.x, y: cur.y }, target: cur });
       this.damage(cur, dmg, t);
-      if (!cur.dead) this.applyStatus(cur, t.def.status);
+      if (!cur.dead) this.applyTowerStatuses(cur, t.def);
       seen.add(cur.id);
       src = { x: cur.x, y: cur.y };
       dmg *= t.def.chainFall;
@@ -509,7 +550,7 @@ export class Sim {
       const dx = e.x - t.x, dy = e.y - t.y;
       if (dx * dx + dy * dy > r2 || e.hp <= 0) continue;
       this.damage(e, st.damage, t);
-      if (!e.dead) this.applyStatus(e, t.def.status);
+      if (!e.dead) this.applyTowerStatuses(e, t.def);
       hitAny = true;
     }
     if (hitAny) {
@@ -546,7 +587,7 @@ export class Sim {
       id: this.nextId++, x: t.x, y: t.y - 40, tx: aim.x, ty: aim.y,
       x0: t.x, y0: t.y - 40, speed: t.def.projSpeed, damage: st.damage,
       splash: t.def.splash, color: t.def.color, from: t.id, t: 0,
-      arc: true, flight: Math.max(0.5, lead * 0.9), status: t.def.status,
+      arc: true, flight: Math.max(0.5, lead * 0.9), status: t.def.status, statusBoth: t.def.statusBoth,
       pool: { dps: t.def.poolDps, dur: t.def.poolDur, r: t.def.poolR },
     });
     this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y });
@@ -556,7 +597,7 @@ export class Sim {
     this.projectiles.push({
       id: this.nextId++, x: t.x, y: t.y - 18, tx: best.x, ty: best.y,
       target: best.id, speed: t.def.projSpeed, damage: st.damage,
-      splash: 0, color: t.def.color, from: t.id, t: 0, status: t.def.status,
+      splash: 0, color: t.def.color, from: t.id, t: 0, status: t.def.status, statusBoth: t.def.statusBoth,
     });
     this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y });
   }
@@ -839,14 +880,14 @@ export class Sim {
         const ex = e.x - pr.x, ey = e.y - pr.y;
         if (ex * ex + ey * ey <= s2) {
           this.damage(e, pr.damage, tower);
-          if (!e.dead && pr.status) this.applyStatus(e, pr.status);
+          if (!e.dead) this.applyTowerStatuses(e, pr);
         }
       }
       this.rings.push({ x: pr.x, y: pr.y, t: 0, dur: 0.5, color: pr.color, max: pr.splash * 1.9 });
       this.burst(pr.x, pr.y, pr.color, 6, 40);
     } else if (directTarget && directTarget.hp > 0) {
       this.damage(directTarget, pr.damage, tower);
-      if (!directTarget.dead && pr.status) this.applyStatus(directTarget, pr.status);
+      if (!directTarget.dead) this.applyTowerStatuses(directTarget, pr);
       this.burst(pr.x, pr.y, pr.color, 3, 22);
     }
     if (pr.pool) {
