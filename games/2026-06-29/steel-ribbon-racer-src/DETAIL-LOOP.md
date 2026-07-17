@@ -1507,3 +1507,20 @@ signal-corner ped density weighting.
 - **DEPLOY BATCH 17 EARLY (2026-07-17, user: "yes, continue and
   deploy")**: v3.24.0 ships round-seven items 2-3 (brake lights, pond
   edges) ahead of the item-5 cadence. Items 4-10 continue after.
+- **62 PEDS IN PARKS — round-seven item 4 (2026-07-17)**: the parks
+  are inhabited. The LAST 6 walkers of the spawner become STROLLERS:
+  each binds to one of the first 3 path cells (parkSys.strollerCells
+  records {cx, cz, vert, bow, half} during buildParks) and walks THE
+  ACTUAL BOWED PATH — position from the same sin() math the path
+  strip uses, yaw from its derivative, bouncing at the cell ends.
+  Same Rr entries, so ped kits, personas and click-inspect all still
+  work on them; zero new draws. BOUND BUG: the walker loop runs to
+  `ie` (45), not `m` (30 = TRAFFIC count) — `I >= m - 5` caught 20
+  walkers; read the LOOP variable, not the nearest count. Verified by
+  LOOKING (loop-shots/62-strollers/): two strollers on the pale path
+  between the pines with a flowerbed beside — the park finally has
+  people. Perf gate: 1859-1916 calls / 603-612k tris. Suite 159/159
+  (stroller probe: 1-8 in-cell; one brake-probe window starvation —
+  no car braked in its 9s — widened to 15s per the calibration
+  pattern). NEXT: item 5 — road oil stains, then items 6-10 → deploy
+  batch 18 + closing survey.
