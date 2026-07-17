@@ -8114,6 +8114,20 @@ function buildPlaneBannerAtlas() {
   tex.colorSpace = SRGBColorSpace;
   return tex;
 }
+// zoom-detail 47 (round-five item 10): fictional registration codes, one row
+// per plane, dark stencil text on transparent — decals for fuselage + wing
+const PLANE_REGS = ["SR-21A", "SR-07K", "SR-93B", "SR-42E"];
+function buildPlaneRegAtlas() {
+  const cv = document.createElement("canvas");
+  ((cv.width = 256), (cv.height = 256));
+  const g = cv.getContext("2d");
+  for (let r = 0; r < 4; r++) {
+    ((g.font = "900 44px monospace"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    ((g.fillStyle = "rgba(24, 32, 44, 0.92)"), g.fillText(PLANE_REGS[r], 128, r * 64 + 32));
+  }
+  const t = new CanvasTexture(cv);
+  return ((t.colorSpace = SRGBColorSpace), t);
+}
 function buildPropPlanes() {
   const lanes = [
     { z: -220, alt: 170, dir: 1, speed: 30, color: 16733525 },
@@ -8123,6 +8137,10 @@ function buildPropPlanes() {
   ];
   const bannerAtlas = buildPlaneBannerAtlas(),
     bannerMat = new MeshBasicMaterial({ map: bannerAtlas, side: DoubleSide, toneMapped: !1 }),
+    regMat = new MeshBasicMaterial({ map: buildPlaneRegAtlas(), transparent: !0, side: DoubleSide, toneMapped: !1 }),
+    navRedMat = new MeshBasicMaterial({ color: 16721448, toneMapped: !1 }),
+    navGreenMat = new MeshBasicMaterial({ color: 2293538, toneMapped: !1 }),
+    discMat = new MeshBasicMaterial({ color: 13421772, transparent: !0, opacity: 0.15, depthWrite: !1, side: DoubleSide }),
     laneIdxRef = { i: 0 };
   qe.propPlanes = 0;
   for (const lane of lanes) {
@@ -8155,7 +8173,44 @@ function buildPropPlanes() {
     ((banner.rotation.y = Math.PI / 2), banner.position.set(0, -0.4, 10), plane.add(banner));
     const rope = new Mesh(new BoxGeometry(0.05, 0.05, 1.6), darkMat);
     (rope.position.set(0, -0.1, 3.9), plane.add(rope));
-    propPlaneMeta.push({ plane, text: PLANE_BANNERS[laneIdx], alt: lane.alt });
+    // zoom-detail 47: registration decals (fuselage both sides + underwing,
+    // merged to ONE mesh reading this plane's atlas row), translucent prop
+    // disc behind the spinning blades, merged gear struts + wheels
+    const regRow = (geo) => {
+      const uv2 = geo.attributes.uv;
+      for (let vi = 0; vi < uv2.count; vi++) uv2.setXY(vi, uv2.getX(vi), 1 - (laneIdx + (1 - uv2.getY(vi))) / 4);
+      return geo;
+    };
+    const regGeo = mergeGeometries(
+      [
+        regRow(new PlaneGeometry(2.3, 0.6)).rotateY(Math.PI / 2).translate(0.99, 0.12, 1.3),
+        regRow(new PlaneGeometry(2.3, 0.6)).rotateY(-Math.PI / 2).translate(-0.99, 0.12, 1.3),
+        regRow(new PlaneGeometry(3.4, 0.85)).rotateX(Math.PI / 2).translate(2.9, 0.03, -0.6),
+      ],
+      !1,
+    );
+    const regs = new Mesh(regGeo, regMat);
+    ((regs.raycast = () => {}), plane.add(regs));
+    const disc = new Mesh(new CircleGeometry(2.78, 24), discMat);
+    ((disc.position.z = -5.72), (disc.raycast = () => {}), plane.add(disc));
+    const gearGeo = mergeGeometries(
+      [
+        new CylinderGeometry(0.07, 0.07, 0.85, 6).translate(1.45, -1.35, -1.2),
+        new CylinderGeometry(0.07, 0.07, 0.85, 6).translate(-1.45, -1.35, -1.2),
+        new CylinderGeometry(0.3, 0.3, 0.2, 10).rotateZ(Math.PI / 2).translate(1.45, -1.82, -1.2),
+        new CylinderGeometry(0.3, 0.3, 0.2, 10).rotateZ(Math.PI / 2).translate(-1.45, -1.82, -1.2),
+        new CylinderGeometry(0.05, 0.05, 0.5, 6).translate(0, -0.95, 3.3),
+        new CylinderGeometry(0.17, 0.17, 0.14, 8).rotateZ(Math.PI / 2).translate(0, -1.22, 3.3),
+      ],
+      !1,
+    );
+    const gear = new Mesh(gearGeo, darkMat);
+    ((gear.raycast = () => {}), plane.add(gear));
+    const navL = new Mesh(new BoxGeometry(0.16, 0.1, 0.3), navRedMat),
+      navR = new Mesh(new BoxGeometry(0.16, 0.1, 0.3), navGreenMat);
+    (navL.position.set(-5.72, 0.18, -0.6), navR.position.set(5.72, 0.18, -0.6), plane.add(navL), plane.add(navR));
+    plane.userData.detail = { reg: PLANE_REGS[laneIdx], gear: !0, disc: !0 };
+    propPlaneMeta.push({ plane, text: PLANE_BANNERS[laneIdx], reg: PLANE_REGS[laneIdx], alt: lane.alt });
     plane.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1)));
     plane.scale.setScalar(2.6);
     ((plane.rotation.y = lane.dir > 0 ? -Math.PI / 2 : Math.PI / 2),
@@ -11088,6 +11143,7 @@ window.__steelRibbonDebug = {
       },
       planes: {
         count: propPlaneMeta.length,
+        regs: propPlaneMeta.map((m) => m.reg ?? null),
         banners: propPlaneMeta.map((p) => p.text),
         sample: propPlaneMeta.slice(0, 4).map((p) => ({ x: +p.plane.position.x.toFixed(1), y: +p.plane.position.y.toFixed(1), z: +p.plane.position.z.toFixed(1), text: p.text })),
       },
