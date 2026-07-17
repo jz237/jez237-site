@@ -9,7 +9,7 @@ import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
 import { botStep } from './bot.js';
 
-export const VERSION = 'v1.8.0';
+export const VERSION = 'v1.9.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -103,6 +103,9 @@ class Game {
     this.renderer.pathMesh = null; // forces map mesh rebuild on next frame
     this.renderer.clearStains(); // fresh ground for a fresh story
     this.armed = null; this.selected = null;
+    this.paused = false; this.speed = 1;
+    const bp = document.getElementById('btnPause'); if (bp) { bp.textContent = '⏸'; bp.classList.remove('active'); }
+    const bs = document.getElementById('btnSpeed'); if (bs) { bs.textContent = '×1'; bs.classList.remove('active'); }
     this.ui.showInspect(null);
     this.ui.hideGameOver();
     document.getElementById('gosubmit').disabled = false;
@@ -152,8 +155,25 @@ class Game {
       if (e.key === ' ') { e.preventDefault(); this.callSurge(); }
       if (e.key === 'u' && this.selected) this.upgradeSelected();
       if (e.key === 'm' || e.key === 'M') { const m = this.audio.toggleMute(); this.ui.toast(m ? 'the grove falls silent' : 'the grove sings again'); }
+      if (e.key === 'p' || e.key === 'P') this.togglePause();
+      if (e.key === 'f' || e.key === 'F') this.cycleSpeed();
     });
     window.addEventListener('resize', () => this.renderer.resize());
+  }
+
+  togglePause() {
+    if (!this.started) return;
+    this.paused = !this.paused;
+    document.getElementById('btnPause').textContent = this.paused ? '▶' : '⏸';
+    document.getElementById('btnPause').classList.toggle('active', this.paused);
+    this.ui.toast(this.paused ? 'the grove holds still' : 'the water moves again');
+  }
+
+  cycleSpeed() {
+    if (!this.started) return;
+    this.speed = this.speed >= 4 ? 1 : this.speed * 2;
+    document.getElementById('btnSpeed').textContent = '×' + this.speed;
+    document.getElementById('btnSpeed').classList.toggle('active', this.speed > 1);
   }
 
   armTower(id) { this.armed = this.armed === id ? null : id; this.selected = null; this.ui.showInspect(null); }
@@ -254,7 +274,7 @@ class Game {
       if (this.attractBotT > 0.7) { this.attractBotT = 0; botStep(this.sim); if (this.sim.state === 'prep' && this.sim.prepLeft > 3) this.sim.startWave(true); }
       if (this.sim.state === 'over' || this.sim.wave > 22) this.startAttract();
     }
-    if (this.running && this.started) {
+    if (this.running && this.started && !this.paused) {
       this.acc += raw * this.speed;
       let steps = 0;
       while (this.acc >= DT && steps < 8) {
