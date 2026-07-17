@@ -1,0 +1,331 @@
+{
+  "currentDate": "2026-07-17",
+  "historicDate": "1983-06-13",
+  "displayDate": "Week of June 13–19, 1983",
+  "edition": "Issue 046 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Software goes mass-market with home-computer and arcade energy",
+    "motifs": [
+      "colorful software boxes",
+      "Coleco Adam complete system",
+      "Atari XL computers",
+      "WarGames arcade glow"
+    ],
+    "layout": "Dense 1983 computer weekly with software retail as the lead, gaming imagery, boxed charts, blue rules, and red spot color"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+    "dateline": "Week of June 13–19, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Software boxes and a busy computer store across the upper fold",
+    "secondaryRail": "Coleco Adam, Atari XL, WarGames, charts, shelf watch, and prices",
+    "archiveNavigation": "Previous/next weekly issue controls and calendar archive"
+  },
+  "sectionChrome": {
+    "primary": "Arcade red",
+    "secondary": "CRT blue",
+    "texture": "Warm aged newsprint, column rules, halftone dots, and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-06-13.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the week of June 13–19, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Software is leaving the hobby shelf for a billion-dollar contest of packaging, advertising, retail space and price.",
+  "morningLine": "The machine may sit on the desk, but the software business now wants the whole storefront.",
+  "lead": {
+    "headline": "Software's Hard Sell Becomes a Billion-Dollar Business",
+    "dek": "Commodore readies roughly 70 titles, Lotus buys attention, and software makers learn the arts of packaging and promotion.",
+    "confidence": "Exact-date reporting for announcements during June 13–19",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "Personal-computer software is becoming a mass-market business before shoppers’ eyes. SRI International estimates that Americans bought $1 billion worth of personal-computer programs in 1982 and forecasts $1.5 billion this year, growth fast enough to turn code once passed among hobbyists into a fiercely promoted consumer product.",
+      "Commodore supplied the week’s clearest sign of scale by announcing roughly 70 software titles for summer. Its planned version of Microsoft Multiplan, priced below $100, would undercut versions selling for as much as $275 and put a serious business program within reach of the enormous Commodore home-computer audience.",
+      "At the expensive end, Lotus 1-2-3 combines spreadsheet, database and graphing functions for the IBM PC at $495. Time identifies it as the bestselling business program after Lotus backed the launch with a three-month, $1 million advertising campaign—a budget that makes software look increasingly like records, books or packaged goods.",
+      "Electronic Arts is making that comparison literal, placing entertainment programs in album-like packages and presenting programmers as “software artists.” Retail is changing too: Software Centre International counts 26 outlets, with 13 more under construction, while experiments in electronic delivery hint that programs may someday reach buyers without a box at all."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Coleco's Adam Resets the Complete-Computer Price",
+      "kicker": "Hardware",
+      "dek": "A sub-$600 bundle promises keyboard, storage, printer, software and ColecoVision games.",
+      "confidence": "Same-month CES announcement; specifications subject to change",
+      "sourceRefs": [
+        1
+      ],
+      "body": [
+        "Coleco’s Adam was the hardware sensation of the Summer Consumer Electronics Show: a complete system promised for under $600, or $450 as an expansion for ColecoVision owners. The announced package joins a Z80A processor, 80K of RAM, detachable keyboard, high-speed 500K digital-data cassette and daisy-wheel printer.",
+        "Word processing, Microsoft BASIC, sound, sprites, controllers and Buck Rogers: Planet of Zoom round out an unusually complete family package. Contemporary reports caution that final specifications may change before fall and that Applesoft compatibility does not mean most Apple software will run unchanged."
+      ]
+    },
+    {
+      "headline": "Atari Sweeps the Deck for Four XL Machines",
+      "kicker": "Home Computers",
+      "dek": "The 600XL and 800XL lead a replacement line built around lower prices and broad compatibility.",
+      "confidence": "Same-month CES announcement",
+      "sourceRefs": [
+        1
+      ],
+      "body": [
+        "Atari is replacing the 400, 800 and recently introduced 1200XL with four XL computers while retaining broad compatibility with existing software and peripherals. The 16K 600XL is tagged at $199 and expandable to 64K; the 64K 800XL is listed at $299.",
+        "Both bring built-in BASIC, cartridge support, joystick ports, 256 colors and four-channel sound. Atari is also opening its architecture to accessory makers and creating Atari Publishing to sell programs for rival Commodore and Texas Instruments machines."
+      ]
+    },
+    {
+      "headline": "WarGames Turns Computer Anxiety into a Hit",
+      "kicker": "Digital Culture",
+      "dek": "The computer-centered thriller climbs in its third weekend.",
+      "confidence": "Exact weekend box-office data",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "WarGames earned $5,355,801 from 973 theaters on June 17–19, an 11 percent rise from the prior weekend. Its domestic total reached $22,260,427 after three weekends.",
+        "The thriller ranked fifth nationally behind Superman III, Return of the Jedi, Trading Places and Octopussy, carrying modems, hacking and computer-controlled catastrophe into mainstream conversation."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Coleco Adam",
+      "summary": "Complete under-$600 system announced with 80K RAM, cassette storage, printer and ColecoVision compatibility.",
+      "confidence": "Same-month announcement",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Atari 600XL",
+      "summary": "16K home computer announced at $199, expandable to 64K.",
+      "confidence": "Same-month announcement",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Atari 800XL",
+      "summary": "64K model announced at $299 with built-in BASIC.",
+      "confidence": "Same-month announcement",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Software retail",
+      "summary": "Specialty stores and electronic-delivery trials signal a widening market.",
+      "confidence": "Exact-date reporting",
+      "sourceRefs": [
+        0
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Multiplan for Commodore",
+      "detail": "Announced below $100"
+    },
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "Integrated business package — $495"
+    },
+    {
+      "name": "VisiON",
+      "detail": "Integrated environment expected October or later"
+    },
+    {
+      "name": "Astro Chase",
+      "detail": "Electronic Arts entertainment title"
+    },
+    {
+      "name": "Buck Rogers: Planet of Zoom",
+      "detail": "Announced Adam pack-in game"
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Buck Rogers: Planet of Zoom",
+        "Astro Chase",
+        "Archon: The Light and the Dark",
+        "Pinball Construction Set",
+        "M.U.L.E."
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Superman III",
+        "Return of the Jedi",
+        "Trading Places",
+        "Octopussy",
+        "WarGames"
+      ]
+    },
+    {
+      "label": "Home Computers",
+      "items": [
+        "Coleco Adam",
+        "Atari 600XL",
+        "Atari 800XL",
+        "Commodore 64",
+        "IBM PC"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "Multiplan for Commodore",
+        "Lotus 1-2-3",
+        "VisiON",
+        "Atari BASIC",
+        "Microsoft BASIC"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Coleco Adam complete system",
+      "price": "under $600",
+      "note": "Announced target"
+    },
+    {
+      "item": "ColecoVision Adam expansion",
+      "price": "$450",
+      "note": "Announced target"
+    },
+    {
+      "item": "Atari 600XL",
+      "price": "$199",
+      "note": "Suggested price"
+    },
+    {
+      "item": "Atari 800XL",
+      "price": "$299",
+      "note": "Suggested price"
+    },
+    {
+      "item": "Lotus 1-2-3",
+      "price": "$495",
+      "note": "Business software"
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Software-only stores multiply",
+      "text": "Software Centre International has 26 outlets, 13 under construction, and about 3,300 items per store."
+    },
+    {
+      "headline": "Programs move over the wire",
+      "text": "Tymshare is testing in-store electronic delivery near San Francisco; Control Video plans telephone delivery of games."
+    },
+    {
+      "headline": "Commodore prepares a software wave",
+      "text": "The company says roughly 70 titles are coming this summer."
+    },
+    {
+      "headline": "Sally Ride launches aboard Challenger",
+      "text": "STS-7 lifts off June 18 with the first American woman to fly in space."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Flashdance... What a Feeling",
+      "artist": "Irene Cara"
+    },
+    {
+      "rank": 2,
+      "title": "Time",
+      "artist": "Culture Club"
+    },
+    {
+      "rank": 3,
+      "title": "Let's Dance",
+      "artist": "David Bowie"
+    },
+    {
+      "rank": 4,
+      "title": "Electric Avenue",
+      "artist": "Eddy Grant"
+    },
+    {
+      "rank": 5,
+      "title": "Overkill",
+      "artist": "Men at Work"
+    }
+  ],
+  "periodAd": {
+    "headline": "Put the Program on the Shelf",
+    "summary": "Bright boxes, national advertising and specialty stores turn software into a product shoppers can browse.",
+    "tagline": "Choose it. Load it. Make the computer work."
+  },
+  "market": {
+    "headline": "Software Sales Aim for $1.5 Billion",
+    "summary": "SRI International forecasts the personal-computer software market will rise from $1 billion in 1982 to $1.5 billion in 1983.",
+    "confidence": "Exact-date reporting",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Sally Ride Becomes the First American Woman in Space",
+    "summary": "Challenger launched June 18 carrying mission specialist Sally Ride, the first U.S. woman to fly in space.",
+    "confidence": "Exact-date",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Software market figures, Commodore plans and named prices follow Time’s June 20 cover-dated report on announcements made during this week.",
+      "Adam and Atari details are period announcement claims; specifications and prices could change before retail release.",
+      "Movie ranking uses the June 17–19 domestic weekend.",
+      "Music ranking uses the singles chart dated June 18, 1983.",
+      "Games are named period titles; the shelf is a period watch list, not a verified weekly sales ranking."
+    ]
+  },
+  "sources": [
+    {
+      "label": "The Software Hard Sell — Time, June 20, 1983",
+      "url": "https://time.com/archive/6859931/the-software-hard-sell/"
+    },
+    {
+      "label": "The Fall Computer Collection at the Summer Consumer Electronics Show — Compute!, August 1983",
+      "url": "https://www.atarimagazines.com/compute/issue39/186_1_THE_FALL_COMPUTER_COLLECTION_AT_THE_SUMMER_CONSUMER_ELECTRONICS_SHOW.php"
+    },
+    {
+      "label": "Singles Chart for June 18, 1983 — Music Charts Archive",
+      "url": "https://mail.musicchartsarchive.com/singles-chart/1983-06-18"
+    },
+    {
+      "label": "Domestic Weekend June 17–19, 1983 — Box Office Mojo",
+      "url": "https://www.boxofficemojo.com/weekend/1983W24/?sort=rank"
+    },
+    {
+      "label": "Pope John Paul II arrives in Poland — UPI, June 16, 1983",
+      "url": "https://www.upi.com/Archives/1983/06/16/Pope-John-Paul-II-kissed-the-ground-of-mother/1653424584000/"
+    },
+    {
+      "label": "Sally Ride and Challenger crew — UPI, June 19, 1983",
+      "url": "https://www.upi.com/Archives/1983/06/19/Space-celebrity-Sally-Ride-and-the-other-Challenger-astronauts/6207924084324/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Programmers Wanted",
+      "copy": "The software shelves are growing. Bring code, imagination and a taste for deadlines."
+    },
+    {
+      "headline": "Modem Owners",
+      "copy": "Trade tips, scores and programs after dark—your local bulletin board is waiting."
+    }
+  ]
+}
