@@ -89,10 +89,13 @@ export class UI {
     if (!tower) { el.classList.remove('open'); return; }
     const next = tower.def.levels[tower.level + 1];
     const st = sim.towerStats(tower);
+    const statLine = tower.def.attack === 'aura'
+      ? `+${Math.round(st.buffRate * 100)}% rate · +${Math.round(st.buffDmg * 100)}% damage · range ${st.range}`
+      : `damage ${st.damage} · range ${st.range} · rate ${st.rate.toFixed(2)}/s`;
     el.innerHTML = `
       <div class="iname">${tower.def.name} <span class="ilvl">◆${'◆'.repeat(tower.level)}</span></div>
-      <div class="irow">damage ${st.damage} · range ${st.range} · rate ${st.rate.toFixed(2)}/s</div>
-      <div class="irow dim">kills ${tower.kills}</div>
+      <div class="irow">${statLine}</div>
+      <div class="irow dim">${tower.def.attack === 'aura' ? 'support' : 'kills ' + tower.kills}${tower.def.status ? ' · inflicts ' + tower.def.status : ''}</div>
       <div class="ibtns">
         ${next ? `<button id="btnUp" ${sim.gold < next.cost ? 'disabled' : ''}>GROW ◈${next.cost}</button>` : '<span class="dim">fully grown</span>'}
         <button id="btnSell">RELEASE ◈${Math.floor(tower.spent * ECON.sellRefund)}</button>

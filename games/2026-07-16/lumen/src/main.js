@@ -6,7 +6,7 @@ import { Renderer } from './renderer.js';
 import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS } from './content.js';
 
-export const VERSION = 'v0.1.0';
+export const VERSION = 'v0.2.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -83,9 +83,10 @@ class Game {
       this.ui.showInspect(best, this.sim);
     });
     cv.addEventListener('contextmenu', e => { e.preventDefault(); this.armed = null; this.selected = null; this.ui.showInspect(null); });
+    const towerKeys = Object.keys(TOWERS);
     window.addEventListener('keydown', e => {
-      if (e.key === '1') this.armTower('coral');
-      if (e.key === '2') this.armTower('tesla');
+      const n = parseInt(e.key, 10);
+      if (n >= 1 && n <= towerKeys.length) this.armTower(towerKeys[n - 1]);
       if (e.key === 'Escape') { this.armed = null; this.selected = null; this.ui.showInspect(null); }
       if (e.key === ' ') { e.preventDefault(); this.callSurge(); }
       if (e.key === 'u' && this.selected) this.upgradeSelected();
@@ -120,6 +121,13 @@ class Game {
         case 'impact':
           this.fx.shake = Math.min(5, this.fx.shake + 0.4);
           this.fx.aberr = Math.min(0.012, this.fx.aberr + 0.0035);
+          break;
+        case 'mix':
+          this.fx.shake = Math.min(7, this.fx.shake + 1.6);
+          this.fx.aberr = Math.min(0.016, this.fx.aberr + 0.006);
+          break;
+        case 'discover':
+          this.ui.banner(ev.name, ev.desc);
           break;
         case 'heartHit':
           this.fx.shake = Math.min(9, this.fx.shake + 5);
@@ -175,10 +183,11 @@ class Game {
     const s = this.sim;
     this.started = true;
     s.gold = 100000;
-    // six towers near the mid-path: spiral-search each anchor for a legal spot
+    // a varied grove near the mid-path: spiral-search each anchor for a legal spot
     const anchors = [
-      ['coral', 520, 640], ['tesla', 640, 830], ['coral', 900, 860],
-      ['tesla', 1090, 760], ['coral', 1240, 660], ['tesla', 1380, 620],
+      ['coral', 520, 640], ['tesla', 640, 830], ['bloom', 900, 860],
+      ['spire', 1090, 760], ['urchin', 1240, 660], ['tesla', 1380, 620],
+      ['bramble', 480, 900], ['bulb', 1160, 680],
     ];
     for (const [type, ax, ay] of anchors) {
       let placed = null;
@@ -194,11 +203,14 @@ class Game {
       else console.warn('ns: no spot near', ax, ay);
     }
     s.gold = 480;
-    // drive sim to wave 12 mid-flight: spawn a dense wave manually
+    // stage a dense mid-flight wave: start wave 12, double its spawn queue,
+    // then run ~10s so the stream spreads through the tower gauntlet
     s.wave = 11;
     s.state = 'prep'; s.prepLeft = 0.01;
-    // run ~3.5s so the wave floods in and towers open fire
-    for (let i = 0; i < 60 * 6; i++) { s.step(); }
+    s.step(); // triggers startWave
+    const extra = s.spawnQueue.map(q => ({ at: q.at + 0.22, type: q.type, hpMul: q.hpMul * 1.6 }));
+    s.spawnQueue.push(...extra);
+    for (let i = 0; i < 60 * 16; i++) { s.step(); }
     this.running = true;
     window.__lumen.nsReady = true;
   }

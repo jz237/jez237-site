@@ -26,6 +26,26 @@ export const COLORS = {
   heart: [1.0, 0.78, 0.35],
 };
 
+// Status chemistry: each status is owned by one colour family; mixing two
+// statuses on the same creature triggers a reaction with its own light.
+export const STATUS = {
+  chill:   { color: COLORS.cyan,    dur: 2.2 },
+  shock:   { color: COLORS.magenta, dur: 0.45 },
+  ignite:  { color: COLORS.amber,   dur: 3.0, dps: 9 },
+  corrode: { color: COLORS.acid,    dur: 4.0, maxStacks: 5, vulnPerStack: 0.06 },
+};
+
+export const MIXES = {
+  shatter:    { a: 'chill', b: 'ignite', color: COLORS.violet, name: 'SHATTER',
+                desc: 'chill + ignite — thermal shock bursts the creature' },
+  overload:   { a: 'shock', b: 'corrode', color: [0.85, 1.0, 0.6], name: 'OVERLOAD',
+                desc: 'shock + corrode — detonates in a caustic arc-burst' },
+  freezelock: { a: 'chill', b: 'shock', color: [0.8, 0.95, 1.0], name: 'FREEZE-LOCK',
+                desc: 'chill + shock — locks the creature solid' },
+  meltdown:   { a: 'ignite', b: 'corrode', color: [1.0, 0.55, 0.15], name: 'MELTDOWN',
+                desc: 'ignite + corrode — melts into a burning pool' },
+};
+
 export const TOWERS = {
   coral: {
     id: 'coral', name: 'Pulse Coral', kind: 3,
@@ -45,11 +65,76 @@ export const TOWERS = {
     desc: 'A charged anemone that arcs living lightning between prey.',
     color: COLORS.magenta, hue: 0.88,
     cost: 120, range: 235, rate: 0.6, damage: 24, chain: 3, chainFall: 0.72,
+    status: 'shock',
     size: 58,
     levels: [
       { cost: 0,   damage: 24, range: 235, rate: 0.6, chain: 3 },
       { cost: 90,  damage: 38, range: 260, rate: 0.68, chain: 4 },
       { cost: 160, damage: 60, range: 290, rate: 0.78, chain: 5 },
+    ],
+  },
+  spire: {
+    id: 'spire', name: 'Chill Spire', kind: 12,
+    desc: 'A crystal polyp that rings with cold — pulses chill every few seconds.',
+    color: COLORS.cyan, hue: 0.55,
+    cost: 100, range: 205, rate: 0.62, damage: 20, attack: 'pulse',
+    status: 'chill',
+    size: 66,
+    levels: [
+      { cost: 0,   damage: 20, range: 205, rate: 0.62 },
+      { cost: 80,  damage: 32, range: 230, rate: 0.72 },
+      { cost: 140, damage: 50, range: 255, rate: 0.85 },
+    ],
+  },
+  urchin: {
+    id: 'urchin', name: 'Lance Urchin', kind: 13,
+    desc: 'Focuses its spines into a piercing lance of light — hits everything in the line.',
+    color: COLORS.magenta, hue: 0.9,
+    cost: 140, range: 430, rate: 0.75, damage: 42, attack: 'beam', beamWidth: 26,
+    size: 56,
+    levels: [
+      { cost: 0,   damage: 42, range: 430, rate: 0.75 },
+      { cost: 110, damage: 68, range: 470, rate: 0.85 },
+      { cost: 190, damage: 105, range: 510, rate: 0.95 },
+    ],
+  },
+  bloom: {
+    id: 'bloom', name: 'Ember Bloom', kind: 14,
+    desc: 'Lobs burning spore-shells that ignite creatures and leave embers smouldering.',
+    color: COLORS.amber, hue: 0.1,
+    cost: 130, range: 360, minRange: 110, rate: 0.45, damage: 40, splash: 85,
+    attack: 'mortar', status: 'ignite', poolDps: 12, poolDur: 3.5, poolR: 70,
+    projSpeed: 480, size: 64,
+    levels: [
+      { cost: 0,   damage: 40, range: 360, rate: 0.45 },
+      { cost: 100, damage: 62, range: 395, rate: 0.52 },
+      { cost: 180, damage: 96, range: 430, rate: 0.60 },
+    ],
+  },
+  bramble: {
+    id: 'bramble', name: 'Acid Bramble', kind: 15,
+    desc: 'A thorn-mound that spits corroding sap — stacks make creatures take more damage.',
+    color: COLORS.acid, hue: 0.28,
+    cost: 110, range: 185, rate: 2.3, damage: 8, attack: 'spit',
+    status: 'corrode', projSpeed: 700,
+    size: 52,
+    levels: [
+      { cost: 0,   damage: 8,  range: 185, rate: 2.3 },
+      { cost: 85,  damage: 13, range: 205, rate: 2.6 },
+      { cost: 150, damage: 20, range: 225, rate: 3.0 },
+    ],
+  },
+  bulb: {
+    id: 'bulb', name: 'Resonant Bulb', kind: 16,
+    desc: 'Does not fight — it sings. Nearby towers fire faster and hit harder.',
+    color: [0.85, 0.7, 1.0], hue: 0.75,
+    cost: 150, range: 200, rate: 0, damage: 0, attack: 'aura',
+    buffRate: 0.18, buffDmg: 0.12,
+    size: 58,
+    levels: [
+      { cost: 0,   buffRate: 0.18, buffDmg: 0.12, range: 200 },
+      { cost: 120, buffRate: 0.28, buffDmg: 0.20, range: 225 },
+      { cost: 200, buffRate: 0.40, buffDmg: 0.30, range: 250 },
     ],
   },
 };
