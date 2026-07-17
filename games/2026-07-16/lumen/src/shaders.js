@@ -55,7 +55,7 @@ layout(location=1) in vec4 iA; // x y sx sy
 layout(location=2) in vec4 iB; // rot phase hue aux
 layout(location=3) in vec4 iC; // r g b extra
 uniform vec2 uCam; uniform float uZoom; uniform vec2 uRes;
-out vec2 vUv; out vec4 vB; out vec4 vC; out float vDepth;
+out vec2 vUv; out vec4 vB; out vec4 vC; out float vDepth; out vec2 vWorld;
 void main(){
   vUv = aCorner;
   vB = iB; vC = iC;
@@ -63,6 +63,7 @@ void main(){
   vec2 local = vec2(aCorner.x*iA.z, aCorner.y*iA.w);
   vec2 rot = vec2(local.x*cr - local.y*sr, local.x*sr + local.y*cr);
   vec2 world = iA.xy + rot;
+  vWorld = world;
   vDepth = clamp(iA.y / uRes.y, 0.0, 1.0);
   vec2 ndc = (world - uCam) * uZoom / (uRes*0.5);
   gl_Position = vec4(ndc.x, -ndc.y, 0.0, 1.0);
@@ -157,6 +158,14 @@ void main(){
   // organic mottling — dark pools and pale lichen veils
   base *= 1.0 - 0.42*smoothstep(0.55,0.75,fbm(p*0.6+9.0));
   base += vec3(0.030,0.055,0.060) * smoothstep(0.60,0.85,fbm(p*1.7+23.0));
+  // sedimentary strata — banded ridges warped by the terrain noise
+  float strata = 0.5+0.5*sin(p.y*9.0 + fbm(p*1.4)*7.0 + p.x*0.5);
+  base *= 0.88 + 0.24*smoothstep(0.35,0.95,strata);
+  // deep cracks, glowing faintly from below
+  float crackN = fbm(p*2.4+77.0);
+  float crack = smoothstep(0.70,0.92,crackN);
+  base = mix(base, vec3(0.015,0.030,0.036), crack*0.65);
+  base += vec3(0.04,0.22,0.20) * smoothstep(0.86,0.98,crackN) * (0.55+0.45*sin(uT*0.6+p.x*4.0)) * near;
   // faint teal ambient sheen so the plane never reads as void
   base += vec3(0.012,0.030,0.034);
   // bioluminescent micro-life: sparse cyan/green dots that breathe
@@ -225,14 +234,20 @@ void main(){
 
 // ---------------------------------------------------------------- ground light
 export const FS_LIGHT = COMMON + `
-in vec2 vUv; in vec4 vB; in vec4 vC; out vec4 frag;
+in vec2 vUv; in vec4 vB; in vec4 vC; in float vDepth; in vec2 vWorld; out vec4 frag;
 // radial ground illumination; aux = intensity; extra = ring? (0 disc, 1 ring with aux radius)
 void main(){
   float r = length(vUv);
   if(vC.a < 0.5){
     float fall = pow(max(0.0, 1.0 - r), 2.2);
-    // subtle noise breakup so pools of light look organic on the ground
-    fall *= 0.8 + 0.35*fbm3(vUv*3.0 + vB.y);
+    // light SCULPTS the terrain: sample the same fbm family the ground uses,
+    // so pools of light reveal rock texture instead of flattening it
+    float tex = fbm3(vWorld*0.016);
+    float tex2 = fbm3(vWorld*0.05 + 31.0);
+    fall *= 0.55 + 0.7*tex + 0.35*tex2;
+    // faint forward shadowing — light falls off faster up-screen, as if
+    // the ground tilts away from the source
+    fall *= 1.0 - 0.25*clamp(-vUv.y, 0.0, 1.0);
     frag = vec4(vC.rgb * fall * vB.w, 0.0);
   } else {
     // organic ripple: eroded, width-varying, direction-modulated ring
@@ -276,9 +291,10 @@ void main(){
     float m = smoothstep(0.03,-0.03,d);
     if(m<=0.0){ frag=vec4(0.0); return; }
     float core = smoothstep(0.30,0.0,length(q+vec2(0.12,0.0)));
+    float innards = smoothstep(0.42,0.05,length(q+vec2(0.05,0.0))) * (0.5+0.5*fbm3(q*5.0+phase));
     float rim = smoothstep(0.0,0.14,-d)*smoothstep(-0.30,-0.10,d);
     vec3 membrane = tint*0.16 + vec3(0.01,0.01,0.03);
-    col = membrane + tint*core*(1.6+0.7*sin(phase*3.1)) + tint*rim*0.9;
+    col = membrane + tint*innards*0.6 + tint*core*(1.8+0.7*sin(phase*3.1)) + tint*rim*0.9;
     cov = m*0.92;
   }
   else if(kind == 1){ // GRUB — armoured segmented crawler
@@ -302,8 +318,9 @@ void main(){
     }
     seam *= smoothstep(-0.1,0.25,p.y);
     float pulse = 0.6+0.5*sin(phase*4.0 - p.x*4.0);
+    float belly = smoothstep(0.1,0.45,p.y) * (0.5+0.5*fbm3(p*4.0+phase*0.5));
     vec3 shellCol = mix(tint*0.13, vec3(0.02,0.015,0.045), shell*0.8);
-    col = shellCol + tint*seam*pulse*1.5;
+    col = shellCol + tint*belly*0.55 + tint*seam*pulse*2.1;
     float rim = smoothstep(0.0,0.10,-d)*smoothstep(-0.22,-0.08,d);
     col += tint*rim*0.5;
     // eyes
@@ -410,8 +427,8 @@ void main(){
     }
     vec3 shell = mix(tint*0.16, vec3(0.05,0.07,0.12), smoothstep(-0.4,0.3,q.y));
     shell *= 0.85 + 0.3*fbm3(q*6.0+seed*8.0);
-    // damage cracks: amber light leaks as hp (aux) falls
-    float crackAmt = (1.0-aux);
+    // damage cracks: amber light leaks as hp (aux) falls; a whisper shows even intact
+    float crackAmt = 0.18 + 0.82*(1.0-aux);
     float crack = smoothstep(0.62,1.0,fbm(q*5.5+seed*13.0)) * crackAmt;
     vec3 col2 = shell + vec3(1.0,0.55,0.15)*crack*1.8 + tint*plates*0.35;
     float rim = smoothstep(0.0,0.08,-d)*smoothstep(-0.2,-0.07,d);
@@ -445,6 +462,9 @@ void main(){
     vec3 body = mix(tint*0.20, vec3(0.03,0.05,0.08), smoothstep(-0.2,0.35,q.y));
     float ridges = pow(0.5+0.5*sin(atan(q.y+0.1,q.x)*7.0+seed*9.0),2.0);
     body += tint*ridges*0.22;
+    // inner organs pulse beneath the dome
+    body += tint * smoothstep(0.20,0.0,length(q-vec2(-0.10,0.16))) * (0.6+0.4*sin(phase*2.6)) * 0.8;
+    body += tint * smoothstep(0.16,0.0,length(q-vec2(0.14,0.10))) * (0.6+0.4*sin(phase*2.6+2.0)) * 0.7;
     float rim = smoothstep(0.0,0.07,-dome)*smoothstep(-0.18,-0.06,dome);
     col = (body + tint*rim*0.8)*m;
     cov = m*0.95;
@@ -570,6 +590,69 @@ void main(){
     }
     cov = m*0.995; // nearly opaque — it occludes the glow behind it
   }
+  else if(kind == 27){ // CRYSTAL CLUSTER — grounded mineral spears, lit from within
+    vec2 q = p; q.y = -q.y;
+    float d = 1e9;
+    float coreGlow = 0.0;
+    for(int i=0;i<4;i++){
+      float fi = float(i);
+      float bx = (fi-1.5)*0.26 + (hash12(vec2(seed,fi))-0.5)*0.14;
+      float h = 0.55 + 0.75*hash12(vec2(seed*7.0,fi));
+      float lean = (hash12(vec2(fi,seed*3.0))-0.5)*0.55;
+      vec2 root = vec2(bx, -0.72);
+      vec2 tip  = vec2(bx + lean*h*0.5, -0.72 + h*1.5);
+      tip.y = min(tip.y, 0.80); // never reach the quad edge
+      float sd = sdSeg(q, root, tip) - (0.14 - 0.11*clamp((q.y-root.y)/(tip.y-root.y+1e-3),0.0,1.0));
+      d = min(d, sd);
+      coreGlow += smoothstep(0.30,0.0,sdSeg(q, mix(root,tip,0.15), mix(root,tip,0.7))) * (0.4+0.6*hash12(vec2(fi,seed)));
+    }
+    // rubble mound at the base grounds the formation
+    d = smin(d, sdCircle(q+vec2(0.0,0.68), 0.26+fbm3(q*4.0+seed*9.0)*0.07), 0.14);
+    float m = smoothstep(0.02,-0.02,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    float facet = 0.5+0.5*sin((q.x+q.y*0.6)*24.0+seed*30.0);
+    float breathe2 = 0.6+0.4*sin(phase*0.5+seed*9.0);
+    // solid mineral body: dark glass with banded facets
+    vec3 body = mix(vec3(0.05,0.06,0.13), tint*0.42, 0.25+0.38*facet);
+    body += tint * coreGlow * 0.6 * breathe2 * aux;   // inner light
+    body *= 0.9 + 0.2*fbm3(q*6.0+seed);
+    float rim = smoothstep(0.0,0.045,-d)*smoothstep(-0.11,-0.035,d);
+    col = body + mix(tint,vec3(1.0),0.3)*rim*(0.45+0.4*breathe2)*aux;
+    // contact shadow where it meets the ground
+    col *= 1.0 - 0.5*smoothstep(-0.45,-0.80,q.y);
+    cov = m*0.985;
+  }
+  else if(kind == 28){ // ROCKFORM — lobed strata outcrop, heavily eroded silhouette
+    vec2 q = p; q.y = -q.y;
+    float wob = fbm(q*1.3+seed*8.0)*0.26;
+    float d = sdCircle(q*vec2(0.72,1.30)+vec2(0.08,0.30), 0.40+wob);
+    d = smin(d, sdCircle(q*vec2(0.85,1.45)+vec2(-0.28,0.42), 0.28+wob*0.7), 0.18);
+    d = smin(d, sdCircle(q*vec2(0.95,1.6)+vec2(0.34,0.55), 0.20+wob*0.5), 0.16);
+    float m = smoothstep(0.03,-0.03,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    float strat = 0.5+0.5*sin(q.y*13.0 + fbm(q*2.2+seed)*8.0 + q.x*1.5);
+    vec3 body = mix(vec3(0.020,0.016,0.040), vec3(0.065,0.055,0.115), smoothstep(0.25,0.85,strat));
+    body *= 0.75+0.4*fbm3(q*4.0+seed*4.0);
+    // biolum dust settled in the crevices
+    float dust = smoothstep(0.74,0.93,fbm(q*4.5+seed*13.0));
+    body += vec3(0.06,0.26,0.23) * dust * (0.5+0.5*sin(phase*0.4+seed*20.0));
+    // sky rim light along the upper silhouette
+    float rim = smoothstep(0.0,0.06,-d)*smoothstep(-0.14,-0.05,d)*smoothstep(-0.15,0.55,q.y);
+    col = body + vec3(0.12,0.34,0.38)*rim*0.9;
+    // sleeping reef: a crest of tiny polyp lights along the upper surface
+    float nearEdge = smoothstep(0.0,-0.06,d)*smoothstep(-0.26,-0.10,d)*smoothstep(-0.1,0.35,q.y);
+    vec2 pc = floor(q*9.0+seed*31.0);
+    float pd = hash12(pc);
+    if(pd > 0.72 && nearEdge > 0.05){
+      vec2 cuv = fract(q*9.0+seed*31.0)-0.5;
+      float pr = length(cuv - (vec2(hash12(pc+3.0),hash12(pc+5.0))-0.5)*0.5);
+      float breathe3 = 0.5+0.5*sin(phase*(0.6+pd)+pd*40.0);
+      vec3 pcol = mix(vec3(0.10,0.55,0.50), vec3(0.55,0.25,0.65), step(0.88,pd));
+      col += pcol * smoothstep(0.16,0.0,pr) * breathe3 * nearEdge * 1.6;
+    }
+    col *= 1.0 - 0.45*smoothstep(-0.35,-0.75,q.y); // contact shadow
+    cov = m*0.99;
+  }
   else if(kind == 26){ // SHADOW — dark aura disc (premultiplied darkness)
     float r = length(p);
     float fall = pow(max(0.0,1.0-r),2.6) * (0.7+0.3*fbm3(p*2.2+phase*0.3));
@@ -584,6 +667,7 @@ void main(){
     float half1 = mix(0.26, 0.0, smoothstep(-0.45, apex, q.y)) + 0.02;
     float d = abs(q.x) - half1 - wob;
     d = max(d, q.y - apex);
+    d = max(d, -0.60 - q.y); // bound the blade below — else it runs off the quad
     d = smin(d, sdCircle(q + vec2(0.0, 0.52), 0.26 + wob), 0.14);
     // two side shards
     for(int i=0;i<2;i++){
@@ -833,7 +917,8 @@ void main(){
   } else {
     col = fetch(uv);
   }
-  vec3 bloom = texture(uB1,uv).rgb*0.5 + texture(uB2,uv).rgb*0.75 + texture(uB3,uv).rgb*1.0;
+  // two-tier bloom: tight hot core + wide soft atmosphere
+  vec3 bloom = texture(uB1,uv).rgb*0.95 + texture(uB2,uv).rgb*0.55 + texture(uB3,uv).rgb*1.25;
   col += bloom * uBloomAmt;
   // grade: lift shadows toward indigo, gentle teal-orange split
   col = filmic(col*1.75);
