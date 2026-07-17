@@ -1,0 +1,251 @@
+// Boot, fixed-step loop, input, camera feel, event→juice routing, the
+// ?ns=1 North Star harness and the window.__lumen debug hook (kept in prod).
+
+import { Sim, DT } from './sim.js';
+import { Renderer } from './renderer.js';
+import { UI } from './ui.js';
+import { TOWERS, WORLD_W, WORLD_H, COLORS } from './content.js';
+
+export const VERSION = 'v0.1.0';
+
+const params = new URLSearchParams(location.search);
+const NS_MODE = params.get('ns') === '1';
+
+class Game {
+  constructor() {
+    this.canvas = document.getElementById('cv');
+    this.renderer = new Renderer(this.canvas);
+    this.sim = new Sim(0, NS_MODE ? 777 : null);
+    this.ui = new UI(document.body, this);
+    this.armed = null;          // tower id being placed
+    this.selected = null;       // placed tower selected
+    this.mouse = { x: 0, y: 0, world: { x: 0, y: 0 } };
+    this.running = !NS_MODE;    // ns mode drives manually then resumes
+    this.speed = 1;
+    this.acc = 0;
+    this.last = performance.now();
+    this.fx = {
+      aberr: 0, shake: 0, shakeX: 0, shakeY: 0, wallTime: 0, camDx: 0,
+    };
+    this.cam = { dx: 0, dy: 0, zoom: 1.0, shakeX: 0, shakeY: 0 };
+    this.frameMs = 16;
+    this.started = false;
+    this.bindInput();
+    this.installDebug();
+    document.querySelector('#ver').textContent = 'LUMEN ' + VERSION;
+    if (NS_MODE) this.stageNorthStar();
+    else this.showTitle();
+    requestAnimationFrame(t => this.tick(t));
+  }
+
+  showTitle() {
+    const t = document.getElementById('title');
+    t.classList.add('open');
+    const start = () => {
+      t.classList.remove('open');
+      this.started = true;
+      this.ui.banner('THE GROVE WAKES', 'grow your light — the surge is coming');
+    };
+    t.querySelector('#play').addEventListener('click', start, { once: true });
+  }
+
+  // --- input ---------------------------------------------------------------
+  bindInput() {
+    const cv = this.canvas;
+    const toWorld = (e) => {
+      const r = cv.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width * WORLD_W;
+      const y = (e.clientY - r.top) / r.height * WORLD_H;
+      return { x, y };
+    };
+    cv.addEventListener('mousemove', e => {
+      this.mouse.world = toWorld(e);
+    });
+    cv.addEventListener('click', e => {
+      const w = toWorld(e);
+      if (this.armed) {
+        const t = this.sim.place(this.armed, w.x, w.y);
+        if (t) {
+          this.juicePlace(t);
+          if (!e.shiftKey) this.armed = null;
+        } else if (this.sim.gold < TOWERS[this.armed].cost) {
+          this.ui.toast('not enough light', 'warn');
+        }
+        return;
+      }
+      // select tower
+      let best = null, bd = 60 * 60;
+      for (const t of this.sim.towers) {
+        const dx = t.x - w.x, dy = t.y - w.y, d = dx * dx + dy * dy;
+        if (d < bd) { bd = d; best = t; }
+      }
+      this.selected = best;
+      this.ui.showInspect(best, this.sim);
+    });
+    cv.addEventListener('contextmenu', e => { e.preventDefault(); this.armed = null; this.selected = null; this.ui.showInspect(null); });
+    window.addEventListener('keydown', e => {
+      if (e.key === '1') this.armTower('coral');
+      if (e.key === '2') this.armTower('tesla');
+      if (e.key === 'Escape') { this.armed = null; this.selected = null; this.ui.showInspect(null); }
+      if (e.key === ' ') { e.preventDefault(); this.callSurge(); }
+      if (e.key === 'u' && this.selected) this.upgradeSelected();
+    });
+    window.addEventListener('resize', () => this.renderer.resize());
+  }
+
+  armTower(id) { this.armed = this.armed === id ? null : id; this.selected = null; this.ui.showInspect(null); }
+  callSurge() { if (this.sim.startWave(true)) this.ui.banner(`WAVE ${this.sim.wave}`, 'the dark comes flowing'); }
+  upgradeSelected() { if (this.selected && this.sim.upgrade(this.selected)) { this.ui.showInspect(this.selected, this.sim); this.juiceUpgrade(this.selected); } }
+  sellSelected() { if (this.selected) { this.sim.sell(this.selected); this.selected = null; this.ui.showInspect(null); } }
+
+  // --- juice ----------------------------------------------------------------
+  juicePlace(t) { this.fx.shake = Math.min(6, this.fx.shake + 2.5); }
+  juiceUpgrade(t) { this.fx.shake = Math.min(6, this.fx.shake + 2); }
+
+  routeEvents() {
+    for (const ev of this.sim.events) {
+      switch (ev.type) {
+        case 'waveStart':
+          if (!NS_MODE) this.ui.banner(`WAVE ${ev.wave}`, ev.wave % 5 === 0 ? 'something vast stirs' : '');
+          break;
+        case 'waveClear':
+          this.ui.toast(`wave ${ev.wave} cleared · +◈${ev.bonus} bloom · +◈${ev.interest} interest`, 'good');
+          break;
+        case 'surgeBonus':
+          this.ui.toast(`surge called early · +◈${ev.amount}`, 'good');
+          break;
+        case 'kill':
+          this.fx.shake = Math.min(5, this.fx.shake + 0.25);
+          break;
+        case 'impact':
+          this.fx.shake = Math.min(5, this.fx.shake + 0.4);
+          this.fx.aberr = Math.min(0.012, this.fx.aberr + 0.0035);
+          break;
+        case 'heartHit':
+          this.fx.shake = Math.min(9, this.fx.shake + 5);
+          this.fx.aberr = Math.min(0.02, this.fx.aberr + 0.012);
+          this.ui.toast(`the heart dims — ${ev.lives} light left`, 'warn');
+          break;
+        case 'gameOver':
+          this.ui.banner('THE LIGHT GOES OUT', `the grove survived ${ev.wave - 1} waves`);
+          break;
+      }
+    }
+  }
+
+  // --- loop ------------------------------------------------------------------
+  tick(now) {
+    const raw = Math.min(0.1, (now - this.last) / 1000);
+    this.last = now;
+    this.frameMs = this.frameMs * 0.95 + raw * 1000 * 0.05;
+    this.fx.wallTime += raw;
+
+    if (this.running && this.started) {
+      this.acc += raw * this.speed;
+      let steps = 0;
+      while (this.acc >= DT && steps < 8) {
+        this.sim.step();
+        this.routeEvents();
+        this.acc -= DT; steps++;
+      }
+    }
+
+    // camera feel: slow drift + breathing, decaying shake
+    const t = this.fx.wallTime;
+    this.cam.dx = Math.sin(t * 0.11) * 9;
+    this.cam.dy = Math.cos(t * 0.09) * 6;
+    this.cam.zoom = 1.012 + Math.sin(t * 0.07) * 0.012;
+    this.fx.shake = Math.max(0, this.fx.shake - raw * 14);
+    this.fx.aberr = Math.max(0, this.fx.aberr - raw * 0.02);
+    const sh = this.fx.shake;
+    this.cam.shakeX = (Math.random() - 0.5) * sh;
+    this.cam.shakeY = (Math.random() - 0.5) * sh;
+    this.fx.camDx = this.cam.dx;
+
+    this.renderer.render(this.sim, this.cam, this.fx, raw || 0.016);
+    this.ui.update(this.sim, this.armed);
+    const fpsEl = document.getElementById('fps');
+    if (fpsEl && (this.renderer.frame & 31) === 0) fpsEl.textContent = `${Math.round(1000 / Math.max(1, this.frameMs))}`;
+    requestAnimationFrame(tt => this.tick(tt));
+  }
+
+  // --- North Star harness -----------------------------------------------------
+  // ?ns=1 → deterministic staged scene: mid-run wave with 6 towers firing.
+  stageNorthStar() {
+    const s = this.sim;
+    this.started = true;
+    s.gold = 100000;
+    // six towers near the mid-path: spiral-search each anchor for a legal spot
+    const anchors = [
+      ['coral', 520, 640], ['tesla', 640, 830], ['coral', 900, 860],
+      ['tesla', 1090, 760], ['coral', 1240, 660], ['tesla', 1380, 620],
+    ];
+    for (const [type, ax, ay] of anchors) {
+      let placed = null;
+      outer: for (let r = 0; r <= 220 && !placed; r += 28) {
+        for (let a = 0; a < 8; a++) {
+          const x = ax + Math.cos(a * 0.785 + r) * r, y = ay + Math.sin(a * 0.785 + r) * r;
+          placed = s.place(type, x, y);
+          if (placed) break outer;
+          if (r === 0) break; // center tried once
+        }
+      }
+      if (placed) placed.level = 2;
+      else console.warn('ns: no spot near', ax, ay);
+    }
+    s.gold = 480;
+    // drive sim to wave 12 mid-flight: spawn a dense wave manually
+    s.wave = 11;
+    s.state = 'prep'; s.prepLeft = 0.01;
+    // run ~3.5s so the wave floods in and towers open fire
+    for (let i = 0; i < 60 * 6; i++) { s.step(); }
+    this.running = true;
+    window.__lumen.nsReady = true;
+  }
+
+  installDebug() {
+    const g = this;
+    window.__lumen = {
+      version: VERSION,
+      nsReady: false,
+      get sim() { return g.sim; },
+      stats() {
+        return {
+          version: VERSION, wave: g.sim.wave, gold: g.sim.gold, lives: g.sim.lives,
+          enemies: g.sim.enemies.length, towers: g.sim.towers.length,
+          projectiles: g.sim.projectiles.length, particles: g.sim.particles.length,
+          state: g.sim.state, frameMs: +g.frameMs.toFixed(2),
+          canvas: [g.canvas.width, g.canvas.height],
+        };
+      },
+      drive(secs) { const n = Math.floor(secs / DT); for (let i = 0; i < n; i++) { g.sim.step(); g.routeEvents(); } },
+      render() { g.renderer.render(g.sim, g.cam, g.fx, 0.016); },
+      place(type, x, y) { return g.sim.place(type, x, y); },
+      gold(n) { g.sim.gold = n; },
+      startWave() { return g.sim.startWave(true); },
+      start() { g.started = true; document.getElementById('title').classList.remove('open'); },
+      pixelStats() {
+        const gl = g.renderer.gl;
+        const w = 64, h = 36;
+        const px = new Uint8Array(w * h * 4);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.readPixels(0, 0, w, h, gl.RGBA, gl.UNSIGNED_BYTE, px);
+        let lum = 0, maxL = 0, nonBlack = 0;
+        for (let i = 0; i < w * h; i++) {
+          const l = (px[i * 4] * 0.299 + px[i * 4 + 1] * 0.587 + px[i * 4 + 2] * 0.114) / 255;
+          lum += l; if (l > maxL) maxL = l; if (l > 0.02) nonBlack++;
+        }
+        return { avgLum: +(lum / (w * h)).toFixed(3), maxLum: +maxL.toFixed(3), nonBlackFrac: +(nonBlack / (w * h)).toFixed(3) };
+      },
+    };
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    new Game();
+  } catch (e) {
+    document.getElementById('glfail').style.display = 'grid';
+    console.error(e);
+  }
+});
