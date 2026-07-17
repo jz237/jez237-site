@@ -96,21 +96,24 @@ export class Renderer {
       -200, WORLD_H + 100, 0, 1, WORLD_W + 200, WORLD_H + 100, 1, 1,
     ]);
     this.groundMesh = this.meshFrom(gverts, 4);
-    // path ribbon triangle strip
-    const { pts, arc, total } = sim.path;
+    // one ribbon triangle strip per path
     const w = sim.map.pathW * 1.7; // ribbon wider than gameplay width — edges erode in shader
-    const verts = [];
-    for (let i = 0; i < pts.length; i++) {
-      const i2 = Math.min(pts.length - 1, i + 1);
-      const dx = pts[i2][0] - pts[Math.max(0, i - 1)][0];
-      const dy = pts[i2][1] - pts[Math.max(0, i - 1)][1];
-      const l = Math.hypot(dx, dy) || 1;
-      const nx = -dy / l, ny = dx / l;
-      const along = arc[i] / total;
-      verts.push(pts[i][0] + nx * w, pts[i][1] + ny * w, along, -1);
-      verts.push(pts[i][0] - nx * w, pts[i][1] - ny * w, along, 1);
-    }
-    this.pathMesh = this.meshFrom(new Float32Array(verts), verts.length / 4);
+    this.pathMeshes = sim.paths.map(path => {
+      const { pts, arc, total } = path;
+      const verts = [];
+      for (let i = 0; i < pts.length; i++) {
+        const i2 = Math.min(pts.length - 1, i + 1);
+        const dx = pts[i2][0] - pts[Math.max(0, i - 1)][0];
+        const dy = pts[i2][1] - pts[Math.max(0, i - 1)][1];
+        const l = Math.hypot(dx, dy) || 1;
+        const nx = -dy / l, ny = dx / l;
+        const along = arc[i] / total;
+        verts.push(pts[i][0] + nx * w, pts[i][1] + ny * w, along, -1);
+        verts.push(pts[i][0] - nx * w, pts[i][1] - ny * w, along, 1);
+      }
+      return this.meshFrom(new Float32Array(verts), verts.length / 4);
+    });
+    this.pathMesh = this.pathMeshes[0];
     // foreground silhouette flora along the bottom edge
     const rng = new Rng(sim.map.seed ^ 0xF06);
     this.fgFlora = [];
@@ -186,12 +189,14 @@ export class Renderer {
     gl.bindVertexArray(this.groundMesh.vao);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.groundMesh.count);
 
-    // path (premultiplied over)
+    // paths (premultiplied over)
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     bindWorld(this.pPath);
-    gl.bindVertexArray(this.pathMesh.vao);
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.pathMesh.count);
+    for (const mesh of this.pathMeshes) {
+      gl.bindVertexArray(mesh.vao);
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, mesh.count);
+    }
 
     // ---- ground lights (additive)
     this.lights.reset();
@@ -360,11 +365,12 @@ export class Renderer {
       const ds = depthScale(pl.y);
       L.push(pl.x, pl.y, pl.r * 2.1 * ds, pl.r * 1.3 * ds, 0, pl.t * 2, 0, 0.5 * lf, pl.color[0], pl.color[1], pl.color[2], 0);
     }
-    // shockwave rings (extra=1 → ring)
+    // shockwave rings (extra=1 → ring); quad is padded 1.4x so the eroded
+    // ring band never reaches the quad edge (which reads as a square)
     for (const r of sim.rings) {
       const f = r.t / r.dur;
       const ds = depthScale(r.y);
-      L.push(r.x, r.y, r.max * ds, r.max * 0.62 * ds, 0, r.t * 3, 0, f, r.color[0], r.color[1], r.color[2], 1);
+      L.push(r.x, r.y, r.max * 1.4 * ds, r.max * 0.62 * 1.4 * ds, 0, r.t * 3, 0, f / 1.4, r.color[0], r.color[1], r.color[2], 1);
     }
   }
 
@@ -569,10 +575,10 @@ export class Renderer {
         e.def.color[0] * 0.18, e.def.color[1] * 0.18, e.def.color[2] * 0.18, 0);
     }
     for (const arc of sim.arcs) {
-      if (arc.t > 0.05) continue;
+      const lf = (1 - arc.t / arc.dur) * 0.14;
       for (const hit of arc.hits) {
         T.push(hit.to.x, hit.to.y, 22, 22, 0, 0, KIND.GLOW, 1,
-          arc.color[0] * 0.35, arc.color[1] * 0.35, arc.color[2] * 0.35, 0);
+          arc.color[0] * lf, arc.color[1] * lf, arc.color[2] * lf, 0);
       }
     }
     // beams sear a line into the trail buffer on their first frame

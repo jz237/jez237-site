@@ -4,9 +4,10 @@
 import { Sim, DT } from './sim.js';
 import { Renderer } from './renderer.js';
 import { UI } from './ui.js';
-import { TOWERS, WORLD_W, WORLD_H, COLORS } from './content.js';
+import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
+import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 
-export const VERSION = 'v0.3.0';
+export const VERSION = 'v0.4.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -15,7 +16,8 @@ class Game {
   constructor() {
     this.canvas = document.getElementById('cv');
     this.renderer = new Renderer(this.canvas);
-    this.sim = new Sim(0, NS_MODE ? 777 : null);
+    this.mapIndex = Math.min(MAPS.length - 1, Math.max(0, parseInt(params.get('map') || '1', 10) - 1));
+    this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
     this.ui = new UI(document.body, this);
     this.armed = null;          // tower id being placed
     this.selected = null;       // placed tower selected
@@ -41,12 +43,41 @@ class Game {
   showTitle() {
     const t = document.getElementById('title');
     t.classList.add('open');
-    const start = () => {
+    this.ui.renderBoard();
+    document.getElementById('play').onclick = () => {
       t.classList.remove('open');
+      this.newRun();
       this.started = true;
       this.ui.banner('THE GROVE WAKES', 'grow your light — the surge is coming');
     };
-    t.querySelector('#play').addEventListener('click', start, { once: true });
+    // game-over panel buttons (idempotent wiring)
+    document.getElementById('goagain').onclick = () => {
+      this.ui.hideGameOver();
+      this.showTitle();
+    };
+    document.getElementById('gosubmit').onclick = async () => {
+      const init = cleanInitials(document.getElementById('goinit').value);
+      const s = this.sim;
+      const entry = { initials: init, score: s.score(), wave: s.wave, kills: s.kills, map: MAPS[this.mapIndex].id, mode: s.campaignDone ? 'endless' : 'campaign' };
+      saveLocal(entry);
+      document.getElementById('gonote').textContent = 'etching…';
+      const ok = await submitGlobal(entry);
+      document.getElementById('gonote').textContent = ok ? 'your light is etched into the grove ✦' : 'the dark swallowed the signal — saved locally';
+      document.getElementById('gosubmit').disabled = true;
+    };
+  }
+
+  selectMap(i) { this.mapIndex = i; }
+
+  newRun() {
+    this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
+    this.renderer.pathMesh = null; // forces map mesh rebuild on next frame
+    this.armed = null; this.selected = null;
+    this.ui.showInspect(null);
+    this.ui.hideGameOver();
+    document.getElementById('gosubmit').disabled = false;
+    document.getElementById('goinit').value = '';
+    this.submitted = false;
   }
 
   // --- input ---------------------------------------------------------------
@@ -149,8 +180,12 @@ class Game {
           this.fx.aberr = Math.min(0.02, this.fx.aberr + 0.012);
           this.ui.toast(`the heart dims — ${ev.lives} light left`, 'warn');
           break;
+        case 'victory':
+          this.ui.banner('THE GROVE ENDURES', 'the endless surge begins — how long can you shine?');
+          break;
         case 'gameOver':
           this.ui.banner('THE LIGHT GOES OUT', `the grove survived ${ev.wave - 1} waves`);
+          setTimeout(() => this.ui.showGameOver(this.sim, this.sim.campaignDone), 2200);
           break;
       }
     }
@@ -198,12 +233,25 @@ class Game {
     const s = this.sim;
     this.started = true;
     s.gold = 100000;
-    // a varied grove near the mid-path: spiral-search each anchor for a legal spot
-    const anchors = [
-      ['coral', 520, 640], ['tesla', 640, 830], ['bloom', 900, 860],
-      ['spire', 1090, 760], ['urchin', 1240, 660], ['tesla', 1380, 620],
-      ['bramble', 480, 900], ['bulb', 1160, 680],
-    ];
+    // a varied grove near the action: per-map anchors, spiral-searched to legal spots
+    const ANCHORS = {
+      rootdelta: [
+        ['coral', 520, 640], ['tesla', 640, 830], ['bloom', 900, 860],
+        ['spire', 1090, 760], ['urchin', 1240, 660], ['tesla', 1380, 620],
+        ['bramble', 480, 900], ['bulb', 1160, 680],
+      ],
+      twinveins: [
+        ['coral', 640, 560], ['tesla', 900, 620], ['bloom', 1150, 640],
+        ['spire', 480, 580], ['urchin', 1350, 700], ['tesla', 1500, 740],
+        ['bramble', 1000, 850], ['bulb', 1180, 580],
+      ],
+      caldera: [
+        ['coral', 950, 500], ['tesla', 1200, 700], ['bloom', 600, 600],
+        ['spire', 500, 800], ['urchin', 900, 800], ['tesla', 1450, 650],
+        ['bramble', 350, 700], ['bulb', 1000, 640],
+      ],
+    };
+    const anchors = ANCHORS[s.map.id] || ANCHORS.rootdelta;
     for (const [type, ax, ay] of anchors) {
       let placed = null;
       outer: for (let r = 0; r <= 220 && !placed; r += 28) {
@@ -232,7 +280,7 @@ class Game {
     // boss frames need a living swarm around the great one — restock escorts
     if (nsWave >= 20) {
       const boss = s.enemies.find(e => e.def.boss);
-      const bs = boss ? boss.s : s.path.total * 0.35;
+      const bs = boss ? boss.s : s.paths[0].total * 0.35;
       const kinds = ['mite', 'dartfin', 'grub', 'wisp', 'husk', 'mite', 'dartfin', 'brood'];
       for (let i = 0; i < 26; i++) {
         const type = kinds[i % kinds.length];

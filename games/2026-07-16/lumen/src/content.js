@@ -254,23 +254,63 @@ export function waveComp(n) {
   return { entries, clearBonus: 20 + n * 4 };
 }
 
-// Map 1 — "Rootdelta". A single meandering channel from a ridge-gate (far,
-// upper-left) down to the Heart (near, lower-right). Control points hand-laid
-// in world space; the sim resamples to an arc-length table.
+// Maps. Each map carries one or more full splines portal→heart; branching is
+// expressed as multiple paths sharing prefix/suffix points. Control points
+// hand-laid in world space; the sim resamples each to an arc-length table.
 export const MAPS = [
   {
     id: 'rootdelta', name: 'Rootdelta',
+    blurb: 'one deep channel — learn the water',
     seed: 20260716,
     pathW: 74, // half-width of the ribbon
-    points: [
+    paths: [[
       [-60, 330], [180, 345], [420, 390], [610, 500], [640, 660],
       [500, 780], [430, 900], [560, 985], [820, 995], [1080, 930],
       [1180, 790], [1150, 640], [1250, 520], [1450, 500], [1620, 580],
       [1700, 720], [1690, 870],
-    ],
+    ]],
     heart: [1690, 880],
     portal: [-40, 330],
     floraCount: 46,
+  },
+  {
+    id: 'twinveins', name: 'Twin Veins',
+    blurb: 'the flow splits around the old massif',
+    seed: 20260717,
+    pathW: 68,
+    paths: [
+      [ // upper vein
+        [-60, 420], [150, 430], [360, 470], [620, 390], [900, 345],
+        [1150, 385], [1355, 480], [1500, 620], [1600, 760], [1655, 862],
+      ],
+      [ // lower vein
+        [-60, 420], [150, 430], [360, 470], [520, 650], [630, 830],
+        [830, 945], [1080, 965], [1300, 905], [1500, 825], [1655, 862],
+      ],
+    ],
+    heart: [1660, 870],
+    portal: [-40, 420],
+    floraCount: 56,
+  },
+  {
+    id: 'caldera', name: 'Emberfall Caldera',
+    blurb: 'the long way round the sunken mouth — or straight through it',
+    seed: 20260718,
+    pathW: 64,
+    paths: [
+      [ // the rim road
+        [-60, 270], [200, 285], [500, 305], [850, 325], [1200, 365],
+        [1500, 470], [1655, 650], [1500, 830], [1200, 925], [900, 965],
+        [620, 970], [390, 948],
+      ],
+      [ // the plunge
+        [-60, 270], [200, 285], [500, 305], [700, 435], [805, 605],
+        [755, 765], [610, 885], [430, 940], [390, 948],
+      ],
+    ],
+    heart: [370, 950],
+    portal: [-40, 265],
+    floraCount: 50,
   },
 ];
 

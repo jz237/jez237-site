@@ -235,8 +235,12 @@ void main(){
     fall *= 0.8 + 0.35*fbm3(vUv*3.0 + vB.y);
     frag = vec4(vC.rgb * fall * vB.w, 0.0);
   } else {
-    float ring = smoothstep(0.10, 0.0, abs(r - vB.w));
-    ring *= 0.75 + 0.4*fbm3(vUv*6.0 + vB.y);
+    // organic ripple: eroded, width-varying, direction-modulated ring
+    float ang = atan(vUv.y, vUv.x);
+    float er = fbm3(vec2(ang*1.6, vB.y*0.7)) - 0.5;
+    float w = 0.06 + 0.08*fbm3(vec2(ang*2.3+7.0, vB.y));
+    float ring = smoothstep(w, 0.0, abs(r - vB.w - er*0.10));
+    ring *= 0.55 + 0.6*fbm3(vUv*5.0 + vB.y);
     frag = vec4(vC.rgb * ring * (1.0-vB.w*0.7), 0.0);
   }
 }
@@ -568,9 +572,9 @@ void main(){
   }
   else if(kind == 26){ // SHADOW — dark aura disc (premultiplied darkness)
     float r = length(p);
-    float fall = pow(max(0.0,1.0-r),1.6) * (0.85+0.15*fbm3(p*3.0+phase*0.3));
+    float fall = pow(max(0.0,1.0-r),2.6) * (0.7+0.3*fbm3(p*2.2+phase*0.3));
     col = vec3(0.010,0.004,0.02) * fall;
-    cov = fall * vB.w; // aux = darkness strength
+    cov = fall * vB.w * 0.8; // aux = darkness strength
   }
   else if(kind == 12){ // CHILL SPIRE — faceted crystal polyp
     vec2 q = p; q.y = -q.y; // grow upward
