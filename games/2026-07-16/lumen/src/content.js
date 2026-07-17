@@ -217,6 +217,25 @@ export const ENEMIES = {
   },
 };
 
+// Endless mutators: named twists on post-campaign waves so deep runs stay
+// surprising. Applied to non-boss waves past 20, picked by wave number.
+export const MUTATORS = [
+  { id: 'swift',  name: 'THE SWIFT TIDE',   desc: 'they come fast and thin — +45% speed, −20% hp',
+    speedMul: 1.45, hpAdj: 0.8 },
+  { id: 'shell',  name: 'THE THICK SHELL',  desc: 'chitin on every back — corrode pierces it',
+    armorAdd: 6 },
+  { id: 'veiled', name: 'THE VEILED SURGE', desc: 'spectres ride among them',
+    escort: { type: 'spectre', count: 6 } },
+  { id: 'brood',  name: 'BROODSWELL',       desc: 'carriers heavy with children',
+    escort: { type: 'brood', count: 5 } },
+  { id: 'fins',   name: 'STORM OF FINS',    desc: 'a river of dartfins',
+    escort: { type: 'dartfin', count: 14 } },
+  { id: 'mend',   name: 'THE MENDING',      desc: 'their wounds close — burn them',
+    regenAdd: 0.015 },
+  { id: 'golden', name: 'THE GOLDEN TIDE',  desc: 'rich prey, thick hide — +60% bounty, +25% hp',
+    bountyMul: 1.6, hpAdj: 1.25 },
+];
+
 // Wave table: 1-5 power fantasy, new species introduced in bands, pressure
 // compounds from 10+. Boss waves: 10 (broodmother), 20 (THE UNLIT). After the
 // campaign (20), endless mode re-runs the table with harsher multipliers.
@@ -251,7 +270,14 @@ export function waveComp(n) {
   if (n >= 12) push('regen', (n - 11) * 0.8, gap * 2.8, 6.0);
   if (n >= 13) push('spectre', (n - 12) * 0.9, gap * 2.2, 7.0);
   if (n >= 14) push('bulwark', (n - 13) * 0.5, gap * 4.0, 8.0);
-  return { entries, clearBonus: 20 + n * 4 };
+  // deep endless: a named mutator twists every non-boss wave past 20
+  let mutator = null;
+  if (n > 20) {
+    mutator = MUTATORS[(n * 7 + 3) % MUTATORS.length];
+    if (mutator.hpAdj) for (const e of entries) e.hpMul *= mutator.hpAdj;
+    if (mutator.escort) push(mutator.escort.type, mutator.escort.count, gap * 1.3, 2.0);
+  }
+  return { entries, clearBonus: 20 + n * 4, mutator };
 }
 
 // Maps. Each map carries one or more full splines portal→heart; branching is
