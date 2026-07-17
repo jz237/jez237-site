@@ -1733,12 +1733,13 @@ function updateStals(dt){
 /* ---------------- biome hazards: puffballs + bone chimes ---------------- */
 function updateHazards(dt){
   for(const pf of World.puffs){
-    if(pf.state===1)continue;
+    if(pf.state===1){if(pf.t<1)pf.t+=dt;continue}
     if(Math.abs(pf.x-P.x)>700)continue;
     if(hyp(pf.x-P.x,pf.y-P.y)<pf.r+P.r+3){
-      pf.state=1;
+      pf.state=1;pf.t=0;
       Au.puffPop(Au.pos(pf.x,pf.y).pan);
       NoiseEv.emit(pf.x,pf.y,0.6);
+      Particles.spawn({type:'ring',col:'170,230,150',x:pf.x,y:pf.y,vx:0,vy:0,life:0.8,t:0,r:pf.r});
       Tension.add(5);
       P.sporeT=3.2; /* spores choke the lantern */
       for(let i=0;i<14;i++)Particles.spawn({type:'spore',x:pf.x+rnd(-6,6),y:pf.y+rnd(-6,2),
@@ -1755,6 +1756,7 @@ function updateHazards(dt){
       ch.cd=6;ch.sway=1;
       Au.boneClatter(Au.pos(ch.x,ch.y).pan);
       NoiseEv.emit(ch.x,ch.y,0.7);
+      Particles.spawn({type:'ring',col:'220,215,195',x:ch.x,y:ch.y+ch.len*0.8,vx:0,vy:0,life:0.8,t:0,r:6});
       Tension.add(5);
       Hints.show('chime','bone chimes. someone hung them here on purpose.');
     }
@@ -2627,7 +2629,17 @@ function drawScene(){
   }
   /* puffballs: pale swollen things on the fungal floors */
   for(const pf of World.puffs){
-    if(pf.state===1||pf.x<vr.l||pf.x>vr.r||pf.y<vr.t||pf.y>vr.b)continue;
+    if(pf.x<vr.l||pf.x>vr.r||pf.y<vr.t||pf.y>vr.b)continue;
+    if(pf.state===1){
+      /* burst skin sighs back into the floor */
+      const dk3=1-clamp(pf.t/0.4,0,1);
+      if(dk3<=0)continue;
+      sctx.fillStyle=`rgba(134,158,116,${0.85*dk3})`;
+      sctx.beginPath();
+      sctx.ellipse(pf.x,pf.y+pf.r*(1-dk3)*0.55,pf.r*(0.55+0.45*dk3),pf.r*0.8*dk3+0.4,0,0,TAU);
+      sctx.fill();
+      continue;
+    }
     const br=1+Math.sin(Game.t*1.6+pf.ph)*0.06;
     const g2=sctx.createRadialGradient(pf.x-pf.r*0.3,pf.y-pf.r*0.4,1,pf.x,pf.y,pf.r*br);
     g2.addColorStop(0,'rgba(196,214,176,0.95)');
@@ -2769,7 +2781,7 @@ function drawScene(){
         sctx.lineWidth=0.7;
         sctx.beginPath();sctx.arc(p.x,p.y,p.r,0,TAU);sctx.stroke();break;
       case 'ring':
-        sctx.strokeStyle=`rgba(210,220,230,${0.4*k*k})`;
+        sctx.strokeStyle=`rgba(${p.col||'210,220,230'},${0.4*k*k})`;
         sctx.lineWidth=1.2;
         sctx.beginPath();sctx.arc(p.x,p.y,p.r,0,TAU);sctx.stroke();break;
     }
@@ -3668,7 +3680,7 @@ function drawTitle(){
   ctx.fillStyle='rgba(110,118,126,0.45)';
   ctx.font='10px "Courier New",monospace';
   ctx.textAlign='right';
-  ctx.fillText('v1.8.0',VIEW.w-10,VIEW.h-8);
+  ctx.fillText('v1.9.0',VIEW.w-10,VIEW.h-8);
   ctx.textAlign='center';
 }
 const STORY=[
@@ -4017,6 +4029,15 @@ function render(){
   if(Game.zoneT<5&&Game.zone>0){
     const k=Math.min(Game.zoneT*1.2,1)*clamp((5-Game.zoneT)*0.8,0,1);
     screenSpace(ctx,1);
+    /* the new deep breathes its colour over you once */
+    const ZC=['','120,225,165','215,195,150','255,110,55'];
+    if(ZC[Game.zone]){
+      const zg=ctx.createRadialGradient(VIEW.w/2,VIEW.h/2,VIEW.h*0.15,VIEW.w/2,VIEW.h/2,VIEW.h*0.8);
+      zg.addColorStop(0,`rgba(${ZC[Game.zone]},${0.06*k})`);
+      zg.addColorStop(1,'rgba(0,0,0,0)');
+      ctx.fillStyle=zg;
+      ctx.fillRect(0,0,VIEW.w,VIEW.h);
+    }
     ctx.textAlign='center';
     ctx.font='italic 19px Georgia,serif';
     ctx.fillStyle=`rgba(186,178,158,${k*0.85})`;
