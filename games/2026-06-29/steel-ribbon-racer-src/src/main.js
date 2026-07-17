@@ -4045,6 +4045,20 @@ const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: []
 const raceWearSys = { segs: 0, patches: 0, enabled: !0, _mesh: null };
 // zoom-detail 50 (round-six item 3): lawn mowing stripes + worn patches
 const lawnSys = { striped: 0, enabled: !0, mat: null };
+// zoom-detail 52 (round-six item 5): neon halos + flicker
+const neonSys = { halos: 0, flicker: 0, enabled: !0, _meshes: [], _flick: [] };
+let neonHaloTex = null;
+function buildHaloTexture() {
+  if (neonHaloTex) return neonHaloTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 256), (cv.height = 128));
+  const g = cv.getContext("2d"),
+    gr = g.createRadialGradient(128, 64, 6, 128, 64, 120);
+  (gr.addColorStop(0, "rgba(255,255,255,0.85)"), gr.addColorStop(0.45, "rgba(255,255,255,0.32)"), gr.addColorStop(1, "rgba(255,255,255,0)"));
+  ((g.fillStyle = gr), g.fillRect(0, 0, 256, 128));
+  neonHaloTex = new CanvasTexture(cv);
+  return ((neonHaloTex.colorSpace = SRGBColorSpace), neonHaloTex);
+}
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
   ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
@@ -5534,6 +5548,9 @@ function N1() {
     for (let $ = 0; $ < Ze.length; $++) se.setMatrixAt($, Ze[$]);
     ((se.instanceMatrix.needsUpdate = !0), (se.castShadow = !0), (se.receiveShadow = !0), i.add(se));
   }
+  const __neonHaloParts = {},
+    __neonFlickParts = [];
+  ((neonSys.halos = 0), (neonSys.flicker = 0), (neonSys._meshes = []), (neonSys._flick = []));
   const J = ["HOTEL", "OPEN", "AUTO", "RACE", "CAFE", "PARTS", "ARCADE", "MOTEL", "TACOS", "VINYL"];
   for (let N = 0; N < Math.min(Me.length, 34); N++) {
     const O = Me[N],
@@ -5545,6 +5562,13 @@ function N1() {
       (oe.rotation.y = O.zSide < 0 ? Math.PI : 0),
       i.add(oe),
       Xi("vertical-neon", oe.position.x, oe.position.y, oe.position.z));
+    {
+      const hg = new PlaneGeometry(12, 30).translate(0, 0, -0.13),
+        hm2 = new Matrix4().makeRotationY(oe.rotation.y);
+      (hm2.setPosition(oe.position.x, oe.position.y, oe.position.z), hg.applyMatrix4(hm2));
+      if (N === 2) __neonFlickParts.push({ geo: hg, color: j, mat: ee });
+      else (__neonHaloParts[j] || (__neonHaloParts[j] = [])).push(hg);
+    }
   }
   for (let N = 0; N < Math.min(Se.length, 48); N++) {
     const O = Se[N],
@@ -5560,6 +5584,13 @@ function N1() {
       : (re.position.set(O.px, w, O.pz + O.side * (O.d * 0.5 + 0.22)), (re.rotation.y = O.side < 0 ? Math.PI : 0)),
       i.add(re),
       Xi("wall-sign", re.position.x, re.position.y, re.position.z));
+    {
+      const hg = new PlaneGeometry(oe * 1.4, 10.5).translate(0, 0, -0.11),
+        hm2 = new Matrix4().makeRotationY(re.rotation.y);
+      (hm2.setPosition(re.position.x, re.position.y, re.position.z), hg.applyMatrix4(hm2));
+      if (N === 5) __neonFlickParts.push({ geo: hg, color: j, mat: ee });
+      else (__neonHaloParts[j] || (__neonHaloParts[j] = [])).push(hg);
+    }
   }
   for (let N = 0; N < Math.min(Z.length, 18); N++) {
     const O = Z[N],
@@ -5587,7 +5618,41 @@ function N1() {
       (oe.rotation.y = O.axis === "x" ? (O.side > 0 ? Math.PI / 2 : -Math.PI / 2) : O.side < 0 ? Math.PI : 0),
       i.add(oe),
       Xi("roof-billboard", oe.position.x, oe.position.y + 4.8, oe.position.z));
+    {
+      const hg = new PlaneGeometry(w * 1.35, 11).translate(0, 0, -0.55),
+        hm2 = new Matrix4().makeRotationY(oe.rotation.y);
+      (hm2.setPosition(oe.position.x, oe.position.y + 4.8, oe.position.z), hg.applyMatrix4(hm2));
+      (__neonHaloParts[ee] || (__neonHaloParts[ee] = [])).push(hg);
+    }
   }
+  // zoom-detail 52: merged halo mesh per neon color (≤6 additive draws for
+  // every sign in the city) + individual flicker pairs (sign + own halo wobble)
+  for (const hc of Object.keys(__neonHaloParts)) {
+    const hm3 = new Mesh(
+      mergeGeometries(__neonHaloParts[hc], !1),
+      new MeshBasicMaterial({ map: buildHaloTexture(), color: new Color(hc), transparent: !0, opacity: 0.4, blending: AdditiveBlending, depthWrite: !1, side: DoubleSide, fog: !1 }),
+    );
+    ((hm3.raycast = () => {}), (hm3.renderOrder = 2), i.add(hm3), neonSys._meshes.push(hm3), (neonSys.halos += __neonHaloParts[hc].length));
+  }
+  for (const fp of __neonFlickParts) {
+    const fmat = new MeshBasicMaterial({ map: buildHaloTexture(), color: new Color(fp.color), transparent: !0, opacity: 0.4, blending: AdditiveBlending, depthWrite: !1, side: DoubleSide, fog: !1 }),
+      fmesh = new Mesh(fp.geo, fmat);
+    ((fmesh.raycast = () => {}), (fmesh.renderOrder = 2), i.add(fmesh), neonSys._meshes.push(fmesh));
+    (neonSys._flick.push({ sign: fp.mat, halo: fmat }), neonSys.flicker++, neonSys.halos++);
+  }
+  if (neonSys._flick.length) {
+    const flickAnchor = new Object3D();
+    i.add(flickAnchor);
+    Bn(flickAnchor, (tt) => {
+      if (!neonSys.enabled) return;
+      for (let fi = 0; fi < neonSys._flick.length; fi++) {
+        const ff = neonSys._flick[fi],
+          dip = Math.sin(tt * 11.3 + fi * 2.1) * Math.sin(tt * 4.7 + fi) > 0.88 ? 0.22 : 1;
+        ((ff.sign.opacity = dip), (ff.halo.opacity = 0.4 * dip));
+      }
+    });
+  }
+  if (!neonSys.enabled) for (const m4 of neonSys._meshes) m4.visible = !1;
   const le = [11680564, 3108784, 14205514, 15198700, 3752265, 4164178, 10112944],
     // parked cars: real silhouette (body + cabin) with a separate dark wheel layer, still 2 draw calls total
     fe = mergeGeometries([
@@ -11201,6 +11266,12 @@ window.__steelRibbonDebug = {
     if (lawnSys.mat) ((lawnSys.mat.vertexColors = lawnSys.enabled), (lawnSys.mat.needsUpdate = !0));
     return lawnSys.enabled;
   },
+  neonEnable(on) {
+    neonSys.enabled = !!on;
+    for (const m of neonSys._meshes) m.visible = neonSys.enabled;
+    if (!neonSys.enabled) for (const f of neonSys._flick) ((f.sign.opacity = 1), (f.halo.opacity = 0.4));
+    return neonSys.enabled;
+  },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
     const hd = on === !1 ? 1 : 2;
@@ -11324,6 +11395,7 @@ window.__steelRibbonDebug = {
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
+      neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
