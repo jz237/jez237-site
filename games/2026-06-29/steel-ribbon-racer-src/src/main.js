@@ -955,10 +955,13 @@ function He(i, e) {
   return -7 + Math.sin(i * 0.018) * 4 + Math.cos(e * 0.014) * 5 + Math.sin((i + e) * 0.006) * 10;
 }
 function $i(i, e, t, n) {
+  // 5x5 min-sample of the footprint (was 3x3): a trustworthy minimum lets the
+  // placers keep a SMALL anti-float margin instead of burying every building
+  // half a meter — the "sunk into the ground" report (2026-07-16).
   const s = t * 0.5,
     r = n * 0.5;
   let a = He(i, e);
-  for (const o of [-s, 0, s]) for (const c of [-r, 0, r]) a = Math.min(a, He(i + o, e + c));
+  for (const o of [-s, -s * 0.5, 0, s * 0.5, s]) for (const c of [-r, -r * 0.5, 0, r * 0.5, r]) a = Math.min(a, He(i + o, e + c));
   return a;
 }
 function ka(i, e, t = 10) {
@@ -1277,7 +1280,7 @@ function L1() {
       v = new Mesh(new PlaneGeometry(980, 64 + g * 18, 1, 1), n.clone());
     ((v.rotation.x = -Math.PI / 2),
       (v.rotation.z = -0.34 + g * 0.03),
-      v.position.set(M, $i(M, x, h, _) - 0.55, x),
+      v.position.set(M, $i(M, x, h, _) - 0.2, x),
       (v.renderOrder = -4),
       et.add(v));
   }
@@ -1481,7 +1484,7 @@ function L1() {
     const R = Math.hypot(h, _) * 0.65,
       C = zn(() => ({ x: -880 + Math.random() * 1760, z: -900 - Math.random() * 900 }), R, 240, 60);
     C &&
-      (M.position.set(C.x, $i(C.x, C.z, h, _) - 0.7, C.z),
+      (M.position.set(C.x, $i(C.x, C.z, h, _) - 0.3, C.z),
       (M.rotation.y = Math.random() * Math.PI),
       et.add(M),
       kn("building", C.x, C.z, R, 240));
@@ -5088,7 +5091,7 @@ function N1() {
   }
   function $e(N, O, Y, j, ee, oe = "downtown") {
     if (Hi(N, O, Y, j)) return !1;
-    const re = $i(N, O, Y, j) - 1.1;
+    const re = $i(N, O, Y, j) - 0.45;
     if (Wi(N, O, Y, j, re + ee + 2)) return !1;
     if (
       (e.position.set(N, re + ee / 2, O),
@@ -5128,7 +5131,7 @@ function N1() {
   }
   function ot(N, O, Y, j, ee, oe = "residential") {
     if (Hi(N, O, Y, j)) return !1;
-    const re = $i(N, O, Y, j) - 0.55,
+    const re = $i(N, O, Y, j) - 0.2,
       w = 2 + Math.random() * 2.4;
     if (Wi(N, O, Y, j, re + ee + w + 1.5, 6)) return !1;
     (e.position.set(N, re + ee / 2, O),
@@ -5442,9 +5445,15 @@ function N1() {
         ? r + Math.random() * (s - r)
         : s - Math.round(Math.random() * ((s - r) / a)) * a + (Math.random() < 0.5 ? -1 : 1) * (o * 0.26);
     if (Pn(O, Y, 4).clearance < 2) continue;
-    const j = He(O, Y) + 0.06;
+    const j = He(O, Y) + 0.06,
+      // tilt parked cars to the terrain normal (gradient of He) — flat cars on
+      // sloped lawns bury their uphill wheels ("sunk" report, 2026-07-16)
+      _gx = (He(O + 1.2, Y) - He(O - 1.2, Y)) / 2.4,
+      _gz = (He(O, Y + 1.2) - He(O, Y - 1.2)) / 2.4,
+      _qN = new Quaternion().setFromUnitVectors(on, new Vector3(-_gx, 1, -_gz).normalize()),
+      _qY = new Quaternion().setFromAxisAngle(on, N ? 0 : Math.PI / 2);
     (e.position.set(O, j, Y),
-      e.quaternion.setFromAxisAngle(on, N ? 0 : Math.PI / 2),
+      e.quaternion.copy(_qN).multiply(_qY),
       e.scale.set(1, 1, 1),
       e.updateMatrix(),
       Ve.setMatrixAt(Re, e.matrix),
@@ -11170,6 +11179,9 @@ window.__steelRibbonDebug = {
         endYaw: +Math.atan2(a.abx, -a.abz).toFixed(4),
       };
     });
+  },
+  parkedSpots(i = 10) {
+    return (rideSys.spots || []).slice(0, i).map((e) => ({ x: +e.x.toFixed(1), z: +e.z.toFixed(1), idx: e.idx }));
   },
   colliderSample(i = 8) {
     return Mn.slice(0, i).map((e) => ({
