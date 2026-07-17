@@ -168,6 +168,7 @@ export class Sim {
       pulseT: def.pulse ? def.pulse.every : 0,
       telegraphT: 0,
       sumT: def.summon ? 5.0 : 0, sumTeleT: 0,
+      splitsDone: 0,
       shieldT: def.shieldCycle ? def.shieldCycle.every : 0, shieldTeleT: 0,
       bossPhase: 1,
     };
@@ -568,6 +569,7 @@ export class Sim {
       this.emit('bossPhase', { id: e.id, phase: 2 });
     }
     if (e.def.bossKind === 'tidecaller') { this.stepTidecaller(e, dt); return; }
+    if (e.def.bossKind === 'mycelial') { this.stepMycelial(e, dt); return; }
     this.stepUnlit(e, dt);
   }
 
@@ -606,6 +608,29 @@ export class Sim {
         e.shieldT -= dt;
         if (e.shieldT <= 0) { e.shieldT = C.every; e.shieldTeleT = C.telegraph; this.emit('bossTelegraph', { x: e.x, y: e.y, dur: C.telegraph, kind: 'swell' }); }
       }
+    }
+  }
+
+  // THE MYCELIAL: sheds sporelings at health thresholds; spore aura heals
+  // nearby creatures (blocked by ignite — burn is the counter)
+  stepMycelial(e, dt) {
+    const thresholds = e.def.splitAt;
+    if (e.splitsDone < thresholds.length && e.hp <= e.maxHp * thresholds[e.splitsDone]) {
+      e.splitsDone++;
+      const waveScale = 1 + Math.max(0, this.wave - 20) * 0.05;
+      this.spawnEnemy('sporeling', waveScale, Math.max(0, e.s - 34));
+      e.telegraphT = 0.9; // recoil — the shared slow-while-telegraphing
+      this.rings.push({ x: e.x, y: e.y, t: 0, dur: 0.9, color: e.def.color, max: 300 });
+      this.burst(e.x, e.y, e.def.color, 30, 170);
+      this.emit('bossSplit', { x: e.x, y: e.y, splits: e.splitsDone });
+    }
+    if (e.telegraphT > 0) e.telegraphT -= dt;
+    // heal aura pulse (visual ring every ~2.5s handled by renderer via phase)
+    const A = e.def.healAura, r2 = A.radius * A.radius;
+    for (const o of this.enemies) {
+      if (o === e || o.hp <= 0 || o.st.ignite > 0 || o.hp >= o.maxHp) continue;
+      const dx = o.x - e.x, dy = o.y - e.y;
+      if (dx * dx + dy * dy <= r2) o.hp = Math.min(o.maxHp, o.hp + o.maxHp * A.pct * dt * (e.bossPhase === 2 ? 1.6 : 1));
     }
   }
 
