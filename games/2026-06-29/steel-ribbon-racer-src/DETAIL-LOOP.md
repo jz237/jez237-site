@@ -1538,3 +1538,25 @@ signal-corner ped density weighting.
   calls / 599-608k tris (+1 draw, +1 texture). Suite 160/160 (probe:
   placed===spots ≥10 + toggle). NEXT: item 6 — suburban shop facades,
   then 7-10 → DEPLOY BATCH 18 (v3.25.0) + closing survey.
+- **64 SUBURBAN SHOP BANDS + SUITE HARDENING (2026-07-17)**: the A()
+  brick shops have street-level life at MID distance — a permanent
+  window/door canvas band (2 variants: shop windows with sills, one
+  warmly lit with an interior silhouette, glazed door with handle)
+  on each shop's street face, world-baked and MERGED per variant (≤2
+  draws for all ~19 shops). This fills the tier BETWEEN the flat
+  color bands (far) and the pooled storefront near-tier (which still
+  overlays richer detail up close). TWO ANCHOR LESSONS PAID AGAIN:
+  (1) the neon-collector declaration had grown A-board fields — my
+  script asserted and aborted BEFORE ITS WRITE, so the partial state
+  was clean but confusing (asserts protect, aborted writes save you);
+  (2) the collector reset initially sat AFTER the placement loop and
+  wiped everything — statement EXECUTION order beats line intuition;
+  reset now lives beside storefrontSys.resetSpots(). SUITE HARDENING:
+  brake probe made DETERMINISTIC (__pokeBrake debug sets
+  brakePulse=1.5 on the nearest car — organic braking starved two 15s
+  windows); heli descent poll 90→160 tries + a 4-attempt exit-retry
+  settle loop (low-fps descent overshoot was THE recurring flake).
+  Verified by LOOKING (loop-shots/64-shopbands/): VECTOR TIRES gains
+  a row of framed shop windows + glazed door at its base; OFF = flat
+  wall. Perf gate: 1870-1948 calls / 604-618k tris. Suite 161/161.
+  v3.25.0. DEPLOY BATCH 18 (items 4-6) next in this iteration.

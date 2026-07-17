@@ -4136,6 +4136,41 @@ const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: []
 // zoom-detail 61 (round-seven item 3): pond-edge dressing — reeds, rocks,
 // lily pads ringing every city pond. ONE merged vcBake mesh (+1 draw total).
 const pondEdgeSys = { ponds: 0, clusters: 0, pads: 0, enabled: !0, _mesh: null, sample: null };
+// zoom-detail 64 (round-seven item 6): permanent window/door bands on the
+// suburban A() shops — the MID tier between flat color bands and the pooled
+// storefront near-tier. Two variants, merged per variant (≤2 draws).
+const shopBandSys = { count: 0, enabled: !0, _parts: {}, _meshes: [], sample: null };
+function buildShopBandTextures() {
+  const out = [];
+  for (let v = 0; v < 2; v++) {
+    const cv = document.createElement("canvas");
+    ((cv.width = 512), (cv.height = 128));
+    const g = cv.getContext("2d");
+    g.clearRect(0, 0, 512, 128);
+    const win = (x, w2, lit) => {
+      ((g.fillStyle = "#f0ebdd"), g.fillRect(x - 4, 100, w2 + 8, 8));
+      ((g.fillStyle = lit ? "#e8b96a" : "#182430"), g.fillRect(x, 22, w2, 78));
+      ((g.strokeStyle = "#caccc4"), (g.lineWidth = 5), g.strokeRect(x, 22, w2, 78));
+      (g.beginPath(), g.moveTo(x + w2 / 2, 24), g.lineTo(x + w2 / 2, 98), g.stroke());
+      if (lit) ((g.fillStyle = "rgba(60,50,40,0.55)"), g.fillRect(x + w2 * 0.12, 60, w2 * 0.2, 40));
+    };
+    if (v === 0) {
+      (win(28, 92, !1), win(150, 92, !0), win(390, 92, !1));
+      ((g.fillStyle = "#4a3326"), g.fillRect(282, 18, 74, 92));
+      ((g.fillStyle = "#9fc4cf"), g.fillRect(292, 26, 54, 60));
+      ((g.fillStyle = "#e8d8b0"), g.fillRect(318, 70, 8, 8));
+    } else {
+      (win(24, 120, !0), win(298, 120, !1));
+      ((g.fillStyle = "#3a3f46"), g.fillRect(180, 18, 84, 92));
+      ((g.fillStyle = "#8fb4bf"), g.fillRect(190, 26, 64, 66));
+      ((g.fillStyle = "#d8c8a0"), g.fillRect(222, 74, 9, 9));
+      win(436, 60, !1);
+    }
+    const t = new CanvasTexture(cv);
+    ((t.colorSpace = SRGBColorSpace), out.push(t));
+  }
+  return out;
+}
 function buildPondEdges(group) {
   ((pondEdgeSys.ponds = 0), (pondEdgeSys.clusters = 0), (pondEdgeSys.pads = 0), (pondEdgeSys.sample = null));
   if (!ponds.length) return;
@@ -5702,6 +5737,16 @@ function N1() {
           (Ce.rotation.y = $ > 0 ? Math.PI / 2 : -Math.PI / 2))
         : (Ce.position.set(N, re + ee * 0.66, O + $ * (j * 0.5 + 0.2)), (Ce.rotation.y = $ < 0 ? Math.PI : 0)),
       i.add(Ce),
+      (() => {
+        const bw = Math.min(14, (se ? j : Y) * 0.8),
+          bv = Math.abs((N * 7 + O) | 0) % 2,
+          bg2 = new PlaneGeometry(bw, 2.7),
+          bm2 = new Matrix4().makeRotationY(se ? ($ > 0 ? Math.PI / 2 : -Math.PI / 2) : $ < 0 ? Math.PI : 0);
+        (se ? bm2.setPosition(N + $ * (Y * 0.5 + 0.12), re + 1.65, O) : bm2.setPosition(N, re + 1.65, O + $ * (j * 0.5 + 0.12)), bg2.applyMatrix4(bm2));
+        ((shopBandSys._parts[bv] || (shopBandSys._parts[bv] = [])).push(bg2), shopBandSys.count++);
+        shopBandSys.sample ||
+          (shopBandSys.sample = se ? { x: +(N + $ * (Y * 0.5 + 1)).toFixed(1), y: +(re + 1.6).toFixed(1), z: +O.toFixed(1), nx: $, nz: 0 } : { x: +N.toFixed(1), y: +(re + 1.6).toFixed(1), z: +(O + $ * (j * 0.5 + 1)).toFixed(1), nx: 0, nz: $ });
+      })(),
       Xi("storefront-sign", Ce.position.x, Ce.position.y, Ce.position.z),
       storefrontSys.addSpot(
         se ? N + $ * (Y * 0.5) : N,
@@ -5717,6 +5762,7 @@ function N1() {
   }
   storefrontSys.resetSpots();
   rooftopSys.resetSpots();
+  ((shopBandSys._parts = {}), (shopBandSys.count = 0), (shopBandSys._meshes = []), (shopBandSys.sample = null));
   for (let N = t + a / 2; N <= n - a / 2; N += a)
     for (let O = s - a / 2; O >= r + a / 2; O -= a) {
       const Y = Pn(N, O, c * 0.5).clearance;
@@ -5968,6 +6014,17 @@ function N1() {
     });
   }
   if (!neonSys.enabled) for (const m4 of neonSys._meshes) m4.visible = !1;
+  {
+    const sbTex = buildShopBandTextures();
+    for (const bk of Object.keys(shopBandSys._parts)) {
+      const sbm = new Mesh(
+        mergeGeometries(shopBandSys._parts[bk], !1),
+        new MeshBasicMaterial({ map: sbTex[+bk], transparent: !0, alphaTest: 0.15, side: DoubleSide }),
+      );
+      ((sbm.raycast = () => {}), i.add(sbm), shopBandSys._meshes.push(sbm));
+    }
+    if (!shopBandSys.enabled) for (const m6 of shopBandSys._meshes) m6.visible = !1;
+  }
   {
     const awnTex = buildAwningTextures();
     for (const ck of Object.keys(__awnParts)) {
@@ -11649,6 +11706,11 @@ window.__steelRibbonDebug = {
     oilSys.enabled = !!on;
     return oilSys.enabled;
   },
+  shopBandsEnable(on) {
+    shopBandSys.enabled = !!on;
+    for (const m of shopBandSys._meshes) m.visible = shopBandSys.enabled;
+    return shopBandSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -11682,6 +11744,16 @@ window.__steelRibbonDebug = {
   brakesEnable(on) {
     brakeSys.enabled = !!on;
     return brakeSys.enabled;
+  },
+  __pokeBrake() {
+    let best = null;
+    for (const K of Rc) {
+      if (!K.mesh || !K.mesh.visible) continue;
+      const d = Math.hypot(K.mesh.position.x - Xe.position.x, K.mesh.position.z - Xe.position.z);
+      (!best || d < best.d) && (best = { K, d });
+    }
+    if (best) best.K.brakePulse = 1.5;
+    return !!best;
   },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
@@ -11806,6 +11878,7 @@ window.__steelRibbonDebug = {
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
       oil: { spots: oilSys.spots.length, placed: oilSys.placed, enabled: oilSys.enabled, sample: oilSys.sample.slice(0, 3) },
+      shopBands: { count: shopBandSys.count, enabled: shopBandSys.enabled, sample: shopBandSys.sample ?? null },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },
