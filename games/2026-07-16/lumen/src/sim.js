@@ -16,8 +16,7 @@ function catmullRom(p0, p1, p2, p3, t) {
   ];
 }
 
-export function buildPath(map, samplesPerSeg = 24) {
-  const pts = map.points;
+export function buildPath(pts, samplesPerSeg = 24) {
   const out = [];
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
@@ -52,7 +51,7 @@ export class Sim {
   constructor(mapIndex = 0, seed = null) {
     this.map = MAPS[Math.min(mapIndex, MAPS.length - 1)];
     this.rng = new Rng(seed ?? this.map.seed);
-    this.path = buildPath(this.map);
+    this.paths = this.map.paths.map(pts => buildPath(pts));
     this.time = 0;
     this.gold = ECON.startGold;
     this.lives = ECON.startLives;
@@ -95,13 +94,15 @@ export class Sim {
   }
 
   distToPath(x, y) {
-    // coarse then fine scan of the sample table
-    const { pts } = this.path;
+    // coarse scan across every path's sample table
     let best = Infinity;
-    for (let i = 0; i < pts.length; i += 6) {
-      const dx = pts[i][0] - x, dy = pts[i][1] - y;
-      const d = dx * dx + dy * dy;
-      if (d < best) best = d;
+    for (const path of this.paths) {
+      const { pts } = path;
+      for (let i = 0; i < pts.length; i += 6) {
+        const dx = pts[i][0] - x, dy = pts[i][1] - y;
+        const d = dx * dx + dy * dy;
+        if (d < best) best = d;
+      }
     }
     return Math.sqrt(best);
   }
@@ -148,6 +149,7 @@ export class Sim {
       st: { chill: 0, shock: 0, ignite: 0, corrode: 0, corrodeStacks: 0, freeze: 0 },
       mixCool: 0,
       dead: false,
+      pathIdx: this.rng.int(0, this.paths.length - 1),
       shield: def.shield ? def.shield * hpMul : 0,
       maxShield: def.shield ? def.shield * hpMul : 0,
       untargetable: false,
@@ -157,7 +159,7 @@ export class Sim {
       telegraphT: 0,
       bossPhase: 1,
     };
-    const p = pathPos(this.path, 0);
+    const p = pathPos(this.paths[e.pathIdx], atS);
     e.x = p.x; e.y = p.y;
     this.enemies.push(e);
     this.emit('spawn', { id: e.id, type });
@@ -326,6 +328,10 @@ export class Sim {
         this.state = 'prep';
         this.prepLeft = ECON.prepTime;
         this.emit('waveClear', { wave: this.wave, bonus: this.clearBonus, interest });
+        if (this.wave === 20 && !this.campaignDone) {
+          this.campaignDone = true;
+          this.emit('victory', { wave: this.wave, score: this.score() });
+        }
       }
     }
 
@@ -374,14 +380,14 @@ export class Sim {
       if (e.def.boss && e.bossPhase === 2) slowMul *= 1.6;
       e.s += e.speed * slowMul * dt * (0.9 + 0.1 * Math.sin(this.time * 3 + e.wobblePhase));
       e.phase += dt * (3 + e.def.wobble * 0.2);
-      const p = pathPos(this.path, e.s);
+      const p = pathPos(this.paths[e.pathIdx], e.s);
       // lane offset across path + type wobble
       const ox = -p.ny * e.lane * pathW * 0.8;
       const oy = p.nx * e.lane * pathW * 0.8;
       const wob = e.def.hover ? Math.sin(this.time * 2.2 + e.wobblePhase) * 10 : Math.sin(this.time * 5 + e.wobblePhase) * e.def.wobble * 0.3;
       e.x = p.x + ox; e.y = p.y + oy + wob;
       e.dirx = p.nx; e.diry = p.ny;
-      if (e.s >= this.path.total - 4) {
+      if (e.s >= this.paths[e.pathIdx].total - 4) {
         e.dead = true; e.reached = true;
         this.lives -= e.def.damage;
         this.heartHitT = 0.8;
@@ -435,7 +441,7 @@ export class Sim {
 
   fireProjectile(t, st, best) {
     const lead = Math.min(0.5, Math.hypot(best.x - t.x, best.y - t.y) / t.def.projSpeed);
-    const aim = pathPos(this.path, best.s + best.speed * lead);
+    const aim = pathPos(this.paths[best.pathIdx], best.s + best.speed * lead);
     this.projectiles.push({
       id: this.nextId++, x: t.x, y: t.y - 30, tx: aim.x, ty: aim.y,
       target: best.id, speed: t.def.projSpeed, damage: st.damage,
@@ -464,7 +470,7 @@ export class Sim {
       }
       cur = nxt;
     }
-    this.arcs.push({ hits, t: 0, dur: 0.3, color: t.def.color, seed: this.rng.next() });
+    this.arcs.push({ hits, t: 0, dur: 0.45, color: t.def.color, seed: this.rng.next() });
     this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y, chains: hits.length });
   }
 
@@ -508,7 +514,7 @@ export class Sim {
 
   fireMortar(t, st, best) {
     const lead = Math.hypot(best.x - t.x, best.y - t.y) / t.def.projSpeed;
-    const aim = pathPos(this.path, best.s + best.speed * lead * 0.85);
+    const aim = pathPos(this.paths[best.pathIdx], best.s + best.speed * lead * 0.85);
     this.projectiles.push({
       id: this.nextId++, x: t.x, y: t.y - 40, tx: aim.x, ty: aim.y,
       x0: t.x, y0: t.y - 40, speed: t.def.projSpeed, damage: st.damage,
