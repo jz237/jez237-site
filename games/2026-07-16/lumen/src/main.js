@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.2.0';
+export const VERSION = 'v2.3.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -52,6 +52,7 @@ class Game {
     const armAudio = () => this.audio.start();
     window.addEventListener('pointerdown', armAudio, { once: true });
     window.addEventListener('keydown', armAudio, { once: true });
+    if (COARSE) { document.body.classList.add('coarse'); this.renderer.setQuality(2); } // phones start mid-tier; auto may climb
     this.bindInput();
     this.installDebug();
     document.querySelector('#ver').textContent = 'LUMEN ' + VERSION;
@@ -512,6 +513,7 @@ class Game {
       start() { g.attract = false; g.newRun(); g.started = true; document.getElementById('title').classList.remove('open'); },
       audioState() { return g.audio.state(); },
       quality() { return g.renderer.quality; },
+      uiState() { return { armed: g.armed, pending: g.pendingSpot || null, lastPtr: g.lastPointerType || null, started: g.started }; },
       qState() { return { qSlow: g.qSlow, qFast: g.qFast, frameMs: +g.frameMs.toFixed(1), q: g.renderer.quality, pref: g.audio.settings.quality || 'auto' }; },
       pixelStats() {
         const gl = g.renderer.gl;

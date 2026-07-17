@@ -100,6 +100,10 @@
     background: radial-gradient(ellipse at 50% 60%, rgba(10,6,32,0.5), rgba(4,2,12,0.92));
     opacity: 0; pointer-events: none; transition: opacity 0.6s; }
   #title.open { opacity: 1; pointer-events: auto; }
+  /* children with explicit pointer-events:auto would still swallow input
+     while hidden — hard-disable everything inside closed overlays */
+  #title:not(.open) * { pointer-events: none !important; }
+  #gameover:not(.open) * { pointer-events: none !important; }
   #title .tbox { text-align: center; }
   #title h1 { font-size: clamp(48px, 9vw, 120px); font-weight: 700; letter-spacing: 0.42em;
     text-indent: 0.42em; color: #eafcff;
@@ -169,6 +173,11 @@
   #tapCancel.show { display: block; }
   /* coarse-pointer ergonomics: fatter targets, tighter chrome */
   @media (pointer: coarse) {
+    #bottombar { gap: 8px; padding: 8px 8px 10px; overflow-x: auto; justify-content: flex-start; -webkit-overflow-scrolling: touch; }
+    #bottombar::-webkit-scrollbar { display: none; }
+    #cards { flex-shrink: 0; }
+    #surge { flex-shrink: 0; }
+    #tempo { flex-shrink: 0; }
     .card { min-width: 74px; padding: 12px 8px 10px; }
     .card .key { display: none; }
     #tempo button { width: 52px; padding: 13px 0; }
@@ -240,7 +249,7 @@
   <div id="rotate"><div><span class="ricon">📱</span>turn your device sideways<br>the grove is wide</div></div>
   <button id="tapCancel">✕ cancel placement</button>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v2.2.0</div>
+  <div id="ver">LUMEN v2.3.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>

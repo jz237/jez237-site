@@ -147,11 +147,12 @@ export class UI {
     const s = this.el.surge;
     if (sim.state === 'prep') {
       const bonus = Math.floor(Math.max(0, sim.prepLeft) * ECON.surgeBonusPerSec);
-      s.textContent = `CALL THE SURGE  +◈${bonus}  (${Math.ceil(Math.max(0, sim.prepLeft))}s)`;
+      const coarse = document.body.classList.contains('coarse');
+      s.textContent = coarse ? `SURGE +◈${bonus}` : `CALL THE SURGE  +◈${bonus}  (${Math.ceil(Math.max(0, sim.prepLeft))}s)`;
       s.classList.add('ready');
       s.disabled = false;
     } else {
-      s.textContent = sim.state === 'wave' ? 'SURGE INBOUND' : '—';
+      s.textContent = sim.state === 'wave' ? (document.body.classList.contains('coarse') ? 'INBOUND' : 'SURGE INBOUND') : '—';
       s.classList.remove('ready');
       s.disabled = true;
     }
