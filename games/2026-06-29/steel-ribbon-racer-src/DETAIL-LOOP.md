@@ -1186,3 +1186,24 @@ signal-corner ped density weighting.
   skip-passes on narrow-roof worlds). NEXT: item 10 — plane close
   detail (registration codes, prop disc, gear struts), then DEPLOY
   BATCH 14 (v3.21.0) and the round-five closing survey.
+- **47 PLANE CLOSE DETAIL — round-five item 10, ROUND FIVE COMPLETE
+  (2026-07-16)**: the banner planes are aircraft up close. Each of the
+  four gets: fictional registration decals (PLANE_REGS SR-21A/07K/93B/
+  42E; 256x256 4-row stencil atlas, dark text, transparent; fuselage
+  both sides + underwing, three quads MERGED to one mesh per plane
+  reading its atlas row), a translucent prop disc behind the spinning
+  blades (CircleGeometry, opacity 0.15, depthWrite off), merged gear
+  (two main struts + wheels, tail wheel — ONE mesh on the existing
+  darkMat), and wingtip nav lights (red left/green right, shared
+  toneMapped-off basics). +5 draws per plane worst case. userData.
+  detail + regs in the planes report. Verified by LOOKING
+  (loop-shots/47-plane-detail/): SR-21A crisp on the fuselage and
+  underwing, three wheels hanging right, banner intact; nav lights
+  verified by report+geometry (wingtips out of frame in the passes).
+  Perf gate: 1835-1890 calls / 599-615k tris — 615k is ~99% of the
+  620k gate: ROUND SIX MUST OPEN WITH FRESH RENEGOTIATION DATA before
+  any geometry-adding item. Suite 148/148. ROUND FIVE: 10/10 SHIPPED
+  (37-47 incl. the v3.20.0 sunk-fix interlude). DEPLOY BATCH 14
+  (v3.21.0) next, then the closing survey — which per the user's
+  standing directive ("continue improving graphics and details")
+  seeds ROUND SIX instead of stopping the loop.
