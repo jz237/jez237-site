@@ -743,6 +743,62 @@ void main(){
     col += tint*rim*0.6;
     cov = m*0.96;
   }
+  else if(kind == 33){ // PRISMBLOOM — apex: prism petals round a molten core
+    vec2 q = p; q.y = -q.y;
+    float ang = atan(q.y,q.x);
+    float r = length(q);
+    // six angular prism blades
+    float blade = 1e9;
+    for(int i=0;i<6;i++){
+      float fi=float(i);
+      float ba = fi*1.047 + 0.26*sin(phase*0.5+fi);
+      vec2 dir = vec2(cos(ba), sin(ba)*0.9);
+      vec2 rel = q - dir*0.16;
+      float along = dot(rel, dir);
+      float perp = abs(rel.x*dir.y - rel.y*dir.x);
+      float w = 0.16*(1.0 - along*1.15);
+      float bd = max(perp - max(w, 0.0), max(along - 0.72, -along));
+      blade = min(blade, bd);
+    }
+    float core = sdCircle(q, 0.24 + fbm3(q*5.0+phase*0.4)*0.04);
+    float d = smin(blade, core, 0.07);
+    float m = smoothstep(0.02,-0.02,d);
+    float coreG = smoothstep(0.30,0.0,r);
+    if(m<=0.0 && coreG<=0.01){ frag=vec4(0.0); return; }
+    float facet = 0.5+0.5*sin(ang*12.0 + r*16.0 + seed*20.0);
+    vec3 body = mix(vec3(0.07,0.04,0.13), tint*0.5, 0.3+0.4*facet);
+    col = body*m;
+    col += mix(tint, vec3(1.0), 0.6) * coreG * (1.4 + 2.6*aux*aux);
+    // refraction streaks as it charges
+    float streak = pow(0.5+0.5*sin(ang*6.0 - phase*2.0), 5.0) * smoothstep(0.75,0.3,r) * smoothstep(0.2,0.45,r);
+    col += tint * streak * (0.4 + 1.8*aux) * m;
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.12,-0.04,d);
+    col += mix(tint,vec3(1.0),0.3)*rim*0.8*m;
+    cov = clamp(m*0.97 + coreG*0.3, 0.0, 1.0);
+  }
+  else if(kind == 34){ // STORMBRIAR — apex: thorn coil crackling with arcs
+    vec2 q = p*vec2(1.0,1.08);
+    float r = length(q);
+    float ang = atan(q.y,q.x);
+    float wob = fbm3(vec2(ang*1.6, phase*0.2)+seed*4.0)*0.07;
+    // the coil: thick ring with thorn spikes in and out
+    float ring = abs(r - 0.52 - wob) - 0.10;
+    float spikes = 0.10*pow(abs(sin(ang*7.0 + phase*0.3)), 6.0);
+    ring -= spikes;
+    // central bramble knot
+    float d = smin(ring, sdCircle(q, 0.20+wob), 0.10);
+    float m = smoothstep(0.02,-0.02,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    vec3 body = mix(vec3(0.05,0.07,0.03), tint*0.34, smoothstep(0.75,0.2,r));
+    body *= 0.8 + 0.3*fbm3(q*6.0+seed*7.0);
+    // arc nodes: hot magenta sparks travelling the coil
+    float node = pow(0.5+0.5*sin(ang*3.0 - phase*3.2), 14.0) * smoothstep(0.16,0.0,abs(r-0.52-wob));
+    col = body*m + vec3(1.0,0.4,0.9) * node * (0.9 + 2.0*aux) * m;
+    col += tint * smoothstep(0.22,0.0,r) * (0.8 + 1.8*aux*aux);
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.12,-0.04,d);
+    col += tint*rim*0.7*m;
+    cov = m*0.95;
+  }
   else if(kind == 29){ // FROND — foreground kelp silhouette, haze-rimmed
     vec2 q = p; q.y = -q.y;
     float d = 1e9;

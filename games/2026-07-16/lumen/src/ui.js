@@ -206,10 +206,13 @@ export class UI {
       <div class="ibtns">
         ${next ? `<button id="btnUp" ${sim.gold < next.cost ? 'disabled' : ''}>GROW ◈${next.cost}</button>` : '<span class="dim">fully grown</span>'}
         <button id="btnSell">RELEASE ◈${Math.floor(tower.spent * ECON.sellRefund)}</button>
-      </div>`;
+      </div>
+      ${(() => { const f = sim.canFuse(tower); return f ? `<div class="ibtns"><button id="btnFuse" ${sim.gold < 300 ? 'disabled' : ''} style="border-color: rgb(190,120,255); box-shadow: 0 0 14px -6px rgb(190,120,255)">⬢ FUSE ◈300 → ${f.apexDef.name}</button></div>` : ''; })()}`;
     el.classList.add('open');
     const up = el.querySelector('#btnUp');
     if (up) up.onclick = () => this.game.upgradeSelected();
+    const fu = el.querySelector('#btnFuse');
+    if (fu) fu.onclick = () => this.game.fuseSelected();
     el.querySelector('#btnSell').onclick = () => this.game.sellSelected();
   }
 }
