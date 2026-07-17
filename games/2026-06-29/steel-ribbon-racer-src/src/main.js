@@ -4032,7 +4032,7 @@ const storefrontSys = {
 // footprints), ponds, outskirt scenery (Sa) and the ribbon corridor (Pn);
 // trees additionally stay ≥4m off street edges (ka) and register in the Sa
 // audit with a small margin so the road-safety probe stays clean.
-const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, pitches: 0, enabled: !0, sample: [], _vis: [] };
+const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, pitches: 0, strollers: 0, strollerCells: [], strollerSample: null, enabled: !0, sample: [], _vis: [] };
 // zoom-detail 51 (round-six item 4): soccer-pitch line canvas (white on
 // transparent; touchlines, halfway, center circle, boxes, spots)
 let pitchTex = null;
@@ -4201,7 +4201,7 @@ function buildHaloTexture() {
   return ((neonHaloTex.colorSpace = SRGBColorSpace), neonHaloTex);
 }
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
     zTop = Math.max(zA, zB),
     zCap = Math.min(zTop, 240),
@@ -4293,6 +4293,7 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
       }
     }
     parkSys.cells++;
+    parkSys.strollerCells.length < 3 && parkSys.strollerCells.push({ cx, cz, vert, bow, half });
     parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
   }
   const pg = new BufferGeometry();
@@ -5126,6 +5127,12 @@ function F1(i, e, t) {
       Rr.push(be),
       be.mesh.traverse((pm) => (pm.castShadow = !1)),
       i.add(be.mesh));
+    // zoom-detail 62 (round-seven item 4): the last few walkers stroll the
+    // park paths instead of streets — same Rr entry (kits/inspect intact)
+    if (I >= ie - 6 && parkSys.strollerCells.length) {
+      const pc = parkSys.strollerCells[I % parkSys.strollerCells.length];
+      ((be.park = pc), (be.parkT = (Math.random() - 0.5) * pc.half * 1.5), (be.speed = 1.1 + Math.random() * 0.7), parkSys.strollers++);
+    }
   }
   const de = new MeshBasicMaterial({ color: 14230306, transparent: !0, opacity: 0, depthWrite: !1, side: DoubleSide }),
     pe = new MeshBasicMaterial({ color: 16734015, transparent: !0, opacity: 0, depthWrite: !1, side: DoubleSide });
@@ -5154,6 +5161,25 @@ function F1(i, e, t) {
     if (!I.active)
       if (((I.respawn -= Me), I.respawn <= 0)) ((I.active = !0), (I.mesh.visible = !0), (I.along += I.dir * 50));
       else return;
+    if (I.park) {
+      const pc = I.park,
+        LIM = pc.half - 6;
+      I.parkT = (I.parkT ?? 0) + I.dir * I.speed * Me;
+      (I.parkT > LIM && ((I.parkT = LIM), (I.dir = -1)), I.parkT < -LIM && ((I.parkT = -LIM), (I.dir = 1)));
+      const tt2 = (I.parkT + pc.half) / (2 * pc.half),
+        across = Math.sin(tt2 * Math.PI) * pc.bow,
+        dAcr = ((Math.cos(tt2 * Math.PI) * Math.PI) / (2 * pc.half)) * pc.bow,
+        Z2 = pc.vert ? pc.cx + across : pc.cx + I.parkT,
+        K2 = pc.vert ? pc.cz + I.parkT : pc.cz + across,
+        hx2 = pc.vert ? dAcr * I.dir : I.dir,
+        hz2 = pc.vert ? I.dir : dAcr * I.dir;
+      ((I.x = Z2), (I.z = K2), I.mesh.position.set(Z2, He(Z2, K2) + 0.08, K2), (I.mesh.rotation.y = Math.atan2(-hx2, -hz2)));
+      parkSys.strollerSample || (parkSys.strollerSample = { x: +Z2.toFixed(1), z: +K2.toFixed(1), cx: +pc.cx.toFixed(0), cz: +pc.cz.toFixed(0) });
+      const Le3 = Math.sin(ye * 7 + I.phase);
+      for (const Ye of I.mesh.userData.limbs || [])
+        ((Ye.mesh.rotation.x = Le3 * Ye.amp * Ye.side), (Ye.mesh.position.y = Ye.baseY + Math.abs(Le3) * 0.025));
+      return;
+    }
     ((I.along += I.dir * I.speed * Me),
       I.axis === "ns"
         ? (I.along < a - 28 && (I.along = r + 28), I.along > r + 28 && (I.along = a - 28))
@@ -11688,7 +11714,7 @@ window.__steelRibbonDebug = {
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
-      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pitches: parkSys.pitches, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
+      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pitches: parkSys.pitches, strollers: parkSys.strollers, strollerSample: parkSys.strollerSample ?? null, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },

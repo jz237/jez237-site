@@ -778,6 +778,21 @@ const browser = await chromium.launch({
     JSON.stringify(blp),
   );
 
+  // zoom-detail 62 (round seven item 4): strollers walk the park paths
+  const str = await page.evaluate(() => {
+    const pk2 = window.__steelRibbonDebug.detailReport().parks;
+    const s2 = pk2.strollerSample;
+    return {
+      strollers: pk2.strollers,
+      inCell: s2 ? Math.abs(s2.x - s2.cx) < 60 && Math.abs(s2.z - s2.cz) < 60 : false,
+    };
+  });
+  check(
+    "strollers: a few walkers stroll park paths inside their cells",
+    !!str && str.strollers >= 1 && str.strollers <= 8 && str.inCell,
+    JSON.stringify(str),
+  );
+
   // zoom-detail 61 (round seven item 3): pond-edge dressing
   const pnd = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
@@ -801,7 +816,7 @@ const browser = await chromium.launch({
       if (o.userData && o.userData.hasDriver && o.userData.brake) rig++;
     });
     const t0 = deb.detailReport().brakes.total;
-    await new Promise((r) => setTimeout(r, 9000));
+    await new Promise((r) => setTimeout(r, 15000));
     const t1 = deb.detailReport().brakes.total;
     return { rig, grew: t1 > t0 };
   });
