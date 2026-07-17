@@ -1504,3 +1504,6 @@ signal-corner ped density weighting.
   the bank, reed tufts around the rim. Perf gate: 1864-1904 calls /
   612-615k tris. Suite 158/158 (probe: ponds ≥1, clusters ≥8,
   toggle). NEXT: item 4 — peds in parks (walker rerouting, 0 draws).
+- **DEPLOY BATCH 17 EARLY (2026-07-17, user: "yes, continue and
+  deploy")**: v3.24.0 ships round-seven items 2-3 (brake lights, pond
+  edges) ahead of the item-5 cadence. Items 4-10 continue after.
