@@ -23,8 +23,8 @@ const server = createServer((req, res) => {
     res.end();
   }
 });
-await new Promise((r) => server.listen(0, r));
-const url = `http://localhost:${server.address().port}/`;
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
+const url = `http://127.0.0.1:${server.address().port}/`;
 
 let failures = 0;
 const results = [];
@@ -762,6 +762,161 @@ const browser = await chromium.launch({
     "race wear: rubber line + skid patches baked along the course, toggle works",
     !!rw && rw.segs > 200 && rw.patches >= 4 && rw.off === false && rw.offRep === false,
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
+  );
+
+  // zoom-detail 57 (round six item 10): the RIBBON COLA blimp drifts on a high lane
+  const blp = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug,
+      b0 = deb.detailReport().blimp;
+    await new Promise((r) => setTimeout(r, 2500));
+    const b1 = deb.detailReport().blimp;
+    return { text: b0.text, alt: b0.alt, drift: +(b1.x - b0.x).toFixed(1) };
+  });
+  check(
+    "blimp: fictional-brand airship drifts on its high lane",
+    !!blp && blp.text === "RIBBON COLA" && blp.alt === 300 && blp.drift > 0.5,
+    JSON.stringify(blp),
+  );
+
+  // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
+  const oil = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().oil,
+      off = deb.oilEnable(false),
+      offRep = deb.detailReport().oil.enabled;
+    deb.oilEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "oil stains: instanced blots placed on approach lanes, toggle works",
+    !!oil && oil.placed >= 10 && oil.placed === oil.spots && oil.off === false && oil.offRep === false,
+    JSON.stringify({ spots: oil?.spots, placed: oil?.placed }),
+  );
+
+  // zoom-detail 62 (round seven item 4): strollers walk the park paths
+  const str = await page.evaluate(() => {
+    const pk2 = window.__steelRibbonDebug.detailReport().parks;
+    const s2 = pk2.strollerSample;
+    return {
+      strollers: pk2.strollers,
+      inCell: s2 ? Math.abs(s2.x - s2.cx) < 60 && Math.abs(s2.z - s2.cz) < 60 : false,
+    };
+  });
+  check(
+    "strollers: a few walkers stroll park paths inside their cells",
+    !!str && str.strollers >= 1 && str.strollers <= 8 && str.inCell,
+    JSON.stringify(str),
+  );
+
+  // zoom-detail 61 (round seven item 3): pond-edge dressing
+  const pnd = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().pondEdges,
+      off = deb.pondEdgesEnable(false),
+      offRep = deb.detailReport().pondEdges.enabled;
+    deb.pondEdgesEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "pond edges: reeds/rocks/lily pads ring the city ponds, toggle works",
+    !!pnd && pnd.ponds >= 1 && pnd.clusters >= 8 && pnd.off === false && pnd.offRep === false,
+    JSON.stringify({ ponds: pnd?.ponds, clusters: pnd?.clusters, pads: pnd?.pads }),
+  );
+
+  // zoom-detail 60 (round seven item 2): brake lights on slowing traffic
+  const brk = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    let rig = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.userData && o.userData.hasDriver && o.userData.brake) rig++;
+    });
+    const t0 = deb.detailReport().brakes.total;
+    await new Promise((r) => setTimeout(r, 15000));
+    const t1 = deb.detailReport().brakes.total;
+    return { rig, grew: t1 > t0 };
+  });
+  check(
+    "brake lights: every traffic car rigged, glow fires on braking",
+    !!brk && brk.rig >= 30 && brk.rig <= 33 && brk.grew,
+    JSON.stringify(brk),
+  );
+
+  // zoom-detail 55 (round six item 8): traffic turn indicators
+  const tsg = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    let rig = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.userData && o.userData.hasDriver && o.userData.blink) rig++;
+    });
+    const t0 = deb.detailReport().turnSignals.total;
+    await new Promise((r) => setTimeout(r, 9000));
+    const t1 = deb.detailReport().turnSignals.total;
+    return { rig, t0, t1, grew: t1 > t0 };
+  });
+  check(
+    "turn signals: every traffic car rigged, indicators fire during turns",
+    !!tsg && tsg.rig >= 30 && tsg.rig <= 33 && tsg.grew,
+    JSON.stringify(tsg),
+  );
+
+  // zoom-detail 54 (round six item 7): striped shop awnings under wall signs
+  const aw = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().awnings,
+      off = deb.awningEnable(false),
+      offRep = deb.detailReport().awnings.enabled;
+    deb.awningEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "awnings: striped canopies merged per colorway under wall signs, toggle works",
+    !!aw && aw.count >= 20 && aw.boards >= 8 && aw.off === false && aw.offRep === false,
+    JSON.stringify({ count: aw?.count, boards: aw?.boards }),
+  );
+
+  // zoom-detail 53 (round six item 6): zebra crosswalks in three wear tiers
+  const xw = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().xwalks,
+      off = deb.xwalkEnable(false),
+      offRep = deb.detailReport().xwalks.enabled;
+    deb.xwalkEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "crosswalks: zebra planes in three deterministic wear tiers, toggle works",
+    !!xw && xw.fresh > 10 && xw.worn > 10 && xw.chipped > 10 && xw.off === false && xw.offRep === false,
+    JSON.stringify({ fresh: xw?.fresh, worn: xw?.worn, chipped: xw?.chipped }),
+  );
+
+  // zoom-detail 52 (round six item 5): neon halos + flicker pair
+  const ne = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().neon,
+      off = deb.neonEnable(false),
+      offRep = deb.detailReport().neon.enabled;
+    deb.neonEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "neon: halo quads merged per color + flicker pair, toggle works",
+    !!ne && ne.halos > 40 && ne.flicker === 2 && ne.off === false && ne.offRep === false,
+    JSON.stringify({ halos: ne?.halos, flicker: ne?.flicker }),
+  );
+
+  // zoom-detail 51 (round six item 4): soccer pitches in flat park cells
+  const pit = await page.evaluate(() => {
+    const pk2 = window.__steelRibbonDebug.detailReport().parks;
+    let quad = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.isMesh && o.geometry && o.geometry.parameters && o.geometry.parameters.width === 58 && o.geometry.parameters.height === 38) quad++;
+    });
+    return { pitches: pk2.pitches, quad };
+  });
+  check(
+    "pitches: soccer fields placed on flat lawn cells (0-2 by terrain luck), quads match",
+    !!pit && pit.pitches >= 0 && pit.pitches <= 2 && pit.quad === pit.pitches,
+    JSON.stringify(pit) + (pit.pitches === 0 ? " (hilly world — none flat enough)" : ""),
   );
 
   // zoom-detail 50 (round six item 3): lawn mowing stripes + worn patches

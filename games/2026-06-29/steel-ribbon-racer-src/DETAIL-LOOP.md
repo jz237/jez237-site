@@ -1281,3 +1281,260 @@ signal-corner ped density weighting.
   across the park cells at mid; far reads as parkland texture, not
   noise; OFF pair = the old felt. Perf: 1829-1867 calls / 591-601k
   tris. Suite 150/150. NEXT: item 4 — sports-field markings.
+- **51 SOCCER PITCHES — round-six item 4 (2026-07-16)**: the survey's
+  "field markings" idea, redirected — the mint "field" slabs are
+  outskirt FARM fields (crop strips); sports grounds belong in the
+  city. buildParks gains a SECOND cell scan (rect-fitted margins: Mn
+  +33/+23, ponds likewise, Sa +36, Pn ≥12 — cells rejected for paths
+  can still host a pitch; the path pass consumes every path-qualifying
+  cell, so leftovers were ZERO) + per-cell 7-spot flatness search
+  (58x38 corner span ≤1.6, pinned at the local MAX + 0.09 per the
+  flat-decal rule). Up to 2 pitches per world: white-line canvas
+  (512x336: touchlines/halfway/center circle/boxes/spots, toneMapped
+  off — the lines GLOW slightly at dusk and read as floodlit grounds,
+  a happy accident kept deliberately) + vcBaked goal frames (posts +
+  crossbar both ends) merged into the park furniture mesh. Verified by
+  LOOKING (loop-shots/51-pitches/): aerial = a complete pitch between
+  the boulevards; ground = goal frame against the skyline. Perf:
+  1819-1880 calls / 594-604k tris / tex 252 max (new gate 260). Suite
+  151/151 (probe: pitches 0-2 by terrain luck, scene quads match
+  count). NEXT: item 5 — neon sign glow, then DEPLOY BATCH 15
+  (v3.22.0).
+- **52 NEON HALOS — round-six item 5 (2026-07-16/17)**: every sign in
+  the city glows now. Three sign classes found by SEARCHING THE CODE
+  first (vertical neons ≤34 via Ah(), wall bands ≤48 via Eo(), roof
+  billboards ≤18 via Od()): each contributes a halo quad (radial-
+  gradient canvas, sign-tinted, sized ~1.4x, offset toward the wall/
+  behind the box so edges spill around the sign). DRAW-CALL DESIGN:
+  per-sign halos would cost ~100 draws — instead halos merge into ONE
+  additive mesh PER NEON COLOR (≤6 draws for the whole city), except
+  the two FLICKER signs (vertical #2, wall band #5) which keep
+  individual halo meshes so a Bn tick can wobble sign.opacity + halo
+  in sync (dips to 0.22 when sin(t*11.3+φ)·sin(t*4.7+φ) > 0.88 — brief
+  irregular dropouts). neonSys {halos:100, flicker:2} + neonEnable
+  (hides meshes, resets flicker opacities). Verified by LOOKING
+  (loop-shots/52-neon/): the HOTEL vertical washes soft magenta onto
+  the tower wall; OFF pair = flat sign. Perf gate: 1809-1854 calls /
+  599-610k tris / tex 252 max. Suite 152/152 (one world-luck pond
+  flake — cityPonds=1 world — rerun clean). v3.22.0. DEPLOY BATCH 15
+  next in this iteration.
+- **53 CROSSWALK WEAR — round-six item 6 (2026-07-17)**: the solid
+  white crossing bars became real ZEBRA crossings in three wear tiers.
+  The old bars (one solid box per approach) are now flat planes with
+  an 8-stripe alpha canvas — three shared materials: fresh (0.95),
+  worn (0.66 + destination-out speckle erosion), chipped (0.45 + heavy
+  erosion). Wear tier is deterministic per INTERSECTION (hash of the
+  lattice coords >>3 %3, all four approaches match) — distribution
+  this world 60/62/60. Same mesh count as before, +3 small textures,
+  raycast-inert; the A/B toggle drives material opacity because the
+  MESHES static-merge at boot (visibility toggles die in the merge —
+  materials survive, the it.52/53 pattern). Verified by LOOKING
+  (loop-shots/53-xwalk/): one crossing crisp/bright, another visibly
+  chipped and faded toward its end; the giant glowing arrow in frame
+  is the pre-existing roam-gate marker, not paint. Perf gate:
+  1838-1883 calls / 596-608k tris / tex 249 max. Suite 153/153. NEXT:
+  item 7 — tower-shop awnings.
+- **54 SHOP AWNINGS — round-six item 7 (2026-07-17)**: the wall-sign
+  shops got striped canvas awnings. 36 of the 48 Eo() wall-sign faces
+  (skip every 4th for variety) carry a canopy at SHOP level (gy+4.5,
+  independent of the sign band height): sloped canopy plane
+  (rotateX(-1.02), high edge at the wall gy+5.0, low edge 1.6m out at
+  gy+3.9) + valance skirt, striped canvas in 4 colorways (cream +
+  pink/teal/amber/green, colorway = (N*2+1)%4), all geometry MERGED
+  PER COLORWAY = 4 draws total (the neon-halo pattern). awningSys
+  {count, sample[3]} + awningEnable (merged meshes stay unmerged-by-
+  boot — 1 mesh per material — so visibility toggling works).
+  Verified by LOOKING (loop-shots/54-awnings/): striped canopy under
+  the MIDNIGHT AUTO band shading the lit shopfront; OFF = bare wall.
+  BATTERY LESSON: don't anchor shots on geometry vertex[0] of a
+  traversal-matched mesh — expose sample positions in the report
+  (multiple 128x64 canvases exist). Perf gate: 1818-1879 calls /
+  588-604k tris. SUITE NOTE: 3 runs — awning probe green all runs
+  (count 36); one heavy-physics probe flaked per run (drift+heli,
+  stunt, heli — heli 2/3) with EVERY probe passing at least once on
+  this build; no interference vector exists (no colliders, raycast-
+  inert, static quads) and the machine is heavily loaded with hours of
+  Chromium instances. NEXT ITERATION MUST START by re-running the heli
+  probe twice on a quiet machine — if it fails >50% fresh, treat as
+  REAL and bisect before item 8. NEXT: item 8 — traffic turn signals.
+- **55 HELI RECOVERED + TURN SIGNALS — round-six item 8 (2026-07-17)**:
+  health check first: two serial suites on a quiet machine = 154/154
+  BOTH, heli green — the it.54 failures were machine load, case
+  closed. THEN turn indicators: every I1 traffic car carries 4 amber
+  corner quads (two per side, ONE shared toneMapped-off material —
+  blink = global opacity pulse at 9.2rad/s, per-car SIDE via group
+  visibility). The turn chooser W() computes the side from
+  heading-cross (left = sign(h2·(up×h1))) and arms a dedicated 2.2s
+  blinkT timer (turnBlend decays in 0.3s — too brief to read as an
+  indicator; REUSE THE RIGHT STATE, don't piggyback). THREE BUGS
+  FOUND: (1) I1's return REASSIGNS t.userData wholesale — fields set
+  before it are obliterated (blink now rides the literal); (2) my
+  module-scope insert anchored on text ANOTHER AGENT had extended
+  (awningSys gained boards/A-board work that my it.54 `git add
+  src/main.js` swept into cf2b41374 — it tested green 154/154 x2, no
+  damage, but ALWAYS re-grep anchors before python replaces and
+  assert every replacement); (3) the probe counted 31 rigs — stolen/
+  player cars are I1 builds too (assert ranges, not exact counts, for
+  scene populations). Verified by LOOKING (loop-shots/55-turnsig/):
+  white pickup with amber right-side indicators lit approaching the
+  turn. Perf gate: 1834-1873 calls / 592-601k tris. Suite 155/155.
+  NEXT: item 9 — rooftop heat shimmer, then 10 blimp → DEPLOY BATCH
+  16 (v3.23.0) + closing survey.
+- **56 HEAT SHIMMER — round-six item 9 BLOCKED (2026-07-17)**: two
+  attempts, two visual-verification failures, reverted per charter.
+  A shimmerSys (steamSys-pattern pooled sprites over promoted rooftop
+  kits: 4 columns x 4 sprites, rise + wobble + fade tick, engine state
+  fully working — active:4 promoted, toggle clean) simply DOES NOT
+  READ at the game's dusk lighting: peak opacity 0.16 invisible;
+  strengthened to 0.3 grey-tint + 1.5-4.7 scale still near-identical
+  in ON/OFF pairs against the bright dusk sky. Sprite-alpha "shimmer"
+  needs a refraction/distortion post pass to read — out of scope for
+  a detail item (and the deck already has steam puffs at street
+  level for the atmosphere beat). BLOCKED reason: technique-limited,
+  not placement-limited. Code fully reverted (git checkout, rebuild,
+  boot clean, zero shimmer refs). Lesson for the wishlist: effects
+  that live on TRANSPARENCY need a dark backdrop test FIRST — the
+  dusk sky kills faint alpha; steam works because its puffs are
+  denser (0.42) and viewed against dark roads. NEXT: item 10 — the
+  blimp (opaque geometry, no such risk), then DEPLOY BATCH 16
+  (v3.23.0) + the round-six closing survey.
+- **57 THE BLIMP — round-six item 10, ROUND SIX COMPLETE (2026-07-17)**:
+  one RIBBON COLA airship drifts at alt 300 above the prop-plane lanes
+  (speed 8, wrap ±1500, slow bob + gentle roll). Opaque vc-baked hull
+  (18x12 ellipsoid) + cross tail fins + gondola + landing skids in ONE
+  merged mesh, plus a two-sided banner mesh (512x128 canvas, new
+  fictional brand) — 2 draws, ~600 tris, zero transparency risk (the
+  it.56 lesson applied). TWO FIT LESSONS: banner quads must sit
+  OUTSIDE the hull's mid-bulge (offset ≥ hull max radius +0.3) AND
+  their LENGTH must stay inside the silhouette taper — 16-long at
+  ±4.35 poked past the tail; 11-long at ±3.9 let the bulge through
+  the text; 11 at ±4.4 is the fit. Verified by LOOKING
+  (loop-shots/57-blimp/): pearl hull + red banner readable alongside,
+  gondola under, a banner plane crossing below; from the city it's a
+  tiny drifting capsule. Perf gate: 1887-1925 calls / 590-600k tris.
+  Suite 156/156 (probe: text + alt + drift >0.5 over 2.5s). ROUND SIX
+  FINAL: 8 shipped (2,3,4,5,6,7,8,10) + 1 closed-exists (1) + 1
+  blocked (9, technique-limited). DEPLOY BATCH 16 (v3.23.0) + closing
+  survey next.
+- **58 ROUND SIX CLOSE + ROUND SEVEN BACKLOG (2026-07-17)**: v3.23.0
+  LIVE (batch 16: crosswalk wear, awnings+boards, turn signals, blimp).
+  ROUND SIX FINAL SCORE: 8 shipped, 1 closed-exists, 1 blocked. Suite
+  156/156. Closing survey (loop-shots/58-survey-7/): the race pack on
+  the deck reads great (racing line ✓ seams ✓) but the deck EDGES are
+  plain and rivals brake invisibly; city streets read smooth at near
+  (no oil/lane wear); parks lovely but EMPTY of people; ponds bare;
+  suburban shops flat; lamp poles bare; sky life rich (blimp, planes,
+  balloons ✓). ROUND SEVEN BACKLOG (prioritized):
+  1. RACE KERBS — red/white rumble strips on deck edges through
+     corners (course-spline strips at high-curvature spans; the race
+     sees them every lap).
+  2. RIVAL + TRAFFIC BRAKE LIGHTS — brakePulse exists on traffic;
+     surface it as rear glow quads; extend to race rivals.
+  3. POND EDGES — reeds/rocks/lily pads ringing city ponds (vcBaked).
+  4. PEDS IN PARKS — route a few walkers onto park paths (they only
+     walk streets today; the parks are empty stages).
+  5. ROAD OIL STAINS — dark lane-center patches near intersections
+     (roadDecal pattern, deterministic).
+  6. SUBURBAN SHOP FACADES — the A() brick shops get a window/door
+     canvas band at near (the en() tower treatment, smaller).
+  7. LAMP-POST DRESSING — hanging baskets/banners on poles near parks
+     and shops (merged per color).
+  8. BALLOON CANOPIES — striped canopies + baskets for the hot-air
+     balloons.
+  9. GRANDSTAND CROWDS — colored crowd-dot texture on the outskirt
+     grandstands (race-visible).
+  10. WINDMILL POLISH — striped blade tips + hubs on outskirt
+     turbines.
+  Wishlist note: aerial mowing stripes read weak from 45m+ — consider
+  +2% amplitude if a later item touches the terrain bake.
+- **59 RACE KERBS — round-seven item 1 BLOCKED (2026-07-17)**: three
+  visual failures, reverted per charter (limit 2; the third was a
+  diagnostic beacon that the title menu blocked — enough). The
+  progression of diagnoses, for the NEXT attempt: (a) strips at
+  ±(halfW-0.62) hide under the deck's golden RIM band; (b) at
+  ±(halfW-2.3) they hide under the pale SHOULDER strip; (c) a
+  probeDown cross-section at a corner showed the deck's VISIBLE mesh
+  top diverging from BOTH the spline (St().p.y, off by −0.1..−2m,
+  banked) and the analytic Ki "track" surface (which reads ~0.6 ABOVE
+  the visible mesh at edges — the ray hits understructure); (d) Ki is
+  TDZ-locked (Yn) at world-build time — runtime one-shot Bn builds
+  work but the height source is still wrong. CONCLUSION: kerbs must
+  reuse THE DECK BUILDER'S OWN cross-section math (find where the
+  ribbon deck mesh itself is constructed and emit kerb quads in that
+  exact vertex space) — a deeper refactor than a detail item. BLOCKED:
+  needs deck-builder integration. Code fully reverted, boot clean.
+  Suite state unchanged (156 probes; no kerb probe was added). NEXT:
+  item 2 — brake lights (brakePulse already exists on traffic — a
+  surface-only feature, no geometry archaeology).
+- **60 BRAKE LIGHTS — round-seven item 2 (2026-07-17)**: braking is
+  visible now. Every I1 traffic car carries two rear brake-glow quads
+  (0.34x0.16 at the rear corners, ONE shared toneMapped-off red
+  material) driven by the EXISTING brakePulse state (decays 3.2/s;
+  set on panic stops, signal stops, and obstacle slowdowns) — the
+  blink Bn tick from it.55 now also toggles brake visibility at
+  brakePulse > 0.12 and tracks {braking, total, sample}. The rig
+  rides the userData LITERAL (the I1-reassignment lesson). Race
+  rivals use their own livery build (addRaceLivery, not I1) — noted,
+  skipped for scope (rivals rarely brake-and-crawl; traffic is where
+  braking reads). Verified by LOOKING (loop-shots/60-brakes/): a bus
+  halting at a stop sign with both rear lamps glowing red. Suite
+  157/157 (probe: rig 30-33 + total grows over 9s). **PERF TRIPWIRE:
+  world 0 gate run hit 2008 calls vs the 2010 ceiling** (world 1:
+  1869-1877 — world-luck high, but the gate is now effectively
+  zero-headroom on hot worlds). RULE for remaining round-seven items:
+  draw-neutral or single-merged-mesh only; if any gate run EXCEEDS
+  2010, stop and renegotiate with a 5-world sample before shipping.
+  NEXT: item 3 — pond edges (single merged vcBake ring mesh, +1 draw).
+- **61 POND EDGES — round-seven item 3 (2026-07-17)**: the city ponds
+  have banks worth looking at — reed clusters (4-7 leaning tapered
+  stalks in 3 greens), grey boulders, and lily pads floating just
+  inside the rim, ~14-22 clusters per pond, ONE merged vcBake mesh for
+  every pond (+1 draw, tripwire-compliant). TWO PLUMBING LESSONS:
+  (1) buildPonds() runs at MODULE level AFTER the world builder —
+  calling buildPondEdges inside the world build saw an EMPTY registry
+  (and the parks/pitch pond-avoidance filters have silently never
+  matched city ponds either — latent, low-impact since Sa "lake"
+  covers the big water, noted for a future pass); the call now sits
+  directly after buildPonds(). (2) registerPond's waterY defaults to
+  NULL for city ponds (only the lake passes one) — the real water
+  surface is He(center)+0.15; a null-blind .toFixed crashed boot.
+  First-pass density was too thin from the air — reeds 1.0-1.9 tall,
+  rocks 0.45-1.0, pads 0.55-0.9 now read at aerial. Verified by
+  LOOKING (loop-shots/61-pond-edges/): pads on the water, boulders on
+  the bank, reed tufts around the rim. Perf gate: 1864-1904 calls /
+  612-615k tris. Suite 158/158 (probe: ponds ≥1, clusters ≥8,
+  toggle). NEXT: item 4 — peds in parks (walker rerouting, 0 draws).
+- **DEPLOY BATCH 17 EARLY (2026-07-17, user: "yes, continue and
+  deploy")**: v3.24.0 ships round-seven items 2-3 (brake lights, pond
+  edges) ahead of the item-5 cadence. Items 4-10 continue after.
+- **62 PEDS IN PARKS — round-seven item 4 (2026-07-17)**: the parks
+  are inhabited. The LAST 6 walkers of the spawner become STROLLERS:
+  each binds to one of the first 3 path cells (parkSys.strollerCells
+  records {cx, cz, vert, bow, half} during buildParks) and walks THE
+  ACTUAL BOWED PATH — position from the same sin() math the path
+  strip uses, yaw from its derivative, bouncing at the cell ends.
+  Same Rr entries, so ped kits, personas and click-inspect all still
+  work on them; zero new draws. BOUND BUG: the walker loop runs to
+  `ie` (45), not `m` (30 = TRAFFIC count) — `I >= m - 5` caught 20
+  walkers; read the LOOP variable, not the nearest count. Verified by
+  LOOKING (loop-shots/62-strollers/): two strollers on the pale path
+  between the pines with a flowerbed beside — the park finally has
+  people. Perf gate: 1859-1916 calls / 603-612k tris. Suite 159/159
+  (stroller probe: 1-8 in-cell; one brake-probe window starvation —
+  no car braked in its 9s — widened to 15s per the calibration
+  pattern). NEXT: item 5 — road oil stains, then items 6-10 → deploy
+  batch 18 + closing survey.
+- **63 OIL STAINS — round-seven item 5 (2026-07-17)**: the roads carry
+  history now. oilSys clones the roadDecalSys pattern small: ONE
+  InstancedMesh (cap 24), 2-cell 256x128 atlas of layered radial dark
+  blots (big spill cluster / drip trail), 20 spots seeded on
+  intersection APPROACH LANES (lattice intersections ± 12-21m back,
+  lane offset ±sw*0.24, plateRng 0x011f00d) with per-spot scale
+  variance, placed once on the first tick via roadDecalSys._surfaceY
+  (reused directly — the band-filtered slab raycast). depthWrite off +
+  polygonOffset -3; dark-on-grey = dusk-safe by design. Verified by
+  LOOKING (loop-shots/63-oil/): an irregular blot on the lane beside
+  the newspaper decal, gone in the OFF pair. Perf gate: 1861-1890
+  calls / 599-608k tris (+1 draw, +1 texture). Suite 160/160 (probe:
+  placed===spots ≥10 + toggle). NEXT: item 6 — suburban shop facades,
+  then 7-10 → DEPLOY BATCH 18 (v3.25.0) + closing survey.

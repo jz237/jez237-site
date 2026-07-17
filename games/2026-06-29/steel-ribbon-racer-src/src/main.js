@@ -2141,8 +2141,31 @@ function I1(i, e) {
     opq.push(vcBake(capGeo, vcAt(dx, 2.18, dz), 1119001));
   }
   (t.add(new Mesh(mergeGeometries(opq, !1), opaque)), gls.length && t.add(new Mesh(mergeGeometries(gls, !1), glass)));
+  {
+    // turn indicators: two corner quads per side, hidden until a turn is live
+    const bq = new PlaneGeometry(0.26, 0.14),
+      mkSide = (sx) => {
+        const g2 = new Group();
+        for (const [bz, ry] of [
+          [-s.l / 2 - 0.02, Math.PI],
+          [s.l / 2 + 0.02, 0],
+        ]) {
+          const q2 = new Mesh(bq, turnSigMat());
+          (q2.position.set(sx * (s.w / 2 - 0.18), 0.82, bz), (q2.rotation.y = ry), (q2.raycast = () => {}), g2.add(q2));
+        }
+        return ((g2.visible = !1), t.add(g2), g2);
+      };
+    var __bL = mkSide(-1),
+      __bR = mkSide(1);
+    var __brk = new Group();
+    for (const bx of [-s.w / 2 + 0.34, s.w / 2 - 0.34]) {
+      const q3 = new Mesh(new PlaneGeometry(0.34, 0.16), brakeMat());
+      (q3.position.set(bx, 0.88, s.l / 2 + 0.025), (q3.raycast = () => {}), __brk.add(q3));
+    }
+    ((__brk.visible = !1), t.add(__brk));
+  }
   return (
-    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
+    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, blink: { L: __bL, R: __bR }, brake: __brk, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
       ((x.castShadow = !1), (x.receiveShadow = !0));
@@ -3383,6 +3406,75 @@ const roadDecalSys = {
     (this.ensure(), this.place());
   },
 };
+// zoom-detail 63 (round-seven item 5): oil stains — the roadDecalSys pattern
+// cloned small: ONE InstancedMesh (cap 24), 2-cell atlas of dark blots at
+// intersection approach lanes. Dark-on-grey backdrop = dusk-safe.
+let oilAtlasTex = null;
+function buildOilAtlas() {
+  if (oilAtlasTex) return oilAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 256), (cv.height = 128));
+  const g = cv.getContext("2d");
+  const blot = (cx, cy, r, a) => {
+    const gr = g.createRadialGradient(cx, cy, 1, cx, cy, r);
+    (gr.addColorStop(0, `rgba(12,12,16,${a})`), gr.addColorStop(0.7, `rgba(14,14,18,${a * 0.55})`), gr.addColorStop(1, "rgba(16,16,20,0)"));
+    ((g.fillStyle = gr), g.beginPath(), g.arc(cx, cy, r, 0, Math.PI * 2), g.fill());
+  };
+  (blot(64, 64, 46, 0.5), blot(38, 44, 18, 0.4), blot(92, 88, 14, 0.42), blot(84, 38, 9, 0.34));
+  (blot(192, 64, 22, 0.44), blot(192, 34, 12, 0.36), blot(190, 96, 10, 0.3), blot(206, 78, 7, 0.3), blot(178, 50, 6, 0.3));
+  oilAtlasTex = new CanvasTexture(cv);
+  return ((oilAtlasTex.colorSpace = SRGBColorSpace), oilAtlasTex);
+}
+const oilSys = {
+  spots: [],
+  mesh: null,
+  placed: 0,
+  placedDone: !1,
+  enabled: !0,
+  sample: [],
+  _surfaceY(sp) {
+    return roadDecalSys._surfaceY(sp);
+  },
+  ensure() {
+    if (this.mesh) return;
+    const geo = new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+    geo.setAttribute("aDecalSlot", new InstancedBufferAttribute(new Float32Array(24), 1));
+    const mat = new MeshBasicMaterial({ map: buildOilAtlas(), transparent: !0, polygonOffset: !0, polygonOffsetFactor: -3, depthWrite: !1 });
+    mat.customProgramCacheKey = () => "oil-stain-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute float aDecalSlot;\nvarying vec2 vOilUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvOilUv = vec2((aDecalSlot + uv.x) * 0.5, uv.y);");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vOilUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vOilUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, 24);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1), (this.mesh.raycast = () => {}), (this.mesh.renderOrder = 1), (this.mesh.count = 0));
+    et.add(this.mesh);
+  },
+  place() {
+    const dummy = new Object3D();
+    let n = 0;
+    this.sample.length = 0;
+    for (const sp of this.spots) {
+      if (n >= 24) break;
+      const sc = sp.v ? [2.0 + sp.s * 1.2, 1.4 + sp.s] : [2.6 + sp.s * 1.6, 2.4 + sp.s * 1.4];
+      (dummy.position.set(sp.x, this._surfaceY(sp), sp.z), (dummy.rotation.y = sp.yaw), dummy.scale.set(sc[0], 1, sc[1]), dummy.updateMatrix());
+      this.mesh.setMatrixAt(n, dummy.matrix);
+      this.mesh.geometry.attributes.aDecalSlot.setX(n, sp.v);
+      this.sample.length < 3 && this.sample.push({ x: sp.x, y: sp.ySurf, z: sp.z, v: sp.v });
+      n++;
+    }
+    ((this.mesh.count = n), (this.mesh.instanceMatrix.needsUpdate = !0), (this.mesh.geometry.attributes.aDecalSlot.needsUpdate = !0), (this.placed = n), (this.placedDone = !0));
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    if (this.mesh) this.mesh.visible = this.enabled;
+    if (this.placedDone) return;
+    (this.ensure(), this.place());
+  },
+};
 // (4b-lite driver silhouettes retired in round four: every cabin now has
 // a real recessed driver baked in — see full-fat 4b.)
 // race roadside life (zoom-detail item 18): marshals with checkered flags,
@@ -4009,15 +4101,176 @@ const storefrontSys = {
 // footprints), ponds, outskirt scenery (Sa) and the ribbon corridor (Pn);
 // trees additionally stay ≥4m off street edges (ka) and register in the Sa
 // audit with a small margin so the road-safety probe stays clean.
-const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
+const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, pitches: 0, strollers: 0, strollerCells: [], strollerSample: null, enabled: !0, sample: [], _vis: [] };
+// zoom-detail 51 (round-six item 4): soccer-pitch line canvas (white on
+// transparent; touchlines, halfway, center circle, boxes, spots)
+let pitchTex = null;
+function buildPitchTexture() {
+  if (pitchTex) return pitchTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 336));
+  const g = cv.getContext("2d");
+  ((g.strokeStyle = "rgba(255,255,255,0.92)"), (g.lineWidth = 5));
+  g.strokeRect(14, 14, 484, 308);
+  (g.beginPath(), g.moveTo(256, 14), g.lineTo(256, 322), g.stroke());
+  (g.beginPath(), g.arc(256, 168, 42, 0, Math.PI * 2), g.stroke());
+  for (const bx of [14, 498 - 78]) {
+    g.strokeRect(bx, 168 - 74, 78, 148);
+    g.strokeRect(bx === 14 ? 14 : 498 - 30, 168 - 34, 30, 68);
+  }
+  ((g.fillStyle = "rgba(255,255,255,0.92)"),
+    g.beginPath(),
+    g.arc(256, 168, 4, 0, Math.PI * 2),
+    g.fill(),
+    g.beginPath(),
+    g.arc(72, 168, 4, 0, Math.PI * 2),
+    g.fill(),
+    g.beginPath(),
+    g.arc(440, 168, 4, 0, Math.PI * 2),
+    g.fill());
+  pitchTex = new CanvasTexture(cv);
+  return ((pitchTex.colorSpace = SRGBColorSpace), pitchTex);
+}
 // zoom-detail 43 (round-five item 7): start-line paddock clutter registry
 const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: [] };
+// zoom-detail 61 (round-seven item 3): pond-edge dressing — reeds, rocks,
+// lily pads ringing every city pond. ONE merged vcBake mesh (+1 draw total).
+const pondEdgeSys = { ponds: 0, clusters: 0, pads: 0, enabled: !0, _mesh: null, sample: null };
+function buildPondEdges(group) {
+  ((pondEdgeSys.ponds = 0), (pondEdgeSys.clusters = 0), (pondEdgeSys.pads = 0), (pondEdgeSys.sample = null));
+  if (!ponds.length) return;
+  const parts = [],
+    rng = plateRng(0x9a0de5);
+  for (let pi = 0; pi < ponds.length; pi++) {
+    const p = ponds[pi];
+    if (!p.rx || p.rx > 60) continue;
+    const wy = p.waterY != null ? p.waterY : He(p.x, p.z) + 0.15;
+    pondEdgeSys.ponds++;
+    pondEdgeSys.sample || (pondEdgeSys.sample = { x: +p.x.toFixed(1), z: +p.z.toFixed(1), rx: +p.rx.toFixed(1), rz: +p.rz.toFixed(1), wy: +wy.toFixed(2) });
+    const n = 14 + (pi % 3) * 4;
+    for (let k = 0; k < n; k++) {
+      const a = (k / n) * Math.PI * 2 + rng() * 0.4,
+        kind = (k * 3 + pi) % 5;
+      if (kind === 3) {
+        const px = p.x + Math.cos(a) * p.rx * (0.5 + rng() * 0.3),
+          pz = p.z + Math.sin(a) * p.rz * (0.5 + rng() * 0.3);
+        (parts.push(vcBake(new CircleGeometry(0.55 + rng() * 0.35, 7).rotateX(-Math.PI / 2), vcAt(px, wy + 0.025, pz), 2721550)), pondEdgeSys.pads++);
+      } else if (kind === 2) {
+        const px = p.x + Math.cos(a) * (p.rx + 0.8 + rng()),
+          pz = p.z + Math.sin(a) * (p.rz + 0.8 + rng()),
+          rm = new Matrix4().makeScale(1, 0.5 + rng() * 0.35, 1);
+        rm.setPosition(px, He(px, pz) + 0.1, pz);
+        (parts.push(vcBake(new SphereGeometry(0.45 + rng() * 0.55, 7, 5), rm, 6316128)), pondEdgeSys.clusters++);
+      } else {
+        const bx = p.x + Math.cos(a) * (p.rx + 0.5 + rng() * 0.9),
+          bz = p.z + Math.sin(a) * (p.rz + 0.5 + rng() * 0.9),
+          gy = He(bx, bz),
+          cnt = 4 + ((k * 7 + pi) % 4);
+        for (let r2 = 0; r2 < cnt; r2++) {
+          const h = 1.0 + rng() * 0.9,
+            lean = new Matrix4().makeRotationZ((rng() - 0.5) * 0.4);
+          lean.setPosition(bx + (rng() - 0.5) * 0.55, gy + h / 2, bz + (rng() - 0.5) * 0.55);
+          parts.push(vcBake(new CylinderGeometry(0.02, 0.055, h, 4), lean, [2904614, 4359732, 5407038][r2 % 3]));
+        }
+        pondEdgeSys.clusters++;
+      }
+    }
+  }
+  if (!parts.length) return;
+  const pm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((pm.castShadow = !0), (pm.receiveShadow = !0), (pm.raycast = () => {}), group.add(pm), (pondEdgeSys._mesh = pm));
+  if (!pondEdgeSys.enabled) pm.visible = !1;
+}
 // zoom-detail 49 (round-six item 2): racing-line rubber on the ribbon deck
 const raceWearSys = { segs: 0, patches: 0, enabled: !0, _mesh: null };
 // zoom-detail 50 (round-six item 3): lawn mowing stripes + worn patches
 const lawnSys = { striped: 0, enabled: !0, mat: null };
+// zoom-detail 52 (round-six item 5): neon halos + flicker
+const neonSys = { halos: 0, flicker: 0, enabled: !0, _meshes: [], _flick: [] };
+// zoom-detail 53 (round-six item 6): zebra crosswalks in three wear tiers
+const xwalkSys = { fresh: 0, worn: 0, chipped: 0, enabled: !0, _mats: [] };
+// zoom-detail 54 (round-six item 7): striped shop awnings under wall signs
+const awningSys = { count: 0, boards: 0, enabled: !0, _meshes: [], sample: [], boardSample: [] };
+// zoom-detail 55 (round-six item 8): traffic turn indicators (blink during turns)
+const turnSigSys = { turning: 0, cars: 0, enabled: !0, mat: null };
+function turnSigMat() {
+  if (!turnSigSys.mat) turnSigSys.mat = new MeshBasicMaterial({ color: 16758332, toneMapped: !1, transparent: !0, opacity: 1, side: DoubleSide });
+  return turnSigSys.mat;
+}
+// zoom-detail 60 (round-seven item 2): brake-light glow, shared material
+const brakeSys = { braking: 0, total: 0, enabled: !0, mat: null, sample: null };
+function brakeMat() {
+  if (!brakeSys.mat) brakeSys.mat = new MeshBasicMaterial({ color: 16719400, toneMapped: !1, side: DoubleSide });
+  return brakeSys.mat;
+}
+function buildAwningTextures() {
+  const COLS = ["#c2456e", "#2f8fa3", "#c9922e", "#3f8f56"],
+    out = [];
+  for (const c of COLS) {
+    const cv = document.createElement("canvas");
+    ((cv.width = 128), (cv.height = 64));
+    const g = cv.getContext("2d");
+    ((g.fillStyle = "#efe8d8"), g.fillRect(0, 0, 128, 64), (g.fillStyle = c));
+    for (let x = 0; x < 128; x += 24) g.fillRect(x, 0, 12, 64);
+    ((g.fillStyle = "rgba(0,0,0,0.12)"), g.fillRect(0, 56, 128, 8));
+    const t = new CanvasTexture(cv);
+    ((t.colorSpace = SRGBColorSpace), out.push(t));
+  }
+  return out;
+}
+function buildAwningBoardTexture() {
+  const cv = document.createElement("canvas");
+  ((cv.width = 192), (cv.height = 256));
+  const g = cv.getContext("2d");
+  ((g.fillStyle = "#172323"), g.fillRect(0, 0, 192, 256));
+  ((g.strokeStyle = "#d7c49d"), (g.lineWidth = 9), g.strokeRect(8, 8, 176, 240));
+  ((g.textAlign = "center"), (g.textBaseline = "middle"), (g.fillStyle = "#f3e8c5"));
+  ((g.font = "700 34px sans-serif"), g.fillText("OPEN", 96, 93));
+  ((g.font = "700 25px sans-serif"), g.fillText("TODAY", 96, 145));
+  ((g.strokeStyle = "#d66d4f"), (g.lineWidth = 5), g.beginPath(), g.moveTo(42, 181), g.lineTo(150, 181), g.stroke());
+  const t = new CanvasTexture(cv);
+  return ((t.colorSpace = SRGBColorSpace), t);
+}
+function buildXwalkTextures() {
+  const out = [];
+  for (let tier = 0; tier < 3; tier++) {
+    const cv = document.createElement("canvas");
+    ((cv.width = 256), (cv.height = 64));
+    const g = cv.getContext("2d"),
+      alpha = [0.95, 0.66, 0.45][tier];
+    g.fillStyle = `rgba(238, 240, 235, ${alpha})`;
+    for (let x = 6; x < 250; x += 32) g.fillRect(x, 4, 18, 56);
+    if (tier > 0) {
+      // chip away paint: erase speckles, heavier on the chipped tier
+      g.globalCompositeOperation = "destination-out";
+      const n2 = tier === 1 ? 90 : 220;
+      for (let k = 0; k < n2; k++) {
+        const rx = Math.random() * 256,
+          ry = Math.random() * 64,
+          rs = 1 + Math.random() * (tier === 1 ? 2.5 : 4);
+        g.fillRect(rx, ry, rs, rs * (0.6 + Math.random()));
+      }
+      g.globalCompositeOperation = "source-over";
+    }
+    const t = new CanvasTexture(cv);
+    ((t.colorSpace = SRGBColorSpace), out.push(t));
+  }
+  return out;
+}
+let neonHaloTex = null;
+function buildHaloTexture() {
+  if (neonHaloTex) return neonHaloTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 256), (cv.height = 128));
+  const g = cv.getContext("2d"),
+    gr = g.createRadialGradient(128, 64, 6, 128, 64, 120);
+  (gr.addColorStop(0, "rgba(255,255,255,0.85)"), gr.addColorStop(0.45, "rgba(255,255,255,0.32)"), gr.addColorStop(1, "rgba(255,255,255,0)"));
+  ((g.fillStyle = gr), g.fillRect(0, 0, 256, 128));
+  neonHaloTex = new CanvasTexture(cv);
+  return ((neonHaloTex.colorSpace = SRGBColorSpace), neonHaloTex);
+}
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
     zTop = Math.max(zA, zB),
     zCap = Math.min(zTop, 240),
@@ -4109,6 +4362,7 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
       }
     }
     parkSys.cells++;
+    parkSys.strollerCells.length < 3 && parkSys.strollerCells.push({ cx, cz, vert, bow, half });
     parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
   }
   const pg = new BufferGeometry();
@@ -4201,6 +4455,84 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
       parkSys.beds++;
       parkSys._furnSample.length < 4 && parkSys._furnSample.push({ k: "bed", x: +fp.fx.toFixed(1), z: +fp.fz.toFixed(1) });
     }
+  }
+  // zoom-detail 51 (round-six item 4): up to two REMAINING flat cells become
+  // soccer pitches — line-canvas overlay pinned above the local terrain
+  // maximum (rolling lawns clip flat quads otherwise) + vcBaked goal frames
+  // merged into the furniture mesh.
+  const usedCells = new Set(picked.map((c3) => c3.cx + "," + c3.cz)),
+    pitchCand = [];
+  for (let pcx = x0 + pitch * 0.5; pcx < x1; pcx += pitch)
+    for (let pcz = zTop - pitch * 0.5; pcz > zLo; pcz -= pitch) {
+      if (pcz >= zCap || usedCells.has(pcx + "," + pcz)) continue;
+      if (Pn(pcx, pcz, 26).clearance < 12) continue;
+      let ok3 = !0;
+      for (const b of Mn)
+        if (Math.abs(b.x - pcx) < b.hw + 33 && Math.abs(b.z - pcz) < b.hd + 23) {
+          ok3 = !1;
+          break;
+        }
+      if (ok3)
+        for (const p2 of ponds)
+          if (Math.abs(p2.x - pcx) < (p2.rx || 20) + 33 && Math.abs(p2.z - pcz) < (p2.rz || 20) + 23) {
+            ok3 = !1;
+            break;
+          }
+      if (ok3)
+        for (const s3 of Sa)
+          if (Math.hypot(s3.x - pcx, s3.z - pcz) < (s3.radius || 6) + 36) {
+            ok3 = !1;
+            break;
+          }
+      ok3 && pitchCand.push({ cx: pcx, cz: pcz });
+    }
+  for (let k = pitchCand.length - 1; k > 0; k--) {
+    const j = (rng() * (k + 1)) | 0,
+      tmp = pitchCand[k];
+    ((pitchCand[k] = pitchCand[j]), (pitchCand[j] = tmp));
+  }
+  for (const sc of pitchCand) {
+    if (parkSys.pitches >= 2) break;
+    const PW = 58,
+      PH = 38,
+      spanAt = (ox, oz) => {
+        const hs = [
+          He(sc.cx + ox, sc.cz + oz),
+          He(sc.cx + ox - PW / 2, sc.cz + oz - PH / 2),
+          He(sc.cx + ox + PW / 2, sc.cz + oz - PH / 2),
+          He(sc.cx + ox - PW / 2, sc.cz + oz + PH / 2),
+          He(sc.cx + ox + PW / 2, sc.cz + oz + PH / 2),
+        ];
+        return { top: Math.max(...hs), span: Math.max(...hs) - Math.min(...hs) };
+      };
+    let bestO = null;
+    for (const [ox, oz] of [
+      [0, 0],
+      [16, 0],
+      [-16, 0],
+      [0, 22],
+      [0, -22],
+      [16, 22],
+      [-16, -22],
+    ]) {
+      const r3 = spanAt(ox, oz);
+      (!bestO || r3.span < bestO.span) && (bestO = { ox, oz, ...r3 });
+    }
+    if (!bestO || bestO.span > 1.6) continue;
+    const px3 = sc.cx + bestO.ox,
+      pz3 = sc.cz + bestO.oz,
+      top = bestO.top;
+    const pm3 = new Mesh(new PlaneGeometry(PW, PH), new MeshBasicMaterial({ map: buildPitchTexture(), transparent: !0, toneMapped: !1, depthWrite: !1 }));
+    ((pm3.rotation.x = -Math.PI / 2), pm3.position.set(px3, top + 0.09, pz3), (pm3.raycast = () => {}), (pm3.renderOrder = 1), group.add(pm3), parkSys._vis.push(pm3));
+    for (const gx of [-PW / 2 + 1.2, PW / 2 - 1.2]) {
+      const gm = new Matrix4().makeTranslation(px3 + gx, top, pz3),
+        GP = (lx, ly, lz, w2, h2, d2) => {
+          const m2 = new Matrix4().makeTranslation(lx, ly, lz);
+          fparts.push(vcBake(new BoxGeometry(w2, h2, d2), new Matrix4().multiplyMatrices(gm, m2), 15921906));
+        };
+      (GP(0, 1.22, -3.66, 0.12, 2.44, 0.12), GP(0, 1.22, 3.66, 0.12, 2.44, 0.12), GP(0, 2.44, 0, 0.12, 0.12, 7.44));
+    }
+    parkSys.pitches++;
   }
   if (fparts.length) {
     const fm = new Mesh(mergeGeometries(fparts, !1), vcMats().opaque);
@@ -4441,6 +4773,20 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
     const yaw = v === 2 ? (isNS ? (drng() < 0.5 ? 0 : Math.PI) : ((drng() < 0.5 ? 1 : -1) * Math.PI) / 2) : drng() * 6.28;
     roadDecalSys.spots.push({ i: roadDecalSys.spots.length, x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw, v });
+  }
+  ((oilSys.spots.length = 0), (oilSys.placedDone = !1));
+  const orng = plateRng(0x011f00d);
+  for (let i = 0; i < 200 && oilSys.spots.length < 20; i++) {
+    // approach-lane stains: just before intersections, in the lane centers
+    const isNS = orng() < 0.5,
+      xi = x0 + pitch * (1 + ((orng() * ((x1 - x0) / pitch - 1)) | 0)),
+      zj = zHigh - pitch * (1 + ((orng() * ((zHigh - zLow) / pitch - 1)) | 0)),
+      back = 12 + orng() * 9,
+      lane = (orng() < 0.5 ? -1 : 1) * sw * 0.24,
+      px = isNS ? xi + lane : xi + (orng() < 0.5 ? -back : back),
+      pz = isNS ? zj + (orng() < 0.5 ? -back : back) : zj + lane;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    oilSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw: orng() * 6.28, v: (orng() * 2) | 0, s: orng() });
   }
   for (const d of defs) {
     const im = meshes[d.key];
@@ -4702,6 +5048,14 @@ function F1(i, e, t) {
         be.length || be.push({ axis: Me, road: I.road, along: Se, dir: -I.dir, turn: !0 }));
       const Lt = be.filter((wt) => wt.turn),
         Ze = !ye && Lt.length && Math.random() < 0.42 ? y(Lt) : y(be);
+      {
+        const h1x = Me === "ew" ? I.dir : 0,
+          h1z = Me === "ns" ? I.dir : 0,
+          h2x = Ze.axis === "ew" ? Ze.dir : 0,
+          h2z = Ze.axis === "ns" ? Ze.dir : 0,
+          lft = h2x * h1z - h2z * h1x;
+        ((I.blinkSide = Ze.turn && Ze.axis !== Me ? (lft > 0 ? -1 : 1) : 0), (I.blinkT = I.blinkSide ? 2.2 : 0));
+      }
       ((Ze.turn || Ze.axis !== Me) && qe.turns++,
         (I.axis = Ze.axis),
         (I.road = Ze.road),
@@ -4856,6 +5210,12 @@ function F1(i, e, t) {
       Rr.push(be),
       be.mesh.traverse((pm) => (pm.castShadow = !1)),
       i.add(be.mesh));
+    // zoom-detail 62 (round-seven item 4): the last few walkers stroll the
+    // park paths instead of streets — same Rr entry (kits/inspect intact)
+    if (I >= ie - 6 && parkSys.strollerCells.length) {
+      const pc = parkSys.strollerCells[I % parkSys.strollerCells.length];
+      ((be.park = pc), (be.parkT = (Math.random() - 0.5) * pc.half * 1.5), (be.speed = 1.1 + Math.random() * 0.7), parkSys.strollers++);
+    }
   }
   const de = new MeshBasicMaterial({ color: 14230306, transparent: !0, opacity: 0, depthWrite: !1, side: DoubleSide }),
     pe = new MeshBasicMaterial({ color: 16734015, transparent: !0, opacity: 0, depthWrite: !1, side: DoubleSide });
@@ -4884,6 +5244,25 @@ function F1(i, e, t) {
     if (!I.active)
       if (((I.respawn -= Me), I.respawn <= 0)) ((I.active = !0), (I.mesh.visible = !0), (I.along += I.dir * 50));
       else return;
+    if (I.park) {
+      const pc = I.park,
+        LIM = pc.half - 6;
+      I.parkT = (I.parkT ?? 0) + I.dir * I.speed * Me;
+      (I.parkT > LIM && ((I.parkT = LIM), (I.dir = -1)), I.parkT < -LIM && ((I.parkT = -LIM), (I.dir = 1)));
+      const tt2 = (I.parkT + pc.half) / (2 * pc.half),
+        across = Math.sin(tt2 * Math.PI) * pc.bow,
+        dAcr = ((Math.cos(tt2 * Math.PI) * Math.PI) / (2 * pc.half)) * pc.bow,
+        Z2 = pc.vert ? pc.cx + across : pc.cx + I.parkT,
+        K2 = pc.vert ? pc.cz + I.parkT : pc.cz + across,
+        hx2 = pc.vert ? dAcr * I.dir : I.dir,
+        hz2 = pc.vert ? I.dir : dAcr * I.dir;
+      ((I.x = Z2), (I.z = K2), I.mesh.position.set(Z2, He(Z2, K2) + 0.08, K2), (I.mesh.rotation.y = Math.atan2(-hx2, -hz2)));
+      parkSys.strollerSample || (parkSys.strollerSample = { x: +Z2.toFixed(1), z: +K2.toFixed(1), cx: +pc.cx.toFixed(0), cz: +pc.cz.toFixed(0) });
+      const Le3 = Math.sin(ye * 7 + I.phase);
+      for (const Ye of I.mesh.userData.limbs || [])
+        ((Ye.mesh.rotation.x = Le3 * Ye.amp * Ye.side), (Ye.mesh.position.y = Ye.baseY + Math.abs(Le3) * 0.025));
+      return;
+    }
     ((I.along += I.dir * I.speed * Me),
       I.axis === "ns"
         ? (I.along < a - 28 && (I.along = r + 28), I.along > r + 28 && (I.along = a - 28))
@@ -4912,6 +5291,7 @@ function F1(i, e, t) {
       roadsideSys.update(I, ye);
       facadeSys.update(I, ye);
       roadDecalSys.update(I, ye);
+      oilSys.update(I, ye);
       newsSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
@@ -5032,6 +5412,15 @@ function N1() {
     side: DoubleSide,
   });
   i.add(new Mesh(m(f, 0.4, 0.62), b));
+  {
+    const xt = buildXwalkTextures();
+    ((xwalkSys._mats = xt.map((t2) => new MeshStandardMaterial({ map: t2, transparent: !0, roughness: 0.6, metalness: 0.02, emissive: 3158064, emissiveIntensity: 0.05, depthWrite: !1 }))),
+      (xwalkSys.fresh = 0),
+      (xwalkSys.worn = 0),
+      (xwalkSys.chipped = 0));
+  }
+  const xwalkGeoA = new PlaneGeometry(o * 0.92, 2.6).rotateX(-Math.PI / 2),
+    xwalkGeoB = new PlaneGeometry(2.6, o * 0.92).rotateX(-Math.PI / 2);
   let S = 0,
     L = 0,
     F = 0;
@@ -5040,11 +5429,17 @@ function N1() {
       const Y = l[N],
         j = d[O];
       if (!(Pn(Y, j, o * 0.75).clearance < 2))
+        // zoom-detail 53: zebra-stripe planes in a deterministic per-intersection
+        // wear tier (fresh / worn / chipped alpha textures on shared materials —
+        // the materials survive the static merge, so the A/B toggle lives there)
         for (const ee of [-1, 1]) {
-          const oe = new Mesh(new BoxGeometry(o * 0.92, 0.07, 1.15), h);
-          (oe.position.set(Y, He(Y, j + ee * 13) + 0.83, j + ee * 13), (oe.receiveShadow = !0), i.add(oe));
-          const re = new Mesh(new BoxGeometry(1.15, 0.07, o * 0.92), h);
-          (re.position.set(Y + ee * 13, He(Y + ee * 13, j) + 0.83, j), (re.receiveShadow = !0), i.add(re), (S += 2));
+          const tier = (Math.abs((Y * 7919 + j * 104729) | 0) >>> 3) % 3,
+            xm = xwalkSys._mats[tier];
+          (tier === 0 ? xwalkSys.fresh++ : tier === 1 ? xwalkSys.worn++ : xwalkSys.chipped++);
+          const oe = new Mesh(xwalkGeoA, xm);
+          (oe.position.set(Y, He(Y, j + ee * 13) + 0.83, j + ee * 13), (oe.receiveShadow = !0), (oe.raycast = () => {}), i.add(oe));
+          const re = new Mesh(xwalkGeoB, xm);
+          (re.position.set(Y + ee * 13, He(Y + ee * 13, j) + 0.83, j), (re.receiveShadow = !0), (re.raycast = () => {}), i.add(re), (S += 2));
         }
     }
   const W = new Shape();
@@ -5427,6 +5822,13 @@ function N1() {
     for (let $ = 0; $ < Ze.length; $++) se.setMatrixAt($, Ze[$]);
     ((se.instanceMatrix.needsUpdate = !0), (se.castShadow = !0), (se.receiveShadow = !0), i.add(se));
   }
+  const __neonHaloParts = {},
+    __neonFlickParts = [],
+    __awnParts = {},
+    __awnBoardFaces = [],
+    __awnBoardFrames = [];
+  ((awningSys.count = 0), (awningSys.boards = 0), (awningSys._meshes = []), (awningSys.sample.length = 0), (awningSys.boardSample.length = 0));
+  ((neonSys.halos = 0), (neonSys.flicker = 0), (neonSys._meshes = []), (neonSys._flick = []));
   const J = ["HOTEL", "OPEN", "AUTO", "RACE", "CAFE", "PARTS", "ARCADE", "MOTEL", "TACOS", "VINYL"];
   for (let N = 0; N < Math.min(Me.length, 34); N++) {
     const O = Me[N],
@@ -5438,6 +5840,13 @@ function N1() {
       (oe.rotation.y = O.zSide < 0 ? Math.PI : 0),
       i.add(oe),
       Xi("vertical-neon", oe.position.x, oe.position.y, oe.position.z));
+    {
+      const hg = new PlaneGeometry(12, 30).translate(0, 0, -0.13),
+        hm2 = new Matrix4().makeRotationY(oe.rotation.y);
+      (hm2.setPosition(oe.position.x, oe.position.y, oe.position.z), hg.applyMatrix4(hm2));
+      if (N === 2) __neonFlickParts.push({ geo: hg, color: j, mat: ee });
+      else (__neonHaloParts[j] || (__neonHaloParts[j] = [])).push(hg);
+    }
   }
   for (let N = 0; N < Math.min(Se.length, 48); N++) {
     const O = Se[N],
@@ -5453,6 +5862,50 @@ function N1() {
       : (re.position.set(O.px, w, O.pz + O.side * (O.d * 0.5 + 0.22)), (re.rotation.y = O.side < 0 ? Math.PI : 0)),
       i.add(re),
       Xi("wall-sign", re.position.x, re.position.y, re.position.z));
+    if (N % 4 !== 3) {
+      // awning at SHOP level (gy+4.5) on the same face — canopy slope + valance
+      const cw = Math.min(oe, 14),
+        can = new PlaneGeometry(cw, 1.85).rotateX(-1.02).translate(0, 4.5, 0.82),
+        val = new PlaneGeometry(cw, 0.4).translate(0, 3.83, 1.63),
+        am = new Matrix4().makeRotationY(re.rotation.y);
+      (O.axis === "x" ? am.setPosition(O.px + O.side * O.w * 0.5, O.gy, O.pz) : am.setPosition(O.px, O.gy, O.pz + O.side * O.d * 0.5), can.applyMatrix4(am), val.applyMatrix4(am));
+      const ci3 = (N * 2 + 1) % 4;
+      ((__awnParts[ci3] || (__awnParts[ci3] = [])).push(can, val), awningSys.count++);
+      awningSys.sample.length < 3 &&
+        awningSys.sample.push(
+          O.axis === "x"
+            ? { x: +(O.px + O.side * (O.w * 0.5 + 1)).toFixed(1), y: +(O.gy + 4.4).toFixed(1), z: +O.pz.toFixed(1), nx: O.side, nz: 0 }
+            : { x: +O.px.toFixed(1), y: +(O.gy + 4.4).toFixed(1), z: +(O.pz + O.side * (O.d * 0.5 + 1)).toFixed(1), nx: 0, nz: O.side },
+        );
+      if (N % 3 === 0) {
+        const bm = new Matrix4().makeRotationY(re.rotation.y);
+        O.axis === "x"
+          ? bm.setPosition(O.px + O.side * O.w * 0.5, O.gy, O.pz)
+          : bm.setPosition(O.px, O.gy, O.pz + O.side * O.d * 0.5);
+        const face = new PlaneGeometry(0.82, 1.05).translate(0, 0.9, 2.51).applyMatrix4(bm),
+          frameParts = [
+            new BoxGeometry(0.08, 1.38, 0.08).translate(-0.47, 0.82, 2.46),
+            new BoxGeometry(0.08, 1.38, 0.08).translate(0.47, 0.82, 2.46),
+            new BoxGeometry(1.02, 0.08, 0.08).translate(0, 1.5, 2.46),
+            new BoxGeometry(1.02, 0.08, 0.08).translate(0, 0.15, 2.46),
+            new BoxGeometry(0.07, 1.25, 0.07).rotateX(-0.2).translate(-0.43, 0.7, 2.66),
+            new BoxGeometry(0.07, 1.25, 0.07).rotateX(-0.2).translate(0.43, 0.7, 2.66),
+          ];
+        (__awnBoardFaces.push(face), frameParts.forEach((g) => (g.applyMatrix4(bm), __awnBoardFrames.push(g))), awningSys.boards++);
+        if (awningSys.boardSample.length < 2) {
+          const bx = O.axis === "x" ? O.px + O.side * (O.w * 0.5 + 2.5) : O.px,
+            bz = O.axis === "x" ? O.pz : O.pz + O.side * (O.d * 0.5 + 2.5);
+          awningSys.boardSample.push({ x: +bx.toFixed(1), y: +(O.gy + 0.9).toFixed(1), z: +bz.toFixed(1), nx: O.axis === "x" ? O.side : 0, nz: O.axis === "z" ? O.side : 0 });
+        }
+      }
+    }
+    {
+      const hg = new PlaneGeometry(oe * 1.4, 10.5).translate(0, 0, -0.11),
+        hm2 = new Matrix4().makeRotationY(re.rotation.y);
+      (hm2.setPosition(re.position.x, re.position.y, re.position.z), hg.applyMatrix4(hm2));
+      if (N === 5) __neonFlickParts.push({ geo: hg, color: j, mat: ee });
+      else (__neonHaloParts[j] || (__neonHaloParts[j] = [])).push(hg);
+    }
   }
   for (let N = 0; N < Math.min(Z.length, 18); N++) {
     const O = Z[N],
@@ -5480,6 +5933,62 @@ function N1() {
       (oe.rotation.y = O.axis === "x" ? (O.side > 0 ? Math.PI / 2 : -Math.PI / 2) : O.side < 0 ? Math.PI : 0),
       i.add(oe),
       Xi("roof-billboard", oe.position.x, oe.position.y + 4.8, oe.position.z));
+    {
+      const hg = new PlaneGeometry(w * 1.35, 11).translate(0, 0, -0.55),
+        hm2 = new Matrix4().makeRotationY(oe.rotation.y);
+      (hm2.setPosition(oe.position.x, oe.position.y + 4.8, oe.position.z), hg.applyMatrix4(hm2));
+      (__neonHaloParts[ee] || (__neonHaloParts[ee] = [])).push(hg);
+    }
+  }
+  // zoom-detail 52: merged halo mesh per neon color (≤6 additive draws for
+  // every sign in the city) + individual flicker pairs (sign + own halo wobble)
+  for (const hc of Object.keys(__neonHaloParts)) {
+    const hm3 = new Mesh(
+      mergeGeometries(__neonHaloParts[hc], !1),
+      new MeshBasicMaterial({ map: buildHaloTexture(), color: new Color(hc), transparent: !0, opacity: 0.4, blending: AdditiveBlending, depthWrite: !1, side: DoubleSide, fog: !1 }),
+    );
+    ((hm3.raycast = () => {}), (hm3.renderOrder = 2), i.add(hm3), neonSys._meshes.push(hm3), (neonSys.halos += __neonHaloParts[hc].length));
+  }
+  for (const fp of __neonFlickParts) {
+    const fmat = new MeshBasicMaterial({ map: buildHaloTexture(), color: new Color(fp.color), transparent: !0, opacity: 0.4, blending: AdditiveBlending, depthWrite: !1, side: DoubleSide, fog: !1 }),
+      fmesh = new Mesh(fp.geo, fmat);
+    ((fmesh.raycast = () => {}), (fmesh.renderOrder = 2), i.add(fmesh), neonSys._meshes.push(fmesh));
+    (neonSys._flick.push({ sign: fp.mat, halo: fmat }), neonSys.flicker++, neonSys.halos++);
+  }
+  if (neonSys._flick.length) {
+    const flickAnchor = new Object3D();
+    i.add(flickAnchor);
+    Bn(flickAnchor, (tt) => {
+      if (!neonSys.enabled) return;
+      for (let fi = 0; fi < neonSys._flick.length; fi++) {
+        const ff = neonSys._flick[fi],
+          dip = Math.sin(tt * 11.3 + fi * 2.1) * Math.sin(tt * 4.7 + fi) > 0.88 ? 0.22 : 1;
+        ((ff.sign.opacity = dip), (ff.halo.opacity = 0.4 * dip));
+      }
+    });
+  }
+  if (!neonSys.enabled) for (const m4 of neonSys._meshes) m4.visible = !1;
+  {
+    const awnTex = buildAwningTextures();
+    for (const ck of Object.keys(__awnParts)) {
+      const awm = new Mesh(
+        mergeGeometries(__awnParts[ck], !1),
+        new MeshStandardMaterial({ map: awnTex[+ck], roughness: 0.82, metalness: 0.02, side: DoubleSide }),
+      );
+      ((awm.castShadow = !0), (awm.receiveShadow = !0), (awm.raycast = () => {}), i.add(awm), awningSys._meshes.push(awm));
+    }
+    if (__awnBoardFaces.length) {
+      const boardFace = new Mesh(
+          mergeGeometries(__awnBoardFaces, !1),
+          new MeshBasicMaterial({ map: buildAwningBoardTexture(), side: DoubleSide }),
+        ),
+        boardFrame = new Mesh(
+          mergeGeometries(__awnBoardFrames, !1),
+          new MeshStandardMaterial({ color: 0x6b4227, roughness: 0.88, metalness: 0 }),
+        );
+      for (const m5 of [boardFace, boardFrame]) ((m5.castShadow = !0), (m5.receiveShadow = !0), (m5.raycast = () => {}), i.add(m5), awningSys._meshes.push(m5));
+    }
+    if (!awningSys.enabled) for (const m5 of awningSys._meshes) m5.visible = !1;
   }
   const le = [11680564, 3108784, 14205514, 15198700, 3752265, 4164178, 10112944],
     // parked cars: real silhouette (body + cabin) with a separate dark wheel layer, still 2 draw calls total
@@ -7935,6 +8444,7 @@ function buildPonds() {
   ((qe.ponds = placed), et.add(i), bakeMinimap());
 }
 buildPonds();
+buildPondEdges(et);
 // ─── On-foot walker + helicopter and its pad ───
 const walker = U1(3375807, 15905331);
 ((walker.visible = !1), walker.scale.setScalar(1.06), et.add(walker));
@@ -8354,6 +8864,52 @@ function buildPropPlanes() {
   }
 }
 buildPropPlanes();
+// zoom-detail 57 (round-six item 10): one slow fictional-brand blimp on a
+// high lane above the prop planes. Opaque vc-baked hull+fins+gondola (one
+// mesh) + a two-sided banner mesh — 2 draws, ~600 tris, no transparency risk.
+const blimpSys = { alt: 300, text: "RIBBON COLA", enabled: !0, x: 0, z: -520, _g: null };
+function buildBlimpBanner() {
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 128));
+  const g = cv.getContext("2d");
+  ((g.fillStyle = "#b3202c"), g.fillRect(0, 0, 512, 128));
+  ((g.fillStyle = "#f4ead8"), (g.font = "900 72px Arial Black, Arial, sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+  g.fillText("RIBBON COLA", 256, 66, 480);
+  const t = new CanvasTexture(cv);
+  return ((t.colorSpace = SRGBColorSpace), t);
+}
+function buildBlimp() {
+  const g = new Group(),
+    { opaque } = vcMats(),
+    parts = [],
+    T = (x, y, z) => new Matrix4().setPosition(x, y, z),
+    S = (m, sx, sy, sz) => m.multiply(new Matrix4().makeScale(sx, sy, sz));
+  parts.push(vcBake(new SphereGeometry(1, 18, 12), S(T(0, 0, 0), 13.5, 4.1, 4.1), 13096394));
+  parts.push(vcBake(new BoxGeometry(0.3, 7.2, 3.4), T(-12.4, 0, 0), 11221071));
+  parts.push(vcBake(new BoxGeometry(0.3, 3.4, 7.2).rotateX(Math.PI / 2), T(-12.4, 0, 0), 11221071));
+  parts.push(vcBake(new BoxGeometry(3.6, 1.3, 1.7), T(0.6, -4.6, 0), 4406333));
+  parts.push(vcBake(new BoxGeometry(0.14, 0.9, 0.14), T(-0.8, -4.0, 0.5), 2565927));
+  parts.push(vcBake(new BoxGeometry(0.14, 0.9, 0.14), T(1.9, -4.0, -0.5), 2565927));
+  const bl = new Mesh(mergeGeometries(parts, !1), opaque);
+  ((bl.raycast = () => {}), g.add(bl));
+  const bGeo = mergeGeometries(
+    [new PlaneGeometry(11, 3.0).rotateY(Math.PI / 2).translate(4.4, 0.2, 0), new PlaneGeometry(11, 3.0).rotateY(-Math.PI / 2).translate(-4.4, 0.2, 0)],
+    !1,
+  );
+  bGeo.rotateY(Math.PI / 2);
+  const banner = new Mesh(bGeo, new MeshStandardMaterial({ map: buildBlimpBanner(), roughness: 0.6, metalness: 0.05, emissive: 3348752, emissiveIntensity: 0.14 }));
+  ((banner.raycast = () => {}), g.add(banner));
+  ((g.position.set(-1300, blimpSys.alt, blimpSys.z)), (g.rotation.y = -Math.PI / 2), et.add(g), (blimpSys._g = g));
+  const ph = 1.7;
+  Bn(g, (tt, dt) => {
+    ((g.position.x += 8 * dt), g.position.x > 1500 && (g.position.x = -1500));
+    ((g.position.y = blimpSys.alt + Math.sin(tt * 0.21 + ph) * 6), (g.rotation.z = Math.sin(tt * 0.13) * 0.03));
+    ((blimpSys.x = +g.position.x.toFixed(1)), (blimpSys.z = +g.position.z.toFixed(1)));
+  });
+  return g;
+}
+buildBlimp();
+
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
 // up one star at a time once you keep 240+ units of distance. Roam only. ───
@@ -11084,6 +11640,15 @@ window.__steelRibbonDebug = {
     paddockSys._mesh && (paddockSys._mesh.visible = paddockSys.enabled);
     return paddockSys.enabled;
   },
+  pondEdgesEnable(on) {
+    pondEdgeSys.enabled = !!on;
+    pondEdgeSys._mesh && (pondEdgeSys._mesh.visible = pondEdgeSys.enabled);
+    return pondEdgeSys.enabled;
+  },
+  oilEnable(on) {
+    oilSys.enabled = !!on;
+    return oilSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -11093,6 +11658,30 @@ window.__steelRibbonDebug = {
     lawnSys.enabled = !!on;
     if (lawnSys.mat) ((lawnSys.mat.vertexColors = lawnSys.enabled), (lawnSys.mat.needsUpdate = !0));
     return lawnSys.enabled;
+  },
+  neonEnable(on) {
+    neonSys.enabled = !!on;
+    for (const m of neonSys._meshes) m.visible = neonSys.enabled;
+    if (!neonSys.enabled) for (const f of neonSys._flick) ((f.sign.opacity = 1), (f.halo.opacity = 0.4));
+    return neonSys.enabled;
+  },
+  xwalkEnable(on) {
+    xwalkSys.enabled = !!on;
+    for (const m of xwalkSys._mats) ((m.opacity = xwalkSys.enabled ? 1 : 0), (m.needsUpdate = !0));
+    return xwalkSys.enabled;
+  },
+  awningEnable(on) {
+    awningSys.enabled = !!on;
+    for (const m of awningSys._meshes) m.visible = awningSys.enabled;
+    return awningSys.enabled;
+  },
+  turnSignalsEnable(on) {
+    turnSigSys.enabled = !!on;
+    return turnSigSys.enabled;
+  },
+  brakesEnable(on) {
+    brakeSys.enabled = !!on;
+    return brakeSys.enabled;
   },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
@@ -11213,10 +11802,18 @@ window.__steelRibbonDebug = {
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
-      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
+      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pitches: parkSys.pitches, strollers: parkSys.strollers, strollerSample: parkSys.strollerSample ?? null, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
+      pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
+      oil: { spots: oilSys.spots.length, placed: oilSys.placed, enabled: oilSys.enabled, sample: oilSys.sample.slice(0, 3) },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
+      neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },
+      xwalks: { fresh: xwalkSys.fresh, worn: xwalkSys.worn, chipped: xwalkSys.chipped, enabled: xwalkSys.enabled },
+      awnings: { count: awningSys.count, boards: awningSys.boards, enabled: awningSys.enabled, sample: awningSys.sample.slice(0, 3), boardSample: awningSys.boardSample.slice(0, 2) },
+      turnSignals: { turning: turnSigSys.turning, cars: turnSigSys.cars, enabled: turnSigSys.enabled, total: turnSigSys.total ?? 0, sample: turnSigSys.sample ?? null },
+      brakes: { braking: brakeSys.braking, total: brakeSys.total, enabled: brakeSys.enabled, sample: brakeSys.sample ?? null },
+      blimp: { x: blimpSys.x, z: blimpSys.z, alt: blimpSys.alt, text: blimpSys.text },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
@@ -13676,6 +14273,42 @@ window.addEventListener("pointerup", (ev) => {
 window.addEventListener("keydown", (ev) => {
   ev.code === "Escape" && inspectExit();
 });
+{
+  // zoom-detail 55: turn-indicator tick — show the live side while turnBlend
+  // decays, pulse via the ONE shared material (global sync is unnoticeable)
+  const blinkAnchor = new Object3D();
+  et.add(blinkAnchor);
+  Bn(blinkAnchor, (tt, dt) => {
+    let on = 0;
+    brakeSys._on = 0;
+    const pulse = Math.sin(tt * 9.2) > 0 ? 1 : 0.12;
+    for (const K of Rc) {
+      const b = K.mesh && K.mesh.userData.blink;
+      if (!b) continue;
+      K.blinkT > 0 && (K.blinkT = Math.max(0, K.blinkT - dt));
+      const live = turnSigSys.enabled && K.blinkSide && K.blinkT > 0;
+      ((b.L.visible = live && K.blinkSide < 0), (b.R.visible = live && K.blinkSide > 0), live && on++);
+      const bm = K.mesh.userData.brake;
+      if (bm) {
+        const braking = brakeSys.enabled && (K.brakePulse || 0) > 0.12;
+        bm.visible = braking;
+        if (braking) {
+          brakeSys._on++;
+          brakeSys.sample || (brakeSys.sample = { x: +K.mesh.position.x.toFixed(1), y: +K.mesh.position.y.toFixed(1), z: +K.mesh.position.z.toFixed(1) });
+        }
+      }
+    }
+    ((turnSigSys.turning = on), (turnSigSys.cars = Rc.length), (turnSigSys.total = (turnSigSys.total || 0) + on), turnSigSys.mat && (turnSigSys.mat.opacity = pulse));
+    ((brakeSys.braking = brakeSys._on || 0), (brakeSys.total += brakeSys._on || 0), (brakeSys._on = 0), brakeSys.braking || (brakeSys.sample = null));
+    turnSigSys.sample = null;
+    if (on)
+      for (const K of Rc)
+        if (K.mesh && K.mesh.userData.blink && K.blinkSide && K.blinkT > 0) {
+          turnSigSys.sample = { x: +K.mesh.position.x.toFixed(1), y: +K.mesh.position.y.toFixed(1), z: +K.mesh.position.z.toFixed(1), side: K.blinkSide };
+          break;
+        }
+  });
+}
 {
   const inspectAnchor = new Object3D();
   et.add(inspectAnchor);
