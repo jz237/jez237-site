@@ -1,5 +1,6 @@
 import {
   Fog,
+  Box3,
   CanvasTexture,
   InstancedMesh,
   Group,
@@ -35,6 +36,7 @@ import {
   Quaternion,
   SphereGeometry,
   PlaneGeometry,
+  InstancedBufferAttribute,
   Raycaster,
   PMREMGenerator,
   Clock,
@@ -605,24 +607,54 @@ function y1(i = 256) {
   const s = new CanvasTexture(e);
   return ((s.colorSpace = SRGBColorSpace), s);
 }
-function As(i = 128, e = 256, t = 0.42) {
+function As(i = 128, e = 256, t = 0.42, hd = 1) {
+  // zoom-detail 44 (round-five item 8): hd=2 doubles canvas AND cell grid —
+  // same window layout on the wall, twice the texels per window, plus frame/
+  // mullion lines and curtain/blind variation so mid-band walls resolve crisp
+  // instead of blurring. hd=1 is the legacy look (kept for the A/B toggle).
   const n = document.createElement("canvas");
-  ((n.width = i), (n.height = e));
+  ((n.width = i * hd), (n.height = e * hd));
   const s = n.getContext("2d");
-  ((s.fillStyle = "#081722"), s.fillRect(0, 0, i, e));
-  for (let a = 10; a < e - 8; a += 18)
-    for (let o = 9; o < i - 9; o += 15)
-      (Math.random() < t
+  ((s.fillStyle = "#081722"), s.fillRect(0, 0, i * hd, e * hd));
+  for (let a = 10 * hd; a < (e - 8) * hd; a += 18 * hd)
+    for (let o = 9 * hd; o < (i - 9) * hd; o += 15 * hd) {
+      const lit = Math.random() < t,
+        wW = 7 * hd,
+        wH = 8 * hd;
+      (lit
         ? ((s.shadowColor = "rgba(255, 197, 104, 0.75)"),
-          (s.shadowBlur = 5),
-          (s.fillStyle = `rgba(255, ${205 + Math.random() * 38}, ${118 + Math.random() * 72}, ${0.82 + Math.random() * 0.18})`))
+          (s.shadowBlur = 5 * hd),
+          (s.fillStyle = `rgba(255, ${205 + Math.random() * 38}, ${118 + Math.random() * 72}, ${0.86 + Math.random() * 0.14})`))
         : ((s.shadowBlur = 0), (s.fillStyle = "rgba(42, 92, 125, 0.28)")),
-        s.fillRect(o, a, 7, 8));
-  ((s.shadowBlur = 0), (s.strokeStyle = "rgba(140, 220, 255, 0.12)"), (s.lineWidth = 1));
-  for (let a = 0; a < i; a += 15) (s.beginPath(), s.moveTo(a + 3, 0), s.lineTo(a + 3, e), s.stroke());
+        s.fillRect(o, a, wW, wH));
+      if (hd > 1) {
+        s.shadowBlur = 0;
+        if (lit) {
+          const v = Math.random();
+          if (v < 0.18) {
+            // blind: pale strip pulled partway down
+            ((s.fillStyle = "rgba(226, 214, 190, 0.6)"), s.fillRect(o, a, wW, wH * (0.25 + Math.random() * 0.3)));
+          } else if (v < 0.3) {
+            // curtains: muted side panels
+            ((s.fillStyle = "rgba(148, 96, 84, 0.55)"), s.fillRect(o, a, wW * 0.22, wH), s.fillRect(o + wW * 0.78, a, wW * 0.22, wH));
+          } else if (v < 0.38) {
+            // plant/lamp silhouette on the sill
+            ((s.fillStyle = "rgba(30, 40, 30, 0.7)"), s.fillRect(o + wW * 0.6, a + wH * 0.55, wW * 0.2, wH * 0.4));
+          }
+        }
+        // mullion cross + frame
+        ((s.strokeStyle = "rgba(9, 16, 24, 0.85)"), (s.lineWidth = 1));
+        (s.beginPath(), s.moveTo(o + wW * 0.5, a), s.lineTo(o + wW * 0.5, a + wH), s.moveTo(o, a + wH * 0.45), s.lineTo(o + wW, a + wH * 0.45), s.stroke());
+        ((s.strokeStyle = "rgba(12, 22, 32, 0.9)"), s.strokeRect(o - 0.5, a - 0.5, wW + 1, wH + 1));
+      }
+    }
+  ((s.shadowBlur = 0), (s.strokeStyle = "rgba(140, 220, 255, 0.12)"), (s.lineWidth = 1 * hd));
+  for (let a = 0; a < i * hd; a += 15 * hd) (s.beginPath(), s.moveTo(a + 3 * hd, 0), s.lineTo(a + 3 * hd, e * hd), s.stroke());
   const r = new CanvasTexture(n);
   return ((r.colorSpace = SRGBColorSpace), r);
 }
+// live refs for the window-texture A/B toggle (city tower shared materials)
+const towerTexSys = { mats: null, hd: 2, args: null };
 function b1(i = 256, e = 256, t = "#d9d0bd") {
   const n = document.createElement("canvas");
   ((n.width = i), (n.height = e));
@@ -1849,9 +1881,11 @@ function D1() {
     }
     (E.position.set(v, He(v, y), y),
       (E.rotation.y = Math.atan2(-v, -y) + (Math.random() - 0.5) * 0.5),
+      crowdSys.stands.push({ x: v, z: y, yaw: E.rotation.y, w: T, gy: E.position.y }),
       et.add(E),
       kn("grandstand", v, y, 40, 30));
   }
+  crowdSys.init();
   const x = [16731486, 16765503, 16777215, 11824127];
   for (let h = 0; h < 90; h++) {
     const _ = zn(() => ({ x: -900 + Math.random() * 1800, z: -300 - Math.random() * 1500 }), 3, 20, 16);
@@ -1972,10 +2006,32 @@ function I1(i, e) {
     opq = [],
     gls = [];
   opq.push(vcBake(new BoxGeometry(s.w, s.h, s.l), vcAt(0, 0.95, 0), bodyColor));
+  // full-fat 4b (round four, freeze lifted): non-bus cabins are RECESSED —
+  // the box is 0.34 shorter, the old front face is rebuilt as A-pillars +
+  // header + sill around the windshield, and a baked driver sits in the
+  // dark interior behind the glass. Every car is visibly crewed at any
+  // distance the cabin resolves.
   (s.bus ? gls : opq).push(
-    vcBake(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2]), vcAt(0, 1.65, s.cabinZ), s.bus ? 10217727 : e),
+    s.bus
+      ? vcBake(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2]), vcAt(0, 1.65, s.cabinZ), 10217727)
+      : vcBake(new BoxGeometry(s.cabin[0], s.cabin[1], s.cabin[2] - 0.34), vcAt(0, 1.65, s.cabinZ + 0.17), e),
   );
   if (!s.bus) {
+    const czF = s.cabinZ - s.cabin[2] / 2;
+    (opq.push(vcBake(new BoxGeometry(s.cabin[0], s.cabin[1] * 0.22, 0.06), vcAt(0, 1.65 + s.cabin[1] * 0.39, czF + 0.03), e)),
+      opq.push(vcBake(new BoxGeometry(s.cabin[0], s.cabin[1] * 0.18, 0.06), vcAt(0, 1.65 - s.cabin[1] * 0.41, czF + 0.03), e)));
+    for (const h of [-1, 1]) opq.push(vcBake(new BoxGeometry(s.cabin[0] * 0.12, s.cabin[1], 0.06), vcAt(h * s.cabin[0] * 0.44, 1.65, czF + 0.03), e));
+    (opq.push(vcBake(new BoxGeometry(s.cabin[0] * 0.92, s.cabin[1] * 0.86, 0.05), vcAt(0, 1.65, czF + 0.31), 1052688)),
+      opq.push(vcBake(new BoxGeometry(s.cabin[0] * 0.86, 0.09, 0.22), vcAt(0, 1.65 - s.cabin[1] * 0.18, czF + 0.15), 1974824)));
+    const skin = [11893070, 9657655, 13018202, 8541761][(e >>> 4) % 4],
+      dxD = -s.cabin[0] * 0.2;
+    opq.push(vcBake(new SphereGeometry(0.105, 8, 6), vcAt(dxD, 1.65 + s.cabin[1] * 0.12, czF + 0.2), skin));
+    const capG = new SphereGeometry(0.1, 8, 5);
+    capG.scale(1, 0.55, 1);
+    (opq.push(vcBake(capG, vcAt(dxD, 1.65 + s.cabin[1] * 0.12 + 0.08, czF + 0.2), 1119001)),
+      opq.push(vcBake(new BoxGeometry(0.3, 0.16, 0.1), vcAt(dxD, 1.65 - s.cabin[1] * 0.05, czF + 0.22), dimColor)));
+    const whM = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(dxD, 1.62, czF + 0.1), new Matrix4().makeRotationX(1.25));
+    opq.push(vcBake(new CylinderGeometry(0.075, 0.075, 0.018, 10), whM, 1381656));
     gls.push(
       vcBake(
         new BoxGeometry(s.cabin[0] * 0.78, s.cabin[1] * 0.55, 0.08),
@@ -2025,9 +2081,24 @@ function I1(i, e) {
   for (const x of [-s.w * 0.28, s.w * 0.28])
     (opq.push(vcBake(headGeo, vcAt(x, 0.95, -s.l * 0.52 - 0.04), 16774064, 16765788, 1.7)),
       opq.push(vcBake(tailGeo, vcAt(x, 0.98, s.l * 0.52 + 0.04), 16725033, 16717325, 1.45)));
+  // driver silhouette + steering wheel baked into the same body merge (zoom-detail
+  // item 04): zero extra draws. ONLY for glass-cabin vehicles (bus) — car cabins
+  // are solid opaque boxes with glass quads on the faces, so a driver inside them
+  // can never be seen (verified the hard way; see DETAIL-LOOP.md item 4b).
+  if (s.bus) {
+    // the bus body is solid to y≈1.95; its glass band sits at y≈2.08 — the driver
+    // is a head + cap at window height behind the windshield glass
+    const skin = [11893070, 9657655, 13018202, 8541761][(e >>> 4) % 4],
+      dx = -s.cabin[0] * 0.27,
+      dz = s.cabinZ - s.cabin[2] / 2 + 0.55;
+    opq.push(vcBake(new SphereGeometry(0.155, 8, 6), vcAt(dx, 2.06, dz), skin));
+    const capGeo = new SphereGeometry(0.145, 8, 5);
+    capGeo.scale(1, 0.55, 1);
+    opq.push(vcBake(capGeo, vcAt(dx, 2.18, dz), 1119001));
+  }
   (t.add(new Mesh(mergeGeometries(opq, !1), opaque)), gls.length && t.add(new Mesh(mergeGeometries(gls, !1), glass)));
   return (
-    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55 }),
+    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
       ((x.castShadow = !1), (x.receiveShadow = !0));
@@ -2035,27 +2106,41 @@ function I1(i, e) {
     t
   );
 }
-function U1(i, e) {
+function U1(i, e, idx = 0) {
+  // zoom-detail 41 (round-five item 5): walkers become individuals — 4-tone
+  // skin, cap-or-hair, two-tone jacket/waist, sleeve variety. All deterministic
+  // per idx; the stacked cylinders keep the original body's silhouette envelope.
   const t = new Group(),
     { opaque } = vcMats(),
+    SKIN = [11893070, 9657655, 13018202, 8541761],
+    CAPS = [1119001, 4728103, 2110297, 6960969],
+    HAIRS = [2036767, 4924443, 7359290, 9992782],
+    WAIST = [3236447, 7887430, 5987111, 8012354],
+    skin = SKIN[idx % 4],
+    hair = idx % 3 === 1,
+    capCol = hair ? HAIRS[(idx >> 2) % 4] : CAPS[(idx >> 2) % 4],
+    waist = WAIST[(idx * 3 + 1) % 4],
+    sleeves = idx % 5 < 2 ? skin : i,
     hatGeo = new SphereGeometry(0.25, 8, 5);
-  hatGeo.scale(1, 0.5, 1);
+  hatGeo.scale(1, hair ? 0.42 : 0.5, 1);
   t.add(
     new Mesh(
       mergeGeometries(
         [
-          vcBake(new CylinderGeometry(0.28, 0.34, 0.95, 8), vcAt(0, 1.35, 0), i),
-          vcBake(new SphereGeometry(0.24, 10, 8), vcAt(0, 2.02, 0), 12947299),
-          vcBake(hatGeo, vcAt(0, 2.17, 0), 1119001),
+          vcBake(new CylinderGeometry(0.28, 0.315, 0.62, 8), vcAt(0, 1.515, 0), i),
+          vcBake(new CylinderGeometry(0.315, 0.34, 0.34, 8), vcAt(0, 1.04, 0), waist),
+          vcBake(new SphereGeometry(0.24, 10, 8), vcAt(0, 2.02, 0), skin),
+          vcBake(hatGeo, vcAt(0, hair ? 2.13 : 2.17, 0), capCol),
         ],
         !1,
       ),
       opaque,
     ),
   );
+  t.userData.style = { skin: idx % 4, hair, cap: capCol, waist, sleeves: sleeves === skin ? "short" : "long" };
   const d = [],
     legGeo = vcBake(new CylinderGeometry(0.075, 0.09, 0.78, 6), null, e),
-    armGeo = vcBake(new CylinderGeometry(0.055, 0.065, 0.72, 6), null, 12947299);
+    armGeo = vcBake(new CylinderGeometry(0.055, 0.065, 0.72, 6), null, sleeves);
   for (const f of [-0.16, 0.16]) {
     const p = new Mesh(legGeo, opaque);
     (p.position.set(f, 0.58, 0), t.add(p), d.push({ mesh: p, side: Math.sign(f), baseY: 0.58, amp: 0.28 }));
@@ -2074,6 +2159,2366 @@ function U1(i, e) {
     }),
     t
   );
+}
+// ─── License plates (zoom-detail item 01): ONE InstancedMesh of plate quads
+// (front+rear per car) sampling an 8x8 canvas atlas via a per-instance UV slot
+// attribute — a single extra draw call and texture for every plated car in the
+// world. Traffic cars sync matrices each city tick; parked cars are static and
+// only re-apply when their steal-spot `taken` flag flips. Instance ranges are
+// fixed (parked 0..259, traffic 260..339) so the two builders can reset
+// independently in any order. Letters are consonant-only so no real word (or
+// profanity) can ever appear; a blocklist catches vowel-free offenders.
+const PLATE_LETTERS = "BCDFGHJKLMNPRSTVWXZ";
+const PLATE_BANNED = ["FCK", "SHT", "DCK", "CNT", "KKK", "WTF", "FML", "NGR", "FGT", "SLT", "DMN", "BTC", "JZZ"];
+const PLATE_CAP = 340;
+function plateRng(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+let plateAtlas = null;
+function buildPlateAtlas() {
+  if (plateAtlas) return plateAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d"),
+    texts = [];
+  for (let s = 0; s < 64; s++) {
+    const rng = plateRng(0x51ee1 + s * 2654435761);
+    let text = "";
+    do {
+      text = "";
+      for (let k = 0; k < 3; k++) text += PLATE_LETTERS[(rng() * PLATE_LETTERS.length) | 0];
+    } while (PLATE_BANNED.includes(text));
+    text += " ";
+    for (let k = 0; k < 3; k++) text += (rng() * 10) | 0;
+    texts.push(text);
+    const x = (s % 8) * 128,
+      y = ((s / 8) | 0) * 64,
+      commercial = s % 9 === 3;
+    ((g.fillStyle = commercial ? "#f3d268" : "#ece9dc"), g.fillRect(x + 6, y + 8, 116, 48));
+    ((g.strokeStyle = "#25304d"), (g.lineWidth = 3), g.strokeRect(x + 7.5, y + 9.5, 113, 45));
+    ((g.fillStyle = "#1c2848"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    ((g.font = "bold 30px 'Courier New', monospace"), g.fillText(text, x + 64, y + 38));
+    ((g.font = "bold 10px sans-serif"), g.fillText("STEEL STATE", x + 64, y + 17));
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  plateAtlas = { texture, texts };
+  return plateAtlas;
+}
+const _plateOne = new Vector3(1, 1, 1),
+  _plateCar = new Matrix4(),
+  _plateOut = new Matrix4();
+const plateSys = {
+  mesh: null,
+  texts: null,
+  statics: [],
+  dynamics: [],
+  _zero: new Matrix4().makeScale(0, 0, 0),
+  ensure() {
+    if (this.mesh) return;
+    const { texture, texts } = buildPlateAtlas();
+    this.texts = texts;
+    const geo = new PlaneGeometry(0.55, 0.17);
+    geo.setAttribute("aPlateSlot", new InstancedBufferAttribute(new Float32Array(PLATE_CAP * 2), 2));
+    const mat = new MeshBasicMaterial({ map: texture });
+    mat.customProgramCacheKey = () => "plate-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute vec2 aPlateSlot;\nvarying vec2 vPlateUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvPlateUv = uv * 0.125 + aPlateSlot;");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vPlateUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vPlateUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, PLATE_CAP);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1));
+    for (let k = 0; k < PLATE_CAP; k++) this.mesh.setMatrixAt(k, this._zero);
+    et.add(this.mesh);
+  },
+  _slot(seed) {
+    const s = seed % 64;
+    return { u: (s % 8) * 0.125, v: (7 - ((s / 8) | 0)) * 0.125, s };
+  },
+  // outset clears the car's own bumper bar (traffic cars: bumper face at halfL+0.14)
+  _offsets(halfL, outset = 0.03) {
+    return {
+      offF: new Matrix4().makeRotationY(Math.PI).setPosition(0, 0.62, -(halfL + outset)),
+      offR: new Matrix4().setPosition(0, 0.62, halfL + outset),
+    };
+  },
+  resetStatic() {
+    this.ensure();
+    this.statics.length = 0;
+    for (let k = 0; k < 260; k++) this.mesh.setMatrixAt(k, this._zero);
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+  resetDynamic() {
+    this.ensure();
+    this.dynamics.length = 0;
+    for (let k = 260; k < PLATE_CAP; k++) this.mesh.setMatrixAt(k, this._zero);
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+  addStatic(matrix, halfL, seed, spot) {
+    this.ensure();
+    if (this.statics.length >= 130) return;
+    const base = this.statics.length * 2,
+      { u, v, s } = this._slot(seed * 13 + 29),
+      reg = { matrix: matrix.clone(), spot, wasTaken: null, iF: base, iR: base + 1, slot: s, ...this._offsets(halfL) },
+      attr = this.mesh.geometry.getAttribute("aPlateSlot");
+    (attr.setXY(reg.iF, u, v), attr.setXY(reg.iR, u, v), (attr.needsUpdate = !0));
+    (this.statics.push(reg), this._applyStatic(reg));
+  },
+  _applyStatic(reg) {
+    reg.wasTaken = !!(reg.spot && reg.spot.taken);
+    if (reg.wasTaken) (this.mesh.setMatrixAt(reg.iF, this._zero), this.mesh.setMatrixAt(reg.iR, this._zero));
+    else {
+      this.mesh.setMatrixAt(reg.iF, _plateOut.multiplyMatrices(reg.matrix, reg.offF));
+      this.mesh.setMatrixAt(reg.iR, _plateOut.multiplyMatrices(reg.matrix, reg.offR));
+    }
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+  addDynamic(carMesh, seed) {
+    this.ensure();
+    if (this.dynamics.length >= 40) return;
+    const base = 260 + this.dynamics.length * 2,
+      { u, v, s } = this._slot(seed * 37 + 11),
+      attr = this.mesh.geometry.getAttribute("aPlateSlot");
+    (attr.setXY(base, u, v), attr.setXY(base + 1, u, v), (attr.needsUpdate = !0));
+    this.dynamics.push({ carMesh, iF: base, iR: base + 1, slot: s, ...this._offsets(carMesh.userData.plateHalfL || 2.2, 0.155) });
+  },
+  update() {
+    if (!this.mesh || !this.dynamics.length) return;
+    for (const d of this.dynamics) {
+      _plateCar.compose(d.carMesh.position, d.carMesh.quaternion, _plateOne);
+      this.mesh.setMatrixAt(d.iF, _plateOut.multiplyMatrices(_plateCar, d.offF));
+      this.mesh.setMatrixAt(d.iR, _plateOut.multiplyMatrices(_plateCar, d.offR));
+    }
+    for (const r of this.statics) if (!!(r.spot && r.spot.taken) !== r.wasTaken) this._applyStatic(r);
+    this.mesh.instanceMatrix.needsUpdate = !0;
+  },
+};
+// ─── Pedestrian near-tier kits (zoom-detail item 02): a small pool of face/
+// hand/shoe add-on kits that attach to the pedestrian groups nearest the
+// camera. Far pedestrians render exactly as built; a promoted one gains a
+// merged face mesh (child of the group — heads never move relative to it)
+// plus hands and shoes parented onto the animated limb meshes so they inherit
+// the walk swing for free. Kit choice is pedIndex % pool, so a pedestrian
+// always gets the same face/shoe variety back when re-promoted. All parts
+// share vcMats' opaque material: promoted cost is 5 small draws per kit.
+// ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
+// tier), but the nearest grandstand within 70m gets a pool of seated figures —
+// two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
+// plane, doing a traveling wave. Invisible when no stand is near: zero cost at
+// the race-start perf gate, honors the permanent-geometry freeze.
+const crowdSys = {
+  stands: [],
+  torsos: null,
+  heads: null,
+  active: -1,
+  cap: 0,
+  figures: 0,
+  _seats: [],
+  init() {
+    if (this.torsos || !this.stands.length) return;
+    this.cap = mobilePerf ? 140 : 280;
+    const { opaque } = vcMats();
+    const torsoGeo = vcBake(new BoxGeometry(0.52, 0.6, 0.38), null, 16777215),
+      headGeo = vcBake(new SphereGeometry(0.17, 7, 5), vcAt(0, 0.45, 0), 12947299);
+    ((this.torsos = new InstancedMesh(torsoGeo, opaque, this.cap)), (this.heads = new InstancedMesh(headGeo, opaque, this.cap)));
+    const shirt = new Color(),
+      shirts = [16731486, 16765503, 4111086, 16777215, 15121483, 5025616, 16744576, 3392239];
+    for (let k = 0; k < this.cap; k++) this.torsos.setColorAt(k, shirt.set(shirts[k % shirts.length]));
+    this.torsos.instanceColor && (this.torsos.instanceColor.needsUpdate = !0);
+    for (const m of [this.torsos, this.heads])
+      ((m.frustumCulled = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.visible = !1), (m.count = 0), et.add(m));
+    Bn(this.torsos, (t) => this.update(t));
+  },
+  _layout(st) {
+    // seats in crowd-plane space: plane at stand-local (0,12,6), rotX(-0.85)
+    this._seats.length = 0;
+    const cosT = Math.cos(-0.85),
+      sinT = Math.sin(-0.85),
+      cy = Math.cos(st.yaw),
+      sy = Math.sin(st.yaw),
+      cols = Math.min(46, Math.floor((st.w * 0.9) / 1.7)),
+      rows = Math.min(6, Math.floor(this.cap / cols));
+    for (let r = 0; r < rows; r++)
+      for (let c = 0; c < cols; c++) {
+        if (this._seats.length >= this.cap) break;
+        const px = -((cols - 1) * 1.7) / 2 + c * 1.7,
+          py = -9.5 + r * 3.4,
+          lx = px,
+          ly = 12 + py * cosT + 0.35 * -sinT,
+          lz = 6 + py * sinT + 0.35 * cosT;
+        this._seats.push({
+          x: st.x + lx * cy + lz * sy,
+          y: st.gy + ly,
+          z: st.z - lx * sy + lz * cy,
+          ph: c * 0.42 + r * 0.9,
+        });
+      }
+    this.figures = this._seats.length;
+  },
+  update(t) {
+    if (!this.torsos) return;
+    const cx = Xe.position.x,
+      cz = Xe.position.z;
+    let best = -1,
+      bd = 70 * 70;
+    for (let i = 0; i < this.stands.length; i++) {
+      const s = this.stands[i],
+        d = (s.x - cx) * (s.x - cx) + (s.z - cz) * (s.z - cz);
+      d < bd && ((bd = d), (best = i));
+    }
+    if (best < 0) {
+      if (this.active >= 0) ((this.active = -1), (this.torsos.visible = !1), (this.heads.visible = !1));
+      return;
+    }
+    if (best !== this.active) {
+      this.active = best;
+      this._layout(this.stands[best]);
+      ((this.torsos.count = this.figures), (this.heads.count = this.figures));
+      ((this.torsos.visible = !0), (this.heads.visible = !0));
+    }
+    // traveling wave (matrices recomposed only while a stand is promoted)
+    const m = new Matrix4();
+    for (let k = 0; k < this.figures; k++) {
+      const s = this._seats[k],
+        lift = Math.max(0, Math.sin(t * 2.2 - s.ph)) * 0.5;
+      m.makeRotationY(this.stands[this.active].yaw + Math.PI);
+      m.setPosition(s.x, s.y + lift, s.z);
+      (this.torsos.setMatrixAt(k, m), this.heads.setMatrixAt(k, m));
+    }
+    ((this.torsos.instanceMatrix.needsUpdate = !0), (this.heads.instanceMatrix.needsUpdate = !0));
+  },
+};
+// ─── Birds that scatter (zoom-detail item 13 / backlog 14): one pooled flock
+// of instanced pigeons pecking on the ground ahead of the roam player; drive
+// within 9m and they burst upward, flutter away and despawn. Roam-only, one
+// InstancedMesh visible only while a flock is active — zero permanent cost.
+const birdSys = {
+  mesh: null,
+  cap: 9,
+  active: !1,
+  state: "idle",
+  birds: [],
+  spot: { x: 0, z: 0 },
+  _timer: 0,
+  _m: null,
+  _q: null,
+  ensure() {
+    if (this.mesh) return;
+    const { opaque } = vcMats();
+    const geo = mergeGeometries(
+      [
+        vcBake(new SphereGeometry(0.085, 6, 5), vcAt(0, 0.1, 0), 9145227),
+        vcBake(new SphereGeometry(0.055, 6, 5), vcAt(0, 0.17, -0.09), 6118749),
+        vcBake(new ConeGeometry(0.02, 0.06, 4), vcAt(0, 0.16, -0.15, Math.PI / 2), 15379494),
+        vcBake(new BoxGeometry(0.16, 0.012, 0.09), vcAt(-0.1, 0.13, 0.01), 7763064),
+        vcBake(new BoxGeometry(0.16, 0.012, 0.09), vcAt(0.1, 0.13, 0.01), 7763064),
+        vcBake(new BoxGeometry(0.05, 0.012, 0.1), vcAt(0, 0.12, 0.12), 5460309),
+      ],
+      !1,
+    );
+    this.mesh = new InstancedMesh(geo, opaque, this.cap);
+    const tint = new Color(),
+      tones = [16777215, 11119017, 9143160, 12961221, 8355711];
+    for (let k = 0; k < this.cap; k++) this.mesh.setColorAt(k, tint.set(tones[k % tones.length]));
+    this.mesh.instanceColor && (this.mesh.instanceColor.needsUpdate = !0);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.visible = !1), (this.mesh.count = 0));
+    et.add(this.mesh);
+    ((this._m = new Matrix4()), (this._q = new Matrix4()));
+  },
+  spawn(x, z) {
+    this.ensure();
+    ((this.spot.x = x), (this.spot.z = z));
+    this.birds.length = 0;
+    const n = 6 + ((Math.abs(x + z) | 0) % (this.cap - 5));
+    for (let k = 0; k < n; k++) {
+      const a = (k / n) * Math.PI * 2 + 0.7,
+        r = 0.5 + (k % 3) * 0.55;
+      this.birds.push({
+        x: x + Math.cos(a) * r,
+        y: He(x + Math.cos(a) * r, z + Math.sin(a) * r) + 0.02,
+        z: z + Math.sin(a) * r,
+        yaw: a + Math.PI / 2,
+        vx: 0,
+        vy: 0,
+        vz: 0,
+        ph: k * 1.3,
+        flying: !1,
+      });
+    }
+    ((this.active = !0), (this.state = "peck"), (this.mesh.visible = !0), (this.mesh.count = this.birds.length));
+  },
+  deactivate() {
+    ((this.active = !1), (this.state = "idle"), (this.mesh && ((this.mesh.visible = !1), (this.mesh.count = 0))));
+  },
+  update(t, dt) {
+    if (!dt) return;
+    if (!this.active) {
+      this._timer -= dt;
+      if (this._timer > 0 || u.mode !== "roam" || Math.abs(u.speed) > 45) return;
+      this._timer = 2.2;
+      // spawn a pecking flock a little ahead of the player, off to one side
+      const fx = -Math.sin(u.roamYaw ?? 0),
+        fz = -Math.cos(u.roamYaw ?? 0),
+        side = ((t | 0) % 2 ? 1 : -1) * (5 + ((t * 7) % 6)),
+        sx = u.roamPos.x + fx * 19 - fz * side,
+        sz = u.roamPos.z + fz * 19 + fx * side;
+      this.spawn(sx, sz);
+      return;
+    }
+    const pdx = u.roamPos.x - this.spot.x,
+      pdz = u.roamPos.z - this.spot.z,
+      pd2 = pdx * pdx + pdz * pdz;
+    if (this.state === "peck" && u.mode === "roam" && pd2 < 81) {
+      this.state = "scatter";
+      for (const b of this.birds) {
+        const away = Math.atan2(b.x - u.roamPos.x, b.z - u.roamPos.z);
+        ((b.vx = Math.sin(away) * (3.2 + (b.ph % 2))), (b.vz = Math.cos(away) * (3.2 + ((b.ph * 1.7) % 2))), (b.vy = 3.4 + (b.ph % 1.6)), (b.flying = !0), (b.yaw = away));
+      }
+    }
+    if (pd2 > 3600 || u.mode !== "roam") {
+      this.deactivate();
+      return;
+    }
+    let k = 0,
+      allGone = this.state === "scatter";
+    for (const b of this.birds) {
+      if (this.state === "peck") {
+        b.y = He(b.x, b.z) + 0.02 + Math.max(0, Math.sin(t * 5 + b.ph)) * 0.05;
+        b.yaw += Math.sin(t * 0.7 + b.ph) * 0.01;
+      } else if (b.flying) {
+        ((b.x += b.vx * dt), (b.z += b.vz * dt), (b.y += b.vy * dt), (b.vy -= 0.4 * dt));
+        if (b.y > He(b.x, b.z) + 14) b.vy = Math.min(b.vy, 0.6);
+        b.y < He(b.x, b.z) + 11 && (allGone = !1);
+      }
+      const roll = b.flying ? Math.sin(t * 16 + b.ph) * 0.5 : 0;
+      this._m.makeRotationY(b.yaw);
+      roll && (this._q.makeRotationZ(roll), this._m.multiply(this._q));
+      this._m.setPosition(b.x, b.y, b.z);
+      this.mesh.setMatrixAt(k++, this._m);
+    }
+    this.mesh.instanceMatrix.needsUpdate = !0;
+    if (this.state === "scatter") {
+      this._timer -= dt;
+      (allGone || this._timer < -6) && this.deactivate();
+    }
+  },
+};
+// ─── Steam grates (zoom-detail item 14 / backlog 15): ~12 vent spots seeded
+// along the curbs; the nearest 3 within 55m show a dark grate disc and a rising
+// column of soft steam puffs (pooled sprites, cycling y/scale/opacity). Nothing
+// renders when no vent is near — freeze-safe.
+const steamSys = {
+  spots: [],
+  vents: null,
+  active: 0,
+  PUFFS: 5,
+  _timer: 0,
+  ensure() {
+    if (this.vents) return;
+    const cv = document.createElement("canvas");
+    ((cv.width = 64), (cv.height = 64));
+    const g = cv.getContext("2d"),
+      grad = g.createRadialGradient(32, 32, 4, 32, 32, 30);
+    (grad.addColorStop(0, "rgba(235,240,245,0.55)"), grad.addColorStop(0.6, "rgba(225,232,240,0.22)"), grad.addColorStop(1, "rgba(220,228,238,0)"));
+    ((g.fillStyle = grad), g.fillRect(0, 0, 64, 64));
+    const tex = new CanvasTexture(cv);
+    tex.colorSpace = SRGBColorSpace;
+    const { opaque } = vcMats();
+    const grateGeo = mergeGeometries(
+      [
+        vcBake(new CylinderGeometry(0.44, 0.44, 0.025, 10), vcAt(0, 0.012, 0), 1512727),
+        vcBake(new CylinderGeometry(0.34, 0.34, 0.03, 10), vcAt(0, 0.016, 0), 3158322),
+      ],
+      !1,
+    );
+    this.vents = [];
+    const n = mobilePerf ? 2 : 3;
+    for (let v = 0; v < n; v++) {
+      const grate = new Mesh(grateGeo, opaque);
+      ((grate.visible = !1), (grate.castShadow = !1), (grate.receiveShadow = !0), et.add(grate));
+      const puffs = [];
+      for (let k = 0; k < this.PUFFS; k++) {
+        const sp = new Sprite(new SpriteMaterial({ map: tex, transparent: !0, depthWrite: !1, opacity: 0 }));
+        ((sp.visible = !1), (sp.renderOrder = 4), et.add(sp), puffs.push(sp));
+      }
+      this.vents.push({ grate, puffs, spot: null, ph: v * 0.37 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer <= 0) {
+      this._timer = 0.5;
+      this.ensure();
+      const cx = Xe.position.x,
+        cz = Xe.position.z,
+        R2 = 55 * 55,
+        cand = [];
+      for (const s of this.spots) {
+        const dx = s.x - cx,
+          dz = s.z - cz,
+          d2 = dx * dx + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+      cand.sort((a, b) => a.d2 - b.d2);
+      this.active = 0;
+      for (let v = 0; v < this.vents.length; v++) {
+        const vent = this.vents[v],
+          s = cand[v]?.s ?? null;
+        vent.spot = s;
+        if (s) {
+          (vent.grate.position.set(s.x, s.y + 0.01, s.z), (vent.grate.visible = !0), this.active++);
+          for (const sp of vent.puffs) sp.visible = !0;
+        } else {
+          vent.grate.visible = !1;
+          for (const sp of vent.puffs) sp.visible = !1;
+        }
+      }
+    }
+    if (!this.vents) return;
+    for (const vent of this.vents) {
+      if (!vent.spot) continue;
+      for (let k = 0; k < vent.puffs.length; k++) {
+        const p = ((t * 0.32 + vent.ph + k / this.PUFFS) % 1 + 1) % 1,
+          sp = vent.puffs[k];
+        sp.position.set(vent.spot.x + Math.sin(t * 0.8 + k * 2.1) * 0.22 * p, vent.spot.y + 0.25 + p * 2.6, vent.spot.z + Math.cos(t * 0.7 + k * 1.7) * 0.2 * p);
+        const sc = 0.55 + p * 1.9;
+        sp.scale.set(sc, sc, 1);
+        sp.material.opacity = (p < 0.1 ? p / 0.1 : 1 - (p - 0.1) / 0.9) * 0.42;
+      }
+    }
+  },
+};
+// parked-car variety (near tier): pooled add-on kits promoted onto the nearest
+// parked instances — roof racks (some with cargo boxes), rocker-panel grime,
+// door dents, antennas, side mirrors. Features seeded by spot idx so a car
+// keeps its look; base instanced silhouette (and the far view) untouched.
+let carGrimeAtlas = null;
+function buildCarGrimeAtlas() {
+  if (carGrimeAtlas) return carGrimeAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 256));
+  const g = cv.getContext("2d"),
+    r = plateRng(0xca7d1e);
+  for (let col = 0; col < 4; col++) {
+    // row 0: rocker grime strips — sooty/rust streaks hugging the lower edge
+    const x0 = col * 128;
+    for (let i = 0; i < 46; i++) {
+      const bx = x0 + 6 + r() * 116,
+        by = 78 + r() * 40,
+        bw = 5 + r() * (12 + col * 5),
+        bh = 3 + r() * 9,
+        rust = r() < 0.45;
+      ((g.fillStyle = rust ? `rgba(96,58,30,${0.1 + r() * 0.3})` : `rgba(28,30,34,${0.08 + r() * 0.26})`),
+        g.beginPath(),
+        g.ellipse(bx, by, bw, bh, r() * 3.14, 0, 6.29),
+        g.fill());
+    }
+    for (let i = 0; i < 9; i++) {
+      const sx = x0 + 10 + r() * 108;
+      ((g.strokeStyle = `rgba(70,46,26,${0.12 + r() * 0.22})`), (g.lineWidth = 1 + r() * 2), g.beginPath(), g.moveTo(sx, 70 + r() * 20), g.lineTo(sx + (r() - 0.5) * 10, 118), g.stroke());
+    }
+    // row 1: door dents — dark crease + a rust bloom, centered in the cell
+    const cx = x0 + 64,
+      cy = 192;
+    for (let i = 0; i < 7; i++)
+      ((g.fillStyle = `rgba(20,22,26,${0.1 + r() * 0.2})`), g.beginPath(), g.ellipse(cx + (r() - 0.5) * 44, cy + (r() - 0.5) * 34, 14 + r() * 22, 8 + r() * 12, r() * 3.14, 0, 6.29), g.fill());
+    ((g.strokeStyle = "rgba(14,15,18,0.5)"), (g.lineWidth = 2.5), g.beginPath(), g.moveTo(cx - 26 - r() * 12, cy + (r() - 0.5) * 16), g.quadraticCurveTo(cx + (r() - 0.5) * 18, cy + (r() - 0.5) * 20, cx + 26 + r() * 12, cy + (r() - 0.5) * 16), g.stroke());
+    r() < 0.6 && ((g.fillStyle = "rgba(110,64,32,0.34)"), g.beginPath(), g.ellipse(cx + (r() - 0.5) * 30, cy + (r() - 0.5) * 22, 7 + r() * 8, 5 + r() * 6, r() * 3.14, 0, 6.29), g.fill());
+  }
+  carGrimeAtlas = new CanvasTexture(cv);
+  carGrimeAtlas.colorSpace = SRGBColorSpace;
+  return carGrimeAtlas;
+}
+const parkedKitSys = {
+  kits: null,
+  promoted: 0,
+  racks: 0,
+  grimeN: 0,
+  dents: 0,
+  antennas: 0,
+  RADIUS: 34,
+  sample: [],
+  _timer: 0,
+  _slotPlane(w, h, col, row) {
+    const g = new PlaneGeometry(w, h),
+      uv = g.attributes.uv;
+    for (let i = 0; i < uv.count; i++) uv.setXY(i, (col + uv.getX(i)) / 4, 1 - (row + (1 - uv.getY(i))) / 2);
+    return g;
+  },
+  ensure() {
+    if (this.kits) return;
+    const atlas = buildCarGrimeAtlas(),
+      decalMat = new MeshStandardMaterial({ map: atlas, transparent: !0, depthWrite: !1, roughness: 0.92, metalness: 0, polygonOffset: !0, polygonOffsetFactor: -2 }),
+      railMat = new MeshStandardMaterial({ color: 2699316, roughness: 0.46, metalness: 0.58 }),
+      darkMat = new MeshStandardMaterial({ color: 1381656, roughness: 0.6, metalness: 0.3 });
+    this._grimeGeos = [0, 1, 2, 3].map((c) => this._slotPlane(3.9, 0.55, c, 0));
+    this._dentGeos = [0, 1, 2, 3].map((c) => this._slotPlane(0.72, 0.46, c, 1));
+    const railGeo = new BoxGeometry(0.06, 0.05, 1.85),
+      barGeo = new BoxGeometry(1.38, 0.04, 0.05),
+      cargoGeo = new BoxGeometry(1.15, 0.34, 1.5),
+      mirrorGeo = mergeGeometries([
+        new BoxGeometry(0.2, 0.03, 0.03).translate(-0.12, 0, 0),
+        new BoxGeometry(0.13, 0.09, 0.045).translate(0, 0, 0),
+      ]),
+      antGeo = new CylinderGeometry(0.012, 0.018, 0.55, 5);
+    // shared glass+seam geometry (parked body: nose -z, cabin x ±0.85 y 1.14-1.70,
+    // z -1.295..0.855; body sides x ±1.1, tail z 2.3) and vc-baked lamp lenses
+    {
+      const gp = [];
+      for (const sx of [-1, 1])
+        for (const [zc, zw] of [
+          [-0.75, 0.8],
+          [0.28, 0.85],
+        ])
+          gp.push(new PlaneGeometry(zw, 0.4).rotateY((sx * Math.PI) / 2).translate(sx * 0.856, 1.42, zc));
+      gp.push(new PlaneGeometry(1.5, 0.42).rotateY(Math.PI).translate(0, 1.42, -1.301));
+      gp.push(new PlaneGeometry(1.5, 0.38).translate(0, 1.44, 0.861));
+      for (const sx of [-1, 1]) for (const zs of [-0.35, 0.85]) gp.push(new PlaneGeometry(0.025, 0.6).rotateY((sx * Math.PI) / 2).translate(sx * 1.106, 0.76, zs));
+      this._glassGeo = mergeGeometries(gp, !1);
+      this._glassMat = new MeshStandardMaterial({ color: 1054236, roughness: 0.22, metalness: 0.55 });
+      const lampAt = (x, y, z, flip) => {
+        const m = new Matrix4().makeRotationY(flip ? Math.PI : 0);
+        return (m.setPosition(x, y, z), m);
+      };
+      this._lampGeo = mergeGeometries(
+        [
+          vcBake(new PlaneGeometry(0.3, 0.15), lampAt(-0.78, 0.98, 2.302, !1), 6822420),
+          vcBake(new PlaneGeometry(0.3, 0.15), lampAt(0.78, 0.98, 2.302, !1), 6822420),
+          vcBake(new PlaneGeometry(0.32, 0.15), lampAt(-0.76, 0.98, -2.302, !0), 13684944),
+          vcBake(new PlaneGeometry(0.32, 0.15), lampAt(0.76, 0.98, -2.302, !0), 13684944),
+        ],
+        !1,
+      );
+    }
+    this.kits = [];
+    const n = mobilePerf ? 3 : 7;
+    for (let k = 0; k < n; k++) {
+      const kit = new Group(),
+        rack = new Group();
+      for (const rx of [-0.66, 0.66]) {
+        const rail = new Mesh(railGeo, railMat);
+        (rail.position.set(rx, 1.76, -0.22), rack.add(rail));
+      }
+      for (const bz of [-0.9, -0.22, 0.5]) {
+        const bar = new Mesh(barGeo, railMat);
+        (bar.position.set(0, 1.79, bz), rack.add(bar));
+      }
+      const cargoMat = new MeshStandardMaterial({ roughness: 0.72, metalness: 0.08 }),
+        cargo = new Mesh(cargoGeo, cargoMat);
+      (cargo.position.set(0, 1.98, -0.25), rack.add(cargo), kit.add(rack));
+      const grimeL = new Mesh(this._grimeGeos[0], decalMat),
+        grimeR = new Mesh(this._grimeGeos[0], decalMat);
+      (grimeL.position.set(-1.112, 0.66, 0), (grimeL.rotation.y = -Math.PI / 2), grimeR.position.set(1.112, 0.66, 0), (grimeR.rotation.y = Math.PI / 2), (grimeL.renderOrder = 2), (grimeR.renderOrder = 2), kit.add(grimeL), kit.add(grimeR));
+      const dent = new Mesh(this._dentGeos[0], decalMat);
+      ((dent.renderOrder = 2), kit.add(dent));
+      const ant = new Mesh(antGeo, darkMat);
+      (ant.position.set(0.72, 1.42, 1.72), (ant.rotation.x = -0.14), kit.add(ant));
+      for (const mx of [-1.08, 1.08]) {
+        const mir = new Mesh(mirrorGeo, darkMat);
+        (mir.position.set(mx, 1.5, -1.16), (mir.rotation.y = mx < 0 ? Math.PI : 0), kit.add(mir));
+      }
+      // zoom-detail 42 (round-five item 6): glass + door seams + lamp lenses.
+      // Two meshes per kit on SHARED merged geometries — every promoted car
+      // stops being a windowless box at 3m. Parked = lenses dark, never lit.
+      const glass = new Mesh(this._glassGeo, this._glassMat),
+        lamps = new Mesh(this._lampGeo, vcMats().opaque);
+      ((glass.raycast = () => {}), (lamps.raycast = () => {}), kit.add(glass), kit.add(lamps));
+      ((kit.visible = !1), kit.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1))), et.add(kit));
+      this.kits.push({ g: kit, rack, cargo, cargoMat, grimeL, grimeR, dent, ant, idx: -1 });
+    }
+  },
+  enabled: !0,
+  update(t, dt) {
+    if (!rideSys.spots.length || !rideSys.im || !dt) return;
+    if (!this.enabled) {
+      if (this.kits) for (const k of this.kits) ((k.g.visible = !1), (k.idx = -1));
+      ((this.promoted = 0), (this.racks = 0), (this.grimeN = 0), (this.dents = 0), (this.antennas = 0), (this.sample.length = 0));
+      return;
+    }
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    // altitude gate: the race ribbon runs ~64m above the city — never promote
+    // under a high camera (2D distance alone would match cars directly below)
+    if (Xe.position.y <= 26)
+      for (const s of rideSys.spots) {
+        if (s.taken) continue;
+        const dx = s.x - cx,
+          dz = s.z - cz,
+          d2 = dx * dx + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.racks = 0), (this.grimeN = 0), (this.dents = 0), (this.antennas = 0), (this.sample.length = 0));
+    const CARGO_COLS = [8079146, 3100523, 3818058, 7042934];
+    for (let k = 0; k < this.kits.length; k++) {
+      const kit = this.kits[k],
+        s = cand[k]?.s ?? null;
+      if (!s) {
+        ((kit.g.visible = !1), (kit.idx = -1));
+        continue;
+      }
+      rideSys.im.getMatrixAt(s.idx, _pkM);
+      _pkM.decompose(kit.g.position, kit.g.quaternion, _pkV);
+      const r = plateRng((((s.idx + 1) * 2654435761) ^ 0x9a4b17) >>> 0),
+        rRack = r(),
+        rCargo = r(),
+        rCargoCol = r(),
+        rGrime = r(),
+        rGrimeV = r(),
+        rDent = r(),
+        rDentV = r(),
+        rDentSide = r(),
+        rDentZ = r(),
+        rAnt = r();
+      const hasRack = rRack < 0.34,
+        hasGrime = rGrime < 0.62,
+        hasDent = rDent < 0.3,
+        hasAnt = rAnt < 0.42;
+      ((kit.rack.visible = hasRack), (kit.cargo.visible = rCargo < 0.5), kit.cargoMat.color.setHex(CARGO_COLS[(rCargoCol * 4) | 0]));
+      ((kit.grimeL.visible = hasGrime), (kit.grimeR.visible = hasGrime));
+      if (hasGrime) {
+        const gv = (rGrimeV * 4) | 0;
+        ((kit.grimeL.geometry = this._grimeGeos[gv]), (kit.grimeR.geometry = this._grimeGeos[gv]));
+      }
+      kit.dent.visible = hasDent;
+      if (hasDent) {
+        const side = rDentSide < 0.5 ? -1 : 1;
+        (kit.dent.position.set(side * 1.112, 0.86, -0.7 + rDentZ * 1.8), (kit.dent.rotation.y = (side * Math.PI) / 2), (kit.dent.geometry = this._dentGeos[(rDentV * 4) | 0]));
+      }
+      kit.ant.visible = hasAnt;
+      ((kit.g.visible = !0), (kit.idx = s.idx), this.promoted++);
+      (hasRack && this.racks++, hasGrime && this.grimeN++, hasDent && this.dents++, hasAnt && this.antennas++);
+      this.sample.length < 3 && this.sample.push({ idx: s.idx, x: +s.x.toFixed(1), y: +kit.g.position.y.toFixed(2), z: +s.z.toFixed(1), yaw: +Math.atan2(2 * (kit.g.quaternion.w * kit.g.quaternion.y + kit.g.quaternion.x * kit.g.quaternion.z), 1 - 2 * (kit.g.quaternion.y * kit.g.quaternion.y + kit.g.quaternion.x * kit.g.quaternion.x)).toFixed(2), rack: hasRack, grime: hasGrime, dent: hasDent });
+    }
+  },
+};
+const _pkM = new Matrix4(),
+  _pkV = new Vector3();
+// near-field ambience (zoom-detail item 20): crowd murmur near the stands,
+// steam hiss at active vents, WALK-signal crossing ticks, phone chirps from
+// texting pedestrians. All procedural WebAudio on the existing `mi` bus (so
+// mute/volume come free), all gated to the city camera — the race view and
+// the at-distance soundscape are untouched.
+const ambientSys = {
+  signals: null, // live PS array (the signal tick stamps walkEW/walkNS per box)
+  nodes: null,
+  enabled: !0,
+  _timer: 0,
+  _nextTick: 0,
+  _nextChirp: 0,
+  tickCount: 0,
+  chirpCount: 0,
+  levels: { murmur: 0, hiss: 0 },
+  ticksActive: 0,
+  ensure() {
+    if (this.nodes || !mi) return;
+    const ctx = mi.ctx,
+      bus = ctx.createGain();
+    ((bus.gain.value = 0.9), bus.connect(mi.master));
+    const nb = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate),
+      nd = nb.getChannelData(0);
+    let v = 0;
+    for (let k = 0; k < nd.length; k++) nd[k] = v = v * 0.965 + (Math.random() * 2 - 1) * 0.28;
+    const mkLoop = (type, freq, q) => {
+      const src = ctx.createBufferSource(),
+        f = ctx.createBiquadFilter(),
+        g = ctx.createGain();
+      ((src.buffer = nb), (src.loop = !0), (f.type = type), (f.frequency.value = freq), (f.Q.value = q), (g.gain.value = 1e-4));
+      (src.connect(f), f.connect(g), g.connect(bus), src.start());
+      return { src, f, g };
+    };
+    this.nodes = { ctx, bus, murmur: mkLoop("lowpass", 430, 0.4), hiss: mkLoop("bandpass", 3300, 0.8) };
+  },
+  _pan(x, z) {
+    // camera-relative stereo: project the source onto the camera right vector
+    const e = Xe.matrixWorld.elements,
+      dx = x - Xe.position.x,
+      dz = z - Xe.position.z,
+      d = Math.hypot(dx, dz) || 1;
+    return MathUtils.clamp(((dx * e[0] + dz * e[2]) / d) * 0.8, -0.9, 0.9);
+  },
+  blip(freq, dur, vol, pan, freq2) {
+    const n = this.nodes;
+    if (!n) return;
+    const t0 = n.ctx.currentTime,
+      o = n.ctx.createOscillator(),
+      g = n.ctx.createGain(),
+      p = n.ctx.createStereoPanner();
+    ((o.type = "sine"), o.frequency.setValueAtTime(freq, t0), freq2 && o.frequency.setValueAtTime(freq2, t0 + dur * 0.5));
+    (g.gain.setValueAtTime(1e-4, t0), g.gain.exponentialRampToValueAtTime(Math.max(vol, 2e-4), t0 + 0.008), g.gain.exponentialRampToValueAtTime(1e-4, t0 + dur));
+    ((p.pan.value = pan || 0), o.connect(g), g.connect(p), p.connect(n.bus), o.start(t0), o.stop(t0 + dur + 0.03));
+  },
+  update(t, dt) {
+    if (!mi || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.25;
+    this.ensure();
+    const n = this.nodes;
+    if (!n) return;
+    const now = n.ctx.currentTime,
+      cx = Xe.position.x,
+      cz = Xe.position.z,
+      cityCam = this.enabled && (u.mode === "roam" || u.mode === "race" || u.mode === "paused") && Xe.position.y <= 26;
+    // crowd murmur — nearest grandstand, slow swell so it breathes
+    let mg = 1e-4;
+    if (cityCam && crowdSys.stands.length) {
+      let d2b = 1e9;
+      for (const s of crowdSys.stands) {
+        const d2 = (s.x - cx) * (s.x - cx) + (s.z - cz) * (s.z - cz);
+        d2 < d2b && (d2b = d2);
+      }
+      const d = Math.sqrt(d2b);
+      d < 90 && (mg = 0.15 * (1 - d / 90) * (0.72 + 0.28 * Math.sin(t * 0.6)));
+    }
+    n.murmur.g.gain.setTargetAtTime(mg, now, 0.3);
+    // steam hiss — nearest active vent
+    let hg = 1e-4;
+    if (cityCam && steamSys.vents)
+      for (const v of steamSys.vents) {
+        if (!v.spot) continue;
+        // 26m: the roam CAR camera trails ~17m behind the player, so a
+        // tighter radius would make vent hiss a foot-mode-only detail
+        const d = Math.hypot(v.spot.x - cx, v.spot.z - cz);
+        d < 26 && (hg = Math.max(hg, 0.05 * (1 - d / 26)));
+      }
+    n.hiss.g.gain.setTargetAtTime(hg, now, 0.5);
+    // WALK-signal crossing ticks — nearest walking box, metronome cadence
+    this.ticksActive = 0;
+    if (cityCam && this.signals) {
+      let best = null,
+        bd = 26;
+      for (const P of this.signals) {
+        if (!P.walkEW && !P.walkNS) continue;
+        const d = Math.hypot(P.x - cx, P.z - cz);
+        d < bd && ((bd = d), (best = P));
+      }
+      if (best) {
+        this.ticksActive = 1;
+        t >= this._nextTick && ((this._nextTick = t + 0.55), this.tickCount++, this.blip(940, 0.05, 0.13 * (1 - bd / 26), this._pan(best.x, best.z)));
+      }
+    }
+    // phone chirps — a nearby texting pedestrian gets a reply every few seconds
+    if (cityCam && !mobilePerf && pedKitSys.kits && t >= this._nextChirp) {
+      let best = null,
+        bd = 15;
+      for (const k of pedKitSys.kits) {
+        if (!k.ped || !k.texting || !k.ped.mesh) continue;
+        const p = k.ped.mesh.position,
+          d = Math.hypot(p.x - cx, p.z - cz);
+        d < bd && ((bd = d), (best = p));
+      }
+      if (best) {
+        this._nextChirp = t + 4 + Math.random() * 5;
+        this.chirpCount++;
+        this.blip(1318, 0.17, 0.1 * (1 - bd / 15), this._pan(best.x, best.z), 1760);
+      }
+    }
+    ((this.levels.murmur = +mg.toFixed(3)), (this.levels.hiss = +hg.toFixed(3)));
+  },
+};
+// rooftop detail (zoom-detail item 17): pooled kits promoted onto the roofs
+// nearest the camera — HVAC clusters, antenna masts, water towers. Each kit
+// is ONE vcBaked merged mesh (single draw call on the shared opaque
+// material), so six kits cost six calls; visible from the ribbon where the
+// race actually flies past the skyline.
+const rooftopSys = {
+  spots: [],
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 130,
+  sample: [],
+  _timer: 0,
+  resetSpots() {
+    this.spots.length = 0;
+  },
+  _variantFor(s, r) {
+    const elig = [];
+    (Math.min(s.w, s.d) >= 10 && elig.push(0), s.h >= 14 && elig.push(1), s.w >= 14 && s.d >= 14 && s.h >= 26 && elig.push(2));
+    return elig.length ? elig[(r * elig.length) | 0] : 0;
+  },
+  PIGEONS: 7,
+  ensure() {
+    if (this.kits) return;
+    const { opaque } = vcMats(),
+      GALV = 11974326,
+      DARK = 3423298,
+      DUCT = 9211020,
+      STEEL = 4022096,
+      TAN = 13213802,
+      TEAL = 6197130,
+      RUST = 8079150;
+    // perched pigeons, baked straight into the kit merges (zero extra draws)
+    const pigeon = (x, y, z, yaw) => {
+      const m = (gx, gy, gz) => new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(x, y, z), new Matrix4().multiplyMatrices(new Matrix4().makeRotationY(yaw), new Matrix4().makeTranslation(gx, gy, gz)));
+      return [
+        vcBake(new BoxGeometry(0.14, 0.13, 0.22), m(0, 0.07, 0), 8949654),
+        vcBake(new BoxGeometry(0.08, 0.08, 0.08), m(0, 0.17, -0.13), 5926502),
+        vcBake(new BoxGeometry(0.08, 0.028, 0.13), m(0, 0.1, 0.15), 5926502),
+      ];
+    };
+    const ac = (x, z, w, h, d) => [
+      vcBake(new BoxGeometry(w, h, d), vcAt(x, h / 2, z), GALV),
+      vcBake(new CylinderGeometry(Math.min(w, d) * 0.33, Math.min(w, d) * 0.33, 0.06, 12), vcAt(x, h + 0.02, z), DARK),
+    ];
+    const v0 = () =>
+      mergeGeometries(
+        [
+          ...ac(-1.3, -0.7, 1.8, 1.1, 1.4),
+          ...ac(1.2, 0.6, 2.4, 1.3, 1.6),
+          vcBake(new BoxGeometry(0.5, 0.5, 3.6), vcAt(-0.2, 0.25, -1.8), DUCT),
+          vcBake(new BoxGeometry(0.5, 1.4, 0.5), vcAt(1.5, 0.7, -1.8), DUCT),
+          vcBake(new CylinderGeometry(0.16, 0.18, 0.9, 8), vcAt(-2.4, 0.45, 1.2), RUST),
+          vcBake(new CylinderGeometry(0.14, 0.16, 0.7, 8), vcAt(2.6, 0.35, -0.5), DARK),
+          ...pigeon(0.7, 1.3, 0.3, 0.7),
+          ...pigeon(1.8, 1.3, 0.9, -1.9),
+        ],
+        !1,
+      );
+    const v1 = () => {
+      const dishM = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(1.3, 1.35, 0.6), new Matrix4().makeRotationZ(1.15));
+      return mergeGeometries(
+        [
+          vcBake(new BoxGeometry(0.9, 0.5, 0.9), vcAt(0, 0.25, 0), STEEL),
+          vcBake(new CylinderGeometry(0.1, 0.14, 2.2, 8), vcAt(0, 1.6, 0), DARK),
+          vcBake(new CylinderGeometry(0.07, 0.1, 1.8, 8), vcAt(0, 3.6, 0), DARK),
+          vcBake(new CylinderGeometry(0.035, 0.07, 1.6, 6), vcAt(0, 5.3, 0), DARK),
+          vcBake(new ConeGeometry(0.85, 0.4, 12), dishM, 14212594),
+          vcBake(new BoxGeometry(0.5, 0.12, 0.12), vcAt(0.85, 1.35, 0.6), STEEL),
+          vcBake(new CylinderGeometry(0.02, 0.03, 1.5, 6), vcAt(-1.2, 0.95, 0.9), DARK),
+          vcBake(new BoxGeometry(0.5, 0.7, 0.28), vcAt(-1.2, 0.35, 0.9), STEEL),
+          ...pigeon(0.3, 0.5, -0.3, 2.4),
+          ...pigeon(-0.28, 0.5, 0.25, -0.5),
+        ],
+        !1,
+      );
+    };
+    const v2 = (tank) => {
+      const parts = [];
+      for (const [lx, lz] of [
+        [-1.5, -1.5],
+        [1.5, -1.5],
+        [-1.5, 1.5],
+        [1.5, 1.5],
+      ])
+        parts.push(vcBake(new CylinderGeometry(0.12, 0.14, 2.8, 8), vcAt(lx, 1.4, lz), STEEL));
+      (parts.push(vcBake(new CylinderGeometry(2.1, 2.1, 2.5, 14), vcAt(0, 4.05, 0), tank)),
+        parts.push(vcBake(new CylinderGeometry(2.14, 2.14, 0.1, 14), vcAt(0, 3.3, 0), DARK)),
+        parts.push(vcBake(new CylinderGeometry(2.14, 2.14, 0.1, 14), vcAt(0, 4.7, 0), DARK)),
+        parts.push(vcBake(new ConeGeometry(2.28, 1.1, 14), vcAt(0, 5.85, 0), STEEL)),
+        parts.push(vcBake(new CylinderGeometry(0.06, 0.06, 0.5, 6), vcAt(0, 6.6, 0), DARK)));
+      (parts.push(...pigeon(1.85, 5.3, 0.7, 1.2)), parts.push(...pigeon(-1.6, 5.3, -1.1, -2.6)), parts.push(...pigeon(0.28, 6.5, 0.1, 0.4)));
+      for (const rz of [-0.18, 0.18]) parts.push(vcBake(new BoxGeometry(0.06, 3.4, 0.06), vcAt(2.2, 1.7, rz), DARK));
+      for (let k = 0; k < 6; k++) parts.push(vcBake(new BoxGeometry(0.05, 0.05, 0.44), vcAt(2.2, 0.5 + k * 0.5, 0), DARK));
+      return mergeGeometries(parts, !1);
+    };
+    const geos = [v0(), v1(), v2(TAN), v0(), v1(), v2(TEAL)],
+      n = mobilePerf ? 3 : 6;
+    this.kits = [];
+    for (let k = 0; k < n; k++) {
+      const m = new Mesh(geos[k], opaque);
+      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), et.add(m));
+      this.kits.push({ g: m, variant: k % 3, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cy = Xe.position.y,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled)
+      for (const s of this.spots) {
+        const dx = s.x - cx,
+          dy = s.top - cy,
+          dz = s.z - cz,
+          d2 = dx * dx + dy * dy + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    const used = new Set(),
+      free = { 0: [], 1: [], 2: [] };
+    for (const k of this.kits) ((k.idx = -1), free[k.variant].push(k));
+    for (const c of cand) {
+      if (this.promoted >= this.kits.length) break;
+      if (used.has(c.s.i)) continue;
+      const r = plateRng((((c.s.i + 1) * 2654435761) ^ 0x700f70) >>> 0),
+        v = this._variantFor(c.s, r()),
+        kit = free[v].pop();
+      if (!kit) continue;
+      used.add(c.s.i);
+      const ox = (r() - 0.5) * Math.max(0, c.s.w - 8) * 0.3,
+        oz = (r() - 0.5) * Math.max(0, c.s.d - 8) * 0.3;
+      (kit.g.position.set(c.s.x + ox, c.s.top, c.s.z + oz), (kit.g.rotation.y = r() < 0.5 ? 0 : Math.PI / 2), (kit.g.visible = !0), (kit.idx = c.s.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: c.s.i, x: +c.s.x.toFixed(1), z: +c.s.z.toFixed(1), top: +c.s.top.toFixed(1), v });
+    }
+    for (const k of this.kits) k.idx < 0 && (k.g.visible = !1);
+  },
+};
+// building facade near-tier (zoom-detail item 19): lobby-band panels promoted
+// onto the camera-facing wall of the nearest towers at street level — glass
+// entrance with lit interior silhouettes, canopy, seeded address plate, wall
+// lanterns, mullioned lobby windows. Everything between the fixtures is
+// TRANSPARENT so the building's own wall color shows through (any facade
+// color works). Street-only: altitude gate keeps the race view untouched.
+let facadeAtlasTex = null;
+function buildFacadeAtlas() {
+  if (facadeAtlasTex) return facadeAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  for (let v = 0; v < 2; v++) {
+    const y0 = v * 256,
+      warm = v === 0;
+    g.clearRect(0, y0, 1024, 256);
+    // canopy bar over the entrance
+    ((g.fillStyle = warm ? "#7a2f2a" : "#24455f"), g.fillRect(392, y0 + 52, 240, 26));
+    ((g.fillStyle = "rgba(0,0,0,0.35)"), g.fillRect(392, y0 + 78, 240, 8));
+    // double glass door, lit lobby behind
+    ((g.fillStyle = "#f3c988"), g.fillRect(432, y0 + 86, 160, 150));
+    ((g.fillStyle = "rgba(30,26,20,0.9)"),
+      g.fillRect(452, y0 + 150, 26, 86),
+      g.fillRect(506, y0 + 128, 8, 62),
+      (g.beginPath(), g.arc(560, y0 + 170, 17, 0, 6.29), g.fill()),
+      g.fillRect(552, y0 + 186, 16, 50));
+    ((g.strokeStyle = "#2c2c30"), (g.lineWidth = 8), g.strokeRect(432, y0 + 86, 160, 150), g.beginPath(), g.moveTo(512, y0 + 86), g.lineTo(512, y0 + 236), g.stroke());
+    ((g.fillStyle = "#d8c060"), g.fillRect(498, y0 + 158, 6, 26), g.fillRect(520, y0 + 158, 6, 26));
+    // address plate
+    ((g.fillStyle = "#20242c"), g.fillRect(452, y0 + 20, 120, 30));
+    ((g.fillStyle = "#e8e4d8"), (g.font = "bold 26px monospace"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(String(214 + v * 173), 512, y0 + 36);
+    // wall lanterns each side of the door
+    for (const lx of [404, 620]) {
+      ((g.fillStyle = "#2c2c30"), g.fillRect(lx - 3, y0 + 96, 6, 22));
+      const gr = g.createRadialGradient(lx, y0 + 130, 3, lx, y0 + 130, 22);
+      (gr.addColorStop(0, "rgba(255,214,140,0.95)"), gr.addColorStop(1, "rgba(255,214,140,0)"));
+      ((g.fillStyle = gr), g.beginPath(), g.arc(lx, y0 + 130, 22, 0, 6.29), g.fill());
+    }
+    // mullioned lobby windows with sills + furniture silhouettes
+    for (const wx of [120, 744]) {
+      ((g.fillStyle = warm ? "#e8b45c" : "#9fd0e8"), g.fillRect(wx, y0 + 96, 160, 110));
+      g.fillStyle = "rgba(24,22,28,0.88)";
+      if (warm) (g.fillRect(wx + 18, y0 + 156, 52, 50), g.beginPath(), g.arc(wx + 116, y0 + 150, 15, 0, 6.29), g.fill(), g.fillRect(wx + 110, y0 + 162, 12, 44));
+      else (g.fillRect(wx + 96, y0 + 130, 44, 76), g.fillRect(wx + 20, y0 + 180, 56, 26), g.beginPath(), g.arc(wx + 48, y0 + 160, 12, 0, 6.29), g.fill());
+      ((g.strokeStyle = "#33363e"), (g.lineWidth = 7), g.strokeRect(wx, y0 + 96, 160, 110));
+      (g.beginPath(), g.moveTo(wx + 80, y0 + 96), g.lineTo(wx + 80, y0 + 206), g.moveTo(wx, y0 + 150), g.lineTo(wx + 160, y0 + 150), g.stroke());
+      ((g.fillStyle = "#4a4e58"), g.fillRect(wx - 8, y0 + 206, 176, 10));
+    }
+  }
+  facadeAtlasTex = new CanvasTexture(cv);
+  facadeAtlasTex.colorSpace = SRGBColorSpace;
+  return facadeAtlasTex;
+}
+const facadeSys = {
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 30,
+  sample: [],
+  _timer: 0,
+  ensure() {
+    if (this.kits) return;
+    const mat = new MeshBasicMaterial({ map: buildFacadeAtlas(), transparent: !0, alphaTest: 0.25, toneMapped: !1, polygonOffset: !0, polygonOffsetFactor: -2 });
+    this.kits = [];
+    const n = mobilePerf ? 2 : 5;
+    for (let k = 0; k < n; k++) {
+      const geo = new PlaneGeometry(11, 5.5),
+        uv = geo.attributes.uv,
+        row = k % 2;
+      for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i), 1 - (row + (1 - uv.getY(i))) / 2);
+      const m = new Mesh(geo, mat);
+      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.raycast = () => {}), et.add(m));
+      this.kits.push({ g: m, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!rooftopSys.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled && Xe.position.y <= 26)
+      for (const s of rooftopSys.spots) {
+        if (Math.min(s.w, s.d) < 12) continue;
+        const hw = s.w / 2,
+          hd = s.d / 2,
+          ddx = Math.max(Math.abs(cx - s.x) - hw, 0),
+          ddz = Math.max(Math.abs(cz - s.z) - hd, 0),
+          d2 = ddx * ddx + ddz * ddz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    for (let k = 0; k < this.kits.length; k++) {
+      const kit = this.kits[k],
+        c = cand[k];
+      if (!c) {
+        ((kit.g.visible = !1), (kit.idx = -1));
+        continue;
+      }
+      const s = c.s,
+        gy = s.top - 1.2 - s.h,
+        relX = (cx - s.x) / (s.w / 2),
+        relZ = (cz - s.z) / (s.d / 2);
+      let px = s.x,
+        pz = s.z,
+        yaw = 0;
+      if (Math.abs(relX) > Math.abs(relZ)) ((px += Math.sign(relX) * (s.w / 2 + 0.08)), (yaw = (Math.sign(relX) * Math.PI) / 2));
+      else ((pz += Math.sign(relZ) * (s.d / 2 + 0.08)), (yaw = relZ >= 0 ? 0 : Math.PI));
+      (kit.g.position.set(px, gy + 2.9, pz), (kit.g.rotation.y = yaw), (kit.g.visible = !0), (kit.idx = s.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: s.i, x: +px.toFixed(1), y: +(gy + 2.9).toFixed(1), z: +pz.toFixed(1) });
+    }
+  },
+};
+// road micro-detail (zoom-detail item 11-lite): manholes, storm drains, worn
+// turn arrows and asphalt patches as pooled flat decals promoted around the
+// street camera — the full painted-road version stays freeze-blocked, but
+// the near-tier reading costs nothing at race altitude.
+let roadDecalTex = null;
+function buildRoadDecalAtlas() {
+  if (roadDecalTex) return roadDecalTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 128));
+  const g = cv.getContext("2d");
+  g.clearRect(0, 0, 512, 128);
+  // cell 0: manhole cover
+  ((g.fillStyle = "#23262b"), g.beginPath(), g.arc(64, 64, 52, 0, 6.29), g.fill());
+  ((g.strokeStyle = "#3a3e46"), (g.lineWidth = 5), g.beginPath(), g.arc(64, 64, 46, 0, 6.29), g.stroke());
+  g.lineWidth = 3;
+  for (let k = 0; k < 8; k++) {
+    const a = (k * Math.PI) / 4;
+    (g.beginPath(), g.moveTo(64 + Math.cos(a) * 14, 64 + Math.sin(a) * 14), g.lineTo(64 + Math.cos(a) * 42, 64 + Math.sin(a) * 42), g.stroke());
+  }
+  (g.beginPath(), g.arc(64, 64, 10, 0, 6.29), g.stroke());
+  // cell 1: storm drain grate
+  ((g.fillStyle = "#1c1f24"), g.fillRect(140, 34, 104, 60));
+  ((g.fillStyle = "#3a3e46"));
+  for (let k = 0; k < 5; k++) g.fillRect(148 + k * 19, 40, 9, 48);
+  ((g.strokeStyle = "#101216"), (g.lineWidth = 4), g.strokeRect(140, 34, 104, 60));
+  // cell 2: worn white turn arrow (pointing up)
+  ((g.fillStyle = "rgba(232,232,224,0.82)"));
+  (g.beginPath(), g.moveTo(320, 12), g.lineTo(348, 52), g.lineTo(330, 52), g.lineTo(330, 116), g.lineTo(310, 116), g.lineTo(310, 52), g.lineTo(292, 52), g.closePath(), g.fill());
+  ((g.globalCompositeOperation = "destination-out"), (g.fillStyle = "rgba(0,0,0,0.55)"));
+  for (let k = 0; k < 14; k++) (g.beginPath(), g.arc(292 + ((k * 53) % 60), 16 + ((k * 37) % 100), 3 + (k % 3) * 2, 0, 6.29), g.fill());
+  g.globalCompositeOperation = "source-over";
+  // cell 3: asphalt repair patch — darker rectangle with tar-seam edges
+  ((g.fillStyle = "rgba(14,15,18,0.55)"), g.beginPath(), g.roundRect(396, 22, 104, 84, 10), g.fill());
+  ((g.strokeStyle = "rgba(8,9,11,0.85)"), (g.lineWidth = 6), g.beginPath(), g.roundRect(399, 25, 98, 78, 9), g.stroke());
+  g.fillStyle = "rgba(60,62,68,0.35)";
+  for (let k = 0; k < 6; k++) {
+    const bx = 410 + ((k * 47) % 80),
+      by = 34 + ((k * 31) % 60);
+    (g.beginPath(), g.ellipse(bx, by, 8 + (k % 3) * 4, 6 + (k % 2) * 4, k, 0, 6.29), g.fill());
+  }
+  roadDecalTex = new CanvasTexture(cv);
+  roadDecalTex.colorSpace = SRGBColorSpace;
+  return roadDecalTex;
+}
+const _rdRay = new Raycaster(),
+  _rdDown = new Vector3(0, -1, 0),
+  _rdFrom = new Vector3();
+const roadDecalSys = {
+  spots: [],
+  mesh: null,
+  placed: 0,
+  placedDone: !1,
+  enabled: !0,
+  sample: [],
+  _SCALES: [
+    [1.5, 1.5],
+    [1.8, 1.1],
+    [1.5, 3.4],
+    [2.8, 2.3],
+  ],
+  // full-fat (round four, freeze lifted): every seeded decal is PERMANENT —
+  // one InstancedMesh, per-instance atlas slot (plate pattern; the
+  // customProgramCacheKey is MANDATORY or the cache serves unpatched
+  // shaders). Arrows and manholes now read at mid distance, not just ≤40m.
+  _surfaceY(sp) {
+    if (sp.ySurf !== undefined) return sp.ySurf;
+    (_rdFrom.set(sp.x, sp.y + 40, sp.z), _rdRay.set(_rdFrom, _rdDown));
+    ((_rdRay.far = 80), (_rdRay.camera = Xe));
+    const hits = _rdRay.intersectObjects(et.children, !0);
+    let best = null;
+    for (const h of hits) {
+      if (h.object.isSprite) continue;
+      if (h.point.y > sp.y + 1.0 || h.point.y < sp.y - 0.5) continue;
+      (best === null || h.point.y > best) && (best = h.point.y);
+    }
+    return (sp.ySurf = best === null ? sp.y : +(best + 0.025).toFixed(3));
+  },
+  ensure() {
+    if (this.mesh) return;
+    const geo = new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+    geo.setAttribute("aDecalSlot", new InstancedBufferAttribute(new Float32Array(48), 1));
+    const mat = new MeshBasicMaterial({ map: buildRoadDecalAtlas(), transparent: !0, alphaTest: 0.15, polygonOffset: !0, polygonOffsetFactor: -3 });
+    mat.customProgramCacheKey = () => "road-decal-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute float aDecalSlot;\nvarying vec2 vDecalUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvDecalUv = vec2((aDecalSlot + uv.x) * 0.25, uv.y);");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vDecalUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vDecalUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, 48);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1), (this.mesh.raycast = () => {}), (this.mesh.renderOrder = 1), (this.mesh.count = 0));
+    et.add(this.mesh);
+  },
+  place() {
+    const dummy = new Object3D();
+    let n = 0;
+    ((this.sample.length = 0));
+    for (const sp of this.spots) {
+      if (n >= 48) break;
+      const sc = this._SCALES[sp.v];
+      (dummy.position.set(sp.x, this._surfaceY(sp), sp.z), (dummy.rotation.y = sp.yaw), dummy.scale.set(sc[0], 1, sc[1]), dummy.updateMatrix());
+      this.mesh.setMatrixAt(n, dummy.matrix);
+      this.mesh.geometry.attributes.aDecalSlot.setX(n, sp.v);
+      this.sample.length < 3 && this.sample.push({ i: sp.i, x: sp.x, y: sp.ySurf, z: sp.z, v: sp.v });
+      n++;
+    }
+    ((this.mesh.count = n), (this.mesh.instanceMatrix.needsUpdate = !0), (this.mesh.geometry.attributes.aDecalSlot.needsUpdate = !0), (this.placed = n), (this.placedDone = !0));
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    if (this.mesh) this.mesh.visible = this.enabled;
+    if (this.placedDone) return;
+    (this.ensure(), this.place());
+  },
+};
+// (4b-lite driver silhouettes retired in round four: every cabin now has
+// a real recessed driver baked in — see full-fat 4b.)
+// race roadside life (zoom-detail item 18): marshals with checkered flags,
+// pit boards, camera crews on small platforms bolted to the deck edge — the
+// stuff you zoom past at speed. Pooled kits promoted to the nearest of ~14
+// stations seeded along the course; ~1-2 draw calls per kit.
+let roadsideBoardAtlas = null;
+const ROADSIDE_BOARDS = ["P3  +1.2", "LAP 2  PUSH"];
+function buildRoadsideBoardAtlas() {
+  if (roadsideBoardAtlas) return roadsideBoardAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 256));
+  const g = cv.getContext("2d");
+  for (let r = 0; r < 2; r++) {
+    const y = r * 128;
+    ((g.fillStyle = "#101726"), g.fillRect(0, y, 512, 128));
+    ((g.strokeStyle = "#3a4a68"), (g.lineWidth = 6), g.strokeRect(3, y + 3, 506, 122));
+    ((g.fillStyle = "#f2f4f8"), (g.font = "900 72px monospace"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(ROADSIDE_BOARDS[r], 256, y + 66, 480);
+  }
+  roadsideBoardAtlas = new CanvasTexture(cv);
+  roadsideBoardAtlas.colorSpace = SRGBColorSpace;
+  return roadsideBoardAtlas;
+}
+const roadsideSys = {
+  spots: [],
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 220,
+  sample: [],
+  _timer: 0,
+  buildStations() {
+    this.spots.length = 0;
+    const n = 14,
+      rng = plateRng(0x70ad51);
+    for (let k = 0; k < n; k++) {
+      const s = ((k + 0.3 + rng() * 0.4) * ce.length) / n,
+        sideSign = rng() < 0.5 ? -1 : 1;
+      if (s % ce.length < 40 || railSkipZone(s % ce.length, sideSign)) continue;
+      const c = St(s % ce.length),
+        p = c.p
+          .clone()
+          .addScaledVector(c.side, sideSign * (ce.width * 0.5 + 2.0))
+          .addScaledVector(on, 0.58);
+      this.spots.push({ i: this.spots.length, x: p.x, y: p.y, z: p.z, yaw: Math.atan2(-c.side.x * sideSign, -c.side.z * sideSign), v: this.spots.length % 3 });
+    }
+  },
+  LIFT: 1.3, // platform deck rides this high over the station point so the
+  // figures stand clear of the ribbon's raised rim wall (flush platforms
+  // proved invisible from the deck — only a head-sliver peeked over)
+  _figure(parts, x, z, vest) {
+    const L = this.LIFT;
+    (parts.push(vcBake(new BoxGeometry(0.34, 0.5, 0.22), vcAt(x, L + 0.25, z), 2500134)),
+      parts.push(vcBake(new CylinderGeometry(0.22, 0.26, 0.72, 8), vcAt(x, L + 0.96, z), vest)),
+      parts.push(vcBake(new SphereGeometry(0.17, 8, 6), vcAt(x, L + 1.5, z), 15250572)),
+      parts.push(vcBake(new CylinderGeometry(0.18, 0.18, 0.08, 8), vcAt(x, L + 1.63, z), 2500134)));
+  },
+  _platform(parts) {
+    const L = this.LIFT;
+    parts.push(vcBake(new BoxGeometry(3.0, 0.14, 2.4), vcAt(0, L - 0.07, 0), 4022096));
+    for (const px of [-1.35, 1.35]) parts.push(vcBake(new BoxGeometry(0.05, 0.62, 0.05), vcAt(px, L + 0.31, -1.14), 2500134));
+    parts.push(vcBake(new BoxGeometry(2.8, 0.05, 0.05), vcAt(0, L + 0.64, -1.14), 2500134));
+    for (const px of [-0.9, 0.9]) {
+      const m = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(px, L * 0.42, 0.9), new Matrix4().makeRotationX(0.55));
+      parts.push(vcBake(new BoxGeometry(0.1, 0.1, 2.2), m, 4022096));
+    }
+  },
+  ensure() {
+    if (this.kits) return;
+    const { opaque } = vcMats();
+    const marshal = () => {
+      const parts = [];
+      (this._platform(parts), this._figure(parts, 0, 0.25, 15231516));
+      const stick = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(0.45, this.LIFT + 1.42, 0.3), new Matrix4().makeRotationZ(-0.65));
+      parts.push(vcBake(new CylinderGeometry(0.024, 0.024, 0.95, 6), stick, 2500134));
+      for (let row = 0; row < 2; row++)
+        for (let col = 0; col < 4; col++)
+          parts.push(vcBake(new PlaneGeometry(0.2, 0.2), vcAt(0.78 + col * 0.2, this.LIFT + 1.9 - row * 0.2, 0.3), (row + col) % 2 ? 2500134 : 15921906));
+      return new Mesh(mergeGeometries(parts, !1), opaque);
+    };
+    const pitBoard = () => {
+      const parts = [];
+      (this._platform(parts), this._figure(parts, 1.1, 0.2, 15231516));
+      for (const px of [-0.75, 0.75]) parts.push(vcBake(new BoxGeometry(0.07, 1.3, 0.07), vcAt(px - 0.3, this.LIFT + 0.65, 0.25), 2500134));
+      parts.push(vcBake(new BoxGeometry(1.8, 1.05, 0.07), vcAt(-0.3, this.LIFT + 1.5, 0.25), 1974824));
+      return new Mesh(mergeGeometries(parts, !1), opaque);
+    };
+    const camCrew = () => {
+      const parts = [];
+      (this._platform(parts), this._figure(parts, -0.62, 0.05, 3104680));
+      for (let k = 0; k < 3; k++) {
+        const a = (k * Math.PI * 2) / 3,
+          m = new Matrix4().multiplyMatrices(
+            new Matrix4().makeTranslation(0.15 + Math.sin(a) * 0.28, this.LIFT + 0.55, 0.2 + Math.cos(a) * 0.28),
+            new Matrix4().multiplyMatrices(new Matrix4().makeRotationY(a), new Matrix4().makeRotationX(0.3)),
+          );
+        parts.push(vcBake(new CylinderGeometry(0.028, 0.034, 1.15, 6), m, 2500134));
+      }
+      parts.push(vcBake(new BoxGeometry(0.5, 0.3, 0.34), vcAt(0.15, this.LIFT + 1.28, 0.2), 1974824));
+      const lens = new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(0.15, this.LIFT + 1.28, 0.45), new Matrix4().makeRotationX(Math.PI / 2));
+      parts.push(vcBake(new CylinderGeometry(0.09, 0.1, 0.26, 10), lens, 2500134));
+      return new Mesh(mergeGeometries(parts, !1), opaque);
+    };
+    const boardMat = new MeshBasicMaterial({ map: buildRoadsideBoardAtlas(), toneMapped: !1 });
+    this.kits = [];
+    const n = mobilePerf ? 3 : 6;
+    let boardIdx = 0;
+    for (let k = 0; k < n; k++) {
+      const variant = k % 3,
+        g = new Group(),
+        base = variant === 0 ? marshal() : variant === 1 ? pitBoard() : camCrew();
+      g.add(base);
+      if (variant === 1) {
+        const row = boardIdx++ % 2,
+          tg = new PlaneGeometry(1.68, 0.95),
+          uv = tg.attributes.uv;
+        for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, uv.getX(vi), 1 - (row + (1 - uv.getY(vi))) / 2);
+        const tq = new Mesh(tg, boardMat);
+        (tq.position.set(-0.3, this.LIFT + 1.5, 0.3), g.add(tq));
+      }
+      ((g.visible = !1), g.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1))), et.add(g));
+      this.kits.push({ g, variant, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cy = Xe.position.y,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled)
+      for (const s of this.spots) {
+        const dx = s.x - cx,
+          dy = s.y - cy,
+          dz = s.z - cz,
+          d2 = dx * dx + dy * dy + dz * dz;
+        d2 < R2 && cand.push({ s, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    const free = { 0: [], 1: [], 2: [] };
+    for (const k of this.kits) ((k.idx = -1), free[k.variant].push(k));
+    for (const c of cand) {
+      if (this.promoted >= this.kits.length) break;
+      const s = c.s,
+        kit = free[s.v].pop() || free[(s.v + 1) % 3].pop() || free[(s.v + 2) % 3].pop();
+      if (!kit) break;
+      (kit.g.position.set(s.x, s.y, s.z), (kit.g.rotation.y = s.yaw), (kit.g.visible = !0), (kit.idx = s.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: s.i, x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), v: kit.variant });
+    }
+    for (const k of this.kits) k.idx < 0 && (k.g.visible = !1);
+  },
+};
+const PED_KIT_RADIUS = 40;
+// Fictional, family-friendly two-bubble chats shown on texting pedestrians'
+// phone screens (one per kit, drawn into a single shared atlas).
+const PED_CHATS = [
+  [["running late again", "me"], ["the ribbon jam??", "them"], ["every. time.", "me"]],
+  [["pizza tonight?", "them"], ["obviously", "me"], ["extra olives", "them"]],
+  [["did u see that stunt", "me"], ["the triple flip?!", "them"], ["unreal", "me"]],
+  [["buy milk pls", "them"], ["on it", "me"], ["and cookies", "them"]],
+  [["gate 8 is glowing", "me"], ["on my way!!", "them"]],
+  [["new high score", "me"], ["screenshot or it", "them"], ["didn't happen", "them"]],
+  [["taxi 27 honked at me", "me"], ["classic 27", "them"]],
+  [["lost my parking spot", "me"], ["someone STOLE it??", "them"], ["drove right off", "me"]],
+];
+let pedChatAtlas = null;
+function buildPedChatAtlas() {
+  if (pedChatAtlas) return pedChatAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 512));
+  const g = cv.getContext("2d");
+  for (let s = 0; s < 8; s++) {
+    const x = (s % 4) * 128,
+      y = ((s / 4) | 0) * 256,
+      chat = PED_CHATS[s % PED_CHATS.length];
+    // screen background + status bar
+    ((g.fillStyle = "#101823"), g.fillRect(x, y, 128, 256));
+    ((g.fillStyle = "#1c2a3a"), g.fillRect(x, y, 128, 26));
+    ((g.fillStyle = "#9fd6ff"), (g.font = "bold 14px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText("chat", x + 64, y + 14);
+    ((g.font = "bold 16px sans-serif"), (g.textAlign = "left"));
+    let by = y + 42;
+    for (const [text, who] of chat) {
+      const mine = who === "me",
+        w = Math.min(116, g.measureText(text).width + 14),
+        bx = mine ? x + 124 - w : x + 4;
+      g.fillStyle = mine ? "#2f7fd4" : "#2a3546";
+      g.beginPath();
+      g.roundRect(bx, by, w, 34, 10);
+      g.fill();
+      ((g.fillStyle = "#eaf4ff"), g.fillText(text, bx + 7, by + 18));
+      by += 42;
+    }
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  pedChatAtlas = { texture, mat: new MeshBasicMaterial({ map: texture }) };
+  return pedChatAtlas;
+}
+const pedKitSys = {
+  kits: null,
+  pool: 0,
+  _timer: 0,
+  ensure() {
+    if (this.kits) return;
+    this.pool = mobilePerf ? 4 : 8;
+    const { opaque } = vcMats(),
+      shoeTones = [1976625, 3153952, 5985575, 2503224, 4400680, 1710618, 5124895, 3355970],
+      mouthTones = [9067082, 7952701, 10707786, 8341813, 9067082, 7952701, 10707786, 8341813],
+      browTones = [3087378, 1975326, 4022546, 3087378, 1975326, 4022546, 3087378, 1975326];
+    this.kits = [];
+    for (let k = 0; k < this.pool; k++) {
+      const faceParts = [],
+        eyeGeo = new SphereGeometry(0.038, 6, 5),
+        browGeo = new BoxGeometry(0.078, 0.02, 0.02),
+        noseGeo = new SphereGeometry(0.03, 6, 5),
+        mouthGeo = new BoxGeometry(0.09, 0.022, 0.02);
+      for (const ex of [-0.085, 0.085]) {
+        faceParts.push(vcBake(eyeGeo, vcAt(ex, 2.06, -0.198), 1842476));
+        faceParts.push(vcBake(browGeo, vcAt(ex, 2.118, -0.207), browTones[k % browTones.length]));
+      }
+      faceParts.push(vcBake(noseGeo, vcAt(0, 2.0, -0.229), 11893070));
+      faceParts.push(vcBake(mouthGeo, vcAt(0, 1.935, -0.216), mouthTones[k % mouthTones.length]));
+      const face = new Mesh(mergeGeometries(faceParts, !1), opaque),
+        handGeo = vcBake(new SphereGeometry(0.056, 6, 5), null, 12947299),
+        shoeGeo = vcBake(new BoxGeometry(0.13, 0.07, 0.24), null, shoeTones[k % shoeTones.length]),
+        handL = new Mesh(handGeo, opaque),
+        handR = new Mesh(handGeo, opaque),
+        shoeL = new Mesh(shoeGeo, opaque),
+        shoeR = new Mesh(shoeGeo, opaque);
+      (handL.position.set(0, -0.38, 0), handR.position.set(0, -0.38, 0));
+      (shoeL.position.set(0, -0.42, -0.045), shoeR.position.set(0, -0.42, -0.045));
+      // phone: dark body + lit chat screen (shared atlas material, per-kit UVs).
+      // Group-parented at chest height facing up-back toward the head; the right
+      // arm is pose-overridden every tick while texting so the hand "holds" it.
+      const chatAtlas = buildPedChatAtlas(),
+        phone = new Group(),
+        phoneBody = new Mesh(vcBake(new BoxGeometry(0.075, 0.15, 0.014), null, 1315356), opaque),
+        screenGeo = new PlaneGeometry(0.062, 0.128),
+        su = (k % 4) * 0.25,
+        sv = 1 - (((k / 4) | 0) + 1) * 0.5,
+        uvArr = screenGeo.attributes.uv;
+      for (let vi = 0; vi < uvArr.count; vi++) uvArr.setXY(vi, su + uvArr.getX(vi) * 0.25, sv + uvArr.getY(vi) * 0.5);
+      const screen = new Mesh(screenGeo, chatAtlas.mat);
+      ((screen.position.z = 0.0095), phone.add(phoneBody), phone.add(screen));
+      // in the raised right hand (pose puts it at ~(0.38, 1.48, -0.33)), screen
+      // aimed at the head so it reads over the shoulder
+      phone.position.set(0.34, 1.47, -0.36);
+      phone.quaternion.setFromUnitVectors(new Vector3(0, 0, 1), new Vector3(-0.34, 0.55, 0.36).normalize());
+      // item 3b props: a paper shopping bag that hangs from the left arm and a
+      // coffee cup held at the hand — one per kit, colored by kit index
+      const bagTone = [10120994, 13391656, 4886754, 11893070, 5987163, 12744766, 8355711, 14192963][k % 8],
+        bag = new Mesh(
+          mergeGeometries(
+            [
+              vcBake(new BoxGeometry(0.26, 0.32, 0.15), vcAt(0, -0.62, 0), bagTone),
+              vcBake(new BoxGeometry(0.02, 0.16, 0.02), vcAt(-0.09, -0.4, 0), 3355443),
+              vcBake(new BoxGeometry(0.02, 0.16, 0.02), vcAt(0.09, -0.4, 0), 3355443),
+            ],
+            !1,
+          ),
+          opaque,
+        ),
+        sleeveTone = [7952694, 3116150, 10702874, 5122622][k % 4],
+        cup = new Mesh(
+          mergeGeometries(
+            [
+              vcBake(new CylinderGeometry(0.056, 0.048, 0.15, 8), vcAt(0, -0.4, 0), 16447738),
+              vcBake(new CylinderGeometry(0.06, 0.06, 0.06, 8), vcAt(0, -0.405, 0), sleeveTone),
+              vcBake(new CylinderGeometry(0.058, 0.058, 0.016, 8), vcAt(0, -0.318, 0), 6902849),
+            ],
+            !1,
+          ),
+          opaque,
+        );
+      // item: leashed dogs — a small trotting companion beside every 4th
+      // promoted ped, one merged mesh + a static taut leash hip→collar
+      const dogTone = [7029795, 2499102, 12884588, 12104876][k % 4],
+        dog = new Mesh(
+          mergeGeometries(
+            [
+              vcBake(new BoxGeometry(0.16, 0.2, 0.36), vcAt(0, 0.3, 0), dogTone),
+              vcBake(new BoxGeometry(0.13, 0.13, 0.14), vcAt(0, 0.44, -0.24), dogTone),
+              vcBake(new BoxGeometry(0.08, 0.06, 0.08), vcAt(0, 0.4, -0.33), 2499102),
+              vcBake(new BoxGeometry(0.04, 0.07, 0.03), vcAt(0.05, 0.54, -0.22), dogTone),
+              vcBake(new BoxGeometry(0.04, 0.07, 0.03), vcAt(-0.05, 0.54, -0.22), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(0.05, 0.1, -0.13), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(-0.05, 0.1, -0.13), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(0.05, 0.1, 0.13), dogTone),
+              vcBake(new BoxGeometry(0.05, 0.2, 0.05), vcAt(-0.05, 0.1, 0.13), dogTone),
+              vcBake(new BoxGeometry(0.04, 0.16, 0.04), vcAt(0, 0.44, 0.2, 0.5), dogTone),
+            ],
+            !1,
+          ),
+          opaque,
+        );
+      dog.position.set(0.52, 0, -0.1);
+      const leashDir = new Vector3(0.52 - 0.24, 0.5 - 0.88, -0.28 - 0.02),
+        leashLen = leashDir.length(),
+        leash = new Mesh(vcBake(new BoxGeometry(0.016, leashLen, 0.016), null, 2105376), opaque);
+      (leash.position.set((0.24 + 0.52) / 2, (0.88 + 0.5) / 2, (0.02 - 0.28) / 2), leash.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), leashDir.normalize()));
+      const kit = { face, handL, handR, shoeL, shoeR, phone, bag, cup, dog, leash, prop: null, texting: !1, ped: null };
+      for (const part of [face, handL, handR, shoeL, shoeR, phone, phoneBody, screen, bag, cup, dog, leash])
+        ((part.userData.kitPart = !0), (part.castShadow = !1), (part.receiveShadow = !0), (part.raycast = () => {}));
+      this.kits.push(kit);
+    }
+  },
+  attach(kit, actor, prop) {
+    const g = actor.mesh,
+      limbs = g.userData.limbs || [];
+    (g.add(kit.face),
+      limbs[0]?.mesh.add(kit.shoeL),
+      limbs[1]?.mesh.add(kit.shoeR),
+      limbs[2]?.mesh.add(kit.handL),
+      limbs[3]?.mesh.add(kit.handR),
+      (kit.prop = prop),
+      (kit.texting = prop === "text"),
+      kit.texting && g.add(kit.phone),
+      // head-tilt illusion: pitch the face overlay about the HEAD CENTRE so
+      // the features slide down the sphere toward the phone (the merged head
+      // itself cannot rotate)
+      (() => {
+        if (kit.texting) {
+          const th = 0.35,
+            c = Math.cos(th),
+            s2 = Math.sin(th),
+            hy = 2.04,
+            hz = -0.03;
+          ((kit.face.rotation.x = th), kit.face.position.set(0, hy - (hy * c - hz * s2), hz - (hy * s2 + hz * c)));
+        } else ((kit.face.rotation.x = 0), kit.face.position.set(0, 0, 0));
+      })(),
+      prop === "bag" && limbs[2]?.mesh.add(kit.bag),
+      prop === "cup" && limbs[2]?.mesh.add(kit.cup),
+      prop === "dog" && (g.add(kit.dog), g.add(kit.leash)),
+      (kit.ped = actor));
+  },
+  detach(kit) {
+    for (const part of [kit.face, kit.handL, kit.handR, kit.shoeL, kit.shoeR, kit.phone, kit.bag, kit.cup, kit.dog, kit.leash]) part.removeFromParent();
+    ((kit.ped = null), (kit.texting = !1), (kit.prop = null));
+  },
+  reset() {
+    if (this.kits) for (const k of this.kits) k.ped && this.detach(k);
+  },
+  promotedCount() {
+    return this.kits ? this.kits.reduce((n, k) => n + (k.ped ? 1 : 0), 0) : 0;
+  },
+  update(dt) {
+    if (!Rr.length) {
+      this.reset();
+      return;
+    }
+    // pose pass runs EVERY tick: ze() rewrites limb swing each frame, so the
+    // texting arm must be re-raised after it (same Bn callback, later in order)
+    this._t = (this._t || 0) + dt;
+    if (this.kits)
+      for (const k of this.kits)
+        if (k.ped && k.texting) {
+          const arm = k.ped.mesh.userData.limbs?.[3]?.mesh;
+          arm && ((arm.rotation.x = -2.05), (arm.position.y = 1.33));
+        } else if (k.ped && k.prop === "dog") {
+          // trot: quick bob + a touch of pitch, keyed off the shared clock
+          const ph = this._t * 8 + k.dog.position.x * 7;
+          ((k.dog.position.y = Math.abs(Math.sin(ph)) * 0.035), (k.dog.rotation.x = Math.sin(ph * 2) * 0.05));
+        }
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.35;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = PED_KIT_RADIUS * PED_KIT_RADIUS,
+      cand = [];
+    for (let idx = 0; idx < Rr.length; idx++) {
+      const a = Rr[idx];
+      if (!a.active || !a.mesh.visible) continue;
+      const dx = a.x - cx,
+        dz = a.z - cz,
+        d2 = dx * dx + dz * dz;
+      d2 < R2 && cand.push({ a, idx, d2 });
+    }
+    cand.sort((p, q) => p.d2 - q.d2);
+    const want = cand.slice(0, this.pool),
+      wantSet = new Set(want.map((w) => w.a));
+    for (const k of this.kits)
+      k.ped && (!wantSet.has(k.ped) || !k.ped.active || !k.ped.mesh.visible) && this.detach(k);
+    for (const w of want) {
+      const k = this.kits[w.idx % this.pool];
+      if (k.ped === w.a) continue;
+      if (k.ped && wantSet.has(k.ped)) continue; // kit busy with an equally-near ped
+      (k.ped && this.detach(k), this.attach(k, w.a, ["text", "bag", "cup", "dog"][w.idx % 4]));
+    }
+  },
+};
+// ─── Taxi identity (zoom-detail item 05): dark cutout "TAXI ##" text on both
+// faces of the glowing roof-sign box plus door decals — a pooled set of 8
+// pre-built 4-quad meshes (one draw per taxi) over a single atlas texture.
+// Medallion numbers are per-slot deterministic; pool meshes recycle across
+// world rebuilds so no geometry/texture creep.
+let taxiSignAtlas = null;
+function buildTaxiSignAtlas() {
+  if (taxiSignAtlas) return taxiSignAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  const nums = [];
+  for (let s = 0; s < 8; s++) {
+    const x = (s % 4) * 256,
+      y = ((s / 4) | 0) * 256,
+      num = ((s * 97 + 13) % 90) + 10;
+    nums.push(num);
+    ((g.fillStyle = "#14203a"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    ((g.font = "bold 88px sans-serif"), g.fillText(`TAXI ${num}`, x + 128, y + 96));
+    ((g.font = "bold 34px sans-serif"), g.fillText("STEEL CITY CAB", x + 128, y + 178));
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  taxiSignAtlas = {
+    texture,
+    nums,
+    mat: new MeshBasicMaterial({ map: texture, transparent: !0, alphaTest: 0.25 }),
+  };
+  return taxiSignAtlas;
+}
+const taxiSignSys = {
+  pool: null,
+  used: 0,
+  ensure() {
+    if (this.pool) return;
+    const atlas = buildTaxiSignAtlas();
+    this.pool = [];
+    for (let s = 0; s < 8; s++) {
+      const su = (s % 4) * 0.25,
+        sv = 1 - (((s / 4) | 0) + 1) * 0.5,
+        quads = [];
+      // roof sign faces (box at (0, 2.2, -0.35), size 1 x 0.24 x 0.46)
+      for (const [z, ry] of [[-0.585, Math.PI], [-0.115, 0]]) {
+        const q = new PlaneGeometry(0.94, 0.2);
+        const uv = q.attributes.uv;
+        // top half of the slot: the big "TAXI ##" line
+        for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, su + uv.getX(vi) * 0.25, sv + 0.25 + uv.getY(vi) * 0.25);
+        (ry && q.rotateY(ry), q.translate(0, 2.2, z), quads.push(q));
+      }
+      // door decals (body sides at x ±1.125)
+      for (const [x, ry] of [[1.13, Math.PI / 2], [-1.13, -Math.PI / 2]]) {
+        const q = new PlaneGeometry(0.62, 0.3);
+        const uv = q.attributes.uv;
+        for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, su + uv.getX(vi) * 0.25, sv + uv.getY(vi) * 0.5);
+        (q.rotateY(ry), q.translate(x, 1.05, -0.2), quads.push(q));
+      }
+      const mesh = new Mesh(mergeGeometries(quads, !1), atlas.mat);
+      ((mesh.castShadow = !1), (mesh.receiveShadow = !1), (mesh.userData.taxiSign = s));
+      this.pool.push(mesh);
+    }
+  },
+  reset() {
+    if (this.pool) for (const m of this.pool) m.removeFromParent();
+    this.used = 0;
+  },
+  attach(carMesh) {
+    this.ensure();
+    if (this.used >= this.pool.length) return;
+    carMesh.add(this.pool[this.used++]);
+  },
+  count() {
+    return this.pool ? this.pool.reduce((n, m) => n + (m.parent ? 1 : 0), 0) : 0;
+  },
+};
+// ─── Storefront near-tier (zoom-detail item 06): commercial storefronts get a
+// promotion pool of 4 "dress kits" — a glowing interior window (4 canvas
+// styles: cafe / garage / shelves / arcade), a door with pane + brass handle,
+// and an OPEN/CLOSED/BACK IN 5 sign. Buildings are static-merged, so kits are
+// positioned in WORLD space from spots recorded at build time; promotion is
+// camera-distance keyed like the pedestrian kits. Far tier: the flat facade
+// band, exactly as today.
+let storefrontAtlas = null;
+function buildStorefrontAtlas() {
+  if (storefrontAtlas) return storefrontAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  const drawInterior = (x, y, style) => {
+    const W = 512,
+      H = 224,
+      warm = ["#e8a45c", "#7fb8d8", "#e8c087", "#c77bd8"][style],
+      glow = ["#ffdba4", "#c8ecff", "#ffe9c4", "#ffb3ec"][style];
+    const grad = g.createLinearGradient(x, y, x, y + H);
+    (grad.addColorStop(0, glow), grad.addColorStop(0.55, warm), grad.addColorStop(1, ["#8a5a2c", "#3f6c86", "#8a6a3c", "#6c3f86"][style]));
+    ((g.fillStyle = grad), g.fillRect(x, y, W, H));
+    // window frame so the quad reads as glazing, not a floating band
+    ((g.strokeStyle = "#221a14"), (g.lineWidth = 10), g.strokeRect(x + 5, y + 5, W - 10, H - 10));
+    ((g.lineWidth = 4), g.beginPath(), g.moveTo(x + W / 2, y), g.lineTo(x + W / 2, y + H), g.moveTo(x, y + H / 2), g.lineTo(x + W, y + H / 2), g.stroke());
+    g.fillStyle = "rgba(255, 230, 180, 0.85)";
+    for (let l = x + 60; l < x + W - 40; l += 110) {
+      g.fillRect(l, y + 8, 3, 26);
+      (g.beginPath(), g.moveTo(l - 12, y + 34), g.lineTo(l + 15, y + 34), g.lineTo(l + 1.5, y + 48), g.fill());
+    }
+    g.fillStyle = "rgba(10, 8, 12, 0.88)";
+    if (style === 0)
+      for (let t2 = x + 70; t2 < x + W - 60; t2 += 150)
+        (g.fillRect(t2, y + 150, 74, 8), g.fillRect(t2 + 33, y + 158, 8, 52), g.fillRect(t2 - 18, y + 168, 26, 42), g.fillRect(t2 + 66, y + 168, 26, 42));
+    else if (style === 1)
+      for (let t2 = x + 50; t2 < x + W - 60; t2 += 90)
+        (g.fillRect(t2, y + 60, 12, 60), g.fillRect(t2 - 14, y + 76, 40, 10), g.beginPath(), g.arc(t2 + 6, y + 180, 26, 0, 7), g.fill());
+    else if (style === 2) {
+      for (const sy of [80, 130, 180]) g.fillRect(x + 40, y + sy, W - 80, 8);
+      g.fillStyle = "rgba(30, 22, 16, 0.9)";
+      for (const sy of [56, 106, 156])
+        for (let bx = x + 56; bx < x + W - 70; bx += 44) g.fillRect(bx, y + sy, 26, 22);
+    } else
+      for (let t2 = x + 60; t2 < x + W - 80; t2 += 120) {
+        g.fillRect(t2, y + 90, 62, 120);
+        ((g.fillStyle = ["#4ff3ff", "#ff4fb7", "#68ff8f"][((t2 / 120) | 0) % 3]), g.fillRect(t2 + 10, y + 104, 42, 34));
+        g.fillStyle = "rgba(10, 8, 12, 0.88)";
+      }
+  };
+  (drawInterior(0, 0, 0), drawInterior(512, 0, 1), drawInterior(0, 224, 2), drawInterior(512, 224, 3));
+  // bottom strip: door-hang signs
+  const sign = (x, w, text, bg, fg) => {
+    ((g.fillStyle = bg), g.fillRect(x + 4, 452, w - 8, 56));
+    ((g.strokeStyle = fg), (g.lineWidth = 3), g.strokeRect(x + 7, 455, w - 14, 50));
+    ((g.fillStyle = fg), (g.font = "900 26px Arial, sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(text, x + w / 2, 481, w - 24);
+  };
+  (sign(0, 150, "OPEN", "#1d3a24", "#7dffa5"), sign(150, 150, "CLOSED", "#3a1d1d", "#ff8d7d"), sign(300, 190, "BACK IN 5", "#33301d", "#ffe27d"));
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  storefrontAtlas = { texture, mat: new MeshBasicMaterial({ map: texture }) };
+  return storefrontAtlas;
+}
+const storefrontSys = {
+  spots: [],
+  kits: null,
+  pool: 0,
+  _timer: 0,
+  resetSpots() {
+    this.spots.length = 0;
+    if (this.kits) for (const k of this.kits) ((k.group.visible = !1), (k.spot = null));
+  },
+  addSpot(x, y, z, yaw, w) {
+    this.spots.push({ x, y, z, yaw, w });
+  },
+  ensure() {
+    if (this.kits) return;
+    this.pool = mobilePerf ? 2 : 4;
+    const atlas = buildStorefrontAtlas();
+    this.kits = [];
+    for (let k = 0; k < this.pool; k++) {
+      const group = new Group(),
+        su = (k % 2) * 0.5,
+        sv = k < 2 ? 0.5625 : 0.125, // interior slots: rows y=0..224 → v 0.5625..1, y=224..448 → 0.125..0.5625
+        win = new PlaneGeometry(5.6, 1.9),
+        uv = win.attributes.uv;
+      for (let vi = 0; vi < uv.count; vi++) uv.setXY(vi, su + uv.getX(vi) * 0.5, sv + uv.getY(vi) * 0.4375);
+      const winMesh = new Mesh(win, atlas.mat);
+      (winMesh.position.set(-0.7, 1.55, 0.06), group.add(winMesh));
+      // cream trim backing makes the doorway read against ANY facade paint
+      const trim = new Mesh(new BoxGeometry(1.3, 2.3, 0.03), new MeshStandardMaterial({ color: 15326941, roughness: 0.7, metalness: 0.05 }));
+      (trim.position.set(2.75, 1.15, 0.03), group.add(trim));
+      const door = new Mesh(new BoxGeometry(1.02, 2.14, 0.05), new MeshStandardMaterial({ color: 5910302, roughness: 0.55, metalness: 0.15 }));
+      (door.position.set(2.75, 1.07, 0.05), group.add(door));
+      const pane = new Mesh(new PlaneGeometry(0.6, 0.8), new MeshStandardMaterial({ color: 10217727, roughness: 0.1, metalness: 0.1, emissive: 2963258, emissiveIntensity: 0.5 }));
+      (pane.position.set(2.75, 1.5, 0.081), group.add(pane));
+      const handle = new Mesh(new BoxGeometry(0.035, 0.17, 0.045), new MeshStandardMaterial({ color: 13092431, roughness: 0.3, metalness: 0.85 }));
+      (handle.position.set(3.14, 1.02, 0.09), group.add(handle));
+      const signW = [150, 150, 190][k % 3] / 150,
+        signGeo = new PlaneGeometry(0.34 * signW, 0.14),
+        suv = signGeo.attributes.uv,
+        sx0 = [0, 150 / 1024, 300 / 1024][k % 3],
+        sw = [150 / 1024, 150 / 1024, 190 / 1024][k % 3];
+      for (let vi = 0; vi < suv.count; vi++) suv.setXY(vi, sx0 + suv.getX(vi) * sw, (512 - 508 + suv.getY(vi) * 56) / 512);
+      const signMesh = new Mesh(signGeo, atlas.mat);
+      (signMesh.position.set(2.75, 0.62, 0.085), group.add(signMesh));
+      group.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1), (o.userData.dressKit = !0)));
+      ((group.visible = !1), et.add(group));
+      this.kits.push({ group, spot: null });
+    }
+  },
+  dressedCount() {
+    return this.kits ? this.kits.reduce((n, k) => n + (k.spot ? 1 : 0), 0) : 0;
+  },
+  update(dt) {
+    if (!this.spots.length) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.4;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = 45 * 45,
+      cand = [];
+    for (const s of this.spots) {
+      const dx = s.x - cx,
+        dz = s.z - cz,
+        d2 = dx * dx + dz * dz;
+      d2 < R2 && cand.push({ s, d2 });
+    }
+    cand.sort((p, q) => p.d2 - q.d2);
+    const want = cand.slice(0, this.pool).map((c) => c.s),
+      wantSet = new Set(want);
+    for (const k of this.kits)
+      if (k.spot && !wantSet.has(k.spot)) ((k.spot = null), (k.group.visible = !1));
+    for (const s of want) {
+      if (this.kits.some((k) => k.spot === s)) continue;
+      const free = this.kits.find((k) => !k.spot);
+      if (!free) break;
+      ((free.spot = s),
+        free.group.position.set(s.x, s.y, s.z),
+        (free.group.rotation.y = s.yaw),
+        free.group.scale.setScalar(Math.min(1, (s.w * 0.72) / 7)),
+        (free.group.visible = !0));
+    }
+  },
+};
+// ─── Park dressing (zoom-detail 39, round-five item 3): the empty lawn blocks
+// between streets get baked gravel paths + instanced tree clusters. World-gen
+// bake — the far tier IS the feature. Cells must dodge buildings (rooftopSys
+// footprints), ponds, outskirt scenery (Sa) and the ribbon corridor (Pn);
+// trees additionally stay ≥4m off street edges (ka) and register in the Sa
+// audit with a small margin so the road-safety probe stays clean.
+const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
+// zoom-detail 43 (round-five item 7): start-line paddock clutter registry
+const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: [] };
+function buildParks(group, x0, x1, zA, zB, pitch, sw) {
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
+  const zLo = Math.min(zA, zB),
+    zTop = Math.max(zA, zB),
+    zCap = Math.min(zTop, 240),
+    rng = plateRng(0x9a4b17),
+    cells = [];
+  // z street rows anchor at the TOP of the grid (zNear) and descend — cell
+  // centers must anchor there too, or every row sits ~5m off a centerline
+  for (let cx = x0 + pitch * 0.5; cx < x1; cx += pitch)
+    for (let cz = zTop - pitch * 0.5; cz > zLo; cz -= pitch) {
+      if (cz >= zCap) continue;
+      if (Pn(cx, cz, 26).clearance < 20) continue;
+      let ok = !0;
+      for (const b of Mn)
+        if (Math.abs(b.x - cx) < b.hw + 52 && Math.abs(b.z - cz) < b.hd + 52) {
+          ok = !1;
+          break;
+        }
+      if (ok)
+        for (const p of ponds)
+          if (Math.abs(p.x - cx) < (p.rx || 20) + 56 && Math.abs(p.z - cz) < (p.rz || 20) + 56) {
+            ok = !1;
+            break;
+          }
+      if (ok)
+        for (const s2 of Sa)
+          if (Math.hypot(s2.x - cx, s2.z - cz) < (s2.radius || 6) + 52) {
+            ok = !1;
+            break;
+          }
+      ok && cells.push({ cx, cz });
+    }
+  for (let k = cells.length - 1; k > 0; k--) {
+    const j = (rng() * (k + 1)) | 0,
+      tmp = cells[k];
+    ((cells[k] = cells[j]), (cells[j] = tmp));
+  }
+  const picked = cells.slice(0, mobilePerf ? 6 : 12);
+  if (!picked.length) return;
+  const pos = [],
+    col = [],
+    idx = [],
+    treePts = [],
+    furnPts = [],
+    half = pitch * 0.5 - sw * 0.5 - 12;
+  for (let n2 = 0; n2 < picked.length; n2++) {
+    const { cx, cz } = picked[n2],
+      vert = rng() < 0.5,
+      bow = (rng() - 0.5) * 40,
+      SEG = 8,
+      W = 1.15,
+      base = pos.length / 3;
+    for (let s2 = 0; s2 <= SEG; s2++) {
+      const t2 = s2 / SEG,
+        along = -half + t2 * 2 * half,
+        across = Math.sin(t2 * Math.PI) * bow,
+        px = cx + (vert ? across : along),
+        pz = cz + (vert ? along : across),
+        dS = (2 * half) / SEG,
+        dC = ((Math.cos(t2 * Math.PI) * Math.PI) / SEG) * bow,
+        dX = vert ? dC : dS,
+        dZ = vert ? dS : dC,
+        L = Math.hypot(dX, dZ) || 1,
+        nx = (-dZ / L) * W,
+        nz = (dX / L) * W,
+        sh = s2 % 2 ? 0 : -0.03,
+        cr = 0.4 + sh,
+        cg = 0.365 + sh,
+        cb = 0.285 + sh;
+      pos.push(px - nx, He(px - nx, pz - nz) + 0.05, pz - nz, px + nx, He(px + nx, pz + nz) + 0.05, pz + nz);
+      col.push(cr, cg, cb, cr, cg, cb);
+      if (s2 < SEG) {
+        const b2 = base + s2 * 2;
+        idx.push(b2, b2 + 1, b2 + 2, b2 + 1, b2 + 3, b2 + 2);
+      }
+      if (s2 > 0 && s2 < SEG) {
+        const lat = (4.5 + rng() * 4.5) * (s2 % 2 ? 1 : -1);
+        treePts.push({ tx: px + (vert ? lat : rng() * 6 - 3), tz: pz + (vert ? rng() * 6 - 3 : lat) });
+        // benches face the path from just off its edge; flowerbeds sit opposite
+        if (s2 === 3 || (s2 === 6 && n2 % 2)) {
+          const sd = s2 === 3 ? 1 : -1,
+            nxu = nx / W,
+            nzu = nz / W;
+          furnPts.push({ kind: "bench", fx: px + nxu * 2.3 * sd, fz: pz + nzu * 2.3 * sd, yaw: Math.atan2(-sd * nxu, -sd * nzu) + Math.PI });
+        } else if (s2 === 5) {
+          const nxu = nx / W,
+            nzu = nz / W;
+          furnPts.push({ kind: "bed", fx: px - nxu * 3.1, fz: pz - nzu * 3.1, yaw: Math.atan2(nxu, nzu) });
+        }
+      }
+    }
+    parkSys.cells++;
+    parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
+  }
+  const pg = new BufferGeometry();
+  (pg.setAttribute("position", new Float32BufferAttribute(pos, 3)), pg.setAttribute("color", new Float32BufferAttribute(col, 3)), pg.setIndex(idx), pg.computeVertexNormals());
+  const pm = new Mesh(pg, new MeshStandardMaterial({ vertexColors: !0, roughness: 0.96 }));
+  ((pm.receiveShadow = !0), (pm.raycast = () => {}), group.add(pm), parkSys._vis.push(pm));
+  parkSys.pathTris = idx.length / 3;
+  const trunkGeo = new CylinderGeometry(0.28, 0.42, 1, 6).translate(0, 0.5, 0),
+    canopyGeo = mergeGeometries([
+      new ConeGeometry(2.7, 5.4, 7).translate(0, 1.9, 0),
+      new ConeGeometry(2.1, 4.9, 7).rotateY(0.6).translate(0, 3.35, 0),
+      new ConeGeometry(1.55, 4.1, 7).rotateY(1.2).translate(0, 4.7, 0),
+    ]),
+    canopyColors = [2055221, 3109954, 1589042].map((cc) => new Color(cc)),
+    cap = Math.max(Math.min(treePts.length, mobilePerf ? 24 : 56), 1),
+    trunkIM = new InstancedMesh(trunkGeo, new MeshStandardMaterial({ color: 4926748, roughness: 0.9 }), cap),
+    canopyIM = new InstancedMesh(canopyGeo, new MeshStandardMaterial({ roughness: 0.92 }), cap),
+    dum = new Object3D();
+  let ci = 0;
+  for (const tp of treePts) {
+    if (ci >= cap) break;
+    if (ka(tp.tx, tp.tz, 3)) continue;
+    if (Pn(tp.tx, tp.tz, 6).clearance < 10) continue;
+    let hitB = !1;
+    for (const b of Mn)
+      if (Math.abs(b.x - tp.tx) < b.hw + 4 && Math.abs(b.z - tp.tz) < b.hd + 4) {
+        hitB = !0;
+        break;
+      }
+    if (hitB) continue;
+    const M = 0.5 + rng() * 0.4,
+      y = He(tp.tx, tp.tz),
+      T = 1.7 + rng() * 2.2;
+    (dum.position.set(tp.tx, y, tp.tz), (dum.rotation.y = rng() * Math.PI), dum.scale.set(M, T, M), dum.updateMatrix(), trunkIM.setMatrixAt(ci, dum.matrix));
+    (dum.position.set(tp.tx, y + T, tp.tz), dum.scale.set(M, M, M), dum.updateMatrix(), canopyIM.setMatrixAt(ci, dum.matrix));
+    (canopyIM.setColorAt(ci, canopyColors[ci % 3]), kn("tree", tp.tx, tp.tz, 8 * M, 10), ci++);
+  }
+  ((trunkIM.count = ci), (canopyIM.count = ci), (trunkIM.instanceMatrix.needsUpdate = !0), (canopyIM.instanceMatrix.needsUpdate = !0), canopyIM.instanceColor && (canopyIM.instanceColor.needsUpdate = !0));
+  ((trunkIM.castShadow = !0), (canopyIM.castShadow = !0), (trunkIM.raycast = () => {}), (canopyIM.raycast = () => {}));
+  (group.add(trunkIM), group.add(canopyIM), parkSys._vis.push(trunkIM, canopyIM));
+  parkSys.trees = ci;
+  // benches + flowerbeds (round-five item 4): same safety filters as trees,
+  // every part baked into ONE merged vertex-colored mesh (shared vc opaque)
+  const fparts = [],
+    F = (geo, place, lx, ly, lz, colr) => fparts.push(vcBake(geo, new Matrix4().multiplyMatrices(place, vcAt(lx, ly, lz)), colr)),
+    FLOWERS = [15021620, 16765778, 10233776, 16744272];
+  parkSys._rej = { total: furnPts.length, ka: 0, pn: 0, mn: 0 };
+  parkSys._furnSample = [];
+  for (const fp of furnPts) {
+    if (ka(fp.fx, fp.fz, 3)) {
+      parkSys._rej.ka++;
+      continue;
+    }
+    if (Pn(fp.fx, fp.fz, 4).clearance < 10) {
+      parkSys._rej.pn++;
+      continue;
+    }
+    let hitB = !1;
+    for (const b of Mn)
+      if (Math.abs(b.x - fp.fx) < b.hw + 2 && Math.abs(b.z - fp.fz) < b.hd + 2) {
+        hitB = !0;
+        break;
+      }
+    if (hitB) {
+      parkSys._rej.mn++;
+      continue;
+    }
+    const place = new Matrix4().makeRotationY(fp.yaw);
+    place.setPosition(fp.fx, He(fp.fx, fp.fz), fp.fz);
+    if (fp.kind === "bench") {
+      parkSys._furnSample.length < 4 && parkSys._furnSample.push({ k: "bench", x: +fp.fx.toFixed(1), z: +fp.fz.toFixed(1) });
+      for (const px2 of [-0.62, 0.62]) {
+        F(new BoxGeometry(0.14, 0.42, 0.42), place, px2, 0.21, 0, 2432796);
+        F(new BoxGeometry(0.12, 0.62, 0.06), place, px2, 0.7, 0.21, 2432796);
+      }
+      F(new BoxGeometry(1.55, 0.05, 0.16), place, 0, 0.44, -0.12, 9130315);
+      F(new BoxGeometry(1.55, 0.05, 0.16), place, 0, 0.44, 0.08, 9130315);
+      F(new BoxGeometry(1.55, 0.16, 0.05), place, 0, 0.68, 0.2, 9130315);
+      F(new BoxGeometry(1.55, 0.16, 0.05), place, 0, 0.9, 0.22, 9130315);
+      parkSys.benches++;
+    } else {
+      F(new BoxGeometry(1.7, 0.26, 1.0), place, 0, 0.13, 0, 5789222);
+      F(new BoxGeometry(1.54, 0.1, 0.84), place, 0, 0.29, 0, 3548956);
+      for (let fl = 0; fl < 6; fl++) {
+        const lx = -0.58 + (fl % 3) * 0.58,
+          lz = fl < 3 ? -0.2 : 0.2;
+        F(new BoxGeometry(0.1, 0.16, 0.1), place, lx, 0.4, lz, 4022096);
+        F(new SphereGeometry(0.09, 5, 4), place, lx, 0.5, lz, FLOWERS[(fl + ((fp.fx | 0) & 3)) % 4]);
+      }
+      parkSys.beds++;
+      parkSys._furnSample.length < 4 && parkSys._furnSample.push({ k: "bed", x: +fp.fx.toFixed(1), z: +fp.fz.toFixed(1) });
+    }
+  }
+  if (fparts.length) {
+    const fm = new Mesh(mergeGeometries(fparts, !1), vcMats().opaque);
+    ((fm.castShadow = !0), (fm.receiveShadow = !0), (fm.raycast = () => {}), group.add(fm), parkSys._vis.push(fm));
+  }
+  if (!parkSys.enabled) for (const m2 of parkSys._vis) m2.visible = !1;
+}
+// ─── Street furniture (zoom-detail item 07): hydrants, parking meters, benches
+// and trash cans seeded along the sidewalk lines — four InstancedMeshes sharing
+// the vertex-colored opaque material (4 extra draws for ~200 objects). Permanent
+// like the plates: real objects up close, sub-pixel dots at distance. Built AFTER
+// the building grid loop so clearance checks see the finished blocks.
+const furnitureSys = { meshes: null, counts: { hydrants: 0, meters: 0, benches: 0, cans: 0 }, sample: [] };
+// newspaper boxes (round 3 wishlist): a 5th furniture type; the nearest few
+// show a READABLE front page — the zoom reward.
+let newsAtlasTex = null;
+const NEWS_HEADLINES = [
+  ["THE RIBBON DAILY", "RIBBON CUP SUNDAY:", "CROWTHER FAVOURED"],
+  ["THE RIBBON DAILY", "PIGEONS ADOPT WATER", "TOWER, REFUSE COMMENT"],
+  ["CITY HERALD", "GATE 8 GLOWS AGAIN —", "EXPERTS DELIGHTED"],
+  ["CITY HERALD", "LOCAL DOG 'BISCUIT'", "WINS EVERYTHING"],
+];
+function buildNewsAtlas() {
+  if (newsAtlasTex) return newsAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 128));
+  const g = cv.getContext("2d");
+  for (let c = 0; c < 4; c++) {
+    const x = c * 128,
+      H = NEWS_HEADLINES[c];
+    ((g.fillStyle = "#efeadd"), g.fillRect(x, 0, 128, 128));
+    ((g.fillStyle = "#191b20"), (g.font = "900 13px Georgia,serif"), (g.textAlign = "center"));
+    g.fillText(H[0], x + 64, 18, 120);
+    ((g.strokeStyle = "#191b20"), (g.lineWidth = 1.5), g.beginPath(), g.moveTo(x + 8, 24), g.lineTo(x + 120, 24), g.stroke());
+    ((g.font = "bold 12px Georgia,serif"));
+    (g.fillText(H[1], x + 64, 42, 120), g.fillText(H[2], x + 64, 57, 120));
+    g.fillStyle = "#8a8578";
+    for (let r = 0; r < 8; r++) {
+      const w = 46 + ((r * 31) % 60);
+      g.fillRect(x + 10 + (r % 2) * 62, 68 + r * 7, Math.min(w, 52), 2.5);
+    }
+  }
+  newsAtlasTex = new CanvasTexture(cv);
+  newsAtlasTex.colorSpace = SRGBColorSpace;
+  return newsAtlasTex;
+}
+const newsSys = {
+  spots: [],
+  kits: null,
+  promoted: 0,
+  enabled: !0,
+  RADIUS: 22, // the roam CAR camera trails ~17m behind the player (it.16 lesson)
+  sample: [],
+  _timer: 0,
+  _geos: null,
+  ensure() {
+    if (this.kits) return;
+    const mat = new MeshBasicMaterial({ map: buildNewsAtlas(), toneMapped: !1, polygonOffset: !0, polygonOffsetFactor: -2 });
+    this._geos = [0, 1, 2, 3].map((c) => {
+      const geo = new PlaneGeometry(0.3, 0.28),
+        uv = geo.attributes.uv;
+      for (let i = 0; i < uv.count; i++) uv.setXY(i, (c + uv.getX(i)) / 4, uv.getY(i));
+      return geo;
+    });
+    this.kits = [];
+    const n = mobilePerf ? 2 : 4;
+    for (let k = 0; k < n; k++) {
+      const m = new Mesh(this._geos[0], mat);
+      ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), (m.raycast = () => {}), et.add(m));
+      this.kits.push({ m, idx: -1 });
+    }
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    this._timer -= dt;
+    if (this._timer > 0) return;
+    this._timer = 0.5;
+    this.ensure();
+    const cx = Xe.position.x,
+      cz = Xe.position.z,
+      R2 = this.RADIUS * this.RADIUS,
+      cand = [];
+    if (this.enabled && Xe.position.y <= 26)
+      for (const sp of this.spots) {
+        const dx = sp.x - cx,
+          dz = sp.z - cz,
+          d2 = dx * dx + dz * dz;
+        d2 < R2 && cand.push({ sp, d2 });
+      }
+    cand.sort((a, b) => a.d2 - b.d2);
+    ((this.promoted = 0), (this.sample.length = 0));
+    for (let k = 0; k < this.kits.length; k++) {
+      const kit = this.kits[k],
+        c = cand[k];
+      if (!c) {
+        ((kit.m.visible = !1), (kit.idx = -1));
+        continue;
+      }
+      const sp = c.sp,
+        fx = -Math.sin(sp.yaw),
+        fz = -Math.cos(sp.yaw);
+      ((kit.m.geometry = this._geos[sp.i % 4]), kit.m.position.set(sp.x + fx * 0.21, sp.y + 0.62, sp.z + fz * 0.21), (kit.m.rotation.y = sp.yaw + Math.PI), (kit.m.visible = !0), (kit.idx = sp.i), this.promoted++);
+      this.sample.length < 3 && this.sample.push({ i: sp.i, x: sp.x, y: sp.y, z: sp.z, yaw: sp.yaw });
+    }
+  },
+};
+function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt) {
+  const { opaque } = vcMats();
+  const hydrantGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.11, 0.13, 0.1, 6), vcAt(0, 0.05, 0), 2894892),
+      vcBake(new CylinderGeometry(0.09, 0.1, 0.34, 6), vcAt(0, 0.27, 0), 15021620),
+      vcBake(new SphereGeometry(0.095, 6, 4), vcAt(0, 0.47, 0), 15021620),
+      vcBake(new CylinderGeometry(0.035, 0.035, 0.3, 6), vcAt(0, 0.33, 0, Math.PI / 2), 13840175),
+      vcBake(new CylinderGeometry(0.03, 0.03, 0.08, 6), vcAt(0, 0.56, 0), 16765778),
+    ],
+    !1,
+  );
+  const meterGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.024, 0.03, 1.04, 6), vcAt(0, 0.52, 0), 3092306),
+      vcBake(new BoxGeometry(0.15, 0.22, 0.09), vcAt(0, 1.13, 0), 5395032),
+      vcBake(new BoxGeometry(0.11, 0.1, 0.02), vcAt(0, 1.16, -0.047), 13036239),
+    ],
+    !1,
+  );
+  const benchGeo = mergeGeometries(
+    [
+      vcBake(new BoxGeometry(0.14, 0.42, 0.42), vcAt(-0.62, 0.21, 0), 2432796),
+      vcBake(new BoxGeometry(0.14, 0.42, 0.42), vcAt(0.62, 0.21, 0), 2432796),
+      // back posts carry the backrest slats
+      vcBake(new BoxGeometry(0.12, 0.62, 0.06), vcAt(-0.62, 0.7, 0.21), 2432796),
+      vcBake(new BoxGeometry(0.12, 0.62, 0.06), vcAt(0.62, 0.7, 0.21), 2432796),
+      vcBake(new BoxGeometry(1.55, 0.05, 0.16), vcAt(0, 0.44, -0.12), 9130315),
+      vcBake(new BoxGeometry(1.55, 0.05, 0.16), vcAt(0, 0.44, 0.08), 9130315),
+      vcBake(new BoxGeometry(1.55, 0.16, 0.05), vcAt(0, 0.68, 0.2), 9130315),
+      vcBake(new BoxGeometry(1.55, 0.16, 0.05), vcAt(0, 0.9, 0.22), 9130315),
+    ],
+    !1,
+  );
+  const canGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.19, 0.16, 0.52, 8), vcAt(0, 0.26, 0), 3225437),
+      vcBake(new CylinderGeometry(0.2, 0.2, 0.05, 8), vcAt(0, 0.55, 0), 4936027),
+      vcBake(new CylinderGeometry(0.13, 0.13, 0.03, 8), vcAt(0, 0.57, 0), 1118996),
+    ],
+    !1,
+  );
+  const newsboxGeo = mergeGeometries(
+    [
+      vcBake(new BoxGeometry(0.42, 0.6, 0.38), vcAt(0, 0.52, 0), 11746096),
+      vcBake(new BoxGeometry(0.34, 0.32, 0.03), vcAt(0, 0.62, -0.19), 1183769),
+      vcBake(new BoxGeometry(0.34, 0.05, 0.02), vcAt(0, 0.84, -0.195), 15921139),
+      vcBake(new BoxGeometry(0.05, 0.05, 0.05), vcAt(0.12, 0.88, -0.12), 3355970),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(-0.16, 0.12, -0.14), 2500134),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(0.16, 0.12, -0.14), 2500134),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(-0.16, 0.12, 0.14), 2500134),
+      vcBake(new BoxGeometry(0.04, 0.24, 0.04), vcAt(0.16, 0.12, 0.14), 2500134),
+    ],
+    !1,
+  );
+  const defs = [
+    { key: "hydrants", geo: hydrantGeo, cap: 46 },
+    { key: "meters", geo: meterGeo, cap: 60 },
+    { key: "benches", geo: benchGeo, cap: 33 },
+    { key: "cans", geo: canGeo, cap: 46 },
+    { key: "newsboxes", geo: newsboxGeo, cap: 24 },
+  ];
+  newsSys.spots.length = 0;
+  if (furnitureSys.meshes) for (const m of furnitureSys.meshes) (m.removeFromParent(), m.geometry.dispose());
+  ((furnitureSys.meshes = []), (furnitureSys.sample = []));
+  const meshes = {},
+    dummy = new Object3D(),
+    rng = plateRng(0xf00d);
+  for (const d of defs) {
+    const im = new InstancedMesh(d.geo, opaque, d.cap);
+    ((im.frustumCulled = !1), (im.castShadow = !1), (im.receiveShadow = !0), (im.userData.furniture = d.key), (im.userData.used = 0));
+    ((meshes[d.key] = im), furnitureSys.meshes.push(im), group.add(im));
+  }
+  const put = (key, x, z, yaw) => {
+    const im = meshes[key];
+    if (im.userData.used >= im.count) return;
+    (dummy.position.set(x, He(x, z) + 0.02, z), (dummy.rotation.y = yaw), dummy.updateMatrix());
+    im.setMatrixAt(im.userData.used++, dummy.matrix);
+    key === "newsboxes" && newsSys.spots.push({ i: newsSys.spots.length, x: +x.toFixed(1), y: +(He(x, z) + 0.02).toFixed(2), z: +z.toFixed(1), yaw });
+    furnitureSys.sample.length < 8 && furnitureSys.sample.push({ key, x: +x.toFixed(1), z: +z.toFixed(1) });
+  };
+  const placeAlong = (isNS, line) => {
+    const from = isNS ? zLow + 9 : x0 + 9,
+      to = isNS ? zHigh - 9 : x1 - 9;
+    for (let v = from; v <= to; v += 15 + rng() * 10) {
+      // skip intersections: near a crossing street line
+      const cross = isNS ? Math.abs(((v - zHigh) % pitch) + pitch) % pitch : Math.abs(((v - x0) % pitch) + pitch) % pitch;
+      if (cross < 13 || cross > pitch - 13) continue;
+      const side = rng() < 0.5 ? -1 : 1,
+        off = side * (sw * 0.66 + 1.35),
+        px = isNS ? line + off : v,
+        pz = isNS ? v : line + off;
+      if (clearanceAt(px, pz, 0.6).clearance < 0.8) continue;
+      const pick = rng();
+      if (pick < 0.24) put("hydrants", px, pz, rng() * 6.28);
+      else if (pick < 0.52) put("meters", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      else if (pick < 0.68) put("benches", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      else if (pick < 0.82) put("newsboxes", px, pz, isNS ? side * Math.PI * 0.5 : side > 0 ? Math.PI : 0);
+      else put("cans", px, pz, rng() * 6.28);
+    }
+  };
+  for (let x = x0; x <= x1 + 1; x += pitch) placeAlong(!0, Math.round(x));
+  for (let z = zHigh; z >= zLow - 1; z -= pitch) placeAlong(!1, Math.round(z));
+  // steam vent spots: on the road edge near the curb, sparse and seeded
+  steamSys.spots.length = 0;
+  const vrng = plateRng(0x57ea0);
+  for (let i = 0; i < 90 && steamSys.spots.length < 12; i++) {
+    const isNS = vrng() < 0.5,
+      lines = isNS ? Math.floor((x1 - x0) / pitch) : Math.floor((zHigh - zLow) / pitch),
+      line = (isNS ? x0 : zHigh) + (isNS ? 1 : -1) * pitch * (1 + ((vrng() * (lines - 1)) | 0)),
+      along = (isNS ? zLow : x0) + 30 + vrng() * ((isNS ? zHigh - zLow : x1 - x0) - 60),
+      side = vrng() < 0.5 ? -1 : 1,
+      off = side * (sw * 0.5 - 0.9),
+      px = isNS ? line + off : along,
+      pz = isNS ? along : line + off;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    steamSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.02).toFixed(2), z: +pz.toFixed(1) });
+  }
+  // road decal spots: manholes/drains/arrows/wear seeded on the same street math
+  ((roadDecalSys.spots.length = 0), (roadDecalSys.placedDone = !1));
+  const drng = plateRng(0xdeca1);
+  for (let i = 0; i < 240 && roadDecalSys.spots.length < 36; i++) {
+    const isNS = drng() < 0.5,
+      lines = isNS ? Math.floor((x1 - x0) / pitch) : Math.floor((zHigh - zLow) / pitch),
+      line = (isNS ? x0 : zHigh) + (isNS ? 1 : -1) * pitch * (1 + ((drng() * (lines - 1)) | 0)),
+      along = (isNS ? zLow : x0) + 30 + drng() * ((isNS ? zHigh - zLow : x1 - x0) - 60),
+      v = (drng() * 4) | 0,
+      side = drng() < 0.5 ? -1 : 1,
+      off = v === 1 ? side * (sw * 0.5 - 0.6) : v === 0 ? side * sw * 0.1 : side * sw * 0.24,
+      px = isNS ? line + off : along,
+      pz = isNS ? along : line + off;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    const yaw = v === 2 ? (isNS ? (drng() < 0.5 ? 0 : Math.PI) : ((drng() < 0.5 ? 1 : -1) * Math.PI) / 2) : drng() * 6.28;
+    roadDecalSys.spots.push({ i: roadDecalSys.spots.length, x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw, v });
+  }
+  for (const d of defs) {
+    const im = meshes[d.key];
+    ((im.count = im.userData.used), (im.instanceMatrix.needsUpdate = !0), (furnitureSys.counts[d.key] = im.userData.used));
+  }
+}
+// ─── Street-name signs (zoom-detail item 08): a double-blade sign at every
+// intersection corner. The street GRID is deterministic (di constants), so each
+// line keeps its themed fictional name forever. Two InstancedMeshes total: poles
+// and text blades — blades sample one 8x4 name atlas via a per-instance slot
+// attribute (same shader pattern as the license plates).
+const STREET_NAMES = [
+  "RIBBON AVE", "COIL ST", "PISTON BLVD", "TORQUE WAY", "APEX DR", "CHICANE CT",
+  "GEARBOX ST", "TURBINE AVE", "SPOKE LN", "CAMBER RD", "NITRO AVE", "DYNAMO ST",
+  "CLUTCH ST", "MANIFOLD AVE", "OCTANE BLVD", "SPOILER ST", "DOWNSHIFT DR",
+  "HAIRPIN RD", "SLIPSTREAM AVE", "REDLINE ST", "IGNITION WAY", "FLYWHEEL RD",
+  "BANKED AVE", "PIT LANE", "VELOCITY BLVD", "CHROME ST", "SPROCKET ST", "AERO WAY",
+  "MEDALLION RD", "CROSSWALK CT", "OVERPASS AVE", "STEEL RIBBON PKWY",
+];
+let streetSignAtlas = null;
+function buildStreetSignAtlas() {
+  if (streetSignAtlas) return streetSignAtlas;
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 256));
+  const g = cv.getContext("2d");
+  for (let s = 0; s < 32; s++) {
+    const x = (s % 8) * 128,
+      y = ((s / 8) | 0) * 64;
+    ((g.fillStyle = "#175430"), g.fillRect(x + 2, y + 14, 124, 36));
+    ((g.strokeStyle = "#e8f4ea"), (g.lineWidth = 2.5), g.strokeRect(x + 4.5, y + 16.5, 119, 31));
+    ((g.fillStyle = "#f2fbf4"), (g.font = "bold 17px Arial, sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(STREET_NAMES[s % STREET_NAMES.length], x + 64, y + 33, 112);
+  }
+  const texture = new CanvasTexture(cv);
+  ((texture.colorSpace = SRGBColorSpace), (texture.anisotropy = 4));
+  const mat = new MeshBasicMaterial({ map: texture });
+  mat.customProgramCacheKey = () => "street-sign-atlas";
+  mat.onBeforeCompile = (sh) => {
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nattribute vec2 aSignSlot;\nvarying vec2 vSignUv;")
+      .replace("#include <uv_vertex>", "#include <uv_vertex>\nvSignUv = uv * vec2(0.125, 0.25) + aSignSlot;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying vec2 vSignUv;")
+      .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vSignUv );");
+  };
+  streetSignAtlas = { texture, mat };
+  return streetSignAtlas;
+}
+const streetSignSys = { poles: 0, blades: 0, meshes: null, sample: [] };
+function buildStreetSigns(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt) {
+  const atlas = buildStreetSignAtlas(),
+    { opaque } = vcMats();
+  if (streetSignSys.meshes) for (const m of streetSignSys.meshes) (m.removeFromParent(), m.geometry.dispose());
+  ((streetSignSys.meshes = []), (streetSignSys.sample = []));
+  const xLines = [],
+    zLines = [];
+  for (let x = x0; x <= x1 + 1; x += pitch) xLines.push(Math.round(x));
+  for (let z = zHigh; z >= zLow - 1; z -= pitch) zLines.push(Math.round(z));
+  const cap = xLines.length * zLines.length + 4;
+  const poleGeo = mergeGeometries(
+    [
+      vcBake(new CylinderGeometry(0.035, 0.045, 2.55, 6), vcAt(0, 1.275, 0), 1590848),
+      vcBake(new CylinderGeometry(0.05, 0.05, 0.06, 6), vcAt(0, 2.58, 0), 2894377),
+    ],
+    !1,
+  );
+  const poles = new InstancedMesh(poleGeo, opaque, cap);
+  // blade = front + back quads (back rotated so text reads correctly both sides)
+  const bladeFront = new PlaneGeometry(0.92, 0.17),
+    bladeBack = new PlaneGeometry(0.92, 0.17);
+  bladeBack.rotateY(Math.PI);
+  const bladeGeo = mergeGeometries([bladeFront, bladeBack], !1);
+  bladeGeo.setAttribute("aSignSlot", new InstancedBufferAttribute(new Float32Array(cap * 2 * 2), 2));
+  const blades = new InstancedMesh(bladeGeo, atlas.mat, cap * 2);
+  const slotAttr = bladeGeo.getAttribute("aSignSlot");
+  for (const im of [poles, blades])
+    ((im.frustumCulled = !1), (im.castShadow = !1), (im.receiveShadow = !0), group.add(im), streetSignSys.meshes.push(im));
+  const dummy = new Object3D();
+  let np = 0,
+    nb = 0;
+  const nameIdx = (isNS, k) => (isNS ? k : xLines.length + k) % 32;
+  for (let xi = 0; xi < xLines.length; xi++)
+    for (let zi = 0; zi < zLines.length; zi++) {
+      const cx = xLines[xi] + sw * 0.66 + 1.5,
+        cz = zLines[zi] + sw * 0.66 + 1.5;
+      if (clearanceAt(cx, cz, 0.5).clearance < 0.7) continue;
+      if (np >= cap || nb + 2 > blades.count) continue;
+      const gy = He(cx, cz) + 0.02;
+      (dummy.position.set(cx, gy, cz), (dummy.rotation.y = 0), dummy.updateMatrix(), poles.setMatrixAt(np++, dummy.matrix));
+      // NS street blade (runs along z → plane faces ±x)
+      const sNS = nameIdx(!0, xi),
+        sEW = nameIdx(!1, zi);
+      (dummy.position.set(cx, gy + 2.4, cz), (dummy.rotation.y = Math.PI / 2), dummy.updateMatrix());
+      (blades.setMatrixAt(nb, dummy.matrix), slotAttr.setXY(nb, (sNS % 8) * 0.125, (3 - ((sNS / 8) | 0)) * 0.25), nb++);
+      (dummy.position.set(cx, gy + 2.56, cz), (dummy.rotation.y = 0), dummy.updateMatrix());
+      (blades.setMatrixAt(nb, dummy.matrix), slotAttr.setXY(nb, (sEW % 8) * 0.125, (3 - ((sEW / 8) | 0)) * 0.25), nb++);
+      streetSignSys.sample.length < 4 &&
+        streetSignSys.sample.push({ x: +cx.toFixed(1), y: +gy.toFixed(2), z: +cz.toFixed(1), ns: STREET_NAMES[sNS], ew: STREET_NAMES[sEW] });
+    }
+  ((poles.count = np), (blades.count = nb), (poles.instanceMatrix.needsUpdate = !0), (blades.instanceMatrix.needsUpdate = !0), (slotAttr.needsUpdate = !0));
+  ((streetSignSys.poles = np), (streetSignSys.blades = nb));
+}
+// ─── WALK / DON'T-WALK pedestrian signals (zoom-detail item 09): small two-face
+// display boxes on the existing signal poles, synced to the same phase function
+// that drives the (already live) red/amber/green lamp heads. Icons are two tiny
+// pooled canvas textures; each face toggles a white walker / orange hand quad.
+const pedSignalMeta = { count: 0, sample: [] };
+// zoom-detail 37: one-lamp-lit signal heads (unlit lenses go dark-glass; the
+// legacy look kept vivid diffuse on all three, reading "all lit" in daylight)
+const signalLampSys = { enabled: !0, heads: 0, states: { g: 0, y: 0, r: 0 }, headsRef: null };
+let pedIconMats = null;
+function buildPedIconMats() {
+  if (pedIconMats) return pedIconMats;
+  const mk = (draw) => {
+    const c = document.createElement("canvas");
+    ((c.width = 64), (c.height = 64));
+    const g = c.getContext("2d");
+    ((g.fillStyle = "#0a0c10"), g.fillRect(0, 0, 64, 64));
+    draw(g);
+    const t = new CanvasTexture(c);
+    t.colorSpace = SRGBColorSpace;
+    // transparent:true opts these quads OUT of mergeStaticScenery() — merged
+    // copies can't toggle .visible per phase (the merge skips transparent mats)
+    return new MeshBasicMaterial({ map: t, transparent: !0 });
+  };
+  const walk = mk((g) => {
+    ((g.fillStyle = "#f4f8ff"), (g.strokeStyle = "#f4f8ff"), (g.lineWidth = 5), (g.lineCap = "round"));
+    (g.beginPath(), g.arc(34, 13, 6, 0, 7), g.fill());
+    (g.beginPath(),
+      g.moveTo(34, 19),
+      g.lineTo(30, 35),
+      g.moveTo(30, 35),
+      g.lineTo(20, 52),
+      g.moveTo(30, 35),
+      g.lineTo(41, 50),
+      g.moveTo(33, 25),
+      g.lineTo(20, 32),
+      g.moveTo(33, 25),
+      g.lineTo(45, 33),
+      g.stroke());
+  });
+  const hand = mk((g) => {
+    g.fillStyle = "#ff7a26";
+    g.fillRect(22, 26, 22, 24);
+    for (let f = 0; f < 4; f++) g.fillRect(22 + f * 5.7, 11, 4.4, 19);
+    g.fillRect(15, 30, 8, 13);
+  });
+  pedIconMats = { walk, hand };
+  return pedIconMats;
 }
 function F1(i, e, t) {
   const { X0: n, X1: s, ZN: r, ZF: a, pitch: o, streetW: c, trafficControls: l = new Map() } = t,
@@ -2102,7 +4547,10 @@ function F1(i, e, t) {
     (qe.trafficCrashes = 0),
     (qe.streetLights = 0),
     (qe.trafficLights = 0),
-    (qe.stopSigns = 0));
+    (qe.stopSigns = 0),
+    plateSys.resetDynamic(),
+    pedKitSys.reset(),
+    taxiSignSys.reset());
   const y = (I) => I[(Math.random() * I.length) | 0],
     E = (I) => (I > 0 ? -1 : 1) * c * 0.23,
     T = (I, ye) => {
@@ -2230,6 +4678,8 @@ function F1(i, e, t) {
       p.push(K),
       Rc.push(K),
       i.add(K.mesh),
+      plateSys.addDynamic(K.mesh, I),
+      Me === "taxi" && taxiSignSys.attach(K.mesh),
       (qe.types[Me] = (qe.types[Me] || 0) + 1));
   }
   function te(I, ye = 0, Me = 0) {
@@ -2296,6 +4746,7 @@ function F1(i, e, t) {
   ((qe.traffic = p.length),
     Bn(i, (I, ye) => {
       for (const Me of p) te(Me, I, ye);
+      plateSys.update();
     }));
   const ne = [14703451, 5217256, 15779915, 6535022, 12284639, 15724527, 15764053],
     X = [2437188, 3092787, 4930093, 2244434],
@@ -2321,7 +4772,7 @@ function F1(i, e, t) {
         x: 0,
         z: 0,
         hitRadius: 0.9,
-        mesh: U1(ne[I % ne.length], X[(I * 2) % X.length]),
+        mesh: U1(ne[I % ne.length], X[(I * 2) % X.length], I),
       };
     (I < 14 &&
       ((be.axis = "ns"),
@@ -2380,6 +4831,17 @@ function F1(i, e, t) {
   ((qe.pedestrians = Q.length),
     Bn(i, (I, ye) => {
       for (const Me of Q) ze(Me, I, ye);
+      pedKitSys.update(ye);
+      storefrontSys.update(ye);
+      birdSys.update(I, ye);
+      steamSys.update(I, ye);
+      parkedKitSys.update(I, ye);
+      ambientSys.update(I, ye);
+      rooftopSys.update(I, ye);
+      roadsideSys.update(I, ye);
+      facadeSys.update(I, ye);
+      roadDecalSys.update(I, ye);
+      newsSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
         Me.userData.life -= ye;
@@ -2564,7 +5026,7 @@ function N1() {
       oe.position.set(j + (Math.random() - 0.5) * o * 0.7, He(j, ee) + 0.66, ee + (Math.random() - 0.5) * o * 0.7),
       i.add(oe));
   }
-  const Q = [As(160, 320, 0.5), As(160, 320, 0.62), As(160, 320, 0.42)],
+  const Q = [As(160, 320, 0.5, 2), As(160, 320, 0.62, 2), As(160, 320, 0.42, 2)],
     ie = [
       new MeshStandardMaterial({
         map: Q[0],
@@ -2594,7 +5056,13 @@ function N1() {
         emissiveIntensity: 0.36,
       }),
     ],
-    de = new BoxGeometry(1, 1, 1),
+    de = new BoxGeometry(1, 1, 1);
+  ((towerTexSys.mats = ie), (towerTexSys.args = [
+    [160, 320, 0.5],
+    [160, 320, 0.62],
+    [160, 320, 0.42],
+  ]), (towerTexSys.hd = 2));
+  const
     pe = [[], [], []],
     ze = [],
     I = [],
@@ -2643,6 +5111,7 @@ function N1() {
           ye.push(w));
       Math.random() < 0.34 && Me.push({ px: N, pz: O, w: Y, d: j, h: ee, gy: re, zSide: Math.random() < 0.5 ? -1 : 1 });
     }
+    ee > 10 && rooftopSys.spots.push({ i: rooftopSys.spots.length, x: N, z: O, top: re + ee + 1.2, w: Y, d: j, h: ee });
     if (ee > 14 && Math.random() < 0.48) {
       const w = Math.random() < 0.5 ? "x" : "z";
       Se.push({ px: N, pz: O, w: Y, d: j, h: ee, gy: re, axis: w, side: Math.random() < 0.5 ? -1 : 1 });
@@ -2768,11 +5237,20 @@ function N1() {
         : (Ce.position.set(N, re + ee * 0.66, O + $ * (j * 0.5 + 0.2)), (Ce.rotation.y = $ < 0 ? Math.PI : 0)),
       i.add(Ce),
       Xi("storefront-sign", Ce.position.x, Ce.position.y, Ce.position.z),
+      storefrontSys.addSpot(
+        se ? N + $ * (Y * 0.5) : N,
+        re,
+        se ? O : O + $ * (j * 0.5),
+        se ? ($ > 0 ? Math.PI / 2 : -Math.PI / 2) : $ < 0 ? Math.PI : 0,
+        se ? j : Y,
+      ),
       Mn.push({ x: N, z: O, hw: Y * 0.5, hd: j * 0.5, maxY: re + ee + 2 }),
       Dt(oe, "brickStorefront"),
       !0
     );
   }
+  storefrontSys.resetSpots();
+  rooftopSys.resetSpots();
   for (let N = t + a / 2; N <= n - a / 2; N += a)
     for (let O = s - a / 2; O >= r + a / 2; O -= a) {
       const Y = Pn(N, O, c * 0.5).clearance;
@@ -2825,6 +5303,9 @@ function N1() {
         }
       }
     }
+  buildStreetFurniture(i, t, n, r, s, a, o, Pn);
+  buildStreetSigns(i, t, n, r, s, a, o, Pn);
+  buildParks(i, t, n, r, s, a, o);
   for (let N = 0; N < 3; N++) {
     if (!pe[N].length) continue;
     const O = new InstancedMesh(de, ie[N], pe[N].length);
@@ -2948,6 +5429,7 @@ function N1() {
     ae = 130,
     Ve = new InstancedMesh(fe, new MeshStandardMaterial({ roughness: 0.42, metalness: 0.36 }), ae),
     VeW = new InstancedMesh(feWheels, new MeshStandardMaterial({ color: 1512727, roughness: 0.9 }), ae);
+  plateSys.resetStatic();
   let Re = 0,
     Je = 0;
   for (; Re < ae && Je < ae * 6;) {
@@ -2969,6 +5451,7 @@ function N1() {
       VeW.setMatrixAt(Re, e.matrix),
       Ve.setColorAt(Re, new Color(le[(Math.random() * le.length) | 0])),
       rideSys.spots.push({ x: O, z: Y, yaw: N ? 0 : -Math.PI / 2, idx: Re, taken: !1 }),
+      plateSys.addStatic(e.matrix, 2.3, Re, rideSys.spots[rideSys.spots.length - 1]),
       Re++);
   }
   ((Ve.count = Re),
@@ -2994,13 +5477,37 @@ function N1() {
           : { green: null, yellow: "ew" };
   }
   function nt() {
+    ((pedSignalMeta.count = 0), (pedSignalMeta.sample.length = 0));
     const N = [],
+      PS = [],
+      pedMats = buildPedIconMats(),
       O = new MeshStandardMaterial({ color: 1120028, roughness: 0.38, metalness: 0.62 }),
       Y = new MeshStandardMaterial({ color: 1382685, roughness: 0.34, metalness: 0.38 }),
       j = A1(),
       ee = new MeshBasicMaterial({ map: j, transparent: !0, side: DoubleSide }),
       oe = new MeshStandardMaterial({ color: 5050642, roughness: 0.48, metalness: 0.12 }),
       re = (se, $) => new MeshStandardMaterial({ color: se, roughness: 0.16, metalness: 0.02, emissive: $, emissiveIntensity: 0.2 }),
+      hoodGeo = new BoxGeometry(0.68, 0.09, 0.46),
+      addPedSignals = (xe, Ce, Ke, rt, wx, wz, wy) => {
+        // hang the display box OFF the pole (pole radius 0.24 — centering it on
+        // the axis buries the faces, same failure family as plates-in-bumpers)
+        const bx = Ke - 0.26,
+          bz = rt - 0.26;
+        const pb = new Mesh(new BoxGeometry(0.3, 0.52, 0.3), Y);
+        (pb.position.set(bx, 2.55, bz), xe.add(pb));
+        const arm = new Mesh(new BoxGeometry(0.34, 0.06, 0.34), Y);
+        (arm.position.set(Ke - 0.13, 2.84, rt - 0.13), xe.add(arm));
+        const mk = (mat) => new Mesh(new PlaneGeometry(0.2, 0.2), mat);
+        const walkA = mk(pedMats.walk),
+          handA = mk(pedMats.hand),
+          walkB = mk(pedMats.walk),
+          handB = mk(pedMats.hand);
+        for (const q of [walkA, handA]) ((q.position.set(bx - 0.16, 2.55, bz)), (q.rotation.y = -Math.PI / 2), xe.add(q));
+        for (const q of [walkB, handB]) ((q.position.set(bx, 2.55, bz - 0.16)), (q.rotation.y = Math.PI), xe.add(q));
+        PS.push({ control: Ce, walkA, handA, walkB, handB, x: wx + bx, y: wy + 2.55, z: wz + bz, walkEW: !1, walkNS: !1 });
+        pedSignalMeta.count++;
+        pedSignalMeta.sample.length < 3 && pedSignalMeta.sample.push({ x: +(wx + bx).toFixed(1), y: +(wy + 2.55).toFixed(2), z: +(wz + bz).toFixed(1) });
+      },
       w = (se, $, me, ue, Ce, Pe) => {
         const xe = new Group(),
           Ke = new Mesh(new BoxGeometry(1.15, 2.85, 0.75), Y);
@@ -3012,11 +5519,13 @@ function N1() {
         for (let ke = 0; ke < 3; ke++) {
           const yt = new Mesh(new SphereGeometry(0.28, 12, 8), ut[ke]);
           (yt.position.set(0, 0.78 - ke * 0.78, -0.42), xe.add(yt));
+          const hd = new Mesh(hoodGeo, Y);
+          (hd.position.set(0, 0.78 - ke * 0.78 + 0.33, -0.5), xe.add(hd));
         }
         (xe.position.set(me, ue, Ce),
           (xe.rotation.y = Pe),
           se.add(xe),
-          N.push({ axis: $, red: rt, yellow: vt, green: Mt, control: se.userData.control }));
+          N.push({ axis: $, red: rt, yellow: vt, green: Mt, control: se.userData.control, _st: "" }));
       },
       U = (se, $, me) => {
         const ue = ge(se, $),
@@ -3038,6 +5547,7 @@ function N1() {
           w(xe, "ns", Ke - o * 0.18, 7.52, -rt, Math.PI),
           w(xe, "ew", Ke, 7.05, rt - o * 1.24, Math.PI / 2),
           w(xe, "ew", -Ke, 7.05, rt - o * 0.18, -Math.PI / 2),
+          addPedSignals(xe, Ce, Ke, rt, se, $, Pe),
           xe.position.set(se, Pe, $),
           xe.traverse((ke) => {
             ((ke.castShadow = !0), (ke.receiveShadow = !0));
@@ -3079,12 +5589,35 @@ function N1() {
       }
     return (
       Bn(i, (se) => {
+        ((signalLampSys.headsRef = N), (signalLampSys.heads = N.length));
+        ((signalLampSys.states.g = 0), (signalLampSys.states.y = 0), (signalLampSys.states.r = 0));
         for (const $ of N) {
-          const me = we($.control, se);
-          (($.red.emissiveIntensity = me.green === $.axis || me.yellow === $.axis ? 0.12 : 2.3),
-            ($.yellow.emissiveIntensity = me.yellow === $.axis ? 2.6 : 0.12),
-            ($.green.emissiveIntensity = me.green === $.axis ? 2.6 : 0.1));
+          const me = we($.control, se),
+            st2 = signalLampSys.enabled ? (me.green === $.axis ? "g" : me.yellow === $.axis ? "y" : "r") : "x";
+          if ((signalLampSys.states[st2] !== void 0 && signalLampSys.states[st2]++, $._st !== st2)) {
+            $._st = st2;
+            if (st2 === "x")
+              (($.red.color.setHex(16724008), $.yellow.color.setHex(16767053), $.green.color.setHex(4521842)),
+                (($.red.emissiveIntensity = 0.12), ($.yellow.emissiveIntensity = 0.12), ($.green.emissiveIntensity = 0.1)));
+            else
+              (($.red.color.setHex(st2 === "r" ? 16724008 : 3017480),
+                $.yellow.color.setHex(st2 === "y" ? 16767053 : 3352072),
+                $.green.color.setHex(st2 === "g" ? 4521842 : 666136)),
+                (($.red.emissiveIntensity = st2 === "r" ? 2.3 : 0),
+                  ($.yellow.emissiveIntensity = st2 === "y" ? 2.6 : 0),
+                  ($.green.emissiveIntensity = st2 === "g" ? 2.6 : 0)));
+          }
         }
+        let walking = 0;
+        for (const P of PS) {
+          const st = we(P.control, se),
+            aW = st.green === "ew",
+            bW = st.green === "ns";
+          ((P.walkA.visible = aW), (P.handA.visible = !aW), (P.walkB.visible = bW), (P.handB.visible = !bW));
+          ((P.walkEW = aW), (P.walkNS = bW));
+          walking += (aW ? 1 : 0) + (bW ? 1 : 0);
+        }
+        ((qe.pedWalkFaces = walking), (ambientSys.signals = PS));
       }),
       { trafficLights: H, stopSigns: z }
     );
@@ -3341,7 +5874,7 @@ function N1() {
     if (Wi(N, O, Y, j, V + ee + 2)) return !1;
     const H = N < 80 ? 1 : -1,
       z = new MeshStandardMaterial({
-        map: As(192, 512, re),
+        map: As(192, 512, re, 2),
         color: oe,
         roughness: 0.24,
         metalness: 0.36,
@@ -3352,7 +5885,7 @@ function N1() {
       se = new Mesh(new BoxGeometry(Y, ee, j), z);
     (se.position.set(N, V + ee / 2, O), (se.castShadow = !1), (se.receiveShadow = !0), i.add(se));
     const $ = new MeshStandardMaterial({
-        map: As(220, 620, Math.min(0.86, re + 0.18)),
+        map: As(220, 620, Math.min(0.86, re + 0.18), 2),
         color: 10481407,
         roughness: 0.12,
         metalness: 0.28,
@@ -3839,6 +6372,92 @@ function z1() {
       T.position.copy(_),
       T.quaternion.copy(v),
       i.add(T));
+  }
+  // zoom-detail 43 (round-five item 7): paddock clutter on the start aprons —
+  // tire stacks, tool carts, fuel drums, cones, pennant bunting. Static
+  // vcBaked single mesh in the same course frame the START gantry uses;
+  // visual-only (raycast-inert, no colliders — same class as lawn trees).
+  {
+    ((paddockSys.clusters = 0), (paddockSys.parts = 0), (paddockSys.sample.length = 0));
+    const pparts = [],
+      pOne = new Vector3(1, 1, 1),
+      prng = plateRng(0x9add0c),
+      tireG = new CylinderGeometry(0.42, 0.42, 0.26, 10),
+      hubG = new CylinderGeometry(0.16, 0.16, 0.27, 8),
+      cartG = new BoxGeometry(0.92, 0.62, 0.56),
+      wheelG = new CylinderGeometry(0.09, 0.09, 0.06, 8).rotateZ(Math.PI / 2),
+      handleG = new BoxGeometry(0.05, 0.72, 0.05).rotateX(-0.5),
+      coneG = new ConeGeometry(0.17, 0.42, 8),
+      drumG = new CylinderGeometry(0.3, 0.3, 0.86, 10),
+      poleG = new CylinderGeometry(0.03, 0.04, 2.3, 6),
+      penG = new CircleGeometry(0.17, 3).rotateZ(Math.PI),
+      PLIFT = 1.15,
+      P = (geo, aM, lx, ly, lz, col, ry = 0) => {
+        const m2 = new Matrix4().makeRotationY(ry);
+        (m2.setPosition(lx, ly + PLIFT, lz), pparts.push(vcBake(geo, new Matrix4().multiplyMatrices(aM, m2), col)));
+      },
+      slabG = new BoxGeometry(5.6, 0.16, 3.6),
+      PEN_COLS = [15021620, 16765778, 2780370, 13684944];
+    for (const cd of [
+      { ds: -9, side: -1, kind: 0 },
+      { ds: -4, side: 1, kind: 1 },
+      { ds: 4, side: 1, kind: 0 },
+      { ds: 9, side: -1, kind: 1 },
+    ]) {
+      const sA = 6 + cd.ds;
+      if (Li(sA)) continue;
+      const a2 = St(sA),
+        b2 = St(sA + l),
+        qq = ui(a2, b2).q,
+        right = new Vector3(1, 0, 0).applyQuaternion(qq),
+        base = a2.p.clone().addScaledVector(right, cd.side * (ce.width * 0.5 + 2.4)),
+        aM = new Matrix4().compose(base, qq, pOne);
+      paddockSys.sample.length < 4 && paddockSys.sample.push({ x: +base.x.toFixed(1), y: +base.y.toFixed(1), z: +base.z.toFixed(1), kind: cd.kind });
+      P(slabG, aM, 0.5, -0.08, 0, 4022096);
+      if (cd.kind === 0) {
+        for (const [tx, tz, n2] of [
+          [-1.1, -0.4, 3],
+          [0, 0.5, 4],
+          [1.0, -0.2, 2],
+        ])
+          for (let t2 = 0; t2 < n2; t2++) {
+            P(tireG, aM, tx + (prng() - 0.5) * 0.09, 0.13 + t2 * 0.26, tz + (prng() - 0.5) * 0.09, 1381400);
+            P(hubG, aM, tx, 0.13 + t2 * 0.26, tz, 6316135);
+          }
+        P(cartG, aM, 2.1, 0.4, 0.3, 9315878, 0.3);
+        for (const [wx, wz] of [
+          [1.75, 0.62],
+          [2.45, 0.62],
+          [1.75, -0.02],
+          [2.45, -0.02],
+        ])
+          P(wheelG, aM, wx, 0.09, wz, 1381400, 0.3);
+        P(handleG, aM, 2.62, 0.62, 0.32, 6316135, 0.3);
+        P(coneG, aM, 0.42, 0.21, 1.45, 14248476);
+        P(coneG, aM, 1.5, 0.21, -1.05, 14248476);
+      } else {
+        P(drumG, aM, -0.82, 0.43, 0, 4886754);
+        P(drumG, aM, -0.14, 0.43, 0.36, 9315878);
+        for (let t2 = 0; t2 < 2; t2++) {
+          P(tireG, aM, 1.05, 0.13 + t2 * 0.26, -0.2, 1381400);
+          P(hubG, aM, 1.05, 0.13 + t2 * 0.26, -0.2, 6316135);
+        }
+        P(poleG, aM, -1.65, 1.15, -1.25, 6316135);
+        P(poleG, aM, 1.85, 1.15, -1.25, 6316135);
+        for (let pn = 0; pn < 8; pn++) {
+          const t3 = (pn + 0.5) / 8,
+            px2 = -1.65 + t3 * 3.5,
+            py2 = 2.12 - Math.sin(t3 * Math.PI) * 0.16;
+          P(penG, aM, px2, py2, -1.25, PEN_COLS[pn % 4]);
+        }
+      }
+      paddockSys.clusters++;
+    }
+    if (pparts.length) {
+      const pm2 = new Mesh(mergeGeometries(pparts, !1), vcMats().opaque);
+      ((pm2.castShadow = !0), (pm2.receiveShadow = !0), (pm2.raycast = () => {}), i.add(pm2), (paddockSys._mesh = pm2), (paddockSys.parts = pparts.length));
+      if (!paddockSys.enabled) pm2.visible = !1;
+    }
   }
   if (d.length) {
     const g = new CylinderGeometry(0.18, 0.24, 3, 6);
@@ -4705,6 +7324,93 @@ const RIVAL_DEFS = [
   { key: "bishop", label: "Bishop", body: 3244268, trim: 1400130, lane: -0.3, base: 92, wave: 9, waveFreq: 0.95 },
   { key: "maddock", label: "Maddock", body: 16770387, trim: 5723991, lane: 0.3, base: 91, wave: 6, waveFreq: 0.5 },
 ];
+// race-number roundels + livery (zoom-detail item 18b): rivals are race cars
+// and they sit ~10m ahead of the player for the whole race — give them door,
+// roof and tail roundels, name strips and twin racing stripes. One merged
+// add-on mesh per car (alphaTest cutouts), one shared atlas, player included.
+const RACE_LIVERY = { crowther: { n: 2, col: 0, trim: 7740696 }, bishop: { n: 5, col: 1, trim: 1400130 }, maddock: { n: 9, col: 2, trim: 5723991 }, you: { n: 7, col: 3, trim: 13120044 } };
+let liveryAtlasTex = null,
+  liveryMat = null;
+function buildLiveryAtlas() {
+  if (liveryMat) return liveryMat;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 512));
+  const g = cv.getContext("2d"),
+    ks = ["crowther", "bishop", "maddock", "you"];
+  g.clearRect(0, 0, 512, 512);
+  for (let c = 0; c < 4; c++) {
+    const x = c * 128,
+      L = RACE_LIVERY[ks[c]];
+    ((g.fillStyle = "#f6f4ec"), g.beginPath(), g.arc(x + 64, 64, 56, 0, 6.29), g.fill());
+    ((g.strokeStyle = "#20242c"), (g.lineWidth = 5), g.beginPath(), g.arc(x + 64, 64, 53, 0, 6.29), g.stroke());
+    ((g.fillStyle = "#16181e"), (g.font = "900 78px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(String(L.n), x + 64, 70);
+    const t = "#" + L.trim.toString(16).padStart(6, "0");
+    ((g.fillStyle = t), g.fillRect(x + 8, 136, 112, 48));
+  }
+  ((g.font = "900 44px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+  const names = ["CROWTHER", "BISHOP", "MADDOCK"];
+  for (let i = 0; i < 3; i++) {
+    const y = 200 + i * 64;
+    ((g.fillStyle = "rgba(246,244,236,0.92)"), g.fillRect(4, y, 248, 56), (g.fillStyle = "#16181e"));
+    g.fillText(names[i], 128, y + 30, 236);
+  }
+  liveryAtlasTex = new CanvasTexture(cv);
+  liveryAtlasTex.colorSpace = SRGBColorSpace;
+  liveryMat = new MeshBasicMaterial({ map: liveryAtlasTex, transparent: !0, alphaTest: 0.3, toneMapped: !1, polygonOffset: !0, polygonOffsetFactor: -2, side: DoubleSide });
+  return liveryMat;
+}
+const _lbb = new Box3(),
+  _lsz = new Vector3(),
+  _lct = new Vector3();
+function _uvCell(geo, u0, v0, u1, v1) {
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, u0 + uv.getX(i) * (u1 - u0), v0 + uv.getY(i) * (v1 - v0));
+  return geo;
+}
+function addRaceLivery(mesh, key) {
+  const L = RACE_LIVERY[key];
+  if (!L || mesh.userData.liveryN) return;
+  const mat = buildLiveryAtlas();
+  (_lbb.setFromObject(mesh), _lbb.getSize(_lsz), _lbb.getCenter(_lct));
+  const cy = _lct.y - mesh.position.y,
+    topY = _lbb.max.y - mesh.position.y,
+    halfW = _lsz.x / 2,
+    rearZ = _lbb.min.z - mesh.position.z, // local +z is the NOSE on these builds
+    u0 = L.col / 4,
+    u1 = (L.col + 1) / 4,
+    rv0 = 1 - 128 / 512,
+    parts = [];
+  // door roundels (both sides)
+  for (const sx of [-1, 1]) {
+    const q = _uvCell(new PlaneGeometry(0.62, 0.62), u0, rv0, u1, 1);
+    (q.rotateY((sx * Math.PI) / 2), q.translate(sx * (halfW + 0.012), cy + 0.12, 0.1), parts.push(q));
+  }
+  // roof + tail roundels (the chase camera stares at these)
+  const roof = _uvCell(new PlaneGeometry(0.72, 0.72), u0, rv0, u1, 1);
+  (roof.rotateX(-Math.PI / 2), roof.translate(0, topY + 0.015, 0.15), parts.push(roof));
+  const tail = _uvCell(new PlaneGeometry(0.5, 0.5), u0, rv0, u1, 1);
+  (tail.rotateY(Math.PI), tail.translate(0, cy + 0.18, rearZ - 0.012), parts.push(tail));
+  // twin racing stripes over the roofline, tinted via the solid trim cell
+  const su0 = L.col / 4 + 0.02,
+    su1 = (L.col + 1) / 4 - 0.02;
+  for (const sx of [-0.24, 0.24]) {
+    const st = _uvCell(new PlaneGeometry(0.2, _lsz.z * 0.55), su0, 1 - 184 / 512, su1, 1 - 140 / 512);
+    (st.rotateX(-Math.PI / 2), st.translate(sx, topY + 0.012, 0), parts.push(st));
+  }
+  // rival name strip above the door roundel
+  if (L.col < 3)
+    for (const sx of [-1, 1]) {
+      const nv0 = 1 - (256 + L.col * 64) / 512,
+        ns = _uvCell(new PlaneGeometry(1.35, 0.3), 8 / 512, nv0, 252 / 512, nv0 + 56 / 512);
+      (ns.rotateY((sx * Math.PI) / 2), ns.translate(sx * (halfW + 0.012), cy + 0.62, 0.1), parts.push(ns));
+    }
+  const add = new Mesh(mergeGeometries(parts, !1), mat);
+  // raycast-invisible: the roof quad rides just above the player car and the
+  // roam physics probes ground/water by raycasting down through the car —
+  // a hit here reads as "ground at roof height" and ponds never drag
+  ((add.raycast = () => {}), (add.castShadow = !1), (add.receiveShadow = !1), mesh.add(add), (mesh.userData.liveryN = L.n));
+}
 const rivals = RIVAL_DEFS.map((d, idx) => ({
   ...d,
   idx,
@@ -4717,13 +7423,16 @@ const rivals = RIVAL_DEFS.map((d, idx) => ({
   progEl: null,
 }));
 const es = rivals[0].mesh;
+for (const r of rivals) addRaceLivery(r.mesh, r.key);
 let cn = CAR_MODELS[carModelIndex].build();
+addRaceLivery(cn, "you");
 function applyCarSelection(idx) {
   ((carModelIndex = MathUtils.clamp(idx, 0, CAR_MODELS.length - 1)),
     localStorage.setItem("steel-ribbon-carmodel", String(carModelIndex)));
   const wasVisible = cn.visible;
   Po(cn);
   ((cn = CAR_MODELS[carModelIndex].build()), (cn.visible = wasVisible));
+  addRaceLivery(cn, "you");
   typeof refreshCarUI == "function" && refreshCarUI();
 }
 for (const r of rivals) ((r.mesh.visible = !1), et.add(r.mesh));
@@ -4870,6 +7579,7 @@ function buildGuardrails(parent) {
   }
   ((postIM.count = postCount), (postIM.instanceMatrix.needsUpdate = !0), parent.add(postIM));
   ((qe.railRuns = railRuns), (qe.railPosts = postCount));
+  roadsideSys.buildStations();
 }
 function buildTrackGear() {
   ((boostPads.length = 0), (gapBeaconMats.length = 0));
@@ -5350,6 +8060,28 @@ function buildStuntRamps() {
 buildStuntRamps();
 // ─── Ambient propeller planes: low-poly single-props cruising over the map with a
 // gentle bank and visibly spinning propellers. Pure scenery. ───
+// aerial ad banners towed behind the prop planes (zoom-detail item 13):
+// fictional, world-consistent copy — big unlit lettering so it reads from the
+// ribbon deck ~105m below the lanes. Back face mirrors like real fabric.
+const PLANE_BANNERS = ["RIBBON CUP SUNDAY", "FLY ZEPHYR AIRWAYS", "PIXEL PAWN PAYS BEST", "SKYLINE PIER IS OPEN"];
+const propPlaneMeta = [];
+function buildPlaneBannerAtlas() {
+  const cv = document.createElement("canvas");
+  ((cv.width = 1024), (cv.height = 512));
+  const g = cv.getContext("2d");
+  for (let r = 0; r < 4; r++) {
+    const y = r * 128;
+    ((g.fillStyle = "#e8b93a"), g.fillRect(0, y, 1024, 128));
+    ((g.fillStyle = "#232a3d"), g.fillRect(0, y, 16, 128), g.fillRect(1008, y, 16, 128));
+    ((g.fillStyle = "#16181f"), (g.font = "900 96px sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+    g.fillText(PLANE_BANNERS[r], 512, y + 66, 950);
+    g.fillStyle = "#6f6a58";
+    for (const gx of [38, 986]) for (const gy of [y + 18, y + 110]) (g.beginPath(), g.arc(gx, gy, 6, 0, 6.29), g.fill());
+  }
+  const tex = new CanvasTexture(cv);
+  tex.colorSpace = SRGBColorSpace;
+  return tex;
+}
 function buildPropPlanes() {
   const lanes = [
     { z: -220, alt: 170, dir: 1, speed: 30, color: 16733525 },
@@ -5357,6 +8089,9 @@ function buildPropPlanes() {
     { z: -1150, alt: 190, dir: 1, speed: 34, color: 9096933 },
     { z: 120, alt: 240, dir: -1, speed: 24, color: 5817343 },
   ];
+  const bannerAtlas = buildPlaneBannerAtlas(),
+    bannerMat = new MeshBasicMaterial({ map: bannerAtlas, side: DoubleSide, toneMapped: !1 }),
+    laneIdxRef = { i: 0 };
   qe.propPlanes = 0;
   for (const lane of lanes) {
     const plane = new Group(),
@@ -5379,6 +8114,16 @@ function buildPropPlanes() {
       b1 = new Mesh(bladeGeo, darkMat),
       b2 = new Mesh(bladeGeo, darkMat);
     ((b2.rotation.z = Math.PI / 2), prop.add(b1), prop.add(b2), (prop.position.z = -5.75), plane.add(prop));
+    // towed ad banner: rope + one double-sided quad reading its atlas row
+    const laneIdx = laneIdxRef.i++;
+    const bGeo = new PlaneGeometry(12, 2.5),
+      bUv = bGeo.attributes.uv;
+    for (let vi = 0; vi < bUv.count; vi++) bUv.setXY(vi, bUv.getX(vi), 1 - (laneIdx + (1 - bUv.getY(vi))) / 4);
+    const banner = new Mesh(bGeo, bannerMat);
+    ((banner.rotation.y = Math.PI / 2), banner.position.set(0, -0.4, 10), plane.add(banner));
+    const rope = new Mesh(new BoxGeometry(0.05, 0.05, 1.6), darkMat);
+    (rope.position.set(0, -0.1, 3.9), plane.add(rope));
+    propPlaneMeta.push({ plane, text: PLANE_BANNERS[laneIdx], alt: lane.alt });
     plane.traverse((o) => ((o.castShadow = !1), (o.receiveShadow = !1)));
     plane.scale.setScalar(2.6);
     ((plane.rotation.y = lane.dir > 0 ? -Math.PI / 2 : Math.PI / 2),
@@ -8085,6 +10830,97 @@ window.__steelRibbonDebug = {
       hoop: r.hoop ? { x: +r.hoop.x.toFixed(1), y: +r.hoop.y.toFixed(1), z: +r.hoop.z.toFixed(1), r: r.hoop.r } : null,
     }));
   },
+  parkedKitEnable(on) {
+    parkedKitSys.enabled = !!on;
+    return parkedKitSys.enabled;
+  },
+  ambientEnable(on) {
+    ambientSys.enabled = !!on;
+    return ambientSys.enabled;
+  },
+  rooftopEnable(on) {
+    rooftopSys.enabled = !!on;
+    return rooftopSys.enabled;
+  },
+  roadsideEnable(on) {
+    roadsideSys.enabled = !!on;
+    return roadsideSys.enabled;
+  },
+  facadeEnable(on) {
+    facadeSys.enabled = !!on;
+    return facadeSys.enabled;
+  },
+  roadDecalEnable(on) {
+    roadDecalSys.enabled = !!on;
+    return roadDecalSys.enabled;
+  },
+  newsEnable(on) {
+    newsSys.enabled = !!on;
+    return newsSys.enabled;
+  },
+  signalLampsEnable(on) {
+    signalLampSys.enabled = on !== !1;
+    return signalLampSys.enabled;
+  },
+  parksEnable(on) {
+    parkSys.enabled = !!on;
+    for (const m of parkSys._vis) m.visible = parkSys.enabled;
+    return parkSys.enabled;
+  },
+  paddockEnable(on) {
+    paddockSys.enabled = !!on;
+    paddockSys._mesh && (paddockSys._mesh.visible = paddockSys.enabled);
+    return paddockSys.enabled;
+  },
+  windowTexHD(on) {
+    if (!towerTexSys.mats) return null;
+    const hd = on === !1 ? 1 : 2;
+    if (hd !== towerTexSys.hd) {
+      towerTexSys.hd = hd;
+      towerTexSys.mats.forEach((m, k) => {
+        const a = towerTexSys.args[k],
+          tex = As(a[0], a[1], a[2], hd);
+        (m.map && m.map.dispose(), (m.map = tex), (m.emissiveMap = tex), (m.needsUpdate = !0));
+      });
+    }
+    return { hd: towerTexSys.hd, size: towerTexSys.mats[0].map.image.width };
+  },
+  signalHeadStates() {
+    const heads = signalLampSys.headsRef || [];
+    return {
+      heads: heads.length,
+      enabled: signalLampSys.enabled,
+      states: { ...signalLampSys.states },
+      sample: heads.slice(0, 6).map(($) => ({ axis: $.axis, st: $._st })),
+    };
+  },
+  __nearestTraffic(skipBus) {
+    let best = null;
+    for (const a of Rc) {
+      if (!a.mesh || !a.mesh.visible) continue;
+      if (skipBus && a.mesh.userData.bus) continue;
+      const d = Math.hypot(a.mesh.position.x - Xe.position.x, a.mesh.position.z - Xe.position.z);
+      (!best || d < best.d) && (best = { d: +d.toFixed(1), x: +a.mesh.position.x.toFixed(1), z: +a.mesh.position.z.toFixed(1), type: a.type });
+    }
+    return best;
+  },
+  camWorld() {
+    return { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) };
+  },
+  __BasicMat: MeshBasicMaterial,
+  parkedKitDump() {
+    if (!parkedKitSys.kits) return null;
+    const v = new Vector3();
+    return parkedKitSys.kits.map((k) => ({
+      idx: k.idx,
+      visible: k.g.visible,
+      pos: { x: +k.g.position.x.toFixed(2), y: +k.g.position.y.toFixed(2), z: +k.g.position.z.toFixed(2) },
+      kids: k.g.children.map((o, i) => {
+        o.getWorldPosition(v);
+        return { i, type: o.type, vis: o.visible, x: +v.x.toFixed(2), y: +v.y.toFixed(2), z: +v.z.toFixed(2) };
+      }),
+    }));
+  },
   nearestParkedSpot(x, z) {
     let best = null;
     for (const s of rideSys.spots) {
@@ -8122,6 +10958,143 @@ window.__steelRibbonDebug = {
   },
   stats() {
     return { trafficCrashes: qe.trafficCrashes, splats: qe.splats, roamPos: { x: +u.roamPos.x.toFixed(1), y: +u.roamPos.y.toFixed(1), z: +u.roamPos.z.toFixed(1) }, speed: +u.speed.toFixed(2), cooldown: +u.collisionCooldown.toFixed(2) };
+  },
+  spawnBirds(x, z) {
+    return (birdSys.spawn(x, z), { active: birdSys.active, count: birdSys.birds.length });
+  },
+  detailReport() {
+    return {
+      plates: plateSys.mesh
+        ? {
+            atlasSlots: 64,
+            traffic: plateSys.dynamics.length,
+            parked: plateSys.statics.length,
+            uniqueTexts: new Set(plateSys.texts).size,
+            sample: plateSys.texts.slice(0, 5),
+          }
+        : null,
+      drivers: {
+        cars: Rc.length,
+        withDriver: Rc.reduce((n, c) => n + (c.mesh?.userData?.hasDriver ? 1 : 0), 0),
+      },
+      taxis: {
+        count: Rc.reduce((n, c) => n + (c.type === "taxi" ? 1 : 0), 0),
+        signed: taxiSignSys.count(),
+      },
+      storefronts: {
+        spots: storefrontSys.spots.length,
+        dressed: storefrontSys.dressedCount(),
+        pool: storefrontSys.pool,
+        sample: storefrontSys.spots.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), yaw: +s.yaw.toFixed(2), w: +s.w.toFixed(1) })),
+      },
+      furniture: { ...furnitureSys.counts, sample: furnitureSys.sample.slice(0, 4) },
+      streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
+      pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
+      signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
+      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
+      paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
+      birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
+      steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
+      parked: {
+        spots: rideSys.spots.length,
+        promoted: parkedKitSys.promoted,
+        racks: parkedKitSys.racks,
+        grime: parkedKitSys.grimeN,
+        dents: parkedKitSys.dents,
+        antennas: parkedKitSys.antennas,
+        radius: parkedKitSys.RADIUS,
+        glassVerts: parkedKitSys._glassGeo ? parkedKitSys._glassGeo.attributes.position.count : 0,
+        lampVerts: parkedKitSys._lampGeo ? parkedKitSys._lampGeo.attributes.position.count : 0,
+        sample: parkedKitSys.sample.slice(0, 3),
+      },
+      news: {
+        spots: newsSys.spots.length,
+        promoted: newsSys.promoted,
+        pool: newsSys.kits ? newsSys.kits.length : 0,
+        sample: newsSys.sample.slice(0, 2),
+        stations: newsSys.spots.slice(0, 2).map((sp) => ({ i: sp.i, x: sp.x, z: sp.z })),
+      },
+      roadDecals: {
+        spots: roadDecalSys.spots.length,
+        placed: roadDecalSys.placed,
+        visible: roadDecalSys.mesh ? roadDecalSys.mesh.visible : !1,
+        sample: roadDecalSys.sample.slice(0, 3),
+        stations: [0, 1, 2, 3].map((v) => roadDecalSys.spots.find((s2) => s2.v === v)).filter(Boolean).map((s2) => ({ i: s2.i, x: s2.x, z: s2.z, v: s2.v })),
+      },
+      facades: {
+        eligible: rooftopSys.spots.reduce((n, sp) => n + (Math.min(sp.w, sp.d) >= 12 ? 1 : 0), 0),
+        promoted: facadeSys.promoted,
+        pool: facadeSys.kits ? facadeSys.kits.length : 0,
+        radius: facadeSys.RADIUS,
+        sample: facadeSys.sample.slice(0, 3),
+      },
+      livery: {
+        rivals: rivals.map((r) => ({ key: r.key, n: r.mesh.userData.liveryN ?? 0, x: +r.mesh.position.x.toFixed(1), y: +r.mesh.position.y.toFixed(1), z: +r.mesh.position.z.toFixed(1), visible: r.mesh.visible })),
+        player: cn.userData.liveryN ?? 0,
+      },
+      roadside: {
+        spots: roadsideSys.spots.length,
+        promoted: roadsideSys.promoted,
+        pool: roadsideSys.kits ? roadsideSys.kits.length : 0,
+        radius: roadsideSys.RADIUS,
+        sample: roadsideSys.sample.slice(0, 3),
+        stations: roadsideSys.spots.slice(0, 3).map((s) => ({ i: s.i, x: +s.x.toFixed(1), y: +s.y.toFixed(1), z: +s.z.toFixed(1), v: s.v })),
+      },
+      rooftops: {
+        spots: rooftopSys.spots.length,
+        promoted: rooftopSys.promoted,
+        pool: rooftopSys.kits ? rooftopSys.kits.length : 0,
+        radius: rooftopSys.RADIUS,
+        pigeons: rooftopSys.PIGEONS,
+        sample: rooftopSys.sample.slice(0, 3),
+        tall: rooftopSys.spots
+          .slice()
+          .sort((a, b) => b.top - a.top)
+          .slice(0, 5)
+          .map((s) => ({ x: +s.x.toFixed(1), z: +s.z.toFixed(1), top: +s.top.toFixed(1), w: +s.w.toFixed(0) })),
+      },
+      planes: {
+        count: propPlaneMeta.length,
+        banners: propPlaneMeta.map((p) => p.text),
+        sample: propPlaneMeta.slice(0, 4).map((p) => ({ x: +p.plane.position.x.toFixed(1), y: +p.plane.position.y.toFixed(1), z: +p.plane.position.z.toFixed(1), text: p.text })),
+      },
+      ambient: {
+        ready: !!ambientSys.nodes,
+        ctxState: ambientSys.nodes ? ambientSys.nodes.ctx.state : null,
+        enabled: ambientSys.enabled,
+        signals: ambientSys.signals ? ambientSys.signals.length : 0,
+        ticksActive: ambientSys.ticksActive,
+        tickCount: ambientSys.tickCount,
+        chirpCount: ambientSys.chirpCount,
+        levels: { ...ambientSys.levels },
+      },
+      crowd: {
+        stands: crowdSys.stands.length,
+        promoted: crowdSys.active >= 0 ? 1 : 0,
+        figures: crowdSys.active >= 0 ? crowdSys.figures : 0,
+        sample: crowdSys.stands.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), z: +s.z.toFixed(1), gy: +s.gy.toFixed(1), w: +s.w.toFixed(0) })),
+      },
+      peds: {
+        pool: pedKitSys.pool,
+        promoted: pedKitSys.promotedCount(),
+        texting: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.texting ? 1 : 0), 0),
+        bags: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "bag" ? 1 : 0), 0),
+        cups: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "cup" ? 1 : 0), 0),
+        dogs: (pedKitSys.kits || []).reduce((n, k) => n + (k.ped && k.prop === "dog" ? 1 : 0), 0),
+        radius: PED_KIT_RADIUS,
+        sample: (pedKitSys.kits || [])
+          .filter((k) => k.ped)
+          .slice(0, 3)
+          .map((k) => {
+            const o = { x: +k.ped.x.toFixed(1), y: +k.ped.mesh.position.y.toFixed(2), z: +k.ped.z.toFixed(1), axis: k.ped.axis, dir: k.ped.dir, t: k.texting ? 1 : 0, p: k.prop, tilt: +k.face.rotation.x.toFixed(2) };
+            if (k.texting) {
+              const pv = k.phone.getWorldPosition(new Vector3());
+              o.phone = { x: +pv.x.toFixed(2), y: +pv.y.toFixed(2), z: +pv.z.toFixed(2) };
+            }
+            return o;
+          }),
+      },
+    };
   },
   viewInfo() {
     const i = St(u.s),
@@ -10150,3 +13123,419 @@ u.lastSafeDistance = u.totalDistance;
 dl(0.016);
 vr();
 nu();
+
+// ─── Photo mode (zoom-detail item 11): orbit the camera around the car to savor
+// the near-tier detail. O key or the 📷 button toggles; drag orbits, wheel/pinch
+// dollies. Rides the __freeCam override — the promotion systems key on camera
+// position, so plates/faces/chats/crowds resolve around wherever you point it.
+const photoRig = {
+  active: !1,
+  yaw: 0.6,
+  pitch: 0.32,
+  radius: 9,
+  target: new Vector3(),
+  entryMode: null,
+  _drag: null,
+  _pinch: 0,
+};
+window.__photoRig = photoRig;
+const photoBtn = document.createElement("button");
+((photoBtn.id = "photoBtn"), (photoBtn.type = "button"), (photoBtn.textContent = "📷"));
+photoBtn.style.cssText =
+  "position:fixed;right:12px;bottom:96px;z-index:30;font-size:20px;padding:6px 10px;background:rgba(10,14,22,0.72);color:#cfe6ff;border:1px solid rgba(140,180,220,0.35);border-radius:10px;display:none;cursor:pointer;";
+document.body.appendChild(photoBtn);
+const photoHint = document.createElement("div");
+photoHint.textContent = "PHOTO MODE — drag to orbit · scroll/pinch to zoom · O or 📷 to exit";
+photoHint.style.cssText =
+  "position:fixed;top:64px;left:50%;transform:translateX(-50%);z-index:30;font:600 12px/1.4 system-ui,sans-serif;color:#dff0ff;background:rgba(8,12,20,0.62);padding:6px 12px;border-radius:8px;display:none;pointer-events:none;letter-spacing:0.04em;";
+document.body.appendChild(photoHint);
+function photoModeSet(on) {
+  if (on === photoRig.active) return;
+  if (on) {
+    if (!(u.mode === "race" || u.mode === "roam" || u.mode === "paused")) return;
+    photoRig.entryMode = u.mode;
+    u.mode === "roam"
+      ? photoRig.target.set(u.roamPos.x, u.roamPos.y + 1.1, u.roamPos.z)
+      : (cn.getWorldPosition(photoRig.target), (photoRig.target.y += 1.0));
+    photoRig.minR = u.mode === "roam" && u.vehicle === "foot" ? 2.2 : 5.4;
+    ((photoRig.pitch = 0.3), (photoRig.radius = 9), (photoRig.active = !0), (window.__freeCam = !0));
+    ((photoHint.style.display = "block"), (photoBtn.textContent = "✕"));
+  } else {
+    ((photoRig.active = !1), (window.__freeCam = !1));
+    ((photoHint.style.display = "none"), (photoBtn.textContent = "📷"));
+  }
+}
+photoBtn.addEventListener("click", (ev) => {
+  (ev.stopPropagation(), photoModeSet(!photoRig.active));
+});
+window.addEventListener("keydown", (ev) => {
+  ev.code === "KeyO" && photoModeSet(!photoRig.active);
+});
+window.addEventListener("pointerdown", (ev) => {
+  photoRig.active && ev.target === Lr && (photoRig._drag = { x: ev.clientX, y: ev.clientY });
+});
+window.addEventListener("pointermove", (ev) => {
+  if (!photoRig.active || !photoRig._drag) return;
+  const dx = ev.clientX - photoRig._drag.x,
+    dy = ev.clientY - photoRig._drag.y;
+  photoRig._drag = { x: ev.clientX, y: ev.clientY };
+  photoRig.yaw -= dx * 0.005;
+  photoRig.pitch = MathUtils.clamp(photoRig.pitch + dy * 0.004, -0.15, 1.25);
+});
+window.addEventListener("pointerup", () => (photoRig._drag = null));
+window.addEventListener(
+  "wheel",
+  (ev) => {
+    photoRig.active && (photoRig.radius = MathUtils.clamp(photoRig.radius * (1 + Math.sign(ev.deltaY) * 0.12), photoRig.minR ?? 2.2, 70));
+  },
+  { passive: !0 },
+);
+window.addEventListener(
+  "touchmove",
+  (ev) => {
+    if (!photoRig.active || ev.touches.length !== 2) return;
+    const d = Math.hypot(ev.touches[0].clientX - ev.touches[1].clientX, ev.touches[0].clientY - ev.touches[1].clientY);
+    (photoRig._pinch > 0 && (photoRig.radius = MathUtils.clamp(photoRig.radius * (photoRig._pinch / d), photoRig.minR ?? 2.2, 70)),
+      (photoRig._pinch = d));
+  },
+  { passive: !0 },
+);
+window.addEventListener("touchend", () => (photoRig._pinch = 0));
+setInterval(() => {
+  photoBtn.style.display = u.mode === "race" || u.mode === "roam" || u.mode === "paused" ? "block" : "none";
+}, 800);
+{
+  const photoAnchor = new Object3D();
+  et.add(photoAnchor);
+  Bn(photoAnchor, () => {
+    if (!photoRig.active) return;
+    if (u.mode !== photoRig.entryMode) {
+      photoModeSet(!1);
+      return;
+    }
+    const r = Math.max(photoRig.minR ?? 2.2, photoRig.radius),
+      cp = Math.cos(photoRig.pitch);
+    Xe.position.set(
+      photoRig.target.x + Math.sin(photoRig.yaw) * cp * r,
+      photoRig.target.y + Math.sin(photoRig.pitch) * r,
+      photoRig.target.z + Math.cos(photoRig.yaw) * cp * r,
+    );
+    Xe.lookAt(photoRig.target);
+    window.__freeCam = !0;
+  });
+}
+window.__steelRibbonDebug.photoMode = function (on) {
+  photoModeSet(on ?? !photoRig.active);
+  return {
+    active: photoRig.active,
+    radius: photoRig.radius,
+    yaw: +photoRig.yaw.toFixed(2),
+    cam: { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) },
+  };
+};
+// ─── Ped inspect (zoom-detail round 3): click a pedestrian in roam and the
+// camera glides to them while a thought bubble shows what they're doing,
+// thinking or reading. Personas are seeded by the ped's Rr index, so the
+// same person keeps their name, dog and chat all session. ───
+const PED_NAMES = ["MARGO", "FELIX", "JUNIPER", "OTTO", "WREN", "CASSIA", "BRUNO", "POPPY", "EZRA", "LOTTIE", "GUS", "MIRA", "THEO", "SAGE", "NELL", "REMY", "IVY", "COLE", "FERN", "BASIL", "OPAL", "HUGO", "DOT", "ASH"];
+const DOG_NAMES = ["BISCUIT", "PICKLE", "NOODLE", "WAFFLE", "MOCHI", "PEPPER", "BEAN", "ZIGGY"];
+const INSPECT_THOUGHTS = {
+  bag: ["Got the last one at Pixel Pawn.", "Should have bought two, honestly.", "This bag weighs a metric ton.", "Wait till they see this at home."],
+  cup: ["Triple shot kind of day.", "Do not spill. Do not spill.", "The Neon Diner does it better, but shhh.", "Warm hands, warm heart."],
+  dog: ["{DOG} found a smell. Could be a while.", "Who is a good {DOG}? You are.", "{DOG} barks at every race car. Every single one.", "One more block, then treats."],
+  walk: ["Nice night for a walk.", "Was that car doing two hundred?!", "I never get tired of this skyline.", "Gate 8 looked extra glowy tonight."],
+};
+// zoom-detail 38: inspect extends to cars, dogs and marshals — same rig, a
+// kind dimension picks persona, camera framing and alive-checks per subject.
+const CAR_RADIO = [
+  "Tuned to 88.7 The Ribbon. All synth, all night.",
+  "Caller nine wins pit passes. I am ALWAYS caller nine.",
+  "Traffic report says I am the traffic.",
+  "This song again? ...turns it up anyway.",
+];
+const CAR_ERRANDS = [
+  "Birthday cake on the back seat. No sudden brakes.",
+  "Left the oven off. Pretty sure. Mostly sure.",
+  "New wiper blades today. Living the dream.",
+  "Shortcut? I know a guy who knows a shortcut.",
+];
+const TAXI_LINES = [
+  "Fare to the stadium — tip is looking promising.",
+  "Two hundred laps of this city and I still love the skyline.",
+  "The meter is fair. The meter is always fair.",
+  "Airport run at nine. Plenty of time. Probably.",
+];
+const BUS_LINES = [
+  "Two minutes ahead of schedule. Do not tell dispatch.",
+  "Crosstown 14: every stop, every time, no exceptions.",
+  "Someone left an umbrella again. Third one this week.",
+  "Smooth stops tonight. The passengers applaud. Inwardly.",
+];
+const DOG_THOUGHTS = [
+  "Seven hydrants today. A personal record.",
+  "The human walks slow, but I love them anyway.",
+  "That pigeon knows exactly what it did.",
+  "Treats are statistically imminent. I can feel it.",
+];
+const MARSHAL_LINES = [
+  "Blue flag ready — someone is about to get lapped.",
+  "Best seat on the whole ribbon, honestly.",
+  "Sector clear. Beautiful racing out there tonight.",
+  "Radio check every lap. The crackle means it works.",
+];
+const inspectRig = { active: !1, actor: null, idx: -1, kind: "ped", persona: null, entryPos: new Vector3(), _look: new Vector3() };
+const inspectBubble = document.createElement("div");
+inspectBubble.style.cssText =
+  "position:fixed;z-index:31;display:none;max-width:270px;background:rgba(250,250,246,0.96);color:#1c2028;font:600 13px/1.45 system-ui,sans-serif;padding:9px 12px;border-radius:12px;pointer-events:none;box-shadow:0 4px 18px rgba(0,0,0,0.35);transform:translate(-50%,-112%);";
+document.body.appendChild(inspectBubble);
+const inspectCard = document.createElement("div");
+inspectCard.style.cssText =
+  "position:fixed;left:12px;bottom:96px;z-index:31;display:none;background:rgba(8,12,20,0.78);color:#dff0ff;font:600 13px/1.5 system-ui,sans-serif;padding:9px 13px;border-radius:10px;border:1px solid rgba(140,180,220,0.3);letter-spacing:0.03em;pointer-events:none;";
+document.body.appendChild(inspectCard);
+function pedPersona(idx) {
+  const prop = ["text", "bag", "cup", "dog"][idx % 4],
+    name = PED_NAMES[idx % PED_NAMES.length],
+    dog = DOG_NAMES[idx % DOG_NAMES.length];
+  let activity, thought;
+  if (prop === "text") {
+    const chat = PED_CHATS[idx % 8 % PED_CHATS.length];
+    activity = "texting a friend";
+    thought = chat.map(([line, who]) => (who === "me" ? "▸ " : "  ") + line).join("\n");
+  } else if (prop === "dog") {
+    activity = "walking " + dog.charAt(0) + dog.slice(1).toLowerCase();
+    thought = INSPECT_THOUGHTS.dog[idx % 4].replaceAll("{DOG}", dog.charAt(0) + dog.slice(1).toLowerCase());
+  } else if (prop === "bag") {
+    ((activity = "hauling shopping"), (thought = INSPECT_THOUGHTS.bag[idx % 4]));
+  } else ((activity = "on a coffee run"), (thought = INSPECT_THOUGHTS.cup[idx % 4]));
+  return { name, prop, activity, thought };
+}
+function carPlateText(mesh) {
+  const d = plateSys.dynamics.find((q) => q.carMesh === mesh);
+  return d && plateSys.texts ? plateSys.texts[d.slot % plateSys.texts.length] : null;
+}
+function carPersona(car, i) {
+  const name = PED_NAMES[(i * 7 + 3) % PED_NAMES.length],
+    plate = carPlateText(car.mesh),
+    bus = !!car.mesh.userData.bus,
+    taxi = car.type === "taxi";
+  const activity = bus ? "driving the Crosstown 14" : taxi ? "on shift" + (plate ? ", cab " + plate : "") : "out for a drive";
+  const thought = bus ? BUS_LINES[i % 4] : taxi ? TAXI_LINES[i % 4] : (i % 2 ? CAR_RADIO : CAR_ERRANDS)[(i >> 1) % 4];
+  return { name, prop: bus ? "bus" : taxi ? "taxi" : "car", activity, thought, plate };
+}
+function dogPersona(idx) {
+  const dog = DOG_NAMES[idx % DOG_NAMES.length];
+  return { name: dog, prop: "dog", activity: "being a very good dog", thought: DOG_THOUGHTS[idx % 4], plate: null };
+}
+function marshalPersona(si) {
+  const name = PED_NAMES[(si * 5 + 11) % PED_NAMES.length];
+  return { name, prop: "marshal", activity: "flag marshal, station " + ((si % 14) + 1), thought: MARSHAL_LINES[si % 4], plate: null };
+}
+const _insW = new Vector3();
+// One framing table for enter-snap, the follow tick and the bubble: head
+// point, forward x/z, camera standoff/side/height and bubble lift per kind.
+function inspectSubject(kind, a) {
+  if (kind === "car") {
+    const m = a.mesh,
+      bus = !!m.userData.bus;
+    _insW.set(0, 0, 1).applyQuaternion(m.quaternion);
+    return { hx: m.position.x, hy: m.position.y + (bus ? 1.9 : 1.0), hz: m.position.z, fx: _insW.x, fz: _insW.z, off: bus ? 7.2 : 4.6, side: 1.7, ty: 0.55, drop: 0.35, lift: bus ? 1.0 : 0.8 };
+  }
+  if (kind === "dog") {
+    a.dog.getWorldPosition(_insW);
+    const w = a.ped.mesh;
+    return { hx: _insW.x, hy: _insW.y + 0.42, hz: _insW.z, fx: -Math.sin(w.rotation.y), fz: -Math.cos(w.rotation.y), off: 1.7, side: 0.6, ty: 0.12, drop: 0.05, lift: 0.35 };
+  }
+  if (kind === "marshal") {
+    // frame from the viewer's approach side — a fixed forward vector can point
+    // straight into the deck rim wall and bury the camera in the platform
+    const g = a.g,
+      dx = Xe.position.x - g.position.x,
+      dz = Xe.position.z - g.position.z,
+      L = Math.hypot(dx, dz) || 1;
+    return { hx: g.position.x, hy: g.position.y + roadsideSys.LIFT + 1.45, hz: g.position.z, fx: dx / L, fz: dz / L, off: 3.1, side: 0.4, ty: 0.6, drop: 0.25, lift: 0.5 };
+  }
+  const m = a.mesh;
+  return { hx: m.position.x, hy: m.position.y + 1.62, hz: m.position.z, fx: -Math.sin(m.rotation.y), fz: -Math.cos(m.rotation.y), off: 2.5, side: 0.95, ty: 0.25, drop: 0.15, lift: 0.42 };
+}
+function inspectAlive(kind, a) {
+  if (kind === "car") return !!(a.mesh && a.mesh.visible);
+  if (kind === "dog") return !!(a.ped && a.prop === "dog" && a.ped.active && a.ped.mesh.visible);
+  if (kind === "marshal") return !!(a.g && a.g.visible && a.idx >= 0);
+  return !!(a.active && a.mesh.visible);
+}
+function inspectExit() {
+  if (!inspectRig.active) return;
+  ((inspectRig.active = !1), (inspectRig.actor = null), (window.__freeCam = !1));
+  ((inspectBubble.style.display = "none"), (inspectCard.style.display = "none"));
+}
+function inspectEnter(actor, idx, kind = "ped") {
+  if (photoRig.active || u.mode !== "roam") return !1;
+  const persona = kind === "car" ? carPersona(actor, idx) : kind === "dog" ? dogPersona(idx) : kind === "marshal" ? marshalPersona(idx) : pedPersona(idx);
+  ((inspectRig.actor = actor), (inspectRig.idx = idx), (inspectRig.kind = kind), (inspectRig.persona = persona), (inspectRig.active = !0));
+  inspectRig.entryPos.copy(u.roamPos);
+  const s0 = inspectSubject(kind, actor);
+  inspectRig._look.set(s0.hx, s0.hy - s0.drop, s0.hz);
+  const pp = inspectRig.persona;
+  inspectCard.innerHTML =
+    "\uD83D\uDC41 <b>" +
+    pp.name +
+    "</b> \u00B7 " +
+    pp.activity +
+    (pp.plate && pp.prop !== "taxi" ? ' \u00B7 <span style="background:#e8e4d8;color:#222;padding:1px 6px;border-radius:3px;font-family:monospace">' + pp.plate + "</span>" : "") +
+    " &nbsp;\u2014&nbsp; click away or Esc to close";
+  ((inspectBubble.textContent = pp.thought), (inspectBubble.style.whiteSpace = "pre-line"));
+  ((inspectBubble.style.display = "block"), (inspectCard.style.display = "block"), (window.__freeCam = !0));
+  return !0;
+}
+function inspectNearestPed(maxDist = 60) {
+  let best = null;
+  for (let i = 0; i < Rr.length; i++) {
+    const a = Rr[i];
+    if (!a.active || !a.mesh.visible) continue;
+    const d = Math.hypot(a.x - Xe.position.x, a.z - Xe.position.z);
+    (!best || d < best.d) && (best = { a, i, d });
+  }
+  return best && best.d <= maxDist ? best : null;
+}
+const _insV = new Vector3();
+function inspectScreenPick(px, py) {
+  const rect = Lr.getBoundingClientRect(),
+    cx = Xe.position.x,
+    cz = Xe.position.z;
+  let best = null;
+  const consider = (kind, a, i, wx, wy, wz, maxD, acc) => {
+    if (i < 0 || Math.hypot(wx - cx, wz - cz) > maxD) return;
+    _insV.set(wx, wy, wz).project(Xe);
+    if (_insV.z > 1) return;
+    const sx = rect.left + ((_insV.x + 1) / 2) * rect.width,
+      sy = rect.top + ((1 - _insV.y) / 2) * rect.height,
+      dPx = Math.hypot(sx - px, sy - py);
+    dPx <= acc && (!best || dPx < best.dPx) && (best = { kind, a, i, dPx });
+  };
+  for (let i = 0; i < Rr.length; i++) {
+    const a = Rr[i];
+    a.active && a.mesh.visible && consider("ped", a, i, a.mesh.position.x, a.mesh.position.y + 1.5, a.mesh.position.z, 55, 46);
+  }
+  for (const k of pedKitSys.kits || [])
+    if (k.ped && k.prop === "dog" && k.ped.mesh.visible) {
+      k.dog.getWorldPosition(_insW);
+      consider("dog", k, Rr.indexOf(k.ped), _insW.x, _insW.y + 0.3, _insW.z, 38, 40);
+    }
+  for (let i = 0; i < Rc.length; i++) {
+    const c = Rc[i];
+    c.mesh && c.mesh.visible && consider("car", c, i, c.mesh.position.x, c.mesh.position.y + 0.9, c.mesh.position.z, 55, 62);
+  }
+  if (roadsideSys.kits)
+    for (const k of roadsideSys.kits)
+      k.variant === 0 && k.g.visible && k.idx >= 0 && consider("marshal", k, k.idx, k.g.position.x, k.g.position.y + roadsideSys.LIFT + 1.35, k.g.position.z, 60, 46);
+  return best;
+}
+let inspectDown = null;
+window.addEventListener("pointerdown", (ev) => {
+  ev.target === Lr && !photoRig.active && u.mode === "roam" && (inspectDown = { x: ev.clientX, y: ev.clientY, t: performance.now() });
+});
+window.addEventListener("pointerup", (ev) => {
+  const dn = inspectDown;
+  inspectDown = null;
+  if (!dn || ev.target !== Lr || photoRig.active || u.mode !== "roam") return;
+  if (Math.hypot(ev.clientX - dn.x, ev.clientY - dn.y) > 7 || performance.now() - dn.t > 420) return;
+  if (!inspectRig.active && !(u.vehicle === "foot" || Math.abs(u.speed) < 8)) return;
+  const hit = inspectScreenPick(ev.clientX, ev.clientY);
+  if (hit) inspectEnter(hit.a, hit.i, hit.kind);
+  else inspectExit();
+});
+window.addEventListener("keydown", (ev) => {
+  ev.code === "Escape" && inspectExit();
+});
+{
+  const inspectAnchor = new Object3D();
+  et.add(inspectAnchor);
+  Bn(inspectAnchor, () => {
+    if (!inspectRig.active) return;
+    const a = inspectRig.actor,
+      kind = inspectRig.kind;
+    if (u.mode !== "roam" || photoRig.active || !a || !inspectAlive(kind, a) || u.roamPos.distanceTo(inspectRig.entryPos) > (kind === "car" ? 12 : 3)) {
+      inspectExit();
+      return;
+    }
+    const s = inspectSubject(kind, a);
+    if (kind === "car" && Math.hypot(s.hx - inspectRig.entryPos.x, s.hz - inspectRig.entryPos.z) > 130) {
+      inspectExit();
+      return;
+    }
+    const tx = s.hx + s.fx * s.off + s.fz * s.side,
+      ty = s.hy + s.ty,
+      tz = s.hz + s.fz * s.off - s.fx * s.side;
+    (Xe.position.lerp(_insV.set(tx, ty, tz), kind === "car" ? 0.22 : 0.14), inspectRig._look.lerp(_insV.set(s.hx, s.hy - s.drop, s.hz), kind === "car" ? 0.45 : 0.3), Xe.lookAt(inspectRig._look));
+    window.__freeCam = !0;
+    _insV.set(s.hx, s.hy + s.lift, s.hz).project(Xe);
+    if (_insV.z <= 1) {
+      const rect = Lr.getBoundingClientRect();
+      ((inspectBubble.style.left = rect.left + ((_insV.x + 1) / 2) * rect.width + "px"), (inspectBubble.style.top = rect.top + ((1 - _insV.y) / 2) * rect.height + "px"), (inspectBubble.style.display = "block"));
+    } else inspectBubble.style.display = "none";
+  });
+}
+window.__steelRibbonDebug.inspectPed = function (on) {
+  if (on === !1) {
+    inspectExit();
+    return { active: !1 };
+  }
+  if (on !== "info" && !inspectRig.active) {
+    const n = inspectNearestPed(80);
+    n && inspectEnter(n.a, n.i);
+  }
+  const pp = inspectRig.persona;
+  let sub = null;
+  if (inspectRig.actor && inspectRig.active) {
+    const s = inspectSubject(inspectRig.kind, inspectRig.actor);
+    sub = { x: +s.hx.toFixed(1), y: +s.hy.toFixed(2), z: +s.hz.toFixed(1) };
+  }
+  return {
+    active: inspectRig.active,
+    idx: inspectRig.idx,
+    kind: inspectRig.kind,
+    name: pp ? pp.name : null,
+    prop: pp ? pp.prop : null,
+    activity: pp ? pp.activity : null,
+    thought: pp ? pp.thought : null,
+    plate: pp ? (pp.plate ?? null) : null,
+    ped: sub,
+    cam: { x: +Xe.position.x.toFixed(1), y: +Xe.position.y.toFixed(1), z: +Xe.position.z.toFixed(1) },
+  };
+};
+window.__steelRibbonDebug.inspectNearest = function (kind) {
+  inspectRig.active && inspectExit();
+  const cx = Xe.position.x,
+    cz = Xe.position.z;
+  let ent = null,
+    b = null;
+  if (kind === "car") {
+    for (let i = 0; i < Rc.length; i++) {
+      const c = Rc[i];
+      if (!c.mesh || !c.mesh.visible) continue;
+      const d = Math.hypot(c.mesh.position.x - cx, c.mesh.position.z - cz);
+      (!b || d < b.d) && (b = { a: c, i, d });
+    }
+    b && b.d <= 140 && (ent = [b.a, b.i, "car"]);
+  } else if (kind === "dog") {
+    for (const k of pedKitSys.kits || []) {
+      if (!k.ped || k.prop !== "dog" || !k.ped.mesh.visible) continue;
+      const d = Math.hypot(k.ped.mesh.position.x - cx, k.ped.mesh.position.z - cz),
+        i = Rr.indexOf(k.ped);
+      i >= 0 && (!b || d < b.d) && (b = { a: k, i, d });
+    }
+    b && b.d <= 60 && (ent = [b.a, b.i, "dog"]);
+  } else if (kind === "marshal") {
+    for (const k of roadsideSys.kits || []) {
+      if (k.variant !== 0 || !k.g.visible || k.idx < 0) continue;
+      const d = Math.hypot(k.g.position.x - cx, k.g.position.z - cz);
+      (!b || d < b.d) && (b = { a: k, i: k.idx, d });
+    }
+    b && b.d <= 240 && (ent = [b.a, b.i, "marshal"]);
+  } else {
+    const n = inspectNearestPed(80);
+    n && (ent = [n.a, n.i, "ped"]);
+  }
+  ent && inspectEnter(ent[0], ent[1], ent[2]);
+  return window.__steelRibbonDebug.inspectPed("info");
+};
