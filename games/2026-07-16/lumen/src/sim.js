@@ -230,9 +230,15 @@ export class Sim {
     return refund;
   }
 
+  towerRank(t) {
+    return t.kills >= 175 ? 3 : t.kills >= 75 ? 2 : t.kills >= 25 ? 1 : 0;
+  }
+
   towerStats(t) {
     const base = t.def, lv = base.levels[t.level];
-    const rateMul = 1 + (t.buffRate || 0), dmgMul = 1 + (t.buffDmg || 0);
+    const rank = this.towerRank(t);
+    const rateMul = (1 + (t.buffRate || 0)) * (1 + rank * 0.03);
+    const dmgMul = (1 + (t.buffDmg || 0)) * (1 + rank * 0.04);
     return {
       damage: Math.round((lv.damage || 0) * dmgMul),
       range: lv.range, rate: (lv.rate || 0) * rateMul,
@@ -606,7 +612,15 @@ export class Sim {
     if (e.hp <= 0) {
       e.dead = true;
       this.kills++;
-      if (tower) tower.kills++;
+      if (tower) {
+        const before = this.towerRank(tower);
+        tower.kills++;
+        const after = this.towerRank(tower);
+        if (after > before) {
+          this.rings.push({ x: tower.x, y: tower.y, t: 0, dur: 0.8, color: [1, 0.95, 0.8], max: 170 });
+          this.emit('rank', { id: tower.id, rank: after, name: tower.def.name });
+        }
+      }
       const bounty = Math.round(e.def.bounty * (e.bountyMul || 1));
       this.gold += bounty;
       this.goldEarned += bounty;
