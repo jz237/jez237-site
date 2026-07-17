@@ -1148,3 +1148,22 @@ signal-corner ped density weighting.
   renegotiation data) / tex 236-242 / geo 5500-5565. Suite 146/146
   (probe locks hd2 default 320px + toggle rebuild both ways). NEXT:
   item 9 — rooftop density (2-3 kits on large roofs + hatch boxes).
+- **45 SUNK GEOMETRY FIX + v3.20.0 (2026-07-16, user report: "some of
+  the buildings and cars are sunk into the ground")**: two root causes
+  measured with probeDown audits. (1) BUILDINGS: $i() min-sampled
+  footprints at only 3x3, so placers carried big anti-float margins
+  (-0.55/-0.7/-1.1) — on flat ground every tower sat buried ~0.55m, and
+  with corner spreads of 1.4-3.2m the uphill faces were buried 2-3.8m.
+  Fix: $i() now 5x5 min-sampling + margins tightened to
+  -0.2/-0.3/-0.45 (all four call sites). Slope-side foundations still
+  cut into hills (natural); flat-ground bases now sit flush. (2)
+  PARKED CARS: placed FLAT at He(center) — on sloped lawns the uphill
+  wheels buried. Fix: tilt each parked instance to the terrain normal
+  (He gradient ±1.2m, quaternion = align-up × yaw); plates and parked
+  kits inherit the same instance matrix so they tilt together. NEW
+  debug parkedSpots(n). Verified by LOOKING (loop-shots/45-sunk/):
+  parked car on a 0.55-gradient street shoulder sits tilted with all
+  wheels touching, plate square; tower base meets the lawn flush with
+  ground-floor windows clear. Suite 146/146 (no probe changes needed —
+  heights move together). Deployed as v3.20.0 (batch 13, EARLY — user
+  fix; items 9/10 will ride batch 14).
