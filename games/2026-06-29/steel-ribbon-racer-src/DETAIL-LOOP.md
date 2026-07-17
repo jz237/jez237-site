@@ -1357,3 +1357,26 @@ signal-corner ped density weighting.
   Chromium instances. NEXT ITERATION MUST START by re-running the heli
   probe twice on a quiet machine — if it fails >50% fresh, treat as
   REAL and bisect before item 8. NEXT: item 8 — traffic turn signals.
+- **55 HELI RECOVERED + TURN SIGNALS — round-six item 8 (2026-07-17)**:
+  health check first: two serial suites on a quiet machine = 154/154
+  BOTH, heli green — the it.54 failures were machine load, case
+  closed. THEN turn indicators: every I1 traffic car carries 4 amber
+  corner quads (two per side, ONE shared toneMapped-off material —
+  blink = global opacity pulse at 9.2rad/s, per-car SIDE via group
+  visibility). The turn chooser W() computes the side from
+  heading-cross (left = sign(h2·(up×h1))) and arms a dedicated 2.2s
+  blinkT timer (turnBlend decays in 0.3s — too brief to read as an
+  indicator; REUSE THE RIGHT STATE, don't piggyback). THREE BUGS
+  FOUND: (1) I1's return REASSIGNS t.userData wholesale — fields set
+  before it are obliterated (blink now rides the literal); (2) my
+  module-scope insert anchored on text ANOTHER AGENT had extended
+  (awningSys gained boards/A-board work that my it.54 `git add
+  src/main.js` swept into cf2b41374 — it tested green 154/154 x2, no
+  damage, but ALWAYS re-grep anchors before python replaces and
+  assert every replacement); (3) the probe counted 31 rigs — stolen/
+  player cars are I1 builds too (assert ranges, not exact counts, for
+  scene populations). Verified by LOOKING (loop-shots/55-turnsig/):
+  white pickup with amber right-side indicators lit approaching the
+  turn. Perf gate: 1834-1873 calls / 592-601k tris. Suite 155/155.
+  NEXT: item 9 — rooftop heat shimmer, then 10 blimp → DEPLOY BATCH
+  16 (v3.23.0) + closing survey.
