@@ -31,6 +31,11 @@ export class UI {
       el.value = game.audio ? game.audio.settings[kind] : 0.7;
       el.addEventListener('input', () => game.audio.setVolume(kind, parseFloat(el.value)));
     }
+    const qsel = document.getElementById('qualitySel');
+    if (qsel) {
+      qsel.value = (game.audio && game.audio.settings.quality) || 'auto';
+      qsel.addEventListener('change', () => { game.audio.settings.quality = qsel.value; game.audio.save(); });
+    }
     this.el.surge.addEventListener('click', () => game.callSurge());
     this.lastVals = {};
   }
