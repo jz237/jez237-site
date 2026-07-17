@@ -1240,3 +1240,26 @@ signal-corner ped density weighting.
   Lessons: survey camera near-frames must aim from OUTSIDE anchors
   (storefront/signal anchors sit inside assemblies — approach from the
   street side at +6m standoff minimum).
+- **49 ITEM 1 CLOSED (ALREADY EXISTS) + ITEM 2 RACING-LINE WEAR SHIPPED
+  (2026-07-16)**: investigating sidewalks revealed THE BASE GAME
+  ALREADY BUILDS THEM — the city street builder (line ~4900) drapes
+  sidewalk strips (halfW 2.9 at ±13.3 off centerline, lift 0.66) +
+  curbs (±10.42) + center dashes along the FULL lattice via m(), which
+  samples He at BOTH edge vertices (true draping). The survey's "peds
+  walk on bare grass" was a dusk/angle misread — the street-edge
+  close-up shows a ped standing ON the sidewalk at a signal. Item 1
+  marked CLOSED-EXISTS (lesson: search the codebase for the system
+  BEFORE writing a backlog item; the survey sees pixels, not code).
+  ITEM 2 shipped instead: raceWearSys — a rubber racing line following
+  the course spline (St/ui frame, 4m steps, lateral offset ∝ smoothed
+  curvature swinging to corner insides, ±1.15m wide) + 17 skid streaks
+  drifting toward corner outsides (curv > 0.0055, ≥30m apart, cap 44),
+  all ONE transparent vertex-colored MeshBasic mesh (opacity 0.38,
+  depthWrite off, renderOrder 1, raycast-inert; MultiplyBlending needs
+  premultipliedAlpha in three — plain alpha reads fine). Verified by
+  LOOKING (loop-shots/49-racewear/): the dark line hugs the inside of
+  the opening bend and weaves through the pack; A/B OFF is the old
+  clean deck; skid streaks read on the ramp. ~1.6k tris, +1 draw. Perf
+  gate: 1830-1866 calls / 597-611k tris (new gates 2010/645k roomy).
+  Suite 149/149. NEXT: item 3 — lawn variation (mowing stripes + worn
+  patches).

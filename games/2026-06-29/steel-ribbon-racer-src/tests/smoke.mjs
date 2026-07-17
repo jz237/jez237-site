@@ -749,6 +749,21 @@ const browser = await chromium.launch({
     JSON.stringify({ clusters: pad?.clusters, parts: pad?.parts }),
   );
 
+  // zoom-detail 49 (round six item 2): racing-line wear on the ribbon deck
+  const rw = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().raceWear,
+      off = deb.raceWearEnable(false),
+      offRep = deb.detailReport().raceWear.enabled;
+    deb.raceWearEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "race wear: rubber line + skid patches baked along the course, toggle works",
+    !!rw && rw.segs > 200 && rw.patches >= 4 && rw.off === false && rw.offRep === false,
+    JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
+  );
+
   // zoom-detail 44 (round five item 8): HD window atlas on the shared tower
   // materials — 2x texel density with mullions; toggle rebuilds at legacy 1x
   const wtx = await page.evaluate(() => {

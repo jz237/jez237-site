@@ -3971,6 +3971,8 @@ const storefrontSys = {
 const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
 // zoom-detail 43 (round-five item 7): start-line paddock clutter registry
 const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: [] };
+// zoom-detail 49 (round-six item 2): racing-line rubber on the ribbon deck
+const raceWearSys = { segs: 0, patches: 0, enabled: !0, _mesh: null };
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
   ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
@@ -6490,6 +6492,86 @@ function z1() {
       ((pm2.castShadow = !0), (pm2.receiveShadow = !0), (pm2.raycast = () => {}), i.add(pm2), (paddockSys._mesh = pm2), (paddockSys.parts = pparts.length));
       if (!paddockSys.enabled) pm2.visible = !1;
     }
+  }
+  // zoom-detail 49 (round-six item 2): RACING-LINE WEAR — a darkened rubber
+  // ribbon following the course, swinging to the inside of corners (offset ∝
+  // smoothed curvature), plus darker skid patches toward the outside wall at
+  // the sharpest samples. One transparent mesh, ~1.5k tris, race-view payoff.
+  {
+    const wpos = [],
+      widx = [],
+      wcol = [],
+      STEP = 4,
+      HW = 1.15,
+      len = ce.length,
+      up = new Vector3(0, 1, 0);
+    let prevL = null,
+      prevR = null,
+      smOff = 0,
+      prevHead = null,
+      base2 = 0,
+      patches = 0;
+    const pushV = (v, sh) => (wpos.push(v.x, v.y, v.z), wcol.push(sh, sh, sh), wpos.length / 3 - 1);
+    for (let sA = 0; sA < len - STEP; sA += STEP) {
+      if (Li(sA)) {
+        ((prevL = null), (prevR = null));
+        continue;
+      }
+      const a2 = St(sA),
+        b2 = St(sA + STEP),
+        head = Math.atan2(b2.p.x - a2.p.x, b2.p.z - a2.p.z);
+      let curv = 0;
+      if (prevHead !== null) {
+        let dh = head - prevHead;
+        (dh > Math.PI && (dh -= Math.PI * 2), dh < -Math.PI && (dh += Math.PI * 2), (curv = dh / STEP));
+      }
+      prevHead = head;
+      smOff += (Math.max(-ce.width * 0.28, Math.min(ce.width * 0.28, -curv * 240)) - smOff) * 0.12;
+      const q2 = ui(a2, b2).q,
+        right = new Vector3(1, 0, 0).applyQuaternion(q2),
+        c2 = a2.p.clone().addScaledVector(right, smOff);
+      c2.y += 0.07;
+      const L2 = c2.clone().addScaledVector(right, -HW),
+        R2 = c2.clone().addScaledVector(right, HW),
+        sh = 0.12 + Math.abs(curv) * 26;
+      if (prevL) {
+        const iA = pushV(prevL, prevL._sh),
+          iB = pushV(prevR, prevR._sh),
+          iC = pushV(R2, sh),
+          iD = pushV(L2, sh);
+        widx.push(iA, iB, iC, iA, iC, iD);
+      }
+      ((L2._sh = sh), (R2._sh = sh), (prevL = L2), (prevR = R2));
+      // skid patches: sharp corners leave streaks drifting to the OUTSIDE
+      if (Math.abs(curv) > 0.0055 && patches < 44 && sA - base2 > 30) {
+        base2 = sA;
+        patches++;
+        const out2 = Math.sign(curv),
+          pc = a2.p.clone().addScaledVector(right, out2 * ce.width * 0.3);
+        pc.y += 0.075;
+        const fwd = new Vector3(0, 0, 1).applyQuaternion(q2),
+          pw = 0.5,
+          pl = 3.6,
+          pA = pc.clone().addScaledVector(right, -pw).addScaledVector(fwd, -pl),
+          pB = pc.clone().addScaledVector(right, pw).addScaledVector(fwd, -pl),
+          pC = pc.clone().addScaledVector(right, pw * 1.6).addScaledVector(fwd, pl),
+          pD = pc.clone().addScaledVector(right, -pw * 0.2).addScaledVector(fwd, pl),
+          i1 = pushV(pA, 0.3),
+          i2 = pushV(pB, 0.3),
+          i3 = pushV(pC, 0.34),
+          i4 = pushV(pD, 0.34);
+        widx.push(i1, i2, i3, i1, i3, i4);
+      }
+    }
+    const wg = new BufferGeometry();
+    (wg.setAttribute("position", new Float32BufferAttribute(wpos, 3)), wg.setAttribute("color", new Float32BufferAttribute(wcol, 3)), wg.setIndex(widx));
+    const wm = new Mesh(
+      wg,
+      new MeshBasicMaterial({ vertexColors: !0, transparent: !0, opacity: 0.38, depthWrite: !1, side: DoubleSide }),
+    );
+    ((wm.raycast = () => {}), (wm.renderOrder = 1), i.add(wm));
+    ((raceWearSys._mesh = wm), (raceWearSys.segs = widx.length / 6), (raceWearSys.patches = patches));
+    if (!raceWearSys.enabled) wm.visible = !1;
   }
   if (d.length) {
     const g = new CylinderGeometry(0.18, 0.24, 3, 6);
@@ -10959,6 +11041,11 @@ window.__steelRibbonDebug = {
     paddockSys._mesh && (paddockSys._mesh.visible = paddockSys.enabled);
     return paddockSys.enabled;
   },
+  raceWearEnable(on) {
+    raceWearSys.enabled = !!on;
+    raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
+    return raceWearSys.enabled;
+  },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
     const hd = on === !1 ? 1 : 2;
@@ -11080,6 +11167,7 @@ window.__steelRibbonDebug = {
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
       parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
+      raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
