@@ -24,6 +24,13 @@ export class UI {
     };
     this.buildCards();
     this.buildMapPicker();
+    // audio sliders on the title screen
+    for (const [id, kind] of [['volMaster', 'master'], ['volMusic', 'music'], ['volSfx', 'sfx']]) {
+      const el = document.getElementById(id);
+      if (!el) continue;
+      el.value = game.audio ? game.audio.settings[kind] : 0.7;
+      el.addEventListener('input', () => game.audio.setVolume(kind, parseFloat(el.value)));
+    }
     this.el.surge.addEventListener('click', () => game.callSurge());
     this.lastVals = {};
   }

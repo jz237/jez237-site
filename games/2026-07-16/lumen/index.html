@@ -113,6 +113,10 @@
   .mapcard .mblurb { font-size: 11px; opacity: 0.6; margin-top: 4px; line-height: 1.5; }
   .mapcard.sel { border-color: var(--cyan); box-shadow: 0 0 22px -6px var(--cyan); }
   .mapcard:hover { transform: translateY(-2px); }
+  #audioopts { margin-top: 18px; display: flex; gap: 22px; justify-content: center;
+    color: #6f97a3; font-size: 12px; letter-spacing: 0.14em; }
+  #audioopts label { display: flex; align-items: center; gap: 8px; }
+  #audioopts input[type=range] { width: 90px; accent-color: #29f2ff; background: transparent; }
   #board { margin-top: 20px; min-height: 90px; }
   #board .btitle { color: #9fd9e4; letter-spacing: 0.3em; font-size: 12px; margin-bottom: 8px; }
   #board table { margin: 0 auto; border-collapse: collapse; font-size: 13px; letter-spacing: 0.08em; color: #bfe3ec; }
@@ -170,8 +174,13 @@
       <button id="play">TAKE ROOT</button>
       <div class="hint">grow towers of living light · defend the heart · 20 waves, then the endless surge<br>
       1–7 or click a card to grow · space calls the wave early for bonus light<br>
-      gold held at wave end earns interest — restraint is power<br>
+      gold held at wave end earns interest — restraint is power · M mutes<br>
       mix statuses on a creature (chill + ignite…) to discover reactions</div>
+      <div id="audioopts">
+        <label>master<input type="range" id="volMaster" min="0" max="1" step="0.05"></label>
+        <label>ambience<input type="range" id="volMusic" min="0" max="1" step="0.05"></label>
+        <label>effects<input type="range" id="volSfx" min="0" max="1" step="0.05"></label>
+      </div>
       <div id="board"></div>
     </div>
   </div>
@@ -189,7 +198,7 @@
     </div>
   </div>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v1.1.0</div>
+  <div id="ver">LUMEN v1.2.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>

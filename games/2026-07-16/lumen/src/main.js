@@ -6,8 +6,9 @@ import { Renderer } from './renderer.js';
 import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
+import { AudioEngine } from './audio.js';
 
-export const VERSION = 'v1.1.0';
+export const VERSION = 'v1.2.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -18,6 +19,7 @@ class Game {
     this.renderer = new Renderer(this.canvas);
     this.mapIndex = Math.min(MAPS.length - 1, Math.max(0, parseInt(params.get('map') || '1', 10) - 1));
     this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
+    this.audio = new AudioEngine(); // before UI — sliders read persisted settings
     this.ui = new UI(document.body, this);
     this.armed = null;          // tower id being placed
     this.selected = null;       // placed tower selected
@@ -32,6 +34,10 @@ class Game {
     this.cam = { dx: 0, dy: 0, zoom: 1.0, shakeX: 0, shakeY: 0 };
     this.frameMs = 16;
     this.started = false;
+    // browsers require a gesture before audio — arm on the first of any
+    const armAudio = () => this.audio.start();
+    window.addEventListener('pointerdown', armAudio, { once: true });
+    window.addEventListener('keydown', armAudio, { once: true });
     this.bindInput();
     this.installDebug();
     document.querySelector('#ver').textContent = 'LUMEN ' + VERSION;
@@ -122,21 +128,23 @@ class Game {
       if (e.key === 'Escape') { this.armed = null; this.selected = null; this.ui.showInspect(null); }
       if (e.key === ' ') { e.preventDefault(); this.callSurge(); }
       if (e.key === 'u' && this.selected) this.upgradeSelected();
+      if (e.key === 'm' || e.key === 'M') { const m = this.audio.toggleMute(); this.ui.toast(m ? 'the grove falls silent' : 'the grove sings again'); }
     });
     window.addEventListener('resize', () => this.renderer.resize());
   }
 
   armTower(id) { this.armed = this.armed === id ? null : id; this.selected = null; this.ui.showInspect(null); }
   callSurge() { if (this.sim.startWave(true)) this.ui.banner(`WAVE ${this.sim.wave}`, 'the dark comes flowing'); }
-  upgradeSelected() { if (this.selected && this.sim.upgrade(this.selected)) { this.ui.showInspect(this.selected, this.sim); this.juiceUpgrade(this.selected); } }
-  sellSelected() { if (this.selected) { this.sim.sell(this.selected); this.selected = null; this.ui.showInspect(null); } }
+  upgradeSelected() { if (this.selected && this.sim.upgrade(this.selected)) { this.ui.showInspect(this.selected, this.sim); this.juiceUpgrade(this.selected); this.audio.on({ type: 'upgrade' }); } }
+  sellSelected() { if (this.selected) { this.sim.sell(this.selected); this.selected = null; this.ui.showInspect(null); this.audio.on({ type: 'sell' }); } }
 
   // --- juice ----------------------------------------------------------------
-  juicePlace(t) { this.fx.shake = Math.min(6, this.fx.shake + 2.5); }
+  juicePlace(t) { this.fx.shake = Math.min(6, this.fx.shake + 2.5); this.audio.on({ type: 'place' }); }
   juiceUpgrade(t) { this.fx.shake = Math.min(6, this.fx.shake + 2); }
 
   routeEvents() {
     for (const ev of this.sim.events) {
+      if (!NS_MODE) this.audio.on(ev);
       switch (ev.type) {
         case 'waveStart':
           if (!NS_MODE) this.ui.banner(`WAVE ${ev.wave}`, ev.wave % 5 === 0 ? 'something vast stirs' : '');
@@ -239,6 +247,7 @@ class Game {
     this.cam.shakeX = (Math.random() - 0.5) * sh;
     this.cam.shakeY = (Math.random() - 0.5) * sh;
     this.fx.camDx = this.cam.dx;
+    if ((this.renderer.frame & 63) === 0) this.audio.setMood(Math.min(2, Math.max(0, (this.sim.wave - 1) / 19 * 2)));
 
     this.renderer.render(this.sim, this.cam, this.fx, raw || 0.016);
     this.ui.update(this.sim, this.armed);
@@ -292,7 +301,7 @@ class Game {
     s.wave = nsWave - 1;
     s.state = 'prep'; s.prepLeft = 0.01;
     s.step(); // triggers startWave
-    const extra = s.spawnQueue.map(q => ({ at: q.at + 0.22, type: q.type, hpMul: q.hpMul * 1.6 }));
+    const extra = s.spawnQueue.map(q => ({ at: q.at + 0.22, enemyType: q.enemyType, hpMul: q.hpMul * 1.6 }));
     s.spawnQueue.push(...extra);
     // bosses crawl — drive further so they reach mid-frame for the shot
     const driveSecs = nsWave >= 20 ? 46 : 16;
@@ -367,6 +376,7 @@ class Game {
       gold(n) { g.sim.gold = n; },
       startWave() { return g.sim.startWave(true); },
       start() { g.started = true; document.getElementById('title').classList.remove('open'); },
+      audioState() { return g.audio.state(); },
       pixelStats() {
         const gl = g.renderer.gl;
         const w = 64, h = 36;
