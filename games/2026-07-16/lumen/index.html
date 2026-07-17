@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>LUMEN — a bioluminescent tower defence</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="description" content="LUMEN — grow living light-towers and defend the Heart of the grove. A bioluminescent WebGL tower defence.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='7' fill='%2329f2ff'/%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%23ff40d9' stroke-width='2' opacity='0.7'/%3E%3C/svg%3E">
 <style>
@@ -16,7 +16,7 @@
     font-family: 'Rajdhani', 'Segoe UI', system-ui, sans-serif; }
   #stage { position: fixed; inset: 0; display: grid; place-items: center; }
   #frame { position: relative; width: 100vw; height: 56.25vw; max-height: 100vh; max-width: 177.78vh; }
-  canvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+  canvas { width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: none; }
 
   .hud { position: absolute; color: #cfe9ef; user-select: none; }
   #topbar { top: 0; left: 0; right: 0; display: flex; justify-content: space-between;
@@ -156,6 +156,29 @@
   #gameover .gnote { margin-top: 12px; font-size: 12px; color: #6f97a3; letter-spacing: 0.1em; min-height: 16px; }
 
   #ver { position: absolute; right: 10px; bottom: 6px; color: #46606c; font-size: 11px; letter-spacing: 0.1em; }
+  #rotate { display: none; position: fixed; inset: 0; z-index: 60; place-items: center;
+    background: rgba(4,2,12,0.94); color: #cfe9ef; text-align: center;
+    font-size: 18px; letter-spacing: 0.12em; line-height: 2.2; }
+  #rotate .ricon { font-size: 46px; display: block; animation: rspin 2.4s ease-in-out infinite; }
+  @keyframes rspin { 0%,100% { transform: rotate(0deg); } 50% { transform: rotate(90deg); } }
+  @media (orientation: portrait) and (pointer: coarse) { #rotate { display: grid; } }
+  #tapCancel { display: none; position: absolute; top: 60px; right: 14px; z-index: 30;
+    background: rgba(30,6,16,0.8); color: #ffd9de; border: 1px solid rgba(255,80,100,0.5);
+    border-radius: 12px; padding: 12px 20px; font-family: inherit; font-size: 15px;
+    letter-spacing: 0.14em; pointer-events: auto; }
+  #tapCancel.show { display: block; }
+  /* coarse-pointer ergonomics: fatter targets, tighter chrome */
+  @media (pointer: coarse) {
+    .card { min-width: 74px; padding: 12px 8px 10px; }
+    .card .key { display: none; }
+    #tempo button { width: 52px; padding: 13px 0; }
+    #surge { padding: 14px 16px; }
+    #inspect { right: 8px; left: 8px; top: auto; bottom: 108px; width: auto; }
+    #inspect button { padding: 12px 6px; }
+    #topbar { font-size: 16px; }
+    #maps { flex-wrap: wrap; }
+    #audioopts { flex-wrap: wrap; gap: 12px; }
+  }
   #glfail { display: none; position: absolute; inset: 0; place-items: center; color: #cfe9ef;
     background: var(--ink); text-align: center; font-size: 18px; letter-spacing: 0.08em; line-height: 2; }
 </style>
@@ -214,8 +237,10 @@
       <div class="gnote" id="gonote"></div>
     </div>
   </div>
+  <div id="rotate"><div><span class="ricon">📱</span>turn your device sideways<br>the grove is wide</div></div>
+  <button id="tapCancel">✕ cancel placement</button>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v2.1.0</div>
+  <div id="ver">LUMEN v2.2.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>
