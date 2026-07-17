@@ -1263,6 +1263,47 @@ function L1() {
     t.setZ(g, He(M, -x) + 7);
   }
   ((t.needsUpdate = !0), e.geometry.computeVertexNormals(), et.add(e));
+  // zoom-detail 50 (round-six item 3): lawn variation baked as terrain vertex
+  // colors — per-cell mowing-band direction, ±3.5% stripe tint, hash-noise dry
+  // and lush patches. City lawn cells only (outside street corridors); the 14m
+  // vertex pitch gives wide soft bands, park-mower scale by design.
+  {
+    const col = new Float32Array(t.count * 3),
+      { x0: LX0, x1: LX1, zNear: LZN, zFar: LZF, pitch: LP, streetW: LSW } = di,
+      hash2 = (a2, b2) => {
+        let h2 = (a2 * 374761393 + b2 * 668265263) | 0;
+        h2 = Math.imul(h2 ^ (h2 >>> 13), 1274126177);
+        return (((h2 ^ (h2 >>> 16)) >>> 0) % 1000) / 1000;
+      };
+    let striped = 0;
+    for (let g = 0; g < t.count; g++) {
+      const wx = t.getX(g),
+        wz = -t.getY(g);
+      let r2 = 1,
+        g2 = 1,
+        b3 = 1;
+      if (wx > LX0 && wx < LX1 && wz > LZF && wz < LZN) {
+        const lx = Math.abs(((((wx - LX0 + LP / 2) % LP) + LP) % LP) - LP / 2),
+          lz = Math.abs(((((LZN - wz + LP / 2) % LP) + LP) % LP) - LP / 2);
+        if (Math.min(lx, lz) > LSW * 0.5 + 4) {
+          const cellX = Math.floor((wx - LX0) / LP),
+            cellZ = Math.floor((LZN - wz) / LP),
+            hcell = hash2(cellX, cellZ),
+            along = hcell < 0.5 ? wx : wz,
+            band = Math.sin(along / 8.9 + hcell * 40) > 0 ? 1 : -1,
+            s2 = 1 + band * 0.12,
+            wear = hash2(Math.floor(wx / 23) + 7, Math.floor(wz / 23));
+          ((r2 = s2), (g2 = s2), (b3 = s2));
+          if (wear > 0.86) ((r2 *= 1.12), (g2 *= 1.04), (b3 *= 0.86));
+          else if (wear < 0.07) ((r2 *= 0.9), (b3 *= 0.93));
+          striped++;
+        }
+      }
+      ((col[g * 3] = r2), (col[g * 3 + 1] = g2), (col[g * 3 + 2] = b3));
+    }
+    e.geometry.setAttribute("color", new Float32BufferAttribute(col, 3));
+    ((i.vertexColors = !0), (lawnSys.striped = striped), (lawnSys.mat = i));
+  }
   const n = new MeshStandardMaterial({
     color: 5220796,
     roughness: 0.22,
@@ -3973,6 +4014,8 @@ const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, enabled:
 const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: [] };
 // zoom-detail 49 (round-six item 2): racing-line rubber on the ribbon deck
 const raceWearSys = { segs: 0, patches: 0, enabled: !0, _mesh: null };
+// zoom-detail 50 (round-six item 3): lawn mowing stripes + worn patches
+const lawnSys = { striped: 0, enabled: !0, mat: null };
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
   ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
@@ -11046,6 +11089,11 @@ window.__steelRibbonDebug = {
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
     return raceWearSys.enabled;
   },
+  lawnEnable(on) {
+    lawnSys.enabled = !!on;
+    if (lawnSys.mat) ((lawnSys.mat.vertexColors = lawnSys.enabled), (lawnSys.mat.needsUpdate = !0));
+    return lawnSys.enabled;
+  },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
     const hd = on === !1 ? 1 : 2;
@@ -11168,6 +11216,7 @@ window.__steelRibbonDebug = {
       parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
+      lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

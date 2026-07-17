@@ -764,6 +764,21 @@ const browser = await chromium.launch({
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
   );
 
+  // zoom-detail 50 (round six item 3): lawn mowing stripes + worn patches
+  const lw = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().lawn,
+      off = deb.lawnEnable(false),
+      offRep = deb.detailReport().lawn.enabled;
+    deb.lawnEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "lawn: variation baked into terrain vertex colors, toggle works",
+    !!lw && lw.striped > 4000 && lw.off === false && lw.offRep === false,
+    JSON.stringify({ striped: lw?.striped }),
+  );
+
   // zoom-detail 44 (round five item 8): HD window atlas on the shared tower
   // materials — 2x texel density with mullions; toggle rebuilds at legacy 1x
   const wtx = await page.evaluate(() => {
