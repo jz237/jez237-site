@@ -3,6 +3,8 @@
 
 import { TOWERS, ECON, MAPS } from './content.js';
 import { localScores, fetchGlobal } from './scores.js';
+import { journal } from './journal.js';
+import { MIXES } from './content.js';
 
 const GLYPHS = { coral: '❋', tesla: '✺', spire: '❆', urchin: '✴', bloom: '❁', bramble: '✿', bulb: '◉' };
 
@@ -51,7 +53,9 @@ export class UI {
     MAPS.forEach((m, i) => {
       const b = document.createElement('button');
       b.className = 'mapcard' + (i === this.game.mapIndex ? ' sel' : '');
-      b.innerHTML = `<div class="mname">${m.name}</div><div class="mblurb">${m.blurb}</div>`;
+      const best = journal.get().best[m.id];
+      const bestLine = best ? `<div class="mbest">${best.won ? '✦ ' : ''}best · wave ${best.wave}</div>` : '';
+      b.innerHTML = `<div class="mname">${m.name}</div><div class="mblurb">${m.blurb}</div>${bestLine}`;
       b.addEventListener('click', () => {
         this.game.selectMap(i);
         for (const c of wrap.children) c.classList.remove('sel');
@@ -59,6 +63,19 @@ export class UI {
       });
       wrap.appendChild(b);
     });
+  }
+
+  renderJournal() {
+    const el = document.getElementById('journal');
+    if (!el) return;
+    const j = journal.get();
+    const chips = Object.keys(MIXES).map(id => {
+      const m = MIXES[id];
+      const found = !!j.mixes[id];
+      const c = m.color.map(v => Math.floor(Math.pow(v, 0.7) * 255)).join(',');
+      return `<span class="jchip${found ? ' found' : ''}" style="--jc: rgb(${c})" title="${found ? m.desc : 'undiscovered reaction'}">${found ? m.name : '?'}</span>`;
+    }).join('');
+    el.innerHTML = `<span class="jlabel">REACTIONS</span>${chips}`;
   }
 
   async renderBoard() {
