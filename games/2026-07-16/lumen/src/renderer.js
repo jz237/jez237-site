@@ -286,7 +286,7 @@ export class Renderer {
 
     // ---- ground lights (additive)
     this.lights.reset();
-    this.pushGroundLights(sim, t);
+    this.pushGroundLights(sim, t, fx);
     gl.blendFunc(gl.ONE, gl.ONE);
     bindWorld(this.pLight);
     this.lights.flush(this.pLight);
@@ -411,7 +411,7 @@ export class Renderer {
     }
   }
 
-  pushGroundLights(sim, t) {
+  pushGroundLights(sim, t, fx) {
     const L = this.lights;
     // heart aura
     const [hx, hy] = sim.map.heart;
@@ -451,6 +451,19 @@ export class Renderer {
       const ds = depthScale(pl.y);
       L.push(pl.x, pl.y, pl.r * 2.1 * ds, pl.r * 1.3 * ds, 0, pl.t * 2, 0, 0.5 * lf, pl.color[0], pl.color[1], pl.color[2], 0);
     }
+    // placement ghost range + selection range: steady organic rings
+    const steadyRing = (x, y, range, color, bright) => {
+      const ds = depthScale(y);
+      const q = range * 1.4;
+      L.push(x, y, q * ds, q * 0.62 * ds, 0, t * 1.3, 0, range / q, color[0] * bright, color[1] * bright, color[2] * bright, 1);
+    };
+    if (fx.ghost) {
+      const g = fx.ghost;
+      const c = g.valid ? g.def.color : [1.0, 0.25, 0.2];
+      steadyRing(g.x, g.y, g.range, c, 0.9);
+      L.push(g.x, g.y + 12, 130, 80, 0, t, 0, 0.25, c[0], c[1], c[2], 0);
+    }
+    if (fx.selRing) steadyRing(fx.selRing.x, fx.selRing.y, fx.selRing.range, fx.selRing.color, 0.6);
     // shockwave rings (extra=1 → ring); quad is padded 1.4x so the eroded
     // ring band never reaches the quad edge (which reads as a square)
     for (const r of sim.rings) {
@@ -507,6 +520,14 @@ export class Renderer {
     E.sort((a, b) => a.y - b.y);
     for (const e of E) {
       this.entities.push(e.x, e.y, e.sx, e.sy, e.rot, e.phase, e.k, e.aux, e.c[0], e.c[1], e.c[2], e.seed);
+    }
+    // placement ghost body — translucent preview of the organism
+    if (fx.ghost) {
+      const g = fx.ghost;
+      const ds = depthScale(g.y);
+      const size = g.def.size * ds;
+      const c = g.valid ? g.def.color.map(v => v * 0.55) : [0.5, 0.12, 0.1];
+      this.entities.push(g.x, g.y, size, size, 0, t * 2, g.def.kind, 0.35, c[0], c[1], c[2], 0.5);
     }
     // foreground silhouettes — parallax kelp profiles, drawn last
     if (this.fgFlora) {
