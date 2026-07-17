@@ -165,12 +165,16 @@ export class Renderer {
     gl.viewport(0, 0, this.fScene.w, this.fScene.h);
     gl.disable(gl.BLEND);
 
+    // mood: dusk → deep night → violet pre-dawn across a run
+    const mood = Math.min(2, Math.max(0, (sim.wave - 1) / 19 * 2));
+
     // background
     gl.useProgram(this.pBg.prog);
     gl.uniform1f(this.pBg.u.uT, t);
     gl.uniform2f(this.pBg.u.uReso, this.w, this.h);
     gl.uniform1f(this.pBg.u.uHorizon, skyFrac);
     gl.uniform2f(this.pBg.u.uPar, cam.dx * 60, cam.dy * 60);
+    gl.uniform1f(this.pBg.u.uMood, mood);
     gl.bindVertexArray(this.quad);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
 
@@ -178,6 +182,7 @@ export class Renderer {
     bindWorld(this.pGround);
     gl.uniform1f(this.pGround.u.uHorizon, skyFrac);
     gl.uniform2f(this.pGround.u.uReso, this.w, this.h);
+    gl.uniform1f(this.pGround.u.uMood, mood);
     gl.bindVertexArray(this.groundMesh.vao);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.groundMesh.count);
 
@@ -335,7 +340,14 @@ export class Renderer {
     for (const e of sim.enemies) {
       const ds = depthScale(e.y);
       const c = e.def.color;
-      L.push(e.x, e.y + 10 * ds, 60 * ds, 38 * ds, 0, e.phase, 0, 0.30, c[0], c[1], c[2], 0);
+      const big = (e.def.boss || e.def.miniboss) ? 3.2 : 1;
+      L.push(e.x, e.y + 10 * ds, 60 * ds * big, 38 * ds * big, 0, e.phase, 0, 0.30, c[0], c[1], c[2], 0);
+    }
+    // excited flora cast their own small light
+    for (const f of sim.flora) {
+      if (f.excite < 0.25) continue;
+      const ds = depthScale(f.y);
+      L.push(f.x, f.y, 70 * ds * f.excite, 44 * ds * f.excite, 0, f.phase, 0, 0.35 * f.excite, 0.2, 0.75, 0.5, 0);
     }
     // projectile ground light
     for (const pr of sim.projectiles) {
@@ -380,9 +392,18 @@ export class Renderer {
     for (const e of sim.enemies) {
       const ds = depthScale(e.y);
       const size = e.def.size * ds;
-      const rot = e.type === 'grub' || e.type === 'mite' ? Math.atan2(e.diry || 0, e.dirx || 1) + Math.PI : 0;
+      const faces = e.type === 'grub' || e.type === 'mite' || e.type === 'husk' || e.type === 'dartfin' || e.type === 'bulwark';
+      const rot = faces ? Math.atan2(e.diry || 0, e.dirx || 1) + Math.PI : 0;
       const hpf = e.hp / e.maxHp;
-      E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot, phase: e.phase, aux: hpf, c: e.def.color, seed: e.wobblePhase });
+      let aux = hpf;
+      if (e.def.shield) aux = e.maxShield > 0 ? e.shield / e.maxShield : 0;
+      else if (e.def.phasing) aux = e.untargetable ? 0.28 : 1;
+      else if (e.def.boss) aux = e.bossPhase === 2 ? 1 : 0;
+      if (e.def.boss || e.def.miniboss) {
+        // dark aura beneath the great ones
+        E.push({ y: e.y - 1, k: 26, x: e.x, sx: size * 2.4, sy: size * 1.5, rot: 0, phase: e.phase, aux: e.def.boss ? 0.8 : 0.45, c: [0, 0, 0], seed: e.wobblePhase });
+      }
+      E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot, phase: e.phase, aux, c: e.def.color, seed: e.wobblePhase });
     }
     E.sort((a, b) => a.y - b.y);
     for (const e of E) {
@@ -487,6 +508,20 @@ export class Renderer {
         this.pushLightning(e.x - e.def.size * 0.6 * ds, e.y, e.x + e.def.size * 0.6 * ds, e.y,
           [1, 0.5, 0.95], 0.7, e.phase + this.frame * 0.1);
       }
+    }
+    // boss telegraph: gathering ring + rising dread-glow while winding up
+    for (const e of sim.enemies) {
+      if (!e.def.boss || e.telegraphT <= 0) continue;
+      const P = e.def.pulse;
+      const f = 1 - e.telegraphT / P.telegraph; // 0 → 1 as the pulse nears
+      const ds = depthScale(e.y);
+      // contracting warning ring
+      const r = P.radius * (1.15 - f * 0.95) * ds;
+      A.push(e.x, e.y, r * 2, r * 1.25, 0, t * 4, KIND.GLOW, 1,
+        0.55 * f, 0.18 * f, 0.8 * f, 0);
+      // core gathering violence
+      A.push(e.x, e.y, 120 * f * ds, 120 * f * ds, 0, t * 8, KIND.MOTE, 1,
+        0.8 * f, 0.3 * f, 1.0 * f, e.wobblePhase);
     }
     // heart-hit flash
     if (sim.heartHitT > 0) {

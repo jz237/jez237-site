@@ -6,7 +6,7 @@ import { Renderer } from './renderer.js';
 import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS } from './content.js';
 
-export const VERSION = 'v0.2.0';
+export const VERSION = 'v0.3.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -126,6 +126,21 @@ class Game {
           this.fx.shake = Math.min(7, this.fx.shake + 1.6);
           this.fx.aberr = Math.min(0.016, this.fx.aberr + 0.006);
           break;
+        case 'bossSpawn':
+          this.ui.banner(ev.name, ev.boss ? 'the grove holds its breath' : 'something vast crawls out');
+          this.fx.shake = Math.min(9, this.fx.shake + 4);
+          break;
+        case 'bossPulse':
+          this.fx.shake = Math.min(11, this.fx.shake + 7);
+          this.fx.aberr = Math.min(0.022, this.fx.aberr + 0.014);
+          break;
+        case 'bossPhase':
+          this.ui.banner('IT CRACKS OPEN', 'the light inside is not friendly');
+          this.fx.shake = Math.min(10, this.fx.shake + 6);
+          break;
+        case 'shieldBreak':
+          this.fx.shake = Math.min(6, this.fx.shake + 1);
+          break;
         case 'discover':
           this.ui.banner(ev.name, ev.desc);
           break;
@@ -203,14 +218,29 @@ class Game {
       else console.warn('ns: no spot near', ax, ay);
     }
     s.gold = 480;
-    // stage a dense mid-flight wave: start wave 12, double its spawn queue,
-    // then run ~10s so the stream spreads through the tower gauntlet
-    s.wave = 11;
+    // stage a dense mid-flight wave (default 12; ?wave=20 stages the boss),
+    // then run so the stream spreads through the tower gauntlet
+    const nsWave = parseInt(params.get('wave') || '12', 10);
+    s.wave = nsWave - 1;
     s.state = 'prep'; s.prepLeft = 0.01;
     s.step(); // triggers startWave
     const extra = s.spawnQueue.map(q => ({ at: q.at + 0.22, type: q.type, hpMul: q.hpMul * 1.6 }));
     s.spawnQueue.push(...extra);
-    for (let i = 0; i < 60 * 16; i++) { s.step(); }
+    // bosses crawl — drive further so they reach mid-frame for the shot
+    const driveSecs = nsWave >= 20 ? 46 : 16;
+    for (let i = 0; i < 60 * driveSecs; i++) { s.step(); }
+    // boss frames need a living swarm around the great one — restock escorts
+    if (nsWave >= 20) {
+      const boss = s.enemies.find(e => e.def.boss);
+      const bs = boss ? boss.s : s.path.total * 0.35;
+      const kinds = ['mite', 'dartfin', 'grub', 'wisp', 'husk', 'mite', 'dartfin', 'brood'];
+      for (let i = 0; i < 26; i++) {
+        const type = kinds[i % kinds.length];
+        const off = -60 - i * 34 + (i % 3) * 18;
+        s.spawnEnemy(type, 4.0, Math.max(10, bs + off));
+      }
+      for (let i = 0; i < 60 * 2; i++) s.step(); // let towers open fire on them
+    }
     this.running = true;
     window.__lumen.nsReady = true;
   }
