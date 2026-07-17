@@ -125,7 +125,7 @@ export class Sim {
     for (const e of comp.entries) {
       let tt = t + (e.delay || 0);
       for (let i = 0; i < e.count; i++) {
-        this.spawnQueue.push({ at: tt, type: e.type, hpMul: e.hpMul });
+        this.spawnQueue.push({ at: tt, enemyType: e.type, hpMul: e.hpMul });
         tt += e.gap;
       }
     }
@@ -162,7 +162,7 @@ export class Sim {
     const p = pathPos(this.paths[e.pathIdx], atS);
     e.x = p.x; e.y = p.y;
     this.enemies.push(e);
-    this.emit('spawn', { id: e.id, type });
+    this.emit('spawn', { id: e.id, enemyType: type });
     if (def.boss || def.miniboss) this.emit('bossSpawn', { id: e.id, name: def.name, boss: !!def.boss });
   }
 
@@ -190,7 +190,7 @@ export class Sim {
     };
     this.towers.push(t);
     this.rings.push({ x, y, t: 0, dur: 1.1, color: def.color, max: 260 });
-    this.emit('place', { id: t.id, type: typeId, x, y });
+    this.emit('place', { id: t.id, towerType: typeId, x, y });
     return t;
   }
 
@@ -316,7 +316,7 @@ export class Sim {
       for (let i = this.spawnQueue.length - 1; i >= 0; i--) {
         if (this.spawnQueue[i].at <= this.waveT) {
           const s = this.spawnQueue.splice(i, 1)[0];
-          this.spawnEnemy(s.type, s.hpMul);
+          this.spawnEnemy(s.enemyType, s.hpMul);
         }
       }
       if (this.spawnQueue.length === 0 && this.enemies.length === 0) {
@@ -447,7 +447,7 @@ export class Sim {
       target: best.id, speed: t.def.projSpeed, damage: st.damage,
       splash: t.def.splash, color: t.def.color, from: t.id, t: 0,
     });
-    this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y });
+    this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y });
   }
 
   fireChain(t, st, best) {
@@ -471,7 +471,7 @@ export class Sim {
       cur = nxt;
     }
     this.arcs.push({ hits, t: 0, dur: 0.6, color: t.def.color, seed: this.rng.next() });
-    this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y, chains: hits.length });
+    this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y, chains: hits.length });
   }
 
   firePulse(t, st) {
@@ -487,7 +487,7 @@ export class Sim {
     }
     if (hitAny) {
       this.rings.push({ x: t.x, y: t.y, t: 0, dur: 0.7, color: t.def.color, max: st.range * 1.05 });
-      this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y });
+      this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y });
     } else {
       t.cool = 0.2; // nothing in range — stay primed
     }
@@ -509,7 +509,7 @@ export class Sim {
       if (perp <= w + e.def.size * 0.4) this.damage(e, st.damage, t);
     }
     this.beams.push({ x1: sx, y1: sy, x2: ex, y2: ey, t: 0, dur: 0.32, color: t.def.color });
-    this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y, beam: true });
+    this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y, beam: true });
   }
 
   fireMortar(t, st, best) {
@@ -522,7 +522,7 @@ export class Sim {
       arc: true, flight: Math.max(0.5, lead * 0.9), status: t.def.status,
       pool: { dps: t.def.poolDps, dur: t.def.poolDur, r: t.def.poolR },
     });
-    this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y });
+    this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y });
   }
 
   fireSpit(t, st, best) {
@@ -531,7 +531,7 @@ export class Sim {
       target: best.id, speed: t.def.projSpeed, damage: st.damage,
       splash: 0, color: t.def.color, from: t.id, t: 0, status: t.def.status,
     });
-    this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y });
+    this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y });
   }
 
   // boss behaviour: telegraphed dark pulse that stuns towers; phase 2 at 50%
@@ -590,7 +590,7 @@ export class Sim {
       if (tower) tower.kills++;
       this.gold += e.def.bounty;
       this.goldEarned += e.def.bounty;
-      this.emit('kill', { id: e.id, type: e.type, x: e.x, y: e.y, bounty: e.def.bounty, boss: !!(e.def.boss || e.def.miniboss), color: e.def.color });
+      this.emit('kill', { id: e.id, enemyType: e.type, x: e.x, y: e.y, bounty: e.def.bounty, boss: !!(e.def.boss || e.def.miniboss), color: e.def.color });
       // death: burst into dissolving motes that drift and fade
       const n = e.def.boss ? 90 : e.def.miniboss ? 50 : 14 + Math.floor(e.def.size * 0.3);
       this.burst(e.x, e.y, e.def.color, n, e.def.size * 2.2);
