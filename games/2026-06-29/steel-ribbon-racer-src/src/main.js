@@ -2157,9 +2157,15 @@ function I1(i, e) {
       };
     var __bL = mkSide(-1),
       __bR = mkSide(1);
+    var __brk = new Group();
+    for (const bx of [-s.w / 2 + 0.34, s.w / 2 - 0.34]) {
+      const q3 = new Mesh(new PlaneGeometry(0.34, 0.16), brakeMat());
+      (q3.position.set(bx, 0.88, s.l / 2 + 0.025), (q3.raycast = () => {}), __brk.add(q3));
+    }
+    ((__brk.visible = !1), t.add(__brk));
   }
   return (
-    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, blink: { L: __bL, R: __bR }, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
+    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, blink: { L: __bL, R: __bR }, brake: __brk, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
       ((x.castShadow = !1), (x.receiveShadow = !0));
@@ -4073,6 +4079,12 @@ const turnSigSys = { turning: 0, cars: 0, enabled: !0, mat: null };
 function turnSigMat() {
   if (!turnSigSys.mat) turnSigSys.mat = new MeshBasicMaterial({ color: 16758332, toneMapped: !1, transparent: !0, opacity: 1, side: DoubleSide });
   return turnSigSys.mat;
+}
+// zoom-detail 60 (round-seven item 2): brake-light glow, shared material
+const brakeSys = { braking: 0, total: 0, enabled: !0, mat: null, sample: null };
+function brakeMat() {
+  if (!brakeSys.mat) brakeSys.mat = new MeshBasicMaterial({ color: 16719400, toneMapped: !1, side: DoubleSide });
+  return brakeSys.mat;
 }
 function buildAwningTextures() {
   const COLS = ["#c2456e", "#2f8fa3", "#c9922e", "#3f8f56"],
@@ -11499,6 +11511,10 @@ window.__steelRibbonDebug = {
     turnSigSys.enabled = !!on;
     return turnSigSys.enabled;
   },
+  brakesEnable(on) {
+    brakeSys.enabled = !!on;
+    return brakeSys.enabled;
+  },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
     const hd = on === !1 ? 1 : 2;
@@ -11626,6 +11642,7 @@ window.__steelRibbonDebug = {
       xwalks: { fresh: xwalkSys.fresh, worn: xwalkSys.worn, chipped: xwalkSys.chipped, enabled: xwalkSys.enabled },
       awnings: { count: awningSys.count, boards: awningSys.boards, enabled: awningSys.enabled, sample: awningSys.sample.slice(0, 3), boardSample: awningSys.boardSample.slice(0, 2) },
       turnSignals: { turning: turnSigSys.turning, cars: turnSigSys.cars, enabled: turnSigSys.enabled, total: turnSigSys.total ?? 0, sample: turnSigSys.sample ?? null },
+      brakes: { braking: brakeSys.braking, total: brakeSys.total, enabled: brakeSys.enabled, sample: brakeSys.sample ?? null },
       blimp: { x: blimpSys.x, z: blimpSys.z, alt: blimpSys.alt, text: blimpSys.text },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
@@ -14093,6 +14110,7 @@ window.addEventListener("keydown", (ev) => {
   et.add(blinkAnchor);
   Bn(blinkAnchor, (tt, dt) => {
     let on = 0;
+    brakeSys._on = 0;
     const pulse = Math.sin(tt * 9.2) > 0 ? 1 : 0.12;
     for (const K of Rc) {
       const b = K.mesh && K.mesh.userData.blink;
@@ -14100,8 +14118,18 @@ window.addEventListener("keydown", (ev) => {
       K.blinkT > 0 && (K.blinkT = Math.max(0, K.blinkT - dt));
       const live = turnSigSys.enabled && K.blinkSide && K.blinkT > 0;
       ((b.L.visible = live && K.blinkSide < 0), (b.R.visible = live && K.blinkSide > 0), live && on++);
+      const bm = K.mesh.userData.brake;
+      if (bm) {
+        const braking = brakeSys.enabled && (K.brakePulse || 0) > 0.12;
+        bm.visible = braking;
+        if (braking) {
+          brakeSys._on++;
+          brakeSys.sample || (brakeSys.sample = { x: +K.mesh.position.x.toFixed(1), y: +K.mesh.position.y.toFixed(1), z: +K.mesh.position.z.toFixed(1) });
+        }
+      }
     }
     ((turnSigSys.turning = on), (turnSigSys.cars = Rc.length), (turnSigSys.total = (turnSigSys.total || 0) + on), turnSigSys.mat && (turnSigSys.mat.opacity = pulse));
+    ((brakeSys.braking = brakeSys._on || 0), (brakeSys.total += brakeSys._on || 0), (brakeSys._on = 0), brakeSys.braking || (brakeSys.sample = null));
     turnSigSys.sample = null;
     if (on)
       for (const K of Rc)

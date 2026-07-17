@@ -778,6 +778,24 @@ const browser = await chromium.launch({
     JSON.stringify(blp),
   );
 
+  // zoom-detail 60 (round seven item 2): brake lights on slowing traffic
+  const brk = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    let rig = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.userData && o.userData.hasDriver && o.userData.brake) rig++;
+    });
+    const t0 = deb.detailReport().brakes.total;
+    await new Promise((r) => setTimeout(r, 9000));
+    const t1 = deb.detailReport().brakes.total;
+    return { rig, grew: t1 > t0 };
+  });
+  check(
+    "brake lights: every traffic car rigged, glow fires on braking",
+    !!brk && brk.rig >= 30 && brk.rig <= 33 && brk.grew,
+    JSON.stringify(brk),
+  );
+
   // zoom-detail 55 (round six item 8): traffic turn indicators
   const tsg = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;

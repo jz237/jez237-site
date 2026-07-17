@@ -1466,3 +1466,22 @@ signal-corner ped density weighting.
   Suite state unchanged (156 probes; no kerb probe was added). NEXT:
   item 2 — brake lights (brakePulse already exists on traffic — a
   surface-only feature, no geometry archaeology).
+- **60 BRAKE LIGHTS — round-seven item 2 (2026-07-17)**: braking is
+  visible now. Every I1 traffic car carries two rear brake-glow quads
+  (0.34x0.16 at the rear corners, ONE shared toneMapped-off red
+  material) driven by the EXISTING brakePulse state (decays 3.2/s;
+  set on panic stops, signal stops, and obstacle slowdowns) — the
+  blink Bn tick from it.55 now also toggles brake visibility at
+  brakePulse > 0.12 and tracks {braking, total, sample}. The rig
+  rides the userData LITERAL (the I1-reassignment lesson). Race
+  rivals use their own livery build (addRaceLivery, not I1) — noted,
+  skipped for scope (rivals rarely brake-and-crawl; traffic is where
+  braking reads). Verified by LOOKING (loop-shots/60-brakes/): a bus
+  halting at a stop sign with both rear lamps glowing red. Suite
+  157/157 (probe: rig 30-33 + total grows over 9s). **PERF TRIPWIRE:
+  world 0 gate run hit 2008 calls vs the 2010 ceiling** (world 1:
+  1869-1877 — world-luck high, but the gate is now effectively
+  zero-headroom on hot worlds). RULE for remaining round-seven items:
+  draw-neutral or single-merged-mesh only; if any gate run EXCEEDS
+  2010, stop and renegotiate with a 5-world sample before shipping.
+  NEXT: item 3 — pond edges (single merged vcBake ring mesh, +1 draw).
