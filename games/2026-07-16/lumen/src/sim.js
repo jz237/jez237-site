@@ -508,7 +508,7 @@ export class Sim {
       const perp = Math.abs(px * ny - py * nx);
       if (perp <= w + e.def.size * 0.4) this.damage(e, st.damage, t);
     }
-    this.beams.push({ x1: sx, y1: sy, x2: ex, y2: ey, t: 0, dur: 0.18, color: t.def.color });
+    this.beams.push({ x1: sx, y1: sy, x2: ex, y2: ey, t: 0, dur: 0.32, color: t.def.color });
     this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y, beam: true });
   }
 
