@@ -1560,3 +1560,21 @@ signal-corner ped density weighting.
   a row of framed shop windows + glazed door at its base; OFF = flat
   wall. Perf gate: 1870-1948 calls / 604-618k tris. Suite 161/161.
   v3.25.0. DEPLOY BATCH 18 (items 4-6) next in this iteration.
+- **65 LAMP-POST FLOWER BASKETS (2026-07-17)**: round-seven item 7 —
+  the 132 instanced city lamp posts get civic dressing where the city
+  is "lived-in": posts within 85m of a park cell or a shop row (awning
+  spot) grow a cross-arm and TWO hanging flower baskets (terracotta
+  taper, squashed foliage dome, 4-5 flower blobs in 4 mid-tone LINEAR
+  colors — the ~0.4 rule), capped at 26 posts / 52 baskets, ONE merged
+  vcBake mesh (+1 draw, ~8k tris, ZERO textures). NEW COLLECTORS with
+  resets BEFORE their loops (the it.64 lesson applied proactively):
+  lampDressSys.posts (street-light Yt loop), .parkCells (buildParks
+  cell loop), .shopSpots (awning placement). Builder runs at MODULE
+  level after buildPondEdges — all collectors full by then. Verified
+  by LOOKING (loop-shots/65-lampdress/): near-on = two green baskets
+  with pink/white blooms flanking the pole under the globe, near-off =
+  bare pole, mid = subtle green cluster, far = unchanged glow dots.
+  First-try visual pass. Report lampDress {dressed 26, baskets 52,
+  posts 132, sample}; lampDressEnable toggle. Suite 162/162 (one
+  inspect-cars flake on run 1, clean rerun — the flaky family).
+  NEXT: item 8 balloon canopies.
