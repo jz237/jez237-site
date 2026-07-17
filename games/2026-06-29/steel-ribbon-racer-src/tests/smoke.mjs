@@ -764,6 +764,21 @@ const browser = await chromium.launch({
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
   );
 
+  // zoom-detail 53 (round six item 6): zebra crosswalks in three wear tiers
+  const xw = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().xwalks,
+      off = deb.xwalkEnable(false),
+      offRep = deb.detailReport().xwalks.enabled;
+    deb.xwalkEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "crosswalks: zebra planes in three deterministic wear tiers, toggle works",
+    !!xw && xw.fresh > 10 && xw.worn > 10 && xw.chipped > 10 && xw.off === false && xw.offRep === false,
+    JSON.stringify({ fresh: xw?.fresh, worn: xw?.worn, chipped: xw?.chipped }),
+  );
+
   // zoom-detail 52 (round six item 5): neon halos + flicker pair
   const ne = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
