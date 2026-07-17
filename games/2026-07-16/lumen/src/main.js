@@ -8,8 +8,10 @@ import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
 import { botStep } from './bot.js';
+import { journal } from './journal.js';
+import { MIXES } from './content.js';
 
-export const VERSION = 'v2.0.0';
+export const VERSION = 'v2.1.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -60,6 +62,8 @@ class Game {
     const t = document.getElementById('title');
     t.classList.add('open');
     this.ui.renderBoard();
+    this.ui.renderJournal();
+    this.ui.buildMapPicker(); // refresh best-wave lines
     this.startAttract();
     document.getElementById('play').onclick = () => {
       t.classList.remove('open');
@@ -240,6 +244,7 @@ class Game {
           break;
         case 'discover':
           this.ui.banner(ev.name, ev.desc);
+          journal.addMix(ev.mix);
           break;
         case 'heartHit':
           this.fx.shake = Math.min(9, this.fx.shake + 5);
@@ -248,9 +253,11 @@ class Game {
           break;
         case 'victory':
           this.ui.banner('THE GROVE ENDURES', 'the endless surge begins — how long can you shine?');
+          journal.recordRun(MAPS[this.mapIndex].id, this.sim.wave, this.sim.score(), true);
           break;
         case 'gameOver':
           if (NS_MODE) break; // staged shots never show the end panel
+          journal.recordRun(MAPS[this.mapIndex].id, this.sim.wave, this.sim.score(), this.sim.campaignDone);
           this.ui.banner('THE LIGHT GOES OUT', `the grove survived ${ev.wave - 1} waves`);
           setTimeout(() => this.ui.showGameOver(this.sim, this.sim.campaignDone), 2200);
           break;
