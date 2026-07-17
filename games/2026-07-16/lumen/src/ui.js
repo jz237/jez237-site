@@ -2,7 +2,7 @@
 // toasts. Pure DOM — the canvas stays untouched by UI concerns.
 
 import { TOWERS, ECON, MAPS, ENEMIES, waveComp } from './content.js';
-import { localScores, fetchGlobal } from './scores.js';
+import { localScores, fetchGlobal, dailyInfo } from './scores.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
@@ -52,6 +52,16 @@ export class UI {
     const wrap = document.getElementById('maps');
     if (!wrap) return;
     wrap.innerHTML = '';
+    const daily = dailyInfo();
+    const db = document.createElement('button');
+    db.className = 'mapcard daily' + (this.game.daily ? ' sel' : '');
+    db.innerHTML = `<div class="mname">☀ DAILY GROVE</div><div class="mblurb">${daily.label} · one seed for everyone · own board</div>`;
+    db.addEventListener('click', () => {
+      this.game.selectDaily();
+      for (const c of wrap.children) c.classList.remove('sel');
+      db.classList.add('sel');
+      this.renderBoard();
+    });
     MAPS.forEach((m, i) => {
       const b = document.createElement('button');
       b.className = 'mapcard' + (i === this.game.mapIndex ? ' sel' : '');
@@ -62,9 +72,11 @@ export class UI {
         this.game.selectMap(i);
         for (const c of wrap.children) c.classList.remove('sel');
         b.classList.add('sel');
+        this.renderBoard();
       });
       wrap.appendChild(b);
     });
+    wrap.appendChild(db);
   }
 
   renderJournal() {
@@ -85,12 +97,12 @@ export class UI {
     if (!el) return;
     const local = localScores();
     el.innerHTML = '<div class="btitle">BRIGHTEST GROVES</div><div class="dim" style="opacity:0.5">reaching into the dark…</div>';
-    const global = await fetchGlobal();
+    const global = await fetchGlobal(this.game.daily ? dailyInfo().board : undefined);
     const list = (global && global.length ? global : local).slice(0, 8);
     if (!list.length) { el.innerHTML = '<div class="btitle">BRIGHTEST GROVES</div><div style="opacity:0.5;font-size:12px">no lights etched yet — be first</div>'; return; }
     const rows = list.map((s, i) =>
       `<tr><td class="rk">${i + 1}</td><td>${(s.initials || '???')}</td><td class="sc">${s.score}</td><td class="rk">${(s.extra && s.extra.wave) ? 'w' + s.extra.wave : ''}</td></tr>`).join('');
-    el.innerHTML = `<div class="btitle">BRIGHTEST GROVES ${global && global.length ? '· GLOBAL' : '· THIS GROVE'}</div><table>${rows}</table>`;
+    el.innerHTML = `<div class="btitle">${this.game.daily ? '☀ TODAY’S GROVES' : 'BRIGHTEST GROVES'} ${global && global.length ? '· GLOBAL' : '· THIS GROVE'}</div><table>${rows}</table>`;
   }
 
   showGameOver(sim, won) {

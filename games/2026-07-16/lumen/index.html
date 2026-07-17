@@ -221,6 +221,10 @@
     #toasts { top: 46px; } .toast { font-size: 12px; padding: 4px 12px; }
     #tapCancel { top: 42px; padding: 9px 14px; font-size: 13px; }
   }
+  body.photo .hud, body.photo #ver, body.photo #tapCancel { opacity: 0 !important; pointer-events: none !important; transition: opacity 0.3s; }
+  .mapcard.daily { border-color: rgba(255,184,51,0.4); }
+  .mapcard.daily .mname { color: #ffd27a; }
+  .mapcard.daily.sel { border-color: #ffb833; box-shadow: 0 0 22px -6px #ffb833; }
   #glfail { display: none; position: absolute; inset: 0; place-items: center; color: #cfe9ef;
     background: var(--ink); text-align: center; font-size: 18px; letter-spacing: 0.08em; line-height: 2; }
 </style>
@@ -255,7 +259,7 @@
       <button id="play">TAKE ROOT</button>
       <div class="hint">grow towers of living light · defend the heart · 20 waves, then the endless surge<br>
       1–7 or click a card to grow · space calls the wave early for bonus light<br>
-      gold held at wave end earns interest — restraint is power<br>P pauses · F cycles speed ×1/×2/×4 · M mutes<br>
+      gold held at wave end earns interest — restraint is power<br>P pauses · F cycles speed ×1/×2/×4 · M mutes · C photo mode<br>
       mix statuses on a creature (chill + ignite…) to discover reactions<br>towers standing on ground stained their own colour grow attuned (+10%)</div>
       <div id="audioopts">
         <label>master<input type="range" id="volMaster" min="0" max="1" step="0.05"></label>
@@ -284,7 +288,7 @@
   <div id="rotate"><div><span class="ricon">📱</span>turn your device sideways<br>the grove is wide</div></div>
   <button id="tapCancel">✕ cancel placement</button>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v2.11.0</div>
+  <div id="ver">LUMEN v2.12.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>
