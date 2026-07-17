@@ -1300,3 +1300,21 @@ signal-corner ped density weighting.
   151/151 (probe: pitches 0-2 by terrain luck, scene quads match
   count). NEXT: item 5 — neon sign glow, then DEPLOY BATCH 15
   (v3.22.0).
+- **52 NEON HALOS — round-six item 5 (2026-07-16/17)**: every sign in
+  the city glows now. Three sign classes found by SEARCHING THE CODE
+  first (vertical neons ≤34 via Ah(), wall bands ≤48 via Eo(), roof
+  billboards ≤18 via Od()): each contributes a halo quad (radial-
+  gradient canvas, sign-tinted, sized ~1.4x, offset toward the wall/
+  behind the box so edges spill around the sign). DRAW-CALL DESIGN:
+  per-sign halos would cost ~100 draws — instead halos merge into ONE
+  additive mesh PER NEON COLOR (≤6 draws for the whole city), except
+  the two FLICKER signs (vertical #2, wall band #5) which keep
+  individual halo meshes so a Bn tick can wobble sign.opacity + halo
+  in sync (dips to 0.22 when sin(t*11.3+φ)·sin(t*4.7+φ) > 0.88 — brief
+  irregular dropouts). neonSys {halos:100, flicker:2} + neonEnable
+  (hides meshes, resets flicker opacities). Verified by LOOKING
+  (loop-shots/52-neon/): the HOTEL vertical washes soft magenta onto
+  the tower wall; OFF pair = flat sign. Perf gate: 1809-1854 calls /
+  599-610k tris / tex 252 max. Suite 152/152 (one world-luck pond
+  flake — cityPonds=1 world — rerun clean). v3.22.0. DEPLOY BATCH 15
+  next in this iteration.

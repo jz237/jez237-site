@@ -764,6 +764,21 @@ const browser = await chromium.launch({
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
   );
 
+  // zoom-detail 52 (round six item 5): neon halos + flicker pair
+  const ne = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().neon,
+      off = deb.neonEnable(false),
+      offRep = deb.detailReport().neon.enabled;
+    deb.neonEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "neon: halo quads merged per color + flicker pair, toggle works",
+    !!ne && ne.halos > 40 && ne.flicker === 2 && ne.off === false && ne.offRep === false,
+    JSON.stringify({ halos: ne?.halos, flicker: ne?.flicker }),
+  );
+
   // zoom-detail 51 (round six item 4): soccer pitches in flat park cells
   const pit = await page.evaluate(() => {
     const pk2 = window.__steelRibbonDebug.detailReport().parks;
