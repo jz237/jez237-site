@@ -27,6 +27,7 @@ const VO = {
   defeat:   { files: ['defeat_v1', 'defeat_v2'], pri: 4 },
   tidecaller: { files: ['tidecaller_v1', 'tidecaller_v2'], pri: 3 },
   mycelial: { files: ['mycelial_v1', 'mycelial_v2'], pri: 3 },
+  apex: { files: ['apex_v1'], pri: 3 },
 };
 
 export class AudioEngine {
@@ -282,6 +283,7 @@ export class AudioEngine {
         this.noise({ dur: 0.6, freq: 400, gain: 0.14, sweep: 90, type: 'lowpass' });
         break;
       case 'fuse':
+        this.say('apex');
         this.chord([262, 392, 523, 659, 1046], 2.0, 0.1, 'triangle', 0.1);
         this.noise({ dur: 1.2, freq: 800, gain: 0.1, sweep: 4200 });
         this.tone({ freq: 70, dur: 1.4, gain: 0.18, glide: 240 });

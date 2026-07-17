@@ -161,6 +161,29 @@ export const APEX = {
     chain: 6, chainFall: 0.78, size: 90,
     levels: [{ cost: 0, damage: 85, range: 300, rate: 0.7, chain: 6 }],
   },
+  'spire+tesla': {
+    id: 'glacialcoil', name: 'GLACIAL COIL', kind: 35, apex: true,
+    desc: 'Cold wound through storm — pulse fields that freeze-lock.',
+    color: [0.75, 0.92, 1.0],
+    attack: 'pulse', statusBoth: ['chill', 'shock'], size: 94,
+    levels: [{ cost: 0, damage: 70, range: 260, rate: 0.5 }],
+  },
+  'bloom+bramble': {
+    id: 'causticfurnace', name: 'CAUSTIC FURNACE', kind: 36, apex: true,
+    desc: 'A maw of burning acid — shells that melt everything down.',
+    color: [1.0, 0.58, 0.18],
+    attack: 'mortar', statusBoth: ['ignite', 'corrode'],
+    minRange: 100, poolDps: 22, poolDur: 4.5, poolR: 90, projSpeed: 500,
+    splash: 100, size: 98,
+    levels: [{ cost: 0, damage: 95, range: 380, rate: 0.42 }],
+  },
+  'coral+urchin': {
+    id: 'lancechorus', name: 'LANCE CHORUS', kind: 37, apex: true,
+    desc: 'Many spines, one voice — a lance that ends conversations.',
+    color: [0.85, 0.65, 1.0],
+    attack: 'beam', beamWidth: 34, size: 92,
+    levels: [{ cost: 0, damage: 150, range: 520, rate: 0.85 }],
+  },
 };
 
 export const ENEMIES = {
