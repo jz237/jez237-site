@@ -758,6 +758,29 @@ const browser = await chromium.launch({
       back = deb.windowTexHD(true);
     return { hd2, hd1, back };
   });
+  // zoom-detail 46 (round five item 9): big roofs earn 2-3 kits + hatches.
+  // Fly above the widest tall roof so its kits promote, then read multi.
+  const rfd = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug,
+      tall = deb.detailReport().rooftops.tall,
+      big = tall.sort((a, b) => b.w - a.w)[0];
+    if (!big || big.w < 22) return { skip: "no wide roof", w: big?.w };
+    deb.flyCam(big.x + 24, big.top + 14, big.z + 24, big.x, big.top + 2, big.z);
+    let rep = null;
+    for (let i = 0; i < 30; i++) {
+      await new Promise((r) => setTimeout(r, 300));
+      rep = deb.detailReport().rooftops;
+      if (rep.multi > 0) break;
+    }
+    window.__freeCam = !1;
+    return { promoted: rep.promoted, multi: rep.multi, w: big.w };
+  });
+  check(
+    "rooftops: wide roofs promote multiple kits (density pass)",
+    !!rfd && (rfd.skip !== undefined || (rfd.promoted >= 2 && rfd.multi >= 1)),
+    JSON.stringify(rfd),
+  );
+
   check(
     "window atlas: shared tower textures HD by default, A/B toggle rebuilds",
     !!wtx && wtx.hd2?.size === 320 && wtx.hd1?.size === 160 && wtx.back?.size === 320 && wtx.back?.hd === 2,

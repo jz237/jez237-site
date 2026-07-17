@@ -3034,11 +3034,25 @@ const rooftopSys = {
       for (let k = 0; k < 6; k++) parts.push(vcBake(new BoxGeometry(0.05, 0.05, 0.44), vcAt(2.2, 0.5 + k * 0.5, 0), DARK));
       return mergeGeometries(parts, !1);
     };
-    const geos = [v0(), v1(), v2(TAN), v0(), v1(), v2(TEAL)],
-      n = mobilePerf ? 3 : 6;
+    // zoom-detail 46 (round-five item 9): every kit carries a roof-access
+    // hatch (galv box + darker lid + stub rail), merged in — zero extra draws
+    const hatch = (hx, hz, yaw) => {
+      const hm = (gx, gy, gz) => new Matrix4().multiplyMatrices(new Matrix4().makeTranslation(hx, 0, hz), new Matrix4().multiplyMatrices(new Matrix4().makeRotationY(yaw), new Matrix4().makeTranslation(gx, gy, gz)));
+      return [
+        vcBake(new BoxGeometry(1.15, 0.95, 1.35), hm(0, 0.475, 0), GALV),
+        vcBake(new BoxGeometry(1.23, 0.1, 1.43), hm(0, 0.98, 0), DARK),
+        vcBake(new BoxGeometry(0.05, 0.6, 0.05), hm(0.68, 0.3, 0.5), DARK),
+        vcBake(new BoxGeometry(0.05, 0.6, 0.05), hm(0.68, 0.3, -0.5), DARK),
+        vcBake(new BoxGeometry(0.05, 0.05, 1.0), hm(0.68, 0.62, 0), DARK),
+      ];
+    };
+    const geos = [v0(), v1(), v2(TAN), v0(), v1(), v2(TEAL)].map((g2, gi) =>
+      mergeGeometries([g2, ...hatch(gi % 2 ? -3.1 : 3.0, gi % 3 === 0 ? -2.6 : 2.4, (gi * Math.PI) / 3)], !1),
+    );
+    const n = mobilePerf ? 3 : 8;
     this.kits = [];
     for (let k = 0; k < n; k++) {
-      const m = new Mesh(geos[k], opaque);
+      const m = new Mesh(geos[k % geos.length], opaque);
       ((m.visible = !1), (m.castShadow = !1), (m.receiveShadow = !1), et.add(m));
       this.kits.push({ g: m, variant: k % 3, idx: -1 });
     }
@@ -3063,21 +3077,30 @@ const rooftopSys = {
         d2 < R2 && cand.push({ s, d2 });
       }
     cand.sort((a, b) => a.d2 - b.d2);
-    ((this.promoted = 0), (this.sample.length = 0));
-    const used = new Set(),
+    ((this.promoted = 0), (this.multi = 0), (this.sample.length = 0));
+    // zoom-detail 46 (round-five item 9): big roofs earn 2-3 kits — used is a
+    // per-roof count now; a placed candidate re-queues until its allowance is
+    // spent (pushing while iterating extends the for..of deterministically)
+    const used = new Map(),
       free = { 0: [], 1: [], 2: [] };
     for (const k of this.kits) ((k.idx = -1), free[k.variant].push(k));
     for (const c of cand) {
       if (this.promoted >= this.kits.length) break;
-      if (used.has(c.s.i)) continue;
-      const r = plateRng((((c.s.i + 1) * 2654435761) ^ 0x700f70) >>> 0),
+      const seen = used.get(c.s.i) ?? 0,
+        allow = Math.min(c.s.w, c.s.d) >= 22 ? 3 : Math.min(c.s.w, c.s.d) >= 14 ? 2 : 1;
+      if (seen >= allow) continue;
+      const r = plateRng((((c.s.i + 1) * 2654435761) ^ (0x700f70 + seen * 977)) >>> 0),
         v = this._variantFor(c.s, r()),
-        kit = free[v].pop();
+        kit = free[v].pop() || (seen > 0 ? free[(v + 1) % 3].pop() : null);
       if (!kit) continue;
-      used.add(c.s.i);
-      const ox = (r() - 0.5) * Math.max(0, c.s.w - 8) * 0.3,
-        oz = (r() - 0.5) * Math.max(0, c.s.d - 8) * 0.3;
+      used.set(c.s.i, seen + 1);
+      seen === 1 && this.multi++;
+      const qx = seen === 0 ? (r() - 0.5) * 2 : seen % 2 ? 1 : -1,
+        qz = seen === 0 ? (r() - 0.5) * 2 : seen < 2 ? 1 : -1,
+        ox = qx * Math.max(0, c.s.w - 9) * (0.14 + r() * 0.14),
+        oz = qz * Math.max(0, c.s.d - 9) * (0.14 + r() * 0.14);
       (kit.g.position.set(c.s.x + ox, c.s.top, c.s.z + oz), (kit.g.rotation.y = r() < 0.5 ? 0 : Math.PI / 2), (kit.g.visible = !0), (kit.idx = c.s.i), this.promoted++);
+      seen + 1 < allow && cand.push(c);
       this.sample.length < 3 && this.sample.push({ i: c.s.i, x: +c.s.x.toFixed(1), z: +c.s.z.toFixed(1), top: +c.s.top.toFixed(1), v });
     }
     for (const k of this.kits) k.idx < 0 && (k.g.visible = !1);
@@ -11055,6 +11078,7 @@ window.__steelRibbonDebug = {
         pool: rooftopSys.kits ? rooftopSys.kits.length : 0,
         radius: rooftopSys.RADIUS,
         pigeons: rooftopSys.PIGEONS,
+        multi: rooftopSys.multi ?? 0,
         sample: rooftopSys.sample.slice(0, 3),
         tall: rooftopSys.spots
           .slice()
