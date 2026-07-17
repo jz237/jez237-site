@@ -249,6 +249,24 @@ export const TIDECALLER = {
 };
 ENEMIES.tidecaller = TIDECALLER;
 
+// Boss #3 — the divider: sheds sporelings at health thresholds and heals
+// its escort with a spore aura (ignite blocks regen — burn is the counter).
+export const MYCELIAL = {
+  id: 'mycelial', name: 'THE MYCELIAL', kind: 31,
+  color: [0.72, 0.95, 0.30], size: 185,
+  hp: 8800, speed: 22, bounty: 700, damage: 20,
+  wobble: 1, boss: true, bossKind: 'mycelial',
+  splitAt: [0.66, 0.33], healAura: { radius: 230, pct: 0.012 },
+  phase2At: 0.33,
+};
+ENEMIES.mycelial = MYCELIAL;
+ENEMIES.sporeling = {
+  id: 'sporeling', name: 'Sporeling', kind: 31,
+  color: [0.72, 0.95, 0.30], size: 78,
+  hp: 950, speed: 55, bounty: 60, damage: 5,
+  wobble: 2, child: true,
+};
+
 // Wave table: 1-5 power fantasy, new species introduced in bands, pressure
 // compounds from 10+. Boss waves: 10 (broodmother), 20 (THE UNLIT). After the
 // campaign (20), endless mode re-runs the table with harsher multipliers.
@@ -268,10 +286,11 @@ export function waveComp(n) {
   }
   if (n === 20 || (n > 20 && n % 10 === 0)) {
     const bossHm = 1 + Math.max(0, n - 20) * 0.12; // scales only past 20
-    const roster = ['unlit', 'tidecaller'];
+    const roster = ['unlit', 'tidecaller', 'mycelial'];
     const bossId = roster[((n - 20) / 10) % roster.length];
     push(bossId, 1, 1, 1.0, bossHm);
     if (bossId === 'tidecaller') { push('shellback', 6, gap * 1.6, 4); push('wisp', 8, gap, 6); }
+    else if (bossId === 'mycelial') { push('regen', 5, gap * 2, 4); push('grub', 8, gap * 1.4, 6); }
     else { push('dartfin', 10, gap, 4); push('spectre', 4, gap * 2, 8); }
     return { entries, clearBonus: 200 + n * 5, boss: bossId };
   }

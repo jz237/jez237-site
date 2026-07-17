@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.7.0';
+export const VERSION = 'v2.8.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -276,6 +276,11 @@ class Game {
         case 'bossSpawn':
           this.ui.banner(ev.name, ev.boss ? 'the grove holds its breath' : 'something vast crawls out');
           this.fx.shake = Math.min(9, this.fx.shake + 4);
+          break;
+        case 'bossSplit':
+          this.ui.toast('it divides — burn the pieces', 'warn');
+          this.fx.shake = Math.min(9, this.fx.shake + 4);
+          this.fx.aberr = Math.min(0.018, this.fx.aberr + 0.008);
           break;
         case 'bossSummon':
           this.fx.shake = Math.min(8, this.fx.shake + 3.5);

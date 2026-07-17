@@ -711,6 +711,38 @@ void main(){
       cov = clamp(cov + fresnel*0.3*aux, 0.0, 1.0);
     }
   }
+  else if(kind == 31){ // THE MYCELIAL / sporeling — fungal mass, gilled cap
+    vec2 q = p; q.y = -q.y;
+    float child = step(0.5, aux); // sporelings are simpler, brighter
+    float wob = fbm(q*2.2 + seed*5.0 + phase*0.06)*0.10;
+    // cap dome
+    float cap = sdCircle(q*vec2(0.82,1.15)-vec2(0.0,0.12), 0.5+wob);
+    cap = max(cap, -(q.y+0.62)); // flat under-line
+    // base hyphae mound
+    float d = smin(cap, sdCircle(q*vec2(0.9,1.5)+vec2(0.0,0.72), 0.34+wob*0.6), 0.16);
+    // spore bulbs clustered on the crown
+    float bulbs = 0.0;
+    for(int i=0;i<5;i++){
+      float fi=float(i);
+      vec2 c = vec2((fi-2.0)*0.19 + sin(seed*9.0+fi)*0.05, 0.42 + 0.10*hash12(vec2(seed,fi)));
+      float beat = 0.5+0.5*sin(phase*1.4+fi*1.9);
+      float bd = sdCircle(q-c, 0.09+0.03*beat);
+      d = smin(d, bd, 0.07);
+      bulbs += smoothstep(0.10,0.0,length(q-c)) * beat;
+    }
+    float m = smoothstep(0.03,-0.03,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    float p2 = step(0.5, vB.x);
+    // gill lines radiating under the cap
+    float ang = atan(q.y-0.05, q.x);
+    float gills = pow(0.5+0.5*sin(ang*22.0 + seed*10.0), 4.0) * smoothstep(0.1,-0.35,q.y) * smoothstep(-0.65,-0.3,q.y);
+    vec3 body = mix(vec3(0.05,0.06,0.03), tint*(0.30+0.15*child), smoothstep(0.7,0.0,length(q)));
+    body *= 0.8 + 0.35*fbm3(q*5.0+seed*3.0);
+    col = body + tint*gills*(0.5+0.4*p2) + tint*bulbs*(0.9+0.9*p2+0.4*child);
+    float rim = smoothstep(0.0,0.07,-d)*smoothstep(-0.16,-0.06,d);
+    col += tint*rim*0.6;
+    cov = m*0.96;
+  }
   else if(kind == 29){ // FROND — foreground kelp silhouette, haze-rimmed
     vec2 q = p; q.y = -q.y;
     float d = 1e9;

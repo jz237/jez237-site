@@ -459,6 +459,14 @@ export class Renderer {
       const ds = depthScale(pr.y);
       L.push(pr.x, pr.y + 20, 70 * ds, 44 * ds, 0, 0, 0, 0.25, pr.color[0], pr.color[1], pr.color[2], 0);
     }
+    // mycelial heal-aura: a slow acid breath washing over the escort
+    for (const e of sim.enemies) {
+      if (e.def.bossKind !== 'mycelial') continue;
+      const ds = depthScale(e.y);
+      const cyc = (t * 0.4 + e.wobblePhase) % 1;
+      const R = (e.def.healAura.radius * 2 * ds * cyc + 40) * 1.4;
+      L.push(e.x, e.y, R, R * 0.62, 0, t, 0, (1 - cyc) * 0.25 / 1.4, 0.45, 0.7, 0.15, 1);
+    }
     // hazard pools light the ground
     for (const pl of sim.pools) {
       const lf = Math.min(1, (pl.dur - pl.t) / 0.6) * Math.min(1, pl.t / 0.15);
@@ -531,6 +539,8 @@ export class Renderer {
       const hpf = e.hp / e.maxHp;
       let aux = hpf, bossRot = rot;
       if (e.def.bossKind === 'tidecaller') { aux = e.maxShield > 0 ? e.shield / e.maxShield : 0; bossRot = e.bossPhase === 2 ? 1 : 0; }
+      else if (e.def.bossKind === 'mycelial') { aux = 0; bossRot = e.bossPhase === 2 ? 1 : 0; }
+      else if (e.def.child) { aux = 1; }
       else if (e.def.shield) aux = e.maxShield > 0 ? e.shield / e.maxShield : 0;
       else if (e.def.phasing) aux = e.untargetable ? 0.28 : 1;
       else if (e.def.boss) aux = e.bossPhase === 2 ? 1 : 0;
@@ -538,7 +548,7 @@ export class Renderer {
         // dark aura beneath the great ones
         E.push({ y: e.y - 1, k: 26, x: e.x, sx: size * 2.4, sy: size * 1.5, rot: 0, phase: e.phase, aux: e.def.boss ? 0.8 : 0.45, c: [0, 0, 0], seed: e.wobblePhase });
       }
-      E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot: e.def.bossKind === 'tidecaller' ? bossRot : rot, phase: e.phase, aux, c: e.def.color, seed: e.wobblePhase });
+      E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot: (e.def.bossKind === 'tidecaller' || e.def.bossKind === 'mycelial') ? bossRot : rot, phase: e.phase, aux, c: e.def.color, seed: e.wobblePhase });
     }
     E.sort((a, b) => a.y - b.y);
     for (const e of E) {
