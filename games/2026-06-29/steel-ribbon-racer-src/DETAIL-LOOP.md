@@ -1416,3 +1416,34 @@ signal-corner ped density weighting.
   FINAL: 8 shipped (2,3,4,5,6,7,8,10) + 1 closed-exists (1) + 1
   blocked (9, technique-limited). DEPLOY BATCH 16 (v3.23.0) + closing
   survey next.
+- **58 ROUND SIX CLOSE + ROUND SEVEN BACKLOG (2026-07-17)**: v3.23.0
+  LIVE (batch 16: crosswalk wear, awnings+boards, turn signals, blimp).
+  ROUND SIX FINAL SCORE: 8 shipped, 1 closed-exists, 1 blocked. Suite
+  156/156. Closing survey (loop-shots/58-survey-7/): the race pack on
+  the deck reads great (racing line ✓ seams ✓) but the deck EDGES are
+  plain and rivals brake invisibly; city streets read smooth at near
+  (no oil/lane wear); parks lovely but EMPTY of people; ponds bare;
+  suburban shops flat; lamp poles bare; sky life rich (blimp, planes,
+  balloons ✓). ROUND SEVEN BACKLOG (prioritized):
+  1. RACE KERBS — red/white rumble strips on deck edges through
+     corners (course-spline strips at high-curvature spans; the race
+     sees them every lap).
+  2. RIVAL + TRAFFIC BRAKE LIGHTS — brakePulse exists on traffic;
+     surface it as rear glow quads; extend to race rivals.
+  3. POND EDGES — reeds/rocks/lily pads ringing city ponds (vcBaked).
+  4. PEDS IN PARKS — route a few walkers onto park paths (they only
+     walk streets today; the parks are empty stages).
+  5. ROAD OIL STAINS — dark lane-center patches near intersections
+     (roadDecal pattern, deterministic).
+  6. SUBURBAN SHOP FACADES — the A() brick shops get a window/door
+     canvas band at near (the en() tower treatment, smaller).
+  7. LAMP-POST DRESSING — hanging baskets/banners on poles near parks
+     and shops (merged per color).
+  8. BALLOON CANOPIES — striped canopies + baskets for the hot-air
+     balloons.
+  9. GRANDSTAND CROWDS — colored crowd-dot texture on the outskirt
+     grandstands (race-visible).
+  10. WINDMILL POLISH — striped blade tips + hubs on outskirt
+     turbines.
+  Wishlist note: aerial mowing stripes read weak from 45m+ — consider
+  +2% amplitude if a later item touches the terrain bake.
