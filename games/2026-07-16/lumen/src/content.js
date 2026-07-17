@@ -139,6 +139,30 @@ export const TOWERS = {
   },
 };
 
+// Apex fusion: two ADJACENT max-level towers of complementary species fuse
+// into a hybrid that applies BOTH statuses per hit — reactions on tap.
+// Key = sorted 'a+b'. (More pairs unlock as their forms are grown.)
+export const FUSION_COST = 300;
+export const APEX = {
+  'bloom+spire': {
+    id: 'prismbloom', name: 'PRISMBLOOM', kind: 33, apex: true,
+    desc: 'Chill and fire in one shell — every volley shatters.',
+    color: [0.75, 0.45, 1.0],
+    attack: 'mortar', statusBoth: ['chill', 'ignite'],
+    minRange: 100, poolDps: 18, poolDur: 4, poolR: 80, projSpeed: 520,
+    splash: 95, size: 96,
+    levels: [{ cost: 0, damage: 110, range: 400, rate: 0.5 }],
+  },
+  'bramble+tesla': {
+    id: 'stormbriar', name: 'STORMBRIAR', kind: 34, apex: true,
+    desc: 'Living lightning threaded through thorns — arcs that overload.',
+    color: [0.85, 1.0, 0.55],
+    attack: 'chain', statusBoth: ['shock', 'corrode'],
+    chain: 6, chainFall: 0.78, size: 90,
+    levels: [{ cost: 0, damage: 85, range: 300, rate: 0.7, chain: 6 }],
+  },
+};
+
 export const ENEMIES = {
   mite: {
     id: 'mite', name: 'Gloom Mite', kind: 0,
