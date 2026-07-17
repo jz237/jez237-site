@@ -45,7 +45,59 @@ export class Renderer {
     this.fgFlora = null; // foreground silhouettes, built per map
     this.frame = 0;
     this.w = 0; this.h = 0;
+    // world-space stain accumulation: the run's history painted into the ground
+    this.stampQueue = [];
+    const gl2 = this.gl;
+    this.fStainA = createFBO(gl2, 960, 540, this.halfFloat);
+    this.fStainB = createFBO(gl2, 960, 540, this.halfFloat);
+    this.clearStains();
     this.resize();
+  }
+
+  clearStains() {
+    const gl = this.gl;
+    for (const f of [this.fStainA, this.fStainB]) {
+      gl.bindFramebuffer(gl.FRAMEBUFFER, f.fbo);
+      gl.clearColor(0, 0, 0, 1); gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    this.stampQueue.length = 0;
+  }
+
+  // decay the stain field a whisper, then burn in this frame's new stamps.
+  // Drawn with a world-locked camera so stains live in world space.
+  updateStains(dt) {
+    const gl = this.gl;
+    const A = this.fStainA, B = this.fStainB;
+    gl.bindFramebuffer(gl.FRAMEBUFFER, B.fbo);
+    gl.viewport(0, 0, B.w, B.h);
+    gl.disable(gl.BLEND);
+    gl.useProgram(this.pDecay.prog);
+    const decay = Math.pow(0.5, dt / 90); // half-life ~90s — near-permanent
+    gl.uniform1f(this.pDecay.u.uDecayR, decay);
+    gl.uniform1f(this.pDecay.u.uDecayG, decay);
+    gl.uniform1f(this.pDecay.u.uDecayB, decay);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, A.tex);
+    gl.uniform1i(this.pDecay.u.uPrev, 0);
+    gl.bindVertexArray(this.quad);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    if (this.stampQueue.length) {
+      this.lights.reset();
+      for (const st of this.stampQueue.splice(0, 200)) {
+        this.lights.push(st.x, st.y, st.r, st.r * 0.62, 0, st.x * 0.01, 0, st.i,
+          st.color[0], st.color[1], st.color[2], 0);
+      }
+      gl.enable(gl.BLEND);
+      gl.blendFunc(gl.ONE, gl.ONE);
+      gl.useProgram(this.pLight.prog);
+      gl.uniform2f(this.pLight.u.uCam, WORLD_W / 2, WORLD_H / 2);
+      gl.uniform1f(this.pLight.u.uZoom, 1);
+      gl.uniform2f(this.pLight.u.uRes, WORLD_W, WORLD_H);
+      this.lights.flush(this.pLight);
+      gl.disable(gl.BLEND);
+    }
+    this.fStainA = B; this.fStainB = A;
   }
 
   makeSpores() {
@@ -169,6 +221,7 @@ export class Renderer {
     const t = sim.time + fx.wallTime; // keep ambient life moving even when paused
     if (!this.pathMesh) this.buildMapMeshes(sim);
     this.updateSpores(dt);
+    this.updateStains(dt);
 
     // ---- camera → uniforms
     const camX = WORLD_W / 2 + cam.dx + cam.shakeX;
@@ -209,6 +262,11 @@ export class Renderer {
     gl.uniform1f(this.pGround.u.uHorizon, skyFrac);
     gl.uniform2f(this.pGround.u.uReso, this.w, this.h);
     gl.uniform1f(this.pGround.u.uMood, mood);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.fStainA.tex);
+    gl.uniform1i(this.pGround.u.uStain, 1);
+    gl.uniform2f(this.pGround.u.uWorldSize, WORLD_W, WORLD_H);
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindVertexArray(this.groundMesh.vao);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.groundMesh.count);
 
@@ -216,6 +274,11 @@ export class Renderer {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
     bindWorld(this.pPath);
+    gl.activeTexture(gl.TEXTURE1);
+    gl.bindTexture(gl.TEXTURE_2D, this.fStainA.tex);
+    gl.uniform1i(this.pPath.u.uStain, 1);
+    gl.uniform2f(this.pPath.u.uWorldSize, WORLD_W, WORLD_H);
+    gl.activeTexture(gl.TEXTURE0);
     for (const mesh of this.pathMeshes) {
       gl.bindVertexArray(mesh.vao);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, mesh.count);
