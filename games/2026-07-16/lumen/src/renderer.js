@@ -342,6 +342,12 @@ export class Renderer {
       const ds = depthScale(pr.y);
       L.push(pr.x, pr.y + 20, 70 * ds, 44 * ds, 0, 0, 0, 0.25, pr.color[0], pr.color[1], pr.color[2], 0);
     }
+    // hazard pools light the ground
+    for (const pl of sim.pools) {
+      const lf = Math.min(1, (pl.dur - pl.t) / 0.6) * Math.min(1, pl.t / 0.15);
+      const ds = depthScale(pl.y);
+      L.push(pl.x, pl.y, pl.r * 2.1 * ds, pl.r * 1.3 * ds, 0, pl.t * 2, 0, 0.5 * lf, pl.color[0], pl.color[1], pl.color[2], 0);
+    }
     // shockwave rings (extra=1 → ring)
     for (const r of sim.rings) {
       const f = r.t / r.dur;
@@ -418,6 +424,70 @@ export class Renderer {
         this.pushLightning(hit.from.x, hit.from.y, hit.to.x, hit.to.y, arc.color, lf, arc.seed + hit.to.x);
       }
     }
+    // urchin lances — straight, hot core, tapering off, muzzle bloom
+    for (const b of sim.beams) {
+      const lf = 1 - b.t / b.dur;
+      const dx = b.x2 - b.x1, dy = b.y2 - b.y1;
+      const len = Math.hypot(dx, dy);
+      const rot = Math.atan2(dy, dx);
+      const segsN = 6;
+      for (let i = 0; i < segsN; i++) {
+        const f0 = i / segsN, f1 = (i + 1) / segsN;
+        const mx = b.x1 + dx * (f0 + f1) / 2, my = b.y1 + dy * (f0 + f1) / 2;
+        const taper = 1 - f0 * 0.65;
+        this.segs.push(mx, my, len / segsN / 2 + 3, 13 * taper * lf, rot, 0, KIND.SEG, lf,
+          b.color[0] * lf * taper, b.color[1] * lf * taper, b.color[2] * lf * taper, 0);
+      }
+      A.push(b.x1, b.y1, 46 * lf, 46 * lf, 0, 0, KIND.GLOW, 1,
+        b.color[0] * lf, b.color[1] * lf, b.color[2] * lf, 0);
+    }
+    // hazard pools — flickering ground fire + rising embers
+    for (const pl of sim.pools) {
+      const lf = Math.min(1, (pl.dur - pl.t) / 0.6) * Math.min(1, pl.t / 0.15);
+      for (let i = 0; i < 5; i++) {
+        const hx = Math.sin(i * 2.4 + pl.x) * pl.r * 0.55;
+        const hy = Math.cos(i * 1.7 + pl.y) * pl.r * 0.33;
+        const fl = 0.5 + 0.5 * Math.sin(t * (6 + i) + i * 2.2 + pl.x);
+        A.push(pl.x + hx, pl.y + hy, 26 + fl * 14, 20 + fl * 10, 0, t * 3 + i, KIND.MOTE, lf,
+          pl.color[0] * fl * lf * 0.55, pl.color[1] * fl * lf * 0.55, pl.color[2] * fl * lf * 0.55, i * 0.13);
+      }
+      // rising embers
+      for (let i = 0; i < 4; i++) {
+        const cyc = (t * (0.5 + i * 0.13) + i * 0.7 + pl.x * 0.01) % 1;
+        const ex = pl.x + Math.sin(i * 51.7 + pl.y) * pl.r * 0.6;
+        const ey = pl.y - cyc * 55;
+        A.push(ex, ey, 7, 7, 0, 0, KIND.GLOW, 1,
+          pl.color[0] * (1 - cyc) * lf * 0.8, pl.color[1] * (1 - cyc) * lf * 0.8, pl.color[2] * (1 - cyc) * lf * 0.8, 0);
+      }
+    }
+    // status halos — statuses must be readable as light
+    for (const e of sim.enemies) {
+      const ds = depthScale(e.y);
+      const st = e.st;
+      if (!st) continue;
+      if (st.freeze > 0) {
+        A.push(e.x, e.y, e.def.size * 1.6 * ds, e.def.size * 1.6 * ds, 0, e.phase, KIND.GLOW, 1, 0.5, 0.75, 0.9, 0);
+      } else if (st.chill > 0) {
+        const f = Math.min(1, st.chill);
+        A.push(e.x, e.y, e.def.size * 1.35 * ds, e.def.size * 1.35 * ds, 0, e.phase, KIND.GLOW, 1, 0.06 * f, 0.35 * f, 0.42 * f, 0);
+      }
+      if (st.ignite > 0) {
+        const fl = 0.6 + 0.4 * Math.sin(t * 11 + e.phase * 3);
+        A.push(e.x, e.y - e.def.size * 0.5 * ds, e.def.size * 0.9 * ds, e.def.size * 1.3 * ds, 0, t * 5, KIND.MOTE, 1,
+          1.0 * fl * 0.7, 0.5 * fl * 0.7, 0.1 * fl * 0.7, e.wobblePhase);
+      }
+      if (st.corrodeStacks > 0) {
+        for (let i = 0; i < Math.min(3, st.corrodeStacks); i++) {
+          const a = t * 2.4 + i * 2.1 + e.phase;
+          A.push(e.x + Math.cos(a) * e.def.size * 0.55 * ds, e.y + Math.sin(a) * e.def.size * 0.4 * ds,
+            8 * ds, 8 * ds, 0, 0, KIND.GLOW, 1, 0.35, 0.6, 0.08, 0);
+        }
+      }
+      if (st.shock > 0) {
+        this.pushLightning(e.x - e.def.size * 0.6 * ds, e.y, e.x + e.def.size * 0.6 * ds, e.y,
+          [1, 0.5, 0.95], 0.7, e.phase + this.frame * 0.1);
+      }
+    }
     // heart-hit flash
     if (sim.heartHitT > 0) {
       const [hx, hy] = sim.map.heart;
@@ -468,6 +538,16 @@ export class Renderer {
       for (const hit of arc.hits) {
         T.push(hit.to.x, hit.to.y, 22, 22, 0, 0, KIND.GLOW, 1,
           arc.color[0] * 0.35, arc.color[1] * 0.35, arc.color[2] * 0.35, 0);
+      }
+    }
+    // beams sear a line into the trail buffer on their first frame
+    for (const b of sim.beams) {
+      if (b.t > 0.05) continue;
+      const n = 9;
+      for (let i = 0; i <= n; i++) {
+        const f = i / n;
+        T.push(b.x1 + (b.x2 - b.x1) * f, b.y1 + (b.y2 - b.y1) * f, 13, 13, 0, 0, KIND.GLOW, 1,
+          b.color[0] * 0.4 * (1 - f * 0.5), b.color[1] * 0.4 * (1 - f * 0.5), b.color[2] * 0.4 * (1 - f * 0.5), 0);
       }
     }
   }

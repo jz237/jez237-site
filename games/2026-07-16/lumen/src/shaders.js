@@ -379,6 +379,135 @@ void main(){
     col = blade*m + tint*glow*(0.5+1.6*aux);
     cov = clamp(m*0.85 + glow*0.3, 0.0, 1.0);
   }
+  else if(kind == 12){ // CHILL SPIRE — faceted crystal polyp
+    vec2 q = p; q.y = -q.y; // grow upward
+    float wob = fbm3(q*2.5 + seed*7.0)*0.05;
+    // main crystal: blade tapering to a point, rounded root
+    float apex = 0.78;
+    float half1 = mix(0.26, 0.0, smoothstep(-0.45, apex, q.y)) + 0.02;
+    float d = abs(q.x) - half1 - wob;
+    d = max(d, q.y - apex);
+    d = smin(d, sdCircle(q + vec2(0.0, 0.52), 0.26 + wob), 0.14);
+    // two side shards
+    for(int i=0;i<2;i++){
+      float sgn = i==0 ? -1.0 : 1.0;
+      vec2 r = q - vec2(sgn*0.34, -0.28);
+      float a = sgn*0.5;
+      vec2 rr = vec2(r.x*cos(a)-r.y*sin(a), r.x*sin(a)+r.y*cos(a));
+      float halfW = 0.13 - 0.16*smoothstep(-0.3,0.5,rr.y);
+      float d2 = max(abs(rr.x)-halfW-wob, abs(rr.y)-0.38);
+      d = min(d, d2);
+    }
+    float m = smoothstep(0.02,-0.02,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    // faceted interior: banded light + inner frost glow
+    float facet = 0.6 + 0.4*sin(q.x*14.0 + q.y*9.0 + seed*20.0);
+    float inner = smoothstep(0.5,0.0,length(q*vec2(1.6,0.9)+vec2(0.0,0.15)));
+    vec3 body = mix(vec3(0.06,0.10,0.16), tint*0.55, 0.35 + 0.4*facet);
+    body += tint * inner * (0.5 + 1.2*aux);
+    float tip = smoothstep(0.22,0.0,length(q-vec2(0.0,0.66)));
+    body += mix(tint,vec3(1.0),0.5) * tip * (0.8 + 2.2*aux*aux);
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.13,-0.04,d);
+    body += tint*rim*0.7;
+    col = body;
+    cov = m*0.96;
+  }
+  else if(kind == 13){ // LANCE URCHIN — spined focus organism
+    float ang = atan(p.y,p.x);
+    float r = length(p);
+    float d = 1e9;
+    float tipGlow = 0.0;
+    for(int i=0;i<14;i++){
+      float fi = float(i);
+      float a = fi/14.0*6.2832 + sin(phase*0.5+fi)*0.03;
+      float len = 0.55 + 0.34*hash12(vec2(seed,fi)) + 0.06*sin(phase*1.5+fi*2.2);
+      vec2 dir = vec2(cos(a), sin(a)*0.85);
+      float sp = sdSeg(p, dir*0.14, dir*len) - (0.045 - 0.035*smoothstep(0.1,len,r));
+      d = min(d, sp);
+      tipGlow += smoothstep(0.07,0.0,length(p-dir*len));
+    }
+    float core = sdCircle(p*vec2(1.0,1.1), 0.26 + fbm3(p*5.0+phase*0.3)*0.04);
+    d = smin(d, core, 0.06);
+    float m = smoothstep(0.015,-0.015,d);
+    float eye = smoothstep(0.15,0.0,length(p*vec2(1.0,1.1)));
+    if(m<=0.0 && eye<=0.01){ frag=vec4(0.0); return; }
+    vec3 body = mix(vec3(0.07,0.02,0.10), tint*0.40, smoothstep(0.6,0.05,r));
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.10,-0.03,d);
+    col = body*m + tint*rim*0.55*m;
+    col += mix(tint,vec3(1.0),0.65) * eye * (0.9 + 2.6*aux*aux);
+    col += tint * tipGlow * (0.3 + 1.5*aux);
+    cov = clamp(m*0.95 + eye*0.4, 0.0, 1.0);
+  }
+  else if(kind == 14){ // EMBER BLOOM — mortar flower, petals cup an amber throat
+    vec2 q = p; q.y = -q.y;
+    float d = 1e9;
+    for(int i=0;i<5;i++){
+      float fi = float(i);
+      float a = (fi-2.0)*0.42 + sin(phase*0.6+fi*1.9)*0.05;
+      vec2 c = vec2(sin(a)*0.42, 0.10 + cos(a)*0.16);
+      vec2 r = q - c;
+      vec2 rr = vec2(r.x*cos(-a)-r.y*sin(-a), r.x*sin(-a)+r.y*cos(-a));
+      float petal = length(rr*vec2(1.6,1.0) + vec2(0.0,-0.14)) - (0.30 + fbm3(q*4.0+fi+seed*9.0)*0.06);
+      d = min(d, petal);
+    }
+    // base bulb
+    d = smin(d, sdCircle(q+vec2(0.0,0.42), 0.30), 0.12);
+    float m = smoothstep(0.02,-0.02,d);
+    float throat = smoothstep(0.34,0.0,length(q-vec2(0.0,0.16)));
+    if(m<=0.0 && throat<=0.01){ frag=vec4(0.0); return; }
+    float veins = 0.5+0.5*sin(atan(q.y-0.1,q.x)*10.0+phase*0.4);
+    vec3 body = mix(vec3(0.09,0.04,0.08), tint*0.38, smoothstep(-0.5,0.4,q.y));
+    body *= 0.8 + 0.3*veins*smoothstep(0.2,0.6,length(q-vec2(0.0,0.16)));
+    col = body*m;
+    col += mix(tint,vec3(1.0,0.9,0.6),0.4) * throat * (0.9 + 2.8*aux*aux) * m;
+    float rim = smoothstep(0.0,0.06,-d)*smoothstep(-0.14,-0.05,d);
+    col += tint*rim*0.5*m;
+    cov = m*0.96;
+  }
+  else if(kind == 15){ // ACID BRAMBLE — thorn mound with sap-droplet tips
+    vec2 q = p; q.y = -q.y;
+    float d = sdCircle(q+vec2(0.0,0.45), 0.42 + fbm3(q*3.0+seed*5.0)*0.10); // mound
+    float dropGlow = 0.0;
+    for(int i=0;i<6;i++){
+      float fi = float(i);
+      float a = (fi/6.0-0.5)*2.4 + sin(phase*0.5+fi*2.0)*0.06;
+      float len = 0.55 + 0.25*hash12(vec2(seed*3.0,fi));
+      vec2 root = vec2(sin(a)*0.30, -0.30);
+      vec2 tip = root + vec2(sin(a+0.3*sin(fi))*len*0.7, len*0.8);
+      float thorn = sdSeg(q, root, tip) - (0.085 - 0.065*smoothstep(0.0,1.0,distance(q,root)/len));
+      d = smin(d, thorn, 0.06);
+      dropGlow += smoothstep(0.10,0.0,length(q-tip)) * (0.6+0.4*sin(phase*2.0+fi*2.6));
+    }
+    float m = smoothstep(0.02,-0.02,d);
+    if(m<=0.0 && dropGlow<=0.01){ frag=vec4(0.0); return; }
+    vec3 body = mix(vec3(0.05,0.06,0.03), tint*0.22, smoothstep(-0.6,0.5,q.y)*0.7);
+    body *= 0.8 + 0.35*fbm3(q*7.0+seed);
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.12,-0.04,d);
+    col = body*m + tint*rim*(0.4+0.3*aux)*m;
+    col += mix(tint,vec3(1.0),0.3) * dropGlow * (0.5 + 1.8*aux);
+    cov = clamp(m*0.95 + dropGlow*0.25, 0.0, 1.0);
+  }
+  else if(kind == 16){ // RESONANT BULB — singing orb on a stalk
+    vec2 q = p; q.y = -q.y;
+    float stalk = sdSeg(q, vec2(0.0,-0.75), vec2(0.03*sin(phase*0.8),-0.18)) - 0.07;
+    float orbR = 0.42 + 0.02*sin(phase*1.6) + fbm3(vec2(atan(q.y-0.18,q.x)*1.3, phase*0.15)+seed*4.0)*0.07;
+    float orb = sdCircle(q-vec2(0.0,0.18), orbR);
+    float d = smin(stalk, orb, 0.10);
+    float m = smoothstep(0.02,-0.02,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    vec2 oq = (q-vec2(0.0,0.18))/orbR;
+    float rr = length(oq);
+    // concentric singing membranes
+    float memb = pow(0.5+0.5*sin(rr*14.0 - phase*2.2), 3.0) * smoothstep(1.0,0.3,rr);
+    float core = smoothstep(0.30,0.0,rr);
+    vec3 body = mix(vec3(0.08,0.05,0.13), tint*0.30, 0.5);
+    col = body*m;
+    col += tint * memb * (0.5+0.9*aux) * m;
+    col += mix(tint,vec3(1.0),0.6) * core * (1.0+1.4*aux) * m;
+    float rim = smoothstep(0.0,0.04,-d)*smoothstep(-0.09,-0.03,d);
+    col += tint*rim*0.8*m;
+    cov = m*0.92;
+  }
   else if(kind == 6){ // HEART — the thing we defend
     float integ = aux; // 1 healthy → 0 dying
     vec3 hcol = mix(vec3(1.0,0.25,0.18), tint, integ);
