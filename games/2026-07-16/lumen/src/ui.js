@@ -1,12 +1,14 @@
 // HTML HUD wiring: resource bar, tower cards, surge button, tower inspect,
 // toasts. Pure DOM — the canvas stays untouched by UI concerns.
 
-import { TOWERS, ECON, MAPS } from './content.js';
+import { TOWERS, ECON, MAPS, ENEMIES, waveComp } from './content.js';
 import { localScores, fetchGlobal } from './scores.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
 const GLYPHS = { coral: '❋', tesla: '✺', spire: '❆', urchin: '✴', bloom: '❁', bramble: '✿', bulb: '◉' };
+const FOE_GLYPHS = { mite: '·', grub: '◗', wisp: '✧', husk: '▣', brood: '◉', shellback: '⬡',
+  dartfin: '➤', bulwark: '▲', spectre: '☽', regen: '✚', broodmother: '❂', unlit: '⬤' };
 
 export class UI {
   constructor(root, game) {
@@ -155,6 +157,31 @@ export class UI {
       s.textContent = sim.state === 'wave' ? (document.body.classList.contains('coarse') ? 'INBOUND' : 'SURGE INBOUND') : '—';
       s.classList.remove('ready');
       s.disabled = true;
+    }
+    // upcoming-wave forecast during prep (total information)
+    const pv = document.getElementById('wavePreview');
+    if (pv) {
+      if (sim.state === 'prep') {
+        const next = sim.wave + 1;
+        if (this._pvWave !== next) {
+          this._pvWave = next;
+          const comp = waveComp(next);
+          const counts = {};
+          for (const e of comp.entries) counts[e.type] = (counts[e.type] || 0) + Math.floor(e.count);
+          const bits = Object.keys(counts).map(t => {
+            const d = ENEMIES[t];
+            const c = d.color.map(v => Math.floor(Math.pow(v, 0.7) * 255)).join(',');
+            const big = d.boss || d.miniboss;
+            return `<span class="pvfoe${big ? ' pvboss' : ''}" style="--fc: rgb(${c})" title="${d.name}">${FOE_GLYPHS[t] || '?'}${big ? ' ' + d.name : '×' + counts[t]}</span>`;
+          }).join('');
+          const mut = comp.mutator ? `<span class="pvmut">${comp.mutator.name}</span>` : '';
+          pv.innerHTML = `<span class="pvlabel">NEXT</span>${bits}${mut}`;
+          pv.classList.add('show');
+        }
+      } else if (this._pvWave !== -1) {
+        this._pvWave = -1;
+        pv.classList.remove('show');
+      }
     }
     // card affordability + armed state
     for (const card of this.el.cards.children) {

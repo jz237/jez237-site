@@ -56,6 +56,18 @@
   #surge.ready { border-color: var(--magenta); box-shadow: 0 0 22px -6px var(--magenta);
     animation: surgepulse 2.2s ease-in-out infinite; }
   #surge:disabled { opacity: 0.45; cursor: default; animation: none; }
+  #wavePreview { left: 50%; bottom: 96px; transform: translateX(-50%) translateY(8px);
+    display: flex; gap: 12px; align-items: center; padding: 6px 18px;
+    background: rgba(8,6,24,0.65); border: 1px solid rgba(120,220,255,0.16);
+    border-radius: 12px 5px 12px 5px; backdrop-filter: blur(6px);
+    font-size: 13px; letter-spacing: 0.1em; opacity: 0; transition: all 0.35s ease;
+    pointer-events: none; white-space: nowrap; }
+  #wavePreview.show { opacity: 1; transform: translateX(-50%); }
+  #wavePreview .pvlabel { color: #6f97a3; font-size: 11px; letter-spacing: 0.22em; }
+  #wavePreview .pvfoe { color: var(--fc); text-shadow: 0 0 8px var(--fc); }
+  #wavePreview .pvboss { font-weight: 700; letter-spacing: 0.16em; }
+  #wavePreview .pvmut { color: #ffd9de; border-left: 1px solid rgba(255,120,150,0.3); padding-left: 12px; letter-spacing: 0.16em; }
+  @media (pointer: coarse) { #wavePreview { bottom: 116px; font-size: 12px; } }
   #tempo { display: flex; gap: 6px; pointer-events: auto; }
   #tempo button { background: var(--glass); color: #cfe9ef; border: 1px solid rgba(120,220,255,0.22);
     border-radius: 9px; width: 44px; padding: 10px 0; font-family: inherit; font-size: 15px;
@@ -208,6 +220,7 @@
   <div class="hud" id="toasts"></div>
   <div class="hud" id="banner"></div>
   <div class="hud" id="inspect"></div>
+  <div class="hud" id="wavePreview"></div>
   <div class="hud" id="bottombar">
     <div id="cards" style="display:flex;gap:12px"></div>
     <button id="surge">CALL THE SURGE</button>
@@ -250,7 +263,7 @@
   <div id="rotate"><div><span class="ricon">📱</span>turn your device sideways<br>the grove is wide</div></div>
   <button id="tapCancel">✕ cancel placement</button>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v2.4.0</div>
+  <div id="ver">LUMEN v2.5.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>
