@@ -3406,6 +3406,75 @@ const roadDecalSys = {
     (this.ensure(), this.place());
   },
 };
+// zoom-detail 63 (round-seven item 5): oil stains — the roadDecalSys pattern
+// cloned small: ONE InstancedMesh (cap 24), 2-cell atlas of dark blots at
+// intersection approach lanes. Dark-on-grey backdrop = dusk-safe.
+let oilAtlasTex = null;
+function buildOilAtlas() {
+  if (oilAtlasTex) return oilAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 256), (cv.height = 128));
+  const g = cv.getContext("2d");
+  const blot = (cx, cy, r, a) => {
+    const gr = g.createRadialGradient(cx, cy, 1, cx, cy, r);
+    (gr.addColorStop(0, `rgba(12,12,16,${a})`), gr.addColorStop(0.7, `rgba(14,14,18,${a * 0.55})`), gr.addColorStop(1, "rgba(16,16,20,0)"));
+    ((g.fillStyle = gr), g.beginPath(), g.arc(cx, cy, r, 0, Math.PI * 2), g.fill());
+  };
+  (blot(64, 64, 46, 0.5), blot(38, 44, 18, 0.4), blot(92, 88, 14, 0.42), blot(84, 38, 9, 0.34));
+  (blot(192, 64, 22, 0.44), blot(192, 34, 12, 0.36), blot(190, 96, 10, 0.3), blot(206, 78, 7, 0.3), blot(178, 50, 6, 0.3));
+  oilAtlasTex = new CanvasTexture(cv);
+  return ((oilAtlasTex.colorSpace = SRGBColorSpace), oilAtlasTex);
+}
+const oilSys = {
+  spots: [],
+  mesh: null,
+  placed: 0,
+  placedDone: !1,
+  enabled: !0,
+  sample: [],
+  _surfaceY(sp) {
+    return roadDecalSys._surfaceY(sp);
+  },
+  ensure() {
+    if (this.mesh) return;
+    const geo = new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+    geo.setAttribute("aDecalSlot", new InstancedBufferAttribute(new Float32Array(24), 1));
+    const mat = new MeshBasicMaterial({ map: buildOilAtlas(), transparent: !0, polygonOffset: !0, polygonOffsetFactor: -3, depthWrite: !1 });
+    mat.customProgramCacheKey = () => "oil-stain-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute float aDecalSlot;\nvarying vec2 vOilUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvOilUv = vec2((aDecalSlot + uv.x) * 0.5, uv.y);");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vOilUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vOilUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, 24);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1), (this.mesh.raycast = () => {}), (this.mesh.renderOrder = 1), (this.mesh.count = 0));
+    et.add(this.mesh);
+  },
+  place() {
+    const dummy = new Object3D();
+    let n = 0;
+    this.sample.length = 0;
+    for (const sp of this.spots) {
+      if (n >= 24) break;
+      const sc = sp.v ? [2.0 + sp.s * 1.2, 1.4 + sp.s] : [2.6 + sp.s * 1.6, 2.4 + sp.s * 1.4];
+      (dummy.position.set(sp.x, this._surfaceY(sp), sp.z), (dummy.rotation.y = sp.yaw), dummy.scale.set(sc[0], 1, sc[1]), dummy.updateMatrix());
+      this.mesh.setMatrixAt(n, dummy.matrix);
+      this.mesh.geometry.attributes.aDecalSlot.setX(n, sp.v);
+      this.sample.length < 3 && this.sample.push({ x: sp.x, y: sp.ySurf, z: sp.z, v: sp.v });
+      n++;
+    }
+    ((this.mesh.count = n), (this.mesh.instanceMatrix.needsUpdate = !0), (this.mesh.geometry.attributes.aDecalSlot.needsUpdate = !0), (this.placed = n), (this.placedDone = !0));
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    if (this.mesh) this.mesh.visible = this.enabled;
+    if (this.placedDone) return;
+    (this.ensure(), this.place());
+  },
+};
 // (4b-lite driver silhouettes retired in round four: every cabin now has
 // a real recessed driver baked in — see full-fat 4b.)
 // race roadside life (zoom-detail item 18): marshals with checkered flags,
@@ -4705,6 +4774,20 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     const yaw = v === 2 ? (isNS ? (drng() < 0.5 ? 0 : Math.PI) : ((drng() < 0.5 ? 1 : -1) * Math.PI) / 2) : drng() * 6.28;
     roadDecalSys.spots.push({ i: roadDecalSys.spots.length, x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw, v });
   }
+  ((oilSys.spots.length = 0), (oilSys.placedDone = !1));
+  const orng = plateRng(0x011f00d);
+  for (let i = 0; i < 200 && oilSys.spots.length < 20; i++) {
+    // approach-lane stains: just before intersections, in the lane centers
+    const isNS = orng() < 0.5,
+      xi = x0 + pitch * (1 + ((orng() * ((x1 - x0) / pitch - 1)) | 0)),
+      zj = zHigh - pitch * (1 + ((orng() * ((zHigh - zLow) / pitch - 1)) | 0)),
+      back = 12 + orng() * 9,
+      lane = (orng() < 0.5 ? -1 : 1) * sw * 0.24,
+      px = isNS ? xi + lane : xi + (orng() < 0.5 ? -back : back),
+      pz = isNS ? zj + (orng() < 0.5 ? -back : back) : zj + lane;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    oilSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw: orng() * 6.28, v: (orng() * 2) | 0, s: orng() });
+  }
   for (const d of defs) {
     const im = meshes[d.key];
     ((im.count = im.userData.used), (im.instanceMatrix.needsUpdate = !0), (furnitureSys.counts[d.key] = im.userData.used));
@@ -5208,6 +5291,7 @@ function F1(i, e, t) {
       roadsideSys.update(I, ye);
       facadeSys.update(I, ye);
       roadDecalSys.update(I, ye);
+      oilSys.update(I, ye);
       newsSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
@@ -11561,6 +11645,10 @@ window.__steelRibbonDebug = {
     pondEdgeSys._mesh && (pondEdgeSys._mesh.visible = pondEdgeSys.enabled);
     return pondEdgeSys.enabled;
   },
+  oilEnable(on) {
+    oilSys.enabled = !!on;
+    return oilSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -11717,6 +11805,7 @@ window.__steelRibbonDebug = {
       parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pitches: parkSys.pitches, strollers: parkSys.strollers, strollerSample: parkSys.strollerSample ?? null, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
+      oil: { spots: oilSys.spots.length, placed: oilSys.placed, enabled: oilSys.enabled, sample: oilSys.sample.slice(0, 3) },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },
