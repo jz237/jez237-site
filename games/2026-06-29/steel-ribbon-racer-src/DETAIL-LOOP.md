@@ -1398,3 +1398,21 @@ signal-corner ped density weighting.
   denser (0.42) and viewed against dark roads. NEXT: item 10 — the
   blimp (opaque geometry, no such risk), then DEPLOY BATCH 16
   (v3.23.0) + the round-six closing survey.
+- **57 THE BLIMP — round-six item 10, ROUND SIX COMPLETE (2026-07-17)**:
+  one RIBBON COLA airship drifts at alt 300 above the prop-plane lanes
+  (speed 8, wrap ±1500, slow bob + gentle roll). Opaque vc-baked hull
+  (18x12 ellipsoid) + cross tail fins + gondola + landing skids in ONE
+  merged mesh, plus a two-sided banner mesh (512x128 canvas, new
+  fictional brand) — 2 draws, ~600 tris, zero transparency risk (the
+  it.56 lesson applied). TWO FIT LESSONS: banner quads must sit
+  OUTSIDE the hull's mid-bulge (offset ≥ hull max radius +0.3) AND
+  their LENGTH must stay inside the silhouette taper — 16-long at
+  ±4.35 poked past the tail; 11-long at ±3.9 let the bulge through
+  the text; 11 at ±4.4 is the fit. Verified by LOOKING
+  (loop-shots/57-blimp/): pearl hull + red banner readable alongside,
+  gondola under, a banner plane crossing below; from the city it's a
+  tiny drifting capsule. Perf gate: 1887-1925 calls / 590-600k tris.
+  Suite 156/156 (probe: text + alt + drift >0.5 over 2.5s). ROUND SIX
+  FINAL: 8 shipped (2,3,4,5,6,7,8,10) + 1 closed-exists (1) + 1
+  blocked (9, technique-limited). DEPLOY BATCH 16 (v3.23.0) + closing
+  survey next.
