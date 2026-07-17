@@ -758,6 +758,25 @@ const browser = await chromium.launch({
       back = deb.windowTexHD(true);
     return { hd2, hd1, back };
   });
+  // zoom-detail 47 (round five item 10): plane close detail — regs/gear/discs
+  const pln = await page.evaluate(() => {
+    const p2 = window.__steelRibbonDebug.detailReport().planes;
+    let gear = 0,
+      disc = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.userData && o.userData.detail && o.userData.detail.gear) {
+        gear++;
+        o.userData.detail.disc && disc++;
+      }
+    });
+    return { count: p2.count, regs: p2.regs, uniq: new Set(p2.regs).size, gear, disc };
+  });
+  check(
+    "planes: registration codes, gear and prop discs on all four",
+    !!pln && pln.count === 4 && pln.uniq === 4 && pln.gear === 4 && pln.disc === 4,
+    JSON.stringify(pln),
+  );
+
   // zoom-detail 46 (round five item 9): big roofs earn 2-3 kits + hatches.
   // Fly above the widest tall roof so its kits promote, then read multi.
   const rfd = await page.evaluate(async () => {
