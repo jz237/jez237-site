@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.9.0';
+export const VERSION = 'v2.10.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -290,6 +290,7 @@ class Game {
         case 'fuse':
           this.ui.banner(ev.name, 'apex — the grove exceeds itself');
           this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 220, i: 0.9, color: ev.color });
+          this.renderer.fusePillars.push({ x: ev.x, y: ev.y, t: 0, color: ev.color });
           this.audio.on(ev);
           break;
         case 'bossSplit':

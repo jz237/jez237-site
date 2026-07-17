@@ -48,6 +48,7 @@ export class Renderer {
     this.quality = 3; // 3 full · 2 medium · 1 low (auto-managed by main)
     // world-space stain accumulation: the run's history painted into the ground
     this.stampQueue = [];
+    this.fusePillars = []; // transient apex-birth light columns
     const gl2 = this.gl;
     this.fStainA = createFBO(gl2, 960, 540, this.halfFloat);
     this.fStainB = createFBO(gl2, 960, 540, this.halfFloat);
@@ -694,6 +695,22 @@ export class Renderer {
       // core gathering violence
       A.push(e.x, e.y, 120 * f * ds, 120 * f * ds, 0, t * 8, KIND.MOTE, 1,
         0.8 * f, 0.3 * f, 1.0 * f, e.wobblePhase);
+    }
+    // apex births: a column of light stands for a moment where two became one
+    for (let i = this.fusePillars.length - 1; i >= 0; i--) {
+      const fp = this.fusePillars[i];
+      fp.t += dt;
+      if (fp.t > 1.6) { this.fusePillars.splice(i, 1); continue; }
+      const lf = 1 - fp.t / 1.6;
+      for (let k = 0; k < 5; k++) {
+        const f = k / 4;
+        const w = (120 - f * 60) * (0.7 + 0.3 * Math.sin(t * 3 + k)) * lf;
+        const a2 = lf * (1 - f * 0.6) * 0.35;
+        A.push(fp.x, fp.y - 40 - f * 380, w, 130, 0, t + k, KIND.GLOW, 1,
+          fp.color[0] * a2, fp.color[1] * a2, fp.color[2] * a2, 0);
+      }
+      A.push(fp.x, fp.y, 200 * lf, 130 * lf, 0, 0, KIND.GLOW, 1,
+        lf * 0.8, lf * 0.78, lf * 0.7, 0);
     }
     // the heart breathes a soft column of light into the sky — stacked
     // glow pools thinning with height, swaying like rising smoke
