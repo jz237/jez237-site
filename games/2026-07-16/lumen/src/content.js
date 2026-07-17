@@ -203,8 +203,8 @@ export const ENEMIES = {
   broodmother: {
     id: 'broodmother', name: 'BROODMOTHER', kind: 24,
     color: [0.9, 1.0, 0.3], size: 110,
-    hp: 2600, speed: 30, bounty: 200, damage: 8,
-    wobble: 1, miniboss: true, spawnEvery: 3.2, spawnType: 'mite', spawnN: 2,
+    hp: 2400, speed: 30, bounty: 200, damage: 6,
+    wobble: 1, miniboss: true, spawnEvery: 4.2, spawnType: 'mite', spawnN: 2,
   },
   unlit: {
     id: 'unlit', name: 'THE UNLIT', kind: 25,
@@ -222,7 +222,7 @@ export const ENEMIES = {
 // campaign (20), endless mode re-runs the table with harsher multipliers.
 export function waveComp(n) {
   const entries = [];
-  const hpMul = Math.pow(1.11, Math.max(0, n - 1)) * (1 + Math.max(0, n - 10) * 0.06);
+  const hpMul = Math.pow(1.105, Math.max(0, n - 1)) * (1 + Math.max(0, n - 10) * 0.045);
   const gap = Math.max(0.28, 0.9 - n * 0.03);
   const push = (type, count, g = gap, delay = 0, hm = hpMul) => {
     if (count > 0) entries.push({ type, count: Math.floor(count), gap: g, hpMul: hm, delay });
@@ -297,6 +297,7 @@ export const MAPS = [
     blurb: 'the long way round the sunken mouth — or straight through it',
     seed: 20260718,
     pathW: 64,
+    pathWeights: [0.66, 0.34], // most take the rim road; the plunge stays a threat
     paths: [
       [ // the rim road
         [-60, 270], [200, 285], [500, 305], [850, 325], [1200, 365],
