@@ -470,7 +470,7 @@ export class Sim {
       }
       cur = nxt;
     }
-    this.arcs.push({ hits, t: 0, dur: 0.45, color: t.def.color, seed: this.rng.next() });
+    this.arcs.push({ hits, t: 0, dur: 0.6, color: t.def.color, seed: this.rng.next() });
     this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y, chains: hits.length });
   }
 

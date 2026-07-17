@@ -417,7 +417,7 @@ export class Renderer {
     // heart
     const [hx, hy] = sim.map.heart;
     const integ = sim.lives / 20;
-    E.push({ y: hy, k: KIND.HEART, x: hx, sx: 130, sy: 130, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
+    E.push({ y: hy, k: KIND.HEART, x: hx, sx: 170, sy: 170, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
     // towers
     for (const tw of sim.towers) {
       const ds = depthScale(tw.y);
@@ -559,6 +559,21 @@ export class Renderer {
       // core gathering violence
       A.push(e.x, e.y, 120 * f * ds, 120 * f * ds, 0, t * 8, KIND.MOTE, 1,
         0.8 * f, 0.3 * f, 1.0 * f, e.wobblePhase);
+    }
+    // the heart breathes a soft column of light into the sky — stacked
+    // glow pools thinning with height, swaying like rising smoke
+    {
+      const [hx, hy] = sim.map.heart;
+      const integ = sim.lives / 20;
+      const pulse = (0.55 + 0.45 * Math.sin(t * 1.1)) * (0.35 + 0.65 * integ);
+      for (let i = 0; i < 6; i++) {
+        const f = i / 5; // 0 at heart → 1 high
+        const sway = Math.sin(t * 0.5 + f * 2.6) * 26 * f;
+        const w = (150 - f * 70) * (0.8 + 0.2 * Math.sin(t * 0.9 + f * 4));
+        const a = pulse * (1 - f * 0.75) * 0.10;
+        A.push(hx + sway, hy - 60 - f * 480, w, 150, 0, t + i, KIND.GLOW, 1,
+          1.0 * a, 0.82 * a, 0.45 * a, 0);
+      }
     }
     // heart-hit flash
     if (sim.heartHitT > 0) {
