@@ -142,36 +142,115 @@ export const TOWERS = {
 export const ENEMIES = {
   mite: {
     id: 'mite', name: 'Gloom Mite', kind: 0,
-    color: COLORS.acid, size: 26,
+    color: COLORS.acid, size: 30,
     hp: 34, speed: 130, bounty: 6, damage: 1,
     wobble: 8,
   },
   grub: {
     id: 'grub', name: 'Ember Grub', kind: 1,
-    color: COLORS.amber, size: 44,
+    color: COLORS.amber, size: 50,
     hp: 150, speed: 62, bounty: 14, damage: 2,
     wobble: 3,
   },
   wisp: {
     id: 'wisp', name: 'Pale Wisp', kind: 2,
-    color: COLORS.violet, size: 32,
+    color: COLORS.violet, size: 36,
     hp: 60, speed: 105, bounty: 9, damage: 1,
-    wobble: 14, hover: true,
+    wobble: 14, hover: true, flying: true, // flying: immune to pools + spire pulses
+  },
+  husk: {
+    id: 'husk', name: 'Slate Husk', kind: 17,
+    color: [0.55, 0.75, 0.95], size: 48,
+    hp: 120, speed: 74, bounty: 16, damage: 2,
+    wobble: 2, armor: 9, // flat reduction per hit; corrode stacks pierce it
+  },
+  brood: {
+    id: 'brood', name: 'Brood Carrier', kind: 18,
+    color: [0.85, 1.0, 0.45], size: 54,
+    hp: 170, speed: 70, bounty: 12, damage: 2,
+    wobble: 4, splitInto: 'mite', splitCount: 6,
+  },
+  shellback: {
+    id: 'shellback', name: 'Shellback', kind: 19,
+    color: [0.4, 0.9, 1.0], size: 52,
+    hp: 140, speed: 66, bounty: 18, damage: 2,
+    wobble: 3, shield: 120, // absorbs damage & blocks status until broken
+  },
+  dartfin: {
+    id: 'dartfin', name: 'Dartfin', kind: 20,
+    color: [1.0, 0.5, 0.9], size: 34,
+    hp: 46, speed: 215, bounty: 10, damage: 1,
+    wobble: 10,
+  },
+  bulwark: {
+    id: 'bulwark', name: 'Bulwark', kind: 21,
+    color: [1.0, 0.45, 0.25], size: 78,
+    hp: 900, speed: 38, bounty: 45, damage: 4,
+    wobble: 1,
+  },
+  spectre: {
+    id: 'spectre', name: 'Spectre', kind: 22,
+    color: [0.75, 0.6, 1.0], size: 42,
+    hp: 110, speed: 92, bounty: 20, damage: 2,
+    wobble: 8, hover: true, phasing: { visible: 2.0, ethereal: 1.3 },
+  },
+  regen: {
+    id: 'regen', name: 'Mendling', kind: 23,
+    color: [0.5, 1.0, 0.7], size: 44,
+    hp: 200, speed: 58, bounty: 22, damage: 2,
+    wobble: 3, regenPct: 0.035,
+  },
+  broodmother: {
+    id: 'broodmother', name: 'BROODMOTHER', kind: 24,
+    color: [0.9, 1.0, 0.3], size: 110,
+    hp: 2600, speed: 30, bounty: 200, damage: 8,
+    wobble: 1, miniboss: true, spawnEvery: 3.2, spawnType: 'mite', spawnN: 2,
+  },
+  unlit: {
+    id: 'unlit', name: 'THE UNLIT', kind: 25,
+    color: [1.0, 0.62, 0.2], size: 195,
+    hp: 9000, speed: 24, bounty: 600, damage: 20,
+    wobble: 0.5, boss: true,
+    // telegraphed dark pulse: 2.6s wind-up glow, then stuns towers in radius
+    pulse: { every: 8.0, telegraph: 2.6, radius: 330, stun: 2.4 },
+    phase2At: 0.5, // at 50% hp: cracks open, faster, pulse spawns mites
   },
 };
 
-// Wave composition: waves 1-5 are a power fantasy, pressure builds from 8+.
+// Wave table: 1-5 power fantasy, new species introduced in bands, pressure
+// compounds from 10+. Boss waves: 10 (broodmother), 20 (THE UNLIT). After the
+// campaign (20), endless mode re-runs the table with harsher multipliers.
 export function waveComp(n) {
   const entries = [];
-  const mites = Math.floor(5 + n * 2.2);
-  const grubs = n >= 3 ? Math.floor((n - 2) * 1.4) : 0;
-  const wisps = n >= 5 ? Math.floor((n - 4) * 1.7) : 0;
-  // gentle through the wave-5 power fantasy, compounding from 10+
   const hpMul = Math.pow(1.11, Math.max(0, n - 1)) * (1 + Math.max(0, n - 10) * 0.06);
-  const gap = Math.max(0.30, 0.9 - n * 0.03);
-  entries.push({ type: 'mite', count: mites, gap, hpMul });
-  if (grubs) entries.push({ type: 'grub', count: grubs, gap: gap * 2.4, hpMul, delay: 2.0 });
-  if (wisps) entries.push({ type: 'wisp', count: wisps, gap: gap * 1.6, hpMul, delay: 4.0 });
+  const gap = Math.max(0.28, 0.9 - n * 0.03);
+  const push = (type, count, g = gap, delay = 0, hm = hpMul) => {
+    if (count > 0) entries.push({ type, count: Math.floor(count), gap: g, hpMul: hm, delay });
+  };
+  if (n === 10) {
+    // boss base hp IS the wave-10 value — no global multiplier on top
+    push('broodmother', 1, 1, 1.0, 1);
+    push('mite', 14, gap, 3);
+    push('husk', 4, gap * 2.5, 6);
+    return { entries, clearBonus: 120, boss: 'broodmother' };
+  }
+  if (n === 20 || (n > 20 && n % 10 === 0)) {
+    const bossHm = 1 + Math.max(0, n - 20) * 0.12; // scales only past 20
+    push('unlit', 1, 1, 1.0, bossHm);
+    push('dartfin', 10, gap, 4);
+    push('spectre', 4, gap * 2, 8);
+    return { entries, clearBonus: 200 + n * 5, boss: 'unlit' };
+  }
+  push('mite', 5 + n * 1.8);
+  if (n >= 3) push('grub', (n - 2) * 1.2, gap * 2.4, 2.0);
+  if (n >= 5) push('wisp', (n - 4) * 1.4, gap * 1.6, 4.0);
+  if (n >= 6) push('husk', (n - 5) * 1.2, gap * 2.2, 3.0);
+  if (n >= 8) push('brood', (n - 7) * 0.9, gap * 3.0, 5.0);
+  if (n >= 9) push('dartfin', (n - 8) * 1.6, gap * 1.2, 1.0);
+  if (n >= 11) push('shellback', (n - 10) * 1.1, gap * 2.4, 4.0);
+  if (n >= 12) push('regen', (n - 11) * 0.8, gap * 2.8, 6.0);
+  if (n >= 13) push('spectre', (n - 12) * 0.9, gap * 2.2, 7.0);
+  if (n >= 14) push('bulwark', (n - 13) * 0.5, gap * 4.0, 8.0);
   return { entries, clearBonus: 20 + n * 4 };
 }
 
