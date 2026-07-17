@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 17 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 13–19, 1983 — Software&apos;s Hard Sell Becomes a Billion-Dollar Business</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-06-13</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-06-13</guid>
+      <pubDate>Fri, 17 Jul 2026 12:00:00 GMT</pubDate>
+      <description>Commodore readies roughly 70 titles, Lotus buys attention, and software makers learn the arts of packaging and promotion. Personal-computer software is becoming a mass-market business before shoppers’ eyes. SRI International estimates that Americans bought $1 billion worth of personal-computer programs in 1982 and forecasts $1.5 billion this year, growth fast enough to turn code once passed among hobbyists into a fiercely promoted consumer product. Also this week: Coleco&apos;s Adam Resets the Complete-Computer Price · Atari Sweeps the Deck for Four XL Machines · WarGames Turns Computer Anxiety into a Hit.</description>
+    </item>
     <item>
       <title>Week of June 6–12, 1983 — Coleco’s $600 Adam Steals the Summer CES</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-06-06</link>
@@ -138,13 +145,6 @@
       <link>https://jez237.com/computer-chronicle/?date=1983-01-24</link>
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-01-24</guid>
       <pubDate>Sun, 28 Jun 2026 12:00:00 GMT</pubDate>
-      <description></description>
-    </item>
-    <item>
-      <title>Week of January 17-23, 1983 — Imagic Stock Delay Shows the Cartridge Boom Losing Its Shine</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-01-17</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-01-17</guid>
-      <pubDate>Sat, 27 Jun 2026 12:00:00 GMT</pubDate>
       <description></description>
     </item>
   </channel>

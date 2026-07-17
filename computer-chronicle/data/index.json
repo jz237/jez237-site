@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-17",
+      "historicDate": "1983-06-13",
+      "displayDate": "Week of June 13–19, 1983",
+      "edition": "Issue 046 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "The machine may sit on the desk, but the software business now wants the whole storefront.",
+      "leadHeadline": "Software's Hard Sell Becomes a Billion-Dollar Business",
+      "storyHeadlines": [
+        "Coleco's Adam Resets the Complete-Computer Price",
+        "Atari Sweeps the Deck for Four XL Machines",
+        "WarGames Turns Computer Anxiety into a Hit"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-06-13.jpg",
+      "thumb": "media/thumbs/1983-06-13.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-16",
       "historicDate": "1983-06-06",
       "displayDate": "Week of June 6–12, 1983",
