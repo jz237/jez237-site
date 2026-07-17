@@ -67,6 +67,10 @@ export class Sim {
     this.particles = [];
     this.rings = [];             // ground shockwaves
     this.discovered = new Set(); // mix reactions the player has seen
+    // coarse CPU mirror of the visual stain field (48x27 cells, rgb) so
+    // gameplay can read what the ground remembers
+    this.stainGrid = new Float32Array(48 * 27 * 3);
+    this.stainDecayT = 0;
     this.spawnQueue = [];
     this.nextId = 1;
     this.kills = 0;
@@ -108,6 +112,30 @@ export class Sim {
   }
 
   emit(type, data) { this.events.push({ type, ...data }); }
+
+  addStain(x, y, r, intensity, color) {
+    const cw = WORLD_W / 48, ch = WORLD_H / 27;
+    const c0 = Math.max(0, Math.floor((x - r) / cw)), c1 = Math.min(47, Math.floor((x + r) / cw));
+    const r0 = Math.max(0, Math.floor((y - r) / ch)), r1 = Math.min(26, Math.floor((y + r) / ch));
+    for (let gy = r0; gy <= r1; gy++) {
+      for (let gx = c0; gx <= c1; gx++) {
+        const dx = gx * cw + cw / 2 - x, dy = gy * ch + ch / 2 - y;
+        const f = Math.max(0, 1 - Math.hypot(dx, dy) / r);
+        if (f <= 0) continue;
+        const idx = (gy * 48 + gx) * 3;
+        this.stainGrid[idx] += color[0] * intensity * f;
+        this.stainGrid[idx + 1] += color[1] * intensity * f;
+        this.stainGrid[idx + 2] += color[2] * intensity * f;
+      }
+    }
+  }
+
+  stainAt(x, y) {
+    const gx = Math.max(0, Math.min(47, Math.floor(x / (WORLD_W / 48))));
+    const gy = Math.max(0, Math.min(26, Math.floor(y / (WORLD_H / 27))));
+    const idx = (gy * 48 + gx) * 3;
+    return [this.stainGrid[idx], this.stainGrid[idx + 1], this.stainGrid[idx + 2]];
+  }
 
   // --- wave control -------------------------------------------------------
   startWave(early = false) {
@@ -277,7 +305,7 @@ export class Sim {
     const base = t.def, lv = base.levels[t.level];
     const rank = this.towerRank(t);
     const rateMul = (1 + (t.buffRate || 0)) * (1 + rank * 0.03);
-    const dmgMul = (1 + (t.buffDmg || 0)) * (1 + rank * 0.04);
+    const dmgMul = (1 + (t.buffDmg || 0)) * (1 + rank * 0.04) * (t.attuned ? 1.10 : 1);
     return {
       damage: Math.round((lv.damage || 0) * dmgMul),
       range: lv.range, rate: (lv.rate || 0) * rateMul,
@@ -288,7 +316,18 @@ export class Sim {
 
   // recompute aura buffs — cheap, tower counts are small
   refreshBuffs() {
-    for (const t of this.towers) { t.buffRate = 0; t.buffDmg = 0; }
+    for (const t of this.towers) {
+      t.buffRate = 0; t.buffDmg = 0;
+      // attunement: ground soaked in the tower's own dominant colour
+      const st = this.stainAt(t.x, t.y);
+      const mag = st[0] + st[1] + st[2];
+      if (mag > 0.55 && t.def.color) {
+        const dom = st.indexOf(Math.max(st[0], st[1], st[2]));
+        const c = t.def.color;
+        const tdom = c.indexOf(Math.max(c[0], c[1], c[2]));
+        t.attuned = dom === tdom;
+      } else t.attuned = false;
+    }
     for (const b of this.towers) {
       if (b.def.attack !== 'aura') continue;
       const st = b.def.levels[b.level];
@@ -338,6 +377,7 @@ export class Sim {
       this.emit('discover', { mix: key, name: mix.name, desc: mix.desc });
     }
     this.emit('mix', { mix: key, x: e.x, y: e.y, color: mix.color });
+    this.addStain(e.x, e.y, 150, 0.85, mix.color);
     switch (key) {
       case 'shatter':
         st.chill = 0; st.ignite = 0;
@@ -406,6 +446,12 @@ export class Sim {
     this.stepTowers(dt);
     this.stepProjectiles(dt);
     this.stepFx(dt);
+    this.stainDecayT += dt;
+    if (this.stainDecayT >= 1) {
+      const k = Math.pow(0.5, this.stainDecayT / 90);
+      for (let i = 0; i < this.stainGrid.length; i++) this.stainGrid[i] *= k;
+      this.stainDecayT = 0;
+    }
     if (this.heartHitT > 0) this.heartHitT -= dt;
   }
 
@@ -733,6 +779,7 @@ export class Sim {
           this.emit('rank', { id: tower.id, rank: after, name: tower.def.name });
         }
       }
+      this.addStain(e.x, e.y, e.def.boss ? 240 : 44, e.def.boss ? 0.7 : 0.3, e.def.color);
       const bounty = Math.round(e.def.bounty * (e.bountyMul || 1));
       this.gold += bounty;
       this.goldEarned += bounty;

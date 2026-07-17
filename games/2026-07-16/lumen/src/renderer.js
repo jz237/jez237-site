@@ -588,6 +588,18 @@ export class Renderer {
       A.push(p.x, p.y, p.size * 2.4 * ds * (0.5 + lf * 0.5), p.size * 2.4 * ds * (0.5 + lf * 0.5), 0, p.phase + p.age * 5, KIND.MOTE, lf,
         p.color[0] * lf * 0.9, p.color[1] * lf * 0.9, p.color[2] * lf * 0.9, p.seed);
     }
+    // attuned towers shimmer — the ground feeds them
+    for (const tw of sim.towers) {
+      if (!tw.attuned) continue;
+      const ds = depthScale(tw.y);
+      const c = tw.def.color;
+      for (let i = 0; i < 2; i++) {
+        const cyc = (t * (0.5 + i * 0.23) + tw.phase + i * 1.7) % 1;
+        A.push(tw.x + Math.sin(i * 4 + tw.phase * 3 + t * 0.6) * 26 * ds, tw.y + 8 - cyc * 70 * ds,
+          8 * ds, 8 * ds, 0, 0, KIND.GLOW, 1,
+          c[0] * (1 - cyc) * 0.5, c[1] * (1 - cyc) * 0.5, c[2] * (1 - cyc) * 0.5, 0);
+      }
+    }
     // ambient spores (halved on the low tier)
     let sporeSkip = 0;
     for (const s of this.spores) {
