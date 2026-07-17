@@ -6,9 +6,26 @@
 const SETTINGS_KEY = 'lumen_settings_v1';
 
 function loadSettings() {
-  try { return { master: 0.8, music: 0.55, sfx: 0.75, muted: false, ...(JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}) }; }
-  catch { return { master: 0.8, music: 0.55, sfx: 0.75, muted: false }; }
+  try { return { master: 0.8, music: 0.55, sfx: 0.75, voice: 0.85, muted: false, ...(JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}) }; }
+  catch { return { master: 0.8, music: 0.55, sfx: 0.75, voice: 0.85, muted: false }; }
 }
+
+// The grove speaks: HTMLAudio pools, one line at a time, priority-interrupt,
+// variant rotation with no immediate repeats. Files in assets/vo/.
+const VO = {
+  wave:     { files: ['wave_v1', 'wave_v2'], pri: 1 },
+  wave5:    { files: ['wave5_v1', 'wave5_v2'], pri: 2 },
+  brood:    { files: ['brood_v1', 'brood_v2'], pri: 3 },
+  unlit:    { files: ['unlit_v1', 'unlit_v2'], pri: 3 },
+  phase:    { files: ['phase_v1', 'phase_v2'], pri: 3 },
+  shatter:  { files: ['shatter'], pri: 2 },
+  overload: { files: ['overload'], pri: 2 },
+  freezelock: { files: ['freezelock'], pri: 2 },
+  meltdown: { files: ['meltdown'], pri: 2 },
+  hearthit: { files: ['hearthit_v1', 'hearthit_v2'], pri: 2 },
+  victory:  { files: ['victory_v1', 'victory_v2'], pri: 4 },
+  defeat:   { files: ['defeat_v1', 'defeat_v2'], pri: 4 },
+};
 
 export class AudioEngine {
   constructor() {
@@ -17,6 +34,9 @@ export class AudioEngine {
     this.voices = 0;
     this.cool = {};       // per-event cooldown clocks
     this.mood = 0;
+    this.voClips = {};    // lazy HTMLAudio cache
+    this.voLast = {};     // last variant per line, for no-repeat
+    this.voPlaying = null; this.voPri = 0; this.voLastAt = 0;
     this._ambientTimer = null;
   }
 
@@ -50,7 +70,29 @@ export class AudioEngine {
   setMood(m) { this.mood = m; }
 
   state() {
-    return this.ctx ? { state: this.ctx.state, voices: this.voices, muted: this.settings.muted } : { state: 'off' };
+    return this.ctx ? { state: this.ctx.state, voices: this.voices, muted: this.settings.muted, vo: !!this.voPlaying } : { state: 'off' };
+  }
+
+  // priority-interrupt voice: higher lines cut lower ones; 3.5s spacing for equals
+  say(line) {
+    const def = VO[line];
+    if (!def || this.settings.muted || this.settings.voice <= 0.01) return;
+    const now = performance.now();
+    if (this.voPlaying && !this.voPlaying.ended) {
+      if (def.pri <= this.voPri) return;
+      this.voPlaying.pause();
+    } else if (now - this.voLastAt < 3500 && def.pri < 3) return;
+    let pick = def.files[Math.floor(Math.random() * def.files.length)];
+    if (def.files.length > 1 && pick === this.voLast[line]) {
+      pick = def.files[(def.files.indexOf(pick) + 1) % def.files.length];
+    }
+    this.voLast[line] = pick;
+    let clip = this.voClips[pick];
+    if (!clip) { clip = new Audio('assets/vo/' + pick + '.mp3'); this.voClips[pick] = clip; }
+    clip.volume = Math.max(0, Math.min(1, this.settings.voice * this.settings.master));
+    clip.currentTime = 0;
+    clip.play().catch(() => { });
+    this.voPlaying = clip; this.voPri = def.pri; this.voLastAt = now;
   }
 
   // --- primitives -----------------------------------------------------------
@@ -194,6 +236,7 @@ export class AudioEngine {
         break;
       case 'discover':
         this.chord([523, 659, 988], 0.8, 0.09, 'triangle', 0.11);
+        this.say(ev.mix);
         break;
       case 'place':
         this.tone({ freq: this.v(200), dur: 0.35, type: 'triangle', gain: 0.09, glide: this.v(520) });
@@ -206,11 +249,14 @@ export class AudioEngine {
         this.tone({ freq: 500, dur: 0.3, type: 'triangle', gain: 0.06, glide: 160 });
         break;
       case 'heartHit':
+        if (this.gate('voHeart', 9000)) this.say('hearthit');
         this.tone({ freq: 65, dur: 0.8, gain: 0.22, type: 'sine' });
         this.tone({ freq: this.v(392), dur: 0.5, gain: 0.07, type: 'sawtooth', glide: 250, detune: 18 });
         break;
       case 'waveStart':
         if (this.gate('waveStart', 800)) this.tone({ freq: 98, dur: 1.1, gain: 0.12, glide: 130, type: 'triangle' });
+        if (ev.wave % 5 === 0) this.say('wave5');
+        else if (Math.random() < 0.35) this.say('wave');
         break;
       case 'waveClear':
         this.chord([392, 494, 587], 0.9, 0.05, 'sine', 0.09);
@@ -222,6 +268,7 @@ export class AudioEngine {
         if (this.gate('shieldBreak', 120)) this.noise({ dur: 0.2, freq: this.v(2800), q: 2, gain: 0.07, sweep: 900 });
         break;
       case 'bossSpawn':
+        this.say(ev.boss ? 'unlit' : 'brood');
         this.tone({ freq: 49, dur: 3.0, gain: 0.28 });
         this.noise({ dur: 2.0, freq: 200, gain: 0.1, sweep: 60, type: 'lowpass' });
         break;
@@ -233,13 +280,16 @@ export class AudioEngine {
         this.noise({ dur: 0.6, freq: 400, gain: 0.14, sweep: 90, type: 'lowpass' });
         break;
       case 'bossPhase':
+        this.say('phase');
         this.noise({ dur: 1.2, freq: 1400, gain: 0.16, sweep: 200 });
         this.tone({ freq: 65, dur: 1.6, gain: 0.22, glide: 90 });
         break;
       case 'victory':
+        this.say('victory');
         this.chord([392, 523, 659, 784, 1046], 2.4, 0.09, 'triangle', 0.16);
         break;
       case 'gameOver':
+        this.say('defeat');
         this.chord([330, 262, 196, 131], 2.6, 0.1, 'sine', 0.3);
         break;
     }
