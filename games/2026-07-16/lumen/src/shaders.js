@@ -108,6 +108,10 @@ void main(){
   vec3 nebB = tri(vec3(0.12,0.55,0.85), vec3(0.05,0.20,0.45), vec3(0.80,0.45,0.20), uMood);
   vec3 nebCol = mix(nebA, nebB, n2);
   sky += nebCol * neb * (0.55 - 0.15*clamp(uMood,0.0,1.0)*(2.0-uMood));
+  // grand slow structures in the upper sky so the top of frame isn't flat
+  float n3 = fbm(np*0.9 + 71.0 - vec2(uT*0.005, 0.0));
+  sky += nebA * smoothstep(0.48,0.85,n3) * smoothstep(0.30,0.85,skyY) * 0.40;
+  sky += nebB * smoothstep(0.62,0.95,fbm(np*1.6+13.0)) * smoothstep(0.5,1.0,skyY) * 0.30;
   // spore-stars, twinkling
   vec2 sp = uv*uReso*0.5 + vec2(uPar.x*0.03,0.0);
   vec2 cell = floor(sp/22.0);
@@ -297,7 +301,7 @@ void main(){
     float innards = smoothstep(0.42,0.05,length(q+vec2(0.05,0.0))) * (0.5+0.5*fbm3(q*5.0+phase));
     float rim = smoothstep(0.0,0.14,-d)*smoothstep(-0.30,-0.10,d);
     vec3 membrane = tint*0.32 + vec3(0.01,0.01,0.03);
-    col = membrane + tint*innards*0.6 + tint*core*(1.8+0.7*sin(phase*3.1)) + tint*rim*0.9;
+    col = membrane + tint*innards*0.75 + tint*core*(1.8+0.7*sin(phase*3.1)) + tint*rim*0.55;
     cov = m*0.92;
   }
   else if(kind == 1){ // GRUB — armoured segmented crawler
@@ -325,7 +329,7 @@ void main(){
     vec3 shellCol = mix(tint*0.27, vec3(0.03,0.02,0.055), shell*0.75);
     col = shellCol + tint*belly*0.55 + tint*seam*pulse*2.1;
     float rim = smoothstep(0.0,0.10,-d)*smoothstep(-0.22,-0.08,d);
-    col += tint*rim*0.5;
+    col += tint*rim*0.35;
     // eyes
     col += vec3(1.0,0.9,0.7)*smoothstep(0.05,0.0,length(p-vec2(-0.72,-0.06)))*1.4;
     cov = m*0.96;
@@ -435,7 +439,7 @@ void main(){
     float crack = smoothstep(0.62,1.0,fbm(q*5.5+seed*13.0)) * crackAmt;
     vec3 col2 = shell + vec3(1.0,0.55,0.15)*crack*1.8 + tint*plates*0.35;
     float rim = smoothstep(0.0,0.08,-d)*smoothstep(-0.2,-0.07,d);
-    col = col2 + tint*rim*0.8;
+    col = col2 + tint*rim*0.5;
     col += vec3(1.0,0.9,0.7)*smoothstep(0.05,0.0,length(p-vec2(-0.62,0.0)))*1.2;
     cov = m*0.97;
   }
@@ -587,9 +591,9 @@ void main(){
     // phase-2: molten cracks tear open
     if(aux > 0.01){
       float crack = smoothstep(0.55,0.95,fbm(q*4.0+seed*9.0+phase*0.05));
-      col += tint * crack * aux * 2.4;
-      float coreGlow = smoothstep(0.3,0.0,length(q))*aux;
-      col += mix(tint,vec3(1.0),0.5)*coreGlow*1.2;
+      col += tint * crack * aux * 3.0;
+      float coreGlow = smoothstep(0.34,0.0,length(q))*aux;
+      col += mix(tint,vec3(1.0),0.5)*coreGlow*1.8;
     }
     cov = m*0.995; // nearly opaque — it occludes the glow behind it
   }
@@ -661,6 +665,35 @@ void main(){
     float fall = pow(max(0.0,1.0-r),2.6) * (0.7+0.3*fbm3(p*2.2+phase*0.3));
     col = vec3(0.010,0.004,0.02) * fall;
     cov = fall * vB.w * 0.8; // aux = darkness strength
+  }
+  else if(kind == 29){ // FROND — foreground kelp silhouette, haze-rimmed
+    vec2 q = p; q.y = -q.y;
+    float d = 1e9;
+    for(int i=0;i<5;i++){
+      float fi = float(i);
+      float bx = (fi-2.0)*0.28 + (hash12(vec2(seed,fi))-0.5)*0.2;
+      float h = 0.50 + 0.44*hash12(vec2(seed*3.0,fi));
+      float sway = sin(phase*0.4 + fi*1.7 + seed*9.0)*0.12;
+      vec2 a = vec2(bx, -1.0);
+      vec2 b = vec2(bx + sway*0.5, -1.0 + h*0.9);
+      vec2 c = vec2(bx + sway*1.6, min(0.62, -1.0 + h*1.7));
+      float w = 0.06*(1.0 - 0.45*smoothstep(-1.0, 0.7, q.y));
+      float sd = min(sdSeg(q,a,b), sdSeg(q,b,c)) - w;
+      for(int j=0;j<3;j++){
+        float fj = float(j);
+        vec2 fp = mix(b, c, fj/3.0);
+        float fa = (hash12(vec2(fi*7.0+fj, seed*5.0))-0.5)*2.4;
+        vec2 ftip = fp + vec2(cos(fa), abs(sin(fa))*0.7)*0.20*(0.6+0.4*hash12(vec2(fj,fi)));
+        sd = min(sd, sdSeg(q, fp, ftip) - 0.032);
+      }
+      d = min(d, sd);
+    }
+    float m = smoothstep(0.015,-0.015,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    vec3 body = vec3(0.012,0.018,0.032); // near-black against the glow
+    float rim = smoothstep(0.0,0.03,-d)*smoothstep(-0.07,-0.025,d);
+    col = body + vec3(0.06,0.20,0.22)*rim*aux;
+    cov = m*0.995;
   }
   else if(kind == 12){ // CHILL SPIRE — faceted crystal polyp
     vec2 q = p; q.y = -q.y; // grow upward
