@@ -600,12 +600,7 @@ export class Sim {
       this.gold += e.def.bounty;
       this.goldEarned += e.def.bounty;
       this.emit('kill', { id: e.id, enemyType: e.type, x: e.x, y: e.y, bounty: e.def.bounty, boss: !!(e.def.boss || e.def.miniboss), color: e.def.color });
-      // death: burst into dissolving motes that drift and fade
-      const n = e.def.boss ? 90 : e.def.miniboss ? 50 : 14 + Math.floor(e.def.size * 0.3);
-      this.burst(e.x, e.y, e.def.color, n, e.def.size * 2.2);
-      if (e.def.boss || e.def.miniboss) {
-        this.rings.push({ x: e.x, y: e.y, t: 0, dur: 1.4, color: e.def.color, max: 560 });
-      }
+      this.deathBurst(e);
       // brood carriers split into a scatter of children
       if (e.def.splitInto) {
         for (let i = 0; i < e.def.splitCount; i++) {
@@ -625,6 +620,88 @@ export class Sim {
         drift: this.rng.range(-8, 8), kind: 'mote',
         phase: this.rng.range(0, 6.28), seed: this.rng.next(),
       });
+    }
+  }
+
+  // every species dies in its own light
+  deathBurst(e) {
+    const c = e.def.color, x = e.x, y = e.y, S = e.def.size;
+    const part = (o) => this.particles.push({
+      x, y, vx: 0, vy: 0, life: 1.6, age: 0, size: 5, color: c,
+      drift: this.rng.range(-6, 6), kind: 'mote',
+      phase: this.rng.range(0, 6.28), seed: this.rng.next(), ...o,
+    });
+    switch (e.type) {
+      case 'mite': // quick pop
+        this.burst(x, y, c, 8, S * 2.4);
+        break;
+      case 'grub': // belly bursts, embers fall and smoulder
+        for (let i = 0; i < 14; i++) {
+          const a = this.rng.range(0, 6.28), sp = this.rng.range(20, 90);
+          part({ vx: Math.cos(a) * sp, vy: -this.rng.range(30, 90), grav: 160,
+                 life: this.rng.range(0.8, 1.6), size: this.rng.range(4, 8) });
+        }
+        break;
+      case 'wisp': case 'spectre': { // dissolve upward / implode
+        const inward = e.type === 'spectre';
+        for (let i = 0; i < 16; i++) {
+          const a = this.rng.range(0, 6.28), r = this.rng.range(S * 0.4, S * 1.2);
+          const px = x + Math.cos(a) * r, py = y + Math.sin(a) * r;
+          part({ x: px, y: py,
+                 vx: inward ? (x - px) * 3 : this.rng.range(-12, 12),
+                 vy: inward ? (y - py) * 3 : -this.rng.range(40, 110),
+                 grav: inward ? 0 : -20, life: inward ? 0.5 : this.rng.range(1.4, 2.6),
+                 size: this.rng.range(3, 7) });
+        }
+        break;
+      }
+      case 'husk': { // shell shards skitter out flat
+        for (let i = 0; i < 7; i++) {
+          const a = this.rng.range(0, 6.28), sp = this.rng.range(90, 200);
+          part({ vx: Math.cos(a) * sp, vy: Math.sin(a) * sp * 0.4, grav: 60,
+                 life: this.rng.range(0.5, 0.9), size: this.rng.range(5, 9) });
+        }
+        this.burst(x, y, [0.7, 0.8, 0.95], 6, 50);
+        break;
+      }
+      case 'shellback': // bubble already popped; body deflates softly
+        this.rings.push({ x, y, t: 0, dur: 0.45, color: c, max: 90 });
+        this.burst(x, y, c, 10, 60);
+        break;
+      case 'dartfin': { // momentum carries its light onward
+        const dx = e.dirx || 1, dy = e.diry || 0;
+        for (let i = 0; i < 10; i++) {
+          part({ x: x - dx * i * 8, y: y - dy * i * 8, vx: dx * this.rng.range(60, 160),
+                 vy: dy * 60, grav: 0, life: this.rng.range(0.5, 1.1), size: 6 - i * 0.4 });
+        }
+        break;
+      }
+      case 'bulwark': // heavy slam + slow ember rain
+        this.rings.push({ x, y, t: 0, dur: 0.8, color: c, max: 240 });
+        this.burst(x, y, c, 22, S * 2.0);
+        for (let i = 0; i < 12; i++) {
+          part({ x: x + this.rng.range(-S, S), y: y - this.rng.range(20, 90),
+                 vy: -this.rng.range(10, 50), grav: 120, life: this.rng.range(1.2, 2.2),
+                 age: -this.rng.range(0, 0.5), size: this.rng.range(4, 8) });
+        }
+        break;
+      case 'broodmother': case 'unlit': { // cascade: rings + staged detonations
+        const boss = e.type === 'unlit';
+        this.burst(x, y, c, boss ? 90 : 50, S * 2.2);
+        for (let i = 0; i < (boss ? 4 : 2); i++) {
+          this.rings.push({ x, y, t: -i * 0.22, dur: 1.2, color: i % 2 ? [1, 0.95, 0.85] : c, max: 420 + i * 120 });
+        }
+        for (let i = 0; i < (boss ? 40 : 20); i++) {
+          const a = this.rng.range(0, 6.28), r = this.rng.range(0, S * 1.4);
+          part({ x: x + Math.cos(a) * r, y: y + Math.sin(a) * r,
+                 vx: this.rng.range(-40, 40), vy: -this.rng.range(20, 140), grav: -10,
+                 age: -this.rng.range(0, 1.2), life: this.rng.range(1.5, 3.0),
+                 size: this.rng.range(4, 10), color: i % 3 ? c : [1, 0.95, 0.8] });
+        }
+        break;
+      }
+      default:
+        this.burst(x, y, c, 14 + Math.floor(S * 0.3), S * 2.2);
     }
   }
 
@@ -684,9 +761,10 @@ export class Sim {
   stepFx(dt) {
     for (const p of this.particles) {
       p.age += dt;
+      if (p.age < 0) continue; // delayed spawn (staged cascades)
       p.x += p.vx * dt + Math.sin(this.time * 1.5 + p.phase) * p.drift * dt;
       p.y += p.vy * dt;
-      p.vy -= 12 * dt;  // motes drift upward
+      p.vy += (p.grav != null ? p.grav : -12) * dt; // default: motes drift up
       p.vx *= (1 - 0.8 * dt);
     }
     this.particles = this.particles.filter(p => p.age < p.life);

@@ -467,6 +467,7 @@ export class Renderer {
     // shockwave rings (extra=1 → ring); quad is padded 1.4x so the eroded
     // ring band never reaches the quad edge (which reads as a square)
     for (const r of sim.rings) {
+      if (r.t < 0) continue; // staged cascade rings
       const f = r.t / r.dur;
       const ds = depthScale(r.y);
       L.push(r.x, r.y, r.max * 1.4 * ds, r.max * 0.62 * 1.4 * ds, 0, r.t * 3, 0, f / 1.4, r.color[0], r.color[1], r.color[2], 1);
@@ -548,7 +549,8 @@ export class Renderer {
     }
     // death motes
     for (const p of sim.particles) {
-      const lf = 1 - p.age / p.life;
+      if (p.age < 0) continue; // staged, not yet born
+      const lf = Math.max(0, Math.min(1, 1 - p.age / p.life));
       const ds = depthScale(p.y);
       A.push(p.x, p.y, p.size * 2.4 * ds * (0.5 + lf * 0.5), p.size * 2.4 * ds * (0.5 + lf * 0.5), 0, p.phase + p.age * 5, KIND.MOTE, lf,
         p.color[0] * lf * 0.9, p.color[1] * lf * 0.9, p.color[2] * lf * 0.9, p.seed);

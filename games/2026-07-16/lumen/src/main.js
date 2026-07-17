@@ -8,7 +8,7 @@ import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
 
-export const VERSION = 'v1.4.0';
+export const VERSION = 'v1.5.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -157,6 +157,7 @@ class Game {
           break;
         case 'kill':
           this.fx.shake = Math.min(5, this.fx.shake + 0.25);
+          if (ev.boss) { this.fx.shake = 12; this.fx.aberr = 0.024; }
           // each death soaks a whisper of its colour into the ground
           this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: ev.boss ? 240 : 44, i: ev.boss ? 0.7 : 0.3, color: ev.color || [0.5, 0.9, 0.5] });
           break;
