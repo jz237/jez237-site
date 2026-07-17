@@ -3,7 +3,8 @@
 // with other games on the site.
 
 // slug v2: '/scores/lumen' was polluted by test submissions pre-release
-const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/lumen-td';
+const SCORE_BASE = 'https://game-scores.jez237.workers.dev/scores/';
+const DEFAULT_BOARD = 'lumen-td';
 const LOCAL_KEY = 'lumen_hs_v1';
 const LIMIT = 10;
 
@@ -24,27 +25,27 @@ export function cleanInitials(s) {
   return (s || '???').toUpperCase().replace(/[^A-Z0-9]/g, '').padEnd(3, '·').slice(0, 3);
 }
 
-let globalCache = null, cacheAt = 0;
-export async function fetchGlobal() {
-  if (globalCache && Date.now() - cacheAt < 60000) return globalCache;
+let globalCache = null, cacheAt = 0, cacheBoard = null;
+export async function fetchGlobal(board = DEFAULT_BOARD) {
+  if (globalCache && cacheBoard === board && Date.now() - cacheAt < 60000) return globalCache;
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 6000);
   try {
-    const res = await fetch(`${SCORE_API}?limit=${LIMIT}`, { signal: ctl.signal });
+    const res = await fetch(`${SCORE_BASE}${board}?limit=${LIMIT}`, { signal: ctl.signal });
     clearTimeout(timer);
     if (!res.ok) return null;
     const data = await res.json();
     const list = Array.isArray(data) ? data : (data.scores || data.results || []);
-    globalCache = list; cacheAt = Date.now();
+    globalCache = list; cacheAt = Date.now(); cacheBoard = board;
     return list;
   } catch { clearTimeout(timer); return null; }
 }
 
-export async function submitGlobal({ initials, score, wave, kills, map, mode }) {
+export async function submitGlobal({ initials, score, wave, kills, map, mode, board = DEFAULT_BOARD }) {
   const ctl = new AbortController();
   const timer = setTimeout(() => ctl.abort(), 6000);
   try {
-    await fetch(SCORE_API, {
+    await fetch(SCORE_BASE + board, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -59,4 +60,11 @@ export async function submitGlobal({ initials, score, wave, kills, map, mode }) 
     globalCache = null;
     return true;
   } catch { clearTimeout(timer); return false; }
+}
+
+// the daily grove: one seed for everyone, its own board
+export function dailyInfo() {
+  const d = new Date();
+  const key = `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, '0')}${String(d.getUTCDate()).padStart(2, '0')}`;
+  return { seed: parseInt(key, 10), mapIndex: parseInt(key, 10) % 3, board: 'lumen-td-daily-' + key, label: d.toISOString().slice(0, 10) };
 }
