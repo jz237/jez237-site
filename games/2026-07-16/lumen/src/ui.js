@@ -37,6 +37,10 @@ export class UI {
       qsel.addEventListener('change', () => { game.audio.settings.quality = qsel.value; game.audio.save(); });
     }
     this.el.surge.addEventListener('click', () => game.callSurge());
+    const bp = document.getElementById('btnPause');
+    if (bp) bp.addEventListener('click', () => game.togglePause());
+    const bs = document.getElementById('btnSpeed');
+    if (bs) bs.addEventListener('click', () => game.cycleSpeed());
     this.lastVals = {};
   }
 
