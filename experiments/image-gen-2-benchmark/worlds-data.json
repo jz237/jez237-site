@@ -1906,5 +1906,145 @@
       "continuity": "Preserves Resonance Vault’s five-legged plum-gray inhabitants, vibration whiskers, dorsal resonance chambers, tuned basalt ribs, hanging pale fiber ecology, amber fault light, salt glass, pumice, copper, and the missing Crown Rib route tone.",
       "entryDescription": "At Chordwell Commons, young bridge-listener Eru tests a silent Crown Rib while morning commuters pause and neighboring arches still send visible ripples through the brine."
     }
+  },
+  {
+    "id": "2026-07-16-weekly-world-resonance-vault-deepnote-exchange-market-hum",
+    "title": "Resonance Vault: Deepnote Exchange Market Hum",
+    "tests": "Manual completion of Resonance Vault nine-image serialized weekly-world arc; generated with built-in GPT Image 2 using prior world images as visual references; visually inspected for continuity, tactile materials, cavern setting, and radial non-human inhabitants.",
+    "prompt": "Create a square photorealistic documentary scene for Resonance Vault, story beat 3/9. At Deepnote Exchange, young bridge-listener Eru investigates the missing Crown Rib route tone while market vendors use hand-tuned stall chimes, stone tapping plates, and salt-glass resonance bowls to guide travelers. Eru compares a quivering copper line with a slack one and discovers that the silence grows stronger toward the Crown Rib. Show a lived-in market beneath hanging chalk-white mineral-fiber groves, with black-basalt arches, warm amber fault light, blue-white brine ripples, pumice blocks, oxidized copper, salt glass, and radial non-humanoid inhabitants with exactly five short load-bearing legs, two fine manipulator tendrils, plum-gray skin, pale vibration whiskers, pressure pits, and hollow dorsal resonance chambers. No humans, humanoids, bipeds, open sky, mushrooms, fantasy crystal palace, readable text, logos, or watermark.\n\nReusable prompt template: Create a realistic photographed weekly-world story image for [WORLD_NAME], beat [STORY_ORDER]/[TOTAL], showing [CHARACTER_OR_CREW] carrying out [CAUSAL_STORY_ACTION] at [SPECIFIC_WORLD_LOCATION]. Preserve [NON_HUMAN_BODY_PLAN], [SIGNATURE_GEOLOGY_AND_ECOLOGY], [MATERIALS_AND_INFRASTRUCTURE], [RECURRING_LIGHTING_AND_PALETTE], and [CONTINUITY_FROM_PREVIOUS_BEAT]. Make the action legible through practical activity, environmental cause-and-effect, tactile wear, and scale cues; no readable text, generic franchise styling, or cinematic battle framing.\n\nExample substitution: [WORLD_NAME] = Resonance Vault; [STORY_ORDER]/[TOTAL] = 3/9; [CHARACTER_OR_CREW] = Eru and Deepnote vendors; [CAUSAL_STORY_ACTION] = tracing the fading route resonance through improvised market chimes; [SPECIFIC_WORLD_LOCATION] = Deepnote Exchange; [CONTINUITY_FROM_PREVIOUS_BEAT] = Eru has just found the Crown Rib silent at Chordwell Commons.",
+    "image": "images/2026-07-16-weekly-world-resonance-vault-deepnote-exchange-market-hum.jpg",
+    "thumb": "thumbs/2026-07-16-weekly-world-resonance-vault-deepnote-exchange-market-hum.webp",
+    "color": "#312d29",
+    "date": "2026-07-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1254x1254",
+    "world": {
+      "name": "Resonance Vault",
+      "description": "A vast warm cavern civilization beneath a lightless alien crust, where radial five-legged inhabitants navigate by vibration through tuned basalt ribs, hanging mineral-fiber groves, warm brine seams, and pumice transit.",
+      "continuity": "Story beat 3/9 preserves the silent Crown Rib, five-legged radial inhabitants, tuned basalt routes, hanging mineral fibers, amber fault light, copper tension lines, salt glass, pumice, and blue-white brine.",
+      "entryDescription": "At Deepnote Exchange, vendors improvise hand-tuned stall chimes while Eru maps how the missing route tone weakens toward the Crown Rib."
+    }
+  },
+  {
+    "id": "2026-07-16-weekly-world-resonance-vault-ceiling-grove-fiber-shift",
+    "title": "Resonance Vault: Ceiling Grove Fiber Shift",
+    "tests": "Manual completion of Resonance Vault nine-image serialized weekly-world arc; generated with built-in GPT Image 2 using prior world images as visual references; visually inspected for continuity, tactile materials, cavern setting, and radial non-human inhabitants.",
+    "prompt": "Create a square photorealistic documentary scene for Resonance Vault, story beat 4/9. In the Ceiling Grove, Eru and grove tender Oruq discover that newly grown chalk-white mineral fibers bend away from the silent Crown Rib and toward a low vibration rising through the cavern floor. Oruq separates divergent bundles while Eru braces five feet on a suspended basalt walkway to sense the new direction. Show immense hanging fibers, salt fans, copper-thread creepers, suspended collection baskets, distant blue-white brine, and warm amber geothermal light. Every inhabitant is a radial non-humanoid with exactly five short legs, two tendrils, plum-gray skin, whiskers, pressure pits, and a hollow dorsal resonance chamber. No humans, humanoids, bipeds, open sky, mushrooms, crystal fantasy, readable text, logos, or watermark.\n\nReusable prompt template: Create a realistic photographed weekly-world story image for [WORLD_NAME], beat [STORY_ORDER]/[TOTAL], showing [CHARACTER_OR_CREW] carrying out [CAUSAL_STORY_ACTION] at [SPECIFIC_WORLD_LOCATION]. Preserve [NON_HUMAN_BODY_PLAN], [SIGNATURE_GEOLOGY_AND_ECOLOGY], [MATERIALS_AND_INFRASTRUCTURE], [RECURRING_LIGHTING_AND_PALETTE], and [CONTINUITY_FROM_PREVIOUS_BEAT]. Make the action legible through practical activity, environmental cause-and-effect, tactile wear, and scale cues; no readable text, generic franchise styling, or cinematic battle framing.\n\nExample substitution: [WORLD_NAME] = Resonance Vault; [STORY_ORDER]/[TOTAL] = 4/9; [CHARACTER_OR_CREW] = Eru and Oruq; [CAUSAL_STORY_ACTION] = following mineral fibers redirected by a new low vibration; [SPECIFIC_WORLD_LOCATION] = suspended Ceiling Grove walkways; [CONTINUITY_FROM_PREVIOUS_BEAT] = Deepnote chimes showed the silence strengthening toward the Crown Rib.",
+    "image": "images/2026-07-16-weekly-world-resonance-vault-ceiling-grove-fiber-shift.jpg",
+    "thumb": "thumbs/2026-07-16-weekly-world-resonance-vault-ceiling-grove-fiber-shift.webp",
+    "color": "#302b27",
+    "date": "2026-07-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1254x1254",
+    "world": {
+      "name": "Resonance Vault",
+      "description": "A vast warm cavern civilization beneath a lightless alien crust, where radial five-legged inhabitants navigate by vibration through tuned basalt ribs, hanging mineral-fiber groves, warm brine seams, and pumice transit.",
+      "continuity": "Story beat 4/9 preserves the missing route tone while the hanging chalk-white fibers reveal a new low vibration beneath the Crown Rib.",
+      "entryDescription": "Eru and grove tender Oruq discover mineral fibers bending away from the silent rib and toward an unexpected vibration rising through the floor."
+    }
+  },
+  {
+    "id": "2026-07-16-weekly-world-resonance-vault-new-brine-seep-discovery",
+    "title": "Resonance Vault: New Brine Seep Discovery",
+    "tests": "Manual completion of Resonance Vault nine-image serialized weekly-world arc; generated with built-in GPT Image 2 using prior world images as visual references; visually inspected for continuity, tactile materials, cavern setting, and radial non-human inhabitants.",
+    "prompt": "Create a square photorealistic documentary discovery scene for Resonance Vault, story beat 5/9. Beneath the Crown Rib footing, Eru, elder basalt tuner Vann, and grove tender Oruq discover a fresh warm-brine seep. Translucent silica lace has grown around the tuned basalt foundation and is harmlessly absorbing its old route frequency. Eru senses floor ripples, Vann uses a mechanical harmonic gauge, and Oruq carefully lifts one edge of the lace without tearing it. Show wet black basalt, blue-white brine, amber fault light, salt crystals, copper wire, pumice wedges, salt-glass bowls, worn tools, and radial non-humanoid inhabitants with exactly five short legs, two tendrils, plum-gray skin, whiskers, pressure pits, and hollow dorsal resonance chambers. No humans, humanoids, bipeds, mushrooms, crystal-palace fantasy, horror, readable text, logos, or watermark.\n\nReusable prompt template: Create a realistic photographed weekly-world story image for [WORLD_NAME], beat [STORY_ORDER]/[TOTAL], showing [CHARACTER_OR_CREW] carrying out [CAUSAL_STORY_ACTION] at [SPECIFIC_WORLD_LOCATION]. Preserve [NON_HUMAN_BODY_PLAN], [SIGNATURE_GEOLOGY_AND_ECOLOGY], [MATERIALS_AND_INFRASTRUCTURE], [RECURRING_LIGHTING_AND_PALETTE], and [CONTINUITY_FROM_PREVIOUS_BEAT]. Make the action legible through practical activity, environmental cause-and-effect, tactile wear, and scale cues; no readable text, generic franchise styling, or cinematic battle framing.\n\nExample substitution: [WORLD_NAME] = Resonance Vault; [STORY_ORDER]/[TOTAL] = 5/9; [CHARACTER_OR_CREW] = Eru, Vann, and Oruq; [CAUSAL_STORY_ACTION] = discovering that new silica-lace growth is damping the old route frequency; [SPECIFIC_WORLD_LOCATION] = maintenance hollow beneath the Crown Rib; [CONTINUITY_FROM_PREVIOUS_BEAT] = the ceiling fibers pointed toward a new vibration source below.",
+    "image": "images/2026-07-16-weekly-world-resonance-vault-new-brine-seep-discovery.jpg",
+    "thumb": "thumbs/2026-07-16-weekly-world-resonance-vault-new-brine-seep-discovery.webp",
+    "color": "#32302e",
+    "date": "2026-07-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1254x1254",
+    "world": {
+      "name": "Resonance Vault",
+      "description": "A vast warm cavern civilization beneath a lightless alien crust, where radial five-legged inhabitants navigate by vibration through tuned basalt ribs, hanging mineral-fiber groves, warm brine seams, and pumice transit.",
+      "continuity": "Story beat 5/9 reveals that a fresh brine seep and translucent silica lace are damping the old Crown Rib frequency.",
+      "entryDescription": "Eru, Vann, and Oruq find a new warm-brine seam whose delicate silica lace is harmlessly absorbing the old civic route tone."
+    }
+  },
+  {
+    "id": "2026-07-16-weekly-world-resonance-vault-amber-fault-station-beacons",
+    "title": "Resonance Vault: Amber Fault Station Beacons",
+    "tests": "Manual completion of Resonance Vault nine-image serialized weekly-world arc; generated with built-in GPT Image 2 using prior world images as visual references; visually inspected for continuity, tactile materials, cavern setting, and radial non-human inhabitants.",
+    "prompt": "Create a square photorealistic documentary scene for Resonance Vault, story beat 6/9. At Amber Fault Station, leaders halt the weekly warm-brine migration because restoring the old frequency would destroy the new seep and silica lace. Families, nursery groups, loaded stone sleds, basket lifts, and a pumice ferry wait around tactile rails while Eru and Quiet Ring apprentices build temporary five-beat beacons from pumice, braided mineral fiber, copper tapping rods, and salt-glass bowls. Show a vast black-basalt station, amber fault windows, hanging pale fibers, blue-white brine, worn tools, damp five-point tracks, and radial non-humanoid inhabitants with exactly five short legs, two tendrils, plum-gray skin, whiskers, pressure pits, and hollow dorsal chambers. No humans, humanoids, bipeds, panic, readable signs, logos, or watermark.\n\nReusable prompt template: Create a realistic photographed weekly-world story image for [WORLD_NAME], beat [STORY_ORDER]/[TOTAL], showing [CHARACTER_OR_CREW] carrying out [CAUSAL_STORY_ACTION] at [SPECIFIC_WORLD_LOCATION]. Preserve [NON_HUMAN_BODY_PLAN], [SIGNATURE_GEOLOGY_AND_ECOLOGY], [MATERIALS_AND_INFRASTRUCTURE], [RECURRING_LIGHTING_AND_PALETTE], and [CONTINUITY_FROM_PREVIOUS_BEAT]. Make the action legible through practical activity, environmental cause-and-effect, tactile wear, and scale cues; no readable text, generic franchise styling, or cinematic battle framing.\n\nExample substitution: [WORLD_NAME] = Resonance Vault; [STORY_ORDER]/[TOTAL] = 6/9; [CHARACTER_OR_CREW] = Eru and Quiet Ring apprentices; [CAUSAL_STORY_ACTION] = creating temporary tactile navigation while migration waits; [SPECIFIC_WORLD_LOCATION] = Amber Fault Station; [CONTINUITY_FROM_PREVIOUS_BEAT] = the crew now knows the old route tone is being absorbed by a new living mineral ecology.",
+    "image": "images/2026-07-16-weekly-world-resonance-vault-amber-fault-station-beacons.jpg",
+    "thumb": "thumbs/2026-07-16-weekly-world-resonance-vault-amber-fault-station-beacons.webp",
+    "color": "#38322d",
+    "date": "2026-07-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1254x1254",
+    "world": {
+      "name": "Resonance Vault",
+      "description": "A vast warm cavern civilization beneath a lightless alien crust, where radial five-legged inhabitants navigate by vibration through tuned basalt ribs, hanging mineral-fiber groves, warm brine seams, and pumice transit.",
+      "continuity": "Story beat 6/9 preserves the new brine ecology while migration is paused and temporary five-beat tactile beacons keep travelers safe.",
+      "entryDescription": "At Amber Fault Station, migration leaders halt outbound groups as Eru and nursery apprentices assemble temporary mechanical route beacons."
+    }
+  },
+  {
+    "id": "2026-07-16-weekly-world-resonance-vault-crown-rib-retuning",
+    "title": "Resonance Vault: Crown-Rib Retuning",
+    "tests": "Manual completion of Resonance Vault nine-image serialized weekly-world arc; generated with built-in GPT Image 2 using prior world images as visual references; visually inspected for continuity, tactile materials, cavern setting, and radial non-human inhabitants.",
+    "prompt": "Create a square photorealistic documentary repair scene for Resonance Vault, story beat 7/9. Vann leads a careful retuning of the Crown Rib around the changed geology while Eru operates a five-point floor resonance plate. A non-electronic harmonic rig tensions oxidized copper wires across the great basalt arch using pumice counterweights, salt-glass bowls, mechanical gauges, braided fiber, and stone tuning tools. Protect the fresh brine seep and translucent silica lace inside tactile boundary stones; the crew changes the civic chord instead of removing the new ecology. Show coordinated ripples beginning in adjacent blue-white brine pools, amber work light, damp basalt, and radial non-humanoid inhabitants with exactly five short legs, two tendrils, plum-gray skin, whiskers, pressure pits, and dorsal chambers. No humans, humanoids, bipeds, fantasy, explosions, text, logos, or watermark.\n\nReusable prompt template: Create a realistic photographed weekly-world story image for [WORLD_NAME], beat [STORY_ORDER]/[TOTAL], showing [CHARACTER_OR_CREW] carrying out [CAUSAL_STORY_ACTION] at [SPECIFIC_WORLD_LOCATION]. Preserve [NON_HUMAN_BODY_PLAN], [SIGNATURE_GEOLOGY_AND_ECOLOGY], [MATERIALS_AND_INFRASTRUCTURE], [RECURRING_LIGHTING_AND_PALETTE], and [CONTINUITY_FROM_PREVIOUS_BEAT]. Make the action legible through practical activity, environmental cause-and-effect, tactile wear, and scale cues; no readable text, generic franchise styling, or cinematic battle framing.\n\nExample substitution: [WORLD_NAME] = Resonance Vault; [STORY_ORDER]/[TOTAL] = 7/9; [CHARACTER_OR_CREW] = Vann, Eru, and Crown Rib tuners; [CAUSAL_STORY_ACTION] = retuning the arch around the new brine ecology; [SPECIFIC_WORLD_LOCATION] = Crown Rib maintenance chamber; [CONTINUITY_FROM_PREVIOUS_BEAT] = temporary beacons hold the route while the permanent chord is changed.",
+    "image": "images/2026-07-16-weekly-world-resonance-vault-crown-rib-retuning.jpg",
+    "thumb": "thumbs/2026-07-16-weekly-world-resonance-vault-crown-rib-retuning.webp",
+    "color": "#312c26",
+    "date": "2026-07-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1254x1254",
+    "world": {
+      "name": "Resonance Vault",
+      "description": "A vast warm cavern civilization beneath a lightless alien crust, where radial five-legged inhabitants navigate by vibration through tuned basalt ribs, hanging mineral-fiber groves, warm brine seams, and pumice transit.",
+      "continuity": "Story beat 7/9 retunes the Crown Rib around changed geology, protecting the brine seep and adding its low vibration to the civic chord.",
+      "entryDescription": "Vann, Eru, and maintenance crews use a non-electronic harmonic rig to retune the great arch without disturbing the new silica-lace sanctuary."
+    }
+  },
+  {
+    "id": "2026-07-16-weekly-world-resonance-vault-warm-brine-migration-crossing",
+    "title": "Resonance Vault: Warm-Brine Migration Crossing",
+    "tests": "Manual completion of Resonance Vault nine-image serialized weekly-world arc; generated with built-in GPT Image 2 using prior world images as visual references; visually inspected for continuity, tactile materials, cavern setting, and radial non-human inhabitants.",
+    "prompt": "Create a square photorealistic documentary scene for Resonance Vault, story beat 8/9. The weekly warm-brine migration resumes safely after the Crown Rib retuning. Eru leads a five-beat test group across a tuned black-basalt bridge, followed by families, nursery groups, loaded vibration-guided sleds, a hanging basket lift, and a counterweighted pumice ferry. Copper lines quiver together, chalk-white ceiling fibers lean with the restored chord, and synchronized rings cross the blue-white brine with one subtle additional low ripple. Show warm amber cavern light, salt-glass lamps, pumice cargo, damp route ridges, and radial non-humanoid inhabitants with exactly five short legs, two tendrils, plum-gray skin, whiskers, pressure pits, and hollow dorsal chambers. No humans, humanoids, bipeds, open sky, parade framing, text, logos, or watermark.\n\nReusable prompt template: Create a realistic photographed weekly-world story image for [WORLD_NAME], beat [STORY_ORDER]/[TOTAL], showing [CHARACTER_OR_CREW] carrying out [CAUSAL_STORY_ACTION] at [SPECIFIC_WORLD_LOCATION]. Preserve [NON_HUMAN_BODY_PLAN], [SIGNATURE_GEOLOGY_AND_ECOLOGY], [MATERIALS_AND_INFRASTRUCTURE], [RECURRING_LIGHTING_AND_PALETTE], and [CONTINUITY_FROM_PREVIOUS_BEAT]. Make the action legible through practical activity, environmental cause-and-effect, tactile wear, and scale cues; no readable text, generic franchise styling, or cinematic battle framing.\n\nExample substitution: [WORLD_NAME] = Resonance Vault; [STORY_ORDER]/[TOTAL] = 8/9; [CHARACTER_OR_CREW] = Eru and the warm-brine migration; [CAUSAL_STORY_ACTION] = crossing safely on the retuned five-beat route; [SPECIFIC_WORLD_LOCATION] = the Crown Rib bridge network; [CONTINUITY_FROM_PREVIOUS_BEAT] = the retuning preserved the seep and successfully added its low note.",
+    "image": "images/2026-07-16-weekly-world-resonance-vault-warm-brine-migration-crossing.jpg",
+    "thumb": "thumbs/2026-07-16-weekly-world-resonance-vault-warm-brine-migration-crossing.webp",
+    "color": "#2d2822",
+    "date": "2026-07-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1254x1254",
+    "world": {
+      "name": "Resonance Vault",
+      "description": "A vast warm cavern civilization beneath a lightless alien crust, where radial five-legged inhabitants navigate by vibration through tuned basalt ribs, hanging mineral-fiber groves, warm brine seams, and pumice transit.",
+      "continuity": "Story beat 8/9 shows the restored route network carrying the migration safely on a richer five-beat chord.",
+      "entryDescription": "Eru leads a test group across the retuned bridge before families, nursery groups, freight sleds, basket lifts, and pumice ferries resume their coordinated migration."
+    }
+  },
+  {
+    "id": "2026-07-16-weekly-world-resonance-vault-keeper-of-the-added-note",
+    "title": "Resonance Vault: Keeper of the Added Note",
+    "tests": "Manual completion of Resonance Vault nine-image serialized weekly-world arc; generated with built-in GPT Image 2 using prior world images as visual references; visually inspected for continuity, tactile materials, cavern setting, and radial non-human inhabitants.",
+    "prompt": "Create a square photorealistic documentary closing scene for Resonance Vault, story beat 9/9. At Chordwell Commons, the restored civic chord travels through every tuned basalt arch with one added low note. Eru performs the first official inspection as Keeper of the Added Note beside Vann, shown through a braided copper-and-fiber harmonic gauge laid across the tactile route ridge rather than clothing or ceremony. Ordinary transit resumes behind them; brine pools ripple in layered rings; hanging fibers lean to the richer chord. In a side alcove, Oruq places tactile boundary stones around the protected silica-lace sanctuary above the new seep. Show vast black-basalt bridges, amber fault glow, blue-white brine, salt glass, pumice transit, worn copper, and radial non-humanoid inhabitants with exactly five short legs, two tendrils, plum-gray skin, whiskers, pressure pits, and hollow dorsal chambers. No humans, humanoids, bipeds, crowns, ceremony stage, text, logos, or watermark.\n\nReusable prompt template: Create a realistic photographed weekly-world story image for [WORLD_NAME], beat [STORY_ORDER]/[TOTAL], showing [CHARACTER_OR_CREW] carrying out [CAUSAL_STORY_ACTION] at [SPECIFIC_WORLD_LOCATION]. Preserve [NON_HUMAN_BODY_PLAN], [SIGNATURE_GEOLOGY_AND_ECOLOGY], [MATERIALS_AND_INFRASTRUCTURE], [RECURRING_LIGHTING_AND_PALETTE], and [CONTINUITY_FROM_PREVIOUS_BEAT]. Make the action legible through practical activity, environmental cause-and-effect, tactile wear, and scale cues; no readable text, generic franchise styling, or cinematic battle framing.\n\nExample substitution: [WORLD_NAME] = Resonance Vault; [STORY_ORDER]/[TOTAL] = 9/9; [CHARACTER_OR_CREW] = Eru, Vann, and Oruq; [CAUSAL_STORY_ACTION] = accepting the new chord, protecting the changed ecology, and entrusting Eru with its care; [SPECIFIC_WORLD_LOCATION] = Chordwell Commons; [CONTINUITY_FROM_PREVIOUS_BEAT] = the migration has crossed safely on the retuned route.",
+    "image": "images/2026-07-16-weekly-world-resonance-vault-keeper-of-the-added-note.jpg",
+    "thumb": "thumbs/2026-07-16-weekly-world-resonance-vault-keeper-of-the-added-note.webp",
+    "color": "#28231e",
+    "date": "2026-07-16",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1254x1254",
+    "world": {
+      "name": "Resonance Vault",
+      "description": "A vast warm cavern civilization beneath a lightless alien crust, where radial five-legged inhabitants navigate by vibration through tuned basalt ribs, hanging mineral-fiber groves, warm brine seams, and pumice transit.",
+      "continuity": "Story beat 9/9 resolves the crisis: the new chord becomes civic canon, the silica lace is protected, and Eru becomes keeper of the added low note.",
+      "entryDescription": "At Chordwell Commons, Eru conducts the first official inspection of the richer route chord while Oruq marks the new silica-lace sanctuary."
+    }
   }
 ]
