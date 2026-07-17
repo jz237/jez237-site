@@ -799,6 +799,84 @@ void main(){
     col += tint*rim*0.7*m;
     cov = m*0.95;
   }
+  else if(kind == 35){ // GLACIAL COIL — apex: crossed ice rings, frozen heart
+    vec2 q = p;
+    float r = length(q);
+    float wob = fbm3(q*3.0+seed*5.0)*0.05;
+    // two crossing elliptical rings
+    float ringA = abs(length(q*vec2(1.0,1.9)) - 0.58 - wob) - 0.075;
+    float ringB = abs(length(q*vec2(1.9,1.0)) - 0.58 - wob) - 0.075;
+    float d = min(ringA, ringB);
+    d = smin(d, sdCircle(q, 0.22+wob), 0.09);
+    float m = smoothstep(0.02,-0.02,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    float facet = 0.5+0.5*sin((q.x+q.y)*22.0+seed*9.0);
+    vec3 body = mix(vec3(0.07,0.10,0.16), tint*0.5, 0.3+0.4*facet);
+    col = body*m;
+    col += mix(tint,vec3(1.0),0.6) * smoothstep(0.26,0.0,r) * (1.2 + 2.4*aux*aux);
+    float sparkle = pow(0.5+0.5*sin(atan(q.y,q.x)*10.0 + phase*2.4), 9.0) * smoothstep(0.1,0.0,min(ringA,ringB));
+    col += vec3(1.0) * sparkle * (0.4 + 1.2*aux) * m;
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.11,-0.04,d);
+    col += tint*rim*0.8*m;
+    cov = m*0.95;
+  }
+  else if(kind == 36){ // CAUSTIC FURNACE — apex: molten maw dripping acid
+    vec2 q = p; q.y = -q.y;
+    float wob = fbm3(q*2.6+seed*4.0)*0.08;
+    // squat furnace body with an open maw
+    float body = sdCircle(q*vec2(0.8,1.1)+vec2(0.0,0.10), 0.55+wob);
+    float maw = sdCircle(q*vec2(1.1,1.7)-vec2(0.0,0.28), 0.30);
+    float d = max(body, -maw);
+    float m = smoothstep(0.03,-0.03,d);
+    float mawGlow = smoothstep(0.34,0.0,length(q*vec2(1.1,1.7)-vec2(0.0,0.28)));
+    if(m<=0.0 && mawGlow<=0.01){ frag=vec4(0.0); return; }
+    vec3 shell = mix(vec3(0.09,0.05,0.03), tint*0.30, smoothstep(0.7,0.1,length(q)));
+    shell *= 0.8 + 0.3*fbm3(q*6.0+seed*8.0);
+    // molten cracks + green acid drips at the base
+    float crack = smoothstep(0.66,0.95,fbm(q*4.2+seed*13.0));
+    float drip = 0.0;
+    for(int i=0;i<3;i++){
+      float fi = float(i);
+      vec2 c = vec2((fi-1.0)*0.28 + sin(seed*7.0+fi)*0.06, -0.52 - 0.14*fract(phase*0.23+fi*0.37));
+      drip += smoothstep(0.07,0.0,length(q-c));
+    }
+    col = shell*m + tint*crack*(1.2+1.2*aux)*m + vec3(0.55,0.95,0.25)*drip*0.9;
+    col += mix(tint,vec3(1.0,0.85,0.5),0.5) * mawGlow * (1.1 + 2.6*aux*aux);
+    float rim = smoothstep(0.0,0.06,-d)*smoothstep(-0.13,-0.05,d);
+    col += tint*rim*0.6*m;
+    cov = clamp(m*0.97 + mawGlow*0.3, 0.0, 1.0);
+  }
+  else if(kind == 37){ // LANCE CHORUS — apex: a choir of converging blades
+    vec2 q = p; q.y = -q.y;
+    float d = 1e9;
+    float tipG = 0.0;
+    for(int i=0;i<3;i++){
+      float fi = float(i);
+      float bx = (fi-1.0)*0.30;
+      float lean = (fi-1.0)*-0.16;
+      vec2 root = vec2(bx, -0.62);
+      vec2 tip = vec2(bx+lean, 0.55 + 0.14*(1.0-abs(fi-1.0)));
+      vec2 dir = normalize(tip-root);
+      vec2 rel = q-root;
+      float along = clamp(dot(rel,dir)/length(tip-root), 0.0, 1.0);
+      float perp = abs(rel.x*dir.y - rel.y*dir.x);
+      float bd = perp - 0.10*(1.0-along*0.85);
+      bd = max(bd, along-1.0); bd = max(bd, -along);
+      d = min(d, bd);
+      tipG += smoothstep(0.12,0.0,length(q-tip));
+    }
+    d = smin(d, sdCircle(q+vec2(0.0,0.48), 0.26+fbm3(q*4.0+seed*6.0)*0.05), 0.10);
+    float m = smoothstep(0.02,-0.02,d);
+    if(m<=0.0 && tipG<=0.01){ frag=vec4(0.0); return; }
+    float facet = 0.5+0.5*sin(q.y*18.0+seed*11.0);
+    vec3 body = mix(vec3(0.08,0.05,0.13), tint*0.45, 0.35+0.35*facet);
+    col = body*m;
+    col += mix(tint,vec3(1.0),0.6) * tipG * (0.9 + 2.4*aux*aux);
+    col += tint * smoothstep(0.30,0.0,length(q+vec2(0.0,0.44))) * (0.7+1.2*aux) * m;
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.11,-0.04,d);
+    col += tint*rim*0.7*m;
+    cov = clamp(m*0.96 + tipG*0.3, 0.0, 1.0);
+  }
   else if(kind == 29){ // FROND — foreground kelp silhouette, haze-rimmed
     vec2 q = p; q.y = -q.y;
     float d = 1e9;
