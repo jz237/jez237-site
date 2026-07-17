@@ -45,6 +45,7 @@ export class Renderer {
     this.fgFlora = null; // foreground silhouettes, built per map
     this.frame = 0;
     this.w = 0; this.h = 0;
+    this.quality = 3; // 3 full · 2 medium · 1 low (auto-managed by main)
     // world-space stain accumulation: the run's history painted into the ground
     this.stampQueue = [];
     const gl2 = this.gl;
@@ -117,8 +118,17 @@ export class Renderer {
     return out;
   }
 
+  setQuality(q) {
+    q = Math.max(1, Math.min(3, q));
+    if (q === this.quality) return;
+    this.quality = q;
+    this.w = 0; this.h = 0; // force FBO re-alloc at the new scale
+    this.resize();
+  }
+
   resize() {
-    const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+    const dprCap = this.quality === 3 ? 1.5 : this.quality === 2 ? 1.2 : 1.0;
+    const dpr = Math.min(dprCap, window.devicePixelRatio || 1);
     const w = Math.floor(this.canvas.clientWidth * dpr) || 1280;
     const h = Math.floor(this.canvas.clientHeight * dpr) || 720;
     if (w === this.w && h === this.h) return;
@@ -379,8 +389,8 @@ export class Renderer {
     gl.uniform1f(this.pBright.u.uKnee, 0.30);
     gl.bindVertexArray(this.quad);
     gl.drawArrays(gl.TRIANGLES, 0, 3);
-    const b1 = passBlur(this.fBright, this.fB1a, this.fB1b);
-    const b2 = passBlur(b1, this.fB2a, this.fB2b);
+    const b1 = this.quality >= 3 ? passBlur(this.fBright, this.fB1a, this.fB1b) : this.fBright;
+    const b2 = this.quality >= 2 ? passBlur(b1, this.fB2a, this.fB2b) : b1;
     const b3 = passBlur(b2, this.fB3a, this.fB3b);
 
     // ================= post =================
@@ -559,8 +569,10 @@ export class Renderer {
       A.push(p.x, p.y, p.size * 2.4 * ds * (0.5 + lf * 0.5), p.size * 2.4 * ds * (0.5 + lf * 0.5), 0, p.phase + p.age * 5, KIND.MOTE, lf,
         p.color[0] * lf * 0.9, p.color[1] * lf * 0.9, p.color[2] * lf * 0.9, p.seed);
     }
-    // ambient spores
+    // ambient spores (halved on the low tier)
+    let sporeSkip = 0;
     for (const s of this.spores) {
+      if (this.quality === 1 && (sporeSkip++ & 1)) continue;
       const tw = 0.6 + 0.4 * Math.sin(t * 0.8 + s.phase * 4);
       A.push(s.x, s.y, s.size * 2.2, s.size * 2.2, 0, s.phase, KIND.GLOW, 1,
         s.hue[0] * s.bright * tw, s.hue[1] * s.bright * tw, s.hue[2] * s.bright * tw, 0);
