@@ -124,6 +124,13 @@
   #audioopts label { display: flex; align-items: center; gap: 8px; }
   #audioopts input[type=range] { width: 90px; accent-color: #29f2ff; background: transparent; }
   #audioopts select { background: rgba(10,8,28,0.8); color: #cfe9ef; border: 1px solid rgba(120,220,255,0.25); border-radius: 6px; font-family: inherit; padding: 2px 6px; }
+  #journal { margin-top: 16px; display: flex; gap: 10px; justify-content: center; align-items: center;
+    font-size: 11px; letter-spacing: 0.18em; }
+  #journal .jlabel { color: #6f97a3; }
+  .jchip { border: 1px solid rgba(120,220,255,0.15); border-radius: 8px; padding: 3px 10px;
+    color: #3d5560; background: rgba(10,8,28,0.5); }
+  .jchip.found { color: var(--jc); border-color: var(--jc); text-shadow: 0 0 10px var(--jc); }
+  .mapcard .mbest { font-size: 10px; color: #ffb833; opacity: 0.85; margin-top: 5px; letter-spacing: 0.14em; }
   #board { margin-top: 20px; min-height: 90px; }
   #board .btitle { color: #9fd9e4; letter-spacing: 0.3em; font-size: 12px; margin-bottom: 8px; }
   #board table { margin: 0 auto; border-collapse: collapse; font-size: 13px; letter-spacing: 0.08em; color: #bfe3ec; }
@@ -190,6 +197,7 @@
         <label>effects<input type="range" id="volSfx" min="0" max="1" step="0.05"></label>
         <label>quality<select id="qualitySel"><option value="auto">auto</option><option value="high">high</option><option value="med">med</option><option value="low">low</option></select></label>
       </div>
+      <div id="journal"></div>
       <div id="board"></div>
     </div>
   </div>
@@ -207,7 +215,7 @@
     </div>
   </div>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v2.0.0</div>
+  <div id="ver">LUMEN v2.1.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>
