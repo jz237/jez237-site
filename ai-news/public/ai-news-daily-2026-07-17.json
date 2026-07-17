@@ -1,7 +1,135 @@
 {
   "date": "2026-07-17",
-  "updatedAt": "2026-07-17T04:00:02.007006+00:00",
+  "updatedAt": "2026-07-17T10:57:41.733486+00:00",
   "items": [
+    {
+      "title": "Google DeepMind launched an AI biosecurity programme to fight biological threats",
+      "url": "https://thenextweb.com/news/deepmind-isomorphic-ai-biosecurity-bioresilience",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google DeepMind has launched a programme to turn AI on biological threats. The London lab and its sister company Isomorphic Labs call it bioresilience, and set it out in a joint blog post. The aim is twofold. DeepMind wants to stop people misusing its models, and to help governments, scientists and biosecurity groups use AI [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-2d10477ae49920ef7a.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T09:56:21+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.8192,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Google DeepMind launched an AI biosecurity programme to fight biological threats",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "google-deepmind-google-deepmind-launched-biosecurity-programme",
+      "imageOriginal": "https://media.thenextweb.com/2026/05/deepmind-union-google-pentagon-ai-military.avif"
+    },
+    {
+      "title": "Meet the philosopher inside Google DeepMind",
+      "url": "https://thenextweb.com/news/deepmind-philosopher-iason-gabriel-ai-ethics",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "What does a company that builds game-playing AI need with a philosopher? That question sits at the heart of a Guardian long-read on Iason Gabriel, who has worked inside Google DeepMind since 2017. For a time, the Guardian reports, Gabriel was the only philosopher at a frontier AI lab. His job was to anticipate the [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-b593d9ec64c5d5e5f5.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T10:14:18+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.1281,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Meet the philosopher inside Google DeepMind",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-deepmind-meet-philosopher-inside-google-deepmind",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/iasongabriel-google-deepmind.avif"
+    },
+    {
+      "title": "DeepMind’s Hassabis says a STEM degree makes you 10x better with AI",
+      "url": "https://thenextweb.com/news/hassabis-stem-degree-ai-computer-science",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "AI is reshaping tech careers. But it will not kill off the value of a STEM degree, according to Google DeepMind chief Demis Hassabis. He made the comments at a London business conference, in a video published on Wednesday. Knowing the fundamentals of software gives you an edge with AI, he told the audience, Business [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-5e855b2096f8b4ad0d.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T10:18:48+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.8304,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "DeepMind’s Hassabis says a STEM degree makes you 10x better with AI",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "deepmind-deepmind-hassabis-stem-degree-makes",
+      "imageOriginal": "https://media.thenextweb.com/2026/04/google-deepmind-hassabis-startup-pace.avif"
+    },
+    {
+      "title": "SoftBank lines up a new $60bn bond to keep its OpenAI bet funded",
+      "url": "https://thenextweb.com/news/softbank-60-billion-bond",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Sixty billion dollars is a lot of bond, even by SoftBank Group’s standards. The Japanese conglomerate is reportedly preparing to raise up to that much in fresh debt, according to Bloomberg, a target that would eclipse anything Masayoshi Son’s firm has sold before and that lands squarely behind its swelling bet on OpenAI. The plan [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-d579293079e5d8624b.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T08:33:44+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.0791,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "SoftBank lines up a new $60bn bond to keep its OpenAI bet funded",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-softbank-lines-60bn-bond-keep",
+      "imageOriginal": "https://media.thenextweb.com/2026/04/softbank-battery-factory-sharp-sakai-ai-data-centres-1.avif"
+    },
     {
       "title": "5 AI Engineering Trends for Non-Engineers",
       "url": "https://aidailybrief.ai/e/2026-07-15",
@@ -14,9 +142,9 @@
       "summary": "OpenAI's first consumer device enters prototyping as a screen-free, semi-alive home speaker — but the real payload today is a field guide: the five things AI engineers are talking about right now, and why non-engineers get a six-month head start by eavesdropping.",
       "image": "public/thumbnails/news-4984a8bef78fb4bed9.png",
       "featuredLatest": false,
-      "published": "2026-07-17T04:00:13.844316+00:00",
+      "published": "2026-07-17T10:57:46.614404+00:00",
       "firstSeen": "2026-07-16T16:00:01.750493+00:00",
-      "lastSeen": "2026-07-17T04:00:02.007006+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 4.332,
@@ -32,6 +160,192 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "engineering-trends-non-engineers"
+    },
+    {
+      "title": "Mick Jagger says AI is fine for musicians, as long as it does not sound like him",
+      "url": "https://thenextweb.com/news/mick-jagger-ai-music-rolling-stones",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Mick Jagger has given a qualified blessing to musicians who reach for artificial intelligence, on the strict condition that whatever comes out is genuinely their own. “If someone wants to make music by AI, go ahead,” he told Billboard in a cover story published this week. “But it has to be original.” The line arrives quickly, though, [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Mick-Jagger.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T09:55:37+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1188,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Mick Jagger says AI is fine for musicians, as long as it does not sound like him",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "mick-jagger-fine-musicians-long-does"
+    },
+    {
+      "title": "French startup Syntetica raised $30M to recycle the nylon fashion throws away",
+      "url": "https://thenextweb.com/news/syntetica-nylon-recycling-series-a-lululemon",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A French startup has raised $30 million to tackle one of fashion’s hardest waste problems. Syntetica recycles nylon, and it can process two grades at once that the industry has long struggled to pull apart, its founder told TechCrunch. The Ecotechnologies 2 fund, managed by France’s public bank Bpifrance, led the round, worth €26.1 million. [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/syntetica-raises-30m.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T09:50:34+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1163,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "French startup Syntetica raised $30M to recycle the nylon fashion throws away",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "french-startup-syntetica-raised-30m-recycle"
+    },
+    {
+      "title": "Coca-Cola halted fairlife’s US production after a ransomware attack",
+      "url": "https://thenextweb.com/news/coca-cola-fairlife-ransomware-us-production-suspended",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Coca-Cola says its fairlife dairy unit was hit by ransomware, and has suspended all US production while it investigates. A ransomware attack has stopped production at one of Coca-Cola’s biggest dairy brands. The company said fairlife found unauthorised access to part of its systems, including production systems, in a statement. Coca-Cola disclosed the breach to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/coca-cola-fairlife.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T09:17:34+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1002,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Coca-Cola halted fairlife’s US production after a ransomware attack",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "coca-cola-halted-fairlife-production-ransomware-attack"
+    },
+    {
+      "title": "Mamdani wants NYC landlords to label the AI in their apartment photos",
+      "url": "https://thenextweb.com/news/mamdani-ai-apartment-listings-streeteasy",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The apartment in the StreetEasy photo is bright, airy, and a shade roomier than the walls actually permit. Under a plan from New York City mayor Zohran Mamdani, that listing would soon have to confess the touch-up. On 16 July his administration published the Rental Ripoff Report, a 23-point agenda drawn from the testimony of more [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Zohran-Mamdani.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T08:39:08+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0817,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Mamdani wants NYC landlords to label the AI in their apartment photos",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "mamdani-wants-nyc-landlords-label-their"
+    },
+    {
+      "title": "Mitsubishi Electric weighs power-chip merger with Rohm and Toshiba",
+      "url": "https://thenextweb.com/news/mitsubishi-rohm-toshiba-power-chip-merger",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Japan’s three biggest power-chip makers want to become one company, and the wiring is proving harder to rearrange than the ambition. Mitsubishi Electric is exploring a combination of its power-semiconductor operations with those of Rohm and Toshiba, according to people familiar with the matter cited by Bloomberg. The talks are part of a wider scramble to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Mitsubishi-Electric.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T08:29:52+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0772,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Mitsubishi Electric weighs power-chip merger with Rohm and Toshiba",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "mitsubishi-electric-weighs-power-chip-merger-rohm"
+    },
+    {
+      "title": "Databricks hits $188bn valuation in Coatue-led round, landing above its own $175bn talks",
+      "url": "https://thenextweb.com/news/databricks-188-billion-valuation-coatue",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "$188bn is a large number for a company that keeps insisting it is in no rush to go public. That is the valuation Databricks has reached in a new funding round led by Coatue Management, a figure first reported by the Wall Street Journal. The mark sits well above the up-to-$175bn the firm was reportedly in [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/databricks-matei-zaharia-acm-prize-agi.avif",
+      "featuredLatest": false,
+      "published": "2026-07-17T08:24:29+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0747,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Databricks hits $188bn valuation in Coatue-led round, landing above its own $175bn talks",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "databricks-hits-188bn-valuation-coatue-led-round"
     }
   ],
   "tools": [
@@ -71,6 +385,40 @@
       "model_release": true
     },
     {
+      "title": "Unabyss for Claude",
+      "url": "https://www.producthunt.com/products/unabyss",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Shared memory across all apps and LLMs. In Claude\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-10T19:19:45+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.4211,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Unabyss for Claude",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Unabyss for Claude",
+      "toolLabel": "Unabyss for Claude",
+      "toolSummary": "Shared memory across all apps and LLMs. In Claude",
+      "clusterKey": "claude-unabyss-claude"
+    },
+    {
       "title": "New AI tools by IFTTT",
       "url": "https://www.producthunt.com/products/ifttt",
       "source": "Product Hunt AI",
@@ -84,10 +432,10 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-17T04:00:02.007006+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8103,
+      "score": 7.8099,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -121,7 +469,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6152,
+      "score": 7.6139,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -220,10 +568,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-17T04:00:02.007006+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.822,
+      "score": 5.8195,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -257,7 +605,7 @@
       "lastSeen": "2026-07-17T04:00:02.007006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8157,
+      "score": 5.8143,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -273,40 +621,6 @@
       "toolLabel": "ChatGPT Work",
       "toolSummary": "Partner for your most ambitious work",
       "clusterKey": "chatgpt-chatgpt-work"
-    },
-    {
-      "title": "Edgee Claude Code Compressor V2",
-      "url": "https://www.producthunt.com/products/edgee",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Fewer tokens, same context, 50% cost reduction\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-706ad7089f96fd98e1.avif",
-      "featuredLatest": false,
-      "published": "2026-07-03T04:38:17+00:00",
-      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-12T22:00:01.518156+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8081,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Edgee Claude Code Compressor V2",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Edgee Claude Code Compressor V2",
-      "toolLabel": "Edgee Claude Code Compressor V2",
-      "toolSummary": "Fewer tokens, same context, 50% cost reduction",
-      "clusterKey": "claude-edgee-claude-code-compressor"
     }
   ],
   "tryWorthy": [
@@ -346,6 +660,40 @@
       "model_release": true
     },
     {
+      "title": "Unabyss for Claude",
+      "url": "https://www.producthunt.com/products/unabyss",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Shared memory across all apps and LLMs. In Claude\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-10T19:19:45+00:00",
+      "firstSeen": "2026-07-17T10:57:41.733486+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.4211,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Unabyss for Claude",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Unabyss for Claude",
+      "toolLabel": "Unabyss for Claude",
+      "toolSummary": "Shared memory across all apps and LLMs. In Claude",
+      "clusterKey": "claude-unabyss-claude"
+    },
+    {
       "title": "New AI tools by IFTTT",
       "url": "https://www.producthunt.com/products/ifttt",
       "source": "Product Hunt AI",
@@ -359,10 +707,10 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-17T04:00:02.007006+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8103,
+      "score": 7.8099,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -396,7 +744,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6152,
+      "score": 7.6139,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -495,10 +843,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-17T04:00:02.007006+00:00",
+      "lastSeen": "2026-07-17T10:57:41.733486+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.822,
+      "score": 5.8195,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -532,7 +880,7 @@
       "lastSeen": "2026-07-17T04:00:02.007006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8157,
+      "score": 5.8143,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -548,40 +896,6 @@
       "toolLabel": "ChatGPT Work",
       "toolSummary": "Partner for your most ambitious work",
       "clusterKey": "chatgpt-chatgpt-work"
-    },
-    {
-      "title": "Edgee Claude Code Compressor V2",
-      "url": "https://www.producthunt.com/products/edgee",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Fewer tokens, same context, 50% cost reduction\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-706ad7089f96fd98e1.avif",
-      "featuredLatest": false,
-      "published": "2026-07-03T04:38:17+00:00",
-      "firstSeen": "2026-07-06T10:00:01.502270+00:00",
-      "lastSeen": "2026-07-12T22:00:01.518156+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.8081,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Edgee Claude Code Compressor V2",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Edgee Claude Code Compressor V2",
-      "toolLabel": "Edgee Claude Code Compressor V2",
-      "toolSummary": "Fewer tokens, same context, 50% cost reduction",
-      "clusterKey": "claude-edgee-claude-code-compressor"
     }
   ],
   "sourceHealth": [
@@ -593,7 +907,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1038,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -603,7 +917,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -613,7 +927,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -623,7 +937,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -633,7 +947,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 829,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -643,7 +957,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -653,7 +967,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -663,7 +977,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -673,7 +987,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -683,7 +997,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -693,7 +1007,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -703,7 +1017,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "The Next Web",
@@ -713,7 +1027,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -723,7 +1037,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -733,7 +1047,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -743,7 +1057,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -753,7 +1067,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Anthropic News",
@@ -763,7 +1077,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 243,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "The Verge AI",
@@ -773,7 +1087,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -783,7 +1097,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Simon Willison",
@@ -793,7 +1107,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -803,7 +1117,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Latent Space",
@@ -813,7 +1127,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Import AI",
@@ -821,9 +1135,10 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "ok",
-      "items": 20,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "status": "error",
+      "items": 0,
+      "error": "HTTP Error 403: Forbidden",
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -833,7 +1148,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 151,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -843,7 +1158,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -853,7 +1168,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -863,7 +1178,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -873,7 +1188,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -883,7 +1198,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -893,7 +1208,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -903,8 +1218,14 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-17T04:00:02.007006+00:00"
+      "checkedAt": "2026-07-17T10:57:41.733486+00:00"
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Import AI",
+      "url": "https://importai.substack.com/feed",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
 }
