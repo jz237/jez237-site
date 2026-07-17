@@ -4009,7 +4009,36 @@ const storefrontSys = {
 // footprints), ponds, outskirt scenery (Sa) and the ribbon corridor (Pn);
 // trees additionally stay ≥4m off street edges (ka) and register in the Sa
 // audit with a small margin so the road-safety probe stays clean.
-const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, enabled: !0, sample: [], _vis: [] };
+const parkSys = { cells: 0, trees: 0, benches: 0, beds: 0, pathTris: 0, pitches: 0, enabled: !0, sample: [], _vis: [] };
+// zoom-detail 51 (round-six item 4): soccer-pitch line canvas (white on
+// transparent; touchlines, halfway, center circle, boxes, spots)
+let pitchTex = null;
+function buildPitchTexture() {
+  if (pitchTex) return pitchTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 336));
+  const g = cv.getContext("2d");
+  ((g.strokeStyle = "rgba(255,255,255,0.92)"), (g.lineWidth = 5));
+  g.strokeRect(14, 14, 484, 308);
+  (g.beginPath(), g.moveTo(256, 14), g.lineTo(256, 322), g.stroke());
+  (g.beginPath(), g.arc(256, 168, 42, 0, Math.PI * 2), g.stroke());
+  for (const bx of [14, 498 - 78]) {
+    g.strokeRect(bx, 168 - 74, 78, 148);
+    g.strokeRect(bx === 14 ? 14 : 498 - 30, 168 - 34, 30, 68);
+  }
+  ((g.fillStyle = "rgba(255,255,255,0.92)"),
+    g.beginPath(),
+    g.arc(256, 168, 4, 0, Math.PI * 2),
+    g.fill(),
+    g.beginPath(),
+    g.arc(72, 168, 4, 0, Math.PI * 2),
+    g.fill(),
+    g.beginPath(),
+    g.arc(440, 168, 4, 0, Math.PI * 2),
+    g.fill());
+  pitchTex = new CanvasTexture(cv);
+  return ((pitchTex.colorSpace = SRGBColorSpace), pitchTex);
+}
 // zoom-detail 43 (round-five item 7): start-line paddock clutter registry
 const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: [] };
 // zoom-detail 49 (round-six item 2): racing-line rubber on the ribbon deck
@@ -4017,7 +4046,7 @@ const raceWearSys = { segs: 0, patches: 0, enabled: !0, _mesh: null };
 // zoom-detail 50 (round-six item 3): lawn mowing stripes + worn patches
 const lawnSys = { striped: 0, enabled: !0, mat: null };
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.sample.length = 0), (parkSys._vis = []));
   const zLo = Math.min(zA, zB),
     zTop = Math.max(zA, zB),
     zCap = Math.min(zTop, 240),
@@ -4201,6 +4230,84 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
       parkSys.beds++;
       parkSys._furnSample.length < 4 && parkSys._furnSample.push({ k: "bed", x: +fp.fx.toFixed(1), z: +fp.fz.toFixed(1) });
     }
+  }
+  // zoom-detail 51 (round-six item 4): up to two REMAINING flat cells become
+  // soccer pitches — line-canvas overlay pinned above the local terrain
+  // maximum (rolling lawns clip flat quads otherwise) + vcBaked goal frames
+  // merged into the furniture mesh.
+  const usedCells = new Set(picked.map((c3) => c3.cx + "," + c3.cz)),
+    pitchCand = [];
+  for (let pcx = x0 + pitch * 0.5; pcx < x1; pcx += pitch)
+    for (let pcz = zTop - pitch * 0.5; pcz > zLo; pcz -= pitch) {
+      if (pcz >= zCap || usedCells.has(pcx + "," + pcz)) continue;
+      if (Pn(pcx, pcz, 26).clearance < 12) continue;
+      let ok3 = !0;
+      for (const b of Mn)
+        if (Math.abs(b.x - pcx) < b.hw + 33 && Math.abs(b.z - pcz) < b.hd + 23) {
+          ok3 = !1;
+          break;
+        }
+      if (ok3)
+        for (const p2 of ponds)
+          if (Math.abs(p2.x - pcx) < (p2.rx || 20) + 33 && Math.abs(p2.z - pcz) < (p2.rz || 20) + 23) {
+            ok3 = !1;
+            break;
+          }
+      if (ok3)
+        for (const s3 of Sa)
+          if (Math.hypot(s3.x - pcx, s3.z - pcz) < (s3.radius || 6) + 36) {
+            ok3 = !1;
+            break;
+          }
+      ok3 && pitchCand.push({ cx: pcx, cz: pcz });
+    }
+  for (let k = pitchCand.length - 1; k > 0; k--) {
+    const j = (rng() * (k + 1)) | 0,
+      tmp = pitchCand[k];
+    ((pitchCand[k] = pitchCand[j]), (pitchCand[j] = tmp));
+  }
+  for (const sc of pitchCand) {
+    if (parkSys.pitches >= 2) break;
+    const PW = 58,
+      PH = 38,
+      spanAt = (ox, oz) => {
+        const hs = [
+          He(sc.cx + ox, sc.cz + oz),
+          He(sc.cx + ox - PW / 2, sc.cz + oz - PH / 2),
+          He(sc.cx + ox + PW / 2, sc.cz + oz - PH / 2),
+          He(sc.cx + ox - PW / 2, sc.cz + oz + PH / 2),
+          He(sc.cx + ox + PW / 2, sc.cz + oz + PH / 2),
+        ];
+        return { top: Math.max(...hs), span: Math.max(...hs) - Math.min(...hs) };
+      };
+    let bestO = null;
+    for (const [ox, oz] of [
+      [0, 0],
+      [16, 0],
+      [-16, 0],
+      [0, 22],
+      [0, -22],
+      [16, 22],
+      [-16, -22],
+    ]) {
+      const r3 = spanAt(ox, oz);
+      (!bestO || r3.span < bestO.span) && (bestO = { ox, oz, ...r3 });
+    }
+    if (!bestO || bestO.span > 1.6) continue;
+    const px3 = sc.cx + bestO.ox,
+      pz3 = sc.cz + bestO.oz,
+      top = bestO.top;
+    const pm3 = new Mesh(new PlaneGeometry(PW, PH), new MeshBasicMaterial({ map: buildPitchTexture(), transparent: !0, toneMapped: !1, depthWrite: !1 }));
+    ((pm3.rotation.x = -Math.PI / 2), pm3.position.set(px3, top + 0.09, pz3), (pm3.raycast = () => {}), (pm3.renderOrder = 1), group.add(pm3), parkSys._vis.push(pm3));
+    for (const gx of [-PW / 2 + 1.2, PW / 2 - 1.2]) {
+      const gm = new Matrix4().makeTranslation(px3 + gx, top, pz3),
+        GP = (lx, ly, lz, w2, h2, d2) => {
+          const m2 = new Matrix4().makeTranslation(lx, ly, lz);
+          fparts.push(vcBake(new BoxGeometry(w2, h2, d2), new Matrix4().multiplyMatrices(gm, m2), 15921906));
+        };
+      (GP(0, 1.22, -3.66, 0.12, 2.44, 0.12), GP(0, 1.22, 3.66, 0.12, 2.44, 0.12), GP(0, 2.44, 0, 0.12, 0.12, 7.44));
+    }
+    parkSys.pitches++;
   }
   if (fparts.length) {
     const fm = new Mesh(mergeGeometries(fparts, !1), vcMats().opaque);
@@ -11213,7 +11320,7 @@ window.__steelRibbonDebug = {
       streetSigns: { poles: streetSignSys.poles, blades: streetSignSys.blades, sample: streetSignSys.sample.slice(0, 3) },
       pedSignals: { count: pedSignalMeta.count, walking: qe.pedWalkFaces ?? 0, sample: pedSignalMeta.sample.slice(0, 2) },
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
-      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
+      parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pitches: parkSys.pitches, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
