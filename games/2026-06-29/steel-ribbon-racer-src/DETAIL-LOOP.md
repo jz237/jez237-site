@@ -1380,3 +1380,21 @@ signal-corner ped density weighting.
   turn. Perf gate: 1834-1873 calls / 592-601k tris. Suite 155/155.
   NEXT: item 9 — rooftop heat shimmer, then 10 blimp → DEPLOY BATCH
   16 (v3.23.0) + closing survey.
+- **56 HEAT SHIMMER — round-six item 9 BLOCKED (2026-07-17)**: two
+  attempts, two visual-verification failures, reverted per charter.
+  A shimmerSys (steamSys-pattern pooled sprites over promoted rooftop
+  kits: 4 columns x 4 sprites, rise + wobble + fade tick, engine state
+  fully working — active:4 promoted, toggle clean) simply DOES NOT
+  READ at the game's dusk lighting: peak opacity 0.16 invisible;
+  strengthened to 0.3 grey-tint + 1.5-4.7 scale still near-identical
+  in ON/OFF pairs against the bright dusk sky. Sprite-alpha "shimmer"
+  needs a refraction/distortion post pass to read — out of scope for
+  a detail item (and the deck already has steam puffs at street
+  level for the atmosphere beat). BLOCKED reason: technique-limited,
+  not placement-limited. Code fully reverted (git checkout, rebuild,
+  boot clean, zero shimmer refs). Lesson for the wishlist: effects
+  that live on TRANSPARENCY need a dark backdrop test FIRST — the
+  dusk sky kills faint alpha; steam works because its puffs are
+  denser (0.42) and viewed against dark roads. NEXT: item 10 — the
+  blimp (opaque geometry, no such risk), then DEPLOY BATCH 16
+  (v3.23.0) + the round-six closing survey.
