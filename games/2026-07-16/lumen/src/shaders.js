@@ -299,7 +299,7 @@ void main(){
     if(m<=0.0){ frag=vec4(0.0); return; }
     float core = smoothstep(0.30,0.0,length(q+vec2(0.12,0.0)));
     float innards = smoothstep(0.42,0.05,length(q+vec2(0.05,0.0))) * (0.5+0.5*fbm3(q*5.0+phase));
-    float rim = smoothstep(0.0,0.14,-d)*smoothstep(-0.30,-0.10,d);
+    float rim = smoothstep(0.0,0.14,-d)*smoothstep(-0.30,-0.10,d) * smoothstep(0.15,0.55,vDepth);
     vec3 membrane = tint*0.32 + vec3(0.01,0.01,0.03);
     col = membrane + tint*innards*0.75 + tint*core*(1.8+0.7*sin(phase*3.1)) + tint*rim*0.55;
     cov = m*0.92;
@@ -328,7 +328,7 @@ void main(){
     float belly = smoothstep(0.1,0.45,p.y) * (0.5+0.5*fbm3(p*4.0+phase*0.5));
     vec3 shellCol = mix(tint*0.27, vec3(0.03,0.02,0.055), shell*0.75);
     col = shellCol + tint*belly*0.55 + tint*seam*pulse*2.1;
-    float rim = smoothstep(0.0,0.10,-d)*smoothstep(-0.22,-0.08,d);
+    float rim = smoothstep(0.0,0.10,-d)*smoothstep(-0.22,-0.08,d) * smoothstep(0.15,0.55,vDepth);
     col += tint*rim*0.35;
     // eyes
     col += vec3(1.0,0.9,0.7)*smoothstep(0.05,0.0,length(p-vec2(-0.72,-0.06)))*1.4;
@@ -340,7 +340,7 @@ void main(){
     float body = smoothstep(0.25,-0.2,d);
     float tail = smoothstep(0.4,0.0,abs(p.y+p.x*0.3*sin(phase)))*smoothstep(0.9,0.2,p.x)*step(0.0,p.x)*veil;
     float core = smoothstep(0.24,0.0,length(p));
-    col = tint*body*0.5 + tint*core*2.0 + tint*tail*0.5;
+    col = tint*body*0.65 + tint*core*2.0 + tint*tail*0.5;
     cov = clamp(body*0.55 + core*0.4, 0.0, 1.0);
   }
   else if(kind == 3){ // CORAL CANNON — branching coral, tips charge with aux
@@ -480,7 +480,7 @@ void main(){
       float br = 0.86 + 0.03*sin(phase*3.0);
       float bub = abs(length(p) - br);
       float fresnel = smoothstep(0.10,0.0,bub) * (0.5+0.5*sin(atan(p.y,p.x)*6.0 - phase*2.0)*0.3);
-      vec3 bcol = vec3(0.45,0.9,1.0) * fresnel * (0.4 + aux*1.2);
+      vec3 bcol = vec3(0.45,0.9,1.0) * fresnel * (0.22 + aux*0.85);
       col += bcol;
       cov = clamp(cov + fresnel*0.25*aux, 0.0, 1.0);
     }
@@ -974,11 +974,12 @@ void main(){
   vec3 bloom = texture(uB1,uv).rgb*0.95 + texture(uB2,uv).rgb*0.55 + texture(uB3,uv).rgb*1.25;
   col += bloom * uBloomAmt;
   // grade: lift shadows toward indigo, gentle teal-orange split
-  col = filmic(col*1.75);
+  col = filmic(col*1.85);
   col = pow(col, vec3(0.92,0.96,1.0));
-  col += vec3(0.012,0.008,0.030) * (1.0-col);
+  col += vec3(0.009,0.006,0.024) * (1.0-col);
   // vignette
-  float vig = 1.0 - dot(fromC,fromC)*0.85;
+  vec2 vC2 = fromC*vec2(1.0,1.22);
+  float vig = 1.0 - dot(vC2,vC2)*1.0;
   col *= clamp(vig,0.0,1.0);
   // fine grain
   float g = (hash12(uv*vec2(1920.0,1080.0)+fract(uT)*7.0)-0.5) * 0.015;
