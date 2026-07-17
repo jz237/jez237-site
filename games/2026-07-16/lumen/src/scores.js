@@ -2,7 +2,8 @@
 // LUMEN's own slug; local mirror in localStorage. New keys — no collisions
 // with other games on the site.
 
-const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/lumen';
+// slug v2: '/scores/lumen' was polluted by test submissions pre-release
+const SCORE_API = 'https://game-scores.jez237.workers.dev/scores/lumen-td';
 const LOCAL_KEY = 'lumen_hs_v1';
 const LIMIT = 10;
 
