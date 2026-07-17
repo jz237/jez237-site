@@ -7,8 +7,9 @@ import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
+import { botStep } from './bot.js';
 
-export const VERSION = 'v1.7.0';
+export const VERSION = 'v1.8.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -59,8 +60,10 @@ class Game {
     const t = document.getElementById('title');
     t.classList.add('open');
     this.ui.renderBoard();
+    this.startAttract();
     document.getElementById('play').onclick = () => {
       t.classList.remove('open');
+      this.attract = false;
       this.newRun();
       this.started = true;
       this.ui.banner('THE GROVE WAKES', 'grow your light — the surge is coming');
@@ -83,6 +86,17 @@ class Game {
   }
 
   selectMap(i) { this.mapIndex = i; }
+
+  // the grove defends itself behind the title — arcade attract tradition
+  startAttract() {
+    this.attract = true;
+    this.attractMap = ((this.attractMap ?? Math.floor(this.fx.wallTime)) + 1) % MAPS.length;
+    this.sim = new Sim(this.attractMap, 4242 + this.attractMap);
+    this.sim.gold = 380; // a slightly flush start so the demo builds fast
+    this.renderer.pathMesh = null;
+    this.renderer.clearStains();
+    this.attractBotT = 0;
+  }
 
   newRun() {
     this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
@@ -151,9 +165,14 @@ class Game {
   juicePlace(t) { this.fx.shake = Math.min(6, this.fx.shake + 2.5); this.audio.on({ type: 'place' }); }
   juiceUpgrade(t) { this.fx.shake = Math.min(6, this.fx.shake + 2); }
 
-  routeEvents() {
+  routeEvents(quiet = false) {
     for (const ev of this.sim.events) {
-      if (!NS_MODE) this.audio.on(ev);
+      if (!NS_MODE && !quiet) this.audio.on(ev);
+      if (quiet) { // attract: only the visual ground-story reacts
+        if (ev.type === 'kill') this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: ev.boss ? 240 : 44, i: ev.boss ? 0.7 : 0.3, color: ev.color || [0.5, 0.9, 0.5] });
+        if (ev.type === 'mix') this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 150, i: 0.85, color: ev.color });
+        continue;
+      }
       switch (ev.type) {
         case 'waveStart':
           if (!NS_MODE) this.ui.banner(`WAVE ${ev.wave}`, ev.wave % 5 === 0 ? 'something vast stirs' : '');
@@ -223,6 +242,18 @@ class Game {
     this.frameMs = this.frameMs * 0.95 + raw * 1000 * 0.05;
     this.fx.wallTime += raw;
 
+    if (this.attract && !this.started) {
+      this.acc += raw;
+      let steps = 0;
+      while (this.acc >= DT && steps < 4) {
+        this.sim.step();
+        this.routeEvents(true); // quiet: stains + shake only
+        this.acc -= DT; steps++;
+      }
+      this.attractBotT += raw;
+      if (this.attractBotT > 0.7) { this.attractBotT = 0; botStep(this.sim); if (this.sim.state === 'prep' && this.sim.prepLeft > 3) this.sim.startWave(true); }
+      if (this.sim.state === 'over' || this.sim.wave > 22) this.startAttract();
+    }
     if (this.running && this.started) {
       this.acc += raw * this.speed;
       let steps = 0;
@@ -413,7 +444,7 @@ class Game {
       place(type, x, y) { return g.sim.place(type, x, y); },
       gold(n) { g.sim.gold = n; },
       startWave() { return g.sim.startWave(true); },
-      start() { g.started = true; document.getElementById('title').classList.remove('open'); },
+      start() { g.attract = false; g.newRun(); g.started = true; document.getElementById('title').classList.remove('open'); },
       audioState() { return g.audio.state(); },
       quality() { return g.renderer.quality; },
       qState() { return { qSlow: g.qSlow, qFast: g.qFast, frameMs: +g.frameMs.toFixed(1), q: g.renderer.quality, pref: g.audio.settings.quality || 'auto' }; },
