@@ -4226,6 +4226,8 @@ const neonSys = { halos: 0, flicker: 0, enabled: !0, _meshes: [], _flick: [] };
 const xwalkSys = { fresh: 0, worn: 0, chipped: 0, enabled: !0, _mats: [] };
 // zoom-detail 54 (round-six item 7): striped shop awnings under wall signs
 const awningSys = { count: 0, boards: 0, enabled: !0, _meshes: [], sample: [], boardSample: [] };
+// zoom-detail 65 (round-seven item 7): hanging flower baskets on lamp posts near parks/shops
+const lampDressSys = { posts: [], parkCells: [], shopSpots: [], dressed: 0, baskets: 0, enabled: !0, sample: null, _mesh: null };
 // zoom-detail 55 (round-six item 8): traffic turn indicators (blink during turns)
 const turnSigSys = { turning: 0, cars: 0, enabled: !0, mat: null };
 function turnSigMat() {
@@ -4305,7 +4307,7 @@ function buildHaloTexture() {
   return ((neonHaloTex.colorSpace = SRGBColorSpace), neonHaloTex);
 }
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []), (lampDressSys.parkCells.length = 0));
   const zLo = Math.min(zA, zB),
     zTop = Math.max(zA, zB),
     zCap = Math.min(zTop, 240),
@@ -4399,6 +4401,7 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
     parkSys.cells++;
     parkSys.strollerCells.length < 3 && parkSys.strollerCells.push({ cx, cz, vert, bow, half });
     parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
+    lampDressSys.parkCells.push({ x: cx, z: cz });
   }
   const pg = new BufferGeometry();
   (pg.setAttribute("position", new Float32BufferAttribute(pos, 3)), pg.setAttribute("color", new Float32BufferAttribute(col, 3)), pg.setIndex(idx), pg.computeVertexNormals());
@@ -5873,7 +5876,7 @@ function N1() {
     __awnParts = {},
     __awnBoardFaces = [],
     __awnBoardFrames = [];
-  ((awningSys.count = 0), (awningSys.boards = 0), (awningSys._meshes = []), (awningSys.sample.length = 0), (awningSys.boardSample.length = 0));
+  ((awningSys.count = 0), (awningSys.boards = 0), (awningSys._meshes = []), (awningSys.sample.length = 0), (awningSys.boardSample.length = 0), (lampDressSys.shopSpots.length = 0));
   ((neonSys.halos = 0), (neonSys.flicker = 0), (neonSys._meshes = []), (neonSys._flick = []));
   const J = ["HOTEL", "OPEN", "AUTO", "RACE", "CAFE", "PARTS", "ARCADE", "MOTEL", "TACOS", "VINYL"];
   for (let N = 0; N < Math.min(Me.length, 34); N++) {
@@ -5917,6 +5920,7 @@ function N1() {
       (O.axis === "x" ? am.setPosition(O.px + O.side * O.w * 0.5, O.gy, O.pz) : am.setPosition(O.px, O.gy, O.pz + O.side * O.d * 0.5), can.applyMatrix4(am), val.applyMatrix4(am));
       const ci3 = (N * 2 + 1) % 4;
       ((__awnParts[ci3] || (__awnParts[ci3] = [])).push(can, val), awningSys.count++);
+      lampDressSys.shopSpots.push(O.axis === "x" ? { x: O.px + O.side * O.w * 0.5, z: O.pz } : { x: O.px, z: O.pz + O.side * O.d * 0.5 });
       awningSys.sample.length < 3 &&
         awningSys.sample.push(
           O.axis === "x"
@@ -6290,6 +6294,7 @@ function N1() {
     It = new InstancedMesh(st, Ee, Be),
     Tt = new InstancedMesh(k, Ae, Be);
   let Yt = 0;
+  lampDressSys.posts.length = 0;
   for (let N = 0; N < Be * 2 && Yt < Be; N++) {
     const O = Math.random() < 0.5,
       Y = O
@@ -6300,6 +6305,7 @@ function N1() {
         : s - Math.round(Math.random() * ((s - r) / a)) * a + (Math.random() < 0.5 ? -1 : 1) * (o * 0.58);
     if (Pn(Y, j, 3).clearance < 2) continue;
     const ee = He(Y, j);
+    lampDressSys.posts.push({ x: Y, z: j, y: ee });
     (e.quaternion.identity(),
       e.position.set(Y, ee + 3.6, j),
       e.scale.set(1, 1, 1),
@@ -8502,6 +8508,51 @@ function buildPonds() {
 }
 buildPonds();
 buildPondEdges(et);
+// zoom-detail 65 (round-seven item 7): dress lamp posts that stand near park cells or
+// shop rows with a cross-arm and two hanging flower baskets — ONE merged vertex-color
+// mesh, zero new textures. Runs at module level so the park/shop/post collectors are full.
+function buildLampDressing(group) {
+  ((lampDressSys.dressed = 0), (lampDressSys.baskets = 0), (lampDressSys.sample = null));
+  if (!lampDressSys.posts.length) return;
+  const anchors = lampDressSys.parkCells.concat(lampDressSys.shopSpots);
+  if (!anchors.length) return;
+  const rng = plateRng(0x1a3b0f),
+    parts = [],
+    FLOWERS = [12078958, 10893368, 12556848, 11573136];
+  for (const p of lampDressSys.posts) {
+    if (lampDressSys.dressed >= 26) break;
+    if (!anchors.some((a) => Math.hypot(a.x - p.x, a.z - p.z) < 85)) continue;
+    const th = rng() * Math.PI,
+      dx = Math.cos(th),
+      dz = Math.sin(th);
+    parts.push(vcBake(new BoxGeometry(1.72, 0.07, 0.07).applyMatrix4(new Matrix4().makeRotationY(-th)), vcAt(p.x, p.y + 5.74, p.z), 2765112));
+    for (const e of [-0.78, 0.78]) {
+      const bx = p.x + dx * e,
+        bz = p.z + dz * e;
+      parts.push(vcBake(new CylinderGeometry(0.012, 0.012, 0.24, 4, 1, !0), vcAt(bx, p.y + 5.6, bz), 2765112));
+      parts.push(vcBake(new CylinderGeometry(0.3, 0.15, 0.32, 8), vcAt(bx, p.y + 5.34, bz), 7228972));
+      const fm = new Matrix4().makeScale(1, 0.55, 1);
+      fm.setPosition(bx, p.y + 5.52, bz);
+      parts.push(vcBake(new SphereGeometry(0.36, 6, 4), fm, 4029231));
+      const nb = 4 + (lampDressSys.baskets % 2);
+      for (let f = 0; f < nb; f++) {
+        const fa = (f / nb) * Math.PI * 2 + rng() * 0.7,
+          fr = 0.2 + rng() * 0.1;
+        parts.push(
+          vcBake(new SphereGeometry(0.08 + rng() * 0.035, 4, 3), vcAt(bx + Math.cos(fa) * fr, p.y + 5.56 + rng() * 0.06, bz + Math.sin(fa) * fr), FLOWERS[(lampDressSys.baskets * 3 + f) % 4]),
+        );
+      }
+      lampDressSys.baskets++;
+    }
+    lampDressSys.dressed++;
+    lampDressSys.sample || (lampDressSys.sample = { x: +p.x.toFixed(1), y: +(p.y + 5.4).toFixed(1), z: +p.z.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const lm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((lm.castShadow = !0), (lm.receiveShadow = !0), (lm.raycast = () => {}), group.add(lm), (lampDressSys._mesh = lm));
+  if (!lampDressSys.enabled) lm.visible = !1;
+}
+buildLampDressing(et);
 // ─── On-foot walker + helicopter and its pad ───
 const walker = U1(3375807, 15905331);
 ((walker.visible = !1), walker.scale.setScalar(1.06), et.add(walker));
@@ -11711,6 +11762,11 @@ window.__steelRibbonDebug = {
     for (const m of shopBandSys._meshes) m.visible = shopBandSys.enabled;
     return shopBandSys.enabled;
   },
+  lampDressEnable(on) {
+    lampDressSys.enabled = !!on;
+    lampDressSys._mesh && (lampDressSys._mesh.visible = lampDressSys.enabled);
+    return lampDressSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -11879,6 +11935,7 @@ window.__steelRibbonDebug = {
       pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
       oil: { spots: oilSys.spots.length, placed: oilSys.placed, enabled: oilSys.enabled, sample: oilSys.sample.slice(0, 3) },
       shopBands: { count: shopBandSys.count, enabled: shopBandSys.enabled, sample: shopBandSys.sample ?? null },
+      lampDress: { dressed: lampDressSys.dressed, baskets: lampDressSys.baskets, posts: lampDressSys.posts.length, enabled: lampDressSys.enabled, sample: lampDressSys.sample ?? null },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },

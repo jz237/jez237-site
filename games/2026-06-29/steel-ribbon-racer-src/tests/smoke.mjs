@@ -793,6 +793,21 @@ const browser = await chromium.launch({
     JSON.stringify({ count: shb?.count }),
   );
 
+  // zoom-detail 65 (round seven item 7): hanging flower baskets on lamp posts
+  const lpd = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().lampDress,
+      off = deb.lampDressEnable(false),
+      offRep = deb.detailReport().lampDress.enabled;
+    deb.lampDressEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "lamp dressing: flower baskets on posts near parks/shops, toggle works",
+    !!lpd && lpd.dressed >= 6 && lpd.dressed <= 26 && lpd.baskets === lpd.dressed * 2 && lpd.off === false && lpd.offRep === false,
+    JSON.stringify({ dressed: lpd?.dressed, baskets: lpd?.baskets }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
