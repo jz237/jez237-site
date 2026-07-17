@@ -764,6 +764,24 @@ const browser = await chromium.launch({
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
   );
 
+  // zoom-detail 55 (round six item 8): traffic turn indicators
+  const tsg = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    let rig = 0;
+    window.__steelRibbonScene.traverse((o) => {
+      if (o.userData && o.userData.hasDriver && o.userData.blink) rig++;
+    });
+    const t0 = deb.detailReport().turnSignals.total;
+    await new Promise((r) => setTimeout(r, 9000));
+    const t1 = deb.detailReport().turnSignals.total;
+    return { rig, t0, t1, grew: t1 > t0 };
+  });
+  check(
+    "turn signals: every traffic car rigged, indicators fire during turns",
+    !!tsg && tsg.rig >= 30 && tsg.rig <= 33 && tsg.grew,
+    JSON.stringify(tsg),
+  );
+
   // zoom-detail 54 (round six item 7): striped shop awnings under wall signs
   const aw = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,

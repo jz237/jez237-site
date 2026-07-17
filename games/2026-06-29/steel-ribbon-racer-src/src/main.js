@@ -2141,8 +2141,25 @@ function I1(i, e) {
     opq.push(vcBake(capGeo, vcAt(dx, 2.18, dz), 1119001));
   }
   (t.add(new Mesh(mergeGeometries(opq, !1), opaque)), gls.length && t.add(new Mesh(mergeGeometries(gls, !1), glass)));
+  {
+    // turn indicators: two corner quads per side, hidden until a turn is live
+    const bq = new PlaneGeometry(0.26, 0.14),
+      mkSide = (sx) => {
+        const g2 = new Group();
+        for (const [bz, ry] of [
+          [-s.l / 2 - 0.02, Math.PI],
+          [s.l / 2 + 0.02, 0],
+        ]) {
+          const q2 = new Mesh(bq, turnSigMat());
+          (q2.position.set(sx * (s.w / 2 - 0.18), 0.82, bz), (q2.rotation.y = ry), (q2.raycast = () => {}), g2.add(q2));
+        }
+        return ((g2.visible = !1), t.add(g2), g2);
+      };
+    var __bL = mkSide(-1),
+      __bR = mkSide(1);
+  }
   return (
-    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
+    (t.userData = { wheels: M, colliderHalfW: s.w * 0.58, colliderHalfD: s.l * 0.55, plateHalfL: s.l / 2, hasDriver: !0, bus: !!s.bus, blink: { L: __bL, R: __bR }, cab: { w: s.cabin[0], h: s.cabin[1], l: s.cabin[2], z: s.cabinZ } }),
     // moving traffic skips the shadow pass — barely visible at dusk, and it halves their draw cost
     t.traverse((x) => {
       ((x.castShadow = !1), (x.receiveShadow = !0));
@@ -4051,6 +4068,12 @@ const neonSys = { halos: 0, flicker: 0, enabled: !0, _meshes: [], _flick: [] };
 const xwalkSys = { fresh: 0, worn: 0, chipped: 0, enabled: !0, _mats: [] };
 // zoom-detail 54 (round-six item 7): striped shop awnings under wall signs
 const awningSys = { count: 0, boards: 0, enabled: !0, _meshes: [], sample: [], boardSample: [] };
+// zoom-detail 55 (round-six item 8): traffic turn indicators (blink during turns)
+const turnSigSys = { turning: 0, cars: 0, enabled: !0, mat: null };
+function turnSigMat() {
+  if (!turnSigSys.mat) turnSigSys.mat = new MeshBasicMaterial({ color: 16758332, toneMapped: !1, transparent: !0, opacity: 1, side: DoubleSide });
+  return turnSigSys.mat;
+}
 function buildAwningTextures() {
   const COLS = ["#c2456e", "#2f8fa3", "#c9922e", "#3f8f56"],
     out = [];
@@ -4881,6 +4904,14 @@ function F1(i, e, t) {
         be.length || be.push({ axis: Me, road: I.road, along: Se, dir: -I.dir, turn: !0 }));
       const Lt = be.filter((wt) => wt.turn),
         Ze = !ye && Lt.length && Math.random() < 0.42 ? y(Lt) : y(be);
+      {
+        const h1x = Me === "ew" ? I.dir : 0,
+          h1z = Me === "ns" ? I.dir : 0,
+          h2x = Ze.axis === "ew" ? Ze.dir : 0,
+          h2z = Ze.axis === "ns" ? Ze.dir : 0,
+          lft = h2x * h1z - h2z * h1x;
+        ((I.blinkSide = Ze.turn && Ze.axis !== Me ? (lft > 0 ? -1 : 1) : 0), (I.blinkT = I.blinkSide ? 2.2 : 0));
+      }
       ((Ze.turn || Ze.axis !== Me) && qe.turns++,
         (I.axis = Ze.axis),
         (I.road = Ze.road),
@@ -11418,6 +11449,10 @@ window.__steelRibbonDebug = {
     for (const m of awningSys._meshes) m.visible = awningSys.enabled;
     return awningSys.enabled;
   },
+  turnSignalsEnable(on) {
+    turnSigSys.enabled = !!on;
+    return turnSigSys.enabled;
+  },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
     const hd = on === !1 ? 1 : 2;
@@ -11544,6 +11579,7 @@ window.__steelRibbonDebug = {
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },
       xwalks: { fresh: xwalkSys.fresh, worn: xwalkSys.worn, chipped: xwalkSys.chipped, enabled: xwalkSys.enabled },
       awnings: { count: awningSys.count, boards: awningSys.boards, enabled: awningSys.enabled, sample: awningSys.sample.slice(0, 3), boardSample: awningSys.boardSample.slice(0, 2) },
+      turnSignals: { turning: turnSigSys.turning, cars: turnSigSys.cars, enabled: turnSigSys.enabled, total: turnSigSys.total ?? 0, sample: turnSigSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
@@ -14003,6 +14039,31 @@ window.addEventListener("pointerup", (ev) => {
 window.addEventListener("keydown", (ev) => {
   ev.code === "Escape" && inspectExit();
 });
+{
+  // zoom-detail 55: turn-indicator tick — show the live side while turnBlend
+  // decays, pulse via the ONE shared material (global sync is unnoticeable)
+  const blinkAnchor = new Object3D();
+  et.add(blinkAnchor);
+  Bn(blinkAnchor, (tt, dt) => {
+    let on = 0;
+    const pulse = Math.sin(tt * 9.2) > 0 ? 1 : 0.12;
+    for (const K of Rc) {
+      const b = K.mesh && K.mesh.userData.blink;
+      if (!b) continue;
+      K.blinkT > 0 && (K.blinkT = Math.max(0, K.blinkT - dt));
+      const live = turnSigSys.enabled && K.blinkSide && K.blinkT > 0;
+      ((b.L.visible = live && K.blinkSide < 0), (b.R.visible = live && K.blinkSide > 0), live && on++);
+    }
+    ((turnSigSys.turning = on), (turnSigSys.cars = Rc.length), (turnSigSys.total = (turnSigSys.total || 0) + on), turnSigSys.mat && (turnSigSys.mat.opacity = pulse));
+    turnSigSys.sample = null;
+    if (on)
+      for (const K of Rc)
+        if (K.mesh && K.mesh.userData.blink && K.blinkSide && K.blinkT > 0) {
+          turnSigSys.sample = { x: +K.mesh.position.x.toFixed(1), y: +K.mesh.position.y.toFixed(1), z: +K.mesh.position.z.toFixed(1), side: K.blinkSide };
+          break;
+        }
+  });
+}
 {
   const inspectAnchor = new Object3D();
   et.add(inspectAnchor);
