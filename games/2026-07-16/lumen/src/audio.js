@@ -40,6 +40,7 @@ export class AudioEngine {
     this.voClips = {};    // lazy HTMLAudio cache
     this.voLast = {};     // last variant per line, for no-repeat
     this.voPlaying = null; this.voPri = 0; this.voLastAt = 0;
+    this.threat = 0;      // 0 calm → 1 boss-panic, drives the music stems
     this._ambientTimer = null;
   }
 
@@ -72,8 +73,16 @@ export class AudioEngine {
   toggleMute() { this.settings.muted = !this.settings.muted; this.applyVolumes(); this.save(); return this.settings.muted; }
   setMood(m) { this.mood = m; }
 
+  setThreat(v) {
+    this.threat = Math.max(0, Math.min(1, v));
+    if (!this.ctx) return;
+    const t0 = this.ctx.currentTime;
+    if (this.tensionGain) this.tensionGain.gain.setTargetAtTime(Math.pow(this.threat, 1.5) * 0.10, t0, 1.2);
+    if (this.shimmerGain) this.shimmerGain.gain.setTargetAtTime(Math.max(0, this.threat - 0.5) * 0.12, t0, 1.6);
+  }
+
   state() {
-    return this.ctx ? { state: this.ctx.state, voices: this.voices, muted: this.settings.muted, vo: !!this.voPlaying } : { state: 'off' };
+    return this.ctx ? { state: this.ctx.state, voices: this.voices, muted: this.settings.muted, vo: !!this.voPlaying, threat: +this.threat.toFixed(2) } : { state: 'off' };
   }
 
   // priority-interrupt voice: higher lines cut lower ones; 3.5s spacing for equals
@@ -172,11 +181,42 @@ export class AudioEngine {
     const lfoG = ctx.createGain(); lfoG.gain.value = 140;
     lfo.connect(lfoG); lfoG.connect(this.droneFilter.frequency);
     lfo.start();
+    // threat stems: tremolo tension strings + high anxiety shimmer,
+    // gains driven by setThreat with slow smoothing
+    this.tensionGain = ctx.createGain(); this.tensionGain.gain.value = 0;
+    const trem = ctx.createGain(); trem.gain.value = 0.5;
+    const tLfo = ctx.createOscillator(); tLfo.frequency.value = 4.2;
+    const tLfoG = ctx.createGain(); tLfoG.gain.value = 0.5;
+    tLfo.connect(tLfoG); tLfoG.connect(trem.gain); tLfo.start();
+    const tBp = ctx.createBiquadFilter(); tBp.type = 'bandpass'; tBp.frequency.value = 420; tBp.Q.value = 1.4;
+    for (const f of [110, 110.7, 165]) {
+      const o = ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f;
+      const g = ctx.createGain(); g.gain.value = 0.33;
+      o.connect(g); g.connect(tBp); o.start();
+    }
+    tBp.connect(trem); trem.connect(this.tensionGain); this.tensionGain.connect(this.musicBus);
+    this.shimmerGain = ctx.createGain(); this.shimmerGain.gain.value = 0;
+    for (const f of [1318, 1320.5]) {
+      const o = ctx.createOscillator(); o.frequency.value = f;
+      const g = ctx.createGain(); g.gain.value = 0.5;
+      o.connect(g); g.connect(this.shimmerGain); o.start();
+    }
+    this.shimmerGain.connect(this.musicBus);
+    // war-drum: a slow heart-thump that quickens with threat
+    const thump = () => {
+      if (!this.ctx) return;
+      if (this.ctx.state === 'running' && this.threat > 0.35 && !this.settings.muted) {
+        this.tone({ freq: 52, dur: 0.35, gain: 0.16 * this.threat, glide: 34, bus: this.musicBus });
+        this.noise({ dur: 0.12, freq: 180, gain: 0.05 * this.threat, type: 'lowpass', bus: this.musicBus });
+      }
+      this._thumpTimer = setTimeout(thump, 1650 - this.threat * 900);
+    };
+    thump();
     // sparse biolum blips, pentatonic, mood-shifted
     const scale = [523, 587, 659, 784, 880, 1046];
     const blip = () => {
       if (!this.ctx) return;
-      if (this.ctx.state === 'running' && Math.random() < 0.85) {
+      if (this.ctx.state === 'running' && Math.random() < 0.85 && this.threat < 0.75) {
         const f = scale[Math.floor(Math.random() * scale.length)] * (1 + this.mood * 0.06);
         this.tone({ freq: this.v(f, 0.01), dur: this.v(2.2, 0.3), type: 'sine', gain: 0.022, bus: this.musicBus, attack: 0.4 });
         if (Math.random() < 0.3) this.tone({ freq: this.v(f * 1.5, 0.01), dur: 2.8, type: 'sine', gain: 0.012, bus: this.musicBus, attack: 0.6 });

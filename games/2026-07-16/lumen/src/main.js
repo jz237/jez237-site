@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.12.0';
+export const VERSION = 'v2.13.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -463,7 +463,11 @@ class Game {
       const st = this.sim.towerStats(this.selected);
       this.fx.selRing = { x: this.selected.x, y: this.selected.y, range: st.range, color: this.selected.def.color };
     } else this.fx.selRing = null;
-    if ((this.renderer.frame & 63) === 0) this.audio.setMood(Math.min(2, Math.max(0, (this.sim.wave - 1) / 19 * 2)));
+    if ((this.renderer.frame & 63) === 0) {
+      this.audio.setMood(Math.min(2, Math.max(0, (this.sim.wave - 1) / 19 * 2)));
+      const boss = this.sim.enemies.some(en => en.def.boss);
+      this.audio.setThreat(Math.min(0.65, this.sim.enemies.length / 30) + (boss ? 0.35 : 0));
+    }
 
     this.renderer.render(this.sim, this.cam, this.fx, raw || 0.016);
     this.ui.update(this.sim, this.armed);
