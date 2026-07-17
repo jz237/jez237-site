@@ -8,7 +8,7 @@ import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
 
-export const VERSION = 'v1.3.0';
+export const VERSION = 'v1.4.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -247,6 +247,20 @@ class Game {
     this.cam.shakeX = (Math.random() - 0.5) * sh;
     this.cam.shakeY = (Math.random() - 0.5) * sh;
     this.fx.camDx = this.cam.dx;
+    // placement ghost + selection range ring for the renderer
+    if (this.armed && this.started && !NS_MODE) {
+      const def = TOWERS[this.armed];
+      const w = this.mouse.world;
+      this.fx.ghost = {
+        x: w.x, y: w.y, def,
+        valid: this.sim.canPlace(w.x, w.y) && this.sim.gold >= def.cost,
+        range: def.levels[0].range,
+      };
+    } else this.fx.ghost = null;
+    if (this.selected && this.sim.towers.includes(this.selected)) {
+      const st = this.sim.towerStats(this.selected);
+      this.fx.selRing = { x: this.selected.x, y: this.selected.y, range: st.range, color: this.selected.def.color };
+    } else this.fx.selRing = null;
     if ((this.renderer.frame & 63) === 0) this.audio.setMood(Math.min(2, Math.max(0, (this.sim.wave - 1) / 19 * 2)));
 
     this.renderer.render(this.sim, this.cam, this.fx, raw || 0.016);
