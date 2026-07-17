@@ -7,7 +7,7 @@ import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 
-export const VERSION = 'v0.6.0';
+export const VERSION = 'v0.7.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -289,10 +289,15 @@ class Game {
       const boss = s.enemies.find(e => e.def.boss);
       const bs = boss ? boss.s : s.paths[0].total * 0.35;
       const kinds = ['mite', 'dartfin', 'grub', 'wisp', 'husk', 'mite', 'dartfin', 'brood'];
-      for (let i = 0; i < 26; i++) {
+      // spread the swarm along the whole gauntlet so every tower is firing:
+      // a dense knot around the boss plus a stream reaching toward the heart
+      const total = s.paths[0].total;
+      for (let i = 0; i < 30; i++) {
         const type = kinds[i % kinds.length];
-        const off = -60 - i * 34 + (i % 3) * 18;
-        s.spawnEnemy(type, 4.0, Math.max(10, bs + off));
+        let at;
+        if (i < 12) at = bs - 70 - i * 30 + (i % 3) * 16;          // knot behind boss
+        else at = bs + 90 + (i - 12) * ((total * 0.92 - bs) / 18); // stream ahead
+        s.spawnEnemy(type, 4.0, Math.max(10, Math.min(total * 0.94, at)));
       }
       for (let i = 0; i < 60 * 2; i++) s.step(); // let towers open fire on them
     }

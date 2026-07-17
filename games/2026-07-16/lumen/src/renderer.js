@@ -445,11 +445,11 @@ export class Renderer {
     for (const e of E) {
       this.entities.push(e.x, e.y, e.sx, e.sy, e.rot, e.phase, e.k, e.aux, e.c[0], e.c[1], e.c[2], e.seed);
     }
-    // foreground silhouettes — parallax: drawn last, near-black, oversized
+    // foreground silhouettes — parallax kelp profiles, drawn last
     if (this.fgFlora) {
       for (const f of this.fgFlora) {
         const parx = f.x + fx.camDx * -2.2;
-        this.entities.push(parx, f.y, f.size, f.size, 0, t * 0.5 + f.phase, KIND.FLORA, 0.05, 0.012, 0.02, 0.035, f.seed);
+        this.entities.push(parx, f.y, f.size, f.size * 1.35, 0, t * 0.5 + f.phase, 29, 0.8, 0.012, 0.02, 0.035, f.seed);
       }
     }
   }
