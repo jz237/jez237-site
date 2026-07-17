@@ -1485,3 +1485,22 @@ signal-corner ped density weighting.
   draw-neutral or single-merged-mesh only; if any gate run EXCEEDS
   2010, stop and renegotiate with a 5-world sample before shipping.
   NEXT: item 3 — pond edges (single merged vcBake ring mesh, +1 draw).
+- **61 POND EDGES — round-seven item 3 (2026-07-17)**: the city ponds
+  have banks worth looking at — reed clusters (4-7 leaning tapered
+  stalks in 3 greens), grey boulders, and lily pads floating just
+  inside the rim, ~14-22 clusters per pond, ONE merged vcBake mesh for
+  every pond (+1 draw, tripwire-compliant). TWO PLUMBING LESSONS:
+  (1) buildPonds() runs at MODULE level AFTER the world builder —
+  calling buildPondEdges inside the world build saw an EMPTY registry
+  (and the parks/pitch pond-avoidance filters have silently never
+  matched city ponds either — latent, low-impact since Sa "lake"
+  covers the big water, noted for a future pass); the call now sits
+  directly after buildPonds(). (2) registerPond's waterY defaults to
+  NULL for city ponds (only the lake passes one) — the real water
+  surface is He(center)+0.15; a null-blind .toFixed crashed boot.
+  First-pass density was too thin from the air — reeds 1.0-1.9 tall,
+  rocks 0.45-1.0, pads 0.55-0.9 now read at aerial. Verified by
+  LOOKING (loop-shots/61-pond-edges/): pads on the water, boulders on
+  the bank, reed tufts around the rim. Perf gate: 1864-1904 calls /
+  612-615k tris. Suite 158/158 (probe: ponds ≥1, clusters ≥8,
+  toggle). NEXT: item 4 — peds in parks (walker rerouting, 0 draws).

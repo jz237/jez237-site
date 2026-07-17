@@ -4064,6 +4064,54 @@ function buildPitchTexture() {
 }
 // zoom-detail 43 (round-five item 7): start-line paddock clutter registry
 const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: [] };
+// zoom-detail 61 (round-seven item 3): pond-edge dressing — reeds, rocks,
+// lily pads ringing every city pond. ONE merged vcBake mesh (+1 draw total).
+const pondEdgeSys = { ponds: 0, clusters: 0, pads: 0, enabled: !0, _mesh: null, sample: null };
+function buildPondEdges(group) {
+  ((pondEdgeSys.ponds = 0), (pondEdgeSys.clusters = 0), (pondEdgeSys.pads = 0), (pondEdgeSys.sample = null));
+  if (!ponds.length) return;
+  const parts = [],
+    rng = plateRng(0x9a0de5);
+  for (let pi = 0; pi < ponds.length; pi++) {
+    const p = ponds[pi];
+    if (!p.rx || p.rx > 60) continue;
+    const wy = p.waterY != null ? p.waterY : He(p.x, p.z) + 0.15;
+    pondEdgeSys.ponds++;
+    pondEdgeSys.sample || (pondEdgeSys.sample = { x: +p.x.toFixed(1), z: +p.z.toFixed(1), rx: +p.rx.toFixed(1), rz: +p.rz.toFixed(1), wy: +wy.toFixed(2) });
+    const n = 14 + (pi % 3) * 4;
+    for (let k = 0; k < n; k++) {
+      const a = (k / n) * Math.PI * 2 + rng() * 0.4,
+        kind = (k * 3 + pi) % 5;
+      if (kind === 3) {
+        const px = p.x + Math.cos(a) * p.rx * (0.5 + rng() * 0.3),
+          pz = p.z + Math.sin(a) * p.rz * (0.5 + rng() * 0.3);
+        (parts.push(vcBake(new CircleGeometry(0.55 + rng() * 0.35, 7).rotateX(-Math.PI / 2), vcAt(px, wy + 0.025, pz), 2721550)), pondEdgeSys.pads++);
+      } else if (kind === 2) {
+        const px = p.x + Math.cos(a) * (p.rx + 0.8 + rng()),
+          pz = p.z + Math.sin(a) * (p.rz + 0.8 + rng()),
+          rm = new Matrix4().makeScale(1, 0.5 + rng() * 0.35, 1);
+        rm.setPosition(px, He(px, pz) + 0.1, pz);
+        (parts.push(vcBake(new SphereGeometry(0.45 + rng() * 0.55, 7, 5), rm, 6316128)), pondEdgeSys.clusters++);
+      } else {
+        const bx = p.x + Math.cos(a) * (p.rx + 0.5 + rng() * 0.9),
+          bz = p.z + Math.sin(a) * (p.rz + 0.5 + rng() * 0.9),
+          gy = He(bx, bz),
+          cnt = 4 + ((k * 7 + pi) % 4);
+        for (let r2 = 0; r2 < cnt; r2++) {
+          const h = 1.0 + rng() * 0.9,
+            lean = new Matrix4().makeRotationZ((rng() - 0.5) * 0.4);
+          lean.setPosition(bx + (rng() - 0.5) * 0.55, gy + h / 2, bz + (rng() - 0.5) * 0.55);
+          parts.push(vcBake(new CylinderGeometry(0.02, 0.055, h, 4), lean, [2904614, 4359732, 5407038][r2 % 3]));
+        }
+        pondEdgeSys.clusters++;
+      }
+    }
+  }
+  if (!parts.length) return;
+  const pm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((pm.castShadow = !0), (pm.receiveShadow = !0), (pm.raycast = () => {}), group.add(pm), (pondEdgeSys._mesh = pm));
+  if (!pondEdgeSys.enabled) pm.visible = !1;
+}
 // zoom-detail 49 (round-six item 2): racing-line rubber on the ribbon deck
 const raceWearSys = { segs: 0, patches: 0, enabled: !0, _mesh: null };
 // zoom-detail 50 (round-six item 3): lawn mowing stripes + worn patches
@@ -8286,6 +8334,7 @@ function buildPonds() {
   ((qe.ponds = placed), et.add(i), bakeMinimap());
 }
 buildPonds();
+buildPondEdges(et);
 // ─── On-foot walker + helicopter and its pad ───
 const walker = U1(3375807, 15905331);
 ((walker.visible = !1), walker.scale.setScalar(1.06), et.add(walker));
@@ -11481,6 +11530,11 @@ window.__steelRibbonDebug = {
     paddockSys._mesh && (paddockSys._mesh.visible = paddockSys.enabled);
     return paddockSys.enabled;
   },
+  pondEdgesEnable(on) {
+    pondEdgeSys.enabled = !!on;
+    pondEdgeSys._mesh && (pondEdgeSys._mesh.visible = pondEdgeSys.enabled);
+    return pondEdgeSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -11636,6 +11690,7 @@ window.__steelRibbonDebug = {
       signalHeads: { heads: signalLampSys.heads, enabled: signalLampSys.enabled, states: { ...signalLampSys.states } },
       parks: { cells: parkSys.cells, trees: parkSys.trees, benches: parkSys.benches, beds: parkSys.beds, pitches: parkSys.pitches, pathTris: parkSys.pathTris, enabled: parkSys.enabled, rej: parkSys._rej ?? null, furn: (parkSys._furnSample ?? []).slice(0, 4), sample: parkSys.sample.slice(0, 3) },
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
+      pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },

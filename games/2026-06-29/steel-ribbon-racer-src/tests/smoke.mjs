@@ -778,6 +778,21 @@ const browser = await chromium.launch({
     JSON.stringify(blp),
   );
 
+  // zoom-detail 61 (round seven item 3): pond-edge dressing
+  const pnd = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().pondEdges,
+      off = deb.pondEdgesEnable(false),
+      offRep = deb.detailReport().pondEdges.enabled;
+    deb.pondEdgesEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "pond edges: reeds/rocks/lily pads ring the city ponds, toggle works",
+    !!pnd && pnd.ponds >= 1 && pnd.clusters >= 8 && pnd.off === false && pnd.offRep === false,
+    JSON.stringify({ ponds: pnd?.ponds, clusters: pnd?.clusters, pads: pnd?.pads }),
+  );
+
   // zoom-detail 60 (round seven item 2): brake lights on slowing traffic
   const brk = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;
