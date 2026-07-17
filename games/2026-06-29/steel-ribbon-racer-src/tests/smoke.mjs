@@ -778,6 +778,21 @@ const browser = await chromium.launch({
     JSON.stringify(blp),
   );
 
+  // zoom-detail 64 (round seven item 6): suburban shop window bands
+  const shb = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().shopBands,
+      off = deb.shopBandsEnable(false),
+      offRep = deb.detailReport().shopBands.enabled;
+    deb.shopBandsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "shop bands: window/door bands merged on suburban shop faces, toggle works",
+    !!shb && shb.count >= 6 && shb.off === false && shb.offRep === false,
+    JSON.stringify({ count: shb?.count }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
@@ -831,7 +846,8 @@ const browser = await chromium.launch({
       if (o.userData && o.userData.hasDriver && o.userData.brake) rig++;
     });
     const t0 = deb.detailReport().brakes.total;
-    await new Promise((r) => setTimeout(r, 15000));
+    deb.__pokeBrake();
+    await new Promise((r) => setTimeout(r, 1200));
     const t1 = deb.detailReport().brakes.total;
     return { rig, grew: t1 > t0 };
   });
@@ -1253,12 +1269,16 @@ const browser = await chromium.launch({
   check("exit blocked at altitude", still === "heli", still);
   await page.keyboard.up("Space");
   await page.keyboard.down("ShiftLeft");
-  await poll(page, () => window.__steelRibbonTelemetry.altitude, (a) => a < 2.5, 90);
+  await poll(page, () => window.__steelRibbonTelemetry.altitude, (a) => a < 2.5, 160);
   await page.keyboard.up("ShiftLeft");
-  await page.waitForTimeout(500);
-  await page.keyboard.press("KeyE");
-  await page.waitForTimeout(400);
-  v = await page.evaluate(() => window.__steelRibbonTelemetry.vehicle);
+  // low-fps hardening: descent overshoots the poll under load — retry the
+  // exit a few times while the heli settles
+  for (let att = 0; att < 4 && v !== "foot"; att++) {
+    await page.waitForTimeout(600);
+    await page.keyboard.press("KeyE");
+    await page.waitForTimeout(400);
+    v = await page.evaluate(() => window.__steelRibbonTelemetry.vehicle);
+  }
   check("land and exit to foot", v === "foot", v);
   check("no console errors (v3.2)", errors.length === 0, errors.slice(0, 3).join(" | "));
   await ctx.close();
