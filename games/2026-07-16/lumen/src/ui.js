@@ -27,7 +27,7 @@ export class UI {
     this.buildCards();
     this.buildMapPicker();
     // audio sliders on the title screen
-    for (const [id, kind] of [['volMaster', 'master'], ['volMusic', 'music'], ['volSfx', 'sfx']]) {
+    for (const [id, kind] of [['volMaster', 'master'], ['volMusic', 'music'], ['volSfx', 'sfx'], ['volVoice', 'voice']]) {
       const el = document.getElementById(id);
       if (!el) continue;
       el.value = game.audio ? game.audio.settings[kind] : 0.7;
