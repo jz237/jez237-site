@@ -7,7 +7,7 @@ import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 
-export const VERSION = 'v0.5.0';
+export const VERSION = 'v0.6.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -210,9 +210,16 @@ class Game {
 
     // camera feel: slow drift + breathing, decaying shake
     const t = this.fx.wallTime;
-    this.cam.dx = Math.sin(t * 0.11) * 9;
-    this.cam.dy = Math.cos(t * 0.09) * 6;
-    this.cam.zoom = 1.012 + Math.sin(t * 0.07) * 0.012;
+    if (this.nsCam) {
+      // staged-shot composition: locked frame with only a faint breath
+      this.cam.dx = this.nsCam.dx;
+      this.cam.dy = this.nsCam.dy;
+      this.cam.zoom = this.nsCam.zoom + Math.sin(t * 0.07) * 0.004;
+    } else {
+      this.cam.dx = Math.sin(t * 0.11) * 9;
+      this.cam.dy = Math.cos(t * 0.09) * 6;
+      this.cam.zoom = 1.012 + Math.sin(t * 0.07) * 0.012;
+    }
     this.fx.shake = Math.max(0, this.fx.shake - raw * 14);
     this.fx.aberr = Math.max(0, this.fx.aberr - raw * 0.02);
     const sh = this.fx.shake;
@@ -288,6 +295,34 @@ class Game {
         s.spawnEnemy(type, 4.0, Math.max(10, bs + off));
       }
       for (let i = 0; i < 60 * 2; i++) s.step(); // let towers open fire on them
+    }
+    // compose the frame: zoom toward the action (boss if present, else the
+    // busiest cluster of creatures), clamped so world edges stay off-screen
+    {
+      const boss = s.enemies.find(e => e.def.boss || e.def.miniboss);
+      if (boss && boss.def.boss && boss.hp > boss.maxHp * 0.48) {
+        boss.hp = boss.maxHp * 0.48; // stage phase 2 — the cracked-open state is the shot
+        for (let i = 0; i < 30; i++) s.step();
+      }
+      let fx, fy;
+      if (boss) {
+        // frame boss AND heart together when both can fit
+        const [hx2, hy2] = s.map.heart;
+        fx = boss.x + (hx2 - boss.x) * 0.38;
+        fy = boss.y + (hy2 - boss.y) * 0.38;
+      }
+      else if (s.enemies.length) {
+        fx = s.enemies.reduce((a, e) => a + e.x, 0) / s.enemies.length;
+        fy = s.enemies.reduce((a, e) => a + e.y, 0) / s.enemies.length;
+      } else { fx = WORLD_W / 2; fy = WORLD_H / 2; }
+      const zoom = 1.17;
+      const mx = (WORLD_W - WORLD_W / zoom) / 2 - 4;
+      const my = (WORLD_H - WORLD_H / zoom) / 2 - 4;
+      this.nsCam = {
+        dx: Math.max(-mx, Math.min(mx, (fx - WORLD_W / 2) * 0.45)),
+        dy: Math.max(-my, Math.min(my, (fy - WORLD_H / 2) * 0.45)),
+        zoom,
+      };
     }
     this.running = true;
     window.__lumen.nsReady = true;

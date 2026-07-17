@@ -134,6 +134,9 @@ void main(){
   float hg = exp(-max(0.0, uv.y-horizonLine)*26.0);
   vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood);
   sky += hgCol * hg * (0.8 + 0.2*sin(uT*0.23));
+  // god-ray shafts rising out of the glow, slowly wandering
+  float shaftN = pow(0.5+0.5*sin(uv.x*34.0 + fbm(vec2(uv.x*6.0, uT*0.02))*11.0 + uT*0.05), 3.5);
+  sky += hgCol * shaftN * exp(-max(0.0, uv.y-horizonLine)*9.0) * 0.4;
   // below the horizon, converge on the ground's far-haze colour
   vec3 hazeCol = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood);
   float below = smoothstep(0.0, 0.012, horizonLine - uv.y);
@@ -293,7 +296,7 @@ void main(){
     float core = smoothstep(0.30,0.0,length(q+vec2(0.12,0.0)));
     float innards = smoothstep(0.42,0.05,length(q+vec2(0.05,0.0))) * (0.5+0.5*fbm3(q*5.0+phase));
     float rim = smoothstep(0.0,0.14,-d)*smoothstep(-0.30,-0.10,d);
-    vec3 membrane = tint*0.16 + vec3(0.01,0.01,0.03);
+    vec3 membrane = tint*0.32 + vec3(0.01,0.01,0.03);
     col = membrane + tint*innards*0.6 + tint*core*(1.8+0.7*sin(phase*3.1)) + tint*rim*0.9;
     cov = m*0.92;
   }
@@ -319,7 +322,7 @@ void main(){
     seam *= smoothstep(-0.1,0.25,p.y);
     float pulse = 0.6+0.5*sin(phase*4.0 - p.x*4.0);
     float belly = smoothstep(0.1,0.45,p.y) * (0.5+0.5*fbm3(p*4.0+phase*0.5));
-    vec3 shellCol = mix(tint*0.13, vec3(0.02,0.015,0.045), shell*0.8);
+    vec3 shellCol = mix(tint*0.27, vec3(0.03,0.02,0.055), shell*0.75);
     col = shellCol + tint*belly*0.55 + tint*seam*pulse*2.1;
     float rim = smoothstep(0.0,0.10,-d)*smoothstep(-0.22,-0.08,d);
     col += tint*rim*0.5;
@@ -333,7 +336,7 @@ void main(){
     float body = smoothstep(0.25,-0.2,d);
     float tail = smoothstep(0.4,0.0,abs(p.y+p.x*0.3*sin(phase)))*smoothstep(0.9,0.2,p.x)*step(0.0,p.x)*veil;
     float core = smoothstep(0.24,0.0,length(p));
-    col = tint*body*0.35 + tint*core*2.0 + tint*tail*0.5;
+    col = tint*body*0.5 + tint*core*2.0 + tint*tail*0.5;
     cov = clamp(body*0.55 + core*0.4, 0.0, 1.0);
   }
   else if(kind == 3){ // CORAL CANNON — branching coral, tips charge with aux
@@ -441,7 +444,7 @@ void main(){
     float d = sdCircle(p*vec2(0.85,1.05), 0.5+wob);
     float m = smoothstep(0.04,-0.04,d);
     if(m<=0.0){ frag=vec4(0.0); return; }
-    vec3 body = tint*0.14 + vec3(0.02,0.03,0.02);
+    vec3 body = tint*0.27 + vec3(0.02,0.03,0.02);
     // eggs
     float eggs = 0.0;
     for(int i=0;i<4;i++){
@@ -492,7 +495,7 @@ void main(){
     float core = smoothstep(0.3,0.0,length(q+vec2(0.18,0.0)));
     // speed streaks behind
     float streak = smoothstep(0.12,0.0,abs(p.y*0.7 - 0.04*sin(p.x*9.0+phase*7.0))) * smoothstep(0.9,0.2,p.x) * step(0.0,p.x);
-    vec3 body = tint*0.2;
+    vec3 body = tint*0.36;
     col = body*m + mix(tint,vec3(1.0),0.6)*core*2.2 + tint*streak*0.8;
     cov = m*0.9;
   }
@@ -533,7 +536,7 @@ void main(){
     if(m<=0.0){ frag=vec4(0.0); return; }
     float crossV = smoothstep(0.10,0.0,abs(p.x)) + smoothstep(0.10,0.0,abs(p.y));
     float beat = pow(0.5+0.5*sin(phase*2.4),2.0);
-    vec3 body = tint*0.16 + vec3(0.02,0.02,0.03);
+    vec3 body = tint*0.30 + vec3(0.02,0.02,0.03);
     col = body + tint*crossV*(0.5+beat*1.0);
     float rim = smoothstep(0.0,0.08,-d)*smoothstep(-0.2,-0.07,d);
     col += mix(tint,vec3(1.0,0.6,0.8),0.4)*rim*0.7;
@@ -789,19 +792,36 @@ void main(){
     col += tint*rim*0.8*m;
     cov = m*0.92;
   }
-  else if(kind == 6){ // HEART — the thing we defend
+  else if(kind == 6){ // HEART — the luminous organism the whole grove serves
     float integ = aux; // 1 healthy → 0 dying
     vec3 hcol = mix(vec3(1.0,0.25,0.18), tint, integ);
-    float r = length(p*vec2(1.0,1.12));
-    float wob = fbm(p*2.4 + uT*0.15)*0.10;
-    float membrane = smoothstep(0.035,0.0,abs(r-0.82-wob)) * (0.6+0.4*sin(uT*1.3));
-    float veil = smoothstep(0.8,0.15,r) * fbm(p*3.5 - uT*0.1) * 0.5;
-    float beat = pow(0.5+0.5*sin(uT*(1.6+ (1.0-integ)*2.4)), 3.0);
-    float nucleus = smoothstep(0.40+beat*0.06,0.0,r);
+    vec2 hq = p*vec2(1.0,1.08);
+    float r = length(hq);
+    float ang = atan(hq.y,hq.x);
+    float beat = pow(0.5+0.5*sin(uT*(1.6+(1.0-integ)*2.4)), 3.0);
+    // radiant light-tendrils drifting off the core
+    float tend = 0.0;
+    for(int i=0;i<7;i++){
+      float fi = float(i);
+      float ta = fi/7.0*6.2832 + uT*0.12 + sin(uT*0.35+fi*1.9)*0.22;
+      float dAng = abs(mod(ang - ta + 3.14159, 6.2832) - 3.14159);
+      float reach = 0.55 + 0.35*sin(uT*0.5+fi*2.4);
+      tend += smoothstep(0.34,0.0,dAng) * smoothstep(0.95,0.35,r) * smoothstep(0.10,0.30,r) * reach;
+    }
+    // layered membranes, wobbling
+    float wob = fbm(hq*2.4 + uT*0.15)*0.09;
+    float memb1 = smoothstep(0.030,0.0,abs(r-0.80-wob)) * (0.6+0.4*sin(uT*1.3));
+    float memb2 = smoothstep(0.026,0.0,abs(r-0.58+wob*0.7)) * (0.5+0.5*sin(uT*1.1+2.0));
+    // inner galaxy: swirling motes
+    float swirl = fbm(vec2(ang*1.5 + uT*0.25, r*4.0 - uT*0.18));
+    float veil = smoothstep(0.75,0.10,r) * swirl * 0.8;
+    float nucleus = smoothstep(0.34+beat*0.07,0.0,r);
     float flicker = 1.0 - (1.0-integ)*0.4*step(0.7, hash12(vec2(floor(uT*14.0), seed)));
-    col = hcol*veil*0.5 + hcol*membrane*1.2 + mix(hcol,vec3(1.0,0.95,0.85),0.6)*nucleus*(1.3+beat*1.6);
+    col = hcol*veil*0.7 + hcol*tend*0.55*(0.7+0.3*beat)
+        + hcol*memb1*1.3 + mix(hcol,vec3(1.0),0.3)*memb2*0.8
+        + mix(hcol,vec3(1.0,0.97,0.9),0.65)*nucleus*(1.6+beat*2.0);
     col *= flicker;
-    cov = clamp(veil*0.6 + membrane*0.5 + nucleus*0.8, 0.0, 1.0);
+    cov = clamp(veil*0.5 + tend*0.3 + memb1*0.5 + nucleus*0.85, 0.0, 1.0);
   }
   else if(kind == 7){ // GLOW PARTICLE / SPORE
     float r = length(p);
