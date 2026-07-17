@@ -1263,3 +1263,21 @@ signal-corner ped density weighting.
   gate: 1830-1866 calls / 597-611k tris (new gates 2010/645k roomy).
   Suite 149/149. NEXT: item 3 — lawn variation (mowing stripes + worn
   patches).
+- **50 LAWN VARIATION — round-six item 3 (2026-07-16)**: the bowling-
+  green felt is gone. Mowing-stripe bands + worn patches baked as
+  VERTEX COLORS on the existing 300x300 terrain mesh (zero new
+  geometry/draws/shader risk; material.vertexColors flag = the free
+  A/B toggle). City lawn cells only (inside di bounds, ≥4m outside
+  street corridors): per-cell band direction from an integer hash,
+  ±12% luminance stripes, hash-noise dry patches (warm 1.12/1.04/0.86)
+  and lush spots. TWO CALIBRATION LESSONS: (1) stripe wavelength MUST
+  be ≥2x the vertex pitch — 13.5m bands on a 14m-pitch mesh aliased to
+  nothing (bands now 28m: sin(along/8.9)); (2) dusk lighting swallows
+  ~half the contrast — ±3.5% and ±9% were invisible/faint; ±12% reads
+  as natural park mowing at the game's signature dusk. 8008 verts
+  tinted. "Clear" on the menu is WEATHER (rain toggle), not
+  time-of-day — dusk is the canonical light, calibrate against it.
+  Verified by LOOKING (loop-shots/50-lawn/): soft alternating swaths
+  across the park cells at mid; far reads as parkland texture, not
+  noise; OFF pair = the old felt. Perf: 1829-1867 calls / 591-601k
+  tris. Suite 150/150. NEXT: item 4 — sports-field markings.
