@@ -1126,3 +1126,25 @@ signal-corner ped density weighting.
   calibrated 4.2→7.5. Perf gate: 1828-1858 calls / 602-610k tris.
   Suite 145/145. NEXT: item 8 — window atlas crispness (2x + mullions,
   far look pixel-equivalent).
+- **44 HD WINDOW ATLAS — round-five item 8 (2026-07-16)**: the facade
+  mid-band blur is fixed. As() gains an hd param: hd=2 doubles the
+  canvas AND the cell grid — same window layout on the wall, 2x texels
+  per window — and draws per-window structure: 1px frame + mullion
+  cross (transom at 45%), plus lit-window life (18% blinds pulled
+  partway, 12% curtain side-panels, 8% sill silhouettes). Applied to
+  the THREE SHARED city-tower materials (Q, 160x320→320x640) and both
+  glass-tower maps in en(); outskirt buildings stay 1x (they live at
+  distance). Texture COUNT unchanged. towerTexSys keeps live refs; NEW
+  debug windowTexHD(on) rebuilds the shared maps at hd 1|2 (dispose old
+  — VRAM stable) for true same-camera A/B. Verified by LOOKING
+  (loop-shots/44-window-atlas/): the 16m pair is night and day — HD2
+  windows have crisp edges, frames, transoms, blind variation; HD1 is
+  the survey's formless glow. Far pair equivalent (density/tone/warmth
+  identical; lit patterns re-roll on rebuild by design). FRAMING
+  GOTCHA: rooftops.tall towers can be 43m wide — camera at center+16
+  sits INSIDE the footprint; frame from face = center + w/2 + dist.
+  Perf gate: 1794-1854 calls / 596-612k tris (612k is the closest yet
+  to the 620k ceiling — items 9/10 must stay tri-light or bring
+  renegotiation data) / tex 236-242 / geo 5500-5565. Suite 146/146
+  (probe locks hd2 default 320px + toggle rebuild both ways). NEXT:
+  item 9 — rooftop density (2-3 kits on large roofs + hatch boxes).

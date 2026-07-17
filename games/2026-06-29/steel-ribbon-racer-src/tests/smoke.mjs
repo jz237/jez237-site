@@ -749,6 +749,21 @@ const browser = await chromium.launch({
     JSON.stringify({ clusters: pad?.clusters, parts: pad?.parts }),
   );
 
+  // zoom-detail 44 (round five item 8): HD window atlas on the shared tower
+  // materials — 2x texel density with mullions; toggle rebuilds at legacy 1x
+  const wtx = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      hd2 = deb.windowTexHD(true),
+      hd1 = deb.windowTexHD(false),
+      back = deb.windowTexHD(true);
+    return { hd2, hd1, back };
+  });
+  check(
+    "window atlas: shared tower textures HD by default, A/B toggle rebuilds",
+    !!wtx && wtx.hd2?.size === 320 && wtx.hd1?.size === 160 && wtx.back?.size === 320 && wtx.back?.hd === 2,
+    JSON.stringify(wtx),
+  );
+
   // zoom-detail item 08: named double-blade street signs at intersections
   const ssg = await page.evaluate(() => window.__steelRibbonDebug.detailReport().streetSigns);
   check(

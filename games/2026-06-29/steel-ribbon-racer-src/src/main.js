@@ -607,24 +607,54 @@ function y1(i = 256) {
   const s = new CanvasTexture(e);
   return ((s.colorSpace = SRGBColorSpace), s);
 }
-function As(i = 128, e = 256, t = 0.42) {
+function As(i = 128, e = 256, t = 0.42, hd = 1) {
+  // zoom-detail 44 (round-five item 8): hd=2 doubles canvas AND cell grid —
+  // same window layout on the wall, twice the texels per window, plus frame/
+  // mullion lines and curtain/blind variation so mid-band walls resolve crisp
+  // instead of blurring. hd=1 is the legacy look (kept for the A/B toggle).
   const n = document.createElement("canvas");
-  ((n.width = i), (n.height = e));
+  ((n.width = i * hd), (n.height = e * hd));
   const s = n.getContext("2d");
-  ((s.fillStyle = "#081722"), s.fillRect(0, 0, i, e));
-  for (let a = 10; a < e - 8; a += 18)
-    for (let o = 9; o < i - 9; o += 15)
-      (Math.random() < t
+  ((s.fillStyle = "#081722"), s.fillRect(0, 0, i * hd, e * hd));
+  for (let a = 10 * hd; a < (e - 8) * hd; a += 18 * hd)
+    for (let o = 9 * hd; o < (i - 9) * hd; o += 15 * hd) {
+      const lit = Math.random() < t,
+        wW = 7 * hd,
+        wH = 8 * hd;
+      (lit
         ? ((s.shadowColor = "rgba(255, 197, 104, 0.75)"),
-          (s.shadowBlur = 5),
-          (s.fillStyle = `rgba(255, ${205 + Math.random() * 38}, ${118 + Math.random() * 72}, ${0.82 + Math.random() * 0.18})`))
+          (s.shadowBlur = 5 * hd),
+          (s.fillStyle = `rgba(255, ${205 + Math.random() * 38}, ${118 + Math.random() * 72}, ${0.86 + Math.random() * 0.14})`))
         : ((s.shadowBlur = 0), (s.fillStyle = "rgba(42, 92, 125, 0.28)")),
-        s.fillRect(o, a, 7, 8));
-  ((s.shadowBlur = 0), (s.strokeStyle = "rgba(140, 220, 255, 0.12)"), (s.lineWidth = 1));
-  for (let a = 0; a < i; a += 15) (s.beginPath(), s.moveTo(a + 3, 0), s.lineTo(a + 3, e), s.stroke());
+        s.fillRect(o, a, wW, wH));
+      if (hd > 1) {
+        s.shadowBlur = 0;
+        if (lit) {
+          const v = Math.random();
+          if (v < 0.18) {
+            // blind: pale strip pulled partway down
+            ((s.fillStyle = "rgba(226, 214, 190, 0.6)"), s.fillRect(o, a, wW, wH * (0.25 + Math.random() * 0.3)));
+          } else if (v < 0.3) {
+            // curtains: muted side panels
+            ((s.fillStyle = "rgba(148, 96, 84, 0.55)"), s.fillRect(o, a, wW * 0.22, wH), s.fillRect(o + wW * 0.78, a, wW * 0.22, wH));
+          } else if (v < 0.38) {
+            // plant/lamp silhouette on the sill
+            ((s.fillStyle = "rgba(30, 40, 30, 0.7)"), s.fillRect(o + wW * 0.6, a + wH * 0.55, wW * 0.2, wH * 0.4));
+          }
+        }
+        // mullion cross + frame
+        ((s.strokeStyle = "rgba(9, 16, 24, 0.85)"), (s.lineWidth = 1));
+        (s.beginPath(), s.moveTo(o + wW * 0.5, a), s.lineTo(o + wW * 0.5, a + wH), s.moveTo(o, a + wH * 0.45), s.lineTo(o + wW, a + wH * 0.45), s.stroke());
+        ((s.strokeStyle = "rgba(12, 22, 32, 0.9)"), s.strokeRect(o - 0.5, a - 0.5, wW + 1, wH + 1));
+      }
+    }
+  ((s.shadowBlur = 0), (s.strokeStyle = "rgba(140, 220, 255, 0.12)"), (s.lineWidth = 1 * hd));
+  for (let a = 0; a < i * hd; a += 15 * hd) (s.beginPath(), s.moveTo(a + 3 * hd, 0), s.lineTo(a + 3 * hd, e * hd), s.stroke());
   const r = new CanvasTexture(n);
   return ((r.colorSpace = SRGBColorSpace), r);
 }
+// live refs for the window-texture A/B toggle (city tower shared materials)
+const towerTexSys = { mats: null, hd: 2, args: null };
 function b1(i = 256, e = 256, t = "#d9d0bd") {
   const n = document.createElement("canvas");
   ((n.width = i), (n.height = e));
@@ -4996,7 +5026,7 @@ function N1() {
       oe.position.set(j + (Math.random() - 0.5) * o * 0.7, He(j, ee) + 0.66, ee + (Math.random() - 0.5) * o * 0.7),
       i.add(oe));
   }
-  const Q = [As(160, 320, 0.5), As(160, 320, 0.62), As(160, 320, 0.42)],
+  const Q = [As(160, 320, 0.5, 2), As(160, 320, 0.62, 2), As(160, 320, 0.42, 2)],
     ie = [
       new MeshStandardMaterial({
         map: Q[0],
@@ -5026,7 +5056,13 @@ function N1() {
         emissiveIntensity: 0.36,
       }),
     ],
-    de = new BoxGeometry(1, 1, 1),
+    de = new BoxGeometry(1, 1, 1);
+  ((towerTexSys.mats = ie), (towerTexSys.args = [
+    [160, 320, 0.5],
+    [160, 320, 0.62],
+    [160, 320, 0.42],
+  ]), (towerTexSys.hd = 2));
+  const
     pe = [[], [], []],
     ze = [],
     I = [],
@@ -5838,7 +5874,7 @@ function N1() {
     if (Wi(N, O, Y, j, V + ee + 2)) return !1;
     const H = N < 80 ? 1 : -1,
       z = new MeshStandardMaterial({
-        map: As(192, 512, re),
+        map: As(192, 512, re, 2),
         color: oe,
         roughness: 0.24,
         metalness: 0.36,
@@ -5849,7 +5885,7 @@ function N1() {
       se = new Mesh(new BoxGeometry(Y, ee, j), z);
     (se.position.set(N, V + ee / 2, O), (se.castShadow = !1), (se.receiveShadow = !0), i.add(se));
     const $ = new MeshStandardMaterial({
-        map: As(220, 620, Math.min(0.86, re + 0.18)),
+        map: As(220, 620, Math.min(0.86, re + 0.18), 2),
         color: 10481407,
         roughness: 0.12,
         metalness: 0.28,
@@ -10835,6 +10871,19 @@ window.__steelRibbonDebug = {
     paddockSys.enabled = !!on;
     paddockSys._mesh && (paddockSys._mesh.visible = paddockSys.enabled);
     return paddockSys.enabled;
+  },
+  windowTexHD(on) {
+    if (!towerTexSys.mats) return null;
+    const hd = on === !1 ? 1 : 2;
+    if (hd !== towerTexSys.hd) {
+      towerTexSys.hd = hd;
+      towerTexSys.mats.forEach((m, k) => {
+        const a = towerTexSys.args[k],
+          tex = As(a[0], a[1], a[2], hd);
+        (m.map && m.map.dispose(), (m.map = tex), (m.emissiveMap = tex), (m.needsUpdate = !0));
+      });
+    }
+    return { hd: towerTexSys.hd, size: towerTexSys.mats[0].map.image.width };
   },
   signalHeadStates() {
     const heads = signalLampSys.headsRef || [];
