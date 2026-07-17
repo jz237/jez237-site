@@ -1447,3 +1447,22 @@ signal-corner ped density weighting.
      turbines.
   Wishlist note: aerial mowing stripes read weak from 45m+ — consider
   +2% amplitude if a later item touches the terrain bake.
+- **59 RACE KERBS — round-seven item 1 BLOCKED (2026-07-17)**: three
+  visual failures, reverted per charter (limit 2; the third was a
+  diagnostic beacon that the title menu blocked — enough). The
+  progression of diagnoses, for the NEXT attempt: (a) strips at
+  ±(halfW-0.62) hide under the deck's golden RIM band; (b) at
+  ±(halfW-2.3) they hide under the pale SHOULDER strip; (c) a
+  probeDown cross-section at a corner showed the deck's VISIBLE mesh
+  top diverging from BOTH the spline (St().p.y, off by −0.1..−2m,
+  banked) and the analytic Ki "track" surface (which reads ~0.6 ABOVE
+  the visible mesh at edges — the ray hits understructure); (d) Ki is
+  TDZ-locked (Yn) at world-build time — runtime one-shot Bn builds
+  work but the height source is still wrong. CONCLUSION: kerbs must
+  reuse THE DECK BUILDER'S OWN cross-section math (find where the
+  ribbon deck mesh itself is constructed and emit kerb quads in that
+  exact vertex space) — a deeper refactor than a detail item. BLOCKED:
+  needs deck-builder integration. Code fully reverted, boot clean.
+  Suite state unchanged (156 probes; no kerb probe was added). NEXT:
+  item 2 — brake lights (brakePulse already exists on traffic — a
+  surface-only feature, no geometry archaeology).
