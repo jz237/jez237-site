@@ -1207,3 +1207,36 @@ signal-corner ped density weighting.
   (v3.21.0) next, then the closing survey — which per the user's
   standing directive ("continue improving graphics and details")
   seeds ROUND SIX instead of stopping the loop.
+- **48 ROUND SIX BOOTSTRAP (2026-07-16)**: perf renegotiation + fresh
+  survey. RENEGOTIATION (5 fresh worlds x 2 readings, race chase):
+  calls 1822-1913, tris 595.7-602.3k, tex 233-242, geo 5518-5600. The
+  recent 610-615k tris readings were world-luck highs of the same
+  code. **NEW GATES (max-ever + ~5%): calls ≤2010 / tris ≤645k /
+  tex ≤260 / geo ≤5750.** Tripwires, not budgets — headroom ~40k tris
+  is earmarked for round-six items below. SURVEY (loop-shots/
+  48-survey-6/, near frames 03/05 were degenerate — anchor teleports
+  landed inside geometry; 01/02/04/06/07 read well):
+  ROUND SIX BACKLOG (prioritized, single-layer each):
+  1. SIDEWALKS — pale concrete strips + curb line along both sides of
+     every city street (baked merged, vertex-shaded expansion joints);
+     peds currently walk on bare grass. The big spend (~15-25k tris).
+  2. RACING-LINE WEAR — darkened rubber line through ribbon corners +
+     skid patches near walls (course-spline strip, race-view payoff).
+  3. LAWN VARIATION — mowing-stripe tint bands + worn patches on city
+     lawns; kills the bowling-green felt at every distance.
+  4. SPORTS-FIELD MARKINGS — the mint field slabs get white line sets
+     (soccer/tennis canvas per type).
+  5. NEON GLOW PASS — sign bands (BLUE EXIT, MOONLIGHT LANES...) gain
+     soft halo quads; one or two flicker.
+  6. CROSSWALK WEAR — zebra stripes + stop lines vary per intersection
+     (fresh vs worn paint).
+  7. TOWER-SHOP AWNINGS — canopy strips + sidewalk boards under tower
+     sign bands.
+  8. TRAFFIC TURN SIGNALS — indicator blink on cars slowing into
+     intersection turns.
+  9. ROOFTOP HEAT SHIMMER — pooled shimmer sprites over active vents
+     (near tier only).
+  10. BLIMP — one slow fictional-banner blimp on a high lane.
+  Lessons: survey camera near-frames must aim from OUTSIDE anchors
+  (storefront/signal anchors sit inside assemblies — approach from the
+  street side at +6m standoff minimum).
