@@ -75,9 +75,10 @@ export const VS_RIBBON = `#version 300 es
 layout(location=0) in vec2 aPos;
 layout(location=1) in vec2 aUv;
 uniform vec2 uCam; uniform float uZoom; uniform vec2 uRes;
-out vec2 vUv; out float vDepth;
+out vec2 vUv; out float vDepth; out vec2 vWorld;
 void main(){
   vUv = aUv;
+  vWorld = aPos;
   vDepth = clamp(aPos.y / uRes.y, 0.0, 1.0);
   vec2 ndc = (aPos - uCam) * uZoom / (uRes*0.5);
   gl_Position = vec4(ndc.x, -ndc.y, 0.0, 1.0);
@@ -152,7 +153,8 @@ void main(){
 // ---------------------------------------------------------------- ground
 export const FS_GROUND = COMMON + `
 uniform float uT; uniform float uHorizon; uniform vec2 uReso; uniform float uMood;
-in vec2 vUv; out vec4 frag;
+uniform sampler2D uStain; uniform vec2 uWorldSize;
+in vec2 vUv; in vec2 vWorld; out vec4 frag;
 // vUv here: x across screen, y 0 at horizon → 1 at bottom (near)
 void main(){
   float near = vUv.y;
@@ -175,6 +177,10 @@ void main(){
   base += vec3(0.04,0.22,0.20) * smoothstep(0.86,0.98,crackN) * (0.55+0.45*sin(uT*0.6+p.x*4.0)) * near;
   // faint teal ambient sheen so the plane never reads as void
   base += vec3(0.012,0.030,0.034);
+  // the run's history: chemistry and deaths bloom into the ground itself
+  vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
+  stain = stain / (1.0 + stain*0.55); // soft-knee — a tended grove never clips
+  base += stain * (0.7 + 0.9*rock) * (0.5 + 0.5*near);
   // bioluminescent micro-life: sparse cyan/green dots that breathe
   vec2 cell = floor(p*9.0);
   float d = hash12(cell);
@@ -202,7 +208,8 @@ void main(){
 // ---------------------------------------------------------------- path ribbon
 export const FS_PATH = COMMON + `
 uniform float uT;
-in vec2 vUv; in float vDepth; out vec4 frag;
+uniform sampler2D uStain; uniform vec2 uWorldSize;
+in vec2 vUv; in float vDepth; in vec2 vWorld; out vec4 frag;
 // vUv.x = along path (0 spawn → 1 heart), vUv.y = across (-1..1)
 void main(){
   float across = vUv.y;
@@ -233,6 +240,9 @@ void main(){
   float rim = smoothstep(0.30,0.06,abs(edge - er*0.35 - 0.10));
   veinCol += vec3(0.10,0.45,0.40) * rim * (0.4+0.25*sin(uT*0.9 + along*80.0));
   vec3 col = bed + veinCol;
+  // battle stains soak into the riverbed too
+  vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
+  col += (stain / (1.0 + stain*0.55)) * 0.75;
   // haze with depth
   col = mix(col, vec3(0.10,0.28,0.34)*0.6, (1.0-vDepth)*0.35);
   frag = vec4(col*mask, mask);

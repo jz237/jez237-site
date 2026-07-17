@@ -590,7 +590,7 @@ export class Sim {
       if (tower) tower.kills++;
       this.gold += e.def.bounty;
       this.goldEarned += e.def.bounty;
-      this.emit('kill', { id: e.id, type: e.type, x: e.x, y: e.y, bounty: e.def.bounty, boss: !!(e.def.boss || e.def.miniboss) });
+      this.emit('kill', { id: e.id, type: e.type, x: e.x, y: e.y, bounty: e.def.bounty, boss: !!(e.def.boss || e.def.miniboss), color: e.def.color });
       // death: burst into dissolving motes that drift and fade
       const n = e.def.boss ? 90 : e.def.miniboss ? 50 : 14 + Math.floor(e.def.size * 0.3);
       this.burst(e.x, e.y, e.def.color, n, e.def.size * 2.2);

@@ -7,7 +7,7 @@ import { UI } from './ui.js';
 import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 
-export const VERSION = 'v1.0.0';
+export const VERSION = 'v1.1.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -72,6 +72,7 @@ class Game {
   newRun() {
     this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
     this.renderer.pathMesh = null; // forces map mesh rebuild on next frame
+    this.renderer.clearStains(); // fresh ground for a fresh story
     this.armed = null; this.selected = null;
     this.ui.showInspect(null);
     this.ui.hideGameOver();
@@ -148,14 +149,19 @@ class Game {
           break;
         case 'kill':
           this.fx.shake = Math.min(5, this.fx.shake + 0.25);
+          // each death soaks a whisper of its colour into the ground
+          this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: ev.boss ? 240 : 44, i: ev.boss ? 0.7 : 0.3, color: ev.color || [0.5, 0.9, 0.5] });
           break;
         case 'impact':
           this.fx.shake = Math.min(5, this.fx.shake + 0.4);
           this.fx.aberr = Math.min(0.012, this.fx.aberr + 0.0035);
+          if (ev.splash > 0) this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 52, i: 0.17, color: ev.color });
           break;
         case 'mix':
           this.fx.shake = Math.min(7, this.fx.shake + 1.6);
           this.fx.aberr = Math.min(0.016, this.fx.aberr + 0.006);
+          // reactions paint the terrain in the blended hue — the run's story
+          this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 150, i: 0.85, color: ev.color });
           break;
         case 'bossSpawn':
           this.ui.banner(ev.name, ev.boss ? 'the grove holds its breath' : 'something vast crawls out');
@@ -184,6 +190,7 @@ class Game {
           this.ui.banner('THE GROVE ENDURES', 'the endless surge begins — how long can you shine?');
           break;
         case 'gameOver':
+          if (NS_MODE) break; // staged shots never show the end panel
           this.ui.banner('THE LIGHT GOES OUT', `the grove survived ${ev.wave - 1} waves`);
           setTimeout(() => this.ui.showGameOver(this.sim, this.sim.campaignDone), 2200);
           break;
@@ -289,7 +296,7 @@ class Game {
     s.spawnQueue.push(...extra);
     // bosses crawl — drive further so they reach mid-frame for the shot
     const driveSecs = nsWave >= 20 ? 46 : 16;
-    for (let i = 0; i < 60 * driveSecs; i++) { s.step(); }
+    for (let i = 0; i < 60 * driveSecs; i++) { s.step(); this.routeEvents(); }
     // boss frames need a living swarm around the great one — restock escorts
     if (nsWave >= 20) {
       const boss = s.enemies.find(e => e.def.boss);
@@ -305,7 +312,7 @@ class Game {
         else at = bs + 90 + (i - 12) * ((total * 0.92 - bs) / 18); // stream ahead
         s.spawnEnemy(type, 4.0, Math.max(10, Math.min(total * 0.94, at)));
       }
-      for (let i = 0; i < 60 * 2; i++) s.step(); // let towers open fire on them
+      for (let i = 0; i < 60 * 2; i++) { s.step(); this.routeEvents(); } // towers open fire; stains burn in
     }
     // compose the frame: zoom toward the action (boss if present, else the
     // busiest cluster of creatures), clamped so world edges stay off-screen
@@ -313,7 +320,7 @@ class Game {
       const boss = s.enemies.find(e => e.def.boss || e.def.miniboss);
       if (boss && boss.def.boss && boss.hp > boss.maxHp * 0.48) {
         boss.hp = boss.maxHp * 0.48; // stage phase 2 — the cracked-open state is the shot
-        for (let i = 0; i < 30; i++) s.step();
+        for (let i = 0; i < 30; i++) { s.step(); this.routeEvents(); }
       }
       let fx, fy;
       if (boss) {
