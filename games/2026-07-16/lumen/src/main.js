@@ -9,7 +9,7 @@ import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
 import { botStep } from './bot.js';
 
-export const VERSION = 'v1.9.0';
+export const VERSION = 'v2.0.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
@@ -195,7 +195,10 @@ class Game {
       }
       switch (ev.type) {
         case 'waveStart':
-          if (!NS_MODE) this.ui.banner(`WAVE ${ev.wave}`, ev.wave % 5 === 0 ? 'something vast stirs' : '');
+          if (!NS_MODE) {
+            if (ev.mutator) this.ui.banner(ev.mutator.name, `wave ${ev.wave} — ${ev.mutator.desc}`);
+            else this.ui.banner(`WAVE ${ev.wave}`, ev.wave % 5 === 0 ? 'something vast stirs' : '');
+          }
           break;
         case 'waveClear':
           this.ui.toast(`wave ${ev.wave} cleared · +◈${ev.bonus} bloom · +◈${ev.interest} interest`, 'good');

@@ -121,6 +121,7 @@ export class Sim {
     this.state = 'wave';
     const comp = waveComp(this.wave);
     this.clearBonus = comp.clearBonus;
+    this.waveMutator = comp.mutator || null;
     let t = 0.4;
     for (const e of comp.entries) {
       let tt = t + (e.delay || 0);
@@ -130,7 +131,7 @@ export class Sim {
       }
     }
     this.waveT = 0;
-    this.emit('waveStart', { wave: this.wave });
+    this.emit('waveStart', { wave: this.wave, mutator: this.waveMutator });
     return true;
   }
 
@@ -168,6 +169,13 @@ export class Sim {
       telegraphT: 0,
       bossPhase: 1,
     };
+    const mu = this.waveMutator;
+    if (mu && this.state === 'wave') {
+      if (mu.speedMul) e.speed *= mu.speedMul;
+      if (mu.armorAdd) e.armorAdd = mu.armorAdd;
+      if (mu.regenAdd) e.regenAdd = mu.regenAdd;
+      if (mu.bountyMul) e.bountyMul = mu.bountyMul;
+    }
     const p = pathPos(this.paths[e.pathIdx], atS);
     e.x = p.x; e.y = p.y;
     this.enemies.push(e);
@@ -363,8 +371,9 @@ export class Sim {
       if (st.ignite > 0) { st.ignite -= dt; this.damage(e, STATUS.ignite.dps * dt, null, true); if (e.dead) continue; }
       if (e.mixCool > 0) e.mixCool -= dt;
       // species behaviours
-      if (e.def.regenPct && e.hp < e.maxHp && st.ignite <= 0) {
-        e.hp = Math.min(e.maxHp, e.hp + e.maxHp * e.def.regenPct * dt);
+      const regen = e.def.regenPct || e.regenAdd;
+      if (regen && e.hp < e.maxHp && st.ignite <= 0) {
+        e.hp = Math.min(e.maxHp, e.hp + e.maxHp * regen * dt);
       }
       if (e.def.phasing) {
         e.phaseT += dt;
@@ -580,7 +589,8 @@ export class Sim {
 
   damage(e, amount, tower) {
     if (e.hp <= 0) return;
-    if (e.def.armor) amount = Math.max(amount * 0.25, amount - Math.max(0, e.def.armor - e.st.corrodeStacks * 3));
+    const armor = (e.def.armor || 0) + (e.armorAdd || 0);
+    if (armor) amount = Math.max(amount * 0.25, amount - Math.max(0, armor - e.st.corrodeStacks * 3));
     if (e.st.corrodeStacks > 0) amount *= 1 + e.st.corrodeStacks * STATUS.corrode.vulnPerStack;
     // shields absorb first and spark while doing it
     if (e.shield > 0) {
@@ -597,8 +607,9 @@ export class Sim {
       e.dead = true;
       this.kills++;
       if (tower) tower.kills++;
-      this.gold += e.def.bounty;
-      this.goldEarned += e.def.bounty;
+      const bounty = Math.round(e.def.bounty * (e.bountyMul || 1));
+      this.gold += bounty;
+      this.goldEarned += bounty;
       this.emit('kill', { id: e.id, enemyType: e.type, x: e.x, y: e.y, bounty: e.def.bounty, boss: !!(e.def.boss || e.def.miniboss), color: e.def.color });
       this.deathBurst(e);
       // brood carriers split into a scatter of children
