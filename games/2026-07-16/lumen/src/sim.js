@@ -134,6 +134,15 @@ export class Sim {
     return true;
   }
 
+  pickPath() {
+    const w = this.map.pathWeights;
+    if (!w) return this.rng.int(0, this.paths.length - 1);
+    const r = this.rng.next();
+    let acc = 0;
+    for (let i = 0; i < w.length; i++) { acc += w[i]; if (r <= acc) return i; }
+    return w.length - 1;
+  }
+
   spawnEnemy(type, hpMul, atS = 0) {
     const def = ENEMIES[type];
     const e = {
@@ -149,7 +158,7 @@ export class Sim {
       st: { chill: 0, shock: 0, ignite: 0, corrode: 0, corrodeStacks: 0, freeze: 0 },
       mixCool: 0,
       dead: false,
-      pathIdx: this.rng.int(0, this.paths.length - 1),
+      pathIdx: this.pickPath(),
       shield: def.shield ? def.shield * hpMul : 0,
       maxShield: def.shield ? def.shield * hpMul : 0,
       untargetable: false,

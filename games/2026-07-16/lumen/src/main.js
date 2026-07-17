@@ -8,7 +8,7 @@ import { TOWERS, WORLD_W, WORLD_H, COLORS, MAPS } from './content.js';
 import { saveLocal, submitGlobal, cleanInitials } from './scores.js';
 import { AudioEngine } from './audio.js';
 
-export const VERSION = 'v1.2.0';
+export const VERSION = 'v1.3.0';
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
