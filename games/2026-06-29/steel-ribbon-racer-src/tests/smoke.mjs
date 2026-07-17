@@ -764,6 +764,20 @@ const browser = await chromium.launch({
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
   );
 
+  // zoom-detail 57 (round six item 10): the RIBBON COLA blimp drifts on a high lane
+  const blp = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug,
+      b0 = deb.detailReport().blimp;
+    await new Promise((r) => setTimeout(r, 2500));
+    const b1 = deb.detailReport().blimp;
+    return { text: b0.text, alt: b0.alt, drift: +(b1.x - b0.x).toFixed(1) };
+  });
+  check(
+    "blimp: fictional-brand airship drifts on its high lane",
+    !!blp && blp.text === "RIBBON COLA" && blp.alt === 300 && blp.drift > 0.5,
+    JSON.stringify(blp),
+  );
+
   // zoom-detail 55 (round six item 8): traffic turn indicators
   const tsg = await page.evaluate(async () => {
     const deb = window.__steelRibbonDebug;

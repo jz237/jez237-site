@@ -8693,6 +8693,52 @@ function buildPropPlanes() {
   }
 }
 buildPropPlanes();
+// zoom-detail 57 (round-six item 10): one slow fictional-brand blimp on a
+// high lane above the prop planes. Opaque vc-baked hull+fins+gondola (one
+// mesh) + a two-sided banner mesh — 2 draws, ~600 tris, no transparency risk.
+const blimpSys = { alt: 300, text: "RIBBON COLA", enabled: !0, x: 0, z: -520, _g: null };
+function buildBlimpBanner() {
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 128));
+  const g = cv.getContext("2d");
+  ((g.fillStyle = "#b3202c"), g.fillRect(0, 0, 512, 128));
+  ((g.fillStyle = "#f4ead8"), (g.font = "900 72px Arial Black, Arial, sans-serif"), (g.textAlign = "center"), (g.textBaseline = "middle"));
+  g.fillText("RIBBON COLA", 256, 66, 480);
+  const t = new CanvasTexture(cv);
+  return ((t.colorSpace = SRGBColorSpace), t);
+}
+function buildBlimp() {
+  const g = new Group(),
+    { opaque } = vcMats(),
+    parts = [],
+    T = (x, y, z) => new Matrix4().setPosition(x, y, z),
+    S = (m, sx, sy, sz) => m.multiply(new Matrix4().makeScale(sx, sy, sz));
+  parts.push(vcBake(new SphereGeometry(1, 18, 12), S(T(0, 0, 0), 13.5, 4.1, 4.1), 13096394));
+  parts.push(vcBake(new BoxGeometry(0.3, 7.2, 3.4), T(-12.4, 0, 0), 11221071));
+  parts.push(vcBake(new BoxGeometry(0.3, 3.4, 7.2).rotateX(Math.PI / 2), T(-12.4, 0, 0), 11221071));
+  parts.push(vcBake(new BoxGeometry(3.6, 1.3, 1.7), T(0.6, -4.6, 0), 4406333));
+  parts.push(vcBake(new BoxGeometry(0.14, 0.9, 0.14), T(-0.8, -4.0, 0.5), 2565927));
+  parts.push(vcBake(new BoxGeometry(0.14, 0.9, 0.14), T(1.9, -4.0, -0.5), 2565927));
+  const bl = new Mesh(mergeGeometries(parts, !1), opaque);
+  ((bl.raycast = () => {}), g.add(bl));
+  const bGeo = mergeGeometries(
+    [new PlaneGeometry(11, 3.0).rotateY(Math.PI / 2).translate(4.4, 0.2, 0), new PlaneGeometry(11, 3.0).rotateY(-Math.PI / 2).translate(-4.4, 0.2, 0)],
+    !1,
+  );
+  bGeo.rotateY(Math.PI / 2);
+  const banner = new Mesh(bGeo, new MeshStandardMaterial({ map: buildBlimpBanner(), roughness: 0.6, metalness: 0.05, emissive: 3348752, emissiveIntensity: 0.14 }));
+  ((banner.raycast = () => {}), g.add(banner));
+  ((g.position.set(-1300, blimpSys.alt, blimpSys.z)), (g.rotation.y = -Math.PI / 2), et.add(g), (blimpSys._g = g));
+  const ph = 1.7;
+  Bn(g, (tt, dt) => {
+    ((g.position.x += 8 * dt), g.position.x > 1500 && (g.position.x = -1500));
+    ((g.position.y = blimpSys.alt + Math.sin(tt * 0.21 + ph) * 6), (g.rotation.z = Math.sin(tt * 0.13) * 0.03));
+    ((blimpSys.x = +g.position.x.toFixed(1)), (blimpSys.z = +g.position.z.toFixed(1)));
+  });
+  return g;
+}
+buildBlimp();
+
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
 // up one star at a time once you keep 240+ units of distance. Roam only. ───
@@ -11580,6 +11626,7 @@ window.__steelRibbonDebug = {
       xwalks: { fresh: xwalkSys.fresh, worn: xwalkSys.worn, chipped: xwalkSys.chipped, enabled: xwalkSys.enabled },
       awnings: { count: awningSys.count, boards: awningSys.boards, enabled: awningSys.enabled, sample: awningSys.sample.slice(0, 3), boardSample: awningSys.boardSample.slice(0, 2) },
       turnSignals: { turning: turnSigSys.turning, cars: turnSigSys.cars, enabled: turnSigSys.enabled, total: turnSigSys.total ?? 0, sample: turnSigSys.sample ?? null },
+      blimp: { x: blimpSys.x, z: blimpSys.z, alt: blimpSys.alt, text: blimpSys.text },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
