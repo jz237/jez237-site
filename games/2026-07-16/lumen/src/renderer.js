@@ -529,15 +529,16 @@ export class Renderer {
       const faces = e.type === 'grub' || e.type === 'mite' || e.type === 'husk' || e.type === 'dartfin' || e.type === 'bulwark';
       const rot = faces ? Math.atan2(e.diry || 0, e.dirx || 1) + Math.PI : 0;
       const hpf = e.hp / e.maxHp;
-      let aux = hpf;
-      if (e.def.shield) aux = e.maxShield > 0 ? e.shield / e.maxShield : 0;
+      let aux = hpf, bossRot = rot;
+      if (e.def.bossKind === 'tidecaller') { aux = e.maxShield > 0 ? e.shield / e.maxShield : 0; bossRot = e.bossPhase === 2 ? 1 : 0; }
+      else if (e.def.shield) aux = e.maxShield > 0 ? e.shield / e.maxShield : 0;
       else if (e.def.phasing) aux = e.untargetable ? 0.28 : 1;
       else if (e.def.boss) aux = e.bossPhase === 2 ? 1 : 0;
       if (e.def.boss || e.def.miniboss) {
         // dark aura beneath the great ones
         E.push({ y: e.y - 1, k: 26, x: e.x, sx: size * 2.4, sy: size * 1.5, rot: 0, phase: e.phase, aux: e.def.boss ? 0.8 : 0.45, c: [0, 0, 0], seed: e.wobblePhase });
       }
-      E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot, phase: e.phase, aux, c: e.def.color, seed: e.wobblePhase });
+      E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot: e.def.bossKind === 'tidecaller' ? bossRot : rot, phase: e.phase, aux, c: e.def.color, seed: e.wobblePhase });
     }
     E.sort((a, b) => a.y - b.y);
     for (const e of E) {
@@ -655,9 +656,24 @@ export class Renderer {
           [1, 0.5, 0.95], 0.7, e.phase + this.frame * 0.1);
       }
     }
+    // tidecaller telegraphs: teal gather (summon) / white swell (shield)
+    for (const e of sim.enemies) {
+      if (e.def.bossKind !== 'tidecaller') continue;
+      const ds = depthScale(e.y);
+      if (e.sumTeleT > 0) {
+        const f = 1 - e.sumTeleT / e.def.summon.telegraph;
+        A.push(e.x, e.y, (260 - f * 160) * ds, (170 - f * 100) * ds, 0, t * 5, KIND.GLOW, 1,
+          0.12 * f, 0.5 * f, 0.6 * f, 0);
+      }
+      if (e.shieldTeleT > 0) {
+        const f = 1 - e.shieldTeleT / e.def.shieldCycle.telegraph;
+        A.push(e.x, e.y, 200 * f * ds, 200 * f * ds, 0, t * 7, KIND.MOTE, 1,
+          0.5 * f, 0.8 * f, 0.95 * f, e.wobblePhase);
+      }
+    }
     // boss telegraph: gathering ring + rising dread-glow while winding up
     for (const e of sim.enemies) {
-      if (!e.def.boss || e.telegraphT <= 0) continue;
+      if (!e.def.boss || !e.def.pulse || e.telegraphT <= 0) continue;
       const P = e.def.pulse;
       const f = 1 - e.telegraphT / P.telegraph; // 0 → 1 as the pulse nears
       const ds = depthScale(e.y);

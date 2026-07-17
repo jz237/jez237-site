@@ -210,7 +210,7 @@ export const ENEMIES = {
     id: 'unlit', name: 'THE UNLIT', kind: 25,
     color: [1.0, 0.62, 0.2], size: 195,
     hp: 9000, speed: 24, bounty: 600, damage: 20,
-    wobble: 0.5, boss: true,
+    wobble: 0.5, boss: true, bossKind: 'unlit',
     // telegraphed dark pulse: 2.6s wind-up glow, then stuns towers in radius
     pulse: { every: 8.0, telegraph: 2.6, radius: 330, stun: 2.4 },
     phase2At: 0.5, // at 50% hp: cracks open, faster, pulse spawns mites
@@ -236,6 +236,19 @@ export const MUTATORS = [
     bountyMul: 1.6, hpAdj: 1.25 },
 ];
 
+// Boss #2 — a summoner with shield windows, no tower stuns: the opposite
+// rhythm of THE UNLIT.
+export const TIDECALLER = {
+  id: 'tidecaller', name: 'THE TIDECALLER', kind: 30,
+  color: [0.35, 0.85, 1.0], size: 175,
+  hp: 8200, speed: 26, bounty: 650, damage: 20,
+  wobble: 3, hover: true, boss: true, bossKind: 'tidecaller',
+  summon: { every: 9.0, telegraph: 1.8, types: ['mite', 'dartfin', 'wisp'], n: 5 },
+  shieldCycle: { amount: 2400, every: 13.0, telegraph: 2.2 },
+  phase2At: 0.5,
+};
+ENEMIES.tidecaller = TIDECALLER;
+
 // Wave table: 1-5 power fantasy, new species introduced in bands, pressure
 // compounds from 10+. Boss waves: 10 (broodmother), 20 (THE UNLIT). After the
 // campaign (20), endless mode re-runs the table with harsher multipliers.
@@ -255,10 +268,12 @@ export function waveComp(n) {
   }
   if (n === 20 || (n > 20 && n % 10 === 0)) {
     const bossHm = 1 + Math.max(0, n - 20) * 0.12; // scales only past 20
-    push('unlit', 1, 1, 1.0, bossHm);
-    push('dartfin', 10, gap, 4);
-    push('spectre', 4, gap * 2, 8);
-    return { entries, clearBonus: 200 + n * 5, boss: 'unlit' };
+    const roster = ['unlit', 'tidecaller'];
+    const bossId = roster[((n - 20) / 10) % roster.length];
+    push(bossId, 1, 1, 1.0, bossHm);
+    if (bossId === 'tidecaller') { push('shellback', 6, gap * 1.6, 4); push('wisp', 8, gap, 6); }
+    else { push('dartfin', 10, gap, 4); push('spectre', 4, gap * 2, 8); }
+    return { entries, clearBonus: 200 + n * 5, boss: bossId };
   }
   push('mite', 5 + n * 1.8);
   if (n >= 3) push('grub', (n - 2) * 1.2, gap * 2.4, 2.0);

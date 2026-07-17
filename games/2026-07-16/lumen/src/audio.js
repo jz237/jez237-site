@@ -25,6 +25,7 @@ const VO = {
   hearthit: { files: ['hearthit_v1', 'hearthit_v2'], pri: 2 },
   victory:  { files: ['victory_v1', 'victory_v2'], pri: 4 },
   defeat:   { files: ['defeat_v1', 'defeat_v2'], pri: 4 },
+  tidecaller: { files: ['tidecaller_v1', 'tidecaller_v2'], pri: 3 },
 };
 
 export class AudioEngine {
@@ -268,7 +269,7 @@ export class AudioEngine {
         if (this.gate('shieldBreak', 120)) this.noise({ dur: 0.2, freq: this.v(2800), q: 2, gain: 0.07, sweep: 900 });
         break;
       case 'bossSpawn':
-        this.say(ev.boss ? 'unlit' : 'brood');
+        this.say(ev.bossId === 'tidecaller' ? 'tidecaller' : ev.boss ? 'unlit' : 'brood');
         this.tone({ freq: 49, dur: 3.0, gain: 0.28 });
         this.noise({ dur: 2.0, freq: 200, gain: 0.1, sweep: 60, type: 'lowpass' });
         break;
@@ -278,6 +279,14 @@ export class AudioEngine {
       case 'bossPulse':
         this.tone({ freq: 55, dur: 1.0, gain: 0.3, glide: 30 });
         this.noise({ dur: 0.6, freq: 400, gain: 0.14, sweep: 90, type: 'lowpass' });
+        break;
+      case 'tideSwell':
+        this.noise({ dur: 0.9, freq: this.v(600), q: 0.8, gain: 0.1, sweep: 2400, type: 'bandpass' });
+        this.tone({ freq: this.v(220), dur: 0.8, gain: 0.08, glide: 520 });
+        break;
+      case 'bossSummon':
+        this.noise({ dur: 0.5, freq: 900, gain: 0.1, sweep: 200, type: 'lowpass' });
+        this.tone({ freq: this.v(110), dur: 0.5, gain: 0.1, glide: 60 });
         break;
       case 'bossPhase':
         this.say('phase');

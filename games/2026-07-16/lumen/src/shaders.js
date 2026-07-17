@@ -679,6 +679,38 @@ void main(){
     col = vec3(0.010,0.004,0.02) * fall;
     cov = fall * vB.w * 0.8; // aux = darkness strength
   }
+  else if(kind == 30){ // THE TIDECALLER — crescent tide-serpent, cold light
+    vec2 q = p*vec2(0.95,1.05);
+    q.y += 0.04*sin(phase*0.8);
+    float body = sdCircle(q, 0.52+fbm(q*2.0+phase*0.1)*0.08);
+    float carve = sdCircle(q-vec2(0.16,-0.10), 0.44);
+    float d = max(body, -carve);
+    float mane = 1e9;
+    for(int i=0;i<6;i++){
+      float fi=float(i);
+      float a = -0.5 - fi*0.28;
+      vec2 root = vec2(cos(a),sin(a))*0.48;
+      vec2 tip = root + vec2(cos(a-0.9), sin(a-0.9)) * (0.30+0.12*sin(phase*1.3+fi));
+      mane = min(mane, sdSeg(q, root, tip) - (0.05 - 0.028*fi/6.0));
+    }
+    d = smin(d, mane, 0.08);
+    float m = smoothstep(0.03,-0.03,d);
+    float coreG = smoothstep(0.35,0.0,length(q-vec2(-0.15,0.05)));
+    if(m<=0.0 && coreG<=0.01 && aux<=0.001){ frag=vec4(0.0); return; }
+    float p2 = step(0.5, vB.x); // rot slot carries the phase-2 flag
+    vec3 body3 = mix(vec3(0.03,0.07,0.10), tint*0.4, smoothstep(0.6,-0.2,length(q)));
+    body3 += tint*coreG*(1.2+p2*1.4);
+    float rim = smoothstep(0.0,0.06,-d)*smoothstep(-0.14,-0.05,d);
+    col = body3*m + mix(tint,vec3(1.0),0.5)*rim*(0.8+0.5*p2)*m;
+    cov = m*0.96;
+    if(aux > 0.001){ // the tide-shield
+      float br = 0.9 + 0.03*sin(phase*2.2);
+      float bub = abs(length(p) - br);
+      float fresnel = smoothstep(0.12,0.0,bub) * (0.6+0.4*sin(atan(p.y,p.x)*8.0 - phase*3.0)*0.4);
+      col += vec3(0.5,0.9,1.0) * fresnel * (0.35 + aux*1.1);
+      cov = clamp(cov + fresnel*0.3*aux, 0.0, 1.0);
+    }
+  }
   else if(kind == 29){ // FROND — foreground kelp silhouette, haze-rimmed
     vec2 q = p; q.y = -q.y;
     float d = 1e9;
