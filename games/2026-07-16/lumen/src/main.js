@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.6.1';
+export const VERSION = 'v2.7.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -277,6 +277,13 @@ class Game {
           this.ui.banner(ev.name, ev.boss ? 'the grove holds its breath' : 'something vast crawls out');
           this.fx.shake = Math.min(9, this.fx.shake + 4);
           break;
+        case 'bossSummon':
+          this.fx.shake = Math.min(8, this.fx.shake + 3.5);
+          break;
+        case 'tideSwell':
+          this.ui.toast('the tide swells — its shell returns', 'warn');
+          this.fx.shake = Math.min(7, this.fx.shake + 2.5);
+          break;
         case 'bossPulse':
           this.fx.shake = Math.min(11, this.fx.shake + 7);
           this.fx.aberr = Math.min(0.022, this.fx.aberr + 0.014);
@@ -444,6 +451,7 @@ class Game {
       else console.warn('ns: no spot near', ax, ay);
     }
     s.gold = 480;
+    s.lives = 99; // staged shots must never end mid-capture
     // stage a dense mid-flight wave (default 12; ?wave=20 stages the boss),
     // then run so the stream spreads through the tower gauntlet
     const nsWave = parseInt(params.get('wave') || '12', 10);
