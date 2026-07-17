@@ -167,6 +167,8 @@ export class Sim {
       spawnCool: def.spawnEvery || 0,
       pulseT: def.pulse ? def.pulse.every : 0,
       telegraphT: 0,
+      sumT: def.summon ? 5.0 : 0, sumTeleT: 0,
+      shieldT: def.shieldCycle ? def.shieldCycle.every : 0, shieldTeleT: 0,
       bossPhase: 1,
     };
     const mu = this.waveMutator;
@@ -180,7 +182,7 @@ export class Sim {
     e.x = p.x; e.y = p.y;
     this.enemies.push(e);
     this.emit('spawn', { id: e.id, enemyType: type });
-    if (def.boss || def.miniboss) this.emit('bossSpawn', { id: e.id, name: def.name, boss: !!def.boss });
+    if (def.boss || def.miniboss) this.emit('bossSpawn', { id: e.id, name: def.name, boss: !!def.boss, bossId: def.id });
   }
 
   // --- towers ---------------------------------------------------------------
@@ -558,15 +560,59 @@ export class Sim {
     this.emit('fire', { tower: t.id, towerType: t.type, x: t.x, y: t.y });
   }
 
-  // boss behaviour: telegraphed dark pulse that stuns towers; phase 2 at 50%
   stepBoss(e, dt) {
-    const P = e.def.pulse;
-    if (e.bossPhase === 1 && e.hp <= e.maxHp * e.def.phase2At) {
+    if (e.bossPhase === 1 && e.def.phase2At && e.hp <= e.maxHp * e.def.phase2At) {
       e.bossPhase = 2;
       this.burst(e.x, e.y, e.def.color, 40, 220);
       this.rings.push({ x: e.x, y: e.y, t: 0, dur: 1.0, color: e.def.color, max: 420 });
       this.emit('bossPhase', { id: e.id, phase: 2 });
     }
+    if (e.def.bossKind === 'tidecaller') { this.stepTidecaller(e, dt); return; }
+    this.stepUnlit(e, dt);
+  }
+
+  // THE TIDECALLER: summons tide-surges of escorts and cycles a shield that
+  // must be broken in windows — pressure, not paralysis
+  stepTidecaller(e, dt) {
+    const S = e.def.summon, C = e.def.shieldCycle;
+    const p2 = e.bossPhase === 2;
+    // summon cycle
+    if (e.sumTeleT > 0) {
+      e.sumTeleT -= dt;
+      if (e.sumTeleT <= 0) {
+        const count = S.n + (p2 ? 2 : 0);
+        for (let i = 0; i < count; i++) {
+          const type = S.types[this.rng.int(0, S.types.length - 1)];
+          this.spawnEnemy(type, 1 + this.wave * 0.05, Math.max(0, e.s - 30 - i * 22));
+        }
+        this.rings.push({ x: e.x, y: e.y, t: 0, dur: 0.7, color: e.def.color, max: 260 });
+        this.burst(e.x, e.y, e.def.color, 16, 130);
+        this.emit('bossSummon', { x: e.x, y: e.y, count });
+      }
+    } else {
+      e.sumT -= dt;
+      if (e.sumT <= 0) { e.sumT = S.every * (p2 ? 0.75 : 1); e.sumTeleT = S.telegraph; this.emit('bossTelegraph', { x: e.x, y: e.y, dur: S.telegraph, kind: 'summon' }); }
+    }
+    // shield swell cycle — only while unshielded
+    if (e.shield <= 0) {
+      if (e.shieldTeleT > 0) {
+        e.shieldTeleT -= dt;
+        if (e.shieldTeleT <= 0) {
+          e.shield = e.maxShield = C.amount * (p2 ? 0.75 : 1) * (1 + Math.max(0, this.wave - 30) * 0.06);
+          this.rings.push({ x: e.x, y: e.y, t: 0, dur: 0.8, color: [0.8, 0.95, 1.0], max: 220 });
+          this.emit('tideSwell', { x: e.x, y: e.y });
+        }
+      } else {
+        e.shieldT -= dt;
+        if (e.shieldT <= 0) { e.shieldT = C.every; e.shieldTeleT = C.telegraph; this.emit('bossTelegraph', { x: e.x, y: e.y, dur: C.telegraph, kind: 'swell' }); }
+      }
+    }
+  }
+
+  // THE UNLIT: telegraphed dark pulse that stuns towers
+  stepUnlit(e, dt) {
+    const P = e.def.pulse;
+
     if (e.telegraphT > 0) {
       e.telegraphT -= dt;
       if (e.telegraphT <= 0) {
