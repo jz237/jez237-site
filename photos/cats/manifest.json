@@ -2,6 +2,24 @@
   "album": "Cat Corner",
   "photos": [
     {
+      "src": "images/taco-upside-down-2026-07-16.jpg",
+      "alt": "Taco lying upside down across the carpet beside a red and black cat tree",
+      "caption": "Taco: gravity is more of a suggestion",
+      "date": "2026-07-16"
+    },
+    {
+      "src": "images/cosmo-disapproving-closeup-2026-07-14.jpg",
+      "alt": "Close-up of Cosmo sitting on Jez's lap with a deeply unimpressed expression",
+      "caption": "Cosmo has reviewed the evidence and remains disappointed",
+      "date": "2026-07-14"
+    },
+    {
+      "src": "images/cosmo-sleepy-lap-2026-07-14.jpg",
+      "alt": "Cosmo getting sleepy while stretched across Jez's lap",
+      "caption": "Cosmo: the review meeting has been adjourned for a nap",
+      "date": "2026-07-14"
+    },
+    {
       "src": "images/cat-family-portrait-2026-06-19.jpg",
       "alt": "Storybook-style portrait of Luca, Cosmo, Taco, and Marty together in a warm cat room",
       "caption": "Luca, Cosmo, Taco & Marty: family portrait, storybook edition",
