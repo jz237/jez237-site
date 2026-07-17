@@ -202,7 +202,7 @@ export class UI {
     el.innerHTML = `
       <div class="iname">${tower.def.name} <span class="ilvl">◆${'◆'.repeat(tower.level)}</span></div>
       <div class="irow">${statLine}</div>
-      <div class="irow dim">${tower.def.attack === 'aura' ? 'support' : 'kills ' + tower.kills}${tower.def.status ? ' · inflicts ' + tower.def.status : ''}</div>
+      <div class="irow dim">${tower.def.attack === 'aura' ? 'support' : 'kills ' + tower.kills + (sim.towerRank(tower) ? ' · rank ' + '✦'.repeat(sim.towerRank(tower)) : '')}${tower.def.status ? ' · inflicts ' + tower.def.status : ''}</div>
       <div class="ibtns">
         ${next ? `<button id="btnUp" ${sim.gold < next.cost ? 'disabled' : ''}>GROW ◈${next.cost}</button>` : '<span class="dim">fully grown</span>'}
         <button id="btnSell">RELEASE ◈${Math.floor(tower.spent * ECON.sellRefund)}</button>

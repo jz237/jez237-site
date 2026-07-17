@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v2.5.0';
+export const VERSION = 'v2.6.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -274,6 +274,10 @@ class Game {
         case 'bossPhase':
           this.ui.banner('IT CRACKS OPEN', 'the light inside is not friendly');
           this.fx.shake = Math.min(10, this.fx.shake + 6);
+          break;
+        case 'rank':
+          this.ui.toast(`${ev.name} grows wiser · rank ${'✦'.repeat(ev.rank)}`, 'good');
+          this.audio.on({ type: 'upgrade' });
           break;
         case 'shieldBreak':
           this.fx.shake = Math.min(6, this.fx.shake + 1);
