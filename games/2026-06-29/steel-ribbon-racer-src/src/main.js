@@ -4136,6 +4136,41 @@ const paddockSys = { clusters: 0, parts: 0, enabled: !0, _mesh: null, sample: []
 // zoom-detail 61 (round-seven item 3): pond-edge dressing — reeds, rocks,
 // lily pads ringing every city pond. ONE merged vcBake mesh (+1 draw total).
 const pondEdgeSys = { ponds: 0, clusters: 0, pads: 0, enabled: !0, _mesh: null, sample: null };
+// zoom-detail 64 (round-seven item 6): permanent window/door bands on the
+// suburban A() shops — the MID tier between flat color bands and the pooled
+// storefront near-tier. Two variants, merged per variant (≤2 draws).
+const shopBandSys = { count: 0, enabled: !0, _parts: {}, _meshes: [], sample: null };
+function buildShopBandTextures() {
+  const out = [];
+  for (let v = 0; v < 2; v++) {
+    const cv = document.createElement("canvas");
+    ((cv.width = 512), (cv.height = 128));
+    const g = cv.getContext("2d");
+    g.clearRect(0, 0, 512, 128);
+    const win = (x, w2, lit) => {
+      ((g.fillStyle = "#f0ebdd"), g.fillRect(x - 4, 100, w2 + 8, 8));
+      ((g.fillStyle = lit ? "#e8b96a" : "#182430"), g.fillRect(x, 22, w2, 78));
+      ((g.strokeStyle = "#caccc4"), (g.lineWidth = 5), g.strokeRect(x, 22, w2, 78));
+      (g.beginPath(), g.moveTo(x + w2 / 2, 24), g.lineTo(x + w2 / 2, 98), g.stroke());
+      if (lit) ((g.fillStyle = "rgba(60,50,40,0.55)"), g.fillRect(x + w2 * 0.12, 60, w2 * 0.2, 40));
+    };
+    if (v === 0) {
+      (win(28, 92, !1), win(150, 92, !0), win(390, 92, !1));
+      ((g.fillStyle = "#4a3326"), g.fillRect(282, 18, 74, 92));
+      ((g.fillStyle = "#9fc4cf"), g.fillRect(292, 26, 54, 60));
+      ((g.fillStyle = "#e8d8b0"), g.fillRect(318, 70, 8, 8));
+    } else {
+      (win(24, 120, !0), win(298, 120, !1));
+      ((g.fillStyle = "#3a3f46"), g.fillRect(180, 18, 84, 92));
+      ((g.fillStyle = "#8fb4bf"), g.fillRect(190, 26, 64, 66));
+      ((g.fillStyle = "#d8c8a0"), g.fillRect(222, 74, 9, 9));
+      win(436, 60, !1);
+    }
+    const t = new CanvasTexture(cv);
+    ((t.colorSpace = SRGBColorSpace), out.push(t));
+  }
+  return out;
+}
 function buildPondEdges(group) {
   ((pondEdgeSys.ponds = 0), (pondEdgeSys.clusters = 0), (pondEdgeSys.pads = 0), (pondEdgeSys.sample = null));
   if (!ponds.length) return;
@@ -4191,6 +4226,8 @@ const neonSys = { halos: 0, flicker: 0, enabled: !0, _meshes: [], _flick: [] };
 const xwalkSys = { fresh: 0, worn: 0, chipped: 0, enabled: !0, _mats: [] };
 // zoom-detail 54 (round-six item 7): striped shop awnings under wall signs
 const awningSys = { count: 0, boards: 0, enabled: !0, _meshes: [], sample: [], boardSample: [] };
+// zoom-detail 65 (round-seven item 7): hanging flower baskets on lamp posts near parks/shops
+const lampDressSys = { posts: [], parkCells: [], shopSpots: [], dressed: 0, baskets: 0, enabled: !0, sample: null, _mesh: null };
 // zoom-detail 55 (round-six item 8): traffic turn indicators (blink during turns)
 const turnSigSys = { turning: 0, cars: 0, enabled: !0, mat: null };
 function turnSigMat() {
@@ -4270,7 +4307,7 @@ function buildHaloTexture() {
   return ((neonHaloTex.colorSpace = SRGBColorSpace), neonHaloTex);
 }
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []), (lampDressSys.parkCells.length = 0));
   const zLo = Math.min(zA, zB),
     zTop = Math.max(zA, zB),
     zCap = Math.min(zTop, 240),
@@ -4364,6 +4401,7 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
     parkSys.cells++;
     parkSys.strollerCells.length < 3 && parkSys.strollerCells.push({ cx, cz, vert, bow, half });
     parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
+    lampDressSys.parkCells.push({ x: cx, z: cz });
   }
   const pg = new BufferGeometry();
   (pg.setAttribute("position", new Float32BufferAttribute(pos, 3)), pg.setAttribute("color", new Float32BufferAttribute(col, 3)), pg.setIndex(idx), pg.computeVertexNormals());
@@ -5702,6 +5740,16 @@ function N1() {
           (Ce.rotation.y = $ > 0 ? Math.PI / 2 : -Math.PI / 2))
         : (Ce.position.set(N, re + ee * 0.66, O + $ * (j * 0.5 + 0.2)), (Ce.rotation.y = $ < 0 ? Math.PI : 0)),
       i.add(Ce),
+      (() => {
+        const bw = Math.min(14, (se ? j : Y) * 0.8),
+          bv = Math.abs((N * 7 + O) | 0) % 2,
+          bg2 = new PlaneGeometry(bw, 2.7),
+          bm2 = new Matrix4().makeRotationY(se ? ($ > 0 ? Math.PI / 2 : -Math.PI / 2) : $ < 0 ? Math.PI : 0);
+        (se ? bm2.setPosition(N + $ * (Y * 0.5 + 0.12), re + 1.65, O) : bm2.setPosition(N, re + 1.65, O + $ * (j * 0.5 + 0.12)), bg2.applyMatrix4(bm2));
+        ((shopBandSys._parts[bv] || (shopBandSys._parts[bv] = [])).push(bg2), shopBandSys.count++);
+        shopBandSys.sample ||
+          (shopBandSys.sample = se ? { x: +(N + $ * (Y * 0.5 + 1)).toFixed(1), y: +(re + 1.6).toFixed(1), z: +O.toFixed(1), nx: $, nz: 0 } : { x: +N.toFixed(1), y: +(re + 1.6).toFixed(1), z: +(O + $ * (j * 0.5 + 1)).toFixed(1), nx: 0, nz: $ });
+      })(),
       Xi("storefront-sign", Ce.position.x, Ce.position.y, Ce.position.z),
       storefrontSys.addSpot(
         se ? N + $ * (Y * 0.5) : N,
@@ -5717,6 +5765,7 @@ function N1() {
   }
   storefrontSys.resetSpots();
   rooftopSys.resetSpots();
+  ((shopBandSys._parts = {}), (shopBandSys.count = 0), (shopBandSys._meshes = []), (shopBandSys.sample = null));
   for (let N = t + a / 2; N <= n - a / 2; N += a)
     for (let O = s - a / 2; O >= r + a / 2; O -= a) {
       const Y = Pn(N, O, c * 0.5).clearance;
@@ -5827,7 +5876,7 @@ function N1() {
     __awnParts = {},
     __awnBoardFaces = [],
     __awnBoardFrames = [];
-  ((awningSys.count = 0), (awningSys.boards = 0), (awningSys._meshes = []), (awningSys.sample.length = 0), (awningSys.boardSample.length = 0));
+  ((awningSys.count = 0), (awningSys.boards = 0), (awningSys._meshes = []), (awningSys.sample.length = 0), (awningSys.boardSample.length = 0), (lampDressSys.shopSpots.length = 0));
   ((neonSys.halos = 0), (neonSys.flicker = 0), (neonSys._meshes = []), (neonSys._flick = []));
   const J = ["HOTEL", "OPEN", "AUTO", "RACE", "CAFE", "PARTS", "ARCADE", "MOTEL", "TACOS", "VINYL"];
   for (let N = 0; N < Math.min(Me.length, 34); N++) {
@@ -5871,6 +5920,7 @@ function N1() {
       (O.axis === "x" ? am.setPosition(O.px + O.side * O.w * 0.5, O.gy, O.pz) : am.setPosition(O.px, O.gy, O.pz + O.side * O.d * 0.5), can.applyMatrix4(am), val.applyMatrix4(am));
       const ci3 = (N * 2 + 1) % 4;
       ((__awnParts[ci3] || (__awnParts[ci3] = [])).push(can, val), awningSys.count++);
+      lampDressSys.shopSpots.push(O.axis === "x" ? { x: O.px + O.side * O.w * 0.5, z: O.pz } : { x: O.px, z: O.pz + O.side * O.d * 0.5 });
       awningSys.sample.length < 3 &&
         awningSys.sample.push(
           O.axis === "x"
@@ -5968,6 +6018,17 @@ function N1() {
     });
   }
   if (!neonSys.enabled) for (const m4 of neonSys._meshes) m4.visible = !1;
+  {
+    const sbTex = buildShopBandTextures();
+    for (const bk of Object.keys(shopBandSys._parts)) {
+      const sbm = new Mesh(
+        mergeGeometries(shopBandSys._parts[bk], !1),
+        new MeshBasicMaterial({ map: sbTex[+bk], transparent: !0, alphaTest: 0.15, side: DoubleSide }),
+      );
+      ((sbm.raycast = () => {}), i.add(sbm), shopBandSys._meshes.push(sbm));
+    }
+    if (!shopBandSys.enabled) for (const m6 of shopBandSys._meshes) m6.visible = !1;
+  }
   {
     const awnTex = buildAwningTextures();
     for (const ck of Object.keys(__awnParts)) {
@@ -6233,6 +6294,7 @@ function N1() {
     It = new InstancedMesh(st, Ee, Be),
     Tt = new InstancedMesh(k, Ae, Be);
   let Yt = 0;
+  lampDressSys.posts.length = 0;
   for (let N = 0; N < Be * 2 && Yt < Be; N++) {
     const O = Math.random() < 0.5,
       Y = O
@@ -6243,6 +6305,7 @@ function N1() {
         : s - Math.round(Math.random() * ((s - r) / a)) * a + (Math.random() < 0.5 ? -1 : 1) * (o * 0.58);
     if (Pn(Y, j, 3).clearance < 2) continue;
     const ee = He(Y, j);
+    lampDressSys.posts.push({ x: Y, z: j, y: ee });
     (e.quaternion.identity(),
       e.position.set(Y, ee + 3.6, j),
       e.scale.set(1, 1, 1),
@@ -8445,6 +8508,51 @@ function buildPonds() {
 }
 buildPonds();
 buildPondEdges(et);
+// zoom-detail 65 (round-seven item 7): dress lamp posts that stand near park cells or
+// shop rows with a cross-arm and two hanging flower baskets — ONE merged vertex-color
+// mesh, zero new textures. Runs at module level so the park/shop/post collectors are full.
+function buildLampDressing(group) {
+  ((lampDressSys.dressed = 0), (lampDressSys.baskets = 0), (lampDressSys.sample = null));
+  if (!lampDressSys.posts.length) return;
+  const anchors = lampDressSys.parkCells.concat(lampDressSys.shopSpots);
+  if (!anchors.length) return;
+  const rng = plateRng(0x1a3b0f),
+    parts = [],
+    FLOWERS = [12078958, 10893368, 12556848, 11573136];
+  for (const p of lampDressSys.posts) {
+    if (lampDressSys.dressed >= 26) break;
+    if (!anchors.some((a) => Math.hypot(a.x - p.x, a.z - p.z) < 85)) continue;
+    const th = rng() * Math.PI,
+      dx = Math.cos(th),
+      dz = Math.sin(th);
+    parts.push(vcBake(new BoxGeometry(1.72, 0.07, 0.07).applyMatrix4(new Matrix4().makeRotationY(-th)), vcAt(p.x, p.y + 5.74, p.z), 2765112));
+    for (const e of [-0.78, 0.78]) {
+      const bx = p.x + dx * e,
+        bz = p.z + dz * e;
+      parts.push(vcBake(new CylinderGeometry(0.012, 0.012, 0.24, 4, 1, !0), vcAt(bx, p.y + 5.6, bz), 2765112));
+      parts.push(vcBake(new CylinderGeometry(0.3, 0.15, 0.32, 8), vcAt(bx, p.y + 5.34, bz), 7228972));
+      const fm = new Matrix4().makeScale(1, 0.55, 1);
+      fm.setPosition(bx, p.y + 5.52, bz);
+      parts.push(vcBake(new SphereGeometry(0.36, 6, 4), fm, 4029231));
+      const nb = 4 + (lampDressSys.baskets % 2);
+      for (let f = 0; f < nb; f++) {
+        const fa = (f / nb) * Math.PI * 2 + rng() * 0.7,
+          fr = 0.2 + rng() * 0.1;
+        parts.push(
+          vcBake(new SphereGeometry(0.08 + rng() * 0.035, 4, 3), vcAt(bx + Math.cos(fa) * fr, p.y + 5.56 + rng() * 0.06, bz + Math.sin(fa) * fr), FLOWERS[(lampDressSys.baskets * 3 + f) % 4]),
+        );
+      }
+      lampDressSys.baskets++;
+    }
+    lampDressSys.dressed++;
+    lampDressSys.sample || (lampDressSys.sample = { x: +p.x.toFixed(1), y: +(p.y + 5.4).toFixed(1), z: +p.z.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const lm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((lm.castShadow = !0), (lm.receiveShadow = !0), (lm.raycast = () => {}), group.add(lm), (lampDressSys._mesh = lm));
+  if (!lampDressSys.enabled) lm.visible = !1;
+}
+buildLampDressing(et);
 // ─── On-foot walker + helicopter and its pad ───
 const walker = U1(3375807, 15905331);
 ((walker.visible = !1), walker.scale.setScalar(1.06), et.add(walker));
@@ -11649,6 +11757,16 @@ window.__steelRibbonDebug = {
     oilSys.enabled = !!on;
     return oilSys.enabled;
   },
+  shopBandsEnable(on) {
+    shopBandSys.enabled = !!on;
+    for (const m of shopBandSys._meshes) m.visible = shopBandSys.enabled;
+    return shopBandSys.enabled;
+  },
+  lampDressEnable(on) {
+    lampDressSys.enabled = !!on;
+    lampDressSys._mesh && (lampDressSys._mesh.visible = lampDressSys.enabled);
+    return lampDressSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -11682,6 +11800,16 @@ window.__steelRibbonDebug = {
   brakesEnable(on) {
     brakeSys.enabled = !!on;
     return brakeSys.enabled;
+  },
+  __pokeBrake() {
+    let best = null;
+    for (const K of Rc) {
+      if (!K.mesh || !K.mesh.visible) continue;
+      const d = Math.hypot(K.mesh.position.x - Xe.position.x, K.mesh.position.z - Xe.position.z);
+      (!best || d < best.d) && (best = { K, d });
+    }
+    if (best) best.K.brakePulse = 1.5;
+    return !!best;
   },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
@@ -11806,6 +11934,8 @@ window.__steelRibbonDebug = {
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
       oil: { spots: oilSys.spots.length, placed: oilSys.placed, enabled: oilSys.enabled, sample: oilSys.sample.slice(0, 3) },
+      shopBands: { count: shopBandSys.count, enabled: shopBandSys.enabled, sample: shopBandSys.sample ?? null },
+      lampDress: { dressed: lampDressSys.dressed, baskets: lampDressSys.baskets, posts: lampDressSys.posts.length, enabled: lampDressSys.enabled, sample: lampDressSys.sample ?? null },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },

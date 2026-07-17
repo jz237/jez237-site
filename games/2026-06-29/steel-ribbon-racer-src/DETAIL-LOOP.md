@@ -1538,3 +1538,43 @@ signal-corner ped density weighting.
   calls / 599-608k tris (+1 draw, +1 texture). Suite 160/160 (probe:
   placed===spots ≥10 + toggle). NEXT: item 6 — suburban shop facades,
   then 7-10 → DEPLOY BATCH 18 (v3.25.0) + closing survey.
+- **64 SUBURBAN SHOP BANDS + SUITE HARDENING (2026-07-17)**: the A()
+  brick shops have street-level life at MID distance — a permanent
+  window/door canvas band (2 variants: shop windows with sills, one
+  warmly lit with an interior silhouette, glazed door with handle)
+  on each shop's street face, world-baked and MERGED per variant (≤2
+  draws for all ~19 shops). This fills the tier BETWEEN the flat
+  color bands (far) and the pooled storefront near-tier (which still
+  overlays richer detail up close). TWO ANCHOR LESSONS PAID AGAIN:
+  (1) the neon-collector declaration had grown A-board fields — my
+  script asserted and aborted BEFORE ITS WRITE, so the partial state
+  was clean but confusing (asserts protect, aborted writes save you);
+  (2) the collector reset initially sat AFTER the placement loop and
+  wiped everything — statement EXECUTION order beats line intuition;
+  reset now lives beside storefrontSys.resetSpots(). SUITE HARDENING:
+  brake probe made DETERMINISTIC (__pokeBrake debug sets
+  brakePulse=1.5 on the nearest car — organic braking starved two 15s
+  windows); heli descent poll 90→160 tries + a 4-attempt exit-retry
+  settle loop (low-fps descent overshoot was THE recurring flake).
+  Verified by LOOKING (loop-shots/64-shopbands/): VECTOR TIRES gains
+  a row of framed shop windows + glazed door at its base; OFF = flat
+  wall. Perf gate: 1870-1948 calls / 604-618k tris. Suite 161/161.
+  v3.25.0. DEPLOY BATCH 18 (items 4-6) next in this iteration.
+- **65 LAMP-POST FLOWER BASKETS (2026-07-17)**: round-seven item 7 —
+  the 132 instanced city lamp posts get civic dressing where the city
+  is "lived-in": posts within 85m of a park cell or a shop row (awning
+  spot) grow a cross-arm and TWO hanging flower baskets (terracotta
+  taper, squashed foliage dome, 4-5 flower blobs in 4 mid-tone LINEAR
+  colors — the ~0.4 rule), capped at 26 posts / 52 baskets, ONE merged
+  vcBake mesh (+1 draw, ~8k tris, ZERO textures). NEW COLLECTORS with
+  resets BEFORE their loops (the it.64 lesson applied proactively):
+  lampDressSys.posts (street-light Yt loop), .parkCells (buildParks
+  cell loop), .shopSpots (awning placement). Builder runs at MODULE
+  level after buildPondEdges — all collectors full by then. Verified
+  by LOOKING (loop-shots/65-lampdress/): near-on = two green baskets
+  with pink/white blooms flanking the pole under the globe, near-off =
+  bare pole, mid = subtle green cluster, far = unchanged glow dots.
+  First-try visual pass. Report lampDress {dressed 26, baskets 52,
+  posts 132, sample}; lampDressEnable toggle. Suite 162/162 (one
+  inspect-cars flake on run 1, clean rerun — the flaky family).
+  NEXT: item 8 balloon canopies.
