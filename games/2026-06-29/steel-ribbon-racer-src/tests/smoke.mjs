@@ -23,8 +23,8 @@ const server = createServer((req, res) => {
     res.end();
   }
 });
-await new Promise((r) => server.listen(0, r));
-const url = `http://localhost:${server.address().port}/`;
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
+const url = `http://127.0.0.1:${server.address().port}/`;
 
 let failures = 0;
 const results = [];
@@ -762,6 +762,21 @@ const browser = await chromium.launch({
     "race wear: rubber line + skid patches baked along the course, toggle works",
     !!rw && rw.segs > 200 && rw.patches >= 4 && rw.off === false && rw.offRep === false,
     JSON.stringify({ segs: rw?.segs, patches: rw?.patches }),
+  );
+
+  // zoom-detail 54 (round six item 7): striped shop awnings under wall signs
+  const aw = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().awnings,
+      off = deb.awningEnable(false),
+      offRep = deb.detailReport().awnings.enabled;
+    deb.awningEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "awnings: striped canopies merged per colorway under wall signs, toggle works",
+    !!aw && aw.count >= 20 && aw.boards >= 8 && aw.off === false && aw.offRep === false,
+    JSON.stringify({ count: aw?.count, boards: aw?.boards }),
   );
 
   // zoom-detail 53 (round six item 6): zebra crosswalks in three wear tiers

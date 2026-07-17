@@ -1334,3 +1334,26 @@ signal-corner ped density weighting.
   is the pre-existing roam-gate marker, not paint. Perf gate:
   1838-1883 calls / 596-608k tris / tex 249 max. Suite 153/153. NEXT:
   item 7 — tower-shop awnings.
+- **54 SHOP AWNINGS — round-six item 7 (2026-07-17)**: the wall-sign
+  shops got striped canvas awnings. 36 of the 48 Eo() wall-sign faces
+  (skip every 4th for variety) carry a canopy at SHOP level (gy+4.5,
+  independent of the sign band height): sloped canopy plane
+  (rotateX(-1.02), high edge at the wall gy+5.0, low edge 1.6m out at
+  gy+3.9) + valance skirt, striped canvas in 4 colorways (cream +
+  pink/teal/amber/green, colorway = (N*2+1)%4), all geometry MERGED
+  PER COLORWAY = 4 draws total (the neon-halo pattern). awningSys
+  {count, sample[3]} + awningEnable (merged meshes stay unmerged-by-
+  boot — 1 mesh per material — so visibility toggling works).
+  Verified by LOOKING (loop-shots/54-awnings/): striped canopy under
+  the MIDNIGHT AUTO band shading the lit shopfront; OFF = bare wall.
+  BATTERY LESSON: don't anchor shots on geometry vertex[0] of a
+  traversal-matched mesh — expose sample positions in the report
+  (multiple 128x64 canvases exist). Perf gate: 1818-1879 calls /
+  588-604k tris. SUITE NOTE: 3 runs — awning probe green all runs
+  (count 36); one heavy-physics probe flaked per run (drift+heli,
+  stunt, heli — heli 2/3) with EVERY probe passing at least once on
+  this build; no interference vector exists (no colliders, raycast-
+  inert, static quads) and the machine is heavily loaded with hours of
+  Chromium instances. NEXT ITERATION MUST START by re-running the heli
+  probe twice on a quiet machine — if it fails >50% fresh, treat as
+  REAL and bisect before item 8. NEXT: item 8 — traffic turn signals.

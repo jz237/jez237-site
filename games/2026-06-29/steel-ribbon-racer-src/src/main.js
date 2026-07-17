@@ -4049,6 +4049,36 @@ const lawnSys = { striped: 0, enabled: !0, mat: null };
 const neonSys = { halos: 0, flicker: 0, enabled: !0, _meshes: [], _flick: [] };
 // zoom-detail 53 (round-six item 6): zebra crosswalks in three wear tiers
 const xwalkSys = { fresh: 0, worn: 0, chipped: 0, enabled: !0, _mats: [] };
+// zoom-detail 54 (round-six item 7): striped shop awnings under wall signs
+const awningSys = { count: 0, boards: 0, enabled: !0, _meshes: [], sample: [], boardSample: [] };
+function buildAwningTextures() {
+  const COLS = ["#c2456e", "#2f8fa3", "#c9922e", "#3f8f56"],
+    out = [];
+  for (const c of COLS) {
+    const cv = document.createElement("canvas");
+    ((cv.width = 128), (cv.height = 64));
+    const g = cv.getContext("2d");
+    ((g.fillStyle = "#efe8d8"), g.fillRect(0, 0, 128, 64), (g.fillStyle = c));
+    for (let x = 0; x < 128; x += 24) g.fillRect(x, 0, 12, 64);
+    ((g.fillStyle = "rgba(0,0,0,0.12)"), g.fillRect(0, 56, 128, 8));
+    const t = new CanvasTexture(cv);
+    ((t.colorSpace = SRGBColorSpace), out.push(t));
+  }
+  return out;
+}
+function buildAwningBoardTexture() {
+  const cv = document.createElement("canvas");
+  ((cv.width = 192), (cv.height = 256));
+  const g = cv.getContext("2d");
+  ((g.fillStyle = "#172323"), g.fillRect(0, 0, 192, 256));
+  ((g.strokeStyle = "#d7c49d"), (g.lineWidth = 9), g.strokeRect(8, 8, 176, 240));
+  ((g.textAlign = "center"), (g.textBaseline = "middle"), (g.fillStyle = "#f3e8c5"));
+  ((g.font = "700 34px sans-serif"), g.fillText("OPEN", 96, 93));
+  ((g.font = "700 25px sans-serif"), g.fillText("TODAY", 96, 145));
+  ((g.strokeStyle = "#d66d4f"), (g.lineWidth = 5), g.beginPath(), g.moveTo(42, 181), g.lineTo(150, 181), g.stroke());
+  const t = new CanvasTexture(cv);
+  return ((t.colorSpace = SRGBColorSpace), t);
+}
 function buildXwalkTextures() {
   const out = [];
   for (let tier = 0; tier < 3; tier++) {
@@ -5592,7 +5622,11 @@ function N1() {
     ((se.instanceMatrix.needsUpdate = !0), (se.castShadow = !0), (se.receiveShadow = !0), i.add(se));
   }
   const __neonHaloParts = {},
-    __neonFlickParts = [];
+    __neonFlickParts = [],
+    __awnParts = {},
+    __awnBoardFaces = [],
+    __awnBoardFrames = [];
+  ((awningSys.count = 0), (awningSys.boards = 0), (awningSys._meshes = []), (awningSys.sample.length = 0), (awningSys.boardSample.length = 0));
   ((neonSys.halos = 0), (neonSys.flicker = 0), (neonSys._meshes = []), (neonSys._flick = []));
   const J = ["HOTEL", "OPEN", "AUTO", "RACE", "CAFE", "PARTS", "ARCADE", "MOTEL", "TACOS", "VINYL"];
   for (let N = 0; N < Math.min(Me.length, 34); N++) {
@@ -5627,6 +5661,43 @@ function N1() {
       : (re.position.set(O.px, w, O.pz + O.side * (O.d * 0.5 + 0.22)), (re.rotation.y = O.side < 0 ? Math.PI : 0)),
       i.add(re),
       Xi("wall-sign", re.position.x, re.position.y, re.position.z));
+    if (N % 4 !== 3) {
+      // awning at SHOP level (gy+4.5) on the same face — canopy slope + valance
+      const cw = Math.min(oe, 14),
+        can = new PlaneGeometry(cw, 1.85).rotateX(-1.02).translate(0, 4.5, 0.82),
+        val = new PlaneGeometry(cw, 0.4).translate(0, 3.83, 1.63),
+        am = new Matrix4().makeRotationY(re.rotation.y);
+      (O.axis === "x" ? am.setPosition(O.px + O.side * O.w * 0.5, O.gy, O.pz) : am.setPosition(O.px, O.gy, O.pz + O.side * O.d * 0.5), can.applyMatrix4(am), val.applyMatrix4(am));
+      const ci3 = (N * 2 + 1) % 4;
+      ((__awnParts[ci3] || (__awnParts[ci3] = [])).push(can, val), awningSys.count++);
+      awningSys.sample.length < 3 &&
+        awningSys.sample.push(
+          O.axis === "x"
+            ? { x: +(O.px + O.side * (O.w * 0.5 + 1)).toFixed(1), y: +(O.gy + 4.4).toFixed(1), z: +O.pz.toFixed(1), nx: O.side, nz: 0 }
+            : { x: +O.px.toFixed(1), y: +(O.gy + 4.4).toFixed(1), z: +(O.pz + O.side * (O.d * 0.5 + 1)).toFixed(1), nx: 0, nz: O.side },
+        );
+      if (N % 3 === 0) {
+        const bm = new Matrix4().makeRotationY(re.rotation.y);
+        O.axis === "x"
+          ? bm.setPosition(O.px + O.side * O.w * 0.5, O.gy, O.pz)
+          : bm.setPosition(O.px, O.gy, O.pz + O.side * O.d * 0.5);
+        const face = new PlaneGeometry(0.82, 1.05).translate(0, 0.9, 2.51).applyMatrix4(bm),
+          frameParts = [
+            new BoxGeometry(0.08, 1.38, 0.08).translate(-0.47, 0.82, 2.46),
+            new BoxGeometry(0.08, 1.38, 0.08).translate(0.47, 0.82, 2.46),
+            new BoxGeometry(1.02, 0.08, 0.08).translate(0, 1.5, 2.46),
+            new BoxGeometry(1.02, 0.08, 0.08).translate(0, 0.15, 2.46),
+            new BoxGeometry(0.07, 1.25, 0.07).rotateX(-0.2).translate(-0.43, 0.7, 2.66),
+            new BoxGeometry(0.07, 1.25, 0.07).rotateX(-0.2).translate(0.43, 0.7, 2.66),
+          ];
+        (__awnBoardFaces.push(face), frameParts.forEach((g) => (g.applyMatrix4(bm), __awnBoardFrames.push(g))), awningSys.boards++);
+        if (awningSys.boardSample.length < 2) {
+          const bx = O.axis === "x" ? O.px + O.side * (O.w * 0.5 + 2.5) : O.px,
+            bz = O.axis === "x" ? O.pz : O.pz + O.side * (O.d * 0.5 + 2.5);
+          awningSys.boardSample.push({ x: +bx.toFixed(1), y: +(O.gy + 0.9).toFixed(1), z: +bz.toFixed(1), nx: O.axis === "x" ? O.side : 0, nz: O.axis === "z" ? O.side : 0 });
+        }
+      }
+    }
     {
       const hg = new PlaneGeometry(oe * 1.4, 10.5).translate(0, 0, -0.11),
         hm2 = new Matrix4().makeRotationY(re.rotation.y);
@@ -5696,6 +5767,28 @@ function N1() {
     });
   }
   if (!neonSys.enabled) for (const m4 of neonSys._meshes) m4.visible = !1;
+  {
+    const awnTex = buildAwningTextures();
+    for (const ck of Object.keys(__awnParts)) {
+      const awm = new Mesh(
+        mergeGeometries(__awnParts[ck], !1),
+        new MeshStandardMaterial({ map: awnTex[+ck], roughness: 0.82, metalness: 0.02, side: DoubleSide }),
+      );
+      ((awm.castShadow = !0), (awm.receiveShadow = !0), (awm.raycast = () => {}), i.add(awm), awningSys._meshes.push(awm));
+    }
+    if (__awnBoardFaces.length) {
+      const boardFace = new Mesh(
+          mergeGeometries(__awnBoardFaces, !1),
+          new MeshBasicMaterial({ map: buildAwningBoardTexture(), side: DoubleSide }),
+        ),
+        boardFrame = new Mesh(
+          mergeGeometries(__awnBoardFrames, !1),
+          new MeshStandardMaterial({ color: 0x6b4227, roughness: 0.88, metalness: 0 }),
+        );
+      for (const m5 of [boardFace, boardFrame]) ((m5.castShadow = !0), (m5.receiveShadow = !0), (m5.raycast = () => {}), i.add(m5), awningSys._meshes.push(m5));
+    }
+    if (!awningSys.enabled) for (const m5 of awningSys._meshes) m5.visible = !1;
+  }
   const le = [11680564, 3108784, 14205514, 15198700, 3752265, 4164178, 10112944],
     // parked cars: real silhouette (body + cabin) with a separate dark wheel layer, still 2 draw calls total
     fe = mergeGeometries([
@@ -11320,6 +11413,11 @@ window.__steelRibbonDebug = {
     for (const m of xwalkSys._mats) ((m.opacity = xwalkSys.enabled ? 1 : 0), (m.needsUpdate = !0));
     return xwalkSys.enabled;
   },
+  awningEnable(on) {
+    awningSys.enabled = !!on;
+    for (const m of awningSys._meshes) m.visible = awningSys.enabled;
+    return awningSys.enabled;
+  },
   windowTexHD(on) {
     if (!towerTexSys.mats) return null;
     const hd = on === !1 ? 1 : 2;
@@ -11445,6 +11543,7 @@ window.__steelRibbonDebug = {
       lawn: { striped: lawnSys.striped, enabled: lawnSys.enabled },
       neon: { halos: neonSys.halos, flicker: neonSys.flicker, enabled: neonSys.enabled },
       xwalks: { fresh: xwalkSys.fresh, worn: xwalkSys.worn, chipped: xwalkSys.chipped, enabled: xwalkSys.enabled },
+      awnings: { count: awningSys.count, boards: awningSys.boards, enabled: awningSys.enabled, sample: awningSys.sample.slice(0, 3), boardSample: awningSys.boardSample.slice(0, 2) },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
