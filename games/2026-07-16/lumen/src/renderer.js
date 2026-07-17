@@ -509,11 +509,18 @@ export class Renderer {
     const [hx, hy] = sim.map.heart;
     const integ = sim.lives / 20;
     E.push({ y: hy, k: KIND.HEART, x: hx, sx: 170, sy: 170, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
-    // towers
+    // towers (+ veterancy pips hovering above)
     for (const tw of sim.towers) {
       const ds = depthScale(tw.y);
       const size = tw.def.size * (1 + tw.level * 0.22) * ds;
       E.push({ y: tw.y, k: tw.def.kind, x: tw.x, sx: size, sy: size, rot: 0, phase: t * 2 + tw.phase, aux: tw.charge, c: tw.def.color, seed: tw.seed });
+      const rank = sim.towerRank ? sim.towerRank(tw) : 0;
+      for (let r = 0; r < rank; r++) {
+        const px = tw.x + (r - (rank - 1) / 2) * 16 * ds;
+        const py = tw.y - size - 14 * ds + Math.sin(t * 1.6 + r * 1.9 + tw.phase) * 3;
+        this.additive.push(px, py, 7 * ds, 7 * ds, 0, t * 2 + r, KIND.GLOW, 1,
+          1.0 * 0.5, 0.95 * 0.5, 0.75 * 0.5, 0);
+      }
     }
     // enemies
     for (const e of sim.enemies) {
