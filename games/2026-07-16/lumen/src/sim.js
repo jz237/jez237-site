@@ -133,12 +133,12 @@ export class Sim {
     return true;
   }
 
-  spawnEnemy(type, hpMul) {
+  spawnEnemy(type, hpMul, atS = 0) {
     const def = ENEMIES[type];
     const e = {
       id: this.nextId++,
       type, def,
-      s: 0,                                  // distance along path
+      s: atS,                                // distance along path
       hp: def.hp * hpMul, maxHp: def.hp * hpMul,
       speed: def.speed * this.rng.range(0.92, 1.08),
       x: 0, y: 0, vx: 0, vy: 0,
@@ -148,11 +148,20 @@ export class Sim {
       st: { chill: 0, shock: 0, ignite: 0, corrode: 0, corrodeStacks: 0, freeze: 0 },
       mixCool: 0,
       dead: false,
+      shield: def.shield ? def.shield * hpMul : 0,
+      maxShield: def.shield ? def.shield * hpMul : 0,
+      untargetable: false,
+      phaseT: 0,
+      spawnCool: def.spawnEvery || 0,
+      pulseT: def.pulse ? def.pulse.every : 0,
+      telegraphT: 0,
+      bossPhase: 1,
     };
     const p = pathPos(this.path, 0);
     e.x = p.x; e.y = p.y;
     this.enemies.push(e);
     this.emit('spawn', { id: e.id, type });
+    if (def.boss || def.miniboss) this.emit('bossSpawn', { id: e.id, name: def.name, boss: !!def.boss });
   }
 
   // --- towers ---------------------------------------------------------------
@@ -233,7 +242,7 @@ export class Sim {
 
   // --- status chemistry ------------------------------------------------------
   applyStatus(e, kind) {
-    if (!kind || e.hp <= 0) return;
+    if (!kind || e.hp <= 0 || e.shield > 0) return; // shields block chemistry
     const st = e.st;
     if (e.mixCool <= 0) {
       for (const key of Object.keys(MIXES)) {
@@ -338,10 +347,31 @@ export class Sim {
       if (st.corrode > 0) { st.corrode -= dt; if (st.corrode <= 0) st.corrodeStacks = 0; }
       if (st.ignite > 0) { st.ignite -= dt; this.damage(e, STATUS.ignite.dps * dt, null, true); if (e.dead) continue; }
       if (e.mixCool > 0) e.mixCool -= dt;
+      // species behaviours
+      if (e.def.regenPct && e.hp < e.maxHp && st.ignite <= 0) {
+        e.hp = Math.min(e.maxHp, e.hp + e.maxHp * e.def.regenPct * dt);
+      }
+      if (e.def.phasing) {
+        e.phaseT += dt;
+        const cyc = e.def.phasing.visible + e.def.phasing.ethereal;
+        e.untargetable = (e.phaseT % cyc) > e.def.phasing.visible;
+      }
+      if (e.def.spawnEvery && e.hp > 0) {
+        e.spawnCool -= dt;
+        if (e.spawnCool <= 0) {
+          e.spawnCool = e.def.spawnEvery;
+          for (let i = 0; i < e.def.spawnN; i++) this.spawnEnemy(e.def.spawnType, 1 + this.wave * 0.06, Math.max(0, e.s - 10 - i * 14));
+          this.burst(e.x, e.y, e.def.color, 6, 40);
+          this.emit('broodSpawn', { x: e.x, y: e.y });
+        }
+      }
+      if (e.def.boss) this.stepBoss(e, dt);
       let slowMul = 1;
       if (st.freeze > 0) slowMul = 0;
       else if (st.shock > 0) slowMul = 0.15;
       else if (st.chill > 0) slowMul = 0.55;
+      if (e.telegraphT > 0) slowMul *= 0.25; // bosses slow while winding up
+      if (e.def.boss && e.bossPhase === 2) slowMul *= 1.6;
       e.s += e.speed * slowMul * dt * (0.9 + 0.1 * Math.sin(this.time * 3 + e.wobblePhase));
       e.phase += dt * (3 + e.def.wobble * 0.2);
       const p = pathPos(this.path, e.s);
@@ -372,6 +402,7 @@ export class Sim {
     this.refreshBuffs();
     for (const t of this.towers) {
       t.phase += dt * 2.2;
+      if (t.stun > 0) { t.stun -= dt; t.charge = 0; continue; } // dark-pulsed
       if (t.def.attack === 'aura') { t.charge = 0.5 + 0.5 * Math.sin(this.time * 1.4 + t.phase); continue; }
       const st = this.towerStats(t);
       t.cool -= dt;
@@ -383,6 +414,7 @@ export class Sim {
       const r2 = st.range * st.range;
       const min2 = (t.def.minRange || 0) * (t.def.minRange || 0);
       for (const e of this.enemies) {
+        if (e.untargetable) continue;
         const dx = e.x - t.x, dy = e.y - t.y, d2 = dx * dx + dy * dy;
         if (d2 <= r2 && d2 >= min2 && e.s > bestS && e.hp > 0) { best = e; bestS = e.s; }
       }
@@ -440,6 +472,7 @@ export class Sim {
     const r2 = st.range * st.range;
     let hitAny = false;
     for (const e of this.enemies) {
+      if (e.untargetable || e.def.flying) continue; // ground wave can't reach fliers
       const dx = e.x - t.x, dy = e.y - t.y;
       if (dx * dx + dy * dy > r2 || e.hp <= 0) continue;
       this.damage(e, st.damage, t);
@@ -495,9 +528,55 @@ export class Sim {
     this.emit('fire', { tower: t.id, type: t.type, x: t.x, y: t.y });
   }
 
+  // boss behaviour: telegraphed dark pulse that stuns towers; phase 2 at 50%
+  stepBoss(e, dt) {
+    const P = e.def.pulse;
+    if (e.bossPhase === 1 && e.hp <= e.maxHp * e.def.phase2At) {
+      e.bossPhase = 2;
+      this.burst(e.x, e.y, e.def.color, 40, 220);
+      this.rings.push({ x: e.x, y: e.y, t: 0, dur: 1.0, color: e.def.color, max: 420 });
+      this.emit('bossPhase', { id: e.id, phase: 2 });
+    }
+    if (e.telegraphT > 0) {
+      e.telegraphT -= dt;
+      if (e.telegraphT <= 0) {
+        // the dark pulse lands
+        const r = P.radius, r2 = r * r;
+        for (const t of this.towers) {
+          const dx = t.x - e.x, dy = t.y - e.y;
+          if (dx * dx + dy * dy <= r2) { t.stun = Math.max(t.stun || 0, P.stun); }
+        }
+        this.rings.push({ x: e.x, y: e.y, t: 0, dur: 0.9, color: [0.35, 0.12, 0.5], max: r * 1.1 });
+        this.burst(e.x, e.y, [0.5, 0.2, 0.8], 22, r * 0.6);
+        if (e.bossPhase === 2) {
+          for (let i = 0; i < 3; i++) this.spawnEnemy('mite', 1 + this.wave * 0.06, Math.max(0, e.s - 20 - i * 16));
+        }
+        this.emit('bossPulse', { x: e.x, y: e.y, radius: r });
+      }
+    } else {
+      e.pulseT -= dt;
+      if (e.pulseT <= 0) {
+        e.pulseT = P.every * (e.bossPhase === 2 ? 0.7 : 1);
+        e.telegraphT = P.telegraph;
+        this.emit('bossTelegraph', { x: e.x, y: e.y, dur: P.telegraph, radius: P.radius });
+      }
+    }
+  }
+
   damage(e, amount, tower) {
     if (e.hp <= 0) return;
+    if (e.def.armor) amount = Math.max(amount * 0.25, amount - Math.max(0, e.def.armor - e.st.corrodeStacks * 3));
     if (e.st.corrodeStacks > 0) amount *= 1 + e.st.corrodeStacks * STATUS.corrode.vulnPerStack;
+    // shields absorb first and spark while doing it
+    if (e.shield > 0) {
+      e.shield -= amount;
+      if (e.shield <= 0) {
+        e.shield = 0;
+        this.burst(e.x, e.y, [0.6, 0.95, 1.0], 12, 70);
+        this.emit('shieldBreak', { id: e.id, x: e.x, y: e.y });
+      }
+      return;
+    }
     e.hp -= amount;
     if (e.hp <= 0) {
       e.dead = true;
@@ -505,9 +584,19 @@ export class Sim {
       if (tower) tower.kills++;
       this.gold += e.def.bounty;
       this.goldEarned += e.def.bounty;
-      this.emit('kill', { id: e.id, type: e.type, x: e.x, y: e.y, bounty: e.def.bounty });
+      this.emit('kill', { id: e.id, type: e.type, x: e.x, y: e.y, bounty: e.def.bounty, boss: !!(e.def.boss || e.def.miniboss) });
       // death: burst into dissolving motes that drift and fade
-      this.burst(e.x, e.y, e.def.color, 14 + Math.floor(e.def.size * 0.3), e.def.size * 2.2);
+      const n = e.def.boss ? 90 : e.def.miniboss ? 50 : 14 + Math.floor(e.def.size * 0.3);
+      this.burst(e.x, e.y, e.def.color, n, e.def.size * 2.2);
+      if (e.def.boss || e.def.miniboss) {
+        this.rings.push({ x: e.x, y: e.y, t: 0, dur: 1.4, color: e.def.color, max: 560 });
+      }
+      // brood carriers split into a scatter of children
+      if (e.def.splitInto) {
+        for (let i = 0; i < e.def.splitCount; i++) {
+          const child = this.spawnEnemy(e.def.splitInto, 1 + this.wave * 0.05, Math.max(0, e.s - 6 - i * 10));
+        }
+      }
     }
   }
 
@@ -597,6 +686,7 @@ export class Sim {
       p.t += dt;
       const r2 = p.r * p.r;
       for (const e of this.enemies) {
+        if (e.def.flying) continue; // fliers pass above ground fire
         const dx = e.x - p.x, dy = e.y - p.y;
         if (dx * dx + dy * dy <= r2) this.damage(e, p.dps * dt, null);
       }

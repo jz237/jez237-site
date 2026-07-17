@@ -37,6 +37,8 @@ vec3 hueShift(vec3 c, float h){
   float ca = cos(h), sa = sin(h);
   return c*ca + cross(k,c)*sa + k*dot(k,c)*(1.0-ca);
 }
+// three-point palette: m 0..2 → a(dusk) b(deep night) c(pre-dawn)
+vec3 tri(vec3 a, vec3 b, vec3 c, float m){ return m < 1.0 ? mix(a,b,m) : mix(b,c,m-1.0); }
 `;
 
 // ---------------------------------------------------------------- vertices
@@ -84,6 +86,7 @@ void main(){
 // ---------------------------------------------------------------- background
 export const FS_BG = COMMON + `
 uniform float uT; uniform vec2 uReso; uniform float uHorizon; uniform vec2 uPar;
+uniform float uMood; // 0 dusk → 1 deep night → 2 violet pre-dawn
 in vec2 vUv; out vec4 frag;
 // sky gradient, aurora-nebula, far ridgelines, spore-stars
 void main(){
@@ -91,19 +94,24 @@ void main(){
   float horizon = uHorizon; // fraction of screen height that is sky
   float horizonLine = 1.0 - horizon;
   float skyY = clamp((uv.y - horizonLine) / max(horizon,1e-3), 0.0, 1.0); // 0 horizon → 1 top
-  // deep indigo → darker zenith (values sit above the filmic toe)
-  vec3 sky = mix(vec3(0.30,0.17,0.46), vec3(0.07,0.05,0.16), pow(skyY,0.75));
+  // deep indigo → darker zenith, palette breathing across the run
+  vec3 horizCol = tri(vec3(0.30,0.17,0.46), vec3(0.10,0.13,0.34), vec3(0.42,0.16,0.38), uMood);
+  vec3 zenCol   = tri(vec3(0.07,0.05,0.16), vec3(0.015,0.02,0.06), vec3(0.10,0.05,0.16), uMood);
+  vec3 sky = mix(horizCol, zenCol, pow(skyY,0.75));
   // nebula: two fbm layers drifting at different rates (parallax offset uPar)
   vec2 np = vec2(uv.x*2.6 + uPar.x*0.00012, uv.y*6.0);
   float n1 = fbm(np*2.0 + vec2(uT*0.008, uT*0.004));
   float n2 = fbm(np*4.5 - vec2(uT*0.013, 0.0) + 31.7);
   float neb = smoothstep(0.45, 0.85, n1) * (0.5 + 0.5*n2);
-  vec3 nebCol = mix(vec3(0.55,0.16,0.95), vec3(0.12,0.55,0.85), n2);
-  sky += nebCol * neb * 0.55;
+  vec3 nebA = tri(vec3(0.55,0.16,0.95), vec3(0.10,0.25,0.70), vec3(0.95,0.30,0.55), uMood);
+  vec3 nebB = tri(vec3(0.12,0.55,0.85), vec3(0.05,0.20,0.45), vec3(0.80,0.45,0.20), uMood);
+  vec3 nebCol = mix(nebA, nebB, n2);
+  sky += nebCol * neb * (0.55 - 0.15*clamp(uMood,0.0,1.0)*(2.0-uMood));
   // spore-stars, twinkling
   vec2 sp = uv*uReso*0.5 + vec2(uPar.x*0.03,0.0);
   vec2 cell = floor(sp/22.0);
-  float star = step(0.976, hash12(cell));
+  float starGate = 0.976 - 0.012*clamp(uMood,0.0,1.0); // deep night = more stars
+  float star = step(starGate, hash12(cell));
   vec2 cuv = fract(sp/22.0)-0.5;
   float sd = length(cuv - (vec2(hash12(cell+7.3),hash12(cell+3.1))-0.5)*0.6);
   float tw = 0.55+0.45*sin(uT*(0.6+hash12(cell+1.7)*2.0)+hash12(cell)*40.0);
@@ -121,19 +129,21 @@ void main(){
     float rim = smoothstep(0.010,0.0,abs(uv.y-ridge));
     sky += vec3(0.10,0.42,0.44) * rim * (0.5+0.3*sin(uT*0.4+px*9.0)) * (1.0-fi*0.55);
   }
-  // teal bioluminescent haze rising off the world — drawn over ridge bases
+  // bioluminescent haze rising off the world — drawn over ridge bases
   float hg = exp(-max(0.0, uv.y-horizonLine)*26.0);
-  sky += vec3(0.10,0.46,0.50) * hg * (0.8 + 0.2*sin(uT*0.23));
+  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood);
+  sky += hgCol * hg * (0.8 + 0.2*sin(uT*0.23));
   // below the horizon, converge on the ground's far-haze colour
+  vec3 hazeCol = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood);
   float below = smoothstep(0.0, 0.012, horizonLine - uv.y);
-  sky = mix(sky, vec3(0.10,0.28,0.34), below);
+  sky = mix(sky, hazeCol, below);
   frag = vec4(sky, 1.0);
 }
 `;
 
 // ---------------------------------------------------------------- ground
 export const FS_GROUND = COMMON + `
-uniform float uT; uniform float uHorizon; uniform vec2 uReso;
+uniform float uT; uniform float uHorizon; uniform vec2 uReso; uniform float uMood;
 in vec2 vUv; out vec4 frag;
 // vUv here: x across screen, y 0 at horizon → 1 at bottom (near)
 void main(){
@@ -159,13 +169,16 @@ void main(){
     vec3 mc = mix(vec3(0.1,0.7,0.55), vec3(0.5,0.8,0.2), step(0.978,d));
     base += mc * smoothstep(0.12,0.0,r) * breathe * 0.5 * near;
   }
+  // mood tint on the plane itself
+  base *= tri(vec3(1.0), vec3(0.55,0.7,1.05), vec3(1.05,0.75,0.95), uMood);
   // atmospheric haze toward horizon — far edge must equal the bg's
-  // below-horizon colour vec3(0.10,0.28,0.34) or a seam appears
-  vec3 haze = vec3(0.10,0.28,0.34);
+  // below-horizon colour or a seam appears
+  vec3 haze = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood);
   base = mix(haze, base, smoothstep(0.0, 0.42, near));
   // continuation of the bg horizon glow onto the far ground (same colour +
   // time modulation as FS_BG's hg term, decay matched across the seam)
-  base += vec3(0.10,0.46,0.50) * (0.8 + 0.2*sin(uT*0.23)) * exp(-near*22.0);
+  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood);
+  base += hgCol * (0.8 + 0.2*sin(uT*0.23)) * exp(-near*22.0);
   frag = vec4(base, 1.0);
 }
 `;
@@ -198,8 +211,8 @@ void main(){
   float pulse2 = pow(0.5+0.5*sin(along*23.0 - uT*1.7 + 2.0), 8.0);
   vec3 veinCol = vec3(0.05,0.55,0.60) * vein * (0.55 + 0.8*pulse);
   veinCol += vec3(0.35,0.18,0.60) * vein * pulse2 * 0.8;
-  // faint center channel glow
-  veinCol += vec3(0.04,0.30,0.34) * smoothstep(0.5,0.0,abs(across)) * 0.35;
+  // faint center channel glow — boosted so the river never dies mid-frame
+  veinCol += vec3(0.05,0.38,0.42) * smoothstep(0.5,0.0,abs(across)) * 0.55;
   // rim lichen: bright organic edge where path meets ground
   float rim = smoothstep(0.30,0.06,abs(edge - er*0.35 - 0.10));
   veinCol += vec3(0.10,0.45,0.40) * rim * (0.4+0.25*sin(uT*0.9 + along*80.0));
@@ -375,9 +388,189 @@ void main(){
       glow += smoothstep(0.16,0.0,length(p-tip));
     }
     float m = smoothstep(0.015,-0.015,d);
-    vec3 blade = mix(vec3(0.015,0.02,0.05), tint*0.30, 0.4+aux*0.5);
-    col = blade*m + tint*glow*(0.5+1.6*aux);
+    vec3 blade = mix(vec3(0.015,0.02,0.05), tint*0.35, 0.4+aux*0.6);
+    col = blade*m + tint*glow*(0.4+2.8*aux);
     cov = clamp(m*0.85 + glow*0.3, 0.0, 1.0);
+  }
+  else if(kind == 17){ // SLATE HUSK — armoured beetle, cracks glow as it breaks
+    float wob = fbm3(p*2.5 + seed*4.0)*0.07;
+    vec2 q = vec2(p.x*0.9, p.y*1.15);
+    float d = sdCircle(q, 0.52+wob);
+    float m = smoothstep(0.03,-0.03,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    // three shell plates
+    float plates = 0.0;
+    for(int i=0;i<3;i++){
+      float px = -0.34 + float(i)*0.34;
+      plates += smoothstep(0.05,0.0,abs(q.x-px+q.y*0.15)) ;
+    }
+    vec3 shell = mix(tint*0.16, vec3(0.05,0.07,0.12), smoothstep(-0.4,0.3,q.y));
+    shell *= 0.85 + 0.3*fbm3(q*6.0+seed*8.0);
+    // damage cracks: amber light leaks as hp (aux) falls
+    float crackAmt = (1.0-aux);
+    float crack = smoothstep(0.62,1.0,fbm(q*5.5+seed*13.0)) * crackAmt;
+    vec3 col2 = shell + vec3(1.0,0.55,0.15)*crack*1.8 + tint*plates*0.35;
+    float rim = smoothstep(0.0,0.08,-d)*smoothstep(-0.2,-0.07,d);
+    col = col2 + tint*rim*0.8;
+    col += vec3(1.0,0.9,0.7)*smoothstep(0.05,0.0,length(p-vec2(-0.62,0.0)))*1.2;
+    cov = m*0.97;
+  }
+  else if(kind == 18){ // BROOD CARRIER — egg sac, children glowing inside
+    float wob = fbm3(p*3.0 + phase*0.4 + seed*6.0)*0.12;
+    float d = sdCircle(p*vec2(0.85,1.05), 0.5+wob);
+    float m = smoothstep(0.04,-0.04,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    vec3 body = tint*0.14 + vec3(0.02,0.03,0.02);
+    // eggs
+    float eggs = 0.0;
+    for(int i=0;i<4;i++){
+      float fi = float(i);
+      vec2 c = vec2(sin(fi*2.4+seed*9.0)*0.22, cos(fi*1.7+seed*5.0)*0.24);
+      float beat = 0.5+0.5*sin(phase*2.0+fi*1.9);
+      eggs += smoothstep(0.14,0.0,length(p-c)) * (0.5+0.5*beat);
+    }
+    float rim = smoothstep(0.0,0.10,-d)*smoothstep(-0.26,-0.09,d);
+    col = body + tint*eggs*1.5 + tint*rim*0.7;
+    cov = m*0.9;
+  }
+  else if(kind == 19){ // SHELLBACK — dome walker inside a shield bubble (aux = shield frac)
+    vec2 q = p*vec2(0.95,1.15);
+    float wob = fbm3(q*3.0+seed*3.0)*0.06;
+    float dome = sdCircle(q+vec2(0.0,0.1), 0.42+wob);
+    float m = smoothstep(0.03,-0.03,dome);
+    vec3 body = mix(tint*0.20, vec3(0.03,0.05,0.08), smoothstep(-0.2,0.35,q.y));
+    float ridges = pow(0.5+0.5*sin(atan(q.y+0.1,q.x)*7.0+seed*9.0),2.0);
+    body += tint*ridges*0.22;
+    float rim = smoothstep(0.0,0.07,-dome)*smoothstep(-0.18,-0.06,dome);
+    col = (body + tint*rim*0.8)*m;
+    cov = m*0.95;
+    // shield bubble
+    if(aux > 0.001){
+      float br = 0.86 + 0.03*sin(phase*3.0);
+      float bub = abs(length(p) - br);
+      float fresnel = smoothstep(0.10,0.0,bub) * (0.5+0.5*sin(atan(p.y,p.x)*6.0 - phase*2.0)*0.3);
+      vec3 bcol = vec3(0.45,0.9,1.0) * fresnel * (0.4 + aux*1.2);
+      col += bcol;
+      cov = clamp(cov + fresnel*0.25*aux, 0.0, 1.0);
+    }
+  }
+  else if(kind == 20){ // DARTFIN — speed incarnate
+    vec2 q = p*vec2(0.62,1.5); // stretched along travel axis
+    float wob = fbm3(q*3.0+phase)*0.05;
+    float bodyD = sdCircle(q+vec2(0.12,0.0), 0.4+wob);
+    // fin blades
+    float fins = min(
+      sdSeg(p, vec2(0.1,0.0), vec2(0.55,-0.5)) - 0.05,
+      sdSeg(p, vec2(0.1,0.0), vec2(0.55, 0.5)) - 0.05);
+    float d = smin(bodyD, fins, 0.08);
+    float m = smoothstep(0.03,-0.03,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    float core = smoothstep(0.3,0.0,length(q+vec2(0.18,0.0)));
+    // speed streaks behind
+    float streak = smoothstep(0.12,0.0,abs(p.y*0.7 - 0.04*sin(p.x*9.0+phase*7.0))) * smoothstep(0.9,0.2,p.x) * step(0.0,p.x);
+    vec3 body = tint*0.2;
+    col = body*m + mix(tint,vec3(1.0),0.6)*core*2.2 + tint*streak*0.8;
+    cov = m*0.9;
+  }
+  else if(kind == 21){ // BULWARK — living siege wall
+    float wob = fbm3(p*2.0 + seed*2.0)*0.08;
+    vec2 q = vec2(p.x*0.8, p.y*1.25);
+    float d = sdCircle(q+vec2(0.0,0.05), 0.55+wob);
+    float m = smoothstep(0.03,-0.03,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    // heavy plates + lava seams
+    float seg = pow(0.5+0.5*sin(q.x*9.0+seed*7.0),3.0);
+    float seams = smoothstep(0.75,1.0,fbm(q*4.0+seed*11.0));
+    vec3 body = mix(vec3(0.06,0.03,0.05), tint*0.18, smoothstep(0.4,-0.4,q.y));
+    body *= 0.8+0.35*fbm3(q*5.0);
+    float pulse2 = 0.6+0.4*sin(phase*1.6 + q.x*3.0);
+    col = body + tint*seams*pulse2*1.3 + tint*seg*0.12;
+    float rim = smoothstep(0.0,0.09,-d)*smoothstep(-0.2,-0.07,d);
+    col += tint*rim*0.6;
+    col += vec3(1.0,0.85,0.6)*smoothstep(0.06,0.0,length(p-vec2(-0.68,-0.05)))*1.1;
+    cov = m*0.98;
+  }
+  else if(kind == 22){ // SPECTRE — hollow-eyed veil (aux = presence: 0.3 when phased out)
+    float veil = fbm(p*2.8 + vec2(phase*0.7, seed*4.0));
+    float d = sdCircle(p*vec2(1.0,1.2), 0.45 + veil*0.16);
+    float body = smoothstep(0.3,-0.25,d);
+    float core = smoothstep(0.4,0.0,length(p*vec2(1.0,1.3)+vec2(0.0,0.05)));
+    // hollow eye voids
+    float eyes = smoothstep(0.10,0.02,length(p-vec2(-0.13,-0.12))) + smoothstep(0.10,0.02,length(p-vec2(0.13,-0.12)));
+    vec3 c2 = tint*body*0.4 + tint*core*1.6;
+    c2 *= (1.0 - eyes*0.9);
+    col = c2 * aux;
+    cov = clamp(body*0.5+core*0.3,0.0,1.0) * aux;
+  }
+  else if(kind == 23){ // MENDLING — soft healer, light-vein cross pulsing
+    float wob = fbm3(p*2.6 + phase*0.3 + seed*3.0)*0.10;
+    float d = sdCircle(p, 0.46+wob);
+    float m = smoothstep(0.04,-0.04,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    float crossV = smoothstep(0.10,0.0,abs(p.x)) + smoothstep(0.10,0.0,abs(p.y));
+    float beat = pow(0.5+0.5*sin(phase*2.4),2.0);
+    vec3 body = tint*0.16 + vec3(0.02,0.02,0.03);
+    col = body + tint*crossV*(0.5+beat*1.0);
+    float rim = smoothstep(0.0,0.08,-d)*smoothstep(-0.2,-0.07,d);
+    col += mix(tint,vec3(1.0,0.6,0.8),0.4)*rim*0.7;
+    cov = m*0.9;
+  }
+  else if(kind == 24){ // BROODMOTHER — mountain of egg sacs
+    float wob = fbm3(p*2.2 + phase*0.2 + seed)*0.10;
+    float d = sdCircle(p*vec2(0.8,1.05), 0.55+wob);
+    d = smin(d, sdCircle((p+vec2(0.3,0.25))*vec2(0.9,1.2), 0.35), 0.15);
+    d = smin(d, sdCircle((p-vec2(0.32,-0.22))*vec2(0.9,1.2), 0.33), 0.15);
+    float m = smoothstep(0.03,-0.03,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    vec3 body = tint*0.12 + vec3(0.03,0.03,0.01);
+    float eggs = 0.0;
+    for(int i=0;i<7;i++){
+      float fi = float(i);
+      vec2 c = vec2(sin(fi*2.3+seed*7.0)*0.38, cos(fi*1.8+seed*3.0)*0.34);
+      float beat = 0.5+0.5*sin(phase*1.7+fi*2.3);
+      eggs += smoothstep(0.11,0.0,length(p-c)) * beat;
+    }
+    // crown spikes
+    float ang = atan(p.y,p.x);
+    float spikes = smoothstep(0.02,-0.02, length(p)-0.62-0.14*pow(abs(sin(ang*5.0+seed*6.0)),8.0));
+    col = body + tint*eggs*1.6 + tint*spikes*0.25;
+    float rim = smoothstep(0.0,0.10,-d)*smoothstep(-0.25,-0.08,d);
+    col += tint*rim*0.8;
+    cov = m*0.97;
+  }
+  else if(kind == 25){ // THE UNLIT — a hole in the light (aux = phase-2 crack glow)
+    float wob = fbm(p*1.8 + vec2(phase*0.15, seed*2.0))*0.10;
+    vec2 q = p*vec2(0.85,1.1);
+    float d = sdCircle(q, 0.46+wob);
+    // trailing void tendrils — kept inside the quad or they clip hard
+    for(int i=0;i<3;i++){
+      float fi = float(i);
+      float a = 2.4 + fi*0.5 + sin(phase*0.4+fi)*0.2;
+      vec2 dir = vec2(cos(a), sin(a));
+      d = smin(d, sdSeg(q, dir*0.24, dir*(0.62+0.10*sin(phase*0.6+fi*2.0))) - 0.09, 0.12);
+    }
+    float m = smoothstep(0.04,-0.04,d);
+    if(m<=0.0){ frag=vec4(0.0); return; }
+    // the body EATS light: near-black with a searing, breathing rim
+    vec3 body = vec3(0.012,0.006,0.02);
+    body += vec3(0.03,0.01,0.05) * fbm(q*3.0 - phase*0.1); // faint void currents
+    float rim = smoothstep(0.0,0.05,-d)*smoothstep(-0.11,-0.04,d);
+    rim *= 0.55 + 0.8*fbm(vec2(atan(q.y,q.x)*2.2, phase*0.2)+seed*5.0);
+    col = body + tint*rim*1.7;
+    // phase-2: molten cracks tear open
+    if(aux > 0.01){
+      float crack = smoothstep(0.55,0.95,fbm(q*4.0+seed*9.0+phase*0.05));
+      col += tint * crack * aux * 2.4;
+      float coreGlow = smoothstep(0.3,0.0,length(q))*aux;
+      col += mix(tint,vec3(1.0),0.5)*coreGlow*1.2;
+    }
+    cov = m*0.995; // nearly opaque — it occludes the glow behind it
+  }
+  else if(kind == 26){ // SHADOW — dark aura disc (premultiplied darkness)
+    float r = length(p);
+    float fall = pow(max(0.0,1.0-r),1.6) * (0.85+0.15*fbm3(p*3.0+phase*0.3));
+    col = vec3(0.010,0.004,0.02) * fall;
+    cov = fall * vB.w; // aux = darkness strength
   }
   else if(kind == 12){ // CHILL SPIRE — faceted crystal polyp
     vec2 q = p; q.y = -q.y; // grow upward
