@@ -24,8 +24,8 @@ const server = createServer((req, res) => {
     res.end(readFileSync(f));
   } else { res.writeHead(404); res.end(); }
 });
-await new Promise((r) => server.listen(0, r));
-const url = `http://localhost:${server.address().port}/`;
+await new Promise((r) => server.listen(0, "127.0.0.1", r));
+const url = `http://127.0.0.1:${server.address().port}/`;
 const report = { url, shots: {}, data: {} };
 
 async function poll(page, fn, pred, tries = 120, interval = 250) {
