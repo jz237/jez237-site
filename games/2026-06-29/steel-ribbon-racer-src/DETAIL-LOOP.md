@@ -1722,3 +1722,20 @@ signal-corner ped density weighting.
   meets pavement, aerial reads urban block vs billiard lawn. Report
   forecourts {pads, planters, sample}; forecourtsEnable. Suite
   168/168. NEXT: item 4 suburb walkways + hedges.
+- **73 SUBURB WALKWAYS + HEDGES (2026-07-17)**: round-eight item 4 —
+  every A() shop face (new walkwaySys._spots collector beside the
+  shopBand push; reset beside the shopBand reset) gets a paved
+  walkway probed outward along the face normal to the street edge
+  (Pn clearance < 1.5 stops it), built as a shallow TERRACE riding
+  the higher end (it.72 corner rule), plus two dark-green hedge
+  boxes flanking the walkway mouth. ONE merged vc mesh, 15-28
+  walks/world. VERIFY LESSON: the FIRST report sample sat beside a
+  tall tower whose it.72 forecourt terrace swallowed the walkway —
+  A/B looked identical and nearly failed the item; the fix was
+  MULTIPLE report samples (samples[0..5]) and shooting index 2 —
+  clean suburb spots show walkway + hedge vs bare lawn decisively.
+  PLAYBOOK: when an A/B pair looks identical, suspect the SHOWCASE
+  before the system — shoot a different sample. Report suburbWalks
+  {walks, hedges, sample, samples[6]}; suburbWalksEnable. Suite
+  169/169. NEXT: item 5 tree variety → then DEPLOY BATCH 21
+  (v3.28.0, round-eight items 1-5).

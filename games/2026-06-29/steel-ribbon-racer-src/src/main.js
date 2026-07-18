@@ -2404,6 +2404,8 @@ const pylonDressSys = { dressed: 0, collars: 0, enabled: !0, sample: null, _mesh
 const deckRibSys = { ribs: 0, spines: 0, enabled: !0, sample: null, _mesh: null, _segs: [] };
 // zoom-detail 72 (round-eight item 3): paved forecourt aprons + planters at tower bases
 const forecourtSys = { pads: 0, planters: 0, enabled: !0, sample: null, _mesh: null };
+// zoom-detail 73 (round-eight item 4): front walkways + hedges for the suburban shops
+const walkwaySys = { walks: 0, hedges: 0, enabled: !0, sample: null, _mesh: null, _spots: [], _samples: [] };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -5774,6 +5776,7 @@ function N1() {
         ((shopBandSys._parts[bv] || (shopBandSys._parts[bv] = [])).push(bg2), shopBandSys.count++);
         shopBandSys.sample ||
           (shopBandSys.sample = se ? { x: +(N + $ * (Y * 0.5 + 1)).toFixed(1), y: +(re + 1.6).toFixed(1), z: +O.toFixed(1), nx: $, nz: 0 } : { x: +N.toFixed(1), y: +(re + 1.6).toFixed(1), z: +(O + $ * (j * 0.5 + 1)).toFixed(1), nx: 0, nz: $ });
+        walkwaySys._spots.push(se ? { x: N + $ * (Y * 0.5 + 0.3), z: O, nx: $, nz: 0, y: re } : { x: N, z: O + $ * (j * 0.5 + 0.3), nx: 0, nz: $, y: re });
       })(),
       Xi("storefront-sign", Ce.position.x, Ce.position.y, Ce.position.z),
       storefrontSys.addSpot(
@@ -5791,6 +5794,7 @@ function N1() {
   storefrontSys.resetSpots();
   rooftopSys.resetSpots();
   ((shopBandSys._parts = {}), (shopBandSys.count = 0), (shopBandSys._meshes = []), (shopBandSys.sample = null));
+  walkwaySys._spots.length = 0;
   for (let N = t + a / 2; N <= n - a / 2; N += a)
     for (let O = s - a / 2; O >= r + a / 2; O -= a) {
       const Y = Pn(N, O, c * 0.5).clearance;
@@ -9216,6 +9220,52 @@ function buildForecourts(group) {
   if (!forecourtSys.enabled) fm.visible = !1;
 }
 buildForecourts(et);
+// zoom-detail 73 (round-eight item 4): suburban shops sit in bare lawn — run a paved
+// walkway from each A() shop door out to the street edge (probed with Pn along the
+// face normal) and flank the walkway mouth with low hedges. End heights are sampled
+// and the strips ride the HIGHER end as shallow terraces (the it.72 corner rule).
+// ONE merged vertex-color mesh.
+function buildSuburbWalks(group) {
+  ((walkwaySys.walks = 0), (walkwaySys.hedges = 0), (walkwaySys.sample = null), (walkwaySys._samples.length = 0));
+  const parts = [];
+  for (const sp of walkwaySys._spots) {
+    if (walkwaySys.walks >= 40) break;
+    let L = 10;
+    for (let d = 3; d <= 16; d += 1)
+      if (Pn(sp.x + sp.nx * d, sp.z + sp.nz * d, 0).clearance < 1.5) {
+        L = d - 1.2;
+        break;
+      }
+    if (L < 3) continue;
+    const mx = sp.x + sp.nx * (L * 0.5 + 0.2),
+      mz = sp.z + sp.nz * (L * 0.5 + 0.2),
+      hA = He(sp.x + sp.nx * 0.6, sp.z + sp.nz * 0.6),
+      hB = He(sp.x + sp.nx * (L + 0.4), sp.z + sp.nz * (L + 0.4)),
+      topY = Math.max(sp.y, hA, hB) + 0.09,
+      th = topY - (Math.min(hA, hB) - 0.3),
+      wg = new BoxGeometry(2.2, th, L).applyMatrix4(new Matrix4().makeRotationY(Math.atan2(sp.nx, sp.nz)));
+    parts.push(vcBake(wg, vcAt(mx, topY - th * 0.5, mz), 8222824));
+    const px = -sp.nz,
+      pz = sp.nx;
+    for (const sd of [-1, 1]) {
+      const hx = sp.x + sp.nx * 1.6 + px * sd * 2.6,
+        hz = sp.z + sp.nz * 1.6 + pz * sd * 2.6,
+        hg2 = He(hx, hz),
+        hgTop = Math.max(hg2, sp.y) + 0.42,
+        hth = hgTop + 0.4 - (hg2 - 0.25),
+        hgeo = new BoxGeometry(0.95, hth, 3.4).applyMatrix4(new Matrix4().makeRotationY(Math.atan2(sp.nx, sp.nz)));
+      (parts.push(vcBake(hgeo, vcAt(hx, hgTop + 0.4 - hth * 0.5, hz), 3095846)), walkwaySys.hedges++);
+    }
+    walkwaySys.walks++;
+    walkwaySys._samples.length < 6 && walkwaySys._samples.push({ x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), y: +topY.toFixed(1), nx: sp.nx, nz: sp.nz, L: +L.toFixed(1) });
+    walkwaySys.sample || (walkwaySys.sample = { x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), y: +topY.toFixed(1), nx: sp.nx, nz: sp.nz, L: +L.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const wm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((wm.castShadow = !1), (wm.receiveShadow = !0), (wm.raycast = () => {}), group.add(wm), (walkwaySys._mesh = wm));
+  if (!walkwaySys.enabled) wm.visible = !1;
+}
+buildSuburbWalks(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -11998,6 +12048,11 @@ window.__steelRibbonDebug = {
     forecourtSys._mesh && (forecourtSys._mesh.visible = forecourtSys.enabled);
     return forecourtSys.enabled;
   },
+  suburbWalksEnable(on) {
+    walkwaySys.enabled = !!on;
+    walkwaySys._mesh && (walkwaySys._mesh.visible = walkwaySys.enabled);
+    return walkwaySys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12180,6 +12235,7 @@ window.__steelRibbonDebug = {
       pylonDress: { dressed: pylonDressSys.dressed, collars: pylonDressSys.collars, enabled: pylonDressSys.enabled, sample: pylonDressSys.sample ?? null },
       deckRibs: { ribs: deckRibSys.ribs, spines: deckRibSys.spines, enabled: deckRibSys.enabled, sample: deckRibSys.sample ?? null },
       forecourts: { pads: forecourtSys.pads, planters: forecourtSys.planters, enabled: forecourtSys.enabled, sample: forecourtSys.sample ?? null },
+      suburbWalks: { walks: walkwaySys.walks, hedges: walkwaySys.hedges, enabled: walkwaySys.enabled, sample: walkwaySys.sample ?? null, samples: walkwaySys._samples.slice(0, 6) },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

@@ -900,6 +900,21 @@ const browser = await chromium.launch({
     JSON.stringify({ pads: fct?.pads, planters: fct?.planters }),
   );
 
+  // zoom-detail 73 (round eight item 4): suburb walkways + hedges
+  const swk = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().suburbWalks,
+      off = deb.suburbWalksEnable(false),
+      offRep = deb.detailReport().suburbWalks.enabled;
+    deb.suburbWalksEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "suburb walks: door-to-street walkways + hedges at A() shops, toggle works",
+    !!swk && swk.walks >= 6 && swk.hedges === swk.walks * 2 && swk.off === false && swk.offRep === false,
+    JSON.stringify({ walks: swk?.walks, hedges: swk?.hedges }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
