@@ -1757,3 +1757,18 @@ signal-corner ped density weighting.
   (pines + green + amber + blossom-pale) at mid. Report treeVar
   {broadleaf, autumn, sample}; treeVarietyEnable. Suite 170/170.
   **ROUND-EIGHT ITEMS 1-5 DONE → DEPLOY BATCH 21 (v3.28.0).**
+- **75 GRANDSTAND ROOF FIX (2026-07-17)**: round-eight item 6 — the
+  stand canopy bloomed to PURE WHITE at dusk (light color 13620954 +
+  metalness 0.2 under the low sun). Roof slabs now use a dedicated
+  slate material (5659491, rough 0.85, metal 0.05) swapped in the
+  stand builder (posts keep the old material); a steel fascia strip
+  hangs at each roof's front lip — built WORLD-SPACE from
+  crowdSys.stands {x,z,yaw,w,gy} at module level, ONE merged vc
+  mesh. A/B toggle = MATERIAL SWAP on the roof meshes (4 roofs < 6
+  same-material meshes → they escape static merge, mesh-level swap
+  is safe) + fascia visibility. ANCHOR LESSON RE-PAID: quoted `const
+  R =` from memory but the real line is `R =` in a const chain —
+  the assert aborted BEFORE the write, clean re-apply. LOOK verdict
+  (loop-shots/75-standroof/): ON = slate canopy + fascia lip over
+  the crowd; OFF = the incandescent white slab. Suite 171/171.
+  NEXT: item 7 pond shore ring.

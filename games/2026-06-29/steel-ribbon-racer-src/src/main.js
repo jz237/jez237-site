@@ -1926,6 +1926,7 @@ function D1() {
     });
   }
   const g = new MeshStandardMaterial({ color: 13620954, roughness: 0.6, metalness: 0.2 });
+  ((standRoofSys._oldMat = g), (standRoofSys._newMat = new MeshStandardMaterial({ color: 5659491, roughness: 0.85, metalness: 0.05 })));
   ((crowdTexSys._legacy = G1()),
     (crowdTexSys._dots = [buildCrowdDotTexture(0), buildCrowdDotTexture(1)]),
     (crowdTexSys._mats = crowdTexSys._dots.map((tx) => new MeshBasicMaterial({ map: tx, side: DoubleSide, toneMapped: !1 }))));
@@ -1935,8 +1936,8 @@ function D1() {
     const { x: v, z: y } = _,
       E = new Group(),
       T = 60 + Math.random() * 40,
-      R = new Mesh(new BoxGeometry(T, 1.4, 26), g);
-    (R.position.set(0, 26, -4), (R.rotation.x = -0.32), E.add(R));
+      R = new Mesh(new BoxGeometry(T, 1.4, 26), standRoofSys._newMat);
+    (R.position.set(0, 26, -4), (R.rotation.x = -0.32), E.add(R), standRoofSys._meshes.push(R), standRoofSys.roofs++);
     const C = new Mesh(new PlaneGeometry(T * 0.94, 24), crowdTexSys._mats[h % 2]);
     (C.position.set(0, 12, 6), (C.rotation.x = -0.85), E.add(C));
     for (const b of [-T / 2, T / 2]) {
@@ -2413,6 +2414,8 @@ const forecourtSys = { pads: 0, planters: 0, enabled: !0, sample: null, _mesh: n
 const walkwaySys = { walks: 0, hedges: 0, enabled: !0, sample: null, _mesh: null, _spots: [], _samples: [] };
 // zoom-detail 74 (round-eight item 5): broadleaf + autumn trees among the conifers
 const treeVarSys = { broadleaf: 0, autumn: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
+// zoom-detail 75 (round-eight item 6): slate stand roofs + fascia (was white blowout)
+const standRoofSys = { roofs: 0, enabled: !0, _meshes: [], _newMat: null, _oldMat: null, _fascia: null };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -9309,6 +9312,30 @@ function buildTreeVariety(group) {
   if (!treeVarSys.enabled) tm.visible = !1;
 }
 buildTreeVariety(et);
+// zoom-detail 75 (round-eight item 6): a steel fascia strip along each stand roof's
+// front lip (world-space from crowdSys.stands {x,z,yaw,w,gy}); the roof slab itself
+// swapped to a dedicated slate material in the stand builder — the old light metal
+// material bloomed to pure white at dusk. ONE merged vertex-color mesh for fascias.
+function buildStandFascias(group) {
+  if (!crowdSys.stands.length) return;
+  const parts = [],
+    q = new Quaternion(),
+    pos = new Vector3(),
+    scl = new Vector3(1, 1, 1),
+    up = new Vector3(0, 1, 0);
+  for (const st of crowdSys.stands) {
+    q.setFromAxisAngle(up, st.yaw);
+    const lx = Math.sin(st.yaw),
+      lz = Math.cos(st.yaw);
+    pos.set(st.x + lx * 8.34, st.gy + 30.1, st.z + lz * 8.34);
+    const m = new Matrix4().compose(pos, q, scl);
+    parts.push(vcBake(new BoxGeometry(st.w, 0.6, 0.4), m, 3949388));
+  }
+  const fm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((fm.raycast = () => {}), group.add(fm), (standRoofSys._fascia = fm));
+  if (!standRoofSys.enabled) fm.visible = !1;
+}
+buildStandFascias(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -12101,6 +12128,12 @@ window.__steelRibbonDebug = {
     treeVarSys._mesh && (treeVarSys._mesh.visible = treeVarSys.enabled);
     return treeVarSys.enabled;
   },
+  standRoofEnable(on) {
+    standRoofSys.enabled = !!on;
+    for (const m of standRoofSys._meshes) m.material = standRoofSys.enabled ? standRoofSys._newMat : standRoofSys._oldMat;
+    standRoofSys._fascia && (standRoofSys._fascia.visible = standRoofSys.enabled);
+    return standRoofSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12285,6 +12318,7 @@ window.__steelRibbonDebug = {
       forecourts: { pads: forecourtSys.pads, planters: forecourtSys.planters, enabled: forecourtSys.enabled, sample: forecourtSys.sample ?? null },
       suburbWalks: { walks: walkwaySys.walks, hedges: walkwaySys.hedges, enabled: walkwaySys.enabled, sample: walkwaySys.sample ?? null, samples: walkwaySys._samples.slice(0, 6) },
       treeVar: { broadleaf: treeVarSys.broadleaf, autumn: treeVarSys.autumn, enabled: treeVarSys.enabled, sample: treeVarSys.sample ?? null },
+      standRoof: { roofs: standRoofSys.roofs, enabled: standRoofSys.enabled },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

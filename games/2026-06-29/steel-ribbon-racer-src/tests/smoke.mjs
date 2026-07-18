@@ -930,6 +930,21 @@ const browser = await chromium.launch({
     JSON.stringify({ broadleaf: tvr?.broadleaf, autumn: tvr?.autumn }),
   );
 
+  // zoom-detail 75 (round eight item 6): slate stand roofs + fascia strips
+  const srf = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().standRoof,
+      off = deb.standRoofEnable(false),
+      offRep = deb.detailReport().standRoof.enabled;
+    deb.standRoofEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "stand roofs: slate material + fascia replace the white blowout, toggle works",
+    !!srf && srf.roofs >= 3 && srf.roofs <= 4 && srf.off === false && srf.offRep === false,
+    JSON.stringify({ roofs: srf?.roofs }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
