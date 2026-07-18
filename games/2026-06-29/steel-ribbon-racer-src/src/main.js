@@ -2400,6 +2400,8 @@ const crowdTexSys = { enabled: !0, _mats: [], _dots: [], _legacy: null };
 const windmillSys = { turbines: 0, enabled: !0, sample: null, _meshes: [] };
 // zoom-detail 70 (round-eight item 1): plinths/collars/warning tips on the deck pylons
 const pylonDressSys = { dressed: 0, collars: 0, enabled: !0, sample: null, _mesh: null };
+// zoom-detail 71 (round-eight item 2): girder ribs + spine beam under the deck slabs
+const deckRibSys = { ribs: 0, spines: 0, enabled: !0, sample: null, _mesh: null, _segs: [] };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -7474,6 +7476,7 @@ function X1() {
     }
     return (Cc++, !0);
   }
+  deckRibSys._segs.length = 0;
   for (let E = 0; E < ce.length; E += v) {
     if (Li(E + v * 0.5)) continue;
     const T = St(E),
@@ -7482,6 +7485,7 @@ function X1() {
       { sideways: b, normal: S, q: L } = ui(T, R),
       F = T.p.distanceTo(R.p) + 0.45,
       W = Math.floor(E / (v * 2)) % 2 ? e : t;
+    deckRibSys._segs.push({ x: C.x, y: C.y, z: C.z, qx: L.x, qy: L.y, qz: L.z, qw: L.w, sx: S.x, sy: S.y, sz: S.z, f: F });
     (Bt(i, new Vector3(ce.width, 0.62, F), C.clone().addScaledVector(S, -0.05), L, W),
       Bt(i, new Vector3(ce.width - 2.8, 0.08, F * 0.86), C.clone().addScaledVector(S, 0.36), L, f),
       Bt(
@@ -9135,6 +9139,34 @@ function buildPylonDressing(group) {
   if (!pylonDressSys.enabled) pm.visible = !1;
 }
 buildPylonDressing(et);
+// zoom-detail 71 (round-eight item 2): the ribbon's belly is a featureless dark slab
+// from every street — hang a lengthwise spine beam under every deck segment and a
+// full-width girder cross-rib under every second one, oriented by the SAME segment
+// quaternion the slab builder used (collected during the slab walk; the slab Bt calls
+// themselves are untouched — deck surface math sacred, it.59). ONE merged vc mesh.
+function buildDeckRibs(group) {
+  ((deckRibSys.ribs = 0), (deckRibSys.spines = 0), (deckRibSys.sample = null));
+  if (!deckRibSys._segs.length) return;
+  const parts = [],
+    q = new Quaternion(),
+    pos = new Vector3(),
+    scl = new Vector3(1, 1, 1);
+  for (let i = 0; i < deckRibSys._segs.length; i++) {
+    const sg = deckRibSys._segs[i];
+    q.set(sg.qx, sg.qy, sg.qz, sg.qw);
+    pos.set(sg.x - sg.sx * 0.62, sg.y - sg.sy * 0.62, sg.z - sg.sz * 0.62);
+    const m = new Matrix4().compose(pos, q, scl);
+    (parts.push(vcBake(new BoxGeometry(0.55, 0.6, sg.f * 0.96), m, 3752526)), deckRibSys.spines++);
+    if (i % 2 === 0) {
+      (parts.push(vcBake(new BoxGeometry(ce.width * 0.96, 0.5, 0.85), m, 4871520)), deckRibSys.ribs++);
+      deckRibSys.sample || (deckRibSys.sample = { x: +sg.x.toFixed(1), y: +sg.y.toFixed(1), z: +sg.z.toFixed(1) });
+    }
+  }
+  const rm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((rm.castShadow = !1), (rm.receiveShadow = !0), (rm.raycast = () => {}), group.add(rm), (deckRibSys._mesh = rm));
+  if (!deckRibSys.enabled) rm.visible = !1;
+}
+buildDeckRibs(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -11907,6 +11939,11 @@ window.__steelRibbonDebug = {
     pylonDressSys._mesh && (pylonDressSys._mesh.visible = pylonDressSys.enabled);
     return pylonDressSys.enabled;
   },
+  deckRibsEnable(on) {
+    deckRibSys.enabled = !!on;
+    deckRibSys._mesh && (deckRibSys._mesh.visible = deckRibSys.enabled);
+    return deckRibSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12087,6 +12124,7 @@ window.__steelRibbonDebug = {
       balloons: { count: balloonSys.count, enabled: balloonSys.enabled, x: balloonSys.x, z: balloonSys.z, alt: balloonSys.alt },
       windmill: { turbines: windmillSys.turbines, enabled: windmillSys.enabled, sample: windmillSys.sample ?? null },
       pylonDress: { dressed: pylonDressSys.dressed, collars: pylonDressSys.collars, enabled: pylonDressSys.enabled, sample: pylonDressSys.sample ?? null },
+      deckRibs: { ribs: deckRibSys.ribs, spines: deckRibSys.spines, enabled: deckRibSys.enabled, sample: deckRibSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

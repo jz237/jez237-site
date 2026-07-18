@@ -870,6 +870,21 @@ const browser = await chromium.launch({
     JSON.stringify({ dressed: pyd?.dressed, collars: pyd?.collars }),
   );
 
+  // zoom-detail 71 (round eight item 2): girder ribs under the deck slabs
+  const drb = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().deckRibs,
+      off = deb.deckRibsEnable(false),
+      offRep = deb.detailReport().deckRibs.enabled;
+    deb.deckRibsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "deck ribs: spine beams + cross-ribs under the ribbon, toggle works",
+    !!drb && drb.ribs >= 40 && drb.spines >= drb.ribs && drb.off === false && drb.offRep === false,
+    JSON.stringify({ ribs: drb?.ribs, spines: drb?.spines }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
