@@ -1802,3 +1802,24 @@ signal-corner ped density weighting.
   {dressed, sample}; mtnStrataEnable. Suite 173/173. NEXT: item 9
   manholes + drain grates (oilSys clone), then 10 park path
   connections → DEPLOY BATCH 22 (v3.29.0) + closing survey.
+- **78 MANHOLES + DRAIN GRATES (2026-07-17)**: round-eight item 9 —
+  ironSys, the THIRD member of the roadDecalSys shader family (after
+  oil): ONE InstancedMesh cap 44, 2-cell 256x128 iron atlas (ringed
+  manhole cover w/ radial ticks, barred drain grate), aDecalSlot +
+  UV patch + customProgramCacheKey "manhole-atlas", placed via the
+  shared band-filtered _surfaceY raycast on first tick. Seeding:
+  manholes mid-lane (sw*0.1) near intersections, grates on the curb
+  line (sw*0.38, axis-aligned yaw); 44/44 placed. TOGGLE FIX: the
+  systems-update block (oil/birds/steam zone) is PAUSED under
+  flyCam, so an update-tick-only visibility sync never fires during
+  verification — toggles must apply mesh.visible DIRECTLY (oilSys
+  has the same latent quirk, left as-is). VERIFY LESSON (cost a few
+  reruns): my street-level camera used ABSOLUTE y over sloped
+  terrain and aimed at midair — the "grate" I kept staring at was a
+  steam vent; the decisive shot is TOP-DOWN over a sample with
+  probeDown().ground for height. Region-avg pixel compares beat
+  eyeballing for A/B disputes. LOOK verdict (loop-shots/78-iron/
+  topdown-*): ringed manhole dead center on asphalt vs bare road.
+  Report iron {spots, placed, sample}; ironEnable. Suite 174/174.
+  NEXT: item 10 park path connections (LAST) → DEPLOY BATCH 22
+  (v3.29.0) + round-eight closing survey.
