@@ -1907,8 +1907,10 @@ function D1() {
       ((_.position.x += v * E), _.position.x > 1400 && (_.position.x = -1400));
     });
   }
-  const g = new MeshStandardMaterial({ color: 13620954, roughness: 0.6, metalness: 0.2 }),
-    M = new MeshBasicMaterial({ map: G1(), side: DoubleSide });
+  const g = new MeshStandardMaterial({ color: 13620954, roughness: 0.6, metalness: 0.2 });
+  ((crowdTexSys._legacy = G1()),
+    (crowdTexSys._dots = [buildCrowdDotTexture(0), buildCrowdDotTexture(1)]),
+    (crowdTexSys._mats = crowdTexSys._dots.map((tx) => new MeshBasicMaterial({ map: tx, side: DoubleSide, toneMapped: !1 }))));
   for (let h = 0; h < 4; h++) {
     const _ = zn(() => ({ x: -560 + Math.random() * 1120, z: -520 - Math.random() * 900 }), 40, 30, 40);
     if (!_) continue;
@@ -1917,7 +1919,7 @@ function D1() {
       T = 60 + Math.random() * 40,
       R = new Mesh(new BoxGeometry(T, 1.4, 26), g);
     (R.position.set(0, 26, -4), (R.rotation.x = -0.32), E.add(R));
-    const C = new Mesh(new PlaneGeometry(T * 0.94, 24), M);
+    const C = new Mesh(new PlaneGeometry(T * 0.94, 24), crowdTexSys._mats[h % 2]);
     (C.position.set(0, 12, 6), (C.rotation.x = -0.85), E.add(C));
     for (const b of [-T / 2, T / 2]) {
       const S = new Mesh(new BoxGeometry(1.4, 26, 1.4), g);
@@ -2379,6 +2381,8 @@ const plateSys = {
 // the walk swing for free. Kit choice is pedIndex % pool, so a pedestrian
 // always gets the same face/shoe variety back when re-promoted. All parts
 // share vcMats' opaque material: promoted cost is 5 small draws per kit.
+// zoom-detail 67 (round-seven item 9): race-visible crowd-dot textures on the stands
+const crowdTexSys = { enabled: !0, _mats: [], _dots: [], _legacy: null };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -7262,6 +7266,32 @@ function V1(i, e) {
   const o = new CanvasTexture(t);
   return ((o.colorSpace = SRGBColorSpace), o);
 }
+// zoom-detail 67: seated crowd ranks that read as a CROWD from the race deck —
+// aligned rows of paired torso/head dots (a few standing), deterministic per variant.
+function buildCrowdDotTexture(v) {
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 192));
+  const e = cv.getContext("2d"),
+    rng = plateRng(0xc0d5 + v * 977);
+  ((e.fillStyle = "#232a31"), e.fillRect(0, 0, 512, 192));
+  const shirts = ["#c9463f", "#3f9fd9", "#d9b53a", "#d8d8d8", "#7e58c9", "#3fae7f", "#d977b5", "#4e6ed9", "#d97b32"],
+    skins = ["#c9986f", "#8a5f3f", "#e0b58a", "#6f4a2f"],
+    rows = 9,
+    rh = 192 / rows;
+  for (let r = 0; r < rows; r++) {
+    const y0 = r * rh;
+    ((e.fillStyle = "rgba(0,0,0,0.35)"), e.fillRect(0, y0, 512, 3));
+    for (let cx = 6 + rng() * 4; cx < 506; cx += 7.4 + rng() * 2.4) {
+      if (rng() < 0.13) continue;
+      const stand = rng() < 0.06,
+        ty = y0 + rh - (stand ? 15 : 11) - rng() * 2;
+      ((e.fillStyle = shirts[(rng() * shirts.length) | 0]), e.fillRect(cx - 2.6, ty + 4, 5.2, stand ? 11 : 7));
+      ((e.fillStyle = skins[(rng() * skins.length) | 0]), e.beginPath(), e.arc(cx, ty + 2, 2.1, 0, Math.PI * 2), e.fill());
+    }
+  }
+  const n = new CanvasTexture(cv);
+  return ((n.colorSpace = SRGBColorSpace), n);
+}
 function G1() {
   const i = document.createElement("canvas");
   ((i.width = 256), (i.height = 128));
@@ -11813,6 +11843,13 @@ window.__steelRibbonDebug = {
     for (const g of balloonSys._gs) g.visible = balloonSys.enabled;
     return balloonSys.enabled;
   },
+  crowdDotsEnable(on) {
+    crowdTexSys.enabled = !!on;
+    crowdTexSys._mats.forEach((m, i) => {
+      m.map = crowdTexSys.enabled ? crowdTexSys._dots[i] : crowdTexSys._legacy;
+    });
+    return crowdTexSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12070,6 +12107,8 @@ window.__steelRibbonDebug = {
       },
       crowd: {
         stands: crowdSys.stands.length,
+        dotTex: crowdTexSys._mats.length,
+        dotsEnabled: crowdTexSys.enabled,
         promoted: crowdSys.active >= 0 ? 1 : 0,
         figures: crowdSys.active >= 0 ? crowdSys.figures : 0,
         sample: crowdSys.stands.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), z: +s.z.toFixed(1), gy: +s.gy.toFixed(1), w: +s.w.toFixed(0) })),

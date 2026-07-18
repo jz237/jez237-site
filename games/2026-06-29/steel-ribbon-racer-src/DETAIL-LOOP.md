@@ -1594,3 +1594,22 @@ signal-corner ped density weighting.
   asserts count 3, alt window, drift, toggle. Suite 163/163 FIRST
   RUN. v3.26.0. DEPLOY BATCH 19 (items 7+8) per user "yes, continue
   and deploy". NEXT: item 9 grandstand crowds.
+- **67 GRANDSTAND CROWD DOTS (2026-07-17)**: round-seven item 9 — the
+  far-tier crowd on the 4 city grandstands was G1()'s random 0.19m
+  confetti specks, which mush to gray from the race deck. Replaced
+  the plane map with buildCrowdDotTexture(v): 512x192, 9 aligned
+  seat ROWS with dark row banding, paired torso-rect + skin-tone
+  head-dot figures (~1.2m pitch, 13% empty seats, 6% standing), 2
+  deterministic variants alternating across stands, toneMapped:!1
+  (THE canvas-under-bloom lesson). ZERO new draws — same 4 plane
+  meshes, 2 materials; +2 textures (255/260). The crowdSys near-pool
+  instanced figures still promote on top ≤70m — tiers coexist.
+  SCOPE NOTE: the round-one "stadium crowd v2" near pool made this
+  look done in code — the LEDGER's item text ("race-visible,
+  outskirt stands") is what defined the real gap; read the backlog
+  item text before declaring CLOSED-EXISTS. Verified by LOOKING
+  (loop-shots/67-crowddots/): race-dist 110m = both stands read as
+  populated colorful seated crowds; near A/B = ordered ranks vs
+  legacy confetti. Report crowd.dotTex/dotsEnabled; crowdDotsEnable
+  toggle. Suite 164/164 FIRST RUN. NEXT: item 10 windmill polish →
+  DEPLOY BATCH 20 + round-seven closing survey.
