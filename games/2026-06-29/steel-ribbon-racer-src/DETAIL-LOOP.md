@@ -1687,3 +1687,19 @@ signal-corner ped density weighting.
   threads on discs. Report pylonDress {dressed 74, collars 381,
   sample}; pylonDressEnable. Suite 166/166. NEXT: item 2 deck
   underside ribs.
+- **71 DECK UNDERSIDE RIBS (2026-07-17)**: round-eight item 2 — the
+  ribbon's belly (survey find b). The slab walk now COLLECTS each
+  segment's {center, quaternion, normal, length} into
+  deckRibSys._segs (reset before the loop; the slab Bt calls are
+  untouched — deck surface math sacred); a module-level builder then
+  hangs a lengthwise spine beam under EVERY segment (184) and a
+  full-width girder cross-rib under every SECOND one (92), composed
+  via Matrix4().compose(pos, quat, scale) with the SAME quaternion
+  the slab used, tucked S*-0.62 below center (top edge embeds 0.04
+  into the slab — no float gap, no top bleed). ONE merged vc mesh,
+  ~3.6k tris. LOOK verdict (loop-shots/71-deckribs/): from the
+  street the belly reads as an engineered bridge — regular rib
+  lines + spine the whole run, working with the it.70 collars and
+  the existing X-braces; OFF = the old flat slab. Report deckRibs
+  {ribs 92, spines 184, sample}; deckRibsEnable. Suite 167/167.
+  NEXT: item 3 tower forecourts.
