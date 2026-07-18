@@ -1728,6 +1728,19 @@ function D1() {
       const ne = new Group();
       (ne.add(te), (ne.rotation.z = (W / 3) * Math.PI * 2), L.add(ne));
     }
+    {
+      const tp = [];
+      for (let W = 0; W < 3; W++) {
+        const ang = (W / 3) * Math.PI * 2;
+        for (const ty of [21.3, 24.5])
+          tp.push(vcBake(new BoxGeometry(1.2, 1.6, 0.62).translate(0, ty, 0).applyMatrix4(new Matrix4().makeRotationZ(ang)), null, 12078624));
+      }
+      tp.push(vcBake(new CylinderGeometry(1.45, 1.45, 0.9, 10).rotateX(Math.PI / 2), null, 11580600));
+      tp.push(vcBake(new ConeGeometry(1.25, 2.4, 10).rotateX(Math.PI / 2), new Matrix4().setPosition(0, 0, 1.5), 11580600));
+      const tm = new Mesh(mergeGeometries(tp, !1), vcMats().opaque);
+      ((tm.raycast = () => {}), L.add(tm), windmillSys._meshes.push(tm), windmillSys.turbines++);
+      windmillSys.sample || (windmillSys.sample = { x: +y.toFixed(1), z: +E.toFixed(1), hub: +(T - 8).toFixed(1) });
+    }
     (b.add(L), R.add(b), R.position.set(y, -8, E), (R.rotation.y = Math.random() * Math.PI), et.add(R));
     const F = 0.5 + Math.random() * 0.5;
     Bn(L, (W) => {
@@ -2383,6 +2396,8 @@ const plateSys = {
 // share vcMats' opaque material: promoted cost is 5 small draws per kit.
 // zoom-detail 67 (round-seven item 9): race-visible crowd-dot textures on the stands
 const crowdTexSys = { enabled: !0, _mats: [], _dots: [], _legacy: null };
+// zoom-detail 68 (round-seven item 10): striped blade tips + nose cones on the turbines
+const windmillSys = { turbines: 0, enabled: !0, sample: null, _meshes: [] };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -11850,6 +11865,11 @@ window.__steelRibbonDebug = {
     });
     return crowdTexSys.enabled;
   },
+  windmillTipsEnable(on) {
+    windmillSys.enabled = !!on;
+    for (const m of windmillSys._meshes) m.visible = windmillSys.enabled;
+    return windmillSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12028,6 +12048,7 @@ window.__steelRibbonDebug = {
       brakes: { braking: brakeSys.braking, total: brakeSys.total, enabled: brakeSys.enabled, sample: brakeSys.sample ?? null },
       blimp: { x: blimpSys.x, z: blimpSys.z, alt: blimpSys.alt, text: blimpSys.text },
       balloons: { count: balloonSys.count, enabled: balloonSys.enabled, x: balloonSys.x, z: balloonSys.z, alt: balloonSys.alt },
+      windmill: { turbines: windmillSys.turbines, enabled: windmillSys.enabled, sample: windmillSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

@@ -1613,3 +1613,23 @@ signal-corner ped density weighting.
   legacy confetti. Report crowd.dotTex/dotsEnabled; crowdDotsEnable
   toggle. Suite 164/164 FIRST RUN. NEXT: item 10 windmill polish →
   DEPLOY BATCH 20 + round-seven closing survey.
+- **68 WINDMILL POLISH (2026-07-17)**: round-seven item 10 (LAST) —
+  the 9 outskirt wind turbines (line ~1710 zone: tower + nacelle +
+  3 blades in per-blade groups under spinning group L) get aviation
+  detail: double ORANGE TIP BANDS on every blade + hub ring + nose
+  cone, ONE merged vcBake mesh PER ROTOR parented to L so it spins
+  rigidly with the blades (blades are rigid relative to L — bake
+  band boxes rotated to each blade angle, no per-blade meshes).
+  KEY ENGINE FACT CONFIRMED: Bn-registered subtrees (Bd) are
+  EXCLUDED from mergeStaticScenery ≤300 meshes — anything parented
+  under an animated group stays live and keeps .visible toggles.
+  +≤9 draws (frustum-culled at the fringe), ~1.6k tris, zero
+  textures. Verified by LOOKING (loop-shots/68-windmill/): near A/B
+  = crisp double bands riding the spinning blades vs plain white;
+  mid 160m = tiny orange flecks, silhouette unchanged. Report
+  windmill {turbines 9, sample{x,z,hub}}; windmillTipsEnable.
+  Suite 165/165 FIRST RUN. **ROUND SEVEN COMPLETE: 8 shipped, 1
+  blocked (kerbs), 1 closed-exists-upgraded (crowd dots).**
+  v3.27.0 DEPLOY BATCH 20 (items 9+10). NEXT: round-seven CLOSING
+  SURVEY (fresh eyes, varied zooms) → seeds ROUND EIGHT per the
+  user's standing directive.
