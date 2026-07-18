@@ -1672,3 +1672,18 @@ signal-corner ped density weighting.
      in lawn.
   Carried: mowing stripes +2% if any item touches the terrain bake;
   heat shimmer + kerbs stay BLOCKED. Survey shipped NO code.
+- **70 DECK PYLON DRESSING (2026-07-17)**: round-eight item 1 — the
+  survey's dominant find. Every deck support pylon (the $n collider
+  registry — entries WITH hw; module-scope, fed by the support-station
+  builder at ~7440) gets a two-step concrete plinth over the existing
+  flat disc, steel collar rings up the shaft, and an emissive amber
+  warning cube under the deck. ONE merged vcBake mesh; deck surface
+  math untouched (vertical members only — it.59 lesson honored).
+  BALANCE PASS: first build hit its 70 cap with pylons left over —
+  coverage beats density: cap 130 (74/74 dressed), collar spacing
+  11→14m, segs 10→8 → ~15k tris total, cheaper AND complete. LOOK
+  verdict (loop-shots/70-pylons/): plinth feet ANCHOR the pylons at
+  street level, collars give the shafts rhythm; OFF = floating
+  threads on discs. Report pylonDress {dressed 74, collars 381,
+  sample}; pylonDressEnable. Suite 166/166. NEXT: item 2 deck
+  underside ribs.
