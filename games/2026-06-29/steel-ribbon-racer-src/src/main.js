@@ -1364,6 +1364,7 @@ function L1() {
       new MeshStandardMaterial({ color: 4874865, roughness: 1 }),
     ],
     o = new MeshStandardMaterial({ color: 15068905, roughness: 0.95 });
+  mtnStrataSys._spots.length = 0;
   for (let g = 0; g < 52; g++) {
     const M = 78 + Math.random() * 180,
       x = 52 + Math.random() * 115,
@@ -1378,6 +1379,7 @@ function L1() {
       );
     if (!h) continue;
     const _ = new Mesh(new ConeGeometry(x, M, 5 + Math.floor(Math.random() * 2)), a[g % a.length]);
+    M > 120 && mtnStrataSys._spots.push({ x: h.x, z: h.z, r: x, m: M });
     if (
       (_.position.set(h.x, -9, h.z),
       (_.rotation.y = Math.random() * Math.PI),
@@ -2418,6 +2420,8 @@ const treeVarSys = { broadleaf: 0, autumn: 0, enabled: !0, sample: null, _mesh: 
 const standRoofSys = { roofs: 0, enabled: !0, _meshes: [], _newMat: null, _oldMat: null, _fascia: null };
 // zoom-detail 76 (round-eight item 7): sand/mud shore rings at the pond waterlines
 const pondShoreSys = { shores: 0, enabled: !0, sample: null, _mesh: null };
+// zoom-detail 77 (round-eight item 8): strata bands + talus skirts on the big mountains
+const mtnStrataSys = { dressed: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -9365,6 +9369,38 @@ function buildPondShores(group) {
   if (!pondShoreSys.enabled) sm.visible = !1;
 }
 buildPondShores(et);
+// zoom-detail 77 (round-eight item 8): the fringe mountains are stark placeholder
+// cones — big ones (M > 120) gain two proud strata band rings (short wide cone
+// slices at ~30%% and ~55%% of the visible height) and a talus skirt at the foot.
+// Color-read only; the SILHOUETTE is unchanged (far view sacred). Rings use 7 segs
+// against the 5-6-seg parents — the facet mismatch reads as irregular rock ledges.
+// ONE merged mesh on the flat organic material.
+function buildMtnStrata(group) {
+  ((mtnStrataSys.dressed = 0), (mtnStrataSys.sample = null));
+  if (!mtnStrataSys._spots.length) return;
+  const parts = [];
+  for (const sp of mtnStrataSys._spots) {
+    const top = -9 + sp.m * 0.5,
+      gy = He(sp.x, sp.z);
+    if (top - gy < 40) continue;
+    const vis = top - gy,
+      mk = (frac, scale, th, col) => {
+        const yb = gy + vis * frac,
+          rb = (sp.r * (top - yb)) / sp.m;
+        parts.push(vcBake(new ConeGeometry(rb * scale, sp.m * th, 7), vcAt(sp.x, yb + (sp.m * th) / 2, sp.z), col));
+      };
+    mk(0.55, 1.1, 0.05, 4866104);
+    mk(0.3, 1.08, 0.04, 6050376);
+    mk(0.02, 1.16, 0.05, 9076590);
+    mtnStrataSys.dressed++;
+    mtnStrataSys.sample || (mtnStrataSys.sample = { x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), top: +top.toFixed(1), gy: +gy.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const mm = new Mesh(mergeGeometries(parts, !1), new MeshStandardMaterial({ vertexColors: !0, roughness: 0.96, metalness: 0 }));
+  ((mm.receiveShadow = !0), (mm.raycast = () => {}), group.add(mm), (mtnStrataSys._mesh = mm));
+  if (!mtnStrataSys.enabled) mm.visible = !1;
+}
+buildMtnStrata(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -12168,6 +12204,11 @@ window.__steelRibbonDebug = {
     pondShoreSys._mesh && (pondShoreSys._mesh.visible = pondShoreSys.enabled);
     return pondShoreSys.enabled;
   },
+  mtnStrataEnable(on) {
+    mtnStrataSys.enabled = !!on;
+    mtnStrataSys._mesh && (mtnStrataSys._mesh.visible = mtnStrataSys.enabled);
+    return mtnStrataSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12354,6 +12395,7 @@ window.__steelRibbonDebug = {
       treeVar: { broadleaf: treeVarSys.broadleaf, autumn: treeVarSys.autumn, enabled: treeVarSys.enabled, sample: treeVarSys.sample ?? null },
       standRoof: { roofs: standRoofSys.roofs, enabled: standRoofSys.enabled },
       pondShores: { shores: pondShoreSys.shores, enabled: pondShoreSys.enabled, sample: pondShoreSys.sample ?? null },
+      mtnStrata: { dressed: mtnStrataSys.dressed, enabled: mtnStrataSys.enabled, sample: mtnStrataSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
