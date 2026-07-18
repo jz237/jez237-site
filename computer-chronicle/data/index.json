@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-18",
+      "historicDate": "1983-06-20",
+      "displayDate": "Week of June 20-26, 1983",
+      "edition": "Issue 047 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week in 1983: software learns the hard sell, Coleco unveils Adam, and Atari remakes its home-computer line.",
+      "leadHeadline": "Software's Hard Sell",
+      "storyHeadlines": [
+        "Coleco's Adam Takes Aim at the Family Room",
+        "Atari Clears the Deck for Four XL Machines",
+        "Programs May Soon Travel by Telephone"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-06-20.jpg",
+      "thumb": "media/thumbs/1983-06-20.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-17",
       "historicDate": "1983-06-13",
       "displayDate": "Week of June 13–19, 1983",
