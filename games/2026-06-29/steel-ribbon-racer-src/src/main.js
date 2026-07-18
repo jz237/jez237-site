@@ -2416,6 +2416,8 @@ const walkwaySys = { walks: 0, hedges: 0, enabled: !0, sample: null, _mesh: null
 const treeVarSys = { broadleaf: 0, autumn: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
 // zoom-detail 75 (round-eight item 6): slate stand roofs + fascia (was white blowout)
 const standRoofSys = { roofs: 0, enabled: !0, _meshes: [], _newMat: null, _oldMat: null, _fascia: null };
+// zoom-detail 76 (round-eight item 7): sand/mud shore rings at the pond waterlines
+const pondShoreSys = { shores: 0, enabled: !0, sample: null, _mesh: null };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -9336,6 +9338,33 @@ function buildStandFascias(group) {
   if (!standRoofSys.enabled) fm.visible = !1;
 }
 buildStandFascias(et);
+// zoom-detail 76 (round-eight item 7): the lawn met the water in a hard edge — each
+// pond (rx <= 60, same filter as pondEdges) gets a flat sand ring at the waterline
+// with a darker wet-mud band just inside it. The rings are FLAT at water level; the
+// outer rim cutting into rising lawn reads as a natural bank. ONE merged vc mesh.
+function buildPondShores(group) {
+  ((pondShoreSys.shores = 0), (pondShoreSys.sample = null));
+  if (!ponds.length) return;
+  const parts = [];
+  for (const p of ponds) {
+    if (!p.rx || p.rx > 60) continue;
+    const wy = p.waterY != null ? p.waterY : He(p.x, p.z) + 0.15,
+      sq = p.rz / p.rx,
+      sand = new Matrix4().makeScale(1, 1, sq),
+      mud = new Matrix4().makeScale(1, 1, sq);
+    sand.setPosition(p.x, wy + 0.045, p.z);
+    mud.setPosition(p.x, wy + 0.025, p.z);
+    parts.push(vcBake(new RingGeometry(p.rx * 0.9, p.rx + 2.2, 26).rotateX(-Math.PI / 2), sand, 10259038));
+    parts.push(vcBake(new RingGeometry(p.rx * 0.8, p.rx * 0.92, 26).rotateX(-Math.PI / 2), mud, 7035458));
+    pondShoreSys.shores++;
+    pondShoreSys.sample || (pondShoreSys.sample = { x: +p.x.toFixed(1), z: +p.z.toFixed(1), rx: +p.rx.toFixed(1), wy: +wy.toFixed(2) });
+  }
+  if (!parts.length) return;
+  const sm = new Mesh(mergeGeometries(parts, !1), new MeshStandardMaterial({ vertexColors: !0, roughness: 0.96, metalness: 0 }));
+  ((sm.receiveShadow = !0), (sm.raycast = () => {}), group.add(sm), (pondShoreSys._mesh = sm));
+  if (!pondShoreSys.enabled) sm.visible = !1;
+}
+buildPondShores(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -12134,6 +12163,11 @@ window.__steelRibbonDebug = {
     standRoofSys._fascia && (standRoofSys._fascia.visible = standRoofSys.enabled);
     return standRoofSys.enabled;
   },
+  pondShoresEnable(on) {
+    pondShoreSys.enabled = !!on;
+    pondShoreSys._mesh && (pondShoreSys._mesh.visible = pondShoreSys.enabled);
+    return pondShoreSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12319,6 +12353,7 @@ window.__steelRibbonDebug = {
       suburbWalks: { walks: walkwaySys.walks, hedges: walkwaySys.hedges, enabled: walkwaySys.enabled, sample: walkwaySys.sample ?? null, samples: walkwaySys._samples.slice(0, 6) },
       treeVar: { broadleaf: treeVarSys.broadleaf, autumn: treeVarSys.autumn, enabled: treeVarSys.enabled, sample: treeVarSys.sample ?? null },
       standRoof: { roofs: standRoofSys.roofs, enabled: standRoofSys.enabled },
+      pondShores: { shores: pondShoreSys.shores, enabled: pondShoreSys.enabled, sample: pondShoreSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
