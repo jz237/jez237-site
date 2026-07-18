@@ -855,6 +855,21 @@ const browser = await chromium.launch({
     JSON.stringify({ turbines: wm?.turbines }),
   );
 
+  // zoom-detail 70 (round eight item 1): plinths/collars/tips dress the deck pylons
+  const pyd = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().pylonDress,
+      off = deb.pylonDressEnable(false),
+      offRep = deb.detailReport().pylonDress.enabled;
+    deb.pylonDressEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "pylon dressing: plinths + collars + warning tips on deck pylons, toggle works",
+    !!pyd && pyd.dressed >= 8 && pyd.dressed <= 130 && pyd.collars > pyd.dressed && pyd.off === false && pyd.offRep === false,
+    JSON.stringify({ dressed: pyd?.dressed, collars: pyd?.collars }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,

@@ -2398,6 +2398,8 @@ const plateSys = {
 const crowdTexSys = { enabled: !0, _mats: [], _dots: [], _legacy: null };
 // zoom-detail 68 (round-seven item 10): striped blade tips + nose cones on the turbines
 const windmillSys = { turbines: 0, enabled: !0, sample: null, _meshes: [] };
+// zoom-detail 70 (round-eight item 1): plinths/collars/warning tips on the deck pylons
+const pylonDressSys = { dressed: 0, collars: 0, enabled: !0, sample: null, _mesh: null };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -9103,6 +9105,36 @@ function buildBalloons() {
   }
 }
 buildBalloons();
+// zoom-detail 70 (round-eight item 1): the deck support pylons read as bare threads
+// from street level — dress every pylon (the $n collider registry, entries with hw)
+// with a two-step concrete plinth, steel collar rings every ~11m, and an emissive
+// amber warning cube just under the deck. ONE merged vertex-color mesh; the deck
+// surface math is untouched (vertical members only — the it.59 kerbs lesson).
+function buildPylonDressing(group) {
+  ((pylonDressSys.dressed = 0), (pylonDressSys.collars = 0), (pylonDressSys.sample = null));
+  const parts = [];
+  for (const p of $n) {
+    if (!p.hw || p.maxY == null) continue;
+    if (pylonDressSys.dressed >= 130) break;
+    const tall = p.hw > 2,
+      rad = tall ? 0.56 : 0.42,
+      gy = He(p.x, p.z),
+      top = p.maxY + 0.7;
+    if (top - gy < 12) continue;
+    parts.push(vcBake(new BoxGeometry(rad * 4.8, 1.1, rad * 4.8), vcAt(p.x, gy + 0.55, p.z), 7040884));
+    parts.push(vcBake(new BoxGeometry(rad * 3.5, 1.0, rad * 3.5), vcAt(p.x, gy + 1.5, p.z), 6183530));
+    for (let y = gy + 9; y < top - 3.5; y += 14)
+      (parts.push(vcBake(new CylinderGeometry(rad + 0.34, rad + 0.34, 0.62, 8), vcAt(p.x, y, p.z), 3818824)), pylonDressSys.collars++);
+    parts.push(vcBake(new BoxGeometry(0.55, 0.55, 0.55), vcAt(p.x, top - 1.4, p.z), 3350547, 16749824, 1.4));
+    pylonDressSys.dressed++;
+    pylonDressSys.sample || (pylonDressSys.sample = { x: +p.x.toFixed(1), z: +p.z.toFixed(1), gy: +gy.toFixed(1), top: +top.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const pm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((pm.castShadow = !0), (pm.receiveShadow = !0), (pm.raycast = () => {}), group.add(pm), (pylonDressSys._mesh = pm));
+  if (!pylonDressSys.enabled) pm.visible = !1;
+}
+buildPylonDressing(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -11870,6 +11902,11 @@ window.__steelRibbonDebug = {
     for (const m of windmillSys._meshes) m.visible = windmillSys.enabled;
     return windmillSys.enabled;
   },
+  pylonDressEnable(on) {
+    pylonDressSys.enabled = !!on;
+    pylonDressSys._mesh && (pylonDressSys._mesh.visible = pylonDressSys.enabled);
+    return pylonDressSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12049,6 +12086,7 @@ window.__steelRibbonDebug = {
       blimp: { x: blimpSys.x, z: blimpSys.z, alt: blimpSys.alt, text: blimpSys.text },
       balloons: { count: balloonSys.count, enabled: balloonSys.enabled, x: balloonSys.x, z: balloonSys.z, alt: balloonSys.alt },
       windmill: { turbines: windmillSys.turbines, enabled: windmillSys.enabled, sample: windmillSys.sample ?? null },
+      pylonDress: { dressed: pylonDressSys.dressed, collars: pylonDressSys.collars, enabled: pylonDressSys.enabled, sample: pylonDressSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
