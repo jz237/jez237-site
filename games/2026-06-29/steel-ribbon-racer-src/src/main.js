@@ -1410,6 +1410,7 @@ function L1() {
       canopyIM = new InstancedMesh(canopyGeo, new MeshStandardMaterial({ roughness: 0.92 }), 185),
       dum = new Object3D();
     let ci = 0;
+    treeVarSys._spots.length = 0;
     for (let g = 0; g < 185; g++) {
       const M = 0.58 + Math.random() * 1.05,
         x = 8 * M,
@@ -1419,6 +1420,10 @@ function L1() {
       if (ka(_, v, 18)) continue;
       const y = He(_, v) + 0.8,
         T = 2.2 + Math.random() * 3.8;
+      if ((g & 3) === 3) {
+        (treeVarSys._spots.push({ x: _, z: v, m: M, t: T, y }), kn("tree", _, v, x, 145));
+        continue;
+      }
       (dum.position.set(_, y, v),
         (dum.rotation.y = Math.random() * Math.PI),
         dum.scale.set(M, T, M),
@@ -2406,6 +2411,8 @@ const deckRibSys = { ribs: 0, spines: 0, enabled: !0, sample: null, _mesh: null,
 const forecourtSys = { pads: 0, planters: 0, enabled: !0, sample: null, _mesh: null };
 // zoom-detail 73 (round-eight item 4): front walkways + hedges for the suburban shops
 const walkwaySys = { walks: 0, hedges: 0, enabled: !0, sample: null, _mesh: null, _spots: [], _samples: [] };
+// zoom-detail 74 (round-eight item 5): broadleaf + autumn trees among the conifers
+const treeVarSys = { broadleaf: 0, autumn: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -9266,6 +9273,42 @@ function buildSuburbWalks(group) {
   if (!walkwaySys.enabled) wm.visible = !1;
 }
 buildSuburbWalks(et);
+// zoom-detail 74 (round-eight item 5): the city forest was one cone-pine species —
+// every 4th conifer slot becomes a broadleaf "lollipop" (trunk + lumpy 3-sphere
+// canopy), with every 6th broadleaf autumn-tinted amber/rust. Slots are diverted
+// DETERMINISTICALLY on the loop index inside the conifer instancing loop (still
+// kn-registered); ONE merged vertex-color mesh carries all of them.
+function buildTreeVariety(group) {
+  ((treeVarSys.broadleaf = 0), (treeVarSys.autumn = 0), (treeVarSys.sample = null));
+  if (!treeVarSys._spots.length) return;
+  const parts = [],
+    GREENS = [7314506, 6261823, 8366165],
+    FALLS = [13208122, 11889200];
+  for (let i = 0; i < treeVarSys._spots.length; i++) {
+    const sp = treeVarSys._spots[i],
+      base = sp.y - 0.7,
+      fall = i % 6 === 5,
+      cA = fall ? FALLS[i % 2] : GREENS[i % 3],
+      cB = fall ? FALLS[(i + 1) % 2] : GREENS[(i + 1) % 3],
+      th = 1.6 * sp.m + sp.t * 0.55,
+      cy = base + th + 1.05 * sp.m;
+    parts.push(vcBake(new CylinderGeometry(0.24 * sp.m, 0.36 * sp.m, th, 6), vcAt(sp.x, base + th * 0.5, sp.z), 7031344));
+    const mainM = new Matrix4().makeScale(1, 0.82, 1);
+    mainM.setPosition(sp.x, cy, sp.z);
+    parts.push(vcBake(new SphereGeometry(2.45 * sp.m, 6, 5), mainM, cA));
+    const oa = (i * 2.4) % (Math.PI * 2);
+    parts.push(vcBake(new SphereGeometry(1.55 * sp.m, 5, 4), vcAt(sp.x + Math.cos(oa) * 1.5 * sp.m, cy + 0.7 * sp.m, sp.z + Math.sin(oa) * 1.5 * sp.m), cB));
+    parts.push(vcBake(new SphereGeometry(1.3 * sp.m, 5, 4), vcAt(sp.x - Math.cos(oa) * 1.6 * sp.m, cy + 0.25 * sp.m, sp.z - Math.sin(oa) * 1.6 * sp.m), cA));
+    (treeVarSys.broadleaf++, fall && treeVarSys.autumn++);
+    treeVarSys.sample || (treeVarSys.sample = { x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), y: +cy.toFixed(1) });
+  }
+  // flat foliage material — the shared vc material's metalness turns smooth canopy
+  // spheres into black specular blobs at dusk; trees need diffuse like the conifers
+  const tm = new Mesh(mergeGeometries(parts, !1), new MeshStandardMaterial({ vertexColors: !0, roughness: 0.95, metalness: 0 }));
+  ((tm.castShadow = !0), (tm.receiveShadow = !0), (tm.raycast = () => {}), group.add(tm), (treeVarSys._mesh = tm));
+  if (!treeVarSys.enabled) tm.visible = !1;
+}
+buildTreeVariety(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -12053,6 +12096,11 @@ window.__steelRibbonDebug = {
     walkwaySys._mesh && (walkwaySys._mesh.visible = walkwaySys.enabled);
     return walkwaySys.enabled;
   },
+  treeVarietyEnable(on) {
+    treeVarSys.enabled = !!on;
+    treeVarSys._mesh && (treeVarSys._mesh.visible = treeVarSys.enabled);
+    return treeVarSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12236,6 +12284,7 @@ window.__steelRibbonDebug = {
       deckRibs: { ribs: deckRibSys.ribs, spines: deckRibSys.spines, enabled: deckRibSys.enabled, sample: deckRibSys.sample ?? null },
       forecourts: { pads: forecourtSys.pads, planters: forecourtSys.planters, enabled: forecourtSys.enabled, sample: forecourtSys.sample ?? null },
       suburbWalks: { walks: walkwaySys.walks, hedges: walkwaySys.hedges, enabled: walkwaySys.enabled, sample: walkwaySys.sample ?? null, samples: walkwaySys._samples.slice(0, 6) },
+      treeVar: { broadleaf: treeVarSys.broadleaf, autumn: treeVarSys.autumn, enabled: treeVarSys.enabled, sample: treeVarSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

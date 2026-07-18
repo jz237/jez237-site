@@ -915,6 +915,21 @@ const browser = await chromium.launch({
     JSON.stringify({ walks: swk?.walks, hedges: swk?.hedges }),
   );
 
+  // zoom-detail 74 (round eight item 5): broadleaf + autumn trees among conifers
+  const tvr = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().treeVar,
+      off = deb.treeVarietyEnable(false),
+      offRep = deb.detailReport().treeVar.enabled;
+    deb.treeVarietyEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "tree variety: broadleaf + autumn canopies mixed into the forest, toggle works",
+    !!tvr && tvr.broadleaf >= 20 && tvr.broadleaf <= 70 && tvr.autumn >= 3 && tvr.off === false && tvr.offRep === false,
+    JSON.stringify({ broadleaf: tvr?.broadleaf, autumn: tvr?.autumn }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,

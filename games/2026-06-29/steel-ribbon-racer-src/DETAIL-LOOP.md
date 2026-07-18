@@ -1739,3 +1739,21 @@ signal-corner ped density weighting.
   {walks, hedges, sample, samples[6]}; suburbWalksEnable. Suite
   169/169. NEXT: item 5 tree variety → then DEPLOY BATCH 21
   (v3.28.0, round-eight items 1-5).
+- **74 TREE VARIETY (2026-07-17)**: round-eight item 5 — the city
+  forest was one cone-pine species. Every 4th conifer LOOP INDEX
+  ((g & 3) === 3 — deterministic, not Math.random) diverts to a
+  broadleaf collector (still kn-registered, conifer instances
+  untouched otherwise); a module-level builder raises ~42-46
+  lollipop broadleafs (trunk + lumpy 3-sphere canopy), every 6th
+  autumn amber/rust. ATTEMPT 1 FAILED THE LOOK: canopies rendered
+  as BLACK GLOSSY BLOBS — the shared vcMats().opaque material has
+  metalness 0.22, and smooth spheres at dusk go full specular
+  darkness. NEW PLAYBOOK RULE: FOLIAGE/ORGANIC vc meshes need a
+  DEDICATED flat material (vertexColors, roughness ~0.95, metalness
+  0 — same class as the conifer materials); the shared vc material
+  is for hard/built things. Also brightened the palette ~1.6x.
+  ONE merged mesh + 1 material, ~7k tris. LOOK verdict
+  (loop-shots/74-trees/): bright green lollipop near, mixed grove
+  (pines + green + amber + blossom-pale) at mid. Report treeVar
+  {broadleaf, autumn, sample}; treeVarietyEnable. Suite 170/170.
+  **ROUND-EIGHT ITEMS 1-5 DONE → DEPLOY BATCH 21 (v3.28.0).**
