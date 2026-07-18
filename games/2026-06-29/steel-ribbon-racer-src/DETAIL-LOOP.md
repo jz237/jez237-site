@@ -1578,3 +1578,19 @@ signal-corner ped density weighting.
   posts 132, sample}; lampDressEnable toggle. Suite 162/162 (one
   inspect-cars flake on run 1, clean rerun — the flaky family).
   NEXT: item 8 balloon canopies.
+- **66 HOT-AIR BALLOONS (2026-07-17)**: round-seven item 8 — three
+  gore-striped hot-air balloons (crimson/cream, teal/cream,
+  gold/cream) drift, bob and slowly spin on low lanes over the city
+  fringes (alts 165/195/205 — well under the blimp's 300). Each is
+  ONE merged vcBake mesh: 12 sphere-slice gores (phiStart/phiLength
+  — no per-vertex tinting needed), skirt cylinder, EMISSIVE burner
+  cube (vcBake's emissive args, first use — they work), wicker
+  basket, four ropes; own group + Bn drift tick, blimp wrap pattern.
+  +3 draws (shared vc material), ~1.2k tris, ZERO textures. Verified
+  by LOOKING (loop-shots/66-balloons/): near = classic striped
+  balloon with glowing burner over the outskirt hills; off = empty
+  sky; mid reads as distant sky detail. First-try visual pass.
+  Report balloons {count,x,z,alt}; balloonsEnable toggle; probe
+  asserts count 3, alt window, drift, toggle. Suite 163/163 FIRST
+  RUN. v3.26.0. DEPLOY BATCH 19 (items 7+8) per user "yes, continue
+  and deploy". NEXT: item 9 grandstand crowds.

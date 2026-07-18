@@ -808,6 +808,23 @@ const browser = await chromium.launch({
     JSON.stringify({ dressed: lpd?.dressed, baskets: lpd?.baskets }),
   );
 
+  // zoom-detail 66 (round seven item 8): hot-air balloons drift over the outskirts
+  const bal = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug,
+      b0 = deb.detailReport().balloons;
+    await new Promise((r) => setTimeout(r, 2500));
+    const b1 = deb.detailReport().balloons,
+      off = deb.balloonsEnable(false),
+      offRep = deb.detailReport().balloons.enabled;
+    deb.balloonsEnable(true);
+    return { count: b0.count, alt: b1.alt, drift: +(b1.x - b0.x).toFixed(1), off, offRep };
+  });
+  check(
+    "balloons: striped hot-air balloons drift below the blimp lane, toggle works",
+    !!bal && bal.count === 3 && bal.alt > 120 && bal.alt < 240 && bal.drift > 0.3 && bal.off === false && bal.offRep === false,
+    JSON.stringify(bal),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
