@@ -975,6 +975,25 @@ const browser = await chromium.launch({
     JSON.stringify({ dressed: mst?.dressed }),
   );
 
+  // zoom-detail 78 (round eight item 9): manhole covers + drain grates
+  const irn = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    for (let k = 0; k < 40; k++) {
+      if (deb.detailReport().iron.placed > 0) break;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    const r = deb.detailReport().iron,
+      off = deb.ironEnable(false),
+      offRep = deb.detailReport().iron.enabled;
+    deb.ironEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "iron street furniture: manholes + drain grates placed on roads, toggle works",
+    !!irn && irn.spots >= 12 && irn.placed === irn.spots && irn.off === false && irn.offRep === false,
+    JSON.stringify({ spots: irn?.spots, placed: irn?.placed }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,

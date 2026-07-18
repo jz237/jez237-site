@@ -3518,6 +3518,80 @@ const oilSys = {
     (this.ensure(), this.place());
   },
 };
+// zoom-detail 78 (round-eight item 9): manhole covers + drain grates — the oilSys
+// road-decal shader family, third member. ONE InstancedMesh, 2-cell iron atlas.
+let ironAtlasTex = null;
+function buildIronAtlas() {
+  if (ironAtlasTex) return ironAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 256), (cv.height = 128));
+  const g = cv.getContext("2d");
+  // cell 0: round manhole cover
+  ((g.fillStyle = "#2e3236"), g.beginPath(), g.arc(64, 64, 54, 0, Math.PI * 2), g.fill());
+  ((g.strokeStyle = "#464b50"), (g.lineWidth = 6), g.beginPath(), g.arc(64, 64, 48, 0, Math.PI * 2), g.stroke());
+  ((g.lineWidth = 3), g.beginPath(), g.arc(64, 64, 30, 0, Math.PI * 2), g.stroke());
+  g.strokeStyle = "#1c1f22";
+  for (let k = 0; k < 12; k++) {
+    const a = (k / 12) * Math.PI * 2;
+    (g.beginPath(), g.moveTo(64 + Math.cos(a) * 32, 64 + Math.sin(a) * 32), g.lineTo(64 + Math.cos(a) * 46, 64 + Math.sin(a) * 46), g.stroke());
+  }
+  // cell 1: rectangular drain grate
+  ((g.fillStyle = "#33383c"), g.fillRect(134, 34, 116, 60));
+  g.fillStyle = "#141618";
+  for (let k = 0; k < 7; k++) g.fillRect(140 + k * 16, 40, 9, 48);
+  ironAtlasTex = new CanvasTexture(cv);
+  return ((ironAtlasTex.colorSpace = SRGBColorSpace), ironAtlasTex);
+}
+const ironSys = {
+  spots: [],
+  mesh: null,
+  placed: 0,
+  placedDone: !1,
+  enabled: !0,
+  sample: [],
+  _surfaceY(sp) {
+    return roadDecalSys._surfaceY(sp);
+  },
+  ensure() {
+    if (this.mesh) return;
+    const geo = new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+    geo.setAttribute("aDecalSlot", new InstancedBufferAttribute(new Float32Array(44), 1));
+    const mat = new MeshBasicMaterial({ map: buildIronAtlas(), transparent: !0, polygonOffset: !0, polygonOffsetFactor: -3, depthWrite: !1 });
+    mat.customProgramCacheKey = () => "manhole-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute float aDecalSlot;\nvarying vec2 vIronUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvIronUv = vec2((aDecalSlot + uv.x) * 0.5, uv.y);");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vIronUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vIronUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, 44);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1), (this.mesh.raycast = () => {}), (this.mesh.renderOrder = 1), (this.mesh.count = 0));
+    et.add(this.mesh);
+  },
+  place() {
+    const dummy = new Object3D();
+    let n = 0;
+    this.sample.length = 0;
+    for (const sp of this.spots) {
+      if (n >= 44) break;
+      const sc = sp.v ? [1.5 + sp.s * 0.2, 0.75] : [1.22 + sp.s * 0.15, 1.22 + sp.s * 0.15];
+      (dummy.position.set(sp.x, this._surfaceY(sp), sp.z), (dummy.rotation.y = sp.yaw), dummy.scale.set(sc[0], 1, sc[1]), dummy.updateMatrix());
+      this.mesh.setMatrixAt(n, dummy.matrix);
+      this.mesh.geometry.attributes.aDecalSlot.setX(n, sp.v);
+      this.sample.length < 3 && this.sample.push({ x: sp.x, z: sp.z, v: sp.v });
+      n++;
+    }
+    ((this.mesh.count = n), (this.mesh.instanceMatrix.needsUpdate = !0), (this.mesh.geometry.attributes.aDecalSlot.needsUpdate = !0), (this.placed = n), (this.placedDone = !0));
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    if (this.mesh) this.mesh.visible = this.enabled;
+    if (this.placedDone) return;
+    (this.ensure(), this.place());
+  },
+};
 // (4b-lite driver silhouettes retired in round four: every cabin now has
 // a real recessed driver baked in — see full-fat 4b.)
 // race roadside life (zoom-detail item 18): marshals with checkered flags,
@@ -4869,6 +4943,22 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
     if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
     oilSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw: orng() * 6.28, v: (orng() * 2) | 0, s: orng() });
   }
+  ((ironSys.spots.length = 0), (ironSys.placedDone = !1));
+  const irng = plateRng(0x1a09e5);
+  for (let i = 0; i < 320 && ironSys.spots.length < 44; i++) {
+    // manholes mid-lane near intersections; drain grates along the curb line
+    const isNS = irng() < 0.5,
+      xi = x0 + pitch * (1 + ((irng() * ((x1 - x0) / pitch - 1)) | 0)),
+      zj = zHigh - pitch * (1 + ((irng() * ((zHigh - zLow) / pitch - 1)) | 0)),
+      back = 6 + irng() * 26,
+      v = irng() < 0.55 ? 0 : 1,
+      off = (irng() < 0.5 ? -1 : 1) * sw * (v === 0 ? 0.1 : 0.38),
+      px = isNS ? xi + off : xi + (irng() < 0.5 ? -back : back),
+      pz = isNS ? zj + (irng() < 0.5 ? -back : back) : zj + off;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    const yaw = v === 1 ? (isNS ? 0 : Math.PI / 2) : irng() * 6.28;
+    ironSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw, v, s: irng() });
+  }
   for (const d of defs) {
     const im = meshes[d.key];
     ((im.count = im.userData.used), (im.instanceMatrix.needsUpdate = !0), (furnitureSys.counts[d.key] = im.userData.used));
@@ -5373,6 +5463,7 @@ function F1(i, e, t) {
       facadeSys.update(I, ye);
       roadDecalSys.update(I, ye);
       oilSys.update(I, ye);
+      ironSys.update(I, ye);
       newsSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
@@ -12141,6 +12232,11 @@ window.__steelRibbonDebug = {
     oilSys.enabled = !!on;
     return oilSys.enabled;
   },
+  ironEnable(on) {
+    ironSys.enabled = !!on;
+    ironSys.mesh && (ironSys.mesh.visible = ironSys.enabled);
+    return ironSys.enabled;
+  },
   shopBandsEnable(on) {
     shopBandSys.enabled = !!on;
     for (const m of shopBandSys._meshes) m.visible = shopBandSys.enabled;
@@ -12376,6 +12472,7 @@ window.__steelRibbonDebug = {
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
       oil: { spots: oilSys.spots.length, placed: oilSys.placed, enabled: oilSys.enabled, sample: oilSys.sample.slice(0, 3) },
+      iron: { spots: ironSys.spots.length, placed: ironSys.placed, enabled: ironSys.enabled, sample: ironSys.sample.slice(0, 3) },
       shopBands: { count: shopBandSys.count, enabled: shopBandSys.enabled, sample: shopBandSys.sample ?? null },
       lampDress: { dressed: lampDressSys.dressed, baskets: lampDressSys.baskets, posts: lampDressSys.posts.length, enabled: lampDressSys.enabled, sample: lampDressSys.sample ?? null },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
