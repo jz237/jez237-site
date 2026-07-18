@@ -2422,6 +2422,8 @@ const standRoofSys = { roofs: 0, enabled: !0, _meshes: [], _newMat: null, _oldMa
 const pondShoreSys = { shores: 0, enabled: !0, sample: null, _mesh: null };
 // zoom-detail 77 (round-eight item 8): strata bands + talus skirts on the big mountains
 const mtnStrataSys = { dressed: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
+// zoom-detail 79 (round-eight item 10): park paths connect to the street network
+const connectSys = { connectors: 0, bollards: 0, enabled: !0, sample: null, _mesh: null, _cells: [] };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -4424,7 +4426,7 @@ function buildHaloTexture() {
   return ((neonHaloTex.colorSpace = SRGBColorSpace), neonHaloTex);
 }
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []), (lampDressSys.parkCells.length = 0));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []), (lampDressSys.parkCells.length = 0), (connectSys._cells.length = 0));
   const zLo = Math.min(zA, zB),
     zTop = Math.max(zA, zB),
     zCap = Math.min(zTop, 240),
@@ -4517,6 +4519,7 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
     }
     parkSys.cells++;
     parkSys.strollerCells.length < 3 && parkSys.strollerCells.push({ cx, cz, vert, bow, half });
+    connectSys._cells.push({ cx, cz, vert, half });
     parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
     lampDressSys.parkCells.push({ x: cx, z: cz });
   }
@@ -9492,6 +9495,54 @@ function buildMtnStrata(group) {
   if (!mtnStrataSys.enabled) mm.visible = !1;
 }
 buildMtnStrata(et);
+// zoom-detail 79 (round-eight item 10): park gravel paths dead-ended in lawn — run a
+// straight connector strip from each path end (the bow vanishes at t=0/1, so ends sit
+// at cell center ± half along the path axis) out to the street edge (Pn-probed, the
+// it.73 walkway pattern), with a bollard pair at each street mouth. Shallow terrace
+// per the corner rule. ONE merged vertex-color mesh in the walkway cream tone.
+function buildParkConnectors(group) {
+  ((connectSys.connectors = 0), (connectSys.bollards = 0), (connectSys.sample = null));
+  const parts = [];
+  for (const c of connectSys._cells) {
+    for (const sgn of [-1, 1]) {
+      if (connectSys.connectors >= 26) break;
+      const dx = c.vert ? 0 : sgn,
+        dz = c.vert ? sgn : 0,
+        ex = c.cx + dx * c.half,
+        ez = c.cz + dz * c.half;
+      // lattice geometry: half = pitch/2 - sw/2 - 12, so every path end sits exactly
+      // 12m from the adjacent road edge — the connector length is deterministic.
+      // (Pn measures clearance to the RACE COURSE, not city roads — probing with it
+      // silently fails; see the it.79 ledger note.)
+      const L = 10.8;
+      const mx = ex + dx * (L * 0.5),
+        mz = ez + dz * (L * 0.5),
+        hA = He(ex, ez),
+        hB = He(ex + dx * L, ez + dz * L),
+        topY = Math.max(hA, hB) + 0.08,
+        th = topY - (Math.min(hA, hB) - 0.3),
+        wg = new BoxGeometry(c.vert ? 1.9 : L + 0.8, th, c.vert ? L + 0.8 : 1.9);
+      parts.push(vcBake(wg, vcAt(mx, topY - th * 0.5, mz), 8222824));
+      const px = -dz,
+        pz = dx,
+        bx = ex + dx * (L - 0.5),
+        bz = ez + dz * (L - 0.5);
+      for (const bs of [-1, 1]) {
+        const hx = bx + px * bs * 1.35,
+          hz = bz + pz * bs * 1.35,
+          hg = He(hx, hz);
+        (parts.push(vcBake(new CylinderGeometry(0.1, 0.12, 0.85, 6), vcAt(hx, Math.max(hg, topY) + 0.42, hz), 2765112)), connectSys.bollards++);
+      }
+      connectSys.connectors++;
+      connectSys.sample || (connectSys.sample = { x: +ex.toFixed(1), z: +ez.toFixed(1), y: +topY.toFixed(1), dx, dz, L: +L.toFixed(1) });
+    }
+  }
+  if (!parts.length) return;
+  const cm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((cm.castShadow = !1), (cm.receiveShadow = !0), (cm.raycast = () => {}), group.add(cm), (connectSys._mesh = cm));
+  if (!connectSys.enabled) cm.visible = !1;
+}
+buildParkConnectors(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -12305,6 +12356,11 @@ window.__steelRibbonDebug = {
     mtnStrataSys._mesh && (mtnStrataSys._mesh.visible = mtnStrataSys.enabled);
     return mtnStrataSys.enabled;
   },
+  parkConnectorsEnable(on) {
+    connectSys.enabled = !!on;
+    connectSys._mesh && (connectSys._mesh.visible = connectSys.enabled);
+    return connectSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12493,6 +12549,7 @@ window.__steelRibbonDebug = {
       standRoof: { roofs: standRoofSys.roofs, enabled: standRoofSys.enabled },
       pondShores: { shores: pondShoreSys.shores, enabled: pondShoreSys.enabled, sample: pondShoreSys.sample ?? null },
       mtnStrata: { dressed: mtnStrataSys.dressed, enabled: mtnStrataSys.enabled, sample: mtnStrataSys.sample ?? null },
+      parkConnectors: { connectors: connectSys.connectors, bollards: connectSys.bollards, enabled: connectSys.enabled, sample: connectSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

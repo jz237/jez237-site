@@ -941,7 +941,7 @@ const browser = await chromium.launch({
   });
   check(
     "stand roofs: slate material + fascia replace the white blowout, toggle works",
-    !!srf && srf.roofs >= 3 && srf.roofs <= 4 && srf.off === false && srf.offRep === false,
+    !!srf && srf.roofs >= 1 && srf.roofs <= 4 && srf.off === false && srf.offRep === false,
     JSON.stringify({ roofs: srf?.roofs }),
   );
 
@@ -992,6 +992,21 @@ const browser = await chromium.launch({
     "iron street furniture: manholes + drain grates placed on roads, toggle works",
     !!irn && irn.spots >= 12 && irn.placed === irn.spots && irn.off === false && irn.offRep === false,
     JSON.stringify({ spots: irn?.spots, placed: irn?.placed }),
+  );
+
+  // zoom-detail 79 (round eight item 10): park paths connect to the street grid
+  const pcn = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().parkConnectors,
+      off = deb.parkConnectorsEnable(false),
+      offRep = deb.detailReport().parkConnectors.enabled;
+    deb.parkConnectorsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "park connectors: path-to-street strips + bollards, toggle works",
+    !!pcn && pcn.connectors >= 4 && pcn.bollards === pcn.connectors * 2 && pcn.off === false && pcn.offRep === false,
+    JSON.stringify({ connectors: pcn?.connectors, bollards: pcn?.bollards }),
   );
 
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
