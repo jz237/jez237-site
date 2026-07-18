@@ -1788,3 +1788,17 @@ signal-corner ped density weighting.
   defined sand bank vs water floating on flat ground. Report
   pondShores {shores, sample}; pondShoresEnable. Suite 172/172.
   NEXT: item 8 mountain strata.
+- **77 MOUNTAIN STRATA (2026-07-17)**: round-eight item 8 — the
+  fringe mountains were stark placeholder cones. Big peaks (M > 120,
+  ~36-40/world) gain two proud strata band rings (short wide cone
+  slices at 30%/55% of VISIBLE height — parent radius recomputed
+  from the cone taper, r*(top-y)/M) and a talus skirt at the foot.
+  Rings use 7 segs against the 5-6-seg parents — the facet mismatch
+  reads as irregular rock ledges, a feature not a bug. Colors
+  COMPUTED from hex in the patch script (it.76 rule paid off —
+  first-try visual pass). SILHOUETTE UNCHANGED (far shot verified —
+  the range reads as before with faint band hints up close). ONE
+  merged mesh, flat organic material, ~1.5k tris. Report mtnStrata
+  {dressed, sample}; mtnStrataEnable. Suite 173/173. NEXT: item 9
+  manholes + drain grates (oilSys clone), then 10 park path
+  connections → DEPLOY BATCH 22 (v3.29.0) + closing survey.

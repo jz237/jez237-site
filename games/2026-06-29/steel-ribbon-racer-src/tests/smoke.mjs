@@ -960,6 +960,21 @@ const browser = await chromium.launch({
     JSON.stringify({ shores: psh?.shores }),
   );
 
+  // zoom-detail 77 (round eight item 8): strata bands + talus skirts on mountains
+  const mst = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().mtnStrata,
+      off = deb.mtnStrataEnable(false),
+      offRep = deb.detailReport().mtnStrata.enabled;
+    deb.mtnStrataEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "mountain strata: band rings + talus skirts on big peaks, toggle works",
+    !!mst && mst.dressed >= 8 && mst.dressed <= 52 && mst.off === false && mst.offRep === false,
+    JSON.stringify({ dressed: mst?.dressed }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
