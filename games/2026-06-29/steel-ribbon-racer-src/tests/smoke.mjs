@@ -945,6 +945,21 @@ const browser = await chromium.launch({
     JSON.stringify({ roofs: srf?.roofs }),
   );
 
+  // zoom-detail 76 (round eight item 7): sand/mud shore rings at pond waterlines
+  const psh = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().pondShores,
+      off = deb.pondShoresEnable(false),
+      offRep = deb.detailReport().pondShores.enabled;
+    deb.pondShoresEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "pond shores: sand + mud rings at the waterline, toggle works",
+    !!psh && psh.shores >= 1 && psh.off === false && psh.offRep === false,
+    JSON.stringify({ shores: psh?.shores }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,

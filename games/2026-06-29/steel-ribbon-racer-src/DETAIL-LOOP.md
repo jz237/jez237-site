@@ -1772,3 +1772,19 @@ signal-corner ped density weighting.
   (loop-shots/75-standroof/): ON = slate canopy + fascia lip over
   the crowd; OFF = the incandescent white slab. Suite 171/171.
   NEXT: item 7 pond shore ring.
+- **76 POND SHORE RINGS (2026-07-17)**: round-eight item 7 — every
+  pond (rx ≤ 60, the pondEdges filter) gets a flat sand ring at the
+  waterline + a darker wet-mud band just inside it (RingGeometry
+  pairs, ellipse-scaled by rz/rx, rotateX(-PI/2), at wy+0.045/0.025;
+  flat at water level is CORRECT — the outer rim cutting into rising
+  lawn reads as a natural bank). ONE merged mesh with the DEDICATED
+  flat organic material (the it.74 rule). ATTEMPT 1 FAILED THE LOOK
+  loudly: the sand ring rendered HOT MAGENTA — a decimal-hex TYPO
+  (9375326 = 0x8F0F5E, not 0x9c8a5e = 10259038). NEW PLAYBOOK RULE:
+  COMPUTE decimal color literals from hex programmatically or
+  double-check — a wrong literal passes every build/probe and only
+  the LOOK catches it (this is WHY the loop verifies by looking).
+  A/B verdict (loop-shots/76-pondshore/): mud band hugs the water +
+  defined sand bank vs water floating on flat ground. Report
+  pondShores {shores, sample}; pondShoresEnable. Suite 172/172.
+  NEXT: item 8 mountain strata.
