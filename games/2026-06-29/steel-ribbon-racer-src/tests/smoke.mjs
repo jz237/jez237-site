@@ -885,6 +885,21 @@ const browser = await chromium.launch({
     JSON.stringify({ ribs: drb?.ribs, spines: drb?.spines }),
   );
 
+  // zoom-detail 72 (round eight item 3): forecourt aprons + planters at tower bases
+  const fct = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().forecourts,
+      off = deb.forecourtsEnable(false),
+      offRep = deb.detailReport().forecourts.enabled;
+    deb.forecourtsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "forecourts: paved aprons + planters at tall tower bases, toggle works",
+    !!fct && fct.pads >= 10 && fct.pads <= 70 && fct.planters > fct.pads && fct.off === false && fct.offRep === false,
+    JSON.stringify({ pads: fct?.pads, planters: fct?.planters }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,

@@ -2402,6 +2402,8 @@ const windmillSys = { turbines: 0, enabled: !0, sample: null, _meshes: [] };
 const pylonDressSys = { dressed: 0, collars: 0, enabled: !0, sample: null, _mesh: null };
 // zoom-detail 71 (round-eight item 2): girder ribs + spine beam under the deck slabs
 const deckRibSys = { ribs: 0, spines: 0, enabled: !0, sample: null, _mesh: null, _segs: [] };
+// zoom-detail 72 (round-eight item 3): paved forecourt aprons + planters at tower bases
+const forecourtSys = { pads: 0, planters: 0, enabled: !0, sample: null, _mesh: null };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -9167,6 +9169,53 @@ function buildDeckRibs(group) {
   if (!deckRibSys.enabled) rm.visible = !1;
 }
 buildDeckRibs(et);
+// zoom-detail 72 (round-eight item 3): downtown towers rise straight out of lawn —
+// give every tall footprint (Mn, height >= 30) a two-tone paved forecourt apron
+// (framed slab pair) plus corner planters (dark box + clipped green dome), planters
+// skipped where they'd sit in a road corridor. ONE merged vertex-color mesh.
+function buildForecourts(group) {
+  ((forecourtSys.pads = 0), (forecourtSys.planters = 0), (forecourtSys.sample = null));
+  const parts = [];
+  for (const b of Mn) {
+    if (forecourtSys.pads >= 70) break;
+    if (!b.hw || b.hw < 6 || b.hd < 6) continue;
+    const g0 = He(b.x, b.z);
+    if (b.maxY - g0 < 30) continue;
+    const aw = b.hw * 2 + 6.5,
+      ad = b.hd * 2 + 6.5;
+    // terrain slopes across a 30-40m footprint: the apron must ride the HIGHEST
+    // corner (max-sample — the inverse of the it.45 sunk fix) and rise as a solid
+    // terrace from below the LOWEST corner, or it buries uphill / floats downhill.
+    let hi = g0,
+      lo = g0;
+    for (const [ax, az] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+      const h = He(b.x + ax * (aw * 0.5 + 0.8), b.z + az * (ad * 0.5 + 0.8));
+      (h > hi && (hi = h), h < lo && (lo = h));
+    }
+    const topY = hi + 0.18,
+      th = topY - (lo - 0.35);
+    parts.push(vcBake(new BoxGeometry(aw + 1.6, th, ad + 1.6), vcAt(b.x, topY - th * 0.5, b.z), 6448747));
+    parts.push(vcBake(new BoxGeometry(aw, 0.12, ad), vcAt(b.x, topY + 0.05, b.z), 7896450));
+    for (const sx of [-1, 1])
+      for (const sz of [-1, 1]) {
+        const px = b.x + sx * (b.hw + 2.3),
+          pz = b.z + sz * (b.hd + 2.3);
+        if (Pn(px, pz, 1.2).clearance < 0.6) continue;
+        parts.push(vcBake(new BoxGeometry(1.6, 0.78, 1.6), vcAt(px, topY + 0.44, pz), 4145992));
+        const dm = new Matrix4().makeScale(1, 0.62, 1);
+        dm.setPosition(px, topY + 1.0, pz);
+        parts.push(vcBake(new SphereGeometry(0.82, 6, 4), dm, 3761966));
+        forecourtSys.planters++;
+      }
+    forecourtSys.pads++;
+    forecourtSys.sample || (forecourtSys.sample = { x: +b.x.toFixed(1), z: +b.z.toFixed(1), gy: +topY.toFixed(1), aw: +aw.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const fm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((fm.castShadow = !1), (fm.receiveShadow = !0), (fm.raycast = () => {}), group.add(fm), (forecourtSys._mesh = fm));
+  if (!forecourtSys.enabled) fm.visible = !1;
+}
+buildForecourts(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -11944,6 +11993,11 @@ window.__steelRibbonDebug = {
     deckRibSys._mesh && (deckRibSys._mesh.visible = deckRibSys.enabled);
     return deckRibSys.enabled;
   },
+  forecourtsEnable(on) {
+    forecourtSys.enabled = !!on;
+    forecourtSys._mesh && (forecourtSys._mesh.visible = forecourtSys.enabled);
+    return forecourtSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12125,6 +12179,7 @@ window.__steelRibbonDebug = {
       windmill: { turbines: windmillSys.turbines, enabled: windmillSys.enabled, sample: windmillSys.sample ?? null },
       pylonDress: { dressed: pylonDressSys.dressed, collars: pylonDressSys.collars, enabled: pylonDressSys.enabled, sample: pylonDressSys.sample ?? null },
       deckRibs: { ribs: deckRibSys.ribs, spines: deckRibSys.spines, enabled: deckRibSys.enabled, sample: deckRibSys.sample ?? null },
+      forecourts: { pads: forecourtSys.pads, planters: forecourtSys.planters, enabled: forecourtSys.enabled, sample: forecourtSys.sample ?? null },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

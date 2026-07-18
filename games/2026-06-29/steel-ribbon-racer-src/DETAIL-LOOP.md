@@ -1703,3 +1703,22 @@ signal-corner ped density weighting.
   the existing X-braces; OFF = the old flat slab. Report deckRibs
   {ribs 92, spines 184, sample}; deckRibsEnable. Suite 167/167.
   NEXT: item 3 tower forecourts.
+- **72 TOWER FORECOURTS (2026-07-17)**: round-eight item 3 — every
+  tall Mn footprint (height ≥30 over He, hw/hd ≥6, cap 70 — 70
+  dressed) gets a paved forecourt: framed two-tone apron + corner
+  planters (dark box + clipped green dome), planters skipped in road
+  corridors (Pn clearance). ATTEMPT 1 FAILED THE LOOK: flat apron at
+  CENTER-ground height buried uphill / floated domes — the SUNK
+  GEOMETRY class strikes on sloped 30-40m footprints. FIX = the
+  INVERSE of the it.45 min-sample: MAX-sample the 4 apron corners,
+  top rides the HIGHEST corner, and the slab is a SOLID TERRACE
+  rising from below the LOWEST corner — downhill sides show a proper
+  plinth step (real towers on slopes do exactly this). Planters
+  stand on the apron TOP (topY), never on He. NEW PLAYBOOK RULE:
+  ground-hugging pads on multi-vertex footprints must corner-sample
+  — min for embeds (it.45), MAX + terrace for platforms. ONE merged
+  vc mesh (~17k tris, 70 pads / 280 planters). LOOK verdict
+  (loop-shots/72-forecourts/): terrace wraps the base, entrance
+  meets pavement, aerial reads urban block vs billiard lawn. Report
+  forecourts {pads, planters, sample}; forecourtsEnable. Suite
+  168/168. NEXT: item 4 suburb walkways + hedges.
