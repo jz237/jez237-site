@@ -825,6 +825,21 @@ const browser = await chromium.launch({
     JSON.stringify(bal),
   );
 
+  // zoom-detail 67 (round seven item 9): crowd-dot textures on the grandstands
+  const cdt = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      c0 = deb.detailReport().crowd,
+      off = deb.crowdDotsEnable(false),
+      offRep = deb.detailReport().crowd.dotsEnabled;
+    deb.crowdDotsEnable(true);
+    return { stands: c0.stands, dotTex: c0.dotTex, off, offRep };
+  });
+  check(
+    "crowd dots: colored seated-rank textures on grandstands, toggle works",
+    !!cdt && cdt.stands >= 1 && cdt.dotTex === 2 && cdt.off === false && cdt.offRep === false,
+    JSON.stringify(cdt),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
