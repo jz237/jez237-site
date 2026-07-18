@@ -8976,6 +8976,8 @@ buildPropPlanes();
 // high lane above the prop planes. Opaque vc-baked hull+fins+gondola (one
 // mesh) + a two-sided banner mesh — 2 draws, ~600 tris, no transparency risk.
 const blimpSys = { alt: 300, text: "RIBBON COLA", enabled: !0, x: 0, z: -520, _g: null };
+// zoom-detail 66 (round-seven item 8): striped hot-air balloons over the outskirts
+const balloonSys = { count: 0, enabled: !0, x: 0, z: 0, alt: 0, _gs: [] };
 function buildBlimpBanner() {
   const cv = document.createElement("canvas");
   ((cv.width = 512), (cv.height = 128));
@@ -9017,6 +9019,45 @@ function buildBlimp() {
   return g;
 }
 buildBlimp();
+// zoom-detail 66 (round-seven item 8): hot-air balloons drift on low lanes over the
+// city fringes, well under the blimp (300). Each balloon is ONE merged vertex-color
+// mesh — 12 gore slices in two alternating colors, skirt, emissive burner, wicker
+// basket, four ropes — in its own group with a Bn drift/bob/spin tick.
+function buildBalloons() {
+  const { opaque } = vcMats(),
+    SPECS = [
+      { z: 390, alt: 165, sp: 6, x0: -900, ph: 0.4, cols: [10500666, 11907224] },
+      { z: -1480, alt: 195, sp: -5, x0: 700, ph: 2.1, cols: [3832440, 11577488] },
+      { z: -560, alt: 205, sp: 4.4, x0: 200, ph: 4.0, cols: [11569712, 12102776] },
+    ];
+  for (const sp of SPECS) {
+    const parts = [],
+      GORES = 12;
+    for (let k = 0; k < GORES; k++) {
+      const wedge = new SphereGeometry(1, 2, 9, (k / GORES) * Math.PI * 2, (Math.PI * 2) / GORES);
+      wedge.applyMatrix4(new Matrix4().makeScale(6.6, 7.6, 6.6));
+      parts.push(vcBake(wedge, new Matrix4().setPosition(0, 12.4, 0), sp.cols[k % 2]));
+    }
+    parts.push(vcBake(new CylinderGeometry(3.1, 1.5, 2.6, 12, 1, !0), new Matrix4().setPosition(0, 5.4, 0), sp.cols[0]));
+    parts.push(vcBake(new BoxGeometry(0.5, 0.5, 0.5), new Matrix4().setPosition(0, 3.6, 0), 3350547, 16736800, 1.5));
+    parts.push(vcBake(new BoxGeometry(1.7, 1.35, 1.7), new Matrix4().setPosition(0, 2.4, 0), 7031343));
+    for (const [rx, rz] of [[-0.72, -0.72], [0.72, -0.72], [-0.72, 0.72], [0.72, 0.72]])
+      parts.push(vcBake(new CylinderGeometry(0.03, 0.03, 1.6, 4, 1, !0), new Matrix4().setPosition(rx, 3.85, rz), 2565927));
+    const m = new Mesh(mergeGeometries(parts, !1), opaque);
+    m.raycast = () => {};
+    const g = new Group();
+    (g.add(m), g.position.set(sp.x0, sp.alt, sp.z), et.add(g), balloonSys._gs.push(g), balloonSys.count++);
+    const first = sp === SPECS[0];
+    Bn(g, (tt, dt) => {
+      ((g.position.x += sp.sp * dt),
+        sp.sp > 0 && g.position.x > 1500 && (g.position.x = -1500),
+        sp.sp < 0 && g.position.x < -1500 && (g.position.x = 1500));
+      ((g.position.y = sp.alt + Math.sin(tt * 0.17 + sp.ph) * 4), (g.rotation.y = tt * 0.05 + sp.ph));
+      first && ((balloonSys.x = +g.position.x.toFixed(1)), (balloonSys.z = +g.position.z.toFixed(1)), (balloonSys.alt = +g.position.y.toFixed(1)));
+    });
+  }
+}
+buildBalloons();
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -11767,6 +11808,11 @@ window.__steelRibbonDebug = {
     lampDressSys._mesh && (lampDressSys._mesh.visible = lampDressSys.enabled);
     return lampDressSys.enabled;
   },
+  balloonsEnable(on) {
+    balloonSys.enabled = !!on;
+    for (const g of balloonSys._gs) g.visible = balloonSys.enabled;
+    return balloonSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -11944,6 +11990,7 @@ window.__steelRibbonDebug = {
       turnSignals: { turning: turnSigSys.turning, cars: turnSigSys.cars, enabled: turnSigSys.enabled, total: turnSigSys.total ?? 0, sample: turnSigSys.sample ?? null },
       brakes: { braking: brakeSys.braking, total: brakeSys.total, enabled: brakeSys.enabled, sample: brakeSys.sample ?? null },
       blimp: { x: blimpSys.x, z: blimpSys.z, alt: blimpSys.alt, text: blimpSys.text },
+      balloons: { count: balloonSys.count, enabled: balloonSys.enabled, x: balloonSys.x, z: balloonSys.z, alt: balloonSys.alt },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
