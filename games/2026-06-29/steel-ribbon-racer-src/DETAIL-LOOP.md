@@ -1633,3 +1633,42 @@ signal-corner ped density weighting.
   v3.27.0 DEPLOY BATCH 20 (items 9+10). NEXT: round-seven CLOSING
   SURVEY (fresh eyes, varied zooms) → seeds ROUND EIGHT per the
   user's standing directive.
+- **69 ROUND-SEVEN CLOSING SURVEY → ROUND EIGHT BACKLOG (2026-07-17)**:
+  15 fresh-eyes shots (loop-shots/69-survey-8/, untracked) across
+  street/aerial/deck/park/pond/stand/fringe/sky. Round-seven systems
+  all read well in situ (strollers walk the path, crowd dots read as
+  packed stands at 70m, balloons+blimp fill the dusk sky, turbine tip
+  bands crisp at 160m). DOMINANT FINDS: (a) the deck support PYLONS
+  are bare threads in almost every frame — no taper/bracing/base;
+  (b) the deck UNDERSIDE is a giant featureless dark slab seen from
+  every street; (c) the GROUND PLANE is empty — towers rise straight
+  out of billiard lawn, suburb shops have no walkways/hedges, ONE
+  tree species everywhere. Sky/race tiers are now rich; the ground
+  tier is the frontier. ROUND EIGHT (ranked, near+omnipresent
+  weighted):
+  1. DECK PYLON DRESSING — X-brace lattice panels between pole
+     pairs, base plinths, amber tip lights near deck; ONE merged
+     mesh; do NOT touch deck surface math (kerbs lesson).
+  2. DECK UNDERSIDE RIBS — periodic girder cross-ribs under the
+     ribbon following the course spline (raceWearSys spline-walk
+     pattern), ONE merged mesh; kills the flat belly.
+  3. DOWNTOWN TOWER FORECOURTS — paved plaza aprons + entry planters
+     around Mn tower footprints (parks-pad pattern); ends the
+     tower-out-of-lawn look.
+  4. SUBURB FRONT WALKWAYS + HEDGES — path strip from street to each
+     A() shop door (shopBand face math known) + low hedge boxes.
+  5. TREE VARIETY — second species (broadleaf + autumn minority)
+     replacing ~1/3 of cone pines; check how pines build/merge first.
+  6. GRANDSTAND ROOF FIX — the canopy blows out pure white at dusk;
+     tone material + truss edge strip + darker underside.
+  7. POND SHORE RING — sand/mud ring at the waterline (pondEdge
+     zone); kills the hard lawn-to-water edge.
+  8. MOUNTAIN STRATA — subtle rock-band vertex tint + scree at the
+     fringe pyramid bases; silhouette unchanged (far view sacred).
+  9. MANHOLES + DRAIN GRATES — second road-decal InstancedMesh at
+     intersections (oilSys clone, cap ~40); near-tier street reward.
+  10. PARK PATH CONNECTIONS — extend path strips to the nearest
+     street edge + bin/lamp at path mouths; paths currently dead-end
+     in lawn.
+  Carried: mowing stripes +2% if any item touches the terrain bake;
+  heat shimmer + kerbs stay BLOCKED. Survey shipped NO code.
