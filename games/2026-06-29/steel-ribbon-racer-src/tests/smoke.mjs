@@ -840,6 +840,21 @@ const browser = await chromium.launch({
     JSON.stringify(cdt),
   );
 
+  // zoom-detail 68 (round seven item 10): striped tips + nose cones on turbines
+  const wm = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().windmill,
+      off = deb.windmillTipsEnable(false),
+      offRep = deb.detailReport().windmill.enabled;
+    deb.windmillTipsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "windmill polish: striped blade tips + nose cones on outskirt turbines, toggle works",
+    !!wm && wm.turbines === 9 && wm.off === false && wm.offRep === false,
+    JSON.stringify({ turbines: wm?.turbines }),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
