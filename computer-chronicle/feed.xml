@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 17 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 20-26, 1983 — Software&apos;s Hard Sell</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-06-20</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-06-20</guid>
+      <pubDate>Sat, 18 Jul 2026 12:00:00 GMT</pubDate>
+      <description>A $1.5 billion industry learns packaging, promotion and hit-making. Personal-computer software is becoming a packaged-goods business. SRI International projects 1983 revenue of $1.5 billion, after $1 billion in 1982 and $600 million in 1981, and TIME counts at least 230 producers chasing annual growth near 50 percent. The machine may command the showroom, but the programs now determine what owners can actually accomplish. Also this week: Coleco&apos;s Adam Takes Aim at the Family Room · Atari Clears the Deck for Four XL Machines · Programs May Soon Travel by Telephone.</description>
+    </item>
     <item>
       <title>Week of June 13–19, 1983 — Software&apos;s Hard Sell Becomes a Billion-Dollar Business</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-06-13</link>
@@ -138,13 +145,6 @@
       <link>https://jez237.com/computer-chronicle/?date=1983-01-31</link>
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-01-31</guid>
       <pubDate>Mon, 29 Jun 2026 12:00:00 GMT</pubDate>
-      <description></description>
-    </item>
-    <item>
-      <title>Week of January 24-30, 1983 — Lotus 1-2-3 reaches IBM PC desks</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-01-24</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-01-24</guid>
-      <pubDate>Sun, 28 Jun 2026 12:00:00 GMT</pubDate>
       <description></description>
     </item>
   </channel>
