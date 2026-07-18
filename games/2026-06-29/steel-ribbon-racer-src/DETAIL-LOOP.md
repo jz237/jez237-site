@@ -1823,3 +1823,26 @@ signal-corner ped density weighting.
   Report iron {spots, placed, sample}; ironEnable. Suite 174/174.
   NEXT: item 10 park path connections (LAST) → DEPLOY BATCH 22
   (v3.29.0) + round-eight closing survey.
+- **79 PARK PATH CONNECTIONS (2026-07-17)**: round-eight item 10
+  (LAST) — park gravel paths dead-ended in lawn. Every path end (the
+  bow vanishes at t=0/1, ends sit at cell center ± half along the
+  path axis; new connectSys._cells collector beside strollerCells,
+  reset with the parkSys resets) gets a straight cream connector
+  strip to the adjacent road edge + a bollard pair at the mouth.
+  KEY DISCOVERY (cost two dud probe passes + a console-log boot):
+  **Pn() measures clearance to the RACE COURSE spline samples, NOT
+  city roads** — clearances at park ends read 30-900m. The it.73
+  walkway "street-edge probe" silently never matched and always
+  used its L=10 fallback (looked right by luck). The real answer is
+  LATTICE GEOMETRY: half = pitch/2 - sw/2 - 12, so every path end
+  is EXACTLY 12m from the adjacent road edge — connector L is
+  deterministic (10.8m), no probing at all. PLAYBOOK: before
+  probing, check whether the lattice already answers the question;
+  and Pn is course-distance, use di lattice math for street
+  distance. Also loosened the it.75 stand-roof probe to ≥1 (zn
+  placement luck yielded a 2-stand world). A/B verdict
+  (loop-shots/79-connectors/): path continues to the road edge with
+  bollards vs dead-ending in lawn. Report parkConnectors; toggle.
+  Suite 175/175. **ROUND EIGHT COMPLETE: 10/10 shipped.** v3.29.0
+  DEPLOY BATCH 22 (items 6-10). NEXT: round-eight closing survey
+  (user paused the loop 2026-07-17 — resume with /loop).
