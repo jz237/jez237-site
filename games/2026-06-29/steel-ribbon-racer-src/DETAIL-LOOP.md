@@ -1889,3 +1889,29 @@ signal-corner ped density weighting.
   roll onto pale dunes, car on the sand, surf line + glinting sea;
   aerial = real coastline wrapping the headlands. Suite 177/177.
   v3.31.0 DEPLOYED.
+- **80c OCEAN RETHINK (2026-07-17, user: "water looks terrible and
+  the car drives under the water")**: full rewrite of both halves.
+  LOOK: real GERSTNER trains (4, dispersion-correct w=sqrt(9.81k),
+  horizontal crest displacement for sharp crests, λ 27-132m) travel
+  SHOREWARD on every side (direction = island-square outward normal
+  blended at corners), SHOAL approaching the sand (+65% amp) and
+  collapse at the line; per-pixel FACETED normals via dFdx/dFdy
+  (lowpoly-coherent and cheap) + ripple perturbation; crest foam
+  from the wave-phase sum + a pulsing wash riding the primary train
+  ashore; depth-graded teal→deep body; 8 slabs (dense ~24m surf
+  ring + coarse skirt, ~22k tris). PHYSICS: the water is now the
+  FLOOR — Ki returns kind "water" at y -10.05 in the surf band
+  where the seabed is deeper, so the car FLOATS at the waterline
+  (hull at -9.5) with all suspension/air logic intact; waterPhysics
+  adds a shoreward current (8.5 · depth, beats drag-terminal).
+  THREE HARD LESSONS: (1) a BOBBING floor feeds the crest-launch
+  detector and trampolines the car to y=47 — water floors must be
+  FLAT; (2) the "flying car" that survived the flat floor was NOT a
+  bug — the race deck crosses the east surf and Zd's upward track
+  snap ratchets a floating car onto the ribbon (pre-existing,
+  left as a feature); (3) the old phantom-water lake probe sampled
+  into the new surf band — probes with world-geometry assumptions
+  need updating when the WORLD grows (ocean-aware cd filter).
+  Verified in-car at a deck-free south bay: floats at waterline
+  over a -14.5 seabed, SPLASH + wake rings, waves rolling in
+  (loop-shots/80c-waves/). Suite 177/177. v3.32.0 DEPLOYED.

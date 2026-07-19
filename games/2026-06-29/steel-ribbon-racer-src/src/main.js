@@ -1053,11 +1053,12 @@ function pondDepthAt(x, z) {
   // zoom-detail 80b: the ocean surf band — shallow water wherever the perimeter
   // terrain dips below sea level (-9.5), so driving into the surf gets the same
   // drag/splash/wake as ponds. Capped: the surf is never a wall.
+  let ocean = !1;
   if (Math.max(Math.abs(x), Math.abs(z)) > 1980) {
-    const d2 = MathUtils.clamp((-9.5 - He(x, z)) / 3.2, 0, 0.85);
-    d2 > depth && ((depth = d2), (pond = null));
+    const d2 = MathUtils.clamp((-9.5 - He(x, z)) / 2.2, 0, 1.4);
+    d2 > depth && ((depth = d2), (pond = null), (ocean = !0));
   }
-  return { depth, pond };
+  return { depth, pond, ocean };
 }
 const Sa = [],
   Co = [],
@@ -9582,53 +9583,84 @@ buildParkConnectors(et);
 // FRAGMENT stage, and THINNED custom fog so glinting water reads through the haze
 // that swallows terrain at the same distance (real glint does). Opaque (dusk rule).
 function buildOcean(group) {
+  // zoom-detail 80c (rethink): REAL waves. Gerstner trains (dispersion-correct,
+  // horizontal crest displacement) travel SHOREWARD on every side (direction from
+  // the island-square outward normal, blended at corners), shoal up approaching
+  // the sand and collapse at the line. Per-pixel FACETED normals (dFdx/dFdy) match
+  // the game's lowpoly look and catch hard sun glints; crest foam breaks where the
+  // wave-phase sum peaks and a pulsing wash rides the primary train onto the shore.
+  // 8 slabs: a dense surf ring where the player can stand, coarse skirt beyond.
   const vsh = `
     uniform float uTime;
+    uniform float uInner;
     varying vec3 vW;
-    varying float vSw;
+    varying vec2 vDir;
+    varying float vEd;
+    varying float vCrest;
+    vec2 shoreDir(vec2 p) {
+      float w = smoothstep(-140.0, 140.0, abs(p.x) - abs(p.y));
+      vec2 d = mix(vec2(0.0, -sign(p.y)), vec2(-sign(p.x), 0.0), w);
+      return normalize(d + vec2(0.14, 0.09));
+    }
     void main() {
       vec4 wp = modelMatrix * vec4(position, 1.0);
       float t = uTime;
-      float sw = sin(dot(wp.xz, vec2(0.0241, 0.0088)) + t * 0.62) * 1.25
-               + sin(dot(wp.xz, vec2(-0.0125, 0.0176)) + t * 0.51) * 0.8
-               + sin(dot(wp.xz, vec2(0.0396, -0.0302)) + t * 0.9) * 0.35;
-      wp.y += sw;
+      vec2 dir = shoreDir(wp.xz);
+      float ed = max(abs(wp.x), abs(wp.z)) - uInner;
+      float grow = 1.0 + 0.65 * smoothstep(160.0, 24.0, ed);
+      float die = smoothstep(-4.0, 14.0, ed);
+      float aS = grow * die;
+      vec3 off = vec3(0.0);
+      float crest = 0.0;
+      vec2 kd; float L; float A; float k; float w; float ph;
+      kd = dir; L = 132.0; A = 1.15 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t;
+      off.y += A * sin(ph); off.xz += kd * (4.2 * aS * cos(ph)); crest += 0.35 * cos(ph);
+      kd = normalize(dir + vec2(0.35, -0.18)); L = 71.0; A = 0.62 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t;
+      off.y += A * sin(ph); off.xz += kd * (2.1 * aS * cos(ph)); crest += 0.30 * cos(ph);
+      kd = normalize(dir + vec2(-0.28, 0.22)); L = 43.0; A = 0.34 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t + 1.7;
+      off.y += A * sin(ph); off.xz += kd * (1.2 * aS * cos(ph)); crest += 0.22 * cos(ph);
+      kd = normalize(dir + vec2(0.55, 0.45)); L = 27.0; A = 0.18 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t + 3.9;
+      off.y += A * sin(ph); off.xz += kd * (0.6 * aS * cos(ph)); crest += 0.16 * cos(ph);
+      wp.xyz += off;
       vW = wp.xyz;
-      vSw = sw;
+      vDir = dir;
+      vEd = ed;
+      vCrest = crest * die;
       gl_Position = projectionMatrix * viewMatrix * wp;
     }`,
     fsh = `
     uniform float uTime;
-    uniform float uInner;
     varying vec3 vW;
-    varying float vSw;
+    varying vec2 vDir;
+    varying float vEd;
+    varying float vCrest;
     void main() {
       float t = uTime;
-      vec2 g = vec2(0.0);
-      g += vec2(0.0241, 0.0088) * cos(dot(vW.xz, vec2(0.0241, 0.0088)) + t * 0.62) * 1.25;
-      g += vec2(-0.0125, 0.0176) * cos(dot(vW.xz, vec2(-0.0125, 0.0176)) + t * 0.51) * 0.8;
-      g += vec2(0.0396, -0.0302) * cos(dot(vW.xz, vec2(0.0396, -0.0302)) + t * 0.9) * 0.35;
-      g += vec2(0.21, 0.13) * cos(dot(vW.xz, vec2(0.21, 0.13)) + t * 2.6) * 0.055;
-      g += vec2(-0.14, 0.24) * cos(dot(vW.xz, vec2(-0.14, 0.24)) + t * 3.1) * 0.045;
-      vec3 N = normalize(vec3(-g.x, 1.0, -g.y));
+      vec3 fN = normalize(cross(dFdx(vW), dFdy(vW)));
+      if (fN.y < 0.0) fN = -fN;
+      vec2 rip = vec2(0.0);
+      rip += vec2(0.20, 0.13) * cos(dot(vW.xz, vec2(0.20, 0.13)) + t * 2.4);
+      rip += vec2(-0.13, 0.23) * cos(dot(vW.xz, vec2(-0.13, 0.23)) + t * 3.2);
+      rip += vec2(0.31, -0.24) * cos(dot(vW.xz, vec2(0.31, -0.24)) + t * 4.1);
+      vec3 N = normalize(vec3(fN.x + rip.x * 0.22, fN.y, fN.z + rip.y * 0.22));
       vec3 V = normalize(cameraPosition - vW);
       float fr = pow(1.0 - max(dot(N, V), 0.0), 3.0);
-      vec3 deep = vec3(0.052, 0.125, 0.21);
-      vec3 skyc = vec3(0.66, 0.44, 0.38);
-      vec3 col = mix(deep, skyc, clamp(fr * 0.62 + vSw * 0.03 + 0.13, 0.0, 1.0));
-      vec3 L = normalize(vec3(-0.55, 0.16, -0.30));
+      vec3 deep = vec3(0.012, 0.06, 0.10);
+      vec3 shal = vec3(0.03, 0.14, 0.16);
+      vec3 body = mix(shal, deep, smoothstep(10.0, 170.0, vEd));
+      vec3 skyc = vec3(0.72, 0.50, 0.44);
+      vec3 col = mix(body, skyc, clamp(fr * 0.38, 0.0, 1.0));
+      vec3 L = normalize(vec3(-0.55, 0.20, -0.30));
       vec3 H = normalize(L + V);
-      col += vec3(1.0, 0.70, 0.42) * pow(max(dot(N, H), 0.0), 140.0) * 0.9;
-      float glit = pow(max(sin(dot(vW.xz, vec2(0.31, 0.23)) + t * 3.4) * max(vSw, 0.0), 0.0), 9.0);
-      col += vec3(1.0, 0.74, 0.48) * glit * 0.1;
-      float ed = max(abs(vW.x), abs(vW.z)) - uInner;
-      float foamBand = smoothstep(46.0, 3.0, ed);
-      float br1 = 0.5 + 0.5 * sin(ed * 0.24 - t * 1.5);
-      float br2 = 0.5 + 0.5 * sin(ed * 0.55 - t * 2.6 + sin(vW.x * 0.021 + vW.z * 0.017) * 2.2);
-      float foam = foamBand * (0.18 + 0.72 * pow(br1, 3.0) + 0.55 * pow(br2, 5.0)) * (0.7 + 0.3 * sin(vW.x * 0.05 + vW.z * 0.043));
-      col = mix(col, vec3(0.93, 0.90, 0.85), clamp(foam, 0.0, 1.0) * 0.85);
+      col += vec3(1.0, 0.72, 0.44) * pow(max(dot(N, H), 0.0), 220.0) * 1.4;
+      col += vec3(1.0, 0.78, 0.50) * pow(max(dot(reflect(-L, vec3(0.0, 1.0, 0.0)), V), 0.0), 24.0) * 0.10;
+      float shoreBoost = smoothstep(150.0, 18.0, vEd);
+      float cf = smoothstep(0.92 - 0.3 * shoreBoost, 1.15, vCrest);
+      float wash = smoothstep(26.0, 2.0, vEd) * (0.45 + 0.55 * pow(max(cos(dot(vDir, vW.xz) * 0.0476 - 0.683 * t), 0.0), 3.0));
+      float foam = clamp(cf * 0.9 + wash, 0.0, 1.0);
+      col = mix(col, vec3(0.90, 0.88, 0.84), foam * 0.9);
       float d = length(cameraPosition - vW);
-      col = mix(col, vec3(0.93, 0.78, 0.70), smoothstep(700.0, 4200.0, d) * 0.85);
+      col = mix(col, vec3(0.93, 0.78, 0.70), smoothstep(700.0, 4200.0, d) * 0.65);
       gl_FragColor = vec4(col, 1.0);
     }`;
   const mat = new ShaderMaterial({
@@ -9642,7 +9674,10 @@ function buildOcean(group) {
     const om = new Mesh(new PlaneGeometry(w, d, sx, sz).rotateX(-Math.PI / 2), mat);
     (om.position.set(cx, oceanSys.y, cz), (om.raycast = () => {}), group.add(om), oceanSys._meshes.push(om), oceanSys.slabs++);
   };
-  (mk(7800, 1920, 0, -2940, 80, 18), mk(7800, 1920, 0, 2940, 80, 18), mk(1920, 3960, -2940, 0, 18, 42), mk(1920, 3960, 2940, 0, 18, 42));
+  // surf ring (dense: ~24m pitch so 40-130m Gerstner trains show real geometry)
+  (mk(4560, 280, 0, -2120, 192, 12), mk(4560, 280, 0, 2120, 192, 12), mk(280, 3960, -2120, 0, 12, 160), mk(280, 3960, 2120, 0, 12, 160));
+  // open-sea skirt (coarse — fragment ripples + fog carry it)
+  (mk(7800, 1640, 0, -3080, 64, 10), mk(7800, 1640, 0, 3080, 64, 10), mk(1640, 4520, -3080, 0, 10, 56), mk(1640, 4520, 3080, 0, 10, 56));
   if (!oceanSys.enabled) for (const m of oceanSys._meshes) m.visible = !1;
 }
 buildOcean(et);
@@ -10794,7 +10829,13 @@ function Ki(i, e, t = u.roamPos.y) {
   const r = qd(i, e);
   r && r.y >= n - 1.2 && (s = r);
   const a = Zd(i, e, Math.max(t, s.y));
-  return (!(s.kind === "ramp" && s.rampType === "off") && a && a.y >= s.y - 0.8 && (s = a), s);
+  !(s.kind === "ramp" && s.rampType === "off") && a && a.y >= s.y - 0.8 && (s = a);
+  // zoom-detail 80c: in the ocean surf band the water itself is the floor — the
+  // car floats on the swell (gentle bob) instead of driving down the seabed
+  // FLAT floor — a bobbing floor feeds the crest-launch detector and trampolines
+  // the car out to sea (verified the hard way); suspension wobble sells the swell
+  if (s.kind === "ground" && s.y < -10.05 && Math.max(Math.abs(i), Math.abs(e)) > 1980) s = { kind: "water", y: -10.05 };
+  return s;
 }
 function Ih(i) {
   if (i.rampType === "off" || u.drivingStolen) return !1;
@@ -11657,6 +11698,14 @@ function waterPhysics(dt, prevSpeed) {
   const s = pondDepthAt(u.roamPos.x, u.roamPos.z);
   u.waterDepth = s.depth;
   if (s.depth <= 0.02) return;
+  // zoom-detail 80c: past wading depth the OCEAN floats the hull on the swell
+  // (never driving along the seabed) and a shoreward current washes it back in.
+  if (s.ocean && s.depth > 0.55) {
+    const cur = 8.5 * Math.min(1, s.depth - 0.45) * dt;
+    Math.abs(u.roamPos.x) > Math.abs(u.roamPos.z)
+      ? (u.roamPos.x -= Math.sign(u.roamPos.x) * cur)
+      : (u.roamPos.z -= Math.sign(u.roamPos.z) * cur);
+  }
   // Pure drag, never a wall: terminal speed at full depth is ~7, so the car can always crawl or reverse out.
   u.speed -= u.speed * (0.85 + 5.2 * s.depth) * s.depth * dt;
   if (prev <= 0.02 && Math.abs(prevSpeed) > 16)
