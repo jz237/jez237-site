@@ -1578,3 +1578,340 @@ signal-corner ped density weighting.
   posts 132, sample}; lampDressEnable toggle. Suite 162/162 (one
   inspect-cars flake on run 1, clean rerun — the flaky family).
   NEXT: item 8 balloon canopies.
+- **66 HOT-AIR BALLOONS (2026-07-17)**: round-seven item 8 — three
+  gore-striped hot-air balloons (crimson/cream, teal/cream,
+  gold/cream) drift, bob and slowly spin on low lanes over the city
+  fringes (alts 165/195/205 — well under the blimp's 300). Each is
+  ONE merged vcBake mesh: 12 sphere-slice gores (phiStart/phiLength
+  — no per-vertex tinting needed), skirt cylinder, EMISSIVE burner
+  cube (vcBake's emissive args, first use — they work), wicker
+  basket, four ropes; own group + Bn drift tick, blimp wrap pattern.
+  +3 draws (shared vc material), ~1.2k tris, ZERO textures. Verified
+  by LOOKING (loop-shots/66-balloons/): near = classic striped
+  balloon with glowing burner over the outskirt hills; off = empty
+  sky; mid reads as distant sky detail. First-try visual pass.
+  Report balloons {count,x,z,alt}; balloonsEnable toggle; probe
+  asserts count 3, alt window, drift, toggle. Suite 163/163 FIRST
+  RUN. v3.26.0. DEPLOY BATCH 19 (items 7+8) per user "yes, continue
+  and deploy". NEXT: item 9 grandstand crowds.
+- **67 GRANDSTAND CROWD DOTS (2026-07-17)**: round-seven item 9 — the
+  far-tier crowd on the 4 city grandstands was G1()'s random 0.19m
+  confetti specks, which mush to gray from the race deck. Replaced
+  the plane map with buildCrowdDotTexture(v): 512x192, 9 aligned
+  seat ROWS with dark row banding, paired torso-rect + skin-tone
+  head-dot figures (~1.2m pitch, 13% empty seats, 6% standing), 2
+  deterministic variants alternating across stands, toneMapped:!1
+  (THE canvas-under-bloom lesson). ZERO new draws — same 4 plane
+  meshes, 2 materials; +2 textures (255/260). The crowdSys near-pool
+  instanced figures still promote on top ≤70m — tiers coexist.
+  SCOPE NOTE: the round-one "stadium crowd v2" near pool made this
+  look done in code — the LEDGER's item text ("race-visible,
+  outskirt stands") is what defined the real gap; read the backlog
+  item text before declaring CLOSED-EXISTS. Verified by LOOKING
+  (loop-shots/67-crowddots/): race-dist 110m = both stands read as
+  populated colorful seated crowds; near A/B = ordered ranks vs
+  legacy confetti. Report crowd.dotTex/dotsEnabled; crowdDotsEnable
+  toggle. Suite 164/164 FIRST RUN. NEXT: item 10 windmill polish →
+  DEPLOY BATCH 20 + round-seven closing survey.
+- **68 WINDMILL POLISH (2026-07-17)**: round-seven item 10 (LAST) —
+  the 9 outskirt wind turbines (line ~1710 zone: tower + nacelle +
+  3 blades in per-blade groups under spinning group L) get aviation
+  detail: double ORANGE TIP BANDS on every blade + hub ring + nose
+  cone, ONE merged vcBake mesh PER ROTOR parented to L so it spins
+  rigidly with the blades (blades are rigid relative to L — bake
+  band boxes rotated to each blade angle, no per-blade meshes).
+  KEY ENGINE FACT CONFIRMED: Bn-registered subtrees (Bd) are
+  EXCLUDED from mergeStaticScenery ≤300 meshes — anything parented
+  under an animated group stays live and keeps .visible toggles.
+  +≤9 draws (frustum-culled at the fringe), ~1.6k tris, zero
+  textures. Verified by LOOKING (loop-shots/68-windmill/): near A/B
+  = crisp double bands riding the spinning blades vs plain white;
+  mid 160m = tiny orange flecks, silhouette unchanged. Report
+  windmill {turbines 9, sample{x,z,hub}}; windmillTipsEnable.
+  Suite 165/165 FIRST RUN. **ROUND SEVEN COMPLETE: 8 shipped, 1
+  blocked (kerbs), 1 closed-exists-upgraded (crowd dots).**
+  v3.27.0 DEPLOY BATCH 20 (items 9+10). NEXT: round-seven CLOSING
+  SURVEY (fresh eyes, varied zooms) → seeds ROUND EIGHT per the
+  user's standing directive.
+- **69 ROUND-SEVEN CLOSING SURVEY → ROUND EIGHT BACKLOG (2026-07-17)**:
+  15 fresh-eyes shots (loop-shots/69-survey-8/, untracked) across
+  street/aerial/deck/park/pond/stand/fringe/sky. Round-seven systems
+  all read well in situ (strollers walk the path, crowd dots read as
+  packed stands at 70m, balloons+blimp fill the dusk sky, turbine tip
+  bands crisp at 160m). DOMINANT FINDS: (a) the deck support PYLONS
+  are bare threads in almost every frame — no taper/bracing/base;
+  (b) the deck UNDERSIDE is a giant featureless dark slab seen from
+  every street; (c) the GROUND PLANE is empty — towers rise straight
+  out of billiard lawn, suburb shops have no walkways/hedges, ONE
+  tree species everywhere. Sky/race tiers are now rich; the ground
+  tier is the frontier. ROUND EIGHT (ranked, near+omnipresent
+  weighted):
+  1. DECK PYLON DRESSING — X-brace lattice panels between pole
+     pairs, base plinths, amber tip lights near deck; ONE merged
+     mesh; do NOT touch deck surface math (kerbs lesson).
+  2. DECK UNDERSIDE RIBS — periodic girder cross-ribs under the
+     ribbon following the course spline (raceWearSys spline-walk
+     pattern), ONE merged mesh; kills the flat belly.
+  3. DOWNTOWN TOWER FORECOURTS — paved plaza aprons + entry planters
+     around Mn tower footprints (parks-pad pattern); ends the
+     tower-out-of-lawn look.
+  4. SUBURB FRONT WALKWAYS + HEDGES — path strip from street to each
+     A() shop door (shopBand face math known) + low hedge boxes.
+  5. TREE VARIETY — second species (broadleaf + autumn minority)
+     replacing ~1/3 of cone pines; check how pines build/merge first.
+  6. GRANDSTAND ROOF FIX — the canopy blows out pure white at dusk;
+     tone material + truss edge strip + darker underside.
+  7. POND SHORE RING — sand/mud ring at the waterline (pondEdge
+     zone); kills the hard lawn-to-water edge.
+  8. MOUNTAIN STRATA — subtle rock-band vertex tint + scree at the
+     fringe pyramid bases; silhouette unchanged (far view sacred).
+  9. MANHOLES + DRAIN GRATES — second road-decal InstancedMesh at
+     intersections (oilSys clone, cap ~40); near-tier street reward.
+  10. PARK PATH CONNECTIONS — extend path strips to the nearest
+     street edge + bin/lamp at path mouths; paths currently dead-end
+     in lawn.
+  Carried: mowing stripes +2% if any item touches the terrain bake;
+  heat shimmer + kerbs stay BLOCKED. Survey shipped NO code.
+- **70 DECK PYLON DRESSING (2026-07-17)**: round-eight item 1 — the
+  survey's dominant find. Every deck support pylon (the $n collider
+  registry — entries WITH hw; module-scope, fed by the support-station
+  builder at ~7440) gets a two-step concrete plinth over the existing
+  flat disc, steel collar rings up the shaft, and an emissive amber
+  warning cube under the deck. ONE merged vcBake mesh; deck surface
+  math untouched (vertical members only — it.59 lesson honored).
+  BALANCE PASS: first build hit its 70 cap with pylons left over —
+  coverage beats density: cap 130 (74/74 dressed), collar spacing
+  11→14m, segs 10→8 → ~15k tris total, cheaper AND complete. LOOK
+  verdict (loop-shots/70-pylons/): plinth feet ANCHOR the pylons at
+  street level, collars give the shafts rhythm; OFF = floating
+  threads on discs. Report pylonDress {dressed 74, collars 381,
+  sample}; pylonDressEnable. Suite 166/166. NEXT: item 2 deck
+  underside ribs.
+- **71 DECK UNDERSIDE RIBS (2026-07-17)**: round-eight item 2 — the
+  ribbon's belly (survey find b). The slab walk now COLLECTS each
+  segment's {center, quaternion, normal, length} into
+  deckRibSys._segs (reset before the loop; the slab Bt calls are
+  untouched — deck surface math sacred); a module-level builder then
+  hangs a lengthwise spine beam under EVERY segment (184) and a
+  full-width girder cross-rib under every SECOND one (92), composed
+  via Matrix4().compose(pos, quat, scale) with the SAME quaternion
+  the slab used, tucked S*-0.62 below center (top edge embeds 0.04
+  into the slab — no float gap, no top bleed). ONE merged vc mesh,
+  ~3.6k tris. LOOK verdict (loop-shots/71-deckribs/): from the
+  street the belly reads as an engineered bridge — regular rib
+  lines + spine the whole run, working with the it.70 collars and
+  the existing X-braces; OFF = the old flat slab. Report deckRibs
+  {ribs 92, spines 184, sample}; deckRibsEnable. Suite 167/167.
+  NEXT: item 3 tower forecourts.
+- **72 TOWER FORECOURTS (2026-07-17)**: round-eight item 3 — every
+  tall Mn footprint (height ≥30 over He, hw/hd ≥6, cap 70 — 70
+  dressed) gets a paved forecourt: framed two-tone apron + corner
+  planters (dark box + clipped green dome), planters skipped in road
+  corridors (Pn clearance). ATTEMPT 1 FAILED THE LOOK: flat apron at
+  CENTER-ground height buried uphill / floated domes — the SUNK
+  GEOMETRY class strikes on sloped 30-40m footprints. FIX = the
+  INVERSE of the it.45 min-sample: MAX-sample the 4 apron corners,
+  top rides the HIGHEST corner, and the slab is a SOLID TERRACE
+  rising from below the LOWEST corner — downhill sides show a proper
+  plinth step (real towers on slopes do exactly this). Planters
+  stand on the apron TOP (topY), never on He. NEW PLAYBOOK RULE:
+  ground-hugging pads on multi-vertex footprints must corner-sample
+  — min for embeds (it.45), MAX + terrace for platforms. ONE merged
+  vc mesh (~17k tris, 70 pads / 280 planters). LOOK verdict
+  (loop-shots/72-forecourts/): terrace wraps the base, entrance
+  meets pavement, aerial reads urban block vs billiard lawn. Report
+  forecourts {pads, planters, sample}; forecourtsEnable. Suite
+  168/168. NEXT: item 4 suburb walkways + hedges.
+- **73 SUBURB WALKWAYS + HEDGES (2026-07-17)**: round-eight item 4 —
+  every A() shop face (new walkwaySys._spots collector beside the
+  shopBand push; reset beside the shopBand reset) gets a paved
+  walkway probed outward along the face normal to the street edge
+  (Pn clearance < 1.5 stops it), built as a shallow TERRACE riding
+  the higher end (it.72 corner rule), plus two dark-green hedge
+  boxes flanking the walkway mouth. ONE merged vc mesh, 15-28
+  walks/world. VERIFY LESSON: the FIRST report sample sat beside a
+  tall tower whose it.72 forecourt terrace swallowed the walkway —
+  A/B looked identical and nearly failed the item; the fix was
+  MULTIPLE report samples (samples[0..5]) and shooting index 2 —
+  clean suburb spots show walkway + hedge vs bare lawn decisively.
+  PLAYBOOK: when an A/B pair looks identical, suspect the SHOWCASE
+  before the system — shoot a different sample. Report suburbWalks
+  {walks, hedges, sample, samples[6]}; suburbWalksEnable. Suite
+  169/169. NEXT: item 5 tree variety → then DEPLOY BATCH 21
+  (v3.28.0, round-eight items 1-5).
+- **74 TREE VARIETY (2026-07-17)**: round-eight item 5 — the city
+  forest was one cone-pine species. Every 4th conifer LOOP INDEX
+  ((g & 3) === 3 — deterministic, not Math.random) diverts to a
+  broadleaf collector (still kn-registered, conifer instances
+  untouched otherwise); a module-level builder raises ~42-46
+  lollipop broadleafs (trunk + lumpy 3-sphere canopy), every 6th
+  autumn amber/rust. ATTEMPT 1 FAILED THE LOOK: canopies rendered
+  as BLACK GLOSSY BLOBS — the shared vcMats().opaque material has
+  metalness 0.22, and smooth spheres at dusk go full specular
+  darkness. NEW PLAYBOOK RULE: FOLIAGE/ORGANIC vc meshes need a
+  DEDICATED flat material (vertexColors, roughness ~0.95, metalness
+  0 — same class as the conifer materials); the shared vc material
+  is for hard/built things. Also brightened the palette ~1.6x.
+  ONE merged mesh + 1 material, ~7k tris. LOOK verdict
+  (loop-shots/74-trees/): bright green lollipop near, mixed grove
+  (pines + green + amber + blossom-pale) at mid. Report treeVar
+  {broadleaf, autumn, sample}; treeVarietyEnable. Suite 170/170.
+  **ROUND-EIGHT ITEMS 1-5 DONE → DEPLOY BATCH 21 (v3.28.0).**
+- **75 GRANDSTAND ROOF FIX (2026-07-17)**: round-eight item 6 — the
+  stand canopy bloomed to PURE WHITE at dusk (light color 13620954 +
+  metalness 0.2 under the low sun). Roof slabs now use a dedicated
+  slate material (5659491, rough 0.85, metal 0.05) swapped in the
+  stand builder (posts keep the old material); a steel fascia strip
+  hangs at each roof's front lip — built WORLD-SPACE from
+  crowdSys.stands {x,z,yaw,w,gy} at module level, ONE merged vc
+  mesh. A/B toggle = MATERIAL SWAP on the roof meshes (4 roofs < 6
+  same-material meshes → they escape static merge, mesh-level swap
+  is safe) + fascia visibility. ANCHOR LESSON RE-PAID: quoted `const
+  R =` from memory but the real line is `R =` in a const chain —
+  the assert aborted BEFORE the write, clean re-apply. LOOK verdict
+  (loop-shots/75-standroof/): ON = slate canopy + fascia lip over
+  the crowd; OFF = the incandescent white slab. Suite 171/171.
+  NEXT: item 7 pond shore ring.
+- **76 POND SHORE RINGS (2026-07-17)**: round-eight item 7 — every
+  pond (rx ≤ 60, the pondEdges filter) gets a flat sand ring at the
+  waterline + a darker wet-mud band just inside it (RingGeometry
+  pairs, ellipse-scaled by rz/rx, rotateX(-PI/2), at wy+0.045/0.025;
+  flat at water level is CORRECT — the outer rim cutting into rising
+  lawn reads as a natural bank). ONE merged mesh with the DEDICATED
+  flat organic material (the it.74 rule). ATTEMPT 1 FAILED THE LOOK
+  loudly: the sand ring rendered HOT MAGENTA — a decimal-hex TYPO
+  (9375326 = 0x8F0F5E, not 0x9c8a5e = 10259038). NEW PLAYBOOK RULE:
+  COMPUTE decimal color literals from hex programmatically or
+  double-check — a wrong literal passes every build/probe and only
+  the LOOK catches it (this is WHY the loop verifies by looking).
+  A/B verdict (loop-shots/76-pondshore/): mud band hugs the water +
+  defined sand bank vs water floating on flat ground. Report
+  pondShores {shores, sample}; pondShoresEnable. Suite 172/172.
+  NEXT: item 8 mountain strata.
+- **77 MOUNTAIN STRATA (2026-07-17)**: round-eight item 8 — the
+  fringe mountains were stark placeholder cones. Big peaks (M > 120,
+  ~36-40/world) gain two proud strata band rings (short wide cone
+  slices at 30%/55% of VISIBLE height — parent radius recomputed
+  from the cone taper, r*(top-y)/M) and a talus skirt at the foot.
+  Rings use 7 segs against the 5-6-seg parents — the facet mismatch
+  reads as irregular rock ledges, a feature not a bug. Colors
+  COMPUTED from hex in the patch script (it.76 rule paid off —
+  first-try visual pass). SILHOUETTE UNCHANGED (far shot verified —
+  the range reads as before with faint band hints up close). ONE
+  merged mesh, flat organic material, ~1.5k tris. Report mtnStrata
+  {dressed, sample}; mtnStrataEnable. Suite 173/173. NEXT: item 9
+  manholes + drain grates (oilSys clone), then 10 park path
+  connections → DEPLOY BATCH 22 (v3.29.0) + closing survey.
+- **78 MANHOLES + DRAIN GRATES (2026-07-17)**: round-eight item 9 —
+  ironSys, the THIRD member of the roadDecalSys shader family (after
+  oil): ONE InstancedMesh cap 44, 2-cell 256x128 iron atlas (ringed
+  manhole cover w/ radial ticks, barred drain grate), aDecalSlot +
+  UV patch + customProgramCacheKey "manhole-atlas", placed via the
+  shared band-filtered _surfaceY raycast on first tick. Seeding:
+  manholes mid-lane (sw*0.1) near intersections, grates on the curb
+  line (sw*0.38, axis-aligned yaw); 44/44 placed. TOGGLE FIX: the
+  systems-update block (oil/birds/steam zone) is PAUSED under
+  flyCam, so an update-tick-only visibility sync never fires during
+  verification — toggles must apply mesh.visible DIRECTLY (oilSys
+  has the same latent quirk, left as-is). VERIFY LESSON (cost a few
+  reruns): my street-level camera used ABSOLUTE y over sloped
+  terrain and aimed at midair — the "grate" I kept staring at was a
+  steam vent; the decisive shot is TOP-DOWN over a sample with
+  probeDown().ground for height. Region-avg pixel compares beat
+  eyeballing for A/B disputes. LOOK verdict (loop-shots/78-iron/
+  topdown-*): ringed manhole dead center on asphalt vs bare road.
+  Report iron {spots, placed, sample}; ironEnable. Suite 174/174.
+  NEXT: item 10 park path connections (LAST) → DEPLOY BATCH 22
+  (v3.29.0) + round-eight closing survey.
+- **79 PARK PATH CONNECTIONS (2026-07-17)**: round-eight item 10
+  (LAST) — park gravel paths dead-ended in lawn. Every path end (the
+  bow vanishes at t=0/1, ends sit at cell center ± half along the
+  path axis; new connectSys._cells collector beside strollerCells,
+  reset with the parkSys resets) gets a straight cream connector
+  strip to the adjacent road edge + a bollard pair at the mouth.
+  KEY DISCOVERY (cost two dud probe passes + a console-log boot):
+  **Pn() measures clearance to the RACE COURSE spline samples, NOT
+  city roads** — clearances at park ends read 30-900m. The it.73
+  walkway "street-edge probe" silently never matched and always
+  used its L=10 fallback (looked right by luck). The real answer is
+  LATTICE GEOMETRY: half = pitch/2 - sw/2 - 12, so every path end
+  is EXACTLY 12m from the adjacent road edge — connector L is
+  deterministic (10.8m), no probing at all. PLAYBOOK: before
+  probing, check whether the lattice already answers the question;
+  and Pn is course-distance, use di lattice math for street
+  distance. Also loosened the it.75 stand-roof probe to ≥1 (zn
+  placement luck yielded a 2-stand world). A/B verdict
+  (loop-shots/79-connectors/): path continues to the road edge with
+  bollards vs dead-ending in lawn. Report parkConnectors; toggle.
+  Suite 175/175. **ROUND EIGHT COMPLETE: 10/10 shipped.** v3.29.0
+  DEPLOY BATCH 22 (items 6-10). NEXT: round-eight closing survey
+  (user paused the loop 2026-07-17 — resume with /loop).
+- **80 THE OCEAN (2026-07-17, user request)**: the 4200x4200 terrain
+  is an ISLAND — it is now surrounded by ocean. Four border slabs
+  (inner edge tucked 40m under the terrain rim at |x|,|z|=2060, out
+  to +/-3900 — the camera far plane is 1800, no point going further)
+  share ONE ShaderMaterial: long swell (240-290m wavelengths, safe
+  on the slab grid) displaces VERTICES; fine chop normals, fresnel
+  deep-vs-dusk-sky mix, low-sun specular + glitter (the pond
+  palette), and animated shore-foam breakers (Chebyshev distance to
+  the island square) run in the FRAGMENT; OPAQUE (dusk rule).
+  KEY TRICK: the ocean carries THINNED CUSTOM FOG (700-4200 x0.85,
+  pale-haze color) — terrain drowns in scene fog at 2150 but
+  glinting water pierces the haze, which is physically what sun
+  glitter does. Ticked free via the existing waterMats uTime loop.
+  TWO SHADING PASSES: v1 hardcoded output-space fog color rendered
+  desert-orange from altitude + deep tone went black on the
+  anti-sun side — rebalanced (paler haze, fog capped 0.85, deep
+  lifted). ~8.8k tris, +4 draws, zero textures. LOOK verdict
+  (loop-shots/80-ocean/): coast-foam = wide pale sea with sun
+  glints rolling to the horizon; coast A/B = glinting sea band vs
+  terrain edge dropping into void sky. Report ocean {slabs, y, t};
+  oceanEnable. Suite 176/176. v3.30.0 DEPLOYED.
+- **80b DRIVE ONTO THE BEACH (2026-07-17, user request)**: the coast
+  is now a DESTINATION — roam clamps widened from the city rect
+  (±820/-1620..480) to the island rim (±2040 both axes, BOTH clamp
+  sites), the outer 255m of terrain is a dune-striped SAND BEACH,
+  the surf line pulled inward (uInner 2060→1980) with DISCRETE
+  double-breaker foam bands rolling ashore, and pondDepthAt gained
+  an ocean surf band (perimeter terrain below sea level -9.5) so
+  driving into the waves gets the full pond water physics — drag,
+  SPLASH banner, wake, camera shake (verified: depth 0.84 at rest
+  in the surf). THE BIG LESSON (cost 3 visual passes): vertex
+  colors MULTIPLY the map — no factor can create red a green grass
+  texture doesn't have (subtle at 1.9x, bloom-white at 3.3x, never
+  sand). ABSOLUTE color changes need a SHADER INJECTION: terrain
+  material onBeforeCompile lerps diffuse to sand after
+  map_fragment (customProgramCacheKey "terrain-beach-band"); the
+  vertex colors then multiply on top = dune stripes. Also: roam
+  yaw 0 faces -z, +x is yaw +PI/2; fresnel capped 0.62 keeps
+  grazing water blue; foam base 0.18 so breakers read as BANDS not
+  a white sheet. LOOK verdict (loop-shots/80b-beach/): green hills
+  roll onto pale dunes, car on the sand, surf line + glinting sea;
+  aerial = real coastline wrapping the headlands. Suite 177/177.
+  v3.31.0 DEPLOYED.
+- **80c OCEAN RETHINK (2026-07-17, user: "water looks terrible and
+  the car drives under the water")**: full rewrite of both halves.
+  LOOK: real GERSTNER trains (4, dispersion-correct w=sqrt(9.81k),
+  horizontal crest displacement for sharp crests, λ 27-132m) travel
+  SHOREWARD on every side (direction = island-square outward normal
+  blended at corners), SHOAL approaching the sand (+65% amp) and
+  collapse at the line; per-pixel FACETED normals via dFdx/dFdy
+  (lowpoly-coherent and cheap) + ripple perturbation; crest foam
+  from the wave-phase sum + a pulsing wash riding the primary train
+  ashore; depth-graded teal→deep body; 8 slabs (dense ~24m surf
+  ring + coarse skirt, ~22k tris). PHYSICS: the water is now the
+  FLOOR — Ki returns kind "water" at y -10.05 in the surf band
+  where the seabed is deeper, so the car FLOATS at the waterline
+  (hull at -9.5) with all suspension/air logic intact; waterPhysics
+  adds a shoreward current (8.5 · depth, beats drag-terminal).
+  THREE HARD LESSONS: (1) a BOBBING floor feeds the crest-launch
+  detector and trampolines the car to y=47 — water floors must be
+  FLAT; (2) the "flying car" that survived the flat floor was NOT a
+  bug — the race deck crosses the east surf and Zd's upward track
+  snap ratchets a floating car onto the ribbon (pre-existing,
+  left as a feature); (3) the old phantom-water lake probe sampled
+  into the new surf band — probes with world-geometry assumptions
+  need updating when the WORLD grows (ocean-aware cd filter).
+  Verified in-car at a deck-free south bay: floats at waterline
+  over a -14.5 seabed, SPLASH + wake rings, waves rolling in
+  (loop-shots/80c-waves/). Suite 177/177. v3.32.0 DEPLOYED.

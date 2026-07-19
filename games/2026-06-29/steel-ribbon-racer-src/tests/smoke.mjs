@@ -808,6 +808,242 @@ const browser = await chromium.launch({
     JSON.stringify({ dressed: lpd?.dressed, baskets: lpd?.baskets }),
   );
 
+  // zoom-detail 66 (round seven item 8): hot-air balloons drift over the outskirts
+  const bal = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug,
+      b0 = deb.detailReport().balloons;
+    await new Promise((r) => setTimeout(r, 2500));
+    const b1 = deb.detailReport().balloons,
+      off = deb.balloonsEnable(false),
+      offRep = deb.detailReport().balloons.enabled;
+    deb.balloonsEnable(true);
+    return { count: b0.count, alt: b1.alt, drift: +(b1.x - b0.x).toFixed(1), off, offRep };
+  });
+  check(
+    "balloons: striped hot-air balloons drift below the blimp lane, toggle works",
+    !!bal && bal.count === 3 && bal.alt > 120 && bal.alt < 240 && bal.drift > 0.3 && bal.off === false && bal.offRep === false,
+    JSON.stringify(bal),
+  );
+
+  // zoom-detail 67 (round seven item 9): crowd-dot textures on the grandstands
+  const cdt = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      c0 = deb.detailReport().crowd,
+      off = deb.crowdDotsEnable(false),
+      offRep = deb.detailReport().crowd.dotsEnabled;
+    deb.crowdDotsEnable(true);
+    return { stands: c0.stands, dotTex: c0.dotTex, off, offRep };
+  });
+  check(
+    "crowd dots: colored seated-rank textures on grandstands, toggle works",
+    !!cdt && cdt.stands >= 1 && cdt.dotTex === 2 && cdt.off === false && cdt.offRep === false,
+    JSON.stringify(cdt),
+  );
+
+  // zoom-detail 68 (round seven item 10): striped tips + nose cones on turbines
+  const wm = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().windmill,
+      off = deb.windmillTipsEnable(false),
+      offRep = deb.detailReport().windmill.enabled;
+    deb.windmillTipsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "windmill polish: striped blade tips + nose cones on outskirt turbines, toggle works",
+    !!wm && wm.turbines === 9 && wm.off === false && wm.offRep === false,
+    JSON.stringify({ turbines: wm?.turbines }),
+  );
+
+  // zoom-detail 70 (round eight item 1): plinths/collars/tips dress the deck pylons
+  const pyd = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().pylonDress,
+      off = deb.pylonDressEnable(false),
+      offRep = deb.detailReport().pylonDress.enabled;
+    deb.pylonDressEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "pylon dressing: plinths + collars + warning tips on deck pylons, toggle works",
+    !!pyd && pyd.dressed >= 8 && pyd.dressed <= 130 && pyd.collars > pyd.dressed && pyd.off === false && pyd.offRep === false,
+    JSON.stringify({ dressed: pyd?.dressed, collars: pyd?.collars }),
+  );
+
+  // zoom-detail 71 (round eight item 2): girder ribs under the deck slabs
+  const drb = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().deckRibs,
+      off = deb.deckRibsEnable(false),
+      offRep = deb.detailReport().deckRibs.enabled;
+    deb.deckRibsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "deck ribs: spine beams + cross-ribs under the ribbon, toggle works",
+    !!drb && drb.ribs >= 40 && drb.spines >= drb.ribs && drb.off === false && drb.offRep === false,
+    JSON.stringify({ ribs: drb?.ribs, spines: drb?.spines }),
+  );
+
+  // zoom-detail 72 (round eight item 3): forecourt aprons + planters at tower bases
+  const fct = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().forecourts,
+      off = deb.forecourtsEnable(false),
+      offRep = deb.detailReport().forecourts.enabled;
+    deb.forecourtsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "forecourts: paved aprons + planters at tall tower bases, toggle works",
+    !!fct && fct.pads >= 10 && fct.pads <= 70 && fct.planters > fct.pads && fct.off === false && fct.offRep === false,
+    JSON.stringify({ pads: fct?.pads, planters: fct?.planters }),
+  );
+
+  // zoom-detail 73 (round eight item 4): suburb walkways + hedges
+  const swk = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().suburbWalks,
+      off = deb.suburbWalksEnable(false),
+      offRep = deb.detailReport().suburbWalks.enabled;
+    deb.suburbWalksEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "suburb walks: door-to-street walkways + hedges at A() shops, toggle works",
+    !!swk && swk.walks >= 6 && swk.hedges === swk.walks * 2 && swk.off === false && swk.offRep === false,
+    JSON.stringify({ walks: swk?.walks, hedges: swk?.hedges }),
+  );
+
+  // zoom-detail 74 (round eight item 5): broadleaf + autumn trees among conifers
+  const tvr = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().treeVar,
+      off = deb.treeVarietyEnable(false),
+      offRep = deb.detailReport().treeVar.enabled;
+    deb.treeVarietyEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "tree variety: broadleaf + autumn canopies mixed into the forest, toggle works",
+    !!tvr && tvr.broadleaf >= 20 && tvr.broadleaf <= 70 && tvr.autumn >= 3 && tvr.off === false && tvr.offRep === false,
+    JSON.stringify({ broadleaf: tvr?.broadleaf, autumn: tvr?.autumn }),
+  );
+
+  // zoom-detail 75 (round eight item 6): slate stand roofs + fascia strips
+  const srf = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().standRoof,
+      off = deb.standRoofEnable(false),
+      offRep = deb.detailReport().standRoof.enabled;
+    deb.standRoofEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "stand roofs: slate material + fascia replace the white blowout, toggle works",
+    !!srf && srf.roofs >= 1 && srf.roofs <= 4 && srf.off === false && srf.offRep === false,
+    JSON.stringify({ roofs: srf?.roofs }),
+  );
+
+  // zoom-detail 76 (round eight item 7): sand/mud shore rings at pond waterlines
+  const psh = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().pondShores,
+      off = deb.pondShoresEnable(false),
+      offRep = deb.detailReport().pondShores.enabled;
+    deb.pondShoresEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "pond shores: sand + mud rings at the waterline, toggle works",
+    !!psh && psh.shores >= 1 && psh.off === false && psh.offRep === false,
+    JSON.stringify({ shores: psh?.shores }),
+  );
+
+  // zoom-detail 77 (round eight item 8): strata bands + talus skirts on mountains
+  const mst = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().mtnStrata,
+      off = deb.mtnStrataEnable(false),
+      offRep = deb.detailReport().mtnStrata.enabled;
+    deb.mtnStrataEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "mountain strata: band rings + talus skirts on big peaks, toggle works",
+    !!mst && mst.dressed >= 8 && mst.dressed <= 52 && mst.off === false && mst.offRep === false,
+    JSON.stringify({ dressed: mst?.dressed }),
+  );
+
+  // zoom-detail 78 (round eight item 9): manhole covers + drain grates
+  const irn = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug;
+    for (let k = 0; k < 40; k++) {
+      if (deb.detailReport().iron.placed > 0) break;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    const r = deb.detailReport().iron,
+      off = deb.ironEnable(false),
+      offRep = deb.detailReport().iron.enabled;
+    deb.ironEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "iron street furniture: manholes + drain grates placed on roads, toggle works",
+    !!irn && irn.spots >= 12 && irn.placed === irn.spots && irn.off === false && irn.offRep === false,
+    JSON.stringify({ spots: irn?.spots, placed: irn?.placed }),
+  );
+
+  // zoom-detail 79 (round eight item 10): park paths connect to the street grid
+  const pcn = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug,
+      r = deb.detailReport().parkConnectors,
+      off = deb.parkConnectorsEnable(false),
+      offRep = deb.detailReport().parkConnectors.enabled;
+    deb.parkConnectorsEnable(true);
+    return { ...r, off, offRep };
+  });
+  check(
+    "park connectors: path-to-street strips + bollards, toggle works",
+    !!pcn && pcn.connectors >= 4 && pcn.bollards === pcn.connectors * 2 && pcn.off === false && pcn.offRep === false,
+    JSON.stringify({ connectors: pcn?.connectors, bollards: pcn?.bollards }),
+  );
+
+  // zoom-detail 80 (user request): the ocean surrounding the island
+  const ocn = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug,
+      o0 = deb.detailReport().ocean;
+    await new Promise((r) => setTimeout(r, 1500));
+    const o1 = deb.detailReport().ocean,
+      off = deb.oceanEnable(false),
+      offRep = deb.detailReport().ocean.enabled;
+    deb.oceanEnable(true);
+    return { slabs: o0.slabs, y: o0.y, dt: +(o1.t - o0.t).toFixed(2), off, offRep };
+  });
+  check(
+    "ocean: four wave slabs surround the island, time advances, toggle works",
+    !!ocn && ocn.slabs === 8 && ocn.dt > 0.05 && ocn.off === false && ocn.offRep === false,
+    JSON.stringify(ocn),
+  );
+
+  // zoom-detail 80b: drive onto the beach — roam reaches the coast, surf has depth
+  const bch = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug;
+    let spot = null;
+    for (let z = -2000; z <= 2000 && !spot; z += 25) {
+      const w = deb.waterAt(2015, z);
+      if (w.depth > 0.08) spot = { z, depth: w.depth };
+    }
+    deb.setRoamPos(2005, spot ? spot.z : 0, Math.PI / 2);
+    const rp = deb.stats().roamPos;
+    return { spot, rx: +rp.x.toFixed(0) };
+  });
+  check(
+    "beach drive: roam reaches the coast and the surf band has water depth",
+    !!bch && bch.rx > 1900 && !!bch.spot && bch.spot.depth > 0.08,
+    JSON.stringify(bch),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
@@ -1444,8 +1680,9 @@ const browser = await chromium.launch({
     for (let ix = -4; ix <= 4; ix++)
       for (let iz = -4; iz <= 4; iz++) {
         const px = lake.x + (ix / 5) * lake.rx,
-          pz = lake.z + (iz / 5) * lake.rz,
-          w = d.waterAt(px, pz);
+          pz = lake.z + (iz / 5) * lake.rz;
+        if (Math.max(Math.abs(px), Math.abs(pz)) > 1980) continue; // the OCEAN surf band is real water (zoom-detail 80c)
+        const w = d.waterAt(px, pz);
         (w.depth > 0.04 && wetSamples++, w.ground > lake.waterY + 0.15 && w.depth > 0.04 && violations++);
       }
     return { lake: !0, gated: !0, violations, wetSamples };

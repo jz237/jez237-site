@@ -1050,7 +1050,15 @@ function pondDepthAt(x, z) {
       d > depth && ((depth = d), (pond = p));
     }
   }
-  return { depth, pond };
+  // zoom-detail 80b: the ocean surf band — shallow water wherever the perimeter
+  // terrain dips below sea level (-9.5), so driving into the surf gets the same
+  // drag/splash/wake as ponds. Capped: the surf is never a wall.
+  let ocean = !1;
+  if (Math.max(Math.abs(x), Math.abs(z)) > 1980) {
+    const d2 = MathUtils.clamp((-9.5 - He(x, z)) / 2.2, 0, 1.4);
+    d2 > depth && ((depth = d2), (pond = null), (ocean = !0));
+  }
+  return { depth, pond, ocean };
 }
 const Sa = [],
   Co = [],
@@ -1255,6 +1263,17 @@ function P1() {
 function L1() {
   const i = new MeshStandardMaterial({ map: M1(), color: 8231526, roughness: 0.98, metalness: 0.02 }),
     e = new Mesh(new PlaneGeometry(4200, 4200, 300, 300), i);
+  // zoom-detail 80b: the perimeter beach — an ABSOLUTE lerp to sand in the outer
+  // band, injected after map sampling (vertex colors then multiply = dune stripes)
+  i.customProgramCacheKey = () => "terrain-beach-band";
+  i.onBeforeCompile = (sh) => {
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying float vBch;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvBch = smoothstep(1845.0, 1975.0, max(abs(position.x), abs(position.y)));");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying float vBch;")
+      .replace("#include <map_fragment>", "#include <map_fragment>\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.60, 0.52, 0.36), vBch);");
+  };
   ((e.rotation.x = -Math.PI / 2), (e.position.y = -7), (e.receiveShadow = !0));
   const t = e.geometry.attributes.position;
   for (let g = 0; g < t.count; g++) {
@@ -1298,6 +1317,17 @@ function L1() {
           else if (wear < 0.07) ((r2 *= 0.9), (b3 *= 0.93));
           striped++;
         }
+      }
+      // zoom-detail 80b: perimeter sand — the outer 230m of the island blends
+      // lawn into warm dune-striped beach so the coast reads drivable shore
+      // zoom-detail 80b: dune striping for the beach band — brightness modulation
+      // only; the SAND COLOR itself is an absolute lerp injected into the terrain
+      // shader (multiplying vertex colors cannot create red the green map lacks)
+      const cd2 = Math.max(Math.abs(wx), Math.abs(wz));
+      if (cd2 > 1845) {
+        const bl = Math.min(1, (cd2 - 1845) / 110),
+          dune = 1 + Math.sin(wx * 0.021 + wz * 0.017) * 0.07 * bl;
+        ((r2 *= dune), (g2 *= dune), (b3 *= dune));
       }
       ((col[g * 3] = r2), (col[g * 3 + 1] = g2), (col[g * 3 + 2] = b3));
     }
@@ -1364,6 +1394,7 @@ function L1() {
       new MeshStandardMaterial({ color: 4874865, roughness: 1 }),
     ],
     o = new MeshStandardMaterial({ color: 15068905, roughness: 0.95 });
+  mtnStrataSys._spots.length = 0;
   for (let g = 0; g < 52; g++) {
     const M = 78 + Math.random() * 180,
       x = 52 + Math.random() * 115,
@@ -1378,6 +1409,7 @@ function L1() {
       );
     if (!h) continue;
     const _ = new Mesh(new ConeGeometry(x, M, 5 + Math.floor(Math.random() * 2)), a[g % a.length]);
+    M > 120 && mtnStrataSys._spots.push({ x: h.x, z: h.z, r: x, m: M });
     if (
       (_.position.set(h.x, -9, h.z),
       (_.rotation.y = Math.random() * Math.PI),
@@ -1410,6 +1442,7 @@ function L1() {
       canopyIM = new InstancedMesh(canopyGeo, new MeshStandardMaterial({ roughness: 0.92 }), 185),
       dum = new Object3D();
     let ci = 0;
+    treeVarSys._spots.length = 0;
     for (let g = 0; g < 185; g++) {
       const M = 0.58 + Math.random() * 1.05,
         x = 8 * M,
@@ -1419,6 +1452,10 @@ function L1() {
       if (ka(_, v, 18)) continue;
       const y = He(_, v) + 0.8,
         T = 2.2 + Math.random() * 3.8;
+      if ((g & 3) === 3) {
+        (treeVarSys._spots.push({ x: _, z: v, m: M, t: T, y }), kn("tree", _, v, x, 145));
+        continue;
+      }
       (dum.position.set(_, y, v),
         (dum.rotation.y = Math.random() * Math.PI),
         dum.scale.set(M, T, M),
@@ -1728,6 +1765,19 @@ function D1() {
       const ne = new Group();
       (ne.add(te), (ne.rotation.z = (W / 3) * Math.PI * 2), L.add(ne));
     }
+    {
+      const tp = [];
+      for (let W = 0; W < 3; W++) {
+        const ang = (W / 3) * Math.PI * 2;
+        for (const ty of [21.3, 24.5])
+          tp.push(vcBake(new BoxGeometry(1.2, 1.6, 0.62).translate(0, ty, 0).applyMatrix4(new Matrix4().makeRotationZ(ang)), null, 12078624));
+      }
+      tp.push(vcBake(new CylinderGeometry(1.45, 1.45, 0.9, 10).rotateX(Math.PI / 2), null, 11580600));
+      tp.push(vcBake(new ConeGeometry(1.25, 2.4, 10).rotateX(Math.PI / 2), new Matrix4().setPosition(0, 0, 1.5), 11580600));
+      const tm = new Mesh(mergeGeometries(tp, !1), vcMats().opaque);
+      ((tm.raycast = () => {}), L.add(tm), windmillSys._meshes.push(tm), windmillSys.turbines++);
+      windmillSys.sample || (windmillSys.sample = { x: +y.toFixed(1), z: +E.toFixed(1), hub: +(T - 8).toFixed(1) });
+    }
     (b.add(L), R.add(b), R.position.set(y, -8, E), (R.rotation.y = Math.random() * Math.PI), et.add(R));
     const F = 0.5 + Math.random() * 0.5;
     Bn(L, (W) => {
@@ -1907,17 +1957,20 @@ function D1() {
       ((_.position.x += v * E), _.position.x > 1400 && (_.position.x = -1400));
     });
   }
-  const g = new MeshStandardMaterial({ color: 13620954, roughness: 0.6, metalness: 0.2 }),
-    M = new MeshBasicMaterial({ map: G1(), side: DoubleSide });
+  const g = new MeshStandardMaterial({ color: 13620954, roughness: 0.6, metalness: 0.2 });
+  ((standRoofSys._oldMat = g), (standRoofSys._newMat = new MeshStandardMaterial({ color: 5659491, roughness: 0.85, metalness: 0.05 })));
+  ((crowdTexSys._legacy = G1()),
+    (crowdTexSys._dots = [buildCrowdDotTexture(0), buildCrowdDotTexture(1)]),
+    (crowdTexSys._mats = crowdTexSys._dots.map((tx) => new MeshBasicMaterial({ map: tx, side: DoubleSide, toneMapped: !1 }))));
   for (let h = 0; h < 4; h++) {
     const _ = zn(() => ({ x: -560 + Math.random() * 1120, z: -520 - Math.random() * 900 }), 40, 30, 40);
     if (!_) continue;
     const { x: v, z: y } = _,
       E = new Group(),
       T = 60 + Math.random() * 40,
-      R = new Mesh(new BoxGeometry(T, 1.4, 26), g);
-    (R.position.set(0, 26, -4), (R.rotation.x = -0.32), E.add(R));
-    const C = new Mesh(new PlaneGeometry(T * 0.94, 24), M);
+      R = new Mesh(new BoxGeometry(T, 1.4, 26), standRoofSys._newMat);
+    (R.position.set(0, 26, -4), (R.rotation.x = -0.32), E.add(R), standRoofSys._meshes.push(R), standRoofSys.roofs++);
+    const C = new Mesh(new PlaneGeometry(T * 0.94, 24), crowdTexSys._mats[h % 2]);
     (C.position.set(0, 12, 6), (C.rotation.x = -0.85), E.add(C));
     for (const b of [-T / 2, T / 2]) {
       const S = new Mesh(new BoxGeometry(1.4, 26, 1.4), g);
@@ -2379,6 +2432,30 @@ const plateSys = {
 // the walk swing for free. Kit choice is pedIndex % pool, so a pedestrian
 // always gets the same face/shoe variety back when re-promoted. All parts
 // share vcMats' opaque material: promoted cost is 5 small draws per kit.
+// zoom-detail 67 (round-seven item 9): race-visible crowd-dot textures on the stands
+const crowdTexSys = { enabled: !0, _mats: [], _dots: [], _legacy: null };
+// zoom-detail 68 (round-seven item 10): striped blade tips + nose cones on the turbines
+const windmillSys = { turbines: 0, enabled: !0, sample: null, _meshes: [] };
+// zoom-detail 70 (round-eight item 1): plinths/collars/warning tips on the deck pylons
+const pylonDressSys = { dressed: 0, collars: 0, enabled: !0, sample: null, _mesh: null };
+// zoom-detail 71 (round-eight item 2): girder ribs + spine beam under the deck slabs
+const deckRibSys = { ribs: 0, spines: 0, enabled: !0, sample: null, _mesh: null, _segs: [] };
+// zoom-detail 72 (round-eight item 3): paved forecourt aprons + planters at tower bases
+const forecourtSys = { pads: 0, planters: 0, enabled: !0, sample: null, _mesh: null };
+// zoom-detail 73 (round-eight item 4): front walkways + hedges for the suburban shops
+const walkwaySys = { walks: 0, hedges: 0, enabled: !0, sample: null, _mesh: null, _spots: [], _samples: [] };
+// zoom-detail 74 (round-eight item 5): broadleaf + autumn trees among the conifers
+const treeVarSys = { broadleaf: 0, autumn: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
+// zoom-detail 75 (round-eight item 6): slate stand roofs + fascia (was white blowout)
+const standRoofSys = { roofs: 0, enabled: !0, _meshes: [], _newMat: null, _oldMat: null, _fascia: null };
+// zoom-detail 76 (round-eight item 7): sand/mud shore rings at the pond waterlines
+const pondShoreSys = { shores: 0, enabled: !0, sample: null, _mesh: null };
+// zoom-detail 77 (round-eight item 8): strata bands + talus skirts on the big mountains
+const mtnStrataSys = { dressed: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
+// zoom-detail 79 (round-eight item 10): park paths connect to the street network
+const connectSys = { connectors: 0, bollards: 0, enabled: !0, sample: null, _mesh: null, _cells: [] };
+// zoom-detail 80 (user request): the ocean surrounding the island
+const oceanSys = { slabs: 0, y: -9.5, enabled: !0, _meshes: [], _mat: null };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -3475,6 +3552,80 @@ const oilSys = {
     (this.ensure(), this.place());
   },
 };
+// zoom-detail 78 (round-eight item 9): manhole covers + drain grates — the oilSys
+// road-decal shader family, third member. ONE InstancedMesh, 2-cell iron atlas.
+let ironAtlasTex = null;
+function buildIronAtlas() {
+  if (ironAtlasTex) return ironAtlasTex;
+  const cv = document.createElement("canvas");
+  ((cv.width = 256), (cv.height = 128));
+  const g = cv.getContext("2d");
+  // cell 0: round manhole cover
+  ((g.fillStyle = "#2e3236"), g.beginPath(), g.arc(64, 64, 54, 0, Math.PI * 2), g.fill());
+  ((g.strokeStyle = "#464b50"), (g.lineWidth = 6), g.beginPath(), g.arc(64, 64, 48, 0, Math.PI * 2), g.stroke());
+  ((g.lineWidth = 3), g.beginPath(), g.arc(64, 64, 30, 0, Math.PI * 2), g.stroke());
+  g.strokeStyle = "#1c1f22";
+  for (let k = 0; k < 12; k++) {
+    const a = (k / 12) * Math.PI * 2;
+    (g.beginPath(), g.moveTo(64 + Math.cos(a) * 32, 64 + Math.sin(a) * 32), g.lineTo(64 + Math.cos(a) * 46, 64 + Math.sin(a) * 46), g.stroke());
+  }
+  // cell 1: rectangular drain grate
+  ((g.fillStyle = "#33383c"), g.fillRect(134, 34, 116, 60));
+  g.fillStyle = "#141618";
+  for (let k = 0; k < 7; k++) g.fillRect(140 + k * 16, 40, 9, 48);
+  ironAtlasTex = new CanvasTexture(cv);
+  return ((ironAtlasTex.colorSpace = SRGBColorSpace), ironAtlasTex);
+}
+const ironSys = {
+  spots: [],
+  mesh: null,
+  placed: 0,
+  placedDone: !1,
+  enabled: !0,
+  sample: [],
+  _surfaceY(sp) {
+    return roadDecalSys._surfaceY(sp);
+  },
+  ensure() {
+    if (this.mesh) return;
+    const geo = new PlaneGeometry(1, 1).rotateX(-Math.PI / 2);
+    geo.setAttribute("aDecalSlot", new InstancedBufferAttribute(new Float32Array(44), 1));
+    const mat = new MeshBasicMaterial({ map: buildIronAtlas(), transparent: !0, polygonOffset: !0, polygonOffsetFactor: -3, depthWrite: !1 });
+    mat.customProgramCacheKey = () => "manhole-atlas";
+    mat.onBeforeCompile = (sh) => {
+      sh.vertexShader = sh.vertexShader
+        .replace("#include <common>", "#include <common>\nattribute float aDecalSlot;\nvarying vec2 vIronUv;")
+        .replace("#include <uv_vertex>", "#include <uv_vertex>\nvIronUv = vec2((aDecalSlot + uv.x) * 0.5, uv.y);");
+      sh.fragmentShader = sh.fragmentShader
+        .replace("#include <common>", "#include <common>\nvarying vec2 vIronUv;")
+        .replace("#include <map_fragment>", "diffuseColor *= texture2D( map, vIronUv );");
+    };
+    this.mesh = new InstancedMesh(geo, mat, 44);
+    ((this.mesh.frustumCulled = !1), (this.mesh.castShadow = !1), (this.mesh.receiveShadow = !1), (this.mesh.raycast = () => {}), (this.mesh.renderOrder = 1), (this.mesh.count = 0));
+    et.add(this.mesh);
+  },
+  place() {
+    const dummy = new Object3D();
+    let n = 0;
+    this.sample.length = 0;
+    for (const sp of this.spots) {
+      if (n >= 44) break;
+      const sc = sp.v ? [1.5 + sp.s * 0.2, 0.75] : [1.22 + sp.s * 0.15, 1.22 + sp.s * 0.15];
+      (dummy.position.set(sp.x, this._surfaceY(sp), sp.z), (dummy.rotation.y = sp.yaw), dummy.scale.set(sc[0], 1, sc[1]), dummy.updateMatrix());
+      this.mesh.setMatrixAt(n, dummy.matrix);
+      this.mesh.geometry.attributes.aDecalSlot.setX(n, sp.v);
+      this.sample.length < 3 && this.sample.push({ x: sp.x, z: sp.z, v: sp.v });
+      n++;
+    }
+    ((this.mesh.count = n), (this.mesh.instanceMatrix.needsUpdate = !0), (this.mesh.geometry.attributes.aDecalSlot.needsUpdate = !0), (this.placed = n), (this.placedDone = !0));
+  },
+  update(t, dt) {
+    if (!this.spots.length || !dt) return;
+    if (this.mesh) this.mesh.visible = this.enabled;
+    if (this.placedDone) return;
+    (this.ensure(), this.place());
+  },
+};
 // (4b-lite driver silhouettes retired in round four: every cabin now has
 // a real recessed driver baked in — see full-fat 4b.)
 // race roadside life (zoom-detail item 18): marshals with checkered flags,
@@ -4307,7 +4458,7 @@ function buildHaloTexture() {
   return ((neonHaloTex.colorSpace = SRGBColorSpace), neonHaloTex);
 }
 function buildParks(group, x0, x1, zA, zB, pitch, sw) {
-  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []), (lampDressSys.parkCells.length = 0));
+  ((parkSys.cells = 0), (parkSys.trees = 0), (parkSys.benches = 0), (parkSys.beds = 0), (parkSys.pathTris = 0), (parkSys.pitches = 0), (parkSys.strollers = 0), (parkSys.strollerCells.length = 0), (parkSys.strollerSample = null), (parkSys.sample.length = 0), (parkSys._vis = []), (lampDressSys.parkCells.length = 0), (connectSys._cells.length = 0));
   const zLo = Math.min(zA, zB),
     zTop = Math.max(zA, zB),
     zCap = Math.min(zTop, 240),
@@ -4400,6 +4551,7 @@ function buildParks(group, x0, x1, zA, zB, pitch, sw) {
     }
     parkSys.cells++;
     parkSys.strollerCells.length < 3 && parkSys.strollerCells.push({ cx, cz, vert, bow, half });
+    connectSys._cells.push({ cx, cz, vert, half });
     parkSys.sample.length < 3 && parkSys.sample.push({ x: +cx.toFixed(0), z: +cz.toFixed(0) });
     lampDressSys.parkCells.push({ x: cx, z: cz });
   }
@@ -4825,6 +4977,22 @@ function buildStreetFurniture(group, x0, x1, zLow, zHigh, pitch, sw, clearanceAt
       pz = isNS ? zj + (orng() < 0.5 ? -back : back) : zj + lane;
     if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
     oilSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw: orng() * 6.28, v: (orng() * 2) | 0, s: orng() });
+  }
+  ((ironSys.spots.length = 0), (ironSys.placedDone = !1));
+  const irng = plateRng(0x1a09e5);
+  for (let i = 0; i < 320 && ironSys.spots.length < 44; i++) {
+    // manholes mid-lane near intersections; drain grates along the curb line
+    const isNS = irng() < 0.5,
+      xi = x0 + pitch * (1 + ((irng() * ((x1 - x0) / pitch - 1)) | 0)),
+      zj = zHigh - pitch * (1 + ((irng() * ((zHigh - zLow) / pitch - 1)) | 0)),
+      back = 6 + irng() * 26,
+      v = irng() < 0.55 ? 0 : 1,
+      off = (irng() < 0.5 ? -1 : 1) * sw * (v === 0 ? 0.1 : 0.38),
+      px = isNS ? xi + off : xi + (irng() < 0.5 ? -back : back),
+      pz = isNS ? zj + (irng() < 0.5 ? -back : back) : zj + off;
+    if (clearanceAt(px, pz, 0.5).clearance < 0.6) continue;
+    const yaw = v === 1 ? (isNS ? 0 : Math.PI / 2) : irng() * 6.28;
+    ironSys.spots.push({ x: +px.toFixed(1), y: +(He(px, pz) + 0.03).toFixed(2), z: +pz.toFixed(1), yaw, v, s: irng() });
   }
   for (const d of defs) {
     const im = meshes[d.key];
@@ -5330,6 +5498,7 @@ function F1(i, e, t) {
       facadeSys.update(I, ye);
       roadDecalSys.update(I, ye);
       oilSys.update(I, ye);
+      ironSys.update(I, ye);
       newsSys.update(I, ye);
       for (const Me of Ps) {
         if (!Me.visible) continue;
@@ -5749,6 +5918,7 @@ function N1() {
         ((shopBandSys._parts[bv] || (shopBandSys._parts[bv] = [])).push(bg2), shopBandSys.count++);
         shopBandSys.sample ||
           (shopBandSys.sample = se ? { x: +(N + $ * (Y * 0.5 + 1)).toFixed(1), y: +(re + 1.6).toFixed(1), z: +O.toFixed(1), nx: $, nz: 0 } : { x: +N.toFixed(1), y: +(re + 1.6).toFixed(1), z: +(O + $ * (j * 0.5 + 1)).toFixed(1), nx: 0, nz: $ });
+        walkwaySys._spots.push(se ? { x: N + $ * (Y * 0.5 + 0.3), z: O, nx: $, nz: 0, y: re } : { x: N, z: O + $ * (j * 0.5 + 0.3), nx: 0, nz: $, y: re });
       })(),
       Xi("storefront-sign", Ce.position.x, Ce.position.y, Ce.position.z),
       storefrontSys.addSpot(
@@ -5766,6 +5936,7 @@ function N1() {
   storefrontSys.resetSpots();
   rooftopSys.resetSpots();
   ((shopBandSys._parts = {}), (shopBandSys.count = 0), (shopBandSys._meshes = []), (shopBandSys.sample = null));
+  walkwaySys._spots.length = 0;
   for (let N = t + a / 2; N <= n - a / 2; N += a)
     for (let O = s - a / 2; O >= r + a / 2; O -= a) {
       const Y = Pn(N, O, c * 0.5).clearance;
@@ -7262,6 +7433,32 @@ function V1(i, e) {
   const o = new CanvasTexture(t);
   return ((o.colorSpace = SRGBColorSpace), o);
 }
+// zoom-detail 67: seated crowd ranks that read as a CROWD from the race deck —
+// aligned rows of paired torso/head dots (a few standing), deterministic per variant.
+function buildCrowdDotTexture(v) {
+  const cv = document.createElement("canvas");
+  ((cv.width = 512), (cv.height = 192));
+  const e = cv.getContext("2d"),
+    rng = plateRng(0xc0d5 + v * 977);
+  ((e.fillStyle = "#232a31"), e.fillRect(0, 0, 512, 192));
+  const shirts = ["#c9463f", "#3f9fd9", "#d9b53a", "#d8d8d8", "#7e58c9", "#3fae7f", "#d977b5", "#4e6ed9", "#d97b32"],
+    skins = ["#c9986f", "#8a5f3f", "#e0b58a", "#6f4a2f"],
+    rows = 9,
+    rh = 192 / rows;
+  for (let r = 0; r < rows; r++) {
+    const y0 = r * rh;
+    ((e.fillStyle = "rgba(0,0,0,0.35)"), e.fillRect(0, y0, 512, 3));
+    for (let cx = 6 + rng() * 4; cx < 506; cx += 7.4 + rng() * 2.4) {
+      if (rng() < 0.13) continue;
+      const stand = rng() < 0.06,
+        ty = y0 + rh - (stand ? 15 : 11) - rng() * 2;
+      ((e.fillStyle = shirts[(rng() * shirts.length) | 0]), e.fillRect(cx - 2.6, ty + 4, 5.2, stand ? 11 : 7));
+      ((e.fillStyle = skins[(rng() * skins.length) | 0]), e.beginPath(), e.arc(cx, ty + 2, 2.1, 0, Math.PI * 2), e.fill());
+    }
+  }
+  const n = new CanvasTexture(cv);
+  return ((n.colorSpace = SRGBColorSpace), n);
+}
 function G1() {
   const i = document.createElement("canvas");
   ((i.width = 256), (i.height = 128));
@@ -7427,6 +7624,7 @@ function X1() {
     }
     return (Cc++, !0);
   }
+  deckRibSys._segs.length = 0;
   for (let E = 0; E < ce.length; E += v) {
     if (Li(E + v * 0.5)) continue;
     const T = St(E),
@@ -7435,6 +7633,7 @@ function X1() {
       { sideways: b, normal: S, q: L } = ui(T, R),
       F = T.p.distanceTo(R.p) + 0.45,
       W = Math.floor(E / (v * 2)) % 2 ? e : t;
+    deckRibSys._segs.push({ x: C.x, y: C.y, z: C.z, qx: L.x, qy: L.y, qz: L.z, qw: L.w, sx: S.x, sy: S.y, sz: S.z, f: F });
     (Bt(i, new Vector3(ce.width, 0.62, F), C.clone().addScaledVector(S, -0.05), L, W),
       Bt(i, new Vector3(ce.width - 2.8, 0.08, F * 0.86), C.clone().addScaledVector(S, 0.36), L, f),
       Bt(
@@ -8976,6 +9175,8 @@ buildPropPlanes();
 // high lane above the prop planes. Opaque vc-baked hull+fins+gondola (one
 // mesh) + a two-sided banner mesh — 2 draws, ~600 tris, no transparency risk.
 const blimpSys = { alt: 300, text: "RIBBON COLA", enabled: !0, x: 0, z: -520, _g: null };
+// zoom-detail 66 (round-seven item 8): striped hot-air balloons over the outskirts
+const balloonSys = { count: 0, enabled: !0, x: 0, z: 0, alt: 0, _gs: [] };
 function buildBlimpBanner() {
   const cv = document.createElement("canvas");
   ((cv.width = 512), (cv.height = 128));
@@ -9017,6 +9218,469 @@ function buildBlimp() {
   return g;
 }
 buildBlimp();
+// zoom-detail 66 (round-seven item 8): hot-air balloons drift on low lanes over the
+// city fringes, well under the blimp (300). Each balloon is ONE merged vertex-color
+// mesh — 12 gore slices in two alternating colors, skirt, emissive burner, wicker
+// basket, four ropes — in its own group with a Bn drift/bob/spin tick.
+function buildBalloons() {
+  const { opaque } = vcMats(),
+    SPECS = [
+      { z: 390, alt: 165, sp: 6, x0: -900, ph: 0.4, cols: [10500666, 11907224] },
+      { z: -1480, alt: 195, sp: -5, x0: 700, ph: 2.1, cols: [3832440, 11577488] },
+      { z: -560, alt: 205, sp: 4.4, x0: 200, ph: 4.0, cols: [11569712, 12102776] },
+    ];
+  for (const sp of SPECS) {
+    const parts = [],
+      GORES = 12;
+    for (let k = 0; k < GORES; k++) {
+      const wedge = new SphereGeometry(1, 2, 9, (k / GORES) * Math.PI * 2, (Math.PI * 2) / GORES);
+      wedge.applyMatrix4(new Matrix4().makeScale(6.6, 7.6, 6.6));
+      parts.push(vcBake(wedge, new Matrix4().setPosition(0, 12.4, 0), sp.cols[k % 2]));
+    }
+    parts.push(vcBake(new CylinderGeometry(3.1, 1.5, 2.6, 12, 1, !0), new Matrix4().setPosition(0, 5.4, 0), sp.cols[0]));
+    parts.push(vcBake(new BoxGeometry(0.5, 0.5, 0.5), new Matrix4().setPosition(0, 3.6, 0), 3350547, 16736800, 1.5));
+    parts.push(vcBake(new BoxGeometry(1.7, 1.35, 1.7), new Matrix4().setPosition(0, 2.4, 0), 7031343));
+    for (const [rx, rz] of [[-0.72, -0.72], [0.72, -0.72], [-0.72, 0.72], [0.72, 0.72]])
+      parts.push(vcBake(new CylinderGeometry(0.03, 0.03, 1.6, 4, 1, !0), new Matrix4().setPosition(rx, 3.85, rz), 2565927));
+    const m = new Mesh(mergeGeometries(parts, !1), opaque);
+    m.raycast = () => {};
+    const g = new Group();
+    (g.add(m), g.position.set(sp.x0, sp.alt, sp.z), et.add(g), balloonSys._gs.push(g), balloonSys.count++);
+    const first = sp === SPECS[0];
+    Bn(g, (tt, dt) => {
+      ((g.position.x += sp.sp * dt),
+        sp.sp > 0 && g.position.x > 1500 && (g.position.x = -1500),
+        sp.sp < 0 && g.position.x < -1500 && (g.position.x = 1500));
+      ((g.position.y = sp.alt + Math.sin(tt * 0.17 + sp.ph) * 4), (g.rotation.y = tt * 0.05 + sp.ph));
+      first && ((balloonSys.x = +g.position.x.toFixed(1)), (balloonSys.z = +g.position.z.toFixed(1)), (balloonSys.alt = +g.position.y.toFixed(1)));
+    });
+  }
+}
+buildBalloons();
+// zoom-detail 70 (round-eight item 1): the deck support pylons read as bare threads
+// from street level — dress every pylon (the $n collider registry, entries with hw)
+// with a two-step concrete plinth, steel collar rings every ~11m, and an emissive
+// amber warning cube just under the deck. ONE merged vertex-color mesh; the deck
+// surface math is untouched (vertical members only — the it.59 kerbs lesson).
+function buildPylonDressing(group) {
+  ((pylonDressSys.dressed = 0), (pylonDressSys.collars = 0), (pylonDressSys.sample = null));
+  const parts = [];
+  for (const p of $n) {
+    if (!p.hw || p.maxY == null) continue;
+    if (pylonDressSys.dressed >= 130) break;
+    const tall = p.hw > 2,
+      rad = tall ? 0.56 : 0.42,
+      gy = He(p.x, p.z),
+      top = p.maxY + 0.7;
+    if (top - gy < 12) continue;
+    parts.push(vcBake(new BoxGeometry(rad * 4.8, 1.1, rad * 4.8), vcAt(p.x, gy + 0.55, p.z), 7040884));
+    parts.push(vcBake(new BoxGeometry(rad * 3.5, 1.0, rad * 3.5), vcAt(p.x, gy + 1.5, p.z), 6183530));
+    for (let y = gy + 9; y < top - 3.5; y += 14)
+      (parts.push(vcBake(new CylinderGeometry(rad + 0.34, rad + 0.34, 0.62, 8), vcAt(p.x, y, p.z), 3818824)), pylonDressSys.collars++);
+    parts.push(vcBake(new BoxGeometry(0.55, 0.55, 0.55), vcAt(p.x, top - 1.4, p.z), 3350547, 16749824, 1.4));
+    pylonDressSys.dressed++;
+    pylonDressSys.sample || (pylonDressSys.sample = { x: +p.x.toFixed(1), z: +p.z.toFixed(1), gy: +gy.toFixed(1), top: +top.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const pm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((pm.castShadow = !0), (pm.receiveShadow = !0), (pm.raycast = () => {}), group.add(pm), (pylonDressSys._mesh = pm));
+  if (!pylonDressSys.enabled) pm.visible = !1;
+}
+buildPylonDressing(et);
+// zoom-detail 71 (round-eight item 2): the ribbon's belly is a featureless dark slab
+// from every street — hang a lengthwise spine beam under every deck segment and a
+// full-width girder cross-rib under every second one, oriented by the SAME segment
+// quaternion the slab builder used (collected during the slab walk; the slab Bt calls
+// themselves are untouched — deck surface math sacred, it.59). ONE merged vc mesh.
+function buildDeckRibs(group) {
+  ((deckRibSys.ribs = 0), (deckRibSys.spines = 0), (deckRibSys.sample = null));
+  if (!deckRibSys._segs.length) return;
+  const parts = [],
+    q = new Quaternion(),
+    pos = new Vector3(),
+    scl = new Vector3(1, 1, 1);
+  for (let i = 0; i < deckRibSys._segs.length; i++) {
+    const sg = deckRibSys._segs[i];
+    q.set(sg.qx, sg.qy, sg.qz, sg.qw);
+    pos.set(sg.x - sg.sx * 0.62, sg.y - sg.sy * 0.62, sg.z - sg.sz * 0.62);
+    const m = new Matrix4().compose(pos, q, scl);
+    (parts.push(vcBake(new BoxGeometry(0.55, 0.6, sg.f * 0.96), m, 3752526)), deckRibSys.spines++);
+    if (i % 2 === 0) {
+      (parts.push(vcBake(new BoxGeometry(ce.width * 0.96, 0.5, 0.85), m, 4871520)), deckRibSys.ribs++);
+      deckRibSys.sample || (deckRibSys.sample = { x: +sg.x.toFixed(1), y: +sg.y.toFixed(1), z: +sg.z.toFixed(1) });
+    }
+  }
+  const rm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((rm.castShadow = !1), (rm.receiveShadow = !0), (rm.raycast = () => {}), group.add(rm), (deckRibSys._mesh = rm));
+  if (!deckRibSys.enabled) rm.visible = !1;
+}
+buildDeckRibs(et);
+// zoom-detail 72 (round-eight item 3): downtown towers rise straight out of lawn —
+// give every tall footprint (Mn, height >= 30) a two-tone paved forecourt apron
+// (framed slab pair) plus corner planters (dark box + clipped green dome), planters
+// skipped where they'd sit in a road corridor. ONE merged vertex-color mesh.
+function buildForecourts(group) {
+  ((forecourtSys.pads = 0), (forecourtSys.planters = 0), (forecourtSys.sample = null));
+  const parts = [];
+  for (const b of Mn) {
+    if (forecourtSys.pads >= 70) break;
+    if (!b.hw || b.hw < 6 || b.hd < 6) continue;
+    const g0 = He(b.x, b.z);
+    if (b.maxY - g0 < 30) continue;
+    const aw = b.hw * 2 + 6.5,
+      ad = b.hd * 2 + 6.5;
+    // terrain slopes across a 30-40m footprint: the apron must ride the HIGHEST
+    // corner (max-sample — the inverse of the it.45 sunk fix) and rise as a solid
+    // terrace from below the LOWEST corner, or it buries uphill / floats downhill.
+    let hi = g0,
+      lo = g0;
+    for (const [ax, az] of [[1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+      const h = He(b.x + ax * (aw * 0.5 + 0.8), b.z + az * (ad * 0.5 + 0.8));
+      (h > hi && (hi = h), h < lo && (lo = h));
+    }
+    const topY = hi + 0.18,
+      th = topY - (lo - 0.35);
+    parts.push(vcBake(new BoxGeometry(aw + 1.6, th, ad + 1.6), vcAt(b.x, topY - th * 0.5, b.z), 6448747));
+    parts.push(vcBake(new BoxGeometry(aw, 0.12, ad), vcAt(b.x, topY + 0.05, b.z), 7896450));
+    for (const sx of [-1, 1])
+      for (const sz of [-1, 1]) {
+        const px = b.x + sx * (b.hw + 2.3),
+          pz = b.z + sz * (b.hd + 2.3);
+        if (Pn(px, pz, 1.2).clearance < 0.6) continue;
+        parts.push(vcBake(new BoxGeometry(1.6, 0.78, 1.6), vcAt(px, topY + 0.44, pz), 4145992));
+        const dm = new Matrix4().makeScale(1, 0.62, 1);
+        dm.setPosition(px, topY + 1.0, pz);
+        parts.push(vcBake(new SphereGeometry(0.82, 6, 4), dm, 3761966));
+        forecourtSys.planters++;
+      }
+    forecourtSys.pads++;
+    forecourtSys.sample || (forecourtSys.sample = { x: +b.x.toFixed(1), z: +b.z.toFixed(1), gy: +topY.toFixed(1), aw: +aw.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const fm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((fm.castShadow = !1), (fm.receiveShadow = !0), (fm.raycast = () => {}), group.add(fm), (forecourtSys._mesh = fm));
+  if (!forecourtSys.enabled) fm.visible = !1;
+}
+buildForecourts(et);
+// zoom-detail 73 (round-eight item 4): suburban shops sit in bare lawn — run a paved
+// walkway from each A() shop door out to the street edge (probed with Pn along the
+// face normal) and flank the walkway mouth with low hedges. End heights are sampled
+// and the strips ride the HIGHER end as shallow terraces (the it.72 corner rule).
+// ONE merged vertex-color mesh.
+function buildSuburbWalks(group) {
+  ((walkwaySys.walks = 0), (walkwaySys.hedges = 0), (walkwaySys.sample = null), (walkwaySys._samples.length = 0));
+  const parts = [];
+  for (const sp of walkwaySys._spots) {
+    if (walkwaySys.walks >= 40) break;
+    let L = 10;
+    for (let d = 3; d <= 16; d += 1)
+      if (Pn(sp.x + sp.nx * d, sp.z + sp.nz * d, 0).clearance < 1.5) {
+        L = d - 1.2;
+        break;
+      }
+    if (L < 3) continue;
+    const mx = sp.x + sp.nx * (L * 0.5 + 0.2),
+      mz = sp.z + sp.nz * (L * 0.5 + 0.2),
+      hA = He(sp.x + sp.nx * 0.6, sp.z + sp.nz * 0.6),
+      hB = He(sp.x + sp.nx * (L + 0.4), sp.z + sp.nz * (L + 0.4)),
+      topY = Math.max(sp.y, hA, hB) + 0.09,
+      th = topY - (Math.min(hA, hB) - 0.3),
+      wg = new BoxGeometry(2.2, th, L).applyMatrix4(new Matrix4().makeRotationY(Math.atan2(sp.nx, sp.nz)));
+    parts.push(vcBake(wg, vcAt(mx, topY - th * 0.5, mz), 8222824));
+    const px = -sp.nz,
+      pz = sp.nx;
+    for (const sd of [-1, 1]) {
+      const hx = sp.x + sp.nx * 1.6 + px * sd * 2.6,
+        hz = sp.z + sp.nz * 1.6 + pz * sd * 2.6,
+        hg2 = He(hx, hz),
+        hgTop = Math.max(hg2, sp.y) + 0.42,
+        hth = hgTop + 0.4 - (hg2 - 0.25),
+        hgeo = new BoxGeometry(0.95, hth, 3.4).applyMatrix4(new Matrix4().makeRotationY(Math.atan2(sp.nx, sp.nz)));
+      (parts.push(vcBake(hgeo, vcAt(hx, hgTop + 0.4 - hth * 0.5, hz), 3095846)), walkwaySys.hedges++);
+    }
+    walkwaySys.walks++;
+    walkwaySys._samples.length < 6 && walkwaySys._samples.push({ x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), y: +topY.toFixed(1), nx: sp.nx, nz: sp.nz, L: +L.toFixed(1) });
+    walkwaySys.sample || (walkwaySys.sample = { x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), y: +topY.toFixed(1), nx: sp.nx, nz: sp.nz, L: +L.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const wm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((wm.castShadow = !1), (wm.receiveShadow = !0), (wm.raycast = () => {}), group.add(wm), (walkwaySys._mesh = wm));
+  if (!walkwaySys.enabled) wm.visible = !1;
+}
+buildSuburbWalks(et);
+// zoom-detail 74 (round-eight item 5): the city forest was one cone-pine species —
+// every 4th conifer slot becomes a broadleaf "lollipop" (trunk + lumpy 3-sphere
+// canopy), with every 6th broadleaf autumn-tinted amber/rust. Slots are diverted
+// DETERMINISTICALLY on the loop index inside the conifer instancing loop (still
+// kn-registered); ONE merged vertex-color mesh carries all of them.
+function buildTreeVariety(group) {
+  ((treeVarSys.broadleaf = 0), (treeVarSys.autumn = 0), (treeVarSys.sample = null));
+  if (!treeVarSys._spots.length) return;
+  const parts = [],
+    GREENS = [7314506, 6261823, 8366165],
+    FALLS = [13208122, 11889200];
+  for (let i = 0; i < treeVarSys._spots.length; i++) {
+    const sp = treeVarSys._spots[i],
+      base = sp.y - 0.7,
+      fall = i % 6 === 5,
+      cA = fall ? FALLS[i % 2] : GREENS[i % 3],
+      cB = fall ? FALLS[(i + 1) % 2] : GREENS[(i + 1) % 3],
+      th = 1.6 * sp.m + sp.t * 0.55,
+      cy = base + th + 1.05 * sp.m;
+    parts.push(vcBake(new CylinderGeometry(0.24 * sp.m, 0.36 * sp.m, th, 6), vcAt(sp.x, base + th * 0.5, sp.z), 7031344));
+    const mainM = new Matrix4().makeScale(1, 0.82, 1);
+    mainM.setPosition(sp.x, cy, sp.z);
+    parts.push(vcBake(new SphereGeometry(2.45 * sp.m, 6, 5), mainM, cA));
+    const oa = (i * 2.4) % (Math.PI * 2);
+    parts.push(vcBake(new SphereGeometry(1.55 * sp.m, 5, 4), vcAt(sp.x + Math.cos(oa) * 1.5 * sp.m, cy + 0.7 * sp.m, sp.z + Math.sin(oa) * 1.5 * sp.m), cB));
+    parts.push(vcBake(new SphereGeometry(1.3 * sp.m, 5, 4), vcAt(sp.x - Math.cos(oa) * 1.6 * sp.m, cy + 0.25 * sp.m, sp.z - Math.sin(oa) * 1.6 * sp.m), cA));
+    (treeVarSys.broadleaf++, fall && treeVarSys.autumn++);
+    treeVarSys.sample || (treeVarSys.sample = { x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), y: +cy.toFixed(1) });
+  }
+  // flat foliage material — the shared vc material's metalness turns smooth canopy
+  // spheres into black specular blobs at dusk; trees need diffuse like the conifers
+  const tm = new Mesh(mergeGeometries(parts, !1), new MeshStandardMaterial({ vertexColors: !0, roughness: 0.95, metalness: 0 }));
+  ((tm.castShadow = !0), (tm.receiveShadow = !0), (tm.raycast = () => {}), group.add(tm), (treeVarSys._mesh = tm));
+  if (!treeVarSys.enabled) tm.visible = !1;
+}
+buildTreeVariety(et);
+// zoom-detail 75 (round-eight item 6): a steel fascia strip along each stand roof's
+// front lip (world-space from crowdSys.stands {x,z,yaw,w,gy}); the roof slab itself
+// swapped to a dedicated slate material in the stand builder — the old light metal
+// material bloomed to pure white at dusk. ONE merged vertex-color mesh for fascias.
+function buildStandFascias(group) {
+  if (!crowdSys.stands.length) return;
+  const parts = [],
+    q = new Quaternion(),
+    pos = new Vector3(),
+    scl = new Vector3(1, 1, 1),
+    up = new Vector3(0, 1, 0);
+  for (const st of crowdSys.stands) {
+    q.setFromAxisAngle(up, st.yaw);
+    const lx = Math.sin(st.yaw),
+      lz = Math.cos(st.yaw);
+    pos.set(st.x + lx * 8.34, st.gy + 30.1, st.z + lz * 8.34);
+    const m = new Matrix4().compose(pos, q, scl);
+    parts.push(vcBake(new BoxGeometry(st.w, 0.6, 0.4), m, 3949388));
+  }
+  const fm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((fm.raycast = () => {}), group.add(fm), (standRoofSys._fascia = fm));
+  if (!standRoofSys.enabled) fm.visible = !1;
+}
+buildStandFascias(et);
+// zoom-detail 76 (round-eight item 7): the lawn met the water in a hard edge — each
+// pond (rx <= 60, same filter as pondEdges) gets a flat sand ring at the waterline
+// with a darker wet-mud band just inside it. The rings are FLAT at water level; the
+// outer rim cutting into rising lawn reads as a natural bank. ONE merged vc mesh.
+function buildPondShores(group) {
+  ((pondShoreSys.shores = 0), (pondShoreSys.sample = null));
+  if (!ponds.length) return;
+  const parts = [];
+  for (const p of ponds) {
+    if (!p.rx || p.rx > 60) continue;
+    const wy = p.waterY != null ? p.waterY : He(p.x, p.z) + 0.15,
+      sq = p.rz / p.rx,
+      sand = new Matrix4().makeScale(1, 1, sq),
+      mud = new Matrix4().makeScale(1, 1, sq);
+    sand.setPosition(p.x, wy + 0.045, p.z);
+    mud.setPosition(p.x, wy + 0.025, p.z);
+    parts.push(vcBake(new RingGeometry(p.rx * 0.9, p.rx + 2.2, 26).rotateX(-Math.PI / 2), sand, 10259038));
+    parts.push(vcBake(new RingGeometry(p.rx * 0.8, p.rx * 0.92, 26).rotateX(-Math.PI / 2), mud, 7035458));
+    pondShoreSys.shores++;
+    pondShoreSys.sample || (pondShoreSys.sample = { x: +p.x.toFixed(1), z: +p.z.toFixed(1), rx: +p.rx.toFixed(1), wy: +wy.toFixed(2) });
+  }
+  if (!parts.length) return;
+  const sm = new Mesh(mergeGeometries(parts, !1), new MeshStandardMaterial({ vertexColors: !0, roughness: 0.96, metalness: 0 }));
+  ((sm.receiveShadow = !0), (sm.raycast = () => {}), group.add(sm), (pondShoreSys._mesh = sm));
+  if (!pondShoreSys.enabled) sm.visible = !1;
+}
+buildPondShores(et);
+// zoom-detail 77 (round-eight item 8): the fringe mountains are stark placeholder
+// cones — big ones (M > 120) gain two proud strata band rings (short wide cone
+// slices at ~30%% and ~55%% of the visible height) and a talus skirt at the foot.
+// Color-read only; the SILHOUETTE is unchanged (far view sacred). Rings use 7 segs
+// against the 5-6-seg parents — the facet mismatch reads as irregular rock ledges.
+// ONE merged mesh on the flat organic material.
+function buildMtnStrata(group) {
+  ((mtnStrataSys.dressed = 0), (mtnStrataSys.sample = null));
+  if (!mtnStrataSys._spots.length) return;
+  const parts = [];
+  for (const sp of mtnStrataSys._spots) {
+    const top = -9 + sp.m * 0.5,
+      gy = He(sp.x, sp.z);
+    if (top - gy < 40) continue;
+    const vis = top - gy,
+      mk = (frac, scale, th, col) => {
+        const yb = gy + vis * frac,
+          rb = (sp.r * (top - yb)) / sp.m;
+        parts.push(vcBake(new ConeGeometry(rb * scale, sp.m * th, 7), vcAt(sp.x, yb + (sp.m * th) / 2, sp.z), col));
+      };
+    mk(0.55, 1.1, 0.05, 4866104);
+    mk(0.3, 1.08, 0.04, 6050376);
+    mk(0.02, 1.16, 0.05, 9076590);
+    mtnStrataSys.dressed++;
+    mtnStrataSys.sample || (mtnStrataSys.sample = { x: +sp.x.toFixed(1), z: +sp.z.toFixed(1), top: +top.toFixed(1), gy: +gy.toFixed(1) });
+  }
+  if (!parts.length) return;
+  const mm = new Mesh(mergeGeometries(parts, !1), new MeshStandardMaterial({ vertexColors: !0, roughness: 0.96, metalness: 0 }));
+  ((mm.receiveShadow = !0), (mm.raycast = () => {}), group.add(mm), (mtnStrataSys._mesh = mm));
+  if (!mtnStrataSys.enabled) mm.visible = !1;
+}
+buildMtnStrata(et);
+// zoom-detail 79 (round-eight item 10): park gravel paths dead-ended in lawn — run a
+// straight connector strip from each path end (the bow vanishes at t=0/1, so ends sit
+// at cell center ± half along the path axis) out to the street edge (Pn-probed, the
+// it.73 walkway pattern), with a bollard pair at each street mouth. Shallow terrace
+// per the corner rule. ONE merged vertex-color mesh in the walkway cream tone.
+function buildParkConnectors(group) {
+  ((connectSys.connectors = 0), (connectSys.bollards = 0), (connectSys.sample = null));
+  const parts = [];
+  for (const c of connectSys._cells) {
+    for (const sgn of [-1, 1]) {
+      if (connectSys.connectors >= 26) break;
+      const dx = c.vert ? 0 : sgn,
+        dz = c.vert ? sgn : 0,
+        ex = c.cx + dx * c.half,
+        ez = c.cz + dz * c.half;
+      // lattice geometry: half = pitch/2 - sw/2 - 12, so every path end sits exactly
+      // 12m from the adjacent road edge — the connector length is deterministic.
+      // (Pn measures clearance to the RACE COURSE, not city roads — probing with it
+      // silently fails; see the it.79 ledger note.)
+      const L = 10.8;
+      const mx = ex + dx * (L * 0.5),
+        mz = ez + dz * (L * 0.5),
+        hA = He(ex, ez),
+        hB = He(ex + dx * L, ez + dz * L),
+        topY = Math.max(hA, hB) + 0.08,
+        th = topY - (Math.min(hA, hB) - 0.3),
+        wg = new BoxGeometry(c.vert ? 1.9 : L + 0.8, th, c.vert ? L + 0.8 : 1.9);
+      parts.push(vcBake(wg, vcAt(mx, topY - th * 0.5, mz), 8222824));
+      const px = -dz,
+        pz = dx,
+        bx = ex + dx * (L - 0.5),
+        bz = ez + dz * (L - 0.5);
+      for (const bs of [-1, 1]) {
+        const hx = bx + px * bs * 1.35,
+          hz = bz + pz * bs * 1.35,
+          hg = He(hx, hz);
+        (parts.push(vcBake(new CylinderGeometry(0.1, 0.12, 0.85, 6), vcAt(hx, Math.max(hg, topY) + 0.42, hz), 2765112)), connectSys.bollards++);
+      }
+      connectSys.connectors++;
+      connectSys.sample || (connectSys.sample = { x: +ex.toFixed(1), z: +ez.toFixed(1), y: +topY.toFixed(1), dx, dz, L: +L.toFixed(1) });
+    }
+  }
+  if (!parts.length) return;
+  const cm = new Mesh(mergeGeometries(parts, !1), vcMats().opaque);
+  ((cm.castShadow = !1), (cm.receiveShadow = !0), (cm.raycast = () => {}), group.add(cm), (connectSys._mesh = cm));
+  if (!connectSys.enabled) cm.visible = !1;
+}
+buildParkConnectors(et);
+// zoom-detail 80 (user request 2026-07-17): the terrain is a 4200x4200 island —
+// surround it with an ocean. Four border slabs (inner edge tucked 40m under the
+// terrain rim at |x|,|z| = 2060, out to 3900) share ONE shader: long Gerstner-style
+// swell displaced in the VERTEX stage (240-290m wavelengths — safe on the slab
+// grid), fine chop + fresnel + dusk-sun specular + animated shore foam in the
+// FRAGMENT stage, and THINNED custom fog so glinting water reads through the haze
+// that swallows terrain at the same distance (real glint does). Opaque (dusk rule).
+function buildOcean(group) {
+  // zoom-detail 80c (rethink): REAL waves. Gerstner trains (dispersion-correct,
+  // horizontal crest displacement) travel SHOREWARD on every side (direction from
+  // the island-square outward normal, blended at corners), shoal up approaching
+  // the sand and collapse at the line. Per-pixel FACETED normals (dFdx/dFdy) match
+  // the game's lowpoly look and catch hard sun glints; crest foam breaks where the
+  // wave-phase sum peaks and a pulsing wash rides the primary train onto the shore.
+  // 8 slabs: a dense surf ring where the player can stand, coarse skirt beyond.
+  const vsh = `
+    uniform float uTime;
+    uniform float uInner;
+    varying vec3 vW;
+    varying vec2 vDir;
+    varying float vEd;
+    varying float vCrest;
+    vec2 shoreDir(vec2 p) {
+      float w = smoothstep(-140.0, 140.0, abs(p.x) - abs(p.y));
+      vec2 d = mix(vec2(0.0, -sign(p.y)), vec2(-sign(p.x), 0.0), w);
+      return normalize(d + vec2(0.14, 0.09));
+    }
+    void main() {
+      vec4 wp = modelMatrix * vec4(position, 1.0);
+      float t = uTime;
+      vec2 dir = shoreDir(wp.xz);
+      float ed = max(abs(wp.x), abs(wp.z)) - uInner;
+      float grow = 1.0 + 0.65 * smoothstep(160.0, 24.0, ed);
+      float die = smoothstep(-4.0, 14.0, ed);
+      float aS = grow * die;
+      vec3 off = vec3(0.0);
+      float crest = 0.0;
+      vec2 kd; float L; float A; float k; float w; float ph;
+      kd = dir; L = 132.0; A = 1.15 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t;
+      off.y += A * sin(ph); off.xz += kd * (4.2 * aS * cos(ph)); crest += 0.35 * cos(ph);
+      kd = normalize(dir + vec2(0.35, -0.18)); L = 71.0; A = 0.62 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t;
+      off.y += A * sin(ph); off.xz += kd * (2.1 * aS * cos(ph)); crest += 0.30 * cos(ph);
+      kd = normalize(dir + vec2(-0.28, 0.22)); L = 43.0; A = 0.34 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t + 1.7;
+      off.y += A * sin(ph); off.xz += kd * (1.2 * aS * cos(ph)); crest += 0.22 * cos(ph);
+      kd = normalize(dir + vec2(0.55, 0.45)); L = 27.0; A = 0.18 * aS; k = 6.2832 / L; w = sqrt(9.81 * k); ph = k * dot(kd, wp.xz) - w * t + 3.9;
+      off.y += A * sin(ph); off.xz += kd * (0.6 * aS * cos(ph)); crest += 0.16 * cos(ph);
+      wp.xyz += off;
+      vW = wp.xyz;
+      vDir = dir;
+      vEd = ed;
+      vCrest = crest * die;
+      gl_Position = projectionMatrix * viewMatrix * wp;
+    }`,
+    fsh = `
+    uniform float uTime;
+    varying vec3 vW;
+    varying vec2 vDir;
+    varying float vEd;
+    varying float vCrest;
+    void main() {
+      float t = uTime;
+      vec3 fN = normalize(cross(dFdx(vW), dFdy(vW)));
+      if (fN.y < 0.0) fN = -fN;
+      vec2 rip = vec2(0.0);
+      rip += vec2(0.20, 0.13) * cos(dot(vW.xz, vec2(0.20, 0.13)) + t * 2.4);
+      rip += vec2(-0.13, 0.23) * cos(dot(vW.xz, vec2(-0.13, 0.23)) + t * 3.2);
+      rip += vec2(0.31, -0.24) * cos(dot(vW.xz, vec2(0.31, -0.24)) + t * 4.1);
+      vec3 N = normalize(vec3(fN.x + rip.x * 0.22, fN.y, fN.z + rip.y * 0.22));
+      vec3 V = normalize(cameraPosition - vW);
+      float fr = pow(1.0 - max(dot(N, V), 0.0), 3.0);
+      vec3 deep = vec3(0.012, 0.06, 0.10);
+      vec3 shal = vec3(0.03, 0.14, 0.16);
+      vec3 body = mix(shal, deep, smoothstep(10.0, 170.0, vEd));
+      vec3 skyc = vec3(0.72, 0.50, 0.44);
+      vec3 col = mix(body, skyc, clamp(fr * 0.38, 0.0, 1.0));
+      vec3 L = normalize(vec3(-0.55, 0.20, -0.30));
+      vec3 H = normalize(L + V);
+      col += vec3(1.0, 0.72, 0.44) * pow(max(dot(N, H), 0.0), 220.0) * 1.4;
+      col += vec3(1.0, 0.78, 0.50) * pow(max(dot(reflect(-L, vec3(0.0, 1.0, 0.0)), V), 0.0), 24.0) * 0.10;
+      float shoreBoost = smoothstep(150.0, 18.0, vEd);
+      float cf = smoothstep(0.92 - 0.3 * shoreBoost, 1.15, vCrest);
+      float wash = smoothstep(26.0, 2.0, vEd) * (0.45 + 0.55 * pow(max(cos(dot(vDir, vW.xz) * 0.0476 - 0.683 * t), 0.0), 3.0));
+      float foam = clamp(cf * 0.9 + wash, 0.0, 1.0);
+      col = mix(col, vec3(0.90, 0.88, 0.84), foam * 0.9);
+      float d = length(cameraPosition - vW);
+      col = mix(col, vec3(0.93, 0.78, 0.70), smoothstep(700.0, 4200.0, d) * 0.65);
+      gl_FragColor = vec4(col, 1.0);
+    }`;
+  const mat = new ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uInner: { value: 1980 } },
+    vertexShader: vsh,
+    fragmentShader: fsh,
+    fog: !1,
+  });
+  ((oceanSys._mat = mat), waterMats.push(mat));
+  const mk = (w, d, cx, cz, sx, sz) => {
+    const om = new Mesh(new PlaneGeometry(w, d, sx, sz).rotateX(-Math.PI / 2), mat);
+    (om.position.set(cx, oceanSys.y, cz), (om.raycast = () => {}), group.add(om), oceanSys._meshes.push(om), oceanSys.slabs++);
+  };
+  // surf ring (dense: ~24m pitch so 40-130m Gerstner trains show real geometry)
+  (mk(4560, 280, 0, -2120, 192, 12), mk(4560, 280, 0, 2120, 192, 12), mk(280, 3960, -2120, 0, 12, 160), mk(280, 3960, 2120, 0, 12, 160));
+  // open-sea skirt (coarse — fragment ripples + fog carry it)
+  (mk(7800, 1640, 0, -3080, 64, 10), mk(7800, 1640, 0, 3080, 64, 10), mk(1640, 4520, -3080, 0, 10, 56), mk(1640, 4520, 3080, 0, 10, 56));
+  if (!oceanSys.enabled) for (const m of oceanSys._meshes) m.visible = !1;
+}
+buildOcean(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -10165,7 +10829,13 @@ function Ki(i, e, t = u.roamPos.y) {
   const r = qd(i, e);
   r && r.y >= n - 1.2 && (s = r);
   const a = Zd(i, e, Math.max(t, s.y));
-  return (!(s.kind === "ramp" && s.rampType === "off") && a && a.y >= s.y - 0.8 && (s = a), s);
+  !(s.kind === "ramp" && s.rampType === "off") && a && a.y >= s.y - 0.8 && (s = a);
+  // zoom-detail 80c: in the ocean surf band the water itself is the floor — the
+  // car floats on the swell (gentle bob) instead of driving down the seabed
+  // FLAT floor — a bobbing floor feeds the crest-launch detector and trampolines
+  // the car out to sea (verified the hard way); suspension wobble sells the swell
+  if (s.kind === "ground" && s.y < -10.05 && Math.max(Math.abs(i), Math.abs(e)) > 1980) s = { kind: "water", y: -10.05 };
+  return s;
 }
 function Ih(i) {
   if (i.rampType === "off" || u.drivingStolen) return !1;
@@ -10619,8 +11289,8 @@ function $d(i) {
       lv(u.roamPos, _) && (x = !0),
       (_ = Ki(u.roamPos.x, u.roamPos.z, u.roamPos.y)),
       u.roamAir || (u.roamPos.y = _.y + Wn));
-  ((u.roamPos.x = MathUtils.clamp(u.roamPos.x, -820, 820)),
-    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -1620, 480)),
+  ((u.roamPos.x = MathUtils.clamp(u.roamPos.x, -2040, 2040)),
+    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -2040, 2040)),
     x &&
       (u.collisionCooldown <= 0 &&
         (ev(new Vector3(u.roamPos.x, u.roamPos.y + 0.8, u.roamPos.z), e, "IMPACT"), (u.collisionCooldown = 0.38)),
@@ -10856,8 +11526,8 @@ function walkerUpdate(i) {
     f = -Math.cos(u.roamYaw);
   ((u.roamPos.x += d * u.speed * i), (u.roamPos.z += f * u.speed * i));
   (lv(u.roamPos, { kind: "ground" }),
-    (u.roamPos.x = MathUtils.clamp(u.roamPos.x, -820, 820)),
-    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -1620, 480)),
+    (u.roamPos.x = MathUtils.clamp(u.roamPos.x, -2040, 2040)),
+    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -2040, 2040)),
     (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
   (waterPhysics(i, prevSpeed), sv());
   // pose + limb swing
@@ -11028,6 +11698,14 @@ function waterPhysics(dt, prevSpeed) {
   const s = pondDepthAt(u.roamPos.x, u.roamPos.z);
   u.waterDepth = s.depth;
   if (s.depth <= 0.02) return;
+  // zoom-detail 80c: past wading depth the OCEAN floats the hull on the swell
+  // (never driving along the seabed) and a shoreward current washes it back in.
+  if (s.ocean && s.depth > 0.55) {
+    const cur = 8.5 * Math.min(1, s.depth - 0.45) * dt;
+    Math.abs(u.roamPos.x) > Math.abs(u.roamPos.z)
+      ? (u.roamPos.x -= Math.sign(u.roamPos.x) * cur)
+      : (u.roamPos.z -= Math.sign(u.roamPos.z) * cur);
+  }
   // Pure drag, never a wall: terminal speed at full depth is ~7, so the car can always crawl or reverse out.
   u.speed -= u.speed * (0.85 + 5.2 * s.depth) * s.depth * dt;
   if (prev <= 0.02 && Math.abs(prevSpeed) > 16)
@@ -11757,6 +12435,11 @@ window.__steelRibbonDebug = {
     oilSys.enabled = !!on;
     return oilSys.enabled;
   },
+  ironEnable(on) {
+    ironSys.enabled = !!on;
+    ironSys.mesh && (ironSys.mesh.visible = ironSys.enabled);
+    return ironSys.enabled;
+  },
   shopBandsEnable(on) {
     shopBandSys.enabled = !!on;
     for (const m of shopBandSys._meshes) m.visible = shopBandSys.enabled;
@@ -11766,6 +12449,74 @@ window.__steelRibbonDebug = {
     lampDressSys.enabled = !!on;
     lampDressSys._mesh && (lampDressSys._mesh.visible = lampDressSys.enabled);
     return lampDressSys.enabled;
+  },
+  balloonsEnable(on) {
+    balloonSys.enabled = !!on;
+    for (const g of balloonSys._gs) g.visible = balloonSys.enabled;
+    return balloonSys.enabled;
+  },
+  crowdDotsEnable(on) {
+    crowdTexSys.enabled = !!on;
+    crowdTexSys._mats.forEach((m, i) => {
+      m.map = crowdTexSys.enabled ? crowdTexSys._dots[i] : crowdTexSys._legacy;
+    });
+    return crowdTexSys.enabled;
+  },
+  windmillTipsEnable(on) {
+    windmillSys.enabled = !!on;
+    for (const m of windmillSys._meshes) m.visible = windmillSys.enabled;
+    return windmillSys.enabled;
+  },
+  pylonDressEnable(on) {
+    pylonDressSys.enabled = !!on;
+    pylonDressSys._mesh && (pylonDressSys._mesh.visible = pylonDressSys.enabled);
+    return pylonDressSys.enabled;
+  },
+  deckRibsEnable(on) {
+    deckRibSys.enabled = !!on;
+    deckRibSys._mesh && (deckRibSys._mesh.visible = deckRibSys.enabled);
+    return deckRibSys.enabled;
+  },
+  forecourtsEnable(on) {
+    forecourtSys.enabled = !!on;
+    forecourtSys._mesh && (forecourtSys._mesh.visible = forecourtSys.enabled);
+    return forecourtSys.enabled;
+  },
+  suburbWalksEnable(on) {
+    walkwaySys.enabled = !!on;
+    walkwaySys._mesh && (walkwaySys._mesh.visible = walkwaySys.enabled);
+    return walkwaySys.enabled;
+  },
+  treeVarietyEnable(on) {
+    treeVarSys.enabled = !!on;
+    treeVarSys._mesh && (treeVarSys._mesh.visible = treeVarSys.enabled);
+    return treeVarSys.enabled;
+  },
+  standRoofEnable(on) {
+    standRoofSys.enabled = !!on;
+    for (const m of standRoofSys._meshes) m.material = standRoofSys.enabled ? standRoofSys._newMat : standRoofSys._oldMat;
+    standRoofSys._fascia && (standRoofSys._fascia.visible = standRoofSys.enabled);
+    return standRoofSys.enabled;
+  },
+  pondShoresEnable(on) {
+    pondShoreSys.enabled = !!on;
+    pondShoreSys._mesh && (pondShoreSys._mesh.visible = pondShoreSys.enabled);
+    return pondShoreSys.enabled;
+  },
+  mtnStrataEnable(on) {
+    mtnStrataSys.enabled = !!on;
+    mtnStrataSys._mesh && (mtnStrataSys._mesh.visible = mtnStrataSys.enabled);
+    return mtnStrataSys.enabled;
+  },
+  parkConnectorsEnable(on) {
+    connectSys.enabled = !!on;
+    connectSys._mesh && (connectSys._mesh.visible = connectSys.enabled);
+    return connectSys.enabled;
+  },
+  oceanEnable(on) {
+    oceanSys.enabled = !!on;
+    for (const m of oceanSys._meshes) m.visible = oceanSys.enabled;
+    return oceanSys.enabled;
   },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
@@ -11934,6 +12685,7 @@ window.__steelRibbonDebug = {
       paddock: { clusters: paddockSys.clusters, parts: paddockSys.parts, enabled: paddockSys.enabled, sample: paddockSys.sample.slice(0, 4) },
       pondEdges: { ponds: pondEdgeSys.ponds, clusters: pondEdgeSys.clusters, pads: pondEdgeSys.pads, enabled: pondEdgeSys.enabled, sample: pondEdgeSys.sample ?? null },
       oil: { spots: oilSys.spots.length, placed: oilSys.placed, enabled: oilSys.enabled, sample: oilSys.sample.slice(0, 3) },
+      iron: { spots: ironSys.spots.length, placed: ironSys.placed, enabled: ironSys.enabled, sample: ironSys.sample.slice(0, 3) },
       shopBands: { count: shopBandSys.count, enabled: shopBandSys.enabled, sample: shopBandSys.sample ?? null },
       lampDress: { dressed: lampDressSys.dressed, baskets: lampDressSys.baskets, posts: lampDressSys.posts.length, enabled: lampDressSys.enabled, sample: lampDressSys.sample ?? null },
       raceWear: { segs: raceWearSys.segs, patches: raceWearSys.patches, enabled: raceWearSys.enabled },
@@ -11944,6 +12696,18 @@ window.__steelRibbonDebug = {
       turnSignals: { turning: turnSigSys.turning, cars: turnSigSys.cars, enabled: turnSigSys.enabled, total: turnSigSys.total ?? 0, sample: turnSigSys.sample ?? null },
       brakes: { braking: brakeSys.braking, total: brakeSys.total, enabled: brakeSys.enabled, sample: brakeSys.sample ?? null },
       blimp: { x: blimpSys.x, z: blimpSys.z, alt: blimpSys.alt, text: blimpSys.text },
+      balloons: { count: balloonSys.count, enabled: balloonSys.enabled, x: balloonSys.x, z: balloonSys.z, alt: balloonSys.alt },
+      windmill: { turbines: windmillSys.turbines, enabled: windmillSys.enabled, sample: windmillSys.sample ?? null },
+      pylonDress: { dressed: pylonDressSys.dressed, collars: pylonDressSys.collars, enabled: pylonDressSys.enabled, sample: pylonDressSys.sample ?? null },
+      deckRibs: { ribs: deckRibSys.ribs, spines: deckRibSys.spines, enabled: deckRibSys.enabled, sample: deckRibSys.sample ?? null },
+      forecourts: { pads: forecourtSys.pads, planters: forecourtSys.planters, enabled: forecourtSys.enabled, sample: forecourtSys.sample ?? null },
+      suburbWalks: { walks: walkwaySys.walks, hedges: walkwaySys.hedges, enabled: walkwaySys.enabled, sample: walkwaySys.sample ?? null, samples: walkwaySys._samples.slice(0, 6) },
+      treeVar: { broadleaf: treeVarSys.broadleaf, autumn: treeVarSys.autumn, enabled: treeVarSys.enabled, sample: treeVarSys.sample ?? null },
+      standRoof: { roofs: standRoofSys.roofs, enabled: standRoofSys.enabled },
+      pondShores: { shores: pondShoreSys.shores, enabled: pondShoreSys.enabled, sample: pondShoreSys.sample ?? null },
+      mtnStrata: { dressed: mtnStrataSys.dressed, enabled: mtnStrataSys.enabled, sample: mtnStrataSys.sample ?? null },
+      parkConnectors: { connectors: connectSys.connectors, bollards: connectSys.bollards, enabled: connectSys.enabled, sample: connectSys.sample ?? null },
+      ocean: { slabs: oceanSys.slabs, y: oceanSys.y, enabled: oceanSys.enabled, t: oceanSys._mat ? +oceanSys._mat.uniforms.uTime.value.toFixed(2) : 0 },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {
@@ -12023,6 +12787,8 @@ window.__steelRibbonDebug = {
       },
       crowd: {
         stands: crowdSys.stands.length,
+        dotTex: crowdTexSys._mats.length,
+        dotsEnabled: crowdTexSys.enabled,
         promoted: crowdSys.active >= 0 ? 1 : 0,
         figures: crowdSys.active >= 0 ? crowdSys.figures : 0,
         sample: crowdSys.stands.slice(0, 2).map((s) => ({ x: +s.x.toFixed(1), z: +s.z.toFixed(1), gy: +s.gy.toFixed(1), w: +s.w.toFixed(0) })),
