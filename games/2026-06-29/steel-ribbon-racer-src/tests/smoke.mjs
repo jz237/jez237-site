@@ -1026,6 +1026,24 @@ const browser = await chromium.launch({
     JSON.stringify(ocn),
   );
 
+  // zoom-detail 80b: drive onto the beach — roam reaches the coast, surf has depth
+  const bch = await page.evaluate(() => {
+    const deb = window.__steelRibbonDebug;
+    let spot = null;
+    for (let z = -2000; z <= 2000 && !spot; z += 25) {
+      const w = deb.waterAt(2015, z);
+      if (w.depth > 0.08) spot = { z, depth: w.depth };
+    }
+    deb.setRoamPos(2005, spot ? spot.z : 0, Math.PI / 2);
+    const rp = deb.stats().roamPos;
+    return { spot, rx: +rp.x.toFixed(0) };
+  });
+  check(
+    "beach drive: roam reaches the coast and the surf band has water depth",
+    !!bch && bch.rx > 1900 && !!bch.spot && bch.spot.depth > 0.08,
+    JSON.stringify(bch),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
