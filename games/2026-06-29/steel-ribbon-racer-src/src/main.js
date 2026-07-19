@@ -2424,6 +2424,8 @@ const pondShoreSys = { shores: 0, enabled: !0, sample: null, _mesh: null };
 const mtnStrataSys = { dressed: 0, enabled: !0, sample: null, _mesh: null, _spots: [] };
 // zoom-detail 79 (round-eight item 10): park paths connect to the street network
 const connectSys = { connectors: 0, bollards: 0, enabled: !0, sample: null, _mesh: null, _cells: [] };
+// zoom-detail 80 (user request): the ocean surrounding the island
+const oceanSys = { slabs: 0, y: -9.5, enabled: !0, _meshes: [], _mat: null };
 // ─── Stadium crowd v2 (zoom-detail item 10): the noise-texture crowd stays (far
 // tier), but the nearest grandstand within 70m gets a pool of seated figures —
 // two InstancedMeshes (tinted torsos + skin heads) laid out on the tilted crowd
@@ -9543,6 +9545,77 @@ function buildParkConnectors(group) {
   if (!connectSys.enabled) cm.visible = !1;
 }
 buildParkConnectors(et);
+// zoom-detail 80 (user request 2026-07-17): the terrain is a 4200x4200 island —
+// surround it with an ocean. Four border slabs (inner edge tucked 40m under the
+// terrain rim at |x|,|z| = 2060, out to 3900) share ONE shader: long Gerstner-style
+// swell displaced in the VERTEX stage (240-290m wavelengths — safe on the slab
+// grid), fine chop + fresnel + dusk-sun specular + animated shore foam in the
+// FRAGMENT stage, and THINNED custom fog so glinting water reads through the haze
+// that swallows terrain at the same distance (real glint does). Opaque (dusk rule).
+function buildOcean(group) {
+  const vsh = `
+    uniform float uTime;
+    varying vec3 vW;
+    varying float vSw;
+    void main() {
+      vec4 wp = modelMatrix * vec4(position, 1.0);
+      float t = uTime;
+      float sw = sin(dot(wp.xz, vec2(0.0241, 0.0088)) + t * 0.62) * 1.25
+               + sin(dot(wp.xz, vec2(-0.0125, 0.0176)) + t * 0.51) * 0.8
+               + sin(dot(wp.xz, vec2(0.0396, -0.0302)) + t * 0.9) * 0.35;
+      wp.y += sw;
+      vW = wp.xyz;
+      vSw = sw;
+      gl_Position = projectionMatrix * viewMatrix * wp;
+    }`,
+    fsh = `
+    uniform float uTime;
+    uniform float uInner;
+    varying vec3 vW;
+    varying float vSw;
+    void main() {
+      float t = uTime;
+      vec2 g = vec2(0.0);
+      g += vec2(0.0241, 0.0088) * cos(dot(vW.xz, vec2(0.0241, 0.0088)) + t * 0.62) * 1.25;
+      g += vec2(-0.0125, 0.0176) * cos(dot(vW.xz, vec2(-0.0125, 0.0176)) + t * 0.51) * 0.8;
+      g += vec2(0.0396, -0.0302) * cos(dot(vW.xz, vec2(0.0396, -0.0302)) + t * 0.9) * 0.35;
+      g += vec2(0.21, 0.13) * cos(dot(vW.xz, vec2(0.21, 0.13)) + t * 2.6) * 0.055;
+      g += vec2(-0.14, 0.24) * cos(dot(vW.xz, vec2(-0.14, 0.24)) + t * 3.1) * 0.045;
+      vec3 N = normalize(vec3(-g.x, 1.0, -g.y));
+      vec3 V = normalize(cameraPosition - vW);
+      float fr = pow(1.0 - max(dot(N, V), 0.0), 3.0);
+      vec3 deep = vec3(0.052, 0.125, 0.21);
+      vec3 skyc = vec3(0.66, 0.44, 0.38);
+      vec3 col = mix(deep, skyc, clamp(fr * 0.85 + vSw * 0.03 + 0.13, 0.0, 1.0));
+      vec3 L = normalize(vec3(-0.55, 0.16, -0.30));
+      vec3 H = normalize(L + V);
+      col += vec3(1.0, 0.70, 0.42) * pow(max(dot(N, H), 0.0), 140.0) * 0.9;
+      float glit = pow(max(sin(dot(vW.xz, vec2(0.31, 0.23)) + t * 3.4) * max(vSw, 0.0), 0.0), 9.0);
+      col += vec3(1.0, 0.74, 0.48) * glit * 0.1;
+      float ed = max(abs(vW.x), abs(vW.z)) - uInner;
+      float foamBand = smoothstep(34.0, 4.0, ed);
+      float breakers = 0.5 + 0.5 * sin(ed * 0.24 - t * 1.5);
+      float foam = foamBand * (0.35 + 0.65 * pow(breakers, 3.0)) * (0.75 + 0.25 * sin(vW.x * 0.05 + vW.z * 0.043));
+      col = mix(col, vec3(0.93, 0.90, 0.85), clamp(foam, 0.0, 1.0) * 0.85);
+      float d = length(cameraPosition - vW);
+      col = mix(col, vec3(0.93, 0.78, 0.70), smoothstep(700.0, 4200.0, d) * 0.85);
+      gl_FragColor = vec4(col, 1.0);
+    }`;
+  const mat = new ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uInner: { value: 2060 } },
+    vertexShader: vsh,
+    fragmentShader: fsh,
+    fog: !1,
+  });
+  ((oceanSys._mat = mat), waterMats.push(mat));
+  const mk = (w, d, cx, cz, sx, sz) => {
+    const om = new Mesh(new PlaneGeometry(w, d, sx, sz).rotateX(-Math.PI / 2), mat);
+    (om.position.set(cx, oceanSys.y, cz), (om.raycast = () => {}), group.add(om), oceanSys._meshes.push(om), oceanSys.slabs++);
+  };
+  (mk(7800, 1840, 0, -2980, 80, 18), mk(7800, 1840, 0, 2980, 80, 18), mk(1840, 4120, -2980, 0, 18, 42), mk(1840, 4120, 2980, 0, 18, 42));
+  if (!oceanSys.enabled) for (const m of oceanSys._meshes) m.visible = !1;
+}
+buildOcean(et);
 
 // ─── Police heat: 0–5 stars from theft, splats and rammings. Cruisers spawn with heat,
 // home in on the player with feeler-based building avoidance, ram on contact, and give
@@ -12361,6 +12434,11 @@ window.__steelRibbonDebug = {
     connectSys._mesh && (connectSys._mesh.visible = connectSys.enabled);
     return connectSys.enabled;
   },
+  oceanEnable(on) {
+    oceanSys.enabled = !!on;
+    for (const m of oceanSys._meshes) m.visible = oceanSys.enabled;
+    return oceanSys.enabled;
+  },
   raceWearEnable(on) {
     raceWearSys.enabled = !!on;
     raceWearSys._mesh && (raceWearSys._mesh.visible = raceWearSys.enabled);
@@ -12550,6 +12628,7 @@ window.__steelRibbonDebug = {
       pondShores: { shores: pondShoreSys.shores, enabled: pondShoreSys.enabled, sample: pondShoreSys.sample ?? null },
       mtnStrata: { dressed: mtnStrataSys.dressed, enabled: mtnStrataSys.enabled, sample: mtnStrataSys.sample ?? null },
       parkConnectors: { connectors: connectSys.connectors, bollards: connectSys.bollards, enabled: connectSys.enabled, sample: connectSys.sample ?? null },
+      ocean: { slabs: oceanSys.slabs, y: oceanSys.y, enabled: oceanSys.enabled, t: oceanSys._mat ? +oceanSys._mat.uniforms.uTime.value.toFixed(2) : 0 },
       birds: { active: birdSys.active, state: birdSys.state, count: birdSys.birds.length, spot: { x: +birdSys.spot.x.toFixed(1), z: +birdSys.spot.z.toFixed(1) } },
       steam: { spots: steamSys.spots.length, active: steamSys.active, sample: steamSys.spots.slice(0, 2) },
       parked: {

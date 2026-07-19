@@ -1846,3 +1846,24 @@ signal-corner ped density weighting.
   Suite 175/175. **ROUND EIGHT COMPLETE: 10/10 shipped.** v3.29.0
   DEPLOY BATCH 22 (items 6-10). NEXT: round-eight closing survey
   (user paused the loop 2026-07-17 — resume with /loop).
+- **80 THE OCEAN (2026-07-17, user request)**: the 4200x4200 terrain
+  is an ISLAND — it is now surrounded by ocean. Four border slabs
+  (inner edge tucked 40m under the terrain rim at |x|,|z|=2060, out
+  to +/-3900 — the camera far plane is 1800, no point going further)
+  share ONE ShaderMaterial: long swell (240-290m wavelengths, safe
+  on the slab grid) displaces VERTICES; fine chop normals, fresnel
+  deep-vs-dusk-sky mix, low-sun specular + glitter (the pond
+  palette), and animated shore-foam breakers (Chebyshev distance to
+  the island square) run in the FRAGMENT; OPAQUE (dusk rule).
+  KEY TRICK: the ocean carries THINNED CUSTOM FOG (700-4200 x0.85,
+  pale-haze color) — terrain drowns in scene fog at 2150 but
+  glinting water pierces the haze, which is physically what sun
+  glitter does. Ticked free via the existing waterMats uTime loop.
+  TWO SHADING PASSES: v1 hardcoded output-space fog color rendered
+  desert-orange from altitude + deep tone went black on the
+  anti-sun side — rebalanced (paler haze, fog capped 0.85, deep
+  lifted). ~8.8k tris, +4 draws, zero textures. LOOK verdict
+  (loop-shots/80-ocean/): coast-foam = wide pale sea with sun
+  glints rolling to the horizon; coast A/B = glinting sea band vs
+  terrain edge dropping into void sky. Report ocean {slabs, y, t};
+  oceanEnable. Suite 176/176. v3.30.0 DEPLOYED.

@@ -1009,6 +1009,23 @@ const browser = await chromium.launch({
     JSON.stringify({ connectors: pcn?.connectors, bollards: pcn?.bollards }),
   );
 
+  // zoom-detail 80 (user request): the ocean surrounding the island
+  const ocn = await page.evaluate(async () => {
+    const deb = window.__steelRibbonDebug,
+      o0 = deb.detailReport().ocean;
+    await new Promise((r) => setTimeout(r, 1500));
+    const o1 = deb.detailReport().ocean,
+      off = deb.oceanEnable(false),
+      offRep = deb.detailReport().ocean.enabled;
+    deb.oceanEnable(true);
+    return { slabs: o0.slabs, y: o0.y, dt: +(o1.t - o0.t).toFixed(2), off, offRep };
+  });
+  check(
+    "ocean: four wave slabs surround the island, time advances, toggle works",
+    !!ocn && ocn.slabs === 4 && ocn.dt > 0.05 && ocn.off === false && ocn.offRep === false,
+    JSON.stringify(ocn),
+  );
+
   // zoom-detail 63 (round seven item 5): oil stains at intersection approaches
   const oil = await page.evaluate(() => {
     const deb = window.__steelRibbonDebug,
