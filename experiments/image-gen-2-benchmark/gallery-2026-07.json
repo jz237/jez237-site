@@ -28,6 +28,26 @@
     "size": "1024x1024"
   },
   {
+    "id": "2026-07-19-hybrid-creature-wild-cistern-coil-herald-in-the-wild",
+    "title": "Cistern Coil Herald: In the Wild",
+    "tests": "Sunday hybrid-creature wild companion; exactly chambered nautilus + barn owl; matches posted development map; coiled nacre shell; heart-shaped facial disc; barred feather fringe; short folded wings; two taloned legs; wet limestone wall-hang; blue-hour sea-cliff cistern; fictional and non-actionable; visually inspected.",
+    "prompt": "Create a matching photorealistic natural-history field photograph of the adult Cistern Coil Herald, a clearly fictional hybrid combining exactly chambered nautilus + barn owl, hanging from the wet limestone wall of a narrow sea-cliff cistern at blue hour. Preserve the exact shared phenotype: dinner-plate-scale coiled pearlescent nacre shell with visible chambered growth lines; soft barn-owl head and heart-shaped facial disc emerging from the shell aperture; dark forward eyes and small hooked beak; barred cream-and-charcoal feather fringe around the aperture rim; two short broad silent wings folded along the outer shell whorl; two feathered taloned legs gripping vertical wet stone. Show one decisive hung posture above a dark still cistern pool, with drip-water beads, salt-spray mist, mossy seeps, pale shell hash on the ledge, and cool blue-hour rim light catching nacre iridescence and facial-disc down. Use a low three-quarter camera looking slightly upward from inside the grotto, shallow documentary depth of field, believable moisture and stone texture, no text, no people, no lab props, no gore, no logos, no costume look, no pure nautilus, no pure owl, and no humanoid anatomy.",
+    "image": "images/2026-07-19-hybrid-creature-wild-cistern-coil-herald-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-19-hybrid-creature-wild-cistern-coil-herald-in-the-wild.webp",
+    "color": "#3b434e",
+    "date": "2026-07-19",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "hybridCreature": {
+      "name": "Cistern Coil Herald",
+      "imageKind": "wild",
+      "description": "A fictional chambered-nautilus and barn-owl hybrid whose coiled nacre shell hangs from limestone cistern walls while an owl facial disc and silent wings emerge from the aperture.",
+      "continuity": "Dinner-plate-scale coiled nacre shell body with chambered growth lines; soft barn-owl head and heart-shaped facial disc emerging from the aperture; barred cream-and-charcoal feather fringe; two short broad silent wings folded along the outer whorl; two feathered taloned legs for vertical wet-limestone grip; limestone sea-cliff cistern and tide-cut grotto habitat at blue hour."
+    }
+  },
+  {
     "id": "2026-07-19-hybrid-creature-infographic-cistern-coil-herald-development",
     "title": "Cistern Coil Herald: Development Map",
     "tests": "Hybrid creature pair slot; colorful photorealistic development-map infographic; exactly two sources chambered nautilus + barn owl; source-trait map; four-stage strip; adult specimen; macro windows; habitat swatches; scale vignette; locomotion comparison; field-bench context; coiled non-humanoid hanging body plan; fictional non-actionable.",
