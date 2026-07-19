@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-19",
+      "historicDate": "1983-06-27",
+      "displayDate": "Week of June 27-July 3, 1983",
+      "edition": "Issue 048 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week in 1983: Dragon’s Lair turns the arcade into a cartoon, Coleco promises an Adam for the family, and WarGames makes the modem a movie star.",
+      "leadHeadline": "Dragon’s Lair Brings the Cartoon Arcade",
+      "storyHeadlines": [
+        "Coleco Pitches Adam as the Family Computer",
+        "Atari Resets Its 8-Bit Line with the 600XL and 800XL",
+        "WarGames Makes the Modem a Summer Star",
+        "The Price War Bites the Family-Room Shelf"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-06-27.jpg",
+      "thumb": "media/thumbs/1983-06-27.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-18",
       "historicDate": "1983-06-20",
       "displayDate": "Week of June 20-26, 1983",
