@@ -1022,7 +1022,7 @@ const browser = await chromium.launch({
   });
   check(
     "ocean: four wave slabs surround the island, time advances, toggle works",
-    !!ocn && ocn.slabs === 4 && ocn.dt > 0.05 && ocn.off === false && ocn.offRep === false,
+    !!ocn && ocn.slabs === 8 && ocn.dt > 0.05 && ocn.off === false && ocn.offRep === false,
     JSON.stringify(ocn),
   );
 
@@ -1680,8 +1680,9 @@ const browser = await chromium.launch({
     for (let ix = -4; ix <= 4; ix++)
       for (let iz = -4; iz <= 4; iz++) {
         const px = lake.x + (ix / 5) * lake.rx,
-          pz = lake.z + (iz / 5) * lake.rz,
-          w = d.waterAt(px, pz);
+          pz = lake.z + (iz / 5) * lake.rz;
+        if (Math.max(Math.abs(px), Math.abs(pz)) > 1980) continue; // the OCEAN surf band is real water (zoom-detail 80c)
+        const w = d.waterAt(px, pz);
         (w.depth > 0.04 && wetSamples++, w.ground > lake.waterY + 0.15 && w.depth > 0.04 && violations++);
       }
     return { lake: !0, gated: !0, violations, wetSamples };
