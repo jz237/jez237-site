@@ -886,5 +886,25 @@
       "description": "A fictional prenatally gene-combined open-ocean organism whose puffin-derived insulation, countershading, paddle control, and keratin pigmentation are developmentally fused with man-o'-war-derived pneumatic buoyancy, translucent color, wind drift, and sensory filaments throughout one seamless body.",
       "continuity": "One continuous seal-pup-length spindle body with no separate bird torso or jellyfish colony; velvety black-and-white hydroplumage grading into translucent cyan-magenta flank tissue; a low flexible pneumatic crest grown seamlessly along the spine; a tapered sensory snout with embedded orange-yellow keratin ridges rather than an intact puffin beak; four short paddle limbs with orange translucent webbing; fine ventral sensory-feeding filaments emerging gradually from the same belly tissue; open-ocean pumice line and long-swell habitat in bright overcast light."
     }
+  },
+  {
+    "id": "2026-07-19-hybrid-creature-wild-pumice-raft-quillback-in-the-wild",
+    "title": "Pumice Raft Quillback: In the Wild",
+    "tests": "Fictional hybrid pair companion; exact sources Atlantic puffin + Portuguese man o war; seamless single-embryo phenotype; horizontal ocean drift; continuous hydroplumage-to-translucent tissue; integrated dorsal buoyancy crest; paddle limbs; ventral sensory filaments; pumice-line habitat; matching adult continuity; non-actionable; no stitched anatomy or intact source-animal parts.",
+    "prompt": "Create a matching photorealistic natural-history field photograph of the adult Pumice Raft Quillback drifting along a floating pumice line on long open-ocean swell under bright overcast light. This is one clearly fictional organism genetically recombined from Atlantic puffin + Portuguese man o' war before birth and developed from a single embryo, not two animals or animal parts physically joined. Preserve the exact seamless adult phenotype from the development chart: one seal-pup-length horizontal spindle body with continuous load-bearing anatomy; velvety black-and-white hydroplumage grading smoothly into translucent cyan-magenta flank tissue; a low flexible pneumatic crest grown continuously from the dorsal skin; a tapered sensory snout with embedded orange-yellow keratin ridges rather than an intact puffin head or beak; four short paddle limbs with translucent orange webbing; fine ventral sensory-feeding filaments emerging gradually from the same belly tissue. Show one decisive wind-assisted drift moment with slight wake wrinkles, pale pumice chunks nearby, the dorsal crest flexing naturally, and subsurface filaments refracting beneath clear water. Use a low wave-height documentary side angle, believable ocean optics, tactile continuous tissue transitions, and convincing mass and buoyancy. No text, people, lab props, gore, logos, costume look, seams, stitched anatomy, pasted-on bladder, attached wings, separate jellyfish body, intact puffin torso/head, or recognizable source-animal parts bolted together.",
+    "image": "images/2026-07-19-hybrid-creature-wild-pumice-raft-quillback-in-the-wild.jpg",
+    "thumb": "thumbs/2026-07-19-hybrid-creature-wild-pumice-raft-quillback-in-the-wild.webp",
+    "color": "#7e8084",
+    "date": "2026-07-19",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "hybridCreature": {
+      "name": "Pumice Raft Quillback",
+      "imageKind": "wild",
+      "description": "A fictional prenatally gene-combined open-ocean organism whose puffin-derived insulation, countershading, paddle control, and keratin pigmentation are developmentally fused with man-o'-war-derived pneumatic buoyancy, translucent color, wind drift, and sensory filaments throughout one seamless body.",
+      "continuity": "One continuous seal-pup-length spindle body with no separate bird torso or jellyfish colony; velvety black-and-white hydroplumage grading into translucent cyan-magenta flank tissue; a low flexible pneumatic crest grown seamlessly along the spine; a tapered sensory snout with embedded orange-yellow keratin ridges rather than an intact puffin beak; four short paddle limbs with orange translucent webbing; fine ventral sensory-feeding filaments emerging gradually from the same belly tissue; open-ocean pumice line and long-swell habitat in bright overcast light."
+    }
   }
 ]
