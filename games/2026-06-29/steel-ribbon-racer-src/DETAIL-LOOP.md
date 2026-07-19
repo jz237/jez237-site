@@ -1867,3 +1867,25 @@ signal-corner ped density weighting.
   glints rolling to the horizon; coast A/B = glinting sea band vs
   terrain edge dropping into void sky. Report ocean {slabs, y, t};
   oceanEnable. Suite 176/176. v3.30.0 DEPLOYED.
+- **80b DRIVE ONTO THE BEACH (2026-07-17, user request)**: the coast
+  is now a DESTINATION — roam clamps widened from the city rect
+  (±820/-1620..480) to the island rim (±2040 both axes, BOTH clamp
+  sites), the outer 255m of terrain is a dune-striped SAND BEACH,
+  the surf line pulled inward (uInner 2060→1980) with DISCRETE
+  double-breaker foam bands rolling ashore, and pondDepthAt gained
+  an ocean surf band (perimeter terrain below sea level -9.5) so
+  driving into the waves gets the full pond water physics — drag,
+  SPLASH banner, wake, camera shake (verified: depth 0.84 at rest
+  in the surf). THE BIG LESSON (cost 3 visual passes): vertex
+  colors MULTIPLY the map — no factor can create red a green grass
+  texture doesn't have (subtle at 1.9x, bloom-white at 3.3x, never
+  sand). ABSOLUTE color changes need a SHADER INJECTION: terrain
+  material onBeforeCompile lerps diffuse to sand after
+  map_fragment (customProgramCacheKey "terrain-beach-band"); the
+  vertex colors then multiply on top = dune stripes. Also: roam
+  yaw 0 faces -z, +x is yaw +PI/2; fresnel capped 0.62 keeps
+  grazing water blue; foam base 0.18 so breakers read as BANDS not
+  a white sheet. LOOK verdict (loop-shots/80b-beach/): green hills
+  roll onto pale dunes, car on the sand, surf line + glinting sea;
+  aerial = real coastline wrapping the headlands. Suite 177/177.
+  v3.31.0 DEPLOYED.

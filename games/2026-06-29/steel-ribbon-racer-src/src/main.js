@@ -1050,6 +1050,13 @@ function pondDepthAt(x, z) {
       d > depth && ((depth = d), (pond = p));
     }
   }
+  // zoom-detail 80b: the ocean surf band — shallow water wherever the perimeter
+  // terrain dips below sea level (-9.5), so driving into the surf gets the same
+  // drag/splash/wake as ponds. Capped: the surf is never a wall.
+  if (Math.max(Math.abs(x), Math.abs(z)) > 1980) {
+    const d2 = MathUtils.clamp((-9.5 - He(x, z)) / 3.2, 0, 0.85);
+    d2 > depth && ((depth = d2), (pond = null));
+  }
   return { depth, pond };
 }
 const Sa = [],
@@ -1255,6 +1262,17 @@ function P1() {
 function L1() {
   const i = new MeshStandardMaterial({ map: M1(), color: 8231526, roughness: 0.98, metalness: 0.02 }),
     e = new Mesh(new PlaneGeometry(4200, 4200, 300, 300), i);
+  // zoom-detail 80b: the perimeter beach — an ABSOLUTE lerp to sand in the outer
+  // band, injected after map sampling (vertex colors then multiply = dune stripes)
+  i.customProgramCacheKey = () => "terrain-beach-band";
+  i.onBeforeCompile = (sh) => {
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying float vBch;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvBch = smoothstep(1845.0, 1975.0, max(abs(position.x), abs(position.y)));");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying float vBch;")
+      .replace("#include <map_fragment>", "#include <map_fragment>\ndiffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.60, 0.52, 0.36), vBch);");
+  };
   ((e.rotation.x = -Math.PI / 2), (e.position.y = -7), (e.receiveShadow = !0));
   const t = e.geometry.attributes.position;
   for (let g = 0; g < t.count; g++) {
@@ -1298,6 +1316,17 @@ function L1() {
           else if (wear < 0.07) ((r2 *= 0.9), (b3 *= 0.93));
           striped++;
         }
+      }
+      // zoom-detail 80b: perimeter sand — the outer 230m of the island blends
+      // lawn into warm dune-striped beach so the coast reads drivable shore
+      // zoom-detail 80b: dune striping for the beach band — brightness modulation
+      // only; the SAND COLOR itself is an absolute lerp injected into the terrain
+      // shader (multiplying vertex colors cannot create red the green map lacks)
+      const cd2 = Math.max(Math.abs(wx), Math.abs(wz));
+      if (cd2 > 1845) {
+        const bl = Math.min(1, (cd2 - 1845) / 110),
+          dune = 1 + Math.sin(wx * 0.021 + wz * 0.017) * 0.07 * bl;
+        ((r2 *= dune), (g2 *= dune), (b3 *= dune));
       }
       ((col[g * 3] = r2), (col[g * 3 + 1] = g2), (col[g * 3 + 2] = b3));
     }
@@ -9586,23 +9615,24 @@ function buildOcean(group) {
       float fr = pow(1.0 - max(dot(N, V), 0.0), 3.0);
       vec3 deep = vec3(0.052, 0.125, 0.21);
       vec3 skyc = vec3(0.66, 0.44, 0.38);
-      vec3 col = mix(deep, skyc, clamp(fr * 0.85 + vSw * 0.03 + 0.13, 0.0, 1.0));
+      vec3 col = mix(deep, skyc, clamp(fr * 0.62 + vSw * 0.03 + 0.13, 0.0, 1.0));
       vec3 L = normalize(vec3(-0.55, 0.16, -0.30));
       vec3 H = normalize(L + V);
       col += vec3(1.0, 0.70, 0.42) * pow(max(dot(N, H), 0.0), 140.0) * 0.9;
       float glit = pow(max(sin(dot(vW.xz, vec2(0.31, 0.23)) + t * 3.4) * max(vSw, 0.0), 0.0), 9.0);
       col += vec3(1.0, 0.74, 0.48) * glit * 0.1;
       float ed = max(abs(vW.x), abs(vW.z)) - uInner;
-      float foamBand = smoothstep(34.0, 4.0, ed);
-      float breakers = 0.5 + 0.5 * sin(ed * 0.24 - t * 1.5);
-      float foam = foamBand * (0.35 + 0.65 * pow(breakers, 3.0)) * (0.75 + 0.25 * sin(vW.x * 0.05 + vW.z * 0.043));
+      float foamBand = smoothstep(46.0, 3.0, ed);
+      float br1 = 0.5 + 0.5 * sin(ed * 0.24 - t * 1.5);
+      float br2 = 0.5 + 0.5 * sin(ed * 0.55 - t * 2.6 + sin(vW.x * 0.021 + vW.z * 0.017) * 2.2);
+      float foam = foamBand * (0.18 + 0.72 * pow(br1, 3.0) + 0.55 * pow(br2, 5.0)) * (0.7 + 0.3 * sin(vW.x * 0.05 + vW.z * 0.043));
       col = mix(col, vec3(0.93, 0.90, 0.85), clamp(foam, 0.0, 1.0) * 0.85);
       float d = length(cameraPosition - vW);
       col = mix(col, vec3(0.93, 0.78, 0.70), smoothstep(700.0, 4200.0, d) * 0.85);
       gl_FragColor = vec4(col, 1.0);
     }`;
   const mat = new ShaderMaterial({
-    uniforms: { uTime: { value: 0 }, uInner: { value: 2060 } },
+    uniforms: { uTime: { value: 0 }, uInner: { value: 1980 } },
     vertexShader: vsh,
     fragmentShader: fsh,
     fog: !1,
@@ -9612,7 +9642,7 @@ function buildOcean(group) {
     const om = new Mesh(new PlaneGeometry(w, d, sx, sz).rotateX(-Math.PI / 2), mat);
     (om.position.set(cx, oceanSys.y, cz), (om.raycast = () => {}), group.add(om), oceanSys._meshes.push(om), oceanSys.slabs++);
   };
-  (mk(7800, 1840, 0, -2980, 80, 18), mk(7800, 1840, 0, 2980, 80, 18), mk(1840, 4120, -2980, 0, 18, 42), mk(1840, 4120, 2980, 0, 18, 42));
+  (mk(7800, 1920, 0, -2940, 80, 18), mk(7800, 1920, 0, 2940, 80, 18), mk(1920, 3960, -2940, 0, 18, 42), mk(1920, 3960, 2940, 0, 18, 42));
   if (!oceanSys.enabled) for (const m of oceanSys._meshes) m.visible = !1;
 }
 buildOcean(et);
@@ -11218,8 +11248,8 @@ function $d(i) {
       lv(u.roamPos, _) && (x = !0),
       (_ = Ki(u.roamPos.x, u.roamPos.z, u.roamPos.y)),
       u.roamAir || (u.roamPos.y = _.y + Wn));
-  ((u.roamPos.x = MathUtils.clamp(u.roamPos.x, -820, 820)),
-    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -1620, 480)),
+  ((u.roamPos.x = MathUtils.clamp(u.roamPos.x, -2040, 2040)),
+    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -2040, 2040)),
     x &&
       (u.collisionCooldown <= 0 &&
         (ev(new Vector3(u.roamPos.x, u.roamPos.y + 0.8, u.roamPos.z), e, "IMPACT"), (u.collisionCooldown = 0.38)),
@@ -11455,8 +11485,8 @@ function walkerUpdate(i) {
     f = -Math.cos(u.roamYaw);
   ((u.roamPos.x += d * u.speed * i), (u.roamPos.z += f * u.speed * i));
   (lv(u.roamPos, { kind: "ground" }),
-    (u.roamPos.x = MathUtils.clamp(u.roamPos.x, -820, 820)),
-    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -1620, 480)),
+    (u.roamPos.x = MathUtils.clamp(u.roamPos.x, -2040, 2040)),
+    (u.roamPos.z = MathUtils.clamp(u.roamPos.z, -2040, 2040)),
     (u.roamPos.y = He(u.roamPos.x, u.roamPos.z) + 0.05));
   (waterPhysics(i, prevSpeed), sv());
   // pose + limb swing
