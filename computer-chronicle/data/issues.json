@@ -4,6 +4,379 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-07-19",
+      "historicDate": "1983-06-27",
+      "displayDate": "Week of June 27-July 3, 1983",
+      "edition": "Issue 048 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Electric arcade-era newsprint with a gaming-anchored front and a week the price war made personal",
+        "motifs": [
+          "Dragon’s Lair cabinet silhouette",
+          "arcade marquee and joystick",
+          "Coleco Adam keyboard and Digital Data Pack",
+          "Atari XL brick",
+          "red 5¼-inch disk mailing sleeve"
+        ],
+        "layout": "Five-column front with the arcade lead top-left, a hardware right rail of Adam and the Atari XL line, and a software-and-prices footer"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of June 27-July 3, 1983",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Gaming lead (Dragon’s Lair) across the top, art-anchored",
+        "secondaryRail": "Coleco Adam and Atari XL hardware reports on the right column",
+        "archiveNavigation": "Previous and next weekly issues with calendar shelf and On This Week strip"
+      },
+      "sectionChrome": {
+        "primary": "Deep red rules on warm newsprint",
+        "secondary": "Electric blue section labels",
+        "texture": "Aged paper grain, halftones, slight ink bleed, no dead footer space"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-06-27.jpg",
+        "alt": "GPT Image 2 newspaper-style front page for Computer Chronicle, week of June 27-July 3, 1983, with Dragon’s Lair as the gaming lead.",
+        "caption": "GPT Image 2 newspaper-style front page generated from the structured Chronicle issue data for the week of June 27-July 3, 1983.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "An arcade laserdisc, a CES’s worth of new home computers, and a Hollywood film about modems all arrive in the same week — and the price tags are sliding while the programmers argue.",
+      "morningLine": "This week in 1983: Dragon’s Lair turns the arcade into a cartoon, Coleco promises an Adam for the family, and WarGames makes the modem a movie star.",
+      "lead": {
+        "headline": "Dragon’s Lair Brings the Cartoon Arcade",
+        "dek": "Cinematronics’ laserdisc cabinet turns Don Bluth animation into the year’s loudest coin-op, and the rest of the arcade is scrambling to keep up.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          3,
+          4,
+          5
+        ],
+        "body": [
+          "Just weeks after the June Consumer Electronics Show handed the home-computer business its next big products, the arcade answered with a machine that played more like a movie than a game. Cinematronics’ Dragon’s Lair, in arcades from June 1983, drove a Pioneer laserdisc player with a joystick and a single sword button, jumping between pre-animated scenes of a knight named Dirk the Daring rescuing Princess Daphne from the dragon Singe.",
+          "The animation came from a team that included veteran Disney artists, working in the studio of director Don Bluth. Instead of the sprite-and-tile world every other cabinet in the alley offered, players watched fully drawn characters move through caves and corridors. Each choice was binary and timed: hesitate and Dirk walked into a death that was already drawn for the laserdisc to play. The look borrowed the storytelling grammar of Saturday-morning animation, and the trade press took notice all spring.",
+          "That novelty carried a price. Operators commonly charged 50 cents a play — twice the quarter most arcade games still asked — and the cabinet itself cost operators several thousand dollars, the laserdisc hardware driving the price far above ordinary uprights. Players queued anyway, drawn by the same storytelling spectacle that the trade papers had been writing about all spring.",
+          "For a software business racing to prove that a home computer was a serious tool, Dragon’s Lair was a pointed reminder of how much charm a coin-op could still pack into a cabinet. Coleco, Atari and Commodore were about to spend the rest of the year fighting over the family room; for one summer week, the loudest computer in the mall had a sword and a laserdisc."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Coleco Pitches Adam as the Family Computer",
+          "kicker": "Summer CES",
+          "dek": "A keyboard, a daisy-wheel printer, and a high-speed tape drive arrive bundled for roughly $600 — if the schedule holds.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1,
+            2,
+            6
+          ],
+          "body": [
+            "Coleco used June’s Consumer Electronics Show to position Adam less as a computer and more as a household appliance. The system paired a Z80A-based keyboard with a Digital Data Pack drive, a daisy-wheel printer that doubled as the power supply, and SmartWriter word processing built into ROM, all advertised as one package near $600.",
+            "Adam could also dock a ColecoVision, turning the company’s hit game console into a slot-loader for the keyboard. That kept the existing cartridge library relevant and gave Coleco a story against Atari and Commodore: one buy, one family, one box."
+          ]
+        },
+        {
+          "headline": "Atari Resets Its 8-Bit Line with the 600XL and 800XL",
+          "kicker": "Hardware",
+          "dek": "New cases, built-in BASIC and a Parallel Bus Interface are meant to clean up the entry-level fight.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1,
+            7
+          ],
+          "body": [
+            "Atari announced the 600XL and 800XL at the June CES as the clean successors to the 400 and 800. The 600XL shipped with 16K of RAM and the 800XL with 64K, both built around the 6502-family chips and Atari’s ANTIC, GTIA and POKEY custom silicon. Atari BASIC lived in ROM, ending the era when owners had to slot a cartridge before they could type PRINT.",
+            "The XL cases also added a Parallel Bus Interface, keeping the serial peripheral bus for drives and printers. Analysts read the announcement as much about inventory management as about engineering: Atari was simultaneously trying to clear 400 and 800 stock while preparing a price-war line that would face Commodore’s 64 and TI’s sinking 99/4A."
+          ]
+        },
+        {
+          "headline": "WarGames Makes the Modem a Summer Star",
+          "kicker": "Culture",
+          "dek": "Matthew Broderick’s lightman reaches a war computer by accident, and a generation of teenagers learns the word wardialing.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            8,
+            9,
+            10
+          ],
+          "body": [
+            "WarGames, which opened June 3, was still in wide release by the first week of July, riding a wave of coverage that put the words \"modem\" and \"war dialing\" on the front page of the culture section. Matthew Broderick plays David Lightman, a Seattle teen who uses a modem and a little war dialing to reach what he thinks is a game company and what is actually the WOPR military computer.",
+            "The film’s cleanest line belongs to the machine: \"The only winning move is not to play.\" For a Computer Chronicle reader, the resonance was practical — the same summer, BBSes were multiplying, CompuServe was signing new customers, and the cost of a 300-baud modem had dropped below $200."
+          ]
+        },
+        {
+          "headline": "The Price War Bites the Family-Room Shelf",
+          "kicker": "Industry",
+          "dek": "Commodore’s chip-owning advantage and TI’s repeated cuts are forcing the rest of the field to rethink the entry-level price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1,
+            2
+          ],
+          "body": [
+            "Inside the same week that Coleco promised Adam for around $600, the wider market was sliding the other way. The Commodore 64, which had debuted at $595, was already showing up at lower shelf prices as Commodore used its ownership of MOS Technology to keep the silicon cost down. Texas Instruments kept trimming the TI-99/4A, the machine that had once sold for several hundred dollars now advertised well below $200.",
+            "For Atari, the XL line was a response as much as a refresh. For Coleco, the Adam target price was a bet that families would pay a premium for a printer in the box. The market was about to find out who was right."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Coleco Adam",
+          "summary": "Z80A family computer with Digital Data Pack drive, daisy-wheel printer and SmartWriter; package targeted near $600.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1,
+            6
+          ]
+        },
+        {
+          "title": "Atari 600XL / 800XL",
+          "summary": "New 16K and 64K Atari 8-bit machines with built-in BASIC and a Parallel Bus Interface.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1,
+            7
+          ]
+        },
+        {
+          "title": "Commodore 64",
+          "summary": "64K home computer with VIC-II graphics and SID sound; central to the accelerating retail price contest.",
+          "confidence": "period",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "$495 list; the defining IBM PC spreadsheet, with charting and database on the same disk."
+        },
+        {
+          "name": "Atari BASIC",
+          "detail": "Built into the announced 600XL and 800XL; no separate cartridge required."
+        },
+        {
+          "name": "Lode Runner",
+          "detail": "Broderbund’s 1983 puzzle-platformer by Doug Smith, a major new home-computer title."
+        },
+        {
+          "name": "Archon: The Light and the Dark",
+          "detail": "Free Fall Associates’ chess-meets-action hybrid, one of Electronic Arts’ first 1983 releases."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Dragon’s Lair",
+            "Lode Runner",
+            "Archon: The Light and the Dark",
+            "Donkey Kong",
+            "Ms. Pac-Man"
+          ]
+        },
+        {
+          "label": "At the Movies",
+          "items": [
+            "Return of the Jedi",
+            "Superman III",
+            "Trading Places",
+            "WarGames",
+            "Twilight Zone: The Movie"
+          ]
+        },
+        {
+          "label": "Business Software",
+          "items": [
+            "Lotus 1-2-3",
+            "VisiCalc",
+            "WordStar"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Lotus 1-2-3",
+          "price": "$495 list",
+          "note": "IBM PC spreadsheet, charting and database in one package."
+        },
+        {
+          "item": "Coleco Adam package",
+          "price": "about $600 announced target",
+          "note": "Computer, Digital Data Pack drive, daisy-wheel printer and SmartWriter."
+        },
+        {
+          "item": "Dragon’s Lair arcade play",
+          "price": "50¢ per play",
+          "note": "About double the standard quarter play of the period."
+        },
+        {
+          "item": "TI-99/4A home computer",
+          "price": "Below $200 in mid-1983 retail ads",
+          "note": "Texas Instruments kept cutting the 99/4A through the price war."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "CompuServe keeps adding consumer channels",
+          "text": "The Columbus-based service is opening new areas aimed at hobbyists and home shoppers as modem sales climb."
+        },
+        {
+          "headline": "Electronic Arts ships distinctive square boxes",
+          "text": "Archon and Pinball Construction Set are showing up in the publisher’s oversized sleeves with programmer credits up front."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Flashdance… What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 2,
+          "title": "Time (Clock of the Heart)",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 3,
+          "title": "Electric Avenue",
+          "artist": "Eddy Grant"
+        },
+        {
+          "rank": 4,
+          "title": "Every Breath You Take",
+          "artist": "The Police"
+        },
+        {
+          "rank": 5,
+          "title": "Never Gonna Let You Go",
+          "artist": "Sergio Mendes"
+        }
+      ],
+      "periodAd": {
+        "headline": "BRING THE ARCADE HOME",
+        "summary": "A new generation of home computers — Adam, the Atari XLs, and a refreshed Commodore line — is heading for the family-room shelf this fall.",
+        "tagline": "Plug in, load the cartridge, and let the screen do the rest."
+      },
+      "market": {
+        "headline": "The price war is squeezing everyone but Commodore",
+        "summary": "TI keeps cutting the 99/4A, Coleco is selling a printer in the box, and Atari is reshaping the 8-bit line while it clears old inventory.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Interstate 95 bridge collapses into the Mianus River",
+        "summary": "In the early hours of June 28, a 100-foot section of the Mianus River Bridge in Greenwich, Connecticut, fell, sending vehicles into the river; three people died and investigators focused on corroded pin-and-hanger assemblies.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          11,
+          12
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Compact Disc prepares for its American mass-market debut",
+        "summary": "Sony and Philips’ digital audio format, in stores in Japan since late 1982, was rolling into North American showrooms in 1983; first players remained expensive showcase products.",
+        "confidence": "period",
+        "sourceRefs": [
+          13,
+          14
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Dragon’s Lair is documented as a June 1983 arcade debut by Cinematronics using Pioneer laserdisc hardware and Don Bluth animation, with 50¢ plays common.",
+          "Coleco Adam is documented as a June 1983 CES announcement pairing a Z80A keyboard, Digital Data Pack drive, daisy-wheel printer and SmartWriter at a roughly $600 target.",
+          "Atari 600XL and 800XL are documented as June 1983 CES announcements with 16K and 64K of RAM and built-in Atari BASIC.",
+          "WarGames opened June 3, 1983, and remained in wide release through early July.",
+          "The Billboard Hot 100 chart for July 2, 1983 places Irene Cara at No. 1, with Culture Club, Eddy Grant, The Police and Sergio Mendes in the top five.",
+          "The Mianus River Bridge collapse on June 28, 1983 is documented in the NTSB Highway Accident Report HAR-84/03.",
+          "Compact Disc is documented as launching in Japan in late 1982 and entering North American retail in 1983."
+        ]
+      },
+      "sources": [
+        {
+          "label": "IEEE Spectrum: The Chips That Made the Commodore 64",
+          "url": "https://spectrum.ieee.org/commodore-64"
+        },
+        {
+          "label": "Computer History Museum: Home computers",
+          "url": "https://www.computerhistory.org/revolution/personal-computers/17/302"
+        },
+        {
+          "label": "Old-Computers: Atari 800XL",
+          "url": "https://www.old-computers.com/museum/computer.asp?c=35"
+        },
+        {
+          "label": "The Strong Museum of Play: Dragon’s Lair",
+          "url": "https://www.museumofplay.org/games/dragons-lair/"
+        },
+        {
+          "label": "Arcade Museum: Dragon’s Lair",
+          "url": "https://www.arcade-museum.com/Videogame/dragons-lair"
+        },
+        {
+          "label": "Old-Computers: Coleco Adam",
+          "url": "https://www.old-computers.com/museum/computer.asp?c=120"
+        },
+        {
+          "label": "Atari Museum: Atari 800XL",
+          "url": "https://www.atarimuseum.com/computers/8BITS/XL/800xl/800xl.htm"
+        },
+        {
+          "label": "AFI Catalog: WarGames",
+          "url": "https://catalog.afi.com/Catalog/moviedetails/58148"
+        },
+        {
+          "label": "Box Office Mojo: WarGames weekly",
+          "url": "https://www.boxofficemojo.com/release/rl3769693697/weekly/"
+        },
+        {
+          "label": "IMDb: WarGames (1983)",
+          "url": "https://www.imdb.com/title/tt0086567/"
+        },
+        {
+          "label": "Computer History Museum: Lotus 1-2-3",
+          "url": "https://www.computerhistory.org/revolution/personal-computers/17/297"
+        },
+        {
+          "label": "NTSB Highway Accident Report HAR-84/03 (Mianus River Bridge)",
+          "url": "https://www.ntsb.gov/investigations/AccidentReports/Reports/HAR8403.pdf"
+        },
+        {
+          "label": "History.com: Mianus River Bridge collapse (June 28, 1983)",
+          "url": "https://www.history.com/this-day-in-history/june-28/bridge-collapses-in-connecticut"
+        },
+        {
+          "label": "Philips: The beginning of the CD",
+          "url": "https://www.philips.com/a-w/research/technologies/cd/beginning.html"
+        },
+        {
+          "label": "Smithsonian: Compact Disc player",
+          "url": "https://americanhistory.si.edu/collections/object/nmah_713528"
+        },
+        {
+          "label": "Billboard Hot 100 — July 2, 1983",
+          "url": "https://www.billboard.com/charts/hot-100/1983-07-02/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "ARCADE TECHS WANTED",
+          "copy": "Cinematronics cabinets need laserdisc-cleaning every shift. Apply at the alley office."
+        },
+        {
+          "headline": "BBS TRADERS",
+          "copy": "Local boards meet Thursday nights. Bring a 300-baud modem and a fresh disk."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-07-18",
       "historicDate": "1983-06-20",
       "displayDate": "Week of June 20-26, 1983",
