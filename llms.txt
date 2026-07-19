@@ -146,6 +146,7 @@ Current plant/reference slugs:
 | `grapevine` | Grapevine and arbor/lattice views |
 | `hostas` | Hostas |
 | `interesting-insects` | Pollinators, butterflies, caterpillars, wildlife |
+| `peppers` | Peppers and summer harvest progress |
 | `lemony-lace-elderberry` | Lemony Lace elderberry |
 | `little-henry-sweetspire` | Little Henry sweetspire |
 | `narrow-upright-yew` | Narrow upright yew |
