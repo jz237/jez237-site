@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-20",
+      "historicDate": "1983-07-04",
+      "displayDate": "Week of July 4-10, 1983",
+      "edition": "Issue 049 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week in 1983: Adam becomes the summer’s most talked-about computer, Dragon’s Lair draws crowds, and Electronic Arts’ first games reach reviewers.",
+      "leadHeadline": "Coleco’s Adam Promises a Complete Computer for Under $600",
+      "storyHeadlines": [
+        "The $600 System Becomes the New Battleground",
+        "Dragon’s Lair Turns the Arcade into a Cartoon Theater",
+        "Electronic Arts Gives Designers Star Billing"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-07-04.jpg",
+      "thumb": "media/thumbs/1983-07-04.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-19",
       "historicDate": "1983-06-27",
       "displayDate": "Week of June 27-July 3, 1983",

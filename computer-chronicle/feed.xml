@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 4-10, 1983 — Coleco’s Adam Promises a Complete Computer for Under $600</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-07-04</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-04</guid>
+      <pubDate>Mon, 20 Jul 2026 12:00:00 GMT</pubDate>
+      <description>The summer CES sensation combines game compatibility, high-capacity tape, word processing and a daisy-wheel printer in one mass-market package. The most talked-about personal computer of the summer is not merely a keyboard in a box. Coleco’s Adam, the lead item in the July 3 Arcade Express after its Consumer Electronics Show debut, is being pitched as a complete household system: computer, keyboard, high-capacity tape storage, word processing, joysticks and a daisy-wheel printer for a promised price below $600. Also this week: The $600 System Becomes the New Battleground · Dragon’s Lair Turns the Arcade into a Cartoon Theater · Electronic Arts Gives Designers Star Billing.</description>
+    </item>
     <item>
       <title>Week of June 27-July 3, 1983 — Dragon’s Lair Brings the Cartoon Arcade</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-06-27</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-02-14</guid>
       <pubDate>Wed, 01 Jul 2026 12:00:00 GMT</pubDate>
       <description>Commodore, Texas Instruments, Atari, and IBM-compatible software all compete for attention as February shoppers compare game libraries, BASIC, memory, and office promises. By mid-February 1983, the home-computer boom was becoming a shelf-by-shelf argument. Commodore 64 advertising leaned on memory and color, TI-99/4A promotions kept pressure on price, Atari remained tied to both games and BASIC, and IBM PC software such as Lotus 1-2-3 gave office buyers a different reason to visit the computer counter. The result was a week when the same store could sell cartridges, joysticks, educational programs, and spreadsheet power as parts of one expanding microcomputer habit.</description>
-    </item>
-    <item>
-      <title>Week of February 7-13, 1983 — Atari pitches a keyboard path from game console to computer</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-02-07</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-02-07</guid>
-      <pubDate>Tue, 30 Jun 2026 12:00:00 GMT</pubDate>
-      <description></description>
     </item>
   </channel>
 </rss>
