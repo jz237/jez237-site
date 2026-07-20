@@ -1,21 +1,23 @@
 // Service worker for Stunt Car Racer PWA
 // Caches game files for offline play and home-screen launch
 
-var CACHE_NAME = 'scr-v137';
+var CACHE_NAME = 'scr-v138';
 var ASSETS = [
   'source.html',
-  'source.js?v=137',
-  'source.wasm?v=137',
-  'controls.js?v=137',
-  'driver-controls.js?v=137',
-  'profile.js?v=137',
-  'track-access.js?v=137',
-  'hotseat.js?v=137',
-  'link-championship.js?v=137',
-  'backup.js?v=137',
-  'multiplayer.js?v=137',
-  'game.js?v=137',
-  'game.css?v=137',
+  'source.js?v=138',
+  'source.wasm?v=138',
+  'controls.js?v=138',
+  'driver-controls.js?v=138',
+  'profile.js?v=138',
+  'track-access.js?v=138',
+  'hotseat.js?v=138',
+  'link-championship.js?v=138',
+  'backup.js?v=138',
+  'multiplayer.js?v=138',
+  'game.js?v=138',
+  'game.css?v=138',
+  'hd-graphics.js?v=138',
+  'images/sky.jpg',
   'manifest.json',
   'icon-192.png',
   'icon-512.png',
@@ -42,10 +44,10 @@ var ASSETS = [
   'images/dust/dust-cloud-5.png',
   'images/dust/dust-cloud-6.png',
   'images/dust/dust-cloud-7.png',
-  'images/screens/menu.png',
+  'images/screens/menu.jpg',
   'images/screens/heads.png',
-  'images/screens/racewin.png',
-  'images/screens/racelost.png',
+  'images/screens/racewin.jpg',
+  'images/screens/racelost.jpg',
   'images/screens/wrecked.png'
 ];
 
