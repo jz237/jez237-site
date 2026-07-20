@@ -2046,5 +2046,25 @@
       "continuity": "Story beat 9/9 resolves the crisis: the new chord becomes civic canon, the silica lace is protected, and Eru becomes keeper of the added low note.",
       "entryDescription": "At Chordwell Commons, Eru conducts the first official inspection of the richer route chord while Oruq marks the new silica-lace sanctuary."
     }
+  },
+  {
+    "id": "2026-07-20-weekly-world-aureline-shelf-scientific-field-chart",
+    "title": "Aureline Shelf: Scientific Field Chart",
+    "tests": "Weekly-world introduction; story order 1 of 9; walking sail-tree cutaway; non-humanoid Velari anatomy; root-step sequence; fog-bridge engineering; material and macro panels; physical survey-bench anchor; copper-twilight plateau; anti-repeat world: mobile high-mesa orchard civilization.",
+    "prompt": "Create a colorful photorealistic scientific world field chart for Aureline Shelf, physically mounted on a wind-scarred ochre ceramic survey bench at the edge of a real copper-twilight plateau. Build at least eight specific visual information layers: a dominant central cutaway of a walking sail-tree showing the amber fog-harvesting membrane, fluid channels, braided root-stilt gait and the suspended Kestrel Loom settlement; a full-body adult Velari anatomy panel showing six jointed legs, indigo skin, airflow cheek fans, four weaving palps and spinal pressure pearls; a four-stage root-step locomotion sequence; an exploded view of a flexible fog bridge with cobalt ceramic anchors, reed cables, resin joints and counterweights; three large macro windows for sail membrane pores beaded with fog, blue cup moss, and woven bone-white root fiber; a migration-lane landscape panel with Needle Pass and the cloud ocean; material and palette swatches; a cause-and-effect diagram showing wind, canopy pressure and root steering. Surround the mounted chart with real anchor hardware, seed kites, tension gauges, glazed ceramic samples and wet reed bundles. Use concise restrained labels only, large specimen photography and clear hierarchy; museum-grade field science, not a flat school poster. No humans, humanoids, screens, caves, oceans, mushrooms, fantasy palaces, logos or paragraphs.",
+    "image": "images/2026-07-20-weekly-world-aureline-shelf-scientific-field-chart.jpg",
+    "thumb": "thumbs/2026-07-20-weekly-world-aureline-shelf-scientific-field-chart.webp",
+    "color": "#7b6658",
+    "date": "2026-07-20",
+    "batch": "Daily Prompt",
+    "slot": "weekly-world",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "world": {
+      "name": "Aureline Shelf",
+      "description": "A copper-twilight high plateau where non-humanoid Velari settlements travel beneath giant fog-harvesting sail-trees that walk on braided root stilts.",
+      "continuity": "Establishes amber sail-tree membranes, indigo six-legged Velari, Kestrel Loom, cobalt ceramic anchors, reed rigging, ochre mesas, cyan cloud light, and copper twilight for all later story beats.",
+      "entryDescription": "A survey-bench field chart introduces Aureline Shelf through Orra the walking sail-tree, the Velari body plan, mobile-settlement infrastructure, root locomotion, materials, and wind-steering biology."
+    }
   }
 ]
