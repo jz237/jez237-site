@@ -4395,42 +4395,43 @@
     var minutes = Math.min(9, Math.floor(totalSeconds / 60));
     var seconds = totalSeconds % 60;
     var hundredths = Math.floor(milliseconds / 10) % 100;
-    drawCockpitGlyph(ctx, String(minutes), 237, y);
-    drawCockpitGlyph(ctx, ':', 243, y);
-    drawCockpitGlyph(ctx, String(Math.floor(seconds / 10)), 248, y);
-    drawCockpitGlyph(ctx, String(seconds % 10), 255, y);
-    drawCockpitGlyph(ctx, '.', 261, y);
-    drawCockpitGlyph(ctx, String(Math.floor(hundredths / 10)), 266, y);
-    drawCockpitGlyph(ctx, String(hundredths % 10), 273, y);
+    drawCockpitGlyph(ctx, String(minutes), 229, y);
+    drawCockpitGlyph(ctx, ':', 235, y);
+    drawCockpitGlyph(ctx, String(Math.floor(seconds / 10)), 240, y);
+    drawCockpitGlyph(ctx, String(seconds % 10), 247, y);
+    drawCockpitGlyph(ctx, '.', 253, y);
+    drawCockpitGlyph(ctx, String(Math.floor(hundredths / 10)), 258, y);
+    drawCockpitGlyph(ctx, String(hundredths % 10), 265, y);
   }
 
   function drawCockpitReadouts(ctx) {
-    ctx.fillStyle = '#000000';
+    // HD dash LCDs: left glass x43-82, right glass x229-269, rows y172/y181
+    ctx.fillStyle = '#d6ecff';
 
     var lap = getLapNumber();
     if (lap >= 1) {
-      drawCockpitGlyph(ctx, 'L', 37, 178);
-      drawCockpitGlyph(ctx, String(Math.min(lap, 3)), 45, 178);
+      drawCockpitGlyph(ctx, 'L', 44, 172);
+      drawCockpitGlyph(ctx, String(Math.min(lap, 3)), 51, 172);
     }
 
     var boost = Math.max(0, Math.min(99, getBoostReserve()));
-    drawCockpitGlyph(ctx, 'B', 60, 178);
-    drawCockpitGlyph(ctx, String(Math.floor(boost / 10)), 68, 178);
-    drawCockpitGlyph(ctx, String(boost % 10), 76, 178);
+    drawCockpitGlyph(ctx, 'B', 62, 172);
+    drawCockpitGlyph(ctx, String(Math.floor(boost / 10)), 69, 172);
+    drawCockpitGlyph(ctx, String(boost % 10), 76, 172);
 
     if (uiMode !== UI_PRACTISE_RACE) {
       var rawDistance = getDistanceToOpponent();
       var distance = (rawDistance + (rawDistance >> 2)) >> 2;
-      if (distance < 0) drawCockpitGlyph(ctx, '-', 44, 188);
+      if (distance < 0) drawCockpitGlyph(ctx, '-', 43, 181);
       var digits = ('0000' + Math.min(9999, Math.abs(distance))).slice(-4);
-      drawCockpitGlyph(ctx, digits.charAt(0), 52, 188);
-      drawCockpitGlyph(ctx, digits.charAt(1), 60, 188);
-      drawCockpitGlyph(ctx, digits.charAt(2), 68, 188);
-      drawCockpitGlyph(ctx, digits.charAt(3), 76, 188);
+      drawCockpitGlyph(ctx, digits.charAt(0), 50, 181);
+      drawCockpitGlyph(ctx, digits.charAt(1), 57, 181);
+      drawCockpitGlyph(ctx, digits.charAt(2), 64, 181);
+      drawCockpitGlyph(ctx, digits.charAt(3), 71, 181);
     }
 
-    if (lap >= 1) drawCockpitTime(ctx, getCurrentLapTime(), 178);
-    drawCockpitTime(ctx, getPlayerBestLap(), 188);
+    if (lap >= 1) drawCockpitTime(ctx, getCurrentLapTime(), 172);
+    drawCockpitTime(ctx, getPlayerBestLap(), 181);
   }
 
   function updateCockpitSpeedBar() {
@@ -4455,7 +4456,7 @@
         var py = damagePath[dx];
         if (py >= 2) {
           ctx.fillStyle = damageShade[dx] ? '#dd9999' : '#995555';
-          ctx.fillRect(40 + dx, py - 2, 1, 1);
+          ctx.fillRect(40 + dx, py + 42, 1, 1); // +44 HD offset: sit below the cage top bar
         }
       }
 
@@ -4463,11 +4464,9 @@
       ctx.fillStyle = '#000';
       for (var dx = 0; dx < dmg; dx++) {
         if (isDamagePixelInHole(40 + dx, numHoles)) continue;
-        var py = damagePath[dx];
+        var py = damagePath[dx] + 44; // HD offset: below the cage top bar
         ctx.fillRect(40 + dx, py, 1, 1);
-        if (py >= 1) {
-          ctx.fillRect(40 + dx, py - 1, 1, 1);
-        }
+        ctx.fillRect(40 + dx, py - 1, 1, 1);
       }
     }
 
@@ -4484,8 +4483,9 @@
     if (speedBar >= 128) speedBar -= 128;
     speedBar = Math.max(0, Math.min(127, speedBar));
     if (speedBar > 0) {
-      ctx.fillStyle = '#ffff00';
-      ctx.fillRect(97, 174, speedBar, 2);
+      // HD dash: printed scale runs x110-210 in 320-space (was x97-224)
+      ctx.fillStyle = '#ffcc22';
+      ctx.fillRect(110, 169, Math.round(speedBar * 100 / 127), 3);
     }
 
     drawCockpitReadouts(ctx);
@@ -4809,16 +4809,16 @@
       if (side === 'left') {
         if (frame === leftFrame) {
           w.style.display = 'block';
-          w.style.left = 'calc(32 / 320 * 100%)';
-          w.style.top = 'calc(' + leftY + ' / 200 * 100%)';
+          w.style.left = 'calc(12 / 320 * 100%)';
+          w.style.top = 'calc(' + (leftY + 14) + ' / 200 * 100%)';
         } else {
           w.style.display = 'none';
         }
       } else {
         if (frame === rightFrame) {
           w.style.display = 'block';
-          w.style.left = 'calc(256 / 320 * 100%)';
-          w.style.top = 'calc(' + rightY + ' / 200 * 100%)';
+          w.style.left = 'calc(264 / 320 * 100%)';
+          w.style.top = 'calc(' + (rightY + 14) + ' / 200 * 100%)';
         } else {
           w.style.display = 'none';
         }
