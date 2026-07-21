@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-21",
+      "historicDate": "1983-07-11",
+      "displayDate": "Week of July 11-17, 1983",
+      "edition": "Issue 050 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Friday, July 15, brings Nintendo’s red-and-white Family Computer to Japanese shops with three familiar arcade names ready to play at home.",
+      "leadHeadline": "Nintendo Brings the Arcade Home With Its Family Computer",
+      "storyHeadlines": [
+        "Sega Enters the Living Room With the SG-1000",
+        "Electronic Arts' M.U.L.E. Turns Economics Into a Multiplayer Contest",
+        "Infocom's Suspended Puts Six Robots Between the Player and Disaster"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-07-11.jpg",
+      "thumb": "media/thumbs/1983-07-11.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-07-20",
       "historicDate": "1983-07-04",
       "displayDate": "Week of July 4-10, 1983",

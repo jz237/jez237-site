@@ -1,0 +1,331 @@
+{
+  "currentDate": "2026-07-21",
+  "historicDate": "1983-07-11",
+  "displayDate": "Week of July 11-17, 1983",
+  "edition": "Issue 050 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Extra-edition arcade excitement on warm aged newsprint",
+    "motifs": [
+      "red-and-white cartridge console",
+      "arcade sprites",
+      "home-computer disks"
+    ],
+    "layout": "Dense seven-column weekly front page with gaming lead and boxed charts"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Newspaper of Computers, Games & Electronic Culture",
+    "dateline": "Week of July 11-17, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Famicom launch dominates above the fold",
+    "secondaryRail": "Sega, M.U.L.E., KoalaPad and Suspended",
+    "archiveNavigation": "Previous and next weekly issues"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "newsprint blue",
+    "texture": "aged paper, halftone ink and column rules"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-07-11.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week Nintendo launched the Famicom",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "EXTRA EDITION: Japan’s cartridge-console contest begins in earnest, while home-computer players trade resources, paint by touch and command robots through a crisis.",
+  "morningLine": "Friday, July 15, brings Nintendo’s red-and-white Family Computer to Japanese shops with three familiar arcade names ready to play at home.",
+  "milestone": {
+    "title": "Nintendo launches the Family Computer",
+    "note": "The July 15 Japanese debut created the hardware and software platform later exported as the NES, helping define the modern console business."
+  },
+  "lead": {
+    "headline": "Nintendo Brings the Arcade Home With Its Family Computer",
+    "dek": "At ¥14,800, Nintendo’s red-and-white Famicom arrives with two controllers and three arcade conversions.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ],
+    "body": [
+      "Nintendo launched its Family Computer in Japan on July 15, placing a compact red-and-white cartridge machine on shop counters for ¥14,800. The name was quickly shortened to Famicom, and the proposition was direct: swap a cartridge and bring the speed and familiarity of the arcade into the living room.",
+      "The console arrived with two hard-wired controllers. Its second pad carried an unusual microphone, while the initial software lineup leaned entirely on proven coin-operated hits: Donkey Kong, Donkey Kong Jr. and Popeye. Nintendo’s own history stresses cartridge changing and arcade-style play as the machine’s essential appeal.",
+      "That opening trio made the launch easy to understand. Rather than asking families to imagine what a new platform might someday do, Nintendo put recognizable characters and play patterns at the front of the counter from day one.",
+      "The week also finds Sega introducing its SG-1000 at nearly the same price, making Japan a testing ground for rival visions of the cartridge home console. The Family Computer would later be redesigned for overseas sale as the Nintendo Entertainment System; together, the Famicom and NES ultimately sold more than 60 million units."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Sega Enters the Living Room With the SG-1000",
+      "kicker": "Console Counter",
+      "dek": "Sega’s first home cartridge system challenges Nintendo at roughly the same price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3,
+        4,
+        1
+      ],
+      "body": [
+        "Sega entered Japan’s home-console market in July with the SG-1000, a ¥15,000 cartridge system closely related to the company’s SC-3000 computer hardware. Its arrival put Sega within ¥200 of Nintendo’s new Famicom.",
+        "Early software included N-Sub, Mahjong, Congo Bongo, Yamato, Star Jacker and shogi. Historical accounts commonly associate the machine with July 15, though the surviving evidence makes the exact day less certain than the month; what is clear is that Sega and Nintendo began competing for the same living-room shelf in the summer of 1983."
+      ]
+    },
+    {
+      "headline": "Electronic Arts' M.U.L.E. Turns Economics Into a Multiplayer Contest",
+      "kicker": "Game Design",
+      "dek": "Dani Bunten makes supply, demand and bargaining the center of play.",
+      "confidence": "period",
+      "sourceRefs": [
+        5
+      ],
+      "body": [
+        "Electronic Arts’ M.U.L.E., featured in the July-August Computer Gaming World, sends as many as four colonists to develop land and outfit mechanical M.U.L.E. workers for production. Food, energy, smithore and crystite become the raw materials of both survival and rivalry.",
+        "Its auctions turn economics into a social contest. Shortages, bargaining, collusion and sudden swings in supply are visible around the screen, giving Atari computer owners a multiplayer game in which reading the room can matter as much as reading the numbers."
+      ]
+    },
+    {
+      "headline": "Infocom's Suspended Puts Six Robots Between the Player and Disaster",
+      "kicker": "Interactive Fiction",
+      "dek": "A frozen overseer must save a planet through six very different mechanical senses.",
+      "confidence": "period",
+      "sourceRefs": [
+        5
+      ],
+      "body": [
+        "Infocom’s Suspended: The Cryogenic Nightmare places the player immobilized inside a life-support complex while planetary systems fail. Commands must pass through six robots, each able to perceive and act on the emergency in a different way.",
+        "Michael Berlyn’s design turns limited information into the puzzle: the player must combine incomplete reports, dispatch the right machine and repair the system before disaster spreads. Its raised plastic face and elaborate documents also continue Infocom’s habit of making the package part of the fiction."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Nintendo Family Computer",
+      "summary": "Japanese cartridge console launched July 15 at ¥14,800 with two attached controllers.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Sega SG-1000",
+      "summary": "Sega's first home cartridge console, introduced in Japan in July at about ¥15,000.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "title": "KoalaPad",
+      "summary": "Touch tablet bundled with drawing software for $125.",
+      "confidence": "period",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Diskwiz",
+      "detail": "Atari 400/800/1200XL: Disk editor and repair/duplication tool with hex/ASCII editing and an onboard disassembler."
+    },
+    {
+      "name": "Ultra Disassembler",
+      "detail": "Atari 8-bit: Adventure International utility that reconstructed labeled source from memory, DOS files, or disk sectors; $49.95."
+    },
+    {
+      "name": "SuperShopper",
+      "detail": "Atari 8-bit disk: Two-disk grocery and food-cost manager tracking as many as 1,000 items and 40 grocers; $35.95."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Computer Games",
+      "items": [
+        "Donkey Kong / Donkey Kong Jr. / Popeye",
+        "M.U.L.E.",
+        "Suspended",
+        "Knights of the Desert",
+        "Clipper: Around the Horn in 1850"
+      ]
+    },
+    {
+      "label": "Movies",
+      "items": [
+        "Staying Alive",
+        "Return of the Jedi",
+        "Snow White and the Seven Dwarfs",
+        "WarGames"
+      ]
+    },
+    {
+      "label": "Utility Software",
+      "items": [
+        "Diskwiz",
+        "Ultra Disassembler",
+        "SuperShopper"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Nintendo Famicom",
+      "price": "¥14,800",
+      "note": "exact-date"
+    },
+    {
+      "item": "Sega SG-1000",
+      "price": "¥15,000",
+      "note": "same-month"
+    },
+    {
+      "item": "KoalaPad with software",
+      "price": "$125.00",
+      "note": "period"
+    },
+    {
+      "item": "Ultra Disassembler",
+      "price": "$49.95",
+      "note": "period"
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Atari owners offered a $49.95 carrying case",
+      "text": "A molded case for an Atari 800 claimed room for manuals and power supply and enough strength to support an adult."
+    },
+    {
+      "headline": "EPROM burner turns Atari owners into cartridge makers",
+      "text": "Radical Systems listed an $89 plug-in unit for burning 2K or 4K EPROMs and backing up cartridge ROMs."
+    },
+    {
+      "headline": "WarGames keeps drawing moviegoers",
+      "text": "The computer thriller earned $3.1 million July 15-17 and held fifth place after seven weekends."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Every Breath You Take",
+      "artist": "The Police"
+    },
+    {
+      "rank": 2,
+      "title": "Electric Avenue",
+      "artist": "Eddy Grant"
+    },
+    {
+      "rank": 3,
+      "title": "Flashdance... What a Feeling",
+      "artist": "Irene Cara"
+    },
+    {
+      "rank": 4,
+      "title": "Never Gonna Let You Go",
+      "artist": "Sergio Mendes"
+    },
+    {
+      "rank": 5,
+      "title": "Too Shy",
+      "artist": "Kajagoogoo"
+    }
+  ],
+  "periodAd": {
+    "headline": "Draw by Touch on Your Atari",
+    "summary": "Koala Technologies offers the $125 KoalaPad with painting and graphics software.",
+    "tagline": "Your fingertip becomes the brush."
+  },
+  "market": {
+    "headline": "Two Consoles, One New Contest",
+    "summary": "Nintendo’s ¥14,800 Famicom and Sega’s roughly ¥15,000 SG-1000 put cartridge systems nearly side by side in Japan.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      3,
+      4,
+      1,
+      0,
+      2
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Record heat grips the eastern United States",
+    "summary": "UPI reported on July 16 that a third day of record-breaking heat stretched from the Mississippi River to the Atlantic, while severe thunderstorms struck southeastern Texas.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Famicom launch date and price",
+        "confidence": "exact-date"
+      },
+      {
+        "claim": "SG-1000 July introduction",
+        "confidence": "same-month"
+      },
+      {
+        "claim": "Period games and products",
+        "confidence": "period"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Nintendo brought arcade games into homes 30 years ago",
+      "url": "https://www.japantimes.co.jp/news/2013/07/15/reference/nintendo-brought-arcade-games-into-homes-30-years-ago/"
+    },
+    {
+      "label": "Famicom history",
+      "url": "https://www.nintendo.com/jp/famicom/history/index.html"
+    },
+    {
+      "label": "Famicom returns in palm-sized form",
+      "url": "https://www.nintendo.com/jp/topics/article/d2923b54-8552-11e6-9b38-063b7ac45a6d"
+    },
+    {
+      "label": "Celebrating the SG-1000",
+      "url": "https://www.timeextension.com/features/celebrating-the-sg-1000-segas-first-console-and-one-time-famicom-rival"
+    },
+    {
+      "label": "SG-1000 software chronology",
+      "url": "https://segaiden.com/sg-1000-software-chronology/"
+    },
+    {
+      "label": "Computer Gaming World volume 3 number 4",
+      "url": "https://www.cgwmuseum.org/galleries/issues/cgw_3.4.pdf"
+    },
+    {
+      "label": "Antic new products, volume 2 number 4",
+      "url": "https://www.atarimagazines.com/v2n4/newproducts.php"
+    },
+    {
+      "label": "Billboard Hot 100, July 16, 1983",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-07-16"
+    },
+    {
+      "label": "Domestic weekend 28, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W28/"
+    },
+    {
+      "label": "Record-breaking heat wave boiled the nation",
+      "url": "https://www.upi.com/Archives/1983/07/16/The-third-day-of-a-record-breaking-heat-wave-boiled/3626427176000/"
+    },
+    {
+      "label": "Drought, Death and Despair",
+      "url": "https://time.com/archive/6882809/disasters-drought-death-and-despair/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Atari Carrying Case — $49.95",
+      "copy": "Molded storage for computer, manuals and power supply."
+    },
+    {
+      "headline": "EPROM Burner — $89",
+      "copy": "Radical Systems plug-in unit for 2K or 4K EPROMs; shipping extra."
+    }
+  ]
+}
