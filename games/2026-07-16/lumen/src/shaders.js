@@ -162,7 +162,7 @@ void main(){
   base *= uMapTint;
   // top-down: darken toward the board edges like the concept
   vec2 c = vec2(vUv.x - 0.5, near - 0.5);
-  base *= 1.0 - 0.42*smoothstep(0.28, 0.72, length(c*vec2(1.0,1.15)));
+  base *= 1.0 - 0.30*smoothstep(0.30, 0.74, length(c*vec2(1.0,1.15)));
   frag = vec4(base, 1.0);
 }
 `;
@@ -1167,7 +1167,10 @@ void main(){
   vec3 bloom = texture(uB1,uv).rgb*0.95 + texture(uB2,uv).rgb*0.55 + texture(uB3,uv).rgb*0.88;
   col += bloom * uBloomAmt;
   // grade: lift shadows toward indigo, gentle teal-orange split
-  col = filmic(col*1.85);
+  col = filmic(col*1.95);
+  // the mock runs hotter and more saturated than the old dusk grade
+  float luma = dot(col, vec3(0.2126,0.7152,0.0722));
+  col = mix(vec3(luma), col, 1.14);
   col = pow(col, vec3(0.92,0.96,1.0));
   col += vec3(0.009,0.006,0.024) * (1.0-col);
   // vignette
