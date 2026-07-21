@@ -31,6 +31,7 @@ export class Renderer {
     this.pBright = compile(gl, SH.VS_FULL, SH.FS_BRIGHT, 'bright');
     this.pBlur = compile(gl, SH.VS_FULL, SH.FS_BLUR, 'blur');
     this.pPost = compile(gl, SH.VS_FULL, SH.FS_POST, 'post');
+    this.pTex = compile(gl, SH.VS_INST, SH.FS_TEXSPRITE, 'texsprite');
 
     this.quad = createQuad(gl);
     this.entities = new InstanceBatch(gl, 6144);
@@ -38,6 +39,7 @@ export class Renderer {
     this.additive = new InstanceBatch(gl, 6144);
     this.segs = new InstanceBatch(gl, 2048);
     this.trailEm = new InstanceBatch(gl, 2048);
+    this.texSprites = new InstanceBatch(gl, 1024);
 
     this.groundMesh = null;
     this.pathMesh = null;
@@ -54,6 +56,7 @@ export class Renderer {
     this.fStainB = createFBO(gl2, 960, 540, this.halfFloat);
     this.clearStains();
     this.artGround = this.loadArtTexture('assets/art/ground.jpg');
+    this.artTowers = this.loadArtTexture('assets/art/towers.jpg');
     this.resize();
   }
 
@@ -338,6 +341,16 @@ export class Renderer {
     gl.uniform1f(this.pEnt.u.uHorizon, skyFrac);
     this.entities.flush(this.pEnt);
 
+    // ---- painted tower sprites on their pads (premultiplied over)
+    this.texSprites.reset();
+    this.pushTowerSprites(sim, t);
+    bindWorld(this.pTex);
+    gl.activeTexture(gl.TEXTURE3);
+    gl.bindTexture(gl.TEXTURE_2D, this.artTowers.tex);
+    gl.uniform1i(this.pTex.u.uAtlas, 3);
+    gl.activeTexture(gl.TEXTURE0);
+    this.texSprites.flush(this.pTex);
+
     // ---- additive effects: projectiles, arcs, particles, spores, rings
     this.additive.reset();
     this.segs.reset();
@@ -557,7 +570,8 @@ export class Renderer {
     for (const tw of sim.towers) {
       const ds = depthScale(tw.y);
       const size = tw.def.size * (1 + tw.level * 0.22) * ds;
-      E.push({ y: tw.y, k: tw.def.kind, x: tw.x, sx: size, sy: size, rot: 0, phase: t * 2 + tw.phase, aux: tw.charge, c: tw.def.color, seed: tw.seed });
+      if (!this.artTowers.ready) // painted sprite pass owns the body once art lands
+        E.push({ y: tw.y, k: tw.def.kind, x: tw.x, sx: size, sy: size, rot: 0, phase: t * 2 + tw.phase, aux: tw.charge, c: tw.def.color, seed: tw.seed });
       const rank = sim.towerRank ? sim.towerRank(tw) : 0;
       for (let r = 0; r < rank; r++) {
         const px = tw.x + (r - (rank - 1) / 2) * 16 * ds;
@@ -597,6 +611,24 @@ export class Renderer {
       const size = g.def.size * ds;
       const c = g.valid ? g.def.color.map(v => v * 0.55) : [0.5, 0.12, 0.1];
       this.entities.push(g.x, g.y, size, size, 0, t * 2, g.def.kind, 0.35, c[0], c[1], c[2], 0.5);
+    }
+  }
+
+  // painted towers: ringed pad sprite + 2x ornate organism, y-sorted.
+  // frames: 0 apex crown · 1 tesla · 2 chill · 3 urchin · 4 ember · 5 acid ·
+  // 6 bulb · 7 pulse jellyfish · 8 platform pad
+  pushTowerSprites(sim, t) {
+    if (!this.artTowers.ready) return;
+    const FRAME = { coral: 7, tesla: 1, spire: 2, urchin: 3, bloom: 4, bramble: 5, bulb: 6 };
+    const towers = [...sim.towers].sort((a, b) => a.y - b.y);
+    for (const tw of towers) {
+      const size = tw.def.size * (1 + tw.level * 0.22) * 0.68;
+      const frame = tw.def.apex ? 0 : (FRAME[tw.def.id] ?? 7);
+      const c = tw.def.color;
+      this.texSprites.push(tw.x, tw.y + 4, size * 1.12, size * 0.9, 0, tw.phase, 8, 0.25,
+        0.4, 0.9, 1.0, 0);
+      this.texSprites.push(tw.x, tw.y, size, size, 0, tw.phase, frame, tw.charge,
+        c[0], c[1], c[2], 0);
     }
   }
 
