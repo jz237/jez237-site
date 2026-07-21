@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v3.5.0';
+export const VERSION = 'v3.6.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -399,12 +399,8 @@ class Game {
       this.acc += raw * this.speed;
       let steps = 0;
       while (this.acc >= DT && steps < 8) {
-        // staged shots: synchronize a tower volley every ~2.5s so bursts
-        // catch arcs + beams + shells converging mid-flight
-        if (NS_MODE && this.sim.time % 2.5 < DT) {
-          let k = 0;
-          for (const tw of this.sim.towers) { tw.cool = Math.min(tw.cool, 0.02 + (k++ % 4) * 0.05); }
-        }
+        // staged shots: organic fire reads closer to the mock than forced
+        // synchronized volleys (which stacked flashes into one white zone)
         this.sim.step();
         this.routeEvents();
         this.acc -= DT; steps++;

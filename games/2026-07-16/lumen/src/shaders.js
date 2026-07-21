@@ -139,7 +139,7 @@ void main(){
   auv += (vec2(fbm(vWorld*0.0031), fbm(vWorld*0.0031+57.0)) - 0.5) * 0.14;
   vec3 art = texture(uArt, auv).rgb;
   float artL = dot(art, vec3(0.35,0.5,0.15));
-  base = mix(base, art * 2.3 + base * 0.25, uArtMix * 0.94);
+  base = mix(base, art * 2.5 + base * 0.25, uArtMix * 0.94);
   // clusters breathe: brighter coral pockets pulse their rim glow gently
   base += art * smoothstep(0.08, 0.28, artL) * (0.42 + 0.22*sin(uT*0.8 + artL*30.0)) * uArtMix;
   // the run's history: chemistry and deaths bloom into the ground itself
@@ -1079,7 +1079,7 @@ void main(){
 // derived from luminance (art lives on pure black), so jpg noise dies at
 // the smoothstep floor and the glow halos survive
 export const FS_TEXSPRITE = COMMON + `
-uniform float uT; uniform sampler2D uAtlas;
+uniform float uT; uniform sampler2D uAtlas; uniform float uGain;
 in vec2 vUv; in vec4 vB; in vec4 vC; in float vDepth; in vec2 vWorld; out vec4 frag;
 void main(){
   float frame = vB.z;
@@ -1090,7 +1090,7 @@ void main(){
   float m = max(art.r, max(art.g, art.b));
   float a = smoothstep(0.045, 0.16, m);
   // alive: slow breathing + charge brightening, tinted by the species colour
-  vec3 col = art * (0.78 + 0.50*aux + 0.10*sin(uT*1.9 + vB.y));
+  vec3 col = art * uGain * (1.0 + 0.62*aux + 0.12*sin(uT*1.9 + vB.y));
   col += art * vC.rgb * 0.30 * aux;
   frag = vec4(col * a, a) * vC.a; // iC.w = per-instance fade (spectres)
 }
