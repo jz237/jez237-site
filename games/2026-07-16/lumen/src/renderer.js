@@ -564,7 +564,7 @@ export class Renderer {
     }
     // portal
     const [px, py] = sim.map.portal;
-    E.push({ y: py, k: KIND.PORTAL, x: px + 46, sx: 190, sy: 215, rot: 0, phase: t, aux: 1, c: COLORS.violet, seed: 0.3 });
+    E.push({ y: py, k: KIND.PORTAL, x: Math.max(px + 46, 108), sx: 190, sy: 215, rot: 0, phase: t, aux: 1, c: COLORS.violet, seed: 0.3 });
     // portal orbiters
     {
       const [ppx, ppy] = sim.map.portal;
