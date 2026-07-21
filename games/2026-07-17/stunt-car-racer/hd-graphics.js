@@ -155,6 +155,10 @@
       '      c = mix(atex, gtex, lowland) * macro;',
       '    } else if (isEarth) {',
       '      c = tri(uHdTexR, vWorld, Nn, 1.0 / 1100.0) * (0.72 + 0.5 * lum3(c)) * macro;', // sandy run-off
+      '    } else if (isRed && Nn.y > 0.6) {',
+      '      float seg = step(0.5, fract((vWorld.x + vWorld.z) / 1800.0));',            // ~900-unit kerb stones
+      '      vec3 stone = tri(uHdTexM, vWorld, Nn, 1.0 / 520.0);',
+      '      c = mix(vec3(0.78, 0.11, 0.09), vec3(0.93, 0.91, 0.87), seg) * (stone * 1.25);',
       '    } else if (isRed || (isWhite && fdist < 28000.0)) {',
       '      vec3 tex = tri(uHdTexM, vWorld, Nn, 1.0 / 520.0);',
       '      c = c * (tex * 1.3);',                                                     // concrete blocks, keeps red/white
