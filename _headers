@@ -13,6 +13,12 @@
 /games/*
   Cache-Control: public, max-age=0, must-revalidate
 
+# entry page must never be edge-pinned (versioned ?v= assets handle the rest)
+/games/2026-07-17/stunt-car-racer/source
+  Cache-Control: no-store
+/games/2026-07-17/stunt-car-racer/source.html
+  Cache-Control: no-store
+
 # network map is all self-hosted; if a live traffic exporter is wired in
 # later (see network/traffic-sim.js adapter contract), its origin must be
 # added to connect-src in the CSP above.
