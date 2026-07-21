@@ -606,7 +606,7 @@
 #gameUI.desktop-input #tc-right,
 #gameUI.desktop-input #tc-accel,
 #gameUI.desktop-input #tc-brake {
-  opacity: 0.62;
+  opacity: 0.22;
 }
 
 #gameUI.desktop-input #tc-left:hover,

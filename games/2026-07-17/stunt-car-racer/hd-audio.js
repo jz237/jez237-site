@@ -9,7 +9,7 @@
   'use strict';
   if (/[?&]classic=1/.test(location.search)) return;
 
-  var V = '139';
+  var V = '140';
   var LS_KEY = 'scr-hd-audio';
   var hdOn = localStorage.getItem(LS_KEY) !== 'off';
 
