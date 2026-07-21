@@ -1087,9 +1087,9 @@ void main(){
   float m = max(art.r, max(art.g, art.b));
   float a = smoothstep(0.045, 0.16, m);
   // alive: slow breathing + charge brightening, tinted by the species colour
-  vec3 col = art * (0.92 + 0.50*aux + 0.14*sin(uT*1.9 + vB.y));
+  vec3 col = art * (0.78 + 0.50*aux + 0.10*sin(uT*1.9 + vB.y));
   col += art * vC.rgb * 0.30 * aux;
-  frag = vec4(col * a, a);
+  frag = vec4(col * a, a) * vC.a; // iC.w = per-instance fade (spectres)
 }
 `;
 
