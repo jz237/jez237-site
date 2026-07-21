@@ -581,7 +581,7 @@ export class Renderer {
     // heart
     const [hx, hy] = sim.map.heart;
     const integ = Math.min(1, sim.lives / 20);
-    E.push({ y: hy, k: KIND.HEART, x: hx, sx: 150, sy: 150, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
+    E.push({ y: hy, k: KIND.HEART, x: hx, sx: 185, sy: 185, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
     // towers (+ veterancy pips hovering above)
     for (const tw of sim.towers) {
       const ds = depthScale(tw.y);
