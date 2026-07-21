@@ -129,8 +129,8 @@
       '  vec3 Nn = (nl > 0.0001) ? N / nl : vec3(0.0, 1.0, 0.0);',
       '  if (Nn.y < 0.0) Nn = -Nn;',
       '  float fdist = distance(vWorld, uHdCam);',
-      '  bool isGround = ((abs(r-g) < 0.06) && (b < g - 0.08) && g > 0.3 && g < 0.62)',  // olive terrain
-      '               || (r > g && g > b && (r - g) < 0.3 && (r - b) > 0.1 && r > 0.3 && r < 0.68 && g > 0.28);', // red-brown earth (walls are darker+redder)
+      '  bool isGround = (abs(r-g) < 0.06) && (b < g - 0.08) && g > 0.3 && g < 0.62;',   // olive terrain -> grass
+      '  bool isEarth  = r > g && g > b && (r - g) < 0.3 && (r - b) > 0.1 && r > 0.3 && r < 0.68 && g > 0.28;', // red-brown -> sand run-off
       '  bool isCream  = (abs(r-g) < 0.08) && (b < g - 0.06) && g >= 0.62;',            // pale deck tops
       '  bool isTrack  = (mono < 0.09) && r > 0.32 && r < 0.75;',                       // grey deck
       '  bool isRed    = r > 0.45 && g < 0.36 && b < 0.34 && (r - g) > 0.18;',          // red wall panels
@@ -150,19 +150,21 @@
       '    float macro = 0.88 + 0.24 * fbm(vWorld.xz * 0.0012);',                       // breaks tiling at range
     '    if (isGround) {',
       '      float lowland = 1.0 - smoothstep(60.0, 170.0, vWorld.y);',                 // elevated olive = deck surface
-      '      vec3 gtex = tri(uHdTexG, vWorld, Nn, 1.0 / 1500.0) * vec3(1.0, 0.92, 0.78);',
-      '      vec3 atex = tri(uHdTexA, vWorld, Nn, 1.0 / 680.0) * (0.5 + 1.1 * lum3(c));',
-      '      vec3 tex = mix(atex, gtex, lowland) * macro;',
-      '      c = tex * (0.78 + 0.5 * (g - 0.3));',                                      // keep engine shade variation
+      '      vec3 gtex = tri(uHdTexG, vWorld, Nn, 1.0 / 1500.0) * (1.05 + 0.4 * (g - 0.3));',
+      '      vec3 atex = tri(uHdTexA, vWorld, Nn, 1.0 / 680.0) * (0.9 + 1.1 * lum3(c));',
+      '      c = mix(atex, gtex, lowland) * macro;',
+      '    } else if (isEarth) {',
+      '      c = tri(uHdTexR, vWorld, Nn, 1.0 / 1100.0) * (0.72 + 0.5 * lum3(c)) * macro;', // sandy run-off
       '    } else if (isRed || (isWhite && fdist < 28000.0)) {',
       '      vec3 tex = tri(uHdTexM, vWorld, Nn, 1.0 / 520.0);',
-      '      c = c * (tex * 1.3);',                                                     // panel detail, keeps red/white
+      '      c = c * (tex * 1.3);',                                                     // concrete blocks, keeps red/white
+      '      if (isRed) c *= vec3(1.45, 0.8, 0.75);',                                   // vivid painted red like the reference
       '    } else if ((isTrack || isCream) && vWorld.y > -20.0) {',
       '      vec3 tex = tri(uHdTexA, vWorld, Nn, 1.0 / 680.0);',
-      '      c = tex * (0.4 + 1.45 * lum3(c)) * macro;',                                // asphalt, keeps segment shades
+      '      c = tex * (0.9 + 1.1 * lum3(c)) * macro;',                                 // dark rich asphalt
       '    } else if (!isEdge && mono > 0.1 && g > r && g > 0.25) {',
-      '      vec3 tex = tri(uHdTexR, vWorld, Nn, 1.0 / 8000.0);',                       // big tiles: mountains are always far
-      '      c = tex * (0.5 + 1.0 * lum3(c));',
+      '      vec3 tex = tri(uHdTexG, vWorld, Nn, 1.0 / 6000.0);',                       // green 3D geometry -> grassy
+      '      c = tex * (0.55 + 0.9 * lum3(c));',
       '    }',
       '  }',
       '  float sun = clamp(dot(Nn, normalize(vec3(0.35, 0.8, 0.45))), 0.0, 1.0);',
@@ -219,11 +221,11 @@
     '  vec3 c;',
     '  float d = distance(hit.xz, uCamPos.xz);',
     '  if (uHdTexOn > 0.5) {',
-    '    float macro = (0.7 + 0.55 * fbm(hit.xz * 0.0012)) * (0.82 + 0.36 * fbm(hit.xz * 0.00028));',
+    '    float macro = (0.82 + 0.42 * fbm(hit.xz * 0.0012)) * (0.9 + 0.24 * fbm(hit.xz * 0.00028));',
     '    float bias = -clamp(d / 9000.0, 0.0, 1.75);',                                  // fight mip flattening at range
     '    vec3 tNear = texture2D(uHdTexG, hit.xz / 1500.0, bias).rgb;',
     '    vec3 tFar  = texture2D(uHdTexG, hit.xz / 5000.0, bias * 0.5).rgb;',
-    '    c = mix(tNear, tFar, smoothstep(8000.0, 30000.0, d)) * vec3(1.0, 0.92, 0.78) * 0.95 * macro;',
+    '    c = mix(tNear, tFar, smoothstep(8000.0, 30000.0, d)) * macro * 1.1;',
     '  } else {',
     '    c = scrubColor(hit.xz);',
     '  }',
@@ -308,8 +310,8 @@
     st.texReady = 0;
     var aniso = gl.getExtension('EXT_texture_filter_anisotropic') ||
                 gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
-    var TEXES = [['g', 'images/tex-ground.jpg'], ['a', 'images/tex-asphalt.jpg'],
-                 ['m', 'images/tex-metal.jpg'], ['r', 'images/tex-rock.jpg']];
+    var TEXES = [['g', 'images/tex-grass.jpg'], ['a', 'images/tex-asphalt2.jpg'],
+                 ['m', 'images/tex-wall.jpg'], ['r', 'images/tex-sand.jpg']];
     TEXES.forEach(function (pair, i) {
       var tex = gl.createTexture();
       st.worldTex[pair[0]] = tex;
@@ -331,7 +333,7 @@
         st.texReady++;
       };
       img2.onerror = function () { console.error('[hd-graphics] texture failed:', pair[1]); };
-      img2.src = pair[1] + '?v=hd2';
+      img2.src = pair[1] + '?v=hd3';
     });
     // sky texture: procedural now, photo when available
     function upload(srcCanvasOrImg) {
