@@ -191,7 +191,7 @@ export class Renderer {
     ]);
     this.groundMesh = this.meshFrom(gverts, 4);
     // one ribbon triangle strip per path
-    const w = sim.map.pathW * 1.7; // ribbon wider than gameplay width — edges erode in shader
+    const w = sim.map.pathW * 1.38; // ribbon slightly wider than gameplay — edges erode in shader
     this.pathMeshes = sim.paths.map(path => {
       const { pts, arc, total } = path;
       const verts = [];
@@ -562,7 +562,7 @@ export class Renderer {
     }
     // portal
     const [px, py] = sim.map.portal;
-    E.push({ y: py, k: KIND.PORTAL, x: px + 30, sx: 150, sy: 170, rot: 0, phase: t, aux: 1, c: COLORS.violet, seed: 0.3 });
+    E.push({ y: py, k: KIND.PORTAL, x: px + 46, sx: 190, sy: 215, rot: 0, phase: t, aux: 1, c: COLORS.violet, seed: 0.3 });
     // portal orbiters
     {
       const [ppx, ppy] = sim.map.portal;

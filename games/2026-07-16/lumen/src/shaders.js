@@ -145,8 +145,8 @@ void main(){
   // the run's history: chemistry and deaths bloom into the ground itself
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
   // luminance-bounded knee: heavy traffic deepens the hue, never bleaches white
-  stain = stain / (1.0 + dot(stain, vec3(0.8)));
-  base += stain * (0.7 + 0.9*rock) * (0.5 + 0.5*near);
+  stain = stain / (1.0 + dot(stain, vec3(1.5)));
+  base += stain * (0.6 + 0.8*rock) * (0.5 + 0.5*near);
   // bioluminescent micro-life: sparse cyan/green dots that breathe
   vec2 cell = floor(p*9.0);
   float d = hash12(cell);
@@ -200,12 +200,12 @@ void main(){
   coreE  = coreE  / (1.0 + coreE*0.45);
   vec3 halo = vec3(0.10,0.45,1.15);
   vec3 core = vec3(0.80,0.98,1.30);
-  col += halo * energy * 0.78 + core * coreE * 0.72;
+  col += halo * energy * 0.68 + core * coreE * 0.78;
   // soft blue ambience filling the channel
-  col += vec3(0.04,0.14,0.42) * smoothstep(1.0,0.0,abs(across)) * 1.35;
+  col += vec3(0.04,0.14,0.42) * smoothstep(1.0,0.0,abs(across)) * 1.05;
   // battle stains soak in
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
-  col += (stain / (1.0 + dot(stain, vec3(0.8)))) * 0.35;
+  col += (stain / (1.0 + dot(stain, vec3(1.5)))) * 0.25;
   col *= mix(vec3(1.0), uMapTint, 0.3);
   frag = vec4(col*mask, mask);
 }
@@ -1013,12 +1013,13 @@ void main(){
     }
     // layered membranes, wobbling
     float wob = fbm(hq*2.4 + uT*0.15)*0.09;
-    float memb1 = smoothstep(0.030,0.0,abs(r-0.80-wob)) * (0.6+0.4*sin(uT*1.3));
-    float memb2 = smoothstep(0.026,0.0,abs(r-0.58+wob*0.7)) * (0.5+0.5*sin(uT*1.1+2.0));
+    float memb1 = smoothstep(0.026,0.0,abs(r-0.82-wob*0.4)) * (0.9+0.3*sin(uT*1.3));
+    float memb2 = smoothstep(0.022,0.0,abs(r-0.60+wob*0.3)) * (0.8+0.3*sin(uT*1.1+2.0))
+                + smoothstep(0.018,0.0,abs(r-0.40-wob*0.2)) * 0.7;
     // inner galaxy: swirling motes
     float swirl = fbm(vec2(ang*1.5 + uT*0.25, r*4.0 - uT*0.18));
-    float veil = smoothstep(0.75,0.10,r) * swirl * 0.8;
-    float nucleus = smoothstep(0.34+beat*0.07,0.0,r);
+    float veil = smoothstep(0.75,0.10,r) * swirl * 0.45;
+    float nucleus = smoothstep(0.24+beat*0.05,0.0,r);
     float flicker = 1.0 - (1.0-integ)*0.4*step(0.7, hash12(vec2(floor(uT*14.0), seed)));
     col = hcol*veil*0.7 + hcol*tend*0.55*(0.7+0.3*beat)
         + hcol*memb1*1.3 + mix(hcol,vec3(1.0),0.3)*memb2*0.8
@@ -1040,15 +1041,17 @@ void main(){
     col = mix(tint, vec3(1.0), core*0.75) * (core*2.6) + tint*halo*0.8;
     cov = 0.0;
   }
-  else if(kind == 9){ // PORTAL — torn glowing gate
-    vec2 q = p*vec2(1.25,0.9);
+  else if(kind == 9){ // PORTAL — vivid magenta double-ellipse gate (mock)
+    vec2 q = p*vec2(1.35,0.95);
     float r = length(q);
-    float tear = fbm(vec2(atan(q.y,q.x)*1.2 + uT*0.3, r*3.0)+seed);
-    float ringM = smoothstep(0.10,0.0,abs(r-0.66-tear*0.12));
-    float inner = smoothstep(0.6,0.0,r)*0.5;
-    vec3 icol = mix(tint, vec3(0.6,0.2,0.9), 0.4);
-    col = icol*ringM*(1.2+0.5*sin(uT*2.0+seed*10.0)) + icol*inner*fbm(q*4.0-uT*0.25);
-    cov = clamp(ringM*0.6+inner*0.4,0.0,1.0)*0.85;
+    float tear = fbm(vec2(atan(q.y,q.x)*1.2 + uT*0.3, r*3.0)+seed)*0.05;
+    float ringO = smoothstep(0.065,0.0,abs(r-0.74-tear));
+    float ringI = smoothstep(0.050,0.0,abs(r-0.52+tear));
+    float inner = smoothstep(0.5,0.0,r)*0.55;
+    vec3 icol = vec3(0.95,0.15,1.0);
+    col = icol*(ringO*1.9 + ringI*1.2)*(1.0+0.35*sin(uT*2.0+seed*10.0))
+        + mix(icol, vec3(0.3,0.1,0.8), 0.5)*inner*(0.5+0.5*fbm(q*4.0-uT*0.25));
+    cov = clamp(ringO*0.8+ringI*0.6+inner*0.5,0.0,1.0)*0.9;
   }
   else if(kind == 10){ // MOTE — death ember
     float r = length(p);
@@ -1161,7 +1164,7 @@ void main(){
     col = fetch(uv);
   }
   // two-tier bloom: tight hot core + wide soft atmosphere
-  vec3 bloom = texture(uB1,uv).rgb*0.95 + texture(uB2,uv).rgb*0.55 + texture(uB3,uv).rgb*1.25;
+  vec3 bloom = texture(uB1,uv).rgb*0.95 + texture(uB2,uv).rgb*0.55 + texture(uB3,uv).rgb*0.88;
   col += bloom * uBloomAmt;
   // grade: lift shadows toward indigo, gentle teal-orange split
   col = filmic(col*1.85);
