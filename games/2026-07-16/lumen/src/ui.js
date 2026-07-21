@@ -136,6 +136,7 @@ export class UI {
   }
 
   toast(text, cls = '') {
+    if (window.__lumenNS) return; // staged captures stay clean
     const d = document.createElement('div');
     d.className = 'toast ' + cls;
     d.textContent = text;
@@ -145,6 +146,7 @@ export class UI {
   }
 
   banner(text, sub = '') {
+    if (window.__lumenNS) return; // staged captures stay clean
     const b = this.el.banner;
     b.innerHTML = `<div class="btext">${text}</div>${sub ? `<div class="bsub">${sub}</div>` : ''}`;
     b.classList.remove('bshow');
