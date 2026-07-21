@@ -33,7 +33,7 @@ export class Renderer {
     this.pPost = compile(gl, SH.VS_FULL, SH.FS_POST, 'post');
 
     this.quad = createQuad(gl);
-    this.entities = new InstanceBatch(gl, 4096);
+    this.entities = new InstanceBatch(gl, 6144);
     this.lights = new InstanceBatch(gl, 2048);
     this.additive = new InstanceBatch(gl, 6144);
     this.segs = new InstanceBatch(gl, 2048);
@@ -191,13 +191,13 @@ export class Renderer {
     const prng = new Rng(sim.map.seed ^ 0xC0FFEE);
     const PALETTE = [[0.16, 0.95, 1.0], [0.62, 0.3, 1.0], [1.0, 0.72, 0.2], [0.62, 1.0, 0.18]];
     let tries = 0;
-    while (this.props.length < 9 && tries++ < 500) {
+    while (this.props.length < 14 && tries++ < 900) {
       const x = prng.range(120, WORLD_W - 120);
       const y = prng.range(HORIZON_Y + 110, WORLD_H - 90);
       const d = sim.distToPath(x, y);
       if (d < sim.map.pathW + 90) continue;
       // keep props apart so they read as landmarks, not clutter
-      if (this.props.some(o => Math.hypot(o.x - x, o.y - y) < 260)) continue;
+      if (this.props.some(o => Math.hypot(o.x - x, o.y - y) < 200)) continue;
       const [hx, hy] = sim.map.heart;
       if (Math.hypot(hx - x, hy - y) < 200) continue;
       // crystals only — rock mounds kept reading as flat holes in tests
@@ -434,13 +434,17 @@ export class Renderer {
     L.push(hx, hy + 10, 340, 200, 0, t, 0, 0.5 * hpulse, ...COLORS.heart, 0);
     // portal aura
     const [px, py] = sim.map.portal;
-    L.push(px + 40, py + 20, 220, 130, 0, t * 0.7, 0, 0.4, 0.35, 0.15, 0.5, 0);
-    // tower light pools
+    L.push(px + 40, py + 20, 320, 190, 0, t * 0.7, 0, 0.55, 0.4, 0.18, 0.6, 0);
+    // tower platforms: concentric ringed pads + light pool (reference look)
     for (const tw of sim.towers) {
       const ds = depthScale(tw.y);
       const c = tw.def.color;
       const intensity = 0.22 + tw.charge * 0.3;
       L.push(tw.x, tw.y + 14 * ds, 150 * ds, 90 * ds, 0, tw.phase, 0, intensity, c[0], c[1], c[2], 0);
+      const pr = tw.def.size * 1.15 * ds;
+      L.push(tw.x, tw.y + 10 * ds, pr * 1.4, pr * 0.62 * 1.4, 0, tw.phase * 0.5, 0, pr / (pr * 1.4), c[0] * 0.5, c[1] * 0.5, c[2] * 0.5, 1);
+      const pr2 = tw.def.size * 0.7 * ds;
+      L.push(tw.x, tw.y + 10 * ds, pr2 * 1.4, pr2 * 0.62 * 1.4, 0, tw.phase * 0.5 + 2, 0, pr2 / (pr2 * 1.4), c[0] * 0.32, c[1] * 0.32, c[2] * 0.32, 1);
     }
     // enemy glows move along the path — the river of colour
     for (const e of sim.enemies) {
@@ -509,11 +513,19 @@ export class Renderer {
     // flora
     for (const f of sim.flora) {
       const ds = depthScale(f.y);
-      E.push({ y: f.y, k: KIND.FLORA, x: f.x, sx: f.size * ds, sy: f.size * ds, rot: 0, phase: t * 1.1 + f.phase, aux: f.excite, c: [0.2, 0.75, 0.5], seed: f.seed });
+      E.push({ y: f.y, k: KIND.FLORA, x: f.x, sx: f.size * ds, sy: f.size * ds, rot: 0, phase: t * 1.1 + f.phase, aux: f.excite, c: f.color || [0.2, 0.75, 0.5], seed: f.seed });
     }
     // portal
     const [px, py] = sim.map.portal;
-    E.push({ y: py, k: KIND.PORTAL, x: px + 30, sx: 95, sy: 110, rot: 0, phase: t, aux: 1, c: COLORS.violet, seed: 0.3 });
+    E.push({ y: py, k: KIND.PORTAL, x: px + 30, sx: 150, sy: 170, rot: 0, phase: t, aux: 1, c: COLORS.violet, seed: 0.3 });
+    // portal orbiters
+    {
+      const [ppx, ppy] = sim.map.portal;
+      for (let i = 0; i < 3; i++) {
+        const a = t * (0.7 + i * 0.23) + i * 2.1;
+        E.push({ y: ppy + Math.sin(a) * 60, k: KIND.GLOW, x: ppx + 30 + Math.cos(a) * 120, sx: 12, sy: 12, rot: 0, phase: t, aux: 1, c: [0.5 * 0.8, 0.25 * 0.8, 0.8 * 0.8], seed: 0 });
+      }
+    }
     // heart
     const [hx, hy] = sim.map.heart;
     const integ = sim.lives / 20;
@@ -651,13 +663,25 @@ export class Renderer {
           pl.color[0] * (1 - cyc) * lf * 0.8, pl.color[1] * (1 - cyc) * lf * 0.8, pl.color[2] * (1 - cyc) * lf * 0.8, 0);
       }
     }
+    // hp pips over damaged creatures (bosses read via their own drama)
+    for (const e of sim.enemies) {
+      if (e.def.boss || e.def.miniboss || e.hp >= e.maxHp || e.hp <= 0) continue;
+      const ds = depthScale(e.y);
+      const f = Math.max(0, e.hp / e.maxHp);
+      const w = e.def.size * 0.62 * ds;
+      const py = e.y - e.def.size * 0.85 * ds;
+      this.segs.push(e.x - w * (1 - f) / 2, py, w * f / 2 + 1, 2.6 * ds, 0, 0, KIND.SEG, 1,
+        e.def.color[0] * 0.5, e.def.color[1] * 0.5, e.def.color[2] * 0.5, 0);
+      this.segs.push(e.x + w * f / 2, py, w * (1 - f) / 2 + 0.5, 2.2 * ds, 0, 0, KIND.SEG, 1,
+        0.30, 0.04, 0.05, 0);
+    }
     // status halos — statuses must be readable as light
     for (const e of sim.enemies) {
       const ds = depthScale(e.y);
       const st = e.st;
       if (!st) continue;
       if (st.freeze > 0) {
-        A.push(e.x, e.y, e.def.size * 1.5 * ds, e.def.size * 1.5 * ds, 0, e.phase, KIND.GLOW, 1, 0.26, 0.42, 0.5, 0);
+        A.push(e.x, e.y, e.def.size * 1.5 * ds, e.def.size * 1.5 * ds, 0, e.phase, KIND.GLOW, 1, 0.15, 0.26, 0.32, 0);
       } else if (st.chill > 0) {
         const f = Math.min(1, st.chill);
         A.push(e.x, e.y, e.def.size * 1.35 * ds, e.def.size * 1.35 * ds, 0, e.phase, KIND.GLOW, 1, 0.06 * f, 0.35 * f, 0.42 * f, 0);
