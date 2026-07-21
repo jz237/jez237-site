@@ -31,6 +31,12 @@
   #gold { color: var(--amber); text-shadow: 0 0 14px rgba(255,184,51,0.5); }
   #lives { color: #ff7d9c; text-shadow: 0 0 14px rgba(255,60,90,0.45); }
   #wave { color: var(--cyan); }
+  #waveSub { font-size: 0.62em; color: #7fb7c4; letter-spacing: 0.18em; min-height: 1em; }
+  .card .chip { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px;
+    background: color-mix(in srgb, var(--glow) 20%, rgba(8,6,24,0.7)); border: 1px solid color-mix(in srgb, var(--glow) 45%, transparent); }
+  #surge .schip { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-right: 8px;
+    border-radius: 50%; background: rgba(41,180,242,0.18); border: 1px solid rgba(41,200,255,0.4);
+    color: #6fe0ff; vertical-align: middle; font-size: 13px; }
   #fps { opacity: 0.35; font-size: 0.7em; min-width: 2.2em; text-align: right; }
 
   #bottombar { bottom: 0; left: 0; right: 0; display: flex; gap: 14px; align-items: flex-end;
@@ -235,7 +241,7 @@
 <div id="stage"><div id="frame">
   <canvas id="cv"></canvas>
   <div class="hud" id="topbar">
-    <span class="stat" id="wave">WAVE 1</span>
+    <span style="display:flex;flex-direction:column;gap:1px"><span class="stat" id="wave">WAVE 1</span><span id="waveSub"></span></span>
     <span style="display:flex;gap:26px">
       <span class="stat" id="gold">◈ 0</span>
       <span class="stat" id="lives">❤ 20</span>
@@ -288,7 +294,7 @@
   <div id="rotate"><div><span class="ricon">📱</span>turn your device sideways<br>the grove is wide</div></div>
   <button id="tapCancel">✕ cancel placement</button>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v2.14.0</div>
+  <div id="ver">LUMEN v2.15.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>
