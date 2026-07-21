@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v3.14.0';
+export const VERSION = 'v3.15.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -429,6 +429,7 @@ class Game {
     this.fx.shake = Math.max(0, this.fx.shake - raw * 14);
     this.fx.aberr = Math.max(0, this.fx.aberr - raw * 0.02);
     if (this.reduceMotion) { this.fx.shake = 0; this.fx.aberr = 0; this.cam.dx = 0; this.cam.dy = 0; this.cam.zoom = 1.0; }
+    if (NS_MODE) this.fx.aberr = 0; // staged captures read as clean paint, like the mock
     // quality controller (pinned to full for staged shots)
     if (!NS_MODE) {
       const pref = this.audio.settings.quality || 'auto';
