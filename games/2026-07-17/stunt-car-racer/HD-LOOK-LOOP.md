@@ -26,11 +26,9 @@ boost flames, wheels, ElevenLabs audio layer, glass UI, title = green-valley
 backdrop + 'HD vNNN' badge, ?classic=1 escape hatch.
 
 ## BACKLOG (top = next; one item per iteration; keep each shippable)
-1. **Trackside trees** — inject my own billboard quads: extend hd-graphics.js with a
-   treeSys drawn right after the ground fill (same captured matrices, depth-tested,
-   alpha-tested fal tree cutouts on units 5+). Place on grass via deterministic hash
-   of world XZ cells, density ~1 per 4000×4000 units, skip cells near y-elevated
-   geometry unknown — verify visually that none pierce the track (start sparse).
+1. ~~Trackside trees~~ **DONE it.1** (treeSys: 283 billboards, oak+pine sheet unit 5,
+   engine-identical transform, GEQUAL bug fixed → LEQUAL, cells 16000/EXCL 18000,
+   heights 3200-5400).
 2. **Kerb treatment on road edges** — the engine's red edge lines are flat polys;
    give the isRed-and-narrow (near-track, low-height) fragments a kerb-stone texture
    (new fal texture: angled red/white kerb top-down) instead of wall blocks.
@@ -106,4 +104,13 @@ backdrop + 'HD vNNN' badge, ?classic=1 escape hatch.
   #mm-btn-twoplayer hidden; do NOT touch stuntcarracer.fly.dev/CSP.
 
 ## ITERATION LOG
-- (start here — newest first, one line per iteration: item, result, lesson)
+- it.1 (2026-07-21): TREES SHIPPED — 283 oak/pine billboards on the grass, correct
+  depth vs walls/terrain, none on track. THREE HARD LESSONS: (a) NEVER combine the
+  engine's matrices in JS for FORWARD projection — my row-vector mat4Mul product sent
+  clip z ~1e5 out of range; pass view+proj separately and let GLSL do
+  `pos * uV * uP` EXACTLY like the engine's own vertex shader (the ground quad's
+  INVERSE path only worked because the roundtrip cancels the convention);
+  (b) probe said depth clear=1 func=LESS — standard GL, use LEQUAL (my GEQUAL
+  guess made zero pixels); (c) WORLD SCALE: the road is ~3000+ units wide — trees
+  need heights 3200-5400, not 600 (bushes). Attribute packing: species*100000+h
+  (4096 overflowed). scr-tree-probe.mjs = the in-page NDC/depth probe pattern.
