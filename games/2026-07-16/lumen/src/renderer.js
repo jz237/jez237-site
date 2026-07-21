@@ -177,15 +177,8 @@ export class Renderer {
       return this.meshFrom(new Float32Array(verts), verts.length / 4);
     });
     this.pathMesh = this.pathMeshes[0];
-    // foreground silhouette flora along the bottom edge
-    const rng = new Rng(sim.map.seed ^ 0xF06);
-    this.fgFlora = [];
-    for (let i = 0; i < 9; i++) {
-      this.fgFlora.push({
-        x: rng.range(-60, WORLD_W + 60), y: WORLD_H + rng.range(-8, 40),
-        size: rng.range(120, 300), seed: rng.next(), phase: rng.range(0, 6.28),
-      });
-    }
+    // top-down board: no foreground silhouettes (they read as side-view kelp)
+    this.fgFlora = null;
     // mid-ground props: crystal clusters + rock outcrops in the open ground
     this.props = [];
     const prng = new Rng(sim.map.seed ^ 0xC0FFEE);
@@ -575,13 +568,6 @@ export class Renderer {
       const c = g.valid ? g.def.color.map(v => v * 0.55) : [0.5, 0.12, 0.1];
       this.entities.push(g.x, g.y, size, size, 0, t * 2, g.def.kind, 0.35, c[0], c[1], c[2], 0.5);
     }
-    // foreground silhouettes — parallax kelp profiles, drawn last
-    if (this.fgFlora) {
-      for (const f of this.fgFlora) {
-        const parx = f.x + fx.camDx * -2.2;
-        this.entities.push(parx, f.y, f.size, f.size * 1.35, 0, t * 0.5 + f.phase, 29, 0.8, 0.012, 0.02, 0.035, f.seed);
-      }
-    }
   }
 
   pushEffects(sim, t) {
@@ -748,18 +734,16 @@ export class Renderer {
       A.push(fp.x, fp.y, 200 * lf, 130 * lf, 0, 0, KIND.GLOW, 1,
         lf * 0.8, lf * 0.78, lf * 0.7, 0);
     }
-    // the heart breathes a soft column of light into the sky — stacked
-    // glow pools thinning with height, swaying like rising smoke
+    // top-down sun-gate: the heart radiates flat concentric amber halos
     {
       const [hx, hy] = sim.map.heart;
       const integ = sim.lives / 20;
       const pulse = (0.55 + 0.45 * Math.sin(t * 1.1)) * (0.35 + 0.65 * integ);
-      for (let i = 0; i < 6; i++) {
-        const f = i / 5; // 0 at heart → 1 high
-        const sway = Math.sin(t * 0.5 + f * 2.6) * 26 * f;
-        const w = (150 - f * 70) * (0.8 + 0.2 * Math.sin(t * 0.9 + f * 4));
-        const a = pulse * (1 - f * 0.75) * 0.10;
-        A.push(hx + sway, hy - 60 - f * 480, w, 150, 0, t + i, KIND.GLOW, 1,
+      for (let i = 0; i < 4; i++) {
+        const f = i / 3;
+        const rr = (240 + f * 260) * (0.92 + 0.08 * Math.sin(t * 0.9 + f * 4));
+        const a = pulse * (1 - f * 0.7) * 0.085;
+        A.push(hx, hy, rr, rr, 0, t + i, KIND.GLOW, 1,
           1.0 * a, 0.82 * a, 0.45 * a, 0);
       }
     }

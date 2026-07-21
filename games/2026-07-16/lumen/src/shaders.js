@@ -91,63 +91,17 @@ uniform float uT; uniform vec2 uReso; uniform float uHorizon; uniform vec2 uPar;
 uniform float uMood; // 0 dusk → 1 deep night → 2 violet pre-dawn
 uniform vec3 uMapTint;
 in vec2 vUv; out vec4 frag;
-// sky gradient, aurora-nebula, far ridgelines, spore-stars
+// top-down deep water: radial depth gradient + slow drifting murk.
+// (the ground quad covers nearly everything — this only peeks at edges)
 void main(){
-  vec2 uv = vUv; // 0..1, y up from bottom
-  float horizon = uHorizon; // fraction of screen height that is sky
-  float horizonLine = 1.0 - horizon;
-  float skyY = clamp((uv.y - horizonLine) / max(horizon,1e-3), 0.0, 1.0); // 0 horizon → 1 top
-  // deep indigo → darker zenith, palette breathing across the run
-  vec3 horizCol = tri(vec3(0.30,0.17,0.46), vec3(0.10,0.13,0.34), vec3(0.42,0.16,0.38), uMood);
-  vec3 zenCol   = tri(vec3(0.07,0.05,0.16), vec3(0.015,0.02,0.06), vec3(0.10,0.05,0.16), uMood);
-  vec3 sky = mix(horizCol, zenCol, pow(skyY,0.75));
-  // nebula: two fbm layers drifting at different rates (parallax offset uPar)
-  vec2 np = vec2(uv.x*2.6 + uPar.x*0.00012, uv.y*6.0);
-  float n1 = fbm(np*2.0 + vec2(uT*0.008, uT*0.004));
-  float n2 = fbm(np*4.5 - vec2(uT*0.013, 0.0) + 31.7);
-  float neb = smoothstep(0.45, 0.85, n1) * (0.5 + 0.5*n2);
-  vec3 nebA = tri(vec3(0.55,0.16,0.95), vec3(0.10,0.25,0.70), vec3(0.95,0.30,0.55), uMood);
-  vec3 nebB = tri(vec3(0.12,0.55,0.85), vec3(0.05,0.20,0.45), vec3(0.80,0.45,0.20), uMood);
-  vec3 nebCol = mix(nebA, nebB, n2);
-  sky += nebCol * neb * (0.55 - 0.15*clamp(uMood,0.0,1.0)*(2.0-uMood));
-  // grand slow structures in the upper sky so the top of frame isn't flat
-  float n3 = fbm(np*0.9 + 71.0 - vec2(uT*0.005, 0.0));
-  sky += nebA * smoothstep(0.48,0.85,n3) * smoothstep(0.30,0.85,skyY) * 0.40;
-  sky += nebB * smoothstep(0.62,0.95,fbm(np*1.6+13.0)) * smoothstep(0.5,1.0,skyY) * 0.30;
-  // spore-stars, twinkling
-  vec2 sp = uv*uReso*0.5 + vec2(uPar.x*0.03,0.0);
-  vec2 cell = floor(sp/22.0);
-  float starGate = 0.976 - 0.012*clamp(uMood,0.0,1.0); // deep night = more stars
-  float star = step(starGate, hash12(cell));
-  vec2 cuv = fract(sp/22.0)-0.5;
-  float sd = length(cuv - (vec2(hash12(cell+7.3),hash12(cell+3.1))-0.5)*0.6);
-  float tw = 0.55+0.45*sin(uT*(0.6+hash12(cell+1.7)*2.0)+hash12(cell)*40.0);
-  vec3 starCol = mix(vec3(0.5,0.9,1.0), vec3(1.0,0.7,0.9), hash12(cell+9.9));
-  sky += starCol * star * smoothstep(0.09,0.0,sd) * tw * 1.1 * smoothstep(0.02,0.3,skyY);
-  // thin ridgeline silhouettes hugging the horizon, glow rising behind them
-  for(int i=0;i<2;i++){
-    float fi = float(i);
-    float px = uv.x + uPar.x*(0.00035 + fi*0.00025);
-    float rn = fbm(vec2(px*(3.4-fi*1.3)+fi*13.7, fi*7.1));
-    float ridge = horizonLine + (0.010+0.016*fi) + 0.055*(rn-0.30)*(1.0+fi*0.8);
-    float m = smoothstep(ridge+0.006, ridge-0.010, uv.y);
-    vec3 ridgeCol = mix(vec3(0.055,0.038,0.115), vec3(0.085,0.06,0.16), fi);
-    sky = mix(sky, ridgeCol, m*(0.9-0.25*fi));
-    float rim = smoothstep(0.010,0.0,abs(uv.y-ridge));
-    sky += vec3(0.10,0.42,0.44) * rim * (0.5+0.3*sin(uT*0.4+px*9.0)) * (1.0-fi*0.55);
-  }
-  // bioluminescent haze rising off the world — drawn over ridge bases
-  float hg = exp(-max(0.0, uv.y-horizonLine)*26.0);
-  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood) * uMapTint;
-  sky += hgCol * hg * (0.8 + 0.2*sin(uT*0.23));
-  // god-ray shafts rising out of the glow, slowly wandering
-  float shaftN = pow(0.5+0.5*sin(uv.x*34.0 + fbm(vec2(uv.x*6.0, uT*0.02))*11.0 + uT*0.05), 3.5);
-  sky += hgCol * shaftN * exp(-max(0.0, uv.y-horizonLine)*9.0) * 0.4;
-  // below the horizon, converge on the ground's far-haze colour
-  vec3 hazeCol = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood) * uMapTint;
-  float below = smoothstep(0.0, 0.012, horizonLine - uv.y);
-  sky = mix(sky, hazeCol, below);
-  frag = vec4(sky, 1.0);
+  vec2 uv = vUv;
+  float r = length(uv - 0.5);
+  vec3 deep = tri(vec3(0.045,0.038,0.120), vec3(0.018,0.022,0.075), vec3(0.070,0.035,0.110), uMood);
+  vec3 base = mix(deep, deep*0.35, smoothstep(0.15, 0.75, r));
+  float n = fbm(uv*3.2 + vec2(uT*0.01, -uT*0.006));
+  base += vec3(0.02,0.05,0.13) * smoothstep(0.55,0.9,n) * 0.6;
+  base *= mix(vec3(1.0), uMapTint, 0.5);
+  frag = vec4(base, 1.0);
 }
 `;
 
@@ -160,8 +114,7 @@ in vec2 vUv; in vec2 vWorld; out vec4 frag;
 // vUv here: x across screen, y 0 at horizon → 1 at bottom (near)
 void main(){
   float near = vUv.y;
-  float persp = mix(3.4, 1.0, near); // features shrink toward horizon
-  vec2 p = vec2(vUv.x*7.0*persp, near*6.5 + 2.0);
+  vec2 p = vec2(vUv.x*11.0, near*6.5 + 2.0); // uniform top-down texel scale
   float rock = fbm(p);
   float rock2 = fbm(p*3.1 + 40.0);
   vec3 base = mix(vec3(0.052,0.036,0.105), vec3(0.115,0.078,0.185), rock);
@@ -176,7 +129,7 @@ void main(){
   float crackN = fbm(p*2.4+77.0);
   float crack = smoothstep(0.70,0.92,crackN);
   base = mix(base, vec3(0.015,0.030,0.036), crack*0.65);
-  base += vec3(0.04,0.22,0.20) * mix(vec3(1.0), uMapTint*1.4, 0.6) * smoothstep(0.86,0.98,crackN) * (0.55+0.45*sin(uT*0.6+p.x*4.0)) * near;
+  base += vec3(0.04,0.22,0.20) * mix(vec3(1.0), uMapTint*1.4, 0.6) * smoothstep(0.86,0.98,crackN) * (0.55+0.45*sin(uT*0.6+p.x*4.0)) * 0.8;
   // faint teal ambient sheen so the plane never reads as void
   base += vec3(0.012,0.030,0.034);
   // the run's history: chemistry and deaths bloom into the ground itself
@@ -191,19 +144,14 @@ void main(){
     float r = length(cuv - (vec2(hash12(cell+3.0),hash12(cell+5.0))-0.5)*0.5);
     float breathe = 0.5+0.5*sin(uT*(0.5+d)+d*50.0);
     vec3 mc = mix(vec3(0.1,0.7,0.55), vec3(0.5,0.8,0.2), step(0.978,d));
-    base += mc * smoothstep(0.12,0.0,r) * breathe * 0.5 * near;
+    base += mc * smoothstep(0.12,0.0,r) * breathe * 0.45;
   }
   // mood tint on the plane itself, then the map's own colour identity
   base *= tri(vec3(1.0), vec3(0.55,0.7,1.05), vec3(1.05,0.75,0.95), uMood);
   base *= uMapTint;
-  // atmospheric haze toward horizon — far edge must equal the bg's
-  // below-horizon colour or a seam appears
-  vec3 haze = tri(vec3(0.10,0.28,0.34), vec3(0.05,0.14,0.26), vec3(0.30,0.14,0.28), uMood) * uMapTint;
-  base = mix(haze, base, smoothstep(0.0, 0.42, near));
-  // continuation of the bg horizon glow onto the far ground (same colour +
-  // time modulation as FS_BG's hg term, decay matched across the seam)
-  vec3 hgCol = tri(vec3(0.10,0.46,0.50), vec3(0.06,0.22,0.46), vec3(0.55,0.18,0.42), uMood) * uMapTint;
-  base += hgCol * (0.8 + 0.2*sin(uT*0.23)) * exp(-near*22.0);
+  // top-down: darken toward the board edges like the concept
+  vec2 c = vec2(vUv.x - 0.5, near - 0.5);
+  base *= 1.0 - 0.42*smoothstep(0.28, 0.72, length(c*vec2(1.0,1.15)));
   frag = vec4(base, 1.0);
 }
 `;
@@ -213,41 +161,38 @@ export const FS_PATH = COMMON + `
 uniform float uT; uniform vec3 uMapTint;
 uniform sampler2D uStain; uniform vec2 uWorldSize;
 in vec2 vUv; in float vDepth; in vec2 vWorld; out vec4 frag;
-// vUv.x = along path (0 spawn → 1 heart), vUv.y = across (-1..1)
+// the channels are ropes of ELECTRIC LIGHT: 5 braided strands with
+// near-white cores and blue halos, crackling as they flow to the heart
 void main(){
   float across = vUv.y;
   float along = vUv.x;
   float edge = 1.0 - abs(across);
-  // organic edge erosion
-  float er = fbm(vec2(along*46.0, across*3.0)) * 0.55;
-  float mask = smoothstep(0.0, 0.42, edge - er*0.35);
+  float er = fbm(vec2(along*46.0, across*3.0)) * 0.4;
+  float mask = smoothstep(0.0, 0.32, edge - er*0.22);
   if(mask <= 0.001){ frag = vec4(0.0); return; }
-  // the path is a riverbed of dark silt with glowing veins
-  vec3 bed = vec3(0.030,0.020,0.055) * (0.7 + 0.6*fbm(vec2(along*60.0, across*4.0)+3.0));
-  // veins: branching filaments flowing toward the heart
-  float vein = 0.0;
-  for(int i=0;i<3;i++){
+  // recessed dark bed so the filaments own the brightness
+  vec3 col = vec3(0.010,0.014,0.038) * (0.7 + 0.5*fbm(vec2(along*60.0, across*4.0)+3.0));
+  float energy = 0.0, coreE = 0.0;
+  for(int i=0;i<5;i++){
     float fi = float(i);
-    float lane = sin(along*(30.0+fi*17.0) + fi*2.1)*0.5 + sin(along*(90.0+fi*31.0)+fi)*0.16;
-    float w = 0.10 - fi*0.02;
-    vein += smoothstep(w, 0.0, abs(across*0.85 - lane*0.55)) * (0.55-0.13*fi);
+    float off = sin(along*(38.0+fi*11.0) + fi*1.9 + uT*(0.9+fi*0.13)) * 0.42
+              + sin(along*(87.0+fi*17.0) - uT*(1.3+fi*0.21) + fi*4.0) * 0.16;
+    float jit = (fbm3(vec2(along*160.0 + fi*31.0, uT*1.4)) - 0.5) * 0.10;
+    float dS = abs(across*0.9 - off - jit);
+    float w = 0.055 + 0.018*sin(uT*2.0+fi*1.7);
+    float g = exp(-dS*dS/(w*w));
+    energy += g * (0.8 + 0.2*sin(uT*3.0 + fi*2.2 + along*20.0));
+    coreE  += exp(-dS*dS/(w*w*0.14));
   }
-  // energy pulses travelling along the veins toward the heart
-  float pulse = pow(0.5+0.5*sin(along*44.0 - uT*2.6), 6.0);
-  float pulse2 = pow(0.5+0.5*sin(along*23.0 - uT*1.7 + 2.0), 8.0);
-  vec3 veinCol = vec3(0.05,0.55,0.60) * vein * (0.55 + 0.8*pulse);
-  veinCol += vec3(0.35,0.18,0.60) * vein * pulse2 * 0.8;
-  // faint center channel glow — boosted so the river never dies mid-frame
-  veinCol += vec3(0.05,0.38,0.42) * smoothstep(0.5,0.0,abs(across)) * 0.55;
-  // rim lichen: bright organic edge where path meets ground
-  float rim = smoothstep(0.30,0.06,abs(edge - er*0.35 - 0.10));
-  veinCol += vec3(0.10,0.45,0.40) * rim * (0.4+0.25*sin(uT*0.9 + along*80.0));
-  vec3 col = bed + veinCol * mix(vec3(1.0), uMapTint, 0.5);
-  // battle stains soak into the riverbed too
+  vec3 halo = vec3(0.10,0.45,1.15);
+  vec3 core = vec3(0.80,0.98,1.30);
+  col += halo * energy * 0.55 + core * coreE * 0.85;
+  // soft blue ambience filling the channel
+  col += vec3(0.03,0.10,0.30) * smoothstep(0.95,0.0,abs(across)) * 0.8;
+  // battle stains soak in
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
-  col += (stain / (1.0 + stain*0.55)) * 0.75;
-  // haze with depth
-  col = mix(col, vec3(0.10,0.28,0.34)*0.6, (1.0-vDepth)*0.35);
+  col += (stain / (1.0 + stain*0.55)) * 0.4;
+  col *= mix(vec3(1.0), uMapTint, 0.3);
   frag = vec4(col*mask, mask);
 }
 `;
@@ -1107,9 +1052,7 @@ void main(){
     cov = 0.0;
   }
 
-  // atmospheric haze: entities near the horizon fade toward haze colour
-  float hazeAmt = smoothstep(0.45, 0.05, vDepth) * 0.45;
-  col = mix(col, vec3(0.10,0.28,0.34)*cov, hazeAmt*step(0.001,cov));
+  // top-down board: no distance haze — every organism reads at full colour
   frag = vec4(col, cov);
 }
 `;
