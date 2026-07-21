@@ -191,7 +191,7 @@ export class Renderer {
     ]);
     this.groundMesh = this.meshFrom(gverts, 4);
     // one ribbon triangle strip per path
-    const w = sim.map.pathW * 1.38; // ribbon slightly wider than gameplay — edges erode in shader
+    const w = sim.map.pathW * 1.52; // ribbon slightly wider than gameplay — edges erode in shader
     this.pathMeshes = sim.paths.map(path => {
       const { pts, arc, total } = path;
       const verts = [];
@@ -661,7 +661,7 @@ export class Renderer {
       const size = tw.def.size * (1 + tw.level * 0.22) * 0.68;
       const frame = tw.def.apex ? 0 : (FRAME[tw.def.id] ?? 7);
       const c = tw.def.color;
-      this.texSprites.push(tw.x, tw.y + 4, size * 1.12, size * 0.9, 0, tw.phase, 8, 0.25,
+      this.texSprites.push(tw.x, tw.y + 4, size * 1.34, size * 1.08, 0, tw.phase, 8, 0.5,
         0.4, 0.9, 1.0, 1);
       this.texSprites.push(tw.x, tw.y, size, size, 0, tw.phase, frame, tw.charge,
         c[0], c[1], c[2], 1);
