@@ -5685,5 +5685,24 @@
     "slot": "quietly-uncanny-domestic",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-07-21-factual-infographic-factual-infographic-how-octopus-skin-ch",
+    "title": "Factual infographic: How Octopus Skin Changes Color and Texture",
+    "tests": "Real-world/non-fiction topic; central half-sand/half-rock octopus transformation; layered skin cutaway; neural-control sequence; chromatophore and reflective-cell macro windows; papilla texture sequence; substrate comparison; scale ladder; aquarium observation-bench anchor; conservative species-variation note; no animal harm or invented statistics.",
+    "prompt": "Create a finished square factual infographic titled “HOW OCTOPUS SKIN CHANGES COLOR AND TEXTURE” about the real-world, non-fiction biology of rapid octopus camouflage. Make it a vivid photorealistic marine-biology observation display physically integrated into a wet aquarium bench, not a flat school poster. The stop-scroll centerpiece is one large living common octopus spanning the middle of a clear seawater habitat: its left half is smooth, pale, and finely speckled against sand while its right half is dark, high-contrast, and visibly knobby against algae-coated rock, making the color, pattern, brightness, and texture transformation unmistakable at thumbnail size. No fantasy glow.\n\nBuild eight concrete visual information layers around that dominant specimen: (1) a large magnified cutaway of living skin showing the layered relationship between expandable pigment-filled chromatophore organs near the surface, reflective iridophores beneath them, diffuse white-scattering leucophores, nerves, radial muscle fibers, and deeper muscular tissue; (2) a clear four-step neural-control strip showing eye observing the surroundings, brain selecting a coordinated body pattern, motor signals traveling through skin nerves, and radial muscles expanding chromatophore sacs into visible colored discs; (3) a paired papilla sequence showing smooth skin, muscle contraction lifting three-dimensional bumps, and relaxed skin flattening again; (4) a macro-lens window of expanded brown, red, and yellow chromatophore discs beside contracted pinpoints; (5) a microscopy-style window where iridophores produce angle-dependent blue-green structural reflections and leucophores scatter ambient light; (6) a substrate comparison with the same animal silhouette matched to pale sand, mottled pebbles, and dark reef rock, labeled as coordinated patterning rather than exact color copying; (7) a scale ladder from whole octopus to a patch of skin to one chromatophore organ; (8) a concise accuracy panel stating that capabilities and cell arrangements vary among species and that camouflage combines neural control, pigment, reflection, posture, and texture.\n\nThe physical bench anchor must remain visible around the display: seawater droplets on black composite, a shallow observation tank, a waterproof macro camera housing, polarizing filter, scale ruler, color-neutral reference tile, natural sand and rock sample trays, soft aquarium hoses, and a red-safe work lamp. Use restrained readable labels, short arrows, large visual panels, and crisp museum-science hierarchy. Palette: living umber, rust red, ochre, pearl white, iridescent teal, seawater cyan, slate black. Keep every biological relationship conservative: chromatophores change apparent area through radial muscle action; reflective cells contribute structural color and brightness; papillae alter skin relief; visual input and the nervous system coordinate rapid body patterns; do not claim the skin merely photographs or directly samples the background. Show observation only—no dissection, injection, restraint, animal harm, invented statistics, brand logos, QR codes, paragraphs of tiny text, decorative nonsense labels, or prompt-card instructions.",
+    "image": "images/2026-07-21-factual-infographic-factual-infographic-how-octopus-skin-ch.jpg",
+    "thumb": "thumbs/2026-07-21-factual-infographic-factual-infographic-how-octopus-skin-ch.webp",
+    "color": "#494339",
+    "date": "2026-07-21",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Octopus rapid camouflage through chromatophores, reflective skin cells, and muscular papillae",
+      "description": "A real-world marine-biology bench infographic showing how octopuses coordinate pigment organs, reflective cells, and muscular skin texture for rapid camouflage.",
+      "sourceNote": "Conservative synthesis of established cephalopod skin physiology; capabilities and cell arrangements vary among species."
+    }
   }
 ]
