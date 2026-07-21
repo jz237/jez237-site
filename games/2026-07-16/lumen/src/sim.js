@@ -164,6 +164,7 @@ export class Sim {
       }
     }
     this.waveT = 0;
+    this.waveTotal = this.spawnQueue.length;
     this.emit('waveStart', { wave: this.wave, mutator: this.waveMutator });
     return true;
   }
