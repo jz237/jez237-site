@@ -53,7 +53,33 @@ export class Renderer {
     this.fStainA = createFBO(gl2, 960, 540, this.halfFloat);
     this.fStainB = createFBO(gl2, 960, 540, this.halfFloat);
     this.clearStains();
+    this.artGround = this.loadArtTexture('assets/art/ground.jpg');
     this.resize();
+  }
+
+  // painted art plate → GL texture. Starts as a 1px dark placeholder so the
+  // shader can sample immediately; uArtMix stays 0 until the image lands.
+  loadArtTexture(url) {
+    const gl = this.gl;
+    const tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE,
+      new Uint8Array([10, 9, 28, 255]));
+    const entry = { tex, ready: false };
+    const img = new Image();
+    img.onload = () => {
+      gl.bindTexture(gl.TEXTURE_2D, tex);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
+      gl.generateMipmap(gl.TEXTURE_2D);
+      // mirrored repeat hides the tile seam without authored wrap edges
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.MIRRORED_REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      entry.ready = true;
+    };
+    img.src = url;
+    return entry;
   }
 
   clearStains() {
@@ -273,6 +299,10 @@ export class Renderer {
     gl.bindTexture(gl.TEXTURE_2D, this.fStainA.tex);
     gl.uniform1i(this.pGround.u.uStain, 1);
     gl.uniform2f(this.pGround.u.uWorldSize, WORLD_W, WORLD_H);
+    gl.activeTexture(gl.TEXTURE2);
+    gl.bindTexture(gl.TEXTURE_2D, this.artGround.tex);
+    gl.uniform1i(this.pGround.u.uArt, 2);
+    gl.uniform1f(this.pGround.u.uArtMix, this.artGround.ready ? 1 : 0);
     gl.activeTexture(gl.TEXTURE0);
     gl.bindVertexArray(this.groundMesh.vao);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.groundMesh.count);
