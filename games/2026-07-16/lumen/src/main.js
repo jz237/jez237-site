@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v3.3.0';
+export const VERSION = 'v3.4.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -489,10 +489,10 @@ class Game {
         ['spire', 1090, 760], ['urchin', 1240, 660], ['tesla', 1380, 620],
         ['bramble', 480, 900], ['bulb', 1160, 680],
       ],
-      twinveins: [
-        ['coral', 640, 560], ['tesla', 900, 620], ['bloom', 1150, 640],
-        ['spire', 480, 580], ['urchin', 1350, 700], ['tesla', 1500, 740],
-        ['bramble', 1000, 850], ['bulb', 1180, 580],
+      twinveins: [ // spread board-wide like the mock, one per neighbourhood
+        ['coral', 430, 300], ['tesla', 880, 260], ['bloom', 1420, 300],
+        ['spire', 330, 700], ['urchin', 900, 560], ['tesla', 1520, 560],
+        ['bramble', 620, 880], ['bulb', 1240, 860],
       ],
       caldera: [
         ['coral', 950, 500], ['tesla', 1200, 700], ['bloom', 600, 600],
