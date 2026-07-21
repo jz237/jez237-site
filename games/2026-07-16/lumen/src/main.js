@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v3.0.0';
+export const VERSION = 'v3.0.1';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -563,14 +563,8 @@ class Game {
         fx = s.enemies.reduce((a, e) => a + e.x, 0) / s.enemies.length;
         fy = s.enemies.reduce((a, e) => a + e.y, 0) / s.enemies.length;
       } else { fx = WORLD_W / 2; fy = WORLD_H / 2; }
-      const zoom = 1.17;
-      const mx = (WORLD_W - WORLD_W / zoom) / 2 - 4;
-      const my = (WORLD_H - WORLD_H / zoom) / 2 - 4;
-      this.nsCam = {
-        dx: Math.max(-mx, Math.min(mx, (fx - WORLD_W / 2) * 0.45)),
-        dy: Math.max(-my, Math.min(my, (fy - WORLD_H / 2) * 0.45)),
-        zoom,
-      };
+      // reference framing: the mock shows the ENTIRE board edge-to-edge
+      this.nsCam = { dx: 0, dy: 0, zoom: 1.0 };
     }
     this.running = true;
     window.__lumen.nsReady = true;

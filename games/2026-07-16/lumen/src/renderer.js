@@ -424,7 +424,7 @@ export class Renderer {
     // heart aura
     const [hx, hy] = sim.map.heart;
     const hpulse = 0.75 + 0.25 * Math.sin(t * 1.5);
-    L.push(hx, hy + 10, 340, 200, 0, t, 0, 0.5 * hpulse, ...COLORS.heart, 0);
+    L.push(hx, hy + 10, 260, 180, 0, t, 0, 0.32 * hpulse, ...COLORS.heart, 0);
     // portal aura
     const [px, py] = sim.map.portal;
     L.push(px + 40, py + 20, 320, 190, 0, t * 0.7, 0, 0.55, 0.4, 0.18, 0.6, 0);
@@ -521,7 +521,7 @@ export class Renderer {
     }
     // heart
     const [hx, hy] = sim.map.heart;
-    const integ = sim.lives / 20;
+    const integ = Math.min(1, sim.lives / 20);
     E.push({ y: hy, k: KIND.HEART, x: hx, sx: 170, sy: 170, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
     // towers (+ veterancy pips hovering above)
     for (const tw of sim.towers) {
@@ -737,12 +737,12 @@ export class Renderer {
     // top-down sun-gate: the heart radiates flat concentric amber halos
     {
       const [hx, hy] = sim.map.heart;
-      const integ = sim.lives / 20;
+      const integ = Math.min(1, sim.lives / 20);
       const pulse = (0.55 + 0.45 * Math.sin(t * 1.1)) * (0.35 + 0.65 * integ);
       for (let i = 0; i < 4; i++) {
         const f = i / 3;
-        const rr = (240 + f * 260) * (0.92 + 0.08 * Math.sin(t * 0.9 + f * 4));
-        const a = pulse * (1 - f * 0.7) * 0.085;
+        const rr = (150 + f * 150) * (0.92 + 0.08 * Math.sin(t * 0.9 + f * 4));
+        const a = pulse * (1 - f * 0.7) * 0.045;
         A.push(hx, hy, rr, rr, 0, t + i, KIND.GLOW, 1,
           1.0 * a, 0.82 * a, 0.45 * a, 0);
       }
@@ -751,7 +751,7 @@ export class Renderer {
     if (sim.heartHitT > 0) {
       const [hx, hy] = sim.map.heart;
       const f = sim.heartHitT / 0.8;
-      A.push(hx, hy, 260 * f, 260 * f, 0, 0, KIND.GLOW, 1, 1 * f, 0.3 * f, 0.2 * f, 0);
+      A.push(hx, hy, 170 * f, 170 * f, 0, 0, KIND.GLOW, 1, 0.5 * f, 0.15 * f, 0.1 * f, 0);
     }
   }
 
