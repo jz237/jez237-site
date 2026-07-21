@@ -44,4 +44,10 @@ export function botStep(sim) {
     }
     if (best) sim.upgrade(best);
   }
+  // fuse when flush: apexes are the endgame
+  if (sim.gold > 450 && sim.fuse) {
+    for (const t of sim.towers) {
+      if (sim.canFuse(t)) { sim.fuse(t); break; }
+    }
+  }
 }
