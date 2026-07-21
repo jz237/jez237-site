@@ -1,484 +1,7 @@
 {
-  "date": "2026-07-20",
-  "updatedAt": "2026-07-20T22:00:01.610038+00:00",
+  "date": "2026-07-21",
+  "updatedAt": "2026-07-21T04:00:01.782484+00:00",
   "items": [
-    {
-      "title": "AI is writing your date’s messages. The dating apps say they cannot stop it.",
-      "url": "https://thenextweb.com/news/chatfishing-ai-dating-apps-chatgpt-claude-tinder-hinge",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Singles are feeding their dating app conversations into ChatGPT and Claude, asking the models to write replies, analyse what went wrong, and generate opening lines. The practice, called “chatfishing,” has produced a 5,000% spike in Google searches and a growing trail of Reddit posts and TikTok confessionals. Twenty-six per cent of US adults, and 49% [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-5719d60ea2531b6e6a.avif",
-      "featuredLatest": false,
-      "published": "2026-07-20T13:29:52+00:00",
-      "firstSeen": "2026-07-20T16:00:01.282615+00:00",
-      "lastSeen": "2026-07-20T16:00:01.282615+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 12.4186,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "AI is writing your date’s messages. The dating apps say they cannot stop it",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "writing-your-date-messages-dating-apps",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/chatfishing-ai-dating-apps-chatgpt-claude-tinder-hinge.avif"
-    },
-    {
-      "title": "The AI Model That Beat Claude: Kimi K3 Tops Frontend Coding Test",
-      "url": "https://www.techrepublic.com/article/news-apac-china-kimi-k3-moonshot-ai",
-      "source": "TechRepublic AI",
-      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Moonshot AI’s Kimi K3 topped a frontend coding benchmark, beating Claude Fable 5 while adding pressure on US AI leaders.\nThe post The AI Model That Beat Claude: Kimi K3 Tops Frontend Coding Test appeared first on TechRepublic.",
-      "image": "public/thumbnails/news-5265e2055ec1d26b2d.jpg",
-      "featuredLatest": false,
-      "published": "2026-07-20T14:57:49+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 11.8047,
-      "signalGroup": "Research",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
-      "brief": {
-        "whatHappened": "The AI Model That Beat Claude: Kimi K3 Tops Frontend Coding Test",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
-        "sourceFrame": "Seen via TechRepublic AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "claude-model-beat-claude-kimi-tops",
-      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/tr-07202026-apac-china-kimi-k3-moonshot-ai.jpg?f=jpeg"
-    },
-    {
-      "title": "Custom OS installation now available on AWS DeepRacer devices",
-      "url": "https://aws.amazon.com/blogs/machine-learning/custom-os-installation-now-available-on-aws-deepracer-devices",
-      "source": "AWS Machine Learning Blog",
-      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-      "sourceWeight": 0.72,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "With the stock firmware and software, developers couldn't modify their AWS DeepRacer devices to use the latest operating systems. Now, developers can upgrade or install a custom operating system (OS) by using a newly released bootloader, which extends the life of these hardware devices. In this post, we introduce the bootloader, discuss how to use it, and share links to a community distribution that uses it.",
-      "image": "public/thumbnails/news-6100bd9bd10f68acf2.png",
-      "featuredLatest": false,
-      "published": "2026-07-20T17:25:24+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "model_release": true,
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 10.9767,
-      "signalGroup": "Model releases",
-      "sourceTier": "Reported source",
-      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
-      "brief": {
-        "whatHappened": "Custom OS installation now available on AWS DeepRacer devices",
-        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
-        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
-        "sourceFrame": "Seen via AWS Machine Learning Blog."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "aws-custom-installation-available-aws-deepracer",
-      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/20/ML-20957.png"
-    },
-    {
-      "title": "How Couchbase built a multi-model AI architecture for Capella iQ with Amazon Bedrock",
-      "url": "https://aws.amazon.com/blogs/machine-learning/how-couchbase-built-a-multi-model-ai-architecture-for-capella-iq-with-amazon-bedrock",
-      "source": "AWS Machine Learning Blog",
-      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
-      "sourceWeight": 0.72,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "This post describes how Couchbase adopted Amazon Bedrock to power Capella iQ with Anthropic’s Claude family of models, the architectural decisions behind their multi-model approach, and the operational benefits realized in production.",
-      "image": "public/thumbnails/news-a564671d52170057f1.png",
-      "featuredLatest": false,
-      "published": "2026-07-20T16:58:52+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 9.0648,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "How Couchbase built a multi-model AI architecture for Capella iQ with Amazon Bedrock",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via AWS Machine Learning Blog."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "how-couchbase-built-multi-model-architecture-capella",
-      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/20/ml-21175.png"
-    },
-    {
-      "title": "US public health agencies to test OpenAI and Anthropic AI models",
-      "url": "https://www.artificialintelligence-news.com/news/openai-anthropic-public-health-ai",
-      "source": "Artificial Intelligence News",
-      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "sourceWeight": 0.82,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Public health departments across the United States will test generative AI tools under a new programme involving the Coalition for Health AI, OpenAI, Anthropic, and Accenture. The Public Health Use Case and Learning Scaling Engine, known as PULSE, will support trials in 10 state, local, tribal, or territorial jurisdictions. The programme is intended to produce [&#8230;]\nThe post US public health agencies to test OpenAI and Anthropic AI models appeared first on AI News.",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-07-20T10:00:00+00:00",
-      "firstSeen": "2026-07-20T11:56:34.669534+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "big_name_with_impact",
-      "score": 9.0362,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "US public health agencies to test OpenAI and Anthropic AI models",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Artificial Intelligence News."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "openai-anthropic-public-health-agencies-test-openai"
-    },
-    {
-      "title": "Google is working on a new AI chip designed to make Gemini more efficient",
-      "url": "https://techcrunch.com/2026/07/20/google-is-working-on-a-new-ai-chip-designed-to-make-gemini-more-efficient",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Alphabet, Google's parent company, is reportedly working on a new chip designed to make its Gemini models run much more efficiently.",
-      "image": "public/thumbnails/news-84501da7e9406cd5aa.webp",
-      "featuredLatest": false,
-      "published": "2026-07-20T21:21:15+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 8.2704,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Google is working on a new AI chip designed to make Gemini more efficient",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "google-gemini-google-working-chip-designed-make",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/07/Screenshot-2026-07-01-at-10.00.27-AM.jpg?resize=1200%2C611"
-    },
-    {
-      "title": "Google is building a chip with Gemini baked into the silicon",
-      "url": "https://thenextweb.com/news/google-frozen-chip-gemini-silicon",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Most AI chips are general-purpose. You load a model onto them, and they run it. Google is reportedly trying something stranger: a chip that is the model, with Gemini’s blueprint etched into the hardware itself. The project, informally called “Frozen v2,” was reported by The Information and picked up by Reuters and Bloomberg Law. Alphabet [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-92521525cc71786f70.avif",
-      "featuredLatest": false,
-      "published": "2026-07-20T14:46:54+00:00",
-      "firstSeen": "2026-07-20T16:00:01.282615+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.9501,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Google is building a chip with Gemini baked into the silicon",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "google-gemini-google-building-chip-gemini-baked",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/google-ai-search-unsafe-schools-common-sense-media.avif"
-    },
-    {
-      "title": "China delivers a one-two punch to America’s AI dominance",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/967781/chinese-ai-models-open-source-moonshot-kimi-k3-alibaba-qwen",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "China's leading AI companies are ramping up the pressure on Silicon Valley, as Moonshot and Alibaba unveiled models they claim can go toe-to-toe with the best from OpenAI and Anthropic at a fraction of the cost. The rapid-fire releases suggest America's lead at the AI frontier is increasingly tight, just as the technology is becoming [&#8230;]",
-      "image": "public/thumbnails/news-17a599a19c3bdc2cc4.webp",
-      "featuredLatest": false,
-      "published": "2026-07-20T10:16:33+00:00",
-      "firstSeen": "2026-07-20T11:56:34.669534+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.4542,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "China delivers a one-two punch to America’s AI dominance",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Verge AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "china-delivers-one-two-punch-america-dominance"
-    },
-    {
-      "title": "Four teams just broke AI agents four ways in ten days. The flaw is the same one.",
-      "url": "https://thenextweb.com/news/ai-agent-security-four-attacks-one-flaw",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "We spent two years asking whether AI would lie to us. The more useful question this summer is what happens once we hand it the keys. Give a model your Gmail, your calendar, a memory and the power to act, and its mistakes stop being embarrassing. They start being exploitable. Over roughly ten days in [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-32b7c858f52977101a.avif",
-      "featuredLatest": false,
-      "published": "2026-07-20T14:09:53+00:00",
-      "firstSeen": "2026-07-20T16:00:01.282615+00:00",
-      "lastSeen": "2026-07-20T16:00:01.282615+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.1348,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Four teams just broke AI agents four ways in ten days. The flaw is the same one",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "four-teams-just-broke-agents-four",
-      "imageOriginal": "https://media.thenextweb.com/2026/05/taiwan-high-speed-rail-hacked-student-tetra-sdr.avif"
-    },
-    {
-      "title": "Reverse-engineering is cheap now",
-      "url": "https://simonwillison.net/2026/Jul/20/cheap-reverse-engineering",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "sourceRole": "primary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "I keep hearing anecdotes from people who used coding agents to reverse-engineer and automate devices in their homes.\nI think this is an interesting illustration of the impact of the reduced cost of writing code.\nPrior to agents, it was entirely possible to reverse-engineer home devices. The problem was the ROI - was it really worth all of that effort? More importantly, any experienced programmer knows that undocumented, unstable APIs like that may well change or break in the future. Is that initial work worth the effort if you're committing yourself to a frustrating cycle of maintenance in the",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-07-20T19:24:05+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.0134,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Primary source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Reverse-engineering is cheap now",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Simon Willison."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "reverse-engineering-cheap"
-    },
-    {
-      "title": "Kimi K3 open-weight model: China’s biggest AI is a bet on memory, not compute",
-      "url": "https://www.artificialintelligence-news.com/news/kimi-k3-open-weight-model-memory-compute-china",
-      "source": "Artificial Intelligence News",
-      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "sourceWeight": 0.82,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Moonshot AI&#8217;s Kimi K3 open-weight model has been read almost entirely through its parameter count since it&#160;launchedon July 16. At 2.8 trillion parameters, it is the largest open-weight model released to date. Model sizes are usually grouped into rough brackets, and 2.8 trillion rounds into what the industry calls the 3T class. A tier no [&#8230;]\nThe post Kimi K3 open-weight model: China&#8217;s biggest AI is a bet on memory, not compute appeared first on AI News.",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-07-20T09:00:00+00:00",
-      "firstSeen": "2026-07-20T11:56:34.669534+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.8146,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Kimi K3 open-weight model: China’s biggest AI is a bet on memory, not compute",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via Artificial Intelligence News."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "kimi-open-weight-model-china-biggest-bet"
-    },
-    {
-      "title": "At SIGGRAPH, NVIDIA Advances Graphics and Simulation With Agentic and Physical AI",
-      "url": "https://blogs.nvidia.com/blog/siggraph-news-2026",
-      "source": "NVIDIA Blog",
-      "sourceUrl": "https://blogs.nvidia.com/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "primary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "From open models to real-time simulation, AI and graphics breakthroughs are transforming media, content creation and robotics.",
-      "image": "public/thumbnails/news-2a1a838d005e168230.jpg",
-      "featuredLatest": false,
-      "published": "2026-07-20T15:00:53+00:00",
-      "firstSeen": "2026-07-20T16:00:01.282615+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.796,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Primary source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "At SIGGRAPH, NVIDIA Advances Graphics and Simulation With Agentic and Physical AI",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via NVIDIA Blog."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "nvidia-siggraph-nvidia-advances-graphics-simulation",
-      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/07/siggraph-featured-still-1920x1080-1.jpg"
-    },
-    {
-      "title": "OneDrive will block screenshots of sensitive documents, but only in Microsoft’s own browser.",
-      "url": "https://thenextweb.com/news/microsoft-edge-screenshot-blocking-sensitive-pdfs",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Starting next month, OneDrive and SharePoint will block screen captures when enterprise users open certain sensitivity-labelled PDFs in Microsoft Edge. The restriction applies to documents carrying a Purview Information Protection label without the Copy (EXTRACT) permission. When those conditions are met, screenshot blocking activates by default. Personal OneDrive accounts and unlabelled files are not affected. [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-beab618d7f873f9ea8.avif",
-      "featuredLatest": false,
-      "published": "2026-07-20T14:43:59+00:00",
-      "firstSeen": "2026-07-20T16:00:01.282615+00:00",
-      "lastSeen": "2026-07-20T16:00:01.282615+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.4489,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "OneDrive will block screenshots of sensitive documents, but only in Microsoft’s own browser",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "onedrive-will-block-screenshots-sensitive-documents",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/microsoft-edge-screenshot-blocking-sensitive-pdfs.avif"
-    },
-    {
-      "title": "OpenAI is scared of open-weight models. Should the US be?",
-      "url": "https://techcrunch.com/2026/07/20/openai-is-scared-of-open-weight-models-should-the-us-be",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Talk of banning Chinese-made open-weight LLMs reveals the challenge of  turning AI into a business.",
-      "image": "public/thumbnails/news-301f756688ee34b4b6.webp",
-      "featuredLatest": false,
-      "published": "2026-07-20T19:33:25+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.2178,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "OpenAI is scared of open-weight models. Should the US be?",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "openai-openai-scared-open-weight-models-should",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2153474303-e.jpg?resize=1200%2C800"
-    },
-    {
-      "title": "Safety and alignment in an era of long-horizon models",
-      "url": "https://openai.com/index/safety-alignment-long-horizon-models",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
-      "sourceRole": "primary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "OpenAI shares lessons from deploying long-running AI models, highlighting new safety risks, observed failures, and improved safeguards through iterative deployment.",
-      "image": "public/thumbnails/news-e74d0669ba37aab9d0.png",
-      "featuredLatest": false,
-      "published": "2026-07-20T10:00:00+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.1882,
-      "signalGroup": "Product updates",
-      "sourceTier": "Primary source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "Safety and alignment in an era of long-horizon models",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via OpenAI News."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "safety-alignment-era-long-horizon-models",
-      "imageOriginal": "https://images.ctfassets.net/kftzwdyauwt9/1Xa7VsDMfKDQaCRhafmq4r/58954b4318f57a81a96ad23470ed2497/SEO_image.png?w=1600&h=900&fit=fill"
-    },
     {
       "title": "The Self-Driving Company",
       "url": "https://aidailybrief.ai/e/2026-07-19",
@@ -491,9 +14,9 @@
       "summary": "A weekend long-read on Amjad Masad's viral \"The Self-Driving Company\" post — Replit's account of what happens when agents get woven into the fabric of an entire organization, plus NLW's takeaways on how any company (not just an engineering-native one) can start driving itself.",
       "image": "public/thumbnails/news-0a5390eecec7592eb9.png",
       "featuredLatest": false,
-      "published": "2026-07-20T22:00:08.388063+00:00",
+      "published": "2026-07-21T04:00:10.114755+00:00",
       "firstSeen": "2026-07-19T10:42:11.067310+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
+      "lastSeen": "2026-07-21T04:00:01.782484+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 5.132,
@@ -509,70 +32,6 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "self-driving-company"
-    },
-    {
-      "title": "X relaunches a rebuilt Android app after year-long effort",
-      "url": "https://techcrunch.com/2026/07/20/x-relaunches-a-rebuilt-android-app-after-year-long-effort",
-      "source": "TechCrunch AI",
-      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
-      "sourceWeight": 0.85,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "X says the rebuilt version of its Android app is now available globally.",
-      "image": "public/thumbnails/news-a62059e49231886d0f.webp",
-      "featuredLatest": false,
-      "published": "2026-07-20T19:37:39+00:00",
-      "firstSeen": "2026-07-20T22:00:01.610038+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.1198,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "X relaunches a rebuilt Android app after year-long effort",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via TechCrunch AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "relaunches-rebuilt-android-app-year-long-effort",
-      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2023/07/x-twitter.jpg?resize=1200%2C550"
-    },
-    {
-      "title": "A $400M nonprofit backed by France and DeepMind is building AI’s ‘public option’",
-      "url": "https://thenextweb.com/news/current-ai-public-open-ai-alternative-400-million",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "A farmer in rural India photographs a dying plant and wants to look it up. She does not speak English, and today’s AI barely speaks hers. A nonprofit called Current AI thinks that is a problem worth fixing. Its goal is grand: a “public option” for AI, open and free to anyone, much like the [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-b2ca3f80f7e4dc1c51.avif",
-      "featuredLatest": false,
-      "published": "2026-07-20T13:01:44+00:00",
-      "firstSeen": "2026-07-20T16:00:01.282615+00:00",
-      "lastSeen": "2026-07-20T16:00:01.282615+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.9074,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "A $400M nonprofit backed by France and DeepMind is building AI’s ‘public option’",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "deepmind-400m-nonprofit-backed-france-deepmind",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/current-ai.avif"
     }
   ],
   "tools": [
@@ -590,10 +49,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T19:19:45+00:00",
       "firstSeen": "2026-07-17T10:00:01.497400+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
+      "lastSeen": "2026-07-21T04:00:01.782484+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4093,
+      "score": 9.4091,
       "signalGroup": "Infrastructure",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -624,7 +83,7 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
+      "lastSeen": "2026-07-21T04:00:01.782484+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 7.8082,
@@ -661,7 +120,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6086,
+      "score": 7.6085,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -695,7 +154,7 @@
       "lastSeen": "2026-07-20T04:00:01.722451+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8091,
+      "score": 5.809,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -729,7 +188,7 @@
       "lastSeen": "2026-07-17T04:00:02.007006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8086,
+      "score": 5.8085,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -831,7 +290,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.9085,
+      "score": 4.9084,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -864,10 +323,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T19:19:45+00:00",
       "firstSeen": "2026-07-17T10:00:01.497400+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
+      "lastSeen": "2026-07-21T04:00:01.782484+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4093,
+      "score": 9.4091,
       "signalGroup": "Infrastructure",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -898,7 +357,7 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-20T22:00:01.610038+00:00",
+      "lastSeen": "2026-07-21T04:00:01.782484+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 7.8082,
@@ -935,7 +394,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6086,
+      "score": 7.6085,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -969,7 +428,7 @@
       "lastSeen": "2026-07-20T04:00:01.722451+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8091,
+      "score": 5.809,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1003,7 +462,7 @@
       "lastSeen": "2026-07-17T04:00:02.007006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8086,
+      "score": 5.8085,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1105,7 +564,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 4.9085,
+      "score": 4.9084,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1132,7 +591,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1040,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1142,7 +601,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1152,7 +611,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1162,7 +621,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1172,7 +631,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 829,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1182,7 +641,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1192,7 +651,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1202,7 +661,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1212,7 +671,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1222,7 +681,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1232,7 +691,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1242,7 +701,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "The Next Web",
@@ -1252,7 +711,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1262,7 +721,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1272,7 +731,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1282,7 +741,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1292,7 +751,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1302,7 +761,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 244,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1312,7 +771,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1322,7 +781,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1332,7 +791,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1342,7 +801,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Latent Space",
@@ -1352,7 +811,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Import AI",
@@ -1362,7 +821,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1372,7 +831,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 146,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1382,7 +841,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1392,7 +851,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1402,7 +861,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1412,7 +871,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1422,7 +881,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1432,7 +891,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1442,7 +901,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-20T22:00:01.610038+00:00"
+      "checkedAt": "2026-07-21T04:00:01.782484+00:00"
     }
   ],
   "errors": []

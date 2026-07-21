@@ -1,6 +1,6 @@
 {
   "date": "2026-07-18",
-  "updatedAt": "2026-07-18T10:39:39.370572+00:00",
+  "updatedAt": "2026-07-18T22:00:02.084774+00:00",
   "items": [
     {
       "title": "Claude make Fable 5 permanent",
@@ -16,10 +16,10 @@
       "featuredLatest": false,
       "published": "2026-07-18T06:00:13+00:00",
       "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 13.8565,
+      "score": 13.5954,
       "signalGroup": "Product updates",
       "sourceTier": "Primary source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -32,6 +32,69 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "claude-claude-make-fable-permanent"
+    },
+    {
+      "title": "Dave Eggers told OpenAI staff  that ChatGPT was ‘silencing an entire generation’",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/967630/dave-eggers-openai-chatgpt-silencing-an-entire-generation",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Last year, Sam Altman invited author Dave Eggers to give a talk to around 200 OpenAI staffers. The man has written countless novels, screenplays, pieces of journalism, started McSweeney's, and founded multiple schools and nonprofits that support writers and the arts more broadly. So one might expect he'd roll into the company's offices and offer [&#8230;]",
+      "image": "public/thumbnails/news-d120cc2e3004ee76f1.webp",
+      "featuredLatest": false,
+      "published": "2026-07-18T20:54:42+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.3272,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Dave Eggers told OpenAI staff  that ChatGPT was ‘silencing an entire generation’",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-chatgpt-dave-eggers-told-openai-staff",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/gettyimages-2157758001.jpg?quality=90&strip=all&crop=0%2C2.5961195218394%2C100%2C43.073649479563&w=1200"
+    },
+    {
+      "title": "SQLite Query Explainer",
+      "url": "https://simonwillison.net/2026/Jul/18/sqlite-query-explainer",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Tool: SQLite Query Explainer\n        Julia Evan's, in Learning a few things about running SQLite:\n\nMaybe one day I’ll learn to read a query plan.\n\nBig same.... which inspired me to have Fable build this interactive explain tool, which runs SQLite in Python in Pyodide in Web Assembly in the browser and adds a layer of explanation to the results of both EXPLAIN and EXPLAIN QUERY PLAN.\nApproach with caution, since I don't know enough about SQLite query plans to verify the results myself, but it seems cromulent enough to me.\n    \n    \n        Tags: sql, sqlite, tools, julia-evans, pyodide, claude-",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-18T17:19:10+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.6559,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "SQLite Query Explainer",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "sqlite-query-explainer"
     },
     {
       "title": "Google used Veo and Gemini to reconstruct the greatest goal Pelé ever scored, which was never filmed",
@@ -50,7 +113,7 @@
       "lastSeen": "2026-07-18T10:39:39.370572+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0785,
+      "score": 7.8006,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -66,6 +129,38 @@
       "imageOriginal": "https://media.thenextweb.com/2026/07/google-deepmind-pele-lost-goal-ai-reconstruction.avif"
     },
     {
+      "title": "The White House is now deciding who gets access to frontier AI models, not the labs",
+      "url": "https://thenextweb.com/news/white-house-dictating-frontier-ai-model-access-anthropic-openai",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The Trump administration is now dictating which companies and entities get access to frontier AI models from Anthropic and OpenAI, CNBC reported on Friday, citing two people familiar with the matter. Until now, the labs made that decision themselves. Anthropic controlled access to its Mythos cybersecurity model through an initiative called Project Glasswing. OpenAI ran [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-8fe974b1336b598879.avif",
+      "featuredLatest": false,
+      "published": "2026-07-18T14:15:31+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9371,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "The White House is now deciding who gets access to frontier AI models, not the labs",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "white-house-deciding-who-gets-access",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/white-house-dictating-frontier-ai-model-access-anthropic-openai.avif"
+    },
+    {
       "title": "A French startup built a radiology viewer from scratch with AI at its core. Moffitt Cancer Center is already using it.",
       "url": "https://thenextweb.com/news/raidium-ai-radiology-moffitt-cancer-center-us-launch",
       "source": "The Next Web",
@@ -79,10 +174,10 @@
       "featuredLatest": false,
       "published": "2026-07-18T10:07:35+00:00",
       "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.3338,
+      "score": 5.0409,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -96,6 +191,38 @@
       "toolCandidate": false,
       "clusterKey": "french-startup-built-radiology-viewer-scratch",
       "imageOriginal": "https://media.thenextweb.com/2026/07/raidium-ai-radiology-moffitt-cancer-center-us-launch.avif"
+    },
+    {
+      "title": "China is rebuilding the smartphone around AI agents. ZTE’s NaviX sold out in hours.",
+      "url": "https://thenextweb.com/news/china-agentic-ai-smartphones-zte-navix-doubao-waic",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "ZTE showcased the NaviX Ultra at the World AI Conference in Shanghai this week, calling it the world’s first agentic AI smartphone. The device, built under ZTE’s Nubia brand, runs ByteDance’s Doubao AI agent and can be activated by voice or a dedicated button. It comes in four colours and was prototyped in December at [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-b3dcdfcc4a8bb2408e.avif",
+      "featuredLatest": false,
+      "published": "2026-07-18T18:32:39+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.7493,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "China is rebuilding the smartphone around AI agents. ZTE’s NaviX sold out in hours",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "china-rebuilding-smartphone-around-agents-zte",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/china-agentic-ai-smartphones-zte-navix-doubao-waic.avif"
     },
     {
       "title": "Xpeng debuted its flying car in Germany. It has 7,000 orders and a factory that can build 10,000 a year.",
@@ -114,7 +241,7 @@
       "lastSeen": "2026-07-18T10:39:39.370572+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.4688,
+      "score": 3.1935,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -127,6 +254,37 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "xpeng-debuted-flying-car-germany-has"
+    },
+    {
+      "title": "The apps, gadgets, and tools every reader needs",
+      "url": "https://www.theverge.com/tech/967544/best-apps-gadgets-reading-installer",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Hi, friends! Welcome to Installer No. 136, your guide to the best and Verge-iest stuff in the world. (If you're new here, welcome, hope your neighborhood isn't as smoky as mine, and also you can read all the old editions at the Installer homepage.) This week, I've been recording the next season of Version History [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/Installer-136.png?quality=90&strip=all&crop=0%2C10.685039219071%2C100%2C78.629921561859&w=1200",
+      "featuredLatest": false,
+      "published": "2026-07-18T12:00:00+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.1932,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "The apps, gadgets, and tools every reader needs",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "apps-gadgets-tools-every-reader-needs"
     },
     {
       "title": "[AINews] not much happened today",
@@ -142,10 +300,10 @@
       "featuredLatest": false,
       "published": "2026-07-18T04:30:21+00:00",
       "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.2311,
+      "score": 2.9806,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -159,10 +317,41 @@
       "toolCandidate": false,
       "clusterKey": "ainews-not-much-happened-today",
       "clusterTitle": "[AINews] not much happened today",
-      "clusterSize": 5,
+      "clusterSize": 4,
       "relatedSources": [
         "Latent Space"
       ]
+    },
+    {
+      "title": "Kimi: Threat or menace?",
+      "url": "https://techcrunch.com/2026/07/18/kimi-threat-or-menace",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Chinese company Moonshot AI released a new version of its Kimi model this week, prompting concern about \"full AI communism.\"",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024",
+      "featuredLatest": false,
+      "published": "2026-07-18T18:51:07+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8979,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Kimi: Threat or menace?",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "kimi-threat-menace"
     },
     {
       "title": "Neil Rimer thinks the AI money is coming back out",
@@ -178,10 +367,10 @@
       "featuredLatest": false,
       "published": "2026-07-18T04:47:25+00:00",
       "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8245,
+      "score": 2.572,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -209,10 +398,10 @@
       "featuredLatest": false,
       "published": "2026-07-18T09:42:38+00:00",
       "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.8213,
+      "score": 2.5319,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -227,221 +416,159 @@
       "clusterKey": "cybercriminals-released-802-000-stolen-accounts"
     },
     {
-      "title": "The New Enterprise Battle Over Who Owns the Model",
-      "url": "https://aidailybrief.ai/e/2026-07-16",
+      "title": "Is Kimi K3 Really Fable Class?",
+      "url": "https://aidailybrief.ai/e/2026-07-17",
       "source": "The AI Daily Brief",
       "sourceUrl": "https://aidailybrief.ai/",
       "sourceWeight": 0.88,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Thinking Machines ships its first model — and it's the availability, not the benchmarks, that matters. Inkling is a base model built for fine-tuning, and it lands right as Microsoft trains its salesforce to attack the frontier labs on data trust. The new enterprise fight isn't which model you rent — it's who owns the one you customize.",
-      "image": "https://aidailybrief.ai/og/2026-07-16.png",
+      "summary": "The month of models rolls on, and Kimi K3 arrives with the boldest claim yet: a Fable-5-class open model on your desk. NLW unpacks the two-reaction cycle — the euphoric UI demos, then the sober debugging failures, brutal token costs, and near-total absence of guardrails — to figure out whether China really just closed the gap to under three months.",
+      "image": "https://aidailybrief.ai/og/2026-07-17.png",
       "featuredLatest": false,
-      "published": "2026-07-18T10:39:46.843412+00:00",
-      "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "published": "2026-07-18T22:00:15.639677+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.682,
-      "signalGroup": "Research",
+      "score": 2.332,
+      "signalGroup": "Product updates",
       "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "The New Enterprise Battle Over Who Owns the Model",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "whatHappened": "Is Kimi K3 Really Fable Class?",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The AI Daily Brief."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "enterprise-battle-who-owns-model"
+      "clusterKey": "kimi-really-fable-class"
     },
     {
-      "title": "Face AI upgrades its video face swap tool with faster processing and better tracking",
-      "url": "https://thenextweb.com/news/face-ai-video-face-swap-update-2026",
+      "title": "Nebius raised $775 million by borrowing against its GPUs. It has $40 billion more contracts to securitise.",
+      "url": "https://thenextweb.com/news/nebius-775-million-gpu-backed-debt-financing",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Face AI, a Los Angeles-based face swap platform, announced a major update to its video face swap feature on Friday. The update improves facial tracking, expression preservation, and scene stability across changing lighting, camera angles, and partial face occlusions like glasses and hats. Queued videos now process in under a minute. The tool targets social [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/face-ai-video-face-swap-update-2026.avif",
+      "summary": "Nebius raised $775 million in its first secured debt facility, borrowing against deployed GPU infrastructure and contracted cash flows from an investment-grade customer. The facility matures on October 31, 2030, and is priced at SOFR + 2.50%, roughly 6.8% at current rates. Together with the customer agreement’s cash flows, the facility covers more than 100% [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/nebius-775-million-gpu-backed-debt-financing.avif",
       "featuredLatest": false,
-      "published": "2026-07-18T09:05:33+00:00",
-      "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "published": "2026-07-18T14:12:52+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1031,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Face AI upgrades its video face swap tool with faster processing and better tracking",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "face-upgrades-video-face-swap-tool"
-    },
-    {
-      "title": "Jensen Huang’s leather jacket sold for $960,000 at Sotheby’s, 96 times its retail price",
-      "url": "https://thenextweb.com/news/jensen-huang-leather-jacket-960000-sothebys",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "One of Nvidia CEO Jensen Huang’s signature black Tom Ford leather jackets sold at Sotheby’s on Friday for $960,000 after 65 bids from 45 collectors. The pre-sale estimate was $40,000 to $60,000. The jacket retails for just under $10,000. Huang wore it in 2023 at a Foxconn event in Taipei and signed it for the [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/jensen-huang-leather-jacket-960000-sothebys.avif",
-      "featuredLatest": false,
-      "published": "2026-07-18T08:34:27+00:00",
-      "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0881,
+      "score": 2.2361,
       "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
       "brief": {
-        "whatHappened": "Jensen Huang’s leather jacket sold for $960,000 at Sotheby’s, 96 times its retail price",
+        "whatHappened": "Nebius raised $775 million by borrowing against its GPUs. It has $40 billion more contracts to securitise",
         "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
         "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "jensen-huang-leather-jacket-sold-960"
+      "clusterKey": "nebius-raised-775-million-borrowing-against"
     },
     {
-      "title": "Spanish satellite startup Sateliot wants €150 million to beam 5G directly to smartphones from orbit",
-      "url": "https://thenextweb.com/news/sateliot-150-million-satellite-5g-smartphones-europe",
+      "title": "France and Germany pledge to build a European rival to Palantir’s military AI software",
+      "url": "https://thenextweb.com/news/france-germany-palantir-rival-european-sovereign-military-ai",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Sateliot, a Barcelona-based satellite startup, is seeking to raise up to €150 million ($172 million), a 50% increase from the €100 million round it announced in April. The company operates a network of low-Earth orbit satellites and plans to use the funding to deploy 16 more over the next year. By early 2028, it expects [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/sateliot-150-million-satellite-5g-smartphones-europe.avif",
+      "summary": "France and Germany pledged on Friday to develop a European alternative to Palantir’s military AI software. A joint declaration signed after talks between Emmanuel Macron and Friedrich Merz committed the two countries to examine “a European sovereign digital backbone” covering data-centric security, AI, and cloud solutions. France’s Arcadia, an AI-powered command-and-control platform, was named as [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/france-germany-palantir-rival-european-sovereign-military-ai.avif",
       "featuredLatest": false,
-      "published": "2026-07-18T07:19:42+00:00",
-      "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "published": "2026-07-18T14:16:46+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.0527,
-      "signalGroup": "Business",
+      "score": 1.9377,
+      "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
       "brief": {
-        "whatHappened": "Spanish satellite startup Sateliot wants €150 million to beam 5G directly to smartphones from orbit",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "whatHappened": "France and Germany pledge to build a European rival to Palantir’s military AI software",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "spanish-satellite-startup-sateliot-wants-150"
+      "clusterKey": "france-germany-pledge-build-european-rival"
     },
     {
-      "title": "Apple raised iPhone 17 prices by 10% in Japan as the yen hovers near a four-decade low",
-      "url": "https://thenextweb.com/news/apple-iphone-17-price-increase-japan-yen",
+      "title": "Chinese car sales in the UK jumped from 384 in 2015 to 285,000 last year. The tariff gap explains why.",
+      "url": "https://thenextweb.com/news/chinese-cars-uk-sales-surge-byd-geely-no-tariff",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Apple raised the price of the iPhone 17 in Japan by roughly 10%, with the entry-level 256GB model now starting at ¥142,800 ($879), up from ¥129,800 previously, Bloomberg reported on Saturday. The iPhone 17 Pro with the same storage rose 8.3% to ¥194,800. Apple Watch and AirPods models also increased by up to 10%. Apple’s [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/apple-iphone-17-price-increase-japan-yen.avif",
+      "summary": "Brits bought 384 Chinese-made vehicles in 2015. Last year, they bought 285,000, according to automotive consulting firm Mobility Global. The growth is accelerating. BYD nearly doubled its UK sales in the first half of 2026 to over 37,000 units, and Chinese brands collectively hold roughly 13% of new car registrations in Britain, double their share [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/chinese-cars-uk-sales-surge-byd-geely-no-tariff.avif",
       "featuredLatest": false,
-      "published": "2026-07-18T07:38:19+00:00",
-      "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "published": "2026-07-18T14:14:00+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": 0.0614,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.9365,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "Apple raised iPhone 17 prices by 10% in Japan as the yen hovers near a four-decade low",
+        "whatHappened": "Chinese car sales in the UK jumped from 384 in 2015 to 285,000 last year. The tariff gap explains why",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "apple-raised-iphone-prices-japan-yen"
+      "clusterKey": "chinese-car-sales-jumped-384-2015"
     },
     {
-      "title": "nascheme/quixote",
-      "url": "https://simonwillison.net/2026/Jul/18/quixote",
-      "source": "Simon Willison",
-      "sourceUrl": "https://simonwillison.net/atom/everything/",
-      "sourceWeight": 0.85,
-      "sourceRole": "primary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "nascheme/quixote\nA certain vintage if Python web nerd might be delighted to learn that the most recent commit to the Quixote web framework was six hours ago.\nThe oldest commit in that repo is from 21 years ago, and that was the initial import of Quixote 2.4 from Subversion into Git.\n\n\n    Tags: computer-history, python, web-frameworks",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-07-18T05:27:49+00:00",
-      "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "repo_title_low_context",
-      "score": 0.0421,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Primary source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "nascheme/quixote",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via Simon Willison."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "nascheme-quixote"
-    },
-    {
-      "title": "TSMC posted record $40 billion revenue. Its stock fell 4%. Investors are no longer buying the AI spending story on faith.",
-      "url": "https://thenextweb.com/news/tsmc-record-revenue-stock-falls-ai-capex-fears",
+      "title": "Meta patented an AI system that listens to your voice all day and tracks your mood",
+      "url": "https://thenextweb.com/news/meta-patent-mood-tracking-voice-emotion-ai",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "TSMC posted record second-quarter revenue of over $40 billion, up 36% year on year, with net income rising 77%. The result should have been a triumph. Instead, shares fell 4%, dragging the Nasdaq 100 down 1.4% on Thursday and compounding losses from the day before. The problem was not the earnings but the spending. TSMC [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/tsmc-record-revenue-stock-falls-ai-capex-fears.avif",
+      "summary": "Meta has been granted a patent for an AI system that continuously records a user’s voice, transcribes it, and feeds the audio through a machine learning model to detect their emotional state. The patent, published on July 2, describes a device that listens for “audible communications” including sighs, laughter, and vocal tone, and combines them [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/meta-patent-mood-tracking-voice-emotion-ai.avif",
       "featuredLatest": false,
-      "published": "2026-07-18T07:30:11+00:00",
-      "firstSeen": "2026-07-18T10:39:39.370572+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "published": "2026-07-18T13:45:03+00:00",
+      "firstSeen": "2026-07-18T22:00:02.084774+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.0424,
-      "signalGroup": "Business",
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.9247,
+      "signalGroup": "Media generation",
       "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
       "brief": {
-        "whatHappened": "TSMC posted record $40 billion revenue. Its stock fell 4%. Investors are no longer buying the AI spending story on faith",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "whatHappened": "Meta patented an AI system that listens to your voice all day and tracks your mood",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "tsmc-posted-record-billion-revenue-stock"
+      "clusterKey": "meta-meta-patented-system-listens-your"
     }
   ],
   "tools": [
@@ -494,10 +621,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T19:19:45+00:00",
       "firstSeen": "2026-07-17T10:00:01.497400+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4148,
+      "score": 9.4129,
       "signalGroup": "Infrastructure",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -528,10 +655,10 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.809,
+      "score": 7.8087,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -565,7 +692,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6111,
+      "score": 7.6102,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -664,10 +791,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.814,
+      "score": 5.8124,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -701,7 +828,7 @@
       "lastSeen": "2026-07-17T04:00:02.007006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8113,
+      "score": 5.8104,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -769,10 +896,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T19:19:45+00:00",
       "firstSeen": "2026-07-17T10:00:01.497400+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4148,
+      "score": 9.4129,
       "signalGroup": "Infrastructure",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -803,10 +930,10 @@
       "featuredLatest": false,
       "published": "2026-07-07T21:58:15+00:00",
       "firstSeen": "2026-07-15T11:01:24.556175+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.809,
+      "score": 7.8087,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -840,7 +967,7 @@
       "lastSeen": "2026-07-16T04:00:02.028386+00:00",
       "editorial_allow": false,
       "editorial_reason": "watchlist_low_signal",
-      "score": 7.6111,
+      "score": 7.6102,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -939,10 +1066,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T14:54:54+00:00",
       "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-18T10:39:39.370572+00:00",
+      "lastSeen": "2026-07-18T22:00:02.084774+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.814,
+      "score": 5.8124,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -976,7 +1103,7 @@
       "lastSeen": "2026-07-17T04:00:02.007006+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8113,
+      "score": 5.8104,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -1003,7 +1130,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1039,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1013,7 +1140,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1023,7 +1150,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1033,7 +1160,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1043,7 +1170,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 829,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1053,7 +1180,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1063,7 +1190,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1073,7 +1200,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1083,7 +1210,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1093,7 +1220,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1103,7 +1230,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1113,7 +1240,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "The Next Web",
@@ -1123,7 +1250,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1133,7 +1260,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1143,7 +1270,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1153,7 +1280,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1162,8 +1289,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 18,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "items": 19,
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1173,7 +1300,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 243,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1183,7 +1310,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1193,7 +1320,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1203,7 +1330,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1213,7 +1340,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Latent Space",
@@ -1223,7 +1350,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Import AI",
@@ -1231,10 +1358,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1243,8 +1369,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 150,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "items": 149,
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1254,7 +1380,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1264,7 +1390,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1274,7 +1400,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1284,7 +1410,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1294,7 +1420,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1304,7 +1430,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1314,14 +1440,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-18T10:39:39.370572+00:00"
+      "checkedAt": "2026-07-18T22:00:02.084774+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
