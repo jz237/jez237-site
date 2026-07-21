@@ -141,7 +141,7 @@ void main(){
   float artL = dot(art, vec3(0.35,0.5,0.15));
   base = mix(base, art * 2.5 + base * 0.25, uArtMix * 0.94);
   // clusters breathe: brighter coral pockets pulse their rim glow gently
-  base += art * smoothstep(0.08, 0.28, artL) * (0.42 + 0.22*sin(uT*0.8 + artL*30.0)) * uArtMix;
+  base += art * smoothstep(0.08, 0.28, artL) * (0.50 + 0.24*sin(uT*0.8 + artL*30.0)) * uArtMix;
   // the run's history: chemistry and deaths bloom into the ground itself
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
   // luminance-bounded knee: heavy traffic deepens the hue, never bleaches white
@@ -190,7 +190,7 @@ void main(){
               + sin(along*(29.0+fi*5.0) - uT*(0.85+fi*0.13) + fi*4.0) * 0.10;
     float jit = (fbm3(vec2(along*90.0 + fi*31.0, uT*0.9)) - 0.5) * 0.05;
     float dS = abs(across*0.9 - off - jit);
-    float w = 0.062 + 0.014*sin(uT*1.6+fi*1.7);
+    float w = 0.070 + 0.014*sin(uT*1.6+fi*1.7);
     float g = exp(-dS*dS/(w*w));
     energy += g * (0.8 + 0.2*sin(uT*3.0 + fi*2.2 + along*20.0));
     coreE  += exp(-dS*dS/(w*w*0.14));
@@ -200,7 +200,7 @@ void main(){
   coreE  = coreE  / (1.0 + coreE*0.45);
   vec3 halo = vec3(0.10,0.45,1.15);
   vec3 core = vec3(0.80,0.98,1.30);
-  col += halo * energy * 0.68 + core * coreE * 0.78;
+  col += halo * energy * 0.72 + core * coreE * 0.78;
   // soft blue ambience filling the channel
   col += vec3(0.04,0.14,0.42) * smoothstep(1.0,0.0,abs(across)) * 1.05;
   // battle stains soak in
