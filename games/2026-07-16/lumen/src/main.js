@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v3.7.0';
+export const VERSION = 'v3.8.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -486,10 +486,13 @@ class Game {
         ['spire', 1090, 760], ['urchin', 1240, 660], ['tesla', 1380, 620],
         ['bramble', 480, 900], ['bulb', 1160, 680],
       ],
-      twinveins: [ // spread board-wide like the mock, one per neighbourhood
+      twinveins: [ // mock density: a grove in every neighbourhood (~18 in frame)
         ['coral', 430, 300], ['tesla', 880, 260], ['bloom', 1420, 300],
         ['spire', 330, 700], ['urchin', 900, 560], ['tesla', 1520, 560],
-        ['bramble', 620, 880], ['bulb', 1240, 860],
+        ['bramble', 620, 880], ['bulb', 1240, 860], ['bloom', 240, 460],
+        ['urchin', 650, 480], ['coral', 1130, 420], ['bramble', 1680, 380],
+        ['spire', 470, 620], ['bloom', 1050, 720], ['tesla', 780, 820],
+        ['bulb', 1440, 740], ['coral', 1660, 820], ['urchin', 260, 840],
       ],
       caldera: [
         ['coral', 950, 500], ['tesla', 1200, 700], ['bloom', 600, 600],
