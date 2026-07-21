@@ -350,6 +350,7 @@ export class Renderer {
     gl.activeTexture(gl.TEXTURE4);
     gl.bindTexture(gl.TEXTURE_2D, this.artEnemies.tex);
     gl.uniform1i(this.pTex.u.uAtlas, 4);
+    gl.uniform1f(this.pTex.u.uGain, 0.6); // beetles sit dark on the bright filament
     gl.activeTexture(gl.TEXTURE0);
     this.texEnemies.flush(this.pTex);
     this.texSprites.reset();
@@ -357,6 +358,7 @@ export class Renderer {
     gl.activeTexture(gl.TEXTURE3);
     gl.bindTexture(gl.TEXTURE_2D, this.artTowers.tex);
     gl.uniform1i(this.pTex.u.uAtlas, 3);
+    gl.uniform1f(this.pTex.u.uGain, 0.82);
     gl.activeTexture(gl.TEXTURE0);
     this.texSprites.flush(this.pTex);
 
@@ -642,7 +644,7 @@ export class Renderer {
       if (e.def.boss || e.def.miniboss) continue;
       const frame = FRAME[e.type];
       if (frame === undefined) continue;
-      const size = e.def.size * 1.15;
+      const size = e.def.size * 1.3;
       const rot = Math.atan2(e.dirx || 0, -(e.diry || -1));
       const alpha = e.def.phasing && e.untargetable ? 0.3 : 1;
       const wob = 1 + 0.06 * Math.sin(t * 9 + e.wobblePhase);
