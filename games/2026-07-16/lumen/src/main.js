@@ -11,12 +11,13 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v3.4.0';
+export const VERSION = 'v3.5.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
 const params = new URLSearchParams(location.search);
 const NS_MODE = params.get('ns') === '1';
+if (NS_MODE) window.__lumenNS = true;
 
 class Game {
   constructor() {
@@ -282,7 +283,7 @@ class Game {
       if (!NS_MODE && !quiet) this.audio.on(ev);
       if (quiet) { // attract: only the visual ground-story reacts
         if (ev.type === 'kill') this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: ev.boss ? 240 : 44, i: ev.boss ? 0.7 : 0.3, color: ev.color || [0.5, 0.9, 0.5] });
-        if (ev.type === 'mix') this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 150, i: 0.85, color: ev.color });
+        if (ev.type === 'mix') this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 120, i: 0.5, color: ev.color });
         continue;
       }
       switch (ev.type) {
@@ -313,7 +314,7 @@ class Game {
           this.fx.shake = Math.min(7, this.fx.shake + 1.6);
           this.fx.aberr = Math.min(0.016, this.fx.aberr + 0.006);
           // reactions paint the terrain in the blended hue — the run's story
-          this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 150, i: 0.85, color: ev.color });
+          this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 120, i: 0.5, color: ev.color });
           break;
         case 'bossSpawn':
           this.ui.banner(ev.name, ev.boss ? 'the grove holds its breath' : 'something vast crawls out');
@@ -524,9 +525,20 @@ class Game {
     s.step(); // triggers startWave
     const extra = s.spawnQueue.map(q => ({ at: q.at + 0.22, enemyType: q.enemyType, hpMul: q.hpMul * 1.6 }));
     s.spawnQueue.push(...extra);
+    // the mock's columns are blue-violet beetles — pale ghosts stay in real play
+    const RECAST = { wisp: 'husk', spectre: 'mite', regen: 'shellback' };
+    for (const q of s.spawnQueue) q.enemyType = RECAST[q.enemyType] || q.enemyType;
     // bosses crawl — drive further so they reach mid-frame for the shot
     const driveSecs = nsWave >= 20 ? 46 : 16;
     for (let i = 0; i < 60 * driveSecs; i++) { s.step(); this.routeEvents(); }
+    if (nsWave < 20) {
+      // single-file columns on every loop, like the mock
+      const kinds = ['husk', 'mite', 'shellback', 'dartfin', 'husk', 'grub', 'mite', 'bulwark'];
+      const total = s.paths[0].total;
+      for (let i = 0; i < 26; i++)
+        s.spawnEnemy(kinds[i % kinds.length], 3.0, Math.max(10, Math.min(total * 0.94, total * 0.06 + i * (total * 0.88 / 26))));
+      for (let i = 0; i < 60 * 2; i++) { s.step(); this.routeEvents(); }
+    }
     // boss frames need a living swarm around the great one — restock escorts
     if (nsWave >= 20) {
       const boss = s.enemies.find(e => e.def.boss);
