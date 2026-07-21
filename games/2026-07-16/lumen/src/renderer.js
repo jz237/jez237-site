@@ -880,8 +880,8 @@ export class Renderer {
     for (const pr of sim.projectiles) {
       const ds = depthScale(pr.y);
       const py = pr.y - (pr.height || 0);
-      T.push(pr.x, py, 20 * ds, 20 * ds, 0, 0, KIND.GLOW, 1,
-        pr.color[0] * 0.75, pr.color[1] * 0.75, pr.color[2] * 0.75, 0);
+      T.push(pr.x, py, 17 * ds, 17 * ds, 0, 0, KIND.GLOW, 1,
+        pr.color[0] * 0.42, pr.color[1] * 0.42, pr.color[2] * 0.42, 0);
     }
     for (const e of sim.enemies) {
       if (e.type !== 'wisp') continue;
