@@ -469,6 +469,8 @@ Jez provided or explicitly approved.
 
 - Add new playable experiments through `/games/index.html` using the
   existing card and link patterns.
+- VOIDFORGE is publicly hosted at `https://voidforge.jez237.com/`; its
+  source of truth is `https://github.com/jz237/voidforge`.
 - Current shipped game directories with pages include:
   `/games/2026-06-05/invaders/`,
   `/games/2026-06-05/neon-invaders/`,
