@@ -110,6 +110,7 @@ export const FS_GROUND = COMMON + `
 uniform float uT; uniform float uHorizon; uniform vec2 uReso; uniform float uMood;
 uniform vec3 uMapTint;
 uniform sampler2D uStain; uniform vec2 uWorldSize;
+uniform sampler2D uArt; uniform float uArtMix;
 in vec2 vUv; in vec2 vWorld; out vec4 frag;
 // vUv here: x across screen, y 0 at horizon → 1 at bottom (near)
 void main(){
@@ -132,6 +133,15 @@ void main(){
   base += vec3(0.04,0.22,0.20) * mix(vec3(1.0), uMapTint*1.4, 0.6) * smoothstep(0.86,0.98,crackN) * (0.55+0.45*sin(uT*0.6+p.x*4.0)) * 0.8;
   // faint teal ambient sheen so the plane never reads as void
   base += vec3(0.012,0.030,0.034);
+  // painted coral plate (mirrored-repeat tiling, fbm-warped to hide symmetry);
+  // procedural life above stays layered on top so the board never goes static
+  vec2 auv = vWorld / 920.0;
+  auv += (vec2(fbm(vWorld*0.0031), fbm(vWorld*0.0031+57.0)) - 0.5) * 0.14;
+  vec3 art = texture(uArt, auv).rgb;
+  float artL = dot(art, vec3(0.35,0.5,0.15));
+  base = mix(base, art * 2.3 + base * 0.25, uArtMix * 0.94);
+  // clusters breathe: brighter coral pockets pulse their rim glow gently
+  base += art * smoothstep(0.08, 0.28, artL) * (0.42 + 0.22*sin(uT*0.8 + artL*30.0)) * uArtMix;
   // the run's history: chemistry and deaths bloom into the ground itself
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
   // luminance-bounded knee: heavy traffic deepens the hue, never bleaches white
