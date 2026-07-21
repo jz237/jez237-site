@@ -127,7 +127,7 @@ export class UI {
       card.dataset.tower = id;
       const cssColor = `rgb(${t.color.map(c => Math.floor(Math.pow(c, 0.7) * 255)).join(',')})`;
       card.style.setProperty('--glow', cssColor);
-      card.innerHTML = `<span class="key">${i}</span><span class="glyph">${GLYPHS[id] || '❖'}</span><span class="cname">${t.name}</span><span class="cost">◈ ${t.cost}</span>`;
+      card.innerHTML = `<span class="key">${i}</span><span class="chip"><span class="glyph">${GLYPHS[id] || '❖'}</span></span><span class="cname">${t.name}</span><span class="cost">◈ ${t.cost}</span>`;
       card.title = t.desc;
       card.addEventListener('click', () => this.game.armTower(id));
       this.el.cards.appendChild(card);
@@ -154,19 +154,27 @@ export class UI {
 
   update(sim, armed) {
     const set = (key, el, val) => { if (this.lastVals[key] !== val) { el.textContent = val; this.lastVals[key] = val; } };
+    // (surge uses innerHTML directly below — not routed through set())
     set('gold', this.el.gold, `◈ ${sim.gold}`);
     set('lives', this.el.lives, `❤ ${sim.lives}`);
     set('wave', this.el.wave, sim.state === 'prep' ? `WAVE ${sim.wave + 1}` : `WAVE ${sim.wave}`);
+    const ws = document.getElementById('waveSub');
+    if (ws) {
+      if (sim.state === 'wave' && sim.waveTotal) {
+        const remaining = Math.min(sim.waveTotal, sim.spawnQueue.length + sim.enemies.length);
+        set('waveSub', ws, `☄ ${remaining} / ${sim.waveTotal}`);
+      } else set('waveSub', ws, '');
+    }
     // surge button
     const s = this.el.surge;
     if (sim.state === 'prep') {
       const bonus = Math.floor(Math.max(0, sim.prepLeft) * ECON.surgeBonusPerSec);
       const coarse = document.body.classList.contains('coarse');
-      s.textContent = coarse ? `SURGE +◈${bonus}` : `CALL THE SURGE  +◈${bonus}  (${Math.ceil(Math.max(0, sim.prepLeft))}s)`;
+      s.innerHTML = coarse ? `<span class="schip">≋</span>SURGE +◈${bonus}` : `<span class="schip">≋</span>CALL THE SURGE +◈${bonus} (${Math.ceil(Math.max(0, sim.prepLeft))}s)`;
       s.classList.add('ready');
       s.disabled = false;
     } else {
-      s.textContent = sim.state === 'wave' ? (document.body.classList.contains('coarse') ? 'INBOUND' : 'SURGE INBOUND') : '—';
+      s.innerHTML = sim.state === 'wave' ? `<span class="schip">≋</span>` + (document.body.classList.contains('coarse') ? 'INBOUND' : 'SURGE INBOUND') : '—';
       s.classList.remove('ready');
       s.disabled = true;
     }

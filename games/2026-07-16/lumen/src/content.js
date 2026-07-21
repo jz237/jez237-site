@@ -377,13 +377,15 @@ export const MAPS = [
         [1180, 790], [1150, 640], [1250, 520], [1450, 500], [1620, 580],
         [1700, 720], [1690, 870],
       ],
-      [ // the high road — crosses the meander twice before rejoining
-        [-60, 330], [180, 345], [420, 390], [700, 320], [980, 295],
-        [1230, 345], [1400, 430], [1450, 500], [1620, 580],
+      [ // the high road — a long northern arc that dives back through the
+        // meander's hook, so both routes give towers similar exposure
+        [-60, 330], [180, 345], [420, 390], [700, 320], [950, 290],
+        [1200, 300], [1420, 370], [1530, 500], [1430, 620], [1250, 600],
+        [1150, 640], [1250, 520], [1450, 500], [1620, 580],
         [1700, 720], [1690, 870],
       ],
     ],
-    pathWeights: [0.55, 0.45],
+    pathWeights: [0.58, 0.42],
     heart: [1690, 880],
     portal: [-40, 330],
     floraCount: 150,
