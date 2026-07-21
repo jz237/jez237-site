@@ -1020,12 +1020,14 @@ void main(){
     float memb1 = smoothstep(0.026,0.0,abs(r-0.82-wob*0.4)) * (0.9+0.3*sin(uT*1.3));
     float memb2 = smoothstep(0.022,0.0,abs(r-0.60+wob*0.3)) * (0.8+0.3*sin(uT*1.1+2.0))
                 + smoothstep(0.018,0.0,abs(r-0.40-wob*0.2)) * 0.7;
+    // sun-gate ray spokes turning slowly through the rings (mock)
+    float rays = pow(abs(cos(ang*4.0 + uT*0.08)), 22.0) * smoothstep(0.95,0.25,r) * 0.45;
     // inner galaxy: swirling motes
     float swirl = fbm(vec2(ang*1.5 + uT*0.25, r*4.0 - uT*0.18));
     float veil = smoothstep(0.75,0.10,r) * swirl * 0.45;
     float nucleus = smoothstep(0.24+beat*0.05,0.0,r);
     float flicker = 1.0 - (1.0-integ)*0.4*step(0.7, hash12(vec2(floor(uT*14.0), seed)));
-    col = hcol*veil*0.7 + hcol*tend*0.55*(0.7+0.3*beat)
+    col = hcol*rays + hcol*veil*0.7 + hcol*tend*0.55*(0.7+0.3*beat)
         + hcol*memb1*1.3 + mix(hcol,vec3(1.0),0.3)*memb2*0.8
         + mix(hcol,vec3(1.0,0.97,0.9),0.65)*nucleus*(1.6+beat*2.0);
     col *= flicker;
