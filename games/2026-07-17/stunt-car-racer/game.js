@@ -4395,43 +4395,43 @@
     var minutes = Math.min(9, Math.floor(totalSeconds / 60));
     var seconds = totalSeconds % 60;
     var hundredths = Math.floor(milliseconds / 10) % 100;
-    drawCockpitGlyph(ctx, String(minutes), 229, y);
-    drawCockpitGlyph(ctx, ':', 235, y);
-    drawCockpitGlyph(ctx, String(Math.floor(seconds / 10)), 240, y);
-    drawCockpitGlyph(ctx, String(seconds % 10), 247, y);
-    drawCockpitGlyph(ctx, '.', 253, y);
-    drawCockpitGlyph(ctx, String(Math.floor(hundredths / 10)), 258, y);
-    drawCockpitGlyph(ctx, String(hundredths % 10), 265, y);
+    drawCockpitGlyph(ctx, String(minutes), 259, y);
+    drawCockpitGlyph(ctx, ':', 265, y);
+    drawCockpitGlyph(ctx, String(Math.floor(seconds / 10)), 270, y);
+    drawCockpitGlyph(ctx, String(seconds % 10), 277, y);
+    drawCockpitGlyph(ctx, '.', 283, y);
+    drawCockpitGlyph(ctx, String(Math.floor(hundredths / 10)), 288, y);
+    drawCockpitGlyph(ctx, String(hundredths % 10), 295, y);
   }
 
   function drawCockpitReadouts(ctx) {
-    // HD dash LCDs: left glass x43-82, right glass x229-269, rows y172/y181
+    // HD dash v2 LCDs: left glass x6-69, right glass x256-317, rows y172/y182
     ctx.fillStyle = '#d6ecff';
 
     var lap = getLapNumber();
     if (lap >= 1) {
-      drawCockpitGlyph(ctx, 'L', 44, 172);
-      drawCockpitGlyph(ctx, String(Math.min(lap, 3)), 51, 172);
+      drawCockpitGlyph(ctx, 'L', 10, 172);
+      drawCockpitGlyph(ctx, String(Math.min(lap, 3)), 17, 172);
     }
 
     var boost = Math.max(0, Math.min(99, getBoostReserve()));
-    drawCockpitGlyph(ctx, 'B', 62, 172);
-    drawCockpitGlyph(ctx, String(Math.floor(boost / 10)), 69, 172);
-    drawCockpitGlyph(ctx, String(boost % 10), 76, 172);
+    drawCockpitGlyph(ctx, 'B', 32, 172);
+    drawCockpitGlyph(ctx, String(Math.floor(boost / 10)), 39, 172);
+    drawCockpitGlyph(ctx, String(boost % 10), 46, 172);
 
     if (uiMode !== UI_PRACTISE_RACE) {
       var rawDistance = getDistanceToOpponent();
       var distance = (rawDistance + (rawDistance >> 2)) >> 2;
-      if (distance < 0) drawCockpitGlyph(ctx, '-', 43, 181);
+      if (distance < 0) drawCockpitGlyph(ctx, '-', 9, 182);
       var digits = ('0000' + Math.min(9999, Math.abs(distance))).slice(-4);
-      drawCockpitGlyph(ctx, digits.charAt(0), 50, 181);
-      drawCockpitGlyph(ctx, digits.charAt(1), 57, 181);
-      drawCockpitGlyph(ctx, digits.charAt(2), 64, 181);
-      drawCockpitGlyph(ctx, digits.charAt(3), 71, 181);
+      drawCockpitGlyph(ctx, digits.charAt(0), 16, 182);
+      drawCockpitGlyph(ctx, digits.charAt(1), 23, 182);
+      drawCockpitGlyph(ctx, digits.charAt(2), 30, 182);
+      drawCockpitGlyph(ctx, digits.charAt(3), 37, 182);
     }
 
     if (lap >= 1) drawCockpitTime(ctx, getCurrentLapTime(), 172);
-    drawCockpitTime(ctx, getPlayerBestLap(), 181);
+    drawCockpitTime(ctx, getPlayerBestLap(), 182);
   }
 
   function updateCockpitSpeedBar() {
@@ -4483,9 +4483,9 @@
     if (speedBar >= 128) speedBar -= 128;
     speedBar = Math.max(0, Math.min(127, speedBar));
     if (speedBar > 0) {
-      // HD dash: printed scale runs x110-210 in 320-space (was x97-224)
+      // HD dash v2: printed scale runs x101-245 in 320-space, origin at the 50 mark
       ctx.fillStyle = '#ffcc22';
-      ctx.fillRect(110, 169, Math.round(speedBar * 100 / 127), 3);
+      ctx.fillRect(101, 164, Math.round(speedBar * 144 / 127), 3);
     }
 
     drawCockpitReadouts(ctx);

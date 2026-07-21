@@ -99,6 +99,12 @@
       '#endif',
       'uniform float textureWeight;',
       'uniform sampler2D uSampler;',
+      'uniform sampler2D uHdTexG;',
+      'uniform sampler2D uHdTexA;',
+      'uniform sampler2D uHdTexM;',
+      'uniform sampler2D uHdTexR;',
+      'uniform float uHdTexOn;',
+      'uniform float uHdDebug;',
       'uniform vec3 uHdCam;',
       'uniform float uHdFog;',
       'uniform float uHdLight;',
@@ -107,40 +113,61 @@
       'varying vec3 vWorld;',
       'varying float vDepth;',
       NOISE_GLSL,
-      TERRAIN_GLSL,
+      'float lum3(vec3 c){ return dot(c, vec3(0.299, 0.587, 0.114)); }',
+      'vec3 tri(sampler2D t, vec3 p, vec3 n, float sc){',
+      '  vec3 an = abs(n) + vec3(1e-4); an /= (an.x + an.y + an.z);',
+      '  return texture2D(t, p.zy * sc).rgb * an.x + texture2D(t, p.xz * sc).rgb * an.y + texture2D(t, p.xy * sc).rgb * an.z;',
+      '}',
       'void main() {',
       '  vec4 base = (1.0 - textureWeight) * outputColor + textureWeight * texture2D(uSampler, vTextureCoord);',
       '  vec3 c = base.rgb;',
       '  float r = base.r, g = base.g, b = base.b;',
       '  float mono = max(max(r,g),b) - min(min(r,g),b);',
-      '  bool isGround = (abs(r-g) < 0.06) && (b < g - 0.08) && g > 0.3 && g < 0.62;', // olive family
-      '  bool isTrack  = (mono < 0.09) && r > 0.32 && r < 0.75;',                      // grey family
-      '  bool isEdge   = (r > 0.55 && g < 0.35 && b < 0.3) || (r > 0.85 && g > 0.8 && b > 0.8);', // red/white curbs+snow
-      '  float lowland = 1.0 - smoothstep(60.0, 170.0, vWorld.y);',                    // keep scrub off elevated deck
-      '  if (isGround && lowland > 0.01) {',
-      '    vec3 scrub = scrubColor(vWorld.xz) * (0.82 + 0.35 * (g - 0.3));',
-      '    c = mix(c * (0.92 + 0.12 * fbm(vWorld.xz * 0.9)), scrub, lowland);',
-      '  } else if (isTrack) {',
-      '    float grain = fbm(vWorld.xz * 1.7);',
-      '    float wear  = fbm(vWorld.xz * 0.13 + 5.0);',
-      '    float lum = dot(c, vec3(0.299, 0.587, 0.114));',
-      '    float gAmp = mix(1.0, 0.4, smoothstep(0.6, 0.78, lum));',                   // keep white walls clean
-      '    c = c * mix(1.0, 0.86 + 0.16 * grain, gAmp);',
-      '    c = mix(c, c * 0.78, smoothstep(0.55, 0.8, wear) * 0.5 * gAmp);',           // darker worn patches
-      '  } else if (!isEdge && mono > 0.12 && g > r && g > 0.3) {',
-      '    float rock = fbm(vWorld.xz * 0.35 + 3.0);',                                 // green mountains -> vegetated rock
-      '    c = c * (0.8 + 0.3 * rock);',
-      '  }',
       '  vec3 fdx = dFdx(vWorld), fdy = dFdy(vWorld);',
       '  vec3 N = cross(fdx, fdy);',
       '  float nl = length(N);',
-      '  if (nl > 0.0001) {',
-      '    N /= nl; if (N.y < 0.0) N = -N;',
-      '    float sun = clamp(dot(N, normalize(vec3(0.35, 0.8, 0.45))), 0.0, 1.0);',
-      '    c *= mix(1.0, 0.78 + 0.3 * sun, uHdLight);',
+      '  vec3 Nn = (nl > 0.0001) ? N / nl : vec3(0.0, 1.0, 0.0);',
+      '  if (Nn.y < 0.0) Nn = -Nn;',
+      '  float fdist = distance(vWorld, uHdCam);',
+      '  bool isGround = ((abs(r-g) < 0.06) && (b < g - 0.08) && g > 0.3 && g < 0.62)',  // olive terrain
+      '               || (r > g && g > b && (r - g) < 0.3 && (r - b) > 0.1 && r > 0.3 && r < 0.68 && g > 0.28);', // red-brown earth (walls are darker+redder)
+      '  bool isCream  = (abs(r-g) < 0.08) && (b < g - 0.06) && g >= 0.62;',            // pale deck tops
+      '  bool isTrack  = (mono < 0.09) && r > 0.32 && r < 0.75;',                       // grey deck
+      '  bool isRed    = r > 0.45 && g < 0.36 && b < 0.34 && (r - g) > 0.18;',          // red wall panels
+      '  bool isWhite  = r > 0.82 && g > 0.8 && b > 0.78;',                             // white panels / snow
+      '  bool isEdge   = isRed || isWhite;',
+      '  if (uHdDebug > 0.5) {',
+      '    vec3 dc = vec3(1.0, 0.0, 0.0);',                    // red = unclassified
+      '    if (isGround) dc = vec3(0.0, 1.0, 0.0);',           // green
+      '    else if (isTrack) dc = vec3(0.5);',                 // grey
+      '    else if (isCream) dc = vec3(1.0, 1.0, 0.0);',       // yellow
+      '    else if (isEdge) dc = vec3(1.0, 0.0, 1.0);',        // magenta
+      '    else if (mono > 0.1 && g > r && g > 0.25) dc = vec3(0.0, 0.0, 1.0);', // blue = rock
+      '    if (textureWeight > 0.5) dc = mix(dc, vec3(0.0, 1.0, 1.0), 0.6);',    // cyan tint = engine-textured
+      '    gl_FragColor = vec4(dc, 1.0); return;',
       '  }',
+      '  if (uHdTexOn > 0.5) {',
+      '    float macro = 0.88 + 0.24 * fbm(vWorld.xz * 0.0012);',                       // breaks tiling at range
+    '    if (isGround) {',
+      '      float lowland = 1.0 - smoothstep(60.0, 170.0, vWorld.y);',                 // elevated olive = deck surface
+      '      vec3 gtex = tri(uHdTexG, vWorld, Nn, 1.0 / 1500.0) * vec3(1.0, 0.92, 0.78);',
+      '      vec3 atex = tri(uHdTexA, vWorld, Nn, 1.0 / 680.0) * (0.5 + 1.1 * lum3(c));',
+      '      vec3 tex = mix(atex, gtex, lowland) * macro;',
+      '      c = tex * (0.78 + 0.5 * (g - 0.3));',                                      // keep engine shade variation
+      '    } else if (isRed || (isWhite && fdist < 28000.0)) {',
+      '      vec3 tex = tri(uHdTexM, vWorld, Nn, 1.0 / 520.0);',
+      '      c = c * (tex * 1.3);',                                                     // panel detail, keeps red/white
+      '    } else if ((isTrack || isCream) && vWorld.y > -20.0) {',
+      '      vec3 tex = tri(uHdTexA, vWorld, Nn, 1.0 / 680.0);',
+      '      c = tex * (0.4 + 1.45 * lum3(c)) * macro;',                                // asphalt, keeps segment shades
+      '    } else if (!isEdge && mono > 0.1 && g > r && g > 0.25) {',
+      '      vec3 tex = tri(uHdTexR, vWorld, Nn, 1.0 / 8000.0);',                       // big tiles: mountains are always far
+      '      c = tex * (0.5 + 1.0 * lum3(c));',
+      '    }',
+      '  }',
+      '  float sun = clamp(dot(Nn, normalize(vec3(0.35, 0.8, 0.45))), 0.0, 1.0);',
+      '  c *= mix(1.0, 0.8 + 0.28 * sun, uHdLight);',
       '  vec3 fogC = vec3(0.72, 0.78, 0.88);',
-      '  float fdist = distance(vWorld, uHdCam);',                                      // world-space: mode-independent
       '  float fog = smoothstep(45000.0, 95000.0, fdist) * 0.55 * uHdFog;',
       '  if (isEdge || isTrack) fog *= 0.45;',                                          // keep racing cues punchy
       '  c = mix(c, fogC, fog);',
@@ -171,6 +198,8 @@
     'uniform mat4 uInvVP;',      // inverse of (view*projection), row-vector convention
     'uniform float uGroundY;',
     'uniform vec3 uCamPos;',
+    'uniform sampler2D uHdTexG;',
+    'uniform float uHdTexOn;',
     NOISE_GLSL,
     TERRAIN_GLSL,
     'vec3 unproject(vec3 ndc){',
@@ -187,9 +216,18 @@
     '  vec3 fogC = vec3(0.72, 0.78, 0.88);',
     '  if (t < 0.0) { gl_FragColor = vec4(fogC, 1.0); return; }',
     '  vec3 hit = pNear + dir * t;',
-    '  vec3 c = scrubColor(hit.xz);',
+    '  vec3 c;',
     '  float d = distance(hit.xz, uCamPos.xz);',
-    '  c = mix(c, fogC, smoothstep(14000.0, 48000.0, d) * 0.85);',
+    '  if (uHdTexOn > 0.5) {',
+    '    float macro = (0.7 + 0.55 * fbm(hit.xz * 0.0012)) * (0.82 + 0.36 * fbm(hit.xz * 0.00028));',
+    '    float bias = -clamp(d / 9000.0, 0.0, 1.75);',                                  // fight mip flattening at range
+    '    vec3 tNear = texture2D(uHdTexG, hit.xz / 1500.0, bias).rgb;',
+    '    vec3 tFar  = texture2D(uHdTexG, hit.xz / 5000.0, bias * 0.5).rgb;',
+    '    c = mix(tNear, tFar, smoothstep(8000.0, 30000.0, d)) * vec3(1.0, 0.92, 0.78) * 0.95 * macro;',
+    '  } else {',
+    '    c = scrubColor(hit.xz);',
+    '  }',
+    '  c = mix(c, fogC, smoothstep(45000.0, 110000.0, d) * 0.6);',
     '  gl_FragColor = vec4(c, 1.0);',
     '}',
   ].join('\n');
@@ -262,6 +300,39 @@
     st.gInvVP = gl.getUniformLocation(st.groundProg, 'uInvVP');
     st.gY = gl.getUniformLocation(st.groundProg, 'uGroundY');
     st.gCam = gl.getUniformLocation(st.groundProg, 'uCamPos');
+    st.gTexG = gl.getUniformLocation(st.groundProg, 'uHdTexG');
+    st.gTexOn = gl.getUniformLocation(st.groundProg, 'uHdTexOn');
+
+    // world photo textures on units 1-4 (POT, mipmapped, mirrored repeat)
+    st.worldTex = {};
+    st.texReady = 0;
+    var aniso = gl.getExtension('EXT_texture_filter_anisotropic') ||
+                gl.getExtension('WEBKIT_EXT_texture_filter_anisotropic');
+    var TEXES = [['g', 'images/tex-ground.jpg'], ['a', 'images/tex-asphalt.jpg'],
+                 ['m', 'images/tex-metal.jpg'], ['r', 'images/tex-rock.jpg']];
+    TEXES.forEach(function (pair, i) {
+      var tex = gl.createTexture();
+      st.worldTex[pair[0]] = tex;
+      var img2 = new Image();
+      img2.onload = function () {
+        var prevActive = gl.getParameter(gl.ACTIVE_TEXTURE);
+        gl.activeTexture(gl.TEXTURE1 + i);
+        gl.bindTexture(gl.TEXTURE_2D, tex);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img2);
+        gl.generateMipmap(gl.TEXTURE_2D);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.MIRRORED_REPEAT);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.MIRRORED_REPEAT);
+        if (aniso) gl.texParameterf(gl.TEXTURE_2D, aniso.TEXTURE_MAX_ANISOTROPY_EXT,
+          Math.min(16, gl.getParameter(aniso.MAX_TEXTURE_MAX_ANISOTROPY_EXT) || 1));
+        gl.activeTexture(prevActive);
+        st.texReady++;
+      };
+      img2.onerror = function () { console.error('[hd-graphics] texture failed:', pair[1]); };
+      img2.src = pair[1] + '?v=hd2';
+    });
     // sky texture: procedural now, photo when available
     function upload(srcCanvasOrImg) {
       gl.bindTexture(gl.TEXTURE_2D, st.skyTex);
@@ -343,6 +414,8 @@
       gl.uniformMatrix4fv(st.gInvVP, false, inv);
       gl.uniform1f(st.gY, st.groundY);
       gl.uniform3f(st.gCam, cam[0], cam[1], cam[2]);
+      if (st.gTexG) gl.uniform1i(st.gTexG, 1);
+      if (st.gTexOn) gl.uniform1f(st.gTexOn, st.texReady >= 4 ? 1 : 0);
     });
     return true;
   }
@@ -387,6 +460,12 @@
                 cam: origGetLoc(currentProgram, 'uHdCam'),
                 fog: origGetLoc(currentProgram, 'uHdFog'),
                 light: origGetLoc(currentProgram, 'uHdLight'),
+                tg: origGetLoc(currentProgram, 'uHdTexG'),
+                ta: origGetLoc(currentProgram, 'uHdTexA'),
+                tm: origGetLoc(currentProgram, 'uHdTexM'),
+                tr: origGetLoc(currentProgram, 'uHdTexR'),
+                ton: origGetLoc(currentProgram, 'uHdTexOn'),
+                dbg: origGetLoc(currentProgram, 'uHdDebug'),
               };
               camLocs.set(currentProgram, cl);
             }
@@ -396,6 +475,22 @@
             }
             if (cl.fog) gl.uniform1f(cl.fog, gl.__hd.fogMul != null ? gl.__hd.fogMul : 1.0);
             if (cl.light) gl.uniform1f(cl.light, gl.__hd.lightMul != null ? gl.__hd.lightMul : 1.0);
+            if (cl.tg) gl.uniform1i(cl.tg, 1);
+            if (cl.ta) gl.uniform1i(cl.ta, 2);
+            if (cl.tm) gl.uniform1i(cl.tm, 3);
+            if (cl.tr) gl.uniform1i(cl.tr, 4);
+            if (cl.ton) gl.uniform1f(cl.ton, gl.__hd.texReady >= 4 ? 1 : 0);
+            if (cl.dbg) gl.uniform1f(cl.dbg, gl.__hd.debugMul != null ? gl.__hd.debugMul : 0.0);
+            // re-assert our texture bindings once per frame (engine only uses unit 0)
+            var wt = gl.__hd.worldTex;
+            if (wt && gl.__hd.texReady >= 4) {
+              var prevA = gl.getParameter(gl.ACTIVE_TEXTURE);
+              gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, wt.g);
+              gl.activeTexture(gl.TEXTURE2); gl.bindTexture(gl.TEXTURE_2D, wt.a);
+              gl.activeTexture(gl.TEXTURE3); gl.bindTexture(gl.TEXTURE_2D, wt.m);
+              gl.activeTexture(gl.TEXTURE4); gl.bindTexture(gl.TEXTURE_2D, wt.r);
+              gl.activeTexture(prevA);
+            }
           }
         } else if (n === 'projectionMatrix') gl.__hd.proj = Array.from(value);
       }
