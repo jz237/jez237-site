@@ -576,7 +576,7 @@ export class Renderer {
     // heart
     const [hx, hy] = sim.map.heart;
     const integ = Math.min(1, sim.lives / 20);
-    E.push({ y: hy, k: KIND.HEART, x: hx, sx: 170, sy: 170, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
+    E.push({ y: hy, k: KIND.HEART, x: hx, sx: 150, sy: 150, rot: 0, phase: t, aux: integ, c: COLORS.heart, seed: 0.7 });
     // towers (+ veterancy pips hovering above)
     for (const tw of sim.towers) {
       const ds = depthScale(tw.y);
@@ -754,10 +754,10 @@ export class Renderer {
       const f = Math.max(0, e.hp / e.maxHp);
       const w = e.def.size * 0.62 * ds;
       const py = e.y - e.def.size * 0.85 * ds;
-      this.segs.push(e.x - w * (1 - f) / 2, py, w * f / 2 + 1, 2.6 * ds, 0, 0, KIND.SEG, 1,
-        e.def.color[0] * 0.5, e.def.color[1] * 0.5, e.def.color[2] * 0.5, 0);
-      this.segs.push(e.x + w * f / 2, py, w * (1 - f) / 2 + 0.5, 2.2 * ds, 0, 0, KIND.SEG, 1,
-        0.30, 0.04, 0.05, 0);
+      this.segs.push(e.x - w * (1 - f) / 2, py, w * f / 2 + 1, 3.1 * ds, 0, 0, KIND.SEG, 1,
+        0.10, 0.78, 0.90, 0);
+      this.segs.push(e.x + w * f / 2, py, w * (1 - f) / 2 + 0.5, 2.7 * ds, 0, 0, KIND.SEG, 1,
+        0.72, 0.08, 0.10, 0);
     }
     // status halos — statuses must be readable as light
     for (const e of sim.enemies) {
@@ -840,7 +840,7 @@ export class Renderer {
       for (let i = 0; i < 4; i++) {
         const f = i / 3;
         const rr = (150 + f * 150) * (0.92 + 0.08 * Math.sin(t * 0.9 + f * 4));
-        const a = pulse * (1 - f * 0.7) * 0.045;
+        const a = pulse * (1 - f * 0.7) * 0.034;
         A.push(hx, hy, rr, rr, 0, t + i, KIND.GLOW, 1,
           1.0 * a, 0.82 * a, 0.45 * a, 0);
       }
