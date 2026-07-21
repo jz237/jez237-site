@@ -1181,10 +1181,10 @@ void main(){
   col += vec3(0.009,0.006,0.024) * (1.0-col);
   // vignette
   vec2 vC2 = fromC*vec2(1.0,1.22);
-  float vig = 1.0 - dot(vC2,vC2)*1.0;
+  float vig = 1.0 - dot(vC2,vC2)*0.8;
   col *= clamp(vig,0.0,1.0);
   // fine grain
-  float g = (hash12(uv*vec2(1920.0,1080.0)+fract(uT)*7.0)-0.5) * 0.015;
+  float g = (hash12(uv*vec2(1920.0,1080.0)+fract(uT)*7.0)-0.5) * 0.008;
   col += g;
   frag = vec4(col, 1.0);
 }
