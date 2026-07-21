@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 20 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 21 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 11-17, 1983 — Nintendo Brings the Arcade Home With Its Family Computer</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-07-11</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-11</guid>
+      <pubDate>Tue, 21 Jul 2026 12:00:00 GMT</pubDate>
+      <description>At ¥14,800, Nintendo’s red-and-white Famicom arrives with two controllers and three arcade conversions. Nintendo launched its Family Computer in Japan on July 15, placing a compact red-and-white cartridge machine on shop counters for ¥14,800. The name was quickly shortened to Famicom, and the proposition was direct: swap a cartridge and bring the speed and familiarity of the arcade into the living room. Also this week: Sega Enters the Living Room With the SG-1000 · Electronic Arts&apos; M.U.L.E. Turns Economics Into a Multiplayer Contest · Infocom&apos;s Suspended Puts Six Robots Between the Player and Disaster.</description>
+    </item>
     <item>
       <title>Week of July 4-10, 1983 — Coleco’s Adam Promises a Complete Computer for Under $600</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-07-04</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-02-21</guid>
       <pubDate>Thu, 02 Jul 2026 12:00:00 GMT</pubDate>
       <description>As February closes, Computer Gaming World points readers toward deeper strategy and adventure titles while home-computer stores keep selling machines through games, BASIC, and office software promises. During the week of February 21-27, 1983, the home-computer story is not a single launch so much as a crowded shelf. Computer Gaming World&apos;s winter issue keeps strategy, simulation, and adventure games in front of serious players, with Serpentine, Cosmic Balance, S.E.U.I.S., Armor Assault, and other computer titles showing how far the market had moved beyond simple arcade imitation. Across the same counter, Lotus 1-2-3 was still fresh for IBM PC shoppers after its January on-sale date, while Commodore, TI, and Atari machines competed for families through memory, price, games, and programming.</description>
-    </item>
-    <item>
-      <title>Week of February 14-20, 1983 — Home-computer price fight moves to the family counter</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-02-14</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-02-14</guid>
-      <pubDate>Wed, 01 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Commodore, Texas Instruments, Atari, and IBM-compatible software all compete for attention as February shoppers compare game libraries, BASIC, memory, and office promises. By mid-February 1983, the home-computer boom was becoming a shelf-by-shelf argument. Commodore 64 advertising leaned on memory and color, TI-99/4A promotions kept pressure on price, Atari remained tied to both games and BASIC, and IBM PC software such as Lotus 1-2-3 gave office buyers a different reason to visit the computer counter. The result was a week when the same store could sell cartridges, joysticks, educational programs, and spreadsheet power as parts of one expanding microcomputer habit.</description>
     </item>
   </channel>
 </rss>
