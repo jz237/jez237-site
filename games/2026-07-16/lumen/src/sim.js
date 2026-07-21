@@ -85,13 +85,18 @@ export class Sim {
   scatterFlora() {
     const out = [];
     const rng = new Rng(this.map.seed ^ 0x5EED);
+    const PALETTE = [
+      [0.2, 0.75, 0.5], [0.2, 0.75, 0.5], [0.16, 0.6, 0.7],
+      [0.5, 0.35, 0.75], [0.65, 0.7, 0.25], [0.7, 0.45, 0.25],
+    ];
     let attempts = 0;
-    while (out.length < this.map.floraCount && attempts++ < 800) {
+    while (out.length < this.map.floraCount && attempts++ < 4000) {
       const x = rng.range(40, WORLD_W - 40);
       const y = rng.range(HORIZON_Y + 60, WORLD_H - 30);
       const d = this.distToPath(x, y);
-      if (d > this.map.pathW + 26 && d < this.map.pathW + 420) {
-        out.push({ x, y, seed: rng.next(), phase: rng.range(0, 6.28), excite: 0, size: rng.range(26, 52) });
+      if (d > this.map.pathW + 26) {
+        out.push({ x, y, seed: rng.next(), phase: rng.range(0, 6.28), excite: 0,
+          size: rng.range(22, 54), color: PALETTE[rng.int(0, PALETTE.length - 1)] });
       }
     }
     return out;

@@ -370,15 +370,23 @@ export const MAPS = [
     blurb: 'one deep channel — learn the water',
     seed: 20260716,
     pathW: 74, // half-width of the ribbon
-    paths: [[
-      [-60, 330], [180, 345], [420, 390], [610, 500], [640, 660],
-      [500, 780], [430, 900], [560, 985], [820, 995], [1080, 930],
-      [1180, 790], [1150, 640], [1250, 520], [1450, 500], [1620, 580],
-      [1700, 720], [1690, 870],
-    ]],
+    paths: [
+      [
+        [-60, 330], [180, 345], [420, 390], [610, 500], [640, 660],
+        [500, 780], [430, 900], [560, 985], [820, 995], [1080, 930],
+        [1180, 790], [1150, 640], [1250, 520], [1450, 500], [1620, 580],
+        [1700, 720], [1690, 870],
+      ],
+      [ // the high road — crosses the meander twice before rejoining
+        [-60, 330], [180, 345], [420, 390], [700, 320], [980, 295],
+        [1230, 345], [1400, 430], [1450, 500], [1620, 580],
+        [1700, 720], [1690, 870],
+      ],
+    ],
+    pathWeights: [0.55, 0.45],
     heart: [1690, 880],
     portal: [-40, 330],
-    floraCount: 46,
+    floraCount: 150,
     tint: [1, 1, 1], // baseline teal-dusk
   },
   {
@@ -395,10 +403,15 @@ export const MAPS = [
         [-60, 420], [150, 430], [360, 470], [520, 650], [630, 830],
         [830, 945], [1080, 965], [1300, 905], [1500, 825], [1655, 862],
       ],
+      [ // the serpent — weaves between both veins, crossing each
+        [-60, 420], [150, 430], [360, 470], [620, 580], [900, 460],
+        [1150, 610], [1360, 540], [1500, 690], [1655, 862],
+      ],
     ],
+    pathWeights: [0.38, 0.34, 0.28],
     heart: [1660, 870],
     portal: [-40, 420],
-    floraCount: 56,
+    floraCount: 170,
     tint: [0.84, 0.97, 1.16], // colder — the abyssal veins
   },
   {
@@ -406,7 +419,7 @@ export const MAPS = [
     blurb: 'the long way round the sunken mouth — or straight through it',
     seed: 20260718,
     pathW: 64,
-    pathWeights: [0.66, 0.34], // most take the rim road; the plunge stays a threat
+    pathWeights: [0.48, 0.26, 0.26], // rim road, plunge, switchback
     paths: [
       [ // the rim road
         [-60, 270], [200, 285], [500, 305], [850, 325], [1200, 365],
@@ -417,10 +430,15 @@ export const MAPS = [
         [-60, 270], [200, 285], [500, 305], [700, 435], [805, 605],
         [755, 765], [610, 885], [430, 940], [390, 948],
       ],
+      [ // the switchback — spirals through the caldera floor
+        [-60, 270], [200, 285], [500, 305], [800, 380], [1100, 455],
+        [1290, 610], [1180, 780], [940, 855], [700, 795], [520, 865],
+        [390, 948],
+      ],
     ],
     heart: [370, 950],
     portal: [-40, 265],
-    floraCount: 50,
+    floraCount: 160,
     tint: [1.32, 0.92, 0.72], // ember-warm — the caldera smoulders
   },
 ];
