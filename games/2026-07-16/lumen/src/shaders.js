@@ -111,6 +111,7 @@ uniform float uT; uniform float uHorizon; uniform vec2 uReso; uniform float uMoo
 uniform vec3 uMapTint;
 uniform sampler2D uStain; uniform vec2 uWorldSize;
 uniform sampler2D uArt; uniform float uArtMix;
+uniform sampler2D uArt2; uniform float uArt2Mix;
 in vec2 vUv; in vec2 vWorld; out vec4 frag;
 // vUv here: x across screen, y 0 at horizon → 1 at bottom (near)
 void main(){
@@ -138,6 +139,9 @@ void main(){
   vec2 auv = vWorld / 920.0;
   auv += (vec2(fbm(vWorld*0.0031), fbm(vWorld*0.0031+57.0)) - 0.5) * 0.14;
   vec3 art = texture(uArt, auv).rgb;
+  // two plates blended by a broad drift field — kills visible tiling
+  float sel = smoothstep(0.38, 0.62, fbm(vWorld*0.00085 + 17.0)) * uArt2Mix;
+  art = mix(art, texture(uArt2, auv*1.13 + 0.37).rgb, sel);
   float artL = dot(art, vec3(0.35,0.5,0.15));
   base = mix(base, art * 2.5 + base * 0.25, uArtMix * 0.94);
   // clusters breathe: brighter coral pockets pulse their rim glow gently

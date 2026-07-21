@@ -57,6 +57,7 @@ export class Renderer {
     this.fStainB = createFBO(gl2, 960, 540, this.halfFloat);
     this.clearStains();
     this.artGround = this.loadArtTexture('assets/art/ground.jpg');
+    this.artGround2 = this.loadArtTexture('assets/art/ground2.jpg');
     this.artTowers = this.loadArtTexture('assets/art/towers.jpg');
     this.artEnemies = this.loadArtTexture('assets/art/enemies.jpg');
     this.resize();
@@ -307,7 +308,11 @@ export class Renderer {
     gl.activeTexture(gl.TEXTURE2);
     gl.bindTexture(gl.TEXTURE_2D, this.artGround.tex);
     gl.uniform1i(this.pGround.u.uArt, 2);
+    gl.activeTexture(gl.TEXTURE5);
+    gl.bindTexture(gl.TEXTURE_2D, this.artGround2.tex);
+    gl.uniform1i(this.pGround.u.uArt2, 5);
     gl.uniform1f(this.pGround.u.uArtMix, this.artGround.ready ? 1 : 0);
+    gl.uniform1f(this.pGround.u.uArt2Mix, this.artGround2.ready ? 1 : 0);
     gl.activeTexture(gl.TEXTURE0);
     gl.bindVertexArray(this.groundMesh.vao);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, this.groundMesh.count);
