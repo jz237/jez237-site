@@ -40,6 +40,7 @@ export class Renderer {
     this.segs = new InstanceBatch(gl, 2048);
     this.trailEm = new InstanceBatch(gl, 2048);
     this.texSprites = new InstanceBatch(gl, 1024);
+    this.texEnemies = new InstanceBatch(gl, 4096);
 
     this.groundMesh = null;
     this.pathMesh = null;
@@ -57,6 +58,7 @@ export class Renderer {
     this.clearStains();
     this.artGround = this.loadArtTexture('assets/art/ground.jpg');
     this.artTowers = this.loadArtTexture('assets/art/towers.jpg');
+    this.artEnemies = this.loadArtTexture('assets/art/enemies.jpg');
     this.resize();
   }
 
@@ -341,10 +343,17 @@ export class Renderer {
     gl.uniform1f(this.pEnt.u.uHorizon, skyFrac);
     this.entities.flush(this.pEnt);
 
-    // ---- painted tower sprites on their pads (premultiplied over)
+    // ---- painted sprites (premultiplied over): beetles march under towers
+    bindWorld(this.pTex);
+    this.texEnemies.reset();
+    this.pushEnemySprites(sim, t);
+    gl.activeTexture(gl.TEXTURE4);
+    gl.bindTexture(gl.TEXTURE_2D, this.artEnemies.tex);
+    gl.uniform1i(this.pTex.u.uAtlas, 4);
+    gl.activeTexture(gl.TEXTURE0);
+    this.texEnemies.flush(this.pTex);
     this.texSprites.reset();
     this.pushTowerSprites(sim, t);
-    bindWorld(this.pTex);
     gl.activeTexture(gl.TEXTURE3);
     gl.bindTexture(gl.TEXTURE_2D, this.artTowers.tex);
     gl.uniform1i(this.pTex.u.uAtlas, 3);
@@ -598,7 +607,12 @@ export class Renderer {
         // dark aura beneath the great ones
         E.push({ y: e.y - 1, k: 26, x: e.x, sx: size * 2.4, sy: size * 1.5, rot: 0, phase: e.phase, aux: e.def.boss ? 0.8 : 0.45, c: [0, 0, 0], seed: e.wobblePhase });
       }
-      E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot: (e.def.bossKind === 'tidecaller' || e.def.bossKind === 'mycelial') ? bossRot : rot, phase: e.phase, aux, c: e.def.color, seed: e.wobblePhase });
+      const spriteOwned = this.artEnemies.ready && !e.def.boss && !e.def.miniboss &&
+        ({ mite: 1, grub: 1, wisp: 1, husk: 1, brood: 1, shellback: 1, dartfin: 1, bulwark: 1, spectre: 1, regen: 1, sporeling: 1 })[e.type];
+      if (spriteOwned) // dark oval keeps the beetle silhouetted on the bright filament
+        E.push({ y: e.y - 0.5, k: 26, x: e.x, sx: size * 1.5, sy: size * 1.05, rot: 0, phase: e.phase, aux: 0.55, c: [0, 0, 0], seed: e.wobblePhase });
+      else
+        E.push({ y: e.y, k: e.def.kind, x: e.x, sx: size, sy: size, rot: (e.def.bossKind === 'tidecaller' || e.def.bossKind === 'mycelial') ? bossRot : rot, phase: e.phase, aux, c: e.def.color, seed: e.wobblePhase });
     }
     E.sort((a, b) => a.y - b.y);
     for (const e of E) {
@@ -617,6 +631,26 @@ export class Renderer {
   // painted towers: ringed pad sprite + 2x ornate organism, y-sorted.
   // frames: 0 apex crown · 1 tesla · 2 chill · 3 urchin · 4 ember · 5 acid ·
   // 6 bulb · 7 pulse jellyfish · 8 platform pad
+  // painted beetles: every ground creature becomes a directional sprite;
+  // bosses/minibosses keep their bespoke SDF setpieces. Head faces travel.
+  pushEnemySprites(sim, t) {
+    if (!this.artEnemies.ready) return;
+    const FRAME = { mite: 0, grub: 5, wisp: 7, husk: 1, brood: 6, shellback: 3,
+      dartfin: 4, bulwark: 8, spectre: 2, regen: 2, sporeling: 0 };
+    const list = [...sim.enemies].sort((a, b) => a.y - b.y);
+    for (const e of list) {
+      if (e.def.boss || e.def.miniboss) continue;
+      const frame = FRAME[e.type];
+      if (frame === undefined) continue;
+      const size = e.def.size * 1.15;
+      const rot = Math.atan2(e.dirx || 0, -(e.diry || -1));
+      const alpha = e.def.phasing && e.untargetable ? 0.3 : 1;
+      const wob = 1 + 0.06 * Math.sin(t * 9 + e.wobblePhase);
+      this.texEnemies.push(e.x, e.y, size * wob, size / wob, rot, e.phase,
+        frame, 0.1, e.def.color[0], e.def.color[1], e.def.color[2], alpha * 0.82);
+    }
+  }
+
   pushTowerSprites(sim, t) {
     if (!this.artTowers.ready) return;
     const FRAME = { coral: 7, tesla: 1, spire: 2, urchin: 3, bloom: 4, bramble: 5, bulb: 6 };
@@ -626,9 +660,9 @@ export class Renderer {
       const frame = tw.def.apex ? 0 : (FRAME[tw.def.id] ?? 7);
       const c = tw.def.color;
       this.texSprites.push(tw.x, tw.y + 4, size * 1.12, size * 0.9, 0, tw.phase, 8, 0.25,
-        0.4, 0.9, 1.0, 0);
+        0.4, 0.9, 1.0, 1);
       this.texSprites.push(tw.x, tw.y, size, size, 0, tw.phase, frame, tw.charge,
-        c[0], c[1], c[2], 0);
+        c[0], c[1], c[2], 1);
     }
   }
 
