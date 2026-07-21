@@ -79,6 +79,29 @@
     '}',
   ].join('\n');
 
+  // 2D backdrop pipeline: discard the flat mountain/lake fills so the photo
+  // mountains baked into sky.jpg show instead. Palette sampled from the engine's
+  // Little Ramp backdrop; HUD lines (yellow/black) are untouched, whites only
+  // above mid-screen. Other tracks may need palette additions — see ledger.
+  function rewriteFragment2D(src) {
+    return [
+      'precision mediump float;',
+      'uniform float windowHeight;',
+      'varying lowp vec4 outputColor;',
+      'bool near3(vec3 c, vec3 t){ return all(lessThan(abs(c - t), vec3(0.03))); }',
+      'void main() {',
+      '  vec3 c = outputColor.rgb;',
+      '  bool mtn = near3(c, vec3(0.3333, 0.4667, 0.4667))',   // 85,119,119 teal
+      '        || near3(c, vec3(0.2588, 0.3529, 0.0863))',      // 66,90,22 dark green
+      '        || near3(c, vec3(0.6, 0.7333, 0.2))',            // 153,187,51 lime
+      '        || near3(c, vec3(0.3333, 0.7333, 1.0));',        // 85,187,255 lake
+      '  bool snow = near3(c, vec3(1.0)) && gl_FragCoord.y > windowHeight * 0.5;',
+      '  if (mtn || snow) discard;',
+      '  gl_FragColor = outputColor;',
+      '}',
+    ].join('\n');
+  }
+
   // ── engine shader rewrites ──
   function rewriteVertex3D(src) {
     if (src.indexOf('projectionMatrix') < 0) return src;
@@ -136,6 +159,7 @@
       '  bool isRed    = r > 0.45 && g < 0.36 && b < 0.34 && (r - g) > 0.18;',          // red wall panels
       '  bool isWhite  = r > 0.82 && g > 0.8 && b > 0.78;',                             // white panels / snow
       '  bool isEdge   = isRed || isWhite;',
+      '  bool isPale   = mono < 0.12 && b > r + 0.02 && lum3(c) > 0.55 && Nn.y > 0.5;',   // per-track pale terrain (Big Ramp)
       '  if (uHdDebug > 0.5) {',
       '    vec3 dc = vec3(1.0, 0.0, 0.0);',                    // red = unclassified
       '    if (isGround) dc = vec3(0.0, 1.0, 0.0);',           // green
@@ -148,13 +172,17 @@
       '  }',
       '  if (uHdTexOn > 0.5) {',
       '    float macro = 0.88 + 0.24 * fbm(vWorld.xz * 0.0012);',                       // breaks tiling at range
-    '    if (isGround) {',
+    '    if (isGround || isPale) {',
       '      float lowland = 1.0 - smoothstep(60.0, 170.0, vWorld.y);',                 // elevated olive = deck surface
-      '      vec3 gtex = tri(uHdTexG, vWorld, Nn, 1.0 / 1500.0) * (1.05 + 0.4 * (g - 0.3));',
+      '      vec3 gtex = tri(uHdTexG, vWorld, Nn, 1.0 / 1500.0) * vec3(1.08, 1.02, 0.88) * (1.12 + 0.4 * (g - 0.3));',
       '      vec3 atex = tri(uHdTexA, vWorld, Nn, 1.0 / 680.0) * (0.9 + 1.1 * lum3(c));',
       '      c = mix(atex, gtex, lowland) * macro;',
       '    } else if (isEarth) {',
       '      c = tri(uHdTexR, vWorld, Nn, 1.0 / 1100.0) * (0.72 + 0.5 * lum3(c)) * macro;', // sandy run-off
+      '    } else if (isRed && Nn.y > 0.6) {',
+      '      float seg = step(0.5, fract((vWorld.x + vWorld.z) / 1800.0));',            // ~900-unit kerb stones
+      '      vec3 stone = tri(uHdTexM, vWorld, Nn, 1.0 / 520.0);',
+      '      c = mix(vec3(0.78, 0.11, 0.09), vec3(0.93, 0.91, 0.87), seg) * (stone * 1.25);',
       '    } else if (isRed || (isWhite && fdist < 28000.0)) {',
       '      vec3 tex = tri(uHdTexM, vWorld, Nn, 1.0 / 520.0);',
       '      c = c * (tex * 1.3);',                                                     // concrete blocks, keeps red/white
@@ -163,8 +191,8 @@
       '      vec3 tex = tri(uHdTexA, vWorld, Nn, 1.0 / 680.0);',
       '      c = tex * (0.9 + 1.1 * lum3(c)) * macro;',                                 // dark rich asphalt
       '    } else if (!isEdge && mono > 0.1 && g > r && g > 0.25) {',
-      '      vec3 tex = tri(uHdTexG, vWorld, Nn, 1.0 / 6000.0);',                       // green 3D geometry -> grassy
-      '      c = tex * (0.55 + 0.9 * lum3(c));',
+      '      vec3 tex = tri(uHdTexG, vWorld, Nn, 1.0 / 1500.0) * vec3(1.08, 1.02, 0.88);',  // green geometry = grass (mountains are 2D)
+      '      c = tex * (0.62 + 0.75 * lum3(c)) * macro;',
       '    }',
       '  }',
       '  float sun = clamp(dot(Nn, normalize(vec3(0.35, 0.8, 0.45))), 0.0, 1.0);',
@@ -188,7 +216,11 @@
     'precision mediump float;',
     'varying vec2 vUv;',
     'uniform sampler2D uSky;',
-    'void main(){ gl_FragColor = vec4(texture2D(uSky, vec2(vUv.x, 1.0 - vUv.y)).rgb, 1.0); }',
+    'uniform vec2 uSkyBand;',   // horizon Y, top Y in window px — maps image bottom onto the horizon
+    'void main(){',
+    '  float t = clamp((gl_FragCoord.y - uSkyBand.x) / max(1.0, uSkyBand.y - uSkyBand.x), 0.0, 1.0);',
+    '  gl_FragColor = vec4(texture2D(uSky, vec2(vUv.x, 1.0 - t)).rgb, 1.0);',
+    '}',
   ].join('\n');
   var GROUND_FS = [
     '#ifdef GL_FRAGMENT_PRECISION_HIGH',
@@ -215,7 +247,7 @@
     '  vec3 pFar  = unproject(vec3(ndc, 0.8));',
     '  vec3 dir = pFar - pNear;',
     '  float t = (uGroundY - pNear.y) / (abs(dir.y) < 1e-5 ? 1e-5 : dir.y);',
-    '  vec3 fogC = vec3(0.72, 0.78, 0.88);',
+    '  vec3 fogC = vec3(0.44, 0.57, 0.40);',
     '  if (t < 0.0) { gl_FragColor = vec4(fogC, 1.0); return; }',
     '  vec3 hit = pNear + dir * t;',
     '  vec3 c;',
@@ -225,11 +257,11 @@
     '    float bias = -clamp(d / 9000.0, 0.0, 1.75);',                                  // fight mip flattening at range
     '    vec3 tNear = texture2D(uHdTexG, hit.xz / 1500.0, bias).rgb;',
     '    vec3 tFar  = texture2D(uHdTexG, hit.xz / 5000.0, bias * 0.5).rgb;',
-    '    c = mix(tNear, tFar, smoothstep(8000.0, 30000.0, d)) * macro * 1.1;',
+    '    c = mix(tNear, tFar, smoothstep(8000.0, 30000.0, d)) * vec3(1.08, 1.02, 0.88) * macro * 1.14;',
     '  } else {',
     '    c = scrubColor(hit.xz);',
     '  }',
-    '  c = mix(c, fogC, smoothstep(45000.0, 110000.0, d) * 0.6);',
+    '  c = mix(c, fogC, smoothstep(26000.0, 95000.0, d) * 0.8);',
     '  gl_FragColor = vec4(c, 1.0);',
     '}',
   ].join('\n');
@@ -241,12 +273,15 @@
     'attribute vec2 aCorner;',  // x -1..1, y 0..1
     'uniform mat4 uV;',
     'uniform mat4 uP;',
-    'uniform vec3 uRight;',
+    'uniform vec3 uCamT;',
     'varying vec2 vUv;',
     'void main(){',
     '  float species = floor(aTree.w / 100000.0);',
     '  float h = aTree.w - species * 100000.0;',
-    '  vec3 pos = aTree.xyz + uRight * (aCorner.x * h * 0.44) + vec3(0.0, aCorner.y * h, 0.0);',
+    '  vec3 toCam = vec3(uCamT.x - aTree.x, 0.0, uCamT.z - aTree.z);',
+    '  float tl = length(toCam);',
+    '  vec3 right = tl > 60.0 ? vec3(-toCam.z / tl, 0.0, toCam.x / tl) : vec3(0.0, 0.0, 1.0);',   // face camera; overhead = any facing
+    '  vec3 pos = aTree.xyz + right * (aCorner.x * h * 0.44) + vec3(0.0, aCorner.y * h, 0.0);',
     '  vec4 t = vec4(pos, 1.0) * uV * uP;',    // identical math to the engine vertex shader
     '  gl_Position = vec4(-t.x, t.y, -(2.0 * t.w - t.z), -t.w);',
     '  vUv = vec2((species + (aCorner.x * 0.5 + 0.5)) * 0.5, 1.0 - aCorner.y * 0.97);',
@@ -360,6 +395,7 @@
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     st.skyU = gl.getUniformLocation(st.skyProg, 'uSky');
+    st.skyBand = gl.getUniformLocation(st.skyProg, 'uSkyBand');
     st.gInvVP = gl.getUniformLocation(st.groundProg, 'uInvVP');
     st.gY = gl.getUniformLocation(st.groundProg, 'uGroundY');
     st.gCam = gl.getUniformLocation(st.groundProg, 'uCamPos');
@@ -374,7 +410,7 @@
       gl.linkProgram(st.treeProg);
       st.tV = gl.getUniformLocation(st.treeProg, 'uV');
       st.tP = gl.getUniformLocation(st.treeProg, 'uP');
-      st.tRight = gl.getUniformLocation(st.treeProg, 'uRight');
+      st.tCam = gl.getUniformLocation(st.treeProg, 'uCamT');
       st.tTex = gl.getUniformLocation(st.treeProg, 'uTex');
       st.trees = buildTreeBuffer(gl);
       st.treeTex = gl.createTexture();
@@ -442,7 +478,7 @@
     upload(makeProceduralSky());
     var img = new Image();
     img.onload = function () { upload(img); };
-    img.src = 'images/sky.jpg?v=hd1';
+    img.src = 'images/sky.jpg?v=hd4';
   }
 
   function drawQuad(gl, prog, bindUniforms) {
@@ -491,10 +527,15 @@
 
   function drawSky(gl) {
     var st = gl.__hd;
+    var sb = gl.isEnabled(gl.SCISSOR_TEST) ? gl.getParameter(gl.SCISSOR_BOX) : null;
+    var vp = gl.getParameter(gl.VIEWPORT);
+    var horizonY = sb ? sb[1] : 0;
+    var topY = sb ? sb[1] + sb[3] : vp[3];
     drawQuad(gl, st.skyProg, function () {
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, st.skyTex);
       gl.uniform1i(st.skyU, 0);
+      if (st.skyBand) gl.uniform2f(st.skyBand, horizonY, topY);
     });
   }
   function drawGround(gl) {
@@ -506,6 +547,7 @@
     var invView = mat4Inv(st.view);
     var cam = invView ? [invView[12], invView[13], invView[14]] : [0, 0, 0];
     st._vp = vp;
+    st._camPos = cam;
     if (invView) {
       var rx = invView[0], rz = invView[2];
       var rl = Math.sqrt(rx * rx + rz * rz) || 1;
@@ -513,8 +555,15 @@
     }
     drawQuad(gl, st.groundProg, function () {
       gl.uniformMatrix4fv(st.gInvVP, false, inv);
-      gl.uniform1f(st.gY, st.groundY);
+      // camera-relative world: eye sits at y=0, so a plane AT 0 degenerates.
+      // 800 below eye ~= road-level ground seen from the cockpit; gives every
+      // track textured perspective ground where geometry is absent.
+      gl.uniform1f(st.gY, st.groundY - 800.0);
       gl.uniform3f(st.gCam, cam[0], cam[1], cam[2]);
+      // bind grass HERE: some tracks (Big Ramp) bind engine textures mid-frame,
+      // stomping the frame-start unit-1 binding — never trust it at draw time
+      gl.activeTexture(gl.TEXTURE1);
+      gl.bindTexture(gl.TEXTURE_2D, st.worldTex.g);
       if (st.gTexG) gl.uniform1i(st.gTexG, 1);
       if (st.gTexOn) gl.uniform1f(st.gTexOn, st.texReady >= 4 ? 1 : 0);
     });
@@ -523,7 +572,7 @@
 
   function drawTrees(gl) {
     var st = gl.__hd;
-    if (!st.treeProg || !st.treeReady || !st._vp || !st._camRight) return;
+    if (!st.treeProg || !st.treeReady || !st.view || !st._camPos) return;
     var prevProg = gl.getParameter(gl.CURRENT_PROGRAM);
     var prevBuf = gl.getParameter(gl.ARRAY_BUFFER_BINDING);
     var prevDepthTest = gl.isEnabled(gl.DEPTH_TEST);
@@ -559,7 +608,7 @@
     gl.vertexAttribPointer(1, 2, gl.FLOAT, false, 24, 16);
     gl.uniformMatrix4fv(st.tV, false, st.view);
     gl.uniformMatrix4fv(st.tP, false, st.proj);
-    gl.uniform3f(st.tRight, st._camRight[0], st._camRight[1], st._camRight[2]);
+    gl.uniform3f(st.tCam, st._camPos[0], st._camPos[1], st._camPos[2]);
     gl.activeTexture(gl.TEXTURE5);
     gl.bindTexture(gl.TEXTURE_2D, st.treeTex);
     gl.uniform1i(st.tTex, 5);
@@ -591,6 +640,7 @@
       try {
         if (src.indexOf('projectionMatrix') >= 0) src = rewriteVertex3D(src);
         else if (src.indexOf('textureWeight') >= 0) src = rewriteFragment3D(src);
+        else if (src.indexOf('gl_FragColor = outputColor') >= 0) src = rewriteFragment2D(src);
       } catch (e) { console.error('[hd-graphics] rewrite failed', e); }
       return origShaderSource(sh, src);
     };
@@ -661,16 +711,28 @@
 
     var pendingFill = null; // 'sky' | 'ground' | null
     var origClearColor = gl.clearColor.bind(gl);
+    var lastClearLum = 0;
     gl.clearColor = function (r, g, b, a) {
       var key = Math.round(r * 255) + ',' + Math.round(g * 255) + ',' + Math.round(b * 255);
       pendingFill = (key === SKY_KEY) ? 'sky' : (key === GROUND_KEY) ? 'ground' : null;
+      lastClearLum = 0.299 * r + 0.587 * g + 0.114 * b;
       return origClearColor(r, g, b, a);
     };
     var origClear = gl.clear.bind(gl);
     gl.clear = function (mask) {
       var st = gl.__hd;
-      if (!st || !st.enabled || !pendingFill || !(mask & gl.COLOR_BUFFER_BIT)) return origClear(mask);
+      if (!st || !st.enabled || !(mask & gl.COLOR_BUFFER_BIT)) return origClear(mask);
       var fill = pendingFill;
+      // tracks use per-track fill palettes — classify scissored clears by REGION,
+      // not color: bottom band = ground fill, upper band = sky fill
+      if (gl.isEnabled(gl.SCISSOR_TEST)) {
+        var sb = gl.getParameter(gl.SCISSOR_BOX);
+        var vpv = gl.getParameter(gl.VIEWPORT);
+        if (sb[3] < vpv[3]) fill = (sb[1] <= 0) ? 'ground' : 'sky';
+      } else if (!fill && st.view && st.proj && lastClearLum > 0.15) {
+        fill = 'ground';   // per-track fullscreen base fill (e.g. Big Ramp pale) -> grass plain
+      }
+      if (!fill) return origClear(mask);
       var rest = mask & ~gl.COLOR_BUFFER_BIT;
       if (fill === 'sky') {
         if (rest) origClear(rest);
