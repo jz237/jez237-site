@@ -3,7 +3,7 @@
 
 export const WORLD_W = 1920;
 export const WORLD_H = 1080;
-export const HORIZON_Y = 190; // sky above, living ground below
+export const HORIZON_Y = 0; // top-down: the living board fills the frame
 
 export const ECON = {
   startGold: 260,
@@ -446,7 +446,6 @@ export const MAPS = [
 ];
 
 export function depthScale(y) {
-  // things near the horizon are farther away
-  const t = Math.min(1, Math.max(0, (y - HORIZON_Y) / (WORLD_H - HORIZON_Y)));
-  return 0.62 + 0.53 * t;
+  // top-down board: uniform scale (kept as a function — 30+ call sites)
+  return 1.0;
 }
