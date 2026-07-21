@@ -1071,6 +1071,28 @@ void main(){
 }
 `;
 
+// ------------------------------------------------------- textured sprites
+// painted art atlas (3x3 cells) drawn as premultiplied quads; alpha is
+// derived from luminance (art lives on pure black), so jpg noise dies at
+// the smoothstep floor and the glow halos survive
+export const FS_TEXSPRITE = COMMON + `
+uniform float uT; uniform sampler2D uAtlas;
+in vec2 vUv; in vec4 vB; in vec4 vC; in float vDepth; in vec2 vWorld; out vec4 frag;
+void main(){
+  float frame = vB.z;
+  float aux = vB.w;
+  vec2 uv = vUv*0.5 + 0.5;
+  vec2 cell = vec2(mod(frame, 3.0), floor(frame / 3.0));
+  vec3 art = texture(uAtlas, (cell + mix(vec2(0.035), vec2(0.965), uv)) / 3.0).rgb;
+  float m = max(art.r, max(art.g, art.b));
+  float a = smoothstep(0.045, 0.16, m);
+  // alive: slow breathing + charge brightening, tinted by the species colour
+  vec3 col = art * (0.92 + 0.50*aux + 0.14*sin(uT*1.9 + vB.y));
+  col += art * vC.rgb * 0.30 * aux;
+  frag = vec4(col * a, a);
+}
+`;
+
 // ---------------------------------------------------------------- trails
 export const FS_TRAIL_DECAY = COMMON + `
 uniform sampler2D uPrev; uniform float uDecayR; uniform float uDecayG; uniform float uDecayB;
