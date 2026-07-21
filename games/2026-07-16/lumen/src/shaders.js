@@ -134,7 +134,8 @@ void main(){
   base += vec3(0.012,0.030,0.034);
   // the run's history: chemistry and deaths bloom into the ground itself
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
-  stain = stain / (1.0 + stain*0.55); // soft-knee — a tended grove never clips
+  // luminance-bounded knee: heavy traffic deepens the hue, never bleaches white
+  stain = stain / (1.0 + dot(stain, vec3(0.8)));
   base += stain * (0.7 + 0.9*rock) * (0.5 + 0.5*near);
   // bioluminescent micro-life: sparse cyan/green dots that breathe
   vec2 cell = floor(p*9.0);
@@ -168,30 +169,33 @@ void main(){
   float along = vUv.x;
   float edge = 1.0 - abs(across);
   float er = fbm(vec2(along*46.0, across*3.0)) * 0.4;
-  float mask = smoothstep(0.0, 0.32, edge - er*0.22);
+  float mask = smoothstep(0.0, 0.42, edge - er*0.22);
   if(mask <= 0.001){ frag = vec4(0.0); return; }
   // recessed dark bed so the filaments own the brightness
-  vec3 col = vec3(0.010,0.014,0.038) * (0.7 + 0.5*fbm(vec2(along*60.0, across*4.0)+3.0));
+  vec3 col = vec3(0.016,0.024,0.065) * (0.7 + 0.5*fbm(vec2(along*60.0, across*4.0)+3.0));
   float energy = 0.0, coreE = 0.0;
-  for(int i=0;i<5;i++){
+  for(int i=0;i<7;i++){
     float fi = float(i);
-    float off = sin(along*(38.0+fi*11.0) + fi*1.9 + uT*(0.9+fi*0.13)) * 0.42
-              + sin(along*(87.0+fi*17.0) - uT*(1.3+fi*0.21) + fi*4.0) * 0.16;
-    float jit = (fbm3(vec2(along*160.0 + fi*31.0, uT*1.4)) - 0.5) * 0.10;
+    float off = sin(along*(13.0+fi*3.0) + fi*1.9 + uT*(0.55+fi*0.09)) * 0.27
+              + sin(along*(29.0+fi*5.0) - uT*(0.85+fi*0.13) + fi*4.0) * 0.10;
+    float jit = (fbm3(vec2(along*90.0 + fi*31.0, uT*0.9)) - 0.5) * 0.05;
     float dS = abs(across*0.9 - off - jit);
-    float w = 0.055 + 0.018*sin(uT*2.0+fi*1.7);
+    float w = 0.062 + 0.014*sin(uT*1.6+fi*1.7);
     float g = exp(-dS*dS/(w*w));
     energy += g * (0.8 + 0.2*sin(uT*3.0 + fi*2.2 + along*20.0));
     coreE  += exp(-dS*dS/(w*w*0.14));
   }
+  // soft knee so overlapping strands and junctions saturate instead of clipping
+  energy = energy / (1.0 + energy*0.30);
+  coreE  = coreE  / (1.0 + coreE*0.45);
   vec3 halo = vec3(0.10,0.45,1.15);
   vec3 core = vec3(0.80,0.98,1.30);
-  col += halo * energy * 0.55 + core * coreE * 0.85;
+  col += halo * energy * 0.78 + core * coreE * 0.72;
   // soft blue ambience filling the channel
-  col += vec3(0.03,0.10,0.30) * smoothstep(0.95,0.0,abs(across)) * 0.8;
+  col += vec3(0.04,0.14,0.42) * smoothstep(1.0,0.0,abs(across)) * 1.35;
   // battle stains soak in
   vec3 stain = texture(uStain, vWorld / uWorldSize).rgb;
-  col += (stain / (1.0 + stain*0.55)) * 0.4;
+  col += (stain / (1.0 + dot(stain, vec3(0.8)))) * 0.35;
   col *= mix(vec3(1.0), uMapTint, 0.3);
   frag = vec4(col*mask, mask);
 }
@@ -309,7 +313,7 @@ void main(){
     float d = sdCircle(q + vec2(0.0,0.62), 0.34+wob); // base bulb
     int branches = 3 + int(min(2.0, floor(vC.a*0.34+seed*0.0))); // level via extra later
     float tipGlow = 0.0;
-    for(int i=0;i<5;i++){
+    for(int i=0;i<7;i++){
       if(i >= branches) break;
       float fi = float(i);
       float bx = (fi - float(branches-1)*0.5) * 0.34;
@@ -667,7 +671,7 @@ void main(){
     float d = smin(cap, sdCircle(q*vec2(0.9,1.5)+vec2(0.0,0.72), 0.34+wob*0.6), 0.16);
     // spore bulbs clustered on the crown
     float bulbs = 0.0;
-    for(int i=0;i<5;i++){
+    for(int i=0;i<7;i++){
       float fi=float(i);
       vec2 c = vec2((fi-2.0)*0.19 + sin(seed*9.0+fi)*0.05, 0.42 + 0.10*hash12(vec2(seed,fi)));
       float beat = 0.5+0.5*sin(phase*1.4+fi*1.9);
@@ -825,7 +829,7 @@ void main(){
   else if(kind == 29){ // FROND — foreground kelp silhouette, haze-rimmed
     vec2 q = p; q.y = -q.y;
     float d = 1e9;
-    for(int i=0;i<5;i++){
+    for(int i=0;i<7;i++){
       float fi = float(i);
       float bx = (fi-2.0)*0.28 + (hash12(vec2(seed,fi))-0.5)*0.2;
       float h = 0.50 + 0.44*hash12(vec2(seed*3.0,fi));
@@ -914,7 +918,7 @@ void main(){
   else if(kind == 14){ // EMBER BLOOM — mortar flower, petals cup an amber throat
     vec2 q = p; q.y = -q.y;
     float d = 1e9;
-    for(int i=0;i<5;i++){
+    for(int i=0;i<7;i++){
       float fi = float(i);
       float a = (fi-2.0)*0.42 + sin(phase*0.6+fi*1.9)*0.05;
       vec2 c = vec2(sin(a)*0.42, 0.10 + cos(a)*0.16);
