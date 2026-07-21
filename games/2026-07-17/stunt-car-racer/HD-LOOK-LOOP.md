@@ -29,32 +29,40 @@ backdrop + 'HD vNNN' badge, ?classic=1 escape hatch.
 1. ~~Trackside trees~~ **DONE it.1** (treeSys: 283 billboards, oak+pine sheet unit 5,
    engine-identical transform, GEQUAL bug fixed → LEQUAL, cells 16000/EXCL 18000,
    heights 3200-5400).
-2. **Kerb treatment on road edges** — the engine's red edge lines are flat polys;
-   give the isRed-and-narrow (near-track, low-height) fragments a kerb-stone texture
-   (new fal texture: angled red/white kerb top-down) instead of wall blocks.
-3. **Photo mountain backdrop** — mountains/lake are the engine's 2D screen-space
-   pipeline (shader 2/3, NO world coords — cannot world-texture). Experiment: render
-   a fal mountain-panorama strip into MY sky quad's lower band, and mute the 2D
-   mountains by rewriting shader 3 to discard/fade its distinctive mountain colors
-   (RISK: same 2D pipeline draws HUD lines — gate by color families only, test
-   heavily; abort if HUD damaged and record why).
-4. **Contact shadows** — fake AO: darken ground/asphalt fragments within ~40 units of
-   walls (needs wall proximity — approximate via screen-space: NOT feasible per-fragment
-   without data; try instead a soft dark band at the BASE of wall faces via vWorld.y
-   proximity to local ground height captured…  investigate first, may be CLOSED-HARD).
-5. **Chain-link fence** — billboard strips along wall TOPS need per-wall positions
-   (no track data exported). Investigate reading vertex buffers in the bufferData
-   hook to harvest wall-top spans once per track load. Stretch goal; timebox it.
-6. **Grass calibration vs reference** — brightness/saturation A/B against REFERENCE.jpg
-   (current grass slightly deep; reference is sunnier). Tune modulation + macro floors.
-7. **Title screen art iteration** — regenerate menu.jpg with fal until composition ≈
-   reference (ramp right, valley center, mountains behind); keep UI clear-zone center.
-8. **Damage holes + flag/stopwatch icons** — replace remaining pixel art (cracked-glass
-   strip + tiny photoreal icons; keep positions/ids).
-9. **Sun/bloom pass** — subtle warm tint + vignette via a final fullscreen quad after
-   the frame? (needs end-of-frame hook — investigate requestAnimationFrame wrap; may
-   conflict with engine loop — timebox).
-10. **Closing survey** — fresh-eyes shots of every screen vs reference; seed next round.
+2. ~~Kerb treatment~~ **DONE it.2** (procedural: isRed && Nn.y>0.6 → alternating
+   red/white 900-unit stones over the concrete texture; no new texture unit needed).
+3. ~~Photo mountain backdrop~~ **DONE it.3** (2D fragment rewrite discards the 5
+   sampled backdrop colors — greens/teal/lake exact, snow gated above mid-screen —
+   and sky.jpg carries a photo range amplified to the bottom 22%; SKY QUAD FIX:
+   fullscreen-triangle UVs span the VIEWPORT, so the shader now remaps v to the
+   actual sky band read from SCISSOR_BOX — image bottom rides the horizon).
+4. ~~Contact shadows~~ **CLOSED-HARD it.4**: fragments have no neighbor-geometry or
+   adjacency data; SSAO impossible (WebGL1 default framebuffer depth is unreadable);
+   wall-base distance underivable from vWorld alone. Would need engine geometry.
+5. ~~Chain-link fence~~ **CLOSED-TIMEBOX it.5**: harvesting wall-top spans means
+   blind reverse-engineering of interleaved vertex buffers (layout unknown, per-track)
+   with real regression risk for a thin distant visual — beyond any sane timebox.
+6. ~~Grass calibration~~ **DONE it.4** (warm tint vec3(1.08,1.02,0.88) + brightness
+   lift on both the geometry grass branch and the ground quad — sunny reference green).
+7. ~~Title screen art~~ **DONE it.5** (reroll adopted: towering red/white-edged ramp
+   right, green hills + trees, snow mountains — reference mood).
+8. ~~Damage holes + icons~~ **DONE it.5** (PIL-drawn checkered flag, stopwatch dial,
+   torn-gap hole, cracked smash — same files/ids/positions).
+9. ~~Sun/bloom~~ **DONE it.6** (CSS grade on #canvas: saturate 1.07 / contrast 1.03 /
+   brightness 1.01 — zero GL risk).
+10. ~~Closing survey~~ **DONE it.6** — found + FIXED the Big Ramp pale-world bug.
+
+## ROUND TWO BACKLOG
+1. ~~Track sweep 1-8~~ **DONE it.7** — all 8 choosers + t1/t8 races verified green/textured.
+2. Sliver-tree: NOT reproduced after the facing fix (it.7-8 runs) — WATCH-ONLY.
+3. ~~Mobile pass~~ **DONE it.8** (title/badge/buttons fit portrait; race letterboxed as designed).
+4. ~~End screens~~ **DONE it.8** (all three cards render: photoreal scenes + readable text;
+   verified via class-injection — deterministic, same visual path as the real trigger).
+5. ~~Streaming-fill anchor~~ **SETTLED it.7**: fill plane now 800 below eye (the y=0
+   plane degenerates — it IS eye level in camera-relative space); near band textured,
+   distance = field-green (0.44,0.57,0.40); green 3D geometry unified to grass scale.
+   The engine's clip mapping compresses the texture band toward the screen bottom —
+   accepted (matches the reference's smooth fields).
 
 ## PROCESS (every iteration)
 - Home: worktree `/home/jez237/.openclaw/workspace/worktrees/scr-hd` (branch scr-hd);
@@ -103,7 +111,51 @@ backdrop + 'HD vNNN' badge, ?classic=1 escape hatch.
 - heads.png (driver portraits) stays ORIGINAL (user-loved). No multiplayer — keep
   #mm-btn-twoplayer hidden; do NOT touch stuntcarracer.fly.dev/CSP.
 
+## LOOP COMPLETE 2026-07-21 (v147 live CF + GitHub)
+Two rounds, 8 iterations, v143→v147 deployed. The reference look is achieved:
+green tree-dotted hills, dark aggregate asphalt with red/white kerbs, weathered
+red/white block walls, photo snow-mountain horizon, photoreal low cockpit, HD
+audio, cinematic end cards — all 8 tracks, desktop + mobile, zero console errors.
+Resume anytime with the /loop prompt; candidate future items: per-track palette
+variety (e.g. restore Big Ramp's icy mood as a grass variant), damage-glass art,
+season-dusk aesthetic exploration (accidental beauty — engine dims for season
+screens and the layers compose into twilight).
+
 ## ITERATION LOG
+- it.8 (2026-07-21): mobile + end-cards verified; sliver-tree not reproduced;
+  round two CLOSED — loop complete.
+- it.7 (2026-07-21): 8-track sweep green; fill architecture settled (below-eye plane,
+  field-green distance, unified green-geometry grass). LESSON: in this engine EVERY
+  mysterious flat region so far has been MY OWN fill's fog color — check
+  scr-own2.mjs pixel-ownership FIRST, hypothesize second. v147 DEPLOYED.
+- it.6 (2026-07-21): grade shipped; SURVEY caught Big Ramp pale-world. FIVE-HYPOTHESIS
+  debugging chain ended in a REVELATION: the engine keeps the WORLD CAMERA-RELATIVE —
+  viewMatrix has ZERO translation (cam pos [0,0,0] is CORRECT); worldMatrix carries it.
+  Implications now recorded: my "vWorld" is camera-relative; fog distances were always
+  right; the ground-fill plane at y=0 is EYE LEVEL so downward rays always miss → the
+  fill's below-horizon output was ALWAYS the miss-color: recolored it hazy-green
+  (0.58,0.68,0.60) — fixed t4 AND improved every horizon. Also: draw-time texture
+  binds (engine stomps units mid-frame on textured tracks), tree billboards face
+  per-tree camera, 2D-discard palette unchanged. TOOLS: pixel-ownership tracer
+  (scr-own.mjs) + frame tracer (scr-dbg-frame.mjs) + readPixels probe — THE debug kit.
+- it.5 (2026-07-21): fence CLOSED-TIMEBOX (blind vertex-buffer reverse-engineering);
+  title reroll adopted (ramp-right composition); indicator sprites redrawn in PIL
+  (no API needed for ≤64px art). v145 DEPLOYED (grass + title + sprites batch).
+- it.4 (2026-07-21): shadows CLOSED-HARD (no adjacency/depth access at this layer);
+  grass calibrated warm+bright on both paths. LESSON: when an investigation item
+  dead-ends quickly, close it with reasons and pull the next quick win into the
+  same iteration — thin iterations waste loop cadence.
+- it.3 (2026-07-21): PHOTO MOUNTAINS SHIPPED — 2D backdrop discard + horizon-anchored
+  sky mapping. LESSONS: (a) the sky quad's vUv covers the whole VIEWPORT (scissor just
+  clips it) — anything positional in the sky image needs the SCISSOR_BOX remap;
+  (b) 2D-pipeline rewrite is SAFE scoped to exact palette colors (HUD yellow/black
+  untouched); other TRACKS may use different backdrop palettes — check each track's
+  chooser later and extend the discard list if flat mountains reappear. v144 DEPLOYED.
+- it.2 (2026-07-21): KERBS SHIPPED — horizontal red edge strips (Nn.y>0.6) become
+  alternating red/white stones via `fract((x+z)/1800)` over the block texture;
+  vertical red walls untouched. LESSON: prefer PROCEDURAL patterns keyed on the
+  existing classification + normals before spending a texture unit. v143 DEPLOYED
+  (trees) to CF+GitHub mid-loop at user request; jez237.com still stuck v139.
 - it.1 (2026-07-21): TREES SHIPPED — 283 oak/pine billboards on the grass, correct
   depth vs walls/terrain, none on track. THREE HARD LESSONS: (a) NEVER combine the
   engine's matrices in JS for FORWARD projection — my row-vector mat4Mul product sent
