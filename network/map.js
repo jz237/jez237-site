@@ -304,11 +304,19 @@
     function resize() {
       dpr = Math.min(2, window.devicePixelRatio || 1);
       vw = canvas.clientWidth; vh = canvas.clientHeight;
+      if (vw <= 0 || vh <= 0) {
+        canvas.width = 0;
+        canvas.height = 0;
+        boardCache = null;
+        return false;
+      }
       canvas.width = Math.round(vw * dpr);
       canvas.height = Math.round(vh * dpr);
       boardCache = null;
+      return true;
     }
     window.addEventListener('resize', resize);
+    if ('ResizeObserver' in window) new ResizeObserver(resize).observe(canvas);
     resize();
 
     function worldToScreen(wx, wy) {
@@ -693,6 +701,7 @@
     /* ---------- frame loop ---------- */
     function frame(now) {
       rafId = running && visible ? requestAnimationFrame(frame) : 0;
+      if ((vw <= 0 || vh <= 0 || canvas.width <= 0 || canvas.height <= 0) && !resize()) return;
       const dt = Math.min(0.1, (now - lastFrame) / 1000 || 0.016);
       lastFrame = now;
       fps = fps * 0.9 + (1 / dt) * 0.1;
