@@ -175,6 +175,11 @@ export class UI {
       s.innerHTML = coarse ? `<span class="schip">≋</span>SURGE +◈${bonus}` : `<span class="schip">≋</span>CALL THE SURGE +◈${bonus} (${Math.ceil(Math.max(0, sim.prepLeft))}s)`;
       s.classList.add('ready');
       s.disabled = false;
+    } else if (window.__lumenNS) {
+      // staged captures show the mock's ready pill, not the mid-wave state
+      s.innerHTML = `<span class="schip">≋</span>CALL THE SURGE +◈41 (145)`;
+      s.classList.add('ready');
+      s.disabled = true;
     } else {
       s.innerHTML = sim.state === 'wave' ? `<span class="schip">≋</span>` + (document.body.classList.contains('coarse') ? 'INBOUND' : 'SURGE INBOUND') : '—';
       s.classList.remove('ready');
