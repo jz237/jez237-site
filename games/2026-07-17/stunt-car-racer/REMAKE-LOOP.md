@@ -89,9 +89,10 @@ keep the game in the games-page UNFINISHED set (both slugs already listed).
 Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
 
 ## BACKLOG (top = next; one shippable item per iteration)
-1. Track builder v1: deck+walls+kerbs from tracks/little-ramp.json; drive it.
-   Scale decision: original units → remake meters (slat 512u ≈ 4m suggests
-   ÷128; deck baseline 640u ≈ 5m pylon height — pick after eyeballing).
+1. PYLONS as real A-frame trusses (replace v2 box piers) + contact-shadow
+   decals + underside steel framing. Also: hard-edged wall block colors
+   (vertex-color rings currently smear red→white across one segment) and the
+   mountain-ring seam brightness step.
 3. PYLONS + contact shadows (the anchoring payoff) + underside framing.
 4. Physics tuning round 1 vs parity targets (accel/top/jump arc on Little Ramp).
 5. Trace remaining 7 tracks (batch the harness); build all; sweep screenshots.
@@ -142,6 +143,26 @@ Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
 
 ## ITERATION LOG
 - (newest first: item, result, lesson)
+- 2026-07-22 TRACK BUILDER V1 SHIPPED as REMAKE v2 (deploy: CF+GitHub,
+  CACHE scr-v150). remake/main.js v2 loads tracks/little-ramp.json and builds:
+  deck ribbons (center asphalt + red/white kerb strips + sides/underside,
+  DoubleSide on sides or the underside renders black), alternating red/white
+  block WALLS (vertexColors × wallTex; blocks every 3 slats), box-pier
+  previews (InstancedMesh, width 2+h*0.05 — thin sticks look absurd under a
+  13m+ deck), start gantry, terrain dished/flattened near the path
+  (spatial-hash grid over path points, CELL 40m — powers pathDist/deckAt).
+  SCALE LOCKED: S=1/48 (deck 600u→12.5m); physics in ORIGINAL RATIOS:
+  VMAX = 92×181×S ≈ 347 m/s, GRAV ≈ 104 m/s² (original gravity×S — REAL 9.8
+  would break jump airtimes; the SCR feel REQUIRES its own gravity ratio).
+  HUD displays original units (m/s ÷ 3.77). deckAt() = precise segment query
+  (lateral offset, banked surface y, slope); groundInfo picks deck vs terrain
+  (deck only when car y > deck-3 — falling off the edge drops you to grass).
+  Drive verified: 0→159 m/s, wall keep-in works blind, R respawns at start.
+  Viaduct-from-below shot = the anchoring payoff, already structural.
+  Zero console errors. SwiftShader ~12fps.
+  KNOWN ROUGH EDGES (queued): box piers (→A-frames), wall color smear at
+  block boundaries, mountain-ring seam step, car spawn direction vs original
+  race direction unverified (A/B item resolves).
 - 2026-07-22 ORIGINAL-TRACER SHIPPED (no deploy — next release bundles it).
   `tracks/little-ramp.json` (397 ordered centerline points: x,y,z,width,bank,
   shade; loop closes within 1 slat, zero gaps) + `parity/targets.json` +
