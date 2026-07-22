@@ -16,12 +16,19 @@ const hintEl = document.getElementById('hint');
 const S = 1 / 48;
 const DISP2MS = 181 * S;             // display-speed unit -> m/s
 const VMAX = 92 * DISP2MS;           // ≈ 347 m/s (engine hard cap)
-// gravity: A/B-tuned against the original's 2.28s ramp airtime; ?grav= overrides
-const GRAV = parseFloat(qs.get('grav')) || 22;
+// gravity: A/B-tuned against the original's 2.28s gap-jump flight; ?grav= overrides
+const GRAV = parseFloat(qs.get('grav')) || 55;
+// slope decel: the original's traced speed curve shows NO uphill slowdown on
+// the hill climb (the earlier "climb grind" was the car off-road against the
+// ramp structure) — the 1989 engine ignores grade for speed. Kept at 0 until
+// a clean uphill measurement says otherwise.
+const SLOPE_G = 0;
 // accel model fitted to the traced curve: dv/dt = THRUST − CDRAG·v² (display units)
 const THRUST_D = 11.07, CDRAG_D = 0.000978;
 const CRANE_LAUNCH = 28 * DISP2MS;   // the crane drop exits at display 28
-const CRANE_BACK = 40;               // crane drops ~2 sections before the line
+// the crane drops you most of a lap before the line: telemetry shows 275
+// slats from launch to the gap jump, and the line sits just past the gap
+const CRANE_BACK = 283;
 
 // ---------- deterministic noise ----------
 function hash2(ix, iz) {
@@ -604,6 +611,10 @@ function step(dt) {
     const vd = state.speed / DISP2MS; // display units for the fitted model
     if (fwd) state.speed += (THRUST_D - CDRAG_D * vd * vd) * DISP2MS * dt;
     else state.speed -= (CDRAG_D * vd * vd + 0.5) * DISP2MS * dt;
+    // uphill slows, downhill feeds — clamped: steeper than ±0.3 is a jump
+    // feature you fly over, not a drivable grade
+    const sl = Math.max(-0.3, Math.min(0.3, roadAt(state.s).slope));
+    state.speed -= SLOPE_G * sl * dt;
     if (brk) state.speed -= BRAKE * dt;
     if (state.speed > VMAX) state.speed = VMAX;
     if (state.speed < 0) state.speed = 0;
@@ -632,14 +643,14 @@ function step(dt) {
     state.y += state.vy * dt;
     if (state.y <= deckY) { state.y = deckY; state.vy = 0; state.airborne = false; }
   } else {
-    // crest launch: airborne the moment the deck falls away from the
-    // ballistic arc (vy = slope×speed) — crests, lips and cliffs all in one
-    const vyGround = r0.slope * state.speed;
-    const ballisticY = state.y + vyGround * dt - 0.5 * GRAV * dt * dt;
-    if (ballisticY > deckY + 0.05) {
+    // 1989-style: the car is GLUED to the road over ordinary crests (the
+    // original's telemetry never lifts on the hill at 85+). Airborne only
+    // when the road truly falls away (gap lip / cliff): drop > 2.2m in a
+    // tick. Takeoff vy inherits the approach slope (the ramp-up before the
+    // chasm is what kicks you across), clamped ±0.3.
+    if (state.y - deckY > 2.2) {
       state.airborne = true;
-      state.vy = vyGround - GRAV * dt;
-      state.y = ballisticY;
+      state.vy = Math.max(-0.3, Math.min(0.3, r0.slope)) * state.speed;
     } else {
       state.y = deckY;
     }
@@ -652,6 +663,8 @@ function step(dt) {
 const camTarget = new THREE.Vector3();
 function updateVisuals() {
   car.position.set(state.x, state.y, state.z);
+  // cockpit view never renders your own car (the dash overlay is the cockpit)
+  car.visible = state.chase || !state.driving;
   const r = roadAt(state.s);
   const pitch = !state.airborne ? Math.atan(r.slope) : clamp01(-state.vy / 60) * 0.3;
   car.rotation.set(-pitch, state.heading + Math.PI, -Math.atan2(r.bank, r.w));
@@ -733,7 +746,7 @@ buildWorld().then(() => {
     },
     startIdx: () => startIdx,
     fps: () => fps,
-    version: 4,
+    version: 5,
     __t: { renderer, scene, sun, hemi, camera, THREE },
   };
 });
