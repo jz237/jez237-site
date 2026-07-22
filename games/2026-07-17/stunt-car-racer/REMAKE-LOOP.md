@@ -381,3 +381,27 @@ Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
   (the old page registered sw.js; the remake shell didn't); sw.js ASSETS +
   original.html; CACHE scr-v159. Games-page card/slug/section UNCHANGED
   (still Unfinished). Both entries verified locally before deploy.
+
+## CLOSING SURVEY (2026-07-22, round one COMPLETE — v10 live at source.html)
+Vs REFERENCE.jpg: MATCHED — near-black coarse asphalt, red/white block walls
++ kerbs, green valley, snow-mountain horizon, warm grade, and the core ask:
+the track is a STRUCTURE (braced steel trestles, contact patches, shadows —
+nothing floats). Vs the original: layout traced point-for-point on all 8;
+physics measured (top exact, t90 0.4%, gap jump 8.8%); race flow, crane,
+damage, boost faithful in behavior.
+
+## ROUND TWO BACKLOG (seeded — start here if the loop is relaunched)
+1. Wall/kerb material: bake real weathered-marble red/white block textures
+   (fal) instead of vertex-tinted white blocks (reference has fading paint).
+2. Terrain richness: sandy run-off strips at corners, grass macro-variation,
+   lusher/nearer trees with shadows (reference meadows), photo cumulus
+   skybox (fal) instead of gradient dome.
+3. Proper SCR car mesh (chase view) replacing the box placeholder; rival
+   ballistic gap jumps (currently glued/linear-bridge).
+4. Race completion: 3-lap win/lose vs rival with racewin/racelost end cards
+   + fanfare/lost audio (assets exist); per-track craneBack measurement.
+5. Cockpit polish: 8:5 letterbox option, wheels/ + boost/ flame overlays
+   from the HD stack; asphalt tiling seams (14m) macro-variation fix.
+6. Desktop 60fps validation on a real GPU; fx auto-tuning by measured fps.
+7. (user-side) jez237.com domain re-attach in Cloudflare dashboard — the
+   custom domain still pins an old deployment; pages.dev + GitHub are current.
