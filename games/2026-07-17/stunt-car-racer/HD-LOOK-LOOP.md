@@ -121,6 +121,16 @@ variety (e.g. restore Big Ramp's icy mood as a grass variant), damage-glass art,
 season-dusk aesthetic exploration (accidental beauty — engine dims for season
 screens and the layers compose into twilight).
 
+## POST-LOOP MAINTENANCE
+- v148 (2026-07-21, user): ANCHORING — background ground-fill plane raised from
+  800→250 below eye (st.groundDrop override hook added) so elevated track sections
+  hug the ground instead of floating; safe because the fill draws behind ALL track
+  geometry (depth 0.9999, no depth write) so it can never occlude the road. Verified
+  chooser+race, near field unaffected. GAMES PAGE: game moved back to UNFINISHED
+  section — the section is keyed on slugTitle in the UNFINISHED set (NOT the tag);
+  renaming to "Stunt Car Racer HD" broke the match, so added 'stunt car racer hd'
+  to the set; reverted card tag featured→experimental and removed the front-page promo.
+
 ## ITERATION LOG
 - it.8 (2026-07-21): mobile + end-cards verified; sliver-tree not reproduced;
   round two CLOSED — loop complete.
