@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-22",
+      "historicDate": "1983-07-18",
+      "displayDate": "Week of July 18-24, 1983",
+      "edition": "Issue 051 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Apple counts to a million; Commodore prepares to cut the price of what those machines run.",
+      "leadHeadline": "Apple II Sales Reach One Million",
+      "storyHeadlines": [
+        "Commodore Threatens to Halve Software Prices",
+        "Whole Earth Maps a 40,000-Program Jungle",
+        "More Memory for Less in the Home-Computer War"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-07-18.jpg",
+      "thumb": "media/thumbs/1983-07-18.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-07-21",
       "historicDate": "1983-07-11",
       "displayDate": "Week of July 11-17, 1983",

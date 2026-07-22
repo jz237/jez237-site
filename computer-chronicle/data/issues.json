@@ -1,8 +1,328 @@
 {
-  "generatedAt": "2026-07-20T12:06:40.818Z",
+  "generatedAt": "2026-07-22",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-22",
+      "historicDate": "1983-07-18",
+      "displayDate": "Week of July 18-24, 1983",
+      "edition": "Issue 051 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Extra Edition energy on warm aged newsprint",
+        "motifs": [
+          "Apple II expansion slots",
+          "floppy disks and software boxes",
+          "red-and-blue newsprint rules"
+        ],
+        "layout": "Dense broadsheet front page with a milestone banner, computing columns, shelf lists, and compact world bulletin"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Culture",
+        "dateline": "Week of July 18-24, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Milestone banner and lead across the upper page",
+        "secondaryRail": "Software price war, game shelf, charts, and price watch",
+        "archiveNavigation": "Previous and next weekly issues with calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "Deep newspaper red",
+        "secondary": "IBM blue",
+        "texture": "Warm paper grain, halftone screens, and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-07-18.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of July 18, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Extra Edition: one million Apple II computers mark a new scale for the home-computer age, while software publishers debate how cheaply the programs can be sold.",
+      "morningLine": "Apple counts to a million; Commodore prepares to cut the price of what those machines run.",
+      "milestone": {
+        "title": "Apple sells the one-millionth Apple II",
+        "note": "On July 18, the Apple II family reached one million sales, a landmark for the personal-computer industry."
+      },
+      "lead": {
+        "headline": "Apple II Sales Reach One Million",
+        "dek": "Six years after its debut, the expandable 6502 machine crosses a landmark that shows how far personal computing has moved beyond the hobby bench.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1
+        ],
+        "body": [
+          "Apple Computer sold its one-millionth Apple II on July 18, giving the personal-computer business a round-number milestone few could have imagined when the original machine appeared in 1977. The figure belongs to the whole Apple II family, whose color graphics, expansion slots, and accessible design carried it from enthusiasts’ rooms into schools, offices, and neighborhood computer shops.",
+          "The achievement is also a victory for continuity. While rivals repeatedly introduced incompatible machines, Apple kept the 6502-based line recognizable and useful, allowing owners to build libraries of disks, peripherals, and skills. Thousands of programs and a broad dealer network turned the computer into a platform rather than a one-season appliance.",
+          "That installed base now feeds a self-reinforcing market. Software houses can justify ambitious releases because so many customers own compatible machines; buyers can justify the hardware because shelves are crowded with business tools, educational titles, utilities, and games. Expansion cards further let an Apple II grow with its owner instead of being discarded.",
+          "One million machines does not settle the home-computer contest. Commodore’s aggressive prices and the swelling ranks of lower-cost systems are changing shoppers’ expectations. But this week’s milestone confirms that the personal computer has become a durable mass-market category—and that software may be the next battleground."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Commodore Threatens to Halve Software Prices",
+          "kicker": "Retail",
+          "dek": "The hardware price war may be coming to cartridges and disks.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "Personal Computer News reports that Commodore is pressing for a $99 ceiling on software and considering mass-market cartridges priced as low as $10 to $15. Such figures would cut sharply against premium packages and extend Commodore’s familiar hardware tactics into publishing.",
+            "Lower prices could put more titles into ordinary retail channels and tempt owners to buy more often, but they would also squeeze developers and dealers. The proposal makes clear that the contest for home-computer buyers will be fought as much on software shelves as at the hardware counter."
+          ]
+        },
+        {
+          "headline": "Whole Earth Maps a 40,000-Program Jungle",
+          "kicker": "Software Trade",
+          "dek": "Stewart Brand turns cataloging instincts toward an exploding, confusing market.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "body": [
+            "TIME describes Stewart Brand’s effort to bring order to a software market estimated at roughly 40,000 programs. His Whole Earth Software Catalog would mix descriptions, criticism, and practical recommendations for buyers facing a bewildering range of products.",
+            "Brand planned to tap dial-up communities, including EIES, for recommendations—an early sign that computer networks could become engines of software word of mouth. The project recognizes a new industry problem: abundance has arrived faster than trustworthy guidance."
+          ]
+        },
+        {
+          "headline": "More Memory for Less in the Home-Computer War",
+          "kicker": "Hardware",
+          "dek": "Sub-$100 machines and rumors of IBM’s “Peanut” crowd the summer market.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ],
+          "body": [
+            "COMPUTE! surveys a market in which falling prices no longer mean toy specifications. Commodore’s pressure and new Atari models are forcing makers to offer more memory and capability at prices that would have seemed impossible only a short time ago.",
+            "The magazine also relays expectations of an IBM home machine near $600. That “Peanut” remains rumor—the PCjr will not be announced until November—but its prominence shows how seriously established computer companies now regard the household buyer."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Apple II family",
+          "summary": "The expandable 6502 platform passes one million sales on July 18.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Pinball Construction Set",
+          "summary": "Bill Budge’s design-your-own pinball “software toy” exemplifies Electronic Arts’ author-forward debut catalog.",
+          "confidence": "period",
+          "sourceRefs": [
+            8,
+            9
+          ]
+        },
+        {
+          "title": "IBM “Peanut” rumor",
+          "summary": "Contemporary reports expect a roughly $600 IBM home computer; the machine is still unannounced.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Acornsoft View",
+          "detail": "ROM-based BBC Micro word processor advertised as ready immediately at power-on."
+        },
+        {
+          "name": "WordPro Plus",
+          "detail": "Commodore word processor advertised with more than 30,000 users."
+        },
+        {
+          "name": "LIST software inventory",
+          "detail": "A cataloging service preparing to move from semiannual to monthly publication."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Pinball Construction Set",
+            "M.U.L.E.",
+            "Worms?",
+            "Roadblock",
+            "Castle Quest"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Jaws 3-D",
+            "Staying Alive",
+            "Return of the Jedi",
+            "Class",
+            "Snow White and the Seven Dwarfs"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Acornsoft View",
+            "WordPro Plus",
+            "LIST software inventory"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Proposed Commodore software ceiling",
+          "price": "$99 maximum",
+          "note": "Reported in Personal Computer News."
+        },
+        {
+          "item": "Proposed mass-market Commodore cartridges",
+          "price": "$10-$15",
+          "note": "A possible new low-price tier."
+        },
+        {
+          "item": "Typical software range reported by TIME",
+          "price": "$50-$500",
+          "note": "A measure of the market’s wide spread."
+        },
+        {
+          "item": "COMPUTE! July issue",
+          "price": "$2.50",
+          "note": "U.S. newsstand price."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Computer magazines multiply",
+          "text": "COMPUTE! calls it a “magazine epidemic” as mainstream publishers crowd into computer coverage."
+        },
+        {
+          "headline": "Networks guide software buyers",
+          "text": "Whole Earth’s catalog project plans to draw recommendations from dial-up communities."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Every Breath You Take",
+          "artist": "The Police"
+        },
+        {
+          "rank": 2,
+          "title": "Electric Avenue",
+          "artist": "Eddy Grant"
+        },
+        {
+          "rank": 3,
+          "title": "Flashdance... What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 4,
+          "title": "Never Gonna Let You Go",
+          "artist": "Sergio Mendes"
+        },
+        {
+          "rank": 5,
+          "title": "Wanna Be Startin’ Somethin’",
+          "artist": "Michael Jackson"
+        }
+      ],
+      "periodAd": {
+        "headline": "Design the Pinball Game Yourself",
+        "summary": "Pinball Construction Set turns bumpers, flippers, and wiring into pieces the player can arrange.",
+        "tagline": "A software toy from Electronic Arts."
+      },
+      "market": {
+        "headline": "Software Prices Become the New Front",
+        "summary": "Commodore’s proposed $99 ceiling and $10-$15 cartridges challenge a market where many programs sell for far more.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          2,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "U.S. carrier group steams toward Central America",
+        "summary": "UPI reported July 19 that an eight-ship aircraft-carrier battle group was heading toward Central America’s Pacific coast amid regional conflict.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "One-millionth Apple II sold July 18",
+            "confidence": "exact-date"
+          },
+          {
+            "claim": "Commodore software pricing proposal",
+            "confidence": "same-week"
+          },
+          {
+            "claim": "Period games and software",
+            "confidence": "period"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Chronology of Personal Computers: July 1983",
+          "url": "https://www.islandnet.com/~kpolsson/comphist/comp1983jul.htm"
+        },
+        {
+          "label": "Apple II History: 1982-1985",
+          "url": "https://www.apple2history.org/appendix/ahb/ahb3/"
+        },
+        {
+          "label": "Personal Computer News, Volume 1 No. 19",
+          "url": "https://archive.org/stream/PersonalComputerNews/PersonalComputerNews019-20Jul1983_djvu.txt"
+        },
+        {
+          "label": "TIME — Capturing the World of Software",
+          "url": "https://time.com/archive/6884077/computers-capturing-the-world-of-software/"
+        },
+        {
+          "label": "COMPUTE! Issue 38, July 1983",
+          "url": "https://archive.org/stream/1983-07-compute-magazine/Compute_Issue_038_1983_Jul_djvu.txt"
+        },
+        {
+          "label": "Billboard Hot 100, July 23, 1983",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-07-23"
+        },
+        {
+          "label": "Domestic box office, weekend 29 of 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W29/"
+        },
+        {
+          "label": "UPI — U.S. ships head for war games near Central America",
+          "url": "https://www.upi.com/Archives/1983/07/19/US-ships-heads-for-wargames-near-Central-America/9088427435200/"
+        },
+        {
+          "label": "Electronic Arts — Today in EA History",
+          "url": "https://www.ea.com/news/today-in-ea-history"
+        },
+        {
+          "label": "Atari Magazine — The Artistry of Bill Budge",
+          "url": "https://www.atarimagazines.com/v2n6/ARTISTRY.php"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "PROGRAMMERS WANTED",
+          "copy": "Bring your best disk, cartridge, or cassette idea to a market hungry for new software."
+        },
+        {
+          "headline": "MODEM CLUB",
+          "copy": "Trade tips and recommendations over the telephone line after dark."
+        }
+      ]
+    },
     {
       "currentDate": "2026-07-21",
       "historicDate": "1983-07-11",
