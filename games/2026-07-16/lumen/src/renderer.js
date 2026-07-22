@@ -119,7 +119,9 @@ export class Renderer {
     if (this.stampQueue.length) {
       this.lights.reset();
       for (const st of this.stampQueue.splice(0, 200)) {
-        this.lights.push(st.x, st.y, st.r, st.r * 0.62, 0, st.x * 0.01, 0, st.i,
+        // VS_INST negates clip y; FS_GROUND/FS_PATH sample v = y/H — flip here
+        // or every stamp lands mirrored across the board's midline
+        this.lights.push(st.x, WORLD_H - st.y, st.r, st.r * 0.62, 0, st.x * 0.01, 0, st.i,
           st.color[0], st.color[1], st.color[2], 0);
       }
       gl.enable(gl.BLEND);
@@ -197,14 +199,25 @@ export class Renderer {
       const { pts, arc, total } = path;
       const verts = [];
       for (let i = 0; i < pts.length; i++) {
-        const i2 = Math.min(pts.length - 1, i + 1);
-        const dx = pts[i2][0] - pts[Math.max(0, i - 1)][0];
-        const dy = pts[i2][1] - pts[Math.max(0, i - 1)][1];
+        const i0 = Math.max(0, i - 1), i2 = Math.min(pts.length - 1, i + 1);
+        const dx = pts[i2][0] - pts[i0][0];
+        const dy = pts[i2][1] - pts[i0][1];
         const l = Math.hypot(dx, dy) || 1;
         const nx = -dy / l, ny = dx / l;
+        // hairpin guard: where the turn tightens, shrink the half-width to the
+        // local fold limit or the strip self-intersects into dark shards
+        let wi = w;
+        if (i > 0 && i < pts.length - 1) {
+          const ax = pts[i][0] - pts[i0][0], ay = pts[i][1] - pts[i0][1];
+          const bx = pts[i2][0] - pts[i][0], by = pts[i2][1] - pts[i][1];
+          const la = Math.hypot(ax, ay) || 1, lb = Math.hypot(bx, by) || 1;
+          const cosT = Math.max(-1, Math.min(1, (ax * bx + ay * by) / (la * lb)));
+          const sinHalf = Math.sqrt(Math.max(0, (1 - cosT) / 2)); // sin(theta/2)
+          if (sinHalf > 1e-3) wi = Math.min(w, (Math.min(la, lb) * 0.75) / sinHalf);
+        }
         const along = arc[i] / total;
-        verts.push(pts[i][0] + nx * w, pts[i][1] + ny * w, along, -1);
-        verts.push(pts[i][0] - nx * w, pts[i][1] - ny * w, along, 1);
+        verts.push(pts[i][0] + nx * wi, pts[i][1] + ny * wi, along, -1);
+        verts.push(pts[i][0] - nx * wi, pts[i][1] - ny * wi, along, 1);
       }
       return this.meshFrom(new Float32Array(verts), verts.length / 4);
     });
@@ -370,7 +383,7 @@ export class Renderer {
     // ---- additive effects: projectiles, arcs, particles, spores, rings
     this.additive.reset();
     this.segs.reset();
-    this.pushEffects(sim, t);
+    this.pushEffects(sim, t, dt);
     gl.blendFunc(gl.ONE, gl.ONE);
     // seg batch (lightning)
     bindWorld(this.pEnt);
@@ -673,7 +686,7 @@ export class Renderer {
     }
   }
 
-  pushEffects(sim, t) {
+  pushEffects(sim, t, dt) {
     const A = this.additive;
     // projectiles (mortars fly an arc — render at lofted height)
     for (const pr of sim.projectiles) {

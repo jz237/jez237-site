@@ -11,7 +11,7 @@ import { botStep } from './bot.js';
 import { journal } from './journal.js';
 import { MIXES } from './content.js';
 
-export const VERSION = 'v3.15.0';
+export const VERSION = 'v3.16.0';
 
 const COARSE = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches;
 
@@ -23,7 +23,8 @@ class Game {
   constructor() {
     this.canvas = document.getElementById('cv');
     this.renderer = new Renderer(this.canvas);
-    this.mapIndex = Math.min(MAPS.length - 1, Math.max(0, parseInt(params.get('map') || '1', 10) - 1));
+    const mp = parseInt(params.get('map') || '1', 10);
+    this.mapIndex = Number.isFinite(mp) ? Math.min(MAPS.length - 1, Math.max(0, mp - 1)) : 0;
     this.sim = new Sim(this.mapIndex, NS_MODE ? 777 : null);
     this.audio = new AudioEngine(); // before UI — sliders read persisted settings
     this.ui = new UI(document.body, this);
@@ -115,6 +116,7 @@ class Game {
     this.renderer.clearStains(); // fresh ground for a fresh story
     this.armed = null; this.selected = null;
     this.paused = false; this.speed = 1;
+    if (this.photo) { this.photo = false; document.body.classList.remove('photo'); this.photoCam = null; }
     const bp = document.getElementById('btnPause'); if (bp) { bp.textContent = '⏸'; bp.classList.remove('active'); }
     const bs = document.getElementById('btnSpeed'); if (bs) { bs.textContent = '×1'; bs.classList.remove('active'); }
     this.ui.showInspect(null);
@@ -161,6 +163,7 @@ class Game {
       cancelBtn.classList.remove('show');
     });
     cv.addEventListener('click', e => {
+      if (this.photo) return; // photo mode is a viewing mode — toWorld ignores its camera
       const w = toWorld(e);
       if (this.armed) {
         // touch flow: first tap aims (ghost + range), second tap nearby grows
@@ -204,6 +207,7 @@ class Game {
     cv.addEventListener('contextmenu', e => { e.preventDefault(); this.armed = null; this.selected = null; this.ui.showInspect(null); });
     const towerKeys = Object.keys(TOWERS);
     window.addEventListener('keydown', e => {
+      if (e.target && e.target.matches && e.target.matches('input, textarea, select')) return;
       const n = parseInt(e.key, 10);
       if (n >= 1 && n <= towerKeys.length) this.armTower(towerKeys[n - 1]);
       if (e.key === 'Escape') { this.armed = null; this.selected = null; this.ui.showInspect(null); }
@@ -253,6 +257,7 @@ class Game {
   }
 
   armTower(id) {
+    if (!this.started || this.photo) return;
     this.armed = this.armed === id ? null : id;
     this.selected = null; this.pendingSpot = null;
     this.ui.showInspect(null);
@@ -260,8 +265,8 @@ class Game {
     if (this.armed && COARSE) { chip.classList.add('show'); this.ui.toast('tap to aim · tap again to grow'); }
     else chip.classList.remove('show');
   }
-  callSurge() { if (this.sim.startWave(true)) this.ui.banner(`WAVE ${this.sim.wave}`, 'the dark comes flowing'); }
-  upgradeSelected() { if (this.selected && this.sim.upgrade(this.selected)) { this.ui.showInspect(this.selected, this.sim); this.juiceUpgrade(this.selected); this.audio.on({ type: 'upgrade' }); } }
+  callSurge() { if (!this.started) return; this.sim.startWave(true); this.routeEvents(); }
+  upgradeSelected() { if (!this.selected) return; if (this.sim.upgrade(this.selected)) { this.ui.showInspect(this.selected, this.sim); this.juiceUpgrade(this.selected); this.audio.on({ type: 'upgrade' }); } else if (this.sim.towerStats(this.selected)) this.ui.toast('not enough light', 'warn'); }
   fuseSelected() {
     if (!this.selected) return;
     const apex = this.sim.fuse(this.selected);
@@ -269,6 +274,7 @@ class Game {
       this.selected = apex;
       this.ui.showInspect(apex, this.sim);
       this.fx.shake = 10; this.fx.aberr = 0.02;
+      this.routeEvents(); // celebrate now — the fuse event must not wait a frame
     }
   }
 
@@ -279,6 +285,7 @@ class Game {
   juiceUpgrade(t) { this.fx.shake = Math.min(6, this.fx.shake + 2); }
 
   routeEvents(quiet = false) {
+    if (!this.sim.events.length) return;
     for (const ev of this.sim.events) {
       if (!NS_MODE && !quiet) this.audio.on(ev);
       if (quiet) { // attract: only the visual ground-story reacts
@@ -324,7 +331,6 @@ class Game {
           this.ui.banner(ev.name, 'apex — the grove exceeds itself');
           this.renderer.stampQueue.push({ x: ev.x, y: ev.y, r: 220, i: 0.9, color: ev.color });
           this.renderer.fusePillars.push({ x: ev.x, y: ev.y, t: 0, color: ev.color });
-          this.audio.on(ev);
           break;
         case 'bossSplit':
           this.ui.toast('it divides — burn the pieces', 'warn');
@@ -355,7 +361,7 @@ class Game {
           break;
         case 'discover':
           this.ui.banner(ev.name, ev.desc);
-          journal.addMix(ev.mix);
+          if (!NS_MODE) journal.addMix(ev.mix); // staged runs must not pollute the journal
           break;
         case 'heartHit':
           this.fx.shake = Math.min(9, this.fx.shake + 5);
@@ -363,6 +369,7 @@ class Game {
           this.ui.toast(`the heart dims — ${ev.lives} light left`, 'warn');
           break;
         case 'victory':
+          if (NS_MODE) break; // staged shots never record real progress
           this.ui.banner('THE GROVE ENDURES', 'the endless surge begins — how long can you shine?');
           journal.recordRun(MAPS[this.mapIndex].id, this.sim.wave, this.sim.score(), true);
           break;
@@ -374,6 +381,7 @@ class Game {
           break;
       }
     }
+    this.sim.events.length = 0; // consumed — sim.step no longer wipes the queue
   }
 
   // --- loop ------------------------------------------------------------------
@@ -405,6 +413,8 @@ class Game {
         this.routeEvents();
         this.acc -= DT; steps++;
       }
+      // input handlers (fuse, surge) emit between frames — route those too
+      this.routeEvents();
     }
 
     // camera feel: slow drift + breathing, decaying shake

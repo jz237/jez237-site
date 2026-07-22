@@ -10,7 +10,7 @@ const BUILD = ['coral', 'spire', 'bramble', 'bloom', 'tesla', 'coral', 'urchin',
 function scoreSpots(sim) {
   const spots = [];
   for (let x = 80; x < 1920 - 80; x += 60) {
-    for (let y = 260; y < 1080 - 60; y += 60) {
+    for (let y = 80; y < 1080 - 60; y += 60) {
       if (!sim.canPlace(x, y)) continue;
       let score = 0;
       for (const path of sim.paths) {
