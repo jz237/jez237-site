@@ -89,19 +89,15 @@ keep the game in the games-page UNFINISHED set (both slugs already listed).
 Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
 
 ## BACKLOG (top = next; one shippable item per iteration)
-1. Rival AI + race flow: lap counting at the startIdx line, lap/best times on
-   the dash LCDs (replace 'L-'), localStorage records per track, wreck/crane
-   recovery (fall off deck -> chains.png crane moment -> respawn), rival car
-   following the centerline with a division speed profile.
-2. Physics round 2: steering/lat-drift parity (fit KC + steer rates from
+1. Physics round 2: steering/lat-drift parity (fit KC + steer rates from
    original rx telemetry), wall-hit damage, wreck thresholds, gap-aware decks
    (no interpolated bridge across real gaps on big-ramp/high-jump/ski-jump/
    draw-bridge), air steering; re-check t60 (6% fast) and gap airtime
    (2.08 vs 2.28s) after any change. Car visual: pitch smoothing + real mesh.
-3. Mobile touch + gamepad + perf pass (SwiftShader ~9fps → ≥30; beams/flat
+2. Mobile touch + gamepad + perf pass (SwiftShader ~9fps → ≥30; beams/flat
    ribbons and shadow settings are the levers). Cockpit 8:5 letterbox option.
-4. Swap-gate audit → SWAP source.html, keep original.html, sitemap/index.
-5. Closing survey vs reference photo + original; seed round two.
+3. Swap-gate audit → SWAP source.html, keep original.html, sitemap/index.
+4. Closing survey vs reference photo + original; seed round two.
 
 ## PROCESS (every iteration)
 - Home: worktree `/home/jez237/.openclaw/workspace/worktrees/scr-hd`, game at
