@@ -89,23 +89,21 @@ keep the game in the games-page UNFINISHED set (both slugs already listed).
 Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
 
 ## BACKLOG (top = next; one shippable item per iteration)
-1. Bootstrap: vendor Three.js, remake.html shell (menu reusing game.css glass,
-   'REMAKE v1' badge), empty valley scene (terrain+sky+mountains+sun+shadows),
-   drivable placeholder box-car on a flat test ribbon. Deploy alongside.
-2. Original-tracer: Playwright harness logging telemetry+camera per frame on
+1. Original-tracer: Playwright harness logging telemetry+camera per frame on
    Little Ramp; fit centerline; `tracks/little-ramp.json`; overlay plot vs
    chooser flyover screenshot.
-3. Track builder v1: deck+walls+kerbs from JSON; drive it.
-4. PYLONS + contact shadows (the anchoring payoff) + underside framing.
-5. Physics tuning round 1 vs parity targets (accel/top/jump arc on Little Ramp).
-6. Trace remaining 7 tracks (batch the harness); build all; sweep screenshots.
-7. Cockpit/HUD integration (reuse stack) + audio integration (reuse mixer).
-8. Rival AI + race flow (crane start, laps, win/lose, damage/wreck/records).
-9. Physics tuning round 2 (Big Ramp jumps, Ski Jump, wreck thresholds).
-10. Mobile touch + gamepad + perf pass (LODs, shadow cascade budget).
-11. Swap-gate audit → SWAP source.html, keep original.html, sitemap/index
+2. Track builder v1: deck+walls+kerbs from JSON; drive it.
+3. PYLONS + contact shadows (the anchoring payoff) + underside framing.
+4. Physics tuning round 1 vs parity targets (accel/top/jump arc on Little Ramp).
+5. Trace remaining 7 tracks (batch the harness); build all; sweep screenshots.
+6. Cockpit/HUD integration (reuse stack) + audio integration (reuse mixer).
+7. Rival AI + race flow (crane start, laps, win/lose, damage/wreck/records).
+8. Physics tuning round 2 (Big Ramp jumps, Ski Jump, wreck thresholds).
+9. Mobile touch + gamepad + perf pass (LODs, shadow cascade budget; SwiftShader
+   headless baseline is ~11fps at 1600x900 — needs to reach >=30 for the gate).
+10. Swap-gate audit → SWAP source.html, keep original.html, sitemap/index
     descriptions updated ('remake' wording, still Unfinished).
-12. Closing survey vs reference photo + original; seed round two.
+11. Closing survey vs reference photo + original; seed round two.
 
 ## PROCESS (every iteration)
 - Home: worktree `/home/jez237/.openclaw/workspace/worktrees/scr-hd`, game at
@@ -145,3 +143,31 @@ Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
 
 ## ITERATION LOG
 - (newest first: item, result, lesson)
+- 2026-07-22 REMAKE v1 — BOOTSTRAP SHIPPED. remake.html + remake/main.js +
+  vendored three r171 (three.module.min.js imports ./three.core.min.js — BOTH
+  files required). Valley terrain (deterministic value-noise heightfield,
+  `terrainH(x,z)` shared by mesh + physics), gradient sky dome, photo mountain
+  ring (sky.jpg bottom 26% on an open cylinder, MirroredRepeatWrapping to hide
+  strip seams), 140 billboard trees from tex-trees.png (2-column UV split),
+  flat test ribbon (asphalt deck + ALTERNATING red/white 30u wall segments =
+  reference look), placeholder box-car, fixed-step 60Hz kinematic drive
+  (W/S/A/D, C chase cam, Esc menu), HUD pill, REFERENCE.jpg saved (user's
+  target photo, extracted 1672x941). QA: window.__remake {ready, state, fps(),
+  __t:{renderer,scene,sun,hemi,camera,THREE}}; rig scratchpad/scr-remake.mjs
+  (?drive=1 auto-start; menu+standstill+accel+steer+chase shots; exit 1 on any
+  console/page error). Zero errors; accel 0->49->66 of VMAX 92.
+  LESSONS (shadows — cost 4 probes):
+  (a) after resizing a DirectionalLight shadow frustum you MUST call
+      shadow.camera.updateProjectionMatrix() — silently no shadows otherwise;
+  (b) shadow.bias scales by (far-near): -0.0004 over a 3800u range = ~1.5 world
+      units — ERASES contact shadows of low objects (car body!) while tall
+      boxes still cast; use bias 0 + normalBias ~0.5;
+  (c) keep the shadow ortho window TIGHT (±140) and near/far span narrow
+      (800..2600) — follows the car each frame; crispness comes from window
+      size, not mapSize;
+  (d) debug ladder that worked: CameraHelper + giant test box (proves pipeline)
+      -> readRenderTargetPixels histogram of the shadow map (proves caster is
+      in the map) -> zoomed screenshot crop (shadow was there, just soft).
+  SwiftShader headless: ~11fps at 1600x900 (perf gate work in item 9).
+  Deployed alongside as REMAKE v1; main game untouched gameplay-wise (v149
+  token/cache bump only, badge 'HD v149 · 22 Jul 2026').
