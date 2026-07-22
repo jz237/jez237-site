@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 21 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 18-24, 1983 — Apple II Sales Reach One Million</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-07-18</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-18</guid>
+      <pubDate>Wed, 22 Jul 2026 12:00:00 GMT</pubDate>
+      <description>Six years after its debut, the expandable 6502 machine crosses a landmark that shows how far personal computing has moved beyond the hobby bench. Apple Computer sold its one-millionth Apple II on July 18, giving the personal-computer business a round-number milestone few could have imagined when the original machine appeared in 1977. The figure belongs to the whole Apple II family, whose color graphics, expansion slots, and accessible design carried it from enthusiasts’ rooms into schools, offices, and neighborhood computer shops. Also this week: Commodore Threatens to Halve Software Prices · Whole Earth Maps a 40,000-Program Jungle · More Memory for Less in the Home-Computer War.</description>
+    </item>
     <item>
       <title>Week of July 11-17, 1983 — Nintendo Brings the Arcade Home With Its Family Computer</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-07-11</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-02-28</guid>
       <pubDate>Fri, 03 Jul 2026 12:00:00 GMT</pubDate>
       <description>As March 1983 begins, Computer Gaming World keeps strategy, adventure, and simulation titles in view while retailers use games to make home machines feel useful and fun. During the week of February 28-March 6, 1983, the home-computer market was still being explained from the shelf outward. Computer Gaming World&apos;s early-1983 issues put titles such as Serpentine, Cosmic Balance, S.E.U.I.S., Armor Assault, and wider strategy coverage in front of readers who wanted more than arcade imitation. At the same time, IBM PC shoppers were hearing the new Lotus 1-2-3 pitch, a spreadsheet/database/graphics package that had gone on sale in January and was quickly becoming a reason to take the PC seriously at work.</description>
-    </item>
-    <item>
-      <title>Week of February 21-27, 1983 — Computer games claim the brightest shelf space</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-02-21</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-02-21</guid>
-      <pubDate>Thu, 02 Jul 2026 12:00:00 GMT</pubDate>
-      <description>As February closes, Computer Gaming World points readers toward deeper strategy and adventure titles while home-computer stores keep selling machines through games, BASIC, and office software promises. During the week of February 21-27, 1983, the home-computer story is not a single launch so much as a crowded shelf. Computer Gaming World&apos;s winter issue keeps strategy, simulation, and adventure games in front of serious players, with Serpentine, Cosmic Balance, S.E.U.I.S., Armor Assault, and other computer titles showing how far the market had moved beyond simple arcade imitation. Across the same counter, Lotus 1-2-3 was still fresh for IBM PC shoppers after its January on-sale date, while Commodore, TI, and Atari machines competed for families through memory, price, games, and programming.</description>
     </item>
   </channel>
 </rss>
