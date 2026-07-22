@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-07-22T16:00:01.187955+00:00",
+  "updatedAt": "2026-07-22T22:00:01.430415+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -18304,8 +18304,8 @@
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024",
-      "localPath": "public/thumbnails/news-42c8ddccf57925fb1d.webp",
-      "checkedAt": "2026-07-16T16:00:01.750493+00:00"
+      "localPath": "public/thumbnails/news-42c8ddccf57925fb1d.jpg",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/anthropic-ODE.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/anthropic-ODE.avif",
@@ -18669,12 +18669,12 @@
     "thumb:https://media.thenextweb.com/2026/07/raidium-ai-radiology-moffitt-cancer-center-us-launch.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/raidium-ai-radiology-moffitt-cancer-center-us-launch.avif",
       "localPath": "public/thumbnails/news-89e5b5f9c159fa8713.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/google-deepmind-pele-lost-goal-ai-reconstruction.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/google-deepmind-pele-lost-goal-ai-reconstruction.avif",
       "localPath": "public/thumbnails/news-b27a9f2be7df320244.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/07/vertu-alphafold-unfold.jpg?resize=1200%2C800": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/07/vertu-alphafold-unfold.jpg?resize=1200%2C800",
@@ -18709,7 +18709,7 @@
     "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/07/inline-1784235912807.png": {
       "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/07/inline-1784235912807.png",
       "localPath": "public/thumbnails/news-b0d8929f7a6d88c6a1.png",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "https://aidailybrief.ai/e/2026-07-17": {
       "image": "https://aidailybrief.ai/og/2026-07-17.png",
@@ -18784,12 +18784,12 @@
     "thumb:https://media.thenextweb.com/2026/07/white-house-dictating-frontier-ai-model-access-anthropic-openai.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/white-house-dictating-frontier-ai-model-access-anthropic-openai.avif",
       "localPath": "public/thumbnails/news-8fe974b1336b598879.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://aidailybrief.ai/og/2026-07-17.png": {
       "sourceImage": "https://aidailybrief.ai/og/2026-07-17.png",
       "localPath": "public/thumbnails/news-6aa9101154bf4bb520.png",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "https://www.theverge.com/ai-artificial-intelligence/967781/chinese-ai-models-open-source-moonshot-kimi-k3-alibaba-qwen": {
       "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/gettyimages-2286623351.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
@@ -18934,7 +18934,7 @@
     "thumb:https://media.thenextweb.com/2026/07/neo-security-100m-agentic-ai-control-layer.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/neo-security-100m-agentic-ai-control-layer.avif",
       "localPath": "public/thumbnails/news-6a2d262a0c333912cd.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2153474303-e.jpg?resize=1200%2C800": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2024/11/GettyImages-2153474303-e.jpg?resize=1200%2C800",
@@ -18964,7 +18964,7 @@
     "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/07/siggraph-featured-still-1920x1080-1.jpg": {
       "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/07/siggraph-featured-still-1920x1080-1.jpg",
       "localPath": "public/thumbnails/news-2a1a838d005e168230.jpg",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://assets.techrepublic.com/uploads/2026/07/tr-07202026-apac-china-kimi-k3-moonshot-ai.jpg?f=jpeg": {
       "sourceImage": "https://assets.techrepublic.com/uploads/2026/07/tr-07202026-apac-china-kimi-k3-moonshot-ai.jpg?f=jpeg",
@@ -18974,7 +18974,7 @@
     "thumb:https://media.thenextweb.com/2026/07/google-ai-search-unsafe-schools-common-sense-media.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/google-ai-search-unsafe-schools-common-sense-media.avif",
       "localPath": "public/thumbnails/news-92521525cc71786f70.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://images.ctfassets.net/kftzwdyauwt9/1Xa7VsDMfKDQaCRhafmq4r/58954b4318f57a81a96ad23470ed2497/SEO_image.png?w=1600&h=900&fit=fill": {
       "sourceImage": "https://images.ctfassets.net/kftzwdyauwt9/1Xa7VsDMfKDQaCRhafmq4r/58954b4318f57a81a96ad23470ed2497/SEO_image.png?w=1600&h=900&fit=fill",
@@ -19063,7 +19063,7 @@
     "thumb:https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeShield&backgroundColor=heather": {
       "sourceImage": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeShield&backgroundColor=heather",
       "localPath": "public/thumbnails/news-2882ae2d318a17d042.png",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://aidailybrief.ai/og/2026-07-19.png": {
       "sourceImage": "https://aidailybrief.ai/og/2026-07-19.png",
@@ -19105,7 +19105,7 @@
     "thumb:https://media.thenextweb.com/2026/07/Samsung-card.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/Samsung-card.avif",
       "localPath": "public/thumbnails/news-acfa23192106771ac4.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://ph-files.imgix.net/854af628-6b6d-4d44-830b-22891ba5ea5e.png?auto=format&fit=crop&frame=1&h=512&w=1024": {
       "sourceImage": "https://ph-files.imgix.net/854af628-6b6d-4d44-830b-22891ba5ea5e.png?auto=format&fit=crop&frame=1&h=512&w=1024",
@@ -19249,7 +19249,7 @@
     "thumb:https://media.thenextweb.com/2026/07/poolside-laguna-s-2-1-open-weight-coding-model.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/poolside-laguna-s-2-1-open-weight-coding-model.avif",
       "localPath": "public/thumbnails/news-680595102a7a422f29.avif",
-      "checkedAt": "2026-07-21T22:00:01.919126+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-638007236.jpg?resize=1200%2C798": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-638007236.jpg?resize=1200%2C798",
@@ -19264,7 +19264,7 @@
     "thumb:https://media.thenextweb.com/2026/07/gm-q2-earnings-cadillac-gas-ev-pullback.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/gm-q2-earnings-cadillac-gas-ev-pullback.avif",
       "localPath": "public/thumbnails/news-646f13a11c98762b84.avif",
-      "checkedAt": "2026-07-21T22:00:01.919126+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/01/google-gemini-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
@@ -19289,7 +19289,7 @@
     "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/07/ethernet-spectrum-x-corp-blog-1920x1080-5205700.jpg": {
       "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/07/ethernet-spectrum-x-corp-blog-1920x1080-5205700.jpg",
       "localPath": "public/thumbnails/news-852d09f06197b3e616.jpg",
-      "checkedAt": "2026-07-21T22:00:01.919126+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/STK255_Google_Gemini_D.jpg?quality=90&strip=all&crop=0%2C9.9676601489831%2C100%2C80.064679702034&w=1200": {
       "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/01/STK255_Google_Gemini_D.jpg?quality=90&strip=all&crop=0%2C9.9676601489831%2C100%2C80.064679702034&w=1200",
@@ -19304,22 +19304,22 @@
     "thumb:https://media.thenextweb.com/2026/07/microsoft-edge-screenshot-blocking-sensitive-pdfs.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/microsoft-edge-screenshot-blocking-sensitive-pdfs.avif",
       "localPath": "public/thumbnails/news-beab618d7f873f9ea8.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/05/taiwan-high-speed-rail-hacked-student-tetra-sdr.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/05/taiwan-high-speed-rail-hacked-student-tetra-sdr.avif",
       "localPath": "public/thumbnails/news-32b7c858f52977101a.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/chatfishing-ai-dating-apps-chatgpt-claude-tinder-hinge.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/chatfishing-ai-dating-apps-chatgpt-claude-tinder-hinge.avif",
       "localPath": "public/thumbnails/news-5719d60ea2531b6e6a.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/07/current-ai.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/current-ai.avif",
       "localPath": "public/thumbnails/news-b2ca3f80f7e4dc1c51.avif",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "thumb:https://lh3.googleusercontent.com/esSD0-kSrZ8K07XxNkSKL3OGlcx1Cf3M-qiQut0q_vArHMiK2L1CpUIGVkjuQrhu_m0g8UMVflVQpDp7VFAJSubDdCjSXsPJPDeK-PUtaPbqA8W1=w528-h297-n-nu-rw-lo": {
       "sourceImage": "https://lh3.googleusercontent.com/esSD0-kSrZ8K07XxNkSKL3OGlcx1Cf3M-qiQut0q_vArHMiK2L1CpUIGVkjuQrhu_m0g8UMVflVQpDp7VFAJSubDdCjSXsPJPDeK-PUtaPbqA8W1=w528-h297-n-nu-rw-lo",
@@ -19466,7 +19466,7 @@
     "thumb:https://www.anthropic.com/api/opengraph-illustration?name=Hand+Stack&backgroundColor=oat": {
       "sourceImage": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+Stack&backgroundColor=oat",
       "localPath": "public/thumbnails/news-7461f4b20b1479c40c.png",
-      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     },
     "https://aidailybrief.ai/e/2026-07-21": {
       "image": "https://aidailybrief.ai/og/2026-07-21.png",
@@ -19588,6 +19588,129 @@
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/07/glow-founders.jpg?resize=1200%2C800",
       "localPath": "public/thumbnails/news-2f26220d95c481667b.webp",
       "checkedAt": "2026-07-22T16:00:01.187955+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/treasury-threatens-sanctions-after-white-house-claims-moonshot-distilled-anthropics-fable": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/GettyImages-2254580342.jpg?w=1024",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apac-china-ai-model-export-controls": {
+      "image": "https://assets.techrepublic.com/uploads/2026/07/china-chip.jpg?f=jpeg",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://www.techrepublic.com/article/news-samsung-fold8-ultra-fold8": {
+      "image": "https://assets.techrepublic.com/uploads/2026/07/Samsung-Galaxy-Z-Fold8-Ultra-Unveiled.jpg?f=jpeg",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://www.techrepublic.com/article/news-samsung-galaxy-z-flip8-price-thinner-design": {
+      "image": "https://assets.techrepublic.com/uploads/2026/07/flip8-1.jpg?f=jpeg",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/how-an-openais-human-mistake-led-to-the-ai-powered-hack-on-hugging-face": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/hugging-face-openai-logos-split-screen.jpg?resize=1200%2C799",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/travis-kalanicks-robotics-company-raises-1-7b-led-by-a16z": {
+      "image": "https://techcrunch.com/wp-content/uploads/2019/04/GettyImages-1132384785.jpg?resize=1200%2C799",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/yope-raises-12-3m-to-build-a-private-social-network-without-algorithms-or-ads": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/banner.png?resize=1200%2C750",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/monday-com-lays-off-hundreds-to-focuses-on-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-2259521127.jpg?w=1024",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://www.theverge.com/tech/969382/samsung-google-smart-glasses-gentle-monster-warby-parker": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/07/samsung-google-gentle-monster-warby-parker-ai-glasses-08.jpg?quality=90&strip=all&crop=0%2C10.741906587151%2C100%2C78.516186825698&w=1200",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/arcee-a-us-open-source-ai-lab-says-chinese-models-are-not-inherently-dangerous": {
+      "image": "https://techcrunch.com/wp-content/uploads/2021/09/GettyImages-1297448481.jpg?resize=1200%2C800",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/substacks-new-tool-tells-you-whos-been-writing-their-newsletters-with-ai": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/substack-GettyImages-2261803485.jpg?w=1024",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/2026/07/22/openais-ai-spending-spree-has-ballooned-to-750b": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-2236544023.jpeg?resize=1200%2C800",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://techcrunch.com/podcast/menlo-ventures-matt-murphy-explains-what-ai-startups-founders-must-do-differently": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/Matt-Murphy-Menlo-Ventures.jpeg?resize=1200%2C1200",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://openai.com/index/how-news-organizations-are-using-ai": {
+      "image": "https://images.ctfassets.net/kftzwdyauwt9/4KPHlygXSOVWJHJlSNVU1N/574f3d3fc5309307943d657bd5000a20/how_news_orgs_use_AI_16x9.png?w=1600&h=900&fit=fill",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://www.anthropic.com/news/anthropic-economic-index-connector": {
+      "image": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeBook&backgroundColor=coral",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://www.anthropic.com/news/economic-futures-research-fund-agenda": {
+      "image": "https://cdn.sanity.io/images/4zrzovbb/website/303a79341c6210020de254eaabc259548d27ba58-1200x630.jpg",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "https://aidailybrief.ai/e/2026-07-21#secret-china-ban-effort": {
+      "image": "https://aidailybrief.ai/og/2026-07-21.png",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://storage.googleapis.com/gweb-research2023-media/original_images/SymptomAI1_Overview.png": {
+      "sourceImage": "https://storage.googleapis.com/gweb-research2023-media/original_images/SymptomAI1_Overview.png",
+      "localPath": "public/thumbnails/news-7d8eae2498889e0d3c.png",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/07/openai-brockman-kimi-k3-pretty-good-distillation-white-house.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/07/openai-brockman-kimi-k3-pretty-good-distillation-white-house.avif",
+      "localPath": "public/thumbnails/news-f4da170b2e402933a0.avif",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://assets.techrepublic.com/uploads/2026/07/flip8-1.jpg?f=jpeg": {
+      "sourceImage": "https://assets.techrepublic.com/uploads/2026/07/flip8-1.jpg?f=jpeg",
+      "localPath": "public/thumbnails/news-d45fbcae0994f42fcb.jpg",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/07/trump-5-billion-genesis-mission-ai-science-research.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/07/trump-5-billion-genesis-mission-ai-science-research.avif",
+      "localPath": "public/thumbnails/news-79f7801ddd64976a55.avif",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/07/hugging-face-openai-logos-split-screen.jpg?resize=1200%2C799": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/07/hugging-face-openai-logos-split-screen.jpg?resize=1200%2C799",
+      "localPath": "public/thumbnails/news-66bb3e03249f660751.webp",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/07/cisco-logo.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/07/cisco-logo.avif",
+      "localPath": "public/thumbnails/news-4845adb91f4de22da9.avif",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-2236544023.jpeg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-2236544023.jpeg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-4a4e8c28361c0e94e1.webp",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/07/Matt-Murphy-Menlo-Ventures.jpeg?resize=1200%2C1200": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/07/Matt-Murphy-Menlo-Ventures.jpeg?resize=1200%2C1200",
+      "localPath": "public/thumbnails/news-d76e0e019827820fd3.webp",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://images.ctfassets.net/kftzwdyauwt9/4KPHlygXSOVWJHJlSNVU1N/574f3d3fc5309307943d657bd5000a20/how_news_orgs_use_AI_16x9.png?w=1600&h=900&fit=fill": {
+      "sourceImage": "https://images.ctfassets.net/kftzwdyauwt9/4KPHlygXSOVWJHJlSNVU1N/574f3d3fc5309307943d657bd5000a20/how_news_orgs_use_AI_16x9.png?w=1600&h=900&fit=fill",
+      "localPath": "public/thumbnails/news-906abab38ce14abdeb.png",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeBook&backgroundColor=coral": {
+      "sourceImage": "https://www.anthropic.com/api/opengraph-illustration?name=Hand+NodeBook&backgroundColor=coral",
+      "localPath": "public/thumbnails/news-36ff3a8ec8ea0c35c9.png",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
+    },
+    "thumb:https://cdn.sanity.io/images/4zrzovbb/website/303a79341c6210020de254eaabc259548d27ba58-1200x630.jpg": {
+      "sourceImage": "https://cdn.sanity.io/images/4zrzovbb/website/303a79341c6210020de254eaabc259548d27ba58-1200x630.jpg",
+      "localPath": "public/thumbnails/news-4d0563d4dc7b3922f8.jpg",
+      "checkedAt": "2026-07-22T22:00:01.430415+00:00"
     }
   }
 }
