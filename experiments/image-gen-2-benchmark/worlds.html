@@ -207,6 +207,21 @@
       margin: 0 0 16px;
       padding: 0 4px;
     }
+    .story-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      margin: 0 0 20px 4px;
+      padding: 9px 14px;
+      border: 1px solid rgba(155,228,255,.42);
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(0,76,124,.9), rgba(0,122,176,.82));
+      color: #f4fbff;
+      font-weight: 820;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(0,65,105,.24);
+    }
+    .story-link:hover { color: #fff; text-decoration: none; border-color: rgba(255,255,255,.7); }
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
     .card {
       overflow: hidden;
@@ -319,6 +334,7 @@
       <a href="world-that-never-was.html">World that never was</a>
       <a href="subject-artifacts.html">Subject as artifact</a>
       <a href="data-artifacts.html">Data as artifact</a>
+      <a href="aureline-shelf-story.html">Aureline story</a>
       <a href="mirthcap-story.html">Mirthcap story</a>
     </nav>
     <div class="meta">
@@ -418,6 +434,10 @@
       }
 
       function render(items) {
+        const storyLinks = {
+          'Aureline Shelf': { href: 'aureline-shelf-story.html', label: 'Watch The Orchard That Turned Upwind' },
+          'Mirthcap Lookingglass Village': { href: 'mirthcap-story.html', label: 'Watch The Heartglass Rue' }
+        };
         const groups = new Map();
         items.forEach((item) => {
           const world = item.world || {};
@@ -451,6 +471,7 @@
               <span class="world-count">${world.items.length} image${world.items.length === 1 ? '' : 's'}</span>
             </div>
             ${world.continuity ? `<p class="world-note"><strong>Continuity:</strong> ${escapeHtml(world.continuity)}</p>` : ''}
+            ${storyLinks[world.name] ? `<a class="story-link" href="${escapeHtml(storyLinks[world.name].href)}">${escapeHtml(storyLinks[world.name].label)} →</a>` : ''}
             <div class="grid">${world.items.map(cardHtml).join('')}</div>
           </section>
         `).join('');
