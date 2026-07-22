@@ -240,7 +240,9 @@ export class AudioEngine {
     switch (ev.type) {
       case 'fire':
         if (!this.gate('fire_' + ev.towerType, 90)) break;
-        switch (ev.towerType) {
+        // apex hybrids borrow their dominant parent's report, a shade deeper
+        switch ({ prismbloom: 'bloom', stormbriar: 'tesla', glacialcoil: 'coral',
+          causticfurnace: 'bloom', lancechorus: 'urchin' }[ev.towerType] || ev.towerType) {
           case 'coral': this.tone({ freq: this.v(340), dur: 0.14, type: 'triangle', gain: 0.06, glide: this.v(240) }); break;
           case 'tesla': this.noise({ dur: 0.12, freq: this.v(2600), q: 2.5, gain: 0.07, sweep: 700 }); break;
           case 'spire': this.tone({ freq: this.v(1560, 0.05), dur: 0.5, type: 'sine', gain: 0.05 });

@@ -64,7 +64,7 @@ export class UI {
     });
     MAPS.forEach((m, i) => {
       const b = document.createElement('button');
-      b.className = 'mapcard' + (i === this.game.mapIndex ? ' sel' : '');
+      b.className = 'mapcard' + (!this.game.daily && i === this.game.mapIndex ? ' sel' : '');
       const best = journal.get().best[m.id];
       const bestLine = best ? `<div class="mbest">${best.won ? '✦ ' : ''}best · wave ${best.wave}</div>` : '';
       b.innerHTML = `<div class="mname">${m.name}</div><div class="mblurb">${m.blurb}</div>${bestLine}`;
@@ -95,14 +95,17 @@ export class UI {
   async renderBoard() {
     const el = document.getElementById('board');
     if (!el) return;
+    const seq = this._boardSeq = (this._boardSeq || 0) + 1;
+    const daily = this.game.daily; // capture at call time — the flag can flip mid-fetch
     const local = localScores();
     el.innerHTML = '<div class="btitle">BRIGHTEST GROVES</div><div class="dim" style="opacity:0.5">reaching into the dark…</div>';
-    const global = await fetchGlobal(this.game.daily ? dailyInfo().board : undefined);
+    const global = await fetchGlobal(daily ? dailyInfo().board : undefined);
+    if (seq !== this._boardSeq) return; // a newer request owns the panel now
     const list = (global && global.length ? global : local).slice(0, 8);
     if (!list.length) { el.innerHTML = '<div class="btitle">BRIGHTEST GROVES</div><div style="opacity:0.5;font-size:12px">no lights etched yet — be first</div>'; return; }
     const rows = list.map((s, i) =>
       `<tr><td class="rk">${i + 1}</td><td>${(s.initials || '???')}</td><td class="sc">${s.score}</td><td class="rk">${(s.extra && s.extra.wave) ? 'w' + s.extra.wave : ''}</td></tr>`).join('');
-    el.innerHTML = `<div class="btitle">${this.game.daily ? '☀ TODAY’S GROVES' : 'BRIGHTEST GROVES'} ${global && global.length ? '· GLOBAL' : '· THIS GROVE'}</div><table>${rows}</table>`;
+    el.innerHTML = `<div class="btitle">${daily ? '☀ TODAY’S GROVES' : 'BRIGHTEST GROVES'} ${global && global.length ? '· GLOBAL' : '· THIS GROVE'}</div><table>${rows}</table>`;
   }
 
   showGameOver(sim, won) {
@@ -167,10 +170,18 @@ export class UI {
         set('waveSub', ws, `☄ ${remaining} / ${sim.waveTotal}`);
       } else set('waveSub', ws, '');
     }
+    // inspect affordability tracks live gold (panel is otherwise write-once)
+    const selT = this.game.selected;
+    if (selT) {
+      const up = document.getElementById('btnUp');
+      if (up) { const next = selT.def.levels && selT.def.levels[selT.level + 1]; if (next) up.disabled = sim.gold < next.cost; }
+      const fu = document.getElementById('btnFuse');
+      if (fu) fu.disabled = sim.gold < 300;
+    }
     // surge button
     const s = this.el.surge;
     if (sim.state === 'prep') {
-      const bonus = Math.floor(Math.max(0, sim.prepLeft) * ECON.surgeBonusPerSec);
+      const bonus = sim.prepLeft > 0.5 ? Math.floor(sim.prepLeft * ECON.surgeBonusPerSec) : 0;
       const coarse = document.body.classList.contains('coarse');
       s.innerHTML = coarse ? `<span class="schip">≋</span>SURGE +◈${bonus}` : `<span class="schip">≋</span>CALL THE SURGE +◈${bonus} (${Math.ceil(Math.max(0, sim.prepLeft))}s)`;
       s.classList.add('ready');

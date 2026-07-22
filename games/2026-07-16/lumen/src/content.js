@@ -322,7 +322,8 @@ export function waveComp(n) {
   const hpMul = Math.pow(1.105, Math.max(0, n - 1)) * (1 + Math.max(0, n - 10) * 0.045);
   const gap = Math.max(0.28, 0.9 - n * 0.03);
   const push = (type, count, g = gap, delay = 0, hm = hpMul) => {
-    if (count > 0) entries.push({ type, count: Math.floor(count), gap: g, hpMul: hm, delay });
+    const c = Math.floor(count); // gate on the floored value or the forecast shows ×0 ghosts
+    if (c > 0) entries.push({ type, count: c, gap: g, hpMul: hm, delay });
   };
   if (n === 10) {
     // boss base hp IS the wave-10 value — no global multiplier on top
@@ -354,7 +355,8 @@ export function waveComp(n) {
   // deep endless: a named mutator twists every non-boss wave past 20
   let mutator = null;
   if (n > 20) {
-    mutator = MUTATORS[(n * 7 + 3) % MUTATORS.length];
+    // stride must be coprime with the table length or one mutator repeats forever
+    mutator = MUTATORS[(n * 5 + 3) % MUTATORS.length];
     if (mutator.hpAdj) for (const e of entries) e.hpMul *= mutator.hpAdj;
     if (mutator.escort) push(mutator.escort.type, mutator.escort.count, gap * 1.3, 2.0);
   }

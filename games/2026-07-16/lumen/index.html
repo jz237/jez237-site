@@ -40,8 +40,9 @@
   #fps { opacity: 0.35; font-size: 0.7em; min-width: 2.2em; text-align: right; }
 
   #bottombar { bottom: 0; left: 0; right: 0; display: flex; gap: 14px; align-items: flex-end;
-    justify-content: center; padding: 12px 18px 14px;
+    justify-content: center; padding: 12px 18px 14px; pointer-events: none;
     background: linear-gradient(0deg, rgba(4,2,12,0.6), transparent); }
+  #bottombar > * { pointer-events: auto; }
   .card { pointer-events: auto; cursor: pointer; position: relative;
     background: radial-gradient(ellipse at 50% 120%, rgba(28,20,60,0.85), rgba(8,6,24,0.78));
     border: 1px solid color-mix(in srgb, var(--glow) 30%, transparent);
@@ -77,7 +78,10 @@
   #wavePreview .pvfoe { color: var(--fc); text-shadow: 0 0 8px var(--fc); }
   #wavePreview .pvboss { font-weight: 700; letter-spacing: 0.16em; }
   #wavePreview .pvmut { color: #ffd9de; border-left: 1px solid rgba(255,120,150,0.3); padding-left: 12px; letter-spacing: 0.16em; }
-  @media (pointer: coarse) { #wavePreview { bottom: 116px; font-size: 12px; } }
+  @media (pointer: coarse) {
+    #wavePreview { bottom: 116px; font-size: 12px; }
+    body:has(#inspect.open) #wavePreview { opacity: 0; }
+  }
   #tempo { display: flex; gap: 6px; pointer-events: auto; }
   #tempo button { background: var(--glass); color: #cfe9ef; border: 1px solid rgba(120,220,255,0.22);
     border-radius: 9px; width: 44px; padding: 10px 0; font-family: inherit; font-size: 15px;
@@ -214,6 +218,10 @@
   }
   /* short landscape phones: reclaim vertical space from the HUD */
   @media (max-height: 430px) {
+    #title { overflow-y: auto; place-items: start center; padding: 10px 0 24px; }
+    #title h1 { font-size: 42px; }
+    #title .sub { margin: 4px 0 10px; }
+    #title .hint { display: none; }
     .card { min-width: 64px; padding: 7px 6px 6px; gap: 0; }
     .card .glyph { font-size: 12px; }
     .card .cname { font-size: 10px; }
@@ -294,7 +302,7 @@
   <div id="rotate"><div><span class="ricon">📱</span>turn your device sideways<br>the grove is wide</div></div>
   <button id="tapCancel">✕ cancel placement</button>
   <div id="glfail"><div>LUMEN needs WebGL2.<br>Please use a desktop browser with hardware acceleration.</div></div>
-  <div id="ver">LUMEN v3.15.0</div>
+  <div id="ver">LUMEN v3.16.0</div>
 </div></div>
 <script type="module" src="src/main.js"></script>
 </body>
