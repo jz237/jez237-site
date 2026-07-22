@@ -431,3 +431,50 @@ damage, boost faithful in behavior.
 
 - 2026-07-22 v12 (CACHE scr-v161): steering sign REVERSED per user report
   (A/D — and with them touch thirds + gamepad axis — were mirrored).
+
+## PHYSICS-NOTES (2026-07-22, from the disassembled original's source)
+Source: github.com/olefriis/stuntcarremake (clone in scratchpad/scr-src;
+"Car Behaviour.cpp" = the Amiga original's physics, 4408 lines). The WASM in
+this folder was compiled from it. Fixed-point: most values ×256; angles in
+MAX_ANGLE wrap; physics steps ONCE PER frameGap frames (PC gap 4; Amiga
+MIN.FRAMES=6 at 50Hz PAL → ~8-12Hz physics step! Constants below are PER
+THAT STEP — convert to our 60Hz: dt_orig ≈ 0.083-0.12s).
+KEY ROUTINE MAP (ranked MOST-WRONG in remake first):
+1. THREE-WHEEL CONTACT MODEL (front-left, front-right, rear — a trike):
+   per-wheel road height vs actual height; height_difference clamped
+   [+0x1400, −0x300]; amount_below_road extrapolated by INCREASE (276/256)
+   of the delta + new_difference; collision force = average amount below
+   road directed along the ROAD SURFACE NORMAL (inclinations from per-wheel
+   height differences >> log car length 4 / width 3). Remake has NONE of
+   this (single point clamp). This is the suspension/bounce/pitch/roll core.
+2. FREE YAW ANGLE + ROAD ALIGNMENT: car owns player_y_angle; steering sets
+   left_right_value ±15 (only touching_road && !on_chains) feeding steering
+   acceleration; the road's per-section angle pulls the car straight
+   (AlignCarWithRoad, y_angle_difference section−player). Remake locks
+   heading to the road tangent (lat-only) — no drift/fishtail dynamics.
+3. GRIP RULE: |engine_z_acceleration| capped at 2× collision Y acceleration
+   — light car = no thrust (wheelspin off crests, no accel mid-air).
+4. THROTTLE LATCH: once accelerating, stays accelerating after release
+   until BRAKE pressed (accelerating flag). Engine accel 240 (×256 units);
+   brake −240; cut when z_speed ≥ 120×256 (reachable only via boost —
+   natural equilibrium ≈ 64×256 due to wind reduction).
+5. WIND RESISTANCE: engine accel reduced by (z_speed>>8) each step (linear,
+   NOT my v² fit); GLOBAL DAMPING: world speeds ×REDUCTION (238/256) per
+   step in the integrator (this is the real "drag").
+6. GRAVITY_ACCELERATION = 317 (×256 units per step²) rotated into car axes.
+7. BOOST: boostReserve units; boostUnit countdown at boost_unit_value=16
+   per reserve unit; boost also engages with brake key (brake+boost combo).
+8. DAMAGE: per-wheel; from amount_below_road − cushion, ≥0x700 threshold,
+   +50% scaling, cap 0xff per wheel; damaged_limit 10/track; 14-frame
+   window; wreck → wreck_wheel_height_reduction 0x200.
+9. CRANE/DROP: PositionCarAbovePiece → car centered on a legal piece,
+   y = road + 0xc00 (×256) ≈ 12 height-units above road, drop under
+   gravity; on_chains freezes control; OFF_TRACK_LIMIT=64 steps off-track
+   → re-drop at current piece. touching_road sets drop_start_done.
+10. DISPLAY SPEED = z_speed × 183 >> 15 (top ≈ 171 at the 120×256 cut —
+    92 is the wind-equilibrium, boost exceeds it: remake cap 92×1.09 close).
+SUBSYSTEM PLAN: (a) 3-wheel contact+surface-normal forces+pitch/roll,
+(b) free-yaw steering + alignment, (c) grip rule + throttle latch + linear
+wind + REDUCTION damping (replaces fitted v² model), (d) boost/damage per
+source, (e) crane per source, (f) re-verify A/B (accel curve should STILL
+match — the fitted model approximated exactly these mechanics).
