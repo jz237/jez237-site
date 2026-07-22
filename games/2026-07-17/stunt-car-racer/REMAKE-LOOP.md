@@ -347,3 +347,15 @@ Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
   glued, crossing voids on the linear bridge path (reads as a jump; fine).
   Steering KC/rate parity: CLOSED-DEFERRED (original rx traces lack logged
   inputs; current feel validated by drivable blind laps).
+
+- 2026-07-22 MOBILE + GAMEPAD + PERF SHIPPED as REMAKE v9 (CACHE scr-v157).
+  FX tiers: ?fx=low|high (auto-low when hardwareConcurrency<=4): low = no
+  shadows/AA, pixelRatio 0.7, terrain SEG 100 + Lambert, 70 FrontSide trees.
+  PERF GATE MET: SwiftShader headless 12.4fps (high) -> 37.0fps (low) >= 30.
+  DOM cockpit/dash stay crisp at any 3D scale. TOUCH: left/right thirds
+  steer, middle accelerates, bottom-middle brakes (window-level handlers,
+  preventDefault, only while driving). GAMEPAD: axes[0] steer +/-0.3,
+  A/RT accel, B/LT brake, polled per frame into a gp state merged with
+  keyboard in step(). Zero console errors both tiers.
+  REMAINING before swap audit: cockpit 8:5 letterbox option (cosmetic,
+  optional), per-track craneBack, swap-gate full sweep.
