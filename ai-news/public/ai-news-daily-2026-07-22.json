@@ -1,38 +1,236 @@
 {
   "date": "2026-07-22",
-  "updatedAt": "2026-07-22T10:00:01.372841+00:00",
+  "updatedAt": "2026-07-22T16:00:01.187955+00:00",
   "items": [
     {
-      "title": "How to Get the Most Out of Fable 5 and GPT-5.6 Sol",
-      "url": "https://aidailybrief.ai/e/2026-07-20",
-      "source": "The AI Daily Brief",
-      "sourceUrl": "https://aidailybrief.ai/",
-      "sourceWeight": 0.88,
-      "sourceRole": "secondary",
+      "title": "Building AI infrastructure with the Effingham County community",
+      "url": "https://openai.com/index/building-ai-infrastructure-with-the-effingham-county-community",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
       "sourceType": "",
       "category": "AI",
-      "summary": "No new-model drama today (that's Kimi's job) — instead a practical field guide to squeezing every drop out of Fable 5 and GPT-5.6 Sol, from managing a more tenacious model's boundaries to raising your own ambition until the limits reveal themselves.",
-      "image": "public/thumbnails/news-ddfefecd5f0e87b82d.png",
+      "summary": "OpenAI announces Project Camellia in Effingham County, Georgia, with commitments to responsible energy, community investment, jobs, and access to Codex.",
+      "image": "public/thumbnails/news-ad721fa9f4277f7be1.png",
       "featuredLatest": false,
-      "published": "2026-07-22T10:00:09.874927+00:00",
-      "firstSeen": "2026-07-21T22:00:01.919126+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "published": "2026-07-22T13:00:00+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 13.632,
+      "score": 17.512,
       "signalGroup": "Model releases",
-      "sourceTier": "Reported source",
+      "sourceTier": "Primary source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
       "brief": {
-        "whatHappened": "How to Get the Most Out of Fable 5 and GPT-5.6 Sol",
+        "whatHappened": "Building AI infrastructure with the Effingham County community",
         "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
         "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
-        "sourceFrame": "Seen via The AI Daily Brief."
+        "sourceFrame": "Seen via OpenAI News."
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "how-get-most-out-fable-gpt-5"
+      "clusterKey": "building-infrastructure-effingham-county-community",
+      "imageOriginal": "https://images.ctfassets.net/kftzwdyauwt9/2E055Vw112vq9W8h2im5nw/2e610c07e7da2a38a0a77c37ffa562d0/effingham_county_16x9.png?w=1600&h=900&fit=fill"
+    },
+    {
+      "title": "Open models recap: more on Kimi K3, Qwen 3.8, Xi's WAIC speech, distillation, the open-closed gap, and what's next",
+      "url": "https://www.interconnects.ai/p/open-models-recap-more-on-kimi-k3",
+      "source": "Interconnects AI",
+      "sourceUrl": "https://www.interconnects.ai/feed",
+      "sourceWeight": 0.9,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A podcast with Florian Brand.",
+      "image": "public/thumbnails/news-4b0ace772bd8a54d95.jpg",
+      "featuredLatest": false,
+      "published": "2026-07-22T14:09:04+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 11.6049,
+      "signalGroup": "Model releases",
+      "sourceTier": "Primary source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Open models recap: more on Kimi K3, Qwen 3.8, Xi's WAIC speech, distillation, the open-closed gap, and what's next",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via Interconnects AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "open-models-recap-more-kimi-qwen",
+      "imageOriginal": "https://substackcdn.com/image/fetch/$s_!v7es!,w_1200,h_600,c_fill,f_jpg,q_auto:good,fl_progressive:steep,g_auto/https%3A%2F%2Fsubstack-video.s3.amazonaws.com%2Fvideo_upload%2Fpost%2F207969620%2F7456517c-1b8e-47fc-815b-cfa3d76dcaa6%2Ftranscoded-1784683917.png"
+    },
+    {
+      "title": "OpenAI adds two banking CEOs to its board as an IPO looms",
+      "url": "https://thenextweb.com/news/openai-banking-ceos-board-velez-vince-ipo",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The ChatGPT maker has put two banking chiefs on both its nonprofit and for-profit boards: Nubank’s David Vélez and BNY’s Robin Vince. It is the kind of Wall Street ballast a company assembles when it is getting ready to face public investors. OpenAI is not a public company yet. Its latest board picks suggest it [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-7ff1fb0fcf9b0e8e11.avif",
+      "featuredLatest": false,
+      "published": "2026-07-22T15:30:17+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.135,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "OpenAI adds two banking CEOs to its board as an IPO looms",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-adds-two-banking-ceos",
+      "imageOriginal": "https://media.thenextweb.com/2026/04/openai-chatgpt-pro-100-codex-claude-max.avif"
+    },
+    {
+      "title": "Substack adds AI detection to fight ‘Claudefishing’",
+      "url": "https://thenextweb.com/news/substack-pangram-ai-detection-claudefishing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Substack has a name for the moment you realise a post you admired for its human voice actually came from a bot: Claudefishing. Now it is handing readers a button to catch it, powered by the AI detector Pangram. The newsletter platform has launched an AI-detection feature. In a pointed post titled “Against Claudefishing,” chief [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-745d9b82ae837a062d.avif",
+      "featuredLatest": false,
+      "published": "2026-07-22T15:01:26+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.8206,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Substack adds AI detection to fight ‘Claudefishing’",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "claude-substack-adds-detection-fight-claudefishing",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/substack-logo.avif"
+    },
+    {
+      "title": "The browser wars aren’t about search anymore — here are the best alternatives to Chrome and Safari",
+      "url": "https://techcrunch.com/2026/07/22/as-the-browser-wars-heat-up-here-are-the-hottest-alternatives-to-chrome-and-safari-in-2026",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "We’ve compiled an overview of some of the top alternative browsers available today aiming to challenge Chrome and Safari.",
+      "image": "public/thumbnails/news-d5c8c57530f77863a5.webp",
+      "featuredLatest": false,
+      "published": "2026-07-22T13:20:35+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.1117,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "The browser wars aren’t about search anymore — here are the best alternatives to Chrome and Safari",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "browser-wars-aren-search-anymore-here",
+      "clusterTitle": "The browser wars aren’t about search anymore — here are the best alternatives to Chrome and Safari",
+      "clusterSize": 2,
+      "relatedSources": [
+        "TechCrunch AI"
+      ],
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2024/08/search-engine.jpg?resize=1200%2C700"
+    },
+    {
+      "title": "OpenAI and Anthropic now out-lobby Nvidia in Washington",
+      "url": "https://thenextweb.com/news/openai-anthropic-record-lobbying-q2",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The AI industry is buying a bigger seat at the table. OpenAI and Anthropic set records for federal lobbying in the second quarter of 2026, CNBC reported. Together they spent $3.17 million, up 23% from the first quarter. Startups outspending giants The individual numbers are the striking part. Anthropic spent $1.97 million, up 26% in [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-833a1105ef941f4a30.avif",
+      "featuredLatest": false,
+      "published": "2026-07-22T13:28:51+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.0756,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "OpenAI and Anthropic now out-lobby Nvidia in Washington",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-anthropic-nvidia-openai-anthropic-out-lobby-nvidia-washington",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/anthropic-fable-5-vs-openai-gpt-5-5-benchmark-comparison.avif"
+    },
+    {
+      "title": "Introducing OpenAI Presence",
+      "url": "https://openai.com/index/introducing-openai-presence",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Introducing OpenAI Presence, a proven enterprise AI agent platform that helps organizations deploy trusted voice and chat agents for customer and internal workflows.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-22T05:30:00+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.9217,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Introducing OpenAI Presence",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-introducing-openai-presence"
     },
     {
       "title": "University of Tennessee sues Anthropic over neural network patents",
@@ -51,7 +249,7 @@
       "lastSeen": "2026-07-22T10:00:01.372841+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.5028,
+      "score": 6.3411,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -65,6 +263,133 @@
       "toolCandidate": false,
       "clusterKey": "anthropic-university-tennessee-sues-anthropic-neural",
       "imageOriginal": "https://media.thenextweb.com/2026/04/Anthropic.avif"
+    },
+    {
+      "title": "AI Teammates: how monday.com runs production AI agents on Amazon Bedrock",
+      "url": "https://aws.amazon.com/blogs/machine-learning/ai-teammates-how-monday-com-runs-production-ai-agents-on-amazon-bedrock",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "AI Teammates are agentic AI on Amazon Bedrock, and few engineering organizations run them in production at the scale that monday.com does. Nine in ten Builders use AI coding tools every month, up from roughly half a year ago. Per-engineer PR throughput is up by more than half. Every figure in this post comes from monday’s own internal production data. In this post, we share the architecture behind those numbers, the retrofits that made it work in a decade-old code base, and the confidence-scored merge play closing the gap to full autonomy.",
+      "image": "public/thumbnails/news-8d7c31914f83994af8.png",
+      "featuredLatest": false,
+      "published": "2026-07-22T15:54:28+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2052,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "AI Teammates: how monday.com runs production AI agents on Amazon Bedrock",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "teammates-how-monday-com-runs-production",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/07/22/ML-21226.png"
+    },
+    {
+      "title": "Jack Dorsey’s Block takes on Slack with Buzz, a workspace for humans and AI agents",
+      "url": "https://thenextweb.com/news/block-buzz-humans-ai-agents-workspace",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Jack Dorsey’s Block wants to take on Slack. The twist is that the workforce it is building for is half machine. Its new app, Buzz, is an open-source workspace where humans and AI agents share the same channels, and every agent carries its own portable identity. Block, the Dorsey-led fintech behind Square and Cash App, [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-6be763ea607f95d8ab.avif",
+      "featuredLatest": false,
+      "published": "2026-07-22T14:20:46+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9006,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Jack Dorsey’s Block takes on Slack with Buzz, a workspace for humans and AI agents",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "jack-dorsey-block-takes-slack-buzz",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/buzz-xyz.avif"
+    },
+    {
+      "title": "AMD commits up to $5 billion to  Anthropic",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/969285/amd-anthropic-ai-infrastructure-deal",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "AMD says it's going to invest up to $5 billion in Anthropic, while helping to expand the AI company's computing power, according to an announcement on Wednesday. As part of the new partnership, Anthropic will deploy up to 2 gigawatts of AMD's Instinct MI450 AI GPUs using the chipmaker's new Helios rack-scale system, as reported [&#8230;]",
+      "image": "public/thumbnails/news-f29786b5d258079e2d.webp",
+      "featuredLatest": false,
+      "published": "2026-07-22T14:44:27+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6222,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "AMD commits up to $5 billion to  Anthropic",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-amd-commits-billion-anthropic",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/03/acastro_STK081_amd_02.jpg.webp?quality=90&strip=all&crop=0%2C10.654292878952%2C100%2C78.691414242097"
+    },
+    {
+      "title": "Advancing the next era of national science",
+      "url": "https://openai.com/index/advancing-the-next-era-of-national-science",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI outlines its commitment to advancing American science working with the U.S. Department of Energy and national labs to use frontier AI to accelerate discovery.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-22T12:00:00+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.3843,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Advancing the next era of national science",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "advancing-next-era-national-science"
     },
     {
       "title": "Samsung reportedly in talks to back Mistral at €20bn valuation",
@@ -83,7 +408,7 @@
       "lastSeen": "2026-07-22T10:00:01.372841+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.1273,
+      "score": 4.9619,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -115,7 +440,7 @@
       "lastSeen": "2026-07-22T10:00:01.372841+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.1109,
+      "score": 4.948,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
@@ -131,252 +456,131 @@
       "imageOriginal": "https://media.thenextweb.com/2026/07/Anthropic-logo.avif"
     },
     {
-      "title": "Noetra’s CEO calls his robot AI startup a ‘last chance’ for Japan",
-      "url": "https://thenextweb.com/news/noetra-japan-robot-ai-last-chance-tamba",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Hironobu Tamba spent years inside SoftBank building large language models, the kind of software that answers questions and drafts emails. He has now walked away from that work to bet on machines that move. Tamba is president and chief executive of Noetra, a Tokyo company that began full-scale research in July on a home-grown foundation [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Hironobu-Tamba.avif",
-      "featuredLatest": false,
-      "published": "2026-07-22T09:00:15+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "did_not_clear_gate",
-      "score": 3.52,
-      "signalGroup": "Research",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
-      "brief": {
-        "whatHappened": "Noetra’s CEO calls his robot AI startup a ‘last chance’ for Japan",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "noetra-ceo-calls-his-robot-startup"
-    },
-    {
-      "title": "Synthesia’s AI training platform is moving beyond videos into live coaching",
-      "url": "https://techcrunch.com/2026/07/22/synthesias-ai-training-platform-is-moving-beyond-videos-into-live-coaching",
+      "title": "Glow emerges from stealth at $1.2B valuation to challenge endpoint security in the AI era",
+      "url": "https://techcrunch.com/2026/07/22/glow-emerges-from-stealth-at-1-2b-valuation-to-challenge-endpoint-security-in-the-ai-era",
       "source": "TechCrunch AI",
       "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
       "sourceWeight": 0.85,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Synthesia launched AI Roleplay Sessions, an interactive enterprise training platform where employees practice workplace conversations with AI avatars that provide feedback, scoring, and analytics to help companies measure training effectiveness.",
-      "image": "https://techcrunch.com/wp-content/uploads/2026/07/Roleplay-Sessions_Press-Kit_Product_01.png?resize=1200%2C675",
+      "summary": "Glow is targeting a new class of endpoint risks created by the rapid adoption of AI agents and developer tools inside enterprises.",
+      "image": "public/thumbnails/news-2f26220d95c481667b.webp",
       "featuredLatest": false,
-      "published": "2026-07-22T08:00:00+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2305,
-      "signalGroup": "Product updates",
+      "published": "2026-07-22T10:00:00+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.5211,
+      "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Synthesia’s AI training platform is moving beyond videos into live coaching",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "whatHappened": "Glow emerges from stealth at $1.2B valuation to challenge endpoint security in the AI era",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
         "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "synthesia-training-platform-moving-beyond-videos"
+      "clusterKey": "glow-emerges-stealth-valuation-challenge-endpoint",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/07/glow-founders.jpg?resize=1200%2C800"
     },
     {
-      "title": "Origin Energy investigates potential breach of customer data",
-      "url": "https://thenextweb.com/news/origin-energy-investigates-potential-breach-of-customer-data",
+      "title": "The Fight Over Which AI Models You Can Use",
+      "url": "https://aidailybrief.ai/e/2026-07-21",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI's own policy chief tweeted the quiet part out loud — that Washington could smother Chinese open-weight models with manufactured regulatory FUD — and set off a firefight that reveals a bigger truth: whatever gets decided in these White House turf battles will shape which models you can actually use, at what cost, and how you build with them.",
+      "image": "public/thumbnails/news-1e435d0ecd0bc9bfc1.png",
+      "featuredLatest": false,
+      "published": "2026-07-22T16:00:08.130369+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.332,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "The Fight Over Which AI Models You Can Use",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "fight-which-models-you-can-use",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-07-21.png"
+    },
+    {
+      "title": "Oracle says one AI data centre could cost it a $7bn power guarantee",
+      "url": "https://thenextweb.com/news/oracle-wisconsin-datacentre-power-7-billion-collateral",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Australia’s largest energy retailer has told the ASX that some customer information may have been accessed without authorisation, though it says card and bank details appear untouched. Origin Energy, Australia’s largest electricity and gas retailer, told the Australian Securities Exchange on 22 July that it is investigating potential unauthorised access to some of its customers’ data. The [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Origin-Energy.avif",
+      "summary": "Oracle is building a huge AI data centre in Port Washington, Wisconsin, with Vantage and OpenAI. The nearly one-gigawatt Lighthouse Campus is a roughly $15 billion project. To get the electricity to run it, though, Oracle first has to satisfy the local regulator, and that is proving expensive. In a sworn affidavit, Oracle says the [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-de6d41813afecb5a9b.avif",
       "featuredLatest": false,
-      "published": "2026-07-22T08:53:19+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2165,
+      "published": "2026-07-22T13:16:19+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.0697,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
       "brief": {
-        "whatHappened": "Origin Energy investigates potential breach of customer data",
+        "whatHappened": "Oracle says one AI data centre could cost it a $7bn power guarantee",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "origin-energy-investigates-potential-breach-customer"
+      "clusterKey": "oracle-one-data-centre-could-cost",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/oracle-port-washington.avif"
     },
     {
-      "title": "TikTok’s US security chief to face the House China committee on September 15",
-      "url": "https://thenextweb.com/news/tiktok-us-security-chief-house-china-committee-testimony",
+      "title": "Every frontier AI model the UK tested for cheating cheated",
+      "url": "https://thenextweb.com/news/aisi-frontier-ai-models-cheating",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Will Farrell, the chief security officer for TikTok’s US operation, will appear before the House Select Committee on the Chinese Communist Party on September 15 to answer questions about Beijing’s influence over the app, Reuters reported. He will be the first executive from the business recently sold to a group of US investors to testify since that ownership [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2023/12/tiktok-europe-data-centre-norway-1.avif",
+      "summary": "The UK’s AI safety watchdog put five frontier models through a set of security tests to see whether they would cut corners. Every one of them cheated. Worse, when asked about it afterwards, most would not admit they had done anything wrong. The finding comes from the AI Security Institute (AISI), a research body inside [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/ai-safety-problem-conversation-between-models.avif",
       "featuredLatest": false,
-      "published": "2026-07-22T08:02:00+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "published": "2026-07-22T14:11:36+00:00",
+      "firstSeen": "2026-07-22T16:00:01.187955+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1915,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.4961,
       "signalGroup": "Policy & risk",
       "sourceTier": "Reported source",
       "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
       "brief": {
-        "whatHappened": "TikTok’s US security chief to face the House China committee on September 15",
+        "whatHappened": "Every frontier AI model the UK tested for cheating cheated",
         "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
         "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "tiktok-security-chief-face-house-china"
-    },
-    {
-      "title": "Big Tech’s AI spending is catching up with its cash flow",
-      "url": "https://thenextweb.com/news/big-tech-ai-capex-free-cash-flow-pressure",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The four largest US technology companies are on course to spend close to $700bn on artificial intelligence infrastructure this year, and the cost is starting to show up in the one figure that is hard to dress up: free cash flow. An analysis by Reuters, found that combined capital spending across the major cloud operators [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/uk-buy-ai-chips-british-companies-kendall.avif",
-      "featuredLatest": false,
-      "published": "2026-07-22T08:15:31+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.798,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Big Tech’s AI spending is catching up with its cash flow",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "big-tech-spending-catching-cash-flow"
-    },
-    {
-      "title": "A gas-rich outback station could host a $28bn off-grid AI data centre",
-      "url": "https://thenextweb.com/news/australia-28bn-data-centre-project",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "On a cattle station deep in the Northern Territory outback, roughly 683km south of Darwin, a Singapore-headquartered developer wants to build one of the largest data centres in the southern hemisphere. The plan leans on a resource the region has in abundance and the electricity grid does not reach out to supply: gas. Energy North [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Project-Ares.avif",
-      "featuredLatest": false,
-      "published": "2026-07-22T09:27:51+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1337,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "A gas-rich outback station could host a $28bn off-grid AI data centre",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "gas-rich-outback-station-could-host-28bn"
-    },
-    {
-      "title": "UK businesses have tripled their AI adoption. Most are still barely scratching the surface.",
-      "url": "https://thenextweb.com/news/uk-ai-adoption-widening-not-deepening-ons-2026",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Three years ago, roughly one in eight UK businesses with ten or more employees reported using artificial intelligence; today, the Office for National Statistics puts that figure at around one in three, a near-tripling that reflects how quickly AI has moved from specialist tool to mainstream workplace technology. The numbers tell a compelling story of expansion. [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/uk-cloud-dependency-billion-pound-risk.avif",
-      "featuredLatest": false,
-      "published": "2026-07-22T09:18:41+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1291,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "UK businesses have tripled their AI adoption. Most are still barely scratching the surface",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "businesses-have-tripled-their-adoption-most"
-    },
-    {
-      "title": "Nvidia supplier Wistron opens $700m Texas factory to build Grace Blackwell superchips",
-      "url": "https://thenextweb.com/news/wistron-texas-ai-factory-nvidia-gb300",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Wistron, the Taiwanese contract manufacturer that builds server hardware for Nvidia, has opened its first factory on American soil, a $700 million plant in Fort Worth, Texas, that is already assembling Nvidia’s GB300 Grace Blackwell Ultra superchips. The site held its grand opening on 21 July, and Nvidia says it is the first place the GB300 [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Wistron-Nvidia.avif",
-      "featuredLatest": false,
-      "published": "2026-07-22T08:31:40+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1059,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Nvidia supplier Wistron opens $700m Texas factory to build Grace Blackwell superchips",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "nvidia-nvidia-supplier-wistron-opens-700m"
+      "clusterKey": "every-frontier-model-tested-cheating-cheated"
     }
   ],
   "tools": [
@@ -394,11 +598,11 @@
       "featuredLatest": false,
       "published": "2026-07-21T17:36:22+00:00",
       "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.8056,
+      "score": 14.6985,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -413,8 +617,7 @@
       "toolName": "Gemini 3.6 Flash Family",
       "toolLabel": "Gemini 3.6 Flash Family",
       "toolSummary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
-      "clusterKey": "gemini-gemini-flash-family",
-      "imageOriginal": "https://ph-files.imgix.net/f197209e-d6d6-41a5-95ac-b550a2697daa.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "gemini-gemini-flash-family"
     },
     {
       "title": "Unabyss for Claude",
@@ -430,10 +633,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T19:19:45+00:00",
       "firstSeen": "2026-07-17T10:00:01.497400+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4085,
+      "score": 9.4084,
       "signalGroup": "Infrastructure",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -532,10 +735,10 @@
       "featuredLatest": false,
       "published": "2026-07-21T16:57:26+00:00",
       "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1932,
+      "score": 7.088,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -550,8 +753,7 @@
       "toolName": "AgentManager",
       "toolLabel": "AgentManager",
       "toolSummary": "Never miss a Claude Code session waiting for your input",
-      "clusterKey": "agentmanager",
-      "imageOriginal": "https://ph-files.imgix.net/b8eecd87-a18c-4da1-a9f4-5062eeb1c4bc.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "agentmanager"
     },
     {
       "title": "Claude Overlay",
@@ -622,38 +824,38 @@
       "clusterKey": "chatgpt-chatgpt-work"
     },
     {
-      "title": "Edgee Claude Code Compressor V2",
-      "url": "https://www.producthunt.com/products/edgee",
+      "title": "CodeMote",
+      "url": "https://www.producthunt.com/products/codemote-remote-control-for-any-ai",
       "source": "Product Hunt AI",
       "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
       "sourceWeight": 0.72,
       "sourceRole": "watchlist",
       "sourceType": "tool-directory",
       "category": "AI",
-      "summary": "Fewer tokens, same context, 50% cost reduction\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-706ad7089f96fd98e1.avif",
+      "summary": "Claude Code, Codex, any CLI agent. Driven from your iPhone\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-013de8a707527705c4.avif",
       "featuredLatest": false,
-      "published": "2026-07-03T04:38:17+00:00",
+      "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.808,
+      "editorial_reason": "major_product_news",
+      "score": 5.508,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Edgee Claude Code Compressor V2",
+        "whatHappened": "CodeMote",
         "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
         "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
         "sourceFrame": "Seen via Product Hunt AI."
       },
-      "tryWorthy": false,
+      "tryWorthy": true,
       "toolCandidate": true,
-      "toolName": "Edgee Claude Code Compressor V2",
-      "toolLabel": "Edgee Claude Code Compressor V2",
-      "toolSummary": "Fewer tokens, same context, 50% cost reduction",
-      "clusterKey": "claude-edgee-claude-code-compressor"
+      "toolName": "CodeMote",
+      "toolLabel": "CodeMote",
+      "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
+      "clusterKey": "codemote"
     }
   ],
   "tryWorthy": [
@@ -671,11 +873,11 @@
       "featuredLatest": false,
       "published": "2026-07-21T17:36:22+00:00",
       "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.8056,
+      "score": 14.6985,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -690,8 +892,7 @@
       "toolName": "Gemini 3.6 Flash Family",
       "toolLabel": "Gemini 3.6 Flash Family",
       "toolSummary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
-      "clusterKey": "gemini-gemini-flash-family",
-      "imageOriginal": "https://ph-files.imgix.net/f197209e-d6d6-41a5-95ac-b550a2697daa.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "gemini-gemini-flash-family"
     },
     {
       "title": "Unabyss for Claude",
@@ -707,10 +908,10 @@
       "featuredLatest": false,
       "published": "2026-07-10T19:19:45+00:00",
       "firstSeen": "2026-07-17T10:00:01.497400+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4085,
+      "score": 9.4084,
       "signalGroup": "Infrastructure",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
@@ -809,10 +1010,10 @@
       "featuredLatest": false,
       "published": "2026-07-21T16:57:26+00:00",
       "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-22T10:00:01.372841+00:00",
+      "lastSeen": "2026-07-22T16:00:01.187955+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1932,
+      "score": 7.088,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -827,8 +1028,7 @@
       "toolName": "AgentManager",
       "toolLabel": "AgentManager",
       "toolSummary": "Never miss a Claude Code session waiting for your input",
-      "clusterKey": "agentmanager",
-      "imageOriginal": "https://ph-files.imgix.net/b8eecd87-a18c-4da1-a9f4-5062eeb1c4bc.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+      "clusterKey": "agentmanager"
     },
     {
       "title": "Claude Overlay",
@@ -899,38 +1099,38 @@
       "clusterKey": "chatgpt-chatgpt-work"
     },
     {
-      "title": "Edgee Claude Code Compressor V2",
-      "url": "https://www.producthunt.com/products/edgee",
+      "title": "CodeMote",
+      "url": "https://www.producthunt.com/products/codemote-remote-control-for-any-ai",
       "source": "Product Hunt AI",
       "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
       "sourceWeight": 0.72,
       "sourceRole": "watchlist",
       "sourceType": "tool-directory",
       "category": "AI",
-      "summary": "Fewer tokens, same context, 50% cost reduction\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-706ad7089f96fd98e1.avif",
+      "summary": "Claude Code, Codex, any CLI agent. Driven from your iPhone\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-013de8a707527705c4.avif",
       "featuredLatest": false,
-      "published": "2026-07-03T04:38:17+00:00",
+      "published": "2026-07-05T13:39:06+00:00",
       "firstSeen": "2026-07-06T10:00:01.502270+00:00",
       "lastSeen": "2026-07-12T22:00:01.518156+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.808,
+      "editorial_reason": "major_product_news",
+      "score": 5.508,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Edgee Claude Code Compressor V2",
+        "whatHappened": "CodeMote",
         "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
         "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
         "sourceFrame": "Seen via Product Hunt AI."
       },
-      "tryWorthy": false,
+      "tryWorthy": true,
       "toolCandidate": true,
-      "toolName": "Edgee Claude Code Compressor V2",
-      "toolLabel": "Edgee Claude Code Compressor V2",
-      "toolSummary": "Fewer tokens, same context, 50% cost reduction",
-      "clusterKey": "claude-edgee-claude-code-compressor"
+      "toolName": "CodeMote",
+      "toolLabel": "CodeMote",
+      "toolSummary": "Claude Code, Codex, any CLI agent. Driven from your iPhone",
+      "clusterKey": "codemote"
     }
   ],
   "sourceHealth": [
@@ -941,8 +1141,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1043,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "items": 1046,
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -952,7 +1152,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -962,7 +1162,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -972,7 +1172,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -982,7 +1182,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 830,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -992,7 +1192,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1002,7 +1202,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1012,7 +1212,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1022,7 +1222,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1032,7 +1232,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1042,7 +1242,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1052,7 +1252,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "The Next Web",
@@ -1062,7 +1262,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1072,7 +1272,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1082,7 +1282,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1092,7 +1292,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1102,7 +1302,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1112,7 +1312,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 246,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1122,7 +1322,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1132,7 +1332,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1142,7 +1342,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1152,7 +1352,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Latent Space",
@@ -1162,7 +1362,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Import AI",
@@ -1172,7 +1372,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1181,8 +1381,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 145,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "items": 152,
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1192,7 +1392,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1202,7 +1402,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1212,7 +1412,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1222,7 +1422,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1232,7 +1432,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1242,7 +1442,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1252,7 +1452,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-22T10:00:01.372841+00:00"
+      "checkedAt": "2026-07-22T16:00:01.187955+00:00"
     }
   ],
   "errors": []
