@@ -178,7 +178,7 @@ export class Sim {
     return w.length - 1;
   }
 
-  spawnEnemy(type, hpMul, atS = 0) {
+  spawnEnemy(type, hpMul, atS = 0, pathIdx = null) {
     const def = ENEMIES[type];
     const e = {
       id: this.nextId++,
@@ -193,7 +193,9 @@ export class Sim {
       st: { chill: 0, shock: 0, ignite: 0, corrode: 0, corrodeStacks: 0, freeze: 0 },
       mixCool: 0,
       dead: false,
-      pathIdx: this.pickPath(),
+      // children/summons inherit the parent's path — arc length s is only
+      // meaningful there; a random re-roll teleports them (heart leaks)
+      pathIdx: pathIdx ?? this.pickPath(),
       shield: def.shield ? def.shield * hpMul : 0,
       maxShield: def.shield ? def.shield * hpMul : 0,
       untargetable: false,
@@ -418,7 +420,8 @@ export class Sim {
   step() {
     const dt = DT;
     this.time += dt;
-    this.events.length = 0;
+    // events are consumed (and cleared) by routeEvents — clearing here wiped
+    // everything emitted from input handlers between frames (fuse, surge)
     if (this.state === 'over') return;
 
     if (this.state === 'prep') {
@@ -486,7 +489,7 @@ export class Sim {
         e.spawnCool -= dt;
         if (e.spawnCool <= 0) {
           e.spawnCool = e.def.spawnEvery;
-          for (let i = 0; i < e.def.spawnN; i++) this.spawnEnemy(e.def.spawnType, 1 + this.wave * 0.06, Math.max(0, e.s - 10 - i * 14));
+          for (let i = 0; i < e.def.spawnN; i++) this.spawnEnemy(e.def.spawnType, 1 + this.wave * 0.06, Math.max(0, e.s - 10 - i * 14), e.pathIdx);
           this.burst(e.x, e.y, e.def.color, 6, 40);
           this.emit('broodSpawn', { x: e.x, y: e.y });
         }
@@ -678,7 +681,7 @@ export class Sim {
         const count = S.n + (p2 ? 2 : 0);
         for (let i = 0; i < count; i++) {
           const type = S.types[this.rng.int(0, S.types.length - 1)];
-          this.spawnEnemy(type, 1 + this.wave * 0.05, Math.max(0, e.s - 30 - i * 22));
+          this.spawnEnemy(type, 1 + this.wave * 0.05, Math.max(0, e.s - 30 - i * 22), e.pathIdx);
         }
         this.rings.push({ x: e.x, y: e.y, t: 0, dur: 0.7, color: e.def.color, max: 260 });
         this.burst(e.x, e.y, e.def.color, 16, 130);
@@ -711,7 +714,7 @@ export class Sim {
     if (e.splitsDone < thresholds.length && e.hp <= e.maxHp * thresholds[e.splitsDone]) {
       e.splitsDone++;
       const waveScale = 1 + Math.max(0, this.wave - 20) * 0.05;
-      this.spawnEnemy('sporeling', waveScale, Math.max(0, e.s - 34));
+      this.spawnEnemy('sporeling', waveScale, Math.max(0, e.s - 34), e.pathIdx);
       e.telegraphT = 0.9; // recoil — the shared slow-while-telegraphing
       this.rings.push({ x: e.x, y: e.y, t: 0, dur: 0.9, color: e.def.color, max: 300 });
       this.burst(e.x, e.y, e.def.color, 30, 170);
@@ -743,7 +746,7 @@ export class Sim {
         this.rings.push({ x: e.x, y: e.y, t: 0, dur: 0.9, color: [0.35, 0.12, 0.5], max: r * 1.1 });
         this.burst(e.x, e.y, [0.5, 0.2, 0.8], 22, r * 0.6);
         if (e.bossPhase === 2) {
-          for (let i = 0; i < 3; i++) this.spawnEnemy('mite', 1 + this.wave * 0.06, Math.max(0, e.s - 20 - i * 16));
+          for (let i = 0; i < 3; i++) this.spawnEnemy('mite', 1 + this.wave * 0.06, Math.max(0, e.s - 20 - i * 16), e.pathIdx);
         }
         this.emit('bossPulse', { x: e.x, y: e.y, radius: r });
       }
@@ -794,7 +797,7 @@ export class Sim {
       // brood carriers split into a scatter of children
       if (e.def.splitInto) {
         for (let i = 0; i < e.def.splitCount; i++) {
-          const child = this.spawnEnemy(e.def.splitInto, 1 + this.wave * 0.05, Math.max(0, e.s - 6 - i * 10));
+          const child = this.spawnEnemy(e.def.splitInto, 1 + this.wave * 0.05, Math.max(0, e.s - 6 - i * 10), e.pathIdx);
         }
       }
     }
