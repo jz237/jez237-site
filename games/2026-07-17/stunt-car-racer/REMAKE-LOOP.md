@@ -313,3 +313,15 @@ Until the swap, remake.html deploys ALONGSIDE — safe to ship every iteration.
   pointerdown/keydown; QA __remakeAudio.levels() (verified idle .13/high .30
   rate 1.35 at speed, ctx running). Zero console errors. Backlog next: rival
   AI + race flow (lap counting at startIdx line, records, wreck/crane).
+
+- 2026-07-22 RACE FLOW + RIVAL SHIPPED as REMAKE v7 (CACHE scr-v155). Lap
+  counting at cum[startIdx] via wrapped-progress edge (relPrev>0.9T ->
+  rel<0.1T); lap/current/best on dash LCDs; best persisted per track
+  (localStorage scr-remake-best-<trackId>); verified blind lap 16.1s counted.
+  Crane recovery: stuck >3s (speed<~19m/s) -> chains.png drop overlay 2.2s ->
+  respawn 24 slats before the line at crane launch speed. Rival car (red
+  livery clone, lat +2.8) follows centerline: same thrust model x0.93 with
+  corner-aware target sqrt(1400/kmax over next 8 segs), glued (cheats jumps —
+  round-2 polish). REGRESSION LESSON: a step() refactor DROPPED the
+  syncWorldPose() call — world pose froze while s advanced; probe caught
+  identical x/z across samples. Zero console errors.
