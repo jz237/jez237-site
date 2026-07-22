@@ -478,3 +478,24 @@ SUBSYSTEM PLAN: (a) 3-wheel contact+surface-normal forces+pitch/roll,
 wind + REDUCTION damping (replaces fitted v² model), (d) boost/damage per
 source, (e) crane per source, (f) re-verify A/B (accel curve should STILL
 match — the fitted model approximated exactly these mechanics).
+
+- 2026-07-22 PHYSICS SUBSYSTEM (a) — THREE-WHEEL CONTACT — REMAKE v13
+  (CACHE scr-v162). Ported the original's trike model (Car Behaviour.cpp
+  CalculateWheelCollision): FL/FR/R contact points sampling roadAt(s−dz) at
+  lat+dx; clamped height difference [−0.3,+2.0] + INCREASE (276/256)
+  extrapolated amount-below-road; per-wheel force amt×W_K (90) capped at
+  1.3m equivalent; vertical = −GRAV + ΣF with 6/s contact damping; pitch/
+  roll from wheel torques (SIGN LESSON: torque must RAISE the loaded wheel —
+  F×dz NOT F×−dz; the wrong sign is positive feedback that saturates pitch
+  and floats the car) + grade-align springs 85/95 with 11/12 damping, clamps
+  ±0.55; landing damage from compression spike >1.2m. Crest launches,
+  landing bounce and settle-hop now EMERGE from the contact model — the
+  explicit ballistic-takeoff/restitution branches are gone. Crane drop
+  settles with a small authentic hop (0.7→0.4→0.6). Visuals use physics
+  pitch/roll directly. 60Hz retune of the ~10Hz原 constants: W_K 90 (160
+  launched the car — energy gain when deep+clamped), force cap, damping.
+  Regression: 8/8 tracks lap (zero cranes), hump-back 8 flights/lap, rest
+  pose h~0.6 p~−0.1 (slight nose-down — characterful), zero errors.
+  NEXT SUBSYSTEMS: (b) free-yaw steering+alignment, (c) throttle latch +
+  grip rule + linear wind + REDUCTION damping, (d) boost/damage per source,
+  (e) crane on_chains behavior, (f) full A/B re-verify.
