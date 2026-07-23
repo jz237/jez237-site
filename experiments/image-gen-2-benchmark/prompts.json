@@ -6003,5 +6003,19 @@
     "slot": "machine-dream",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-07-23-intense-phobia-situation-intense-phobia-situation-above-the",
+    "title": "Intense phobia situation: Above the Broadcast Mast",
+    "tests": "Phobia: acrophobia (fear of heights). Situation: a secured telecommunications tower inspector on one narrow rung 430 meters over a coastal city. Capture logic: chest-mounted action camera, steep downward 16mm-equivalent view, restrained barrel distortion, natural late-morning exposure. Physical credibility: galvanized lattice, correctly fitted fall-arrest harness, two independent clipped lanyards, hand grip, boots, cables, bolts, atmospheric depth, and miniaturized streets. Anti-repeat variables: first-person industrial tower inspection, coastal megacity, vertical lattice convergence, cool daylight; no fall, injury, storm, supernatural element, readable text, or cinematic exaggeration. Actual-image QA: boots, gloved grip, harness, rung, converging mast, clouds, harbor, and tiny city are coherent and instantly legible.",
+    "prompt": "Create a single photorealistic documentary photograph of an intense but controlled acrophobia situation, seen from a telecommunications tower inspector’s chest-mounted action camera 430 meters above a dense coastal city. The camera looks steeply down past the inspector’s bent knees and scuffed brown safety boots braced on one narrow galvanized-steel rung inside an open triangular broadcast mast; the entire lattice structure converges toward a tiny rooftop base far below, making the enormous vertical drop dominate at thumbnail scale. One tan full-body fall-arrest harness is correctly fitted over dark navy work trousers, with two independent energy-absorbing lanyards visibly clipped to separate certified steel anchor loops; a gloved left hand grips a weathered diagonal brace close to the lens. Show physically accurate hot-dip galvanized steel, bolts, cable trays, rust freckles at joints, wind-vibrated coax loops, boot pressure on the rung, and taut but not load-bearing safety lines. Far beneath, ordinary streets, buses, apartment blocks, harbor cranes, and a pale strip of ocean are sharply recognizable but dramatically miniaturized through clear late-morning air, with mild atmospheric haze and believable perspective; a few low clouds pass below the camera level. Use a 16mm-equivalent action-camera lens with restrained barrel distortion, realistic auto-exposure, crisp foreground texture, slight wind vibration at the frame edge, and natural cool daylight. The decisive visual premise is the uninterrupted plunge from the boots straight down through hundreds of meters of lattice to the tiny city. No fall, no injury, no dangling person, no panic theatrics, no storm, no supernatural element, no monster, no impossible architecture, no readable logos or text, no cinematic color grading, no second anomaly.",
+    "image": "images/2026-07-23-intense-phobia-situation-intense-phobia-situation-above-the.jpg",
+    "thumb": "thumbs/2026-07-23-intense-phobia-situation-intense-phobia-situation-above-the.webp",
+    "color": "#67696c",
+    "date": "2026-07-23",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024"
   }
 ]
