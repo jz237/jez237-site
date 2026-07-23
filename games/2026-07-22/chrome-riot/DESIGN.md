@@ -92,6 +92,29 @@ demo on title, gamepad rumble, enforcer "scared puppy" + "Mikey bug" quirk emula
 Bozo mode, per-wave Pylon shape variety beyond 4 shapes, PWA manifest,
 difficulty settings.
 
+## v1.1.0 — arcade authenticity pass (same day)
+
+Pushed the presentation and pressure much closer to the 1982 original:
+- Playfield is now stark black (grid removed); the arena border is drawn live every frame
+  and colour-cycles arcade-style, flashing gold on rescues, red on death, cyan on extra
+  lives, white on wave clear.
+- The materialization is the iconic warp-in: four sparks converge, a vertical scan line
+  grows, and the sprite unfolds sideways out of it — rainbow/psychedelic on brain waves.
+  The player warps in the same way.
+- Thralls (Progs) now leave the classic colour-cycling segmented trail.
+- Fifth electrode variant: a flashing "2086" text mine (nod to the original's 2084
+  electrode). Shapes cycle over 5 per wave.
+- Mikey-bug emulation: every Cortex fixates on the same single human at wave setup
+  (the kid when present), reverting to nearest-human when that one is gone — enabling
+  the authentic brain-wave farming strategy.
+- Late-wave frenzy: grunt-speed floor drops at 45s and 60s into a wave, producing the
+  "frenzied charge" Jarvis described.
+- Hives now bias their drift toward the nearest wall (edge-hugging Spheroids), and 25%
+  of Wasp stingers lead the player's movement instead of aiming at their position.
+- Robotron HUD colours (red score / yellow best / cyan wave), bigger multi-colour death
+  bloom with colour-cycling shockwave rings.
+- Robustness: zero-sized-viewport guard in computeFit/draw (seed-tab/iframe edge case).
+
 ## Post-review fixes (same day, pre-publish)
 
 A 4-dimension review (correctness / mobile / perf / spec fidelity) with adversarial

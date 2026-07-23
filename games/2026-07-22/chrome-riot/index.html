@@ -18,6 +18,7 @@
   .topbar { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-top:10px;
     font-size:11px; font-weight:800; letter-spacing:2px; color:var(--dim); text-shadow:0 2px 6px #000; }
   .stat b { display:block; font-size:19px; letter-spacing:1px; color:#fff; margin-top:2px; font-variant-numeric:tabular-nums; }
+  #scoreV { color:#ff6a5b; } #hiV { color:#ffe14a; } #waveV { color:#4df3ff; }
   .stat.mid { text-align:center; } .stat.right { text-align:right; padding-right:106px; }
   #scoreV.flash { color:var(--yl); }
   #lives { display:flex; gap:5px; margin-top:5px; min-height:14px; }
@@ -93,7 +94,7 @@
   <div id="manual"></div>
   <button class="play" id="startBtn">START THE RIOT</button><br>
   <button class="secondary" id="showScores">HIGH SCORES</button>
-  <div class="version">BUILD v1.0.0 · 2026-07-22 · UNFINISHED REVIEW</div>
+  <div class="version">BUILD v1.1.0 · 2026-07-22 · UNFINISHED REVIEW</div>
 </div></div>
 
 <div id="pauseM" class="modal hidden"><div class="card">
@@ -126,7 +127,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '1.0.0';
+const VERSION = '1.1.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const START_WAVE = Math.max(1, parseInt(qs.get('wave'), 10) || 1);
@@ -442,14 +443,15 @@ for (const k in GRIDS) SPR[k] = GRIDS[k].map(bakeGrid);
 function bakeShape(size, fn) { const c = document.createElement('canvas'); c.width = c.height = size * PXS;
   const g = c.getContext('2d'); g.translate(c.width / 2, c.height / 2); g.scale(PXS, PXS); fn(g);
   c.gw = size; c.gh = size; return c; }
-const PYLON_SHAPES = [0, 1, 2, 3].map(shape => [0, 1].map(f => bakeShape(9, g => {
+const PYLON_SHAPES = [0, 1, 2, 3, 4].map(shape => [0, 1].map(f => bakeShape(9, g => {
   const bright = f === 0;
   g.lineWidth = 1.4; g.strokeStyle = bright ? '#ffe14a' : '#b39a2a'; g.fillStyle = bright ? '#fff7c2' : '#ffe14a';
   g.shadowColor = '#ffe14a'; g.shadowBlur = bright ? 6 : 3;
   if (shape === 0) { g.beginPath(); g.moveTo(0, -4); g.lineTo(4, 0); g.lineTo(0, 4); g.lineTo(-4, 0); g.closePath(); g.stroke(); g.fillRect(-1, -1, 2, 2); }
   else if (shape === 1) { g.beginPath(); g.moveTo(0, -4); g.lineTo(0, 4); g.moveTo(-4, 0); g.lineTo(4, 0); g.stroke(); g.fillRect(-1, -1, 2, 2); }
   else if (shape === 2) { g.beginPath(); g.moveTo(-3.2, -3.2); g.lineTo(3.2, 3.2); g.moveTo(3.2, -3.2); g.lineTo(-3.2, 3.2); g.stroke(); g.fillRect(-1, -1, 2, 2); }
-  else { g.beginPath(); g.arc(0, 0, 3.4, 0, 7); g.stroke(); g.fillRect(-1, -1, 2, 2); }
+  else if (shape === 3) { g.beginPath(); g.arc(0, 0, 3.4, 0, 7); g.stroke(); g.fillRect(-1, -1, 2, 2); }
+  else { g.font = 'bold 3.6px monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('2086', 0, 0.2); }
 })));
 const HIVE_FRAMES = [0, 1, 2].map(f => bakeShape(12, g => {
   const r = 4 + f * 0.7;
@@ -486,6 +488,7 @@ function computeFit() {
   const dpr = Math.min(devicePixelRatio || 1, 2);
   const w = Math.round(visualViewport ? visualViewport.width : innerWidth) || innerWidth;
   const h = Math.round(visualViewport ? visualViewport.height : innerHeight) || innerHeight;
+  if (!(w > 0) || !(h > 0)) return;      // viewport not laid out yet; resize listeners retry
   const key = w + 'x' + h + '@' + dpr;
   if (key === lastFit) return;
   lastFit = key; DPR = dpr;
@@ -513,30 +516,14 @@ function bakeBg() {
   for (let i = 0; i < 70; i++) { g.globalAlpha = 0.04 + srand() * 0.16; g.fillStyle = srand() < 0.3 ? '#8ad8ff' : '#c9baff';
     g.fillRect(srand() * SW, srand() * SH, 1.5, 1.5); }
   g.globalAlpha = 1;
+  // arcade-black playfield: near-black with a whisper of depth, no grid (border is drawn live)
   const ax = OX, ay = OY, aw = FIELD.w * SCALE, ah = FIELD.h * SCALE;
   const grad = g.createLinearGradient(0, ay, 0, ay + ah);
-  grad.addColorStop(0, '#0b0722'); grad.addColorStop(0.55, '#070514'); grad.addColorStop(1, '#0a0618');
+  grad.addColorStop(0, '#05040e'); grad.addColorStop(0.5, '#020207'); grad.addColorStop(1, '#04030b');
   g.fillStyle = grad; g.fillRect(ax, ay, aw, ah);
-  const cell = 20 * SCALE;
-  for (let x = cell, i = 1; x < aw - 1; x += cell, i++) {
-    g.strokeStyle = i % 4 === 0 ? 'rgba(122,94,255,0.28)' : 'rgba(112,84,255,0.13)';
-    g.lineWidth = 1; g.beginPath(); g.moveTo(ax + x, ay); g.lineTo(ax + x, ay + ah); g.stroke();
-  }
-  for (let y = cell, i = 1; y < ah - 1; y += cell, i++) {
-    g.strokeStyle = i % 4 === 0 ? 'rgba(122,94,255,0.28)' : 'rgba(112,84,255,0.13)';
-    g.lineWidth = 1; g.beginPath(); g.moveTo(ax, ay + y); g.lineTo(ax + aw, ay + y); g.stroke();
-  }
-  const rg = g.createRadialGradient(ax + aw / 2, ay + ah / 2, Math.min(aw, ah) * 0.25, ax + aw / 2, ay + ah / 2, Math.max(aw, ah) * 0.75);
-  rg.addColorStop(0, 'rgba(0,0,0,0)'); rg.addColorStop(1, 'rgba(0,0,0,0.5)');
+  const rg = g.createRadialGradient(ax + aw / 2, ay + ah / 2, Math.min(aw, ah) * 0.2, ax + aw / 2, ay + ah / 2, Math.max(aw, ah) * 0.72);
+  rg.addColorStop(0, 'rgba(34,24,68,0.10)'); rg.addColorStop(1, 'rgba(0,0,0,0.55)');
   g.fillStyle = rg; g.fillRect(ax, ay, aw, ah);
-  g.lineJoin = 'round';
-  g.strokeStyle = 'rgba(77,243,255,0.22)'; g.lineWidth = 7; g.strokeRect(ax - 3, ay - 3, aw + 6, ah + 6);
-  g.strokeStyle = 'rgba(77,243,255,0.65)'; g.lineWidth = 2.5; g.strokeRect(ax - 3, ay - 3, aw + 6, ah + 6);
-  g.strokeStyle = '#eafcff'; g.lineWidth = 1; g.strokeRect(ax - 3, ay - 3, aw + 6, ah + 6);
-  const cl = 14;
-  g.strokeStyle = '#ff4a3d'; g.lineWidth = 3;
-  [[ax - 3, ay - 3, 1, 1], [ax + aw + 3, ay - 3, -1, 1], [ax - 3, ay + ah + 3, 1, -1], [ax + aw + 3, ay + ah + 3, -1, -1]]
-    .forEach(([cx, cy, dx, dy]) => { g.beginPath(); g.moveTo(cx + dx * cl, cy); g.lineTo(cx, cy); g.lineTo(cx, cy + dy * cl); g.stroke(); });
 }
 let resizeTimer = 0;
 function queueFit() { clearTimeout(resizeTimer); resizeTimer = setTimeout(computeFit, 240); }
@@ -635,6 +622,8 @@ function spark(x, y, color, n, spd, life) {
 let trauma = 0, freezeT = 0;
 const addTrauma = t => { trauma = Math.min(1, trauma + t); };
 const hitStop = ticks => { freezeT = Math.max(freezeT, ticks); };
+const borderFlash = { color: '#fff', t: 0 };
+const flashBorder = (color, t = 18) => { borderFlash.color = color; borderFlash.t = Math.max(borderFlash.t, t); };
 const popups = [];
 function popup(x, y, txt, color) { popups.push({ x, y, txt, color, t: 60 }); if (popups.length > 14) popups.shift(); }
 
@@ -666,7 +655,7 @@ function spawnWave(w, counts) {
   bullets = []; stingers = []; seekers = []; shells = [];
   drudges = []; pylons = []; juggs = []; hives = []; wasps = []; cortexes = []; thralls = []; forges = []; crawlers = []; humans = [];
   chain = 0;
-  const shape = (w - 1) % 4;
+  const shape = (w - 1) % 5;
   for (let i = 0; i < d[0]; i++) { const [x, y] = placeOutside(rw, rh, 8); drudges.push({ x, y, cd: irand(gruntDelay + 1), hop: 0, frame: irand(2), mat: mat() }); }
   for (let i = 0; i < d[1]; i++) { const [x, y] = placeOutside(rw, rh, 7); pylons.push({ x, y, shape, mat: mat() }); }
   const kinds = [['ma', d[2]], ['pa', d[3]], ['kid', d[4]]];
@@ -687,6 +676,11 @@ function spawnWave(w, counts) {
   }
   for (let i = 0; i < d[8]; i++) { const [x, y] = placeOutside(rw, rh, 10);
     forges.push({ x, y, vx: 0, vy: 0, moveT: 0, quota: Math.max(1, Math.round(irand(12) / 2)), dropT: irand(30) + 10, rot: rand(0, 3), leave: 0, mat: mat() }); }
+  if (cortexes.length && humans.length) {
+    // the whole Cortex division fixates on one human at wave start (the famous arcade quirk)
+    const mark = humans.find(h => h.kind === 'kid') || humans[0];
+    for (const c of cortexes) c.targetH = mark;
+  }
   freeze = 66; waveT = 0;
   state = 'starting'; stateT = 0;
   Snd.matSfx();
@@ -713,6 +707,7 @@ function updateHumans() {
       const pts = RESCUE_PTS[Math.min(chain, 4)]; chain++; rescuedTotal++;
       addScore(pts); popup(h.x, h.y, '' + pts, '#ffe14a');
       spark(h.x, h.y, '#ffe14a', 10, 1.4, 30);
+      flashBorder('#ffe14a', 12);
       Snd.rescueSfx();
       if (chain === 5) say('chainMax'); else if (Math.random() < 0.3) say('rescue');
     }
@@ -776,7 +771,11 @@ function updateHives() {
   for (let i = hives.length - 1; i >= 0; i--) {
     const h = hives[i];
     if (h.mat > 0) { h.mat -= 2; continue; }
-    if (--h.moveT <= 0) { h.moveT = 30 + irand(60); h.vx = rand(-0.7, 0.7); h.vy = rand(-0.7, 0.7); h.ax = rand(-0.02, 0.02); h.ay = rand(-0.02, 0.02); }
+    if (--h.moveT <= 0) { h.moveT = 30 + irand(60); h.vx = rand(-0.7, 0.7); h.vy = rand(-0.7, 0.7); h.ax = rand(-0.02, 0.02); h.ay = rand(-0.02, 0.02);
+      if (Math.random() < 0.6) { // hug the nearest wall, arcade-style
+        if (Math.min(h.x, FIELD.w - h.x) < Math.min(h.y, FIELD.h - h.y)) h.ax = h.x < FIELD.w / 2 ? -0.03 : 0.03;
+        else h.ay = h.y < FIELD.h / 2 ? -0.03 : 0.03;
+      } }
     h.vx = clamp(h.vx + h.ax, -1.1, 1.1); h.vy = clamp(h.vy + h.ay, -1.1, 1.1);
     h.x += h.vx; h.y += h.vy;
     if (h.x < 6) { h.x = 6; h.vx = Math.abs(h.vx); h.ax = Math.abs(h.ax); } if (h.x > FIELD.w - 6) { h.x = FIELD.w - 6; h.vx = -Math.abs(h.vx); h.ax = -Math.abs(h.ax); }
@@ -803,7 +802,11 @@ function updateWasps() {
       if (--w.fireT <= 0) {
         w.fireT = irand(D.enfFire(wave)) + 6;
         if (stingers.length < 20) {
-          const tx = player.x + irand(32) - 16, ty = player.y + irand(32) - 16;
+          let tx, ty;
+          if (Math.random() < 0.25 && (player.mvx || player.mvy)) {
+            const d0 = Math.hypot(player.x - w.x, player.y - w.y);
+            tx = player.x + player.mvx * d0 * 0.45; ty = player.y + player.mvy * d0 * 0.45; // lead the runner
+          } else { tx = player.x + irand(32) - 16; ty = player.y + irand(32) - 16; }
           const dx = tx - w.x, dy = ty - w.y, d = Math.hypot(dx, dy) || 1;
           const sp = clamp(d * 0.012, 0.8, 2.4);
           stingers.push({ x: w.x, y: w.y, vx: dx / d * sp, vy: dy / d * sp,
@@ -966,12 +969,14 @@ function addScore(pts) {
   if (score >= nextLife) {
     lives++; nextLife += EXTRA_LIFE;
     popup(player.x, player.y - 10, 'EXTRA LIFE', '#4df3ff');
+    flashBorder('#4df3ff', 28);
     Snd.chime(); say('extraLife');
   }
   updateHud();
 }
 function updatePlayer(inp) {
   player.moving = !!inp.mv;
+  player.mvx = inp.mv ? inp.mv[0] : 0; player.mvy = inp.mv ? inp.mv[1] : 0;
   if (inp.mv) {
     player.x = clamp(player.x + inp.mv[0], 4, FIELD.w - 4);
     player.y = clamp(player.y + inp.mv[1], 5, FIELD.h - 5);
@@ -1056,10 +1061,12 @@ function playerHit() {
 /* ============================== DEATH / WAVE FLOW ============================== */
 function die() {
   state = 'dying'; stateT = 0; deaths++; lives--;
-  addTrauma(1);
+  addTrauma(1); flashBorder('#ff4a3d', 46);
   spark(player.x, player.y, '#4df3ff', 40, 2.4, 60);
   spark(player.x, player.y, '#ffffff', 24, 1.6, 46);
   spark(player.x, player.y, '#ff4a3d', 20, 2, 52);
+  spark(player.x, player.y, '#ffe14a', 18, 2.2, 55);
+  spark(player.x, player.y, '#ff4ad9', 14, 1.8, 50);
   Snd.deathSfx(); Snd.stopMusic(); say('death', null, true);
   updateHud();
 }
@@ -1127,7 +1134,8 @@ function stepTick() {
   if (state !== 'play') { fxTick(); return; }
   if (freezeT > 0) { freezeT--; fxTick(); return; }
   waveT++;
-  if (waveT % 600 === 0) gruntDelay = Math.max(gruntFloor, gruntDelay - 1);
+  if (waveT % 300 === 0) gruntDelay = Math.max(gruntFloor, gruntDelay - 1);
+  if (waveT === 2700 || waveT === 3600) gruntFloor = Math.max(2, gruntFloor - 2); // late-wave frenzied charge
   let inp;
   if (inputOverride) { inp = inputOverride; if (--inputOverride.ticks <= 0) inputOverride = null; }
   else inp = bot.enabled ? botInput() : readInput();
@@ -1141,6 +1149,7 @@ function stepTick() {
   if (playerHit()) { die(); return; }
   if (killableLeft() === 0) {
     state = 'waveclear'; stateT = 0; wavesCleared++;
+    flashBorder('#ffffff', 22);
     popup(FIELD.w / 2, FIELD.h / 2 - 20, 'WAVE ' + wave + ' CLEAR', '#4df3ff');
     Snd.fanfare(); if (Math.random() < 0.6) say('waveClear');
   }
@@ -1151,25 +1160,51 @@ function glowAt(x, y, r, color, alpha) {
   ctx.drawImage(glowFor(color), x - r, y - r, r * 2, r * 2);
 }
 function drawSpr(c, x, y) { ctx.drawImage(c, x - c.gw / 2, y - c.gh / 2, c.gw, c.gh); }
+const PROG_COLS = ['#ff4a3d', '#ffe14a', '#58e06a', '#4df3ff', '#ff4ad9'];
 function drawMat(c, e, ringColor) {
+  // arcade warp-in: four sparks converge -> vertical scan line grows -> sprite unfolds sideways
   const p = 1 - e.mat / 66;
-  ctx.globalAlpha = Math.max(0.15, p);
-  const h = c.gh * Math.max(0.12, p);
-  ctx.drawImage(c, e.x - c.gw / 2, e.y - h / 2, c.gw, h);
-  ctx.globalAlpha = (1 - p) * 0.9;
-  ctx.strokeStyle = ringColor; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.arc(e.x, e.y, 2 + (1 - p) * 12, 0, 7); ctx.stroke();
-  ctx.globalAlpha = 1;
+  const col = isBrainWave(wave) ? `hsl(${(tick * 9 + e.x * 4) % 360},100%,66%)` : ringColor;
+  if (p < 0.7) {
+    const q = p / 0.7;
+    const dx = (1 - q) * 26, dy = (1 - q) * 16;
+    ctx.fillStyle = col; ctx.globalAlpha = 0.45 + q * 0.55;
+    ctx.fillRect(e.x - dx - 1, e.y - 1, 2, 2); ctx.fillRect(e.x + dx - 1, e.y - 1, 2, 2);
+    ctx.fillRect(e.x - 1, e.y - dy - 1, 2, 2); ctx.fillRect(e.x - 1, e.y + dy - 1, 2, 2);
+    const lh = c.gh * q;
+    ctx.globalAlpha = 0.9; ctx.fillRect(e.x - 0.7, e.y - lh / 2, 1.4, lh);
+    ctx.globalAlpha = 1;
+  } else {
+    const q = (p - 0.7) / 0.3;
+    const w = Math.max(1.2, c.gw * q);
+    ctx.globalAlpha = 0.6 + q * 0.4;
+    ctx.drawImage(c, e.x - w / 2, e.y - c.gh / 2, w, c.gh);
+    if (q < 0.5) { ctx.globalAlpha = 0.7 - q; ctx.fillStyle = col; ctx.fillRect(e.x - 0.7, e.y - c.gh / 2, 1.4, c.gh); }
+    ctx.globalAlpha = 1;
+  }
 }
 function ent(c, e) { if (e.mat > 0) drawMat(c, e, '#9df8ff'); else drawSpr(c, e.x, e.y); }
 function draw() {
+  if (!SW || !SH) computeFit();
+  if (!SW || !SH) return;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  if (bg) ctx.drawImage(bg, 0, 0, SW, SH);
+  if (bg && bg.width && bg.height) ctx.drawImage(bg, 0, 0, SW, SH);
   const shaking = state === 'play' || state === 'starting' || state === 'dying' || state === 'waveclear';
   const sh = shaking ? trauma * trauma : 0, shx = 6 * sh * rand(-1, 1), shy = 6 * sh * rand(-1, 1);
   ctx.save();
   ctx.translate(OX + shx * SCALE, OY + shy * SCALE);
   ctx.scale(SCALE, SCALE);
+
+  // color-cycling arena border (flashes on events, arcade-style)
+  const hue = (tick * 3.2) % 360;
+  const bc = borderFlash.t > 0 ? borderFlash.color : `hsl(${hue},100%,62%)`;
+  const ba = borderFlash.t > 0 ? Math.min(1, 0.55 + borderFlash.t / 30) : 0.55;
+  if (borderFlash.t > 0) borderFlash.t--;
+  ctx.lineJoin = 'miter';
+  ctx.globalAlpha = ba * 0.4; ctx.strokeStyle = bc; ctx.lineWidth = 3.2; ctx.strokeRect(-2.5, -2.5, FIELD.w + 5, FIELD.h + 5);
+  ctx.globalAlpha = ba; ctx.lineWidth = 1.4; ctx.strokeRect(-2.5, -2.5, FIELD.w + 5, FIELD.h + 5);
+  ctx.globalAlpha = 0.85; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.45; ctx.strokeRect(-2.5, -2.5, FIELD.w + 5, FIELD.h + 5);
+  ctx.globalAlpha = 1;
 
   // additive under-glow pass (smoothing on: glow sprites scale fractionally)
   ctx.globalCompositeOperation = 'lighter';
@@ -1193,6 +1228,16 @@ function draw() {
   ctx.imageSmoothingEnabled = false;
   for (const p of pylons) { if (p.mat > 0) { drawMat(PYLON_SHAPES[p.shape][0], p, '#ffe14a'); } else drawSpr(PYLON_SHAPES[p.shape][(tick >> 3) & 1], p.x, p.y); }
   for (const h of humans) ent(SPR[h.kind][h.frame], h);
+  for (const t of thralls) {                       // prog-style color-cycling trail segments
+    if (t.mat > 0) continue;
+    for (let i = t.hist.length - 1; i >= 0; i--) {
+      const [hx, hy] = t.hist[i];
+      ctx.globalAlpha = 0.3 + 0.5 * (1 - i / 7);
+      ctx.fillStyle = PROG_COLS[(i + (tick >> 2)) % PROG_COLS.length];
+      ctx.fillRect(hx - 1.5, hy - 1.5, 3, 3);
+    }
+    ctx.globalAlpha = 1;
+  }
   for (const t of thralls) ent(SPR.thrall[t.frame], t);
   for (const c of crawlers) ent(SPR.crawler[c.frame], c);
   for (const d of drudges) {
@@ -1212,7 +1257,9 @@ function draw() {
   for (const h of hives) ent(HIVE_FRAMES[(tick >> 4) % 3], h);
   for (const c of cortexes) ent(SPR.cortex[c.frame], c);
   for (const w of wasps) ent(SPR.wasp[w.frame], w);
-  if (state === 'play' || state === 'starting' || state === 'waveclear') {
+  if (state === 'starting' && freeze > 0) {
+    drawMat(SPR.player[0], { x: player.x, y: player.y, mat: Math.min(66, freeze) }, '#4df3ff');
+  } else if (state === 'play' || state === 'starting' || state === 'waveclear') {
     drawSpr(SPR.player[player.moving ? player.frame : 0], player.x, player.y);
     const m = Math.hypot(player.fx, player.fy) || 1;
     const ux = player.fx / m, uy = player.fy / m;
@@ -1245,8 +1292,9 @@ function draw() {
   if (state === 'dying') {
     const r = stateT * 1.4;
     ctx.globalAlpha = Math.max(0, 1 - stateT / 70);
-    ctx.strokeStyle = '#4df3ff'; ctx.lineWidth = 2;
+    ctx.strokeStyle = `hsl(${(stateT * 14) % 360},100%,62%)`; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(player.x, player.y, r, 0, 7); ctx.stroke();
+    ctx.beginPath(); ctx.arc(player.x, player.y, r * 0.55, 0, 7); ctx.stroke();
     ctx.globalAlpha = Math.max(0, 0.35 - stateT * 0.006);
     ctx.fillStyle = '#ff4a3d'; ctx.fillRect(0, 0, FIELD.w, FIELD.h);
   }
