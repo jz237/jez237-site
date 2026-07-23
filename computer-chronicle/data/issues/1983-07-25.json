@@ -1,0 +1,322 @@
+{
+  "currentDate": "2026-07-23",
+  "historicDate": "1983-07-25",
+  "displayDate": "Week of July 25-31, 1983",
+  "edition": "Issue 052 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Urgent home-computer price-war energy on warm aged newsprint",
+    "motifs": [
+      "Commodore 64 keyboard",
+      "Famicom cartridges and arcade sprites",
+      "red-and-blue retail price bursts"
+    ],
+    "layout": "Dense broadsheet front page with a price-war lead, gaming picture block, shelf lists, and compact world bulletin"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing & Culture",
+    "dateline": "Week of July 25-31, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Commodore price-war banner across the upper page",
+    "secondaryRail": "Famicom, Aquarius, game shelf, charts, and price watch",
+    "archiveNavigation": "Previous and next weekly issues with calendar archive"
+  },
+  "sectionChrome": {
+    "primary": "Deep newspaper red",
+    "secondary": "IBM blue",
+    "texture": "Warm paper grain, halftone screens, and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-07-25.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the week of July 25-31, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Commodore sharpens Britain's home-computer price war while Mattel finally launches the Aquarius and Nintendo's new Family Computer brings arcade hits home in Japan.",
+  "morningLine": "The Commodore 64 gets cheaper, the Aquarius reaches the shops, and a red-and-white game machine begins its first full week.",
+  "lead": {
+    "headline": "Commodore Slashes 64 Price to £229",
+    "dek": "A £116 British price cut puts a 64K color computer into the fiercest part of the home-micro market.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      1,
+      2,
+      3
+    ],
+    "body": [
+      "Commodore has taken what Personal Computer News called a “scythe” to its British prices. Effective August 1, the recommended retail price of the Commodore 64 falls from £345 to £229, a £116 cut that moves the 64K color machine into direct contention with far less capable rivals.",
+      "The official date may be next week, but the battle is already under way. PCN reports that Lasky's and Dixons moved early with offers around £225. A computer with sprites, sound, color graphics, and 64K of memory is suddenly sitting in a price band crowded with machines built around much tighter specifications.",
+      "Commodore is cutting around the system as well as the keyboard. VIC-20 and Commodore 64 game cartridges are set at £9.99, while the shared single disk drive drops from £299.95 to £229. VIC-20 memory packs also fall sharply: the 3K pack to £19.95, the 8K to £29.95, and the 16K to £39.95.",
+      "The cuts display Commodore's manufacturing advantage at a dangerous moment for the trade. Too many home computers are chasing the same household money, and makers must now answer a machine that offers a large memory, strong game hardware, and a familiar name at £229. Dealers may celebrate the traffic; competitors must decide how much margin they can surrender."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Aquarius Finally Reaches Launch Day",
+      "kicker": "Toy Giant Enters the Micro Race",
+      "dek": "Mattel's delayed under-£100 home computer launches in Britain on July 27.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1,
+        4,
+        5
+      ],
+      "body": [
+        "Mattel's long-awaited Aquarius receives its official British launch on Wednesday, July 27, roughly three months after Personal Computer News first tested it. The toy company's computer arrives with a Z80-family processor, a rubber chiclet keyboard, and only 4K of RAM.",
+        "That under-£100 price is meant to open the door, but the market outside has changed while Aquarius waited. Commodore's new price and the growing range of inexpensive British micros make limited memory and graphics harder to excuse. Mattel's retail muscle can put the box before families; software and expandability must persuade them to take it home."
+      ]
+    },
+    {
+      "headline": "Nintendo Brings the Arcade Home",
+      "kicker": "Game Desk",
+      "dek": "Japan's new ¥14,800 Family Computer begins its first full week with Donkey Kong, Donkey Kong Jr., and Popeye.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        9
+      ],
+      "body": [
+        "Nintendo's red-and-white Family Computer, launched in Japan on July 15, is the month's most intriguing game machine. Its ¥14,800 price buys a cartridge console with two hard-wired controllers and hardware designed to reproduce bright, fast arcade action on the family television.",
+        "Nintendo has led with names players already know: Donkey Kong, Donkey Kong Jr., and Popeye. The early catalog is small, but the promise is unusually clear—Nintendo's own arcade hits without the trip to the amusement center. The machine begins its first full issue week as a bold test of whether arcade loyalty can build a living-room platform."
+      ]
+    },
+    {
+      "headline": "KoalaPad Makes the Screen a Drawing Board",
+      "kicker": "Graphics at a Fingertip",
+      "dek": "A $125 touch tablet gives Atari owners a direct route from hand movement to screen image.",
+      "confidence": "period",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "The KoalaPad is a small touch-sensitive tablet that can reproduce drawn or written images, move a cursor or object, act as a custom keyboard, and even serve as a game controller. Antic lists the package at $125 including graphics software.",
+        "Its importance lies in the gesture: instead of translating every idea through keys or joystick clicks, the user can point and draw. For classrooms, artists, and home experimenters, the tablet makes computer graphics feel less like programming and more like handling a familiar pencil or brush."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Dragon Data Disk Drive",
+      "summary": "A £275 5.25-inch drive package, including controller and cables, is due through Boots and Dixons.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "BBC Micro Speech Synthesizer",
+      "summary": "A Lostock School project enters small-scale production at roughly £29-£35 with phonetic speech and variable pitch.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Epson RX-80 FT",
+      "summary": "The £350 friction-feed printer variant handles single sheets and letterhead instead of requiring continuous stationery.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "ZX Tool Kit",
+      "detail": "Spectrum cassette utility with block editing, search-and-replace, renumbering, memory map, and tracing tools."
+    },
+    {
+      "name": "Ultra Disassembler",
+      "detail": "Adventure International's $49.95 Atari utility reconstructs labelled source from memory, files, or disk sectors."
+    },
+    {
+      "name": "Micro Illustrator",
+      "detail": "Koala Technologies' drawing program supplied with the KoalaPad touch tablet."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "M.U.L.E.",
+        "Suspended",
+        "Knights of the Desert",
+        "Dragon's Lair",
+        "Donkey Kong"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "National Lampoon's Vacation",
+        "Jaws 3-D",
+        "Return of the Jedi",
+        "Krull",
+        "WarGames"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "ZX Tool Kit",
+        "Ultra Disassembler",
+        "Micro Illustrator"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Commodore 64 UK RRP",
+      "price": "£229 from August 1",
+      "note": "Down from £345."
+    },
+    {
+      "item": "Commodore game cartridges",
+      "price": "£9.99",
+      "note": "For VIC-20 and Commodore 64."
+    },
+    {
+      "item": "Nintendo Family Computer",
+      "price": "¥14,800",
+      "note": "Japanese launch price."
+    },
+    {
+      "item": "KoalaPad with software",
+      "price": "$125",
+      "note": "Touch tablet and graphics package."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "GEC Takes Control of Torch",
+      "text": "GEC pays roughly £3 million for 76 percent of Torch Computers and promises support for products, manufacturing, marketing, and service."
+    },
+    {
+      "headline": "WarGames Stays in the Top Ten",
+      "text": "The computer thriller earns $2.10 million over July 29-31, taking its cumulative gross above $55 million."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Every Breath You Take",
+      "artist": "The Police"
+    },
+    {
+      "rank": 2,
+      "title": "Electric Avenue",
+      "artist": "Eddy Grant"
+    },
+    {
+      "rank": 3,
+      "title": "Flashdance... What a Feeling",
+      "artist": "Irene Cara"
+    },
+    {
+      "rank": 4,
+      "title": "Sweet Dreams (Are Made of This)",
+      "artist": "Eurythmics"
+    },
+    {
+      "rank": 5,
+      "title": "Is There Something I Should Know?",
+      "artist": "Duran Duran"
+    }
+  ],
+  "periodAd": {
+    "headline": "Draw Directly on Your Atari",
+    "summary": "KoalaPad turns a fingertip or stylus into lines, pictures, cursor movement, and custom controls.",
+    "tagline": "$125 with graphics software."
+  },
+  "market": {
+    "headline": "Price War Sweeps the Whole System",
+    "summary": "Commodore's cuts reach beyond the C64 to cartridges, disk drives, and VIC-20 memory, pressuring rivals and accessory makers alike.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      1,
+      2,
+      3
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Communal Violence Engulfs Colombo",
+    "summary": "By July 27, four days of anti-Tamil violence had left burned neighborhoods, troops in the streets, and black smoke over Sri Lanka's capital in the crisis later known as Black July.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Commodore British price reductions",
+        "confidence": "same-week"
+      },
+      {
+        "claim": "Aquarius British launch on July 27",
+        "confidence": "exact-date"
+      },
+      {
+        "claim": "Famicom launch and software",
+        "confidence": "same-month"
+      },
+      {
+        "claim": "Period games, software, and hardware",
+        "confidence": "period"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Personal Computer News, July 21-27, 1983",
+      "url": "https://archive.org/stream/PersonalComputerNews/PersonalComputerNews020-27Jul1983_djvu.txt"
+    },
+    {
+      "label": "Commodore Computer Price List",
+      "url": "https://www.computinghistory.org.uk/det/7620/Commodore-Computer-Price-List/"
+    },
+    {
+      "label": "Antic New Products, August 1983",
+      "url": "https://www.atarimagazines.com/v2n4/newproducts.php"
+    },
+    {
+      "label": "Creative Computing: Mattel Aquarius",
+      "url": "https://www.atarimagazines.com/creative/v9n8/49_Mattel_Aquarius_home_comp.php"
+    },
+    {
+      "label": "COMPUTE!: Mattel's New Home Computer",
+      "url": "https://www.atarimagazines.com/compute/issue32/019_1_MATTELS_NEW_HOME_COMPUTER.php"
+    },
+    {
+      "label": "Computer Gaming World Vol. 3 No. 4",
+      "url": "https://www.cgwmuseum.org/galleries/issues/cgw_3.4.pdf"
+    },
+    {
+      "label": "Washington Post: Sri Lanka Communal Unrest",
+      "url": "https://www.washingtonpost.com/archive/politics/1983/07/28/sides-harden-in-sri-lankas-worst-communal-unrest-in-decades/dbb74e73-81c6-45e4-867d-5513ffda8af5/"
+    },
+    {
+      "label": "Billboard Hot 100, July 30, 1983",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-07-30"
+    },
+    {
+      "label": "Japan Times: Nintendo Brought Arcade Games Home",
+      "url": "https://www.japantimes.co.jp/news/2013/07/15/reference/nintendo-brought-arcade-games-into-homes-30-years-ago/"
+    },
+    {
+      "label": "Box Office Mojo: Weekend 30, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W30/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "DISK DRIVE ARRIVING",
+      "copy": "Ask your Boots or Dixons counter about Dragon Data's 5.25-inch drive package."
+    },
+    {
+      "headline": "DRAW ON SCREEN",
+      "copy": "KoalaPad seeks artists, teachers, and curious Atari owners."
+    }
+  ]
+}
