@@ -65,6 +65,9 @@
   .initials { display:flex; gap:12px; justify-content:center; margin:12px 0; }
   .letter { font:900 26px Arial,sans-serif; color:#ffe89a; min-width:48px; } .letter button { display:block; width:46px; height:36px; border-radius:9px; margin:6px auto; font-size:14px; }
   .version { margin-top:12px; font-size:9.5px; letter-spacing:2px; color:#5a6a8f; }
+  .optrow { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin:2px 0 10px; }
+  .optrow button { height:38px; padding:0 16px; border-radius:999px; border-color:#4df3ff44; background:linear-gradient(150deg,#101b2e,#0a101f); box-shadow:none; color:#9fb6d9; }
+  .optrow button.sel { border-color:#4df3ffcc; color:#eafcff; background:linear-gradient(150deg,#0e5f78,#083048); box-shadow:0 0 14px #4df3ff44; }
   @media (max-height:660px){ .card{padding:15px 14px} h1{font-size:32px} p{margin:6px auto} .play{height:46px;margin:7px 0} #manual{gap:5px 4px} .version{margin-top:6px} }
 </style>
 </head>
@@ -94,7 +97,8 @@
   <div id="manual"></div>
   <button class="play" id="startBtn">START THE RIOT</button><br>
   <button class="secondary" id="showScores">HIGH SCORES</button>
-  <div class="version">BUILD v1.1.0 · 2026-07-22 · UNFINISHED REVIEW</div>
+  <button class="secondary" id="optsBtn">OPTIONS</button>
+  <div class="version">BUILD v1.2.0 · 2026-07-22 · UNFINISHED REVIEW</div>
 </div></div>
 
 <div id="pauseM" class="modal hidden"><div class="card">
@@ -102,6 +106,15 @@
   <h2>THE RIOT WAITS FOR NO ONE</h2>
   <button class="play" id="resumeBtn">RESUME</button><br>
   <button class="secondary" id="quitBtn">ABANDON RUN</button>
+</div></div>
+
+<div id="optsM" class="modal hidden"><div class="card">
+  <h1>OPTIONS</h1>
+  <h2>OPERATOR SETTINGS</h2>
+  <p class="small">DIFFICULTY</p><div class="optrow" id="optDiff"></div>
+  <p class="small">EXTRA LIFE EVERY</p><div class="optrow" id="optExtra"></div>
+  <p class="small">STARTING LIVES</p><div class="optrow" id="optLives"></div>
+  <button class="play" id="closeOpts">SAVE &amp; RETURN</button>
 </div></div>
 
 <div id="scoresM" class="modal hidden"><div class="card">
@@ -127,7 +140,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '1.1.0';
+const VERSION = '1.2.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const START_WAVE = Math.max(1, parseInt(qs.get('wave'), 10) || 1);
@@ -145,7 +158,9 @@ const dist2 = (ax, ay, bx, by) => { const dx = ax - bx, dy = ay - by; return dx 
 const HS_KEY = 'chrome-riot-highscores-v1', SET_KEY = 'chrome-riot-settings-v1';
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
-const settings = store.get(SET_KEY, { sound: true });
+const settings = Object.assign({ sound: true, diff: 'arcade', extraAt: 25000, lives: 3 }, store.get(SET_KEY, {}));
+const DIFFS = { cadet: 1.35, arcade: 1, veteran: 0.75 };
+let diffMul = DIFFS[settings.diff] || 1;
 const getScores = () => store.get(HS_KEY, []);
 const saveScores = a => store.set(HS_KEY, a);
 
@@ -166,15 +181,17 @@ const waveData = w => WAVES[w <= 40 ? w - 1 : 20 + ((w - 21) % 20)];
 const isBrainWave = w => waveData(w)[6] > 0;
 
 // ---- difficulty pacing (from the arcade tables; approximate trend past wave 10) ----
+// dm = operator-difficulty scaling: bigger delays / slower cadence on cadet, tighter on veteran
+const dm = v => Math.max(1, Math.round(v * diffMul));
 const D = {
-  gruntDelay:  w => w <= 1 ? 20 : w <= 10 ? 15 : Math.max(12, 15 - ((w - 10) / 10 | 0)),
-  gruntFloor:  w => [9,7,6,5,5,5,5,5,4,4][w - 1] ?? (w <= 20 ? 4 : 3),
-  hulkTicks:   w => [9,8,8,7,7,7,7,7,6,6][w - 1] ?? (w <= 20 ? 6 : 5),
-  brainTicks:  w => [10,8,8,8,8,8,7,7,7,7][w - 1] ?? (w <= 25 ? 7 : 6),
-  enfFire:     w => Math.max(13, 32 - 2 * w),
-  hiveDrop:    w => [40,30,28,26,24,30,20,18,16,18][w - 1] ?? Math.max(14, 18 - ((w - 10) / 8 | 0)),
-  cruiseDelay: w => [80,64,64,64,64,64,40,40,38,38][w - 1] ?? Math.max(25, 38 - (w - 10)),
-  tankFire:    w => w <= 1 ? 40 : Math.max(20, 32 - ((w - 8) / 2 | 0)),
+  gruntDelay:  w => dm(w <= 1 ? 20 : w <= 10 ? 15 : Math.max(12, 15 - ((w - 10) / 10 | 0))),
+  gruntFloor:  w => dm([9,7,6,5,5,5,5,5,4,4][w - 1] ?? (w <= 20 ? 4 : 3)),
+  hulkTicks:   w => dm([9,8,8,7,7,7,7,7,6,6][w - 1] ?? (w <= 20 ? 6 : 5)),
+  brainTicks:  w => dm([10,8,8,8,8,8,7,7,7,7][w - 1] ?? (w <= 25 ? 7 : 6)),
+  enfFire:     w => dm(Math.max(13, 32 - 2 * w)),
+  hiveDrop:    w => dm([40,30,28,26,24,30,20,18,16,18][w - 1] ?? Math.max(14, 18 - ((w - 10) / 8 | 0))),
+  cruiseDelay: w => dm([80,64,64,64,64,64,40,40,38,38][w - 1] ?? Math.max(25, 38 - (w - 10))),
+  tankFire:    w => dm(w <= 1 ? 40 : Math.max(20, 32 - ((w - 8) / 2 | 0))),
   safeRect:    w => w <= 1 ? [192,112] : w <= 2 ? [176,96] : w <= 3 ? [160,80] : w <= 4 ? [146,72] : w <= 9 ? [114,54] : [72,50],
 };
 const POINTS = { drudge:100, hive:1000, wasp:150, stinger:25, cortex:500, seeker:25, thrall:100, forge:1000, crawler:200, shell:50 };
@@ -629,6 +646,8 @@ function popup(x, y, txt, color) { popups.push({ x, y, txt, color, t: 60 }); if 
 
 /* ============================== GAME STATE ============================== */
 let state = 'title', stateT = 0, tick = 0, waveT = 0, inputOverride = null;
+let demo = false, idleT = 0, demoT = 0;
+const STORY_LINES = ['THE YEAR IS 2086', 'THE CHROME — OUR PERFECT SERVANTS —', 'HAVE REACHED A VERDICT:', 'HUMANITY IS OBSOLETE', '', 'ONE AUGMENTED COURIER REMAINS', 'SAVE THE LAST FAMILY'];
 let wave = 1, score = 0, lives = START_LIVES, chain = 0, nextLife = EXTRA_LIFE;
 let hi = getScores()[0] ? getScores()[0].score : 0;
 let gruntDelay = 20, gruntFloor = 9, freeze = 0;
@@ -967,7 +986,7 @@ function addScore(pts) {
   score += pts;
   if (score > hi) hi = score;
   if (score >= nextLife) {
-    lives++; nextLife += EXTRA_LIFE;
+    lives++; nextLife += settings.extraAt;
     popup(player.x, player.y - 10, 'EXTRA LIFE', '#4df3ff');
     flashBorder('#4df3ff', 28);
     Snd.chime(); say('extraLife');
@@ -1078,6 +1097,7 @@ function rebuildAfterDeath() {
     juggs.length, cortexes.length, hivesN, forges.filter(f => !f.leave).length];
   const thrallsN = thralls.length, crawlersN = crawlers.length;
   gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave);
+  if (wave <= 2) gruntDelay = Math.max(gruntDelay, 22);   // silent mercy on early deaths ("Bozo mode")
   spawnWave(wave, counts);
   const [rw, rh] = D.safeRect(wave);
   for (let i = 0; i < thrallsN; i++) { const [x, y] = placeOutside(rw, rh, 8);
@@ -1090,9 +1110,21 @@ function killableLeft() {
     forges.length + crawlers.length;
 }
 function gameOver() {
+  if (demo) { exitDemo(); return; }
   state = 'over'; stateT = 0;
   Snd.stopMusic(); say('gameOver', null, true);
   showOver();
+}
+function beginStory() {
+  demo = true; demoT = 0; bot.enabled = true;
+  hideModals(); $('#btns').classList.add('hidden');
+  state = 'story'; stateT = 0;
+}
+function exitDemo() {
+  demo = false; bot.enabled = false;
+  Snd.stopMusic();
+  state = 'title'; hideModals(); $('#title').classList.remove('hidden');
+  idleT = 0;
 }
 
 /* ============================== MASTER TICK ============================== */
@@ -1110,11 +1142,17 @@ function allMats(fn) {
 }
 function stepTick() {
   tick++;
+  if (state === 'story') {
+    stateT++; fxTick();
+    if (stateT >= 250) startGame();
+    return;
+  }
+  if (demo && ++demoT > 4200) { exitDemo(); return; }   // demo caps at ~70s
   if (state === 'starting') {
     stateT++;
     allMats(e => { if (e.mat > 0) e.mat--; });
     fxTick();
-    if (--freeze <= 0) { state = 'play'; Snd.startMusic(); }
+    if (--freeze <= 0) { state = 'play'; if (!demo) Snd.startMusic(); }
     return;
   }
   if (state === 'dying') {
@@ -1128,7 +1166,7 @@ function stepTick() {
   if (state === 'waveclear') {
     stateT++; fxTick();
     updateHumans();
-    if (stateT >= 100) { wave++; gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave); spawnWave(wave); }
+    if (stateT >= 100) { wave++; if (wave > 255) wave = 1; gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave); spawnWave(wave); }
     return;
   }
   if (state !== 'play') { fxTick(); return; }
@@ -1205,6 +1243,20 @@ function draw() {
   ctx.globalAlpha = ba; ctx.lineWidth = 1.4; ctx.strokeRect(-2.5, -2.5, FIELD.w + 5, FIELD.h + 5);
   ctx.globalAlpha = 0.85; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.45; ctx.strokeRect(-2.5, -2.5, FIELD.w + 5, FIELD.h + 5);
   ctx.globalAlpha = 1;
+
+  if (state === 'story') {                 // attract-mode story card
+    ctx.fillStyle = '#020207'; ctx.fillRect(0, 0, FIELD.w, FIELD.h);
+    const shown = Math.min(STORY_LINES.length, 1 + (stateT / 30 | 0));
+    ctx.textAlign = 'center'; ctx.font = 'bold 9px "Courier New",monospace';
+    for (let i = 0; i < shown; i++) {
+      ctx.globalAlpha = i === shown - 1 ? Math.min(1, 0.25 + (stateT - i * 30) / 15) : 1;
+      ctx.fillStyle = STORY_LINES[i] === 'HUMANITY IS OBSOLETE' ? '#ff4a3d' : '#c8f2ff';
+      ctx.fillText(STORY_LINES[i], FIELD.w / 2, 46 + i * 17);
+    }
+    ctx.globalAlpha = 1;
+    ctx.restore();
+    return;
+  }
 
   // additive under-glow pass (smoothing on: glow sprites scale fractionally)
   ctx.globalCompositeOperation = 'lighter';
@@ -1315,6 +1367,11 @@ function draw() {
     ctx.fillStyle = isBrainWave(wave) ? '#ff8ac2' : '#ffe14a';
     ctx.fillText(isBrainWave(wave) ? 'CORTEX DIVISION INBOUND' : wave === 1 ? 'SAVE THE LAST FAMILY' : 'THE CHROME MARCHES', FIELD.w / 2, FIELD.h / 2 - 16);
   }
+  if (demo) {
+    ctx.globalAlpha = 0.55 + 0.4 * Math.sin(tick * 0.1);
+    ctx.fillStyle = '#ffe14a'; ctx.font = 'bold 9px Arial';
+    ctx.fillText(IS_TOUCH ? 'DEMO MODE · TAP TO EXIT' : 'DEMO MODE · ANY KEY TO EXIT', FIELD.w / 2, FIELD.h - 7);
+  }
   ctx.globalAlpha = 1;
   ctx.globalCompositeOperation = 'source-over';
   ctx.imageSmoothingEnabled = false;
@@ -1376,7 +1433,7 @@ function bind(el, fn) {
     e.preventDefault(); e.stopPropagation(); fn();
   }, { passive: false });
 }
-function hideModals() { ['#title', '#pauseM', '#scoresM', '#over'].forEach(s => $(s).classList.add('hidden')); }
+function hideModals() { ['#title', '#pauseM', '#scoresM', '#over', '#optsM'].forEach(s => $(s).classList.add('hidden')); }
 let wakeLock = null;
 function requestWake() {
   if (!navigator.wakeLock || (state !== 'play' && state !== 'starting')) return;
@@ -1384,9 +1441,9 @@ function requestWake() {
 }
 function startGame() {
   hideModals();
-  $('#btns').classList.remove('hidden');
-  requestWake();
-  score = 0; lives = START_LIVES; chain = 0; nextLife = EXTRA_LIFE;
+  if (!demo) { $('#btns').classList.remove('hidden'); requestWake(); }
+  score = 0; lives = settings.lives || START_LIVES; chain = 0;
+  nextLife = settings.extraAt > 0 ? settings.extraAt : Infinity;
   wave = START_WAVE; deaths = 0; wavesCleared = 0; rescuedTotal = 0;
   gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave);
   trauma = 0; freezeT = 0; parts.length = 0; popups.length = 0;
@@ -1404,9 +1461,17 @@ function togglePause() {
   }
 }
 document.addEventListener('visibilitychange', () => {
+  if (document.hidden && demo) { exitDemo(); return; }
   if (document.hidden && (state === 'play' || state === 'starting' || state === 'waveclear')) togglePause();
   if (!document.hidden) requestWake();
 });
+// attract mode: any input exits the demo (capture phase, before game handlers)
+['pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, e => {
+  if (!demo) return;
+  e.stopPropagation(); e.preventDefault();
+  exitDemo();
+}, { capture: true }));
+['pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, () => { idleT = 0; }, { passive: true }));
 function setMute(v) {
   Snd.setOn(v);
   $('#muteBtn').classList.toggle('off', !v);
@@ -1482,6 +1547,24 @@ $('#ctlHelp').textContent = IS_TOUCH
   }
 }
 
+// operator options panel
+function buildOpts() {
+  const mk = (holder, opts, key, fmt) => {
+    holder.innerHTML = '';
+    opts.forEach(v => {
+      const b = document.createElement('button'); b.textContent = fmt(v);
+      if (settings[key] === v) b.classList.add('sel');
+      bind(b, () => { settings[key] = v; store.set(SET_KEY, settings); if (key === 'diff') diffMul = DIFFS[v]; Snd.click(); buildOpts(); });
+      holder.append(b);
+    });
+  };
+  mk($('#optDiff'), ['cadet', 'arcade', 'veteran'], 'diff', v => v.toUpperCase());
+  mk($('#optExtra'), [20000, 25000, 30000, 50000, 0], 'extraAt', v => v ? (v / 1000) + 'K' : 'NEVER');
+  mk($('#optLives'), [3, 5], 'lives', v => '' + v);
+}
+bind($('#optsBtn'), () => { Snd.click(); buildOpts(); $('#optsM').classList.remove('hidden'); });
+bind($('#closeOpts'), () => { Snd.click(); $('#optsM').classList.add('hidden'); });
+
 /* ============================== QA API ============================== */
 window.__CHROME_RIOT__ = {
   version: VERSION,
@@ -1496,6 +1579,9 @@ window.__CHROME_RIOT__ = {
   frame(q) { draw(); return canvas.toDataURL('image/jpeg', q || 0.7); },
   setBot(v) { bot.enabled = !!v; $('#autoBadge').style.display = v ? 'block' : 'none'; },
   setInput(mv, fv, ticks = 60) { inputOverride = { mv: mv || null, fv: fv || null, ticks }; },
+  get demo() { return demo; },
+  startDemo() { beginStory(); },
+  stopDemo() { if (demo) exitDemo(); },
   start(useBot) { this.setBot(!!useBot); startGame(); },
   step(n = 1) { for (let i = 0; i < n; i++) stepTick(); draw(); return this.snapshot(); },
   snapshot() { return { state, wave, score, lives, deaths, wavesCleared, tick, chain,
@@ -1524,7 +1610,13 @@ let last = 0, acc = 0;
 function frame(t) {
   requestAnimationFrame(frame);
   const dt = Math.min(0.05, (t - last) / 1000 || 0.016); last = t;
-  if (state === 'title' || state === 'paused' || state === 'over') { draw(); return; }
+  if (state === 'title') {
+    const modalOpen = !$('#scoresM').classList.contains('hidden') || !$('#optsM').classList.contains('hidden');
+    if (modalOpen) idleT = 0;
+    else { idleT += dt; if (idleT > 12) { idleT = 0; beginStory(); } }
+    draw(); return;
+  }
+  if (state === 'paused' || state === 'over') { draw(); return; }
   acc += dt;
   let steps = 0;
   while (acc >= 1 / 60 && steps < 4) { stepTick(); acc -= 1 / 60; steps++; }
