@@ -44,10 +44,12 @@
   .stick { position:fixed; width:120px; height:120px; margin:-60px 0 0 -60px; border-radius:50%; pointer-events:none; z-index:4;
     border:2px solid; background:radial-gradient(circle,#ffffff0a,#ffffff03 62%,transparent 70%);
     opacity:0; transition:opacity .25s; will-change:transform,opacity; }
+  .stick::after { content:attr(data-label); position:absolute; left:0; right:0; bottom:9px; text-align:center;
+    font:900 8px Arial,sans-serif; letter-spacing:1.8px; opacity:.72; text-shadow:0 1px 4px #000; }
   .stick .knob { position:absolute; left:50%; top:50%; width:54px; height:54px; margin:-27px 0 0 -27px; border-radius:50%;
     border:2px solid; will-change:transform; }
-  #stickL { border-color:#4df3ff59; } #stickL .knob { border-color:#9df8ffcc; background:radial-gradient(circle at 35% 30%,#c9fbff88,#1997b866 60%,#0b3c5544); box-shadow:0 0 18px #4df3ff55; }
-  #stickR { border-color:#ff4a3d59; } #stickR .knob { border-color:#ffb0a8cc; background:radial-gradient(circle at 35% 30%,#ffd9d488,#c9372b66 60%,#57110b44); box-shadow:0 0 18px #ff4a3d55; }
+  #stickL { border-color:#4df3ff59; color:#9df8ff; } #stickL .knob { border-color:#9df8ffcc; background:radial-gradient(circle at 35% 30%,#c9fbff88,#1997b866 60%,#0b3c5544); box-shadow:0 0 18px #4df3ff55; }
+  #stickR { border-color:#ff4a3d59; color:#ffb0a8; } #stickR .knob { border-color:#ffb0a8cc; background:radial-gradient(circle at 35% 30%,#ffd9d488,#c9372b66 60%,#57110b44); box-shadow:0 0 18px #ff4a3d55; }
   .modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; padding:16px; z-index:8;
     background:linear-gradient(#02020bb5,#050310eb); }
   .card { width:min(500px,100%); max-height:94vh; max-height:94dvh; overflow:auto; text-align:center; border:1px solid #4df3ff55; border-radius:20px;
@@ -138,8 +140,8 @@
   <button class="icon-btn" id="muteBtn" title="Sound">♪</button>
   <button class="icon-btn" id="pauseBtn" title="Pause">❚❚</button>
 </div>
-<div id="stickL" class="stick"><div class="knob"></div></div>
-<div id="stickR" class="stick"><div class="knob"></div></div>
+<div id="stickL" class="stick" data-label="MOVE"><div class="knob"></div></div>
+<div id="stickR" class="stick" data-label="FIRE"><div class="knob"></div></div>
 
 <div id="title" class="modal"><div class="card">
   <h1>CHROME <span>RIOT</span></h1>
@@ -154,7 +156,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v3.1.0 · 2026-07-23 · ELEVENLABS AUDIO + COMBAT FX</div>
+  <div class="version">BUILD v3.2.0 · 2026-07-23 · MOBILE CONTROL LANES</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -233,7 +235,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '3.1.0';
+const VERSION = '3.2.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -1121,10 +1123,21 @@ let userGestureSeen = false;
 const keys = {};
 const mouse = { x: 0, y: 0, down: false, seen: false };
 const RAD = 55, DZ_MOVE = 0.12, DZ_FIRE = 0.15;
+const CONTROL_GUTTER_RATIO = 0.18, CONTROL_GUTTER_MIN = 64, CONTROL_GUTTER_MAX = 112;
 const sticks = {
   L: { id: null, ox: 0, oy: 0, x: 0, y: 0, el: $('#stickL'), knob: $('#stickL .knob') },
   R: { id: null, ox: 0, oy: 0, x: 0, y: 0, el: $('#stickR'), knob: $('#stickR .knob') },
 };
+function touchControlLayout() {
+  const gutter = clamp(SW * CONTROL_GUTTER_RATIO, CONTROL_GUTTER_MIN, CONTROL_GUTTER_MAX);
+  return { leftMax:(SW - gutter) / 2, rightMin:(SW + gutter) / 2, gutter };
+}
+function touchControlZone(x) {
+  const lane = touchControlLayout();
+  if (x <= lane.leftMax) return 'L';
+  if (x >= lane.rightMin) return 'R';
+  return null;
+}
 function releaseStick(s) { s.id = null; s.x = s.y = 0; s.el.style.opacity = 0; s.knob.style.transform = 'translate(0,0)'; }
 function moveStick(s, cx, cy) {
   let dx = cx - s.ox, dy = cy - s.oy;
@@ -1133,10 +1146,15 @@ function moveStick(s, cx, cy) {
   s.knob.style.transform = `translate(${dx / d * cl}px,${dy / d * cl}px)`;
 }
 canvas.addEventListener('pointerdown', e => {
-  try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-  if (e.pointerType === 'mouse') { mouse.down = true; mouse.x = e.clientX; mouse.y = e.clientY; mouse.seen = true; return; }
-  const s = e.clientX < SW / 2 ? sticks.L : sticks.R;
+  if (e.pointerType === 'mouse') {
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    mouse.down = true; mouse.x = e.clientX; mouse.y = e.clientY; mouse.seen = true; return;
+  }
+  const zone = touchControlZone(e.clientX);
+  if (!zone) return;
+  const s = sticks[zone];
   if (s.id !== null) return;
+  try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
   s.id = e.pointerId; s.ox = e.clientX; s.oy = e.clientY; s.x = s.y = 0;
   s.el.style.transform = `translate(${s.ox}px,${s.oy}px)`;
   s.el.style.opacity = 1; s.knob.style.transform = 'translate(0,0)';
@@ -3070,7 +3088,7 @@ bind($('#saveScore'), () => {
 });
 paintMute(Snd.on);
 $('#ctlHelp').textContent = IS_TOUCH
-  ? 'LEFT thumb anywhere on the left half to MOVE · RIGHT thumb on the right half to AIM + FIRE. Sticks appear where you touch.'
+  ? 'LEFT lane to MOVE · RIGHT lane to AIM + FIRE. The center lane is neutral, and each stick stays locked to its starting side.'
   : 'WASD to MOVE · ARROW KEYS to FIRE (or hold the mouse to shoot at the cursor) · P pauses · Twin-stick gamepads supported.';
 // field manual
 {
@@ -3135,6 +3153,12 @@ window.__CHROME_RIOT__ = {
   get assisted() { return assistedRun; }, get globalEligible() { return runGlobalEligible; },
   get pendingScores() { return getPendingScores().length; }, get wakeActive() { return !!wakeLock; },
   get audio() { return Snd.status(); },
+  get controls() {
+    const lane = touchControlLayout();
+    return { leftMax:+lane.leftMax.toFixed(1), rightMin:+lane.rightMin.toFixed(1), gutter:+lane.gutter.toFixed(1),
+      left:{ active:sticks.L.id !== null, x:+sticks.L.x.toFixed(3), y:+sticks.L.y.toFixed(3) },
+      right:{ active:sticks.R.id !== null, x:+sticks.R.x.toFixed(3), y:+sticks.R.y.toFixed(3) } };
+  },
   get camera() {
     const active = mobileCameraActive(), topPad = isOverdrive() ? 118 : 72, viewH = Math.max(1, SH - topPad - 18);
     const scale = active ? Math.max(SW / FIELD.w, viewH / FIELD.h) * settings.mobileZoom : SCALE;
