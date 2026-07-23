@@ -154,7 +154,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v2.2.0 · 2026-07-23 · MOBILE ZOOM OPTIONS</div>
+  <div class="version">BUILD v2.3.0 · 2026-07-23 · EXPANDED MOBILE ZOOM</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -233,7 +233,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '2.2.0';
+const VERSION = '2.3.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -291,7 +291,7 @@ let scoreViewBoard = 'arcade', runBoard = 'arcade';
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 const storedSettings = store.get(SET_KEY, {});
-const MOBILE_ZOOM_LEVELS = [1, 1.2, 1.4, 1.6];
+const MOBILE_ZOOM_LEVELS = [0.6, 0.8, 1, 1.2, 1.4];
 const settings = Object.assign({ sound: true, diff: 'arcade', extraAt: 25000, lives: 3, cabinetFx: true, mobileZoom: 1 },
   storedSettings && typeof storedSettings === 'object' && !Array.isArray(storedSettings) ? storedSettings : {});
 settings.sound = settings.sound !== false;
@@ -299,6 +299,7 @@ settings.cabinetFx = settings.cabinetFx !== false;
 if (!['cadet', 'arcade', 'veteran'].includes(settings.diff)) settings.diff = 'arcade';
 if (![20000, 25000, 30000, 50000, 0].includes(settings.extraAt)) settings.extraAt = 25000;
 if (![3, 5].includes(settings.lives)) settings.lives = 3;
+if (settings.mobileZoom === 1.6) settings.mobileZoom = 1.4; // migrate the former maximum
 if (!MOBILE_ZOOM_LEVELS.includes(settings.mobileZoom)) settings.mobileZoom = 1;
 const DIFFS = { cadet: 1.35, arcade: 1, veteran: 0.75 };
 let diffMul = DIFFS[settings.diff] || 1;
@@ -2150,6 +2151,8 @@ function draw() {
   ctx.save();
   if (view.camera) {
     ctx.beginPath(); ctx.rect(view.x, view.y, view.w, view.h); ctx.clip();
+    // Lower zoom levels can reveal space beyond an arena edge; keep that overscan clean.
+    ctx.fillStyle = '#020207'; ctx.fillRect(view.x, view.y, view.w, view.h);
   }
   ctx.translate(view.ox + shx * view.scale, view.oy + shy * view.scale);
   ctx.scale(view.scale, view.scale);
@@ -2727,7 +2730,7 @@ function buildOpts() {
   mk($('#optLives'), [3, 5], 'lives', v => '' + v);
   mk($('#optCabinet'), [true, false], 'cabinetFx', v => v ? 'ON' : 'OFF');
   mk($('#optMobileZoom'), MOBILE_ZOOM_LEVELS, 'mobileZoom',
-    v => v === 1 ? '1× STANDARD' : v === 1.2 ? '1.2× CLOSE' : v === 1.4 ? '1.4× CLOSER' : '1.6× MAX');
+    v => (v < 1 ? String(v).replace(/^0/, '') : String(v)) + '×');
 }
 bind($('#optsBtn'), () => { Snd.click(); buildOpts(); $('#optsM').classList.remove('hidden'); });
 bind($('#closeOpts'), () => { Snd.click(); $('#optsM').classList.add('hidden'); });
