@@ -92,6 +92,19 @@ demo on title, gamepad rumble, enforcer "scared puppy" + "Mikey bug" quirk emula
 Bozo mode, per-wave Pylon shape variety beyond 4 shapes, PWA manifest,
 difficulty settings.
 
+## v1.2.0 — attract mode + operator settings (same day)
+
+- Attract mode: 12s idle at the title rolls a story card ("THE YEAR IS 2086…", line-by-line
+  reveal inside the cycling border) into a self-playing bot demo with a pulsing DEMO MODE
+  banner; any key/tap exits, demo caps at ~70s, tab-hide exits cleanly. QA:
+  startDemo()/stopDemo() + demo getter.
+- Operator OPTIONS panel on the title: difficulty CADET/ARCADE/VETERAN (scales all enemy
+  pacing tables ×1.35/×1/×0.75), extra life every 20K/25K/30K/50K/NEVER, starting lives
+  3/5 — persisted in settings.
+- Wave counter wraps at 255 back to wave 1 with difficulty reset (8-bit counter homage).
+- "Bozo mode": dying on waves 1–2 silently re-throttles Drudges gentler on the rebuild
+  (2nd-ROM-revision mercy rule).
+
 ## v1.1.0 — arcade authenticity pass (same day)
 
 Pushed the presentation and pressure much closer to the 1982 original:
