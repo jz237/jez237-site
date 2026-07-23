@@ -92,6 +92,18 @@ demo on title, gamepad rumble, enforcer "scared puppy" + "Mikey bug" quirk emula
 Bozo mode, per-wave Pylon shape variety beyond 4 shapes, PWA manifest,
 difficulty settings.
 
+## v1.3.0 — 2-player alternating play (same day; completes 1:1 feature parity)
+
+- Arcade-style alternating 2P from the title ("2 PLAYER RIOT"): players swap on every
+  death; each keeps their own score, lives, wave, extra-life progress, and a
+  remaining-enemy snapshot so their wave resumes under the authentic rebuild rules;
+  "PLAYER n / WAVE n / GET READY" interstitial between turns; live P1/P2 score line in
+  the HUD; dual-score game-over card with sequential initials entry for every
+  qualifying score.
+- With this, every mechanical feature of the researched arcade spec is implemented
+  except three documented deliberate omissions: the enforcer "scared puppy" overflow
+  bug, per-tank ammo (folklore, not in ROM), and coin/credit simulation.
+
 ## v1.2.0 — attract mode + operator settings (same day)
 
 - Attract mode: 12s idle at the title rolls a story card ("THE YEAR IS 2086…", line-by-line
