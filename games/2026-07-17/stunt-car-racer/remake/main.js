@@ -765,10 +765,10 @@ function step(dt) {
       }
     } else {
       const spdA = Math.hypot(state.vx, state.vz);
-      const onDeck = !!deckAt(state.x, state.z);
-      const ahead = onDeck ? Math.max(45, spdA * 0.9) : 0; // off-road: return to the road
+      const nearDeck = !!deckAt(state.x, state.z); // renamed: onDeck() is now a module-level helper
+      const ahead = nearDeck ? Math.max(45, spdA * 0.9) : 0; // off-road: return to the road
       const rA = roadAt(state.s + ahead);
-      if (!onDeck && spdA > 60) gp.ts = true;
+      if (!nearDeck && spdA > 60) gp.ts = true;
       let want = Math.atan2(rA.x - state.x, rA.z - state.z) - state.heading;
       while (want > Math.PI) want -= 2 * Math.PI;
       while (want < -Math.PI) want += 2 * Math.PI;
