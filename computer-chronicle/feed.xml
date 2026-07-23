@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 23 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 25-31, 1983 — Commodore Slashes 64 Price to £229</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-07-25</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-25</guid>
+      <pubDate>Thu, 23 Jul 2026 12:00:00 GMT</pubDate>
+      <description>A £116 British price cut puts a 64K color computer into the fiercest part of the home-micro market. Commodore has taken what Personal Computer News called a “scythe” to its British prices. Effective August 1, the recommended retail price of the Commodore 64 falls from £345 to £229, a £116 cut that moves the 64K color machine into direct contention with far less capable rivals. Also this week: Aquarius Finally Reaches Launch Day · Nintendo Brings the Arcade Home · KoalaPad Makes the Screen a Drawing Board.</description>
+    </item>
     <item>
       <title>Week of July 18-24, 1983 — Apple II Sales Reach One Million</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-07-18</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-03-07</guid>
       <pubDate>Sat, 04 Jul 2026 12:00:00 GMT</pubDate>
       <description>On March 8, IBM introduced the Personal Computer XT, an expanded PC with a 10 MB fixed disk that made the office micro feel more permanent. During the week of March 7-13, 1983, IBM gave business buyers a clearer upgrade path from the original PC. Contemporary coverage described the PC XT as a new model with more expansion room and a built-in fixed disk, while the quoted $4,995 configuration kept it firmly in office-machine territory. The timing helped software such as Lotus 1-2-3 look less like an add-on and more like the daily reason to buy an IBM-compatible desk system.</description>
-    </item>
-    <item>
-      <title>Week of February 28-March 6, 1983 — Game shelves carry the home-computer pitch</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-02-28</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-02-28</guid>
-      <pubDate>Fri, 03 Jul 2026 12:00:00 GMT</pubDate>
-      <description>As March 1983 begins, Computer Gaming World keeps strategy, adventure, and simulation titles in view while retailers use games to make home machines feel useful and fun. During the week of February 28-March 6, 1983, the home-computer market was still being explained from the shelf outward. Computer Gaming World&apos;s early-1983 issues put titles such as Serpentine, Cosmic Balance, S.E.U.I.S., Armor Assault, and wider strategy coverage in front of readers who wanted more than arcade imitation. At the same time, IBM PC shoppers were hearing the new Lotus 1-2-3 pitch, a spreadsheet/database/graphics package that had gone on sale in January and was quickly becoming a reason to take the PC seriously at work.</description>
     </item>
   </channel>
 </rss>

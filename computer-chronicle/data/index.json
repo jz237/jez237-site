@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-23",
+      "historicDate": "1983-07-25",
+      "displayDate": "Week of July 25-31, 1983",
+      "edition": "Issue 052 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "The Commodore 64 gets cheaper, the Aquarius reaches the shops, and a red-and-white game machine begins its first full week.",
+      "leadHeadline": "Commodore Slashes 64 Price to £229",
+      "storyHeadlines": [
+        "Aquarius Finally Reaches Launch Day",
+        "Nintendo Brings the Arcade Home",
+        "KoalaPad Makes the Screen a Drawing Board"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-07-25.jpg",
+      "thumb": "media/thumbs/1983-07-25.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-22",
       "historicDate": "1983-07-18",
       "displayDate": "Week of July 18-24, 1983",
