@@ -76,7 +76,7 @@
 <div id="hud">
   <div class="topbar">
     <div class="stat">SCORE<b id="scoreV">0</b><div id="lives"></div></div>
-    <div class="stat mid">BEST<b id="hiV">0</b></div>
+    <div class="stat mid">BEST<b id="hiV">0</b><div id="p2line" style="font-size:10px;letter-spacing:1px;margin-top:3px;color:#9fb6d9;display:none;"></div></div>
     <div class="stat right">WAVE<b id="waveV">1</b></div>
   </div>
   <div id="autoBadge">AUTO-RUN</div>
@@ -96,9 +96,10 @@
   <p class="small" id="ctlHelp"></p>
   <div id="manual"></div>
   <button class="play" id="startBtn">START THE RIOT</button><br>
+  <button class="secondary" id="start2Btn">2 PLAYER RIOT</button>
   <button class="secondary" id="showScores">HIGH SCORES</button>
   <button class="secondary" id="optsBtn">OPTIONS</button>
-  <div class="version">BUILD v1.2.0 · 2026-07-22 · UNFINISHED REVIEW</div>
+  <div class="version">BUILD v1.3.0 · 2026-07-22 · UNFINISHED REVIEW</div>
 </div></div>
 
 <div id="pauseM" class="modal hidden"><div class="card">
@@ -129,7 +130,7 @@
   <h2 id="overSub">FINAL SCORE 0</h2>
   <p id="overText" class="small"></p>
   <div id="entry" class="hidden">
-    <p class="small">NEW RECORD — SIGN THE RESISTANCE ROLL</p>
+    <p class="small" id="entryLabel">NEW RECORD — SIGN THE RESISTANCE ROLL</p>
     <div class="initials" id="letters"></div>
     <button class="play" id="saveScore">LOG RECORD</button>
   </div>
@@ -140,7 +141,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '1.2.0';
+const VERSION = '1.3.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const START_WAVE = Math.max(1, parseInt(qs.get('wave'), 10) || 1);
@@ -594,8 +595,11 @@ addEventListener('blur', () => {
   for (const k in keys) keys[k] = false;
   mouse.down = false;
   releaseStick(sticks.L); releaseStick(sticks.R);
+  if (demo) { exitDemo(); return; }
   if (state === 'play' || state === 'starting' || state === 'waveclear') togglePause();
+  else if (state === 'dying' || state === 'handoff') pendingPause = true;   // land paused when play resumes
 });
+addEventListener('focus', () => { pendingPause = false; });
 window.addEventListener('contextmenu', e => e.preventDefault());
 document.addEventListener('gesturestart', e => e.preventDefault(), { passive: false });
 document.addEventListener('touchmove', e => { if (e.target === canvas) e.preventDefault(); }, { passive: false });
@@ -647,6 +651,7 @@ function popup(x, y, txt, color) { popups.push({ x, y, txt, color, t: 60 }); if 
 /* ============================== GAME STATE ============================== */
 let state = 'title', stateT = 0, tick = 0, waveT = 0, inputOverride = null;
 let demo = false, idleT = 0, demoT = 0;
+let players = 1, cur = 0, P = [null, null], entryQueue = [], pendingPause = false;
 const STORY_LINES = ['THE YEAR IS 2086', 'THE CHROME — OUR PERFECT SERVANTS —', 'HAVE REACHED A VERDICT:', 'HUMANITY IS OBSOLETE', '', 'ONE AUGMENTED COURIER REMAINS', 'SAVE THE LAST FAMILY'];
 let wave = 1, score = 0, lives = START_LIVES, chain = 0, nextLife = EXTRA_LIFE;
 let hi = getScores()[0] ? getScores()[0].score : 0;
@@ -984,7 +989,7 @@ function updateShells() {
 /* ============================== PLAYER + BULLETS ============================== */
 function addScore(pts) {
   score += pts;
-  if (score > hi) hi = score;
+  if (!demo && score > hi) hi = score;
   if (score >= nextLife) {
     lives++; nextLife += settings.extraAt;
     popup(player.x, player.y - 10, 'EXTRA LIFE', '#4df3ff');
@@ -1089,22 +1094,33 @@ function die() {
   Snd.deathSfx(); Snd.stopMusic(); say('death', null, true);
   updateHud();
 }
-function rebuildAfterDeath() {
+function captureSnap() {
   const liveWasps = wasps.length, liveHives = hives.length;
-  let hivesN = Math.min(waveData(wave)[7], Math.floor(liveWasps / 4) + liveHives + (liveWasps > 0 && liveWasps < 4 && liveHives === 0 ? 1 : 0));
-  const counts = [drudges.length, pylons.length,
+  const hivesN = Math.min(waveData(wave)[7], Math.floor(liveWasps / 4) + liveHives + (liveWasps > 0 && liveWasps < 4 && liveHives === 0 ? 1 : 0));
+  return { counts: [drudges.length, pylons.length,
     humans.filter(h => h.kind === 'ma').length, humans.filter(h => h.kind === 'pa').length, humans.filter(h => h.kind === 'kid').length,
-    juggs.length, cortexes.length, hivesN, forges.filter(f => !f.leave).length];
-  const thrallsN = thralls.length, crawlersN = crawlers.length;
+    juggs.length, cortexes.length, hivesN, forges.filter(f => !f.leave).length],
+    thralls: thralls.length, crawlers: crawlers.length };
+}
+function spawnFromSnap(snap) {
   gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave);
   if (wave <= 2) gruntDelay = Math.max(gruntDelay, 22);   // silent mercy on early deaths ("Bozo mode")
-  spawnWave(wave, counts);
+  spawnWave(wave, snap && snap.counts);
+  if (!snap) return;
   const [rw, rh] = D.safeRect(wave);
-  for (let i = 0; i < thrallsN; i++) { const [x, y] = placeOutside(rw, rh, 8);
+  for (let i = 0; i < snap.thralls; i++) { const [x, y] = placeOutside(rw, rh, 8);
     thralls.push({ x, y, ox: irand(40) - 20, oy: irand(40) - 20, dx: 0, dy: 0, hist: [], frame: 0, mat: mat() }); }
-  for (let i = 0; i < crawlersN; i++) { const [x, y] = placeOutside(rw, rh, 9);
+  for (let i = 0; i < snap.crawlers; i++) { const [x, y] = placeOutside(rw, rh, 9);
     crawlers.push({ x, y, dx: 0, dy: 0, moveT: 0, fireT: D.tankFire(wave) + irand(16), frame: 0, mat: mat() }); }
 }
+function rebuildAfterDeath() { spawnFromSnap(captureSnap()); }
+// ---- alternating 2-player registers ----
+function mkP() { return { score: 0, lives: settings.lives || START_LIVES, wave: START_WAVE,
+  nextLife: settings.extraAt > 0 ? settings.extraAt : Infinity, rescued: 0, deaths: 0, snap: null }; }
+function saveCur() { P[cur] = { score, lives, wave, nextLife, rescued: rescuedTotal, deaths, snap: captureSnap() }; }
+function loadP(i) { cur = i; const p = P[i];
+  score = p.score; lives = p.lives; wave = p.wave; nextLife = p.nextLife; rescuedTotal = p.rescued; deaths = p.deaths; }
+function beginHandoff(i) { loadP(i); state = 'handoff'; stateT = 0; updateHud(true); }
 function killableLeft() {
   return drudges.length + hives.length + wasps.length + cortexes.length + thralls.length +
     forges.length + crawlers.length;
@@ -1152,15 +1168,32 @@ function stepTick() {
     stateT++;
     allMats(e => { if (e.mat > 0) e.mat--; });
     fxTick();
-    if (--freeze <= 0) { state = 'play'; if (!demo) Snd.startMusic(); }
+    if (--freeze <= 0) {
+      state = 'play';
+      if (pendingPause && !demo) { pendingPause = false; togglePause(); return; }
+      if (!demo) Snd.startMusic();
+    }
     return;
   }
   if (state === 'dying') {
     stateT++; fxTick();
     if (stateT === 110) {
-      if (lives <= 0) gameOver();
-      else rebuildAfterDeath();
+      if (players === 2) {
+        saveCur();
+        const other = 1 - cur;
+        if (P[other].lives > 0) beginHandoff(other);              // alternate on every death
+        else if (lives > 0) { const s = P[cur].snap; P[cur].snap = null; spawnFromSnap(s); }
+        else gameOver();
+      } else {
+        if (lives <= 0) gameOver();
+        else rebuildAfterDeath();
+      }
     }
+    return;
+  }
+  if (state === 'handoff') {
+    stateT++; fxTick();
+    if (stateT >= 130) { const s = P[cur].snap; P[cur].snap = null; spawnFromSnap(s); }
     return;
   }
   if (state === 'waveclear') {
@@ -1253,6 +1286,20 @@ function draw() {
       ctx.fillStyle = STORY_LINES[i] === 'HUMANITY IS OBSOLETE' ? '#ff4a3d' : '#c8f2ff';
       ctx.fillText(STORY_LINES[i], FIELD.w / 2, 46 + i * 17);
     }
+    ctx.globalAlpha = 1;
+    ctx.restore();
+    return;
+  }
+  if (state === 'handoff') {                // alternating-play interstitial
+    ctx.fillStyle = '#020207'; ctx.fillRect(0, 0, FIELD.w, FIELD.h);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = cur === 0 ? '#4df3ff' : '#ff8ac2'; ctx.font = 'bold 16px Arial';
+    ctx.fillText('PLAYER ' + (cur + 1), FIELD.w / 2, FIELD.h / 2 - 16);
+    ctx.fillStyle = '#ffe14a'; ctx.font = 'bold 9px "Courier New",monospace';
+    ctx.fillText('WAVE ' + wave + ' · ' + lives + (lives === 1 ? ' LIFE' : ' LIVES') + ' LEFT', FIELD.w / 2, FIELD.h / 2 + 2);
+    ctx.globalAlpha = 0.5 + 0.5 * Math.sin(tick * 0.2);
+    ctx.fillStyle = '#c8f2ff'; ctx.font = 'bold 8px Arial';
+    ctx.fillText('GET READY', FIELD.w / 2, FIELD.h / 2 + 18);
     ctx.globalAlpha = 1;
     ctx.restore();
     return;
@@ -1384,6 +1431,12 @@ function updateHud(force) {
   if (force || hudScore !== score) { $('#scoreV').textContent = score.toLocaleString(); hudScore = score; }
   if (force || hudHi !== hi) { $('#hiV').textContent = hi.toLocaleString(); hudHi = hi; }
   if (force || hudWave !== wave) { $('#waveV').textContent = wave; hudWave = wave; }
+  const p2 = $('#p2line');
+  if (players === 2) {
+    const s1 = cur === 0 ? score : P[0].score, s2 = cur === 1 ? score : P[1].score;
+    p2.style.display = 'block';
+    p2.textContent = `${cur === 0 ? '▶' : ''}P1 ${s1.toLocaleString()} · ${cur === 1 ? '▶' : ''}P2 ${s2.toLocaleString()}`;
+  } else p2.style.display = 'none';
   const spare = Math.max(0, lives - 1);
   if (force || hudLives !== spare) {
     hudLives = spare;
@@ -1439,9 +1492,10 @@ function requestWake() {
   if (!navigator.wakeLock || (state !== 'play' && state !== 'starting')) return;
   navigator.wakeLock.request('screen').then(l => { wakeLock = l; }).catch(() => {});
 }
-function startGame() {
+function startGame(nPlayers) {
   hideModals();
   if (!demo) { $('#btns').classList.remove('hidden'); requestWake(); }
+  players = nPlayers === 2 ? 2 : 1; cur = 0; P = [mkP(), mkP()]; entryQueue = []; pendingPause = false;
   score = 0; lives = settings.lives || START_LIVES; chain = 0;
   nextLife = settings.extraAt > 0 ? settings.extraAt : Infinity;
   wave = START_WAVE; deaths = 0; wavesCleared = 0; rescuedTotal = 0;
@@ -1499,29 +1553,46 @@ function renderLetters() {
 function showOver() {
   $('#btns').classList.add('hidden');
   $('#over').classList.remove('hidden');
-  $('#overSub').textContent = 'FINAL SCORE ' + score.toLocaleString();
-  $('#overText').textContent = `Reached wave ${wave} · ${rescuedTotal} human${rescuedTotal === 1 ? '' : 's'} rescued · ${deaths} courier${deaths === 1 ? '' : 's'} lost`;
-  const q = isHigh(score);
-  $('#entry').classList.toggle('hidden', !q);
-  $('#againBtn').classList.toggle('hidden', q);
-  if (q) renderLetters();
+  if (players === 2) {
+    $('#overSub').textContent = `P1 ${P[0].score.toLocaleString()} · P2 ${P[1].score.toLocaleString()}`;
+    $('#overText').textContent = `P1 reached wave ${P[0].wave}, P2 reached wave ${P[1].wave} · ${P[0].rescued + P[1].rescued} humans rescued between you`;
+    entryQueue = [0, 1].filter(i => isHigh(P[i].score)).map(i => ({ label: 'PLAYER ' + (i + 1), score: P[i].score, wave: P[i].wave }));
+  } else {
+    $('#overSub').textContent = 'FINAL SCORE ' + score.toLocaleString();
+    $('#overText').textContent = `Reached wave ${wave} · ${rescuedTotal} human${rescuedTotal === 1 ? '' : 's'} rescued · ${deaths} courier${deaths === 1 ? '' : 's'} lost`;
+    entryQueue = isHigh(score) ? [{ label: '', score, wave }] : [];
+  }
+  nextEntry();
+}
+function nextEntry() {
+  while (entryQueue.length && !isHigh(entryQueue[0].score)) entryQueue.shift();  // may no longer qualify after prior insert
+  const e = entryQueue[0];
+  $('#entry').classList.toggle('hidden', !e);
+  $('#againBtn').classList.toggle('hidden', !!e);
+  if (e) {
+    $('#entryLabel').textContent = (e.label ? e.label + ' · ' : '') + 'NEW RECORD — SIGN THE RESISTANCE ROLL';
+    letters = [0, 0, 0]; renderLetters();
+  }
   renderScoreList($('#finalScores'));
 }
-bind($('#startBtn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(); });
+bind($('#startBtn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(1); });
+bind($('#start2Btn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(2); });
 bind($('#showScores'), () => { Snd.click(); renderScoreList($('#scoreList')); $('#scoresM').classList.remove('hidden'); });
 bind($('#closeScores'), () => { Snd.click(); $('#scoresM').classList.add('hidden'); });
 bind($('#resumeBtn'), () => { Snd.click(); togglePause(); });
 bind($('#quitBtn'), () => { Snd.click(); state = 'title'; hideModals(); $('#btns').classList.add('hidden'); $('#title').classList.remove('hidden'); Snd.stopMusic(); });
 bind($('#pauseBtn'), togglePause);
 bind($('#muteBtn'), () => setMute(!Snd.on));
-bind($('#againBtn'), () => { Snd.click(); startGame(); });
+bind($('#againBtn'), () => { Snd.click(); startGame(players); });
 bind($('#saveScore'), () => {
+  const e = entryQueue.shift();
+  if (!e) return;
   const a = getScores();
-  a.push({ name: letters.map(x => alphabet[x]).join(''), score, wave });
+  a.push({ name: letters.map(x => alphabet[x]).join(''), score: e.score, wave: e.wave });
   a.sort((x, y) => y.score - x.score); saveScores(a.slice(0, 10));
   hi = a[0].score; updateHud(true);
-  $('#entry').classList.add('hidden'); $('#againBtn').classList.remove('hidden');
-  renderScoreList($('#finalScores'));
+  Snd.click();
+  nextEntry();
 });
 setMute(Snd.on);
 $('#ctlHelp').textContent = IS_TOUCH
@@ -1580,6 +1651,8 @@ window.__CHROME_RIOT__ = {
   setBot(v) { bot.enabled = !!v; $('#autoBadge').style.display = v ? 'block' : 'none'; },
   setInput(mv, fv, ticks = 60) { inputOverride = { mv: mv || null, fv: fv || null, ticks }; },
   get demo() { return demo; },
+  get players() { return players; }, get cur() { return cur; },
+  get P() { return P.map(p => p && { score: p.score, lives: p.lives, wave: p.wave }); },
   startDemo() { beginStory(); },
   stopDemo() { if (demo) exitDemo(); },
   start(useBot) { this.setBot(!!useBot); startGame(); },
