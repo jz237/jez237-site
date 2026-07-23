@@ -154,7 +154,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v2.0.0 · 2026-07-23 · OVERDRIVE EXPANSION</div>
+  <div class="version">BUILD v2.1.0 · 2026-07-23 · MOBILE TRACKING CAMERA</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -232,7 +232,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '2.0.0';
+const VERSION = '2.1.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -843,6 +843,7 @@ function glowFor(color) {
 /* ============================== SCREEN / BG ============================== */
 const canvas = $('#game'), ctx = canvas.getContext('2d', { alpha: false, desynchronized: true });
 let DPR = 1, SW = 0, SH = 0, SCALE = 1, OX = 0, OY = 0, bg = null, lastFit = '';
+let cameraX = FIELD.w / 2, cameraY = FIELD.h / 2, cameraReady = false;
 function computeFit() {
   const dpr = Math.min(devicePixelRatio || 1, 2);
   const w = Math.round(visualViewport ? visualViewport.width : innerWidth) || innerWidth;
@@ -893,6 +894,43 @@ addEventListener('orientationchange', () => {
 }, { passive: true });
 /* ============================== INPUT ============================== */
 const IS_TOUCH = matchMedia('(pointer:coarse)').matches || 'ontouchstart' in window;
+function mobileCameraActive() {
+  return IS_TOUCH && Math.min(SW, SH) <= 600 &&
+    ['starting', 'play', 'dying', 'waveclear', 'paused'].includes(state);
+}
+function resetCamera() {
+  cameraX = player.x; cameraY = player.y; cameraReady = true;
+}
+function renderView() {
+  if (!mobileCameraActive()) {
+    cameraReady = false;
+    return { scale:SCALE, ox:OX, oy:OY, camera:false, x:0, y:0, w:SW, h:SH };
+  }
+  const sidePad = 0;
+  const topPad = isOverdrive() ? 118 : 72;
+  const botPad = 18;
+  const viewW = Math.max(1, SW - sidePad * 2);
+  const viewH = Math.max(1, SH - topPad - botPad);
+  // Cover the usable phone playfield instead of shrinking the complete arena into a short strip.
+  // Portrait crops and tracks horizontally; landscape crops and tracks vertically.
+  const scale = Math.max(viewW / FIELD.w, viewH / FIELD.h);
+  const halfW = viewW / (scale * 2), halfH = viewH / (scale * 2);
+  const targetX = halfW >= FIELD.w / 2 ? FIELD.w / 2 : clamp(player.x, halfW, FIELD.w - halfW);
+  const targetY = halfH >= FIELD.h / 2 ? FIELD.h / 2 : clamp(player.y, halfH, FIELD.h - halfH);
+  if (!cameraReady) {
+    cameraX = targetX; cameraY = targetY; cameraReady = true;
+  } else {
+    cameraX += (targetX - cameraX) * 0.16;
+    cameraY += (targetY - cameraY) * 0.16;
+  }
+  return {
+    scale,
+    ox:sidePad + viewW / 2 - cameraX * scale,
+    oy:topPad + viewH / 2 - cameraY * scale,
+    camera:true,
+    x:sidePad, y:topPad, w:viewW, h:viewH,
+  };
+}
 let userGestureSeen = false;
 ['pointerdown','touchstart','keydown'].forEach(ev => addEventListener(ev, e => { if (e.isTrusted) userGestureSeen = true; }, { capture:true, passive:true }));
 const keys = {};
@@ -2103,11 +2141,24 @@ function draw() {
   updateModeHud();
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   if (bg && bg.width && bg.height) ctx.drawImage(bg, 0, 0, SW, SH);
+  const view = renderView();
   const shaking = state === 'play' || state === 'starting' || state === 'dying' || state === 'waveclear';
   const sh = shaking ? trauma * trauma : 0, shx = 6 * sh * (Math.random() * 2 - 1), shy = 6 * sh * (Math.random() * 2 - 1);
   ctx.save();
-  ctx.translate(OX + shx * SCALE, OY + shy * SCALE);
-  ctx.scale(SCALE, SCALE);
+  if (view.camera) {
+    ctx.beginPath(); ctx.rect(view.x, view.y, view.w, view.h); ctx.clip();
+  }
+  ctx.translate(view.ox + shx * view.scale, view.oy + shy * view.scale);
+  ctx.scale(view.scale, view.scale);
+
+  if (view.camera && !isOverdrive()) {
+    const arenaBg = ctx.createLinearGradient(0, 0, 0, FIELD.h);
+    arenaBg.addColorStop(0, '#05040e'); arenaBg.addColorStop(0.5, '#020207'); arenaBg.addColorStop(1, '#04030b');
+    ctx.fillStyle = arenaBg; ctx.fillRect(0, 0, FIELD.w, FIELD.h);
+    const arenaGlow = ctx.createRadialGradient(FIELD.w / 2, FIELD.h / 2, 36, FIELD.w / 2, FIELD.h / 2, 190);
+    arenaGlow.addColorStop(0, 'rgba(34,24,68,0.10)'); arenaGlow.addColorStop(1, 'rgba(0,0,0,0.55)');
+    ctx.fillStyle = arenaGlow; ctx.fillRect(0, 0, FIELD.w, FIELD.h);
+  }
 
   // color-cycling arena border (flashes on events, arcade-style)
   const hue = (tick * 3.2) % 360;
@@ -2412,11 +2463,13 @@ function startGame(nPlayers = 1, mode = 'arcade', opts = {}) {
   gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave);
   trauma = 0; freezeT = 0; parts.length = 0; popups.length = 0;
   spawnWave(wave);
+  resetCamera();
   if (!demo) requestWake();
   updateHud(true);
 }
 function returnToTitle() {
   demo = false; bot.enabled = false; inputOverride = null; entryQueue = []; replayPlayback = null; replayViewing = false;
+  cameraReady = false;
   state = 'title'; hideModals(); $('#btns').classList.add('hidden'); $('#title').classList.remove('hidden');
   Snd.stopMusic(); releaseWake(); idleT = 0; document.body.classList.remove('overdrive-live');
 }
@@ -2686,6 +2739,12 @@ window.__CHROME_RIOT__ = {
   get rescueMultiplier() { return rescueMultiplier; }, get replayViewing() { return replayViewing; },
   get assisted() { return assistedRun; }, get globalEligible() { return runGlobalEligible; },
   get pendingScores() { return getPendingScores().length; }, get wakeActive() { return !!wakeLock; },
+  get camera() {
+    const active = mobileCameraActive(), topPad = isOverdrive() ? 118 : 72, viewH = Math.max(1, SH - topPad - 18);
+    const scale = active ? Math.max(SW / FIELD.w, viewH / FIELD.h) : SCALE;
+    return { active, x:+cameraX.toFixed(3), y:+cameraY.toFixed(3), scale:+scale.toFixed(3),
+      visibleW:+(SW / scale).toFixed(1), visibleH:+(viewH / scale).toFixed(1) };
+  },
   get rules() { return { standard: standardRules(), diff: settings.diff, extraAt: settings.extraAt, lives: settings.lives,
     runExtraAt, runStartLives, board:runBoard }; },
   get player() { return { x: player.x, y: player.y, fx: player.fx, fy: player.fy }; },
