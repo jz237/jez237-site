@@ -92,6 +92,17 @@ demo on title, gamepad rumble, enforcer "scared puppy" + "Mikey bug" quirk emula
 Bozo mode, per-wave Pylon shape variety beyond 4 shapes, PWA manifest,
 difficulty settings.
 
+## v1.3.1 — final parity polish (same day)
+
+- Hive follow-up Wasp drops now come at delay/4 per the spec (production accelerates once
+  a Hive starts hatching); vamoosing Forges stay lethal on contact and survive into the
+  death-rebuild snapshot with a fresh quota; waggle-fire (re-aiming the fire stick resets
+  the shot cycle for slightly faster fire); and the "scared puppy" Enforcer overflow bug
+  is now emulated — hug the far-left band and Wasps occasionally misread you as far-right
+  and flee to the east wall.
+- Remaining non-features by design: per-tank ammo (folklore, absent from the ROM) and
+  coin/credit hardware simulation (meaningless in a browser).
+
 ## v1.3.0 — 2-player alternating play (same day; completes 1:1 feature parity)
 
 - Arcade-style alternating 2P from the title ("2 PLAYER RIOT"): players swap on every
@@ -101,8 +112,8 @@ difficulty settings.
   the HUD; dual-score game-over card with sequential initials entry for every
   qualifying score.
 - With this, every mechanical feature of the researched arcade spec is implemented
-  except three documented deliberate omissions: the enforcer "scared puppy" overflow
-  bug, per-tank ammo (folklore, not in ROM), and coin/credit simulation.
+  (the scared-puppy quirk followed in v1.3.1; per-tank ammo and coin/credit simulation
+  remain out by design — see v1.3.1 notes).
 
 ## v1.2.0 — attract mode + operator settings (same day)
 
