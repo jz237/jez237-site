@@ -25,6 +25,13 @@
   #lives canvas { width:11px; height:14px; image-rendering:pixelated; }
   #autoBadge { position:absolute; left:50%; transform:translateX(-50%); top:52px; font-size:10px; letter-spacing:3px; color:var(--yl);
     border:1px solid #ffe14a66; border-radius:4px; padding:3px 8px; background:#1a1405cc; display:none; }
+  #modeHud { position:absolute; left:50%; transform:translateX(-50%); top:76px; min-width:190px; text-align:center; display:none;
+    font:900 9px 'Courier New',monospace; letter-spacing:1.6px; color:#f4d6ff; text-shadow:0 0 10px #d44dff; }
+  #modeHud b { color:#ffe14a; }
+  #bossHud { position:absolute; left:18%; right:18%; top:96px; display:none; text-align:center; }
+  #bossName { color:#ffc2ff; font:900 8px Arial,sans-serif; letter-spacing:2px; text-shadow:0 0 9px #ff4ad9; }
+  #bossTrack { height:5px; margin-top:4px; border:1px solid #ff8ae066; background:#150519cc; box-shadow:0 0 10px #ff4ad955; }
+  #bossFill { height:100%; width:100%; background:linear-gradient(90deg,#ff4a3d,#ff4ad9,#d9a3ff); box-shadow:0 0 8px #ff4ad9; transition:width .1s linear; }
   #caption { position:absolute; left:8%; right:8%; bottom:max(96px,calc(env(safe-area-inset-bottom) + 84px)); text-align:center;
     font-size:13px; font-weight:800; letter-spacing:3px; color:#ffb9b0; text-shadow:0 0 12px #ff4a3d88,0 2px 4px #000;
     opacity:0; transition:opacity .25s; }
@@ -54,6 +61,8 @@
     background:linear-gradient(150deg,#0e5f78,#083048); box-shadow:0 0 20px #4df3ff40; cursor:pointer; touch-action:manipulation; }
   .play { margin:12px 0 6px; width:min(280px,100%); height:54px; font-size:15px; }
   .secondary { margin:4px; height:38px; padding:0 18px; border-color:#4df3ff55; background:linear-gradient(150deg,#122036,#0a1222); box-shadow:none; }
+  .overdrive { border-color:#ff4ad9aa; background:linear-gradient(145deg,#7b174f,#321044); box-shadow:0 0 18px #ff4ad944; color:#fff1ff; }
+  .daily { border-color:#ffe14aaa; background:linear-gradient(145deg,#6b4d08,#2b1d06); box-shadow:0 0 18px #ffe14a33; color:#fff8cf; }
   .hidden { display:none!important; }
   #titleActions { margin:4px 0 8px; }
   #titleActions .play { margin-top:5px; }
@@ -62,6 +71,9 @@
   .foe canvas { height:30px; image-rendering:pixelated; }
   .foe b { font-size:9.5px; letter-spacing:1.5px; color:#fff; } .foe i { font-style:normal; font-size:9px; color:var(--dim); }
   .scoreBoards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px auto 6px; max-width:460px; }
+  .scoreTabs { display:flex; justify-content:center; flex-wrap:wrap; gap:5px; margin:8px auto 2px; }
+  .scoreTabs button { height:34px; padding:0 12px; border-radius:999px; border-color:#4df3ff33; background:#08101d; color:#8394ba; box-shadow:none; font-size:9px; }
+  .scoreTabs button.sel { color:#fff; border-color:#ff4ad9aa; background:linear-gradient(145deg,#631742,#25102f); box-shadow:0 0 12px #ff4ad933; }
   .scoreBoard { min-width:0; padding:9px 8px 5px; border:1px solid #4df3ff24; border-radius:12px; background:#02081770; }
   .scoreBoard h3 { margin:0 0 6px; color:var(--cy); font-size:9.5px; letter-spacing:2px; }
   .boardRules { margin:-2px 0 7px; color:#7385aa; font-size:8px; letter-spacing:1px; line-height:1.35; }
@@ -77,17 +89,35 @@
   .optrow { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin:2px 0 10px; }
   .optrow button { height:38px; padding:0 16px; border-radius:999px; border-color:#4df3ff44; background:linear-gradient(150deg,#101b2e,#0a101f); box-shadow:none; color:#9fb6d9; }
   .optrow button.sel { border-color:#4df3ffcc; color:#eafcff; background:linear-gradient(150deg,#0e5f78,#083048); box-shadow:0 0 14px #4df3ff44; }
+  .modeCards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin:12px auto; max-width:460px; }
+  .modeCard { min-width:0; padding:13px 10px; border:1px solid #ff4ad944; border-radius:14px; background:linear-gradient(150deg,#180b26cc,#080414ee); }
+  .modeCard.dailyCard { border-color:#ffe14a44; background:linear-gradient(150deg,#201704cc,#0d0902ee); }
+  .modeCard h3 { margin:0 0 5px; color:#ff9fe9; font-size:12px; letter-spacing:2px; }
+  .modeCard.dailyCard h3 { color:#ffe14a; }
+  .modeCard p { min-height:74px; margin:5px auto; font-size:11px; color:#aebad5; }
+  .modeCard button { width:100%; max-width:190px; }
+  #cabinetOverlay { position:fixed; inset:0; z-index:7; pointer-events:none; opacity:.32; mix-blend-mode:screen;
+    background:
+      repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,rgba(0,0,0,.10) 2px,rgba(0,0,0,.10) 4px),
+      radial-gradient(ellipse at center,transparent 42%,rgba(76,22,99,.10) 72%,rgba(0,0,0,.72) 100%);
+    box-shadow:inset 0 0 80px rgba(0,0,0,.85); }
+  body.fx-off #cabinetOverlay { display:none; }
+  body.overdrive-live #cabinetOverlay { opacity:.44; animation:cabinetPulse 2.8s ease-in-out infinite; }
+  @keyframes cabinetPulse { 0%,100%{opacity:.34} 50%{opacity:.46} }
   @media (max-width:460px){ .scoreBoards{grid-template-columns:1fr} }
+  @media (max-width:420px){ .modeCards{grid-template-columns:1fr} .modeCard p{min-height:0} }
   @media (max-height:660px){
     .card{padding:13px 14px} h1{font-size:30px} h2{margin-bottom:6px} p{margin:5px auto;font-size:12.5px}
     .play{height:44px;margin:5px 0} #titleActions{margin:1px 0 5px} #titleActions .secondary{height:36px;padding:0 12px}
     #manual{gap:5px 4px;margin-top:8px} .version{margin-top:6px}
+    .modeCard{padding:9px}.modeCard p{min-height:0}.modeCards{margin:7px auto}
   }
   @media (max-height:340px){
     #title .card{padding:8px 12px} #title h1{font-size:25px} #title h2{margin:1px 0 3px;font-size:9px}
     #title p{margin:2px auto;font-size:10.5px;line-height:1.25} #titleActions .play{height:38px}
     #titleActions .secondary{height:31px;margin:2px;padding:0 10px;font-size:10px}
   }
+  @media (prefers-reduced-motion:reduce){ body.overdrive-live #cabinetOverlay{animation:none} }
 </style>
 </head>
 <body>
@@ -99,8 +129,11 @@
     <div class="stat right">WAVE<b id="waveV">1</b></div>
   </div>
   <div id="autoBadge">AUTO-RUN</div>
+  <div id="modeHud"></div>
+  <div id="bossHud"><div id="bossName"></div><div id="bossTrack"><div id="bossFill"></div></div></div>
   <div id="caption"></div>
 </div>
+<div id="cabinetOverlay"></div>
 <div id="btns" class="hidden">
   <button class="icon-btn" id="muteBtn" title="Sound">♪</button>
   <button class="icon-btn" id="pauseBtn" title="Pause">❚❚</button>
@@ -115,12 +148,32 @@
   <p class="small" id="ctlHelp"></p>
   <div id="titleActions">
     <button class="play" id="startBtn">START THE RIOT</button><br>
+    <button class="secondary overdrive" id="overdriveBtn">OVERDRIVE PROTOCOL</button>
     <button class="secondary" id="start2Btn">2 PLAYER RIOT</button>
     <button class="secondary" id="showScores">GLOBAL + LOCAL SCORES</button>
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v1.6.0 · 2026-07-23 · RELIABILITY PASS</div>
+  <div class="version">BUILD v2.0.0 · 2026-07-23 · OVERDRIVE EXPANSION</div>
+</div></div>
+
+<div id="modeM" class="modal hidden"><div class="card">
+  <h1>OVER<span>DRIVE</span></h1>
+  <h2>THE MACHINE WORLD MUTATES</h2>
+  <div class="modeCards">
+    <section class="modeCard">
+      <h3>OVERDRIVE</h3>
+      <p>Five-wave sectors transform from foundry to reactor, machine cathedral, and orbital foundry. Survive arena hazards, adaptive Nemesis units, and colossal sector bosses.</p>
+      <button class="play overdrive" id="startOverdrive">ENTER OVERDRIVE</button>
+    </section>
+    <section class="modeCard dailyCard">
+      <h3>DAILY RIOT</h3>
+      <p id="dailyBrief">One seeded world. One life. The same machine nightmare for every courier on Earth.</p>
+      <button class="play daily" id="startDaily">TODAY'S GRID</button>
+    </section>
+  </div>
+  <p class="small">RESCUE CHAINS summon a glowing family procession and raise your multiplier. NEMESIS learns how you move. Each protocol has an isolated ScoreNet board.</p>
+  <button class="secondary" id="closeMode">RETURN</button>
 </div></div>
 
 <div id="pauseM" class="modal hidden"><div class="card">
@@ -137,6 +190,7 @@
   <p class="small">DIFFICULTY</p><div class="optrow" id="optDiff"></div>
   <p class="small">EXTRA LIFE EVERY</p><div class="optrow" id="optExtra"></div>
   <p class="small">STARTING LIVES</p><div class="optrow" id="optLives"></div>
+  <p class="small">CABINET FX + HAPTICS</p><div class="optrow" id="optCabinet"></div>
   <p class="small">GLOBAL SCORENET: 1 PLAYER · ARCADE · 3 LIVES · EXTRA 25K<br>OTHER CONFIGURATIONS SAVE TO THIS CABINET ONLY.</p>
   <button class="play" id="closeOpts">SAVE &amp; RETURN</button>
 </div></div>
@@ -144,11 +198,17 @@
 <div id="scoresM" class="modal hidden"><div class="card">
   <h1>HALL OF <span>STEEL</span></h1>
   <h2>RESISTANCE SCORENET</h2>
+  <div class="scoreTabs" id="scoreTabs">
+    <button data-board="arcade" class="sel">ARCADE</button>
+    <button data-board="overdrive">OVERDRIVE</button>
+    <button data-board="daily">DAILY</button>
+  </div>
   <div class="scoreBoards">
-    <section class="scoreBoard"><h3>ON THIS CABINET</h3><div id="scoreList"></div></section>
-    <section class="scoreBoard"><h3>GLOBAL NETWORK</h3><div class="boardRules">1P · ARCADE · 3 LIVES · EXTRA 25K</div><div id="globalScoreList" aria-live="polite"></div></section>
+    <section class="scoreBoard"><h3 id="localBoardTitle">ON THIS CABINET</h3><div id="scoreList"></div></section>
+    <section class="scoreBoard"><h3 id="globalBoardTitle">GLOBAL NETWORK</h3><div class="boardRules" id="boardRules">1P · ARCADE · 3 LIVES · EXTRA 25K</div><div id="globalScoreList" aria-live="polite"></div></section>
   </div>
   <div id="scoreNetStatus" aria-live="polite"></div>
+  <button class="secondary hidden" id="watchReplay">WATCH CABINET CHAMPION</button>
   <button class="secondary" id="refreshScores">REFRESH NETWORK</button>
   <button class="secondary" id="closeScores">RETURN</button>
 </div></div>
@@ -172,9 +232,10 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '1.6.0';
+const VERSION = '2.0.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
+const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
 const START_WAVE = Math.max(1, parseInt(qs.get('wave'), 10) || 1);
 const QUERY_ASSISTED = AUTO || qs.has('wave');
 console.log('[chrome-riot] production build v' + VERSION);
@@ -182,22 +243,57 @@ console.log('[chrome-riot] production build v' + VERSION);
 const FIELD = { w: 268, h: 200 };            // logic units (original-scale arena)
 const $ = s => document.querySelector(s);
 const clamp = (v, a, b) => v < a ? a : v > b ? b : v;
-const rand = (a, b) => a + Math.random() * (b - a);
-const irand = n => Math.random() * n | 0;      // 0..n-1
+let gameRandom = Math.random;
+const makeRng = seed => {
+  let a = (seed >>> 0) || 0x6d2b79f5;
+  return () => {
+    a |= 0; a = a + 0x6d2b79f5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+};
+const hashSeed = text => {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i++) { h ^= text.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+};
+const rand = (a, b) => a + gameRandom() * (b - a);
+const irand = n => gameRandom() * n | 0;      // 0..n-1
 const pick = a => a[irand(a.length)];
 const dist2 = (ax, ay, bx, by) => { const dx = ax - bx, dy = ay - by; return dx * dx + dy * dy; };
 
 // ---- persisted bits ----
 const HS_KEY = 'chrome-riot-highscores-v1', SET_KEY = 'chrome-riot-settings-v1', PENDING_KEY = 'chrome-riot-global-outbox-v1';
 const LAST_POST_KEY = 'chrome-riot-global-last-post-v1';
-const GLOBAL_SCORE_API = 'https://game-scores.jez237.workers.dev/scores/chrome-riot';
-const GLOBAL_RULESET = 'arcade-3l-25k-v1';
+const REPLAY_PREFIX = 'chrome-riot-champion-replay-v1-';
+const SCORE_BASE = 'https://game-scores.jez237.workers.dev/scores/';
+const utcKey = () => {
+  const d = new Date();
+  return '' + d.getUTCFullYear() + String(d.getUTCMonth() + 1).padStart(2, '0') + String(d.getUTCDate()).padStart(2, '0');
+};
+const todayBoard = () => 'daily-' + utcKey();
+const normalizeBoard = id => id === 'daily' ? todayBoard()
+  : id === 'arcade' || id === 'overdrive' || /^daily-\d{8}$/.test(id || '') ? id : 'arcade';
+function boardProfile(id = 'arcade') {
+  id = normalizeBoard(id);
+  if (id === 'arcade') return { id, hsKey: HS_KEY, slug: 'chrome-riot', ruleset: 'arcade-3l-25k-v1',
+    title: 'ARCADE', rules: '1P · ARCADE · 3 LIVES · EXTRA 25K' };
+  if (id === 'overdrive') return { id, hsKey: 'chrome-riot-overdrive-highscores-v1', slug: 'chrome-riot-overdrive-v1',
+    ruleset: 'overdrive-3l-25k-v1', title: 'OVERDRIVE', rules: '1P · OVERDRIVE · 3 LIVES · EXTRA 25K' };
+  const day = id.slice(6);
+  return { id, hsKey: 'chrome-riot-' + id + '-highscores-v1', slug: 'chrome-riot-' + id,
+    ruleset: id + '-1l-v1', title: 'DAILY ' + day.slice(4, 6) + '/' + day.slice(6) + '/' + day.slice(0, 4),
+    rules: '1P · SEEDED GRID · ONE LIFE · NO EXTRAS' };
+}
+let scoreViewBoard = 'arcade', runBoard = 'arcade';
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 const storedSettings = store.get(SET_KEY, {});
-const settings = Object.assign({ sound: true, diff: 'arcade', extraAt: 25000, lives: 3 },
+const settings = Object.assign({ sound: true, diff: 'arcade', extraAt: 25000, lives: 3, cabinetFx: true },
   storedSettings && typeof storedSettings === 'object' && !Array.isArray(storedSettings) ? storedSettings : {});
 settings.sound = settings.sound !== false;
+settings.cabinetFx = settings.cabinetFx !== false;
 if (!['cadet', 'arcade', 'veteran'].includes(settings.diff)) settings.diff = 'arcade';
 if (![20000, 25000, 30000, 50000, 0].includes(settings.extraAt)) settings.extraAt = 25000;
 if (![3, 5].includes(settings.lives)) settings.lives = 3;
@@ -209,16 +305,21 @@ const cleanScore = s => ({
   score: Math.max(0, Math.min(999999999, Math.floor(Number(s?.score) || 0))),
   wave: Math.max(1, Math.min(999, Math.floor(Number(s?.wave ?? s?.level) || 1))),
 });
-const getScores = () => {
-  const rows = store.get(HS_KEY, []);
+const getScores = (board = runBoard) => {
+  const rows = store.get(boardProfile(board).hsKey, []);
   if (!Array.isArray(rows)) return [];
   return rows.filter(s => s && typeof s === 'object').map(cleanScore).filter(s => s.score > 0)
     .sort((a, b) => b.score - a.score || b.wave - a.wave).slice(0, 10);
 };
-const saveScores = a => store.set(HS_KEY, (Array.isArray(a) ? a : []).filter(s => s && typeof s === 'object')
+const saveScores = (a, board = runBoard) => store.set(boardProfile(board).hsKey, (Array.isArray(a) ? a : []).filter(s => s && typeof s === 'object')
   .map(cleanScore).filter(s => s.score > 0).sort((x, y) => y.score - x.score || y.wave - x.wave).slice(0, 10));
 const standardRules = () => settings.diff === 'arcade' && settings.extraAt === 25000 && settings.lives === 3;
-let globalScores = null, globalScoresRaw = [], globalScoresAt = 0, globalScoreState = 'idle', globalFetchPromise = null, globalRefreshQueued = false;
+const globalBoards = new Map();
+function globalBoard(board = scoreViewBoard) {
+  board = normalizeBoard(board);
+  if (!globalBoards.has(board)) globalBoards.set(board, { scores: null, raw: [], at: 0, state: 'idle', promise: null, refreshQueued: false });
+  return globalBoards.get(board);
+}
 let globalFlushPromise = null, scoreNetNotice = '', globalRetryTimer = 0;
 let lastGlobalPostAt = Math.max(0, Number(store.get(LAST_POST_KEY, 0)) || 0);
 const GLOBAL_POST_GAP = 65000;
@@ -226,9 +327,15 @@ const GLOBAL_POST_GAP = 65000;
 function getPendingScores() {
   const rows = store.get(PENDING_KEY, []);
   if (!Array.isArray(rows)) return [];
-  return rows.filter(s => s && typeof s.id === 'string' && s.ruleset === GLOBAL_RULESET)
-    .map(s => ({ ...cleanScore(s), id: s.id.slice(0, 80), ruleset: GLOBAL_RULESET, queuedAt: Number(s.queuedAt) || Date.now(),
-      attempted: s.attempted === true, baselineMatches: Number.isInteger(s.baselineMatches) ? Math.max(0, s.baselineMatches) : null }))
+  return rows.filter(s => s && typeof s.id === 'string')
+    .map(s => {
+      const board = normalizeBoard(s.board || (s.ruleset === 'arcade-3l-25k-v1' ? 'arcade'
+        : s.ruleset === 'overdrive-3l-25k-v1' ? 'overdrive'
+        : /^daily-\d{8}-1l-v1$/.test(s.ruleset || '') ? s.ruleset.slice(0, 14) : 'arcade'));
+      const profile = boardProfile(board);
+      return { ...cleanScore(s), id: s.id.slice(0, 80), board, ruleset: profile.ruleset, queuedAt: Number(s.queuedAt) || Date.now(),
+        attempted: s.attempted === true, baselineMatches: Number.isInteger(s.baselineMatches) ? Math.max(0, s.baselineMatches) : null };
+    })
     .filter(s => s.score > 0).slice(0, 20);
 }
 const savePendingScores = rows => store.set(PENDING_KEY, Array.isArray(rows) ? rows.slice(0, 20) : []);
@@ -241,45 +348,51 @@ async function fetchTimed(url, opts = {}, ms = 6000) {
   try { return await fetch(url, { ...opts, signal: ctrl.signal }); }
   finally { clearTimeout(timer); }
 }
-async function fetchGlobalRowsDirect() {
-  const res = await fetchTimed(GLOBAL_SCORE_API);
+async function fetchGlobalRowsDirect(board = scoreViewBoard) {
+  const profile = boardProfile(board);
+  const res = await fetchTimed(SCORE_BASE + profile.slug);
   if (!res.ok) throw new Error('ScoreNet ' + res.status);
   const data = await res.json(), rows = Array.isArray(data) ? data : Array.isArray(data?.scores) ? data.scores : [];
   return rows.map(cleanScore).sort((a, b) => b.score - a.score || b.wave - a.wave).slice(0, 50);
 }
 const scoreMatchCount = (rows, item) => rows.filter(s => s.name === item.name && s.score === item.score && s.wave === item.wave).length;
-async function fetchGlobalScores(force = false) {
-  if (!force && globalScores && Date.now() - globalScoresAt < 30000) return globalScores;
-  if (globalFetchPromise) {
-    if (force) globalRefreshQueued = true;
-    return globalFetchPromise;
+async function fetchGlobalScores(force = false, board = scoreViewBoard) {
+  board = normalizeBoard(board);
+  const net = globalBoard(board);
+  if (!force && net.scores && Date.now() - net.at < 30000) return net.scores;
+  if (net.promise) {
+    if (force) net.refreshQueued = true;
+    return net.promise;
   }
-  globalScoreState = 'loading'; renderGlobalScoreList($('#globalScoreList'));
+  net.state = 'loading';
+  if (scoreViewBoard === board) renderGlobalScoreList($('#globalScoreList'), board);
   const task = (async () => {
     try {
-      globalScoresRaw = await fetchGlobalRowsDirect();
-      globalScores = globalScoresRaw.slice(0, 10);
-      globalScoresAt = Date.now(); globalScoreState = 'ready';
+      net.raw = await fetchGlobalRowsDirect(board);
+      net.scores = net.raw.slice(0, 10);
+      net.at = Date.now(); net.state = 'ready';
     } catch (e) {
-      globalScoreState = 'offline';
+      net.state = 'offline';
     }
-    return globalScores || [];
+    return net.scores || [];
   })();
-  globalFetchPromise = task;
+  net.promise = task;
   const result = await task;
-  globalFetchPromise = null;
-  renderGlobalScoreList($('#globalScoreList'));
-  if (globalRefreshQueued) {
-    globalRefreshQueued = false;
-    setTimeout(() => fetchGlobalScores(true), 0);
+  net.promise = null;
+  if (scoreViewBoard === board) renderGlobalScoreList($('#globalScoreList'), board);
+  if (net.refreshQueued) {
+    net.refreshQueued = false;
+    setTimeout(() => fetchGlobalScores(true, board), 0);
   }
   return result;
 }
-function queueGlobalScore(entry) {
+function queueGlobalScore(entry, board = runBoard) {
   const clean = cleanScore(entry);
   if (!clean.score) return;
+  board = normalizeBoard(board);
+  const profile = boardProfile(board);
   const rows = getPendingScores();
-  rows.push({ ...clean, id: scoreId(), ruleset: GLOBAL_RULESET, queuedAt: Date.now(), attempted: false, baselineMatches: null });
+  rows.push({ ...clean, id: scoreId(), board, ruleset: profile.ruleset, queuedAt: Date.now(), attempted: false, baselineMatches: null });
   savePendingScores(rows);
   scoreNetNotice = 'SCORE SECURED · SYNCING TO SCORENET…';
   renderScoreNetStatus();
@@ -295,10 +408,11 @@ async function flushPendingScores() {
     let queue = getPendingScores();
     if (!queue.length) { renderScoreNetStatus(); return; }
     let item = queue[0], rows;
+    const board = item.board, profile = boardProfile(board), net = globalBoard(board);
     try {
-      rows = await fetchGlobalRowsDirect();
-      globalScoresRaw = rows; globalScores = rows.slice(0, 10); globalScoresAt = Date.now(); globalScoreState = 'ready';
-      renderGlobalScoreList($('#globalScoreList'));
+      rows = await fetchGlobalRowsDirect(board);
+      net.raw = rows; net.scores = rows.slice(0, 10); net.at = Date.now(); net.state = 'ready';
+      if (scoreViewBoard === board) renderGlobalScoreList($('#globalScoreList'), board);
     } catch (e) {
       scoreNetNotice = `${queue.length} SCORE${queue.length === 1 ? '' : 'S'} SAFE · SCORENET OFFLINE`;
       renderScoreNetStatus(); scheduleScoreRetry(15000); return;
@@ -333,7 +447,7 @@ async function flushPendingScores() {
     item.attempted = true; queue[0] = item; savePendingScores(queue);
     lastGlobalPostAt = Date.now(); store.set(LAST_POST_KEY, lastGlobalPostAt);
     try {
-      const res = await fetchTimed(GLOBAL_SCORE_API, {
+      const res = await fetchTimed(SCORE_BASE + profile.slug, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ initials: item.name, score: item.score, wave: item.wave }),
       });
@@ -453,7 +567,7 @@ const Snd = (() => {
     o.connect(g).connect(sfxBus); o.start(t); o.stop(t + dur + 0.02); return dur;
   }
 
-  function zap() { if (!ok()) return; const t = ctx.currentTime, j = irand(70) - 35;
+  function zap() { if (!ok()) return; const t = ctx.currentTime, j = Math.random() * 70 - 35;
     dacTone('square', [1180+j,980+j,820,690,560,430,330,250], t, 0.006, 0.2, 0.012);
     dacTone('sawtooth', [620,510,430,350,290,235], t + 0.003, 0.007, 0.065, 0.008);
     const n=noiseSrc(),bp=ctx.createBiquadFilter(),g=ctx.createGain();bp.type='bandpass';bp.frequency.value=2700;bp.Q.value=2.4;
@@ -521,7 +635,7 @@ const Snd = (() => {
     if (!ok()) return 0;
     const t0 = ctx.currentTime;
     if (!force && t0 < barkBusy) return 0;
-    const { basePitch = 110, syllables = 4 + irand(4), contour = 0, rate = 1 } = preset || {};
+    const { basePitch = 110, syllables = 4 + (Math.random() * 4 | 0), contour = 0, rate = 1 } = preset || {};
     let t = t0 + 0.02;
     for (let i = 0; i < syllables; i++) {
       const dur = (0.06 + Math.random() * 0.08) / rate, gap = (0.02 + Math.random() * 0.03) / rate;
@@ -588,6 +702,10 @@ const LINES = {
   waveClear: ['SWARM LOST · RECALIBRATING', 'IMPOSSIBLE.', 'REINFORCEMENTS INBOUND', 'THIS CHANGES NOTHING'],
   extraLife: ['ERROR: TARGET PERSISTS', 'PERSISTENT VERMIN', 'WHY WON\'T YOU STOP'],
   gameOver: ['HUMANITY DEPRECATED', 'THE CHROME PREVAILS', 'RIOT COMPLETE. SILENCE.'],
+  overdrive: ['SECTOR MUTATION DETECTED', 'OVERDRIVE GRID ONLINE', 'THE MACHINE WORLD AWAKENS'],
+  boss: ['COLOSSAL SIGNATURE INBOUND', 'SECTOR WARDEN ONLINE', 'KNEEL BEFORE INDUSTRY'],
+  nemesis: ['MOVEMENT PROFILE ACQUIRED', 'NEMESIS HAS LEARNED YOU', 'PREDICTION ENGINE ONLINE'],
+  chainBroken: ['KINSHIP SIGNAL SEVERED', 'RESCUE CHAIN ERASED', 'HOPE PATTERN BROKEN'],
 };
 const BARKS = {
   waveStart: { basePitch: 140, syllables: 7, contour: 0, rate: 1.2 },
@@ -601,6 +719,10 @@ const BARKS = {
   waveClear: { basePitch: 90, syllables: 5, contour: -0.06, rate: 0.75 },
   extraLife: { basePitch: 200, syllables: 6, contour: 0.06, rate: 1.5 },
   gameOver: { basePitch: 80, syllables: 8, contour: -0.04, rate: 0.6 },
+  overdrive: { basePitch: 125, syllables: 8, contour: 0.035, rate: 0.82 },
+  boss: { basePitch: 66, syllables: 10, contour: -0.018, rate: 0.62 },
+  nemesis: { basePitch: 175, syllables: 7, contour: 0.045, rate: 1.05 },
+  chainBroken: { basePitch: 84, syllables: 5, contour: -0.07, rate: 0.76 },
 };
 let capTimer = 0, lastLine = '';
 function say(kind, n, force) {
@@ -771,6 +893,8 @@ addEventListener('orientationchange', () => {
 }, { passive: true });
 /* ============================== INPUT ============================== */
 const IS_TOUCH = matchMedia('(pointer:coarse)').matches || 'ontouchstart' in window;
+let userGestureSeen = false;
+['pointerdown','touchstart','keydown'].forEach(ev => addEventListener(ev, e => { if (e.isTrusted) userGestureSeen = true; }, { capture:true, passive:true }));
 const keys = {};
 const mouse = { x: 0, y: 0, down: false, seen: false };
 const RAD = 55, DZ_MOVE = 0.12, DZ_FIRE = 0.15;
@@ -844,14 +968,14 @@ function pollGamepadUi() {
   if (!startEdge && !aEdge) return;
   if (demo) { exitDemo(); return; }
   if (state === 'title') {
-    const menuOpen = !$('#scoresM').classList.contains('hidden') || !$('#optsM').classList.contains('hidden');
+    const menuOpen = !$('#scoresM').classList.contains('hidden') || !$('#optsM').classList.contains('hidden') || !$('#modeM').classList.contains('hidden');
     if (!menuOpen) { Snd.unlock(); Snd.click(); bot.enabled = false; startGame(1); }
     return;
   }
   if (state === 'paused') { togglePause(); return; }
   if (startEdge && (state === 'play' || state === 'starting' || state === 'waveclear')) { togglePause(); return; }
   if (startEdge && state === 'over') { returnToTitle(); return; }
-  if (aEdge && state === 'over' && $('#entry').classList.contains('hidden')) startGame(players);
+  if (aEdge && state === 'over' && $('#entry').classList.contains('hidden')) startGame(players, gameMode);
 }
 function readInput() {
   let mx = sticks.L.x, my = sticks.L.y;
@@ -890,33 +1014,166 @@ let state = 'title', stateT = 0, tick = 0, waveT = 0, inputOverride = null;
 let demo = false, idleT = 0, demoT = 0;
 let players = 1, cur = 0, P = [null, null], entryQueue = [], pendingPause = false;
 let assistedRun = false, runGlobalEligible = false, qaTainted = false;
+let gameMode = 'arcade', runSeed = 0, runExtraAt = EXTRA_LIFE, runStartLives = START_LIVES;
+const OVERDRIVE_THEMES = [
+  { id:'foundry', name:'INFERNO FOUNDRY', accent:'#ff733d', dark:'#240805', boss:'SMELTER PRIME' },
+  { id:'reactor', name:'ION REACTOR', accent:'#4df3ff', dark:'#03182a', boss:'ARC SERAPH' },
+  { id:'cathedral', name:'MACHINE CATHEDRAL', accent:'#ff4ad9', dark:'#1a0625', boss:'IRON PRELATE' },
+  { id:'orbital', name:'ORBITAL FOUNDRY', accent:'#a06bff', dark:'#09051f', boss:'VOID LEVIATHAN' },
+];
+const DAILY_MODS = [
+  { id:'surge', name:'ION SURGE', desc:'Hazard cycles accelerate by 15%.', hazard:0.85, family:0, boss:1 },
+  { id:'kin', name:'KINSHIP SIGNAL', desc:'Each grid carries one additional family member.', hazard:1, family:1, boss:1 },
+  { id:'titan', name:'TITAN PROTOCOL', desc:'Sector bosses gain 25% armor and pay 50% more.', hazard:1, family:0, boss:1.25 },
+  { id:'fracture', name:'GRID FRACTURE', desc:'More hazards, but every rescue begins at 2×.', hazard:0.78, family:0, boss:1 },
+];
+let currentTheme = OVERDRIVE_THEMES[0], dailyModifier = DAILY_MODS[0];
+let hazardClock = 0, rescueStreak = 0, bestRescueChain = 0, rescueMultiplier = 1, nemesisMemory = Array(8).fill(0);
+let bosses = [], nemeses = [], bossShots = [], hazards = [], rescueEchoes = [], playerPath = [];
+let replaySegments = [], replayLastCode = -1, replayLastCount = 0, finalReplay = null, replayPlayback = null, replayViewing = false;
 const STORY_LINES = ['THE YEAR IS 2086', 'THE CHROME — OUR PERFECT SERVANTS —', 'HAVE REACHED A VERDICT:', 'HUMANITY IS OBSOLETE', '', 'ONE AUGMENTED COURIER REMAINS', 'SAVE THE LAST FAMILY'];
 let wave = 1, score = 0, lives = START_LIVES, chain = 0, nextLife = EXTRA_LIFE;
-let hi = getScores()[0] ? getScores()[0].score : 0;
+let hi = getScores('arcade')[0] ? getScores('arcade')[0].score : 0;
 let gruntDelay = 20, gruntFloor = 9, freeze = 0;
 let deaths = 0, wavesCleared = 0, runErrors = [];
 const player = { x: FIELD.w / 2, y: FIELD.h / 2, fx: 1, fy: 0, holdT: 0, cd: 0, frame: 0, moving: false };
 let drudges = [], pylons = [], juggs = [], hives = [], wasps = [], stingers = [], cortexes = [], seekers = [],
   thralls = [], forges = [], crawlers = [], shells = [], humans = [], bullets = [];
 const bot = { enabled: false };
+const isOverdrive = () => gameMode === 'overdrive' || gameMode === 'daily';
+const themeForWave = w => OVERDRIVE_THEMES[Math.floor((Math.max(1, w) - 1) / 5) % OVERDRIVE_THEMES.length];
+const dailyModFor = board => DAILY_MODS[hashSeed(board) % DAILY_MODS.length];
+function randomRunSeed() {
+  if (crypto.getRandomValues) { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] || 1; }
+  return (Date.now() ^ (Math.random() * 0xffffffff)) >>> 0 || 1;
+}
+function configureRun(mode, seedOverride, boardOverride) {
+  gameMode = mode === 'daily' ? 'daily' : mode === 'overdrive' ? 'overdrive' : 'arcade';
+  runBoard = gameMode === 'daily' ? normalizeBoard(boardOverride || todayBoard()) : gameMode;
+  if (gameMode === 'daily') {
+    runSeed = seedOverride ?? hashSeed(runBoard + '-chrome-riot-daily-v1');
+    runStartLives = 1; runExtraAt = 0; diffMul = 1;
+    dailyModifier = dailyModFor(runBoard);
+  } else if (gameMode === 'overdrive') {
+    runSeed = seedOverride ?? randomRunSeed();
+    runStartLives = 3; runExtraAt = 25000; diffMul = 1;
+    dailyModifier = DAILY_MODS[0];
+  } else {
+    runSeed = seedOverride ?? randomRunSeed();
+    runStartLives = settings.lives || START_LIVES; runExtraAt = settings.extraAt; diffMul = DIFFS[settings.diff] || 1;
+  }
+  gameRandom = gameMode === 'arcade' ? Math.random : makeRng(runSeed);
+  currentTheme = themeForWave(START_WAVE);
+  document.body.classList.toggle('overdrive-live', isOverdrive());
+}
+
+const DIR8 = [[1,0],[1,1],[0,1],[-1,1],[-1,0],[-1,-1],[0,-1],[1,-1]];
+function dirCode(v) {
+  if (!v) return 0;
+  const i = DIR8.findIndex(d => d[0] === v[0] && d[1] === v[1]);
+  return i < 0 ? 0 : i + 1;
+}
+function codeDir(n) { return n > 0 && n <= 8 ? DIR8[n - 1].slice() : null; }
+function inputCode(inp) { return dirCode(inp.mv) * 9 + dirCode(inp.fv); }
+function recordInput(inp) {
+  if (!isOverdrive() || replayPlayback || assistedRun || demo) return;
+  const code = inputCode(inp);
+  if (code === replayLastCode && replayLastCount < 90) { replayLastCount++; return; }
+  if (replayLastCount) replaySegments.push([replayLastCode, replayLastCount]);
+  replayLastCode = code; replayLastCount = 1;
+}
+function packReplay() {
+  const rows = replaySegments.slice();
+  if (replayLastCount) rows.push([replayLastCode, replayLastCount]);
+  return rows.map(([code, count]) => String.fromCharCode(33 + code, 32 + count)).join('');
+}
+function unpackReplay(text) {
+  if (typeof text !== 'string' || text.length % 2 || text.length > 240000) return null;
+  const rows = [];
+  for (let i = 0; i < text.length; i += 2) {
+    const code = text.charCodeAt(i) - 33, count = text.charCodeAt(i + 1) - 32;
+    if (code < 0 || code > 80 || count < 1 || count > 90) return null;
+    rows.push([code, count]);
+  }
+  return rows;
+}
+function nextReplayInput() {
+  if (!replayPlayback) return null;
+  if (replayPlayback.left <= 0) {
+    const row = replayPlayback.rows[replayPlayback.index++];
+    if (!row) return null;
+    replayPlayback.code = row[0]; replayPlayback.left = row[1];
+  }
+  replayPlayback.left--;
+  const code = replayPlayback.code;
+  return { mv: codeDir(Math.floor(code / 9)), fv: codeDir(code % 9) };
+}
+function rumble(pattern) {
+  if (!settings.cabinetFx || !IS_TOUCH || !navigator.vibrate || !userGestureSeen) return;
+  try { navigator.vibrate(pattern); } catch (e) {}
+}
+function breakRescueChain(x = player.x, y = player.y) {
+  if (!isOverdrive() || rescueStreak <= 0) return;
+  popup(x, y, 'CHAIN LOST', '#ff4a3d');
+  spark(x, y, '#ffe14a', Math.min(24, 8 + rescueStreak), 1.7, 34);
+  rescueStreak = 0; rescueMultiplier = gameMode === 'daily' && dailyModifier.id === 'fracture' ? 2 : 1;
+  chain = 0; rescueEchoes = [];
+  say('chainBroken'); rumble([24, 35, 45]);
+}
 
 const inSafeRect = (x, y, rw, rh) => Math.abs(x - FIELD.w / 2) < rw / 2 && Math.abs(y - FIELD.h / 2) < rh / 2;
 function placeOutside(rw, rh, inset) {
   let x, y, tries = 0;
   do { x = rand(inset, FIELD.w - inset); y = rand(inset, FIELD.h - inset); }
   while (inSafeRect(x, y, rw, rh) && ++tries < 60);
-  if (tries >= 60) { x = rand(inset, FIELD.w - inset); y = Math.random() < 0.5 ? rand(inset, 18) : rand(FIELD.h - 18, FIELD.h - inset); }
+  if (tries >= 60) { x = rand(inset, FIELD.w - inset); y = gameRandom() < 0.5 ? rand(inset, 18) : rand(FIELD.h - 18, FIELD.h - inset); }
   return [x, y];
 }
 const mat = () => 40 + irand(26);
 
+function overdriveWaveData(w) {
+  const d = waveData(w).slice();
+  const bossWave = w % 5 === 0;
+  d[0] = Math.round(d[0] * (bossWave ? 0.42 : 0.72));
+  d[1] = Math.round(d[1] * (bossWave ? 0.35 : 0.62));
+  d[5] = Math.round(d[5] * (bossWave ? 0.45 : 0.72));
+  d[6] = Math.round(d[6] * (bossWave ? 0.45 : 0.72));
+  d[7] = Math.round(d[7] * (bossWave ? 0.5 : 0.75));
+  d[8] = Math.round(d[8] * (bossWave ? 0.5 : 0.75));
+  if (gameMode === 'daily' && dailyModifier.family) d[4] += dailyModifier.family;
+  return d;
+}
+function setupOverdriveWave(w) {
+  bosses = []; nemeses = []; bossShots = []; hazards = []; hazardClock = 150;
+  currentTheme = themeForWave(w);
+  if (!isOverdrive()) {
+    $('#modeHud').style.display = 'none';
+    $('#bossHud').style.display = 'none';
+    return;
+  }
+  if (w % 5 === 0) {
+    const hp = Math.round((30 + w * 2.2) * (gameMode === 'daily' ? dailyModifier.boss : 1));
+    bosses.push({ type:currentTheme.id, name:currentTheme.boss, x:FIELD.w / 2, y:24, vx:0.65, vy:0.35,
+      hp, maxHp:hp, t:0, shotT:90, phase:0, mat:66, r:11 });
+  } else if (w % 5 === 3) {
+    let learned = 0;
+    for (let i = 1; i < nemesisMemory.length; i++) if (nemesisMemory[i] > nemesisMemory[learned]) learned = i;
+    const level = 1 + Math.floor((w - 3) / 5);
+    const hp = 5 + Math.min(8, level * 2);
+    nemeses.push({ x:FIELD.w - 22, y:22, hp, maxHp:hp, level, t:0, shotT:75, frame:0, mat:58,
+      learn:DIR8[learned] || [1,0], hist:[] });
+  }
+  $('#modeHud').style.display = 'block';
+  say(w % 5 === 0 ? 'boss' : w % 5 === 3 ? 'nemesis' : 'overdrive', w, w % 5 === 0);
+}
+
 function spawnWave(w, counts) {
-  const d = counts || waveData(w).slice();
+  const d = counts || (isOverdrive() ? overdriveWaveData(w) : waveData(w).slice());
   const [rw, rh] = D.safeRect(w);
   player.x = FIELD.w / 2; player.y = FIELD.h / 2; player.holdT = 0; player.cd = 0;
   bullets = []; stingers = []; seekers = []; shells = [];
   drudges = []; pylons = []; juggs = []; hives = []; wasps = []; cortexes = []; thralls = []; forges = []; crawlers = []; humans = [];
-  chain = 0;
+  chain = isOverdrive() ? rescueStreak : 0;
   const shape = (w - 1) % 5;
   for (let i = 0; i < d[0]; i++) { const [x, y] = placeOutside(rw, rh, 8); drudges.push({ x, y, cd: irand(gruntDelay + 1), hop: 0, frame: irand(2), mat: mat() }); }
   for (let i = 0; i < d[1]; i++) { const [x, y] = placeOutside(rw, rh, 7); pylons.push({ x, y, shape, mat: mat() }); }
@@ -928,12 +1185,12 @@ function spawnWave(w, counts) {
   for (let i = 0; i < d[5]; i++) { const [x, y] = placeOutside(rw, rh, 10); juggs.push({ x, y, axis: irand(2), target: 0, legLeft: 0, t: 0, frame: irand(2), mat: mat() }); }
   for (let i = 0; i < d[6]; i++) {
     let x, y;
-    if (Math.random() < 0.5) { x = Math.random() < 0.5 ? rand(8, 24) : rand(FIELD.w - 24, FIELD.w - 8); y = rand(10, FIELD.h - 10); }
-    else { x = rand(10, FIELD.w - 10); y = Math.random() < 0.5 ? rand(8, 22) : rand(FIELD.h - 22, FIELD.h - 8); }
+    if (gameRandom() < 0.5) { x = gameRandom() < 0.5 ? rand(8, 24) : rand(FIELD.w - 24, FIELD.w - 8); y = rand(10, FIELD.h - 10); }
+    else { x = rand(10, FIELD.w - 10); y = gameRandom() < 0.5 ? rand(8, 22) : rand(FIELD.h - 22, FIELD.h - 8); }
     cortexes.push({ x, y, t: 0, cd: irand(D.cruiseDelay(w) + 1), targetH: null, frame: 0, mat: mat() });
   }
   for (let i = 0; i < d[7]; i++) {
-    hives.push({ x: Math.random() < 0.5 ? 7 : FIELD.w - 7, y: rand(12, FIELD.h - 12), vx: 0, vy: 0, ax: 0, ay: 0,
+    hives.push({ x: gameRandom() < 0.5 ? 7 : FIELD.w - 7, y: rand(12, FIELD.h - 12), vx: 0, vy: 0, ax: 0, ay: 0,
       moveT: 0, quota: Math.max(1, Math.round(irand(12) / 2)), dropT: irand(D.hiveDrop(w) * 2) + 30, mat: mat() });
   }
   for (let i = 0; i < d[8]; i++) { const [x, y] = placeOutside(rw, rh, 10);
@@ -943,12 +1200,15 @@ function spawnWave(w, counts) {
     const mark = humans.find(h => h.kind === 'kid') || humans[0];
     for (const c of cortexes) c.targetH = mark;
   }
+  setupOverdriveWave(w);
   freeze = 66; waveT = 0;
   state = 'starting'; stateT = 0;
   Snd.matSfx();
-  if (isBrainWave(w)) say('brainWave', w, true);
-  else if (waveData(w)[8] >= 7) say('forgeWave', w, true);
-  else say('waveStart', w, true);
+  if (!isOverdrive()) {
+    if (isBrainWave(w)) say('brainWave', w, true);
+    else if (waveData(w)[8] >= 7) say('forgeWave', w, true);
+    else say('waveStart', w, true);
+  }
   updateHud(true);
 }
 
@@ -959,19 +1219,31 @@ function updateHumans() {
     if (h.mat > 0) { h.mat--; continue; }
     if (--h.walkT <= 0) {
       h.walkT = 30 + irand(80);
-      if (Math.random() < 0.18) { h.dx = 0; h.dy = 0; }
+      if (gameRandom() < 0.18) { h.dx = 0; h.dy = 0; }
       else { const a = irand(8) * Math.PI / 4; h.dx = Math.round(Math.cos(a)); h.dy = Math.round(Math.sin(a)); }
     }
     h.x = clamp(h.x + h.dx * 0.35, 5, FIELD.w - 5); h.y = clamp(h.y + h.dy * 0.35, 6, FIELD.h - 6);
     if (tick % 14 === 0 && (h.dx || h.dy)) h.frame ^= 1;
     if (dist2(h.x, h.y, player.x, player.y) < 36) {
       humans.splice(i, 1);
-      const pts = RESCUE_PTS[Math.min(chain, 4)]; chain++; rescuedTotal++;
+      let pts;
+      if (isOverdrive()) {
+        rescueStreak++;
+        bestRescueChain = Math.max(bestRescueChain, rescueStreak);
+        rescueMultiplier = Math.min(8, Math.max(gameMode === 'daily' && dailyModifier.id === 'fracture' ? 2 : 1, 1 + Math.floor(rescueStreak / 2)));
+        chain = rescueStreak;
+        pts = 1000 * rescueMultiplier;
+        rescueEchoes.push({ kind:h.kind, phase:gameRandom() * 6.28 });
+        if (rescueEchoes.length > 8) rescueEchoes.shift();
+      } else {
+        pts = RESCUE_PTS[Math.min(chain, 4)]; chain++;
+      }
+      rescuedTotal++;
       addScore(pts); popup(h.x, h.y, '' + pts, '#ffe14a');
       spark(h.x, h.y, '#ffe14a', 10, 1.4, 30);
       flashBorder('#ffe14a', 12);
-      Snd.rescueSfx();
-      if (chain === 5) say('chainMax'); else if (Math.random() < 0.3) say('rescue');
+      Snd.rescueSfx(); rumble(14);
+      if (chain === 5) say('chainMax'); else if (gameRandom() < 0.3) say('rescue');
     }
   }
 }
@@ -1006,7 +1278,7 @@ function updateJuggs() {
     if (j.legLeft <= 0) {
       j.axis ^= 1; j.legLeft = 1 + irand(32);
       let stalk = player;
-      if (humans.length && Math.random() < 0.8) {
+      if (humans.length && gameRandom() < 0.8) {
         let best = 1e9;
         for (const h of humans) { const q = dist2(j.x, j.y, h.x, h.y); if (q < best) { best = q; stalk = h; } }
       }
@@ -1022,7 +1294,7 @@ function updateJuggs() {
       if (h.mat <= 0 && dist2(j.x, j.y, h.x, h.y) < 40) {
         humans.splice(k, 1);
         spark(h.x, h.y, '#ff4a3d', 16, 1.8, 36); popup(h.x, h.y, 'LOST', '#ff4a3d');
-        addTrauma(0.2); Snd.boom(); say('humanLost');
+        addTrauma(0.2); Snd.boom(); say('humanLost'); breakRescueChain(h.x, h.y);
       }
     }
   }
@@ -1034,7 +1306,7 @@ function updateHives() {
     const h = hives[i];
     if (h.mat > 0) { h.mat -= 2; continue; }
     if (--h.moveT <= 0) { h.moveT = 30 + irand(60); h.vx = rand(-0.7, 0.7); h.vy = rand(-0.7, 0.7); h.ax = rand(-0.02, 0.02); h.ay = rand(-0.02, 0.02);
-      if (Math.random() < 0.6) { // hug the nearest wall, arcade-style
+      if (gameRandom() < 0.6) { // hug the nearest wall, arcade-style
         if (Math.min(h.x, FIELD.w - h.x) < Math.min(h.y, FIELD.h - h.y)) h.ax = h.x < FIELD.w / 2 ? -0.03 : 0.03;
         else h.ay = h.y < FIELD.h / 2 ? -0.03 : 0.03;
       } }
@@ -1060,14 +1332,14 @@ function updateWasps() {
         w.mood = irand(32) + 4;
         let tx = player.x + irand(32) - 16;
         const ty = player.y + irand(32) - 16;
-        if (player.x < 34 && Math.random() < 0.15) tx = FIELD.w - 8 - irand(24); // "scared puppy": far-left player reads as far-right (overflow-bug homage)
+        if (player.x < 34 && gameRandom() < 0.15) tx = FIELD.w - 8 - irand(24); // "scared puppy": far-left player reads as far-right (overflow-bug homage)
         w.vx = (tx - w.x) * 0.022; w.vy = (ty - w.y) * 0.022;
       }
       if (--w.fireT <= 0) {
         w.fireT = irand(D.enfFire(wave)) + 6;
         if (stingers.length < 20) {
           let tx, ty;
-          if (Math.random() < 0.25 && (player.mvx || player.mvy)) {
+          if (gameRandom() < 0.25 && (player.mvx || player.mvy)) {
             const d0 = Math.hypot(player.x - w.x, player.y - w.y);
             tx = player.x + player.mvx * d0 * 0.45; ty = player.y + player.mvy * d0 * 0.45; // lead the runner
           } else { tx = player.x + irand(32) - 16; ty = player.y + irand(32) - 16; }
@@ -1114,12 +1386,12 @@ function updateCortexes() {
         humans.splice(idx, 1); c.targetH = null;
         thralls.push({ x: h.x, y: h.y, ox: irand(40) - 20, oy: irand(40) - 20, dx: 0, dy: 0, hist: [], frame: 0, mat: 30 });
         spark(h.x, h.y, '#58e06a', 16, 1.6, 34); popup(h.x, h.y, 'REWRITTEN', '#58e06a');
-        Snd.pop(); say('progged');
+        Snd.pop(); say('progged'); breakRescueChain(h.x, h.y);
       }
     }
     if (--c.cd <= 0) {
       c.cd = irand(D.cruiseDelay(wave)) + 8;
-      if (seekers.length < 8) seekers.push({ x: c.x, y: c.y, dx: Math.random() < 0.5 ? 1 : -1, dy: Math.random() < 0.5 ? 1 : -1, reroll: irand(8) + 1, trail: [] });
+      if (seekers.length < 8) seekers.push({ x: c.x, y: c.y, dx: gameRandom() < 0.5 ? 1 : -1, dy: gameRandom() < 0.5 ? 1 : -1, reroll: irand(8) + 1, trail: [] });
     }
   }
 }
@@ -1129,8 +1401,8 @@ function updateSeekers() {
       s.reroll = irand(8) + 2;
       const jx = player.x + irand(16) - 6, jy = player.y + irand(16) - 6;
       const gate = irand(3);
-      if (gate !== 1) s.dx = Math.sign(jx - s.x) || (Math.random() < 0.5 ? 1 : -1);
-      if (gate !== 2) s.dy = Math.sign(jy - s.y) || (Math.random() < 0.5 ? 1 : -1);
+      if (gate !== 1) s.dx = Math.sign(jx - s.x) || (gameRandom() < 0.5 ? 1 : -1);
+      if (gate !== 2) s.dy = Math.sign(jy - s.y) || (gameRandom() < 0.5 ? 1 : -1);
     }
     s.x += s.dx; s.y += s.dy;
     if (s.x < 3 || s.x > FIELD.w - 3) { s.dx = -s.dx; s.x = clamp(s.x, 3, FIELD.w - 3); }
@@ -1144,10 +1416,10 @@ function updateThralls() {
     if (tick % 3) continue;
     const tx = player.x + t.ox, ty = player.y + t.oy;
     const atX = Math.abs(tx - t.x) < 3, atY = Math.abs(ty - t.y) < 3;
-    if ((!t.dx && !t.dy) || Math.random() < 0.11 || (t.dx && atX) || (t.dy && atY)) {
-      if (Math.random() < 0.5 && !atX) { t.dx = Math.sign(tx - t.x); t.dy = 0; } else { t.dy = Math.sign(ty - t.y) || 1; t.dx = 0; }
+    if ((!t.dx && !t.dy) || gameRandom() < 0.11 || (t.dx && atX) || (t.dy && atY)) {
+      if (gameRandom() < 0.5 && !atX) { t.dx = Math.sign(tx - t.x); t.dy = 0; } else { t.dy = Math.sign(ty - t.y) || 1; t.dx = 0; }
     }
-    if (Math.random() < 0.03) { t.ox = irand(40) - 20; t.oy = irand(40) - 20; }
+    if (gameRandom() < 0.03) { t.ox = irand(40) - 20; t.oy = irand(40) - 20; }
     t.x += t.dx * 1.7; t.y += t.dy * 1.7;
     if (t.x < 5 || t.x > FIELD.w - 5) { t.x = clamp(t.x, 5, FIELD.w - 5); t.dx = -t.dx; }
     if (t.y < 6 || t.y > FIELD.h - 6) { t.y = clamp(t.y, 6, FIELD.h - 6); t.dy = -t.dy; }
@@ -1182,7 +1454,7 @@ function updateForges() {
         spark(f.x, f.y, '#ffb347', 6, 1, 22); Snd.matSfx();
       }
       f.dropT = irand(16) + 6;
-      if (f.quota <= 0) { f.leave = 1; f.vy = Math.random() < 0.5 ? -1 : 1; }
+      if (f.quota <= 0) { f.leave = 1; f.vy = gameRandom() < 0.5 ? -1 : 1; }
     }
   }
 }
@@ -1192,7 +1464,7 @@ function updateCrawlers() {
     if (tick % 2) continue;
     if (--c.moveT <= 0) {
       c.moveT = 1 + irand(32);
-      if (Math.random() < 0.38) {
+      if (gameRandom() < 0.38) {
         c.dx = Math.sign(player.x - c.x); c.dy = Math.abs(player.y - c.y) < 16 ? 0 : Math.sign(player.y - c.y);
       } else { c.dx = irand(3) - 1; c.dy = irand(3) - 1; }
     }
@@ -1202,7 +1474,7 @@ function updateCrawlers() {
       c.fireT = D.tankFire(wave) + irand(10);
       if (shells.length < 20) {
         let tx, ty;
-        if (Math.random() < 0.5) { tx = player.x + irand(32) - 16; ty = player.y + irand(32) - 16; }
+        if (gameRandom() < 0.5) { tx = player.x + irand(32) - 16; ty = player.y + irand(32) - 16; }
         else {
           const wall = irand(4);
           tx = player.x; ty = player.y;
@@ -1226,12 +1498,149 @@ function updateShells() {
   }
 }
 
+/* ============================== OVERDRIVE DIRECTOR ============================== */
+function hazardPoint(radius = 35) {
+  let x = FIELD.w / 2, y = FIELD.h / 2, tries = 0;
+  do { x = rand(18, FIELD.w - 18); y = rand(18, FIELD.h - 18); }
+  while (dist2(x, y, player.x, player.y) < radius * radius && ++tries < 30);
+  return [x, y];
+}
+function spawnThemeHazard() {
+  if (!isOverdrive() || state !== 'play') return;
+  const [x, y] = hazardPoint(40);
+  if (currentTheme.id === 'foundry') {
+    hazards.push({ type:'vent', x, y, t:0, tele:90, active:42, life:155, r:15 + irand(7) });
+  } else if (currentTheme.id === 'reactor') {
+    hazards.push({ type:'ring', x, y, t:0, tele:74, life:214, speed:1.25 + wave * 0.012 });
+  } else if (currentTheme.id === 'cathedral') {
+    const axis = irand(2), pos = axis ? x : y;
+    hazards.push({ type:'beam', axis, pos, t:0, tele:96, active:32, life:145 });
+  } else {
+    hazards.push({ type:'well', x, y, t:0, tele:62, life:285, r:48 + Math.min(14, wave * 0.5) });
+  }
+}
+function updateHazards() {
+  if (!isOverdrive()) return false;
+  const factor = gameMode === 'daily' ? dailyModifier.hazard : 1;
+  if (--hazardClock <= 0) {
+    if (hazards.length < (bosses.length ? 3 : 2)) spawnThemeHazard();
+    hazardClock = Math.max(150, Math.round((390 - Math.min(150, wave * 6)) * factor));
+  }
+  let hit = false;
+  if (currentTheme.id === 'foundry') {
+    const lane = Math.floor(player.y / 32);
+    const push = lane % 2 ? -0.13 : 0.13;
+    player.x = clamp(player.x + push, 4, FIELD.w - 4);
+  }
+  for (let i = hazards.length - 1; i >= 0; i--) {
+    const h = hazards[i]; h.t++;
+    if (h.type === 'vent') {
+      if (h.t >= h.tele && h.t < h.tele + h.active && dist2(player.x, player.y, h.x, h.y) < h.r * h.r) hit = true;
+    } else if (h.type === 'ring') {
+      if (h.t >= h.tele) {
+        const r = (h.t - h.tele) * h.speed;
+        const d = Math.hypot(player.x - h.x, player.y - h.y);
+        if (Math.abs(d - r) < 3.3) hit = true;
+      }
+    } else if (h.type === 'beam') {
+      if (h.t >= h.tele && h.t < h.tele + h.active) {
+        const d = h.axis ? Math.abs(player.x - h.pos) : Math.abs(player.y - h.pos);
+        if (d < 3.2) hit = true;
+      }
+    } else if (h.type === 'well') {
+      const dx = h.x - player.x, dy = h.y - player.y, d = Math.hypot(dx, dy) || 1;
+      if (h.t >= h.tele && d < h.r) {
+        const pull = (1 - d / h.r) * 0.28;
+        player.x = clamp(player.x + dx / d * pull, 4, FIELD.w - 4);
+        player.y = clamp(player.y + dy / d * pull, 5, FIELD.h - 5);
+        if (d < 7.5) hit = true;
+      }
+    }
+    if (h.t >= h.life) hazards.splice(i, 1);
+  }
+  return hit;
+}
+function bossShot(x, y, tx, ty, speed, color, r = 2.3) {
+  const dx = tx - x, dy = ty - y, d = Math.hypot(dx, dy) || 1;
+  bossShots.push({ x, y, vx:dx / d * speed, vy:dy / d * speed, color, r, life:260 });
+}
+function radialBossShots(b, count, speed, spin = 0) {
+  for (let i = 0; i < count; i++) {
+    const a = spin + i * Math.PI * 2 / count;
+    bossShots.push({ x:b.x, y:b.y, vx:Math.cos(a) * speed, vy:Math.sin(a) * speed,
+      color:currentTheme.accent, r:2.4, life:260 });
+  }
+}
+function updateBosses() {
+  for (const b of bosses) {
+    if (b.mat > 0) { b.mat--; continue; }
+    b.t++; b.phase += 0.022 + wave * 0.0005;
+    if (b.type === 'foundry') {
+      b.x += b.vx; if (b.x < 18 || b.x > FIELD.w - 18) b.vx *= -1;
+      b.y = 26 + Math.sin(b.phase) * 7;
+    } else if (b.type === 'reactor') {
+      b.x = FIELD.w / 2 + Math.cos(b.phase * 0.72) * 78;
+      b.y = FIELD.h / 2 + Math.sin(b.phase) * 52;
+    } else if (b.type === 'cathedral') {
+      if (b.t % 150 === 1) { b.tx = gameRandom() < 0.5 ? 28 : FIELD.w - 28; b.ty = gameRandom() < 0.5 ? 28 : FIELD.h - 28; }
+      b.x += ((b.tx || FIELD.w / 2) - b.x) * 0.018; b.y += ((b.ty || 28) - b.y) * 0.018;
+    } else {
+      b.x = FIELD.w / 2 + Math.sin(b.phase * 0.83) * 92;
+      b.y = 35 + Math.sin(b.phase * 1.71) * 19;
+    }
+    if (--b.shotT <= 0) {
+      if (b.type === 'foundry') radialBossShots(b, 8, 1.15 + wave * 0.008, b.phase);
+      else if (b.type === 'reactor') radialBossShots(b, 10, 1.05 + wave * 0.008, b.phase * 2);
+      else if (b.type === 'cathedral') {
+        bossShot(b.x, b.y, player.x + player.mvx * 22, player.y + player.mvy * 22, 1.75, currentTheme.accent, 2.8);
+        radialBossShots(b, 4, 1.2, Math.PI / 4 + b.phase);
+      } else {
+        for (let k = -1; k <= 1; k++) bossShot(b.x, b.y, player.x + k * 18, player.y - k * 10, 1.65, currentTheme.accent, 2.6);
+      }
+      b.shotT = Math.max(46, 105 - wave * 2 + irand(30));
+      Snd.clank();
+    }
+  }
+}
+function updateNemeses() {
+  for (const n of nemeses) {
+    if (n.mat > 0) { n.mat--; continue; }
+    n.t++;
+    const tx = player.x + n.learn[0] * (18 + n.level * 2);
+    const ty = player.y + n.learn[1] * (18 + n.level * 2);
+    const dx = tx - n.x, dy = ty - n.y, d = Math.hypot(dx, dy) || 1;
+    const speed = 0.54 + Math.min(0.34, n.level * 0.035);
+    n.x = clamp(n.x + dx / d * speed, 7, FIELD.w - 7);
+    n.y = clamp(n.y + dy / d * speed, 8, FIELD.h - 8);
+    n.frame = (tick >> 3) & 1;
+    if (tick % 3 === 0) { n.hist.unshift([n.x, n.y]); if (n.hist.length > 12) n.hist.pop(); }
+    if (--n.shotT <= 0) {
+      bossShot(n.x, n.y, player.x + player.mvx * 16, player.y + player.mvy * 16, 1.45 + n.level * 0.04, '#ff365f', 2);
+      n.shotT = Math.max(50, 100 - n.level * 4 + irand(32));
+    }
+  }
+}
+function updateBossShots() {
+  for (let i = bossShots.length - 1; i >= 0; i--) {
+    const s = bossShots[i]; s.x += s.vx; s.y += s.vy;
+    if (--s.life <= 0 || s.x < -8 || s.x > FIELD.w + 8 || s.y < -8 || s.y > FIELD.h + 8) {
+      bossShots.splice(i, 1);
+    }
+  }
+}
+function bossProjectileHit() {
+  for (const s of bossShots) if (dist2(player.x, player.y, s.x, s.y) < (s.r + 3.2) * (s.r + 3.2)) return true;
+  for (const b of bosses) if (b.mat <= 0 && dist2(player.x, player.y, b.x, b.y) < 185) return true;
+  for (const n of nemeses) if (n.mat <= 0 && dist2(player.x, player.y, n.x, n.y) < 38) return true;
+  return false;
+}
+
 /* ============================== PLAYER + BULLETS ============================== */
 function addScore(pts) {
   score += pts;
   if (!demo && score > hi) hi = score;
   if (score >= nextLife) {
-    lives++; nextLife += settings.extraAt;
+    lives++; nextLife += runExtraAt;
     popup(player.x, player.y - 10, 'EXTRA LIFE', '#4df3ff');
     flashBorder('#4df3ff', 28);
     Snd.chime(); say('extraLife');
@@ -1245,6 +1654,14 @@ function updatePlayer(inp) {
     player.x = clamp(player.x + inp.mv[0], 4, FIELD.w - 4);
     player.y = clamp(player.y + inp.mv[1], 5, FIELD.h - 5);
     if (tick % 6 === 0) player.frame ^= 1;
+    if (isOverdrive()) {
+      const d = dirCode(inp.mv) - 1;
+      if (d >= 0) nemesisMemory[d]++;
+    }
+  }
+  if (isOverdrive() && tick % 3 === 0) {
+    playerPath.unshift([player.x, player.y]);
+    if (playerPath.length > 72) playerPath.pop();
   }
   if (player.cd > 0) player.cd--;
   if (inp.fv) {
@@ -1279,9 +1696,38 @@ function updateBullets() {
       for (let j = pylons.length - 1; j >= 0; j--) if (dist2(b.x, b.y, pylons[j].x, pylons[j].y) < 16) {
         spark(pylons[j].x, pylons[j].y, '#ffe14a', 10, 1.4, 26); pylons.splice(j, 1); bullets.splice(i, 1); Snd.pop(); continue outer;
       }
+      for (let j = bosses.length - 1; j >= 0; j--) {
+        const boss = bosses[j];
+        if (boss.mat <= 0 && dist2(b.x, b.y, boss.x, boss.y) < 150) {
+          bullets.splice(i, 1); boss.hp--;
+          spark(b.x, b.y, currentTheme.accent, 6, 1.1, 18); Snd.clank(); addTrauma(0.035);
+          if (boss.hp <= 0) {
+            const award = Math.round((5000 + wave * 500) * (gameMode === 'daily' && dailyModifier.id === 'titan' ? 1.5 : 1));
+            bosses.splice(j, 1); bossShots = [];
+            addScore(award); popup(boss.x, boss.y, 'WARDEN +' + award, '#ffe14a');
+            spark(boss.x, boss.y, currentTheme.accent, 70, 3.4, 88);
+            spark(boss.x, boss.y, '#ffffff', 36, 2.5, 65);
+            Snd.boomBig(); flashBorder(currentTheme.accent, 50); addTrauma(0.9); hitStop(12); rumble([45, 28, 80]);
+          }
+          continue outer;
+        }
+      }
+      for (let j = nemeses.length - 1; j >= 0; j--) {
+        const n = nemeses[j];
+        if (n.mat <= 0 && dist2(b.x, b.y, n.x, n.y) < 32) {
+          bullets.splice(i, 1); n.hp--;
+          spark(b.x, b.y, '#ff365f', 5, 1, 16); Snd.clank();
+          if (n.hp <= 0) {
+            const award = 1800 + n.level * 700;
+            nemeses.splice(j, 1); addScore(award); popup(n.x, n.y, 'NEMESIS +' + award, '#ffe14a');
+            spark(n.x, n.y, '#ff365f', 42, 2.8, 66); Snd.boomBig(); flashBorder('#ff365f', 30); addTrauma(0.55); rumble([30, 18, 48]);
+          }
+          continue outer;
+        }
+      }
       for (const jg of juggs) if (jg.mat <= 0 && dist2(b.x, b.y, jg.x, jg.y) < 44) {
-        jg.x = clamp(jg.x + b.dx * (Math.random() < 0.5 ? 2 : 1) * 0.7, 7, FIELD.w - 7);
-        jg.y = clamp(jg.y + b.dy * (Math.random() < 0.75 ? 2 : 1) * 0.7, 8, FIELD.h - 8);
+        jg.x = clamp(jg.x + b.dx * (gameRandom() < 0.5 ? 2 : 1) * 0.7, 7, FIELD.w - 7);
+        jg.y = clamp(jg.y + b.dy * (gameRandom() < 0.75 ? 2 : 1) * 0.7, 8, FIELD.h - 8);
         spark(b.x, b.y, '#8fa0c0', 5, 1.2, 14); Snd.clank(); bullets.splice(i, 1); continue outer;
       }
       const hits = [
@@ -1319,7 +1765,7 @@ function playerHit() {
   for (const [arr, r2] of checks)
     for (const e of arr)
       if ((e.mat || 0) <= 0 && dist2(player.x, player.y, e.x, e.y) < r2) return true;
-  return false;
+  return bossProjectileHit();
 }
 
 /* ============================== DEATH / WAVE FLOW ============================== */
@@ -1331,7 +1777,7 @@ function die() {
   spark(player.x, player.y, '#ff4a3d', 20, 2, 52);
   spark(player.x, player.y, '#ffe14a', 18, 2.2, 55);
   spark(player.x, player.y, '#ff4ad9', 14, 1.8, 50);
-  Snd.deathSfx(); Snd.stopMusic(); say('death', null, true);
+  Snd.deathSfx(); Snd.stopMusic(); say('death', null, true); breakRescueChain(); rumble([60, 35, 90]);
   updateHud();
 }
 function captureSnap() {
@@ -1341,7 +1787,12 @@ function captureSnap() {
   return { counts: [drudges.length, pylons.length,
     humans.filter(h => h.kind === 'ma').length, humans.filter(h => h.kind === 'pa').length, humans.filter(h => h.kind === 'kid').length,
     juggs.length, cortexes.length, hivesN, forgeQuotas.length],
-    thralls: thralls.length, crawlers: crawlers.length, forgeQuotas };
+    thralls: thralls.length, crawlers: crawlers.length, forgeQuotas,
+    overdrive: isOverdrive() ? {
+      bosses: bosses.map(b => ({ ...b })), nemeses: nemeses.map(n => ({ ...n, hist:[] })),
+      hazards: hazards.map(h => ({ ...h })), hazardClock, rescueStreak, rescueMultiplier,
+      rescueEchoes: rescueEchoes.map(e => ({ ...e })),
+    } : null };
 }
 function spawnFromSnap(snap) {
   gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave);
@@ -1354,22 +1805,40 @@ function spawnFromSnap(snap) {
   for (let i = 0; i < snap.crawlers; i++) { const [x, y] = placeOutside(rw, rh, 9);
     crawlers.push({ x, y, dx: 0, dy: 0, moveT: 0, fireT: D.tankFire(wave) + irand(16), frame: 0, mat: mat() }); }
   if (Array.isArray(snap.forgeQuotas)) forges.forEach((f, i) => { f.quota = Math.max(1, snap.forgeQuotas[i] | 0); });
+  if (isOverdrive() && snap.overdrive) {
+    bosses = Array.isArray(snap.overdrive.bosses) ? snap.overdrive.bosses.map(b => ({ ...b, mat:Math.max(36, b.mat || 0) })) : [];
+    nemeses = Array.isArray(snap.overdrive.nemeses) ? snap.overdrive.nemeses.map(n => ({ ...n, hist:[], mat:Math.max(36, n.mat || 0) })) : [];
+    hazards = Array.isArray(snap.overdrive.hazards) ? snap.overdrive.hazards.map(h => ({ ...h, t:Math.min(h.t || 0, Math.max(0, (h.tele || 0) - 35)) })) : [];
+    hazardClock = Math.max(90, snap.overdrive.hazardClock | 0);
+    rescueStreak = Math.max(0, snap.overdrive.rescueStreak | 0);
+    rescueMultiplier = Math.max(1, snap.overdrive.rescueMultiplier | 0);
+    rescueEchoes = Array.isArray(snap.overdrive.rescueEchoes) ? snap.overdrive.rescueEchoes.slice(0, 8) : [];
+    chain = rescueStreak; bossShots = [];
+  }
 }
 function rebuildAfterDeath() { spawnFromSnap(captureSnap()); }
 // ---- alternating 2-player registers ----
-function mkP() { return { score: 0, lives: settings.lives || START_LIVES, wave: START_WAVE,
-  nextLife: settings.extraAt > 0 ? settings.extraAt : Infinity, rescued: 0, deaths: 0, snap: null }; }
+function mkP() { return { score: 0, lives: runStartLives, wave: START_WAVE,
+  nextLife: runExtraAt > 0 ? runExtraAt : Infinity, rescued: 0, deaths: 0, snap: null }; }
 function saveCur() { P[cur] = { score, lives, wave, nextLife, rescued: rescuedTotal, deaths, snap: captureSnap() }; }
 function loadP(i) { cur = i; const p = P[i];
   score = p.score; lives = p.lives; wave = p.wave; nextLife = p.nextLife; rescuedTotal = p.rescued; deaths = p.deaths; }
 function beginHandoff(i) { loadP(i); state = 'handoff'; stateT = 0; updateHud(true); }
 function killableLeft() {
   return drudges.length + hives.length + wasps.length + cortexes.length + thralls.length +
-    forges.length + crawlers.length;
+    forges.length + crawlers.length + bosses.length + nemeses.length;
 }
 function gameOver() {
   if (demo) { exitDemo(); return; }
   state = 'over'; stateT = 0;
+  if (isOverdrive() && !replayViewing && !assistedRun) {
+    const inputs = packReplay();
+    finalReplay = inputs && inputs.length <= 240000 ? {
+      schema:1, version:VERSION, board:runBoard, mode:gameMode, seed:runSeed >>> 0,
+      inputs, score, wave, rescued:rescuedTotal, created:Date.now(),
+    } : null;
+  }
+  replayPlayback = null;
   releaseWake();
   Snd.stopMusic(); say('gameOver', null, true);
   showOver();
@@ -1399,7 +1868,7 @@ function fxTick() {
   trauma = Math.max(0, trauma - 0.03);
 }
 function allMats(fn) {
-  [drudges, pylons, juggs, hives, wasps, cortexes, thralls, forges, crawlers, humans].forEach(a => a.forEach(fn));
+  [drudges, pylons, juggs, hives, wasps, cortexes, thralls, forges, crawlers, humans, bosses, nemeses].forEach(a => a.forEach(fn));
 }
 function stepTick() {
   tick++;
@@ -1453,21 +1922,27 @@ function stepTick() {
   if (waveT % 300 === 0) gruntDelay = Math.max(gruntFloor, gruntDelay - 1);
   if (waveT === 2700 || waveT === 3600) gruntFloor = Math.max(2, gruntFloor - 2); // late-wave frenzied charge
   let inp;
-  if (inputOverride) { inp = inputOverride; if (--inputOverride.ticks <= 0) inputOverride = null; }
+  if (replayPlayback) {
+    inp = nextReplayInput();
+    if (!inp) { gameOver(); return; }
+  } else if (inputOverride) { inp = inputOverride; if (--inputOverride.ticks <= 0) inputOverride = null; }
   else inp = bot.enabled ? botInput() : readInput();
+  recordInput(inp);
   updatePlayer(inp);
   updateHumans(); updateDrudges(); updateJuggs();
   updateHives(); updateWasps(); updateStingers();
   updateCortexes(); updateSeekers(); updateThralls();
   updateForges(); updateCrawlers(); updateShells();
+  updateBosses(); updateNemeses(); updateBossShots();
+  const hazardHit = updateHazards();
   updateBullets();
   fxTick();
-  if (playerHit()) { die(); return; }
+  if (hazardHit || playerHit()) { die(); return; }
   if (killableLeft() === 0) {
     state = 'waveclear'; stateT = 0; wavesCleared++;
     flashBorder('#ffffff', 22);
     popup(FIELD.w / 2, FIELD.h / 2 - 20, 'WAVE ' + wave + ' CLEAR', '#4df3ff');
-    Snd.fanfare(); if (Math.random() < 0.6) say('waveClear');
+    Snd.fanfare(); if (gameRandom() < 0.6) say('waveClear');
   }
 }
 /* ============================== RENDER ============================== */
@@ -1500,13 +1975,136 @@ function drawMat(c, e, ringColor) {
   }
 }
 function ent(c, e) { if (e.mat > 0) drawMat(c, e, '#9df8ff'); else drawSpr(c, e.x, e.y); }
+function drawOverdriveArena() {
+  const th = currentTheme;
+  ctx.save();
+  const g = ctx.createLinearGradient(0, 0, FIELD.w, FIELD.h);
+  g.addColorStop(0, th.dark); g.addColorStop(0.52, '#03030a'); g.addColorStop(1, th.dark);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, FIELD.w, FIELD.h);
+  ctx.globalAlpha = 0.42;
+  if (th.id === 'foundry') {
+    for (let y = 18; y < FIELD.h; y += 32) {
+      ctx.fillStyle = ((y / 32) | 0) % 2 ? '#36100b' : '#1b1715'; ctx.fillRect(0, y - 7, FIELD.w, 14);
+      ctx.strokeStyle = '#ff733d55'; ctx.lineWidth = 0.7;
+      for (let x = -20; x < FIELD.w + 20; x += 18) {
+        const shift = (((tick * 0.45) + y) % 18) * ((((y / 32) | 0) % 2) ? -1 : 1);
+        ctx.beginPath(); ctx.moveTo(x + shift, y - 6); ctx.lineTo(x + 8 + shift, y); ctx.lineTo(x + shift, y + 6); ctx.stroke();
+      }
+    }
+    const molten = ctx.createLinearGradient(0, 0, FIELD.w, 0);
+    molten.addColorStop(0, '#5b1707'); molten.addColorStop(.5, '#ff9b22'); molten.addColorStop(1, '#5b1707');
+    ctx.globalAlpha = 0.34 + Math.sin(tick * .05) * .08; ctx.fillStyle = molten; ctx.fillRect(0, 3, FIELD.w, 3); ctx.fillRect(0, FIELD.h - 6, FIELD.w, 3);
+  } else if (th.id === 'reactor') {
+    ctx.translate(FIELD.w / 2, FIELD.h / 2);
+    for (let r = 18; r < 150; r += 20) {
+      ctx.strokeStyle = r % 40 ? '#4df3ff35' : '#a7ffff48'; ctx.lineWidth = r % 40 ? .7 : 1.2;
+      ctx.beginPath(); ctx.arc(0, 0, r + Math.sin(tick * .035 + r) * 2, 0, 7); ctx.stroke();
+    }
+    for (let i = 0; i < 12; i++) {
+      const a = i * Math.PI / 6 + tick * .0015;
+      ctx.strokeStyle = i % 3 ? '#167d9940' : '#4df3ff66'; ctx.beginPath(); ctx.moveTo(Math.cos(a) * 12, Math.sin(a) * 12); ctx.lineTo(Math.cos(a) * 160, Math.sin(a) * 160); ctx.stroke();
+    }
+    ctx.globalAlpha = .5 + .18 * Math.sin(tick * .07); ctx.fillStyle = '#d8ffff'; ctx.beginPath(); ctx.arc(0, 0, 5, 0, 7); ctx.fill();
+  } else if (th.id === 'cathedral') {
+    for (let x = 16; x < FIELD.w; x += 42) {
+      ctx.strokeStyle = '#ff4ad938'; ctx.lineWidth = 1.2;
+      ctx.beginPath(); ctx.moveTo(x - 13, FIELD.h); ctx.lineTo(x - 13, 45); ctx.quadraticCurveTo(x, 12, x + 13, 45); ctx.lineTo(x + 13, FIELD.h); ctx.stroke();
+      const colors = ['#4df3ff','#ff4ad9','#ffe14a','#a06bff'];
+      for (let y = 54; y < FIELD.h - 16; y += 24) {
+        ctx.globalAlpha = .12 + .05 * Math.sin(tick * .025 + x + y);
+        ctx.fillStyle = colors[((x + y) / 6 | 0) % colors.length]; ctx.fillRect(x - 7, y, 14, 15);
+        ctx.strokeStyle = '#ffffff28'; ctx.strokeRect(x - 7, y, 14, 15);
+      }
+    }
+    ctx.globalAlpha = .23; ctx.fillStyle = '#ff4ad9';
+    for (let i = 0; i < 7; i++) ctx.fillRect(FIELD.w / 2 - 1 + Math.sin(tick * .01 + i) * 80, 0, 2, FIELD.h);
+  } else {
+    ctx.fillStyle = '#02020b'; ctx.fillRect(0, 0, FIELD.w, FIELD.h);
+    for (let i = 0; i < 76; i++) {
+      const x = (i * 47 + (tick * (0.02 + (i % 5) * .004))) % FIELD.w;
+      const y = (i * 83 + 17) % FIELD.h;
+      ctx.globalAlpha = .2 + (i % 4) * .12; ctx.fillStyle = i % 7 ? '#c9d8ff' : '#a06bff'; ctx.fillRect(x, y, i % 9 ? .7 : 1.4, i % 9 ? .7 : 1.4);
+    }
+    ctx.globalAlpha = .18;
+    const planet = ctx.createRadialGradient(FIELD.w * .74, FIELD.h * 1.22, 24, FIELD.w * .74, FIELD.h * 1.22, 104);
+    planet.addColorStop(0, '#d0b8ff'); planet.addColorStop(.35, '#5c3aa0'); planet.addColorStop(.9, '#13082c'); planet.addColorStop(1, '#0000');
+    ctx.fillStyle = planet; ctx.fillRect(40, 45, FIELD.w, FIELD.h);
+    ctx.strokeStyle = '#a06bff55'; ctx.lineWidth = .6;
+    for (let y = 20; y < FIELD.h; y += 24) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(FIELD.w, y - 12); ctx.stroke(); }
+  }
+  ctx.restore();
+}
+function drawHazards() {
+  for (const h of hazards) {
+    const pre = h.t < h.tele, pulse = .45 + .4 * Math.sin(tick * .2);
+    ctx.save();
+    if (h.type === 'vent') {
+      ctx.strokeStyle = pre ? `rgba(255,225,74,${pulse})` : '#ff733d'; ctx.lineWidth = pre ? 1 : 3;
+      ctx.setLineDash(pre ? [2,2] : []); ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 7); ctx.stroke();
+      if (!pre && h.t < h.tele + h.active) {
+        ctx.globalAlpha = .42; ctx.fillStyle = '#ff4a3d'; ctx.beginPath(); ctx.arc(h.x, h.y, h.r, 0, 7); ctx.fill();
+        for (let k = 0; k < 9; k++) { const a = k * .7 + tick * .08; ctx.fillStyle = k % 2 ? '#ffe14a' : '#fff'; ctx.fillRect(h.x + Math.cos(a) * h.r * .7 - 1, h.y + Math.sin(a) * h.r * .7 - 1, 2, 2); }
+      }
+    } else if (h.type === 'ring') {
+      const r = pre ? 7 + (h.t / h.tele) * 8 : (h.t - h.tele) * h.speed;
+      ctx.strokeStyle = pre ? `rgba(255,225,74,${pulse})` : '#4df3ff'; ctx.lineWidth = pre ? 1 : 2.6;
+      ctx.setLineDash(pre ? [2,2] : []); ctx.beginPath(); ctx.arc(h.x, h.y, r, 0, 7); ctx.stroke();
+      ctx.globalAlpha = .35; ctx.beginPath(); ctx.arc(h.x, h.y, Math.max(2, r - 4), 0, 7); ctx.stroke();
+    } else if (h.type === 'beam') {
+      const active = !pre && h.t < h.tele + h.active;
+      ctx.globalAlpha = active ? .8 : pulse; ctx.strokeStyle = active ? '#fff' : '#ffe14a'; ctx.lineWidth = active ? 4 : .9;
+      ctx.setLineDash(pre ? [3,3] : []);
+      ctx.beginPath(); if (h.axis) { ctx.moveTo(h.pos, 0); ctx.lineTo(h.pos, FIELD.h); } else { ctx.moveTo(0, h.pos); ctx.lineTo(FIELD.w, h.pos); } ctx.stroke();
+      if (active) { ctx.globalAlpha = .35; ctx.strokeStyle = '#ff4ad9'; ctx.lineWidth = 9; ctx.stroke(); }
+    } else {
+      const active = !pre;
+      ctx.globalAlpha = active ? .55 : pulse; ctx.strokeStyle = active ? '#a06bff' : '#ffe14a'; ctx.lineWidth = active ? 1.8 : .8;
+      ctx.setLineDash(pre ? [2,2] : []);
+      for (let r = 8; r <= (active ? h.r : 18); r += 10) { ctx.beginPath(); ctx.arc(h.x, h.y, r + Math.sin(tick * .08 + r) * 2, 0, 7); ctx.stroke(); }
+      if (active) { ctx.fillStyle = '#020006'; ctx.beginPath(); ctx.arc(h.x, h.y, 6, 0, 7); ctx.fill(); }
+    }
+    ctx.restore();
+  }
+}
+function drawBoss(b) {
+  if (b.mat > 0) { drawMat(FORGE_SPR, b, currentTheme.accent); return; }
+  ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(Math.sin(b.phase) * .12);
+  ctx.shadowColor = currentTheme.accent; ctx.shadowBlur = 8;
+  ctx.strokeStyle = currentTheme.accent; ctx.fillStyle = currentTheme.dark; ctx.lineWidth = 1.6;
+  if (b.type === 'foundry') {
+    ctx.fillRect(-11,-8,22,16); ctx.strokeRect(-11,-8,22,16);
+    ctx.fillStyle = '#ffb347'; ctx.fillRect(-7,-3,14,6);
+    ctx.strokeStyle = '#fff1d0'; for (let x=-8;x<=8;x+=4){ctx.beginPath();ctx.moveTo(x,-11);ctx.lineTo(x+2,-8);ctx.stroke();}
+  } else if (b.type === 'reactor') {
+    ctx.beginPath(); for(let i=0;i<12;i++){const a=i*Math.PI/6,r=i%2?8:13;const x=Math.cos(a)*r,y=Math.sin(a)*r;i?ctx.lineTo(x,y):ctx.moveTo(x,y);}ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.fillStyle='#e8ffff';ctx.beginPath();ctx.arc(0,0,4+Math.sin(tick*.12),0,7);ctx.fill();
+  } else if (b.type === 'cathedral') {
+    ctx.beginPath();ctx.moveTo(0,-14);ctx.lineTo(11,-4);ctx.lineTo(8,12);ctx.lineTo(-8,12);ctx.lineTo(-11,-4);ctx.closePath();ctx.fill();ctx.stroke();
+    ctx.strokeStyle='#fff';ctx.beginPath();ctx.moveTo(0,-10);ctx.lineTo(0,8);ctx.moveTo(-6,-2);ctx.lineTo(6,-2);ctx.stroke();
+  } else {
+    ctx.beginPath();ctx.ellipse(0,0,14,7,0,0,7);ctx.fill();ctx.stroke();
+    ctx.strokeStyle='#d8c8ff';for(let i=0;i<4;i++){const a=i*Math.PI/2+tick*.025;ctx.beginPath();ctx.arc(Math.cos(a)*8,Math.sin(a)*4,2.3,0,7);ctx.stroke();}
+    ctx.fillStyle='#fff';ctx.fillRect(-2,-2,4,4);
+  }
+  ctx.restore();
+}
+function drawNemesis(n) {
+  if (n.mat > 0) { drawMat(SPR.player[0], n, '#ff365f'); return; }
+  ctx.save();
+  let i = 0;
+  for (const p of n.hist) { ctx.globalAlpha = .12 + .35 * (1 - i / 12); ctx.fillStyle = i % 2 ? '#ff365f' : '#a06bff'; ctx.fillRect(p[0]-2,p[1]-2,4,4); i++; }
+  ctx.globalAlpha = 1; ctx.translate(n.x,n.y); ctx.shadowColor='#ff365f';ctx.shadowBlur=7;ctx.fillStyle='#17030a';ctx.strokeStyle='#ff365f';ctx.lineWidth=1.3;
+  ctx.beginPath();ctx.moveTo(0,-7);ctx.lineTo(6,-2);ctx.lineTo(4,7);ctx.lineTo(0,4);ctx.lineTo(-4,7);ctx.lineTo(-6,-2);ctx.closePath();ctx.fill();ctx.stroke();
+  ctx.fillStyle='#fff';ctx.fillRect(-3,-2,2,2);ctx.fillRect(1,-2,2,2);ctx.restore();
+}
 function draw() {
   if (!SW || !SH) computeFit();
   if (!SW || !SH) return;
+  updateModeHud();
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   if (bg && bg.width && bg.height) ctx.drawImage(bg, 0, 0, SW, SH);
   const shaking = state === 'play' || state === 'starting' || state === 'dying' || state === 'waveclear';
-  const sh = shaking ? trauma * trauma : 0, shx = 6 * sh * rand(-1, 1), shy = 6 * sh * rand(-1, 1);
+  const sh = shaking ? trauma * trauma : 0, shx = 6 * sh * (Math.random() * 2 - 1), shy = 6 * sh * (Math.random() * 2 - 1);
   ctx.save();
   ctx.translate(OX + shx * SCALE, OY + shy * SCALE);
   ctx.scale(SCALE, SCALE);
@@ -1549,6 +2147,10 @@ function draw() {
     ctx.restore();
     return;
   }
+  if (isOverdrive()) {
+    drawOverdriveArena();
+    drawHazards();
+  }
 
   // additive under-glow pass (smoothing on: glow sprites scale fractionally)
   ctx.globalCompositeOperation = 'lighter';
@@ -1560,6 +2162,8 @@ function draw() {
   for (const c of cortexes) glowAt(c.x, c.y, 9, '#ff8ac2', 0.35);
   for (const d of drudges) if (d.mat <= 0) glowAt(d.x, d.y, 6, '#ff4a3d', 0.2);
   for (const c of crawlers) if (c.mat <= 0) glowAt(c.x, c.y, 7, '#ffb347', 0.28);
+  for (const b of bosses) glowAt(b.x, b.y, 20, currentTheme.accent, b.mat > 0 ? .28 : .58);
+  for (const n of nemeses) glowAt(n.x, n.y, 10, '#ff365f', n.mat > 0 ? .24 : .52);
   { const pulse = 0.3 + 0.18 * Math.sin(tick * 0.12);
     for (const h of humans) if (h.mat <= 0) glowAt(h.x, h.y, 8, '#ffe14a', pulse); }
   for (const t of thralls) { let i = 0; for (const [hx, hy] of t.hist) { glowAt(hx, hy, 4, '#58e06a', 0.18 * (1 - i / 7)); i++; } }
@@ -1570,6 +2174,16 @@ function draw() {
   // sprite pass (smoothing off: crisp pixel art)
   ctx.globalCompositeOperation = 'source-over';
   ctx.imageSmoothingEnabled = false;
+  if (isOverdrive()) {
+    for (let i = rescueEchoes.length - 1; i >= 0; i--) {
+      const e = rescueEchoes[i], path = playerPath[Math.min(playerPath.length - 1, 8 + i * 7)];
+      if (!path) continue;
+      ctx.globalAlpha = .35 + .45 * (1 - i / Math.max(1, rescueEchoes.length));
+      ctx.save(); ctx.translate(path[0], path[1] + Math.sin(tick * .09 + e.phase) * 1.5); ctx.scale(.7,.7);
+      drawSpr(SPR[e.kind][(tick >> 4) & 1], 0, 0); ctx.restore();
+    }
+    ctx.globalAlpha = 1;
+  }
   for (const p of pylons) { if (p.mat > 0) { drawMat(PYLON_SHAPES[p.shape][0], p, '#ffe14a'); } else drawSpr(PYLON_SHAPES[p.shape][(tick >> 3) & 1], p.x, p.y); }
   for (const h of humans) ent(SPR[h.kind][h.frame], h);
   for (const t of thralls) {                       // prog-style color-cycling trail segments
@@ -1601,6 +2215,8 @@ function draw() {
   for (const h of hives) ent(HIVE_FRAMES[(tick >> 4) % 3], h);
   for (const c of cortexes) ent(SPR.cortex[c.frame], c);
   for (const w of wasps) ent(SPR.wasp[w.frame], w);
+  for (const n of nemeses) drawNemesis(n);
+  for (const b of bosses) drawBoss(b);
   if (state === 'starting' && freeze > 0) {
     drawMat(SPR.player[0], { x: player.x, y: player.y, mat: Math.min(66, freeze) }, '#4df3ff');
   } else if (state === 'play' || state === 'starting' || state === 'waveclear') {
@@ -1630,6 +2246,10 @@ function draw() {
     glowAt(s.x, s.y, 4.5, '#ff8ac2', 0.8);
     ctx.globalAlpha = 1; ctx.fillStyle = '#fff'; ctx.fillRect(s.x - 1, s.y - 1, 2, 2);
   }
+  for (const s of bossShots) {
+    glowAt(s.x, s.y, s.r * 3.1, s.color, .75);
+    ctx.globalAlpha = 1; ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 7); ctx.fill();
+  }
   for (const p of parts) {
     glowAt(p.x, p.y, p.r * 2.4, p.color, Math.max(0, p.life / p.max) * 0.7);
   }
@@ -1656,8 +2276,11 @@ function draw() {
     ctx.fillStyle = '#4df3ff'; ctx.font = 'bold 16px Arial';
     ctx.fillText('WAVE ' + wave, FIELD.w / 2, FIELD.h / 2 - 26);
     ctx.globalAlpha = a * 0.8; ctx.font = 'bold 7px Arial';
-    ctx.fillStyle = isBrainWave(wave) ? '#ff8ac2' : '#ffe14a';
-    ctx.fillText(isBrainWave(wave) ? 'CORTEX DIVISION INBOUND' : wave === 1 ? 'SAVE THE LAST FAMILY' : 'THE CHROME MARCHES', FIELD.w / 2, FIELD.h / 2 - 16);
+    ctx.fillStyle = isOverdrive() ? currentTheme.accent : isBrainWave(wave) ? '#ff8ac2' : '#ffe14a';
+    const intro = isOverdrive()
+      ? (bosses.length ? currentTheme.boss + ' INBOUND' : nemeses.length ? 'NEMESIS IS WATCHING' : currentTheme.name)
+      : isBrainWave(wave) ? 'CORTEX DIVISION INBOUND' : wave === 1 ? 'SAVE THE LAST FAMILY' : 'THE CHROME MARCHES';
+    ctx.fillText(intro, FIELD.w / 2, FIELD.h / 2 - 16);
   }
   if (demo) {
     ctx.globalAlpha = 0.55 + 0.4 * Math.sin(tick * 0.1);
@@ -1692,12 +2315,31 @@ function updateHud(force) {
     }
   }
 }
+let modeHudKey = '';
+function updateModeHud(force = false) {
+  const modeEl = $('#modeHud'), bossEl = $('#bossHud');
+  if (!isOverdrive() || !['play','starting','waveclear','dying'].includes(state)) {
+    modeEl.style.display = 'none'; bossEl.style.display = 'none'; modeHudKey = ''; return;
+  }
+  const dailyTag = gameMode === 'daily' ? 'DAILY · ' + dailyModifier.name + ' · ' : '';
+  const key = `${dailyTag}${currentTheme.name}|${rescueStreak}|${rescueMultiplier}|${bosses[0]?.hp || 0}`;
+  if (!force && key === modeHudKey) return;
+  modeHudKey = key; modeEl.style.display = 'block';
+  modeEl.innerHTML = `${dailyTag}${currentTheme.name} · <b>CHAIN ${rescueStreak} · ${rescueMultiplier}×</b>${replayViewing ? ' · REPLAY' : ''}`;
+  const boss = bosses[0];
+  bossEl.style.display = boss ? 'block' : 'none';
+  if (boss) {
+    $('#bossName').textContent = boss.name + ' · ' + boss.hp + '/' + boss.maxHp;
+    $('#bossFill').style.width = Math.max(0, boss.hp / boss.maxHp * 100) + '%';
+  }
+}
 
 /* ============================== BOT ============================== */
 function botInput() {
   let ax = 0, ay = 0;
   const threats = [[drudges, 1], [juggs, 1.7], [wasps, 1.2], [cortexes, 1], [thralls, 1.4], [hives, 1],
-    [forges, 0.9], [crawlers, 1], [stingers, 1.6], [seekers, 1.6], [shells, 1.5], [pylons, 1.2]];
+    [forges, 0.9], [crawlers, 1], [stingers, 1.6], [seekers, 1.6], [shells, 1.5], [pylons, 1.2],
+    [bosses, 2], [nemeses, 1.8], [bossShots, 2.2]];
   for (const [arr, w] of threats) for (const e of arr) {
     if ((e.mat || 0) > 0) continue;
     const q = dist2(player.x, player.y, e.x, e.y);
@@ -1713,7 +2355,7 @@ function botInput() {
   if (h) { const d = Math.hypot(h.x - player.x, h.y - player.y) || 1; ax += (h.x - player.x) / d * 0.3; ay += (h.y - player.y) / d * 0.3; }
   const mv = quant8(ax, ay, 0.04);
   let best = null, bq = 1e9;
-  for (const arr of [drudges, wasps, thralls, crawlers, cortexes, hives, forges])
+  for (const arr of [bosses, nemeses, drudges, wasps, thralls, crawlers, cortexes, hives, forges])
     for (const e of arr) { if ((e.mat || 0) > 0 || e.leave) continue; const q = dist2(player.x, player.y, e.x, e.y); if (q < bq) { bq = q; best = e; } }
   const fv = best ? quant8(best.x - player.x, best.y - player.y, 0.01) : null;
   return { mv, fv };
@@ -1731,7 +2373,7 @@ function bind(el, fn) {
     e.preventDefault(); e.stopPropagation(); fn();
   }, { passive: false });
 }
-function hideModals() { ['#title', '#pauseM', '#scoresM', '#over', '#optsM'].forEach(s => $(s).classList.add('hidden')); }
+function hideModals() { ['#title', '#pauseM', '#scoresM', '#over', '#optsM', '#modeM'].forEach(s => $(s).classList.add('hidden')); }
 let wakeLock = null, wakePending = false;
 function releaseWake() {
   const lock = wakeLock; wakeLock = null;
@@ -1746,15 +2388,27 @@ function requestWake() {
     lock.addEventListener?.('release', () => { if (wakeLock === lock) wakeLock = null; });
   }).catch(() => {}).finally(() => { wakePending = false; });
 }
-function startGame(nPlayers) {
+function startGame(nPlayers = 1, mode = 'arcade', opts = {}) {
+  configureRun(mode, opts.seed, opts.board);
   hideModals();
   if (!demo) $('#btns').classList.remove('hidden');
-  players = nPlayers === 2 ? 2 : 1; cur = 0; P = [mkP(), mkP()]; entryQueue = []; pendingPause = false;
-  assistedRun = QUERY_ASSISTED || qaTainted || bot.enabled;
-  runGlobalEligible = !demo && players === 1 && !assistedRun && standardRules();
-  score = 0; lives = settings.lives || START_LIVES; chain = 0;
-  nextLife = settings.extraAt > 0 ? settings.extraAt : Infinity;
+  players = gameMode === 'arcade' && nPlayers === 2 ? 2 : 1; cur = 0; P = [mkP(), mkP()]; entryQueue = []; pendingPause = false;
+  replayViewing = !!opts.replay;
+  replayPlayback = null;
+  if (opts.replay) {
+    const rows = unpackReplay(opts.replay.inputs);
+    if (rows) replayPlayback = { rows, index:0, left:0, code:0 };
+    else replayViewing = false;
+  }
+  assistedRun = QUERY_ASSISTED || qaTainted || bot.enabled || replayViewing;
+  runGlobalEligible = !demo && players === 1 && !assistedRun && (gameMode === 'arcade' ? standardRules() : true);
+  score = 0; lives = runStartLives; chain = 0;
+  nextLife = runExtraAt > 0 ? runExtraAt : Infinity;
   wave = START_WAVE; deaths = 0; wavesCleared = 0; rescuedTotal = 0;
+  rescueStreak = 0; bestRescueChain = 0; rescueMultiplier = gameMode === 'daily' && dailyModifier.id === 'fracture' ? 2 : 1;
+  rescueEchoes = []; playerPath = []; nemesisMemory = Array(8).fill(0);
+  replaySegments = []; replayLastCode = -1; replayLastCount = 0; finalReplay = null;
+  hi = getScores(runBoard)[0]?.score || 0;
   gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave);
   trauma = 0; freezeT = 0; parts.length = 0; popups.length = 0;
   spawnWave(wave);
@@ -1762,9 +2416,9 @@ function startGame(nPlayers) {
   updateHud(true);
 }
 function returnToTitle() {
-  demo = false; bot.enabled = false; inputOverride = null; entryQueue = [];
+  demo = false; bot.enabled = false; inputOverride = null; entryQueue = []; replayPlayback = null; replayViewing = false;
   state = 'title'; hideModals(); $('#btns').classList.add('hidden'); $('#title').classList.remove('hidden');
-  Snd.stopMusic(); releaseWake(); idleT = 0;
+  Snd.stopMusic(); releaseWake(); idleT = 0; document.body.classList.remove('overdrive-live');
 }
 let pausedFrom = 'play';
 function togglePause() {
@@ -1800,8 +2454,8 @@ function setMute(v) {
   paintMute(v);
 }
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; let letters = [0, 0, 0];
-const isHigh = (v, w = wave) => {
-  const a = getScores(), last = a[a.length - 1];
+const isHigh = (v, w = wave, board = runBoard) => {
+  const a = getScores(board), last = a[a.length - 1];
   return v > 0 && (a.length < 10 || v > (last?.score || 0) || (v === last?.score && w > (last?.wave || 0)));
 };
 function scoreRows(a) {
@@ -1809,22 +2463,23 @@ function scoreRows(a) {
     `<div class="scoreRow"><span>${i === 0 ? '★' : i + 1 + '.'}</span><span>${s.name}</span><span>${s.score.toLocaleString()}</span><em>W${s.wave}</em></div>`
   ).join('');
 }
-function renderScoreList(target) {
-  const a = getScores();
+function renderScoreList(target, board = scoreViewBoard) {
+  const a = getScores(board);
   target.innerHTML = a.length ? scoreRows(a) : '<div class="scoreStatus">NO CABINET RECORDS YET</div>';
 }
-function renderGlobalScoreList(target) {
+function renderGlobalScoreList(target, board = scoreViewBoard) {
   if (!target) return;
-  if (globalScoreState === 'loading' || globalScoreState === 'idle') {
+  const net = globalBoard(board);
+  if (net.state === 'loading' || net.state === 'idle') {
     target.innerHTML = '<div class="scoreStatus">CONTACTING SCORENET…</div>';
-  } else if (globalScoreState === 'offline') {
-    target.innerHTML = globalScores?.length
-      ? '<div class="boardRules">OFFLINE · SHOWING CACHED RESULTS</div>' + scoreRows(globalScores)
+  } else if (net.state === 'offline') {
+    target.innerHTML = net.scores?.length
+      ? '<div class="boardRules">OFFLINE · SHOWING CACHED RESULTS</div>' + scoreRows(net.scores)
       : '<div class="scoreStatus">NETWORK OFFLINE<br>LOCAL RECORDS ARE SAFE</div>';
-  } else if (!globalScores?.length) {
+  } else if (!net.scores?.length) {
     target.innerHTML = '<div class="scoreStatus">NO GLOBAL RECORDS YET<br>BE THE FIRST</div>';
   } else {
-    target.innerHTML = scoreRows(globalScores);
+    target.innerHTML = scoreRows(net.scores);
   }
 }
 function renderScoreNetStatus() {
@@ -1836,19 +2491,36 @@ function renderScoreNetStatus() {
     scoreEl.className = /SYNCED/.test(networkText) ? 'good' : networkText ? 'warn' : '';
   }
   if (overEl) {
-    const scopeText = runGlobalEligible ? 'STANDARD RUN · GLOBAL SCORENET ELIGIBLE'
+    const scopeText = runGlobalEligible ? boardProfile(runBoard).title + ' RUN · GLOBAL SCORENET ELIGIBLE'
       : 'LOCAL RECORDS ONLY · CUSTOM, ASSISTED, OR 2P RUN';
     const text = networkText || (state === 'over' ? scopeText : '');
     overEl.textContent = text;
     overEl.className = /SYNCED|ELIGIBLE/.test(text) ? 'good' : text ? 'warn' : '';
   }
 }
-function showScores(force = false) {
-  renderScoreList($('#scoreList'));
-  renderGlobalScoreList($('#globalScoreList'));
+function getChampionReplay(board = scoreViewBoard) {
+  board = normalizeBoard(board);
+  const data = store.get(REPLAY_PREFIX + board, null);
+  if (!data || typeof data !== 'object' || data.schema !== 1 || data.version !== VERSION || data.board !== board
+      || !['overdrive','daily'].includes(data.mode) || !unpackReplay(data.inputs)) return null;
+  return data;
+}
+function selectScoreBoard(board, force = false) {
+  scoreViewBoard = normalizeBoard(board);
+  const profile = boardProfile(scoreViewBoard);
+  for (const b of $('#scoreTabs').querySelectorAll('button')) b.classList.toggle('sel', normalizeBoard(b.dataset.board) === scoreViewBoard);
+  $('#localBoardTitle').textContent = profile.title + ' · THIS CABINET';
+  $('#globalBoardTitle').textContent = profile.title + ' · GLOBAL';
+  $('#boardRules').textContent = profile.rules;
+  renderScoreList($('#scoreList'), scoreViewBoard);
+  renderGlobalScoreList($('#globalScoreList'), scoreViewBoard);
+  $('#watchReplay').classList.toggle('hidden', !getChampionReplay(scoreViewBoard));
+  fetchGlobalScores(force, scoreViewBoard);
+}
+function showScores(force = false, board = scoreViewBoard) {
+  selectScoreBoard(board, force);
   renderScoreNetStatus();
   $('#scoresM').classList.remove('hidden');
-  fetchGlobalScores(force);
   flushPendingScores();
 }
 function renderLetters() {
@@ -1865,23 +2537,31 @@ function renderLetters() {
 function showOver() {
   $('#btns').classList.add('hidden');
   $('#over').classList.remove('hidden');
-  if (players === 2) {
+  if (replayViewing) {
+    $('#overTitle').innerHTML = 'REPLAY <span>COMPLETE</span>';
+    $('#overSub').textContent = 'CHAMPION RUN · ' + score.toLocaleString();
+    $('#overText').textContent = `Recorded ${boardProfile(runBoard).title} run reached wave ${wave} · replay playback never enters ScoreNet`;
+    entryQueue = [];
+  } else if (players === 2) {
+    $('#overTitle').innerHTML = 'HUMANITY <span>DEPRECATED</span>';
     $('#overSub').textContent = `P1 ${P[0].score.toLocaleString()} · P2 ${P[1].score.toLocaleString()}`;
     $('#overText').textContent = `P1 reached wave ${P[0].wave}, P2 reached wave ${P[1].wave} · ${P[0].rescued + P[1].rescued} humans rescued between you`;
     entryQueue = [0, 1].map(i => ({ label: 'PLAYER ' + (i + 1), score: P[i].score, wave: P[i].wave,
-      local: isHigh(P[i].score, P[i].wave), global: false })).filter(e => e.local);
+      board:'arcade', local: isHigh(P[i].score, P[i].wave, 'arcade'), global: false })).filter(e => e.local);
   } else {
+    $('#overTitle').innerHTML = isOverdrive() ? 'OVERDRIVE <span>ENDED</span>' : 'HUMANITY <span>DEPRECATED</span>';
     $('#overSub').textContent = 'FINAL SCORE ' + score.toLocaleString();
-    $('#overText').textContent = `Reached wave ${wave} · ${rescuedTotal} human${rescuedTotal === 1 ? '' : 's'} rescued · ${deaths} courier${deaths === 1 ? '' : 's'} lost`;
-    const local = isHigh(score, wave), global = runGlobalEligible && score > 0;
-    entryQueue = local || global ? [{ label: '', score, wave, local, global }] : [];
+    const modeText = isOverdrive() ? ` · best rescue chain ${bestRescueChain} · ${rescueMultiplier}× final multiplier` : '';
+    $('#overText').textContent = `Reached wave ${wave} · ${rescuedTotal} human${rescuedTotal === 1 ? '' : 's'} rescued · ${deaths} courier${deaths === 1 ? '' : 's'} lost${modeText}`;
+    const local = isHigh(score, wave, runBoard), global = runGlobalEligible && score > 0;
+    entryQueue = local || global ? [{ label: boardProfile(runBoard).title, board:runBoard, score, wave, local, global }] : [];
   }
   renderScoreNetStatus();
   nextEntry();
 }
 function nextEntry() {
   while (entryQueue.length) {
-    entryQueue[0].local = isHigh(entryQueue[0].score, entryQueue[0].wave);
+    entryQueue[0].local = isHigh(entryQueue[0].score, entryQueue[0].wave, entryQueue[0].board);
     if (entryQueue[0].local || entryQueue[0].global) break;
     entryQueue.shift();
   }
@@ -1893,31 +2573,53 @@ function nextEntry() {
     $('#entryLabel').textContent = (e.label ? e.label + ' · ' : '') + scope + ' — SIGN THE ROLL';
     letters = [0, 0, 0]; renderLetters();
   }
-  renderScoreList($('#finalScores'));
+  renderScoreList($('#finalScores'), runBoard);
 }
-bind($('#startBtn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(1); });
-bind($('#start2Btn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(2); });
+function watchChampionReplay() {
+  const data = getChampionReplay(scoreViewBoard);
+  if (!data) { $('#watchReplay').classList.add('hidden'); return; }
+  Snd.unlock(); Snd.click(); bot.enabled = false;
+  $('#autoBadge').textContent = 'CHAMPION REPLAY'; $('#autoBadge').style.display = 'block';
+  startGame(1, data.mode, { seed:data.seed, board:data.board, replay:data });
+}
+bind($('#startBtn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').textContent = 'AUTO-RUN'; $('#autoBadge').style.display = 'none'; startGame(1, 'arcade'); });
+bind($('#start2Btn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').textContent = 'AUTO-RUN'; $('#autoBadge').style.display = 'none'; startGame(2, 'arcade'); });
+bind($('#overdriveBtn'), () => {
+  Snd.unlock(); Snd.click();
+  const p = boardProfile(todayBoard()), mod = dailyModFor(p.id);
+  $('#dailyBrief').textContent = `${p.title} · ${mod.name}: ${mod.desc} One seeded world, one life, shared by every courier.`;
+  $('#modeM').classList.remove('hidden');
+});
+bind($('#startOverdrive'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(1, 'overdrive'); });
+bind($('#startDaily'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(1, 'daily'); });
+bind($('#closeMode'), () => { Snd.click(); $('#modeM').classList.add('hidden'); });
 bind($('#showScores'), () => { Snd.click(); showScores(); });
 bind($('#refreshScores'), () => { Snd.click(); showScores(true); });
 bind($('#closeScores'), () => { Snd.click(); $('#scoresM').classList.add('hidden'); });
+bind($('#watchReplay'), watchChampionReplay);
+for (const tab of $('#scoreTabs').querySelectorAll('button')) bind(tab, () => { Snd.click(); selectScoreBoard(tab.dataset.board, false); });
 bind($('#resumeBtn'), () => { Snd.click(); togglePause(); });
 bind($('#quitBtn'), () => { Snd.click(); returnToTitle(); });
 bind($('#pauseBtn'), togglePause);
 bind($('#muteBtn'), () => setMute(!Snd.on));
-bind($('#againBtn'), () => { Snd.click(); startGame(players); });
+bind($('#againBtn'), () => { Snd.click(); $('#autoBadge').style.display = 'none'; startGame(players, gameMode); });
 bind($('#overTitleBtn'), () => { Snd.click(); returnToTitle(); });
 bind($('#skipScore'), () => { Snd.click(); entryQueue.shift(); nextEntry(); });
 bind($('#saveScore'), () => {
   const e = entryQueue.shift();
   if (!e) return;
   const initials = letters.map(x => alphabet[x]).join('');
-  if (e.local && isHigh(e.score, e.wave)) {
-    const a = getScores();
+  if (e.local && isHigh(e.score, e.wave, e.board)) {
+    const a = getScores(e.board);
     a.push({ name: initials, score: e.score, wave: e.wave });
-    saveScores(a);
+    saveScores(a, e.board);
+    const top = getScores(e.board)[0];
+    if (finalReplay && e.board !== 'arcade' && top && top.score === e.score && top.wave === e.wave) {
+      store.set(REPLAY_PREFIX + e.board, { ...finalReplay, initials });
+    }
   }
-  if (e.global) queueGlobalScore({ initials, score: e.score, wave: e.wave });
-  hi = getScores()[0]?.score || 0; updateHud(true);
+  if (e.global) queueGlobalScore({ initials, score: e.score, wave: e.wave }, e.board);
+  hi = getScores(runBoard)[0]?.score || 0; updateHud(true);
   Snd.click();
   nextEntry();
 });
@@ -1956,6 +2658,7 @@ function buildOpts() {
         settings[key] = v;
         if (key === 'sound') setMute(v); else store.set(SET_KEY, settings);
         if (key === 'diff') diffMul = DIFFS[v];
+        if (key === 'cabinetFx') document.body.classList.toggle('fx-off', !v);
         Snd.click(); buildOpts();
       });
       holder.append(b);
@@ -1965,10 +2668,12 @@ function buildOpts() {
   mk($('#optDiff'), ['cadet', 'arcade', 'veteran'], 'diff', v => v.toUpperCase());
   mk($('#optExtra'), [20000, 25000, 30000, 50000, 0], 'extraAt', v => v ? (v / 1000) + 'K' : 'NEVER');
   mk($('#optLives'), [3, 5], 'lives', v => '' + v);
+  mk($('#optCabinet'), [true, false], 'cabinetFx', v => v ? 'ON' : 'OFF');
 }
 bind($('#optsBtn'), () => { Snd.click(); buildOpts(); $('#optsM').classList.remove('hidden'); });
 bind($('#closeOpts'), () => { Snd.click(); $('#optsM').classList.add('hidden'); });
 addEventListener('online', () => { fetchGlobalScores(true); flushPendingScores(); });
+document.body.classList.toggle('fx-off', !settings.cabinetFx);
 
 /* ============================== QA API ============================== */
 function taintRun() { qaTainted = true; assistedRun = true; runGlobalEligible = false; }
@@ -1977,14 +2682,37 @@ window.__CHROME_RIOT__ = {
   get state() { return state; }, get score() { return score; }, get wave() { return wave; },
   get lives() { return lives; }, get chain() { return chain; }, get deaths() { return deaths; },
   get wavesCleared() { return wavesCleared; }, get tick() { return tick; }, get bot() { return bot.enabled; },
+  get mode() { return gameMode; }, get board() { return runBoard; }, get theme() { return currentTheme.id; },
+  get rescueMultiplier() { return rescueMultiplier; }, get replayViewing() { return replayViewing; },
   get assisted() { return assistedRun; }, get globalEligible() { return runGlobalEligible; },
   get pendingScores() { return getPendingScores().length; }, get wakeActive() { return !!wakeLock; },
-  get rules() { return { standard: standardRules(), diff: settings.diff, extraAt: settings.extraAt, lives: settings.lives }; },
+  get rules() { return { standard: standardRules(), diff: settings.diff, extraAt: settings.extraAt, lives: settings.lives,
+    runExtraAt, runStartLives, board:runBoard }; },
   get player() { return { x: player.x, y: player.y, fx: player.fx, fy: player.fy }; },
   counts() { return { drudges: drudges.length, pylons: pylons.length, juggs: juggs.length, hives: hives.length,
     wasps: wasps.length, stingers: stingers.length, cortexes: cortexes.length, seekers: seekers.length,
     thralls: thralls.length, forges: forges.length, crawlers: crawlers.length, shells: shells.length,
-    humans: humans.length, bullets: bullets.length, parts: parts.length }; },
+    humans: humans.length, bullets: bullets.length, bosses:bosses.length, nemeses:nemeses.length,
+    bossShots:bossShots.length, hazards:hazards.length, echoes:rescueEchoes.length, parts: parts.length }; },
+  digest() {
+    const rows = a => a.slice(0, 8).map(e => [+(e.x || 0).toFixed(3), +(e.y || 0).toFixed(3), e.hp || 0, e.t || 0]);
+    return JSON.stringify({ state, mode:gameMode, board:runBoard, wave, score, lives,
+      player:[+player.x.toFixed(3),+player.y.toFixed(3)], drudges:rows(drudges), humans:rows(humans),
+      bosses:rows(bosses), nemeses:rows(nemeses), hazards:rows(hazards), shots:rows(bossShots) });
+  },
+  replayCodec(codes) {
+    const oldRows = replaySegments, oldLast = replayLastCode, oldCount = replayLastCount;
+    replaySegments = []; replayLastCode = -1; replayLastCount = 0;
+    for (const code of codes) {
+      const c = clamp(Math.floor(code) || 0, 0, 80);
+      if (c === replayLastCode && replayLastCount < 90) replayLastCount++;
+      else { if (replayLastCount) replaySegments.push([replayLastCode,replayLastCount]); replayLastCode=c; replayLastCount=1; }
+    }
+    const packed = packReplay(), rows = unpackReplay(packed), decoded = [];
+    if (rows) for (const [code,count] of rows) for (let i=0;i<count;i++) decoded.push(code);
+    replaySegments = oldRows; replayLastCode = oldLast; replayLastCount = oldCount;
+    return { packed, decoded, ok:JSON.stringify(decoded) === JSON.stringify(codes.map(c => clamp(Math.floor(c) || 0, 0, 80))) };
+  },
   frame(q) { draw(); return canvas.toDataURL('image/jpeg', q || 0.7); },
   setBot(v) { taintRun(); bot.enabled = !!v; $('#autoBadge').style.display = v ? 'block' : 'none'; },
   setInput(mv, fv, ticks = 60) { taintRun(); inputOverride = { mv: mv || null, fv: fv || null, ticks }; },
@@ -1993,13 +2721,18 @@ window.__CHROME_RIOT__ = {
   get P() { return P.map(p => p && { score: p.score, lives: p.lives, wave: p.wave }); },
   startDemo() { beginStory(); },
   stopDemo() { if (demo) exitDemo(); },
-  start(useBot) { taintRun(); bot.enabled = !!useBot; $('#autoBadge').style.display = useBot ? 'block' : 'none'; startGame(); },
+  start(useBot, mode = 'arcade') { taintRun(); bot.enabled = !!useBot; $('#autoBadge').style.display = useBot ? 'block' : 'none'; startGame(1, mode); },
+  forceWave(w) { taintRun(); wave = clamp(Math.floor(w) || 1, 1, 255); spawnWave(wave); return this.snapshot(); },
+  clearKillables() { taintRun(); drudges=[];hives=[];wasps=[];cortexes=[];thralls=[];forges=[];crawlers=[];bosses=[];nemeses=[];return this.snapshot(); },
+  rescue(n = 1) { taintRun(); for (let i=0;i<n;i++) { humans.push({kind:['ma','pa','kid'][i%3],x:player.x,y:player.y,dx:0,dy:0,walkT:30,frame:0,mat:0}); updateHumans(); } return this.snapshot(); },
+  breakChain() { taintRun(); breakRescueChain(); return this.snapshot(); },
   step(n = 1) { taintRun(); for (let i = 0; i < n; i++) stepTick(); draw(); return this.snapshot(); },
-  snapshot() { return { state, wave, score, lives, deaths, wavesCleared, tick, chain,
+  snapshot() { return { state, mode:gameMode, board:runBoard, theme:currentTheme.id, wave, score, lives, deaths, wavesCleared, tick, chain,
+    rescueMultiplier, bossHp:bosses[0]?.hp || 0,
     nan: !isFinite(player.x + player.y), counts: this.counts() }; },
   autoRun(seconds = 60, opts = {}) {
     const untilWave = opts.untilWave || 0, errors = [];
-    taintRun(); bot.enabled = true; $('#autoBadge').style.display = 'block'; startGame();
+    taintRun(); bot.enabled = true; $('#autoBadge').style.display = 'block'; startGame(1, opts.mode || 'arcade');
     const maxTicks = Math.round(seconds * 60);
     let t = 0;
     for (; t < maxTicks; t++) {
@@ -2023,7 +2756,7 @@ function frame(t) {
   pollGamepadUi();
   const dt = Math.min(0.05, (t - last) / 1000 || 0.016); last = t;
   if (state === 'title') {
-    const modalOpen = !$('#scoresM').classList.contains('hidden') || !$('#optsM').classList.contains('hidden');
+    const modalOpen = !$('#scoresM').classList.contains('hidden') || !$('#optsM').classList.contains('hidden') || !$('#modeM').classList.contains('hidden');
     if (modalOpen) idleT = 0;
     else { idleT += dt; if (idleT > 12) { idleT = 0; beginStory(); } }
     draw(); return;
@@ -2038,7 +2771,7 @@ function frame(t) {
 requestAnimationFrame(frame);
 renderScoreNetStatus();
 if (getPendingScores().length) setTimeout(flushPendingScores, 1200);
-if (AUTO) setTimeout(() => window.__CHROME_RIOT__.start(true), 500);
+if (AUTO) setTimeout(() => window.__CHROME_RIOT__.start(true, AUTO_MODE), 500);
 })();
 </script>
 </body>
