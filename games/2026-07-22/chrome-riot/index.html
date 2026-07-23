@@ -59,15 +59,20 @@
   .foe { display:flex; flex-direction:column; align-items:center; gap:3px; padding:7px 2px 6px; border:1px solid #ffffff14; border-radius:10px; background:#ffffff05; }
   .foe canvas { height:30px; image-rendering:pixelated; }
   .foe b { font-size:9.5px; letter-spacing:1.5px; color:#fff; } .foe i { font-style:normal; font-size:9px; color:var(--dim); }
-  #scoreList { margin:12px auto 4px; max-width:360px; text-align:left; font:700 13px 'Courier New',monospace; }
+  .scoreBoards { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px auto 6px; max-width:460px; }
+  .scoreBoard { min-width:0; padding:9px 8px 5px; border:1px solid #4df3ff24; border-radius:12px; background:#02081770; }
+  .scoreBoard h3 { margin:0 0 6px; color:var(--cy); font-size:9.5px; letter-spacing:2px; }
+  #scoreList,#globalScoreList { text-align:left; font:700 12px 'Courier New',monospace; }
   .scoreRow { display:grid; grid-template-columns:30px 52px 1fr 58px; padding:6px 5px; border-bottom:1px solid #4df3ff1a; color:#c8f2ff; }
   .scoreRow:first-child { color:#ffe89a; text-shadow:0 0 10px #ffcb5c; } .scoreRow em { text-align:right; color:var(--dim); font-style:normal; }
+  .scoreStatus { min-height:54px; display:flex; align-items:center; justify-content:center; text-align:center; color:var(--dim); font:700 10px Arial,sans-serif; letter-spacing:1px; line-height:1.5; }
   .initials { display:flex; gap:12px; justify-content:center; margin:12px 0; }
   .letter { font:900 26px Arial,sans-serif; color:#ffe89a; min-width:48px; } .letter button { display:block; width:46px; height:36px; border-radius:9px; margin:6px auto; font-size:14px; }
   .version { margin-top:12px; font-size:9.5px; letter-spacing:2px; color:#5a6a8f; }
   .optrow { display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin:2px 0 10px; }
   .optrow button { height:38px; padding:0 16px; border-radius:999px; border-color:#4df3ff44; background:linear-gradient(150deg,#101b2e,#0a101f); box-shadow:none; color:#9fb6d9; }
   .optrow button.sel { border-color:#4df3ffcc; color:#eafcff; background:linear-gradient(150deg,#0e5f78,#083048); box-shadow:0 0 14px #4df3ff44; }
+  @media (max-width:460px){ .scoreBoards{grid-template-columns:1fr} }
   @media (max-height:660px){ .card{padding:15px 14px} h1{font-size:32px} p{margin:6px auto} .play{height:46px;margin:7px 0} #manual{gap:5px 4px} .version{margin-top:6px} }
 </style>
 </head>
@@ -97,9 +102,9 @@
   <div id="manual"></div>
   <button class="play" id="startBtn">START THE RIOT</button><br>
   <button class="secondary" id="start2Btn">2 PLAYER RIOT</button>
-  <button class="secondary" id="showScores">HIGH SCORES</button>
-  <button class="secondary" id="optsBtn">OPTIONS</button>
-  <div class="version">BUILD v1.4.0 · 2026-07-23 · WILLIAMS AUDIO PASS</div>
+  <button class="secondary" id="showScores">GLOBAL + LOCAL SCORES</button>
+  <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
+  <div class="version">BUILD v1.5.0 · 2026-07-23 · GLOBAL SCORENET</div>
 </div></div>
 
 <div id="pauseM" class="modal hidden"><div class="card">
@@ -112,6 +117,7 @@
 <div id="optsM" class="modal hidden"><div class="card">
   <h1>OPTIONS</h1>
   <h2>OPERATOR SETTINGS</h2>
+  <p class="small">CABINET SOUND</p><div class="optrow" id="optSound"></div>
   <p class="small">DIFFICULTY</p><div class="optrow" id="optDiff"></div>
   <p class="small">EXTRA LIFE EVERY</p><div class="optrow" id="optExtra"></div>
   <p class="small">STARTING LIVES</p><div class="optrow" id="optLives"></div>
@@ -120,8 +126,12 @@
 
 <div id="scoresM" class="modal hidden"><div class="card">
   <h1>HALL OF <span>STEEL</span></h1>
-  <h2>LOCAL RESISTANCE RECORDS</h2>
-  <div id="scoreList"></div>
+  <h2>RESISTANCE SCORENET</h2>
+  <div class="scoreBoards">
+    <section class="scoreBoard"><h3>ON THIS CABINET</h3><div id="scoreList"></div></section>
+    <section class="scoreBoard"><h3>GLOBAL NETWORK</h3><div id="globalScoreList" aria-live="polite"></div></section>
+  </div>
+  <button class="secondary" id="refreshScores">REFRESH NETWORK</button>
   <button class="secondary" id="closeScores">RETURN</button>
 </div></div>
 
@@ -141,7 +151,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '1.4.0';
+const VERSION = '1.5.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const START_WAVE = Math.max(1, parseInt(qs.get('wave'), 10) || 1);
@@ -157,6 +167,7 @@ const dist2 = (ax, ay, bx, by) => { const dx = ax - bx, dy = ay - by; return dx 
 
 // ---- persisted bits ----
 const HS_KEY = 'chrome-riot-highscores-v1', SET_KEY = 'chrome-riot-settings-v1';
+const GLOBAL_SCORE_API = 'https://game-scores.jez237.workers.dev/scores/chrome-riot';
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 const settings = Object.assign({ sound: true, diff: 'arcade', extraAt: 25000, lives: 3 }, store.get(SET_KEY, {}));
@@ -164,6 +175,53 @@ const DIFFS = { cadet: 1.35, arcade: 1, veteran: 0.75 };
 let diffMul = DIFFS[settings.diff] || 1;
 const getScores = () => store.get(HS_KEY, []);
 const saveScores = a => store.set(HS_KEY, a);
+let globalScores = null, globalScoresAt = 0, globalScoreState = 'idle', globalFetchPromise = null;
+
+const cleanScore = s => ({
+  name: String(s?.initials ?? s?.name ?? '???').toUpperCase().replace(/[^A-Z]/g, '').slice(0, 3) || '???',
+  score: Math.max(0, Math.min(99999999, Math.floor(Number(s?.score) || 0))),
+  wave: Math.max(1, Math.min(999, Math.floor(Number(s?.wave ?? s?.level) || 1))),
+});
+async function fetchTimed(url, opts = {}, ms = 6000) {
+  const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), ms);
+  try { return await fetch(url, { ...opts, signal: ctrl.signal }); }
+  finally { clearTimeout(timer); }
+}
+async function fetchGlobalScores(force = false) {
+  if (!force && globalScores && Date.now() - globalScoresAt < 30000) return globalScores;
+  if (globalFetchPromise) return globalFetchPromise;
+  globalScoreState = 'loading'; renderGlobalScoreList($('#globalScoreList'));
+  globalFetchPromise = (async () => {
+    try {
+      const res = await fetchTimed(GLOBAL_SCORE_API + '?limit=10');
+      if (!res.ok) throw new Error('ScoreNet ' + res.status);
+      const data = await res.json(), rows = Array.isArray(data) ? data : Array.isArray(data?.scores) ? data.scores : [];
+      globalScores = rows.map(cleanScore).sort((a, b) => b.score - a.score || b.wave - a.wave).slice(0, 10);
+      globalScoresAt = Date.now(); globalScoreState = 'ready';
+    } catch (e) {
+      globalScoreState = 'offline';
+    } finally {
+      globalFetchPromise = null;
+      renderGlobalScoreList($('#globalScoreList'));
+    }
+    return globalScores || [];
+  })();
+  return globalFetchPromise;
+}
+async function submitGlobalScore(entry) {
+  const clean = cleanScore(entry);
+  try {
+    const res = await fetchTimed(GLOBAL_SCORE_API, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initials: clean.name, score: clean.score, wave: clean.wave }),
+    });
+    if (!res.ok) throw new Error('ScoreNet ' + res.status);
+    globalScores = null; globalScoresAt = 0;
+    fetchGlobalScores(true);
+  } catch (e) {
+    console.warn('[chrome-riot] global score upload unavailable');
+  }
+}
 
 // ---- wave composition (per-wave: drudges, pylons, ma, pa, kid, juggernauts, cortexes, hives, forges) ----
 const WAVES = [
@@ -1542,16 +1600,39 @@ document.addEventListener('visibilitychange', () => {
 ['pointerdown', 'keydown'].forEach(ev => window.addEventListener(ev, () => { idleT = 0; }, { passive: true }));
 function setMute(v) {
   Snd.setOn(v);
+  settings.sound = !!v;
+  store.set(SET_KEY, settings);
   $('#muteBtn').classList.toggle('off', !v);
   $('#muteBtn').textContent = v ? '♪' : '✕';
 }
 const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; let letters = [0, 0, 0];
 const isHigh = v => { const a = getScores(); return v > 0 && (a.length < 10 || v > (a[a.length - 1]?.score || 0)); };
+function scoreRows(a) {
+  return a.map(cleanScore).slice(0, 10).map((s, i) =>
+    `<div class="scoreRow"><span>${i === 0 ? '★' : i + 1 + '.'}</span><span>${s.name}</span><span>${s.score.toLocaleString()}</span><em>W${s.wave}</em></div>`
+  ).join('');
+}
 function renderScoreList(target) {
   const a = getScores();
-  target.innerHTML = a.length
-    ? '<div id="scoreList">' + a.map((s, i) => `<div class="scoreRow"><span>${i === 0 ? '★' : i + 1 + '.'}</span><span>${s.name}</span><span>${s.score.toLocaleString()}</span><em>W${s.wave}</em></div>`).join('') + '</div>'
-    : '<p class="small">NO RESISTANCE RECORDS YET</p>';
+  target.innerHTML = a.length ? scoreRows(a) : '<div class="scoreStatus">NO CABINET RECORDS YET</div>';
+}
+function renderGlobalScoreList(target) {
+  if (!target) return;
+  if (globalScoreState === 'loading' || globalScoreState === 'idle') {
+    target.innerHTML = '<div class="scoreStatus">CONTACTING SCORENET…</div>';
+  } else if (globalScoreState === 'offline' && !globalScores) {
+    target.innerHTML = '<div class="scoreStatus">NETWORK OFFLINE<br>LOCAL RECORDS ARE SAFE</div>';
+  } else if (!globalScores?.length) {
+    target.innerHTML = '<div class="scoreStatus">NO GLOBAL RECORDS YET<br>BE THE FIRST</div>';
+  } else {
+    target.innerHTML = scoreRows(globalScores);
+  }
+}
+function showScores(force = false) {
+  renderScoreList($('#scoreList'));
+  renderGlobalScoreList($('#globalScoreList'));
+  $('#scoresM').classList.remove('hidden');
+  fetchGlobalScores(force);
 }
 function renderLetters() {
   const holder = $('#letters'); holder.innerHTML = '';
@@ -1591,7 +1672,8 @@ function nextEntry() {
 }
 bind($('#startBtn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(1); });
 bind($('#start2Btn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').style.display = 'none'; startGame(2); });
-bind($('#showScores'), () => { Snd.click(); renderScoreList($('#scoreList')); $('#scoresM').classList.remove('hidden'); });
+bind($('#showScores'), () => { Snd.click(); showScores(); });
+bind($('#refreshScores'), () => { Snd.click(); showScores(true); });
 bind($('#closeScores'), () => { Snd.click(); $('#scoresM').classList.add('hidden'); });
 bind($('#resumeBtn'), () => { Snd.click(); togglePause(); });
 bind($('#quitBtn'), () => { Snd.click(); state = 'title'; hideModals(); $('#btns').classList.add('hidden'); $('#title').classList.remove('hidden'); Snd.stopMusic(); });
@@ -1601,9 +1683,11 @@ bind($('#againBtn'), () => { Snd.click(); startGame(players); });
 bind($('#saveScore'), () => {
   const e = entryQueue.shift();
   if (!e) return;
+  const initials = letters.map(x => alphabet[x]).join('');
   const a = getScores();
-  a.push({ name: letters.map(x => alphabet[x]).join(''), score: e.score, wave: e.wave });
+  a.push({ name: initials, score: e.score, wave: e.wave });
   a.sort((x, y) => y.score - x.score); saveScores(a.slice(0, 10));
+  submitGlobalScore({ initials, score: e.score, wave: e.wave });
   hi = a[0].score; updateHud(true);
   Snd.click();
   nextEntry();
@@ -1639,10 +1723,16 @@ function buildOpts() {
     opts.forEach(v => {
       const b = document.createElement('button'); b.textContent = fmt(v);
       if (settings[key] === v) b.classList.add('sel');
-      bind(b, () => { settings[key] = v; store.set(SET_KEY, settings); if (key === 'diff') diffMul = DIFFS[v]; Snd.click(); buildOpts(); });
+      bind(b, () => {
+        settings[key] = v;
+        if (key === 'sound') setMute(v); else store.set(SET_KEY, settings);
+        if (key === 'diff') diffMul = DIFFS[v];
+        Snd.click(); buildOpts();
+      });
       holder.append(b);
     });
   };
+  mk($('#optSound'), [true, false], 'sound', v => v ? 'ON' : 'OFF');
   mk($('#optDiff'), ['cadet', 'arcade', 'veteran'], 'diff', v => v.toUpperCase());
   mk($('#optExtra'), [20000, 25000, 30000, 50000, 0], 'extraAt', v => v ? (v / 1000) + 'K' : 'NEVER');
   mk($('#optLives'), [3, 5], 'lives', v => '' + v);
