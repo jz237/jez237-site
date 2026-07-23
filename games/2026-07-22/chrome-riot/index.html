@@ -154,7 +154,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v3.0.0 · 2026-07-23 · HIGH-DEFINITION REBUILD</div>
+  <div class="version">BUILD v3.1.0 · 2026-07-23 · ELEVENLABS AUDIO + COMBAT FX</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -233,7 +233,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '3.0.0';
+const VERSION = '3.1.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -512,9 +512,34 @@ const EXTRA_LIFE = 25000, START_LIVES = 3;
 
 /* ============================== AUDIO ============================== */
 const Snd = (() => {
-  let ctx = null, comp, master, sfxBus, musicBus, voxBus, noiseBuf, dacShaper, sfxFilter, voxFilter;
+  let ctx = null, comp, master, sfxBus, sampleBus, musicBus, voxBus, noiseBuf, dacShaper, sfxFilter, voxFilter;
   let musicTimer = null, mstep = 0, nextNote = 0, musicOn = false;
+  let shotSample = 0, boomSample = 0, musicFailed = false;
+  const sampleBuffers = {}, loadingSamples = new Set();
+  const SAMPLE_FILES = {
+    laser1:'laser-1.mp3', laser2:'laser-2.mp3',
+    boom1:'enemy-explosion-1.mp3', boom2:'enemy-explosion-2.mp3',
+    heavy:'heavy-explosion.mp3', boss:'boss-explosion.mp3', armor:'armor-hit.mp3',
+    materialize:'materialize.mp3', rescue:'rescue.mp3', death:'player-death.mp3',
+    wave:'wave-start.mp3', extra:'extra-life.mp3', click:'ui-click.mp3',
+  };
+  const musicTrack = new Audio('assets/audio/riot-drive.mp3');
+  musicTrack.preload = 'auto'; musicTrack.loop = true; musicTrack.volume = .32;
+  musicTrack.addEventListener('error', () => { musicFailed = true; });
   let on = settings.sound !== false;
+  function primeSamples() {
+    if (!ctx) return;
+    for (const [name, file] of Object.entries(SAMPLE_FILES)) {
+      if (sampleBuffers[name] || loadingSamples.has(name)) continue;
+      loadingSamples.add(name);
+      fetch('assets/audio/' + file, { cache:'force-cache' })
+        .then(r => { if (!r.ok) throw new Error('audio ' + r.status); return r.arrayBuffer(); })
+        .then(data => ctx.decodeAudioData(data))
+        .then(buffer => { sampleBuffers[name] = buffer; })
+        .catch(() => {})
+        .finally(() => loadingSamples.delete(name));
+    }
+  }
   function ensure() {
     if (ctx) return true;
     try {
@@ -524,7 +549,8 @@ const Snd = (() => {
     master = ctx.createGain(); master.gain.value = 0.8;
     comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -18; comp.knee.value = 12; comp.ratio.value = 8; comp.attack.value = 0.003; comp.release.value = 0.2;
-    sfxBus = ctx.createGain(); sfxBus.gain.value = 0.9; musicBus = ctx.createGain(); musicBus.gain.value = 0.34;
+    sfxBus = ctx.createGain(); sfxBus.gain.value = 0.9; sampleBus = ctx.createGain(); sampleBus.gain.value = .82;
+    musicBus = ctx.createGain(); musicBus.gain.value = 0.34;
     voxBus = ctx.createGain(); voxBus.gain.value = 0.85;
     // Williams-era 8-bit DAC character: coarse amplitude steps, hard midrange and limited bandwidth.
     dacShaper = ctx.createWaveShaper(); dacShaper.oversample = 'none';
@@ -537,10 +563,12 @@ const Snd = (() => {
     sfxFilter = ctx.createBiquadFilter(); sfxFilter.type = 'lowpass'; sfxFilter.frequency.value = 6100; sfxFilter.Q.value = 0.45;
     voxFilter = ctx.createBiquadFilter(); voxFilter.type = 'bandpass'; voxFilter.frequency.value = 1350; voxFilter.Q.value = 0.72;
     sfxBus.connect(dacShaper).connect(sfxFilter).connect(comp);
+    sampleBus.connect(comp);
     voxBus.connect(voxFilter).connect(dacShaper);
     musicBus.connect(comp); comp.connect(master); master.connect(ctx.destination);
     noiseBuf = ctx.createBuffer(1, ctx.sampleRate, ctx.sampleRate);
     const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+      primeSamples();
       return true;
     } catch (e) {
       try { ctx?.close?.(); } catch (err) {}
@@ -561,6 +589,14 @@ const Snd = (() => {
     if (!document.hidden && ctx && ctx.state !== 'running') Promise.resolve(ctx.resume()).catch(() => {});
   });
   const ok = () => on && ctx && ctx.state === 'running';
+  function sample(name, gain = 1, rate = 1) {
+    const buffer = sampleBuffers[name];
+    if (!ok() || !buffer) return false;
+    const source = ctx.createBufferSource(), level = ctx.createGain();
+    source.buffer = buffer; source.playbackRate.value = rate; level.gain.value = gain;
+    source.connect(level).connect(sampleBus); source.start();
+    return true;
+  }
   const env = (g, t, a, peak, dur) => { g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t + a); g.gain.exponentialRampToValueAtTime(0.001, t + dur); };
   function steppedPitch(o, t, values, step) {
     values.forEach((f, i) => o.frequency.setValueAtTime(Math.max(25, f), t + i * step));
@@ -571,12 +607,16 @@ const Snd = (() => {
     o.connect(g).connect(sfxBus); o.start(t); o.stop(t + dur + 0.02); return dur;
   }
 
-  function zap() { if (!ok()) return; const t = ctx.currentTime, j = Math.random() * 70 - 35;
+  function zap() { if (!ok()) return;
+    if (sample(++shotSample & 1 ? 'laser1' : 'laser2', .62, .97 + Math.random() * .07)) return;
+    const t = ctx.currentTime, j = Math.random() * 70 - 35;
     dacTone('square', [1180+j,980+j,820,690,560,430,330,250], t, 0.006, 0.2, 0.012);
     dacTone('sawtooth', [620,510,430,350,290,235], t + 0.003, 0.007, 0.065, 0.008);
     const n=noiseSrc(),bp=ctx.createBiquadFilter(),g=ctx.createGain();bp.type='bandpass';bp.frequency.value=2700;bp.Q.value=2.4;
     g.gain.setValueAtTime(0.055,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.045);n.connect(bp).connect(g).connect(sfxBus);n.start(t);n.stop(t+0.05); }
-  function boom() { if (!ok()) return; const t = ctx.currentTime;
+  function boom() { if (!ok()) return;
+    if (sample(++boomSample & 1 ? 'boom1' : 'boom2', .58, .94 + Math.random() * .12)) return;
+    const t = ctx.currentTime;
     const n = noiseSrc(), lp = ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 1;
     lp.frequency.setValueAtTime(1200, t); lp.frequency.exponentialRampToValueAtTime(90, t + 0.3);
     const ng = ctx.createGain(); ng.gain.setValueAtTime(0.4, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.35);
@@ -584,7 +624,9 @@ const Snd = (() => {
     const o = ctx.createOscillator(); o.type = 'sine'; o.frequency.setValueAtTime(160, t); o.frequency.exponentialRampToValueAtTime(45, t + 0.22);
     const og = ctx.createGain(); og.gain.setValueAtTime(0.35, t); og.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
     o.connect(og).connect(sfxBus); o.start(t); o.stop(t + 0.26); }
-  function boomBig() { if (!ok()) return; const t = ctx.currentTime;
+  function boomBig() { if (!ok()) return;
+    if (sample('boss', .72, .96 + Math.random() * .055)) { duck(); return; }
+    const t = ctx.currentTime;
     const c = noiseSrc(), hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2500;
     const cg = ctx.createGain(); cg.gain.setValueAtTime(0.35, t); cg.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
     c.connect(hp).connect(cg).connect(sfxBus); c.start(t); c.stop(t + 0.07);
@@ -596,42 +638,52 @@ const Snd = (() => {
     const sg = ctx.createGain(); sg.gain.setValueAtTime(0.5, t); sg.gain.exponentialRampToValueAtTime(0.001, t + 0.7);
     s.connect(sg).connect(sfxBus); s.start(t); s.stop(t + 0.72);
     duck(); }
-  function rescueSfx() { if (!ok()) return; const t = ctx.currentTime;
+  function boomHeavy() {
+    if (!ok()) return;
+    if (sample('heavy', .66, .95 + Math.random() * .07)) { duck(); return; }
+    boomBig();
+  }
+  function rescueSfx() { if (!ok()) return; if (sample('rescue', .62)) return; const t = ctx.currentTime;
     [392,523,659,784,1047].forEach((f,i)=>dacTone('square',[f,f*1.03,f*.98],t+i*.052,.012,i===4?.2:.135,i===4?.14:.018));
     dacTone('triangle',[330,392,523,659,784,1047],t+.08,.052,.075,.16); }
-  function matSfx() { if (!ok()) return; const t = ctx.currentTime;
+  function matSfx() { if (!ok()) return; if (sample('materialize', .52, .97 + Math.random() * .05)) return; const t = ctx.currentTime;
     const seq=[180,230,310,420,570,760,980,1250,1540,1840,2100,2380];
     dacTone('square',seq,t,.032,.115,.05);dacTone('sawtooth',seq.map((f,i)=>f*(i&1?1.18:.82)),t+.008,.032,.06,.06);
     const n=noiseSrc(),bp=ctx.createBiquadFilter(),ng=ctx.createGain();bp.type='bandpass';bp.Q.value=9;
     bp.frequency.setValueAtTime(420,t);bp.frequency.exponentialRampToValueAtTime(4200,t+.43);env(ng,t,.03,.15,.48);
     n.connect(bp).connect(ng).connect(sfxBus);n.start(t);n.stop(t+.5); }
-  function deathSfx() { if (!ok()) return; const t = ctx.currentTime;
+  function deathSfx() { if (!ok()) return; if (sample('death', .72)) { duck(); return; } const t = ctx.currentTime;
     dacTone('square',[980,860,735,620,520,430,350,285,225,175,130,92,64,45],t,.045,.24,.18);
     dacTone('sawtooth',[490,420,350,295,242,194,150,112,82,58,40],t+.015,.057,.13,.24);
     setTimeout(()=>{if(ok())boomBig()},130); }
-  function fanfare() { if (!ok()) return; const t = ctx.currentTime;
+  function fanfare() { if (!ok()) return; if (sample('wave', .58)) return; const t = ctx.currentTime;
     [262,330,392,523,659,784].forEach((f,i)=>dacTone('square',[f,f,f*1.01],t+i*.065,.018,.13,i===5?.2:.025));
     dacTone('triangle',[523,659,784,1047,784,1047],t+.43,.07,.09,.24); }
-  function clank() { if (!ok()) return; const t = ctx.currentTime;
+  function clank() { if (!ok()) return; if (sample('armor', .52, .94 + Math.random() * .12)) return; const t = ctx.currentTime;
     const o = ctx.createOscillator(); o.type = 'square'; o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(60, t + 0.07);
     const g = ctx.createGain(); g.gain.setValueAtTime(0.14, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
     o.connect(g).connect(sfxBus); o.start(t); o.stop(t + 0.09);
     const n = noiseSrc(), hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 3000;
     const ng = ctx.createGain(); ng.gain.setValueAtTime(0.08, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
     n.connect(hp).connect(ng).connect(sfxBus); n.start(t); n.stop(t + 0.05); }
-  function pop() { if (!ok()) return; const t = ctx.currentTime;
+  function pop() { if (!ok()) return; if (sample('boom2', .36, 1.12 + Math.random() * .12)) return; const t = ctx.currentTime;
     const n = noiseSrc(), bp = ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.Q.value = 6; bp.frequency.value = 2400;
     const g = ctx.createGain(); g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
     n.connect(bp).connect(g).connect(sfxBus); n.start(t); n.stop(t + 0.1); }
-  function chime() { if (!ok()) return; const t = ctx.currentTime;
+  function chime() { if (!ok()) return; if (sample('extra', .64)) return; const t = ctx.currentTime;
     [660, 880, 1320].forEach((f, i) => { const st = t + i * 0.11, o = ctx.createOscillator(); o.type = 'sine'; o.frequency.value = f;
       const g = ctx.createGain(); env(g, st, 0.01, 0.18, 0.4); o.connect(g).connect(sfxBus); o.start(st); o.stop(st + 0.42); }); }
-  function click() { if (!ok()) return; const t = ctx.currentTime;
+  function click() { if (!ok()) return; if (sample('click', .42, .98 + Math.random() * .04)) return; const t = ctx.currentTime;
     const o = ctx.createOscillator(); o.type = 'square'; o.frequency.value = 1800;
     const g = ctx.createGain(); g.gain.setValueAtTime(0.1, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
     o.connect(g).connect(sfxBus); o.start(t); o.stop(t + 0.035); }
   function duck() { if (!ok()) return; const t = ctx.currentTime;
-    musicBus.gain.setTargetAtTime(0.18, t, 0.05); musicBus.gain.setTargetAtTime(0.4, t + 0.4, 0.3); }
+    musicBus.gain.setTargetAtTime(0.18, t, 0.05); musicBus.gain.setTargetAtTime(0.4, t + 0.4, 0.3);
+    if (!musicTrack.paused) {
+      musicTrack.volume = .12;
+      setTimeout(() => { if (musicOn && on) musicTrack.volume = .32; }, 650);
+    }
+  }
 
   // machine-voice: ring-modulated syllable babble; every call is a fresh variant
   let barkBusy = 0;
@@ -680,17 +732,38 @@ const Snd = (() => {
       const g = ctx.createGain(); g.gain.setValueAtTime(0.05, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.03);
       n.connect(hp).connect(g).connect(musicBus); n.start(t); n.stop(t + 0.035); }
   }
-  function startMusic() { if (!ensure() || musicOn) return; musicOn = true;
-    if (ctx.state === 'running') { nextNote = ctx.currentTime + 0.05; }
+  function startProceduralMusic() {
+    if (ctx.state === 'running') nextNote = ctx.currentTime + 0.05;
     if (!musicTimer) musicTimer = setInterval(() => {
       if (!musicOn || !on || ctx.state !== 'running') return;
       if (nextNote < ctx.currentTime - 0.5) nextNote = ctx.currentTime + 0.05;
       while (nextNote < ctx.currentTime + 0.12) { schedStep(mstep, nextNote); mstep++; nextNote += STEP; }
-    }, 25); }
-  function stopMusic() { musicOn = false; }
-  function setOn(v) { on = v; settings.sound = v; store.set(SET_KEY, settings); if (v) unlock(); }
-  return { zap, boom, boomBig, rescueSfx, matSfx, deathSfx, fanfare, clank, pop, chime, click, bark, startMusic, stopMusic,
-    setOn, get on() { return on; }, unlock };
+    }, 25);
+  }
+  function startMusic() {
+    if (!ensure() || musicOn || !on) return;
+    musicOn = true; musicTrack.volume = .32;
+    if (!musicFailed) {
+      Promise.resolve(musicTrack.play()).catch(() => { musicFailed = true; if (musicOn) startProceduralMusic(); });
+    } else startProceduralMusic();
+  }
+  function stopMusic() { musicOn = false; musicTrack.pause(); }
+  function setOn(v) {
+    on = v; settings.sound = v; store.set(SET_KEY, settings);
+    if (!v) { musicTrack.pause(); }
+    else {
+      unlock();
+      if (typeof state !== 'undefined' && ['play','waveclear'].includes(state)) { musicOn = false; startMusic(); }
+    }
+  }
+  function status() {
+    return {
+      context:ctx?.state || 'none', samples:Object.keys(sampleBuffers).sort(), loading:loadingSamples.size,
+      music:{ on:musicOn, paused:musicTrack.paused, ready:musicTrack.readyState, time:+musicTrack.currentTime.toFixed(2), failed:musicFailed },
+    };
+  }
+  return { zap, boom, boomBig, boomHeavy, rescueSfx, matSfx, deathSfx, fanfare, clank, pop, chime, click, bark, startMusic, stopMusic,
+    setOn, status, get on() { return on; }, unlock };
 })();
 
 // ---- machine-voice caption lines (pools per event; picked fresh each time) ----
@@ -1144,12 +1217,22 @@ function readInput() {
 
 /* ============================== FX (particles / shake / popups) ============================== */
 const parts = [], MAXP = 520;
+const muzzleFx = [], blastFx = [];
 function spark(x, y, color, n, spd, life) {
   for (let i = 0; i < n; i++) {
     if (parts.length >= MAXP) parts.shift();
     const a = rand(0, Math.PI * 2), v = rand(spd * 0.3, spd);
     parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, life: rand(life * 0.5, life), max: life, color, r: rand(1, 2.6) });
   }
+}
+function muzzleBurst(x, y, dx, dy) {
+  const m = Math.hypot(dx, dy) || 1;
+  muzzleFx.push({ x, y, ux:dx / m, uy:dy / m, t:9, max:9 });
+  if (muzzleFx.length > 18) muzzleFx.shift();
+}
+function detonate(x, y, color, scale = 1) {
+  blastFx.push({ x, y, color, scale, t:Math.round(30 + scale * 7), max:Math.round(30 + scale * 7), seed:Math.random() * 1000 });
+  if (blastFx.length > 24) blastFx.shift();
 }
 let trauma = 0, freezeT = 0;
 const addTrauma = t => { trauma = Math.min(1, trauma + t); };
@@ -1443,7 +1526,7 @@ function updateJuggs() {
       const h = humans[k];
       if (h.mat <= 0 && dist2(j.x, j.y, h.x, h.y) < 40) {
         humans.splice(k, 1);
-        spark(h.x, h.y, '#ff4a3d', 16, 1.8, 36); popup(h.x, h.y, 'LOST', '#ff4a3d');
+        spark(h.x, h.y, '#ff4a3d', 16, 1.8, 36); detonate(h.x, h.y, '#ff4a3d', 1.1); popup(h.x, h.y, 'LOST', '#ff4a3d');
         addTrauma(0.2); Snd.boom(); say('humanLost'); breakRescueChain(h.x, h.y);
       }
     }
@@ -1820,9 +1903,12 @@ function updatePlayer(inp) {
     player.fx = inp.fv[0]; player.fy = inp.fv[1];
     player.holdT++;
     if (player.holdT >= 2 && player.cd <= 0 && bullets.length < 4) {
-      bullets.push({ x: player.x + inp.fv[0] * 4, y: player.y + inp.fv[1] * 4, dx: inp.fv[0] * 6, dy: inp.fv[1] * 6 });
+      const bx = player.x + inp.fv[0] * 4, by = player.y + inp.fv[1] * 4;
+      bullets.push({ x:bx, y:by, dx:inp.fv[0] * 6, dy:inp.fv[1] * 6 });
       player.cd = 8; Snd.zap();
-      spark(player.x + inp.fv[0] * 5, player.y + inp.fv[1] * 5, '#eafcff', 2, 0.8, 8);
+      muzzleBurst(player.x + inp.fv[0] * 5.5, player.y + inp.fv[1] * 5.5, inp.fv[0], inp.fv[1]);
+      spark(player.x + inp.fv[0] * 5, player.y + inp.fv[1] * 5, '#4df3ff', 7, 1.35, 12);
+      spark(player.x + inp.fv[0] * 5, player.y + inp.fv[1] * 5, '#ffffff', 3, .8, 8);
     }
   } else { player.holdT = 0; player.lastFx = player.lastFy = 9; }
 }
@@ -1831,6 +1917,9 @@ function killAt(x, y, color, pts, label) {
   popup(x, y, '' + pts, color);
   spark(x, y, color, 22, 2.05, 38);
   spark(x, y, '#ffffff', 5, 1.25, 18);
+  spark(x, y, '#ffe14a', 5, 1.65, 25);
+  spark(x, y, '#ff8a38', 4, 1.9, 30);
+  detonate(x, y, color, 1);
   Snd.boom(); addTrauma(0.12);
 }
 function updateBullets() {
@@ -1842,10 +1931,12 @@ function updateBullets() {
       b.x += b.dx / 2; b.y += b.dy / 2;
       if (b.x < 2 || b.x > FIELD.w - 2 || b.y < 2 || b.y > FIELD.h - 2) {
         spark(clamp(b.x, 2, FIELD.w - 2), clamp(b.y, 2, FIELD.h - 2), '#eafcff', 3, 0.8, 10);
+        detonate(clamp(b.x, 2, FIELD.w - 2), clamp(b.y, 2, FIELD.h - 2), '#4df3ff', .32);
         bullets.splice(i, 1); continue outer;
       }
       for (let j = pylons.length - 1; j >= 0; j--) if (dist2(b.x, b.y, pylons[j].x, pylons[j].y) < 16) {
-        spark(pylons[j].x, pylons[j].y, '#ffe14a', 10, 1.4, 26); pylons.splice(j, 1); bullets.splice(i, 1); Snd.pop(); continue outer;
+        spark(pylons[j].x, pylons[j].y, '#ffe14a', 10, 1.4, 26); detonate(pylons[j].x, pylons[j].y, '#ffe14a', .7);
+        pylons.splice(j, 1); bullets.splice(i, 1); Snd.pop(); continue outer;
       }
       for (let j = bosses.length - 1; j >= 0; j--) {
         const boss = bosses[j];
@@ -1858,6 +1949,9 @@ function updateBullets() {
             addScore(award); popup(boss.x, boss.y, 'WARDEN +' + award, '#ffe14a');
             spark(boss.x, boss.y, currentTheme.accent, 70, 3.4, 88);
             spark(boss.x, boss.y, '#ffffff', 36, 2.5, 65);
+            spark(boss.x, boss.y, '#ffe14a', 30, 3, 78);
+            spark(boss.x, boss.y, '#ff6b2d', 26, 3.6, 92);
+            detonate(boss.x, boss.y, currentTheme.accent, 4);
             Snd.boomBig(); flashBorder(currentTheme.accent, 50); addTrauma(0.9); hitStop(12); rumble([45, 28, 80]);
           }
           continue outer;
@@ -1871,7 +1965,8 @@ function updateBullets() {
           if (n.hp <= 0) {
             const award = 1800 + n.level * 700;
             nemeses.splice(j, 1); addScore(award); popup(n.x, n.y, 'NEMESIS +' + award, '#ffe14a');
-            spark(n.x, n.y, '#ff365f', 42, 2.8, 66); Snd.boomBig(); flashBorder('#ff365f', 30); addTrauma(0.55); rumble([30, 18, 48]);
+            spark(n.x, n.y, '#ff365f', 42, 2.8, 66); detonate(n.x, n.y, '#ff365f', 2.4);
+            Snd.boomHeavy(); flashBorder('#ff365f', 30); addTrauma(0.55); rumble([30, 18, 48]);
           }
           continue outer;
         }
@@ -1928,6 +2023,7 @@ function die() {
   spark(player.x, player.y, '#ff4a3d', 20, 2, 52);
   spark(player.x, player.y, '#ffe14a', 18, 2.2, 55);
   spark(player.x, player.y, '#ff4ad9', 14, 1.8, 50);
+  detonate(player.x, player.y, '#4df3ff', 2.8);
   Snd.deathSfx(); Snd.stopMusic(); say('death', null, true); breakRescueChain(); rumble([60, 35, 90]);
   updateHud();
 }
@@ -2015,6 +2111,8 @@ function fxTick() {
     p.x += p.vx; p.y += p.vy; p.vx *= 0.96; p.vy *= 0.96;
     if (--p.life <= 0) parts.splice(i, 1);
   }
+  for (let i = muzzleFx.length - 1; i >= 0; i--) if (--muzzleFx[i].t <= 0) muzzleFx.splice(i, 1);
+  for (let i = blastFx.length - 1; i >= 0; i--) if (--blastFx[i].t <= 0) blastFx.splice(i, 1);
   for (let i = popups.length - 1; i >= 0; i--) { popups[i].y -= 0.25; if (--popups[i].t <= 0) popups.splice(i, 1); }
   trauma = Math.max(0, trauma - 0.03);
 }
@@ -2336,6 +2434,64 @@ function drawNemesis(n) {
   ctx.fillStyle='#c8bed0';for(const x of[-4.6,4.6]){ctx.beginPath();ctx.arc(x,4.4,.55,0,7);ctx.fill();}
   ctx.restore();
 }
+function drawMuzzleBursts() {
+  for (const f of muzzleFx) {
+    const a = f.t / f.max, nx = -f.uy, ny = f.ux;
+    const len = 5 + a * 8, wide = 1.2 + a * 2.7;
+    ctx.save();
+    ctx.globalAlpha = Math.min(1, a * 1.7);
+    ctx.fillStyle = '#4df3ff';
+    ctx.beginPath();
+    ctx.moveTo(f.x + f.ux * len, f.y + f.uy * len);
+    ctx.lineTo(f.x - f.ux * 1.2 + nx * wide, f.y - f.uy * 1.2 + ny * wide);
+    ctx.lineTo(f.x - f.ux * 1.2 - nx * wide, f.y - f.uy * 1.2 - ny * wide);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.moveTo(f.x + f.ux * (len + 1.8), f.y + f.uy * (len + 1.8));
+    ctx.lineTo(f.x + nx * wide * .34, f.y + ny * wide * .34);
+    ctx.lineTo(f.x - nx * wide * .34, f.y - ny * wide * .34);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#bdfcff'; ctx.lineWidth = .65;
+    ctx.beginPath(); ctx.moveTo(f.x + nx * wide * 2.2, f.y + ny * wide * 2.2);
+    ctx.lineTo(f.x - nx * wide * 2.2, f.y - ny * wide * 2.2); ctx.stroke();
+    ctx.globalAlpha = a * .7; ctx.beginPath(); ctx.arc(f.x, f.y, 1.8 + (1 - a) * 4, 0, 7); ctx.stroke();
+    ctx.restore();
+  }
+}
+function drawBlastBursts() {
+  for (const b of blastFx) {
+    const p = 1 - b.t / b.max, fade = Math.max(0, 1 - p), s = b.scale;
+    const ring = s * (2 + 23 * (1 - Math.pow(1 - p, 3)));
+    ctx.save(); ctx.translate(b.x, b.y);
+    if (p < .58) {
+      const coreR = s * (2.5 + 10 * Math.sin(Math.min(1, p / .58) * Math.PI * .5));
+      const fire = ctx.createRadialGradient(-coreR * .16, -coreR * .16, .1, 0, 0, coreR);
+      fire.addColorStop(0, '#ffffff');
+      fire.addColorStop(.18, '#fff6b0');
+      fire.addColorStop(.44, b.color);
+      fire.addColorStop(1, b.color + '00');
+      ctx.globalAlpha = Math.min(1, (1 - p / .58) * 1.5);
+      ctx.fillStyle = fire; ctx.beginPath(); ctx.arc(0, 0, coreR, 0, 7); ctx.fill();
+    }
+    ctx.globalAlpha = fade * .9; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = Math.max(.55, 1.5 * s * fade);
+    ctx.beginPath(); ctx.arc(0, 0, ring, 0, 7); ctx.stroke();
+    ctx.globalAlpha = fade * .62; ctx.strokeStyle = b.color; ctx.lineWidth = Math.max(.45, 3.5 * s * fade);
+    ctx.beginPath(); ctx.arc(0, 0, ring * .78, 0, 7); ctx.stroke();
+    const rays = Math.round(8 + s * 4);
+    for (let i = 0; i < rays; i++) {
+      const a = i * Math.PI * 2 / rays + Math.sin(b.seed + i * 17.13) * .22;
+      const jitter = .72 + (Math.sin(b.seed * 2.1 + i * 31.7) + 1) * .2;
+      const r1 = ring * (.24 + p * .28), r2 = ring * jitter;
+      ctx.globalAlpha = fade * (.28 + (i % 3) * .16);
+      ctx.strokeStyle = i % 3 ? b.color : '#ffffff';
+      ctx.lineWidth = Math.max(.32, s * (.32 + (i % 2) * .2) * fade);
+      ctx.beginPath(); ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1);
+      ctx.lineTo(Math.cos(a) * r2, Math.sin(a) * r2); ctx.stroke();
+    }
+    ctx.restore();
+  }
+}
 function draw() {
   if (!SW || !SH) computeFit();
   if (!SW || !SH) return;
@@ -2418,6 +2574,11 @@ function draw() {
   for (const c of crawlers) if (c.mat <= 0) glowAt(c.x, c.y, 7, '#ffb347', 0.28);
   for (const b of bosses) glowAt(b.x, b.y, 20, currentTheme.accent, b.mat > 0 ? .28 : .58);
   for (const n of nemeses) glowAt(n.x, n.y, 10, '#ff365f', n.mat > 0 ? .24 : .52);
+  for (const f of muzzleFx) glowAt(f.x + f.ux * 3, f.y + f.uy * 3, 8, '#4df3ff', f.t / f.max * .8);
+  for (const b of blastFx) {
+    const p = 1 - b.t / b.max;
+    glowAt(b.x, b.y, b.scale * (12 + p * 14), b.color, Math.max(0, (1 - p) * .82));
+  }
   { const pulse = 0.3 + 0.18 * Math.sin(tick * 0.12);
     for (const h of humans) if (h.mat <= 0) glowAt(h.x, h.y, 8, '#ffe14a', pulse); }
   for (const t of thralls) { let i = 0; for (const [hx, hy] of t.hist) { glowAt(hx, hy, 4, '#58e06a', 0.18 * (1 - i / 7)); i++; } }
@@ -2488,13 +2649,18 @@ function draw() {
   // additive fx pass
   ctx.globalCompositeOperation = 'lighter';
   ctx.imageSmoothingEnabled = true;
+  drawBlastBursts();
+  drawMuzzleBursts();
   for (const b of bullets) {
-    glowAt(b.x, b.y, 5, '#4df3ff', 0.55);
+    glowAt(b.x, b.y, 7, '#4df3ff', 0.72);
     const l = Math.hypot(b.dx, b.dy) || 1, ux = b.dx / l, uy = b.dy / l;
-    ctx.globalAlpha = 0.9; ctx.strokeStyle = '#c9fbff'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(b.x - ux * 4, b.y - uy * 4); ctx.lineTo(b.x, b.y); ctx.stroke();
-    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 0.9;
-    ctx.beginPath(); ctx.moveTo(b.x - ux * 3, b.y - uy * 3); ctx.lineTo(b.x, b.y); ctx.stroke();
+    const trail = ctx.createLinearGradient(b.x - ux * 13, b.y - uy * 13, b.x + ux * 2, b.y + uy * 2);
+    trail.addColorStop(0, '#4df3ff00'); trail.addColorStop(.58, '#4df3ff99'); trail.addColorStop(1, '#ffffff');
+    ctx.globalAlpha = .9; ctx.strokeStyle = trail; ctx.lineCap = 'round'; ctx.lineWidth = 4.2;
+    ctx.beginPath(); ctx.moveTo(b.x - ux * 13, b.y - uy * 13); ctx.lineTo(b.x + ux * 1.8, b.y + uy * 1.8); ctx.stroke();
+    ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1.1;
+    ctx.beginPath(); ctx.moveTo(b.x - ux * 7, b.y - uy * 7); ctx.lineTo(b.x + ux * 2.2, b.y + uy * 2.2); ctx.stroke();
+    ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(b.x + ux, b.y + uy, 1.35, 0, 7); ctx.fill();
   }
   for (const s of stingers) {
     glowAt(s.x, s.y, 5, '#ff4a3d', .72);
@@ -2687,7 +2853,7 @@ function startGame(nPlayers = 1, mode = 'arcade', opts = {}) {
   replaySegments = []; replayLastCode = -1; replayLastCount = 0; finalReplay = null;
   hi = getScores(runBoard)[0]?.score || 0;
   gruntDelay = D.gruntDelay(wave); gruntFloor = D.gruntFloor(wave);
-  trauma = 0; freezeT = 0; parts.length = 0; popups.length = 0;
+  trauma = 0; freezeT = 0; parts.length = 0; muzzleFx.length = 0; blastFx.length = 0; popups.length = 0;
   spawnWave(wave);
   resetCamera();
   if (!demo) requestWake();
@@ -2968,6 +3134,7 @@ window.__CHROME_RIOT__ = {
   get rescueMultiplier() { return rescueMultiplier; }, get replayViewing() { return replayViewing; },
   get assisted() { return assistedRun; }, get globalEligible() { return runGlobalEligible; },
   get pendingScores() { return getPendingScores().length; }, get wakeActive() { return !!wakeLock; },
+  get audio() { return Snd.status(); },
   get camera() {
     const active = mobileCameraActive(), topPad = isOverdrive() ? 118 : 72, viewH = Math.max(1, SH - topPad - 18);
     const scale = active ? Math.max(SW / FIELD.w, viewH / FIELD.h) * settings.mobileZoom : SCALE;
@@ -2981,7 +3148,8 @@ window.__CHROME_RIOT__ = {
     wasps: wasps.length, stingers: stingers.length, cortexes: cortexes.length, seekers: seekers.length,
     thralls: thralls.length, forges: forges.length, crawlers: crawlers.length, shells: shells.length,
     humans: humans.length, bullets: bullets.length, bosses:bosses.length, nemeses:nemeses.length,
-    bossShots:bossShots.length, hazards:hazards.length, echoes:rescueEchoes.length, parts: parts.length }; },
+    bossShots:bossShots.length, hazards:hazards.length, echoes:rescueEchoes.length, parts: parts.length,
+    muzzleFx:muzzleFx.length, blastFx:blastFx.length }; },
   digest() {
     const rows = a => a.slice(0, 8).map(e => [+(e.x || 0).toFixed(3), +(e.y || 0).toFixed(3), e.hp || 0, e.t || 0]);
     return JSON.stringify({ state, mode:gameMode, board:runBoard, wave, score, lives,
@@ -3004,6 +3172,14 @@ window.__CHROME_RIOT__ = {
   frame(q) { draw(); return canvas.toDataURL('image/jpeg', q || 0.7); },
   setBot(v) { taintRun(); bot.enabled = !!v; $('#autoBadge').style.display = v ? 'block' : 'none'; },
   setInput(mv, fv, ticks = 60) { taintRun(); inputOverride = { mv: mv || null, fv: fv || null, ticks }; },
+  vfxBurst(scale = 2) {
+    taintRun();
+    const x = clamp(player.x + 14, 20, FIELD.w - 20), y = clamp(player.y - 16, 20, FIELD.h - 20);
+    detonate(x, y, '#ff4a3d', clamp(Number(scale) || 2, .5, 4));
+    spark(x, y, '#ff4a3d', 34, 2.8, 60); spark(x, y, '#ffe14a', 18, 2.2, 45); spark(x, y, '#ffffff', 12, 1.8, 30);
+    muzzleBurst(player.x + 5.5, player.y, 1, 0); draw();
+    return { x, y, counts:this.counts() };
+  },
   get demo() { return demo; },
   get players() { return players; }, get cur() { return cur; },
   get P() { return P.map(p => p && { score: p.score, lives: p.lives, wave: p.wave }); },
