@@ -1298,6 +1298,7 @@
     const SITE_BASE = './';
     const gameHref = g => g.href || `${SITE_BASE}${g.path}`;
     const games = [
+      { title: 'Smoke Lab', path: '2026-07-24/smoke-lab/', emoji: '💨', date: 'Jul 24', cat: 'arcade', tag: 'demo', desc: 'Unfinished physics sandbox — a real Eulerian fluid solver (Stam\'s Stable Fluids) running on the GPU in WebGL2, not a particle effect. Semi-Lagrangian advection, Jacobi pressure projection on a staggered grid, vorticity confinement, and buoyancy coupled to a temperature field, so hot smoke rises, cools, and stops climbing. Drag boxes, spheres and airfoils through the plume: obstacles are rasterised into a solid mask every frame and take part in the pressure solve, so smoke genuinely flows around them, and the speed of your drag is injected into the fluid to leave a wake. Around forty live sliders cover viscosity, dissipation, vorticity, buoyancy, wind, turbulence, emitters and rendering, with debug views for velocity, pressure, divergence, vorticity and the obstacle mask. Six presets from Campfire to Wind Tunnel. Falls back to a smaller CPU grid where float render targets are unavailable. Mouse, touch and keyboard.' },
       { title: 'Aquarium Laboratory', path: '2026-07-23/aquarium-laboratory/', emoji: '🐠', date: 'Jul 23', cat: 'arcade', tag: 'demo', desc: 'Interactive Three.js aquarium technology demo with eight anatomically distinct procedural fish species, flocking and obstacle avoidance, feeding and hunger behavior, animated water and caustics, swaying plants, bubbles, glass reflections, live camera tools, real-time telemetry, and an extensive searchable systems console. Select and follow fish, tap the glass, move hardscape, save presets, capture screenshots, and tune the exhibit from Low through Ultra quality.' },
       { title: 'Skyhook: Ruin Runner', path: '2026-07-22/skyhook/', emoji: '🪝', date: 'Jul 22', cat: 'arcade', tag: 'experimental', desc: 'v1.3.1 — an accessible one-finger sky-swing arcade run through a sunlit world of broken floating citadels. The opening auto-latches to a safe beacon; after that, hold anywhere to hook to the best reachable line and release to slingshot. Lower gravity, long tethers, rescue beacons, and Cloud Lift recovery catch missed timing and floor/lightning grazes; upper citadels are scenic so they cannot trap the flight. Catch relics, chain hooks for momentum, and survive procedural cloud layers, particle-rich impacts, synthesised flight sounds, touch-first controls, and a persistent local top-10 Hall of Wind.' },
       { title: 'Chrome Riot', path: '2026-07-22/chrome-riot/', emoji: '🤖', date: 'Jul 24', cat: 'arcade', tag: 'experimental', desc: 'v3.4.0 — Desktop mouse play now uses a compact RIOT STICK: click anywhere in the arena to open it, drag in one of eight directions, and the courier moves and fires that way together until release. Combat Clarity makes the mobile tracking camera tactical: edge markers point toward off-screen family members, enemies, wardens and incoming fire, while stronger courier/family silhouettes stay readable over a subdued battlefield. Operator Options includes floating or fixed mobile sticks plus size, sensitivity and opacity, the .6×–1.4× zoom range, a clarity toggle, and independent music/SFX levels. Rescue chains ignite three escalating Overcharge tiers — rapid thrust and fire, twin volleys, then piercing plasma with a one-hit Aegis shield. The soundtrack adds threat-reactive layers for crowded waves, last-life pressure, maximum rescue chains and bosses. Sector Wardens arrive with camera pullback, warning silhouettes, full name cards and themed entrances, then die in unique foundry, reactor, cathedral or orbital destruction sequences. Arcade, Overdrive, Daily Riot, isolated local/global ScoreNet boards, champion replays, touch, keyboard, mouse and gamepad controls remain intact.' },
@@ -1372,7 +1373,8 @@
       'void surge', 'void echo', 'gravity weaver', 'storm echo', 'vector arena demo',
       'vector arena 3d', 'vector tempest',
       'marble madness practice build', 'lumen',
-      'stunt car racer', 'stunt car racer hd', 'skyhook ruin runner'
+      'stunt car racer', 'stunt car racer hd', 'skyhook ruin runner',
+      'smoke lab'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
@@ -1407,7 +1409,7 @@
       ['blackout', 'tank'], ['subway', 'train'], ['glassrail', 'train'], ['vortex', 'storm'],
       ['slash', 'lightning'], ['void', 'void'], ['gravity', 'web'],
       ['fluid', 'fluid'], ['invaders', 'invaders'], ['choplifter', 'chopper'],
-      ['particle', 'fluid'],
+      ['particle', 'fluid'], ['smoke', 'fluid'],
       ['snake awakening', 'serpent'],
       ['serpent', 'serpent'],
       ['steel ribbon', 'ribbon'],
