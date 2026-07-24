@@ -4,6 +4,334 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-07-24",
+      "historicDate": "1983-08-01",
+      "displayDate": "Week of August 1-7, 1983",
+      "edition": "Issue 053 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Summer trade-show rush on warm, ink-softened newsprint",
+        "motifs": [
+          "Atari four-joystick game table",
+          "crowded computer showroom",
+          "boxed retail price cards"
+        ],
+        "layout": "Gaming-led broadsheet with a market-news secondary rail and compact culture shelves"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "Week of August 1-7, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "M.U.L.E. dominates the upper fold with a four-player Atari scene",
+        "secondaryRail": "The Summer CES computer flood, Atari XL reset, and price watch",
+        "archiveNavigation": "Previous and next weekly issues flank the 1983 archive calendar"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "IBM blue",
+        "texture": "warm newsprint, halftone screens, fine column rules, and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-08-01.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of August 1-7, 1983",
+        "caption": "A GPT Image 2 newspaper-style front page generated from the Chronicle's structured issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The home-computer boom is becoming a contest over what people can do together: play, bargain, program, and communicate.",
+      "morningLine": "This week, four joysticks turn an Atari into a noisy frontier marketplace while a wave of new machines crowds the fall starting line.",
+      "lead": {
+        "headline": "M.U.L.E. Turns the Atari Into a Four-Player Marketplace",
+        "dek": "Ozark Softscape and Electronic Arts mix land development, arcade action, and a live commodity auction into one unusually social computer game.",
+        "confidence": "period",
+        "sourceRefs": [
+          2,
+          10
+        ],
+        "body": [
+          "A new game from designer Dani Bunten and Ozark Softscape asks Atari owners to gather around one machine and build an economy together. M.U.L.E., published by Electronic Arts, supports as many as four players, with the computer taking any empty places, and makes unusually direct use of the Atari computer family's four controller ports.",
+          "Each colonist claims plots on the planet Irata and outfits mechanical M.U.L.E.s to produce food, energy, smithore, or the riskier crystite. The choices interlock: energy keeps production moving, food buys time, and smithore supplies new machines. A player who ignores the colony's needs can discover that private advantage is hard to sustain.",
+          "The market is the game's great piece of theater. Buyers and sellers move their figures toward one another in a real-time auction, testing prices while everyone watches. Between rounds, short arcade sequences and random events keep the balance unsettled, so arithmetic never entirely replaces reflexes or nerve.",
+          "Computer Gaming World's July-August issue gave the title feature treatment beside Suspended and Battle for Normandy. In a season crowded with new hardware, M.U.L.E. makes the strongest case that the home computer's future may depend as much on inventive shared software as on another memory specification."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Seventeen New Computers Crowd the Fall Starting Line",
+          "kicker": "Summer CES",
+          "dek": "Coleco's bundled Adam and a showroom full of rivals intensify the fight for the family desk.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "body": [
+            "COMPUT! counted at least 17 personal computers introduced at the Summer Consumer Electronics Show in Chicago and predicted that 30 to 40 sub-$1,000 machines could confront Christmas shoppers. The range ran from minimal 2K machines near $40 to elaborate systems above $1,000, a display of abundance that also warned how little room remained for undistinguished newcomers.",
+            "Coleco supplied the sharpest retail proposition. Its promised sub-$600 Adam combined an 80K Z80A computer, detachable keyboard, high-speed 500K-per-cassette drive, daisy-wheel printer, word processor, Microsoft BASIC, controllers, and Buck Rogers Planet of Zoom. A $450 add-on was promised for ColecoVision owners.",
+            "The bundle shifts the argument from the price of a keyboard to the cost of a usable system. Printers, storage, software, and a familiar game all arrive in the box—on paper, at least—putting pressure on rivals whose low advertised prices require a shopping list of accessories."
+          ]
+        },
+        {
+          "headline": "Atari Sweeps Away Its Old Line for Four XL Computers",
+          "kicker": "Hardware Desk",
+          "dek": "The 400, 800, and short-lived 1200XL give way to a new ladder beginning at $199.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Atari has completely restructured its home-computer line, replacing the 400, 800, and recently introduced 1200XL with four XL models. The 16K 600XL carries a suggested $199 price, while the 64K 800XL is marked at $299; both include BASIC and full-stroke keyboards while retaining broad compatibility with older Atari software and peripherals.",
+            "Higher up, the proposed 1400XL adds a direct-connect 300-baud modem and speech synthesis. The 1450XLD adds a built-in double-sided, double-density disk drive storing as much as 254K. Together the machines are Atari's answer to a price war that has made yesterday's range look expensive almost overnight.",
+            "Atari Publishing is also preparing software for Commodore and Texas Instruments machines, a striking acknowledgment that software can travel where hardware sales do not. The reset preserves the familiar Atari graphics and sound strengths while admitting that the company must compete at several price points at once."
+          ]
+        },
+        {
+          "headline": "C and Scientific Software Reach the Personal-Computer Desk",
+          "kicker": "Software Desk",
+          "dek": "An exact-week science column and BYTE's C-language issue point beyond the household budget program.",
+          "confidence": "exact-date / same-month",
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "body": [
+            "The New York Times devoted its August 2 Personal Computers column to new software for science and engineering, evidence that specialized calculation and analysis packages are becoming a recognizable microcomputer category. The personal machine is being asked to serve laboratories and technical offices, not merely play games or balance a checkbook.",
+            "BYTE's August theme issue, The C Language, follows the same movement toward more ambitious work. Its coverage of compilers, portability, and applications brings a language associated with institutional Unix systems before a broad microcomputer audience.",
+            "C cannot erase the incompatibilities among Apple, Atari, CP/M, and IBM machines, but portable source code offers programmers a way to think beyond a single box. That promise matters greatly in a week when the hardware showroom seems to acquire another incompatible family every few steps."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Coleco Adam",
+          "summary": "An 80K Z80A system promised with tape storage, daisy-wheel printer, controllers, productivity software, BASIC, and a game for under $600.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Atari 600XL and 800XL",
+          "summary": "New $199 and $299 machines bring built-in BASIC and full keyboards to Atari's reworked range.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "TRS-80 Model 100",
+          "summary": "Practical Computing reviews Radio Shack's battery-powered portable with built-in LCD and communications software.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "M.U.L.E.",
+          "detail": "Four-player economic strategy for Atari 8-bit computers from Electronic Arts."
+        },
+        {
+          "name": "C language systems",
+          "detail": "BYTE surveys compilers, portability, and applications for microcomputer programmers."
+        },
+        {
+          "name": "Wordwise",
+          "detail": "A word-processing ROM for the BBC Micro covered by Practical Computing."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "M.U.L.E.",
+            "Suspended: A Cryogenic Nightmare",
+            "Dragon's Lair",
+            "Battle for Normandy",
+            "Donkey Kong"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "National Lampoon's Vacation",
+            "Return of the Jedi",
+            "Risky Business",
+            "Jaws 3-D",
+            "Staying Alive"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "C language systems",
+            "Adam word processor and Microsoft BASIC",
+            "Wordwise"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Coleco Adam complete system",
+          "price": "Under $600 promised",
+          "note": "Computer, keyboard, tape drive, printer, software, controllers, and game."
+        },
+        {
+          "item": "ColecoVision Adam expansion",
+          "price": "$450 promised",
+          "note": "Computer expansion for existing ColecoVision owners."
+        },
+        {
+          "item": "Atari 600XL",
+          "price": "$199 suggested retail",
+          "note": "16K RAM; a 48K expansion was expected near $100."
+        },
+        {
+          "item": "Atari 800XL",
+          "price": "$299 suggested retail",
+          "note": "64K RAM, built-in BASIC, and monitor jack."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Industry leaders face the year ahead",
+          "text": "COMPUT!'s August interviews find executives forecasting a market already under severe price pressure."
+        },
+        {
+          "headline": "Three futures on the test bench",
+          "text": "Practical Computing examines Apple's Lisa, IBM's PC XT, and Radio Shack's portable Model 100."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Every Breath You Take",
+          "artist": "The Police"
+        },
+        {
+          "rank": 2,
+          "title": "Electric Avenue",
+          "artist": "Eddy Grant"
+        },
+        {
+          "rank": 3,
+          "title": "Flashdance... What a Feeling",
+          "artist": "Irene Cara"
+        },
+        {
+          "rank": 4,
+          "title": "Sweet Dreams (Are Made of This)",
+          "artist": "Eurythmics"
+        },
+        {
+          "rank": 5,
+          "title": "Maniac",
+          "artist": "Michael Sembello"
+        }
+      ],
+      "periodAd": {
+        "headline": "A Whole Computer System in One Carton",
+        "summary": "Coleco promises Adam with keyboard, tape drive, letter-quality printer, BASIC, word processing, controllers, and Buck Rogers.",
+        "tagline": "Promised under $600—availability expected this fall."
+      },
+      "market": {
+        "headline": "The Bundle Becomes the Battleground",
+        "summary": "With dozens of sub-$1,000 computers expected by Christmas, storage, printers, and included software increasingly matter as much as the keyboard's sticker price.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Thomas Sankara Takes Power in Upper Volta",
+        "summary": "On August 4, Captain Thomas Sankara came to power in a coup in Upper Volta; his revolutionary government would rename the country Burkina Faso the following year.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          8,
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "M.U.L.E. design, play, and period coverage",
+            "confidence": "period"
+          },
+          {
+            "claim": "Summer CES computer introductions and prices",
+            "confidence": "same-month"
+          },
+          {
+            "claim": "August 2 scientific-software coverage",
+            "confidence": "exact-date"
+          },
+          {
+            "claim": "Charts and Thomas Sankara world anchor",
+            "confidence": "exact-week"
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "COMPUT!: The Fall Computer Collection",
+          "url": "https://www.atarimagazines.com/compute/issue39/186_1_THE_FALL_COMPUTER_COLLECTION_AT_THE_SUMMER_CONSUMER_ELECTRONICS_SHOW.php"
+        },
+        {
+          "label": "COMPUT! Magazine Issue 39",
+          "url": "https://archive.org/details/1983-08-compute-magazine"
+        },
+        {
+          "label": "Computer Gaming World Vol. 3 No. 4",
+          "url": "https://www.cgwmuseum.org/galleries/issues/cgw_3.4.pdf"
+        },
+        {
+          "label": "BYTE: The C Language, August 1983",
+          "url": "https://archive.org/details/byte-magazine-1983-08"
+        },
+        {
+          "label": "New York Times: Software for Science and Engineering",
+          "url": "https://www.nytimes.com/1983/08/02/science/personal-computers-new-software-for-science-and-engineering.html"
+        },
+        {
+          "label": "Practical Computing, August 1983",
+          "url": "https://archive.org/stream/practical-computing/PracticalComputing-1983-08_djvu.txt"
+        },
+        {
+          "label": "Billboard Hot 100, August 6, 1983",
+          "url": "https://www.elpee.jp/hot100/week/1983-08-06"
+        },
+        {
+          "label": "Box Office Mojo: Weekend 31, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W31/"
+        },
+        {
+          "label": "Encyclopaedia Britannica: Thomas Sankara",
+          "url": "https://www.britannica.com/biography/Thomas-Sankara"
+        },
+        {
+          "label": "Encyclopaedia Britannica: Burkina Faso",
+          "url": "https://www.britannica.com/place/Burkina-Faso"
+        },
+        {
+          "label": "MobyGames: M.U.L.E.",
+          "url": "https://www.mobygames.com/game/188/mule/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "MODEM OWNERS",
+          "copy": "Swap programs and messages after dark. 300-baud callers welcome—local BBS hours vary."
+        },
+        {
+          "headline": "ATARI PLAYERS WANTED",
+          "copy": "Four colonists needed for an evening on Irata. Bring a joystick and your best auction face."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-07-23",
       "historicDate": "1983-07-25",
       "displayDate": "Week of July 25-31, 1983",

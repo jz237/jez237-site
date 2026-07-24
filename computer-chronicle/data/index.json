@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-24",
+      "historicDate": "1983-08-01",
+      "displayDate": "Week of August 1-7, 1983",
+      "edition": "Issue 053 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week, four joysticks turn an Atari into a noisy frontier marketplace while a wave of new machines crowds the fall starting line.",
+      "leadHeadline": "M.U.L.E. Turns the Atari Into a Four-Player Marketplace",
+      "storyHeadlines": [
+        "Seventeen New Computers Crowd the Fall Starting Line",
+        "Atari Sweeps Away Its Old Line for Four XL Computers",
+        "C and Scientific Software Reach the Personal-Computer Desk"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-01.jpg",
+      "thumb": "media/thumbs/1983-08-01.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-23",
       "historicDate": "1983-07-25",
       "displayDate": "Week of July 25-31, 1983",
