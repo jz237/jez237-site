@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#050310">
-<meta name="description" content="Chrome Riot — free browser twin-stick arena shooter. Save the last human family from the machine uprising of 2086. Twin on-screen joysticks on mobile, keyboard + mouse + gamepad on desktop.">
+<meta name="description" content="Chrome Riot — free browser twin-stick arena shooter. Save the last human family from the machine uprising of 2086. Twin on-screen joysticks on mobile, keyboard + one-stick mouse + gamepad on desktop.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23050310'/%3E%3Crect x='3' y='2' width='10' height='9' rx='1' fill='%234df3ff'/%3E%3Crect x='5' y='5' width='2' height='2' fill='%23050310'/%3E%3Crect x='9' y='5' width='2' height='2' fill='%23050310'/%3E%3Crect x='4' y='12' width='3' height='3' fill='%23ff4a3d'/%3E%3Crect x='9' y='12' width='3' height='3' fill='%23ff4a3d'/%3E%3C/svg%3E">
 <title>Chrome Riot</title>
 <style>
@@ -57,6 +57,16 @@
     border:2px solid; will-change:transform; }
   #stickL { border-color:#4df3ff59; color:#9df8ff; } #stickL .knob { border-color:#9df8ffcc; background:radial-gradient(circle at 35% 30%,#c9fbff88,#1997b866 60%,#0b3c5544); box-shadow:0 0 18px #4df3ff55; }
   #stickR { border-color:#ff4a3d59; color:#ffb0a8; } #stickR .knob { border-color:#ffb0a8cc; background:radial-gradient(circle at 35% 30%,#ffd9d488,#c9372b66 60%,#57110b44); box-shadow:0 0 18px #ff4a3d55; }
+  #mouseStick { position:fixed; width:86px; height:86px; margin:-43px 0 0 -43px; border-radius:50%; pointer-events:none; z-index:5;
+    border:1.5px solid #9df8ffd9; background:radial-gradient(circle,#ffffff16 0 16%,#09162bd9 58%,#020713d0 68%,transparent 71%);
+    box-shadow:0 0 18px #4df3ff44,inset 0 0 16px #ff4a3d1f; opacity:0; transition:opacity .1s linear; will-change:transform,opacity; }
+  #mouseStick::before,#mouseStick::after { content:""; position:absolute; left:50%; top:50%; background:#c6fbff35; transform:translate(-50%,-50%); }
+  #mouseStick::before { width:64px; height:1px; } #mouseStick::after { width:1px; height:64px; }
+  #mouseStick .mouseKnob { position:absolute; left:50%; top:50%; width:34px; height:34px; margin:-17px 0 0 -17px; border-radius:50%;
+    border:1.5px solid #fff; background:radial-gradient(circle at 34% 28%,#fff,#6ff5ff 24%,#158daa 58%,#8b202c);
+    box-shadow:0 0 14px #4df3ffaa,0 0 7px #ff4a3d88; will-change:transform; }
+  #mouseStick .mouseKnob::after { content:""; position:absolute; left:50%; top:5px; width:0; height:0; transform:translateX(-50%);
+    border-left:4px solid transparent; border-right:4px solid transparent; border-bottom:7px solid #07101e; opacity:.8; }
   .modal { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; padding:16px; z-index:8;
     background:linear-gradient(#02020bb5,#050310eb); }
   .card { width:min(500px,100%); max-height:94vh; max-height:94dvh; overflow:auto; text-align:center; border:1px solid #4df3ff55; border-radius:20px;
@@ -150,6 +160,7 @@
 </div>
 <div id="stickL" class="stick" data-label="MOVE"><div class="knob"></div></div>
 <div id="stickR" class="stick" data-label="FIRE"><div class="knob"></div></div>
+<div id="mouseStick" aria-hidden="true"><div class="mouseKnob"></div></div>
 
 <div id="title" class="modal"><div class="card">
   <h1>CHROME <span>RIOT</span></h1>
@@ -164,7 +175,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v3.3.0 · 2026-07-23 · COMBAT CLARITY</div>
+  <div class="version">BUILD v3.4.0 · 2026-07-24 · DESKTOP RIOT STICK</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -250,7 +261,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '3.3.0';
+const VERSION = '3.4.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -1187,8 +1198,10 @@ function renderView() {
 let userGestureSeen = false;
 ['pointerdown','touchstart','keydown'].forEach(ev => addEventListener(ev, e => { if (e.isTrusted) userGestureSeen = true; }, { capture:true, passive:true }));
 const keys = {};
-const mouse = { x: 0, y: 0, down: false, seen: false };
+const mouse = { x: 0, y: 0, down: false, seen: false, id: null, ox: 0, oy: 0, vx: 0, vy: 0,
+  el: $('#mouseStick'), knob: $('#mouseStick .mouseKnob') };
 const RAD = 55, DZ_MOVE = 0.12, DZ_FIRE = 0.15;
+const MOUSE_RAD = 34, MOUSE_DZ = 0.13;
 const CONTROL_GUTTER_RATIO = 0.18, CONTROL_GUTTER_MIN = 64, CONTROL_GUTTER_MAX = 112;
 const sticks = {
   L: { id: null, ox: 0, oy: 0, x: 0, y: 0, el: $('#stickL'), knob: $('#stickL .knob') },
@@ -1253,10 +1266,32 @@ function moveStick(s, cx, cy) {
   s.x = dx / d * amount; s.y = dy / d * amount;
   s.knob.style.transform = `translate(${dx / d * cl}px,${dy / d * cl}px)`;
 }
+function mouseControlsVisible() {
+  return !demo && ['starting','play','waveclear'].includes(state);
+}
+function releaseMouseStick() {
+  mouse.down = false; mouse.id = null; mouse.vx = mouse.vy = 0;
+  mouse.knob.style.transform = 'translate(0,0)';
+  mouse.el.style.opacity = 0;
+}
+function moveMouseStick(cx, cy) {
+  mouse.x = cx; mouse.y = cy;
+  const dx = cx - mouse.ox, dy = cy - mouse.oy, d = Math.hypot(dx, dy) || 1;
+  const amount = Math.min(1, d / MOUSE_RAD), cl = amount * MOUSE_RAD;
+  const angle = Math.atan2(dy, dx) * 180 / Math.PI + 90;
+  mouse.vx = dx / d * amount; mouse.vy = dy / d * amount;
+  mouse.knob.style.transform = `translate(${dx / d * cl}px,${dy / d * cl}px) rotate(${angle}deg)`;
+}
 canvas.addEventListener('pointerdown', e => {
   if (e.pointerType === 'mouse') {
+    if (e.button !== 0 || !mouseControlsVisible() || mouse.id !== null) return;
     try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
-    mouse.down = true; mouse.x = e.clientX; mouse.y = e.clientY; mouse.seen = true; return;
+    mouse.down = true; mouse.seen = true; mouse.id = e.pointerId;
+    mouse.x = mouse.ox = e.clientX; mouse.y = mouse.oy = e.clientY; mouse.vx = mouse.vy = 0;
+    mouse.el.style.transform = `translate(${mouse.ox}px,${mouse.oy}px)`;
+    mouse.knob.style.transform = 'translate(0,0)';
+    mouse.el.style.opacity = .9;
+    return;
   }
   if (!controlsVisible()) return;
   const zone = touchControlZone(e.clientX);
@@ -1271,11 +1306,15 @@ canvas.addEventListener('pointerdown', e => {
   s.el.style.opacity = settings.controlOpacity; s.knob.style.transform ||= 'translate(0,0)';
 });
 canvas.addEventListener('pointermove', e => {
-  if (e.pointerType === 'mouse') { mouse.x = e.clientX; mouse.y = e.clientY; return; }
+  if (e.pointerType === 'mouse') {
+    mouse.x = e.clientX; mouse.y = e.clientY;
+    if (mouse.down && mouse.id === e.pointerId) moveMouseStick(e.clientX, e.clientY);
+    return;
+  }
   for (const k of ['L', 'R']) { const s = sticks[k]; if (s.id === e.pointerId) { moveStick(s, e.clientX, e.clientY); return; } }
 });
 ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(ev => canvas.addEventListener(ev, e => {
-  if (e.pointerType === 'mouse') { if (ev !== 'lostpointercapture') mouse.down = false; return; }
+  if (e.pointerType === 'mouse') { if (mouse.id === e.pointerId) releaseMouseStick(); return; }
   for (const k of ['L', 'R']) { const s = sticks[k]; if (s.id === e.pointerId) releaseStick(s); }
 }));
 addEventListener('keydown', e => {
@@ -1289,7 +1328,7 @@ addEventListener('keydown', e => {
 addEventListener('keyup', e => { keys[e.code] = false; });
 addEventListener('blur', () => {
   for (const k in keys) keys[k] = false;
-  mouse.down = false;
+  releaseMouseStick();
   releaseStick(sticks.L); releaseStick(sticks.R);
   if (demo) { exitDemo(); return; }
   if (state === 'play' || state === 'starting' || state === 'waveclear') togglePause();
@@ -1337,9 +1376,12 @@ function readInput() {
   const pad = readPad();
   if (pad) { if (Math.hypot(pad.mx, pad.my) > 0.25) { mx += pad.mx; my += pad.my; } if (Math.hypot(pad.fx, pad.fy) > 0.28) { fx += pad.fx; fy += pad.fy; } }
   let mv = quant8(mx, my, DZ_MOVE), fv = quant8(fx, fy, DZ_FIRE);
-  if (!fv && mouse.down) {
-    const wx = (mouse.x - OX) / SCALE, wy = (mouse.y - OY) / SCALE;
-    fv = quant8(wx - player.x, wy - player.y, 0.01);
+  if (mouse.down) {
+    const oneStick = quant8(mouse.vx, mouse.vy, MOUSE_DZ);
+    if (oneStick) {
+      mv = oneStick;
+      fv = oneStick.slice();
+    }
   }
   return { mv, fv };
 }
@@ -2283,6 +2325,7 @@ function killableLeft() {
 }
 function gameOver() {
   if (demo) { exitDemo(); return; }
+  releaseMouseStick();
   state = 'over'; stateT = 0;
   if (isOverdrive() && !replayViewing && !assistedRun) {
     const inputs = packReplay();
@@ -2304,6 +2347,7 @@ function beginStory() {
 }
 function exitDemo() {
   demo = false; bot.enabled = false;
+  releaseMouseStick();
   releaseWake();
   Snd.setIntensity(0); Snd.stopMusic();
   state = 'title'; hideModals(); $('#title').classList.remove('hidden');
@@ -3189,6 +3233,7 @@ function requestWake() {
   }).catch(() => {}).finally(() => { wakePending = false; });
 }
 function startGame(nPlayers = 1, mode = 'arcade', opts = {}) {
+  releaseMouseStick();
   configureRun(mode, opts.seed, opts.board);
   hideModals();
   if (!demo) $('#btns').classList.remove('hidden');
@@ -3219,6 +3264,7 @@ function startGame(nPlayers = 1, mode = 'arcade', opts = {}) {
 }
 function returnToTitle() {
   demo = false; bot.enabled = false; inputOverride = null; entryQueue = []; replayPlayback = null; replayViewing = false;
+  releaseMouseStick();
   cameraReady = false;
   state = 'title'; hideModals(); $('#btns').classList.add('hidden'); $('#title').classList.remove('hidden');
   resetOvercharge(); Snd.setIntensity(0); Snd.stopMusic(); releaseWake(); idleT = 0; document.body.classList.remove('overdrive-live');
@@ -3226,6 +3272,7 @@ function returnToTitle() {
 let pausedFrom = 'play';
 function togglePause() {
   if (state === 'play' || state === 'starting' || state === 'waveclear') {
+    releaseMouseStick();
     pausedFrom = state; state = 'paused'; $('#pauseM').classList.remove('hidden'); Snd.stopMusic(); releaseWake();
   } else if (state === 'paused') {
     state = pausedFrom === 'starting' && freeze <= 0 ? 'play' : pausedFrom;
@@ -3429,7 +3476,7 @@ bind($('#saveScore'), () => {
 paintMute(Snd.on);
 $('#ctlHelp').textContent = IS_TOUCH
   ? 'LEFT lane to MOVE · RIGHT lane to AIM + FIRE. The center lane is neutral. Floating/fixed sticks, size, sensitivity and opacity are adjustable in OPTIONS.'
-  : 'WASD to MOVE · ARROW KEYS to FIRE (or hold the mouse to shoot at the cursor) · P pauses · Twin-stick gamepads supported.';
+  : 'CLICK + DRAG to open a small RIOT STICK that moves and fires in the same direction · WASD + arrows and twin-stick gamepads also supported · P pauses.';
 // field manual
 {
   const forgeThumb = FORGE_SPR;
@@ -3511,7 +3558,9 @@ window.__CHROME_RIOT__ = {
       style:settings.controlStyle, size:settings.controlSize, sensitivity:settings.controlSensitivity, opacity:settings.controlOpacity,
       origins:{ left:fixedStickOrigin('L').map(v=>+v.toFixed(1)), right:fixedStickOrigin('R').map(v=>+v.toFixed(1)) },
       left:{ active:sticks.L.id !== null, x:+sticks.L.x.toFixed(3), y:+sticks.L.y.toFixed(3) },
-      right:{ active:sticks.R.id !== null, x:+sticks.R.x.toFixed(3), y:+sticks.R.y.toFixed(3) } };
+      right:{ active:sticks.R.id !== null, x:+sticks.R.x.toFixed(3), y:+sticks.R.y.toFixed(3) },
+      mouse:{ active:mouse.down, x:+mouse.vx.toFixed(3), y:+mouse.vy.toFixed(3),
+        origin:[+mouse.ox.toFixed(1),+mouse.oy.toFixed(1)] } };
   },
   get camera() {
     const active = mobileCameraActive(), topPad = isOverdrive() ? 118 : 72, viewH = Math.max(1, SH - topPad - 18);
