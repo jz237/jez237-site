@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 24 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 1-7, 1983 — M.U.L.E. Turns the Atari Into a Four-Player Marketplace</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-08-01</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-01</guid>
+      <pubDate>Fri, 24 Jul 2026 12:00:00 GMT</pubDate>
+      <description>Ozark Softscape and Electronic Arts mix land development, arcade action, and a live commodity auction into one unusually social computer game. A new game from designer Dani Bunten and Ozark Softscape asks Atari owners to gather around one machine and build an economy together. M.U.L.E., published by Electronic Arts, supports as many as four players, with the computer taking any empty places, and makes unusually direct use of the Atari computer family&apos;s four controller ports. Also this week: Seventeen New Computers Crowd the Fall Starting Line · Atari Sweeps Away Its Old Line for Four XL Computers · C and Scientific Software Reach the Personal-Computer Desk.</description>
+    </item>
     <item>
       <title>Week of July 25-31, 1983 — Commodore Slashes 64 Price to £229</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-07-25</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-03-14</guid>
       <pubDate>Sun, 05 Jul 2026 12:00:00 GMT</pubDate>
       <description>BYTE&apos;s March 1983 issue put a Bell 103-compatible originate/answer modem project in front of hobbyists as personal-computer communications moved from curiosity toward routine use. During the week of March 14-20, 1983, the computer press kept one eye on telecommunications. BYTE Volume 8 Number 3 listed Steve Ciarcia&apos;s Build the ECM-103, an Originate/Answer Modem, a Texas Instruments TMS99532-based Bell 103-compatible project. The article sat beside VIC-20 expansion, COMDEX impressions, storage technology, and retail advertising, a useful snapshot of how hobbyist building, home-computer upgrades, and business microcomputing shared the same magazine rack.</description>
-    </item>
-    <item>
-      <title>Week of March 7-13, 1983 — IBM puts a hard disk in the personal-computer aisle</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-03-07</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-03-07</guid>
-      <pubDate>Sat, 04 Jul 2026 12:00:00 GMT</pubDate>
-      <description>On March 8, IBM introduced the Personal Computer XT, an expanded PC with a 10 MB fixed disk that made the office micro feel more permanent. During the week of March 7-13, 1983, IBM gave business buyers a clearer upgrade path from the original PC. Contemporary coverage described the PC XT as a new model with more expansion room and a built-in fixed disk, while the quoted $4,995 configuration kept it firmly in office-machine territory. The timing helped software such as Lotus 1-2-3 look less like an add-on and more like the daily reason to buy an IBM-compatible desk system.</description>
     </item>
   </channel>
 </rss>
