@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-26",
+      "historicDate": "1983-08-08",
+      "displayDate": "Week of August 8-14, 1983",
+      "edition": "Issue 054 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week, Apple gathers developers around the mouse while Atari and Coleco reset the low end for a make-or-break Christmas.",
+      "leadHeadline": "Apple Courts Independent Programmers on 'Lisa Day'",
+      "storyHeadlines": [
+        "Atari Erases the 1200XL and Bets on Four New Computers",
+        "Coleco's Adam Forces the Home-Computer Market to Scramble",
+        "Laserdisc Cartoon and a Colony Auction Headline the Summer Games"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-08.jpg",
+      "thumb": "media/thumbs/1983-08-08.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-24",
       "historicDate": "1983-08-01",
       "displayDate": "Week of August 1-7, 1983",

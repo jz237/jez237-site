@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 26 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 8-14, 1983 — Apple Courts Independent Programmers on &apos;Lisa Day&apos;</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-08-08</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-08</guid>
+      <pubDate>Sun, 26 Jul 2026 12:00:00 GMT</pubDate>
+      <description>At a week-long developers&apos; conference, Apple works to turn Lisa&apos;s mouse-and-window interface into a platform outside programmers can build on. Apple spent this week trying to convince independent programmers that its expensive graphical computer, the Lisa, deserves their labor. At a week-long Independent Developers&apos; Conference at the Dunfey Hotel in San Mateo, the company opened Thursday, August 11, as &apos;Lisa Day,&apos; walking outside developers through the machine&apos;s unusual mouse-and-window way of working and the tools available to write for it. Also this week: Atari Erases the 1200XL and Bets on Four New Computers · Coleco&apos;s Adam Forces the Home-Computer Market to Scramble · Laserdisc Cartoon and a Colony Auction Headline the Summer Games.</description>
+    </item>
     <item>
       <title>Week of August 1-7, 1983 — M.U.L.E. Turns the Atari Into a Four-Player Marketplace</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-08-01</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-03-21</guid>
       <pubDate>Mon, 06 Jul 2026 12:00:00 GMT</pubDate>
       <description>Computer Gaming World&apos;s March-April issue put Zork, Ultima II, The Cosmic Balance, and a 1983 game-industry report in front of readers as stores balanced arcade action with deeper Apple II play. During the week of March 21-27, 1983, the strongest personal-computer culture signal came from the game rack. Computer Gaming World Vol. 3 No. 2 carried a report on computer games in 1983, coverage of The Cosmic Balance, an overview of Zork, and a review of Ultima II. The mix shows why late-March shoppers saw computer games as more than arcade imitations: role-playing, text adventures, and strategy titles were becoming durable reasons to own a disk drive.</description>
-    </item>
-    <item>
-      <title>Week of March 14-20, 1983 — Home-computer readers wire up for the modem age</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-03-14</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-03-14</guid>
-      <pubDate>Sun, 05 Jul 2026 12:00:00 GMT</pubDate>
-      <description>BYTE&apos;s March 1983 issue put a Bell 103-compatible originate/answer modem project in front of hobbyists as personal-computer communications moved from curiosity toward routine use. During the week of March 14-20, 1983, the computer press kept one eye on telecommunications. BYTE Volume 8 Number 3 listed Steve Ciarcia&apos;s Build the ECM-103, an Originate/Answer Modem, a Texas Instruments TMS99532-based Bell 103-compatible project. The article sat beside VIC-20 expansion, COMDEX impressions, storage technology, and retail advertising, a useful snapshot of how hobbyist building, home-computer upgrades, and business microcomputing shared the same magazine rack.</description>
     </item>
   </channel>
 </rss>
