@@ -7,6 +7,13 @@ audio, and enemy fiction — no Williams assets or trademarks. Year is 2086 (not
 **Fiction:** 2086. The Chrome — humanity's own machines — have voted their makers
 obsolete. One augmented courier and the last human family are all that's left to save.
 
+## v3.6.0 — living Cortex (2026-07-26)
+
+- The Cortex brain is now alive: a glossy dome overlay pulses with a heartbeat curve
+  (per-enemy phase), throbbing procedural veins that flush and thicken on each beat,
+  breathing underglow. On death it properly ruptures — brain-matter chunks, wobbling
+  gore globs, twin pink shockwaves, and a wet synth squelch.
+
 ## v3.5.0 — mobile armor + death spectacle (2026-07-25)
 
 - Touch devices now get comfort armor in arcade mode: the courier absorbs 2 hits per
