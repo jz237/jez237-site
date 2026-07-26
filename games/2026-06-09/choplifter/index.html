@@ -201,9 +201,24 @@
     <div class="logo">CHOP<br>LIFTER<small>RESCUE RUN</small></div>
     <p class="tagline">Fly behind enemy lines, land by the barracks, load survivors, and bring them home. Dodge tanks, jets, and drones.</p>
     <button class="btn" id="btn-start">▶ START MISSION</button>
+    <button class="btn secondary" id="btn-scores">🌐 GLOBAL HIGH SCORES</button>
     <button class="btn secondary" id="btn-howto">HOW TO PLAY</button>
     <p class="muted" id="best-line" style="margin-top:16px"></p>
     <p class="muted" id="version-line" style="margin-top:8px;font-size:.68rem;opacity:.75"></p>
+  </div>
+
+  <!-- High scores -->
+  <div class="screen hidden" id="screen-scores">
+    <div class="result-title" style="color:#ffd95c">RESCUE HONOR ROLL</div>
+    <p class="muted" style="margin:8px 0 14px">The top rescue pilots across every device</p>
+    <div class="panel" style="margin-bottom:8px">
+      <div class="lb-tabs">
+        <button class="lb-tab active" id="scores-tab-global">🌐 GLOBAL</button>
+        <button class="lb-tab" id="scores-tab-local">📱 LOCAL</button>
+      </div>
+      <div class="lb-list" id="scores-lb-list"></div>
+    </div>
+    <button class="btn secondary" id="btn-scores-back">BACK TO TITLE</button>
   </div>
 
   <!-- How to play -->
@@ -284,7 +299,7 @@
    Single-file canvas game. Mobile one-finger + desktop keyboard.
    ========================================================================== */
 (function () {
-const VERSION = 'v2.0.0';
+const VERSION = 'v2.0.1';
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/choplifter';
 const HS_KEY = 'choplifter_highscores_v1';
 const MUTE_KEY = 'choplifter_muted';
@@ -2240,6 +2255,11 @@ function togglePause() {
 }
 
 document.getElementById('btn-start').onclick = () => { Audio2.resume(); startGame(); };
+document.getElementById('btn-scores').onclick = () => {
+  showScreen('screen-scores');
+  renderLeaderboard('global', '', 'scores');
+};
+document.getElementById('btn-scores-back').onclick = () => showScreen('screen-title');
 document.getElementById('btn-howto').onclick = () => showScreen('screen-howto');
 document.getElementById('btn-howback').onclick = () => showScreen('screen-title');
 document.getElementById('btn-resume').onclick = () => togglePause();
@@ -2301,23 +2321,28 @@ document.getElementById('btn-submit').onclick = async () => {
       body: JSON.stringify({ initials: name, score: pendingScore, extra: 'w' + G.wave + ' s' + G.savedHome }) });
     globalCache = null;
   } catch (e) {}
-  renderLeaderboard('global', name);
+  renderLeaderboard('global', name, 'over');
 };
 
 async function fetchGlobal() {
   if (globalCache) return globalCache;
   try {
     const r = await fetch(SCORES_API);
+    if (!r.ok) throw new Error('Leaderboard request failed: ' + r.status);
     const data = await r.json();
     globalCache = Array.isArray(data) ? data : (data.scores || []);
   } catch (e) { globalCache = null; }
   return globalCache;
 }
-async function renderLeaderboard(mode, you) {
+async function renderLeaderboard(mode, you, view) {
+  view = view || 'over';
+  const ids = view === 'scores'
+    ? { global: 'scores-tab-global', local: 'scores-tab-local', list: 'scores-lb-list' }
+    : { global: 'tab-global', local: 'tab-local', list: 'lb-list' };
   lbMode = mode;
-  document.getElementById('tab-global').classList.toggle('active', mode === 'global');
-  document.getElementById('tab-local').classList.toggle('active', mode === 'local');
-  const list = document.getElementById('lb-list');
+  document.getElementById(ids.global).classList.toggle('active', mode === 'global');
+  document.getElementById(ids.local).classList.toggle('active', mode === 'local');
+  const list = document.getElementById(ids.list);
   let rows = [], notice = '';
   if (mode === 'local') {
     rows = getLocal().map(r => ({ name: r.name, score: r.score }));
@@ -2338,8 +2363,10 @@ async function renderLeaderboard(mode, you) {
     return '<div class="lb-row' + (me ? ' you' : '') + '"><span class="rk">' + (i + 1) + '</span><span class="nm">' + r.name + '</span><span class="sc">' + r.score.toLocaleString() + '</span></div>';
   }).join('');
 }
-document.getElementById('tab-global').onclick = () => renderLeaderboard('global');
-document.getElementById('tab-local').onclick = () => renderLeaderboard('local');
+document.getElementById('tab-global').onclick = () => renderLeaderboard('global', '', 'over');
+document.getElementById('tab-local').onclick = () => renderLeaderboard('local', '', 'over');
+document.getElementById('scores-tab-global').onclick = () => renderLeaderboard('global', '', 'scores');
+document.getElementById('scores-tab-local').onclick = () => renderLeaderboard('local', '', 'scores');
 
 // ===========================================================================
 //  MAIN LOOP
