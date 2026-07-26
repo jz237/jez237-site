@@ -1,6 +1,6 @@
 {
   "date": "2026-07-26",
-  "updatedAt": "2026-07-26T10:52:43.025891+00:00",
+  "updatedAt": "2026-07-26T16:00:01.218822+00:00",
   "items": [
     {
       "title": "Why AI Hasn’t Increased Unemployment, According to Anthropic",
@@ -14,9 +14,9 @@
       "summary": "Anthropic's head of economics makes the case that AI has caused no material rise in unemployment — because it's a skill-biased, labor-augmenting technology, not a replacement one. Plus a headlines run stuffed with the new hot category: model routing, as Stripe circles OpenRouter for $10B.",
       "image": "public/thumbnails/news-ad37c6dc6571ef6435.png",
       "featuredLatest": false,
-      "published": "2026-07-26T10:52:46.673540+00:00",
+      "published": "2026-07-26T16:00:05.841466+00:00",
       "firstSeen": "2026-07-26T10:52:43.025891+00:00",
-      "lastSeen": "2026-07-26T10:52:43.025891+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 5.332,
@@ -31,8 +31,7 @@
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "anthropic-why-hasn-increased-unemployment-according",
-      "imageOriginal": "https://aidailybrief.ai/og/2026-07-24.png"
+      "clusterKey": "anthropic-why-hasn-increased-unemployment-according"
     },
     {
       "title": "DeepSeek pauses its second fundraising round after founder’s leaked investor comments go viral",
@@ -48,10 +47,10 @@
       "featuredLatest": false,
       "published": "2026-07-26T09:40:52+00:00",
       "firstSeen": "2026-07-26T10:52:43.025891+00:00",
-      "lastSeen": "2026-07-26T10:52:43.025891+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.114,
+      "score": 4.9729,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -67,6 +66,133 @@
       "imageOriginal": "https://media.thenextweb.com/2026/07/deepseek-funding-pause-viral-posts-liang-wenfeng.avif"
     },
     {
+      "title": "Most accelerators make atartups worse. What do the good ones do?",
+      "url": "https://thenextweb.com/news/most-accelerators-make-atartups-worse-what-do-the-good-ones-do",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Every accelerator makes a version of the same offer: capital, mentorship, a network, three months of support, and materially better odds of survival. Evidence suggests that little of it actually works. In April, Youn Baek and Deepak Hegde of NYU Stern published a working paper through the National Bureau of Economic Research examining nearly 750,000 American startups [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-58684e6fc3095ea822.avif",
+      "featuredLatest": false,
+      "published": "2026-07-26T14:09:27+00:00",
+      "firstSeen": "2026-07-26T16:00:01.218822+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.5451,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Most accelerators make atartups worse. What do the good ones do?",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "most-accelerators-make-atartups-worse-what",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/most-accelerators-make-startups-worse.avif"
+    },
+    {
+      "title": "Roku raises streaming device prices by up to 60 percent as the memory shortage reaches the living room",
+      "url": "https://thenextweb.com/news/roku-streaming-device-prices-rise-60-percent-memory-shortage",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Roku has raised prices on its entire US streaming hardware lineup, with increases ranging from $10 to $50 per device, as the global memory shortage driven by AI data centre demand reaches a product category that had been one of the last bastions of affordable consumer technology. The Streaming Stick 4K saw the steepest jump, [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-965cfcdd9d62f41f30.avif",
+      "featuredLatest": false,
+      "published": "2026-07-26T12:28:41+00:00",
+      "firstSeen": "2026-07-26T16:00:01.218822+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.4475,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Roku raises streaming device prices by up to 60 percent as the memory shortage reaches the living room",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "roku-raises-streaming-device-prices-percent",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/roku-streaming-device-prices-rise-60-percent-memory-shortage.avif"
+    },
+    {
+      "title": "Google confirms higher Pixel 11 prices as RAM costs surge sixfold, and says it is reworking Android to use less memory",
+      "url": "https://thenextweb.com/news/google-pixel-11-price-hike-ram-memory-crisis",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google has confirmed that its upcoming Pixel 11 phones will cost more than their predecessors, becoming the latest major phone maker to pass on the cost of a global memory shortage that has sent RAM prices to levels the industry has never seen. In an interview with 9to5Google published on Thursday, Shakil Barkat, Google’s vice [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-9f7d43ac27e022ac70.avif",
+      "featuredLatest": false,
+      "published": "2026-07-26T12:04:03+00:00",
+      "firstSeen": "2026-07-26T16:00:01.218822+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.4362,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Google confirms higher Pixel 11 prices as RAM costs surge sixfold, and says it is reworking Android to use less memory",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-google-confirms-higher-pixel-prices",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/google-pixel-11-price-hike-ram-memory-crisis.avif"
+    },
+    {
+      "title": "Apple targets WWDC 2027 for smart glasses but is still deciding on the camera question",
+      "url": "https://thenextweb.com/news/apple-smart-glasses-privacy-camera-debate-wwdc-2027",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Apple is currently aiming to unveil its first smart glasses at next June’s Worldwide Developers Conference, with a consumer release by the end of 2027, according to Bloomberg’s Mark Gurman. But the company’s engineering and marketing teams are still wrestling with a question that will define the product: whether its glasses should include a camera [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/apple-smart-glasses-privacy-camera-debate-wwdc-2027.avif",
+      "featuredLatest": false,
+      "published": "2026-07-26T14:39:13+00:00",
+      "firstSeen": "2026-07-26T16:00:01.218822+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.9096,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Apple targets WWDC 2027 for smart glasses but is still deciding on the camera question",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "apple-targets-wwdc-2027-smart-glasses"
+    },
+    {
       "title": "EV owners are more satisfied with their cars than gas car drivers in nearly every category, JD Power finds",
       "url": "https://thenextweb.com/news/jd-power-apeal-ev-owners-happier-ice-2026",
       "source": "The Next Web",
@@ -80,10 +206,10 @@
       "featuredLatest": false,
       "published": "2026-07-26T09:24:54+00:00",
       "firstSeen": "2026-07-26T10:52:43.025891+00:00",
-      "lastSeen": "2026-07-26T10:52:43.025891+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 3.0062,
+      "score": 2.8661,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -111,10 +237,10 @@
       "featuredLatest": false,
       "published": "2026-07-26T09:51:50+00:00",
       "firstSeen": "2026-07-26T10:52:43.025891+00:00",
-      "lastSeen": "2026-07-26T10:52:43.025891+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 2.6194,
+      "score": 2.4776,
       "signalGroup": "Research",
       "sourceTier": "Reported source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -127,6 +253,37 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "chatbots-quietly-becoming-uninvited-third-person"
+    },
+    {
+      "title": "Why businesses are bracing for more economic volatility in 2026",
+      "url": "https://thenextweb.com/news/why-businesses-bracing-economic-volatility-2026",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The first half of 2026 has been marked by waves of economic uncertainty. From fuel prices to inflation to market dives, here’s why leaders should stay flexible as they prepare for the uncertain months ahead. Furthermore, it has been marked by significant economic volatility. Business leaders have had to navigate a uniquely unpredictable market defined [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/why-businesses-bracing-economic-volatility-2026.avif",
+      "featuredLatest": false,
+      "published": "2026-07-26T13:29:37+00:00",
+      "firstSeen": "2026-07-26T16:00:01.218822+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.076,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Why businesses are bracing for more economic volatility in 2026",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "why-businesses-bracing-more-economic-volatility"
     }
   ],
   "tools": [
@@ -147,7 +304,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1553,
+      "score": 14.149,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -281,10 +438,10 @@
       "featuredLatest": false,
       "published": "2026-07-25T00:38:36+00:00",
       "firstSeen": "2026-07-09T10:00:01.309485+00:00",
-      "lastSeen": "2026-07-26T10:52:43.025891+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.333,
+      "score": 7.2766,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -318,7 +475,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5545,
+      "score": 6.5483,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -422,7 +579,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1553,
+      "score": 14.149,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -556,10 +713,10 @@
       "featuredLatest": false,
       "published": "2026-07-25T00:38:36+00:00",
       "firstSeen": "2026-07-09T10:00:01.309485+00:00",
-      "lastSeen": "2026-07-26T10:52:43.025891+00:00",
+      "lastSeen": "2026-07-26T16:00:01.218822+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.333,
+      "score": 7.2766,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -593,7 +750,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5545,
+      "score": 6.5483,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -688,7 +845,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1050,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -698,7 +855,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -708,7 +865,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -718,7 +875,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -728,7 +885,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 831,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -738,7 +895,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -748,7 +905,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -756,10 +913,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "not well-formed (invalid token): line 1, column 158",
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -769,7 +925,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -779,7 +935,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -789,7 +945,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -799,7 +955,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "The Next Web",
@@ -809,7 +965,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -819,7 +975,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -829,7 +985,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -839,7 +995,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -849,7 +1005,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Anthropic News",
@@ -859,7 +1015,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 250,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "The Verge AI",
@@ -869,7 +1025,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -879,7 +1035,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Simon Willison",
@@ -889,7 +1045,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -899,7 +1055,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Latent Space",
@@ -909,7 +1065,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Import AI",
@@ -917,10 +1073,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -930,7 +1085,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 150,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -940,7 +1095,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -950,7 +1105,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -960,7 +1115,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -970,7 +1125,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -980,7 +1135,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -990,7 +1145,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1000,19 +1155,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-26T10:52:43.025891+00:00"
+      "checkedAt": "2026-07-26T16:00:01.218822+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
