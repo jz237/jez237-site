@@ -1,0 +1,334 @@
+{
+  "currentDate": "2026-07-26",
+  "historicDate": "1983-08-08",
+  "displayDate": "Week of August 8-14, 1983",
+  "edition": "Issue 054 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Developers' summer on warm, ink-softened newsprint with a graphical-interface glow",
+    "motifs": [
+      "Lisa mouse and window desktop",
+      "crowded XL computer showroom",
+      "laserdisc arcade cabinet"
+    ],
+    "layout": "Interface-led broadsheet with a hardware price-war rail and a gaming culture shelf"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "Week of August 8-14, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Apple's Lisa Day anchors the upper fold with a mouse-and-window desktop scene",
+    "secondaryRail": "Atari's XL reset, Coleco's Adam, and the home-computer price war",
+    "archiveNavigation": "Previous and next weekly issues flank the 1983 archive calendar"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "IBM blue",
+    "texture": "warm newsprint, halftone screens, fine column rules, and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-08-08.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of August 8-14, 1983",
+    "caption": "A GPT Image 2 newspaper-style front page generated from the Chronicle's structured issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The industry is arguing about two futures at once: a costly graphical machine that courts programmers, and a flood of cheap boxes fighting over the family desk.",
+  "morningLine": "This week, Apple gathers developers around the mouse while Atari and Coleco reset the low end for a make-or-break Christmas.",
+  "lead": {
+    "headline": "Apple Courts Independent Programmers on 'Lisa Day'",
+    "dek": "At a week-long developers' conference, Apple works to turn Lisa's mouse-and-window interface into a platform outside programmers can build on.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "Apple spent this week trying to convince independent programmers that its expensive graphical computer, the Lisa, deserves their labor. At a week-long Independent Developers' Conference at the Dunfey Hotel in San Mateo, the company opened Thursday, August 11, as 'Lisa Day,' walking outside developers through the machine's unusual mouse-and-window way of working and the tools available to write for it.",
+      "The pitch is complicated by choice. Developers were weighing three distinct environments—a standalone approach, a windowed approach, and Apple's Toolkit—each with different demands and rewards. Demonstration machines ran unreleased system software that observers reported was noticeably faster than the shipping version, a hint that Apple knows the current Lisa can feel slow.",
+      "Some of the week's most telling talk was about craft. Bill Atkinson, author of the QuickDraw graphics routines, recounted how Steve Jobs pressed him to add rounded rectangles to Lisa's drawing code—the 'warm and friendly RoundRects' that soften every window and button on the screen. It is a small detail that captures Apple's larger bet: that how a machine feels can matter as much as what it costs.",
+      "That bet remains costly. One dealer quoted five Lisa disks at $70 and another ten at $120, and the machine itself lists near $9,995. The contemporary Signal newsletter, which attended the conference, relayed an August Datamation report that Apple's planned 1983 run of 20,000 Lisas had sold out, while treating the figure as a claim rather than confirmed fact.",
+      "For all the price shock, the conference framed Lisa as a software problem more than a hardware one. As Signal put it, 'a relatively small group of individuals, and not a large corporation, created the software that makes Lisa so special'—a reminder that in the summer of 1983 the graphical desktop is still an idea in search of programmers willing to build on it."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Atari Erases the 1200XL and Bets on Four New Computers",
+      "kicker": "Hardware Desk",
+      "dek": "The 400, 800, and short-lived 1200XL give way to a compatible XL ladder starting at $199.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1,
+        2
+      ],
+      "body": [
+        "Atari has swept away its established home-computer line, retiring the 400, 800, and recently launched 1200XL in favor of four new XL models. Creative Computing's John J. Anderson, noting the 1200XL's compatibility and video-signal troubles, wrote bluntly that 'the Atari 1200 has been benched,' its production halted before the machine was permanently withdrawn.",
+        "The replacements begin low and climb. The 16K 600XL lists at $199 and expands to 64K; the 64K 800XL lists at $299. Both keep built-in BASIC, full-stroke keyboards, and compatibility with nearly all older Atari software and peripherals, and add a rear processor-bus connector for expansion. Higher up, the planned 1400XL adds a 300-baud modem and speech synthesis, while the 1450XLD adds a double-sided, double-density drive storing up to 254K.",
+        "More striking than the hardware is Atari's new willingness to publish software for rival machines, including Commodore and Texas Instruments computers. Industry analysts quoted by COMPUTE! called the move 'the most significant development of the year'—an admission that in a brutal price war, code may travel to customers that Atari's own hardware cannot reach."
+      ]
+    },
+    {
+      "headline": "Coleco's Adam Forces the Home-Computer Market to Scramble",
+      "kicker": "Summer CES",
+      "dek": "A promised sub-$600 bundle of computer, tape drive, printer, and software raises the stakes before Christmas.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2,
+        3
+      ],
+      "body": [
+        "Coleco's Adam has become, in the words of COMPUTE!'s Tom R. Halfhill, 'the system to beat.' The company promised a complete Adam—an 80K Z80A computer expandable to 144K, a detachable 75-key keyboard, a high-speed 500K-per-cassette tape drive, a daisy-wheel printer, word processing, Applesoft-compatible Microsoft BASIC, three-channel sound, 32 sprites, two controllers, and Buck Rogers Planet of Zoom—for under $600. A $450 expansion was promised for ColecoVision owners.",
+        "The bundle reframes the whole argument. Where rivals advertise a keyboard and leave storage, printing, and software to a shopping list, Coleco proposes to put a usable system in one carton. Period coverage cautioned that the specifications were not yet final and that Adam was only promised for fall 1983, but the announcement alone reset expectations.",
+        "It landed in a market already straining. After Adam's unveiling, Commodore outlined a Commodore 64 package under $1,000 and Atari said a 600XL with a letter-quality printer could sell below $600. COMPUTE! projected 30 to 40 sub-$1,000 personal computers confronting shoppers by Christmas, calling the season 'the Christmas of the Computers'—and the next twelve months 'a make-it-or-break-it year' for established vendors."
+      ]
+    },
+    {
+      "headline": "Laserdisc Cartoon and a Colony Auction Headline the Summer Games",
+      "kicker": "Game Room",
+      "dek": "Dragon's Lair turns the arcade into a theater while M.U.L.E. and Suspended dominate the computer shelf.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        5,
+        4
+      ],
+      "body": [
+        "The arcade sensation of the summer is a cartoon. Cinematronics' Dragon's Lair pairs a laserdisc with Don Bluth's film-quality animation, drawing crowds—and a premium 50-cent play price—even though its branching action is driven by timed directional inputs rather than true real-time control. It is the month's clearest sign that video games and screen animation are converging.",
+        "On the home computer, the season belongs to more cerebral fare. Electronic Arts' M.U.L.E., Dani Bunten's four-player economic strategy game, drew feature coverage in Computer Gaming World's July-August issue, which also put Infocom's cryogenic text adventure Suspended on its cover and reviewed Strategic Simulations' wargame Battle for Normandy.",
+        "Together the titles sketch a widening hobby: a quarter-eating spectacle in the arcade, and thoughtful, sometimes social software at home. In a week dominated by hardware price wars, the games are a reminder of what all those machines are ultimately for."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Apple Lisa",
+      "summary": "Motorola 68000 graphical office computer with mouse, windows, and bundled applications, listing near $9,995 as Apple courts outside developers.",
+      "confidence": "period",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Atari 600XL and 800XL",
+      "summary": "New $199 and $299 machines bring built-in BASIC, full keyboards, and bus expansion to Atari's reworked XL range.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "Coleco Adam",
+      "summary": "An 80K Z80A system promised with tape storage, daisy-wheel printer, controllers, word processing, BASIC, and a game for under $600.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lisa Toolkit",
+      "detail": "Apple's development environment, weighed against standalone and windowed approaches at the August 11 conference."
+    },
+    {
+      "name": "Lotus 1-2-3 Release 1A",
+      "detail": "The current IBM PC spreadsheet combining worksheet, charting, and database functions."
+    },
+    {
+      "name": "Word Plus-PC",
+      "detail": "An easy-to-learn IBM PC word processor described in Creative Computing's August issue."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "M.U.L.E.",
+        "Suspended: A Cryogenic Nightmare",
+        "Dragon's Lair",
+        "Battle for Normandy",
+        "Pole Position"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "National Lampoon's Vacation",
+        "Cujo",
+        "Risky Business",
+        "Mr. Mom",
+        "WarGames"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "Lisa Toolkit",
+        "Lotus 1-2-3 Release 1A",
+        "Word Plus-PC"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari 600XL",
+      "price": "$199 suggested retail",
+      "note": "16K RAM expandable to 64K, built-in BASIC, and bus expansion."
+    },
+    {
+      "item": "Atari 800XL",
+      "price": "$299 suggested retail",
+      "note": "64K RAM with monitor output and broad Atari compatibility."
+    },
+    {
+      "item": "Coleco Adam complete system",
+      "price": "Under $600 promised",
+      "note": "Computer, keyboard, tape drive, printer, software, controllers, and game."
+    },
+    {
+      "item": "Lisa floppy disks",
+      "price": "$70 for five; $120 for ten",
+      "note": "Dealer quotes reported by the Signal newsletter."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "IBM 'Peanut' rumors intensify",
+      "text": "Period reporting expects IBM's consumer machine to be unveiled in September, adding pressure to a crowded Christmas market."
+    },
+    {
+      "headline": "Electronics eyes light-beam office links",
+      "text": "The August 11 issue of Electronics features line-of-sight optical communications as a thrifty alternative for company data links."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Every Breath You Take",
+      "artist": "The Police"
+    },
+    {
+      "rank": 2,
+      "title": "Electric Avenue",
+      "artist": "Eddy Grant"
+    },
+    {
+      "rank": 3,
+      "title": "Flashdance... What a Feeling",
+      "artist": "Irene Cara"
+    },
+    {
+      "rank": 4,
+      "title": "Sweet Dreams (Are Made of This)",
+      "artist": "Eurythmics"
+    },
+    {
+      "rank": 5,
+      "title": "Maniac",
+      "artist": "Michael Sembello"
+    }
+  ],
+  "periodAd": {
+    "headline": "A Whole Computer System in One Carton",
+    "summary": "Coleco promises Adam with keyboard, high-speed tape drive, letter-quality printer, BASIC, word processing, controllers, and Buck Rogers.",
+    "tagline": "Promised under $600—availability expected this fall."
+  },
+  "market": {
+    "headline": "Two Futures Meet the Family Desk",
+    "summary": "A $9,995 graphical Lisa courts programmers on one flank while sub-$600 bundles from Coleco and Atari fight for the mass market on the other, with dozens of new machines expected by Christmas.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0,
+      2
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Guatemalan Army Overthrows Ríos Montt",
+    "summary": "On August 8, the Guatemalan military removed President Efraín Ríos Montt after a brief battle and installed Brig. Gen. Óscar Humberto Mejía Víctores, who issued a nine-point declaration promising a political opening.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9,
+      10
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Apple Lisa Day developer conference details",
+        "confidence": "exact-date"
+      },
+      {
+        "claim": "Atari XL line reset and prices",
+        "confidence": "same-month"
+      },
+      {
+        "claim": "Coleco Adam bundle and price-war context",
+        "confidence": "same-month"
+      },
+      {
+        "claim": "Charts, weekend films, and Guatemala world anchor",
+        "confidence": "exact-date / period"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Signal Newsletter: Lisa Day, August 1983",
+      "url": "http://www.macmothership.com/lisacontent/signal/Signal03_August1983.html"
+    },
+    {
+      "label": "Creative Computing: Outpost Atari, August 1983",
+      "url": "https://www.atarimagazines.com/creative/v9n8/220_Outpost_Atari.php"
+    },
+    {
+      "label": "COMPUTE!: The Fall Computer Collection",
+      "url": "https://www.atarimagazines.com/compute/issue39/186_1_THE_FALL_COMPUTER_COLLECTION_AT_THE_SUMMER_CONSUMER_ELECTRONICS_SHOW.php"
+    },
+    {
+      "label": "Commodore Computer Price List, 1983",
+      "url": "https://www.computinghistory.org.uk/det/7620/Commodore-Computer-Price-List/"
+    },
+    {
+      "label": "Computer Gaming World Vol. 3 No. 4",
+      "url": "https://www.cgwmuseum.org/galleries/issues/cgw_3.4.pdf"
+    },
+    {
+      "label": "Video Game History Hour: August 1983",
+      "url": "https://www.listennotes.com/podcasts/video-game/august-1983-HnWwy5u3foT/"
+    },
+    {
+      "label": "Creative Computing, August 1983 (archive)",
+      "url": "https://archive.org/stream/creativecomputing-1983-08/Creative_Computing_v09_n08_1983_August_djvu.txt"
+    },
+    {
+      "label": "Billboard Hot 100, August 13, 1983",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1983/BB-1983-08-13.pdf"
+    },
+    {
+      "label": "Box Office Mojo: Weekend 32, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W32/"
+    },
+    {
+      "label": "UPI: Nine-point declaration of Guatemalan Army",
+      "url": "https://www.upi.com/Archives/1983/08/08/Nine-point-declaration-of-Guatemalan-Army/7330429163200/"
+    },
+    {
+      "label": "New York Times: Guatemalan Army Topples President",
+      "url": "https://www.nytimes.com/1983/08/09/world/guatemalan-army-topples-president-in-a-brief-battle.html"
+    },
+    {
+      "label": "Electronics, August 11, 1983",
+      "url": "https://www.worldradiohistory.com/Archive-Electronics/80s/83/Electronics-1983-08-11.pdf"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "PROGRAMMERS WANTED",
+      "copy": "Learn the mouse. Windowed, standalone, or Toolkit—three doors into Lisa, one afternoon to choose. Bring patience and a fresh floppy."
+    },
+    {
+      "headline": "TRADE-IN TIME",
+      "copy": "Old 400s and 800s welcome. New XL ladder starts at $199. Ask about the printer bundle before the holiday rush."
+    }
+  ]
+}
