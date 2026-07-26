@@ -1,9 +1,9 @@
 {
   "title": "Philly Weather Almanac",
   "location": "Philly 19111",
-  "date": "Saturday, July 25, 2026",
+  "date": "Sunday, July 26, 2026",
   "image": "almanac/latest.jpg",
   "imageWebp": "almanac/latest.webp",
-  "archiveImage": "almanac/philly-weather-almanac-2026-07-25.jpg",
+  "archiveImage": "almanac/philly-weather-almanac-2026-07-26.jpg",
   "source": "GPT Image 2 weather almanac"
 }
