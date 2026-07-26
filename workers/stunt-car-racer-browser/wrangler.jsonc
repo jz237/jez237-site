@@ -1,0 +1,15 @@
+{
+  "name": "stunt-car-racer-browser",
+  "compatibility_date": "2026-07-17",
+  "assets": {
+    "directory": ".assets",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  "routes": [
+    {
+      "pattern": "jez237.com/games/2026-07-17/stunt-car-racer/*",
+      "zone_name": "jez237.com"
+    }
+  ]
+}
