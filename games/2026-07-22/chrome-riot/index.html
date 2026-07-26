@@ -175,7 +175,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v3.6.0 · 2026-07-26 · LIVING CORTEX</div>
+  <div class="version">BUILD v3.7.0 · 2026-07-26 · HD ENEMIES + PAD CONTROLS</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -220,6 +220,10 @@
   <p class="small">STICK SIZE</p><div class="optrow" id="optControlSize"></div>
   <p class="small">STICK SENSITIVITY</p><div class="optrow" id="optControlSensitivity"></div>
   <p class="small">STICK OPACITY</p><div class="optrow" id="optControlOpacity"></div>
+  <p class="small">XBOX / GAMEPAD</p><div class="optrow" id="optGamepad"></div>
+  <p class="small">PAD RUMBLE</p><div class="optrow" id="optPadRumble"></div>
+  <p class="small">PAD DEADZONE</p><div class="optrow" id="optPadDz"></div>
+  <p class="small" id="padStatus" style="color:#7dd8a9;letter-spacing:1px;"></p>
   <p class="small">GLOBAL SCORENET: 1 PLAYER · ARCADE · 3 LIVES · EXTRA 25K<br>OTHER CONFIGURATIONS SAVE TO THIS CABINET ONLY.</p>
   <button class="play" id="closeOpts">SAVE &amp; RETURN</button>
 </div></div>
@@ -261,7 +265,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '3.6.0';
+const VERSION = '3.7.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -341,6 +345,9 @@ if (!['floating', 'fixed'].includes(settings.controlStyle)) settings.controlStyl
 if (!CONTROL_SIZES.includes(settings.controlSize)) settings.controlSize = 1;
 if (!CONTROL_SENSITIVITIES.includes(settings.controlSensitivity)) settings.controlSensitivity = 1;
 if (!CONTROL_OPACITIES.includes(settings.controlOpacity)) settings.controlOpacity = 0.75;
+settings.gamepad = settings.gamepad !== false;
+settings.padRumble = settings.padRumble !== false;
+if (![0.15, 0.25, 0.35].includes(settings.padDz)) settings.padDz = 0.25;
 const DIFFS = { cadet: 1.35, arcade: 1, veteran: 0.75 };
 let diffMul = DIFFS[settings.diff] || 1;
 
@@ -998,6 +1005,103 @@ function spriteDetails(g, kind, w, h, frame) {
   }
   g.restore();
 }
+function spriteExtras(g, kind, w, h, frame) {
+  // second HD detail layer: greebles, lights, wear — painted over spriteDetails
+  const cx = w / 2;
+  g.save(); g.scale(PXS, PXS); g.lineCap = 'round'; g.lineJoin = 'round';
+  const bolt = (x, y, r = 0.22) => { g.fillStyle = '#dfe8ff'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    g.fillStyle = '#3a4358'; g.beginPath(); g.arc(x + r * 0.25, y + r * 0.25, r * 0.45, 0, 7); g.fill(); };
+  const lamp = (x, y, col, r = 0.3, on = true) => {
+    if (on) { g.fillStyle = col + '55'; g.beginPath(); g.arc(x, y, r * 2.1, 0, 7); g.fill(); }
+    g.fillStyle = on ? col : '#22293a'; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill();
+    g.fillStyle = '#ffffffb0'; g.beginPath(); g.arc(x - r * 0.3, y - r * 0.3, r * 0.35, 0, 7); g.fill(); };
+  const scratches = (x, y, ww, hh, n) => { g.strokeStyle = '#ffffff2e'; g.lineWidth = 0.12;
+    for (let i = 0; i < n; i++) { const sx = x + ((i * 2.7) % ww), sy = y + ((i * 1.9) % hh);
+      g.beginPath(); g.moveTo(sx, sy); g.lineTo(sx + 0.9, sy + 0.5); g.stroke(); } };
+  if (kind === 'player') {
+    lamp(cx, 0.55, '#4df3ff', 0.22, frame === 0);                       // antenna beacon blinks
+    g.strokeStyle = '#9df8ff'; g.lineWidth = 0.18;
+    g.beginPath(); g.arc(cx, 5.65, 1.15, 0, 7); g.stroke();             // core containment ring
+    g.fillStyle = '#0e2d44'; g.fillRect(cx - 3.2, 8.9, 1.1, 1.5); g.fillRect(cx + 2.1, 8.9, 1.1, 1.5);
+    const jet = g.createLinearGradient(0, 9, 0, 10.6);                   // hip jet nozzles
+    jet.addColorStop(0, '#9df8ff'); jet.addColorStop(1, '#0e2d4400');
+    g.fillStyle = jet; g.fillRect(cx - 3.05, 9.6, 0.8, 1 + frame * 0.4); g.fillRect(cx + 2.25, 9.6, 0.8, 1 + frame * 0.4);
+    bolt(cx - 2.1, 4.5, 0.16); bolt(cx + 2.1, 4.5, 0.16);
+  } else if (kind === 'drudge') {
+    g.fillStyle = '#fff7c9'; g.fillRect(cx - 2.1 + frame * 2.6, 1.28, 0.9, 0.42);   // scanning eye sweep
+    for (let i = 0; i < 3; i++) {                                        // chest hazard chevrons
+      g.fillStyle = i % 2 ? '#151009' : '#ffb347';
+      g.beginPath(); g.moveTo(cx - 1.9 + i * 1.3, 6.3); g.lineTo(cx - 1.25 + i * 1.3, 5.65); g.lineTo(cx - 0.6 + i * 1.3, 6.3); g.closePath(); g.fill();
+    }
+    bolt(cx - 3.1, 0.85); bolt(cx + 3.1, 0.85); bolt(cx - 2.3, 4.4, 0.18); bolt(cx + 2.3, 4.4, 0.18);
+    g.fillStyle = '#5c1713'; for (let i = 0; i < 3; i++) g.fillRect(cx - 3.35, 4.9 + i * 0.7, 0.55, 0.32);  // side vents
+    g.fillStyle = '#5c1713'; for (let i = 0; i < 3; i++) g.fillRect(cx + 2.8, 4.9 + i * 0.7, 0.55, 0.32);
+    g.strokeStyle = '#ffcfc9'; g.lineWidth = 0.22;                       // knee pistons
+    g.beginPath(); g.moveTo(cx - 1.6, 8.6); g.lineTo(cx - 1.6, 9.6 + frame * 0.3); g.moveTo(cx + 1.6, 8.6); g.lineTo(cx + 1.6, 9.9 - frame * 0.3); g.stroke();
+    scratches(cx - 2.4, 4.3, 4.8, 3.4, 4);
+  } else if (kind === 'jugg') {
+    for (let x = -3.9; x <= 3.9; x += 1.3) bolt(cx + x, 0.95, 0.17);     // shoulder rivet row
+    for (let i = 0; i < 4; i++) {                                        // caution stripes on skirt
+      g.fillStyle = i % 2 ? '#151009' : '#f5ff7d';
+      g.save(); g.translate(cx - 2.9 + i * 1.5, 9.35); g.rotate(-0.6); g.fillRect(0, 0, 0.62, 1.15); g.restore();
+    }
+    const core = g.createRadialGradient(cx, 6.5, 0.2, cx, 6.5, 2.6);     // reactor glow behind grill
+    core.addColorStop(0, '#c9ffd455'); core.addColorStop(1, '#00000000');
+    g.fillStyle = core; g.fillRect(cx - 2.7, 5.1, 5.4, 3.2);
+    g.strokeStyle = '#9fb2c4'; g.lineWidth = 0.3;                        // arm hydraulics
+    g.beginPath(); g.moveTo(cx - 4.9, 4.4); g.lineTo(cx - 5.15, 6.1); g.moveTo(cx + 4.9, 4.4); g.lineTo(cx + 5.15, 6.1); g.stroke();
+    lamp(cx - 3.6, 4.8, '#79ff8c', 0.24, frame === 0); lamp(cx + 3.6, 4.8, '#79ff8c', 0.24, frame === 1);
+    g.fillStyle = '#0d1f14'; g.fillRect(cx - 3.3, 13.35, 2, 0.3); g.fillRect(cx + 1.3, 13.35, 2, 0.3);  // toe treads
+    scratches(cx - 4, 4.4, 8, 5.6, 6);
+  } else if (kind === 'wasp') {
+    g.strokeStyle = '#e9f4ff88'; g.lineWidth = 0.14;                     // wing veins
+    g.beginPath(); g.moveTo(cx - 1.2, 3.6); g.lineTo(0.9, 2.4 + frame); g.moveTo(cx - 1.2, 4.2); g.lineTo(1.3, 5.6);
+    g.moveTo(cx + 1.2, 3.6); g.lineTo(w - 0.9, 2.4 + frame); g.moveTo(cx + 1.2, 4.2); g.lineTo(w - 1.3, 5.6); g.stroke();
+    g.strokeStyle = '#42206f'; g.lineWidth = 0.24;                       // abdomen segments
+    for (let i = 0; i < 3; i++) { g.beginPath(); g.arc(cx, h / 2 + 0.7 + i * 0.75, 1.7 - i * 0.35, 0.35, Math.PI - 0.35); g.stroke(); }
+    lamp(cx, h / 2 + 2.9, '#ff8ac2', 0.22);                              // stinger tip
+    g.strokeStyle = '#d9b8ff'; g.lineWidth = 0.16;                       // antennae bulbs
+    lamp(cx - 1.8, 0.35, '#d9b8ff', 0.16, frame === 0); lamp(cx + 1.8, 0.35, '#d9b8ff', 0.16, frame === 1);
+  } else if (kind === 'cortex') {
+    g.strokeStyle = '#8fa0c0'; g.lineWidth = 0.34;                       // spinal feed tube
+    g.beginPath(); g.moveTo(cx, 5.35); g.lineTo(cx, 6.3); g.stroke();
+    g.strokeStyle = '#ff8ac2'; g.lineWidth = 0.2;
+    g.beginPath(); g.moveTo(cx - 0.4, 5.4); g.quadraticCurveTo(cx - 1.6, 5.9, cx - 2.2, 6.6); g.stroke();  // shoulder cables
+    g.beginPath(); g.moveTo(cx + 0.4, 5.4); g.quadraticCurveTo(cx + 1.6, 5.9, cx + 2.2, 6.6); g.stroke();
+    for (let i = 0; i < 3; i++) lamp(cx - 1 + i, 7.6, i <= frame ? '#ff8ac2' : '#8fa0c0', 0.16, i <= frame);  // gauge lights
+    bolt(cx - 2.9, 8.6, 0.16); bolt(cx + 2.9, 8.6, 0.16);
+  } else if (kind === 'thrall') {
+    g.fillStyle = '#9cff8b33'; g.fillRect(cx - 2.6, 2.4 + frame * 2.2, 5.2, 0.5);   // glitch scan band
+    g.fillStyle = '#d8ff72'; g.fillRect(cx - 2.45, 5 - frame * 1.3, 0.5, 0.2);      // stray glitch pixel
+    g.strokeStyle = '#66f078'; g.lineWidth = 0.16;                       // exposed circuit trace
+    g.beginPath(); g.moveTo(cx - 1.9, 8.3); g.lineTo(cx - 1.3, 8.8); g.lineTo(cx - 1.5, 9.5); g.stroke();
+    g.fillStyle = '#16251c';                                             // torn hem
+    for (let i = 0; i < 4; i++) { g.beginPath(); g.moveTo(cx - 2.1 + i * 1.15, 7.95); g.lineTo(cx - 1.55 + i * 1.15, 8.55); g.lineTo(cx - 1 + i * 1.15, 7.95); g.closePath(); g.fill(); }
+    lamp(cx - 1.15, 1.5, '#d8ff72', 0.2); lamp(cx + 1.15, 1.5, '#d8ff72', 0.2);
+  } else if (kind === 'crawler') {
+    g.fillStyle = '#2c1c0c'; g.fillRect(cx + 1.7, -0.85, 1.7, 0.66);     // muzzle brake
+    g.strokeStyle = '#ffe1ad'; g.lineWidth = 0.16;
+    g.beginPath(); g.moveTo(cx + 2.15, -0.9); g.lineTo(cx + 2.15, -0.15); g.moveTo(cx + 2.85, -0.9); g.lineTo(cx + 2.85, -0.15); g.stroke();
+    lamp(cx - 3.4, 1.6, '#ff6b2d', 0.22, frame === 0);                   // running lights alternate
+    lamp(cx + 3.4, 1.6, '#ff6b2d', 0.22, frame === 1);
+    for (let x = -3.9; x <= 3.9; x += 1.55) bolt(cx + x, 4.55, 0.15);    // skirt rivets
+    g.fillStyle = '#3a2c19'; g.fillRect(cx - 4.6, 3.2, 0.75, 1.15); g.fillRect(cx + 3.85, 3.2, 0.75, 1.15); // exhaust stacks
+    g.fillStyle = '#141210'; g.fillRect(cx - 4.6, 3.05, 0.75, 0.3); g.fillRect(cx + 3.85, 3.05, 0.75, 0.3);
+    g.strokeStyle = '#d4deea'; g.lineWidth = 0.14;                       // tread guide rail
+    g.beginPath(); g.moveTo(1.1, 7.55); g.lineTo(w - 1.1, 7.55); g.stroke();
+  } else if (kind === 'ma' || kind === 'pa' || kind === 'kid') {
+    g.fillStyle = '#21140f';                                             // hair shape
+    if (kind === 'ma') { g.beginPath(); g.arc(cx + 1.3, 0.65, 0.55, 0, 7); g.fill(); }
+    if (kind === 'pa') { g.fillRect(cx - 1.5, 0.2, 3, 0.35); }
+    if (kind === 'kid') { g.fillStyle = '#2a7f4f'; g.fillRect(cx - 1.4, 0.25, 2.8, 0.5); g.fillRect(cx + 0.6, 0.45, 1.5, 0.3); } // cap + brim
+    g.strokeStyle = '#7a4a35'; g.lineWidth = 0.14;                       // mouth
+    g.beginPath(); g.moveTo(cx - 0.35, 2.6); g.quadraticCurveTo(cx, 2.85, cx + 0.35, 2.6); g.stroke();
+    if (kind === 'ma') { g.fillStyle = '#ffffff66'; for (let i = 0; i < 4; i++) g.beginPath(), g.arc(cx - 1.4 + i * 0.95, 5.4 + (i % 2) * 0.9, 0.16, 0, 7), g.fill(); }  // dress dots
+    if (kind === 'pa') { g.fillStyle = '#ffd34d'; g.fillRect(cx - 0.2, 3.6, 0.4, 1.9); }   // tie
+    g.fillStyle = '#ffffff40'; g.fillRect(cx - (kind === 'kid' ? 1.9 : 2.35), 3.55, 0.35, 0.9);  // sleeve highlight
+  }
+  g.restore();
+}
 function bakeGrid(rows, kind, frame) {
   const c = document.createElement('canvas');
   c.width = rows[0].length * PXS; c.height = rows.length * PXS;
@@ -1013,6 +1117,7 @@ function bakeGrid(rows, kind, frame) {
       if ((i + j + frame) % 3 === 0) { g.fillStyle = '#ffffff45'; g.fillRect(x + 2, y + 2, 2, 1); }
     } } });
   spriteDetails(g, kind, rows[0].length, rows.length, frame);
+  spriteExtras(g, kind, rows[0].length, rows.length, frame);
   c.gw = rows[0].length; c.gh = rows.length;
   return c;
 }
@@ -1068,24 +1173,102 @@ function bakeShape(size, fn) { const c = document.createElement('canvas'); c.wid
   const g = c.getContext('2d'); g.translate(c.width / 2, c.height / 2); g.scale(PXS, PXS); fn(g);
   c.gw = size; c.gh = size; return c; }
 const PYLON_SHAPES = [0, 1, 2, 3, 4].map(shape => [0, 1].map(f => bakeShape(9, g => {
-  const bright = f === 0;
-  g.lineWidth = 1.4; g.strokeStyle = bright ? '#ffe14a' : '#b39a2a'; g.fillStyle = bright ? '#fff7c2' : '#ffe14a';
-  g.shadowColor = '#ffe14a'; g.shadowBlur = bright ? 6 : 3;
-  if (shape === 0) { g.beginPath(); g.moveTo(0, -4); g.lineTo(4, 0); g.lineTo(0, 4); g.lineTo(-4, 0); g.closePath(); g.stroke(); g.fillRect(-1, -1, 2, 2); }
-  else if (shape === 1) { g.beginPath(); g.moveTo(0, -4); g.lineTo(0, 4); g.moveTo(-4, 0); g.lineTo(4, 0); g.stroke(); g.fillRect(-1, -1, 2, 2); }
-  else if (shape === 2) { g.beginPath(); g.moveTo(-3.2, -3.2); g.lineTo(3.2, 3.2); g.moveTo(3.2, -3.2); g.lineTo(-3.2, 3.2); g.stroke(); g.fillRect(-1, -1, 2, 2); }
-  else if (shape === 3) { g.beginPath(); g.arc(0, 0, 3.4, 0, 7); g.stroke(); g.fillRect(-1, -1, 2, 2); }
-  else { g.font = 'bold 3.6px monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('2086', 0, 0.2); }
+  const bright = f === 0, glow = bright ? 1 : 0.55;
+  // ambient charge field
+  const field = g.createRadialGradient(0, 0, 0.4, 0, 0, 4.4);
+  field.addColorStop(0, `rgba(255,225,74,${0.16 * glow})`); field.addColorStop(1, 'rgba(255,225,74,0)');
+  g.fillStyle = field; g.fillRect(-4.5, -4.5, 9, 9);
+  const tips = shape === 0 ? [[0, -4], [4, 0], [0, 4], [-4, 0]]
+    : shape === 1 ? [[0, -4], [0, 4], [-4, 0], [4, 0]]
+    : shape === 2 ? [[-3.2, -3.2], [3.2, 3.2], [3.2, -3.2], [-3.2, 3.2]] : [];
+  const element = () => {
+    g.beginPath();
+    if (shape === 0) { g.moveTo(0, -4); g.lineTo(4, 0); g.lineTo(0, 4); g.lineTo(-4, 0); g.closePath(); }
+    else if (shape === 1) { g.moveTo(0, -4); g.lineTo(0, 4); g.moveTo(-4, 0); g.lineTo(4, 0); }
+    else if (shape === 2) { g.moveTo(-3.2, -3.2); g.lineTo(3.2, 3.2); g.moveTo(3.2, -3.2); g.lineTo(-3.2, 3.2); }
+    else if (shape === 3) { g.arc(0, 0, 3.4, 0, 7); }
+  };
+  if (shape === 4) {
+    // hazard plate variant: framed flashing "2086" sign
+    const plate = g.createLinearGradient(-3.6, -2, 3.6, 2);
+    plate.addColorStop(0, '#2a2410'); plate.addColorStop(0.5, '#151005'); plate.addColorStop(1, '#241d08');
+    g.fillStyle = plate; g.fillRect(-3.7, -1.9, 7.4, 3.8);
+    g.strokeStyle = bright ? '#ffe14a' : '#8f7a1a'; g.lineWidth = 0.5; g.strokeRect(-3.7, -1.9, 7.4, 3.8);
+    g.strokeStyle = '#ffffff40'; g.lineWidth = 0.16; g.strokeRect(-3.25, -1.45, 6.5, 2.9);
+    [[-3.25, -1.45], [3.25, -1.45], [-3.25, 1.45], [3.25, 1.45]].forEach(([x, y]) => {
+      g.fillStyle = '#dfe8ff'; g.beginPath(); g.arc(x, y, 0.24, 0, 7); g.fill();
+      g.fillStyle = '#3a4358'; g.beginPath(); g.arc(x + 0.06, y + 0.06, 0.11, 0, 7); g.fill(); });
+    g.shadowColor = '#ffe14a'; g.shadowBlur = bright ? 7 : 2;
+    g.fillStyle = bright ? '#fff7c2' : '#b39a2a';
+    g.font = 'bold 2.4px monospace'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText('2086', 0, 0.12);
+    return;
+  }
+  // energy element: dark housing, hot core, white filament
+  g.lineCap = 'round';
+  g.strokeStyle = '#6b520a'; g.lineWidth = 1.9; element(); g.stroke();
+  g.shadowColor = '#ffe14a'; g.shadowBlur = bright ? 6 : 2;
+  g.strokeStyle = bright ? '#ffe14a' : '#c2a832'; g.lineWidth = 0.95; element(); g.stroke();
+  g.shadowBlur = 0;
+  g.strokeStyle = `rgba(255,252,233,${0.5 + 0.4 * glow})`; g.lineWidth = 0.3; element(); g.stroke();
+  // arc filaments between tips (bright frame only)
+  if (bright && tips.length) {
+    g.strokeStyle = 'rgba(255,247,201,0.75)'; g.lineWidth = 0.18;
+    for (let i = 0; i < tips.length; i++) {
+      const [ax, ay] = tips[i], [bx2, by2] = tips[(i + 1) % tips.length];
+      const mx = (ax + bx2) / 2 + 0.5, my2 = (ay + by2) / 2 - 0.4;
+      g.beginPath(); g.moveTo(ax * 0.55, ay * 0.55); g.lineTo(mx * 0.5, my2 * 0.5); g.lineTo(bx2 * 0.55, by2 * 0.55); g.stroke();
+    }
+  }
+  // emitter node caps on tips
+  for (const [tx, ty] of tips) {
+    const cap = g.createRadialGradient(tx - 0.15, ty - 0.15, 0.05, tx, ty, 0.55);
+    cap.addColorStop(0, '#fffce9'); cap.addColorStop(0.6, bright ? '#ffe14a' : '#b39a2a'); cap.addColorStop(1, '#4a3a08');
+    g.fillStyle = cap; g.beginPath(); g.arc(tx, ty, 0.5, 0, 7); g.fill();
+  }
+  // charged core orb
+  const core = g.createRadialGradient(-0.3, -0.3, 0.1, 0, 0, 1.35);
+  core.addColorStop(0, '#ffffff'); core.addColorStop(0.45, bright ? '#fff7c2' : '#ffe14a'); core.addColorStop(1, '#8f6c0d');
+  g.fillStyle = core; g.beginPath(); g.arc(0, 0, bright ? 1.3 : 1.05, 0, 7); g.fill();
 })));
 const HIVE_FRAMES = [0, 1, 2].map(f => bakeShape(12, g => {
-  const r = 4 + f * 0.7;
-  g.lineWidth = 1.3; g.strokeStyle = '#ff4ad9'; g.shadowColor = '#ff4ad9'; g.shadowBlur = 7;
-  g.beginPath(); g.arc(0, 0, r, 0, 7); g.stroke();
-  g.lineWidth = 0.9; g.strokeStyle = '#ff9dea';
-  g.beginPath(); g.arc(0, 0, r * 0.55, 0, 7); g.stroke();
-  g.fillStyle = '#fff'; g.fillRect(-0.8, -0.8, 1.6, 1.6);
-  for (let i = 0; i < 3; i++) { const a = f * 0.7 + i * Math.PI * 2 / 3;
-    g.fillStyle = '#ffc2f0'; g.fillRect(Math.cos(a) * r - 0.6, Math.sin(a) * r - 0.6, 1.2, 1.2); }
+  const rot = f * 0.7, r = 4 + f * 0.35;
+  // energy haze
+  const haze = g.createRadialGradient(0, 0, 0.5, 0, 0, 5.6);
+  haze.addColorStop(0, 'rgba(255,74,217,0.22)'); haze.addColorStop(1, 'rgba(255,74,217,0)');
+  g.fillStyle = haze; g.fillRect(-5.8, -5.8, 11.6, 11.6);
+  g.save(); g.rotate(rot);
+  // outer rotor ring with segment teeth
+  g.shadowColor = '#ff4ad9'; g.shadowBlur = 6;
+  g.strokeStyle = '#8f1f78'; g.lineWidth = 1.5; g.beginPath(); g.arc(0, 0, r, 0, 7); g.stroke();
+  g.shadowBlur = 0;
+  g.strokeStyle = '#ff4ad9'; g.lineWidth = 0.8; g.beginPath(); g.arc(0, 0, r, 0, 7); g.stroke();
+  g.strokeStyle = '#ffd8f4'; g.lineWidth = 0.22; g.beginPath(); g.arc(0, 0, r - 0.45, 0, 7); g.stroke();
+  g.fillStyle = '#ff9dea';
+  for (let i = 0; i < 8; i++) { const a = i * Math.PI / 4;
+    g.save(); g.translate(Math.cos(a) * r, Math.sin(a) * r); g.rotate(a); g.fillRect(-0.28, -0.75, 0.56, 1.5); g.restore(); }
+  // inner lattice spokes (counter-detail)
+  g.strokeStyle = 'rgba(255,157,234,0.5)'; g.lineWidth = 0.24;
+  for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3 + rot * 0.5;
+    g.beginPath(); g.moveTo(Math.cos(a) * 1.7, Math.sin(a) * 1.7); g.lineTo(Math.cos(a) * (r - 0.7), Math.sin(a) * (r - 0.7)); g.stroke(); }
+  g.restore();
+  // wasp gestation pods orbiting (visible cargo)
+  for (let i = 0; i < 3; i++) {
+    const a = rot * 1.6 + i * Math.PI * 2 / 3, px = Math.cos(a) * 2.75, py = Math.sin(a) * 2.75;
+    const pod = g.createRadialGradient(px - 0.2, py - 0.2, 0.05, px, py, 0.72);
+    pod.addColorStop(0, '#ffffff'); pod.addColorStop(0.5, '#d9b8ff'); pod.addColorStop(1, '#42206f');
+    g.fillStyle = pod; g.beginPath(); g.ellipse(px, py, 0.62, 0.78, a, 0, 7); g.fill();
+    g.strokeStyle = '#ffd8f4'; g.lineWidth = 0.14; g.beginPath(); g.ellipse(px, py, 0.62, 0.78, a, 0, 7); g.stroke();
+  }
+  // molten core
+  const core = g.createRadialGradient(-0.35, -0.35, 0.1, 0, 0, 1.8);
+  core.addColorStop(0, '#ffffff'); core.addColorStop(0.4, '#ffc2f0'); core.addColorStop(0.8, '#ff4ad9'); core.addColorStop(1, '#57104a');
+  g.fillStyle = core; g.beginPath(); g.arc(0, 0, 1.55, 0, 7); g.fill();
+  g.fillStyle = '#ffffffcc'; g.beginPath(); g.arc(-0.4, -0.45, 0.34, 0, 7); g.fill();
+  // antenna spikes
+  g.strokeStyle = '#ff9dea'; g.lineWidth = 0.26;
+  g.beginPath(); g.moveTo(0, -r - 0.2); g.lineTo(0, -r - 1.15); g.moveTo(0, r + 0.2); g.lineTo(0, r + 1.15); g.stroke();
+  g.fillStyle = '#fff'; g.beginPath(); g.arc(0, -r - 1.3, 0.22, 0, 7); g.arc(0, r + 1.3, 0.22, 0, 7); g.fill();
 }));
 const FORGE_SPR = bakeShape(11, g => {
   const fill = g.createRadialGradient(0, 0, .2, 0, 0, 5.2);
@@ -1360,10 +1543,14 @@ function quant8(x, y, dz) {
   return [Math.round(Math.cos(a)), Math.round(Math.sin(a))];
 }
 function readPad() {
+  if (!settings.gamepad) return null;
   const gp = navigator.getGamepads && navigator.getGamepads()[0];
   if (!gp) return null;
+  const b = gp.buttons || [];
   return { mx: gp.axes[0] || 0, my: gp.axes[1] || 0, fx: gp.axes[2] || 0, fy: gp.axes[3] || 0,
-    start: gp.buttons[9] && gp.buttons[9].pressed, a: gp.buttons[0] && gp.buttons[0].pressed };
+    dpx: (b[15]?.pressed ? 1 : 0) - (b[14]?.pressed ? 1 : 0),      // Xbox d-pad moves too
+    dpy: (b[13]?.pressed ? 1 : 0) - (b[12]?.pressed ? 1 : 0),
+    start: b[9] && b[9].pressed, a: b[0] && b[0].pressed };
 }
 let padStartHeld = false, padAHeld = false;
 function pollGamepadUi() {
@@ -1388,7 +1575,11 @@ function readInput() {
   let fx = sticks.R.x, fy = sticks.R.y;
   if (keys.ArrowUp) fy -= 1; if (keys.ArrowDown) fy += 1; if (keys.ArrowLeft) fx -= 1; if (keys.ArrowRight) fx += 1;
   const pad = readPad();
-  if (pad) { if (Math.hypot(pad.mx, pad.my) > 0.25) { mx += pad.mx; my += pad.my; } if (Math.hypot(pad.fx, pad.fy) > 0.28) { fx += pad.fx; fy += pad.fy; } }
+  if (pad) {
+    if (Math.hypot(pad.mx, pad.my) > settings.padDz) { mx += pad.mx; my += pad.my; }
+    if (Math.hypot(pad.fx, pad.fy) > settings.padDz + 0.03) { fx += pad.fx; fy += pad.fy; }
+    mx += pad.dpx; my += pad.dpy;
+  }
   let mv = quant8(mx, my, DZ_MOVE), fv = quant8(fx, fy, DZ_FIRE);
   if (mouse.down) {
     const oneStick = quant8(mouse.vx, mouse.vy, MOUSE_DZ);
@@ -1594,6 +1785,15 @@ function nextReplayInput() {
   return { mv: codeDir(Math.floor(code / 9)), fv: codeDir(code % 9) };
 }
 function rumble(pattern) {
+  if (settings.gamepad && settings.padRumble) {
+    const gp = navigator.getGamepads && navigator.getGamepads()[0];
+    const act = gp && gp.vibrationActuator;
+    if (act && act.playEffect) {
+      const arr = Array.isArray(pattern) ? pattern : [pattern];
+      const dur = Math.min(420, arr.reduce((s, v) => s + v, 0));
+      try { act.playEffect('dual-rumble', { duration: dur, strongMagnitude: Math.min(1, dur / 140), weakMagnitude: Math.min(1, dur / 210) }); } catch (e) {}
+    }
+  }
   if (!settings.cabinetFx || !IS_TOUCH || !navigator.vibrate || !userGestureSeen) return;
   try { navigator.vibrate(pattern); } catch (e) {}
 }
@@ -3619,7 +3819,7 @@ bind($('#saveScore'), () => {
 paintMute(Snd.on);
 $('#ctlHelp').textContent = IS_TOUCH
   ? 'LEFT lane to MOVE · RIGHT lane to AIM + FIRE. The center lane is neutral. Floating/fixed sticks, size, sensitivity and opacity are adjustable in OPTIONS.'
-  : 'CLICK + DRAG to open a small RIOT STICK that moves and fires in the same direction · WASD + arrows and twin-stick gamepads also supported · P pauses.';
+  : 'CLICK + DRAG to open a small RIOT STICK that moves and fires in the same direction · WASD + arrows supported · Xbox-style pads: left stick or D-pad moves, right stick fires, START pauses (options in OPTIONS) · P pauses.';
 // field manual
 {
   const forgeThumb = FORGE_SPR;
@@ -3672,10 +3872,22 @@ function buildOpts() {
   mk($('#optMobileZoom'), MOBILE_ZOOM_LEVELS, 'mobileZoom',
     v => (v < 1 ? String(v).replace(/^0/, '') : String(v)) + '×');
   mk($('#optControlStyle'), ['floating','fixed'], 'controlStyle', v => v.toUpperCase());
+  mk($('#optGamepad'), [true, false], 'gamepad', v => v ? 'ON' : 'OFF');
+  mk($('#optPadRumble'), [true, false], 'padRumble', v => v ? 'ON' : 'OFF');
+  mk($('#optPadDz'), [0.15, 0.25, 0.35], 'padDz', v => v === 0.15 ? 'TIGHT' : v === 0.25 ? 'STANDARD' : 'LOOSE');
+  updatePadStatus();
   mk($('#optControlSize'), CONTROL_SIZES, 'controlSize', v => v === 1 ? '100%' : Math.round(v * 100) + '%');
   mk($('#optControlSensitivity'), CONTROL_SENSITIVITIES, 'controlSensitivity', v => v === 1 ? '100%' : Math.round(v * 100) + '%');
   mk($('#optControlOpacity'), CONTROL_OPACITIES, 'controlOpacity', v => Math.round(v * 100) + '%');
 }
+function updatePadStatus() {
+  const gp = navigator.getGamepads && [...navigator.getGamepads()].find(p => p);
+  $('#padStatus').textContent = gp
+    ? '🎮 PAD DETECTED: ' + (gp.id || 'CONTROLLER').replace(/\s*\(.*$/, '').slice(0, 44).toUpperCase() + ' · LEFT STICK / D-PAD MOVE · RIGHT STICK FIRES · START PAUSES'
+    : 'NO PAD DETECTED — CONNECT AN XBOX-STYLE CONTROLLER AND PRESS ANY BUTTON';
+}
+window.addEventListener('gamepadconnected', () => { updatePadStatus(); });
+window.addEventListener('gamepaddisconnected', () => { updatePadStatus(); });
 bind($('#optsBtn'), () => { Snd.click(); buildOpts(); $('#optsM').classList.remove('hidden'); });
 bind($('#closeOpts'), () => { Snd.click(); $('#optsM').classList.add('hidden'); });
 addEventListener('online', () => { fetchGlobalScores(true); flushPendingScores(); });
