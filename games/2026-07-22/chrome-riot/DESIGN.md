@@ -7,6 +7,20 @@ audio, and enemy fiction — no Williams assets or trademarks. Year is 2086 (not
 **Fiction:** 2086. The Chrome — humanity's own machines — have voted their makers
 obsolete. One augmented courier and the last human family are all that's left to save.
 
+## v3.8.0 — WATCH DEMO button + showman bot (2026-07-26)
+
+- WATCH DEMO on the title runs the attract demo on demand with a long (~6.5 min) cap;
+  idle attract keeps the short 70s cycle. The demo wears the phone hull armor (it is
+  demoing the mobile experience; demo runs were never board-eligible).
+- Bot rewritten as a utility planner: 9 move options scored by 3-step threat raycasts,
+  chasers get wide fear while static pylons/shots get sharp short fear (the old wide
+  pylon fear read as paralysis on 25-mine waves), projectile tracks projected 7/14 ticks
+  ahead, near-forbidden walls + corner kill-switch, direction hysteresis, committed
+  safety-checked rescue targets, and kill-the-gun fire priorities (wasps/hives first,
+  cortex-about-to-convert above all). Measured: demo config 8/8/8/8 waves with zero
+  deaths and 5-9 rescues per run; raw bot 6-8 waves (was 3-4).
+- QA: snapshot() now reports rescued; startDemo(long) selects the long cap.
+
 ## v3.7.0 — HD enemy detail + Xbox pad controls (2026-07-26)
 
 - Detail layer over every enemy master: scanning drudge eyes, hazard chevrons, vents and

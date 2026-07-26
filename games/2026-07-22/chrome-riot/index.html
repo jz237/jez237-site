@@ -169,13 +169,14 @@
   <p class="small" id="ctlHelp"></p>
   <div id="titleActions">
     <button class="play" id="startBtn">START THE RIOT</button><br>
+  <button class="secondary" id="demoBtn">WATCH DEMO</button>
     <button class="secondary overdrive" id="overdriveBtn">OVERDRIVE PROTOCOL</button>
     <button class="secondary" id="start2Btn">2 PLAYER RIOT</button>
     <button class="secondary" id="showScores">GLOBAL + LOCAL SCORES</button>
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v3.7.0 · 2026-07-26 · HD ENEMIES + PAD CONTROLS</div>
+  <div class="version">BUILD v3.8.0 · 2026-07-26 · SHOWMAN DEMO</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -265,7 +266,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '3.7.0';
+const VERSION = '3.8.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -1685,7 +1686,7 @@ function popup(x, y, txt, color) { popups.push({ x, y, txt, color, t: 60 }); if 
 
 /* ============================== GAME STATE ============================== */
 let state = 'title', stateT = 0, tick = 0, waveT = 0, inputOverride = null;
-let demo = false, idleT = 0, demoT = 0;
+let demo = false, idleT = 0, demoT = 0, demoMaxT = 4200;
 let players = 1, cur = 0, P = [null, null], entryQueue = [], pendingPause = false;
 let assistedRun = false, runGlobalEligible = false, qaTainted = false;
 let gameMode = 'arcade', runSeed = 0, runExtraAt = EXTRA_LIFE, runStartLives = START_LIVES;
@@ -1933,7 +1934,7 @@ function spawnWave(w, counts) {
   const d = counts || (isOverdrive() ? overdriveWaveData(w) : waveData(w).slice());
   const [rw, rh] = D.safeRect(w);
   player.x = FIELD.w / 2; player.y = FIELD.h / 2; player.holdT = 0; player.cd = 0;
-  hullHits = MOBILE_HULL && gameMode === 'arcade' && !replayViewing ? 2 : 0;
+  hullHits = (MOBILE_HULL || demo) && gameMode === 'arcade' && !replayViewing ? 2 : 0;   // demo showcases the phone armor too
   bullets = []; stingers = []; seekers = []; shells = [];
   drudges = []; pylons = []; juggs = []; hives = []; wasps = []; cortexes = []; thralls = []; forges = []; crawlers = []; humans = [];
   chain = isOverdrive() ? rescueStreak : 0;
@@ -2643,8 +2644,9 @@ function gameOver() {
   Snd.setIntensity(0); Snd.stopMusic(); say('gameOver', null, true);
   showOver();
 }
-function beginStory() {
-  demo = true; demoT = 0; bot.enabled = true;
+function beginStory(long) {
+  demo = true; demoT = 0; demoMaxT = long ? 24000 : 4200;   // WATCH DEMO runs long enough to tour 8+ waves
+  bot.enabled = true;
   releaseWake();
   hideModals(); $('#btns').classList.add('hidden');
   state = 'story'; stateT = 0;
@@ -2692,7 +2694,7 @@ function stepTick() {
     if (stateT >= 250) startGame();
     return;
   }
-  if (demo && ++demoT > 4200) { exitDemo(); return; }   // demo caps at ~70s
+  if (demo && ++demoT > demoMaxT) { exitDemo(); return; }   // idle attract ~70s; WATCH DEMO ~6.5min
   if (state === 'starting') {
     stateT++;
     allMats(e => { if (e.mat > 0) e.mat--; });
@@ -3522,29 +3524,96 @@ function updateModeHud(force = false) {
 }
 
 /* ============================== BOT ============================== */
+let botRescueTarget = null, botRescueLock = 0, botLastDir = -1, botBestI = -1;
 function botInput() {
-  let ax = 0, ay = 0;
-  const threats = [[drudges, 1], [juggs, 1.7], [wasps, 1.2], [cortexes, 1], [thralls, 1.4], [hives, 1],
-    [forges, 0.9], [crawlers, 1], [stingers, 1.6], [seekers, 1.6], [shells, 1.5], [pylons, 1.2],
-    [bosses, 2], [nemeses, 1.8], [bossShots, 2.2]];
-  for (const [arr, w] of threats) for (const e of arr) {
+  const px = player.x, py = player.y;
+  // threat samples: chasers get a wide fear radius (they come to you); static mines and shots
+  // get a sharp short one (just don't step on them) — wide fear on 25 pylons reads as paralysis
+  const samples = [];
+  const addS = (x, y, w, rad2) => samples.push({ x, y, w, rad2, fall: Math.sqrt(rad2) });
+  const walkers = [[drudges, 1], [juggs, 1.9], [wasps, 1.25], [cortexes, 1.05], [thralls, 1.5], [hives, 1.05],
+    [forges, 1], [crawlers, 1.1], [bosses, 2.2], [nemeses, 2]];
+  for (const [arr, w] of walkers) for (const e of arr) {
     if ((e.mat || 0) > 0) continue;
-    const q = dist2(player.x, player.y, e.x, e.y);
-    if (q < 4900) {
-      const d = Math.sqrt(q) || 1, f = w * (70 - d) / 70;
-      ax -= (e.x - player.x) / d * f; ay -= (e.y - player.y) / d * f;
-    }
+    addS(e.x, e.y, w, 2600);
   }
-  if (player.x < 34) ax += (34 - player.x) * 0.05; if (player.x > FIELD.w - 34) ax -= (player.x - (FIELD.w - 34)) * 0.05;
-  if (player.y < 34) ay += (34 - player.y) * 0.05; if (player.y > FIELD.h - 34) ay -= (player.y - (FIELD.h - 34)) * 0.05;
-  ax += (FIELD.w / 2 - player.x) * 0.002; ay += (FIELD.h / 2 - player.y) * 0.002;
-  const h = nearestHuman(player.x, player.y);
-  if (h) { const d = Math.hypot(h.x - player.x, h.y - player.y) || 1; ax += (h.x - player.x) / d * 0.3; ay += (h.y - player.y) / d * 0.3; }
-  const mv = quant8(ax, ay, 0.04);
-  let best = null, bq = 1e9;
-  for (const arr of [bosses, nemeses, drudges, wasps, thralls, crawlers, cortexes, hives, forges])
-    for (const e of arr) { if ((e.mat || 0) > 0 || e.leave) continue; const q = dist2(player.x, player.y, e.x, e.y); if (q < bq) { bq = q; best = e; } }
-  const fv = best ? quant8(best.x - player.x, best.y - player.y, 0.01) : null;
+  for (const p of pylons) { if ((p.mat || 0) <= 0) addS(p.x, p.y, 2.3, 550); }
+  const shots = [[stingers, 2.4], [seekers, 2.5], [shells, 2], [bossShots, 2.6]];
+  for (const [arr, w] of shots) for (const e of arr) {
+    addS(e.x, e.y, w, 1100);
+    const vx = e.vx !== undefined ? e.vx : (e.dx || 0), vy = e.vy !== undefined ? e.vy : (e.dy || 0);
+    addS(e.x + vx * 7, e.y + vy * 7, w * 0.9, 1100);
+    addS(e.x + vx * 14, e.y + vy * 14, w * 0.75, 1100);
+  }
+  for (const hz of hazards) addS(hz.x, hz.y, 2.2, 900);
+  // committed rescue target: nearest human that is not in a kill zone; re-picked at most every 1.5s
+  if (botRescueLock > 0) botRescueLock--;
+  if (botRescueTarget && humans.indexOf(botRescueTarget) < 0) { botRescueTarget = null; botRescueLock = 0; }
+  const wallDist = (x, y) => Math.min(x, FIELD.w - x, y, FIELD.h - y);
+  if (!botRescueTarget || botRescueLock <= 0) {
+    let bestH = null, bs = -1e9;
+    for (const h of humans) {
+      if (h.mat > 0) continue;
+      let danger = 0;
+      for (const s of samples) { const q = dist2(h.x, h.y, s.x, s.y); if (q < Math.min(1600, s.rad2)) danger += s.w * (40 - Math.sqrt(q)); }
+      const score = -Math.hypot(h.x - px, h.y - py) * 0.8 - danger * 3 - Math.max(0, 26 - wallDist(h.x, h.y)) * 3;
+      if (score > bs) { bs = score; bestH = h; }
+    }
+    botRescueTarget = bestH; botRescueLock = 60;
+  }
+  // utility-score 8 directions + hold: threat raycast (uT) shapes safety; rescue/centre (uR) only spends surplus safety
+  const waveGrace = waveT < 130;
+  let bestDir = null, bestU = -1e9;
+  for (let i = 0; i <= 8; i++) {
+    const d8 = i < 8 ? DIR8[i] : [0, 0];
+    let uT = 0, uR = 0;
+    for (let step = 1; step <= 3; step++) {
+      const lx = px + d8[0] * step * 11, ly = py + d8[1] * step * 11;
+      if (lx < 8 || lx > FIELD.w - 8 || ly < 9 || ly > FIELD.h - 9) { uT -= 60 / step; continue; }
+      for (const s of samples) {
+        const q = dist2(lx, ly, s.x, s.y);
+        if (q < s.rad2) uT -= s.w * (s.fall - Math.sqrt(q)) / step;
+      }
+    }
+    const cx2 = px + d8[0] * 22, cy2 = py + d8[1] * 22;
+    uT -= Math.pow(Math.max(0, 42 - wallDist(cx2, cy2)), 2) * 0.2;    // walls are near-forbidden — sparks funnel along them
+    const w2 = [cx2, FIELD.w - cx2, cy2, FIELD.h - cy2].filter(v => v < 48).length;
+    if (w2 >= 2) uT -= 240;                                            // corners are death traps, full stop
+    uR -= (Math.abs(cx2 - FIELD.w / 2) + Math.abs(cy2 - FIELD.h / 2)) * (waveGrace ? 0.5 : 0.12);
+    if (botRescueTarget) {
+      const cur = Math.hypot(botRescueTarget.x - px, botRescueTarget.y - py);
+      const nxt = Math.hypot(botRescueTarget.x - cx2, botRescueTarget.y - cy2);
+      uR += (cur - nxt) * 3.4;
+    }
+    if (i === 8) uR -= 6;
+    if (botLastDir >= 0 && i === botLastDir) uR += 9;                  // hysteresis: don't flip-flop between near-ties
+    const u = uT + (uT > -60 ? uR : uR * 0.15);                        // in real danger, survival owns the vote
+    if (u > bestU) { bestU = u; bestDir = i < 8 ? d8 : null; botBestI = i; }
+  }
+  botLastDir = bestDir ? botBestI : -1;
+  const mv = bestDir ? bestDir.slice() : null;
+  // fire priority: cortex about to convert > spawners/bosses > anything blocking the escape corridor > nearest
+  let target = null, tScore = -1e9;
+  const consider = (e, base) => {
+    if ((e.mat || 0) > 0 || e.leave) return;
+    const d = Math.hypot(e.x - px, e.y - py) || 1;
+    let sc = base - d * 0.6;
+    if (mv) {
+      const dot = ((e.x - px) * mv[0] + (e.y - py) * mv[1]) / (d * (Math.hypot(mv[0], mv[1]) || 1));
+      if (dot > 0.6) sc += 30;
+    }
+    if (sc > tScore) { tScore = sc; target = e; }
+  };
+  for (const c of cortexes) consider(c, c.targetH && Math.hypot(c.x - c.targetH.x, c.y - c.targetH.y) < 34 ? 70 : 26);
+  for (const b of bosses) consider(b, 40);
+  for (const n of nemeses) consider(n, 36);
+  for (const w of wasps) consider(w, 44);          // kill the gun, not the bullet
+  for (const h2 of hives) consider(h2, 42);        // and the gun factory
+  for (const f of forges) consider(f, 34);
+  for (const t of thralls) consider(t, 22);
+  for (const c of crawlers) consider(c, 26);
+  for (const d of drudges) consider(d, 18);
+  const fv = target ? quant8(target.x - px, target.y - py, 0.01) : (mv ? mv.slice() : null);
   return { mv, fv };
 }
 
@@ -3776,6 +3845,7 @@ function watchChampionReplay() {
   startGame(1, data.mode, { seed:data.seed, board:data.board, replay:data });
 }
 bind($('#startBtn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').textContent = 'AUTO-RUN'; $('#autoBadge').style.display = 'none'; startGame(1, 'arcade'); });
+bind($('#demoBtn'), () => { Snd.unlock(); Snd.click(); beginStory(true); });
 bind($('#start2Btn'), () => { Snd.unlock(); Snd.click(); bot.enabled = false; $('#autoBadge').textContent = 'AUTO-RUN'; $('#autoBadge').style.display = 'none'; startGame(2, 'arcade'); });
 bind($('#overdriveBtn'), () => {
   Snd.unlock(); Snd.click();
@@ -3968,7 +4038,7 @@ window.__CHROME_RIOT__ = {
   get demo() { return demo; },
   get players() { return players; }, get cur() { return cur; },
   get P() { return P.map(p => p && { score: p.score, lives: p.lives, wave: p.wave }); },
-  startDemo() { beginStory(); },
+  startDemo(long) { beginStory(!!long); },
   stopDemo() { if (demo) exitDemo(); },
   start(useBot, mode = 'arcade') { taintRun(); bot.enabled = !!useBot; $('#autoBadge').style.display = useBot ? 'block' : 'none'; startGame(1, mode); },
   forceWave(w) { taintRun(); wave = clamp(Math.floor(w) || 1, 1, 255); spawnWave(wave); return this.snapshot(); },
@@ -3992,7 +4062,7 @@ window.__CHROME_RIOT__ = {
     return this.snapshot();
   },
   step(n = 1) { taintRun(); for (let i = 0; i < n; i++) stepTick(); draw(); return this.snapshot(); },
-  snapshot() { return { state, mode:gameMode, board:runBoard, theme:currentTheme.id, wave, score, lives, deaths, wavesCleared, tick, chain,
+  snapshot() { return { state, mode:gameMode, board:runBoard, theme:currentTheme.id, wave, score, lives, deaths, wavesCleared, tick, chain, rescued:rescuedTotal,
     hull:hullHits, mobileHull:MOBILE_HULL,
     rescueMultiplier, overcharge:{tier:overchargeTier,ticks:overchargeTicks,shield:overchargeShield,invulnerable:shieldT},
     indicators:lastIndicatorCount, bossHp:bosses[0]?.hp || 0, bossIntro:!!(bosses.length&&state==='starting'&&freeze>0),
