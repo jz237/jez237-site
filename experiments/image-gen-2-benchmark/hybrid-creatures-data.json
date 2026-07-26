@@ -966,5 +966,25 @@
       "description": "A fictional rabbit-sized alpine mammal combining the compact talus ecology of the American pika with localized inflatable black-tipped defensive quills inspired by the porcupinefish.",
       "continuity": "rabbit-sized round ochre mammal, short black-tipped inflatable quills, pika ears, cream belly, charcoal eye mask, four rock-gripping feet"
     }
+  },
+  {
+    "id": "2026-07-26-hybrid-creature-wild-photo-bramblequill-pika-wild-photo",
+    "title": "Bramblequill Pika: Wild Photo",
+    "tests": "Sunday hybrid-creature wild-photo slot; matching second member of the Bramblequill Pika pair; exactly American pika + porcupinefish; decisive localized defensive bristling response in an alpine granite crevice; coherent rabbit-sized ochre quadruped; short rounded pika ears; cream belly; charcoal eye mask; four rock-gripping feet; hundreds of short black-tipped quills continuously rooted through dorsal fur; dropped hay and first frost; documentary rock-level capture; no balloon body, intact fish anatomy, pasted parts, extra limbs, humanoid form, text, staging, fantasy glow, gore, or poster layout; actual pixels inspected with xai/grok-4.3 and passed.",
+    "prompt": "Create a matching square photorealistic natural-history field photograph of the adult Bramblequill Pika, one clearly fictional seamless hybrid derived from exactly American pika and porcupinefish, in a wind-scoured alpine talus field at first autumn frost. Preserve the exact development-map phenotype: one rabbit-sized compact round ochre-furred mammal; short rounded pika ears; charcoal eye mask and glossy dark eyes; blunt whiskered muzzle; cream belly; four sturdy rock-gripping feet; and hundreds of short flexible quills growing continuously through the dorsal fur, each with an ochre base and black tip. The quills are anatomically rooted mammalian structures with slightly inflatable hollow bases, not detached fish spines; there is no fish body, fin, gill, scale armor, tail fan, extra limb, or humanoid posture.\n\nShow one decisive natural behavior at thumbnail scale. The adult braces sideways in a narrow granite crevice as a gust and the passing shadow of an ordinary raven trigger a half-second defensive response: its dorsal quills rise into a dense rounded black-tipped halo while the cream belly, four feet, ears, and face remain normally proportioned rather than the whole body becoming a balloon. A mouthful of dry alpine grass has just fallen onto its small hay pile, connecting the pika behavior to the moment. The coherent quill roots part the wet ochre guard fur, and tiny frost beads catch on the black tips. The raven itself appears only as a small soft shadow crossing one stone, never as a second subject.\n\nPhotograph from rock level with a weather-sealed full-frame camera, 85mm lens, f/7.1, 1/1600 second, natural cold sunrise, restrained color, and documentary depth of field. The adult fills most of the frame; eye mask, whiskers, ear edges, rock-gripping forefeet, continuous fur-to-quill transition, black tips, frost beads, and coherent contact shadows are critically sharp. Surround it with fractured blue-gray granite, orange crustose lichen, dry sedge, a few red bearberries, thin ice in shaded cracks, scattered hay stems, and a distant softly blurred snow ridge. Use ochre, cream, charcoal, granite blue-gray, lichen orange, berry red, and pale sunrise gold. Render believable mass, quadrupedal anatomy, dense fur, keratin texture, breath condensation, frost, rock grain, and wind pressure.\n\nThe creature’s compact pika identity and localized porcupinefish-inspired defensive quill inflation must be unmistakable and biologically integrated. No readable text, people, lab props, specimen staging, costume look, fantasy glow, gore, mutation horror, intact fish, fish head, fins, gills, scales, round balloon body, detached spines, pasted-on parts, extra legs, bipedal pose, humanoid body, logo, border, collage, infographic, poster, or watermark.",
+    "image": "images/2026-07-26-hybrid-creature-wild-photo-bramblequill-pika-wild-photo.jpg",
+    "thumb": "thumbs/2026-07-26-hybrid-creature-wild-photo-bramblequill-pika-wild-photo.webp",
+    "color": "#5c5148",
+    "date": "2026-07-26",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild-photo",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Bramblequill Pika",
+      "imageKind": "wild",
+      "description": "A fictional rabbit-sized alpine mammal combining the compact talus ecology of the American pika with localized inflatable black-tipped defensive quills inspired by the porcupinefish.",
+      "continuity": "rabbit-sized round ochre mammal, short black-tipped inflatable quills, pika ears, cream belly, charcoal eye mask, four rock-gripping feet"
+    }
   }
 ]
