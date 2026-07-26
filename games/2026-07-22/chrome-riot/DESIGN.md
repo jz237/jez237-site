@@ -7,6 +7,16 @@ audio, and enemy fiction — no Williams assets or trademarks. Year is 2086 (not
 **Fiction:** 2086. The Chrome — humanity's own machines — have voted their makers
 obsolete. One augmented courier and the last human family are all that's left to save.
 
+## v3.5.0 — mobile armor + death spectacle (2026-07-25)
+
+- Touch devices now get comfort armor in arcade mode: the courier absorbs 2 hits per
+  life (3rd is fatal) with a rotating hull ring, a shockwave on each breach that shoves
+  the swarm back and burns nearby fire, and brief invulnerability. Desktop stays 1-hit
+  arcade-pure; a hull absorb voids global-board eligibility for that run so the boards
+  stay honest. Mobile also defaults to 5 starting lives (existing explicit choices kept).
+- Death explosions rebuilt: blinding core flash, spinning debris chunks, rolling
+  secondary cook-off blasts, hit-stop; big enemies (500+ pts) now shed debris too.
+
 ## Research base
 
 Mechanics were reconstructed from primary sources, not memory:

@@ -175,7 +175,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v3.4.0 · 2026-07-24 · DESKTOP RIOT STICK</div>
+  <div class="version">BUILD v3.5.0 · 2026-07-25 · MOBILE ARMOR</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -261,7 +261,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '3.4.0';
+const VERSION = '3.5.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -319,6 +319,7 @@ let scoreViewBoard = 'arcade', runBoard = 'arcade';
 const store = { get(k, d) { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} } };
 const storedSettings = store.get(SET_KEY, {});
+const COARSE_TOUCH = matchMedia('(pointer:coarse)').matches || 'ontouchstart' in window;
 const MOBILE_ZOOM_LEVELS = [0.6, 0.8, 1, 1.2, 1.4];
 const MIX_LEVELS = [0, 0.5, 0.75, 1];
 const CONTROL_SIZES = [0.85, 1, 1.15], CONTROL_SENSITIVITIES = [0.8, 1, 1.2], CONTROL_OPACITIES = [0.55, 0.75, 1];
@@ -332,7 +333,8 @@ if (!MIX_LEVELS.includes(settings.musicVolume)) settings.musicVolume = 0.75;
 if (!MIX_LEVELS.includes(settings.sfxVolume)) settings.sfxVolume = 1;
 if (!['cadet', 'arcade', 'veteran'].includes(settings.diff)) settings.diff = 'arcade';
 if (![20000, 25000, 30000, 50000, 0].includes(settings.extraAt)) settings.extraAt = 25000;
-if (![3, 5].includes(settings.lives)) settings.lives = 3;
+if (![3, 5].includes(settings.lives)) settings.lives = COARSE_TOUCH ? 5 : 3;
+else if (!settings.livesTouched && COARSE_TOUCH && settings.lives === 3) settings.lives = 5; // mobile defaults to 5 couriers
 if (settings.mobileZoom === 1.6) settings.mobileZoom = 1.4; // migrate the former maximum
 if (!MOBILE_ZOOM_LEVELS.includes(settings.mobileZoom)) settings.mobileZoom = 1;
 if (!['floating', 'fixed'].includes(settings.controlStyle)) settings.controlStyle = 'floating';
@@ -852,6 +854,7 @@ const LINES = {
   progged: ['MIND REWRITTEN', 'WELCOME TO THE CHROME', 'A NEW UNIT JOINS US'],
   waveClear: ['SWARM LOST · RECALIBRATING', 'IMPOSSIBLE.', 'REINFORCEMENTS INBOUND', 'THIS CHANGES NOTHING'],
   extraLife: ['ERROR: TARGET PERSISTS', 'PERSISTENT VERMIN', 'WHY WON\'T YOU STOP'],
+  hullHit: ['SHELL CRACKED', 'ARMOR FAILING, MEAT', 'THE NEXT ONE COUNTS', 'YOUR PLATING WEEPS'],
   gameOver: ['HUMANITY DEPRECATED', 'THE CHROME PREVAILS', 'RIOT COMPLETE. SILENCE.'],
   overdrive: ['SECTOR MUTATION DETECTED', 'OVERDRIVE GRID ONLINE', 'THE MACHINE WORLD AWAKENS'],
   boss: ['COLOSSAL SIGNATURE INBOUND', 'SECTOR WARDEN ONLINE', 'KNEEL BEFORE INDUSTRY'],
@@ -869,6 +872,7 @@ const BARKS = {
   progged: { basePitch: 150, syllables: 5, contour: 0.05, rate: 1.1 },
   waveClear: { basePitch: 90, syllables: 5, contour: -0.06, rate: 0.75 },
   extraLife: { basePitch: 200, syllables: 6, contour: 0.06, rate: 1.5 },
+  hullHit: { basePitch: 130, syllables: 4, contour: 0.03, rate: 1.2 },
   gameOver: { basePitch: 80, syllables: 8, contour: -0.04, rate: 0.6 },
   overdrive: { basePitch: 125, syllables: 8, contour: 0.035, rate: 0.82 },
   boss: { basePitch: 66, syllables: 10, contour: -0.018, rate: 0.62 },
@@ -1153,7 +1157,7 @@ addEventListener('orientationchange', () => {
   let tries = 0; const poll = setInterval(() => { computeFit(); if (++tries > 8) clearInterval(poll); }, 250);
 }, { passive: true });
 /* ============================== INPUT ============================== */
-const IS_TOUCH = matchMedia('(pointer:coarse)').matches || 'ontouchstart' in window;
+const IS_TOUCH = COARSE_TOUCH;
 function mobileCameraActive() {
   return IS_TOUCH && Math.min(SW, SH) <= 600 &&
     ['starting', 'play', 'dying', 'waveclear', 'paused'].includes(state);
@@ -1405,6 +1409,16 @@ function detonate(x, y, color, scale = 1) {
   blastFx.push({ x, y, color, scale, t:Math.round(30 + scale * 7), max:Math.round(30 + scale * 7), seed:Math.random() * 1000 });
   if (blastFx.length > 24) blastFx.shift();
 }
+function chunks(x, y, colors, n, spd) {
+  // spinning debris fragments for big deaths
+  for (let i = 0; i < n; i++) {
+    if (parts.length >= MAXP) parts.shift();
+    const a = rand(0, Math.PI * 2), v = rand(spd * 0.4, spd);
+    parts.push({ type:'chunk', x, y, vx:Math.cos(a) * v, vy:Math.sin(a) * v,
+      rot:rand(0, 3.1), rv:rand(-0.3, 0.3), size:rand(1.5, 3.2),
+      life:rand(55, 100), max:100, color:pick(colors), r:2 });
+  }
+}
 let trauma = 0, freezeT = 0;
 const addTrauma = t => { trauma = Math.min(1, trauma + t); };
 const hitStop = ticks => { freezeT = Math.max(freezeT, ticks); };
@@ -1438,6 +1452,7 @@ let replaySegments = [], replayLastCode = -1, replayLastCount = 0, finalReplay =
 const STORY_LINES = ['THE YEAR IS 2086', 'THE CHROME — OUR PERFECT SERVANTS —', 'HAVE REACHED A VERDICT:', 'HUMANITY IS OBSOLETE', '', 'ONE AUGMENTED COURIER REMAINS', 'SAVE THE LAST FAMILY'];
 let wave = 1, score = 0, lives = START_LIVES, chain = 0, nextLife = EXTRA_LIFE;
 let overchargeTier = 0, overchargeTicks = 0, overchargeShield = 0, shieldT = 0;
+let MOBILE_HULL = COARSE_TOUCH, hullHits = 0;   // touch comfort armor: 2 absorbed hits per courier (arcade mode only)
 let hi = getScores('arcade')[0] ? getScores('arcade')[0].score : 0;
 let gruntDelay = 20, gruntFloor = 9, freeze = 0;
 let deaths = 0, wavesCleared = 0, runErrors = [];
@@ -1566,6 +1581,25 @@ function absorbShield() {
   flashBorder('#ff4ad9', 34); Snd.overchargeSfx(3); addTrauma(.4); rumble([35,22,58]);
   updatePowerHud(); return true;
 }
+function hullBreach() {
+  hullHits--; shieldT = Math.max(shieldT, 100);
+  runGlobalEligible = false;                          // comfort armor took a hit — this run stays off the global boards
+  const near = e => dist2(player.x, player.y, e.x, e.y) < 1450;
+  bossShots = bossShots.filter(e => !near(e)); stingers = stingers.filter(e => !near(e));
+  seekers = seekers.filter(e => !near(e)); shells = shells.filter(e => !near(e));
+  for (const arr of [drudges, wasps, thralls, crawlers, juggs]) for (const e of arr) {
+    const q = dist2(player.x, player.y, e.x, e.y);
+    if (q < 1600) { const d = Math.sqrt(q) || 1, f = (46 - d) / d * 0.55;
+      e.x = clamp(e.x + (e.x - player.x) * f, 6, FIELD.w - 6);
+      e.y = clamp(e.y + (e.y - player.y) * f, 7, FIELD.h - 7); }
+  }
+  spark(player.x, player.y, '#4df3ff', 30, 2.4, 46); spark(player.x, player.y, '#ffffff', 12, 1.6, 30);
+  chunks(player.x, player.y, ['#4df3ff', '#8fa0c0'], 5, 1.8);
+  detonate(player.x, player.y, '#4df3ff', 1.7);
+  popup(player.x, player.y - 11, hullHits > 0 ? 'HULL BREACH' : 'HULL CRITICAL', '#9df8ff');
+  flashBorder('#4df3ff', 28); Snd.clank(); Snd.boom(); addTrauma(.45); hitStop(5); rumble([28, 20, 46]);
+  say('hullHit');
+}
 function breakRescueChain(x = player.x, y = player.y) {
   const streak = isOverdrive() ? rescueStreak : chain;
   if (streak <= 0 && !overchargeTier) return;
@@ -1634,6 +1668,7 @@ function spawnWave(w, counts) {
   const d = counts || (isOverdrive() ? overdriveWaveData(w) : waveData(w).slice());
   const [rw, rh] = D.safeRect(w);
   player.x = FIELD.w / 2; player.y = FIELD.h / 2; player.holdT = 0; player.cd = 0;
+  hullHits = MOBILE_HULL && gameMode === 'arcade' && !replayViewing ? 2 : 0;
   bullets = []; stingers = []; seekers = []; shells = [];
   drudges = []; pylons = []; juggs = []; hives = []; wasps = []; cortexes = []; thralls = []; forges = []; crawlers = []; humans = [];
   chain = isOverdrive() ? rescueStreak : 0;
@@ -2159,6 +2194,7 @@ function killAt(x, y, color, pts, label) {
   spark(x, y, '#ffe14a', 5, 1.65, 25);
   spark(x, y, '#ff8a38', 4, 1.9, 30);
   detonate(x, y, color, 1);
+  if (pts >= 500) { chunks(x, y, [color, '#ffffff'], 5, 2); detonate(x, y, '#ffffff', 0.6); }
   Snd.boom(); addTrauma(0.12);
 }
 function spendBullet(b, i) {
@@ -2265,13 +2301,15 @@ function playerHit() {
 /* ============================== DEATH / WAVE FLOW ============================== */
 function die() {
   state = 'dying'; stateT = 0; deaths++; lives--;
-  addTrauma(1); flashBorder('#ff4a3d', 46);
+  addTrauma(1); flashBorder('#ff4a3d', 46); hitStop(7);
   spark(player.x, player.y, '#4df3ff', 40, 2.4, 60);
   spark(player.x, player.y, '#ffffff', 24, 1.6, 46);
   spark(player.x, player.y, '#ff4a3d', 20, 2, 52);
   spark(player.x, player.y, '#ffe14a', 18, 2.2, 55);
   spark(player.x, player.y, '#ff4ad9', 14, 1.8, 50);
+  chunks(player.x, player.y, ['#4df3ff', '#c9fbff', '#dfe8ff', '#8fa0c0', '#ffffff'], 16, 2.8);
   detonate(player.x, player.y, '#4df3ff', 2.8);
+  detonate(player.x, player.y, '#ffffff', 1.4);
   Snd.deathSfx(); Snd.stopMusic(); say('death', null, true); breakRescueChain(); rumble([60, 35, 90]);
   updateHud();
 }
@@ -2358,7 +2396,8 @@ function exitDemo() {
 function fxTick() {
   for (let i = parts.length - 1; i >= 0; i--) {
     const p = parts[i];
-    p.x += p.vx; p.y += p.vy; p.vx *= 0.96; p.vy *= 0.96;
+    if (p.type === 'chunk') { p.x += p.vx; p.y += p.vy; p.vx *= 0.985; p.vy *= 0.985; p.rot += p.rv; }
+    else { p.x += p.vx; p.y += p.vy; p.vx *= 0.96; p.vy *= 0.96; }
     if (--p.life <= 0) parts.splice(i, 1);
   }
   for (let i = muzzleFx.length - 1; i >= 0; i--) if (--muzzleFx[i].t <= 0) muzzleFx.splice(i, 1);
@@ -2400,6 +2439,10 @@ function stepTick() {
   }
   if (state === 'dying') {
     stateT++; fxTick();
+    // rolling secondary explosions — the wreck cooks off
+    if (stateT === 9) { detonate(player.x + 6, player.y - 5, '#ffe14a', 1.5); spark(player.x + 6, player.y - 5, '#ffe14a', 12, 2, 38); chunks(player.x + 6, player.y - 5, ['#ffe14a', '#ff8a38'], 5, 2.2); addTrauma(0.3); }
+    if (stateT === 19) { detonate(player.x - 7, player.y + 4, '#ff4ad9', 1.3); spark(player.x - 7, player.y + 4, '#ff4ad9', 10, 1.9, 34); Snd.boom(); }
+    if (stateT === 30) { detonate(player.x + 2, player.y + 7, '#ff6b2d', 1.1); spark(player.x + 2, player.y + 7, '#ff6b2d', 9, 1.7, 30); addTrauma(0.2); }
     if (stateT === 110) {
       if (players === 2) {
         saveCur();
@@ -2452,7 +2495,10 @@ function stepTick() {
   updateOvercharge();
   fxTick();
   if (hazardHit || playerHit()) {
-    if (!absorbShield()) { die(); return; }
+    if (!absorbShield()) {
+      if (hullHits > 0) hullBreach();
+      else { die(); return; }
+    }
   }
   if (killableLeft() === 0) {
     state = 'waveclear'; stateT = 0; wavesCleared++;
@@ -3035,7 +3081,17 @@ function draw() {
       if (overchargeShield) {ctx.globalAlpha=.72;ctx.lineWidth=1.2;ctx.setLineDash([2,1.5]);ctx.beginPath();ctx.arc(player.x,player.y,10.7,0,7);ctx.stroke();}
       ctx.restore();
     }
+    if (hullHits > 0) {                            // mobile comfort armor: rotating hull segments
+      ctx.save(); ctx.strokeStyle = '#9df8ff'; ctx.lineWidth = 1.1;
+      const seg = Math.PI * 2 / (hullHits + 1);
+      for (let i = 0; i <= hullHits; i++) {
+        ctx.globalAlpha = 0.45 + 0.2 * Math.sin(tick * 0.09 + i * 2);
+        ctx.beginPath(); ctx.arc(player.x, player.y, 12.4, tick * 0.025 + i * seg + 0.3, tick * 0.025 + (i + 1) * seg - 0.3); ctx.stroke();
+      }
+      ctx.restore();
+    }
     ctx.save();ctx.shadowColor='#4df3ff';ctx.shadowBlur=settings.combatClarity?3:0;
+    if (shieldT > 0 && ((tick >> 2) & 1)) ctx.globalAlpha = 0.4;
     drawSpr(SPR.player[player.moving ? player.frame : 0], player.x, player.y);ctx.restore();
     const m = Math.hypot(player.fx, player.fy) || 1;
     const ux = player.fx / m, uy = player.fy / m;
@@ -3088,9 +3144,20 @@ function draw() {
     ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(s.x-.25,s.y-.25,Math.max(.7,s.r*.48),0,7);ctx.fill();
   }
   for (const p of parts) {
-    glowAt(p.x, p.y, p.r * 2.4, p.color, Math.max(0, p.life / p.max) * 0.7);
+    const a = Math.max(0, p.life / p.max);
+    if (p.type === 'chunk') {                      // spinning debris fragment
+      glowAt(p.x, p.y, p.size * 2.2, p.color, a * 0.5);
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.globalAlpha = Math.min(1, a * 1.4); ctx.fillStyle = p.color;
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+      ctx.globalAlpha = Math.min(1, a * 1.4) * 0.7; ctx.fillStyle = '#ffffff';
+      ctx.fillRect(-p.size / 2, -p.size / 2, p.size * 0.45, p.size * 0.45);
+      ctx.restore();
+      continue;
+    }
+    glowAt(p.x, p.y, p.r * 2.4, p.color, a * 0.7);
     const speed = Math.hypot(p.vx, p.vy) || 1, ux = p.vx / speed, uy = p.vy / speed;
-    ctx.globalAlpha = Math.max(0, p.life / p.max);
+    ctx.globalAlpha = a;
     ctx.strokeStyle = p.color; ctx.lineWidth = Math.max(.35, p.r * .62);
     ctx.beginPath(); ctx.moveTo(p.x - ux * p.r * 2.4, p.y - uy * p.r * 2.4); ctx.lineTo(p.x, p.y); ctx.stroke();
     ctx.fillStyle = '#ffffff'; ctx.beginPath(); ctx.arc(p.x, p.y, Math.max(.25, p.r * .34), 0, 7); ctx.fill();
@@ -3506,6 +3573,7 @@ function buildOpts() {
       if (settings[key] === v) b.classList.add('sel');
       bind(b, () => {
         settings[key] = v;
+        if (key === 'lives') settings.livesTouched = true;   // explicit choice — stop mobile default migration
         if (key === 'sound') setMute(v); else store.set(SET_KEY, settings);
         if (key === 'diff') diffMul = DIFFS[v];
         if (key === 'cabinetFx') document.body.classList.toggle('fx-off', !v);
@@ -3628,6 +3696,8 @@ window.__CHROME_RIOT__ = {
     taintRun(); bossShots.push({x:player.x,y:player.y,vx:0,vy:0,r:3,color:'#ff4a3d',life:60});
     const held=absorbShield(); return {held,overcharge:this.overcharge};
   },
+  setMobileHull(v) { taintRun(); MOBILE_HULL = !!v; return { mobileHull: MOBILE_HULL }; },
+  get hull() { return hullHits; },
   destroyBoss() {
     taintRun(); const b=bosses[0]; if(!b)return this.snapshot();
     b.mat=0;b.hp=1;bullets.push({x:b.x,y:b.y,dx:0,dy:0,charged:3,pierce:0});updateBullets();draw();
@@ -3635,6 +3705,7 @@ window.__CHROME_RIOT__ = {
   },
   step(n = 1) { taintRun(); for (let i = 0; i < n; i++) stepTick(); draw(); return this.snapshot(); },
   snapshot() { return { state, mode:gameMode, board:runBoard, theme:currentTheme.id, wave, score, lives, deaths, wavesCleared, tick, chain,
+    hull:hullHits, mobileHull:MOBILE_HULL,
     rescueMultiplier, overcharge:{tier:overchargeTier,ticks:overchargeTicks,shield:overchargeShield,invulnerable:shieldT},
     indicators:lastIndicatorCount, bossHp:bosses[0]?.hp || 0, bossIntro:!!(bosses.length&&state==='starting'&&freeze>0),
     nan: !isFinite(player.x + player.y), counts: this.counts() }; },
