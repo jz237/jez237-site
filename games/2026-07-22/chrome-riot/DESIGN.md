@@ -7,6 +7,21 @@ audio, and enemy fiction — no Williams assets or trademarks. Year is 2086 (not
 **Fiction:** 2086. The Chrome — humanity's own machines — have voted their makers
 obsolete. One augmented courier and the last human family are all that's left to save.
 
+## v3.7.0 — HD enemy detail + Xbox pad controls (2026-07-26)
+
+- Detail layer over every enemy master: scanning drudge eyes, hazard chevrons, vents and
+  knee pistons; jugg rivet rows, caution stripes, reactor glow and hydraulics; wasp wing
+  veins, abdomen segments and antenna bulbs; cortex spinal tube, cables and gauge lights;
+  thrall glitch bands and torn hems; crawler muzzle brake, exhaust stacks and running
+  lights; hair/ties/caps and faces on the family. Pylons rebuilt as HD ring emitters with
+  arc filaments and node caps (plus a framed hazard-plate 2086 sign); Hives rebuilt with
+  toothed rotor rings, lattice spokes, orbiting wasp gestation pods and a molten core.
+  All baked at load — zero added per-frame cost.
+- CONTROLS grown in OPTIONS: Xbox/gamepad enable, pad rumble (dual-rumble via
+  vibrationActuator), deadzone (tight/standard/loose), live pad-detected readout.
+  D-pad now moves, START pauses / A confirms (already), controller rumble mirrors
+  cabinet haptics.
+
 ## v3.6.0 — living Cortex (2026-07-26)
 
 - The Cortex brain is now alive: a glossy dome overlay pulses with a heartbeat curve
