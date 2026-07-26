@@ -926,5 +926,25 @@
       "description": "A fictional palm-length mangrove-mudflat amphibian blending mudskipper locomotion and respiration with glasswing-inspired transparent fin membranes in one seamless body.",
       "continuity": "Palm-length horizontal amphibious body; mud-brown head and torso with turquoise flank spots; high-set gold eyes; broad soft mouth; paired weight-bearing pectoral crutches; two tall transparent dorsal fins grown continuously from the back with fine veins and charcoal rims; mangrove mudflat and water-filled burrow habitat."
     }
+  },
+  {
+    "id": "2026-07-26-hybrid-creature-wild-photo-tideglass-skimmer-wild-photo",
+    "title": "Tideglass Skimmer: Wild Photo",
+    "tests": "Sunday hybrid-creature wild-photo slot; matching second member of the Tideglass Skimmer pair; exactly common mudskipper + glasswing butterfly; decisive mangrove-mudflat burrow behavior; coherent palm-length amphibious body; mud-brown head and torso; turquoise flank spots; high-set gold eyes; paired weight-bearing pectoral crutches; exactly two transparent biological dorsal fins continuously rooted in the back with branching veins and charcoal rims; coherent transmitted sunlight and veined shadows; propagule scale cue; documentary macro capture; no pasted-on insect anatomy, extra legs, humanoid form, text, staging, fantasy glow, gore, or poster layout; actual pixels inspected with xai/grok-4.3 and passed.",
+    "prompt": "Create a matching square photorealistic natural-history field photograph of the adult Tideglass Skimmer, one clearly fictional seamless hybrid derived from exactly common mudskipper and glasswing butterfly, on a sunlit mangrove mudflat after the falling tide. Preserve the exact development-map phenotype: one palm-length horizontal amphibious body; low mud-brown mudskipper-like head and continuous muscular torso with turquoise flank spots; high-set round gold eyes; broad soft mouth; two strong paired pectoral crutches planted in wet sediment; and two tall transparent biological dorsal fins growing continuously from fin rays along the back, with glasswing-like clear membranes, fine branching veins, and charcoal borders. The fins are not attached insect wings, and there is no separate butterfly body, antennae, extra legs, or humanoid posture.\n\nShow a decisive natural behavior: the animal has paused halfway through a pectoral-crutch stride at the lip of its water-filled burrow while both transparent dorsal fins open toward a narrow shaft of noon sun as a combined shade and courtship display. Sunlight passes through the clear membranes and projects sharply veined shadows across its wet turquoise-spotted flank and the rippled mud; the charcoal fin rims cast darker lines, proving the fins are physically attached and translucent. A second much smaller individual remains softly out of focus beside another burrow in the middle distance, establishing ecology without competing with the main subject.\n\nPhotograph from mud level with a weather-sealed full-frame camera, 100mm macro lens, f/8, 1/1000 second, restrained natural color and realistic shallow depth of field. The adult fills most of the frame; its gold eyes, pectoral contact points, continuous fin roots, membrane veins, mucus sheen, and coherent shadow are critically sharp. Surround it with believable red-mangrove pneumatophores, shallow tidal rivulets, tiny fiddler-crab tracks without a visible crab, green algae film, salt crystals, one fallen mangrove propagule for scale, and bright water bokeh. Use tidal turquoise, mud brown, mangrove green, translucent pearl, charcoal, and warm sun highlights. Render believable anatomy, mass, wet skin, fin-ray support, water tension, footprints, and reflections.\n\nThe creature and its transparent dorsal-fin display must be unmistakable at thumbnail scale and match the development map exactly. No readable text, people, lab props, specimen staging, costume look, fantasy glow, gore, mutation horror, butterfly wings pasted onto a fish, intact butterfly, extra legs, antennae, flight, humanoid body, logo, border, collage, infographic, poster, or watermark.",
+    "image": "images/2026-07-26-hybrid-creature-wild-photo-tideglass-skimmer-wild-photo.jpg",
+    "thumb": "thumbs/2026-07-26-hybrid-creature-wild-photo-tideglass-skimmer-wild-photo.webp",
+    "color": "#878073",
+    "date": "2026-07-26",
+    "batch": "Daily Prompt",
+    "slot": "hybrid-creature-wild-photo",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "hybridCreature": {
+      "name": "Tideglass Skimmer",
+      "imageKind": "wild",
+      "description": "A fictional palm-length mangrove-mudflat amphibian blending mudskipper locomotion and respiration with glasswing-inspired transparent fin membranes in one seamless body.",
+      "continuity": "Palm-length horizontal amphibious body; mud-brown head and torso with turquoise flank spots; high-set gold eyes; broad soft mouth; paired weight-bearing pectoral crutches; two tall transparent dorsal fins grown continuously from the back with fine veins and charcoal rims; mangrove mudflat and water-filled burrow habitat."
+    }
   }
 ]
