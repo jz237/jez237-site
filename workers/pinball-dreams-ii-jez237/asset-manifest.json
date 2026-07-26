@@ -1,0 +1,2519 @@
+{
+  "schema_version": 1,
+  "worker": "pinball-dreams-ii-jez237",
+  "captured_from_deployment_id": "5578b804-aeb4-41d8-bce7-1e4e34d3524a",
+  "captured_from_version_id": "a05b517b-d012-404e-91ef-63da2e69d371",
+  "script_etag": "4a138305ac4c4b8e1d5d2801aa0680b4ccfa7f801ea6a9ddeb25a45f35c2b84d",
+  "captured_at": "2026-07-26T15:05:00Z",
+  "intentional_live_only_reason": "Generated game media remain on the routed Cloudflare Worker to avoid duplicating 61.8 MB of binary assets in Git. This manifest is the canonical GitHub pointer and recovery map.",
+  "asset_count": 358,
+  "total_bytes": 61778737,
+  "assets": [
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/PinballDreams-BlT1lRGT.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/PinballDreams-BlT1lRGT.js",
+      "bytes": 367760,
+      "sha256": "243113a376858db7b0a4df791e3842692d151c289685f02b4db3d9f2e59f4871",
+      "content_type": "text/javascript"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/framework-DjPHiq1u.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/framework-DjPHiq1u.js",
+      "bytes": 189761,
+      "sha256": "e1c95fc407283714d3fc4e9666d2fac09df84f3b4d479fcabdf8c4e3e53fa985",
+      "content_type": "text/javascript"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-C_VnvUr1.css",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-C_VnvUr1.css",
+      "bytes": 32216,
+      "sha256": "f6c9fd624bd6a04987c95ae1703612af46d3ef7a07b1fe09f43d8f50c4034b7a",
+      "content_type": "text/css"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-Ch-aShgk.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-Ch-aShgk.js",
+      "bytes": 80868,
+      "sha256": "4ec2f43faebf2d521ce5382d05a773cce49836b0c0f031ec8801dc22fa8d53e1",
+      "content_type": "text/javascript"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/layout-segment-context-DyzVtZF5.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/layout-segment-context-DyzVtZF5.js",
+      "bytes": 288,
+      "sha256": "85e190e90eae55438e6cc9bd482409a902909457780c5367b3ba700ce83d279b",
+      "content_type": "text/javascript"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/rolldown-runtime-S-ySWqyJ.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/rolldown-runtime-S-ySWqyJ.js",
+      "bytes": 694,
+      "sha256": "5db5ba82eef00d1dee7e86e663098c9427d01183a88d357437daff295aec3e75",
+      "content_type": "text/javascript"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/favicon.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/favicon.png",
+      "bytes": 373,
+      "sha256": "0103aececf23f90afc5f83e2ba911b2c7eee3c7ee246e0777abaaee4909b006f",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/favicon.svg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/favicon.svg",
+      "bytes": 520,
+      "sha256": "29d2d054e1d9202b99b055423e7cd23ab2107404e92d13d8d100afcf9ff7775f",
+      "content_type": "image/svg+xml"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/audio-manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/audio-manifest.json",
+      "bytes": 83050,
+      "sha256": "74ac5885d209f4b10cd9af1e2635a3224cbd3a5e4205909210d51ebf66803ff9",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/00.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/00.ogg",
+      "bytes": 151783,
+      "sha256": "4090c98fcf2ef531073ac672bd8ae3657f2705f27d305af5522ad362daa94aee",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/01.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/01.ogg",
+      "bytes": 676816,
+      "sha256": "db3ffa7a0e5f8a55ab260f352781fdfa62aa149cd39b4b98e205966745afd0ed",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/02.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/02.ogg",
+      "bytes": 1609329,
+      "sha256": "0bb65561703409c6185ceb3e991607f5cead15a704ff6a30b1e131928b34d32d",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/03.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/03.ogg",
+      "bytes": 180489,
+      "sha256": "bff5191a967f27c3af5614e5239cc5f0044aa9ef792ac014dce0574bb259d2ea",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/04.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/04.ogg",
+      "bytes": 60640,
+      "sha256": "f63055b5bffd9ca3858b887fea370402ecf15172641df90d3c9b251b136508a9",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/05.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/05.ogg",
+      "bytes": 58546,
+      "sha256": "552539b34bd51101aa61e7d5f00b4a4957123ce2efc894f4f26c8f8cfbc4b689",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/06.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/06.ogg",
+      "bytes": 36476,
+      "sha256": "837e19f3599ab7549134b317a419dcbe6e4e8acf62dc4965906baf6a72eea737",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/07.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/07.ogg",
+      "bytes": 44197,
+      "sha256": "7480af32e98153b0574aaee9c66590ac28ad3dfade037f6966f034d496e4097a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/08.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/08.ogg",
+      "bytes": 39792,
+      "sha256": "4e4c1d6ef706f3c9f03fe39c77111d8ab55379d7b71835977429873cb71e1037",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/09.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/09.ogg",
+      "bytes": 102517,
+      "sha256": "d42ecf337b785495ddf7cfb36ae336fe1fa76bc2aef017d910c45d8d58bcc3a0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/10.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/10.ogg",
+      "bytes": 52832,
+      "sha256": "82db0fe6528a1a2db621376c4cce64c8aa9f13ecc2da07faba7681b571e027ad",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/11.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/11.ogg",
+      "bytes": 47255,
+      "sha256": "2a06f36381bbd0886fe4d80d3f9bbbd0651da0f8a5129877c5e529e638ac8c38",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/12.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/12.ogg",
+      "bytes": 38519,
+      "sha256": "2f09da5b9c0cef6e8b2be482bbfad0113e8b021a3b1067209b8cbc331ce1b81f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/13.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/13.ogg",
+      "bytes": 22760,
+      "sha256": "a132e99025652dba30e42bb730e5b6cb273a54bf5faf023c120684caf70ddce3",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/14.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/14.ogg",
+      "bytes": 62623,
+      "sha256": "0a34e825b26bada7ae2e22dac14fdc7c192c991cb8ad4d7d2f587b725408c3c4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/15.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/15.ogg",
+      "bytes": 38461,
+      "sha256": "c756d98801a6ee63a86a7bb31b5cefe5f9da61cec39d9d2a8e465babc7af91b9",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/16.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/16.ogg",
+      "bytes": 42218,
+      "sha256": "62c7920fa1e2ebb5c277b5785ac70347bba0e1a15f4935ab382327a622c16fe7",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/17.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/17.ogg",
+      "bytes": 17662,
+      "sha256": "9de7258a6e66159a41e956a3e5ea389b5187b1fcbd408e9dc208036d29b41d72",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/18.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/18.ogg",
+      "bytes": 36588,
+      "sha256": "0108efad7e85a9c5e71323bd82bc3c0876bee3fdc0a10f9572e84e7f848012bf",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/19.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/19.ogg",
+      "bytes": 22742,
+      "sha256": "7fe5a020cc8f26cfdb60bf2dd19902eb886fca31c5b839e72634b1c8d0bcb37c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/20.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/20.ogg",
+      "bytes": 128886,
+      "sha256": "e7fb5a96fc6536047776c75ff3eeb06a237743010b7d8d169b70a89b00c1748e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/21.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/21.ogg",
+      "bytes": 21450,
+      "sha256": "aa28428a5fa38e3fa1e0eb8a9ccc4701b7bbdc302921aad025b531b51c7ca457",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/22.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/22.ogg",
+      "bytes": 37570,
+      "sha256": "ccef14c01d40b2af4c8b9a7aca340035c6994be574a1a350dbb8e0739e0b0c29",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/23.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/23.ogg",
+      "bytes": 22779,
+      "sha256": "daa89002ad53f212a7a46437339f3ea307dd3f520f6d656cdd65c3b892c0ace2",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/24.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/24.ogg",
+      "bytes": 39957,
+      "sha256": "33ea58a88ce56ced377dec1c876c6ac910e9fa4b6746dc025d98a9bf0aa47d02",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/25.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/25.ogg",
+      "bytes": 48995,
+      "sha256": "cb98c7be59fab1afee1befcff7686b7ca0f45d28ad237debbb02bc69a42a039f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/26.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/26.ogg",
+      "bytes": 46135,
+      "sha256": "5c1a720bb966468ba2fb822cff45978fa4e3579de4eee3436a0af1065006aec0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/27.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/27.ogg",
+      "bytes": 27650,
+      "sha256": "5bb6c2fb7c85ecc029a97c4e5bf2faf6572158dd694378d47b52e00f6f3a49a9",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/28.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/28.ogg",
+      "bytes": 25748,
+      "sha256": "55b4da619f724d205ee0eb61173891edc1d87cfaf2803f811265e25baf69b130",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/29.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/29.ogg",
+      "bytes": 48071,
+      "sha256": "cb4f918062c37f5cd5a89e96b859a78d4bb69347f104c2a2428d6c8c363d1d40",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/30.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/30.ogg",
+      "bytes": 50704,
+      "sha256": "5195b68e3a3005eb7833306909acf0d4eca937cec3bd502b9b0dd0135ae535b1",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/31.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/31.ogg",
+      "bytes": 37090,
+      "sha256": "159682c026fb93bb1704a683121ceceb5a482494043b5abdbc62484a400a8399",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/32.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/32.ogg",
+      "bytes": 21075,
+      "sha256": "7d922b227e8075e687bfb3147e991158091e5bf4e033a20a1baf308f81fd850c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/33.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/33.ogg",
+      "bytes": 41434,
+      "sha256": "254a02d9daca1a9e19015f0c28cb154689c970cbc46ba12d0043d424da2bd7c4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/34.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/34.ogg",
+      "bytes": 43252,
+      "sha256": "3ebea9132edd57371d97ece83de0b2cdd807d6865cde9ca06c162c72ca39f449",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/35.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/35.ogg",
+      "bytes": 52263,
+      "sha256": "a3dec9818836a5d15ec4db8fd05cff0dab48aa6bd166bf680e0ffd2605f888ad",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/36.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/36.ogg",
+      "bytes": 57231,
+      "sha256": "a8b7af0df11cac8297276b3830acadcd5686b622cb3d33a3cfdfe8500b112a2d",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/37.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/beat-box/37.ogg",
+      "bytes": 4664,
+      "sha256": "862a734a23d25ab0af0b34085138c8256978de62f3957c881621e0897c42f19c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/browser-audio-map.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/browser-audio-map.json",
+      "bytes": 12570,
+      "sha256": "f9265bc25b59babc1dc45e606edbe87881d59670dff2306b4305967180332f3f",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/drain-gutter.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/drain-gutter.ogg",
+      "bytes": 10156,
+      "sha256": "08bda6e429aacb8fb940e04b8604b9f0e1da2ea1aa36eafe6da8fa3e3a773228",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/drop-target-down.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/drop-target-down.ogg",
+      "bytes": 7366,
+      "sha256": "77c65f08b481bd55339626ed6bdb6388e1704671dbb0e9e1b6ba346d7bcb4f26",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/drop-target-reset.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/drop-target-reset.ogg",
+      "bytes": 7022,
+      "sha256": "d6c59d6e193ead5c1abc87d5d7446c5cfa541d2f1b38dfd2e88d567678282d88",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/flipper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/flipper.ogg",
+      "bytes": 7303,
+      "sha256": "a94d9ec92b6af1f474d8a2c0a9e3f9798c06e74f5ebfdf23e6dcc88bda6e6dbc",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/hole-pit.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/hole-pit.ogg",
+      "bytes": 7003,
+      "sha256": "237cdc56ec213ff0038f6787d476bf65d4243bd9f8249731c483d67d9a53fccc",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/multi-bonus.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/multi-bonus.ogg",
+      "bytes": 8900,
+      "sha256": "1794b28290a6e4134f527729d9f3adb55e29b4fe8210e5696c4d2aacf4dfccac",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/new-ball.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/new-ball.ogg",
+      "bytes": 16232,
+      "sha256": "b72071ffca69bd385603435d356928b0947daa315a8ebff3f66036759ac1c059",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/plunger.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/plunger.ogg",
+      "bytes": 7551,
+      "sha256": "b241baccfc09b1f672d34a6a379a23ebf4a0001d0268aac64d39948d421f8449",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/pop-bumper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/pop-bumper.ogg",
+      "bytes": 8483,
+      "sha256": "a60e7f7557997a071314d33f38dd124dc7c8e3a0f52aa901c0df438ee5c751cd",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-1.ogg",
+      "bytes": 11995,
+      "sha256": "c2abe71b149888f0d0a6ec082c13e4de0ef9815ce760dcf9a98b7f32538d9707",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-2.ogg",
+      "bytes": 9297,
+      "sha256": "75bc41148fee74ddfa7a06ca10b0a75873bf00827a11b737c506dc4d9b14e5c0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-3.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-3.ogg",
+      "bytes": 10201,
+      "sha256": "826c9caaed610549073c1289f550eb72102d7da2f306aaade25fd51096f812c9",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-4.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-4.ogg",
+      "bytes": 10005,
+      "sha256": "da8769046857fe2c2c564a7e1e895e5609cb23af734fd863ce955576fe022a9a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-5.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/rail-gate-5.ogg",
+      "bytes": 10573,
+      "sha256": "3227c78b0184b77ca3c7e1ba402e75e18c422059c7030a9de03ae937ee97a228",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/score.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/score.ogg",
+      "bytes": 7215,
+      "sha256": "e96feafd97ff2f8e6a29dcf2c5bd8b2794d029e445f1dd2b119a0f0c4b8de1fe",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/slingshot.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/slingshot.ogg",
+      "bytes": 8977,
+      "sha256": "4e208677f79827905e4f17e8e3f6b6d103ce1aba90e2e67108c2755e3b54a1f4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/touch-switch-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/touch-switch-1.ogg",
+      "bytes": 10195,
+      "sha256": "f49056ba578f44cf76857320e7d74c5fc1b3ae6b37ac0e937c4c8663b248b2b4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/touch-switch-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/touch-switch-2.ogg",
+      "bytes": 10766,
+      "sha256": "64186fe7e53f3edd8050c226d41b2a224db59755b5eee62d96214a3474b56539",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/trip-count.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/beat-box/trip-count.ogg",
+      "bytes": 8474,
+      "sha256": "272e87ae2f8a77946a5da75a0af84d97d757a03d4e4e4af5211bff4ad170ad5e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/direct-sfx-manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/direct-sfx-manifest.json",
+      "bytes": 60285,
+      "sha256": "1fcc2035514722e18283458e75edf05b36004e01ba24bfe56394c70c6cb99298",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/drain-gutter.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/drain-gutter.ogg",
+      "bytes": 12876,
+      "sha256": "01c6da1e1b244fbf7b7e03f241afb05ffd250fc57f2e3433016e1759fc27d3a5",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/drop-target-down.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/drop-target-down.ogg",
+      "bytes": 7886,
+      "sha256": "fc33b0d756e237e70cac425ec57e7f04ffc520ed1a45ec750b142d07e3463f54",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/drop-target-reset.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/drop-target-reset.ogg",
+      "bytes": 10779,
+      "sha256": "47964deeb19aa92fd89abbba182315662d10aadbc1cba81c8c91dd725c8aeb5a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/flipper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/flipper.ogg",
+      "bytes": 7266,
+      "sha256": "4bb7ea907b61971fd96e0d67512877ce47b82d9a6ad34241f779d4f195d2ff9f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/hole-pit.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/hole-pit.ogg",
+      "bytes": 10818,
+      "sha256": "2e173b38ef5356d41a5a1e1b2465c955810cd546c3bb991edefa43178e8bc82f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/multi-bonus.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/multi-bonus.ogg",
+      "bytes": 16804,
+      "sha256": "21a26397c17ccf7b3c57957b9b26882fd51afe7ab16e0cdb58feb342d2de91b6",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/new-ball.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/new-ball.ogg",
+      "bytes": 26677,
+      "sha256": "fc6da52de9e534ac74d152534a825839b58f7ae5a0a32af7d4a8925986cf64c8",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/plunger.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/plunger.ogg",
+      "bytes": 8106,
+      "sha256": "c60901013cd71fe7139e322bcbe720ac5fe5122a20c7b1e903f7acbe8c709dd6",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/pop-bumper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/pop-bumper.ogg",
+      "bytes": 10698,
+      "sha256": "5d85c6b5222fb383db89e3ee70e65b726c71fbcc1a746b500a202175b62c27da",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-1.ogg",
+      "bytes": 6261,
+      "sha256": "49f3082d2ce0429eaf9f1c3a1976afa044c3918f62638d83792124379a30179b",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-2.ogg",
+      "bytes": 14180,
+      "sha256": "b500e841f227897c9dc84fea4e335f33c6b2322948a4cf20d906256bef90822a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-3.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-3.ogg",
+      "bytes": 9279,
+      "sha256": "bb87619a86e4a8046b623ccf1e9d1f9f63f0e1978b8a527a5ee32436757aead8",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-4.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-4.ogg",
+      "bytes": 10709,
+      "sha256": "2066845f2a687b59ad43c79967ed1b1e5609ac149023b403a0b5928001ae602a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-5.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/rail-gate-5.ogg",
+      "bytes": 30780,
+      "sha256": "b994e53a8ccbb285d4be72f6f0935579318a6f835c0b1a9b4b16a0bf6f2c5291",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/score.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/score.ogg",
+      "bytes": 6419,
+      "sha256": "03c3a34fd9e4893abcb9ab7b8528749f54ff98c050801a76c2fc93014c8ed618",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/slingshot.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/slingshot.ogg",
+      "bytes": 10092,
+      "sha256": "e8b697c5f2f2a9a40b796739473735c093927a68e973bc6ccce0ae027bb26378",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/touch-switch-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/touch-switch-1.ogg",
+      "bytes": 15280,
+      "sha256": "db720f302612941817286c0490826ad09caf0ba108ad911428447c2d80020a40",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/touch-switch-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/touch-switch-2.ogg",
+      "bytes": 10005,
+      "sha256": "48be6c16c44aeff93eabc1a25f344e9930b1630dffaa0ef75d8d3cd8aa268a90",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/trip-count.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/ignition/trip-count.ogg",
+      "bytes": 10169,
+      "sha256": "ba951cf24366ec051fec76874f31548546c905e5a61ded183d3b0c6e16e20011",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/drain-gutter.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/drain-gutter.ogg",
+      "bytes": 8884,
+      "sha256": "0ef20c1ec43002f2dac42317dacef371676d7416d1830bba61a4e83efc75ba0b",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/drop-target-down.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/drop-target-down.ogg",
+      "bytes": 8308,
+      "sha256": "24f6181c32eeae41e16ab1bfc67dabf81ed6150203255707eb49565d440ca1d4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/drop-target-reset.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/drop-target-reset.ogg",
+      "bytes": 9272,
+      "sha256": "53e92ffbf8ebcc56a00d637170e9adc3fc86745413428c80a9b23fe57c9b6537",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/flipper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/flipper.ogg",
+      "bytes": 7473,
+      "sha256": "5821f6e54cd5951013a053c823d1438b32cd766a5777b8f1bef0189271b96f90",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/hole-pit.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/hole-pit.ogg",
+      "bytes": 9180,
+      "sha256": "aca1c204c87631f39fe18575d6928c34536b5307c3e2607ad068c7fedcbb458d",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/multi-bonus.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/multi-bonus.ogg",
+      "bytes": 15424,
+      "sha256": "a808d3ad57b186eecaef195c0e481584366346b230d833b3e3346e3c13d15f9e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/new-ball.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/new-ball.ogg",
+      "bytes": 16129,
+      "sha256": "072d9b5011984f978fc13a7f893adb96bebc26c6f260dc93eac951f53529df80",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/plunger.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/plunger.ogg",
+      "bytes": 8605,
+      "sha256": "1864872c7b0a70a4a46f26b157879ef1f03bd82bc9c33557a6c10e3a8a6c3baa",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/pop-bumper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/pop-bumper.ogg",
+      "bytes": 12801,
+      "sha256": "0d7812954b9652dd83cc5c7c2320270574ce24ace11cd0ae5dc47b15e4577885",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-1.ogg",
+      "bytes": 23837,
+      "sha256": "d52c45e0c8b4fe0bdd32ffcf4edefcec768a5006738a7414846d2068f5aac9bf",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-2.ogg",
+      "bytes": 22181,
+      "sha256": "18e464acbf18ff5c332d2f2b2a9546080b18fb5d7f8e4768555c27a0bd864641",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-3.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-3.ogg",
+      "bytes": 26885,
+      "sha256": "417fb0f73c35ce012c7025add674a29e012beadb162ae9151bd1e4d442ed15ff",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-4.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-4.ogg",
+      "bytes": 11740,
+      "sha256": "f7dd49782e2f62163fbc812c13b31876a93dc7b3554104ad0bcc738114e28daf",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-5.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/rail-gate-5.ogg",
+      "bytes": 15832,
+      "sha256": "45b32d9e1ded2253935709f0d7d994ea3773922cc128bc11eed61410b25c1186",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/score.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/score.ogg",
+      "bytes": 9158,
+      "sha256": "1c1faadcb2f89c61313456a5c225321a4643476e749b9e006f5b9c56349a7b1c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/slingshot.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/slingshot.ogg",
+      "bytes": 8258,
+      "sha256": "a05f43aea247bd19d23787ff87278758a017af25da0b8d0d169f2583f117aa87",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/touch-switch-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/touch-switch-1.ogg",
+      "bytes": 13732,
+      "sha256": "907eda61eb3f0e68e643a9663134d04ec9ee473195cd6b7888cf26f6fab965bb",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/touch-switch-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/touch-switch-2.ogg",
+      "bytes": 11251,
+      "sha256": "a12f165b5da89f27bb982f5882123edf41c61b04c37a621b413e8b301d718614",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/trip-count.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/nightmare/trip-count.ogg",
+      "bytes": 10070,
+      "sha256": "1a246f79a411a123a26362bb15d4b136c56169f9c84c62ed69ebbe9f8ee8b36e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/drain-gutter.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/drain-gutter.ogg",
+      "bytes": 10364,
+      "sha256": "e41a94d37e113b6c241ba2e3d30732c318d2247ff61afbbd26fb1f7fdc4ecf5c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/drop-target-down.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/drop-target-down.ogg",
+      "bytes": 7092,
+      "sha256": "c4aea3144346625d4fb8d595e7c7f9db09ac9843f588241f795c31d724de8bdc",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/drop-target-reset.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/drop-target-reset.ogg",
+      "bytes": 10735,
+      "sha256": "8c221ebc387e9c6d5c73d3ff6ef05a86ef1d2d992593d7dee78d2a10481d59ec",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/flipper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/flipper.ogg",
+      "bytes": 6886,
+      "sha256": "e7ac14e0bbfd3cea867cbe0d704d7a57bb82f408311b8c33e6b0eddd38bd9221",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/hole-pit.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/hole-pit.ogg",
+      "bytes": 10835,
+      "sha256": "9011d06dc5f4f8be983175d728fcef3b1982d63f05bb9276f5730c442760ad4f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/multi-bonus.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/multi-bonus.ogg",
+      "bytes": 8182,
+      "sha256": "1f4b9126ed85f192e4ba0953ad43e48bd0dbdbf44d3dbb004e2985bda55ab587",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/new-ball.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/new-ball.ogg",
+      "bytes": 23707,
+      "sha256": "ac5dfe72ea9fa1904d8e1af518e5c0b9eb6c66e591df51f8eeec144f55c46e3b",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/plunger.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/plunger.ogg",
+      "bytes": 7626,
+      "sha256": "fddb650581a375b24f7adbb5cff791b19d887a95ac96a5e6baad18c134f73735",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/pop-bumper.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/pop-bumper.ogg",
+      "bytes": 13146,
+      "sha256": "b87112aae060589ce307da61f86110a4add35ea8ca47374f7954e7c851314cbe",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-1.ogg",
+      "bytes": 7124,
+      "sha256": "a6495d9bfa908986bb4dab81a383d918b543ad9599c694cfd5cb3a9f511f8aa0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-2.ogg",
+      "bytes": 7090,
+      "sha256": "973f31b758f3ba659325a9da60465d3d57955c56c641131aba606900aa0720f4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-3.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-3.ogg",
+      "bytes": 6899,
+      "sha256": "63ee9da0ba101d491ef4fc841aa3b20b5364ff3d10475bf25b9a8876479f29fa",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-4.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-4.ogg",
+      "bytes": 6711,
+      "sha256": "3d225c8e95d0a13d27310f3c1376dac2a7ddf15f11eb61e1b1ef6bd29b7a9bd4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-5.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/rail-gate-5.ogg",
+      "bytes": 6719,
+      "sha256": "9d7756f8806ee57ee6a4304efa925c26643a495f0d3374f28ed7ff8f262d9461",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/score.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/score.ogg",
+      "bytes": 13117,
+      "sha256": "83d376d7c97779cf5702a834dbd2d7a40504e3aafe8718a32726c747dcf07410",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/slingshot.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/slingshot.ogg",
+      "bytes": 9610,
+      "sha256": "6d1e3893ca1b7dc1c5b12be8c93c0e6796c37947b2f38801df29e227d136fedd",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/touch-switch-1.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/touch-switch-1.ogg",
+      "bytes": 6469,
+      "sha256": "d451c990666a0a76c766b89a196731ed29025df74089723b110d682bf9348102",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/touch-switch-2.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/touch-switch-2.ogg",
+      "bytes": 7341,
+      "sha256": "b6606e2b2320236df4d0a3a979e024a1ceeebbbefb5c6ad37eddac6995120852",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/trip-count.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/direct-sfx/steel-wheels/trip-count.ogg",
+      "bytes": 7409,
+      "sha256": "3633edb9c9f5b2b830fa22a729c233fa775ba056aee72d62ea251b706221a48f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/00.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/00.ogg",
+      "bytes": 176775,
+      "sha256": "9a1d55f81ff60733b4a38edbbe66bfcff2f5f0bea150fa77fcccd5f1577c9463",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/01.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/01.ogg",
+      "bytes": 30799,
+      "sha256": "4858648015f6c566f0739d74ebadd0a84a85bd34ac9588b43030628374d78df9",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/02.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/02.ogg",
+      "bytes": 27367,
+      "sha256": "56fdd794dab0f13532a94caf05fe72f5d40d671f3cb6a3b94264b5730f15ee8e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/03.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/03.ogg",
+      "bytes": 1004889,
+      "sha256": "78bce12aaf7fc9c66f1d43ee14f6f2b2beffd3820488b5b21882dff1383bc4b5",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/04.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/04.ogg",
+      "bytes": 941640,
+      "sha256": "f5be848a485ebf7b5cbedc8061336ede9b7f0c0d1f0bc80de536c087dfc7929f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/05.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/05.ogg",
+      "bytes": 1294912,
+      "sha256": "b81f51a4cde2d6a6fcf34aef1912a2cbfdcb35cf4d380489039e28462a16d360",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/06.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/06.ogg",
+      "bytes": 630309,
+      "sha256": "160e6cd5ae28621a5acbb1000238c2ee70bd3f78095305ddf959c04977584059",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/07.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/07.ogg",
+      "bytes": 56185,
+      "sha256": "12146defba3bc00c8b03bfff92cb802cc51c3f6b7f999bfedf831639e6f65638",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/08.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/08.ogg",
+      "bytes": 26948,
+      "sha256": "50e972b65c4bedaa4f697ef05d5dc8ce1b8442da57553b16e60b184b1ee1c804",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/09.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/09.ogg",
+      "bytes": 118316,
+      "sha256": "aac1fd22c1e950d994ccf2e2600a45c2ab4508ca2d9a4def079bbea6d822bafd",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/10.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/10.ogg",
+      "bytes": 93798,
+      "sha256": "2bca9cbb36e9c64233033121fdfad84835a7b46337033a04041363879343c78c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/11.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/11.ogg",
+      "bytes": 51096,
+      "sha256": "5a8a91098a07fe6b4d5f4d526c4bd8aec217319ea544be8f90ae0269482bf7f0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/12.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/12.ogg",
+      "bytes": 25536,
+      "sha256": "4eb1b3ef2a1940864a03b51799ec6ca8ec65ea3298155a03c6a768590fb91d3e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/13.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/13.ogg",
+      "bytes": 157865,
+      "sha256": "3cacc99015c7573610ee496e6023b48431515e32b282e4298c00071effbe307b",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/14.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/14.ogg",
+      "bytes": 24806,
+      "sha256": "d3fc75e42b9ecf64c2762e1b958780c17ef231a8baba4a0e0c7eb5d31ff616f6",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/15.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/15.ogg",
+      "bytes": 78517,
+      "sha256": "f197d61c73f645fa481e9307a1da24002dff8037b03696529bf4df6b45f2c17f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/16.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/16.ogg",
+      "bytes": 46450,
+      "sha256": "0c7930bebb3dd242e59428d74c1a7c328c2ad6691a1b2f75d3fcca6e4a6c4797",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/17.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/17.ogg",
+      "bytes": 47051,
+      "sha256": "addb54da06d3ef0579aa67d3840a83f6df5823addb4c7820db14bc0aa1767ce4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/18.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/18.ogg",
+      "bytes": 47015,
+      "sha256": "2d232f182d9718dcd6ffd13373f26463b31d2ca834abf9252f2bf142407f3723",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/19.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/19.ogg",
+      "bytes": 23940,
+      "sha256": "292908f61f64211bd364219076f13aaa1b66df841f620107a08811da2c82c51f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/20.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/20.ogg",
+      "bytes": 57704,
+      "sha256": "a975a8ea2edc6ffc5d91bc125db56f80e4076c8f229da55dc8de3e91571ef6e5",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/21.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/21.ogg",
+      "bytes": 24253,
+      "sha256": "7086632e426ce231f39b9271e9724e0d2658a6dcbecc4aac4e7569777b2cec30",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/22.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/22.ogg",
+      "bytes": 60377,
+      "sha256": "c0867dd0dab6d7b7ed2537fed48cd85df919e45a60321461addaa1d7ae6aeb57",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/23.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/23.ogg",
+      "bytes": 27077,
+      "sha256": "ebcfb52f662e5dbbbf5a895259abf8b5a3eae16a19e595c679a5cbc99aee7800",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/24.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/24.ogg",
+      "bytes": 119210,
+      "sha256": "d41cd8801ad2cd1c745ce1230883264a736279e3cf947663afcb57f82e08424a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/25.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/25.ogg",
+      "bytes": 42399,
+      "sha256": "60b00ca781b39b7ae351ab06ba19319a16aaf2aa15fe6466844c903713bee17f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/26.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/26.ogg",
+      "bytes": 29351,
+      "sha256": "216ddae97fecc1815a51ffb588ac66cee51553408e9199953c1dd2e1bd96f594",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/27.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/27.ogg",
+      "bytes": 33074,
+      "sha256": "ea8080417bcdddcfcbb076407509c69b05836311b5130ae831aa4f61f154fd7f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/28.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/28.ogg",
+      "bytes": 45129,
+      "sha256": "34c0e4c4d4fb55378324e78a0c6d43be6a7b6a5b720403886bf5adc786085c95",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/29.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/29.ogg",
+      "bytes": 54663,
+      "sha256": "d55952aeb79631050b32bf4edc3f3ff8784d46cf667980659a5dc459a5e53a62",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/30.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/30.ogg",
+      "bytes": 80014,
+      "sha256": "7f17b8dda9b3b494a235353008e9847b8c70dc806fae4ff5105e0ad873fe8dbb",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/31.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/31.ogg",
+      "bytes": 36307,
+      "sha256": "ead1d8b0a6df17a0d709ffcaae96442d0eb82166b14f43e843f78e949079fedb",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/32.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/32.ogg",
+      "bytes": 29271,
+      "sha256": "15ddc3ebf7f032a2fcabbe6ac440a5213cd88c5400c2a7a5098d15922cefb9fd",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/33.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/33.ogg",
+      "bytes": 4611,
+      "sha256": "a547efdacebc3f0e5a08d9641148783bcc23b7fb9863388dd7cbc682bdba53e3",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/34.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/ignition/34.ogg",
+      "bytes": 18201,
+      "sha256": "28259e63b5400d6f4b94136e231eef4f106b83c76545c1c5fb32c50a9e5578e8",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/menu/00.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/menu/00.ogg",
+      "bytes": 3190426,
+      "sha256": "a4961ee4ea220f10d5df91421095e65440571da8fa738a59450e5c12cb7306f1",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/00.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/00.ogg",
+      "bytes": 188913,
+      "sha256": "11be5fb461f72e0dc303461e4d6d6b1c6fc2cf52b3066602ed624c2a56831241",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/01.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/01.ogg",
+      "bytes": 1605627,
+      "sha256": "7230a286f7b6b7e2f680fad2adb2a023e2ee8a301c74baa2690658cf5ebe164b",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/02.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/02.ogg",
+      "bytes": 1652890,
+      "sha256": "fef2bfa1d0fdfac2208ddcc653fe3eb9cc87bcb5356fe58193d0b1b3d3ddfc00",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/03.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/03.ogg",
+      "bytes": 1661788,
+      "sha256": "7599720fb71d06d02e5d3c0907cdbe6652adae61bb0720bd0dbeec26d874ce5e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/04.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/04.ogg",
+      "bytes": 31701,
+      "sha256": "29c1be0b31f0df5f92f8a1745d25cdd63e27169f51e32945ed5c485513258d56",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/05.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/05.ogg",
+      "bytes": 69124,
+      "sha256": "7fa970620fec5f2fe79d14890eff984d46035b19e3fb16acd10a6b2a4263f9b9",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/06.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/06.ogg",
+      "bytes": 85831,
+      "sha256": "9f7f9aba2bd2d1c9549ad76fe6a13c041df8484497250f02fefb5a419aae92b1",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/07.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/07.ogg",
+      "bytes": 37896,
+      "sha256": "4764df188b9221a773cdc170a606e93125cb229e20fe89e8ef6c112bded3f65c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/08.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/08.ogg",
+      "bytes": 44920,
+      "sha256": "3061e3572f562546ff199f70f501e5a55606fae03c1f4a43d04adcbe20ea0ea4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/09.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/09.ogg",
+      "bytes": 61620,
+      "sha256": "0a3a205fc3cb02a8abcc1bfb2682c3b92cd6aaec3bc91dd670a07afcd88a6bdc",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/10.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/10.ogg",
+      "bytes": 96711,
+      "sha256": "d9854db02d275aea9228132d3fbbafd07d720f6f1e6cc65f420392b7e323a127",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/11.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/11.ogg",
+      "bytes": 105694,
+      "sha256": "b2b19d1f8f73c2b116fe96544fd77952d1ed80e5f564e57576b790437a0704f6",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/12.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/12.ogg",
+      "bytes": 44456,
+      "sha256": "7d8af8d505212698bc04f9c9d411b3e558f641e14716e3616f001305613248b0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/13.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/13.ogg",
+      "bytes": 98254,
+      "sha256": "6664ac88c086aafee0e53c51f088596afe1b7020bcec43407d40ec760fd0312f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/14.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/14.ogg",
+      "bytes": 70651,
+      "sha256": "37e8ce5d3b6b6a5dc6394bbe1b6a97d620ff8e63462538650314f0d9a5c664ef",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/15.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/15.ogg",
+      "bytes": 37615,
+      "sha256": "72394fa77bcda5fe3bf4ec8bbcd7ef44cd55bfc6ab79bfb395ddd63ee1914b21",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/16.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/16.ogg",
+      "bytes": 150673,
+      "sha256": "ab5f4fc16080e41d8f5144451d0b58d9ba10d579cccd6b71cb93a7dbe6576c4a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/17.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/17.ogg",
+      "bytes": 609057,
+      "sha256": "5cdd8f0fe795c269c63c8688d060352095e1590defa532dc199c36dd8dc2ff54",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/18.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/18.ogg",
+      "bytes": 29570,
+      "sha256": "4b0d7a2e0e29a9a35ec016588ab4c5d7d3e967c8dcd2e12166e294bb1afe5e8c",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/19.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/19.ogg",
+      "bytes": 86209,
+      "sha256": "14bb48a01864d2e59bd3f1673807ac665ff629fc2072fe4223d60d9f100250f5",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/20.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/20.ogg",
+      "bytes": 50006,
+      "sha256": "271518ca809566bf26a7722466b9ab2f67593c7893b70fd47790d7473b31042f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/21.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/21.ogg",
+      "bytes": 28055,
+      "sha256": "40ca12425f39f3cc12bc767e1fbf25d9cf7fa6216bb1e801f585ab4e572fa652",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/22.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/22.ogg",
+      "bytes": 20124,
+      "sha256": "50c73f5df58ec8da840d9288eeea3dfa52b0af22c19b3456c27fb1e99123b782",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/23.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/23.ogg",
+      "bytes": 54173,
+      "sha256": "ef03066d8ca48047ab7d1e008fd4a5e776bb7cc79c1b97971274cd88afb97664",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/24.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/24.ogg",
+      "bytes": 374805,
+      "sha256": "cf258087e36e4123ffe5ea35989b82e3218f66979e246f355ac23965172a4dde",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/25.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/25.ogg",
+      "bytes": 62631,
+      "sha256": "7f2bfa9df9418f40088c0cfef4d690b00a1d37f308f5852ae6141fb648cc05b1",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/26.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/26.ogg",
+      "bytes": 42125,
+      "sha256": "3d7930fa3cd3638ba1df35503ab13a74c94a69fd102944f6f50821f391499cc8",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/27.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/27.ogg",
+      "bytes": 32680,
+      "sha256": "81d76917ebb07a1284ba24e5924ad61f110e4ec16f1751250780a905be67d029",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/28.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/28.ogg",
+      "bytes": 4614,
+      "sha256": "99a29be3639cc47970caf9dac2554df8dab13eba546a261be8a4815e2b6880e9",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/29.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/29.ogg",
+      "bytes": 22892,
+      "sha256": "59bfd4a5ca1648d8db27590e59d49c8f3c709725f4f28d0253eb20f6ab8a988f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/30.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/30.ogg",
+      "bytes": 34459,
+      "sha256": "0101aeb5104c0d967d4579f43f1e5fef12a1618c876d1e1831ec40b7332e5cff",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/31.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/31.ogg",
+      "bytes": 44747,
+      "sha256": "76608608a9a12de6fd9d1423fd346f628198f5b518e9000408807e6b6787df29",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/32.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/32.ogg",
+      "bytes": 83966,
+      "sha256": "2a13def2e174ac95dcc53d090c9ee0d1457dd207ea25d3ab0c54dc85d636b76e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/33.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/33.ogg",
+      "bytes": 27974,
+      "sha256": "f7af413bd8762ce2f3c79d026d77e004bc852e587d297e17c034077283030637",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/34.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/34.ogg",
+      "bytes": 28595,
+      "sha256": "40b75b510200af8329ba8cb033df62a13f57d759860d6a4f2b4155fe07b1c6c0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/35.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/nightmare/35.ogg",
+      "bytes": 111675,
+      "sha256": "f5a6afea6f2e0cabc7ec20234cc960b378428dd47deaa7a31aa353e345c2de89",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/00.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/00.ogg",
+      "bytes": 164878,
+      "sha256": "2e95a3d3b3e12fbe0260bcbadb7035eb69b87084a6debecdc1907b1703488db7",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/01.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/01.ogg",
+      "bytes": 2601914,
+      "sha256": "74f40d7f67ddd68f078b80331b6ee6ab3a9aef5ee5c28563d8a035791bbbd127",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/02.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/02.ogg",
+      "bytes": 1126697,
+      "sha256": "5e6817e3689977b8548c7019817c367c2b207b024b45469daf3ed59a975601a0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/03.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/03.ogg",
+      "bytes": 41405,
+      "sha256": "496ffcc6de63f95d625e4d8380282b861de9ca5dfd64202648bf10958b14c6ab",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/04.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/04.ogg",
+      "bytes": 29753,
+      "sha256": "660de962db9f4acb0d3e183420b3cf9033887bc2443ac6c21869940f1618a707",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/05.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/05.ogg",
+      "bytes": 34566,
+      "sha256": "09f59159df7d7f52c79c291074ce6d451d580753966005c0d8cfd57b3a426553",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/06.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/06.ogg",
+      "bytes": 56500,
+      "sha256": "b9da65a1221ff9c2349b83c5f180cf100d18197a3c4c59d85da8a96f274815da",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/07.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/07.ogg",
+      "bytes": 80422,
+      "sha256": "894b2258ad5ec4560c1566c835c2fbcb984606cb0e12a2d662361ef15723cb9e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/08.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/08.ogg",
+      "bytes": 41574,
+      "sha256": "a487d0961ec5fbb3ea00d83d4e0fbbe6f68f5d955408fcae088d8d1d40ecc0f1",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/09.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/09.ogg",
+      "bytes": 67939,
+      "sha256": "3d19fa8c35ce50e04c3d39c09e9b27bff795166991d601b37cd0f10c81283b04",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/10.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/10.ogg",
+      "bytes": 112081,
+      "sha256": "9474736b48b11ead4341e52f4ad0766c50dff768a87eafcccb079d01fd07bd36",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/11.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/11.ogg",
+      "bytes": 65089,
+      "sha256": "68c77a73dfa7a45d4d956a3f3ca74ec2251dd243c1624f80ba3d6aac1cdc3e9a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/12.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/12.ogg",
+      "bytes": 39907,
+      "sha256": "7e686f2f0cc80ef90ec2509cb54401bec99f99f888c23ace39a961fceb7c7a3b",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/13.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/13.ogg",
+      "bytes": 78660,
+      "sha256": "30d710df15a085a5162a27e93136aa425daec224445e5fcc29977e42eb249b04",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/14.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/14.ogg",
+      "bytes": 53411,
+      "sha256": "1806969afc244855c9e151dfbb2778d5c4e6b310cde6f0ce418d323d6d666301",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/15.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/15.ogg",
+      "bytes": 126257,
+      "sha256": "7da00cfdb379c4a7b24d7c7dba07e545ddd4c3ea01143f031eadde6fee4ccf89",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/16.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/16.ogg",
+      "bytes": 61697,
+      "sha256": "cec23802194ea5ca817f0fd6f8b8d265e7bf3fa414641583849acd556c19dc30",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/17.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/17.ogg",
+      "bytes": 84964,
+      "sha256": "9081dcd9fb9b7bed8771158e5adb34d029cc68dc9712d292385c15ab0129d8d8",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/18.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/18.ogg",
+      "bytes": 42914,
+      "sha256": "519cfbf6405017c1454371cf46edd7a173deb7babd5c7628958e30dad16bf161",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/19.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/19.ogg",
+      "bytes": 86040,
+      "sha256": "ad7032498157d39d170e937a15d535c93ace1640a838eba12c615dea81e9314a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/20.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/20.ogg",
+      "bytes": 70414,
+      "sha256": "bd7c409645e60d89112f3ea26b15c868408af8dc0fa9cd683bad28c83287fe62",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/21.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/21.ogg",
+      "bytes": 30658,
+      "sha256": "2d55eda3b7cbe9f56be8d413ca861b35ee5d89a6d163af82083b63462377b93d",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/22.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/22.ogg",
+      "bytes": 72961,
+      "sha256": "a4c71b018c4bc13a3943fa06d9a9780788490a21f1cd20b9a1b2e3e2f0f540f2",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/23.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/23.ogg",
+      "bytes": 32694,
+      "sha256": "aa021d48819507b3dd56ccdec33e77757dc3e20abb5e2de92ca78aaa21a4a142",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/24.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/24.ogg",
+      "bytes": 4496,
+      "sha256": "3b7826362bcc405f4adc83d32274bd3bff301d1d9158ab090dddc03b297178d4",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/25.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/25.ogg",
+      "bytes": 124040,
+      "sha256": "5d95030befc77030a740dbcc4429f9b97a33bda0485b32f6bc33437cbdcfab1b",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/26.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/26.ogg",
+      "bytes": 50818,
+      "sha256": "f522bef78a349e8969ea828f2fc6b426d99a81549db30e653f5cabf622bcff3f",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/27.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/27.ogg",
+      "bytes": 26478,
+      "sha256": "803218f6cd1135db453d1644ea6dce6b1b59c6a28ccbb4616d223cfba182f089",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/28.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/28.ogg",
+      "bytes": 38434,
+      "sha256": "aff2bf24486c0eb4aab2dd3e30b82a0c5dd5d8a2fe6d331e3b3616ffab219ccf",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/29.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/29.ogg",
+      "bytes": 29328,
+      "sha256": "7f88f9ee499699ba6e2f84f48024a4a374b49482e5ec12f10112076c51ea640e",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/30.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/30.ogg",
+      "bytes": 84795,
+      "sha256": "04db78ff7e41c8bfd809f55222331233e31c89213865a2f55387ad5f4fa4fdea",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/31.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/31.ogg",
+      "bytes": 48574,
+      "sha256": "a6363e395a8ab13e5df2e972778e84e6c5946e3a2bf1b18aa9f54e961c25c9d0",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/32.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/32.ogg",
+      "bytes": 114245,
+      "sha256": "29f016e73219f62b1a9c3280f4069b05145d7a0a7783539f69eae5272929b707",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/33.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/33.ogg",
+      "bytes": 43726,
+      "sha256": "691e8c51ac90eb994b597af7f371c9de99b6d8b6afa6260ff66a6ba8ff7a24ad",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/34.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/34.ogg",
+      "bytes": 61833,
+      "sha256": "523ba2dedbf8cef5005c42f8e154405308336f1c87de812e5ec1bc75de5b34d3",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/35.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/35.ogg",
+      "bytes": 31760,
+      "sha256": "21f309e8df62aacde32142f3c7136d673120c2696d6b12b4b1b7b59347639f53",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/36.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/steel-wheels/36.ogg",
+      "bytes": 20285,
+      "sha256": "48904a6bacf84f499d81c96c75d4d24457c7eff301f29acfec14b7776e2c33b2",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/audio/title/00.ogg",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/audio/title/00.ogg",
+      "bytes": 6159458,
+      "sha256": "969dcd715bace9dced867b9ed0460a8566c78b543ae6b40a629f5f753783c64a",
+      "content_type": "audio/ogg"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/manifest-mobile.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/manifest-mobile.json",
+      "bytes": 379828,
+      "sha256": "1012e98f6fff08b756d768d5024050bf9b990ce47e1a74ed846bb32ecd762997",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/manifest.json",
+      "bytes": 363678,
+      "sha256": "0af86cbcd02342a71e106a1aed6bdbd2ddea72c826362bfdbb3fe4646beb45a9",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/ball.png",
+      "bytes": 2312,
+      "sha256": "bd2db9590bc138cd2a8aa3de11090b486d558ff1aa8938b40ddd659f168f0055",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/effects.webp",
+      "bytes": 16890,
+      "sha256": "e81bb06acad09431f3b3cc9d7c3126abd86d57d0b58d1c36be8518818e9cfb62",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/flippers.webp",
+      "bytes": 86414,
+      "sha256": "3c1e131ce30d769be3c5bcbb2fdedb51e2716d516830acbe0ad4a4ad5392b421",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/lamps.webp",
+      "bytes": 138628,
+      "sha256": "ae9b385ee80c04d480b406d6dafdde367f55666517326c557203489811c700d2",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/playfield.webp",
+      "bytes": 195760,
+      "sha256": "3e77a68aeb691c13c66fef80543bdde563d80e13d96e13adec7af2dfcfba173c",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/beat-box/spring.webp",
+      "bytes": 9318,
+      "sha256": "881ee54f83e861ee6de84da389fb1aa710bdf3e7f23a6a445e5adfd46ee492d4",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/ball.png",
+      "bytes": 2312,
+      "sha256": "bd2db9590bc138cd2a8aa3de11090b486d558ff1aa8938b40ddd659f168f0055",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/effects.webp",
+      "bytes": 18678,
+      "sha256": "99383f8e5cc48fa0972335c0ff79e3bd087e756cc4cc062f23d5d2c2946fa771",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/flippers.webp",
+      "bytes": 87950,
+      "sha256": "52c58d8fa1125f45c3db660c4fa044503d74fc016d5d1f19df85a687f8f656c4",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/lamps.webp",
+      "bytes": 124334,
+      "sha256": "1e1cb533f1032ad6762099cb74f15aad8dc5fb9622fb8e3ac632a0cf27724e17",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/playfield.webp",
+      "bytes": 160264,
+      "sha256": "48dc6b6f10cca07f91ea71c95d7fab9ff6005cb2cbb643ca086c78e4f7a72a41",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/spring.webp",
+      "bytes": 8660,
+      "sha256": "d6eec4c34be60e11a10836dffa719df1da79f7b4f3bb3e87548602d6c168479a",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/states.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/ignition/states.webp",
+      "bytes": 1758,
+      "sha256": "c6b737ea94b01560812a1d93e7ce895e41b484b987cbfe754e1d20ba3a80ec51",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/ball.png",
+      "bytes": 2312,
+      "sha256": "bd2db9590bc138cd2a8aa3de11090b486d558ff1aa8938b40ddd659f168f0055",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/effects.webp",
+      "bytes": 19962,
+      "sha256": "22fb419e9e5a6251116bad0d84660726ae5450d84f2ec612f4ac91dbbcb28dae",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/flippers.webp",
+      "bytes": 85608,
+      "sha256": "a57f67033ce5f2ff25e8f2dbc58f9b6f667fcf781153ea7adb8bb7f122bdc751",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/lamps.webp",
+      "bytes": 183566,
+      "sha256": "c4c190343b1dd88e9280216cba99bc0573b7b7578de70ca94a0f798ed530ffed",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/playfield.webp",
+      "bytes": 155702,
+      "sha256": "09d463041f2bbd27529e53833e417f90f44653ed4cb0a1d84b98ae5387d050e9",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/nightmare/spring.webp",
+      "bytes": 8584,
+      "sha256": "9ce0cfd24e3268ba6879347c62d9c87178144128838fe7d6663f721802abba94",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/ball.png",
+      "bytes": 2312,
+      "sha256": "bd2db9590bc138cd2a8aa3de11090b486d558ff1aa8938b40ddd659f168f0055",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/effects.webp",
+      "bytes": 18482,
+      "sha256": "eb448d7491e808abe9075662e343a96470dee6199af28c2917a336f0ad920979",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/flippers.webp",
+      "bytes": 86000,
+      "sha256": "0311d9987a467def3774b9c502b556597014a37e6c289fad71ff000d689f5cab",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/lamps.webp",
+      "bytes": 179302,
+      "sha256": "82d21088ef25360ea0dd24c07b02a1820b4bae23025189f316faa4ce9efbc32a",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/playfield.webp",
+      "bytes": 218890,
+      "sha256": "be22cd8fc5100db171a9cdd9256d278b95a7d1456e4b9f6262f27d8cf32ad782",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/spring.webp",
+      "bytes": 8122,
+      "sha256": "33157f504df6ac96053a095fec12c8fb1957601210846d4654777ef193077034",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/states.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/tables/steel-wheel/states.webp",
+      "bytes": 3924,
+      "sha256": "567f1e2cc10ff7645ff1b30212e507f74b96679492bbd989650a8c39c8f8e9f9",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/highscores.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/highscores.webp",
+      "bytes": 57768,
+      "sha256": "94c3a99e075466f7d7526f964a44e8fb2dfb1a480442880fa9bdfa21592e6aab",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-digital-illusions.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-digital-illusions.webp",
+      "bytes": 48688,
+      "sha256": "1e72d0490c2accd69dc7b6ec00d6824b931a988ba487e10b22717d23fcffc101",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-eagle.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-eagle.webp",
+      "bytes": 53930,
+      "sha256": "f4ba3e07d11547f578f63cc146496b7f8505e977c22b2d8a3f0e6bd06cf1fa5e",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-loading.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-loading.webp",
+      "bytes": 38464,
+      "sha256": "15820bb2051f216950487498b24814ce4d85d264f3406f68732c740912782251",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-presents.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-presents.webp",
+      "bytes": 6936,
+      "sha256": "ec1aabc46200b3aa117d6118f7b16db0b0422a17756eff61529bed8721e3131a",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-title.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/intro-title.webp",
+      "bytes": 67464,
+      "sha256": "f24f7df7821f06e6872cd9ee0c7d8e755c8e8dc4c6d4ca4042b722d33aae088f",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-beat-box.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-beat-box.webp",
+      "bytes": 70090,
+      "sha256": "50606d5a9093597a5fc8f9b9f153dddc05bfe00db17bb8962c8c8cb5c07f57c6",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-ignition.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-ignition.webp",
+      "bytes": 57484,
+      "sha256": "77ad18b2ceab33ab52775b390cad9e757c0cf446baaf09894f011b05571e7e5d",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-nightmare.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-nightmare.webp",
+      "bytes": 54382,
+      "sha256": "de8bcc410a8d955fd6bc6f707c4bbef568ab8a62dfc85b680d51ff9c8816fe5d",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-steel-wheel.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/loading-steel-wheel.webp",
+      "bytes": 63302,
+      "sha256": "753becbd0a9437510cfe6a45fd0a68b97c56590328b11ed1eef7c6507f967212",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/selector.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/mobile/ui/selector.webp",
+      "bytes": 69372,
+      "sha256": "c1ecb1b494b3a7b0727327145921399670e91299be13d037bb739bd47d168f15",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/ball.png",
+      "bytes": 5960,
+      "sha256": "396c5c0874d205d69a7a4efeb181434fb5aa24e9422df6cd9c61cb4021ba4d2c",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/effects.webp",
+      "bytes": 43946,
+      "sha256": "a8c16dc865be6fb7fdf4b86df68d88f34546a889ec8fcac33242c06bfb41325e",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/flippers.webp",
+      "bytes": 215940,
+      "sha256": "8f563fb17a308bdab2c77dd0170cb1e6e70d8b164ebadf8d9489d60dfcc54f9b",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/lamps.webp",
+      "bytes": 458126,
+      "sha256": "2dc338cf5a6b5b6b3299e1e12cffe9de48b7587ca0e66e8ee9d63fe843efa36f",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/playfield.webp",
+      "bytes": 2933428,
+      "sha256": "8dd002fa9baf4e53a788fb76dcc4d3e0861d1312e4dce27cebc122ec1db67b11",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/reference.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/reference.png",
+      "bytes": 60731,
+      "sha256": "5f1d7b6d297f6c649f36a41b5365f69b924ab98a5f5cd128f69498ab607cbf86",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/beat-box/spring.webp",
+      "bytes": 49614,
+      "sha256": "496250d888bc27ceaabc3d17cbf5edba360e69c18b6f21764b764c1940520cae",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/ball.png",
+      "bytes": 5960,
+      "sha256": "396c5c0874d205d69a7a4efeb181434fb5aa24e9422df6cd9c61cb4021ba4d2c",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/effects.webp",
+      "bytes": 43886,
+      "sha256": "79b34cd555ea1b99b9713d76a871d800aaeefb61f5f9817ddbb06ac15725aee3",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/flippers.webp",
+      "bytes": 187488,
+      "sha256": "231361543b75b3131304a66cca40d54b3a3e10c1bf7dcc65756c0955d2fd288a",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/lamps.webp",
+      "bytes": 394176,
+      "sha256": "f0f7fbeb64879bea50791bbe5b3fcc4454f5252781c7a42f66546efe233e341e",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/playfield.webp",
+      "bytes": 2529716,
+      "sha256": "fe5534d08f0f2289e1d2fb486d3b351f8b4cfa368b7e9fb74645f5b4760f371a",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/reference.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/reference.png",
+      "bytes": 51564,
+      "sha256": "1325ab163becbc37072f1a0f52082aa196f8ed5a570b43c6f528fc33ae3bf33d",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/spring.webp",
+      "bytes": 51936,
+      "sha256": "e75c54c7e9a57d3a8c3de284a69bad16b72b1983d2fa8c6757793a3c61cd553b",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/states.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/ignition/states.webp",
+      "bytes": 9250,
+      "sha256": "decb704c1a5857793feb295dfa9ddfda5a7bdf1a767021dc1e9097db1233a398",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/ball.png",
+      "bytes": 5960,
+      "sha256": "396c5c0874d205d69a7a4efeb181434fb5aa24e9422df6cd9c61cb4021ba4d2c",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/effects.webp",
+      "bytes": 37872,
+      "sha256": "6aa424610b281fd3fc8b23b53efd83caada22cf5ef048c290c238410c5516ff3",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/flippers.webp",
+      "bytes": 250122,
+      "sha256": "55a7095b04f0260b2d999ef77814a42dc40dfdae3d261e7dffc47fa16e27fa4e",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/lamps.webp",
+      "bytes": 635986,
+      "sha256": "321edada29cefe679c47df06f25757ddbcef4a77c6218e8b18d207113ff766d1",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/playfield.webp",
+      "bytes": 2523894,
+      "sha256": "d547ea0ae54be186055f6c71db77ef8dd08f143b98655acdb743399c4cd2f16a",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/reference.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/reference.png",
+      "bytes": 42898,
+      "sha256": "9a216c3df467442082edbbf149e587859588ba865a2f442ccbd003f90b24ad08",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/nightmare/spring.webp",
+      "bytes": 57176,
+      "sha256": "681ab31ed4049ae8ea4a9954a09236ae45b927d95d7b19735a8435281269772e",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/ball.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/ball.png",
+      "bytes": 5960,
+      "sha256": "396c5c0874d205d69a7a4efeb181434fb5aa24e9422df6cd9c61cb4021ba4d2c",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/effects.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/effects.webp",
+      "bytes": 37692,
+      "sha256": "5843b56ca9f0cb86fc345fc36653da8e47049d15d371fce93ebc794e52046e5d",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/flippers.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/flippers.webp",
+      "bytes": 264360,
+      "sha256": "3f1e324b7822249ed051ab0a3e27506d0cc23be022ee17218112de93b0cf9892",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/lamps.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/lamps.webp",
+      "bytes": 671194,
+      "sha256": "98e74c188f2be1471bed19cb266f60db715f64486aed505b0098cba1acdd06da",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/playfield.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/playfield.webp",
+      "bytes": 2985094,
+      "sha256": "8b1af78d0555cf4cb92aaf99a2e1a7451d3ca8181737b569b73193c3ff1e593e",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/reference.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/reference.png",
+      "bytes": 46644,
+      "sha256": "72e23b0ee312766cd446e96606873140ffa751b9037056c5c09b5bfc7059cada",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/spring.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/spring.webp",
+      "bytes": 56108,
+      "sha256": "059eaad75a9462c113d8c0a2c35053e5fb210dff58e948cdec0b9e82374aec62",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/states.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/tables/steel-wheel/states.webp",
+      "bytes": 31428,
+      "sha256": "a23c5e49726924f39dc7fc0e8904a3758fcc28e709fd8dbd5c611e2f00dca470",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/footer-font.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/footer-font.png",
+      "bytes": 41364,
+      "sha256": "80c91a98ead4f98c20856cae23d88e4ec75ba652db25dbf6cc553a72ce31caae",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/highscore-font.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/highscore-font.webp",
+      "bytes": 58792,
+      "sha256": "b9fbf3e9f65d27b3ffd366ea6cf7dc4846efbbe8fe9db282b2357511f6318ee4",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/highscores.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/highscores.webp",
+      "bytes": 985126,
+      "sha256": "6a372081e5a0aba68d3a3ea9c4c3160756ce26e5e8850b35703f9851feed2109",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-digital-illusions.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-digital-illusions.webp",
+      "bytes": 693402,
+      "sha256": "b2010c15592a6b3e9d407e5a2e1b1843a84387c11bf5b2bbf26cd78b3e22c99f",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-eagle.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-eagle.webp",
+      "bytes": 667586,
+      "sha256": "fd611578da50064f7a3b71b75720c3e75cd3da3c76af48f2732e33592d6b321e",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-loading.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-loading.webp",
+      "bytes": 506752,
+      "sha256": "726ad5c57826eb25acce49028ff3ea2d612da4bc857c49cd091579036f927f4b",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-presents.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-presents.webp",
+      "bytes": 147574,
+      "sha256": "e0b6a108528b098d7a8d52052598dfd025b75364b49f893b782c555061fee363",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-title.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/intro-title.webp",
+      "bytes": 943082,
+      "sha256": "de2b54b6bc0ba05ec2ed37ff26fe30a70accc933669cdb3166848ec6d142a5ad",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-beat-box.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-beat-box.webp",
+      "bytes": 763638,
+      "sha256": "e4e545a9768106d927951dfa4003aa87c8eabaab7af9364dda3be6e76ad1b887",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-ignition.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-ignition.webp",
+      "bytes": 614046,
+      "sha256": "2bf559e5c6621eb152586169b0e5b5a691af61057db17be32438a3bd7c475f88",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-nightmare.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-nightmare.webp",
+      "bytes": 622240,
+      "sha256": "580956ff8ae013d0156a77ac5385d83d82ca9a193c1eb6081a62a4bf336601f8",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-steel-wheel.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/loading-steel-wheel.webp",
+      "bytes": 719292,
+      "sha256": "788549a05201255140b046a67e7b1d6897a0585efdb329c60573139e2a616d02",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/nightmare-hud-font.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/nightmare-hud-font.png",
+      "bytes": 33558,
+      "sha256": "8f5d908c2c8e845a0d8f8adf1ad7eb83262489b67abb97015aa4bec4c2213ae9",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/selector.webp",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/selector.webp",
+      "bytes": 905922,
+      "sha256": "450ef025ef56ec57ca1a8b98b44306c5a39bed059fe5ae8184f1bf4a7e25a381",
+      "content_type": "image/webp"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/social-card.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/hd/ui/social-card.png",
+      "bytes": 771145,
+      "sha256": "53254e3e3d1475d65b7a5db719995d4c4959fc39cccbbc81e1b84cf8c55c9d16",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/footer-font.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/footer-font.png",
+      "bytes": 722,
+      "sha256": "4c30a69c15041d9a40ea229f4bb21399638d52b3967f9f0ac214c38136f26e35",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/highscore-font.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/highscore-font.png",
+      "bytes": 1503,
+      "sha256": "50aae838c02a7eecc3487f3ed615e2506305e0006e2074759fea29d77669f59c",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/highscores.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/highscores.png",
+      "bytes": 14375,
+      "sha256": "44a5be14cd3589d8013e37cb173ad5f9f19e98d6b14f880e97b56cf9f436546c",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-credit-glyphs.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-credit-glyphs.bin",
+      "bytes": 9216,
+      "sha256": "00511a69f5fe0986382a539492f9e951c57ac530e9eccdf879d26d524ad60865",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-credit-stream.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-credit-stream.bin",
+      "bytes": 339,
+      "sha256": "ce660eb91858f962207e02060be68afdb4431408203605ceb304a9be385d5616",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-credit-widths.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-credit-widths.bin",
+      "bytes": 192,
+      "sha256": "534dc16ee4001dd432b2a9ab2c8e9e07ecb421616d64f45104f5f76fcc6ceea0",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-data.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-data.json",
+      "bytes": 6854,
+      "sha256": "4a076727e10b7fa2383eed16ee7f7426a63e7363f36266091173cbb5370879ae",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-digital-illusions.indices.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-digital-illusions.indices.bin",
+      "bytes": 81920,
+      "sha256": "b9554e3c618288f65ae85a9c7d27c8b149a9f47c7a65942126a7d88a4b4e70f6",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-digital-illusions.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-digital-illusions.png",
+      "bytes": 11591,
+      "sha256": "506cc216acdf35b4a5ee482da377ebd9e82c83afc5f0abe5e0908cdad7d3a7cc",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-eagle.indices.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-eagle.indices.bin",
+      "bytes": 81920,
+      "sha256": "fa121b2fe0ab9448aa99ac06c7013be458ba3d42e5ceccd48fc5dee5cfb90dc4",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-eagle.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-eagle.png",
+      "bytes": 42528,
+      "sha256": "b345e9d5127cadcfccd6d1304e429096dcff46097d6800900c58ae1949e728c0",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-loader.indices.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-loader.indices.bin",
+      "bytes": 2880,
+      "sha256": "10842716d5f7e7d240cd669b5589ea207e36d1e17c43764e657d50ce6989fe7e",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-presents.indices.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-presents.indices.bin",
+      "bytes": 14400,
+      "sha256": "76264424e1e7de41c3dbd90d076e391ad60f87f06bf4c79d546ec6c6fe55a359",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-presents.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-presents.png",
+      "bytes": 1001,
+      "sha256": "80b763220afce968dd1b91cf3019b716e3757826b06e73b396fc410d64363dc1",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-title.indices.bin",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-title.indices.bin",
+      "bytes": 81920,
+      "sha256": "05b7170b17510094ad09258ceaa416d8d58283810d3e38962f9838e5b49422ec",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-title.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/intro-title.png",
+      "bytes": 27107,
+      "sha256": "1a751aa5e906a9a7a1950e1fcde18ebf36789857d9714fc35390ab221e77065b",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-beat-box.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-beat-box.png",
+      "bytes": 782,
+      "sha256": "40faba28d48ac38b3030d8f542ff5db3148a831d9c0533c4269d15034ba692ba",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-ignition.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-ignition.png",
+      "bytes": 737,
+      "sha256": "6ba4129bf29178158a6977abae018a460034fde720647564270d969e7defa3a5",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-nightmare.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-nightmare.png",
+      "bytes": 827,
+      "sha256": "bc97dbc2b519f7de3ff70bf1cbe35bd7d2ec3e7ae2d6f93431050a85b457ebb2",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-steel-wheel.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/loading-steel-wheel.png",
+      "bytes": 827,
+      "sha256": "9332225b6e7e4d5959325d8a2d2740614caa3e8e99bc3a25b3b5a371b29b96eb",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/manifest.json",
+      "bytes": 7918,
+      "sha256": "754e13413001f311b74e4abea18ee0735523e7415e89686b5a764b5917375672",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/nightmare-hud-font.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/nightmare-hud-font.png",
+      "bytes": 980,
+      "sha256": "5695c936b87d12e195c9662d8652ca5662dbe4e28547371c3a703fb82293ab8d",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/original-ui/selector.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/original-ui/selector.png",
+      "bytes": 23932,
+      "sha256": "f6a3c7f2625afe3e2ea0b80d4cd09927261b642c2af2d3c0afc1d61b3331c837",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/ball-16x15.png",
+      "bytes": 187,
+      "sha256": "d0192bca1048475e3837e4c2bf33a7cd1717a81c7a1dc8ad4895aafc026530bf",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/flippers-4x9-grid.png",
+      "bytes": 4153,
+      "sha256": "e5e44cdb51aadaeb2a279f464aaabc59d9bde7a5321666a00e6db1277c6d3e31",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/dynamic-playfield-manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/dynamic-playfield-manifest.json",
+      "bytes": 320478,
+      "sha256": "ff4967a8da24973e492a3256ff437445f2bbc15564512f3b76c740ee93745e24",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/ball-16x15.png",
+      "bytes": 192,
+      "sha256": "d1a109f7b9fc200ac636bb3eed5f1986420483758ccf5942968955a113a1e93d",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/flippers-4x9-grid.png",
+      "bytes": 4188,
+      "sha256": "7979e47996bad5413b6d295e7d35be882733e3498db632453b2eae66b30efee7",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/manifest.json",
+      "bytes": 121998,
+      "sha256": "26e8cfacfc33fa3776fbe4d2bee213e5daf454ad79a08de5768e159f0f28a4b0",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/ball-16x15.png",
+      "bytes": 191,
+      "sha256": "f339a216bae814e5117161c4a6394a4896301bb2ae1bf09841fe7b540fddd297",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/flippers-4x9-grid.png",
+      "bytes": 4126,
+      "sha256": "118c8009caf8fc8e8432b93d9350e5722a681f4029b28a13edd2ddba4ef7f2be",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/ball-16x15.png",
+      "bytes": 195,
+      "sha256": "b1b076c2c1e41ee41c17fe2a0590f3ff6f770414ca7c54393fab7433e34834a9",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/flippers-4x9-grid.png",
+      "bytes": 4153,
+      "sha256": "8e3ed8a26ba2e9d9557e0fb8376b7926815f0b6bcc06b61d44853ccdecfaabf5",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/tables/beat-box.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/tables/beat-box.png",
+      "bytes": 63440,
+      "sha256": "21fb7315b0272d80d06d715481869c2ac5e77658940b8c62e4e3cdb6c7b060a6",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/tables/ignition.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/tables/ignition.png",
+      "bytes": 52973,
+      "sha256": "83facd66254093c9792605485b8c19bac19556c1f42f492535431a7476c62b2a",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/tables/manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/tables/manifest.json",
+      "bytes": 961,
+      "sha256": "5514349c612533bfc73ef2dd91719f03e3dcb3f0e0ea153a12205e199af884c5",
+      "content_type": "application/json"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/tables/nightmare.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/tables/nightmare.png",
+      "bytes": 44872,
+      "sha256": "2ee4066b12ffecc598b2efa2b6edb8a6c2dff2395554175023f18330239b3607",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/tables/steel-wheel.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/tables/steel-wheel.png",
+      "bytes": 48639,
+      "sha256": "bf0caeeacc032c6b32fc2f33e3e3a49c333b4d46a9568a23a49e9501bea02780",
+      "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/og.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/og.png",
+      "bytes": 13331,
+      "sha256": "deded9e65bcdc5ddeba852e0a43a542d56a15b4b07178134ff716763b12c8e29",
+      "content_type": "image/png"
+    }
+  ]
+}
