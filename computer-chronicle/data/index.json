@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-27",
+      "historicDate": "1983-08-15",
+      "displayDate": "Week of August 15-21, 1983",
+      "edition": "Issue 055 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week in 1983: Lisa developers weigh their tools, M.U.L.E. and Suspended show new game ambitions, and Hurricane Alicia strikes Texas.",
+      "leadHeadline": "Apple Developers Confront the Lisa Software Puzzle",
+      "storyHeadlines": [
+        "Computer Games Grow Up: M.U.L.E. and Suspended Lead the Summer",
+        "A $16.95 3-D Space Game Lands on Timex/Sinclair",
+        "IBM's ‘Peanut’ Rumor Keeps the Market Guessing"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-15.jpg",
+      "thumb": "media/thumbs/1983-08-15.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-26",
       "historicDate": "1983-08-08",
       "displayDate": "Week of August 8-14, 1983",

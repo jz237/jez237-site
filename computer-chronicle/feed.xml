@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 26 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 27 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 15-21, 1983 — Apple Developers Confront the Lisa Software Puzzle</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-08-15</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-15</guid>
+      <pubDate>Mon, 27 Jul 2026 12:00:00 GMT</pubDate>
+      <description>At Apple&apos;s August gathering, independent programmers see faster unreleased software—but face difficult choices about how to build for the graphical machine. Apple&apos;s Lisa has made the graphical office a commercial proposition, but the machine&apos;s future now rests with people deciding what to make for it. At a week-long Independent Developers&apos; Conference at the Dunfey Hotel in San Mateo, programmers gathered to compare methods, inspect works in progress and learn how Apple&apos;s unfamiliar visual environment might become a software market. Also this week: Computer Games Grow Up: M.U.L.E. and Suspended Lead the Summer · A $16.95 3-D Space Game Lands on Timex/Sinclair · IBM&apos;s ‘Peanut’ Rumor Keeps the Market Guessing.</description>
+    </item>
     <item>
       <title>Week of August 8-14, 1983 — Apple Courts Independent Programmers on &apos;Lisa Day&apos;</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-08-08</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-04-04</guid>
       <pubDate>Tue, 07 Jul 2026 12:00:00 GMT</pubDate>
       <description>Computer Gaming World&apos;s May-June 1983 number put modem gaming, an adventure-games contest, and computer baseball league coverage in front of Apple II and strategy players. During the week of April 4-10, 1983, the liveliest personal-computer story was still at the game rack. Computer Gaming World Vol. 3 No. 3 carried cover lines for modem gaming, an adventure games contest, and a computer baseball league, with SSI strategy titles such as Knights of the Desert sharing space with reader-driven play. The shelf message was clear: home-computer games were becoming longer, more social, and more magazine-mediated than the arcade conversions beside them.</description>
-    </item>
-    <item>
-      <title>Week of March 21-27, 1983 — Game shelves lean into adventures and strategy</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-03-21</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-03-21</guid>
-      <pubDate>Mon, 06 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Computer Gaming World&apos;s March-April issue put Zork, Ultima II, The Cosmic Balance, and a 1983 game-industry report in front of readers as stores balanced arcade action with deeper Apple II play. During the week of March 21-27, 1983, the strongest personal-computer culture signal came from the game rack. Computer Gaming World Vol. 3 No. 2 carried a report on computer games in 1983, coverage of The Cosmic Balance, an overview of Zork, and a review of Ultima II. The mix shows why late-March shoppers saw computer games as more than arcade imitations: role-playing, text adventures, and strategy titles were becoming durable reasons to own a disk drive.</description>
     </item>
   </channel>
 </rss>
