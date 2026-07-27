@@ -1,7 +1,71 @@
 {
   "date": "2026-07-27",
-  "updatedAt": "2026-07-27T04:00:01.634302+00:00",
+  "updatedAt": "2026-07-27T12:35:29.001800+00:00",
   "items": [
+    {
+      "title": "A million words costs $50 from Anthropic and 87 cents from DeepSeek. Corporate America noticed.",
+      "url": "https://thenextweb.com/news/thrift-maxxing-chinese-models-openai-anthropic-ipo-valuations",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Roughly 750,000 words of AI output costs $50 if you buy it from Anthropic’s Fable. The same volume from DeepSeek’s V4-Pro costs about 87 cents, Fortune reported. Z.AI’s GLM-5.2 charges $4.40. Moonshot’s Kimi K3, pricey by Chinese standards, charges $15. Corporate America has noticed. Companies spent a year competing to burn tokens. Now they shop [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-29914f3613af8af051.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T10:11:20+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.079,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "A million words costs $50 from Anthropic and 87 cents from DeepSeek. Corporate America noticed",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-million-words-costs-anthropic-cents",
+      "imageOriginal": "https://media.thenextweb.com/2026/05/Chatbots.avif"
+    },
+    {
+      "title": "Sam Altman renews his ‘democratic AI’ pitch as Anthropic holds a harder line",
+      "url": "https://thenextweb.com/news/sam-altman-renews-his-democratic-ai-pitch-as-anthropic-holds-a-harder-line",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Sam Altman has a preferred way of framing the contest over artificial intelligence, and it is a stark one. Either the United States and its allies build the technology and spread its benefits, the OpenAI chief has argued, or authoritarian governments use it to cement and expand their own power. That binary, set out most [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-0b6bf158df686ddc61.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T10:31:51+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.0888,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Sam Altman renews his ‘democratic AI’ pitch as Anthropic holds a harder line",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-sam-altman-renews-his-democratic",
+      "imageOriginal": "https://media.thenextweb.com/2026/05/Sam-Altman.avif"
+    },
     {
       "title": "Why AI Hasn’t Increased Unemployment, According to Anthropic",
       "url": "https://aidailybrief.ai/e/2026-07-24",
@@ -14,9 +78,9 @@
       "summary": "Anthropic's head of economics makes the case that AI has caused no material rise in unemployment — because it's a skill-biased, labor-augmenting technology, not a replacement one. Plus a headlines run stuffed with the new hot category: model routing, as Stripe circles OpenRouter for $10B.",
       "image": "public/thumbnails/news-ad37c6dc6571ef6435.png",
       "featuredLatest": false,
-      "published": "2026-07-27T04:00:07.531745+00:00",
+      "published": "2026-07-27T12:35:33.023642+00:00",
       "firstSeen": "2026-07-26T10:52:43.025891+00:00",
-      "lastSeen": "2026-07-27T04:00:01.634302+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
       "score": 5.332,
@@ -32,10 +96,389 @@
       "tryWorthy": false,
       "toolCandidate": false,
       "clusterKey": "anthropic-why-hasn-increased-unemployment-according"
+    },
+    {
+      "title": "How AI is shortening drug discovery timelines in China",
+      "url": "https://www.artificialintelligence-news.com/news/ai-drug-discovery-china",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Insilico Medicine has reduced the time needed to produce some drug development candidates to about one year by combining artificial intelligence with laboratory research in China, according to CEO Alex Zhavoronkov. The Hong Kong-listed company’s fastest programme reached candidate nomination in nine months, while its typical timeline is about 13 months, Zhavoronkov said. He said [&#8230;]\nThe post How AI is shortening drug discovery timelines in China appeared first on AI News.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-07-27T10:00:00+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.6716,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "How AI is shortening drug discovery timelines in China",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via Artificial Intelligence News."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "how-shortening-drug-discovery-timelines-china"
+    },
+    {
+      "title": "CXMT soared 466% on day one to become China’s most valuable onshore company",
+      "url": "https://thenextweb.com/news/cxmt-shanghai-debut-most-valuable-china-listed-dram",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "China has a new most valuable listed company, and it makes the chips inside your phone. CXMT, formerly ChangXin Memory Technologies, closed its Shanghai debut up 466% on Monday, the South China Morning Post reported. That values the Hefei firm at 3.28 trillion yuan, or about $485bn. The numbers are hard to overstate. CXMT priced [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-8c8089d0440f16e750.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T09:50:43+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.1692,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "CXMT soared 466% on day one to become China’s most valuable onshore company",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "cxmt-soared-466-day-one-become",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/CXMT-IC-China.avif"
+    },
+    {
+      "title": "Nadella won’t call it a bubble. He’ll only say how it ends badly.",
+      "url": "https://thenextweb.com/news/nadella-microsoft-compute-crunch-azure-customers-copilot-priority",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Fareed Zakaria opened with the question everyone is circling. Are we in an AI bubble, and has it begun to deflate? OpenAI has promised to spend hundreds of billions while making a fraction of that, he noted. The maths does not add up. Nadella did not push back. He reframed the question as a test [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-d63627b57d7042b6a4.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T10:44:19+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.0948,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Nadella won’t call it a bubble. He’ll only say how it ends badly",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "nadella-won-call-bubble-only-say",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/microsoft-nadella-ai-reboot-leadership-restructure-slt.avif"
+    },
+    {
+      "title": "Industry Leaders Unite in Open Secure AI Alliance for AI Safety and Security",
+      "url": "https://blogs.nvidia.com/blog/open-secure-ai-alliance",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Open source software is a critical pillar of the global economy. It underpins cloud computing, financial services, manufacturing, telecommunications, government and internet services by making technology accessible and observable to communities of experts.  Cybersecurity is among the top three beneficiaries of open source software. The Open Secure AI Alliance — building on the leadership of [&#8230;]",
+      "image": "https://blogs.nvidia.com/wp-content/uploads/2026/07/osaia-logo-garden_press-kit_1920x1080_V4.png",
+      "featuredLatest": false,
+      "published": "2026-07-27T09:00:07+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.8856,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Industry Leaders Unite in Open Secure AI Alliance for AI Safety and Security",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via NVIDIA Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "industry-leaders-unite-open-secure-alliance"
+    },
+    {
+      "title": "NVIDIA Cosmos-H-Dreams: Bringing Real-Time Generative Simulation to Surgical Robotics",
+      "url": "https://huggingface.co/blog/nvidia/cosmos-h-dreams",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/68c1279544f671330c604f4c/Cj0RZwvOSUhFGFEFKgyDw.png",
+      "featuredLatest": false,
+      "published": "2026-07-27T09:32:20+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3406,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "NVIDIA Cosmos-H-Dreams: Bringing Real-Time Generative Simulation to Surgical Robotics",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via Hugging Face Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "nvidia-nvidia-cosmos-h-dreams-bringing-real-time-generative"
+    },
+    {
+      "title": "Nuclear Turbines raises £15M for compact reactors it says could undercut fossil fuels",
+      "url": "https://thenextweb.com/news/nuclear-turbines-15m-raise-compact-reactors",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Nuclear power usually arrives with a very large price tag and a very long wait. Nuclear Turbines, a Manchester startup spun out of BAE Systems, has raised £15M to argue that it need not be either, at a moment when nuclear power startups across Europe are pulling in record amounts of private capital. The foundational round was [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Nuclear-Turbines-.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T11:45:31+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8248,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Nuclear Turbines raises £15M for compact reactors it says could undercut fossil fuels",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "nuclear-turbines-raises-15m-compact-reactors"
+    },
+    {
+      "title": "Insight Partners And Glilot Capital Co-Lead $20M Investment In Way Security To Reinvent IAM Operations",
+      "url": "https://thenextweb.com/news/way-security-20m-insight-partners-glilot-iam-operations",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Identity and access management has become a foundational component of enterprise cybersecurity, but the systems organizations buy to manage identity often create a second problem: making those systems work across the full complexity of the enterprise. Way Security, founded by former security leaders Yossi Barishev and Yonatan Rosenberg, is targeting that challenge with an AI-powered [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/way-security-20m-insight-partners-glilot-iam-operations.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T11:10:44+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.8077,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Insight Partners And Glilot Capital Co-Lead $20M Investment In Way Security To Reinvent IAM Operations",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "insight-partners-glilot-capital-co-lead-20m"
+    },
+    {
+      "title": "Starship came home in one piece, and SpaceX finally got to look at an undamaged heatshield",
+      "url": "https://thenextweb.com/news/spacex-starship-flight-13-starlink-v3-raptor-relight-catch",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The headline number from Starship’s 13th flight is not 20 satellites. It is one word in SpaceX’s own flight report: intact. Starship lifted off from Starbase in Texas at 5:51pm on Friday, after delays and engine replacements pushed the attempt back. It was the second flight of the V3 vehicles. It was also the first [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Starship-Flight-13.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T11:28:51+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1166,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Starship came home in one piece, and SpaceX finally got to look at an undamaged heatshield",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "starship-came-home-one-piece-spacex"
+    },
+    {
+      "title": "Google has promised to pay $44bn of rent on buildings it will never own",
+      "url": "https://thenextweb.com/news/google-44-billion-data-centre-lease-guarantees-tpu-anthropic",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Start with the number, because the number moved fast. Google has agreed to cover as much as $44bn of lease payments on data centres owned by other people, should the tenant default. It disclosed the figure last week. At the end of September the same commitment stood at $6.5bn, The Information reported. That is close [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/google-75-million-a24-deepmind-ai-filmmaking-partnership.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T11:14:48+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1097,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Google has promised to pay $44bn of rent on buildings it will never own",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-google-has-promised-pay-44bn"
+    },
+    {
+      "title": "AI-generated ‘doctors’ peddling fake cures on TikTok are a ‘huge danger’, experts warn",
+      "url": "https://thenextweb.com/news/ai-generated-doctors-tiktok-danger",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The advice arrives in the confident cadence of a physician. Microwaving food in plastic gives you cancer, a spoonful of Coca-Cola mixed with onion will ease your pain, and a supplement called “Hyalethinap Plus Pro Max” will fix your hair, nails, and joints in one go. The doctor delivering it does not exist. A study [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/07/Deepfake.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T09:27:40+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0584,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "AI-generated ‘doctors’ peddling fake cures on TikTok are a ‘huge danger’, experts warn",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "ai-generated-doctors-peddling-fake-cures-tiktok"
+    },
+    {
+      "title": "Shein reveals slowing profits and a quarterly loss ahead of Hong Kong IPO",
+      "url": "https://thenextweb.com/news/shein-hong-kong-ipo-financials",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Shein has finally shown investors the numbers. In a draft prospectus filed on July 26, the fast-fashion retailer disclosed annual revenue of $41.8 billion for 2025, up roughly 8% on the year before, alongside a net profit that fell 38.7% to $2.064 billion. Growth, of a sort, bought at a visibly thinner margin. The document, cleared by [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/Shein.avif",
+      "featuredLatest": false,
+      "published": "2026-07-27T09:04:47+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0478,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Shein reveals slowing profits and a quarterly loss ahead of Hong Kong IPO",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "shein-reveals-slowing-profits-quarterly-loss"
     }
   ],
   "tools": [
     {
+      "title": "Claude Opus 5",
+      "url": "https://www.producthunt.com/products/claude",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Near-Fable 5 intelligence at half the price\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-9a4e90371e94607915.avif",
+      "featuredLatest": false,
+      "published": "2026-07-24T17:17:21+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.2776,
+      "signalGroup": "Model releases",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Claude Opus 5",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Claude Opus 5",
+      "toolLabel": "Claude Opus 5",
+      "toolSummary": "Near-Fable 5 intelligence at half the price",
+      "clusterKey": "claude-claude-opus",
+      "imageOriginal": "https://ph-files.imgix.net/3e27ff5d-0612-4506-ad3b-c935991b517e.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
       "title": "Gemini 3.6 Flash Family",
       "url": "https://www.producthunt.com/products/gemini-3-6-flash-family",
       "source": "Product Hunt AI",
@@ -52,7 +495,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1374,
+      "score": 14.1312,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -69,6 +512,41 @@
       "toolSummary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
       "clusterKey": "gemini-gemini-flash-family",
       "model_release": true
+    },
+    {
+      "title": "Grok 4.5",
+      "url": "https://www.producthunt.com/products/grok",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "SpaceXAI's model for coding, agentic tasks & knowledge work\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-9640b22b4600f5b0d5.avif",
+      "featuredLatest": false,
+      "published": "2026-07-26T21:24:53+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.6296,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Grok 4.5",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Grok 4.5",
+      "toolLabel": "Grok 4.5",
+      "toolSummary": "SpaceXAI's model for coding, agentic tasks & knowledge work",
+      "clusterKey": "grok-grok",
+      "imageOriginal": "https://ph-files.imgix.net/ee3cc408-d3cf-4b98-a2b6-74066f002240.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024"
     },
     {
       "title": "Unabyss for Claude",
@@ -186,10 +664,10 @@
       "featuredLatest": false,
       "published": "2026-07-25T00:38:36+00:00",
       "firstSeen": "2026-07-09T10:00:01.309485+00:00",
-      "lastSeen": "2026-07-27T04:00:01.634302+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1721,
+      "score": 7.1161,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -223,7 +701,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5369,
+      "score": 6.5307,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -239,78 +717,46 @@
       "toolLabel": "AgentManager",
       "toolSummary": "Never miss a Claude Code session waiting for your input",
       "clusterKey": "agentmanager"
-    },
-    {
-      "title": "Claude Overlay",
-      "url": "https://www.producthunt.com/products/claude-overlay",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "A floating Claude Code chat that sees your screen\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-07-10T14:54:54+00:00",
-      "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-20T04:00:01.722451+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.808,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Claude Overlay",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Claude Overlay",
-      "toolLabel": "Claude Overlay",
-      "toolSummary": "A floating Claude Code chat that sees your screen",
-      "clusterKey": "claude-claude-overlay"
-    },
-    {
-      "title": "ChatGPT Work",
-      "url": "https://www.producthunt.com/products/chatgpt-work",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Partner for your most ambitious work\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-31c12954c5e68500ba.avif",
-      "featuredLatest": false,
-      "published": "2026-07-09T17:16:44+00:00",
-      "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-17T04:00:02.007006+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.808,
-      "signalGroup": "Product updates",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "ChatGPT Work",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "ChatGPT Work",
-      "toolLabel": "ChatGPT Work",
-      "toolSummary": "Partner for your most ambitious work",
-      "clusterKey": "chatgpt-chatgpt-work"
     }
   ],
   "tryWorthy": [
     {
+      "title": "Claude Opus 5",
+      "url": "https://www.producthunt.com/products/claude",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Near-Fable 5 intelligence at half the price\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-9a4e90371e94607915.avif",
+      "featuredLatest": false,
+      "published": "2026-07-24T17:17:21+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 14.2776,
+      "signalGroup": "Model releases",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Claude Opus 5",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Claude Opus 5",
+      "toolLabel": "Claude Opus 5",
+      "toolSummary": "Near-Fable 5 intelligence at half the price",
+      "clusterKey": "claude-claude-opus",
+      "imageOriginal": "https://ph-files.imgix.net/3e27ff5d-0612-4506-ad3b-c935991b517e.png?auto=format&fit=crop&frame=1&h=512&w=1024"
+    },
+    {
       "title": "Gemini 3.6 Flash Family",
       "url": "https://www.producthunt.com/products/gemini-3-6-flash-family",
       "source": "Product Hunt AI",
@@ -327,7 +773,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1374,
+      "score": 14.1312,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -344,6 +790,41 @@
       "toolSummary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
       "clusterKey": "gemini-gemini-flash-family",
       "model_release": true
+    },
+    {
+      "title": "Grok 4.5",
+      "url": "https://www.producthunt.com/products/grok",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "SpaceXAI's model for coding, agentic tasks & knowledge work\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-9640b22b4600f5b0d5.avif",
+      "featuredLatest": false,
+      "published": "2026-07-26T21:24:53+00:00",
+      "firstSeen": "2026-07-27T12:35:29.001800+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.6296,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Grok 4.5",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": true,
+      "toolName": "Grok 4.5",
+      "toolLabel": "Grok 4.5",
+      "toolSummary": "SpaceXAI's model for coding, agentic tasks & knowledge work",
+      "clusterKey": "grok-grok",
+      "imageOriginal": "https://ph-files.imgix.net/ee3cc408-d3cf-4b98-a2b6-74066f002240.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024"
     },
     {
       "title": "Unabyss for Claude",
@@ -461,10 +942,10 @@
       "featuredLatest": false,
       "published": "2026-07-25T00:38:36+00:00",
       "firstSeen": "2026-07-09T10:00:01.309485+00:00",
-      "lastSeen": "2026-07-27T04:00:01.634302+00:00",
+      "lastSeen": "2026-07-27T12:35:29.001800+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.1721,
+      "score": 7.1161,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -498,7 +979,7 @@
       "lastSeen": "2026-07-24T11:10:07.745434+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.5369,
+      "score": 6.5307,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -514,74 +995,6 @@
       "toolLabel": "AgentManager",
       "toolSummary": "Never miss a Claude Code session waiting for your input",
       "clusterKey": "agentmanager"
-    },
-    {
-      "title": "Claude Overlay",
-      "url": "https://www.producthunt.com/products/claude-overlay",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "A floating Claude Code chat that sees your screen\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-07-10T14:54:54+00:00",
-      "firstSeen": "2026-07-14T10:00:01.969891+00:00",
-      "lastSeen": "2026-07-20T04:00:01.722451+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.808,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Claude Overlay",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "Claude Overlay",
-      "toolLabel": "Claude Overlay",
-      "toolSummary": "A floating Claude Code chat that sees your screen",
-      "clusterKey": "claude-claude-overlay"
-    },
-    {
-      "title": "ChatGPT Work",
-      "url": "https://www.producthunt.com/products/chatgpt-work",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Partner for your most ambitious work\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-31c12954c5e68500ba.avif",
-      "featuredLatest": false,
-      "published": "2026-07-09T17:16:44+00:00",
-      "firstSeen": "2026-07-11T10:00:01.957875+00:00",
-      "lastSeen": "2026-07-17T04:00:02.007006+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 5.808,
-      "signalGroup": "Product updates",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "ChatGPT Work",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": true,
-      "toolName": "ChatGPT Work",
-      "toolLabel": "ChatGPT Work",
-      "toolSummary": "Partner for your most ambitious work",
-      "clusterKey": "chatgpt-chatgpt-work"
     }
   ],
   "sourceHealth": [
@@ -592,8 +1005,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1050,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "items": 1051,
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -603,7 +1016,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -613,7 +1026,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -623,7 +1036,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -633,7 +1046,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 831,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -643,7 +1056,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -653,7 +1066,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -663,7 +1076,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -673,7 +1086,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -683,7 +1096,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -693,7 +1106,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -703,7 +1116,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "The Next Web",
@@ -713,7 +1126,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -723,7 +1136,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -733,7 +1146,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -743,7 +1156,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -753,7 +1166,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Anthropic News",
@@ -763,7 +1176,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 250,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "The Verge AI",
@@ -773,7 +1186,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -783,7 +1196,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Simon Willison",
@@ -793,7 +1206,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -803,7 +1216,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Latent Space",
@@ -813,7 +1226,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Import AI",
@@ -821,9 +1234,10 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "ok",
-      "items": 20,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "status": "error",
+      "items": 0,
+      "error": "HTTP Error 403: Forbidden",
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -833,7 +1247,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 150,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -843,7 +1257,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -853,7 +1267,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -863,7 +1277,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -873,7 +1287,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -883,7 +1297,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 8,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -893,7 +1307,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -903,8 +1317,14 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-07-27T04:00:01.634302+00:00"
+      "checkedAt": "2026-07-27T12:35:29.001800+00:00"
     }
   ],
-  "errors": []
+  "errors": [
+    {
+      "source": "Import AI",
+      "url": "https://importai.substack.com/feed",
+      "error": "HTTP Error 403: Forbidden"
+    }
+  ]
 }
