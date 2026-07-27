@@ -4,6 +4,324 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-07-27",
+      "historicDate": "1983-08-15",
+      "displayDate": "Week of August 15-21, 1983",
+      "edition": "Issue 055 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Warm, ambitious personal-computing weekly",
+        "motifs": [
+          "Lisa windows",
+          "game disks",
+          "cassette software",
+          "compact discs"
+        ],
+        "layout": "Dense 1983 broadsheet with a Lisa lead and game-heavy secondary rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "August 15-21, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Lisa developer conference across the upper columns",
+        "secondaryRail": "M.U.L.E., Suspended and low-cost Timex/Sinclair games",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "newsprint red",
+        "secondary": "terminal blue",
+        "texture": "aged paper, halftone and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-08-15.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of August 15-21, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Graphical computing is leaving the laboratory and meeting the hard questions of software, speed and developer choice, while imaginative games stretch the home computer in other directions.",
+      "morningLine": "This week in 1983: Lisa developers weigh their tools, M.U.L.E. and Suspended show new game ambitions, and Hurricane Alicia strikes Texas.",
+      "lead": {
+        "headline": "Apple Developers Confront the Lisa Software Puzzle",
+        "dek": "At Apple's August gathering, independent programmers see faster unreleased software—but face difficult choices about how to build for the graphical machine.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Apple's Lisa has made the graphical office a commercial proposition, but the machine's future now rests with people deciding what to make for it. At a week-long Independent Developers' Conference at the Dunfey Hotel in San Mateo, programmers gathered to compare methods, inspect works in progress and learn how Apple's unfamiliar visual environment might become a software market.",
+          "The contemporary Lisa newsletter Signal attended Lisa Day on August 11 and found developers choosing among standalone, windowed and Toolkit environments. The choice was not merely technical: it shaped how programs behaved, how closely they followed Lisa conventions and how much work their creators would assume. Signal reported that many developers still seemed unsure which route best suited their plans.",
+          "There was encouragement on the demonstration machines. Signal noted noticeable speed improvements in software not yet released, an important sign for a system often discussed as much for its deliberate pace as for its friendly interface. QuickDraw author Bill Atkinson also recalled Steve Jobs pressing for the rounded rectangles that helped give Lisa's display its distinctive, approachable character.",
+          "The opportunity remained expensive. Signal relayed a trade-paper claim that Apple's planned 1983 production of 20,000 Lisas was sold out, while sampled dealers quoted Lisa floppy media at $70 for five or $120 for ten. The conference revealed both sides of graphical computing's next step: remarkable tools and a developer community still working out how to turn them into fast, useful and affordable software."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Computer Games Grow Up: M.U.L.E. and Suspended Lead the Summer",
+          "kicker": "Game Desk",
+          "dek": "Strategy, economics and interactive fiction claim feature space beside wargames and adventures.",
+          "confidence": "period",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "The July-August Computer Gaming World treats two striking new designs as events worth extended attention. Electronic Arts' M.U.L.E. turns settlement and trade into a competitive economic contest, while Infocom's Suspended places the player inside a science-fiction crisis managed through remote senses and carefully chosen commands.",
+            "The same issue ranges through Battle for Normandy and adventure hints, evidence that computer gaming is no longer a single narrow genre. Its shelves now hold simulations, strategic contests and literary puzzles—experiences shaped as much by systems and imagination as by reflexes."
+          ]
+        },
+        {
+          "headline": "A $16.95 3-D Space Game Lands on Timex/Sinclair",
+          "kicker": "Cassette Counter",
+          "dek": "Softsync's Mothership brings a pseudo-3-D corridor and two-player action to an entry-level computer.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ],
+          "body": [
+            "The inexpensive Timex/Sinclair software economy has a new arcade entry. COMPUTE!'s August new-products pages list Softsync's Mothership at $16.95 plus $1.50 shipping and handling, a cassette-priced invitation to pilot Starlight Fighters through a hostile corridor.",
+            "The game offers one or two players, three difficulty levels, on-screen scoring and a pseudo-3-D display. Its keyboard becomes a control panel as players steer around drones—a compact example of publishers finding spectacle in machines built for a mass, budget-conscious audience."
+          ]
+        },
+        {
+          "headline": "IBM's ‘Peanut’ Rumor Keeps the Market Guessing",
+          "kicker": "Rumor Wire",
+          "dek": "Expected low-cost and Unix machines stir speculation, but neither product has been announced.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "The industry is already talking as though IBM's next personal computer has a nickname. Signal records expectations of a September unveiling for the rumored low-cost ‘Peanut,’ a machine whose shadow is influencing home-computer forecasts before IBM has formally introduced it.",
+            "The newsletter also relays an August Datamation report about ‘Popcorn,’ a rumored 68000-based Unix workstation near $10,000 and aimed at Lisa in 1984. Both remain period speculation, but the chatter shows competitors expecting IBM to press beyond the business desktop."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Apple Lisa",
+          "summary": "Independent developers compare programming environments as unreleased software shows speed gains.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Timex/Sinclair",
+          "summary": "Softsync's Mothership joins the low-cost cassette-software market.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "IBM rumors",
+          "summary": "‘Peanut’ and ‘Popcorn’ remain unannounced but widely discussed.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lisa development environments",
+          "detail": "Standalone, windowed and Toolkit approaches compete for developer attention."
+        },
+        {
+          "name": "LisaWrite",
+          "detail": "Signal documents an unsupported Workshop-to-LisaWrite text-transfer workaround."
+        },
+        {
+          "name": "Mothership",
+          "detail": "Pseudo-3-D Timex/Sinclair arcade game from Softsync."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "M.U.L.E.",
+            "Suspended",
+            "Battle for Normandy",
+            "Mothership",
+            "Ultima II"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Easy Money",
+            "Risky Business",
+            "Mr. Mom",
+            "National Lampoon's Vacation",
+            "Return of the Jedi"
+          ]
+        },
+        {
+          "label": "Software Watch",
+          "items": [
+            "Lisa Toolkit",
+            "LisaWrite",
+            "Mothership",
+            "Suspended",
+            "M.U.L.E."
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Softsync Mothership",
+          "price": "$16.95",
+          "note": "Plus $1.50 shipping and handling"
+        },
+        {
+          "item": "Lisa floppy disks",
+          "price": "$70 for five",
+          "note": "One sampled dealer quote"
+        },
+        {
+          "item": "Lisa floppy disks",
+          "price": "$120 for ten",
+          "note": "One sampled dealer quote"
+        },
+        {
+          "item": "Rumored IBM ‘Popcorn’",
+          "price": "about $10,000",
+          "note": "Speculation only; not an announced product"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "WarGames remains in theaters",
+          "text": "The computer thriller ranks 12th for August 19-21, taking $1.40 million for the weekend and $63.70 million cumulatively."
+        },
+        {
+          "headline": "Return of the Jedi passes $222 million",
+          "text": "The film ranks sixth for August 19-21 and reaches $222,489,243 after 13 weekends."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Every Breath You Take",
+          "artist": "The Police"
+        },
+        {
+          "rank": 2,
+          "title": "Sweet Dreams (Are Made of This)",
+          "artist": "Eurythmics"
+        },
+        {
+          "rank": 3,
+          "title": "She Works Hard for the Money",
+          "artist": "Donna Summer"
+        },
+        {
+          "rank": 4,
+          "title": "Maniac",
+          "artist": "Michael Sembello"
+        },
+        {
+          "rank": 5,
+          "title": "Electric Avenue",
+          "artist": "Eddy Grant"
+        }
+      ],
+      "periodAd": {
+        "headline": "Mothership for Timex/Sinclair",
+        "summary": "One or two players, three difficulty levels and a pseudo-3-D space corridor.",
+        "tagline": "$16.95 plus $1.50 shipping"
+      },
+      "market": {
+        "headline": "Lisa's Software Market Takes Shape",
+        "summary": "Demand is reported strong, but developer uncertainty and costly media show the obstacles facing Apple's graphical computer.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Hurricane Alicia Strikes Texas as Category 3 Storm",
+        "summary": "Alicia became a tropical storm August 15, a hurricane August 16, and struck west of Galveston and Houston as a Category 3 hurricane, ending a three-year continental U.S. hurricane drought.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          6,
+          7
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Compact Disc Players Enter the Hi-Fi Conversation",
+        "summary": "August advertising for Philips' CD100 and digital-disc coverage show optical audio moving toward a premium consumer category.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          8,
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Lisa conference reporting: same-week period source",
+          "Games coverage: July-August period source",
+          "Mothership details: August period source",
+          "Charts and box office: week ending August 20-21",
+          "IBM machines: explicitly labeled rumors"
+        ]
+      },
+      "sources": [
+        {
+          "label": "Signal 3, August 1983",
+          "url": "http://www.macmothership.com/lisacontent/signal/Signal03_August1983.html"
+        },
+        {
+          "label": "COMPUTE! Issue 39: T/S Game In 3-D",
+          "url": "https://www.atarimagazines.com/compute/issue39/265_2_NEW_PRODUCTS_T_S_GAME_IN_3-D.php"
+        },
+        {
+          "label": "Computer Gaming World Vol. 3 No. 4",
+          "url": "https://www.cgwmuseum.org/galleries/issues/cgw_3.4.pdf"
+        },
+        {
+          "label": "Domestic 1983 Weekend 33",
+          "url": "https://www.boxofficemojo.com/weekend/1983W33/"
+        },
+        {
+          "label": "US Top 40, week ending August 20, 1983",
+          "url": "https://top40weekly.com/2013/08/20/us-top-40-singles-for-the-week-ending-august-20-1983/"
+        },
+        {
+          "label": "Music Charts Archive, August 20, 1983",
+          "url": "https://www.musicchartsarchive.com/singles-chart/1983-08-20"
+        },
+        {
+          "label": "NOAA: Hurricane Alicia, August 14-22, 1983",
+          "url": "https://www.wpc.ncep.noaa.gov/tropical/rain/alicia1983.html"
+        },
+        {
+          "label": "NOAA: 35th Anniversary of Hurricane Alicia",
+          "url": "https://www.aoml.noaa.gov/hurricane_blog/35th-anniversary-of-hurricane-alicia/"
+        },
+        {
+          "label": "Philips CD100 advertisement, August 1983",
+          "url": "https://www.dutchaudioclassics.nl/advertising/Philips-cd100-advertisement-August-1983/"
+        },
+        {
+          "label": "Audio, August 1983",
+          "url": "https://www.worldradiohistory.com/Archive-All-Audio/Archive-Audio/80s/Audio-1983-08.pdf"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "PROGRAMMERS WANTED",
+          "copy": "Graphical tools, windowed environments and brave ideas required."
+        },
+        {
+          "headline": "MODEM MEET",
+          "copy": "Trade tips, game hints and messages after the evening rates begin."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-07-26",
       "historicDate": "1983-08-08",
       "displayDate": "Week of August 8-14, 1983",
