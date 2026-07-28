@@ -192,6 +192,19 @@ def main() -> None:
     ap.add_argument("--wrangler-bin", default=os.environ.get("WRANGLER_BIN", "wrangler"))
     args = ap.parse_args()
 
+    is_factual_infographic = (
+        args.factual_topic.strip()
+        or args.slot == "factual-infographic"
+        or args.title.lower().startswith("factual infographic:")
+    )
+    source_note = args.factual_source_note.strip()
+    if is_factual_infographic:
+        source_urls = re.findall(r"https://[^\s,;]+", source_note)
+        if len(set(source_urls)) < 2:
+            raise SystemExit(
+                "Factual infographics require --factual-source-note with at least two distinct direct https:// source URLs."
+            )
+
     src = Path(args.image).expanduser().resolve()
     if not src.exists():
         raise SystemExit(f"Image not found: {src}")
@@ -251,18 +264,7 @@ def main() -> None:
             "description": args.subject_description.strip(),
             "continuity": args.subject_continuity.strip(),
         }
-    is_factual_infographic = (
-        args.factual_topic.strip()
-        or args.slot == "factual-infographic"
-        or args.title.lower().startswith("factual infographic:")
-    )
     if is_factual_infographic:
-        source_note = args.factual_source_note.strip()
-        source_urls = re.findall(r"https://[^\s,;]+", source_note)
-        if len(source_urls) < 2:
-            raise SystemExit(
-                "Factual infographics require --factual-source-note with at least two direct https:// source URLs."
-            )
         entry["factualInfographic"] = {
             "topic": args.factual_topic.strip() or args.title.removeprefix("Factual infographic:").strip(),
             "description": args.factual_description.strip() or args.tests,
