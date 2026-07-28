@@ -1,0 +1,307 @@
+{
+  "currentDate": "2026-07-28",
+  "historicDate": "1983-08-22",
+  "displayDate": "Week of August 22-28, 1983",
+  "edition": "Issue 056 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Back-to-school urgency on warm newsprint",
+    "motifs": [
+      "campus desktops",
+      "arcade laserdisc",
+      "home-computer price tags"
+    ],
+    "layout": "Gaming-led secondary art beside a strong education lead"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Computer & Culture Newspaper",
+    "dateline": "Week of August 22-28, 1983",
+    "price": "75¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Clarkson computer handout across the upper columns",
+    "secondaryRail": "Dragon's Lair and the home-computer price war",
+    "archiveNavigation": "Previous and next weekly issues"
+  },
+  "sectionChrome": {
+    "primary": "newsprint red",
+    "secondary": "computer blue",
+    "texture": "aged paper, halftone screens, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-08-22.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of August 22, 1983",
+    "caption": "A GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The personal computer is leaving the lab. This week, Clarkson freshmen collect desktops as routinely as orientation papers, while families face a crowded and fast-changing home-computer aisle.",
+  "morningLine": "Campus computers, arcade animation, and a sub-$1,000 price war define the week.",
+  "lead": {
+    "headline": "A Desktop for Every Freshman",
+    "dek": "More than 800 new Clarkson students are to collect personal computers during orientation, turning a bold campus requirement into everyday academic equipment.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "POTSDAM, N.Y. — More than 800 Clarkson College freshmen arriving Thursday will receive an unusual addition to the standard orientation packet: their own personal desktop computers. United Press International reported the distribution on August 24, as the college prepared to put a machine directly into the hands of every member of the incoming class.",
+      "Clarkson announced the program the previous October and described itself as the first college in the nation to require every incoming freshman to have a personal computer. The distinction is larger than a crowded computer laboratory. Each student is expected to possess a machine as a regular academic tool, available for assignments, calculation, writing, and experimentation.",
+      "The undertaking marks a decisive change in the place of personal computing on campus. Only a few years ago, many undergraduates encountered computers through terminals scheduled around a central system. Clarkson's plan treats the desktop machine more like a textbook: individual, immediate, and woven into daily coursework.",
+      "Questions of training, software, maintenance, and how professors will redesign assignments now move to the foreground. Yet the scale of the handout is itself the news. For this class, computer literacy will not be an elective pursuit on the edge of college life; it begins at orientation."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Christmas Computer War Crowds the Aisles",
+      "kicker": "Home Computing",
+      "dek": "At least 17 machines debuted at summer CES, and COMPUT! expects 30 to 40 sub-$1,000 choices by Christmas.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1,
+        2
+      ],
+      "body": [
+        "The home-computer counter is becoming a battlefield. COMPUT!'s August survey counted at least 17 personal computers introduced at the Summer Consumer Electronics Show and forecast 30 to 40 machines priced below $1,000 by Christmas.",
+        "The range runs from minimal low-memory machines near $40 to elaborate systems above $1,000 with modems, speech, and disk drives. Coleco's Adam is the boldest all-in-one wager: an 80K Z80A computer, high-speed cassette storage, keyboard, daisy-wheel printer, word processing, Microsoft BASIC, and Buck Rogers promised for under $600.",
+        "Price alone will not settle the contest. Buyers must judge software, storage, compatibility, dealer support, and whether announced machines actually reach shops. The crowded field gives families leverage but makes every purchase a bet on which platform will survive."
+      ]
+    },
+    {
+      "headline": "Dragon's Lair Turns the Arcade into a Cartoon",
+      "kicker": "Games",
+      "dek": "Don Bluth animation and laserdisc playback give players a startling glimpse of a movie-like arcade future.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "Arcade crowds are gathering around a cabinet that looks unlike the familiar fields of sprites and maze walls. Dragon's Lair uses laserdisc video to display lavish Don Bluth animation, then asks players to guide hero Dirk the Daring through precisely timed joystick and button choices.",
+        "Rick Dyer's Advanced Microcomputer Systems developed the game with Don Bluth Studios and Cinematronics. Its branching scenes offer only limited control compared with conventional action games, but the spectacle is immediate: a coin-operated cartoon whose hero lives or dies on the player's cue.",
+        "The attraction also exposes the technology's tradeoffs. Memorization matters, wrong moves end quickly, and laserdisc hardware is more elaborate than ordinary game boards. Even so, Dragon's Lair is the summer's clearest sign that Hollywood craft and arcade machinery are converging."
+      ]
+    },
+    {
+      "headline": "Atari Clears the Deck for XL",
+      "kicker": "Hardware",
+      "dek": "The 400, 800, and 1200XL give way to a new family led by the $199 600XL and $299 800XL.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ],
+      "body": [
+        "Atari is replacing its established computer line in one sweep. The company has discontinued the 400, 800, and recently introduced 1200XL in favor of four XL models, a drastic reset during the fiercest home-computer price competition yet.",
+        "The 16K 600XL is listed at $199 and can expand to 64K; the 64K 800XL is $299. Both build BASIC into ROM, retain compatibility with most earlier Atari software and peripherals, and expose a full processor bus for expansion.",
+        "Atari is also looking beyond its own hardware. A new publishing arm plans software for Commodore and Texas Instruments computers, acknowledging that popular programs may have to travel wherever the customers are."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Coleco Adam",
+      "summary": "80K expandable to 144K, high-speed cassette storage, printer, word processing, BASIC, and a bundled game promised for under $600.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Atari 600XL",
+      "summary": "A 16K entry model with built-in BASIC and a $199 suggested price; a roughly $100 module expands it to 64K.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Atari 800XL",
+      "summary": "The 64K XL model adds a monitor jack and carries a $299 suggested price.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Atari Publishing titles",
+      "detail": "Atari plans hit software for rival Commodore and Texas Instruments machines."
+    },
+    {
+      "name": "Adam Word Processor",
+      "detail": "Built into Coleco's promised all-in-one computer package."
+    },
+    {
+      "name": "Microsoft BASIC for Adam",
+      "detail": "Applesoft-compatible in design, though memory differences limit direct Apple program compatibility."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "Dragon's Lair",
+        "Q*bert",
+        "Buck Rogers: Planet of Zoom",
+        "Zaxxon",
+        "Donkey Kong"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "Mr. Mom",
+        "Risky Business",
+        "Easy Money",
+        "National Lampoon's Vacation",
+        "Return of the Jedi"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "Atari Publishing titles",
+        "Adam Word Processor",
+        "Microsoft BASIC",
+        "VisiCalc",
+        "HomeWord"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari 600XL",
+      "price": "$199",
+      "note": "Suggested retail; 16K expandable to 64K."
+    },
+    {
+      "item": "Atari 800XL",
+      "price": "$299",
+      "note": "Suggested retail; 64K."
+    },
+    {
+      "item": "Coleco Adam",
+      "price": "Under $600",
+      "note": "Complete package promised; ColecoVision expansion version $450."
+    },
+    {
+      "item": "Commodore line",
+      "price": "See August dealer list",
+      "note": "Regional period price-list artifact preserved in sources."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Atari courts user groups",
+      "text": "Atari brought 15 user-group officers to CES while working to rebuild grassroots confidence in the XL line."
+    },
+    {
+      "headline": "WarGames still drawing audiences",
+      "text": "The computer thriller earned $1.26 million on 821 screens over August 26-28, raising its domestic total to $65.83 million."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Every Breath You Take",
+      "artist": "The Police"
+    },
+    {
+      "rank": 2,
+      "title": "Sweet Dreams (Are Made of This)",
+      "artist": "Eurythmics"
+    },
+    {
+      "rank": 3,
+      "title": "Maniac",
+      "artist": "Michael Sembello"
+    },
+    {
+      "rank": 4,
+      "title": "She Works Hard for the Money",
+      "artist": "Donna Summer"
+    },
+    {
+      "rank": 5,
+      "title": "Flashdance... What a Feeling",
+      "artist": "Irene Cara"
+    }
+  ],
+  "periodAd": {
+    "headline": "Bring Home an XL",
+    "summary": "Atari's new 600XL and 800XL pair built-in BASIC with compatibility across much of the existing Atari shelf.",
+    "tagline": "More memory, lower prices, one familiar cartridge slot."
+  },
+  "market": {
+    "headline": "The Window Is Closing",
+    "summary": "With dozens of sub-$1,000 machines forecast for Christmas, makers are racing to establish software libraries and retail footholds before weaker platforms are squeezed out.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Aquino Assassination Shakes the Philippines",
+    "summary": "The August 21 killing of opposition leader Benigno 'Ninoy' Aquino Jr. on his arrival in Manila set off political shock and an urgent investigation throughout this historical week.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      7,
+      8
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Clarkson report: exact date, August 24, 1983",
+      "Hardware and market details: August 1983 period coverage",
+      "Charts and box office: week ending August 27-28, 1983",
+      "World anchor: contemporary UPI reporting"
+    ]
+  },
+  "sources": [
+    {
+      "label": "UPI — Freshmen to be issued computers, Aug. 24, 1983",
+      "url": "https://www.upi.com/Archives/1983/08/24/Freshmen-to-be-issued-computers/4679430545600/"
+    },
+    {
+      "label": "COMPUT! — Fall Computer Collection, Aug. 1983",
+      "url": "https://www.atarimagazines.com/compute/issue39/186_1_THE_FALL_COMPUTER_COLLECTION_AT_THE_SUMMER_CONSUMER_ELECTRONICS_SHOW.php"
+    },
+    {
+      "label": "COMPUT! Issue 39 scan",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_039_1983_Aug.pdf"
+    },
+    {
+      "label": "New York Times — Hollywood Playing Harder at the Video Game",
+      "url": "https://www.nytimes.com/1983/08/02/arts/hollywood-playing-harder-at-the-video-game.html"
+    },
+    {
+      "label": "Commodore Computer Price List, Aug. 1983",
+      "url": "https://www.computinghistory.org.uk/det/7620/Commodore-Computer-Price-List/"
+    },
+    {
+      "label": "Billboard Hot 100, week of Aug. 27, 1983",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-08-27"
+    },
+    {
+      "label": "Box Office Mojo — weekend 34, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W34/"
+    },
+    {
+      "label": "UPI — Benigno Aquino Jr. profile, Aug. 22, 1983",
+      "url": "https://www.upi.com/Archives/1983/08/22/Benigno-Aquino-Jr-Filipino-opposition-leader/1326430372800/"
+    },
+    {
+      "label": "UPI — Aquino assassination investigation, Aug. 23, 1983",
+      "url": "https://www.upi.com/Archives/1983/08/23/The-first-firm-clue-in-the-assassination-of-Benigno/4143430459200/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM CLUB",
+      "copy": "Trade local dial-up numbers and terminal tips. Bring your own acoustic coupler."
+    },
+    {
+      "headline": "DISK SWAP",
+      "copy": "Atari and Commodore users: labeled disks only. Saturday at the community room."
+    }
+  ]
+}
