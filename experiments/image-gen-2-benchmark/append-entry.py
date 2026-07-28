@@ -251,11 +251,22 @@ def main() -> None:
             "description": args.subject_description.strip(),
             "continuity": args.subject_continuity.strip(),
         }
-    if args.factual_topic.strip() or args.slot == "factual-infographic" or args.title.lower().startswith("factual infographic:"):
+    is_factual_infographic = (
+        args.factual_topic.strip()
+        or args.slot == "factual-infographic"
+        or args.title.lower().startswith("factual infographic:")
+    )
+    if is_factual_infographic:
+        source_note = args.factual_source_note.strip()
+        source_urls = re.findall(r"https://[^\s,;]+", source_note)
+        if len(source_urls) < 2:
+            raise SystemExit(
+                "Factual infographics require --factual-source-note with at least two direct https:// source URLs."
+            )
         entry["factualInfographic"] = {
             "topic": args.factual_topic.strip() or args.title.removeprefix("Factual infographic:").strip(),
             "description": args.factual_description.strip() or args.tests,
-            "sourceNote": args.factual_source_note.strip() or "Real-world/non-fiction topic; avoid invented data and fictional lore.",
+            "sourceNote": source_note,
         }
     if args.hybrid_name.strip() or args.slot in {"hybrid-creature-infographic", "hybrid-creature-wild"}:
         entry["hybridCreature"] = {
