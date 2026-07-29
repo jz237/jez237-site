@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-29",
+      "historicDate": "1983-08-29",
+      "displayDate": "Week of August 29-September 4, 1983",
+      "edition": "Issue 057 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "IBM compatibility, portable-computer turmoil, and Ultima III define the week.",
+      "leadHeadline": "IBM's PC Standard Tightens Its Grip",
+      "storyHeadlines": [
+        "Ultima III Makes the Quest a Team Affair",
+        "Portable Computers Crowd the Departure Gate",
+        "Cellular Service Moves Toward the Marketplace"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-29.jpg",
+      "thumb": "media/thumbs/1983-08-29.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-28",
       "historicDate": "1983-08-22",
       "displayDate": "Week of August 22-28, 1983",

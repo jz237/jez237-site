@@ -4,6 +4,338 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-07-29",
+      "historicDate": "1983-08-29",
+      "displayDate": "Week of August 29-September 4, 1983",
+      "edition": "Issue 057 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Late-summer industry shakeout on warm newsprint",
+        "motifs": [
+          "IBM-compatible desktops",
+          "portable CP/M computers",
+          "fantasy role-playing maps"
+        ],
+        "layout": "IBM market lead with a large Ultima III gaming panel and compact gadget rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "Week of August 29-September 4, 1983",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "IBM standard and industry shakeout across the upper columns",
+        "secondaryRail": "Ultima III, portable computers, and cellular service",
+        "archiveNavigation": "Previous and next weekly issues"
+      },
+      "sectionChrome": {
+        "primary": "newsprint red",
+        "secondary": "computer blue",
+        "texture": "aged paper, halftone screens, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-08-29.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of August 29, 1983",
+        "caption": "A GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The personal-computer boom is becoming a contest over standards, shelves, and survival. IBM sets the pace, portable makers feel the strain, and ambitious games make home machines worlds of their own.",
+      "morningLine": "IBM compatibility, portable-computer turmoil, and Ultima III define the week.",
+      "lead": {
+        "headline": "IBM's PC Standard Tightens Its Grip",
+        "dek": "The two-year-old IBM PC has taken the sales lead, inspired a compatible-machine industry, and left once-hot independents scrambling for position.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "NEW YORK — The personal-computer trade has rarely moved so quickly from open field to established order. TIME reports this week that IBM's Personal Computer, introduced only in August 1981, now accounts for 26 percent of unit sales and has displaced Apple from first place.",
+          "The market around it is expanding at a dizzying rate. More than 200 American manufacturers are competing, twice the number of two years ago, while 1983 sales are forecast at seven million machines. Roughly 20 companies already offer IBM-compatible computers, evidence that buyers increasingly prize access to the software and dealers gathered around one standard.",
+          "That concentration is exacting a price. Osborne cut its pioneering Osborne 1 from $1,795 to $1,295 after advance word of the Executive slowed current sales. Vector Graphic turned a 1981 profit into a 1982 loss and has laid off a quarter of its workforce; Victor Technologies reported an $11 million second-quarter loss and eliminated 350 jobs.",
+          "There are winners as well as casualties. Kaypro founder Andrew Kay has enjoyed an estimated $245 million paper gain after his company's stock offering. Yet the lesson from showroom to boardroom is the same: technical novelty is no longer enough. Compatibility, software, distribution, and the ability to deliver the next model without sinking the present one now determine who remains in the race."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Ultima III Makes the Quest a Team Affair",
+          "kicker": "Games",
+          "dek": "Origin's Exodus expands the computer role-playing form with four adventurers, tactical battles, and a richly furnished box.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            10,
+            11,
+            12
+          ],
+          "body": [
+            "A new fantasy epic is giving Apple II owners an unusually ambitious journey. Richard Garriott's Ultima III: Exodus replaces the lone adventurer of earlier games with a party of four characters, each chosen and developed to contribute different skills.",
+            "Combat now moves to separate tactical screens, turning encounters into contests of position as well as preparation. The change gives the party structure real purpose and pushes the computer role-playing game toward a more deliberate blend of exploration, statistics, and battlefield command.",
+            "Origin Systems also treats the package as part of the adventure. A cloth map and extensive materials make Exodus feel less like a bare disk and more like a boxed world, a standard other computer-game publishers will find difficult to ignore."
+          ]
+        },
+        {
+          "headline": "Portable Computers Crowd the Departure Gate",
+          "kicker": "Hardware",
+          "dek": "BYTE surveys a growing field of luggables as Kaypro prospers and Osborne struggles through a painful model change.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "body": [
+            "Portable computing has grown from curiosity into a category crowded with choices. BYTE's September cover package examines CP/M luggables including the Osborne 1, Kaypro II, Zorba, and Pied Piper I, machines that promise a familiar office environment in a case that can travel.",
+            "The business fortunes behind those handles differ sharply. TIME estimates a $245 million paper gain for Kaypro founder Andrew Kay after the company's offering, while Osborne canceled its planned offering amid slowing sales and trouble bridging the Osborne 1 to its announced Executive.",
+            "These are transportable rather than effortless companions: displays are small, cases are heavy, and wall power remains essential. Still, bundling a screen, drives, and useful software in one enclosure is changing what buyers expect a complete computer to be."
+          ]
+        },
+        {
+          "headline": "Cellular Service Moves Toward the Marketplace",
+          "kicker": "Communications",
+          "dek": "Ameritech forms a subsidiary to offer cellular mobile telephone service in the Midwest.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            5
+          ],
+          "body": [
+            "CHICAGO — Ameritech announced on September 1 that it has organized a subsidiary to offer mobile telephone service using cellular technology. The parent of five Midwestern Bell companies describes the unit as the first of its kind organized for the new service.",
+            "Cellular systems divide a territory into small radio areas and reuse frequencies as callers move between them, offering a path beyond the limited capacity of conventional mobile telephone networks. The announcement arrives just ahead of commercial cellular service expected in Chicago.",
+            "The early handsets and car installations will be costly, and coverage will begin in selected cities. Even so, the organizational step signals that a long-demonstrated technology is becoming a consumer communications business."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM PC",
+          "summary": "The 8088 platform now commands a reported 26 percent of unit sales and anchors a rapidly growing compatible-machine market.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Osborne 1",
+          "summary": "The portable CP/M pioneer is now $1,295 after a $500 cut as buyers wait for its announced successor.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "IBM 'Peanut' rumor",
+          "summary": "Developers reportedly have an unannounced smaller IBM home machine expected to start near $600-$700.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Ultima III: Exodus",
+          "detail": "Party-based Apple II role-playing with tactical combat and a cloth map."
+        },
+        {
+          "name": "Word-processing packages",
+          "detail": "A crowded field of productivity tools reflects a maturing software market."
+        },
+        {
+          "name": "CP/M portable bundles",
+          "detail": "Packaged applications remain a central selling point for luggable computers."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Ultima III: Exodus",
+            "Dragon's Lair",
+            "Q*bert",
+            "Zaxxon",
+            "Donkey Kong"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "Mr. Mom",
+            "Risky Business",
+            "Easy Money",
+            "National Lampoon's Vacation",
+            "WarGames"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Ultima III: Exodus",
+            "WordStar",
+            "WordPerfect",
+            "VisiCalc",
+            "dBASE II"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Timex Sinclair 1000",
+          "price": "$49.95",
+          "note": "Cut from $99; TIME reports sales still falling."
+        },
+        {
+          "item": "Osborne 1",
+          "price": "$1,295",
+          "note": "Cut from $1,795 during the Executive transition."
+        },
+        {
+          "item": "IBM 'Peanut'",
+          "price": "$600-$700 expected base",
+          "note": "Unconfirmed estimate; about $1,300 with monitor and extras."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Kaypro offering creates a paper fortune",
+          "text": "TIME estimates founder Andrew Kay's paper gain at $245 million after the portable-computer maker's stock offering."
+        },
+        {
+          "headline": "MicroOffice names watch-industry veteran",
+          "text": "Former Citizen Watch president and Timex chairman Robert F. Weltzien was elected chief executive on September 2."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Sweet Dreams (Are Made of This)",
+          "artist": "Eurythmics"
+        },
+        {
+          "rank": 2,
+          "title": "Every Breath You Take",
+          "artist": "The Police"
+        },
+        {
+          "rank": 3,
+          "title": "Maniac",
+          "artist": "Michael Sembello"
+        },
+        {
+          "rank": 4,
+          "title": "She Works Hard for the Money",
+          "artist": "Donna Summer"
+        },
+        {
+          "rank": 5,
+          "title": "Puttin' on the Ritz",
+          "artist": "Taco"
+        }
+      ],
+      "periodAd": {
+        "headline": "Take Your Office on the Road",
+        "summary": "Portable CP/M systems gather display, disk drives, keyboard, and software into one travel-ready case.",
+        "tagline": "Pack the programs. Carry the computer."
+      },
+      "market": {
+        "headline": "Compatibility Becomes Currency",
+        "summary": "With roughly 20 makers already building IBM-compatible machines, access to established software and dealers is becoming as decisive as hardware design.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Soviet Fighter Downs Korean Air Lines Flight 007",
+        "summary": "KAL 007 was shot down near Sakhalin after straying into Soviet airspace on September 1; all 269 people aboard were reported lost, triggering an international crisis.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          8,
+          9
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Beta Hi-Fi Promises Better Sound With Home Video",
+        "summary": "A September 1 home-entertainment report puts improved stereo-quality audio at the center of the latest Betamax pitch.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "IBM market report: same-week TIME issue dated September 5, 1983",
+          "Cellular, Beta Hi-Fi, and world anchor: exact-date contemporary reports",
+          "Ultima III and portable computing: August-September 1983 period sources",
+          "Charts and box office: week ending September 3-5, 1983"
+        ]
+      },
+      "sources": [
+        {
+          "label": "TIME — An Easy-Come, Easy-Go World, Sept. 5, 1983",
+          "url": "https://time.com/archive/6860026/an-easy-come-easy-go-world/"
+        },
+        {
+          "label": "BYTE — Portable Computers in Depth, Sept. 1983",
+          "url": "https://archive.org/details/byte-magazine-1983-09"
+        },
+        {
+          "label": "COMPUTE! Magazine Issue 40, Sept. 1983",
+          "url": "https://archive.org/stream/1983-09-compute-magazine/Compute_Issue_040_1983_Sep_djvu.txt"
+        },
+        {
+          "label": "UPI — Guion S. Bluford profile, Aug. 29, 1983",
+          "url": "https://www.upi.com/Archives/1983/08/29/Guion-S-Bluford-First-American-black-to-go-into-space/6531430977600/"
+        },
+        {
+          "label": "UPI — Challenger launches with Guion Bluford, Aug. 30, 1983",
+          "url": "https://www.upi.com/Archives/1983/08/30/The-shuttle-Challenger-rocketed-a-black-astronaut-and-four/6694431064000/"
+        },
+        {
+          "label": "UPI — Ameritech cellular subsidiary, Sept. 1, 1983",
+          "url": "https://www.upi.com/Archives/1983/09/01/Ameritech-subsidiary-to-offer-new-mobile-phone-service/2895431236800/"
+        },
+        {
+          "label": "UPI — Beta Hi-Fi brings super sound, Sept. 1, 1983",
+          "url": "https://www.upi.com/Archives/1983/09/01/Home-entertainmentNEWLNHot-news-in-video-cassettes-Beta-Hi-Fi-brings-super-sound/2965431236800/"
+        },
+        {
+          "label": "Billboard Hot 100, week of Sept. 3, 1983",
+          "url": "https://www.elpee.jp/hot100/week/1983-09-03"
+        },
+        {
+          "label": "New York Times — KAL 007 downed, Sept. 2, 1983",
+          "url": "https://www.nytimes.com/1983/09/02/world/us-says-soviet-downed-korean-airliner-269-lost-reagan-denounces-wanton-act.html"
+        },
+        {
+          "label": "UPI — Soviet Su-15 and KAL 007, Sept. 2, 1983",
+          "url": "https://www.upi.com/Archives/1983/09/02/The-Soviet-Sukhoi-Su-15-believed-to-have-shot-down/3574431323200/"
+        },
+        {
+          "label": "GameRanks — August 1983 releases",
+          "url": "https://gameranks.gg/releases/1983/august-23"
+        },
+        {
+          "label": "MobyGames — Ultima III: Exodus",
+          "url": "https://www.mobygames.com/game/880/ultima-iii-exodus/"
+        },
+        {
+          "label": "The Digital Antiquarian — Ultima, Part 3: Exodus",
+          "url": "https://www.filfre.net/2012/11/ultima-part-3-exodus/"
+        },
+        {
+          "label": "Box Office Mojo — Labor Day weekend 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W35/occasion/us_laborday_weekend/"
+        }
+      ],
+    "classifieds": [
+      {
+        "headline": "Wanted",
+        "copy": "IBM-compatible software and manuals; business applications preferred."
+      },
+      {
+        "headline": "For Trade",
+        "copy": "Apple II adventure games for recent role-playing titles."
+      }
+      ]
+    },
+    {
       "currentDate": "2026-07-28",
       "historicDate": "1983-08-22",
       "displayDate": "Week of August 22-28, 1983",
