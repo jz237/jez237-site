@@ -1,0 +1,237 @@
+# CHROME RIOT — design doc (v1.0.0, unfinished review build)
+
+Clean-room, Robotron: 2084–inspired twin-stick arena shooter. Single self-contained
+`index.html`, mobile-first with twin floating on-screen joysticks. Original name, art,
+audio, and enemy fiction — no Williams assets or trademarks. Year is 2086 (not 2084).
+
+**Fiction:** 2086. The Chrome — humanity's own machines — have voted their makers
+obsolete. One augmented courier and the last human family are all that's left to save.
+
+## v3.10.0 — comfort pass (2026-07-29)
+
+- POWER SAVER option: renders at 30fps (sim stays 60Hz), halves particle bursts, drops
+  the per-drudge/crawler underglow, and caps DPR at 1.5 — for hot phones and long runs.
+- COLOR MODE: SAFE remaps green-dominant pixels to blue on the Thrall/kid/Juggernaut
+  sprites at bake time (g/b channel rotation) and swaps the Thrall trail/effect greens,
+  separating the red/green Drudge-vs-Thrall pair for deuteranopia.
+- The machine-voice caption lifts to the top of the screen while a thumb is on a stick,
+  so the announcer never hides under your hands.
+
+## v3.9.0 — mobile suite (2026-07-26)
+
+- Save & resume: interrupted arcade runs auto-save on tab-hide/close and offer a green
+  RESUME RUN button on the title (48h TTL, consumed on use, cleared on game over/abandon;
+  competitive daily/overdrive modes stay one-shot). Resumes rebuild the wave under the
+  authentic death-rebuild rules.
+- PWA install: manifest + icons + a network-first service worker (fresh deploys always
+  win; offline play from cache) + apple-touch-icon/meta. Registers on https only.
+- Aim assist (default ON for touch, OFF desktop): bends volleys up to ~20° onto the
+  nearest target in the fired direction; disqualifies ScoreNet like other assists.
+- Manual hull shockwave: spend an armor segment on demand — ⚡ button, Space, or pad B.
+- First-run interactive tutorial: three input-driven beats (~20s), pause skips, flag
+  persisted; bots/demo/replays never see it.
+- Share card: game-over SHARE button renders a score card and uses navigator.share
+  (file → text → clipboard fallbacks).
+- (Rescue radar was already covered by the off-screen indicator system.)
+
+## v3.8.0 — WATCH DEMO button + showman bot (2026-07-26)
+
+- WATCH DEMO on the title runs the attract demo on demand with a long (~6.5 min) cap;
+  idle attract keeps the short 70s cycle. The demo wears the phone hull armor (it is
+  demoing the mobile experience; demo runs were never board-eligible).
+- Bot rewritten as a utility planner: 9 move options scored by 3-step threat raycasts,
+  chasers get wide fear while static pylons/shots get sharp short fear (the old wide
+  pylon fear read as paralysis on 25-mine waves), projectile tracks projected 7/14 ticks
+  ahead, near-forbidden walls + corner kill-switch, direction hysteresis, committed
+  safety-checked rescue targets, and kill-the-gun fire priorities (wasps/hives first,
+  cortex-about-to-convert above all). Measured: demo config 8/8/8/8 waves with zero
+  deaths and 5-9 rescues per run; raw bot 6-8 waves (was 3-4).
+- QA: snapshot() now reports rescued; startDemo(long) selects the long cap.
+
+## v3.7.0 — HD enemy detail + Xbox pad controls (2026-07-26)
+
+- Detail layer over every enemy master: scanning drudge eyes, hazard chevrons, vents and
+  knee pistons; jugg rivet rows, caution stripes, reactor glow and hydraulics; wasp wing
+  veins, abdomen segments and antenna bulbs; cortex spinal tube, cables and gauge lights;
+  thrall glitch bands and torn hems; crawler muzzle brake, exhaust stacks and running
+  lights; hair/ties/caps and faces on the family. Pylons rebuilt as HD ring emitters with
+  arc filaments and node caps (plus a framed hazard-plate 2086 sign); Hives rebuilt with
+  toothed rotor rings, lattice spokes, orbiting wasp gestation pods and a molten core.
+  All baked at load — zero added per-frame cost.
+- CONTROLS grown in OPTIONS: Xbox/gamepad enable, pad rumble (dual-rumble via
+  vibrationActuator), deadzone (tight/standard/loose), live pad-detected readout.
+  D-pad now moves, START pauses / A confirms (already), controller rumble mirrors
+  cabinet haptics.
+
+## v3.6.0 — living Cortex (2026-07-26)
+
+- The Cortex brain is now alive: a glossy dome overlay pulses with a heartbeat curve
+  (per-enemy phase), throbbing procedural veins that flush and thicken on each beat,
+  breathing underglow. On death it properly ruptures — brain-matter chunks, wobbling
+  gore globs, twin pink shockwaves, and a wet synth squelch.
+
+## v3.5.0 — mobile armor + death spectacle (2026-07-25)
+
+- Touch devices now get comfort armor in arcade mode: the courier absorbs 2 hits per
+  life (3rd is fatal) with a rotating hull ring, a shockwave on each breach that shoves
+  the swarm back and burns nearby fire, and brief invulnerability. Desktop stays 1-hit
+  arcade-pure; a hull absorb voids global-board eligibility for that run so the boards
+  stay honest. Mobile also defaults to 5 starting lives (existing explicit choices kept).
+- Death explosions rebuilt: blinding core flash, spinning debris chunks, rolling
+  secondary cook-off blasts, hit-stop; big enemies (500+ pts) now shed debris too.
+
+## Research base
+
+Mechanics were reconstructed from primary sources, not memory:
+
+- Scott Tunstall's commented arcade ROM disassembly (seanriddle.com/robomame.asm) —
+  per-enemy speeds/caps/AI cadence, safe-spawn rectangles, death-rebuild logic.
+- Sean Riddle's decoded per-wave enemy table (robowaves.html) — exact 40-wave counts.
+- Eugene Jarvis's 2012 "Enemy Dynamics" essays — designer-stated behavior intent.
+- StrategyWiki / original Williams manual — scoring table, rescue-bonus reset rules.
+
+Touch design follows the Game Developer iOS twin-stick usability study + nipplejs
+defaults (floating origin, display-on-touch, per-pointerId tracking, radial dead zones).
+Rendering/audio follow mobile canvas practice: no per-frame shadowBlur (baked glow
+sprites + `lighter` compositing), pooled particles, one AudioContext with
+compressor-protected master bus, all SFX/music/voice synthesized (zero assets).
+
+## Roster mapping (clone name = original role)
+
+| Chrome Riot | Role | Pts | Behavior kept from research |
+|---|---|---|---|
+| DRUDGE | Grunt | 100 | 4px jumps at random intervals; speeds up 0.875× per kill + time ramp; dies on Pylons |
+| PYLON | Electrode | 0 | static, one-shot kill, kills player+Drudges (mutual), crushed by Juggernauts, new shape each wave |
+| JUGGERNAUT | Hulk | — | indestructible; stalks humans in H/V legs; shots push it ~4–12px along bullet direction |
+| HIVE | Spheroid | 1000 | edge spawn, curving drift, drops 1–6 Wasps then despawns for 0 pts; 8-Wasp cap |
+| WASP | Enforcer | 150 | glide at player ± 16px offset, velocity ∝ distance |
+| · stinger | Spark | 25 | aim jitter ±16px, speed ∝ distance, random curvature (curve balls), no bounce — slides walls into corners; cap 20 |
+| CORTEX | Brain | 500 | brain waves (every 5th) only; walks to nearest human, converts within 6px |
+| · seeker | Cruise missile | 25 | zigzag homing snake with trail, wall bounce, cap 8 |
+| THRALL | Prog | 100 | converted human; fast erratic axis-run chaser with glow trail |
+| FORGE | Quark | 1000 | bouncing diagonal drift; drops 1–6 Crawlers then leaves; 20-Crawler cap |
+| CRAWLER | Tank | 200 | slow roller; shells ~50% direct / ~50% one-bounce bank shots, speed ∝ distance |
+| · shell | Tank shell | 50 | shootable, true wall bounce |
+| Family (MA/PA/KID) | Mommy/Daddy/Mikey | 1000→5000 | wander; rescue chain 1k/2k/3k/4k/5k(cap), resets on new wave AND on death |
+
+Core rules kept: fixed single-screen arena (268×200 logic units, uniform-scaled to the
+screen); player always spawns center; enemies spawn outside a shrinking safe rectangle
+(~192×112 wave 1 → 72×50 wave 10+); ~1s materialization shimmer with AI frozen; max 4
+player shots, ~7.5 shots/s held, 6px/tick bullets that splash on walls; wave ends when
+all killable robots die (Juggernauts/Pylons/humans don't count); on death the wave
+rebuilds — survivors re-placed, loose Wasps fold back into Hives, Hives/Forges get fresh
+quotas, Drudge speed re-throttles, rescue chain resets; exact 40-wave ROM composition
+table, waves 21–40 cycling forever after 40; 3 lives, extra life every 25,000.
+
+## Controls
+
+- **Touch (primary):** twin floating sticks — invisible until touched, base spawns
+  under the thumb, left half = move, right half = aim + auto-fire past a 0.15 dead zone
+  (move 0.12), radius ~55px, input active beyond the ring, zeroed instantly on release,
+  250ms fade. Pointer Events with per-pointerId ownership + setPointerCapture;
+  pointercancel = release. Both inputs quantized to 8 ways (authentic).
+- **Keyboard:** WASD move, arrow keys fire. **Mouse:** hold button to fire toward cursor.
+- **Gamepad:** left stick move, right stick fire.
+- Mobile hygiene: touch-action:none, overscroll none, viewport-fit=cover + safe-area
+  insets, DPR capped at 2, dt clamped, pause on tab hide, wake-lock best effort,
+  audio unlocked on first gesture (touchend-safe) with interrupted-state recovery.
+
+## Voice + audio
+
+All synthesized. SFX per event (fire/kills/rescue/materialize/death/wave-clear), dark
+118 BPM synth loop via lookahead scheduler, and a ring-mod "machine voice" that barks
+robot gibberish with a text caption. Every bark is generated fresh (randomized syllables,
+formants, contour) so no two repeats; caption text pools per event (wave start, brain
+wave, rescue, chain-max, Juggernaut push, death, extra life, game over). speechSynthesis
+rejected deliberately (latency, no WebAudio routing, device-dependent voices).
+
+## QA hooks
+
+- `window.__CHROME_RIOT__`: state getters, `frame(q)` screenshot, `setInput()`,
+  synchronous `autoRun(seconds, {untilWave})` — fixed-step, rAF-free (headless-safe),
+  returns {waves, score, deaths, ticks, errors, nanCheck}. Bot = weighted threat
+  repulsion + human attraction + nearest-target fire.
+- `?autoRun=1` — real-time self-playing mode. `?wave=N` — start at wave N.
+
+## v1 shipped vs deferred
+
+**In v1:** full 12-type roster incl. Forges/Crawlers, 40-wave table + cycling, rescue
+chain, death-rebuild rule, twin floating sticks + keyboard/mouse/gamepad, synth
+SFX/music/voice with captions, local top-10 high scores (initials), pause, field-manual
+title screen, autoRun QA.
+
+**Deferred:** 2-player, global leaderboard (fleet worker endpoint exists), attract-mode
+demo on title, gamepad rumble, enforcer "scared puppy" + "Mikey bug" quirk emulation,
+Bozo mode, per-wave Pylon shape variety beyond 4 shapes, PWA manifest,
+difficulty settings.
+
+## v1.3.1 — final parity polish (same day)
+
+- Hive follow-up Wasp drops now come at delay/4 per the spec (production accelerates once
+  a Hive starts hatching); vamoosing Forges stay lethal on contact and survive into the
+  death-rebuild snapshot with a fresh quota; waggle-fire (re-aiming the fire stick resets
+  the shot cycle for slightly faster fire); and the "scared puppy" Enforcer overflow bug
+  is now emulated — hug the far-left band and Wasps occasionally misread you as far-right
+  and flee to the east wall.
+- Remaining non-features by design: per-tank ammo (folklore, absent from the ROM) and
+  coin/credit hardware simulation (meaningless in a browser).
+
+## v1.3.0 — 2-player alternating play (same day; completes 1:1 feature parity)
+
+- Arcade-style alternating 2P from the title ("2 PLAYER RIOT"): players swap on every
+  death; each keeps their own score, lives, wave, extra-life progress, and a
+  remaining-enemy snapshot so their wave resumes under the authentic rebuild rules;
+  "PLAYER n / WAVE n / GET READY" interstitial between turns; live P1/P2 score line in
+  the HUD; dual-score game-over card with sequential initials entry for every
+  qualifying score.
+- With this, every mechanical feature of the researched arcade spec is implemented
+  (the scared-puppy quirk followed in v1.3.1; per-tank ammo and coin/credit simulation
+  remain out by design — see v1.3.1 notes).
+
+## v1.2.0 — attract mode + operator settings (same day)
+
+- Attract mode: 12s idle at the title rolls a story card ("THE YEAR IS 2086…", line-by-line
+  reveal inside the cycling border) into a self-playing bot demo with a pulsing DEMO MODE
+  banner; any key/tap exits, demo caps at ~70s, tab-hide exits cleanly. QA:
+  startDemo()/stopDemo() + demo getter.
+- Operator OPTIONS panel on the title: difficulty CADET/ARCADE/VETERAN (scales all enemy
+  pacing tables ×1.35/×1/×0.75), extra life every 20K/25K/30K/50K/NEVER, starting lives
+  3/5 — persisted in settings.
+- Wave counter wraps at 255 back to wave 1 with difficulty reset (8-bit counter homage).
+- "Bozo mode": dying on waves 1–2 silently re-throttles Drudges gentler on the rebuild
+  (2nd-ROM-revision mercy rule).
+
+## v1.1.0 — arcade authenticity pass (same day)
+
+Pushed the presentation and pressure much closer to the 1982 original:
+- Playfield is now stark black (grid removed); the arena border is drawn live every frame
+  and colour-cycles arcade-style, flashing gold on rescues, red on death, cyan on extra
+  lives, white on wave clear.
+- The materialization is the iconic warp-in: four sparks converge, a vertical scan line
+  grows, and the sprite unfolds sideways out of it — rainbow/psychedelic on brain waves.
+  The player warps in the same way.
+- Thralls (Progs) now leave the classic colour-cycling segmented trail.
+- Fifth electrode variant: a flashing "2086" text mine (nod to the original's 2084
+  electrode). Shapes cycle over 5 per wave.
+- Mikey-bug emulation: every Cortex fixates on the same single human at wave setup
+  (the kid when present), reverting to nearest-human when that one is gone — enabling
+  the authentic brain-wave farming strategy.
+- Late-wave frenzy: grunt-speed floor drops at 45s and 60s into a wave, producing the
+  "frenzied charge" Jarvis described.
+- Hives now bias their drift toward the nearest wall (edge-hugging Spheroids), and 25%
+  of Wasp stingers lead the player's movement instead of aiming at their position.
+- Robotron HUD colours (red score / yellow best / cyan wave), bigger multi-colour death
+  bloom with colour-cycling shockwave rings.
+- Robustness: zero-sized-viewport guard in computeFit/draw (seed-tab/iframe edge case).
+
+## Post-review fixes (same day, pre-publish)
+
+A 4-dimension review (correctness / mobile / perf / spec fidelity) with adversarial
+verification confirmed 19 findings (13 unique); all fixed: tap-vs-scroll discrimination
+on modal buttons, window-blur input latch (keys/mouse/sticks) with auto-pause, mouse
+pointer capture, lethal Hives (were pass-through), 1–6 factory quotas (were 1–5), forge
+materialize ghost used the hive sprite, orientation-change re-baked the background 9×
+with fresh canvases (now cached + seeded stars), glow sprites now draw smoothed while
+pixel sprites stay crisp, shake gated off in menus, waveclear now auto-pauses on tab
+hide (resume returns to the correct state), iOS landscape top-edge dead zone padding,
+44pt initials buttons, wake lock, and the missing setInput() QA hook.
