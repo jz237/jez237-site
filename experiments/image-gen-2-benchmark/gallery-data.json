@@ -6505,5 +6505,24 @@
       "description": "A real-world rare-insect infographic explaining the Lord Howe Island phasmid's flightless anatomy, nocturnal ecology, exceptionally restricted Ball's Pyramid refuge, rediscovery, threats, and conservation breeding.",
       "sourceNote": "Verified 2026-07-28 against Australian Government DCCEEW species pages (EPBC status: Critically Endangered; restricted occurrence and recovery context), the NSW threatened-species determination, and peer-reviewed recovery-program literature: https://www.dcceew.gov.au/environment/biodiversity/threatened/action-plan/priority-invertebrates/lord-howe-island-phasmid ; https://www.dcceew.gov.au/environment/biodiversity/threatened/conservation-advices/dryococelus-australis ; https://www.environment.nsw.gov.au/topics/animals-and-plants/threatened-species/nsw-threatened-species-scientific-committee/determinations/final-determinations/2011-2012/lord-howe-island-phasmid-dryococelus-australis-critically-endangered-species-listing ; https://doi.org/10.1111/j.1442-8903.2009.00450.x"
     }
+  },
+  {
+    "id": "2026-07-29-random-image-style-random-rendering-style-needle-felted-wha",
+    "title": "Random rendering style: Needle-Felted Whale-Fall Observatory",
+    "tests": "Core concept: whale-fall ecosystem observed by a research submersible. Random style medium: dense hand-worked needle-felted wool diorama. Capture/style logic: cinematic abyssal depth constructed entirely from tactile wool roving, layered felt, yarn, tufted marine snow, and embroidery. Anti-repeat variables: whale skeleton anchor, submersible lamp diagonal, abyssal ecology, lanolin-cream/rust/cyan palette; distinct from recent marquetry, oil pastel, ink wash, holographic foil, linocut, mosaic, pixel art, and papier-mache entries. Actual-image QA: PASS via xai/grok-4.3; premise, medium, anatomy, depth, ecosystem relationship, and artifact exclusions all visibly succeeded.",
+    "prompt": "Create a richly detailed square image rendered entirely as a dense hand-worked needle-felted wool diorama: a compact deep-sea research submersible has just discovered a whale-fall ecosystem on the abyssal plain. The stop-scroll anchor is the enormous curved whale skeleton filling the lower two-thirds of the frame, every rib, vertebra, jawbone, and porous bone surface sculpted from layered cream, gray, and tea-stained wool fibers. A small mustard-yellow submersible hovers just above the skull at upper left, its three round viewports and articulated sampling arm also made from tightly needled felt; one soft cone of cyan lamp light reveals the skull, rib cage, and a dense living halo of felted hagfish, squat lobsters, amphipods, snails, bacterial mats, and feathery polychaete worms. Show a convincing ecological gradient: dark maroon tissue remnants tucked beneath the spine, pale microbial carpets close to the bones, rust-orange crabs and cream snails among the ribs, and sparse animals fading into the midnight-blue seafloor. Make the entire environment unmistakably fiber art rather than photography or CGI: visible wool roving, barbed-needle stippling, fuzzy cut edges, twisted yarn cables, layered felt sheets for sediment, tufted marine snow suspended at different depths, and tiny embroidered stitch marks defining anatomy. Preserve strong cinematic depth within the crafted medium through foreground ribs crossing the frame, the submersible in the midground, and an abyssal blue-black falloff behind it. Use an abyssal navy, lanolin cream, rust orange, muted plum, mustard yellow, and bioluminescent cyan palette, with the cool lamp beam creating a decisive diagonal through the warm wool textures. The visual premise and medium must read instantly at thumbnail size. No humans, no lettering, no labels, no frame, no poster, no flat textile swatch, no photographed craft table, no tools around the artwork, no plastic miniature look, no smooth digital surfaces, no gore, no fantasy monster, no second whale, no watermark.",
+    "image": "images/2026-07-29-random-image-style-random-rendering-style-needle-felted-wha.jpg",
+    "thumb": "thumbs/2026-07-29-random-image-style-random-rendering-style-needle-felted-wha.webp",
+    "color": "#3c3b35",
+    "date": "2026-07-29",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "dense hand-worked needle-felted wool diorama",
+      "description": "A tactile fiber-art whale-fall ecosystem where a mustard-yellow research submersible illuminates a monumental felted skeleton and its abyssal scavenger community.",
+      "template": ""
+    }
   }
 ]
