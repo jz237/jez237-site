@@ -7,6 +7,16 @@ audio, and enemy fiction — no Williams assets or trademarks. Year is 2086 (not
 **Fiction:** 2086. The Chrome — humanity's own machines — have voted their makers
 obsolete. One augmented courier and the last human family are all that's left to save.
 
+## v3.10.0 — comfort pass (2026-07-29)
+
+- POWER SAVER option: renders at 30fps (sim stays 60Hz), halves particle bursts, drops
+  the per-drudge/crawler underglow, and caps DPR at 1.5 — for hot phones and long runs.
+- COLOR MODE: SAFE remaps green-dominant pixels to blue on the Thrall/kid/Juggernaut
+  sprites at bake time (g/b channel rotation) and swaps the Thrall trail/effect greens,
+  separating the red/green Drudge-vs-Thrall pair for deuteranopia.
+- The machine-voice caption lifts to the top of the screen while a thumb is on a stick,
+  so the announcer never hides under your hands.
+
 ## v3.9.0 — mobile suite (2026-07-26)
 
 - Save & resume: interrupted arcade runs auto-save on tab-hide/close and offer a green

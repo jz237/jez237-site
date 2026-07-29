@@ -45,7 +45,8 @@
   #bossFill { height:100%; width:100%; background:linear-gradient(90deg,#ff4a3d,#ff4ad9,#d9a3ff); box-shadow:0 0 8px #ff4ad9; transition:width .1s linear; }
   #caption { position:absolute; left:8%; right:8%; bottom:max(96px,calc(env(safe-area-inset-bottom) + 84px)); text-align:center;
     font-size:13px; font-weight:800; letter-spacing:3px; color:#ffb9b0; text-shadow:0 0 12px #ff4a3d88,0 2px 4px #000;
-    opacity:0; transition:opacity .25s; }
+    opacity:0; transition:opacity .25s, bottom .2s, top .2s; }
+  #caption.lifted { bottom:auto; top:70px; }
   #caption.show { opacity:1; }
   #btns { position:fixed; top:max(20px,env(safe-area-inset-top)); right:max(10px,env(safe-area-inset-right)); display:flex; gap:8px; z-index:6; }
   .icon-btn { pointer-events:auto; width:44px; height:44px; border-radius:12px; border:1px solid #4df3ff55; color:var(--cy);
@@ -183,7 +184,7 @@
     <button class="secondary" id="optsBtn">OPERATOR OPTIONS</button>
   </div>
   <div id="manual"></div>
-  <div class="version">BUILD v3.9.0 · 2026-07-26 · MOBILE SUITE</div>
+  <div class="version">BUILD v3.10.0 · 2026-07-29 · COMFORT PASS</div>
 </div></div>
 
 <div id="modeM" class="modal hidden"><div class="card">
@@ -233,6 +234,8 @@
   <p class="small">PAD DEADZONE</p><div class="optrow" id="optPadDz"></div>
   <p class="small" id="padStatus" style="color:#7dd8a9;letter-spacing:1px;"></p>
   <p class="small">AIM ASSIST</p><div class="optrow" id="optAimAssist"></div>
+  <p class="small">POWER SAVER</p><div class="optrow" id="optPowerSaver"></div>
+  <p class="small">COLOR MODE</p><div class="optrow" id="optColorSafe"></div>
   <p class="small">GLOBAL SCORENET: 1 PLAYER · ARCADE · 3 LIVES · EXTRA 25K · NO AIM ASSIST<br>OTHER CONFIGURATIONS (AND ARMOR/SHOCKWAVE USE) SAVE TO THIS CABINET ONLY.</p>
   <button class="play" id="closeOpts">SAVE &amp; RETURN</button>
 </div></div>
@@ -275,7 +278,7 @@
 <script>
 (() => {
 'use strict';
-const VERSION = '3.9.0';
+const VERSION = '3.10.0';
 const qs = new URLSearchParams(location.search);
 const AUTO = qs.has('autoRun');
 const AUTO_MODE = ['overdrive','daily'].includes(qs.get('mode')) ? qs.get('mode') : 'arcade';
@@ -359,6 +362,8 @@ settings.gamepad = settings.gamepad !== false;
 settings.padRumble = settings.padRumble !== false;
 if (![0.15, 0.25, 0.35].includes(settings.padDz)) settings.padDz = 0.25;
 if (typeof settings.aimAssist !== 'boolean') settings.aimAssist = COARSE_TOUCH;   // thumbs get help by default
+settings.powerSaver = settings.powerSaver === true;
+settings.colorSafe = settings.colorSafe === true;
 const DIFFS = { cadet: 1.35, arcade: 1, veteran: 0.75 };
 let diffMul = DIFFS[settings.diff] || 1;
 
@@ -1177,7 +1182,25 @@ const GRIDS = {
     '..gg..','..ge..','.gggg.','g.gg.g','..gg..','..gg..','..gg..','.g..g.','.G..G.']],
 };
 const SPR = {};                                    // name -> [frame canvases]
-for (const k in GRIDS) SPR[k] = GRIDS[k].map((rows, frame) => bakeGrid(rows, k, frame));
+function remapGreens(c) {
+  // deuteranopia-safe pass: rotate green-dominant pixels toward blue (g/b channel swap)
+  const g = c.getContext('2d'), img = g.getImageData(0, 0, c.width, c.height), d = img.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const r = d[i], gr = d[i + 1], b = d[i + 2];
+    if (gr > 60 && gr > r * 1.15 && gr > b * 1.15) { d[i + 1] = b; d[i + 2] = gr; }
+  }
+  g.putImageData(img, 0, 0);
+}
+const CS_KINDS = ['thrall', 'kid', 'jugg'];
+function buildSprites() {
+  for (const k in GRIDS) SPR[k] = GRIDS[k].map((rows, frame) => {
+    const c = bakeGrid(rows, k, frame);
+    if (settings.colorSafe && CS_KINDS.includes(k)) remapGreens(c);
+    return c;
+  });
+}
+const csc = c => settings.colorSafe && c === '#58e06a' ? '#58a6ff' : c;
+buildSprites();
 
 // pylons: 4 shapes x 2 pulse frames, hives: 3 pulse frames — baked procedurally
 function bakeShape(size, fn) { const c = document.createElement('canvas'); c.width = c.height = size * PXS;
@@ -1315,7 +1338,7 @@ function computeFit() {
   if (!(w > 0) || !(h > 0)) return;      // viewport not laid out yet; resize listeners retry
   const sizeCap = w * h > 2400000 ? 1.5 : w * h > 1100000 ? 2 : 3;
   const memoryCap = navigator.deviceMemory && navigator.deviceMemory < 4 ? 2 : 3;
-  const dpr = Math.min(devicePixelRatio || 1, sizeCap, memoryCap);
+  const dpr = Math.min(devicePixelRatio || 1, sizeCap, memoryCap, settings.powerSaver ? 1.5 : 3);
   const key = w + 'x' + h + '@' + dpr;
   if (key === lastFit) return;
   lastFit = key; DPR = dpr;
@@ -1466,6 +1489,7 @@ function applyControlPrefs() {
 function releaseStick(s) {
   s.id = null; s.x = s.y = 0; s.knob.style.transform = 'translate(0,0)';
   s.el.style.opacity = idleStickOpacity();
+  if (sticks.L.id === null && sticks.R.id === null) $('#caption').classList.remove('lifted');
 }
 function moveStick(s, cx, cy) {
   let dx = cx - s.ox, dy = cy - s.oy;
@@ -1512,6 +1536,7 @@ canvas.addEventListener('pointerdown', e => {
     const [x,y] = fixedStickOrigin(zone); placeStick(s, x, y); moveStick(s, e.clientX, e.clientY);
   } else placeStick(s, e.clientX, e.clientY);
   s.el.style.opacity = settings.controlOpacity; s.knob.style.transform ||= 'translate(0,0)';
+  $('#caption').classList.add('lifted');            // keep the announcer clear of thumbs
 });
 canvas.addEventListener('pointermove', e => {
   if (e.pointerType === 'mouse') {
@@ -1608,6 +1633,7 @@ function readInput() {
 const parts = [], MAXP = 520;
 const muzzleFx = [], blastFx = [];
 function spark(x, y, color, n, spd, life) {
+  if (settings.powerSaver) n = Math.ceil(n / 2);
   for (let i = 0; i < n; i++) {
     if (parts.length >= MAXP) parts.shift();
     const a = rand(0, Math.PI * 2), v = rand(spd * 0.3, spd);
@@ -2163,7 +2189,7 @@ function updateCortexes() {
       if (idx >= 0) {
         humans.splice(idx, 1); c.targetH = null;
         thralls.push({ x: h.x, y: h.y, ox: irand(40) - 20, oy: irand(40) - 20, dx: 0, dy: 0, hist: [], frame: 0, mat: 30 });
-        spark(h.x, h.y, '#58e06a', 16, 1.6, 34); popup(h.x, h.y, 'REWRITTEN', '#58e06a');
+        spark(h.x, h.y, csc('#58e06a'), 16, 1.6, 34); popup(h.x, h.y, 'REWRITTEN', csc('#58e06a'));
         Snd.pop(); say('progged'); breakRescueChain(h.x, h.y);
       }
     }
@@ -2558,7 +2584,7 @@ function updateBullets() {
         [wasps, 17, '#a06bff', POINTS.wasp, null],
         [hives, 24, '#ff4ad9', POINTS.hive, null],
         [cortexes, 30, '#ff8ac2', POINTS.cortex, e => brainBurst(e.x, e.y)],
-        [thralls, 16, '#58e06a', POINTS.thrall, null],
+        [thralls, 16, csc('#58e06a'), POINTS.thrall, null],
         [forges, 20, '#39f0d0', POINTS.forge, null],
         [crawlers, 24, '#ffb347', POINTS.crawler, null],
         [stingers, 7, '#ff4a3d', POINTS.stinger, null],
@@ -2824,7 +2850,7 @@ function glowAt(x, y, r, color, alpha) {
   ctx.drawImage(glowFor(color), x - r, y - r, r * 2, r * 2);
 }
 function drawSpr(c, x, y) { ctx.drawImage(c, x - c.gw / 2, y - c.gh / 2, c.gw, c.gh); }
-const PROG_COLS = ['#ff4a3d', '#ffe14a', '#58e06a', '#4df3ff', '#ff4ad9'];
+const PROG_COLS = ['#ff4a3d', '#ffe14a', settings.colorSafe ? '#58a6ff' : '#58e06a', '#4df3ff', '#ff4ad9'];
 function drawMat(c, e, ringColor) {
   // arcade warp-in: four sparks converge -> vertical scan line grows -> sprite unfolds sideways
   const p = 1 - e.mat / 66;
@@ -3309,8 +3335,10 @@ function draw() {
   for (const w of wasps) glowAt(w.x, w.y, 7, '#a06bff', 0.35);
   for (const c of cortexes) { const b = c.mat > 0 ? 0 : cortexBeat(c);
     glowAt(c.x, c.y - 2, 9 + b * 4, '#ff8ac2', 0.3 + b * 0.3); }
-  for (const d of drudges) if (d.mat <= 0) glowAt(d.x, d.y, 6, '#ff4a3d', 0.2);
-  for (const c of crawlers) if (c.mat <= 0) glowAt(c.x, c.y, 7, '#ffb347', 0.28);
+  if (!settings.powerSaver) {
+    for (const d of drudges) if (d.mat <= 0) glowAt(d.x, d.y, 6, '#ff4a3d', 0.2);
+    for (const c of crawlers) if (c.mat <= 0) glowAt(c.x, c.y, 7, '#ffb347', 0.28);
+  }
   for (const b of bosses) glowAt(b.x, b.y, 20, currentTheme.accent, b.mat > 0 ? .28 : .58);
   for (const n of nemeses) glowAt(n.x, n.y, 10, '#ff365f', n.mat > 0 ? .24 : .52);
   for (const f of muzzleFx) glowAt(f.x + f.ux * 3, f.y + f.uy * 3, 8, '#4df3ff', f.t / f.max * .8);
@@ -3320,7 +3348,7 @@ function draw() {
   }
   { const pulse = 0.3 + 0.18 * Math.sin(tick * 0.12);
     for (const h of humans) if (h.mat <= 0) glowAt(h.x, h.y, 8, '#ffe14a', pulse); }
-  for (const t of thralls) { let i = 0; for (const [hx, hy] of t.hist) { glowAt(hx, hy, 4, '#58e06a', 0.18 * (1 - i / 7)); i++; } }
+  for (const t of thralls) { let i = 0; for (const [hx, hy] of t.hist) { glowAt(hx, hy, 4, csc('#58e06a'), 0.18 * (1 - i / 7)); i++; } }
   allMats(e => { if (e.mat > 0) glowAt(e.x, e.y, 10, '#4df3ff', clamp(1 - e.mat / 66, 0, 1) * 0.5); });
   if (state === 'play' || state === 'starting' || state === 'waveclear' || state === 'tutorial') glowAt(player.x, player.y, 8, '#4df3ff', 0.45);
   ctx.globalAlpha = 1;
@@ -4081,6 +4109,8 @@ function buildOpts() {
         if (key === 'diff') diffMul = DIFFS[v];
         if (key === 'cabinetFx') document.body.classList.toggle('fx-off', !v);
         if (key === 'mobileZoom') cameraReady = false;
+        if (key === 'powerSaver') { lastFit = ''; computeFit(); }
+        if (key === 'colorSafe') { buildSprites(); PROG_COLS[2] = v ? '#58a6ff' : '#58e06a'; }
         if (key === 'musicVolume' || key === 'sfxVolume') Snd.setMix();
         if (key.startsWith('control')) applyControlPrefs();
         Snd.click(); buildOpts();
@@ -4103,6 +4133,8 @@ function buildOpts() {
   mk($('#optPadRumble'), [true, false], 'padRumble', v => v ? 'ON' : 'OFF');
   mk($('#optPadDz'), [0.15, 0.25, 0.35], 'padDz', v => v === 0.15 ? 'TIGHT' : v === 0.25 ? 'STANDARD' : 'LOOSE');
   mk($('#optAimAssist'), [true, false], 'aimAssist', v => v ? 'ON' : 'OFF');
+  mk($('#optPowerSaver'), [false, true], 'powerSaver', v => v ? 'ON · 30FPS' : 'OFF');
+  mk($('#optColorSafe'), [false, true], 'colorSafe', v => v ? 'SAFE' : 'STANDARD');
   updatePadStatus();
   mk($('#optControlSize'), CONTROL_SIZES, 'controlSize', v => v === 1 ? '100%' : Math.round(v * 100) + '%');
   mk($('#optControlSensitivity'), CONTROL_SENSITIVITIES, 'controlSensitivity', v => v === 1 ? '100%' : Math.round(v * 100) + '%');
@@ -4265,8 +4297,10 @@ function frame(t) {
   let steps = 0;
   while (acc >= 1 / 60 && steps < 4) { stepTick(); acc -= 1 / 60; steps++; }
   if (steps === 4) acc = 0;
-  draw();
+  renderFlip ^= 1;
+  if (!settings.powerSaver || renderFlip) draw();   // power saver renders at 30fps; the sim stays 60Hz
 }
+let renderFlip = 0;
 requestAnimationFrame(frame);
 renderScoreNetStatus();
 if (getPendingScores().length) setTimeout(flushPendingScores, 1200);
