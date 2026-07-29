@@ -1,0 +1,15 @@
+{
+  "name": "Chrome Riot",
+  "short_name": "Chrome Riot",
+  "description": "2086: the machines voted you obsolete. Twin-stick arena shooter — save the last human family.",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050310",
+  "theme_color": "#050310",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

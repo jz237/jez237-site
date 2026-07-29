@@ -7,6 +7,23 @@ audio, and enemy fiction — no Williams assets or trademarks. Year is 2086 (not
 **Fiction:** 2086. The Chrome — humanity's own machines — have voted their makers
 obsolete. One augmented courier and the last human family are all that's left to save.
 
+## v3.9.0 — mobile suite (2026-07-26)
+
+- Save & resume: interrupted arcade runs auto-save on tab-hide/close and offer a green
+  RESUME RUN button on the title (48h TTL, consumed on use, cleared on game over/abandon;
+  competitive daily/overdrive modes stay one-shot). Resumes rebuild the wave under the
+  authentic death-rebuild rules.
+- PWA install: manifest + icons + a network-first service worker (fresh deploys always
+  win; offline play from cache) + apple-touch-icon/meta. Registers on https only.
+- Aim assist (default ON for touch, OFF desktop): bends volleys up to ~20° onto the
+  nearest target in the fired direction; disqualifies ScoreNet like other assists.
+- Manual hull shockwave: spend an armor segment on demand — ⚡ button, Space, or pad B.
+- First-run interactive tutorial: three input-driven beats (~20s), pause skips, flag
+  persisted; bots/demo/replays never see it.
+- Share card: game-over SHARE button renders a score card and uses navigator.share
+  (file → text → clipboard fallbacks).
+- (Rescue radar was already covered by the off-screen indicator system.)
+
 ## v3.8.0 — WATCH DEMO button + showman bot (2026-07-26)
 
 - WATCH DEMO on the title runs the attract demo on demand with a long (~6.5 min) cap;
