@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 29 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 30 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 5-11, 1983 — BIG BLUE SETS THE STANDARD</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-09-05</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-05</guid>
+      <pubDate>Thu, 30 Jul 2026 12:00:00 GMT</pubDate>
+      <description>IBM compatibility redraws the personal-computer map as a booming market enters its first great shakeout. NEW YORK — The personal-computer business has reached the moment when a boom begins to choose its standard. TIME&apos;s September 5 survey reports that IBM, only two years after introducing its Personal Computer, has captured 26 percent of unit sales and displaced Apple from first place. Also this week: Games by Telephone Move Closer to Home · Draft-Aide Puts CAD on the Personal Computer · Young Computer Experts Teach the Teachers.</description>
+    </item>
     <item>
       <title>Week of August 29-September 4, 1983 — IBM&apos;s PC Standard Tightens Its Grip</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-08-29</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-04-25</guid>
       <pubDate>Fri, 10 Jul 2026 12:00:00 GMT</pubDate>
       <description>Video magazine coverage treats Apple II and home-computer games as part of the same conversation as Zaxxon and Turbo. In the spring 1983 game press, the wall between coin-op excitement and personal-computer software kept getting thinner. Electronic Games expanded its Arcade Alley column to cover computer gaming, reviewing Zaxxon, Turbo, and Apple II titles in the same breath. For shoppers with an Apple II, Atari 8-bit, Commodore 64, or VIC-20, that mattered: game disks were no longer just hobby curiosities, but a front-counter reason to compare graphics, joysticks, and disk drives.</description>
-    </item>
-    <item>
-      <title>Week of April 18-24, 1983 — Pole Position keeps arcade racing in the fast lane</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-04-18</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-04-18</guid>
-      <pubDate>Thu, 09 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Atari/Namco racing cabinets remained a trade-paper and operator touchstone as home-computer aisles tried to borrow arcade excitement. By the week of April 18, arcade operators were still talking about the drawing power of Pole Position, the Namco racer Atari distributed in North America. Its sit-down cabinet, qualifying lap, and billboard-style track made it a showroom example of how arcade spectacle could sell a game before a player touched the wheel. For home-computer buyers, that arcade glow mattered: software shelves were filling with conversions and racing titles that promised a slice of the coin-op floor.</description>
     </item>
   </channel>
 </rss>

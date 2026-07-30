@@ -1,8 +1,327 @@
 {
-  "generatedAt": "2026-07-28T12:03:14.805Z",
+  "generatedAt": "2026-07-30T12:02:28.922Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-07-30",
+      "historicDate": "1983-09-05",
+      "displayDate": "Week of September 5-11, 1983",
+      "edition": "Issue 058 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Late-summer industry shakeout on warm newsprint",
+        "motifs": [
+          "IBM-compatible desktops",
+          "portable CP/M computers",
+          "fantasy role-playing maps"
+        ],
+        "layout": "IBM market lead with a large Ultima III gaming panel and compact gadget rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "WEEK OF SEPTEMBER 5-11, 1983",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "IBM standard and industry shakeout across the upper columns",
+        "secondaryRail": "Ultima III, portable computers, and cellular service",
+        "archiveNavigation": "Previous and next weekly issues"
+      },
+      "sectionChrome": {
+        "primary": "newsprint red",
+        "secondary": "computer blue",
+        "texture": "aged paper, halftone screens, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-09-05.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for September 5-11, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "EXTRA EDITION: IBM compatibility is turning a crowded personal-computer boom into an industry standard—and a brutal test of which makers can survive.",
+      "morningLine": "Big Blue sets the standard, telephone lines promise games and software, and personal computers enter the drafting room.",
+      "lead": {
+        "headline": "BIG BLUE SETS THE STANDARD",
+        "dek": "IBM compatibility redraws the personal-computer map as a booming market enters its first great shakeout.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "NEW YORK — The personal-computer business has reached the moment when a boom begins to choose its standard. TIME's September 5 survey reports that IBM, only two years after introducing its Personal Computer, has captured 26 percent of unit sales and displaced Apple from first place.",
+          "The market remains enormous and unruly: more than 200 American companies now manufacture personal computers, twice the number of two years ago, while 1983 sales are forecast at seven million machines. Yet the center of gravity is unmistakable. About 20 companies already make IBM-compatible systems, and buyers increasingly measure a new machine by the software, dealers, and accessories it shares with Big Blue.",
+          "That rush toward compatibility is exposing weak balance sheets. Vector Graphic turned a $2.4 million profit into a $3 million loss and laid off one-quarter of its 400 workers. Victor Technologies lost $11 million in the second quarter and eliminated 350 jobs; Fortune Systems watched an $8 million sales decline turn a $3 million profit into a $3 million loss.",
+          "Home-computer makers feel the squeeze as well. TIME says Timex Sinclair 1000 sales fell as much as 50 percent in two months even after its price dropped from $99 to $49.95, while Atari, Texas Instruments, and Mattel absorbed heavy losses. Rumors now point to IBM's own lower-priced home machine, code-named Peanut.",
+          "The lesson is no longer merely how to build a clever microcomputer. Compatibility, distribution, production capacity, and the timing of a successor model now decide who can remain in the game. The open frontier is becoming an industry—and IBM has planted its flag at the center."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Games by Telephone Move Closer to Home",
+          "kicker": "Network Play",
+          "dek": "Coleco and AT&T propose computer and video-game services delivered over ordinary phone lines.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1,
+            2,
+            3
+          ],
+          "body": [
+            "HARTFORD — Coleco Industries and American Telephone and Telegraph announced a joint venture September 8 aimed at bringing home-computer and video-game use over telephone lines. The proposal joins the country's communications network to the fast-growing market for electronic entertainment.",
+            "The announcement arrives as Coleco prepares its Adam family computer, an expansion of the ColecoVision platform promoted with 64K of user memory, Digital Data Pack storage, a daisy-wheel printer, and SmartWriter word processing.",
+            "Details of the service remain ahead of the hardware, but the ambition is striking: programs and play need not remain sealed inside a cartridge or disk. The telephone may become a road connecting home machines to distant services and other players."
+          ]
+        },
+        {
+          "headline": "Draft-Aide Puts CAD on the Personal Computer",
+          "kicker": "Office Desk",
+          "dek": "A five-level drafting line brings specialist design work toward smaller systems.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ],
+          "body": [
+            "NEW YORK — United Networking Systems introduced its Draft-Aide line September 7 for personal computers as well as larger systems. Five user levels promise to scale computer-aided drafting to different needs.",
+            "CAD has long suggested costly specialist equipment. A product family meant to reach personal computers strengthens the microcomputer's case as a practical drawing and design tool, not merely a machine for ledgers, letters, and games."
+          ]
+        },
+        {
+          "headline": "Young Computer Experts Teach the Teachers",
+          "kicker": "School Bell",
+          "dek": "At Stanford, early-teen specialists help nearly 200 educators catch up with a new generation.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            5
+          ],
+          "body": [
+            "PALO ALTO — Computer-literate youngsters in their early teens helped instruct educators during a five-week Stanford University training course reported September 11. Nearly 200 teachers and administrators from around the world attended.",
+            "The reversal is a vivid sign of the home-computer era. Pupils who learned by exploring machines at home can arrive in class ahead of professional teachers, forcing schools to rethink who holds expertise and how quickly a curriculum can change."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM Personal Computer",
+          "summary": "A reported 26 percent of unit sales makes the two-year-old PC the market leader and compatibility standard.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Coleco Adam",
+          "summary": "A forthcoming family system combines 64K user RAM, data-pack storage, SmartWriter, and a daisy-wheel printer.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "Timex Sinclair 1000",
+          "summary": "Now $49.95 after a cut from $99, yet TIME says demand fell as much as 50 percent in two months.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Draft-Aide",
+          "detail": "Five-level computer-aided drafting line for personal computers and larger systems."
+        },
+        {
+          "name": "SmartWriter",
+          "detail": "Coleco's bundled word processor for the forthcoming Adam."
+        },
+        {
+          "name": "Enchanter",
+          "detail": "Infocom's 1983 interactive fantasy begins a new trilogy in the Zork universe."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Ultima III: Exodus",
+            "Enchanter",
+            "Zaxxon",
+            "Q*bert",
+            "Donkey Kong"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Mr. Mom",
+            "Risky Business",
+            "Nightmares",
+            "National Lampoon's Vacation",
+            "WarGames"
+          ]
+        },
+        {
+          "label": "Software Watch",
+          "items": [
+            "Draft-Aide",
+            "SmartWriter",
+            "Enchanter",
+            "VisiCalc",
+            "WordStar"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Timex Sinclair 1000",
+          "price": "$49.95",
+          "note": "Cut from $99; sales reportedly still falling."
+        },
+        {
+          "item": "Osborne 1",
+          "price": "$1,295",
+          "note": "Reduced from $1,795 amid the portable maker's difficulties."
+        },
+        {
+          "item": "Coleco Adam complete system",
+          "price": "about $600-$700",
+          "note": "Period estimate for computer, storage, keyboard, printer, and software."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "More than 200 U.S. PC makers",
+          "text": "TIME counts twice as many personal-computer manufacturers as only two years ago."
+        },
+        {
+          "headline": "Osborne Executive turns toward IBM",
+          "text": "The delayed portable is being adapted to run IBM programs, with a November target reported."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Maniac",
+          "artist": "Michael Sembello"
+        },
+        {
+          "rank": 2,
+          "title": "Sweet Dreams (Are Made of This)",
+          "artist": "Eurythmics"
+        },
+        {
+          "rank": 3,
+          "title": "The Safety Dance",
+          "artist": "Men Without Hats"
+        },
+        {
+          "rank": 4,
+          "title": "Puttin' on the Ritz",
+          "artist": "Taco"
+        },
+        {
+          "rank": 5,
+          "title": "Tell Her About It",
+          "artist": "Billy Joel"
+        }
+      ],
+      "periodAd": {
+        "headline": "Join the Compatible Future",
+        "summary": "Choose software, printers, and expansion boards from the fast-growing world gathered around the IBM PC standard.",
+        "tagline": "One standard. A whole new shelf of possibilities."
+      },
+      "market": {
+        "headline": "Compatibility Becomes Currency",
+        "summary": "Roughly 20 makers already build IBM-compatible machines as software libraries and dealer channels become decisive competitive advantages.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Reagan Condemns Soviet Destruction of KAL 007",
+        "summary": "In a September 5 televised address, President Ronald Reagan called the shootdown of the civilian Boeing 747 carrying 269 people a crime against humanity and demanded an apology and compensation.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          10,
+          11
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "IBM market survey: TIME issue dated September 5, 1983",
+          "Coleco-AT&T, Draft-Aide, education, and world bulletin: exact-date reports",
+          "Adam, Ultima III, and Enchanter: period or same-month sources",
+          "Music and movie rankings: week ending September 10-11, 1983"
+        ]
+      },
+      "sources": [
+        {
+          "label": "TIME — An Easy-Come, Easy-Go World, Sept. 5, 1983",
+          "url": "https://time.com/archive/6860026/an-easy-come-easy-go-world/"
+        },
+        {
+          "label": "UPI — Coleco and AT&T joint venture, Sept. 8, 1983",
+          "url": "https://www.upi.com/Archives/1983/09/08/Coleco-Industries-and-American-Telephone-and-Telegraph-Corp-have/8940431841600/"
+        },
+        {
+          "label": "Creative Computing — And Coleco Created Adam",
+          "url": "https://www.atarimagazines.com/creative/v9n9/204_And_Coleco_created_Adam.php"
+        },
+        {
+          "label": "Old Computers — Coleco Adam",
+          "url": "https://www.oldcomputers.net/adam.html"
+        },
+        {
+          "label": "UPI — CAD programs for personal computers, Sept. 7, 1983",
+          "url": "https://www.upi.com/Archives/1983/09/07/CAD-programs-for-personal-computers/3764431755200/"
+        },
+        {
+          "label": "UPI — Youngsters show teachers computers, Sept. 11, 1983",
+          "url": "https://www.upi.com/Archives/1983/09/11/When-it-comes-to-computers-youngsters-show-the-teachers/3508432100800/"
+        },
+        {
+          "label": "MobyGames — Enchanter",
+          "url": "https://www.mobygames.com/game/56/enchanter/"
+        },
+        {
+          "label": "Wikipedia — Ultima III: Exodus",
+          "url": "https://en.wikipedia.org/wiki/Ultima_III:_Exodus"
+        },
+        {
+          "label": "Billboard Hot 100 archive — week of Sept. 10, 1983",
+          "url": "https://elpee.jp/hot100/week/1983-09-10/"
+        },
+        {
+          "label": "Box Office Mojo — Sept. 9-11, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W36/"
+        },
+        {
+          "label": "UPI — Reagan address on KAL 007, Sept. 5, 1983",
+          "url": "https://www.upi.com/Archives/1983/09/05/Declaring-this-crime-against-humanity-must-never-be-forgotten/3399431582400/"
+        },
+        {
+          "label": "Miller Center — Reagan speech on Korean airliner attack",
+          "url": "https://millercenter.org/the-presidency/presidential-speeches/september-5-1983-speech-soviet-attack-korean-airliner"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted",
+          "copy": "IBM-compatible software, manuals, and expansion boards; business applications preferred."
+        },
+        {
+          "headline": "Modem Owners",
+          "copy": "Experimenters sought for telephone-line games and computer services."
+        }
+      ],
+      "milestone": {
+        "title": "IBM PC becomes the personal-computer industry's standard",
+        "note": "TIME's September 5 survey captured the decisive standardization of business microcomputing around IBM compatibility and the shakeout that followed."
+      }
+    },
     {
       "currentDate": "2026-07-29",
       "historicDate": "1983-08-29",
@@ -324,15 +643,15 @@
           "url": "https://www.boxofficemojo.com/weekend/1983W35/occasion/us_laborday_weekend/"
         }
       ],
-    "classifieds": [
-      {
-        "headline": "Wanted",
-        "copy": "IBM-compatible software and manuals; business applications preferred."
-      },
-      {
-        "headline": "For Trade",
-        "copy": "Apple II adventure games for recent role-playing titles."
-      }
+      "classifieds": [
+        {
+          "headline": "Wanted",
+          "copy": "IBM-compatible software and manuals; business applications preferred."
+        },
+        {
+          "headline": "For Trade",
+          "copy": "Apple II adventure games for recent role-playing titles."
+        }
       ]
     },
     {
