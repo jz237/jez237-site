@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-30",
+      "historicDate": "1983-09-05",
+      "displayDate": "Week of September 5-11, 1983",
+      "edition": "Issue 058 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Big Blue sets the standard, telephone lines promise games and software, and personal computers enter the drafting room.",
+      "leadHeadline": "BIG BLUE SETS THE STANDARD",
+      "storyHeadlines": [
+        "Games by Telephone Move Closer to Home",
+        "Draft-Aide Puts CAD on the Personal Computer",
+        "Young Computer Experts Teach the Teachers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-05.jpg",
+      "thumb": "media/thumbs/1983-09-05.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-07-29",
       "historicDate": "1983-08-29",
       "displayDate": "Week of August 29-September 4, 1983",
