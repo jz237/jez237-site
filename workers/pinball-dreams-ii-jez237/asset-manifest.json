@@ -1,52 +1,52 @@
 {
   "schema_version": 1,
   "worker": "pinball-dreams-ii-jez237",
-  "captured_from_deployment_id": "a6d7c920-0065-47c3-a520-9e17963feade",
-  "captured_from_version_id": "f115a2ba-b044-46c4-a881-aadc92ad99c2",
-  "script_etag": "221fc5bfc0a0ba916fdabc9192c2eaa65997f3428f9dd43879e71c6409f2c767",
-  "captured_at": "2026-07-31T05:33:41.841Z",
+  "captured_from_deployment_id": "9e0d9bc7-26d2-4b26-b233-390f12e7be05",
+  "captured_from_version_id": "2c74a452-b7ba-4b30-810d-59eca38c643e",
+  "script_etag": "c8397cdc72abb562a634df0e64c1cb9b91e7c7696ac28b4fa051f063f252a151",
+  "captured_at": "2026-07-31T09:11:21.853542Z",
   "intentional_live_only_reason": "Generated game media remain on the routed Cloudflare Worker to avoid duplicating large binary assets in Git. This manifest is the canonical GitHub pointer and recovery map.",
   "asset_count": 407,
-  "total_bytes": 67137210,
+  "total_bytes": 67137281,
   "assets": [
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/PinballDreams-BlT1lRGT.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/PinballDreams-BlT1lRGT.js",
-      "bytes": 367649,
-      "sha256": "61d3bc6a7479c1adc8d8e2f11b9dad282762528fa5a9845ccf844bc9a2c567b0",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/PinballDreams-BlT1lRGT.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/PinballDreams-BlT1lRGT.js",
+      "bytes": 367720,
+      "sha256": "75d68b57f1d74349ccc7d5743e3fbdfac2ab2f8c2f6de4ee9384a73d0ebc337e",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/framework-DjPHiq1u.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/framework-DjPHiq1u.js",
       "bytes": 189761,
       "sha256": "e1c95fc407283714d3fc4e9666d2fac09df84f3b4d479fcabdf8c4e3e53fa985",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-C_VnvUr1.css",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-C_VnvUr1.css",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/index-C_VnvUr1.css",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/index-C_VnvUr1.css",
       "bytes": 32216,
       "sha256": "f6c9fd624bd6a04987c95ae1703612af46d3ef7a07b1fe09f43d8f50c4034b7a",
       "content_type": "text/css"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/index-Ch-aShgk.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/index-Ch-aShgk.js",
       "bytes": 80868,
-      "sha256": "8bdbb046138fc697e919f4236d97d9dc3b0cfbbf2ca6b42989316f44390fc4b0",
+      "sha256": "e31feaa40ca760e303765db288979e3ec492edd8878bd243c8b6ae8daa5e426c",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/layout-segment-context-DyzVtZF5.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/layout-segment-context-DyzVtZF5.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/layout-segment-context-DyzVtZF5.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/layout-segment-context-DyzVtZF5.js",
       "bytes": 288,
       "sha256": "85e190e90eae55438e6cc9bd482409a902909457780c5367b3ba700ce83d279b",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/rolldown-runtime-S-ySWqyJ.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-4c34f8d93a5d/rolldown-runtime-S-ySWqyJ.js",
       "bytes": 694,
       "sha256": "5db5ba82eef00d1dee7e86e663098c9427d01183a88d357437daff295aec3e75",
       "content_type": "text/javascript"
