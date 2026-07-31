@@ -5,9 +5,9 @@ This directory preserves the production Worker that owns:
 - `/games/2026-07-14/pinball-dreams-ii`
 - `/games/2026-07-14/pinball-dreams-ii/*`
 
-`index.js` is the recoverable deployed bundle for Pinball Dreams HD v1.0.2,
+`index.js` is the recoverable deployed bundle for Pinball Dreams HD v1.0.3,
 published as Cloudflare Worker version
-`f115a2ba-b044-46c4-a881-aadc92ad99c2`. The D1 leaderboard remains in
+`2c74a452-b7ba-4b30-810d-59eca38c643e`. The D1 leaderboard remains in
 `pinball-dreams-hd-scores`.
 
 The 407 generated audio/image/client assets remain intentionally live-only on
@@ -19,10 +19,13 @@ This recovery set includes all 59 physics assets and uses versioned physics
 requests. That prevents stale negative CDN/browser cache entries from surfacing
 as the game's generic `DISK READ ERROR`.
 
-The normal unversioned game URL redirects to `?release=1.0.2`, whose page shell,
-client bundle, physics files, sprites, and table artwork all use cache-safe
-release URLs. This also recovers browsers that retained the original immutable
-client bundle.
+The normal unversioned game URL redirects to `?release=1.0.3`. This release
+uses a new client directory and a new `1.0.3` cache key for every critical
+physics, sprite, manifest, UI, and table-art request. v1.0.2 had changed the
+client directory but accidentally reused v1.0.1's `r15`/`r16` generated-asset
+keys, so a returning browser could still retain an earlier failed response.
+Non-successful asset responses are now served with `Cache-Control: no-store`
+to prevent a future partial deployment from poisoning a browser cache.
 
 To reconstruct a deployment payload:
 
