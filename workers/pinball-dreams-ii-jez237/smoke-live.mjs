@@ -220,8 +220,9 @@ try {
       .filter((name) => name.includes("/assets-"))`,
   );
   const releaseLoaded = scriptResources.some((name) =>
-    name.includes("/assets-30f1a101d15d/PinballDreams-"),
+    name.includes("/assets-a102c7e31f4b/PinballDreams-"),
   );
+  const effectiveUrl = await evaluate(`window.location.href`);
   const handledRejections = await evaluate(
     `window.__pinballHandledRejections ?? []`,
   );
@@ -233,6 +234,7 @@ try {
   );
   const report = {
     gameUrl,
+    effectiveUrl,
     results,
     releaseLoaded,
     scriptResources,
@@ -249,6 +251,7 @@ try {
 
   const failed =
     results.some((result) => !result.game || result.error) ||
+    !effectiveUrl.includes("release=1.0.2") ||
     !releaseLoaded ||
     versionedPhysicsRequests.length === 0 ||
     failedRequests.some(({ url }) => url.includes("/generated/physics/")) ||
