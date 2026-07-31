@@ -15,39 +15,39 @@ var init_vite_rsc_assets_manifest = __esm({
   "dist/server/__vite_rsc_assets_manifest.js"() {
     "use strict";
     vite_rsc_assets_manifest_default = {
-      "bootstrapScriptContent": 'import("/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js")',
+      "bootstrapScriptContent": 'import("/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js")',
       "clientReferenceDeps": {
         "7f5649b6d79d": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/PinballDreams-BlT1lRGT.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/PinballDreams-BlT1lRGT.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js"
           ],
           "css": []
         },
         "593f344dc510": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js"
           ],
           "css": []
         },
         "15c18cfaeeff": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/layout-segment-context-DyzVtZF5.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/layout-segment-context-DyzVtZF5.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js"
           ],
           "css": []
         },
         "8c0f216c4604": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js"
           ],
           "css": []
         }
@@ -56,7 +56,7 @@ var init_vite_rsc_assets_manifest = __esm({
         "app/layout.tsx": {
           "js": [],
           "css": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-C_VnvUr1.css"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-C_VnvUr1.css"
           ]
         }
       }
@@ -70,39 +70,39 @@ var init_vite_rsc_assets_manifest2 = __esm({
   "dist/server/ssr/__vite_rsc_assets_manifest.js"() {
     "use strict";
     vite_rsc_assets_manifest_default2 = {
-      "bootstrapScriptContent": 'import("/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js")',
+      "bootstrapScriptContent": 'import("/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js")',
       "clientReferenceDeps": {
         "7f5649b6d79d": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/PinballDreams-BlT1lRGT.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/PinballDreams-BlT1lRGT.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js"
           ],
           "css": []
         },
         "593f344dc510": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js"
           ],
           "css": []
         },
         "15c18cfaeeff": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/layout-segment-context-DyzVtZF5.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/layout-segment-context-DyzVtZF5.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js"
           ],
           "css": []
         },
         "8c0f216c4604": {
           "js": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-Ch-aShgk.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/rolldown-runtime-S-ySWqyJ.js",
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/framework-DjPHiq1u.js"
           ],
           "css": []
         }
@@ -111,7 +111,7 @@ var init_vite_rsc_assets_manifest2 = __esm({
         "app/layout.tsx": {
           "js": [],
           "css": [
-            "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-C_VnvUr1.css"
+            "/games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/index-C_VnvUr1.css"
           ]
         }
       }
@@ -3010,7 +3010,7 @@ function OriginalTicker() {
     "aria-hidden": "true",
     children: [/* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
       className: "ticker-gold",
-      children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterText, { value: "WELCOME TO PINBALL DREAMS HD v1.0.1!   HIGH-DEFINITION REMASTER   SPACE TOGGLES MENU/HIGHSCORES SCREEN   PRESS M TO TOGGLE MENU MUSIC ON/OFF   " })
+      children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterText, { value: "WELCOME TO PINBALL DREAMS HD v1.0.2!   HIGH-DEFINITION REMASTER   SPACE TOGGLES MENU/HIGHSCORES SCREEN   PRESS M TO TOGGLE MENU MUSIC ON/OFF   " })
     }), /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
       className: "ticker-red",
       children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterText, { value: "PRESS F1-F4 OR CLICK A TABLE TO PLAY   PRESS P TO PAUSE THE GAME   PAUSE THEN ESC TO QUIT A TABLE   " })
@@ -11915,7 +11915,7 @@ var init_PinballDreams_C7ej04Pv = __esm({
           };
           image.onerror = () => reject(/* @__PURE__ */ new Error(`Unable to load ${table.id} playfield`));
         });
-        image.src = table.image;
+        image.src = mobileVersionedPhysicsUrl(table.image);
         this.hdRenderer.loadTable(table.id, this.renderScale);
         const physicsReady = this.loadPhysicsAssets(table.id);
         const dynamicsReady = this.loadPlayfieldDynamics(table.id);
@@ -39011,7 +39011,7 @@ var __create2, __defProp3, __getOwnPropDesc2, __getOwnPropNames3, __getProtoOf2,
 var init_index = __esm({
   "dist/server/index.js"() {
     init_vite_rsc_assets_manifest();
-    globalThis.__VINEXT_LAZY_CHUNKS__ = ["games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/PinballDreams-BlT1lRGT.js", "games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/layout-segment-context-DyzVtZF5.js"];
+    globalThis.__VINEXT_LAZY_CHUNKS__ = ["games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/PinballDreams-BlT1lRGT.js", "games/2026-07-14/pinball-dreams-ii/assets-a102c7e31f4b/layout-segment-context-DyzVtZF5.js"];
     __create2 = Object.create;
     __defProp3 = Object.defineProperty;
     __getOwnPropDesc2 = Object.getOwnPropertyDescriptor;
@@ -44544,6 +44544,11 @@ var init_index = __esm({
     __name(secureResponse, "secureResponse");
     worker_entry_default = { async fetch(request, env, ctx) {
       const url = new URL(request.url);
+      if ((url.pathname === basePath || url.pathname === `${basePath}/`) && (request.method === "GET" || request.method === "HEAD") && url.searchParams.get("release") !== "1.0.2") {
+        url.pathname = `${basePath}/`;
+        url.searchParams.set("release", "1.0.2");
+        return Response.redirect(url, 302);
+      }
       if (basePath && url.pathname === basePath && (request.method === "GET" || request.method === "HEAD")) {
         url.pathname = `${basePath}/`;
         return Response.redirect(url, 308);
