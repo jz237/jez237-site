@@ -9,6 +9,7 @@ const gameUrl =
 const chromePath = process.env.CHROME_PATH ?? "/usr/bin/google-chrome";
 const port = Number(process.env.CDP_PORT ?? 19351);
 const fastTimers = process.env.FAST_TIMERS !== "0";
+const mobile = process.env.MOBILE === "1";
 const tableKeys = (process.env.TABLE_KEYS ?? "F1,F2,F3,F4")
   .split(",")
   .map((key) => key.trim())
@@ -65,6 +66,7 @@ const pending = new Map();
 const failedRequests = [];
 const exceptions = [];
 const physicsRequests = [];
+const criticalGeneratedRequests = [];
 const consoleMessages = [];
 
 socket.addEventListener("message", (event) => {
@@ -105,6 +107,15 @@ socket.addEventListener("message", (event) => {
     const { response } = message.params;
     if (response.url.includes("/generated/physics/")) {
       physicsRequests.push({ status: response.status, url: response.url });
+    }
+    if (
+      response.url.includes("/generated/physics/") ||
+      response.url.includes("/generated/hd/")
+    ) {
+      criticalGeneratedRequests.push({
+        status: response.status,
+        url: response.url,
+      });
     }
     if (response.status >= 400) {
       failedRequests.push({ status: response.status, url: response.url });
@@ -165,6 +176,20 @@ try {
   await command("Log.enable");
   await command("Network.enable");
   await command("Page.enable");
+  if (mobile) {
+    await command("Emulation.setDeviceMetricsOverride", {
+      width: 390,
+      height: 844,
+      deviceScaleFactor: 3,
+      mobile: true,
+      screenWidth: 390,
+      screenHeight: 844,
+    });
+    await command("Emulation.setTouchEmulationEnabled", {
+      enabled: true,
+      maxTouchPoints: 5,
+    });
+  }
   await command("Page.addScriptToEvaluateOnNewDocument", {
     source: `{
       window.__pinballHandledRejections = [];
@@ -220,9 +245,12 @@ try {
       .filter((name) => name.includes("/assets-"))`,
   );
   const releaseLoaded = scriptResources.some((name) =>
-    name.includes("/assets-a102c7e31f4b/PinballDreams-"),
+    name.includes("/assets-4c34f8d93a5d/PinballDreams-"),
   );
   const effectiveUrl = await evaluate(`window.location.href`);
+  const mobilePresentation = await evaluate(
+    `window.matchMedia("(hover: none) and (pointer: coarse)").matches`,
+  );
   const handledRejections = await evaluate(
     `window.__pinballHandledRejections ?? []`,
   );
@@ -232,15 +260,22 @@ try {
   const versionedPhysicsRequests = physicsRequests.filter(
     ({ url }) => url.includes(".u8?v=") || url.includes(".png?v="),
   );
+  const staleCriticalRequests = criticalGeneratedRequests.filter(
+    ({ url }) => !url.includes("1.0.3"),
+  );
   const report = {
     gameUrl,
     effectiveUrl,
+    requestedMobilePresentation: mobile,
+    mobilePresentation,
     results,
     releaseLoaded,
     scriptResources,
     physicsRequestCount: physicsRequests.length,
     versionedPhysicsRequestCount: versionedPhysicsRequests.length,
     physicsRequests,
+    criticalGeneratedRequestCount: criticalGeneratedRequests.length,
+    staleCriticalRequests,
     failedRequests,
     exceptions,
     consoleMessages,
@@ -251,9 +286,11 @@ try {
 
   const failed =
     results.some((result) => !result.game || result.error) ||
-    !effectiveUrl.includes("release=1.0.2") ||
+    !effectiveUrl.includes("release=1.0.3") ||
+    mobilePresentation !== mobile ||
     !releaseLoaded ||
     versionedPhysicsRequests.length === 0 ||
+    staleCriticalRequests.length > 0 ||
     failedRequests.some(({ url }) => url.includes("/generated/physics/")) ||
     exceptions.length > 0;
   if (failed) process.exitCode = 1;
