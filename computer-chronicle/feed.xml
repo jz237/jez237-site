@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 30 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 31 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 12-18, 1983 — OSBORNE CRASHES INTO BANKRUPTCY</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-09-12</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-12</guid>
+      <pubDate>Fri, 31 Jul 2026 12:00:00 GMT</pubDate>
+      <description>The portable pioneer seeks Chapter 11 protection after demand collapses and suppliers are left owed $45 million. SAN FRANCISCO — Osborne Computer sought bankruptcy protection September 13, a stunning reversal for the company that turned a suitcase-sized computer and a rich software bundle into one of personal computing’s first spectacular success stories. Also this week: Shakeout Reaches Computers and Cartridges · M.U.L.E. and Archon Turn Rivalry into Art · A Portable That Really Fits the Lap.</description>
+    </item>
     <item>
       <title>Week of September 5-11, 1983 — BIG BLUE SETS THE STANDARD</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-09-05</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-02</guid>
       <pubDate>Sat, 11 Jul 2026 12:00:00 GMT</pubDate>
       <description>Atari&apos;s Star Wars arcade machine gives the week its clearest computer-culture image: a 3-D vector trench run landing just as home computers borrow more of the arcade shelf. Trade and collector records place Atari&apos;s Star Wars arcade release in 1983, with May widely used for the cabinet&apos;s arrival. Its color-vector cockpit fantasy made a natural front-page emblem for a spring when home-computer owners were also buying arcade conversions, strategy disks, and BASIC-friendly machines from the same stores.</description>
-    </item>
-    <item>
-      <title>Week of April 25-May 1, 1983 — Arcade Alley widens the lane for computer games</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-04-25</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-04-25</guid>
-      <pubDate>Fri, 10 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Video magazine coverage treats Apple II and home-computer games as part of the same conversation as Zaxxon and Turbo. In the spring 1983 game press, the wall between coin-op excitement and personal-computer software kept getting thinner. Electronic Games expanded its Arcade Alley column to cover computer gaming, reviewing Zaxxon, Turbo, and Apple II titles in the same breath. For shoppers with an Apple II, Atari 8-bit, Commodore 64, or VIC-20, that mattered: game disks were no longer just hobby curiosities, but a front-counter reason to compare graphics, joysticks, and disk drives.</description>
     </item>
   </channel>
 </rss>
