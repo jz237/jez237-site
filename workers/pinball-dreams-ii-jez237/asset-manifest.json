@@ -1,52 +1,52 @@
 {
   "schema_version": 1,
   "worker": "pinball-dreams-ii-jez237",
-  "captured_from_deployment_id": "5578b804-aeb4-41d8-bce7-1e4e34d3524a",
-  "captured_from_version_id": "a05b517b-d012-404e-91ef-63da2e69d371",
-  "script_etag": "4a138305ac4c4b8e1d5d2801aa0680b4ccfa7f801ea6a9ddeb25a45f35c2b84d",
-  "captured_at": "2026-07-26T15:05:00Z",
-  "intentional_live_only_reason": "Generated game media remain on the routed Cloudflare Worker to avoid duplicating 61.8 MB of binary assets in Git. This manifest is the canonical GitHub pointer and recovery map.",
-  "asset_count": 358,
-  "total_bytes": 61778737,
+  "captured_from_deployment_id": "1f1ecfe1-0c95-4d84-8e39-1c78baa30db6",
+  "captured_from_version_id": "4b42973a-cef2-444b-847d-593f70249eee",
+  "script_etag": "3cc5a2f809a3eea2b91b21b1499974adce1e9d1cee2b21a96bd68006fbc7526b",
+  "captured_at": "2026-07-31T04:09:11.920Z",
+  "intentional_live_only_reason": "Generated game media remain on the routed Cloudflare Worker to avoid duplicating large binary assets in Git. This manifest is the canonical GitHub pointer and recovery map.",
+  "asset_count": 407,
+  "total_bytes": 67137206,
   "assets": [
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/PinballDreams-BlT1lRGT.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/PinballDreams-BlT1lRGT.js",
-      "bytes": 367760,
-      "sha256": "243113a376858db7b0a4df791e3842692d151c289685f02b4db3d9f2e59f4871",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/PinballDreams-BlT1lRGT.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/PinballDreams-BlT1lRGT.js",
+      "bytes": 367645,
+      "sha256": "f208ece3d848f2cffa4ccefd79cb0dde1236aeeb10132499363ba5827eb37034",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/framework-DjPHiq1u.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/framework-DjPHiq1u.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/framework-DjPHiq1u.js",
       "bytes": 189761,
       "sha256": "e1c95fc407283714d3fc4e9666d2fac09df84f3b4d479fcabdf8c4e3e53fa985",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-C_VnvUr1.css",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-C_VnvUr1.css",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-C_VnvUr1.css",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-C_VnvUr1.css",
       "bytes": 32216,
       "sha256": "f6c9fd624bd6a04987c95ae1703612af46d3ef7a07b1fe09f43d8f50c4034b7a",
       "content_type": "text/css"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-Ch-aShgk.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/index-Ch-aShgk.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/index-Ch-aShgk.js",
       "bytes": 80868,
-      "sha256": "4ec2f43faebf2d521ce5382d05a773cce49836b0c0f031ec8801dc22fa8d53e1",
+      "sha256": "31cd95b8e4a3e565114787128f427f8f736721db04db878790f96330367b95a7",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/layout-segment-context-DyzVtZF5.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/layout-segment-context-DyzVtZF5.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/layout-segment-context-DyzVtZF5.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/layout-segment-context-DyzVtZF5.js",
       "bytes": 288,
       "sha256": "85e190e90eae55438e6cc9bd482409a902909457780c5367b3ba700ce83d279b",
       "content_type": "text/javascript"
     },
     {
-      "path": "/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/rolldown-runtime-S-ySWqyJ.js",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-8efe9cf5af91/rolldown-runtime-S-ySWqyJ.js",
+      "path": "/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/assets-30f1a101d15d/rolldown-runtime-S-ySWqyJ.js",
       "bytes": 694,
       "sha256": "5db5ba82eef00d1dee7e86e663098c9427d01183a88d357437daff295aec3e75",
       "content_type": "text/javascript"
@@ -2404,74 +2404,417 @@
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/background-dynamics-reset-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/background-dynamics-reset-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "c3f9ba877d6c2af81927e6c611f26d87107bd6f091eb80856b369eb5b12338a4",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/background-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/background-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "3f86b517742a5d460380dd1cbffd0013baf9fdc4087c4bbdf0ff408e9aa14f79",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/ball-16x15.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/ball-16x15.png?v=2026-07-16-r16",
       "bytes": 187,
       "sha256": "d0192bca1048475e3837e4c2bf33a7cd1717a81c7a1dc8ad4895aafc026530bf",
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/collision-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/collision-high.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "3e0fae6847bcfae19bd496fd2b3318402981b41c6b918c2c84755750f73b2731",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/collision-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/collision-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "06aabef86fecfcd6bd394640ca9b1546236ece636c484f9630e54891f45b49f2",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/dynamic-masks.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/dynamic-masks.u8?v=2026-07-16-r16",
+      "bytes": 35632,
+      "sha256": "29162cf5ef4b56620438cd2d3cfa49dcb9e42e045f8ad508340e6e439d10fd2c",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/flippers-4x9-grid.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/flippers-4x9-grid.png?v=2026-07-16-r16",
       "bytes": 4153,
       "sha256": "e5e44cdb51aadaeb2a279f464aaabc59d9bde7a5321666a00e6db1277c6d3e31",
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/foreground-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/foreground-high.u8?v=2026-07-16-r16",
+      "bytes": 165120,
+      "sha256": "85b3e77a5c5e02dbb1f83e666fe032c8336408dfa65cc51a2277591eb21ce215",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/foreground-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/foreground-low.u8?v=2026-07-16-r16",
+      "bytes": 165120,
+      "sha256": "760bc578fdefa41d63de385490a5476fb8d7fabbdc44ab63e5c98c816a7072e7",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/gate-material-patches.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/gate-material-patches.u8?v=2026-07-16-r16",
+      "bytes": 1664,
+      "sha256": "182ed5c56eb2eb68690365c2e4a878ef3e39253d52a85d292225f6e9b2f1487d",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/material-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/material-high.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "b3c6dc4ce509813707f796ee66b1835116f8346ed8aa6379804800ba3e243515",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/material-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/material-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "a9cefdfd8f4e5430b0889c765a0c4286027ac197c43ca26b8f9d619f1991327e",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/palette-rgb.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/palette-rgb.u8?v=2026-07-16-r16",
+      "bytes": 192,
+      "sha256": "35b31f7a322946727601f0c898b7d6491ce80e7eb410859cc67d4438f1c14a44",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/shooter-spring-frames.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/beat-box/shooter-spring-frames.u8?v=2026-07-16-r16",
+      "bytes": 3366,
+      "sha256": "b24ce70f5f253145585e482e5fef1bb008480a5ccd99601641fc2e1b48938569",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/dynamic-playfield-manifest.json",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/dynamic-playfield-manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/dynamic-playfield-manifest.json?v=2026-07-16-r16",
       "bytes": 320478,
       "sha256": "ff4967a8da24973e492a3256ff437445f2bbc15564512f3b76c740ee93745e24",
       "content_type": "application/json"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/background-dynamics-reset-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/background-dynamics-reset-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "be0ca1d76b2184528e8770eb42c425c7320794c86b6fadde2cba3fd76bccd39e",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/background-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/background-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "bc2b5165a5afde0940b1c4e9ce8f05d1446aa4355414e0ccd204eb436db8b6b9",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/ball-16x15.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/ball-16x15.png?v=2026-07-16-r16",
       "bytes": 192,
       "sha256": "d1a109f7b9fc200ac636bb3eed5f1986420483758ccf5942968955a113a1e93d",
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/collision-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/collision-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "42a57e76313d2e4338ed4ec827c06fe0be4a00f31640b38d37a362c2123023fc",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/dynamic-masks.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/dynamic-masks.u8?v=2026-07-16-r16",
+      "bytes": 34896,
+      "sha256": "ea38db0726e146c452d1c9b1fe06be3a75ccce07486a48811a0ea2fd8247add7",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/flippers-4x9-grid.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/flippers-4x9-grid.png?v=2026-07-16-r16",
       "bytes": 4188,
       "sha256": "7979e47996bad5413b6d295e7d35be882733e3498db632453b2eae66b30efee7",
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/foreground-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/foreground-low.u8?v=2026-07-16-r16",
+      "bytes": 165120,
+      "sha256": "d16d6fab7941c9e98345d3698701eea3d16b899f5d4f847463b6824ebea493fb",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/gate-material-patches.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/gate-material-patches.u8?v=2026-07-16-r16",
+      "bytes": 1792,
+      "sha256": "3caa1a97f5f0c9e8fc8b9c00f8795670af65094d0fddc9d92160ac300d3c1aeb",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/material-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/material-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "c45db68820909c519b3163d189b0973dcd27955e402d6586a394f31aad43c7de",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/material-targets-up.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/material-targets-up.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "c45db68820909c519b3163d189b0973dcd27955e402d6586a394f31aad43c7de",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/palette-rgb.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/palette-rgb.u8?v=2026-07-16-r16",
+      "bytes": 192,
+      "sha256": "41c877b2facf1535057e6fe9a0737f1c661532b3a103d5505d6ab51f8c322631",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/shooter-spring-frames.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/shooter-spring-frames.u8?v=2026-07-16-r16",
+      "bytes": 3366,
+      "sha256": "b21bc33e621a275e4c81db42e7bb68623b396faf6e9e584eb59f92feb02b98a6",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/target-material-patches.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/ignition/target-material-patches.u8?v=2026-07-16-r16",
+      "bytes": 3584,
+      "sha256": "ace27fc69cbe2a43a538fee789c4bc71b93f46444768be8291815231550d96ed",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/manifest.json",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/manifest.json",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/manifest.json?v=2026-07-16-r16",
       "bytes": 121998,
       "sha256": "26e8cfacfc33fa3776fbe4d2bee213e5daf454ad79a08de5768e159f0f28a4b0",
       "content_type": "application/json"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/background-dynamics-reset-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/background-dynamics-reset-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "c02119c04b9fe0a9f974a6db468c977b3d3fef6e8bb873dbf81e4432c779efcb",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/background-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/background-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "c7f7810068f176fd626e7eead3b9c7b625962ba1efea33cca5a9ed09948c5861",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/ball-16x15.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/ball-16x15.png?v=2026-07-16-r16",
       "bytes": 191,
       "sha256": "f339a216bae814e5117161c4a6394a4896301bb2ae1bf09841fe7b540fddd297",
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/collision-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/collision-high.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "d2f44b178d89406dfc90a8a8fed0c8509e23f7da90efd444e8f861dbcea3edf3",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/collision-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/collision-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "1d3a6a09e495e290e551eb2521f10bf1e02fcc4c82387d0c4e5e6972ea9a30d0",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/dynamic-masks.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/dynamic-masks.u8?v=2026-07-16-r16",
+      "bytes": 52736,
+      "sha256": "e88fb8206c8a61c6930da784655f0c289e1c7e77e7b9d6d774c00045f8d224eb",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/flippers-4x9-grid.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/flippers-4x9-grid.png?v=2026-07-16-r16",
       "bytes": 4126,
       "sha256": "118c8009caf8fc8e8432b93d9350e5722a681f4029b28a13edd2ddba4ef7f2be",
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/foreground-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/foreground-high.u8?v=2026-07-16-r16",
+      "bytes": 165120,
+      "sha256": "3b7585fce8963546e7640d006cc1d9a230636dfc7ea02b20a2988f93301023ac",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/foreground-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/foreground-low.u8?v=2026-07-16-r16",
+      "bytes": 165120,
+      "sha256": "a848bb8368e35a544e0b3f5994ecc187f7cbeff3ff412063c59bfe0b92ccebcb",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/gate-material-patches.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/gate-material-patches.u8?v=2026-07-16-r16",
+      "bytes": 448,
+      "sha256": "7c0160ca5c83f800dcf6957f9115a9769855709ba111bcbc29f2e55bc873449d",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/material-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/material-high.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "a833988804c88931e84f74f22393e1d6d54b47666f23626d037b99dc6f72871b",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/material-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/material-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "769035495960c12c78f9a7920fb3dff50efe464981e227906929af19b0c9e6e1",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/palette-rgb.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/palette-rgb.u8?v=2026-07-16-r16",
+      "bytes": 192,
+      "sha256": "8bfdd7aa999c9adb2d5d9c95b44ed6ef0d61ee18f946af093867245f519e28eb",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/shooter-spring-frames.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/nightmare/shooter-spring-frames.u8?v=2026-07-16-r16",
+      "bytes": 3366,
+      "sha256": "cf45e0f557631f5972445fb5dc48a55438dcd7f7e8d572d13c7d68e734a08602",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/background-dynamics-reset-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/background-dynamics-reset-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "db4527a42346e9e702aecaeeb86e8c4542cbfbb3e4a6807ad8845f6cabf665ca",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/background-indexed.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/background-indexed.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "ee1735a424a90b4d163c54665ba17e32cb4767360bb1fb29253c0fa813709c94",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/ball-16x15.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/ball-16x15.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/ball-16x15.png?v=2026-07-16-r16",
       "bytes": 195,
       "sha256": "b1b076c2c1e41ee41c17fe2a0590f3ff6f770414ca7c54393fab7433e34834a9",
       "content_type": "image/png"
     },
     {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/collision-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/collision-high.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "32b794017fed01417801be2548a2496988a41119ee592f0d1e13a29519e6b92f",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/collision-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/collision-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "946bf9d0768f3af15b40c02d61e3873fa34ded7ab55432b69ddfeb6a4d279439",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/dynamic-masks.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/dynamic-masks.u8?v=2026-07-16-r16",
+      "bytes": 54912,
+      "sha256": "c6fbbbc99353d0e76bad4a9b250a66737e46f77551e2b204214f4b9ab47a77d3",
+      "content_type": "application/octet-stream"
+    },
+    {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/flippers-4x9-grid.png",
-      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/flippers-4x9-grid.png",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/flippers-4x9-grid.png?v=2026-07-16-r16",
       "bytes": 4153,
       "sha256": "8e3ed8a26ba2e9d9557e0fb8376b7926815f0b6bcc06b61d44853ccdecfaabf5",
       "content_type": "image/png"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/foreground-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/foreground-high.u8?v=2026-07-16-r16",
+      "bytes": 165120,
+      "sha256": "5c6b1f0e2f69d616e8e2f27036bd00af7603c9454419e1cb2666245c60ddcdda",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/foreground-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/foreground-low.u8?v=2026-07-16-r16",
+      "bytes": 165120,
+      "sha256": "15495f80574c02eb2cd42fe08b70f840f955c9f38043e4df8a8e92102b85328c",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/gate-material-patches.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/gate-material-patches.u8?v=2026-07-16-r16",
+      "bytes": 1568,
+      "sha256": "5c0aef6fc5b6f30df12373d93471183be22dcb01e09a2ca852e218a9488a44c2",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/material-high.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/material-high.u8?v=2026-07-16-r16",
+      "bytes": 163840,
+      "sha256": "bae66e0e6fedf0126f5c4fa7af21cc2514b0b462dfb6342524b55397d45e5aed",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/material-low.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/material-low.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "ae4ff55f7393dff2542fc2f8d02ee6eb4d8ba1a3f4c21f829f6dc47bfc246791",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/material-targets-up.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/material-targets-up.u8?v=2026-07-16-r16",
+      "bytes": 170240,
+      "sha256": "8243375cc7c5309b8f6a32a0956bb368af589ac512ef9ee3a5d26d94511edc73",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/palette-rgb.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/palette-rgb.u8?v=2026-07-16-r16",
+      "bytes": 192,
+      "sha256": "644cd621788cb2c606bf63b8f1a21ae2a37db52aa32d6639ab78fc599b66c9b2",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/shooter-spring-frames.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/shooter-spring-frames.u8?v=2026-07-16-r16",
+      "bytes": 3366,
+      "sha256": "6b8ffe6f2dd5e436fbeee68728381abc2cd5c53fcb8877b59706e2da4c33e954",
+      "content_type": "application/octet-stream"
+    },
+    {
+      "path": "/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/target-material-patches.u8",
+      "url": "https://jez237.com/games/2026-07-14/pinball-dreams-ii/generated/physics/steel-wheel/target-material-patches.u8?v=2026-07-16-r16",
+      "bytes": 5120,
+      "sha256": "39b8ce9959a3aac06488e9e1f59be9e64eb39024bac5cdbb59c0cca15da4257e",
+      "content_type": "application/octet-stream"
     },
     {
       "path": "/games/2026-07-14/pinball-dreams-ii/generated/tables/beat-box.png",
