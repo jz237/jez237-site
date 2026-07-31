@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-07-31",
+      "historicDate": "1983-09-12",
+      "displayDate": "Week of September 12-18, 1983",
+      "edition": "Issue 059 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Osborne falls, Electronic Arts plays on, and portable computing sheds twenty pounds.",
+      "leadHeadline": "OSBORNE CRASHES INTO BANKRUPTCY",
+      "storyHeadlines": [
+        "Shakeout Reaches Computers and Cartridges",
+        "M.U.L.E. and Archon Turn Rivalry into Art",
+        "A Portable That Really Fits the Lap"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-12.jpg",
+      "thumb": "media/thumbs/1983-09-12.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-07-30",
       "historicDate": "1983-09-05",
       "displayDate": "Week of September 5-11, 1983",

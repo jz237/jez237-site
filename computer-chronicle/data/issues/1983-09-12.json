@@ -1,0 +1,321 @@
+{
+  "currentDate": "2026-07-31",
+  "historicDate": "1983-09-12",
+  "displayDate": "Week of September 12-18, 1983",
+  "edition": "Issue 059 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Extra Edition urgency on warm aged newsprint",
+    "motifs": [
+      "portable computers",
+      "floppy disks",
+      "bankruptcy headline",
+      "early game box art"
+    ],
+    "layout": "Dense six-column front page with bold red and blue rails"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Computer & Culture Newspaper",
+    "dateline": "Week of September 12-18, 1983",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Osborne collapse dominates the upper half",
+    "secondaryRail": "Electronic Arts games and lap-size portable",
+    "archiveNavigation": "Previous and next weekly issues"
+  },
+  "sectionChrome": {
+    "primary": "deep newspaper red",
+    "secondary": "ink blue",
+    "texture": "warm paper grain and halftone ink"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-09-12.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the week of September 12, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "EXTRA EDITION: The portable-computer pioneer that once seemed unstoppable seeks bankruptcy protection, while a new generation of truly lap-size machines and inventive games points ahead.",
+  "morningLine": "Osborne falls, Electronic Arts plays on, and portable computing sheds twenty pounds.",
+  "milestone": {
+    "title": "Osborne Computer declares bankruptcy",
+    "note": "The September 13 filing ended the first great success story in portable personal computing and became the industry’s enduring warning about announcing replacements before they are ready."
+  },
+  "lead": {
+    "headline": "OSBORNE CRASHES INTO BANKRUPTCY",
+    "dek": "The portable pioneer seeks Chapter 11 protection after demand collapses and suppliers are left owed $45 million.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ],
+    "body": [
+      "SAN FRANCISCO — Osborne Computer sought bankruptcy protection September 13, a stunning reversal for the company that turned a suitcase-sized computer and a rich software bundle into one of personal computing’s first spectacular success stories.",
+      "The 24-pound Osborne 1 sold for $1,795 with a five-inch display, 64 kilobytes of memory, a modem, two 5.25-inch floppy drives, and software valued at roughly $1,500. The formula drove sales to about $70 million in 1982 and made “portable” a serious category rather than a laboratory curiosity.",
+      "But customers stopped buying the Osborne 1 while waiting for the announced Executive successor. TIME reports monthly unit sales plunging from about 10,000 in February to roughly 100 in April. The delayed new machine failed to arrive in time to replace the evaporating revenue.",
+      "Manufacturing stopped early this month. Four hundred workers were laid off, Adam Osborne resigned, and only about 80 employees remained as the company entered filing week with virtually no income and $45 million owed to suppliers.",
+      "The failure offers a brutal lesson to every fast-moving microcomputer maker: a promised successor can destroy today’s product before tomorrow’s is ready. Osborne made portable computing visible; its collapse now makes timing, cash, and customer confidence just as visible."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Shakeout Reaches Computers and Cartridges",
+      "kicker": "Industry Watch",
+      "dek": "Victor cuts jobs, Adam slips again, and Imagic layoffs show the boom’s harsher side.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1,
+        3,
+        10
+      ],
+      "body": [
+        "Osborne is not alone in feeling the market turn. TIME reports Victor Technologies has laid off 350 workers and expects a third-quarter loss, while Coleco’s $600-to-$700 Adam home computer has slipped again, putting its Christmas arrival in doubt.",
+        "The contraction reaches videogames too. A September 17 New York Times brief reports layoffs at Imagic, the prominent independent cartridge publisher. Hardware makers and software houses alike are learning that crowded shelves and ambitious forecasts cannot guarantee demand.",
+        "The surviving firms will need tighter inventories, dependable delivery dates, and products that stand apart in a market suddenly less forgiving of delay."
+      ]
+    },
+    {
+      "headline": "M.U.L.E. and Archon Turn Rivalry into Art",
+      "kicker": "Game Desk",
+      "dek": "Electronic Arts’ first wave mixes strategy, arcade action, and face-to-face competition.",
+      "confidence": "period",
+      "sourceRefs": [
+        5,
+        6
+      ],
+      "body": [
+        "Electronic Arts is making a persuasive case that computer games can be a creative medium. Dan Bunten’s M.U.L.E. turns an Atari space colony into a four-player contest of land claims, production, auctions, and supply-and-demand economics.",
+        "Archon: The Light and the Dark begins like a fantasy chessboard, then lets opposing pieces settle captures through real-time combat. The combination makes tactical position and joystick skill equally important.",
+        "Both games place human rivals at the center. The Atari 400 and 800’s four joystick ports give M.U.L.E. a living-room immediacy that solitary adventures cannot match, while Archon converts every encounter into a miniature arcade duel."
+      ]
+    },
+    {
+      "headline": "A Portable That Really Fits the Lap",
+      "kicker": "Hardware Desk",
+      "dek": "NEC’s battery-powered PC-8201 points beyond the 24-pound luggable.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ],
+      "body": [
+        "September’s Personal Computing calls the NEC PC-8201 a “lap-size portable computer,” language that draws a sharp contrast with the Osborne 1’s 24-pound bulk.",
+        "Positioned against Tandy’s Model 100, the battery-powered NEC suggests the next portable market may belong in a briefcase and operate away from a wall socket. Portability is shifting from a handle on a heavy case to a machine that can travel as naturally as papers."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Osborne 1",
+      "summary": "The 24-pound, $1,795 portable at the center of this week’s bankruptcy filing.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "NEC PC-8201",
+      "summary": "A battery-powered lap-size portable competing in the executive briefcase market.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "Coleco Adam",
+      "summary": "The 64K home system with data-pack drive and daisy-wheel printer slips again.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1,
+        10
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Harvard Project Manager",
+      "detail": "Critical-path planning featured as Personal Computing’s Software of the Month."
+    },
+    {
+      "name": "WordStar and MailMerge",
+      "detail": "Bundled business writing tools remain powerful hardware sales weapons."
+    },
+    {
+      "name": "Multiplan",
+      "detail": "Microsoft’s spreadsheet appears in contemporary complete-system bundles."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "M.U.L.E.",
+        "Archon: The Light and the Dark",
+        "Ultima III: Exodus",
+        "Enchanter",
+        "Zaxxon"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Mr. Mom",
+        "Risky Business",
+        "Revenge of the Ninja",
+        "National Lampoon’s Vacation",
+        "WarGames"
+      ]
+    },
+    {
+      "label": "Software Watch",
+      "items": [
+        "Harvard Project Manager",
+        "WordStar",
+        "MailMerge",
+        "Multiplan",
+        "CP/M"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Osborne 1",
+      "price": "$1,795",
+      "note": "Bundled with software valued at about $1,500."
+    },
+    {
+      "item": "Coleco Adam",
+      "price": "$600-$700",
+      "note": "Reported range as delivery slips again."
+    },
+    {
+      "item": "Personal Computing",
+      "price": "$3.00",
+      "note": "September 1983 cover price."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Imagic cuts staff",
+      "text": "A September 17 report confirms layoffs at the independent videogame publisher."
+    },
+    {
+      "headline": "IBM unveils Glendale system",
+      "text": "A September 16 industry report marks another new IBM computer introduction."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Maniac",
+      "artist": "Michael Sembello"
+    },
+    {
+      "rank": 2,
+      "title": "Tell Her About It",
+      "artist": "Billy Joel"
+    },
+    {
+      "rank": 3,
+      "title": "Sweet Dreams (Are Made of This)",
+      "artist": "Eurythmics"
+    },
+    {
+      "rank": 4,
+      "title": "Human Nature",
+      "artist": "Michael Jackson"
+    },
+    {
+      "rank": 5,
+      "title": "The Safety Dance",
+      "artist": "Men Without Hats"
+    }
+  ],
+  "periodAd": {
+    "headline": "Take Computing on the Road",
+    "summary": "Compare the 24-pound luggable with a new generation of battery-powered lap-size machines.",
+    "tagline": "Portable is getting personal."
+  },
+  "market": {
+    "headline": "The Boom Meets Its Balance Sheet",
+    "summary": "Layoffs at Osborne, Victor, and Imagic reveal the cash and inventory pressure beneath computing’s rapid expansion.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      1,
+      3
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Vanessa Williams Breaks Miss America Barrier",
+    "summary": "On September 17, 20-year-old Vanessa Williams of New York became the first Black woman crowned Miss America.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Osborne filing and specifications: exact-date institutional and period reporting",
+      "Industry shakeout: same-week or closely following period reports",
+      "NEC portable and software: September 1983 magazine coverage",
+      "Music and movies: charts for the week ending September 17-18, 1983"
+    ]
+  },
+  "sources": [
+    {
+      "label": "Computer History Museum — Osborne Computer Declares Bankruptcy, Sept. 13, 1983",
+      "url": "https://www.computerhistory.org/tdih/september/13/"
+    },
+    {
+      "label": "TIME — A Pioneer Goes Bankrupt, Sept. 26, 1983",
+      "url": "https://time.com/archive/6882955/a-pioneer-goes-bankrupt/"
+    },
+    {
+      "label": "New York Times — Osborne Financially Shaky, Sept. 13, 1983",
+      "url": "https://www.nytimes.com/1983/09/13/business/osborne-financially-shaky-seeks-investor.html"
+    },
+    {
+      "label": "New York Times — Imagic Layoffs, Sept. 17, 1983",
+      "url": "https://www.nytimes.com/1983/09/17/business/imagic-layoffs.html"
+    },
+    {
+      "label": "Personal Computing — September 1983",
+      "url": "https://archive.org/stream/198309PersonalComputing/198309%20Personal%20Computing_djvu.txt"
+    },
+    {
+      "label": "Computer Gaming World 3.4",
+      "url": "https://www.cgwmuseum.org/galleries/issues/cgw_3.4.pdf"
+    },
+    {
+      "label": "Computer Gaming World 3.5 — Archon",
+      "url": "https://www.oldgames.sk/en/mags/article/13377"
+    },
+    {
+      "label": "Billboard Hot 100 archive — Sept. 17, 1983",
+      "url": "https://www.elpee.jp/hot100/week/1983-09-17"
+    },
+    {
+      "label": "Box Office Mojo — Sept. 16-18, 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W37/"
+    },
+    {
+      "label": "UPI — Vanessa Williams crowned Miss America",
+      "url": "https://www.upi.com/Archives/1983/09/18/On-Saturday-night-Vanessa-Williams-became-the-first-black-woman-crowned-Miss-America/9839432705600/"
+    },
+    {
+      "label": "UPI — Coleco Adam approval, Sept. 22, 1983",
+      "url": "https://www.upi.com/Archives/1983/09/22/Coleco-Industries-said-Thursday-it-has-received-needed-federal/5711433051200/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Wanted: CP/M disks",
+      "copy": "Small office seeks business software compatible with popular 8-bit systems."
+    },
+    {
+      "headline": "Computer club forming",
+      "copy": "Atari owners invited for four-player M.U.L.E. evenings and program swaps."
+    }
+  ]
+}
