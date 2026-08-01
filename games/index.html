@@ -1369,7 +1369,17 @@
       'smoke lab', 'volcano'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-    games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
+    const FEATURED_TITLES = new Set([
+      'pinball fantasies hd', 'pinball dreams hd', 'chrome riot',
+      'missile command', 'joust', 'vector arena', 'iron ridge',
+      'hollow deep', 'emerald mine ii', 'neon qix'
+    ]);
+    games.forEach(g => {
+      const title = slugTitle(g.title);
+      if (FEATURED_TITLES.has(title)) g.tag = 'featured';
+      else if (g.tag === 'featured') g.tag = 'experimental';
+      g.status = UNFINISHED.has(title) ? 'unfinished' : 'released';
+    });
 
     function tagLabel(t, status) {
       if (status === 'unfinished') return '🚧 Unreleased';
