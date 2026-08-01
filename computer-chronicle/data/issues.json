@@ -4,6 +4,322 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-01",
+      "historicDate": "1983-09-19",
+      "displayDate": "Week of September 19-25, 1983",
+      "edition": "Issue 060 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Urgent retail-season news on warm aged newsprint",
+        "motifs": [
+          "Apple Lisa workstation",
+          "Coleco Adam package",
+          "portable computers",
+          "1983 game box art"
+        ],
+        "layout": "Dense six-column front page with bold red and blue rails"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "Week of September 19-25, 1983",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Apple Lisa price cut dominates the upper half",
+        "secondaryRail": "Coleco Adam clearance, portable computers, and game shelf",
+        "archiveNavigation": "Previous and next weekly issues"
+      },
+      "sectionChrome": {
+        "primary": "deep newspaper red",
+        "secondary": "ink blue",
+        "texture": "warm paper grain and halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-09-19.jpg",
+        "alt": "GPT Image 2 vintage newspaper front page for the week of September 19-25, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Apple cuts thousands from Lisa while Coleco clears the last regulatory hurdle to put Adam into the holiday computer fight.",
+      "morningLine": "The graphical future gets a cheaper price tag, and the home-computer aisle gains a formidable new package.",
+      "lead": {
+        "headline": "Apple Slashes Lisa by $3,000 as Sculley Resets the Company",
+        "dek": "A stripped-down $6,995 configuration aims to revive the pioneering graphical workstation while IBM seizes the middle of the personal-computer market.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1
+        ],
+        "body": [
+          "Apple Computer opened the week with a dramatic answer to sluggish Lisa sales: dealers were told that the $9,995 mouse-driven workstation would be offered in a stripped-down $6,995 configuration. The $3,000 cut followed new president John Sculley’s four-day tour addressing some 1,500 dealers in 25 cities, a public show of urgency from a company suddenly chasing IBM in the market it helped create.",
+          "Lisa’s graphical desktop and integrated office applications still looked like a preview of personal computing’s future, but the machine’s price kept it beyond many offices. Time reported that only about 6,000 units had sold and quoted a Crocker National Bank executive saying even $5,000 might only make the bank interested, not convinced. Apple was also preparing IBM PC program compatibility for Lisa, an acknowledgment that corporate buyers increasingly expected access to IBM’s software world.",
+          "The competitive arithmetic had changed quickly. Dataquest figures cited in the period press put IBM at 28 percent of the $1,000-to-$5,000 computer segment, up from 12 percent the previous December, while Apple held 21 percent. The Apple IIe remained a brisk seller and cost roughly $1,500 less than an IBM PC, but dealers were already bracing for IBM’s rumored lower-cost “Peanut” machine.",
+          "Behind the Lisa maneuver stood a smaller gamble. Contemporary reporting said Apple planned a January 18 introduction for Macintosh at about $2,500, carrying Lisa-derived ideas into a more accessible computer, though with less storage and no initial compatibility with Lisa or IBM PC programs. By Friday, Apple warned that quarterly earnings would fall sharply; its shares, once $63.25 in June, closed the week near $29.38. The company’s graphical vision was intact, but the market was demanding a far cheaper way to buy it."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "FCC Clears Coleco’s Adam for the Holiday Computer Battle",
+          "kicker": "Home Computing",
+          "dek": "The approximately $700 all-in-one package can finally head for stores with 64K, data drive, printer, and ColecoVision compatibility.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2,
+            3
+          ],
+          "body": [
+            "Coleco said Thursday that federal regulators had cleared Adam for sale, removing the last formal obstacle between the ambitious home-computer package and Christmas shoppers. The company expected the machine to reach stores for the holiday season, where its promised combination of computer, storage, printer, and videogame compatibility would be measured against Commodore and Atari.",
+            "The complete package was announced at about $700, with 64K of user memory, a proprietary Digital Data Pack drive, and a daisy-wheel printer. Adam could run ColecoVision cartridges, while an expansion version was intended for people who already owned the console. Earlier in September, Coleco and AT&T had also announced plans for home-computer and videogame services delivered over telephone lines, giving Adam a communications story as well as a game library."
+          ]
+        },
+        {
+          "headline": "Portable Computers Crowd the Road-Warrior Market",
+          "kicker": "On the Road",
+          "dek": "September’s machines range from suitcase-like CP/M systems to battery-minded lap-size designs.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ],
+          "body": [
+            "BYTE devoted its September cover package to “Portable Computers in Depth,” evidence that portability had become a category rather than a novelty. Buyers could choose integrated screens, disk drives, and bundled business programs, but every design negotiated the same hard tradeoffs: weight, battery life, display size, storage, and price.",
+            "The familiar Osborne and Kaypro approach put a complete CP/M office into a case a determined traveler could carry. Newer battery-oriented machines pointed toward something closer to a briefcase companion. Period reviews and advertisements show a market experimenting in public, with no settled answer yet to what a portable computer ought to be."
+          ]
+        },
+        {
+          "headline": "IBM’s Shadow Lengthens Across Personal Computing",
+          "kicker": "Market Watch",
+          "dek": "Apple’s price move comes as IBM leads the key mid-price segment and dealers await a cheaper home machine.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "IBM’s rise now shapes nearly every decision in the personal-computer business. Dataquest estimates placed Big Blue at 28 percent of the $1,000-to-$5,000 segment, ahead of Apple’s 21 percent, a reversal achieved in less than two years.",
+            "Apple still had the popular IIe and was developing a simpler, lower-cost version, but compatibility had become a decisive sales argument. Reports of IBM’s cheaper “Peanut,” expected in October, threatened to carry the company’s name from the office into the family room. It would emerge as the PCjr, but this week dealers knew it only as the next pressure point."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Apple Lisa",
+          "summary": "Mouse-driven graphical workstation newly offered in a $6,995 stripped-down configuration.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Coleco Adam",
+          "summary": "A roughly $700 complete home system with 64K, data drive, printer, and ColecoVision compatibility.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Apple Macintosh",
+          "summary": "Lisa-derived graphical computer reported for a January 18 introduction near $2,500.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Volkswriter",
+          "detail": "Lifetree’s IBM PC word processor receives an extended InfoWorld evaluation."
+        },
+        {
+          "name": "Lisa Office System",
+          "detail": "Apple’s mouse-driven integrated applications remain Lisa’s central proposition."
+        },
+        {
+          "name": "Suspended",
+          "detail": "Infocom’s multi-robot text adventure wins praise for its unusual sensory puzzle design."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Suspended",
+            "A.E.",
+            "The Caverns of Freitag",
+            "M.U.L.E.",
+            "Archon: The Light and the Dark"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Mr. Mom",
+            "Risky Business",
+            "National Lampoon’s Vacation",
+            "Revenge of the Ninja",
+            "WarGames"
+          ]
+        },
+        {
+          "label": "Software Watch",
+          "items": [
+            "Volkswriter",
+            "Apple Lisa Office System",
+            "WordStar",
+            "VisiCalc",
+            "Multiplan"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple Lisa stripped-down configuration",
+          "price": "$6,995",
+          "note": "Reduced from the original $9,995 configuration."
+        },
+        {
+          "item": "Coleco Adam complete system",
+          "price": "about $700",
+          "note": "Announced price for computer, data drive, and printer package."
+        },
+        {
+          "item": "Apple Macintosh target price",
+          "price": "about $2,500",
+          "note": "Pre-release period report for the planned January introduction."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Apple shares punished after warning",
+          "text": "A September 23 earnings warning deepens a slide from June’s high."
+        },
+        {
+          "headline": "Computers enter the classroom",
+          "text": "September’s COMPUTE! examines educational games and new approaches in schools."
+        },
+        {
+          "headline": "WarGames holds on",
+          "text": "The computer thriller remains in theaters during its seventeenth weekend."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Tell Her About It",
+          "artist": "Billy Joel"
+        },
+        {
+          "rank": 2,
+          "title": "Total Eclipse of the Heart",
+          "artist": "Bonnie Tyler"
+        },
+        {
+          "rank": 3,
+          "title": "Maniac",
+          "artist": "Michael Sembello"
+        },
+        {
+          "rank": 4,
+          "title": "Sweet Dreams (Are Made of This)",
+          "artist": "Eurythmics"
+        },
+        {
+          "rank": 5,
+          "title": "The Safety Dance",
+          "artist": "Men Without Hats"
+        }
+      ],
+      "periodAd": {
+        "headline": "A Whole Computer System for the Family",
+        "summary": "Keyboard, memory, data storage, letter-quality printer, and videogame compatibility in one holiday package.",
+        "tagline": "Adam is cleared for the computer aisle."
+      },
+      "market": {
+        "headline": "IBM Leads the Mid-Price Race",
+        "summary": "Dataquest estimates cited in period reporting put IBM at 28 percent of the $1,000-to-$5,000 segment, against Apple’s 21 percent.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "U.S. Warships Directly Support Lebanese Army",
+        "summary": "On September 19 U.S. warships fired hundreds of rounds in support of Lebanese government forces, sharply escalating American involvement in Lebanon.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Lisa price cut and Apple warning: exact-date period reporting",
+          "Coleco Adam clearance: exact-date wire reporting",
+          "Portable computers and games: September 1983 period magazines",
+          "Music and movies: charts for the week ending September 24-25, 1983"
+        ]
+      },
+      "sources": [
+        {
+          "label": "Time — Now No. 2, Apple Tries Harder",
+          "url": "https://time.com/archive/6882954/now-no-2-apple-tries-harder/"
+        },
+        {
+          "label": "UPI — Apple stock takes a drubbing",
+          "url": "https://www.upi.com/Archives/1983/09/23/The-stock-of-Apple-Computer-Inc-took-a-drubbing/8600433137600/"
+        },
+        {
+          "label": "UPI — Coleco receives Adam approval",
+          "url": "https://www.upi.com/Archives/1983/09/22/Coleco-Industries-said-Thursday-it-has-received-needed-federal/5711433051200/"
+        },
+        {
+          "label": "UPI — Coleco and AT&T venture",
+          "url": "https://www.upi.com/Archives/1983/09/08/Coleco-Industries-and-American-Telephone-and-Telegraph-Corp-have/8940431841600/"
+        },
+        {
+          "label": "BYTE — Portable Computers in Depth",
+          "url": "https://archive.org/details/byte-magazine-1983-09"
+        },
+        {
+          "label": "Creative Computing — Apple adventure and arcade action",
+          "url": "https://www.atarimagazines.com/creative/v9n9/86_Apple_adventure_and_arcad.php"
+        },
+        {
+          "label": "COMPUTE! Issue 40",
+          "url": "https://www.atarimagazines.com/compute/index/?issue=issue40"
+        },
+        {
+          "label": "InfoWorld — Volkswriter",
+          "url": "https://jvlone.com/computerpub/InfoWorld/IW_1983-09-26_5-39_VolksWriter.pdf"
+        },
+        {
+          "label": "Billboard Hot 100 — September 24",
+          "url": "https://elpee.jp/hot100/week/1983-09-24/"
+        },
+        {
+          "label": "Box Office Mojo — September 23-25",
+          "url": "https://www.boxofficemojo.com/weekend/1983W38/"
+        },
+        {
+          "label": "UPI — U.S. ships support Lebanese forces",
+          "url": "https://www.upi.com/Archives/1983/09/19/US-ships-attack-Lebanese-rebels-in-sharp-escalation/6859432792000/"
+        },
+        {
+          "label": "UPI — Manila anti-Marcos protest",
+          "url": "https://www.upi.com/Archives/1983/09/21/Thousands-of-anti-Marcos-protesters-shouting-revolution-revolution-marched-on/4517432964800/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Wanted: portable CP/M system",
+          "copy": "Traveling consultant seeks bundled word processing and readable display."
+        },
+        {
+          "headline": "ColecoVision owners meet",
+          "copy": "Local club compares cartridges and discusses the forthcoming Adam expansion."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-07-31",
       "historicDate": "1983-09-12",
       "displayDate": "Week of September 12-18, 1983",

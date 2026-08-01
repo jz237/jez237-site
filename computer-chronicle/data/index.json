@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-01",
+      "historicDate": "1983-09-19",
+      "displayDate": "Week of September 19-25, 1983",
+      "edition": "Issue 060 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "The graphical future gets a cheaper price tag, and the home-computer aisle gains a formidable new package.",
+      "leadHeadline": "Apple Slashes Lisa by $3,000 as Sculley Resets the Company",
+      "storyHeadlines": [
+        "FCC Clears Coleco’s Adam for the Holiday Computer Battle",
+        "Portable Computers Crowd the Road-Warrior Market",
+        "IBM’s Shadow Lengthens Across Personal Computing"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-19.jpg",
+      "thumb": "media/thumbs/1983-09-19.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-07-31",
       "historicDate": "1983-09-12",
       "displayDate": "Week of September 12-18, 1983",
