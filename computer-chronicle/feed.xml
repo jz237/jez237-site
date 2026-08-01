@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 31 Jul 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 01 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 19-25, 1983 — Apple Slashes Lisa by $3,000 as Sculley Resets the Company</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-09-19</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-19</guid>
+      <pubDate>Sat, 01 Aug 2026 12:00:00 GMT</pubDate>
+      <description>A stripped-down $6,995 configuration aims to revive the pioneering graphical workstation while IBM seizes the middle of the personal-computer market. Apple Computer opened the week with a dramatic answer to sluggish Lisa sales: dealers were told that the $9,995 mouse-driven workstation would be offered in a stripped-down $6,995 configuration. The $3,000 cut followed new president John Sculley’s four-day tour addressing some 1,500 dealers in 25 cities, a public show of urgency from a company suddenly chasing IBM in the market it helped create. Also this week: FCC Clears Coleco’s Adam for the Holiday Computer Battle · Portable Computers Crowd the Road-Warrior Market · IBM’s Shadow Lengthens Across Personal Computing.</description>
+    </item>
     <item>
       <title>Week of September 12-18, 1983 — OSBORNE CRASHES INTO BANKRUPTCY</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-09-12</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-09</guid>
       <pubDate>Sun, 12 Jul 2026 12:00:00 GMT</pubDate>
       <description>COMPUTE! gives May readers a close look at Atari&apos;s planned add-on computer for the 2600 game machine, a sign that console makers still want a bridge into home computing. The pitch is pure 1983 living room: keep the familiar VCS base, add a keyboard and computing capability, and turn game hardware into a starter machine. For families comparing cartridges, cassette software, and sub-$100 computer ads, the idea captures the week&apos;s uneasy overlap between console gaming and personal computing.</description>
-    </item>
-    <item>
-      <title>Week of May 2-8, 1983 — Star Wars lines up for Atari vector cabinets</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-05-02</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-02</guid>
-      <pubDate>Sat, 11 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Atari&apos;s Star Wars arcade machine gives the week its clearest computer-culture image: a 3-D vector trench run landing just as home computers borrow more of the arcade shelf. Trade and collector records place Atari&apos;s Star Wars arcade release in 1983, with May widely used for the cabinet&apos;s arrival. Its color-vector cockpit fantasy made a natural front-page emblem for a spring when home-computer owners were also buying arcade conversions, strategy disks, and BASIC-friendly machines from the same stores.</description>
     </item>
   </channel>
 </rss>
