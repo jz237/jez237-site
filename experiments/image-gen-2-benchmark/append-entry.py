@@ -35,6 +35,8 @@ IMPOSSIBLE_DOCUMENTARY = ROOT / "impossible-documentary-data.json"
 STRANGE_BOTANICALS = ROOT / "strange-botanicals-data.json"
 CINEMATIC_CATS = ROOT / "cinematic-cats-data.json"
 QUIETLY_UNCANNY_DOMESTIC = ROOT / "quietly-uncanny-domestic-data.json"
+OCEAN_SCENES = ROOT / "ocean-scenes-data.json"
+GALACTIC_PICTURES = ROOT / "galactic-pictures-data.json"
 IMAGES = ROOT / "images"
 THUMBS = ROOT / "thumbs"
 MANIFEST = ROOT / "manifest.json"
@@ -339,6 +341,10 @@ def main() -> None:
             paths = (*paths, CINEMATIC_CATS)
         if args.slot == "quietly-uncanny-domestic":
             paths = (*paths, QUIETLY_UNCANNY_DOMESTIC)
+        if args.slot == "ocean-exploration":
+            paths = (*paths, OCEAN_SCENES)
+        if args.slot == "outer-space-exploration":
+            paths = (*paths, GALACTIC_PICTURES)
     for path in paths:
         data = load(path)
         data.append(entry)
