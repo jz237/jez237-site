@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-02",
+      "historicDate": "1983-09-26",
+      "displayDate": "Week of September 26-October 2, 1983",
+      "edition": "Issue 061 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "A free Unix-compatible system is proposed, Atari buries surplus stock, and Apple cuts the Lisa by $3,000.",
+      "leadHeadline": "Atari Dumps Truckloads of Games in New Mexico Landfill",
+      "storyHeadlines": [
+        "GNU Call Asks Programmers to Build a Free Unix-Compatible System",
+        "Apple Cuts Lisa to $6,995 and Points Dealers Toward Macintosh",
+        "IBM’s Unannounced ‘Peanut’ Has the Home Market Guessing"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-26.jpg",
+      "thumb": "media/thumbs/1983-09-26.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-01",
       "historicDate": "1983-09-19",
       "displayDate": "Week of September 19-25, 1983",
