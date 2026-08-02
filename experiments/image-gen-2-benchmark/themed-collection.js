@@ -3,6 +3,7 @@
   const dataFile = body.dataset.collectionData;
   const label = body.dataset.collectionLabel || 'Collection';
   const emptyText = body.dataset.collectionEmpty || 'No images have been archived in this collection yet.';
+  const order = body.dataset.collectionOrder || 'newest';
   const grid = document.getElementById('collection-grid');
   const count = document.getElementById('collection-count');
   const viewer = document.getElementById('collection-lightbox');
@@ -79,7 +80,14 @@
   }
 
   function render(items) {
-    const sorted = items.sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')) || String(b.slot || '').localeCompare(String(a.slot || '')) || String(b.id || '').localeCompare(String(a.id || '')));
+    const indexed = items.map((item, index) => ({ item, index }));
+    indexed.sort((a, b) => {
+      const dateOrder = String(b.item.date || '').localeCompare(String(a.item.date || ''));
+      if (dateOrder) return dateOrder;
+      if (order === 'journey') return a.index - b.index;
+      return String(b.item.slot || '').localeCompare(String(a.item.slot || '')) || String(b.item.id || '').localeCompare(String(a.item.id || ''));
+    });
+    const sorted = indexed.map(({ item }) => item);
     count.textContent = `Images: ${sorted.length}`;
     if (!sorted.length) {
       grid.innerHTML = `<p class="collection-empty">${escapeHtml(emptyText)}</p>`;
