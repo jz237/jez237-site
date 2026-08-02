@@ -4,6 +4,328 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-02",
+      "historicDate": "1983-09-26",
+      "displayDate": "Week of September 26-October 2, 1983",
+      "edition": "Issue 061 - Weekly 1983 Computer & Culture Chronicle",
+      "milestone": {
+        "title": "GNU Project Announced",
+        "note": "Stallman’s September 27 call launched the project that established the practical and philosophical foundation of modern free software."
+      },
+      "visualProfile": {
+        "tone": "Extra-edition urgency on warm aged newsprint",
+        "motifs": [
+          "terminal printout",
+          "Atari cartridges",
+          "mouse-driven office computer"
+        ],
+        "layout": "Dense seven-column weekly with gaming photo lead and boxed GNU extra"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "Week of September 26-October 2, 1983",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Atari landfill gaming lead across the upper page, with GNU Extra Edition banner",
+        "secondaryRail": "Apple, IBM Peanut, charts, prices and world bulletin",
+        "archiveNavigation": "Previous and next weekly issue controls"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "newsprint blue",
+        "texture": "aged paper, halftone ink and column rules"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-09-26.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for September 26-October 2, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "An Extra Edition week: GNU is announced as Atari’s unwanted cartridges head into a New Mexico landfill, two visions of software’s future arriving within twenty-four hours.",
+      "morningLine": "A free Unix-compatible system is proposed, Atari buries surplus stock, and Apple cuts the Lisa by $3,000.",
+      "lead": {
+        "headline": "Atari Dumps Truckloads of Games in New Mexico Landfill",
+        "dek": "Cartridges and equipment from the El Paso plant are crushed and buried as the console market’s inventory crisis becomes impossible to hide.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          2,
+          3
+        ],
+        "body": [
+          "Truckloads of Atari material rolled into the Alamogordo, New Mexico, municipal landfill this week, where workers crushed and buried cartridges and equipment shipped from the company’s El Paso plant. A September 28 New York Times brief fixed the disposal to this week, turning a grim inventory operation into the sharpest picture yet of the videogame business’s retreat.",
+          "The dumping followed a bruising year for the console trade. Retail shelves had filled with more cartridges than buyers wanted, price-cutting deepened, and Atari’s once-dominant position was squeezed by both home computers and a flood of uneven software. Whatever individual titles lay beneath the soil, the convoy itself testified to the cost of excess stock.",
+          "Atari described the buried goods as discarded material, but the scale invited rumor almost immediately. Later archaeological work would confirm that cartridges and hardware were among the debris. The contemporary record supports the central fact without relying on the legends that grew around it: Atari sent truckloads from El Paso to be destroyed in Alamogordo.",
+          "For computer and game shops, the lesson was immediate. Software could no longer be treated as an endlessly expanding aisle, and brand recognition could not rescue every cartridge. This week’s landfill scene marks the crash not as an abstraction on a balance sheet, but as physical goods reduced to rubble."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "GNU Call Asks Programmers to Build a Free Unix-Compatible System",
+          "kicker": "Extra Edition",
+          "dek": "Richard Stallman names GNU — ‘Gnu’s Not Unix’ — and invites a network of programmers to help create a complete shareable operating system.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "body": [
+            "On September 27, MIT programmer Richard Stallman posted a startling proposal to the net.unix-wizards and net.usoft groups: he intended to write a complete Unix-compatible software system and give it away so that users could share and change it. He named the project GNU, a recursive abbreviation for “Gnu’s Not Unix.”",
+            "The plan reached far beyond a single utility. Stallman listed a kernel, editor, shell, C compiler, linker, assembler, formatter, spreadsheet and documentation among the pieces required. Compatibility with Unix would make the system familiar and portable while avoiding dependence on proprietary Unix source.",
+            "The announcement asked programmers for contributions of machines, money and code, but its larger claim concerned control: people using computers should be able to study, improve and redistribute the programs on which they depended. That invitation begins a project whose tools and principles will reshape software development."
+          ]
+        },
+        {
+          "headline": "Apple Cuts Lisa to $6,995 and Points Dealers Toward Macintosh",
+          "kicker": "Personal Computers",
+          "dek": "The pioneering graphical workstation loses $3,000 from its original price while Apple previews a smaller January machine near $2,500.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ],
+          "body": [
+            "Apple told dealers that a stripped-down Lisa configuration would sell for $6,995, down from the original $9,995. The reduction acknowledged the difficulty of selling an advanced graphical office system at five figures; period reporting put Lisa sales at only about 6,000 units.",
+            "The company was already pointing toward its next answer. Time reported that Macintosh was planned for a January introduction around $2,500, bringing Lisa-derived graphical ideas to a much broader price bracket. The cheaper machine was not expected initially to run Lisa or IBM PC software, making its ease of use central to Apple’s gamble.",
+            "IBM’s advance was the pressure behind the reset. Dataquest figures cited in the same report put IBM ahead of Apple in the $1,000-to-$5,000 segment, reversing their positions from the previous December."
+          ]
+        },
+        {
+          "headline": "IBM’s Unannounced ‘Peanut’ Has the Home Market Guessing",
+          "kicker": "Rumor Desk",
+          "dek": "Before IBM confirms a name, price or specification, expectations for its home computer are already moving the market.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            5
+          ],
+          "body": [
+            "A September 27 New York Times personal-computing column captured the industry’s fixation on IBM’s rumored low-cost “Peanut.” Dealers and competitors expected a machine aimed at homes, but IBM had not announced it, leaving every price and specification in the realm of informed speculation.",
+            "The rumor mattered because IBM’s entry could reset expectations for Apple, Commodore, Atari, Tandy and Coleco. Buyers faced a familiar choice: purchase a proven machine now or wait for the weight of the IBM name. Until an official unveiling, the most important fact about Peanut was the pressure created simply by its possibility."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Apple Lisa",
+          "summary": "Graphical 68000-based office computer newly reduced from $9,995 to $6,995.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Apple Macintosh preview",
+          "summary": "Lisa-derived graphical personal computer reported for a January introduction near $2,500.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Coleco Adam",
+          "summary": "Computer, dual data drives and daisy-wheel printer expected in stores in October.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "GNU proposed system",
+          "detail": "A planned free Unix-compatible kernel, editor, shell, compiler and full toolchain."
+        },
+        {
+          "name": "Volkswriter",
+          "detail": "Lifetree’s IBM PC word processor reviewed in the September 26 InfoWorld."
+        },
+        {
+          "name": "Ultima III: Exodus",
+          "detail": "Origin’s party-based Apple II role-playing epic is a major 1983 computer-game arrival."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Ultima III: Exodus",
+            "Lode Runner",
+            "M.U.L.E.",
+            "Archon: The Light and the Dark",
+            "Suspended"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "The Big Chill",
+            "Mr. Mom",
+            "Beyond the Limit",
+            "Risky Business",
+            "National Lampoon’s Vacation"
+          ]
+        },
+        {
+          "label": "Software Watch",
+          "items": [
+            "GNU proposed system",
+            "Volkswriter",
+            "WordStar",
+            "VisiCalc",
+            "Multiplan"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple Lisa",
+          "price": "$6,995",
+          "note": "Reduced from $9,995."
+        },
+        {
+          "item": "Apple Macintosh advance report",
+          "price": "about $2,500",
+          "note": "Expected price for the planned January introduction."
+        },
+        {
+          "item": "Coleco Adam package",
+          "price": "approximately $600",
+          "note": "September period framing; configuration dependent."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Apple shares punished after warning",
+          "text": "A September 23 earnings warning sends the stock sharply lower just before this issue week."
+        },
+        {
+          "headline": "Coleco Adam clears its hurdle",
+          "text": "Federal approval puts the all-in-one home computer on course for an October store debut."
+        },
+        {
+          "headline": "Volkswriter reviewed",
+          "text": "InfoWorld’s September 26 issue puts Lifetree’s IBM PC word processor through its paces."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Total Eclipse of the Heart",
+          "artist": "Bonnie Tyler"
+        },
+        {
+          "rank": 2,
+          "title": "Making Love Out of Nothing at All",
+          "artist": "Air Supply"
+        },
+        {
+          "rank": 3,
+          "title": "King of Pain",
+          "artist": "The Police"
+        },
+        {
+          "rank": 4,
+          "title": "The Safety Dance",
+          "artist": "Men Without Hats"
+        },
+        {
+          "rank": 5,
+          "title": "Puttin’ on the Ritz",
+          "artist": "Taco"
+        }
+      ],
+      "periodAd": {
+        "headline": "The Graphical Office, Now $3,000 Less",
+        "summary": "Lisa brings a mouse, windows and integrated office software to the executive desk at a sharply reduced entry price.",
+        "tagline": "Apple Lisa — the future gets a new price."
+      },
+      "market": {
+        "headline": "Apple and IBM Fight for the Middle",
+        "summary": "Dataquest figures cited by Time put IBM at 28 percent of the $1,000-to-$5,000 computer market, against Apple’s 21 percent.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Australia II Ends America’s 132-Year Hold on the America’s Cup",
+        "summary": "On September 26, Australia II defeated Liberty off Newport, completing a 4-3 comeback and taking the trophy from the New York Yacht Club for the first time since 1851.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "GNU announcement: original September 27 announcement and Usenet record",
+          "Atari disposal: September 28 period report, corroborated by later archaeology",
+          "Apple and IBM market details: exact-week Time reporting",
+          "Music and movies: charts for the week ending October 1-2, 1983",
+          "Games beyond the landfill story are identified as period shelf titles, not exact-week debuts"
+        ]
+      },
+      "sources": [
+        {
+          "label": "GNU Project initial announcement",
+          "url": "https://www.gnu.org/gnu/initial-announcement.en.html"
+        },
+        {
+          "label": "Original GNU Usenet article",
+          "url": "http://article.olduse.net/771@mit-eddie.UUCP"
+        },
+        {
+          "label": "Atari Parts Are Dumped",
+          "url": "https://www.nytimes.com/1983/09/28/business/atari-parts-are-dumped.html"
+        },
+        {
+          "label": "Atari dump archaeological record",
+          "url": "https://core.tdar.org/project/459204/atari-dump-site-alamogordo-new-mexico-usa"
+        },
+        {
+          "label": "Now No. 2, Apple Tries Harder",
+          "url": "https://time.com/archive/6882954/now-no-2-apple-tries-harder/"
+        },
+        {
+          "label": "Is the I.B.M. Peanut Really in the Wings?",
+          "url": "https://www.nytimes.com/1983/09/27/science/personal-computers-is-the-ibm-peanut-really-in-the-wings.html"
+        },
+        {
+          "label": "Coleco receives federal approval for Adam",
+          "url": "https://www.upi.com/Archives/1983/09/22/Coleco-Industries-said-Thursday-it-has-received-needed-federal/5711433051200/"
+        },
+        {
+          "label": "InfoWorld September 26, 1983 — Volkswriter",
+          "url": "https://jvlone.com/computerpub/InfoWorld/IW_1983-09-26_5-39_VolksWriter.pdf"
+        },
+        {
+          "label": "Billboard Hot 100, October 1, 1983",
+          "url": "https://elpee.jp/hot100/week/1983-10-01/"
+        },
+        {
+          "label": "Domestic 1983 Weekend 39",
+          "url": "https://www.boxofficemojo.com/weekend/1983W39/?sort=gross"
+        },
+        {
+          "label": "Australia II Takes America's Cup",
+          "url": "https://www.washingtonpost.com/archive/politics/1983/09/27/australia-ii-takes-americas-cup/5c01b317-6646-4982-bebc-30d73e62af66/"
+        },
+        {
+          "label": "Apple stock takes a drubbing",
+          "url": "https://www.upi.com/Archives/1983/09/23/The-stock-of-Apple-Computer-Inc-took-a-drubbing/8600433137600/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Programmers wanted for GNU",
+          "copy": "Unix hands invited to discuss compilers, editors, kernels and freely shared tools."
+        },
+        {
+          "headline": "Home computer buyers compare notes",
+          "copy": "Local club weighs Adam’s all-in-one package against established 8-bit systems."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-01",
       "historicDate": "1983-09-19",
       "displayDate": "Week of September 19-25, 1983",
