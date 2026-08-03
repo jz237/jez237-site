@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 02 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 03 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 3-9, 1983 — Britain&apos;s BBC Micro Makes Its American Debut</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-10-03</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-03</guid>
+      <pubDate>Mon, 03 Aug 2026 12:00:00 GMT</pubDate>
+      <description>Acorn aims its $995 package at U.S. classrooms, with teacher notes, networking ambitions, and a 50,000-machine production commitment. Acorn Computer brought one of Britain&apos;s best-known educational machines to the United States this week, formally unveiling an American BBC Micro package priced at $995. The October 7 debut placed the machine directly into the contest for school computer labs, where Apple and other established suppliers already had strong positions. Also this week: Issue 3 Spectrum Change Breaks Some Existing Programs · Sanyo&apos;s $2,100 Challenger Joins the IBM-Compatible Charge · Hewlett-Packard Puts &apos;Magic&apos; at Your Fingertips.</description>
+    </item>
     <item>
       <title>Week of September 26-October 2, 1983 — Atari Dumps Truckloads of Games in New Mexico Landfill</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-09-26</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-23</guid>
       <pubDate>Tue, 14 Jul 2026 12:00:00 GMT</pubDate>
       <description>Designers turn tiny memories into puzzles, adventures, and worlds the player helps complete. A May 24 New York Times personal-computing column puts game design in the spotlight. The craft is less a matter of spectacle than of carefully chosen rules, feedback, surprise, and room for the player’s imagination. Across the month’s computer magazines, the same inventive energy appears in adventure contests, modem play, construction sets, and reviews of strategy simulations—proof that the home computer is becoming a medium, not merely a machine.</description>
-    </item>
-    <item>
-      <title>Week of May 16-22, 1983 — Lode Runner gives Apple II players 150 rooms to conquer</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-05-16</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-16</guid>
-      <pubDate>Mon, 13 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Softalk&apos;s 1983 software record puts Doug Smith&apos;s run-climb-dig game among the year&apos;s defining Apple II releases, complete with a construction set for making new levels. Broderbund&apos;s Lode Runner turns a simple chase into a toolbox: collect the gold, outwit the guards, and then design another screen. Its mix of arcade pace and player-made levels captures the spring&apos;s most exciting computer-game idea—software that lets the owner become part designer.</description>
     </item>
   </channel>
 </rss>
