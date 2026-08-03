@@ -4,6 +4,333 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-03",
+      "historicDate": "1983-10-03",
+      "displayDate": "Week of October 3-9, 1983",
+      "edition": "Issue 062 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "energetic transatlantic computer weekly",
+        "motifs": [
+          "BBC Micro keyboard",
+          "school computer lab",
+          "cassette software",
+          "touch-screen grid"
+        ],
+        "layout": "dense broadsheet with a large education-computing lead and compact software, games, charts, and world-news boxes"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of October 3-9, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Acorn BBC Micro launch dominates the upper half",
+        "secondaryRail": "Spectrum compatibility, Sanyo 555, HP 150, games and charts",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "newsprint blue",
+        "texture": "warm aged paper, halftones, rules and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-10-03.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of October 3-9, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Acorn crosses the Atlantic with a school-minded BBC Micro package while compatibility disputes, lower-priced 16-bit challengers, and touch-screen ideas crowd the personal-computer desk.",
+      "morningLine": "The BBC Micro arrives in America, Spectrum owners meet a compatibility snag, and the IBM-compatible field gets more crowded.",
+      "lead": {
+        "headline": "Britain's BBC Micro Makes Its American Debut",
+        "dek": "Acorn aims its $995 package at U.S. classrooms, with teacher notes, networking ambitions, and a 50,000-machine production commitment.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Acorn Computer brought one of Britain's best-known educational machines to the United States this week, formally unveiling an American BBC Micro package priced at $995. The October 7 debut placed the machine directly into the contest for school computer labs, where Apple and other established suppliers already had strong positions.",
+          "The American configuration was described as a beefed-up BBC Micro, with connections for disk storage, speech synthesis, and Acorn's Econet local-area network. Two sets of teacher-training notes came with the package, underscoring that Acorn was selling a classroom system and curriculum proposition rather than a bare home computer.",
+          "Popular Computing Weekly reported that Wong Electronics of Hong Kong had been commissioned to produce 50,000 U.S.-market machines over the next twelve months, with the first units due to ship during October. That production target gave the launch weight beyond a cautious export experiment, though schools remained the primary audience.",
+          "Acorn also planned to convene American education specialists to review domestic software, promote the strongest programs, and point developers toward gaps in the catalog. The company still hoped families would buy the machine for home use, but its first American argument was clear: computing belonged in the classroom, supported by software, training, and a network ready to link desks together."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Issue 3 Spectrum Change Breaks Some Existing Programs",
+          "kicker": "Compatibility Desk",
+          "dek": "Sinclair blames undocumented programming practices as cassette-era assumptions catch up with owners.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "Owners of the new Issue 3 ZX Spectrum found that some programs written for earlier machines could fail because a replacement chip changed the byte describing the cassette and earphone port. Personal Computer News reported that software houses had not been warned before affected machines reached users.",
+            "Sinclair told dealers that programmers had relied on unsupported, undocumented behavior and called the practice unprofessional. Whatever the technical merits, customers were left holding software that had worked on yesterday's Spectrum but not necessarily today's—a sharp lesson in how fragile compatibility could be in the fast-growing cassette market."
+          ]
+        },
+        {
+          "headline": "Sanyo's $2,100 Challenger Joins the IBM-Compatible Charge",
+          "kicker": "Business Machines",
+          "dek": "An 8088, twin drives, color output, and bundled DOS sharpen the price contest around the PC standard.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2,
+            3
+          ],
+          "body": [
+            "Sanyo's 555 arrived in reports from the SICOB show as another direct challenge to IBM's increasingly influential personal-computer platform. The 8088 system offered 128K of memory, two double-sided floppy drives, a Centronics printer connection, 16-color video output, MS-DOS, and Sanyo BASIC; CP/M-86 was optional.",
+            "Personal Computer News put the British price near £1,400, while an October BYTE dealer advertisement listed a dual-drive U.S. configuration at $2,095. The exact bundles differed, but the message was the same: manufacturers were assembling capable 16-bit DOS machines around an emerging standard and competing hard on included hardware and price."
+          ]
+        },
+        {
+          "headline": "Hewlett-Packard Puts 'Magic' at Your Fingertips",
+          "kicker": "Interface Watch",
+          "dek": "The HP 150 senses a finger through an infrared grid surrounding its screen.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "body": [
+            "BYTE's October cover previewed Hewlett-Packard's HP 150 under its development name, Magic. The 8088 desktop ran MS-DOS but was not hardware-compatible with the IBM PC, and its most striking feature was a screen that users could operate by touch.",
+            "Rather than relying on a pressure-sensitive display, the machine placed infrared emitters and detectors around the screen to locate an interrupting finger. Paired with still-unusual Sony 3.5-inch rigid-shell disks, the HP 150 offered a glimpse of a friendlier desktop interface—one that invited users to point directly at choices instead of memorizing every command."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Acorn BBC Micro, U.S. configuration",
+          "summary": "A $995 education package with disk, speech, and Econet interfaces plus teacher notes.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Panasonic JR-800U",
+          "summary": "A SICOB-show LCD portable with 16K, graphics, clock, music generator, and room for eight in-memory files.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Commodore 64 transportable",
+          "summary": "A reported French model combined a color monitor, disk drive, and detachable keyboard but still required mains power.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Financial Planner for the IBM PC",
+          "detail": "Ashton-Tate financial-analysis software reviewed by PCN this week."
+        },
+        {
+          "name": "Unix Writer's Workbench",
+          "detail": "Bell Labs tools that analyze prose and suggest improvements."
+        },
+        {
+          "name": "Sanyo BASIC and MS-DOS",
+          "detail": "Bundled operating environment advertised with the Sanyo 555."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer Games",
+          "items": [
+            "Ultima III: Exodus",
+            "Xenon-2",
+            "Xenon-1",
+            "Fantasy Quest",
+            "Invaders"
+          ]
+        },
+        {
+          "label": "Business Software",
+          "items": [
+            "Financial Planner",
+            "Unix Writer’s Workbench",
+            "Sanyo BASIC"
+          ]
+        },
+        {
+          "label": "Hardware",
+          "items": [
+            "BBC Micro U.S. package",
+            "Sanyo 555",
+            "HP 150"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Acorn BBC Micro U.S. school package",
+          "price": "$995",
+          "note": "Includes two sets of teacher-training notes."
+        },
+        {
+          "item": "Sanyo 555 dual-drive U.S. configuration",
+          "price": "$2,095",
+          "note": "Period dealer price; bundles varied."
+        },
+        {
+          "item": "IJK Oric-1 games",
+          "price": "£6.50-£8.50",
+          "note": "Fantasy Quest £6.50; Xenon-2 £8.50."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "UNIX Reaches the Micro Desk",
+          "text": "BYTE devotes its October theme to UNIX, portability, networking, shells, and applications for smaller systems."
+        },
+        {
+          "headline": "Usenet Links More Than 500 Systems",
+          "text": "BYTE describes a bulletin-board network connecting more than 500 UNIX installations."
+        },
+        {
+          "headline": "Apple Shows an Eight-Color Plotter",
+          "text": "An October advertisement pairs the Apple IIe with a tilt-screen Monitor II and a wide-bed eight-pen plotter."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Total Eclipse of the Heart",
+          "artist": "Bonnie Tyler"
+        },
+        {
+          "rank": 2,
+          "title": "Making Love Out of Nothing at All",
+          "artist": "Air Supply"
+        },
+        {
+          "rank": 3,
+          "title": "King of Pain",
+          "artist": "The Police"
+        },
+        {
+          "rank": 4,
+          "title": "The Safety Dance",
+          "artist": "Men Without Hats"
+        },
+        {
+          "rank": 5,
+          "title": "Puttin’ on the Ritz",
+          "artist": "Taco"
+        }
+      ],
+      "periodAd": {
+        "headline": "Bring the BBC Micro to Class",
+        "summary": "A $995 American package joins computer, teacher notes, disk and networking potential for the new electronic classroom.",
+        "tagline": "Learn. Program. Connect."
+      },
+      "market": {
+        "headline": "DOS Challengers Press on Price and Features",
+        "summary": "The Sanyo 555 combines an 8088, twin drives, color output, 128K, and MS-DOS as competitors crowd around IBM’s standard.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          2,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Lech Wałęsa Wins the Nobel Peace Prize",
+        "summary": "On October 5 the Norwegian Nobel Committee awarded the 1983 Peace Prize to the leader of Poland's outlawed Solidarity movement, honoring his peaceful contribution to workers' freedom and human rights.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "BBC Micro U.S. launch, price, configuration, and production plan",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Spectrum Issue 3 compatibility dispute and Sanyo 555 specifications",
+            "confidence": "same-week",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "HP 150 touch-screen design and UNIX coverage",
+            "confidence": "same-month",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "Music and movie listings",
+            "confidence": "dated chart and box-office records",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Acorn U.S. debut — New York Times",
+          "url": "https://www.nytimes.com/1983/10/07/business/acorn-computer-makes-us-debut.html"
+        },
+        {
+          "label": "BBC goes to the USA — Popular Computing Weekly transcript",
+          "url": "https://retroisle.com/others/acornbbc/Articles/pcw_bbcusa.php"
+        },
+        {
+          "label": "Personal Computer News issue 30",
+          "url": "https://archive.org/stream/PersonalComputerNews/PersonalComputerNews030-05Oct1983_djvu.txt"
+        },
+        {
+          "label": "BYTE October 1983",
+          "url": "https://archive.org/stream/byte-magazine-1983-10/1983_10_BYTE_08-10_UNIX_djvu.txt"
+        },
+        {
+          "label": "Christian Science Monitor HP 150 report",
+          "url": "https://www.csmonitor.com/1983/0926/092639.html"
+        },
+        {
+          "label": "Billboard Hot 100, October 8, 1983",
+          "url": "https://retrocdn.net/File:Billboard_US_1983-10-08.pdf"
+        },
+        {
+          "label": "Box Office Mojo weekend 40",
+          "url": "https://www.boxofficemojo.com/weekend/1983W40/"
+        },
+        {
+          "label": "Nobel Peace Prize 1983 press release",
+          "url": "https://www.nobelprize.org/prizes/peace/1983/press-release/"
+        },
+        {
+          "label": "Ultima III period review",
+          "url": "https://www.hardcoregaming101.net/ultima-iii-exodus/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "ORIC ARCADE TAPES",
+          "copy": "Xenon-2 £8.50, Fantasy Quest £6.50—VAT and postage included."
+        },
+        {
+          "headline": "COMPUTER LABS LOOKING AHEAD",
+          "copy": "Ask about disk storage, speech, classroom networks, and teacher training."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-02",
       "historicDate": "1983-09-26",
       "displayDate": "Week of September 26-October 2, 1983",

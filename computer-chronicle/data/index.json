@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-03",
+      "historicDate": "1983-10-03",
+      "displayDate": "Week of October 3-9, 1983",
+      "edition": "Issue 062 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "The BBC Micro arrives in America, Spectrum owners meet a compatibility snag, and the IBM-compatible field gets more crowded.",
+      "leadHeadline": "Britain's BBC Micro Makes Its American Debut",
+      "storyHeadlines": [
+        "Issue 3 Spectrum Change Breaks Some Existing Programs",
+        "Sanyo's $2,100 Challenger Joins the IBM-Compatible Charge",
+        "Hewlett-Packard Puts 'Magic' at Your Fingertips"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-03.jpg",
+      "thumb": "media/thumbs/1983-10-03.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-02",
       "historicDate": "1983-09-26",
       "displayDate": "Week of September 26-October 2, 1983",
