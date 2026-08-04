@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-04T16:28:33.926Z",
+  "updatedAt": "2026-08-04T17:59:37.938Z",
   "source": "yahoo-finance-chart",
   "stocks": [
     {
@@ -25,17 +25,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 274.79,
-      "change": 12.2783,
-      "changeAmount": 30.05,
+      "price": 279.27,
+      "change": 14.1089,
+      "changeAmount": 34.53,
       "prevClose": 244.74,
       "dayLow": 251.1,
-      "dayHigh": 275.6,
+      "dayHigh": 280.85,
       "range52w": [
         100.02,
         452.7
       ],
-      "volume": 4346270,
+      "volume": 5574272,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -98,10 +98,10 @@
         241.54,
         239.69,
         239.06,
-        274.79
+        279.27
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:29.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:36.000Z",
       "earningsDate": "2026-07-29"
     },
     {
@@ -127,17 +127,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 415.9,
-      "change": 9.1859,
-      "changeAmount": 34.99,
+      "price": 421.535,
+      "change": 10.6652,
+      "changeAmount": 40.625,
       "prevClose": 380.91,
       "dayLow": 400.68,
-      "dayHigh": 416.68,
+      "dayHigh": 422.065,
       "range52w": [
         281.87,
         495
       ],
-      "volume": 11476039,
+      "volume": 14868672,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -200,10 +200,10 @@
         387.84,
         389.28,
         392.23,
-        415.83
+        421.535
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:34.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:38.000Z",
       "earningsDate": "2026-09-02"
     },
     {
@@ -229,17 +229,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 92.31,
-      "change": 37.162,
-      "changeAmount": 25.01,
+      "price": 94.24,
+      "change": 40.0297,
+      "changeAmount": 26.94,
       "prevClose": 67.3,
       "dayLow": 86.345,
-      "dayHigh": 92.8,
+      "dayHigh": 94.3,
       "range52w": [
         60.55,
         153.2
       ],
-      "volume": 18074438,
+      "volume": 23035517,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -302,10 +302,10 @@
         73.9,
         71.77,
         85.76,
-        92.31
+        94.24
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:34.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:39.000Z",
       "earningsDate": "2026-08-11"
     },
     {
@@ -331,17 +331,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 373.479,
-      "change": 12.2907,
-      "changeAmount": 40.879,
+      "price": 376.16,
+      "change": 13.0968,
+      "changeAmount": 43.56,
       "prevClose": 332.6,
       "dayLow": 366.321,
-      "dayHigh": 375.92,
+      "dayHigh": 376.27,
       "range52w": [
         194.467,
         404.47
       ],
-      "volume": 8640019,
+      "volume": 10824195,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -404,10 +404,10 @@
         333.68,
         356.65,
         372.47,
-        373.479
+        376.16
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:33.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:38.000Z",
       "earningsDate": "2026-10-28"
     },
     {
@@ -434,17 +434,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 100.09,
-      "change": 15.9791,
-      "changeAmount": 13.79,
+      "price": 100.33,
+      "change": 16.2572,
+      "changeAmount": 14.03,
       "prevClose": 86.3,
       "dayLow": 94.32,
-      "dayHigh": 100.45,
+      "dayHigh": 100.99,
       "range52w": [
         19.6,
         142.35
       ],
-      "volume": 61435488,
+      "volume": 72423422,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -507,10 +507,10 @@
         91.13,
         90.2,
         91,
-        100.09
+        100.33
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:37.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:40.000Z",
       "earningsDate": "2026-10-22"
     },
     {
@@ -536,17 +536,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 581.745,
-      "change": -1.9658,
-      "changeAmount": -11.665,
+      "price": 588.1,
+      "change": -0.8948,
+      "changeAmount": -5.31,
       "prevClose": 593.41,
-      "dayLow": 579.95,
-      "dayHigh": 586.37,
+      "dayLow": 578.25,
+      "dayHigh": 589.61,
       "range52w": [
         520.26,
         796.25
       ],
-      "volume": 7482421,
+      "volume": 10541888,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -609,10 +609,10 @@
         539.03,
         556.71,
         590.24,
-        581.745
+        588.1
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:36.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:35.000Z",
       "earningsDate": "2026-10-28"
     },
     {
@@ -638,9 +638,9 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 496.23,
-      "change": 26.1548,
-      "changeAmount": 102.88,
+      "price": 495.895,
+      "change": 26.0697,
+      "changeAmount": 102.545,
       "prevClose": 393.35,
       "dayLow": 479.17,
       "dayHigh": 499.44,
@@ -648,7 +648,7 @@
         349.2,
         553.72
       ],
-      "volume": 24499286,
+      "volume": 28780737,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -711,10 +711,10 @@
         451.1,
         464.72,
         487.65,
-        496.23
+        495.895
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:38.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:39.000Z",
       "earningsDate": "2026-10-28"
     },
     {
@@ -740,9 +740,9 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 210.36,
-      "change": 6.7763,
-      "changeAmount": 13.35,
+      "price": 211.561,
+      "change": 7.3859,
+      "changeAmount": 14.551,
       "prevClose": 197.01,
       "dayLow": 209.05,
       "dayHigh": 212.171,
@@ -750,7 +750,7 @@
         164.07,
         236.54
       ],
-      "volume": 54278847,
+      "volume": 69505410,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -813,10 +813,10 @@
         195.04,
         200.75,
         206.64,
-        210.36
+        211.5605
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:39.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:41.000Z",
       "earningsDate": "2026-08-26"
     },
     {
@@ -842,9 +842,9 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 161.82,
-      "change": -0.6508,
-      "changeAmount": -1.06,
+      "price": 162.22,
+      "change": -0.4052,
+      "changeAmount": -0.66,
       "prevClose": 162.88,
       "dayLow": 155.312,
       "dayHigh": 163.09,
@@ -852,7 +852,7 @@
         121.99,
         259.92
       ],
-      "volume": 5609495,
+      "volume": 7002474,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -915,10 +915,10 @@
         151.6,
         147.61,
         151.57,
-        161.82
+        162.22
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:40.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:40.000Z",
       "earningsDate": "2026-10-29"
     },
     {
@@ -944,9 +944,9 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 273.68,
-      "change": 1.5284,
-      "changeAmount": 4.12,
+      "price": 273.97,
+      "change": 1.636,
+      "changeAmount": 4.41,
       "prevClose": 269.56,
       "dayLow": 268.132,
       "dayHigh": 276.52,
@@ -954,7 +954,7 @@
         118.7,
         379.935
       ],
-      "volume": 2957014,
+      "volume": 3606064,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1017,10 +1017,10 @@
         227.5,
         241.57,
         263.05,
-        273.68
+        273.97
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:39.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:37.000Z",
       "earningsDate": "2026-10-21"
     },
     {
@@ -1046,9 +1046,9 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 278.375,
-      "change": 20.5817,
-      "changeAmount": 47.515,
+      "price": 278.305,
+      "change": 20.5514,
+      "changeAmount": 47.445,
       "prevClose": 230.86,
       "dayLow": 275.82,
       "dayHigh": 281.07,
@@ -1056,7 +1056,7 @@
         196,
         281.07
       ],
-      "volume": 34880439,
+      "volume": 42010862,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -1119,10 +1119,10 @@
         235.5,
         271.58,
         284.02,
-        278.375
+        278.305
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:41.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:44.000Z",
       "earningsDate": "2026-10-29"
     },
     {
@@ -1148,17 +1148,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 416.46,
-      "change": 6.1558,
-      "changeAmount": 24.15,
+      "price": 418.404,
+      "change": 6.6514,
+      "changeAmount": 26.094,
       "prevClose": 392.31,
       "dayLow": 412.11,
-      "dayHigh": 418,
+      "dayHigh": 420.25,
       "range52w": [
         223.7,
         479
       ],
-      "volume": 7076269,
+      "volume": 9061149,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1221,10 +1221,10 @@
         403.31,
         404.25,
         406.11,
-        416.46
+        418.4044
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:42.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:45.000Z",
       "earningsDate": "2026-10-15"
     },
     {
@@ -1250,17 +1250,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 160.802,
-      "change": 30.1724,
-      "changeAmount": 37.272,
+      "price": 163.59,
+      "change": 32.4294,
+      "changeAmount": 40.06,
       "prevClose": 123.53,
       "dayLow": 143.28,
-      "dayHigh": 161.37,
+      "dayHigh": 164.35,
       "range52w": [
         106.37,
         207.52
       ],
-      "volume": 104126637,
+      "volume": 126911927,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -1323,10 +1323,10 @@
         122.26,
         123.06,
         125.65,
-        160.802
+        163.59
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:43.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:46.000Z",
       "earningsDate": "2026-11-02"
     },
     {
@@ -1352,17 +1352,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 12.594,
-      "change": 25.8142,
-      "changeAmount": 2.584,
+      "price": 12.635,
+      "change": 26.2238,
+      "changeAmount": 2.625,
       "prevClose": 10.01,
       "dayLow": 12.06,
-      "dayHigh": 12.66,
+      "dayHigh": 12.72,
       "range52w": [
         5.44,
         34.17
       ],
-      "volume": 6524671,
+      "volume": 8132942,
       "currency": "USD",
       "exchange": "NasdaqGM",
       "chart": [
@@ -1425,10 +1425,10 @@
         11.01,
         10.86,
         11.52,
-        12.5941
+        12.6351
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:38.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:47.000Z",
       "earningsDate": "2026-07-27"
     },
     {
@@ -1454,17 +1454,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 147.41,
-      "change": 22.8826,
-      "changeAmount": 27.45,
+      "price": 147.91,
+      "change": 23.2994,
+      "changeAmount": 27.95,
       "prevClose": 119.96,
       "dayLow": 141.03,
-      "dayHigh": 147.585,
+      "dayHigh": 148.7,
       "range52w": [
         114.5,
         345.72
       ],
-      "volume": 21734243,
+      "volume": 27385505,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1527,10 +1527,10 @@
         127.56,
         129.87,
         141.85,
-        147.41
+        147.91
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:43.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:47.000Z",
       "earningsDate": "2026-09-09"
     },
     {
@@ -1556,9 +1556,9 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 6.415,
-      "change": 2.8045,
-      "changeAmount": 0.175,
+      "price": 6.44,
+      "change": 3.2051,
+      "changeAmount": 0.2,
       "prevClose": 6.24,
       "dayLow": 6.16,
       "dayHigh": 6.47,
@@ -1566,7 +1566,7 @@
         5.65,
         22.17
       ],
-      "volume": 11449808,
+      "volume": 14967747,
       "currency": "USD",
       "exchange": "NasdaqGM",
       "chart": [
@@ -1629,10 +1629,10 @@
         6.14,
         6.13,
         6.1,
-        6.415
+        6.44
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:45.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:44.000Z",
       "earningsDate": "2026-08-05"
     },
     {
@@ -1658,17 +1658,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 237.03,
-      "change": 6.9823,
-      "changeAmount": 15.47,
+      "price": 237.25,
+      "change": 7.0816,
+      "changeAmount": 15.69,
       "prevClose": 221.56,
       "dayLow": 232.88,
-      "dayHigh": 237.96,
+      "dayHigh": 238.17,
       "range52w": [
         176.77,
         254.35
       ],
-      "volume": 3108493,
+      "volume": 4248994,
       "currency": "USD",
       "exchange": "NYSE",
       "chart": [
@@ -1731,10 +1731,10 @@
         220.9,
         216.14,
         233.49,
-        237.0301
+        237.25
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:46.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:36.000Z",
       "earningsDate": "2026-10-28"
     },
     {
@@ -1760,17 +1760,17 @@
         "Analyst target changes",
         "AI capex commentary"
       ],
-      "price": 306.45,
-      "change": -9.8888,
-      "changeAmount": -33.63,
+      "price": 309.55,
+      "change": -8.9773,
+      "changeAmount": -30.53,
       "prevClose": 340.08,
       "dayLow": 301.32,
-      "dayHigh": 307.14,
+      "dayHigh": 310.42,
       "range52w": [
         202.16,
         344.57
       ],
-      "volume": 26340433,
+      "volume": 33829758,
       "currency": "USD",
       "exchange": "NasdaqGS",
       "chart": [
@@ -1833,10 +1833,10 @@
         333.43,
         308.91,
         303.42,
-        306.45
+        309.55
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:48.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:50.000Z",
       "earningsDate": "2026-10-29"
     },
     {
@@ -1861,17 +1861,17 @@
         "Index flows"
       ],
       "kind": "instrument",
-      "price": 7717.12,
-      "change": 3.8814,
-      "changeAmount": 288.34,
+      "price": 7742.45,
+      "change": 4.2224,
+      "changeAmount": 313.67,
       "prevClose": 7428.78,
       "dayLow": 7629.1,
-      "dayHigh": 7717.22,
+      "dayHigh": 7754.49,
       "range52w": [
         6289.37,
-        7717.22
+        7754.49
       ],
-      "volume": 1428860000,
+      "volume": 1872656000,
       "currency": "USD",
       "exchange": "SNP",
       "chart": [
@@ -1934,10 +1934,10 @@
         7437.6299,
         7489.7202,
         7600.5,
-        7717.1499
+        7742.4502
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:48.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:50.000Z",
       "yahooSymbol": "^GSPC"
     },
     {
@@ -1962,17 +1962,17 @@
         "Rate moves"
       ],
       "kind": "instrument",
-      "price": 26460.459,
-      "change": 6.3655,
-      "changeAmount": 1583.549,
+      "price": 26592.516,
+      "change": 6.8964,
+      "changeAmount": 1715.606,
       "prevClose": 24876.91,
       "dayLow": 26088.043,
-      "dayHigh": 26469.236,
+      "dayHigh": 26627.145,
       "range52w": [
         20690.25,
         27190.21
       ],
-      "volume": 4437583000,
+      "volume": 5432243000,
       "currency": "USD",
       "exchange": "Nasdaq GIDS",
       "chart": [
@@ -2035,10 +2035,10 @@
         25122.1797,
         25373.8496,
         25913.9004,
-        26460.459
+        26592.5156
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:49.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:50.000Z",
       "yahooSymbol": "^IXIC"
     },
     {
@@ -2062,17 +2062,17 @@
         "Bank/healthcare moves"
       ],
       "kind": "instrument",
-      "price": 54130.49,
-      "change": 2.6223,
-      "changeAmount": 1383.17,
+      "price": 54188.65,
+      "change": 2.7325,
+      "changeAmount": 1441.33,
       "prevClose": 52747.32,
       "dayLow": 53641.21,
-      "dayHigh": 54130.49,
+      "dayHigh": 54272.6,
       "range52w": [
         43799.2,
-        54130.49
+        54272.6
       ],
-      "volume": 243283932,
+      "volume": 308709594,
       "currency": "USD",
       "exchange": "DJI",
       "chart": [
@@ -2135,10 +2135,10 @@
         52208.0586,
         52485.0313,
         53178.4102,
-        54130.4883
+        54188.6484
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:50.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:52.000Z",
       "yahooSymbol": "^DJI"
     },
     {
@@ -2163,12 +2163,12 @@
         "Earnings events"
       ],
       "kind": "instrument",
-      "price": 16.11,
-      "change": -22.0232,
-      "changeAmount": -4.55,
+      "price": 16.59,
+      "change": -19.6999,
+      "changeAmount": -4.07,
       "prevClose": 20.66,
       "dayLow": 15.51,
-      "dayHigh": 16.38,
+      "dayHigh": 16.59,
       "range52w": [
         13.38,
         35.3
@@ -2236,10 +2236,10 @@
         17.09,
         15.99,
         15.86,
-        16.11
+        16.59
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:13:46.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:44:46.000Z",
       "yahooSymbol": "^VIX"
     },
     {
@@ -2264,11 +2264,11 @@
         "Treasury auctions"
       ],
       "kind": "instrument",
-      "price": 4.629,
-      "change": 0.1514,
-      "changeAmount": 0.007,
+      "price": 4.627,
+      "change": 0.1082,
+      "changeAmount": 0.005,
       "prevClose": 4.622,
-      "dayLow": 4.625,
+      "dayLow": 4.619,
       "dayHigh": 4.668,
       "range52w": [
         3.947,
@@ -2337,10 +2337,10 @@
         4.663,
         4.745,
         4.686,
-        4.629
+        4.627
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:13:44.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:44:44.000Z",
       "yahooSymbol": "^TNX"
     },
     {
@@ -2364,9 +2364,9 @@
         "Global growth data"
       ],
       "kind": "instrument",
-      "price": 99.92,
-      "change": -0.09,
-      "changeAmount": -0.09,
+      "price": 99.903,
+      "change": -0.107,
+      "changeAmount": -0.107,
       "prevClose": 100.01,
       "dayLow": 99.828,
       "dayHigh": 100.058,
@@ -2437,10 +2437,10 @@
         100.01,
         99.8,
         99.96,
-        99.92
+        99.903
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:18:53.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:49:53.000Z",
       "yahooSymbol": "DX-Y.NYB"
     },
     {
@@ -2464,9 +2464,9 @@
         "Dollar/yield moves"
       ],
       "kind": "instrument",
-      "price": 64010.81,
-      "change": 1.9057,
-      "changeAmount": 1197.064,
+      "price": 63922.76,
+      "change": 1.7656,
+      "changeAmount": 1109.014,
       "prevClose": 62813.746,
       "dayLow": 63292.66,
       "dayHigh": 64126.387,
@@ -2474,7 +2474,7 @@
         57747.766,
         126198.07
       ],
-      "volume": 23323559936,
+      "volume": 23339894784,
       "currency": "USD",
       "exchange": "CCC",
       "chart": [
@@ -2537,10 +2537,10 @@
         62763.3203,
         63482,
         63460.8984,
-        64010.9219
+        63922.7617
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:28:45.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:59:52.000Z",
       "yahooSymbol": "BTC-USD"
     },
     {
@@ -2565,9 +2565,9 @@
         "Geopolitics"
       ],
       "kind": "instrument",
-      "price": 76.21,
-      "change": -8.8288,
-      "changeAmount": -7.38,
+      "price": 75.72,
+      "change": -9.415,
+      "changeAmount": -7.87,
       "prevClose": 83.59,
       "dayLow": 75.16,
       "dayHigh": 82.33,
@@ -2575,7 +2575,7 @@
         54.98,
         119.48
       ],
-      "volume": 259862,
+      "volume": 282901,
       "currency": "USD",
       "exchange": "NY Mercantile",
       "chart": [
@@ -2638,10 +2638,10 @@
         83.59,
         84.67,
         80.34,
-        76.2
+        75.72
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:18:51.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:49:55.000Z",
       "yahooSymbol": "CL=F"
     },
     {
@@ -2666,17 +2666,17 @@
         "Geopolitical risk"
       ],
       "kind": "instrument",
-      "price": 4141.4,
-      "change": 1.0073,
-      "changeAmount": 41.3,
+      "price": 4150.9,
+      "change": 1.239,
+      "changeAmount": 50.8,
       "prevClose": 4100.1,
       "dayLow": 4098.2,
-      "dayHigh": 4151.5,
+      "dayHigh": 4163.8,
       "range52w": [
         3310.1,
         5586.2
       ],
-      "volume": 91571,
+      "volume": 103338,
       "currency": "USD",
       "exchange": "COMEX",
       "chart": [
@@ -2739,10 +2739,10 @@
         4100.1001,
         4049.1001,
         4033.7,
-        4141.3999
+        4150.8999
       ],
       "quoteSource": "yahoo-finance-chart",
-      "quoteUpdatedAt": "2026-08-04T16:18:56.000Z",
+      "quoteUpdatedAt": "2026-08-04T17:49:45.000Z",
       "yahooSymbol": "GC=F"
     }
   ],
