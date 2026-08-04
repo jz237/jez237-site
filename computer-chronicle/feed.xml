@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 04 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 10-16, 1983 — Xerox Service Lifeline Reaches Osborne Owners</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-10-10</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-10</guid>
+      <pubDate>Tue, 04 Aug 2026 12:00:00 GMT</pubDate>
+      <description>A fallen portable pioneer turns to an industry giant to keep its machines working. Osborne Computer Corporation, once the most visible name in portable computing, announced October 11 that Xerox would service Osborne products while the manufacturer operated under federal bankruptcy protection. The pact offers owners a measure of continuity after the company’s swift reversal left the future of its machines and support network uncertain. Also this week: Xerox Sunrise Claims a Ten-Hour Workday · FBI Raids Bring Modem Intrusion Home · Electronic Arts Puts Designers in the Spotlight.</description>
+    </item>
     <item>
       <title>Week of October 3-9, 1983 — Britain&apos;s BBC Micro Makes Its American Debut</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-10-03</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-30</guid>
       <pubDate>Wed, 15 Jul 2026 12:00:00 GMT</pubDate>
       <description>A young publisher treats programmers like recording artists—and ships a remarkably varied opening slate. SOUTH SAN FRANCISCO — Ten days before this week began, the small company called Electronic Arts made its first shipment. Its May 20 slate carried five titles—Archon: The Light and the Dark, Hard Hat Mack, M.U.L.E., Worms?, and Axis Assassin—out of a warehouse and toward computer stores. The boxes announced the company’s ambition before a disk was loaded: creators’ names appeared prominently, and the packages borrowed the scale and visual confidence of record albums. Also this week: WarGames Makes Home Computing a Summer-Movie Star · Portable and 16-Bit Machines Crowd the June BYTE · Modems Bring Computer Gamers Together.</description>
-    </item>
-    <item>
-      <title>Week of May 23–29, 1983 — Game Makers Map the Imaginative Path</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-05-23</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-23</guid>
-      <pubDate>Tue, 14 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Designers turn tiny memories into puzzles, adventures, and worlds the player helps complete. A May 24 New York Times personal-computing column puts game design in the spotlight. The craft is less a matter of spectacle than of carefully chosen rules, feedback, surprise, and room for the player’s imagination. Across the month’s computer magazines, the same inventive energy appears in adventure contests, modem play, construction sets, and reviews of strategy simulations—proof that the home computer is becoming a medium, not merely a machine.</description>
     </item>
   </channel>
 </rss>
