@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-04",
+      "historicDate": "1983-10-10",
+      "displayDate": "Week of October 10-16, 1983",
+      "edition": "Issue 063 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week: Xerox steps behind stranded Osborne owners, a battery portable promises ten hours, and computer games gain an auteur-minded publisher.",
+      "leadHeadline": "Xerox Service Lifeline Reaches Osborne Owners",
+      "storyHeadlines": [
+        "Xerox Sunrise Claims a Ten-Hour Workday",
+        "FBI Raids Bring Modem Intrusion Home",
+        "Electronic Arts Puts Designers in the Spotlight"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-10.jpg",
+      "thumb": "media/thumbs/1983-10-10.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-03",
       "historicDate": "1983-10-03",
       "displayDate": "Week of October 3-9, 1983",

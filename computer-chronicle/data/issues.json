@@ -4,6 +4,311 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-04",
+      "historicDate": "1983-10-10",
+      "displayDate": "Week of October 10-16, 1983",
+      "edition": "Issue 063 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Urgent portable-computing weekly on warm aged newsprint",
+        "motifs": [
+          "portable computers",
+          "modem lines",
+          "game boxes"
+        ],
+        "layout": "Dense six-column 1983 computer newspaper"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "October 10-16, 1983",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Osborne and Xerox service pact across the upper front page",
+        "secondaryRail": "Games, charts, prices, and the world bulletin",
+        "archiveNavigation": "Previous and next weekly issues"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "newsprint blue",
+        "texture": "warm paper grain and halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-10-10.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for October 10-16, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Portable computing faces its first great after-sale test while modems bring both play and peril into the home.",
+      "morningLine": "This week: Xerox steps behind stranded Osborne owners, a battery portable promises ten hours, and computer games gain an auteur-minded publisher.",
+      "lead": {
+        "headline": "Xerox Service Lifeline Reaches Osborne Owners",
+        "dek": "A fallen portable pioneer turns to an industry giant to keep its machines working.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Osborne Computer Corporation, once the most visible name in portable computing, announced October 11 that Xerox would service Osborne products while the manufacturer operated under federal bankruptcy protection. The pact offers owners a measure of continuity after the company’s swift reversal left the future of its machines and support network uncertain.",
+          "For customers, service is more than a footnote. Portable machines travel, absorb wear, and combine a display, disk drives, keyboard, and power supply in a tightly packed case. Access to Xerox’s established service organization may keep working Osborne systems productive even as the company that sold them reorganizes.",
+          "The arrangement also marks a sobering turn in the young personal-computer trade. Osborne helped prove that a complete computer could be carried from office to office, but rapid competition and financial distress showed that inventive hardware alone could not guarantee a stable supplier.",
+          "Xerox enters the story from both directions this week: it is supporting the installed Osborne base while introducing a portable machine of its own. Buyers now have a new question for every dazzling specification sheet—who will stand behind the computer after the sale?"
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Xerox Sunrise Claims a Ten-Hour Workday",
+          "kicker": "Portable Hardware",
+          "dek": "The 1810 pairs 64,000 characters of memory with rechargeable batteries.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1,
+            2
+          ],
+          "body": [
+            "Xerox introduced its 1810 Sunrise portable in coverage dated October 13, describing a battery-powered machine with 64,000 characters of memory. The company said its rechargeable batteries could operate for ten hours, a striking claim in a field where “portable” often still means a heavy computer tied to a wall socket.",
+            "The announcement puts endurance at the center of mobility. If the claimed running time holds in daily use, the Sunrise points toward computers that can accompany a full working day instead of merely moving between outlets."
+          ]
+        },
+        {
+          "headline": "FBI Raids Bring Modem Intrusion Home",
+          "kicker": "Networks & Security",
+          "dek": "Seized home computers put teenage electronic trespass in the national spotlight.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "body": [
+            "Federal agents seized the home computers of four Irvine, California high-school students on October 13 as part of a multistate inquiry into suspected electronic intrusion. A follow-up report described a nationwide wire-fraud investigation involving alleged entry into defense and payroll systems.",
+            "The reports give the home modem a new and uneasy prominence. The same communications links that let hobbyists exchange messages and play at a distance can also cross boundaries that owners and institutions are only beginning to define. The episode is certain to sharpen calls for computer ethics, clearer rules, and better passwords."
+          ]
+        },
+        {
+          "headline": "Electronic Arts Puts Designers in the Spotlight",
+          "kicker": "Game Desk",
+          "dek": "Computer Gaming World examines Trip Hawkins’ publishing model as Archon and Lode Runner command attention.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ],
+          "body": [
+            "The October Computer Gaming World devotes a feature to Trip Hawkins and Electronic Arts, a publisher presenting software creators with the prominence usually reserved for recording artists. The approach arrives as computer games become more ambitious in design and presentation.",
+            "The same issue gives substantial attention to Archon: The Light and the Dark and features Lode Runner, alongside Combat Leader and The Cosmic Balance II. Together they show a market expanding beyond arcade imitation toward strategy, construction, and distinctive authorial voices."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Xerox 1810 Sunrise",
+          "summary": "64,000-character memory and a claimed ten hours on rechargeable batteries.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1,
+            2
+          ]
+        },
+        {
+          "title": "Osborne Portable Line",
+          "summary": "Xerox service coverage arrives during Osborne’s bankruptcy protection.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Compaq-TI Settlement",
+          "summary": "Compaq and Texas Instruments settle a multimillion-dollar patent-licensing dispute out of court.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Archon: The Light and the Dark",
+          "detail": "Three-page October CGW review and analysis."
+        },
+        {
+          "name": "Lode Runner",
+          "detail": "Featured in the October CGW issue."
+        },
+        {
+          "name": "Apple ProDOS",
+          "detail": "The Apple II disk operating system emerging in 1983; exact week not established."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Archon: The Light and the Dark",
+            "Lode Runner",
+            "Combat Leader",
+            "The Cosmic Balance II",
+            "TAC"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "Never Say Never Again",
+            "The Big Chill",
+            "Mr. Mom",
+            "All the Right Moves",
+            "Return of the Jedi"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Electronic Arts catalog",
+            "Apple ProDOS",
+            "Lode Runner"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Computer Gaming World — October 1983",
+          "price": "$2.75",
+          "note": "55-page enthusiast magazine."
+        },
+        {
+          "item": "Never Say Never Again",
+          "price": "$7,233,884",
+          "note": "Domestic weekend gross from 1,560 theaters."
+        },
+        {
+          "item": "Xerox 1810 Sunrise",
+          "price": "Price not verified",
+          "note": "No unverified retail figure printed."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Compaq and TI settle",
+          "text": "The Houston companies negotiated an out-of-court end to their patent-licensing fight."
+        },
+        {
+          "headline": "Tele-gaming gets a survey",
+          "text": "October CGW examines play carried over communications links."
+        },
+        {
+          "headline": "Jedi stays in the top ten",
+          "text": "Return of the Jedi ranks tenth in its 21st weekend, earning $622,402."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Total Eclipse of the Heart",
+          "artist": "Bonnie Tyler"
+        },
+        {
+          "rank": 2,
+          "title": "Making Love Out of Nothing at All",
+          "artist": "Air Supply"
+        },
+        {
+          "rank": 3,
+          "title": "King of Pain",
+          "artist": "The Police"
+        },
+        {
+          "rank": 4,
+          "title": "Islands in the Stream",
+          "artist": "Kenny Rogers & Dolly Parton"
+        },
+        {
+          "rank": 5,
+          "title": "One Thing Leads to Another",
+          "artist": "The Fixx"
+        }
+      ],
+      "periodAd": {
+        "headline": "Carry the Workday With You",
+        "summary": "A period-style pitch for battery-powered portability inspired by the Xerox 1810 announcement.",
+        "tagline": "Ten hours claimed on rechargeable batteries."
+      },
+      "market": {
+        "headline": "Compaq and Texas Instruments Settle Patent Fight",
+        "summary": "An out-of-court settlement removes a multimillion-dollar patent-licensing dispute from the fast-growing IBM-compatible maker’s path.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Space Shuttle Discovery Makes Its Public Debut",
+        "summary": "On October 16, Discovery rolled out at Rockwell International’s Palmdale plant after three years of construction; NASA says thermal blankets helped make it 6,870 pounds lighter than Columbia.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Exact-date reporting used for Osborne-Xerox service, Xerox 1810, FBI raids, and Compaq settlement.",
+          "October magazine coverage is labeled same-month.",
+          "Unverified Xerox retail pricing is deliberately omitted."
+        ]
+      },
+      "sources": [
+        {
+          "label": "Osborne announces Xerox service agreement",
+          "url": "https://www.upi.com/Archives/1983/10/11/Osborne-Computer-Corp-the-once-high-flying-maker-of/8095434692800/"
+        },
+        {
+          "label": "Xerox Introduces Portable Computer",
+          "url": "https://www.nytimes.com/1983/10/13/business/xerox-introduces-portable-computer.html"
+        },
+        {
+          "label": "Xerox 1810 museum record",
+          "url": "https://www.ricomputermuseum.org/collections-gallery/small-systems-at-ricm/xerox-1810-portable-computer"
+        },
+        {
+          "label": "Four students’ computers seized",
+          "url": "https://www.upi.com/Archives/1983/10/13/Four-high-school-students-whose-home-computers-were-seized/2822434865600/"
+        },
+        {
+          "label": "Nationwide wire-fraud investigation",
+          "url": "https://www.upi.com/Archives/1983/10/15/As-part-of-a-nationwide-wire-fraud-investigation-of/7313435038400/"
+        },
+        {
+          "label": "Compaq and TI settle suit",
+          "url": "https://www.upi.com/Archives/1983/10/13/Compaq-Computer-Corp-and-Texas-Instruments-Inc-have-negotiated/4220434865600/"
+        },
+        {
+          "label": "Computer Gaming World 3.5",
+          "url": "https://www.oldgames.sk/en/mag/cgw-12"
+        },
+        {
+          "label": "Billboard Hot 100 — Oct. 15",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-10-15"
+        },
+        {
+          "label": "Domestic Weekend 41",
+          "url": "https://www.boxofficemojo.com/weekend/1983W41/?sort=rank"
+        },
+        {
+          "label": "Discovery public debut",
+          "url": "https://www.nasa.gov/history/40-years-ago-space-shuttle-discovery-makes-its-public-debut/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "MODEM OWNERS",
+          "copy": "Know the system, know the rules, and secure your password."
+        },
+        {
+          "headline": "GAME NIGHT",
+          "copy": "Archon and Lode Runner are on the enthusiast desk."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-03",
       "historicDate": "1983-10-03",
       "displayDate": "Week of October 3-9, 1983",
