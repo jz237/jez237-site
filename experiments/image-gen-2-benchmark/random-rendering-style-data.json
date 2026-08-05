@@ -795,5 +795,24 @@
       "description": "A vermilion cable car crosses a glowing volcanic caldera built entirely from tactile curled-paper relief.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-08-05-random-image-style-random-rendering-style-lampworked-glass-",
+    "title": "Random rendering style: Lampworked-Glass Mycelium Observatory",
+    "tests": "Wednesday alternating schedule slot 1/12; random rendering-style subtype; medium family: hand-built lampworked borosilicate glass sculpture; subject: subterranean mycelium observatory; composition: luminous diagonal branching junction with three amber nutrient droplets, four distinct miniature researchers on cobalt walkways, smoky-quartz observation pod, sensor cuffs, spores and capsules; palette: midnight blue, charcoal, opal white, pale cyan, moss green, honey amber and restrained magenta; central mechanism: researchers visibly instrument a transparent fungal network; anti-repeat: not recent woven raffia, scrimshaw, quilled paper, needle felt, encaustic, copper wire, holographic foil, ink wash, lino cut, marquetry, mosaic, oil pastel, papier-mache, pixel art, wax-crayon sgraffito, document layout, generic CGI, or photography. Generated exactly once via synchronous openai/gpt-image-2 CLI; exact non-empty 1254x1254 PNG source verified; byte-identical hard-link QA mirror inspected with xai/grok-4.3; visible QA PASS for stop-scroll premise, coherent lampworked-glass medium, physical relationships, miniature scale, varied researchers, active sensor work, three droplets, walkways, pod, spores/capsules, composition, depth, visual impact, and absence of unwanted text or forbidden elements.",
+    "prompt": "Create a finished square image rendered entirely as an elaborate hand-built lampworked borosilicate-glass sculpture: a subterranean mycelium observatory inside a vast transparent fungal network. The stop-scroll centerpiece is one luminous branching mycelial junction spanning diagonally across the frame, formed from thousands of hair-fine milky glass filaments that converge around three translucent amber nutrient droplets. Within the same coherent miniature world, four tiny adult field researchers in practical coveralls and helmets stand on curved cobalt-glass walkways, actively placing hair-thin sensor cuffs around the living-looking filaments; make each figure distinct in age, build, skin tone, posture, and gear color. Show a compact observation pod blown from smoky quartz glass embedded into the cavern wall, fiber-like glass cables, suspended sample capsules, curled hyphal tips, beadlike spores, and magnifying inspection lenses, all visibly fabricated from glass rather than ordinary real materials. Use hotworked seams, trapped microbubbles, stretched cane striations, dichroic flashes, polished and frosted surfaces, tiny annealing marks, and realistic refraction and caustics as meaningful visual texture. Deep midnight-blue and charcoal glass form the cavern; opal white, pale cyan, moss green, honey amber, and restrained magenta accents reveal the network. Illuminate it like a museum-scale glass installation photographed in darkness with controlled raking light, crisp macro detail from foreground to the central junction, strong depth, layered silhouettes, and plausible miniature scale cues. The decisive action and glass medium must be instantly legible at thumbnail size. No frame, pedestal, display case, paper, poster, labels, readable text, logos, watermark, instructions, generic sci-fi interface, humanoid robots, gore, monsters, or photographic imitation of a real cave.",
+    "image": "images/2026-08-05-random-image-style-random-rendering-style-lampworked-glass-.jpg",
+    "thumb": "thumbs/2026-08-05-random-image-style-random-rendering-style-lampworked-glass-.webp",
+    "color": "#373131",
+    "date": "2026-08-05",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "Lampworked borosilicate glass sculpture",
+      "description": "A subterranean fungal research observatory imagined as a coherent hand-built glass miniature, with researchers instrumenting a luminous branching mycelial junction.",
+      "template": "Render a complete active environment entirely as a coherent handcrafted lampworked-glass miniature, using hotworked seams, refraction, caustics, bubbles, cane striations, polished and frosted surfaces, and a decisive glass-built action."
+    }
   }
 ]
