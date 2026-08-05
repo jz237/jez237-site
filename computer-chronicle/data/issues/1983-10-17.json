@@ -1,0 +1,334 @@
+{
+  "currentDate": "2026-08-05",
+  "historicDate": "1983-10-17",
+  "displayDate": "Week of October 17-23, 1983",
+  "edition": "Issue 064 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Warm newsprint with office-blue and signal-red ink",
+    "motifs": [
+      "network diagrams",
+      "portable micros",
+      "daisy-wheel type",
+      "arcade-era game boxes"
+    ],
+    "layout": "Dense metropolitan computer weekly with a consumer-gaming rail"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "October 17-23, 1983",
+    "price": "75¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Info ’83 office workstation package across the upper columns",
+    "secondaryRail": "Coleco Adam, computer games, charts and Gadget Desk",
+    "archiveNavigation": "Previous and next weekly issues with archive calendar"
+  },
+  "sectionChrome": {
+    "primary": "Office Computing",
+    "secondary": "Home Computer & Game Shelf",
+    "texture": "Aged paper, halftone screens, red and blue rules"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-10-17.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for October 17-23, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Info ’83 shows the personal computer growing into an office workstation, while Coleco brings its ambitious Adam bundle into the holiday home-computer battle.",
+  "morningLine": "Networks link the desks, Adam reaches the shops, and a new generation of computer games fills the shelf.",
+  "lead": {
+    "headline": "Info ’83 Turns the Personal Computer Into an Office Workstation",
+    "dek": "DEC combines word processing, personal computing and communications as software and small networks dominate the New York exposition.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ],
+    "body": [
+      "Software announcements dominated the 10th International Information Management Exposition & Conference in New York, but the larger story was integration. Machines once sold as dedicated word processors were being recast as connected personal workstations, able to prepare documents, exchange files and reach an office network from the same desk.",
+      "Digital Equipment Corporation’s Decmate Office Workstation made that convergence explicit. Its $4,735 package included the system unit, monitor, keyboard, Easycom logon software and WPS Convert, tying word processing to personal-computing and communications tasks under a 90-day on-site service plan.",
+      "The network followed the workstation onto the show floor. General Binding’s Northnet linked System 9 desktop micros, printers and disks for $4,400 per workstation, with electronic mail available as an option. Wordplex’s $450-per-node Wordlink could connect as many as 16 RS-232C electronic typewriters to shared printers while documents continued to arrive.",
+      "Software also promised a friendlier conversation with large machines. Frey Associates showed Themis, a VAX-11 information system that accepted plain-English queries from a base vocabulary exceeding 900 words and could learn more. Info ’83’s crowded aisles offered a clear forecast: office computing would be connected, software-led and increasingly personal."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Coleco’s $700 Adam Enters the Holiday Computer Fight",
+      "kicker": "Home Computer",
+      "dek": "A printer, tape drive and 64K system arrive as one ambitious family bundle.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        1
+      ],
+      "body": [
+        "With federal approval secured in late September, Coleco expected Adam systems to reach stores in October. Priced around $700, the much-advertised package joined a bruising home-computer market with 64K of memory, a Digital Data Pack tape drive, keyboard, daisy-wheel printer and productivity software.",
+        "Adam’s complete-computer configuration also carried ColecoVision compatibility, giving console households an expansion story as well as a new machine. The unusual design made the printer the computer’s power supply, so Coleco’s headline bundle was inseparable in practice—a bold value pitch carrying equally bold engineering risk."
+      ]
+    },
+    {
+      "headline": "Desktop Networks and Electronic Mail Move Downmarket",
+      "kicker": "Connected Office",
+      "dek": "Small systems share files and printers without waiting for the mainframe.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Northnet placed a server station over a cable network of System 9 desktop computers and peripherals, while leaving stations able to make independent connections. Its 16-bit node doubled as a file server, bringing the vocabulary of networking to modest office machines.",
+        "Wordlink aimed at another installed base: electronic typewriters. Up to 16 RS-232C machines could receive documents and share printers at $450 per node. Together the systems made electronic mail and shared resources practical product features rather than distant promises."
+      ]
+    },
+    {
+      "headline": "Portable and Multiuser Micros Crowd the Show",
+      "kicker": "New Machines",
+      "dek": "Suitcase systems meet Unix and MP/M-86 multiuser desktops.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0,
+        2
+      ],
+      "body": [
+        "Manufacturers unveiled desktop and portable systems at Info ’83 even as much of the microcomputer trade held its announcements for November’s Comdex. Xerox had introduced a portable days earlier, evidence that transportable IBM-compatible computing was becoming a recognized category.",
+        "At the other end of the range, Philips showed a 32-bit multiuser supermicro compatible with Unix and its workstation line. A Rair MP/M-86 desktop supported as many as 16 terminals and peripherals, included 1MB of memory and listed for $9,750; Computer Transceiver offered a dual-processor system for $3,295."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Ultima III: Exodus",
+      "summary": "Origin’s party-based Apple II and Atari 8-bit role-playing sequel expands the scale of the computer adventure.",
+      "confidence": "period",
+      "sourceRefs": []
+    },
+    {
+      "title": "Archon: The Light and the Dark",
+      "summary": "Electronic Arts mixes chess-like strategy with direct arcade combat on Atari 8-bit and Commodore 64.",
+      "confidence": "period",
+      "sourceRefs": []
+    },
+    {
+      "title": "M.U.L.E.",
+      "summary": "Ozark Softscape’s multiplayer trading contest makes economics into a social computer game.",
+      "confidence": "period",
+      "sourceRefs": []
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Themis — Frey Associates",
+      "detail": "Natural-language VAX-11 queries with a 900-plus-word extensible vocabulary."
+    },
+    {
+      "name": "Easycom & WPS Convert — DEC",
+      "detail": "Communications and document-conversion tools for the Decmate workstation."
+    },
+    {
+      "name": "Lotus 1-2-3",
+      "detail": "The IBM PC spreadsheet, database and graphics package remains 1983’s business-software phenomenon."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Ultima III: Exodus",
+        "Archon: The Light and the Dark",
+        "M.U.L.E.",
+        "Lode Runner",
+        "One on One: Dr. J vs. Larry Bird"
+      ]
+    },
+    {
+      "label": "Office Hardware",
+      "items": [
+        "DEC Decmate Office Workstation",
+        "GBC Northnet",
+        "Wordplex Wordlink",
+        "Rair MP/M-86 desktop"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "Themis",
+        "Easycom",
+        "WPS Convert",
+        "Lotus 1-2-3"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "DEC Decmate Office Workstation",
+      "price": "$4,735",
+      "note": "System, monitor, keyboard and software"
+    },
+    {
+      "item": "GBC Northnet",
+      "price": "$4,400 per workstation",
+      "note": "16-bit file-serving node"
+    },
+    {
+      "item": "Coleco Adam complete system",
+      "price": "about $700",
+      "note": "64K, tape drive and daisy-wheel printer"
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "IBM-Hitachi Suit Settled",
+      "text": "Settlement terms reportedly give IBM broad powers to monitor Hitachi’s future product development."
+    },
+    {
+      "headline": "French PTT Studies Micro Minitel",
+      "text": "Officials weigh new microcomputer-capable terminals or 8-bit upgrades joined by a PTT-developed bus."
+    },
+    {
+      "headline": "Gadget Desk: Xerox Model 294",
+      "text": "Xerox introduces a $4,600 desktop facsimile with optional RS-232C interface and support for older Group 1 and Group 2 machines."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Total Eclipse of the Heart",
+      "artist": "Bonnie Tyler"
+    },
+    {
+      "rank": 2,
+      "title": "Making Love Out of Nothing at All",
+      "artist": "Air Supply"
+    },
+    {
+      "rank": 3,
+      "title": "Islands in the Stream",
+      "artist": "Kenny Rogers with Dolly Parton"
+    },
+    {
+      "rank": 4,
+      "title": "True",
+      "artist": "Spandau Ballet"
+    },
+    {
+      "rank": 5,
+      "title": "All Night Long (All Night)",
+      "artist": "Lionel Richie"
+    }
+  ],
+  "periodAd": {
+    "headline": "Bring Home a Complete Computer",
+    "summary": "Coleco Adam pairs 64K computing, Digital Data Pack storage and letter-quality printing in one family system.",
+    "tagline": "Computer, games and printer—about $700."
+  },
+  "market": {
+    "headline": "Never Say Never Again Leads the Weekend",
+    "summary": "The Bond return holds first with $6.0 million; The Dead Zone opens second, followed by The Big Chill, Under Fire and The Right Stuff among the week’s notable films.",
+    "confidence": "weekend-verified",
+    "sourceRefs": [
+      5
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Beirut Barracks Bombings Kill U.S. Marines and French Troops",
+    "summary": "On October 23, suicide truck bombs struck U.S. and French military buildings in Beirut, killing 241 U.S. service members and 58 French paratroopers, along with civilians.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      6,
+      7
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Xerox Backs Desktop Fax With the Model 294",
+    "summary": "At Info ’83 Xerox introduced a $4,600 desktop facsimile with an optional RS-232C interface and compatibility with slower Group 1 and Group 2 machines.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Info ’83 products and prices",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      {
+        "claim": "Coleco Adam retail timing and configuration",
+        "confidence": "same-month",
+        "sourceRefs": [
+          1
+        ]
+      },
+      {
+        "claim": "Charts and box office",
+        "confidence": "dated-week",
+        "sourceRefs": [
+          3,
+          5
+        ]
+      },
+      {
+        "claim": "Beirut barracks bombings",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          6,
+          7
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Computerworld, October 17, 1983",
+      "url": "https://archive.org/stream/computerworld1742unse/computerworld1742unse_djvu.txt"
+    },
+    {
+      "label": "UPI: Coleco Adam approval",
+      "url": "https://www.upi.com/Archives/1983/09/22/Coleco-Industries-said-Thursday-it-has-received-needed-federal/5711433051200/"
+    },
+    {
+      "label": "New York Times: Xerox portable",
+      "url": "https://www.nytimes.com/1983/10/13/business/xerox-introduces-portable-computer.html"
+    },
+    {
+      "label": "Billboard Hot 100, October 22",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-10-22"
+    },
+    {
+      "label": "American Top 40, October 22",
+      "url": "https://americantop40.fandom.com/wiki/October_22,_1983"
+    },
+    {
+      "label": "Box Office Mojo, October 21-23",
+      "url": "https://www.boxofficemojo.com/weekend/1983W42/"
+    },
+    {
+      "label": "BBC: Beirut bombings",
+      "url": "http://news.bbc.co.uk/onthisday/low/dates/stories/october/23/newsid_2489000/2489117.stm"
+    },
+    {
+      "label": "UPI: Reagan responds to Beirut bombing",
+      "url": "https://www.upi.com/Archives/1983/10/23/President-Reagan-denouncing-the-bestial-nature-ofterrorist-bombings-in/9245435729600/"
+    },
+    {
+      "label": "UPI: Grenada crisis",
+      "url": "https://www.upi.com/Archives/1983/10/22/Ten-US-warships-sail-toward-Grenada/4161719422789/"
+    },
+    {
+      "label": "Inc.: Lotus 1-2-3",
+      "url": "https://www.inc.com/magazine/19830901/4220.html"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM OWNERS",
+      "copy": "Trade messages after dark—local bulletin-board numbers wanted."
+    },
+    {
+      "headline": "DISK SWAP",
+      "copy": "Apple II and Atari users: games, utilities and club news."
+    }
+  ]
+}

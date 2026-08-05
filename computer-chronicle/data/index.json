@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-05",
+      "historicDate": "1983-10-17",
+      "displayDate": "Week of October 17-23, 1983",
+      "edition": "Issue 064 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Networks link the desks, Adam reaches the shops, and a new generation of computer games fills the shelf.",
+      "leadHeadline": "Info ’83 Turns the Personal Computer Into an Office Workstation",
+      "storyHeadlines": [
+        "Coleco’s $700 Adam Enters the Holiday Computer Fight",
+        "Desktop Networks and Electronic Mail Move Downmarket",
+        "Portable and Multiuser Micros Crowd the Show"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-17.jpg",
+      "thumb": "media/thumbs/1983-10-17.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-04",
       "historicDate": "1983-10-10",
       "displayDate": "Week of October 10-16, 1983",

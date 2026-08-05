@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 05 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 17-23, 1983 — Info ’83 Turns the Personal Computer Into an Office Workstation</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-10-17</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-17</guid>
+      <pubDate>Wed, 05 Aug 2026 12:00:00 GMT</pubDate>
+      <description>DEC combines word processing, personal computing and communications as software and small networks dominate the New York exposition. Software announcements dominated the 10th International Information Management Exposition &amp; Conference in New York, but the larger story was integration. Machines once sold as dedicated word processors were being recast as connected personal workstations, able to prepare documents, exchange files and reach an office network from the same desk. Also this week: Coleco’s $700 Adam Enters the Holiday Computer Fight · Desktop Networks and Electronic Mail Move Downmarket · Portable and Multiuser Micros Crowd the Show.</description>
+    </item>
     <item>
       <title>Week of October 10-16, 1983 — Xerox Service Lifeline Reaches Osborne Owners</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-10-10</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-06-06</guid>
       <pubDate>Thu, 16 Jul 2026 12:00:00 GMT</pubDate>
       <description>A complete computer, word processor, fast tape drive and letter-quality printer promises to turn a ColecoVision household into a home office. The busiest conversation at Chicago’s June 5–8 Consumer Electronics Show begins with an unlikely challenger. Coleco, best known for ColecoVision, has unveiled Adam: an under-$600 home-computer package built around a Z80 processor, a full-size 75-key keyboard, SmartWriter word processing, BASIC, a Digital Data Pack recorder and a daisy-wheel printer. Also this week: Atari Answers With XL Computers and a Writing System · Software Price War Breaks Out at CES · WarGames Makes the Home Modem a Movie Star.</description>
-    </item>
-    <item>
-      <title>Week of May 30–June 5, 1983 — Electronic Arts&apos; First Five Games Reach Players</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-05-30</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-05-30</guid>
-      <pubDate>Wed, 15 Jul 2026 12:00:00 GMT</pubDate>
-      <description>A young publisher treats programmers like recording artists—and ships a remarkably varied opening slate. SOUTH SAN FRANCISCO — Ten days before this week began, the small company called Electronic Arts made its first shipment. Its May 20 slate carried five titles—Archon: The Light and the Dark, Hard Hat Mack, M.U.L.E., Worms?, and Axis Assassin—out of a warehouse and toward computer stores. The boxes announced the company’s ambition before a disk was loaded: creators’ names appeared prominently, and the packages borrowed the scale and visual confidence of record albums. Also this week: WarGames Makes Home Computing a Summer-Movie Star · Portable and 16-Bit Machines Crowd the June BYTE · Modems Bring Computer Gamers Together.</description>
     </item>
   </channel>
 </rss>
