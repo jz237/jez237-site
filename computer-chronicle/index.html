@@ -672,6 +672,7 @@
       overflow-wrap: anywhere;
     }
     .cc-panel-label.cc-label-cyan { border-color: var(--cc-cyan-dim); color: var(--cc-cyan); background: rgba(95, 232, 255, 0.06); }
+    .cc-panel-label.cc-label-green { border-color: var(--cc-green); color: var(--cc-green); background: rgba(99, 242, 165, 0.07); }
     .cc-panel h2 {
       margin: 0 0 10px;
       color: #fff !important;
@@ -700,6 +701,12 @@
     .cc-stories .cc-story:first-child { border-top: 0; padding-top: 0; }
     .cc-stories .cc-story h3 { margin: 6px 0 8px; color: #fff !important; font-family: var(--cc-mono) !important; font-size: 1rem; line-height: 1.45; overflow-wrap: anywhere; }
     .cc-stories .cc-pullquote { margin: 10px 0 12px; padding: 6px 12px; border-left: 3px solid var(--cc-amber); color: var(--cc-text); font-style: italic; font-size: 0.88rem; line-height: 1.55; }
+    #underground-desk { border-color: rgba(99, 242, 165, 0.32); }
+    #underground-desk .cc-pullquote { margin: 10px 0 12px; padding: 6px 12px; border-left: 3px solid var(--cc-green); color: var(--cc-text); font-style: italic; font-size: 0.88rem; line-height: 1.55; }
+    .cc-underground-groups { list-style: none; margin: 12px 0 0; padding: 12px 0 0; border-top: 1px dashed var(--cc-line-soft); display: flex; flex-direction: column; gap: 8px; }
+    .cc-underground-groups li { display: flex; flex-direction: column; gap: 2px; }
+    .cc-underground-groups strong { color: var(--cc-green) !important; font-family: var(--cc-mono) !important; font-size: 0.84rem; letter-spacing: 0.02em; }
+    .cc-underground-groups .cc-note { color: var(--cc-muted); font-size: 0.76rem; line-height: 1.5; }
 
     .cc-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
     .cc-list > li { border-top: 1px solid var(--cc-line-soft); padding: 10px 2px; }
@@ -985,8 +992,8 @@
       .cc-datecard [data-current-date], .cc-side-head h2, .cc-rule, .cc-morning-brand strong { color: #111 !important; text-shadow: none; }
       .cc-datecard [data-historic-date], .cc-card strong, .cc-glance strong, .cc-panel h2, .cc-chart strong,
       .cc-list strong, .cc-item-grid h3, .cc-kv strong, .cc-prices .cc-price-row strong, .cc-side-panel .cc-side-body h3,
-      .cc-bullets li, .cc-shelf-group ol li, .cc-stories .cc-story h3 { color: #111 !important; }
-      .cc-stories .cc-pullquote { color: #333 !important; border-color: #444; }
+      .cc-bullets li, .cc-shelf-group ol li, .cc-stories .cc-story h3, .cc-underground-groups strong { color: #111 !important; }
+      .cc-stories .cc-pullquote, #underground-desk .cc-pullquote { color: #333 !important; border-color: #444; }
       .cc-datecard [data-edition], .cc-card-label, .cc-glance span.cc-glance-kicker, .cc-panel-label, .cc-shelf-group .cc-shelf-label { color: #444 !important; border-color: #444; }
       .cc-panel p, .cc-card em, .cc-morning p, .cc-banner p, .cc-chart .cc-note, .cc-list .cc-note, .cc-prices .cc-note,
       .cc-bullets .cc-note, .cc-item-grid p, .cc-kv .cc-note, .cc-side-panel .cc-side-body p, .cc-deck, .cc-ticker [data-status] { color: #333 !important; }
@@ -1137,6 +1144,14 @@
           </div>
           <h2 id="feature-desk-title" data-stories-title>The Week's Stories</h2>
           <div class="cc-stories" data-stories></div>
+        </section>
+
+        <section class="cc-panel" id="underground-desk" aria-labelledby="underground-title" data-underground-panel hidden>
+          <div class="cc-panel-head">
+            <span class="cc-panel-label cc-label-green" data-underground-label>Underground Desk</span>
+          </div>
+          <h2 id="underground-title" data-underground-title>From the Cracking Underground</h2>
+          <div data-underground></div>
         </section>
 
         <section class="cc-panel" id="hardware-history" aria-labelledby="computer-desk-title">

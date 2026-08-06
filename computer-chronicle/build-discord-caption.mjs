@@ -125,6 +125,15 @@ function gadgetBullet(issue) {
   return summary ? `Gadget Desk: ${headline} - ${summary}` : `Gadget Desk: ${headline}`;
 }
 
+function undergroundBullet(issue) {
+  const desk = issue.undergroundDesk;
+  const headline = clean(desk?.headline);
+  if (!headline) return "";
+  const body = Array.isArray(desk?.body) ? desk.body[0] : (desk?.body || desk?.summary || desk?.dek);
+  const summary = shorten(body);
+  return summary ? `Underground Desk: ${headline} - ${summary}` : `Underground Desk: ${headline}`;
+}
+
 function buildCaption(issue, index) {
   const number = issueNumber(issue, index);
   const displayDate = clean(issue.displayDate || issue.historicDate || "");
@@ -133,6 +142,7 @@ function buildCaption(issue, index) {
     leadBullet(issue),
     namedBullet("Software", issue.softwareList?.[0]),
     cultureBullet(issue),
+    undergroundBullet(issue),
     gadgetBullet(issue),
     namedBullet("Price Watch", issue.priceWatch?.[0])
   ].filter(Boolean);
@@ -146,7 +156,7 @@ function buildCaption(issue, index) {
     `Page: <${publicUrl}>`,
     "",
     "Highlights:",
-    ...bullets.slice(0, 5).map((bullet) => `- ${bullet}`)
+    ...bullets.slice(0, 6).map((bullet) => `- ${bullet}`)
   ].join("\n");
 }
 

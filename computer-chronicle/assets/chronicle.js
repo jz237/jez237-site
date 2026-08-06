@@ -27,6 +27,10 @@
     storiesLabel: document.querySelector("[data-stories-label]"),
     storiesTitle: document.querySelector("[data-stories-title]"),
     stories: document.querySelector("[data-stories]"),
+    undergroundPanel: document.querySelector("[data-underground-panel]"),
+    undergroundLabel: document.querySelector("[data-underground-label]"),
+    undergroundTitle: document.querySelector("[data-underground-title]"),
+    underground: document.querySelector("[data-underground]"),
     pictureDeskPanel: document.querySelector("[data-picture-desk-panel]"),
     pictureDeskLabel: document.querySelector("[data-picture-desk-label]"),
     pictureDeskTitle: document.querySelector("[data-picture-desk-title]"),
@@ -711,6 +715,32 @@
     `;
   }
 
+  function renderUnderground(issue) {
+    if (!els.underground || !els.undergroundPanel) return;
+    const desk = objectSection(issue && issue.undergroundDesk);
+    const paragraphs = desk ? bodyParagraphs(desk.body || desk.summary || "") : [];
+    if (!desk || (!desk.headline && !paragraphs.length)) {
+      els.undergroundPanel.hidden = true;
+      els.underground.innerHTML = "";
+      return;
+    }
+    els.undergroundPanel.hidden = false;
+    setText(els.undergroundLabel, chrome(issue, "underground", "label", "Underground Desk"));
+    setText(els.undergroundTitle, desk.headline || chrome(issue, "underground", "title", "From the Cracking Underground"));
+    const groups = Array.isArray(desk.groups) ? desk.groups : [];
+    els.underground.innerHTML = `
+      ${desk.dek ? `<p class="cc-dek">${escapeHtml(cleanPublicCopy(desk.dek))}</p>` : ""}
+      ${articleVisual(desk.image)}
+      ${paragraphs.map((text) => `<p>${escapeHtml(text)}</p>`).join("")}
+      ${groups.length ? `<ul class="cc-underground-groups">${groups.map((group) => {
+        const name = typeof group === "string" ? group : (group.name || group.handle || group.title || "");
+        const note = typeof group === "string" ? "" : cleanPublicCopy(itemSummary(group));
+        return name ? `<li><strong>${escapeHtml(name)}</strong>${note ? `<span class="cc-note">${escapeHtml(note)}</span>` : ""}</li>` : "";
+      }).join("")}</ul>` : ""}
+      ${desk.pullQuote ? `<blockquote class="cc-pullquote">${escapeHtml(cleanPublicCopy(desk.pullQuote))}</blockquote>` : ""}
+    `;
+  }
+
   function renderStories(issue) {
     if (!els.stories || !els.storiesPanel) return;
     const stories = Array.isArray(issue && issue.stories) ? issue.stories : [];
@@ -876,6 +906,8 @@
       }
       if (els.storiesPanel) els.storiesPanel.hidden = true;
       if (els.stories) els.stories.innerHTML = "";
+      if (els.undergroundPanel) els.undergroundPanel.hidden = true;
+      if (els.underground) els.underground.innerHTML = "";
       if (els.computerItems) els.computerItems.innerHTML = "";
       if (els.pictureDeskPanel) els.pictureDeskPanel.hidden = true;
       if (els.pictureDesk) els.pictureDesk.innerHTML = "";
@@ -915,6 +947,7 @@
     renderWorldAnchor(issue);
     renderLead(issue);
     renderStories(issue);
+    renderUnderground(issue);
     renderComputerItems(issue);
     renderSoftware(issue);
     renderStoreShelves(issue);
