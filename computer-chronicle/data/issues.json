@@ -1,8 +1,333 @@
 {
-  "generatedAt": "2026-07-30T12:02:28.922Z",
+  "generatedAt": "2026-08-06T20:14:19.211Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-08-06",
+      "historicDate": "1983-10-24",
+      "displayDate": "Week of October 24-30, 1983",
+      "edition": "Issue 065 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Warm newsprint with Atari red, arcade yellow and office blue ink",
+        "motifs": [
+          "Atarisoft game boxes",
+          "arcade cabinets",
+          "IBM terminal screens",
+          "DEC circuit boards"
+        ],
+        "layout": "Dense metropolitan computer weekly with gaming as the visual lead"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "October 24-30, 1983",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Atarisoft cross-platform game push across the upper columns",
+        "secondaryRail": "IBM host-linked PCs, MicroVAX, charts and security briefs",
+        "archiveNavigation": "Previous and next weekly issues with archive calendar"
+      },
+      "sectionChrome": {
+        "primary": "Games Across the Great Divide",
+        "secondary": "Office & Systems Desk",
+        "texture": "Aged paper, halftone screens, red and blue rules"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-10-24.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for October 24-30, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Atari crosses old hardware boundaries while IBM and DEC redraw the line between desktop and host computing.",
+      "morningLine": "Arcade hits travel to rival machines, Big Blue brings the mainframe to the desk, and DEC puts VAX power into a microcomputer.",
+      "lead": {
+        "headline": "Atari Takes Its Games to Rival Machines",
+        "dek": "The Atarisoft label carries arcade names beyond Atari hardware as the home-game business searches for software revenue.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          1
+        ],
+        "body": [
+          "Atari is loosening the bond between its famous games and its own machines. A New York Times report on October 27 described new Atari titles made to fit competing home systems, turning the company’s arcade catalog into a software line that could reach players well beyond the Atari 2600 and Atari computers.",
+          "The Atarisoft label gave the strategy a bright retail identity. Platform-coded packages—surviving Apple II editions, for example, wear red—let shoppers spot the version for their machine while the Atari name and familiar coin-op artwork supplied the attraction. The box, rather than the console, became the company’s new front door.",
+          "That shift matters in a difficult year for video games. Instead of demanding that a household buy Atari hardware before buying Atari entertainment, the publisher could earn from owners of rival computers and consoles. Arcade properties could be translated, repackaged and placed on many more store shelves.",
+          "The conversions will still be judged machine by machine: controls, graphics and sound differ sharply across home platforms. Yet the business signal is already clear. A great game can travel, and in the crowded autumn of 1983 Atari is betting that its software names may range farther than any single box beneath the television."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "IBM Links the PC Desk to the Mainframe",
+          "kicker": "Big Blue",
+          "dek": "The 3270 PC and XT/370 join local work with corporate host access.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            2
+          ],
+          "body": [
+            "IBM is bringing two worlds onto one desktop. The 3270 Personal Computer combines PC-class local processing with access to IBM 4300- and 3080-series hosts, and was described as handling as many as seven applications concurrently, four supplied by host systems.",
+            "The Personal Computer XT/370 goes further, fitting an XT with three specialized boards so VM/370 applications can be processed locally. Its hardware includes terminal emulation, 524K of added real memory, an Intel 8087 and two Motorola 68000-family processors, with as much as 4MB of virtual memory.",
+            "For corporate buyers, the promise is continuity rather than rebellion: familiar languages and procedures from the machine room, paired with spreadsheets and other personal work at the employee’s desk."
+          ]
+        },
+        {
+          "headline": "DEC Shrinks 32-Bit VAX Power Into a Microcomputer",
+          "kicker": "New Systems",
+          "dek": "MicroVAX I points departmental and technical computing toward smaller packages.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Digital Equipment Corporation has unveiled the MicroVAX I, described in the October 24 Computerworld as the first micro-based implementation of DEC’s 32-bit VAX architecture. DEC rated it at roughly 35 percent of the processing power of a VAX-11/780 and support for as many as eight users.",
+            "The system is aimed at industrial control as well as business and scientific work. MicroVMS, the real-time VAXELN environment and the Unix-compatible Ultrix accompanied the hardware news, signaling that the smaller VAX is intended as a platform rather than a single-purpose curiosity."
+          ]
+        },
+        {
+          "headline": "FBI Seizes Gear in Multicity Hacker Inquiry",
+          "kicker": "Security",
+          "dek": "Unauthorized access becomes a national law-enforcement and privacy story.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "The FBI has seized equipment belonging to 15 alleged computer hackers in 13 cities, Computerworld reports. The sweep shows how quickly remote access and electronic trespass have moved from hobbyist circles into a coordinated federal investigation.",
+            "The same issue gives prominent attention to computer matching and privacy concerns. Together, the stories place two sides of connected computing in view: outsiders reaching systems without permission, and institutions combining personal records with growing power."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atarisoft conversions",
+          "summary": "Atari carries arcade properties to non-Atari home computers and consoles.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Pentapus",
+          "summary": "Turning Point Software’s high-resolution Apple II space-survival game appears in COMPUTE! this month.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Mothership",
+          "summary": "A fast space game reviewed for the 16K Timex/Sinclair 1000.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Microsoft Word 1.00",
+          "detail": "The new MS-DOS word processor shipped September 29 and remains fresh on fall software desks."
+        },
+        {
+          "name": "MicroVMS",
+          "detail": "DEC operating environment announced for the MicroVAX line."
+        },
+        {
+          "name": "Ultrix",
+          "detail": "DEC’s native Unix-compatible system for MicroVAX machines."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Atarisoft conversions",
+            "Pentapus",
+            "Mothership",
+            "Ultima III: Exodus",
+            "Lode Runner"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "Islands in the Stream — Kenny Rogers with Dolly Parton",
+            "Total Eclipse of the Heart — Bonnie Tyler",
+            "True — Spandau Ballet",
+            "All Night Long (All Night) — Lionel Richie",
+            "One Thing Leads to Another — The Fixx"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "Never Say Never Again",
+            "Richard Pryor... Here and Now",
+            "The Dead Zone"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Microsoft Word 1.00",
+            "MicroVMS",
+            "VAXELN",
+            "Ultrix"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Computerworld single copy",
+          "price": "$1.50",
+          "note": "October 24 masthead price"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Tandem Introduces 32-bit Non-Stop TXP",
+          "text": "Tandem says a typical TXP can process 2.2 to 2.75 times as many transactions per second as a comparable Non-Stop II."
+        },
+        {
+          "headline": "256K DRAM Race Accelerates",
+          "text": "A market assessment puts Western Electric and Hitachi ahead in the race to market 256-kilobit dynamic RAM."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Islands in the Stream",
+          "artist": "Kenny Rogers with Dolly Parton"
+        },
+        {
+          "rank": 2,
+          "title": "Total Eclipse of the Heart",
+          "artist": "Bonnie Tyler"
+        },
+        {
+          "rank": 3,
+          "title": "True",
+          "artist": "Spandau Ballet"
+        },
+        {
+          "rank": 4,
+          "title": "All Night Long (All Night)",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 5,
+          "title": "One Thing Leads to Another",
+          "artist": "The Fixx"
+        }
+      ],
+      "periodAd": {
+        "headline": "Arcade Names, Now for Your Machine",
+        "summary": "Atarisoft packages Atari game conversions for competing computers and consoles.",
+        "tagline": "Watch for the platform color on the box."
+      },
+      "market": {
+        "headline": "Never Say Never Again Leads the Weekend",
+        "summary": "The James Bond adventure ranks first for October 28-30, ahead of Richard Pryor... Here and Now and The Dead Zone.",
+        "confidence": "weekend-verified",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "worldAnchor": {
+        "headline": "U.S. and Caribbean Forces Invade Grenada",
+        "summary": "U.S. troops and forces from six Caribbean nations invaded Grenada on October 25, seized its airports and fought Cuban and Grenadian forces; President Reagan addressed the nation October 27.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7,
+          8
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Atarisoft cross-platform report",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              1
+            ]
+          },
+          {
+            "claim": "IBM and DEC systems news",
+            "confidence": "same-week",
+            "sourceRefs": [
+              0,
+              2
+            ]
+          },
+          {
+            "claim": "Charts and box office",
+            "confidence": "dated-week",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          },
+          {
+            "claim": "Grenada invasion",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              7,
+              8
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Computerworld, October 24, 1983",
+          "url": "https://archive.org/stream/computerworld1743unse/computerworld1743unse_djvu.txt"
+        },
+        {
+          "label": "New York Times: Atari's New Games Fit Other Machines",
+          "url": "https://www.nytimes.com/1983/10/27/business/atari-s-new-games-fit-other-machines.html"
+        },
+        {
+          "label": "IBM 3270 Personal Computer announcement",
+          "url": "https://sharktastica.co.uk/resources/docs/txt/IBM_183-129_3270-PC_1983_IBM.txt"
+        },
+        {
+          "label": "Microsoft history: 1983",
+          "url": "https://learn.microsoft.com/en-us/shows/history/history-of-microsoft-1983"
+        },
+        {
+          "label": "COMPUTE! Issue 41",
+          "url": "https://www.atarimagazines.com/compute/issue41/"
+        },
+        {
+          "label": "Billboard Hot 100, October 29, 1983",
+          "url": "https://web.archive.org/web/20201101040837/https:/www.billboard.com/charts/hot-100/1983-10-29"
+        },
+        {
+          "label": "Box Office Mojo, October 28-30, 1983",
+          "url": "https://www.boxofficemojo.com/weekend/1983W43/"
+        },
+        {
+          "label": "UPI: Invasion of Grenada",
+          "url": "https://www.upi.com/Archives/1983/10/25/US-troops-and-forces-from-six-Caribbean-nations-invaded/1910435902400/"
+        },
+        {
+          "label": "Reagan Library: Address on Lebanon and Grenada",
+          "url": "https://www.reaganlibrary.gov/archives/speech/address-nation-events-lebanon-and-grenada"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "MODEM OWNERS",
+          "copy": "Trade messages after dark—local bulletin-board numbers wanted."
+        },
+        {
+          "headline": "GAME SWAP",
+          "copy": "Apple II, Atari and Timex/Sinclair players: disks, tapes and club news."
+        }
+      ]
+    },
     {
       "currentDate": "2026-08-05",
       "historicDate": "1983-10-17",

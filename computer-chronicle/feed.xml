@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 05 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 06 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of October 24-30, 1983 — Atari Takes Its Games to Rival Machines</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-10-24</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-24</guid>
+      <pubDate>Thu, 06 Aug 2026 12:00:00 GMT</pubDate>
+      <description>The Atarisoft label carries arcade names beyond Atari hardware as the home-game business searches for software revenue. Atari is loosening the bond between its famous games and its own machines. A New York Times report on October 27 described new Atari titles made to fit competing home systems, turning the company’s arcade catalog into a software line that could reach players well beyond the Atari 2600 and Atari computers. Also this week: IBM Links the PC Desk to the Mainframe · DEC Shrinks 32-Bit VAX Power Into a Microcomputer · FBI Seizes Gear in Multicity Hacker Inquiry.</description>
+    </item>
     <item>
       <title>Week of October 17-23, 1983 — Info ’83 Turns the Personal Computer Into an Office Workstation</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-10-17</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-06-13</guid>
       <pubDate>Fri, 17 Jul 2026 12:00:00 GMT</pubDate>
       <description>Commodore readies roughly 70 titles, Lotus buys attention, and software makers learn the arts of packaging and promotion. Personal-computer software is becoming a mass-market business before shoppers’ eyes. SRI International estimates that Americans bought $1 billion worth of personal-computer programs in 1982 and forecasts $1.5 billion this year, growth fast enough to turn code once passed among hobbyists into a fiercely promoted consumer product. Also this week: Coleco&apos;s Adam Resets the Complete-Computer Price · Atari Sweeps the Deck for Four XL Machines · WarGames Turns Computer Anxiety into a Hit.</description>
-    </item>
-    <item>
-      <title>Week of June 6–12, 1983 — Coleco’s $600 Adam Steals the Summer CES</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-06-06</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-06-06</guid>
-      <pubDate>Thu, 16 Jul 2026 12:00:00 GMT</pubDate>
-      <description>A complete computer, word processor, fast tape drive and letter-quality printer promises to turn a ColecoVision household into a home office. The busiest conversation at Chicago’s June 5–8 Consumer Electronics Show begins with an unlikely challenger. Coleco, best known for ColecoVision, has unveiled Adam: an under-$600 home-computer package built around a Z80 processor, a full-size 75-key keyboard, SmartWriter word processing, BASIC, a Digital Data Pack recorder and a daisy-wheel printer. Also this week: Atari Answers With XL Computers and a Writing System · Software Price War Breaks Out at CES · WarGames Makes the Home Modem a Movie Star.</description>
     </item>
   </channel>
 </rss>
