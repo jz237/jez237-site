@@ -164,6 +164,22 @@ function checkRendererShapes(issue, issueIndex) {
     fail(`Issue ${issueIndex}: gadgetWatch must include a headline or summary when present.`);
   }
 
+  if (issue.undergroundDesk) {
+    const desk = issue.undergroundDesk;
+    if (typeof desk !== "object" || Array.isArray(desk)) {
+      fail(`Issue ${issueIndex}: undergroundDesk must be an object when present.`);
+    } else {
+      const body = desk.body || desk.summary;
+      const hasBody = typeof body === "string" ? body.trim().length > 0 : Array.isArray(body) && body.length > 0;
+      if (!desk.headline && !hasBody) {
+        fail(`Issue ${issueIndex}: undergroundDesk must include a headline or body when present.`);
+      }
+      if (desk.groups && !Array.isArray(desk.groups)) {
+        fail(`Issue ${issueIndex}: undergroundDesk.groups must be an array when present.`);
+      }
+    }
+  }
+
   if (!issue.accuracyLedger || !Array.isArray(issue.accuracyLedger.items)) {
     fail(`Issue ${issueIndex}: accuracyLedger must be an object with an items array.`);
   }
