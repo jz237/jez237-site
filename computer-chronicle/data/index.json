@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-06",
+      "historicDate": "1983-10-24",
+      "displayDate": "Week of October 24-30, 1983",
+      "edition": "Issue 065 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Arcade hits travel to rival machines, Big Blue brings the mainframe to the desk, and DEC puts VAX power into a microcomputer.",
+      "leadHeadline": "Atari Takes Its Games to Rival Machines",
+      "storyHeadlines": [
+        "IBM Links the PC Desk to the Mainframe",
+        "DEC Shrinks 32-Bit VAX Power Into a Microcomputer",
+        "FBI Seizes Gear in Multicity Hacker Inquiry"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-24.jpg",
+      "thumb": "media/thumbs/1983-10-24.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-05",
       "historicDate": "1983-10-17",
       "displayDate": "Week of October 17-23, 1983",
