@@ -890,5 +890,24 @@
       "description": "A real pronghorn migration sweeps beneath a rotating dusk supercell in a deeply modeled, crackle-glazed raku ceramic landscape.",
       "template": "Render one coherent active environment entirely as a monumental smoke-fired raku ceramic relief, using modeled clay depth, carbon trapping, crackled and crawling glaze, firing blush, grogged texture, raking shadows, and one restrained kintsugi seam to make both subject and ceramic process unmistakable."
     }
+  },
+  {
+    "id": "2026-08-05-random-image-style-random-rendering-style-clockwork-glacier",
+    "title": "Random rendering style: Clockwork Glacier Calving Observatory",
+    "tests": "Wednesday spacing slot 11/12; category=random-image-style; medium=monumental working brass-and-steel automaton with guilloche enamel, rock crystal, hammered silver, blued steel, and abalone; subject=polar glacier calving observatory; capture=three-quarter museum macro photograph; decisive action=falling glacier slab visibly drives wave rings, pitching research skiff, and tide gauge; exposed cams, gears, linkages, bearings, counterweights, and winding key make the causal mechanism legible; anti-repeat variables differ from today’s lampworked glass, punched tin, soapstone, urushi lacquer, and raku ceramic entries; actual-image QA by xai/grok-4.3=PASS.",
+    "prompt": "Create a square, richly detailed finished artwork titled Clockwork Glacier Calving Observatory, rendered entirely as a monumental working brass-and-steel automaton inside a dark museum void. The subject is a polar field observatory recording the instant a glacier calves into a fjord: a huge articulated blue-white guilloche-enamel ice cliff splits along a visible fault and drops a faceted rock-crystal slab into concentric hammered-silver waves, while a tiny brass research skiff pitches away and a mechanical tide gauge swings from the caused surge. Make the calving action unmistakable at thumbnail scale, with the breaking glacier dominating two thirds of the frame and the displaced water visibly connected to it. Every environmental element must belong to the same physical automaton: nickel-silver mountains on cam followers, blued-steel sea, translucent enamel ice strata, abalone cloud bands, jeweled bearings, ratchets, linkages, counterweights, gear trains, winding key, and a cutaway lower plinth revealing cams that drive the fracture, falling slab, boat motion, and wave rings. Use dramatic cool museum spotlights, warm reflections from the brass mechanism, raking light across engraved surfaces, sharp macro photography, deep but readable shadows, realistic metal wear, tiny oil beads, screw heads, maker marks without readable words, and believable mechanical joints. Compose as a three-quarter macro view of the complete sculptural machine, not a diagram, poster, toy, flat illustration, or text layout. No humans, no captions, no labels, no loose real-world scenery outside the automaton.",
+    "image": "images/2026-08-05-random-image-style-random-rendering-style-clockwork-glacier.jpg",
+    "thumb": "thumbs/2026-08-05-random-image-style-random-rendering-style-clockwork-glacier.webp",
+    "color": "#444749",
+    "date": "2026-08-05",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "randomRenderingStyle": {
+      "medium": "Working brass-and-steel automaton with guilloche enamel and rock crystal",
+      "description": "A kinetic polar observatory automaton captures the instant an enamel glacier calves into a mechanically driven fjord.",
+      "template": "Render one coherent active environment entirely as a monumental working automaton, using articulated metals, enamel, crystal, jeweled bearings, exposed cams and linked cause-and-effect motion to make both the subject and physical mechanism unmistakable."
+    }
   }
 ]
