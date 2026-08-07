@@ -4,6 +4,400 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-07",
+      "historicDate": "1983-10-31",
+      "displayDate": "Week of October 31-November 6, 1983",
+      "edition": "Issue 066 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Extra-edition urgency on warm aged newsprint",
+        "motifs": [
+          "IBM PCjr home-computer setup",
+          "cordless keyboard",
+          "cartridge games",
+          "red-and-blue news boxes"
+        ],
+        "layout": "Dense six-column 1983 computer weekly with a dominant PCjr splash and packed shelf modules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "Week of October 31-November 6, 1983",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Full-width Extra Edition banner and three-column PCjr lead",
+        "secondaryRail": "Arcade Board, Activision conversions, charts and price watch",
+        "archiveNavigation": "Previous and next weekly issue controls with archive shelf"
+      },
+      "sectionChrome": {
+        "primary": "IBM blue",
+        "secondary": "newsroom red",
+        "texture": "Warm newsprint, halftones, column rules and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-10-31.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of October 31, 1983, led by the IBM PCjr unveiling",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Extra Edition: IBM has finally opened the shell around “Peanut,” putting its name and PC compatibility into the home-computer contest.",
+      "morningLine": "IBM comes home, Apple gets arcade muscle, and Activision moves two cartridge hits onto Atari computers.",
+      "lead": {
+        "headline": "IBM Cracks Open 'Peanut' and Sends PCjr Into the Home",
+        "dek": "The world's largest computer maker formally entered the home-computer contest on November 1, aiming above low-cost rivals while extending IBM PC software compatibility.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "body": [
+          "NEW YORK—After months of speculation about a machine code-named “Peanut,” International Business Machines formally unveiled the PCjr on November 1. The announcement puts the company that defined the business-PC standard directly into the crowded home-computer market, with deliveries planned for early 1984.",
+          "IBM priced a 64K system unit with a battery-powered cordless infrared keyboard at $669. A $1,269 package raises memory to 128K and adds a diskette drive. Neither price includes a monitor or printer; IBM's color display is $680, while a compact printer is $175.",
+          "The unusual keyboard can work from as far as 20 feet away. IBM cautioned that several PCjrs operating in one room would need cords to avoid infrared interference, a curious limitation for classrooms—one of the markets the company says it is pursuing alongside homes and small businesses.",
+          "Software compatibility may be the machine's strongest calling card. IBM said most programs written for the IBM PC should run on PCjr unless they demand more memory, while cartridge support and television compatibility aim to make the junior machine friendlier in the living room.",
+          "The PCjr arrives above the bargain end of the market and accessories quickly lift the full-system cost. Still, IBM's entry changes the stakes: home computing now has the attention of the industry's largest name, and every rival will have to answer it."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Apple II Gets an Arcade Board",
+          "kicker": "Expansion Desk",
+          "dek": "A $225 expansion board promised coin-op-style graphics and sound while giving BASIC programmers more than 40 new commands.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            9
+          ],
+          "body": [
+            "Third Millennium Engineering introduced the Arcade Board for the Apple II, II Plus, and IIe. The board used many of the same video and sound chips found in coin-operated games.",
+            "It shipped with more than 20 demos, games, and utilities and extended Applesoft BASIC with more than 40 commands. The advertised price was $225. A $225 expansion board promised coin-op-style graphics and sound while giving BASIC programmers more than 40 new commands."
+          ]
+        },
+        {
+          "headline": "Activision Moves River Raid and Kaboom! to Atari Computers",
+          "kicker": "Game Desk",
+          "dek": "Two best-selling cartridge games crossed from console to Atari home computers, illustrating publishers' push toward the computer-game market during the console downturn.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            10,
+            11
+          ],
+          "body": [
+            "COMPUTE!'s November 1983 product pages reported Atari-computer conversions of Activision's River Raid and Kaboom!. The conversions were enhanced to use the greater capabilities of Atari home computers.",
+            "The news followed Atari's late-October move to publish games for competitors' machines, evidence of rapidly shifting platform economics. Two best-selling cartridge games crossed from console to Atari home computers, illustrating publishers' push toward the computer-game market during the console downturn."
+          ]
+        },
+        {
+          "headline": "Touch-Sensitive PowerPad Offers a New Way to Control Home Computers",
+          "kicker": "Input Desk",
+          "dek": "Chalk Board's 12-inch touch surface represented an early consumer alternative to keyboard input.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            12
+          ],
+          "body": [
+            "The Chalk Board PowerPad was described as a touch-sensitive input device replacing the keyboard for supported tasks. Its active surface measured 12 by 12 inches.",
+            "COMPUTE! carried the product in its November 1983 news pages. Chalk Board's 12-inch touch surface represented an early consumer alternative to keyboard input."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "River Raid — Atari home computers",
+          "summary": "Activision conversion reported in the November issue of COMPUTE!, enhanced from the console version.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "title": "Kaboom! — Atari home computers",
+          "summary": "Activision conversion reported alongside River Raid.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            10
+          ]
+        },
+        {
+          "title": "In the Chips — VIC-20",
+          "summary": "Creative Software educational business simulation giving one or two players $100,000 to organize a software company.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "title": "Zork III — Multiple home computers",
+          "summary": "Creative Computing's November issue reviewed Infocom's concluding Zork adventure as a current title.",
+          "confidence": "period",
+          "sourceRefs": [
+            14
+          ]
+        },
+        {
+          "title": "Third Millennium Arcade Board",
+          "summary": "Apple II/II Plus/IIe graphics-and-sound board; 20-plus programs and 40-plus Applesoft commands; $225.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Dynacomp Timex/Sinclair assortment",
+          "detail": "Programs for 16K Timex/Sinclair machines included Blackjack at $12.95 and personal-finance software."
+        },
+        {
+          "name": "T & G",
+          "detail": "C & C Software graphics system for Apple computers, designed to avoid shape tables for faster execution."
+        },
+        {
+          "name": "Investment Portfolio Manager",
+          "detail": "Bytes and Bits package for Commodore 64 and VIC-20 announced with disk-management tools and games."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer Games",
+          "items": [
+            "River Raid (Atari home computers)",
+            "Kaboom! (Atari home computers)",
+            "In the Chips (VIC-20)",
+            "Zork III (Multiple home computers)"
+          ]
+        },
+        {
+          "label": "Software",
+          "items": [
+            "Dynacomp Timex/Sinclair assortment",
+            "T & G",
+            "Investment Portfolio Manager"
+          ]
+        },
+        {
+          "label": "Hardware",
+          "items": [
+            "IBM PCjr 64K model — $669",
+            "IBM PCjr 128K diskette model — $1,269",
+            "Third Millennium Arcade Board — $225",
+            "Chalk Board PowerPad"
+          ]
+        },
+        {
+          "label": "At the Movies",
+          "items": [
+            "1. Deal of the Century",
+            "2. Never Say Never Again",
+            "3. Richard Pryor... Here and Now",
+            "4. The Big Chill"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM PCjr, 64K",
+          "price": "$669",
+          "note": "Monitor and printer not included."
+        },
+        {
+          "item": "IBM PCjr, 128K with diskette",
+          "price": "$1,269",
+          "note": "Monitor and printer not included."
+        },
+        {
+          "item": "IBM color display",
+          "price": "$680",
+          "note": "PCjr accessory price at unveiling."
+        },
+        {
+          "item": "IBM compact printer",
+          "price": "$175",
+          "note": "PCjr accessory price at unveiling."
+        },
+        {
+          "item": "Apple Arcade Board",
+          "price": "$225",
+          "note": "Third Millennium Engineering expansion board."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Customized adventures arrive as bitCards",
+          "text": "Chartscan Data marketed personalized text-and-graphics adventures as holiday gifts."
+        },
+        {
+          "headline": "A television can serve as PCjr's display",
+          "text": "IBM promoted household-TV compatibility, while selling a dedicated $680 color display."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Islands in the Stream",
+          "artist": "Kenny Rogers with Dolly Parton"
+        },
+        {
+          "rank": 2,
+          "title": "Total Eclipse of the Heart",
+          "artist": "Bonnie Tyler"
+        },
+        {
+          "rank": 3,
+          "title": "True",
+          "artist": "Spandau Ballet"
+        },
+        {
+          "rank": 4,
+          "title": "All Night Long (All Night)",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 5,
+          "title": "One Thing Leads to Another",
+          "artist": "The Fixx"
+        }
+      ],
+      "periodAd": {
+        "headline": "Bring IBM Home",
+        "summary": "The new PCjr offers 64K or 128K configurations, cartridge support, a cordless keyboard and optional color display.",
+        "tagline": "The easy one for everyone."
+      },
+      "market": {
+        "headline": "A Blue Suit Enters the Living Room",
+        "summary": "PCjr extends IBM compatibility toward homes and classrooms, but a monitor and disk-equipped configuration push the real price well beyond the $669 starting point.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Reagan Says U.S. Mission in Grenada Is Complete",
+        "summary": "On November 3 President Reagan said U.S. troops had completed their mission after the invasion; the prior day Washington declared hostilities ended and planned withdrawals.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7,
+          15
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "IBM introduced PCjr on November 1, 1983",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "claim": "Arcade Board and Activision conversions appeared in November 1983 product coverage",
+            "confidence": "same-month",
+            "sourceRefs": [
+              9,
+              10,
+              11,
+              12
+            ]
+          },
+          {
+            "claim": "Charts and listings reflect the historical week or its ending weekend",
+            "confidence": "same-week",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "IBM Unveils Its 2 Personal Computers (1983-11-01)",
+          "url": "https://www.washingtonpost.com/archive/business/1983/11/02/ibm-unveils-its-2-personal-computers/c3ca69d2-5f19-49d1-81fa-a2686e9e4386/"
+        },
+        {
+          "label": "IBM's new 'junior' model - expensive but adaptable (1983-11-02)",
+          "url": "https://www.csmonitor.com/1983/1102/110222.html"
+        },
+        {
+          "label": "IBM introduces new 'PCjr' personal computer (1983-11-02)",
+          "url": "https://www.upi.com/Archives/1983/11/02/IBM-introduces-new-PCjr-personal-computer/4655436597200/"
+        },
+        {
+          "label": "IBM PCjr: The easy one for everyone (1983)",
+          "url": "https://archive.computerhistory.org/resources/text/IBM/IBM.PCjr.1983.102646138.pdf"
+        },
+        {
+          "label": "COMPUTE! Issue 42 product news (1983-11)",
+          "url": "https://archive.org/details/1983-11-compute-magazine"
+        },
+        {
+          "label": "Domestic 1983 Weekend 44 (1983-11-06)",
+          "url": "https://www.boxofficemojo.com/weekend/1983W44/"
+        },
+        {
+          "label": "US Top 40 Singles for week ending November 5, 1983 (1983-11-05)",
+          "url": "https://top40weekly.com/2013/11/05/us-top-40-singles-for-the-week-ending-november-5-1983/"
+        },
+        {
+          "label": "Reagan: U.S. troops complete mission in Grenada (1983-11-03)",
+          "url": "https://www.upi.com/Archives/1983/11/03/Reagan-US-troops-complete-mission-in-Grenada/6279217785141/"
+        },
+        {
+          "label": "The Argentine Result: A Vote for Democracy (1983-11-02)",
+          "url": "https://www.nytimes.com/1983/11/02/world/the-argentine-result-a-vote-for-democracy.html"
+        },
+        {
+          "label": "Period source",
+          "url": "https://www.atarimagazines.com/compute/issue42/097_1_NEWS_PRODUCTS_ARCADE-QUALITY_APPLE.php"
+        },
+        {
+          "label": "Period source",
+          "url": "https://www.atarimagazines.com/compute/issue42/098_2_NEWS_PRODUCTS_GAMES_CONVERTED_FOR_ATARI.php"
+        },
+        {
+          "label": "Period source",
+          "url": "https://www.nytimes.com/1983/10/27/business/atari-s-new-games-fit-other-machines.html"
+        },
+        {
+          "label": "Period source",
+          "url": "https://www.atarimagazines.com/compute/issue42/100_2_NEWS_PRODUCTS_TOUCH-SENSITIVE_INPUT_DEVICE.php"
+        },
+        {
+          "label": "Period source",
+          "url": "https://www.atarimagazines.com/compute/issue42/100_1_NEWS_PRODUCTS_GAMES_FOR_THE_VIC_AND_64.php"
+        },
+        {
+          "label": "Period source",
+          "url": "https://www.atarimagazines.com/creative/v9n11/141_Zork_III_a_classic_adven.php"
+        },
+        {
+          "label": "Period source",
+          "url": "https://www.upi.com/Archives/1983/11/02/The-United-States-said-Wednesday-hostilities-had-ended-in/5966436597200/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "WANTED: PCjr WATCHERS",
+          "copy": "Dealers and software houses prepare for IBM’s early-1984 home-computer arrival."
+        },
+        {
+          "headline": "APPLE ARCADE POWER",
+          "copy": "Graphics, sound and more than 40 Applesoft commands on a $225 expansion board."
+        }
+      ],
+      "milestone": {
+        "title": "IBM unveils the PCjr",
+        "note": "IBM's first purpose-built home computer brought the company defining the business-PC standard directly into the consumer market, making its November 1 debut a landmark industry event even though the machine later failed commercially."
+      }
+    },
+    {
       "currentDate": "2026-08-06",
       "historicDate": "1983-10-24",
       "displayDate": "Week of October 24-30, 1983",
