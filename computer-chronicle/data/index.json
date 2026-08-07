@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-07",
+      "historicDate": "1983-10-31",
+      "displayDate": "Week of October 31-November 6, 1983",
+      "edition": "Issue 066 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "IBM comes home, Apple gets arcade muscle, and Activision moves two cartridge hits onto Atari computers.",
+      "leadHeadline": "IBM Cracks Open 'Peanut' and Sends PCjr Into the Home",
+      "storyHeadlines": [
+        "Apple II Gets an Arcade Board",
+        "Activision Moves River Raid and Kaboom! to Atari Computers",
+        "Touch-Sensitive PowerPad Offers a New Way to Control Home Computers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-31.jpg",
+      "thumb": "media/thumbs/1983-10-31.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-06",
       "historicDate": "1983-10-24",
       "displayDate": "Week of October 24-30, 1983",
