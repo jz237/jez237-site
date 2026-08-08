@@ -1,0 +1,423 @@
+{
+  "currentDate": "2026-08-08",
+  "historicDate": "1983-11-07",
+  "displayDate": "Week of November 7-13, 1983",
+  "edition": "Issue 067 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Extra-edition urgency on warm aged newsprint",
+    "motifs": [
+      "graphical windows",
+      "mouse pointer",
+      "Atari cartridges",
+      "computer-magazine rack"
+    ],
+    "layout": "Dense six-column front page with a dominant Windows announcement and bright gaming rail"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "Week of November 7-13, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Banner lead beneath masthead",
+    "secondaryRail": "Games, charts, software and prices",
+    "archiveNavigation": "Chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "newsprint blue",
+    "texture": "aged paper, halftones and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-11-07.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of November 7-13, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Extra Edition: Microsoft has shown the PC world a graphical future called Windows.",
+  "morningLine": "Menus, tiled windows and a mouse move onto Microsoft’s drawing board while games crowd the holiday shelves.",
+  "milestone": {
+    "title": "Microsoft announces Windows",
+    "note": "The November 10 unveiling began the public history of the graphical PC platform that would later dominate desktop computing worldwide."
+  },
+  "lead": {
+    "headline": "Microsoft Opens a Window on the PC’s Graphical Future",
+    "dek": "Bill Gates unveils a mouse-driven graphical layer for MS-DOS machines, promising menus, tiled windows and a common face for the compatible-computer boom.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ],
+    "body": [
+      "NEW YORK, Nov. 10 — Microsoft this week unveiled Windows, a graphical operating environment intended to place menus, pictures and mouse control above the command-line face of MS-DOS. Bill Gates presented the product at the Helmsley Palace Hotel, giving the fast-growing world of IBM-compatible computers a glimpse of a more visual way to work.",
+      "The project began inside Microsoft under the working name Interface Manager. Its announced design combines pull-down menus, tiled windows, device-independent graphics and cooperative multitasking, allowing several programs to remain available within a shared screen environment.",
+      "Windows enters a field already being defined by Apple’s Lisa and VisiCorp’s Visi On. Microsoft’s wager is that a common graphical layer can span the many machines built around DOS, easing differences among displays, printers and pointing devices for both programmers and users.",
+      "The company is aiming for an April 1984 delivery, though the ambitious software remains unfinished. For buyers accustomed to typed commands, the announcement is still consequential: the largest supplier of microcomputer software has declared that the mouse and graphical desktop belong in the PC’s future.",
+      "Whether Windows arrives on schedule or wins immediate acceptance is uncertain. Yet this week’s demonstration has put a name on Microsoft’s strategy—and opened a contest over who will define the everyday face of personal computing."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "A Self-Replicating Program Earns a New Name: Computer Virus",
+      "kicker": "Underground Desk",
+      "dek": "Fred Cohen’s controlled university demonstration exposes a new class of security problem.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        3,
+        4
+      ],
+      "body": [
+        "At a Lehigh University computer-security seminar on November 10, graduate student Fred Cohen demonstrated a program able to attach itself to other programs and reproduce. The controlled experiment was academic research, not a public outbreak.",
+        "Cohen’s work gives the problem a memorable name—computer virus—and argues that shared systems can permit infections to spread with alarming speed. The demonstration adds a new concern to a year already filled with debate over unauthorized computer access.",
+        "The lesson is defensive: system designers must consider not only intruders but software that turns trusted programs into carriers. No operational code or intrusion instructions are reproduced here."
+      ]
+    },
+    {
+      "headline": "Computer Magazines Ride the Home-Micro Boom",
+      "kicker": "Newsstand",
+      "dek": "Thick issues, machine-specific titles and type-in programs turn the magazine rack into a software shelf.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        6,
+        7
+      ],
+      "body": [
+        "The New York Times reported November 9 on the explosive growth of computer magazines, a publishing boom fed by millions of new microcomputer owners seeking reviews, buying advice and programs.",
+        "General titles such as Byte, Creative Computing and Compute! share the rack with publications devoted to particular machines. Type-in listings make the magazines a low-cost distribution channel as well as reading matter.",
+        "Compute!’s November issue runs beyond 300 pages, its advertisements and product notices mapping an industry in which games, utilities and peripherals compete for the holiday buyer’s attention."
+      ]
+    },
+    {
+      "headline": "IBM-Hitachi Settlement Reported Near $300 Million",
+      "kicker": "Business Computing",
+      "dek": "A reported secret pact underscores the value—and danger—surrounding mainframe compatibility.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        5
+      ],
+      "body": [
+        "A November 9 report said Hitachi agreed to pay IBM about $300 million to settle litigation accusing the Japanese company of technology theft.",
+        "The dispute grew from an FBI sting concerning alleged acquisition of IBM computer secrets. Its reported price shows how fiercely mainframe makers guard the engineering knowledge behind compatible systems."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Microsoft Windows",
+      "summary": "Graphical MS-DOS environment announced November 10 with mouse control, menus, tiled windows and multitasking.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "IBM PCjr",
+      "summary": "IBM’s new home computer enters its first full week in view, from $669 for a 64K base model.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        15
+      ]
+    },
+    {
+      "title": "Caltech Cosmic Cube",
+      "summary": "An experimental parallel computer links processors to attack demanding scientific problems.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        13
+      ]
+    },
+    {
+      "title": "Visi On",
+      "summary": "VisiCorp’s graphical environment provides the immediate commercial benchmark for Windows.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "NEC CD-803E",
+      "summary": "A new equipment profile shows compact-disc players spreading beyond first-wave brands.",
+      "confidence": "period",
+      "sourceRefs": [
+        14
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Microsoft Windows",
+      "detail": "Announced graphical environment for MS-DOS PCs"
+    },
+    {
+      "name": "Visi On",
+      "detail": "VisiCorp graphical environment for capable IBM-compatible systems"
+    },
+    {
+      "name": "Zork III",
+      "detail": "Infocom’s concluding Zork trilogy adventure"
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "River Raid",
+        "Kaboom!",
+        "In the Chips",
+        "Crisis Mountain",
+        "Zork III"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "The Big Chill",
+        "Never Say Never Again",
+        "Richard Pryor... Here and Now",
+        "Deal of the Century",
+        "All the Right Moves"
+      ]
+    },
+    {
+      "label": "Hardware",
+      "items": [
+        "IBM PCjr",
+        "Caltech Cosmic Cube",
+        "NEC CD-803E"
+      ]
+    },
+    {
+      "label": "Software",
+      "items": [
+        "Microsoft Windows",
+        "Visi On",
+        "Zork III"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM PCjr entry model",
+      "price": "$669",
+      "note": "64K base configuration"
+    },
+    {
+      "item": "IBM PCjr enhanced model",
+      "price": "$1,269",
+      "note": "128K with disk drive"
+    },
+    {
+      "item": "River Raid or Kaboom! for Atari computers",
+      "price": "$34.95 each",
+      "note": "Activision conversions"
+    },
+    {
+      "item": "In the Chips for VIC-20",
+      "price": "$29.95",
+      "note": "Creative Software cartridge"
+    },
+    {
+      "item": "Crisis Mountain",
+      "price": "$34.95 / $29.95",
+      "note": "Commodore 64 / VIC-20"
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Electronic-security anxiety intensifies",
+      "text": "Calls for stronger safeguards follow recurring reports of break-ins against government and business systems."
+    },
+    {
+      "headline": "PCjr approaches the holiday market",
+      "text": "IBM positions its colorful new machine for home, education and small-business buyers."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "All Night Long (All Night)",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 2,
+      "title": "Islands in the Stream",
+      "artist": "Kenny Rogers with Dolly Parton"
+    },
+    {
+      "rank": 3,
+      "title": "Total Eclipse of the Heart",
+      "artist": "Bonnie Tyler"
+    },
+    {
+      "rank": 4,
+      "title": "True",
+      "artist": "Spandau Ballet"
+    },
+    {
+      "rank": 5,
+      "title": "One Thing Leads to Another",
+      "artist": "The Fixx"
+    }
+  ],
+  "periodAd": {
+    "headline": "Atari Action Comes Home",
+    "summary": "River Raid and Kaboom! arrive for Atari home computers with expanded play features.",
+    "tagline": "Cartridge thrills for the family computer."
+  },
+  "market": {
+    "headline": "IBM Name Enters the Home-Computer Crossfire",
+    "summary": "The PCjr’s $669 entry model faces Commodore, Atari, Apple and Coleco as holiday competition intensifies.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      15
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Bomb Explodes Outside U.S. Senate Chamber",
+    "summary": "At 10:58 p.m. November 7, a bomb claimed by the Armed Resistance Unit exploded in the Capitol’s north wing. No one was injured; damage was later estimated at $250,000.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      12
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Compact-Disc Players Spread Beyond First-Wave Brands",
+    "summary": "Audio magazine’s November equipment profile of NEC’s CD-803E documents the widening market for still-new digital-audio hardware.",
+    "confidence": "period",
+    "sourceRefs": [
+      14
+    ]
+  },
+  "undergroundDesk": {
+    "headline": "A Virus Is Named in a Controlled Security Test",
+    "dek": "Academic research at Lehigh demonstrates self-replicating software without unleashing a public outbreak.",
+    "body": [
+      "Fred Cohen’s November 10 seminar demonstration showed that software could attach itself to other programs and make them carriers in turn.",
+      "The controlled experiment belongs to computer-security research, not crime. It warns operators of shared systems that trusted programs can become a channel for rapid infection."
+    ],
+    "groups": [
+      {
+        "name": "Fred Cohen",
+        "note": "USC graduate student who conducted the controlled experiment"
+      },
+      {
+        "name": "Lehigh University computer-security seminar",
+        "note": "Academic setting for the November 10 demonstration"
+      }
+    ],
+    "sourceRefs": [
+      3,
+      4
+    ],
+    "confidence": "exact-date"
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Windows announcement",
+        "status": "Verified to November 10, 1983",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "claim": "Fred Cohen virus demonstration",
+        "status": "Verified to November 10, 1983",
+        "sourceRefs": [
+          3,
+          4
+        ]
+      },
+      {
+        "claim": "Charts and prices",
+        "status": "Dated or period-sourced",
+        "sourceRefs": [
+          8,
+          9,
+          10,
+          11
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Computer History Museum: Microsoft Introduces Windows",
+      "url": "https://www.computerhistory.org/tdih/november/10/"
+    },
+    {
+      "label": "Wired: Gates Opens Windows a Bit Early",
+      "url": "https://www.wired.com/2011/11/1110gates-microsoft-intros-windows-1/"
+    },
+    {
+      "label": "Time: Windows on the World",
+      "url": "https://time.com/archive/6860280/computers-windows-on-the-world/"
+    },
+    {
+      "label": "Fred Cohen: Computer Viruses—Theory and Experiments",
+      "url": "https://all.net/books/virus/index.html"
+    },
+    {
+      "label": "Wired: Computer 'Virus' Is Born",
+      "url": "https://www.wired.com/2009/11/1110fred-cohen-first-computer-virus/"
+    },
+    {
+      "label": "UPI: IBM and Hitachi reportedly made secret pact",
+      "url": "https://www.upi.com/Archives/1983/11/09/IBM-and-Hitachi-reportedly-made-secret-pact/2634437202000/"
+    },
+    {
+      "label": "New York Times: Boom in Computer Magazines",
+      "url": "https://www.nytimes.com/1983/11/09/business/boom-in-computer-magazines.html"
+    },
+    {
+      "label": "Compute! Issue 42",
+      "url": "https://archive.org/details/1983-11-compute-magazine"
+    },
+    {
+      "label": "Compute!: Games Converted For Atari",
+      "url": "https://www.atarimagazines.com/compute/issue42/098_2_NEWS_PRODUCTS_GAMES_CONVERTED_FOR_ATARI.php"
+    },
+    {
+      "label": "Compute!: Games For The VIC And 64",
+      "url": "https://www.atarimagazines.com/compute/issue42/100_1_NEWS_PRODUCTS_GAMES_FOR_THE_VIC_AND_64.php"
+    },
+    {
+      "label": "Billboard Hot 100, November 12, 1983",
+      "url": "https://www.elpee.jp/hot100/week/1983-11-12"
+    },
+    {
+      "label": "Box Office Mojo: Domestic Weekend 45",
+      "url": "https://www.boxofficemojo.com/weekend/1983W45/"
+    },
+    {
+      "label": "U.S. Senate: Bomb Explodes in Capitol",
+      "url": "https://www.senate.gov/about/historic-buildings-spaces/capitol/bomb-explodes-1983.htm"
+    },
+    {
+      "label": "Christian Science Monitor: Caltech Cosmic Cube",
+      "url": "https://www.csmonitor.com/1983/1110/111020.html"
+    },
+    {
+      "label": "Audio: NEC CD-803E Compact Disc Player",
+      "url": "https://www.gammaelectronics.xyz/audio_11-1983_nec.html"
+    },
+    {
+      "label": "UPI: IBM introduces the PCjr",
+      "url": "https://www.upi.com/Archives/1983/11/02/IBM-introduces-new-PCjr-personal-computer/4655436597200/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "PROGRAMMERS WANTED",
+      "copy": "Microcomputer experience prized. Bring your best disk and résumé."
+    },
+    {
+      "headline": "MODEM CLUB",
+      "copy": "Trade tips, messages and public-domain programs—local bulletin-board enthusiasts meet weekly."
+    }
+  ]
+}

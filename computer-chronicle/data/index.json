@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-08",
+      "historicDate": "1983-11-07",
+      "displayDate": "Week of November 7-13, 1983",
+      "edition": "Issue 067 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Menus, tiled windows and a mouse move onto Microsoft’s drawing board while games crowd the holiday shelves.",
+      "leadHeadline": "Microsoft Opens a Window on the PC’s Graphical Future",
+      "storyHeadlines": [
+        "A Self-Replicating Program Earns a New Name: Computer Virus",
+        "Computer Magazines Ride the Home-Micro Boom",
+        "IBM-Hitachi Settlement Reported Near $300 Million"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-11-07.jpg",
+      "thumb": "media/thumbs/1983-11-07.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-07",
       "historicDate": "1983-10-31",
       "displayDate": "Week of October 31-November 6, 1983",
