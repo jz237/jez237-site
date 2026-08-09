@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 08 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 09 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 14-20, 1983 — Penney Drops Coleco&apos;s Adam From Holiday Line</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-11-14</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-14</guid>
+      <pubDate>Sun, 09 Aug 2026 12:00:00 GMT</pubDate>
+      <description>A major retailer’s retreat exposes delivery and reliability doubts around the ambitious all-in-one home computer. Coleco’s bid to turn its video-game success into a home-computer empire suffered a conspicuous holiday setback this week. The New York Times reported November 15 that J.C. Penney had omitted the Adam computer from its holiday line, a damaging absence at the moment families were studying Christmas catalogs and retailers were committing scarce shelf space. Also this week: Microsoft Opens a Window on DOS · Video Games Enter Christmas Under a Cloud · Schools Add Ethics to Computer Literacy.</description>
+    </item>
     <item>
       <title>Week of November 7-13, 1983 — Microsoft Opens a Window on the PC’s Graphical Future</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-11-07</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-04</guid>
       <pubDate>Mon, 20 Jul 2026 12:00:00 GMT</pubDate>
       <description>The summer CES sensation combines game compatibility, high-capacity tape, word processing and a daisy-wheel printer in one mass-market package. The most talked-about personal computer of the summer is not merely a keyboard in a box. Coleco’s Adam, the lead item in the July 3 Arcade Express after its Consumer Electronics Show debut, is being pitched as a complete household system: computer, keyboard, high-capacity tape storage, word processing, joysticks and a daisy-wheel printer for a promised price below $600. Also this week: The $600 System Becomes the New Battleground · Dragon’s Lair Turns the Arcade into a Cartoon Theater · Electronic Arts Gives Designers Star Billing.</description>
-    </item>
-    <item>
-      <title>Week of June 27-July 3, 1983 — Dragon’s Lair Brings the Cartoon Arcade</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-06-27</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-06-27</guid>
-      <pubDate>Sun, 19 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Cinematronics’ laserdisc cabinet turns Don Bluth animation into the year’s loudest coin-op, and the rest of the arcade is scrambling to keep up. Just weeks after the June Consumer Electronics Show handed the home-computer business its next big products, the arcade answered with a machine that played more like a movie than a game. Cinematronics’ Dragon’s Lair, in arcades from June 1983, drove a Pioneer laserdisc player with a joystick and a single sword button, jumping between pre-animated scenes of a knight named Dirk the Daring rescuing Princess Daphne from the dragon Singe. Also this week: Coleco Pitches Adam as the Family Computer · Atari Resets Its 8-Bit Line with the 600XL and 800XL · WarGames Makes the Modem a Summer Star · The Price War Bites the Family-Room Shelf.</description>
     </item>
   </channel>
 </rss>
