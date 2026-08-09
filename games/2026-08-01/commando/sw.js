@@ -55,9 +55,13 @@ self.addEventListener('fetch', (e) => {
   if (url.origin !== location.origin) return; // never touch cross-origin
 
   if (isCode(e.request, url)) {
-    // network-first: deployed build wins, cache is the offline safety net
+    // network-first with FORCED REVALIDATION. The site is served by a Worker
+    // that stamps its own 4h Cache-Control (so the project's _headers rules do
+    // not reach these files); cache:'no-cache' makes the browser check the
+    // etag every time, so a fresh deploy is never masked by the HTTP cache.
+    // Cheap: unchanged files answer 304.
     e.respondWith(
-      fetch(e.request)
+      fetch(new Request(e.request, { cache: 'no-cache' }))
         .then((res) => {
           if (res && res.ok) {
             const copy = res.clone();
