@@ -86,3 +86,17 @@
 
 /computer-chronicle/feed.xml
   Cache-Control: public, max-age=300, must-revalidate
+
+# Commando HD updates frequently and ships a service worker; the worker script
+# and the code surface must always revalidate or a stale build sticks forever
+/games/2026-08-01/commando/sw.js
+  Cache-Control: no-cache, must-revalidate
+
+/games/2026-08-01/commando/index.html
+  Cache-Control: no-cache, must-revalidate
+
+/games/2026-08-01/commando/game.js
+  Cache-Control: no-cache, must-revalidate
+
+/games/2026-08-01/commando/data/*
+  Cache-Control: no-cache, must-revalidate
