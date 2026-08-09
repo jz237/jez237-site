@@ -4,6 +4,405 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-09",
+      "historicDate": "1983-11-14",
+      "displayDate": "Week of November 14-20, 1983",
+      "edition": "Issue 068 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "urgent holiday-retail edition on warm aged newsprint",
+        "motifs": [
+          "Coleco Adam package",
+          "computer-store holiday display",
+          "cartridge and disk boxes"
+        ],
+        "layout": "gaming-and-home-computer lead with dense retail sidebars"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of November 14-20, 1983",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Adam retail setback dominates above the fold",
+        "secondaryRail": "Windows, games, ethics and culture charts",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "ink red",
+        "secondary": "IBM blue",
+        "texture": "warm newsprint with halftone photographs and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-11-14.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for November 14-20, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Holiday shelves are deciding which home-computer promises can survive contact with production, retailers and families.",
+      "morningLine": "J.C. Penney backs away from Coleco’s Adam just as the Christmas computer contest reaches full volume.",
+      "lead": {
+        "headline": "Penney Drops Coleco's Adam From Holiday Line",
+        "dek": "A major retailer’s retreat exposes delivery and reliability doubts around the ambitious all-in-one home computer.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "body": [
+          "Coleco’s bid to turn its video-game success into a home-computer empire suffered a conspicuous holiday setback this week. The New York Times reported November 15 that J.C. Penney had omitted the Adam computer from its holiday line, a damaging absence at the moment families were studying Christmas catalogs and retailers were committing scarce shelf space.",
+          "Adam had been promoted as a complete household system rather than a bare computer: 64K of memory, keyboard, Digital Data Pack drive and a daisy-wheel printer in a package advertised near $700. That aggressive bundle promised word processing and home entertainment without the long accessory list attached to many rivals.",
+          "The promise collided with the difficult work of shipping reliable machines in quantity. Federal marketing approval had arrived in September and store availability was expected in October, so Penney’s November retreat sharpened questions about whether Coleco could meet the season it had spent the year courting.",
+          "The episode lands amid a punishing price war. Commodore and Atari are discounting established machines, IBM’s $669 PCjr has entered the conversation, and software libraries increasingly matter as much as specifications. For Adam, missing one retailer’s holiday line is more than a lost sale: it is a test of confidence in the whole package."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Microsoft Opens a Window on DOS",
+          "body": [
+            "Microsoft’s newly announced Windows environment proposes a graphical layer for MS-DOS computers, bringing menus, a pointing device and multiple on-screen work areas to IBM-compatible hardware. The November 10 unveiling remains fresh news as the trade studies an early prerelease system.",
+            "The company’s broad compatibility pitch distinguishes Windows from graphical systems tied to one manufacturer. Bill Gates predicted rapid adoption across IBM-compatible machines, though both the software and the market still face a long road from demonstration to everyday desk."
+          ],
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "headline": "Video Games Enter Christmas Under a Cloud",
+          "body": [
+            "The cartridge business approaches Christmas carrying excess inventory, retailer caution and the shadow of Atari’s losses. Warner Communications reported a $122.3 million third-quarter after-tax loss in October as Atari’s fortunes collapsed.",
+            "Yet computer games are showing where players may go next. Ultima III, Archon and Lode Runner offer deeper strategy, construction and role-playing on programmable machines—experiences that dedicated consoles struggle to match."
+          ],
+          "sourceRefs": [
+            7,
+            8,
+            13,
+            14
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Schools Add Ethics to Computer Literacy",
+          "body": [
+            "A November 14 Christian Science Monitor report argues that students need values alongside technical skill. After the widely publicized intrusions by Milwaukee’s 414s, access to networks is no longer being discussed as a purely mechanical lesson.",
+            "Teachers and parents now confront a new question: how to encourage curiosity without treating an electronic boundary as imaginary. The debate signals that computer literacy is becoming a civic subject as well as a vocational one."
+          ],
+          "sourceRefs": [
+            5,
+            6
+          ],
+          "confidence": "exact-date"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Coleco Adam",
+          "summary": "64K all-in-one home system with data-pack storage and daisy-wheel printer faces a holiday retail setback.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1,
+            2
+          ]
+        },
+        {
+          "title": "Microsoft Windows",
+          "summary": "Graphical MS-DOS environment, announced November 10, points toward mouse-driven IBM-compatible computing.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        },
+        {
+          "title": "IBM PCjr",
+          "summary": "IBM’s $669 entry configuration adds fresh pressure to the home-computer price war.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "Ultima III: Exodus",
+          "summary": "Origin’s party-based role-playing game expands tactical combat on Apple II and Atari computers.",
+          "confidence": "period",
+          "sourceRefs": [
+            13
+          ]
+        },
+        {
+          "title": "Lode Runner",
+          "summary": "Broderbund’s action puzzle and construction set remains a defining 1983 computer game.",
+          "confidence": "period",
+          "sourceRefs": [
+            14
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Microsoft Windows",
+          "detail": "Announced graphical environment for MS-DOS PCs"
+        },
+        {
+          "name": "Turbo Pascal",
+          "detail": "Borland integrated Pascal compiler and editor"
+        },
+        {
+          "name": "Ultima III: Exodus",
+          "detail": "Four-character computer role-playing adventure"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Ultima III: Exodus",
+            "Archon: The Light and the Dark",
+            "Lode Runner",
+            "M.U.L.E.",
+            "Zork III"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "A Christmas Story",
+            "The Big Chill",
+            "The Right Stuff",
+            "Never Say Never Again",
+            "All the Right Moves"
+          ]
+        },
+        {
+          "label": "Hardware",
+          "items": [
+            "Coleco Adam",
+            "IBM PCjr",
+            "Commodore 64"
+          ]
+        },
+        {
+          "label": "Software",
+          "items": [
+            "Microsoft Windows",
+            "Turbo Pascal",
+            "VisiCalc"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Coleco Adam complete system",
+          "price": "about $700",
+          "note": "Computer, keyboard, data-pack drive and printer"
+        },
+        {
+          "item": "IBM PCjr entry configuration",
+          "price": "$669 announced",
+          "note": "64K base configuration"
+        },
+        {
+          "item": "Creative Computing",
+          "price": "$2.95",
+          "note": "November newsstand issue"
+        },
+        {
+          "item": "Commodore 64",
+          "price": "under continuing discount pressure",
+          "note": "Holiday price war"
+        },
+        {
+          "item": "Turbo Pascal",
+          "price": "$49.95 advertised",
+          "note": "Integrated editor and compiler"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Computer magazines keep multiplying",
+          "text": "A same-month Times report finds publishers crowding into the booming personal-computer readership."
+        },
+        {
+          "headline": "Digital terminal market advances",
+          "text": "A November 16 business brief records continued competition in display terminals."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "All Night Long (All Night)",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 2,
+          "title": "Islands in the Stream",
+          "artist": "Kenny Rogers and Dolly Parton"
+        },
+        {
+          "rank": 3,
+          "title": "Say Say Say",
+          "artist": "Paul McCartney and Michael Jackson"
+        },
+        {
+          "rank": 4,
+          "title": "Total Eclipse of the Heart",
+          "artist": "Bonnie Tyler"
+        },
+        {
+          "rank": 5,
+          "title": "Uptown Girl",
+          "artist": "Billy Joel"
+        }
+      ],
+      "periodAd": {
+        "headline": "A Complete Computer for the Family?",
+        "summary": "Coleco promises keyboard, data-pack storage and letter-quality printing in one Adam package.",
+        "tagline": "The holiday bundle now faces the retailer test."
+      },
+      "market": {
+        "headline": "The Holiday Computer Price War Meets Reality",
+        "summary": "Adam near $700 and PCjr from $669 compete with discounted, established machines whose software shelves are already full.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          2,
+          12
+        ]
+      },
+      "worldAnchor": {
+        "headline": "First U.S. Cruise Missiles Arrive in Britain",
+        "summary": "The first American cruise missiles arrived at a British base November 14 amid intense European protests and Cold War tension.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "Computer Ethics Enters the Classroom",
+        "dek": "After the 414s, educators argue that access skills must come with a sense of responsibility.",
+        "body": [
+          "The national attention surrounding Milwaukee’s 414s has made unauthorized computer access a subject for classrooms as well as security offices. A November 14 education report says technical instruction alone is not enough.",
+          "The emerging lesson is ethical rather than operational: curiosity does not erase ownership, privacy or consequences. Schools are beginning to treat responsible access as part of computer literacy."
+        ],
+        "groups": [
+          {
+            "name": "The 414s",
+            "note": "Milwaukee-area group whose unauthorized institutional access became a national 1983 security story."
+          }
+        ],
+        "sourceRefs": [
+          5,
+          6
+        ],
+        "confidence": "exact-date"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "J.C. Penney omits Adam",
+            "status": "Verified to November 15, 1983",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Windows announcement",
+            "status": "Verified to November 10, 1983",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "Charts, releases and prices",
+            "status": "Dated or period-sourced",
+            "sourceRefs": [
+              2,
+              8,
+              9,
+              11
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "New York Times: Penney's Holiday Line Omits Adam Computer",
+          "url": "https://www.nytimes.com/1983/11/15/business/penney-s-holiday-line-omits-adam-computer.html"
+        },
+        {
+          "label": "UPI: Coleco Receives Federal Approval for Adam",
+          "url": "https://www.upi.com/Archives/1983/09/22/Coleco-Industries-said-Thursday-it-has-received-needed-federal/5711433051200/"
+        },
+        {
+          "label": "Compute!: Coleco Adam Hands-On Report",
+          "url": "https://www.atarimagazines.com/compute/issue46/023_1_Colecos_Adam_A_Hands-On_Report.php"
+        },
+        {
+          "label": "Computer History Museum: Microsoft Introduces Windows",
+          "url": "https://www.computerhistory.org/tdih/november/10/"
+        },
+        {
+          "label": "InfoWorld, November 21, 1983",
+          "url": "https://archive.org/details/bub_gb_TjwEAAAAMBAJ"
+        },
+        {
+          "label": "Christian Science Monitor: Computer Ethics",
+          "url": "https://www.csmonitor.com/1983/1114/111412.html"
+        },
+        {
+          "label": "Washington Post: The 414s",
+          "url": "https://www.washingtonpost.com/archive/politics/1983/08/30/young-computer-bandits-byte-off-more-than-they-could-chew/f407e5df-6eaf-4f9b-8b38-04304960d2d9/"
+        },
+        {
+          "label": "Washington Post: Atari Sends Warner to a Loss",
+          "url": "https://www.washingtonpost.com/archive/business/1983/10/15/atari-sends-warner-loss-to-122-million/4f89586d-13f5-4a57-8fe3-9236b62aeece/"
+        },
+        {
+          "label": "Billboard, November 19, 1983",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1983/BB-1983-11-19.pdf"
+        },
+        {
+          "label": "Box Office Mojo: Domestic Weekend 46",
+          "url": "https://www.boxofficemojo.com/weekend/1983W46/"
+        },
+        {
+          "label": "New York Times: First U.S. Missiles Arrive in Britain",
+          "url": "https://www.nytimes.com/1983/11/15/world/first-us-missiles-arrive-by-plane-at-a-british-base.html"
+        },
+        {
+          "label": "Creative Computing, November 1983",
+          "url": "https://archive.org/details/creativecomputing-1983-11"
+        },
+        {
+          "label": "UPI: IBM Introduces the PCjr",
+          "url": "https://www.upi.com/Archives/1983/11/02/IBM-introduces-new-PCjr-personal-computer/4655436597200/"
+        },
+        {
+          "label": "Electronic Arts: Ultima III Exodus",
+          "url": "https://www.ea.com/games/ultima/ultima-3-exodus"
+        },
+        {
+          "label": "MobyGames: Lode Runner",
+          "url": "https://www.mobygames.com/game/7/lode-runner/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Programmers Wanted",
+          "copy": "Growing software houses seek BASIC, Pascal and assembly experience."
+        },
+        {
+          "headline": "Modem Club",
+          "copy": "Local computer users trade tips, programs and bulletin-board news—responsible access expected."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-08",
       "historicDate": "1983-11-07",
       "displayDate": "Week of November 7-13, 1983",

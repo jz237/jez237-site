@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-09",
+      "historicDate": "1983-11-14",
+      "displayDate": "Week of November 14-20, 1983",
+      "edition": "Issue 068 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "J.C. Penney backs away from Coleco’s Adam just as the Christmas computer contest reaches full volume.",
+      "leadHeadline": "Penney Drops Coleco's Adam From Holiday Line",
+      "storyHeadlines": [
+        "Microsoft Opens a Window on DOS",
+        "Video Games Enter Christmas Under a Cloud",
+        "Schools Add Ethics to Computer Literacy"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-11-14.jpg",
+      "thumb": "media/thumbs/1983-11-14.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-08",
       "historicDate": "1983-11-07",
       "displayDate": "Week of November 7-13, 1983",
