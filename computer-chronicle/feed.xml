@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 09 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 10 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 21-27, 1983 — Microsoft Opens a Window on the DOS Desktop</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-11-21</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-21</guid>
+      <pubDate>Mon, 10 Aug 2026 12:00:00 GMT</pubDate>
+      <description>The newly announced graphical environment promises one mouse-driven face across the expanding MS-DOS market—but Microsoft is still showing a future product, not shipping one. Microsoft has put a name and a visible face on its plan for the next stage of MS-DOS computing. Windows, announced in New York on November 10 and pictured for readers in this week’s InfoWorld, places menus, icons and movable on-screen panels between the operator and familiar programs. A mouse becomes a working tool rather than an exotic laboratory accessory. Also this week: Holiday Buyers Enter a Home-Computer Shakeout · IBM&apos;s PCjr Sets a $669 Floor for Big Blue at Home · Computer Chess Programs Learn to Outsmart One Another · An Eyebrow-Controlled Computer Gives a Scientist His Voice.</description>
+    </item>
     <item>
       <title>Week of November 14-20, 1983 — Penney Drops Coleco&apos;s Adam From Holiday Line</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-11-14</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-11</guid>
       <pubDate>Tue, 21 Jul 2026 12:00:00 GMT</pubDate>
       <description>At ¥14,800, Nintendo’s red-and-white Famicom arrives with two controllers and three arcade conversions. Nintendo launched its Family Computer in Japan on July 15, placing a compact red-and-white cartridge machine on shop counters for ¥14,800. The name was quickly shortened to Famicom, and the proposition was direct: swap a cartridge and bring the speed and familiarity of the arcade into the living room. Also this week: Sega Enters the Living Room With the SG-1000 · Electronic Arts&apos; M.U.L.E. Turns Economics Into a Multiplayer Contest · Infocom&apos;s Suspended Puts Six Robots Between the Player and Disaster.</description>
-    </item>
-    <item>
-      <title>Week of July 4-10, 1983 — Coleco’s Adam Promises a Complete Computer for Under $600</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-07-04</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-04</guid>
-      <pubDate>Mon, 20 Jul 2026 12:00:00 GMT</pubDate>
-      <description>The summer CES sensation combines game compatibility, high-capacity tape, word processing and a daisy-wheel printer in one mass-market package. The most talked-about personal computer of the summer is not merely a keyboard in a box. Coleco’s Adam, the lead item in the July 3 Arcade Express after its Consumer Electronics Show debut, is being pitched as a complete household system: computer, keyboard, high-capacity tape storage, word processing, joysticks and a daisy-wheel printer for a promised price below $600. Also this week: The $600 System Becomes the New Battleground · Dragon’s Lair Turns the Arcade into a Cartoon Theater · Electronic Arts Gives Designers Star Billing.</description>
     </item>
   </channel>
 </rss>
