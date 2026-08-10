@@ -4,6 +4,379 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-10",
+      "historicDate": "1983-11-21",
+      "displayDate": "Week of November 21-27, 1983",
+      "edition": "Issue 069 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "milestone Thanksgiving edition on warm aged newsprint",
+        "motifs": [
+          "early graphical windows",
+          "mouse and IBM-compatible desktop",
+          "holiday computer-store shelves"
+        ],
+        "layout": "Windows milestone lead with dense home-computer, game and culture sidebars"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of November 21-27, 1983",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Microsoft Windows milestone dominates above the fold",
+        "secondaryRail": "home-computer price war, PCjr, computer chess and holiday culture charts",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "ink red",
+        "secondary": "IBM blue",
+        "texture": "warm newsprint with halftone photographs and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-11-21.jpg",
+        "alt": "GPT Image 2 vintage newspaper front page for the week of November 21, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "milestone": {
+        "title": "Microsoft's Windows reaches the computer press",
+        "note": "The November 21 InfoWorld demonstration captured Microsoft's first public bid to make a graphical, mouse-driven layer a standard across MS-DOS personal computers."
+      },
+      "editorNote": "A mouse, overlapping panels and a common face for DOS programs point toward a different kind of personal-computer desk.",
+      "morningLine": "Microsoft opens a window on the DOS world while Thanksgiving shoppers confront a bruising home-computer price war.",
+      "lead": {
+        "headline": "Microsoft Opens a Window on the DOS Desktop",
+        "dek": "The newly announced graphical environment promises one mouse-driven face across the expanding MS-DOS market—but Microsoft is still showing a future product, not shipping one.",
+        "confidence": "Exact-date milestone; announcement November 10 and illustrated in the November 21 InfoWorld.",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "body": [
+          "Microsoft has put a name and a visible face on its plan for the next stage of MS-DOS computing. Windows, announced in New York on November 10 and pictured for readers in this week’s InfoWorld, places menus, icons and movable on-screen panels between the operator and familiar programs. A mouse becomes a working tool rather than an exotic laboratory accessory.",
+          "The ambition is broader than a handsome screen. Microsoft wants a graphical environment that can travel across the growing population of DOS machines, collecting support from hardware builders and software publishers instead of belonging to a single proprietary computer. In an industry crowded with partly compatible systems, that common layer may be the most important part of the proposal.",
+          "Windows enters an active contest. VisiCorp’s Visi On is the immediate commercial benchmark, while other makers are pursuing their own graphical ideas. Microsoft says users will be able to move among applications and work through a consistent set of visual commands, a striking contrast with the command lines and memorized keystrokes now governing most desks.",
+          "Buyers should keep the calendar straight: Windows is a pre-release demonstration, not a box on this week’s store shelf. Microsoft projects shipment in April 1984. For now, the November display is a declaration of direction—an attempt to make the graphical desktop a standard companion to DOS."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Holiday Buyers Enter a Home-Computer Shakeout",
+          "confidence": "Same-month reporting.",
+          "sourceRefs": [
+            4,
+            5
+          ],
+          "body": [
+            "The Christmas aisle is filled with bargains produced by a punishing price battle. TIME found one Atari home computer advertised in Los Angeles for $77.95, down from $630 three years earlier, while Commodore, Atari and Texas Instruments fought for volume at ever-thinner margins.",
+            "Texas Instruments has already announced its withdrawal from the home-computer business after severe losses. Clearance prices may delight shoppers, but they also raise hard questions about continued support, software and which machines will still have manufacturers behind them next year.",
+            "The cartridge-game crash deepens the uncertainty. Retailers are carrying discounted inventory, and publishers that once depended on dedicated consoles are looking toward home computers and rival platforms. The holiday bargain is real; so is the shakeout behind it."
+          ]
+        },
+        {
+          "headline": "IBM's PCjr Sets a $669 Floor for Big Blue at Home",
+          "confidence": "Same-month announcement; availability expected in early 1984.",
+          "sourceRefs": [
+            3
+          ],
+          "body": [
+            "IBM’s newly announced PCjr brings the company’s badge toward the family room at $669 for a 64K entry model. A $1,269 enhanced version adds 128K and a 360K disk drive, while color, sound, cartridge slots and a cordless infrared keyboard distinguish the small machine from its office-bred relative.",
+            "The Junior is not yet generally on sale; IBM points to the first quarter of 1984. Nor should buyers assume complete IBM PC software compatibility. Those cautions leave the holiday spotlight on the announcement itself and on whether IBM can stretch its business-computer authority into the fiercely priced home market."
+          ]
+        },
+        {
+          "headline": "Computer Chess Programs Learn to Outsmart One Another",
+          "confidence": "Exact-date feature.",
+          "sourceRefs": [
+            6
+          ],
+          "body": [
+            "Tournament programmers are setting computers against computers, turning the chessboard into a public test of search, evaluation and machine strategy. A November 21 Christian Science Monitor report follows the contests as programs expose one another’s weaknesses move by move.",
+            "Computer chess remains entertainment, experiment and demonstration at once. Every stronger performance gives home users a vivid measure of improving software, while programmers gain a demanding arena in which a bad assumption can be punished before spectators."
+          ]
+        },
+        {
+          "headline": "An Eyebrow-Controlled Computer Gives a Scientist His Voice",
+          "confidence": "Exact-date wire report.",
+          "sourceRefs": [
+            7
+          ],
+          "body": [
+            "A paralyzed scientist in Nashville is continuing to communicate and work through a computer controlled by eyebrow movement, UPI reported November 22. The system turns a small remaining physical motion into selections and composed messages.",
+            "The achievement offers a humane counterpoint to this week’s retail battles. Personal computing is not only about speed, price or entertainment; carefully adapted input can restore a channel for thought and professional life when ordinary keyboards are impossible to use."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Microsoft Windows (pre-release)",
+          "summary": "Mouse-oriented graphical environment for MS-DOS, announced November 10 and pictured in InfoWorld November 21; projected for April 1984.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "IBM PCjr",
+          "summary": "64K entry model announced at $669; enhanced 128K disk model at $1,269, with retail availability expected in early 1984.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Archon: The Light and the Dark",
+          "summary": "Electronic Arts action-strategy game brings an animated light-versus-dark battle to the Atari 8-bit market.",
+          "confidence": "Period release",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Kodak/Drivetec floppy drive",
+          "summary": "Kodak plans Rochester manufacture of Drivetec’s higher-capacity flexible-disk design for personal computers.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            12
+          ]
+        },
+        {
+          "title": "Computer chess",
+          "summary": "Tournament programs compete directly in an exact-week account of improving machine play.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Microsoft Windows",
+          "detail": "Pre-release graphical environment for MS-DOS; not yet shipping."
+        },
+        {
+          "name": "Visi On",
+          "detail": "VisiCorp graphical environment and the immediate benchmark in contemporary comparisons."
+        },
+        {
+          "name": "Archon",
+          "detail": "Free Fall Associates’ chess-like action and strategy game from Electronic Arts."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Archon: The Light and the Dark",
+            "Lunar Jetman",
+            "Ultima III: Exodus",
+            "Lode Runner",
+            "M.U.L.E."
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Terms of Endearment",
+            "A Christmas Story",
+            "Yentl",
+            "The Big Chill",
+            "The Right Stuff"
+          ]
+        },
+        {
+          "label": "Hardware",
+          "items": [
+            "IBM PCjr",
+            "Commodore 64",
+            "Atari 8-bit computers",
+            "Kodak/Drivetec floppy drive"
+          ]
+        },
+        {
+          "label": "Software",
+          "items": [
+            "Microsoft Windows (pre-release)",
+            "Visi On",
+            "Archon: The Light and the Dark"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM PCjr entry model",
+          "price": "$669",
+          "note": "64K announced configuration; not yet generally available."
+        },
+        {
+          "item": "IBM PCjr enhanced model",
+          "price": "$1,269",
+          "note": "128K with 360K disk drive."
+        },
+        {
+          "item": "Discounted Atari home computer",
+          "price": "$77.95",
+          "note": "Los Angeles retail example reported by TIME; formerly $630."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Data-processing jobs forecast at 3.1 million",
+          "text": "A Datamation forecast relayed November 21 projects 54 percent growth by decade’s end, with computer operators growing fastest."
+        },
+        {
+          "headline": "Can computers improve student writing?",
+          "text": "A November 21 Monitor feature examines classroom word processing and whether computers can help strengthen writing skills."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "All Night Long (All Night)",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 2,
+          "title": "Say Say Say",
+          "artist": "Paul McCartney and Michael Jackson"
+        },
+        {
+          "rank": 3,
+          "title": "Uptown Girl",
+          "artist": "Billy Joel"
+        },
+        {
+          "rank": 4,
+          "title": "Islands in the Stream",
+          "artist": "Kenny Rogers and Dolly Parton"
+        },
+        {
+          "rank": 5,
+          "title": "Love Is a Battlefield",
+          "artist": "Pat Benatar"
+        }
+      ],
+      "periodAd": {
+        "headline": "Give the Family a Computer Christmas",
+        "summary": "Compare the software library, support and real take-home package—not only the clearance sticker.",
+        "tagline": "Ask what will still run after New Year’s Day."
+      },
+      "market": {
+        "headline": "Low prices, costly shakeout",
+        "summary": "Home-computer bargains reflect a destructive price war, TI’s exit and pressure from the video-game crash as holiday buying begins.",
+        "confidence": "Same-month reporting.",
+        "sourceRefs": [
+          4,
+          5
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Soviet Union Walks Out of Geneva Missile Talks",
+        "summary": "On November 23 the Soviet Union indefinitely suspended medium-range nuclear-missile talks after West Germany approved NATO deployment; the first U.S. Pershing II missiles then arrived in West Germany.",
+        "confidence": "Exact-date",
+        "sourceRefs": [
+          11
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Windows announcement and November 21 demonstration",
+            "status": "Verified to period and retrospective sources",
+            "sourceRefs": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "PCjr models and announced prices",
+            "status": "Verified to November 2 wire report",
+            "sourceRefs": [
+              3
+            ]
+          },
+          {
+            "claim": "Charts, films and home-computer market",
+            "status": "Dated or period-sourced",
+            "sourceRefs": [
+              4,
+              5,
+              9,
+              10
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "InfoWorld, November 21, 1983",
+          "url": "https://archive.org/stream/bub_gb_cTwEAAAAMBAJ/bub_gb_cTwEAAAAMBAJ_djvu.txt"
+        },
+        {
+          "label": "Computer History Museum: Microsoft Introduces Windows",
+          "url": "https://www.computerhistory.org/tdih/november/10/"
+        },
+        {
+          "label": "TIME: Windows on the World",
+          "url": "https://time.com/archive/6860280/computers-windows-on-the-world/"
+        },
+        {
+          "label": "UPI: IBM introduces new PCjr",
+          "url": "https://www.upi.com/Archives/1983/11/02/IBM-introduces-new-PCjr-personal-computer/4655436597200/"
+        },
+        {
+          "label": "TIME: Shake-Out in the Hardware Wars",
+          "url": "https://time.com/archive/6699650/computers-shake-out-in-the-hardware-wars/"
+        },
+        {
+          "label": "TIME: Video Games Go Crunch!",
+          "url": "https://time.com/archive/6697898/video-games-go-crunch/"
+        },
+        {
+          "label": "Christian Science Monitor: computer chess",
+          "url": "https://www.csmonitor.com/1983/1121/112113.html"
+        },
+        {
+          "label": "UPI: Eyebrow-controlled computer assists scientist",
+          "url": "https://www.upi.com/Archives/1983/11/22/A-noted-scientist-paralyzed-by-an-incurable-disease-is/8895438325200/"
+        },
+        {
+          "label": "UPI: Data-processing growth",
+          "url": "https://www.upi.com/Archives/1983/11/21/DP-growth/6365438238800/"
+        },
+        {
+          "label": "Billboard Hot 100, week ending November 26",
+          "url": "https://billboard.elpee.jp/hot100/week/1983-11-26"
+        },
+        {
+          "label": "Box Office Mojo: November 25-27 weekend",
+          "url": "https://www.boxofficemojo.com/weekend/1983W47/"
+        },
+        {
+          "label": "UPI: Soviets walk out of Geneva talks",
+          "url": "https://www.upi.com/Archives/1983/11/23/Soviets-walk-out-of-Geneva-talks-blast-West-Germany-on-deployment/8760438411600/"
+        },
+        {
+          "label": "UPI: Kodak and Drivetec floppy venture",
+          "url": "https://www.upi.com/Archives/1983/11/14/Business-Briefs/5707437634000/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Mouse Wanted",
+          "copy": "Forward-looking DOS shop seeks pointing device and applications ready for a graphical future."
+        },
+        {
+          "headline": "Chess Opponent Available",
+          "copy": "Computer tournament regular never tires, never resigns early and always remembers the position."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-09",
       "historicDate": "1983-11-14",
       "displayDate": "Week of November 14-20, 1983",
