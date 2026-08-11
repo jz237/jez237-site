@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 10 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 11 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of November 28-December 4, 1983 — At COMDEX, IBM Compatibility Becomes the Winning Bet</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-11-28</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-28</guid>
+      <pubDate>Tue, 11 Aug 2026 12:00:00 GMT</pubDate>
+      <description>The Las Vegas show reveals an industry rapidly reorganizing around the IBM PC standard. Fall COMDEX opened in Las Vegas on November 28 with a floor full of machines, peripherals and promises. Yet beneath the variety ran a common current: makers were increasingly defining their products by whether they could work with the IBM Personal Computer and its growing software world. Also this week: Windows and Visi On Put the Graphical Desktop in View · Holiday Buyers Enter a Crowded, Cut-Price Computer Market · Electronic Arts Mixes Chess Strategy with Arcade Action · BYTE Asks Software to Become Easier.</description>
+    </item>
     <item>
       <title>Week of November 21-27, 1983 — Microsoft Opens a Window on the DOS Desktop</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-11-21</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-18</guid>
       <pubDate>Wed, 22 Jul 2026 12:00:00 GMT</pubDate>
       <description>Six years after its debut, the expandable 6502 machine crosses a landmark that shows how far personal computing has moved beyond the hobby bench. Apple Computer sold its one-millionth Apple II on July 18, giving the personal-computer business a round-number milestone few could have imagined when the original machine appeared in 1977. The figure belongs to the whole Apple II family, whose color graphics, expansion slots, and accessible design carried it from enthusiasts’ rooms into schools, offices, and neighborhood computer shops. Also this week: Commodore Threatens to Halve Software Prices · Whole Earth Maps a 40,000-Program Jungle · More Memory for Less in the Home-Computer War.</description>
-    </item>
-    <item>
-      <title>Week of July 11-17, 1983 — Nintendo Brings the Arcade Home With Its Family Computer</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-07-11</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-11</guid>
-      <pubDate>Tue, 21 Jul 2026 12:00:00 GMT</pubDate>
-      <description>At ¥14,800, Nintendo’s red-and-white Famicom arrives with two controllers and three arcade conversions. Nintendo launched its Family Computer in Japan on July 15, placing a compact red-and-white cartridge machine on shop counters for ¥14,800. The name was quickly shortened to Famicom, and the proposition was direct: swap a cartridge and bring the speed and familiarity of the arcade into the living room. Also this week: Sega Enters the Living Room With the SG-1000 · Electronic Arts&apos; M.U.L.E. Turns Economics Into a Multiplayer Contest · Infocom&apos;s Suspended Puts Six Robots Between the Player and Disaster.</description>
     </item>
   </channel>
 </rss>
