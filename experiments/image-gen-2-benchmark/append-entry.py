@@ -17,6 +17,7 @@ import shlex
 import subprocess
 from pathlib import Path
 from PIL import Image, ImageOps
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "gallery-data.json"
@@ -46,6 +47,15 @@ DEFAULT_R2_PREFIX = "image-gen-2-benchmark/images"
 DEFAULT_R2_THUMB_PREFIX = "image-gen-2-benchmark/thumbs"
 DEFAULT_R2_PUBLIC_BASE_URL = "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/"
 GENERATED_SOURCE_ROOT = Path("/home/jez237/.openclaw/media/tool-image-generation").resolve()
+FACTUAL_SOURCE_TYPES = {
+    "government-agency",
+    "university",
+    "peer-reviewed-journal",
+    "professional-scientific-organization",
+    "museum",
+    "standards-body",
+    "manufacturer-technical-documentation",
+}
 
 
 def slugify(value: str) -> str:
@@ -136,6 +146,126 @@ def rebuild_monthly(data: list[dict]) -> None:
     MANIFEST.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
 
 
+def normalized_text(value: object) -> str:
+    return " ".join(str(value or "").split()).casefold()
+
+
+def source_urls_from_note(source_note: str) -> set[str]:
+    return {
+        match.rstrip(".])},;:")
+        for match in re.findall(r"https://[^\s,;]+", source_note)
+    }
+
+
+def validate_factual_evidence(
+    evidence_path: Path,
+    factual_topic: str,
+    source_note: str,
+) -> dict:
+    """Load and validate the durable, claim-level provenance for one infographic."""
+    if not evidence_path.is_file():
+        raise SystemExit(f"Factual evidence file not found: {evidence_path}")
+    try:
+        evidence = json.loads(evidence_path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f"Invalid factual evidence JSON: {exc}") from exc
+    if not isinstance(evidence, dict):
+        raise SystemExit("Factual evidence must be a JSON object.")
+    if evidence.get("schemaVersion") != 1:
+        raise SystemExit("Factual evidence schemaVersion must be 1.")
+    if normalized_text(evidence.get("topic")) != normalized_text(factual_topic):
+        raise SystemExit("Factual evidence topic must exactly match --factual-topic.")
+
+    checked_at = evidence.get("checkedAt")
+    if not isinstance(checked_at, str) or not checked_at.strip():
+        raise SystemExit("Factual evidence requires a non-empty checkedAt timestamp.")
+    try:
+        dt.datetime.fromisoformat(checked_at.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise SystemExit("Factual evidence checkedAt must be ISO-8601.") from exc
+
+    sources = evidence.get("sources")
+    if not isinstance(sources, list) or len(sources) < 2:
+        raise SystemExit("Factual evidence requires at least two independent sources.")
+
+    source_ids: set[str] = set()
+    publishers: set[str] = set()
+    source_urls: set[str] = set()
+    validated_sources: list[dict] = []
+    for index, source in enumerate(sources, start=1):
+        if not isinstance(source, dict):
+            raise SystemExit(f"Factual evidence source {index} must be an object.")
+        source_id = source.get("id")
+        publisher = source.get("publisher")
+        title = source.get("title")
+        source_type = source.get("sourceType")
+        url = source.get("url")
+        if not all(isinstance(value, str) and value.strip() for value in (source_id, publisher, title, source_type, url)):
+            raise SystemExit(
+                f"Factual evidence source {index} requires id, publisher, title, sourceType, and url."
+            )
+        if source_id in source_ids:
+            raise SystemExit(f"Factual evidence source id is duplicated: {source_id}")
+        if source_type not in FACTUAL_SOURCE_TYPES:
+            allowed = ", ".join(sorted(FACTUAL_SOURCE_TYPES))
+            raise SystemExit(f"Unsupported factual sourceType {source_type!r}; use one of: {allowed}")
+        parsed = urlparse(url)
+        if parsed.scheme != "https" or not parsed.netloc:
+            raise SystemExit(f"Factual evidence source {source_id} must use a direct https:// URL.")
+        source_ids.add(source_id)
+        publishers.add(normalized_text(publisher))
+        source_urls.add(url)
+        validated_sources.append({
+            "id": source_id,
+            "publisher": publisher.strip(),
+            "title": title.strip(),
+            "sourceType": source_type,
+            "url": url,
+        })
+
+    if len(publishers) < 2:
+        raise SystemExit("Factual evidence sources must come from at least two independent publishers.")
+    if len(source_urls) < 2:
+        raise SystemExit("Factual evidence sources must use at least two distinct direct URLs.")
+
+    claims = evidence.get("claims")
+    if not isinstance(claims, list) or not claims:
+        raise SystemExit("Factual evidence requires a non-empty claim sheet.")
+    validated_claims: list[dict] = []
+    for index, claim in enumerate(claims, start=1):
+        if not isinstance(claim, dict):
+            raise SystemExit(f"Factual evidence claim {index} must be an object.")
+        statement = claim.get("claim")
+        supporting_ids = claim.get("sourceIds")
+        if not isinstance(statement, str) or not statement.strip():
+            raise SystemExit(f"Factual evidence claim {index} requires non-empty claim text.")
+        if not isinstance(supporting_ids, list) or not supporting_ids:
+            raise SystemExit(f"Factual evidence claim {index} requires at least one source id.")
+        if any(not isinstance(source_id, str) or source_id not in source_ids for source_id in supporting_ids):
+            raise SystemExit(f"Factual evidence claim {index} cites an unknown source id.")
+        validated_claims.append({
+            "claim": statement.strip(),
+            "sourceIds": supporting_ids,
+        })
+
+    note_urls = source_urls_from_note(source_note)
+    if len(note_urls) < 2:
+        raise SystemExit(
+            "Factual infographics require --factual-source-note with at least two distinct direct https:// source URLs."
+        )
+    if not note_urls.issubset(source_urls):
+        raise SystemExit(
+            "Every URL in --factual-source-note must exactly match a source in --factual-evidence-file."
+        )
+
+    return {
+        "schemaVersion": 1,
+        "checkedAt": checked_at,
+        "sources": validated_sources,
+        "claims": validated_claims,
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--title", required=True)
@@ -163,6 +293,11 @@ def main() -> None:
     ap.add_argument("--factual-topic", default="")
     ap.add_argument("--factual-description", default="")
     ap.add_argument("--factual-source-note", default="")
+    ap.add_argument(
+        "--factual-evidence-file",
+        default="",
+        help="JSON claim sheet with the independently fetched sources supporting a factual infographic",
+    )
     ap.add_argument("--factual-infographic-only", action="store_true", help="Append to factual-infographics-data.json only, not the main prompt gallery")
     ap.add_argument("--hybrid-name", default="")
     ap.add_argument("--hybrid-image-kind", choices=["infographic", "wild"], default="infographic")
@@ -200,12 +335,19 @@ def main() -> None:
         or args.title.lower().startswith("factual infographic:")
     )
     source_note = args.factual_source_note.strip()
+    factual_evidence: dict | None = None
     if is_factual_infographic:
-        source_urls = re.findall(r"https://[^\s,;]+", source_note)
-        if len(set(source_urls)) < 2:
-            raise SystemExit(
-                "Factual infographics require --factual-source-note with at least two distinct direct https:// source URLs."
-            )
+        if not args.title.lower().startswith("factual infographic:"):
+            raise SystemExit("Factual infographic titles must begin exactly with 'Factual infographic:'.")
+        if not args.factual_topic.strip() or not args.factual_description.strip():
+            raise SystemExit("Factual infographics require non-empty --factual-topic and --factual-description.")
+        if not args.factual_evidence_file.strip():
+            raise SystemExit("Factual infographics require --factual-evidence-file with a source-backed claim sheet.")
+        factual_evidence = validate_factual_evidence(
+            Path(args.factual_evidence_file).expanduser().resolve(),
+            args.factual_topic.strip(),
+            source_note,
+        )
 
     src = Path(args.image).expanduser().resolve()
     if not src.exists():
@@ -268,9 +410,10 @@ def main() -> None:
         }
     if is_factual_infographic:
         entry["factualInfographic"] = {
-            "topic": args.factual_topic.strip() or args.title.removeprefix("Factual infographic:").strip(),
-            "description": args.factual_description.strip() or args.tests,
+            "topic": args.factual_topic.strip(),
+            "description": args.factual_description.strip(),
             "sourceNote": source_note,
+            "evidence": factual_evidence,
         }
     if args.hybrid_name.strip() or args.slot in {"hybrid-creature-infographic", "hybrid-creature-wild"}:
         entry["hybridCreature"] = {
