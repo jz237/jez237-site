@@ -1,9 +1,9 @@
 {
   "title": "Philly Weather Almanac",
   "location": "Philly 19111",
-  "date": "Monday, August 10, 2026",
+  "date": "Tuesday, August 11, 2026",
   "image": "almanac/latest.jpg",
   "imageWebp": "almanac/latest.webp",
-  "archiveImage": "almanac/philly-weather-almanac-2026-08-10.jpg",
+  "archiveImage": "almanac/philly-weather-almanac-2026-08-11.jpg",
   "source": "GPT Image 2 weather almanac"
 }
