@@ -1,0 +1,386 @@
+{
+  "currentDate": "2026-08-11",
+  "historicDate": "1983-11-28",
+  "displayDate": "Week of November 28-December 4, 1983",
+  "edition": "Issue 070 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Trade-show urgency on warm, ink-softened newsprint",
+    "motifs": [
+      "COMDEX exhibition aisles",
+      "IBM-compatible desktop silhouettes",
+      "graphical window frames"
+    ],
+    "layout": "Gaming and software rail beside a dominant COMDEX lead, with compact charts and world bulletin"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Computer & Culture Newspaper",
+    "dateline": "Week of November 28-December 4, 1983",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "COMDEX compatibility story across the upper front page",
+    "secondaryRail": "Graphical desktops, holiday computers and shelf watch",
+    "archiveNavigation": "Chronological weekly archive with previous and next issue controls"
+  },
+  "sectionChrome": {
+    "primary": "IBM blue",
+    "secondary": "signal red",
+    "texture": "Warm aged newsprint, halftone screens and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-11-28.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week of November 28, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Las Vegas is the center of the personal-computer world this week, and the message from the aisles is unmistakable: IBM compatibility is becoming a market of its own.",
+  "morningLine": "COMDEX opens, graphical desktops beckon, and home computers crowd the Christmas counter.",
+  "lead": {
+    "headline": "At COMDEX, IBM Compatibility Becomes the Winning Bet",
+    "dek": "The Las Vegas show reveals an industry rapidly reorganizing around the IBM PC standard.",
+    "confidence": "Exact-date reporting with period corroboration.",
+    "sourceRefs": [
+      0,
+      2,
+      3
+    ],
+    "body": [
+      "Fall COMDEX opened in Las Vegas on November 28 with a floor full of machines, peripherals and promises. Yet beneath the variety ran a common current: makers were increasingly defining their products by whether they could work with the IBM Personal Computer and its growing software world.",
+      "The Washington Post put the trend plainly in its report from the show: “IBM Compatibility Grows.” That phrase captures more than a sales pitch. Compatibility offered buyers the prospect of choosing among vendors without abandoning familiar programs, disks and workplace habits, while giving smaller manufacturers a standard around which to build.",
+      "The exhibition itself had swollen into what a contemporary Christian Science Monitor report called the biggest computer show of its kind. The official show guide preserved by the Smithsonian records the scale and cast of this crowded marketplace, where add-on boards, printers, storage and software could matter as much as the computer case.",
+      "For home-computer shoppers, the same week still looked more fractured and price-conscious. But in business computing, COMDEX made the direction unusually clear: the IBM PC was no longer merely one successful machine. Compatibility with it was becoming the wager on which much of the industry expected to build the rest of the decade."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Windows and Visi On Put the Graphical Desktop in View",
+      "confidence": "Same-week and period sources.",
+      "sourceRefs": [
+        1,
+        4,
+        10
+      ],
+      "body": [
+        "TIME’s November 28 issue described two software leaders giving computer screens a new look. VisiCorp’s Visi On and Microsoft’s newly announced Windows promised work arranged through graphical panels rather than commands alone.",
+        "Microsoft had announced Windows on November 10, and a surviving Fall COMDEX video documents an early demonstration. This was still a preview story: the commercial Windows 1.0 product would not ship until 1985.",
+        "The significance on the show floor was expectation. Software houses were asking buyers to imagine the personal computer as a visual workspace, with overlapping tasks and a pointing device changing how programs were selected and managed."
+      ]
+    },
+    {
+      "headline": "Holiday Buyers Enter a Crowded, Cut-Price Computer Market",
+      "confidence": "Same-month reporting.",
+      "sourceRefs": [
+        2,
+        11,
+        12
+      ],
+      "body": [
+        "The Christmas selling season finds home computers stacked against one another on price, software and promises of family usefulness. IBM’s newly introduced PCjr adds the biggest business-computer name to a field already defined by Commodore, Atari and other established home machines.",
+        "Low sticker prices may be welcome at the counter, but they also reveal the damage of the long price war. Post-COMDEX reporting suggests vendors expect the steep slide to slow in 1984, leaving shoppers to weigh support and software libraries alongside the bargain.",
+        "The PCjr remains more holiday conversation than broadly delivered product this week. Its arrival nevertheless reinforces the market’s central question: can a home machine borrow the authority and compatibility of the office PC without losing the affordability that created the boom?"
+      ]
+    },
+    {
+      "headline": "Electronic Arts Mixes Chess Strategy with Arcade Action",
+      "confidence": "Period release.",
+      "sourceRefs": [
+        13
+      ],
+      "body": [
+        "Archon: The Light and the Dark turns a chess-like board into a field of direct combat. When opposing pieces meet, the contest moves from strategy to an action arena where reflexes can overturn apparent advantage.",
+        "The Free Fall Associates design is one of Electronic Arts’ first published titles and a vivid example of the new publisher’s pitch: computer games presented as authored creative works, packaged for a holiday shelf increasingly rich in experiments."
+      ]
+    },
+    {
+      "headline": "BYTE Asks Software to Become Easier",
+      "confidence": "Period magazine issue.",
+      "sourceRefs": [
+        5
+      ],
+      "body": [
+        "BYTE’s December issue carries the theme “Easy Software,” matching the week’s fascination with windows, pointers and friendlier screens. Usability is moving from a pleasant extra toward a central competitive claim.",
+        "The theme joins the trade-show story to the home counter. Whether the buyer is considering an IBM-compatible office machine or a family computer, the winning system may be the one that asks less ceremony before useful work begins."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "IBM-compatible systems",
+      "summary": "The dominant Fall COMDEX competitive direction.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Microsoft Windows preview",
+      "summary": "A graphical MS-DOS environment shown during the COMDEX period, not yet a shipping product.",
+      "confidence": "Same-week",
+      "sourceRefs": [
+        4,
+        10
+      ]
+    },
+    {
+      "title": "Visi On",
+      "summary": "VisiCorp’s graphical environment shares TIME’s spotlight with Windows.",
+      "confidence": "Same-week",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "IBM PCjr",
+      "summary": "IBM’s newly announced home computer shapes holiday expectations before broad delivery.",
+      "confidence": "Same-month",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "title": "The Birds and the Bees",
+      "summary": "Bug-Byte’s ZX Spectrum game is dated to November 1983.",
+      "confidence": "Same-month",
+      "sourceRefs": [
+        14
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Microsoft Windows preview",
+      "detail": "Graphical environment demonstrated before its eventual commercial release."
+    },
+    {
+      "name": "Visi On",
+      "detail": "VisiCorp graphical operating environment for the IBM PC."
+    },
+    {
+      "name": "Archon: The Light and the Dark",
+      "detail": "Free Fall Associates action-strategy game from Electronic Arts."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Archon: The Light and the Dark",
+        "Lunar Jetman",
+        "Ultima III: Exodus",
+        "Lode Runner",
+        "M.U.L.E."
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Terms of Endearment",
+        "A Christmas Story",
+        "Yentl",
+        "The Big Chill",
+        "The Right Stuff"
+      ]
+    },
+    {
+      "label": "Hardware",
+      "items": [
+        "IBM-compatible personal computers",
+        "IBM PCjr",
+        "Commodore 64",
+        "Atari 8-bit computers"
+      ]
+    },
+    {
+      "label": "Software",
+      "items": [
+        "Microsoft Windows preview",
+        "Visi On",
+        "Archon: The Light and the Dark",
+        "The Birds and the Bees"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Home-computer market",
+      "price": "Prices under pressure",
+      "note": "Contemporary reporting expects the long price slide to slow in 1984."
+    },
+    {
+      "item": "IBM PCjr",
+      "price": "Check configuration",
+      "note": "Newly introduced; broad delivery and package details remain unsettled."
+    },
+    {
+      "item": "COMDEX compatibles",
+      "price": "Compare the full system",
+      "note": "Software, memory, storage and peripheral compatibility determine the real cost."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Northern blizzard stops travel",
+      "text": "Snow reaching two feet, with drifts as high as eight feet, makes ground travel nearly impossible in seven states."
+    },
+    {
+      "headline": "Commonwealth criticizes U.S. Namibia policy",
+      "text": "Meeting in New Delhi, Commonwealth nations object to linking Namibian independence with Cuban withdrawal from Angola."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "All Night Long (All Night)",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 2,
+      "title": "Say Say Say",
+      "artist": "Paul McCartney and Michael Jackson"
+    },
+    {
+      "rank": 3,
+      "title": "Uptown Girl",
+      "artist": "Billy Joel"
+    },
+    {
+      "rank": 4,
+      "title": "Islands in the Stream",
+      "artist": "Kenny Rogers with Dolly Parton"
+    },
+    {
+      "rank": 5,
+      "title": "Love Is a Battlefield",
+      "artist": "Pat Benatar"
+    }
+  ],
+  "periodAd": {
+    "headline": "See the Compatible Future at COMDEX",
+    "summary": "Compare software, expansion and peripheral support before choosing the name on the case.",
+    "tagline": "The standard is becoming a marketplace."
+  },
+  "market": {
+    "headline": "Compatibility becomes commercial gravity",
+    "summary": "At Fall COMDEX, the IBM PC standard pulls systems, software and peripherals into a widening business ecosystem.",
+    "confidence": "Exact-date and period reporting.",
+    "sourceRefs": [
+      0,
+      2
+    ]
+  },
+  "worldAnchor": {
+    "headline": "U.S. Navy aircraft downed in Lebanon raid",
+    "summary": "On December 4, Syrian fire downed two U.S. jets during a Navy raid, sharply escalating American involvement in Lebanon.",
+    "confidence": "Exact-date reporting.",
+    "sourceRefs": [
+      8
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Fall COMDEX opening and IBM-compatibility theme",
+        "status": "Verified to exact-date reporting and official guide",
+        "sourceRefs": [
+          0,
+          3
+        ]
+      },
+      {
+        "claim": "Windows and Visi On graphical-interface coverage",
+        "status": "Verified to same-week and period sources",
+        "sourceRefs": [
+          1,
+          4,
+          10
+        ]
+      },
+      {
+        "claim": "Charts, films and holiday-computer context",
+        "status": "Dated or period-sourced",
+        "sourceRefs": [
+          6,
+          7,
+          12
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Computer Show Opens in Las Vegas",
+      "url": "https://www.washingtonpost.com/archive/business/1983/11/29/computer-show-opens-in-las-vegas/c2d9919f-07b9-4a0f-97a5-77f3ec706fb7/"
+    },
+    {
+      "label": "Computers: Windows on the World",
+      "url": "https://time.com/archive/6860280/computers-windows-on-the-world/"
+    },
+    {
+      "label": "Las Vegas computer show has exploded into biggest of them all",
+      "url": "https://www.csmonitor.com/1983/1205/120514.html"
+    },
+    {
+      "label": "Fall COMDEX 1983 guide booklet",
+      "url": "https://americanhistory.si.edu/collections/object/nmah_1281846"
+    },
+    {
+      "label": "Video of Fall COMDEX 1983",
+      "url": "http://www.bricklin.com/comdex83.htm"
+    },
+    {
+      "label": "BYTE, Volume 8 Number 12",
+      "url": "https://archive.org/details/byte-magazine-1983-12"
+    },
+    {
+      "label": "Billboard Hot 100, December 3, 1983",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-12-03"
+    },
+    {
+      "label": "Domestic 1983 Weekend 48",
+      "url": "https://www.boxofficemojo.com/weekend/1983W48/"
+    },
+    {
+      "label": "2 U.S. Jets Downed by Syrian Gunfire",
+      "url": "https://www.nytimes.com/1983/12/04/world/2-usjets-downed-by-syrian-gunfire-navy-staged-raid.html"
+    },
+    {
+      "label": "Commonwealth slams U.S. over Namibia",
+      "url": "https://www.upi.com/Archives/1983/11/28/Commonwealth-slams-US-over-Namibia/8758040388643/"
+    },
+    {
+      "label": "Microsoft announces Windows",
+      "url": "https://www.computerhistory.org/tdih/november/10/"
+    },
+    {
+      "label": "The debut of IBM’s Junior",
+      "url": "https://www.nytimes.com/1983/11/02/business/the-debut-of-ibm-s-junior.html"
+    },
+    {
+      "label": "Under 1983 Christmas tree, expect the home computer",
+      "url": "https://www.nytimes.com/1983/12/10/business/under-1983-christmas-tree-expect-the-home-computer.html"
+    },
+    {
+      "label": "Archon: The Light and the Dark",
+      "url": "https://en.wikipedia.org/wiki/Archon:_The_Light_and_the_Dark"
+    },
+    {
+      "label": "The Birds and the Bees",
+      "url": "https://spectrumcomputing.co.uk/entry/536"
+    },
+    {
+      "label": "Monster blizzard charges across northland",
+      "url": "https://www.upi.com/Archives/1983/11/28/A-monster-blizzard-charged-across-the-northland-Monday-swamping/6015438843600/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Programmers Wanted",
+      "copy": "IBM-compatible software houses seek experienced hands for a rapidly widening market."
+    },
+    {
+      "headline": "Holiday Computer Lessons",
+      "copy": "Learn disks, BASIC and practical home applications before the wrapping paper is gone."
+    }
+  ]
+}
