@@ -1,0 +1,376 @@
+{
+  "currentDate": "2026-08-12",
+  "historicDate": "1983-12-05",
+  "displayDate": "Week of December 5-11, 1983",
+  "edition": "Issue 071 - Weekly 1983 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Holiday trade-show urgency on warm aged newsprint",
+    "motifs": [
+      "COMDEX exhibition floor",
+      "floppy-disk mysteries",
+      "home-computer gift shelves"
+    ],
+    "layout": "Dense metropolitan computer weekly with blue and red rules"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "December 5-11, 1983",
+    "price": "50 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "IBM-compatible COMDEX lead across the upper columns",
+    "secondaryRail": "Interactive fiction and holiday home computers",
+    "archiveNavigation": "Chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "ink blue",
+    "secondary": "press red",
+    "texture": "warm newsprint with halftone photographs"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-12-05.jpg",
+    "alt": "GPT Image 2 newspaper front page for Computer Chronicle, December 5-11, 1983",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "COMDEX has grown from a dealer gathering into an industry city, and nearly every aisle now bends toward the IBM PC. Beyond Las Vegas, floppy-disk fiction and fiercely priced home computers are making the holiday shelf every bit as consequential as the trade-show floor.",
+  "morningLine": "IBM compatibility commands COMDEX while interactive fiction and home computers contest the Christmas shelf.",
+  "lead": {
+    "headline": "COMDEX Becomes Las Vegas's Biggest Show as IBM Compatibility Takes Command",
+    "dek": "More than 80,000 visitors and 1,400 exhibitors gather around a market increasingly organized by the IBM PC standard.",
+    "confidence": "Exact-date reporting.",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "The computer trade has taken over Las Vegas. A show that began in the winter of 1979 with roughly 4,000 visitors has swollen to more than 80,000 attendees, filling the convention center and rooms in five major hotels. Its 1,400 exhibitors include 400 newcomers, with AT&T among the names making a first appearance.",
+      "Yet the loudest message is not a revolutionary new box. Contemporary reporting finds most of the machines on display to be variations on the IBM Personal Computer design. Future Computing analyst Portia Isaacson puts the trend plainly: “The architecture of the IBM PC has become the industry standard.” Compatibility is becoming the language in which makers court dealers and buyers.",
+      "That shift changes the character of the show. Software and marketing are displacing the hobbyist hardware experiments that once supplied much of the excitement. Elaborate multistory booths compete for attention, and a serious display can cost tens of thousands of dollars. Hewlett-Packard expects to recruit hundreds of dealers for its new desktop system.",
+      "Windows draw the strongest crowds. VisiCorp demonstrates Visi On joining word processing, financial planning and graphing on a screen divided into separate panes. The industry arrives without a singular hardware sensation, but it leaves a clear direction: the IBM-compatible marketplace, stocked with graphical software and dealer support, is becoming personal computing’s commercial center."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Interactive Fiction Turns the Floppy Disk into a Bestseller Shelf",
+      "confidence": "Exact-date and same-month reporting.",
+      "sourceRefs": [
+        2,
+        5,
+        12
+      ],
+      "body": [
+        "TIME this week treats text adventures as a new kind of software bestseller: stories in which the reader types commands, questions suspects and redirects the plot. Its opening scene comes from Infocom’s Deadline, where evidence and contradictory testimony turn the keyboard into a detective’s notebook.",
+        "Infocom’s The Witness carries the idea into a 1930s Los Angeles murder mystery. A December COMPUTE! review finds a world assembled through prose rather than arcade graphics, asking the player to examine rooms, objects and alibis closely.",
+        "The genre also solves a stubborn commercial problem. A portable text engine can carry the same tale across otherwise incompatible microcomputer families. On a crowded holiday shelf, the floppy disk is becoming a place for authored worlds as well as utilities and scores."
+      ]
+    },
+    {
+      "headline": "Home Computers Move to the Center of the Christmas Battle",
+      "confidence": "Exact-date and same-month reporting.",
+      "sourceRefs": [
+        3,
+        4
+      ],
+      "body": [
+        "The home computer has become one of the defining gifts of Christmas 1983. Atari, Commodore, Coleco and IBM are fighting for attention with sharply different combinations of price, memory, storage and bundled peripherals.",
+        "Antic’s holiday guide puts Atari’s 16K 600XL at $199 and the 64K 800XL at $299, both with BASIC built in. The $449 Atari 1050 drive brings enhanced-density disks and DOS 3.0, while touch tablets promise drawing and a more direct way to work on screen.",
+        "Coleco’s Adam counters with a bundled computer, data drive and daisy-wheel printer. IBM’s PCjr, announced in November but due to ship in early 1984, hangs over the season as a future entrant. Buyers are choosing not just a machine, but a family of software, storage and accessories."
+      ]
+    },
+    {
+      "headline": "Windows Become Software’s New Battleground",
+      "confidence": "Same-week period reporting.",
+      "sourceRefs": [
+        0,
+        11
+      ],
+      "body": [
+        "The busiest COMDEX demonstrations split a single screen into windows, allowing different programs or views to remain visible at once. Visi On places writing, calculations and graphs inside a mouse-driven environment for IBM-compatible machines.",
+        "The idea promises relief from the ritual of closing one task before opening another, but the price of admission is steep. Visi On demands an expensive, well-equipped PC by home-computer standards.",
+        "Even so, this week’s attention suggests that the next contest will not be decided by processor specifications alone. Software makers are now competing to define how people see, point to and move among their work."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "IBM-compatible personal computers",
+      "summary": "COMDEX variations on the IBM PC increasingly define the business standard.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Visi On",
+      "summary": "VisiCorp demonstrates an integrated mouse-and-windows environment.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        0,
+        11
+      ]
+    },
+    {
+      "title": "The Witness",
+      "summary": "Infocom’s 1930s murder mystery exemplifies the interactive-fiction surge.",
+      "confidence": "Same-month",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "title": "Atari 800XL",
+      "summary": "A 64K home computer with built-in BASIC listed at $299.",
+      "confidence": "Same-month",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "title": "Volksmodem",
+      "summary": "A budget 300-baud modem brings online services within reach.",
+      "confidence": "Same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Visi On",
+      "detail": "Graphical IBM-compatible environment for writing, planning and graphs."
+    },
+    {
+      "name": "Atari DOS 3.0",
+      "detail": "Disk operating system bundled with the Atari 1050 drive."
+    },
+    {
+      "name": "The Witness",
+      "detail": "Infocom interactive murder mystery set in 1930s Los Angeles."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "The Witness",
+        "Deadline",
+        "Zork I",
+        "Planetfall",
+        "Enchanter"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Sudden Impact",
+        "Scarface",
+        "Terms of Endearment",
+        "Christine",
+        "A Christmas Story"
+      ]
+    },
+    {
+      "label": "Hardware",
+      "items": [
+        "Atari 600XL",
+        "Atari 800XL",
+        "Atari 1050 disk drive",
+        "Volksmodem"
+      ]
+    },
+    {
+      "label": "Software",
+      "items": [
+        "Visi On",
+        "Atari DOS 3.0",
+        "The Witness",
+        "Deadline"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari 600XL",
+      "price": "$199",
+      "note": "Antic holiday buyer’s guide list price."
+    },
+    {
+      "item": "Atari 800XL",
+      "price": "$299",
+      "note": "64K model with BASIC built in."
+    },
+    {
+      "item": "KoalaPad with software",
+      "price": "$125",
+      "note": "Touch tablet package."
+    },
+    {
+      "item": "Atari Touch Tablet with Atari Artist",
+      "price": "$79.95",
+      "note": "Holiday guide price."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "The booth becomes theater",
+      "text": "COMDEX displays rise several stories, with serious exhibits costing $25,000 to $50,000."
+    },
+    {
+      "headline": "Budget modems dial online",
+      "text": "The $79.95 Volksmodem joins products aimed at electronic mail and commercial information services."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Say Say Say",
+      "artist": "Paul McCartney and Michael Jackson"
+    },
+    {
+      "rank": 2,
+      "title": "All Night Long (All Night)",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 3,
+      "title": "Uptown Girl",
+      "artist": "Billy Joel"
+    },
+    {
+      "rank": 4,
+      "title": "Love Is a Battlefield",
+      "artist": "Pat Benatar"
+    },
+    {
+      "rank": 5,
+      "title": "Union of the Snake",
+      "artist": "Duran Duran"
+    }
+  ],
+  "periodAd": {
+    "headline": "Bring Home an Atari XL",
+    "summary": "Built-in BASIC, full-stroke keyboards and a growing shelf of disks put computing under the tree.",
+    "tagline": "16K from $199 — 64K from $299."
+  },
+  "market": {
+    "headline": "The PC standard gathers commercial gravity",
+    "summary": "COMDEX’s record scale turns IBM compatibility, software and dealer networks into the week’s decisive business story.",
+    "confidence": "Exact-date reporting.",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Argentina Returns to Civilian Rule",
+    "summary": "Raúl Alfonsín was sworn in December 10 as Argentina’s first civilian president after nearly eight years of military rule, marking a decisive democratic transition.",
+    "confidence": "Exact-date",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "COMDEX scale and IBM-compatibility trend",
+        "status": "Verified to exact-date reporting",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "claim": "Interactive-fiction feature and The Witness review",
+        "status": "Verified to exact-date and period sources",
+        "sourceRefs": [
+          2,
+          5,
+          12
+        ]
+      },
+      {
+        "claim": "Hardware prices, music and films",
+        "status": "Dated to period guides and weekly charts",
+        "sourceRefs": [
+          4,
+          6,
+          7,
+          8
+        ]
+      },
+      {
+        "claim": "Argentina civilian inauguration",
+        "status": "Verified to exact-date wire report",
+        "sourceRefs": [
+          9
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Las Vegas computer show has exploded into biggest of them all",
+      "url": "https://www.csmonitor.com/1983/1205/120514.html"
+    },
+    {
+      "label": "InfoWorld, Vol. 5 No. 49",
+      "url": "https://books.google.com.jm/books?cad=1&id=6C8EAAAAMBAJ"
+    },
+    {
+      "label": "Computers: Putting Fiction on a Floppy",
+      "url": "https://time.com/archive/6884106/computers-putting-fiction-on-a-floppy/"
+    },
+    {
+      "label": "Under 1983 Christmas Tree, Expect the Home Computer",
+      "url": "https://www.nytimes.com/1983/12/10/business/under-1983-christmas-tree-expect-the-home-computer.html"
+    },
+    {
+      "label": "Antic Buyer's Guide",
+      "url": "https://www.atarimagazines.com/v2n9/Buyersguide.html"
+    },
+    {
+      "label": "COMPUTE! Review: The Witness",
+      "url": "https://www.atarimagazines.com/compute/issue43/176_1_REVIEWS_The_Witness.php"
+    },
+    {
+      "label": "Billboard Hot 100, December 10, 1983",
+      "url": "https://elpee.jp/hot100/week/1983-12-10/"
+    },
+    {
+      "label": "US Top 40 Singles, week ending December 10, 1983",
+      "url": "https://top40weekly.com/2013/12/10/us-top-40-singles-for-the-week-ending-december-10-1983/"
+    },
+    {
+      "label": "Domestic 1983 Weekend 49",
+      "url": "https://www.boxofficemojo.com/weekend/1983W49/"
+    },
+    {
+      "label": "New civilian president sworn-in",
+      "url": "https://www.upi.com/Archives/1983/12/10/New-civilian-president-sworn-in/8126439880400/"
+    },
+    {
+      "label": "Human error, lack of radar blamed for crash",
+      "url": "https://www.upi.com/Archives/1983/12/08/Human-error-lack-of-radar-blamed-for-crash/4738439707600/"
+    },
+    {
+      "label": "Computers: Windows on the World",
+      "url": "https://time.com/archive/6860280/computers-windows-on-the-world/"
+    },
+    {
+      "label": "Interactive-fiction TIME article transcript",
+      "url": "http://iso.fi.netbsd.org/index/misc/ifarchive/infocom/articles/Time83-text"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM USERS WANTED",
+      "copy": "Trade messages and program notes at 300 baud. Local club forming."
+    },
+    {
+      "headline": "DISKS & MANUALS",
+      "copy": "Organized home-computer owner seeks swaps and study partners."
+    }
+  ]
+}
