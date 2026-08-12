@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-12",
+      "historicDate": "1983-12-05",
+      "displayDate": "Week of December 5-11, 1983",
+      "edition": "Issue 071 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "IBM compatibility commands COMDEX while interactive fiction and home computers contest the Christmas shelf.",
+      "leadHeadline": "COMDEX Becomes Las Vegas's Biggest Show as IBM Compatibility Takes Command",
+      "storyHeadlines": [
+        "Interactive Fiction Turns the Floppy Disk into a Bestseller Shelf",
+        "Home Computers Move to the Center of the Christmas Battle",
+        "Windows Become Software’s New Battleground"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-12-05.jpg",
+      "thumb": "media/thumbs/1983-12-05.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-11",
       "historicDate": "1983-11-28",
       "displayDate": "Week of November 28-December 4, 1983",
