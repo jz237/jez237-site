@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 11 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 12 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of December 5-11, 1983 — COMDEX Becomes Las Vegas&apos;s Biggest Show as IBM Compatibility Takes Command</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-12-05</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-12-05</guid>
+      <pubDate>Wed, 12 Aug 2026 12:00:00 GMT</pubDate>
+      <description>More than 80,000 visitors and 1,400 exhibitors gather around a market increasingly organized by the IBM PC standard. The computer trade has taken over Las Vegas. A show that began in the winter of 1979 with roughly 4,000 visitors has swollen to more than 80,000 attendees, filling the convention center and rooms in five major hotels. Its 1,400 exhibitors include 400 newcomers, with AT&amp;T among the names making a first appearance. Also this week: Interactive Fiction Turns the Floppy Disk into a Bestseller Shelf · Home Computers Move to the Center of the Christmas Battle · Windows Become Software’s New Battleground.</description>
+    </item>
     <item>
       <title>Week of November 28-December 4, 1983 — At COMDEX, IBM Compatibility Becomes the Winning Bet</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-11-28</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-25</guid>
       <pubDate>Thu, 23 Jul 2026 12:00:00 GMT</pubDate>
       <description>A £116 British price cut puts a 64K color computer into the fiercest part of the home-micro market. Commodore has taken what Personal Computer News called a “scythe” to its British prices. Effective August 1, the recommended retail price of the Commodore 64 falls from £345 to £229, a £116 cut that moves the 64K color machine into direct contention with far less capable rivals. Also this week: Aquarius Finally Reaches Launch Day · Nintendo Brings the Arcade Home · KoalaPad Makes the Screen a Drawing Board.</description>
-    </item>
-    <item>
-      <title>Week of July 18-24, 1983 — Apple II Sales Reach One Million</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-07-18</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-07-18</guid>
-      <pubDate>Wed, 22 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Six years after its debut, the expandable 6502 machine crosses a landmark that shows how far personal computing has moved beyond the hobby bench. Apple Computer sold its one-millionth Apple II on July 18, giving the personal-computer business a round-number milestone few could have imagined when the original machine appeared in 1977. The figure belongs to the whole Apple II family, whose color graphics, expansion slots, and accessible design carried it from enthusiasts’ rooms into schools, offices, and neighborhood computer shops. Also this week: Commodore Threatens to Halve Software Prices · Whole Earth Maps a 40,000-Program Jungle · More Memory for Less in the Home-Computer War.</description>
     </item>
   </channel>
 </rss>
