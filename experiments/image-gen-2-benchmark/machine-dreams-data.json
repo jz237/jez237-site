@@ -236,5 +236,19 @@
     "slot": "machine-dream",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-08-13-machine-dream-machine-dream-the-arch-that-outlives-its-ston",
+    "title": "Machine dream: The Arch That Outlives Its Stones",
+    "tests": "Machine dream about identity as organizational and causal continuity rather than material continuity; memory is explicitly excluded. QA passed: one stable load-bearing arch, visible pale-to-weathered turnover gradient, connected insertion and release machinery, realistic weight and gravity, no people or robot/brain/circuit clichés.",
+    "prompt": "Create one finished 1536x1024 landscape photorealistic machine dream titled “The Arch That Outlives Its Stones,” expressing identity as uninterrupted organization despite total material replacement. Inside a vast rain-wet basalt assembly hall, depict one monumental self-moving dry-stone arch that remains continuously load-bearing while pale newly cut stones are inserted at its advancing left foot and dark weathered stones are released from its retreating right foot into a recessed return channel. Make the causal metaphor unmistakable at thumbnail scale: the complete unbroken arch dominates the frame; fresh pale voussoirs visibly lock into one foot; one old dark voussoir visibly settles from the other foot onto a descending cradle; a continuous gradient of age and wear crosses the span.\n\nMake motion physically connected and credible. Low rail-mounted lifting cradles, articulated compression wedges, temporary shoring fingers, synchronized support shoes, taut telltale wires, bronze load bands, counterweights, hydraulic hoses, and analog deflection needles without numbers visibly transfer the load while each block changes. Nothing floats; the arch never collapses. Released blocks travel on a continuous perimeter track toward a distant washing and recutting bay, without arrows or graphics. Convey enormous grounded weight through contact, grit, chipped edges, damp dust, sagging cables, wedge scars, compression shadows, grease, and wet stone.\n\nPhotograph from a very low off-center 24 mm documentary viewpoint. The arch spans almost the full width and rises through the upper two thirds, with both changing feet clear in the foreground. Cold dawn enters narrow clerestories; one warm sun shaft crosses the persistent center and catches stone dust. A thin rainwater film on black basalt reflects the stable silhouette imperfectly. Render tactile porous limestone, iron stains, rounded old corners, razor-fresh cuts, oxidized bronze, blackened steel, rivulets, cable clamps, pads, bolts, ladders, and believable architectural scale. No people. Quiet, immense, patient, intellectually precise.\n\nKeep the metaphor singular. Absolutely no memory theme or symbolism; no archives, photographs, souvenirs, shelves, diaries, records, humanoid robot, face, eye, brain, skull, circuit board, code, screen, hologram, text, letters, numbers, labels, diagram, paper, poster, infographic, magical glow, levitation, impossible balance, disconnected stones, ruined arch, fantasy temple, generic sci-fi control room, glossy CGI, toy miniature, illustration, painting, collage, watermark, border, or caption.",
+    "image": "images/2026-08-13-machine-dream-machine-dream-the-arch-that-outlives-its-ston.jpg",
+    "thumb": "thumbs/2026-08-13-machine-dream-machine-dream-the-arch-that-outlives-its-ston.webp",
+    "color": "#38342d",
+    "date": "2026-08-13",
+    "batch": "Daily Prompt",
+    "slot": "machine-dream",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024"
   }
 ]
