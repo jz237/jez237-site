@@ -1,0 +1,375 @@
+{
+  "currentDate": "2026-08-13",
+  "historicDate": "1983-12-12",
+  "displayDate": "Week of December 12-18, 1983",
+  "edition": "Issue 072 - Weekly 1983 Computer & Culture Chronicle",
+  "milestone": {
+    "title": "Visi On brings a commercial graphical desktop to the IBM PC",
+    "note": "Its December 1983 release made the graphical window-and-mouse interface a real IBM PC product and framed the interface contest that Microsoft Windows would later dominate."
+  },
+  "visualProfile": {
+    "tone": "Extra-edition urgency on warm aged newsprint",
+    "motifs": [
+      "graphical windows on an IBM PC",
+      "Donkey Kong Jr. arithmetic",
+      "holiday computer counters"
+    ],
+    "layout": "Dense metropolitan computer weekly with blue and red rules"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "December 12-18, 1983",
+    "price": "50 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Visi On milestone lead across the upper columns",
+    "secondaryRail": "Famicom learning games and the home-computer price war",
+    "archiveNavigation": "Chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "ink blue",
+    "secondary": "press red",
+    "texture": "warm newsprint with halftone photographs"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1983-12-12.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for December 12-18, 1983",
+    "caption": "A GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Extra Edition: the graphical desktop has become a shipping IBM PC product, even as rival window systems line up for 1984.",
+  "morningLine": "Visi On reaches the IBM PC, Nintendo sends Donkey Kong Jr. to arithmetic class, and the home-computer price war begins to cool.",
+  "lead": {
+    "headline": "The Window Wars Reach the IBM PC",
+    "dek": "Visi On ships a commercial graphical desktop while Microsoft and Quarterdeck ready cheaper rivals.",
+    "confidence": "Exact-date reporting with period corroboration.",
+    "sourceRefs": [
+      0,
+      5
+    ],
+    "body": [
+      "VisiCorp has put a windowed, mouse-driven working environment onto the IBM Personal Computer, turning a laboratory-style graphical interface into a commercial product. Visi On joins word processing, spreadsheet and graphing programs behind one visual system, giving business users a consistent way to move among tasks.",
+      "The elegance comes with demanding requirements. Applications must be written especially for Visi On, and the development system requires a costly minicomputer toolchain. Serious windowing also calls for roughly half a megabyte of memory and a hard disk, pushing a complete installation toward the expensive end of the PC market.",
+      "Microsoft is promising a different bargain for mid-1984. Its proposed Windows extension, projected at $100 to $250, uses tiled rather than overlapping windows and aims to standardize how programs address displays across machines. Microsoft president William Gates describes a neat-desk metaphor, a deliberate contrast with overlapping papers.",
+      "Quarterdeck’s DESQ, due in January, offers a third route: windows around most existing text-mode DOS applications without rewriting them. Graphics programs would still take over the full screen, but compatibility could matter more than visual polish to owners with established software libraries.",
+      "The contest is bigger than window decoration. Each company is bidding to control the common language between users, applications and displays. As analyst Egil Juliussen puts it, 1984 may determine who becomes the “window master of the world.”"
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Home-Computer Price War Finally Cools",
+      "confidence": "Exact-date reporting.",
+      "sourceRefs": [
+        1
+      ],
+      "body": [
+        "After a year of punishing markdowns, manufacturers at COMDEX expect the steep slide in computer prices to moderate. Machines had been falling 20 to 25 percent annually, with even sharper cuts below $1,000; Texas Instruments has now quit the home-computer field and Atari has accumulated heavy losses.",
+        "IBM’s $700-to-$1,300 PCjr gives rivals room to retreat from the bottom. Atari and Coleco raised prices after its unveiling, while shortages of common PC components leave clone makers with little reason to discount. Kaypro president David Kay dissents, arguing that Japanese vendors may still move into the gap beneath PCjr."
+      ]
+    },
+    {
+      "headline": "Donkey Kong Jr. Clambers Into Arithmetic",
+      "confidence": "Exact-date release.",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "Nintendo released Donkey Kong Jr. Math for the Family Computer in Japan on December 12. The ¥4,500 cartridge turns the familiar vine-climbing action into addition, subtraction, multiplication and division exercises, asking players to collect numbers and symbols.",
+        "Developed by Nintendo R&D1, it follows November’s Popeye English-learning title and shows how console makers hope recognizable arcade characters can broaden the family market beyond action games."
+      ]
+    },
+    {
+      "headline": "A Christmas Bounce for Atari Amid the Crash",
+      "confidence": "Same-week trade reporting.",
+      "sourceRefs": [
+        2
+      ],
+      "body": [
+        "Electronic Games Hotline led its December 18 number with an upbeat report that Atari hardware and software sales were booming for Christmas. The headline offers a rare bright patch in a year defined by excess cartridges, retailer caution and company losses.",
+        "The holiday lift does not erase the industry’s damage: Mattel has just reported a large quarterly loss and Atari’s computer division remains under pressure. But it suggests strong brands and attractive seasonal pricing can still move machines and games even in a contracting market."
+      ]
+    },
+    {
+      "headline": "Software Moves from Boxes to Parcels",
+      "confidence": "Same-week reporting.",
+      "sourceRefs": [
+        6,
+        1
+      ],
+      "body": [
+        "Publishers are experimenting with splitting programs into modules and bundling related applications as software grows more costly to develop. Peachtree and Information Unlimited Software offer packages at roughly half the total price of their separate components.",
+        "Price itself has become a marketing signal. Business Systems raised an Apple II integrated package from $79 to $179 after deciding buyers equated cheap software with weak software, while Lotus 1-2-3 holds at $495 and VisiCalc has fallen to $250."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Visi On",
+      "summary": "Shipping IBM PC graphical environment with specially written applications.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Microsoft Windows",
+      "summary": "Tiled graphical DOS extension projected for mid-1984 at $100-$250.",
+      "confidence": "Same-month",
+      "sourceRefs": [
+        0,
+        5
+      ]
+    },
+    {
+      "title": "Quarterdeck DESQ",
+      "summary": "January-bound window manager promising compatibility with most text-mode DOS programs.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "IBM PCjr",
+      "summary": "The $700-$1,300 family is credited with easing destructive home-computer discounting.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Donkey Kong Jr. Math",
+      "summary": "Nintendo’s Dec. 12 arithmetic cartridge for the Famicom.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Visi On",
+      "detail": "Graphical environment, word processing, spreadsheet and graphing."
+    },
+    {
+      "name": "Microsoft Windows",
+      "detail": "Tiled graphical MS-DOS extension announced for 1984."
+    },
+    {
+      "name": "PAL 64 and Power 64",
+      "detail": "Pro-Line assembler and BASIC enhancement for Commodore 64."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Donkey Kong Jr. Math",
+        "Millionaire",
+        "The Witness",
+        "Planetfall",
+        "Enchanter"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Sudden Impact",
+        "Scarface",
+        "Terms of Endearment",
+        "Christine",
+        "A Christmas Story"
+      ]
+    },
+    {
+      "label": "Hardware",
+      "items": [
+        "IBM PCjr",
+        "IBM PC compatibles",
+        "Nintendo Family Computer",
+        "Commodore 64"
+      ]
+    },
+    {
+      "label": "Software",
+      "items": [
+        "Visi On",
+        "Microsoft Windows",
+        "PAL 64",
+        "Power 64"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM PCjr family",
+      "price": "$700-$1,300",
+      "note": "Premium home-computer range."
+    },
+    {
+      "item": "Lotus 1-2-3",
+      "price": "$495",
+      "note": "Leading business package."
+    },
+    {
+      "item": "VisiCalc",
+      "price": "$250",
+      "note": "Down from $350."
+    },
+    {
+      "item": "Donkey Kong Jr. Math",
+      "price": "¥4,500",
+      "note": "Japanese Famicom cartridge."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Quarterdeck readies DESQ",
+      "text": "Due in January, DESQ promises windows around most existing text-mode DOS programs."
+    },
+    {
+      "headline": "The Christmas of the computer?",
+      "text": "COMPUTE! examines heavy holiday promotion one year after Time’s Machine of the Year cover."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Say Say Say",
+      "artist": "Paul McCartney and Michael Jackson"
+    },
+    {
+      "rank": 2,
+      "title": "All Night Long (All Night)",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 3,
+      "title": "Uptown Girl",
+      "artist": "Billy Joel"
+    },
+    {
+      "rank": 4,
+      "title": "Love Is a Battlefield",
+      "artist": "Pat Benatar"
+    },
+    {
+      "rank": 5,
+      "title": "Union of the Snake",
+      "artist": "Duran Duran"
+    }
+  ],
+  "periodAd": {
+    "headline": "Put Donkey Kong Jr. to Work",
+    "summary": "Climb the vines, choose the numbers and solve the equation on Nintendo’s Family Computer.",
+    "tagline": "Arithmetic action — ¥4,500."
+  },
+  "market": {
+    "headline": "Price-war survivors catch their breath",
+    "summary": "PCjr’s higher price and component shortages reduce pressure for another round of computer discounts.",
+    "confidence": "Exact-date reporting.",
+    "sourceRefs": [
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Coordinated bombings strike Western targets in Kuwait",
+    "summary": "On December 12, truck bombers struck the U.S. Embassy and five other targets across Kuwait in roughly 90 minutes; five people were reported dead and dozens wounded.",
+    "confidence": "Exact-date reporting.",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Visi On release and window-system competition",
+        "status": "Verified to exact-date and period sources",
+        "sourceRefs": [
+          0,
+          5
+        ]
+      },
+      {
+        "claim": "Home-computer pricing and software economics",
+        "status": "Verified to exact-date reporting",
+        "sourceRefs": [
+          1,
+          6
+        ]
+      },
+      {
+        "claim": "Nintendo release, movies and music",
+        "status": "Dated to release records and weekly charts",
+        "sourceRefs": [
+          3,
+          7,
+          8
+        ]
+      },
+      {
+        "claim": "Kuwait bombings",
+        "status": "Verified to exact-date reporting",
+        "sourceRefs": [
+          9
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Christian Science Monitor: The windowing contest",
+      "url": "https://www.csmonitor.com/1983/1212/121208.html"
+    },
+    {
+      "label": "Christian Science Monitor: Home-computer prices",
+      "url": "https://www.csmonitor.com/1983/1215/121519.html"
+    },
+    {
+      "label": "Electronic Games Hotline, Dec. 18, 1983",
+      "url": "https://vgpavilion.com/mags/1983/12/18egh/pages/19831218-egh.pdf"
+    },
+    {
+      "label": "MobyGames: Donkey Kong Jr. Math releases",
+      "url": "https://www.mobygames.com/game/8152/donkey-kong-jr-math/releases/"
+    },
+    {
+      "label": "COMPUTE! Issue 43",
+      "url": "https://archive.org/details/1983-12-compute-magazine"
+    },
+    {
+      "label": "BYTE, December 1983",
+      "url": "https://archive.org/details/byte-magazine-1983-12"
+    },
+    {
+      "label": "New York Times: Parceling Out the Software",
+      "url": "https://www.nytimes.com/1983/12/14/business/parceling-out-the-software.html"
+    },
+    {
+      "label": "Box Office Mojo: Weekend 50 of 1983",
+      "url": "https://www.boxofficemojo.com/weekend/1983W50/"
+    },
+    {
+      "label": "Billboard Hot 100, Dec. 17, 1983",
+      "url": "https://billboard.elpee.jp/hot100/week/1983-12-17"
+    },
+    {
+      "label": "Washington Post: Kuwait bombings",
+      "url": "https://www.washingtonpost.com/archive/politics/1983/12/13/bombing/40b60b96-79cc-4b43-b9cd-07583799d9d1/"
+    },
+    {
+      "label": "UPI: U.S. ships shell positions in Lebanon",
+      "url": "https://www.upi.com/Archives/1983/12/13/US-ships-shell-positions-in-Lebanon/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "Programmers Wanted",
+      "copy": "Window systems need application writers ready for a new visual vocabulary."
+    },
+    {
+      "headline": "Disk Software by Post",
+      "copy": "Business, education and entertainment programs delivered to your door."
+    }
+  ]
+}
