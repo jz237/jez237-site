@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-12T10:18:16.187832+00:00",
+  "updatedAt": "2026-08-13T10:20:10.654854+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11516,7 +11516,7 @@
     "thumb:https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
       "localPath": "public/thumbnails/news-cc208483fb5eb8feb6.webp",
-      "checkedAt": "2026-08-05T11:27:33.408335+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://opengraph.githubassets.com/87b871e255361fe6bd02fa5c9ba9295bc8c46d922ce7c800119a605faffc3b16/ollama/ollama": {
       "sourceImage": "https://opengraph.githubassets.com/87b871e255361fe6bd02fa5c9ba9295bc8c46d922ce7c800119a605faffc3b16/ollama/ollama",
@@ -19239,7 +19239,7 @@
     "thumb:https://media.thenextweb.com/2026/07/openai-models-escaped-hacked-hugging-face.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/openai-models-escaped-hacked-hugging-face.avif",
       "localPath": "public/thumbnails/news-6f737c8db27941e363.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-1849294862.jpg?w=1024": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-1849294862.jpg?w=1024",
@@ -19451,7 +19451,7 @@
     "thumb:https://media.thenextweb.com/2026/07/Anthropic-logo.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/Anthropic-logo.avif",
       "localPath": "public/thumbnails/news-09881477bd1ec1fb96.avif",
-      "checkedAt": "2026-08-11T10:08:40.665231+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://ph-files.imgix.net/f197209e-d6d6-41a5-95ac-b550a2697daa.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024": {
       "sourceImage": "https://ph-files.imgix.net/f197209e-d6d6-41a5-95ac-b550a2697daa.jpeg?auto=format&fit=crop&frame=1&h=512&w=1024",
@@ -20096,7 +20096,7 @@
     "thumb:https://media.thenextweb.com/2026/07/bots-outnumber-humans-internet-ai-agents-traffic.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/bots-outnumber-humans-internet-ai-agents-traffic.avif",
       "localPath": "public/thumbnails/news-0df569a3ab1a0dd744.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/04/Poke-at-3.56.23-PM.jpg?resize=1200%2C610": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/04/Poke-at-3.56.23-PM.jpg?resize=1200%2C610",
@@ -21769,17 +21769,17 @@
     "thumb:https://media.thenextweb.com/2026/08/chatgpt-free-unlimited-text-chats-gpt-5-6-luna-default2.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/chatgpt-free-unlimited-text-chats-gpt-5-6-luna-default2.avif",
       "localPath": "public/thumbnails/news-5c6f5ea25a7f6f1ef2.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/06/Adobe-banner.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/06/Adobe-banner.avif",
       "localPath": "public/thumbnails/news-f0a045e870e8d4845f.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/08/google-maps-ask-maps-agentic-food-ordering-hotel-booking.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/google-maps-ask-maps-agentic-food-ordering-hotel-booking.avif",
       "localPath": "public/thumbnails/news-d12c0df400874372dc.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/06/ML-21567-featured-image.png": {
       "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/06/ML-21567-featured-image.png",
@@ -21789,7 +21789,7 @@
     "thumb:https://media.thenextweb.com/2026/06/chinese-ai-models-gaming-safety-tests-evaluation-awareness.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/06/chinese-ai-models-gaming-safety-tests-evaluation-awareness.avif",
       "localPath": "public/thumbnails/news-73c4489af343a9db57.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/05/ML-21657-featured-image.png": {
       "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/05/ML-21657-featured-image.png",
@@ -21804,7 +21804,7 @@
     "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/04/ML-21331-featured-image.png": {
       "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/04/ML-21331-featured-image.png",
       "localPath": "public/thumbnails/news-06351072c6b0929ea3.png",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/05/ML-21386-featured-image.png": {
       "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/05/ML-21386-featured-image.png",
@@ -21904,12 +21904,12 @@
     "thumb:https://media.thenextweb.com/2026/08/cloudflare-kitesurf-browser-ai-agents-workers.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/cloudflare-kitesurf-browser-ai-agents-workers.avif",
       "localPath": "public/thumbnails/news-ec991995313122edee.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://static.simonwillison.net/static/2026/raccoon-heist-codex-bug.jpg": {
       "sourceImage": "https://static.simonwillison.net/static/2026/raccoon-heist-codex-bug.jpg",
       "localPath": "public/thumbnails/news-80d5dc5c6a3df85331.jpg",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/08/disney-espn-ai-search-discovery-beta.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/disney-espn-ai-search-discovery-beta.avif",
@@ -21929,12 +21929,12 @@
     "thumb:https://media.thenextweb.com/2026/08/zenity-ai.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/zenity-ai.avif",
       "localPath": "public/thumbnails/news-de9a08e6ee619d1545.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/08/openai-astra-model-ten-math-proofs-non-sofic-groups.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/openai-astra-model-ten-math-proofs-non-sofic-groups.avif",
       "localPath": "public/thumbnails/news-1fde08a882e6032cf4.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/VRG_VST080726_Site.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200": {
       "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/VRG_VST080726_Site.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
@@ -22024,7 +22024,7 @@
     "thumb:https://static.simonwillison.net/static/2026/auto-mode-comparison.png": {
       "sourceImage": "https://static.simonwillison.net/static/2026/auto-mode-comparison.png",
       "localPath": "public/thumbnails/news-6d2d551bb884fb3ecc.png",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2259148891.jpg?resize=1200%2C686": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2259148891.jpg?resize=1200%2C686",
@@ -22034,17 +22034,17 @@
     "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/08/5559253-Firebird-AI-Factory-Armenia-social-1920x1080-1.jpg": {
       "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/08/5559253-Firebird-AI-Factory-Armenia-social-1920x1080-1.jpg",
       "localPath": "public/thumbnails/news-4b732105e1da004f66.jpg",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://ph-files.imgix.net/eb4191fe-774e-41e1-8328-6081f53957df.png?auto=format&fit=crop&frame=1&h=512&w=1024": {
       "sourceImage": "https://ph-files.imgix.net/eb4191fe-774e-41e1-8328-6081f53957df.png?auto=format&fit=crop&frame=1&h=512&w=1024",
       "localPath": "public/thumbnails/news-74f2b84ec47937b5c3.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/08/chatgpt-whatsapp-sticker-export-apk-teardown.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/chatgpt-whatsapp-sticker-export-apk-teardown.avif",
       "localPath": "public/thumbnails/news-a751e1fd85eb897eeb.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://ph-files.imgix.net/d2a4d783-3600-4eb5-8d81-2b71215d2386.png?auto=format&fit=crop&frame=1&h=512&w=1024": {
       "sourceImage": "https://ph-files.imgix.net/d2a4d783-3600-4eb5-8d81-2b71215d2386.png?auto=format&fit=crop&frame=1&h=512&w=1024",
@@ -22125,7 +22125,7 @@
     "thumb:https://media.thenextweb.com/2026/07/openai-dublin-250-jobs-european-headquarters-expansion.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/07/openai-dublin-250-jobs-european-headquarters-expansion.avif",
       "localPath": "public/thumbnails/news-01d12de25aa9753187.avif",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/268680_AI_detection_CVirginia-.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200": {
       "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/268680_AI_detection_CVirginia-.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
@@ -22220,22 +22220,22 @@
     "thumb:https://media.thenextweb.com/2026/08/Anthropic-and-OpenAI.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/Anthropic-and-OpenAI.avif",
       "localPath": "public/thumbnails/news-b36dd9ac97d9c49bb7.avif",
-      "checkedAt": "2026-08-11T10:08:40.665231+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/06/lovable-ceo-europe-ai-confidence-problem-talent-silicon-valley.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/06/lovable-ceo-europe-ai-confidence-problem-talent-silicon-valley.avif",
       "localPath": "public/thumbnails/news-68ed335afab1233919.avif",
-      "checkedAt": "2026-08-11T10:08:40.665231+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://media.thenextweb.com/2026/08/ai-transforming-frontend-engineering-web.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/08/ai-transforming-frontend-engineering-web.avif",
       "localPath": "public/thumbnails/news-58310ebaf91821aad0.avif",
-      "checkedAt": "2026-08-11T10:08:40.665231+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://static.simonwillison.net/static/2026/glimmer-pelican.png": {
       "sourceImage": "https://static.simonwillison.net/static/2026/glimmer-pelican.png",
       "localPath": "public/thumbnails/news-b8dca83f7f681ff432.png",
-      "checkedAt": "2026-08-11T10:08:40.665231+00:00"
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     },
     "thumb:https://techcrunch.com/wp-content/uploads/2026/08/Claw-weight.png?resize=1200%2C600": {
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/08/Claw-weight.png?resize=1200%2C600",
@@ -22366,6 +22366,126 @@
       "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/08/image1.jpeg",
       "localPath": "public/thumbnails/news-decc970266bb6b6f82.jpg",
       "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+    },
+    "https://aidailybrief.ai/e/2026-08-12": {
+      "image": "https://aidailybrief.ai/og/2026-08-12.png",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/human-behavior": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/fluiddocs-html-deck-builder": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/kin-health": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/phinq": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://techcrunch.com/2026/08/12/some-claude-users-are-mad-that-anthropics-new-watermarks-will-catch-them-cheating-at-their-jobs-classes": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/06/Claude-photo.jpg?w=1024",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.techrepublic.com/article/news-meta-smart-glasses-ban-england-wales-courts": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.techrepublic.com/article/news-bernie-sanders-ai-development-pause": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.techrepublic.com/article/news-galbot-s1-humanoid-robot-battery-swap": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/skilldocs": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/qencode": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://techcrunch.com/2026/08/12/amazon-will-train-on-twitch-streamers-content-by-default-unless-they-opt-out": {
+      "image": "https://techcrunch.com/wp-content/uploads/2024/03/twitch-reflection.jpg?resize=1200%2C799",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/pickle-browser": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.producthunt.com/products/threadport": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://simonwillison.net/2026/Aug/12/alchemy-utils": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://techcrunch.com/2026/08/12/ai-coding-startup-cognition-reportedly-already-in-talks-to-raise-at-40b-valuation": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/05/Scott-wu-headshot-e1780070238342.png?resize=1200%2C1004",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://techcrunch.com/2026/08/12/as-ai-safety-concerns-mount-three-pioneers-make-the-case-for-staying-open": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/08/HALL1410.jpg?resize=1200%2C800",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/part-2-amazon-bedrock-cost-attribution-with-amazon-athena-and-cudos": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/10/ML-21078-featured-image.png",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://techcrunch.com/2026/08/12/openai-backed-thrive-holdings-raises-2b-to-bring-ai-to-the-enterprise": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/08/holdings_all_team.jpg?resize=1200%2C407",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "https://www.techrepublic.com/article/news-apac-south-korea-tech-strategy": {
+      "image": "",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://aidailybrief.ai/og/2026-08-12.png": {
+      "sourceImage": "https://aidailybrief.ai/og/2026-08-12.png",
+      "localPath": "public/thumbnails/news-5cd5b3c99271f48967.png",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/07/meta-zuckerberg-ai-cloud-business-makes-sense.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/07/meta-zuckerberg-ai-cloud-business-makes-sense.avif",
+      "localPath": "public/thumbnails/news-e5129fdeb57aad63d7.avif",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/05/Taiwan-flag.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/05/Taiwan-flag.avif",
+      "localPath": "public/thumbnails/news-6ac3f02c2e00462545.avif",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://substackcdn.com/image/fetch/$s_!HIbH!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F__ss-rehost__tw-video-preview-13_2087221157787525120.jpg": {
+      "sourceImage": "https://substackcdn.com/image/fetch/$s_!HIbH!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F__ss-rehost__tw-video-preview-13_2087221157787525120.jpg",
+      "localPath": "public/thumbnails/news-020bd8ed0b785c8d6a.jpg",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026/deepseek-pro-low.png": {
+      "sourceImage": "https://static.simonwillison.net/static/2026/deepseek-pro-low.png",
+      "localPath": "public/thumbnails/news-dadc0e9f8f78bee320.png",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/05/Scott-wu-headshot-e1780070238342.png?resize=1200%2C1004": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/05/Scott-wu-headshot-e1780070238342.png?resize=1200%2C1004",
+      "localPath": "public/thumbnails/news-ff4ee440429eb6032e.webp",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/08/holdings_all_team.jpg?resize=1200%2C407": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/08/holdings_all_team.jpg?resize=1200%2C407",
+      "localPath": "public/thumbnails/news-ac4449afa80f24c73f.webp",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/08/GlassdoorBestCEOs2026_16x9.png": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/08/GlassdoorBestCEOs2026_16x9.png",
+      "localPath": "public/thumbnails/news-289457bc8df40f573c.png",
+      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
     }
   }
 }
