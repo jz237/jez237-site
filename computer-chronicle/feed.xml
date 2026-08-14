@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 14 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of December 19-25, 1983 — Big Blue Paints the Personal-Computer Standard</title>
+      <link>https://jez237.com/computer-chronicle/?date=1983-12-19</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-12-19</guid>
+      <pubDate>Fri, 14 Aug 2026 12:00:00 GMT</pubDate>
+      <description>IBM captures the business desktop as software houses and add-on makers rally around its open specifications. Only two years after entering personal computers, IBM has seized roughly 40 percent of the $2,000-to-$5,000 desktop market. That share tells only part of the story: the IBM PC has become the reference point against which business buyers, software publishers and would-be compatible makers now measure their plans. Also this week: Home-Computer Price War Eases After a Savage 1983 · Radio Shack Refreshes the Color Computer Line · Lotus 1-2-3 Overtakes the Spreadsheet Pioneer · Christmas Computer Boom Meets Empty Shelves.</description>
+    </item>
     <item>
       <title>Week of December 12-18, 1983 — The Window Wars Reach the IBM PC</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-12-12</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-08</guid>
       <pubDate>Sun, 26 Jul 2026 12:00:00 GMT</pubDate>
       <description>At a week-long developers&apos; conference, Apple works to turn Lisa&apos;s mouse-and-window interface into a platform outside programmers can build on. Apple spent this week trying to convince independent programmers that its expensive graphical computer, the Lisa, deserves their labor. At a week-long Independent Developers&apos; Conference at the Dunfey Hotel in San Mateo, the company opened Thursday, August 11, as &apos;Lisa Day,&apos; walking outside developers through the machine&apos;s unusual mouse-and-window way of working and the tools available to write for it. Also this week: Atari Erases the 1200XL and Bets on Four New Computers · Coleco&apos;s Adam Forces the Home-Computer Market to Scramble · Laserdisc Cartoon and a Colony Auction Headline the Summer Games.</description>
-    </item>
-    <item>
-      <title>Week of August 1-7, 1983 — M.U.L.E. Turns the Atari Into a Four-Player Marketplace</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-08-01</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-01</guid>
-      <pubDate>Fri, 24 Jul 2026 12:00:00 GMT</pubDate>
-      <description>Ozark Softscape and Electronic Arts mix land development, arcade action, and a live commodity auction into one unusually social computer game. A new game from designer Dani Bunten and Ozark Softscape asks Atari owners to gather around one machine and build an economy together. M.U.L.E., published by Electronic Arts, supports as many as four players, with the computer taking any empty places, and makes unusually direct use of the Atari computer family&apos;s four controller ports. Also this week: Seventeen New Computers Crowd the Fall Starting Line · Atari Sweeps Away Its Old Line for Four XL Computers · C and Scientific Software Reach the Personal-Computer Desk.</description>
     </item>
   </channel>
 </rss>
