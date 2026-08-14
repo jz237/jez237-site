@@ -4,6 +4,389 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-14",
+      "historicDate": "1983-12-19",
+      "displayDate": "Week of December 19-25, 1983",
+      "edition": "Issue 073 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Holiday urgency on warm aged newsprint",
+        "motifs": [
+          "IBM PC office desks",
+          "Color Computer holiday counter",
+          "cartridge and disk game boxes"
+        ],
+        "layout": "Dense metropolitan computer weekly with blue and red rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "December 19-25, 1983",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "IBM PC standard lead across the upper columns",
+        "secondaryRail": "Color Computer refresh and holiday game shelves",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "ink blue",
+        "secondary": "press red",
+        "texture": "warm newsprint with halftone photographs"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-12-19.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for December 19-25, 1983",
+        "caption": "A GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "IBM’s two-year-old personal computer now casts the industry’s longest shadow, while home-machine makers regroup for Christmas.",
+      "morningLine": "Big Blue defines the PC standard, Radio Shack refreshes the Color Computer, and holiday buyers hunt scarce drives and machines.",
+      "lead": {
+        "headline": "Big Blue Paints the Personal-Computer Standard",
+        "dek": "IBM captures the business desktop as software houses and add-on makers rally around its open specifications.",
+        "confidence": "Exact-date reporting.",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Only two years after entering personal computers, IBM has seized roughly 40 percent of the $2,000-to-$5,000 desktop market. That share tells only part of the story: the IBM PC has become the reference point against which business buyers, software publishers and would-be compatible makers now measure their plans.",
+          "More than 900 of the roughly 1,200 software companies operating before the PC appeared are now writing for IBM’s machine, according to this week’s industry assessment. New PC packages are arriving at a pace of about 50 each month, turning compatibility into a powerful sales argument for offices that want a broad catalog rather than a solitary machine.",
+          "IBM helped create that surrounding market by publishing technical specifications that independent manufacturers could study. Expansion boards, peripherals and compatible systems have multiplied, making the PC less a sealed product than the center of an increasingly busy commercial ecosystem.",
+          "The momentum also raises the stakes for every rival. Apple retains a devoted base and home computers compete fiercely below $1,000, but business software is gathering around Big Blue. At Christmas 1983, the most important feature of IBM’s PC may be the standard forming beyond the blue badge."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Home-Computer Price War Eases After a Savage 1983",
+          "confidence": "Same-week reporting.",
+          "sourceRefs": [
+            1,
+            2
+          ],
+          "body": [
+            "The holiday market is emerging from a price war that pushed Texas Instruments out of home computers and left Atari nursing heavy losses. Commodore 64 street prices below $200 and VIC-20 prices below $100 delighted buyers, but the cuts punished manufacturers and dealers alike.",
+            "IBM’s PCjr, priced from roughly $700 to $1,300, has given surviving makers room to stop racing toward the bottom. Atari and Coleco raised prices after its unveiling, while shortages of components and popular disk drives put a practical floor beneath further holiday markdowns."
+          ]
+        },
+        {
+          "headline": "Radio Shack Refreshes the Color Computer Line",
+          "confidence": "Same-month product reporting.",
+          "sourceRefs": [
+            3
+          ],
+          "body": [
+            "Radio Shack is answering the crowded holiday shelves with a 64K Extended BASIC Color Computer at $399.95 and two Color Computer 2 models at $239.95 and $319.95. All arrive with full-stroke keyboards, a welcome upgrade for buyers who intend to type more than game commands.",
+            "The 64K model can use its full memory with the $399.95 Color 2 Disk Kit and $69.95 OS-9 operating system, and can support as many as four drives. The less expensive Color Computer 2 machines retain cassette storage, keeping a lower-priced door open for first-time owners."
+          ]
+        },
+        {
+          "headline": "Lotus 1-2-3 Overtakes the Spreadsheet Pioneer",
+          "confidence": "Same-week reporting.",
+          "sourceRefs": [
+            1
+          ],
+          "body": [
+            "Lotus 1-2-3 is rapidly displacing VisiCalc as the business spreadsheet of choice. Its $495 package combines calculation, graphics and limited filing and writing tools, offering office buyers a coordinated suite rather than a single electronic ledger.",
+            "VisiCalc, once $350, has fallen to $250, but software prices remain tied to the costly work of development and support. Contemporary estimates place development of a major new program between $200,000 and $500,000, explaining why the strongest business titles resist the hardware market’s price war."
+          ]
+        },
+        {
+          "headline": "Christmas Computer Boom Meets Empty Shelves",
+          "confidence": "Same-month retail survey.",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "The promised “Christmas of the Computer” has arrived unevenly. Commodore was shipping at enormous volume, yet Commodore 64 machines and disk drives could still be scarce, while Coleco’s Adam missed its August debut and reached FCC approval only in October.",
+            "Atari’s 600XL and 800XL were expected for Christmas, but delayed machines and canceled dealer orders made selection depend as much on availability as specifications. Families shopping this week may find that the computer in the advertisement is not the computer on the counter."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM PC",
+          "summary": "About 40 percent of the $2,000-$5,000 desktop market, backed by more than 900 software companies.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Radio Shack 64K Color Computer",
+          "summary": "Disk-capable Extended BASIC model at $399.95.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Color Computer 2",
+          "summary": "Cassette-based models with full-stroke keyboards at $239.95 and $319.95.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Commodore 64",
+          "summary": "Holiday street price below $200 amid shortages.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "IBM PCjr",
+          "summary": "Configurations from roughly $700 to $1,300 reshape home-computer pricing.",
+          "confidence": "Same-week",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "IBM PC spreadsheet, graphics and filing package — $495."
+        },
+        {
+          "name": "VisiCalc",
+          "detail": "Pioneering spreadsheet reduced to $250."
+        },
+        {
+          "name": "OS-9",
+          "detail": "$69.95 operating system for the 64K Color Computer disk setup."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Bristles",
+            "Flip and Flop",
+            "Reactoid",
+            "Gomoku/Renju",
+            "Panic Button"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "Say Say Say — Paul McCartney & Michael Jackson",
+            "Say It Isn’t So — Daryl Hall & John Oates",
+            "Union of the Snake — Duran Duran",
+            "Owner of a Lonely Heart — Yes",
+            "All Night Long (All Night) — Lionel Richie"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Sudden Impact",
+            "Terms of Endearment",
+            "Scarface",
+            "Two of a Kind",
+            "The Rescuers (1983 re-release)"
+          ]
+        },
+        {
+          "label": "Software Counter",
+          "items": [
+            "Lotus 1-2-3 — $495",
+            "VisiCalc — $250",
+            "OS-9 — $69.95"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Commodore 64",
+          "price": "under $200 street",
+          "note": "Holiday price-war level."
+        },
+        {
+          "item": "Commodore VIC-20",
+          "price": "under $100 street",
+          "note": "Entry-level bargain."
+        },
+        {
+          "item": "IBM PCjr",
+          "price": "$700-$1,300",
+          "note": "Configurations vary."
+        },
+        {
+          "item": "Toshiba XR-Z90 CD player",
+          "price": "$1,000",
+          "note": "Digital audio carries a premium."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "PC software stampede",
+          "text": "About 50 new IBM PC packages are arriving each month."
+        },
+        {
+          "headline": "Cold grips Upper Midwest",
+          "text": "Temperatures fell to 45 below zero on Dec. 19, with wind chills near 60 below."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Say Say Say",
+          "artist": "Paul McCartney & Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Say It Isn’t So",
+          "artist": "Daryl Hall & John Oates"
+        },
+        {
+          "rank": 3,
+          "title": "Union of the Snake",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 4,
+          "title": "Owner of a Lonely Heart",
+          "artist": "Yes"
+        },
+        {
+          "rank": 5,
+          "title": "All Night Long (All Night)",
+          "artist": "Lionel Richie"
+        }
+      ],
+      "periodAd": {
+        "headline": "Four Players, Forty-Eight Floors of Trouble",
+        "summary": "First Star’s Bristles brings eight characters and frantic painting action to Atari and Commodore 64.",
+        "tagline": "Disk, tape or cartridge — $29.95 to $39.95."
+      },
+      "market": {
+        "headline": "Price-war survivors catch their breath",
+        "summary": "PCjr’s higher range and holiday shortages reduce pressure for another round of cuts.",
+        "confidence": "Same-week reporting.",
+        "sourceRefs": [
+          1,
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Arafat and 4,000 Fighters Evacuate Tripoli",
+        "summary": "Five Greek ships entered Tripoli on Dec. 20 to evacuate Yasser Arafat and roughly 4,000 besieged Palestinian fighters in a second forced exodus from Lebanon.",
+        "confidence": "Exact-date reporting.",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "A $1,000 Compact Disc Player Shows Digital Audio’s Premium Edge",
+        "summary": "Toshiba’s XR-Z90 promises 5 Hz-20 kHz response, rapid access and an eight-track programmable memory.",
+        "confidence": "Same-month equipment profile.",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "IBM PC market share and software ecosystem",
+            "status": "Verified to exact-date reporting",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Home-computer prices and holiday availability",
+            "status": "Verified to same-week and period reporting",
+            "sourceRefs": [
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "Radio Shack computers and games",
+            "status": "Verified to period product reports",
+            "sourceRefs": [
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "claim": "Music, movies and world bulletin",
+            "status": "Dated to weekly charts and exact-date reporting",
+            "sourceRefs": [
+              6,
+              7,
+              8,
+              10
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Christian Science Monitor: Big Blue takes the standard",
+          "url": "https://www.csmonitor.com/1983/1222/122230.html"
+        },
+        {
+          "label": "Christian Science Monitor: Home-computer price slide stalls",
+          "url": "https://www.csmonitor.com/1983/1215/121519.html"
+        },
+        {
+          "label": "COMPUTE!: The Christmas of the Computer?",
+          "url": "https://www.atarimagazines.com/compute/issue43/136_1_The_Christmas_Of_The_Computer.php"
+        },
+        {
+          "label": "COMPUTE!: New Color Computers",
+          "url": "https://www.atarimagazines.com/compute/issue43/251_2_NEWS_PRODUCTS_New_Color_Computers.php"
+        },
+        {
+          "label": "COMPUTE!: New Games for the Color Computer",
+          "url": "https://www.atarimagazines.com/compute/issue43/252_2_NEWS_PRODUCTS_New_Games_For_The_Color_Computer.php"
+        },
+        {
+          "label": "COMPUTE!: Games for Atari, 64, VIC, and Color Computer",
+          "url": "https://www.atarimagazines.com/compute/issue43/253_2_NEWS_PRODUCTS_Games_For_Atari_64_VIC_And_Color_Computer.php"
+        },
+        {
+          "label": "Billboard Hot 100, Dec. 24, 1983",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1983/BB-1983-12-24.pdf"
+        },
+        {
+          "label": "Music Charts Archive: Dec. 24, 1983",
+          "url": "https://www.musicchartsarchive.com/singles-chart/1983-12-24"
+        },
+        {
+          "label": "Box Office Mojo: Domestic Week 51",
+          "url": "https://www.boxofficemojo.com/weekly/1983W51/?sort=rank"
+        },
+        {
+          "label": "Audio: Toshiba XR-Z90 Compact Disc Player",
+          "url": "https://www.gammaelectronics.xyz/audio_12-1983_toshiba.html"
+        },
+        {
+          "label": "UPI: Arafat evacuation from Tripoli",
+          "url": "https://www.upi.com/Archives/1983/12/20/The-first-of-five-Greek-ships-entered-Tripolis-port/2703440744400/"
+        },
+        {
+          "label": "New York Times: Selecting That First VCR",
+          "url": "https://www.nytimes.com/1983/12/18/arts/selecting-that-first-vcr-some-questions-to-keep-in-mind.html"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Disk Drives Wanted",
+          "copy": "Holiday buyers seek Commodore drives; cash waiting for stock."
+        },
+        {
+          "headline": "PC Programmers Needed",
+          "copy": "Growing publishers seek IBM-compatible application experience."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-13",
       "historicDate": "1983-12-12",
       "displayDate": "Week of December 12-18, 1983",
