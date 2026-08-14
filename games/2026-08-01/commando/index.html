@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a0c08">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Commando HD">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<title>Commando HD — a tribute to the classic</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0a0c08; height: 100%; overflow: hidden;
+    -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: none; }
+  #stage { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; }
+  canvas { }
+</style>
+</head>
+<body>
+<div id="stage"><canvas id="game"></canvas></div>
+<script>window.WASM_SEARCH_PATH = 'vendor/websid/';</script>
+<script src="vendor/websid/scriptprocessor_player.js"></script>
+<script src="vendor/websid/backend_websid.js"></script>
+<script src="music.js"></script>
+<script src="sfx.js"></script>
+<script src="data/area1.js"></script>
+<script src="data/area2.js"></script>
+<script src="data/area3.js"></script>
+<script>window.AREAS = [window.AREA1, window.AREA2, window.AREA3];</script>
+<script src="data/plate-masks.js"></script>
+<script src="game.js"></script>
+<script>
+// PWA offline cache — https only, so the LAN dev server (http) and the
+// headless QA rig (http://127.0.0.1) can never be served stale assets.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then((reg) => {
+      // it125 UPDATE TOAST — a new build used to land silently and only appear
+      // after the player happened to close the app twice. Now the waiting
+      // worker announces itself and one tap takes it.
+      const offer = (worker) => {
+        if (!worker || !navigator.serviceWorker.controller) return;
+        const bar = document.createElement('div');
+        bar.textContent = 'NEW VERSION READY — TAP TO RELOAD';
+        bar.setAttribute('role', 'status');
+        bar.style.cssText = 'position:fixed;left:50%;transform:translateX(-50%);bottom:22px;z-index:9999;'
+          + 'background:#1b1d14;color:#ffd257;border:1px solid #ffd257;border-radius:4px;'
+          + 'padding:10px 16px;font:12px/1.4 ui-monospace,Menlo,monospace;letter-spacing:.06em;'
+          + 'cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.55)';
+        bar.onclick = () => { worker.postMessage({ type: 'SKIP_WAITING' }); location.reload(); };
+        document.body.appendChild(bar);
+      };
+      if (reg.waiting) offer(reg.waiting);
+      reg.addEventListener('updatefound', () => {
+        const w = reg.installing;
+        if (w) w.addEventListener('statechange', () => { if (w.state === 'installed') offer(w); });
+      });
+    }).catch(() => {});
+  });
+}
+</script>
+<div id="sitelinks">
+  <a href="/games/">&larr; All games</a>
+  <a href="/experiments/sid-player/">C64 SID player &mdash; Rob Hubbard's Commando</a>
+</div>
+<style>
+  #sitelinks { position: fixed; left: 0; right: 0; bottom: 0; text-align: center;
+    font: 11px/1.9 ui-monospace, SFMono-Regular, Menlo, monospace; color: #7d7660;
+    background: linear-gradient(rgba(10,12,8,0), rgba(10,12,8,0.82)); padding: 14px 8px 5px;
+    pointer-events: none; z-index: 5; }
+  #sitelinks a { color: #9a9280; text-decoration: none; margin: 0 10px; pointer-events: auto; }
+  #sitelinks a:hover { color: #d4b25a; text-decoration: underline; }
+  @media (max-width: 560px) { #sitelinks { font-size: 10px; } #sitelinks a { margin: 0 5px; } }
+</style>
+</body>
+</html>
