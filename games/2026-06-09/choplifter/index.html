@@ -299,7 +299,7 @@
    Single-file canvas game. Mobile one-finger + desktop keyboard.
    ========================================================================== */
 (function () {
-const VERSION = 'v3.0.0'; // realistic flight model: attitude physics, pirouette turns, autorotation
+const VERSION = 'v3.0.1'; // pointer collective-dump: fast descent when the finger is held low
 const SCORES_API = 'https://game-scores.jez237.workers.dev/scores/choplifter';
 const HS_KEY = 'choplifter_highscores_v1';
 const MUTE_KEY = 'choplifter_muted';
@@ -940,12 +940,15 @@ function updateHeli() {
 
   let tiltCmd = 0;      // commanded attitude (rad, + = nose toward +x)
   let thrustTgt;        // collective demand
+  let sinkPush = 0;     // 0..1 pointer demand for a fast collective-dump descent
   if (pTarget) {
     const dx = pTarget.x - heli.x, dy = pTarget.y - heli.y;
     const wantVx = clamp(dx * 0.085, -MAX_VX, MAX_VX);
     const wantVy = clamp(dy * 0.085, -MAX_VY, MAX_VY * 0.85);
+    // finger well below the bird = dump the collective and come down briskly
+    sinkPush = clamp((wantVy - 1.5) / 4, 0, 1);
     tiltCmd = clamp((wantVx - heli.vx) * 0.16, -TILT_FLARE, TILT_FLARE);
-    thrustTgt = clamp(THRUST_HOVER - (wantVy - heli.vy) * 0.6, 0.55, 2.25);
+    thrustTgt = clamp(THRUST_HOVER - (wantVy - heli.vy) * 0.6, 0.55 - 0.25 * sinkPush, 2.25);
     // only commit to a yaw-around when the finger clearly crosses the nose
     if (dx * heli.facingTgt < -46) { if (++heli.turnHold > 5) { heli.facingTgt = -heli.facingTgt; heli.turnHold = 0; } }
     else heli.turnHold = 0;
@@ -982,8 +985,10 @@ function updateHeli() {
   heli.vy += GRAV - GRAV * lift * etl * Math.cos(heli.att);
   heli.vx += GRAV * 1.5 * lift * Math.sin(heli.att);
   // blade drag caps the sink rate — in autorotation the upflow spins the disc
-  // and lift stiffens as descent builds, settling just shy of the skids' limit
-  const sinkCap = outOfFuel ? 3.9 : 2.5;
+  // and lift stiffens as descent builds, settling just shy of the skids' limit.
+  // A deliberate collective dump (pointer held low) raises the cap at altitude,
+  // and the extra sink is arrested again on short final so it can't pile in.
+  const sinkCap = outOfFuel ? 3.9 : 2.5 + 2.4 * sinkPush * sstep(60, 170, alt);
   if (heli.vy > sinkCap && heli.spool > 0.3) heli.vy += (sinkCap - heli.vy) * 0.40;
   // ground effect: the downwash cushion softens (not arrests) the last stretch
   if (!heli.onGround && alt < 100 && heli.vy > 0) heli.vy -= heli.vy * 0.02 * (1 - alt / 100) * heli.spool;
