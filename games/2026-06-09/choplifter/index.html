@@ -518,11 +518,14 @@ const SKY_WAVES = [
 const WORLD_W = 4800;          // total level width
 const GROUND_FRACT = 0.82;     // ground line as fraction of VH
 const GRAV = 0.30;
-const LIFT = 0.62;
-const SIDE_ACCEL = 0.42;
 const MAX_VX = 6.2, MAX_VY = 7.5;
-const DRAG = 0.978;
 const ROTOR_SAFE_VY = 4.6;     // landing speed tolerance
+// -- real-flight model: the heli moves by TILTING; thrust follows the rotor --
+const TILT_CRUISE = 0.40;      // commanded attitude at full stick (~23°)
+const TILT_FLARE  = 0.50;      // hardest nose-up flare when killing speed (~29°)
+const THRUST_HOVER = 1.0;      // collective that exactly counters gravity
+const THRUST_CLIMB = 2.05;     // full collective
+const THRUST_SETTLE = 0.86;    // hands-off collective: a gentle sink
 
 function groundY() { return VH * GROUND_FRACT; }
 
@@ -546,8 +549,15 @@ const G = {
 
 const heli = {
   x: 380, y: 0, vx: 0, vy: 0,
-  facing: 1,           // 1 right, -1 left (sprite flip)
-  tilt: 0,             // visual bank
+  facing: 1,           // 1 right, -1 left (gameplay: guns, camera bias)
+  facingTgt: 1,        // where the pilot wants the nose
+  yawVis: 1,           // -1..1 visual heading — the turn is a real pirouette
+  att: 0, attV: 0,     // body attitude (rad, + = nose toward +x) and rate
+  cmd: 0,              // commanded attitude (the swashplate leads the body)
+  thrustN: 0.9,        // collective thrust, 1 = exactly counters gravity
+  spool: 0.25,         // rotor RPM 0..1 — lift goes with RPM²
+  squat: 0,            // skid compression after touchdown
+  turnHold: 0,         // pointer-turn hysteresis
   rotor: 0,            // rotor spin phase
   rotorPow: 0,         // 0..1 audio/visual intensity
   w: 64, h: 26,
@@ -752,6 +762,7 @@ function hash01(a, b) {
   return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
 }
 function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
+function sstep(a, b, x) { x = clamp((x - a) / (b - a), 0, 1); return x * x * (3 - 2 * x); }
 function aabb(ax, ay, aw, ah, bx, by, bw, bh) { return ax < bx + bw && ax + aw > bx && ay < by + bh && ay + ah > by; }
 function shake(mag, time) { G.shakeMag = Math.max(G.shakeMag, mag); G.shakeT = Math.max(G.shakeT, time); }
 function toast(text, dur) {
@@ -807,7 +818,10 @@ function startGame() {
 }
 function resetHeli(full) {
   heli.x = homeBase.x + homeBase.w / 2; heli.y = groundY() - heli.h / 2 - 2;
-  heli.vx = 0; heli.vy = 0; heli.facing = 1; heli.tilt = 0;
+  heli.vx = 0; heli.vy = 0; heli.facing = 1; heli.facingTgt = 1; heli.yawVis = 1;
+  heli.att = 0; heli.attV = 0; heli.cmd = 0; heli.thrustN = 0.9;
+  heli.spool = full ? 0.22 : 0.5;   // cold start on wave 1: watch the blades wind up
+  heli.squat = 0; heli.turnHold = 0;
   heli.alive = true; heli.onGround = true; heli.invuln = 90;
   heli.hp = 100;                                   // fresh hull every spawn
   heli.bombCd = 60;
@@ -884,11 +898,12 @@ function update(dt) {
   updatePickups();
 
   // camera: velocity lookahead, biased toward the nose
-  const target = clamp(heli.x + heli.vx * 26 - VW * (heli.facing > 0 ? 0.42 : 0.58), 0, WORLD_W - VW);
+  // camera pans smoothly through the yaw-around instead of snapping sides
+  const target = clamp(heli.x + heli.vx * 26 - VW * (0.5 - heli.yawVis * 0.08), 0, WORLD_W - VW);
   G.cam += (target - G.cam) * 0.07;
 
-  // rotor audio
-  Audio2.setRotor(heli.rotorPow);
+  // rotor audio (silent once the bird is down)
+  Audio2.setRotor(heli.alive ? heli.rotorPow : 0);
 
   // wave complete: every hostage accounted for (home or lost with the chopper)
   const remaining = hostages.filter(h => h.state !== 'home' && h.state !== 'lost').length;
@@ -899,10 +914,20 @@ function update(dt) {
   }
 }
 
+// Flight model: a real helicopter doesn't strafe — it TILTS, and the rotor's
+// thrust vector does the rest. Input commands an attitude; the fuselage swings
+// under the disc like a pendulum; horizontal speed is the tilted thrust's
+// sideways component. Hands off the stick = aft-cyclic flare that bleeds speed
+// to a hover, exactly like a quick-stop. Rotor RPM spools with inertia (lift
+// goes with RPM²), ground effect cushions the last rotor-diameter of descent,
+// forward airspeed adds translational lift, and losing fuel drops you into a
+// survivable autorotation instead of a brick.
 function updateHeli() {
   const gY = groundY();
-  heli.rotor += 0.9 + heli.rotorPow * 0.5;
+  const floorY = gY - heli.h / 2 - 2;
+  const alt = Math.max(0, floorY - heli.y);
   const outOfFuel = heli.fuel <= 0;
+  heli.squat *= 0.90;
 
   // ---- intent: keyboard or one-finger pointer-chase ----
   let powered = input.lift || input.left || input.right;
@@ -913,28 +938,71 @@ function updateHeli() {
     powered = true;
   }
 
+  let tiltCmd = 0;      // commanded attitude (rad, + = nose toward +x)
+  let thrustTgt;        // collective demand
   if (pTarget) {
     const dx = pTarget.x - heli.x, dy = pTarget.y - heli.y;
     const wantVx = clamp(dx * 0.085, -MAX_VX, MAX_VX);
     const wantVy = clamp(dy * 0.085, -MAX_VY, MAX_VY * 0.85);
-    heli.vx += (wantVx - heli.vx) * 0.14;
-    heli.vy += (wantVy - heli.vy) * 0.16;
-    if (Math.abs(dx) > 14) heli.facing = dx > 0 ? 1 : -1;
-    heli.tilt += (clamp(heli.vx * 0.055, -0.36, 0.36) - heli.tilt) * 0.18;
-    heli.rotorPow = Math.min(1, heli.rotorPow + 0.06);
+    tiltCmd = clamp((wantVx - heli.vx) * 0.16, -TILT_FLARE, TILT_FLARE);
+    thrustTgt = clamp(THRUST_HOVER - (wantVy - heli.vy) * 0.6, 0.55, 2.25);
+    // only commit to a yaw-around when the finger clearly crosses the nose
+    if (dx * heli.facingTgt < -46) { if (++heli.turnHold > 5) { heli.facingTgt = -heli.facingTgt; heli.turnHold = 0; } }
+    else heli.turnHold = 0;
   } else {
-    if (input.lift && !outOfFuel) { heli.vy -= LIFT; heli.rotorPow = Math.min(1, heli.rotorPow + 0.08); }
-    else { heli.rotorPow = Math.max(0.25, heli.rotorPow - 0.05); }
-    heli.vy += GRAV;
-
-    if (input.left) { heli.vx -= SIDE_ACCEL; heli.facing = -1; heli.tilt += (-0.34 - heli.tilt) * 0.2; }
-    else if (input.right) { heli.vx += SIDE_ACCEL; heli.facing = 1; heli.tilt += (0.34 - heli.tilt) * 0.2; }
-    else { heli.tilt += (0 - heli.tilt) * 0.12; }
-
-    heli.vx *= DRAG; heli.vy *= DRAG;
-    // autorotation assist: with fuel and no lift, settle into a gentle descent
-    if (!outOfFuel && !input.lift) heli.vy = Math.min(heli.vy, 2.1);
+    if (input.right)     { tiltCmd =  TILT_CRUISE; heli.facingTgt = 1; }
+    else if (input.left) { tiltCmd = -TILT_CRUISE; heli.facingTgt = -1; }
+    else tiltCmd = clamp(-heli.vx * 0.115, -TILT_FLARE, TILT_FLARE);  // flare against travel
+    thrustTgt = (input.lift && !outOfFuel) ? THRUST_CLIMB
+              : (Math.abs(heli.vx) > 0.6 ? THRUST_HOVER : THRUST_SETTLE);
+    heli.turnHold = 0;
   }
+  // sliding takeoff: side stick on the pad pulls enough collective to get
+  // light on the skids and climb clear — translational lift then carries it
+  if ((heli.onGround || alt < 26) && !pTarget && (input.left || input.right) && !outOfFuel) thrustTgt = Math.max(thrustTgt, 1.22);
+  if (outOfFuel) thrustTgt = Math.min(thrustTgt, 0.55);        // autorotation: glide, no climb
+  if (alt < 46 && heli.vy > 0.6) tiltCmd *= 0.3 + 0.7 * (alt / 46);  // level out for touchdown
+  heli.facing = heli.facingTgt;
+
+  // ---- rotor spool: RPM lags demand, winds down on the pad ----
+  const spoolTgt = outOfFuel ? (heli.onGround ? 0 : 0.5)
+                 : (powered || !heli.onGround) ? 1 : 0.5;
+  heli.spool += clamp(spoolTgt - heli.spool, -0.006, 0.02);
+  heli.thrustN += (thrustTgt - heli.thrustN) * 0.09;
+  const lift = heli.thrustN * heli.spool * heli.spool;
+
+  // ---- attitude: the body chases the command like a slung pendulum ----
+  heli.cmd = tiltCmd;
+  heli.attV += (tiltCmd - heli.att) * 0.045;
+  heli.attV *= 0.81;
+  heli.att += heli.attV;
+
+  // ---- forces along the rotor axis ----
+  const etl = 1 + 0.10 * Math.min(1, Math.abs(heli.vx) / MAX_VX);  // translational lift
+  heli.vy += GRAV - GRAV * lift * etl * Math.cos(heli.att);
+  heli.vx += GRAV * 1.5 * lift * Math.sin(heli.att);
+  // blade drag caps the sink rate — in autorotation the upflow spins the disc
+  // and lift stiffens as descent builds, settling just shy of the skids' limit
+  const sinkCap = outOfFuel ? 3.9 : 2.5;
+  if (heli.vy > sinkCap && heli.spool > 0.3) heli.vy += (sinkCap - heli.vy) * 0.40;
+  // ground effect: the downwash cushion softens (not arrests) the last stretch
+  if (!heli.onGround && alt < 100 && heli.vy > 0) heli.vy -= heli.vy * 0.02 * (1 - alt / 100) * heli.spool;
+  // a breath of turbulence so a hover is never frozen still
+  if (!heli.onGround) {
+    const tb = 0.5 + 0.5 * Math.min(1, alt / 260);
+    heli.vx += (Math.sin(G.t * 0.021 + 1.3) + Math.sin(G.t * 0.047) * 0.6) * 0.010 * tb;
+    heli.vy += Math.sin(G.t * 0.031 + 4.2) * 0.012 * tb;
+    heli.attV += Math.sin(G.t * 0.039 + 2.1) * 0.0011 * tb;
+  }
+  heli.vx *= 0.985; heli.vy *= 0.982;
+
+  // ---- yaw: the turn is a real pirouette through the camera, not a flip ----
+  // (on the skids it can only pivot once the rotor is carrying most of the weight)
+  if (!heli.onGround || heli.spool > 0.85) heli.yawVis += clamp(heli.facingTgt - heli.yawVis, -0.12, 0.12);
+
+  heli.rotor += 0.15 + 1.3 * heli.spool * heli.spool;
+  heli.rotorPow = clamp(heli.spool * (0.45 + 0.5 * clamp(lift, 0.3, 1.9) / 1.9)
+                      + Math.abs(heli.cmd - heli.att) * 0.5, 0, 1);
 
   // fuel burn scales with demand
   heli.fuel = Math.max(0, heli.fuel - (0.006 + (powered ? 0.05 : 0)) * diffCh().fuel);
@@ -952,7 +1020,6 @@ function updateHeli() {
   if (heli.y < heli.h / 2 + 12) { heli.y = heli.h / 2 + 12; heli.vy = Math.max(0, heli.vy); }
 
   // ground / landing
-  const floorY = gY - heli.h / 2 - 2;
   heli.onGround = false;
   if (heli.y >= floorY) {
     const impact = heli.vy;
@@ -963,7 +1030,23 @@ function updateHeli() {
       return;
     }
     heli.vy = 0; heli.vx *= 0.7; heli.onGround = true;
-    if (impact > 1.5) { Audio2.land(); spawnParticles(heli.x, gY, 8, { color: '#caa', angle: -1.57, spread: 1, smax: 3, grav: 0.05 }); }
+    // the skids always settle a little under the weight; firm arrivals
+    // squat harder and kick dust
+    if (impact > 0.7 && heli.squat < 0.15) {
+      heli.squat = clamp(impact / 4.5, 0.16, 1);
+      if (impact > 1.2) {
+        Audio2.land();
+        spawnParticles(heli.x, gY, Math.round(4 + impact * 3), { color: '#caa', angle: -1.57, spread: 1.2, smax: 2 + impact * 0.5, grav: 0.05 });
+        // plonked down still flared? the tail skid scrapes
+        if (heli.att * heli.facingTgt < -0.24) {
+          spawnParticles(heli.x - heli.facingTgt * 40, gY, 6, { color: '#ffd95c', angle: -2.4, spread: 0.8, smax: 3, lmax: 14, fade: 'spark', grav: 0.12 });
+        }
+      }
+    }
+    // weight on the skids forces the hull level — unless the pilot is
+    // deliberately tipping into a sliding takeoff
+    if (input.left || input.right || pTarget) heli.att = clamp(heli.att, -0.22, 0.22);
+    else { heli.att *= 0.78; heli.attV *= 0.5; }
     // pickup hostages if over barracks zone (right of home)
     if (heli.x > homeBase.x + homeBase.w + 60) tryLoadHostages();
     // deliver at home base; the pad also slowly refuels
@@ -973,16 +1056,35 @@ function updateHeli() {
     }
   }
 
-  // dust when hovering low
-  if (!heli.onGround && heli.y > gY - 90 && G.t % 3 === 0) {
-    spawnParticles(heli.x + rnd(-20, 20), gY, 1, { color: 'rgba(150,140,120,0.5)', angle: rnd(-2.6, -0.5), smax: 2, lmax: 26, grav: -0.02, fade: 'smoke', rmax: 5 });
+  // rotor wash: the downblast fans dust outward and shoves loose smoke around
+  const wash = heli.spool * clamp(lift, 0, 1.8) * clamp(1 - alt / 150, 0, 1);
+  if (wash > 0.1) {
+    if (G.t % (heli.onGround ? 5 : 2) === 0) {
+      const s = Math.random() < 0.5 ? -1 : 1;
+      spawnParticles(heli.x + s * rnd(6, 26), gY, 1, {
+        color: 'rgba(150,140,120,0.5)', angle: s > 0 ? rnd(-0.5, -0.12) : rnd(-3.02, -2.64),
+        smax: 1.4 + wash * 2.4, lmax: 26 + wash * 18, grav: -0.012, fade: 'smoke', rmax: 2.5 + wash * 3.5,
+      });
+    }
+    for (const p of particles) {
+      if (p.y > heli.y + 14 && p.y < gY + 6 && Math.abs(p.x - heli.x) < 85) {
+        p.vx += Math.sign(p.x - heli.x || 1) * 0.05 * wash;
+        p.vy += 0.018 * wash;
+      }
+    }
+  }
+
+  // exhaust wisp under heavy collective
+  if (heli.spool > 0.8 && lift > 1.25 && G.t % 11 === 0) {
+    spawnParticles(heli.x - heli.yawVis * 10, heli.y - 15, 1,
+      { color: 'rgba(110,112,124,0.3)', angle: -1.57, spread: 0.5, smax: 0.8, lmax: 22, grav: -0.03, fade: 'smoke', rmax: 2.2 });
   }
 
   if (heli.invuln > 0) heli.invuln--;
 
   // damaged hull trails smoke so the danger reads at a glance
   if (heli.hp <= 40 && G.t % 6 === 0) {
-    spawnParticles(heli.x - heli.facing * 14, heli.y - 4, 1,
+    spawnParticles(heli.x - heli.yawVis * 14, heli.y - 4, 1,
       { color: 'rgba(90,88,100,0.55)', angle: -1.57, spread: 0.5, smax: 1.6, lmin: 18, lmax: 32, grav: -0.045, fade: 'smoke', rmin: 2.5, rmax: 4.5 });
   }
 
@@ -997,7 +1099,8 @@ function updateHeli() {
     const d = Math.abs(dx);
     if (d < bestD) { bestD = d; aim = e; }
   }
-  if ((aim || input.fire) && heli.fireCd <= 0) {
+  // guns bore-sight along the nose — no shooting mid-pirouette
+  if (Math.abs(heli.yawVis) > 0.6 && (aim || input.fire) && heli.fireCd <= 0) {
     let bvy = 0;
     if (aim) bvy = clamp((aim.y - heli.y) / (Math.abs(aim.x - heli.x) / 12 + 1), -4.8, 4.8);
     bullets.push({ x: heli.x + heli.facing * 30, y: heli.y + 2, vx: heli.facing * 12 + heli.vx * 0.3, vy: bvy, enemy: false, life: 70 });
@@ -2012,9 +2115,12 @@ function drawBullets() {
 function drawHeliSpotlight() {
   if (G.state !== 'play') return;
   const gy = groundY();
-  const nx = heli.x + heli.facing * 16, ny = heli.y + 4;
+  const ya = heli.yawVis;
+  if (Math.abs(ya) < 0.25) return; // nose at the camera mid-turn — beam points away
+  const nx = heli.x + ya * 16, ny = heli.y + 4;
   if (ny > gy - 20) return; // too low, light collapses
-  const tx = heli.x + heli.facing * Math.min(240, (gy - ny) * 0.9);
+  // reach shrinks as the nose swings, so the beam visibly sweeps the turn
+  const tx = heli.x + ya * Math.min(240, (gy - ny) * 0.9);
   ctx.save();
   ctx.globalCompositeOperation = 'lighter';
   const grad = ctx.createLinearGradient(nx, ny, tx, gy);
@@ -2038,16 +2144,59 @@ function drawHeliSpotlight() {
 
 function drawHeli() {
   ctx.save();
-  // gentle hover bob (visual only) + a touch of pitch from vertical speed
-  const bob = heli.onGround ? 0 : Math.sin(G.t * 0.09) * 1.4;
-  ctx.translate(heli.x, heli.y + bob);
+  // 2-per-rev blade vibration + gentle hover bob + touchdown gear squat
+  const vib = Math.sin(heli.rotor * 2) * 0.38 * heli.spool * (heli.onGround ? 0.5 : 1);
+  const bob = heli.onGround ? 0 : Math.sin(G.t * 0.09) * 1.1;
+  ctx.translate(heli.x, heli.y + bob + vib + heli.squat * 1.8);
   // blink when invulnerable
   if (heli.invuln > 0 && Math.floor(heli.invuln / 4) % 2 === 0) ctx.globalAlpha = 0.45;
-  ctx.rotate(heli.tilt * 0.5 + clamp(heli.vy * 0.01, -0.06, 0.06));
-  ctx.scale(heli.facing, 1);
+  // true attitude: nose drops to accelerate, rears up to flare — plus the
+  // little rocking of the gear settling after a firm touchdown
+  ctx.rotate(heli.att * 0.9 + Math.sin(G.t * 0.5) * heli.squat * 0.04);
+  // the swashplate tilts the rotor disc BEFORE the fuselage swings after it
+  const discLead = clamp((heli.cmd - heli.att) * 0.45, -0.13, 0.13);
 
+  const ya = clamp(heli.yawVis, -1, 1), aya = Math.abs(ya);
   const groundDist = (groundY() - heli.y);
+  const baseA = ctx.globalAlpha;
 
+  // side profile — foreshortens as the nose swings through the camera
+  const sideA = sstep(0.22, 0.55, aya);
+  if (sideA > 0.02) {
+    ctx.save();
+    ctx.globalAlpha = baseA * sideA;
+    ctx.scale(ya < 0 ? Math.min(-0.24, ya) : Math.max(0.24, ya), 1);
+    drawHeliSide();
+    ctx.restore();
+  }
+  // head-on profile carries the middle of the pirouette
+  const frontA = 1 - sstep(0.42, 0.8, aya);
+  if (frontA > 0.02) {
+    ctx.save();
+    ctx.globalAlpha = baseA * frontA;
+    ctx.scale(Math.max(0.3, Math.sqrt(Math.max(0, 1 - ya * ya))), 1);
+    drawHeliFront();
+    ctx.restore();
+  }
+  // the rotor disc reads the same from every heading — never foreshortened
+  drawHeliRotor(discLead);
+  ctx.restore();
+
+  // soft radial ground shadow (drawn unflipped)
+  if (groundDist > 0 && groundDist < 220) {
+    ctx.save();
+    const sa = clamp(1 - groundDist / 220, 0, 0.42);
+    const sw = 38 - groundDist * 0.06;
+    const sg = ctx.createRadialGradient(heli.x, groundY() - 1, 1, heli.x, groundY() - 1, sw);
+    sg.addColorStop(0, 'rgba(0,0,0,' + sa + ')');
+    sg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = sg;
+    ctx.beginPath(); ctx.ellipse(heli.x, groundY() - 1, sw, 6, 0, 0, 6.28); ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawHeliSide() {
   // tapered tail boom + horizontal stabilizer
   const tb = ctx.createLinearGradient(0, -4, 0, 5);
   tb.addColorStop(0, '#3f97b6'); tb.addColorStop(1, '#205a74');
@@ -2057,13 +2206,16 @@ function drawHeli() {
   // tail fin with stripe
   ctx.fillStyle = '#256078'; ctx.beginPath(); ctx.moveTo(-44, -2); ctx.lineTo(-52, -13); ctx.lineTo(-47, -13); ctx.lineTo(-42, 4); ctx.closePath(); ctx.fill();
   ctx.fillStyle = '#ffd95c'; ctx.fillRect(-50.5, -12, 6, 2.5);
-  // tail rotor (spinning blur)
-  ctx.strokeStyle = 'rgba(200,230,255,0.55)'; ctx.lineWidth = 2;
-  const tr = Math.sin(heli.rotor * 2.4) * 9;
-  ctx.beginPath(); ctx.moveTo(-50, -8 - tr); ctx.lineTo(-50, -8 + tr); ctx.stroke();
-  ctx.globalAlpha = 0.25;
+  // tail rotor: gears ~5x the main — crisp blades at idle, a blur disc at speed
+  const trA = ctx.globalAlpha;
+  const trBlur = clamp((heli.spool - 0.35) / 0.5, 0, 1);
+  ctx.strokeStyle = 'rgba(200,230,255,0.6)'; ctx.lineWidth = 2; ctx.lineCap = 'round';
+  const tr = Math.sin(heli.rotor * 3.3) * 9 * (0.35 + 0.65 * heli.spool);
+  const tc = Math.cos(heli.rotor * 3.3) * 3.2;
+  ctx.beginPath(); ctx.moveTo(-50 - tc, -8 - tr); ctx.lineTo(-50 + tc, -8 + tr); ctx.stroke();
+  ctx.globalAlpha = trA * 0.28 * trBlur;
   ctx.beginPath(); ctx.arc(-50, -8, 9, 0, 6.283); ctx.stroke();
-  ctx.globalAlpha = 1;
+  ctx.globalAlpha = trA;
 
   // main fuselage — rounded nose, sculpted belly
   const bg = ctx.createLinearGradient(0, -13, 0, 13);
@@ -2138,35 +2290,119 @@ function drawHeli() {
   // rotor mast + hub
   ctx.fillStyle = '#1c2c3c'; ctx.fillRect(-2.5, -19, 5, 5);
   ctx.fillStyle = '#31495e'; ctx.fillRect(-1.5, -20.5, 3, 3);
-  // main rotor: soft blur disc + two coned blades (tips lift)
-  ctx.save();
-  const blurAlpha = clamp(heli.rotorPow, 0.3, 1);
-  const rg = ctx.createLinearGradient(-46, 0, 46, 0);
-  rg.addColorStop(0, 'rgba(207,232,255,0)');
-  rg.addColorStop(0.5, 'rgba(207,232,255,' + (0.22 * blurAlpha) + ')');
-  rg.addColorStop(1, 'rgba(207,232,255,0)');
-  ctx.fillStyle = rg;
-  ctx.beginPath(); ctx.ellipse(0, -19, 47, 4.5, 0, 0, 6.28); ctx.fill();
-  const b1 = Math.cos(heli.rotor) * 46;
-  ctx.strokeStyle = 'rgba(225,242,255,0.9)'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(0, -19); ctx.quadraticCurveTo(b1 * 0.55, -19.5, b1, -21.5); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(0, -19); ctx.quadraticCurveTo(-b1 * 0.55, -19.5, -b1, -21.5); ctx.stroke();
-  ctx.restore();
+}
 
-  ctx.restore();
-
-  // soft radial ground shadow (drawn unflipped)
-  if (groundDist > 0 && groundDist < 220) {
-    ctx.save();
-    const sa = clamp(1 - groundDist / 220, 0, 0.42);
-    const sw = 38 - groundDist * 0.06;
-    const sg = ctx.createRadialGradient(heli.x, groundY() - 1, 1, heli.x, groundY() - 1, sw);
-    sg.addColorStop(0, 'rgba(0,0,0,' + sa + ')');
-    sg.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.fillStyle = sg;
-    ctx.beginPath(); ctx.ellipse(heli.x, groundY() - 1, sw, 6, 0, 0, 6.28); ctx.fill();
-    ctx.restore();
+// head-on view for the middle of the yaw-around — same aircraft, nose at you
+function drawHeliFront() {
+  // fuselage capsule
+  const bg = ctx.createLinearGradient(0, -13, 0, 13);
+  bg.addColorStop(0, '#67dcef'); bg.addColorStop(0.35, '#37a8d2'); bg.addColorStop(0.75, '#1f7aa6'); bg.addColorStop(1, '#155a80');
+  ctx.fillStyle = bg;
+  ctx.beginPath();
+  ctx.moveTo(-11, -6);
+  ctx.quadraticCurveTo(-11, -13, 0, -13.5);
+  ctx.quadraticCurveTo(11, -13, 11, -6);
+  ctx.lineTo(11, 5);
+  ctx.quadraticCurveTo(11, 12, 0, 12.5);
+  ctx.quadraticCurveTo(-11, 12, -11, 5);
+  ctx.closePath(); ctx.fill();
+  // volume: top sheen + belly shadow
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.beginPath(); ctx.ellipse(0, -10.5, 8, 2.6, 0, 0, 6.28); ctx.fill();
+  ctx.fillStyle = 'rgba(8,30,46,0.35)';
+  ctx.beginPath(); ctx.ellipse(0, 9.5, 8, 2.4, 0, 0, 6.28); ctx.fill();
+  // engine cowl + exhaust stubs both sides
+  ctx.fillStyle = '#1d6485'; ctx.fillRect(-6.5, -16, 13, 4);
+  ctx.fillStyle = '#2c80a4'; ctx.fillRect(-6.5, -16, 13, 1.6);
+  ctx.fillStyle = '#10303f'; ctx.fillRect(-9.5, -14.8, 3, 3); ctx.fillRect(6.5, -14.8, 3, 3);
+  // wraparound canopy with the pilots silhouetted inside
+  const cg = ctx.createLinearGradient(0, -12, 0, 6);
+  cg.addColorStop(0, '#d9f6ff'); cg.addColorStop(0.5, '#7cc4e2'); cg.addColorStop(1, '#2c6c8e');
+  ctx.fillStyle = cg;
+  ctx.beginPath();
+  ctx.moveTo(-9.5, -11); ctx.quadraticCurveTo(0, -13, 9.5, -11);
+  ctx.lineTo(8, 4); ctx.quadraticCurveTo(0, 6.5, -8, 4);
+  ctx.closePath(); ctx.fill();
+  ctx.strokeStyle = 'rgba(12,40,60,0.55)'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0, -12.3); ctx.lineTo(0, 5.6); ctx.stroke();
+  ctx.fillStyle = '#0e2a3a';
+  ctx.beginPath(); ctx.arc(-4, 0.5, 2.5, 0, 6.28); ctx.fill();
+  ctx.beginPath(); ctx.arc(4, 0.5, 2.5, 0, 6.28); ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,0.65)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(-6.5, -10); ctx.lineTo(-2.5, -6.5); ctx.stroke();
+  // belly stripe wraps the hull
+  ctx.fillStyle = '#ffd95c'; ctx.fillRect(-11, 6.5, 22, 3);
+  ctx.fillStyle = 'rgba(170,90,20,0.35)'; ctx.fillRect(-11, 8.5, 22, 1);
+  // chin gun pod + bomb on the centre pylon
+  ctx.fillStyle = '#28465c'; ctx.fillRect(-2.5, 11, 5, 4);
+  ctx.fillStyle = '#1a3346'; ctx.fillRect(-1.5, 14.2, 3, 1.6);
+  if (heli.bombCd <= 0 && !heli.onGround) {
+    ctx.fillStyle = '#39414f';
+    ctx.beginPath(); ctx.ellipse(0, 15.8, 3.4, 2.6, 0, 0, 6.28); ctx.fill();
   }
+  // landing light blooming straight at the camera
+  const lg = ctx.createRadialGradient(0, 2.5, 0.5, 0, 2.5, 7);
+  lg.addColorStop(0, 'rgba(255,244,200,0.55)'); lg.addColorStop(1, 'rgba(255,244,200,0)');
+  ctx.fillStyle = lg;
+  ctx.beginPath(); ctx.arc(0, 2.5, 7, 0, 6.28); ctx.fill();
+  // splayed skids with struts
+  ctx.strokeStyle = '#2c3a4c'; ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-6, 12); ctx.lineTo(-9.5, 17); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(6, 12); ctx.lineTo(9.5, 17); ctx.stroke();
+  ctx.lineWidth = 2.2; ctx.strokeStyle = '#3c4e64';
+  ctx.beginPath(); ctx.moveTo(-13, 17.5); ctx.lineTo(-6, 17.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(6, 17.5); ctx.lineTo(13, 17.5); ctx.stroke();
+  // nav lights, aviation-correct: port red on the viewer's right, starboard green left
+  if (Math.floor(G.t / 16) % 2 === 0) {
+    ctx.fillStyle = 'rgba(255,85,95,0.95)';
+    ctx.beginPath(); ctx.arc(10.5, -5, 1.7, 0, 6.283); ctx.fill();
+  }
+  if (Math.floor((G.t + 8) / 16) % 2 === 0) {
+    ctx.fillStyle = 'rgba(120,255,170,0.95)';
+    ctx.beginPath(); ctx.arc(-10.5, -5, 1.5, 0, 6.283); ctx.fill();
+  }
+  // rotor mast + hub
+  ctx.fillStyle = '#1c2c3c'; ctx.fillRect(-2.5, -19, 5, 5);
+  ctx.fillStyle = '#31495e'; ctx.fillRect(-1.5, -20.5, 3, 3);
+}
+
+// main rotor: blades cone up under load, sag when winding down on the pad,
+// blur only at speed, and the whole disc tilts with the swashplate lead
+function drawHeliRotor(discLead) {
+  const spool = heli.spool;
+  ctx.save();
+  ctx.translate(0, -19);
+  ctx.rotate(discLead);
+  const load = clamp(heli.thrustN * spool * spool, 0, 2);
+  const cone = -(1.5 + load * 2.6) + (1 - spool) * (heli.onGround ? 8 : 2.5);
+  const blurMix = clamp((spool - 0.4) / 0.45, 0, 1);
+  const baseA = ctx.globalAlpha;
+  if (blurMix > 0.02) {
+    const a = 0.22 * blurMix * clamp(heli.rotorPow + 0.25, 0.3, 1);
+    const rg = ctx.createLinearGradient(-47, 0, 47, 0);
+    rg.addColorStop(0, 'rgba(207,232,255,0)');
+    rg.addColorStop(0.5, 'rgba(207,232,255,' + a + ')');
+    rg.addColorStop(1, 'rgba(207,232,255,0)');
+    ctx.fillStyle = rg;
+    ctx.beginPath(); ctx.ellipse(0, -1, 47, 4.2, 0, 0, 6.28); ctx.fill();
+    // glinting tip path
+    ctx.strokeStyle = 'rgba(230,245,255,' + (0.10 * blurMix) + ')'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.ellipse(0, cone * 0.6 - 0.5, 47, 3.4, 0, 0, 6.28); ctx.stroke();
+  }
+  // blade pair: crisp when slow, motion-blur ghosts trail behind at speed
+  const ghosts = blurMix > 0.25 ? 3 : 1;
+  ctx.strokeStyle = 'rgba(225,242,255,0.95)';
+  ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+  for (let g = 0; g < ghosts; g++) {
+    const al = (g === 0 ? (1 - blurMix * 0.45) : (0.5 - g * 0.14) * blurMix) * 0.95;
+    if (al <= 0.02) continue;
+    ctx.globalAlpha = baseA * al;
+    const b = Math.cos(heli.rotor - g * 0.5) * 46;
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(b * 0.55, cone * 0.25, b, cone); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-b * 0.55, cone * 0.25, -b, cone); ctx.stroke();
+  }
+  ctx.globalAlpha = baseA;
+  ctx.restore();
 }
 
 function drawParticles() {
@@ -2433,6 +2669,7 @@ document.addEventListener('visibilitychange', () => {
 
 // headless-verification hooks (same convention as the other games)
 window.__g = { G, heli, startGame, loseLife, nextWave, update, render, addScore, damageHeli, explodeBomb,
+  get viewScale() { return viewScale; }, get VW() { return VW; }, get VH() { return VH; },
   get hostages() { return hostages; }, get enemies() { return enemies; },
   get pickups() { return pickups; }, get popups() { return popups; }, get wrecks() { return wrecks; },
   get bombs() { return bombs; }, get scorch() { return scorch; }, get buildings() { return buildings; } };
