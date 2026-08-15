@@ -4,6 +4,393 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-15",
+      "historicDate": "1983-12-26",
+      "displayDate": "Week of December 26, 1983-January 1, 1984",
+      "edition": "Issue 074 - Weekly 1983 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Year-end scrutiny on warm aged newsprint",
+        "motifs": [
+          "IBM PCjr home desk",
+          "infrared keyboard",
+          "Apple Lisa terminal screen",
+          "holiday computer game boxes"
+        ],
+        "layout": "Dense metropolitan computer weekly with blue and red rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "December 26, 1983-January 1, 1984",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "PCjr hands-on lead across the upper columns",
+        "secondaryRail": "Lisa communications, Windows preview, and holiday game shelves",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "ink blue",
+        "secondary": "press red",
+        "texture": "warm newsprint with halftone photographs"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1983-12-26.jpg",
+        "alt": "GPT Image 2 front page for the Computer Chronicle week of December 26, 1983",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The final week of 1983 puts IBM’s long-awaited home computer under a reviewer’s lamp while Apple and Microsoft press graphical machines toward the office.",
+      "morningLine": "Junior arrives for inspection as the home-computer price war closes out a turbulent year.",
+      "lead": {
+        "headline": "The Little IBM Finally Arrives for Its Test",
+        "dek": "PCjr leaves the brochure and meets the reviewer, with color, sound, PC DOS—and a long list of extras.",
+        "confidence": "Exact-date reporting, December 27, 1983.",
+        "sourceRefs": [
+          0,
+          1
+        ],
+        "body": [
+          "IBM’s bid for the family room finally moved from announcement-stage promise to hands-on judgment this week. In a December 27 test, the New York Times examined the PCjr as a real machine rather than a specification sheet, asking whether the most famous name in business computing could translate its success to the home.",
+          "Junior keeps close to the IBM PC family with an Intel 8088-class processor and PC DOS, but adds enhanced color and sound for games, education, and household software. IBM’s brochure calls it “The easy one for everyone,” an appeal that places entertainment and schoolwork alongside writing, spreadsheets, and communications.",
+          "The entry model combines 64K with cassette storage for $669. A 128K machine with a disk drive lists at $1,269, before a monitor and many practical accessories. That makes the sticker price only the opening calculation for a household comparing Junior with sharply discounted Commodore and Atari machines.",
+          "The infrared Freeboard keyboard removes the cord but gives the machine one of its most conspicuous departures from the office PC. Its compact keys and the system’s constrained expansion scheme are likely to matter as much as the bright graphics when buyers decide whether IBM compatibility is worth the compromise.",
+          "PCjr therefore reaches stores carrying two burdens: it must feel friendly enough for first-time owners and compatible enough to borrow the IBM PC’s authority. The holiday test is over for 1983, but the market test has only begun."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Lisa Opens a Line to IBM and DEC",
+          "confidence": "Exact-date wire reporting, December 28, 1983.",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "Apple is giving the Lisa a way into computer rooms already dominated by larger systems. LisaTerminal can emulate DEC VT100 and VT52 terminals as well as IBM 3278 terminals, UPI reported Wednesday.",
+            "Together with Apple’s Cluster Controller, the software lets Lisa users reach information and applications on IBM hosts and DEC minicomputers. The move answers a practical corporate objection to the costly graphical workstation: a new desktop cannot remain an island."
+          ]
+        },
+        {
+          "headline": "Christmas Computer Boom Leaves a Price-War Hangover",
+          "confidence": "Same-month period reporting.",
+          "sourceRefs": [
+            3
+          ],
+          "body": [
+            "The year ends with home computers more visible—and less expensive—than ever. COMPUTE! found Commodore 64 street prices below $200 and VIC-20 machines below $100 as manufacturers fought for mass-market volume.",
+            "The bargains came with bruises. Commodore shortages affected computers and disk drives, Coleco’s delayed Adam lost precious holiday time, and retailers faced returns as newcomers discovered that a complete working system often required more than the box under the tree.",
+            "Future Computing estimated monthly shipments of 160,000 machines for Commodore, 100,000 for Texas Instruments, 65,000 for Atari, and 35,000 for Radio Shack. The shake-out has enlarged the audience while making survival harder for the companies supplying it."
+          ]
+        },
+        {
+          "headline": "Windows Proposes One Face for DOS Programs",
+          "confidence": "Same-month BYTE coverage of a pre-release system.",
+          "sourceRefs": [
+            4
+          ],
+          "body": [
+            "Microsoft’s proposed Windows environment offers tiled program windows, common menus, device handling, and mouse control above the growing base of MS-DOS machines. BYTE’s December coverage gives readers an early look at software meant to make unlike programs behave more consistently.",
+            "The system is still a promise rather than a store-shelf product, with Microsoft projecting availability in 1984. It joins Visi On and other graphical environments in a contest to decide whether the next PC interface will be learned by typing commands or pointing at choices."
+          ]
+        },
+        {
+          "headline": "Atari Finds a Holiday Bright Spot",
+          "confidence": "Same-month period trade reporting.",
+          "sourceRefs": [
+            5
+          ],
+          "body": [
+            "Electronic Games Hotline’s final pre-Christmas issue reported a welcome boom in Atari hardware and software sales. The note offers a useful view from the shop floor during a year more often defined by excess inventory and corporate retrenchment.",
+            "One strong holiday report cannot settle the industry’s problems, but cartridges and computer games still command attention. Ultima III, Lode Runner, and M.U.L.E. show how ambitious disk software is broadening play beyond the familiar console formula."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM PCjr",
+          "summary": "64K cassette and 128K disk configurations bring PC DOS, enhanced color, sound, and an infrared keyboard toward the home.",
+          "confidence": "Exact-date/period.",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Apple Lisa communications",
+          "summary": "LisaTerminal emulates DEC VT100/VT52 and IBM 3278 terminals.",
+          "confidence": "Exact-date.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Microsoft Windows preview",
+          "summary": "A mouse-driven graphical environment proposes common behavior across MS-DOS programs.",
+          "confidence": "Same-month.",
+          "sourceRefs": [
+            4
+          ]
+        },
+        {
+          "title": "Commodore 64",
+          "summary": "Street prices below $200 underline the ferocity of the home-computer price war.",
+          "confidence": "Same-month.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "VIC-20",
+          "summary": "Street pricing below $100 puts a programmable computer into impulse-gift territory.",
+          "confidence": "Same-month.",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Microsoft Windows preview",
+          "detail": "Mouse-driven graphical environment for MS-DOS; not yet shipping."
+        },
+        {
+          "name": "bitCards: A Christmas Adventure",
+          "detail": "Customizable greeting-card adventure — $16.95."
+        },
+        {
+          "name": "LisaTerminal",
+          "detail": "DEC VT100/VT52 and IBM 3278 terminal emulation."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Ultima III: Exodus",
+            "Lode Runner",
+            "M.U.L.E."
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "Say Say Say — Paul McCartney & Michael Jackson",
+            "Say It Isn’t So — Daryl Hall & John Oates",
+            "Union of the Snake — Duran Duran",
+            "Owner of a Lonely Heart — Yes",
+            "All Night Long (All Night) — Lionel Richie"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Sudden Impact",
+            "Terms of Endearment",
+            "Scarface",
+            "Two of a Kind",
+            "The Rescuers (1983 re-release)"
+          ]
+        },
+        {
+          "label": "Software Counter",
+          "items": [
+            "Microsoft Windows preview — not yet shipping",
+            "bitCards: A Christmas Adventure — $16.95",
+            "LisaTerminal — corporate communications"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM PCjr 64K cassette configuration",
+          "price": "$669 list",
+          "note": "Monitor extra."
+        },
+        {
+          "item": "IBM PCjr 128K disk configuration",
+          "price": "$1,269 list",
+          "note": "Monitor and many accessories extra."
+        },
+        {
+          "item": "Commodore 64",
+          "price": "Under $200",
+          "note": "Reported street price."
+        },
+        {
+          "item": "VIC-20",
+          "price": "Under $100",
+          "note": "Reported street price."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Record cold grips the South",
+          "text": "A week-long freeze breaks records across more than a dozen states and threatens Florida citrus."
+        },
+        {
+          "headline": "Pope meets the man who shot him",
+          "text": "John Paul II speaks privately with Mehmet Ali Agca in a Rome prison on December 27."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Say Say Say",
+          "artist": "Paul McCartney and Michael Jackson"
+        },
+        {
+          "rank": 2,
+          "title": "Say It Isn’t So",
+          "artist": "Daryl Hall & John Oates"
+        },
+        {
+          "rank": 3,
+          "title": "Union of the Snake",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 4,
+          "title": "Owner of a Lonely Heart",
+          "artist": "Yes"
+        },
+        {
+          "rank": 5,
+          "title": "All Night Long (All Night)",
+          "artist": "Lionel Richie"
+        }
+      ],
+      "periodAd": {
+        "headline": "IBM PCjr: The easy one for everyone",
+        "summary": "Writing, learning, communications, entertainment—and the IBM name—come home.",
+        "tagline": "Ask your dealer what Junior needs to become a complete system."
+      },
+      "market": {
+        "headline": "Low prices, high volume, hard landings",
+        "summary": "Sub-$200 Commodore 64 pricing and a sub-$100 VIC-20 expand the market while shortages, delays, returns, and vendor losses expose the cost of the 1983 price war.",
+        "confidence": "Same-month period reporting.",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Military overthrows Nigeria’s elected government",
+        "summary": "On December 31 officers ousted President Shehu Shagari in a coup described in initial wire reports as bloodless; Major-General Muhammadu Buhari emerged as the new leader.",
+        "confidence": "Exact-date wire reporting.",
+        "sourceRefs": [
+          11
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "PCjr hands-on test, specifications, and pricing",
+            "status": "Verified to exact-date and primary product sources",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Lisa corporate communications products",
+            "status": "Verified to exact-date wire reporting",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Home-computer prices and market conditions",
+            "status": "Verified to same-month period reporting",
+            "sourceRefs": [
+              3
+            ]
+          },
+          {
+            "claim": "Windows preview and games",
+            "status": "Verified to period publications and catalogs",
+            "sourceRefs": [
+              4,
+              6,
+              7,
+              8
+            ]
+          },
+          {
+            "claim": "Charts and world bulletin",
+            "status": "Dated to weekly charts and exact-date reporting",
+            "sourceRefs": [
+              9,
+              10,
+              11
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "The Little I.B.M. Finally Arrives for a Test",
+          "url": "https://www.nytimes.com/1983/12/27/science/personal-computers-the-little-ibm-finally-arrives-for-a-test.html"
+        },
+        {
+          "label": "IBM PCjr: The easy one for everyone",
+          "url": "https://archive.computerhistory.org/resources/text/IBM/IBM.PCjr.1983.102646138.pdf"
+        },
+        {
+          "label": "Access for apples",
+          "url": "https://www.upi.com/Archives/1983/12/28/Access-for-apples/2106441435600/"
+        },
+        {
+          "label": "The Christmas of the Computer?",
+          "url": "https://www.atarimagazines.com/compute/issue43/136_1_The_Christmas_Of_The_Computer.php"
+        },
+        {
+          "label": "BYTE, December 1983: Easy Software",
+          "url": "https://archive.org/details/byte-magazine-1983-12"
+        },
+        {
+          "label": "Electronic Games Hotline, December 18, 1983",
+          "url": "https://vgpavilion.com/mags/1983/12/18egh/pages/19831218-egh.pdf"
+        },
+        {
+          "label": "Ultima III: Exodus",
+          "url": "https://www.mobygames.com/game/1174/exodus-ultima-iii/"
+        },
+        {
+          "label": "Lode Runner",
+          "url": "https://www.mobygames.com/game/113/lode-runner/"
+        },
+        {
+          "label": "M.U.L.E.",
+          "url": "https://www.mobygames.com/game/1148/mule/"
+        },
+        {
+          "label": "Billboard Hot 100, December 31, 1983",
+          "url": "https://web.archive.org/web/20200816081226/https:/www.billboard.com/charts/hot-100/1983-12-31"
+        },
+        {
+          "label": "Domestic 1983 Week 51",
+          "url": "https://www.boxofficemojo.com/weekly/1983W51/?sort=rank"
+        },
+        {
+          "label": "Nigeria's civilian government was overthrown",
+          "url": "https://www.upi.com/Archives/1983/12/31/Nigerias-civilian-government-was-overthrown-Saturday-in-a-bloodless/7541441694800/"
+        },
+        {
+          "label": "U.S. Is Quitting UNESCO",
+          "url": "https://www.nytimes.com/1983/12/30/world/us-is-quitting-unesco-affirms-backing-for-un.html"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "DISK SWAP",
+          "copy": "Local users seek legal public-domain programs and club contacts. No copied commercial software."
+        },
+        {
+          "headline": "MODEM CLUB",
+          "copy": "Beginners compare terminal programs and bulletin-board etiquette. Write the Chronicle club desk."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-14",
       "historicDate": "1983-12-19",
       "displayDate": "Week of December 19-25, 1983",
