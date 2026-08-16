@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 15 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 16 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of January 2-8, 1984 — Commodore&apos;s 264 family steals a shakeout-era Winter CES</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-01-02</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-02</guid>
+      <pubDate>Sun, 16 Aug 2026 12:00:00 GMT</pubDate>
+      <description>Commodore draws the Winter CES crowds with two 64K machines, built-in productivity software and a new BASIC—while leaving price and compatibility questions open. The International Winter Consumer Electronics Show opened in Las Vegas on January 7 and ran through January 10; COMPUTE! estimated attendance at 80,000-90,000 and said the Commodore stand was crowded throughout the show. Commodore announced the 264 and speech-equipped 364V, both with 64K RAM and a 7501-family processor running at about 1.76 MHz. Also this week: Behind a secret CES door, Amiga shows &apos;Lorraine&apos; · Home-computer boom gives way to a fight for survival · Kodak jumps into home video with a one-piece 8mm camcorder.</description>
+    </item>
     <item>
       <title>Week of December 26, 1983-January 1, 1984 — The Little IBM Finally Arrives for Its Test</title>
       <link>https://jez237.com/computer-chronicle/?date=1983-12-26</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-22</guid>
       <pubDate>Tue, 28 Jul 2026 12:00:00 GMT</pubDate>
       <description>More than 800 new Clarkson students are to collect personal computers during orientation, turning a bold campus requirement into everyday academic equipment. POTSDAM, N.Y. — More than 800 Clarkson College freshmen arriving Thursday will receive an unusual addition to the standard orientation packet: their own personal desktop computers. United Press International reported the distribution on August 24, as the college prepared to put a machine directly into the hands of every member of the incoming class. Also this week: Christmas Computer War Crowds the Aisles · Dragon&apos;s Lair Turns the Arcade into a Cartoon · Atari Clears the Deck for XL.</description>
-    </item>
-    <item>
-      <title>Week of August 15-21, 1983 — Apple Developers Confront the Lisa Software Puzzle</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-08-15</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-15</guid>
-      <pubDate>Mon, 27 Jul 2026 12:00:00 GMT</pubDate>
-      <description>At Apple&apos;s August gathering, independent programmers see faster unreleased software—but face difficult choices about how to build for the graphical machine. Apple&apos;s Lisa has made the graphical office a commercial proposition, but the machine&apos;s future now rests with people deciding what to make for it. At a week-long Independent Developers&apos; Conference at the Dunfey Hotel in San Mateo, programmers gathered to compare methods, inspect works in progress and learn how Apple&apos;s unfamiliar visual environment might become a software market. Also this week: Computer Games Grow Up: M.U.L.E. and Suspended Lead the Summer · A $16.95 3-D Space Game Lands on Timex/Sinclair · IBM&apos;s ‘Peanut’ Rumor Keeps the Market Guessing.</description>
     </item>
   </channel>
 </rss>

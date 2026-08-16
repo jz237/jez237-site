@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-16",
+      "historicDate": "1984-01-02",
+      "displayDate": "Week of January 2-8, 1984",
+      "edition": "Issue 075 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "LAS VEGAS — A crowded Commodore stand and a secret Amiga demonstration set the pace as the home-computer business enters its shakeout year.",
+      "leadHeadline": "Commodore's 264 family steals a shakeout-era Winter CES",
+      "storyHeadlines": [
+        "Behind a secret CES door, Amiga shows 'Lorraine'",
+        "Home-computer boom gives way to a fight for survival",
+        "Kodak jumps into home video with a one-piece 8mm camcorder"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-02.jpg",
+      "thumb": "media/thumbs/1984-01-02.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-15",
       "historicDate": "1983-12-26",
       "displayDate": "Week of December 26, 1983-January 1, 1984",
