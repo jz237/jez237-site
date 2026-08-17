@@ -1,0 +1,366 @@
+{
+  "currentDate": "2026-08-17",
+  "historicDate": "1984-01-09",
+  "displayDate": "Week of January 9-15, 1984",
+  "edition": "Issue 076 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Extra-edition urgency on warm aged newsprint",
+    "motifs": [
+      "Commodore 64 keyboard",
+      "CES show floor",
+      "red EXTRA rules"
+    ],
+    "layout": "Banner lead with gaming and shelf-watch rails"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Computer & Culture Newspaper",
+    "dateline": "Week of January 9-15, 1984",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Full-width extra-edition banner",
+    "secondaryRail": "Games, software, prices and charts",
+    "archiveNavigation": "Previous and next weekly issues"
+  },
+  "sectionChrome": {
+    "primary": "#a32622",
+    "secondary": "#244e78",
+    "texture": "Warm newsprint with halftone ink"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-01-09.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for January 9-15, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "milestone": {
+    "title": "Jack Tramiel abruptly leaves Commodore",
+    "note": "The departure ended the leadership era that made the VIC-20 and Commodore 64 mass-market machines and would soon reshape both Commodore and Atari."
+  },
+  "editorNote": "EXTRA: Commodore’s founder departs just as the home-computer price war reaches a decisive turn.",
+  "morningLine": "The billion-dollar home-computer giant awakens without the man who built its low-price empire.",
+  "lead": {
+    "headline": "TRAMIEL QUITS COMMODORE",
+    "dek": "Founder’s surprise Friday resignation, days after his CES appearance, leaves the company’s next generation under a cloud.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1,
+      4
+    ],
+    "body": [
+      "Jack Tramiel resigned as president and chief executive of Commodore International on Friday, January 13, an abrupt break at the company he had driven from office-machine roots into the center of the home-computer boom. The news followed only days after Tramiel personally championed Commodore’s new 264 family at the Winter Consumer Electronics Show.",
+      "The timing makes the departure more than an executive shuffle. Commodore’s VIC-20 and Commodore 64 had turned price into a weapon, putting capable color computers into mass-market stores and forcing every rival to answer. COMPUTE! estimated that the company’s annual sales pace had multiplied roughly twenty-fivefold in six or seven years.",
+      "Tramiel said a billion-dollar company now required a “professional executive.” Marshall F. Smith, an industrial executive with manufacturing and finance experience but no computer-industry background, was expected to take charge in late February. Until then, dealers and developers must judge whether Commodore’s famously aggressive course will continue.",
+      "The unanswered question hangs over the 264 and speech-equipped 364V. Both promise 64K, an improved BASIC and built-in productivity tools, but sacrifice much of the Commodore 64’s game compatibility. The machines arrived as the industry’s shakeout became visible; now their most forceful sponsor has left the stage."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Games Trade Finds Guarded Relief at CES",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2,
+        5,
+        6
+      ],
+      "body": [
+        "After the bruising 1983 market collapse, the New York Times found a “sigh of relief” among video-game exhibitors on January 10. The confidence was cautious: companies were narrowing their lines, emphasizing proven machines and searching for ways to keep cartridge buyers interested.",
+        "Mattel Electronics had been sold to investors, yet its booth still showed a System Changer for Atari 2600 cartridges, new Intellivision games and Apple and IBM titles. Computer Entertainer’s January tally kept Miner 2049er, Ms. Pac-Man and River Raid among the period’s strongest sellers.",
+        "The show-floor message is survival through software and compatibility. The arcade spirit remains alive, but the extravagant hardware race has yielded to sharper bets on games people will actually buy."
+      ]
+    },
+    {
+      "headline": "Commodore’s 264 Family Promises an Office in ROM",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1,
+        3
+      ],
+      "body": [
+        "The 264 and talking 364V pair 64K of memory with BASIC 3.5, whose disk, graphics, sound and structured-programming commands answer long-standing complaints about the Commodore 64’s sparse built-in language. More than 59K is available to BASIC.",
+        "Commodore’s proposed 3-Plus-1 package combines word processing, filing, spreadsheet work and business graphics. The 364V adds a numeric keypad and Magic Voice speech synthesis, aiming squarely at buyers who want an appliance rather than a hobby kit.",
+        "That convenience carries a cost: C64 cartridges, joysticks and Datasette gear do not transfer, and the TED chip lacks the C64’s sprites and celebrated SID sound. Commodore says the 264 will sell below $500, but has announced no firm price."
+      ]
+    },
+    {
+      "headline": "Coleco Builds an Adam Comeback Plan",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ],
+      "body": [
+        "Coleco answered Adam’s troubled debut with a large CES expansion plan: a floppy drive, modem, RAM card, second data drive, CP/M support and a pledge of 170 software packages. Honeywell had opened five service centers and planned thirty more.",
+        "Questions remain over reliability and price. Creative Computing cited published claims of high initial defect rates, which a Coleco spokesman rejected, while wholesale pricing rose about 20 percent to $650 and New York retail quotes reached $700 to $799.",
+        "The accessories could turn Adam into a broader computer system, but the comeback now depends on delivery, service and restoring buyer confidence."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Commodore 264/364V",
+      "summary": "64K TED-based systems with BASIC 3.5; the 364V adds keypad and speech.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        1,
+        3
+      ]
+    },
+    {
+      "title": "SpectraVideo SVI-728 MSX",
+      "summary": "The lone U.S. CES standard-bearer for Japan’s MSX format.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Timex TS 2050 modem",
+      "summary": "A $119.95 300-baud auto-dial/answer modem with terminal software.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Commodore 3-Plus-1",
+      "detail": "Integrated word processor, file manager, spreadsheet and business graphics."
+    },
+    {
+      "name": "Magic Desk II",
+      "detail": "Icon-driven text, spreadsheet, filing and calculator tools."
+    },
+    {
+      "name": "BASIC 3.5",
+      "detail": "Disk, graphics, sound, error-trapping and renumbering commands."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Miner 2049er",
+        "Ms. Pac-Man (Atari 2600)",
+        "River Raid",
+        "Swords & Serpents",
+        "War Room"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "Say Say Say — Paul McCartney & Michael Jackson",
+        "Owner of a Lonely Heart — Yes",
+        "Say It Isn’t So — Daryl Hall & John Oates",
+        "Union of the Snake — Duran Duran",
+        "Twist of Fate — Olivia Newton-John"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Terms of Endearment",
+        "Hot Dog… The Movie",
+        "Sudden Impact",
+        "Scarface",
+        "Yentl"
+      ]
+    },
+    {
+      "label": "Software Counter",
+      "items": [
+        "Commodore 3-Plus-1",
+        "Magic Desk II",
+        "BASIC 3.5"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Coleco Adam",
+      "price": "$700–$799 retail",
+      "note": "New York-area reports; $650 wholesale."
+    },
+    {
+      "item": "SpectraVideo Family Pack Plus",
+      "price": "$599",
+      "note": "CES package price."
+    },
+    {
+      "item": "Timex TS 1500",
+      "price": "$79.95",
+      "note": "Period CES price."
+    },
+    {
+      "item": "Commodore 264",
+      "price": "Under $500 target",
+      "note": "No firm price; observers guessed near $300."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Atari cancels 1400XL",
+      "text": "The 1400XL is officially canceled; the 1450XLD’s future remains vague."
+    },
+    {
+      "headline": "SpectraVideo carries the MSX flag",
+      "text": "The SVI-728 appears while major Japanese MSX vendors stay away from Winter CES."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Say Say Say",
+      "artist": "Paul McCartney & Michael Jackson"
+    },
+    {
+      "rank": 2,
+      "title": "Owner of a Lonely Heart",
+      "artist": "Yes"
+    },
+    {
+      "rank": 3,
+      "title": "Say It Isn’t So",
+      "artist": "Daryl Hall & John Oates"
+    },
+    {
+      "rank": 4,
+      "title": "Union of the Snake",
+      "artist": "Duran Duran"
+    },
+    {
+      "rank": 5,
+      "title": "Twist of Fate",
+      "artist": "Olivia Newton-John"
+    }
+  ],
+  "periodAd": {
+    "headline": "64K Computing—Built In",
+    "summary": "Commodore’s 264 family promises BASIC 3.5 and productivity software in ROM.",
+    "tagline": "The next home office may start below $500."
+  },
+  "market": {
+    "headline": "The home-computer shakeout reaches the boardroom",
+    "summary": "Fewer new machines and fallen competitors frame Commodore’s leadership shock.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1,
+      4
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Lebanon diplomacy competes with continuing violence",
+    "summary": "Arab diplomatic initiatives returned to the foreground, while U.S. Marine positions remained under threat and warships fired after a January 15 attack.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      10
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Kodak Pushes Home Video into the 8mm Camcorder Era",
+    "summary": "Kodak’s compact one-piece 8mm color camera-recorder makes home video the week’s clearest gadget story.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Jack Tramiel resignation",
+        "status": "Verified to January 13 period reporting",
+        "sourceRefs": [
+          0,
+          4
+        ]
+      },
+      {
+        "claim": "Winter CES products and market conditions",
+        "status": "Verified in period show reports",
+        "sourceRefs": [
+          1,
+          2,
+          3
+        ]
+      },
+      {
+        "claim": "Games, charts and box office",
+        "status": "Dated to January period sources",
+        "sourceRefs": [
+          5,
+          6,
+          7,
+          8
+        ]
+      },
+      {
+        "claim": "World and gadget bulletins",
+        "status": "Verified in dated newspaper reports",
+        "sourceRefs": [
+          9,
+          10
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "COMPUTE! — Editor’s Notes",
+      "url": "https://www.atarimagazines.com/compute/issue46/001_1_EDITORS_NOTES.php"
+    },
+    {
+      "label": "COMPUTE! — The Shakeout Begins",
+      "url": "https://www.atarimagazines.com/compute/issue47/086_1_The_Shakeout_Begins_A_Watershed_Winter_CES.php"
+    },
+    {
+      "label": "Creative Computing — Winter CES",
+      "url": "https://www.atarimagazines.com/creative/v10n4/132_1984_Winter_Consumer_Elec.php"
+    },
+    {
+      "label": "Creative Computing — Commodore 264 and 364V",
+      "url": "https://www.atarimagazines.com/creative/v10n4/136_Commodore_unveils_264_and.php"
+    },
+    {
+      "label": "New York Times — Commodore Founder Resigns",
+      "url": "https://www.nytimes.com/1984/01/14/business/founder-of-commodore-resigns-unexpectedly.html"
+    },
+    {
+      "label": "New York Times — Sigh of Relief on Video Games",
+      "url": "https://www.nytimes.com/1984/01/10/business/sigh-of-relief-on-video-games.html"
+    },
+    {
+      "label": "Computer Entertainer — January 1984",
+      "url": "https://archive.org/details/computer-entertainer-2-10"
+    },
+    {
+      "label": "Billboard singles chart archive",
+      "url": "https://www.musicchartsarchive.com/singles-chart/1984-01-14"
+    },
+    {
+      "label": "Box Office Mojo — Weekend 2, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W02/?sort=rank&sortDir=asc"
+    },
+    {
+      "label": "Washington Post — Kodak 8mm Camcorder",
+      "url": "https://www.washingtonpost.com/archive/business/1984/01/05/kodak-unveils-8mm-video-camcorder/df4e61da-cfc0-469f-8793-571fcfe79f14/"
+    },
+    {
+      "label": "Christian Science Monitor — Lebanon Diplomacy",
+      "url": "https://www.csmonitor.com/1984/0109/010919.html"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM OWNERS",
+      "copy": "Meet the online world at 300 baud. Terminal software included."
+    },
+    {
+      "headline": "SOFTWARE WANTED",
+      "copy": "Games, utilities and productivity disks for popular 8-bit machines."
+    }
+  ]
+}

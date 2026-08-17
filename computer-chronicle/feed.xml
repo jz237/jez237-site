@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 16 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 17 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of January 9-15, 1984 — TRAMIEL QUITS COMMODORE</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-01-09</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-09</guid>
+      <pubDate>Mon, 17 Aug 2026 12:00:00 GMT</pubDate>
+      <description>Founder’s surprise Friday resignation, days after his CES appearance, leaves the company’s next generation under a cloud. Jack Tramiel resigned as president and chief executive of Commodore International on Friday, January 13, an abrupt break at the company he had driven from office-machine roots into the center of the home-computer boom. The news followed only days after Tramiel personally championed Commodore’s new 264 family at the Winter Consumer Electronics Show. Also this week: Games Trade Finds Guarded Relief at CES · Commodore’s 264 Family Promises an Office in ROM · Coleco Builds an Adam Comeback Plan.</description>
+    </item>
     <item>
       <title>Week of January 2-8, 1984 — Commodore&apos;s 264 family steals a shakeout-era Winter CES</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-01-02</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-29</guid>
       <pubDate>Wed, 29 Jul 2026 12:00:00 GMT</pubDate>
       <description>The two-year-old IBM PC has taken the sales lead, inspired a compatible-machine industry, and left once-hot independents scrambling for position. NEW YORK — The personal-computer trade has rarely moved so quickly from open field to established order. TIME reports this week that IBM&apos;s Personal Computer, introduced only in August 1981, now accounts for 26 percent of unit sales and has displaced Apple from first place. Also this week: Ultima III Makes the Quest a Team Affair · Portable Computers Crowd the Departure Gate · Cellular Service Moves Toward the Marketplace.</description>
-    </item>
-    <item>
-      <title>Week of August 22-28, 1983 — A Desktop for Every Freshman</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-08-22</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-08-22</guid>
-      <pubDate>Tue, 28 Jul 2026 12:00:00 GMT</pubDate>
-      <description>More than 800 new Clarkson students are to collect personal computers during orientation, turning a bold campus requirement into everyday academic equipment. POTSDAM, N.Y. — More than 800 Clarkson College freshmen arriving Thursday will receive an unusual addition to the standard orientation packet: their own personal desktop computers. United Press International reported the distribution on August 24, as the college prepared to put a machine directly into the hands of every member of the incoming class. Also this week: Christmas Computer War Crowds the Aisles · Dragon&apos;s Lair Turns the Arcade into a Cartoon · Atari Clears the Deck for XL.</description>
     </item>
   </channel>
 </rss>

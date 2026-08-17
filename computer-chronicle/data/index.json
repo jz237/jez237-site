@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-17",
+      "historicDate": "1984-01-09",
+      "displayDate": "Week of January 9-15, 1984",
+      "edition": "Issue 076 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The billion-dollar home-computer giant awakens without the man who built its low-price empire.",
+      "leadHeadline": "TRAMIEL QUITS COMMODORE",
+      "storyHeadlines": [
+        "Games Trade Finds Guarded Relief at CES",
+        "Commodore’s 264 Family Promises an Office in ROM",
+        "Coleco Builds an Adam Comeback Plan"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-09.jpg",
+      "thumb": "media/thumbs/1984-01-09.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-16",
       "historicDate": "1984-01-02",
       "displayDate": "Week of January 2-8, 1984",
