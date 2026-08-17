@@ -2,6 +2,12 @@
   "album": "Cat Corner",
   "photos": [
     {
+      "src": "images/pc-case-sprawl-2026-08-16.jpg",
+      "alt": "Black cat sprawled across the top of a glass-sided desktop PC with paws and tail hanging over the edges",
+      "caption": "The PC case has been claimed as premium heated real estate",
+      "date": "2026-08-16"
+    },
+    {
       "src": "images/taco-upside-down-2026-07-16.jpg",
       "alt": "Taco lying upside down across the carpet beside a red and black cat tree",
       "caption": "Taco: gravity is more of a suggestion",
