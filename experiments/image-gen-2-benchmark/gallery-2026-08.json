@@ -1,5 +1,116 @@
 [
   {
+    "id": "2026-08-18-factual-infographic-factual-infographic-thistle-tortoise-be",
+    "title": "Factual infographic: Thistle Tortoise Beetle — The Moving Fecal Shield",
+    "tests": "Tuesday factual subtype: bizarre-insect-life; scheduled count 4/8; accepted common name: thistle tortoise beetle; scientific name: Cassida rubiginosa; verified unusual mechanism: the larva accumulates feces and retained cast skins on a forked caudal process and maneuvers the packet as a physical shield capable of blocking ant bites. Macro plan visibly delivered four insect-first close-ups: whole shield-bearing larva, exposed forked caudal process, layered feces-plus-exuviae shield cutaway, and ant-blocking sequence. Evidence verified against AAAS/Science, EDDMapS/University of Georgia, and ZooKeys/Pensoft. Direct-canvas infographic generated once via synchronous openai/gpt-image-2 CLI with high quality; exact source verified and byte-identical QA mirror passed xai/grok-4.3 pixel QA.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “THISTLE TORTOISE BEETLE: THE MOVING FECAL SHIELD,” explaining the real-world, non-fiction defense of the thistle tortoise beetle larva, Cassida rubiginosa. The generated canvas itself must be a polished museum-quality direct infographic: perfectly front-facing, orthographic, straight-on, edge-to-edge 2D information design, with no paper edge, poster, frame, border, cast shadow around the whole composition, wall, room, screen, desk, hands, tools, specimen tray, or environmental staging outside the designed panels. Use concise authoritative editorial typography, short readable labels, crisp leader lines, and no dense paragraphs.\n\nMake the insect biology dominate at thumbnail scale. Use four LARGE, sharply detailed natural-history extreme-macro anchors occupying at least two-thirds of the canvas. Macro 1: an enormous living green Cassida rubiginosa larva on the underside of a Canada-thistle leaf, with a coherent segmented body, dark head, six small thoracic legs, marginal spines, and its rough brown shield arched visibly above the back on a paired forked caudal process. Macro 2: the same larval body viewed obliquely with the shield temporarily lifted, clearly revealing the forked caudal process and the shield attachment without gore or detached anatomy. Macro 3: a huge cutaway through the shield itself showing layered fecal pellets and retained cast larval skins intertwined into one irregular packet, never a manufactured umbrella. Macro 4: a three-frame overhead defensive sequence in which an ant approaches, the larva pivots the shield toward it, and the shield physically blocks the ant's mandibles; show no injury and do not imply chemicals or poison.\n\nBuild at least nine concrete information layers around and through those macro anchors. 1, WHOLE LARVA ANATOMY: label HEAD, THORAX, SIX LEGS, ABDOMEN, MARGINAL SPINES, FORKED CAUDAL PROCESS, and SHIELD. 2, BUILD THE SHIELD: a concise four-step sequence labeled FEED ON THISTLE → RETAIN CAST SKIN → ADD FECAL MATERIAL → CARRY ABOVE BACK, with the fork visibly supporting each stage. 3, MOVE THE BARRIER: the large ant-approach sequence labeled DETECT APPROACH → PIVOT SHIELD → BLOCK BITE, presented as physical defense. 4, SHIELD MATERIALS: two macro texture windows distinguish CAST SKIN / EXUVIAE from FECAL PELLETS, then show them combined. 5, LIFE CYCLE: an illustrated strip EGG → FIVE LARVAL INSTARS → PUPA → GREEN ADULT, with the shield-bearing stage confined to the larval portion. 6, FEEDING TRACE: compare young-larva window feeding on the underside with older-larva irregular holes through the leaf. 7, HONEST SCALE: a ruler comparison for a larva around 6 mm and adult up to roughly 7.5 mm, explicitly labeled APPROXIMATE PROFILE VALUES. 8, HOST AND HABITAT: a small integrated Canada-thistle plant vignette with leaf underside, spring-to-late-summer seasonal context, and EUROPEAN NATIVE RANGE / INTRODUCED BIOCONTROL CONTEXT without a fake precise occurrence map. 9, ADULT VERSUS LARVA: a same-scale comparison of the spiny shield-bearing larva and oval green adult with black underside. 10, EVIDENCE PANEL: a restrained experiment-style comparison labeled SHIELD PRESENT / SHIELD DISPLACED, with the conservative conclusion “MOVABLE SHIELD CAN BLOCK ANT BITES,” no invented percentages.\n\nUse an information architecture unlike today's diagonal gecko foot, horizontal planthopper gear mechanism, or nacre fracture stack. Let the enormous shield-bearing larva form a curled C-shape around a central circular shield-material cutaway; place the exposed caudal-fork macro inside the curve, the ant-deflection sequence as three large wedges around the outer rim, and the life-cycle, feeding trace, adult comparison, habitat, scale, and evidence modules as asymmetric leaf-shaped panels at the corners. Photorealistic insects and thistle scenes may appear only as content inside the designed infographic, never as props around it.\n\nPalette: deep thistle purple, leaf green, larval lime, warm umber shield material, charcoal, ivory, and restrained coral for defensive-motion arrows. Render naturalistic macro-photography detail with believable cuticle, tiny hairs, leaf veins, feeding damage, ant anatomy, cast-skin texture, and crumbly fecal material, integrated with precise natural-history cutaways and crisp vector diagrams. Keep every visible word correctly spelled, high contrast, and large enough to read.\n\nAccuracy constraints: Cassida rubiginosa is a real thistle tortoise beetle. Its green larva has marginal spines and a forked caudal process that supports a movable packet made from feces and retained cast skins; published experiments report that this shield can block ant bites. Adults and larvae feed on thistle foliage; young larvae window-feed beneath leaves, older larvae make irregular holes, and the cited North American profile describes egg, five larval instars, pupa, adult, and one generation per year. Present size, seasonal, and life-cycle details as context-dependent profile values rather than universal laws. Do not claim the shield is venomous, chemically repellent, sprayed, glued, spun from silk, unique among all insects, perfectly effective against every predator, or consciously engineered.\n\nAll insects must have credible anatomy: the beetle larva and adult each have exactly six legs, the ant has exactly six legs and two antennae, bodies are coherent and naturally jointed, and the shield remains visibly connected to the larval caudal fork. No extra limbs, humanoid pose, monster scale, gore, predation injury, fantasy glow, fake statistics, unsupported chemical diagram, logos, QR code, watermark, decorative pseudo-text, bibliography, URLs, tiny citations, classroom worksheet, glossy ad, photographed chart, physical page, screen interface, or prompt-card instructions. The final direct infographic must stop scrolling through the huge shield-bearing larva, the exposed fork, the layered waste-and-cast-skin shield, and the unmistakable moving-barrier defense sequence.",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-thistle-tortoise-be.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-thistle-tortoise-be.webp",
+    "color": "#5a5139",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How thistle tortoise beetle (Cassida rubiginosa) larvae build and wield a fecal-and-exuviae shield on a forked tail process",
+      "description": "A direct-canvas insect-first infographic explaining how Cassida rubiginosa larvae assemble feces and cast skins on a forked caudal process and move the shield to block ant bites.",
+      "sourceNote": "AAAS/Science, Defensive Use of a Fecal Shield by a Beetle Larva (https://api.crossref.org/works/10.1126/science.158.3807.1471), verified the Cassida rubiginosa shield composition, maneuvering, and ant-bite defense; EDDMapS / University of Georgia Center for Invasive Species and Ecosystem Health (https://www.eddmaps.org/species/subject.cfm?sub=15011) verified taxonomy, host, anatomy, feeding traces, approximate size, life cycle, and range context; ZooKeys/Pensoft (https://zookeys.pensoft.net/article/102600/) verified broader cassidine shield construction, retention, caudal-process use, and architecture.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-18T15:28:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "American Association for the Advancement of Science (AAAS)",
+            "title": "Defensive Use of a Fecal Shield by a Beetle Larva",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://api.crossref.org/works/10.1126/science.158.3807.1471"
+          },
+          {
+            "id": "S2",
+            "publisher": "EDDMapS / University of Georgia Center for Invasive Species and Ecosystem Health",
+            "title": "Thistle tortoise beetle (Cassida rubiginosa Muller, 1776)",
+            "sourceType": "university",
+            "url": "https://www.eddmaps.org/species/subject.cfm?sub=15011"
+          },
+          {
+            "id": "S3",
+            "publisher": "ZooKeys / Pensoft Publishers",
+            "title": "Architecture, construction, retention, and repair of faecal shields in three tribes of tortoise beetles",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://zookeys.pensoft.net/article/102600/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Cassida rubiginosa is the thistle tortoise beetle, a real leaf beetle in family Chrysomelidae and subfamily Cassidinae.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Larvae are green, have marginal spines, and carry shield material on a forked caudal process held over the back.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The carried shield packet contains feces and retained cast skins (exuviae).",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The larva can maneuver the shield as a physical defense, and experiments found it effective at blocking ant bites.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cassidine shield construction uses caudal processes and deliberate manipulation of fecal and exuvial material; shield architecture and retention vary among tortoise beetle lineages.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Cassida rubiginosa adults and larvae feed on thistle foliage; Canada thistle is a primary North American host.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Young larvae window-feed on leaf undersides, while older larvae make irregular feeding holes.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The life cycle proceeds through egg, five larval instars, pupa, and adult, with one generation per year in the described North American context.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults are oval and green with a hard protective covering and black underside; larvae reach roughly 6 mm and adults up to roughly 7.5 mm in the cited North American profile.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The species is native to Europe and has been used as a biological-control herbivore of Canada thistle in North America and New Zealand.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-08-18-factual-infographic-factual-infographic-living-gears-of-the",
     "title": "Factual infographic: Living Gears of the Issus Nymph",
     "tests": "factual_subtype: bizarre-insect-life; accepted common name: Issus planthopper; accepted scientific name: Issus coleoptratus; verified mechanism: juvenile hind-leg trochanter tooth strips intermesh to synchronize takeoff and disappear at the final molt; macro plan: dominant whole-nymph extreme macro plus large paired-gear cutaway, asymmetric-tooth close-up, high-speed launch sequence and nymph-versus-adult comparison; capture/style logic: orthographic edge-to-edge museum infographic in high-quality mode; anti-repeat: first archived Issus gear topic, distinct from recent gecko adhesion and parasitoid/defense insect mechanisms; actual pixel QA PASS by xai/grok-4.3 with correct six-legged anatomy, biological gears, readable labels and no material defects.",
