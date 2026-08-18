@@ -8353,5 +8353,128 @@
     "slot": "outer-space-exploration",
     "model": "openai/gpt-image-2",
     "size": "1536x1024"
+  },
+  {
+    "id": "2026-08-18-factual-infographic-factual-infographic-gecko-grip-dry-adhe",
+    "title": "Factual infographic: Gecko Grip — Dry Adhesion Without Glue",
+    "tests": "General factual infographic; direct-canvas orthographic museum information design; topic unique across the full factual archive; dominant five-toed Tokay gecko foot; toe-pad-to-seta-to-spatula hierarchy; directional attach-and-peel release; van der Waals mechanism without glue or suction; source-verified qualitative surface comparison and waxy-leaf limitation; biomimicry shown as a design principle, not an existing miracle product; evidence gate passed against two independent publishers; actual pixels passed xai/grok-4.3 QA.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “GECKO GRIP: DRY ADHESION WITHOUT GLUE,” explaining the real-world, non-fiction mechanism by which Tokay gecko (Gekko gecko) toe pads create strong but rapidly reversible adhesion. The generated canvas itself must be a polished museum-quality information design: perfectly front-facing, orthographic, straight-on, edge-to-edge 2D artwork, with no perspective view of the overall layout, no visible paper edge, poster, placard, frame, border, cast shadow around the composition, wall, room, screen, desk, tools, hands, specimen tray, or environmental background outside the designed infographic. Use concise authoritative editorial typography, short readable labels, crisp leader lines, and no paragraphs of tiny text.\n\nMake the stop-scroll visual anchor a huge photorealistic Tokay gecko forefoot pressed against clear glass, sweeping diagonally across the center and occupying nearly half the canvas. Show believable living anatomy: five toes, natural toe-pad folds, claws lifted clear where appropriate, granular blue-gray skin with orange spots, subtle veins and joints, and a visible contact band where the pads meet glass. Integrate a large cutaway through one toe pad that descends through four visually connected scales: whole toe pad, dense field of microscopic setae, one branched seta, and its many flattened spatula tips making intimate contact with the glass. Show the hierarchy clearly without unsupported numbers.\n\nBuild at least ten concrete information layers into one coherent direct-canvas layout:\n1. The dominant whole-foot contact image and integrated multiscale toe-pad cutaway labeled TOE PAD, SETAL FIELD, SETA, SPATULA TIPS, and GLASS SURFACE.\n2. A three-stage attachment sequence labeled PLACE, LOAD, ENGAGE: the toe approaches; the pad presses toward the surface; a slight pull along the surface aligns the hairs and brings more spatula tips into close contact. Make direction visible with restrained arrows.\n3. A matching three-stage release sequence labeled LIFT EDGE, CHANGE ANGLE, PEEL AWAY: release begins at a toe edge and progresses across the pad rather than every contact breaking simultaneously.\n4. A large molecular-contact macro showing opposing surface molecules at extremely close range with many tiny, individually weak van der Waals attractions adding across abundant spatula contacts. Depict this as a conservative simplified mechanism, not magnetic sparks or chemical glue.\n5. A force-direction diagram comparing weak attachment from touch alone with strong directional attachment after loading toward and slightly along the surface.\n6. A mechanism comparison strip with clear verdicts: NO SECRETED GLUE, NO SUCTION CUP, NO STICKY RESIDUE; DRY INTERMOLECULAR CONTACT. Do not imply electrostatic charging or capillary liquid bridges.\n7. A surface-polarity comparison showing similarly engaged setae on one polarizable hydrophilic test surface and one polarizable hydrophobic test surface, supporting that capillary adhesion is not necessary. Keep it qualitative and do not suggest that every material performs equally.\n8. A natural-surface limitation panel showing a Tokay gecko toe meeting a waxy Southeast Asian leaf: irregular wax coatings reduce intimate contact compared with clean glass. Label it SURFACE CONDITION MATTERS without inventing a performance percentage.\n9. A habitat-and-scale vignette inside the layout showing one normally sized Tokay gecko moving across a tropical tree trunk in Southeast Asia, with the adhesive toe pad magnified beside it.\n10. A biomimicry panel showing a clearly labeled GECKO-INSPIRED DRY ADHESIVE prototype as a synthetic field of branching microfibers, emphasizing the design principle of many subdivided contacts rather than claiming an existing miracle product.\n11. A clean cause-and-effect path linking SUBDIVIDE CONTACTS → INCREASE CLOSE CONTACT → MANY WEAK ATTRACTIONS ADD → DIRECTIONAL GRIP → PEEL TO RELEASE.\n\nUse an asymmetric radial information architecture unlike recent animal-physiology infographics. Let the immense diagonal forefoot cross from upper left to lower center; make the scale ladder expand into a large circular spatula-contact window on the right; place attachment and release sequences as opposing curved ribbons around that window; stack mechanism comparison and surface-polarity panels along the left edge; put the waxy-leaf limitation and Southeast Asia habitat vignette at lower right; run the cause-and-effect path along the bottom. Palette: deep charcoal, warm ivory, mineral teal, Tokay blue-gray, burnt orange spots, glass cyan, and restrained gold for molecular-contact highlights. Blend photorealistic macro zoology, scanning-electron-microscope-like structural texture, precise cutaway illustration, and crisp vector mechanics. Depth may appear inside the gecko, microscope, and habitat imagery only; the overall canvas remains flat and orthographic.\n\nAccuracy constraints: explain adhesion as dry, reversible, directional contact made by microscopic setae branching into spatula tips; identify van der Waals forces as the primary supported mechanism; show that strong engagement requires controlled loading and that rapid release uses angle change and peeling. Do not claim that suction, glue secretion, magnetic attraction, static electricity, or liquid capillary bridges are the mechanism. Do not claim the system grips every surface equally, works perfectly when wet or dirty, or has unlimited strength. Do not invent exact hair counts, forces, dimensions, angles, speeds, percentages, or performance rankings.\n\nAll anatomy must be coherent: one living Tokay gecko foot with five distinct toes, correct joints, continuous skin, believable pads, natural claws, no duplicated digits, fused toes, human fingers, extra limbs, detached anatomy, gore, or dissection. No decorative pseudo-text, equations, bibliography, URLs, citation marks, QR codes, logos, watermark, signature, dense prose, classroom worksheet, photographed chart, poster mockup, physical page, screen interface, instructional prompt-card language, fantasy glow, or generic product advertisement. The final image must be the direct infographic itself, and its huge gecko foot, branching contact hierarchy, and attach-versus-peel mechanics must read immediately at thumbnail scale.\n",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-gecko-grip-dry-adhe.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-gecko-grip-dry-adhe.webp",
+    "color": "#737b7a",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How gecko toe pads produce controllable dry adhesion",
+      "description": "A museum-quality direct-canvas guide to how Tokay gecko toe pads use branching setae, spatula contact, van der Waals attraction, directional loading, and peeling release to create reversible dry adhesion.",
+      "sourceNote": "Sources: Proceedings of the National Academy of Sciences, Evidence for van der Waals adhesion in gecko setae, https://pmc.ncbi.nlm.nih.gov/articles/PMC129431/ ; University of California, Berkeley, It's not glue, suction or static electricity that keep geckos from falling off the ceiling, https://newsarchive.berkeley.edu/news/media/releases/2000/06/07_gecko.html . Verified scope: Tokay gecko setal hierarchy, van der Waals primary mechanism, directional loading and peeling release, surface-condition limits, and gecko-inspired dry-adhesive design principles.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-18T06:29:30Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Proceedings of the National Academy of Sciences",
+            "title": "Evidence for van der Waals adhesion in gecko setae",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC129431/"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of California, Berkeley",
+            "title": "It's not glue, suction or static electricity that keep geckos from falling off the ceiling",
+            "sourceType": "university",
+            "url": "https://newsarchive.berkeley.edu/news/media/releases/2000/06/07_gecko.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Tokay gecko toe pads carry microscopic hairs called setae, and each seta branches into much smaller terminal pads called spatulae.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The hierarchical branching from toe pad to setae to spatulae creates extensive close contact with a surface.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Experiments support van der Waals forces as the primary mechanism of dry adhesion in Tokay gecko setae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Gecko dry adhesion does not require secreted glue or suction.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Tokay gecko setae adhered similarly to strongly hydrophobic and strongly hydrophilic surfaces when both surfaces were polarizable, arguing against capillary adhesion as necessary.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Simply touching a seta to a surface is insufficient for strong attachment; loading it toward the surface and slightly along the surface engages adhesion.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The directional geometry of setae and spatulae makes attachment dependent on loading direction.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Geckos detach rapidly by changing angle and peeling their toes away, which progressively reduces contact rather than breaking every contact at once.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The adhesive system works without leaving a glue residue on the contacted surface.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Setal-tip size and shape, rather than high surface polarity, are central to the measured adhesion mechanism.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Subdividing an adhesive surface into many small contacts increases contact density and is a design principle for gecko-inspired dry adhesives.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Natural surfaces can be more challenging than clean laboratory glass; waxy leaf coatings may hinder close intermolecular contact.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The Tokay gecko, Gekko gecko, is native to Southeast Asia.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
