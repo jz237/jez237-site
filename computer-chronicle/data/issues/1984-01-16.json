@@ -1,0 +1,320 @@
+{
+  "currentDate": "2026-08-18",
+  "historicDate": "1984-01-16",
+  "displayDate": "Week of January 16-22, 1984",
+  "edition": "Issue 077 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Extra-edition 1984 computer weekly",
+    "motifs": [
+      "Macintosh screen",
+      "Super Bowl broadcast",
+      "warm newsprint"
+    ],
+    "layout": "milestone broadsheet"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Computer & Culture Record",
+    "dateline": "January 16-22, 1984",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Macintosh milestone across the upper fold",
+    "secondaryRail": "CES machines, games and software",
+    "archiveNavigation": "Chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "signal red",
+    "secondary": "computer blue",
+    "texture": "aged newsprint and halftone ink"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-01-16.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for January 16-22, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "milestone": {
+    "title": "Apple's '1984' commercial introduces Macintosh to a national audience",
+    "note": "The Super Bowl broadcast made the graphical, mouse-driven Macintosh a mass-market cultural event and a landmark in computing and advertising history."
+  },
+  "editorNote": "Extra edition: one extraordinary minute of television turns a forthcoming personal computer into a national conversation.",
+  "morningLine": "Macintosh steps from the trade press onto America’s biggest screen.",
+  "lead": {
+    "headline": "APPLE'S ‘1984’ SPOT PUTS MACINTOSH ON THE NATIONAL STAGE",
+    "dek": "A stark Super Bowl film promises a new kind of personal computer before viewers have even seen the machine itself.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "body": [
+      "During Super Bowl XVIII on January 22, Apple Computer used a single dramatic national broadcast to introduce the Macintosh as more than another machine. Ridley Scott’s film showed gray ranks of workers facing a giant screen until a lone runner smashed it, closing with Apple’s promise that 1984 would not resemble George Orwell’s 1984.",
+      "The commercial offered scarcely a conventional product demonstration. Its target was an idea: personal computing as an escape from conformity. That approach put the still-unreleased Macintosh before a mass audience with a cultural vocabulary far removed from memory counts and expansion slots.",
+      "Apple’s product plans supplied the substance behind the spectacle. Reports during the week described Macintosh as part of a broader 32-bit line alongside revised Lisa models, while Apple’s launch material emphasized a graphical display, mouse control, MacWrite and MacPaint at a suggested retail price of $2,495.",
+      "The advertisement’s reach made the Macintosh launch a public event before the January 24 unveiling. For the personal-computer business, the week marked a shift: machines would now be sold not only by specifications and price, but by an image of who their owners hoped to become."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "APPLE READIES A 32-BIT FAMILY AROUND MACINTOSH AND LISA 2",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        3
+      ],
+      "body": [
+        "Apple’s January plans linked the compact Macintosh to revised Lisa systems, placing the company’s graphical interface and mouse-driven approach across a broader product family.",
+        "MacWrite and MacPaint showed how fonts, cut-and-paste editing and bitmap drawing could make the interface tangible to ordinary users. The $2,495 suggested Macintosh price still put that experience well above bargain home computers."
+      ]
+    },
+    {
+      "headline": "COMMODORE 264 BETS ON SOFTWARE BUILT INTO THE MACHINE",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4,
+        5
+      ],
+      "body": [
+        "At Winter CES, Commodore’s 264 and talking 364V prototypes pointed beyond the VIC-20 and Commodore 64. Their 3-PLUS-1 package placed word processing, files, spreadsheets and graphics in ROM.",
+        "The new family sacrificed direct Commodore 64 software compatibility, a consequential gamble when the C64 library was becoming one of the company’s strongest advantages. Pricing remained unsettled, leaving buyers to weigh convenience against continuity."
+      ]
+    },
+    {
+      "headline": "COLECO PROMISES A LARGER ADAM WORLD AMID QUALITY QUESTIONS",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ],
+      "body": [
+        "Coleco arrived at CES promising more peripherals and software for Adam, seeking to turn the all-in-one computer into an expanding home system.",
+        "But reports of defective early units continued to shadow the pitch. Dealers quoted roughly $700 to $799 in New York, making reliability as important as the machine’s ambitious bundle."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Apple Macintosh",
+      "summary": "Graphical 32-bit personal computer with mouse, MacWrite and MacPaint; suggested retail $2,495.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        3
+      ]
+    },
+    {
+      "title": "Commodore 264 and 364V",
+      "summary": "CES prototypes with built-in 3-PLUS-1 productivity software; the 364V added speech.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4,
+        5
+      ]
+    },
+    {
+      "title": "Coleco Adam expansion line",
+      "summary": "Coleco promised peripherals and software while early-unit defect reports persisted.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "MacWrite",
+      "detail": "Font-rich mouse-driven word processing."
+    },
+    {
+      "name": "MacPaint",
+      "detail": "Bitmap drawing with brushes, textures and shapes."
+    },
+    {
+      "name": "3-PLUS-1",
+      "detail": "Commodore’s ROM-based word processor, file manager, spreadsheet and graphing suite."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Enchanter",
+        "Eagles",
+        "Flip and Flop",
+        "Miner 2049er",
+        "River Raid"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "Owner of a Lonely Heart — Yes",
+        "Karma Chameleon — Culture Club",
+        "Talking in Your Sleep — The Romantics",
+        "Break My Stride — Matthew Wilder",
+        "I Guess That’s Why They Call It the Blues — Elton John"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Terms of Endearment",
+        "Hot Dog… The Movie",
+        "Silkwood",
+        "Sudden Impact",
+        "Uncommon Valor"
+      ]
+    },
+    {
+      "label": "Software Counter",
+      "items": [
+        "MacWrite",
+        "MacPaint",
+        "3-PLUS-1"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Apple Macintosh",
+      "price": "$2,495",
+      "note": "Suggested retail."
+    },
+    {
+      "item": "Coleco Adam",
+      "price": "$700–$799",
+      "note": "Reported New York retail range."
+    },
+    {
+      "item": "SpectraVideo Family Pack Plus",
+      "price": "$599",
+      "note": "CES package price."
+    },
+    {
+      "item": "Timex Sinclair 1500",
+      "price": "$79.95",
+      "note": "Period CES price."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "SpectraVideo carries the MSX flag",
+      "text": "The 728 appeared at CES while major Japanese MSX makers stayed away."
+    },
+    {
+      "headline": "Apple II remains visible",
+      "text": "A modest Apple CES booth kept the established 8-bit family in view as Macintosh approached."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Owner of a Lonely Heart",
+      "artist": "Yes"
+    },
+    {
+      "rank": 2,
+      "title": "Karma Chameleon",
+      "artist": "Culture Club"
+    },
+    {
+      "rank": 3,
+      "title": "Talking in Your Sleep",
+      "artist": "The Romantics"
+    },
+    {
+      "rank": 4,
+      "title": "Break My Stride",
+      "artist": "Matthew Wilder"
+    },
+    {
+      "rank": 5,
+      "title": "I Guess That’s Why They Call It the Blues",
+      "artist": "Elton John"
+    }
+  ],
+  "periodAd": {
+    "headline": "THE COMPUTER FOR THE REST OF US",
+    "summary": "Macintosh brings pictures, type and pointing to the desktop.",
+    "tagline": "Suggested retail price: $2,495."
+  },
+  "market": {
+    "headline": "Home-computer survivors sound cautiously hopeful",
+    "summary": "After a punishing price war, CES exhibitors stressed software, bundles and clearer product identities.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      4,
+      5
+    ]
+  },
+  "worldAnchor": {
+    "headline": "U.S. warships fire after attacks on Marines in Beirut",
+    "summary": "American warships fired into mountains above Beirut after heavy rocket and mortar attacks on Marine positions, underscoring the danger of the Lebanon deployment.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Super Bowl ad airdate: January 22, 1984",
+      "Macintosh suggested retail price: $2,495",
+      "Charts and box office are dated to this historical week",
+      "CES items are labeled same-month where exact dates are unavailable"
+    ]
+  },
+  "sources": [
+    {
+      "label": "New York Times — Apple Expands Product Line (Jan. 16, 1984)",
+      "url": "https://www.nytimes.com/1984/01/16/business/apple-expands-product-line.html"
+    },
+    {
+      "label": "Smithsonian — Remembering Apple’s “1984” Super Bowl ad",
+      "url": "https://americanhistory.si.edu/explore/stories/remembering-apples-1984-super-bowl-ad"
+    },
+    {
+      "label": "History — Apple’s iconic “1984” commercial airs",
+      "url": "https://www.history.com/this-day-in-history/january-22/apple-1984-commercial-airs-during-super-bowl-xviii"
+    },
+    {
+      "label": "Stanford — First Macintosh Press Release",
+      "url": "https://web.stanford.edu/dept/SUL/sites/mac/primary/docs/pr1.html"
+    },
+    {
+      "label": "Creative Computing — 1984 Winter Consumer Electronics Show",
+      "url": "https://www.atarimagazines.com/creative/v10n4/132_1984_Winter_Consumer_Elec.php"
+    },
+    {
+      "label": "Creative Computing — Commodore unveils 264 and 364V",
+      "url": "https://www.atarimagazines.com/creative/v10n4/136_Commodore_unveils_264_and.php"
+    },
+    {
+      "label": "Antic — New Products, January 1984",
+      "url": "https://www.atarimagazines.com/v2n10/NewProducts.php"
+    },
+    {
+      "label": "Billboard Hot 100 — January 21, 1984",
+      "url": "https://www.elpee.jp/hot100/week/1984-01-21"
+    },
+    {
+      "label": "Box Office Mojo — Domestic Weekend 3, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W03/"
+    },
+    {
+      "label": "Washington Post — Warships Fire After Attack On Marines",
+      "url": "https://www.washingtonpost.com/archive/politics/1984/01/16/warships-fire-after-attack-on-marines/b87b13c7-ab48-49b7-a935-f1e1875ed188/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM OWNERS",
+      "copy": "Trade local board notes and terminal tips—no long-distance promises."
+    },
+    {
+      "headline": "DISK SWAP",
+      "copy": "Adventure and strategy enthusiasts seek fellow club members."
+    }
+  ]
+}

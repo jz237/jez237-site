@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-18",
+      "historicDate": "1984-01-16",
+      "displayDate": "Week of January 16-22, 1984",
+      "edition": "Issue 077 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Macintosh steps from the trade press onto America’s biggest screen.",
+      "leadHeadline": "APPLE'S ‘1984’ SPOT PUTS MACINTOSH ON THE NATIONAL STAGE",
+      "storyHeadlines": [
+        "APPLE READIES A 32-BIT FAMILY AROUND MACINTOSH AND LISA 2",
+        "COMMODORE 264 BETS ON SOFTWARE BUILT INTO THE MACHINE",
+        "COLECO PROMISES A LARGER ADAM WORLD AMID QUALITY QUESTIONS"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-16.jpg",
+      "thumb": "media/thumbs/1984-01-16.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-17",
       "historicDate": "1984-01-09",
       "displayDate": "Week of January 9-15, 1984",
