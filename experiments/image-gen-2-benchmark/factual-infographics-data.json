@@ -1174,5 +1174,135 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-18-factual-infographic-factual-infographic-living-gears-of-the",
+    "title": "Factual infographic: Living Gears of the Issus Nymph",
+    "tests": "factual_subtype: bizarre-insect-life; accepted common name: Issus planthopper; accepted scientific name: Issus coleoptratus; verified mechanism: juvenile hind-leg trochanter tooth strips intermesh to synchronize takeoff and disappear at the final molt; macro plan: dominant whole-nymph extreme macro plus large paired-gear cutaway, asymmetric-tooth close-up, high-speed launch sequence and nymph-versus-adult comparison; capture/style logic: orthographic edge-to-edge museum infographic in high-quality mode; anti-repeat: first archived Issus gear topic, distinct from recent gecko adhesion and parasitoid/defense insect mechanisms; actual pixel QA PASS by xai/grok-4.3 with correct six-legged anatomy, biological gears, readable labels and no material defects.",
+    "prompt": "Create a polished museum-quality scientific infographic as the image canvas itself, straight-on, orthographic, edge-to-edge 2D information design. Title: LIVING GEARS OF THE ISSUS NYMPH. Subtitle: Issus coleoptratus jump synchronization. The insect imagery must occupy most of the canvas. Dominant visual anchor: an enormous naturalistic extreme-macro whole-body view of one real juvenile Issus coleoptratus planthopper on a green leaf, with correct head, thorax, abdomen, exactly six articulated legs, realistic mottled brown cuticle, natural eyes and waxy tail filaments; sharply detailed rather than monstrous. Integrate three further large insect-first close-up panels: 1) a ventral anatomical cutaway of the paired hind-leg trochantera with opposing cuticular tooth strips visibly intermeshed across the midline, clearly biological tissue and never manufactured metal; 2) a scanning-electron-microscope-style macro of asymmetric curved teeth with rounded bases, labeled 10–12 teeth and gear strip about 400 micrometres; 3) a three-frame high-speed side sequence showing both hind legs cocked, the teeth engaging, then simultaneous propulsion into a straight controlled jump, labeled synchronized within about 30 microseconds and reduced yaw. Add a concise five-step causal ribbon: muscles load both hind legs; one leg begins; teeth mesh; the opposite leg is compelled to match; coordinated takeoff. Include a nymph-versus-adult comparison showing that functional interlocking teeth occur in juveniles and disappear at the final molt, while adults still jump without these juvenile gears. Add a tiny leaf-level scale vignette and a restrained 1:1 ratio diagram. Use authoritative editorial typography, large readable labels, charcoal, leaf-green, amber and pale-ivory palette, crisp hierarchy, fine leader lines, clear scale cues, accurate insect anatomy, and rich macro texture. Every claim and visual implication must remain within these stated facts. No invented habitat claim, no fabricated performance percentage, no human motive, no extra legs, no cyborg parts, no metal gears, no monster scale. The canvas is the finished infographic: no visible paper edge, poster, page, frame, wall, screen, desk, museum room, specimen tray, tools, hands, props, cast shadow around the composition, perspective mockup, external environment, bibliography, URLs, logos, watermark or pseudo-text. Make all requested text correctly spelled and concise.",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-living-gears-of-the.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-living-gears-of-the.webp",
+    "color": "#353420",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Issus coleoptratus nymph interlocking hind-leg gears and jump synchronization",
+      "description": "A museum-quality direct-canvas infographic showing how real juvenile Issus planthoppers use paired biological gear teeth on their hind legs to synchronize a jump, and how the gears vanish at the final molt.",
+      "sourceNote": "Sources: Science, Interacting Gears Synchronize Propulsive Leg Movements in a Jumping Insect, https://research-information.bris.ac.uk/ws/portalfiles/portal/72272889/Burrows_and_Sutton_Accepted_Mansucript.pdf ; University of Cambridge, Functioning mechanical gears seen in nature for the first time, https://www.cam.ac.uk/research/news/functioning-mechanical-gears-seen-in-nature-for-the-first-time . Verified scope: species identity, juvenile hind-leg gear anatomy, tooth scale and shape, synchronized propulsion, reduced yaw, and loss of the gears at adulthood.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-18T09:27:25Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Science",
+            "title": "Interacting Gears Synchronize Propulsive Leg Movements in a Jumping Insect",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://research-information.bris.ac.uk/ws/portalfiles/portal/72272889/Burrows_and_Sutton_Accepted_Mansucript.pdf"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Cambridge",
+            "title": "Functioning mechanical gears seen in nature for the first time",
+            "sourceType": "university",
+            "url": "https://www.cam.ac.uk/research/news/functioning-mechanical-gears-seen-in-nature-for-the-first-time"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Issus coleoptratus is a jumping planthopper insect.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In Issus coleoptratus nymphs, opposing toothed strips on the two hind-leg trochantera interlock as functional gears.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The interlocking gears mechanically synchronize the propulsive hind legs during a jump.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "High-speed video showed the hind legs beginning their propulsive movement within about 30 microseconds of one another.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Synchronized propulsion limits unwanted yaw that could spin the insect during takeoff.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Each juvenile gear strip is approximately 400 micrometres long and carries 10 to 12 teeth.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The two gear strips have matching tooth counts and therefore a 1:1 gearing ratio.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The teeth are asymmetric and curved because they transmit motion in the jump-launch direction rather than in both rotational directions.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Rounded tooth bases reduce stress concentration and help resist shearing.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The functional gears occur in juvenile nymphs and are lost at the final molt to adulthood.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A damaged juvenile gear may be replaced at a later molt, whereas an adult has no later molt to repair rigid cuticle.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults synchronize their hind legs without the juvenile interlocking gear teeth.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The nymph is a small six-legged insect with the standard head, thorax and abdomen body regions of an insect.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
