@@ -1624,5 +1624,98 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-18-factual-infographic-factual-infographic-fire-cloud-chimney-",
+    "title": "Factual infographic: Fire Cloud Chimney — How a Pyrocumulonimbus Lofts Smoke",
+    "tests": "Tuesday general factual infographic; rewritten reserve entry selected after full factual archive anti-duplicate scan. Direct-canvas orthographic museum infographic with a central fire-to-stratosphere cutaway, a five-step causal ribbon, pyrocumulus-versus-pyrocumulonimbus comparison, atmospheric scale ladder, three macro texture windows, branching injection outcomes, vertical profile comparison, downstream smoke-spread panel, observation-method strip, and open-research-questions panel. Source-verified scope: fire-driven deep convection, possible upper-troposphere/lower-stratosphere smoke injection, longer and wider dispersal of stratospheric smoke, non-universality of injection, and complementary aircraft/satellite/ground/in-situ/model observations. Pixel QA PASS with xai/grok-4.3: direct infographic, strong central mechanism, clear causal layers, coherent physics and textures, readable hierarchy, explicit caveats, no unsupported numbers or critical defects. Anti-repeat variables: vertical fire-cloud chimney, ember-to-violet atmospheric palette, cloud-stage silhouettes, atmospheric outcome branching, no atmospheric-river S-curve or prior materials/anatomy composition.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “FIRE CLOUD CHIMNEY: HOW A PYROCUMULONIMBUS LOFTS SMOKE,” explaining the real-world, non-fiction path from an intense wildfire to upper-atmosphere smoke injection. The generated canvas itself must be a polished museum-quality information design: perfectly front-facing, orthographic, straight-on, and edge-to-edge, with no poster, paper, page, frame, wall chart, placard, screen, room, desk, hands, tools, aircraft-cabin view, cast shadow around the composition, or environmental staging outside the designed layout. Use concise authoritative typography, short readable labels, restrained arrows, and no dense paragraphs.\n\nMake one enormous vertically integrated cutaway from burning forest to stratosphere the stop-scroll central mechanism, occupying most of the canvas. At the base, show an intense but non-graphic wildfire feeding a dark brown-gray smoke-and-heat column. Above it, show the column becoming a cauliflower-shaped pyrocumulus, then a deep ice-capped pyrocumulonimbus tower with a smoky lower core and bright white upper anvil. Carry a distinct charcoal smoke ribbon through the troposphere and across the tropopause into a thin spreading lower-stratospheric layer. Keep smoke, cloud droplets, ice cloud, and atmospheric layers visually distinct; never depict a literal pipe or volcano.\n\nBuild at least nine concrete visual information layers around that anchor: 1) a five-step causal ribbon labeled INTENSE FIRE → BUOYANT SMOKE COLUMN → PYROCUMULUS → DEEP THUNDERSTORM → POSSIBLE SMOKE INJECTION; 2) a tall atmospheric scale ladder labeled SURFACE, TROPOSPHERE, TROPOPAUSE, LOWER STRATOSPHERE without invented universal heights; 3) a fire-to-cloud energy panel showing heat and rising air as the initial lift, with moisture joining the developing cloud; 4) three large texture windows distinguishing soot-rich smoke, liquid cloud droplets, and upper-cloud ice crystals; 5) a PYROCUMULUS / PYROCUMULONIMBUS comparison, showing shallow cloud-capped smoke versus a deep anvil-bearing storm; 6) a branching outcome panel labeled STAYS LOWER / REACHES UPPER TROPOSPHERE / INJECTS INTO LOWER STRATOSPHERE, explicitly noting that not every fire cloud reaches the stratosphere; 7) a before-and-after vertical profile showing ordinary lower-tropospheric smoke beside a deep pyroCb plume; 8) a downstream panel showing a thin stratospheric smoke layer spreading far from the source and remaining aloft longer than lower smoke, without exact durations; 9) an observation strip labeled SATELLITE, RESEARCH AIRCRAFT, GROUND LIDAR, IN-SITU SAMPLING, MODEL; 10) a compact open-questions panel labeled WHICH FIRES? HOW HIGH? HOW MUCH SMOKE? WHAT ATMOSPHERIC EFFECTS?\n\nUse an information architecture unlike today's gecko-foot diagonal, planthopper gears, nacre fracture stack, tortoise-beetle circular shield, and atmospheric-river S-curve. Let the fire-cloud cutaway form a powerful central vertical column; place the shallow-versus-deep cloud comparison as two large side silhouettes, the three texture windows as circular magnifications crossing the column, the outcome branches in a broad upper band, the stratospheric spread panel at the top edge, and the observation strip along the bottom. Palette: ember orange and deep red only at the surface fire, smoke charcoal and umber through the lower column, storm-cloud silver, ice white, tropospheric blue, violet-gray tropopause, and restrained magenta for research annotations. Blend realistic satellite and cloud textures inside panels with crisp atmospheric cross-sections and vector arrows while keeping the overall canvas flat and orthographic.\n\nAccuracy constraints: identify pyrocumulonimbus as a fire-driven thunderstorm-like cloud; show that intense fire heat, smoke, moisture, and atmospheric conditions combine to drive deep convection; show pyroCb as a possible development beyond pyrocumulus, not an inevitable outcome; show that strong events can transport smoke into the upper troposphere or lower stratosphere; show that stratospheric smoke can spread widely and persist longer than lower-tropospheric smoke; show aircraft, satellite, ground-sensor, in-situ, and model observations as complementary research methods. Do not invent exact temperature, altitude, wind-speed, plume-mass, frequency, duration, or climate-effect numbers. Do not imply every wildfire makes a pyroCb, every pyroCb reaches the stratosphere, smoke itself is a liquid, the storm is a volcano, or researchers can yet predict every event.\n\nNo casualties, injured people, firefighting spectacle, dramatic evacuation, fake statistics, equations, bibliography, URLs, citations, logos, QR codes, watermark, decorative pseudo-text, fantasy electricity, classroom worksheet, photographed infographic artifact, glossy advertisement, or prompt-card instructions. The finished direct infographic must make the surface fire, smoke-fed convective tower, pyrocumulus-to-pyroCb transition, atmospheric layers, possible stratospheric injection, and observation methods unmistakable at thumbnail scale.",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-fire-cloud-chimney-.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-fire-cloud-chimney-.webp",
+    "color": "#4c5a6d",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How a pyrocumulonimbus fire cloud lofts wildfire smoke into the upper atmosphere",
+      "description": "A source-verified museum-quality direct infographic explaining how intense wildfire heat and smoke can build from pyrocumulus into a deep pyrocumulonimbus and, in some events, inject smoke into the upper troposphere or lower stratosphere.",
+      "sourceNote": "Sources: NASA Earth Observatory, Flying through a Fire Cloud, https://science.nasa.gov/earth/earth-observatory/flying-through-a-fire-cloud-145446/ ; National Center for Atmospheric Research Earth Observing Laboratory, INjected Smoke and PYRocumulonimbus Experiment (INSPYRE), https://www.eol.ucar.edu/field_projects/inspyre . Verified scope: pyroCb formation from intense fire-driven convection, possible upper-atmosphere smoke injection, long-range/persistent stratospheric smoke, event variability, and complementary observation methods.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-18T21:27:01Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NASA Earth Observatory",
+            "title": "Flying through a Fire Cloud",
+            "sourceType": "government-agency",
+            "url": "https://science.nasa.gov/earth/earth-observatory/flying-through-a-fire-cloud-145446/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Center for Atmospheric Research Earth Observing Laboratory",
+            "title": "INjected Smoke and PYRocumulonimbus Experiment (INSPYRE)",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.eol.ucar.edu/field_projects/inspyre"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A pyrocumulonimbus, or pyroCb, is a thunderstorm-like cloud produced when an intense fire lofts enough heat, smoke, and moisture to drive deep convection.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "PyroCb development can grow from precursor pyrocumulus convection above a wildfire, but not every pyrocumulus becomes a large pyrocumulonimbus.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A strong pyroCb acts as a vertical chimney that carries smoke through the troposphere and can inject it into the upper troposphere and lower stratosphere.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Smoke that reaches the stratosphere can spread over very large distances and remain aloft longer than smoke confined to the lower troposphere.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "PyroCb smoke injection is studied with aircraft remote sensing, in-situ instruments, ground-based sensors, satellites, and atmospheric models.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Researchers are investigating which fires produce pyroCbs, what controls direct stratospheric injection and plume magnitude, and how injected smoke changes upper-atmospheric composition and radiation.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "PyroCb occurrence and injection height depend on the coupled fire and atmospheric environment, so a large wildfire does not automatically produce a stratospheric smoke plume.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The visible cloud may show a dark smoke-fed lower column and a brighter ice-cloud tower or anvil above it.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
