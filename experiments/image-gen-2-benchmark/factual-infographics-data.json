@@ -1304,5 +1304,98 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-18-factual-infographic-factual-infographic-how-nacre-turns-cra",
+    "title": "Factual infographic: How Nacre Turns Cracks Into Detours",
+    "tests": "Real-world/non-fiction general factual infographic; materials-science domain; selected as Tuesday slot 3 after gecko adhesion and Issus nymph gears; direct-canvas orthographic layout; dominant nacre hierarchy and tortuous crack-path anchor; seven information layers; microscopy windows; monolithic-aragonite comparison; qualitative scale ladder; source-backed multi-mechanism explanation; no exact performance numbers; visually distinct from all 59 earlier factual topics; actual-pixel QA by xai/grok-4.3 passed direct-canvas, legibility, scientific coherence, and visual-impact gates.",
+    "prompt": "Create a polished museum-quality direct-canvas factual infographic titled “HOW NACRE TURNS CRACKS INTO DETOURS” about the real hierarchical fracture resistance of mother-of-pearl. The generated canvas itself is the finished orthographic information design, front-facing and edge-to-edge: no poster, paper, page, frame, screen, room, desk, tools, hands, visible outer border, cast shadow around the composition, or environmental staging. Use deep teal, pearl white, aragonite ivory, iridescent violet, coral, and restrained gold, with authoritative editorial typography, short readable labels, strong hierarchy, and abundant integrated scientific imagery.\n\nMake a large diagonal cutaway from a realistic red-abalone shell edge into an enormous staggered stack of ivory aragonite platelets the dominant stop-scroll anchor. Show a coral crack entering from the brittle outer region, then repeatedly bending along platelet interfaces instead of crossing straight through. Build seven clearly connected information layers around that anchor: (1) a whole-shell-to-layer-to-platelet-to-interface scale ladder using qualitative scale labels only; (2) a four-frame crack-path sequence labeled APPROACH, DEFLECT, BRIDGE, PULL OUT; (3) four large microscopy-style detail windows showing staggered mineral platelets, thin organic material bridging an opening interface, rough interface nanoasperities producing friction, and partially pulled-out platelets; (4) a side-by-side cause-and-effect comparison in which monolithic aragonite carries one direct major crack while nacre spreads damage through a tortuous confined path; (5) a cooperative-stack panel showing neighboring co-oriented platelet stacks sharing deformation; (6) a compact energy-dissipation flow diagram linking crack deflection, blunting and small local cracks, organic bridging, interface friction, and platelet pull-out to resistance against catastrophic crack growth; (7) a restrained bioinspiration vignette showing layered ceramic research coupons, clearly labeled NACRE-INSPIRED DESIGN rather than claiming they equal natural nacre.\n\nShow only these conservative claims: nacre is a hierarchical biological composite made mostly of aragonite platelets separated by a small organic matrix fraction; its staggered brick-and-mortar-like architecture redirects cracks; organic bridging, interface roughness and friction, platelet pull-out, crack blunting, small local cracks, and cooperative deformation across platelet stacks can dissipate energy and spread damage; the toughness comes from several cooperating mechanisms across scales, not one feature alone. Do not show exact performance numbers, unsupported universal ratios, fabrication instructions, formulas, invented statistics, bibliography, URLs, tiny citations, logos, QR codes, fantasy crystals, jewelry glamour, or dense paragraphs. Keep every visible implication within those supported claims. Photorealistic shell and microscopy textures may appear only inside the designed infographic panels; the result must never look like a photographed infographic artifact.",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-how-nacre-turns-cra.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-how-nacre-turns-cra.webp",
+    "color": "#4c5456",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "factualInfographic": {
+      "topic": "How nacre’s hierarchical structure redirects cracks and dissipates fracture energy",
+      "description": "A source-verified materials-science infographic showing how staggered aragonite platelets, thin organic interfaces, tortuous crack paths, bridging, friction, pull-out, and cooperative deformation work together across scales to make nacre damage-tolerant.",
+      "sourceNote": "Communications Materials (Springer Nature), “Nacre toughening due to cooperative plastic deformation of stacks of co-oriented aragonite platelets,” https://www.nature.com/articles/s43246-020-00078-y; Massachusetts Institute of Technology, “Multiscale mechanical studies of nacre from gastropod mollusk Trochus Nilocitus,” https://dspace.mit.edu/entities/publication/57ea71a8-ab54-42f3-bf64-3389214376ff. Verified scope: nacre composition and hierarchy, staggered platelets and organic interfaces, crack deflection and blunting, organic bridging, interface roughness/friction, platelet pull-out, cooperative deformation, and multi-scale damage tolerance.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-18T08:28:10-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Communications Materials (Springer Nature)",
+            "title": "Nacre toughening due to cooperative plastic deformation of stacks of co-oriented aragonite platelets",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s43246-020-00078-y"
+          },
+          {
+            "id": "S2",
+            "publisher": "Massachusetts Institute of Technology",
+            "title": "Multiscale mechanical studies of nacre from gastropod mollusk Trochus Nilocitus",
+            "sourceType": "university",
+            "url": "https://dspace.mit.edu/entities/publication/57ea71a8-ab54-42f3-bf64-3389214376ff"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Nacre is a hierarchical biological composite made mostly of aragonite platelets separated by a small organic matrix fraction.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The aragonite platelets form a staggered brick-and-mortar-like architecture with thin organic interfaces.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Crack deflection, crack blunting, and microcracking help create a tortuous crack path and reduce catastrophic failure.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Organic material can bridge opening platelets and dissipate energy as cracks advance.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Platelet pull-out and friction associated with interface nanoasperities contribute to nacre's resistance to fracture.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cooperative deformation across co-oriented stacks of aragonite platelets adds a larger hierarchical scale to nacre toughening.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Monolithic aragonite tends to form a more direct major crack under indentation, whereas nacre spreads damage and confines cracks near the loaded region.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Nacre's toughness emerges from several cooperating mechanisms across scales rather than from one interface feature alone.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
