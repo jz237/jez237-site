@@ -1508,5 +1508,121 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-18-factual-infographic-factual-infographic-atmospheric-rivers-",
+    "title": "Factual infographic: Atmospheric Rivers — Water in Motion",
+    "tests": "General factual infographic; topic: atmospheric-river water-vapor transport and landfall precipitation; central mechanism: continuous ocean-to-mountain vapor corridor with low-level wind, orographic uplift, rain and snow; information architecture: S-curve transect, satellite comparisons, lower-atmosphere cutaway, transport panel, benefit/hazard band, moving-versus-stalled comparison, and observation strip; direct-canvas orthographic layout; source-verified NOAA and USGS claims only; anti-repeat variables: atmospheric science, wide S-curve mechanism, Pacific navy/cyan/amber palette; pixel QA PASS via xai/grok-4.3.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “ATMOSPHERIC RIVERS: WATER IN MOTION,” explaining the real-world, non-fiction process by which long, narrow bands of strong water-vapor transport cross the ocean and release rain or snow at landfall. The generated canvas itself must be a polished museum-quality information design: perfectly front-facing, orthographic, straight-on, and edge-to-edge, with no paper edge, poster, wall chart, placard, frame, screen, room, desk, hands, tools, cast shadow around the composition, or environmental staging outside the designed layout. Use concise authoritative typography, large readable labels, restrained leader lines, and no dense paragraphs.\n\nMake one continuous ocean-to-mountain atmospheric transect the stop-scroll central mechanism, occupying most of the canvas. Start at lower-left subtropical ocean water, carry a luminous but physically believable narrow moisture corridor diagonally across the Pacific, then show landfall against a rugged coastal mountain range at right. The “river” must be visibly vapor carried in moving air, never a blue liquid tube or floating stream. Show strong low-level winds transporting a concentrated band of water vapor; at the mountain, the moist air rises, cools, condenses into cloud, and produces rain on lower slopes and snow at higher elevations. Use restrained arrows to distinguish airflow, vapor transport, uplift, and precipitation.\n\nBuild at least nine concrete information layers into one coherent direct-canvas layout: 1) the dominant ocean-to-mountain transect labeled OCEAN MOISTURE, LOW-LEVEL WINDS, NARROW VAPOR CORRIDOR, LANDFALL, UPLIFT, COOLING AND CONDENSATION, RAIN, and MOUNTAIN SNOW; 2) a four-step process ribbon labeled EVAPORATE AND GATHER → TRANSPORT → LIFT AND COOL → RAIN OR SNOW; 3) a vertical atmosphere cutaway showing the water-vapor transport concentrated in the lower atmosphere beneath a much deeper atmospheric column; 4) two large satellite-style map windows comparing a broad ordinary moisture field with a long narrow atmospheric-river plume approaching a coast; 5) an integrated-vapor-transport panel showing that transport combines WATER VAPOR and WIND, with no equation or invented threshold; 6) a mountain macro cutaway showing windward uplift, cloud condensation, rain below, and snow accumulation above; 7) a BENEFIT / HAZARD comparison: beneficial reservoir inflow and mountain snowpack versus flooded river, saturated slope, and debris-flow risk; 8) a duration comparison showing a moving plume versus one that stalls over a vulnerable watershed, with the stalled case producing more accumulated precipitation; 9) an observation strip showing SATELLITE, WEATHER RADAR, RESEARCH AIRCRAFT, and FORECAST MODEL as complementary observing and forecasting tools; 10) a variability panel labeled NOT ALL ATMOSPHERIC RIVERS ARE ALIKE, comparing weaker and stronger moisture-and-wind profiles without numerical rankings; 11) a compact scale/context globe indicating moisture transport from lower toward higher latitudes without claiming that every atmospheric river begins at the equator.\n\nUse an information architecture unlike today's diagonal gecko foot, planthopper gear anatomy, nacre fracture stack, and circular tortoise-beetle shield. Let the central vapor corridor form a broad horizontal S-curve across the middle; place the atmosphere cutaway as a tall left-edge column, the two satellite windows above the corridor, the mountain cross-section enlarged at right, the benefit/hazard and moving/stalled comparisons in two broad lower bands, and the observation strip along the bottom. Palette: deep Pacific navy, cloud white, moisture cyan, warm amber for wind vectors, forest green, granite gray, snow blue, and restrained coral for hazards. Blend processed satellite-imagery logic, physically realistic clouds and terrain, clean meteorological cross-sections, and crisp vector arrows; photographic depth may appear inside the map and landscape panels only while the overall canvas remains flat and orthographic.\n\nAccuracy constraints: describe atmospheric rivers as long, narrow regions of enhanced water-vapor transport, not literal rivers; show both moisture and wind contributing to transport; show mountain-forced ascent, cooling, condensation, rain, and snow conservatively; state that atmospheric rivers vary widely and can support water supply or create flooding and slope hazards depending on their strength, duration, location, terrain, and watershed vulnerability. Do not invent exact dimensions, percentages, discharge comparisons, category ratings, precipitation totals, forecast lead times, universal source regions, or climate-trend claims. Do not imply every atmospheric river is tropical, every event is destructive, mountain uplift is the only precipitation mechanism, or radar directly measures all vapor. No bibliography, URLs, citations, logos, QR codes, watermark, decorative pseudo-text, fantasy glow, classroom worksheet, glossy advertisement, photographed infographic artifact, or prompt-card instructions. The finished direct infographic must make the vapor corridor, wind-driven transport, mountain uplift, rain/snow release, and benefit-versus-hazard contrast unmistakable at thumbnail scale.",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-atmospheric-rivers-.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-atmospheric-rivers-.webp",
+    "color": "#34424d",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How atmospheric rivers transport water vapor and produce rain or snow at landfall",
+      "description": "A source-verified museum-quality direct-canvas infographic showing how a long, narrow corridor of wind-driven atmospheric water vapor crosses an ocean, rises over coastal mountains, and produces rain or snow, with both water-supply benefits and flood or slope hazards.",
+      "sourceNote": "Sources: National Oceanic and Atmospheric Administration, What are atmospheric rivers?, https://www.noaa.gov/stories/what-are-atmospheric-rivers ; U.S. Geological Survey, Rivers in the Sky: 6 Facts You Should Know about Atmospheric Rivers, https://www.usgs.gov/news/featured-story/rivers-sky-6-facts-you-should-know-about-atmospheric-rivers . Verified scope: long narrow water-vapor transport, low-level wind and moisture, mountain uplift and precipitation, event variability, beneficial water supply, hazards, and observation methods.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-18T19:04:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Oceanic and Atmospheric Administration",
+            "title": "What are atmospheric rivers?",
+            "sourceType": "government-agency",
+            "url": "https://www.noaa.gov/stories/what-are-atmospheric-rivers"
+          },
+          {
+            "id": "S2",
+            "publisher": "U.S. Geological Survey",
+            "title": "Rivers in the Sky: 6 Facts You Should Know about Atmospheric Rivers",
+            "sourceType": "government-agency",
+            "url": "https://www.usgs.gov/news/featured-story/rivers-sky-6-facts-you-should-know-about-atmospheric-rivers"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Atmospheric rivers are relatively long, narrow regions of enhanced water-vapor transport in the atmosphere.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Atmospheric rivers transport much of the water vapor moving outside the tropics and can carry moisture from lower latitudes toward higher latitudes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Water vapor within an atmospheric river is transported by winds, so both moisture content and wind contribute to vapor transport.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Atmospheric-river water vapor is concentrated primarily in the lower atmosphere rather than forming a liquid river in the sky.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "When moist air reaches land and is forced upward over mountains, cooling and condensation can release the transported water as rain or snow.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Atmospheric rivers vary greatly in size, strength, shape, and impacts.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Weaker atmospheric rivers can provide beneficial rain and snowpack that support water supplies.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Strong or slow-moving atmospheric rivers can produce extreme precipitation, flooding, landslides, and debris-flow hazards.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Satellite, radar, aircraft, and weather-model observations are used to study and forecast atmospheric rivers.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Integrated vapor transport is a useful way to represent the combined movement of atmospheric water vapor by the wind.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Atmospheric rivers are not all hazardous; their effects depend on intensity, duration, landfall location, terrain, and watershed vulnerability.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
