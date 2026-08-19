@@ -111,6 +111,107 @@
     }
   },
   {
+    "id": "2026-08-18-factual-infographic-factual-infographic-namib-fog-basking-b",
+    "title": "Factual infographic: Namib Fog-Basking Beetle — Drinking the Wind",
+    "tests": "Tuesday factual-infographic scheduled slot 8/8; factual_subtype: bizarre-insect-life; common name: fog-basking darkling beetle; scientific name: Onymacris unguicularis; verified unusual mechanism: during Namib fog the beetle climbs a dune crest, faces fog-laden wind in a head-down stance, collects droplets on its dorsal elytra, and channels steady runoff toward its mouth; macro plan: enormous whole-beetle hero plus large elytra-droplet, mouth-runoff, and emerge-climb-tip-drink behavioral close-ups dominate the direct canvas; evidence gate passed using European Journal of Entomology 2008 and PLOS ONE 2012; conservative claims only, no invented pumps, channels, surface chemistry, exact rates, or universal efficiency; anti-repeat variables: Namib dune ecology, steep head-down diagonal, lens-shaped elytra macro, sand-gold foundation, midnight fog palette; synchronous openai/gpt-image-2 source; byte-identical QA mirror inspected with xai/grok-4.3; actual-image QA PASS for insect-first hierarchy, coherent anatomy, physical water pathway, direct-canvas format, readable labels, detail floor, and museum-quality visual impact.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “NAMIB FOG-BASKING BEETLE: DRINKING THE WIND,” explaining the real-world, non-fiction fog-harvesting behavior of the Namib Desert darkling beetle Onymacris unguicularis. The generated canvas itself must be a polished museum-quality direct infographic: perfectly front-facing, orthographic, straight-on, edge-to-edge 2D information design, with no visible paper edge, poster, frame, border, cast shadow around the whole composition, wall, room, exhibit case, screen, desk, tools, hands, specimen tray, or environmental staging outside the designed panels. Use concise authoritative editorial typography, short readable labels, crisp leader lines, and no dense paragraphs.\n\nMake insect biology dominate at thumbnail scale. At least two-thirds of the canvas must be occupied by four LARGE, sharply detailed natural-history macro anchors. Macro 1: an enormous complete living adult Onymacris unguicularis on the knife-edge crest of a Namib sand dune at night, its glossy black hard elytra beaded with real fog droplets, facing directly into low fog-laden wind in its characteristic head-down stance; show coherent beetle anatomy with exactly six jointed legs, two antennae, a distinct head, thorax, abdomen beneath the wing covers, and feet gripping sand. Macro 2: a huge dorsal close-up of droplets striking, coalescing, and forming a steady downhill run across the dark elytra toward the head, with restrained gravity arrows and no invented channels. Macro 3: a huge side close-up of the head and mouth receiving the runoff, clearly showing the physical water path from back to head to mouth. Macro 4: a wide three-frame behavior sequence showing EMERGE FROM SAND DURING NOCTURNAL FOG → CLIMB TO DUNE CREST AND FACE THE WIND → TIP HEAD-DOWN, COLLECT, AND DRINK.\n\nBuild at least ten concrete information layers around and through those macro anchors. 1, WHOLE BEETLE ANATOMY: label ANTENNAE, HEAD, THORAX, HARD ELYTRA, SIX LEGS, and MOUTH. 2, THE WATER PATH: a four-step ribbon labeled FOG DROPLETS ARRIVE → DROPLETS COALESCE ON THE DORSAL SURFACE → GRAVITY CARRIES STEADY RUNOFF TOWARD THE HEAD → THE BEETLE DRINKS. 3, STANCE MECHANICS: compare a level walking posture with the steep head-down fog-basking posture, showing why the slope directs water toward the mouth. 4, WIND AND DUNE: a clean dune-crest cutaway with low nocturnal fog, wind arrows approaching the beetle, and the exposed ridge position. 5, THREE LARGE TEXTURE WINDOWS: airborne fog droplets, droplets merging on the hard elytra, and wet sand grains around a gripping foot. 6, STEADY VERSUS EPISODIC RUNOFF: a conservative qualitative comparison showing the beetle producing frequent small runoff toward its mouth while dune grass may release less frequent cascades; label this as an experimental comparison, with no numbers and no claim that the beetle is the more efficient collector. 7, INTERRUPTION TRADEOFF: show the exposed beetle beginning to descend and dive back into protective sand if disturbed, with the note STEADY RUNOFF CAN PAY OFF EVEN DURING A SHORT FOG-BASKING PERIOD. 8, DAY AND NIGHT ACTIVITY: a compact sun/moon strip labeled USUALLY DAY-ACTIVE / CAN EMERGE FOR NOCTURNAL FOG. 9, HABITAT CONTEXT: a restrained locator silhouette labeled NAMIB DESERT DUNE FIELD, without a precise invented range boundary. 10, WATER-BALANCE CONTEXT: a small panel labeled FOG IS A CRITICAL WATER SOURCE IN AN EXTREMELY ARID DESERT. 11, CLAIM BOUNDARY: a concise note reading THIS BEHAVIOR IS DOCUMENTED FOR ONYMACRIS UNGUICULARIS — NOT EVERY DESERT BEETLE. 12, HONEST SCALE: show the beetle beside a simple adult human fingertip silhouette for broad scale context only, without an exact measurement.\n\nUse an information architecture unlike today’s diagonal gecko foot, planthopper gear anatomy, nacre fracture stack, circular tortoise-beetle shield, atmospheric-river S-curve, vertical fire-cloud chimney, and crescent orchid bee. Let the giant black beetle form a steep dark diagonal from upper left to lower center, matching its head-down dune stance. Place the elytra runoff macro as a wide lens-shaped enlargement across the upper right, the mouth close-up as a bold circular module below it, and the three-frame behavior sequence as a descending staircase along the left edge. Run the dune cutaway as a sweeping sand-gold foundation along the bottom, with the comparison, activity, habitat, tradeoff, and claim-boundary modules nested into clear asymmetrical gaps.\n\nPalette: midnight indigo and cool fog gray, glossy charcoal-black elytra, moonlit silver droplets, Namib sand gold, muted copper for gravity and process arrows, pale ivory typography, and restrained turquoise only for water. Blend naturalistic extreme-macro photography with precise cutaway diagrams and crisp vector arrows. Render believable beetle cuticle, fine leg hairs, joint membranes, antenna segments, mouthparts, water surface tension, droplet highlights, sand grains, low fog, and wind-shaped dune texture. Photorealistic insects, fog, dune, grass, and sand may appear only as content inside the clearly designed infographic panels; the overall canvas remains flat and orthographic.\n\nAccuracy constraints: Onymacris unguicularis is a real Namib Desert darkling beetle in family Tenebrionidae. During fog it climbs to dune crests, faces fog-laden wind, adopts a characteristic head-down stance, collects water on its dorsal surface, and drinks runoff that travels toward its mouth. Experimental work observed steady runoff from its elytra, which can provide water during shorter exposed periods and allow retreat if disturbed. Show nocturnal fog-basking as behavior that can occur outside the beetle’s usual daytime activity. Do not invent microscopic channels, pumps, a special chemical coating, supernatural water attraction, exact collection rates, exact body dimensions, universal efficiency, or a claim that every desert beetle fog-basks. Do not state that the beetle is more efficient than grass; the comparison study found grass collected more over a long test while beetle runoff was steadier.\n\nAll beetles must have correct insect anatomy: exactly six legs, two antennae, coherent head-thorax-abdomen segmentation, hard paired elytra, natural joints, and no duplicated, fused, or humanoid parts. No gore, predation spectacle, monster scale, fantasy glow, electronics, pipes, drinking straw, human container, anthropomorphic face, speech bubbles, fake statistics, equations, bibliography, URLs, tiny citations, logos, QR code, watermark, signature, decorative pseudo-text, classroom worksheet, glossy advertisement, photographed chart, physical page, screen interface, or prompt-card instructions. The final direct infographic must stop scrolling through the enormous black beetle, the moonlit head-down stance, the visible droplet-to-mouth pathway, and the unmistakable emerge-climb-tip-drink sequence.",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-namib-fog-basking-b.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-namib-fog-basking-b.webp",
+    "color": "#323536",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How Onymacris unguicularis harvests Namib fog water with a head-down dune-crest stance",
+      "description": "A source-verified insect-first direct-canvas infographic showing how the real Namib fog-basking darkling beetle climbs dune crests, faces fog-laden wind, tips head-down, collects droplets on its elytra, and drinks the steady runoff.",
+      "sourceNote": "European Journal of Entomology, Why does the Namib Desert tenebrionid Onymacris unguicularis fog-bask?, https://eje.cz/pdfs/eje/2008/05/05.pdf ; PLOS ONE, Animal or Plant: Which Is the Better Fog Water Collector?, https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0034603 . Verified scope: species identity, Namib dune habitat, nocturnal fog-basking, dune-crest and head-down stance, dorsal collection, mouth-directed runoff, steady elytra runoff, and interruption tradeoff.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-19T03:28:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "European Journal of Entomology",
+            "title": "Why does the Namib Desert tenebrionid Onymacris unguicularis (Coleoptera: Tenebrionidae) fog-bask?",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://eje.cz/pdfs/eje/2008/05/05.pdf"
+          },
+          {
+            "id": "S2",
+            "publisher": "PLOS ONE",
+            "title": "Animal or Plant: Which Is the Better Fog Water Collector?",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0034603"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Onymacris unguicularis is a Namib Desert darkling beetle in the family Tenebrionidae.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "During fog, Onymacris unguicularis climbs to dune crests and positions itself in fog-laden wind.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The beetle adopts a characteristic head-down fog-basking stance.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fog water collects on the beetle's dorsal surface and runs toward the mouth, where the beetle drinks it.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Experimental observations found a steady flow of water from the beetle's elytra rather than episodic cascades.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A steady runoff can provide water during short fog-basking periods and lets the exposed beetle leave the dune ridge if disturbed.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fog is an important water source for organisms in the extremely arid Namib Desert.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Onymacris unguicularis can emerge from sand and fog-bask outside its usual daytime activity period during nocturnal fog.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The evidence does not establish that the beetle is the most efficient possible fog collector or that every desert beetle uses this behavior.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-08-18-factual-infographic-factual-infographic-living-gears-of-the",
     "title": "Factual infographic: Living Gears of the Issus Nymph",
     "tests": "factual_subtype: bizarre-insect-life; accepted common name: Issus planthopper; accepted scientific name: Issus coleoptratus; verified mechanism: juvenile hind-leg trochanter tooth strips intermesh to synchronize takeoff and disappear at the final molt; macro plan: dominant whole-nymph extreme macro plus large paired-gear cutaway, asymmetric-tooth close-up, high-speed launch sequence and nymph-versus-adult comparison; capture/style logic: orthographic edge-to-edge museum infographic in high-quality mode; anti-repeat: first archived Issus gear topic, distinct from recent gecko adhesion and parasitoid/defense insect mechanisms; actual pixel QA PASS by xai/grok-4.3 with correct six-legged anatomy, biological gears, readable labels and no material defects.",
