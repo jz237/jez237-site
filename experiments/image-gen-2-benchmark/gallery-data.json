@@ -9019,5 +9019,116 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-18-factual-infographic-factual-infographic-green-orchid-bee-th",
+    "title": "Factual infographic: Green Orchid Bee — The Perfume Workshop",
+    "tests": "Tuesday factual subtype: bizarre-insect-life; current successful count becomes 7/8; selected entry: Green Orchid Bee Perfume Workshop; accepted common name: green orchid bee; scientific name: Euglossa dilemma; verified unusual mechanism: males collect environmental volatile compounds with brush-like front tarsi, transfer them into spongy storage pouches accessed through enlarged hind tibiae, and release the bouquet during wing-fanned courtship display; macro plan delivered: dominant whole-male macro plus large front-tarsal brush, hind-tibia pouch cutaway, and collect-transfer-display sequence; evidence verified against University of Florida IFAS Extension and Nature Communications; direct-canvas infographic generated once via synchronous openai/gpt-image-2 CLI in high-quality mode; exact source verified and byte-identical QA mirror passed xai/grok-4.3 visual QA; anti-repeat: first archived Euglossa/orchid-bee perfume topic, crescent bee architecture and jewel modules distinct from today's gecko, planthopper, nacre, tortoise-beetle, atmospheric-river, and fire-cloud infographics.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “GREEN ORCHID BEE: THE PERFUME WORKSHOP,” explaining the real-world, non-fiction fragrance-collection system of the male green orchid bee, Euglossa dilemma. The generated canvas itself must be a polished museum-quality direct infographic: perfectly front-facing, orthographic, straight-on, edge-to-edge 2D information design, with no paper edge, poster, frame, border, cast shadow around the whole composition, wall, room, screen, desk, tools, hands, specimen tray, or environmental staging outside the designed panels. Use concise authoritative editorial typography, short readable labels, crisp leader lines, and no dense paragraphs.\n\nMake insect biology dominate at thumbnail scale. Use four LARGE, sharply detailed natural-history extreme-macro anchors occupying at least two-thirds of the canvas. Macro 1: an enormous living male Euglossa dilemma in three-quarter side view on textured decaying wood beside a small perfume flower, showing a coherent metallic emerald body, exactly six jointed legs, two antennae, dark transparent wings, long tongue, brush-like front tarsi, and distinctly swollen hind tibiae. Macro 2: a huge close-up of one front tarsus brushing fragrant material from the natural surface, showing dense mop-like hairs and no manufactured perfume bottle. Macro 3: a large cutaway of one enlarged hind tibia showing the small outer opening and the internal spongy fragrance-storage compartment, anatomically connected to the leg and explicitly labeled STORAGE POUCH. Macro 4: a wide three-frame behavior sequence showing COLLECT WITH FRONT BRUSH → TRANSFER TO HIND LEG → WING-FANNED COURTSHIP DISPLAY AT A PERCH, with physically continuous limb positions and restrained visible scent-flow arrows.\n\nBuild at least ten concrete information layers around and through those macro anchors. 1, WHOLE MALE ANATOMY: label ANTENNAE, LONG TONGUE, FRONT-TARSAL BRUSH, DARK TRANSPARENT WINGS, ENLARGED HIND TIBIA, and SIX LEGS. 2, PERFUME PATHWAY: a four-step ribbon labeled FIND ENVIRONMENTAL SCENT → BRUSH AND ABSORB → TRANSFER AND STORE → RELEASE DURING DISPLAY. 3, NATURAL SOURCES: three large material windows labeled PERFUME FLOWERS, WOOD-ROT FUNGI, and DECAYING VEGETATION, with the conservative note MANY ENVIRONMENTAL VOLATILES. 4, STORAGE ENGINE: the hind-tibia cutaway with OUTER OPENING, SPONGY COMPARTMENT, and COLLECTED BOUQUET, avoiding fictional plumbing. 5, MALE VERSUS FEMALE: a same-scale hindleg comparison labeled MALE: FRAGRANCE STORAGE and FEMALE: POLLEN BASKET. 6, DISPLAY LOGIC: show a male at a natural perch fanning his wings so a restrained bouquet plume leaves the hindleg area; label SEXUAL SIGNAL and do not promise mating success. 7, SPECIES SIGNATURE: a qualitative comparison of two distinct bouquet profiles labeled RELATED SPECIES CAN COLLECT DIFFERENT BLENDS, without chemical names, numbers, or a claim that every individual is identical. 8, HONEST SCALE: a silhouette beside a simple ruler labeled ABOUT HONEY-BEE SIZED, with no exact universal measurement. 9, RANGE AND HABITAT: a compact map labeled CENTRAL AMERICA / NATURALIZED SOUTH FLORIDA plus humid garden, forest-edge, and flower context, without a fake precise distribution boundary. 10, NEST AND DEVELOPMENT: a small resin-sealed cavity cutaway labeled RESIN NEST CELLS, NECTAR AND POLLEN PROVISION, DEVELOPING YOUNG, and ADULT, with no invented timing. 11, ECOLOGICAL ROLE: a concise flower-visitation vignette labeled POLLINATOR, paired with the caveat ORCHIDS ARE NOT THE ONLY FRAGRANCE SOURCE. 12, CLAIM BOUNDARY: a restrained note reading COLLECTED PERFUME IS A COURTSHIP SIGNAL — NOT A GUARANTEED MATING OUTCOME.\n\nUse an information architecture unlike today’s gecko-foot diagonal, planthopper gear mechanism, nacre fracture stack, tortoise-beetle circular shield, atmospheric-river S-curve, or vertical fire-cloud chimney. Let the enormous metallic bee sweep in a bold crescent from lower left to upper right. Embed the magnified front-tarsal brush at the crescent’s lower tip, the hind-tibia storage cutaway inside the open center, and the three-frame collect-transfer-display sequence as a broad zigzag along the right edge. Arrange source textures, male-versus-female comparison, bouquet profiles, range, scale, nest, and pollination as asymmetric jewel-shaped modules around the insect. Photorealistic bees, flowers, fungi, wood, resin, nest cells, and habitat may appear only as content inside clearly designed infographic panels, never as props around a physical chart.\n\nPalette: iridescent emerald and peacock teal for the bee, orchid magenta, resin amber, fungal cream, charcoal, ivory, and restrained coral for scent-path arrows. Render naturalistic macro-photography detail with believable metallic cuticle, fine hairs, wing veins, joint membranes, pollen grains, porous sponge-like tibial storage tissue, bark fibers, fungal texture, flower surfaces, and resin, integrated with precise natural-history cutaways and crisp vector diagrams. Keep every visible word correctly spelled, high contrast, and large enough to read.\n\nAccuracy constraints: Euglossa dilemma is a real green orchid bee. Male orchid bees gather fragrant volatile compounds from flowers, fungi, decaying vegetation, and other environmental sources; brush-like structures on the front tarsi collect material, which is transferred into spongy storage compartments accessed through openings in the enlarged hind tibiae. Males release the resulting bouquet during wing-fanned courtship displays. Related orchid-bee species can have distinct collected perfume chemistry. Females carry pollen in hindleg corbiculae and build resin nest cells provisioned with nectar and pollen for developing young. Present perfume as a sexual signal, not proof that any female will mate. Do not imply the bee manufactures perfume internally, drinks fragrance through the tongue, stores it in the abdomen, uses a human perfume bottle, gathers scents only from orchids, or sprays a toxic defense.\n\nAll bees must have credible insect anatomy: exactly six legs, two antennae, coherent head-thorax-abdomen segmentation, two pairs of wings where visible, naturally jointed limbs, and species-appropriate metallic-green coloration. No extra legs, merged limbs, humanoid pose, monster scale, gore, sting attack, fake chemicals, invented statistics, unsupported exact ranges, logos, QR code, watermark, decorative pseudo-text, bibliography, URLs, tiny citations, classroom worksheet, glossy advertisement, photographed chart, physical page, screen interface, or prompt-card instructions. The final direct infographic must stop scrolling through the enormous jeweled male, the bristled collection brush, the spongy hindleg pouch, and the unmistakable collect-transfer-display sequence.\n",
+    "image": "images/2026-08-18-factual-infographic-factual-infographic-green-orchid-bee-th.jpg",
+    "thumb": "thumbs/2026-08-18-factual-infographic-factual-infographic-green-orchid-bee-th.webp",
+    "color": "#3f3f32",
+    "date": "2026-08-18",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How male green orchid bees (Euglossa dilemma) collect, store, and display environment-derived perfume",
+      "description": "A direct-canvas natural-history infographic showing the male green orchid bee's brush-like scent collection, hind-tibia storage pouches, and wing-fanned courtship display, with conservative anatomy, source, sex-difference, habitat, nesting, scale, and pollination context.",
+      "sourceNote": "University of Florida IFAS Extension — Green Orchid Bee Euglossa dilemma Friese: https://ask.ifas.ufl.edu/publication/IN1013 ; Nature Communications — The evolution of sexual signaling is linked to odorant receptor tuning in perfume-collecting orchid bees: https://www.nature.com/articles/s41467-019-14162-6 . Verified taxonomy, anatomy, environmental fragrance collection, hind-tibia storage, courtship release, species-characteristic perfume signaling, range, nesting, and pollination scope.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-19T00:29:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Florida IFAS Extension",
+            "title": "Green Orchid Bee Euglossa dilemma Friese (Insecta: Hymenoptera: Apidae)",
+            "sourceType": "university",
+            "url": "https://ask.ifas.ufl.edu/publication/IN1013"
+          },
+          {
+            "id": "S2",
+            "publisher": "Nature Communications",
+            "title": "The evolution of sexual signaling is linked to odorant receptor tuning in perfume-collecting orchid bees",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s41467-019-14162-6"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The green orchid bee's accepted common and scientific names are green orchid bee and Euglossa dilemma, and it is an orchid bee in family Apidae and tribe Euglossini.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Adult Euglossa dilemma are metallic green, roughly honey-bee sized, with dark transparent wings and a long tongue; males have brush-like front tarsi and enlarged hind tibiae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Male orchid bees collect fragrant volatile compounds from environmental sources including flowers, fungi, and decaying vegetation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Males collect fragrance material with mop-like or brush-like structures on the front tarsi and transfer it into enlarged hind tibiae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A hole in each enlarged male hind tibia opens into a spongy internal compartment that stores collected fragrance compounds.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Male orchid bees release the resulting perfume bouquet during wing-fanned courtship displays at perching sites.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Perfume chemistry and collection behavior can differ between closely related orchid-bee species and contribute to species-characteristic sexual signaling, but perfume should not be presented as a guaranteed mating outcome.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Female Euglossa dilemma have pollen-carrying corbiculae on the hind legs rather than the male fragrance-storage tibiae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Female green orchid bees build resin nest cells in enclosed cavities and provision developing young with nectar and pollen.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Euglossa dilemma belongs to a tropical New World orchid-bee lineage, occurs in Central America, and is established as a naturalized species in South Florida.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Orchid bees are important Neotropical pollinators, while Euglossa dilemma can collect fragrance from non-orchid sources and does not require a matching orchid to persist in naturalized Florida.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
