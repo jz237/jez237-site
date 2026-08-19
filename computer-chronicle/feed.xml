@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 18 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 19 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of January 23-29, 1984 — Macintosh Arrives: Apple Bets $2,495 on the Mouse</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-01-23</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-23</guid>
+      <pubDate>Wed, 19 Aug 2026 12:00:00 GMT</pubDate>
+      <description>The compact 128K machine brings Lisa-style windows, icons and graphics to a far wider market—and seeks a place beside the Apple II and IBM PC. CUPERTINO, Calif.—Apple Computer unveiled the Macintosh on January 24, placing a mouse-controlled graphical desktop inside a compact 20-pound machine carrying a suggested retail price of $2,495. Apple chairman Steven P. Jobs declared that the company expected Macintosh to become a third industry standard alongside the Apple II and IBM PC. Also this week: Lisa 2 Family Cuts the Price of Apple’s Workstation · MacWrite and MacPaint Lead the Software Parade · Atari Reorders the Front Office as the Game Crash Bites · Satellite Television Aims Straight at the Home.</description>
+    </item>
     <item>
       <title>Week of January 16-22, 1984 — APPLE&apos;S ‘1984’ SPOT PUTS MACINTOSH ON THE NATIONAL STAGE</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-01-16</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-12</guid>
       <pubDate>Fri, 31 Jul 2026 12:00:00 GMT</pubDate>
       <description>The portable pioneer seeks Chapter 11 protection after demand collapses and suppliers are left owed $45 million. SAN FRANCISCO — Osborne Computer sought bankruptcy protection September 13, a stunning reversal for the company that turned a suitcase-sized computer and a rich software bundle into one of personal computing’s first spectacular success stories. Also this week: Shakeout Reaches Computers and Cartridges · M.U.L.E. and Archon Turn Rivalry into Art · A Portable That Really Fits the Lap.</description>
-    </item>
-    <item>
-      <title>Week of September 5-11, 1983 — BIG BLUE SETS THE STANDARD</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-09-05</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-05</guid>
-      <pubDate>Thu, 30 Jul 2026 12:00:00 GMT</pubDate>
-      <description>IBM compatibility redraws the personal-computer map as a booming market enters its first great shakeout. NEW YORK — The personal-computer business has reached the moment when a boom begins to choose its standard. TIME&apos;s September 5 survey reports that IBM, only two years after introducing its Personal Computer, has captured 26 percent of unit sales and displaced Apple from first place. Also this week: Games by Telephone Move Closer to Home · Draft-Aide Puts CAD on the Personal Computer · Young Computer Experts Teach the Teachers.</description>
     </item>
   </channel>
 </rss>
