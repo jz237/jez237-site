@@ -1,8 +1,401 @@
 {
-  "generatedAt": "2026-08-18T12:00:00Z",
+  "generatedAt": "2026-08-19T12:03:31.696Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-08-19",
+      "historicDate": "1984-01-23",
+      "displayDate": "Week of January 23-29, 1984",
+      "edition": "Issue 078 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Landmark launch edition on warm aged newsprint",
+        "motifs": [
+          "compact Macintosh",
+          "mouse and desktop icons",
+          "3.5-inch disk",
+          "1984 broadcast glow"
+        ],
+        "layout": "Extra-edition broadsheet with a dominant Macintosh lead, dense columns, charts and boxed sidebars"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of January 23-29, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Dominant upper-page Macintosh launch package",
+        "secondaryRail": "Lisa 2, software, Atari and Gadget Desk",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "deep red",
+        "secondary": "IBM blue",
+        "texture": "warm newsprint, halftone screens and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-01-23.jpg",
+        "alt": "GPT Image 2 vintage newspaper front page for the Macintosh launch week of January 23, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "milestone": {
+        "title": "Apple launches the Macintosh",
+        "note": "The January 24 debut put a mass-market graphical desktop, icons, windows, mouse control, and consistent application design at the center of personal computing's future."
+      },
+      "editorNote": "Extra Edition: Apple has placed the mouse, windows and pictures at the center of a $2,495 personal computer—and challenged the rest of the industry to follow.",
+      "morningLine": "Cupertino opens a new window on personal computing while Atari regroups and home-computer shelves keep moving.",
+      "lead": {
+        "headline": "Macintosh Arrives: Apple Bets $2,495 on the Mouse",
+        "dek": "The compact 128K machine brings Lisa-style windows, icons and graphics to a far wider market—and seeks a place beside the Apple II and IBM PC.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "body": [
+          "CUPERTINO, Calif.—Apple Computer unveiled the Macintosh on January 24, placing a mouse-controlled graphical desktop inside a compact 20-pound machine carrying a suggested retail price of $2,495. Apple chairman Steven P. Jobs declared that the company expected Macintosh to become a third industry standard alongside the Apple II and IBM PC.",
+          "The specifications make the wager concrete: 128KB of memory, 64KB of read-only memory, a crisp black-and-white screen, one 3.5-inch disk drive, two serial ports, an external-drive connection and built-in sound. Menus, icons and overlapping windows replace much command-line ritual, while cut and paste lets words and pictures travel between documents.",
+          "For its first 100 days, Macintosh buyers receive MacWrite and MacPaint without extra charge. MacWrite mixes typefaces, sizes and illustrations; MacPaint supplies brushes, patterns, shapes and erasers. Microsoft Multiplan is available immediately, Lotus has promised a Macintosh version of 1-2-3, and Apple says more than 100 outside companies are developing products.",
+          "The polish comes with limits. Macintosh runs one major application at a time, and a contemporary test found that changing programs to move a picture into a letter could take 20 to 30 seconds. Its 128K memory and single internal drive leave little room to spare, even as the interface makes the computer feel unusually approachable.",
+          "Apple is backing the launch with a $15 million, 100-day advertising drive following Ridley Scott's nationally aired “1984” commercial during the January 22 Super Bowl. A Fremont factory is prepared to turn out one Macintosh every 27 seconds; now dealers, universities, offices and home users will decide whether Apple's new desktop language becomes computing's next vernacular."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Lisa 2 Family Cuts the Price of Apple’s Workstation",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1,
+            0
+          ],
+          "body": [
+            "Apple also introduced three Lisa 2 configurations priced from roughly $3,500 to $5,500—far below the original Lisa's near-$10,000 ticket. The machines offer more storage and power than Macintosh and can keep several applications running at once.",
+            "The shared 3.5-inch disk format and planned software connections make Lisa 2 the senior member of a family rather than a solitary executive machine. Jobs conceded that the first Lisa suffered from high price, thin software support and an overly narrow Fortune 500 sales focus."
+          ]
+        },
+        {
+          "headline": "MacWrite and MacPaint Lead the Software Parade",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "body": [
+            "Apple's two bundled programs are more than demonstrations: they define the new machine's point-and-click vocabulary. MacWrite combines varied fonts with search, replacement and pasted illustrations; MacPaint turns the mouse into a pencil, brush, eraser and geometric drafting tool.",
+            "Apple expects independent publishers to supply about 90 percent of Macintosh software and forecasts at least 500 packages by year's end. Microsoft, Lotus and Software Publishing Corporation are among the named supporters, while Apple's coming MacTerminal is meant to connect the compact machine to larger systems."
+          ]
+        },
+        {
+          "headline": "Atari Reorders the Front Office as the Game Crash Bites",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4,
+            5,
+            6
+          ],
+          "body": [
+            "Atari realigned management on January 24 as James Morgan continued the difficult work of stabilizing Warner Communications' battered games subsidiary. The change follows steep 1983 reversals and extensive layoffs amid the contraction of the American console market.",
+            "The home-computer side remains active despite the corporate strain. Period catalogs show games, disk drives, printer gear and utilities still arriving for the Atari 400/800 and XL audience—a busy shelf beneath a company fighting to restore order above it."
+          ]
+        },
+        {
+          "headline": "Satellite Television Aims Straight at the Home",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            7
+          ],
+          "body": [
+            "The nation's first direct-to-home satellite television service is preparing to begin operation, UPI reported January 25. The plan promises pictures delivered from orbit without depending on a local broadcaster or a neighborhood cable plant.",
+            "Receiving equipment and economics will determine how broadly the experiment travels, but the debut marks home satellite reception as one of consumer electronics' most forward-looking distribution bets."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Apple Macintosh",
+          "summary": "128K compact graphical computer with mouse, monochrome screen and 3.5-inch drive; $2,495.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            2
+          ]
+        },
+        {
+          "title": "Apple Lisa 2 family",
+          "summary": "Three multitasking configurations priced at roughly $3,500-$5,500.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Percom AT88 disk drives",
+          "summary": "Double-density Atari drives with parallel printer port; $529 single or $829 dual.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "MacWrite & MacPaint",
+          "detail": "Word processing and bitmap art; included during the first 100 days."
+        },
+        {
+          "name": "Microsoft Multiplan",
+          "detail": "Financial planning for Macintosh; available at launch."
+        },
+        {
+          "name": "Home-Calc",
+          "detail": "Atari spreadsheet; $29.95 cassette or $39.95 disk."
+        },
+        {
+          "name": "Smoothwriter",
+          "detail": "Atari/Epson word processor; $79 plus shipping."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Capture the Flag — Atari computers",
+            "Flip and Flop — Atari computers",
+            "Enchanter — Atari computers",
+            "Operation Whirlwind — Atari computers",
+            "Activision Decathlon — Atari 2600"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "1. Owner of a Lonely Heart — Yes",
+            "2. Karma Chameleon — Culture Club",
+            "3. Talking in Your Sleep — The Romantics",
+            "4. Joanna — Kool & the Gang",
+            "5. Break My Stride — Matthew Wilder"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Silkwood",
+            "2. Terms of Endearment",
+            "3. Never Cry Wolf",
+            "4. Hot Dog... The Movie",
+            "5. The Lonely Guy"
+          ]
+        },
+        {
+          "label": "Software Shelf",
+          "items": [
+            "MacWrite",
+            "MacPaint",
+            "Microsoft Multiplan",
+            "Home-Calc",
+            "Smoothwriter"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple Macintosh",
+          "price": "$2,495",
+          "note": "MacWrite and MacPaint included for first 100 days"
+        },
+        {
+          "item": "Apple Lisa 2 family",
+          "price": "$3,500-$5,500",
+          "note": "Three new configurations"
+        },
+        {
+          "item": "Eagles",
+          "price": "$39.95",
+          "note": "48K Atari disk strategy game"
+        },
+        {
+          "item": "Shufflebuffer",
+          "price": "$299-$445",
+          "note": "32K to 128K random-access printer buffer"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Toll-Free Challenger",
+          "text": "Satellite Business Systems introduces a toll-free long-distance business service as post-divestiture competition takes shape."
+        },
+        {
+          "headline": "Bell Breakup on the Books",
+          "text": "AT&T's final consolidated report reflects the historic Bell System divestiture that took effect January 1."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Owner of a Lonely Heart",
+          "artist": "Yes"
+        },
+        {
+          "rank": 2,
+          "title": "Karma Chameleon",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 3,
+          "title": "Talking in Your Sleep",
+          "artist": "The Romantics"
+        },
+        {
+          "rank": 4,
+          "title": "Joanna",
+          "artist": "Kool & the Gang"
+        },
+        {
+          "rank": 5,
+          "title": "Break My Stride",
+          "artist": "Matthew Wilder"
+        }
+      ],
+      "periodAd": {
+        "headline": "The Mouse Moves In",
+        "summary": "Macintosh puts icons, windows, words and pictures beneath one small pointer.",
+        "tagline": "Apple Macintosh — suggested retail $2,495"
+      },
+      "market": {
+        "headline": "Atari Reshuffles Amid Industry Contraction",
+        "summary": "Management changes underscore the pressure created by the 1983 video-game collapse, even as Atari computer products continue reaching shelves.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          4,
+          5,
+          6
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Reagan Orders NASA Toward a Permanently Crewed Space Station",
+        "summary": "In his January 25 State of the Union address, President Reagan directed NASA to develop a permanently manned station within a decade and invited allied participation.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Sharp Puts Solar Power in a Credit-Card Calculator",
+        "summary": "The Sharp EL-685 carries an eight-digit LCD, raised keys and a solar cell designed for natural or artificial light.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Macintosh launch date, price, specifications and bundled software",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "Atari management realignment",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Games, utilities and peripherals",
+            "confidence": "same-month",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          },
+          {
+            "claim": "Music and movie rankings",
+            "confidence": "week-specific",
+            "sourceRefs": [
+              10,
+              11
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Apple Computer press release, January 24, 1984",
+          "url": "https://web.stanford.edu/dept/SUL/sites/mac/primary/docs/pr1.html"
+        },
+        {
+          "label": "Christian Science Monitor: Apple unveils Macintosh, January 24, 1984",
+          "url": "https://www.csmonitor.com/1984/0124/012418.html"
+        },
+        {
+          "label": "Christian Science Monitor: Macintosh review, January 24, 1984",
+          "url": "https://www.csmonitor.com/1984/0124/012419.html"
+        },
+        {
+          "label": "UPI: Macintosh launch and 1984 commercial, January 24, 1984",
+          "url": "https://www.upi.com/Archives/1984/01/24/Orwellian-TV-commercial-highlights-launch-of-Apples-Macintosh-computer/7206443768400/"
+        },
+        {
+          "label": "New York Times: Atari management realignment, January 24, 1984",
+          "url": "https://www.nytimes.com/1984/01/24/business/business-people-atari-realignment-of-management-set.html"
+        },
+        {
+          "label": "Hi-Res Magazine previews, January 1984",
+          "url": "https://www.atarimagazines.com/hi-res/v1n2/previews.php"
+        },
+        {
+          "label": "Antic Magazine new products, January 1984",
+          "url": "https://www.atarimagazines.com/v2n10/NewProducts.php"
+        },
+        {
+          "label": "UPI: direct-to-home satellite television, January 25, 1984",
+          "url": "https://www.upi.com/Archives/1984/01/25/The-nations-first-direct-to-home-satellite-TV-service-will-be/2400443854800/"
+        },
+        {
+          "label": "UPI: Sharp solar calculator, January 25, 1984",
+          "url": "https://www.upi.com/Archives/1984/01/25/Solar-calculator/6610443854800/"
+        },
+        {
+          "label": "UPI: Reagan calls for space station, January 25, 1984",
+          "url": "https://www.upi.com/Archives/1984/01/25/Reagan-calls-for-space-station-within-a-decade/6890443854800/"
+        },
+        {
+          "label": "Billboard Hot 100, week ending January 28, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-01-28"
+        },
+        {
+          "label": "Box Office Mojo weekend chart, January 27-29, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W04/"
+        },
+        {
+          "label": "UPI: SBS toll-free telephone service, January 23, 1984",
+          "url": "https://www.upi.com/Archives/1984/01/23/Satellite-Business-Systems-Monday-introduced-a-toll-free-long-distance-telephone/6846443682000/"
+        },
+        {
+          "label": "UPI: final AT&T report reflects breakup, January 26, 1984",
+          "url": "https://www.upi.com/Archives/1984/01/26/Final-ATT-report-reflects-breakup/4602443941200/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "WANTED: MAC DEVELOPERS",
+          "copy": "Applications, utilities and ideas for a new mouse-driven desk."
+        },
+        {
+          "headline": "ATARI DISKS & DRIVES",
+          "copy": "Games, double-density storage and printer helpers for the busy 8-bit desk."
+        }
+      ]
+    },
     {
       "currentDate": "2026-08-18",
       "historicDate": "1984-01-16",
