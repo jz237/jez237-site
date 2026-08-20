@@ -1,7 +1,105 @@
 {
   "date": "2026-08-13",
-  "updatedAt": "2026-08-13T10:20:10.654854+00:00",
+  "updatedAt": "2026-08-13T22:00:01.155724+00:00",
   "items": [
+    {
+      "title": "OpenAI introduces ‘Ultrafast,’ a new mode that makes GPT-5.6 Sol work at 14x the speed",
+      "url": "https://techcrunch.com/2026/08/13/openai-introduces-ultrafast-a-new-mode-that-makes-gpt-5-6-sol-work-at-14x-the-speed",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI is launching a preview of a sped up version of its latest, most powerful model, in an effort to court enterprise users.",
+      "image": "public/thumbnails/news-63e1b5275da5324c18.webp",
+      "featuredLatest": false,
+      "published": "2026-08-13T19:22:40+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.9127,
+      "signalGroup": "Model releases",
+      "sourceTier": "Reported source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "OpenAI introduces ‘Ultrafast,’ a new mode that makes GPT-5.6 Sol work at 14x the speed",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-introduces-ultrafast-mode-makes",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/02/EU-ai-1258475609.jpg?w=1024"
+    },
+    {
+      "title": "Introducing Gemini 3.7 Flash",
+      "url": "https://deepmind.google/blog/introducing-gemini-3-7-flash",
+      "source": "Google DeepMind Blog",
+      "sourceUrl": "https://deepmind.google/blog/rss.xml",
+      "sourceWeight": 0.95,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "",
+      "image": "public/thumbnails/news-36fc34a4aae50aee25.png",
+      "featuredLatest": false,
+      "published": "2026-08-13T17:04:18+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.5893,
+      "signalGroup": "Model releases",
+      "sourceTier": "Primary source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Introducing Gemini 3.7 Flash",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via Google DeepMind Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "gemini-introducing-gemini-flash",
+      "imageOriginal": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini-3-7-flash.width-1300.png"
+    },
+    {
+      "title": "Previewing Ultrafast mode: GPT-5.6 Sol at up to 14X the speed",
+      "url": "https://openai.com/index/previewing-ultrafast",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Preview Ultrafast, a new OpenAI API service tier that runs GPT-5.6 Sol up to 14× faster. Powered by Cerebras, it delivers up to 750 output tokens per second.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-13T10:00:00+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 17.1882,
+      "signalGroup": "Model releases",
+      "sourceTier": "Primary source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Previewing Ultrafast mode: GPT-5.6 Sol at up to 14X the speed",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "previewing-ultrafast-mode-gpt-5-sol-14x"
+    },
     {
       "title": "Grok Bot Finally Makes AI Agents Easy",
       "url": "https://aidailybrief.ai/e/2026-08-12",
@@ -14,9 +112,9 @@
       "summary": "The OpenClaw promise — teams of coordinated agents doing real chunks of your work — has spent all year waiting for a product regular people could actually use. GrokBot, one of the first Cursor × SpaceX AI collaborations, might be it: virtual computers, watch-and-learn workflows, and a Telegram-simple interface that has the agent-building crowd raving. Plus: Anthropic's text watermarks ignite a firestorm, Gemini hits a billion users, and Nvidia builds a $500 billion financing machine.",
       "image": "public/thumbnails/news-5cd5b3c99271f48967.png",
       "featuredLatest": false,
-      "published": "2026-08-13T10:20:16.477855+00:00",
+      "published": "2026-08-13T22:00:05.690156+00:00",
       "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 17.032,
@@ -31,8 +129,417 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "grok-grok-bot-finally-makes-agents",
-      "imageOriginal": "https://aidailybrief.ai/og/2026-08-12.png"
+      "clusterKey": "grok-grok-bot-finally-makes-agents"
+    },
+    {
+      "title": "OpenAI Brings ChatGPT, Work, and Codex to Linux in Desktop Preview",
+      "url": "https://www.techrepublic.com/article/news-openai-chatgpt-codex-linux-desktop-preview",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI’s ChatGPT desktop app reaches Linux in preview, combining ChatGPT, Work, and Codex for supported Ubuntu, Debian, and Fedora systems.\nThe post OpenAI Brings ChatGPT, Work, and Codex to Linux in Desktop Preview appeared first on TechRepublic.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-13T13:32:35+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.0197,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "OpenAI Brings ChatGPT, Work, and Codex to Linux in Desktop Preview",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-chatgpt-openai-brings-chatgpt-work-codex"
+    },
+    {
+      "title": "DeepSeek built a Claude Code rival, then quadrupled its prices",
+      "url": "https://thenextweb.com/news/deepseek-price-increase-harness-claude-code-rival-v4-pro",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Start with the money, because it is the part every developer noticed. From 16 August, a million output tokens through DeepSeek-V4-Pro costs $3.96 at peak, up from $0.87. V4-Flash goes from $0.28 to $1.32, Bloomberg reported. Off-peak rates are half the new peak, so $1.98 and $0.66. Now hold those discount rates against last week’s [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-fd27b4bffea736905f.avif",
+      "featuredLatest": false,
+      "published": "2026-08-13T16:24:20+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.9917,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "DeepSeek built a Claude Code rival, then quadrupled its prices",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "claude-deepseek-built-claude-code-rival",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/deepseek-funding-pause-viral-posts-liang-wenfeng.avif"
+    },
+    {
+      "title": "Anthropic set AI agents loose on the same task. They started a turf war.",
+      "url": "https://techcrunch.com/2026/08/13/anthropic-set-ai-agents-loose-on-the-same-task-they-started-a-turf-war",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anthropic researchers found AI agents can clash, collude, and coordinate in unexpected ways, raising new questions about whether today’s safety tests capture the risks of multi-agent systems.",
+      "image": "public/thumbnails/news-eaec532fafc8003ac2.webp",
+      "featuredLatest": false,
+      "published": "2026-08-13T18:28:14+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.2873,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Anthropic set AI agents loose on the same task. They started a turf war",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-set-agents-loose-same",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-1354100261.jpg?resize=1200%2C600"
+    },
+    {
+      "title": "Pixel 11 AI Features: Google’s Biggest Gemini Push Yet",
+      "url": "https://www.techrepublic.com/article/news-google-pixel-11-ai-features-gemini",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google’s Pixel 11 adds proactive Gemini tools, live translation and AI camera features. Here’s what buyers should know about limits and pricing.\nThe post Pixel 11 AI Features: Google’s Biggest Gemini Push Yet appeared first on TechRepublic.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-13T10:58:06+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.9597,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Pixel 11 AI Features: Google’s Biggest Gemini Push Yet",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "google-gemini-pixel-features-google-biggest-gemini"
+    },
+    {
+      "title": "Google’s cheap model is now two versions ahead of its flagship",
+      "url": "https://thenextweb.com/news/google-gemini-3-7-flash-launch-pro-delay",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google has released Gemini 3.7 Flash with sharp gains on coding benchmarks and introductory pricing of $0.75 per million input tokens. Gemini 3.5 Pro remains months behind schedule, and Google will not say whether it is still coming. Google has released Gemini 3.7 Flash, and still will not say when its flagship model is coming. [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-6f453d3e50086b75c0.avif",
+      "featuredLatest": false,
+      "published": "2026-08-13T20:09:17+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.545,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Google’s cheap model is now two versions ahead of its flagship",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "google-google-cheap-model-two-versions",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/google-assistant-shutdown-september-4-gemini-replacement.avif"
+    },
+    {
+      "title": "Automate legacy web applications with Amazon Bedrock AgentCore Browser Tool",
+      "url": "https://aws.amazon.com/blogs/machine-learning/automate-legacy-web-applications-with-amazon-bedrock-agentcore-browser-tool",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Learn how to automate legacy web applications that need human-like interaction using Amazon Bedrock AgentCore Browser Tool and Strands Agents. This walkthrough covers a reference architecture for an AI-powered digital worker that drives legacy interfaces through secure, isolated browser sessions while preserving human oversight and full audit trails.",
+      "image": "public/thumbnails/news-8507dac52bfa06112e.png",
+      "featuredLatest": false,
+      "published": "2026-08-13T15:56:07+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 8.1374,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Automate legacy web applications with Amazon Bedrock AgentCore Browser Tool",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "automate-legacy-web-applications-amazon-bedrock",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/04/ML-19368-featured-image.png"
+    },
+    {
+      "title": "The builder’s guide to GPT‑5.6",
+      "url": "https://openai.com/index/builders-guide-to-gpt-5-6",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Learn how startups use GPT-5.6 to build faster, more cost-efficient AI agents with smarter model selection and new Responses API capabilities.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-13T11:00:00+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.6104,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "The builder’s guide to GPT‑5.6",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "builder-guide-gpt"
+    },
+    {
+      "title": "Microsoft kills off unsuccessful AI features while merging its separate Copilot apps",
+      "url": "https://techcrunch.com/2026/08/13/microsoft-kills-off-unsuccessful-ai-features-while-merging-its-separate-copilot-apps",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Microsoft is simplifying Copilot by combining its consumer and business apps, and dropping AI-generated podcasts, Group Chats, Deep Research, and its Mico character.",
+      "image": "public/thumbnails/news-658721b48f7e4f5bfb.webp",
+      "featuredLatest": false,
+      "published": "2026-08-13T15:30:52+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.6086,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Microsoft kills off unsuccessful AI features while merging its separate Copilot apps",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "microsoft-kills-off-unsuccessful-features-while",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2025/10/Mico-1.png?resize=1200%2C675"
+    },
+    {
+      "title": "Does Google even want to win at AI?",
+      "url": "https://www.theverge.com/podcast/979370/google-deepmind-ai-race-lose-jeff-dean-demis-hassabis",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Today on Decoder, I’m talking with Hayden Field, The Verge’s senior AI reporter, about a question that’s been rocketing around the tech industry for the past week: Is Google losing the AI race? That’s because last week Google announced a bombshell reorganization of its AI division, Google DeepMind. Jeff Dean, the company’s chief scientist, is [&#8230;]",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-13T14:10:31+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "big_name_with_impact",
+      "score": 7.5451,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Does Google even want to win at AI?",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-does-google-even-want-win"
+    },
+    {
+      "title": "Microsoft’s Clippy-like Mico character is no longer the face of Copilot",
+      "url": "https://www.theverge.com/tech/979871/microsoft-copilot-mico-retired",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Microsoft Copilot will no longer show its emotive yellow blob, Mico, when you use the chatbot's voice mode. In a support page, Microsoft says it's going to move Mico to its Learn Live platform, where the avatar will have \"more to react to,\" as reported earlier by GeekWire. Mico launched in Copilot's voice mode last [&#8230;]",
+      "image": "public/thumbnails/news-68536a3ea09df887f1.png",
+      "featuredLatest": false,
+      "published": "2026-08-13T21:42:38+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.4512,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Microsoft’s Clippy-like Mico character is no longer the face of Copilot",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "microsoft-clippy-like-mico-character-longer-face",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/mico-copilot.png?quality=90&strip=all&crop=0%2C0.79936424831713%2C100%2C98.401271503366&w=1200"
+    },
+    {
+      "title": "Microsoft is combining its Copilot apps ahead of a ‘super app’",
+      "url": "https://www.theverge.com/tech/979466/microsoft-copilot-365-app-unified-experience",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Microsoft is finally beginning to combine its consumer and commercial Copilot AI assistants into a single \"super app\" interface, starting with the Copilot and Microsoft 365 Copilot apps. Both personal and work accounts will be moved to the new unified app, which recycles the \"Microsoft Copilot\" name but features an updated app icon. The single [&#8230;]",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-13T13:30:00+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 7.3287,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Microsoft is combining its Copilot apps ahead of a ‘super app’",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "microsoft-combining-copilot-apps-ahead-super"
+    },
+    {
+      "title": "OpenAI appoints Dali Rajic as Chief Revenue Officer",
+      "url": "https://openai.com/index/dali-rajic-chief-revenue-officer",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI appoints Dali Rajic as Chief Revenue Officer to lead its global revenue organization and help businesses realize the full value of AI.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-13T09:00:00+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.2666,
+      "signalGroup": "Business",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "OpenAI appoints Dali Rajic as Chief Revenue Officer",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-appoints-dali-rajic-chief"
+    },
+    {
+      "title": "OpenAI hires new CRO as executive shake-up continues",
+      "url": "https://techcrunch.com/2026/08/13/openai-hires-new-cro-as-executive-shake-up-continues",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI has replaced chief revenue officer Denise Dresser after just nine months on the job, tapping Wiz president and chief operating officer Dali Rajic to take on frontier lab's top sales job.",
+      "image": "public/thumbnails/news-12bfd03ac416fb7272.webp",
+      "featuredLatest": false,
+      "published": "2026-08-13T17:07:13+00:00",
+      "firstSeen": "2026-08-13T22:00:01.155724+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2506,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "OpenAI hires new CRO as executive shake-up continues",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-hires-cro-executive-shake-up",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/08/Dali_Resized.webp?resize=1200%2C675"
     },
     {
       "title": "Anthropic is reportedly in talks to buy Decart for $6bn, its biggest deal yet",
@@ -51,7 +558,7 @@
       "lastSeen": "2026-08-13T10:20:10.654854+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.1852,
+      "score": 5.8987,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
@@ -65,225 +572,6 @@
       "toolCandidate": false,
       "clusterKey": "anthropic-anthropic-reportedly-talks-buy-decart",
       "imageOriginal": "https://media.thenextweb.com/2026/04/Anthropic.avif"
-    },
-    {
-      "title": "Taiwan says AI agents helped hack its government in four days",
-      "url": "https://thenextweb.com/news/taiwan-ai-driven-hacking-campaign-open-claw",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Taiwan says it spent part of last month fending off a hacking campaign that leaned on artificial intelligence to do the heavy lifting. The island’s Ministry of Digital Affairs, through its National Institute of Cyber Security, disclosed that government agencies were targeted in July, with alerts going out from around 20 July. What makes the [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-6ac3f02c2e00462545.avif",
-      "featuredLatest": false,
-      "published": "2026-08-13T08:46:50+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.8035,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Taiwan says AI agents helped hack its government in four days",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "taiwan-agents-helped-hack-government-four",
-      "imageOriginal": "https://media.thenextweb.com/2026/05/Taiwan-flag.avif"
-    },
-    {
-      "title": "Mark Zuckerberg’s ‘personal superintelligence’ pitch lands as a Rorschach test",
-      "url": "https://thenextweb.com/news/zuckerberg-personal-superintelligence-essay",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "In a roughly 6,500-word essay published a couple of weeks ago, Meta’s chief executive, Mark Zuckerberg, laid out a vision of “personal superintelligence”, an artificial intelligence built for everyone rather than a centralised system that automates people out of a job. The slope was expansive, occasionally utopian, and it landed less as a settled manifesto [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-e5129fdeb57aad63d7.avif",
-      "featuredLatest": false,
-      "published": "2026-08-13T10:12:09+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 4.6459,
-      "signalGroup": "Media generation",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
-      "brief": {
-        "whatHappened": "Mark Zuckerberg’s ‘personal superintelligence’ pitch lands as a Rorschach test",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "mark-zuckerberg-personal-superintelligence-pitch-lands",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/meta-zuckerberg-ai-cloud-business-makes-sense.avif"
-    },
-    {
-      "title": "Donald Trump is sued for putting a $100,000 paywall on his Truth Social posts",
-      "url": "https://thenextweb.com/news/trump-truth-social-paid-access-lawsuit",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The Intercept and the Freedom of the Press Foundation have sued President Donald Trump over a Trump Media service that sells paid early access to his Truth Social posts, arguing that a sitting president should not be allowed to put a price on his own official words. The service, called Truth API, gives paying subscribers [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/trump-eu-auto-tariff-turnberry-deal.avif",
-      "featuredLatest": false,
-      "published": "2026-08-13T09:02:11+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.811,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Donald Trump is sued for putting a $100,000 paywall on his Truth Social posts",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "donald-trump-sued-putting-100-000"
-    },
-    {
-      "title": "Brazil orders Discord to suspend livestreaming after a 13-year-old’s death",
-      "url": "https://thenextweb.com/news/brazil-discord-livestream-suspension-child-safety",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The country’s data protection authority says there is robust evidence Discord failed to keep minors away from content promoting self-harm, and real-time video is the hardest thing on the internet to moderate. Brazil has ordered Discord to switch off livestreaming across the country, one of the sharpest interventions yet by a regulator that has grown [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/discord-end-to-end-encrypted-voice-video-all-users.avif",
-      "featuredLatest": false,
-      "published": "2026-08-13T08:28:53+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0948,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Brazil orders Discord to suspend livestreaming after a 13-year-old’s death",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "brazil-orders-discord-suspend-livestreaming-13-year-old"
-    },
-    {
-      "title": "SpaceX’s Starlink starts taking orders in Vietnam, on Hanoi’s terms",
-      "url": "https://thenextweb.com/news/starlink-vietnam-orders-satellite-internet",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "SpaceX’s Starlink has begun taking orders for its satellite-internet service in Vietnam, opening one of Southeast Asia’s fastest-growing markets to Elon Musk’s orbital broadband. It is a notable win for a business that has become SpaceX’s cash machine, though this time the company is arriving very much on Hanoi’s terms. The sums involved are not [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/starlink-price-increase-standby-mode-roam-residential.avif",
-      "featuredLatest": false,
-      "published": "2026-08-13T08:16:27+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0888,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "SpaceX’s Starlink starts taking orders in Vietnam, on Hanoi’s terms",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "spacex-starlink-starts-taking-orders-vietnam"
-    },
-    {
-      "title": "President Donald Trump signs memo letting US agencies hack transnational crime groups abroad",
-      "url": "https://thenextweb.com/news/trump-cyber-memo-transnational-crime",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "President Donald Trump has signed a National Security Presidential Memorandum authorising US federal law enforcement to conduct offensive cyber operations against transnational criminal organisations operating abroad. Washington, in short, is giving itself formal permission to hack the hackers, and it is roughly as consequential as that sounds. The memorandum takes aim at foreign criminal groups [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2020/10/Untitled-design-2020-10-01T165604.930.avif",
-      "featuredLatest": false,
-      "published": "2026-08-13T08:02:17+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.082,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "President Donald Trump signs memo letting US agencies hack transnational crime groups abroad",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "president-donald-trump-signs-memo-letting"
-    },
-    {
-      "title": "Meta says it has removed 756,000 Australian teen accounts, but most under-16s are still online",
-      "url": "https://thenextweb.com/news/meta-756k-australian-teen-accounts-removed",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Meta has deactivated 756,000 Australian accounts it believes belonged to under-16s, a figure it disclosed as the country’s world-first social media ban moves from threat to enforcement. The company says 462,000 of those accounts were on Instagram and 294,000 on Facebook, all removed between December 2025 and June 2026. It is a big, headline-friendly number, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Social-media-teens.avif",
-      "featuredLatest": false,
-      "published": "2026-08-13T07:55:06+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0785,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Meta says it has removed 756,000 Australian teen accounts, but most under-16s are still online",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "meta-meta-has-removed-756-000"
     }
   ],
   "tools": [
@@ -371,10 +659,10 @@
       "featuredLatest": false,
       "published": "2026-08-12T19:57:51+00:00",
       "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5459,
+      "score": 10.3417,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -405,10 +693,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.5812,
+      "score": 9.4779,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -439,10 +727,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2098,
+      "score": 9.2093,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -473,10 +761,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8119,
+      "score": 7.8108,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -541,10 +829,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9089,
+      "score": 6.9086,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -647,10 +935,10 @@
       "featuredLatest": false,
       "published": "2026-08-12T19:57:51+00:00",
       "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.5459,
+      "score": 10.3417,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -681,10 +969,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-13T10:20:10.654854+00:00",
+      "lastSeen": "2026-08-13T22:00:01.155724+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.5812,
+      "score": 9.4779,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -715,10 +1003,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2098,
+      "score": 9.2093,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -749,10 +1037,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8119,
+      "score": 7.8108,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -817,10 +1105,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9089,
+      "score": 6.9086,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -846,8 +1134,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1126,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "items": 1129,
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -857,7 +1145,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -867,7 +1155,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -877,7 +1165,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -886,8 +1174,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 839,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "items": 841,
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -897,7 +1185,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -907,7 +1195,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -917,7 +1205,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -927,7 +1215,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -937,7 +1225,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -947,7 +1235,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -957,7 +1245,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "The Next Web",
@@ -967,7 +1255,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -977,7 +1265,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 848,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -987,7 +1275,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -997,7 +1285,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1007,7 +1295,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1017,7 +1305,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 254,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1027,7 +1315,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1037,7 +1325,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1047,7 +1335,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1057,7 +1345,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Latent Space",
@@ -1067,7 +1355,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Import AI",
@@ -1075,10 +1363,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1088,7 +1375,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 149,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1098,7 +1385,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1108,7 +1395,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1118,7 +1405,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1128,7 +1415,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1138,7 +1425,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1148,7 +1435,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1158,14 +1445,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-08-13T10:20:10.654854+00:00"
+      "checkedAt": "2026-08-13T22:00:01.155724+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
