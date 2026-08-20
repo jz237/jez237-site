@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-20",
+      "historicDate": "1984-01-30",
+      "displayDate": "Week of January 30-February 5, 1984",
+      "edition": "Issue 079 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The mouse takes the stage in Boston while the clone business heads for court.",
+      "leadHeadline": "Macintosh Meets the Public in Boston",
+      "storyHeadlines": [
+        "IBM Takes the Clone War to Court",
+        "Lisa 2 Becomes Macintosh’s Elder Sibling",
+        "MacWrite and MacPaint Make the Desktop Tangible",
+        "Computer Games Ask What Comes After the Crash"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-30.jpg",
+      "thumb": "media/thumbs/1984-01-30.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-19",
       "historicDate": "1984-01-23",
       "displayDate": "Week of January 23-29, 1984",
