@@ -1,37 +1,199 @@
 {
   "date": "2026-08-08",
-  "updatedAt": "2026-08-08T09:52:11.623033+00:00",
+  "updatedAt": "2026-08-08T22:00:01.252105+00:00",
   "items": [
     {
-      "title": "Google’s AI Leadership Shakeup: Disaster or Exactly What It Needs?",
-      "url": "https://aidailybrief.ai/e/2026-08-06",
+      "title": "OpenAI acquires presentation startup NextSlide",
+      "url": "https://techcrunch.com/2026/08/08/openai-acquires-presentation-startup-nextslide",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "NextSlide says its team members are now working on ChatGPT.",
+      "image": "public/thumbnails/news-bec94ace7f03b427a5.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-08T19:41:13+00:00",
+      "firstSeen": "2026-08-08T22:00:01.252105+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.2215,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "OpenAI acquires presentation startup NextSlide",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-acquires-presentation-startup-nextslide",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/04/GettyImages-2259148891.jpg?resize=1200%2C686"
+    },
+    {
+      "title": "Now we have a timeline of the OpenAI accidental attack against Hugging Face",
+      "url": "https://simonwillison.net/2026/Aug/8/now-we-have-a-timeline-of-the-openai-accidental-attack-against-h",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "My comment on Now we have a timeline of the OpenAI accidental attack against Hugging Face &mdash; Hacker News.I think one of the most interesting details here might be tucked away in that first bulletin point:\n\nMay 7: OpenAI starts a new training run for an experimental, unreleased model. (Do they mean an evaluation run? They say training run in the video, and later mention a “reward signal to judge how well they’re doing”, so I guess this really was about training a model, not evaluating one that was already trained.)\n\nThe more I think about this the more I suspect that the fact this happened",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-08T14:06:41+00:00",
+      "firstSeen": "2026-08-08T16:00:02.076168+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.5235,
+      "signalGroup": "Research",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Now we have a timeline of the OpenAI accidental attack against Hugging Face",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-have-timeline-openai-accidental-attack",
+      "clusterTitle": "Now we have a timeline of the OpenAI accidental attack against Hugging Face",
+      "clusterSize": 2,
+      "relatedSources": [
+        "Simon Willison"
+      ]
+    },
+    {
+      "title": "The Right Way to Worry About AI",
+      "url": "https://aidailybrief.ai/e/2026-08-07",
       "source": "The AI Daily Brief",
       "sourceUrl": "https://aidailybrief.ai/",
       "sourceWeight": 0.88,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Demis Hassabis steps aside as DeepMind CEO and Jeff Dean leaves to start his own lab — the biggest frontier-lab shakeup since the Altman chaos of 2023. The obvious read is disaster; the contrarian read is that Google was never getting back to the frontier with the arrangement that lost it its place. Plus: Meta ships Muse Spark 1.2 and its first coding harness, and Shopify posts the agentic-commerce quarter.",
-      "image": "public/thumbnails/news-921b6cf040103edad4.png",
+      "summary": "Two headlines from one week — AI designing novel viruses and OpenAI's agents spontaneously building a message board to coordinate exploits — are the scariest AI news yet. NLW argues the terrifying part isn't the capability. It's whether we're actually having the conversation. And for once, he thinks we are.",
+      "image": "public/thumbnails/news-c799af3bb3faf5b04f.png",
       "featuredLatest": false,
-      "published": "2026-08-08T09:52:18.147797+00:00",
-      "firstSeen": "2026-08-07T10:08:55.975212+00:00",
-      "lastSeen": "2026-08-08T09:52:11.623033+00:00",
+      "published": "2026-08-08T22:00:06.642033+00:00",
+      "firstSeen": "2026-08-08T16:00:02.076168+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
       "editorial_allow": true,
-      "editorial_reason": "editorial_score_pass",
-      "score": 7.432,
+      "editorial_reason": "high_score_override",
+      "score": 6.032,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Google’s AI Leadership Shakeup: Disaster or Exactly What It Needs?",
+        "whatHappened": "The Right Way to Worry About AI",
         "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
         "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
         "sourceFrame": "Seen via The AI Daily Brief."
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "google-google-leadership-shakeup-disaster-exactly"
+      "clusterKey": "right-way-worry"
+    },
+    {
+      "title": "Firebird Launches CIS Region’s Largest AI Factory in Armenia",
+      "url": "https://blogs.nvidia.com/blog/firebird-ai-factory-armenia-blackwell-rubin-dsx",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The global buildout of AI infrastructure reached a new milestone today — Firebird, an emerging AI cloud, launched the CIS region’s largest AI factory in Armenia, establishing a new AI computing hub powered by NVIDIA accelerated computing and Dell Technologies high-performance AI infrastructure.  Nikol Pashinyan, prime minister of the Republic of Armenia; Zhaslan Madiyev, deputy [&#8230;]",
+      "image": "public/thumbnails/news-4b732105e1da004f66.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-08T10:24:54+00:00",
+      "firstSeen": "2026-08-08T16:00:02.076168+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.7873,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Firebird Launches CIS Region’s Largest AI Factory in Armenia",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via NVIDIA Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "firebird-launches-cis-region-largest-factory",
+      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/08/5559253-Firebird-AI-Factory-Armenia-social-1920x1080-1.jpg"
+    },
+    {
+      "title": "Planned Amazon data center could become the biggest climate polluter in the U.S.",
+      "url": "https://techcrunch.com/2026/08/08/planned-amazon-data-center-could-become-the-biggest-climate-polluter-in-the-u-s",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "As part of a planned Texas data center, Amazon is investing in an on-site power plant that could reportedly become the largest source of climate pollution in the United States.",
+      "image": "https://techcrunch.com/wp-content/uploads/2025/08/GettyImages-692150220.jpeg?resize=1200%2C800",
+      "featuredLatest": false,
+      "published": "2026-08-08T21:24:02+00:00",
+      "firstSeen": "2026-08-08T22:00:01.252105+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2718,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Planned Amazon data center could become the biggest climate polluter in the U.S",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "planned-amazon-data-center-could-become"
+    },
+    {
+      "title": "An Amazon data center could have the worst polluting power plant in the country",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/977124/amazon-data-center-worst-polluting-power-plant",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "To power its new West Texas data center, Amazon is investing in the construction of a new power plant that could be one of the largest single producers of greenhouse gases in the US, according to the New York Times. The new gas-burning plant in Pecos County, Texas has received significant investment from Amazon and, [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/06/STKS528_DATA_CENTERS2_A.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "featuredLatest": false,
+      "published": "2026-08-08T17:53:34+00:00",
+      "firstSeen": "2026-08-08T22:00:01.252105+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.2414,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "An Amazon data center could have the worst polluting power plant in the country",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "amazon-data-center-could-have-worst"
     }
   ],
   "tools": [
@@ -52,7 +214,7 @@
       "lastSeen": "2026-07-31T11:34:39.559002+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1081,
+      "score": 14.108,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -122,7 +284,7 @@
       "lastSeen": "2026-08-05T11:27:33.408335+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8139,
+      "score": 12.8122,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -157,7 +319,7 @@
       "lastSeen": "2026-07-31T11:34:39.559002+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9083,
+      "score": 10.9082,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -188,10 +350,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-08T09:52:11.623033+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2581,
+      "score": 9.2438,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -222,10 +384,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-08T09:52:11.623033+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9199,
+      "score": 7.8879,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -259,7 +421,7 @@
       "lastSeen": "2026-08-03T12:35:06.970137+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5085,
+      "score": 7.5084,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -290,10 +452,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9328,
+      "score": 6.9257,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -329,7 +491,7 @@
       "lastSeen": "2026-07-31T11:34:39.559002+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 14.1081,
+      "score": 14.108,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -399,7 +561,7 @@
       "lastSeen": "2026-08-05T11:27:33.408335+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8139,
+      "score": 12.8122,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -434,7 +596,7 @@
       "lastSeen": "2026-07-31T11:34:39.559002+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9083,
+      "score": 10.9082,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -465,10 +627,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-08T09:52:11.623033+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2581,
+      "score": 9.2438,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -499,10 +661,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-08T09:52:11.623033+00:00",
+      "lastSeen": "2026-08-08T22:00:01.252105+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.9199,
+      "score": 7.8879,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -536,7 +698,7 @@
       "lastSeen": "2026-08-03T12:35:06.970137+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.5085,
+      "score": 7.5084,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -567,10 +729,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9328,
+      "score": 6.9257,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -597,7 +759,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1115,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -607,7 +769,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -617,7 +779,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -627,7 +789,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -637,7 +799,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 835,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -647,7 +809,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -657,7 +819,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -665,10 +827,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "not well-formed (invalid token): line 1, column 158",
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -678,7 +839,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -688,7 +849,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -698,7 +859,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -708,7 +869,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "The Next Web",
@@ -718,7 +879,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -728,7 +889,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -738,7 +899,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -748,7 +909,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -758,7 +919,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Anthropic News",
@@ -768,7 +929,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 254,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "The Verge AI",
@@ -778,7 +939,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -788,7 +949,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Simon Willison",
@@ -798,7 +959,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -808,7 +969,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Latent Space",
@@ -818,7 +979,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Import AI",
@@ -826,10 +987,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -838,8 +998,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 153,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "items": 154,
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -849,7 +1009,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -859,7 +1019,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -869,7 +1029,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -879,7 +1039,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -889,7 +1049,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -899,7 +1059,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -909,19 +1069,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-08-08T09:52:11.623033+00:00"
+      "checkedAt": "2026-08-08T22:00:01.252105+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "not well-formed (invalid token): line 1, column 158"
-    },
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }

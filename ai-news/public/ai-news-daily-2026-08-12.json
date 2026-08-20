@@ -1,7 +1,164 @@
 {
   "date": "2026-08-12",
-  "updatedAt": "2026-08-12T10:18:16.187832+00:00",
+  "updatedAt": "2026-08-12T22:00:01.983853+00:00",
   "items": [
+    {
+      "title": "Gemini has a billion monthly users. ChatGPT hit that in June and moved the goalposts",
+      "url": "https://thenextweb.com/news/gemini-1-billion-monthly-users-chatgpt-weekly-actives-comparison",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Sundar Pichai announced on Tuesday that the Gemini app had passed a billion monthly users. He called it “our fastest growing product ever” and the 14th Google product to hit the mark, alongside Search, Gmail, Android, Maps, Chrome, Play and YouTube. His post has been seen more than 1.5 million times. Google published the engagement [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-18e79660a3ed9e1194.avif",
+      "featuredLatest": false,
+      "published": "2026-08-12T15:16:32+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 16.4626,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Gemini has a billion monthly users. ChatGPT hit that in June and moved the goalposts",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "chatgpt-gemini-gemini-has-billion-monthly-users",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/gemini-1b-users.avif"
+    },
+    {
+      "title": "ChatGPT and Gemini disagree on the best software in a third of categories, and the review sites have been skipped",
+      "url": "https://thenextweb.com/news/getintel-ai-software-index-chatgpt-gemini-disagree-review-sites",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "GetIntel published its AI Software Index on Wednesday. The study asked roughly 80 buyer-phrased questions in each of 126 software categories, covering 1,825 brands. The questions went to the live ChatGPT and Gemini consumer apps rather than the developer APIs. That produced 9,978 usable answers, all collected on 6 August. The headline result is a [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-5c49a3afa5171aa273.avif",
+      "featuredLatest": false,
+      "published": "2026-08-12T13:51:27+00:00",
+      "firstSeen": "2026-08-12T16:00:02.018865+00:00",
+      "lastSeen": "2026-08-12T16:00:02.018865+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 15.7273,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "ChatGPT and Gemini disagree on the best software in a third of categories, and the review sites have been skipped",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "chatgpt-gemini-chatgpt-gemini-disagree-best-software",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/GetIntel-logo.avif"
+    },
+    {
+      "title": "Grok is now an AI ‘teammate’ you can assign work",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/978666/spacexai-grok-bot-ai-agent-beta-launch",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "SpaceXAI has introduced Grok Bot, an always-on AI agent service designed to behave like independent \"AI teammates\" that can do your work for you. The bots share their own cloud-based computer environment, and can sign into apps, tools, and websites you already use to complete multi-step workplace tasks, only coming back when their assigned work [&#8230;]",
+      "image": "public/thumbnails/news-0f49069e581f6d3d2f.webp",
+      "featuredLatest": false,
+      "published": "2026-08-12T11:58:54+00:00",
+      "firstSeen": "2026-08-12T16:00:02.018865+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.8928,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Grok is now an AI ‘teammate’ you can assign work",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "grok-grok-teammate-you-can-assign"
+    },
+    {
+      "title": "Of course the ChatGPT dog cancer vaccine spawned a startup",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/978671/ai-cured-dog-cancer-mrna-vaccine-startup-gamgee",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Remember that much-hyped story about an Australian tech entrepreneur using ChatGPT, Grok, and other AI tools to craft a personalized cancer vaccine for his dog? Well, surprise: He's launched a startup. That entrepreneur is Paul Conyngham, who says he is launching Gamgee to offer \"personalised mRNA cancer vaccines for dogs.\" But his ambitions go well [&#8230;]",
+      "image": "public/thumbnails/news-95e3424a1b19caa54a.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-12T12:09:34+00:00",
+      "firstSeen": "2026-08-12T16:00:02.018865+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.7969,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Of course the ChatGPT dog cancer vaccine spawned a startup",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "chatgpt-course-chatgpt-dog-cancer-vaccine"
+    },
+    {
+      "title": "From assistance to execution: How enterprises put AI to work",
+      "url": "https://openai.com/index/how-enterprises-put-ai-to-work",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI research reveals how enterprises are adopting agentic AI, using ChatGPT and Codex, and how frontier firms are pulling ahead in AI adoption.",
+      "image": "public/thumbnails/news-7f05d918a3afc3b480.png",
+      "featuredLatest": false,
+      "published": "2026-08-12T06:00:00+00:00",
+      "firstSeen": "2026-08-12T16:00:02.018865+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.2053,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "From assistance to execution: How enterprises put AI to work",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "assistance-execution-how-enterprises-put-work"
+    },
     {
       "title": "Anthropic starts marking all of Claude’s output worldwide as EU transparency rules take effect",
       "url": "https://thenextweb.com/news/anthropic-watermarks-claude-output-eu-ai-act-article-50",
@@ -19,7 +176,7 @@
       "lastSeen": "2026-08-12T10:18:16.187832+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.1773,
+      "score": 11.8923,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -33,6 +190,70 @@
       "toolCandidate": false,
       "clusterKey": "anthropic-claude-anthropic-starts-marking-all-claude",
       "imageOriginal": "https://media.thenextweb.com/2026/04/Anthropic.avif"
+    },
+    {
+      "title": "Pixel 11 puts Gemini in the operating system, weeks before Siri gets the same models",
+      "url": "https://thenextweb.com/news/google-pixel-11-gemini-intelligence-apple-siri",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google has launched the Pixel 11, 11 Pro, 11 Pro XL and 11 Pro Fold with Gemini Intelligence acting across apps rather than sitting in a chatbot. It arrives weeks before Apple ships a Siri rebuilt on Google’s own models, and devices chief Rick Osterloh confirmed the memory shortage will push Pixel prices up. Google [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-603772e4a9fb50bbbe.avif",
+      "featuredLatest": false,
+      "published": "2026-08-12T15:52:07+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.1777,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Pixel 11 puts Gemini in the operating system, weeks before Siri gets the same models",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "gemini-pixel-puts-gemini-operating-system",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/google-pixel-11-gemini-intelligence-apple-siri.avif"
+    },
+    {
+      "title": "Everything announced at Made by Google ’26: Pixel 11, Pixel Watch 5, Pixel Tag, and tons of Gemini features",
+      "url": "https://techcrunch.com/2026/08/12/google-unveils-pixel-11-lineup-new-airtag-rival-and-gemini-features-at-made-by-google-2026",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "From the Pixel 11 series and a brand new competitor to Apple’s AirTag, here are all the announcements from the Made by Google 2026 event.",
+      "image": "public/thumbnails/news-45e46c87cc1433d252.webp",
+      "featuredLatest": false,
+      "published": "2026-08-12T14:20:33+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.1792,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Everything announced at Made by Google ’26: Pixel 11, Pixel Watch 5, Pixel Tag, and tons of Gemini features",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-gemini-everything-announced-made-google-pixel",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/08/Portfolio-3-1.png?resize=1200%2C675"
     },
     {
       "title": "Ryanair signs a five-year AI deal with Google Cloud, and a second cloud to fall back on",
@@ -51,7 +272,7 @@
       "lastSeen": "2026-08-12T10:18:16.187832+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.932,
+      "score": 8.6318,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -67,35 +288,67 @@
       "imageOriginal": "https://media.thenextweb.com/2026/08/Ryanair.avif"
     },
     {
-      "title": "What the Heck is Graph Engineering?",
-      "url": "https://aidailybrief.ai/e/2026-08-10",
-      "source": "The AI Daily Brief",
-      "sourceUrl": "https://aidailybrief.ai/",
-      "sourceWeight": 0.88,
+      "title": "Quoting Florian Herrengt",
+      "url": "https://simonwillison.net/2026/Aug/12/florian-herrengt",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "But then users start to report a weird bug. It's the 4th time your team has been trying to fix it. I mean... asking AI to fix it. Unfortunately, it seems like not even Fable can figure it out.\nYou go talk to the person who worked on this feature.\n\"So where does the data come from?\"\n\"Hmm... actually I don't know. Let me ask Claude.\"\nYou sit next to each other watching an endless wall of text appear on the screen. Neither of you has any idea whether any of it is true but Claude seems very confident. [...]\nThis project has become so convoluted, with so many layers and services, that no one on you",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-12T15:08:47+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.1993,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Quoting Florian Herrengt",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "quoting-florian-herrengt"
+    },
+    {
+      "title": "YouTube star Cliff Tan apologises to 2.4 million fans after promoting an AI design tool",
+      "url": "https://thenextweb.com/news/cliff-tan-dear-modern-ai-ad-apology-dreamina",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "OpenAI says it cannot rule out that its next model, Astra, has critical cyber capabilities — and actually pauses the release, the first big real-world test of a frontier lab's safety commitments. Then the main event: a primer on graph engineering, the newest rung on the ladder that runs prompt → context → harness → loop → graph, and why designing agentic organizations may be the next work primitive.",
-      "image": "public/thumbnails/news-c52450abe937dc8f3f.png",
+      "summary": "Interior design creator Cliff Tan has apologised to his 2.4 million YouTube subscribers for a paid advertisement for Dreamina, ByteDance’s AI creative tool. It is the second creator apology in a week, after Hank Green walked back his use of ChatGPT for research. An interior design creator with 2.4 million YouTube subscribers has apologised for [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-71f7676b73833119ce.avif",
       "featuredLatest": false,
-      "published": "2026-08-12T10:18:41.283710+00:00",
-      "firstSeen": "2026-08-11T10:08:40.665231+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
+      "published": "2026-08-12T19:39:10+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 6.732,
-      "signalGroup": "Agents & tooling",
+      "editorial_reason": "major_product_news",
+      "score": 7.4806,
+      "signalGroup": "Research",
       "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
       "brief": {
-        "whatHappened": "What the Heck is Graph Engineering?",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The AI Daily Brief."
+        "whatHappened": "YouTube star Cliff Tan apologises to 2.4 million fans after promoting an AI design tool",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "what-heck-graph-engineering"
+      "clusterKey": "youtube-star-cliff-tan-apologises-million",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/cliff-tan-dear-modern-ai-ad-apology-dreamina.avif"
     },
     {
       "title": "[AINews] How to steal a Reasoning Trace",
@@ -111,10 +364,10 @@
       "featuredLatest": false,
       "published": "2026-08-12T07:11:08+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.3127,
+      "score": 6.0329,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
@@ -130,191 +383,205 @@
       "imageOriginal": "https://substackcdn.com/image/fetch/$s_!nQZJ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fpbs.substack.com%2Fmedia%2FHPcJLMtagAAx07t.jpg"
     },
     {
-      "title": "Brad Lightcap is leaving OpenAI after eight years to start something new",
-      "url": "https://thenextweb.com/news/brad-lightcap-leaves-openai-departures",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
+      "title": "OpenAI-backed Thrive Holdings raises $2B to bring AI to the enterprise",
+      "url": "https://techcrunch.com/2026/08/12/openai-backed-thrive-holdings-raises-2b-to-bring-ai-to-the-enterprise",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Brad Lightcap, who spent eight years at OpenAI and four of them as chief operating officer, said on Tuesday that he is leaving to start something new. He did not say what it is. “It is bittersweet to share that I’ll be moving on from OpenAI to start something new,” Lightcap wrote in a post [&hellip;]\nThis story continues at The Next Web",
-      "image": "public/thumbnails/news-bc7106b094b9b7ebc3.avif",
+      "summary": "Thrive Holdings has raised $2 billion in new funding at a $12 billion valuation from investors like SoftBank, D1 Capital Partners, and Altimeter Capital.",
+      "image": "public/thumbnails/news-ac4449afa80f24c73f.webp",
       "featuredLatest": false,
-      "published": "2026-08-12T09:09:31+00:00",
-      "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
+      "published": "2026-08-12T17:41:29+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.1155,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
-      "brief": {
-        "whatHappened": "Brad Lightcap is leaving OpenAI after eight years to start something new",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "openai-brad-lightcap-leaving-openai-eight",
-      "imageOriginal": "https://media.thenextweb.com/2026/08/Brad-Lightcap-OpenAI.avif"
-    },
-    {
-      "title": "Spotify will badge AI artist profiles, and keep them out of your recommendations",
-      "url": "https://thenextweb.com/news/spotify-ai-persona-badge-recommendations",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Spotify will begin attaching an “AI Persona” badge to artist profiles whose public identity is generated rather than human, the company announced. Profiles carrying the badge will be excluded by default from editorial and algorithmic recommendations, which is the part of the policy that actually bites. There are two versions of the label. Artists can apply [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Spotify-AI-persona.avif",
-      "featuredLatest": false,
-      "published": "2026-08-12T08:58:22+00:00",
-      "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2101,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "Spotify will badge AI artist profiles, and keep them out of your recommendations",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "spotify-will-badge-artist-profiles-keep"
-    },
-    {
-      "title": "Nvidia calms its own credit market after Jensen Huang clarifies the $500bn financing plan",
-      "url": "https://thenextweb.com/news/nvidia-credit-risk-eases-huang-500bn-plan",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The chipmaker’s credit-default swaps had spiked to a record on fears of circular financing. They eased once Jensen Huang recast the plan as other people’s money, with Nvidia’s own exposure capped. After weeks in which the cost of insuring its debt climbed to a record on worries about so-called circular financing, that cost eased once [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Jensen-Huang-CEO-NVIDIA.avif",
-      "featuredLatest": false,
-      "published": "2026-08-12T08:20:40+00:00",
-      "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1917,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Nvidia calms its own credit market after Jensen Huang clarifies the $500bn financing plan",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "nvidia-nvidia-calms-own-credit-market"
-    },
-    {
-      "title": "Oracle is putting a Quantinuum quantum computer inside its own data centre",
-      "url": "https://thenextweb.com/news/oracle-quantinuum-helios-quantum-cloud",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Oracle and Quantinuum have agreed a multi-year partnership under which Quantinuum will physically install its Helios quantum computer inside a US Oracle Cloud Infrastructure AI data centre, and Oracle will sell access to it as a managed OCI service. No financial terms were disclosed, no launch customer was named, and no firm date was given [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Oracle.avif",
-      "featuredLatest": false,
-      "published": "2026-08-12T10:03:52+00:00",
-      "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.8427,
-      "signalGroup": "Infrastructure",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
-      "brief": {
-        "whatHappened": "Oracle is putting a Quantinuum quantum computer inside its own data centre",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "oracle-putting-quantinuum-quantum-computer-inside"
-    },
-    {
-      "title": "Joby is buying a stealth-technology firm for $500m, and rebuilding its defence arm around it",
-      "url": "https://thenextweb.com/news/joby-resonant-sciences-defence-acquisition",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Joby Aviation has agreed to buy Resonant Sciences, a Dayton, Ohio radar and low-observability specialist, for about $500m, in the largest acquisition the electric air taxi company has made and the clearest signal yet of where it expects its near-term revenue to come from. The structure is $450m in cash and roughly $50m in Joby [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Joby-Aviation-Resonant-Sciences.avif",
-      "featuredLatest": false,
-      "published": "2026-08-12T09:22:03+00:00",
-      "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1217,
+      "score": 5.8659,
       "signalGroup": "Business",
       "sourceTier": "Reported source",
       "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
       "brief": {
-        "whatHappened": "Joby is buying a stealth-technology firm for $500m, and rebuilding its defence arm around it",
+        "whatHappened": "OpenAI-backed Thrive Holdings raises $2B to bring AI to the enterprise",
         "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
         "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-backed-thrive-holdings-raises-bring",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/08/holdings_all_team.jpg?resize=1200%2C407"
+    },
+    {
+      "title": "LFM2.5-VL-3B for Better and Faster Vision Capabilities for the Edge",
+      "url": "https://huggingface.co/blog/LiquidAI/lfm2-5-vl-3b",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "",
+      "image": "public/thumbnails/news-aa64dc96b9c9ac2216.png",
+      "featuredLatest": false,
+      "published": "2026-08-12T14:00:51+00:00",
+      "firstSeen": "2026-08-12T16:00:02.018865+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.6111,
+      "signalGroup": "Media generation",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "LFM2.5-VL-3B for Better and Faster Vision Capabilities for the Edge",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Hugging Face Blog."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "joby-buying-stealth-technology-firm-500m-rebuilding"
+      "clusterKey": "lfm2-5-vl-3b-better-faster-vision-capabilities"
     },
     {
-      "title": "French media ask the competition watchdog to make Google pay for its AI answers",
-      "url": "https://thenextweb.com/news/french-media-google-ai-antitrust-complaint",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
+      "title": "French Publishers Challenge Google AI Search Over Content Licensing",
+      "url": "https://www.techrepublic.com/article/french-publishers-google-ai-search-emea-france",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "French media have asked the country’s competition authority to rein in Google’s use of artificial intelligence, filing a complaint that seeks to put a price on the AI-generated summaries quietly siphoning readers away from the outlets that produced the underlying journalism. The grievance, lodged by a trade association representing publishers, lands as the fight over [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/Google-logo.avif",
+      "summary": "French publishers are asking France’s competition watchdog to decide whether Google AI Overviews and AI Mode must be negotiated separately from existing publisher licensing agreements.\nThe post French Publishers Challenge Google AI Search Over Content Licensing appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-51a44751b1c0ba4c03.jpg",
       "featuredLatest": false,
-      "published": "2026-08-12T08:05:00+00:00",
-      "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0842,
+      "published": "2026-08-12T12:53:06+00:00",
+      "firstSeen": "2026-08-12T16:00:02.018865+00:00",
+      "lastSeen": "2026-08-12T16:00:02.018865+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.4039,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
       "brief": {
-        "whatHappened": "French media ask the competition watchdog to make Google pay for its AI answers",
+        "whatHappened": "French Publishers Challenge Google AI Search Over Content Licensing",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
+        "sourceFrame": "Seen via TechRepublic AI."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "google-french-media-ask-competition-watchdog"
+      "clusterKey": "google-french-publishers-challenge-google-search",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/08/Screenshot-2026-08-12-at-8.50.53%E2%80%AFPM.png?f=jpeg",
+      "clusterTitle": "French Publishers Challenge Google AI Search Over Content Licensing",
+      "clusterSize": 2,
+      "relatedSources": [
+        "TechRepublic AI"
+      ]
+    },
+    {
+      "title": "French Publishers Challenge Google AI Search Over Content Licensing",
+      "url": "https://www.techrepublic.com/article/news-french-publishers-google-ai-search-emea-france",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "French publishers are asking France’s competition watchdog to decide whether Google AI Overviews and AI Mode must be negotiated separately from existing publisher licensing agreements.\nThe post French Publishers Challenge Google AI Search Over Content Licensing appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-51a44751b1c0ba4c03.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-12T12:53:06+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.4039,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "French Publishers Challenge Google AI Search Over Content Licensing",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-french-publishers-challenge-google-search",
+      "clusterTitle": "French Publishers Challenge Google AI Search Over Content Licensing",
+      "clusterSize": 2,
+      "relatedSources": [
+        "TechRepublic AI"
+      ],
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/08/Screenshot-2026-08-12-at-8.50.53%E2%80%AFPM.png?f=jpeg"
+    },
+    {
+      "title": "Twitch streamers can now opt out from training Amazon’s AI",
+      "url": "https://www.theverge.com/tech/979112/twitch-streamers-can-now-opt-out-from-training-amazons-ai",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Twitch users can now opt out of allowing their content to be used to train Amazon's generative AI models. Opting out means that \"your streams, VODs, clips, stream chats, and pictures and text on your channel\" won't be used in \"future training\" of an Amazon AI model \"whose purpose is to generate or synthesize text, [&#8230;]",
+      "image": "public/thumbnails/news-4cea5ab4a7d8939e42.webp",
+      "featuredLatest": false,
+      "published": "2026-08-12T17:29:10+00:00",
+      "firstSeen": "2026-08-12T22:00:01.983853+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.9304,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Twitch streamers can now opt out from training Amazon’s AI",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "twitch-streamers-can-opt-out-training",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK044_VRG_Illo_N_Barclay_1_twitch.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
+    {
+      "title": "NVIDIA CEO Tops Glassdoor’s 2026 List of Best CEOs",
+      "url": "https://blogs.nvidia.com/blog/nvidia-life-glassdoor-best-ceo-2026",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "NVIDIA founder and CEO Jensen Huang is ranked No. 1 on Glassdoor’s Best CEOs list for 2026. In the just-released ranking, recognition is earned directly from the people who know their leadership the best — employees. Huang topped the list, with 99% of employees approving of the job he does. “As AI and shifting expectations [&#8230;]",
+      "image": "public/thumbnails/news-289457bc8df40f573c.png",
+      "featuredLatest": false,
+      "published": "2026-08-12T14:00:00+00:00",
+      "firstSeen": "2026-08-12T16:00:02.018865+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.8708,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "NVIDIA CEO Tops Glassdoor’s 2026 List of Best CEOs",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via NVIDIA Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "nvidia-nvidia-ceo-tops-glassdoor-2026",
+      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/08/GlassdoorBestCEOs2026_16x9.png"
     }
   ],
   "tools": [
@@ -354,41 +621,6 @@
       "model_release": true
     },
     {
-      "title": "Gemini 3.6 Flash Family",
-      "url": "https://www.producthunt.com/products/gemini-3-6-flash-family",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-59476473a0fea948e4.avif",
-      "featuredLatest": false,
-      "published": "2026-07-21T17:36:22+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-24T11:10:07.745434+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 14.108,
-      "signalGroup": "Model releases",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
-      "brief": {
-        "whatHappened": "Gemini 3.6 Flash Family",
-        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
-        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Gemini 3.6 Flash Family",
-      "toolLabel": "Gemini 3.6 Flash Family",
-      "toolSummary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
-      "clusterKey": "gemini-gemini-flash-family",
-      "model_release": true
-    },
-    {
       "title": "DeepSeek-V4-Flash-0731",
       "url": "https://www.producthunt.com/products/deepseek",
       "source": "Product Hunt AI",
@@ -405,7 +637,7 @@
       "lastSeen": "2026-08-05T11:27:33.408335+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8084,
+      "score": 12.8083,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -437,10 +669,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9356,
+      "score": 9.7337,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -471,10 +703,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2114,
+      "score": 9.2105,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -505,10 +737,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8157,
+      "score": 7.8136,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -573,10 +805,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9097,
+      "score": 6.9092,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -592,6 +824,40 @@
       "toolLabel": "claudemon",
       "toolSummary": "Wild Pokémon appear while you wait for Claude Code",
       "clusterKey": "claude-claudemon"
+    },
+    {
+      "title": "Health in ChatGPT",
+      "url": "https://www.producthunt.com/products/openai",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Your personal health companion, powered by ChatGPT\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-19b522677cc2cf00ae.avif",
+      "featuredLatest": false,
+      "published": "2026-07-25T00:38:36+00:00",
+      "firstSeen": "2026-07-09T10:00:01.309485+00:00",
+      "lastSeen": "2026-07-29T11:32:47.612859+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 6.908,
+      "signalGroup": "Product updates",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Health in ChatGPT",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Health in ChatGPT",
+      "toolLabel": "Health in ChatGPT",
+      "toolSummary": "Your personal health companion, powered by ChatGPT",
+      "clusterKey": "chatgpt-health-chatgpt"
     }
   ],
   "tryWorthy": [
@@ -631,41 +897,6 @@
       "model_release": true
     },
     {
-      "title": "Gemini 3.6 Flash Family",
-      "url": "https://www.producthunt.com/products/gemini-3-6-flash-family",
-      "source": "Product Hunt AI",
-      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
-      "sourceWeight": 0.72,
-      "sourceRole": "watchlist",
-      "sourceType": "tool-directory",
-      "category": "AI",
-      "summary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber\n          \n          \n            Discussion\n            |\n            Link",
-      "image": "public/thumbnails/news-59476473a0fea948e4.avif",
-      "featuredLatest": false,
-      "published": "2026-07-21T17:36:22+00:00",
-      "firstSeen": "2026-07-22T10:00:01.372841+00:00",
-      "lastSeen": "2026-07-24T11:10:07.745434+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "model_release",
-      "score": 14.108,
-      "signalGroup": "Model releases",
-      "sourceTier": "Watchlist source",
-      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
-      "brief": {
-        "whatHappened": "Gemini 3.6 Flash Family",
-        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
-        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
-        "sourceFrame": "Seen via Product Hunt AI."
-      },
-      "tryWorthy": true,
-      "toolCandidate": true,
-      "toolName": "Gemini 3.6 Flash Family",
-      "toolLabel": "Gemini 3.6 Flash Family",
-      "toolSummary": "Gemini 3.6 Flash, 3.5 Flash-Lite, and 3.5 Flash Cyber",
-      "clusterKey": "gemini-gemini-flash-family",
-      "model_release": true
-    },
-    {
       "title": "DeepSeek-V4-Flash-0731",
       "url": "https://www.producthunt.com/products/deepseek",
       "source": "Product Hunt AI",
@@ -682,7 +913,7 @@
       "lastSeen": "2026-08-05T11:27:33.408335+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8084,
+      "score": 12.8083,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -714,10 +945,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-12T10:18:16.187832+00:00",
+      "lastSeen": "2026-08-12T22:00:01.983853+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.9356,
+      "score": 9.7337,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -748,10 +979,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2114,
+      "score": 9.2105,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -782,10 +1013,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8157,
+      "score": 7.8136,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -850,10 +1081,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9097,
+      "score": 6.9092,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -869,6 +1100,40 @@
       "toolLabel": "claudemon",
       "toolSummary": "Wild Pokémon appear while you wait for Claude Code",
       "clusterKey": "claude-claudemon"
+    },
+    {
+      "title": "Health in ChatGPT",
+      "url": "https://www.producthunt.com/products/openai",
+      "source": "Product Hunt AI",
+      "sourceUrl": "https://www.producthunt.com/feed?category=artificial-intelligence",
+      "sourceWeight": 0.72,
+      "sourceRole": "watchlist",
+      "sourceType": "tool-directory",
+      "category": "AI",
+      "summary": "Your personal health companion, powered by ChatGPT\n          \n          \n            Discussion\n            |\n            Link",
+      "image": "public/thumbnails/news-19b522677cc2cf00ae.avif",
+      "featuredLatest": false,
+      "published": "2026-07-25T00:38:36+00:00",
+      "firstSeen": "2026-07-09T10:00:01.309485+00:00",
+      "lastSeen": "2026-07-29T11:32:47.612859+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 6.908,
+      "signalGroup": "Product updates",
+      "sourceTier": "Watchlist source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Health in ChatGPT",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Product Hunt AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": true,
+      "toolName": "Health in ChatGPT",
+      "toolLabel": "Health in ChatGPT",
+      "toolSummary": "Your personal health companion, powered by ChatGPT",
+      "clusterKey": "chatgpt-health-chatgpt"
     }
   ],
   "sourceHealth": [
@@ -879,8 +1144,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1124,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "items": 1126,
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -890,7 +1155,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -900,7 +1165,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -910,7 +1175,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -920,7 +1185,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 839,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -930,7 +1195,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -940,7 +1205,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -948,10 +1213,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "<urlopen error timed out>",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -961,7 +1225,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -971,7 +1235,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -981,7 +1245,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -991,7 +1255,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "The Next Web",
@@ -1001,7 +1265,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1011,7 +1275,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 848,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1021,7 +1285,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1031,7 +1295,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1041,7 +1305,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1051,7 +1315,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 254,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1061,7 +1325,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1071,7 +1335,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1081,7 +1345,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1091,7 +1355,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Latent Space",
@@ -1101,7 +1365,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Import AI",
@@ -1109,10 +1373,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1121,8 +1384,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 146,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "items": 149,
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1130,9 +1393,10 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "ok",
-      "items": 10,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "status": "error",
+      "items": 0,
+      "error": "The read operation timed out",
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1142,7 +1406,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1152,7 +1416,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1162,7 +1426,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1172,7 +1436,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1182,7 +1446,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1192,19 +1456,14 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-08-12T10:18:16.187832+00:00"
+      "checkedAt": "2026-08-12T22:00:01.983853+00:00"
     }
   ],
   "errors": [
     {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
+      "source": "Microsoft Research Blog",
+      "url": "https://www.microsoft.com/en-us/research/feed/",
+      "error": "The read operation timed out"
     }
   ]
 }

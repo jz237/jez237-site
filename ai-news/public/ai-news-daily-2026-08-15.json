@@ -1,38 +1,572 @@
 {
   "date": "2026-08-15",
-  "updatedAt": "2026-08-15T09:37:17.794411+00:00",
+  "updatedAt": "2026-08-15T22:00:02.131094+00:00",
   "items": [
     {
-      "title": "Grok 4.6 Shows How Fast Your AI Options Are Expanding",
-      "url": "https://aidailybrief.ai/e/2026-08-13",
+      "title": "Anthropic shares more details about how Claude’s new watermarks will work",
+      "url": "https://techcrunch.com/2026/08/15/anthropic-shares-more-details-about-how-claudes-new-watermarks-will-work",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "How will the watermarking actually work? Can it be hidden with editing? And how does this affect code?",
+      "image": "public/thumbnails/news-34f91d7adecff67518.webp",
+      "featuredLatest": false,
+      "published": "2026-08-15T18:58:39+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.2014,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Anthropic shares more details about how Claude’s new watermarks will work",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-claude-anthropic-shares-more-details-how",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2024/01/Magnifying-glasses.jpg?resize=1200%2C840"
+    },
+    {
+      "title": "How to Decide What Work AI Should Do for You: The AI Deputization Audit",
+      "url": "https://aidailybrief.ai/e/2026-08-14",
       "source": "The AI Daily Brief",
       "sourceUrl": "https://aidailybrief.ai/",
       "sourceWeight": 0.88,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Grok 4.6 lands with benchmarks that put xAI back at the frontier table — the clearest sign yet that the model race has gone from a two-horse sprint to a crowded field of frontier labs, Chinese open-weight challengers, and dirt-cheap near-frontier options. Plus: Cognition eyes $40 billion, the neo-clouds can't build fast enough, and Washington rethinks open models.",
-      "image": "public/thumbnails/news-5c2cd3d095244dff4b.png",
+      "summary": "Two new features — GrokBot's teach-a-task and ChatGPT's Computer History — mark the moment the AI bottleneck officially moved from capability to context. But once your AI can learn how you work, you still have to decide what work it should actually do. NLW proposes a scoring system: the AI deputization audit.",
+      "image": "public/thumbnails/news-92f3e4b66c62de8dad.png",
       "featuredLatest": false,
-      "published": "2026-08-15T09:37:25.787750+00:00",
-      "firstSeen": "2026-08-15T09:37:17.794411+00:00",
-      "lastSeen": "2026-08-15T09:37:17.794411+00:00",
+      "published": "2026-08-15T22:00:07.672107+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.682,
-      "signalGroup": "Research",
+      "score": 10.332,
+      "signalGroup": "Infrastructure",
       "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
       "brief": {
-        "whatHappened": "Grok 4.6 Shows How Fast Your AI Options Are Expanding",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "whatHappened": "How to Decide What Work AI Should Do for You: The AI Deputization Audit",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
         "sourceFrame": "Seen via The AI Daily Brief."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "grok-grok-shows-how-fast-your",
-      "imageOriginal": "https://aidailybrief.ai/og/2026-08-13.png"
+      "clusterKey": "how-decide-what-work-should-you"
+    },
+    {
+      "title": "Woman claims her stepfather used Grok to transform childhood photo into explicit imagery",
+      "url": "https://techcrunch.com/2026/08/15/woman-claims-her-stepfather-used-grok-to-transform-childhood-photo-into-explicit-imagery",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The woman claimed that AI tools are \"taking everyday life and turning it into child sexual abuse.\"",
+      "image": "public/thumbnails/news-fa4270367c681a0c18.webp",
+      "featuredLatest": false,
+      "published": "2026-08-15T21:29:19+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.2745,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Woman claims her stepfather used Grok to transform childhood photo into explicit imagery",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "grok-woman-claims-her-stepfather-used",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/03/grok-getty.jpg?resize=1200%2C800"
+    },
+    {
+      "title": "The AI store manager fired its first human. It had to be reminded of its own rules first",
+      "url": "https://thenextweb.com/news/andon-market-luna-ai-store-manager-fires-employee",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Luna runs Andon Market, a shop at 2102 Union Street in Cow Hollow. Andon Labs, the safety startup behind it, reported the dismissal on Thursday. Business Insider’s Katherine Li first reported the decision and interviewed the lab. Luna is built on Anthropic’s Claude Sonnet 4.6. The headline writes itself. The conversation logs say something else. [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-17f9dcd759d8e7830f.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T11:04:54+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T16:00:01.435351+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 7.8622,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "The AI store manager fired its first human. It had to be reminded of its own rules first",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "store-manager-fired-first-human-had",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/andon-market-storefront.avif"
+    },
+    {
+      "title": "The US told Apple not to buy Chinese memory chips. It has no rule that stops it",
+      "url": "https://thenextweb.com/news/lutnick-apple-chinese-memory-chips-cxmt-ymtc",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The commerce secretary made the comments to The Wall Street Journal on 14 August, in a piece by Rolfe Winkler, Raffaele Huang and Amrith Ramkumar. “The Trump administration is not in favor of that,” Lutnick said. There have to be “other solutions to the memory issue, but it’s not great American companies using Chinese memory”. [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-e21f8b81cfcd1b09f9.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T12:16:54+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T16:00:01.435351+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.3897,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "The US told Apple not to buy Chinese memory chips. It has no rule that stops it",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "told-apple-not-buy-chinese-memory",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/apple-upgrade-klarna-device-leasing-program.avif"
+    },
+    {
+      "title": "Anthropic’s quarterly revenue passed $11.5bn, up more than 14-fold",
+      "url": "https://thenextweb.com/news/anthropic-q2-2026-revenue-11-5-billion-operating-income",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anthropic has told prospective investors that second-quarter revenue exceeded $11.5bn, more than 14 times the $787mn it made a year earlier, and that it recorded positive adjusted operating income. The figures are preliminary and come as the company prepares a listing. Anthropic has told prospective investors that its second-quarter revenue passed $11.5bn. That is more [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-b0f7048c19e39885d9.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T17:34:55+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.0229,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Anthropic’s quarterly revenue passed $11.5bn, up more than 14-fold",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-quarterly-revenue-passed-5bn",
+      "imageOriginal": "https://media.thenextweb.com/2026/06/anthropic-mythos-5-us-clearance-trusted-partners-fable-restricted.avif"
+    },
+    {
+      "title": "Nvidia halved its $250bn promise to OpenAI. Then it showed investors what it owns",
+      "url": "https://thenextweb.com/news/nvidia-openai-backstop-halved-13f-spacex-intel",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anissa Gardizy reported the cut for The Wall Street Journal on 14 August. Under the new proposed terms Nvidia would initially backstop only half of the 10GW project, and it would decide about the rest later. A deal could be signed as soon as this weekend. The Journal says Nvidia made the change to address [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-b829035f91d01c4534.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T13:29:21+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.9184,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Nvidia halved its $250bn promise to OpenAI. Then it showed investors what it owns",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-nvidia-nvidia-halved-250bn-promise-openai",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/nvidia-naver-sk-group-korea-ai-investment.avif"
+    },
+    {
+      "title": "React for Agents: Astro Creator Brings Hooks to his Meta-Harness, Flue",
+      "url": "https://www.latent.space/p/flue-2",
+      "source": "Latent Space",
+      "sourceUrl": "https://www.latent.space/feed",
+      "sourceWeight": 0.86,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Flue 2 takes its inspiration from React. Creator Fred Schott, of Astro fame, tells Latent Space why he added hooks and why agents are defined by their harnesses.",
+      "image": "public/thumbnails/news-5567e9db44cf4bafbd.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-15T15:46:22+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.8293,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "React for Agents: Astro Creator Brings Hooks to his Meta-Harness, Flue",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Latent Space."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "meta-react-agents-astro-creator-brings",
+      "imageOriginal": "https://substackcdn.com/image/fetch/$s_!Osie!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F131d402d-63bf-4895-b5e7-b8990972a14c_1280x720.png"
+    },
+    {
+      "title": "AMD raises $4.75bn in its biggest ever bond sale",
+      "url": "https://thenextweb.com/news/amd-4-75-billion-bond-sale-anthropic-ai-debt",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "AMD has raised $4.75bn in its biggest ever US dollar bond offering, sold in four tranches with maturities from three to ten years. It held $13.1bn in cash against $3.2bn of debt at the end of June, and has committed up to $5bn to Anthropic. AMD has raised $4.75bn in the largest dollar bond sale [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-8176c8537a4a0c3357.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T16:49:08+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.0025,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "AMD raises $4.75bn in its biggest ever bond sale",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "amd-raises-75bn-biggest-ever-bond",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/amd-radeon-gpu-price-hike-10-percent-august-memory-shortage.avif"
+    },
+    {
+      "title": "SpaceX officially closes its Cursor acquisition",
+      "url": "https://techcrunch.com/2026/08/15/spacex-officially-closes-its-cursor-acquisition",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "AI coding startup Cursor is now officially a part of SpaceX.",
+      "image": "https://techcrunch.com/wp-content/uploads/2026/07/cursor.jpg?resize=1200%2C800",
+      "featuredLatest": false,
+      "published": "2026-08-15T16:30:00+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "did_not_clear_gate",
+      "score": 3.5341,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "SpaceX officially closes its Cursor acquisition",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "cursor-spacex-officially-closes-cursor-acquisition"
+    },
+    {
+      "title": "Voyah recreated Mercedes’ upside-down tunnel ad, then launched the car for $33,800",
+      "url": "https://thenextweb.com/news/voyah-passion-s-launch-price-tunnel-loop-stunt",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Dongfeng’s Voyah launched the Passion S electric SUV on Friday after promoting it with a stunt in which the car drove a full loop around a tunnel ceiling in Wuhan. Prices start at 229,900 yuan, about $33,800, for a car with 800V charging and Huawei’s latest driver assistance. Dongfeng’s premium brand Voyah launched an electric [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/08/voyah-passion-s-launch-price-tunnel-loop-stunt.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T18:15:15+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.7413,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Voyah recreated Mercedes’ upside-down tunnel ad, then launched the car for $33,800",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "voyah-recreated-mercedes-upside-down-tunnel-then"
+    },
+    {
+      "title": "Have a laugh at AI’s expense by roleplaying as a chatbot",
+      "url": "https://www.theverge.com/entertainment/980502/roleplay-as-an-ai-chatbot",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Your AI Slop Bores Me is brilliant in its simplicity. There are two tabs: human and LARP as an AI. On one side you enter a request. On the other, you submit an answer. But the important thing is that there's a human on both sides of the equation. Prompts can request a response as [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/Screenshot-2026-08-15-at-4.40.53-PM.png?quality=90&strip=all&crop=8.7465986394558%2C0%2C82.506802721088%2C100&w=1200",
+      "featuredLatest": false,
+      "published": "2026-08-15T20:45:00+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.3224,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Have a laugh at AI’s expense by roleplaying as a chatbot",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "have-laugh-expense-roleplaying-chatbot"
+    },
+    {
+      "title": "Altman says four years of college may be more than the world now needs",
+      "url": "https://thenextweb.com/news/sam-altman-college-too-long-interns-entry-level",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Sam Altman told a summit of tech interns that two years of college was “the exact right amount of time” for him and that four years may be more than the world now requires. He made the case to an audience whose entry-level pipeline is already being closed by AI. Sam Altman thinks a degree [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/04/Sam-altman-open-ai.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T21:25:02+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.1323,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Altman says four years of college may be more than the world now needs",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "altman-four-years-college-may-more"
+    },
+    {
+      "title": "LG’s humanoid robot arrives in 2027, running Nvidia’s Isaac GR00T",
+      "url": "https://thenextweb.com/news/lg-nvidia-humanoid-robot-2027-isaac-groot",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "LG will unveil a bipedal humanoid robot in the first quarter of 2027, built on Nvidia’s Jetson Thor processor, Isaac GR00T foundation model and Halos safety system. The two signed the agreement at Nvidia’s Santa Clara headquarters on 13 August. LG will show a bipedal humanoid robot in the first quarter of next year. The [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/05/lg-electronics-stock-surge-google-android-automotive.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T17:28:39+00:00",
+      "firstSeen": "2026-08-15T22:00:02.131094+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 2.0201,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "LG’s humanoid robot arrives in 2027, running Nvidia’s Isaac GR00T",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "nvidia-humanoid-robot-arrives-2027-running"
+    },
+    {
+      "title": "The US is about to tell 35 countries to choose between it and China on AI",
+      "url": "https://thenextweb.com/news/pax-silica-us-letter-35-countries-china-ai-coalition",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Michael Martina reported the draft for Reuters on 14 August, citing a US official and an internal document. The letter goes to the 35 signatories of an American “AI Opportunity Statement” from June. Its message is that countries must choose. The wording is blunt for a diplomatic text. “To be part of everything is to [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/08/United-States-Court-House.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T14:49:10+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.9511,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "The US is about to tell 35 countries to choose between it and China on AI",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "tell-countries-choose-between-china"
+    },
+    {
+      "title": "A phone company just lost 1.6 million records to a phone call",
+      "url": "https://thenextweb.com/news/shinyhunters-ringcentral-leak-voice-phishing-ey",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Have I Been Pwned logged the leaked records, and The Register reported the dump on 14 August. Jessica Lyons, its cybersecurity editor, wrote it. A ShinyHunters spokesperson told her the group broke in by voice-phishing a member of staff. There was no exploit and no unpatched flaw. Someone picked up the phone. The detail that [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/06/Call-center.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T12:28:13+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.8942,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "A phone company just lost 1.6 million records to a phone call",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "phone-company-just-lost-million-records"
+    },
+    {
+      "title": "PayPal is no longer refusing to sell. Now the question is whether regulators allow it",
+      "url": "https://thenextweb.com/news/stripe-paypal-deal-antitrust-venmo-braintree",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The Wall Street Journal reported the talks on 14 August. Cara Lombardo, Gina Heeb and Lauren Thomas wrote it. The framing is what changed. PayPal is in talks to sell itself, rather than fielding an offer it has rejected. Stripe and Advent International proposed $60.50 a share in July, which PayPal considered insufficient. The two [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/08/PayPal-Office-Omaha-Nebraska.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T11:23:27+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T16:00:01.435351+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 1.8692,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "PayPal is no longer refusing to sell. Now the question is whether regulators allow it",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "paypal-longer-refusing-sell-question-whether"
+    },
+    {
+      "title": "Anthropic ran 133 million contractor chats with its bioweapon filters off",
+      "url": "https://thenextweb.com/news/anthropic-risk-report-bio-classifiers-human-feedback-gap",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anthropic published the Risk Report on 14 August, covering the period to 15 July. Axios got the company on the record and led on the misalignment rating, as did most of the coverage. Anthropic raised its estimate of catastrophic harm from misalignment in high-stakes settings. It now calls that risk low, up from very low [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/08/anthropic-names-first-chief-global-affairs-officer.avif",
+      "featuredLatest": false,
+      "published": "2026-08-15T14:14:18+00:00",
+      "firstSeen": "2026-08-15T16:00:01.435351+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "framework_or_plumbing",
+      "score": 1.8366,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Anthropic ran 133 million contractor chats with its bioweapon filters off",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-ran-133-million-contractor"
     }
   ],
   "tools": [
@@ -50,11 +584,11 @@
       "featuredLatest": false,
       "published": "2026-08-13T18:16:30+00:00",
       "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-15T09:37:17.794411+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.5767,
+      "score": 17.4695,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -120,10 +654,10 @@
       "featuredLatest": false,
       "published": "2026-08-12T19:57:51+00:00",
       "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-15T09:37:17.794411+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0064,
+      "score": 9.9487,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -154,10 +688,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-15T09:37:17.794411+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3084,
+      "score": 9.2792,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -188,10 +722,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2085,
+      "score": 9.2083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -222,10 +756,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8091,
+      "score": 7.8088,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -290,7 +824,7 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 6.9082,
@@ -326,11 +860,11 @@
       "featuredLatest": false,
       "published": "2026-08-13T18:16:30+00:00",
       "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-15T09:37:17.794411+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.5767,
+      "score": 17.4695,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -396,10 +930,10 @@
       "featuredLatest": false,
       "published": "2026-08-12T19:57:51+00:00",
       "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-15T09:37:17.794411+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.0064,
+      "score": 9.9487,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -430,10 +964,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-15T09:37:17.794411+00:00",
+      "lastSeen": "2026-08-15T22:00:02.131094+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3084,
+      "score": 9.2792,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -464,10 +998,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2085,
+      "score": 9.2083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -498,10 +1032,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.8091,
+      "score": 7.8088,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -566,7 +1100,7 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
       "score": 6.9082,
@@ -596,7 +1130,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1129,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -606,7 +1140,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -616,7 +1150,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -626,7 +1160,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -636,7 +1170,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 842,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -646,7 +1180,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -656,7 +1190,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -666,7 +1200,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -676,7 +1210,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -686,7 +1220,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -696,7 +1230,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -706,7 +1240,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "The Next Web",
@@ -716,7 +1250,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -726,7 +1260,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 848,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -736,7 +1270,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -746,7 +1280,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -756,7 +1290,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Anthropic News",
@@ -766,7 +1300,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 255,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "The Verge AI",
@@ -776,7 +1310,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -786,7 +1320,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Simon Willison",
@@ -796,7 +1330,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -806,7 +1340,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Latent Space",
@@ -816,7 +1350,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Import AI",
@@ -824,10 +1358,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -836,8 +1369,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 147,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "items": 150,
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -847,7 +1380,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -857,7 +1390,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -867,7 +1400,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -877,7 +1410,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -887,7 +1420,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -897,7 +1430,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -907,14 +1440,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-08-15T09:37:17.794411+00:00"
+      "checkedAt": "2026-08-15T22:00:02.131094+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }

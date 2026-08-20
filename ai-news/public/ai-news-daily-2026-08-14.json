@@ -1,6 +1,6 @@
 {
   "date": "2026-08-14",
-  "updatedAt": "2026-08-14T10:15:10.483175+00:00",
+  "updatedAt": "2026-08-14T22:00:01.596176+00:00",
   "items": [
     {
       "title": "OpenAI’s new Ultrafast mode runs GPT-5.6 Sol 14 times faster, on Cerebras chips",
@@ -17,10 +17,9 @@
       "published": "2026-08-14T06:03:08+00:00",
       "firstSeen": "2026-08-14T10:15:10.483175+00:00",
       "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.7289,
+      "score": 17.4563,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -33,38 +32,8 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "openai-cerebras-openai-ultrafast-mode-runs-gpt-5",
-      "imageOriginal": "https://media.thenextweb.com/2026/07/openai-models-escaped-hacked-hugging-face.avif"
-    },
-    {
-      "title": "Grok Bot Finally Makes AI Agents Easy",
-      "url": "https://aidailybrief.ai/e/2026-08-12",
-      "source": "The AI Daily Brief",
-      "sourceUrl": "https://aidailybrief.ai/",
-      "sourceWeight": 0.88,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The OpenClaw promise — teams of coordinated agents doing real chunks of your work — has spent all year waiting for a product regular people could actually use. GrokBot, one of the first Cursor × SpaceX AI collaborations, might be it: virtual computers, watch-and-learn workflows, and a Telegram-simple interface that has the agent-building crowd raving. Plus: Anthropic's text watermarks ignite a firestorm, Gemini hits a billion users, and Nvidia builds a $500 billion financing machine.",
-      "image": "public/thumbnails/news-5cd5b3c99271f48967.png",
-      "featuredLatest": false,
-      "published": "2026-08-14T10:15:15.975431+00:00",
-      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": true,
-      "editorial_reason": "major_product_news",
-      "score": 17.032,
-      "signalGroup": "Agents & tooling",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
-      "brief": {
-        "whatHappened": "Grok Bot Finally Makes AI Agents Easy",
-        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
-        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
-        "sourceFrame": "Seen via The AI Daily Brief."
-      },
-      "tryWorthy": true,
-      "toolCandidate": false,
-      "clusterKey": "grok-grok-bot-finally-makes-agents"
+      "imageOriginal": "https://media.thenextweb.com/2026/07/openai-models-escaped-hacked-hugging-face.avif",
+      "model_release": true
     },
     {
       "title": "[AINews] Gemini 3.7 Flash brings GDM back to the forefront",
@@ -80,11 +49,11 @@
       "featuredLatest": false,
       "published": "2026-08-14T05:30:39+00:00",
       "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 16.4682,
+      "score": 16.1998,
       "signalGroup": "Model releases",
       "sourceTier": "Reported source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -98,6 +67,133 @@
       "toolCandidate": false,
       "clusterKey": "gemini-ainews-gemini-flash-brings-gdm",
       "imageOriginal": "https://substackcdn.com/image/fetch/$s_!dQiQ!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F6d28d24c-21c5-4e67-a9e6-00b50421ddfe_2112x1214.png"
+    },
+    {
+      "title": "You can now turn off Google Gemini&#8217;s visible watermarks",
+      "url": "https://www.theverge.com/tech/980416/google-gemini-ai-watermarks-removal",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Google will now allow you to remove visible watermarks from the images, videos, and music made with AI tools. With the update, you can toggle off a new \"Media watermark\" setting in Gemini and Google's AI video generator, Flow. When toggled off, Google will remove the \"sparkle\" watermark that appears in the bottom-right corner of [&#8230;]",
+      "image": "public/thumbnails/news-01d75793a139651ae1.webp",
+      "featuredLatest": false,
+      "published": "2026-08-14T16:39:32+00:00",
+      "firstSeen": "2026-08-14T22:00:01.596176+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.8083,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "You can now turn off Google Gemini&#8217;s visible watermarks",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "google-gemini-you-can-turn-off-google",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2025/02/STK255_Google_Gemini_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
+    {
+      "title": "OpenAI CFO tells shareholders enterprise revenue has overtaken ChatGPT",
+      "url": "https://thenextweb.com/news/openai-enterprise-revenue-overtakes-consumer-friar",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI’s enterprise business now generates more revenue than its consumer business, finance chief Sarah Friar told shareholders on Friday, months earlier than the company had forecast. Its annualised run rate has reached $40bn, roughly double a year ago. OpenAI now makes more money from businesses than from ChatGPT subscribers. Finance chief Sarah Friar told shareholders [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-8339aef3522d147284.avif",
+      "featuredLatest": false,
+      "published": "2026-08-14T20:11:29+00:00",
+      "firstSeen": "2026-08-14T22:00:01.596176+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 12.4961,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "OpenAI CFO tells shareholders enterprise revenue has overtaken ChatGPT",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-chatgpt-openai-cfo-tells-shareholders-enterprise",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/openai-enterprise-revenue-overtakes-consumer-friar.avif"
+    },
+    {
+      "title": "Grok 4.6 Shows How Fast Your AI Options Are Expanding",
+      "url": "https://aidailybrief.ai/e/2026-08-13",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Grok 4.6 lands with benchmarks that put xAI back at the frontier table — the clearest sign yet that the model race has gone from a two-horse sprint to a crowded field of frontier labs, Chinese open-weight challengers, and dirt-cheap near-frontier options. Plus: Cognition eyes $40 billion, the neo-clouds can't build fast enough, and Washington rethinks open models.",
+      "image": "public/thumbnails/news-5c2cd3d095244dff4b.png",
+      "featuredLatest": false,
+      "published": "2026-08-14T22:00:06.245720+00:00",
+      "firstSeen": "2026-08-13T10:20:10.654854+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 10.682,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "Grok 4.6 Shows How Fast Your AI Options Are Expanding",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "grok-grok-shows-how-fast-your"
+    },
+    {
+      "title": "OpenAI and Anthropic in price war as Chinese AI rivals gain ground",
+      "url": "https://arstechnica.com/ai/2026/08/openai-and-anthropic-in-price-war-as-chinese-ai-rivals-gain-ground",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "US groups release cheaper models after new challenges to their trillion-dollar ambitions.",
+      "image": "public/thumbnails/news-d3750e5287f1859886.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-14T14:27:14+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 8.642,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "OpenAI and Anthropic in price war as Chinese AI rivals gain ground",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Ars Technica (AI/Tech)."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-anthropic-openai-anthropic-price-war-chinese",
+      "imageOriginal": "https://cdn.arstechnica.net/wp-content/uploads/2026/08/GettyImages-2285566787-1152x648.jpg"
     },
     {
       "title": "A Massachusetts teen is charged with killing his mother and brother, and prosecutors point to ChatGPT",
@@ -116,7 +212,7 @@
       "lastSeen": "2026-08-14T10:15:10.483175+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 8.0994,
+      "score": 7.8072,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -145,10 +241,10 @@
       "featuredLatest": false,
       "published": "2026-08-14T10:00:00+00:00",
       "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.3403,
+      "score": 7.0362,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -161,6 +257,162 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "google-google-health-coach-use-abbott"
+    },
+    {
+      "title": "Building agentic workflows with SageMaker AI and Bedrock AgentCore",
+      "url": "https://aws.amazon.com/blogs/machine-learning/building-agentic-workflows-with-sagemaker-ai-and-bedrock-agentcore",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Learn how to combine OpenAI-compatible endpoints on Amazon SageMaker AI with Amazon Bedrock AgentCore runtime to build a multi-agent workflow where each specialized agent uses the model best suited to its job. This post also shows how to get token-level observability from SageMaker endpoints that Strands Agents does not instrument by default.",
+      "image": "public/thumbnails/news-b26657add05eabbc52.png",
+      "featuredLatest": false,
+      "published": "2026-08-14T15:58:44+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.6386,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Building agentic workflows with SageMaker AI and Bedrock AgentCore",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "building-agentic-workflows-sagemaker-bedrock-agentcore"
+    },
+    {
+      "title": "Five of Europe’s biggest companies just bought compute Mistral has not built",
+      "url": "https://thenextweb.com/news/mistral-data-centre-buildout-asml-compute-units",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Mistral set out the plan on 11 August. Its own announcement covers three things at once. Regional endpoints are now generally available, letting customers pick Europe or the US for inference. A Priority Tier in public preview adds custom rate limits and an uptime commitment. The third part is the one that funds the other [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-38f43cff88986568dc.avif",
+      "featuredLatest": false,
+      "published": "2026-08-14T14:35:38+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T16:00:01.448429+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.3455,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Five of Europe’s biggest companies just bought compute Mistral has not built",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "mistral-five-europe-biggest-companies-just",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/mistral-ceo-open-source-enterprise-warning.avif"
+    },
+    {
+      "title": "Microsoft Merges Copilot Apps as Features Disappear Starting Aug. 18",
+      "url": "https://www.techrepublic.com/article/news-microsoft-copilot-app-merger",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Microsoft is consolidating its consumer Copilot and Microsoft 365 Copilot apps into one experience, with several feature retirements beginning Aug. 18 and a broader desktop rollout following in September.\nThe post Microsoft Merges Copilot Apps as Features Disappear Starting Aug. 18 appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-49cb917977db44af28.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-14T11:16:51+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9667,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Microsoft Merges Copilot Apps as Features Disappear Starting Aug. 18",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "microsoft-merges-copilot-apps-features-disappear"
+    },
+    {
+      "title": "Anthropic Reportedly Eyes $6 Billion Decart Acquisition to Boost AI Efficiency",
+      "url": "https://www.techrepublic.com/article/news-anthropic-decart-6-billion-acquisition-2026",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Anthropic is reportedly considering a $6 billion acquisition of Decart, potentially expanding its AI portfolio while targeting greater compute efficiency.\nThe post Anthropic Reportedly Eyes $6 Billion Decart Acquisition to Boost AI Efficiency appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-25876121942065e903.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-14T10:20:53+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9458,
+      "signalGroup": "Infrastructure",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "brief": {
+        "whatHappened": "Anthropic Reportedly Eyes $6 Billion Decart Acquisition to Boost AI Efficiency",
+        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
+        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "anthropic-anthropic-reportedly-eyes-billion-decart"
+    },
+    {
+      "title": "Agentic AI Foundation Adds 57 Members as Enterprises Push for Open Standards",
+      "url": "https://www.techrepublic.com/article/news-agentic-ai-foundation-adds-57-members-open-standards",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The Agentic AI Foundation added 57 members as enterprises seek open standards for interoperable AI agents, tools, and data systems.\nThe post Agentic AI Foundation Adds 57 Members as Enterprises Push for Open Standards appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-2f0917ddacd5a2ba61.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-14T09:29:15+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.627,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Agentic AI Foundation Adds 57 Members as Enterprises Push for Open Standards",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "agentic-foundation-adds-members-enterprises-push"
     },
     {
       "title": "Thrive Capital’s first investor letter shows how completely OpenAI has come to define it",
@@ -179,7 +431,7 @@
       "lastSeen": "2026-08-14T10:15:10.483175+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 5.8079,
+      "score": 5.5133,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -195,252 +447,129 @@
       "imageOriginal": "https://media.thenextweb.com/2026/05/thrive-capital-shopify-public-market-ai-commerce.avif"
     },
     {
-      "title": "Apple trained its own AI model for China with help from Alibaba",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/980160/apple-intelligence-china-custom-ai-model-alibaba",
-      "source": "The Verge AI",
-      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
-      "sourceWeight": 0.9,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Apple has reportedly trained a custom AI model for the China market alongside domestic tech giant Alibaba, a rare cross-border partnership that cuts across growing tensions between Beijing and Washington. The China-focused large language model was developed in partnership with Alibaba and trained with the company's support, Reuters reports, citing three unnamed people familiar with [&#8230;]",
-      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/STK071_APPLE_A-1.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
-      "featuredLatest": false,
-      "published": "2026-08-14T09:21:17+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.4329,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Apple trained its own AI model for China with help from Alibaba",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Verge AI."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "apple-trained-own-model-china-help"
-    },
-    {
-      "title": "Pony.ai and Uber to put more than 2,000 Chinese robotaxis on European streets",
-      "url": "https://thenextweb.com/news/ponyai-uber-2000-robotaxis-europe",
+      "title": "Joshua Kushner’s Thrive Capital Discloses $215 Million Amazon Stake",
+      "url": "https://thenextweb.com/news/thrive-capital-amazon-215-million-public-markets",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Pony.ai and Uber have expanded their partnership to put more than 2,000 robotaxis on European roads, a deal that hands one of China’s autonomous-driving champions a route onto the continent’s streets through an American app and a scattering of local fleet owners. The arrangement is divided as Pony.ai supplies the Level 4 self-driving technology and [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/05/Uber.avif",
+      "summary": "Joshua Kushner’s Thrive Capital has bought roughly $215mn of Amazon shares, disclosed in a regulatory filing on Friday. It lands in the same week the firm told investors it is selling part of its OpenAI stake, in a company Amazon now owns close to 5% of. Joshua Kushner’s Thrive Capital has bought roughly $215mn of [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-e2d21a4624da8b5d55.avif",
       "featuredLatest": false,
-      "published": "2026-08-14T07:10:19+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1598,
+      "published": "2026-08-14T16:37:13+00:00",
+      "firstSeen": "2026-08-14T22:00:01.596176+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.6973,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
       "brief": {
-        "whatHappened": "Pony.ai and Uber to put more than 2,000 Chinese robotaxis on European streets",
+        "whatHappened": "Joshua Kushner’s Thrive Capital Discloses $215 Million Amazon Stake",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
-      "tryWorthy": false,
+      "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "pony-uber-put-more-than-000"
+      "clusterKey": "joshua-kushner-thrive-capital-discloses-215",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/thrive-capital-amazon-215-million-public-markets.avif"
     },
     {
-      "title": "Apple trained its own AI model for China, and handed the brain to Alibaba",
-      "url": "https://thenextweb.com/news/apple-china-ai-model-alibaba-qwen",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
+      "title": "Does Mark Zuckerberg really believe AI is ‘for everyone’?",
+      "url": "https://techcrunch.com/video/does-mark-zuckerberg-really-believe-ai-is-for-everyone",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Apple has trained its own large language model for the Chinese market with Alibaba’s support, a striking break from the company’s usual habit of leaning on other people’s models. According to a Reuters report, Apple is the first foreign firm Beijing has approved to offer a proprietary AI model in mainland China, a rare concession [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/07/apple-upgrade-klarna-device-leasing-program.avif",
+      "summary": "Meta released Glimmer this week, an open-weight AI&#160;model&#160;anyone can download and run on their own hardware&#160;— a contrast to&#160;Muse&#160;Spark, the company’s more powerful model that stays locked behind its own APIs. The release landed alongside&#160;a letter from Mark Zuckerberg&#160;arguing AI should be “for everyone” rather than controlled by a handful of labs, but as Equity’s [&#8230;]",
+      "image": "public/thumbnails/news-0636c0bc469e4167e2.webp",
       "featuredLatest": false,
-      "published": "2026-08-14T06:08:53+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.1315,
+      "published": "2026-08-14T15:43:28+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.614,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "Apple trained its own AI model for China, and handed the brain to Alibaba",
+        "whatHappened": "Does Mark Zuckerberg really believe AI is ‘for everyone’?",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
+        "sourceFrame": "Seen via TechCrunch AI."
       },
-      "tryWorthy": false,
+      "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "apple-trained-own-model-china-handed"
+      "clusterKey": "does-mark-zuckerberg-really-believe-everyone"
     },
     {
-      "title": "This Bengaluru startup is training dogs and AI to sniff out cancer early",
-      "url": "https://thenextweb.com/news/dognosis-cancer-sniffing-dogs-ai",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
+      "title": "Meta’s ‘open’ AI, and a $250M deal gone very wrong",
+      "url": "https://techcrunch.com/podcast/metas-open-ai-and-a-250m-deal-gone-very-wrong",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Dognosis pairs trained sniffer dogs with artificial intelligence to flag cancer from a breath sample. It is a charming idea aimed at a real problem, with equally real caveats: this is prescreening in trials, not a proven diagnostic. A dog’s nose has long outclassed most laboratory kit, and a two-year-old Bengaluru startup called Dognosis is [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Dognosis.avif",
+      "summary": "Meta released Glimmer this week, an open-weight AI&#160;model&#160;anyone can download and run on their own hardware&#160;— a contrast to&#160;Muse&#160;Spark, the company’s more powerful model that stays locked behind its own APIs. The release landed alongside&#160;a letter from Mark Zuckerberg&#160;arguing AI should be “for everyone” rather than controlled by a handful of labs, but as Equity’s [&#8230;]",
+      "image": "public/thumbnails/news-d6af6ada42166b2178.webp",
       "featuredLatest": false,
-      "published": "2026-08-14T05:56:00+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.3256,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "This Bengaluru startup is training dogs and AI to sniff out cancer early",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "bengaluru-startup-training-dogs-sniff-out"
-    },
-    {
-      "title": "Weather drones are filling the data blind spot that armies and traders both need",
-      "url": "https://thenextweb.com/news/weather-drones-forecasting-traders-military",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The artificial-intelligence weather boom has a dirty secret. For all the talk of models that see storms days ahead, an AI forecaster is only as good as the observations that feed it, and lately those have run thin. According to Bloomberg, drones are now being sent aloft to plug the gap, quietly becoming sensors that [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Weather-drones.avif",
-      "featuredLatest": false,
-      "published": "2026-08-14T08:27:49+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0967,
+      "published": "2026-08-14T14:00:00+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.5708,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "Weather drones are filling the data blind spot that armies and traders both need",
+        "whatHappened": "Meta’s ‘open’ AI, and a $250M deal gone very wrong",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
+        "sourceFrame": "Seen via TechCrunch AI."
       },
-      "tryWorthy": false,
+      "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "weather-drones-filling-data-blind-spot"
+      "clusterKey": "meta-meta-open-250m-deal-gone"
     },
     {
-      "title": "Goldman Sachs is courting investors on Nvidia’s $500bn AI-compute financing deal",
-      "url": "https://thenextweb.com/news/goldman-nvidia-500bn-financing-role",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
+      "title": "Kog is going deeper to squeeze more inference out of GPUs",
+      "url": "https://techcrunch.com/2026/08/14/kog-is-going-deeper-to-squeeze-more-inference-out-of-gpus",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Goldman Sachs has secured the role every Wall Street firm wanted, and it is now working the phones. The bank is in talks with investors about Nvidia’s $500bn AI-compute financing deal, having landed a prized mandate that effectively casts it as the lead, and for now near-sole, lender behind one of the largest infrastructure-funding efforts [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/go-inc-japan-taxi-app-ipo-tokyo-stock-exchange-goldman-sachs.avif",
+      "summary": "The idea that GPUs are poorly suited for agentic workflows may be a misconception, according to French startup Kog.",
+      "image": "public/thumbnails/news-9205cb910c6940a669.webp",
       "featuredLatest": false,
-      "published": "2026-08-14T06:46:35+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0487,
-      "signalGroup": "Infrastructure",
+      "published": "2026-08-14T14:50:11+00:00",
+      "firstSeen": "2026-08-14T16:00:01.448429+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.3915,
+      "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
-      "whyItMatters": "Infrastructure news is the supply side of AI: chips, memory, and hosting constraints quietly decide what tools can exist and what they cost.",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
       "brief": {
-        "whatHappened": "Goldman Sachs is courting investors on Nvidia’s $500bn AI-compute financing deal",
-        "whoItAffects": "Anyone affected by AI compute cost, speed, availability, or hardware supply.",
-        "practicalImpact": "Infrastructure shifts often show up later as cheaper tools, higher limits, or new bottlenecks.",
-        "sourceFrame": "Seen via The Next Web."
+        "whatHappened": "Kog is going deeper to squeeze more inference out of GPUs",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechCrunch AI."
       },
-      "tryWorthy": false,
+      "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "nvidia-goldman-sachs-courting-investors-nvidia"
-    },
-    {
-      "title": "Silver Lake is reportedly in talks to take Workday private at $43bn",
-      "url": "https://thenextweb.com/news/silver-lake-workday-43bn-buyout-talks",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Silver Lake is in talks to take Workday, the cloud-based HR and finance software company, private in a deal that would value it at roughly $43bn, according to a Reuters report. If it comes off, it would rank among the largest software buyouts ever struck, and a rare vote of confidence in a corner of [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/Workday.avif",
-      "featuredLatest": false,
-      "published": "2026-08-14T06:16:31+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0349,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Silver Lake is reportedly in talks to take Workday private at $43bn",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "silver-lake-reportedly-talks-take-workday"
-    },
-    {
-      "title": "Cl0p claims a mass hack of Shell, Philips, and dozens more",
-      "url": "https://thenextweb.com/news/clop-hacking-group-philips-shell",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "The Russia-linked ransomware group Cl0p has claimed a fresh wave of cyberattacks, naming Shell and Philips among its victims and, by some counts, dragging close to 50 companies into the mess. It is a familiar sort of headline, and one that reads more than a little like a rerun of the Oracle-linked breaches that have unsettled corporate [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/06/fbi-russian-hackers-signal-backup-recovery-key-unc5792.avif",
-      "featuredLatest": false,
-      "published": "2026-08-14T07:33:09+00:00",
-      "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "framework_or_plumbing",
-      "score": -1.0295,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Cl0p claims a mass hack of Shell, Philips, and dozens more",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "cl0p-claims-mass-hack-shell-philips"
+      "clusterKey": "kog-going-deeper-squeeze-more-inference"
     }
   ],
   "tools": [
@@ -458,11 +587,11 @@
       "featuredLatest": false,
       "published": "2026-08-13T18:16:30+00:00",
       "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9137,
+      "score": 17.7172,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -528,10 +657,10 @@
       "featuredLatest": false,
       "published": "2026-08-12T19:57:51+00:00",
       "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1877,
+      "score": 10.082,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -562,10 +691,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4001,
+      "score": 9.3466,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -596,10 +725,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2089,
+      "score": 9.2087,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -630,10 +759,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.81,
+      "score": 7.8095,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -698,10 +827,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9084,
+      "score": 6.9083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -734,11 +863,11 @@
       "featuredLatest": false,
       "published": "2026-08-13T18:16:30+00:00",
       "firstSeen": "2026-08-14T10:15:10.483175+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "model_release": true,
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.9137,
+      "score": 17.7172,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -804,10 +933,10 @@
       "featuredLatest": false,
       "published": "2026-08-12T19:57:51+00:00",
       "firstSeen": "2026-08-13T10:20:10.654854+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.1877,
+      "score": 10.082,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -838,10 +967,10 @@
       "featuredLatest": false,
       "published": "2026-08-11T19:25:25+00:00",
       "firstSeen": "2026-08-12T10:18:16.187832+00:00",
-      "lastSeen": "2026-08-14T10:15:10.483175+00:00",
+      "lastSeen": "2026-08-14T22:00:01.596176+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.4001,
+      "score": 9.3466,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -872,10 +1001,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-09T22:00:02.053216+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2089,
+      "score": 9.2087,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -906,10 +1035,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-09T09:54:15.165381+00:00",
+      "lastSeen": "2026-08-10T16:00:01.398245+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.81,
+      "score": 7.8095,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -974,10 +1103,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.9084,
+      "score": 6.9083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1004,7 +1133,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 1129,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1014,7 +1143,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1024,7 +1153,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1034,7 +1163,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1043,8 +1172,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 841,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "items": 842,
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1054,7 +1183,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1064,7 +1193,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1074,7 +1203,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1084,7 +1213,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1094,7 +1223,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1104,7 +1233,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1114,7 +1243,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "The Next Web",
@@ -1124,7 +1253,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1134,7 +1263,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 848,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1144,7 +1273,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1154,7 +1283,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1164,7 +1293,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1173,8 +1302,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 254,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "items": 255,
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1184,7 +1313,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1194,7 +1323,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1204,7 +1333,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1214,7 +1343,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Latent Space",
@@ -1224,7 +1353,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Import AI",
@@ -1232,10 +1361,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1244,8 +1372,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 149,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "items": 147,
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1255,7 +1383,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1265,7 +1393,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1275,7 +1403,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1285,7 +1413,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1295,7 +1423,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1305,7 +1433,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1315,14 +1443,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-08-14T10:15:10.483175+00:00"
+      "checkedAt": "2026-08-14T22:00:01.596176+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }

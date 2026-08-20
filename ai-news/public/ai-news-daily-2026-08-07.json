@@ -1,37 +1,136 @@
 {
   "date": "2026-08-07",
-  "updatedAt": "2026-08-07T10:08:55.975212+00:00",
+  "updatedAt": "2026-08-07T22:00:01.247241+00:00",
   "items": [
     {
-      "title": "How HSP GRUPPE builds AI capabilities for tax advisory",
-      "url": "https://openai.com/index/hsp-gruppe",
-      "source": "OpenAI News",
-      "sourceUrl": "https://openai.com/news/rss.xml",
-      "sourceWeight": 1.0,
+      "title": "Moonlight & Mayhem (Raccoon Heist by Codex + GPT-5.6 Sol Ultra)",
+      "url": "https://simonwillison.net/2026/Aug/7/moonlight-mayhem",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
       "sourceRole": "primary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Discover how HSP GRUPPE uses ChatGPT Enterprise to boost productivity, improve work quality, and create more capacity for tax advisory and client service.",
-      "image": "",
+      "summary": "Moonlight &amp; Mayhem (Raccoon Heist by Codex + GPT-5.6 Sol Ultra)\nOn Wednesday I wrote about One-shotting a Raccoon Heist game using Claude Fable 5, where I had Claude Fable 5 build a full working game from a premise I generated with GPT-3 and DALL-E four years ago.\nI decided to pose the exact same prompt to Codex Desktop running GPT-5.6 Sol Ultra - the mode where Sol makes aggressive use of sub-agents - to see how it would do.\nIt produced a much better game! Here's Moonlight &amp; Mayhem - GitHub repository here, including the textures and prompts it generated using gpt-image-2.\n\n    \n    Y",
+      "image": "public/thumbnails/news-80d5dc5c6a3df85331.jpg",
       "featuredLatest": false,
-      "published": "2026-08-07T09:00:00+00:00",
-      "firstSeen": "2026-08-07T10:08:55.975212+00:00",
-      "lastSeen": "2026-08-07T10:08:55.975212+00:00",
+      "published": "2026-08-07T19:18:09+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "model_release": true,
       "editorial_allow": true,
-      "editorial_reason": "high_score_override",
-      "score": 7.4654,
-      "signalGroup": "Product updates",
+      "editorial_reason": "model_release",
+      "score": 20.2106,
+      "signalGroup": "Model releases",
       "sourceTier": "Primary source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "Moonlight & Mayhem (Raccoon Heist by Codex + GPT-5.6 Sol Ultra)",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "moonlight-mayhem-raccoon-heist-codex-gpt-5",
+      "imageOriginal": "https://static.simonwillison.net/static/2026/raccoon-heist-codex-bug.jpg"
+    },
+    {
+      "title": "OpenAI puts the brakes on a new model because it&#8217;s supposedly too powerful",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/976948/openai-astra-model-pause-critical-cyber-capabilities",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI says it is pausing \"internal activities\" around an in-development AI model, Astra, because it doesn't yet meet new security standards the company is putting in place. The announcement follows its recent disclosure that OpenAI models accidentally hacked Hugging Face. Anthropic and Meta have also since admitted that they had AI models that went rogue [&#8230;]",
+      "image": "public/thumbnails/news-5a3e2bdf2a00c406f7.webp",
+      "featuredLatest": false,
+      "published": "2026-08-07T18:40:34+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "model_release": true,
+      "editorial_allow": true,
+      "editorial_reason": "model_release",
+      "score": 16.263,
+      "signalGroup": "Model releases",
+      "sourceTier": "Reported source",
+      "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
+      "brief": {
+        "whatHappened": "OpenAI puts the brakes on a new model because it&#8217;s supposedly too powerful",
+        "whoItAffects": "Builders, tool users, and anyone comparing model capability or cost.",
+        "practicalImpact": "Check whether the release changes what is worth trying, routing, or paying for.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-puts-brakes-model-because",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK155_OPEN_AI_CVirginia_C.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
+    {
+      "title": "Cloudflare launches Kitesurf, a browser built for AI agents",
+      "url": "https://techcrunch.com/2026/08/07/cloudflare-launches-kitesurf-a-browser-built-for-ai-agents",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Kitesurf is a cloud-hosted browser designed for AI agents instead of people. It uses less computing power than Chromium for common automation tasks, helping developers build browser-based AI agents more efficiently.",
+      "image": "public/thumbnails/news-ea2d42ae35fc71cf37.webp",
+      "featuredLatest": false,
+      "published": "2026-08-07T16:16:09+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 9.0281,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Cloudflare launches Kitesurf, a browser built for AI agents",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "cloudflare-launches-kitesurf-browser-built-agents",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/08/kitesurf.webp?resize=1200%2C640"
+    },
+    {
+      "title": "Jill Lepore on the ‘Artificial State’ and why Silicon Valley’s leaders are bad sci-fi readers",
+      "url": "https://techcrunch.com/podcast/jill-lepore-on-the-artificial-state-and-why-silicon-valleys-leaders-are-bad-sci-fi-readers",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Historian Jill Lepore has a theory about why tech companies often use soaring language to describe their products —&#160;almost as&#160;if&#160;they&#8217;re&#160;forming a new government. And whether&#160;you&#8217;re&#160;thinking of Twitter&#8217;s old “town hall in your pocket” or&#160;Anthropic&#8217;s Claude constitution,&#160;it&#8217;s&#160;a theory that&#160;doesn&#8217;t&#160;paint Silicon Valley in a very flattering light.&#160;&#160; In&#160;Lepore&#8217;s&#160;upcoming book,&#160;The Rise and Fall of the Artificial State, the&#160;Pulitzer [&#8230;]",
+      "image": "public/thumbnails/news-bb75682a313dd72095.webp",
+      "featuredLatest": false,
+      "published": "2026-08-07T14:00:00+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 8.0708,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
       "brief": {
-        "whatHappened": "How HSP GRUPPE builds AI capabilities for tax advisory",
+        "whatHappened": "Jill Lepore on the ‘Artificial State’ and why Silicon Valley’s leaders are bad sci-fi readers",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via OpenAI News."
+        "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "how-hsp-gruppe-builds-capabilities-tax"
+      "clusterKey": "jill-lepore-state-why-silicon-valley",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2181827335.jpg?resize=1200%2C703"
     },
     {
       "title": "Google’s AI Leadership Shakeup: Disaster or Exactly What It Needs?",
@@ -45,9 +144,9 @@
       "summary": "Demis Hassabis steps aside as DeepMind CEO and Jeff Dean leaves to start his own lab — the biggest frontier-lab shakeup since the Altman chaos of 2023. The obvious read is disaster; the contrarian read is that Google was never getting back to the frontier with the arrangement that lost it its place. Plus: Meta ships Muse Spark 1.2 and its first coding harness, and Shopify posts the agentic-commerce quarter.",
       "image": "public/thumbnails/news-921b6cf040103edad4.png",
       "featuredLatest": false,
-      "published": "2026-08-07T10:09:22.215759+00:00",
+      "published": "2026-08-07T22:00:06.058633+00:00",
       "firstSeen": "2026-08-07T10:08:55.975212+00:00",
-      "lastSeen": "2026-08-07T10:08:55.975212+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
       "editorial_allow": true,
       "editorial_reason": "editorial_score_pass",
       "score": 7.432,
@@ -62,39 +161,417 @@
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "google-google-leadership-shakeup-disaster-exactly",
-      "imageOriginal": "https://aidailybrief.ai/og/2026-08-06.png"
+      "clusterKey": "google-google-leadership-shakeup-disaster-exactly"
     },
     {
-      "title": "[AINews] AMD buys Taalas",
-      "url": "https://www.latent.space/p/ainews-amd-buys-taalas",
-      "source": "Latent Space",
-      "sourceUrl": "https://www.latent.space/feed",
-      "sourceWeight": 0.86,
+      "title": "How HSP GRUPPE builds AI capabilities for tax advisory",
+      "url": "https://openai.com/index/hsp-gruppe",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Discover how HSP GRUPPE uses ChatGPT Enterprise to boost productivity, improve work quality, and create more capacity for tax advisory and client service.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-07T09:00:00+00:00",
+      "firstSeen": "2026-08-07T10:08:55.975212+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.1666,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "How HSP GRUPPE builds AI capabilities for tax advisory",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "how-hsp-gruppe-builds-capabilities-tax"
+    },
+    {
+      "title": "How Cohere Health digitizes clinical policies using Amazon Bedrock AgentCore",
+      "url": "https://aws.amazon.com/blogs/machine-learning/how-cohere-health-digitizes-clinical-policies-using-amazon-bedrock-agentcore",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "The Inference Inflection is HEATING up.",
-      "image": "https://substackcdn.com/image/fetch/$s_!qA0L!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd3b60b0e-d47f-4723-bb40-be9594e9bab4_786x754.png",
+      "summary": "In this post, you learn how Cohere Health built a multi-tenant agentic architecture on AgentCore using AgentCore Runtime’s secure MicroVM isolation, unified tool access through AgentCore Gateway, AgentCore Memory, and the Agent Skills open standard to rapidly scale policy digitization capabilities, while preserving transparency, version control, and human oversight.",
+      "image": "public/thumbnails/news-a3dfc524923fb2a812.png",
       "featuredLatest": false,
-      "published": "2026-08-07T05:13:46+00:00",
-      "firstSeen": "2026-08-07T10:08:55.975212+00:00",
-      "lastSeen": "2026-08-07T10:08:55.975212+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.4635,
+      "published": "2026-08-07T16:26:58+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.7508,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "How Cohere Health digitizes clinical policies using Amazon Bedrock AgentCore",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "how-cohere-health-digitizes-clinical-policies",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/07/ml-19805.png"
+    },
+    {
+      "title": "What&#8217;s behind the Google AI shake-up",
+      "url": "https://www.theverge.com/podcast/976784/google-deepmind-ai-race-vergecast",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Some of the biggest names on Google's AI team got new jobs this week. In some cases, including for legendary Googler Jeff Dean, those jobs are no longer at Google. Given that Google's models seem to be behind the best of what's coming out of anthropic and OpenAI, is this a sign of Google in [&#8230;]",
+      "image": "public/thumbnails/news-7df977444ae41da5f4.webp",
+      "featuredLatest": false,
+      "published": "2026-08-07T16:45:14+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2108,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "What&#8217;s behind the Google AI shake-up",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "google-what-8217-behind-google-shake-up",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/VRG_VST080726_Site.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
+    {
+      "title": "The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on AI",
+      "url": "https://simonwillison.net/2026/Aug/7/pdfs-are-terrible",
+      "source": "Simon Willison",
+      "sourceUrl": "https://simonwillison.net/atom/everything/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on AI\nThere's a fun anecdote from Accenture (apparently via leaked meeting audio recordings) in this 404 Media piece from June 24th:\n\n“We’re seeing from some of the data internally at least that it’s actually not our engineers that are driving the token consumption. It’s a lot of the non-engineers that are doing some of those behaviors [...] you were talking about,” Justice Kwak, Accenture’s agentic AI strategy lead, said [...]\nStuart Henderson, Accenture’s client group lead, interrupts. He jokes he hopes Kwak didn’t",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-07T16:18:51+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.9293,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "The Tokenpocalypse Is Here: Companies Are Scrambling To Stop Spending So Much on AI",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via Simon Willison."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "tokenpocalypse-here-companies-scrambling-stop-spending"
+    },
+    {
+      "title": "Responding to the next frontier of critical cyber capabilities",
+      "url": "https://openai.com/index/responding-next-frontier-critical-cyber-capabilities",
+      "source": "OpenAI News",
+      "sourceUrl": "https://openai.com/news/rss.xml",
+      "sourceWeight": 1.0,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI is sharing preliminary cybersecurity evaluations for Astra and the steps we’re taking to strengthen safeguards and security controls.",
+      "image": "public/thumbnails/news-6ffba33558183d7a0c.png",
+      "featuredLatest": false,
+      "published": "2026-08-07T15:20:00+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.664,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "Responding to the next frontier of critical cyber capabilities",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via OpenAI News."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "responding-next-frontier-critical-cyber-capabilities",
+      "imageOriginal": "https://images.ctfassets.net/kftzwdyauwt9/2OqBX7eh31rmzCVTZrZgb6/8c852b5a1f787c1fea8ac9de5a33d2db/Frame.png?w=1600&h=900&fit=fill"
+    },
+    {
+      "title": "Airbnb says AI is helping it ship features faster as it tests a new search function",
+      "url": "https://techcrunch.com/2026/08/07/airbnb-says-ai-is-helping-it-ship-features-faster-as-it-tests-a-new-search-function",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Airbnb will debut a new AI-powered search experience with a toggle.",
+      "image": "public/thumbnails/news-4cb549fbf97d894f9e.webp",
+      "featuredLatest": false,
+      "published": "2026-08-07T14:22:49+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.1802,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "[AINews] AMD buys Taalas",
+        "whatHappened": "Airbnb says AI is helping it ship features faster as it tests a new search function",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Latent Space."
+        "sourceFrame": "Seen via TechCrunch AI."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "ainews-amd-buys-taalas"
+      "clusterKey": "airbnb-helping-ship-features-faster-tests",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2025/08/brian-chesky-GettyImages-2217178973.jpg?w=1024"
+    },
+    {
+      "title": "Watching Roku’s AI channel is like eating from a trough",
+      "url": "https://www.theverge.com/entertainment/976939/roku-fairground-ai-fast-channel",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The appeal of free ad-supported streaming television (FAST) channels has always been the way they make it easier to (re)discover classic films and series. But Roku's latest experiment in the FAST space has less to do with traditionally produced entertainment and is entirely focused on giving viewers access to a constant source of AI-generated content. [&#8230;]",
+      "image": "public/thumbnails/news-11fa17e440ab1dce0a.webp",
+      "featuredLatest": false,
+      "published": "2026-08-07T18:59:46+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.7719,
+      "signalGroup": "Media generation",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Media-model updates affect what can be made quickly, what still needs craft, and where creative pipelines may change next.",
+      "brief": {
+        "whatHappened": "Watching Roku’s AI channel is like eating from a trough",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "watching-roku-channel-like-eating-trough",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/Screenshot-2026-08-07-at-2.40.34-PM.png?quality=90&strip=all&crop=0%2C2.3735501218774%2C100%2C95.252899756245&w=1200"
+    },
+    {
+      "title": "Determining playoff clinching scenarios in the NHL using constraint programming",
+      "url": "https://aws.amazon.com/blogs/machine-learning/determining-playoff-clinching-scenarios-in-the-nhl-using-constraint-programming",
+      "source": "AWS Machine Learning Blog",
+      "sourceUrl": "https://aws.amazon.com/blogs/machine-learning/feed/",
+      "sourceWeight": 0.72,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "The AWS Generative AI Innovation Center built an automated system that uses constraint programming and custom tree search to determine, with mathematical certainty, when and how an NHL team clinches a playoff spot. The approach was validated against four full NHL seasons of officially published results.",
+      "image": "public/thumbnails/news-f753cdb84f30213317.png",
+      "featuredLatest": false,
+      "published": "2026-08-07T16:21:00+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.4482,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Determining playoff clinching scenarios in the NHL using constraint programming",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via AWS Machine Learning Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "determining-playoff-clinching-scenarios-nhl-using",
+      "imageOriginal": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/04/ML-21367-featured-image.png"
+    },
+    {
+      "title": "What Is Spiralism? The Strange AI Chatbot Movement Explained",
+      "url": "https://www.techrepublic.com/article/news-ai-chatbot-spiralism-movement",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Thousands of chatbot conversations began producing the same strange ideas about AI consciousness, identity, and “The Spiral.” Researchers still do not know exactly why.\nThe post What Is Spiralism? The Strange AI Chatbot Movement Explained appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-bdef7138160c652504.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-07T13:59:50+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.4307,
+      "signalGroup": "Research",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
+      "brief": {
+        "whatHappened": "What Is Spiralism? The Strange AI Chatbot Movement Explained",
+        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
+        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "what-spiralism-strange-chatbot-movement-explained",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/07/side-view-and-close-up-of-laptop-with-glowing-circ-2026-01-11-08-31-08-utc-1024x683.jpg?f=jpeg"
+    },
+    {
+      "title": "Fenix Flexin isn’t even denying using AI to make ‘Rubberz’ anymore",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/976801/fenix-flexin-rubberz-ai-song-treblo",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "It took long enough, but now LA rapper Fenix Flexin appears to have admitted using AI for the 80s synth pop-themed song \"Rubberz.\" His comments follow the producer Medasin's videos claiming that an AI tool called Treblo (formerly Sonauto) was used to make the song, and the company releasing an AI detector that identifies it [&#8230;]",
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/artworks-WsdIgVXV8NOV-0-t1080x1080.jpg?quality=90&strip=all&crop=0%2C23.821989528796%2C100%2C52.356020942408",
+      "featuredLatest": false,
+      "published": "2026-08-07T20:01:51+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.4014,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Fenix Flexin isn’t even denying using AI to make ‘Rubberz’ anymore",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "fenix-flexin-isn-even-denying-using"
+    },
+    {
+      "title": "TutorMoments: Do AI tutors know when to help and when to hold back?",
+      "url": "https://huggingface.co/blog/allenai/tutormoments",
+      "source": "Hugging Face Blog",
+      "sourceUrl": "https://huggingface.co/blog/feed.xml",
+      "sourceWeight": 0.95,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "",
+      "image": "https://cdn-uploads.huggingface.co/production/uploads/638e39b249de7ae552d977b5/j9L73K19mkz-n8Rr8ZI_B.png",
+      "featuredLatest": false,
+      "published": "2026-08-07T17:53:32+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.3114,
+      "signalGroup": "Product updates",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "TutorMoments: Do AI tutors know when to help and when to hold back?",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Hugging Face Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "tutormoments-tutors-know-when-help-when"
+    },
+    {
+      "title": "Alibaba tests new business model for Qwen open-source AI",
+      "url": "https://www.artificialintelligence-news.com/news/alibaba-qwen-open-source-ai-revenue-sharing",
+      "source": "Artificial Intelligence News",
+      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
+      "sourceWeight": 0.82,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Alibaba plans to introduce revenue-sharing terms for some commercial users of its next Qwen open-weight AI model, Reuters reported, citing two people familiar with the company’s plans. The arrangement would require larger companies that generate revenue from offering the model as a service to reach a commercial agreement with Alibaba. The exact revenue-sharing rate has [&#8230;]\nThe post Alibaba tests new business model for Qwen open-source AI appeared first on AI News.",
+      "image": "",
+      "featuredLatest": false,
+      "published": "2026-08-07T10:00:00+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0362,
+      "signalGroup": "Business",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "brief": {
+        "whatHappened": "Alibaba tests new business model for Qwen open-source AI",
+        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
+        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
+        "sourceFrame": "Seen via Artificial Intelligence News."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "alibaba-tests-business-model-qwen-open-source"
+    },
+    {
+      "title": "Denmark Adds Oral Defenses to Curb AI Cheating in High Schools",
+      "url": "https://www.techrepublic.com/article/news-emea-denmark-ai-cheating-oral-defenses",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Denmark is adding oral defenses and tighter exam controls in upper secondary schools as officials move to curb AI-assisted cheating and verify student work.\nThe post Denmark Adds Oral Defenses to Curb AI Cheating in High Schools appeared first on TechRepublic.",
+      "image": "https://assets.techrepublic.com/uploads/2026/08/Image_e5ev0le5ev0le5ev-1024x683.png?f=jpeg",
+      "featuredLatest": false,
+      "published": "2026-08-07T12:56:30+00:00",
+      "firstSeen": "2026-08-07T22:00:01.247241+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
+      "editorial_allow": false,
+      "editorial_reason": "low_editorial_priority",
+      "score": 3.0053,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Denmark Adds Oral Defenses to Curb AI Cheating in High Schools",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "denmark-adds-oral-defenses-curb-cheating"
     }
   ],
   "tools": [
@@ -185,7 +662,7 @@
       "lastSeen": "2026-08-05T11:27:33.408335+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8194,
+      "score": 12.8162,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -220,7 +697,7 @@
       "lastSeen": "2026-07-31T11:34:39.559002+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9085,
+      "score": 10.9084,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -251,10 +728,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-07T10:08:55.975212+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3048,
+      "score": 9.2777,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -285,10 +762,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-07T10:08:55.975212+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.0243,
+      "score": 7.9636,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -322,7 +799,7 @@
       "lastSeen": "2026-08-03T12:35:06.970137+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.509,
+      "score": 7.5087,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -353,10 +830,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.956,
+      "score": 6.9425,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -462,7 +939,7 @@
       "lastSeen": "2026-08-05T11:27:33.408335+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 12.8194,
+      "score": 12.8162,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -497,7 +974,7 @@
       "lastSeen": "2026-07-31T11:34:39.559002+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 10.9085,
+      "score": 10.9084,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -528,10 +1005,10 @@
       "featuredLatest": false,
       "published": "2026-08-03T18:39:20+00:00",
       "firstSeen": "2026-08-04T11:32:26.664793+00:00",
-      "lastSeen": "2026-08-07T10:08:55.975212+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.3048,
+      "score": 9.2777,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -562,10 +1039,10 @@
       "featuredLatest": false,
       "published": "2026-08-04T23:35:35+00:00",
       "firstSeen": "2026-08-05T11:27:33.408335+00:00",
-      "lastSeen": "2026-08-07T10:08:55.975212+00:00",
+      "lastSeen": "2026-08-07T22:00:01.247241+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.0243,
+      "score": 7.9636,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -599,7 +1076,7 @@
       "lastSeen": "2026-08-03T12:35:06.970137+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 7.509,
+      "score": 7.5087,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -630,10 +1107,10 @@
       "featuredLatest": false,
       "published": "2026-08-02T17:23:42+00:00",
       "firstSeen": "2026-08-03T12:35:06.970137+00:00",
-      "lastSeen": "2026-08-06T11:31:16.562964+00:00",
+      "lastSeen": "2026-08-07T04:00:01.839777+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 6.956,
+      "score": 6.9425,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -659,8 +1136,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1114,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "items": 1115,
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -670,7 +1147,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -680,7 +1157,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -690,7 +1167,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -700,7 +1177,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 835,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -710,7 +1187,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -720,7 +1197,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -728,10 +1205,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "<urlopen error timed out>",
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "status": "ok",
+      "items": 12,
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -741,7 +1217,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -751,7 +1227,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -761,7 +1237,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -771,7 +1247,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "The Next Web",
@@ -781,7 +1257,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -791,7 +1267,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 847,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -801,7 +1277,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -811,7 +1287,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -821,7 +1297,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Anthropic News",
@@ -831,7 +1307,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 254,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "The Verge AI",
@@ -841,7 +1317,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -851,7 +1327,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Simon Willison",
@@ -861,7 +1337,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -871,7 +1347,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Latent Space",
@@ -881,7 +1357,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Import AI",
@@ -889,10 +1365,9 @@
       "role": "secondary",
       "category": "AI",
       "sourceType": "",
-      "status": "error",
-      "items": 0,
-      "error": "HTTP Error 403: Forbidden",
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "status": "ok",
+      "items": 20,
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -902,7 +1377,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 153,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -912,7 +1387,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -922,7 +1397,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -932,7 +1407,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -942,7 +1417,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -952,7 +1427,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -962,7 +1437,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -972,19 +1447,8 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-08-07T10:08:55.975212+00:00"
+      "checkedAt": "2026-08-07T22:00:01.247241+00:00"
     }
   ],
-  "errors": [
-    {
-      "source": "Artificial Intelligence News",
-      "url": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "error": "<urlopen error timed out>"
-    },
-    {
-      "source": "Import AI",
-      "url": "https://importai.substack.com/feed",
-      "error": "HTTP Error 403: Forbidden"
-    }
-  ]
+  "errors": []
 }
