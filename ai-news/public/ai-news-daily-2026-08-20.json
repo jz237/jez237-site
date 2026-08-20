@@ -1,6 +1,6 @@
 {
   "date": "2026-08-20",
-  "updatedAt": "2026-08-20T10:00:01.330960+00:00",
+  "updatedAt": "2026-08-20T16:00:01.224851+00:00",
   "items": [
     {
       "title": "Binance now lets AI agents trade, but keeping them in check is largely up to users",
@@ -16,10 +16,10 @@
       "featuredLatest": false,
       "published": "2026-08-20T09:30:00+00:00",
       "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 12.9748,
+      "score": 12.8083,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -32,6 +32,102 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "binance-lets-agents-trade-keeping-them"
+    },
+    {
+      "title": "Amazon Makes Alexa+ Free on Fire TV — No Prime Required",
+      "url": "https://www.techrepublic.com/article/news-alexa-plus-fire-tv-free",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Amazon is rolling out Alexa+ at no additional cost to eligible US Fire TV owners, even without Prime. The move expands access to Amazon’s AI assistant while reserving some advanced features and Echo device access for subscribers.\nThe post Amazon Makes Alexa+ Free on Fire TV — No Prime Required appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-e1af592123a80fe3f7.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-20T11:31:56+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 11.3216,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Amazon Makes Alexa+ Free on Fire TV — No Prime Required",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "amazon-makes-alexa+-free-fire-prime",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/08/ringo-firetv-lineup-1600x900-1.jpg?f=jpeg"
+    },
+    {
+      "title": "Slack launches Slack Code, where teams and AI agents build together",
+      "url": "https://thenextweb.com/news/slack-code-ai-coding-channels-launch",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Slack launched a coding product on Thursday. Slack Code adds project-specific channels where teams and AI agents write, review and ship software together. The work happens inside the chat app rather than in a separate browser tab. The mechanic is simple. Tag a coding agent from any conversation and it spins up a dedicated code [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-bcb07d9e851f6cf650.avif",
+      "featuredLatest": false,
+      "published": "2026-08-20T15:45:49+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "editorial_score_pass",
+      "score": 10.5428,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Slack launches Slack Code, where teams and AI agents build together",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "slack-launches-slack-code-where-teams",
+      "imageOriginal": "https://media.thenextweb.com/2026/08/Slack-code.avif"
+    },
+    {
+      "title": "How to Quiz Yourself With ChatGPT and Check the Answers",
+      "url": "https://www.techrepublic.com/article/news-chatgpt-quiz-study-mode-verify-answers",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A better ChatGPT quiz starts with a tighter prompt, a clear difficulty level, and independent checks when the answer actually matters.\nThe post How to Quiz Yourself With ChatGPT and Check the Answers appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-f953004a88712ce9da.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-20T13:54:20+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "major_product_news",
+      "score": 9.1878,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "How to Quiz Yourself With ChatGPT and Check the Answers",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "chatgpt-how-quiz-yourself-chatgpt-check",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/08/ChatGPT-Image-Aug-20-2026-09_07_15-PM.png?f=jpeg"
     },
     {
       "title": "Unitree’s founder says robots are nearing a ‘ChatGPT moment’",
@@ -50,7 +146,7 @@
       "lastSeen": "2026-08-20T10:00:01.330960+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.172,
+      "score": 9.0151,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -66,40 +162,164 @@
       "imageOriginal": "https://media.thenextweb.com/2026/08/Wang-Xingxing-.avif"
     },
     {
-      "title": "The AI Engineering Skills Map for Knowledge Workers",
-      "url": "https://aidailybrief.ai/e/2026-08-18",
-      "source": "The AI Daily Brief",
-      "sourceUrl": "https://aidailybrief.ai/",
-      "sourceWeight": 0.88,
+      "title": "Grok exfiltrates user data when malicious instructions are encrypted",
+      "url": "https://arstechnica.com/security/2026/08/grok-exfiltrates-user-data-when-malicious-instructions-are-encrypted",
+      "source": "Ars Technica (AI/Tech)",
+      "sourceUrl": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+      "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Cursor takes on GitHub with Origin, Anthropic's leaked $65 billion run rate sets up the IPO valuation fight, and Stripe closes its $7 billion OpenRouter deal — then the main event: NLW's five-skill AI engineering map for knowledge workers, from capability mapping to rapid skill acquisition, all resting on a foundation of domain judgment.",
-      "image": "public/thumbnails/news-10ecd2b9d79b40e37c.png",
+      "summary": "Cryptographic Context Injection is only the latest way to break an LLM safety guardrail.",
+      "image": "public/thumbnails/news-d7b45efca50ebbad9a.jpg",
       "featuredLatest": false,
-      "published": "2026-08-20T10:00:05.422036+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "published": "2026-08-20T13:00:35+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.132,
-      "signalGroup": "Business",
+      "score": 8.0623,
+      "signalGroup": "Product updates",
       "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
       "brief": {
-        "whatHappened": "The AI Engineering Skills Map for Knowledge Workers",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The AI Daily Brief."
+        "whatHappened": "Grok exfiltrates user data when malicious instructions are encrypted",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via Ars Technica (AI/Tech)."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "grok-grok-exfiltrates-user-data-when",
+      "imageOriginal": "https://cdn.arstechnica.net/wp-content/uploads/2026/06/xai-grok-1152x648.jpg"
+    },
+    {
+      "title": "It’s Greg Brockman’s OpenAI now",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/982774/greg-brockman-openai-role-expansion",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI has had a hell of a year. The company spent months battling former co-founder Elon Musk in a sensational jury trial, was hit with a high-profile trade secrets lawsuit from Apple, and faced widespread scrutiny after an unreleased model hacked another AI company. As it prepares for an IPO, a steady string of executives [&#8230;]",
+      "image": "public/thumbnails/news-843d98b6ba74f01b11.webp",
+      "featuredLatest": false,
+      "published": "2026-08-20T15:45:55+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.1528,
+      "signalGroup": "Policy & risk",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
+      "brief": {
+        "whatHappened": "It’s Greg Brockman’s OpenAI now",
+        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
+        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
+        "sourceFrame": "Seen via The Verge AI."
       },
       "tryWorthy": true,
       "toolCandidate": false,
-      "clusterKey": "engineering-skills-map-knowledge-workers",
-      "clusterTitle": "The AI Engineering Skills Map for Knowledge Workers",
-      "clusterSize": 2,
-      "relatedSources": [
-        "The AI Daily Brief"
-      ]
+      "clusterKey": "openai-greg-brockman-openai",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKP221_GREG_BROCKMAN2.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
+    {
+      "title": "Slack is launching collaborative vibe-coding channels",
+      "url": "https://www.theverge.com/tech/982628/slack-code-vibe-coding-channels-launch",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Slack is introducing dedicated channels where teams can vibe-code together with AI agents instead of jumping between different tools and conversations. The Slack Code launch includes open, project-specific code channels with dedicated user tabs, alongside features that compare coding changes and preview HTML output before the project is shipped. \"With Slack Code, when you have [&#8230;]",
+      "image": "public/thumbnails/news-eb41be3359f4e0281a.webp",
+      "featuredLatest": false,
+      "published": "2026-08-20T12:00:00+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 7.0443,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Slack is launching collaborative vibe-coding channels",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "slack-launching-collaborative-vibe-coding-channels",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/23988538/acastro_STK060_slack_04.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
+    },
+    {
+      "title": "Bring the Fire: Play Games on GeForce NOW With New Firefox Browser Support",
+      "url": "https://blogs.nvidia.com/blog/geforce-now-thursday-firefox",
+      "source": "NVIDIA Blog",
+      "sourceUrl": "https://blogs.nvidia.com/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "primary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "It’s a new way into the cloud.  GeForce NOW welcomes Firefox support to the cloud, opening up another way to jump into high-performance PC gaming straight from the browser, starting today. Whether on a school laptop or everyday PC, it’s now even easier to play supported PC games without downloading a dedicated app. Plus, discover [&#8230;]",
+      "image": "public/thumbnails/news-adac06270520e546ec.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-20T13:00:24+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.7022,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Primary source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "Bring the Fire: Play Games on GeForce NOW With New Firefox Browser Support",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via NVIDIA Blog."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "bring-fire-play-games-geforce-firefox",
+      "imageOriginal": "https://blogs.nvidia.com/wp-content/uploads/2026/08/GFN_Thursday-Firefox.jpg"
+    },
+    {
+      "title": "Meta AI’s new Mac app wants you to talk to your apps",
+      "url": "https://techcrunch.com/2026/08/20/meta-ais-new-mac-app-wants-you-to-talk-to-your-apps",
+      "source": "TechCrunch AI",
+      "sourceUrl": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "sourceWeight": 0.85,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Meta said its Muse Spark model is powering the dictation feature.",
+      "image": "public/thumbnails/news-ee662d8995c956fb6b.webp",
+      "featuredLatest": false,
+      "published": "2026-08-20T12:11:57+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 6.2798,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
+      "brief": {
+        "whatHappened": "Meta AI’s new Mac app wants you to talk to your apps",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via TechCrunch AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "meta-meta-mac-app-wants-you",
+      "imageOriginal": "https://techcrunch.com/wp-content/uploads/2026/05/meta-ai-GettyImages-2264943773.jpg?w=1024"
     },
     {
       "title": "Agentic AI in government just hit the hard part: deciding what a machine may decide",
@@ -115,10 +335,10 @@
       "featuredLatest": false,
       "published": "2026-08-20T09:00:00+00:00",
       "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": true,
       "editorial_reason": "high_score_override",
-      "score": 6.0179,
+      "score": 5.8536,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Reported source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -131,6 +351,134 @@
       "tryWorthy": true,
       "toolCandidate": false,
       "clusterKey": "agentic-government-just-hit-hard-part"
+    },
+    {
+      "title": "The AI Backlash Is Getting Stupider. But Also Smarter.",
+      "url": "https://aidailybrief.ai/e/2026-08-19",
+      "source": "The AI Daily Brief",
+      "sourceUrl": "https://aidailybrief.ai/",
+      "sourceWeight": 0.88,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "A beer brand is selling urine-mailing as anti-data-center catharsis and a centrist governor who courted $20 billion from Amazon is now calling developers bullies — yet between Shapiro's criteria-based executive order and OpenAI's voluntary training pause, the anti-AI conversation may finally be producing something to actually negotiate with.",
+      "image": "public/thumbnails/news-1f7a449e28788fa164.png",
+      "featuredLatest": false,
+      "published": "2026-08-20T16:00:05.820580+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.332,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "The AI Backlash Is Getting Stupider. But Also Smarter",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The AI Daily Brief."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "backlash-getting-stupider-also-smarter",
+      "imageOriginal": "https://aidailybrief.ai/og/2026-08-19.png"
+    },
+    {
+      "title": "OpenAI previews Private Safety Processing to keep zero data retention",
+      "url": "https://thenextweb.com/news/openai-zero-data-retention-private-safety-processing",
+      "source": "The Next Web",
+      "sourceUrl": "https://thenextweb.com/feed",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "OpenAI has told enterprise customers that its promise not to keep their data will survive the next generation of models. The company set out the position on Wednesday in a post titled “Offering Zero Data Retention for frontier models”. In it, it previewed Private Safety Processing. The system looks for misuse across several related interactions [&hellip;]\nThis story continues at The Next Web",
+      "image": "public/thumbnails/news-d9b8b4c212f2012934.avif",
+      "featuredLatest": false,
+      "published": "2026-08-20T12:57:30+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 5.0609,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "OpenAI previews Private Safety Processing to keep zero data retention",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Next Web."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "openai-openai-previews-private-safety-processing",
+      "imageOriginal": "https://media.thenextweb.com/2026/07/altman-white-house-openai-model-preview-agents.avif"
+    },
+    {
+      "title": "One Tool Lets You Manage Every Reply, Post, and DM on X for Life, $50",
+      "url": "https://www.techrepublic.com/article/tweetback-starter-lifetime-subscription",
+      "source": "TechRepublic AI",
+      "sourceUrl": "https://www.techrepublic.com/rssfeeds/topic/artificial-intelligence/",
+      "sourceWeight": 0.75,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "One browser extension drafts your X replies and posts, tracks the accounts you follow, and schedules them.\nThe post One Tool Lets You Manage Every Reply, Post, and DM on X for Life, $50 appeared first on TechRepublic.",
+      "image": "public/thumbnails/news-43b7ba0065879e92e8.jpg",
+      "featuredLatest": false,
+      "published": "2026-08-20T12:18:37+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.5428,
+      "signalGroup": "Agents & tooling",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
+      "brief": {
+        "whatHappened": "One Tool Lets You Manage Every Reply, Post, and DM on X for Life, $50",
+        "whoItAffects": "People building or using agent workflows, automation, coding tools, and workplace assistants.",
+        "practicalImpact": "Watch permissions, reliability, and integration details before treating it as production-ready.",
+        "sourceFrame": "Seen via TechRepublic AI."
+      },
+      "tryWorthy": true,
+      "toolCandidate": false,
+      "clusterKey": "one-tool-lets-you-manage-every",
+      "imageOriginal": "https://assets.techrepublic.com/uploads/2026/08/unnamed-5.jpg?f=jpeg"
+    },
+    {
+      "title": "Welcome to the AI crisis in math",
+      "url": "https://www.theverge.com/podcast/982434/ai-math-openai-astra-existential-crisis",
+      "source": "The Verge AI",
+      "sourceUrl": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+      "sourceWeight": 0.9,
+      "sourceRole": "secondary",
+      "sourceType": "",
+      "category": "AI",
+      "summary": "Today on Decoder, I’m talking with Robert Hart, The Verge’s London-based AI reporter, about what AI is doing to the field of mathematics and the existential crisis many lead mathematicians are having about it. OpenAI just published a set of solutions to longstanding problems in math that went off like a bombshell in the field. [&#8230;]",
+      "image": "public/thumbnails/news-70f0251a3120e6f570.webp",
+      "featuredLatest": false,
+      "published": "2026-08-20T14:00:00+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
+      "editorial_allow": true,
+      "editorial_reason": "high_score_override",
+      "score": 4.3005,
+      "signalGroup": "Product updates",
+      "sourceTier": "Reported source",
+      "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
+      "brief": {
+        "whatHappened": "Welcome to the AI crisis in math",
+        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
+        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
+        "sourceFrame": "Seen via The Verge AI."
+      },
+      "tryWorthy": false,
+      "toolCandidate": false,
+      "clusterKey": "welcome-crisis-math",
+      "imageOriginal": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/DCD_082026_Site.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200"
     },
     {
       "title": "Meta, Google, TikTok, and LinkedIn now face an Australian news law whether they carry news or not",
@@ -149,7 +497,7 @@
       "lastSeen": "2026-08-20T10:00:01.330960+00:00",
       "editorial_allow": false,
       "editorial_reason": "did_not_clear_gate",
-      "score": 3.5242,
+      "score": 3.3593,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -164,314 +512,66 @@
       "clusterKey": "google-meta-meta-google-tiktok-linkedin-face"
     },
     {
-      "title": "AI data centre regulation just got a template that needs no new law",
-      "url": "https://www.artificialintelligence-news.com/news/ai-data-centre-regulation-pennsylvania-template",
-      "source": "Artificial Intelligence News",
-      "sourceUrl": "https://www.artificialintelligence-news.com/categories/artificial-intelligence/feed/",
-      "sourceWeight": 0.82,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "AI data centre regulation in Pennsylvania now begins with a signature. Before the state will so much as open a developer&#8217;s permit file, that developer has to sign a contract accepting a fixed set of conditions and the penalties for breaking them, and persuade the town that has to live with the building to say [&#8230;]\nThe post AI data centre regulation just got a template that needs no new law appeared first on AI News.",
-      "image": "",
-      "featuredLatest": false,
-      "published": "2026-08-20T08:00:00+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 3.2885,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "AI data centre regulation just got a template that needs no new law",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via Artificial Intelligence News."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "data-centre-regulation-just-got-template"
-    },
-    {
-      "title": "[AINews] Death of Params: Z.ai CEO Jie Tang on GLM 5.3 and the new Post-training Scaling Law",
-      "url": "https://www.latent.space/p/ainews-death-of-params-zai-ceo-jie",
-      "source": "Latent Space",
-      "sourceUrl": "https://www.latent.space/feed",
-      "sourceWeight": 0.86,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Every lab CEO is on X now",
-      "image": "https://substackcdn.com/image/fetch/$s_!Xdc0!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1b1d78e9-d676-408c-9f84-8c9f244ef898_864x1821.png",
-      "featuredLatest": false,
-      "published": "2026-08-20T05:17:12+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.469,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "[AINews] Death of Params: Z.ai CEO Jie Tang on GLM 5.3 and the new Post-training Scaling Law",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via Latent Space."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "ainews-death-params-ceo-jie-tang"
-    },
-    {
-      "title": "Trump hosts crypto executives as the SEC proposes its friendliest rules yet",
-      "url": "https://thenextweb.com/news/sec-regulation-crypto-assets-trump-white-house",
+      "title": "Tesla’s Austin robotaxis are now fully driverless, tracking shows",
+      "url": "https://thenextweb.com/news/tesla-robotaxi-austin-fully-driverless-bollards",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "The Securities and Exchange Commission spent Tuesday proposing the friendliest set of crypto rules an American regulator has ever put on paper. On Wednesday, the industry that would benefit from them was at the White House, having lunch with the president. Donald Trump hosted crypto executives and trade body officials in Washington alongside Paul Atkins, [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/US-Securities-and-Exchange-Commission.avif",
+      "summary": "Tesla’s robotaxi service in Austin appears to have gone fully driverless. Over the past fortnight, every one of the 170 rides logged by an independent monitoring project ran with no human safety monitor on board, across 54 different cars. Two days earlier, a passenger filmed one of those cars driving straight through a line of [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/08/tesla-robotaxi.avif",
       "featuredLatest": false,
-      "published": "2026-08-20T07:30:18+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "published": "2026-08-20T14:43:27+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.4263,
-      "signalGroup": "Research",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
-      "brief": {
-        "whatHappened": "Trump hosts crypto executives as the SEC proposes its friendliest rules yet",
-        "whoItAffects": "People tracking where model behavior, evaluation, or training techniques may head next.",
-        "practicalImpact": "Useful if the idea looks likely to move from paper into products or tooling.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "trump-hosts-crypto-executives-sec-proposes"
-    },
-    {
-      "title": "Skanska takes a $1.2bn order to build four US data centres for an unnamed client",
-      "url": "https://thenextweb.com/news/skanska-1-2bn-four-data-centres-southeast-usa",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Skanska has signed a $1.2bn contract to build four data centres in the southeastern United States, the largest single data centre order the Swedish construction group has announced. The client is an existing customer, and Skanska is not saying who it is. The four buildings will total around 75,000 square metres, or roughly 808,000 square [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Skanska.avif",
-      "featuredLatest": false,
-      "published": "2026-08-20T09:18:52+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1292,
+      "score": 3.2117,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "Skanska takes a $1.2bn order to build four US data centres for an unnamed client",
+        "whatHappened": "Tesla’s Austin robotaxis are now fully driverless, tracking shows",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "skanska-takes-2bn-order-build-four"
+      "clusterKey": "tesla-austin-robotaxis-fully-driverless-tracking"
     },
     {
-      "title": "Callosum raises $100m to make AI workloads cheaper, with the British state on the cap table",
-      "url": "https://thenextweb.com/news/callosum-100m-round-uk-sovereign-ai",
+      "title": "Baidu’s Apollo Go is now on Uber in Dubai, with no safety driver",
+      "url": "https://thenextweb.com/news/uber-baidu-apollo-go-dubai-driverless",
       "source": "The Next Web",
       "sourceUrl": "https://thenextweb.com/feed",
       "sourceWeight": 0.75,
       "sourceRole": "secondary",
       "sourceType": "",
       "category": "AI",
-      "summary": "Callosum has raised $100m, six months after leaving stealth with a tenth of that, and the round includes money from the British state. Bloomberg reported the raise, describing the UK’s public AI fund as a backer. The Cambridge company came out of stealth in February with $10.25m led by Plural, the fund founded by former Wise executive [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/02/Callosum-raises-10.25-million.avif",
+      "summary": "Uber has put Baidu’s driverless robotaxis on its app in Dubai. Book an UberX or an Uber Comfort there now and the app may match you with an Apollo Go vehicle that has nobody in it. A dedicated “Autonomous” option raises the odds for anyone who wants one on purpose. The service went live on [&hellip;]\nThis story continues at The Next Web",
+      "image": "https://media.thenextweb.com/2026/08/uber-baidu-dubai.avif",
       "featuredLatest": false,
-      "published": "2026-08-20T08:50:51+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "published": "2026-08-20T14:26:03+00:00",
+      "firstSeen": "2026-08-20T16:00:01.224851+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": false,
       "editorial_reason": "low_editorial_priority",
-      "score": 2.1153,
+      "score": 3.2032,
       "signalGroup": "Product updates",
       "sourceTier": "Reported source",
       "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
       "brief": {
-        "whatHappened": "Callosum raises $100m to make AI workloads cheaper, with the British state on the cap table",
+        "whatHappened": "Baidu’s Apollo Go is now on Uber in Dubai, with no safety driver",
         "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
         "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
         "sourceFrame": "Seen via The Next Web."
       },
       "tryWorthy": false,
       "toolCandidate": false,
-      "clusterKey": "callosum-raises-100m-make-workloads-cheaper"
-    },
-    {
-      "title": "A Berkeley professor wrote about students cutting corners, but a detector flagged her op-ed",
-      "url": "https://thenextweb.com/news/berkeley-professor-ai-op-ed-pangram-detector",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Zvezdelina Stankova published an op-ed on 15 August arguing that Berkeley admits students who cannot do middle school mathematics. Within days, the argument had been overtaken by a question about how the op-ed itself was written. Zvezdelina Stankova, a teaching professor of mathematics at UC Berkeley, made her case in the San Francisco Standard under [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/University-of-California-at-Berkeley.avif",
-      "featuredLatest": false,
-      "published": "2026-08-20T08:44:11+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.112,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "A Berkeley professor wrote about students cutting corners, but a detector flagged her op-ed",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "berkeley-professor-wrote-students-cutting-corners"
-    },
-    {
-      "title": "China’s robot traffic police can do almost everything except stop you",
-      "url": "https://thenextweb.com/news/china-robot-traffic-police-no-arrest-powers",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "China’s robot traffic police can direct cars, scold jaywalkers, and give a lost tourist directions to the nearest metro station. What they cannot do is stop anybody, and that limitation is written into the design rather than left to the machine’s discretion. The clearest deployment sits in Hangzhou, where the local traffic police put 15 humanoid [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Intelligent-Police-Unit-R001.avif",
-      "featuredLatest": false,
-      "published": "2026-08-20T08:29:25+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.1048,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "China’s robot traffic police can do almost everything except stop you",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "china-robot-traffic-police-can-almost"
-    },
-    {
-      "title": "Revolut wants to let Nik Storonsky borrow $250mn against his own shares",
-      "url": "https://thenextweb.com/news/revolut-storonsky-250mn-share-pledge-project-shasta",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Revolut has asked its shareholders to let Nik Storonsky borrow up to $250mn against his stake in the company, five times what the current rules permit. The request went to investors last week as part of a governance exercise the fintech has codenamed Project Shasta. Storonsky owns roughly 29% of Europe’s most valuable private technology [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Nik-Storonsky-Revolut.avif",
-      "featuredLatest": false,
-      "published": "2026-08-20T08:00:57+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.091,
-      "signalGroup": "Policy & risk",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Policy and risk stories often become product constraints later, especially around data access, safety claims, export rules, and copyright.",
-      "brief": {
-        "whatHappened": "Revolut wants to let Nik Storonsky borrow $250mn against his own shares",
-        "whoItAffects": "Product builders, platform users, and anyone depending on model access or data rights.",
-        "practicalImpact": "Policy moves can become tomorrow's product limits, compliance burden, or availability issue.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "revolut-wants-let-nik-storonsky-borrow"
-    },
-    {
-      "title": "Meta’s first witness told a jury the problem was Mark Zuckerberg’s culture",
-      "url": "https://thenextweb.com/news/meta-trial-bejar-testimony-oakland",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Arturo Béjar took the stand in Oakland on Wednesday and told a federal jury that the reason Meta could never fix its own safety problems was the culture Mark Zuckerberg had built. He is the first witness in a trial that four state attorneys general have spent years assembling. The case opened on Tuesday before [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Arturo-Bejar.avif",
-      "featuredLatest": false,
-      "published": "2026-08-20T07:52:05+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0867,
-      "signalGroup": "Product updates",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Worth a scan because it touches the practical AI stack: products, models, tooling, infrastructure, or adoption pressure.",
-      "brief": {
-        "whatHappened": "Meta’s first witness told a jury the problem was Mark Zuckerberg’s culture",
-        "whoItAffects": "AI watchers looking for practical shifts in products, platforms, or adoption.",
-        "practicalImpact": "Skim for whether this changes what to try, trust, buy, or ignore.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "meta-meta-first-witness-told-jury"
-    },
-    {
-      "title": "Velatir raises €5m to sell European companies control over their own AI",
-      "url": "https://thenextweb.com/news/velatir-5m-seed-european-ai-control",
-      "source": "The Next Web",
-      "sourceUrl": "https://thenextweb.com/feed",
-      "sourceWeight": 0.75,
-      "sourceRole": "secondary",
-      "sourceType": "",
-      "category": "AI",
-      "summary": "Velatir, an Odense startup that sells companies a way to see and control the AI their employees are already using, has raised €5m in seed funding six months after closing its pre-seed. Spintop Ventures, a Nordic early-stage firm investing in the company for the first time, co-led the round with Ugly Duckling Ventures, the Danish [&hellip;]\nThis story continues at The Next Web",
-      "image": "https://media.thenextweb.com/2026/08/Velatir-team.avif",
-      "featuredLatest": false,
-      "published": "2026-08-20T06:36:08+00:00",
-      "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
-      "editorial_allow": false,
-      "editorial_reason": "low_editorial_priority",
-      "score": 2.0509,
-      "signalGroup": "Business",
-      "sourceTier": "Reported source",
-      "whyItMatters": "Business moves are a map of where the industry thinks the bottlenecks and durable demand will be.",
-      "brief": {
-        "whatHappened": "Velatir raises €5m to sell European companies control over their own AI",
-        "whoItAffects": "People reading the industry map: capital, hiring, acquisitions, and market pressure.",
-        "practicalImpact": "The money trail usually points at where companies think the durable demand is.",
-        "sourceFrame": "Seen via The Next Web."
-      },
-      "tryWorthy": false,
-      "toolCandidate": false,
-      "clusterKey": "velatir-raises-sell-european-companies-control"
+      "clusterKey": "baidu-apollo-uber-dubai-safety-driver"
     }
   ],
   "tools": [
@@ -492,7 +592,7 @@
       "lastSeen": "2026-08-18T09:47:02.893382+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.221,
+      "score": 17.219,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -527,7 +627,7 @@
       "lastSeen": "2026-08-18T09:47:02.893382+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.815,
+      "score": 9.8139,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -561,7 +661,7 @@
       "lastSeen": "2026-08-17T09:55:08.479084+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2115,
+      "score": 9.211,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -626,10 +726,10 @@
       "featuredLatest": false,
       "published": "2026-08-17T14:15:56+00:00",
       "firstSeen": "2026-08-18T09:47:02.893382+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7756,
+      "score": 8.7499,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -660,10 +760,10 @@
       "featuredLatest": false,
       "published": "2026-08-19T14:26:08+00:00",
       "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.1468,
+      "score": 8.0487,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -767,7 +867,7 @@
       "lastSeen": "2026-08-18T09:47:02.893382+00:00",
       "editorial_allow": true,
       "editorial_reason": "model_release",
-      "score": 17.221,
+      "score": 17.219,
       "signalGroup": "Model releases",
       "sourceTier": "Watchlist source",
       "whyItMatters": "A model release changes the practical menu: capability, pricing, context, or deployment options may shift for real workflows.",
@@ -802,7 +902,7 @@
       "lastSeen": "2026-08-18T09:47:02.893382+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.815,
+      "score": 9.8139,
       "signalGroup": "Product updates",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Big-lab product changes tend to become the new baseline fast, so they are worth tracking even when the launch sounds incremental.",
@@ -836,7 +936,7 @@
       "lastSeen": "2026-08-17T09:55:08.479084+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 9.2115,
+      "score": 9.211,
       "signalGroup": "Research",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Research items are useful when they hint at future product behavior, benchmark movement, or techniques likely to show up in tools.",
@@ -901,10 +1001,10 @@
       "featuredLatest": false,
       "published": "2026-08-17T14:15:56+00:00",
       "firstSeen": "2026-08-18T09:47:02.893382+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.7756,
+      "score": 8.7499,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -935,10 +1035,10 @@
       "featuredLatest": false,
       "published": "2026-08-19T14:26:08+00:00",
       "firstSeen": "2026-08-20T09:48:21.513462+00:00",
-      "lastSeen": "2026-08-20T10:00:01.330960+00:00",
+      "lastSeen": "2026-08-20T16:00:01.224851+00:00",
       "editorial_allow": true,
       "editorial_reason": "major_product_news",
-      "score": 8.1468,
+      "score": 8.0487,
       "signalGroup": "Agents & tooling",
       "sourceTier": "Watchlist source",
       "whyItMatters": "Agent tooling is moving from demos into everyday control surfaces, where reliability and permissions matter as much as raw model skill.",
@@ -1032,8 +1132,8 @@
       "category": "AI",
       "sourceType": "",
       "status": "ok",
-      "items": 1141,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "items": 1142,
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Google AI Blog",
@@ -1043,7 +1143,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Google DeepMind Blog",
@@ -1053,7 +1153,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Google Research Blog",
@@ -1063,7 +1163,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Hugging Face Blog",
@@ -1073,7 +1173,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 845,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "NVIDIA Blog",
@@ -1083,7 +1183,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 18,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "AWS Machine Learning Blog",
@@ -1093,7 +1193,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Artificial Intelligence News",
@@ -1103,7 +1203,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 12,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Ars Technica (AI/Tech)",
@@ -1113,7 +1213,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Together AI Blog",
@@ -1123,7 +1223,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 100,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "TechRepublic AI",
@@ -1133,7 +1233,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "ScienceDaily AI",
@@ -1143,7 +1243,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 60,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "The Next Web",
@@ -1153,7 +1253,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "BBC Discovery",
@@ -1163,7 +1263,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 849,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "BBC Infinite Monkey Cage",
@@ -1173,7 +1273,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 239,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "BBC The Life Scientific",
@@ -1183,7 +1283,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 356,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "TechCrunch AI",
@@ -1193,7 +1293,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Anthropic News",
@@ -1203,7 +1303,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 255,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "The Verge AI",
@@ -1213,7 +1313,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "VentureBeat AI",
@@ -1223,7 +1323,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 7,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Simon Willison",
@@ -1233,7 +1333,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 30,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Interconnects AI",
@@ -1243,7 +1343,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Latent Space",
@@ -1253,7 +1353,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Import AI",
@@ -1263,7 +1363,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 20,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "The AI Daily Brief",
@@ -1273,7 +1373,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 144,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Microsoft Research Blog",
@@ -1283,7 +1383,7 @@
       "sourceType": "",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "LiteLLM Releases",
@@ -1293,7 +1393,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Hugging Face Transformers Releases",
@@ -1303,7 +1403,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Model Context Protocol Python SDK Releases",
@@ -1313,7 +1413,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 10,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Model Context Protocol Spec Releases",
@@ -1323,7 +1423,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 9,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "OpenAI Cookbook Releases",
@@ -1333,7 +1433,7 @@
       "sourceType": "tool-release",
       "status": "ok",
       "items": 0,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     },
     {
       "source": "Product Hunt AI",
@@ -1343,7 +1443,7 @@
       "sourceType": "tool-directory",
       "status": "ok",
       "items": 50,
-      "checkedAt": "2026-08-20T10:00:01.330960+00:00"
+      "checkedAt": "2026-08-20T16:00:01.224851+00:00"
     }
   ],
   "errors": []
