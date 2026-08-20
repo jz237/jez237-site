@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 19 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 20 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of January 30-February 5, 1984 — Macintosh Meets the Public in Boston</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-01-30</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-30</guid>
+      <pubDate>Thu, 20 Aug 2026 12:00:00 GMT</pubDate>
+      <description>Steve Jobs brings Apple’s new graphical computer before the Boston Computer Society for its first public demonstration. BOSTON, Jan. 30 — Six days after Apple formally introduced Macintosh, Steve Jobs carried the compact computer onto the Boston Computer Society stage for what the society’s founder remembers as its first public showing. Before a room of experienced personal-computer users, the machine’s windows, icons and mouse moved from advertising promise to a working demonstration. Also this week: IBM Takes the Clone War to Court · Lisa 2 Becomes Macintosh’s Elder Sibling · MacWrite and MacPaint Make the Desktop Tangible · Computer Games Ask What Comes After the Crash.</description>
+    </item>
     <item>
       <title>Week of January 23-29, 1984 — Macintosh Arrives: Apple Bets $2,495 on the Mouse</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-01-23</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-19</guid>
       <pubDate>Sat, 01 Aug 2026 12:00:00 GMT</pubDate>
       <description>A stripped-down $6,995 configuration aims to revive the pioneering graphical workstation while IBM seizes the middle of the personal-computer market. Apple Computer opened the week with a dramatic answer to sluggish Lisa sales: dealers were told that the $9,995 mouse-driven workstation would be offered in a stripped-down $6,995 configuration. The $3,000 cut followed new president John Sculley’s four-day tour addressing some 1,500 dealers in 25 cities, a public show of urgency from a company suddenly chasing IBM in the market it helped create. Also this week: FCC Clears Coleco’s Adam for the Holiday Computer Battle · Portable Computers Crowd the Road-Warrior Market · IBM’s Shadow Lengthens Across Personal Computing.</description>
-    </item>
-    <item>
-      <title>Week of September 12-18, 1983 — OSBORNE CRASHES INTO BANKRUPTCY</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-09-12</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-12</guid>
-      <pubDate>Fri, 31 Jul 2026 12:00:00 GMT</pubDate>
-      <description>The portable pioneer seeks Chapter 11 protection after demand collapses and suppliers are left owed $45 million. SAN FRANCISCO — Osborne Computer sought bankruptcy protection September 13, a stunning reversal for the company that turned a suitcase-sized computer and a rich software bundle into one of personal computing’s first spectacular success stories. Also this week: Shakeout Reaches Computers and Cartridges · M.U.L.E. and Archon Turn Rivalry into Art · A Portable That Really Fits the Lap.</description>
     </item>
   </channel>
 </rss>

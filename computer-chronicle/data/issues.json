@@ -4,6 +4,374 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-20",
+      "historicDate": "1984-01-30",
+      "displayDate": "Week of January 30-February 5, 1984",
+      "edition": "Issue 079 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Extra-edition warmth on aged newsprint",
+        "motifs": [
+          "compact Macintosh",
+          "mouse and desktop icons",
+          "Boston user-group auditorium",
+          "3.5-inch disk"
+        ],
+        "layout": "Milestone broadsheet with a dominant Macintosh demonstration lead, dense columns, charts and boxed sidebars"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of January 30-February 5, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Dominant upper-page Macintosh public-debut package",
+        "secondaryRail": "Clone war, Lisa 2, software and game-design desk",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "deep red",
+        "secondary": "IBM blue",
+        "texture": "warm newsprint, halftone screens and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-01-30.jpg",
+        "alt": "GPT Image 2 vintage newspaper front page for the week of January 30, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "milestone": {
+        "title": "Macintosh reaches the public",
+        "note": "Steve Jobs’s January 30 Boston Computer Society presentation put the mouse-driven graphical computer before the world’s largest personal-computer user organization."
+      },
+      "editorNote": "Six days after its unveiling, Macintosh meets an experienced public audience; elsewhere, IBM draws a hard legal line around the code inside PC compatibility.",
+      "morningLine": "The mouse takes the stage in Boston while the clone business heads for court.",
+      "lead": {
+        "headline": "Macintosh Meets the Public in Boston",
+        "dek": "Steve Jobs brings Apple’s new graphical computer before the Boston Computer Society for its first public demonstration.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "body": [
+          "BOSTON, Jan. 30 — Six days after Apple formally introduced Macintosh, Steve Jobs carried the compact computer onto the Boston Computer Society stage for what the society’s founder remembers as its first public showing. Before a room of experienced personal-computer users, the machine’s windows, icons and mouse moved from advertising promise to a working demonstration.",
+          "Jobs showed point-and-click commands, cutting and pasting between applications, mixed text and pictures, drawing tools, stacked desktop documents and even three-dimensional chess. The sequence made Apple’s central argument visible: ordinary work could be directed through consistent pictures and menus instead of a memorized command language.",
+          "The $2,495 launch model combines 128 kilobytes of RAM, 64 kilobytes of ROM, a built-in high-resolution monochrome display, a mouse and a 3.5-inch disk drive. Apple is including MacWrite and MacPaint for purchasers during the first 100 days, giving buyers immediate demonstrations of proportional type, page composition and bitmap drawing.",
+          "Microsoft Multiplan is available at launch, while Apple says more than 100 outside companies are developing products. The company also says its Fremont line can turn out one Macintosh every 27 seconds, but expects demand to outrun supply for several months.",
+          "The Boston appearance supplies the crucial test missing from launch-day spectacle: how the system behaves in front of knowledgeable users. Macintosh is still a costly, memory-tight first model, but its public debut makes the graphical desktop a concrete personal-computing proposition."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "IBM Takes the Clone War to Court",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "body": [
+            "IBM has sued makers of PC-compatible products over copyrighted code, putting the industry on notice that an open hardware bus does not make the PC’s basic input-output system free to copy. The ROM software at issue is what lets compatible hardware behave like an IBM machine.",
+            "The pressure separates functional compatibility from literal duplication. Vendors that want to share the IBM PC software market will need independently written BIOS code—a legal and engineering path that promises to shape which clone makers survive."
+          ]
+        },
+        {
+          "headline": "Lisa 2 Becomes Macintosh’s Elder Sibling",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            2
+          ],
+          "body": [
+            "Apple has introduced three Lisa 2 models alongside Macintosh, describing the systems as one 32-bit graphical family. The revised Lisa line adopts the smaller 3.5-inch disk format and is intended to share software with the less expensive Macintosh.",
+            "The pairing gives Apple a ladder from the $2,495 compact desktop to higher-end office machines. February’s BYTE puts Macintosh on its cover while also examining Lisa 2, capturing Apple’s attempt to turn a new interface into a product family."
+          ]
+        },
+        {
+          "headline": "MacWrite and MacPaint Make the Desktop Tangible",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            2
+          ],
+          "body": [
+            "MacWrite handles multiple fonts and sizes, search and replace, and pictures pasted into documents. MacPaint supplies brushes, pencils, erasers, textures and geometric shapes for bitmap illustration.",
+            "Bundling both programs during the first 100 days is more than a promotion: the pair demonstrates shared menus, cut and paste, proportional type and mixed graphics immediately after the box is opened. Microsoft Multiplan adds a familiar business application to the launch shelf."
+          ]
+        },
+        {
+          "headline": "Computer Games Ask What Comes After the Crash",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5,
+            6
+          ],
+          "body": [
+            "February’s COMPUTE! asks both “What Makes A Good Game?” and “The Future Of Electronic Games” as the American cartridge-console trade contracts. The magazine’s machine-spanning coverage suggests that inventive play is migrating toward programmable home computers.",
+            "Its review of Computer War for Atari, VIC-20 and TI machines places nuclear strategy in the post-WarGames wave. The evidence is a monthly trend rather than a precise release diary, but it shows designers and players looking beyond arcade imitation toward deeper simulations."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Macintosh",
+          "summary": "128K graphical desktop computer with mouse and 3.5-inch drive at $2,495 suggested retail.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Lisa 2 family",
+          "summary": "Three revised Lisa systems adopt the Macintosh disk format and common graphical-family positioning.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0,
+            2
+          ]
+        },
+        {
+          "title": "Computer War",
+          "summary": "Nuclear-strategy title reviewed for Atari 8-bit, VIC-20 and TI-99/4A in February COMPUTE!.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5,
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "MacWrite",
+          "detail": "Word processing with multiple fonts, search-and-replace and pasted graphics."
+        },
+        {
+          "name": "MacPaint",
+          "detail": "Bitmap drawing with brushes, textures, shapes and editing tools."
+        },
+        {
+          "name": "Microsoft Multiplan",
+          "detail": "Financial-planning spreadsheet available for Macintosh at launch."
+        },
+        {
+          "name": "Computer War",
+          "detail": "Strategy game for Atari, VIC-20 and TI home computers."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Computer War — Atari, VIC-20, TI-99/4A",
+            "Capture the Flag — Atari computers",
+            "Flip and Flop — Atari computers",
+            "Enchanter — home computers",
+            "Operation Whirlwind — home computers"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "1. Karma Chameleon — Culture Club",
+            "2. Owner of a Lonely Heart — Yes",
+            "3. Talking in Your Sleep — The Romantics",
+            "4. Joanna — Kool & the Gang",
+            "5. Break My Stride — Matthew Wilder"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Terms of Endearment",
+            "2. Silkwood",
+            "3. Reckless",
+            "4. Never Cry Wolf",
+            "5. Hot Dog... The Movie"
+          ]
+        },
+        {
+          "label": "Software Shelf",
+          "items": [
+            "MacWrite",
+            "MacPaint",
+            "Microsoft Multiplan",
+            "Computer War"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple Macintosh",
+          "price": "$2,495 suggested retail",
+          "note": "MacWrite and MacPaint included during the first 100 days."
+        },
+        {
+          "item": "BYTE, February 1984",
+          "price": "$3.50 U.S.",
+          "note": "Macintosh cover issue; $3.95 Canada and £2.10 U.K."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "HP and Vitalink Link Up",
+          "text": "A January 31 announcement confirms a communications agreement between Hewlett-Packard and Vitalink; technical details remain limited in the accessible report."
+        },
+        {
+          "headline": "Mac Accessories Reach the Desk",
+          "text": "Apple lists the ImageWriter, numeric keypad, carrying case, disk pack and 300/1200-baud modem as immediately available."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Karma Chameleon",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 2,
+          "title": "Owner of a Lonely Heart",
+          "artist": "Yes"
+        },
+        {
+          "rank": 3,
+          "title": "Talking in Your Sleep",
+          "artist": "The Romantics"
+        },
+        {
+          "rank": 4,
+          "title": "Joanna",
+          "artist": "Kool & the Gang"
+        },
+        {
+          "rank": 5,
+          "title": "Break My Stride",
+          "artist": "Matthew Wilder"
+        }
+      ],
+      "periodAd": {
+        "headline": "The Mouse Takes the Stage",
+        "summary": "Windows, pictures and words move beneath one small pointer.",
+        "tagline": "Apple Macintosh — suggested retail $2,495"
+      },
+      "market": {
+        "headline": "Compatibility Meets Copyright",
+        "summary": "IBM’s BIOS suits make independent code—not literal copying—the safer route into the expanding PC-compatible market.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          3,
+          4
+        ]
+      },
+      "worldAnchor": {
+        "headline": "China Launches Experimental Satellite",
+        "summary": "UPI reported from Peking on January 30 that China launched an experimental satellite, which observers saw as a possible communications and rocket-technology advance.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Macintosh Boston demonstration, specifications, price and software",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "IBM clone copyright litigation",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "Computer-game press and titles",
+            "confidence": "same-month",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          },
+          {
+            "claim": "Music and movie rankings",
+            "confidence": "week-specific",
+            "sourceRefs": [
+              7,
+              8,
+              9
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Apple Introduces Macintosh Advanced Personal Computer",
+          "url": "https://web.stanford.edu/dept/SUL/sites/mac/primary/docs/pr1.html"
+        },
+        {
+          "label": "The Very First “Stevenote”",
+          "url": "https://computerhistory.org/blog/the-very-first-stevenote/"
+        },
+        {
+          "label": "BYTE, February 1984",
+          "url": "https://www.worldradiohistory.com/Archive-Byte/80s/Byte-1984-02.pdf"
+        },
+        {
+          "label": "I.B.M. Sues Rivals on Chip Copyright",
+          "url": "https://www.nytimes.com/1984/02/01/business/ibm-sues-rivals-on-chip-copyright.html"
+        },
+        {
+          "label": "Send in the Clones",
+          "url": "https://www.computerhistory.org/revolution/personal-computers/17/302"
+        },
+        {
+          "label": "COMPUTE! Issue 45 index",
+          "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue45"
+        },
+        {
+          "label": "Computer War For Atari, VIC, And TI",
+          "url": "https://www.atarimagazines.com/compute/issue45/computerwar.php"
+        },
+        {
+          "label": "Domestic 1984 Weekend 5",
+          "url": "https://www.boxofficemojo.com/weekend/1984W05/"
+        },
+        {
+          "label": "Billboard Hot 100 archive, February 4, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-02-04"
+        },
+        {
+          "label": "Weekly Rock Top 20 for February 4, 1984",
+          "url": "https://www.tunecaster.com/charts/80/rock8405.html"
+        },
+        {
+          "label": "China launches satellite",
+          "url": "https://www.upi.com/Archives/1984/01/30/China-launches-satellite/8870444286800/"
+        },
+        {
+          "label": "HP and Vitalink announce communications agreement",
+          "url": "https://www.upi.com/Archives/1984/01/31/Hewlett-Packard-Corp-and-Vitalink-Communications-Corp-announced-Tuesday-they/5735444373200/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "Mac Desk Wanted",
+          "copy": "Early adopter seeks second 3.5-inch drive; careful correspondence invited."
+        },
+        {
+          "headline": "Game Designers",
+          "copy": "Home-computer club debates what makes a good game. Bring ideas, not quarters."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-19",
       "historicDate": "1984-01-23",
       "displayDate": "Week of January 23-29, 1984",
