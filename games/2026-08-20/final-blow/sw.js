@@ -1,4 +1,4 @@
-const CACHE_NAME = "final-blow-offline-1.1f";
+const CACHE_NAME = "final-blow-offline-1.1h";
 const PRECACHE = [
   "./",
   "./index.html",
