@@ -472,6 +472,7 @@ Jez provided or explicitly approved.
 - VOIDFORGE is publicly hosted at `https://voidforge.jez237.com/`; its
   source of truth is `https://github.com/jz237/voidforge`.
 - Current shipped game directories with pages include:
+  `/games/2026-08-20/final-blow/`,
   `/games/2026-06-05/invaders/`,
   `/games/2026-06-05/neon-invaders/`,
   `/games/2026-06-09/choplifter/`,

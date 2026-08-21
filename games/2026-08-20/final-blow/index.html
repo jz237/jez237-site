@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b13">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Final Blow: Philly After Dark — a playable 1990s-inspired weapon fighter prototype.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23080b13'/%3E%3Cpath d='M14 10h39l-4 12H29l-2 8h18l-4 11H24l-5 15H5z' fill='%23ef2c28'/%3E%3C/svg%3E">
+  <title>Final Blow: Philly After Dark</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+    <header class="topbar" aria-label="Game status bar">
+      <a class="mini-brand" href="#" id="homeLink" aria-label="Return to title">
+        <span>FINAL</span><strong>BLOW</strong>
+      </a>
+      <div class="build-tag">FIGHTER AUDIO EDITION <b>1.0G</b></div>
+      <div id="offlineBadge" class="offline-badge" aria-live="polite">CACHE CHECK</div>
+      <button id="trackButton" class="track-button" type="button" aria-label="Play next soundtrack">♫ PHILLY AFTER DARK</button>
+      <div id="padStatus" class="pad-status" aria-live="polite"><i></i> KEYBOARD READY</div>
+    </header>
+
+    <section id="gameFrame" class="game-frame" aria-label="Final Blow game">
+      <canvas id="game" width="1280" height="720" tabindex="0" aria-label="Fighting game canvas"></canvas>
+
+      <div id="hud" class="hud hidden" aria-hidden="true">
+        <div class="fighter-hud p1-hud">
+          <div class="hud-name"><span class="side-tag">P1</span><b id="p1Name">DEATHBLOW</b><span id="p1Rounds" class="round-pips"></span></div>
+          <div class="health-shell"><i id="p1Health"></i><em id="p1Damage"></em></div>
+          <div class="grit-row"><span>GRIT</span><div class="meter-shell"><i id="p1Meter"></i></div><b id="p1Grit">0</b></div>
+        </div>
+        <div class="timer-wrap"><span id="roundLabel">ROUND 1</span><b id="timer">99</b></div>
+        <div class="fighter-hud p2-hud">
+          <div class="hud-name"><span id="p2Rounds" class="round-pips"></span><b id="p2Name">JEZ</b><span class="side-tag">P2</span></div>
+          <div class="health-shell"><i id="p2Health"></i><em id="p2Damage"></em></div>
+          <div class="grit-row"><b id="p2Grit">0</b><div class="meter-shell"><i id="p2Meter"></i></div><span>GRIT</span></div>
+        </div>
+      </div>
+      <div id="onlineHud" class="online-hud" aria-live="polite" hidden>
+        <b id="onlineHudState">ROLLBACK SYNC</b><span id="onlineHudPing">— MS</span><span id="onlineHudDelay">2F DELAY</span><span id="onlineHudRollbacks">0 RB</span>
+      </div>
+      <div id="demoHud" class="demo-hud" aria-live="polite" hidden>
+        <b>WATCH DEMO</b><span id="demoHudMatchup">DEATHBLOW VS JEZ</span><em id="demoHudCycle">CYCLE 1</em><small>PRESS ANY BUTTON TO PLAY</small>
+      </div>
+      <div id="onlineInterruption" class="online-interruption" aria-live="assertive" hidden>
+        <strong id="onlineInterruptionTitle">RECONNECTING</strong><span id="onlineInterruptionDetail">Holding the match while the encrypted link returns…</span>
+      </div>
+      <div id="p1Combo" class="combo-readout p1-combo" aria-live="polite"><b>0</b><span>HIT COMBO</span><em>0 DAMAGE</em></div>
+      <div id="p2Combo" class="combo-readout p2-combo" aria-live="polite"><b>0</b><span>HIT COMBO</span><em>0 DAMAGE</em></div>
+
+      <aside id="trainingPanel" class="training-panel" aria-label="Training controls" hidden>
+        <div class="training-stats">
+          <span><small>DAMAGE</small><b id="trainingDamage">0</b></span>
+          <span><small>COMBO</small><b id="trainingCombo">0</b></span>
+          <span><small>FRAME DATA</small><b id="trainingFrames">—</b></span>
+          <span><small>ADVANTAGE</small><b id="trainingAdvantage">—</b></span>
+        </div>
+        <div class="training-tools">
+          <label>DUMMY <select id="trainingDummySelect">
+            <option value="stand">STAND</option><option value="guard">AUTO GUARD</option>
+            <option value="crouch">CROUCH</option><option value="jump">JUMP</option><option value="cpu">CPU</option>
+          </select></label>
+          <label><input id="trainingRecoverToggle" type="checkbox" checked> AUTO LIFE</label>
+          <label><input id="trainingGritToggle" type="checkbox" checked> INFINITE GRIT</label>
+          <button id="trainingResetButton" type="button">RESET POSITION</button>
+        </div>
+        <div id="trainingInputs" class="training-inputs">INPUT: —</div>
+      </aside>
+
+      <div id="announcer" class="announcer hidden" aria-live="assertive">
+        <strong></strong><span></span>
+      </div>
+      <div id="soundCaption" class="sound-caption" aria-live="polite" hidden></div>
+
+      <section id="pausePanel" class="pause-panel" aria-labelledby="pauseTitle" hidden>
+        <p class="eyebrow">THE STREET WAITS</p>
+        <h2 id="pauseTitle">PAUSED</h2>
+        <div id="pausePerformance" class="pause-performance">AUTO VISUALS</div>
+        <div class="menu-stack">
+          <button id="resumeButton" class="arcade-button primary menu-focus" type="button">RESUME</button>
+          <button id="restartButton" class="arcade-button" type="button">RESTART ROUND</button>
+          <button id="pauseOptionsButton" class="arcade-button" type="button">CONTROLS &amp; OPTIONS</button>
+          <button id="pauseSelectButton" class="arcade-button ghost" type="button">SELECT FIGHTERS</button>
+        </div>
+        <p>ESC / P / START TO RESUME</p>
+      </section>
+
+      <section id="titleScreen" class="screen title-screen active" aria-labelledby="gameTitle">
+        <div class="title-glow"></div>
+        <div class="title-lockup">
+          <p class="eyebrow">A PHILADELPHIA WEAPON FIGHTER</p>
+          <h1 id="gameTitle"><span>FINAL</span><strong>BLOW</strong></h1>
+          <h2>PHILLY AFTER DARK</h2>
+          <p class="hook">Eight fighters. Two streets. One last chance to finish it.</p>
+        </div>
+        <div class="menu-stack">
+          <button class="arcade-button primary menu-focus" data-mode="arcade">1 PLAYER · ARCADE</button>
+          <button class="arcade-button" data-mode="versus">2 PLAYER · LOCAL VERSUS</button>
+          <button class="arcade-button online-button" id="onlineButton">ONLINE · PRIVATE ROOM</button>
+          <button class="arcade-button" data-mode="training">TRAINING LAB</button>
+          <button class="arcade-button demo-button" id="demoButton">WATCH DEMO · CPU VS CPU</button>
+          <button class="arcade-button ghost" id="controlsButton">CONTROLS & OPTIONS</button>
+        </div>
+        <div class="start-hint">PRESS <kbd>ENTER</kbd> OR <span class="xbox-a">A</span> TO START</div>
+      </section>
+
+      <section id="onlineScreen" class="screen online-screen" aria-labelledby="onlineTitle">
+        <div class="online-copy">
+          <p class="eyebrow">HEAD-TO-HEAD · INVITE ONLY</p>
+          <h2 id="onlineTitle">PRIVATE<br><strong>ROOMS</strong></h2>
+          <p>Create a sealed two-player room, share one private invite, then connect directly over encrypted WebRTC.</p>
+          <div class="online-security" aria-label="Private room security">
+            <span>🔒 TOKEN AUTH</span><span>◉ P2P ENCRYPTED</span><span>⌛ 15 MINUTES</span><span>2 SEATS ONLY</span>
+          </div>
+          <p class="online-checkpoint-note">LIVE ROLLBACK · INPUT PREDICTION · DESYNC GUARD · RECONNECT &amp; REMATCH</p>
+        </div>
+        <div class="online-terminal">
+          <div id="onlineStatus" class="online-status idle" aria-live="polite">
+            <i></i><div><strong id="onlineStatusTitle">ROOM SYSTEM READY</strong><span id="onlineStatusDetail">Create a room or open a private invite.</span></div>
+          </div>
+          <div id="onlineActions" class="online-actions">
+            <button id="onlineCreateButton" class="arcade-button primary" type="button">CREATE PRIVATE ROOM</button>
+            <div class="online-divider"><span>OR JOIN AN INVITE</span></div>
+            <label for="onlineInviteInput">PASTE PRIVATE INVITE LINK</label>
+            <input id="onlineInviteInput" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://…/#online=join…">
+            <button id="onlineJoinButton" class="arcade-button" type="button">JOIN PRIVATE ROOM</button>
+          </div>
+          <div id="onlineRoomDetails" class="online-room-details" hidden>
+            <div class="online-room-head"><span>ROOM FINGERPRINT</span><b id="onlineFingerprint">—</b><small id="onlineExpiry">EXPIRES IN 15:00</small></div>
+            <label for="onlineInviteLink">PRIVATE GUEST INVITE</label>
+            <div class="online-copy-row"><input id="onlineInviteLink" type="text" readonly><button id="onlineCopyButton" type="button">COPY</button></div>
+            <div class="online-seats">
+              <span id="onlineHostSeat"><i></i><b>HOST</b><em>WAITING</em></span>
+              <span id="onlineGuestSeat"><i></i><b>GUEST</b><em>WAITING</em></span>
+            </div>
+            <div class="online-link-readout"><span>DIRECT LINK</span><b id="onlineLatency">NEGOTIATING</b></div>
+            <div id="onlineMatchSetup" class="online-match-setup" hidden>
+              <div class="online-match-grid">
+                <label>YOUR FIGHTER<select id="onlineFighterSelect" aria-label="Your online fighter">
+                  <option value="deathblow">DEATHBLOW</option><option value="jez">JEZ</option>
+                  <option value="alan">ALLAN</option><option value="post">POST</option>
+                  <option value="benny">BENNY</option><option value="donald">DONALD TRUMP</option>
+                  <option value="cyraxx">CYRAXX</option><option value="ali">ALI G</option>
+                </select></label>
+                <div class="online-opponent"><span>OPPONENT</span><b id="onlineOpponentFighter">CHOOSING…</b></div>
+                <label>STAGE<select id="onlineStageSelect" aria-label="Online stage">
+                  <option value="kensington">KENSINGTON &amp; ALLEGHENY</option><option value="vet">THE VET PARKING LOT</option>
+                </select></label>
+                <label>INPUT DELAY<select id="onlineDelaySelect" aria-label="Online input delay">
+                  <option value="auto">AUTO · PING TUNED</option><option value="0">0 FRAMES</option><option value="1">1 FRAME</option>
+                  <option value="2">2 FRAMES</option><option value="3">3 FRAMES</option><option value="4">4 FRAMES</option>
+                </select></label>
+              </div>
+              <button id="onlineReadyButton" class="arcade-button primary" type="button">READY FOR ROLLBACK</button>
+              <p id="onlineMatchStatus">LINK BOTH SEATS TO ARM THE MATCH</p>
+            </div>
+            <button id="onlineDisconnectButton" class="arcade-button ghost compact" type="button">CLOSE ROOM</button>
+          </div>
+          <p id="onlineError" class="online-error" role="alert" hidden></p>
+          <button class="text-button online-back" data-back="title">← BACK TO TITLE</button>
+        </div>
+      </section>
+
+      <section id="selectScreen" class="screen select-screen" aria-labelledby="selectTitle">
+        <header class="screen-header">
+          <p>CHOOSE YOUR WEAPON</p>
+          <h2 id="selectTitle">SELECT FIGHTER</h2>
+          <div id="selectPrompt">PLAYER 1 — CHOOSE</div>
+        </header>
+        <div id="rosterGrid" class="roster-grid" role="listbox" aria-label="Fighter roster"></div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="title">← BACK</button>
+          <div id="selectionReadout"><span>P1</span> DEATHBLOW <i>VS</i> <span>P2</span> JEZ</div>
+          <button id="fighterContinue" class="arcade-button compact" disabled>STAGE SELECT →</button>
+        </div>
+      </section>
+
+      <section id="stageScreen" class="screen stage-screen" aria-labelledby="stageTitle">
+        <header class="screen-header">
+          <p>WHERE WILL IT END?</p>
+          <h2 id="stageTitle">SELECT STAGE</h2>
+        </header>
+        <div id="arcadeRoutePreview" class="arcade-route-preview" aria-label="Arcade ladder" hidden></div>
+        <div id="stageGrid" class="stage-grid">
+          <button class="stage-card menu-focus selected" data-stage="kensington">
+            <span class="stage-preview kensington-preview"></span>
+            <strong>KENSINGTON &amp; ALLEGHENY</strong>
+            <small>BENEATH THE EL · MIDNIGHT</small>
+          </button>
+          <button class="stage-card" data-stage="vet">
+            <span class="stage-preview vet-preview"></span>
+            <strong>THE VET PARKING LOT</strong>
+            <small>VETERANS STADIUM · 1999</small>
+          </button>
+        </div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="select">← FIGHTERS</button>
+          <div id="stageReadout">KENSINGTON &amp; ALLEGHENY</div>
+          <button id="fightButton" class="arcade-button compact primary">FIGHT →</button>
+        </div>
+      </section>
+
+      <section id="ladderScreen" class="screen ladder-screen" aria-labelledby="arcadeLadderTitle">
+        <div class="ladder-boss" aria-hidden="true">
+          <img src="assets/fighters/commissioner.webp" alt="" draggable="false">
+          <span>THE COMMISSIONER</span>
+        </div>
+        <div class="ladder-copy">
+          <p class="eyebrow" id="arcadeLadderCounter">BOUT 2 / 8</p>
+          <h2 id="arcadeLadderTitle">THE STREET OPENS</h2>
+          <p id="arcadeLadderMessage">One name crossed out. Seven remain.</p>
+          <div id="arcadeLadderNodes" class="arcade-ladder-nodes" aria-label="Arcade route"></div>
+          <button id="arcadeContinueButton" class="arcade-button primary menu-focus">NEXT FIGHT →</button>
+        </div>
+      </section>
+
+      <section id="endingScreen" class="screen ending-screen" aria-labelledby="endingTitle">
+        <div id="endingArt" class="ending-art" aria-hidden="true"></div>
+        <div class="ending-copy">
+          <p class="eyebrow">ARCADE CLEARED · PHILLY AFTER DARK</p>
+          <h2 id="endingTitle">THE GROUND REMEMBERS</h2>
+          <blockquote id="endingQuote">THE LAST BELL RANG UNDER HIS FEET.</blockquote>
+          <p id="endingStory"></p>
+          <div class="ending-stamp"><span>THE COMMISSIONER</span><b>DEFEATED</b></div>
+          <div class="menu-stack horizontal">
+            <button id="endingReplayButton" class="arcade-button primary menu-focus">NEW ARCADE RUN</button>
+            <button class="arcade-button ghost" data-back="title">TITLE</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="screen result-screen" aria-labelledby="resultTitle">
+        <div id="victoryPose" class="victory-pose" aria-hidden="true"></div>
+        <div class="result-copy">
+          <p class="eyebrow" id="resultEyebrow">MATCH COMPLETE</p>
+          <h2 id="resultTitle">DEATHBLOW WINS</h2>
+          <div id="resultFinisher">FAULTLINE EXECUTION</div>
+          <blockquote id="resultQuote">THE STREET MOVED FIRST.</blockquote>
+          <p id="onlineRematchStatus" class="online-rematch-status" hidden>REMATCH VOTES · 0 / 2</p>
+          <p id="demoResultStatus" class="demo-result-status" hidden>NEXT RANDOM FIGHT IN 5 SECONDS · PRESS ANY BUTTON TO PLAY</p>
+          <div class="menu-stack horizontal">
+            <button id="rematchButton" class="arcade-button primary menu-focus">REMATCH</button>
+            <button id="reselectButton" class="arcade-button">SELECT FIGHTERS</button>
+            <button class="arcade-button ghost" data-back="title">TITLE</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="touchControls" class="touch-controls" aria-label="Touch controls">
+        <div class="touch-move">
+          <button data-touch="left" aria-label="Move left">◀</button>
+          <button data-touch="down" aria-label="Crouch or block">▼</button>
+          <button data-touch="right" aria-label="Move right">▶</button>
+        </div>
+        <div class="touch-action">
+          <button class="touch-final" data-touch="final" aria-label="Final Blow">FB</button>
+          <button data-touch="special" aria-label="Special attack">S</button>
+          <button data-touch="heavy" aria-label="Heavy attack">H</button>
+          <button data-touch="light" aria-label="Light attack">L</button>
+          <button data-touch="guard" aria-label="Guard">G</button>
+          <button data-touch="jump" aria-label="Jump">▲</button>
+        </div>
+      </div>
+      <button id="touchPauseButton" class="touch-pause" type="button" aria-label="Pause game">Ⅱ</button>
+    </section>
+
+    <footer class="footer-strip">
+      <span id="stageTicker">KENSINGTON &amp; ALLEGHENY // PHILADELPHIA</span>
+      <span>CHAINS · CANCELS · JUGGLES · GRIT SUPERS · FINAL BLOWS</span>
+    </footer>
+  </main>
+
+  <dialog id="controlsDialog" class="controls-dialog">
+    <form method="dialog">
+      <header>
+        <div><p>SYSTEM CONFIG</p><h2>CONTROLS &amp; OPTIONS</h2></div>
+        <button class="dialog-close" value="close" aria-label="Close">×</button>
+      </header>
+      <div class="controls-grid">
+        <section>
+          <h3>PLAYER 1 · KEYBOARD</h3>
+          <p><kbd>A</kbd><kbd>D</kbd> MOVE/GUARD · <kbd>W</kbd> JUMP · <kbd>S</kbd> CROUCH/LOW GUARD</p>
+          <p><kbd>J</kbd> LIGHT · <kbd>K</kbd> HEAVY · <kbd>L</kbd> SPECIAL</p>
+          <p>DOUBLE-TAP DASH · LIGHT + HEAVY THROW · <kbd>I</kbd> GUARD</p>
+          <p>HEAVY + SPECIAL ENHANCED · FULL GRIT + <kbd>U</kbd> SUPER</p>
+          <p>COMMANDS: ↓ → SPECIAL · ↓ ← SPECIAL · → ↓ → HEAVY · ← → HEAVY</p>
+          <p>FINAL BLOWS: ↓ → HEAVY · ← ↓ → SPECIAL · <kbd>U</kbd> CHARACTER COMBO</p>
+        </section>
+        <section>
+          <h3>PLAYER 2 · KEYBOARD</h3>
+          <p><kbd>←</kbd><kbd>→</kbd> MOVE/GUARD · <kbd>↑</kbd> JUMP · <kbd>↓</kbd> CROUCH/LOW GUARD</p>
+          <p><kbd>1</kbd> LIGHT · <kbd>2</kbd> HEAVY · <kbd>3</kbd> SPECIAL</p>
+          <p>DOUBLE-TAP DASH · LIGHT + HEAVY THROW · <kbd>5</kbd> GUARD</p>
+          <p>HEAVY + SPECIAL ENHANCED · FULL GRIT + <kbd>0</kbd> SUPER</p>
+          <p>COMMANDS: ↓ → SPECIAL · ↓ ← SPECIAL · → ↓ → HEAVY · ← → HEAVY</p>
+          <p>FINAL BLOWS: ↓ → HEAVY · ← ↓ → SPECIAL · <kbd>0</kbd> CHARACTER COMBO</p>
+        </section>
+        <section>
+          <h3>XINPUT / GAMEPAD</h3>
+          <p>STICK / D-PAD MOVE · <span class="xbox-a">A</span> JUMP</p>
+          <p><span class="xbox-x">X</span> LIGHT · <span class="xbox-y">Y</span> HEAVY · LB SPECIAL</p>
+          <p><span class="xbox-b">B</span> GUARD · X + Y THROW · Y + LB ENHANCED</p>
+          <p>FULL GRIT + LT + RT SUPER · POST-KO CHARACTER FINAL BLOW</p>
+        </section>
+        <section class="options-panel">
+          <h3>OPTIONS</h3>
+          <label><input id="goreToggle" type="checkbox" checked><span>GRAPHIC FATALITIES · ARCADE SPLATTER</span></label>
+          <label><input id="flashToggle" type="checkbox" checked><span>SCREEN FLASH</span></label>
+          <label><input id="musicToggle" type="checkbox" checked><span>ELEVENLABS MUSIC</span></label>
+          <label><input id="soundToggle" type="checkbox" checked><span>ELEVENLABS SFX</span></label>
+          <label><input id="reducedMotionToggle" type="checkbox"><span>REDUCED MOTION</span></label>
+          <label><input id="highContrastToggle" type="checkbox"><span>HIGH CONTRAST HUD</span></label>
+          <label><input id="soundCaptionsToggle" type="checkbox" checked><span>VISUAL SOUND CUES</span></label>
+          <label><input id="attractModeToggle" type="checkbox" checked><span>IDLE WATCH DEMO · 45 SECONDS</span></label>
+          <div class="volume-control">
+            <label for="musicVolume"><span>MUSIC VOLUME</span><output id="musicVolumeValue">100%</output></label>
+            <input id="musicVolume" type="range" min="0" max="100" step="1" value="100">
+          </div>
+          <div class="volume-control">
+            <label for="sfxVolume"><span>SFX VOLUME</span><output id="sfxVolumeValue">100%</output></label>
+            <input id="sfxVolume" type="range" min="0" max="100" step="1" value="100">
+          </div>
+          <label class="music-picker"><span>SOUNDTRACK</span>
+            <select id="musicSelect" aria-label="Soundtrack selection">
+              <option value="auto">AUTO ROTATE · ALL 4</option>
+              <option value="0">PHILLY AFTER DARK</option>
+              <option value="1">VET PARKING LOT</option>
+              <option value="2">NEON SIGN WAR</option>
+              <option value="3">SUBWAY AFTER MIDNIGHT</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>CPU DIFFICULTY</span>
+            <select id="aiDifficultySelect" aria-label="CPU difficulty">
+              <option value="rookie">ROOKIE · PATIENT LEARNER</option>
+              <option value="street">STREET · BALANCED</option>
+              <option value="pro">PRO · SHARP</option>
+              <option value="final">FINAL · RELENTLESS</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>CONTROL STYLE</span>
+            <select id="controlStyleSelect" aria-label="Control style">
+              <option value="classic">CLASSIC · MOTION COMMANDS</option>
+              <option value="modern">MODERN · DIRECTION + BUTTON</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>COLOR ASSIST</span>
+            <select id="colorAssistSelect" aria-label="Color assistance palette">
+              <option value="standard">STANDARD</option>
+              <option value="deuteranopia">DEUTERANOPIA</option>
+              <option value="protanopia">PROTANOPIA</option>
+              <option value="tritanopia">TRITANOPIA</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>SCREEN SHAKE</span>
+            <select id="shakeSelect" aria-label="Screen shake intensity">
+              <option value="1">FULL</option><option value="0.5">LOW</option><option value="0">OFF</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>VISUAL QUALITY</span>
+            <select id="visualQualitySelect" aria-label="Visual quality">
+              <option value="auto">AUTO · DEVICE AWARE</option><option value="high">HIGH</option>
+              <option value="balanced">BALANCED</option><option value="battery">BATTERY SAVER</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>TOUCH LAYOUT</span>
+            <select id="touchHandednessSelect" aria-label="Touch control layout">
+              <option value="standard">STANDARD</option><option value="left">LEFT-HANDED</option>
+            </select>
+          </label>
+          <div class="volume-control">
+            <label for="touchScale"><span>TOUCH SIZE</span><output id="touchScaleValue">100%</output></label>
+            <input id="touchScale" type="range" min="80" max="130" step="5" value="100">
+          </div>
+          <div class="volume-control">
+            <label for="touchOpacity"><span>TOUCH OPACITY</span><output id="touchOpacityValue">82%</output></label>
+            <input id="touchOpacity" type="range" min="40" max="100" step="2" value="82">
+          </div>
+          <label><input id="touchHapticsToggle" type="checkbox" checked><span>TOUCH HAPTICS</span></label>
+          <button id="installButton" class="install-button" type="button" hidden>INSTALL OFFLINE GAME</button>
+        </section>
+        <section class="remap-panel">
+          <header><h3>COMPLETE INPUT REMAP</h3><button id="resetBindingsButton" type="button">RESTORE DEFAULTS</button></header>
+          <p>Choose any keyboard action, then press a key. Duplicate assignments swap automatically.</p>
+          <div class="remap-columns"><div><h4>PLAYER 1 KEYBOARD</h4><div id="p1KeyBindings" class="binding-grid"></div></div><div><h4>PLAYER 2 KEYBOARD</h4><div id="p2KeyBindings" class="binding-grid"></div></div></div>
+          <h4>XINPUT / GAMEPAD</h4><div id="padBindings" class="pad-binding-grid"></div>
+        </section>
+        <section class="move-list-panel">
+          <header>
+            <div><h3>FEATURED FIGHTER MOVE LIST</h3><p>Unique frame data, specials and enhanced routes.</p></div>
+            <select id="moveListSelect" aria-label="Choose fighter move list">
+              <option value="deathblow">DEATHBLOW</option>
+              <option value="jez">JEZ</option>
+              <option value="alan">ALLAN</option>
+              <option value="post">POST</option>
+              <option value="benny">BENNY</option>
+              <option value="donald">DONALD</option>
+              <option value="cyraxx">CYRAXX</option>
+              <option value="ali">ALI G</option>
+            </select>
+          </header>
+          <div id="moveListIdentity" class="move-list-identity"></div>
+          <div id="moveListRows" class="move-list-rows"></div>
+        </section>
+      </div>
+      <p class="dialog-note">Hit-confirm normals into chains or specials. Enhanced moves cost 25 Grit; during blockstun, Enhanced or Forward + Special triggers a 30-Grit guard reversal. Supers cost 100. Post-KO FB still performs each fighter's unique Final Blow.</p>
+      <button class="arcade-button primary dialog-done" value="close">DONE</button>
+    </form>
+  </dialog>
+
+  <aside id="rotateGate" class="rotate-gate" aria-live="polite" aria-label="Rotate phone to play">
+    <div class="phone-turn" aria-hidden="true"><i></i><b>↻</b></div>
+    <p>FULL-SCREEN FIGHT MODE</p>
+    <h2>TURN YOUR PHONE SIDEWAYS</h2>
+    <span>Final Blow requires landscape on mobile.</span>
+    <button id="fullscreenButton" class="arcade-button primary" type="button">ENTER FULLSCREEN</button>
+  </aside>
+
+  <script type="module" src="game.js"></script>
+</body>
+</html>
