@@ -4,6 +4,349 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-21",
+      "historicDate": "1984-02-06",
+      "displayDate": "Week of February 6-12, 1984",
+      "edition": "Issue 080 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Clone-war urgency with home-computer retail color",
+        "motifs": [
+          "IBM-compatible circuit boards",
+          "Coleco Adam keyboard and data packs",
+          "arcade boxing cabinet"
+        ],
+        "layout": "Dense metropolitan weekly with a clone-market lead, Adam side rail, charts, prices, and compact world bulletin"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "Week of February 6-12, 1984",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Five-column lead beneath masthead",
+        "secondaryRail": "Adam report, game shelf, charts and prices",
+        "archiveNavigation": "Previous and next weekly issues with calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "IBM blue",
+        "secondary": "Coleco red",
+        "texture": "Warm newsprint, halftone screens and restrained spot color"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-02-06.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of February 6, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The personal-computer market is no longer merely choosing machines; it is choosing standards. This week, IBM compatibility becomes the question hanging over every desk, while Coleco works to rescue Adam with restarted production and a promised library of familiar games.",
+      "morningLine": "Good morning from 1984: the clones are gathering, Adam is back on the line, and Punch-Out!! is ringing the arcade bell.",
+      "lead": {
+        "headline": "IBM Compatibility Becomes the Industry’s New Battleground",
+        "dek": "An open hardware architecture, protected firmware and a vast software library turn “compatible” into the most valuable—and confusing—word in personal computing.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "The flood of machines claiming kinship with the IBM Personal Computer has made compatibility one of the microcomputer trade’s most important and confusing questions. IBM published enough of the PC’s hardware design to invite expansion cards and outside development, but the machine’s basic input-output system remains copyrighted software. A look-alike case and an 8088-family processor alone do not make a true substitute.",
+          "For buyers, the test is practical. Will the machine boot the same operating system, run the same application programs, accept the same expansion cards and talk to the same printers and disks? Each “yes” gives a newcomer access to the broad catalog forming around the IBM standard. Each exception can turn a bargain into an island.",
+          "Clone builders therefore compete on more than price. Some promise portability, faster operation or more generous standard equipment; all must decide how closely to follow IBM without copying protected ROM code. Independently written firmware is becoming both an engineering achievement and a legal shield.",
+          "The result is a market reorganizing around software rather than badges. IBM created the reference machine, but a widening circle of compatible makers now wants the applications, dealers and customer confidence that surround it. The winner may be less a single computer than a common platform—provided shoppers learn exactly what each claim of compatibility means."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Coleco Restarts Adam Lines After a Gentleman’s C",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1,
+            2
+          ],
+          "body": [
+            "Coleco resumed full Adam production at two upstate New York plants this week after a January inventory pause, returning its ambitious home computer to the line just as a prominent review assigned the machine an “A for ingenuity” but only a gentleman’s C for performance.",
+            "The roughly $600 package remains striking: a Z80A-based computer, keyboard, Digital Data Pack storage, daisy-wheel printer and ColecoVision cartridge compatibility in one box. Yet delayed deliveries and early reliability complaints have made dependable performance more urgent than the long feature list.",
+            "Restarting the factories can refill dealer shelves. Restoring confidence will require machines that work consistently—and enough worthwhile software to persuade families that Adam is more than a console with office ambitions."
+          ]
+        },
+        {
+          "headline": "“Best Of” Game Albums Promised for Adam",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            3
+          ],
+          "body": [
+            "Coleco is courting established software publishers for “Best Of” collections intended to give Adam a faster route to a credible game catalog. Electronic Games Hotline led its February 12 issue with the plan, suggesting familiar titles could be assembled for the new machine rather than waiting for an entirely home-grown library.",
+            "The move recognizes the hard lesson of every new platform: specifications do not sell a computer for long without programs. Proven games could link Adam’s ColecoVision audience to its keyboard-and-printer future while buying developers time to create original software."
+          ]
+        },
+        {
+          "headline": "One Printer Attempts Double Duty",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            4
+          ],
+          "body": [
+            "A new American printer reviewed this week tackles a familiar home-office compromise. Daisy-wheel machines make typewriter-crisp letters but offer little graphic freedom; dot-matrix printers draw charts and illustrations but often leave correspondence looking unmistakably computerized.",
+            "The attempt to bridge those jobs shows why the printer can be the most consequential accessory in a home system. A computer that calculates, writes and draws still needs one machine able to put all three kinds of work convincingly on paper."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Punch-Out!!",
+          "summary": "Nintendo’s distinctive boxing cabinet is a principal February arcade attraction.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Apple Macintosh",
+          "summary": "The 128K mouse-driven computer with built-in display and 3.5-inch disk remains the month’s most closely watched newcomer.",
+          "confidence": "period",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Commodore Executive 64",
+          "summary": "The portable SX-64 brings the familiar Commodore 64 environment into a luggable color package.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "MacWrite",
+          "detail": "Bundled Macintosh word processing with fonts and menus"
+        },
+        {
+          "name": "MacPaint",
+          "detail": "Mouse-driven bitmap drawing on Macintosh"
+        },
+        {
+          "name": "Adam “Best Of” collections",
+          "detail": "Announced compilations of proven publisher games"
+        },
+        {
+          "name": "The Warlock of Firetop Mountain",
+          "detail": "ZX Spectrum adventure reviewed this month"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "1. Punch-Out!! — arcade",
+            "2. Ant Attack — ZX Spectrum",
+            "3. Deathchase — ZX Spectrum",
+            "4. The Warlock of Firetop Mountain — ZX Spectrum",
+            "5. Bugaboo — ZX Spectrum"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "1. Karma Chameleon — Culture Club",
+            "2. Joanna — Kool & the Gang",
+            "3. Jump — Van Halen",
+            "4. Talking in Your Sleep — The Romantics",
+            "5. That’s All — Genesis"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Unfaithfully Yours",
+            "2. Terms of Endearment",
+            "3. Silkwood",
+            "4. Never Cry Wolf",
+            "5. Reckless"
+          ]
+        },
+        {
+          "label": "Software Shelf",
+          "items": [
+            "MacWrite",
+            "MacPaint",
+            "Adam “Best Of” collections",
+            "The Warlock of Firetop Mountain"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple Macintosh",
+          "price": "$2,495 list",
+          "note": "128K system with display and 3.5-inch drive"
+        },
+        {
+          "item": "Coleco Adam complete system",
+          "price": "About $600",
+          "note": "Computer, keyboard, storage and daisy-wheel printer package"
+        },
+        {
+          "item": "Electronic Games Hotline",
+          "price": "$2.00",
+          "note": "Single issue"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "BYTE Puts Machines to the Test",
+          "text": "February’s BYTE makes comparative benchmarks its cover subject as buyers seek firmer ways to judge multiplying systems."
+        },
+        {
+          "headline": "British Micros Crowd the Review Desk",
+          "text": "Personal Computer World surveys the Xerox 16/8, Sharp MZ-700 and Gavilan MC while Bytes reviews a lively group of Spectrum games."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Karma Chameleon",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 2,
+          "title": "Joanna",
+          "artist": "Kool & the Gang"
+        },
+        {
+          "rank": 3,
+          "title": "Jump",
+          "artist": "Van Halen"
+        },
+        {
+          "rank": 4,
+          "title": "Talking in Your Sleep",
+          "artist": "The Romantics"
+        },
+        {
+          "rank": 5,
+          "title": "That’s All",
+          "artist": "Genesis"
+        }
+      ],
+      "periodAd": {
+        "headline": "ADAM: Computer, Printer and Games in One Box",
+        "summary": "Coleco’s integrated package joins keyboard computing, data-pack storage, letter-quality printing and ColecoVision cartridge play.",
+        "tagline": "Bring home the whole system for about $600."
+      },
+      "market": {
+        "headline": "Compatibility Is the New Currency",
+        "summary": "Clone makers are competing for entry to IBM’s software and peripheral ecosystem while navigating protected BIOS code.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Andropov Dies as the Kremlin Faces Succession",
+        "summary": "Soviet leader Yuri Andropov died February 9 at age 69; Moscow announced his death the next day as another Kremlin succession began.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "IBM compatibility and BIOS distinction",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Coleco Adam review and production restart",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "Adam game-album announcement",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              3
+            ]
+          },
+          {
+            "claim": "Music and movie rankings",
+            "confidence": "week-specific",
+            "sourceRefs": [
+              6,
+              7
+            ]
+          },
+          {
+            "claim": "World anchor",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              8
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "Why the IBM PC spawned a mob of look-alikes",
+          "url": "https://www.csmonitor.com/1984/0209/020908.html"
+        },
+        {
+          "label": "Coleco's ‘Adam’ Gets Gentleman's ‘C’ for Performance",
+          "url": "https://www.washingtonpost.com/archive/business/1984/02/06/colecos-adam-gets-gentlemans-c-for-performance/c231169a-0e52-4192-b54f-b2b9f5bfd84d/"
+        },
+        {
+          "label": "Coleco resumes full production",
+          "url": "https://www.upi.com/Archives/1984/02/08/Coleco-Industries-Inc-has-resumed-full-production-of-Cabbage/9066445064400/"
+        },
+        {
+          "label": "Electronic Games Hotline, Volume 2 Number 14",
+          "url": "https://vgpavilion.com/mags/1984/02/12egh/pages/19840212-egh.pdf"
+        },
+        {
+          "label": "New American Printer Takes On Double Duty",
+          "url": "https://www.nytimes.com/1984/02/07/science/personal-computers-new-american-printer-takes-on-double-duty.html"
+        },
+        {
+          "label": "BYTE Magazine, February 1984 — Benchmarks",
+          "url": "https://archive.org/details/byte-magazine-1984-02"
+        },
+        {
+          "label": "Billboard Hot 100, February 11, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-02-11"
+        },
+        {
+          "label": "Domestic Weekend Chart, February 10–12, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W06/"
+        },
+        {
+          "label": "Andropov Is Dead in Moscow at 69",
+          "url": "https://www.nytimes.com/1984/02/11/world/andropov-dead-moscow-69-reagan-asks-productive-contacts-names-bush-attend.html"
+        },
+        {
+          "label": "Winter Olympic flame lit in Sarajevo",
+          "url": "https://www.upi.com/Archives/1984/02/08/The-lighting-of-the-Olympic-flame-officially-opened-the/8882445064400/"
+        }
+      ],
+      "classifieds": [
+        {
+          "headline": "WANTED: IBM-COMPATIBLE SOFTWARE",
+          "copy": "Dealers seek serious applications tested on the growing family of PC-compatible machines."
+        },
+        {
+          "headline": "ARCADE CHALLENGERS",
+          "copy": "Step into the ring with Nintendo’s Punch-Out!! at a coin-op floor near you."
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-20",
       "historicDate": "1984-01-30",
       "displayDate": "Week of January 30-February 5, 1984",

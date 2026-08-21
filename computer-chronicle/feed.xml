@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 20 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 21 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of February 6-12, 1984 — IBM Compatibility Becomes the Industry’s New Battleground</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-02-06</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-06</guid>
+      <pubDate>Fri, 21 Aug 2026 12:00:00 GMT</pubDate>
+      <description>An open hardware architecture, protected firmware and a vast software library turn “compatible” into the most valuable—and confusing—word in personal computing. The flood of machines claiming kinship with the IBM Personal Computer has made compatibility one of the microcomputer trade’s most important and confusing questions. IBM published enough of the PC’s hardware design to invite expansion cards and outside development, but the machine’s basic input-output system remains copyrighted software. A look-alike case and an 8088-family processor alone do not make a true substitute. Also this week: Coleco Restarts Adam Lines After a Gentleman’s C · “Best Of” Game Albums Promised for Adam · One Printer Attempts Double Duty.</description>
+    </item>
     <item>
       <title>Week of January 30-February 5, 1984 — Macintosh Meets the Public in Boston</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-01-30</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-26</guid>
       <pubDate>Sun, 02 Aug 2026 12:00:00 GMT</pubDate>
       <description>Cartridges and equipment from the El Paso plant are crushed and buried as the console market’s inventory crisis becomes impossible to hide. Truckloads of Atari material rolled into the Alamogordo, New Mexico, municipal landfill this week, where workers crushed and buried cartridges and equipment shipped from the company’s El Paso plant. A September 28 New York Times brief fixed the disposal to this week, turning a grim inventory operation into the sharpest picture yet of the videogame business’s retreat. Also this week: GNU Call Asks Programmers to Build a Free Unix-Compatible System · Apple Cuts Lisa to $6,995 and Points Dealers Toward Macintosh · IBM’s Unannounced ‘Peanut’ Has the Home Market Guessing.</description>
-    </item>
-    <item>
-      <title>Week of September 19-25, 1983 — Apple Slashes Lisa by $3,000 as Sculley Resets the Company</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-09-19</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-19</guid>
-      <pubDate>Sat, 01 Aug 2026 12:00:00 GMT</pubDate>
-      <description>A stripped-down $6,995 configuration aims to revive the pioneering graphical workstation while IBM seizes the middle of the personal-computer market. Apple Computer opened the week with a dramatic answer to sluggish Lisa sales: dealers were told that the $9,995 mouse-driven workstation would be offered in a stripped-down $6,995 configuration. The $3,000 cut followed new president John Sculley’s four-day tour addressing some 1,500 dealers in 25 cities, a public show of urgency from a company suddenly chasing IBM in the market it helped create. Also this week: FCC Clears Coleco’s Adam for the Holiday Computer Battle · Portable Computers Crowd the Road-Warrior Market · IBM’s Shadow Lengthens Across Personal Computing.</description>
     </item>
   </channel>
 </rss>
