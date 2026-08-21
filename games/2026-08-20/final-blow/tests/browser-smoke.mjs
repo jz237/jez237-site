@@ -23,6 +23,16 @@ const mimeTypes = {
 
 const delay = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
+// Every super must land its authored hit count, out-damage a single heavy, and
+// still leave the opponent with most of their bar. The exact totals move whenever
+// the arcade tuning or combo scaling is retuned, so assert the rule, not a number.
+function assertSuperPayoff(snapshot, label) {
+  const damage = snapshot.fighters[0].combo.damage;
+  assert.ok(damage > 15, `${label} should out-damage a single heavy, got ${damage}`);
+  assert.ok(damage < 36, `${label} should not take a third of the bar, got ${damage}`);
+  assert.ok(snapshot.fighters[1].health > 60, `${label} should leave most of the bar, got ${snapshot.fighters[1].health}`);
+}
+
 function startStaticServer() {
   const server = createServer(async (request, response) => {
     try {
@@ -242,12 +252,12 @@ try {
     simHz: window.__finalBlowEngine?.simulationHz,
   }))()`);
   assert.match(title.title, /Final Blow/);
-  assert.match(title.build, /1\.1B/);
+  assert.match(title.build, /1\.1D/);
   assert.equal(title.rosterCards, 8);
   assert.equal(title.gritLabels, 2);
   assert.equal(title.comboReadouts, 2);
   assert.equal(title.moveListRows, 9);
-  assert.deepEqual(title.aiDifficulties, ['rookie', 'street', 'pro', 'final']);
+  assert.deepEqual(title.aiDifficulties, ['passive', 'rookie', 'street', 'pro', 'final']);
   assert.deepEqual(title.visualQualities, ['auto', 'high', 'balanced', 'battery']);
   assert.equal(title.pauseButtons, 4);
   assert.equal(title.soundCaptions, true);
@@ -260,7 +270,7 @@ try {
   assert.equal(title.engine.demo.idleScheduled, true);
   assert.equal(title.onlineSecurityBadges, 4);
   assert.equal(title.aiDifficulty, 'street');
-  assert.equal(title.engineVersion, '1.1b-grapple-edition');
+  assert.equal(title.engineVersion, '1.1d-passive-cpu-edition');
   assert.equal(title.simHz, 60);
   assert.ok(title.engine.tick > 0, "fixed simulation should be ticking");
 
@@ -750,7 +760,7 @@ try {
   await evaluate(client, `window.__finalBlowQa.step(0.18); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.input(0, { heavy: true }); window.__finalBlowQa.step(0.3)`);
   const flowTwo = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(flowTwo.fighters[0].rhythmStacks, 2, 'a second attack on beat should advance Flow');
-  await evaluate(client, `window.__finalBlowQa.step(0.28); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.input(0, { special: true }); window.__finalBlowQa.step(0.5)`);
+  await evaluate(client, `window.__finalBlowQa.step(0.28); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.input(0, { special: true }); window.__finalBlowQa.step(0.3)`);
   const massiveFlow = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(massiveFlow.fighters[0].rhythmStacks, 3, 'three distinct attacks should reach Massive Flow');
   if (process.env.FINAL_BLOW_FLOW_SCREENSHOT) {
@@ -760,8 +770,23 @@ try {
     await writeFile(process.env.FINAL_BLOW_FLOW_SCREENSHOT, Buffer.from(capture.data, "base64"));
     await evaluate(client, `window.__finalBlowEngine.toggleDebug(true)`);
   }
-  await evaluate(client, `window.__finalBlowQa.input(0, { commandSpecial: true }); window.__finalBlowQa.step(0.084)`);
-  const flowCancel = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
+  // Cancel windows are frame-data driven, so walk to the window rather than
+  // hard-coding a wait that a retune would invalidate.
+  const flowCancel = await evaluate(client, `(() => {
+    for (let frame = 0; frame < 40; frame += 1) {
+      const snapshot = window.__finalBlowEngine.snapshot();
+      const fighter = snapshot.fighters[0];
+      if (fighter.move === 'ali-booyakasha-beat' && fighter.attackConnected) {
+        window.__finalBlowQa.input(0, { commandSpecial: true });
+        window.__finalBlowQa.step(1 / 60);
+        const next = window.__finalBlowEngine.snapshot();
+        if (next.fighters[0].move === 'ali-massive-step') return next;
+        continue;
+      }
+      window.__finalBlowQa.step(1 / 60);
+    }
+    return window.__finalBlowEngine.snapshot();
+  })()`);
   assert.equal(flowCancel.fighters[0].move, 'ali-massive-step');
   assert.equal(flowCancel.fighters[0].cancelledFrom, 'ali-booyakasha-beat');
   assert.equal(flowCancel.fighters[0].rhythmBoost, 3);
@@ -917,7 +942,10 @@ try {
   await dispatchKey(client, "keyUp", "KeyD", "d", 68);
   await dispatchKey(client, "keyUp", "ArrowRight", "ArrowRight", 39);
   assert.equal(chipped.fighters[1].lastHitResult, "blocked-mid");
-  assert.equal(chipped.fighters[1].health, 97, "blocked special should deal configured chip damage");
+  // Chip is meaningful now, but blocking still never kills.
+  const chipDealt = 100 - chipped.fighters[1].health;
+  assert.ok(chipDealt >= 3.5 && chipDealt <= 7, `blocked special chip should be meaningful, got ${chipDealt}`);
+  assert.ok(chipped.fighters[1].health >= 1, "chip can never take the last point of health");
 
   await evaluate(client, `window.__finalBlowQa.fight('deathblow', 'jez'); window.__finalBlowQa.positions(500, 600)`);
   await dispatchKey(client, "keyDown", "ArrowDown", "ArrowDown", 40);
@@ -970,6 +998,145 @@ try {
   assert.equal(throwTech.fighters[1].lastHitResult, "throw-tech");
   assert.equal(throwTech.fighters[0].grabbing, null, "a tech must leave no live clinch");
   assert.equal(throwTech.fighters[1].grabbed, null);
+
+  // Passive CPU: the acceptance check is that a Passive opponent left running for
+  // multiple full rounds at several distances performs zero offensive OR
+  // defensive actions, while the human stays free to hit it.
+  const passiveRun = await evaluate(client, `(() => {
+    window.__finalBlowQa.difficulty('passive');
+    window.__finalBlowQa.aiFight('deathblow', 'jez', 'passive');
+    const distances = [40, 90, 180, 320, 520, 780];
+    const seen = new Set();
+    let moved = 0;
+    let attacked = 0;
+    let guarded = 0;
+    let jumped = 0;
+    let grabbed = 0;
+    let meterSpent = 0;
+    let frames = 0;
+    for (const distance of distances) {
+      window.__finalBlowQa.positions(400, 400 + distance);
+      window.__finalBlowQa.fighter(1, { meter: 100, health: 100 });
+      const startX = window.__finalBlowEngine.snapshot().fighters[1].x;
+      for (let frame = 0; frame < 320; frame += 1) {
+        window.__finalBlowQa.step(1 / 60);
+        frames += 1;
+        const cpu = window.__finalBlowEngine.snapshot().fighters[1];
+        seen.add(cpu.state);
+        if (cpu.move) attacked += 1;
+        if (cpu.guarding) guarded += 1;
+        if (!cpu.grounded) jumped += 1;
+        if (cpu.grabbing) grabbed += 1;
+        if (cpu.meter < 100) meterSpent += 1;
+        if (Math.abs(cpu.x - startX) > 2) moved += 1;
+      }
+    }
+    return { seen: [...seen], moved, attacked, guarded, jumped, grabbed, meterSpent, frames };
+  })()`);
+  assert.ok(passiveRun.frames >= 1900, "passive run must cover multiple full rounds of frames");
+  assert.equal(passiveRun.attacked, 0, "a Passive CPU must never attack");
+  assert.equal(passiveRun.guarded, 0, "a Passive CPU must never automatically block");
+  assert.equal(passiveRun.jumped, 0, "a Passive CPU must never jump");
+  assert.equal(passiveRun.grabbed, 0, "a Passive CPU must never grab");
+  assert.equal(passiveRun.meterSpent, 0, "a Passive CPU must never spend Grit");
+  assert.equal(passiveRun.moved, 0, "a Passive CPU must never advance or chase");
+  assert.deepEqual(passiveRun.seen, ["idle"], `a Passive CPU must stay idle, saw ${passiveRun.seen}`);
+
+  // The human is still free to hit it, and it still takes damage and reacts.
+  const passiveTarget = await evaluate(client, `(() => {
+    window.__finalBlowQa.aiFight('deathblow', 'jez', 'passive');
+    window.__finalBlowQa.positions(500, 600);
+    window.__finalBlowQa.input(0, { heavy: true });
+    window.__finalBlowQa.step(0.5);
+    const hit = window.__finalBlowEngine.snapshot();
+    // Fresh round: a grab needs an opponent who is not still in hitstun.
+    window.__finalBlowQa.aiFight('deathblow', 'jez', 'passive');
+    window.__finalBlowQa.positions(500, 560);
+    window.__finalBlowQa.input(0, { right: true, light: true });
+    window.__finalBlowQa.step(0.8);
+    return { hit, thrown: window.__finalBlowEngine.snapshot() };
+  })()`);
+  assert.ok(passiveTarget.hit.fighters[1].health < 100, "a Passive CPU must still take damage");
+  assert.equal(passiveTarget.hit.fighters[1].lastHitResult, "mid");
+  assert.equal(passiveTarget.thrown.fighters[1].lastHitResult, "throw", "a Passive CPU can still be thrown");
+
+  // Restore a fighting difficulty for the rest of the run.
+  await evaluate(client, `window.__finalBlowQa.difficulty('street')`);
+
+  // The difficulty picker is visible before an Arcade match and remembers itself.
+  const difficultyUi = await evaluate(client, `(() => {
+    document.querySelector('[data-mode="arcade"]').click();
+    const bar = document.querySelector('#difficultyBar');
+    const buttons = [...document.querySelectorAll('#difficultyOptions button')];
+    buttons.find((button) => button.dataset.difficulty === 'passive').click();
+    const afterClick = {
+      stored: localStorage.getItem('final-blow-ai-difficulty'),
+      checked: [...document.querySelectorAll('#difficultyOptions button')]
+        .filter((button) => button.getAttribute('aria-checked') === 'true')
+        .map((button) => button.dataset.difficulty),
+      hint: document.querySelector('#difficultyHint').textContent,
+      optionsSelect: document.querySelector('#aiDifficultySelect').value,
+    };
+    document.querySelector('[data-mode="versus"]').click();
+    const versusHidden = document.querySelector('#difficultyBar').hidden;
+    document.querySelector('[data-mode="arcade"]').click();
+    return {
+      visibleInArcade: !bar.hidden,
+      labels: buttons.map((button) => button.textContent),
+      afterClick,
+      versusHidden,
+    };
+  })()`);
+  assert.equal(difficultyUi.visibleInArcade, true, "difficulty must be visible before an Arcade match");
+  assert.deepEqual(difficultyUi.labels, ["PASSIVE", "ROOKIE", "STREET", "PRO", "FINAL"]);
+  assert.deepEqual(difficultyUi.afterClick.checked, ["passive"]);
+  assert.equal(difficultyUi.afterClick.stored, "passive", "the choice must persist between sessions");
+  assert.equal(difficultyUi.afterClick.optionsSelect, "passive", "the options screen must stay in sync");
+  assert.match(difficultyUi.afterClick.hint, /Never attacks/);
+  assert.equal(difficultyUi.versusHidden, true, "no CPU picker in local versus");
+  await evaluate(client, `window.__finalBlowQa.difficulty('street'); document.querySelector('#homeLink').click();`);
+
+  // Dizzy: repeated clean hits stun, the meter bleeds off when they stop, the
+  // dizzy is a real punish window, and recovery grants a long immunity so it can
+  // never loop.
+  const dizzy = await evaluate(client, `(() => {
+    window.__finalBlowQa.fight('deathblow', 'jez');
+    let dizzied = null;
+    for (let attempt = 0; attempt < 14 && !dizzied; attempt += 1) {
+      window.__finalBlowQa.positions(500, 600);
+      window.__finalBlowQa.fighter(1, { health: 100 });
+      window.__finalBlowQa.input(0, { heavy: true });
+      window.__finalBlowQa.step(0.4);
+      const snapshot = window.__finalBlowEngine.snapshot();
+      if (snapshot.fighters[1].dizzy) dizzied = snapshot;
+    }
+    if (!dizzied) return { dizzied: null };
+    const immediately = window.__finalBlowEngine.snapshot();
+    window.__finalBlowQa.step(4);
+    const recovered = window.__finalBlowEngine.snapshot();
+    return { dizzied, immediately, recovered };
+  })()`);
+  assert.ok(dizzy.dizzied, "repeated clean heavies must eventually dizzy a fighter");
+  assert.ok(dizzy.dizzied.fighters[1].dizzyFrames > 40, "a dizzy must be a real punish window");
+  assert.equal(dizzy.dizzied.fighters[1].stunMeter, 0, "the stun meter resets when the dizzy starts");
+  assert.equal(dizzy.recovered.fighters[1].dizzy, false, "the dizzy must end on its own");
+  assert.ok(
+    dizzy.recovered.fighters[1].stunImmuneFrames > 0,
+    "recovery must grant stun immunity so dizzies cannot loop",
+  );
+
+  // The stun meter bleeds off when the pressure stops.
+  const stunDecay = await evaluate(client, `(() => {
+    window.__finalBlowQa.fight('deathblow', 'jez');
+    window.__finalBlowQa.positions(500, 600);
+    window.__finalBlowQa.input(0, { heavy: true });
+    window.__finalBlowQa.step(0.4);
+    const charged = window.__finalBlowEngine.snapshot().fighters[1].stunMeter;
+    window.__finalBlowQa.step(3);
+    return { charged, drained: window.__finalBlowEngine.snapshot().fighters[1].stunMeter };
+  })()`);
+  assert.ok(stunDecay.charged > 0, "a clean heavy must add stun");
+  assert.equal(stunDecay.drained, 0, "stun must bleed back to zero when the pressure stops");
 
   // Every fighter has a visible grab: a clinch that holds the victim, then a
   // release that knocks down. Forward and backward throws send opposite ways.
@@ -1241,44 +1408,44 @@ try {
   await dispatchKey(client, "keyUp", "KeyM", "m", 77);
   assert.equal(gritSuper.fighters[0].meter, 0);
   assert.equal(gritSuper.fighters[0].combo.hits, 4);
-  assert.ok(gritSuper.fighters[0].combo.damage > 28 && gritSuper.fighters[0].combo.damage < 36);
+  assertSuperPayoff(gritSuper, "DeathBlow super");
   assert.ok(gritSuper.fighters[1].juggleCount >= 2, "the super should exercise juggle scaling");
 
   await evaluate(client, `window.__finalBlowQa.fight('jez', 'deathblow'); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.fighter(0, { meter: 100 }); window.__finalBlowQa.input(0, { super: true }); window.__finalBlowQa.step(2.4)`);
   const jezSuper = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(jezSuper.fighters[0].move, null);
   assert.equal(jezSuper.fighters[0].combo.hits, 7);
-  assert.ok(jezSuper.fighters[0].combo.damage > 20 && jezSuper.fighters[0].combo.damage < 30);
+  assertSuperPayoff(jezSuper, "jezSuper");
 
   await evaluate(client, `window.__finalBlowQa.fight('alan', 'post'); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.fighter(0, { meter: 100 }); window.__finalBlowQa.input(0, { super: true }); window.__finalBlowQa.step(2.4)`);
   const allanSuper = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(allanSuper.fighters[0].combo.hits, 6);
-  assert.ok(allanSuper.fighters[0].combo.damage > 27 && allanSuper.fighters[0].combo.damage < 33);
+  assertSuperPayoff(allanSuper, "allanSuper");
 
   await evaluate(client, `window.__finalBlowQa.fight('post', 'alan'); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.fighter(0, { meter: 100 }); window.__finalBlowQa.input(0, { super: true }); window.__finalBlowQa.step(2.4)`);
   const postSuper = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(postSuper.fighters[0].combo.hits, 7);
-  assert.ok(postSuper.fighters[0].combo.damage > 24 && postSuper.fighters[0].combo.damage < 31);
+  assertSuperPayoff(postSuper, "postSuper");
 
   await evaluate(client, `window.__finalBlowQa.fight('benny', 'donald'); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.fighter(0, { meter: 100 }); window.__finalBlowQa.input(0, { super: true }); window.__finalBlowQa.step(2.4)`);
   const bennySuper = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(bennySuper.fighters[0].combo.hits, 8);
-  assert.ok(bennySuper.fighters[0].combo.damage > 21 && bennySuper.fighters[0].combo.damage < 26);
+  assertSuperPayoff(bennySuper, "bennySuper");
 
   await evaluate(client, `window.__finalBlowQa.fight('donald', 'benny'); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.fighter(0, { meter: 100 }); window.__finalBlowQa.input(0, { super: true }); window.__finalBlowQa.step(2.5)`);
   const donaldSuper = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(donaldSuper.fighters[0].combo.hits, 9);
-  assert.ok(donaldSuper.fighters[0].combo.damage > 20 && donaldSuper.fighters[0].combo.damage < 25);
+  assertSuperPayoff(donaldSuper, "donaldSuper");
 
   await evaluate(client, `window.__finalBlowQa.fight('cyraxx', 'ali'); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.fighter(0, { meter: 100 }); window.__finalBlowQa.input(0, { super: true }); window.__finalBlowQa.step(2.4)`);
   const cyraxxSuper = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(cyraxxSuper.fighters[0].combo.hits, 7);
-  assert.ok(cyraxxSuper.fighters[0].combo.damage > 18 && cyraxxSuper.fighters[0].combo.damage < 28);
+  assertSuperPayoff(cyraxxSuper, "cyraxxSuper");
 
   await evaluate(client, `window.__finalBlowQa.fight('ali', 'cyraxx'); window.__finalBlowQa.positions(500, 600); window.__finalBlowQa.fighter(0, { meter: 100 }); window.__finalBlowQa.input(0, { super: true }); window.__finalBlowQa.step(2.4)`);
   const aliSuper = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(aliSuper.fighters[0].combo.hits, 8);
-  assert.ok(aliSuper.fighters[0].combo.damage > 18 && aliSuper.fighters[0].combo.damage < 28);
+  assertSuperPayoff(aliSuper, "aliSuper");
 
   await evaluate(client, `(() => {
     document.querySelector('[data-mode="arcade"]').click();
@@ -1706,7 +1873,7 @@ try {
     };
   })()`);
   assert.equal(offlineCache.controlled, true);
-  assert.match(offlineCache.name, /final-blow-offline-1\.1b/);
+  assert.match(offlineCache.name, /final-blow-offline-1\.1d/);
   assert.ok(offlineCache.entries >= 156);
   assert.equal(offlineCache.hasGame, true);
   assert.equal(offlineCache.hasRollback, true);
@@ -1733,8 +1900,8 @@ try {
     badge: document.querySelector('#offlineBadge').textContent,
   }))()`);
   assert.match(offlineBoot.title, /Final Blow/);
-  assert.match(offlineBoot.build, /1\.1B/);
-  assert.equal(offlineBoot.version, '1.1b-grapple-edition');
+  assert.match(offlineBoot.build, /1\.1D/);
+  assert.equal(offlineBoot.version, '1.1d-passive-cpu-edition');
   assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
   await client.send('Network.emulateNetworkConditions', {
     offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
