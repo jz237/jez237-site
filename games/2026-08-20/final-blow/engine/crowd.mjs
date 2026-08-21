@@ -72,14 +72,95 @@ const FAN_ACCENTS = Object.freeze([
   "#f2f5f7", "#0f2f28", "#c7ced4", "#2d6b57", "#141719", "#9aa3ab",
 ]);
 
+/**
+ * Boardwalk strollers: an easy night-out crowd, plus cyclists and people leaning
+ * on the railing looking at the ocean.
+ */
+export const BOARDWALK_POSTURES = Object.freeze([
+  Object.freeze({ id: "stroll", weight: 26, lean: 0.06, headDrop: 0.02, stride: 0.7, armSwing: 0.42, bob: 0.7, prop: "" }),
+  Object.freeze({ id: "amble", weight: 18, lean: 0.10, headDrop: 0.04, stride: 0.5, armSwing: 0.3, bob: 0.5, prop: "" }),
+  Object.freeze({ id: "railing", weight: 14, lean: 0.44, headDrop: -0.12, stride: 0, armSwing: 0.04, bob: 0.1, prop: "" }),
+  Object.freeze({ id: "snack", weight: 14, lean: 0.06, headDrop: -0.16, stride: 0.3, armSwing: 0.14, bob: 0.3, prop: "cup" }),
+  Object.freeze({ id: "cyclist", weight: 10, lean: 0.5, headDrop: 0.1, stride: 1.3, armSwing: 0.06, bob: 0.2, prop: "" }),
+  Object.freeze({ id: "linger", weight: 10, lean: 0.14, headDrop: 0.08, stride: 0.06, armSwing: 0.08, bob: 0.2, prop: "" }),
+  Object.freeze({ id: "point", weight: 8, lean: -0.06, headDrop: -0.2, stride: 0.1, armSwing: 0.7, bob: 0.3, prop: "" }),
+]);
+
+/**
+ * Buffet patrons: loading plates, reaching with tongs, competing for crab legs
+ * and carrying overflowing dishes back to their tables.
+ */
+export const BUFFET_POSTURES = Object.freeze([
+  Object.freeze({ id: "load", weight: 24, lean: 0.34, headDrop: 0.24, stride: 0.06, armSwing: 0.5, bob: 0.2, prop: "plate" }),
+  Object.freeze({ id: "tongs", weight: 20, lean: 0.4, headDrop: 0.26, stride: 0, armSwing: 0.66, bob: 0.2, prop: "tongs" }),
+  Object.freeze({ id: "carry", weight: 18, lean: -0.04, headDrop: -0.06, stride: 0.5, armSwing: 0.1, bob: 0.4, prop: "plate" }),
+  Object.freeze({ id: "queue", weight: 14, lean: 0.12, headDrop: 0.08, stride: 0.1, armSwing: 0.1, bob: 0.2, prop: "plate" }),
+  Object.freeze({ id: "reach", weight: 12, lean: 0.46, headDrop: 0.18, stride: 0, armSwing: 0.8, bob: 0.2, prop: "tongs" }),
+  Object.freeze({ id: "spill", weight: 6, lean: 0.3, headDrop: 0.3, stride: 0.4, armSwing: 0.7, bob: 0.9, prop: "plate" }),
+  Object.freeze({ id: "linger", weight: 6, lean: 0.1, headDrop: 0.04, stride: 0.04, armSwing: 0.06, bob: 0.2, prop: "" }),
+]);
+
+// Easy night-out and restaurant palettes: warmer and lighter than the street.
+const BOARDWALK_COLOURS = Object.freeze([
+  "#6a5f77", "#4d6a7a", "#7a6455", "#5f7268", "#7d5f6a", "#556380",
+  "#8a7a63", "#4a5f6d", "#6f6a52", "#77606b", "#3f5866", "#6b7460",
+]);
+const BUFFET_COLOURS = Object.freeze([
+  "#7c6a5c", "#5f6b74", "#84756a", "#6b6f5e", "#75626b", "#5b6a6b",
+  "#8b7a6c", "#666f7c", "#7a6c5a", "#6e6472", "#556663", "#877066",
+]);
+
+/**
+ * Cruise pool deck. The brief asks for high-chaos budget-vacation energy through
+ * behaviour, styling, props and colour rather than any branding, so the postures
+ * are all impatience, over-packing, phone filming and drink-carrying.
+ */
+export const POOLSIDE_POSTURES = Object.freeze([
+  Object.freeze({ id: "bigcup", weight: 18, lean: 0.06, headDrop: -0.14, stride: 0.2, armSwing: 0.14, bob: 0.3, prop: "bigcup" }),
+  Object.freeze({ id: "filming", weight: 15, lean: -0.06, headDrop: -0.26, stride: 0.1, armSwing: 0.1, bob: 0.2, prop: "phone" }),
+  Object.freeze({ id: "queue", weight: 14, lean: 0.16, headDrop: 0.1, stride: 0.06, armSwing: 0.08, bob: 0.2, prop: "bigcup" }),
+  Object.freeze({ id: "overpacked", weight: 12, lean: 0.32, headDrop: 0.18, stride: 0.5, armSwing: 0.12, bob: 0.5, prop: "bag" }),
+  Object.freeze({ id: "towel", weight: 11, lean: 0.28, headDrop: 0.2, stride: 0, armSwing: 0.4, bob: 0.2, prop: "towel" }),
+  Object.freeze({ id: "dance", weight: 10, lean: -0.1, headDrop: -0.2, stride: 0.3, armSwing: 1.1, bob: 1.4, prop: "" }),
+  Object.freeze({ id: "stagger", weight: 9, lean: 0.36, headDrop: 0.22, stride: 0.7, armSwing: 0.6, bob: 1.2, prop: "bigcup" }),
+  Object.freeze({ id: "plate", weight: 7, lean: 0.1, headDrop: -0.04, stride: 0.34, armSwing: 0.1, bob: 0.3, prop: "plate" }),
+  Object.freeze({ id: "staff", weight: 4, lean: 0.12, headDrop: 0.02, stride: 1.1, armSwing: 0.3, bob: 0.7, prop: "plate" }),
+]);
+
+// Loud mismatched resort wear: clashing brights, no branding anywhere.
+const RESORT_COLOURS = Object.freeze([
+  "#ef6a3d", "#31b6c9", "#f2c33d", "#d94f8a", "#59c46a", "#8a5fd6",
+  "#f28a2e", "#2f9be0", "#e04b4b", "#4fd0b0", "#f0e14c", "#c95fc0",
+]);
+const RESORT_TROUSERS = Object.freeze([
+  "#2f6fb5", "#d94f4f", "#3fae7a", "#e2a03a", "#7a5fc0", "#2fa9b5",
+]);
+const RESORT_ACCENTS = Object.freeze([
+  "#fff3c4", "#ff8fc4", "#9df0ff", "#ffd24a", "#c6ff9d", "#ffb0e8",
+]);
+
 export const CROWD_VARIANTS = Object.freeze({
   street: Object.freeze({ postures: POSTURES, coats: null, trousers: null, accents: null }),
   tailgate: Object.freeze({ postures: TAILGATE_POSTURES, coats: FAN_COLOURS, trousers: FAN_TROUSERS, accents: FAN_ACCENTS }),
+  boardwalk: Object.freeze({ postures: BOARDWALK_POSTURES, coats: BOARDWALK_COLOURS, trousers: null, accents: null }),
+  buffet: Object.freeze({ postures: BUFFET_POSTURES, coats: BUFFET_COLOURS, trousers: null, accents: null }),
+  // The pool deck is deliberately the densest crowd in the game.
+  poolside: Object.freeze({
+    postures: POOLSIDE_POSTURES,
+    coats: RESORT_COLOURS,
+    trousers: RESORT_TROUSERS,
+    accents: RESORT_ACCENTS,
+    counts: Object.freeze({ far: 20, mid: 15, near: 9 }),
+    incidents: 6,
+  }),
 });
 
 export const STAGE_CROWD_VARIANT = Object.freeze({
   kensington: "street",
   vet: "tailgate",
+  wildwood: "boardwalk",
+  buffet: "buffet",
+  cruise: "poolside",
 });
 
 /**
@@ -87,6 +168,20 @@ export const STAGE_CROWD_VARIANT = Object.freeze({
  * of several fight loops at its own speed and phase, so the lot never looks like
  * one animation played in unison.
  */
+/**
+ * Pool-deck incidents. Same loop machinery as the tailgate scuffles, different
+ * events: cannonballs, splashing, arguing over a lounger, cutting the bar line,
+ * spilling a frozen drink and a staff member squeezing through the crowd.
+ */
+export const POOL_INCIDENT_KINDS = Object.freeze([
+  Object.freeze({ id: "cannonball", period: 240, members: 1, reach: 30 }),
+  Object.freeze({ id: "splash", period: 160, members: 2, reach: 26 }),
+  Object.freeze({ id: "loungerrow", period: 220, members: 2, reach: 34 }),
+  Object.freeze({ id: "barcut", period: 200, members: 3, reach: 28 }),
+  Object.freeze({ id: "spill", period: 180, members: 2, reach: 40 }),
+  Object.freeze({ id: "squeeze", period: 150, members: 3, reach: 22 }),
+]);
+
 export const SCUFFLE_KINDS = Object.freeze([
   Object.freeze({ id: "argue", period: 190, members: 2, reach: 30 }),
   Object.freeze({ id: "shove", period: 150, members: 2, reach: 42 }),
@@ -141,10 +236,11 @@ export function createCrowd(stageId, { seed = 1, minX = -90, maxX = 1370 } = {})
   const span = maxX - minX;
   const people = [];
   for (const layer of CROWD_LAYERS) {
-    for (let index = 0; index < layer.count; index += 1) {
+    const count = variant.counts?.[layer.id] ?? layer.count;
+    for (let index = 0; index < count; index += 1) {
       const posture = pickPosture(rng, variant.postures);
       // Spread along the band with jitter so the spacing never looks regular.
-      const slot = (index + rng.nextFloat() * 0.85) / layer.count;
+      const slot = (index + rng.nextFloat() * 0.85) / count;
       people.push({
         layer: layer.id,
         posture: posture.id,
@@ -175,16 +271,19 @@ export function createCrowd(stageId, { seed = 1, minX = -90, maxX = 1370 } = {})
       });
     }
   }
-  const scuffles = variantId === "tailgate" ? createScuffles(rng, minX, span) : [];
+  const scuffles = variantId === "tailgate"
+    ? createScuffles(rng, minX, span, SCUFFLE_KINDS, 5)
+    : variantId === "poolside"
+      ? createScuffles(rng, minX, span, POOL_INCIDENT_KINDS, variant.incidents || 6)
+      : [];
   return { stageId, variant: variantId, seed, minX, maxX, span, people, scuffles };
 }
 
 /** Several simultaneous fight loops, each with its own kind, place and phase. */
-function createScuffles(rng, minX, span) {
+function createScuffles(rng, minX, span, kinds = SCUFFLE_KINDS, count = 5) {
   const groups = [];
-  const count = 5;
   for (let index = 0; index < count; index += 1) {
-    const kind = SCUFFLE_KINDS[Math.floor(rng.nextFloat() * SCUFFLE_KINDS.length) % SCUFFLE_KINDS.length];
+    const kind = kinds[Math.floor(rng.nextFloat() * kinds.length) % kinds.length];
     const slot = (index + 0.15 + rng.nextFloat() * 0.7) / count;
     groups.push({
       kind: kind.id,
