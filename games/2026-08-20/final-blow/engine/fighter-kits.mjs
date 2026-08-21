@@ -1,6 +1,7 @@
 import { createAttackInstance } from "./foundation.mjs";
 import { ATTACK_LEVELS, KICK_VARIANTS, deriveKickProfile } from "./defense.mjs";
 import { GRIT_RULES, matchCommandSequence } from "./combos.mjs";
+import { FIGHTER_THROWABLES, THROWABLE_COMMAND } from "./throwables.mjs";
 
 export const KIT_ACTIONS = Object.freeze([
   "backSpecial",
@@ -1323,8 +1324,41 @@ export function fighterActionCost(fighterId, action, context = {}) {
   return getKitMoveProfile(fighterId, action, context)?.gritCost || 0;
 }
 
+/**
+ * The per-fighter movement blocks below were authored against the original 1.0
+ * shared rules. Treating those literals as absolute meant every later change to
+ * the shared tempo — and now the fighter scale — silently failed to reach any
+ * fighter, because all eight override every field.
+ *
+ * They are therefore interpreted as *ratios* of this baseline. A fighter that was
+ * authored at 246 against a 292 baseline stays at 84% of whatever the shared
+ * forward walk currently is, so personality is preserved while arcade tempo and
+ * fighter scale both propagate correctly.
+ */
+export const AUTHORED_MOVEMENT_BASELINE = Object.freeze({
+  forwardWalkSpeed: 292,
+  backWalkSpeed: 224,
+  jumpVelocityY: -748,
+  forwardJumpVelocityX: 326,
+  backJumpVelocityX: 278,
+  forwardDashSpeed: 580,
+  backDashSpeed: 505,
+  standingPushboxHalfWidth: 39,
+  crouchingPushboxHalfWidth: 35,
+});
+
 export function getFighterMovement(fighterId, fallback) {
-  return { ...fallback, ...(getFighterKit(fighterId)?.movement || {}) };
+  const authored = getFighterKit(fighterId)?.movement;
+  if (!authored) return { ...fallback };
+  const movement = { ...fallback };
+  for (const [field, value] of Object.entries(authored)) {
+    const baseline = AUTHORED_MOVEMENT_BASELINE[field];
+    const shared = fallback?.[field];
+    movement[field] = Number.isFinite(baseline) && Number.isFinite(shared) && baseline !== 0
+      ? Math.round((value / baseline) * shared)
+      : value;
+  }
+  return movement;
 }
 
 // Four-button motion vocabulary. Punch terminals (LP/HP) drive the signature
@@ -1340,6 +1374,8 @@ export const FIGHTER_COMMANDS = Object.freeze([
   { action: "backSpecial", sequence: ["down", "back", "punch"], terminal: "punch", display: "↓ ← + PUNCH" },
   { action: "commandSpecial", sequence: ["down", "forward", "punch"], terminal: "punch", display: "↓ → + PUNCH" },
   { action: "special", sequence: ["down", "forward", "kick"], terminal: "kick", display: "↓ → + KICK" },
+  // The last free quarter-circle throws the fighter's personal object.
+  { action: "throwObject", sequence: ["down", "back", "kick"], terminal: "kick", display: "↓ ← + KICK" },
 ]);
 
 export function recognizeFighterCommand(fighterId, history, currentFrame) {
@@ -1393,5 +1429,17 @@ export function selectKitAiIntent(fighterId, {
 }
 
 export function listFighterMoves(fighterId) {
-  return getFighterKit(fighterId)?.moveList.map(([name, command]) => ({ name, command })) || [];
+  const kit = getFighterKit(fighterId);
+  if (!kit) return [];
+  const moves = kit.moveList.map(([name, command]) => ({ name, command }));
+  // The personal throwable is data-driven, so it is listed from the throwable
+  // table rather than duplicated into every kit's move list.
+  const throwable = FIGHTER_THROWABLES[fighterId];
+  if (throwable) {
+    moves.splice(Math.max(0, moves.length - 1), 0, {
+      name: throwable.name,
+      command: `${THROWABLE_COMMAND.display} · ${throwable.usesPerRound} per round`,
+    });
+  }
+  return moves;
 }

@@ -33,6 +33,60 @@ function assertSuperPayoff(snapshot, label) {
   assert.ok(snapshot.fighters[1].health > 60, `${label} should leave most of the bar, got ${snapshot.fighters[1].health}`);
 }
 
+// Fighters must read as the dominant subject: an average standing fighter sits at
+// 68-74% of the playable fight area (floor line minus the HUD), with the whole
+// body on screen and room left for the jump arc.
+const FIGHTER_FRAMING_PROBE = `(() => {
+  window.__finalBlowQa.fight('deathblow', 'jez');
+  window.__finalBlowQa.positions(360, 920);
+  window.__finalBlowQa.step(0.2);
+  const canvas = document.querySelector('#game');
+  const rect = canvas.getBoundingClientRect();
+  const hud = document.querySelector('#hud').getBoundingClientRect();
+  const hudBottom = (hud.bottom - rect.top) / rect.height * canvas.height;
+  const FLOOR = 600;
+  const area = FLOOR - hudBottom;
+  const CHAR_FRACTION = 0.95625;
+  const scale = window.__finalBlowQa.fighterScale();
+  const sizes = window.__finalBlowQa.fighterRenderSizes();
+  const percent = {};
+  for (const [id, size] of Object.entries(sizes)) {
+    percent[id] = Math.round(size * CHAR_FRACTION / area * 1000) / 10;
+  }
+  const snapshot = window.__finalBlowEngine.snapshot();
+  const jumped = (() => {
+    window.__finalBlowQa.input(0, { jump: true });
+    let apex = FLOOR;
+    for (let frame = 0; frame < 60; frame += 1) {
+      window.__finalBlowQa.step(1 / 60);
+      apex = Math.min(apex, window.__finalBlowEngine.snapshot().fighters[0].y);
+    }
+    return apex;
+  })();
+  const tallest = Math.max(...Object.values(sizes)) * CHAR_FRACTION;
+  return {
+    area, hudBottom, scale, percent,
+    min: Math.min(...Object.values(percent)),
+    max: Math.max(...Object.values(percent)),
+    feetOnFloor: snapshot.fighters[0].y === FLOOR,
+    headroom: Math.round(FLOOR - tallest - hudBottom),
+    jumpApexHead: Math.round(jumped - tallest),
+    hurtboxCount: snapshot.fighters[0].hurtboxes.length,
+    bodyHalfWidth: snapshot.fighters[0].movement.standingPushboxHalfWidth,
+  };
+})()`;
+
+function assertFighterFraming(framing, label) {
+  assert.ok(framing.min >= 68, `${label}: smallest fighter is ${framing.min}% of the fight area, must be >= 68%`);
+  assert.ok(framing.max <= 74, `${label}: largest fighter is ${framing.max}% of the fight area, must be <= 74%`);
+  assert.ok(framing.max - framing.min >= 3, `${label}: body types must stay visibly distinct, spread is ${framing.max - framing.min}`);
+  assert.equal(framing.feetOnFloor, true, `${label}: feet must sit on the floor line`);
+  assert.ok(framing.headroom >= 0, `${label}: the tallest fighter must not overlap the HUD`);
+  assert.ok(framing.jumpApexHead > -140, `${label}: a full jump must stay reasonably framed, got ${framing.jumpApexHead}`);
+  assert.ok(framing.hurtboxCount >= 3, `${label}: standing hurtboxes must still be built`);
+  assert.ok(framing.bodyHalfWidth >= 40, `${label}: pushboxes must scale with the larger bodies`);
+}
+
 function startStaticServer() {
   const server = createServer(async (request, response) => {
     try {
@@ -252,11 +306,11 @@ try {
     simHz: window.__finalBlowEngine?.simulationHz,
   }))()`);
   assert.match(title.title, /Final Blow/);
-  assert.match(title.build, /1\.1D/);
+  assert.match(title.build, /1\.1F/);
   assert.equal(title.rosterCards, 8);
   assert.equal(title.gritLabels, 2);
   assert.equal(title.comboReadouts, 2);
-  assert.equal(title.moveListRows, 9);
+  assert.equal(title.moveListRows, 10);
   assert.deepEqual(title.aiDifficulties, ['passive', 'rookie', 'street', 'pro', 'final']);
   assert.deepEqual(title.visualQualities, ['auto', 'high', 'balanced', 'battery']);
   assert.equal(title.pauseButtons, 4);
@@ -270,7 +324,7 @@ try {
   assert.equal(title.engine.demo.idleScheduled, true);
   assert.equal(title.onlineSecurityBadges, 4);
   assert.equal(title.aiDifficulty, 'street');
-  assert.equal(title.engineVersion, '1.1d-passive-cpu-edition');
+  assert.equal(title.engineVersion, '1.1f-throwables-edition');
   assert.equal(title.simHz, 60);
   assert.ok(title.engine.tick > 0, "fixed simulation should be ticking");
 
@@ -380,7 +434,7 @@ try {
     [1280, 1280], [1280, 1280], [1280, 1280], [1280, 1280],
     [1280, 1280], [1280, 1280], [1280, 1280], [1280, 1280],
   ]);
-  assert.equal(kitUi.rows.length, 9);
+  assert.equal(kitUi.rows.length, 10);
   assert.ok(kitUi.rows.includes('Vinyl Step'));
   assert.match(kitUi.identity, /FOOTSIES/);
 
@@ -730,14 +784,16 @@ try {
   assert.equal(feedbackTelegraph.projectiles.length, 1, 'Feedback Loop should plant a delayed echo');
   assert.equal(feedbackTelegraph.projectiles[0].style, 'feedback');
   assert.ok(feedbackTelegraph.projectiles[0].armFrames > 0, 'the echo must visibly telegraph before becoming active');
-  assert.equal(Math.round(feedbackTelegraph.projectiles[0].x), 542);
+  // Projectile origins scale with the fighters, so assert the relationship.
+  const echoX = Math.round(feedbackTelegraph.projectiles[0].x);
+  assert.ok(echoX > 350 && echoX < 700, `feedback echo should plant ahead of Cyraxx, got ${echoX}`);
   if (process.env.FINAL_BLOW_FEEDBACK_SCREENSHOT) {
     await evaluate(client, `window.__finalBlowEngine.toggleDebug(false)`);
     await delay(80);
     const capture = await client.send("Page.captureScreenshot", { format: "png", fromSurface: true });
     await writeFile(process.env.FINAL_BLOW_FEEDBACK_SCREENSHOT, Buffer.from(capture.data, "base64"));
   }
-  await evaluate(client, `window.__finalBlowQa.positions(350, 542); window.__finalBlowQa.step(0.52)`);
+  await evaluate(client, `window.__finalBlowQa.positions(350, ${echoX}); window.__finalBlowQa.step(0.52)`);
   const feedbackHit = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
   assert.equal(feedbackHit.projectiles.length, 0, 'armed feedback should be consumed on contact');
   assert.equal(feedbackHit.fighters[1].lastHitResult, 'feedback-echo');
@@ -998,6 +1054,104 @@ try {
   assert.equal(throwTech.fighters[1].lastHitResult, "throw-tech");
   assert.equal(throwTech.fighters[0].grabbing, null, "a tech must leave no live clinch");
   assert.equal(throwTech.fighters[1].grabbed, null);
+
+  // Personal throwable objects: one recognisable object per fighter, thrown with
+  // the same command everywhere, each with genuinely different physics and a
+  // real recovery window, and none of them spammable.
+  const throwables = await evaluate(client, `(() => {
+    const ids = ['deathblow','jez','alan','post','benny','donald','cyraxx','ali'];
+    const out = {};
+    for (const id of ids) {
+      window.__finalBlowQa.fight(id, id === 'jez' ? 'deathblow' : 'jez');
+      window.__finalBlowQa.positions(300, 1050);
+      const startUses = window.__finalBlowEngine.snapshot().fighters[0].throwableUses;
+      window.__finalBlowQa.input(0, { throwObject: true });
+      let first = null;
+      const path = [];
+      let recoveryFrames = 0;
+      for (let frame = 0; frame < 150; frame += 1) {
+        window.__finalBlowQa.step(1 / 60);
+        const snapshot = window.__finalBlowEngine.snapshot();
+        if (snapshot.fighters[0].move) recoveryFrames += 1;
+        const object = snapshot.projectiles.find((projectile) => projectile.throwable);
+        if (!object) continue;
+        if (!first) first = { ...object };
+        path.push({ x: object.x, y: object.y, hazard: object.hazard, bounces: object.bouncesLeft });
+      }
+      const after = window.__finalBlowEngine.snapshot();
+      out[id] = {
+        spawned: Boolean(first),
+        style: first?.style || null,
+        width: Math.round(first?.width || 0),
+        height: Math.round(first?.height || 0),
+        travel: Math.round((path.at(-1)?.x ?? 0) - (path[0]?.x ?? 0)),
+        apex: Math.round(Math.min(...path.map((point) => point.y))),
+        rest: Math.round(Math.max(...path.map((point) => point.y))),
+        bounced: (first?.bouncesLeft ?? 0) > (path.at(-1)?.bounces ?? 0),
+        hazard: path.some((point) => point.hazard),
+        startUses,
+        usesAfter: after.fighters[0].throwableUses,
+        recoveryFrames,
+      };
+    }
+    return out;
+  })()`);
+  const objectStyles = new Set();
+  for (const [id, object] of Object.entries(throwables)) {
+    assert.ok(object.spawned, `${id} must be able to throw a personal object`);
+    assert.ok(object.style, `${id}'s object must have a style`);
+    objectStyles.add(object.style);
+    assert.equal(object.usesAfter, object.startUses - 1, `${id}'s object must cost a use`);
+    assert.ok(object.startUses >= 2 && object.startUses <= 4, `${id} must have a bounded per-round supply`);
+    assert.ok(object.recoveryFrames >= 24, `${id}'s throw must leave a real recovery window, got ${object.recoveryFrames}`);
+    assert.ok(object.travel > 120, `${id}'s object must actually travel, got ${object.travel}`);
+  }
+  assert.equal(objectStyles.size, 8, "every fighter must have a visually distinct object");
+
+  // Archetypes, not eight fireballs.
+  assert.ok(throwables.benny.travel > throwables.alan.travel * 1.6, "the X-Acto out-ranges the loogies by a wide margin");
+  assert.equal(throwables.benny.apex, throwables.benny.rest, "the X-Acto flies dead straight");
+  assert.ok(throwables.deathblow.width >= 90, "the pizza is a broad disc");
+  assert.ok(throwables.ali.apex < throwables.donald.apex, "the vinyl record is the steeper anti-air arc");
+  assert.ok(throwables.donald.bounced, "the golf ball skips off the floor");
+  assert.ok(throwables.post.bounced && throwables.post.hazard, "the wires bounce then uncoil into a hazard");
+  assert.ok(throwables.cyraxx.hazard, "the bed bugs linger as a floor hazard");
+  assert.ok(throwables.alan.travel < 340, "the loogies stay short-range close pressure");
+
+  // Jez's cable reels a clean hit in, and does not on block.
+  const tether = await evaluate(client, `(() => {
+    const run = (guard) => {
+      window.__finalBlowQa.fight('jez', 'deathblow');
+      window.__finalBlowQa.positions(240, 1000);
+      if (guard) window.__finalBlowQa.input(1, { guard: true }, 200);
+      window.__finalBlowQa.input(0, { throwObject: true });
+      for (let frame = 0; frame < 150; frame += 1) window.__finalBlowQa.step(1 / 60);
+      const snapshot = window.__finalBlowEngine.snapshot();
+      return { gap: Math.round(snapshot.fighters[1].x - snapshot.fighters[0].x), result: snapshot.fighters[1].lastHitResult };
+    };
+    return { clean: run(false), blocked: run(true) };
+  })()`);
+  assert.ok(tether.clean.gap < 320, `a clean mouse hit must reel the opponent in, gap was ${tether.clean.gap}`);
+  assert.ok(tether.blocked.gap > tether.clean.gap + 200, "a blocked mouse must not reel anyone in");
+
+  // The supply is finite: throwing until empty stops producing objects.
+  const ammo = await evaluate(client, `(() => {
+    window.__finalBlowQa.fight('deathblow', 'jez');
+    let thrown = 0;
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      window.__finalBlowQa.positions(300, 1050);
+      const before = window.__finalBlowEngine.snapshot().fighters[0].throwableUses;
+      window.__finalBlowQa.input(0, { throwObject: true });
+      for (let frame = 0; frame < 80; frame += 1) window.__finalBlowQa.step(1 / 60);
+      if (window.__finalBlowEngine.snapshot().fighters[0].throwableUses < before) thrown += 1;
+    }
+    return { thrown, left: window.__finalBlowEngine.snapshot().fighters[0].throwableUses };
+  })()`);
+  assert.equal(ammo.left, 0, "the supply must run out");
+  assert.equal(ammo.thrown, 2, "DeathBlow gets exactly two pizzas per round");
+
+  const desktopFraming = await evaluate(client, FIGHTER_FRAMING_PROBE);
+  assertFighterFraming(desktopFraming, "desktop");
 
   // Passive CPU: the acceptance check is that a Passive opponent left running for
   // multiple full rounds at several distances performs zero offensive OR
@@ -1873,7 +2027,7 @@ try {
     };
   })()`);
   assert.equal(offlineCache.controlled, true);
-  assert.match(offlineCache.name, /final-blow-offline-1\.1d/);
+  assert.match(offlineCache.name, /final-blow-offline-1\.1f/);
   assert.ok(offlineCache.entries >= 156);
   assert.equal(offlineCache.hasGame, true);
   assert.equal(offlineCache.hasRollback, true);
@@ -1900,8 +2054,8 @@ try {
     badge: document.querySelector('#offlineBadge').textContent,
   }))()`);
   assert.match(offlineBoot.title, /Final Blow/);
-  assert.match(offlineBoot.build, /1\.1D/);
-  assert.equal(offlineBoot.version, '1.1d-passive-cpu-edition');
+  assert.match(offlineBoot.build, /1\.1F/);
+  assert.equal(offlineBoot.version, '1.1f-throwables-edition');
   assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
   await client.send('Network.emulateNetworkConditions', {
     offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -1977,6 +2131,15 @@ try {
     assert.ok(box.left >= -1 && box.right <= touchLayout.viewport.width + 1, `${name} must stay inside the frame width`);
   }
   assert.ok(touchLayout.minButton >= 34, "attack buttons must stay comfortably tappable");
+
+  const mobileFraming = await evaluate(client, FIGHTER_FRAMING_PROBE);
+  assertFighterFraming(mobileFraming, "844x390 landscape");
+  // Sub-pixel HUD rounding differs slightly between the two frames; the rule is
+  // that the fighter-to-stage ratio is effectively identical.
+  for (const [id, mobilePercent] of Object.entries(mobileFraming.percent)) {
+    const drift = Math.abs(mobilePercent - desktopFraming.percent[id]);
+    assert.ok(drift <= 1, `${id} framing drifts ${drift}pp between desktop and mobile`);
+  }
 
   // Left-handed players get the mirrored layout without losing the frame fit.
   const mirroredLayout = await evaluate(client, `(() => {
