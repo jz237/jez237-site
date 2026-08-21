@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-21",
+      "historicDate": "1984-02-06",
+      "displayDate": "Week of February 6-12, 1984",
+      "edition": "Issue 080 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Good morning from 1984: the clones are gathering, Adam is back on the line, and Punch-Out!! is ringing the arcade bell.",
+      "leadHeadline": "IBM Compatibility Becomes the Industry’s New Battleground",
+      "storyHeadlines": [
+        "Coleco Restarts Adam Lines After a Gentleman’s C",
+        "“Best Of” Game Albums Promised for Adam",
+        "One Printer Attempts Double Duty"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-06.jpg",
+      "thumb": "media/thumbs/1984-02-06.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-20",
       "historicDate": "1984-01-30",
       "displayDate": "Week of January 30-February 5, 1984",
