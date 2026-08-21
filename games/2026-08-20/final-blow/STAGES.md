@@ -100,3 +100,99 @@ everything settles back to its routes.
 Every fan, scuffle and prop is drawn before the fighters, sits above the fight
 floor line, and has no simulation presence at all. Nothing can enter combat
 collision space or cover the fighters or HUD.
+
+## Wildwood Boardwalk
+
+The Wildwood, New Jersey boardwalk at night, framed to match the Philly After Dark
+identity. A huge illuminated **WILDWOOD** sign in tall retro capitals sits high and
+centred so it stays readable through all normal camera movement, with a lit Ferris
+wheel, roller coaster, neon arcade fronts, food stands, striped awnings, benches
+and litter bins around it, a low white railing, and the dark ocean beyond.
+
+Wet plank decking catches the neon in long reflections. On top of the background:
+drifting seagulls, a ride car climbing the coaster, and a soft sea haze rolling
+along the railing line.
+
+The crowd uses the **boardwalk** variant — strolling, ambling, leaning on the
+railing looking at the ocean, snacking, pointing and cycling past.
+
+Stage weapon: the **dead pigeon**.
+
+## Chinese Buffet — Crab-Leg Section
+
+The fight happens directly in front of the crab-leg line. A long stainless steam
+table runs across the middle of the frame under a glass sneeze guard, heaped with
+crab legs steaming under warm heat lamps, with serving tongs in the trays, stacked
+plates and sauce tubs at each end, tiled walls, glowing menu panels, hanging
+pendant lights, a second steam table behind and a pass-through to a bright kitchen.
+
+On top of the background: steam pulsing on independent rhythms along the line, and
+pendant lights swaying — harder for a moment after a big hit.
+
+The crowd uses the **buffet** variant — patrons loading plates, reaching in with
+tongs, competing over the trays, queueing, carrying overflowing dishes away and
+occasionally spilling. Their plates are drawn heaped well past the rim.
+
+Stage weapon: the **serving tongs**.
+
+## Shared
+
+Both stages are selectable from stage select, join the Arcade rotation, versus,
+Training, online play, deterministic replays, random selection and the Watch Demo
+shuffle bag, and are precached for offline play. Both share the same floor line
+and stage bounds as the original two, so the enlarged fighters, their shadows,
+projectiles, throwable objects, stage weapons and Final Blow cameras all frame
+identically. Backgrounds are original art generated for this project.
+
+### Blocker
+
+Dedicated original music per stage is blocked on the same ElevenLabs
+misconfiguration that blocked the object SFX — the MCP server holds an API key ID
+rather than an API key. Both stages currently draw from the existing four original
+soundtracks through the normal rotation, and their ambience is rendered visually
+rather than as an audio bed. Rotating the ElevenLabs key would unblock a dedicated
+track and ambience mix for each.
+
+## Cruise-Ship Pool Deck
+
+The fight happens on the open deck directly in front of the ship's main pool:
+turquoise water, tiled edging, chrome handrails and ladders, rows of white
+loungers with folded towels, closed parasols, an open bar with stools and hanging
+glasses, a curved water slide, three tiers of balconies and railings, lifeboats, a
+funnel and the ocean horizon beyond.
+
+### The passengers
+
+This is the densest crowd in the game: **44 passengers, at least 39 visible at
+once**, across the far, mid and near layers.
+
+Nine poolside postures carry the comedic high-chaos budget-vacation energy through
+behaviour and styling rather than any branding: nursing an absurd souvenir cup with
+a straw, filming everything on a phone, queueing impatiently, staggering along
+overpacked, throwing a towel down to claim a lounger, dancing, stumbling, carrying
+an overloaded plate, and staff squeezing through the crowd. The palette is loud
+mismatched resort wear — clashing oranges, cyans, pinks, yellows, greens and
+purples. **No Spirit Airlines, Nissan, cruise-line, alcohol or other corporate
+marks appear anywhere.**
+
+### The incidents
+
+Six concurrent incident loops run at any time from six distinct kinds:
+cannonballs, splashing, arguing over a lounger, cutting the bar line, spilling a
+frozen drink and staff squeezing past. Each has its own place, scale, mirror, loop
+period, speed and phase offset, so nothing beats together.
+
+On top of that: splash plumes rising out of the pool on independent rhythms, a
+rider running the water slide, and heat shimmer over the hot deck that intensifies
+when the crowd is stirred.
+
+### Safety and framing
+
+The playable floor is clearly separated from the pool and every passenger. As on
+every other stage, the crowd is drawn before the fighters, has no simulation
+presence, and cannot enter combat collision space or cover the fighters or HUD.
+The stage shares the same floor line and bounds as the rest of the roster.
+
+Stage weapon: the **souvenir cup** — the backlog left this one TBD, and a giant
+frozen-drink cup is the most on-theme object on a budget pool deck: slow, wobbly,
+a big soft hitbox and a slushy burst that briefly slows whoever wears it.
