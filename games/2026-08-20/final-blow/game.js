@@ -129,6 +129,15 @@ import {
   graphicFatalitySnapshot,
 } from "./engine/fatalities.mjs";
 import {
+  CROWD_LAYERS,
+  POSTURES,
+  TAILGATE_POSTURES,
+  createCrowd,
+  crowdPosition,
+  crowdSnapshot,
+  scufflePhase,
+} from "./engine/crowd.mjs";
+import {
   STAGE_WEAPONS,
   canPickUpWeapon,
   canWeaponArrive,
@@ -721,6 +730,9 @@ const state = {
   graphicFatalities: localStorage.getItem("final-blow-graphic-fatalities") !== "0",
   stageWeaponsEnabled: localStorage.getItem("final-blow-stage-weapons") !== "0",
   stageWeapon: null,
+  crowd: null,
+  // Brief crowd reaction to a big moment, decaying back to normal routes.
+  crowdReaction: 0,
   offlineReady: false,
   accessibility: {
     reducedMotion: localStorage.getItem("final-blow-reduced-motion") === "1",
@@ -2180,6 +2192,7 @@ function startMatch(resetSet = true) {
   seedMatch(state.round);
   state.fighters = makeMatchFighters();
   resetStageWeapon();
+  resetCrowd();
   warmFighterAudio();
   if (state.mode === "training") {
     state.training = createTrainingState({
@@ -2254,6 +2267,7 @@ function startOnlineMatch(config) {
   seedOnlineRound(1);
   state.fighters = makeMatchFighters();
   resetStageWeapon();
+  resetCrowd();
   warmFighterAudio();
   state.particles.length = 0;
   state.effects.length = 0;
@@ -2303,6 +2317,7 @@ function resetRound() {
   warmFighterAudio();
   state.fighters.forEach((fighter, side) => { fighter.meter = carriedGrit[side] || 0; });
   resetStageWeapon();
+  resetCrowd();
   state.particles.length = 0;
   state.effects.length = 0;
   state.traps.length = 0;
@@ -4622,6 +4637,7 @@ function hit(attacker, victim, attack, collision) {
   attacker.meter = clamp(attacker.meter + attack.meter * GRIT_RULES.hitGainMultiplier, 0, GRIT_RULES.maximum);
   victim.meter = clamp(victim.meter + attack.meter * GRIT_RULES.damageTakenGainMultiplier, 0, GRIT_RULES.maximum);
   state.shake = Math.max(state.shake, attack.kind === "special" || attack.kind === "throw" ? 0.34 : 0.13);
+  if (!blocked && (attack.superMove || attack.kind === "special")) stirCrowd(attack.superMove ? 1.1 : 0.4);
   state.hitstop = Math.max(state.hitstop, blocked ? 0.035 : attack.kind === "special" || attack.kind === "throw" ? 0.105 : attack.kind === "heavy" ? 0.075 : 0.045);
   const impact = collision?.point || { x: victim.x - attacker.facing * 22, y: victim.y - 105 };
   spawnHit(impact.x, impact.y, attacker.def, attack.kind, blocked);
@@ -4677,6 +4693,7 @@ function checkKnockout() {
   victim.hitstunFrames = 5940;
   attacker.attacking = null;
   duckMusic(0.34, 1900);
+  stirCrowd(1.4);
   announce("FINISH THEM", "ANY BUTTON  ·  LP/LK = A  ·  HP/HK = B", 2.2);
   if (!rollbackResimulating) setTouchPrompt("final");
   updateHud();
@@ -4814,6 +4831,7 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
   updateFighter(state.fighters[1], state.fighters[0], input1, dt);
   updateGrabHolds();
   updateStageWeapon();
+  state.crowdReaction = Math.max(0, state.crowdReaction - 0.016);
   if (state.finisher) updateFinisher(dt);
   else {
     updateProjectiles(dt);
@@ -4968,8 +4986,8 @@ function drawStage(time) {
   ctx.fillStyle = shade;
   ctx.fillRect(0, 0, W, H);
 
-  if (state.stage === "kensington") drawShufflers(time);
-  else drawVetAtmosphere(time);
+  drawCrowd(time);
+  if (state.stage === "vet") drawVetAtmosphere(time);
 
   ctx.fillStyle = "rgba(6,8,11,.26)";
   ctx.fillRect(0, FLOOR, W, H - FLOOR);
@@ -4983,44 +5001,371 @@ function drawStage(time) {
   }
 }
 
-function drawShufflers(time) {
-  const people = [
-    { x: 155, y: 493, scale: 0.48, speed: 0.7 },
-    { x: 540, y: 475, scale: 0.38, speed: 0.47 },
-    { x: 1100, y: 492, scale: 0.52, speed: 0.58 },
-  ];
-  for (const person of people) {
-    const drift = Math.sin(time * 0.00016 * person.speed + person.x) * 19;
-    const sway = Math.sin(time * 0.0012 * person.speed + person.x) * 0.06;
+const POSTURE_BY_ID = Object.fromEntries(
+  [...POSTURES, ...TAILGATE_POSTURES].map((posture) => [posture.id, posture]),
+);
+
+function resetCrowd() {
+  state.crowd = createCrowd(state.stage, { seed: hashSeed(state.matchSeed, state.round) });
+  state.crowdReaction = 0;
+}
+
+// Big moments ripple through the crowd, then it goes back to its routes.
+function stirCrowd(amount = 1) {
+  state.crowdReaction = Math.min(1.4, state.crowdReaction + amount);
+}
+
+function drawPedestrian(person, layer, x, gait, paused, reaction) {
+  const posture = POSTURE_BY_ID[person.posture] || POSTURES[0];
+  const scale = layer.scale * person.height;
+  const step = paused ? 0 : Math.sin(gait) * posture.stride;
+  const bob = paused ? 0 : Math.abs(Math.sin(gait)) * posture.bob * 2.4;
+  // A big moment makes them flinch and hunch briefly, without leaving their route.
+  const flinch = reaction * (0.25 + person.pace * 0.2);
+  const lean = posture.lean + flinch * 0.3;
+
+  // Contact shadow so the pedestrian sits on the pavement rather than floating.
+  ctx.save();
+  ctx.globalAlpha = layer.alpha * 0.45;
+  ctx.fillStyle = "rgba(0,0,0,.8)";
+  ctx.beginPath();
+  ctx.ellipse(x, person.y + 2, 20 * layer.scale * person.width, 5 * layer.scale, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  ctx.save();
+  ctx.translate(x, person.y - bob);
+  ctx.scale(scale * person.direction, scale);
+  ctx.globalAlpha = layer.alpha;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  // Roughly seven-heads tall, with the legs taking a little under half the body.
+  const headY = -124;
+  const shoulderY = -100;
+  const hipY = -56;
+
+  // Legs. A permanent stance offset keeps the two legs separate even when the
+  // stride is near zero, otherwise a standing figure collapses into one post.
+  ctx.strokeStyle = person.trousers;
+  ctx.lineWidth = 10 * person.width;
+  ctx.beginPath();
+  ctx.moveTo(-4, hipY);
+  ctx.lineTo(step * 20 - 8, 0);
+  ctx.moveTo(4, hipY);
+  ctx.lineTo(-step * 20 + 9, 0);
+  ctx.stroke();
+
+  ctx.save();
+  // Everything above the hips leans forward by posture.
+  ctx.translate(0, hipY);
+  ctx.rotate(lean * 0.45);
+  ctx.translate(0, -hipY);
+
+  // Torso: a tapered coat rather than a single fat stroke, so it reads as a body.
+  const shoulderHalf = 12 * person.width;
+  const hipHalf = 8.5 * person.width;
+  ctx.fillStyle = person.coat;
+  ctx.beginPath();
+  ctx.moveTo(-shoulderHalf, shoulderY + person.shoulderSlope * 5);
+  ctx.lineTo(shoulderHalf, shoulderY - person.shoulderSlope * 5);
+  ctx.lineTo(hipHalf, hipY + 4);
+  ctx.lineTo(-hipHalf, hipY + 4);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = "rgba(8,11,16,.55)";
+  ctx.lineWidth = 2.2;
+  ctx.stroke();
+
+  // Arms swing out of phase with the legs.
+  const swing = paused ? 0 : Math.sin(gait + Math.PI) * posture.armSwing;
+  // Arms hang clear of the torso silhouette so the figure reads as a person.
+  ctx.strokeStyle = person.coat;
+  ctx.lineWidth = 6.5 * person.width;
+  ctx.beginPath();
+  ctx.moveTo(shoulderHalf - 2, shoulderY + 5);
+  ctx.lineTo(swing * 14 + shoulderHalf + 4, hipY + 12);
+  ctx.moveTo(-shoulderHalf + 2, shoulderY + 5);
+  ctx.lineTo(-swing * 14 - shoulderHalf - 3, hipY + 14);
+  ctx.stroke();
+
+  if (person.hasBag && layer.detail !== "low") {
+    ctx.fillStyle = person.accent;
+    ctx.fillRect(person.bagSide * 13 - 5, hipY + 2, 11, 15);
+  }
+
+  // Tailgate props ride in the raised hand: cups, cans, flags and handmade signs.
+  if (person.prop && layer.detail !== "low") {
+    const handX = swing * 14 + shoulderHalf + 4;
+    const handY = hipY + 12;
     ctx.save();
-    ctx.translate(person.x + drift, person.y);
-    ctx.scale(person.scale, person.scale);
-    ctx.rotate(sway);
-    ctx.fillStyle = "rgba(5,7,10,.73)";
-    ctx.beginPath();
-    ctx.ellipse(0, -80, 24, 28, 0.55, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.lineCap = "round";
-    ctx.lineWidth = 28;
-    ctx.strokeStyle = "rgba(5,7,10,.76)";
-    ctx.beginPath();
-    ctx.moveTo(-8, -60);
-    ctx.lineTo(25, -10);
-    ctx.lineTo(16, 55);
-    ctx.stroke();
-    ctx.lineWidth = 12;
-    ctx.beginPath();
-    ctx.moveTo(13, -34);
-    ctx.lineTo(43, 22);
-    ctx.moveTo(4, -34);
-    ctx.lineTo(27, 28);
-    ctx.moveTo(16, 48);
-    ctx.lineTo(-2, 100);
-    ctx.moveTo(22, 48);
-    ctx.lineTo(43, 100);
-    ctx.stroke();
+    ctx.translate(handX, handY);
+    if (person.prop === "cup") {
+      ctx.fillStyle = "#d8dde2";
+      ctx.beginPath();
+      ctx.moveTo(-4, -9); ctx.lineTo(4, -9); ctx.lineTo(3, 2); ctx.lineTo(-3, 2);
+      ctx.closePath(); ctx.fill();
+    } else if (person.prop === "can") {
+      ctx.fillStyle = "#a6adb4";
+      ctx.fillRect(-3.5, -10, 7, 11);
+      ctx.fillStyle = person.accent;
+      ctx.fillRect(-3.5, -6, 7, 3);
+    } else if (person.prop === "flag") {
+      ctx.strokeStyle = "#8d949b";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(0, 4); ctx.lineTo(0, -34); ctx.stroke();
+      ctx.fillStyle = person.accent;
+      ctx.beginPath();
+      ctx.moveTo(1, -34); ctx.lineTo(22, -28); ctx.lineTo(1, -20);
+      ctx.closePath(); ctx.fill();
+    } else if (person.prop === "sign") {
+      ctx.fillStyle = "#e6e9ec";
+      ctx.fillRect(-2, -34, 26, 18);
+      ctx.strokeStyle = "#1c4f42";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(-2, -34, 26, 18);
+      // Hand-scrawled marks, never real text or a logo.
+      ctx.beginPath();
+      ctx.moveTo(2, -28); ctx.lineTo(20, -28);
+      ctx.moveTo(2, -23); ctx.lineTo(14, -23);
+      ctx.stroke();
+      ctx.strokeStyle = "#8d949b";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(11, -16); ctx.lineTo(11, 2); ctx.stroke();
+    }
     ctx.restore();
   }
+
+  // Neck and head, dropped forward for the hunched postures.
+  ctx.strokeStyle = "#7d6c5e";
+  ctx.lineWidth = 5 * person.width;
+  ctx.beginPath();
+  ctx.moveTo(0, shoulderY + 3);
+  ctx.lineTo(2, headY + 12);
+  ctx.stroke();
+
+  ctx.save();
+  ctx.translate(2, headY + 6);
+  ctx.rotate(person.headTilt + posture.headDrop * 0.9);
+  ctx.fillStyle = "#8d7a69";
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 8 * person.width, 9.5, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(8,11,16,.5)";
+  ctx.lineWidth = 1.8;
+  ctx.stroke();
+  if (person.facePaint && layer.detail === "high") {
+    ctx.fillStyle = "#1c4f42";
+    ctx.fillRect(-8 * person.width, -3, 16 * person.width, 3.5);
+  }
+  if (person.hasHood) {
+    ctx.fillStyle = person.coat;
+    ctx.beginPath();
+    ctx.ellipse(-2, -2, 11 * person.width, 11.5, 0, Math.PI * 0.82, Math.PI * 2.1);
+    ctx.fill();
+  } else if (person.hasHat) {
+    ctx.fillStyle = person.accent;
+    ctx.fillRect(-11 * person.width, -12, 22 * person.width, 4.5);
+    ctx.fillRect(-7 * person.width, -17, 14 * person.width, 6);
+  }
+  ctx.restore();
+  ctx.restore();
+  ctx.restore();
+}
+
+// One rowdy background scuffle. Readable and physical, never graphic: shoving,
+// shirt-grabbing, wild misses, wrestling, friends pulling people apart.
+function drawScuffle(group, frame, centre, reaction) {
+  const phase = scufflePhase(group, frame);
+  const beat = Math.sin(phase * Math.PI * 2);
+  const clash = Math.max(0, Math.sin(phase * Math.PI * 2 - 0.6));
+  const drawX = group.x + (centre - W * 0.5) * -0.2;
+  if (drawX < -110 || drawX > W + 110) return;
+
+  ctx.save();
+  ctx.translate(drawX, group.y);
+  ctx.scale(group.scale * group.flip, group.scale);
+  ctx.globalAlpha = 0.82;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+
+  const brawler = (offsetX, lean, armReach, shirt, tilt = 0) => {
+    ctx.save();
+    ctx.translate(offsetX, 0);
+    ctx.rotate(tilt);
+    ctx.strokeStyle = "#232a30";
+    ctx.lineWidth = 9;
+    ctx.beginPath();
+    ctx.moveTo(-3, -46); ctx.lineTo(-9, 0);
+    ctx.moveTo(3, -46); ctx.lineTo(10, 0);
+    ctx.stroke();
+    ctx.save();
+    ctx.translate(0, -46);
+    ctx.rotate(lean);
+    ctx.translate(0, 46);
+    ctx.fillStyle = shirt;
+    ctx.beginPath();
+    ctx.moveTo(-11, -88); ctx.lineTo(11, -88); ctx.lineTo(8, -44); ctx.lineTo(-8, -44);
+    ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = "rgba(8,11,16,.5)";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.strokeStyle = shirt;
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(9, -84); ctx.lineTo(armReach, -66);
+    ctx.moveTo(-9, -84); ctx.lineTo(-armReach * 0.4, -52);
+    ctx.stroke();
+    ctx.fillStyle = "#8d7a69";
+    ctx.beginPath();
+    ctx.ellipse(2, -100, 8, 9.5, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    ctx.restore();
+  };
+
+  const swing = group.reach * (0.4 + clash * 0.6) * (1 + reaction * 0.25);
+  switch (group.kind) {
+    case "argue":
+      brawler(-16, 0.2 + beat * 0.06, swing * 0.7, group.shirts[0]);
+      brawler(18, -0.2 - beat * 0.06, -swing * 0.7, group.shirts[1], 0.04);
+      break;
+    case "shove":
+      brawler(-18 - clash * 8, 0.26, swing, group.shirts[0]);
+      brawler(20 + clash * 12, -0.3, -swing * 0.4, group.shirts[1], -clash * 0.16);
+      break;
+    case "shirtgrab":
+      brawler(-13, 0.3, swing * 0.55, group.shirts[0]);
+      brawler(14, -0.32, -swing * 0.55, group.shirts[1], beat * 0.08);
+      break;
+    case "swing":
+      brawler(-20, 0.16 + clash * 0.2, swing * 1.3, group.shirts[0]);
+      brawler(24, -0.34, -swing * 0.3, group.shirts[1], -clash * 0.22);
+      break;
+    case "wrestle":
+      brawler(-10, 0.44, swing * 0.4, group.shirts[0], beat * 0.1);
+      brawler(11, -0.46, -swing * 0.4, group.shirts[1], -beat * 0.1);
+      break;
+    case "separate":
+      brawler(-26, 0.3, swing, group.shirts[0]);
+      brawler(26, -0.3, -swing, group.shirts[1]);
+      // The friend in the middle, arms out, holding them apart.
+      brawler(0, -0.05, swing * 0.9, group.shirts[2], 0);
+      break;
+    case "tableflip": {
+      brawler(-24, 0.34, swing, group.shirts[0]);
+      brawler(26, -0.24, -swing * 0.5, group.shirts[1], clash * 0.2);
+      const lift = clash * 26;
+      ctx.save();
+      ctx.translate(2, -22 - lift);
+      ctx.rotate(clash * 0.5);
+      ctx.fillStyle = "#6b7078";
+      ctx.fillRect(-30, -6, 60, 7);
+      ctx.strokeStyle = "#4e545b";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(-22, 1); ctx.lineTo(-26, 20);
+      ctx.moveTo(22, 1); ctx.lineTo(26, 20);
+      ctx.stroke();
+      ctx.restore();
+      break;
+    }
+    default:
+      // celebrate
+      brawler(-22, -0.1, -swing * 1.2, group.shirts[0]);
+      brawler(0, -0.06, swing * 1.2, group.shirts[1]);
+      brawler(23, -0.12, -swing, group.shirts[2]);
+  }
+  // A puff of dust at the peak of the clash so the scuffle reads as a fight
+  // rather than two people standing close together.
+  if (clash > 0.72) {
+    ctx.globalAlpha = (clash - 0.72) * 2.2;
+    ctx.fillStyle = "rgba(214,206,190,.55)";
+    for (let index = 0; index < 4; index += 1) {
+      const puffX = (index - 1.5) * 13;
+      const puffY = -18 - Math.abs(Math.sin(phase * 9 + index)) * 12;
+      ctx.beginPath();
+      ctx.arc(puffX, puffY, 5 + index, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+// Coolers, folding tables and grills the tailgate gathers around.
+function drawTailgateProps(frame, centre) {
+  const spots = [180, 470, 760, 1050];
+  for (let index = 0; index < spots.length; index += 1) {
+    const x = spots[index] + (centre - W * 0.5) * -0.14;
+    if (x < -80 || x > W + 80) continue;
+    const y = 498 + (index % 2) * 16;
+    ctx.save();
+    ctx.globalAlpha = 0.8;
+    ctx.translate(x, y);
+    if (index % 2 === 0) {
+      ctx.fillStyle = "#c3cad0";
+      ctx.fillRect(-22, -20, 44, 20);
+      ctx.fillStyle = "#1c4f42";
+      ctx.fillRect(-22, -24, 44, 5);
+    } else {
+      ctx.fillStyle = "#4a5057";
+      ctx.fillRect(-20, -26, 40, 6);
+      ctx.strokeStyle = "#3a4046";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.moveTo(-14, -20); ctx.lineTo(-17, 2);
+      ctx.moveTo(14, -20); ctx.lineTo(17, 2);
+      ctx.stroke();
+      // Grill smoke.
+      const smoke = 12 + Math.sin(frame * 0.03 + index) * 5;
+      const gradient = ctx.createRadialGradient(0, -40, 2, 0, -40, smoke * 2.4);
+      gradient.addColorStop(0, "rgba(214,222,228,.2)");
+      gradient.addColorStop(1, "rgba(214,222,228,0)");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(0, -40, smoke * 2.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+function drawCrowd(time) {
+  const crowd = state.crowd;
+  if (!crowd) return;
+  const centre = state.fighters.length ? (state.fighters[0].x + state.fighters[1].x) * 0.5 : W * 0.5;
+  const reaction = state.crowdReaction;
+  const frame = state.simulationTick;
+  // Cheapest possible culling: skip anyone whose parallaxed x is off screen.
+  for (const person of crowd.people) {
+    const layer = CROWD_LAYERS.find((entry) => entry.id === person.layer);
+    const { x, gait, paused } = crowdPosition(person, layer, frame, crowd.span, crowd.minX);
+    const drawX = x + (centre - W * 0.5) * -layer.parallax;
+    if (drawX < -70 || drawX > W + 70) continue;
+    drawPedestrian(person, layer, drawX, gait, paused, reaction);
+  }
+  ctx.globalAlpha = 1;
+
+  for (const group of crowd.scuffles || []) drawScuffle(group, frame, centre, reaction);
+  if (crowd.variant === "tailgate") {
+    drawTailgateProps(frame, centre);
+    // Cups thrown into the air when the crowd is stirred hardest.
+    if (reaction > 0.5) {
+      ctx.globalAlpha = Math.min(0.7, (reaction - 0.5) * 1.6);
+      ctx.fillStyle = "#d8dde2";
+      for (let index = 0; index < 14; index += 1) {
+        const cupX = ((index * 97 + frame * 2.4) % (W + 60)) - 30;
+        const cupY = 470 - Math.abs(Math.sin(frame * 0.05 + index)) * 90;
+        ctx.fillRect(cupX, cupY, 6, 8);
+      }
+      ctx.globalAlpha = 1;
+    }
+    return;
+  }
+
+  // Street life behind the K&A crowd: the El train and drifting litter.
   const trainX = ((time * 0.08) % (W + 650)) - 500;
   ctx.fillStyle = "rgba(18,31,40,.7)";
   ctx.fillRect(trainX, 154, 430, 58);
@@ -5028,6 +5373,14 @@ function drawShufflers(time) {
     ctx.fillStyle = "rgba(255,211,105,.75)";
     ctx.fillRect(x, 166, 34, 22);
   }
+  for (let index = 0; index < 5; index += 1) {
+    const litterX = ((frame * (0.5 + index * 0.2) + index * 260) % (W + 120)) - 60;
+    const litterY = 528 + Math.sin(frame * 0.02 + index) * 7 + index * 4;
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = "#7d8794";
+    ctx.fillRect(litterX, litterY, 7, 4);
+  }
+  ctx.globalAlpha = 1;
 }
 
 function drawVetAtmosphere(time) {
@@ -7448,7 +7801,7 @@ $$("[data-touch]").forEach((button) => {
 });
 
 window.__finalBlowEngine = {
-  version: "1.1h-cyraxx-rebuild-edition",
+  version: "1.1j-tailgate-edition",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -7495,6 +7848,8 @@ window.__finalBlowEngine = {
         lifeFrames: trap.lifeFrames,
         enhanced: trap.enhanced,
       })),
+      crowd: crowdSnapshot(state.crowd, state.simulationTick, { viewLeft: 0, viewRight: W }),
+      crowdReaction: Number(state.crowdReaction.toFixed(3)),
       stageWeapon: weaponSnapshot(state.stageWeapon),
       stageWeaponsEnabled: state.stageWeaponsEnabled,
       projectiles: state.projectiles.map((projectile) => ({
@@ -7600,6 +7955,7 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       seedMatch(state.round);
       state.fighters = [makeFighter(firstIndex, 0), makeFighter(secondIndex, 1)];
       resetStageWeapon();
+      resetCrowd();
       state.particles.length = 0;
       state.effects.length = 0;
       state.traps.length = 0;
@@ -7642,6 +7998,7 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       state.stage = stageId;
       updateStageUI();
       resetStageWeapon();
+      resetCrowd();
       return state.stage;
     },
     stageWeapons(enabled = true) {
