@@ -1298,6 +1298,7 @@
     const SITE_BASE = './';
     const gameHref = g => g.href || `${SITE_BASE}${g.path}`;
     const games = [
+      { title: 'Final Blow: Philly After Dark', path: '2026-08-20/final-blow/', emoji: '🥊', date: 'Aug 20', cat: 'arcade', tag: 'featured', desc: 'A full 1990s-inspired Philadelphia weapon fighter with eight distinct combat styles, fixed-step frame-based combat, combos, throws, supers, Grit Gauge strategy, rollback private rooms, arcade and training modes, and a self-playing CPU-vs-CPU attract mode. Each fighter has bespoke movement and attack animation, two graphic Final Blow fatalities, and a unique ElevenLabs sound palette across movement, strikes, reactions, specials, supers and finishers. Four selectable soundtracks, keyboard, touch, XInput, remapping, accessibility controls, landscape fullscreen mobile play, and offline install support.' },
       { title: 'Pinball Illusions', path: '2026-08-01/pinball-illusions/', emoji: '🎱', date: 'Aug 1', cat: 'arcade', tag: 'classic', desc: 'Reconstruction of the 1995 Amiga AGA original, built from the four floppy disks — playfield geometry, artwork, mission scripts, award values, the multiball lock ladders, lamp inserts and even the physics constants are decoded from the disks rather than guessed. All three tables (Law \'n Justice, BabeWatch, Extreme Sports) play start to finish on a deterministic 50 Hz fixed-point engine, with timed missions, up to three-ball multiball earned through the original lock ladders, blinking playfield lamps, the original menu fonts and tumbling-chrome attract animation, the original boot intro, score-panel text and animations set in the machine\'s own dot-matrix faces, and the original soundtrack — the front-end tune, per-table music modules and every sound effect decoded from the game\'s own sound banks. Ball physics verified frame-by-frame against the real machine running under emulation, and the table rules refereed shot-for-shot the same way. Faithfully has no options screen, because the original shipped without one. Keyboard, touch and gamepad controls; source on GitHub.' },
       { title: 'Pinball Fantasies HD', path: '2026-07-28/pinball-fantasies/', emoji: '🃏', date: 'Jul 28', cat: 'arcade', tag: 'classic', desc: 'High-definition browser rebuild of the 1992 Amiga classic — all four tables playable: Party Land, Speed Devils, Billion Dollar Gameshow and Stones ’n’ Bones. Runs on a deterministic recreation of the original 68000 rules recovered from the disks: scoring, timers, holes, lamps, mode sequencing and both collision planes, with the real Amiga playfields upscaled to HD and the original music and effects lifted from the game’s own sound banks. Four-table select screen, an opt-in Amiga camera that frames the board exactly as the original did, keyboard and touch controls, and global leaderboards.' },
       { title: 'Pinball Dreams HD', path: '2026-07-14/pinball-dreams-ii/', href: 'https://jez237.com/games/2026-07-14/pinball-dreams-ii/?release=1.0.3', emoji: '🕹️', date: 'Jul 14', cat: 'arcade', tag: 'featured', desc: 'High-definition browser remaster of all four Pinball Dreams tables with modern detailed artwork, native HD lamps and effects, original gameplay and physics, saved high scores, and keyboard, touch and gamepad controls.' },
@@ -1373,7 +1374,7 @@
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     const FEATURED_TITLES = new Set([
-      'pinball fantasies hd', 'pinball dreams hd', 'chrome riot',
+      'final blow philly after dark', 'pinball fantasies hd', 'pinball dreams hd', 'chrome riot',
       'missile command', 'joust', 'vector arena', 'iron ridge',
       'hollow deep', 'emerald mine ii', 'neon qix'
     ]);
@@ -1404,6 +1405,7 @@
     ];
     const ICON_EFFECTS = [
       ['vector arena', 'vectorship'],
+      ['final blow', 'sword'],
       ['pinball fantasies', 'pinball'],
       ['pinball dreams', 'pinball'],
       ['pay dirt', 'paydirt'], ['corner pocket', 'cornerpocket'],
