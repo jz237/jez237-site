@@ -91,6 +91,13 @@ function startStaticServer() {
   const server = createServer(async (request, response) => {
     try {
       const pathname = decodeURIComponent(new URL(request.url, "http://127.0.0.1").pathname);
+      // Match Cloudflare Pages canonicalization. This redirect exposed the
+      // production-only failure when the service worker cached /index.html.
+      if (pathname === "/index.html") {
+        response.writeHead(308, { "Cache-Control": "no-store", Location: "/" });
+        response.end();
+        return;
+      }
       const relative = pathname === "/" ? "index.html" : pathname.replace(/^\/+/, "");
       const target = normalize(join(gameRoot, relative));
       if (!target.startsWith(gameRoot)) throw new Error("Path outside game root");
@@ -2621,10 +2628,13 @@ try {
     const name = names.find((item) => item.startsWith('final-blow-shell-'));
     const cache = name ? await caches.open(name) : null;
     const requests = cache ? await cache.keys() : [];
+    const root = cache ? await cache.match('./') : null;
     return {
       controlled: Boolean(navigator.serviceWorker.controller),
       name,
       entries: requests.length,
+      hasIndex: Boolean(cache && await cache.match('./index.html')),
+      rootRedirected: root?.redirected ?? null,
       hasGame: Boolean(cache && await cache.match('./game.js')),
       hasRollback: Boolean(cache && await cache.match('./engine/rollback.mjs')),
       hasDemo: Boolean(cache && await cache.match('./engine/demo.mjs')),
@@ -2636,8 +2646,10 @@ try {
     };
   })()`);
   assert.equal(offlineCache.controlled, true);
-  assert.match(offlineCache.name, /final-blow-shell-1\.3d/);
-  assert.ok(offlineCache.entries >= 20 && offlineCache.entries <= 24);
+  assert.match(offlineCache.name, /final-blow-shell-1\.3e/);
+  assert.equal(offlineCache.entries, 20);
+  assert.equal(offlineCache.hasIndex, false);
+  assert.equal(offlineCache.rootRedirected, false);
   assert.equal(offlineCache.hasGame, true);
   assert.equal(offlineCache.hasRollback, true);
   assert.equal(offlineCache.hasDemo, true);
@@ -2646,6 +2658,16 @@ try {
   assert.equal(offlineCache.hasDeathBlowCall, false);
   assert.equal(offlineCache.hasJanney, false);
   assert.equal(offlineCache.ready, true);
+
+  await reload(client);
+  const controlledReload = await evaluate(client, `(() => ({
+    title: document.title,
+    build: document.querySelector('.build-tag')?.textContent,
+    version: window.__finalBlowEngine?.version,
+  }))()`);
+  assert.match(controlledReload.title, /Final Blow/);
+  assert.match(controlledReload.build, /1\.3C/);
+  assert.equal(controlledReload.version, '1.3c-cinematic-gore');
 
   await client.send('Network.emulateNetworkConditions', {
     offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,

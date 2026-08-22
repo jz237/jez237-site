@@ -2051,9 +2051,9 @@
     })();
   </script>
   <script>
-    // Final Blow 1.3C installed a large offline worker that can leave Chrome
-    // trapped on a cached error page. Repair only that legacy worker when a
-    // visitor reaches this catalog; current versioned workers are preserved.
+    // Final Blow workers before 1.3e cached a redirected /index.html response.
+    // Browsers reject that response for navigation with ERR_FAILED, so repair
+    // only those legacy registrations when a visitor reaches this catalog.
     (async () => {
       if (!("serviceWorker" in navigator) || !("caches" in globalThis)) return;
       try {
@@ -2062,13 +2062,13 @@
         const legacy = registrations.filter((registration) => {
           const scope = new URL(registration.scope).pathname;
           const scriptUrl = registration.active?.scriptURL || registration.waiting?.scriptURL || registration.installing?.scriptURL || "";
-          return scope === legacyScope && !scriptUrl.includes("final-blow-1.3d");
+          return scope === legacyScope && !scriptUrl.includes("final-blow-1.3e");
         });
         if (!legacy.length) return;
         await Promise.all(legacy.map((registration) => registration.unregister()));
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames
-          .filter((name) => name.startsWith("final-blow-offline-"))
+          .filter((name) => name.startsWith("final-blow-") && name !== "final-blow-shell-1.3e")
           .map((name) => caches.delete(name)));
       } catch {
         // The catalog remains fully usable if a browser blocks storage access.
