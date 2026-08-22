@@ -2050,6 +2050,31 @@
       requestAnimationFrame(loop);
     })();
   </script>
+  <script>
+    // Final Blow 1.3C installed a large offline worker that can leave Chrome
+    // trapped on a cached error page. Repair only that legacy worker when a
+    // visitor reaches this catalog; current versioned workers are preserved.
+    (async () => {
+      if (!("serviceWorker" in navigator) || !("caches" in globalThis)) return;
+      try {
+        const legacyScope = "/games/2026-08-20/final-blow/";
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        const legacy = registrations.filter((registration) => {
+          const scope = new URL(registration.scope).pathname;
+          const scriptUrl = registration.active?.scriptURL || registration.waiting?.scriptURL || registration.installing?.scriptURL || "";
+          return scope === legacyScope && !scriptUrl.includes("final-blow-1.3d");
+        });
+        if (!legacy.length) return;
+        await Promise.all(legacy.map((registration) => registration.unregister()));
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames
+          .filter((name) => name.startsWith("final-blow-offline-"))
+          .map((name) => caches.delete(name)));
+      } catch {
+        // The catalog remains fully usable if a browser blocks storage access.
+      }
+    })();
+  </script>
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
   <script src="../assets/space-fx.js?v=20260702b" defer></script>
