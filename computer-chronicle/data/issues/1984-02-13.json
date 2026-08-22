@@ -1,0 +1,355 @@
+{
+  "currentDate": "2026-08-22",
+  "historicDate": "1984-02-13",
+  "displayDate": "Week of February 13-19, 1984",
+  "edition": "Issue 081 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Portable-PC launch urgency with bright home-computer retail color",
+    "motifs": [
+      "IBM suitcase computer and amber CRT",
+      "Sinclair QL keyboard and Microdrives",
+      "telephone-linked videotex terminal"
+    ],
+    "layout": "Dense metropolitan computer weekly with a portable-PC lead, QL side rail, charts, prices and compact world bulletin"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "Week of February 13-19, 1984",
+    "price": "50¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Five-column IBM Portable PC lead beneath masthead",
+    "secondaryRail": "Sinclair QL, videotex, game shelf, charts and prices",
+    "archiveNavigation": "Previous and next weekly issues with calendar archive"
+  },
+  "sectionChrome": {
+    "primary": "IBM blue",
+    "secondary": "signal red",
+    "texture": "Warm newsprint, halftone screens and restrained spot color"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-02-13.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the week of February 13-19, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "IBM puts its standard-setting PC architecture into a 30-pound suitcase while Sinclair aims a far cheaper QL at American home offices and three corporate giants place a bet on videotex.",
+  "morningLine": "The computer road warrior now has an IBM badge, an amber screen and a very sturdy carrying arm.",
+  "lead": {
+    "headline": "IBM Packs the PC into a 30-Pound Suitcase",
+    "dek": "The $4,225 Portable Personal Computer answers Compaq with PC/XT compatibility, twin floppy drives and a built-in amber screen.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "IBM entered the suitcase-computer contest on February 16 with the Portable Personal Computer model 5155, putting the familiar IBM PC architecture into a transportable case. Contemporary coverage made the competitive target plain: Compaq had proved that business buyers wanted a machine they could carry between offices without leaving their software behind.",
+      "Inside, the new portable followed the PC/XT line with a 4.77 MHz Intel 8088 processor and 256 KB of memory, expandable to 640 KB. Two 360 KB 5.25-inch floppy drives sat beside a built-in 9-inch amber display, while the detachable keyboard clipped across the front for travel.",
+      "Portable remained a relative term. The 5155 weighed about 30 pounds, required AC power and cost $4,225. It was a luggable business computer rather than a battery-powered laptop, aimed at professionals who valued IBM compatibility enough to carry the weight and pay the premium.",
+      "That compatibility may be the machine’s strongest feature. Buyers could take established IBM PC programs and disks on the road, and corporate departments could add a mobile system without adopting a separate software standard. The 5155 shows how quickly the compatible-PC market is forcing IBM to answer categories created by its rivals."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Sinclair Sets a $499 American Course for the QL",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        2,
+        3
+      ],
+      "body": [
+        "Sinclair Research said on February 13 that it planned to bring the QL to American consumers in the fall for $499. The Quantum Leap uses a Motorola 68008 processor, carries 128 KB of memory and aims above Sinclair’s inexpensive ZX home machines at home-office and small-business users.",
+        "Its value pitch is unusually ambitious: two built-in Microdrives, a professional keyboard, color-display capability and a bundled Psion suite covering word processing, spreadsheets, databases and business graphics. The promised price puts pressure on machines costing several times more, though American buyers must wait to see whether Sinclair meets its delivery plans."
+      ]
+    },
+    {
+      "headline": "CBS, IBM and Sears Bet on a Videotex Home",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        4
+      ],
+      "body": [
+        "CBS, IBM and Sears joined forces in the electronic information-services field this week, combining a broadcaster, the dominant computer maker and a retail giant in a bid to reach consumers by telephone line. The alliance intensifies the race to turn home terminals into gateways for news, shopping, banking and communications.",
+        "The venture reflects a sweeping expectation that networked information will become a household business. Modems remain slow and the audience small, but the partners bring content, technical reach and retail familiarity to a market still searching for the service that will persuade families to go online."
+      ]
+    },
+    {
+      "headline": "Coleco Courts Publishers for Adam “Best Of” Albums",
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ],
+      "body": [
+        "A tightly dated Electronic Games Hotline report says Coleco plans “best of” software albums for the Adam, seeking deals with established publishers to strengthen the computer’s thin catalog. The move follows a difficult holiday introduction marked by questions about reliability and performance.",
+        "Compilations could give Adam owners recognizable games while helping Coleco show that its computer has a future beyond bundled software. For now the report describes a publishing plan, not finished albums on store shelves; execution will matter as much as the names Coleco signs."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "IBM Portable PC 5155",
+      "summary": "8088, 256 KB RAM, two 360 KB floppies, 9-inch amber CRT and a $4,225 price.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Sinclair QL",
+      "summary": "68008 processor, 128 KB, twin Microdrives and bundled Psion applications; U.S. price planned at $499.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        2,
+        3
+      ]
+    },
+    {
+      "title": "Apple Macintosh 128K",
+      "summary": "The new $2,495 graphical computer keeps drawing attention for its mouse, 9-inch display, MacWrite and MacPaint.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Psion QL suite",
+      "detail": "Word processing, spreadsheet, database and business graphics bundled with the QL."
+    },
+    {
+      "name": "MacWrite",
+      "detail": "Mouse-driven word processing for Apple Macintosh."
+    },
+    {
+      "name": "MacPaint",
+      "detail": "Graphical painting program bundled with Macintosh."
+    },
+    {
+      "name": "Computer War",
+      "detail": "Dan Bunten strategy game reviewed for Atari, VIC-20 and TI systems."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "1. Punch-Out!! — arcade",
+        "2. Computer War — Atari/VIC-20/TI",
+        "3. M.U.L.E. — Atari 8-bit",
+        "4. Lode Runner — Apple II/Atari/Commodore 64",
+        "5. Archon — Apple II/Atari/Commodore 64"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "1. Karma Chameleon — Culture Club",
+        "2. Jump — Van Halen",
+        "3. Talking in Your Sleep — The Romantics",
+        "4. Joanna — Kool & the Gang",
+        "5. 99 Luftballons — Nena"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "1. Footloose",
+        "2. Unfaithfully Yours",
+        "3. Terms of Endearment",
+        "4. Silkwood",
+        "5. The Right Stuff"
+      ]
+    },
+    {
+      "label": "Software Shelf",
+      "items": [
+        "Psion QL suite",
+        "MacWrite",
+        "MacPaint",
+        "Computer War"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM Portable PC 5155",
+      "price": "$4,225",
+      "note": "Business-class luggable with dual floppies and built-in display."
+    },
+    {
+      "item": "Sinclair QL planned U.S. price",
+      "price": "$499",
+      "note": "Fall target with four Psion business applications included."
+    },
+    {
+      "item": "Apple Macintosh",
+      "price": "$2,495",
+      "note": "Suggested retail price for the 128 KB system."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "BYTE Studies Macintosh and Lisa 2",
+      "text": "The February issue examines Apple’s graphical machines and interviews the Macintosh design team."
+    },
+    {
+      "headline": "Punch-Out!! Enters the Arcade Ring",
+      "text": "Nintendo’s dual-screen boxing cabinet arrives with oversized fighters and an unusual transparent player view."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Karma Chameleon",
+      "artist": "Culture Club"
+    },
+    {
+      "rank": 2,
+      "title": "Jump",
+      "artist": "Van Halen"
+    },
+    {
+      "rank": 3,
+      "title": "Talking in Your Sleep",
+      "artist": "The Romantics"
+    },
+    {
+      "rank": 4,
+      "title": "Joanna",
+      "artist": "Kool & the Gang"
+    },
+    {
+      "rank": 5,
+      "title": "99 Luftballons",
+      "artist": "Nena"
+    }
+  ],
+  "periodAd": {
+    "headline": "Take Your IBM PC on the Road",
+    "summary": "Twin floppy drives, amber display and PC software compatibility in one transportable case.",
+    "tagline": "The office standard packs its bags."
+  },
+  "market": {
+    "headline": "Compatibility Becomes the Portable Battleground",
+    "summary": "IBM’s 5155 validates the suitcase-PC category created by Compaq and makes access to the IBM software library the decisive sales argument.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Italy and Vatican End Catholicism’s State-Religion Status",
+    "summary": "Italy and the Vatican signed a revised concordat on February 18 declaring church and state independent and ending Roman Catholicism’s formal status as Italy’s state religion.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "IBM Portable PC launch, specifications and price",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "claim": "Sinclair QL American plan and specifications",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          2,
+          3
+        ]
+      },
+      {
+        "claim": "CBS-IBM-Sears videotex alliance",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          4
+        ]
+      },
+      {
+        "claim": "Period charts and releases",
+        "confidence": "week-specific",
+        "sourceRefs": [
+          7,
+          8
+        ]
+      },
+      {
+        "claim": "World anchor",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "New York Times — Portable Introduced by I.B.M.",
+      "url": "https://www.nytimes.com/1984/02/17/business/portable-introduced-by-ibm.html"
+    },
+    {
+      "label": "IBM Portable PC 5155 product announcement",
+      "url": "https://www.minuszerodegrees.net/5155/doco/IBM%20Product%20Announcement%20-%20Portable%20PC%205155.txt"
+    },
+    {
+      "label": "Timex/Sinclair — Sinclair to Market New Micro in U.S.",
+      "url": "https://www.timexsinclair.com/article/sinclair-to-market-new-micro-in-u-s/"
+    },
+    {
+      "label": "Sinclair QL launch press kit",
+      "url": "https://www.sinclairql.net/downloads/1984-01-12_Sinclair_QL_launch_press_kit-OCRed.pdf"
+    },
+    {
+      "label": "Washington Post — Videotex Competition Heats Up",
+      "url": "https://www.washingtonpost.com/archive/business/1984/02/15/videotex-competition-heats-up-cbs-ibm-sears-jump-into-electronic-information-services-field/c7063c72-b40a-4630-af43-6109eaed3857/"
+    },
+    {
+      "label": "Electronic Games Hotline, February 12, 1984",
+      "url": "https://vgpavilion.com/mags/1984/02/12egh/pages/19840212-egh.pdf"
+    },
+    {
+      "label": "Apple Introduces Macintosh",
+      "url": "https://web.stanford.edu/dept/SUL/sites/mac/primary/docs/pr1.html"
+    },
+    {
+      "label": "Billboard Hot 100 — February 18, 1984",
+      "url": "https://billboard.elpee.jp/hot100/week/1984-02-18"
+    },
+    {
+      "label": "Box Office Mojo — Presidents Day weekend 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W07/occasion/us_presidentsday_weekend/"
+    },
+    {
+      "label": "New York Times — Italy Abolishes State Religion",
+      "url": "https://www.nytimes.com/1984/02/19/world/italy-abolishes-state-religion-in-vatican-pact.html"
+    },
+    {
+      "label": "COMPUTE! — Computer War review",
+      "url": "https://www.atarimagazines.com/compute/issue45/computerwar.php"
+    },
+    {
+      "label": "BYTE, February 1984",
+      "url": "https://www.computinghistory.org.uk/det/13513/Byte-February-1984/"
+    }
+  ],
+  "classifieds": [
+    {
+      "headline": "MODEM OWNERS",
+      "copy": "Trade messages after dark. Long-distance charges apply."
+    },
+    {
+      "headline": "SOFTWARE AUTHORS",
+      "copy": "Publishers seek polished programs for the growing home-computer shelf."
+    }
+  ]
+}
