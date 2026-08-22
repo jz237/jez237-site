@@ -50,5 +50,5 @@ self.addEventListener("fetch", (event) => {
 
   // Only the intentionally small shell is cached. Do not add runtime media
   // here; doing so would quietly recreate the oversized installation.
-  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
+  event.respondWith(caches.match(event.request, { ignoreSearch: true }).then((cached) => cached || fetch(event.request)));
 });
