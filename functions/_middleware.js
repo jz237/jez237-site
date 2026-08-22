@@ -1,4 +1,5 @@
 const GOOGLE_ANALYTICS_ID = "G-S7VKNPPZHV";
+const FINAL_BLOW_SERVICE_WORKER_PATH = "/games/2026-08-20/final-blow/sw.js";
 
 const BLOCKED_SOURCE_PREFIXES = [
   "/.claude/",
@@ -103,6 +104,21 @@ export async function onRequest(context) {
   }
 
   const response = await context.next();
+
+  if (url.pathname === FINAL_BLOW_SERVICE_WORKER_PATH) {
+    const headers = new Headers(response.headers);
+    // Pages' default four-hour JavaScript cache can pin a broken service
+    // worker in browsers even after a deployment. Worker updates must always
+    // reach the current production script.
+    headers.set("Cache-Control", "no-store");
+    headers.set("Service-Worker-Allowed", "/games/2026-08-20/final-blow/");
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  }
+
   const contentType = response.headers.get("content-type") || "";
 
   if (!contentType.includes("text/html")) {

@@ -1,10 +1,9 @@
 // Keep offline startup reliable. Images and audio are intentionally fetched on
 // demand: preloading the complete game was a 19 MB / 162-request install that
 // could make Chrome abort the page before it rendered.
-const CACHE_NAME = "final-blow-shell-1.3d";
+const CACHE_NAME = "final-blow-shell-1.3e";
 const SHELL = [
   "./",
-  "./index.html",
   "./styles.css",
   "./game.js",
   "./manifest.webmanifest",
@@ -44,7 +43,11 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || requestUrl.origin !== self.location.origin) return;
 
   if (event.request.mode === "navigate") {
-    event.respondWith(caches.match("./index.html").then((cached) => cached || fetch(event.request)));
+    // Cloudflare Pages redirects /index.html to the directory URL. Returning
+    // that redirected CacheStorage response from a navigation fetch event is
+    // rejected by browsers as ERR_FAILED. The directory entry is the same
+    // document without a redirect history, so it is safe to use offline.
+    event.respondWith(caches.match("./").then((cached) => cached || fetch(event.request)));
     return;
   }
 

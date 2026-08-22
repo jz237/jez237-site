@@ -13,6 +13,10 @@
 /games/*
   Cache-Control: public, max-age=0, must-revalidate
 
+/games/2026-08-20/final-blow/sw.js
+  Cache-Control: no-store
+  Service-Worker-Allowed: /games/2026-08-20/final-blow/
+
 # entry page must never be edge-pinned (versioned ?v= assets handle the rest)
 /games/2026-07-17/stunt-car-racer/source
   Cache-Control: no-store
