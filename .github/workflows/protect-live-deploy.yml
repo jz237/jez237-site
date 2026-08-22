@@ -26,5 +26,8 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Guard Final Blow service worker
+        run: node --test games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
+
       - name: Guard against stale production deploys
         run: node scripts/guard_cloudflare_deploy.mjs
