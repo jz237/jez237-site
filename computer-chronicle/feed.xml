@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 22 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of February 13-19, 1984 — IBM Packs the PC into a 30-Pound Suitcase</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-02-13</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-13</guid>
+      <pubDate>Sat, 22 Aug 2026 12:00:00 GMT</pubDate>
+      <description>The $4,225 Portable Personal Computer answers Compaq with PC/XT compatibility, twin floppy drives and a built-in amber screen. IBM entered the suitcase-computer contest on February 16 with the Portable Personal Computer model 5155, putting the familiar IBM PC architecture into a transportable case. Contemporary coverage made the competitive target plain: Compaq had proved that business buyers wanted a machine they could carry between offices without leaving their software behind. Also this week: Sinclair Sets a $499 American Course for the QL · CBS, IBM and Sears Bet on a Videotex Home · Coleco Courts Publishers for Adam “Best Of” Albums.</description>
+    </item>
     <item>
       <title>Week of February 6-12, 1984 — IBM Compatibility Becomes the Industry’s New Battleground</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-02-06</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-03</guid>
       <pubDate>Mon, 03 Aug 2026 12:00:00 GMT</pubDate>
       <description>Acorn aims its $995 package at U.S. classrooms, with teacher notes, networking ambitions, and a 50,000-machine production commitment. Acorn Computer brought one of Britain&apos;s best-known educational machines to the United States this week, formally unveiling an American BBC Micro package priced at $995. The October 7 debut placed the machine directly into the contest for school computer labs, where Apple and other established suppliers already had strong positions. Also this week: Issue 3 Spectrum Change Breaks Some Existing Programs · Sanyo&apos;s $2,100 Challenger Joins the IBM-Compatible Charge · Hewlett-Packard Puts &apos;Magic&apos; at Your Fingertips.</description>
-    </item>
-    <item>
-      <title>Week of September 26-October 2, 1983 — Atari Dumps Truckloads of Games in New Mexico Landfill</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-09-26</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-09-26</guid>
-      <pubDate>Sun, 02 Aug 2026 12:00:00 GMT</pubDate>
-      <description>Cartridges and equipment from the El Paso plant are crushed and buried as the console market’s inventory crisis becomes impossible to hide. Truckloads of Atari material rolled into the Alamogordo, New Mexico, municipal landfill this week, where workers crushed and buried cartridges and equipment shipped from the company’s El Paso plant. A September 28 New York Times brief fixed the disposal to this week, turning a grim inventory operation into the sharpest picture yet of the videogame business’s retreat. Also this week: GNU Call Asks Programmers to Build a Free Unix-Compatible System · Apple Cuts Lisa to $6,995 and Points Dealers Toward Macintosh · IBM’s Unannounced ‘Peanut’ Has the Home Market Guessing.</description>
     </item>
   </channel>
 </rss>

@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-22",
+      "historicDate": "1984-02-13",
+      "displayDate": "Week of February 13-19, 1984",
+      "edition": "Issue 081 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The computer road warrior now has an IBM badge, an amber screen and a very sturdy carrying arm.",
+      "leadHeadline": "IBM Packs the PC into a 30-Pound Suitcase",
+      "storyHeadlines": [
+        "Sinclair Sets a $499 American Course for the QL",
+        "CBS, IBM and Sears Bet on a Videotex Home",
+        "Coleco Courts Publishers for Adam “Best Of” Albums"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-13.jpg",
+      "thumb": "media/thumbs/1984-02-13.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-21",
       "historicDate": "1984-02-06",
       "displayDate": "Week of February 6-12, 1984",
