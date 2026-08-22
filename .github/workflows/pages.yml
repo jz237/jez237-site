@@ -28,6 +28,9 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v6
 
+      - name: Guard Final Blow service worker
+        run: node --test games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
+
       - name: Prepare GitHub Pages payload
         run: |
           set -euo pipefail
