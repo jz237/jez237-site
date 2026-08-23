@@ -267,14 +267,28 @@ try {
 
   const runtimeErrors = [];
   const failedResponses = [];
+  const voiceProbe404s = [];
+  // Wave 9 voice plumbing: the game HEAD-probes announcer/fighter voice bank
+  // files exactly once per bank per session and skips missing takes silently.
+  // A 404 on those canonical paths is the expected "bank not recorded yet"
+  // answer, not a failure — but each URL may be probed AT MOST once, which is
+  // asserted at the end of the run alongside the zero-error checks.
+  const isVoiceBankProbe = (url = "") => /\/assets\/audio\/(?:announcer|fighters)\/.+\.mp3$/.test(url);
   client.on("Runtime.exceptionThrown", ({ exceptionDetails }) => {
     runtimeErrors.push(exceptionDetails.exception?.description || exceptionDetails.text);
   });
   client.on("Log.entryAdded", ({ entry }) => {
-    if (entry.level === "error") runtimeErrors.push(entry.text);
+    if (entry.level !== "error") return;
+    if (entry.source === "network" && isVoiceBankProbe(entry.url)) return;
+    runtimeErrors.push(entry.text);
   });
   client.on("Network.responseReceived", ({ response }) => {
-    if (response.status >= 400) failedResponses.push(`${response.status} ${response.url}`);
+    if (response.status < 400) return;
+    if (response.status === 404 && isVoiceBankProbe(response.url)) {
+      voiceProbe404s.push(response.url);
+      return;
+    }
+    failedResponses.push(`${response.status} ${response.url}`);
   });
 
   await Promise.all([
@@ -330,8 +344,8 @@ try {
     simHz: window.__finalBlowEngine?.simulationHz,
   }))()`);
   assert.match(title.title, /Final Blow/);
-  assert.match(title.build, /1\.4/);
-  assert.equal(title.version.text, 'VERSION 1.5');
+  assert.match(title.build, /1\.6/);
+  assert.equal(title.version.text, 'VERSION 1.6');
   assert.notEqual(title.version.display, 'none');
   assert.ok(title.version.left >= 0 && title.version.top >= 0);
   assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -352,11 +366,14 @@ try {
   assert.equal(title.attractEnabled, true);
   assert.equal(title.graphicFatalities, true);
   assert.deepEqual(title.engine.fatalityAudit, { fighters: 8, fatalities: 16, errors: [] });
-  assert.deepEqual(title.engine.audio.audit, { fighters: 8, cuesPerFighter: 12, totalCues: 96, errors: [] });
+  assert.deepEqual(title.engine.audio.audit, {
+    fighters: 8, cuesPerFighter: 17, coreCues: 12, reactiveCues: 5,
+    variantSlots: 3, totalCues: 136, totalVariantPaths: 408, errors: [],
+  });
   assert.equal(title.engine.demo.idleScheduled, true);
   assert.equal(title.onlineSecurityBadges, 4);
   assert.equal(title.aiDifficulty, 'street');
-  assert.equal(title.engineVersion, '1.5-showtime');
+  assert.equal(title.engineVersion, '1.6-loud');
   assert.equal(title.simHz, 60);
   assert.ok(title.engine.tick > 0, "fixed simulation should be ticking");
   assert.equal(title.engine.tournament.version, '1.3');
@@ -2753,7 +2770,7 @@ try {
     };
   })()`);
   assert.equal(offlineCache.controlled, true);
-  assert.match(offlineCache.name, /final-blow-shell-1\.4a/);
+  assert.match(offlineCache.name, /final-blow-shell-1\.6a/);
   assert.equal(offlineCache.entries, 20);
   assert.equal(offlineCache.hasIndex, false);
   assert.equal(offlineCache.rootRedirected, false);
@@ -2773,8 +2790,8 @@ try {
     version: window.__finalBlowEngine?.version,
   }))()`);
   assert.match(controlledReload.title, /Final Blow/);
-  assert.match(controlledReload.build, /1\.4/);
-  assert.equal(controlledReload.version, '1.5-showtime');
+  assert.match(controlledReload.build, /1\.6/);
+  assert.equal(controlledReload.version, '1.6-loud');
 
   await client.send('Network.emulateNetworkConditions', {
     offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -2791,8 +2808,8 @@ try {
     badge: document.querySelector('#offlineBadge').textContent,
   }))()`);
   assert.match(offlineBoot.title, /Final Blow/);
-  assert.match(offlineBoot.build, /1\.4/);
-  assert.equal(offlineBoot.version, '1.5-showtime');
+  assert.match(offlineBoot.build, /1\.6/);
+  assert.equal(offlineBoot.version, '1.6-loud');
   assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
   await client.send('Network.emulateNetworkConditions', {
     offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -2836,7 +2853,7 @@ try {
   assert.equal(landscape.mobileLandscape, true);
   assert.equal(landscape.orientationBlocked, false);
   assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-  assert.equal(landscape.version.text, 'VERSION 1.5');
+  assert.equal(landscape.version.text, 'VERSION 1.6');
   assert.notEqual(landscape.version.display, 'none');
   assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
   assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -3178,6 +3195,13 @@ try {
 
   assert.deepEqual(runtimeErrors, []);
   assert.deepEqual(failedResponses, []);
+  // Wave 9: missing voice banks must be probed at most once per file — any
+  // duplicate 404 for the same canonical path means the probe cache broke.
+  assert.deepEqual(
+    voiceProbe404s.filter((url, index) => voiceProbe404s.indexOf(url) !== index),
+    [],
+    "voice bank probes must never re-fetch a missing file",
+  );
   console.log(JSON.stringify({
     status: "passed",
     desktop: {
