@@ -1,4 +1,4 @@
-# Final Blow v1.9A — Handoff
+# Final Blow v1.9B — Handoff
 
 Paste this whole file to the next agent as context before asking it to touch
 Final Blow. It describes what exists, where it lives, the traps, and how to
@@ -30,6 +30,13 @@ is a facing bugfix release, with two distinct fixes in `engine/facing.mjs`:
    away for over a third of a second at a distance it could never reach. Reach
    is derived from authored hitbox data and body extents, never per-fighter
    exceptions, so it tracks whatever the kits ship.
+
+**1.9B "Approved Audio"** applies Jez's 170-sound review literally: 84
+rejected recordings were removed from the game, 33 rejected candidates remain
+outside it, and the 30 accepted kick candidates now drive light-kick and
+roundhouse swings/impacts. Empty fighter pools use accepted shared sounds or
+procedural audio. The generated policy and regression guard prevent rejected
+files from returning or being requested at runtime.
 
 Note that the detailed sections below still describe the 1.8E baseline; 1.9 did
 not update them.
@@ -336,7 +343,7 @@ Frame roles are documented in `tools/README.md`.
 ```sh
 cd /home/jez237/.openclaw/agents/gamemaster/workspace/final-blow-goal/2026-08-20/final-blow
 
-node --test tests/*.test.mjs        # 39 unit/module/guard tests
+node --test tests/*.test.mjs        # 102 unit/module/guard tests
 node tests/browser-smoke.mjs        # full browser suite, needs Chrome, ~2min
 
 # online rollback (two browsers against a local signaling worker)
@@ -386,6 +393,15 @@ works fine and was used for all the new art.
 - Untracked and deliberately preserved in the canonical game folder:
   `BACKLOG.md` and `assets/references/`. They are private and are not part of the
   v1.8E commit or mirror.
+- Audio is now gated on Jez's SFX review. `engine/audio-review.mjs` is generated
+  from his verdict and is the single source of truth for which takes may ship;
+  `tests/audio-review.test.mjs` fails the build if a rejected recording comes
+  back, whether as a file or as a reference. Adding a fighter take means adding
+  it to his accepted list and regenerating, not dropping an mp3 into
+  `assets/audio/fighters/`. The kick cues (`light-kick-swing`,
+  `light-kick-impact`, `roundhouse-swing`, `roundhouse-impact`) are pooled per
+  fighter and picked by a render-only cursor, so they never touch `state.rng`
+  and stay rollback-safe.
 
 ---
 
@@ -397,6 +413,7 @@ every autonomous decision made during 1.1:
 | File | Covers |
 | --- | --- |
 | `CONTROLS.md` | Four-button layout, motions, chords, grabs, 10 design decisions |
+| `MISSING-AUDIO.md` | The outstanding voice work order, and which takes the SFX review rejected |
 | `COMBAT.md` | SF2HF/MK3 tuning tables, dizzy, fighter scale, the movement-ratio bug |
 | `THROWABLES.md` | Personal objects and stage weapons |
 | `CYRAXX.md` | The rebuild, identity cues, pipeline, the fal edit-mode limitation |
