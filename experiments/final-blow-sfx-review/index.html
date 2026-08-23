@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#090a0d">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥊</text></svg>">
+  <title>Final Blow Audio Lab</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero__eyebrow"><span></span> Temporary review board</div>
+    <h1>FINAL BLOW<br><strong>AUDIO LAB</strong></h1>
+    <p>Audition every current effect and the surplus kick candidates. Mark each sound with the green check or red X. Your decisions stay on this device until you copy or download them.</p>
+    <div class="hero__meta">
+      <div><b id="totalCount">0</b><span>sounds</span></div>
+      <div><b id="acceptedCount">0</b><span>accepted</span></div>
+      <div><b id="rejectedCount">0</b><span>rejected</span></div>
+      <div><b id="unratedCount">0</b><span>unrated</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="toolbar" aria-label="Review controls">
+      <div class="filters" role="group" aria-label="Filter sounds">
+        <button class="filter is-active" data-filter="all">All</button>
+        <button class="filter" data-filter="unrated">Unrated</button>
+        <button class="filter" data-filter="accepted">Accepted</button>
+        <button class="filter" data-filter="rejected">Rejected</button>
+      </div>
+      <label class="search">
+        <span>Search</span>
+        <input id="searchInput" type="search" placeholder="Fighter or sound…" autocomplete="off">
+      </label>
+    </section>
+
+    <section class="selection-note">
+      <div class="selection-note__mark">!</div>
+      <div>
+        <h2>Selection rule</h2>
+        <p>Kick candidate groups contain two alternatives but need only one winner. Existing sounds are included so the whole library can be approved or retired.</p>
+      </div>
+    </section>
+
+    <div id="emptyState" class="empty" hidden>No sounds match this filter.</div>
+    <div id="soundBoard" class="board"></div>
+  </main>
+
+  <aside class="review-dock" aria-label="Export review">
+    <div>
+      <b id="reviewProgress">0 / 0 reviewed</b>
+      <span>Saved automatically on this device</span>
+    </div>
+    <div class="review-dock__actions">
+      <button id="copyButton" class="dock-button">Copy results</button>
+      <button id="downloadButton" class="dock-button dock-button--primary">Download JSON</button>
+    </div>
+  </aside>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js" type="module"></script>
+</body>
+</html>
