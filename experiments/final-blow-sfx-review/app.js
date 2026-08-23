@@ -1,6 +1,32 @@
 const GAME_AUDIO = "/games/2026-08-20/final-blow/assets/audio";
 const STORAGE_KEY = "final-blow-sfx-review-v1";
 
+// Jez's completed 2026-08-23 review is the baseline. Rejected recordings have
+// been removed from both the game and this temporary lab, so only the 51
+// accepted sounds and the two still-unrated sounds are allowed onto the board.
+const APPROVED_IDS = new Set([
+  "shared-jump", "shared-light-swing", "shared-heavy-swing", "shared-body-hit",
+  "shared-finish-ready", "shared-knockout",
+  "deathblow-jump", "deathblow-light", "deathblow-heavy", "deathblow-special",
+  "deathblow-throw", "deathblow-super",
+  "alan-jump", "alan-light", "alan-heavy", "alan-hit-light",
+  "benny-special", "donald-jump", "donald-heavy", "ali-dash", "ali-super",
+  "deathblow-light-kick-swing-a", "deathblow-roundhouse-swing-a",
+  "deathblow-roundhouse-swing-b", "deathblow-roundhouse-impact-b",
+  "jez-light-kick-swing-a", "jez-light-kick-swing-b", "jez-roundhouse-impact-b",
+  "alan-light-kick-swing-a", "alan-light-kick-swing-b", "alan-roundhouse-swing-a",
+  "alan-light-kick-impact-b", "alan-roundhouse-impact-a",
+  "post-light-kick-swing-a", "post-light-kick-swing-b", "post-light-kick-impact-a",
+  "post-roundhouse-impact-b", "benny-light-kick-swing-b",
+  "benny-roundhouse-swing-a", "benny-roundhouse-swing-b", "benny-roundhouse-impact-a",
+  "donald-roundhouse-swing-a", "donald-roundhouse-swing-b",
+  "cyraxx-light-kick-swing-a", "cyraxx-roundhouse-swing-a",
+  "cyraxx-roundhouse-swing-b", "cyraxx-light-kick-impact-a",
+  "cyraxx-roundhouse-impact-a", "cyraxx-roundhouse-impact-b",
+  "ali-light-kick-swing-a", "ali-roundhouse-swing-b",
+]);
+const SURVIVOR_IDS = new Set([...APPROVED_IDS, "shared-ui-select", "post-light-kick-impact-b"]);
+
 const fighters = [
   { id: "deathblow", name: "DeathBlow", color: "#f3b53f" },
   { id: "jez", name: "Jez", color: "#57dcff" },
@@ -32,17 +58,16 @@ const categoryDefinitions = [
 ];
 
 const sounds = [];
-const add = (sound) => sounds.push(Object.freeze(sound));
+const add = (sound) => {
+  if (SURVIVOR_IDS.has(sound.id)) sounds.push(Object.freeze(sound));
+};
 
 add({ id: "shared-ui-select", category: "ui", title: "Menu Select", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/ui-select.mp3`, origin: "current" });
 add({ id: "shared-jump", category: "movement", title: "Generic Jump Fallback", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/jump.mp3`, origin: "current" });
 add({ id: "shared-light-swing", category: "jab-swing", title: "Generic Jab Fallback", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/light-swing.mp3`, origin: "current" });
 add({ id: "shared-heavy-swing", category: "hook-swing", title: "Generic Hook Fallback", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/heavy-swing.mp3`, origin: "current" });
-add({ id: "shared-special", category: "special", title: "Generic Special Fallback", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/special-swing.mp3`, origin: "current" });
 add({ id: "shared-body-hit", category: "jab-impact", title: "Generic Body Impact", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/body-hit.mp3`, origin: "current" });
-add({ id: "shared-block", category: "block", title: "Generic Block Fallback", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/block.mp3`, origin: "current" });
 add({ id: "shared-finish-ready", category: "final", title: "Final Blow Ready", fighter: "Shared", color: "#ff3b43", source: `${GAME_AUDIO}/finish-ready.mp3`, origin: "current" });
-add({ id: "shared-final-blow", category: "final", title: "Final Blow Call", fighter: "Shared", color: "#ff3b43", source: `${GAME_AUDIO}/final-blow.mp3`, origin: "current" });
 add({ id: "shared-knockout", category: "ko", title: "Generic Knockout", fighter: "Shared", color: "#a3a6b0", source: `${GAME_AUDIO}/knockout.mp3`, origin: "current" });
 
 const cueCategories = {
@@ -112,9 +137,13 @@ let toastTimer = 0;
 function loadDecisions() {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    return stored && typeof stored === "object" ? stored : {};
+    const saved = stored && typeof stored === "object" ? stored : {};
+    return Object.fromEntries([...SURVIVOR_IDS].flatMap((id) => {
+      const status = saved[id] || (APPROVED_IDS.has(id) ? "accepted" : "");
+      return status ? [[id, status]] : [];
+    }));
   } catch {
-    return {};
+    return Object.fromEntries([...APPROVED_IDS].map((id) => [id, "accepted"]));
   }
 }
 
