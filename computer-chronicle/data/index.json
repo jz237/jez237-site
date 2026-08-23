@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-23",
+      "historicDate": "1984-02-20",
+      "displayDate": "Week of February 20-26, 1984",
+      "edition": "Issue 082 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Zenith joins the compatible rush while software, mice and modems crowd the personal-computer marketplace.",
+      "leadHeadline": "Zenith Joins the IBM-Compatible Rush With New 16-Bit PCs",
+      "storyHeadlines": [
+        "IBM and Eagle Settle Firmware Copyright Fight",
+        "Software Industry Comes Into Its Own",
+        "PC Magazine Pits Apple Experience Against IBM Momentum"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-20.jpg",
+      "thumb": "media/thumbs/1984-02-20.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-22",
       "historicDate": "1984-02-13",
       "displayDate": "Week of February 13-19, 1984",
