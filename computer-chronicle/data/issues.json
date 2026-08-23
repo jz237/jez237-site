@@ -4,6 +4,348 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-23",
+      "historicDate": "1984-02-20",
+      "displayDate": "Week of February 20-26, 1984",
+      "edition": "Issue 082 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Portable-PC launch urgency with bright home-computer retail color",
+        "motifs": [
+          "IBM suitcase computer and amber CRT",
+          "Sinclair QL keyboard and Microdrives",
+          "telephone-linked videotex terminal"
+        ],
+        "layout": "Dense metropolitan computer weekly with a portable-PC lead, QL side rail, charts, prices and compact world bulletin"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "Week of February 13-19, 1984",
+        "price": "50¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Five-column IBM Portable PC lead beneath masthead",
+        "secondaryRail": "Sinclair QL, videotex, game shelf, charts and prices",
+        "archiveNavigation": "Previous and next weekly issues with calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "IBM blue",
+        "secondary": "signal red",
+        "texture": "Warm newsprint, halftone screens and restrained spot color"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-02-20.jpg",
+        "alt": "GPT Image 2 vintage newspaper front page for the week of February 20-26, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The IBM-compatible tide rises as Zenith enters the field, IBM presses its firmware claims, and PC software and accessories fill dealer pages.",
+      "morningLine": "Zenith joins the compatible rush while software, mice and modems crowd the personal-computer marketplace.",
+      "lead": {
+        "headline": "Zenith Joins the IBM-Compatible Rush With New 16-Bit PCs",
+        "dek": "The electronics veteran enters the hottest race in personal computing with a 16-bit family built to speak IBM’s language.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Zenith Data Systems unveiled its Z-150 family on February 22, placing another substantial manufacturer in the fast-growing market for machines compatible with the IBM Personal Computer. The new 16-bit line is aimed at buyers who want access to the expanding IBM software world without buying an IBM-badged machine.",
+          "Compatibility has become the industry’s most valuable promise. Businesses are accumulating programs, files and training around the PC standard, and every new entrant must convince customers that familiar software and peripherals will travel safely to its hardware. Zenith brings an established dealer and institutional presence to that contest.",
+          "The arrival also sharpens a difficult question: how closely may a rival follow IBM’s design? The week’s settlement between IBM and Eagle Computer over firmware copyright shows that software hidden inside the box can matter as much as the chips and disk drives advertised outside it.",
+          "For buyers, the result is a broader field and more pressure on prices. For manufacturers, it is a race to offer compatibility while retaining enough engineering independence to stay outside IBM’s legal sights."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "IBM and Eagle Settle Firmware Copyright Fight",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1,
+            2
+          ],
+          "body": [
+            "IBM and Eagle Computer settled their dispute over copyrighted firmware this week, adding a legal boundary marker to the compatible-computer boom. IBM has argued that copying the code that starts and controls a PC infringes its copyright even when a rival builds otherwise independent hardware.",
+            "The settlement warns clone makers that compatibility cannot simply mean reproducing IBM’s internal instructions. Manufacturers increasingly need independently written firmware—a clean route to the same behavior—if they want to sell access to PC software without inviting a courtroom fight."
+          ]
+        },
+        {
+          "headline": "Software Industry Comes Into Its Own",
+          "confidence": "same-week",
+          "sourceRefs": [
+            5,
+            4
+          ],
+          "body": [
+            "The personal-computer software trade is emerging as an industry in its own right, with applications, utilities and specialist publishers multiplying around popular machines. Dealer pages now present software as a shelf of competing products rather than an afterthought bundled with hardware.",
+            "Microsoft is pushing Word alongside its mouse, while database managers promise links to spreadsheets and word processors and small utilities such as Norton’s win space in the same crowded market. The value of a computer increasingly rests on what buyers can make it do after the box reaches the desk."
+          ]
+        },
+        {
+          "headline": "PC Magazine Pits Apple Experience Against IBM Momentum",
+          "confidence": "same-week",
+          "sourceRefs": [
+            3,
+            4,
+            6
+          ],
+          "body": [
+            "PC Magazine’s February issue captures a market divided between Apple’s carefully designed user experience and the IBM PC’s gathering commercial momentum. Buyers are weighing graphical ease and integration against the immense tide of compatible hardware and software.",
+            "That contrast is shaping the next phase of personal computing. Apple asks users to adopt a distinct way of working; the IBM camp offers a widening bazaar of interchangeable pieces, dealer discounts and familiar business programs."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Zenith Z-150 PC family",
+          "summary": "New 16-bit IBM PC-compatible line announced February 22; period manuals and sales literature survive online.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Microsoft Mouse",
+          "summary": "PC Magazine promoted a mouse package with tutorial, practice application, Multi-Tool Notepad, programming support, IBM PC compatibility, and MS-DOS 2.0 support.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Microsoft Word with Mouse",
+          "detail": "Mouse-oriented IBM PC word processor; advertised street price $299."
+        },
+        {
+          "name": "Data Base Manager II",
+          "detail": "Alpha Software advertised links to popular spreadsheets and word processors, including VisiCalc, 1-2-3, Multiplan, WordStar, EasyWriter, and Volkswriter."
+        },
+        {
+          "name": "Norton Utilities",
+          "detail": "Advertised at $55 in the February 21 PC Magazine issue."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "1. Microsoft Flight Simulator — IBM PC",
+            "2. M.U.L.E. — Atari 8-bit",
+            "3. Lode Runner — Apple II/Atari/C64",
+            "4. Archon — Apple II/Atari/C64",
+            "5. Ultima III: Exodus — Apple II"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "1. Jump — Van Halen",
+            "2. Karma Chameleon — Culture Club",
+            "3. 99 Luftballons — Nena",
+            "4. Thriller — Michael Jackson",
+            "5. Footloose — Kenny Loggins"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Footloose",
+            "2. Terms of Endearment",
+            "3. Unfaithfully Yours",
+            "4. The Big Chill",
+            "5. The Right Stuff"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Hayes 1200 modem",
+          "price": "$485",
+          "note": "Mail-order advertised price; the internal 1200B was $430 and Anchor's Signalman 1200B was $285."
+        },
+        {
+          "item": "256K RAM expansion board",
+          "price": "$299",
+          "note": "Mail-order advertised IBM PC accessory price."
+        },
+        {
+          "item": "Taxan RGB color monitor",
+          "price": "$450",
+          "note": "Mail-order advertised price."
+        },
+        {
+          "item": "Hyperion IBM-compatible portable",
+          "price": "$2,995 sale; $3,690 list",
+          "note": "Two-drive portable bundle advertised in PC Magazine."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Van Halen's synth-powered 'Jump' takes the pop summit",
+          "text": "The record moved to No. 1 for the chart dated February 25, while '99 Luftballons,' 'Thriller,' and 'Footloose' were climbing rapidly."
+        },
+        {
+          "headline": "IBM-compatible accessories reveal the cost of a working PC",
+          "text": "A monitor, RAM board, modem, storage, and software could add hundreds or thousands of dollars beyond the base computer, as contemporary PC Magazine dealer pages show."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Jump",
+          "artist": "Van Halen"
+        },
+        {
+          "rank": 2,
+          "title": "Karma Chameleon",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 3,
+          "title": "99 Luftballons",
+          "artist": "Nena"
+        },
+        {
+          "rank": 4,
+          "title": "Thriller",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 5,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        }
+      ],
+      "periodAd": {
+        "headline": "Put a Mouse Beside Your IBM PC",
+        "summary": "Microsoft pairs its pointing device with Word, tutorial software and programming support.",
+        "tagline": "Point, click and put words to work."
+      },
+      "market": {
+        "headline": "Compatibility Is Now a Market of Its Own",
+        "summary": "Zenith’s entry, IBM’s firmware campaign and packed accessory ads show the PC standard spreading beyond one manufacturer.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "U.S. Marines Begin Leaving Beirut",
+        "summary": "UPI reported February 21 that Marines were leaving Lebanon after 17 months, with the government they had supported badly weakened; the withdrawal and Reagan's defense of the deployment dominated the week's foreign-policy news.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          11,
+          12
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Zenith Z-150 announcement",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "IBM-Eagle settlement",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "Software and retail prices",
+            "confidence": "same-week",
+            "sourceRefs": [
+              3,
+              4,
+              5
+            ]
+          },
+          {
+            "claim": "Music and movie charts",
+            "confidence": "same-week",
+            "sourceRefs": [
+              8,
+              9,
+              10
+            ]
+          },
+          {
+            "claim": "World anchor",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              11,
+              12
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "New Zenith PC compatible with IBM (1984-02-22)",
+          "url": "https://www.upi.com/Archives/1984/02/22/New-Zenith-PC-compatible-with-IBM/8518446274000/"
+        },
+        {
+          "label": "Eagle-I.B.M. Settlement (1984-02-22)",
+          "url": "https://www.nytimes.com/1984/02/22/business/eagle-ibm-settlement.html"
+        },
+        {
+          "label": "I.B.M. Sues Rivals on Chip Copyright (1984-02-01)",
+          "url": "https://www.nytimes.com/1984/02/01/business/ibm-sues-rivals-on-chip-copyright.html"
+        },
+        {
+          "label": "PC Magazine, Volume 3 Number 3 (1984-02-21)",
+          "url": "https://archive.org/details/PC-Mag-1984-02-21"
+        },
+        {
+          "label": "Full text of PC Magazine, February 21, 1984 (1984-02-21)",
+          "url": "https://archive.org/stream/PC-Mag-1984-02-21/PC-Mag-1984-02-21_djvu.txt"
+        },
+        {
+          "label": "Software industry comes into its own (1984-02-24)",
+          "url": "https://www.csmonitor.com/1984/0224/022425.html"
+        },
+        {
+          "label": "BYTE: Benchmarks (1984-02)",
+          "url": "https://archive.org/details/byte-magazine-1984-02"
+        },
+        {
+          "label": "Computer Gaming World, Volume 4 Number 1 (1984-02)",
+          "url": "https://library.gamehistory.org/repositories/2/archival_objects/8957"
+        },
+        {
+          "label": "Billboard Hot 100, February 25, 1984 (1984-02-25)",
+          "url": "https://elpee.jp/hot100/week/1984-02-25"
+        },
+        {
+          "label": "Cash Box Top 100 Singles (1984-02-25)",
+          "url": "https://cashboxarchives.com/archives/80s_files/19840225.html"
+        },
+        {
+          "label": "Domestic 1984 Week 8 (1984-02-24)",
+          "url": "https://www.boxofficemojo.com/weekly/1984W08/"
+        },
+        {
+          "label": "Marines leave Lebanon in frustration (1984-02-21)",
+          "url": "https://www.upi.com/Archives/1984/02/21/Marines-leave-Lebanon-in-frustration/7047446187600/"
+        },
+        {
+          "label": "Reagan: No regrets in sending Marines to Lebanon (1984-02-22)",
+          "url": "https://www.upi.com/Archives/1984/02/22/Reagan-No-regrets-in-sending-Marines-to-Lebanon/1979446274000/"
+        },
+        {
+          "label": "Foreign News Briefs (1984-02-18)",
+          "url": "https://www.upi.com/Archives/1984/02/18/Foreign-News-Briefs/9506445928400/"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-22",
       "historicDate": "1984-02-13",
       "displayDate": "Week of February 13-19, 1984",
