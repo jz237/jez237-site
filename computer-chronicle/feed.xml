@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 23 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 24 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of February 27-March 4, 1984 — IBM Packs the PC Into a 30-Pound Portable</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-02-27</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-27</guid>
+      <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
+      <description>Big Blue answers the transportable-computer boom with a suitcase-sized machine that runs familiar PC software. IBM announced the Portable Personal Computer 5155 Model 68 on February 29, bringing its own badge to a transportable category pioneered by Osborne and sharpened by Compaq. The new machine preserves IBM PC disk and software compatibility in a luggable case intended to move between desks. Also this week: West Coast Computer Faire Throws Open Its Doors · Software Becomes the Industry’s Main Event · PCjr Brings Better Games—and Awkward Compromises.</description>
+    </item>
     <item>
       <title>Week of February 20-26, 1984 — Zenith Joins the IBM-Compatible Rush With New 16-Bit PCs</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-02-20</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-17</guid>
       <pubDate>Wed, 05 Aug 2026 12:00:00 GMT</pubDate>
       <description>DEC combines word processing, personal computing and communications as software and small networks dominate the New York exposition. Software announcements dominated the 10th International Information Management Exposition &amp; Conference in New York, but the larger story was integration. Machines once sold as dedicated word processors were being recast as connected personal workstations, able to prepare documents, exchange files and reach an office network from the same desk. Also this week: Coleco’s $700 Adam Enters the Holiday Computer Fight · Desktop Networks and Electronic Mail Move Downmarket · Portable and Multiuser Micros Crowd the Show.</description>
-    </item>
-    <item>
-      <title>Week of October 10-16, 1983 — Xerox Service Lifeline Reaches Osborne Owners</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-10-10</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-10</guid>
-      <pubDate>Tue, 04 Aug 2026 12:00:00 GMT</pubDate>
-      <description>A fallen portable pioneer turns to an industry giant to keep its machines working. Osborne Computer Corporation, once the most visible name in portable computing, announced October 11 that Xerox would service Osborne products while the manufacturer operated under federal bankruptcy protection. The pact offers owners a measure of continuity after the company’s swift reversal left the future of its machines and support network uncertain. Also this week: Xerox Sunrise Claims a Ten-Hour Workday · FBI Raids Bring Modem Intrusion Home · Electronic Arts Puts Designers in the Spotlight.</description>
     </item>
   </channel>
 </rss>

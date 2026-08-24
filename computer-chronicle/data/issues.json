@@ -1,8 +1,335 @@
 {
-  "generatedAt": "2026-08-19T12:03:31.696Z",
+  "generatedAt": "2026-08-24T12:01:57.303Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-08-24",
+      "historicDate": "1984-02-27",
+      "displayDate": "Week of February 27-March 4, 1984",
+      "edition": "Issue 083 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "warm aged newsprint with IBM blue and signal-red accents",
+        "motifs": [
+          "transportable computer",
+          "trade-show floor",
+          "amber CRT",
+          "floppy disks"
+        ],
+        "layout": "dense 1984 computer-weekly front page"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Culture",
+        "dateline": "Week of February 27-March 4, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "IBM Portable dominates above the fold",
+        "secondaryRail": "Faire, software, PCjr and charts",
+        "archiveNavigation": "previous and next weekly issues"
+      },
+      "sectionChrome": {
+        "primary": "IBM blue",
+        "secondary": "signal red",
+        "texture": "aged paper, halftone and ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-02-27.jpg",
+        "alt": "GPT Image 2 vintage newspaper front page for the week of February 27, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Big Blue puts a handle on the PC as the software business and public computer fairs grow into institutions.",
+      "morningLine": "This week in 1984: IBM’s 30-pound portable arrives, the West Coast Computer Faire opens, and software takes center stage.",
+      "lead": {
+        "headline": "IBM Packs the PC Into a 30-Pound Portable",
+        "dek": "Big Blue answers the transportable-computer boom with a suitcase-sized machine that runs familiar PC software.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "IBM announced the Portable Personal Computer 5155 Model 68 on February 29, bringing its own badge to a transportable category pioneered by Osborne and sharpened by Compaq. The new machine preserves IBM PC disk and software compatibility in a luggable case intended to move between desks.",
+          "Inside are an Intel 8088, 256K of memory, a nine-inch amber display and one 360K double-sided 5.25-inch diskette drive. The keyboard clips over the front for travel, while five expansion slots leave room for the familiar boards that have helped turn the PC into a business standard.",
+          "Portability remains a relative term. The 5155 weighs about 30 pounds, measures roughly 20 by 17 by 8 inches and requires an AC outlet. At $4,225 before a second drive or other options, it is built for professionals who value compatibility and mobility more than a light load.",
+          "The announcement confirms that transportable PCs are no passing novelty. IBM now expects customers to carry their software environment between offices, and rivals must answer a machine that combines the market leader’s name with the appeal of a computer that can travel."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "West Coast Computer Faire Throws Open Its Doors",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "The ninth West Coast Computer Faire runs March 2-4 at San Francisco’s Civic Auditorium and Brooks Hall, gathering vendors, user groups and enthusiasts under one roof. Its show daily and proceedings range across software, floppy disks, communications and practical microcomputer applications.",
+            "The gathering remains part marketplace and part classroom. Timex/Sinclair clubs and other user communities stand beside commercial exhibitors, a reminder that personal computing is still being built jointly by manufacturers and people trading hard-won knowledge."
+          ]
+        },
+        {
+          "headline": "Software Becomes the Industry’s Main Event",
+          "confidence": "same-week",
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "body": [
+            "Softcon in New Orleans drew a reported 14,600 visitors and 600 exhibitors to a show devoted entirely to software publishing. More than 12,000 packages were displayed as an industry once treated as an accessory to hardware asserted its own economic weight.",
+            "Industry estimates put 1984 software sales near $3.5 billion with growth of 40 to 50 percent a year. Lotus previewed Symphony, extending the 1-2-3 idea with fuller word processing, filing and communications, while publishers confronted development and launch costs that could reach millions."
+          ]
+        },
+        {
+          "headline": "PCjr Brings Better Games—and Awkward Compromises",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ],
+          "body": [
+            "IBM’s PCjr reaches reviewers with enhanced color graphics and sound, joystick support and instant-loading ROM cartridges. The $669 entry model carries 64K; the $1,269 enhanced version adds 128K and a 360K disk drive.",
+            "Its light system unit and gaming talents widen the PC family, but the infrared 62-key keyboard draws criticism and disk activity can swallow keystrokes. Reviewers see promise, yet cheaper dedicated game machines remain formidable rivals in the living room."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM Portable Personal Computer 5155",
+          "summary": "$4,225; 8088, 256K, amber display, 360K drive and approximately 30 pounds.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "IBM PCjr",
+          "summary": "$669 entry or $1,269 enhanced model, with improved color, sound and cartridge slots.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Lotus Symphony",
+          "detail": "Softcon preview combining spreadsheet, graphing, word processing, filing and communications."
+        },
+        {
+          "name": "Lotus 1-2-3",
+          "detail": "The integrated IBM PC spreadsheet standard that Symphony aims to extend."
+        },
+        {
+          "name": "PC DOS",
+          "detail": "IBM-compatible disk operating system used by the Portable PC and PCjr."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "1. Lode Runner — Apple II/Atari/C64",
+            "2. M.U.L.E. — Atari 8-bit",
+            "3. Archon — Apple II/Atari/C64",
+            "4. Ultima III: Exodus — Apple II",
+            "5. Microsoft Flight Simulator — IBM PC"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Footloose",
+            "2. Against All Odds",
+            "3. Blame It on Rio",
+            "16. Repo Man",
+            "17. This Is Spinal Tap"
+          ]
+        },
+        {
+          "label": "Hardware Watch",
+          "items": [
+            "IBM Portable PC 5155",
+            "IBM PCjr",
+            "Sinclair QL",
+            "360K floppy drive",
+            "Nine-inch amber monitor"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "IBM Portable Personal Computer 5155",
+          "price": "$4,225",
+          "note": "exact-date"
+        },
+        {
+          "item": "IBM 5155 second slimline diskette drive",
+          "price": "$642",
+          "note": "exact-date"
+        },
+        {
+          "item": "IBM PCjr entry/enhanced models",
+          "price": "$669 / $1,269",
+          "note": "same-month"
+        },
+        {
+          "item": "Sinclair QL",
+          "price": "£399",
+          "note": "same-month"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Kaypro-Mitsui relationship draws business attention",
+          "text": "The New York Times reported on Kaypro and Japanese trading giant Mitsui on February 28, amid Kaypro's effort to expand its international reach."
+        },
+        {
+          "headline": "Computer privacy reaches the Week in Review",
+          "text": "A March 4 New York Times essay examined consumer privacy as computerized records spread, showing social policy catching up with networked data processing."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Jump",
+          "artist": "Van Halen"
+        },
+        {
+          "rank": 2,
+          "title": "Karma Chameleon",
+          "artist": "Culture Club"
+        },
+        {
+          "rank": 3,
+          "title": "99 Luftballons",
+          "artist": "Nena"
+        },
+        {
+          "rank": 4,
+          "title": "Thriller",
+          "artist": "Michael Jackson"
+        },
+        {
+          "rank": 5,
+          "title": "Girls Just Want to Have Fun",
+          "artist": "Cyndi Lauper"
+        }
+      ],
+      "periodAd": {
+        "headline": "Carry IBM Compatibility With You",
+        "summary": "The 5155 puts a PC, amber screen and disk drive into one transportable case.",
+        "tagline": "Thirty pounds of familiar computing."
+      },
+      "market": {
+        "headline": "Software Moves to Center Stage",
+        "summary": "Softcon’s crowds and catalogs show that programs increasingly determine which machines win.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          3,
+          4
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Dutch dredging ship strikes rebel mine off Nicaragua",
+        "summary": "On March 3 a Dutch dredging vessel struck a mine outside Corinto, Nicaragua's chief Pacific port; UPI reported extensive damage and four injured crew members amid the Contra war.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          10
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "label": "IBM Portable announcement and specifications",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "label": "West Coast Computer Faire dates",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "label": "Softcon industry figures",
+            "confidence": "same-week",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "label": "PCjr evaluation",
+            "confidence": "same-month",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "label": "Charts and world anchor",
+            "confidence": "exact-date",
+            "sourceRefs": [
+              8,
+              9,
+              10
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "IBM Portable Personal Computer 5155 product announcement (1984-02-29)",
+          "url": "https://www.minuszerodegrees.net/5155/doco/IBM%20Product%20Announcement%20-%20Portable%20PC%205155.txt"
+        },
+        {
+          "label": "Portable Introduced by I.B.M. (1984-02-17)",
+          "url": "https://www.nytimes.com/1984/02/17/business/portable-introduced-by-ibm.html"
+        },
+        {
+          "label": "The 9th West Coast Computer Faire show daily (1984-03-02)",
+          "url": "https://archive.computerhistory.org/resources/access/text/2022/06/102725948-05-01-acc.pdf"
+        },
+        {
+          "label": "Software industry comes into its own (1984-02-24)",
+          "url": "https://www.csmonitor.com/1984/0224/022425.html"
+        },
+        {
+          "label": "Firms See World Boom In Software (1984-03-04)",
+          "url": "https://www.washingtonpost.com/archive/business/1984/03/04/firms-see-world-boom-in-software/d86e9abc-f510-4c98-aabe-d19dbe106dba/"
+        },
+        {
+          "label": "IBM PCjr evaluation (1984-03)",
+          "url": "https://www.atarimagazines.com/creative/v10n3/74_IBM_PCjr.php"
+        },
+        {
+          "label": "British Race Is On in Microcomputers (1984-02-27)",
+          "url": "https://www.nytimes.com/1984/02/27/business/british-race-is-on-in-microcomputers.html"
+        },
+        {
+          "label": "Sinclair QL launch press kit (1984-01-12)",
+          "url": "https://www.sinclairql.net/downloads/1984-01-12_Sinclair_QL_launch_press_kit-OCRed.pdf"
+        },
+        {
+          "label": "Billboard Hot 100, March 3, 1984 (1984-03-03)",
+          "url": "https://billboard.mryogaku.com/php/chart.php?date=1984%2F03%2F03"
+        },
+        {
+          "label": "Domestic weekend box office, March 2-4, 1984 (1984-03-04)",
+          "url": "https://www.boxofficemojo.com/weekend/1984W09/"
+        },
+        {
+          "label": "Dutch boat hits rebel-planted mine (1984-03-03)",
+          "url": "https://www.upi.com/Archives/1984/03/03/General-lead-Central-America-Dutch-boat-hits-rebel-planted-mine/6158447138000/"
+        },
+        {
+          "label": "Battles Pick Up on Beirut's Green Line (1984-02-27)",
+          "url": "https://www.nytimes.com/1984/02/27/world/battles-pick-up-on-beirut-s-green-line.html"
+        }
+      ]
+    },
     {
       "currentDate": "2026-08-23",
       "historicDate": "1984-02-20",
