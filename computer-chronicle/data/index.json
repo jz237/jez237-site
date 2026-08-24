@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-24",
+      "historicDate": "1984-02-27",
+      "displayDate": "Week of February 27-March 4, 1984",
+      "edition": "Issue 083 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: IBM’s 30-pound portable arrives, the West Coast Computer Faire opens, and software takes center stage.",
+      "leadHeadline": "IBM Packs the PC Into a 30-Pound Portable",
+      "storyHeadlines": [
+        "West Coast Computer Faire Throws Open Its Doors",
+        "Software Becomes the Industry’s Main Event",
+        "PCjr Brings Better Games—and Awkward Compromises"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-27.jpg",
+      "thumb": "media/thumbs/1984-02-27.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-23",
       "historicDate": "1984-02-20",
       "displayDate": "Week of February 20-26, 1984",
