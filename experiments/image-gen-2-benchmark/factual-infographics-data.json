@@ -2271,5 +2271,128 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-25-factual-infographic-factual-infographic-titiwai-the-living-",
+    "title": "Factual infographic: Titiwai — The Living Fishing Curtain",
+    "tests": "factual_subtype: bizarre-insect-life; accepted common name: New Zealand glow-worm / titiwai; scientific name: Arachnocampa luminosa; verified mechanism: the luminous fungus-gnat larva lures small flying insects toward blue-green light, captures them on hanging silk fishing lines studded with hygroscopic adhesive droplets, and hauls an occupied line upward with its mouthparts. Macro plan: enormous whole-larva hero plus large close-ups of posterior light organ, silk-making mouthparts, and water-rich adhesive droplets. Direct-canvas infographic QA passed with edge-to-edge orthographic design, concise readable text, correct six-legged larval anatomy, unmistakable lure-capture-haul mechanism, habitat comparison, 30 mm scale cue, and egg-larva-pupa-adult strip. Real-world/non-fiction; no URLs on canvas, invented statistics, fantasy anatomy, adult-fishing implication, or physical poster staging. Anti-repeat variables: New Zealand cave fungus gnat, luminous fishing curtain, cyan-green/amber palette, vertical mechanism architecture, portrait information flow.",
+    "prompt": "Create a museum-quality direct-canvas factual infographic titled TITIWAI: THE LIVING FISHING CURTAIN, explaining how the real New Zealand glow-worm larva Arachnocampa luminosa builds and operates a luminous adhesive prey trap. The canvas itself is the finished infographic: orthographic, straight-on, edge-to-edge 2D information design, no perspective view of a physical artifact, no visible paper edges, frame, border shadow, wall, screen, desk, cave room outside the layout, tools, hands, or surrounding props. Make living insect biology occupy most of the canvas. The stop-scroll anchor is an enormous sharply detailed naturalistic macro of one Arachnocampa luminosa fungus-gnat larva suspended horizontally in its translucent mucous ceiling tube, with correct segmented living anatomy and six small true legs near the front, amber-brown translucent tissue, a concentrated cyan-green posterior glow, wet highlights, subtle pores and folds, and believable depth. Directly below it, integrate a broad luminous curtain of many vertical silk fishing lines bearing regularly spaced pearl-clear adhesive droplets, with one small midge visibly caught. Arrange the remaining information as seven tightly integrated layers around and through this hero without crowding it: 1. a three-step visual sequence labeled LURE, CAPTURE, HAUL showing blue-green light attracting a tiny flying insect, contact with a sticky droplet, and the larva using its mouthparts to pull the occupied line upward; 2. a large close-up cutaway of the posterior light-organ region associated with the Malpighian-tubule system, labeled BLUE-GREEN BIOLUMINESCENCE, with no invented molecular pathway; 3. a large macro of the head and mouthparts secreting silk from mouthpart-associated labial glands and lowering a line; 4. a large microscopy window of a silk line with water-rich hygroscopic adhesive droplets, plus restrained callouts DISSOLVED ELEMENTS and PEPTIDE MATERIAL and a comparison showing that these droplets differ from orb-spider glue; 5. a cave-versus-forest habitat comparison showing longer lines in still moist cave air and shorter lines in wind-prone forest habitat, without exact universal lengths; 6. a scale ladder from a 30 mm larva to head, silk line, and droplet; 7. a compact egg to luminous predatory larva to hanging pupa to winged adult fungus gnat strip, clearly making the larva the principal feeding and fishing stage. Use a refined information architecture with the macro insect hero spanning the upper center, the luminous curtain flowing vertically through the middle, three very large close-up biology windows around it, the mechanism sequence along one side, and habitat, scale, and life-cycle modules as supporting bands. Use cave charcoal, wet limestone gray, bioluminescent cyan-green, amber-brown larval tissue, pearl-clear droplets, and restrained warm-cream editorial typography. All subjects and diagrams are content inside the direct infographic, not props around it. Labels must be concise, readable, correctly spelled, and limited to the stated facts. Naturalistic extreme-macro photography detail, accurate translucent tissues, accurate insect segmentation, believable moisture and droplet optics. No bibliography or URLs on canvas, no invented statistics, no decorative prose, no fantasy, no monster scale, no worm anatomy, no spider anatomy, no adult gnat performing the fishing behavior, no sensational claims, no dense paragraphs, no logos, QR codes, watermark, or prompt-card instructions.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-titiwai-the-living-.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-titiwai-the-living-.webp",
+    "color": "#21221b",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "factualInfographic": {
+      "topic": "How New Zealand glow-worm larvae (Arachnocampa luminosa) build luminous sticky fishing-line traps",
+      "description": "An insect-first direct-canvas infographic showing how the real New Zealand glow-worm larva uses blue-green bioluminescence, hanging silk lines, and hygroscopic adhesive droplets to lure, trap, and retrieve small prey.",
+      "sourceNote": "University of Waikato Science Learning Hub, “Glow-worms” (https://www.sciencelearn.org.nz/resources/2417-glow-worms), and PLOS ONE, “Characterization of the Fishing Lines in Titiwai (=Arachnocampa luminosa Skuse, 1890) from New Zealand and Australia” (https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0162687); verified scope: accepted species and larval identity, New Zealand habitat, mucous tube, mouthpart-produced silk, water-rich hygroscopic adhesive droplets, posterior blue-green light organ, lure-capture-haul sequence, habitat-dependent line length, 30 mm scale cue, and life-cycle stages.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-25T08:50:56-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Waikato Science Learning Hub",
+            "title": "Glow-worms",
+            "sourceType": "university",
+            "url": "https://www.sciencelearn.org.nz/resources/2417-glow-worms"
+          },
+          {
+            "id": "S2",
+            "publisher": "PLOS ONE",
+            "title": "Characterization of the Fishing Lines in Titiwai (=Arachnocampa luminosa Skuse, 1890) from New Zealand and Australia",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0162687"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The New Zealand glow-worm is the real insect species Arachnocampa luminosa, a fungus-gnat larva rather than a worm.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Arachnocampa luminosa is endemic to New Zealand and occurs in still, dark, damp caves and forest habitats with suitable prey.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The larva lives suspended in a horizontal mucous tube attached to a ceiling or overhang.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The larva secretes silk through mouthpart-associated labial glands and lowers multiple vertical fishing lines from its tube.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The fishing lines carry regularly spaced adhesive mucous droplets that trap small insects.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The adhesive droplets are mostly water, are hygroscopic, and contain dissolved elements and peptide material; they differ from orb-spider glue droplets.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A light organ near the larva's posterior end is associated with the Malpighian-tubule system and emits blue-green bioluminescence.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The larval glow functions as a prey lure, while the hanging adhesive lines perform the capture.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "After prey sticks to a line, the larva can use its mouthparts to haul the line upward and reach the prey.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fishing-line length varies with habitat and wind exposure, with longer lines favored in still, moist cave conditions and shorter lines in wind-prone forest habitat.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Larvae can reach about 30 millimeters before pupation, providing a supported scale cue for the whole-insect view.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The life cycle proceeds through egg, luminous predatory larva, pupa, and winged adult fungus gnat; the larval stage is the principal feeding stage.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
