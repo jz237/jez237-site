@@ -16,10 +16,36 @@ jobs:
   deploy-guard:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      - name: Blobless guard-only checkout
+        env:
+          GUARD_SPARSE_CHECKOUT: |
+            /content/site.json
+            /experiments/image-gen-2-benchmark/index.html
+            /games/index.html
+            /garden/index.html
+            /games/2026-08-20/final-blow/game.js
+            /games/2026-08-20/final-blow/index.html
+            /games/2026-08-20/final-blow/sw.js
+            /games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
+            /scripts/guard_cloudflare_deploy.mjs
+        run: |
+          set -euo pipefail
+
+          git init .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git sparse-checkout init --no-cone
+          printf '%s\n' "${GUARD_SPARSE_CHECKOUT}" |
+            git sparse-checkout set --no-cone --stdin
+          git -c protocol.version=2 fetch \
+            --depth=1 \
+            --filter=blob:none \
+            --no-tags \
+            origin "${GITHUB_REF}"
+          git checkout --detach "${GITHUB_SHA}"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+
+          du -sh --exclude=.git .
+          du -sh .git
 
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -30,4 +56,7 @@ jobs:
         run: node --test games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
 
       - name: Guard against stale production deploys
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/guard_cloudflare_deploy.mjs

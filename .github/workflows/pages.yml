@@ -22,8 +22,49 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v7
+      - name: Blobless sparse checkout
+        env:
+          PUBLIC_SPARSE_CHECKOUT: |
+            /*
+            !/.claude/
+            !/.github/
+            !/.wrangler/
+            !/functions/
+            !/scripts/
+            !/stock-market-src/
+            !/tmp/
+            !/workers/
+            !/experiments/amiga-mod-player/audio/
+            !/experiments/amiga-mod-player/mods/
+            !/experiments/image-gen-2-benchmark/__pycache__/
+            !/experiments/image-gen-2-benchmark/images/
+            !/experiments/image-gen-2-benchmark/thumbs/
+            !/experiments/sid-player/files/
+            !/experiments/sid-player/sids/
+            !/ops/
+            !/package.json
+            !/package-lock.json
+            !/pnpm-lock.yaml
+            !/yarn.lock
+            !/wrangler.toml
+        run: |
+          set -euo pipefail
+
+          git init .
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+          git sparse-checkout init --no-cone
+          printf '%s\n' "${PUBLIC_SPARSE_CHECKOUT}" |
+            git sparse-checkout set --no-cone --stdin
+          git -c protocol.version=2 fetch \
+            --depth=1 \
+            --filter=blob:none \
+            --no-tags \
+            origin "${GITHUB_REF}"
+          git checkout --detach "${GITHUB_SHA}"
+          test "$(git rev-parse HEAD)" = "${GITHUB_SHA}"
+
+          du -sh --exclude=.git .
+          du -sh .git
 
       - name: Setup Pages
         uses: actions/configure-pages@v6
@@ -38,8 +79,8 @@ jobs:
           rm -rf _site
           mkdir -p _site
 
-          # The mirror keeps public pages and game assets, but skips source-only
-          # files and bulky experiment libraries that make Pages deploys flaky.
+          # These exclusions intentionally duplicate the sparse-checkout denylist.
+          # Keeping them here makes the public boundary explicit and fail-safe.
           tar \
             --exclude='./_site' \
             --exclude='./.claude' \
