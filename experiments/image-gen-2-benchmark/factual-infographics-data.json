@@ -2020,5 +2020,143 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-25-factual-infographic-factual-infographic-diabolical-ironclad",
+    "title": "Factual infographic: Diabolical Ironclad Beetle — Jigsaw Armor",
+    "tests": "Tuesday factual infographic scheduled count 2/8; factual_subtype: bizarre-insect-life; common name: diabolical ironclad beetle; scientific name: Phloeodes diabolicus; verified unusual mechanism: fused layered elytra form a protective shield, jigsaw-shaped blades interlock at the medial suture, microtrichia resist slipping, and progressive delamination spreads compressive load without abrupt catastrophic separation. Macro plan: immense whole adult plus three large close-ups of the medial seam, laminated blade section, and microtrichia contact surface; micro-CT sequence, lab compression result, habitat, larva, and biomimetic joint are supporting layers. Generated once with synchronous openai/gpt-image-2 CLI at high quality; exact non-empty source verified; byte-identical QA mirror inspected with xai/grok-4.3; strict actual-pixel QA PASS.",
+    "prompt": "Create one square, museum-quality factual infographic titled “IRONCLAD BEETLE: JIGSAW ARMOR.” The generated canvas itself is the finished information design: perfectly front-facing, orthographic, edge-to-edge 2D artwork, with no photographed poster, paper edge, frame, wall, room, screen, desk, specimen tray, hands, surrounding props, or cast shadow around the whole composition. Make it a sophisticated adult natural-history and materials-science graphic with concise, correctly spelled labels and strong hierarchy.\n\nThe real insect is the diabolical ironclad beetle, Phloeodes diabolicus. Make insect imagery dominate at least two-thirds of the canvas. Use four LARGE macro anchors: (1) an enormous full living adult in dorsal three-quarter view, about one inch long in reality, with exactly six articulated legs, two segmented antennae, a low broad flightless body, rough pale-gray-to-black bark-mimicking exoskeleton, coherent head–thorax–abdomen anatomy, and fused forewing-derived elytra; (2) a huge dorsal micro-CT-style cutaway showing the two elytral halves meeting along the medial suture; (3) an extreme close-up of the jigsaw-puzzle-shaped interlocking blades at that suture; (4) a sectional electron-microscopy-style close-up showing layered chitin in a protein matrix, rodlike microtrichia at the contact surface, and progressive delamination within a blade under compression. Do not make the armor metallic, mechanical, fantastical, or indestructible.\n\nBuild seven connected information layers around those macro anchors. Layer 1, LOAD PATH: bold lime force arrows travel from a realistic compression platen through the outer elytra into the medial-suture interlocks and side supports. Layer 2, HOW THE SEAM YIELDS: a four-frame sequence labeled LOAD → INTERLOCK → LAYERS SEPARATE → LOAD SPREADS, showing gradual internal delamination rather than a sudden neck snap. Layer 3, THREE SCALES OF ARMOR: whole beetle, medial seam, and laminated blade microstructure linked by nested magnification rings. Layer 4, X-RAY EVIDENCE: a short Advanced Light Source microtomography sequence shows the internal suture before, during, and after increasing compression; label it “3D X-RAYS REVEALED THE LOAD PATH.” Layer 5, MEASURED RESISTANCE: one restrained scale comparison reads “ABOUT 39,000× BODY WEIGHT IN COMPRESSION TESTS,” presented as a reported laboratory result, not a universal survival guarantee. Layer 6, LIFE AND HABITAT: a small but clear western North American bark cross-section shows the flightless adult beneath bark near fungal growth, plus a documented larva inset; label “LARVA DOCUMENTED — TIMING NOT SHOWN.” Layer 7, ENGINEERING ECHO: a compact comparison shows a beetle-inspired laminated composite joint beside the biological seam, labeled “BIOINSPIRED TEST JOINT — NOT BEETLE TISSUE.”\n\nUse an asymmetric architecture: the immense living beetle spans the upper half; the medial-suture cutaway runs vertically through center; the compression sequence arcs down the right; habitat and engineering comparison balance the lower corners. Palette: bone ivory, volcanic charcoal, warm bark umber, rust orange, steel blue micro-CT panels, electric-lime force paths, and cream typography. Render the insects with naturalistic extreme-macro photographic detail—tactile pits, ridges, dust, fine hairs, joints, contact shadows, realistic scale—blended with precise cutaways, crisp vector arrows, restrained hatching, and readable editorial typography. Keep paragraphs out of the image; labels must be short and large.\n\nThe thumbnail premise must be unmistakable without the caption: a real flightless beetle, an enormous jigsaw-shaped back seam, and layered armor visibly spreading a crushing load. No car spectacle, injured animal, gore, broken body, extra or missing legs, open flight wings, shiny knight armor, tank parts, bolts, fantasy glow, pseudo-scientific equations, fabricated statistics, logos, QR codes, watermark, signature, tiny citations, decorative pseudo-text, classroom worksheet, generic school poster, product advertisement, or photographed infographic artifact.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-diabolical-ironclad.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-diabolical-ironclad.webp",
+    "color": "#393631",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How the diabolical ironclad beetle (Phloeodes diabolicus) survives crushing through fused layered elytra and an interlocking medial suture",
+      "description": "An insect-first direct-canvas infographic explaining how the flightless diabolical ironclad beetle uses fused layered elytra, a jigsaw-shaped medial seam, frictional microtrichia, and progressive delamination to resist crushing.",
+      "sourceNote": "Sources verified 2026-08-25: University of California, Irvine, https://news.uci.edu/2020/10/21/uci-materials-scientists-discover-design-secrets-of-nearly-indestructible-insect/ supports flightlessness, habitat, layered chitin/protein elytra, jigsaw suture, progressive delamination, microtrichia, compression result, and bioinspired joints; Lawrence Berkeley National Laboratory, https://newscenter.lbl.gov/2020/10/27/x-rays-reveal-architectural-clues-to-the-crush-resistance-of-diabolical-ironclad-beetles/ supports X-ray microtomography, medial-suture architecture, flightless protective elytra, and compression testing; UC Agriculture and Natural Resources, https://ucanr.edu/blog/bug-squad/article/diabolical-ironclad-beetle-crush-it-car-and-it-still-survives supports accepted species name, adult scale, western North American bark habitat, and fungal feeding; The Coleopterists Bulletin record, https://biostor.org/reference/282280 supports the documented larval stage.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-25T02:28:27-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of California, Irvine",
+            "title": "UCI materials scientists discover design secrets of nearly indestructible insect",
+            "sourceType": "university",
+            "url": "https://news.uci.edu/2020/10/21/uci-materials-scientists-discover-design-secrets-of-nearly-indestructible-insect/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Lawrence Berkeley National Laboratory",
+            "title": "X-Rays Reveal Architectural Clues to the Crush-Resistance of Diabolical Ironclad Beetles",
+            "sourceType": "government-agency",
+            "url": "https://newscenter.lbl.gov/2020/10/27/x-rays-reveal-architectural-clues-to-the-crush-resistance-of-diabolical-ironclad-beetles/"
+          },
+          {
+            "id": "S3",
+            "publisher": "University of California Agriculture and Natural Resources",
+            "title": "Diabolical Ironclad Beetle: Crush It With a Car and It Still Survives",
+            "sourceType": "university",
+            "url": "https://ucanr.edu/blog/bug-squad/article/diabolical-ironclad-beetle-crush-it-car-and-it-still-survives"
+          },
+          {
+            "id": "S4",
+            "publisher": "The Coleopterists Bulletin",
+            "title": "Description of the Larva of Phloeodes diabolicus LeConte (Coleoptera: Zopheridae)",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://biostor.org/reference/282280"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The diabolical ironclad beetle is the real species Phloeodes diabolicus.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The adult is flightless and its forewing-derived elytra have evolved into a solid protective shield.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults occur in western North America, including the U.S. Southwest and Sierra Nevada foothills, and can live beneath rocks or squeezed between tree bark and trunk.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The beetle feeds on fungi associated with tree bark.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "A supported adult scale is about one inch long.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The elytra consist of chitin layers in a protein matrix.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The two elytral halves meet at a medial suture shaped like interlocking jigsaw-puzzle pieces.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Under compression, layered material inside the interlocking blades delaminates progressively instead of failing through a sudden catastrophic neck fracture.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Rodlike microtrichia on the blade surfaces are interpreted as frictional pads that resist slipping.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "X-ray microtomography at the Advanced Light Source visualized the internal architecture and interlocking regions during compression.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Compression testing found that the beetle can withstand a force of about 39,000 times its body weight.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Researchers built beetle-inspired composite joints to test the engineering value of the geometry and lamination.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A larval stage of Phloeodes diabolicus has been formally described, but this infographic does not assert an exact developmental duration or seasonal schedule.",
+            "sourceIds": [
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
