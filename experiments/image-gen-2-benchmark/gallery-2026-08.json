@@ -568,6 +568,106 @@
     }
   },
   {
+    "id": "2026-08-25-factual-infographic-factual-infographic-anna-s-hummingbird-",
+    "title": "Factual infographic: Anna's Hummingbird — A Feather Built to Flash",
+    "tests": "General factual infographic, Tuesday slot 7/8. Real species Calypte anna. Direct-canvas orthographic museum information design; dominant bird-to-feather-to-barb-to-barbule optical hierarchy; large melanosome, keratin, and air multilayer cutaway; light-path sequence; four microscopy windows; on-angle/off-angle comparison; angle-dependent shift; pigment-versus-structure comparison; scale ladder; directional reflection; variation context. Source-verified, no unsupported exact dimensions or universal claims. Pixel QA PASS with xai/grok-4.3: direct canvas, credible anatomy, coherent multilayer optics, meaningful readable labels, and strong thumbnail premise. Anti-repeat variables: avian structural color, diagonal feather hierarchy, concentric optical cross-section, charcoal/magenta/gold/cyan palette.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “ANNA’S HUMMINGBIRD: A FEATHER BUILT TO FLASH,” explaining the real-world, non-fiction optical mechanism by which multilayered barbules create angle-dependent iridescence in the male Anna’s hummingbird, Calypte anna. The generated canvas itself must be a polished museum-quality information design: perfectly front-facing, orthographic, straight-on, edge-to-edge, with no paper edge, poster, wall chart, placard, frame, screen, room, desk, hands, tools, specimen tray, cast shadow around the whole composition, or environmental staging outside the designed layout. Use concise authoritative typography, large readable labels, restrained leader lines, and no dense paragraphs, bibliography, URLs, or tiny citations.\n\nMake one enormous, anatomically credible male Anna’s hummingbird in side-profile courtship posture the upper-left visual anchor, with the crown and gorget flashing saturated reddish-pink against otherwise natural green-gray plumage. Let one enlarged gorget feather sweep diagonally across the canvas and open into a continuous hierarchy: WHOLE BIRD → GORGET FEATHER → BARB → BARBULE → OPTICAL MULTILAYER. The feather-to-nanostructure cutaway must dominate the canvas, with tactile photoreal feather detail integrated inside the flat information design, not presented as a specimen on a table. Show the feather’s distal portion carrying the strongest iridescent reflection.\n\nBuild at least nine concrete visual information layers into one coherent composition: (1) the dominant whole-bird-to-barbule cutaway; (2) a huge cross-section of a barbule showing repeating flattened melanosome layers embedded in keratin with internal air spaces, labeled MELANOSOME, KERATIN, and AIR; (3) a four-step light sequence labeled WHITE LIGHT ARRIVES → REFLECTIONS FORM AT MANY LAYERS → SELECTED WAVELENGTHS REINFORCE → A DIRECTIONAL COLOR FLASH LEAVES THE FEATHER; (4) four large microscopy windows showing the distal feather surface, rows of plate-like barbules, one barbule cross-section, and the stacked melanosome–keratin–air architecture; (5) a bold ON-ANGLE / OFF-ANGLE comparison of the same gorget feather, bright reddish-pink when source, feather, and viewer align and nearly dark when rotated; (6) a three-frame angle-change strip showing the reflected hue shifting as incidence changes, explicitly labeled ANGLE CHANGES COLOR AND BRIGHTNESS; (7) a PIGMENT ALONE / STRUCTURE + MELANIN comparison explaining qualitatively that melanin participates but nanoscale organization creates iridescence; (8) a scale ladder from whole hummingbird to feather to barb to barbule to layered optical structure, without unsupported numerical dimensions; (9) a directional-reflection diagram showing the approximately specular glint from aligned barbules; (10) a compact VARIATION panel comparing different hummingbird melanosome shapes, stacking, air content, and layer dimensions, labeled NOT EVERY FEATHER IS EQUALLY IRIDESCENT; (11) a small whole-bird courtship-context vignette showing why the directional gorget can appear to switch on as orientation changes, without claiming a universal behavioral purpose.\n\nUse a hierarchy unlike today’s volcanic-plume vertical cutaway, red-sprite atmosphere column, sea-star radial hydraulic map, ironclad-beetle jigsaw armor, glow-worm fishing curtain, and assassin-bug backpack. Arrange the design around a sweeping diagonal feather and a giant concentric optical cross-section, with the on/off angle comparison occupying the entire right edge and the light sequence as a luminous lower arc. Palette: near-black charcoal, natural hummingbird green, feather gray, saturated magenta-red, ruby, violet, warm white, honey-gold light rays, and restrained cyan for air layers. Photoreal living-bird and microscopy content may appear inside the designed panels while the overall canvas remains flat and orthographic.\n\nAccuracy constraints: identify the species as Calypte anna; show that barbules contain stacked melanosomes separated by keratin and including air spaces; explain the structure as an optical multilayer with angle-dependent directional reflection; treat the pigment-versus-structure comparison qualitatively; show bright on-angle versus dark off-angle behavior and a shorter-wavelength shift with changing incidence without inventing exact angles, wavelengths, layer counts, thicknesses, percentages, rankings, or universal claims. Do not imply pigment is irrelevant, do not say every hummingbird feather is iridescent, and do not turn the anatomy into metallic foil, gemstones, magic dust, or rainbow paint. No physical poster mockup, classroom worksheet, decorative pseudo-text, QR code, logo, watermark, fantasy glow, glossy advertisement, or prompt-card instructions. The feather hierarchy, multilayer cross-section, light interference logic, and on-angle/off-angle flash must be unmistakable at thumbnail scale.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-anna-s-hummingbird-.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-anna-s-hummingbird-.webp",
+    "color": "#272121",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How multilayered barbules create angle-dependent iridescence in the male Anna's hummingbird (Calypte anna)",
+      "description": "A direct-canvas museum infographic tracing light from a male Anna's hummingbird gorget through feather barbules and their keratin, melanosome, and air multilayers to explain directional, angle-dependent structural color.",
+      "sourceNote": "Field Museum, 'Hummingbirds' rainbow colors come from pancake-shaped structures in their feathers' (https://www.fieldmuseum.org/about/press/hummingbirds-rainbow-colors-come-pancake-shaped-structures-their-feathers), and Journal of Comparative Physiology A, 'Iridescent colouration of male Anna's hummingbird (Calypte anna) caused by multilayered barbules' (https://pmc.ncbi.nlm.nih.gov/articles/PMC6244987/); verified scope: species identity, gorget and feather hierarchy, melanosome-keratin-air multilayers, structural reflection, directional glint, angle-dependent brightness and color, and variation among hummingbird feathers.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-25T17:27:06-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Field Museum",
+            "title": "Hummingbirds' rainbow colors come from pancake-shaped structures in their feathers",
+            "sourceType": "museum",
+            "url": "https://www.fieldmuseum.org/about/press/hummingbirds-rainbow-colors-come-pancake-shaped-structures-their-feathers"
+          },
+          {
+            "id": "S2",
+            "publisher": "Journal of Comparative Physiology A",
+            "title": "Iridescent colouration of male Anna's hummingbird (Calypte anna) caused by multilayered barbules",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6244987/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The male Anna's hummingbird is the real species Calypte anna, and its crown and gorget include bright reddish-pink iridescent feathers.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A feather branches from rachis to barbs to smaller barbules; the iridescent optical structures are located within the barbules.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The iridescent barbules contain stacks of melanin-bearing melanosomes embedded in and separated by keratin, with internal air spaces that create strong refractive-index contrasts.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "These repeating melanosome, keratin, and air layers act as an optical multilayer whose reflections reinforce selected wavelengths and produce structural color.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The reflected color and brightness depend strongly on illumination and viewing angle, so a feather can flash brightly on-angle and become much darker when rotated off-angle.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "In measured Anna's hummingbird feathers, changing the angle of incidence shifted the reflected color toward shorter wavelengths, behavior characteristic of an optical multilayer.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The distal portion of an Anna's hummingbird gorget feather carries the strongest reddish-pink reflection, while the reflecting barbules are oriented to produce a directional, approximately specular glint.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hummingbirds vary in melanosome shape, stacking, air content, and feather-layer dimensions, helping produce diverse iridescent colors; not every hummingbird feather is brightly structural.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The infographic's comparison between pigment-only absorption and structural reflection is qualitative: melanin contributes to the optical system, but nanoscale organization is essential to the iridescent effect.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-08-25-factual-infographic-factual-infographic-acanthaspis-petax-t",
     "title": "Factual infographic: Acanthaspis petax — The Ant-Carcass Backpack",
     "tests": "factual_subtype: bizarre-insect-life; accepted common name: ant-carcass backpack assassin bug; accepted scientific name: Acanthaspis petax; verified biological mechanism: a juvenile nymph carries a mask/backpack made from ant carcasses, and controlled presentations found vision-guided jumping spiders made predatory responses significantly more often to naked than masked bugs. Macro plan: enormous whole-nymph hero plus large close-ups of the living nymph beneath the mask, layered inert ant carcasses, and masked-versus-naked spider presentations. Visual QA PASS via xai/grok-4.3: direct-canvas infographic, insect-first composition, coherent six-legged anatomy, readable critical labels, no invented numeric results, no mockup staging. Anti-repeat variables: East African reduviid; prey-carcass camouflage; predator-recognition experiment; charcoal/ochre museum palette.",
