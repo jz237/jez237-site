@@ -2158,5 +2158,118 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-25-factual-infographic-factual-infographic-red-sprites-lightni",
+    "title": "Factual infographic: Red Sprites — Lightning Above the Storm",
+    "tests": "General factual infographic; direct-canvas orthographic museum information design; verified mechanism: conditional lightning-driven upper-atmosphere electric field and streamer-like breakdown; central vertical storm-to-mesosphere cutaway; 70–80 km approximate onset; millisecond duration; morphology, timing, visibility, scale, and observation panels; no unsupported exact statistics; QA PASS by xai/grok-4.3 for direct-canvas format, scientific plausibility, legible labels, strong central mechanism, and no text corruption.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “RED SPRITES: LIGHTNING ABOVE THE STORM,” explaining the real-world, non-fiction formation, altitude, appearance, duration, and observation of red sprites. The generated canvas itself must be a polished museum-quality information design: perfectly front-facing, orthographic, straight-on, and edge-to-edge. No paper edge, poster, wall chart, placard, frame, screen, room, desk, hands, tools, surrounding environment, or cast shadow around the whole composition. Use concise authoritative typography, large readable labels, restrained leader lines, and no dense paragraphs.\n\nMake a single dramatic vertical atmosphere cutaway the stop-scroll central mechanism, occupying most of the canvas: a physically realistic night thunderstorm at the bottom with one ordinary cloud-to-ground lightning channel, a vast dark atmospheric column above, and an enormous accurately placed crimson sprite beginning around 70–80 KM ALTITUDE, with a broad luminous crown and branching jellyfish-like tendrils developing downward through tens of kilometers. The sprite must visibly tower far above the storm and remain distinct from the lightning below; it is not an upward lightning bolt emerging from the cloud. Add a clear qualifier near the causal path: “AFTER SOME POWERFUL LIGHTNING — NOT EVERY FLASH.”\n\nIntegrate at least ten concrete information layers around that dominant cutaway: 1) an altitude ladder labeling THUNDERSTORM, STRATOSPHERE, MESOSPHERE, and SPRITE ONSET 70–80 KM; 2) a four-step causal ribbon labeled LIGHTNING MOVES CHARGE → BRIEF ELECTRIC FIELD ABOVE STORM → STREAMER-LIKE AIR BREAKDOWN → RED BRANCHING FLASH, with “simplified conventional model” as a small qualifier; 3) a morphology gallery of three large accurate forms labeled COLUMN, CARROT, and JELLYFISH-LIKE GROUP, presented as observed shape families without implying exclusivity; 4) three enlarged streamer/tendril macro windows showing the diffuse upper glow, branching central body, and fine descending tendrils; 5) a timing panel with a short exposure trace labeled LASTS ONLY MILLISECONDS, avoiding an invented exact duration; 6) a location comparison contrasting ORDINARY LIGHTNING IN/BELOW THE STORM with SPRITE HIGH ABOVE THE CLOUDS; 7) a visibility diagram showing the parent storm blocking a nearby ground view while a distant dark-sky viewpoint sees clear sky above the storm; 8) an observation strip labeled LOW-LIGHT GROUND CAMERA, HIGH-SPEED AIRCRAFT CAMERA, SPECTROGRAPH, and ISS VIEW; 9) a scale silhouette comparing the cloud-top region with the much taller sprite-bearing atmosphere; 10) a grouped-event vignette showing several sprites above one storm complex, labeled CAN OCCUR IN GROUPS; 11) a restrained evidence-style pair of processed photographic panels showing a distant ground view and an orbital oblique view, both clearly embedded as infographic content.\n\nUse a distinctive vertical information architecture unlike today’s volcanic-plume lightning infographic and beetle armor anatomy infographic. Let the atmosphere cutaway form a luminous central spine; stack the altitude ladder along the far left, the cause sequence as a curved band from the storm upward, morphology and macro windows in the upper-right quadrant, observation logic across the bottom, and timing/location comparisons in the lower-right. Palette: near-black indigo upper atmosphere, slate-blue storm, cloud white, electric-violet ordinary lightning, crimson and rose sprite emission, restrained amber for causal arrows, and cool cyan for measurement graphics. Blend realistic storm photography, delicate upper-atmosphere luminosity, crisp scientific cross-sections, and clean vector annotation while keeping the overall canvas flat and orthographic.\n\nAccuracy constraints: portray sprites as brief upper-atmosphere electrical discharges associated with thunderstorms and lightning; show the commonly described streamer-like breakdown model as a simplified conditional explanation, not a universal certainty; keep the 70–80 km onset and downward development through tens of kilometers visually approximate; do not claim that every lightning flash produces a sprite; do not depict a sprite as ordinary lightning shooting from a cloud; do not invent exact frequencies, probabilities, temperatures, energies, speeds, chemical effects, or universal dimensions. No bibliography, URLs, citations, logos, QR codes, watermark, decorative pseudo-text, fantasy creatures, classroom worksheet, photographed infographic artifact, or prompt-card instructions. The finished direct infographic must make the storm-to-sprite altitude gap, conditional lightning relationship, branching red morphology, millisecond duration, and observation methods unmistakable at thumbnail scale.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-red-sprites-lightni.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-red-sprites-lightni.webp",
+    "color": "#5b536d",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How red sprites form above thunderstorms and how they are observed",
+      "description": "A source-verified direct-canvas infographic showing how some powerful lightning events can trigger streamer-like red sprites high above thunderstorms, with their altitude, morphology, duration, and observation methods.",
+      "sourceNote": "NASA Earth Observatory — Elusive Sprite Captured from the International Space Station: https://science.nasa.gov/earth/earth-observatory/elusive-sprite-captured-from-the-international-space-station-78487/ ; Annales Geophysicae — Underlying mechanisms of transient luminous events: a review: https://angeo.copernicus.org/articles/30/1185/2012/ ; verified scope: sprite altitude, morphology, duration, lightning association, conditional streamer-like formation model, and observation context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-25T09:27:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NASA Earth Observatory",
+            "title": "Elusive Sprite Captured from the International Space Station",
+            "sourceType": "government-agency",
+            "url": "https://science.nasa.gov/earth/earth-observatory/elusive-sprite-captured-from-the-international-space-station-78487/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Annales Geophysicae",
+            "title": "Underlying mechanisms of transient luminous events: a review",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://angeo.copernicus.org/articles/30/1185/2012/"
+          },
+          {
+            "id": "S3",
+            "publisher": "NSF NCAR Earth Observing Laboratory",
+            "title": "SPRITE SPECTRA-II",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.eol.ucar.edu/field_projects/sprites-ii"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Red sprites are short-lived red electrical discharges above thunderstorms and are connected to lightning.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Sprites typically begin roughly 70 to 80 kilometers above thunderstorms and can develop downward over tens of kilometers.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Sprites can show long vertical tendrils, jellyfish-like forms, and grouped events.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Sprites last only milliseconds and are difficult to see from the ground because the parent thunderstorm often blocks the view.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A conventional sprite explanation involves brief thunderstorm electric fields after some positive cloud-to-ground lightning strokes producing streamer-like air breakdown in the middle atmosphere.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sprites are upper-atmosphere events distinct in location and form from the ordinary lightning occurring in or below the thunderstorm.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Sprites have been recorded from the International Space Station, aircraft, spacecraft, and distant ground viewpoints with low-light or high-speed cameras.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Airborne sprite research has used high-speed imaging and slitless spectroscopy to study spatial, temporal, and spectral structure.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "A useful scale comparison places the thunderstorm in the troposphere and the sprite high above it in the stratospheric and mesospheric region.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Not every lightning flash produces a sprite; the infographic must present the parent-lightning relationship as conditional rather than universal.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
