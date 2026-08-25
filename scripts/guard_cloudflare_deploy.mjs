@@ -2,9 +2,9 @@
 import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 
-const BASELINE_COMMIT = "ed5a786a7103eb8c215f9d30907211c2027b23b0";
-const BASELINE_COMMIT_UNIX_SECONDS = 1783207467;
-const BASELINE_LABEL = "2026-07-04 live-safe baseline";
+const BASELINE_COMMIT = "4810212c063f49501d5d5dbb5bb7ba4bf8c66fd1";
+const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
+const DEFAULT_GITHUB_REPOSITORY = "jz237/jez237-site";
 const PRODUCTION_BRANCHES = new Set(["main"]);
 const REQUIRED_PATHS = [
   "games/index.html",
@@ -53,12 +53,60 @@ function currentCommit() {
   return resolveCommit(ref);
 }
 
-function commitUnixSeconds(ref) {
-  const result = runGit(["show", "-s", "--format=%ct", ref], { allowFail: true });
-  return result.status === 0 ? Number(result.stdout) : 0;
+async function compareOnGitHub(commit) {
+  const repository =
+    process.env.DEPLOY_GUARD_REPOSITORY ||
+    process.env.GITHUB_REPOSITORY ||
+    DEFAULT_GITHUB_REPOSITORY;
+  const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
+  const url =
+    `https://api.github.com/repos/${repository}/compare/` +
+    `${BASELINE_COMMIT}...${commit}`;
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "jez237-live-deploy-guard",
+    "X-GitHub-Api-Version": "2022-11-28",
+  };
+
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  let response;
+  try {
+    response = await fetch(url, {
+      headers,
+      signal: AbortSignal.timeout(10_000),
+    });
+  } catch (error) {
+    return {
+      ok: false,
+      method: "github-compare",
+      detail: `GitHub comparison request failed: ${error.message}`,
+    };
+  }
+
+  if (!response.ok) {
+    const body = await response.text();
+    return {
+      ok: false,
+      method: "github-compare",
+      detail:
+        `GitHub comparison returned HTTP ${response.status}` +
+        (body ? `: ${body.slice(0, 300)}` : ""),
+    };
+  }
+
+  const comparison = await response.json();
+  const ok = comparison.status === "ahead" || comparison.status === "identical";
+  return {
+    ok,
+    method: "github-compare",
+    detail:
+      `status=${comparison.status}; ahead=${comparison.ahead_by}; ` +
+      `behind=${comparison.behind_by}`,
+  };
 }
 
-function commitContainsBaseline(commit) {
+async function commitContainsBaseline(commit) {
   const ancestorCheck = runGit(
     ["merge-base", "--is-ancestor", BASELINE_COMMIT, commit],
     { allowFail: true },
@@ -68,12 +116,7 @@ function commitContainsBaseline(commit) {
     return { ok: true, method: "ancestor" };
   }
 
-  const commitTime = commitUnixSeconds(commit);
-  if (commitTime >= BASELINE_COMMIT_UNIX_SECONDS) {
-    return { ok: true, method: "timestamp" };
-  }
-
-  return { ok: false, method: "ancestor" };
+  return compareOnGitHub(commit);
 }
 
 function fail(message) {
@@ -89,19 +132,13 @@ if (branch && !PRODUCTION_BRANCHES.has(branch)) {
   process.exit(0);
 }
 
-const baselineCheck = commitContainsBaseline(commit);
+const baselineCheck = await commitContainsBaseline(commit);
 
 if (!baselineCheck.ok) {
   fail(
     `commit ${commit} does not include ${BASELINE_LABEL} ${BASELINE_COMMIT}. ` +
-      "Refusing to deploy a tree older than the protected live site.",
-  );
-}
-
-if (baselineCheck.method === "timestamp") {
-  console.warn(
-    "Deploy guard could not prove ancestry, likely because this is a shallow checkout. " +
-      "Accepted because the commit timestamp is newer than the protected baseline.",
+      "Refusing to deploy a tree older than or disconnected from the protected " +
+      `live site.${baselineCheck.detail ? ` ${baselineCheck.detail}` : ""}`,
   );
 }
 
@@ -112,5 +149,6 @@ if (missingPaths.length > 0) {
 
 console.log(
   `Deploy guard passed for ${branch || "current branch"} at ${commit}. ` +
-    `Baseline: ${BASELINE_COMMIT}; method: ${baselineCheck.method}.`,
+    `Baseline: ${BASELINE_COMMIT}; method: ${baselineCheck.method}` +
+    `${baselineCheck.detail ? `; ${baselineCheck.detail}` : ""}.`,
 );
