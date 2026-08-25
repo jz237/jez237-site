@@ -9746,5 +9746,96 @@
     "slot": "outer-space-exploration",
     "model": "openai/gpt-image-2",
     "size": "1536x1024"
+  },
+  {
+    "id": "2026-08-25-factual-infographic-factual-infographic-how-volcanic-plumes",
+    "title": "Factual infographic: How Volcanic Plumes Make Lightning",
+    "tests": "Tuesday factual infographic general subtype; America/New_York quota slot 1/8; unique topic confirmed against the full factual archive; real-world/non-fiction volcanic plume electrification; source-verified claim sheet covers every causal arrow and label; direct-canvas orthographic museum infographic; dominant continuous vent-to-umbrella cutaway; three plume regions; five-stage charge pathway; ash-collision macro windows; fine/coarse particle sorting; mixed-phase ice comparison; turbulence clustering; mechanism-by-height comparison; plume-region map; monitoring application; conservative uncertainty panel; no invented exact figures or universal mechanism. Generated exactly once via synchronous openai/gpt-image-2 CLI; exact same-run non-empty source verified; byte-identical hard-link QA mirror inspected with xai/grok-4.3; actual-pixel QA PASS for readable title and labels, clear central plume, multiple charging pathways, layered information design, no mockup framing, pseudo-text, logos, URLs, people, disaster spectacle, or fantasy lightning.",
+    "prompt": "Create one finished square factual infographic titled “HOW VOLCANIC PLUMES MAKE LIGHTNING,” explaining real-world, non-fiction volcanic plume electrification with conservative science. The generated canvas itself must be the polished museum-quality infographic: perfectly front-facing, orthographic, edge-to-edge, with no visible paper edge, frame, border, cast shadow around the composition, wall, room, screen, exhibit case, desk, tools, hands, specimen tray, stationery, or environmental background outside the designed layout. Use concise authoritative editorial typography, short readable labels, clean leader lines, and no tiny paragraphs.\\n\\nMake the stop-scroll visual anchor an enormous continuous cutaway of one explosive eruption column from vent to umbrella cloud, occupying most of the canvas. Divide the same connected plume into three visibly linked regions: GAS-THRUST REGION immediately above the vent, CONVECTING COLUMN rising through the atmosphere, and SPREADING UMBRELLA aloft. Thread a bright but restrained electric-violet charge pathway through the ash, with several clearly placed branching discharges inside the plume. The eruption cutaway must show granular ash, turbulent eddies, buoyant rise, particle clustering, mixed-phase water and ice aloft, and the transition from dense near-vent jet to broad umbrella, all as one causal mechanism rather than a disaster photograph.\\n\\nBuild at least nine concrete visual information layers around and within the central plume:\\n1. The dominant vent-to-umbrella cutaway with the three plume regions labeled and physically continuous.\\n2. A five-stage causal sequence: explosive fragmentation creates abundant ash surfaces; ash grains collide and exchange charge; turbulence and size sorting help separate and concentrate charged particles; electric field builds across separated charge regions; electrical breakdown produces a lightning discharge.\\n3. Two large macro material windows showing angular volcanic ash grains colliding and fine versus coarse grains moving differently, with plus and minus symbols used sparingly only as charge notation.\\n4. A large upper-plume close-up comparing ash-only particle charging with additional mixed-phase hydrometeor collisions among liquid droplets, ice particles, and ash; label the second pathway “can add ice-related charging aloft,” never as universal.\\n5. A turbulence-clustering panel showing particles preferentially concentrated in dense curved patches within eddies, contrasted with a uniformly dispersed control view; connect denser patches to more collision opportunities, not guaranteed lightning.\\n6. A mechanism-by-height comparison: near-vent silicate-particle charging can be important; higher mixed-phase regions may add ice-related charging when conditions permit.\\n7. A plume-region map locating example discharges in the gas-thrust region, rising column, and umbrella region, without claiming every eruption uses all regions.\\n8. A monitoring application strip showing a volcano partly hidden beneath its opaque umbrella, a ground lightning sensor network and satellite observation icons registering the spatial pattern; state briefly that lightning can reveal otherwise obscured plume activity, while interpretation depends on plume conditions.\\n9. A compact “WHAT VARIES?” panel naming ash size distribution, water and ice, turbulence, plume height, particle concentration, and eruption dynamics as factors that change the electrical behavior.\\n10. A small accuracy panel: “Multiple charging pathways can operate together; no single mechanism explains every eruption.”\\n\\nUse an editorial architecture built around the vertical eruption column, with two asymmetric side wings of supporting panels and a curved umbrella across the top. Palette: deep charcoal-black, ash gray, sulfur gold, electric violet, ice cyan, ember orange, and restrained white typography. Show photorealistic ash microtexture, particle edges, ice surfaces, turbulent structure, and lightning only as content inside the designed infographic. Keep the central plume and charge separation unmistakable at thumbnail size, with labels large enough to read.\\n\\nAccuracy constraints: volcanic lightning is commonly associated with explosive ash plumes; discharges can occur near the vent, in the rising convective column, and in the umbrella region; colliding ash particles, fragmentation, convection, particle buoyancy, clustering, and hydrometeor formation can contribute to electrification; size-dependent triboelectrification of colliding ash is an important pathway; ice-related collisions may add charging aloft when mixed-phase conditions exist; turbulence can create denser particle patches that increase collision opportunities; lightning patterns can aid monitoring of obscured plume activity but do not provide a universal one-to-one measure of eruption intensity. Do not include exact discharge rates, fixed height thresholds, universal temperature thresholds, universal rankings, invented statistics, bibliography, URLs, footnotes, citations, or claims beyond these relationships.\\n\\nNo physical poster, page, board, placard, screen, framed print, photographed mockup, perspective view of the overall layout, visible room, volcano tourism scene, fleeing people, buildings, casualties, lava disaster spectacle, gore, fake satellite interface, dense prose, decorative charts without causal links, fantasy lightning, giant single bolt from sky to crater, logos, watermark, QR code, or unreadable pseudo-text.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-how-volcanic-plumes.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-how-volcanic-plumes.webp",
+    "color": "#5c5960",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "Volcanic plume electrification and lightning formation",
+      "description": "A direct-canvas museum infographic tracing how ash fragmentation, particle collisions and clustering, charge separation, mixed-phase ice processes, and plume dynamics can combine to produce volcanic lightning and support eruption monitoring.",
+      "sourceNote": "U.S. Geological Survey, “Impacts & Mitigation - Lightning” (https://volcanoes.usgs.gov/volcanic_ash/lightning.html), and Communications Earth & Environment, “Multiphase turbulent flow explains lightning rings in volcanic plumes” (https://www.nature.com/articles/s43247-023-01074-z); verified scope: plume regions, ash-particle collisions and clustering, mixed-phase hydrometeor charging, multiple mechanism boundaries, and lightning-pattern monitoring.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-25T04:11:30Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "U.S. Geological Survey",
+            "title": "Impacts & Mitigation - Lightning",
+            "sourceType": "government-agency",
+            "url": "https://volcanoes.usgs.gov/volcanic_ash/lightning.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "Communications Earth & Environment",
+            "title": "Multiphase turbulent flow explains lightning rings in volcanic plumes",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s43247-023-01074-z"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Lightning is often observed during explosive volcanic eruptions and is commonly associated with ash-plume formation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Volcanic lightning can occur in the gas-thrust region near the vent, the convecting rising column, and the spreading umbrella region.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Collisions and clustering among ash particles can generate and concentrate electrical charge in volcanic plumes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Magma fragmentation, particle convection and buoyancy, and hydrometeor formation can all contribute to plume electrification.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Size-dependent triboelectrification of colliding ash particles is a principal volcanic-plume charging pathway.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Collisions among in-plume hydrometeors can add an ice-related charging pathway when water and ice form aloft.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Turbulence can preferentially concentrate particles into denser patches, increasing collision opportunities and favorable conditions for charge concentration.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Volcanic lightning patterns and rates can provide monitoring information about otherwise obscured plume activity, although the relationship depends on plume conditions and charging mechanisms.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
