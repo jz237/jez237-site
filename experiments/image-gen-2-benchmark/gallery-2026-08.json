@@ -123,6 +123,109 @@
     }
   },
   {
+    "id": "2026-08-25-factual-infographic-factual-infographic-sea-star-tube-feet-",
+    "title": "Factual infographic: Sea Star Tube Feet — A Hydraulic Walking System",
+    "tests": "Tuesday general factual infographic scheduled count 5/8; selected/re-written deck entry: Hailstone Supercell Flight Recorder, refreshed as Sea Star Tube Feet — A Hydraulic Walking System; exact factual topic verified unique against the complete factual archive; real-world/non-fiction echinoderm locomotion; central five-part sea-star water-vascular cutaway; madreporite-to-stone-canal-to-ring-canal-to-radial-canal pathway; tube-foot/ampulla hydraulic cross-section; EXTEND, ATTACH, PULL, RELEASE sequence; reversible adhesion comparison; dense tube-foot macro; many-foot coordination strip; movement, grip, prey handling, touch and chemical-sensing function wheel; direct-canvas orthographic museum information design; generated exactly once via synchronous openai/gpt-image-2 CLI with quality high; exact same-run non-empty source verified; byte-identical hard-link QA mirror inspected with xai/grok-4.3; actual-pixel QA PASS for direct-canvas composition, anatomy, causal sequence, readable labels, eight information layers, no mockup framing, pseudo-text, URLs, logos, invented statistics, metal-pipe implication, rigid legs, gore, or fantasy imagery.",
+    "prompt": "Create a finished square factual infographic titled “SEA STAR TUBE FEET: A HYDRAULIC WALKING SYSTEM” about the real-world, non-fiction mechanism by which a sea star coordinates fluid-powered tube feet and reversible underwater adhesion. Render the generated canvas itself as a museum-quality information design, perfectly front-facing, orthographic, straight-on, and edge-to-edge. No photographed poster, page, board, frame, screen, desk, wall, room, paper edge, cast shadow around the composition, hands, tools, specimen tray, or environmental staging outside the designed layout.\n\nMake a large anatomically credible sea star viewed partly from above and partly as a clean underside cutaway the dominant stop-scroll anchor, spanning the center diagonally. Reveal the five-part radial body plan and a continuous cyan water-vascular pathway: aboral madreporite, stone canal, central ring canal, five radial canals, paired rows of tube feet, and bulb-like ampullae. Use restrained numbered labels and one clearly connected flow path; do not imply a heart, pump, pipes made of metal, or jointed legs.\n\nBuild eight concrete information layers around the central animal: (1) the integrated whole-body hydraulic cutaway; (2) a four-frame locomotion sequence labeled EXTEND, ATTACH, PULL, RELEASE, showing one tube foot lengthening as fluid volume changes, temporarily adhering, shortening to transmit force, and detaching; (3) an enlarged tube-foot-and-ampulla cross-section showing soft tissues, internal fluid, and directional volume change; (4) a large macro window of dense tube-foot rows contacting wet rock; (5) a second macro window comparing adhesive secretion at attachment with a distinct release secretion at detachment, using concise labels rather than molecular speculation; (6) a coordination strip showing many feet in different phases while the sea star advances across rock; (7) a function wheel with four conservative icons labeled MOVE, GRIP, HANDLE PREY, SENSE TOUCH & CHEMICAL CUES; (8) a scale/context vignette showing the oral underside against a tide-pool rock and a small comparison silhouette explaining that coordinated soft tube feet, not a few rigid legs, produce motion.\n\nUse a sophisticated deep-ocean teal background with coral-orange sea-star tissues, cyan fluid paths, pearl-white typography, muted violet ampullae, and sand-gold rock accents. Give the subject abundant photorealistic wet skin texture, calcareous surface detail, translucent soft tube feet, realistic seawater highlights, and sharply legible scientific illustration. Keep the visual hierarchy spacious enough that the title and key labels read at a glance, with no dense paragraphs. Every causal arrow must correspond to the verified claims: ring and radial canals distribute the water-vascular system; ampullae control individual feet; fluid-volume changes extend or retract them; specialized adhesive cells support temporary attachment; different secretions support attachment and release; many feet coordinate for locomotion. Do not add exact speeds, pressures, species counts, unsupported molecular names, invented statistics, regeneration claims, feeding-stomach details, logos, URLs, QR codes, citations, fantasy glow, gore, anthropomorphic faces, or prompt-card instructions.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-sea-star-tube-feet-.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-sea-star-tube-feet-.webp",
+    "color": "#44413d",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How sea star tube feet combine hydraulics with reversible adhesion",
+      "description": "A source-verified museum infographic explaining how a sea star's water vascular system, ampullae, soft tube feet, and reversible adhesive secretions coordinate underwater locomotion.",
+      "sourceNote": "City University of New York OpenEd, Biology 2e: Superphylum Deuterostomia, https://opened.cuny.edu/courseware/lesson/751/overview; Smithsonian Science Education Center, All About Starfish, https://ssec.si.edu/stemvisions-blog/all-about-starfish. Verified scope: sea-star water-vascular anatomy, hydraulic extension and retraction, tube-foot functions, and distinct attachment and release secretions.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-25T15:29:30Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "City University of New York OpenEd",
+            "title": "Biology 2e: Superphylum Deuterostomia",
+            "sourceType": "university",
+            "url": "https://opened.cuny.edu/courseware/lesson/751/overview"
+          },
+          {
+            "id": "S2",
+            "publisher": "Smithsonian Science Education Center",
+            "title": "All About Starfish",
+            "sourceType": "museum",
+            "url": "https://ssec.si.edu/stemvisions-blog/all-about-starfish"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Sea stars are echinoderms, and their adult bodies typically have a five-part radial plan around a central axis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A sea star's water vascular system includes a central ring canal and radial canals extending along the arms.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Rows of tube feet project along the oral underside of each arm and connect to the radial canals.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Individual tube feet are controlled by bulb-like ampullae and extend or retract as fluid volume changes.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The water vascular system provides hydrostatic force used in locomotion and prey manipulation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The madreporite lies on the aboral surface and connects through a stone canal to the ring canal.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Tube feet also contribute to feeding, attachment, tactile sensing, and chemical sensing.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Sea star tube feet use specialized adhesive cells for temporary attachment to submerged surfaces.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Attachment and release use different secretions, enabling repeated rapid adhesion and detachment during movement.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A sea star coordinates many tube feet to move across the seabed rather than walking on a small set of jointed legs.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-08-25-factual-infographic-factual-infographic-red-sprites-lightni",
     "title": "Factual infographic: Red Sprites — Lightning Above the Storm",
     "tests": "General factual infographic; direct-canvas orthographic museum information design; verified mechanism: conditional lightning-driven upper-atmosphere electric field and streamer-like breakdown; central vertical storm-to-mesosphere cutaway; 70–80 km approximate onset; millisecond duration; morphology, timing, visibility, scale, and observation panels; no unsupported exact statistics; QA PASS by xai/grok-4.3 for direct-canvas format, scientific plausibility, legible labels, strong central mechanism, and no text corruption.",
