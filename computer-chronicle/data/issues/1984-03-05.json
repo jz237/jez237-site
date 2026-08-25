@@ -1,0 +1,330 @@
+{
+  "currentDate": "2026-08-25",
+  "historicDate": "1984-03-05",
+  "displayDate": "Week of March 5-11, 1984",
+  "edition": "Issue 084 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Busy software-trade weekly with warm newsprint and bright red-and-blue department flags",
+    "motifs": [
+      "floppy disks",
+      "software boxes",
+      "IBM PCjr keyboard",
+      "arcade-style chart cards"
+    ],
+    "layout": "Software-show lead across the upper deck, PCjr and games beneath, compact charts and world bulletin on the rail"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+    "dateline": "Week of March 5-11, 1984",
+    "price": "50 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Five-column banner with software boxes and disk imagery",
+    "secondaryRail": "PCjr verdict, computer games chart, price watch and world bulletin",
+    "archiveNavigation": "Previous and next weekly issues with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "#9f2723",
+    "secondary": "#214f76",
+    "texture": "Warm aged newsprint, halftone screens, fine rules and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-03-05.jpg",
+    "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of March 5-11, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Software is no longer merely what comes in the box. This week it commands its own shows, export ambitions and a multibillion-dollar trade.",
+  "morningLine": "Software takes center stage while IBM’s junior PC meets the reviewers.",
+  "lead": {
+    "headline": "Software Steps Out of Hardware’s Shadow",
+    "dek": "A multibillion-dollar American trade looks overseas—and a software show makes clear that programs now constitute an industry of their own.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "The personal-computer business has spent years measuring progress in processors, memory and disk drives. This week the programs themselves claim the marquee. A March 4 report in The Washington Post describes American personal-computer software as a multibillion-dollar business whose firms are looking beyond the domestic boom toward customers overseas.",
+      "Two days later, The New York Times filed “The View From a Software Show.” The timing matters: a gathering organized around programs rather than machines signals a trade gaining its own professional rhythm—publishers, dealers, demonstrations and buyers comparing what computers can actually do.",
+      "The opportunity comes with friction. Apple, IBM, Commodore, Atari and Britain’s flourishing micro makers divide the market among incompatible formats. Every successful title therefore brings choices about conversion, distribution and support, while buyers must ask whether the software shelf behind a machine is broad enough to justify its price.",
+      "Hardware still sets the limits, but software increasingly determines which machine earns desk space. The industry’s next contest will be fought not only over specifications, but over the programs that turn boxes of chips into useful—and entertaining—personal tools."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "IBM’s PCjr Arrives to a Skeptical Reception",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2,
+        3,
+        4,
+        11
+      ],
+      "body": [
+        "IBM’s home-minded PCjr reaches its retail-launch month carrying the family name, an 8088-class processor, cartridge slots, enhanced color graphics, three-voice sound and a wireless infrared keyboard. The entry configuration is quoted at $669 to $699, while the 128K enhanced model with a disk drive lists for $1,269 before a monitor.",
+        "Reviewers find the compromises as conspicuous as the features. Creative Computing examines limits in compatibility and expansion and sharply criticizes the small chiclet-style keyboard. BYTE’s March newsstand lineup also gives the junior machine close attention. IBM has entered the living room, but buyers must decide whether the badge compensates for the awkward keys and a fully equipped price well above the headline figure."
+      ]
+    },
+    {
+      "headline": "Micro Games Crowd the Chart",
+      "confidence": "same-week",
+      "sourceRefs": [
+        5
+      ],
+      "body": [
+        "The RAM/C all-formats chart published by Personal Computer News on March 17 measures sales through March 8, placing it squarely inside this issue week. Chequered Flag leads, followed by Manic Miner, Fighter Pilot, Atic Atac and Scuba Dive—a top five dominated by the lively British home-computer trade.",
+        "That chart complicates the American tale of a videogame crash. Dedicated cartridge consoles may be suffering, yet software for programmable micros remains a vigorous retail business. Activision’s H.E.R.O. and FTL’s Sundog: Frozen Legacy also belong to the March 1984 release conversation, though surviving records do not support a precise street day this week."
+      ]
+    },
+    {
+      "headline": "Industry Seeks Laws Against “Electronic Trespassers”",
+      "confidence": "same-week",
+      "sourceRefs": [
+        6,
+        7
+      ],
+      "body": [
+        "The Videotex Industry Association is pressing state and federal lawmakers for measures against unauthorized computer access. Its claim that electronic trespass costs members millions of dollars each month is an industry estimate, not an independently audited total, but the appeal shows network intrusion moving into commercial and legislative debate.",
+        "A March issue of the young publication 2600 meanwhile gives the emerging hacker and phone-phreak culture a printed voice. Together the artifacts capture a widening argument over access, curiosity, property and law. The period sources supply no named crew behind the association’s complaint, and this account offers no access codes or operational instructions."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "IBM PCjr",
+      "summary": "8088-class home computer with enhanced color, three-voice sound, cartridges and a much-criticized infrared chiclet keyboard.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2,
+        11
+      ]
+    },
+    {
+      "title": "Tandy 2000",
+      "summary": "BYTE’s March issue reviews the fast Intel 80186-based business micro, notable but not fully IBM PC compatible.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "MacWrite",
+      "detail": "Bundled Macintosh word processor demonstrating the new machine’s mouse-and-window method."
+    },
+    {
+      "name": "MacPaint",
+      "detail": "Bundled graphics showcase for the Macintosh interface."
+    },
+    {
+      "name": "PC-DOS 2.1",
+      "detail": "DOS adaptation supplied with the enhanced PCjr; compatibility remains a buyer concern."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "1. Chequered Flag — Sinclair",
+        "2. Manic Miner — Bug-Byte / Software Projects",
+        "3. Fighter Pilot — Digital Integration",
+        "4. Atic Atac — Ultimate Play the Game",
+        "5. Scuba Dive — Durell"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "1. Splash",
+        "2. Footloose",
+        "3. Against All Odds",
+        "4. Children of the Corn",
+        "5. Blame It on Rio"
+      ]
+    },
+    {
+      "label": "Hardware Watch",
+      "items": [
+        "IBM PCjr",
+        "Tandy 2000",
+        "Apple Macintosh",
+        "PCjr infrared keyboard",
+        "5¼-inch floppy drive"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM PCjr entry model",
+      "price": "$669-$699",
+      "note": "Contemporary accounts vary; monitor and disk storage extra."
+    },
+    {
+      "item": "IBM PCjr enhanced model",
+      "price": "$1,269",
+      "note": "128K and one disk drive; display extra."
+    },
+    {
+      "item": "Apple Macintosh",
+      "price": "$2,495",
+      "note": "128K launch list price for comparison."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "BYTE Simulates March",
+      "text": "The newsstand issue covers simulation, the Tandy 2000, PCjr, Japanese shows, Pascal criticism and software trademarks."
+    },
+    {
+      "headline": "H.E.R.O. Takes Flight",
+      "text": "Activision’s rescue game and FTL’s Sundog belong to March’s new-game conversation, with exact retail days uncertain."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Jump",
+      "artist": "Van Halen"
+    },
+    {
+      "rank": 2,
+      "title": "Girls Just Want to Have Fun",
+      "artist": "Cyndi Lauper"
+    },
+    {
+      "rank": 3,
+      "title": "Somebody’s Watching Me",
+      "artist": "Rockwell"
+    },
+    {
+      "rank": 4,
+      "title": "99 Luftballons",
+      "artist": "Nena"
+    },
+    {
+      "rank": 5,
+      "title": "Footloose",
+      "artist": "Kenny Loggins"
+    }
+  ],
+  "periodAd": {
+    "headline": "Bring Home the IBM Name",
+    "summary": "PCjr offers color, sound, cartridges and a wireless keyboard—but price the complete setup before you buy.",
+    "tagline": "Junior computer, grown-up decision."
+  },
+  "market": {
+    "headline": "Software Looks Beyond America",
+    "summary": "American personal-computer software firms see overseas growth beyond an already multibillion-dollar domestic business.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1
+    ]
+  },
+  "worldAnchor": {
+    "headline": "UN Prepares Chemical-Weapons Inquiry",
+    "summary": "On March 9, a United Nations team was expected to leave Geneva for Tehran to investigate Iranian charges that Iraq used poison gas in the Gulf war.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      10
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "label": "Software trade and show dates",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "label": "IBM PCjr specifications and reception",
+        "confidence": "same-month",
+        "sourceRefs": [
+          2,
+          3,
+          4,
+          11
+        ]
+      },
+      {
+        "label": "Computer games sales chart",
+        "confidence": "same-week",
+        "sourceRefs": [
+          5
+        ]
+      },
+      {
+        "label": "Computer-access legislation push",
+        "confidence": "same-week",
+        "sourceRefs": [
+          6
+        ]
+      },
+      {
+        "label": "Music, movies and world anchor",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          8,
+          9,
+          10
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "The Washington Post — Firms See World Boom In Software (March 4, 1984)",
+      "url": "https://www.washingtonpost.com/archive/business/1984/03/04/firms-see-world-boom-in-software/d86e9abc-f510-4c98-aabe-d19dbe106dba/"
+    },
+    {
+      "label": "The New York Times — The View From a Software Show (March 6, 1984)",
+      "url": "https://www.nytimes.com/1984/03/06/science/personal-computers-the-view-from-a-software-show.html"
+    },
+    {
+      "label": "Creative Computing — IBM PCjr evaluation (March 1984)",
+      "url": "https://www.atarimagazines.com/creative/v10n3/74_IBM_PCjr.php"
+    },
+    {
+      "label": "BYTE — March 1984 issue",
+      "url": "https://archive.org/details/byte-magazine-1984-03"
+    },
+    {
+      "label": "Computing History — BYTE March 1984 contents",
+      "url": "https://www.computinghistory.org.uk/det/13514/Byte-March-1984/"
+    },
+    {
+      "label": "Computer Hits — RAM/C chart, sales through March 8",
+      "url": "https://computerhits.org/archive/personal%20computer%20news_1984-03-17_all%20formats/"
+    },
+    {
+      "label": "The Washington Post — Group Seeks Laws On Computer Access (March 1, 1984)",
+      "url": "https://www.washingtonpost.com/archive/business/1984/03/01/group-seeks-laws-on-computer-access/eb2b5cb5-471a-4bd8-9367-6fde6acb266d/"
+    },
+    {
+      "label": "2600 — Volume 1, Number 3 (March 1984)",
+      "url": "http://www.gbppr.net/2600/pdf/2600_1-3.pdf"
+    },
+    {
+      "label": "Billboard Hot 100 — week ending March 10, 1984",
+      "url": "https://www.billboard.com/charts/hot-100/1984-03-10/"
+    },
+    {
+      "label": "Box Office Mojo — Domestic weekend 10, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W10/"
+    },
+    {
+      "label": "UPI — UN investigates claims of chemical use (March 9, 1984)",
+      "url": "https://www.upi.com/Archives/1984/03/09/UN-investigates-claims-of-chemical-use/3603447656400/"
+    },
+    {
+      "label": "Smithsonian — IBM PCjr",
+      "url": "https://americanhistory.si.edu/collections/nmah_905913"
+    }
+  ]
+}
