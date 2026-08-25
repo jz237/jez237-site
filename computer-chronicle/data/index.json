@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-25",
+      "historicDate": "1984-03-05",
+      "displayDate": "Week of March 5-11, 1984",
+      "edition": "Issue 084 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Software takes center stage while IBM’s junior PC meets the reviewers.",
+      "leadHeadline": "Software Steps Out of Hardware’s Shadow",
+      "storyHeadlines": [
+        "IBM’s PCjr Arrives to a Skeptical Reception",
+        "Micro Games Crowd the Chart",
+        "Industry Seeks Laws Against “Electronic Trespassers”"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-03-05.jpg",
+      "thumb": "media/thumbs/1984-03-05.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-24",
       "historicDate": "1984-02-27",
       "displayDate": "Week of February 27-March 4, 1984",

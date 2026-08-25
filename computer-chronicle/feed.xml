@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 25 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 5-11, 1984 — Software Steps Out of Hardware’s Shadow</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-03-05</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-05</guid>
+      <pubDate>Tue, 25 Aug 2026 12:00:00 GMT</pubDate>
+      <description>A multibillion-dollar American trade looks overseas—and a software show makes clear that programs now constitute an industry of their own. The personal-computer business has spent years measuring progress in processors, memory and disk drives. This week the programs themselves claim the marquee. A March 4 report in The Washington Post describes American personal-computer software as a multibillion-dollar business whose firms are looking beyond the domestic boom toward customers overseas. Also this week: IBM’s PCjr Arrives to a Skeptical Reception · Micro Games Crowd the Chart · Industry Seeks Laws Against “Electronic Trespassers”.</description>
+    </item>
     <item>
       <title>Week of February 27-March 4, 1984 — IBM Packs the PC Into a 30-Pound Portable</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-02-27</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-24</guid>
       <pubDate>Thu, 06 Aug 2026 12:00:00 GMT</pubDate>
       <description>The Atarisoft label carries arcade names beyond Atari hardware as the home-game business searches for software revenue. Atari is loosening the bond between its famous games and its own machines. A New York Times report on October 27 described new Atari titles made to fit competing home systems, turning the company’s arcade catalog into a software line that could reach players well beyond the Atari 2600 and Atari computers. Also this week: IBM Links the PC Desk to the Mainframe · DEC Shrinks 32-Bit VAX Power Into a Microcomputer · FBI Seizes Gear in Multicity Hacker Inquiry.</description>
-    </item>
-    <item>
-      <title>Week of October 17-23, 1983 — Info ’83 Turns the Personal Computer Into an Office Workstation</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-10-17</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-17</guid>
-      <pubDate>Wed, 05 Aug 2026 12:00:00 GMT</pubDate>
-      <description>DEC combines word processing, personal computing and communications as software and small networks dominate the New York exposition. Software announcements dominated the 10th International Information Management Exposition &amp; Conference in New York, but the larger story was integration. Machines once sold as dedicated word processors were being recast as connected personal workstations, able to prepare documents, exchange files and reach an office network from the same desk. Also this week: Coleco’s $700 Adam Enters the Holiday Computer Fight · Desktop Networks and Electronic Mail Move Downmarket · Portable and Multiuser Micros Crowd the Show.</description>
     </item>
   </channel>
 </rss>
