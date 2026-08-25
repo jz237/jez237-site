@@ -10314,5 +10314,102 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-25-factual-infographic-factual-infographic-acanthaspis-petax-t",
+    "title": "Factual infographic: Acanthaspis petax — The Ant-Carcass Backpack",
+    "tests": "factual_subtype: bizarre-insect-life; accepted common name: ant-carcass backpack assassin bug; accepted scientific name: Acanthaspis petax; verified biological mechanism: a juvenile nymph carries a mask/backpack made from ant carcasses, and controlled presentations found vision-guided jumping spiders made predatory responses significantly more often to naked than masked bugs. Macro plan: enormous whole-nymph hero plus large close-ups of the living nymph beneath the mask, layered inert ant carcasses, and masked-versus-naked spider presentations. Visual QA PASS via xai/grok-4.3: direct-canvas infographic, insect-first composition, coherent six-legged anatomy, readable critical labels, no invented numeric results, no mockup staging. Anti-repeat variables: East African reduviid; prey-carcass camouflage; predator-recognition experiment; charcoal/ochre museum palette.",
+    "prompt": "Create a finished 1024x1024 direct-canvas museum-quality factual infographic titled “THE ASSASSIN BUG THAT WEARS ITS PREY” with the scientific name “Acanthaspis petax” clearly beneath the title. The canvas itself is the infographic: straight-on orthographic, edge-to-edge 2D information design, no photographed poster or environmental staging, no visible paper edges, frame, screen, wall, desk, tools, hands, specimen tray, cast shadow around the composition, or perspective view.\\n\\nMake the real insect biology dominate at least two-thirds of the canvas. Use an enormous, sharply detailed naturalistic extreme-macro hero view of one intact six-legged Acanthaspis petax nymph carrying a rough backpack made from layered dead ant carcasses; make the living assassin bug clearly distinguishable beneath the carried remains, with coherent true-bug anatomy, natural earth-brown and rust coloration, believable chitin, fine hairs, antennae, folded legs, mouthparts, and macro depth cues. The dead ants must look inert and carried, never fused into the bug, never alive, and never like a fantasy monster.\\n\\nBuild seven specific visual information layers around that hero without crowding it:\\n1. A large cutaway-style macro window labeled “LIVING NYMPH BENEATH THE MASK,” revealing the juvenile assassin bug under the carcass layer while preserving believable anatomy.\\n2. A second large macro window labeled “ANT-CARCASS BACKPACK,” showing several inert ant bodies layered above the nymph; do not invent pumps, glue chemistry, stitching, grafting, or an unsupported attachment mechanism.\\n3. A third large paired macro labeled “MASKED / NAKED,” showing the same natural-looking bug form with its carcass mask intact versus removed, beside a correctly proportioned jumping spider.\\n4. A concise three-step experiment sequence: “PRESENT BUG” → “SPIDER INSPECTS” → “PREDATORY RESPONSE,” with the masked path visually showing fewer responses than the naked path, using qualitative icons only and no invented counts, percentages, or bar-chart values.\\n5. A cause-and-effect ribbon: “CARRIED ANT REMAINS” → “VISUAL OUTLINE DISRUPTED” → “HARDER FOR TESTED JUMPING SPIDERS TO IDENTIFY AS PREY,” explicitly qualified with “supported in controlled presentations; not perfect protection.”\\n6. A small taxonomy strip: “HEMIPTERA • REDUVIIDAE • Acanthaspis petax,” plus a restrained locator map labeled “LAKE VICTORIA REGION, EAST AFRICA — study animals.”\\n7. A juvenile-stage vignette labeled “NYMPHAL CAMOUFLAGE,” and a small evidence-boundary panel reading “TESTED WITH VISION-GUIDED JUMPING SPIDERS • RESULTS DO NOT APPLY TO EVERY PREDATOR.”\\n\\nUse authoritative editorial typography with large readable labels, strong hierarchy, thin cream annotation lines, deep charcoal background, warm ochre and rust accents, muted olive map tones, and restrained crimson only to distinguish the naked experimental path. Integrate photorealistic macro specimens as designed infographic content, not objects staged around a poster. Preserve exact six-legged insect anatomy and believable jumping-spider anatomy. No dense paragraphs, bibliography, URLs, tiny citations, logos, QR codes, invented statistics, universal claims, sensational gore, fantasy, metallic cyborg parts, pseudo-scientific diagrams, decorative school-poster clip art, placeholder text, instructions, watermark, or malformed pseudo-text.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-acanthaspis-petax-t.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-acanthaspis-petax-t.webp",
+    "color": "#2a251d",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How Acanthaspis petax nymphs carry ant-carcass backpacks that reduce attacks by vision-guided jumping spiders",
+      "description": "An insect-first direct-canvas infographic showing how the real assassin-bug species Acanthaspis petax carries a mask of ant carcasses and how controlled jumping-spider presentations support a conservative visual-defense interpretation.",
+      "sourceNote": "Integrated Taxonomic Information System, “ITIS Report: Acanthaspis petax” (https://itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=1073349); Journal of Zoology, “Bugs with backpacks deter vision-guided predation by jumping spiders” (https://api.crossref.org/works/10.1111/j.1469-7998.2007.00335.x); University of Regensburg, refereed record for “Bugs with a backpack: the function of nymphal camouflage in the West African assassin bugs Paredocla and Acanthaspis spp.” (https://epub.uni-regensburg.de/73160/). Verified scope: species taxonomy, juvenile backpack camouflage, ant-carcass mask, East African study context, masked-versus-naked presentation design, and reduced predatory responses by tested jumping spiders.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-25T18:26:45Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Integrated Taxonomic Information System",
+            "title": "ITIS Report: Acanthaspis petax",
+            "sourceType": "government-agency",
+            "url": "https://itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=1073349"
+          },
+          {
+            "id": "S2",
+            "publisher": "Journal of Zoology",
+            "title": "Bugs with backpacks deter vision-guided predation by jumping spiders",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://api.crossref.org/works/10.1111/j.1469-7998.2007.00335.x"
+          },
+          {
+            "id": "S3",
+            "publisher": "University of Regensburg",
+            "title": "Bugs with a backpack: the function of nymphal camouflage in the West African assassin bugs Paredocla and Acanthaspis spp.",
+            "sourceType": "university",
+            "url": "https://epub.uni-regensburg.de/73160/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Acanthaspis petax is a valid insect species in the assassin-bug family Reduviidae and the true-bug order Hemiptera.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The Acanthaspis petax individual shown is a juvenile nymph carrying camouflage rather than an invented adult life stage.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Acanthaspis petax covers itself with a mask or backpack made from carcasses of its preferred ant prey.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The cited Acanthaspis petax and jumping-spider experiment used animals from the Lake Victoria region of East Africa.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Researchers compared live or lure bugs with the carcass mask intact against bugs with the mask removed.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In the experiment, jumping spiders made predatory responses significantly more often to naked bugs than to masked bugs.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The experiment supports the conservative interpretation that the carried carcass mask can hinder recognition by vision-guided jumping-spider predators; it does not establish perfect protection against every predator.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A separate refereed Animal Behaviour study documents nymphal backpack camouflage in West African Acanthaspis and Paredocla assassin bugs, providing broader behavioral context without being treated as species-specific proof for every Acanthaspis species.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
