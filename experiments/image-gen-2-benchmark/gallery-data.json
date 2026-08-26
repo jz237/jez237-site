@@ -10511,5 +10511,100 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-08-25-factual-infographic-factual-infographic-globe-skimmer-nymph",
+    "title": "Factual infographic: Globe Skimmer Nymph — The Folding Strike Mask",
+    "tests": "Tuesday bizarre-insect-life slot 8/8. Species: globe skimmer, Pantala flavescens. Verified mechanism: the aquatic nymph rapidly protracts a jointed prehensile labium; paired palpi close around small prey and retract it to the mouth. Macro plan: dominant whole nymph plus large folded-mask, hinge/protraction, open-palpi/sensilla, and closed-palpi/retraction views. Habitat: temporary freshwater pool. Pixel QA with xai/grok-4.3 passed coherent six-legged anatomy, all required close-ups, direct-canvas layout, readable causal sequence, strong thumbnail impact, and no unsupported claims.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled GLOBE SKIMMER NYMPH: THE FOLDING STRIKE MASK, explaining the real-world non-fiction prey-capture mechanism of the globe skimmer dragonfly nymph, Pantala flavescens. The generated canvas itself is the polished museum-quality information design: perfectly front-facing, orthographic, straight-on, edge-to-edge, with no visible paper edge, poster, wall chart, placard, frame, screen, room, desk, hands, tools, specimen tray, cast shadow around the composition, or environmental staging outside the layout. Use concise authoritative typography, large readable labels, restrained leader lines, and no dense paragraphs.\n\nMake accurate insect imagery dominate at least two-thirds of the canvas. The stop-scroll anchor is an enormous naturalistic extreme-macro whole Pantala flavescens nymph underwater in a shallow temporary freshwater rain pool, showing six articulated legs, broad compound eyes, segmented abdomen, realistic brown-olive aquatic cuticle, fine setae, and the folded labial mask tucked beneath the head. Surround it with four additional large extreme-macro biology windows: 1) FOLDED UNDER THE HEAD, a close side cutaway labeling POSTMENTUM, PREMENTUM, and PAIRED LABIAL PALPI; 2) JOINTED PROTRACTION, the prementum-postmentum apparatus unfolding forward underwater; 3) PALPI OPEN, paired grasping lobes spread around a small mosquito larva, with visible edge setae and sensilla labeled SENSORY STRUCTURES; 4) PALPI CLOSE AND RETRACT, the paired palpi forming a secure cup around the prey and drawing it toward the mouth. Keep all anatomy integrated into one living insect, never a detachable harpoon or monster jaw.\n\nAdd six supporting information layers without crowding the insect: a bold four-step strike ribbon labeled DETECT PREY, UNFOLD AND PROTRACT, PALPI CLOSE, RETRACT TO MOUTH; a whole-nymph-to-head-to-labium-to-sensilla scale ladder with no invented measurements; a temporary freshwater pool habitat cutaway showing shallow rainwater, submerged stems, detritus, and small aquatic prey; a comparison panel contrasting MASK FOLDED AT REST with MASK EXTENDED DURING STRIKE; a restrained life-cycle arc labeled AQUATIC NYMPH, EMERGENCE, MIGRATORY ADULT with a small accurate amber-gold adult globe skimmer silhouette; and a concise ecological-context panel labeled FRESHWATER PREDATOR with mosquito larvae and other small aquatic prey. Include a small world map silhouette only as a supporting inset labeled NEARLY GLOBAL, PRIMARILY CIRCUMTROPICAL, never as the main visual mass.\n\nUse a strong asymmetric information architecture unlike todays circular, diagonal, and feather-centered infographics: place the huge whole nymph diagonally across the lower-left and center, stack the four large macro windows as overlapping rounded rectangles across the top and right edge, run the four-step mechanism as a broad band across the middle, and keep habitat, scale, life cycle, and range context in compact lower-edge modules. Palette: deep freshwater teal, olive-brown cuticle, amber-gold highlights, pale aqua, wet black, moss green, and restrained coral for motion arrows. Use naturalistic extreme-macro photography detail, believable underwater depth of field, suspended particles, wet cuticle reflections, accurate six-legged insect anatomy and segmentation, crisp scientific cutaways, and restrained vector arrows. Photographic depth belongs inside the insect and habitat panels while the overall infographic remains flat and orthographic.\n\nAccuracy constraints: identify the accepted names as GLOBE SKIMMER and Pantala flavescens; show the aquatic nymph as the macro hero; show the labium as a modified folding lower lip made of postmentum, prementum, and paired labial palpi; show rapid underwater protraction, palpi closure around small prey, and retraction toward the mouth; label setae and sensilla only as sensory structures without assigning an unsupported exact function; describe temporary freshwater pools and a migratory adult stage conservatively; do not print exact strike speeds, development times, migration distances, rankings, universal claims, or invented statistics. No bibliography, URLs, tiny citations, fantasy anatomy, monster scale, extra legs, gore, labels absent from this prompt, logos, watermarks, QR codes, pseudo-text, spelling errors, dense prose, or school-poster styling.",
+    "image": "images/2026-08-25-factual-infographic-factual-infographic-globe-skimmer-nymph.jpg",
+    "thumb": "thumbs/2026-08-25-factual-infographic-factual-infographic-globe-skimmer-nymph.webp",
+    "color": "#3b3b25",
+    "date": "2026-08-25",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How the globe skimmer dragonfly nymph (Pantala flavescens) captures prey with a rapidly extending prehensile labial mask",
+      "description": "A direct-canvas macro entomology infographic showing how the aquatic globe skimmer nymph unfolds a jointed lower-lip mask, closes paired palpi around small prey, and retracts the catch.",
+      "sourceNote": "Materials (MDPI), Prey Capturing Dynamics and Nanomechanically Graded Cutting Apparatus of Dragonfly Nymph, https://pmc.ncbi.nlm.nih.gov/articles/PMC7865395/; PLOS ONE, A Global Population Genetic Study of Pantala flavescens, https://pmc.ncbi.nlm.nih.gov/articles/PMC4775058/. Verified scope: accepted species/common names, distribution and freshwater life-cycle context, and the nymphal labium anatomy and prey-capture sequence.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-08-26T00:29:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Materials (MDPI)",
+            "title": "Prey Capturing Dynamics and Nanomechanically Graded Cutting Apparatus of Dragonfly Nymph",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7865395/"
+          },
+          {
+            "id": "S2",
+            "publisher": "PLOS ONE",
+            "title": "A Global Population Genetic Study of Pantala flavescens",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4775058/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Pantala flavescens is commonly called the globe skimmer or wandering glider and has a nearly global, primarily circumtropical distribution.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Globe skimmers require freshwater for reproduction and can develop as larvae in temporary rain pools before emerging as migratory adults.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pantala flavescens nymphs are aquatic predators that capture small aquatic prey with a rapidly moving modified labium.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The extendable labium includes a postmentum, prementum, and paired labial palpi connected by articulation joints.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "During a strike, the jointed labium unfolds and protracts, the paired palpi open and then close around the prey, and the captured prey is retracted toward the mouth.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "High-speed videography documents rapid underwater protraction and retraction of the globe-skimmer nymph's labium.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The palpi carry setae and sensilla; these are visible sensory structures, while their exact functions should not be overstated.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Globe-skimmer nymphs have been collected from natural and artificial ponds, and mosquito larvae can be among the small aquatic prey they capture.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The adult globe skimmer's enlarged hindwing base contributes to efficient gliding during long-distance migration.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
