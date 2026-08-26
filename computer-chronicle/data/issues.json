@@ -4,6 +4,337 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-26",
+      "historicDate": "1984-03-12",
+      "displayDate": "Week of March 12-18, 1984",
+      "edition": "Issue 085 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Busy software-trade weekly with warm newsprint and bright red-and-blue department flags",
+        "motifs": [
+          "floppy disks",
+          "software boxes",
+          "IBM PCjr keyboard",
+          "arcade-style chart cards"
+        ],
+        "layout": "Software-show lead across the upper deck, PCjr and games beneath, compact charts and world bulletin on the rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of March 12-18, 1984",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Five-column banner with software boxes and disk imagery",
+        "secondaryRail": "PCjr verdict, computer games chart, price watch and world bulletin",
+        "archiveNavigation": "Previous and next weekly issues with calendar shelf"
+      },
+      "sectionChrome": {
+        "primary": "#9f2723",
+        "secondary": "#214f76",
+        "texture": "Warm aged newsprint, halftone screens, fine rules and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-03-12.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for the week of March 12-18, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "The home-computer price war has claimed another famous name, even as ambitious graphics machines and a crowded software trade show point toward what comes next.",
+      "morningLine": "Timex leaves the Sinclair computer business while Softcon fills New Orleans with software, graphics and argument.",
+      "lead": {
+        "headline": "Timex Pulls the Plug on Its Sinclair Home Computers",
+        "dek": "The watchmaker joins Texas Instruments and Mattel in retreat, turning the post-boom home-computer shakeout into the week’s unmistakable story.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "Timex will cease production and sales of its Timex/Sinclair 1500 and 2068 home computers, ending one of the most visible attempts to put a microcomputer into American homes at a mass-market price. The company says manufacturing will stop after remaining components are used, probably within four months.",
+          "Only a short time ago, the sub-$100 Timex/Sinclair 1000 commanded an estimated 28 percent of the home market. But aggressive competition from Commodore and Texas Instruments forced reductions on the later 1500 and 2068, while the collapse of the 1983 price war left retailers and manufacturers with painful inventories.",
+          "Timex marketing vice president C. Michael Jacobi calls the market “risky and volatile.” The withdrawal puts Timex beside Texas Instruments and Mattel among major consumer names backing away from home computers, and it raises a sober question for buyers: which inexpensive machine will still have software and service next year?",
+          "Sinclair insists its own business and planned $500 direct-mail launch of the 32-bit QL will continue. Timex’s Dundee plant is also expected to remain Sinclair’s largest contract manufacturer. The brand partnership may persist behind factory doors, but on American store shelves the Timex/Sinclair experiment is ending."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Mindset Bets Its PC Future on Spectacular Graphics",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Former Atari computer chief Roger Badertscher is preparing an April launch for Mindset, a $1,099 80186-based machine built around custom graphics coprocessors. Its animation and color modes aim at a creative market that ordinary IBM compatibles barely address.",
+            "Storage sharply raises the bill: one floppy adds $699 and two drives add $1,299. Mindset says it tested 60 unmodified IBM PC programs, plans Microsoft Windows support and will offer the $399 Lumena graphics package. A $40 joystick makes the system’s game and animation ambitions plain."
+          ]
+        },
+        {
+          "headline": "VisiCalc Partners Carry Their Feud to Softcon",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Software Arts, creator of VisiCalc, has announced its own Advanced Version for IBM PCs after moving to end its long marketing arrangement with VisiCorp. A Massachusetts court refused VisiCorp’s request to stop Software Arts from using the famous trademark.",
+            "Owners can obtain a promotional $99.95 upgrade, but the six months of suits and countersuits expose a new software-industry reality: a program name, its distribution rights and its installed audience can be as valuable as the code itself."
+          ]
+        },
+        {
+          "headline": "Model 100 Gains a Desktop-Sized Disk Drive",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Radio Shack’s portable Model 100 can now connect to a $799, 5.25-inch disk unit, with room for a $240 second drive. Each single-sided floppy holds 184K in a format incompatible with other TRS-80 disks.",
+            "The enclosure is not portable, but it adds monitor and television connections and a 25-line display. For owners of a 16K or larger Model 100, the accessory turns a road machine into a more capable office system when it returns to the desk."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM 9002",
+          "summary": "A Motorola 68000 desktop from IBM's Instruments division: $6,495 base; optional four-user Xenix license $995; complete 10MB Xenix system $15,960.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "IBM PC Portable",
+          "summary": "The New York Times assessed IBM's just-introduced portable against rivals on March 13, emphasizing a competitive portable-PC field.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Paradise Multi-Display Card",
+          "summary": "A period ad promoted combined IBM-compatible monochrome, color graphics, and printer interfaces, including 640x200 monochrome and 320x200 four-color modes.",
+          "confidence": "period",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Expert-Ease",
+          "detail": "A $2,000 IBM PC/XT expert-system creator requiring 128K and one disk drive; up to 250 questions with as many as 31 conditions each."
+        },
+        {
+          "name": "VisuALL",
+          "detail": "Trillian's PCjr windowing shell was due in April; an IBM Personal Editor shell was expected at $50-$70 and the customizable PC-DOS shell at $99.95."
+        },
+        {
+          "name": "Digital Research/Owlcat SAT software",
+          "detail": "DRI acquired Owlcat and announced a $249.95 60-hour SAT suite, an $89.95 15-hour version, and a $19.95 pretest for Apple II, IBM PC, and PCjr."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "1. Chequered Flag — Sinclair",
+            "2. Manic Miner — Bug-Byte / Software Projects",
+            "3. Fighter Pilot — Digital Integration",
+            "4. Atic Atac — Ultimate Play the Game",
+            "5. Scuba Dive — Durell"
+          ]
+        },
+        {
+          "label": "Top 5 Music",
+          "items": [
+            "1. Jump — Van Halen",
+            "2. Girls Just Want to Have Fun — Cyndi Lauper",
+            "3. Somebody’s Watching Me — Rockwell",
+            "4. 99 Luftballons — Nena",
+            "5. Footloose — Kenny Loggins"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Splash",
+            "2. Footloose",
+            "3. Against All Odds",
+            "4. Terms of Endearment",
+            "5. Snow White and the Seven Dwarfs"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Mindset base computer",
+          "price": "$1,099",
+          "note": "Period advertised or reported price."
+        },
+        {
+          "item": "Radio Shack Model 100 disk drive",
+          "price": "$799; second drive $240",
+          "note": "Period advertised or reported price."
+        },
+        {
+          "item": "VisiCalc Advanced Version upgrade",
+          "price": "$99.95 promotional upgrade",
+          "note": "Period advertised or reported price."
+        },
+        {
+          "item": "Sinclair QL planned direct-mail price",
+          "price": "$500",
+          "note": "Period advertised or reported price."
+        },
+        {
+          "item": "Expert-Ease",
+          "price": "$2,000",
+          "note": "Period advertised or reported price."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "UPI orders 6,000 Zenith Z-100s",
+          "text": "The wire service selected Zenith machines for a broadcast newsroom, billing, and trafficking system for radio stations."
+        },
+        {
+          "headline": "Harvard Business School requires IBM PCs",
+          "text": "First-year students would have to buy discounted IBM PCs as part of tuition costs."
+        },
+        {
+          "headline": "Customs scrutinizes travelers' portable computers",
+          "text": "Under Operation Exodus, travelers were advised to register computer serial numbers before leaving the United States to avoid delays or confiscation on return."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Jump",
+          "artist": "Van Halen"
+        },
+        {
+          "rank": 2,
+          "title": "Girls Just Want to Have Fun",
+          "artist": "Cyndi Lauper"
+        },
+        {
+          "rank": 3,
+          "title": "Somebody’s Watching Me",
+          "artist": "Rockwell"
+        },
+        {
+          "rank": 4,
+          "title": "99 Luftballons",
+          "artist": "Nena"
+        },
+        {
+          "rank": 5,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        }
+      ],
+      "periodAd": {
+        "headline": "Graphics at a New Speed",
+        "summary": "Mindset combines an 80186 with custom color and animation hardware; drives, display and software cost extra.",
+        "tagline": "A different picture of PC compatibility."
+      },
+      "market": {
+        "headline": "Home-Computer Shakeout Deepens",
+        "summary": "Timex joins TI and Mattel in retreat from a volatile consumer market, while Sinclair presses ahead with the QL.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Britain’s Miners Begin a Year-Long Confrontation",
+        "summary": "On March 12, miners struck over threatened pit closures, beginning the defining industrial conflict between the National Union of Mineworkers and Margaret Thatcher’s government.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Timex withdrawal and Softcon reports",
+            "status": "Verified in the March 19, 1984 InfoWorld issue.",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Music chart week",
+            "status": "Billboard Hot 100 week ending March 17, 1984.",
+            "sourceRefs": [
+              5
+            ]
+          },
+          {
+            "claim": "Game shelf",
+            "status": "Contemporaneous UK all-formats chart covering the two weeks through March 8.",
+            "sourceRefs": [
+              7
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "InfoWorld, Volume 6 Number 12 (1984-03-19)",
+          "url": "https://www.loopcntr.net/repository/1017.pdf"
+        },
+        {
+          "label": "Personal Computers: Rivals Stay One Step Ahead of IBM Portable (1984-03-13)",
+          "url": "https://www.nytimes.com/1984/03/13/science/personal-computers-rivals-stay-one-step-ahead-of-ibm-portable.html"
+        },
+        {
+          "label": "Disney makes big splash at box office (1984-03-12)",
+          "url": "https://www.upi.com/Archives/1984/03/12/Disney-makes-big-splash-at-box-office/2401447915600/"
+        },
+        {
+          "label": "1984: Miners strike over threatened pit closures (1984-03-12)",
+          "url": "http://news.bbc.co.uk/onthisday/hi/dates/stories/march/12/newsid_2540000/2540175.stm"
+        },
+        {
+          "label": "Three-foot snows bury Northeast (1984-03-14)",
+          "url": "https://www.upi.com/Archives/1984/03/14/Three-foot-snows-bury-Northeast/2213448088400/"
+        },
+        {
+          "label": "Billboard Hot 100 archive for March 17, 1984 (1984-03-17)",
+          "url": "https://www.elpee.jp/hot100/week/1984-03-17"
+        },
+        {
+          "label": "Weekly Rock Top 20 for March 17, 1984 (1984-03-17)",
+          "url": "https://www.tunecaster.com/charts/80/rock8411.html"
+        },
+        {
+          "label": "RAM/C All Formats chart from Personal Computer News (1984-03-17)",
+          "url": "https://computerhits.org/archive/personal%20computer%20news_1984-03-17_all%20formats/"
+        }
+      ],
+      "undergroundDesk": {
+        "headline": "Louisiana Moves Against Software Piracy",
+        "dek": "A proposed state law would turn shrink-wrap licenses into a new legal weapon.",
+        "body": [
+          "Louisiana officials used Softcon to announce legislation aimed at unauthorized software duplication and distribution. The proposal would treat opening or buying a package as acceptance of the license enclosed inside.",
+          "Copy-protection vendor Vault Corporation, maker of Prolok, helped draft much of the bill. Its advocates call the measure a balance between publishers and customers; if enacted, Louisiana would become the first state with such a law."
+        ],
+        "groups": [
+          {
+            "name": "Vault Corporation",
+            "note": "Copy-protection vendor that helped draft the proposed law."
+          },
+          {
+            "name": "Prolok",
+            "note": "Vault’s contemporary software-protection system."
+          }
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "exact-date"
+      }
+    },
+    {
       "currentDate": "2026-08-25",
       "historicDate": "1984-03-05",
       "displayDate": "Week of March 5-11, 1984",

@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-26",
+      "historicDate": "1984-03-12",
+      "displayDate": "Week of March 12-18, 1984",
+      "edition": "Issue 085 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Timex leaves the Sinclair computer business while Softcon fills New Orleans with software, graphics and argument.",
+      "leadHeadline": "Timex Pulls the Plug on Its Sinclair Home Computers",
+      "storyHeadlines": [
+        "Mindset Bets Its PC Future on Spectacular Graphics",
+        "VisiCalc Partners Carry Their Feud to Softcon",
+        "Model 100 Gains a Desktop-Sized Disk Drive"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-03-12.jpg",
+      "thumb": "media/thumbs/1984-03-12.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-25",
       "historicDate": "1984-03-05",
       "displayDate": "Week of March 5-11, 1984",
