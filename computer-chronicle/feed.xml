@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 25 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 26 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 12-18, 1984 — Timex Pulls the Plug on Its Sinclair Home Computers</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-03-12</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-12</guid>
+      <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
+      <description>The watchmaker joins Texas Instruments and Mattel in retreat, turning the post-boom home-computer shakeout into the week’s unmistakable story. Timex will cease production and sales of its Timex/Sinclair 1500 and 2068 home computers, ending one of the most visible attempts to put a microcomputer into American homes at a mass-market price. The company says manufacturing will stop after remaining components are used, probably within four months. Also this week: Mindset Bets Its PC Future on Spectacular Graphics · VisiCalc Partners Carry Their Feud to Softcon · Model 100 Gains a Desktop-Sized Disk Drive.</description>
+    </item>
     <item>
       <title>Week of March 5-11, 1984 — Software Steps Out of Hardware’s Shadow</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-03-05</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-31</guid>
       <pubDate>Fri, 07 Aug 2026 12:00:00 GMT</pubDate>
       <description>The world&apos;s largest computer maker formally entered the home-computer contest on November 1, aiming above low-cost rivals while extending IBM PC software compatibility. NEW YORK—After months of speculation about a machine code-named “Peanut,” International Business Machines formally unveiled the PCjr on November 1. The announcement puts the company that defined the business-PC standard directly into the crowded home-computer market, with deliveries planned for early 1984. Also this week: Apple II Gets an Arcade Board · Activision Moves River Raid and Kaboom! to Atari Computers · Touch-Sensitive PowerPad Offers a New Way to Control Home Computers.</description>
-    </item>
-    <item>
-      <title>Week of October 24-30, 1983 — Atari Takes Its Games to Rival Machines</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-10-24</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-24</guid>
-      <pubDate>Thu, 06 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The Atarisoft label carries arcade names beyond Atari hardware as the home-game business searches for software revenue. Atari is loosening the bond between its famous games and its own machines. A New York Times report on October 27 described new Atari titles made to fit competing home systems, turning the company’s arcade catalog into a software line that could reach players well beyond the Atari 2600 and Atari computers. Also this week: IBM Links the PC Desk to the Mainframe · DEC Shrinks 32-Bit VAX Power Into a Microcomputer · FBI Seizes Gear in Multicity Hacker Inquiry.</description>
     </item>
   </channel>
 </rss>
