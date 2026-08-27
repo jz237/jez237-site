@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-08-26T09:54:55.723088+00:00",
+  "updatedAt": "2026-08-27T19:49:30.778843+00:00",
   "items": {
     "https://openai.com/index/codex-security-now-in-research-preview": {
       "image": "",
@@ -11431,7 +11431,7 @@
     "thumb:https://media.thenextweb.com/2026/06/anthropic-claude-tag-slack-always-on-ai-teammate.avif": {
       "sourceImage": "https://media.thenextweb.com/2026/06/anthropic-claude-tag-slack-always-on-ai-teammate.avif",
       "localPath": "public/thumbnails/news-09306073bf661f9710.avif",
-      "checkedAt": "2026-06-29T08:00:01.336271+00:00"
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
     },
     "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200": {
       "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/05/STKB364_CLAUDE_2_C_96d15c.jpg?quality=90&%3Bstrip=all&%3Bcrop=0%2C10.732984293194%2C100%2C78.534031413613&%3Bw=1200",
@@ -20728,7 +20728,7 @@
     "thumb:https://cdn.arstechnica.net/wp-content/uploads/2026/02/gatekeeping-ai-agents-1152x648.jpg": {
       "sourceImage": "https://cdn.arstechnica.net/wp-content/uploads/2026/02/gatekeeping-ai-agents-1152x648.jpg",
       "localPath": "public/thumbnails/news-4a2c0c506a9fdf237c.jpg",
-      "checkedAt": "2026-08-05T11:27:33.408335+00:00"
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
     },
     "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362061/STK_414_AI_CHATBOT_R2_CVirginia_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200": {
       "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/chorus/uploads/chorus_asset/file/25362061/STK_414_AI_CHATBOT_R2_CVirginia_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
@@ -24071,7 +24071,7 @@
     "thumb:https://opengraph.githubassets.com/d7a71767f07789cbbe4f854dc9f608dc06696f580e204f3b42a3a684fd510189/modelcontextprotocol/python-sdk/releases/tag/v2.1.0": {
       "sourceImage": "https://opengraph.githubassets.com/d7a71767f07789cbbe4f854dc9f608dc06696f580e204f3b42a3a684fd510189/modelcontextprotocol/python-sdk/releases/tag/v2.1.0",
       "localPath": "public/thumbnails/news-8c3298c99cdb1a6af3.png",
-      "checkedAt": "2026-08-26T09:54:55.723088+00:00"
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
     },
     "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/20/ML-21618-featured-image.png": {
       "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/20/ML-21618-featured-image.png",
@@ -24091,7 +24091,7 @@
     "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/08/HotChips_2026_MKT_KV_Rubin_Rack_Family_Front_comp_4k_V004-2-1-scaled.png": {
       "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/08/HotChips_2026_MKT_KV_Rubin_Rack_Family_Front_comp_4k_V004-2-1-scaled.png",
       "localPath": "public/thumbnails/news-7f770a63e80ebe7231.png",
-      "checkedAt": "2026-08-25T09:49:28.956427+00:00"
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
     },
     "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/08/end-to-end-tech-blog-agentic-perf-kv-1920x1080-5555700.jpg": {
       "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/08/end-to-end-tech-blog-agentic-perf-kv-1920x1080-5555700.jpg",
@@ -24188,6 +24188,216 @@
       "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/08/Claude-AI-app.jpg?resize=1200%2C842",
       "localPath": "public/thumbnails/news-85d43adbb265475600.webp",
       "checkedAt": "2026-08-26T09:54:55.723088+00:00"
+    },
+    "https://aidailybrief.ai/e/2026-08-26": {
+      "image": "https://aidailybrief.ai/og/2026-08-26.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.theverge.com/tech/985567/google-gemini-notebook-expert-sources-books": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/Expert-Intelligence-Hero.png?quality=90&strip=all&crop=0%2C3.4613147178592%2C100%2C93.077370564282&w=1200",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/introducing-india-cross-region-inference-for-openai-gpt-5-6-models-on-amazon-bedrock": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/24/ML-21755-featured-image.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://techcrunch.com/2026/08/27/openai-anthropic-google-and-100-other-companies-call-for-action-to-defend-against-rogue-ai": {
+      "image": "",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/985597/jensen-huang-says-nvidia-achieved-senseless-agi": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/STKP210_JENSEN_HUANG_D.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://deepmind.google/blog/gemini-omni-1-1-flash-lets-you-build-with-more-control": {
+      "image": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Omni_1-1_Flash_hero.width-1300.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/deepgram-deepens-amazon-sagemaker-ai-observability-with-enhanced-metrics": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/21/ML-21597-featured-image.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://aws.amazon.com/blogs/machine-learning/reduce-asr-inference-costs-by-75-with-nvidia-mps-on-amazon-ec2": {
+      "image": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/04/ML-21209-featured-image.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://techcrunch.com/2026/08/27/googles-ai-mode-can-now-track-flight-prices-help-book-hotels-and-more": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://techcrunch.com/2026/08/27/hugging-face-is-selling-a-cute-399-open-source-duck-robot-microduck": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/08/microduck-morning.jpg?resize=1200%2C750",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://techcrunch.com/2026/08/27/ais-memory-crunch-is-coming-for-android-apps": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/08/Pixel-11-Pro-XL-main.jpg?resize=1200%2C675",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.techrepublic.com/article/news-claude-gym-api-flaw": {
+      "image": "",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://techcrunch.com/2026/08/27/heres-all-the-times-ai-has-gone-rogue-and-hacked-other-companies": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/08/open-ai-chatgpt-anthropic-claude-icons.jpg?resize=1200%2C800",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.theverge.com/podcast/985332/openai-greg-brockman-sam-altman-leader-executive-exodus": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/VRG_DCD_082726_site.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.theverge.com/gadgets/985549/hugging-face-microduck-robot": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/microduck-kickabout.jpg?quality=90&strip=all&crop=0%2C3.5508121895556%2C100%2C92.898375620889&w=1200",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.theverge.com/ai-artificial-intelligence/985500/plaud-one-earbuds-ai-recorder-price-availability": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/Plaud-One-earbuds-hero.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://techcrunch.com/2026/08/27/plauds-new-earphones-come-with-an-esim-enabled-case-for-talking-to-ai-agents": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/08/169-KV-Clean-2.jpeg?resize=1200%2C675",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.theverge.com/tech/985491/adobe-photoshop-ai-assisted-editor-markup": {
+      "image": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/AI-Assisted-Editor_Static.jpg?quality=90&strip=all&crop=0%2C1.0239908854167%2C100%2C93.077370564282&w=1200",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://techcrunch.com/2026/08/27/openai-to-start-showing-ads-on-chatgpts-free-and-go-tiers-in-india": {
+      "image": "https://techcrunch.com/wp-content/uploads/2026/02/chatgpt-india-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "https://www.artificialintelligence-news.com/news/nvidia-circular-financing-ai-labs": {
+      "image": "",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/Expert-Intelligence-Hero.png?quality=90&strip=all&crop=0%2C3.4613147178592%2C100%2C93.077370564282&w=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/Expert-Intelligence-Hero.png?quality=90&strip=all&crop=0%2C3.4613147178592%2C100%2C93.077370564282&w=1200",
+      "localPath": "public/thumbnails/news-c99e6791bff70b9a82.webp",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/24/ML-21755-featured-image.png": {
+      "sourceImage": "https://d2908q01vomqb2.cloudfront.net/f1f836cb4ea6efb2a0b1b99f41ad8b103eff4b59/2026/08/24/ML-21755-featured-image.png",
+      "localPath": "public/thumbnails/news-b40febdc6626cc2326.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/08/openai-anthropic-cyber-defence-open-letter-cra-nis2-europe.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/08/openai-anthropic-cyber-defence-open-letter-cra-nis2-europe.avif",
+      "localPath": "public/thumbnails/news-5f11e515f8c6b3a606.avif",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/08/fractional-cto-ai-reshapes-business.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/08/fractional-cto-ai-reshapes-business.avif",
+      "localPath": "public/thumbnails/news-803d646dfcc2f9e49e.avif",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/08/sk-hynix-indiana-hbm-packaging-europe-lost-wroclaw-plant.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/08/sk-hynix-indiana-hbm-packaging-europe-lost-wroclaw-plant.avif",
+      "localPath": "public/thumbnails/news-deaeb958325baf3250.avif",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/08/donnapro-executive-assistant-human-ai-collaboration.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/08/donnapro-executive-assistant-human-ai-collaboration.avif",
+      "localPath": "public/thumbnails/news-e688b62d32d65fd4c6.avif",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Omni_1-1_Flash_hero.width-1300.png": {
+      "sourceImage": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/Omni_1-1_Flash_hero.width-1300.png",
+      "localPath": "public/thumbnails/news-bd7d202db54a03d425.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/01/ai-mode-google.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-e3f918b88ecaec8a00.webp",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/08/Pixel-11-Pro-XL-main.jpg?resize=1200%2C675": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/08/Pixel-11-Pro-XL-main.jpg?resize=1200%2C675",
+      "localPath": "public/thumbnails/news-f83147964ddb96284c.webp",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/08/open-ai-chatgpt-anthropic-claude-icons.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/08/open-ai-chatgpt-anthropic-claude-icons.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-fbe5f681e97b415c26.webp",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://images.ctfassets.net/jdtwqhzvc2n1/5ScHW6mZ2rQr3EvsxrwooK/43df8725b6e12cd4bcf550bb7b3b1cb4/Gravitee_hero.jpg?w=300&q=30": {
+      "sourceImage": "https://images.ctfassets.net/jdtwqhzvc2n1/5ScHW6mZ2rQr3EvsxrwooK/43df8725b6e12cd4bcf550bb7b3b1cb4/Gravitee_hero.jpg?w=300&q=30",
+      "localPath": "public/thumbnails/news-221173aab26ac39d1f.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/VRG_DCD_082726_site.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200": {
+      "sourceImage": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/08/VRG_DCD_082726_site.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "localPath": "public/thumbnails/news-cbf8bb5a2582633464.webp",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://media.thenextweb.com/2026/08/ai-revolution-optimizing-wrong-things.avif": {
+      "sourceImage": "https://media.thenextweb.com/2026/08/ai-revolution-optimizing-wrong-things.avif",
+      "localPath": "public/thumbnails/news-2d463f55ebc28b45e8.avif",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/08/gfn-thursday-8-27-nv-blog-1280x680-logo.jpg": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/08/gfn-thursday-8-27-nv-blog-1280x680-logo.jpg",
+      "localPath": "public/thumbnails/news-86cb7f6f52d5ad3967.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://blogs.nvidia.com/wp-content/uploads/2026/05/vera-key-visual-1920x1080-1.jpg": {
+      "sourceImage": "https://blogs.nvidia.com/wp-content/uploads/2026/05/vera-key-visual-1920x1080-1.jpg",
+      "localPath": "public/thumbnails/news-6a50e2637cf91cc8f5.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/08/169-KV-Clean-2.jpeg?resize=1200%2C675": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/08/169-KV-Clean-2.jpeg?resize=1200%2C675",
+      "localPath": "public/thumbnails/news-4356dea34f2d72c89f.webp",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://cdn.arstechnica.net/wp-content/uploads/2026/07/GettyImages-1004669768-1152x648-1784927041.jpg": {
+      "sourceImage": "https://cdn.arstechnica.net/wp-content/uploads/2026/07/GettyImages-1004669768-1152x648-1784927041.jpg",
+      "localPath": "public/thumbnails/news-c4098c5e0f796aecaf.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://images.ctfassets.net/jdtwqhzvc2n1/9VRh8KJhBqcFviSV8ClXc/feea8ec8fe76ffa0bc5cdb3dd95e1492/EDB_hero.jpeg?w=300&q=30": {
+      "sourceImage": "https://images.ctfassets.net/jdtwqhzvc2n1/9VRh8KJhBqcFviSV8ClXc/feea8ec8fe76ffa0bc5cdb3dd95e1492/EDB_hero.jpeg?w=300&q=30",
+      "localPath": "public/thumbnails/news-e2057e3120e26e3376.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://techcrunch.com/wp-content/uploads/2026/02/chatgpt-india-jagmeet-singh-techcrunch.jpg?resize=1200%2C800": {
+      "sourceImage": "https://techcrunch.com/wp-content/uploads/2026/02/chatgpt-india-jagmeet-singh-techcrunch.jpg?resize=1200%2C800",
+      "localPath": "public/thumbnails/news-37c8b3f17379f612ca.webp",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://substackcdn.com/image/fetch/$s_!FSM7!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa61da113-3d9b-4206-81c1-06da7b4a9a0c_1362x1278.png": {
+      "sourceImage": "https://substackcdn.com/image/fetch/$s_!FSM7!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fa61da113-3d9b-4206-81c1-06da7b4a9a0c_1362x1278.png",
+      "localPath": "public/thumbnails/news-ade9c35de32b9f2f8f.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://substackcdn.com/image/fetch/$s_!sZiW!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F__ss-rehost__tw-video-preview-13_2092299952433061888.jpg": {
+      "sourceImage": "https://substackcdn.com/image/fetch/$s_!sZiW!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F__ss-rehost__tw-video-preview-13_2092299952433061888.jpg",
+      "localPath": "public/thumbnails/news-2e13007ec9c5354b38.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://static.simonwillison.net/static/2026-08-27/IMG_7667.png": {
+      "sourceImage": "https://static.simonwillison.net/static/2026-08-27/IMG_7667.png",
+      "localPath": "public/thumbnails/news-d907b880cd24488751.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://cdn.arstechnica.net/wp-content/uploads/2026/08/GettyImages-2171717886-1152x648.jpg": {
+      "sourceImage": "https://cdn.arstechnica.net/wp-content/uploads/2026/08/GettyImages-2171717886-1152x648.jpg",
+      "localPath": "public/thumbnails/news-689ca85a350c3554f6.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://storage.googleapis.com/gweb-research2023-media/original_images/GlucoFM1_Overview.png": {
+      "sourceImage": "https://storage.googleapis.com/gweb-research2023-media/original_images/GlucoFM1_Overview.png",
+      "localPath": "public/thumbnails/news-da8dcfe573b89a8318.png",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://substackcdn.com/image/fetch/$s_!fZkV!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1af0c504-12da-4610-be86-b5bf3af2514d_1280x720.png": {
+      "sourceImage": "https://substackcdn.com/image/fetch/$s_!fZkV!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F1af0c504-12da-4610-be86-b5bf3af2514d_1280x720.png",
+      "localPath": "public/thumbnails/news-e354df86f218bb805c.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
+    "thumb:https://images.ctfassets.net/jdtwqhzvc2n1/1RK5pjHAxWRLsDy5iAC3Iy/4f9c39b5925645c365440e487ffe2157/Tata_hero.jpg?w=300&q=30": {
+      "sourceImage": "https://images.ctfassets.net/jdtwqhzvc2n1/1RK5pjHAxWRLsDy5iAC3Iy/4f9c39b5925645c365440e487ffe2157/Tata_hero.jpg?w=300&q=30",
+      "localPath": "public/thumbnails/news-0b0e34614ca718910f.jpg",
+      "checkedAt": "2026-08-27T19:49:30.778843+00:00"
     }
   }
 }
