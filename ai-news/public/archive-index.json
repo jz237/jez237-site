@@ -1,6 +1,12 @@
 {
-  "updatedAt": "2026-08-26T09:54:55.723088+00:00",
+  "updatedAt": "2026-08-27T19:49:30.778843+00:00",
   "archives": [
+    {
+      "date": "2026-08-27",
+      "path": "public/ai-news-daily-2026-08-27.json",
+      "count": 18,
+      "updatedAt": "2026-08-27T19:49:30.778843+00:00"
+    },
     {
       "date": "2026-08-26",
       "path": "public/ai-news-daily-2026-08-26.json",
@@ -264,12 +270,6 @@
       "path": "public/ai-news-daily-2026-07-14.json",
       "count": 18,
       "updatedAt": "2026-07-14T22:00:02.115359+00:00"
-    },
-    {
-      "date": "2026-07-13",
-      "path": "public/ai-news-daily-2026-07-13.json",
-      "count": 18,
-      "updatedAt": "2026-07-13T22:00:02.024478+00:00"
     }
   ]
 }
