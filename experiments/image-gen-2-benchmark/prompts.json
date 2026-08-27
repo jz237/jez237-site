@@ -10738,5 +10738,24 @@
     "slot": "intense-phobia-situation",
     "model": "openai/gpt-image-2",
     "size": "1024x1024"
+  },
+  {
+    "id": "2026-08-26-random-image-style-random-rendering-style-marquetry-salt-mi",
+    "title": "Random rendering style: Marquetry Salt-Mine Switch Crew",
+    "tests": "Wednesday random rendering style lane 9/12; scheduled_slot=9; fired run approximately 20:00 ET; selected entry: Random rendering style: Marquetry Salt-Mine Switch Crew; style/medium: traditional hand-cut wood marquetry and parquetry; subject/action: exactly three salt-mine rail workers repair a mechanically coherent branching narrow-gauge turnout beneath monumental mineral galleries while a loaded train waits safely; composition: steep bird’s-eye diagonal landscape panorama with central exposed switch mechanism, near-to-far track depth, small battery locomotive and timber supports; material logic: individually cut veneers, directional grain, saw-kerf seams, inlay outlines, shallow relief, glue-darkened joints and cast shadows govern every surface; palette: chalk-white sycamore, pearwood, smoked oak, ebony, honey maple, walnut, boxwood and tiny verdigris safety accents; anti-repeat variables: marquetry/parquetry craft family, underground salt-mine rail engineering, active switch repair, monumental mineral void, warm wood palette, distinct from todays scratchboard floodgate survey, mosaic coral bathhouse, wax-crayon avalanche observatory and voxel rain-glass apiary. Generated exactly once through synchronous openai/gpt-image-2 CLI; exact same-run non-empty 1536x1024 PNG provenance verified; byte-identical hard-link QA mirror inspected with xai/grok-4.3; actual-pixel QA PASS for unmistakable edge-to-edge traditional marquetry, exactly three coherent miners with distinct purposeful roles, legible branching turnout and exposed switch linkage, safely waiting train, authentic veneer construction, strong thumbnail composition and absence of text, logos, borders, malformed anatomy, broken rails, mosaic treatment, generic filter or glossy CGI.",
+    "prompt": "Create a finished edge-to-edge panoramic scene entirely as traditional hand-cut wood marquetry and parquetry, not as photorealism and not as a poster. Show an underground salt-mine railway crew actively repairing a branching turnout beneath immense carved mineral galleries. Use a steep bird’s-eye diagonal composition: a loaded narrow-gauge salt train waits safely on the upper-left track; the branching rails and open switch mechanism dominate the center; three miners in distinct protective helmets work at human scale—one kneels to align the exposed switch blade with a lever bar, one checks the linkage beside an open tool tray, and one stands farther back holding a safety lamp—while a small battery locomotive and timber supports establish depth. Make every visible surface obey authentic marquetry construction: individually cut and tightly fitted veneers, visible grain direction describing rock strata and machinery, fine saw-kerf seams, delicate inlay outlines, bevelled wood relief, subtle glue-darkened joints, and shallow cast shadows between pieces. Build pale translucent salt walls from chalk-white sycamore and pearwood, rails and deep shafts from smoked oak and ebony, warm lamps from honey maple, workers and tools from walnut and boxwood, and use only tiny verdigris-green inlays on safety equipment. The track switch must be mechanically coherent, the rails must converge cleanly, all three workers must have correct anatomy and clear purposeful interaction, and the salt galleries must feel monumental and layered rather than like a flat decorative panel. Rich tactile detail, strong near-to-far depth, crisp inspectable craftsmanship, restrained warm work lights within dark cavern voids. No readable text, numbers, logos, labels, borders, frame, instructional diagram, generic cinematic photorealism, glossy CGI, malformed hands, duplicate people, broken rails, or decorative mosaic tiles.",
+    "image": "images/2026-08-26-random-image-style-random-rendering-style-marquetry-salt-mi.jpg",
+    "thumb": "thumbs/2026-08-26-random-image-style-random-rendering-style-marquetry-salt-mi.webp",
+    "color": "#6f5741",
+    "date": "2026-08-26",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "randomRenderingStyle": {
+      "medium": "Traditional hand-cut wood marquetry and parquetry",
+      "description": "An underground salt-mine railway crew repairs a branching turnout, with monumental galleries, trains, tools, workers, and light constructed from richly grained cut wood veneers.",
+      "template": "Render a complete working environment as traditional hand-cut wood marquetry and parquetry, making directional grain, tight veneer seams, shallow relief, inlay, and restrained species-specific wood colors control every surface and depth cue."
+    }
   }
 ]
