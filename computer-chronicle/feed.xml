@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 26 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 28 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 19-25, 1984 — Mindset PC Bets on Custom Color Graphics</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-03-19</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-19</guid>
+      <pubDate>Fri, 28 Aug 2026 12:00:00 GMT</pubDate>
+      <description>An 80186, MS-DOS and purpose-built video hardware aim the new machine at artists, animators and game makers. The newest challenge to the IBM-shaped personal-computer market arrives with a very different sales pitch: do more with the picture. InfoWorld placed the Mindset computer on its March 19 cover under the teasing line “Gambling on Great Graphics,” giving the ambitious machine one of the week’s most conspicuous introductions. Also this week: Microcomputers Become Tools of Independence · Laserdiscs Point Toward an Arcade-Style Future at Home · Chequered Flag Takes the British Micro Pole.</description>
+    </item>
     <item>
       <title>Week of March 12-18, 1984 — Timex Pulls the Plug on Its Sinclair Home Computers</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-03-12</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-07</guid>
       <pubDate>Sat, 08 Aug 2026 12:00:00 GMT</pubDate>
       <description>Bill Gates unveils a mouse-driven graphical layer for MS-DOS machines, promising menus, tiled windows and a common face for the compatible-computer boom. NEW YORK, Nov. 10 — Microsoft this week unveiled Windows, a graphical operating environment intended to place menus, pictures and mouse control above the command-line face of MS-DOS. Bill Gates presented the product at the Helmsley Palace Hotel, giving the fast-growing world of IBM-compatible computers a glimpse of a more visual way to work. Also this week: A Self-Replicating Program Earns a New Name: Computer Virus · Computer Magazines Ride the Home-Micro Boom · IBM-Hitachi Settlement Reported Near $300 Million.</description>
-    </item>
-    <item>
-      <title>Week of October 31-November 6, 1983 — IBM Cracks Open &apos;Peanut&apos; and Sends PCjr Into the Home</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-10-31</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-10-31</guid>
-      <pubDate>Fri, 07 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The world&apos;s largest computer maker formally entered the home-computer contest on November 1, aiming above low-cost rivals while extending IBM PC software compatibility. NEW YORK—After months of speculation about a machine code-named “Peanut,” International Business Machines formally unveiled the PCjr on November 1. The announcement puts the company that defined the business-PC standard directly into the crowded home-computer market, with deliveries planned for early 1984. Also this week: Apple II Gets an Arcade Board · Activision Moves River Raid and Kaboom! to Atari Computers · Touch-Sensitive PowerPad Offers a New Way to Control Home Computers.</description>
     </item>
   </channel>
 </rss>
