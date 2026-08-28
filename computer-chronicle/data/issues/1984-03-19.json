@@ -1,0 +1,305 @@
+{
+  "currentDate": "2026-08-28",
+  "historicDate": "1984-03-19",
+  "displayDate": "Week of March 19-25, 1984",
+  "edition": "Issue 086 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Graphics-minded computer weekly on warm newsprint with lively red-and-blue department flags",
+    "motifs": [
+      "Mindset color graphics",
+      "paint-program screen",
+      "Spectrum game cassettes",
+      "laserdisc arcade imagery"
+    ],
+    "layout": "Mindset graphics lead across the upper deck, games and human-interest features below, charts and world bulletin on the rail"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+    "dateline": "Week of March 19-25, 1984",
+    "price": "50 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Five-column banner with a colorful Mindset graphics demonstration",
+    "secondaryRail": "British micro games, software shelf, price watch and world bulletin",
+    "archiveNavigation": "Previous and next weekly issues with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "#9f2723",
+    "secondary": "#214f76",
+    "texture": "Warm aged newsprint, halftone screens, fine rules and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-03-19.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week of March 19-25, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "A bold graphics machine reaches for a place beyond strict IBM imitation, while games, accessibility and packaged software show just how many directions the microcomputer market is taking.",
+  "morningLine": "The Mindset PC gambles on color, speed and a distinctive visual identity.",
+  "lead": {
+    "headline": "Mindset PC Bets on Custom Color Graphics",
+    "dek": "An 80186, MS-DOS and purpose-built video hardware aim the new machine at artists, animators and game makers.",
+    "confidence": "same-week",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "body": [
+      "The newest challenge to the IBM-shaped personal-computer market arrives with a very different sales pitch: do more with the picture. InfoWorld placed the Mindset computer on its March 19 cover under the teasing line “Gambling on Great Graphics,” giving the ambitious machine one of the week’s most conspicuous introductions.",
+      "Inside is Intel’s 80186 processor and MS-DOS, but the headline attraction is custom graphics hardware rather than strict IBM compatibility. The system can display 320 by 200 pixels with 16 colors at once, a specification meant to make painting, animation and game work feel native instead of added as an afterthought.",
+      "Mindset Designer supplies the showcase. The paint program’s tools and colorful sample art turn the computer into a visual workstation, and contemporary documentation identifies programmer Kevin Furry and artist Whitney Caughlan among the people behind the package.",
+      "That specialty is also the wager. Buyers now have abundant software and familiar IBM-compatible choices, so a distinctive display must justify stepping away from the safest standard. Mindset is betting that a vivid screen and responsive graphics can create a market of their own."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Microcomputers Become Tools of Independence",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "The March 19 InfoWorld cover also points toward a quieter revolution: personal computers adapted for people with disabilities. Period rehabilitation research compared machines from Apple, Epson, IBM and others as aids for communication, environmental control and information access.",
+        "The work treats the micro not merely as office equipment but as a flexible interface. Alternate input devices and specialized software can turn a general-purpose home computer into a practical bridge to writing, learning and control of everyday surroundings."
+      ]
+    },
+    {
+      "headline": "Laserdiscs Point Toward an Arcade-Style Future at Home",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ],
+      "body": [
+        "Computer & Video Games is asking whether laserdiscs can bring the spectacle of the new arcade cabinets into the living room. Full-motion filmed imagery promises a visual leap far beyond sprites, even if cost, storage and interaction still make the route uncertain.",
+        "The same March issue previews Atari’s Major Havoc and Marvin’s Maze and reviews joysticks across micros and video systems. Together they show a games market testing new pictures and new controls while home computers and consoles increasingly share the same shelf."
+      ]
+    },
+    {
+      "headline": "Chequered Flag Takes the British Micro Pole",
+      "confidence": "same-week",
+      "sourceRefs": [
+        3
+      ],
+      "body": [
+        "The RAM/C all-formats chart published March 17 puts Sinclair’s Chequered Flag at No. 1, ahead of Manic Miner and Fighter Pilot. Atic Atac and Scuba Dive complete a top five packed with fast, inexpensive microcomputer play.",
+        "The list captures the variety of the Spectrum-era shelf: motor racing, platform action, flight simulation, maze adventure and undersea exploration. Ultimate Play the Game also has Lunar Jetman and Jetpac farther down the chart, evidence of a vigorous specialist software trade."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Mindset Personal Computer",
+      "summary": "Intel 80186, MS-DOS and custom 320x200 graphics with 16 simultaneous colors.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0,
+        1
+      ]
+    },
+    {
+      "title": "Accessible Microcomputing",
+      "summary": "Apple, Epson, IBM and other micros are being evaluated for rehabilitation and communication uses.",
+      "confidence": "same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Laserdisc Games",
+      "summary": "Arcade spectacle prompts new questions about interactive video in the home.",
+      "confidence": "same-month",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Mindset Designer",
+      "detail": "Paint program built to show off the Mindset graphics hardware."
+    },
+    {
+      "name": "Chequered Flag",
+      "detail": "Sinclair racing game at No. 1 on the period all-formats chart."
+    },
+    {
+      "name": "Manic Miner",
+      "detail": "Platform favorite holding No. 2 on the same chart."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "1. Chequered Flag",
+        "2. Manic Miner",
+        "3. Fighter Pilot",
+        "4. Atic Atac",
+        "5. Scuba Dive"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "1. Police Academy",
+        "2. Splash",
+        "3. Footloose",
+        "4. The Ice Pirates",
+        "5. Tank"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "Mindset Designer",
+        "Ant Attack",
+        "Sting 64"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Quicksilva Ant Attack",
+      "price": "£6.95",
+      "note": "Advertised in Computer & Video Games, March 1984."
+    },
+    {
+      "item": "Quicksilva Sting 64",
+      "price": "£7.95",
+      "note": "Advertised in the same issue."
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Softcon Fills the Shelves",
+      "text": "Packaged software is emerging as an industry in its own right, with three to five packages reportedly purchased for every microcomputer sold."
+    },
+    {
+      "headline": "Spinal Tap Expands",
+      "text": "This Is Spinal Tap earned $99,411 from ten theaters over March 23-25, up 68.7 percent."
+    },
+    {
+      "headline": "Major Havoc Previewed",
+      "text": "Atari’s vector-graphics arcade adventure appears among the month’s forward-looking game attractions."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Jump",
+      "artist": "Van Halen"
+    },
+    {
+      "rank": 2,
+      "title": "Somebody's Watching Me",
+      "artist": "Rockwell"
+    },
+    {
+      "rank": 3,
+      "title": "Girls Just Want to Have Fun",
+      "artist": "Cyndi Lauper"
+    },
+    {
+      "rank": 4,
+      "title": "Footloose",
+      "artist": "Kenny Loggins"
+    },
+    {
+      "rank": 5,
+      "title": "Against All Odds (Take a Look at Me Now)",
+      "artist": "Phil Collins"
+    }
+  ],
+  "periodAd": {
+    "headline": "Paint With All 16 Colors",
+    "summary": "Mindset Designer turns custom graphics hardware into a bright electronic canvas.",
+    "tagline": "A personal computer with pictures on its mind."
+  },
+  "market": {
+    "headline": "Software Steps Out of Hardware’s Shadow",
+    "summary": "Softcon coverage reflects intensifying competition for packaged-software distribution and retail shelf space.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      0,
+      4
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Soviet Submarine Collides With USS Kitty Hawk",
+    "summary": "On March 21, a nuclear-powered Soviet attack submarine collided with the U.S. aircraft carrier Kitty Hawk in the southern Sea of Japan; the Pentagon confirmed the incident that day.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Laserdisc Games Eye the Living Room",
+    "summary": "Computer & Video Games assesses whether laserdiscs, already making a stir in arcades, can transform home computer play.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      2
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Mindset specifications and graphics focus",
+        "status": "Verified in the March 19 InfoWorld issue and Mindset’s 1984 user guide.",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      {
+        "claim": "Game chart",
+        "status": "Contemporaneous all-formats chart published March 17 for the two weeks through March 8.",
+        "sourceRefs": [
+          3
+        ]
+      },
+      {
+        "claim": "Music and movie charts",
+        "status": "Billboard week ending March 24 and domestic box office weekend March 23-25.",
+        "sourceRefs": [
+          5,
+          6
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "InfoWorld, March 19, 1984",
+      "url": "https://www.loopcntr.net/repository/1017.pdf"
+    },
+    {
+      "label": "Mindset Designer User Guide (1984)",
+      "url": "https://bitsavers.org/pdf/mindset/100502-001_Designer_Users_Guide_1984.pdf"
+    },
+    {
+      "label": "Computer & Video Games, March 1984",
+      "url": "https://archive.org/stream/computer-and-video-games-magazine/Computer%20and%20Video%20Games%20029_djvu.txt"
+    },
+    {
+      "label": "RAM/C All Formats chart, March 17, 1984",
+      "url": "https://computerhits.org/archive/personal%20computer%20news_1984-03-17_all%20formats/"
+    },
+    {
+      "label": "Software industry comes into its own",
+      "url": "https://www.csmonitor.com/1984/0224/022425.html"
+    },
+    {
+      "label": "Domestic weekend chart, March 23-25, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W12/"
+    },
+    {
+      "label": "Billboard Hot 100, March 24, 1984",
+      "url": "https://www.nostalgilistan.se/billboard/19840324"
+    },
+    {
+      "label": "UPI: Soviet submarine and USS Kitty Hawk collide",
+      "url": "https://www.upi.com/Archives/1984/03/21/A-nuclear-powered-Soviet-attack-submarine-and-the-US-aircraft/7745448693200/"
+    }
+  ]
+}
