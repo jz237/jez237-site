@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 28 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 29 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of March 26-April 1, 1984 — AT&amp;T Throws Down a Unix Gauntlet With Six 3B Computers</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-03-26</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-26</guid>
+      <pubDate>Sat, 29 Aug 2026 12:00:00 GMT</pubDate>
+      <description>The post-divestiture giant puts Unix System V and its own 32-bit architecture at the center of a sweeping commercial challenge. AT&amp;T formally entered the general-purpose computer business on March 27, opening a campaign that reaches from a desktop multi-user machine to fault-tolerant systems. Only months after the Bell System divestiture, the company is carrying Bell Labs software and AT&amp;T-designed processors into direct competition with IBM, DEC, Data General, Wang and Hewlett-Packard. Also this week: Police Raids Put Britain’s Games-Cassette Pirates Under Pressure · IBM Rations PCs and XTs as the Component Squeeze Bites · Sinclair Microdrives Reach London Shops · Macintosh Commands the West Coast Computer Faire.</description>
+    </item>
     <item>
       <title>Week of March 19-25, 1984 — Mindset PC Bets on Custom Color Graphics</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-03-19</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-14</guid>
       <pubDate>Sun, 09 Aug 2026 12:00:00 GMT</pubDate>
       <description>A major retailer’s retreat exposes delivery and reliability doubts around the ambitious all-in-one home computer. Coleco’s bid to turn its video-game success into a home-computer empire suffered a conspicuous holiday setback this week. The New York Times reported November 15 that J.C. Penney had omitted the Adam computer from its holiday line, a damaging absence at the moment families were studying Christmas catalogs and retailers were committing scarce shelf space. Also this week: Microsoft Opens a Window on DOS · Video Games Enter Christmas Under a Cloud · Schools Add Ethics to Computer Literacy.</description>
-    </item>
-    <item>
-      <title>Week of November 7-13, 1983 — Microsoft Opens a Window on the PC’s Graphical Future</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-11-07</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-07</guid>
-      <pubDate>Sat, 08 Aug 2026 12:00:00 GMT</pubDate>
-      <description>Bill Gates unveils a mouse-driven graphical layer for MS-DOS machines, promising menus, tiled windows and a common face for the compatible-computer boom. NEW YORK, Nov. 10 — Microsoft this week unveiled Windows, a graphical operating environment intended to place menus, pictures and mouse control above the command-line face of MS-DOS. Bill Gates presented the product at the Helmsley Palace Hotel, giving the fast-growing world of IBM-compatible computers a glimpse of a more visual way to work. Also this week: A Self-Replicating Program Earns a New Name: Computer Virus · Computer Magazines Ride the Home-Micro Boom · IBM-Hitachi Settlement Reported Near $300 Million.</description>
     </item>
   </channel>
 </rss>
