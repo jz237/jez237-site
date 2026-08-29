@@ -1,8 +1,363 @@
 {
-  "generatedAt": "2026-08-24T12:01:57.303Z",
+  "generatedAt": "2026-08-29T12:00:00Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-08-29",
+      "historicDate": "1984-03-26",
+      "displayDate": "Week of March 26-April 1, 1984",
+      "edition": "Issue 087 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Extra-edition computer weekly on warm newsprint with urgent red-and-blue department flags",
+        "motifs": [
+          "AT&T 3B Unix terminals",
+          "32-bit processor diagrams",
+          "Sinclair Microdrive cartridges",
+          "British games cassettes"
+        ],
+        "layout": "AT&T milestone banner across the upper deck, games and piracy reporting below, charts and world bulletin on the rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of March 26-April 1, 1984",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Five-column Extra Edition banner with AT&T 3B computer room imagery",
+        "secondaryRail": "Games, Microdrive, price watch, charts and world bulletin",
+        "archiveNavigation": "Previous and next weekly issues with calendar shelf"
+      },
+      "sectionChrome": {
+        "primary": "#9f2723",
+        "secondary": "#214f76",
+        "texture": "Warm aged newsprint, halftone screens, fine rules and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-03-26.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for March 26-April 1, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Extra Edition: a newly independent AT&T carries Bell Labs Unix into direct competition with the established computer makers.",
+      "morningLine": "Unix steps onto the commercial main stage while microcomputer shelves fill with new drives, games and sharper enforcement against counterfeit tapes.",
+      "milestone": {
+        "title": "AT&T enters the general-purpose computer business with its Unix-based 3B line",
+        "note": "The newly divested telephone giant's March 27 market entry put Bell Labs' Unix and AT&T-designed 32-bit hardware into direct commercial competition with IBM, DEC, Data General, Wang and Hewlett-Packard."
+      },
+      "lead": {
+        "headline": "AT&T Throws Down a Unix Gauntlet With Six 3B Computers",
+        "dek": "The post-divestiture giant puts Unix System V and its own 32-bit architecture at the center of a sweeping commercial challenge.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1
+        ],
+        "body": [
+          "AT&T formally entered the general-purpose computer business on March 27, opening a campaign that reaches from a desktop multi-user machine to fault-tolerant systems. Only months after the Bell System divestiture, the company is carrying Bell Labs software and AT&T-designed processors into direct competition with IBM, DEC, Data General, Wang and Hewlett-Packard.",
+          "Six announced models make up the 3B family, and every one runs AT&T Unix System V. The desktop 3B2 uses a 32-bit architecture, comes with 256K of memory and can serve as many as 18 users or work as a single-user machine. The larger 3B5 employs AT&T’s WE 32000 microprocessor, with versions intended for roughly 30 or 60 users.",
+          "At the upper end, the 3B20D emphasizes fault tolerance for banking, reservation and military work. AT&T says more than 1,200 related 3B20S systems are already operating inside its own companies, giving the sales pitch a substantial in-house proving ground.",
+          "The opening route is deliberately commercial: value-added resellers and customers able to provide applications come first, joined by 3B Net and a PC Interface. AT&T says 800 sales and technical people have been trained and plans a 6,000-person sales force by year’s end, while Olivetti handles European marketing.",
+          "The line’s first public showing is scheduled for COMDEX Winter in Los Angeles, April 5-7. Hardware sales are only part of the stakes: if the 3B family wins converts, Unix System V could move from a respected technical foundation toward the broad industry standard AT&T plainly wants it to become."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Police Raids Put Britain’s Games-Cassette Pirates Under Pressure",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "Police and Trading Standards raids reported in Salford and Hull have put unusually concrete numbers on the commercial counterfeiting trade. Ocean Software director David Ward estimated that a Salford warehouse held about 20,000 cassettes with a retail value near £100,000; police valued the blank media at £9,500.",
+            "Named copies included current games such as Jet Set Willy, Atic-Atac, Bugaboo and Harrier Attack. A separate Hull seizure recovered 150 cassettes after a tip from Software Projects. The actions target bulk sellers under deception and trade-description law, not home users, and charges in Hull had not yet been brought at press time."
+          ]
+        },
+        {
+          "headline": "IBM Rations PCs and XTs as the Component Squeeze Bites",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "IBM has limited dealers to 25 PC and XT machines a month and is quoting delivery four weeks after orders, a striking restriction for the market’s fastest-growing personal-computer standard. The shortage reaches Intel 8088 processors, 64K RAM chips and TTL components.",
+            "The squeeze lands only two weeks after IBM announced 20 percent price cuts. A licensing agreement with Intel and pilot U.S. production of the 8088 point toward relief, but for now dealers must ration machines just as lower prices promise to stimulate demand."
+          ]
+        },
+        {
+          "headline": "Sinclair Microdrives Reach London Shops",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2,
+            3
+          ],
+          "body": [
+            "Forty long-awaited Sinclair Microdrives reached Computers of Wigmore Street, where six sold within half an hour. The miniature cartridge drive costs £49.95, or £79.95 with Interface 1; blank cartridges are £4.95.",
+            "Sinclair expects to send 20,000 Microdrive and Interface 1 units into shops each month. After delays severe enough to create a black market in order forms, an ordinary retail sale is news in itself, though full QL production is still taking time."
+          ]
+        },
+        {
+          "headline": "Macintosh Commands the West Coast Computer Faire",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "Apple gave away one Macintosh each day at the ninth West Coast Computer Faire in San Francisco, where the compact new machine drew the show’s liveliest attention. Elsewhere, IBM PC software dominated and exhibitors increasingly bundled “wordware” with programs.",
+            "The floor offered little major new hardware, but falling storage prices stood out: Electro Mavin advertised a 20MB eight-inch Winchester drive for the equivalent of about £1,100. A closing seminar on “The Personal Computing Backlash” captured an industry wondering what remains after the home-computer price war."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "AT&T 3B2",
+          "summary": "Desktop 32-bit Unix System V computer with 256K memory and support for as many as 18 users.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Sinclair Microdrive",
+          "summary": "The £49.95 miniature cartridge drive finally reaches a London shop.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "Acorn 6502 Second Processor",
+          "summary": "A 3MHz 6502 with 64K RAM and Tube interface expands the BBC Micro for £199.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Jet Set Willy",
+          "detail": "Software Projects’ Spectrum sequel arrives with a printed color-card protection check."
+        },
+        {
+          "name": "Aviator",
+          "detail": "Acornsoft’s BBC Micro Spitfire simulator includes a manual and map."
+        },
+        {
+          "name": "Acorn Level Two Econet",
+          "detail": "A £249 file server package is due for BBC Micro networks."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer Games This Week",
+          "items": [
+            "Jet Set Willy — ZX Spectrum",
+            "Aviator — BBC Micro",
+            "International Soccer — Commodore 64",
+            "Atic-Atac — ZX Spectrum",
+            "Bugaboo — home micros"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Police Academy",
+            "2. Greystoke: The Legend of Tarzan, Lord of the Apes",
+            "3. Splash",
+            "4. Romancing the Stone",
+            "5. Against All Odds"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Jet Set Willy color-card protection",
+            "Acorn Level Two Econet file server",
+            "Macintosh software at the West Coast Computer Faire"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Sinclair Microdrive",
+          "price": "£49.95",
+          "note": "£79.95 bundled with Interface 1; cartridges £4.95."
+        },
+        {
+          "item": "CGL Sord M5 starter package",
+          "price": "£149.95",
+          "note": "Computer, recorder, BASIC cartridge, books, cables and two games."
+        },
+        {
+          "item": "Oric-1 48K to Atmos upgrade",
+          "price": "£60",
+          "note": "Includes VAT, postage, Atmos manual and a 12-month warranty."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "International Soccer Sells Out",
+          "text": "Commodore says 2,000 C64 cartridges arrive every two weeks, but British demand still overwhelms supply."
+        },
+        {
+          "headline": "Thought-Controlled Apple Demonstrated",
+          "text": "A galvanic-skin-response system moves an Apple IIe cursor and hints at accessibility applications."
+        },
+        {
+          "headline": "Cross-Platform Network Promised",
+          "text": "Micromite says its May Fileserver will link CP/M, MS-DOS and PC-DOS machines across as much as one mile."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        },
+        {
+          "rank": 2,
+          "title": "Somebody's Watching Me",
+          "artist": "Rockwell"
+        },
+        {
+          "rank": 3,
+          "title": "Against All Odds (Take a Look at Me Now)",
+          "artist": "Phil Collins"
+        },
+        {
+          "rank": 4,
+          "title": "Jump",
+          "artist": "Van Halen"
+        },
+        {
+          "rank": 5,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        }
+      ],
+      "periodAd": {
+        "headline": "A Library in Your Pocket",
+        "summary": "Sinclair’s Microdrive puts removable cartridge storage beside the Spectrum.",
+        "tagline": "Tiny cartridges, quick files, £49.95."
+      },
+      "market": {
+        "headline": "Component Shortage Checks the PC Boom",
+        "summary": "IBM dealer limits show how shortages of 8088 processors, RAM and logic parts are constraining demand just after price cuts.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          2
+        ]
+      },
+      "worldAnchor": {
+        "headline": "U.S. Officials Say Iraq Used Nerve Gas in War With Iran",
+        "summary": "A March 30 report said American officials concluded Iraq used the nerve agent tabun against Iranian forces, a grave escalation in the Iran-Iraq War.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "Cassette Raids Put Counterfeiters on Notice",
+        "dek": "Police and trading officers seize alleged copies of current British micro hits.",
+        "body": [
+          "A warehouse raid in Salford reportedly uncovered about 20,000 games cassettes, while a separate Hull action seized 150 more after a tip from Software Projects. The named titles range from Jet Set Willy and Atic-Atac to Bugaboo and Harrier Attack.",
+          "The cases show publishers and authorities turning from warnings to enforcement as the games market grows. The report concerns commercial counterfeiting and legal action; it offers no copying instructions."
+        ],
+        "groups": [
+          {
+            "name": "Salford police",
+            "note": "Conducted the warehouse raid and brought a criminal-deception charge."
+          },
+          {
+            "name": "Hull Trading Standards",
+            "note": "Seized 150 alleged copies; no charges had been brought at press time."
+          },
+          {
+            "name": "Ocean Software",
+            "note": "Estimated the retail value of the Salford haul."
+          },
+          {
+            "name": "Software Projects",
+            "note": "Provided the tip preceding the Hull seizure."
+          }
+        ],
+        "sourceRefs": [
+          2
+        ],
+        "confidence": "same-week"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "AT&T 3B launch and specifications",
+            "status": "Verified in exact-date UPI and Dow Jones reporting from March 27, 1984.",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "British microcomputer news and games",
+            "status": "Contemporaneous Personal Computer News issues dated March 24 and March 31.",
+            "sourceRefs": [
+              2,
+              3
+            ]
+          },
+          {
+            "claim": "Music and movie charts",
+            "status": "Billboard week ending March 31 and domestic box office week beginning March 30.",
+            "sourceRefs": [
+              4,
+              5,
+              6
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "UPI: AT&T introduces new computer line, March 27, 1984",
+          "url": "https://www.upi.com/Archives/1984/03/27/ATT-introduces-new-computer-line/5640449211600/"
+        },
+        {
+          "label": "AT&T Announces Debut in Computer Business, March 27, 1984",
+          "url": "https://www.krsaborio.net/unix/research/1984/0327.htm"
+        },
+        {
+          "label": "Personal Computer News, March 31, 1984",
+          "url": "https://archive.org/stream/Personal-Computer-News/PersonalComputerNews055-31Mar1984_djvu.txt"
+        },
+        {
+          "label": "Personal Computer News, March 24, 1984",
+          "url": "https://archive.org/stream/Personal-Computer-News/PersonalComputerNews054-24Mar1984_djvu.txt"
+        },
+        {
+          "label": "Billboard Hot 100, March 31, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-03-31"
+        },
+        {
+          "label": "Singles chart, March 31, 1984",
+          "url": "https://musicchartsarchive.com/singles-chart/1984-03-31"
+        },
+        {
+          "label": "Domestic box office, week 13 of 1984",
+          "url": "https://www.boxofficemojo.com/weekly/1984W13/?sort=rank"
+        },
+        {
+          "label": "New York Times: U.S. aides say Iraq used nerve gas",
+          "url": "https://www.nytimes.com/1984/03/30/world/us-aides-say-iraqis-made-use-of-a-nerve-gas.html"
+        },
+        {
+          "label": "UPI: Spring blizzard strikes the Northeast",
+          "url": "https://www.upi.com/Archives/1984/03/30/A-spring-blizzard-marched-out-to-sea-today-but/8712449470800/"
+        }
+      ]
+    },
     {
       "currentDate": "2026-08-28",
       "historicDate": "1984-03-19",

@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-29",
+      "historicDate": "1984-03-26",
+      "displayDate": "Week of March 26-April 1, 1984",
+      "edition": "Issue 087 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Unix steps onto the commercial main stage while microcomputer shelves fill with new drives, games and sharper enforcement against counterfeit tapes.",
+      "leadHeadline": "AT&T Throws Down a Unix Gauntlet With Six 3B Computers",
+      "storyHeadlines": [
+        "Police Raids Put Britain’s Games-Cassette Pirates Under Pressure",
+        "IBM Rations PCs and XTs as the Component Squeeze Bites",
+        "Sinclair Microdrives Reach London Shops",
+        "Macintosh Commands the West Coast Computer Faire"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-03-26.jpg",
+      "thumb": "media/thumbs/1984-03-26.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-08-28",
       "historicDate": "1984-03-19",
       "displayDate": "Week of March 19-25, 1984",
