@@ -2,6 +2,12 @@
   "album": "Cat Corner",
   "photos": [
     {
+      "src": "images/luca-lap-long-arm-2026-08-29.jpg",
+      "alt": "Luca, a black cat, sitting on Jez's lap with one front leg stretched toward the camera",
+      "caption": "Luca: lap secured, personal space revoked",
+      "date": "2026-08-29"
+    },
+    {
       "src": "images/pc-case-sprawl-2026-08-16.jpg",
       "alt": "Black cat sprawled across the top of a glass-sided desktop PC with paws and tail hanging over the edges",
       "caption": "The PC case has been claimed as premium heated real estate",
