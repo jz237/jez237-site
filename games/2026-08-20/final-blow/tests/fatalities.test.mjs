@@ -10,7 +10,9 @@ import {
 } from "../engine/fatalities.mjs";
 import { FIGHTER_THROWABLES } from "../engine/throwables.mjs";
 
-const fighters = ["deathblow", "jez", "alan", "post", "benny", "donald", "cyraxx", "ali"];
+// Wave 16: the Commissioner joins with his own cane/ledger pair.
+// Wave 17: the Pinelands Devil joins with his hex-charm wing/hoof pair.
+const fighters = ["deathblow", "jez", "alan", "post", "benny", "donald", "cyraxx", "ali", "devil", "commissioner"];
 const projectileFocusTokens = Object.freeze({
   deathblow: "PIZZA",
   jez: "MOUSE",
@@ -20,12 +22,17 @@ const projectileFocusTokens = Object.freeze({
   donald: "GOLF",
   cyraxx: "BED-BUG",
   ali: "VINYL",
+  // The charm owns every beat; the wings and the hoof are the DEVICE.
+  devil: "CHARM|HEX",
+  // Both of the boss's profiles keep the steel cane in frame — the ledger
+  // beat is the DEVICE, the cane stays the projectile.
+  commissioner: "CANE|LEDGER",
 });
 
-test("all eight fighters receive two unique graphic fatalities", () => {
+test("all ten fighters receive two unique graphic fatalities", () => {
   const audit = auditGraphicFatalities(fighters.map((id) => ({ id, projectile: FIGHTER_THROWABLES[id] })));
-  assert.deepEqual(audit, { fighters: 8, fatalities: 16, errors: [] });
-  assert.equal(Object.keys(GRAPHIC_FATALITIES).length, 8);
+  assert.deepEqual(audit, { fighters: 10, fatalities: 20, errors: [] });
+  assert.equal(Object.keys(GRAPHIC_FATALITIES).length, 10);
   for (const fighter of fighters) {
     for (const fatality of GRAPHIC_FATALITIES[fighter]) {
       assert.equal(fatality.special, FIGHTER_THROWABLES[fighter].name, `${fatality.id} must name the assigned projectile`);
