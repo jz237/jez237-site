@@ -33,6 +33,7 @@ import {
   isPerfectGuard,
   resolveWakeOption,
   stunGainForAttack,
+  attackFrameData,
   boxesOverlap,
   canGuardAttack,
   createCombatMove,
@@ -59,7 +60,10 @@ import {
   fighterActionGroup,
   getFighterKit,
   getFighterMovement,
+  getKitMoveProfile,
+  listFighterFrameData,
   listFighterMoves,
+  prettyProfileName,
   recognizeFighterCommand,
 } from "./engine/fighter-kits.mjs";
 import {
@@ -138,10 +142,12 @@ import {
   BUTTON_NAMES,
   DEFAULT_KEY_MAPS,
   DEFAULT_PAD_MAP,
+  LEGEND_DAMAGE_SCALE,
   PAD_BUTTON_LABELS,
   REMAPPABLE_ACTIONS,
   TOURNAMENT_ACTION_PRIORITY,
   applyControlStyle,
+  legendScaledAction,
   detectPadLabelSet,
   formatKeyCode,
   hasFlowSkipInput,
@@ -152,23 +158,41 @@ import {
   remapKeyBinding,
   remapPadBinding,
   resolveFourButtonInput,
+  touchPadTokens,
 } from "./engine/controls.mjs";
 import {
+  FIGHT_SCHOOL_COACH_LINES,
+  FIGHT_SCHOOL_LESSONS,
   TRAINING_DUMMY_MODES,
+  TRAINING_SLOT_COUNT,
+  awardTrialMedal,
   beginTrainingRecording,
   comboTrialsForFighter,
+  createFightSchoolState,
   createTrainingState,
+  decodeTrainingSlot,
+  encodeTrainingSlot,
+  fighterMedalCounts,
+  fightSchoolLesson,
+  fightSchoolObserve,
+  fightSchoolSnapshot,
   finishTrainingRecording,
+  medalForTrial,
+  normalizeTrialMedals,
   recordTrainingFrame,
   recordTrainingTrialHit,
   resetTrainingScenario,
   selectTrainingTrial,
   trainingDummyInput,
   trainingSnapshot,
+  trialDemoScript,
 } from "./engine/training.mjs";
 import {
+  PERFORMANCE_PROFILES,
   auditFighterBalance,
   auditTournamentBalance,
+  createPerformanceGovernor,
+  hapticPatternFor,
   normalizeVisualQuality,
   resolvePerformanceProfile,
   trimVisualBudget,
@@ -989,6 +1013,11 @@ const state = {
   // the desktop high profile); CRT mode is an opt-in look and defaults off.
   sharpRender: localStorage.getItem("final-blow-sharp-render") !== "0",
   crtMode: localStorage.getItem("final-blow-crt-mode") === "1",
+  // R1.9 wave 15: Arcade Cabinet preset — big-screen TV mode. Persisted like
+  // attractEnabled; while on it forces the high profile, hides the touch HUD,
+  // enlarges the fight HUD and keeps the attract loop cycling. Render/UI
+  // only — never part of any rollback snapshot.
+  cabinetMode: localStorage.getItem("final-blow-cabinet-mode") === "1",
   // CINEMA 3D experimental Three.js presentation renderer. Persisted like the
   // other toggles; ?renderer=3d forces it on for the session without
   // persisting. Battery profile refuses activation (see cinema3dAllowed).
@@ -1127,6 +1156,617 @@ const tallyUi = {
   done: false,
   onContinue: null,
 };
+
+// ===========================================================================
+// R1.9 SCHOOL & POCKET — training & accessibility. Everything in this block
+// is render/meta-side module state on the demoSession pattern: never
+// snapshotted, never read by the checksummed sim. Hooks that run on sim paths
+// are guarded with `if (!rollbackResimulating)` (the announce() pattern) at
+// the call sites.
+// ===========================================================================
+
+// One-shot / live counters for the orchestrator's smoke tests (violence block).
+const trainingFxDebug = {
+  frameMeterTicks: 0,
+  motionFlashes: 0,
+  assistRecolors: 0,
+  schoolSteps: 0,
+  slotSaves: 0,
+  slotLoads: 0,
+  trialDemoRuns: 0,
+  medalAwards: 0,
+};
+
+// --- Color assist for canvas-drawn cues ------------------------------------
+// The DOM already reskins via body[data-color-assist] CSS variables; these are
+// the canvas render paths that used to keep hardcoded hues. Standard palette
+// returns the caller's original color so nothing changes for everyone else.
+const ASSIST_CANVAS_PALETTES = Object.freeze({
+  deuteranopia: Object.freeze({
+    hurtboxP1: "#39a9ff", hurtboxP2: "#ffffff", pushbox: "#b9a5ff", hitbox: "#ff8c00",
+    low: "#ffd166", overhead: "#ff6b35", dizzy: "#ffe066", dizzyAlt: "#ffffff", crush: "#82cfff",
+    frameStartup: "#39a9ff", frameActive: "#ff8c00", frameRecovery: "#9aa5b1", frameStun: "#ffd166",
+  }),
+  protanopia: Object.freeze({
+    hurtboxP1: "#36c8d8", hurtboxP2: "#ffffff", pushbox: "#c5b3ff", hitbox: "#f0a01e",
+    low: "#ffe066", overhead: "#f08a24", dizzy: "#ffe680", dizzyAlt: "#ffffff", crush: "#7cd4e8",
+    frameStartup: "#36c8d8", frameActive: "#f0a01e", frameRecovery: "#9aa5b1", frameStun: "#ffe066",
+  }),
+  tritanopia: Object.freeze({
+    hurtboxP1: "#4ce6c4", hurtboxP2: "#ff4f8b", pushbox: "#d8e34a", hitbox: "#ff5c39",
+    low: "#d8e34a", overhead: "#ff4f8b", dizzy: "#ffb3c8", dizzyAlt: "#ffffff", crush: "#4ce6c4",
+    frameStartup: "#4ce6c4", frameActive: "#ff5c39", frameRecovery: "#9aa5b1", frameStun: "#d8e34a",
+  }),
+});
+
+function assistColor(role, fallback) {
+  const palette = ASSIST_CANVAS_PALETTES[state.accessibility.colorAssist];
+  if (!palette || !palette[role]) return fallback;
+  trainingFxDebug.assistRecolors += 1;
+  return palette[role];
+}
+
+function colorAssistActive() {
+  return Boolean(ASSIST_CANVAS_PALETTES[state.accessibility.colorAssist]);
+}
+
+// --- Frame meter strip (training lab) --------------------------------------
+// One cell per simulation tick per fighter, fed once per NEW tick from
+// updateTrainingUi (which already early-returns during resimulation).
+const FRAME_METER_CELLS = 120;
+const frameMeter = {
+  history: [[], []],
+  lastTick: -1,
+};
+
+function trainingFramePhase(fighter) {
+  if (!fighter) return "idle";
+  if (fighter.dizzyFrames > 0 || fighter.hitstunFrames > 0) return "hitstun";
+  if (fighter.blockstunFrames > 0) return "blockstun";
+  const move = fighter.attacking;
+  if (move) {
+    if (fighter.attackFrame < move.activeStartFrame) return "startup";
+    if (fighter.attackFrame < move.activeEndFrame) return "active";
+    return "recovery";
+  }
+  return "idle";
+}
+
+function feedFrameMeter() {
+  if (state.simulationTick === frameMeter.lastTick) return;
+  frameMeter.lastTick = state.simulationTick;
+  for (const side of [0, 1]) {
+    const history = frameMeter.history[side];
+    history.push(trainingFramePhase(state.fighters[side]));
+    if (history.length > FRAME_METER_CELLS) history.shift();
+  }
+  trainingFxDebug.frameMeterTicks += 1;
+}
+
+// --- Arcade-style input history column -------------------------------------
+const INPUT_COLUMN_ROWS = 12;
+const inputColumn = {
+  rows: [],
+  lastKey: "",
+  flash: null,
+  renderedStamp: "",
+};
+
+function inputColumnDirection(input) {
+  const left = Boolean(input.left);
+  const right = Boolean(input.right);
+  const down = Boolean(input.down);
+  const up = Boolean(input.up || input.jump);
+  if (up && left) return "↖";
+  if (up && right) return "↗";
+  if (up) return "↑";
+  if (down && left) return "↙";
+  if (down && right) return "↘";
+  if (down) return "↓";
+  if (left) return "←";
+  if (right) return "→";
+  return "";
+}
+
+function inputColumnButtons(input) {
+  const buttons = [];
+  if (input.fourButton) {
+    for (const button of ATTACK_BUTTONS) {
+      if (input[button] || input[`${button}Held`]) buttons.push(button.toUpperCase());
+    }
+  } else {
+    const kick = input.limb === "kick";
+    if (input.light) buttons.push(kick ? "LK" : "LP");
+    if (input.heavy) buttons.push(kick ? "HK" : "HP");
+    if (input.special || input.commandSpecial || input.backSpecial) buttons.push("SP");
+    if (input.launcher) buttons.push("LN");
+    if (input.driveHeavy) buttons.push("DH");
+    if (input.enhanced) buttons.push("EX");
+    if (input.throw || input.throwObject) buttons.push("TH");
+    if (input.super) buttons.push("SU");
+    if (input.final) buttons.push("FB");
+  }
+  return buttons.slice(0, 4);
+}
+
+function feedInputColumn(input = {}) {
+  const dir = inputColumnDirection(input);
+  const buttons = inputColumnButtons(input);
+  if (!dir && !buttons.length) {
+    inputColumn.lastKey = "";
+    return;
+  }
+  const key = `${dir}|${buttons.join("+")}`;
+  const head = inputColumn.rows[0];
+  if (key === inputColumn.lastKey && head) {
+    head.frames = Math.min(99, head.frames + 1);
+    return;
+  }
+  inputColumn.lastKey = key;
+  inputColumn.rows.unshift({ dir, buttons, frames: 1 });
+  if (inputColumn.rows.length > INPUT_COLUMN_ROWS) inputColumn.rows.pop();
+}
+
+// Motion-recognition flash: latched from prepareFighterInput when a command is
+// consumed (guarded at the call site), shown as a green chip + green rows.
+let inputColumnFlash = null;
+
+function latchInputColumnFlash(action, fighter) {
+  const profile = getKitMoveProfile(fighter?.kitId, action);
+  inputColumnFlash = {
+    label: profile?.moveName || String(action).replace(/([A-Z])/g, " $1").toUpperCase(),
+    at: performance.now(),
+    rows: Math.min(4, inputColumn.rows.length || 1),
+  };
+  trainingFxDebug.motionFlashes += 1;
+}
+
+function renderInputColumn() {
+  const column = $("#inputHistoryColumn");
+  const visible = state.mode === "training" && state.screen === "fight";
+  column.hidden = !visible;
+  if (!visible) return;
+  const flashLive = inputColumnFlash && performance.now() - inputColumnFlash.at < 900;
+  if (!flashLive) inputColumnFlash = null;
+  const stamp = `${inputColumn.rows.map((row) => `${row.dir}${row.buttons.join("")}${row.frames}`).join(";")}|${flashLive ? inputColumnFlash.label : ""}`;
+  if (stamp === inputColumn.renderedStamp) return;
+  inputColumn.renderedStamp = stamp;
+  const rows = inputColumn.rows.map((row, index) => `
+    <div class="input-row${flashLive && index < inputColumnFlash.rows ? " flash" : ""}">
+      <span class="dir">${row.dir || "·"}</span>
+      ${row.buttons.map((button) => `<span class="chip ${button.toLowerCase()}">${button}</span>`).join("")}
+      <span class="held">${row.frames}F</span>
+    </div>`);
+  const flashChip = flashLive ? `<div class="input-flash-chip">✓ ${inputColumnFlash.label}</div>` : "";
+  column.innerHTML = rows.join("") + flashChip;
+}
+
+// --- Combo trial medals ----------------------------------------------------
+const TRIAL_MEDALS_KEY = "final-blow-trial-medals";
+
+function readStoredJson(key) {
+  try {
+    return JSON.parse(localStorage.getItem(key));
+  } catch {
+    return null;
+  }
+}
+
+let trialMedals = normalizeTrialMedals(readStoredJson(TRIAL_MEDALS_KEY));
+
+function saveTrialMedals() {
+  localStorage.setItem(TRIAL_MEDALS_KEY, JSON.stringify(trialMedals));
+}
+
+const MEDAL_GLYPHS = Object.freeze({ bronze: "●", silver: "●", gold: "★" });
+
+function medalMarkup(counts) {
+  const parts = [];
+  if (counts.gold) parts.push(`<i class="medal-gold">★${counts.gold}</i>`);
+  if (counts.silver) parts.push(`<i class="medal-silver">●${counts.silver}</i>`);
+  if (counts.bronze) parts.push(`<i class="medal-bronze">●${counts.bronze}</i>`);
+  return parts.join(" ");
+}
+
+function refreshTrialMedalBadges() {
+  $$("#rosterGrid .fighter-card").forEach((card) => {
+    const fighter = roster[Number(card.dataset.index)];
+    if (!fighter) return;
+    let badge = card.querySelector(".trial-medal-badge");
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "trial-medal-badge";
+      card.append(badge);
+    }
+    const counts = fighterMedalCounts(trialMedals, fighter.id);
+    badge.hidden = counts.total === 0;
+    badge.innerHTML = medalMarkup(counts);
+  });
+}
+
+// --- Authored trial demos (WATCH DEMO) -------------------------------------
+// Feeds the PLAYER seat through the same direct action fields the QA input
+// machinery uses. `forward` frames are mapped onto left/right against the live
+// facing so cross-through specials cannot strand the walk-in.
+const trialDemo = { active: false, frames: [], index: 0, trialName: "" };
+
+function stopTrialDemo(message = "") {
+  if (!trialDemo.active) return;
+  trialDemo.active = false;
+  trialDemo.frames = [];
+  trialDemo.index = 0;
+  if (message) state.training.lastResult = message;
+  const button = $("#trainingTrialDemoButton");
+  if (button) button.textContent = "WATCH DEMO";
+}
+
+function startTrialDemo() {
+  if (state.mode !== "training" || !state.fighters.length) return false;
+  const fighterId = state.fighters[0].kitId;
+  const trial = comboTrialsForFighter(fighterId)[state.training.trialIndex];
+  if (!trial) return false;
+  resetTrainingPosition(false);
+  state.training.dummyMode = "stand";
+  selectTrainingTrial(state.training, fighterId, state.training.trialIndex);
+  state.fighters.forEach((fighter) => { fighter.meter = GRIT_RULES.maximum; });
+  trialDemo.frames = trialDemoScript(trial);
+  trialDemo.index = 0;
+  trialDemo.active = true;
+  trialDemo.trialName = trial.name;
+  trainingFxDebug.trialDemoRuns += 1;
+  state.training.lastResult = `WATCH · ${trial.name}`;
+  $("#trainingTrialDemoButton").textContent = "STOP DEMO";
+  updateTrainingUi();
+  return true;
+}
+
+function trialDemoInput() {
+  if (!trialDemo.active) return null;
+  if (state.mode !== "training" || state.screen !== "fight") {
+    stopTrialDemo();
+    return null;
+  }
+  const frame = trialDemo.frames[trialDemo.index];
+  trialDemo.index += 1;
+  if (trialDemo.index >= trialDemo.frames.length) stopTrialDemo(`${trialDemo.trialName} · YOUR TURN`);
+  if (!frame) return null;
+  if (frame.forward) {
+    const [player, dummy] = state.fighters;
+    const toward = player && dummy && dummy.x < player.x ? "left" : "right";
+    return { [toward]: true };
+  }
+  return { ...frame };
+}
+
+// --- Situation slots -------------------------------------------------------
+const TRAINING_SLOT_KEY_PREFIX = "final-blow-training-slot-";
+
+const situationSlots = Array.from({ length: TRAINING_SLOT_COUNT }, (_, index) => (
+  decodeTrainingSlot(localStorage.getItem(`${TRAINING_SLOT_KEY_PREFIX}${index}`))
+));
+
+function refreshSituationSlotButtons() {
+  $$("[data-slot-load]").forEach((button) => {
+    const index = Number(button.dataset.slotLoad);
+    const filled = Boolean(situationSlots[index]);
+    button.disabled = !filled;
+    button.classList.toggle("filled", filled);
+  });
+}
+
+function saveSituationSlot(index) {
+  if (state.mode !== "training" || state.screen !== "fight") return false;
+  if (!Number.isInteger(index) || index < 0 || index >= TRAINING_SLOT_COUNT) return false;
+  const encoded = encodeTrainingSlot({
+    state: serializeRollbackState(saveRollbackState()),
+    stage: state.stage,
+    dummyMode: state.training.dummyMode,
+    recording: state.training.recording,
+    savedAt: Date.now(),
+  });
+  if (!encoded) return false;
+  localStorage.setItem(`${TRAINING_SLOT_KEY_PREFIX}${index}`, encoded);
+  situationSlots[index] = decodeTrainingSlot(encoded);
+  trainingFxDebug.slotSaves += 1;
+  state.training.lastResult = `SITUATION SAVED · SLOT ${index + 1}`;
+  refreshSituationSlotButtons();
+  updateTrainingUi();
+  return true;
+}
+
+function loadSituationSlot(index) {
+  if (state.mode !== "training" || state.screen !== "fight") return false;
+  const slot = situationSlots[index];
+  if (!slot) return false;
+  stopTrialDemo();
+  let parsed = null;
+  try {
+    parsed = parseRollbackState(slot.state);
+  } catch {
+    return false;
+  }
+  const previousStage = state.stage;
+  try {
+    restoreRollbackState(parsed);
+  } catch {
+    return false;
+  }
+  // Offline the fixed-step clock owns the tick counter, so it must resume
+  // from the snapshot's tick or every restored frame-relative counter
+  // (buffers, combo gaps, taunt windows) would sit in the wrong tick domain.
+  simulationClock.tick = state.simulationTick;
+  state.training.dummyMode = slot.dummyMode;
+  state.training.recording = slot.recording.map((frame) => ({ ...frame }));
+  state.training.recordingActive = false;
+  state.training.playbackFrame = 0;
+  state.training.guardAfterTriggered = false;
+  state.training.reversalArmed = false;
+  state.training.lastResult = `SITUATION LOADED · SLOT ${index + 1}`;
+  trainingFxDebug.slotLoads += 1;
+  if (state.stage !== previousStage) {
+    updateStageUI();
+    resetCrowd();
+  }
+  updateHud();
+  updateComboState();
+  updateTrainingUi();
+  return true;
+}
+
+// --- FIGHT SCHOOL ----------------------------------------------------------
+const SCHOOL_STORAGE_KEY = "final-blow-fight-school";
+
+const schoolSession = {
+  active: false,
+  machine: null,
+  savedDifficulty: "",
+  pendingSetup: null,
+  dizzyCooldownTick: -Infinity,
+  coachLast: {},
+};
+
+function loadSchoolProgress() {
+  const raw = readStoredJson(SCHOOL_STORAGE_KEY);
+  const completed = {};
+  if (raw?.completed && typeof raw.completed === "object") {
+    for (const lesson of FIGHT_SCHOOL_LESSONS) {
+      if (raw.completed[lesson.id]) completed[lesson.id] = true;
+    }
+  }
+  return { completed, graduated: Boolean(raw?.graduated) };
+}
+
+function saveSchoolProgress() {
+  if (!schoolSession.machine) return;
+  localStorage.setItem(SCHOOL_STORAGE_KEY, JSON.stringify({
+    version: 1,
+    completed: schoolSession.machine.completed,
+    graduated: schoolSession.machine.graduated,
+  }));
+}
+
+// Philly corner-man lines, drawn with a per-pool no-repeat latch so a line
+// can never land back-to-back. visualRandom only — never state.rng here.
+function schoolCoach(pool) {
+  const lines = FIGHT_SCHOOL_COACH_LINES[pool] || [];
+  if (!lines.length) return "";
+  if (lines.length === 1) return lines[0];
+  let pick = Math.floor(visualRandom() * lines.length) % lines.length;
+  if (pick === schoolSession.coachLast[pool]) pick = (pick + 1) % lines.length;
+  schoolSession.coachLast[pool] = pick;
+  return lines[pick];
+}
+
+let schoolPanelStamp = "";
+
+function renderSchoolPanel() {
+  const panel = $("#schoolPanel");
+  const visible = schoolSession.active && state.mode === "training" && state.screen === "fight";
+  panel.hidden = !visible;
+  if (!visible) {
+    schoolPanelStamp = "";
+    return;
+  }
+  const snapshot = fightSchoolSnapshot(schoolSession.machine);
+  const stamp = `${snapshot.lesson}:${snapshot.step}:${snapshot.graduated}`;
+  if (stamp === schoolPanelStamp) return;
+  schoolPanelStamp = stamp;
+  $("#schoolLessonCounter").textContent = snapshot.graduated
+    ? "GRADUATED"
+    : `LESSON ${Math.min(snapshot.lesson + 1, snapshot.lessonCount)} / ${snapshot.lessonCount}`;
+  $("#schoolLessonName").textContent = snapshot.lessonName;
+  const lesson = fightSchoolLesson(schoolSession.machine);
+  $("#schoolLessonIntro").textContent = lesson?.intro || "Every page of the book, landed. Class dismissed.";
+  $("#schoolSteps").innerHTML = snapshot.steps.map((step, index) => (
+    `<span class="${step.complete ? "done" : index === snapshot.step ? "next" : ""}">${step.label}</span>`
+  )).join("");
+}
+
+// Builds the scripted dummy attack loop for the guard lessons: walk toward the
+// player, swing the scripted attack, breathe, repeat — through the exact
+// sanitized-recording playback path the lab already ships.
+function schoolDummyScript(script) {
+  const frames = [];
+  for (let index = 0; index < 42; index += 1) frames.push({ left: true });
+  if (script === "low") frames.push({ down: true, heavy: true });
+  else frames.push({ left: true, heavy: true });
+  for (let index = 0; index < 66; index += 1) frames.push({});
+  return frames;
+}
+
+function applySchoolStepSetup() {
+  if (!schoolSession.active || !schoolSession.machine) return;
+  const lesson = fightSchoolLesson(schoolSession.machine);
+  const step = lesson?.steps[schoolSession.machine.step];
+  if (!lesson) return;
+  if (step?.dummyScript) {
+    state.training.recording = schoolDummyScript(step.dummyScript).map((frame) => ({ ...frame }));
+    state.training.recordingActive = false;
+    state.training.playbackFrame = 0;
+    state.training.dummyMode = "playback";
+  } else {
+    state.training.dummyMode = "cpu";
+  }
+  if (lesson.setup === "dizzy") {
+    schoolSession.pendingSetup = "dizzy";
+  } else if (lesson.setup === "lowHealth") {
+    state.training.autoRecover = false;
+    schoolSession.pendingSetup = "lowHealth";
+  } else {
+    state.training.autoRecover = true;
+    schoolSession.pendingSetup = null;
+  }
+  updateTrainingUi();
+}
+
+function applySchoolLessonSetup() {
+  if (!schoolSession.active) return;
+  resetTrainingPosition(false);
+  applySchoolStepSetup();
+}
+
+function exitFightSchool({ toTitle = false } = {}) {
+  if (!schoolSession.active) return;
+  schoolSession.active = false;
+  schoolSession.pendingSetup = null;
+  stopTrialDemo();
+  if (schoolSession.savedDifficulty) setAiDifficulty(schoolSession.savedDifficulty);
+  if (state.mode === "training") {
+    state.training.autoRecover = true;
+    state.training.dummyMode = "stand";
+  }
+  $("#schoolPanel").hidden = true;
+  if (!toTitle) updateTrainingUi();
+}
+
+function startFightSchool() {
+  unlockAudio();
+  exitDemo?.();
+  state.mode = "training";
+  state.arcadeRun = null;
+  state.survivalRun = null;
+  state.teamBattle = null;
+  dailySession.active = false;
+  endScoreRun();
+  const progress = loadSchoolProgress();
+  const firstOpen = FIGHT_SCHOOL_LESSONS.findIndex((lesson) => !progress.completed[lesson.id]);
+  state.picks = [0, 1];
+  state.locks = [true, true];
+  startMatch(true);
+  state.phase = "fight";
+  state.phaseTime = 0;
+  schoolSession.machine = createFightSchoolState({
+    lesson: firstOpen < 0 ? 0 : firstOpen,
+    completed: firstOpen < 0 ? {} : progress.completed,
+  });
+  schoolSession.active = true;
+  schoolSession.savedDifficulty = state.aiDifficulty;
+  schoolSession.coachLast = {};
+  setAiDifficulty("passive");
+  state.training.dummyMode = "cpu";
+  state.training.infiniteGrit = true;
+  state.fighters.forEach((fighter) => { fighter.meter = GRIT_RULES.maximum; });
+  applySchoolLessonSetup();
+  renderSchoolPanel();
+  const lesson = fightSchoolLesson(schoolSession.machine);
+  announce(lesson ? lesson.name : "FIGHT SCHOOL", schoolCoach("start"), 2.4);
+  updateTrainingUi();
+}
+
+// COMBO TRIALS quick entry: boots the lab with the locked trial dummy config
+// (standing dummy, infinite Grit) using the current fighter picks.
+function startComboTrialsLab() {
+  unlockAudio();
+  schoolSession.active = false;
+  $("#schoolPanel").hidden = true;
+  state.mode = "training";
+  state.arcadeRun = null;
+  state.survivalRun = null;
+  state.teamBattle = null;
+  dailySession.active = false;
+  endScoreRun();
+  startMatch(true);
+  state.phase = "fight";
+  state.phaseTime = 0;
+  state.training.dummyMode = "stand";
+  state.training.infiniteGrit = true;
+  state.fighters.forEach((fighter) => { fighter.meter = GRIT_RULES.maximum; });
+  selectTrainingTrial(state.training, state.fighters[0].kitId, 0);
+  announce("COMBO TRIALS", "PICK A TRIAL · WATCH THE DEMO · EARN MEDALS", 1.8);
+  updateTrainingUi();
+}
+
+// R1.9 LEGEND: the touch HUD advertises the one-button jobs (CSS badges via
+// the data attribute, semantics via aria labels).
+function syncTouchControlStyle() {
+  $("#touchControls").dataset.controlStyle = state.controlStyle;
+  const legend = state.controlStyle === "legend";
+  $(".touch-hp").setAttribute("aria-label", legend
+    ? "Special attack, or super at full Grit"
+    : "Heavy punch, hook");
+  $(".touch-hk").setAttribute("aria-label", legend
+    ? "Kick special"
+    : "Heavy kick, roundhouse");
+}
+
+/**
+ * School progress fold. Called from guarded hook points (hit/block/finisher on
+ * sim paths behind !rollbackResimulating, walk from updateTrainingUi which
+ * already early-returns during resimulation).
+ */
+function schoolEvent(event) {
+  if (!schoolSession.active || !schoolSession.machine) return;
+  if (state.mode !== "training") return;
+  const progress = fightSchoolObserve(schoolSession.machine, event);
+  if (!progress) return;
+  trainingFxDebug.schoolSteps += 1;
+  saveSchoolProgress();
+  if (progress.graduated) {
+    announce("SCHOOL'S OUT", schoolCoach("graduate"), 2.6);
+    state.training.autoRecover = true;
+    // v2.1 PROGRESSION: graduation inks THE GRADUATE (ledger dedupes).
+    progressionEvent("fightSchool");
+    progressionEvaluateLedger();
+  } else if (progress.lessonComplete) {
+    const next = fightSchoolLesson(schoolSession.machine);
+    announce(next ? next.name : "FIGHT SCHOOL", schoolCoach("lesson"), 2.3);
+    applySchoolLessonSetup();
+  } else {
+    announce("NICE", schoolCoach("step"), 1.5);
+    applySchoolStepSetup();
+  }
+  renderSchoolPanel();
+}
+
+// Per-tick school observation: walking drills, the panel/dummy babysitting and
+// the deferred sim-side setups (dizzy stun, low-health KO dummy).
+function schoolTick() {
+  if (!schoolSession.active) return;
+  if (state.mode !== "training" || state.screen !== "fight") {
+    exitFightSchool({ toTitle: true });
+    return;
+  }
+  const machine = schoolSession.machine;
+  const lesson = fightSchoolLesson(machine);
+  const step = lesson?.steps[machine.step];
+  const [player, dummy] = state.fighters;
+  if (schoolSession.pendingSetup === "dizzy" && dummy
+    && state.simulationTick - schoolSession.dizzyCooldownTick > 90) {
+    if (dummy.dizzyFrames <= 0 && !dummy.down && dummy.wakeupFrames <= 0) {
+      enterDizzy(dummy, player);
+      schoolSession.dizzyCooldownTick = state.simulationTick;
+    }
+  }
+  if (schoolSession.pendingSetup === "lowHealth" && dummy && dummy.health > 5 && state.phase === "fight") {
+    dummy.health = 5;
+    updateHud();
+  }
+  if (step?.kind === "walk" && player && player.grounded && !player.attacking
+    && player.hitstunFrames <= 0 && player.blockstunFrames <= 0 && Math.abs(player.vx) > 40) {
+    const direction = Math.sign(player.vx) === player.facing ? "forward" : "back";
+    schoolEvent({ type: "walk", direction });
+  }
+}
 const initialsUi = {
   active: false,
   letters: ["A", "A", "A"],
@@ -1890,10 +2530,13 @@ function scheduleNextDemoMatch() {
 
 function scheduleIdleDemo() {
   clearIdleDemoTimer();
-  if (!state.attractEnabled || demoSession.active || state.screen !== "title" || document.hidden) return;
+  // Wave 15: CABINET MODE always attracts — a cabinet with the demo switched
+  // off is just a dark TV.
+  const attracts = state.attractEnabled || state.cabinetMode;
+  if (!attracts || demoSession.active || state.screen !== "title" || document.hidden) return;
   demoSession.idleTimer = window.setTimeout(() => {
     demoSession.idleTimer = 0;
-    if (state.attractEnabled && state.screen === "title" && !document.hidden && !$("#controlsDialog").open) startDemo({ attract: true });
+    if ((state.attractEnabled || state.cabinetMode) && state.screen === "title" && !document.hidden && !$("#controlsDialog").open) startDemo({ attract: true });
   }, DEMO_IDLE_DELAY_MS);
 }
 
@@ -4286,16 +4929,38 @@ function setupRoster() {
   });
   // v2.1 PROGRESSION: mastery chips on the fresh cards.
   refreshMasteryBadges();
+  // R1.9: combo-trial medal readout per fighter card.
+  refreshTrialMedalBadges();
   updateRosterUI();
 }
+
+// R1.9: the move list is a live frame-data reference now. Rows come from
+// listFighterFrameData — real attack instances, post-ARCADE_TUNING — so the
+// dialog can never drift from the sim. Level chips give LOW/OH/MID/THROW at a
+// glance (text + color, never hue alone).
+const MOVE_LEVEL_TAGS = Object.freeze({
+  mid: "MID", low: "LOW", overhead: "OH", throw: "THROW", air: "AIR",
+});
 
 function renderMoveList(fighterId = "deathblow") {
   const kit = getFighterKit(fighterId);
   if (!kit) return;
   $("#moveListIdentity").innerHTML = `<strong>${kit.archetype}</strong> · ${kit.summary}`;
-  $("#moveListRows").innerHTML = listFighterMoves(fighterId)
-    .map(({ name, command }) => `<div class="move-list-row"><b>${name}</b><span>${command}</span></div>`)
-    .join("");
+  const signed = (value) => `${value >= 0 ? "+" : ""}${value}`;
+  const rows = listFighterFrameData(fighterId).map((row) => `
+    <div class="move-list-row frame-row">
+      <b>${row.name}</b>
+      <span>${row.command}</span>
+      <span class="sar">${row.startup} / ${row.active} / ${row.recovery}</span>
+      <span class="sar">${row.level === "throw" ? "—" : `${signed(row.onHit)} / ${signed(row.onBlock)}`}</span>
+      <span class="sar">${row.damage}</span>
+      <em class="level-chip lvl-${row.level}">${MOVE_LEVEL_TAGS[row.level] || row.level.toUpperCase()}</em>
+    </div>`);
+  $("#moveListRows").className = "move-list-rows frame-data";
+  $("#moveListRows").innerHTML = `
+    <div class="move-list-row frame-head">
+      <b>MOVE</b><span>COMMAND</span><span>S / A / R</span><span>HIT / BLOCK</span><span>DMG</span><span>LVL</span>
+    </div>` + rows.join("");
 }
 
 function arcadeOpponentDef(match = currentArcadeMatch(state.arcadeRun)) {
@@ -4961,6 +5626,10 @@ function showScreen(name) {
   const trainingVisible = playing && state.mode === "training";
   $("#trainingPanel").hidden = !trainingVisible;
   $("#gameFrame").classList.toggle("training-active", trainingVisible);
+  // R1.9: the input column and school panel live and die with the lab.
+  $("#inputHistoryColumn").hidden = !trainingVisible;
+  if (!trainingVisible) $("#schoolPanel").hidden = true;
+  else renderSchoolPanel();
   const playerControlled = playing && state.mode !== "demo";
   $("#touchControls").classList.toggle("playing", playerControlled);
   $("#touchPauseButton").classList.toggle("playing", playerControlled);
@@ -4980,6 +5649,11 @@ function showScreen(name) {
   if (name !== "ending" && endingSequence.active) cancelEndingSequence();
   if (name !== "result" && name !== "ending") updateDailyBanners();
   if (name === "stage") renderMutatorBar();
+  // Wave 15: hold the screen awake through fights/attract, release on menus;
+  // cabinet marquee lives and dies with the title screen.
+  syncWakeLock();
+  const marquee = $("#cabinetMarquee");
+  if (marquee) marquee.hidden = !(state.cabinetMode && name === "title");
 }
 
 function startSelect(mode) {
@@ -5488,6 +6162,9 @@ function finishRound(winner, type = -1) {
   state.rounds[winner] += 1;
   state.finisherType = type;
   const winDef = state.fighters[winner].def;
+  // Wave 15: the KO slams in the hands — for both the knockout hold and the
+  // opening of a Final Blow ceremony (all gates inside combatHaptic).
+  combatHaptic("ko");
   if (type >= 0) {
     const duration = performFinisher(winner, type);
     state.phaseTime = duration;
@@ -6044,6 +6721,13 @@ function updateFinisher(dt) {
   if (finisher.fatalityTriggered && state.graphicFatalities && (finisher.arterialFrames || 0) > 0) {
     finisher.arterialFrames -= 1;
     const pump = 0.5 + 0.5 * Math.abs(Math.sin(state.simulationTick * 0.16));
+    // Wave 15: one haptic lub-dub per peak of the same arterial pump wave.
+    // Module-level tick latch on the wallSplatLastTick pattern; combatHaptic
+    // carries the rollbackResimulating guard.
+    if (pump > 0.94 && state.simulationTick - lastHeartbeatHapticTick > 12) {
+      lastHeartbeatHapticTick = state.simulationTick;
+      combatHaptic("fatalityHeartbeat");
+    }
     const scriptId = attacker.def.finisherScriptId || attacker.def.id;
     const fatality = getGraphicFatality(scriptId, finisher.type);
     const wound = fatalityWoundPoint(victim, fatality, finisher.direction);
@@ -6494,11 +7178,20 @@ function renderTrainingTrials() {
   const trials = comboTrialsForFighter(fighterId);
   const select = $("#trainingTrialSelect");
   if (state.training.trialFighterId !== fighterId) selectTrainingTrial(state.training, fighterId, 0);
-  if (select.dataset.fighterId !== fighterId) {
+  // R1.9: options carry the tier tag + a check for earned medals, so the
+  // rebuild key includes the medal count for this fighter.
+  const counts = fighterMedalCounts(trialMedals, fighterId);
+  const stamp = `${fighterId}:${counts.total}`;
+  if (select.dataset.stamp !== stamp) {
+    select.dataset.stamp = stamp;
     select.dataset.fighterId = fighterId;
-    select.innerHTML = trials.map((trial, index) => `<option value="${index}">${index + 1} · ${trial.name}</option>`).join("");
+    select.innerHTML = trials.map((trial, index) => {
+      const medal = medalForTrial(trialMedals, fighterId, trial.id);
+      return `<option value="${index}">${index + 1} · ${trial.name} · ${trial.tier.toUpperCase()}${medal ? " ✓" : ""}</option>`;
+    }).join("");
   }
   select.value = String(state.training.trialIndex);
+  $("#trainingTrialMedals").innerHTML = counts.total ? medalMarkup(counts) : "";
 }
 
 function updateTrainingUi(input = {}) {
@@ -6507,6 +7200,14 @@ function updateTrainingUi(input = {}) {
   const [player] = state.fighters;
   const combo = player.combo.snapshot(state.simulationTick);
   if (combo.damage > 0) state.training.lastDamage = combo.damage;
+  // R1.9: per-tick training feeds — frame meter cells, the arcade input
+  // column, and the FIGHT SCHOOL walk/setup babysitter. All render-side; this
+  // function already early-returns during rollback resimulation.
+  feedFrameMeter();
+  feedInputColumn(input);
+  renderInputColumn();
+  schoolTick();
+  renderSchoolPanel();
   const limbSuffix = input.limb === "kick" ? "K" : "P";
   const labels = [
     ["left", "←"], ["right", "→"], ["down", "↓"], ["jump", "↑"],
@@ -6543,13 +7244,16 @@ function updateTrainingUi(input = {}) {
     : `${snapshot.lastAdvantage >= 0 ? "+" : ""}${snapshot.lastAdvantage} ACTUAL`;
   // Release 1.7: Perfect Guard practice readout (player just-defends landed).
   $("#trainingPerfectGuards").textContent = String(snapshot.perfectGuards);
-  $("#trainingInputs").textContent = `INPUT: ${snapshot.inputHistory.join(" › ") || "—"}  //  DUMMY: ${snapshot.dummyMode.toUpperCase()}  //  RESETS: ${snapshot.resets}`;
+  // R1.9: the arcade input column (left edge) replaced the flat INPUT line;
+  // this line keeps the dummy/reset status readout only.
+  $("#trainingInputs").textContent = `DUMMY: ${snapshot.dummyMode.toUpperCase()}  //  RESETS: ${snapshot.resets}  //  ${snapshot.lastResult || "READY"}`;
   $("#trainingTrialSteps").innerHTML = `TRIAL: ${snapshot.trial.steps.map((step, index) => `<span class="${step.complete ? "done" : index === snapshot.trial.step ? "next" : ""}">${step.label}</span>`).join(" › ") || "—"}`;
   $("#trainingTrialStatus").textContent = `${snapshot.trial.status}${snapshot.trial.complete ? ` · ${snapshot.trial.completions} CLEAR` : ""}`;
   $("#trainingDummySelect").value = snapshot.dummyMode;
   $("#trainingRecoverToggle").checked = snapshot.autoRecover;
   $("#trainingGritToggle").checked = snapshot.infiniteGrit;
   $("#trainingHitboxToggle").checked = snapshot.showHitboxes;
+  $("#trainingFrameMeterToggle").checked = snapshot.showFrameMeter;
   $("#trainingRecordButton").textContent = snapshot.recordingActive ? "STOP & PLAY" : "RECORD P2";
   $("#trainingPlaybackButton").disabled = snapshot.recordingFrames === 0;
   $("#trainingPlaybackButton").textContent = snapshot.dummyMode === "playback"
@@ -6573,6 +7277,7 @@ function syncNewOptionsUi() {
   $("#soundCaptionsToggle").checked = state.soundCaptions;
   $("#visualQualitySelect").value = state.visualQuality;
   $("#attractModeToggle").checked = state.attractEnabled;
+  if ($("#cabinetModeToggle")) $("#cabinetModeToggle").checked = state.cabinetMode;
 }
 
 function getPad(index) {
@@ -6735,6 +7440,11 @@ function tryFinish(side, input) {
   // intentionally no distance check: the winner can finish from anywhere.
   const type = state.graphicFatalities ? (input.finisherVariant === 1 ? 1 : 0) : 0;
   finishRound(side, type);
+  // R1.9 FIGHT SCHOOL: the LP/LK Final Blow window lesson validates on the
+  // executed finisher (guarded meta observation, announce() pattern).
+  if (!rollbackResimulating && side === 0 && state.mode === "training") {
+    schoolEvent({ type: "finisher" });
+  }
   return true;
 }
 
@@ -6804,6 +7514,15 @@ function beginAttack(fighter, action, input = {}, { reversal = false, force = fa
   fighter.attacking = kitMove || (advancedActions.has(action)
     ? createAdvancedMove(action)
     : createCombatMove(action, moveContext));
+  // R1.9 LEGEND: one-button specials trade ~10% damage. Deterministic: the
+  // style is shared match config online (matchConfig.controlStyles) and the
+  // single local setting offline, so both rollback peers scale identically.
+  // CPU-driven seats never pay the tax.
+  if (legendScaledAction(action) && activeControlStyle(fighter.side) === "legend"
+    && !sideIsCpuControlled(fighter.side)) {
+    fighter.attacking.damage = Number((fighter.attacking.damage * LEGEND_DAMAGE_SCALE).toFixed(4));
+    fighter.attacking.chipDamage = Number(((fighter.attacking.chipDamage || 0) * LEGEND_DAMAGE_SCALE).toFixed(4));
+  }
   if (fighter.def.boss) {
     fighter.attacking.damage = Number((fighter.attacking.damage * 1.08).toFixed(4));
     fighter.attacking.chipDamage = Number(((fighter.attacking.chipDamage || 0) * 1.08).toFixed(4));
@@ -6838,21 +7557,18 @@ function beginAttack(fighter, action, input = {}, { reversal = false, force = fa
     fighter.attacking.hitstunFrames += flow;
   }
   if (state.mode === "training" && fighter.side === 0) {
+    // R1.9: the S/A/R computation is the shared attackFrameData helper now, so
+    // this readout, the frame meter and the move list all agree by construction.
     const move = fighter.attacking;
-    const startup = Number.isFinite(move.startupFrames) ? move.startupFrames : move.activeStartFrame;
-    const active = Number.isFinite(move.activeFrames)
-      ? move.activeFrames
-      : Math.max(1, move.activeEndFrame - move.activeStartFrame + 1);
-    const recovery = Number.isFinite(move.recoveryFrames)
-      ? move.recoveryFrames
-      : Math.max(0, move.durationFrames - move.activeEndFrame);
+    const data = attackFrameData(move);
     state.training.lastMove = {
-      name: move.moveName || move.profileId || move.kind,
-      startup,
-      active,
-      recovery,
-      onHit: (move.hitstunFrames || 0) - recovery,
-      onBlock: (move.blockstunFrames || 0) - recovery,
+      name: move.moveName || prettyProfileName(move.profileId, fighter.kitId) || move.kind,
+      startup: data.startup,
+      active: data.active,
+      recovery: data.recovery,
+      onHit: data.onHit,
+      onBlock: data.onBlock,
+      level: data.level,
     };
     state.training.lastAdvantage = null;
   }
@@ -7046,7 +7762,12 @@ function prepareFighterInput(fighter, input) {
     normalized.heavy = false;
   }
   for (const action of advancedActions) normalized[action] = Boolean(normalized[action] || source[action]);
-  Object.assign(normalized, applyControlStyle(normalized, activeControlStyle(side), fighter.facing));
+  // R1.9: LEGEND expands its single special pulse against the held direction
+  // here, inside the sim, identically on both rollback peers. The airborne
+  // flag keeps the air special reachable from the one button.
+  Object.assign(normalized, applyControlStyle(normalized, activeControlStyle(side), fighter.facing, {
+    airborne: !fighter.grounded,
+  }));
   recordInput(side, normalized, fighter);
   if (state.phase === "fight") {
     const command = recognizeFighterCommand(
@@ -7068,6 +7789,12 @@ function prepareFighterInput(fighter, input) {
       normalized.heavy = false;
       normalized.enhanced = false;
       commandHistory[side].splice(0, command.endIndex + 1);
+      // R1.9: motion-recognition flash for the training input column — a
+      // render-side latch on the announce() pattern, fired exactly when the
+      // recognizer consumes the tokens.
+      if (!rollbackResimulating && state.mode === "training" && side === 0) {
+        latchInputColumnFlash(command.action, fighter);
+      }
     }
     // A completed motion always beats the proximity grab shortcut, so close-range
     // command specials stay reachable while touching an opponent.
@@ -7125,6 +7852,8 @@ function enterDizzy(fighter, attacker) {
   spawnCombatText(fighter.x, fighter.y - fighter.height - 52, "DIZZY", "#ffd54a");
   duckMusic(0.55, 620);
   sound("ko", fighter);
+  // Wave 15: the dizzy flutters in the hands (all gates inside).
+  combatHaptic("dizzy");
   // Wave 9: dazed voice bark layered over the ring (guarded + tick-deduped).
   fighterReactiveCue(fighter, "dizzy");
   // Wave 6: camera pop on the dizzy trigger (render-only latch, guarded +
@@ -7498,6 +8227,8 @@ function spawnWallImpact(fighter, wallDirection) {
   // Wave 7: a wall splat is a heavy moment — kick the RGB-split impulse.
   // Module-level render-only latch; profile/accessibility gates apply at draw.
   if (!rollbackResimulating) aberrationImpulse = Math.max(aberrationImpulse, 0.55);
+  // Wave 15: the corner answers in the hands too — double pulse.
+  combatHaptic("wallSplat");
   const wallX = wallDirection < 0
     ? MOVEMENT_RULES.stageMinX - 30
     : MOVEMENT_RULES.stageMaxX + 30;
@@ -8423,7 +9154,7 @@ function triggerProjectile(projectile, victim) {
   spawnHit(projectile.x, projectile.y, owner.def, impactTier, blocked, { direction: hitDirection, counter });
   if (projectile.style === "feedback") spawnCombatText(projectile.x, projectile.y - 86, blocked ? "ECHO BLOCK" : "FEEDBACK ECHO!", projectile.color);
   else if (counter) spawnCombatText(projectile.x, projectile.y - 72, "COUNTER", projectile.color);
-  else if (!blocked && projectile.level === ATTACK_LEVELS.LOW) spawnCombatText(projectile.x, projectile.y - 61, "LOW SHOT", projectile.color);
+  else if (!blocked && projectile.level === ATTACK_LEVELS.LOW) spawnCombatText(projectile.x, projectile.y - 61, colorAssistActive() ? "\u25bc LOW SHOT" : "LOW SHOT", assistColor("low", projectile.color));
   applyViolenceResponse(impactTier, { blocked, counter });
   state.lastImpactSide = owner.side;
   projectile.hit = true;
@@ -9026,6 +9757,45 @@ function registerAliFlow(attacker, attack) {
   if (massive && $("#flashToggle").checked) state.flash = Math.max(state.flash, 0.06);
 }
 
+// R1.9: shared trial/school observation for every landed player hit. Lives in
+// one helper because the grab path returns out of hit() before the ordinary
+// flow — throws and throw-type back specials must still advance trials and
+// FIGHT SCHOOL. Sim-visible state is only the trial machine the lab already
+// owned; medals/school are guarded meta on the announce() pattern.
+function observeTrainingHit(attacker, victim, attack) {
+  if (state.mode !== "training" || attacker.side !== 0) return;
+  const action = attack.kitAction || attack.kind;
+  const limb = attack.limb || "punch";
+  const trialProgress = recordTrainingTrialHit(state.training, {
+    fighterId: attacker.kitId,
+    action,
+    limb,
+    attackSerial: attack.attackSerial,
+    frame: state.simulationTick,
+  });
+  if (rollbackResimulating) return;
+  // Medal persistence: first completion of a trial banks its tier medal. Demo
+  // playback completes trials too but never earns the medal.
+  if (trialProgress.complete && !trialDemo.active) {
+    const trial = comboTrialsForFighter(attacker.kitId)[state.training.trialIndex];
+    if (trial && !medalForTrial(trialMedals, attacker.kitId, trial.id)) {
+      awardTrialMedal(trialMedals, attacker.kitId, trial);
+      saveTrialMedals();
+      trainingFxDebug.medalAwards += 1;
+      state.training.lastResult = `${trial.tier.toUpperCase()} MEDAL · ${trial.name}`;
+      refreshTrialMedalBadges();
+    }
+  }
+  schoolEvent({
+    type: "hit",
+    action,
+    limb,
+    attackSerial: attack.attackSerial,
+    back: Boolean(attack.backThrow),
+    dizzy: victim.dizzyFrames > 0,
+  });
+}
+
 function hit(attacker, victim, attack, collision) {
   if (triggerSouthpawCounter(victim, attacker, attack, collision)) return;
   if (attack.level === ATTACK_LEVELS.THROW) {
@@ -9039,6 +9809,7 @@ function hit(attacker, victim, attack, collision) {
     }
     // Release 1.7 wave 11: getting grabbed punishes the taunt too.
     if (victim.tauntFrames > 0) interruptTaunt(victim);
+    observeTrainingHit(attacker, victim, attack);
     beginGrabHold(attacker, victim, attack);
     return;
   }
@@ -9055,14 +9826,13 @@ function hit(attacker, victim, attack, collision) {
   // Release 1.7: Perfect Guard — the block STARTED within the just-defend
   // window of this impact. Purely derived from existing frame counters.
   const perfect = blocked && isPerfectGuard(victim.guardStartedTick, state.simulationTick);
-  if (state.mode === "training" && attacker.side === 0 && !blocked) {
-    recordTrainingTrialHit(state.training, {
-      fighterId: attacker.kitId,
-      action: attack.kitAction || attack.kind,
-      attackSerial: attack.attackSerial,
-      frame: state.simulationTick,
-    });
+  // R1.9 FIGHT SCHOOL: guard lessons validate on the block itself (the
+  // LOW/OVERHEAD combat-text hook level), landed-hit lessons below. Both are
+  // meta observations on the announce() guard pattern.
+  if (!rollbackResimulating && state.mode === "training" && blocked && victim.side === 0) {
+    schoolEvent({ type: "block", level: attack.level });
   }
+  if (!blocked) observeTrainingHit(attacker, victim, attack);
   const armored = !blocked
     && attack.level !== ATTACK_LEVELS.THROW
     && victim.attacking?.armorFrames > 0
@@ -9212,6 +9982,7 @@ function hit(attacker, victim, attack, collision) {
     blocked,
     counter,
     final: attack.superMove && attacker.attackHits >= (attack.maxHits || 1),
+    damage: attack.damage,
   });
   const impact = collision?.point || { x: victim.x - attacker.facing * 22, y: victim.y - 105 };
   spawnHit(impact.x, impact.y, attacker.def, impactTier, blocked, { direction: attacker.facing, counter });
@@ -9222,8 +9993,15 @@ function hit(attacker, victim, attack, collision) {
     if ($("#flashToggle").checked) state.flash = Math.max(state.flash, attacker.attackHits >= attack.maxHits ? 0.1 : 0.04);
   }
   if (counter) spawnCombatText(impact.x, impact.y - 74, "COUNTER", attacker.def.accent);
-  else if (!blocked && attack.level === ATTACK_LEVELS.OVERHEAD) spawnCombatText(impact.x, impact.y - 70, "OVERHEAD", attacker.def.accent);
-  else if (!blocked && attack.level === ATTACK_LEVELS.LOW) spawnCombatText(impact.x, impact.y - 64, "LOW", attacker.def.accent);
+  // R1.9 color assist: the two mixup callouts pick up the colorblind-safe
+  // palette plus a distinct glyph each (drop-arrow / down-chevron) so the cue
+  // never rides on hue alone. Standard palette keeps the shipped label text
+  // exactly (smoke tests read combatTextLabels).
+  else if (!blocked && attack.level === ATTACK_LEVELS.OVERHEAD) {
+    spawnCombatText(impact.x, impact.y - 70, colorAssistActive() ? "⤓ OVERHEAD" : "OVERHEAD", assistColor("overhead", attacker.def.accent));
+  } else if (!blocked && attack.level === ATTACK_LEVELS.LOW) {
+    spawnCombatText(impact.x, impact.y - 64, colorAssistActive() ? "▼ LOW" : "LOW", assistColor("low", attacker.def.accent));
+  }
   else if (!blocked && attack.level === ATTACK_LEVELS.THROW) spawnCombatText(impact.x, impact.y - 72, "THROW", attacker.def.accent);
   // Release 1.7: Perfect Guard flash — a cyan ring plus PERFECT combat text
   // (checksum-exempt state.effects, same channel every hit spark uses).
@@ -9246,9 +10024,20 @@ function hit(attacker, victim, attack, collision) {
   state.lastImpactSide = attacker.side;
 }
 
+// R1.9 FIGHT SCHOOL: the Final Blow lesson needs the REAL finish flow, which
+// training otherwise short-circuits. Armed only while the school's finisher
+// step is live and the dummy went down — training is strictly offline, so a
+// meta read here can never touch rollback determinism.
+function schoolFinisherArmed() {
+  if (!schoolSession.active || !schoolSession.machine) return false;
+  const lesson = fightSchoolLesson(schoolSession.machine);
+  return lesson?.steps[schoolSession.machine.step]?.kind === "finisher";
+}
+
 function checkKnockout() {
   if (state.phase !== "fight" || !state.fighters.some((fighter) => fighter.health <= 0)) return;
-  if (state.mode === "training") {
+  if (state.mode === "training"
+    && !(schoolFinisherArmed() && state.fighters[1].health <= 0 && state.fighters[0].health > 0)) {
     const winner = state.fighters[0].health <= 0 ? 1 : 0;
     if (state.training.autoRecover) {
       state.training.lastResult = `${state.fighters[winner].def.name.toUpperCase()} RESET`;
@@ -9378,7 +10167,11 @@ function violenceTier(kind = "light") {
   return VIOLENCE_TIERS[kind] || VIOLENCE_TIERS.light;
 }
 
-function applyViolenceResponse(kind, { blocked = false, counter = false, final = false } = {}) {
+function applyViolenceResponse(kind, { blocked = false, counter = false, final = false, damage = 0 } = {}) {
+  // Wave 15: every screen response has a matching hand response — phone
+  // vibration plus pad dual-rumble (toggle, resim guard and rate cap all
+  // live inside combatHaptic).
+  combatHaptic(kind, { damage, blocked, counter });
   if (blocked) {
     state.shake = Math.max(state.shake, 0.1);
     state.hitstop = Math.max(state.hitstop, 0.067);
@@ -9824,7 +10617,11 @@ function simulateOfflineGameTick(dt) {
   // presses during the freeze reach the buffer. simulatePreparedGameTick owns
   // the freeze itself and stops everything but the input pipeline.
   const bothCpu = state.mode === "demo" || state.mode === "tournament";
+  // R1.9: a running trial demo drives the player seat through the QA-style
+  // scripted input path (training mode only; readQaInput still outranks it so
+  // probes can interrupt a demo).
   let input0 = readQaInput(0)
+    || trialDemoInput()
     || (bothCpu ? aiInput(state.fighters[0], state.fighters[1], dt) : readInput(0));
   const manualTrainingInput = state.mode === "training" && state.training.dummyMode === "record"
     ? readInput(1) : null;
@@ -14000,7 +14797,7 @@ function drawDizzyStars(fighter, time) {
     const x = centreX + Math.cos(angle) * 52;
     const y = centreY + Math.sin(angle) * 15;
     const size = 7 + Math.sin(angle * 2) * 2.4;
-    ctx.fillStyle = index % 2 ? "#ffd54a" : "#fff2b8";
+    ctx.fillStyle = index % 2 ? assistColor("dizzy", "#ffd54a") : assistColor("dizzyAlt", "#fff2b8");
     ctx.beginPath();
     for (let point = 0; point < 10; point += 1) {
       const radius = point % 2 ? size * 0.44 : size;
@@ -14016,7 +14813,7 @@ function drawDizzyStars(fighter, time) {
   ctx.globalAlpha = 1;
   ctx.font = "900 20px system-ui, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#ffd54a";
+  ctx.fillStyle = assistColor("dizzy", "#ffd54a");
   ctx.strokeStyle = "rgba(0,0,0,.72)";
   ctx.lineWidth = 4;
   ctx.strokeText("DIZZY", centreX, centreY - 30);
@@ -14024,7 +14821,7 @@ function drawDizzyStars(fighter, time) {
   // A thin drain bar shows the dizzy running out, so the punish window is legible.
   ctx.fillStyle = "rgba(0,0,0,.55)";
   ctx.fillRect(centreX - 34, centreY - 22, 68, 5);
-  ctx.fillStyle = "#ffd54a";
+  ctx.fillStyle = assistColor("dizzy", "#ffd54a");
   ctx.fillRect(centreX - 34, centreY - 22, 68 * remaining, 5);
   ctx.restore();
 }
@@ -14046,7 +14843,7 @@ function drawGuardCrushMarker(fighter, time) {
     const x = centreX + Math.cos(angle) * 50;
     const y = centreY + Math.sin(angle) * 14;
     const size = 6 + Math.sin(angle * 2) * 2;
-    ctx.fillStyle = index % 2 ? "#7de8ff" : "#d8f9ff";
+    ctx.fillStyle = index % 2 ? assistColor("crush", "#7de8ff") : "#d8f9ff";
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(angle * 1.7);
@@ -14061,14 +14858,14 @@ function drawGuardCrushMarker(fighter, time) {
   ctx.globalAlpha = 1;
   ctx.font = "900 20px system-ui, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillStyle = "#7de8ff";
+  ctx.fillStyle = assistColor("crush", "#7de8ff");
   ctx.strokeStyle = "rgba(0,0,0,.72)";
   ctx.lineWidth = 4;
   ctx.strokeText("CRUSHED", centreX, centreY - 30);
   ctx.fillText("CRUSHED", centreX, centreY - 30);
   ctx.fillStyle = "rgba(0,0,0,.55)";
   ctx.fillRect(centreX - 34, centreY - 22, 68, 5);
-  ctx.fillStyle = "#7de8ff";
+  ctx.fillStyle = assistColor("crush", "#7de8ff");
   ctx.fillRect(centreX - 34, centreY - 22, 68 * remaining, 5);
   ctx.restore();
 }
@@ -14893,6 +15690,71 @@ function drawFinisherOverlay() {
   }
 }
 
+// R1.9: hex + alpha helper for the viewer's translucent fills.
+function fillWithAlpha(hex, alpha) {
+  const value = parseInt(String(hex).replace("#", ""), 16);
+  if (!Number.isFinite(value)) return `rgba(255,255,255,${alpha})`;
+  return `rgba(${(value >> 16) & 255},${(value >> 8) & 255},${value & 255},${alpha})`;
+}
+
+const FRAME_PHASE_ROLES = Object.freeze({
+  startup: ["frameStartup", "#59d66d"],
+  active: ["frameActive", "#ff4d5e"],
+  recovery: ["frameRecovery", "#3fa7ff"],
+  hitstun: ["frameStun", "#ffd54a"],
+  blockstun: ["frameStun", "#b8985a"],
+});
+
+function framePhaseColor(phase) {
+  const entry = FRAME_PHASE_ROLES[phase];
+  if (!entry) return "#252c35";
+  return assistColor(entry[0], entry[1]);
+}
+
+/**
+ * R1.9: SFV-style frame meter strip — one cell per simulation tick per
+ * fighter, colored startup/active/recovery/stun, with the measured ADVANTAGE
+ * number rendered at the live edge. Render-only, fed by feedFrameMeter(),
+ * gated behind the FRAME METER training toggle.
+ */
+function drawTrainingFrameMeter() {
+  if (state.mode !== "training" || !state.training.showFrameMeter) return;
+  if (state.screen !== "fight" || state.fighters.length !== 2) return;
+  const cellWidth = 7;
+  const cellHeight = 13;
+  const originX = 150;
+  const width = FRAME_METER_CELLS * (cellWidth + 1) + 12;
+  const originY = H - 104;
+  ctx.save();
+  ctx.fillStyle = "rgba(3,8,13,.82)";
+  ctx.fillRect(originX - 34, originY - 8, width + 116, cellHeight * 2 + 30);
+  ctx.strokeStyle = "rgba(78,221,245,.5)";
+  ctx.strokeRect(originX - 34, originY - 8, width + 116, cellHeight * 2 + 30);
+  ctx.font = "900 11px ui-monospace, monospace";
+  ctx.textBaseline = "top";
+  for (const side of [0, 1]) {
+    const history = frameMeter.history[side];
+    const rowY = originY + side * (cellHeight + 4);
+    ctx.fillStyle = side === 0
+      ? assistColor("hurtboxP1", "#35e7ff")
+      : assistColor("hurtboxP2", "#ff4dc4");
+    ctx.fillText(`P${side + 1}`, originX - 28, rowY + 2);
+    for (let index = 0; index < history.length; index += 1) {
+      const phase = history[index];
+      ctx.fillStyle = phase === "idle" ? "#1c232c" : framePhaseColor(phase);
+      ctx.fillRect(originX + index * (cellWidth + 1), rowY, cellWidth, cellHeight);
+    }
+  }
+  const advantage = state.training.lastAdvantage;
+  if (Number.isFinite(advantage)) {
+    ctx.fillStyle = advantage >= 0
+      ? assistColor("frameStartup", "#71f7a1")
+      : assistColor("frameActive", "#ff6478");
+    ctx.fillText(`${advantage >= 0 ? "+" : ""}${advantage}`, originX + width - 4, originY + 8);
+  }
+  ctx.restore();
+}
+
 function drawDebugOverlay() {
   const trainingBoxes = state.mode === "training" && state.training.showHitboxes;
   if (!state.debug && !trainingBoxes) return;
@@ -14901,17 +15763,90 @@ function drawDebugOverlay() {
   ctx.font = "700 14px ui-monospace, SFMono-Regular, Menlo, monospace";
   ctx.textBaseline = "top";
 
+  // R1.9 viewer polish: dashed hurtboxes with translucent phase-colored fills
+  // (startup/active/recovery from the live move), solid filled hitboxes with
+  // attack-level tags, dotted pushbox, and the proximity-grab ring — all
+  // through assistColor so the colorblind palettes reach the canvas too.
   for (const fighter of state.fighters) {
-    const hurtColor = fighter.side === 0 ? "#35e7ff" : "#ff4dc4";
+    const phase = trainingFramePhase(fighter);
+    const hurtColor = fighter.side === 0
+      ? assistColor("hurtboxP1", "#35e7ff")
+      : assistColor("hurtboxP2", "#ff4dc4");
+    ctx.setLineDash([6, 4]);
     ctx.strokeStyle = hurtColor;
-    for (const box of getHurtboxes(fighter)) ctx.strokeRect(box.x, box.y, box.width, box.height);
-    ctx.strokeStyle = "rgba(110,255,125,.88)";
+    const phaseTint = fighter.attacking ? framePhaseColor(phase) : null;
+    for (const box of getHurtboxes(fighter)) {
+      if (phaseTint) {
+        ctx.fillStyle = fillWithAlpha(phaseTint, 0.16);
+        ctx.fillRect(box.x, box.y, box.width, box.height);
+      }
+      ctx.strokeRect(box.x, box.y, box.width, box.height);
+    }
+    ctx.setLineDash([2, 3]);
+    ctx.strokeStyle = fillWithAlpha(assistColor("pushbox", "#6eff7d"), 0.88);
     const pushHalf = fighter.crouch
       ? fighter.movement.crouchingPushboxHalfWidth
       : fighter.movement.standingPushboxHalfWidth;
     ctx.strokeRect(fighter.x - pushHalf, fighter.y - 112, pushHalf * 2, 112);
-    ctx.strokeStyle = "#ffef5a";
-    for (const box of getActiveHitboxes(fighter)) ctx.strokeRect(box.x, box.y, box.width, box.height);
+    ctx.setLineDash([]);
+    const hitColor = assistColor("hitbox", "#ffef5a");
+    ctx.strokeStyle = hitColor;
+    ctx.fillStyle = fillWithAlpha(hitColor, 0.3);
+    let levelTagged = false;
+    for (const box of getActiveHitboxes(fighter)) {
+      ctx.fillRect(box.x, box.y, box.width, box.height);
+      ctx.strokeRect(box.x, box.y, box.width, box.height);
+      if (!levelTagged && fighter.attacking) {
+        levelTagged = true;
+        ctx.font = "900 12px ui-monospace, monospace";
+        ctx.fillStyle = "#0b0e14";
+        ctx.fillRect(box.x, box.y - 15, 9 * String(fighter.attacking.level).length + 8, 14);
+        ctx.fillStyle = hitColor;
+        ctx.fillText(String(fighter.attacking.level).toUpperCase(), box.x + 4, box.y - 14);
+        ctx.font = "700 14px ui-monospace, SFMono-Regular, Menlo, monospace";
+      }
+    }
+  }
+
+  if (trainingBoxes && state.fighters.length === 2) {
+    // 104px proximity-grab ring around the player, the same rule the grab
+    // hint reads — lights up exactly when a grab would connect.
+    const [player, opponent] = state.fighters;
+    const grabReady = inProximityGrabRange(player, opponent) && !player.attacking;
+    ctx.setLineDash(grabReady ? [] : [7, 6]);
+    ctx.lineWidth = grabReady ? 3 : 2;
+    ctx.strokeStyle = grabReady
+      ? assistColor("frameStartup", "#71f7a1")
+      : "rgba(255,255,255,.4)";
+    ctx.beginPath();
+    ctx.ellipse(player.x, player.y - 6, PROXIMITY_GRAB_RANGE, PROXIMITY_GRAB_RANGE * 0.24, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.lineWidth = 2;
+    // On-canvas legend for the viewer.
+    const legend = [
+      ["STARTUP", framePhaseColor("startup")],
+      ["ACTIVE", framePhaseColor("active")],
+      ["RECOVERY", framePhaseColor("recovery")],
+      ["HITBOX", assistColor("hitbox", "#ffef5a")],
+      ["HURTBOX P1", assistColor("hurtboxP1", "#35e7ff")],
+      ["HURTBOX P2", assistColor("hurtboxP2", "#ff4dc4")],
+      ["GRAB RING 104PX", "#ffffff"],
+    ];
+    // Right edge, below the training panel and above the school panel, clear
+    // of the left-side input history column.
+    const legendX = W - 150;
+    const legendY = Math.round(H * 0.5);
+    ctx.font = "900 10px ui-monospace, monospace";
+    ctx.fillStyle = "rgba(0,0,0,.72)";
+    ctx.fillRect(legendX, legendY, 136, legend.length * 15 + 10);
+    legend.forEach(([label, color], index) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(legendX + 6, legendY + 6 + index * 15, 9, 9);
+      ctx.fillStyle = "#e8eef4";
+      ctx.fillText(label, legendX + 20, legendY + 5 + index * 15);
+    });
+    ctx.font = "700 14px ui-monospace, SFMono-Regular, Menlo, monospace";
   }
 
   if (!state.debug) {
@@ -16085,6 +17020,7 @@ function draw(time) {
   drawSuperCutIn(hudDtMs);
   drawCrtOverlay(time);
   drawDebugOverlay();
+  drawTrainingFrameMeter();
 }
 
 function clearLatchedInputEdges() {
@@ -16100,6 +17036,9 @@ function runSimulationStep(dt, tick) {
 function loop(now) {
   const elapsed = Math.max(0, (now - state.lastRenderTime) / 1000 || 0);
   state.lastRenderTime = now;
+  // Wave 15: the adaptive governor watches real frame times (all gates,
+  // including the online/forced-profile exclusions, live inside).
+  feedPerformanceGovernor(elapsed * 1000);
   const frame = state.qaManualMode
     ? {
       steps: 0,
@@ -16156,16 +17095,210 @@ function applyAccessibilitySettings() {
   applyPerformanceSettings();
 }
 
+// ---------------------------------------------------------------------------
+// R1.9 wave 15: adaptive runtime performance governor (integration layer).
+// The pure hysteresis machine lives in engine/polish.mjs; this layer feeds it
+// real render-loop frame times and applies its tier decisions. Hard gates:
+// only in AUTO quality (never fighting a user-forced profile), never during
+// online matches (fixed presentation pacing for determinism of feel), never
+// in CABINET MODE (which pins high), and only while a fight or demo is
+// actually rendering. state.performance is render-only and un-checksummed,
+// so every decision is rollback-safe by construction.
+// ---------------------------------------------------------------------------
+const performanceGovernor = { machine: null, steps: 0, lastChange: "" };
+let governorToastTimer = 0;
+
+function governorEligible() {
+  return state.visualQuality === "auto"
+    && !state.cabinetMode
+    && state.mode !== "online"
+    && !document.hidden
+    && (state.screen === "fight" || demoSession.active);
+}
+
+// One-line HUD toast on a tier change, on the sound-caption channel's element
+// (same look, own timer) so it never fights an actual caption for long.
+function governorToast(text) {
+  const caption = $("#soundCaption");
+  if (!caption) return;
+  window.clearTimeout(governorToastTimer);
+  window.clearTimeout(soundCaptionTimer);
+  caption.textContent = `◀ ${text} ▶`;
+  caption.hidden = false;
+  governorToastTimer = window.setTimeout(() => { caption.hidden = true; }, 2400);
+}
+
+function applyGovernorChange(change) {
+  if (!change) return;
+  performanceGovernor.steps += 1;
+  performanceGovernor.lastChange = `${change.action}:${change.from}->${change.to}`;
+  applyPerformanceSettings();
+  governorToast(change.action === "down"
+    ? `AUTO PERFORMANCE · COOLING TO ${change.to.toUpperCase()}`
+    : `AUTO PERFORMANCE · RESTORED TO ${change.to.toUpperCase()}`);
+}
+
+function feedPerformanceGovernor(frameMs) {
+  if (!governorEligible()) {
+    // Leaving eligibility (online match, forced profile, cabinet) drops the
+    // machine entirely so the static resolution rules the profile again and a
+    // later return to AUTO re-baselines from scratch.
+    if (performanceGovernor.machine) {
+      performanceGovernor.machine = null;
+      applyPerformanceSettings();
+    }
+    return;
+  }
+  if (!performanceGovernor.machine) {
+    const baseline = resolvePerformanceProfile("auto", performanceEnvironment(state.accessibility.reducedMotion)).id;
+    performanceGovernor.machine = createPerformanceGovernor({ profileId: state.performance.id, baselineId: baseline });
+  }
+  applyGovernorChange(performanceGovernor.machine.observe(frameMs));
+}
+
+// ---------------------------------------------------------------------------
+// R1.9 wave 15: combat-event haptics + gamepad dual-rumble.
+// Follows the sound() pattern exactly: early-return on rollbackResimulating,
+// gated behind the persisted HAPTICS toggle, rate-capped so a multi-hit never
+// turns the phone into a hair clipper. Pattern selection is pure
+// (hapticPatternFor in engine/polish.mjs); pads rumble per human side via the
+// same getPad plumbing readInput uses. Presentation only — nothing here can
+// touch the simulation.
+// ---------------------------------------------------------------------------
+const hapticsDebug = { events: 0, rumbles: 0, suppressed: 0, lastKind: "" };
+// Tick latch for the fatality heartbeat pulse (wallSplatLastTick pattern —
+// module-level, render-only, never snapshotted).
+let lastHeartbeatHapticTick = -Infinity;
+const HAPTIC_MIN_GAP_MS = 45;
+const HAPTIC_PRIORITY_KINDS = new Set(["ko", "dizzy", "fatalityHeartbeat", "super", "throw", "wallSplat"]);
+let lastHapticAt = 0;
+
+function combatHaptic(kind, { damage = 0, blocked = false, counter = false } = {}) {
+  if (rollbackResimulating) return;
+  if (!state.touchSettings.haptics) return;
+  // Nobody is holding anything during the self-running attract loop.
+  if (state.mode === "demo" || state.mode === "tournament") return;
+  const now = performance.now();
+  if (now - lastHapticAt < HAPTIC_MIN_GAP_MS && !HAPTIC_PRIORITY_KINDS.has(kind)) {
+    hapticsDebug.suppressed += 1;
+    return;
+  }
+  lastHapticAt = now;
+  const pattern = hapticPatternFor(kind, { damage, blocked, counter });
+  hapticsDebug.events += 1;
+  hapticsDebug.lastKind = pattern.kind;
+  try {
+    navigator.vibrate?.(pattern.vibrate);
+  } catch {
+    // Some browsers throw instead of ignoring vibration without a gesture.
+  }
+  for (const side of [0, 1]) {
+    if (sideIsCpuControlled(side)) continue;
+    const pad = getPad(side);
+    const actuator = pad?.vibrationActuator;
+    if (!actuator?.playEffect) continue;
+    hapticsDebug.rumbles += 1;
+    try {
+      const played = actuator.playEffect("dual-rumble", pattern.rumble);
+      played?.catch?.(() => {});
+    } catch {
+      // A pad may vanish between getPad and playEffect; rumble is best-effort.
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// R1.9 wave 15: screen wake lock. Held during fights and the attract demo,
+// released on menus/pause/hidden tab, re-acquired on visibilitychange. Silent
+// no-op where unsupported, like screen.orientation.lock.
+// ---------------------------------------------------------------------------
+let wakeLockSentinel = null;
+let wakeLockWanted = false;
+let wakeLockRequesting = false;
+
+function syncWakeLock() {
+  wakeLockWanted = !document.hidden
+    && ((state.screen === "fight" && !state.paused) || demoSession.active);
+  if (wakeLockWanted && !wakeLockSentinel && !wakeLockRequesting && navigator.wakeLock?.request) {
+    wakeLockRequesting = true;
+    navigator.wakeLock.request("screen").then((sentinel) => {
+      wakeLockRequesting = false;
+      wakeLockSentinel = sentinel;
+      // The browser can release it on its own (tab hidden); track that.
+      sentinel.addEventListener?.("release", () => {
+        if (wakeLockSentinel === sentinel) wakeLockSentinel = null;
+      });
+      // The screen may have changed while the request was in flight.
+      if (!wakeLockWanted) syncWakeLock();
+    }).catch(() => {
+      wakeLockRequesting = false;
+    });
+  } else if (!wakeLockWanted && wakeLockSentinel) {
+    const sentinel = wakeLockSentinel;
+    wakeLockSentinel = null;
+    try {
+      sentinel.release?.()?.catch?.(() => {});
+    } catch {
+      // Already released.
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// R1.9 wave 15: ARCADE CABINET mode. Composes existing pieces into one TV
+// preset: high profile pinned, CRT defaulted on at activation, touch HUD
+// hidden, fight HUD enlarged ~15%, attract loop + high-score cycling forced,
+// cursor auto-hidden at idle, and any pad press on the title dropping
+// straight into character select (handled in menuPadLoop).
+// ---------------------------------------------------------------------------
+let cabinetCursorTimer = 0;
+
+function applyCabinetMode() {
+  document.body.classList.toggle("cabinet-mode", state.cabinetMode);
+  const marquee = $("#cabinetMarquee");
+  if (marquee) marquee.hidden = !(state.cabinetMode && state.screen === "title");
+  if (!state.cabinetMode) {
+    window.clearTimeout(cabinetCursorTimer);
+    cabinetCursorTimer = 0;
+    document.body.classList.remove("cabinet-idle");
+  } else {
+    scheduleCabinetCursorHide();
+    scheduleIdleDemo();
+  }
+  applyPerformanceSettings();
+}
+
+function scheduleCabinetCursorHide() {
+  window.clearTimeout(cabinetCursorTimer);
+  cabinetCursorTimer = window.setTimeout(() => {
+    if (state.cabinetMode) document.body.classList.add("cabinet-idle");
+  }, 4000);
+}
+
+document.addEventListener("mousemove", () => {
+  if (!state.cabinetMode) return;
+  document.body.classList.remove("cabinet-idle");
+  scheduleCabinetCursorHide();
+}, { passive: true });
+
 function applyPerformanceSettings() {
   state.visualQuality = normalizeVisualQuality(state.visualQuality);
-  state.performance = resolvePerformanceProfile(
-    state.visualQuality,
-    performanceEnvironment(state.accessibility.reducedMotion),
-  );
+  // Wave 15 resolution order: CABINET MODE pins high for the TV; otherwise
+  // the adaptive governor may hold a stepped-down tier while quality is AUTO;
+  // otherwise the static device resolution decides. A user-forced profile
+  // always wins because the governor machine only exists under AUTO.
+  let resolved = state.cabinetMode
+    ? PERFORMANCE_PROFILES.high
+    : resolvePerformanceProfile(state.visualQuality, performanceEnvironment(state.accessibility.reducedMotion));
+  if (!state.cabinetMode && state.visualQuality === "auto" && performanceGovernor.machine) {
+    resolved = PERFORMANCE_PROFILES[performanceGovernor.machine.profile()] || resolved;
+  }
+  state.performance = resolved;
   document.body.dataset.quality = state.performance.id;
   $("#visualQualitySelect").value = state.visualQuality;
   $("#sharpRenderToggle").checked = Boolean(state.sharpRender);
   $("#crtModeToggle").checked = Boolean(state.crtMode);
+  if ($("#cabinetModeToggle")) $("#cabinetModeToggle").checked = Boolean(state.cabinetMode);
   $("#cinema3dToggle").checked = Boolean(state.cinema3d);
   // Profile switches can grant/revoke CINEMA 3D eligibility (battery refuses).
   ensureCinema3d();
@@ -17844,7 +18977,16 @@ function failImmersiveMode(error) {
   renderRotateGate();
 }
 
+// Wave 15: the manifest-shortcut boot router starts a mode without a user
+// gesture; a fullscreen request would reject and latch a bogus gate failure,
+// so the router suppresses exactly one immersive attempt.
+let suppressImmersivePrompt = false;
+
 function enterImmersiveMode() {
+  if (suppressImmersivePrompt) {
+    suppressImmersivePrompt = false;
+    return;
+  }
   if (!isPhoneViewport()) return;
   const app = $("#app");
   if (!fullscreenRequestSupported()) {
@@ -17880,7 +19022,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.1");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.2");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -17898,6 +19040,30 @@ window.addEventListener("beforeinstallprompt", (event) => {
 window.addEventListener("appinstalled", () => {
   deferredInstallPrompt = null;
   $("#installButton").hidden = true;
+});
+
+// ---------------------------------------------------------------------------
+// R1.9 wave 15: iOS "Add to Home Screen" coach mark. Safari on iOS never
+// fires beforeinstallprompt, so the only install path is the share sheet —
+// point at it once, dismissible forever, and only in real iOS Safari when
+// the game is not already running standalone.
+// ---------------------------------------------------------------------------
+function maybeShowIosCoachMark() {
+  const coach = $("#iosCoachMark");
+  if (!coach) return false;
+  if (!isIosDevice() || inAppBrowserName()) return false;
+  if (!/Safari\//.test(navigator.userAgent || "")) return false;
+  if (navigator.standalone === true) return false;
+  if (window.matchMedia?.("(display-mode: standalone)").matches
+    || window.matchMedia?.("(display-mode: fullscreen)").matches) return false;
+  if (localStorage.getItem("final-blow-ios-coach") === "1") return false;
+  coach.hidden = false;
+  return true;
+}
+
+$("#iosCoachDismiss")?.addEventListener("click", () => {
+  localStorage.setItem("final-blow-ios-coach", "1");
+  $("#iosCoachMark").hidden = true;
 });
 window.addEventListener("online", updateOfflineBadge);
 window.addEventListener("offline", updateOfflineBadge);
@@ -17923,6 +19089,8 @@ function setPaused(paused, reason = "") {
     syncMusic();
     canvas.focus();
   }
+  // Wave 15: the wake lock releases while paused and returns on resume.
+  syncWakeLock();
   return state.paused;
 }
 
@@ -18026,51 +19194,327 @@ window.addEventListener("gamepaddisconnected", (event) => {
   }
 });
 
-let menuPadWasPressed = false;
-let menuPadPauseWasPressed = false;
+// ---------------------------------------------------------------------------
+// R1.9 wave 15: full gamepad menu navigation.
+// menuPadLoop grows from a single confirm button into a complete navigator:
+// d-pad/left stick moves a visible focus (or the roster/stage cursor on the
+// screens that already have one), A confirms, B backs out, and a second pad
+// drives P2's pick in the local two-player modes. Everything routes through
+// handleMenuPadEvent so the QA layer can drive the exact same paths
+// headlessly. Keyboard and touch handling are untouched — pad navigation
+// clicks the same DOM buttons they do.
+// ---------------------------------------------------------------------------
+const MENU_PAD_REPEAT = Object.freeze({ initialMs: 340, repeatMs: 150 });
+const menuPadSlots = [
+  { direction: "", nextRepeatAt: 0, buttons: new Map() },
+  { direction: "", nextRepeatAt: 0, buttons: new Map() },
+];
+const padNavDebug = { moves: 0, confirms: 0, backs: 0 };
+let padFocusElement = null;
 let menuPadAnyWasPressed = false;
+
+function padMenuDirection(pad) {
+  const axisX = pad.axes?.[0] || 0;
+  const axisY = pad.axes?.[1] || 0;
+  if (buttonValue(pad, 12) || axisY < -0.55) return "up";
+  if (buttonValue(pad, 13) || axisY > 0.55) return "down";
+  if (buttonValue(pad, 14) || axisX < -0.55) return "left";
+  if (buttonValue(pad, 15) || axisX > 0.55) return "right";
+  return "";
+}
+
+function menuPadDirectionEvents(pad, slot, now) {
+  const direction = pad ? padMenuDirection(pad) : "";
+  const events = [];
+  if (direction !== slot.direction) {
+    slot.direction = direction;
+    if (direction) {
+      events.push(direction);
+      slot.nextRepeatAt = now + MENU_PAD_REPEAT.initialMs;
+    }
+  } else if (direction && now >= slot.nextRepeatAt) {
+    events.push(direction);
+    slot.nextRepeatAt = now + MENU_PAD_REPEAT.repeatMs;
+  }
+  return events;
+}
+
+function menuPadButtonEdge(pad, slot, index) {
+  const pressed = Boolean(pad && buttonValue(pad, index));
+  const was = slot.buttons.get(index) || false;
+  slot.buttons.set(index, pressed);
+  return pressed && !was;
+}
+
+function menuFocusRoot() {
+  const dialog = $("#controlsDialog");
+  if (dialog.open) return dialog;
+  if (state.screen === "fight") return state.paused ? $("#pausePanel") : null;
+  return $(`#${state.screen}Screen`);
+}
+
+function menuFocusables(root) {
+  if (!root) return [];
+  return [...root.querySelectorAll("button, select, input:not([type=hidden])")].filter((element) => {
+    if (element.disabled || element.hidden || element.closest("[hidden]")) return false;
+    const rect = element.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  });
+}
+
+function setPadFocus(element) {
+  if (padFocusElement === element) return;
+  padFocusElement?.classList.remove("pad-focus");
+  padFocusElement = element || null;
+  if (padFocusElement) {
+    padFocusElement.classList.add("pad-focus");
+    padFocusElement.focus?.({ preventScroll: true });
+    padFocusElement.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+    padNavDebug.moves += 1;
+  }
+}
+
+function movePadFocus(delta) {
+  const focusables = menuFocusables(menuFocusRoot());
+  if (!focusables.length) return false;
+  const index = focusables.indexOf(padFocusElement);
+  if (index < 0) {
+    setPadFocus(focusables.find((element) => element.classList.contains("menu-focus")) || focusables[0]);
+    return true;
+  }
+  setPadFocus(focusables[(index + delta + focusables.length) % focusables.length]);
+  return true;
+}
+
+// Left/right on a focused select or slider adjusts it instead of moving focus.
+function adjustPadFocusValue(direction) {
+  const element = padFocusElement;
+  if (!element || !menuFocusRoot()?.contains(element)) return false;
+  if (element.tagName === "SELECT") {
+    const next = element.selectedIndex + (direction === "right" ? 1 : -1);
+    if (next >= 0 && next < element.options.length) {
+      element.selectedIndex = next;
+      element.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+    return true;
+  }
+  if (element.tagName === "INPUT" && element.type === "range") {
+    const step = Number(element.step) || 1;
+    const value = Number(element.value) + (direction === "right" ? step : -step);
+    element.value = String(Math.min(Number(element.max) || 100, Math.max(Number(element.min) || 0, value)));
+    element.dispatchEvent(new Event("input", { bubbles: true }));
+    element.dispatchEvent(new Event("change", { bubbles: true }));
+    return true;
+  }
+  return false;
+}
+
+function handleSelectPadEvent(kind, padIndex) {
+  if (kind === "back") {
+    padNavDebug.backs += 1;
+    back("title");
+    return;
+  }
+  const twoPlayer = ["versus", "team"].includes(state.mode);
+  if (padIndex === 1 && !twoPlayer) return;
+  // Pad 0 drives whichever side is currently picking (the keyboard-cursor
+  // rule); a second pad always owns P2's pick in the two-player modes.
+  const side = padIndex === 1 ? 1 : (state.locks[0] ? 1 : 0);
+  if (kind === "confirm") {
+    padNavDebug.confirms += 1;
+    if (state.locks[0] && state.locks[1]) {
+      showStageSelect();
+      return;
+    }
+    if (padIndex === 1 && !state.locks[0]) return; // P2's pad waits for P1's lock
+    if (state.mode !== "team" && state.locks[side]) return;
+    chooseFighter(state.picks[side]);
+    return;
+  }
+  if (state.mode === "arcade" && state.locks[0]) return;
+  if (state.mode !== "team" && state.locks[side]) return;
+  const delta = kind === "left" ? -1 : kind === "right" ? 1 : kind === "up" ? -4 : 4;
+  state.picks[side] = (state.picks[side] + delta + roster.length) % roster.length;
+  // P2's pad may browse early, but the shared keyboard cursor only follows
+  // the side whose turn it actually is.
+  if (padIndex === 0 || state.locks[0]) state.selectingPlayer = side;
+  updateRosterUI();
+  padNavDebug.moves += 1;
+}
+
+function handleStagePadEvent(kind) {
+  if (kind === "back") {
+    padNavDebug.backs += 1;
+    showScreen("select");
+    return;
+  }
+  if (kind === "confirm") {
+    padNavDebug.confirms += 1;
+    startMatch(true);
+    return;
+  }
+  const ids = $$("#stageGrid .stage-card").map((card) => card.dataset.stage);
+  if (!ids.length) return;
+  const index = Math.max(0, ids.indexOf(state.stage));
+  const delta = kind === "left" ? -1 : kind === "right" ? 1 : kind === "up" ? -3 : 3;
+  chooseStage(ids[(index + delta + ids.length) % ids.length]);
+  padNavDebug.moves += 1;
+}
+
+function handleInitialsPadEvent(kind) {
+  if (!initialsUi.active) return;
+  if (kind === "up") cycleInitialLetter(1);
+  else if (kind === "down") cycleInitialLetter(-1);
+  else if (kind === "left") initialsUi.cursor = Math.max(0, initialsUi.cursor - 1);
+  else if (kind === "right") initialsUi.cursor = Math.min(2, initialsUi.cursor + 1);
+  else if (kind === "confirm") {
+    padNavDebug.confirms += 1;
+    commitInitials();
+    return;
+  } else if (kind === "back") return;
+  renderInitials();
+}
+
+const PAD_BACK_TARGETS = Object.freeze({
+  online: "title",
+  blackbook: "title",
+  records: "title",
+  ending: "title",
+  result: "title",
+});
+
+function handleGenericPadBack() {
+  padNavDebug.backs += 1;
+  if (state.screen === "ending" && endingSequence.active) {
+    advanceEndingSequence();
+    return;
+  }
+  // An online rematch screen must never be torn down by a stray B press.
+  if (state.screen === "result" && state.mode === "online") return;
+  const target = PAD_BACK_TARGETS[state.screen];
+  if (target) showScreen(target);
+}
+
+function handleGenericPadConfirm() {
+  padNavDebug.confirms += 1;
+  // v2.1: pad confirm skips the current ending beat first; only the resting
+  // card starts a fresh arcade run.
+  if (state.screen === "ending" && endingSequence.active) {
+    advanceEndingSequence();
+    return;
+  }
+  const root = menuFocusRoot();
+  if (padFocusElement && root?.contains(padFocusElement)) {
+    padFocusElement.click();
+    return;
+  }
+  // No focus engaged: the pre-wave-15 defaults.
+  if (state.screen === "title") startSelect("arcade");
+  else if (state.screen === "ladder") startMatch(true);
+  else if (state.screen === "ending") startSelect("arcade");
+  else if (state.screen === "tally") tallyContinue();
+  else if (state.screen === "result") {
+    if (state.mode === "online") requestOnlineRematch();
+    else if (dailySession.active && dailySession.finished) showScreen("title");
+    else if (state.mode === "survival" && state.survivalRun?.over) startSurvivalRun(state.survivalRun.playerId);
+    else if (state.mode === "team" && state.teamBattle?.over) {
+      beginTeamBattle(state.teamBattle.cpu);
+      startMatch(true);
+    } else startMatch(true);
+  }
+}
+
+function handleMenuPadEvent(kind, padIndex = 0) {
+  const dialog = $("#controlsDialog");
+  if (dialog.open) {
+    if (kind === "back") {
+      padNavDebug.backs += 1;
+      dialog.close();
+      return;
+    }
+    if (kind === "confirm") {
+      padNavDebug.confirms += 1;
+      if (padFocusElement && dialog.contains(padFocusElement)) padFocusElement.click();
+      return;
+    }
+    if ((kind === "left" || kind === "right") && adjustPadFocusValue(kind)) return;
+    movePadFocus(kind === "up" || kind === "left" ? -1 : 1);
+    return;
+  }
+  if (state.screen === "fight") {
+    if (!state.paused) return; // combat owns the pad through readInput
+    if (kind === "back") {
+      padNavDebug.backs += 1;
+      setPaused(false);
+      return;
+    }
+    if (kind === "confirm") {
+      padNavDebug.confirms += 1;
+      if (padFocusElement && $("#pausePanel").contains(padFocusElement)) padFocusElement.click();
+      else setPaused(false);
+      return;
+    }
+    movePadFocus(kind === "up" || kind === "left" ? -1 : 1);
+    return;
+  }
+  if (state.screen === "select") return handleSelectPadEvent(kind, padIndex);
+  if (state.screen === "stage") return handleStagePadEvent(kind);
+  if (state.screen === "initials") return handleInitialsPadEvent(kind);
+  if (kind === "back") return handleGenericPadBack();
+  if (kind === "confirm") return handleGenericPadConfirm();
+  // The two ledger screens scroll their list with up/down.
+  if ((state.screen === "blackbook" || state.screen === "records") && (kind === "up" || kind === "down")) {
+    const scroller = state.screen === "blackbook" ? $("#blackBookList") : $("#recordsGrid");
+    if (scroller && scroller.scrollHeight > scroller.clientHeight + 4) {
+      scroller.scrollBy({ top: kind === "down" ? 150 : -150, behavior: "smooth" });
+      return;
+    }
+  }
+  movePadFocus(kind === "up" || kind === "left" ? -1 : 1);
+}
+
+// Mouse/touch use dismisses the pad focus ring until the pad speaks again.
+document.addEventListener("pointerdown", () => {
+  if (padFocusElement) {
+    padFocusElement.classList.remove("pad-focus");
+    padFocusElement = null;
+  }
+}, true);
+
 function menuPadLoop() {
-  const pad = getPad(0);
-  const anyInput = Boolean(pad && (pad.buttons.some((button) => button.pressed || button.value > 0.55)
-    || pad.axes.some((axis) => Math.abs(axis) > 0.55)));
+  const now = performance.now();
+  const pads = [getPad(0), getPad(1)];
+  const anyInput = pads.some((pad) => Boolean(pad && (pad.buttons.some((button) => button.pressed || button.value > 0.55)
+    || pad.axes.some((axis) => Math.abs(axis) > 0.55))));
   if (demoSession.active && anyInput && !menuPadAnyWasPressed) {
     menuPadAnyWasPressed = true;
     exitDemo();
+    // Wave 15 CABINET MODE: interrupting the attract loop drops straight
+    // into character select — insert coin, pick your fighter.
+    if (state.cabinetMode) startSelect("arcade");
     requestAnimationFrame(menuPadLoop);
     return;
   }
   if (!demoSession.active && anyInput && !menuPadAnyWasPressed) noteUserActivity();
   menuPadAnyWasPressed = anyInput;
-  const pause = buttonValue(pad, 9);
-  if (state.screen === "fight" && pause && !menuPadPauseWasPressed) setPaused(!state.paused);
-  menuPadPauseWasPressed = pause;
-  const confirm = buttonValue(pad, 0);
-  if (confirm && !menuPadWasPressed) {
-    if (state.screen === "title") startSelect("arcade");
-    else if (state.screen === "select") {
-      if (state.locks[0] && state.locks[1]) showStageSelect();
-      else chooseFighter(state.picks[state.selectingPlayer]);
-    } else if (state.screen === "stage") startMatch(true);
-    else if (state.screen === "ladder") startMatch(true);
-    else if (state.screen === "ending") {
-      // v2.1: pad confirm skips the current ending beat first; only the
-      // resting card starts a fresh arcade run.
-      if (endingSequence.active) advanceEndingSequence();
-      else startSelect("arcade");
+  for (const padIndex of [0, 1]) {
+    const pad = pads[padIndex];
+    const slot = menuPadSlots[padIndex];
+    const pause = menuPadButtonEdge(pad, slot, 9);
+    if (pause && state.screen === "fight") setPaused(!state.paused);
+    const confirm = menuPadButtonEdge(pad, slot, 0);
+    const backEdge = menuPadButtonEdge(pad, slot, 1);
+    const directions = menuPadDirectionEvents(pad, slot, now);
+    if (state.screen === "fight" && !state.paused) continue; // edges consumed, combat untouched
+    // Wave 15 CABINET MODE: any face-button press on the title starts a run.
+    if (state.cabinetMode && state.screen === "title" && (confirm || backEdge)) {
+      startSelect("arcade");
+      continue;
     }
-    else if (state.screen === "tally") tallyContinue();
-    else if (state.screen === "initials") commitInitials();
-    else if (state.screen === "result") {
-      if (state.mode === "online") requestOnlineRematch();
-      else if (dailySession.active && dailySession.finished) showScreen("title");
-      else if (state.mode === "survival" && state.survivalRun?.over) startSurvivalRun(state.survivalRun.playerId);
-      else if (state.mode === "team" && state.teamBattle?.over) {
-        beginTeamBattle(state.teamBattle.cpu);
-        startMatch(true);
-      } else startMatch(true);
-    }
+    if (confirm) handleMenuPadEvent("confirm", padIndex);
+    if (backEdge) handleMenuPadEvent("back", padIndex);
+    for (const direction of directions) handleMenuPadEvent(direction, padIndex);
   }
-  menuPadWasPressed = confirm;
   requestAnimationFrame(menuPadLoop);
 }
 
@@ -18146,6 +19590,7 @@ $("#controlStyleSelect").addEventListener("change", (event) => {
     updateOnlineMatchSetup();
   }
   syncNewOptionsUi();
+  syncTouchControlStyle();
 });
 $("#reducedMotionToggle").addEventListener("change", (event) => {
   state.accessibility.reducedMotion = event.target.checked;
@@ -18179,6 +19624,18 @@ $("#sharpRenderToggle").addEventListener("change", (event) => {
 $("#crtModeToggle").addEventListener("change", (event) => {
   state.crtMode = event.target.checked;
   localStorage.setItem("final-blow-crt-mode", state.crtMode ? "1" : "0");
+});
+$("#cabinetModeToggle").addEventListener("change", (event) => {
+  state.cabinetMode = event.target.checked;
+  localStorage.setItem("final-blow-cabinet-mode", state.cabinetMode ? "1" : "0");
+  // The cabinet preset defaults the CRT look on at activation; it stays a
+  // free choice afterwards.
+  if (state.cabinetMode && !state.crtMode) {
+    state.crtMode = true;
+    localStorage.setItem("final-blow-crt-mode", "1");
+  }
+  applyCabinetMode();
+  scheduleIdleDemo();
 });
 $("#cinema3dToggle").addEventListener("change", (event) => {
   state.cinema3d = event.target.checked;
@@ -18255,6 +19712,46 @@ $("#trainingHitboxToggle").addEventListener("change", (event) => {
   state.training.showHitboxes = event.target.checked;
   updateTrainingUi();
 });
+$("#trainingFrameMeterToggle").addEventListener("change", (event) => {
+  state.training.showFrameMeter = event.target.checked;
+  updateTrainingUi();
+});
+// R1.9: situation slots — save/load the full training situation.
+$$("[data-slot-save]").forEach((button) => button.addEventListener("click", () => {
+  saveSituationSlot(Number(button.dataset.slotSave));
+}));
+$$("[data-slot-load]").forEach((button) => button.addEventListener("click", () => {
+  loadSituationSlot(Number(button.dataset.slotLoad));
+}));
+// R1.9: authored trial demo playback.
+$("#trainingTrialDemoButton").addEventListener("click", () => {
+  if (trialDemo.active) stopTrialDemo("DEMO STOPPED");
+  else startTrialDemo();
+  updateTrainingUi();
+});
+// R1.9: FIGHT SCHOOL entries + panel controls.
+$("#fightSchoolButton").addEventListener("click", () => startFightSchool());
+$("#comboTrialsButton").addEventListener("click", () => startComboTrialsLab());
+$("#schoolSkipButton").addEventListener("click", () => {
+  if (!schoolSession.active || !schoolSession.machine) return;
+  const machine = schoolSession.machine;
+  if (machine.lesson + 1 >= FIGHT_SCHOOL_LESSONS.length) {
+    exitFightSchool();
+    return;
+  }
+  schoolSession.machine = createFightSchoolState({
+    lesson: machine.lesson + 1,
+    completed: machine.completed,
+  });
+  const lesson = fightSchoolLesson(schoolSession.machine);
+  announce(lesson ? lesson.name : "FIGHT SCHOOL", schoolCoach("start"), 2);
+  applySchoolLessonSetup();
+  renderSchoolPanel();
+});
+$("#schoolExitButton").addEventListener("click", () => exitFightSchool());
+// R1.9 boot sync: slot availability + touch style badges.
+refreshSituationSlotButtons();
+syncTouchControlStyle();
 $("#trainingRecordButton").addEventListener("click", () => {
   if (state.training.recordingActive) finishTrainingRecording(state.training);
   else beginTrainingRecording(state.training);
@@ -18318,6 +19815,9 @@ document.addEventListener("visibilitychange", () => {
   // so nothing double-starts on visibility flips.
   if (document.hidden) muteRenderAudioBeds();
   syncMusic();
+  // Wave 15: browsers drop the wake lock on a hidden tab; re-acquire it here
+  // when the fight/attract screen returns to view.
+  syncWakeLock();
 });
 $("#fighterContinue").addEventListener("click", showStageSelect);
 $$(".stage-card").forEach((card) => card.addEventListener("click", () => chooseStage(card.dataset.stage)));
@@ -18420,32 +19920,168 @@ window.addEventListener("orientationchange", () => {
 document.addEventListener("fullscreenchange", syncOrientationGate);
 document.addEventListener("webkitfullscreenchange", syncOrientationGate);
 
-$$("[data-touch]").forEach((button) => {
-  // A pad button may map to two tokens at once, e.g. the up-forward corner.
-  const tokens = button.dataset.touch.split(/\s+/).filter(Boolean);
-  const start = (event) => {
+// ---------------------------------------------------------------------------
+// R1.9 wave 15: thumb-slide touch input.
+// The old per-button pointerdown/pointerup binding meant implicit pointer
+// capture pinned a touch to the first cell it landed on — sliding a thumb
+// from Down to Down-Forward to Forward never fired the next cell, which made
+// QCF/DP/double-QCF motions physically impossible on a phone. Both control
+// groups now track pointers at group level:
+//   · the 3x3 movement pad runs sector math around its centre
+//     (touchPadTokens, engine/controls.mjs) and swaps direction tokens in the
+//     existing touch Set as the thumb crosses cells — CONTROLS.md decision 5
+//     (directions recorded on state change) makes the rolled QCF readable;
+//   · the LP/HP/LK/HK cluster re-hit-tests on pointermove, piano-roll style:
+//     rolling LP onto HP keeps LP held and edges HP, which is exactly the
+//     "one button edges while its partner is held" chord read, landing the
+//     existing 6-frame chord-takeover window for EX moves and supers.
+// Everything still flows through the same touch tokens into readInput's
+// action vocabulary: no new inputs, no new net bits, no timing changes.
+// ---------------------------------------------------------------------------
+const touchFxDebug = { padSlides: 0, clusterRolls: 0 };
+
+function pressTouchTokens(tokens) {
+  for (const token of tokens) {
+    touch.add(token);
+    touch.add(`${token}:pressed`);
+  }
+}
+
+function releaseTouchTokens(tokens) {
+  for (const token of tokens) touch.delete(token);
+}
+
+function touchTokenKey(tokens) {
+  return [...tokens].sort().join(" ");
+}
+
+function capturePointer(element, pointerId) {
+  try {
+    element.setPointerCapture?.(pointerId);
+  } catch {
+    // Synthetic QA PointerEvents have no live pointer to capture; the group
+    // listeners still receive the dispatched moves directly.
+  }
+}
+
+(() => {
+  const pad = $(".touch-move");
+  if (!pad) return;
+  // Sorted token key -> cell button, for the pressed-cell highlight only.
+  const cellButtons = new Map();
+  for (const button of pad.querySelectorAll("[data-touch]")) {
+    cellButtons.set(touchTokenKey(button.dataset.touch.split(/\s+/).filter(Boolean)), button);
+  }
+  const pointers = new Map(); // pointerId -> { tokens, rect }
+  const setHighlight = () => {
+    const activeKeys = new Set([...pointers.values()].map((entry) => touchTokenKey(entry.tokens)));
+    for (const [key, button] of cellButtons) button.classList.toggle("active", activeKeys.has(key));
+  };
+  const tokensAt = (entry, event) => {
+    const dx = event.clientX - (entry.rect.left + entry.rect.width / 2);
+    const dy = event.clientY - (entry.rect.top + entry.rect.height / 2);
+    return touchPadTokens(dx, dy, Math.min(entry.rect.width, entry.rect.height) / 2);
+  };
+  const applyTokens = (entry, nextTokens) => {
+    if (touchTokenKey(entry.tokens) === touchTokenKey(nextTokens)) return;
+    releaseTouchTokens(entry.tokens.filter((token) => !nextTokens.includes(token)));
+    pressTouchTokens(nextTokens.filter((token) => !entry.tokens.includes(token)));
+    if (entry.tokens.length) touchFxDebug.padSlides += 1;
+    entry.tokens = nextTokens;
+    setHighlight();
+  };
+  pad.addEventListener("pointerdown", (event) => {
     event.preventDefault();
-    for (const token of tokens) {
-      touch.add(token);
-      touch.add(`${token}:pressed`);
-    }
-    button.classList.add("active");
+    capturePointer(pad, event.pointerId);
+    const entry = { tokens: [], rect: pad.getBoundingClientRect() };
+    pointers.set(event.pointerId, entry);
+    applyTokens(entry, tokensAt(entry, event));
     if (state.touchSettings.haptics && event.isTrusted) navigator.vibrate?.(12);
     unlockAudio();
-  };
-  const end = (event) => {
+  });
+  pad.addEventListener("pointermove", (event) => {
+    const entry = pointers.get(event.pointerId);
+    if (!entry) return;
     event.preventDefault();
-    for (const token of tokens) touch.delete(token);
-    button.classList.remove("active");
+    applyTokens(entry, tokensAt(entry, event));
+  });
+  const end = (event) => {
+    const entry = pointers.get(event.pointerId);
+    if (!entry) return;
+    event.preventDefault();
+    releaseTouchTokens(entry.tokens);
+    pointers.delete(event.pointerId);
+    setHighlight();
   };
-  button.addEventListener("pointerdown", start);
-  button.addEventListener("pointerup", end);
-  button.addEventListener("pointercancel", end);
-  button.addEventListener("pointerleave", end);
-});
+  pad.addEventListener("pointerup", end);
+  pad.addEventListener("pointercancel", end);
+})();
+
+(() => {
+  const cluster = $(".touch-action");
+  if (!cluster) return;
+  const buttons = [...cluster.querySelectorAll("[data-touch]")];
+  const pointers = new Map(); // pointerId -> { rects, held, current }
+  const refresh = () => {
+    const held = new Set();
+    for (const entry of pointers.values()) for (const button of entry.held) held.add(button);
+    for (const button of buttons) button.classList.toggle("active", held.has(button));
+  };
+  const buttonAt = (entry, event) => {
+    for (const [button, rect] of entry.rects) {
+      if (event.clientX >= rect.left && event.clientX <= rect.right
+        && event.clientY >= rect.top && event.clientY <= rect.bottom) return button;
+    }
+    return null;
+  };
+  const applyButton = (entry, next, trusted) => {
+    if (!next || next === entry.current) {
+      if (!next) entry.current = null;
+      return;
+    }
+    // Piano-roll: the earlier button of this touch stays held until lift-off,
+    // so the new edge lands as a chord with it.
+    if (!entry.held.has(next)) {
+      pressTouchTokens([next.dataset.touch]);
+      entry.held.add(next);
+      if (entry.current) touchFxDebug.clusterRolls += 1;
+      if (state.touchSettings.haptics && trusted) navigator.vibrate?.(12);
+    }
+    entry.current = next;
+    refresh();
+  };
+  cluster.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    capturePointer(cluster, event.pointerId);
+    const entry = {
+      rects: buttons.map((button) => [button, button.getBoundingClientRect()]),
+      held: new Set(),
+      current: null,
+    };
+    pointers.set(event.pointerId, entry);
+    applyButton(entry, buttonAt(entry, event), event.isTrusted);
+    unlockAudio();
+  });
+  cluster.addEventListener("pointermove", (event) => {
+    const entry = pointers.get(event.pointerId);
+    if (!entry) return;
+    event.preventDefault();
+    applyButton(entry, buttonAt(entry, event), event.isTrusted);
+  });
+  const end = (event) => {
+    const entry = pointers.get(event.pointerId);
+    if (!entry) return;
+    event.preventDefault();
+    releaseTouchTokens([...entry.held].map((button) => button.dataset.touch));
+    pointers.delete(event.pointerId);
+    refresh();
+  };
+  cluster.addEventListener("pointerup", end);
+  cluster.addEventListener("pointercancel", end);
+})();
 
 window.__finalBlowEngine = {
-  version: "2.1-legacy",
+  version: "2.2-schoolyard",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -18491,6 +20127,27 @@ window.__finalBlowEngine = {
       offlineReady: state.offlineReady,
       accessibility: { ...state.accessibility },
       touchSettings: { ...state.touchSettings },
+      // R1.9 wave 15 platform blocks: thumb-slide input, haptics, pad menu
+      // navigation, cabinet mode, the adaptive governor and the wake lock.
+      touchInput: { ...touchFxDebug, activeTokens: [...touch] },
+      haptics: { ...hapticsDebug, enabled: state.touchSettings.haptics },
+      padNav: {
+        ...padNavDebug,
+        focused: padFocusElement ? (padFocusElement.id || padFocusElement.textContent.trim().slice(0, 28)) : null,
+      },
+      cabinetMode: state.cabinetMode,
+      governor: {
+        eligible: governorEligible(),
+        active: Boolean(performanceGovernor.machine),
+        profile: state.performance.id,
+        steps: performanceGovernor.steps,
+        lastChange: performanceGovernor.lastChange,
+      },
+      wakeLock: {
+        supported: Boolean(navigator.wakeLock),
+        wanted: wakeLockWanted,
+        held: Boolean(wakeLockSentinel),
+      },
       training: trainingSnapshot(state.training),
       online: onlineSnapshot(),
       demo: demoSnapshot(),
@@ -18590,6 +20247,12 @@ window.__finalBlowEngine = {
           fighterId: endingSequence.def?.id || null,
         },
         fx: { ...modeFxDebug },
+        // R1.9 SCHOOL & POCKET: lesson machine, slot presence, medal rollup.
+        school: schoolSession.machine
+          ? { active: schoolSession.active, ...fightSchoolSnapshot(schoolSession.machine) }
+          : null,
+        trainingSlots: situationSlots.map((slot) => Boolean(slot)),
+        trialMedals: Object.fromEntries(roster.map(({ id }) => [id, fighterMedalCounts(trialMedals, id)])),
       },
       seed: state.matchSeed,
       rng: state.rng.getState(),
@@ -18631,6 +20294,17 @@ window.__finalBlowEngine = {
         breathingFighters: presentationDebug.breathing,
         contactShadows: presentationDebug.contactShadows,
         gritAuras: presentationDebug.gritAuras,
+        // R1.9 SCHOOL & POCKET counters (trainingFxDebug: monotonic one-shots
+        // on the hudFxDebug pattern) for orchestrator smoke tests.
+        frameMeterTicks: trainingFxDebug.frameMeterTicks,
+        motionFlashes: trainingFxDebug.motionFlashes,
+        assistRecolors: trainingFxDebug.assistRecolors,
+        schoolSteps: trainingFxDebug.schoolSteps,
+        situationSlotSaves: trainingFxDebug.slotSaves,
+        situationSlotLoads: trainingFxDebug.slotLoads,
+        trialDemoRuns: trainingFxDebug.trialDemoRuns,
+        trialMedalAwards: trainingFxDebug.medalAwards,
+        inputHistoryRows: inputColumn.rows.length,
         lastLegsFighters: presentationDebug.lastLegs,
         battleDamageMarks: battleDamageMarks[0].length + battleDamageMarks[1].length,
         battleDamageDrawn: presentationDebug.battleDamage,
@@ -18942,6 +20616,51 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       if (state.mode !== "training") throw new Error("Start training first");
       selectTrainingTrial(state.training, state.fighters[0].kitId, index);
       updateTrainingUi();
+      return trainingSnapshot(state.training).trial;
+    },
+    // --- R1.9 SCHOOL & POCKET probes --------------------------------------
+    trainingSlotSave(slot = 0) {
+      return saveSituationSlot(slot);
+    },
+    trainingSlotLoad(slot = 0) {
+      return loadSituationSlot(slot);
+    },
+    trialDemo(index = null) {
+      if (state.mode !== "training") throw new Error("Start training first");
+      if (Number.isInteger(index)) selectTrainingTrial(state.training, state.fighters[0].kitId, index);
+      return startTrialDemo();
+    },
+    trialDemoActive() {
+      return trialDemo.active;
+    },
+    trialMedals() {
+      return JSON.parse(JSON.stringify(trialMedals));
+    },
+    clearTrialMedals() {
+      trialMedals = normalizeTrialMedals(null);
+      saveTrialMedals();
+      refreshTrialMedalBadges();
+      return true;
+    },
+    school() {
+      startFightSchool();
+      return { active: schoolSession.active, ...fightSchoolSnapshot(schoolSession.machine) };
+    },
+    schoolStatus() {
+      return schoolSession.machine
+        ? { active: schoolSession.active, ...fightSchoolSnapshot(schoolSession.machine) }
+        : null;
+    },
+    schoolExit() {
+      exitFightSchool();
+      return true;
+    },
+    schoolClear() {
+      localStorage.removeItem(SCHOOL_STORAGE_KEY);
+      return true;
+    },
+    comboTrialsLab() {
+      startComboTrialsLab();
       return trainingSnapshot(state.training).trial;
     },
     stage(stageId = "somerset") {
@@ -19498,6 +21217,62 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       state.simulationTick = simulationClock.tick;
       return this.status();
     },
+    // --- R1.9 wave 15 platform probes -------------------------------------
+    touchDebug() {
+      return { ...touchFxDebug, tokens: [...touch] };
+    },
+    haptics(enabled = null) {
+      if (enabled !== null) state.touchSettings.haptics = Boolean(enabled);
+      return { ...hapticsDebug, enabled: state.touchSettings.haptics };
+    },
+    hapticEvent(kind = "heavy", damage = 0) {
+      combatHaptic(kind, { damage });
+      return { ...hapticsDebug };
+    },
+    padMenu(kind, padIndex = 0) {
+      handleMenuPadEvent(kind, padIndex);
+      return {
+        screen: state.screen,
+        focused: padFocusElement ? (padFocusElement.id || padFocusElement.textContent.trim().slice(0, 28)) : null,
+        ...padNavDebug,
+      };
+    },
+    cabinet(enabled = true) {
+      state.cabinetMode = Boolean(enabled);
+      if (state.cabinetMode && !state.crtMode) state.crtMode = true;
+      applyCabinetMode();
+      return {
+        cabinetMode: state.cabinetMode,
+        crtMode: state.crtMode,
+        profile: state.performance.id,
+        touchDisplay: getComputedStyle($("#touchControls")).display,
+        marqueeVisible: Boolean($("#cabinetMarquee") && !$("#cabinetMarquee").hidden),
+      };
+    },
+    governorInject(frameMs = 25, frames = 130) {
+      if (!performanceGovernor.machine) {
+        const baseline = resolvePerformanceProfile("auto", performanceEnvironment(state.accessibility.reducedMotion)).id;
+        performanceGovernor.machine = createPerformanceGovernor({ profileId: state.performance.id, baselineId: baseline });
+      }
+      for (let frame = 0; frame < Math.max(1, Math.floor(frames)); frame += 1) {
+        applyGovernorChange(performanceGovernor.machine.observe(frameMs));
+      }
+      return {
+        eligible: governorEligible(),
+        profile: state.performance.id,
+        machineProfile: performanceGovernor.machine?.profile() || null,
+        steps: performanceGovernor.steps,
+        lastChange: performanceGovernor.lastChange,
+      };
+    },
+    wakeLock() {
+      syncWakeLock();
+      return { supported: Boolean(navigator.wakeLock), wanted: wakeLockWanted, held: Boolean(wakeLockSentinel) };
+    },
+    iosCoach(show = true) {
+      $("#iosCoachMark").hidden = !show;
+      return !$("#iosCoachMark").hidden;
+    },
     // Release 1.7 DEPTH: live rollback round-trip. Snapshots the real combat
     // state, mutates it by simulating ahead, restores, and reports whether the
     // combat checksum returned to the pre-snapshot value — proving every
@@ -19582,6 +21357,8 @@ function ensureCinema3d() {
 renderBindings();
 applyAccessibilitySettings();
 applyTouchSettings();
+applyCabinetMode();
+maybeShowIosCoachMark();
 syncNewOptionsUi();
 updateMusicUi();
 updateVolumeUi();
@@ -19597,7 +21374,20 @@ if (pendingOnlineInvite) {
   setOnlineStatus("waiting", "Private invite detected. Press Join Private Room.");
 } else if (storedOnlineResume) {
   resumeStoredOnlineConnection(storedOnlineResume);
-} else showScreen("title");
+} else {
+  // Wave 15 PWA shortcuts: ?mode=arcade|survival|daily deep-links from the
+  // manifest jump list land past the title, straight into their mode.
+  const bootMode = new URLSearchParams(location.search).get("mode");
+  if (bootMode === "arcade" || bootMode === "survival") {
+    showScreen("title");
+    suppressImmersivePrompt = true;
+    startSelect(bootMode);
+  } else if (bootMode === "daily") {
+    showScreen("title");
+    suppressImmersivePrompt = true;
+    startDailyRun();
+  } else showScreen("title");
+}
 updateStageUI();
 requestAnimationFrame(loop);
 requestAnimationFrame(menuPadLoop);
