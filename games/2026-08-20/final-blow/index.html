@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Final Blow: Philly After Dark — a playable 1990s-inspired weapon fighter prototype.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23080b13'/%3E%3Cpath d='M14 10h39l-4 12H29l-2 8h18l-4 11H24l-5 15H5z' fill='%23ef2c28'/%3E%3C/svg%3E">
-  <title>Final Blow 2.2: Schoolyard</title>
-  <meta name="application-version" content="2.2">
+  <title>Final Blow 2.3: Family</title>
+  <meta name="application-version" content="2.3">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,7 +20,7 @@
       <a class="mini-brand" href="#" id="homeLink" aria-label="Return to title">
         <span>FINAL</span><strong>BLOW</strong>
       </a>
-      <div class="build-tag">SCHOOLYARD <b>2.2</b></div>
+      <div class="build-tag">FAMILY <b>2.3</b></div>
       <div id="offlineBadge" class="offline-badge" aria-live="polite">CACHE CHECK</div>
       <button id="trackButton" class="track-button" type="button" aria-label="Play next soundtrack">♫ PHILLY AFTER DARK</button>
       <div id="padStatus" class="pad-status" aria-live="polite"><i></i> KEYBOARD READY</div>
@@ -114,6 +114,7 @@
         <strong></strong><span></span>
       </div>
       <div id="flowSkipHint" class="flow-skip-hint" hidden>ANY ATTACK / START · SKIP</div>
+      <div id="introDialogue" class="intro-dialogue" aria-live="polite" hidden></div>
       <div id="soundCaption" class="sound-caption" aria-live="polite" hidden></div>
       <div id="screenWipe" class="screen-wipe" aria-hidden="true"></div>
       <div id="bookStampToast" class="book-stamp-toast" aria-live="polite" hidden>
@@ -143,7 +144,7 @@
           <p class="eyebrow">A PHILADELPHIA WEAPON FIGHTER</p>
           <h1 id="gameTitle"><span>FINAL</span><strong>BLOW</strong></h1>
           <h2>PHILLY AFTER DARK</h2>
-          <p id="titleVersion" class="title-version" aria-label="Version 2.2">VERSION 2.2</p>
+          <p id="titleVersion" class="title-version" aria-label="Version 2.3">VERSION 2.3</p>
           <p class="hook">Eight fighters. Two streets. One last chance to finish it.</p>
         </div>
         <div class="menu-stack">
@@ -205,8 +206,12 @@
                   <option value="alan">ALLAN</option><option value="post">POST</option>
                   <option value="benny">BENNY</option><option value="donald">DONALD TRUMP</option>
                   <option value="cyraxx">CYRAXX</option><option value="ali">ALI G</option>
+                  <option value="devil">PINELANDS DEVIL</option>
                 </select></label>
                 <div class="online-opponent"><span>OPPONENT</span><b id="onlineOpponentFighter">CHOOSING…</b></div>
+                <label>COLORS<select id="onlinePaletteSelect" aria-label="Your fighter colors">
+                  <option value="0">COLOR 1 · PRIMARY</option><option value="1">COLOR 2 · ALT</option>
+                </select></label>
                 <label>STAGE<select id="onlineStageSelect" aria-label="Online stage">
                   <option value="somerset">SOMERSET SEPTA STATION</option><option value="vet">THE VET PARKING LOT</option>
                   <option value="wildwood">WILDWOOD BOARDWALK</option><option value="buffet">CHINESE BUFFET</option>
@@ -232,6 +237,7 @@
           <p>CHOOSE YOUR WEAPON</p>
           <h2 id="selectTitle">SELECT FIGHTER</h2>
           <div id="selectPrompt">PLAYER 1 — CHOOSE</div>
+          <div id="paletteHint" class="palette-hint">LIGHT CONFIRM · COLOR 1 &nbsp;·&nbsp; HEAVY CONFIRM · COLOR 2</div>
         </header>
         <div id="rosterGrid" class="roster-grid" role="listbox" aria-label="Fighter roster"></div>
         <div id="difficultyBar" class="difficulty-bar" role="radiogroup" aria-label="CPU difficulty" hidden>
@@ -624,6 +630,6 @@
 <script type="importmap">
     { "imports": { "three": "./renderer/vendor/three.module.js", "three/addons/": "./renderer/vendor/jsm/" } }
   </script>
-  <script type="module" src="game.js?v=final-blow-2.2"></script>
+  <script type="module" src="game.js?v=final-blow-2.3"></script>
 </body>
 </html>
