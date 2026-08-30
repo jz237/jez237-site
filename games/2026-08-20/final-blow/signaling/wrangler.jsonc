@@ -1,0 +1,27 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "final-blow-signaling",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGIN": "https://jz237.github.io"
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "ROOMS", "class_name": "FinalBlowRoom" },
+      { "name": "CREATE_LIMITS", "class_name": "CreateLimiter" },
+      { "name": "BOARDS", "class_name": "ChallengeBoard" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["FinalBlowRoom", "CreateLimiter"] },
+    { "tag": "v2", "new_sqlite_classes": ["ChallengeBoard"] }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": { "head_sampling_rate": 1 },
+    "traces": { "enabled": true, "head_sampling_rate": 0.05 }
+  }
+}
