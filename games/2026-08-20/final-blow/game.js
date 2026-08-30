@@ -70,9 +70,45 @@ import {
   createAiBrain,
   isPassiveDifficulty,
   normalizeAiDifficulty,
+  registerAiDifficulty,
   resetAiBrain,
   stepAiBrain,
 } from "./engine/ai.mjs";
+import {
+  DAILY_RULES,
+  MUTATORS,
+  MUTATOR_ORDER,
+  SCORE_RULES,
+  TEAM_ELIMINATION_LINES,
+  TEAM_RULES,
+  createBoutTally,
+  createDailyPlan,
+  createSurvivalRun,
+  createTeamBattle,
+  currentSurvivalBout,
+  currentTeamPair,
+  dailyDateString,
+  dailyShareText,
+  highScoreQualifies,
+  insertHighScore,
+  mutatorLabel,
+  nextDailyRecord,
+  normalizeInitials,
+  normalizeMutators,
+  previousDateString,
+  teamFightersRemaining,
+  recordSurvivalDefeat,
+  recordSurvivalWin,
+  recordTeamKo,
+  resolveMatchRules,
+  scaleMovementForRules,
+  scoreDifficultyMultiplier,
+  scoreForHit,
+  survivalRunSnapshot,
+  tallyRows,
+  tallyTotal,
+  teamBattleSnapshot,
+} from "./engine/modes.mjs";
 import {
   ARCADE_BOSS_ID,
   arcadeRunSnapshot,
@@ -919,12 +955,30 @@ const state = {
   sfxVolume: clamp(Number(localStorage.getItem("final-blow-sfx-volume") ?? "1"), 0, 1),
   aiDifficulty: normalizeAiDifficulty(localStorage.getItem("final-blow-ai-difficulty") || DEFAULT_AI_DIFFICULTY),
   arcadeRun: null,
+  // Release 1.8 GRIND: survival ladder + 3v3 team battle bookkeeping (offline
+  // modes; never part of the rollback snapshot) and the House Rules mutator
+  // config. `mutators` IS sim-affecting match config: it is snapshotted by the
+  // rollback machinery and `matchRules` is re-derived from it on restore, so
+  // both online peers always agree (plain rooms simply never set it).
+  survivalRun: null,
+  teamBattle: null,
+  teamPicks: [[], []],
+  mutators: [],
+  matchRules: resolveMatchRules([]),
+  // One-shot per round: has the Sudden Death mutator's first-clean-hit dizzy
+  // fired yet? Sim state (snapshotted + checksummed via saveRollbackState).
+  suddenDeathHitDone: false,
   controlStyle: normalizeControlStyle(localStorage.getItem("final-blow-control-style") || "classic"),
   visualQuality: normalizeVisualQuality(localStorage.getItem("final-blow-visual-quality") || "auto"),
   // Wave 7 display toggles. Sharp render defaults on (it only ever engages on
   // the desktop high profile); CRT mode is an opt-in look and defaults off.
   sharpRender: localStorage.getItem("final-blow-sharp-render") !== "0",
   crtMode: localStorage.getItem("final-blow-crt-mode") === "1",
+  // CINEMA 3D experimental Three.js presentation renderer. Persisted like the
+  // other toggles; ?renderer=3d forces it on for the session without
+  // persisting. Battery profile refuses activation (see cinema3dAllowed).
+  cinema3d: new URLSearchParams(location.search).get("renderer") === "3d"
+    || localStorage.getItem("final-blow-cinema-3d") === "1",
   performance: null,
   // Captions label every sound event over the fight — invaluable when you
   // need them, permanent UI noise when you don't. Opt-in as of the
@@ -1010,6 +1064,209 @@ const demoSession = {
   idleTimer: 0,
 };
 let fightAnnouncementTimer = 0;
+
+// --- Release 1.8 GRIND: score attack / daily / mutator sessions ------------
+// Score is pure presentation/meta, tracked OUTSIDE the checksummed sim state
+// (module-level, on the demoSession pattern). Every increment that runs on a
+// sim path sits behind a rollbackResimulating guard, and online mode is
+// excluded outright, so rollback and determinism never see the score.
+const SCORE_STORAGE_KEY = "final-blow-high-scores";
+const SCORE_INITIALS_KEY = "final-blow-initials";
+const SURVIVAL_BEST_KEY = "final-blow-survival-best";
+const SCORES_API = "https://game-scores.jez237.workers.dev/scores/final-blow";
+
+const scoreSession = {
+  active: false,
+  mode: "",
+  detail: "",
+  total: 0,
+  boutCount: 0,
+  multiplier: 1,
+  bout: createBoutTally(),
+  roundFirstHitDone: false,
+  lastBout: null,
+  lastBoutTotal: 0,
+  submitted: false,
+};
+
+const dailySession = {
+  active: false,
+  date: "",
+  plan: null,
+  finished: false,
+  outcome: null,
+};
+
+// Render-side mutator picks from the versus/team stage-select screen. Consumed
+// (normalized) into state.mutators by startMatch; never read by the sim.
+let pendingMutators = [];
+
+// Tally screen + initials entry transients (render-only).
+const tallyUi = {
+  active: false,
+  rows: [],
+  total: 0,
+  runTotal: 0,
+  multiplier: 1,
+  startedAt: 0,
+  done: false,
+  onContinue: null,
+};
+const initialsUi = {
+  active: false,
+  letters: ["A", "A", "A"],
+  cursor: 0,
+  score: 0,
+  onDone: null,
+};
+// Monotonic one-shot totals for the new modes, on the hudFxDebug pattern.
+const modeFxDebug = {
+  tallyScreens: 0,
+  tallyCountUps: 0,
+  initialsEntries: 0,
+  survivalMilestones: 0,
+  teamEliminations: 0,
+  teamWalkIns: 0,
+  dailyRuns: 0,
+  attractScoreBoards: 0,
+  scoreSubmissions: 0,
+};
+
+function loadHighScores() {
+  const stored = storedJson(SCORE_STORAGE_KEY, []);
+  return Array.isArray(stored) ? stored.filter((row) => row && Number.isFinite(row.score)) : [];
+}
+
+function saveHighScores(list) {
+  try {
+    localStorage.setItem(SCORE_STORAGE_KEY, JSON.stringify(list.slice(0, SCORE_RULES.tableSize)));
+  } catch { /* storage full/blocked — table stays in-memory for the session */ }
+}
+
+function loadSurvivalBest() {
+  const stored = storedJson(SURVIVAL_BEST_KEY, null);
+  return {
+    streak: Math.max(0, Math.round(Number(stored?.streak) || 0)),
+    score: Math.max(0, Math.round(Number(stored?.score) || 0)),
+  };
+}
+
+function saveSurvivalBest(best) {
+  try {
+    localStorage.setItem(SURVIVAL_BEST_KEY, JSON.stringify(best));
+  } catch { /* non-fatal */ }
+}
+
+function loadDailyRecord() {
+  return storedJson(DAILY_RULES.storageKey, null);
+}
+
+function saveDailyRecord(record) {
+  try {
+    localStorage.setItem(DAILY_RULES.storageKey, JSON.stringify(record));
+  } catch { /* non-fatal */ }
+}
+
+// Offline-first, failure-silent submission to Jez's first-party score worker
+// (the pinball-fantasies / hard-hat-mac client pattern). The local table is
+// already written before this is ever called; any network problem is ignored.
+async function submitScoreToWorker(initials, score, detail) {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    await fetch(SCORES_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ initials, score, extra: detail }),
+      signal: controller.signal,
+    });
+    clearTimeout(timer);
+    modeFxDebug.scoreSubmissions += 1;
+  } catch { /* offline or worker down — the local table already has it */ }
+}
+
+function scoreTrackingActive() {
+  return scoreSession.active && (state.mode === "arcade" || state.mode === "survival");
+}
+
+function beginScoreRun(mode, detail, multiplier) {
+  scoreSession.active = true;
+  scoreSession.mode = mode;
+  scoreSession.detail = detail;
+  scoreSession.total = 0;
+  scoreSession.boutCount = 0;
+  scoreSession.multiplier = multiplier;
+  scoreSession.bout = createBoutTally();
+  scoreSession.roundFirstHitDone = false;
+  scoreSession.lastBout = null;
+  scoreSession.lastBoutTotal = 0;
+  scoreSession.submitted = false;
+}
+
+function endScoreRun() {
+  scoreSession.active = false;
+}
+
+function resetRoundScoreTracking() {
+  scoreSession.roundFirstHitDone = false;
+}
+
+// Per-hit points, called from the sim's hit/grab/projectile damage sites.
+// Guarded: never during resimulation, never online, only the human player.
+function awardHitScore(attacker, kind, { counter = false } = {}) {
+  if (rollbackResimulating || !scoreTrackingActive() || attacker.side !== 0) return;
+  const points = scoreForHit(kind, { counter });
+  scoreSession.bout.fightPoints += points;
+  scoreSession.bout.hits += 1;
+  if (!scoreSession.roundFirstHitDone) {
+    scoreSession.roundFirstHitDone = true;
+    scoreSession.bout.firstAttacks += 1;
+  }
+}
+
+function awardDizzyScore(attacker) {
+  if (rollbackResimulating || !scoreTrackingActive() || attacker?.side !== 0) return;
+  scoreSession.bout.dizzies += 1;
+}
+
+// Round-end bonuses, captured in finishRound (sim path, resim-guarded there).
+function captureRoundBonuses(winner, finisherType) {
+  if (!scoreTrackingActive() || winner !== 0) return;
+  const player = state.fighters[0];
+  scoreSession.bout.rounds += 1;
+  scoreSession.bout.timeSeconds += Math.max(0, Math.ceil(state.timer));
+  scoreSession.bout.vitality += Math.max(0, Math.round(player?.health || 0));
+  if ((player?.health ?? 0) >= 100) scoreSession.bout.perfects += 1;
+  if (finisherType >= 0) scoreSession.bout.fatalities += 1;
+}
+
+// Close out the finished bout: bank its multiplied total into the run score
+// and hand back the tally for the SF2 count-up screen.
+function finalizeBoutTally() {
+  if (!scoreTrackingActive()) return null;
+  const tally = scoreSession.bout;
+  const boutTotal = tallyTotal(tally, scoreSession.multiplier);
+  scoreSession.total += boutTotal;
+  scoreSession.boutCount += 1;
+  scoreSession.lastBout = tally;
+  scoreSession.lastBoutTotal = boutTotal;
+  scoreSession.bout = createBoutTally();
+  return { tally, boutTotal, runTotal: scoreSession.total, multiplier: scoreSession.multiplier };
+}
+
+function scoreSessionSnapshot() {
+  return {
+    active: scoreSession.active,
+    mode: scoreSession.mode,
+    detail: scoreSession.detail,
+    total: scoreSession.total,
+    boutCount: scoreSession.boutCount,
+    multiplier: scoreSession.multiplier,
+    bout: { ...scoreSession.bout },
+    lastBoutTotal: scoreSession.lastBoutTotal,
+    roundFirstHitDone: scoreSession.roundFirstHitDone,
+  };
+}
 
 function onlineSnapshot() {
   const rollback = onlineSession.rollback?.metrics() || null;
@@ -1105,6 +1362,7 @@ function endDemoSession() {
   document.body.classList.remove("demo-active");
   $("#demoHud").hidden = true;
   $("#demoResultStatus").hidden = true;
+  $("#attractScores").hidden = true;
   if (state.mode === "demo") state.mode = "arcade";
   if (state.musicChoice !== "auto") setTrack(Number(state.musicChoice), false);
 }
@@ -1127,8 +1385,13 @@ function startNextDemoMatch() {
   demoSession.matches += 1;
   demoSession.superSide = (cycle.cycle - 1) % 2;
   demoSession.superShown = false;
+  $("#attractScores").hidden = true;
   state.mode = "demo";
   state.arcadeRun = null;
+  state.survivalRun = null;
+  state.teamBattle = null;
+  dailySession.active = false;
+  endScoreRun();
   state.picks = picks;
   state.locks = [true, true];
   state.stage = cycle.stage;
@@ -1169,6 +1432,15 @@ function scheduleNextDemoMatch() {
   if (!demoSession.active) return;
   clearDemoResultTimer();
   $("#demoResultStatus").hidden = false;
+  // Release 1.8 GRIND: real-cabinet attract loop — while the idle demo holds
+  // its result, the local high-score table takes the screen.
+  if (demoSession.attract) {
+    const table = renderHighScoreBoard();
+    if (table.length) {
+      $("#attractScores").hidden = false;
+      modeFxDebug.attractScoreBoards += 1;
+    }
+  }
   demoSession.resultTimer = window.setTimeout(() => {
     demoSession.resultTimer = 0;
     startNextDemoMatch();
@@ -1716,7 +1988,11 @@ function validOnlineMatchConfig(config) {
     && Number.isInteger(config.inputDelay)
     && config.inputDelay >= 0
     && config.inputDelay <= 4
-    && config.controlStyles?.length === 2,
+    && config.controlStyles?.length === 2
+    // Optional shared House Rules: absent (plain rooms) or a list of known
+    // mutator ids agreed by both peers. Unknown ids reject the config.
+    && (config.mutators === undefined
+      || (Array.isArray(config.mutators) && config.mutators.every((id) => Boolean(MUTATORS[id])))),
   );
 }
 
@@ -1936,7 +2212,11 @@ function makeFighter(index, side, overrideDef = null) {
   const def = overrideDef || roster[index];
   const kitId = def.kitId || def.id;
   const kit = getFighterKit(kitId);
-  const movement = getFighterMovement(kitId, MOVEMENT_RULES);
+  // Release 1.8 GRIND: the Turbo mutator scales walk/dash speeds here, at
+  // build time. Movement is a derived-from-config reference (never cloned by
+  // the rollback snapshot), and mutators are constant for the whole match, so
+  // a rollback rebuild derives the identical object.
+  const movement = scaleMovementForRules(getFighterMovement(kitId, MOVEMENT_RULES), state.matchRules);
   return {
     def,
     kitId,
@@ -2002,6 +2282,9 @@ function makeFighter(index, side, overrideDef = null) {
     previousDirectionalInput: { left: false, right: false },
     justWoke: false,
     throwTechFlashFrames: 0,
+    // Release 1.8 GRIND: Block War walk-in target during the intro (plain
+    // data — snapshot-cloned like every other fighter field; null when idle).
+    introWalkTarget: null,
     // Personal throwable ammunition, refreshed at the start of every round.
     throwableUses: throwableUses(kitId),
     throwableSpawned: false,
@@ -3419,6 +3702,11 @@ function saveRollbackState() {
     hitstop: state.hitstop,
     matchSeed: state.matchSeed,
     lastImpactSide: state.lastImpactSide,
+    // Release 1.8 GRIND: House Rules config + the Sudden Death one-shot are
+    // sim inputs, so they live in the snapshot (matchRules is derived from
+    // mutators on restore rather than stored — single source of truth).
+    mutators: [...state.mutators],
+    suddenDeathHitDone: state.suddenDeathHitDone,
     rng: state.rng.getState(),
     visualRng: state.visualRng.getState(),
     fighters: state.fighters.map(saveRollbackFighter),
@@ -3453,6 +3741,11 @@ function restoreRollbackState(snapshot) {
   state.hitstop = snapshot.hitstop;
   state.matchSeed = snapshot.matchSeed;
   state.lastImpactSide = snapshot.lastImpactSide;
+  // Mutator config restores BEFORE the fighters: makeFighter derives movement
+  // from state.matchRules, so a mid-restore rebuild must see the right rules.
+  state.mutators = [...(snapshot.mutators || [])];
+  state.matchRules = resolveMatchRules(state.mutators);
+  state.suddenDeathHitDone = Boolean(snapshot.suddenDeathHitDone);
   state.rng.setState(snapshot.rng);
   state.visualRng.setState(snapshot.visualRng);
   for (let side = 0; side < 2; side += 1) {
@@ -3616,6 +3909,574 @@ function makeMatchFighters() {
   return [makeFighter(state.picks[0], 0), makeFighter(state.picks[1], 1, bossOverride)];
 }
 
+// ===========================================================================
+// Release 1.8 GRIND — mode flows: The Gauntlet (survival), Block War (3v3),
+// The Daily Jawn, House Rules mutators, and the SF2 tally / initials /
+// high-score loop. Sim-affecting values all flow through state.mutators →
+// state.matchRules (snapshotted config); everything else here is meta/UI.
+// ===========================================================================
+
+const FIGHTER_HOME_X = [355, 925];
+
+function rosterIndexById(id) {
+  return roster.findIndex((fighter) => fighter.id === id);
+}
+
+function roundsToWinValue() {
+  if (state.mode === "survival" || state.mode === "team") return 1;
+  return state.matchRules.roundsToWin || 2;
+}
+
+// The mutator set the NEXT match should run under. Online reads the shared
+// match config (plain rooms never set it — mutators stay gated out of online);
+// the daily forces its single seeded rule; versus and Block War read the
+// stage-select picker; every other mode is clean.
+function activeMutatorsForMatch() {
+  if (state.mode === "online") return state.mutators;
+  if (dailySession.active && state.mode === "arcade") return dailySession.plan?.mutator ? [dailySession.plan.mutator] : [];
+  if (state.mode === "versus" || state.mode === "team") return pendingMutators;
+  return [];
+}
+
+function applyMatchRulesForMatch() {
+  state.mutators = normalizeMutators(activeMutatorsForMatch());
+  state.matchRules = resolveMatchRules(state.mutators);
+  state.suddenDeathHitDone = false;
+}
+
+// Block War: incoming teammates start at the near arena edge and walk to
+// their slot during the intro. Fixed-dt math on snapshotted fields only.
+function updateIntroWalkIns(dt) {
+  for (const fighter of state.fighters) {
+    if (!Number.isFinite(fighter.introWalkTarget)) continue;
+    const speed = Math.max(220, Number(fighter.movement.forwardWalkSpeed) || 0);
+    const delta = fighter.introWalkTarget - fighter.x;
+    const step = Math.sign(delta) * speed * dt;
+    if (Math.abs(delta) <= Math.abs(step) + 1) {
+      fighter.x = fighter.introWalkTarget;
+      fighter.introWalkTarget = null;
+    } else {
+      fighter.x += step;
+      fighter.walkTime += dt * 2;
+    }
+  }
+}
+
+// Mode-specific fighter setup, applied right after makeMatchFighters() in
+// startMatch. Health carry-in, regen results and AI tuning are all sim inputs
+// derived from the run/battle config (never ad-hoc mid-round writes).
+function applyModeFighterSetup() {
+  if (state.mode === "survival" && state.survivalRun) {
+    const bout = currentSurvivalBout(state.survivalRun);
+    if (bout) {
+      state.fighters[0].health = clamp(bout.carryHealth, 1, 100);
+      state.fighters[1].aiBrain = createAiBrain(bout.difficultyId);
+    }
+  } else if (state.mode === "team" && state.teamBattle) {
+    const battle = state.teamBattle;
+    for (const side of [0, 1]) {
+      state.fighters[side].health = clamp(battle.carryHealth[side], 1, 100);
+      state.fighters[side].meter = clamp(battle.carryMeter[side], 0, GRIT_RULES.maximum);
+    }
+    const incomingSide = battle.lastElimination && !battle.lastElimination.over
+      ? battle.lastElimination.loserSide : -1;
+    if (incomingSide === 0 || incomingSide === 1) {
+      const fighter = state.fighters[incomingSide];
+      fighter.introWalkTarget = FIGHTER_HOME_X[incomingSide];
+      fighter.x = incomingSide === 0 ? MOVEMENT_RULES.stageMinX : MOVEMENT_RULES.stageMaxX;
+    }
+    if (battle.cpu) state.fighters[1].aiBrain = createAiBrain(state.aiDifficulty);
+  } else if (dailySession.active && state.mode === "arcade") {
+    // The Daily Jawn is identical everywhere: CPU difficulty is pinned to the
+    // plan's fixed tier regardless of the local difficulty setting.
+    state.fighters[1].aiBrain = createAiBrain(dailySession.plan?.difficulty || DAILY_RULES.difficulty);
+  }
+  if (state.matchRules.infiniteGrit) {
+    for (const fighter of state.fighters) fighter.meter = GRIT_RULES.maximum;
+  }
+}
+
+// --- Survival: The Gauntlet ------------------------------------------------
+
+function startSurvivalRun(fighterId, seed = null) {
+  state.mode = "survival";
+  state.arcadeRun = null;
+  state.teamBattle = null;
+  dailySession.active = false;
+  const runSeed = Number.isFinite(seed) ? Number(seed) >>> 0 : state.rng.nextUint32();
+  state.survivalRun = createSurvivalRun({
+    playerId: fighterId,
+    fighterIds: roster.map(({ id }) => id),
+    stageIds: Object.keys(stages),
+    seed: runSeed,
+  });
+  beginScoreRun("survival", `survival-${fighterId}`, currentSurvivalBout(state.survivalRun).multiplier);
+  prepareSurvivalBout();
+  startMatch(true);
+  return state.survivalRun;
+}
+
+function prepareSurvivalBout() {
+  const run = state.survivalRun;
+  const bout = currentSurvivalBout(run);
+  if (!run || !bout) return null;
+  registerAiDifficulty(bout.difficultyId, bout.difficultySettings);
+  state.picks[0] = Math.max(0, rosterIndexById(run.playerId));
+  state.picks[1] = Math.max(0, rosterIndexById(bout.opponentId));
+  state.locks = [true, true];
+  state.stage = bout.stage;
+  scoreSession.multiplier = bout.multiplier;
+  return bout;
+}
+
+function survivalBestSummary() {
+  return loadSurvivalBest();
+}
+
+function resolveSurvivalResult(winner) {
+  const run = state.survivalRun;
+  if (!run) {
+    showResult(winner);
+    return;
+  }
+  if (winner === 0) {
+    const tallyContext = finalizeBoutTally();
+    const outcome = recordSurvivalWin(run, state.fighters[0].health);
+    const best = loadSurvivalBest();
+    if (outcome.wins > best.streak) saveSurvivalBest({ ...best, streak: outcome.wins });
+    const proceed = () => {
+      prepareSurvivalBout();
+      startMatch(true);
+    };
+    const announceMilestone = () => {
+      if (!outcome.milestone) return;
+      modeFxDebug.survivalMilestones += 1;
+      announce(`${outcome.wins} STRAIGHT`, outcome.milestoneLine, 1.9);
+      announcerSay("perfect", { delay: 350 });
+    };
+    if (tallyContext) {
+      showBoutTally(tallyContext, proceed, {
+        title: `BOUT ${outcome.wins} CLEARED`,
+        sub: `${outcome.wins} WIN STREAK · NEXT: ${arcadeOpponentDef({ opponentId: outcome.next.opponentId })?.name || outcome.next.opponentId.toUpperCase()}`,
+        onShown: announceMilestone,
+      });
+    } else {
+      announceMilestone();
+      proceed();
+    }
+    return;
+  }
+  // Defeat: the run is over. Points earned during the losing bout still count
+  // (banked without a tally screen), then initials if the total charts.
+  recordSurvivalDefeat(run);
+  finalizeBoutTally();
+  const best = loadSurvivalBest();
+  saveSurvivalBest({
+    streak: Math.max(best.streak, run.wins),
+    score: Math.max(best.score, scoreSession.total),
+  });
+  scoreSession.detail = `survival-${run.wins}`;
+  maybeEnterInitials(() => showResult(winner));
+}
+
+// --- Team battle: Block War ------------------------------------------------
+
+function prepareTeamPairing() {
+  const battle = state.teamBattle;
+  const pair = currentTeamPair(battle);
+  if (!pair) return null;
+  state.picks[0] = Math.max(0, rosterIndexById(pair[0]));
+  state.picks[1] = Math.max(0, rosterIndexById(pair[1]));
+  state.locks = [true, true];
+  return pair;
+}
+
+function beginTeamBattle(cpuOpponent = false) {
+  state.teamBattle = createTeamBattle(state.teamPicks[0], state.teamPicks[1]);
+  state.teamBattle.cpu = Boolean(cpuOpponent);
+  prepareTeamPairing();
+  return state.teamBattle;
+}
+
+function resolveTeamResult(winner) {
+  const battle = state.teamBattle;
+  if (!battle) {
+    showResult(winner);
+    return;
+  }
+  const winnerFighter = state.fighters[winner];
+  const outcome = recordTeamKo(battle, winner, winnerFighter?.health || 0, winnerFighter?.meter || 0);
+  if (!outcome || outcome.over) {
+    showResult(winner);
+    return;
+  }
+  modeFxDebug.teamWalkIns += 1;
+  prepareTeamPairing();
+  startMatch(true);
+}
+
+// --- Daily challenge: The Daily Jawn ---------------------------------------
+
+function startDailyRun(dateOverride = null, { force = false } = {}) {
+  // The date string is computed ONCE here, render-side; the whole run derives
+  // from it (seed, fighter, opponents, stages, mutator) — never from a clock.
+  const date = dateOverride || dailyDateString();
+  const record = loadDailyRecord();
+  if (!force && !dateOverride && record?.date === date && record.played) {
+    updateDailyBanners();
+    refreshDailyUi();
+    sound("select");
+    return false;
+  }
+  const plan = createDailyPlan(date, roster.map(({ id }) => id));
+  dailySession.active = true;
+  dailySession.date = date;
+  dailySession.plan = plan;
+  dailySession.finished = false;
+  dailySession.outcome = null;
+  modeFxDebug.dailyRuns += 1;
+  endDemoSession();
+  state.mode = "arcade";
+  state.survivalRun = null;
+  state.teamBattle = null;
+  state.arcadeRun = plan.run;
+  state.picks = [Math.max(0, rosterIndexById(plan.fighterId)), 0];
+  state.locks = [true, true];
+  beginScoreRun("daily", `daily-${date}`, scoreDifficultyMultiplier(plan.difficulty));
+  prepareArcadeOpponent(true);
+  enterImmersiveMode();
+  unlockAudio();
+  startMatch(true);
+  return true;
+}
+
+function finishDailyRun(cleared) {
+  if (!dailySession.active || dailySession.finished) return null;
+  if (!cleared) finalizeBoutTally();
+  const run = state.arcadeRun;
+  const record = nextDailyRecord(loadDailyRecord(), {
+    date: dailySession.date,
+    score: scoreSession.total,
+    wins: run?.wins || 0,
+    bouts: run?.matches?.length || 8,
+    cleared,
+  });
+  saveDailyRecord(record);
+  dailySession.finished = true;
+  dailySession.outcome = {
+    cleared: Boolean(cleared),
+    score: scoreSession.total,
+    wins: run?.wins || 0,
+    bouts: run?.matches?.length || 8,
+    streak: record.streak,
+  };
+  scoreSession.detail = `daily-${dailySession.date}`;
+  updateDailyBanners();
+  refreshDailyUi();
+  return dailySession.outcome;
+}
+
+function dailyShareTextForOutcome() {
+  const outcome = dailySession.outcome;
+  if (!outcome) return "";
+  return dailyShareText({
+    date: dailySession.date,
+    fighterName: roster.find(({ id }) => id === dailySession.plan?.fighterId)?.name || dailySession.plan?.fighterId,
+    score: outcome.score,
+    wins: outcome.wins,
+    bouts: outcome.bouts,
+    cleared: outcome.cleared,
+    streak: outcome.streak,
+    mutator: dailySession.plan?.mutator,
+  });
+}
+
+async function shareDailyResult(button) {
+  const text = dailyShareTextForOutcome();
+  if (!text) return;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const scratch = document.createElement("textarea");
+    scratch.value = text;
+    document.body.append(scratch);
+    scratch.select();
+    document.execCommand("copy");
+    scratch.remove();
+  }
+  if (button) {
+    const label = button.dataset.label || button.textContent;
+    button.dataset.label = label;
+    button.textContent = "COPIED TO CLIPBOARD";
+    setTimeout(() => { button.textContent = label; }, 1400);
+  }
+}
+
+// Title-screen row state: fresh / completed + live streak readout.
+function refreshDailyUi() {
+  const status = $("#dailyStatus");
+  if (!status) return;
+  const today = dailyDateString();
+  const record = loadDailyRecord();
+  const playedToday = record?.date === today && record.played;
+  const liveStreak = record && (record.date === today || record.lastClearedDate === previousDateString(today))
+    ? record.streak : 0;
+  if (playedToday) {
+    status.textContent = `DONE · ${Math.round(record.score).toLocaleString("en-US")} PTS${liveStreak > 0 ? ` · STREAK ${liveStreak}` : ""}`;
+    $("#dailyButton")?.classList.add("daily-done");
+  } else {
+    status.textContent = `${today} · FRESH JAWN${liveStreak > 0 ? ` · STREAK ${liveStreak}` : ""}`;
+    $("#dailyButton")?.classList.remove("daily-done");
+  }
+}
+
+function updateDailyBanners() {
+  const visible = dailySession.finished && Boolean(dailySession.outcome);
+  for (const id of ["#dailyResultBanner", "#dailyEndingBanner"]) {
+    const banner = $(id);
+    if (!banner) continue;
+    banner.hidden = !visible;
+    if (!visible) continue;
+    const outcome = dailySession.outcome;
+    banner.querySelector("b").textContent = `DAILY JAWN ${dailySession.date} · ${outcome.cleared ? "CLEARED" : `OUT AT ${outcome.wins}/${outcome.bouts}`}`;
+    banner.querySelector("em").textContent = `${Math.round(outcome.score).toLocaleString("en-US")} PTS${outcome.streak > 0 ? ` · STREAK ${outcome.streak}` : ""}${dailySession.plan?.mutator ? ` · ${MUTATORS[dailySession.plan.mutator].name}` : ""}`;
+  }
+}
+
+// --- SF2 tally screen ------------------------------------------------------
+
+function showBoutTally(context, onContinue, { title = "BOUT CLEARED", sub = "", onShown = null } = {}) {
+  tallyUi.active = true;
+  tallyUi.rows = tallyRows(context.tally);
+  tallyUi.total = context.boutTotal;
+  tallyUi.runTotal = context.runTotal;
+  tallyUi.multiplier = context.multiplier;
+  tallyUi.done = false;
+  tallyUi.onContinue = onContinue;
+  tallyUi.startedAt = performance.now();
+  tallyUi.lastTickedRow = -1;
+  modeFxDebug.tallyScreens += 1;
+  $("#tallyTitle").textContent = title;
+  $("#tallySub").textContent = sub || `DIFFICULTY ×${context.multiplier}`;
+  $("#tallyRows").innerHTML = tallyUi.rows.map((row) => `
+    <div class="tally-row" data-row="${row.id}">
+      <span>${row.label}</span>
+      <small>${row.count > 0 ? `× ${row.count}` : "—"}</small>
+      <b data-points="${row.points}">0</b>
+    </div>`).join("");
+  $("#tallyMultiplier").textContent = `DIFFICULTY MULTIPLIER ×${context.multiplier}`;
+  $("#tallyBoutTotal").textContent = "0";
+  $("#tallyRunTotal").textContent = Math.round(context.runTotal - context.boutTotal).toLocaleString("en-US");
+  showScreen("tally");
+  restartCssAnimation($("#tallyScreen").querySelector(".tally-panel"), "enter");
+  if (onShown) onShown();
+  requestAnimationFrame(stepTallyCountUp);
+}
+
+// Count-up: each row ticks up on a short stagger, then the multiplied bout
+// total and run total land. A button press mid-count snaps to the final
+// numbers; the next press continues. Reduced motion resolves instantly.
+function stepTallyCountUp() {
+  if (!tallyUi.active || state.screen !== "tally") return;
+  const reduced = state.accessibility.reducedMotion;
+  const elapsed = (performance.now() - tallyUi.startedAt) / 1000;
+  const rowSlot = 0.16;
+  const rowDuration = 0.42;
+  const rowElements = $$("#tallyRows .tally-row");
+  let allDone = true;
+  rowElements.forEach((element, index) => {
+    const points = Number(element.querySelector("b").dataset.points) || 0;
+    const progress = reduced ? 1 : clamp((elapsed - index * rowSlot) / rowDuration, 0, 1);
+    if (progress < 1) allDone = false;
+    element.classList.toggle("counting", progress > 0 && progress < 1);
+    element.classList.toggle("landed", progress >= 1);
+    element.querySelector("b").textContent = Math.round(points * progress).toLocaleString("en-US");
+    if (progress >= 1 && tallyUi.lastTickedRow < index) {
+      tallyUi.lastTickedRow = index;
+      if (points > 0 && !reduced) sound("select");
+    }
+  });
+  const totalStart = reduced ? 0 : rowElements.length * rowSlot + rowDuration;
+  const totalProgress = reduced ? 1 : clamp((elapsed - totalStart) / 0.5, 0, 1);
+  $("#tallyBoutTotal").textContent = Math.round(tallyUi.total * totalProgress).toLocaleString("en-US");
+  const runBase = tallyUi.runTotal - tallyUi.total;
+  $("#tallyRunTotal").textContent = Math.round(runBase + tallyUi.total * totalProgress).toLocaleString("en-US");
+  if (allDone && totalProgress >= 1) {
+    if (!tallyUi.done) {
+      tallyUi.done = true;
+      modeFxDebug.tallyCountUps += 1;
+      $("#tallyContinueButton").classList.add("ready");
+    }
+    return;
+  }
+  requestAnimationFrame(stepTallyCountUp);
+}
+
+function tallyContinue() {
+  if (!tallyUi.active) return false;
+  if (!tallyUi.done) {
+    // First press: snap the count-up to its final numbers, resolved
+    // synchronously so the CONTINUE button arms immediately (and scripted
+    // probes can press straight through without waiting on a rAF).
+    tallyUi.startedAt = -Infinity;
+    stepTallyCountUp();
+    return true;
+  }
+  tallyUi.active = false;
+  $("#tallyContinueButton").classList.remove("ready");
+  const proceed = tallyUi.onContinue;
+  tallyUi.onContinue = null;
+  sound("select");
+  if (proceed) proceed();
+  return true;
+}
+
+// --- Initials entry + high-score table -------------------------------------
+
+function maybeEnterInitials(onDone) {
+  const score = Math.round(scoreSession.total);
+  if (!highScoreQualifies(loadHighScores(), score)) {
+    onDone();
+    return;
+  }
+  initialsUi.active = true;
+  initialsUi.score = score;
+  initialsUi.cursor = 0;
+  initialsUi.letters = normalizeInitials(localStorage.getItem(SCORE_INITIALS_KEY) || "AAA").split("");
+  initialsUi.onDone = onDone;
+  modeFxDebug.initialsEntries += 1;
+  $("#initialsScore").textContent = `${score.toLocaleString("en-US")} PTS`;
+  $("#initialsMode").textContent = scoreSession.mode === "survival"
+    ? "THE GAUNTLET" : scoreSession.mode === "daily" ? "DAILY JAWN" : "ARCADE";
+  renderInitials();
+  showScreen("initials");
+}
+
+function renderInitials() {
+  $$("#initialsSlots .initials-slot").forEach((slot, index) => {
+    slot.textContent = initialsUi.letters[index] || "A";
+    slot.classList.toggle("cursor", initialsUi.active && index === initialsUi.cursor);
+  });
+}
+
+const INITIALS_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+function cycleInitialLetter(direction) {
+  const current = initialsUi.letters[initialsUi.cursor] || "A";
+  const index = (INITIALS_ALPHABET.indexOf(current) + direction + INITIALS_ALPHABET.length) % INITIALS_ALPHABET.length;
+  initialsUi.letters[initialsUi.cursor] = INITIALS_ALPHABET[index];
+  renderInitials();
+}
+
+function commitInitials() {
+  if (!initialsUi.active) return false;
+  const initials = normalizeInitials(initialsUi.letters.join(""));
+  try {
+    localStorage.setItem(SCORE_INITIALS_KEY, initials);
+  } catch { /* non-fatal */ }
+  const { list } = insertHighScore(loadHighScores(), {
+    initials,
+    score: initialsUi.score,
+    mode: scoreSession.mode || "arcade",
+    detail: scoreSession.detail,
+    date: dailySession.finished ? dailySession.date : dailyDateString(),
+  });
+  saveHighScores(list);
+  // Optional first-party leaderboard: offline-first, silent on any failure.
+  submitScoreToWorker(initials, initialsUi.score, `${scoreSession.mode}:${scoreSession.detail}`);
+  initialsUi.active = false;
+  const done = initialsUi.onDone;
+  initialsUi.onDone = null;
+  sound("select");
+  if (done) done();
+  else showScreen("title");
+  return true;
+}
+
+function handleInitialsKey(event) {
+  if (state.screen !== "initials" || !initialsUi.active) return false;
+  const { code } = event;
+  if (/^Key[A-Z]$/.test(code)) {
+    initialsUi.letters[initialsUi.cursor] = code.slice(3);
+    initialsUi.cursor = Math.min(2, initialsUi.cursor + 1);
+  } else if (/^Digit\d$/.test(code)) {
+    initialsUi.letters[initialsUi.cursor] = code.slice(5);
+    initialsUi.cursor = Math.min(2, initialsUi.cursor + 1);
+  } else if (code === "ArrowLeft") initialsUi.cursor = Math.max(0, initialsUi.cursor - 1);
+  else if (code === "ArrowRight") initialsUi.cursor = Math.min(2, initialsUi.cursor + 1);
+  else if (code === "ArrowUp") cycleInitialLetter(1);
+  else if (code === "ArrowDown") cycleInitialLetter(-1);
+  else if (code === "Backspace") {
+    initialsUi.letters[initialsUi.cursor] = "A";
+    initialsUi.cursor = Math.max(0, initialsUi.cursor - 1);
+  } else if (["Enter", "Space", "Escape"].includes(code)) {
+    commitInitials();
+    return true;
+  } else return false;
+  event.preventDefault();
+  renderInitials();
+  return true;
+}
+
+function handleTallyKey(event) {
+  if (state.screen !== "tally" || !tallyUi.active) return false;
+  if (!["Enter", "Space", "Escape", "KeyJ", "KeyK"].includes(event.code)) return false;
+  event.preventDefault();
+  tallyContinue();
+  return true;
+}
+
+function renderHighScoreBoard(container) {
+  const table = loadHighScores();
+  const target = container || $("#attractScoresRows");
+  if (!target) return table;
+  target.innerHTML = table.length
+    ? table.map((row, index) => `
+      <div class="attract-score-row${index === 0 ? " top" : ""}">
+        <span>${String(index + 1).padStart(2, "0")}</span>
+        <b>${row.initials}</b>
+        <em>${row.mode === "survival" ? "GAUNTLET" : row.mode === "daily" ? "DAILY" : "ARCADE"}</em>
+        <strong>${Math.round(row.score).toLocaleString("en-US")}</strong>
+      </div>`).join("")
+    : `<div class="attract-score-row empty"><b>NO SCORES YET</b><strong>BE FIRST</strong></div>`;
+  return table;
+}
+
+// --- Mutator picker (versus / Block War stage select) ----------------------
+
+function renderMutatorBar() {
+  const bar = $("#mutatorBar");
+  if (!bar) return;
+  const available = ["versus", "team"].includes(state.mode);
+  bar.hidden = !available;
+  if (!available) return;
+  const options = $("#mutatorOptions");
+  if (!options.childElementCount) {
+    options.innerHTML = MUTATOR_ORDER.map((id) => `
+      <button type="button" class="mutator-chip" data-mutator="${id}" title="${MUTATORS[id].blurb}">
+        <b>${MUTATORS[id].name}</b><small>${MUTATORS[id].blurb}</small>
+      </button>`).join("");
+    options.querySelectorAll(".mutator-chip").forEach((chip) => {
+      chip.addEventListener("click", () => toggleMutator(chip.dataset.mutator));
+    });
+  }
+  options.querySelectorAll(".mutator-chip").forEach((chip) => {
+    chip.classList.toggle("selected", pendingMutators.includes(chip.dataset.mutator));
+  });
+  $("#mutatorHint").textContent = pendingMutators.length
+    ? `HOUSE RULES ON: ${mutatorLabel(pendingMutators)}`
+    : "OPTIONAL HOUSE RULES · STACK AS MANY AS YOU WANT";
+}
+
+function toggleMutator(id) {
+  if (!MUTATORS[id]) return;
+  pendingMutators = pendingMutators.includes(id)
+    ? pendingMutators.filter((existing) => existing !== id)
+    : normalizeMutators([...pendingMutators, id]);
+  sound("select");
+  renderMutatorBar();
+}
+
 function showScreen(name) {
   if (demoSession.active && !["fight", "result"].includes(name)) endDemoSession();
   const keepsOnlineLink = state.mode === "online" && ["online", "fight", "result"].includes(name);
@@ -3644,15 +4505,24 @@ function showScreen(name) {
   updateOnlineHud();
   updateDemoUi();
   syncMusic();
-  if (name === "title") scheduleIdleDemo();
-  else clearIdleDemoTimer();
+  if (name === "title") {
+    refreshDailyUi();
+    scheduleIdleDemo();
+  } else clearIdleDemoTimer();
+  if (name !== "result" && name !== "ending") updateDailyBanners();
+  if (name === "stage") renderMutatorBar();
 }
 
 function startSelect(mode) {
   enterImmersiveMode();
   unlockAudio();
-  state.mode = ["arcade", "versus", "training"].includes(mode) ? mode : "arcade";
+  state.mode = ["arcade", "versus", "training", "survival", "team"].includes(mode) ? mode : "arcade";
   state.arcadeRun = null;
+  state.survivalRun = null;
+  state.teamBattle = null;
+  state.teamPicks = [[], []];
+  dailySession.active = false;
+  endScoreRun();
   if (state.mode === "training") {
     // A fresh lab entry keeps accessibility-style toggles but clears transient
     // playback, trial and dummy state so an old recording cannot move P2 during
@@ -3664,11 +4534,15 @@ function startSelect(mode) {
     });
   }
   state.picks = [0, state.mode === "arcade" ? 4 : 1];
-  state.locks = [false, state.mode === "arcade"];
+  state.locks = [false, state.mode === "arcade" || state.mode === "survival"];
   state.selectingPlayer = 0;
   $("#selectPrompt").textContent = state.mode === "training"
     ? "CHOOSE YOUR TRAINING FIGHTER"
-    : "PLAYER 1 — CHOOSE";
+    : state.mode === "survival"
+      ? "THE GAUNTLET — CHOOSE YOUR FIGHTER"
+      : state.mode === "team"
+        ? "BLOCK WAR · PLAYER 1 — PICK 3 (1/3)"
+        : "PLAYER 1 — CHOOSE";
   showScreen("select");
   syncDifficultyUi();
   updateRosterUI();
@@ -3676,6 +4550,47 @@ function startSelect(mode) {
 
 function chooseFighter(index) {
   unlockAudio();
+  if (state.mode === "survival") {
+    // The Gauntlet: one pick, straight into bout 1 — no stage select, the
+    // seeded ladder owns the route.
+    state.picks[0] = index;
+    state.locks = [true, true];
+    sound("select");
+    const lockedCard = $(`.fighter-card[data-index="${index}"]`);
+    if (lockedCard) {
+      restartCssAnimation(lockedCard, "locked-flash");
+      hudFxDebug.selectSlams += 1;
+    }
+    announcerSay(`${roster[index].id}-name`);
+    startSurvivalRun(roster[index].id);
+    return;
+  }
+  if (state.mode === "team") {
+    const side = state.locks[0] ? 1 : 0;
+    const team = state.teamPicks[side];
+    if (team.includes(roster[index].id) || team.length >= TEAM_RULES.teamSize) return;
+    team.push(roster[index].id);
+    state.picks[side] = index;
+    state.selectingPlayer = side;
+    if (team.length >= TEAM_RULES.teamSize) {
+      state.locks[side] = true;
+      state.selectingPlayer = 1;
+    }
+    $("#selectPrompt").textContent = state.locks[0] && state.locks[1]
+      ? "BLOCK WAR · TEAMS SET — STAGE SELECT"
+      : state.locks[0]
+        ? `BLOCK WAR · PLAYER 2 — PICK 3 (${state.teamPicks[1].length + 1}/3)`
+        : `BLOCK WAR · PLAYER 1 — PICK 3 (${state.teamPicks[0].length + 1}/3)`;
+    sound("select");
+    const lockedCard = $(`.fighter-card[data-index="${index}"]`);
+    if (lockedCard) {
+      restartCssAnimation(lockedCard, "locked-flash");
+      hudFxDebug.selectSlams += 1;
+    }
+    if (!(state.locks[0] && state.locks[1])) announcerSay(`${roster[index].id}-name`);
+    updateRosterUI();
+    return;
+  }
   if (state.mode === "arcade") {
     state.picks[0] = index;
     state.locks = [true, true];
@@ -3684,6 +4599,8 @@ function chooseFighter(index) {
       roster.map(({ id }) => id),
       state.rng.nextUint32(),
     );
+    // Release 1.8 GRIND: every arcade run is a score-attack run.
+    beginScoreRun("arcade", `arcade-${roster[index].id}`, scoreDifficultyMultiplier(state.aiDifficulty));
     prepareArcadeOpponent(false);
   } else if (!state.locks[0]) {
     state.picks[0] = index;
@@ -3711,14 +4628,22 @@ function chooseFighter(index) {
 }
 
 function updateRosterUI() {
+  const teamMode = state.mode === "team";
   $$(".fighter-card").forEach((card) => {
     const index = Number(card.dataset.index);
-    card.classList.toggle("p1-pick", state.locks[0] && state.picks[0] === index);
-    card.classList.toggle("p2-pick", state.locks[1] && state.picks[1] === index);
+    const id = roster[index]?.id;
+    card.classList.toggle("p1-pick", teamMode
+      ? state.teamPicks[0].includes(id)
+      : state.locks[0] && state.picks[0] === index);
+    card.classList.toggle("p2-pick", teamMode
+      ? state.teamPicks[1].includes(id)
+      : state.locks[1] && state.picks[1] === index);
     card.classList.toggle("focused", !state.locks[state.selectingPlayer] && state.picks[state.selectingPlayer] === index);
   });
   const readout = $("#selectionReadout");
-  readout.innerHTML = `<span>P1</span> <b class="vs-name p1n">${roster[state.picks[0]].name}</b> <i>VS</i> <span>P2</span> <b class="vs-name p2n">${roster[state.picks[1]].name}</b>`;
+  readout.innerHTML = teamMode
+    ? `<span>P1</span> <b class="vs-name p1n">${state.teamPicks[0].map((id) => roster[rosterIndexById(id)].mark).join("·") || "—"}</b> <i>VS</i> <span>P2</span> <b class="vs-name p2n">${state.teamPicks[1].map((id) => roster[rosterIndexById(id)].mark).join("·") || "—"}</b>`
+    : `<span>P1</span> <b class="vs-name p1n">${roster[state.picks[0]].name}</b> <i>VS</i> <span>P2</span> <b class="vs-name p2n">${roster[state.picks[1]].name}</b>`;
   const bothLocked = state.locks[0] && state.locks[1];
   readout.classList.toggle("both-locked", bothLocked);
   // VS slam: once both slots lock, the two names slam in from the sides
@@ -3768,8 +4693,22 @@ function startMatch(resetSet = true) {
   }
   state.matchSerial += 1;
   state.qaManualMode = false;
+  // Release 1.8 GRIND: build the Block War roster on the first FIGHT press,
+  // then lock the House Rules config for this match BEFORE the fighters are
+  // built (Turbo scales movement at makeFighter time).
+  if (state.mode === "team" && !state.teamBattle && state.teamPicks[0].length === TEAM_RULES.teamSize) {
+    beginTeamBattle(false);
+  }
+  applyMatchRulesForMatch();
+  resetRoundScoreTracking();
+  // Arcade bouts score against the CURRENT difficulty setting; survival and
+  // the daily pin their own multipliers when they prepare the bout.
+  if (scoreSession.active && scoreSession.mode === "arcade" && state.mode === "arcade") {
+    scoreSession.multiplier = scoreDifficultyMultiplier(state.aiDifficulty);
+  }
   seedMatch(state.round);
   state.fighters = makeMatchFighters();
+  applyModeFighterSetup();
   resetStageWeapon();
   resetCrowd();
   warmFighterAudio();
@@ -3808,10 +4747,28 @@ function startMatch(resetSet = true) {
   showScreen("fight");
   updateTrainingUi();
   const arcadeMatch = state.mode === "arcade" ? currentArcadeMatch(state.arcadeRun) : null;
-  const introLabel = arcadeMatch?.kind === "boss" ? "FINAL BOUT · THE COMMISSIONER"
+  let introLabel = arcadeMatch?.kind === "boss" ? "FINAL BOUT · THE COMMISSIONER"
     : arcadeMatch?.kind === "rival" ? `RIVAL BOUT · ${state.fighters[1].def.name}`
       : stages[state.stage].name;
-  announce(`ROUND ${state.round}`, introLabel, 1.2);
+  let introMain = `ROUND ${state.round}`;
+  // Release 1.8 GRIND: mode-flavoured intro banners. Survival counts bouts,
+  // Block War calls the pairing (and the walk-in), active House Rules get
+  // named, and a walked-in teammate gets their name-call intro voice cue.
+  if (state.mode === "survival" && state.survivalRun) {
+    const bout = currentSurvivalBout(state.survivalRun);
+    introMain = `BOUT ${(bout?.index ?? 0) + 1}`;
+    introLabel = `${state.fighters[1].def.name} · ${state.survivalRun.wins} WIN STREAK`;
+  } else if (state.mode === "team" && state.teamBattle) {
+    const battle = state.teamBattle;
+    const incoming = battle.lastElimination?.incomingId;
+    introMain = `BOUT ${battle.bout}`;
+    introLabel = incoming
+      ? `${roster[rosterIndexById(incoming)]?.name || incoming} STEPS IN · ${teamFightersRemaining(battle, 0)}V${teamFightersRemaining(battle, 1)}`
+      : `BLOCK WAR · ${teamFightersRemaining(battle, 0)}V${teamFightersRemaining(battle, 1)}`;
+    if (incoming) announcerSay(`${incoming}-name`, { delay: 300 });
+  }
+  if (state.mutators.length) introLabel = `${introLabel} · ${mutatorLabel(state.mutators)}`;
+  announce(introMain, introLabel, 1.2);
   // Wave 9: the arcade final boss bout gets its own announcer intro, queued
   // behind ROUND 1 / FIGHT via the announcer busy window.
   if (arcadeMatch?.kind === "boss") {
@@ -3831,6 +4788,16 @@ function startOnlineMatch(config) {
   resetMusicDuck();
   state.mode = "online";
   state.arcadeRun = null;
+  state.survivalRun = null;
+  state.teamBattle = null;
+  dailySession.active = false;
+  endScoreRun();
+  // Release 1.8 GRIND: mutators only run online when BOTH sides carry them in
+  // the shared match config. The lobby never offers them, so plain/ranked
+  // rooms always derive the clean default rules on both peers.
+  state.mutators = normalizeMutators(config.mutators || []);
+  state.matchRules = resolveMatchRules(state.mutators);
+  state.suddenDeathHitDone = false;
   state.qaManualMode = false;
   state.paused = false;
   onlineSession.matchConfig = cloneRollbackValue(config);
@@ -3903,11 +4870,16 @@ function resetRound() {
   const carriedGrit = state.fighters.map((fighter) => fighter.meter);
   state.round += 1;
   state.qaManualMode = false;
+  // Release 1.8 GRIND: per-round sim/meta resets — the Sudden Death one-shot
+  // re-arms (sim state) and the FIRST ATTACK score flag re-arms (meta).
+  state.suddenDeathHitDone = false;
+  resetRoundScoreTracking();
   if (state.mode === "online") seedOnlineRound(state.round);
   else seedMatch(state.round);
   state.fighters = makeMatchFighters();
   warmFighterAudio();
   state.fighters.forEach((fighter, side) => { fighter.meter = carriedGrit[side] || 0; });
+  if (state.matchRules.infiniteGrit) state.fighters.forEach((fighter) => { fighter.meter = GRIT_RULES.maximum; });
   resetStageWeapon();
   resetCrowd();
   clearBattleDamage();
@@ -3981,18 +4953,36 @@ function updateFlowSkipHint() {
   $("#flowSkipHint").hidden = !visible;
 }
 
+// Release 1.8 GRIND: only HUMAN inputs may skip the intro/round-over flow. A
+// CPU pressing buttons (arcade zoners, survival, Block War, demo) used to
+// fast-forward straight through — which would eat the new elimination
+// callouts and team walk-ins entirely.
+function sideIsCpuControlled(side) {
+  if (state.mode === "demo" || state.mode === "tournament") return true;
+  if (side !== 1) return false;
+  return state.mode === "arcade"
+    || state.mode === "survival"
+    || (state.mode === "team" && Boolean(state.teamBattle?.cpu))
+    || (state.mode === "training" && state.training.dummyMode === "cpu");
+}
+
 function trySkipFightFlow(input0 = {}, input1 = {}) {
-  if (!hasFlowSkipInput(input0) && !hasFlowSkipInput(input1)) return false;
-  // In the CPU-only modes the "any button" here is the AI mashing, and a
-  // finisher is the thing being exhibited — the showcase must never cancel
-  // itself. (Before inputs flowed through hitstop this was only ever
-  // protected by decision-cadence luck.) A human watching a demo leaves via
-  // the real exit path, which does not come through the simulation inputs.
+  const humanInput0 = sideIsCpuControlled(0) ? {} : input0;
+  const humanInput1 = sideIsCpuControlled(1) ? {} : input1;
+  if (!hasFlowSkipInput(humanInput0) && !hasFlowSkipInput(humanInput1)) return false;
+  // In the CPU-only modes a finisher is the thing being exhibited — the
+  // showcase must never cancel itself. The CPU-input filter above already
+  // covers demo and tournament; kept as belt-and-braces.
   if (state.phase === "roundover" && state.finisher
     && (state.mode === "demo" || state.mode === "tournament")) return false;
   if (state.phase === "intro") {
     state.phase = "fight";
     state.phaseTime = 0;
+    // A skipped intro lands any Block War walk-in on their slot instantly.
+    for (const fighter of state.fighters) {
+      if (Number.isFinite(fighter.introWalkTarget)) fighter.x = fighter.introWalkTarget;
+      fighter.introWalkTarget = null;
+    }
     cancelFightAnnouncement();
     announce("FIGHT!", "INTRO SKIPPED", 0.55);
     updateFlowSkipHint();
@@ -4035,6 +5025,25 @@ function finishRound(winner, type = -1) {
   // Wave 9: round-story callouts (FLAWLESS / COMEBACK / time-over / fatality)
   // layered after the primary call — guarded + deduped like announce().
   if (!rollbackResimulating) queueStoryCallouts(winner, type);
+  // Release 1.8 GRIND: bank the SF2 tally bonuses for this round (score is
+  // meta, tracked outside the checksummed state) and, in Block War, layer the
+  // elimination callout behind the KO banner via the announcer busy window.
+  if (!rollbackResimulating) {
+    captureRoundBonuses(winner, type);
+    if (state.mode === "team" && state.teamBattle && !state.teamBattle.over) {
+      const loserDef = state.fighters[1 - winner].def;
+      const remaining = teamFightersRemaining(state.teamBattle, 1 - winner) - 1;
+      const line = TEAM_ELIMINATION_LINES[
+        (state.teamBattle.eliminated[0].length + state.teamBattle.eliminated[1].length) % TEAM_ELIMINATION_LINES.length
+      ];
+      modeFxDebug.teamEliminations += 1;
+      scheduleFightAnnouncement(() => {
+        if (state.screen === "fight" && state.phase === "roundover") {
+          announce(`${loserDef.name} ELIMINATED`, remaining > 0 ? line : "LAST ONE DOWN · BLOCK WAR OVER", 1.7);
+        }
+      }, 2550);
+    }
+  }
   updateFlowSkipHint();
   updateHud();
 }
@@ -4582,22 +5591,39 @@ function showResult(winner) {
   updateFlowSkipHint();
   const def = state.fighters[winner].def;
   const kit = getFighterKit(def.kitId || def.id);
-  const arcadeDefeat = state.mode === "arcade" && winner === 1 && state.arcadeRun;
+  const dailyOver = dailySession.active && dailySession.finished;
+  const arcadeDefeat = state.mode === "arcade" && winner === 1 && state.arcadeRun && !dailyOver;
+  const survivalOver = state.mode === "survival" && state.survivalRun?.over;
+  const teamOver = state.mode === "team" && state.teamBattle?.over;
   $("#resultEyebrow").textContent = state.mode === "demo" ? `WATCH DEMO · CYCLE ${demoSession.cycle?.cycle || 1}`
-    : arcadeDefeat ? "ARCADE RUN INTERRUPTED" : "MATCH COMPLETE";
-  $("#resultTitle").textContent = `${def.name} WINS`;
-  $("#resultFinisher").textContent = arcadeDefeat
-    ? `${currentArcadeMatch(state.arcadeRun)?.label || "BOUT"} · CONTINUE?`
-    : state.finisherType >= 0 ? def.finishers[state.finisherType] : "KNOCKOUT";
+    : survivalOver ? "THE GAUNTLET · RUN ENDED"
+      : teamOver ? "BLOCK WAR · 3V3 SETTLED"
+        : dailyOver ? "THE DAILY JAWN · ONE SHOT A DAY"
+          : arcadeDefeat ? "ARCADE RUN INTERRUPTED" : "MATCH COMPLETE";
+  $("#resultTitle").textContent = teamOver ? `TEAM P${state.teamBattle.winnerSide + 1} WINS` : `${def.name} WINS`;
+  $("#resultFinisher").textContent = survivalOver
+    ? `${state.survivalRun.wins} WINS · ${Math.round(scoreSession.total).toLocaleString("en-US")} PTS · BEST ${survivalBestSummary().streak}`
+    : teamOver
+      ? `${def.name} HOLDS THE BLOCK · ${teamFightersRemaining(state.teamBattle, state.teamBattle.winnerSide)} STILL STANDING`
+      : dailyOver
+        ? `${dailySession.outcome?.cleared ? "CLEARED" : "RUN OVER"} · ${Math.round(scoreSession.total).toLocaleString("en-US")} PTS`
+        : arcadeDefeat
+          ? `${currentArcadeMatch(state.arcadeRun)?.label || "BOUT"} · CONTINUE?`
+          : state.finisherType >= 0 ? def.finishers[state.finisherType] : "KNOCKOUT";
   const victoryPose = $("#victoryPose");
   victoryPose.classList.toggle("portrait-art", !kit || def.boss);
   victoryPose.style.backgroundImage = kit && !def.boss
     ? `url("assets/moves/${def.id}-specials.webp")`
     : `url("assets/fighters/${def.id}.webp")`;
   $("#resultQuote").textContent = def.victoryQuote || kit?.victory.quote || "PHILLY REMEMBERS THE WINNER.";
-  $("#rematchButton").textContent = arcadeDefeat ? "CONTINUE" : state.mode === "online" ? "REQUEST REMATCH" : "INSTANT REMATCH";
-  $("#reselectButton").textContent = arcadeDefeat ? "ABANDON RUN" : state.mode === "online" ? "LEAVE ROOM" : "SELECT FIGHTERS";
+  $("#rematchButton").textContent = survivalOver ? "NEW GAUNTLET RUN"
+    : teamOver ? "REMATCH · SAME TEAMS"
+      : dailyOver ? "BACK TO TITLE"
+        : arcadeDefeat ? "CONTINUE" : state.mode === "online" ? "REQUEST REMATCH" : "INSTANT REMATCH";
+  $("#reselectButton").textContent = arcadeDefeat ? "ABANDON RUN"
+    : state.mode === "online" ? "LEAVE ROOM" : "SELECT FIGHTERS";
   $("#newStageButton").hidden = state.mode !== "versus";
+  updateDailyBanners();
   showScreen("result");
   // Victory entrance: pose rises from the bottom edge, the WINS title slams
   // in with a scale-settle, the finisher name stamps down last, and a light
@@ -4660,25 +5686,55 @@ function showArcadeEnding() {
   $("#endingStory").textContent = ending.story;
   $("#endingArt").style.backgroundImage = `url("assets/moves/${def.id}-specials.webp")`;
   renderArcadeRoute();
+  updateDailyBanners();
   showScreen("ending");
 }
 
 function resolveMatchResult(winner) {
+  // Release 1.8 GRIND: mode routing. Survival and Block War resolve their
+  // single-round bouts here; arcade (and the Daily Jawn riding it) keeps the
+  // ladder flow but gains the SF2 tally + initials loop.
+  if (state.mode === "survival" && state.survivalRun) {
+    resolveSurvivalResult(winner);
+    return;
+  }
+  if (state.mode === "team" && state.teamBattle) {
+    resolveTeamResult(winner);
+    return;
+  }
   if (state.mode !== "arcade" || !state.arcadeRun) {
     showResult(winner);
     return;
   }
   const outcome = recordArcadeResult(state.arcadeRun, winner === 0);
   if (winner !== 0) {
+    // The Daily Jawn is one attempt — a defeat ends the run (score recorded,
+    // streak broken) with no continues, then initials if the total charts.
+    if (dailySession.active && !dailySession.finished) {
+      finishDailyRun(false);
+      maybeEnterInitials(() => showResult(winner));
+      return;
+    }
     showResult(winner);
     return;
   }
-  if (outcome.completed) {
-    showArcadeEnding();
-    return;
-  }
-  prepareArcadeOpponent(true);
-  showArcadeLadder(outcome.match);
+  const tallyContext = finalizeBoutTally();
+  const proceed = () => {
+    if (outcome.completed) {
+      if (dailySession.active && !dailySession.finished) finishDailyRun(true);
+      maybeEnterInitials(() => showArcadeEnding());
+      return;
+    }
+    prepareArcadeOpponent(true);
+    showArcadeLadder(outcome.match);
+  };
+  if (tallyContext) {
+    const cleared = arcadeOpponentDef(outcome.match)?.name || "";
+    showBoutTally(tallyContext, proceed, {
+      title: outcome.completed ? "ARCADE CLEARED" : `${outcome.match.label} CLEARED`,
+      sub: cleared ? `${cleared} DEFEATED · ×${tallyContext.multiplier} DIFFICULTY` : "",
+    });
+  } else proceed();
 }
 
 function updateHud() {
@@ -4740,8 +5796,12 @@ function updateHud() {
     }
   }
   if (!timerLow) timerEl.classList.remove("tick");
+  const battle = state.teamBattle;
   $("#roundLabel").textContent = state.mode === "training" ? "TRAINING"
-    : state.mode === "demo" ? `DEMO · ROUND ${state.round}` : `ROUND ${state.round}`;
+    : state.mode === "demo" ? `DEMO · ROUND ${state.round}`
+      : state.mode === "survival" ? `GAUNTLET · BOUT ${(currentSurvivalBout(state.survivalRun)?.index ?? 0) + 1}`
+        : state.mode === "team" && battle ? `BLOCK WAR · ${teamFightersRemaining(battle, 0)}V${teamFightersRemaining(battle, 1)}`
+          : `ROUND ${state.round}`;
   const finishing = state.phase === "finish" && state.finishWinner === 0;
   const superReady = state.phase === "fight" && state.fighters[0]?.meter >= GRIT_RULES.superCost;
   setTouchPrompt(finishing ? "final" : superReady ? "super" : "");
@@ -5384,6 +6444,9 @@ function recoverFromDizzy(fighter) {
 }
 
 function enterDizzy(fighter, attacker) {
+  // Release 1.8 GRIND: score attack — dizzying the CPU banks a tally bonus
+  // (guarded meta bookkeeping; no sim state involved).
+  awardDizzyScore(attacker);
   fighter.dizzyFrames = STUN_RULES.dizzyFrames;
   fighter.dizzyTotalFrames = STUN_RULES.dizzyFrames;
   fighter.dizzyMashCount = 0;
@@ -6348,6 +7411,9 @@ function triggerPaintTrap(trap, victim) {
     const comboResult = owner.combo.registerHit(state.simulationTick, victim.juggleCount);
     damage = trap.damage * comboResult.damageScale;
     owner.combo.addDamage(damage);
+    // Release 1.8 GRIND: score attack — a landed trap scores as a special
+    // (guarded meta bookkeeping inside; never touches sim state).
+    awardHitScore(owner, "special");
   }
   victim.health = blocked
     ? Math.max(1, victim.health - damage)
@@ -6626,6 +7692,9 @@ function triggerProjectile(projectile, victim) {
   victim.lastHitResult = blocked ? `blocked-${projectile.level}-${resultKind}` : armored ? "armor" : counter ? `counter-${resultKind}` : projectile.style === "feedback" ? "feedback-echo" : `${projectile.level}-projectile`;
   victim.hitFlash = 0.13;
   if (!blocked && !armored) {
+    // Release 1.8 GRIND: score attack — projectiles/thrown objects score as
+    // specials (guarded meta bookkeeping; never touches sim state).
+    awardHitScore(owner, "special", { counter });
     owner.combo.addDamage(damage);
     victim.attacking = null;
     victim.attackTime = 0;
@@ -6836,7 +7905,10 @@ function resetStageWeapon() {
     fighter.carriedWeapon = null;
     fighter.carryFrames = 0;
   }
-  if (!state.stageWeaponsEnabled) {
+  // Release 1.8 GRIND: the Weapons Rain house rule forces stage weapons on
+  // for the match even when the persisted toggle is off — the rule comes from
+  // matchRules (mutator config), so both peers derive the same answer.
+  if (!state.stageWeaponsEnabled && !state.matchRules.weaponsRain) {
     state.stageWeapon = null;
     return;
   }
@@ -6876,6 +7948,35 @@ function updateStageWeapon() {
   const profile = stageWeaponProfile();
   if (!profile) return;
   weapon.frames += 1;
+  // Release 1.8 GRIND: Weapons Rain house rule — a "gone" weapon re-plans the
+  // next deterministic drop after a fixed cooldown. All counters live on the
+  // snapshotted weapon object and the plan derives from matchSeed + wave, so
+  // the rain is identical on both rollback peers and across resims.
+  if (weapon.phase === "gone" && state.matchRules.weaponsRain && !state.finisher && state.phase === "fight") {
+    weapon.rainFrames = (weapon.rainFrames || 0) + 1;
+    if (weapon.rainFrames >= state.matchRules.weaponRespawnFrames) {
+      const wave = (weapon.wave || 0) + 1;
+      const plan = planStageWeapon(state.stage, {
+        matchSeed: hashSeed(state.matchSeed, "weapons-rain", wave),
+        round: state.round,
+        minX: MOVEMENT_RULES.stageMinX,
+        maxX: MOVEMENT_RULES.stageMaxX,
+      });
+      if (plan) {
+        state.stageWeapon = {
+          ...plan,
+          spawnFrame: 60,
+          phase: "pending",
+          y: FLOOR,
+          holder: -1,
+          frames: 0,
+          wave,
+          roundStartTick: state.simulationTick,
+        };
+      }
+    }
+    return;
+  }
   if (weapon.phase === "pending") {
     // spawnFrame counts from the start of the round, not from match boot.
     if (state.simulationTick - weapon.roundStartTick < weapon.spawnFrame) return;
@@ -7076,6 +8177,8 @@ function resolveGrabThrow(attacker, victim, grab, style, direction) {
   attacker.grabbing = null;
   victim.grabbed = null;
   victim.cinematicRotation = 0;
+  // Release 1.8 GRIND: score attack — a completed grab scores as a throw.
+  awardHitScore(attacker, "throw");
   victim.health = clamp(victim.health - grab.damage, 0, 100);
   victim.lastDamageFrame = state.simulationTick;
   victim.lastHitResult = ATTACK_LEVELS.THROW;
@@ -7326,6 +8429,9 @@ function hit(attacker, victim, attack, collision) {
     : blocked ? (perfect ? "perfect-guard" : `blocked-${attack.level}`)
       : armored ? "armor" : counter ? "counter" : attack.level;
   if (!blocked && !armored) {
+    // Release 1.8 GRIND: score attack — clean hits score by move class
+    // (guarded meta bookkeeping inside; never touches sim state).
+    awardHitScore(attacker, attack.superMove ? "super" : attack.kind, { counter });
     attacker.combo.addDamage(damage);
     registerAliFlow(attacker, attack);
     if (wasJuggle) victim.juggleCount += 1;
@@ -7385,6 +8491,14 @@ function hit(attacker, victim, attack, collision) {
   }
   victim.hitFlash = 0.12;
   if (!blocked && !armored) {
+    // Release 1.8 GRIND: Sudden Death house rule — the round's FIRST clean
+    // melee hit instantly dizzies its victim. The one-shot flag is sim state
+    // (snapshotted + checksummed) and the rule itself comes from matchRules,
+    // which both rollback peers derive from the same mutator config.
+    if (state.matchRules.suddenDeathDizzy && !state.suddenDeathHitDone) {
+      state.suddenDeathHitDone = true;
+      if (victim.dizzyFrames <= 0 && victim.stunImmuneFrames <= 0) enterDizzy(victim, attacker);
+    }
     addStun(victim, attacker, attack, { counter, blocked });
     if (victim.carriedWeapon) dropStageWeapon(victim, false);
   }
@@ -7581,6 +8695,12 @@ function spawnHit(x, y, def, attackKind, blocked, { direction = 1, counter = fal
   // Wave 6: directional camera recoil on landed heavy-class hits plus the
   // counter-hit punch-in (render-only latches, guarded + tick-deduped inside).
   latchImpactCinema(x, y, attackKind, blocked, direction, counter);
+  // CINEMA 3D impact latch: null when 3D is off (zero-cost), presentation-only
+  // when on — the bridge guards rollbackResimulating + tick-dedupes inside,
+  // following the announce()/latch pattern above.
+  if (cinema3dBridge.onHit) {
+    cinema3dBridge.onHit({ x, y, kind: attackKind, blocked, direction, counter, tick: state.simulationTick });
+  }
   if (blocked) {
     const count = Math.max(3, Math.round(8 * state.performance.particleScale));
     for (let index = 0; index < count; index += 1) {
@@ -7827,8 +8947,13 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
   if (state.phase === "intro") {
     input0 = {};
     input1 = {};
+    // Release 1.8 GRIND — Block War walk-in: an incoming teammate strolls to
+    // their slot during the intro. Pure dt math on snapshotted plain fields
+    // (introWalkTarget), so it is deterministic and rollback-safe by shape.
+    updateIntroWalkIns(dt);
     if (state.phaseTime <= 0) {
       state.phase = "fight";
+      for (const fighter of state.fighters) fighter.introWalkTarget = null;
       updateFlowSkipHint();
     }
   }
@@ -7840,6 +8965,17 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
   updateFighter(state.fighters[1], state.fighters[0], input1, dt);
   updateGrabHolds();
   updateStageWeapon();
+  // Release 1.8 GRIND: Infinite Grit house rule — meters pinned full, exactly
+  // the training-lab precedent. Derived from matchRules (mutator config), so
+  // both rollback peers agree; the pin re-derives identically on resim.
+  if (state.matchRules.infiniteGrit) {
+    let gritHudDirty = false;
+    for (const fighter of state.fighters) {
+      if (fighter.meter < GRIT_RULES.maximum) gritHudDirty = true;
+      fighter.meter = GRIT_RULES.maximum;
+    }
+    if (gritHudDirty) updateHud();
+  }
   state.crowdReaction = Math.max(0, state.crowdReaction - 0.016);
   const superActive = state.fighters.some((fighter) => fighter.attacking?.superMove);
   superDimLevel = clamp(superDimLevel + (superActive ? 0.09 : -0.055), 0, 1);
@@ -7896,7 +9032,10 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
     finishRound(state.finishWinner, -1);
   } else if (state.phase === "roundover" && state.phaseTime <= 0) {
     const winner = state.rounds[0] > state.rounds[1] ? 0 : 1;
-    if (state.rounds[winner] >= 2) resolveMatchResult(winner);
+    // Release 1.8 GRIND: rounds-to-win is match config now — survival and
+    // Block War pairings are single-round, and the One-Round Showdown house
+    // rule shortens versus sets the same way.
+    if (state.rounds[winner] >= roundsToWinValue()) resolveMatchResult(winner);
     else resetRound();
   }
 
@@ -8005,8 +9144,13 @@ function simulateOfflineGameTick(dt) {
     enterKnockdown(state.fighters[1]);
     trainingDummy = { ...trainingDummy, trainingKnockdown: false };
   }
+  const cpuOpponent = state.mode === "arcade"
+    || state.mode === "survival"
+    || (state.mode === "team" && state.teamBattle?.cpu)
+    || bothCpu
+    || (state.mode === "training" && trainingDummy === null);
   let input1 = readQaInput(1)
-    || (state.mode === "arcade" || bothCpu || (state.mode === "training" && trainingDummy === null)
+    || (cpuOpponent
       ? aiInput(state.fighters[1], state.fighters[0], dt)
       : trainingDummy || readInput(1));
   simulatePreparedGameTick(dt, input0, input1);
@@ -9430,6 +10574,38 @@ function drawThrowable(projectile, time, life) {
   ctx.globalAlpha = Math.min(1, life * 2.2);
   switch (projectile.style) {
     case "pizza": {
+      if (cinema3dDressingActive()) {
+        // CINEMA 3D: the painted pizza-on-cutter wheel (crust blisters,
+        // mottled cheese, cupped pepperoni, rusted steel rim with a cold
+        // specular) + radial motion smear ghosts trailing the spin. The
+        // classic 2D primitives below stay byte-identical with 3D off.
+        const hd = fatalityPizzaCanvas();
+        const rim = fatalityPizzaRimCanvas();
+        ctx.rotate(angle + wobble);
+        const d = w * 1.04;
+        ctx.drawImage(hd, -d / 2, -d / 2, d, d);
+        // trailing RIM ghosts: the motion blur lives on the spinning edge —
+        // the face detail stays printed once (no doubled pepperoni).
+        ctx.save();
+        ctx.globalAlpha *= 0.3;
+        ctx.rotate(-0.1);
+        ctx.drawImage(rim, -d / 2, -d / 2, d, d);
+        ctx.rotate(-0.12);
+        ctx.globalAlpha *= 0.55;
+        ctx.drawImage(rim, -d / 2, -d / 2, d, d);
+        ctx.restore();
+        // rim speed smears: short bright arcs whipping off the cutting edge
+        ctx.strokeStyle = "rgba(255,244,225,0.55)";
+        ctx.lineCap = "round";
+        ctx.lineWidth = Math.max(1.5, w * 0.02);
+        for (let s = 0; s < 3; s += 1) {
+          const a0 = s * 2.1 + 0.4;
+          ctx.beginPath();
+          ctx.arc(0, 0, w * 0.52, a0, a0 + 0.5);
+          ctx.stroke();
+        }
+        break;
+      }
       ctx.rotate(angle + wobble);
       ctx.fillStyle = "#e8b23a";
       ctx.beginPath();
@@ -10558,6 +11734,467 @@ function drawFinisherImpact(effect, alpha) {
   }
 }
 
+// --- CINEMA 3D fatality dressing -------------------------------------------
+// True while the CINEMA 3D presentation is ON (toggle + eligible + loaded),
+// including during scripted finishers where the world temporarily renders 2D.
+// Every caller keeps the classic 2D path byte-identical when this is false.
+function cinema3dDressingActive() {
+  return Boolean(cinema3dBridge.renderer?.ready && state.cinema3d && cinema3dAllowed());
+}
+
+// One-time offscreen canvases for the 3D-mode fatality frame: an actually
+// painted pizza-on-cutter wheel and a dimensional blood droplet sprite.
+// Built lazily on first 3D fatality; nothing allocates per frame.
+const fatalityDressing = { pizza: null, pizzaRim: null, droplet: null };
+
+// Rim-only copy of the pizza wheel (outer steel + crust edge): the spin
+// ghosts draw THIS, so the motion blur lives on the wheel's rim where a
+// spinning disc actually smears, instead of double-printing the pepperoni.
+function fatalityPizzaRimCanvas() {
+  if (fatalityDressing.pizzaRim) return fatalityDressing.pizzaRim;
+  const source = fatalityPizzaCanvas();
+  const c = document.createElement("canvas");
+  c.width = c.height = source.width;
+  const p = c.getContext("2d");
+  p.drawImage(source, 0, 0);
+  p.globalCompositeOperation = "destination-out";
+  const hole = p.createRadialGradient(c.width / 2, c.width / 2, c.width * 0.24,
+    c.width / 2, c.width / 2, c.width * 0.4);
+  hole.addColorStop(0, "rgba(0,0,0,1)");
+  hole.addColorStop(1, "rgba(0,0,0,0)");
+  p.fillStyle = hole;
+  p.fillRect(0, 0, c.width, c.height);
+  p.globalCompositeOperation = "source-over";
+  fatalityDressing.pizzaRim = c;
+  return c;
+}
+
+function fatalityPizzaCanvas() {
+  if (fatalityDressing.pizza) return fatalityDressing.pizza;
+  const size = 512;
+  const c = document.createElement("canvas");
+  c.width = c.height = size;
+  const p = c.getContext("2d");
+  const cx = size / 2;
+  const hash = (n) => {
+    const s = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+    return s - Math.floor(s);
+  };
+  // --- rusted steel cutter wheel under the pizza ---------------------------
+  const steel = p.createRadialGradient(cx, cx, size * 0.3, cx, cx, size * 0.5);
+  steel.addColorStop(0, "#565049");
+  steel.addColorStop(0.82, "#6a635a");
+  steel.addColorStop(1, "#4a443e");
+  p.fillStyle = steel;
+  p.beginPath();
+  p.arc(cx, cx, size * 0.5 - 2, 0, Math.PI * 2);
+  p.fill();
+  // rust blotches riding the exposed rim
+  for (let i = 0; i < 26; i += 1) {
+    const a = hash(i) * Math.PI * 2;
+    const rr = size * (0.435 + hash(i + 40) * 0.05);
+    p.fillStyle = `rgba(${122 + Math.round(hash(i + 7) * 30)},${64 + Math.round(hash(i + 13) * 18)},38,${(0.35 + hash(i + 3) * 0.4).toFixed(2)})`;
+    p.beginPath();
+    p.ellipse(cx + Math.cos(a) * rr, cx + Math.sin(a) * rr,
+      size * (0.012 + hash(i + 21) * 0.02), size * (0.008 + hash(i + 33) * 0.012), a, 0, Math.PI * 2);
+    p.fill();
+  }
+  // sharpened cutting edge + cold specular arc (the metal must read METAL)
+  p.lineWidth = size * 0.012;
+  p.strokeStyle = "#b9bfc7";
+  p.beginPath();
+  p.arc(cx, cx, size * 0.488, 0, Math.PI * 2);
+  p.stroke();
+  p.lineWidth = size * 0.016;
+  p.strokeStyle = "rgba(240,246,252,0.95)";
+  p.beginPath();
+  p.arc(cx, cx, size * 0.488, Math.PI * 1.12, Math.PI * 1.62);
+  p.stroke();
+  p.lineWidth = size * 0.01;
+  p.strokeStyle = "rgba(18,16,14,0.8)";
+  p.beginPath();
+  p.arc(cx, cx, size * 0.488, Math.PI * 0.1, Math.PI * 0.55);
+  p.stroke();
+  // --- crust ring with charred blisters ------------------------------------
+  const crustR = size * 0.42;
+  const crust = p.createRadialGradient(cx, cx, size * 0.3, cx, cx, crustR);
+  crust.addColorStop(0, "#c9873c");
+  crust.addColorStop(0.75, "#d99a48");
+  crust.addColorStop(1, "#a86a2a");
+  p.fillStyle = crust;
+  p.beginPath();
+  p.arc(cx, cx, crustR, 0, Math.PI * 2);
+  p.fill();
+  for (let i = 0; i < 34; i += 1) {
+    const a = (i / 34) * Math.PI * 2 + hash(i + 60) * 0.18;
+    const rr = size * (0.365 + hash(i + 71) * 0.045);
+    const blister = size * (0.012 + hash(i + 82) * 0.016);
+    p.fillStyle = hash(i + 90) > 0.42 ? "rgba(122,70,26,0.85)" : "rgba(58,30,12,0.8)";
+    p.beginPath();
+    p.arc(cx + Math.cos(a) * rr, cx + Math.sin(a) * rr, blister, 0, Math.PI * 2);
+    p.fill();
+    p.fillStyle = "rgba(240,196,120,0.5)";
+    p.beginPath();
+    p.arc(cx + Math.cos(a) * rr - blister * 0.3, cx + Math.sin(a) * rr - blister * 0.35, blister * 0.4, 0, Math.PI * 2);
+    p.fill();
+  }
+  // --- cheese field: mottled melt over sauce -------------------------------
+  const cheeseR = size * 0.335;
+  p.fillStyle = "#b04226"; // sauce base peeking through
+  p.beginPath();
+  p.arc(cx, cx, cheeseR, 0, Math.PI * 2);
+  p.fill();
+  for (let i = 0; i < 120; i += 1) {
+    const a = hash(i + 200) * Math.PI * 2;
+    const rr = Math.sqrt(hash(i + 210)) * cheeseR * 0.96;
+    const blob = size * (0.02 + hash(i + 220) * 0.035);
+    const tone = hash(i + 230);
+    p.fillStyle = tone > 0.62 ? "rgba(242,220,143,0.9)" : tone > 0.25 ? "rgba(232,201,106,0.9)" : "rgba(214,178,84,0.85)";
+    p.beginPath();
+    p.ellipse(cx + Math.cos(a) * rr, cx + Math.sin(a) * rr, blob, blob * (0.6 + hash(i + 240) * 0.5), a, 0, Math.PI * 2);
+    p.fill();
+  }
+  // browned cheese bubbles
+  for (let i = 0; i < 26; i += 1) {
+    const a = hash(i + 300) * Math.PI * 2;
+    const rr = Math.sqrt(hash(i + 310)) * cheeseR * 0.9;
+    p.fillStyle = `rgba(168,112,40,${(0.3 + hash(i + 320) * 0.35).toFixed(2)})`;
+    p.beginPath();
+    p.arc(cx + Math.cos(a) * rr, cx + Math.sin(a) * rr, size * (0.006 + hash(i + 330) * 0.01), 0, Math.PI * 2);
+    p.fill();
+  }
+  // deep sauce gaps torn into the melt: the dark accents that keep the face
+  // readable through the finisher bloom + saturation drain
+  for (let i = 0; i < 12; i += 1) {
+    const a = hash(i + 500) * Math.PI * 2;
+    const rr = Math.sqrt(hash(i + 510)) * cheeseR * 0.85;
+    p.fillStyle = `rgba(112,30,16,${(0.55 + hash(i + 520) * 0.3).toFixed(2)})`;
+    p.beginPath();
+    p.ellipse(cx + Math.cos(a) * rr, cx + Math.sin(a) * rr,
+      size * (0.014 + hash(i + 530) * 0.022), size * (0.008 + hash(i + 540) * 0.012),
+      a * 1.7, 0, Math.PI * 2);
+    p.fill();
+  }
+  // edge shadow ring seating the cheese under the crust lip
+  p.lineWidth = size * 0.014;
+  p.strokeStyle = "rgba(88,44,14,0.7)";
+  p.beginPath();
+  p.arc(cx, cx, cheeseR * 0.99, 0, Math.PI * 2);
+  p.stroke();
+  // --- pepperoni: cupped discs with grease glints --------------------------
+  for (let i = 0; i < 8; i += 1) {
+    const a = (i / 8) * Math.PI * 2 + hash(i + 400) * 0.7;
+    const rr = i === 7 ? cheeseR * 0.2 : cheeseR * (0.38 + hash(i + 410) * 0.5);
+    const px = cx + Math.cos(a) * rr;
+    const py = cx + Math.sin(a) * rr;
+    const pr = size * (0.055 + hash(i + 420) * 0.014);
+    // flat cured-meat read (the deep sphere gradient read as chocolate)
+    const cup = p.createRadialGradient(px - pr * 0.2, py - pr * 0.24, pr * 0.3, px, py, pr);
+    cup.addColorStop(0, "#c8523a");
+    cup.addColorStop(0.7, "#b03a2a");
+    cup.addColorStop(0.92, "#8a251a");
+    cup.addColorStop(1, "#6e1a12");
+    p.fillStyle = cup;
+    p.beginPath();
+    p.arc(px, py, pr, 0, Math.PI * 2);
+    p.fill();
+    // charred cup rim + grease specular
+    p.lineWidth = pr * 0.16;
+    p.strokeStyle = "rgba(52,12,8,0.75)";
+    p.beginPath();
+    p.arc(px, py, pr * 0.92, Math.PI * 0.1, Math.PI * 1.1);
+    p.stroke();
+    p.fillStyle = "rgba(255,214,178,0.85)";
+    p.beginPath();
+    p.ellipse(px - pr * 0.3, py - pr * 0.34, pr * 0.16, pr * 0.1, -0.6, 0, Math.PI * 2);
+    p.fill();
+  }
+  // top-light: soft directional sheen across the whole face
+  const sheen = p.createLinearGradient(0, 0, size, size);
+  sheen.addColorStop(0, "rgba(255,240,210,0.16)");
+  sheen.addColorStop(0.45, "rgba(255,240,210,0)");
+  sheen.addColorStop(1, "rgba(30,10,4,0.18)");
+  p.fillStyle = sheen;
+  p.beginPath();
+  p.arc(cx, cx, crustR, 0, Math.PI * 2);
+  p.fill();
+  // hub + bolt
+  p.fillStyle = "#2c2a28";
+  p.beginPath();
+  p.arc(cx, cx, size * 0.055, 0, Math.PI * 2);
+  p.fill();
+  p.lineWidth = size * 0.008;
+  p.strokeStyle = "#9aa0a8";
+  p.stroke();
+  p.fillStyle = "#e8edf2";
+  p.beginPath();
+  p.arc(cx - size * 0.014, cx - size * 0.016, size * 0.014, 0, Math.PI * 2);
+  p.fill();
+  fatalityDressing.pizza = c;
+  return c;
+}
+
+// Round-4 blood grammar (Kimberly-paint reference): a DIRECTIONAL teardrop —
+// fat glossy head pointing +x, comma tail whipping back along -x — so every
+// draw site can aim it along a velocity. Deep arterial reds (no browns), a
+// hot core inside the head, a dark wet rim, one bright specular kiss.
+function fatalityDropletCanvas() {
+  if (fatalityDressing.droplet) return fatalityDressing.droplet;
+  const size = 96;
+  const c = document.createElement("canvas");
+  c.width = c.height = size;
+  const p = c.getContext("2d");
+  // comma body: tail tip (12,47) -> top edge -> around the head -> sagging
+  // bottom edge back to the tip.
+  const body = () => {
+    p.beginPath();
+    p.moveTo(12, 47);
+    p.bezierCurveTo(30, 37, 44, 31, 60, 31);
+    p.arc(60, 48, 17, -Math.PI / 2, Math.PI / 2);
+    p.bezierCurveTo(42, 66, 26, 57, 12, 47);
+    p.closePath();
+  };
+  const grad = p.createRadialGradient(64, 43, 3, 60, 48, 42);
+  grad.addColorStop(0, "#f3312c");
+  grad.addColorStop(0.4, "#c00a18");
+  grad.addColorStop(0.78, "#7c0411");
+  grad.addColorStop(1, "#4a020c");
+  p.fillStyle = grad;
+  body();
+  p.fill();
+  // dark wet rim
+  p.strokeStyle = "rgba(40,0,8,0.85)";
+  p.lineWidth = 2.4;
+  body();
+  p.stroke();
+  // hot arterial core inside the head
+  const core = p.createRadialGradient(63, 44, 1, 63, 44, 11);
+  core.addColorStop(0, "rgba(255,92,72,0.85)");
+  core.addColorStop(1, "rgba(255,92,72,0)");
+  p.fillStyle = core;
+  p.beginPath();
+  p.arc(63, 44, 11, 0, Math.PI * 2);
+  p.fill();
+  // specular kiss + glint on the head's upper-left (lamp side)
+  p.fillStyle = "rgba(255,226,216,0.92)";
+  p.beginPath();
+  p.ellipse(56, 40, 6.2, 3.4, -0.5, 0, Math.PI * 2);
+  p.fill();
+  p.fillStyle = "rgba(255,255,255,0.95)";
+  p.beginPath();
+  p.arc(66, 38, 1.9, 0, Math.PI * 2);
+  p.fill();
+  // faint warm floor-bounce along the belly
+  p.fillStyle = "rgba(255,122,88,0.28)";
+  p.beginPath();
+  p.ellipse(58, 58, 9, 2.6, 0.15, 0, Math.PI * 2);
+  p.fill();
+  fatalityDressing.droplet = c;
+  return c;
+}
+
+// Depth layering support: the same teardrop rendered through a tiny buffer so
+// it comes back soft-edged — the FAR band of the gore field draws this one,
+// while near droplets stay sharp (big sharp near, small soft far).
+function fatalityDropletSoftCanvas() {
+  if (fatalityDressing.dropletSoft) return fatalityDressing.dropletSoft;
+  const sharp = fatalityDropletCanvas();
+  const tiny = document.createElement("canvas");
+  tiny.width = tiny.height = 20;
+  tiny.getContext("2d").drawImage(sharp, 0, 0, 20, 20);
+  const c = document.createElement("canvas");
+  c.width = c.height = sharp.width;
+  const p = c.getContext("2d");
+  p.imageSmoothingEnabled = true;
+  p.globalAlpha = 0.85;
+  p.drawImage(tiny, 0, 0, c.width, c.height);
+  fatalityDressing.dropletSoft = c;
+  return c;
+}
+
+// Floor-hit splat: an irregular wet blot with RADIAL TAILS and satellite
+// beads — what a droplet becomes the frame after it lands. Squashed by the
+// caller onto the ground plane.
+function fatalitySplatCanvas() {
+  if (fatalityDressing.splat) return fatalityDressing.splat;
+  const size = 128;
+  const c = document.createElement("canvas");
+  c.width = c.height = size;
+  const p = c.getContext("2d");
+  const cx = size / 2;
+  const hash = (n) => {
+    const s = Math.sin(n * 91.7 + 47.3) * 24634.5;
+    return s - Math.floor(s);
+  };
+  p.lineCap = "round";
+  // radial tails first (under the body): tapered strokes ending in beads
+  for (let tail = 0; tail < 7; tail += 1) {
+    const a = tail * 0.897 + hash(tail) * 0.5;
+    const len = size * (0.2 + hash(tail + 9) * 0.22);
+    const tx = cx + Math.cos(a) * len;
+    const ty = cx + Math.sin(a) * len;
+    p.strokeStyle = "rgba(122,4,17,0.9)";
+    p.lineWidth = 4.5 - hash(tail + 4) * 2;
+    p.beginPath();
+    p.moveTo(cx + Math.cos(a) * size * 0.1, cx + Math.sin(a) * size * 0.1);
+    p.quadraticCurveTo(cx + Math.cos(a) * len * 0.6, cx + Math.sin(a) * len * 0.6, tx, ty);
+    p.stroke();
+    p.fillStyle = "rgba(150,8,20,0.92)";
+    p.beginPath();
+    p.arc(tx, ty, 2.6 + hash(tail + 13) * 2, 0, Math.PI * 2);
+    p.fill();
+  }
+  // satellite micro-beads flung past the tails
+  for (let dot = 0; dot < 6; dot += 1) {
+    const a = dot * 1.13 + 0.4;
+    const len = size * (0.34 + hash(dot + 21) * 0.12);
+    p.fillStyle = "rgba(140,6,18,0.8)";
+    p.beginPath();
+    p.arc(cx + Math.cos(a) * len, cx + Math.sin(a) * len, 1.6 + hash(dot + 27) * 1.4, 0, Math.PI * 2);
+    p.fill();
+  }
+  // irregular blot body: overlapping lobes, dark rim tone under a hot centre
+  const lobes = [[0, 0, 0.17], [0.09, 0.04, 0.12], [-0.1, 0.05, 0.1], [0.03, -0.08, 0.11]];
+  for (const [ox, oy, r] of lobes) {
+    const g = p.createRadialGradient(cx + ox * size, cx + oy * size, 1, cx + ox * size, cx + oy * size, r * size);
+    g.addColorStop(0, "rgba(178,10,24,0.98)");
+    g.addColorStop(0.72, "rgba(112,4,16,0.95)");
+    g.addColorStop(1, "rgba(64,2,10,0.85)");
+    p.fillStyle = g;
+    p.beginPath();
+    p.arc(cx + ox * size, cx + oy * size, r * size, 0, Math.PI * 2);
+    p.fill();
+  }
+  // wet lamp streak
+  p.fillStyle = "rgba(255,206,196,0.55)";
+  p.beginPath();
+  p.ellipse(cx - size * 0.05, cx - size * 0.06, size * 0.07, size * 0.025, -0.4, 0, Math.PI * 2);
+  p.fill();
+  fatalityDressing.splat = c;
+  return c;
+}
+
+// Round-3 debris variety (critic item 2): the lens pass mixes FOUR distinct
+// sprites — glossy droplet (above), a matte torn MEAT CHUNK with a fat seam,
+// a pale BONE FLECK, and an elongated SPLASH RIVULET — so the gore field
+// stops reading as one pepperoni ellipse stamped 31 times. All lit from
+// upper-left (the lamp) with a dark underside.
+function fatalityChunkCanvas() {
+  if (fatalityDressing.chunk) return fatalityDressing.chunk;
+  const size = 96;
+  const c = document.createElement("canvas");
+  c.width = c.height = size;
+  const p = c.getContext("2d");
+  const cx = size / 2;
+  // irregular torn polygon
+  p.fillStyle = "#7c0d16";
+  p.beginPath();
+  p.moveTo(cx - size * 0.3, cx - size * 0.08);
+  p.lineTo(cx - size * 0.12, cx - size * 0.3);
+  p.lineTo(cx + size * 0.16, cx - size * 0.24);
+  p.lineTo(cx + size * 0.32, cx + size * 0.02);
+  p.lineTo(cx + size * 0.18, cx + size * 0.26);
+  p.lineTo(cx - size * 0.1, cx + size * 0.3);
+  p.lineTo(cx - size * 0.28, cx + size * 0.12);
+  p.closePath();
+  p.fill();
+  // darker muscle striations
+  p.strokeStyle = "#4e050c";
+  p.lineWidth = 2.5;
+  for (const [y0, y1] of [[-0.12, 0.08], [0.02, 0.2], [-0.22, -0.05]]) {
+    p.beginPath();
+    p.moveTo(cx - size * 0.2, cx + size * y0);
+    p.quadraticCurveTo(cx, cx + size * (y0 + y1) * 0.5 + 3, cx + size * 0.2, cx + size * y1);
+    p.stroke();
+  }
+  // fat seam + lamp-side highlight
+  p.fillStyle = "rgba(232,206,178,0.85)";
+  p.beginPath();
+  p.ellipse(cx - size * 0.08, cx - size * 0.16, size * 0.12, size * 0.05, -0.4, 0, Math.PI * 2);
+  p.fill();
+  p.fillStyle = "rgba(214,80,72,0.7)";
+  p.beginPath();
+  p.ellipse(cx - size * 0.14, cx - size * 0.06, size * 0.08, size * 0.05, -0.5, 0, Math.PI * 2);
+  p.fill();
+  // dark underside
+  p.fillStyle = "rgba(30,2,6,0.6)";
+  p.beginPath();
+  p.ellipse(cx + size * 0.06, cx + size * 0.2, size * 0.2, size * 0.08, 0.2, 0, Math.PI * 2);
+  p.fill();
+  fatalityDressing.chunk = c;
+  return c;
+}
+function fatalityBoneCanvas() {
+  if (fatalityDressing.bone) return fatalityDressing.bone;
+  const size = 64;
+  const c = document.createElement("canvas");
+  c.width = c.height = size;
+  const p = c.getContext("2d");
+  const cx = size / 2;
+  p.lineCap = "round";
+  // shard shaft with a snapped, flared end
+  p.strokeStyle = "#e6d3b2";
+  p.lineWidth = size * 0.14;
+  p.beginPath();
+  p.moveTo(cx - size * 0.24, cx + size * 0.16);
+  p.lineTo(cx + size * 0.2, cx - size * 0.14);
+  p.stroke();
+  p.strokeStyle = "#f4e8cd";
+  p.lineWidth = size * 0.07;
+  p.beginPath();
+  p.moveTo(cx - size * 0.22, cx + size * 0.13);
+  p.lineTo(cx + size * 0.18, cx - size * 0.14);
+  p.stroke();
+  // splintered tip + marrow fleck + blood stain at the root
+  p.fillStyle = "#f4e8cd";
+  p.beginPath();
+  p.moveTo(cx + size * 0.16, cx - size * 0.2);
+  p.lineTo(cx + size * 0.32, cx - size * 0.24);
+  p.lineTo(cx + size * 0.22, cx - size * 0.06);
+  p.closePath();
+  p.fill();
+  p.fillStyle = "#b89a74";
+  p.beginPath();
+  p.arc(cx + size * 0.12, cx - size * 0.1, size * 0.045, 0, Math.PI * 2);
+  p.fill();
+  p.fillStyle = "rgba(150,12,16,0.85)";
+  p.beginPath();
+  p.ellipse(cx - size * 0.22, cx + size * 0.16, size * 0.1, size * 0.07, 0.5, 0, Math.PI * 2);
+  p.fill();
+  fatalityDressing.bone = c;
+  return c;
+}
+function fatalityRivuletCanvas() {
+  if (fatalityDressing.rivulet) return fatalityDressing.rivulet;
+  const w = 48;
+  const h = 128;
+  const c = document.createElement("canvas");
+  c.width = w;
+  c.height = h;
+  const p = c.getContext("2d");
+  // elongated tear: fat glossy head, whipping thin tail
+  const grad = p.createLinearGradient(0, 0, 0, h);
+  grad.addColorStop(0, "rgba(196,32,28,0.98)");
+  grad.addColorStop(0.4, "rgba(150,12,16,0.95)");
+  grad.addColorStop(1, "rgba(80,2,10,0.2)");
+  p.fillStyle = grad;
+  p.beginPath();
+  p.moveTo(w * 0.5, h * 0.04);
+  p.bezierCurveTo(w * 0.92, h * 0.16, w * 0.72, h * 0.42, w * 0.58, h * 0.66);
+  p.quadraticCurveTo(w * 0.5, h * 0.86, w * 0.44, h * 0.97);
+  p.quadraticCurveTo(w * 0.38, h * 0.8, w * 0.34, h * 0.6);
+  p.bezierCurveTo(w * 0.2, h * 0.36, w * 0.14, h * 0.14, w * 0.5, h * 0.04);
+  p.closePath();
+  p.fill();
+  // glossy head kiss
+  p.fillStyle = "rgba(255,182,170,0.8)";
+  p.beginPath();
+  p.ellipse(w * 0.4, h * 0.14, w * 0.12, h * 0.045, -0.4, 0, Math.PI * 2);
+  p.fill();
+  fatalityDressing.rivulet = c;
+  return c;
+}
+
 function drawFatalityPool(effect, alpha) {
   const growth = 1 - alpha;
   const scale = effect.scale || 1;
@@ -10573,14 +12210,65 @@ function drawFatalityPool(effect, alpha) {
   ctx.beginPath();
   ctx.ellipse(0, 0, (42 + growth * 112) * scale, 8 + growth * 25, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = effect.color;
-  for (let drop = 0; drop < 13; drop += 1) {
-    const angle = drop * 2.399 + (effect.family === "glitch" ? .4 : 0);
-    const reach = (24 + growth * 118) * (.45 + (drop % 5) * .14) * scale;
-    ctx.globalAlpha = alpha * (.38 + drop % 3 * .18);
+  if (cinema3dDressingActive()) {
+    // CINEMA 3D: the pool reads WET — a darkened blood core, a cold glossy
+    // streak answering the overhead lamp, and droplets become directional
+    // spatter with dimensional cores + run-tails instead of flat ellipses.
+    const core = ctx.createRadialGradient(0, 0, 2, 0, 0, 72 * scale);
+    core.addColorStop(0, "rgba(60,2,8,0.85)");
+    core.addColorStop(0.6, "rgba(96,6,12,0.4)");
+    core.addColorStop(1, "rgba(60,2,8,0)");
+    ctx.globalAlpha = Math.min(1, alpha * 1.6);
+    ctx.fillStyle = core;
     ctx.beginPath();
-    ctx.ellipse(Math.cos(angle) * reach, Math.sin(angle) * reach * .22, 4 + drop % 4 * 3, 2 + drop % 3 * 2, angle, 0, Math.PI * 2);
+    ctx.ellipse(0, 0, (34 + growth * 74) * scale, 6 + growth * 15, 0, 0, Math.PI * 2);
     ctx.fill();
+    ctx.globalAlpha = Math.min(1, alpha * 1.2) * 0.55;
+    ctx.fillStyle = "rgba(210,236,225,0.5)"; // lamp streak on the wet surface
+    ctx.beginPath();
+    ctx.ellipse(10 * scale, -2, (20 + growth * 30) * scale, 2.6 + growth * 3, -0.06, 0, Math.PI * 2);
+    ctx.fill();
+    const droplet = fatalityDropletCanvas();
+    for (let drop = 0; drop < 13; drop += 1) {
+      const angle = drop * 2.399 + (effect.family === "glitch" ? .4 : 0);
+      const reach = (24 + growth * 118) * (.45 + (drop % 5) * .14) * scale;
+      const dx = Math.cos(angle) * reach;
+      const dy = Math.sin(angle) * reach * .22;
+      const size = (7 + drop % 4 * 4.5) * (1 + growth * 0.3);
+      ctx.globalAlpha = alpha * (.44 + drop % 3 * .2);
+      // run-tail streaking back toward the pool centre
+      ctx.strokeStyle = effect.color;
+      ctx.lineCap = "round";
+      ctx.lineWidth = Math.max(1.6, size * 0.22);
+      ctx.beginPath();
+      ctx.moveTo(dx * 0.55, dy * 0.55);
+      ctx.lineTo(dx, dy);
+      ctx.stroke();
+      ctx.save();
+      ctx.translate(dx, dy);
+      if (drop % 4 === 0) {
+        // landed hit: splat with radial tails flattened onto the floor plane
+        ctx.rotate(angle * 0.3);
+        ctx.scale(1.3, 0.45);
+        ctx.drawImage(fatalitySplatCanvas(), -size * 1.4, -size * 1.4, size * 2.8, size * 2.8);
+      } else {
+        // teardrop head pointing away from the pool, tail meeting its run-tail
+        ctx.rotate(angle);
+        ctx.scale(1.3, 0.6);
+        ctx.drawImage(droplet, -size, -size, size * 2, size * 2);
+      }
+      ctx.restore();
+    }
+  } else {
+    ctx.fillStyle = effect.color;
+    for (let drop = 0; drop < 13; drop += 1) {
+      const angle = drop * 2.399 + (effect.family === "glitch" ? .4 : 0);
+      const reach = (24 + growth * 118) * (.45 + (drop % 5) * .14) * scale;
+      ctx.globalAlpha = alpha * (.38 + drop % 3 * .18);
+      ctx.beginPath();
+      ctx.ellipse(Math.cos(angle) * reach, Math.sin(angle) * reach * .22, 4 + drop % 4 * 3, 2 + drop % 3 * 2, angle, 0, Math.PI * 2);
+      ctx.fill();
+    }
   }
   if (["rupture", "launch", "crush"].includes(effect.family)) {
     ctx.globalAlpha = alpha * .82;
@@ -10596,10 +12284,600 @@ function drawFatalityPool(effect, alpha) {
   ctx.restore();
 }
 
+// CINEMA 3D painted severed limb (round-3, critic item 2): the flat capsule
+// strokes read as a pink rubber glove on a teal toy — this builds a properly
+// PAINTED limb sprite once per (limb, palette): shaded torn sleeve, modelled
+// forearm + curled fist (or jeans + boot), a real gore stump (blood ring,
+// bone, hanging shreds), warm rim light from the wheel's glow along one edge
+// and a cool night kiss on the other, matching the fighters' rendered-paint
+// language. Built lazily, cached; the classic 2D primitives are untouched.
+const severedLimbCache = new Map();
+
+// Round-4 (ship-review item 2): the severed arm is composited from the
+// VICTIM'S OWN ATLAS PIXELS. Frame 10 of the shared 4x4 grammar is the fully
+// extended straight punch — a clean horizontal forearm + fist painted in the
+// fighter's own rendered language (Jez: bare muscled forearm, wrist wrap,
+// black glove, torn blue gi at the shoulder). HD sheet when ready (same map
+// the super close-up warms), SD atlas as fallback, null before either loads.
+function severedArmAtlasSource(victimId) {
+  const sd = fighterAtlases[victimId];
+  if (!sd?.complete || !sd.naturalWidth) return null;
+  const hdPath = `renderer/hd/${victimId}.webp`;
+  if (!superPortraitHdImages.has(hdPath)) {
+    const img = new Image();
+    img.src = hdPath;
+    superPortraitHdImages.set(hdPath, img);
+  }
+  const hd = superPortraitHdImages.get(hdPath);
+  const atlas = hd.complete && hd.naturalWidth ? hd : sd;
+  const cell = atlas.naturalWidth / 4;
+  const x0 = 2 * cell; // frame 10 = column 2, row 2
+  const y0 = 2 * cell;
+  return {
+    atlas,
+    tag: atlas === hd ? "hd" : "sd",
+    // crop: deltoid through glove knuckles (cell-normalised, grammar-level)
+    sx: x0 + cell * 0.4609, sy: y0 + cell * 0.1875,
+    sw: cell * 0.5234, sh: cell * 0.1953,
+    // arm axis anchors in atlas pixels: mid-shoulder -> fist knuckles
+    axAx: x0 + cell * 0.5312, axAy: y0 + cell * 0.2969,
+    axBx: x0 + cell * 0.9609, axBy: y0 + cell * 0.2734,
+  };
+}
+
+function severedLimbPaintedCanvas(effect, victimId = null, warmSide = 1) {
+  const leg = effect.limb.endsWith("leg");
+  const armSrc = !leg && victimId ? severedArmAtlasSource(victimId) : null;
+  const key = `${leg ? "leg" : "arm"}:${victimId || "-"}:${armSrc ? armSrc.tag : "painted"}:${warmSide}`
+    + `:${effect.clothColor}:${effect.clothAccent}:${effect.color}:${effect.secondary}`;
+  if (severedLimbCache.has(key)) return severedLimbCache.get(key);
+  const length = leg ? 92 : 72;
+  const thickness = leg ? 30 : 23;
+  const scale = 2; // authored at 2x, played back at 1x
+  const c = document.createElement("canvas");
+  c.width = Math.round(length * 1.5 * scale);
+  c.height = Math.round(thickness * 3.2 * scale);
+  const p = c.getContext("2d");
+  p.scale(scale, scale);
+  p.translate(length * 0.75, thickness * 1.6);
+  p.lineCap = "round";
+  p.lineJoin = "round";
+  const shade = (hex, f) => {
+    const n = parseInt(hex.replace("#", ""), 16);
+    const r = Math.min(255, Math.round(((n >> 16) & 255) * f));
+    const g = Math.min(255, Math.round(((n >> 8) & 255) * f));
+    const b = Math.min(255, Math.round((n & 255) * f));
+    return `rgb(${r},${g},${b})`;
+  };
+  // Fabric, not roster accent: the raw def.color is a UI hue (Jez's is
+  // near-cyan) — pulled 72% toward a night-fabric slate so the sleeve reads
+  // as the fighter's CLOTHING under stage light, never a toy shell.
+  const mixHex = (hexA, hexB, t) => {
+    const a = parseInt((hexA || "#3a5a8c").replace("#", ""), 16);
+    const b = parseInt(hexB.replace("#", ""), 16);
+    const channel = (sh) => Math.round(((a >> sh) & 255) * (1 - t) + ((b >> sh) & 255) * t)
+      .toString(16).padStart(2, "0");
+    return `#${channel(16)}${channel(8)}${channel(0)}`;
+  };
+  const cloth = mixHex(effect.clothColor, "#33415e", 0.72);
+  const skin = "#c98b70";
+  const gore = effect.color || "#a11220";
+  const goreDeep = effect.secondary || "#6d0c19";
+  // The limb is built as STACKED TAPERED STROKES (dark underlayer, mid tone,
+  // top-half highlight) along a gently sagging axis — round painted forms,
+  // no straight bars, no full-length rim rods.
+  const sag = leg ? 4 : 2.6;
+  const axis = (t) => ({ x: t * length, y: Math.sin((t + 0.42) * 2.4) * sag });
+  const strokeAlong = (t0, t1, width, tone, offY = 0, alphaScale = 1) => {
+    p.strokeStyle = tone;
+    p.globalAlpha = alphaScale;
+    p.lineWidth = width;
+    p.beginPath();
+    const a0 = axis(t0);
+    const mid = axis((t0 + t1) / 2);
+    const a1 = axis(t1);
+    p.moveTo(a0.x, a0.y + offY);
+    p.quadraticCurveTo(mid.x, mid.y + offY + 1.2, a1.x, a1.y + offY);
+    p.stroke();
+    p.globalAlpha = 1;
+  };
+  const stumpT = -0.42;
+  const stumpAt = axis(stumpT);
+  if (leg) {
+    // thigh->calf in torn jeans, boot at the far end
+    strokeAlong(-0.36, 0.3, thickness * 1.04, shade(cloth, 0.62));
+    strokeAlong(-0.36, 0.3, thickness * 0.9, cloth);
+    strokeAlong(-0.34, 0.26, thickness * 0.4, shade(cloth, 1.3), -thickness * 0.2, 0.85);
+    // knee crease + fold shadows
+    p.strokeStyle = shade(cloth, 0.55);
+    p.lineWidth = 1.8;
+    for (const fx of [-0.12, 0.05, 0.2]) {
+      const at = axis(fx);
+      p.beginPath();
+      p.moveTo(at.x, at.y - thickness * 0.3);
+      p.quadraticCurveTo(at.x + 2.5, at.y, at.x + 1, at.y + thickness * 0.32);
+      p.stroke();
+    }
+    // boot: rounded leather mass + heel + pale sole line
+    const bootAt = axis(0.42);
+    p.fillStyle = "#1a1c22";
+    p.beginPath();
+    p.ellipse(bootAt.x + thickness * 0.16, bootAt.y + 1, thickness * 0.52, thickness * 0.42, 0.12, 0, Math.PI * 2);
+    p.fill();
+    p.beginPath();
+    p.ellipse(bootAt.x + thickness * 0.62, bootAt.y + thickness * 0.16, thickness * 0.34, thickness * 0.28, 0.3, 0, Math.PI * 2);
+    p.fill();
+    p.fillStyle = "#2e323c"; // top-light on the toe
+    p.beginPath();
+    p.ellipse(bootAt.x + thickness * 0.5, bootAt.y - thickness * 0.08, thickness * 0.24, thickness * 0.12, 0.3, 0, Math.PI * 2);
+    p.fill();
+    p.strokeStyle = "#565c68";
+    p.lineWidth = 2.2;
+    p.beginPath();
+    p.moveTo(bootAt.x + thickness * 0.1, bootAt.y + thickness * 0.36);
+    p.quadraticCurveTo(bootAt.x + thickness * 0.5, bootAt.y + thickness * 0.44, bootAt.x + thickness * 0.86, bootAt.y + thickness * 0.3);
+    p.stroke();
+  } else if (armSrc) {
+    // --- HERO PROP: the victim's actual arm, cut off his sprite -------------
+    // The atlas punch-arm is clipped to a lumpy capsule along the limb axis,
+    // sheared off at the stump on a wedge plane, then dressed: torn sleeve
+    // lip with hanging threads, layered gore cross-section (dermis, muscle
+    // wedges, bone ring with marrow, wet sheen), warm wheel-glow rim on the
+    // screen-down edge (warmSide) and a night-cool key opposite.
+    const armPath = () => {
+      p.beginPath();
+      for (const [t, r] of [[-0.6, 0.64], [-0.48, 0.7], [-0.34, 0.68], [-0.2, 0.62], [-0.06, 0.56],
+        [0.08, 0.5], [0.2, 0.46], [0.3, 0.45], [0.4, 0.55], [0.48, 0.62]]) {
+        const at = axis(t);
+        p.moveTo(at.x + thickness * r, at.y);
+        p.arc(at.x, at.y, thickness * r, 0, Math.PI * 2);
+      }
+    };
+    // Cut plane sits INSIDE the sampled torn-sleeve band, so a strip of the
+    // victim's actual blue gi survives on the stump side of the sever.
+    const cutAt = axis(-0.56);
+    // 1) the sampled arm, axis-mapped shoulder->stump so the sever runs
+    //    through the torn gi sleeve and the glove stays at the far end
+    const dstA = axis(-0.52);
+    const dstB = axis(0.5);
+    const srcAngle = Math.atan2(armSrc.axBy - armSrc.axAy, armSrc.axBx - armSrc.axAx);
+    const dstAngle = Math.atan2(dstB.y - dstA.y, dstB.x - dstA.x);
+    const fit = Math.hypot(dstB.x - dstA.x, dstB.y - dstA.y)
+      / Math.hypot(armSrc.axBx - armSrc.axAx, armSrc.axBy - armSrc.axAy);
+    p.save();
+    armPath();
+    p.clip();
+    p.translate(dstA.x, dstA.y);
+    p.rotate(dstAngle - srcAngle);
+    p.scale(fit, fit * 1.16); // slight fatten across the axis: hero presence
+    p.drawImage(armSrc.atlas, armSrc.sx, armSrc.sy, armSrc.sw, armSrc.sh,
+      armSrc.sx - armSrc.axAx, armSrc.sy - armSrc.axAy, armSrc.sw, armSrc.sh);
+    p.restore();
+    // 2) light story clipped to the same silhouette: cool night key on the
+    //    screen-up edge, wheel-glow warmth on the screen-down edge, a soft
+    //    core shadow between them so the arm reads ROUND at play distance
+    p.save();
+    armPath();
+    p.clip();
+    const bboxX = -length * 0.82;
+    const bboxW = length * 1.64;
+    const coolG = p.createLinearGradient(0, -warmSide * thickness * 0.78, 0, -warmSide * thickness * 0.08);
+    coolG.addColorStop(0, "rgba(150,190,255,0.28)");
+    coolG.addColorStop(1, "rgba(150,190,255,0)");
+    p.fillStyle = coolG;
+    p.fillRect(bboxX, -thickness * 1.55, bboxW, thickness * 3.1);
+    const shadeG = p.createLinearGradient(0, warmSide * thickness * 0.05, 0, warmSide * thickness * 0.52);
+    shadeG.addColorStop(0, "rgba(26,8,16,0)");
+    shadeG.addColorStop(1, "rgba(26,8,16,0.3)");
+    p.fillStyle = shadeG;
+    p.fillRect(bboxX, -thickness * 1.55, bboxW, thickness * 3.1);
+    const warmG = p.createLinearGradient(0, warmSide * thickness * 0.3, 0, warmSide * thickness * 0.78);
+    warmG.addColorStop(0, "rgba(255,150,54,0)");
+    warmG.addColorStop(1, "rgba(255,158,58,0.5)");
+    p.fillStyle = warmG;
+    p.fillRect(bboxX, -thickness * 1.55, bboxW, thickness * 3.1);
+    p.restore();
+    // 3) shear everything past the cut plane off on a wedge angle
+    p.save();
+    p.translate(cutAt.x, cutAt.y);
+    p.rotate(-0.28);
+    p.globalCompositeOperation = "destination-out";
+    p.fillRect(-length * 1.4, -thickness * 2.4, length * 1.4, thickness * 4.8);
+    p.restore();
+    // 4) torn sleeve lip biting over the cut, threads whipping off the fray
+    p.save();
+    p.translate(cutAt.x, cutAt.y);
+    p.rotate(-0.28);
+    const fray = (n) => {
+      const s = Math.sin(n * 61.7 + 13.9) * 15731.3;
+      return s - Math.floor(s);
+    };
+    // gi-blue for the painted sleeve parts: the roster colour is a UI hue
+    // (Jez's is near-cyan), pulled hard toward the atlas gi's royal blue so
+    // painted cloth and sampled cloth read as the SAME garment
+    const gi = mixHex(effect.clothColor, "#31518f", 0.9);
+    // the surviving sleeve: a torn cloth band around the upper bicep, clear
+    // of the cross-section — jagged fist-side edge, fold shadows, a lit
+    // frayed lip on the cut side
+    p.beginPath();
+    p.moveTo(9.5, -thickness * 0.56);
+    for (let seg = 0; seg <= 6; seg += 1) {
+      p.lineTo(16.6 + (fray(seg + 51) - 0.5) * 5, -thickness * 0.56 + (seg / 6) * thickness * 1.12);
+    }
+    p.lineTo(9.5, thickness * 0.56);
+    p.closePath();
+    p.fillStyle = gi;
+    p.fill();
+    p.strokeStyle = shade(gi, 0.55); // fold shadows down the band
+    p.lineWidth = 1.1;
+    for (const fy of [-0.3, 0.02, 0.3]) {
+      p.beginPath();
+      p.moveTo(11.4, thickness * fy - 2.4);
+      p.quadraticCurveTo(13.8, thickness * fy + 0.5, 12.2, thickness * fy + 3.2);
+      p.stroke();
+    }
+    p.strokeStyle = shade(gi, 1.42); // lit frayed lip on the cut side
+    p.lineWidth = 1.2;
+    p.beginPath();
+    p.moveTo(10.2, -thickness * 0.5);
+    p.quadraticCurveTo(11.8, 0, 10.4, thickness * 0.5);
+    p.stroke();
+    for (let tooth = 0; tooth < 7; tooth += 1) {
+      const ta = (tooth / 7) * Math.PI * 2 + 0.3;
+      const rimX = Math.cos(ta) * thickness * 0.52;
+      const rimY = Math.sin(ta) * thickness * 0.46;
+      p.fillStyle = fray(tooth) > 0.55 ? shade(gi, 1.22) : shade(gi, 0.82);
+      p.beginPath();
+      p.moveTo(rimX, rimY - thickness * 0.1);
+      p.lineTo(rimX + 2.4 + fray(tooth + 5) * 2.6, rimY + (fray(tooth + 9) - 0.5) * 3);
+      p.lineTo(rimX, rimY + thickness * 0.1);
+      p.closePath();
+      p.fill();
+    }
+    p.lineCap = "round";
+    for (let thread = 0; thread < 3; thread += 1) {
+      const ty = (thread - 1) * thickness * 0.26 + 1;
+      p.strokeStyle = thread === 1 ? shade(gi, 1.5) : shade(gi, 0.7);
+      p.lineWidth = 0.9;
+      p.beginPath();
+      p.moveTo(-thickness * 0.1, ty);
+      p.quadraticCurveTo(
+        -thickness * (0.34 + fray(thread + 3) * 0.2),
+        ty + warmSide * (2 + fray(thread + 7) * 3.5),
+        -thickness * (0.52 + fray(thread + 11) * 0.26),
+        ty + warmSide * (5 + fray(thread + 13) * 4),
+      );
+      p.stroke();
+    }
+    // 5) the wedge cross-section: asymmetric, wet, torn — NOT a bullseye.
+    // Lumpy dark base, off-origin muscle bundles in two close reds with
+    // radial fibre strokes, a short skin lip on the lamp side only, a small
+    // off-centre bone chip, clots breaking the silhouette, sheen on top.
+    const rx = thickness * 0.52;
+    const ry = thickness * 0.46;
+    p.fillStyle = "#3c020b"; // congealed base, lumpy silhouette
+    p.beginPath();
+    p.ellipse(0, 0, rx, ry * 0.94, 0.18, 0, Math.PI * 2);
+    p.ellipse(rx * 0.2, -ry * 0.26, rx * 0.74, ry * 0.66, 0.5, 0, Math.PI * 2);
+    p.ellipse(-rx * 0.22, ry * 0.24, rx * 0.7, ry * 0.62, -0.4, 0, Math.PI * 2);
+    p.ellipse(rx * 0.05, ry * 0.4, rx * 0.6, ry * 0.5, 0.9, 0, Math.PI * 2);
+    p.fill();
+    for (let bundle = 0; bundle < 5; bundle += 1) { // muscle bundles, off-origin
+      const a0 = bundle * 1.256 + fray(bundle + 15) * 0.7;
+      const wr = rx * (0.5 + fray(bundle + 17) * 0.3);
+      const ox = (fray(bundle + 19) - 0.5) * rx * 0.5;
+      const oy = (fray(bundle + 21) - 0.5) * ry * 0.5;
+      p.fillStyle = bundle % 2 ? "#9c0715" : "#b30d1a";
+      p.beginPath();
+      p.ellipse(ox, oy, wr, wr * (0.55 + fray(bundle + 25) * 0.3), a0, 0, Math.PI * 2);
+      p.fill();
+    }
+    p.strokeStyle = "rgba(58,2,10,0.8)"; // radial fibre strokes
+    p.lineWidth = 1;
+    for (let fibre = 0; fibre < 5; fibre += 1) {
+      const fa = fibre * 1.35 + 0.5 + fray(fibre + 29) * 0.5;
+      p.beginPath();
+      p.moveTo(Math.cos(fa) * rx * 0.2, Math.sin(fa) * ry * 0.2);
+      p.lineTo(Math.cos(fa) * rx * (0.6 + fray(fibre + 33) * 0.28),
+        Math.sin(fa) * ry * (0.6 + fray(fibre + 35) * 0.28));
+      p.stroke();
+    }
+    // short skin lip on the lamp side only (no full outline ring)
+    p.lineWidth = 1.5;
+    p.strokeStyle = "rgba(235,176,148,0.75)";
+    p.beginPath();
+    p.ellipse(0, 0, rx * 0.94, ry * 0.92, 0.18, -2.5, -1.3);
+    p.stroke();
+    // small bone chip high of centre: pale wedge with a marrow fleck and an
+    // inner crescent shadow — a chip, not a ring
+    p.save();
+    p.translate(-rx * 0.26, -ry * 0.3);
+    p.rotate(-0.4);
+    p.fillStyle = "#f6ecd4";
+    p.beginPath();
+    p.ellipse(0, 0, thickness * 0.13, thickness * 0.1, 0, 0, Math.PI * 2);
+    p.fill();
+    p.strokeStyle = "rgba(150,118,80,0.7)";
+    p.lineWidth = 0.9;
+    p.beginPath();
+    p.arc(thickness * 0.02, thickness * 0.02, thickness * 0.09, 0.4, 2.2);
+    p.stroke();
+    p.fillStyle = "#c59f68";
+    p.beginPath();
+    p.ellipse(thickness * 0.035, thickness * 0.02, thickness * 0.045, thickness * 0.032, 0.3, 0, Math.PI * 2);
+    p.fill();
+    p.restore();
+    // dark clots riding the rim, breaking any circular read
+    p.fillStyle = "#2c0108";
+    p.beginPath();
+    p.ellipse(rx * 0.6, ry * 0.34, rx * 0.2, ry * 0.14, 0.6, 0, Math.PI * 2);
+    p.ellipse(-rx * 0.5, ry * 0.5, rx * 0.16, ry * 0.12, -0.5, 0, Math.PI * 2);
+    p.fill();
+    // wet sheen crescent + specular pin-lights on the cut's lamp side
+    p.strokeStyle = "rgba(255,198,188,0.8)";
+    p.lineWidth = 1.6;
+    p.beginPath();
+    p.arc(1, 0.5, rx * 0.74, -2.8, -1.7);
+    p.stroke();
+    p.fillStyle = "rgba(255,236,230,0.95)";
+    p.beginPath();
+    p.arc(-2.4, -3.6, 1.2, 0, Math.PI * 2);
+    p.arc(3.4, -1.2, 0.8, 0, Math.PI * 2);
+    p.fill();
+    // gore shreds sagging off the screen-down lip + two gravity drips
+    p.fillStyle = "#7c0512";
+    p.beginPath();
+    p.moveTo(-rx * 0.3, warmSide * ry * 0.7);
+    p.quadraticCurveTo(-rx * 0.16, warmSide * (ry * 0.7 + 4.6), -rx * 0.02, warmSide * ry * 0.74);
+    p.closePath();
+    p.fill();
+    p.beginPath();
+    p.moveTo(rx * 0.2, warmSide * ry * 0.78);
+    p.quadraticCurveTo(rx * 0.32, warmSide * (ry * 0.78 + 3.4), rx * 0.46, warmSide * ry * 0.7);
+    p.closePath();
+    p.fill();
+    p.strokeStyle = "#a50713";
+    p.lineWidth = 2;
+    p.beginPath();
+    p.moveTo(-rx * 0.1, warmSide * ry * 0.85);
+    p.quadraticCurveTo(-rx * 0.16, warmSide * (ry * 0.85 + 5), -rx * 0.1, warmSide * (ry * 0.85 + 8));
+    p.stroke();
+    p.lineWidth = 1.3;
+    p.beginPath();
+    p.moveTo(rx * 0.34, warmSide * ry * 0.8);
+    p.quadraticCurveTo(rx * 0.3, warmSide * (ry * 0.8 + 3.6), rx * 0.33, warmSide * (ry * 0.8 + 5.6));
+    p.stroke();
+    p.restore();
+    // 6) fine blood flecks blown back along the forearm from the wound
+    p.fillStyle = "rgba(156,7,21,0.75)";
+    for (let fleck = 0; fleck < 6; fleck += 1) {
+      const ft = -0.34 + fray(fleck + 23) * 0.5;
+      const at = axis(ft);
+      p.beginPath();
+      p.ellipse(at.x, at.y + (fray(fleck + 31) - 0.5) * thickness * 0.7,
+        1.5 + fray(fleck + 37) * 1.6, 0.8 + fray(fleck + 41) * 0.9,
+        fray(fleck + 43) * 3, 0, Math.PI * 2);
+      p.fill();
+    }
+  } else {
+    // --- torn tee sleeve over the upper arm ---------------------------------
+    strokeAlong(-0.36, -0.08, thickness * 1.02, shade(cloth, 0.6));
+    strokeAlong(-0.36, -0.08, thickness * 0.88, cloth);
+    strokeAlong(-0.35, -0.1, thickness * 0.36, shade(cloth, 1.34), -thickness * 0.18, 0.85);
+    // torn cuff: small cloth-dark triangles biting into the arm
+    p.fillStyle = shade(cloth, 0.72);
+    const cuffAt = axis(-0.08);
+    for (let z = 0; z < 3; z += 1) {
+      p.beginPath();
+      p.moveTo(cuffAt.x - 2, cuffAt.y - thickness * 0.42 + z * thickness * 0.3);
+      p.lineTo(cuffAt.x + thickness * 0.24, cuffAt.y - thickness * 0.3 + z * thickness * 0.3);
+      p.lineTo(cuffAt.x - 2, cuffAt.y - thickness * 0.18 + z * thickness * 0.3);
+      p.closePath();
+      p.fill();
+    }
+    // sleeve fold shadows
+    p.strokeStyle = shade(cloth, 0.52);
+    p.lineWidth = 1.6;
+    for (const fx of [-0.28, -0.17]) {
+      const at = axis(fx);
+      p.beginPath();
+      p.moveTo(at.x, at.y - thickness * 0.3);
+      p.quadraticCurveTo(at.x + 2.2, at.y + 1, at.x + 0.5, at.y + thickness * 0.3);
+      p.stroke();
+    }
+    // --- forearm: rounded skin with a top-half light plane ------------------
+    strokeAlong(-0.1, 0.36, thickness * 0.74, shade(skin, 0.68));
+    strokeAlong(-0.1, 0.36, thickness * 0.62, skin);
+    strokeAlong(-0.08, 0.32, thickness * 0.26, shade(skin, 1.2), -thickness * 0.13, 0.9);
+    // tendon hint + wrist crease (short, curved)
+    p.strokeStyle = shade(skin, 0.58);
+    p.lineWidth = 1.3;
+    const tA = axis(0.05);
+    const tB = axis(0.3);
+    p.beginPath();
+    p.moveTo(tA.x, tA.y - thickness * 0.06);
+    p.quadraticCurveTo((tA.x + tB.x) / 2, tA.y - thickness * 0.12, tB.x, tB.y - thickness * 0.02);
+    p.stroke();
+    const wr = axis(0.37);
+    p.beginPath();
+    p.moveTo(wr.x, wr.y - thickness * 0.2);
+    p.quadraticCurveTo(wr.x + 1.6, wr.y, wr.x, wr.y + thickness * 0.18);
+    p.stroke();
+    // --- curled fist: palm mass, knuckle arc along the top, tucked thumb ----
+    const fist = axis(0.48);
+    p.fillStyle = shade(skin, 0.82);
+    p.beginPath();
+    p.ellipse(fist.x + thickness * 0.1, fist.y + 1, thickness * 0.34, thickness * 0.38, -0.12, 0, Math.PI * 2);
+    p.fill();
+    // knuckle bumps riding the leading arc
+    for (let finger = 0; finger < 4; finger += 1) {
+      const ka = -1.05 + finger * 0.6;
+      const kx = fist.x + thickness * 0.1 + Math.cos(ka) * thickness * 0.32;
+      const ky = fist.y + 1 + Math.sin(ka) * thickness * 0.36;
+      p.fillStyle = finger % 2 ? skin : shade(skin, 1.1);
+      p.beginPath();
+      p.ellipse(kx, ky, thickness * 0.12, thickness * 0.1, ka, 0, Math.PI * 2);
+      p.fill();
+    }
+    // finger creases between the knuckles
+    p.strokeStyle = shade(skin, 0.55);
+    p.lineWidth = 1.2;
+    for (let crease = 0; crease < 3; crease += 1) {
+      const ca = -0.75 + crease * 0.6;
+      p.beginPath();
+      p.arc(fist.x + thickness * 0.1, fist.y + 1, thickness * 0.3, ca - 0.14, ca + 0.14);
+      p.stroke();
+    }
+    // thumb wrapping low across the palm
+    p.fillStyle = shade(skin, 1.06);
+    p.beginPath();
+    p.ellipse(fist.x - thickness * 0.02, fist.y + thickness * 0.24, thickness * 0.17, thickness * 0.1, 0.5, 0, Math.PI * 2);
+    p.fill();
+  }
+  // --- gore stump at the shoulder/thigh end (drawn OVER the limb root) -----
+  // Torn cross-section: dark rim, meat wedges, off-centre bone chip — an
+  // anatomy read, not a glossy ball. (The atlas-composited arm carries its
+  // own layered wedge stump + light story above, so this round-3 pass only
+  // runs for legs and the no-atlas fallback.)
+  if (!armSrc) {
+  p.fillStyle = goreDeep;
+  p.beginPath();
+  p.ellipse(stumpAt.x, stumpAt.y, thickness * 0.44, thickness * 0.4, -0.1, 0, Math.PI * 2);
+  p.fill();
+  // meat wedges: radial pie segments in two reds
+  for (let wedge = 0; wedge < 5; wedge += 1) {
+    const a0 = wedge * 1.256 + 0.35;
+    const wr = thickness * (0.27 + ((wedge * 37) % 11) / 11 * 0.09);
+    p.fillStyle = wedge % 2 ? gore : shade(gore, 0.78);
+    p.beginPath();
+    p.moveTo(stumpAt.x + Math.cos(a0 + 0.5) * 2, stumpAt.y + Math.sin(a0 + 0.5) * 2);
+    p.arc(stumpAt.x, stumpAt.y, wr, a0, a0 + 1.15);
+    p.closePath();
+    p.fill();
+  }
+  // wet sheen crescent on the upper lip of the cut
+  p.strokeStyle = "rgba(255,158,148,0.55)";
+  p.lineWidth = 1.8;
+  p.beginPath();
+  p.arc(stumpAt.x, stumpAt.y, thickness * 0.32, Math.PI * 1.15, Math.PI * 1.75);
+  p.stroke();
+  // bone chip: pale, high of centre, with a marrow fleck
+  p.fillStyle = "#e6d3b2";
+  p.beginPath();
+  p.ellipse(stumpAt.x - thickness * 0.11, stumpAt.y - thickness * 0.14, thickness * 0.08, thickness * 0.065, 0.3, 0, Math.PI * 2);
+  p.fill();
+  p.fillStyle = "#a8906c";
+  p.beginPath();
+  p.arc(stumpAt.x - thickness * 0.11, stumpAt.y - thickness * 0.14, thickness * 0.028, 0, Math.PI * 2);
+  p.fill();
+  // one short drip + a flung droplet — restrained
+  p.strokeStyle = gore;
+  p.lineWidth = 2;
+  p.beginPath();
+  p.moveTo(stumpAt.x - thickness * 0.12, stumpAt.y + thickness * 0.36);
+  p.quadraticCurveTo(stumpAt.x - thickness * 0.18, stumpAt.y + thickness * 0.62, stumpAt.x - thickness * 0.12, stumpAt.y + thickness * 0.8);
+  p.stroke();
+  p.fillStyle = gore;
+  p.beginPath();
+  p.ellipse(stumpAt.x - thickness * 0.34, stumpAt.y + thickness * 0.5, 2.1, 2.8, 0.3, 0, Math.PI * 2);
+  p.fill();
+  // --- light story: SHORT warm dashes on the wheel side, one cool kiss ------
+  p.lineCap = "round";
+  p.strokeStyle = "rgba(255,166,70,0.55)";
+  p.lineWidth = 1.7;
+  for (const [d0, d1, hug] of [[-0.3, -0.2, leg ? 0.47 : 0.4], [-0.04, 0.08, leg ? 0.44 : 0.28], [0.22, 0.32, leg ? 0.42 : 0.26]]) {
+    const a0 = axis(d0);
+    const a1 = axis(d1);
+    p.beginPath();
+    p.moveTo(a0.x, a0.y + thickness * hug);
+    p.quadraticCurveTo((a0.x + a1.x) / 2, (a0.y + a1.y) / 2 + thickness * (hug + 0.04), a1.x, a1.y + thickness * (hug - 0.02));
+    p.stroke();
+  }
+  p.strokeStyle = "rgba(150,190,255,0.35)";
+  p.lineWidth = 1.4;
+  const c0 = axis(-0.26);
+  const c1 = axis(-0.06);
+  p.beginPath();
+  p.moveTo(c0.x, c0.y - thickness * 0.46);
+  p.quadraticCurveTo((c0.x + c1.x) / 2, (c0.y + c1.y) / 2 - thickness * 0.5, c1.x, c1.y - thickness * 0.44);
+  p.stroke();
+  }
+  severedLimbCache.set(key, c);
+  return c;
+}
+
 function drawSeveredLimb(effect, alpha) {
   const leg = effect.limb.endsWith("leg");
   const length = leg ? 92 : 72;
   const thickness = leg ? 30 : 23;
+  if (cinema3dDressingActive()) {
+    // CINEMA 3D: composited limb sprite (same footprint/rotation as the 2D
+    // primitives, so flight physics and resting pose read identically).
+    // Round 4: the arm samples the victim's own atlas, its warm/cool rims and
+    // drips pick the sprite edge that currently faces the wheel/floor, and in
+    // flight it drags a motion smear + an arterial ribbon off the stump.
+    const victimId = state.finisher
+      ? state.fighters[1 - state.finisher.winner]?.def.id || null : null;
+    const rotation = effect.rotation || 0;
+    const warmSide = Math.cos(rotation) >= 0 ? 1 : -1;
+    const painted = severedLimbPaintedCanvas(effect, victimId, warmSide);
+    const baseAlpha = Math.min(1, alpha * 4);
+    const speed = Math.hypot(effect.vx || 0, effect.vy || 0);
+    ctx.save();
+    if (!effect.resting && speed > 60) {
+      const nx = (effect.vx || 0) / speed;
+      const ny = (effect.vy || 0) / speed;
+      // arterial ribbon whipping off the stump, bending under gravity
+      const ca = Math.cos(rotation);
+      const sa = Math.sin(rotation);
+      const stumpX = -length * 0.42 * ca;
+      const stumpY = -length * 0.42 * sa;
+      const trail = Math.min(66, speed * 0.11);
+      const endX = stumpX - nx * trail;
+      const endY = stumpY - ny * trail + trail * 0.35;
+      const ribbonGrad = ctx.createLinearGradient(stumpX, stumpY, endX, endY);
+      ribbonGrad.addColorStop(0, "rgba(178,8,22,0.9)");
+      ribbonGrad.addColorStop(1, "rgba(80,2,12,0)");
+      ctx.strokeStyle = ribbonGrad;
+      ctx.lineCap = "round";
+      ctx.globalAlpha = baseAlpha * 0.85;
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(stumpX, stumpY);
+      ctx.quadraticCurveTo(stumpX - nx * trail * 0.55, stumpY - ny * trail * 0.55 + 6, endX, endY);
+      ctx.stroke();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "rgba(235,52,44,0.55)";
+      ctx.stroke();
+      // shed droplets riding the ribbon, heads leading back along it
+      const shedDir = Math.atan2(endY - stumpY, endX - stumpX);
+      for (const [at, size] of [[0.4, 6.4], [0.72, 4.6], [1.02, 3.2]]) {
+        ctx.save();
+        ctx.translate(stumpX + (endX - stumpX) * at, stumpY + (endY - stumpY) * at + 1.5);
+        ctx.rotate(shedDir);
+        ctx.globalAlpha = baseAlpha * (0.85 - at * 0.35);
+        ctx.drawImage(fatalityDropletCanvas(), -size, -size, size * 2, size * 2);
+        ctx.restore();
+      }
+      // motion smear on the trailing edge: two rotation-lagged ghosts that
+      // hug the limb (a detached copy reads as a second object)
+      for (let ghost = 2; ghost >= 1; ghost -= 1) {
+        ctx.save();
+        ctx.translate(-nx * ghost * 5.5, -ny * ghost * 5.5);
+        ctx.rotate(rotation - (effect.spin || 0) * 0.03 * ghost);
+        ctx.globalAlpha = baseAlpha * (ghost === 1 ? 0.13 : 0.07);
+        ctx.drawImage(painted, -length * 0.75, -thickness * 1.6, painted.width / 2, painted.height / 2);
+        ctx.restore();
+      }
+    }
+    ctx.rotate(rotation);
+    ctx.globalAlpha = baseAlpha;
+    ctx.shadowColor = "rgba(20,0,4,.72)";
+    ctx.shadowBlur = 8;
+    ctx.drawImage(painted, -length * 0.75, -thickness * 1.6, painted.width / 2, painted.height / 2);
+    ctx.restore();
+    return;
+  }
   ctx.save();
   ctx.rotate(effect.rotation || 0);
   ctx.globalCompositeOperation = "source-over";
@@ -10672,9 +12950,12 @@ function drawFatalityProjectile(effect, alpha) {
   ctx.globalCompositeOperation = "source-over";
   ctx.globalAlpha = Math.min(1, alpha * 3) * reveal;
   ctx.shadowColor = effect.color;
-  ctx.shadowBlur = effect.landed ? 22 : 12;
+  // 3D mode: halve the halo glow — the painted wheel carries its own values,
+  // and the old glow + bloom washed the face to a soft gold disc.
+  const dressedHalo = cinema3dDressingActive();
+  ctx.shadowBlur = (effect.landed ? 22 : 12) * (dressedHalo ? 0.5 : 1);
   ctx.strokeStyle = effect.color;
-  ctx.lineWidth = effect.landed ? 6 : 3;
+  ctx.lineWidth = (effect.landed ? 6 : 3) * (dressedHalo ? 0.6 : 1);
   ctx.beginPath();
   ctx.arc(0, 0, Math.max(effect.width, effect.height) * (.58 + (1 - alpha) * .08), 0, Math.PI * 2);
   ctx.stroke();
@@ -10682,22 +12963,31 @@ function drawFatalityProjectile(effect, alpha) {
   ctx.scale(effect.phase === "kill" ? 1.24 : 1.12, effect.phase === "kill" ? 1.24 : 1.12);
   drawThrowable(effect, state.simulationTick * 1000 / SIMULATION_HZ, alpha);
   ctx.restore();
-  ctx.globalAlpha = Math.min(1, alpha * 4);
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-  ctx.font = "1000 13px Arial Narrow, Arial, sans-serif";
-  ctx.lineWidth = 5;
-  ctx.strokeStyle = "rgba(0,0,0,.92)";
-  ctx.fillStyle = "#fff0df";
-  const focusLabel = `${effect.name} · ${effect.phase.toUpperCase()}`;
-  ctx.strokeText(focusLabel, 0, -Math.max(38, effect.height * .72));
-  ctx.fillText(focusLabel, 0, -Math.max(38, effect.height * .72));
+  // 3D mode: once the fatality banner block owns the frame, the floating
+  // world-space focus label only collides with it (the half-hidden
+  // "WHOLE PIZZA · KILL" ghosting through the caption) — drop it there.
+  if (!(cinema3dDressingActive() && state.finisher?.fatalityTriggered)) {
+    ctx.globalAlpha = Math.min(1, alpha * 4);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = "1000 13px Arial Narrow, Arial, sans-serif";
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = "rgba(0,0,0,.92)";
+    ctx.fillStyle = "#fff0df";
+    const focusLabel = `${effect.name} · ${effect.phase.toUpperCase()}`;
+    ctx.strokeText(focusLabel, 0, -Math.max(38, effect.height * .72));
+    ctx.fillText(focusLabel, 0, -Math.max(38, effect.height * .72));
+  }
   ctx.restore();
 }
 
 function drawProjectileFocusBurst(effect, alpha) {
   const growth = 1 - alpha;
   const radius = (effect.phase === "kill" ? 86 : 52) + growth * (effect.phase === "kill" ? 240 : 145);
+  // 3D mode + pizza/vinyl: the burst's energy stays OUTSIDE the painted
+  // wheel — centre-rooted rings/spokes were dissolving the face into a red
+  // starburst. Rings collapse to the outermost, spokes root past the rim.
+  const dressedBurst = cinema3dDressingActive() && ["pizza", "vinyl"].includes(effect.style);
   ctx.save();
   ctx.globalCompositeOperation = "screen";
   ctx.shadowBlur = 18;
@@ -10706,21 +12996,28 @@ function drawProjectileFocusBurst(effect, alpha) {
   ctx.fillStyle = effect.color;
   ctx.lineCap = "round";
   ctx.globalAlpha = alpha * .9;
-  for (let ring = 0; ring < 3; ring += 1) {
+  for (let ring = dressedBurst ? 2 : 0; ring < 3; ring += 1) {
     ctx.lineWidth = Math.max(2, 8 - ring * 2);
     ctx.beginPath();
     ctx.arc(0, 0, radius * (.52 + ring * .22), 0, Math.PI * 2);
     ctx.stroke();
   }
   if (["pizza", "vinyl"].includes(effect.style)) {
-    ctx.rotate(state.simulationTick * .16 * effect.direction);
-    for (let spoke = 0; spoke < 12; spoke += 1) {
-      const angle = spoke * Math.PI / 6;
-      ctx.lineWidth = spoke % 3 === 0 ? 8 : 3;
-      ctx.beginPath();
-      ctx.moveTo(Math.cos(angle) * radius * .18, Math.sin(angle) * radius * .18);
-      ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
-      ctx.stroke();
+    // 3D mode, landed kill wheel: NO spokes at all — at that scale every
+    // centre-rooted line lands across the painted face. The outer ring +
+    // rim ghosts + spatter carry the energy read.
+    if (!(dressedBurst && effect.phase === "kill")) {
+      ctx.rotate(state.simulationTick * .16 * effect.direction);
+      const spokeRoot = dressedBurst ? 1.02 : 0.18;
+      const spokeTip = dressedBurst ? 1.32 : 1;
+      for (let spoke = 0; spoke < 12; spoke += 1) {
+        const angle = spoke * Math.PI / 6;
+        ctx.lineWidth = spoke % 3 === 0 ? 8 : 3;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(angle) * radius * spokeRoot, Math.sin(angle) * radius * spokeRoot);
+        ctx.lineTo(Math.cos(angle) * radius * spokeTip, Math.sin(angle) * radius * spokeTip);
+        ctx.stroke();
+      }
     }
   } else if (["mouse", "wires"].includes(effect.style)) {
     for (let cable = 0; cable < 7; cable += 1) {
@@ -10791,12 +13088,153 @@ function drawCinematicGoreOverlay() {
     ctx.strokeStyle = effect.secondary;
     ctx.shadowColor = "rgba(35,0,4,.8)";
     ctx.shadowBlur = 5;
+    const dressed = cinema3dDressingActive();
+    const droplet3d = dressed ? fatalityDropletCanvas() : null;
+    // Round-3 wheel occlusion (critic item 2): debris whose screen position
+    // falls inside the landed signature wheel is SKIPPED — it reads as
+    // having flown behind the disc, so the gore field sits in depth instead
+    // of floating over the centrepiece as an overlay.
+    let wheelOccluder = null;
+    if (dressed && state.finisher) {
+      const wheelProjectile = state.effects.find((fx) => fx.kind === "fatalityProjectile");
+      if (wheelProjectile) {
+        const goreCamera = finisherCinematicCamera(state.cinematicZoom);
+        const goreZoom = goreCamera.zoom || 1;
+        wheelOccluder = {
+          x: W * .5 + (wheelProjectile.x - goreCamera.x) * goreZoom,
+          y: H * .53 + (wheelProjectile.y - goreCamera.y) * goreZoom,
+          r: Math.max(wheelProjectile.width, wheelProjectile.height) * .6 * goreZoom
+            * (wheelProjectile.phase === "kill" ? 1.24 : 1.12),
+        };
+      }
+    }
     for (let drop = 0; drop < 31; drop += 1) {
       const x = ((drop * 173 + familySeed * 29) % 1180) / 1180 * W;
       const y = ((drop * 97 + familySeed * 43) % 640) / 640 * H;
       const edgeBias = drop % 3 === 0 ? (drop % 2 ? H * .1 : H * .88) : y;
       const radius = (4 + drop % 7 * 2.8) * (effect.scale || 1);
       ctx.globalAlpha = alpha * (.2 + drop % 5 * .09);
+      if (dressed) {
+        // CINEMA 3D round-4 (ship-review item 1): a real droplet FIELD in the
+        // Kimberly-paint grammar. Teardrops stretch along their flight
+        // direction (radially out of the sever point), depth-graded — big
+        // sharp near, small soft far — with ribbon trails on the fast ones,
+        // camera-plane smears, floor splats with radial tails, and crescent
+        // occlusion behind the wheel rim. Density DROPS from 31 stamps to 24
+        // crafted shapes; the classic 2D branch below is untouched.
+        if (drop >= 24) continue;
+        const jitter = ((drop * 199 + familySeed * 17) % 97) / 97;
+        const originX = wheelOccluder ? wheelOccluder.x : W * 0.52;
+        const originY = wheelOccluder ? wheelOccluder.y : H * 0.5;
+        const dir = Math.atan2(edgeBias - originY, x - originX) + (jitter - 0.5) * 0.55;
+        let rimClip = false;
+        if (wheelOccluder) {
+          const wdx = x - wheelOccluder.x;
+          const wdy = edgeBias - wheelOccluder.y;
+          const wd2 = wdx * wdx + wdy * wdy;
+          if (wd2 < wheelOccluder.r * wheelOccluder.r) continue;
+          // near-rim drops get CLIPPED against the disc: the crescent bite
+          // reads as the droplet flying BEHIND the wheel, not printed on it.
+          rimClip = wd2 < wheelOccluder.r * wheelOccluder.r * 1.69;
+        }
+        ctx.save();
+        if (rimClip) {
+          ctx.beginPath();
+          ctx.rect(0, 0, W, H);
+          ctx.arc(wheelOccluder.x, wheelOccluder.y, wheelOccluder.r, 0, Math.PI * 2, true);
+          ctx.clip("evenodd");
+        }
+        if (drop % 6 === 0) {
+          // floor band (H*.88 edge bias): a LANDED hit — splat with radial
+          // tails squashed onto the ground plane, not a floating ellipse.
+          ctx.globalAlpha = alpha * (0.44 + (drop % 5) * 0.1);
+          ctx.translate(x, edgeBias);
+          ctx.rotate((jitter - 0.5) * 0.6);
+          ctx.scale(1.45, 0.52);
+          ctx.drawImage(fatalitySplatCanvas(), -radius * 2, -radius * 2, radius * 4, radius * 4);
+        } else if (drop % 7 === 2) {
+          // matte meat chunk: full spin variety, slightly bigger presence
+          ctx.globalAlpha = alpha * (0.3 + (drop % 5) * 0.1);
+          ctx.translate(x, edgeBias);
+          ctx.rotate((drop * 1.17) % (Math.PI * 2));
+          ctx.drawImage(fatalityChunkCanvas(), -radius * 1.5, -radius * 1.5, radius * 3, radius * 3);
+        } else if (drop % 7 === 5) {
+          // bone fleck: small, pale, catches the eye against the reds
+          ctx.globalAlpha = alpha * (0.27 + (drop % 5) * 0.09);
+          ctx.translate(x, edgeBias);
+          ctx.rotate((drop * 2.31) % (Math.PI * 2));
+          ctx.drawImage(fatalityBoneCanvas(), -radius * 1.1, -radius * 1.1, radius * 2.2, radius * 2.2);
+        } else if (drop % 6 === 3) {
+          // top band (H*.1 edge bias): a hit on the glass, smearing DOWN
+          ctx.globalAlpha = alpha * (0.32 + (drop % 5) * 0.09);
+          ctx.translate(x, edgeBias);
+          ctx.rotate(drop % 2 ? 0.14 : -0.12);
+          ctx.drawImage(fatalityRivuletCanvas(), -radius * 0.7, -radius * 1.2, radius * 1.4, radius * 3.4);
+        } else {
+          // depth band off a second hash (drop % 3 is fully consumed by the
+          // floor/rivulet selectors above): 0 near, 1 mid, 2 far
+          const depthHash = ((drop * 131 + familySeed * 7) % 89) / 89;
+          const band = depthHash < 0.3 ? 0 : depthHash < 0.68 ? 1 : 2;
+          const sizeMul = band === 0 ? 1.85 : band === 1 ? 1.12 : 0.6;
+          const sprite = band === 2 ? fatalityDropletSoftCanvas() : droplet3d;
+          const fast = drop % 5 === 1;
+          const smear = band === 0 && drop % 4 === 1 && !fast;
+          let stretch = 1.12 + jitter * 0.85 + (fast ? 1.1 : 0);
+          ctx.globalAlpha = alpha * (0.3 + (drop % 5) * 0.11)
+            * (band === 0 ? 1.2 : band === 1 ? 1 : 0.7);
+          if (fast && !smear) {
+            // ribbon trail whipping back down the flight path, gravity-bent,
+            // with a brighter liquid core and a mid-trail bead
+            const ribbonLen = radius * (4.5 + jitter * 3);
+            const tx = x - Math.cos(dir) * ribbonLen;
+            const ty = edgeBias - Math.sin(dir) * ribbonLen + ribbonLen * 0.3;
+            const ribbonGrad = ctx.createLinearGradient(x, edgeBias, tx, ty);
+            ribbonGrad.addColorStop(0, "rgba(178,8,22,0.85)");
+            ribbonGrad.addColorStop(1, "rgba(80,2,12,0)");
+            ctx.strokeStyle = ribbonGrad;
+            ctx.lineCap = "round";
+            ctx.lineWidth = Math.max(1.6, radius * 0.5);
+            ctx.beginPath();
+            ctx.moveTo(x, edgeBias);
+            ctx.quadraticCurveTo(
+              x - Math.cos(dir) * ribbonLen * 0.55,
+              edgeBias - Math.sin(dir) * ribbonLen * 0.55 + 7,
+              tx, ty,
+            );
+            ctx.stroke();
+            ctx.lineWidth = Math.max(0.9, radius * 0.2);
+            ctx.strokeStyle = "rgba(240,64,54,0.5)";
+            ctx.stroke();
+            const beadSize = radius * 0.55;
+            ctx.save();
+            ctx.translate((x + tx) / 2, (edgeBias + ty) / 2 + 2);
+            ctx.rotate(dir);
+            ctx.drawImage(droplet3d, -beadSize * 1.35, -beadSize * 1.35, beadSize * 2.7, beadSize * 2.7);
+            ctx.restore();
+          }
+          ctx.translate(x, edgeBias);
+          ctx.rotate(dir);
+          if (smear) {
+            // crossing the camera plane: a long motion smear, not a shape
+            stretch = 5.6;
+            ctx.globalAlpha *= 0.5;
+          }
+          ctx.scale(stretch, 1);
+          const drawSize = radius * sizeMul;
+          ctx.drawImage(sprite, -drawSize * 1.35, -drawSize * 1.35, drawSize * 2.7, drawSize * 2.7);
+          if (smear) {
+            ctx.strokeStyle = "rgba(255,118,104,0.5)";
+            ctx.lineCap = "round";
+            ctx.lineWidth = drawSize * 0.28;
+            ctx.beginPath();
+            ctx.moveTo(-drawSize * 1.2, 0);
+            ctx.lineTo(drawSize * 1.2, 0);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
+        continue;
+      }
       ctx.beginPath();
       ctx.ellipse(x, edgeBias, radius * (drop % 4 === 0 ? 2.4 : 1), radius, (drop * .71) % Math.PI, 0, Math.PI * 2);
       ctx.fill();
@@ -11269,14 +13707,43 @@ function drawParticles() {
     }
     if (particle.kind === "blood" || particle.kind === "arterial") {
       const angle = Math.atan2(particle.vy || 0, particle.vx || 1);
+      if (cinema3dDressingActive()) {
+        // CINEMA 3D: dimensional spatter — the gradient droplet sprite
+        // stretched along its velocity with a thinning smear tail, instead
+        // of a flat solid ellipse.
+        const speed = Math.hypot(particle.vx || 0, particle.vy || 0);
+        const stretch = 1.2 + Math.min(1.6, speed * 0.0016);
+        ctx.strokeStyle = particle.color;
+        ctx.lineCap = "round";
+        ctx.lineWidth = Math.max(1, particle.size * 0.5);
+        ctx.globalAlpha = alpha * 0.55;
+        ctx.beginPath();
+        ctx.moveTo(particle.x - (particle.vx || 0) * 0.03, particle.y - (particle.vy || 0) * 0.03);
+        ctx.lineTo(particle.x, particle.y);
+        ctx.stroke();
+        ctx.globalAlpha = alpha;
+        ctx.translate(particle.x, particle.y);
+        ctx.rotate(angle);
+        ctx.scale(stretch, 1);
+        const dropSize = particle.size * 2.1;
+        ctx.drawImage(fatalityDropletCanvas(), -dropSize, -dropSize, dropSize * 2, dropSize * 2);
+        ctx.restore();
+        continue;
+      }
       ctx.ellipse(particle.x, particle.y, particle.size * 1.65, Math.max(1, particle.size * 0.62), angle, 0, Math.PI * 2);
     } else if (particle.kind === "goreFragment") {
       ctx.translate(particle.x, particle.y);
       ctx.rotate(particle.rotation || 0);
       const spikes = particle.spikes || 6;
+      const dressedGore = cinema3dDressingActive();
       for (let point = 0; point < spikes * 2; point += 1) {
         const angle = point * Math.PI / spikes;
-        const radius = particle.size * (point % 2 ? .48 : 1);
+        // 3D mode: per-point jitter breaks the symmetric star into a torn
+        // irregular chunk (the flat throwing-star read was pure clipart).
+        const jag = dressedGore
+          ? 0.62 + (Math.abs(Math.sin((point * 37.7 + spikes * 91.3 + particle.size * 13.1))) * 0.55)
+          : (point % 2 ? .48 : 1);
+        const radius = particle.size * (dressedGore ? jag : jag);
         if (point === 0) ctx.moveTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
         else ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
       }
@@ -11331,10 +13798,45 @@ function drawParticles() {
       ctx.strokeStyle = effect.color;
       ctx.fillStyle = effect.secondary;
       ctx.lineCap = "round";
+      const dressedSpray = cinema3dDressingActive();
       for (let spray = 0; spray < 17; spray += 1) {
         const angle = -1.42 + spray * .18 + (effect.family === "launch" ? -.18 : 0);
         const length = reach * (.38 + (spray % 6) * .12);
         ctx.globalAlpha = alpha * (.28 + spray % 4 * .14);
+        if (dressedSpray) {
+          // CINEMA 3D: tapered arterial arcs — thick dark root fading down a
+          // gravity-bent path to a droplet-sprite tip; the straight uniform
+          // "red spoke" read is gone.
+          const tipX = Math.cos(angle) * length * effect.direction;
+          const tipY = Math.sin(angle) * length + length * 0.22; // gravity sag
+          const sprayGrad = ctx.createLinearGradient(0, 0, tipX, tipY);
+          sprayGrad.addColorStop(0, effect.secondary);
+          sprayGrad.addColorStop(0.5, effect.color);
+          sprayGrad.addColorStop(1, "rgba(96,4,10,0.25)");
+          ctx.strokeStyle = sprayGrad;
+          ctx.lineWidth = 4.5 + spray % 5;
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.quadraticCurveTo(
+            Math.cos(angle) * length * .55 * effect.direction,
+            Math.sin(angle) * length * .45 - 24,
+            tipX, tipY,
+          );
+          ctx.stroke();
+          // thinner core pass rides the same arc: reads as a liquid rope
+          ctx.globalAlpha *= 0.7;
+          ctx.lineWidth = Math.max(1.4, (4.5 + spray % 5) * 0.4);
+          ctx.stroke();
+          const tipSize = 5 + spray % 4 * 2.4;
+          ctx.save();
+          ctx.translate(tipX, tipY);
+          // teardrop head leads along the arc's end tangent (gravity-drooped)
+          ctx.rotate(angle + 0.3);
+          ctx.scale(1.5, 0.85);
+          ctx.drawImage(fatalityDropletCanvas(), -tipSize, -tipSize, tipSize * 2, tipSize * 2);
+          ctx.restore();
+          continue;
+        }
         ctx.lineWidth = 3 + spray % 5;
         ctx.beginPath();
         ctx.moveTo(0, 0);
@@ -11604,28 +14106,38 @@ function drawFinisherOverlay() {
   ctx.fillRect(0, barHeight - 3, W, 3);
   ctx.fillRect(0, H - barHeight, W, 3);
 
+  // CINEMA 3D text layout: the DOM HUD (health bars, grit) covers the TOP
+  // letterbox bar in 3D mode, which truncated every meta label into garbage
+  // ("CIN...", "REAK", "...ON" peeking around the bars — the critic's
+  // shipping blocker). All three meta labels move into the BOTTOM bar, which
+  // is actually visible. 2D-off path is byte-identical.
+  const dressedOverlay = cinema3dDressingActive();
+  const metaY = dressedOverlay ? H - 10 : barHeight - 11;
   ctx.save();
   ctx.textAlign = "left";
   ctx.font = "900 11px Arial Narrow, Arial";
   ctx.fillStyle = attacker.def.accent;
   ctx.globalAlpha = .82;
-  ctx.fillText(`CINEMATIC · ${cinematic.shot.replaceAll("-", " ").toUpperCase()}`, 24, barHeight - 11);
+  ctx.fillText(`CINEMATIC · ${cinematic.shot.replaceAll("-", " ").toUpperCase()}`, 24, metaY);
   if (state.graphicFatalities) {
     const attackerId = attacker.def.finisherScriptId || attacker.def.id;
     const fatality = getGraphicFatality(attackerId, finisher.type);
     ctx.textAlign = "center";
     ctx.fillStyle = "#d90b19";
-    ctx.fillText(`REALITY BREAK · ${fatality.special} FATALITY`, W * .5, barHeight - 11);
+    ctx.fillText(`REALITY BREAK · ${fatality.special} FATALITY`, W * .5, metaY);
   }
   if (cinematic.shot === "final-impact") {
     ctx.textAlign = "right";
     ctx.fillStyle = "#fff0df";
     ctx.font = "1000 14px Arial Narrow, Arial";
-    ctx.fillText("FINAL-HIT SLOW MOTION", W - 24, barHeight - 11);
+    ctx.fillText("FINAL-HIT SLOW MOTION", W - 24, metaY);
   }
   ctx.restore();
 
-  if (finisher.beatLife > 0) {
+  // 3D mode drops the beat-label block once the fatality banner owns the
+  // frame (round-3, critic item 2): "PIZZA WHEEL ARM SEVER" was printing in
+  // the banner AND down here — four stacked text elements over one shot.
+  if (finisher.beatLife > 0 && !(dressedOverlay && finisher.fatalityTriggered)) {
     const alpha = clamp(finisher.beatLife * 2.2, 0, 1);
     ctx.save();
     ctx.globalAlpha = alpha;
@@ -11637,7 +14149,10 @@ function drawFinisherOverlay() {
     ctx.fillText(finisher.beatLabel, W * .5, H - barHeight - 16);
     ctx.font = "900 11px Arial";
     ctx.fillStyle = attacker.def.accent;
-    ctx.fillText(`${finisher.impactIndex} / 3 PROJECTILE BEATS`, W * .5, H - barHeight + 19);
+    // 3D mode: the beats counter rides just under its beat label, clear of
+    // the meta line now living in the bottom bar.
+    ctx.fillText(`${finisher.impactIndex} / 3 PROJECTILE BEATS`, W * .5,
+      dressedOverlay ? H - barHeight - 2 : H - barHeight + 19);
     ctx.restore();
   }
 
@@ -11660,14 +14175,19 @@ function drawFinisherOverlay() {
     ctx.font = "900 18px Arial Narrow, Arial, sans-serif";
     ctx.lineWidth = 7;
     ctx.fillStyle = "#fff0df";
-    ctx.strokeText(`${fatality.title} · ${fatality.caption}`, W * .5, H * .3);
-    ctx.fillText(`${fatality.title} · ${fatality.caption}`, W * .5, H * .3);
-    ctx.font = "900 14px Arial Narrow, Arial, sans-serif";
-    ctx.lineWidth = 6;
-    ctx.fillStyle = attacker.def.accent;
-    const signatureLine = `${fatality.projectileFinale} · ${fatality.device}`;
-    ctx.strokeText(signatureLine, W * .5, H * .345);
-    ctx.fillText(signatureLine, W * .5, H * .345);
+    // 3D mode: ONE title line under the header (round-3, critic item 2) —
+    // the cinematic carries the story; the caption stack is gone.
+    const titleLine = dressedOverlay ? fatality.caption : `${fatality.title} · ${fatality.caption}`;
+    ctx.strokeText(titleLine, W * .5, H * .3);
+    ctx.fillText(titleLine, W * .5, H * .3);
+    if (!dressedOverlay) {
+      ctx.font = "900 14px Arial Narrow, Arial, sans-serif";
+      ctx.lineWidth = 6;
+      ctx.fillStyle = attacker.def.accent;
+      const signatureLine = `${fatality.projectileFinale} · ${fatality.device}`;
+      ctx.strokeText(signatureLine, W * .5, H * .345);
+      ctx.fillText(signatureLine, W * .5, H * .345);
+    }
     ctx.restore();
   }
 }
@@ -12111,12 +14631,64 @@ function ensureCrtVignette() {
   return surface;
 }
 
+// Offscreen scratch for the 3D-mode CRT pass: the scanline pattern is built
+// here first so soft holes can be punched over the fighters (a straight
+// destination-out on the main canvas would erase the world beneath).
+let crtPunchCanvas = null;
+let crtPunchCtx = null;
+
 function drawCrtOverlay(time) {
   if (!crtOverlayActive()) return;
   ctx.save();
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.fillStyle = ensureCrtPattern();
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // CINEMA 3D (critic fix 6): the scanline veil lifts ~50% over the character
+  // bodies — full-strength scanlines beat against the sprite texels into
+  // moiré on faces. Stage keeps the full CRT flavour; 2D-off path untouched.
+  let punched = false;
+  if (cinema3dWorldActive() && cinema3dBridge.renderer?.projectSim && state.fighters?.length === 2) {
+    if (!crtPunchCanvas || crtPunchCanvas.width !== canvas.width || crtPunchCanvas.height !== canvas.height) {
+      crtPunchCanvas = document.createElement("canvas");
+      crtPunchCanvas.width = canvas.width;
+      crtPunchCanvas.height = canvas.height;
+      crtPunchCtx = crtPunchCanvas.getContext("2d");
+    }
+    const pctx = crtPunchCtx;
+    pctx.setTransform(1, 0, 0, 1, 0, 0);
+    pctx.clearRect(0, 0, crtPunchCanvas.width, crtPunchCanvas.height);
+    pctx.fillStyle = ensureCrtPattern();
+    pctx.fillRect(0, 0, crtPunchCanvas.width, crtPunchCanvas.height);
+    const px = canvas.width / W;
+    pctx.globalCompositeOperation = "destination-out";
+    for (const fighter of state.fighters) {
+      const feet = cinema3dBridge.renderer.projectSim(fighter.x, fighter.y);
+      const head = cinema3dBridge.renderer.projectSim(fighter.x, fighter.y - fighter.height * 1.02);
+      if (!feet || !head) continue;
+      const cx = feet.x * px;
+      const cy = (head.y + feet.y) * 0.5 * px;
+      const ry = Math.max(24, (feet.y - head.y) * 0.62 * px);
+      const rx = ry * 0.52;
+      const hole = pctx.createRadialGradient(cx, cy, ry * 0.25, cx, cy, ry);
+      hole.addColorStop(0, "rgba(0,0,0,0.5)");
+      hole.addColorStop(0.7, "rgba(0,0,0,0.4)");
+      hole.addColorStop(1, "rgba(0,0,0,0)");
+      pctx.save();
+      pctx.translate(cx, cy);
+      pctx.scale(rx / ry, 1);
+      pctx.translate(-cx, -cy);
+      pctx.fillStyle = hole;
+      pctx.beginPath();
+      pctx.arc(cx, cy, ry, 0, Math.PI * 2);
+      pctx.fill();
+      pctx.restore();
+    }
+    pctx.globalCompositeOperation = "source-over";
+    ctx.drawImage(crtPunchCanvas, 0, 0);
+    punched = true;
+  }
+  if (!punched) {
+    ctx.fillStyle = ensureCrtPattern();
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+  }
   ctx.drawImage(ensureCrtVignette(), 0, 0, canvas.width, canvas.height);
   if ($("#flashToggle").checked && !state.accessibility.reducedMotion) {
     const bandHeight = canvas.height * 0.16;
@@ -12141,15 +14713,273 @@ let superCutIn = null;
 let superCutInTick = -1;
 const SUPER_CUT_IN_SECONDS = 0.7;
 
+// CINEMA 3D cut-in dressing: halftone dot + brush-streak pattern tiles, built
+// once on first use. Only the 3D-mode banner draws these; the 2D banner path
+// is byte-for-byte untouched.
+let cutInHalftonePattern = null;
+let cutInBrushPattern = null;
+function cutInPatterns() {
+  if (cutInHalftonePattern) return { halftone: cutInHalftonePattern, brush: cutInBrushPattern };
+  // Tiles authored at 2x and played back through a 0.5 pattern transform:
+  // the 1x banner dot screen read visibly aliased (AAA-critic fix 5).
+  const dots = document.createElement("canvas");
+  dots.width = dots.height = 96;
+  const dctx = dots.getContext("2d");
+  dctx.fillStyle = "rgba(0,0,0,0.85)";
+  for (let y = 0; y < 4; y += 1) {
+    for (let x = 0; x < 4; x += 1) {
+      const r = (2.1 + ((x * 7 + y * 13) % 5) * 0.55) * 2;
+      dctx.beginPath();
+      dctx.arc(x * 24 + (y % 2 ? 12 : 0) + 6, y * 24 + 6, r, 0, Math.PI * 2);
+      dctx.fill();
+    }
+  }
+  const brush = document.createElement("canvas");
+  brush.width = 512;
+  brush.height = 128;
+  const bctx = brush.getContext("2d");
+  for (let i = 0; i < 34; i += 1) {
+    const seed = Math.sin((i + 3) * 12.9898) * 43758.5453;
+    const jitter = seed - Math.floor(seed);
+    bctx.strokeStyle = `rgba(255,255,255,${(0.05 + jitter * 0.16).toFixed(3)})`;
+    bctx.lineWidth = (0.8 + jitter * 2.6) * 2;
+    const y = jitter * 128;
+    bctx.beginPath();
+    bctx.moveTo(-24, y + 10);
+    bctx.lineTo(536, y - 12);
+    bctx.stroke();
+  }
+  cutInHalftonePattern = dots;
+  cutInBrushPattern = brush;
+  return { halftone: dots, brush };
+}
+
+// Half-scale playback transform for the 2x cut-in tiles (3D banner only).
+const CUT_IN_PATTERN_SCALE = new DOMMatrix([0.5, 0, 0, 0.5, 0, 0]);
+
+// CINEMA 3D super portrait (AAA-critic fix 6): a dedicated aggressive
+// close-up composed at 2x from the attacker's ACTUAL super wind-up atlas
+// frame (HD atlas when available) with a hard white key rim, an accent
+// back-rim and a contrast push — not the idle roster art re-pasted. 3D-mode
+// only: none of this runs while the classic 2D banner draws.
+const superPortraitHdImages = new Map();
+const superPortraitCache = new Map();
+function superPortrait3d(cut) {
+  const bank = cut.poseBank === "specials" && fighterMoveAtlases[cut.fighterId] ? "specials" : "base";
+  const sdAtlas = bank === "specials" ? fighterMoveAtlases[cut.fighterId] : fighterAtlases[cut.fighterId];
+  if (!sdAtlas?.complete || !sdAtlas.naturalWidth) return null;
+  const hdPath = `renderer/hd/${cut.fighterId}${bank === "specials" ? "-specials" : ""}.webp`;
+  if (!superPortraitHdImages.has(hdPath)) {
+    const img = new Image();
+    img.src = hdPath; // warm in the fighter layer's HTTP cache; SD fallback
+    superPortraitHdImages.set(hdPath, img);
+  }
+  const hd = superPortraitHdImages.get(hdPath);
+  const atlas = hd.complete && hd.naturalWidth ? hd : sdAtlas;
+  const key = `${cut.fighterId}:${bank}:${cut.poseFrame}:${atlas === hd ? "hd" : "sd"}`;
+  if (superPortraitCache.has(key)) return superPortraitCache.get(key);
+  const cellW = atlas.naturalWidth / 4;
+  const cellH = atlas.naturalHeight / 4;
+  const crop = 0.68; // head + torso + raised fists: the wind-up close-up
+  const sx = (cut.poseFrame % 4) * cellW;
+  const sy = Math.floor(cut.poseFrame / 4) * cellH;
+  const sh = cellH * crop;
+  const canvas = document.createElement("canvas");
+  canvas.height = 584; // ~2x the on-screen portrait height
+  canvas.width = Math.round(584 * (cellW / sh));
+  const pctx = canvas.getContext("2d");
+  // Tinted stamp helper: the frame silhouette filled with one colour.
+  const stamp = document.createElement("canvas");
+  stamp.width = canvas.width;
+  stamp.height = canvas.height;
+  const stampCtx = stamp.getContext("2d");
+  const drawFrame = (target) => target.drawImage(atlas, sx, sy, cellW, sh, 0, 0, canvas.width, canvas.height);
+  const tinted = (color) => {
+    stampCtx.clearRect(0, 0, stamp.width, stamp.height);
+    drawFrame(stampCtx);
+    stampCtx.globalCompositeOperation = "source-in";
+    stampCtx.fillStyle = color;
+    stampCtx.fillRect(0, 0, stamp.width, stamp.height);
+    stampCtx.globalCompositeOperation = "source-over";
+    return stamp;
+  };
+  // Accent back-rim (down-right) then white key rim (up-left) under the real
+  // frame. The rim stamps are BLURRED (critic fix 7): the raw NN-scaled alpha
+  // printed a jaggy white staircase matte around the portrait — softened
+  // here, the sharp art on top still owns the silhouette.
+  pctx.filter = "blur(2.4px)";
+  pctx.drawImage(tinted(cut.accent), 9, 7);
+  pctx.filter = "blur(1.5px)";
+  pctx.drawImage(tinted("rgba(255,255,255,0.95)"), -7, -6);
+  pctx.drawImage(tinted("rgba(255,255,255,0.95)"), -3, -3);
+  pctx.filter = "contrast(1.14) saturate(1.12)";
+  drawFrame(pctx);
+  pctx.filter = "none";
+  superPortraitCache.set(key, canvas);
+  return canvas;
+}
+
+// Limb-following super-freeze energy arcs (critic fix 7): jagged bolts that
+// START at one emitter (the wind-up's chest/fist zone) and WALK the body —
+// each step stays inside the portrait's alpha, hugging the silhouette, so the
+// energy traces arms and shoulders instead of scribbling randomly. Two seeded
+// variants per portrait, cached; the cut-in flickers between them.
+const superArcCache = new Map();
+function superPortraitArcs(portrait, accent, variant) {
+  const key = `${portrait.width}x${portrait.height}:${accent}:${variant}`;
+  if (superArcCache.has(key)) return superArcCache.get(key);
+  const w = portrait.width;
+  const h = portrait.height;
+  const scratch = document.createElement("canvas");
+  scratch.width = w;
+  scratch.height = h;
+  const sctx = scratch.getContext("2d", { willReadFrequently: true });
+  sctx.drawImage(portrait, 0, 0);
+  const alphaData = sctx.getImageData(0, 0, w, h).data;
+  const solid = (x, y) => {
+    if (x < 2 || y < 2 || x >= w - 2 || y >= h - 2) return false;
+    return alphaData[(Math.round(y) * w + Math.round(x)) * 4 + 3] > 90;
+  };
+  const canvasOut = document.createElement("canvas");
+  canvasOut.width = w;
+  canvasOut.height = h;
+  const octx = canvasOut.getContext("2d");
+  const hash = (n) => {
+    const s = Math.sin(n * 127.1 + 311.7 + variant * 53.7) * 43758.5453;
+    return s - Math.floor(s);
+  };
+  // emitter: chest/lead-fist zone of the wind-up crop
+  const ex = w * 0.52;
+  const ey = h * 0.46;
+  octx.lineCap = "round";
+  octx.lineJoin = "round";
+  for (let arc = 0; arc < 6; arc += 1) {
+    let x = ex + (hash(arc * 9 + 1) - 0.5) * w * 0.08;
+    let y = ey + (hash(arc * 9 + 2) - 0.5) * h * 0.06;
+    let angle = hash(arc * 9 + 3) * Math.PI * 2;
+    const points = [[x, y]];
+    const step = Math.max(6, w * 0.028);
+    for (let s = 0; s < 26; s += 1) {
+      angle += (hash(arc * 31 + s) - 0.5) * 1.1;
+      let nx = x + Math.cos(angle) * step;
+      let ny = y + Math.sin(angle) * step;
+      if (!solid(nx, ny)) {
+        // hug the silhouette: try tangential turns before giving up — this is
+        // what makes the bolt FOLLOW an arm instead of flying off it
+        let turned = false;
+        for (const dTurn of [0.7, -0.7, 1.3, -1.3, 2.0, -2.0]) {
+          const tx = x + Math.cos(angle + dTurn) * step;
+          const ty = y + Math.sin(angle + dTurn) * step;
+          if (solid(tx, ty)) {
+            angle += dTurn;
+            nx = tx;
+            ny = ty;
+            turned = true;
+            break;
+          }
+        }
+        if (!turned) break;
+      }
+      x = nx;
+      y = ny;
+      points.push([x, y]);
+    }
+    if (points.length < 5) continue;
+    // BLANKA-GRAMMAR BOLT (round-3, critic item 6): drawn segment-by-segment
+    // with real WIDTH VARIATION — a fat rooted trunk tapering to a whipped
+    // point, jittered per step — in three passes: a soft orange falloff glow,
+    // a hot amber body, and a thin WHITE-HOT core. No more uniform noodle.
+    const jittered = points.map((pt, p) => [
+      pt[0] + (hash(p * 7 + arc) - 0.5) * 3,
+      pt[1] + (hash(p * 11 + arc) - 0.5) * 3,
+    ]);
+    const drawBolt = (pts, rootWidth, seedBase) => {
+      const segs = pts.length - 1;
+      for (let p = 0; p < segs; p += 1) {
+        const t = p / Math.max(1, segs - 1);
+        // taper root -> tip with per-segment crackle so no two widths match
+        const wSeg = Math.max(0.7, rootWidth * (1 - t * 0.78) * (0.62 + hash(seedBase + p * 13) * 0.76));
+        const seg = () => {
+          octx.beginPath();
+          octx.moveTo(pts[p][0], pts[p][1]);
+          octx.lineTo(pts[p + 1][0], pts[p + 1][1]);
+          octx.stroke();
+        };
+        // orange falloff glow
+        octx.globalAlpha = 0.3 * (1 - t * 0.4);
+        octx.strokeStyle = "rgba(255,118,20,1)";
+        octx.lineWidth = wSeg * 3.1;
+        seg();
+        // hot amber body
+        octx.globalAlpha = 0.82;
+        octx.strokeStyle = "rgba(255,178,58,1)";
+        octx.lineWidth = wSeg;
+        seg();
+        // white-hot core
+        octx.globalAlpha = 0.95;
+        octx.strokeStyle = "rgba(255,250,238,1)";
+        octx.lineWidth = Math.max(0.6, wSeg * 0.34);
+        seg();
+      }
+    };
+    drawBolt(jittered, Math.max(3.4, w * 0.016), arc * 101);
+    // BRANCHES: 2 true forks walked off mid points with their own taper —
+    // branching is what separates lightning from scribble.
+    for (let br = 0; br < 2; br += 1) {
+      const rootIndex = Math.floor(jittered.length * (0.3 + hash(arc * 17 + br * 29) * 0.45));
+      const root = jittered[rootIndex];
+      if (!root) continue;
+      let bx = root[0];
+      let by = root[1];
+      let bAngle = hash(arc * 23 + br * 31) * Math.PI * 2;
+      const branchPts = [[bx, by]];
+      const bStep = Math.max(4.5, w * 0.02);
+      for (let s = 0; s < 7; s += 1) {
+        bAngle += (hash(arc * 41 + br * 7 + s) - 0.5) * 1.3;
+        let nx = bx + Math.cos(bAngle) * bStep;
+        let ny = by + Math.sin(bAngle) * bStep;
+        if (!solid(nx, ny)) {
+          let turned = false;
+          for (const dTurn of [0.8, -0.8, 1.5, -1.5]) {
+            const tx = bx + Math.cos(bAngle + dTurn) * bStep;
+            const ty = by + Math.sin(bAngle + dTurn) * bStep;
+            if (solid(tx, ty)) { bAngle += dTurn; nx = tx; ny = ty; turned = true; break; }
+          }
+          if (!turned) break;
+        }
+        bx = nx;
+        by = ny;
+        branchPts.push([bx, by]);
+      }
+      if (branchPts.length >= 3) drawBolt(branchPts, Math.max(1.8, w * 0.008), arc * 211 + br * 57);
+    }
+  }
+  // hot emitter knot where every bolt roots
+  const knot = octx.createRadialGradient(ex, ey, 2, ex, ey, w * 0.075);
+  knot.addColorStop(0, "rgba(255,248,235,0.95)");
+  knot.addColorStop(0.4, `${accent}aa`);
+  knot.addColorStop(1, "rgba(0,0,0,0)");
+  octx.globalAlpha = 1;
+  octx.fillStyle = knot;
+  octx.fillRect(ex - w * 0.075, ey - w * 0.075, w * 0.15, w * 0.15);
+  superArcCache.set(key, canvasOut);
+  return canvasOut;
+}
+
 function latchSuperPresentation(fighter) {
   if (rollbackResimulating || superCutInTick === state.simulationTick) return;
   superCutInTick = state.simulationTick;
+  // poseBank/poseFrame capture the live wind-up pose for the CINEMA 3D
+  // close-up portrait; plain data, unread by the classic 2D banner path.
+  const pose = fighterAnimationPose(fighter);
   superCutIn = {
     side: fighter.side,
     fighterId: fighter.def.id,
     name: fighter.def.name,
     accent: fighter.def.accent,
     color: fighter.def.color,
+    poseBank: pose.bank,
+    poseFrame: pose.frame,
     t: 0,
   };
   hudFxDebug.superCutIns += 1;
@@ -12183,6 +15013,9 @@ function drawSuperCutIn(dtMs) {
   const progress = clamp(cut.t / SUPER_CUT_IN_SECONDS, 0, 1);
   const alpha = Math.min(clamp(progress / 0.07, 0, 1), clamp((1 - progress) / 0.16, 0, 1));
   const fromLeft = cut.side === 0;
+  // CINEMA 3D banner treatment (halftone band, textured type, portrait punch)
+  // only fires over the 3D world; the classic 2D banner is untouched.
+  const in3d = cinema3dWorldActive();
   // Band held to the upper-middle third: clear of the HUD and low enough to
   // frame the portrait without burying the fighters for its 0.7s life.
   const bandTop = H * 0.19;
@@ -12207,6 +15040,30 @@ function drawSuperCutIn(dtMs) {
   wash.addColorStop(1, "rgba(8,10,18,0)");
   ctx.fillStyle = wash;
   ctx.fillRect(0, bandTop - tilt, W, bandBottom - bandTop + tilt * 2);
+  if (in3d) {
+    // Print texture INTO the accent band: a drifting halftone dot screen in
+    // the wash's own shadow tone plus raking brush streaks, so the slash
+    // reads as inked print, not a flat gradient.
+    const { halftone, brush } = cutInPatterns();
+    ctx.save();
+    ctx.globalAlpha = alpha * 0.5;
+    ctx.globalCompositeOperation = "multiply";
+    const dotPattern = ctx.createPattern(halftone, "repeat");
+    dotPattern.setTransform(CUT_IN_PATTERN_SCALE);
+    ctx.translate((fromLeft ? -1 : 1) * cut.t * 160, 0);
+    ctx.fillStyle = dotPattern;
+    ctx.fillRect(-W, bandTop - tilt, W * 3, bandBottom - bandTop + tilt * 2);
+    ctx.restore();
+    ctx.save();
+    ctx.globalAlpha = alpha * 0.55;
+    ctx.globalCompositeOperation = "overlay";
+    const brushPattern = ctx.createPattern(brush, "repeat");
+    brushPattern.setTransform(CUT_IN_PATTERN_SCALE);
+    ctx.translate((fromLeft ? 1 : -1) * cut.t * 420, 0);
+    ctx.fillStyle = brushPattern;
+    ctx.fillRect(-W, bandTop - tilt, W * 3, bandBottom - bandTop + tilt * 2);
+    ctx.restore();
+  }
   // Speed lines streak against the sweep (skipped under reduced motion).
   if (!reduced) {
     ctx.globalCompositeOperation = "lighter";
@@ -12227,10 +15084,24 @@ function drawSuperCutIn(dtMs) {
   }
   // Portrait slam: eased slide toward centre (static under reduced motion),
   // riding an accent glow pool so the cutout art separates from the band.
+  // CINEMA 3D uses the dedicated 2x wind-up close-up (superPortrait3d) with a
+  // speed-line burst behind it; the 2D roster-art path is byte-for-byte
+  // unchanged.
   const image = fighterImages[cut.fighterId];
-  if (image?.complete && image.naturalWidth > 0) {
-    const portraitHeight = (bandBottom - bandTop) * 2.15;
-    const portraitWidth = portraitHeight * (image.naturalWidth / image.naturalHeight);
+  const closeUp = in3d ? superPortrait3d(cut) : null;
+  // 3D deliberate band break (round-3, critic item 6): the portrait's head +
+  // shoulders COMMIT past the band's top edge instead of grazing it — drawn
+  // after the clip ends, through a top-open window bounded at the band's
+  // bottom edge. Geometry is computed here; the actual punch draw happens
+  // post-restore so the edge stroke passes BEHIND the figure.
+  let breakDraw = null;
+  if (closeUp || (image?.complete && image.naturalWidth > 0)) {
+    const bustFraction = 0.46; // top of the roster art: head + torso
+    const sourceHeight = in3d ? (image?.naturalHeight ?? 1) * bustFraction : image?.naturalHeight ?? 1;
+    const portraitHeight = (bandBottom - bandTop) * (closeUp ? 1.46 : in3d ? 1.18 : 2.15);
+    const portraitWidth = portraitHeight * (closeUp
+      ? closeUp.width / closeUp.height
+      : (image?.naturalWidth ?? 1) / sourceHeight);
     const slide = reduced ? 1 : 1 - (1 - clamp(progress / 0.34, 0, 1)) ** 3;
     const targetX = W * 0.5 - portraitWidth * 0.5;
     const startX = fromLeft ? -portraitWidth - 80 : W + 80;
@@ -12246,21 +15117,132 @@ function drawSuperCutIn(dtMs) {
     ctx.fillStyle = glow;
     ctx.fillRect(0, bandTop - tilt, W, bandBottom - bandTop + tilt * 2);
     ctx.globalCompositeOperation = "source-over";
-    ctx.drawImage(image, portraitX, bandTop - portraitHeight * 0.24, portraitWidth, portraitHeight);
+    if (in3d && closeUp && !reduced) {
+      // SPEED-LINE BURST behind the close-up: comic rays converging on the
+      // portrait, wound slightly by the band's life (SF6 cut-in energy).
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.lineCap = "round";
+      for (let ray = 0; ray < 22; ray += 1) {
+        const seed = Math.sin((ray + 5) * 78.233) * 43758.5453;
+        const jitter = seed - Math.floor(seed);
+        const angle = (ray / 22) * Math.PI * 2 + jitter * 0.4 + cut.t * 0.5;
+        const outer = portraitHeight * (0.85 + jitter * 0.7);
+        const inner = portraitHeight * (0.34 + jitter * 0.16);
+        ctx.globalAlpha = alpha * (0.16 + jitter * 0.3);
+        ctx.strokeStyle = ray % 3 === 0 ? cut.accent : "#fff6e6";
+        ctx.lineWidth = 1.5 + jitter * 3.5;
+        ctx.beginPath();
+        ctx.moveTo(glowX + Math.cos(angle) * outer, glowY + Math.sin(angle) * outer);
+        ctx.lineTo(glowX + Math.cos(angle) * inner, glowY + Math.sin(angle) * inner);
+        ctx.stroke();
+      }
+      ctx.restore();
+      ctx.globalAlpha = alpha;
+    }
+    if (in3d) {
+      // Portrait PUNCH geometry: slams in oversized and slightly rolled,
+      // easing to rest over the first quarter of the band's life. Anchored
+      // HIGH: the crown clears the band's top edge by a committed margin.
+      const punch = reduced ? 1 : clamp(progress / 0.24, 0, 1);
+      const punchEase = 1 - (1 - punch) ** 3;
+      const punchScale = 1.22 - punchEase * 0.22;
+      const punchRot = (fromLeft ? -1 : 1) * (1 - punchEase) * 0.09 - 0.025;
+      const pcx = portraitX + portraitWidth * 0.5;
+      const pcy = bandTop - 20 + portraitHeight * 0.5;
+      breakDraw = () => {
+        ctx.save();
+        // Top-open window: free above, cut at the band's bottom edge so the
+        // torso still exits INTO the band (a raw crop line never shows).
+        ctx.beginPath();
+        ctx.moveTo(-60, -H);
+        ctx.lineTo(W + 60, -H);
+        ctx.lineTo(W + 60, bandBottom - tilt);
+        ctx.lineTo(-60, bandBottom + tilt);
+        ctx.closePath();
+        ctx.clip();
+        ctx.globalAlpha = alpha;
+        ctx.translate(pcx, pcy);
+        ctx.rotate(punchRot);
+        ctx.scale(punchScale, punchScale);
+        if (closeUp) {
+          // Mirror the P2 close-up so the wind-up drives INTO the frame.
+          if (!fromLeft) ctx.scale(-1, 1);
+          ctx.drawImage(closeUp, -portraitWidth * 0.5, -portraitHeight * 0.5, portraitWidth, portraitHeight);
+          // Limb-following energy bolts from the chest emitter, flickering
+          // between two seeded variants over the band's life.
+          if (!reduced) {
+            const arcs = superPortraitArcs(closeUp, cut.accent, Math.floor(cut.t * 21) % 2);
+            ctx.save();
+            ctx.globalCompositeOperation = "lighter";
+            ctx.globalAlpha = alpha * (0.75 + 0.25 * Math.sin(cut.t * 47));
+            ctx.drawImage(arcs, -portraitWidth * 0.5, -portraitHeight * 0.5, portraitWidth, portraitHeight);
+            ctx.restore();
+          }
+        } else {
+          ctx.drawImage(
+            image, 0, 0, image.naturalWidth, sourceHeight,
+            -portraitWidth * 0.5, -portraitHeight * 0.5, portraitWidth, portraitHeight,
+          );
+        }
+        ctx.restore();
+      };
+    } else {
+      ctx.drawImage(image, portraitX, bandTop - portraitHeight * 0.24, portraitWidth, portraitHeight);
+    }
   }
   // Name plate riding the band's lower edge.
   ctx.globalAlpha = alpha;
-  ctx.font = "italic 1000 44px Arial Narrow, Impact, sans-serif";
   ctx.textAlign = fromLeft ? "right" : "left";
   ctx.textBaseline = "alphabetic";
-  ctx.lineWidth = 7;
-  ctx.strokeStyle = "rgba(0,0,0,.92)";
-  ctx.fillStyle = "#f4f7ff";
   const nameX = fromLeft ? W - 54 : 54;
-  ctx.strokeText(cut.name, nameX, bandBottom - 18);
-  ctx.fillText(cut.name, nameX, bandBottom - 18);
+  if (in3d) {
+    // Textured display type: skewed heavy caps punched in with the portrait,
+    // hot accent under-stroke offset like misregistered ink, gradient fill,
+    // halftone screen INSIDE the letterforms and a hard black contour.
+    const namePunch = reduced ? 1 : clamp((progress - 0.04) / 0.2, 0, 1);
+    const nameEase = 1 - (1 - namePunch) ** 3;
+    const nameY = bandBottom - 16;
+    ctx.save();
+    ctx.translate(nameX, nameY);
+    ctx.transform(1, 0, -0.24, 1, 0, 0); // slam-forward skew
+    ctx.scale(1 + (1 - nameEase) * 0.35, 1 + (1 - nameEase) * 0.35);
+    ctx.globalAlpha = alpha * (0.25 + nameEase * 0.75);
+    ctx.font = "1000 58px Arial Narrow, Impact, sans-serif";
+    // Misregistered accent pass first (offset down-right).
+    ctx.fillStyle = cut.accent;
+    ctx.fillText(cut.name, 4, 4);
+    // Hard contour.
+    ctx.lineJoin = "round";
+    ctx.lineWidth = 9;
+    ctx.strokeStyle = "rgba(3,4,8,.95)";
+    ctx.strokeText(cut.name, 0, 0);
+    // Gradient body: hot top light falling to steel.
+    const nameGrad = ctx.createLinearGradient(0, -48, 0, 6);
+    nameGrad.addColorStop(0, "#ffffff");
+    nameGrad.addColorStop(0.52, "#f2f5ff");
+    nameGrad.addColorStop(0.56, "#c9d2e8");
+    nameGrad.addColorStop(1, "#9aa6c4");
+    ctx.fillStyle = nameGrad;
+    ctx.fillText(cut.name, 0, 0);
+    // Halftone screen inside the letterforms only.
+    const { halftone } = cutInPatterns();
+    ctx.globalAlpha = alpha * 0.3;
+    ctx.fillStyle = ctx.createPattern(halftone, "repeat");
+    ctx.fillText(cut.name, 0, 0);
+    ctx.restore();
+  } else {
+    ctx.font = "italic 1000 44px Arial Narrow, Impact, sans-serif";
+    ctx.lineWidth = 7;
+    ctx.strokeStyle = "rgba(0,0,0,.92)";
+    ctx.fillStyle = "#f4f7ff";
+    ctx.strokeText(cut.name, nameX, bandBottom - 18);
+    ctx.fillText(cut.name, nameX, bandBottom - 18);
+  }
   ctx.restore();
-  // Band edge strokes drawn unclipped so they stay crisp.
+  // Band edge strokes drawn unclipped so they stay crisp — BEFORE the 3D
+  // portrait break, so the top edge line passes BEHIND the figure and the
+  // crown reads as a designed break, not a graze.
   ctx.save();
   ctx.globalAlpha = alpha * 0.95;
   ctx.strokeStyle = cut.accent;
@@ -12272,6 +15254,12 @@ function drawSuperCutIn(dtMs) {
   ctx.lineTo(W + 60, bandBottom - tilt);
   ctx.stroke();
   ctx.restore();
+  // 3D-only: the committed band break (no-op in 2D — breakDraw stays null).
+  if (breakDraw) {
+    ctx.save();
+    breakDraw();
+    ctx.restore();
+  }
 }
 
 function draw(time) {
@@ -12292,6 +15280,16 @@ function draw(time) {
   // Wave 7 DPR-sharp baseline: all logical-coordinate code below draws through
   // this transform; identity when sharp render is off (renderDpr === 1).
   ctx.setTransform(renderDpr, 0, 0, renderDpr, 0, 0);
+  // CINEMA 3D: when the experimental Three.js world renderer is active it
+  // draws the world on its own canvas UNDER this one; the 2D canvas is
+  // cleared so only the screen-space overlay passes composite on top. When
+  // inactive this is a no-op and the 2D path below is untouched.
+  const cinema3dWorld = cinema3dWorldActive();
+  cinema3dBridge.renderer?.setVisible(cinema3dWorld);
+  if (cinema3dWorld) {
+    cinema3dBridge.renderer.renderFrame(time, hudDtMs);
+    ctx.clearRect(0, 0, W, H);
+  }
   ctx.save();
   const shakeScale = state.accessibility.reducedMotion ? 0 : state.accessibility.shakeScale;
   const shakeX = state.shake > 0 ? Math.sin((state.simulationTick + 1) * 12.9898) * state.shake * 9 * shakeScale : 0;
@@ -12329,46 +15327,58 @@ function draw(time) {
     gritFlareLevel[0] = Math.max(0, gritFlareLevel[0] - 0.05);
     gritFlareLevel[1] = Math.max(0, gritFlareLevel[1] - 0.05);
   }
-  drawStage(time);
-  if (state.screen === "fight") {
-    drawSuperSpotlight();
-    drawWinPoseSpotlight();
-    drawSuperFocusLines(time);
-    drawFighterCastShadows();
-    drawFighterReflections(time);
-    drawPaintTraps(time);
-    drawStageWeapon(time);
-    drawProjectiles(time);
-    drawAfterimages();
-    const ordered = [...state.fighters].sort((a, b) => a.y - b.y);
-    ordered.forEach((fighter) => drawFighter(fighter, time));
-    state.fighters.forEach((fighter) => drawDizzyStars(fighter, time));
-    state.fighters.forEach((fighter) => drawGuardCrushMarker(fighter, time));
-    drawParticles();
-    drawForegroundOccluders(state.fighters.length
-      ? (state.fighters[0].x + state.fighters[1].x) * 0.5 : W * 0.5);
+  if (!cinema3dWorld) {
+    drawStage(time);
+    if (state.screen === "fight") {
+      drawSuperSpotlight();
+      drawWinPoseSpotlight();
+      drawSuperFocusLines(time);
+      drawFighterCastShadows();
+      drawFighterReflections(time);
+      drawPaintTraps(time);
+      drawStageWeapon(time);
+      drawProjectiles(time);
+      drawAfterimages();
+      const ordered = [...state.fighters].sort((a, b) => a.y - b.y);
+      ordered.forEach((fighter) => drawFighter(fighter, time));
+      state.fighters.forEach((fighter) => drawDizzyStars(fighter, time));
+      state.fighters.forEach((fighter) => drawGuardCrushMarker(fighter, time));
+      drawParticles();
+      drawForegroundOccluders(state.fighters.length
+        ? (state.fighters[0].x + state.fighters[1].x) * 0.5 : W * 0.5);
+    }
   }
   // Wave 7: capture the live world transform so the screen-space distortion
   // ring can project its world-space origin after the restore.
   if (distortionRing) worldScreenTransform = ctx.getTransform();
   ctx.restore();
-  drawStageGrade();
-  drawFinisherRealityComposite();
-  // Wave 7 screen-space composite passes, in order: slow-mo smear first, then
-  // the frame capture (so the smear recursively accumulates but bloom can
-  // never feed back into itself), then bloom and the one-shot warps.
-  updateSlowMoBlur();
-  requestFrameCapture();
-  drawBloomComposite();
-  drawDistortionRing(hudDtMs);
-  drawChromaticAberration();
+  // CINEMA 3D handles grade/bloom/grain in its own post stack; the 2D
+  // frame-capture composites would smear a transparent canvas, so they are
+  // skipped while the 3D world is live. UI-readability overlays (letterbox,
+  // cut-ins, flash, CRT, debug) still draw on top either way.
+  if (!cinema3dWorld) {
+    drawStageGrade();
+    drawFinisherRealityComposite();
+    // Wave 7 screen-space composite passes, in order: slow-mo smear first, then
+    // the frame capture (so the smear recursively accumulates but bloom can
+    // never feed back into itself), then bloom and the one-shot warps.
+    updateSlowMoBlur();
+    requestFrameCapture();
+    drawBloomComposite();
+    drawDistortionRing(hudDtMs);
+    drawChromaticAberration();
+  }
   drawIntroLetterbox();
   drawFinisherOverlay();
   if (state.flash > 0) {
-    // Capped well under full white: at 0.9 the flash erased the whole frame on
-    // every multi-hit, which read as confusion rather than impact. Supers and
-    // finishers still reach the cap; ordinary hits sit far below it.
-    ctx.fillStyle = `rgba(255,245,220,${clamp(state.flash * 3, 0, 0.5)})`;
+// CINEMA 3D carries its own layered impact flash (hit-masked white pop,
+    // shockwave ring, embers in the world), so the screen wash is nearly off
+    // there. The 2D path keeps the 1.9E cap: at 0.9 the flash erased the
+    // whole frame on every multi-hit; supers and finishers still reach it.
+    const flashAlpha = cinema3dWorld
+      ? clamp(state.flash * 0.4, 0, 0.08)
+      : clamp(state.flash * 3, 0, 0.5);
+    ctx.fillStyle = `rgba(255,245,220,${flashAlpha})`;
     ctx.fillRect(0, 0, W, H);
   }
   drawSuperCutIn(hudDtMs);
@@ -12455,6 +15465,9 @@ function applyPerformanceSettings() {
   $("#visualQualitySelect").value = state.visualQuality;
   $("#sharpRenderToggle").checked = Boolean(state.sharpRender);
   $("#crtModeToggle").checked = Boolean(state.crtMode);
+  $("#cinema3dToggle").checked = Boolean(state.cinema3d);
+  // Profile switches can grant/revoke CINEMA 3D eligibility (battery refuses).
+  ensureCinema3d();
   $("#pausePerformance").textContent = `${state.visualQuality.toUpperCase()} VISUALS · ${state.performance.id.toUpperCase()} PROFILE · ${state.performance.particleBudget} FX BUDGET`;
   // Wave 7: quality switches re-apply the DPR-sharp backing store.
   applyBackingStoreResolution();
@@ -14166,7 +17179,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-1.9e");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.0");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -14282,6 +17295,9 @@ window.addEventListener("keydown", (event) => {
   }
   if (!keys.has(event.code)) pressed.add(event.code);
   keys.add(event.code);
+  // Release 1.8 GRIND: tally count-up and initials entry own the keyboard
+  // while their screens are up.
+  if (handleTallyKey(event) || handleInitialsKey(event)) return;
   titleKeyboard(event);
 });
 window.addEventListener("keyup", (event) => keys.delete(event.code));
@@ -14336,9 +17352,16 @@ function menuPadLoop() {
     } else if (state.screen === "stage") startMatch(true);
     else if (state.screen === "ladder") startMatch(true);
     else if (state.screen === "ending") startSelect("arcade");
+    else if (state.screen === "tally") tallyContinue();
+    else if (state.screen === "initials") commitInitials();
     else if (state.screen === "result") {
       if (state.mode === "online") requestOnlineRematch();
-      else startMatch(true);
+      else if (dailySession.active && dailySession.finished) showScreen("title");
+      else if (state.mode === "survival" && state.survivalRun?.over) startSurvivalRun(state.survivalRun.playerId);
+      else if (state.mode === "team" && state.teamBattle?.over) {
+        beginTeamBattle(state.teamBattle.cpu);
+        startMatch(true);
+      } else startMatch(true);
     }
   }
   menuPadWasPressed = confirm;
@@ -14450,6 +17473,13 @@ $("#sharpRenderToggle").addEventListener("change", (event) => {
 $("#crtModeToggle").addEventListener("change", (event) => {
   state.crtMode = event.target.checked;
   localStorage.setItem("final-blow-crt-mode", state.crtMode ? "1" : "0");
+});
+$("#cinema3dToggle").addEventListener("change", (event) => {
+  state.cinema3d = event.target.checked;
+  localStorage.setItem("final-blow-cinema-3d", state.cinema3d ? "1" : "0");
+  // Live-switch: the module lazy-loads on first activation; toggling off just
+  // hides the 3D canvas and resumes the 2D world draw next frame.
+  ensureCinema3d();
 });
 $("#soundCaptionsToggle").addEventListener("change", (event) => {
   state.soundCaptions = event.target.checked;
@@ -14586,11 +17616,42 @@ $("#fightButton").addEventListener("click", () => startMatch(true));
 $("#arcadeContinueButton").addEventListener("click", () => startMatch(true));
 $("#endingReplayButton").addEventListener("click", () => startSelect("arcade"));
 $("#rematchButton").addEventListener("click", () => {
-  if (state.mode === "online") requestOnlineRematch();
-  else startMatch(true);
+  if (state.mode === "online") {
+    requestOnlineRematch();
+    return;
+  }
+  // Release 1.8 GRIND: run-based modes restart their RUN, not the lost bout.
+  if (state.mode === "survival" && state.survivalRun?.over) {
+    startSurvivalRun(state.survivalRun.playerId);
+    return;
+  }
+  if (state.mode === "team" && state.teamBattle?.over) {
+    beginTeamBattle(state.teamBattle.cpu);
+    startMatch(true);
+    return;
+  }
+  if (dailySession.active && dailySession.finished) {
+    showScreen("title");
+    return;
+  }
+  startMatch(true);
 });
 $("#newStageButton").addEventListener("click", showSameFightersStageSelect);
 $("#reselectButton").addEventListener("click", () => startSelect(state.mode));
+// Release 1.8 GRIND: new-mode surfaces.
+$("#dailyButton").addEventListener("click", () => startDailyRun());
+$("#tallyContinueButton").addEventListener("click", () => tallyContinue());
+$("#initialsConfirmButton").addEventListener("click", () => commitInitials());
+$$("#initialsSlots .initials-slot").forEach((slot, index) => {
+  slot.addEventListener("click", () => {
+    if (!initialsUi.active) return;
+    if (initialsUi.cursor === index) cycleInitialLetter(1);
+    else initialsUi.cursor = index;
+    renderInitials();
+  });
+});
+$("#shareDailyButton").addEventListener("click", (event) => shareDailyResult(event.currentTarget));
+$("#shareDailyEndingButton").addEventListener("click", (event) => shareDailyResult(event.currentTarget));
 $("#resumeButton").addEventListener("click", () => setPaused(false));
 $("#restartButton").addEventListener("click", restartPausedRound);
 $("#pauseOptionsButton").addEventListener("click", () => $("#controlsDialog").showModal());
@@ -14664,7 +17725,7 @@ $$("[data-touch]").forEach((button) => {
 });
 
 window.__finalBlowEngine = {
-  version: "1.9e-mobile-parity",
+  version: "2.0-cinema",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -14764,6 +17825,42 @@ window.__finalBlowEngine = {
         filmGrainPasses: presentationDebug.filmGrainPasses,
       },
       arcade: arcadeRunSnapshot(state.arcadeRun),
+      // Release 1.8 GRIND: mode/meta block — score attack, survival, Block
+      // War, the Daily Jawn, House Rules config, and the one-shot totals.
+      meta: {
+        score: scoreSessionSnapshot(),
+        survival: survivalRunSnapshot(state.survivalRun),
+        team: teamBattleSnapshot(state.teamBattle),
+        daily: {
+          active: dailySession.active,
+          date: dailySession.date,
+          finished: dailySession.finished,
+          fighterId: dailySession.plan?.fighterId || null,
+          mutator: dailySession.plan?.mutator || null,
+          outcome: dailySession.outcome ? { ...dailySession.outcome } : null,
+          record: loadDailyRecord(),
+        },
+        mutators: [...state.mutators],
+        pendingMutators: [...pendingMutators],
+        matchRules: { ...state.matchRules },
+        suddenDeathHitDone: state.suddenDeathHitDone,
+        tally: {
+          active: tallyUi.active,
+          done: tallyUi.done,
+          total: tallyUi.total,
+          runTotal: tallyUi.runTotal,
+          rows: tallyUi.rows.map((row) => ({ ...row })),
+        },
+        initials: {
+          active: initialsUi.active,
+          letters: [...initialsUi.letters],
+          cursor: initialsUi.cursor,
+          score: initialsUi.score,
+        },
+        highScores: loadHighScores(),
+        survivalBest: loadSurvivalBest(),
+        fx: { ...modeFxDebug },
+      },
       seed: state.matchSeed,
       rng: state.rng.getState(),
       commands: commandHistory.map((history) => history.map((entry) => ({ ...entry }))),
@@ -14902,6 +17999,15 @@ window.__finalBlowEngine = {
         exThrowables: mechFxDebug.exThrowables,
         commandKicks: mechFxDebug.commandKicks,
         taunts: mechFxDebug.taunts,
+        // Release 1.8 GRIND mode systems, same monotonic one-shot pattern
+        // (full detail lives in snapshot().meta.fx).
+        tallyScreens: modeFxDebug.tallyScreens,
+        initialsEntries: modeFxDebug.initialsEntries,
+        survivalMilestones: modeFxDebug.survivalMilestones,
+        teamEliminations: modeFxDebug.teamEliminations,
+        teamWalkIns: modeFxDebug.teamWalkIns,
+        dailyRuns: modeFxDebug.dailyRuns,
+        attractScoreBoards: modeFxDebug.attractScoreBoards,
       },
       stageWeapon: weaponSnapshot(state.stageWeapon),
       stageWeaponsEnabled: state.stageWeaponsEnabled,
@@ -15023,6 +18129,13 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       if (firstIndex < 0 || secondIndex < 0) throw new Error(`Unknown matchup: ${firstId} vs ${secondId}`);
       state.mode = "versus";
       state.arcadeRun = null;
+      state.survivalRun = null;
+      state.teamBattle = null;
+      dailySession.active = false;
+      endScoreRun();
+      // Release 1.8 GRIND: QA fights honour the pending House Rules picker so
+      // probes can demonstrate mutators altering a versus match.
+      applyMatchRulesForMatch();
       state.qaManualMode = true;
       state.picks = [firstIndex, secondIndex];
       state.rounds = [0, 0];
@@ -15198,6 +18311,88 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       setAiDifficulty(difficulty);
       state.mode = "arcade";
       return window.__finalBlowEngine.snapshot();
+    },
+    // --- Release 1.8 GRIND mode probes ------------------------------------
+    survival(fighterId = "deathblow", seed = 237) {
+      if (rosterIndexById(fighterId) < 0) throw new Error(`Unknown fighter: ${fighterId}`);
+      startSurvivalRun(fighterId, seed);
+      return window.__finalBlowEngine.snapshot();
+    },
+    // Resolve the current survival/arcade/team bout as a player win through
+    // the REAL finishRound → roundover → resolveMatchResult pipeline. Pass
+    // hold=true to leave the round-over ceremony playing in real time (so
+    // wall-clock layers like the Block War elimination callout can fire).
+    winBout(playerHealth = null, hold = false) {
+      if (state.screen !== "fight") throw new Error("Start a fight first");
+      if (Number.isFinite(playerHealth)) state.fighters[0].health = clamp(playerHealth, 1, 100);
+      finishRound(0, -1);
+      if (!hold) {
+        state.phaseTime = 0;
+        simulationClock.stepOnce(runSimulationStep);
+      }
+      return window.__finalBlowEngine.snapshot();
+    },
+    loseBout() {
+      if (state.screen !== "fight") throw new Error("Start a fight first");
+      finishRound(1, -1);
+      state.phaseTime = 0;
+      simulationClock.stepOnce(runSimulationStep);
+      return window.__finalBlowEngine.snapshot();
+    },
+    teamBattle(teamA = ["deathblow", "jez", "alan"], teamB = ["post", "benny", "donald"], cpu = true) {
+      state.mode = "team";
+      state.arcadeRun = null;
+      state.survivalRun = null;
+      dailySession.active = false;
+      endScoreRun();
+      state.teamPicks = [[...teamA], [...teamB]];
+      beginTeamBattle(Boolean(cpu));
+      startMatch(true);
+      return window.__finalBlowEngine.snapshot();
+    },
+    daily(dateString = null) {
+      startDailyRun(dateString, { force: true });
+      return window.__finalBlowEngine.snapshot();
+    },
+    dailyPlan(dateString = null) {
+      const date = dateString || dailyDateString();
+      const plan = createDailyPlan(date, roster.map(({ id }) => id));
+      return {
+        date: plan.date,
+        seed: plan.seed,
+        fighterId: plan.fighterId,
+        mutator: plan.mutator,
+        difficulty: plan.difficulty,
+        matches: plan.run.matches.map(({ opponentId, stage, kind }) => ({ opponentId, stage, kind })),
+      };
+    },
+    mutators(ids = []) {
+      pendingMutators = normalizeMutators(ids);
+      renderMutatorBar();
+      return [...pendingMutators];
+    },
+    tallyContinue() {
+      // Mirrors a player: a press mid-count snaps the numbers, the next press
+      // continues. The helper presses through both stages in one call.
+      tallyContinue();
+      if (tallyUi.active && tallyUi.done) tallyContinue();
+      return window.__finalBlowEngine.snapshot();
+    },
+    enterInitials(text = "JEZ") {
+      if (!initialsUi.active) throw new Error("Initials entry is not active");
+      initialsUi.letters = normalizeInitials(text).split("");
+      renderInitials();
+      commitInitials();
+      return window.__finalBlowEngine.snapshot();
+    },
+    highScores() {
+      return loadHighScores();
+    },
+    clearScores() {
+      saveHighScores([]);
+      localStorage.removeItem(DAILY_RULES.storageKey);
+      localStorage.removeItem(SURVIVAL_BEST_KEY);
+      return true;
     },
     tournamentMatrix(seconds = 8, difficulty = "pro") {
       const fighterIds = roster.map(({ id }) => id);
@@ -15543,6 +18738,62 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
 
 setupRoster();
 renderMoveList();
+// ---------------------------------------------------------------------------
+// CINEMA 3D bridge — experimental Three.js presentation renderer.
+// The module lazy-loads on first activation (toggle or ?renderer=3d) so the
+// 2D game never pays its cost. The 3D renderer only READS sim state; the
+// world-draw handoff happens per-frame in draw() via cinema3dWorldActive().
+// Battery performance profile refuses activation entirely.
+// ---------------------------------------------------------------------------
+const cinema3dBridge = { renderer: null, loading: false, onHit: null };
+
+function cinema3dAllowed() {
+  return state.performance?.id !== "battery";
+}
+
+function cinema3dWorldActive() {
+  return Boolean(
+    cinema3dBridge.renderer?.ready
+    && state.cinema3d
+    && cinema3dAllowed()
+    && state.screen === "fight"
+    // Scripted fatality finishers keep their bespoke 2D cinematic presentation.
+    && !state.finisher,
+  );
+}
+
+function ensureCinema3d() {
+  if (!state.cinema3d || !cinema3dAllowed()) {
+    cinema3dBridge.renderer?.setVisible(false);
+    return;
+  }
+  if (cinema3dBridge.renderer || cinema3dBridge.loading) return;
+  cinema3dBridge.loading = true;
+  import("./renderer/three/main.mjs").then((module) => {
+    const renderer3d = module.createRenderer({
+      state,
+      cinematicCamera,
+      stageImages,
+      fighterAtlases,
+      fighterMoveAtlases,
+      fighterRenderSize,
+      fighterAnimationPose,
+      moveSheetAdjust: MOVE_SHEET_ADJUST,
+      gritSuperCost: GRIT_RULES.superCost,
+      gameCanvas: canvas,
+      isRollbackResimulating: () => rollbackResimulating,
+      getPerformanceProfile: () => state.performance,
+      isWorldActive: () => cinema3dWorldActive(),
+    });
+    cinema3dBridge.renderer = renderer3d;
+    cinema3dBridge.onHit = (payload) => renderer3d.onHit(payload);
+  }).catch((error) => {
+    console.warn("CINEMA 3D failed to load; staying on the 2D renderer.", error);
+  }).finally(() => {
+    cinema3dBridge.loading = false;
+  });
+}
+
 renderBindings();
 applyAccessibilitySettings();
 applyTouchSettings();
