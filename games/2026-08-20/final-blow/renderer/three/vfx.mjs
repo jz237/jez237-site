@@ -38,6 +38,25 @@ const TIER_STYLE = {
 // Cyan speedline ring colour: reads as a pressure wave against the warm shards.
 const RING_CYAN = 0x8feaff;
 
+// v2.6 ELEMENTS: per-element tint overrides for special/super impacts. The
+// spawnHit latch now carries the attacker's element id; special-class bursts
+// re-tint the whole layered stack (core halo, shard fan, embers, spill and
+// flash lights) so a curse special flashes green and a gilded one gold. The
+// entire group already joins FIGHTER_MASK_LAYER (the painterly-pass
+// protection mask), so the tinted stack keeps sprite-grade edge snap.
+const ELEMENT_TINTS = {
+  seismic: { color: 0xe8b25a, shard: 0xc9862e },
+  neon: { color: 0x5ee9ff, shard: 0x2ec9ff },
+  concrete: { color: 0xe0e0e0, shard: 0xb8b8b8 },
+  spray: { color: 0xff9b3d, shard: 0xff7a1e },
+  tech: { color: 0x7fd4ff, shard: 0x3ea8ff },
+  gilded: { color: 0xffd76b, shard: 0xffb92e },
+  feedback: { color: 0xb08cff, shard: 0x8cff6b },
+  bass: { color: 0xff8c5a, shard: 0xff6a26 },
+  contract: { color: 0xffd76b, shard: 0xffc94f },
+  curse: { color: 0x8cff5e, shard: 0x4fd42e },
+};
+
 export class ImpactVfxLayer {
   constructor(host) {
     this.host = host;
@@ -47,6 +66,9 @@ export class ImpactVfxLayer {
     this.customEffects = new Map(); // tier -> fn(payload, layer)
     this.pending = [];
     this.seenTicks = [];
+    // MOTION FIX 12: takeoff/landing/dash dust latches from the game-side
+    // motion observers — 3D parity for the 2D ground-work particles.
+    this.pendingDust = [];
 
     // Spark pool (CPU-simulated, single draw call) + streak line segments
     // sharing the same simulation (head = particle, tail = pos - vel*k).
@@ -392,6 +414,41 @@ export class ImpactVfxLayer {
     if (this.pending.length > 8) this.pending.shift();
   }
 
+  // MOTION FIX 12: dust latch — same guard discipline as onHit. Fired from
+  // the render-loop motion observers (never during resim), payload carries
+  // sim-space position + a 0-1.6 force.
+  onDust(payload) {
+    if (this.host.isRollbackResimulating()) return;
+    this.pendingDust.push(payload);
+    if (this.pendingDust.length > 6) this.pendingDust.shift();
+  }
+
+  // Muted grey-brown motes through the ember pool: values kept below bloom
+  // threshold so they read as street dust, not sparks — gentle outward kick,
+  // ordinary ember gravity brings them back down.
+  spawnDust(x, y, force, direction) {
+    const count = Math.round(5 + force * 4);
+    for (let i = 0; i < count; i += 1) {
+      const index = this.emberCursor;
+      this.emberCursor = (this.emberCursor + 1) % MAX_EMBERS;
+      const base = index * 3;
+      this.emberPositions[base] = x + (this.rand() - 0.5) * 0.3;
+      this.emberPositions[base + 1] = Math.max(0.02, y + this.rand() * 0.06);
+      this.emberPositions[base + 2] = 0.16;
+      const side = i % 2 ? 1 : -1;
+      const kick = (0.35 + this.rand() * 0.7) * Math.max(0.5, force);
+      this.emberVelocities[base] = side * kick + direction * kick * 0.3;
+      this.emberVelocities[base + 1] = 0.35 + this.rand() * 0.75 * Math.max(0.5, force);
+      this.emberVelocities[base + 2] = (this.rand() - 0.5) * 0.3;
+      const dim = 0.34 + this.rand() * 0.16;
+      this.emberColors[base] = dim;
+      this.emberColors[base + 1] = dim * 0.92;
+      this.emberColors[base + 2] = dim * 0.8;
+      this.emberMaxLife[index] = 0.4 + this.rand() * 0.36;
+      this.emberLife[index] = this.emberMaxLife[index];
+    }
+  }
+
   spawnSparks(x, y, style, direction, counter) {
     const count = Math.round(style.sparks * (counter ? 1.4 : 1));
     const color = new THREE.Color(style.color);
@@ -422,6 +479,7 @@ export class ImpactVfxLayer {
   // instead of hairlines.
   spawnEmbers(x, y, style, direction, counter) {
     const count = Math.round((style.embers ?? 8) * (counter ? 1.3 : 1));
+    const emberTint = style.emberTint ? new THREE.Color(style.emberTint) : null;
     for (let i = 0; i < count; i += 1) {
       const index = this.emberCursor;
       this.emberCursor = (this.emberCursor + 1) % MAX_EMBERS;
@@ -434,11 +492,18 @@ export class ImpactVfxLayer {
       this.emberVelocities[base] = Math.cos(angle) * speed * 0.6 + direction * speed * 0.9;
       this.emberVelocities[base + 1] = Math.abs(Math.sin(angle)) * speed * 0.9 + 0.55;
       this.emberVelocities[base + 2] = (this.rand() - 0.5) * speed * 0.3;
-      // Molten orange, hot enough to bloom at birth, cooling to deep ember.
+      // Molten orange, hot enough to bloom at birth, cooling to deep ember —
+      // unless an element impact re-heats the pool in its own colour.
       const heat = 1.4 + this.rand() * 1.2;
-      this.emberColors[base] = 1.0 * heat * 2.1;
-      this.emberColors[base + 1] = 0.52 * heat * 1.6;
-      this.emberColors[base + 2] = 0.14 * heat;
+      if (emberTint) {
+        this.emberColors[base] = emberTint.r * heat * 2.1;
+        this.emberColors[base + 1] = emberTint.g * heat * 1.9;
+        this.emberColors[base + 2] = emberTint.b * heat * 1.7;
+      } else {
+        this.emberColors[base] = 1.0 * heat * 2.1;
+        this.emberColors[base + 1] = 0.52 * heat * 1.6;
+        this.emberColors[base + 2] = 0.14 * heat;
+      }
       this.emberMaxLife[index] = 0.42 + this.rand() * 0.34;
       this.emberLife[index] = this.emberMaxLife[index];
     }
@@ -626,6 +691,17 @@ export class ImpactVfxLayer {
     for (const payload of this.pending) {
       const tier = payload.blocked ? "blocked" : (TIER_STYLE[payload.kind] ? payload.kind : "light");
       const style = { ...TIER_STYLE[tier], tier };
+      // Element re-tint on the special class (specials, supers): the kit's
+      // colour takes over the whole burst stack.
+      const elementTint = !payload.blocked && ELEMENT_TINTS[payload.element]
+        && (tier === "special" || tier === "super") ? ELEMENT_TINTS[payload.element] : null;
+      if (elementTint) {
+        style.color = elementTint.color;
+        style.shard = elementTint.shard;
+        // Ember pool is normally hard-coded molten orange; an element impact
+        // re-heats it in the kit colour so the whole stack agrees.
+        style.emberTint = elementTint.shard;
+      }
       const x = worldX(payload.x);
       const y = worldY(payload.y);
       const custom = this.customEffects.get(tier);
@@ -637,6 +713,12 @@ export class ImpactVfxLayer {
       }
     }
     this.pending.length = 0;
+    // MOTION FIX 12: drain the dust latches (takeoff / landing / dash).
+    for (const payload of this.pendingDust) {
+      this.spawnDust(worldX(payload.x), worldY(payload.y),
+        payload.force ?? 1, payload.direction ?? 0);
+    }
+    this.pendingDust.length = 0;
     this.kickTtl = Math.max(0, this.kickTtl - dtSec);
     this.pulseTtl = Math.max(0, this.pulseTtl - dtSec);
     this.popState.ttl = Math.max(0, this.popState.ttl - dtSec);

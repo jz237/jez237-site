@@ -715,8 +715,11 @@ export class FighterLayer {
     const crouchScale = fighter.crouch ? 0.88 : 1;
     const crouchDrop = fighter.crouch ? 21 : 0;
     const fatigue = THREE.MathUtils.clamp(1 - fighter.health / 100, 0, 1);
+    // BODY-FIRST (spec 9) parity: super storms keep the idle chest-rise
+    // alive through their long held active windows, same as the 2D path.
     const breathing = fighter.cinematicFrame === null && fighter.grounded && !fighter.down
-      && !attack && !fighter.stun && !fighter.block && fighter.dizzyFrames <= 0 && fighter.guardCrushFrames <= 0;
+      && (!attack || attack.superMove) && !fighter.stun && !fighter.block
+      && fighter.dizzyFrames <= 0 && fighter.guardCrushFrames <= 0;
     const breath = breathing
       ? Math.sin(fighter.animTime * (5.2 + fatigue * 5.6) + fighter.side * 1.9) * (0.009 + fatigue * 0.015)
       : 0;
@@ -741,15 +744,42 @@ export class FighterLayer {
       const flip = 1 - fighter.airTechFlipFrames / 14;
       rootRotation += -facing * flip * Math.PI * 2;
     }
+    // v2.6 MOTION parity: the shared game-side motion layer (jump flips,
+    // dash/walk lean, recoil wobble, dizzy sway, squash & stretch). Canvas
+    // y-down rotations flip sign for three's z; the flip pivots about the
+    // body centre via the position fixup below, everything else about the
+    // feet like the 2D path.
+    const motion = host.fighterMotionTransform ? host.fighterMotionTransform(fighter) : null;
+    if (motion) {
+      if (motion.rotation) rootRotation += -motion.rotation;
+      if (motion.flipRotation) rootRotation += -motion.flipRotation;
+    }
     rig.root.rotation.z = rootRotation;
     if (fighter.down) rig.root.position.x += -facing * 45 * PX;
+    // v2.6 BODY-FIRST parity: the shared world-space body offset (attack
+    // extension / victim stagger step). Sim x maps straight to world x; sim
+    // y is down-positive so it flips for world y.
+    if (motion && (motion.offsetX || motion.offsetY)) {
+      rig.root.position.x += motion.offsetX * PX;
+      rig.root.position.y -= motion.offsetY * PX;
+    }
 
     const cineScale = fighter.cinematicScale !== 1 ? fighter.cinematicScale : 1;
-    const scaleX = (1 + activePower * 0.045 - startupPower * 0.025) * (1 + hitSmear * 0.05);
+    const scaleX = (1 + activePower * 0.045 - startupPower * 0.025) * (1 + hitSmear * 0.05)
+      * (motion ? motion.scaleX : 1);
     const scaleY = (crouchScale + startupPower * 0.035 - activePower * 0.025)
-      * (1 + breath) * (1 - hitSmear * 0.06);
+      * (1 + breath) * (1 - hitSmear * 0.06) * (motion ? motion.scaleY : 1);
     rig.mesh.scale.set(renderSize * facing * scaleX * cineScale, renderSize * scaleY * cineScale, 1);
     rig.mesh.rotation.z = facing * attackSwing * (attackKind === "heavy" ? 0.07 : 0.025);
+    if (motion && motion.flipRotation) {
+      // Pivot the somersault about the body centre, not the feet: rotating
+      // the feet-anchored root by θ then shifting the root so the centre
+      // point stays fixed is exactly a centre-pivot rotation.
+      const theta = -motion.flipRotation;
+      const centreY = Math.abs(rig.mesh.scale.y) * 0.52;
+      rig.root.position.x += centreY * Math.sin(theta);
+      rig.root.position.y += centreY * (1 - Math.cos(theta));
+    }
 
     // --- Foot anchoring: kill the hover -------------------------------------
     // The atlas frames carry transparent padding under the soles, so the
