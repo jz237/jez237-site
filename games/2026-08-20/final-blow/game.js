@@ -56,12 +56,45 @@ import {
 import {
   KIT_ACTIONS,
   MOTION_CELLS,
+  MOTION2_CELLS,
+  MOTION3_KEYS,
+  WALK_CELL_COUNT,
+  isAuthoredBank,
+  walkCyclePose,
   attackAnimationPose,
   attackMotionBeat,
+  bareHandedAttack,
+  blockstunKeys,
+  throwClinchKeys,
+  throwRecoveryKeys,
+  baseCellDrawAdjust,
+  baseCellRoles,
+  beatPoseAt,
+  buildMotion3KeyMap,
+  cellDrawAdjust,
+  cellFloorOffset,
+  cellVerticalOffset,
+  airborneAnchorRamp,
   buildMotionAcceptMasks,
   createFighterMove,
+  dashKeys,
+  jumpArcKeys,
   motionPose,
+  motion2Pose,
+  motion3Pose,
+  reactionTrackKeys,
+  reactionFallbackCells,
+  wakeupRiseStretch,
+  wakeupSettleStart,
+  wakeupSettleTransform,
+  WAKEUP_SETTLE_FRAMES,
+  REACTION_BANDS,
+  blockRecoverTransform,
+  BLOCK_EXIT_AT,
+  kickArcTransform,
   resolveMotionPose,
+  wakeupMotionPose,
+  wakeupRiseTransform,
   fighterActionCost,
   fighterActionGroup,
   getFighterKit,
@@ -305,7 +338,9 @@ import {
   DEMO_IDLE_DELAY_MS,
   DEMO_RESULT_HOLD_MS,
   createDemoDirector,
+  demoMatchupKey,
 } from "./engine/demo.mjs";
+import { createDemoChoreographer } from "./engine/demo-choreo.mjs";
 import {
   auditGraphicFatalities,
   getGraphicFatality,
@@ -1004,6 +1039,188 @@ function motionCellDrawable(fighterId, cell) {
     && motionBankState.masks?.[fighterId]?.accept[cell]);
 }
 
+// v2.9 FLOW: the second authored bank (assets/motion2) rides the exact same
+// machinery — lazy sheets on the on-demand media policy, manifest accept
+// masks (all 160 accepted this wave, but the gate stays: a missing/loading
+// sheet or a future rejected cell falls back to the pre-2.9 beat carried on
+// every motion2 descriptor).
+const fighterMotion2Atlases = {};
+const motion2BankState = { masks: null, requested: false };
+
+function ensureMotion2Manifest() {
+  if (motion2BankState.requested) return;
+  motion2BankState.requested = true;
+  fetch("assets/motion2/MANIFEST.json")
+    .then((response) => (response.ok ? response.json() : null))
+    .then((manifest) => { motion2BankState.masks = manifest ? buildMotionAcceptMasks(manifest) : {}; })
+    .catch(() => { motion2BankState.masks = {}; });
+}
+
+function ensureMotion2Atlas(fighterId) {
+  ensureMotion2Manifest();
+  let atlas = fighterMotion2Atlases[fighterId];
+  if (!atlas) {
+    atlas = new Image();
+    atlas.src = `assets/motion2/${fighterId}.webp`;
+    fighterMotion2Atlases[fighterId] = atlas;
+  }
+  return atlas;
+}
+
+function motion2CellDrawable(fighterId, cell) {
+  const atlas = ensureMotion2Atlas(fighterId);
+  return Boolean(atlas.complete && atlas.naturalWidth
+    && motion2BankState.masks?.[fighterId]?.accept[cell]);
+}
+
+// v2.10 WALK: the third authored bank (assets/walk) rides the same machinery
+// again — lazy sheet on the on-demand media policy, manifest accept masks,
+// and every descriptor carrying the exact pre-2.10 base walk cell as its
+// fallback. Only two fighters ship a sheet; the other eight have no entry in
+// the manifest at all, so their mask is undefined, walkCellDrawable is false,
+// and their locomotion stays the base-only cycle byte-identically.
+const fighterWalkAtlases = {};
+const walkBankState = { masks: null, requested: false };
+
+function ensureWalkManifest() {
+  if (walkBankState.requested) return;
+  walkBankState.requested = true;
+  fetch("assets/walk/MANIFEST.json")
+    .then((response) => (response.ok ? response.json() : null))
+    .then((manifest) => {
+      walkBankState.masks = manifest
+        ? buildMotionAcceptMasks(manifest, WALK_CELL_COUNT) : {};
+    })
+    .catch(() => { walkBankState.masks = {}; });
+}
+
+function ensureWalkAtlas(fighterId) {
+  let atlas = fighterWalkAtlases[fighterId];
+  if (!atlas) {
+    atlas = new Image();
+    atlas.src = `assets/walk/${fighterId}.webp`;
+    fighterWalkAtlases[fighterId] = atlas;
+  }
+  return atlas;
+}
+
+function walkCellDrawable(fighterId, cell) {
+  // The manifest gates the SHEET REQUEST, not just the cell. Bank 1/2 can
+  // decode speculatively because every fighter has a sheet; here only two do,
+  // so requesting one before the manifest has confirmed it exists 404s for the
+  // other eight on the first step they take (which is exactly what the browser
+  // smoke's zero-console-error assertion caught). While the manifest is in
+  // flight nothing is requested and the descriptor's fallback draws the base
+  // walk cell — the same read the eight unsheeted fighters ship with.
+  ensureWalkManifest();
+  const mask = walkBankState.masks?.[fighterId];
+  if (!mask) return false;
+  const atlas = ensureWalkAtlas(fighterId);
+  return Boolean(atlas.complete && atlas.naturalWidth && mask.accept[cell]);
+}
+
+// ---------------------------------------------------------------------------
+// v2.9 critic round 2 (B1) — the MOTION3 bonus bank (assets/motion3).
+//
+// Name-addressed, not index-addressed: this bank does not ship yet and its
+// frame order is not fixed, so a key names a POSE ID and resolves against
+// whatever the manifest's format.poseIds list happens to contain. Absent
+// manifest, absent sheet, absent pose id — all three mean "no", and every
+// motion3 descriptor carries a shipping-today key as its fallback, so the game
+// is byte-identical without the bank. When it lands, dropping the sheets and
+// the manifest in IS the whole integration.
+// ---------------------------------------------------------------------------
+const fighterMotion3Atlases = {};
+const motion3BankState = { masks: null, keyMap: null, requested: false };
+
+function ensureMotion3Manifest() {
+  if (motion3BankState.requested) return;
+  motion3BankState.requested = true;
+  fetch("assets/motion3/MANIFEST.json")
+    .then((response) => (response.ok ? response.json() : null))
+    .then((manifest) => {
+      motion3BankState.keyMap = buildMotion3KeyMap(manifest);
+      motion3BankState.masks = manifest ? buildMotionAcceptMasks(manifest) : {};
+    })
+    .catch(() => { motion3BankState.masks = {}; motion3BankState.keyMap = {}; });
+}
+
+function ensureMotion3Atlas(fighterId) {
+  let atlas = fighterMotion3Atlases[fighterId];
+  if (!atlas) {
+    atlas = new Image();
+    atlas.src = `assets/motion3/${fighterId}.webp`;
+    fighterMotion3Atlases[fighterId] = atlas;
+  }
+  return atlas;
+}
+
+/**
+ * Resolve a motion3 POSE NAME to its frame index for this fighter, or false.
+ * Like the walk bank, the manifest is consulted BEFORE the sheet is requested:
+ * no motion3 art exists yet, so speculatively decoding would 404 ten times on
+ * the first tick of every match.
+ */
+function motion3KeyDrawable(fighterId, key) {
+  const masks = motion3BankState.masks;
+  if (!masks) {
+    ensureMotion3Manifest();
+    return false;
+  }
+  if (!masks[fighterId]) return false;
+  const frame = motion3BankState.keyMap?.[key];
+  if (!Number.isInteger(frame) || !masks[fighterId].accept[frame]) return false;
+  const atlas = ensureMotion3Atlas(fighterId);
+  return atlas.complete && atlas.naturalWidth ? frame : false;
+}
+
+/** Bank-routed drawable gate for resolveMotionPose (all four authored banks). */
+function motionBankCellDrawable(fighterId, cell, bank) {
+  if (bank === "motion3") return motion3KeyDrawable(fighterId, cell);
+  if (bank === "walk") return walkCellDrawable(fighterId, cell);
+  return bank === "motion2"
+    ? motion2CellDrawable(fighterId, cell)
+    : motionCellDrawable(fighterId, cell);
+}
+
+// ---------------------------------------------------------------------------
+// v2.9 critic round 2 (B3) — AUTHORED BANK PRELOAD.
+//
+// ensureMotionAtlas / ensureMotion2Atlas were only ever reached FROM the
+// drawable gates, so the FIRST authored draw of a match was always a miss: the
+// sheet request started on the very tick the cell was first wanted, and that
+// tick fell through to the descriptor's base fallback. Measured on donald: the
+// opening tick of his bare-fisted heavy punch drew base:13 — his full overhead
+// GOLF SWING with three baked golden crescents — and the smear flash a dozen
+// ticks later drew it AGAIN, because that was bank 1's first draw. Every
+// fighter loses their first crouch-transition tick the same way (the devil's
+// first crouch press drew his wing-wrapped cocoon before the in-between
+// arrived).
+//
+// Both sheets are now requested — and DECODED, which is the half that actually
+// matters, since a complete-but-undecoded image still stalls the first blit —
+// as soon as a matchup is known. Failure stays silent by design: this is the
+// on-demand media policy, and the fallback chain remains the safety net.
+// ---------------------------------------------------------------------------
+function preloadAuthoredBanks(fighterIds) {
+  const ids = (fighterIds || []).filter((id) => typeof id === "string" && id);
+  if (!ids.length) return;
+  ensureMotionManifest();
+  ensureMotion2Manifest();
+  ensureMotion3Manifest();
+  for (const id of ids) {
+    // Counting only FIRST requests keeps the probe meaningful: makeFighter is
+    // also the rollback rebuild path, and a resimulation must not look like a
+    // fresh preload.
+    if (!fighterMotionAtlases[id] || !fighterMotion2Atlases[id]) motionFxDebug.bankPreloads += 1;
+    for (const atlas of [ensureMotionAtlas(id), ensureMotion2Atlas(id), ensureMotion3Atlas(id)]) {
+      if (atlas && !atlas.complete && typeof atlas.decode === "function") {
+        atlas.decode().catch(() => {});
+      }
+    }
+  }
+}
+
 // The Commissioner has no separate specials sheet, so DOM art paths (victory
 // pose, ending panels) address his combat atlas — the same fallback the
 // canvas renderer uses via fighterMoveAtlases.
@@ -1033,8 +1250,11 @@ let matchPalettes = [0, 0];
 let pendingPalettes = [0, 0];
 
 function altAtlasSource(fighterId, bank) {
-  // v2.7 FRAMES: the motion bank remaps like any other sheet.
+  // v2.7 FRAMES: the motion bank remaps like any other sheet (2.9: motion2 too).
   if (bank === "motion") return { image: fighterMotionAtlases[fighterId], key: `${fighterId}:motion` };
+  if (bank === "motion2") return { image: fighterMotion2Atlases[fighterId], key: `${fighterId}:motion2` };
+  if (bank === "motion3") return { image: fighterMotion3Atlases[fighterId], key: `${fighterId}:motion3` };
+  if (bank === "walk") return { image: fighterWalkAtlases[fighterId], key: `${fighterId}:walk` };
   const specials = bank === "specials" ? fighterMoveAtlases[fighterId] : null;
   // The boss shares one sheet across banks — collapse to one cache entry.
   if (specials && specials !== fighterAtlases[fighterId]) return { image: specials, key: `${fighterId}:specials` };
@@ -1072,7 +1292,13 @@ function paletteAtlas(fighterId, side, bank = "base") {
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
     : bank === "motion"
       ? fighterMotionAtlases[fighterId] || fighterAtlases[fighterId]
-      : fighterAtlases[fighterId];
+      : bank === "motion2"
+        ? fighterMotion2Atlases[fighterId] || fighterAtlases[fighterId]
+        : bank === "motion3"
+          ? fighterMotion3Atlases[fighterId] || fighterAtlases[fighterId]
+          : bank === "walk"
+            ? fighterWalkAtlases[fighterId] || fighterAtlases[fighterId]
+            : fighterAtlases[fighterId];
   if (matchPalettes[side] !== 1) return base;
   return ensureAltAtlas(fighterId, bank) || base;
 }
@@ -1493,7 +1719,28 @@ const demoSession = {
   superShown: false,
   resultTimer: 0,
   idleTimer: 0,
+  // v2.9 FLOW: per-match coverage choreographer + the matchup keys this demo
+  // session has featured (bounded by the director's matchup count).
+  choreo: null,
+  pairsSeen: [],
+  // v2.9 FLOW: the CUMULATIVE attract ledger — fighterId -> { moveId: count }
+  // across the exhibitions this session has already run. A single three-round
+  // match cannot honestly demonstrate 30 moves per side every time, so a
+  // fighter that comes back around the rotation opens with whatever the
+  // cabinet has NOT shown for it yet. Bounded by the roster (10 fighters x
+  // 30 ids), reset with the session, and never read by the sim.
+  coverageCarry: {},
 };
+// v2.9 FLOW round 2 — DEMO-ONLY PACING. An exhibition measured 53.6% actual
+// fighting: the rest was the round intro, the FINISH THEM window the winning
+// CPU spent waiting out its ordinary reaction clock, and the ceremony. These
+// three constants reclaim the two parts that are pure waiting; the Final Blow
+// ceremony itself is the showcase and is deliberately left alone. Every use
+// site is gated on state.mode === "demo", so ranked/versus/arcade/tournament
+// and online presentation are byte-for-byte unchanged.
+const DEMO_FINISHER_REACTION = 0.35;
+const DEMO_ROUND_INTRO_SECONDS = 1.15;
+const DEMO_KO_HOLD_SECONDS = 3.1;
 let fightAnnouncementTimer = 0;
 
 // ===========================================================================
@@ -3092,6 +3339,9 @@ function endDemoSession() {
   demoSession.matches = 0;
   demoSession.superSide = 0;
   demoSession.superShown = false;
+  demoSession.choreo = null;
+  demoSession.pairsSeen = [];
+  demoSession.coverageCarry = {};
   document.body.classList.remove("demo-active");
   $("#demoHud").hidden = true;
   $("#demoResultStatus").hidden = true;
@@ -3111,6 +3361,12 @@ function startNextDemoMatch() {
   if (!demoSession.active || !demoSession.director) return false;
   clearDemoResultTimer();
   cancelFightAnnouncement();
+  // v2.9 FLOW: bank the outgoing exhibition's coverage before it is replaced,
+  // so the attract cycle is CUMULATIVE — the next time this fighter is
+  // featured it leads with the part of its kit the cabinet has not shown yet.
+  if (demoSession.choreo) {
+    Object.assign(demoSession.coverageCarry, demoSession.choreo.carryover());
+  }
   const cycle = demoSession.director.next();
   const picks = cycle.picks.map((id) => roster.findIndex((fighter) => fighter.id === id));
   if (picks.some((index) => index < 0) || picks[0] === picks[1]) throw new Error("Demo director produced an invalid matchup.");
@@ -3131,6 +3387,21 @@ function startNextDemoMatch() {
   $("#demoResultStatus").hidden = true;
   startMatch(true);
   state.fighters[demoSession.superSide].meter = GRIT_RULES.maximum;
+  // v2.9 FLOW: a fresh coverage choreographer per exhibition. It works from
+  // kit ids (what beginAttack resolves moves through) and knows whether this
+  // stage/round actually planned a weapon, so the pickup beat is only chased
+  // where one exists. The seed derives from the director's deterministic
+  // stream, so the same demo seed replays the same choreography.
+  demoSession.choreo = createDemoChoreographer({
+    pair: state.fighters.map((fighter) => fighter.kitId),
+    stageId: cycle.stage,
+    hasStageWeapon: Boolean(state.stageWeapon),
+    seed: hashSeed(demoSession.director.snapshot().seed, "choreo", cycle.cycle),
+    priorShown: demoSession.coverageCarry,
+  });
+  const pairKey = demoMatchupKey(...cycle.picks);
+  if (!demoSession.pairsSeen.includes(pairKey)) demoSession.pairsSeen.push(pairKey);
+  while (demoSession.pairsSeen.length > demoSession.director.snapshot().matchupCount) demoSession.pairsSeen.shift();
   updateHud();
   state.qaManualMode = demoSession.qa;
   setTrack(cycle.track, true);
@@ -3150,6 +3421,29 @@ function startDemo({ attract = false, qa = false, seed = null } = {}) {
   demoSession.active = true;
   demoSession.attract = Boolean(attract);
   demoSession.qa = Boolean(qa);
+  // v2.9 FLOW round 2 — SAME-PAGE DETERMINISM. A seeded demo is the QA
+  // reproduction path, and every match seed derives from state.matchSerial
+  // (see seedMatch), which only ever GROWS across a page's lifetime. A second
+  // qa.demo(555) in the same page therefore replayed the same choreography
+  // against a DIFFERENT sim stream and diverged (measured: 7 moves vs 5 after
+  // 900 steps). Rewinding the serial and the rng streams restores exactly the
+  // cold-load starting point, so a cold load stays byte-identical to what it
+  // has always been and a same-page repeat now matches it. The attract loop
+  // never passes a seed, so nothing about unattended attract changes.
+  if (seed !== null) {
+    state.matchSerial = 0;
+    state.rng.setState(initialSeed);
+    state.visualRng.setState(hashSeed(initialSeed, "visual"));
+    // The tick domain has to rewind with it. Every frame-relative counter the
+    // choreographer and the sim own — decision gaps, beat cooldowns, command
+    // history, input buffers — is measured against state.simulationTick, which
+    // only ever grows, so a second run starting at tick 3000 diverged from a
+    // cold-load run starting at 0 even with identical seeds. Offline the
+    // fixed-step clock owns the counter, so both move together (the same pair
+    // replay playback rewinds; see loadReplayHeader).
+    state.simulationTick = 0;
+    simulationClock.tick = 0;
+  }
   demoSession.director = createDemoDirector({
     fighterIds: roster.map(({ id }) => id),
     stageIds: Object.keys(stages),
@@ -5639,6 +5933,12 @@ function renderSetScoreCard() {
 
 function makeFighter(index, side, overrideDef = null) {
   const def = overrideDef || roster[index];
+  // v2.9 critic round 2 (B3): the one choke point every match-start path runs
+  // through — versus, arcade, survival, team, online, replay rebuild and the
+  // QA probes. Warming here means both authored sheets are decoding through
+  // the intro walk-on instead of missing on the first authored beat of round
+  // one. Idempotent, so the rollback rebuild path costs a map lookup.
+  preloadAuthoredBanks([def.id]);
   const kitId = def.kitId || def.id;
   const kit = getFighterKit(kitId);
   // Release 1.8 GRIND: the Turbo mutator scales walk/dash speeds here, at
@@ -5783,6 +6083,32 @@ const presentationDebug = {
   focusLines: 0, lightSpills: 0,
   // v2.6 MOTION steady per-frame passes (2D draw path).
   squashStretchFrames: 0, poseCrossfades: 0, attackSmears: 0,
+  // v2.9 FLOW: motion2 cells actually drawn this frame (per side), so probes
+  // can prove a transition key rendered at its beat rather than trusting the
+  // descriptor alone.
+  motion2Cells: 0,
+  // v2.9 round 4: the same count broken out PER CELL INDEX, cumulative across
+  // the session rather than per frame, so a probe can ask the only honest
+  // question about an authored transition key — "did cell N ever reach the
+  // screen, and for how many draws?" — instead of trusting a beat counter that
+  // watches a sim edge. Instrumentation only: nothing reads this back into the
+  // sim, the choreographer or any pose decision.
+  motion2CellDraws: {},
+  // v2.10 WALK: walk-bank keys actually drawn this frame, and the last key
+  // index each side rendered, so a QA burst can prove the cycle ADVANCED
+  // 0→1→2→3 rather than trusting the descriptor alone.
+  walkCells: 0,
+  lastWalkKey: [null, null],
+  // v2.9 final round (R9/T6): draw-site instrumentation. reactionDrawPriority
+  // counts the frames the reacting fighter was promoted above the attacker in
+  // the pair sort; turnaroundDraws / turnaroundBlocked are the TURNAROUND
+  // audit — the first counts real draws of motion2:5, the second tallies WHY
+  // the latch was live and the cell still did not reach the screen, keyed by
+  // the branch that outranked it. Both cumulative across the session, both
+  // instrumentation only.
+  reactionDrawPriority: 0,
+  turnaroundDraws: 0,
+  turnaroundBlocked: {},
   // MOTION FIX 7: flip-path arc ribbon frames (2D world pass).
   arcRibbons: 0,
   // Wave 7 steady screen-space passes, counted per rendered frame.
@@ -5863,10 +6189,35 @@ const MOTION_RULES = Object.freeze({
   skidSpeed: 230,            // grounded |vx| that arms a reversal skid
   skidCooldown: 10,          // ticks between skid puffs per side
   crackFallSpeed: 940,       // fall speed that earns the ground-crack flash
+  // v2.9 critic round 2 (M2): grounded |vx| below which the dash brake key
+  // finally releases to the upright idle. The 2.9 read released the tick the
+  // dash counter hit zero, with 622px/s still on the clock.
+  dashBrakeReleaseSpeed: 150,
+  // v2.9 final round (T6): ticks an AIRBORNE facing flip stays pending
+  // before it fires the grounded pivot on touchdown. Long enough to cover
+  // the descent of a cross-up jump, short enough that a flip which never
+  // lands cleanly (round end, a mid-air knockdown) cannot pivot late.
+  turnPendingFrames: 34,
+  // v2.9 critic round 2 (M2): ticks of dash-exit latch. The brake must cover
+  // the velocity decay rather than handing to a frame of walk — but it must
+  // not become a hold of its own either, so it is capped at the 2.9 value and
+  // the speed gate below releases it early when the fighter has actually
+  // stopped.
+  dashExitFrames: 4,
 });
+
+// v2.9 critic round 2 (B7): height off the street, in world px, at which a
+// throw victim is genuinely AIRBORNE and may wear the horizontal hurl key.
+// Roughly half a body — above the attacker's knee-and-shin volume, which is
+// where the 18px gate was drawing him.
+const THROW_HURL_LIFT_PX = Math.round(96 * FIGHTER_SCALE);
+
+// v2.9 critic round 2 (B1): ticks the throw attacker's recovery track is paced
+// over, clocked by the motion observer rather than the frozen attack timeline.
+const THROW_RECOVERY_RENDER_TICKS = 20;
 // Monotonic one-shot totals on the hudFxDebug pattern (never reset), exposed
 // via snapshot().violence for orchestrator smoke tests.
-const motionFxDebug = { jumpFlips: 0, skidSmokes: 0, landingDust: 0 };
+const motionFxDebug = { jumpFlips: 0, skidSmokes: 0, landingDust: 0, bankPreloads: 0 };
 // Render-frame gate: motion observers advance their frame counters only when
 // the simulation actually ticked, so 120Hz displays and QA manual stepping
 // both pace the latches in sim frames.
@@ -5889,6 +6240,10 @@ function createMotionObserver() {
     // MOTION FIX 8: ticks since the dash push-off, for the early torso lean
     // (head leads, ~12° over dash frames 2-4) and the stride stretch.
     dashAge: -1,
+    // v2.9 critic round (m2): ticks of dash-exit walk suppression, so the
+    // authored brake key hands straight to idle instead of flashing a single
+    // frame of walk on the residual velocity.
+    dashExitFrames: 0,
     // BODY-FIRST (spec 5): ticks since a controlled takeoff — the directional
     // flip's 2-tick launch stretch-smear reads this. -1 = grounded.
     launchAge: -1,
@@ -5900,6 +6255,24 @@ function createMotionObserver() {
     ribbonFade: 1,
     // Pose cross-fade bookkeeping (2D draw path only).
     poseBank: null, poseFrame: -1, fadeBank: null, fadeFrame: -1, fadeLeft: 0,
+    // v2.9 FLOW transition latches (tick-paced, render-only): remaining ticks
+    // on the authored turnaround pivot key and the crouch enter/leave
+    // in-between. prevFacing 0 / prevCrouch null mean "not yet observed".
+    prevFacing: 0, turnFrames: 0, turnPending: 0, prevCrouch: null, crouchTransFrames: 0,
+    // v2.9 final round (R5): the wake-up SETTLE. wakeLastRung remembers the
+    // cell the rise ended on (the drawn one, after the accept mask), so the
+    // standing cell can arrive at exactly that height and ease out of it.
+    prevWakeup: 0, wakeLastRung: null, wakeSettleFrames: 0, wakeSettleStart: 1,
+    // v2.9 critic round 2 (B1): the blockstun window's LENGTH, latched the
+    // tick it opens, so the blockstun key track has a denominator. Render-only
+    // observer state on the documented pattern — never read by the sim, never
+    // advanced during rollback resimulation.
+    blockstunTotal: 0,
+    // Ticks since a throw's clinch RELEASED. attackFrame and attackTime are
+    // both frozen through the throw's cinematic, so neither can pace the
+    // attacker's recovery — which is why one kit cell owned 25 ticks of it.
+    // -1 = not in a throw recovery.
+    throwRecoverFrames: -1,
   };
 }
 const motionObs = [createMotionObserver(), createMotionObserver()];
@@ -6238,6 +6611,23 @@ function updateMotionObservers() {
       }
       obs.dashAge = -1;
     }
+    // v2.9 critic round (m2): dash-exit walk suppression. Leaving a dash the
+    // residual velocity is still well above the walk threshold while it
+    // decays, so the locomotion beat flashed a frame or two of walk between
+    // the authored brake key and the idle — a third and fourth pose change in
+    // three ticks at the exact seam the brake key exists to smooth. Latching
+    // across the decay lets the brake read all the way into idle.
+    // Blockstun window length, latched on the opening edge.
+    if (fighter.blockstunFrames > obs.blockstunTotal) obs.blockstunTotal = fighter.blockstunFrames;
+    else if (fighter.blockstunFrames === 0) obs.blockstunTotal = 0;
+    // Throw-recovery clock: starts the tick the clinch lets go, runs until the
+    // move ends.
+    if (fighter.grabbing) obs.throwRecoverFrames = 0;
+    else if (fighter.attacking?.kind === "throw") obs.throwRecoverFrames += 1;
+    else obs.throwRecoverFrames = -1;
+    if (fighter.dashFrames > 0) obs.dashExitFrames = 0;
+    else if (obs.prevDashFrames > 0) obs.dashExitFrames = MOTION_RULES.dashExitFrames;
+    else if (obs.dashExitFrames > 0) obs.dashExitFrames -= 1;
     // --- BODY-FIRST (spec 9): hex-charm cast latch --------------------------
     if (obs.castFrames > 0) obs.castFrames -= 1;
     let charms = 0;
@@ -6269,15 +6659,85 @@ function updateMotionObservers() {
       : fighter.dashFrames > 0 ? (fighter.dashDirection || fighter.facing) * 0.07
         : Math.abs(fighter.vx) > 22 ? Math.sign(fighter.vx) * 0.035 : 0;
     obs.leanLevel += clamp(leanTarget - obs.leanLevel, -0.018, 0.018);
+    // --- v2.9 FLOW: facing-flip + crouch-transition latches -----------------
+    // Edge-detected here (render loop, tick-deduped — never during rollback
+    // resimulation) and consumed by fighterPoseDescriptor as 2-3 tick holds
+    // of the authored turnaround / crouch-trans keys.
+    // v2.9 final round (T6) — THE PIVOT KEY STILL MEASURED ZERO, AND THE
+    // DRAW-SITE AUDIT SAYS WHY.
+    //
+    // Round 2 gave motion2:5 precedence over guard and crouch and it still did
+    // not reach the screen in real demo play. Instrumenting the DRAW SITE
+    // (presentationDebug.turnaroundDraws / turnaroundBlocked, which watch
+    // pixels rather than a sim edge) over a full demo run returned
+    // `{ "motion3:4": 2, "motion:11": 2 }` — the latch was live and lost to
+    // AIRBORNE drawings both times. That is the whole story: pushboxes forbid
+    // ground crossings, so a facing flip is almost always a JUMP cross-up; the
+    // latch only armed on a GROUNDED flip, and on the rare occasion it did
+    // arm, the fighter left the ground inside its three ticks and the airborne
+    // branch drew instead while the counter ticked away.
+    //
+    // An airborne flip now arms a PENDING pivot that fires on touchdown, and
+    // the latch does not decay in the air. Both are the same correction: the
+    // pivot is a grounded drawing, so it must be spent on grounded ticks.
+    const facingFlipped = obs.prevFacing !== 0 && fighter.facing !== obs.prevFacing
+      && !fighter.down && state.phase === "fight";
+    if (facingFlipped && fighter.grounded) {
+      obs.turnFrames = 3;
+      obs.turnPending = 0;
+    } else if (facingFlipped) {
+      // The cross-up case: remember it, and pivot when the feet land. The
+      // pending flag expires so a flip that never lands (round end, a
+      // knockdown mid-air) cannot fire a pivot a second later.
+      obs.turnPending = MOTION_RULES.turnPendingFrames;
+    } else if (obs.turnPending > 0 && fighter.grounded && !fighter.down
+      && state.phase === "fight") {
+      obs.turnFrames = 3;
+      obs.turnPending = 0;
+    } else {
+      if (obs.turnPending > 0) obs.turnPending -= 1;
+      if (obs.turnFrames > 0 && fighter.grounded) obs.turnFrames -= 1;
+    }
+    if (fighter.down) { obs.turnFrames = 0; obs.turnPending = 0; }
+    // v2.9 final round (R5) — the wake-up SETTLE latch. The rise's last rung
+    // is remembered while the countdown runs (obs.poseBank/poseFrame are the
+    // RESOLVED cell, so a rejected sheet is accounted for), and the tick the
+    // countdown ends the standing cell is handed the height that rung was
+    // actually drawn at. Render-only observer state, exactly like the turn and
+    // crouch latches — never advanced during rollback resimulation.
+    if (fighter.wakeupFrames > 0 && obs.poseBank) {
+      obs.wakeLastRung = { bank: obs.poseBank, frame: obs.poseFrame };
+    }
+    if (obs.prevWakeup > 0 && fighter.wakeupFrames === 0 && !fighter.down
+      && state.phase === "fight" && obs.wakeLastRung) {
+      obs.wakeSettleFrames = WAKEUP_SETTLE_FRAMES;
+      obs.wakeSettleStart = wakeupSettleStart(fighter.def.id,
+        obs.wakeLastRung.bank, obs.wakeLastRung.frame);
+      obs.wakeLastRung = null;
+    } else if (obs.wakeSettleFrames > 0) obs.wakeSettleFrames -= 1;
+    obs.prevWakeup = fighter.wakeupFrames;
+    if (obs.prevCrouch !== null && fighter.crouch !== obs.prevCrouch
+      && fighter.grounded && state.phase === "fight") {
+      obs.crouchTransFrames = 3;
+    } else if (obs.crouchTransFrames > 0) obs.crouchTransFrames -= 1;
+    obs.prevFacing = fighter.facing;
+    obs.prevCrouch = fighter.crouch;
     // --- Pose cross-fade observation (spec 3) -------------------------------
     // Tick-paced here so render rate never changes the fade length; the 2D
     // draw path consumes fadeBank/fadeFrame/fadeLeft. A fade only ARMS on a
     // clean pose change — hitstop freezes and hit flashes keep the snap (the
     // snap IS the impact), battery keeps the plain blit.
     const observedPose = fighterAnimationPose(fighter);
+    // v2.9 critic round 2 (M4): a BLOCK is not an impact. The fade was armed
+    // only while hitFlash was zero — the snap IS the impact, and that is right
+    // for a clean hit — but a blocked contact also raises the flash, so the
+    // guard -> block-flinch -> guard pair snapped twice with no fade at all,
+    // which is exactly where the 15% stance-height step was landing. Blockstun
+    // now keeps its fade; a genuine hit still snaps.
+    const flashSnaps = fighter.hitFlash > 0 && fighter.blockstunFrames <= 0;
     if (obs.poseBank !== observedPose.bank || obs.poseFrame !== observedPose.frame) {
       if (obs.poseBank !== null && state.hitstop <= 0 && state.performance.trailScale > 0
-        && fighter.hitFlash <= 0 && fighter.cinematicFrame === null) {
+        && !flashSnaps && fighter.cinematicFrame === null) {
         obs.fadeBank = obs.poseBank;
         obs.fadeFrame = obs.poseFrame;
         obs.fadeLeft = MOTION_RULES.crossfadeFrames;
@@ -6339,19 +6799,27 @@ function fighterMotionTransform(fighter) {
     // middle of the arc remaps onto a rotation plateau, which compresses the
     // remaining turn into the fall — and the limb-sprawl cells tuck 6%
     // toward a ball read mid-rotation.
-    const shaped = obs.flipKind === "neutral"
-      ? (progress < 0.44 ? progress * (0.5 / 0.44)
-        : progress < 0.6 ? 0.5
-          : 0.5 + (progress - 0.6) * (0.5 / 0.4))
-      : progress;
-    const eased = obs.flipKind === "neutral"
-      ? motionEase01(0.12, 1.0, shaped) * 0.97
-      : motionEase01(0.05, 1.0, shaped) * 0.97;
-    scratch.flipRotation = obs.flipSpin * Math.PI * 2 * eased;
+    // v2.9 final round (T5) — A NEUTRAL JUMP NO LONGER SOMERSAULTS.
+    //
+    // EVERY jump was a full 360, including a straight-up jump with no
+    // direction held. Three things followed from that, all of them wrong:
+    // the authored motion3 "apex, knees unfolding" and "descent, legs
+    // reaching for the ground" keys played while the body was INVERTED, which
+    // is the opposite of what those drawings depict; the pose crossfade is
+    // gated off for the whole |flipRotation| >= 0.3 band, so the entire
+    // airborne middle of every jump lost its micro-fades; and a neutral jump
+    // is the one jump a fighting game reads as a defensive hop, not an
+    // acrobatic. Directional jumps keep the somersault — that is a committed
+    // movement and the flip sells it. The neutral jump keeps its APEX TUCK
+    // (the body still compresses at the top, spec 4's read) and its landing
+    // squash; it simply stays the right way up while it does.
     if (obs.flipKind === "neutral") {
       const tuck = Math.sin(clamp(progress, 0, 1) * Math.PI) * 0.06;
       scratch.scaleX *= 1 - tuck;
       scratch.scaleY *= 1 - tuck;
+    } else {
+      const eased = motionEase01(0.05, 1.0, progress) * 0.97;
+      scratch.flipRotation = obs.flipSpin * Math.PI * 2 * eased;
     }
     // BODY-FIRST (spec 5): directional flips leave with ONE genuine
     // stretch-smear — ~15% stretch along the launch vector for the first two
@@ -6377,6 +6845,18 @@ function fighterMotionTransform(fighter) {
     const windup = clamp(1 - height / 30, 0, 1);
     scratch.scaleY *= (1 + 0.06 * rise * squashScale) * (1 - windup) + (1 - 0.1 * squashScale) * windup;
     scratch.scaleX *= (1 - 0.028 * rise * squashScale) * (1 - windup) + (1 + 0.07 * squashScale) * windup;
+    // v2.9 critic round (m1): the authored jump-rise key owns ~10 ticks of the
+    // ascent before the tuck band opens, and across that hold the stretch
+    // above only travels ~2.6% — so it read as a freeze. A GATHER ramp gives
+    // every tick of the hold a visible delta: the body draws in and pitches
+    // forward as the knees come up toward the tuck, which is exactly the
+    // transition the cell is an in-between for.
+    const gather = clamp(1 - rise, 0, 1) * (1 - windup) * squashScale;
+    if (gather > 0.01) {
+      scratch.scaleY *= 1 - 0.055 * gather;
+      scratch.scaleX *= 1 + 0.05 * gather;
+      scratch.rotation += fighter.facing * 0.1 * gather;
+    }
     scratch.stretchActive = true;
   }
   if (obs.landFrames > 0 && fighter.grounded) {
@@ -6476,6 +6956,41 @@ function fighterMotionTransform(fighter) {
         scratch.stretchActive = true;
       }
     }
+    // v2.9 final round (T3) — THE HEAVY KICK'S ARC BRIDGE. motion2:1 (knee
+    // chambered at the waist, torso upright) cut to motion:1 (leg extended at
+    // head height, torso leaned back) in ONE tick with no smear flash to carry
+    // the eye — kicks are excluded from the smear beat, correctly, because
+    // both smear cells are painted ARM streaks. There is no leg-smear drawing
+    // in any of the four banks, so the in-between is a transform: over the two
+    // reserved ticks the body rotates back and rises onto the support leg
+    // along the arc the kick is about to travel. attackMotionBeat is the same
+    // pure classifier the pose function uses, so the cell and the arc can
+    // never disagree.
+    const kickBeat = attackMotionBeat(attack, fighter.attackFrame);
+    if (kickBeat?.beat === "kickArc" && !reducedMotion) {
+      const arc = kickArcTransform(kickBeat.phase);
+      scratch.rotation += fighter.facing * arc.lean;
+      scratch.offsetY += arc.lift;
+      scratch.offsetX += fighter.facing * arc.reach * 34;
+      scratch.stretchActive = true;
+    }
+  }
+
+  // v2.9 final round (R6) — THE GUARD-FLINCH EXIT BRIDGE. The tucked cover
+  // (motion2:8) handed off to the tall braced guard cell in one tick. The
+  // stance now ARRIVES carrying the flinch's tuck and unwinds out of it over
+  // the next few ticks; the helper returns null before the handoff, so the
+  // flinch itself is never double-tucked, and null once settled.
+  if (fighter.blockstunFrames > 0 && !fighter.crouch && fighter.grounded && !reducedMotion) {
+    const blockTotal = Math.max(fighter.blockstunFrames, obs.blockstunTotal || 0);
+    const blockPhase = clamp(1 - fighter.blockstunFrames / Math.max(1, blockTotal), 0, 0.999);
+    const bridge = blockRecoverTransform(blockPhase);
+    if (bridge) {
+      scratch.offsetY += bridge.lift;
+      scratch.rotation += fighter.facing * bridge.pitch;
+      scratch.scaleY *= bridge.squash;
+      scratch.stretchActive = true;
+    }
   }
 
   // v2.6 BODY-FIRST (core 2): victim stagger transforms riding the
@@ -6536,10 +7051,59 @@ function fighterMotionTransform(fighter) {
 
   // 6. Dizzy body sway (amplitude up): rides on top of the double-vision
   // ghosts, collapsing with the drain bar. animTime-driven — deterministic.
+  // v2.9 critic round (B5): the pose no longer alternates with a second base
+  // cell (which was an ATTACK on nine of ten fighters), so the sway carries
+  // the whole loop — a lateral rubber-legs drift and a slow knee dip run with
+  // the rotation at an offset phase, which reads as woozy rather than as a
+  // held cell being rocked.
   if (!reducedMotion && fighter.dizzyFrames > 0 && !fighter.down) {
     const drain = fighter.dizzyFrames / Math.max(1, fighter.dizzyTotalFrames);
-    scratch.rotation += Math.sin(fighter.animTime * 4.4 + fighter.side * 1.7)
-      * 0.07 * (0.35 + 0.65 * drain);
+    const amp = 0.35 + 0.65 * drain;
+    const sway = fighter.animTime * 4.4 + fighter.side * 1.7;
+    scratch.rotation += Math.sin(sway) * 0.07 * amp;
+    scratch.offsetX += Math.sin(sway * 0.5 + 0.9) * 5.5 * amp;
+    scratch.scaleY *= 1 - 0.035 * amp * (0.5 + 0.5 * Math.sin(sway * 0.77 + 2.1));
+    scratch.stretchActive = true;
+  }
+
+  // v2.9 critic round (M4): the wake-up rise. Feet-anchored, so the getup
+  // cells lift and un-pitch through their held ticks instead of freezing and
+  // then teleporting to standing. Shared with the 3D rig through the same
+  // pure helper, and reduced motion keeps a softened version (it is the only
+  // thing that makes the recovery read as a rise at all).
+  if (fighter.wakeupFrames > 0 && !fighter.down) {
+    // v2.9 final round (R5): the bridge on the LAST rung is the measured
+    // per-fighter stretch onto the standing height, not round 2's flat 12%
+    // (which closed 1.12 of a ratio that runs to 1.40 on jez). obs.poseBank /
+    // poseFrame are the resolved cell this frame, so a rejected sheet is
+    // accounted for; before the first pose is latched it degrades to 1.
+    const rung = obs.poseBank
+      ? wakeupRiseStretch(fighter.def.id, obs.poseBank, obs.poseFrame) : 1;
+    const wake = wakeupRiseTransform(fighter.wakeupFrames, DEFENSE_RULES.wakeupFrames, rung);
+    if (wake) {
+      const calm = reducedMotion ? 0.5 : 1;
+      scratch.scaleY *= 1 + (wake.scaleY - 1) * calm;
+      scratch.scaleX *= 1 + (wake.scaleX - 1) * calm;
+      scratch.rotation += fighter.facing * wake.pitch * calm;
+      scratch.stretchActive = true;
+    }
+  }
+
+  // v2.9 final round (R5) — the OTHER half of the wake-up seam. The stretch
+  // above is capped, so on the four fighters whose getup-b is more than 25%
+  // short of standing it cannot close the gap alone. The standing cell arrives
+  // compressed to exactly the height the last rung was drawn at and eases out
+  // over five ticks, so the handoff has no step in it at all. Floored at 0.88:
+  // a briefly compressed standing figure reads as the last of the push, a
+  // 37% stretched crouch would read as the character growing.
+  if (obs.wakeSettleFrames > 0 && fighter.grounded && !fighter.down
+    && fighter.wakeupFrames === 0) {
+    const settle = wakeupSettleTransform(obs.wakeSettleFrames, obs.wakeSettleStart);
+    if (settle) {
+      const calm = reducedMotion ? 0.5 : 1;
+      scratch.scaleY *= 1 + (settle.scaleY - 1) * calm;
+      scratch.stretchActive = true;
+    }
   }
   return scratch;
 }
@@ -10077,7 +10641,10 @@ function resetRound() {
   state.timer = 99;
   state.timerCarry = 0;
   state.phase = "intro";
-  state.phaseTime = 2.1;
+  // v2.9 FLOW round 2: demo-only shorter round card — the exhibition owes the
+  // viewer fighting, not four seconds of ROUND 2 per exhibition. Every other
+  // mode keeps the full 2.1s presentation.
+  state.phaseTime = state.mode === "demo" ? DEMO_ROUND_INTRO_SECONDS : 2.1;
   state.hitstop = 0;
   state.lastImpactSide = -1;
   state.finishWinner = -1;
@@ -10320,6 +10887,11 @@ function finishRound(winner, type = -1) {
   state.phase = "roundover";
   state.rounds[winner] += 1;
   state.finisherType = type;
+  // v2.9 FLOW: demo coverage — the round-end beat, plus the Final Blow
+  // ceremony when one executes (the gore/fatality toggles decide the flavour
+  // downstream exactly as before; this is pure observation).
+  demoChoreoBeat(winner, "roundEnd");
+  if (type >= 0) demoChoreoBeat(winner, "finisher");
   const winDef = state.fighters[winner].def;
   // Wave 15: the KO slams in the hands — for both the knockout hold and the
   // opening of a Final Blow ceremony (all gates inside combatHaptic).
@@ -10333,7 +10905,9 @@ function finishRound(winner, type = -1) {
   } else {
     // Hold the KO scene so the blood, dust and reactions can be seen before the
     // next round or the result screen takes over.
-    state.phaseTime = 4.9;
+    // v2.9 FLOW round 2: the attract loop holds a plain KO a little shorter
+    // (demo-only; every other mode keeps the full 4.9s beat).
+    state.phaseTime = state.mode === "demo" ? DEMO_KO_HOLD_SECONDS : 4.9;
     duckMusic(0.28, 2600);
     announce(`${winDef.name} WINS`, "KNOCKOUT", 2.4);
     sound("ko", state.fighters[1 - winner]);
@@ -11953,12 +12527,91 @@ function activeControlStyle(side) {
     : state.controlStyle;
 }
 
+// --- v2.9 FLOW: demo choreography plumbing ---------------------------------
+// The choreographer receives a plain-data view of the two fighters (never the
+// live objects) and reports back through raw inputs; its own state lives on
+// demoSession exactly like superShown. Everything here is scoped to
+// state.mode === "demo", so ranked/vs/arcade CPU behaviour is untouched.
+
+function demoChoreoFighterView(fighter) {
+  return {
+    x: fighter.x,
+    facing: fighter.facing,
+    grounded: fighter.grounded,
+    down: fighter.down,
+    pendingKnockdown: fighter.pendingKnockdown,
+    wakeupFrames: fighter.wakeupFrames,
+    hitstunFrames: fighter.hitstunFrames,
+    blockstunFrames: fighter.blockstunFrames,
+    dizzyFrames: fighter.dizzyFrames,
+    tauntFrames: fighter.tauntFrames,
+    attacking: Boolean(fighter.attacking),
+    // v2.9 FLOW round 2: the sim only opens a cancel window on a CONFIRMED
+    // hit (tryAttackCancel bails on an empty attackConnected). The
+    // choreographer used to chain off "a move came out", so a whiffed poke
+    // queued a link that could never cancel — measured, that single mistake
+    // was 63% of all abandoned directives and it is exactly the "press,
+    // nothing happens, stand there, reset" cadence on screen.
+    attackConnected: Boolean(fighter.attackConnected),
+    // v2.9 FLOW: crouch edges feed the choreographer's crouchTrans beat, and
+    // crouch/guard/vx together are how the choreographer's liveliness
+    // watchdog knows a fighter has stopped moving on screen.
+    crouch: Boolean(fighter.crouch),
+    guarding: Boolean(fighter.guarding),
+    grabbed: Boolean(fighter.grabbed),
+    grabbing: Boolean(fighter.grabbing),
+    meter: fighter.meter,
+    stunMeter: fighter.stunMeter,
+    throwableUses: fighter.throwableUses,
+    carriedWeapon: Boolean(fighter.carriedWeapon),
+    dashFrames: fighter.dashFrames,
+    dashDirection: fighter.dashDirection || 0,
+    vx: fighter.vx,
+    vy: fighter.vy,
+    // v2.9 FLOW round 4. `health` is how the choreographer notices a LOPSIDED
+    // exhibition early enough to hand the trailing fighter the stage (a
+    // dominated fighter finished a whole exhibition at 6 of 30 moves).
+    // `juggleCount` / `wallBounceUsed` are the two flags that decide whether a
+    // victim can still be armed for a corner wall bounce — the only
+    // deterministic route to a wall splat — so chasing the beat against a
+    // victim whose conversion is already spent is now avoidable.
+    health: fighter.health,
+    juggleCount: fighter.juggleCount,
+    wallBounceUsed: Boolean(fighter.wallBounceUsed),
+  };
+}
+
+function demoChoreoView() {
+  return {
+    tick: state.simulationTick,
+    phase: state.phase,
+    stageMinX: MOVEMENT_RULES.stageMinX,
+    stageMaxX: MOVEMENT_RULES.stageMaxX,
+    weapon: state.stageWeapon ? { phase: state.stageWeapon.phase, x: state.stageWeapon.x } : null,
+    fighters: state.fighters.map(demoChoreoFighterView),
+  };
+}
+
+// Beat observation from the sim call sites (dizzy, knockdown, wall splat,
+// grab, taunt, pickup, round end). Guarded exactly like the other meta
+// observers: demo only, never during a rollback resimulation.
+function demoChoreoBeat(side, beat) {
+  if (rollbackResimulating || state.mode !== "demo" || !demoSession.choreo) return;
+  demoSession.choreo.noteBeat(side, beat);
+}
+
 function aiInput(fighter, opponent, dt) {
   fighter.aiClock -= dt;
   const input = { left: false, right: false, down: false, guard: false, jump: false, light: false, heavy: false, special: false, enhanced: false, throw: false, super: false, final: false };
   if (isPassiveDifficulty(fighter.aiBrain?.difficulty)) return input;
   const cpuFinisher = state.mode === "demo" || state.mode === "tournament" || fighter.side === 1;
   if (state.phase === "finish" && state.finishWinner === fighter.side && cpuFinisher) {
+    // v2.9 FLOW round 2 (demo only): the attract loop spent ~2 seconds of
+    // every round with the winner standing in front of a frozen victim
+    // waiting out the brain's ordinary reaction clock — measured, only 54%
+    // of an exhibition was actual fighting. The demo commits to its Final
+    // Blow promptly instead. Arcade/tournament/versus pacing is untouched.
+    if (state.mode === "demo") fighter.aiClock = Math.min(fighter.aiClock, DEMO_FINISHER_REACTION);
     input.final = fighter.aiClock <= 0;
     if (input.final) fighter.aiClock = 2;
     return input;
@@ -11977,12 +12630,22 @@ function aiInput(fighter, opponent, dt) {
     }
     return input;
   }
-  return stepAiBrain(fighter.aiBrain, {
+  const brainInput = stepAiBrain(fighter.aiBrain, {
     frame: state.simulationTick,
     self: fighter,
     opponent,
     roll: random(),
   });
+  // v2.9 FLOW: the demo choreographer rides on top of the live brain. The
+  // brain still observes every tick (so natural windows resume seamlessly);
+  // a scripted input simply outranks it while a showcase directive runs.
+  if (state.mode === "demo" && demoSession.choreo) {
+    const view = demoChoreoView();
+    if (fighter.side === 0) demoSession.choreo.observe(view);
+    const scripted = demoSession.choreo.step(fighter.side, view);
+    if (scripted) return scripted;
+  }
+  return brainInput;
 }
 
 function readQaInput(side) {
@@ -12144,6 +12807,11 @@ function beginAttack(fighter, action, input = {}, { reversal = false, force = fa
   // v2.1 PROGRESSION: per-move usage tally (render-only meta counters on the
   // mechFxDebug pattern; the guard keeps resimulated ticks from double-counting).
   if (!rollbackResimulating) progressionNoteMove(fighter);
+  // v2.9 FLOW: demo coverage — every started move reports its action+context
+  // so the choreographer's checklist and the recorded ids agree exactly.
+  if (!rollbackResimulating && state.mode === "demo" && demoSession.choreo) {
+    demoSession.choreo.noteMove(fighter.side, action, moveContext);
+  }
   if (throwObjectProfile) {
     fighter.throwableUses = Math.max(0, fighter.throwableUses - 1);
     fighter.throwableSpawned = false;
@@ -12435,6 +13103,8 @@ function enterDizzy(fighter, attacker) {
   if (!rollbackResimulating && (attacker?.side === 0 || attacker?.side === 1)) {
     progressionMatch.dizzies[attacker.side] += 1;
   }
+  // v2.9 FLOW: the dizzy animation belongs to the wobbling fighter.
+  demoChoreoBeat(fighter.side, "dizzy");
   fighter.dizzyFrames = STUN_RULES.dizzyFrames;
   fighter.dizzyTotalFrames = STUN_RULES.dizzyFrames;
   fighter.dizzyMashCount = 0;
@@ -12500,6 +13170,8 @@ function performTaunt(fighter) {
     // v2.1 PROGRESSION: Black Book showboat entry (guarded, P1 seat only).
     progressionEvent("taunt", {}, fighter.side);
   }
+  // v2.9 FLOW: demo coverage beat (guarded inside).
+  demoChoreoBeat(fighter.side, "taunt");
   spawnCombatText(fighter.x, fighter.y - fighter.height - 44, "TAUNT", fighter.def.accent);
   stirCrowd(0.25);
   fighterTauntCue(fighter, fighter.tauntLine);
@@ -12529,6 +13201,8 @@ function addStun(victim, attacker, attack, { counter = false, blocked = false } 
 }
 
 function enterKnockdown(fighter) {
+  // v2.9 FLOW: demo coverage beat (guarded inside; no-op outside the demo).
+  demoChoreoBeat(fighter.side, "knockdown");
   fighter.pendingKnockdown = false;
   // Landing before reaching the wall forfeits the pending bounce conversion.
   fighter.wallBounceArmed = 0;
@@ -12830,6 +13504,9 @@ function spawnWallImpact(fighter, wallDirection) {
   const last = wallSplatLastTick[fighter.side];
   if (tick > last && tick - last < WALL_SPLAT_COOLDOWN_TICKS) return;
   wallSplatLastTick[fighter.side] = tick;
+  // v2.9 FLOW: demo coverage beat — counted per distinct splat (the cooldown
+  // above dedupes wall grinds exactly like the presentation burst).
+  demoChoreoBeat(fighter.side, "wallsplat");
   // Wave 7: a wall splat is a heavy moment — kick the RGB-split impulse.
   // Module-level render-only latch; profile/accessibility gates apply at draw.
   if (!rollbackResimulating) aberrationImpulse = Math.max(aberrationImpulse, 0.55);
@@ -13335,7 +14012,7 @@ function updateFighter(fighter, opponent, input, dt) {
       // the trail.
       const ghostPose = fighterAnimationPose(fighter);
       const ghostFrame = ghostPose.bank === "base" ? ghostPose.frame
-        : ghostPose.bank === "motion" && ghostPose.fallback?.bank === "base"
+        : isAuthoredBank(ghostPose.bank) && ghostPose.fallback?.bank === "base"
           ? ghostPose.fallback.frame : -1;
       if (ghostFrame >= 0) {
         state.effects.push({
@@ -13902,6 +14579,8 @@ function throwStyle(fighter) {
 }
 
 function beginGrabHold(attacker, victim, attack) {
+  // v2.9 FLOW: demo coverage beat — a grab actually connected.
+  demoChoreoBeat(attacker.side, "throw");
   const style = throwStyle(attacker);
   const back = Boolean(attack.backThrow);
   attacker.grabbing = {
@@ -13968,6 +14647,15 @@ function resetStageWeapon() {
   state.stageWeapon = plan
     ? { ...plan, phase: "pending", y: FLOOR, holder: -1, frames: 0, roundStartTick: state.simulationTick }
     : null;
+  // v2.9 FLOW: attract exhibitions are short showcase rounds — a weapon
+  // planned for the ordinary 16-62 second contest window simply never arrives
+  // before the KO, which is why the pickup beat was 0-for-10 on every weapon
+  // stage. Demo mode alone pulls the arrival forward; the slot comes from the
+  // already-seeded plan, so this stays deterministic and never touches
+  // ranked, vs, arcade, tournament or online rounds.
+  if (state.mode === "demo" && state.stageWeapon) {
+    state.stageWeapon.spawnFrame = 210 + (state.stageWeapon.slot % 4) * 40;
+  }
 }
 
 function stageWeaponProfile() {
@@ -14079,6 +14767,8 @@ function tryPickUpStageWeapon(fighter, input) {
   weapon.phase = "held";
   weapon.holder = fighter.side;
   weapon.frames = 0;
+  // v2.9 FLOW: demo coverage beat — the stage weapon actually got picked up.
+  demoChoreoBeat(fighter.side, "weaponPickup");
   fighter.carriedWeapon = weapon.weaponId;
   fighter.carryFrames = 0;
   fighter.inputBuffer.consume("heavy", state.simulationTick);
@@ -14477,6 +15167,12 @@ function hit(attacker, victim, attack, collision) {
   attacker.confirmWindowFrames = 12;
   const counter = !blocked && !armored && attack.level !== ATTACK_LEVELS.THROW && isCounterHit(victim);
   const wasJuggle = !victim.grounded || victim.pendingKnockdown;
+  // v2.9 FLOW: demo coverage beats — a genuine counter-hit, and a hit landed
+  // on an already-launched victim (the strict juggle read). Guarded inside.
+  if (!blocked && !armored) {
+    if (counter) demoChoreoBeat(attacker.side, "counterhit");
+    if (!victim.grounded && victim.pendingKnockdown) demoChoreoBeat(attacker.side, "juggle");
+  }
   let comboResult = { hitNumber: 1, damageScale: 1 };
   if (!blocked && attack.level !== ATTACK_LEVELS.THROW) {
     comboResult = attacker.combo.registerHit(state.simulationTick, victim.juggleCount);
@@ -16315,9 +17011,17 @@ function drawVetAtmosphere(time) {
 // the pre-2.7 cell) draws. Every consumer — drawFighter, the observers, the
 // CINEMA 3D bridge — reads through here, so both renderers always agree.
 function fighterAnimationPose(fighter) {
+  // v2.9 critic round 2 (B4): a move with no kit art of its own draws from the
+  // shared banks, and those banks are where a prop can leak into a bare-handed
+  // swing. The gate is passed here, at the single resolution choke point, so
+  // it covers every present and future beat of a kit-less move — not just the
+  // recovery cell the critics happened to catch.
+  const bareHanded = Boolean(fighter.attacking) && bareHandedAttack(fighter.attacking);
   return resolveMotionPose(
     fighterPoseDescriptor(fighter),
-    (cell) => motionCellDrawable(fighter.def.id, cell),
+    (cell, bank) => motionBankCellDrawable(fighter.def.id, cell, bank),
+    fighter.def.id,
+    { bareHanded },
   );
 }
 
@@ -16335,9 +17039,81 @@ function showcasePoseDescriptor(fighter) {
 
 function fighterPoseDescriptor(fighter) {
   const base = (frame) => ({ bank: "base", frame });
+  // v2.9 critic round: every beat below that used to hand off to a hardcoded
+  // base index now resolves through the per-fighter semantic map — base(12)
+  // is a deep squat and base(13) an attack pose (or, on deathblow, a whole
+  // different costume) on most of the roster. See BASE_CELL_ROLES.
+  const roles = baseCellRoles(fighter.def.id);
   if (fighter.cinematicFrame !== null) return base(fighter.cinematicFrame);
-  if (fighter.grabbed) return base(15);
-  if (fighter.dizzyFrames > 0 || fighter.guardCrushFrames > 0) return base(12 + Math.floor(fighter.animTime * 6) % 2);
+  // v2.9 critic round (B4): the airborne `thrown` cell is gated to the actual
+  // LIFT window. It was applied from grab frame 0, which snapped the victim
+  // ~80 degrees from standing idle to flat-on-his-back in ONE tick and then
+  // floated him horizontally at hip height for the hitstop ticks with his
+  // feet nominally on the floor. During the clinch the victim now wears the
+  // authored standing flinch, so attacker (throw-grab, seizing at chest
+  // height) and victim agree in space; the loose-limbed hurl key takes over
+  // once the throw has genuinely lifted him off the floor and the cinematic
+  // rotation is engaged.
+  if (fighter.grabbed) {
+    // v2.9 critic round 2 (B7): the two halves of a throw must occupy the SAME
+    // SPACE. Round 1 moved the gate off "grab frame 0" and onto "18px of
+    // lift", which is not a hurl — it is a fighter still standing on the
+    // attacker's shins. Measured: the victim wore motion2:11 (a fully
+    // horizontal airborne body) while 16-30px off the floor, drawn at the
+    // attacker's knee height and intersecting his legs, while the attacker's
+    // two-handed seize reached into empty air above him.
+    //
+    // The horizontal key is now gated on an ACTUAL AIRBORNE HURL: clear of the
+    // attacker's own standing height, or genuinely committed to the cinematic
+    // rotation. Through the clinch the victim keeps the authored standing
+    // flinch, which is drawn at chest height where the grab actually is.
+    const lifted = FLOOR - fighter.y;
+    const hurling = !fighter.grounded
+      && (lifted > THROW_HURL_LIFT_PX || Math.abs(fighter.cinematicRotation) > 0.55);
+    return hurling
+      ? motion2Pose(MOTION2_CELLS.thrown, "base", roles.hit)
+      : motion2Pose(MOTION2_CELLS.lightHit, "base", roles.hit);
+  }
+  // v2.9 FLOW: the throw attacker wears the authored two-handed seize through
+  // the grab hold; the fallback is exactly what the kit's throw art showed.
+  if (fighter.grabbing) {
+    // v2.9 critic round 2 (B1): the CLINCH. The authored two-handed seize was
+    // held for 21 straight ticks — the grab froze mid-air while the victim
+    // animated underneath it. The kit's own throw art brackets it now: kit
+    // seize, the authored hold, then the kit lift, so the clinch has a
+    // beginning, a middle and an end on cells that all ship today.
+    //
+    // Paced by the GRAB's own counter, not attackFrame: attackFrame is frozen
+    // for the whole hold, which is exactly why one drawing owned all of it.
+    const kitPose = fighter.attacking
+      ? attackAnimationPose(fighter.attacking, fighter.attackFrame) : null;
+    // v2.9 final round: the kit-less fallback was the HARDCODED index 8 — the
+    // last raw base index left in this file after the semantic map landed.
+    // base:8 is deathblow's GUARD cell, so his throw drew the same stance
+    // twice fifteen ticks apart with the hurl in between; it is a braced wide
+    // stance on ali and a STRIKE on four of the roster, which is exactly the
+    // class of assumption BASE_CELL_ROLES exists to kill. The map's own guard
+    // read is what this branch always meant — a two-handed seize is the
+    // fighter squared up and set — and it is certified non-attack per fighter.
+    const fallback = kitPose && !isAuthoredBank(kitPose.bank)
+      ? { bank: kitPose.bank, frame: kitPose.frame }
+      : { bank: "base", frame: roles.guard };
+    const hold = fighter.grabbing;
+    const clinch = clamp((hold.frame || 0) / Math.max(1, hold.total || 1), 0, 0.999);
+    return beatPoseAt(throwClinchKeys(), clinch, fallback);
+  }
+  if (fighter.dizzyFrames > 0 || fighter.guardCrushFrames > 0) {
+    // v2.9 critic round (B5): a REAL woozy loop. The 2.9 read alternated the
+    // authored rubber-legs key with base(13) every ~10 ticks, which meant
+    // benny threw a HIGH KICK every other beat while dizzy (and ali swung the
+    // mic, and deathblow changed trousers). The authored sway now owns the
+    // whole state and the procedural dizzy wobble in fighterMotionTransform
+    // — lateral drift + rotation, amplitude collapsing with the drain bar —
+    // supplies the motion the second cell was faking. The fallback is the
+    // map's stagger read, never an attack cell.
+    return motion2Pose(MOTION2_CELLS.dizzy, "base",
+      Number.isInteger(roles.stagger) ? roles.stagger : roles.hit);
+  }
   // Release 1.7: air-recovery back-flip tuck. v2.7 FRAMES: the spin window
   // wears the authored tuck ball, the tail arches into the airrec footing key.
   if (fighter.airTechFlipFrames > 0) {
@@ -16386,13 +17162,24 @@ function fighterPoseDescriptor(fighter) {
       // combo tracker is sim state, so each seal/curse tick visibly knocks
       // the victim into the next pose (tick cadence stays as a backstop).
       const hitBeat = ((stormCaster.combo?.hits || 0) + Math.floor(stormCaster.attackFrame / 9)) % 2;
+      // v2.9 critic round: these VICTIM tracks were written against the same
+      // assumed grammar as the reaction track (base 12 "slumped", base 13
+      // "staggered recoil") and are wrong on the same nine fighters — the
+      // Commissioner's seal made benny high-kick between binds. Both tracks
+      // now key off the map's certified non-attack recoil cells and the
+      // authored bank; the beat shapes are unchanged.
+      const writhe = Number.isInteger(roles.stagger) ? roles.stagger : roles.hit;
       if (stormCaster.def.vfx === "authority") {
-        if (phase < 0.25) return base(15);                                        // flinch at onset
-        if (phase < 0.72) return base(hitBeat ? 13 : 15);                         // per-hit staggered recoil
-        return base(12);                                                          // bound / slumped at the bind
+        if (phase < 0.25) return base(roles.hit);                                 // flinch at onset
+        if (phase < 0.72) {                                                       // per-hit staggered recoil
+          return hitBeat ? motion2Pose(MOTION2_CELLS.lightHit, "base", writhe) : base(roles.hit);
+        }
+        return motion2Pose(MOTION2_CELLS.dizzy, "base", roles.crouch);            // bound / slumped at the bind
       }
-      if (phase < 0.4) return base(15);                                           // curse impact recoil
-      return base(hitBeat ? 12 : 13);                                             // per-hit sagging writhe
+      if (phase < 0.4) return base(roles.hit);                                    // curse impact recoil
+      return hitBeat                                                              // per-hit sagging writhe
+        ? motion2Pose(MOTION2_CELLS.dizzy, "base", roles.crouch)
+        : motion2Pose(MOTION2_CELLS.lightHit, "base", writhe);
     }
   }
   // v2.7 FRAMES: slammed victims — wall pin, launch arc, knockdown collapse.
@@ -16403,23 +17190,29 @@ function fighterPoseDescriptor(fighter) {
   // (bighit) from the juggle fall (airrec), and the last ~120px of a
   // knockdown fall wear the crumple key before the flat slam.
   if (fighter.hitstunFrames > 0 || fighter.pendingKnockdown) {
-    if (fighterWallPin(fighter)) return motionPose(MOTION_CELLS.wallsplat, "base", 15);
+    if (fighterWallPin(fighter)) return motionPose(MOTION_CELLS.wallsplat, "base", roles.down);
     if (!fighter.grounded) {
       // 2.7 critic round: the crumple (knees buckling) engages only in the
       // last ~55px of the fall — the old 120px band had victims kneeling on
       // air for a dozen frames before touchdown.
       if (fighter.pendingKnockdown && fighter.vy > 0 && FLOOR - fighter.y < 55) {
-        return motionPose(MOTION_CELLS.crumple, "base", 15);
+        return motionPose(MOTION_CELLS.crumple, "base", roles.down);
       }
-      return motionPose(fighter.vy < -120 ? MOTION_CELLS.bighit : MOTION_CELLS.airrec, "base", 15);
+      // v2.9 FLOW: a hurled throw victim keeps the loose-limbed thrown key
+      // through the rising arc of the hurl, before the launched-victim reads
+      // (bighit/airrec/crumple) take over on the way down.
+      if (fighter.lastHitResult === ATTACK_LEVELS.THROW && fighter.vy < 0) {
+        return motion2Pose(MOTION2_CELLS.thrown, "base", roles.down);
+      }
+      return motionPose(fighter.vy < -120 ? MOTION_CELLS.bighit : MOTION_CELLS.airrec, "base", roles.down);
     }
   }
   if (fighter.down || fighter.knockdownFrames > 0) {
     // The first beats of the knockdown keep the mid-collapse key.
     if (fighter.down && fighter.knockdownFrames > DEFENSE_RULES.knockdownFrames - 7) {
-      return motionPose(MOTION_CELLS.crumple, "base", 15);
+      return motionPose(MOTION_CELLS.crumple, "base", roles.down);
     }
-    return base(15);
+    return base(roles.down);
   }
   // v2.6 BODY-FIRST (core 2): EVERY hit sequences the victim through a
   // progressive stagger — head-snap -> torso fold -> stagger step -> recover
@@ -16435,28 +17228,161 @@ function fighterPoseDescriptor(fighter) {
     const striker = state.fighters[1 - fighter.side];
     const sinceHit = state.simulationTick - (striker?.combo?.lastHitFrame ?? -Infinity);
     if (sinceHit >= 0 && sinceHit <= 44) {
-      const hitKey = (striker.combo.hits || 0) % 2;
+      // v2.9 final round (R4): the per-hit alternation is gone. It selected
+      // between `roles.hit` and `fold`, which are the same frame on seven of
+      // ten fighters, so it alternated a cell with itself. Multi-hit moves
+      // re-key the whole track on every landed hit (sinceHit resets), which is
+      // the real re-key and is untouched.
       // v2.7 FRAMES: a landed heavy/special opens the reaction on the
       // authored big-hit key (body bent backward) instead of the flat hit
       // cell; lights keep the tighter head snap.
-      if (sinceHit < 5) {
-        return striker.attacking && striker.attacking.kind !== "light"
-          ? motionPose(MOTION_CELLS.bighit, "base", 15)
-          : base(15);                                       // head snap
-      }
-      if (sinceHit < 11) return base(hitKey ? 13 : 12);     // torso fold (alternates per hit)
-      if (sinceHit < 18) return base(hitKey ? 15 : 13);     // stagger step
-      return base(12);                                      // recover ease
+      // v2.9 critic round (B5): the WHOLE reaction track is authored or
+      // map-resolved. It used to hand off to base(hitKey ? 13 : 12) and then
+      // base(hitKey ? 15 : 13) — base(13) is an ATTACK POSE on nine of ten
+      // fighters (benny high-kicks, ali swings the mic, the devil launches an
+      // airborne claw lunge) and a costume swap on deathblow, while base(12)
+      // is a deep squat that dropped the victim mid-stagger. Every beat below
+      // is either an authored key or a cell the map certifies as non-attack;
+      // the per-hit alternation that made multi-hit moves re-key is kept.
+      // v2.9 critic round 2 (B1/M5): the track is a KEY LIST now. Round 1 kept
+      // the light-vs-heavy opening weight the critics praised but converged
+      // the two tracks four ticks in — the heavy dropped out of the big-hit
+      // bend straight into motion2:9, the SAME cell the light track was
+      // already wearing, with a 60-70 degree torso jump and no in-between —
+      // and then BOTH tracks pinned one base cell for 6-7 ticks and the guard
+      // cell for a dozen more.
+      //
+      // The opening weights are untouched. The MIDDLES are now different
+      // drawings: the heavy sags through the authored rubber-legs key before
+      // it reaches the head-jolt, the light folds through the authored guard
+      // flinch. The tail hands back to the IDLE CYCLE rather than freezing on
+      // the guard cell, so the last third of a long reaction breathes.
+      // motion3's react-mid pair drops into the second band of each track.
+      const heavyTrack = Boolean(striker.attacking && striker.attacking.kind !== "light");
+      // v2.9 final round (R4) — THE TAIL COLLAPSE. Round 2's ladder read
+      // `base(hitKey ? roles.hit : fold)` at 0.30 and `base(fold)` at 0.44,
+      // and `fold` IS `roles.hit` on seven of ten fighters (only deathblow,
+      // the commissioner and cyraxx have a distinct stagger cell). Those two
+      // bands were therefore the SAME DRAWING held for ~12-13 ticks at the end
+      // of every ground reaction, and the per-hit `hitKey` alternation that
+      // was supposed to break it could only alternate between a cell and
+      // itself. The band edges and the cells they resolve to now come from
+      // ONE table in fighter-kits.mjs (reactionFallbackCells), which
+      // guarantees consecutive bands are different frames and drops the
+      // third band entirely rather than repeat one when the sheet cannot
+      // supply three distinct non-attack drawings.
+      const tail = reactionFallbackCells(roles);
+      return beatPoseAt(reactionTrackKeys(heavyTrack), sinceHit / 44, (key) => {
+        const at = key ? key.at : 0;
+        if (at < REACTION_BANDS[2]) return base(tail.snap);
+        if (at < REACTION_BANDS[4]) return base(tail.fold);
+        if (at < REACTION_BANDS[5] && tail.settle !== null) return base(tail.settle);
+        return base(roles.idle[Math.floor(fighter.animTime * 5) % roles.idle.length]);
+      });
     }
-    return base(15);
+    return base(roles.hit);
   }
-  if (fighter.hitFlash > 0 || fighter.hitstunFrames > 21) return base(15);
-  if (fighter.wakeupFrames > 0) return base(fighter.wakeupFrames > 9 ? 15 : 12);
-  if (fighter.throwTechFlashFrames > 0) return base(12);
-  if (fighter.block || fighter.blockstunFrames > 0 || fighter.crouch) return base(12);
+  // v2.9 FLOW: standing guarded contact wears the authored guard-flinch key
+  // for the WHOLE blockstun window — checked before the hit-flash read below
+  // so the flash ticks of a blocked contact flinch instead of borrowing the
+  // clean-hit cell (crouch blockstun keeps the crouch guard cell — the
+  // flinch is a standing pose). The fallback tracks the exact pre-2.9 read:
+  // the hit cell while the contact flash decays, then the guard cell.
+  // v2.9 critic round (B5): the flinch and the guard it returns to are now
+  // the SAME STANCE HEIGHT. Standing guard used to draw base(12), a deep
+  // squat on ali / benny / deathblow / donald / post, so a blocked hit
+  // (block-hit is a standing flinch) made them stand UP ~80px INTO the punch
+  // and drop back down after. Both reads resolve through the map's `guard`.
+  if (fighter.blockstunFrames > 0 && !fighter.crouch) {
+    // v2.9 critic round 2 (B1/M4): the flinch owned all 17 ticks of blockstun.
+    // It now owns the IMPACT and the stance recovers behind it, which is what
+    // blockstun actually looks like — and it is the drawing whose 15% height
+    // mismatch with the guard cell the guard-flinch scale correction fixes, so
+    // the shorter it is held the smaller that seam is. The fallbacks track the
+    // exact pre-fix read: the hit cell while the contact flash decays, then
+    // the guard cell.
+    const blockTotal = Math.max(fighter.blockstunFrames, motionObs[fighter.side]?.blockstunTotal || 0);
+    const blockPhase = clamp(1 - fighter.blockstunFrames / Math.max(1, blockTotal), 0, 0.999);
+    // The flinch key owns the impact now, so the fallback is the STANCE for
+    // the whole window — round 1's read borrowed the clean-hit cell while the
+    // contact flash decayed, which put a 2-tick hit pose in the middle of a
+    // block once the flinch stopped owning the whole thing.
+    return beatPoseAt(blockstunKeys(), blockPhase, base(roles.guard));
+  }
+  if (fighter.hitFlash > 0 || fighter.hitstunFrames > 21) return base(roles.hit);
+  // v2.9 FLOW: sequenced wake-up — getup-a (knee up, hand pushing off) into
+  // getup-b (half-risen crouch) across the recovery countdown, ending the
+  // teleport-to-feet. Pure helper in fighter-kits.mjs; fallbacks exact.
+  if (fighter.wakeupFrames > 0) {
+    // v2.9 critic round 2 (M3): the rise END was fixed in round 1 and the
+    // START then hard-cut — base:15 (flat on his back, a horizontal body)
+    // straight to motion2:14 (kneeling, hand on the floor) in ONE tick, about
+    // 90 degrees of torso rotation and ~150px of head rise with nothing in
+    // between. The track opens on the authored crumple key (the collapse pose,
+    // which is exactly the missing in-between played backwards) and the rise
+    // transform opens with a matching pitch. Passing the real countdown length
+    // keeps the bands honest instead of assuming 16.
+    return wakeupMotionPose(fighter.wakeupFrames, roles, DEFENSE_RULES.wakeupFrames);
+  }
+  if (fighter.throwTechFlashFrames > 0) return base(roles.guard);
+  // v2.9 critic round 2 — TURNAROUND PRECEDENCE. Measured across ~2800 fight
+  // ticks, the authored pivot key drew for 0-1 ticks TOTAL: it sat below the
+  // guard/crouch and attack branches, and a grounded facing flip essentially
+  // only happens in exactly those states. Pushbox separation forbids ground
+  // crossings, so a cross-up is almost always a jump — and the fighter who
+  // actually flips is the DEFENDER, who is holding guard or crouching when it
+  // resolves. The key existed and never once reached the screen.
+  //
+  // The 3-tick latch now outranks guard, crouch and the crouch-entry
+  // in-between. It deliberately stays BELOW hitstun, blockstun, knockdown,
+  // wake-up, grabs and dizzy: being hit outranks turning around. The fallback
+  // is the exact cell the guard/crouch branch below would have drawn, so a
+  // missing sheet changes nothing.
+  const turnObs = motionObs[fighter.side];
+  if (turnObs?.turnFrames > 0 && fighter.grounded && !fighter.attacking) {
+    return motion2Pose(MOTION2_CELLS.turnaround, "base",
+      fighter.crouch ? roles.crouch
+        : fighter.block ? roles.guard
+          : Math.abs(fighter.vx) > 22
+            ? 4 + Math.floor(fighter.walkTime * 10) % 4
+            : Math.floor(fighter.animTime * 5) % 4);
+  }
+  // v2.9 FLOW: 2-3 ticks of the authored half-lowered in-between entering
+  // crouch (the leave side lives past the movement branches below). The
+  // latch is render-only observer state — never advanced during rollback
+  // resimulation (updateMotionObservers runs only in draw()).
+  if (fighter.crouch && !fighter.block
+    && motionObs[fighter.side]?.crouchTransFrames > 0) {
+    return motion2Pose(MOTION2_CELLS.crouchTrans, "base", roles.crouch);
+  }
+  // v2.9 critic round (B5): crouching keeps the low stance; STANDING guard
+  // gets the map's braced standing cell instead of borrowing the crouch.
+  if (fighter.block || fighter.blockstunFrames > 0 || fighter.crouch) {
+    return base(fighter.crouch ? roles.crouch : roles.guard);
+  }
   if (fighter.attacking) {
     const attack = fighter.attacking;
     const kitPose = attackAnimationPose(attack, fighter.attackFrame);
+    // v2.9 critic round 2 (B1): the throw ATTACKER's recovery. Measured 31
+    // ticks (round 1) then 25 frozen on the kit's release cell, because BOTH
+    // attackFrame and attackTime stop advancing through a throw's cinematic —
+    // so nothing inside the attack timeline could pace it. The render observer
+    // clocks it instead: release -> follow-through -> stance -> the authored
+    // motion3 recovery key. The fallback is the kit cell, exactly as before.
+    const throwRecover = motionObs[fighter.side]?.throwRecoverFrames ?? -1;
+    if (attack.kind === "throw" && throwRecover >= 0 && kitPose) {
+      return beatPoseAt(throwRecoveryKeys(),
+        clamp(throwRecover / THROW_RECOVERY_RENDER_TICKS, 0, 0.999),
+        // v2.9 final round (R7): three tiers, not two. The old split put the
+        // kit cell under every band below 0.74, so the track's two empty
+        // bands both resolved to it and the follow-through key sat BETWEEN
+        // two stretches of one drawing — the rewind hitch. Bands now land on
+        // the kit release, the stance, and the breathing idle in that order.
+        (key) => (!key || key.at < 0.26
+          ? { bank: kitPose.bank, frame: kitPose.frame }
+          : key.at < 0.78 ? base(roles.guard)
+            : base(roles.idle[Math.floor(fighter.animTime * 5) % roles.idle.length])));
+    }
     if (kitPose) {
       // BODY-FIRST (spec 10): the Commissioner's storm is ONE full cane-swing
       // arc — the cane RAISES (windup cell), strikes through both active
@@ -16485,6 +17411,48 @@ function fighterPoseDescriptor(fighter) {
     // the kit-less normals timeline, each falling back to the exact base cell
     // this path showed before.
     const beat = attackMotionBeat(attack, fighter.attackFrame);
+    // v2.9 FLOW: the authored anticipation key re-skins the late startup
+    // ticks (windup → smear → extension → follow reads as one swing), and
+    // air normals wear the authored jumping-strike key through their active
+    // window instead of the borrowed ground punch cells.
+    // v2.9 critic round 2 (B1): both of those beats used to be ONE cell for
+    // their whole window — 17 ticks on deathblow's heavy-kick chamber, 30 on
+    // an air normal. They carry key tracks now; the fallback per band is the
+    // exact base cell this path showed before, and the bare-hand gate in
+    // resolveMotionPose keeps a prop out of every one of them.
+    if (beat?.beat === "windup") {
+      return beatPoseAt(beat.keys, beat.phase, { bank: "base", frame: frames[1] });
+    }
+    // v2.9 final round (T3): the heavy KICK's arc bridge. The two ticks the
+    // punch spends on its smear flash are spent here HOLDING THE CHAMBER cell
+    // while fighterMotionTransform rotates the body back onto the support leg
+    // along the arc the kick is about to travel — there is no leg smear
+    // anywhere in the four banks, so the in-between has to be a transform, and
+    // the drawing under it must be the chamber rather than the generic base
+    // strike cell the un-handled beat used to fall through to.
+    if (beat?.beat === "kickArc") {
+      return motion2Pose(beat.cell, "base", frames[1]);
+    }
+    if (beat?.beat === "airAttack") {
+      return beatPoseAt(beat.keys, beat.phase, (key) => ({
+        bank: "base",
+        frame: !key || key.at <= 0 ? frames[1] : key.at < 0.9 ? frames[2] : frames[3],
+      }));
+    }
+    // v2.9 critic round 2 (B1): the RECOVERY. Round 1 sequenced the startup
+    // and the active window and left `return base(frames[3])` to own the whole
+    // recovery — measured 20 ticks on deathblow's heavy kick, 23 on donald's
+    // heavy punch, 22 on the Commissioner's, 17 on ali's, 18 on post's. The
+    // per-band fallbacks are the exact cells this path showed before (the
+    // recovery cell, then the map's guard, then the breathing idle), so a
+    // missing bank still lands byte-for-byte on the pre-fix read.
+    if (beat?.beat === "recover") {
+      return beatPoseAt(beat.keys, beat.phase, (key) => {
+        if (!key || key.at < 0.46) return base(frames[3]);
+        if (key.at < 0.66) return base(roles.guard);
+        return base(roles.idle[Math.floor(fighter.animTime * 5) % roles.idle.length]);
+      });
+    }
     if (beat?.beat === "smear") return motionPose(beat.cell, "base", frames[1]);
     if (beat?.beat === "extension") return motionPose(beat.cell, "base", frames[2]);
     if (time < startup * 0.48) return base(frames[0]);
@@ -16512,6 +17480,13 @@ function fighterPoseDescriptor(fighter) {
     // 2.7 critic round J2: donald's band opens almost immediately — his base
     // ascent cell (13) is the golf swing with a baked golden crescent, which
     // a plain jump was wearing for ~10 ticks before the tuck engaged.
+    // v2.9 critic round 2 (B1): the tuck owned the band from 0.22 to 0.82 of
+    // the arc — 28 consecutive ticks covering the rise, the APEX and most of
+    // the DESCENT on one drawing, the longest hold in the whole build after
+    // the air normal. The band is a key TRACK now: rise -> tuck -> [apex] ->
+    // [descend] -> air-recovery -> landing gather. Four real body plans today
+    // and six once motion3's two jump keys land, with the fallback of every
+    // band the exact cell the pre-fix read showed at that instant.
     if (!state.accessibility.reducedMotion && !fighter.attacking
       && fighter.hitstunFrames === 0 && !fighter.pendingKnockdown
       && fighter.dizzyFrames === 0) {
@@ -16522,30 +17497,106 @@ function fighterPoseDescriptor(fighter) {
         ? 0.5 * (1 - clamp(fighter.vy / launch, 0, 1))
         : 0.5 + 0.5 * clamp(1 - height / Math.max(1, apex), 0, 1);
       const bandStart = fighter.def.id === "donald" ? 0.06 : 0.22;
-      if (progress > bandStart && progress < 0.82) return motionPose(MOTION_CELLS.tuck, "base", 13);
+      return beatPoseAt(jumpArcKeys(bandStart), progress, (key) => (
+        // The ascent fell back to base 13, the descent to the deep gather 12.
+        !key || key.at < 0.76 ? base(13) : base(12)
+      ));
     }
-    if (fighter.vy < 0) return base(13);
+    // v2.9 FLOW: the ascent band between takeoff and the bank-1 tuck wears
+    // the authored rising key (knees starting to draw up) — the base ascent
+    // cell was a full air pose arriving instantly at takeoff (and donald's
+    // is the golf swing). Covers the reduced-motion path too: it is a pose
+    // key, not a transform.
+    if (fighter.vy < 0) return motion2Pose(MOTION2_CELLS.jumpRise, "base", 13);
     // BODY-FIRST (spec 4): the descent cell advances BEFORE touchdown — the
     // legs gather on the crouch cell through the last ~110px of the fall
     // (about five ticks), so the frozen late-fall pair is deduped and the
     // landing squash arrives on a fresh key. v2.7: the authored deep gather.
     if (FLOOR - fighter.y < 110) return motionPose(MOTION_CELLS.land, "base", 12);
-    return base(15);
+    return base(roles.down);
   }
   // v2.7 FRAMES: the landing-recovery window holds the authored full-squat
   // compress under the existing squash-stretch transform.
-  if (fighter.landingRecoveryFrames > 0) return motionPose(MOTION_CELLS.land, "base", 12);
-  if (fighter.dashFrames > 0) {
-    // BODY-FIRST (spec 6) + 2.7 critic round: the dash used to pop 90° from
-    // the horizontal stretch cell straight to an upright stance in 2 ticks.
-    // The final two dash ticks now hold the base GATHER cell (12 — the
-    // crouched compress) as a rising in-between, so the silhouette bridges
-    // stretch → gather → upright instead of snapping.
-    if (fighter.dashFrames <= 2) return base(12);
-    // v2.7 FRAMES: the dash stretch cell over the old walk-cell cycle.
-    return motionPose(MOTION_CELLS.dash, "base", 5 + Math.floor(fighter.walkTime * 18) % 3);
+  // v2.9 critic round 2 (B1): the touchdown CONTINUES the jump arc's last key
+  // instead of re-showing the airborne gather. The arc hands over on the
+  // half-crouch as the feet plant, so the landing is gather -> plant -> stand
+  // (two drawings under the squash) rather than one cell held from 78px above
+  // the street all the way through the compress. Fallback is the exact cell
+  // this branch has always shown.
+  if (fighter.landingRecoveryFrames > 0) {
+    return motion2Pose(MOTION2_CELLS.crouchTrans, "base", 12);
   }
-  if (Math.abs(fighter.vx) > 22) return base(4 + Math.floor(fighter.walkTime * 10) % 4);
+  // v2.9 FLOW: grounded facing flip wears the authored mid-pivot key for the
+  // 2-3 latch ticks; leaving crouch shows the half-lowered in-between on the
+  // way back up. Both latches are render-only observer state (never advanced
+  // during rollback resimulation) and both fall back to the exact cell the
+  // pre-2.9 read showed at that moment.
+  const transObs = turnObs;
+  if (transObs?.crouchTransFrames > 0 && !fighter.crouch && fighter.grounded) {
+    return motion2Pose(MOTION2_CELLS.crouchTrans, "base", Math.floor(fighter.animTime * 5) % 4);
+  }
+  if (fighter.dashFrames > 0) {
+    // BODY-FIRST (spec 6) + 2.7 critic round + v2.9 FLOW + v2.9 critic round 2
+    // (B1/M1/M2). The 2.7 wave fixed the dash EXIT and left the ENTRY exactly
+    // as it was: one tick of upright idle at vx 0, then a fully horizontal
+    // lunge at vx 622, a 90-degree body rotation in a single tick with no
+    // anticipation whatsoever. And the stretch cell then owned ten ticks.
+    //
+    // The authored brake key is a MID-LUNGE body — one foot planted, torso
+    // pitched, arms trailing — which is the missing in-between at BOTH ends of
+    // a dash, so it now bookends the stretch: launch -> stretch -> brake.
+    // Fallbacks are the exact cells the pre-fix read showed (the walk cycle on
+    // the way in, the base gather on the way out).
+    // Pure sim read — startDash sets dashFrames from exactly this pair, so the
+    // progress replays identically under rollback and in both renderers.
+    const total = Math.max(1, (fighter.dashDirection === fighter.facing
+      ? fighter.movement.forwardDashFrames : fighter.movement.backDashFrames) || 1);
+    const dashProgress = clamp(1 - fighter.dashFrames / total, 0, 0.999);
+    return beatPoseAt(dashKeys(), dashProgress, (key) => (
+      !key || key.at >= 0.68
+        ? base(12)
+        : base(5 + Math.floor(fighter.walkTime * 18) % 3)
+    ));
+  }
+  // v2.9 critic round 2 (M2): the dash EXIT TAIL. The brake key got two ticks,
+  // landing the torso at roughly 45 degrees, and then the very next tick drew
+  // the neutral idle while the fighter was still carrying 622px/s — a 45-degree
+  // torso snap plus a full leg gather in ONE tick, with the feet skating. The
+  // brake now owns the whole velocity decay, so the upright cell arrives only
+  // once the fighter has genuinely stopped. The fallback is the base gather
+  // cell the 2.7 bridge used, exactly as the in-dash brake key does.
+  if (transObs?.dashExitFrames > 0 && fighter.grounded && !fighter.crouch
+    && Math.abs(fighter.vx) > MOTION_RULES.dashBrakeReleaseSpeed) {
+    return motion2Pose(MOTION2_CELLS.dashBrake, "base", 12);
+  }
+  if (Math.abs(fighter.vx) > 22 && !(transObs?.dashExitFrames > 0)) {
+    // v2.10 WALK — the SELF-CONTAINED four-key cycle (assets/walk).
+    //
+    // The 2.9 read interleaved the motion2 walk-a/b pair with the base walk
+    // cells every ~6 ticks and was withdrawn, because the two banks cannot be
+    // blended (different generations: build, cap, decal and boots all part,
+    // the devil's pair is an all-fours prowl against an upright bipedal base
+    // cycle, donald's is club-less against a club-carrying base walk) — and
+    // because neither bank is a cycle on its own. The base bank's four walk
+    // cells are near-duplicate redraws of ONE stride phase: adjacent-key
+    // silhouette IoU runs 0.86-0.93 and, pointed at those cells, the 2.10
+    // gate fails phase alternation, plant alternation and lead-leg inversion
+    // on every fighter. The legs never swap; the apparent motion is the x
+    // translation alone, which is the shuffle-glide.
+    //
+    // So this bank is neither a patch nor a blend: it is four keys of one
+    // stride generated in a SINGLE pass — contact-left, passing-left,
+    // contact-right, passing-right — played 0→1→2→3→0 and never interleaved
+    // with the base cells. Build, costume and grading match across the four
+    // keys by construction, and keys 0/2 carry genuinely opposite lead legs.
+    //
+    // Cadence is unchanged: the key index rides the same `walkTime * 10`
+    // phase the base cycle has always used, so locomotion speed still drives
+    // it, and the fallback on each descriptor is exactly the base cell that
+    // phase used to show. Eight of ten fighters have no accepted sheet and so
+    // still render that base cell, byte-identically to 2.9.
+    return walkCyclePose(fighter.walkTime, roles);
+  }
   return base(Math.floor(fighter.animTime * 5) % 4);
 }
 
@@ -16592,6 +17643,86 @@ function tintedSilhouette(atlas, frame, color) {
 // callers can layer it under/over the real sprite in the same transform space.
 function drawSilhouetteFrame(atlas, frame, size, color) {
   ctx.drawImage(tintedSilhouette(atlas, frame, color), -size * 0.5, -size, size, size);
+}
+
+// ---------------------------------------------------------------------------
+// v2.9 critic round (M1) — POSE-CROSSFADE GHOST CELL.
+//
+// The crossfade's outgoing cell, intersected with the INCOMING cell's alpha.
+// The 2.6 ghost used a fixed "clip everything below 72% of the cell" rect,
+// which encodes the assumption that a fighter's head occupies the top 28% of
+// its cell. That holds for standing base cells and fails for most authored
+// motion/motion2 keys — the dash stretch is a horizontal body, so its HEAD
+// sits mid-cell, survived the clip, and drew a fully readable second face at
+// the live fighter's hip on every dash->brake seam.
+//
+// Masking by the live silhouette is a hard guarantee rather than a tuned
+// threshold: no pixel can appear where the new pose is not already opaque, so
+// no bank switch can produce a second readable figure. Built in cell space at
+// SILHOUETTE_CELL and blitted with drawAtlasFrame's footprint; `liveRatio` is
+// renderSize/fadeSize so a sheet-adjust mismatch (the Commissioner's banks,
+// the corrected crouch cell) still lines the mask up with what actually drew.
+// One scratch, keyed like the others so a held crossfade pays nothing.
+// ---------------------------------------------------------------------------
+// Blur radius in CELL pixels (320px cells drawing at ~387px, so ~1.2 world px
+// each). A face is ~50 cell px across, so 9px reliably destroys features while
+// leaving the body's colour mass intact.
+// v2.9 critic round 2 (B5). Round 1 added the blur and it was never reaching
+// the seam the critics were looking at (see the sameCycle fix in drawFighter),
+// and 9px over a 320px cell does not destroy a chest logo even when it does
+// run. The softened ghost is now blurred HARD, desaturated to a grey mass and
+// dimmed, so what is left is colour weight with no features in it — which is
+// all a crossfade needs to kill a pose snap.
+const GHOST_SOFTEN_BLUR = 17;
+const GHOST_SOFTEN_FILTER = `blur(${GHOST_SOFTEN_BLUR}px) saturate(0.25) brightness(0.82)`;
+// Alpha ceiling for a softened (big-delta) ghost vs an adjacent-key one. The
+// round-1 cap was a flat 0.3 for both.
+const GHOST_SOFT_ALPHA = 0.17;
+const GHOST_CYCLE_ALPHA = 0.3;
+const ghostScratch = document.createElement("canvas");
+ghostScratch.width = SILHOUETTE_CELL;
+ghostScratch.height = SILHOUETTE_CELL;
+const ghostScratchCtx = ghostScratch.getContext("2d");
+let ghostScratchKey = "";
+
+function poseGhostCell(fadeAtlas, fadeFrame, liveAtlas, liveFrame, liveRatio, soften) {
+  if (!liveAtlas?.complete || !liveAtlas.naturalWidth) return null;
+  const ratio = Number.isFinite(liveRatio) && liveRatio > 0 ? liveRatio : 1;
+  const key = `${fadeAtlas.src}|${fadeFrame}|${liveAtlas.src}|${liveFrame}|${ratio.toFixed(4)}|${soften ? 1 : 0}`;
+  if (key !== ghostScratchKey) {
+    ghostScratchKey = key;
+    const cell = SILHOUETTE_CELL;
+    ghostScratchCtx.globalCompositeOperation = "source-over";
+    ghostScratchCtx.filter = "none";
+    ghostScratchCtx.clearRect(0, 0, cell, cell);
+    // Masking alone is not enough: the outgoing dash-stretch cell is a
+    // HORIZONTAL body, so its head sits mid-cell and lands squarely ON the
+    // incoming pose's torso — inside the silhouette, but still a legible
+    // second face. Softening the outgoing art destroys the features while
+    // keeping its colour mass, so the fade still does its job (killing the
+    // pose snap) with nothing readable in it. Only pose changes that are not
+    // adjacent keys of one cycle are softened — the walk and idle cycles,
+    // where the crossfade genuinely earns its keep, stay crisp.
+    ghostScratchCtx.filter = soften ? GHOST_SOFTEN_FILTER : "none";
+    ghostScratchCtx.drawImage(
+      fadeAtlas,
+      (fadeFrame % 4) * cell, Math.floor(fadeFrame / 4) * cell, cell, cell,
+      0, 0, cell, cell,
+    );
+    ghostScratchCtx.filter = "none";
+    // The live cell is bottom-centre anchored exactly like drawAtlasFrame, so
+    // the intersection is taken in world-consistent space even when the two
+    // banks draw at different sizes.
+    const live = cell * ratio;
+    ghostScratchCtx.globalCompositeOperation = "destination-in";
+    ghostScratchCtx.drawImage(
+      liveAtlas,
+      (liveFrame % 4) * cell, Math.floor(liveFrame / 4) * cell, cell, cell,
+      (cell - live) * 0.5, cell - live, live, live,
+    );
+    ghostScratchCtx.globalCompositeOperation = "source-over";
+  }
+  return ghostScratch;
 }
 
 // ---------------------------------------------------------------------------
@@ -18080,11 +19211,35 @@ const MOVE_SHEET_ADJUST = Object.freeze({
 // every fighter matches base-cell world size at 1. The Commissioner's older
 // base atlas normalises to the full cell (320px vs 306px measured), so his
 // motion cells scale up to meet it.
-const MOTION_SHEET_ADJUST = Object.freeze({ commissioner: 1.046 });
+// v2.9 critic round (M5): re-tuned. 1.046 was fitted to the Commissioner's
+// 320px OUTLIER cell (base 10, the cane raised overhead — the tallest of his
+// frames 0-11, which is what his older sheet's global normalisation filled
+// the cell with). His STANDING cells measure 311-316, so the correct match
+// against the authored banks' 306px standing cells is 316/306 = 1.033; the
+// old value carried ~1.3% of built-in error on every cell that is not the
+// outlier.
+const MOTION_SHEET_ADJUST = Object.freeze({ commissioner: 1.033 });
+
+// v2.10 WALK: the walk sheets do NOT share the motion banks' normalisation.
+// Each one is scaled so its tallest key matches that fighter's own measured
+// BASE WALK cell height (deathblow 304px, jez 304px), which is how their
+// world size is verified — so the correction is 1.0 by construction and this
+// table exists for a future sheet that cannot be normalised that way. Kept
+// separate from MOTION_SHEET_ADJUST precisely so a Commissioner-style base
+// registration outlier cannot silently inherit the wrong correction.
+const WALK_SHEET_ADJUST = Object.freeze({});
 
 function bankSheetAdjust(fighterId, bank) {
   if (bank === "specials") return MOVE_SHEET_ADJUST[fighterId] || 1;
-  if (bank === "motion") return MOTION_SHEET_ADJUST[fighterId] || 1;
+  // v2.9 FLOW: the motion2 sheets share the motion bank's build
+  // normalisation, so the Commissioner's +4.6% correction applies to both
+  // authored banks from the same table (both renderers read it).
+  // v2.9 critic round 2: motion3 is MASS-MATCHED to the motion2 sheet by its
+  // own build rule, so it inherits the same correction from the same table.
+  if (bank === "motion" || bank === "motion2" || bank === "motion3") {
+    return MOTION_SHEET_ADJUST[fighterId] || 1;
+  }
+  if (bank === "walk") return WALK_SHEET_ADJUST[fighterId] || 1;
   return 1;
 }
 
@@ -18178,8 +19333,29 @@ function drawFighter(fighter, time) {
   const graphicFatality = activeGraphicFatality(fighter);
   const reality = finisherRealityAmount();
   const sizeAdjust = FIGHTER_SIZE_ADJUST[fighter.def.id] || 1;
-  const moveSheetAdjust = bankSheetAdjust(fighter.def.id, pose.bank);
+  // v2.9 critic round (M3): the per-cell adjust rides the whole-sheet one.
+  // The base bank's deep-squat crouch cells are drawn 1.13x-1.33x oversized
+  // (the artist filled the cell with a folded body), so entering crouch
+  // ballooned the figure in one tick against the correctly-normalised motion2
+  // crouch-trans key that precedes it. Correcting renderSize keeps MASS
+  // constant across the handoff — the shadow scales with it, as it already
+  // does for the sheet adjust.
+  // v2.9 critic round 2 (M4): cellDrawAdjust rolls the oversized-crouch
+  // correction together with the new guard-flinch height reconciliation, so
+  // both renderers apply exactly one scale rule per cell.
+  const moveSheetAdjust = bankSheetAdjust(fighter.def.id, pose.bank)
+    * cellDrawAdjust(fighter.def.id, pose.bank, frame);
   const renderSize = fighterRenderSize(fighter.def.id) * moveSheetAdjust;
+  // v2.9 critic round (M5) + round 2 (B2): per-cell floor registration PLUS
+  // the ramped airborne body-centre anchor, in world pixels. Floor-anchoring
+  // an airborne cell is what made a 156px-tall tuck hand off from a 281px-tall
+  // jump-rise by dropping the head half a body height on the tick vy was most
+  // negative — the fighter plummeting while rising fastest. Above the street
+  // every airborne cell registers to the same body-centre row instead, so no
+  // airborne bank switch can move the body at all; the correction ramps to
+  // zero at ground contact so takeoff and touchdown stay feet-planted.
+  const floorFix = cellVerticalOffset(fighter.def.id, pose.bank, frame,
+    fighter.grounded ? 0 : Math.max(0, FLOOR - fighter.y)) / 320 * renderSize;
   const attackKind = attack?.kind;
   const lunge = attackSwing * (attackKind === "special" ? 68 : attackKind === "heavy" ? 46 : 29);
   const crouchScale = fighter.crouch ? 0.88 : 1;
@@ -18286,9 +19462,47 @@ function drawFighter(fighter, time) {
     presentationDebug.lastFighterMirror[fighter.side] = {
       fighterId: fighter.def.id, bank: pose.bank, frame, facing: fighter.facing, mirror: renderMirror,
     };
+    // v2.9 FLOW: count motion2 cells the moment they actually draw.
+    // v2.9 round 4: PER CELL as well. The demo's `turnaround` beat read as
+    // FIRING while motion2:5 drew for zero frames, because the beat counter
+    // watched a sim edge (a grounded facing flip) and the cell it stands for
+    // sits behind a whole precedence chain in fighterPoseDescriptor. A blanket
+    // motion2 total could not tell those apart. This tally is instrumentation
+    // ONLY — read by qa.probe()/qa.demoCoverage(), never by the sim or the
+    // choreographer, so nothing here can perturb determinism.
+    if (pose.bank === "motion2") {
+      presentationDebug.motion2Cells += 1;
+      presentationDebug.motion2CellDraws[frame] = (presentationDebug.motion2CellDraws[frame] || 0) + 1;
+    }
+    // v2.10 WALK: same, plus the key index so a burst can watch it advance.
+    if (pose.bank === "walk") {
+      presentationDebug.walkCells += 1;
+      presentationDebug.lastWalkKey[fighter.side] = pose.frame;
+    }
+    // v2.9 final round (T6) — THE TURNAROUND AUDIT, AT THE DRAW SITE.
+    //
+    // qa.demoCoverage() reported the turnaround beat FIRING while the demo
+    // critic measured motion2:5 at zero frames on screen, so the counter and
+    // the screen disagreed. The counter watches a sim edge (a grounded facing
+    // flip); this watches the pixels. While the 3-tick latch is live, every
+    // frame either draws the pivot key or names — by bank:frame — the drawing
+    // that took the slot instead, which identifies both classes of failure at
+    // once: a pose branch that outranked it (a different cell), and the
+    // descriptor being emitted but falling back through the accept mask (the
+    // pivot's own fallback cell). Instrumentation only.
+    if (motionObs[fighter.side]?.turnFrames > 0) {
+      if (pose.bank === "motion2" && frame === MOTION2_CELLS.turnaround) {
+        presentationDebug.turnaroundDraws += 1;
+      } else {
+        const blockedBy = `${pose.bank}:${frame}`;
+        presentationDebug.turnaroundBlocked[blockedBy] =
+          (presentationDebug.turnaroundBlocked[blockedBy] || 0) + 1;
+      }
+    }
   }
   ctx.scale(renderMirror, 1);
-  ctx.translate(lunge - startupPower * 8, crouchDrop - attackSwing * (attackKind === "special" ? 13 : 5));
+  ctx.translate(lunge - startupPower * 8,
+    floorFix + crouchDrop - attackSwing * (attackKind === "special" ? 13 : 5));
   ctx.rotate(-attackSwing * (attackKind === "heavy" ? 0.07 : 0.025));
   ctx.scale(1 + activePower * 0.045 - startupPower * 0.025, crouchScale + startupPower * 0.035 - activePower * 0.025);
   // Breathing + idle pulse + exhaustion posture: the origin sits at the feet,
@@ -18595,9 +19809,7 @@ function drawFighter(fighter, time) {
     // silhouette solid — no see-through frames), killing the pose snap.
     // Armed/paced by updateMotionObservers; skipped during hitstop freezes,
     // the dismemberment compositor, battery, and the mirror pass.
-    // MOTION FIX 5: ghost discipline — alpha caps at 30%, the ghost is
-    // CLIPPED TO THE TORSO (the head band of the old cell is cut, so a
-    // crossfade can never leave a second readable face), and the fade is
+    // MOTION FIX 5: ghost discipline — alpha caps at 30% and the fade is
     // skipped entirely mid-flip where the rotating transform would smear the
     // old cell across the sky.
     if (!reflectionPassActive && !graphicFatality && state.hitstop <= 0
@@ -18606,18 +19818,56 @@ function drawFighter(fighter, time) {
       if (fadeObs.fadeLeft > 0 && (fadeObs.fadeBank !== pose.bank || fadeObs.fadeFrame !== frame)) {
         const fadeAtlas = paletteAtlas(fighter.def.id, fighter.side, fadeObs.fadeBank);
         if (fadeAtlas?.complete && fadeAtlas.naturalWidth) {
-          const fadeAdjust = bankSheetAdjust(fighter.def.id, fadeObs.fadeBank);
+          const fadeAdjust = bankSheetAdjust(fighter.def.id, fadeObs.fadeBank)
+            * baseCellDrawAdjust(fighter.def.id, fadeObs.fadeBank, fadeObs.fadeFrame);
           const fadeSize = fighterRenderSize(fighter.def.id) * fadeAdjust;
-          ctx.save();
-          ctx.globalAlpha = Math.min(0.3, 0.3 * (fadeObs.fadeLeft / MOTION_RULES.crossfadeFrames) + 0.08);
-          ctx.beginPath();
-          // Torso clip: everything below ~72% of the cell height (the head
-          // band of a standing cell lives in the top ~28%).
-          ctx.rect(-fadeSize * 0.5, -fadeSize * 0.72, fadeSize, fadeSize * 0.72);
-          ctx.clip();
-          drawAtlasFrame(fadeAtlas, fadeObs.fadeFrame, fadeSize);
-          ctx.restore();
-          presentationDebug.poseCrossfades += 1;
+          // v2.9 critic round (M1): the ghost is MASKED BY THE INCOMING
+          // POSE'S OWN SILHOUETTE instead of a fixed rectangle. The old clip
+          // cut "everything below 72% of the cell height", which assumes the
+          // head lives in the top 28% — false for most motion/motion2 cells.
+          // At the dash->brake seam the outgoing horizontal dash-stretch
+          // cell's head survived that clip and a fully legible SECOND FACE
+          // rendered at the fighter's hip; at walk seams a second arm, hand,
+          // shoe or decal read at 30% alpha.
+          //
+          // Intersecting with the live silhouette makes a readable second
+          // figure impossible BY CONSTRUCTION — the fade can only soften
+          // pixels the new cell already covers. It also self-scales with the
+          // pose delta: near-identical poses (walk, idle) still cross-
+          // dissolve fully, a big bank switch contributes interior blending
+          // only, and nothing can ever appear OUTSIDE the live body.
+          // v2.9 critic round 2 (B5): the "same cycle" exemption was the bug.
+          // It said "adjacent keys of one CYCLE", but it tested for adjacent
+          // keys of one SHEET ROW — and only the BASE bank has cycles in its
+          // rows (idle 0-3, walk 4-7). Row 0 of the motion bank is punch-ext /
+          // kick-ext / smear-h / smear-v: four completely different poses. So
+          // every kit-less standing heavy handed motion:2 to motion:0, scored
+          // "same cycle", and drew its outgoing full-extension cell CRISP and
+          // UNSOFTENED over the incoming one — two fully readable shark logos
+          // for the three fade ticks, which is precisely what the critics saw.
+          // The exemption is now what it always claimed to be: base-bank idle
+          // and walk rows only. Everything else softens.
+          const sameCycle = pose.bank === "base" && fadeObs.fadeBank === "base"
+            && Math.floor(fadeObs.fadeFrame / 4) === Math.floor(frame / 4)
+            && Math.floor(frame / 4) <= 1;
+          const ghost = poseGhostCell(fadeAtlas, fadeObs.fadeFrame, atlas, frame,
+            renderSize / fadeSize, !sameCycle);
+          if (ghost) {
+            ctx.save();
+            // The fighter must never be SEE-THROUGH during a fade: the live
+            // cell is already on the canvas at full opacity and the ghost only
+            // ever composites OVER it, source-over, never replacing it. The
+            // alpha here is the ghost's own, and it is explicitly capped —
+            // lower for a softened big-delta switch than for a cycle
+            // cross-dissolve, because a big-delta ghost is doing less work.
+            const ceiling = sameCycle ? GHOST_CYCLE_ALPHA : GHOST_SOFT_ALPHA;
+            ctx.globalCompositeOperation = "source-over";
+            ctx.globalAlpha = Math.min(ceiling,
+              ceiling * (fadeObs.fadeLeft / MOTION_RULES.crossfadeFrames) + 0.05);
+            ctx.drawImage(ghost, -fadeSize * 0.5, -fadeSize, fadeSize, fadeSize);
+            ctx.restore();
+            presentationDebug.poseCrossfades += 1;
+          }
         }
       }
     }
@@ -22719,10 +23969,19 @@ function draw(time) {
   // Unconditional: drawStage runs on every screen, so a gated reset would let
   // the stage counters accumulate without bound outside the fight.
   for (const key of Object.keys(presentationDebug)) {
-    // lastFighterMirror is a latch, not a counter: it holds the most recent
-    // per-side sprite mirror for the QA facing probe rather than a per-frame
-    // tally, so the counter reset must leave it alone.
-    if (key === "lastFighterMirror") continue;
+    // lastFighterMirror and lastWalkKey are LATCHES, not counters: they hold
+    // the most recent per-side sprite mirror / walk-cycle key index for the QA
+    // probes rather than a per-frame tally, so the counter reset must leave
+    // them alone (zeroing lastWalkKey would also swap an array for a number
+    // and break the probe's slice()). motion2CellDraws is a CUMULATIVE tally
+    // for the same reason and more sharply: zeroing it swaps the map for a
+    // number, and the very next per-cell write would throw in module strict
+    // mode and take the whole draw pass down with it.
+    if (key === "lastFighterMirror" || key === "lastWalkKey"
+      || key === "motion2CellDraws"
+      // v2.9 final round: cumulative session tallies, not per-frame counts.
+      || key === "reactionDrawPriority" || key === "turnaroundDraws"
+      || key === "turnaroundBlocked") continue;
     presentationDebug[key] = 0;
   }
   if (state.screen === "fight") {
@@ -22744,6 +24003,50 @@ function draw(time) {
       drawProjectiles(time);
       drawAfterimages();
       const ordered = [...state.fighters].sort((a, b) => a.y - b.y);
+      // v2.9 FLOW (2.7 critic J2): during the attacker's 1-2-tick smear /
+      // final charge-flash frames the attacker draws LAST — from the P1 seat
+      // those flash cells were drawing behind the opponent and getting
+      // occluded at the exact moment they exist to be seen. Scoped strictly
+      // to the flash beats (attackMotionBeat is the same pure classifier the
+      // pose functions use); no general pair-layering change.
+      if (ordered.length === 2) {
+        const flashIndex = ordered.findIndex((fighter) => {
+          if (!fighter.attacking) return false;
+          const beat = attackMotionBeat(fighter.attacking, fighter.attackFrame);
+          return Boolean(beat && (beat.beat === "smear"
+            || (beat.beat === "charge"
+              && fighter.attackFrame >= fighter.attacking.activeStartFrame - 4)));
+        });
+        if (flashIndex === 0) ordered.push(ordered.shift());
+        // v2.9 final round (R9) — THE P1-SEAT OCCLUSION.
+        //
+        // The sort above is `a.y - b.y`, and at point-blank range BOTH
+        // fighters are standing on the floor line, so a.y === b.y and the sort
+        // is a no-op: the array keeps its state.fighters order and SIDE 1
+        // ALWAYS DRAWS LAST. From the P1 seat that means the attacker (side 0)
+        // is behind the defender at a distance, but the attacker covers the
+        // defender the moment the two overlap — which is exactly when the
+        // defender's flinch exists to be read. Every reaction P1 lands is
+        // partly hidden behind the fighter that caused it.
+        //
+        // The REACTING fighter takes draw priority for the length of the
+        // reaction. Same mechanism and the same tight scoping as the flash
+        // rule above: it applies only while a fighter is actually in hitstun,
+        // blockstun or a knockdown, only when the OTHER fighter is not itself
+        // reacting (a trade keeps the y sort), and only when the flash rule
+        // has not already claimed the ordering — the attacker's own smear
+        // frames still win, because those are the two ticks the flash rule
+        // exists for.
+        if (flashIndex < 0) {
+          const reacting = (fighter) => fighter.hitstunFrames > 0 || fighter.blockstunFrames > 0
+            || fighter.knockdownFrames > 0 || fighter.down;
+          const reactIndex = ordered.findIndex(reacting);
+          if (reactIndex === 0 && !reacting(ordered[1])) {
+            ordered.push(ordered.shift());
+            presentationDebug.reactionDrawPriority += 1;
+          }
+        }
+      }
       ordered.forEach((fighter) => drawFighter(fighter, time));
       state.fighters.forEach((fighter) => drawDizzyStars(fighter, time));
       state.fighters.forEach((fighter) => drawGuardCrushMarker(fighter, time));
@@ -24825,7 +26128,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.8");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.9");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -25996,7 +27299,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "2.8-carnage",
+  version: "2.9-flow",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -26255,6 +27558,21 @@ window.__finalBlowEngine = {
         squashStretchFrames: presentationDebug.squashStretchFrames,
         poseCrossfades: presentationDebug.poseCrossfades,
         attackSmears: presentationDebug.attackSmears,
+        // v2.9 FLOW: motion2 cells drawn in the last rendered frame.
+        motion2Cells: presentationDebug.motion2Cells,
+        // v2.9 round 4: cumulative per-cell draw tally (cell index -> draws).
+        motion2CellDraws: { ...presentationDebug.motion2CellDraws },
+        // v2.10 WALK: walk-bank keys drawn, and the last key index per side.
+        walkCells: presentationDebug.walkCells,
+        lastWalkKey: presentationDebug.lastWalkKey.slice(),
+        // v2.9 final round: the two DRAW-SITE audits. reactionDrawPriority
+        // counts frames the reacting fighter was promoted above the attacker
+        // in the pair sort (R9); turnaroundDraws / turnaroundBlocked are the
+        // pivot-key audit (T6) — real draws of motion2:5 versus, keyed by
+        // bank:frame, whatever drew instead while the latch was live.
+        reactionDrawPriority: presentationDebug.reactionDrawPriority,
+        turnaroundDraws: presentationDebug.turnaroundDraws,
+        turnaroundBlocked: { ...presentationDebug.turnaroundBlocked },
         skidSmokes: motionFxDebug.skidSmokes,
         landingDust: motionFxDebug.landingDust,
         // v2.6 ELEMENTS counters: monotonic one-shots (elementFxDebug) for the
@@ -27004,6 +28322,33 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
     exitDemo() {
       return exitDemo();
     },
+    // v2.9 FLOW: live read of the demo choreographer's coverage ledger —
+    // per-fighter move counts, staged beats, the featured pair/stage and the
+    // matchup keys this demo session has already featured. Pure reads.
+    demoCoverage() {
+      if (!demoSession.active || !demoSession.choreo) return null;
+      return {
+        pair: [...demoSession.cycle.picks],
+        stage: demoSession.cycle.stage,
+        perFighter: demoSession.choreo.coverage(),
+        stats: demoSession.choreo.stats(),
+        directive: demoSession.choreo.directive(),
+        // v2.9 FLOW: both lanes (each side either LEADS a showcase, FEEDS the
+        // partner's, or is back on the archetype brain) plus the cumulative
+        // attract ledger this session has banked.
+        lanes: demoSession.choreo.directives(),
+        carry: { ...demoSession.coverageCarry },
+        hasStageWeapon: demoSession.choreo.hasStageWeapon(),
+        cyclePairsSeen: [...demoSession.pairsSeen],
+        // v2.9 round 4 — THE HONEST HALF OF THE BEAT LEDGER. `beats` above is
+        // a sim-state count; this is what the RENDERER actually put on screen,
+        // cell index -> cumulative draws (motion2:5 is the turnaround pivot).
+        // A beat that reads as fired above with a zero here is a beat whose
+        // authored cell never reached the cabinet. Reporting only — never read
+        // back by the choreographer, so determinism is untouched.
+        cellDraws: { ...presentationDebug.motion2CellDraws },
+      };
+    },
     arcade(playerId = "deathblow", difficulty = DEFAULT_AI_DIFFICULTY, seed = 237) {
       const playerIndex = roster.findIndex(({ id }) => id === playerId);
       if (playerIndex < 0) throw new Error(`Unknown arcade fighter: ${playerId}`);
@@ -27048,6 +28393,33 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       if (side !== 0 && side !== 1) throw new Error(`Unknown fighter side: ${side}`);
       qaInputOverrides[side] = { input: { ...input }, frames: Math.max(1, Math.floor(frames)) };
       return true;
+    },
+    // v2.9 critic round: the resolved pose per side, so a 1-tick burst can
+    // assert WHICH CELL drew instead of inferring it from a screenshot. Reads
+    // through fighterAnimationPose, so it reports exactly what the renderers
+    // consume — including the semantic map's attack/unusable classification.
+    pose() {
+      return (state.fighters || []).map((fighter) => {
+        const resolved = fighterAnimationPose(fighter);
+        const roles = baseCellRoles(fighter.def.id);
+        return {
+          id: fighter.def.id,
+          side: fighter.side,
+          bank: resolved.bank,
+          frame: resolved.frame,
+          attackCell: resolved.bank === "base" && roles.attack.includes(resolved.frame),
+          unusableCell: resolved.bank === "base" && roles.unusable.includes(resolved.frame),
+          grounded: fighter.grounded,
+          crouch: fighter.crouch,
+          block: fighter.block,
+          wakeup: fighter.wakeupFrames,
+          dizzy: fighter.dizzyFrames,
+          grabbed: Boolean(fighter.grabbed),
+          dash: fighter.dashFrames,
+          vx: Math.round(fighter.vx),
+          tick: state.simulationTick,
+        };
+      });
     },
     fighter(side, values = {}) {
       const fighter = state.fighters[side];
@@ -27755,6 +29127,15 @@ function ensureCinema3d() {
       moveSheetAdjust: MOVE_SHEET_ADJUST,
       // v2.7 FRAMES: motion-bank world-size correction for the 3D rigs.
       motionSheetAdjust: MOTION_SHEET_ADJUST,
+      // v2.10 WALK: the walk bank's own (currently empty) correction table.
+      walkSheetAdjust: WALK_SHEET_ADJUST,
+      // v2.9 critic round: the per-cell corrections travel the same bridge so
+      // CINEMA 3D plants and scales identically to the 2D path (M3 oversized
+      // crouch cells, M5 the Commissioner's base-bank floor registration).
+      baseCellDrawAdjust,
+      cellDrawAdjust,
+      cellFloorOffset,
+      cellVerticalOffset,
       gritSuperCost: GRIT_RULES.superCost,
       gameCanvas: canvas,
       isRollbackResimulating: () => rollbackResimulating,
