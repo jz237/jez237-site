@@ -1,0 +1,1004 @@
+{
+ "format": {
+  "sheet": "1280x1280 RGBA WebP, 4x4 grid, 320px cells, right-facing, one global scale per sheet (tallest of frames 0-11 normalised to 95.6% cell height; taller frames clamp-shrink to fit)",
+  "grammar": "see MOTION-ATLAS.md \u2014 frame ids fixed across all fighters",
+  "generator": "openai-gpt-image-2 via fal MCP (prompt-only; no reference-image input \u2014 identity carried by per-fighter character bibles)",
+  "processed": "tools/build_atlas.py conventions (soft magenta key + despill, row-band detection, fragment drop)",
+  "built": "2026-08-31",
+  "poseIds": [
+   "punch-ext",
+   "kick-ext",
+   "smear-h",
+   "smear-v",
+   "follow",
+   "tuck",
+   "land",
+   "dash",
+   "bighit",
+   "crumple",
+   "wallsplat",
+   "airrec",
+   "charge",
+   "victory2",
+   "sig1",
+   "sig2"
+  ]
+ },
+ "fighters": {
+  "deathblow": {
+   "sheet": "deathblow.webp",
+   "scale": 1.269,
+   "note": "2.8 full-sheet regen 2026-08-31: regenerated at square_hd (was 4:3 with a 1.645 upscale, softest of the ten) \u2014 sharpness now matches the other nine sheets; poses match the 2.7 sheet per cell; rows recovered by blob clustering so no severed fists at row splits",
+   "signature": {
+    "sig1": "seismic overhead gauntlet slam",
+    "sig2": "gauntlet clash, red energy sparking"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: full-extension gauntlet straight"
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31"
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: red-orange gauntlet arc"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: vertical red streak, body arched \u2014 sets the sheet's global scale"
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: now a true cross-body carry (old second-extension read fixed)"
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31"
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31"
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: width-clamped by pose geometry"
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: single-cell regen spliced in \u2014 backward C-arch, head snapped back, feet leaving the ground; pose contract honored (old horizontal-launch read fixed)"
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31"
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: carries a light painted wall-crack halo"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31"
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: gauntlets crackling red"
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: taller than global scale, clamp-shrunk"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: taller than global scale, clamp-shrunk"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31"
+    }
+   ]
+  },
+  "jez": {
+   "sheet": "jez.webp",
+   "scale": 1.324,
+   "signature": {
+    "sig1": "neon signblade two-hand high guard",
+    "sig2": "neon palm thrust"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "arm stretched into pink-cyan streak"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true,
+     "note": "compact rise rather than a full arc"
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "faint keyed crack-dust halo"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "clamp-shrunk ~14%"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "clamp-shrunk ~14%; blade fully contained"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true
+    }
+   ]
+  },
+  "alan": {
+   "sheet": "alan.webp",
+   "scale": 1.416,
+   "signature": {
+    "sig1": "double axe-handle wind-up",
+    "sig2": "south street shoulder charge"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "full haymaker whirl smear"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true,
+     "note": "arms braced low rather than flung out"
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true,
+     "note": "reads late-collapse (all fours)"
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "carries painted wall-crack debris"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true,
+     "note": "silhouette a shade heavier in the gut than base"
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "clamp-shrunk; heavier silhouette"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "clamp-shrunk; heavier silhouette"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true
+    }
+   ]
+  },
+  "post": {
+   "sheet": "post.webp",
+   "scale": 1.443,
+   "signature": {
+    "sig1": "dual-can crossed spray",
+    "sig2": "ground tag slide"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "carries keyed crack sludge"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true,
+     "note": "shaking a raised can \u2014 in character"
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "clamp-shrunk"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "right-hand mist truncated by the bridged-cell split; reads fine"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true
+    }
+   ]
+  },
+  "benny": {
+   "sheet": "benny.webp",
+   "scale": 1.372,
+   "signature": {
+    "sig1": "voltage flex, arcs on both fists",
+    "sig2": "blitz elbow (wind-up read)"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true,
+     "note": "small spark on fist"
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "whole-figure smear with electric arm streak"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: now reads as his blurred punching arm \u2014 streaked ribbon with the gloved fist at the apex, arcs riding the streak (old electric-column read fixed)"
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "carries keyed crack sludge"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true,
+     "note": "crossed fists crackling \u2014 strongest cell on the sheet"
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "clamp-shrunk"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: forward-driving blitz elbow caught at impact, arcs on the elbow, speed lines trailing (old wind-up read fixed)"
+    }
+   ]
+  },
+  "donald": {
+   "sheet": "donald.webp",
+   "scale": 1.254,
+   "signature": {
+    "sig1": "golf-drive follow-through",
+    "sig2": "club-cane showman lean"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "two-hand club smear with gold streaks"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true,
+     "note": "vertical gold arc"
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true,
+     "note": "tie streaming"
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true,
+     "note": "gold shimmer on fists"
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "showman arms-spread"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "slightly clamp-shrunk"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true
+    }
+   ]
+  },
+  "cyraxx": {
+   "sheet": "cyraxx.webp",
+   "scale": 1.36,
+   "signature": {
+    "sig1": "feedback shriek, hands cupped at mouth",
+    "sig2": "full-body discharge, wisps at hands and feet"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true,
+     "note": "awkward full-extension \u2014 in character"
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "thin-arm smear, faint green-purple shimmer stays off the clothes"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true,
+     "note": "2.8 regen 2026-08-31: rising arm smear with the fist at the apex; translucent purple feedback discharge trails behind/above the arm only, clearly off the body \u2014 shirt stays clean blue, CYRAXX.md overlay rule respected (old smoke-column tint fixed)"
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "slight keyed purple sludge at edges"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true,
+     "note": "restrained wisps around hands only \u2014 rule respected"
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "clamp-shrunk"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true,
+     "note": "wisps at hands and feet only, clothes untinted"
+    }
+   ]
+  },
+  "ali": {
+   "sheet": "ali.webp",
+   "scale": 1.354,
+   "signature": {
+    "sig1": "gold mic-lasso overhead spin",
+    "sig2": "one-hand b-boy freeze"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "golden mic-chain arc around the body \u2014 strongest smear in the set"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true,
+     "note": "shades askew"
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "keyed crack sludge at edges"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "clamp-shrunk"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "clamp-shrunk; spin arc contained"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true,
+     "note": "clamp-shrunk"
+    }
+   ]
+  },
+  "commissioner": {
+   "sheet": "commissioner.webp",
+   "scale": 1.302,
+   "signature": {
+    "sig1": "authority cane slam wind-up",
+    "sig2": "coat-flare pivot, cane behind back"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true,
+     "note": "cane thrust with silver smear"
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true,
+     "note": "coat wrap sells the carry"
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true,
+     "note": "coat-bundled ball"
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": false,
+     "note": "2.9 CANE CONTINUITY (R8) -- accept:false, commissioner only. Read at 1:1: this cell draws him with BOTH HANDS EMPTY, and it is the OPENING key of his heavy reaction track, sitting between base idle (cane) and motion3:7 (cane) -- the cane blinked out of his hand and back inside four ticks. His whole motion-bank reaction set (8 big-hit, 9 crumple, 10 wall-splat, 11 air recovery) is cane-less, which is consistent with the 2.7 finding that his kit-less normals are bare-fisted; only 8 is gated, because only 8 plays in a STANDING reaction bracketed by cane cells. 9/10/11 are knockdown, corner-splat and juggle reads where a dropped cane is defensible. The heavy opener falls back to base:12, the cane brace. PRIOR NOTE: "
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "coat splayed flat; slight keyed sludge"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "lapel-straighten cold stare"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "clamp-shrunk"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true
+    }
+   ]
+  },
+  "devil": {
+   "sheet": "devil.webp",
+   "scale": 1.313,
+   "signature": {
+    "sig1": "full wing-spread screech",
+    "sig2": "quadruped pounce crouch"
+   },
+   "cells": [
+    {
+     "frame": 0,
+     "id": "punch-ext",
+     "accept": true,
+     "note": "clawed strike"
+    },
+    {
+     "frame": 1,
+     "id": "kick-ext",
+     "accept": true,
+     "note": "cloven-hoof kick"
+    },
+    {
+     "frame": 2,
+     "id": "smear-h",
+     "accept": true
+    },
+    {
+     "frame": 3,
+     "id": "smear-v",
+     "accept": true
+    },
+    {
+     "frame": 4,
+     "id": "follow",
+     "accept": true
+    },
+    {
+     "frame": 5,
+     "id": "tuck",
+     "accept": true,
+     "note": "wing-wrapped ball \u2014 standout cell"
+    },
+    {
+     "frame": 6,
+     "id": "land",
+     "accept": true,
+     "note": "reads semi-quadruped, in character"
+    },
+    {
+     "frame": 7,
+     "id": "dash",
+     "accept": true
+    },
+    {
+     "frame": 8,
+     "id": "bighit",
+     "accept": true
+    },
+    {
+     "frame": 9,
+     "id": "crumple",
+     "accept": true
+    },
+    {
+     "frame": 10,
+     "id": "wallsplat",
+     "accept": true,
+     "note": "wings crushed flat against the wall"
+    },
+    {
+     "frame": 11,
+     "id": "airrec",
+     "accept": true
+    },
+    {
+     "frame": 12,
+     "id": "charge",
+     "accept": true,
+     "note": "green glow gathers at the charm necklace"
+    },
+    {
+     "frame": 13,
+     "id": "victory2",
+     "accept": true,
+     "note": "clamp-shrunk"
+    },
+    {
+     "frame": 14,
+     "id": "sig1",
+     "accept": true,
+     "note": "wing tip slightly clipped by the bridged-cell split; width-clamped"
+    },
+    {
+     "frame": 15,
+     "id": "sig2",
+     "accept": true,
+     "notes": "Authored facing-left; flipped in-sheet to right-facing 2026-08-31 (critic round)"
+    }
+   ]
+  }
+ }
+}
