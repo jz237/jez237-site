@@ -55,8 +55,13 @@ import {
 } from "./engine/combos.mjs";
 import {
   KIT_ACTIONS,
+  MOTION_CELLS,
   attackAnimationPose,
+  attackMotionBeat,
+  buildMotionAcceptMasks,
   createFighterMove,
+  motionPose,
+  resolveMotionPose,
   fighterActionCost,
   fighterActionGroup,
   getFighterKit,
@@ -949,6 +954,41 @@ for (const fighter of [...roster.filter(({ id }) => id !== ARCADE_BOSS_ID), arca
   }
 }
 
+// v2.7 FRAMES: the per-fighter MOTION bank (assets/motion). Lazily created on
+// first pose resolution — the sheets follow the on-demand media policy (never
+// in the service-worker shell), and the game stays fully playable while a
+// sheet is missing or loading because every motion descriptor carries the
+// base-bank cell it replaces as its fallback. The manifest's per-cell accept
+// flags gate rejected cells (cyraxx smear-v) onto the same fallback.
+const fighterMotionAtlases = {};
+const motionBankState = { masks: null, requested: false };
+
+function ensureMotionManifest() {
+  if (motionBankState.requested) return;
+  motionBankState.requested = true;
+  fetch("assets/motion/MANIFEST.json")
+    .then((response) => (response.ok ? response.json() : null))
+    .then((manifest) => { motionBankState.masks = manifest ? buildMotionAcceptMasks(manifest) : {}; })
+    .catch(() => { motionBankState.masks = {}; });
+}
+
+function ensureMotionAtlas(fighterId) {
+  ensureMotionManifest();
+  let atlas = fighterMotionAtlases[fighterId];
+  if (!atlas) {
+    atlas = new Image();
+    atlas.src = `assets/motion/${fighterId}.webp`;
+    fighterMotionAtlases[fighterId] = atlas;
+  }
+  return atlas;
+}
+
+function motionCellDrawable(fighterId, cell) {
+  const atlas = ensureMotionAtlas(fighterId);
+  return Boolean(atlas.complete && atlas.naturalWidth
+    && motionBankState.masks?.[fighterId]?.accept[cell]);
+}
+
 // The Commissioner has no separate specials sheet, so DOM art paths (victory
 // pose, ending panels) address his combat atlas — the same fallback the
 // canvas renderer uses via fighterMoveAtlases.
@@ -978,6 +1018,8 @@ let matchPalettes = [0, 0];
 let pendingPalettes = [0, 0];
 
 function altAtlasSource(fighterId, bank) {
+  // v2.7 FRAMES: the motion bank remaps like any other sheet.
+  if (bank === "motion") return { image: fighterMotionAtlases[fighterId], key: `${fighterId}:motion` };
   const specials = bank === "specials" ? fighterMoveAtlases[fighterId] : null;
   // The boss shares one sheet across banks — collapse to one cache entry.
   if (specials && specials !== fighterAtlases[fighterId]) return { image: specials, key: `${fighterId}:specials` };
@@ -1013,7 +1055,9 @@ function ensureAltAtlas(fighterId, bank = "base") {
 function paletteAtlas(fighterId, side, bank = "base") {
   const base = bank === "specials"
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
-    : fighterAtlases[fighterId];
+    : bank === "motion"
+      ? fighterMotionAtlases[fighterId] || fighterAtlases[fighterId]
+      : fighterAtlases[fighterId];
   if (matchPalettes[side] !== 1) return base;
   return ensureAltAtlas(fighterId, bank) || base;
 }
@@ -6377,10 +6421,22 @@ function fighterMotionTransform(fighter) {
       }
     }
     if (extend > 0.01) {
-      scratch.offsetX += fighter.facing * 10 * heft * extend * calm;
-      scratch.rotation += fighter.facing * 0.1 * heft * extend * calm;
-      scratch.scaleX *= 1 + 0.04 * heft * extend * calm;
-      scratch.scaleY *= 1 - 0.018 * heft * extend * calm;
+      // v2.7 FRAMES: while the authored full-extension cell actually draws,
+      // the procedural envelope thins — a reduced translate keeps the lunge
+      // reading, but the stretch is not double-applied on top of the painted
+      // extension. A fallback (sheet missing / cell rejected) keeps the full
+      // 2.6 envelope; attackMotionBeat is the same classifier the pose
+      // functions use, so cell and transform always agree.
+      const beat = attackMotionBeat(attack, fighter.attackFrame);
+      const authoredExtension = beat?.beat === "extension"
+        && motionCellDrawable(fighter.def.id, beat.cell);
+      const lunge = authoredExtension ? 0.55 : 1;
+      scratch.offsetX += fighter.facing * 10 * heft * extend * calm * lunge;
+      scratch.rotation += fighter.facing * 0.1 * heft * extend * calm * lunge;
+      if (!authoredExtension) {
+        scratch.scaleX *= 1 + 0.04 * heft * extend * calm;
+        scratch.scaleY *= 1 - 0.018 * heft * extend * calm;
+      }
       scratch.stretchActive = true;
     } else if (t > activeEnd && attack.kind !== "light") {
       const settle = clamp(1 - (t - activeEnd) / Math.max(0.05, (attack.duration - activeEnd) * 0.6), 0, 1);
@@ -7307,6 +7363,29 @@ function cameraMotionScale() {
   return state.accessibility.reducedMotion ? 0 : state.accessibility.shakeScale;
 }
 
+// Shared wall-pin read (pose selector + the 2.7 wall-splat camera framing):
+// a victim carried into the arena bound by slam-grade force — the same 220
+// threshold the wave-4 splat spawn uses, so light corner pokes never count.
+// Returns -1 (left wall), 1 (right wall) or 0. Pure snapshotted sim fields.
+function fighterWallPin(fighter) {
+  if (!fighter || !(fighter.hitstunFrames > 0 || fighter.pendingKnockdown)) return 0;
+  const atMinWall = fighter.x <= MOVEMENT_RULES.stageMinX + 0.5;
+  const atMaxWall = fighter.x >= MOVEMENT_RULES.stageMaxX - 0.5;
+  const pinned = (atMinWall || atMaxWall) && (!fighter.grounded
+    || (atMaxWall && fighter.vx > 220) || (atMinWall && fighter.vx < -220));
+  return pinned ? (atMinWall ? -1 : 1) : 0;
+}
+
+// 2.7 critic round M3: render-only x-shift that slides the frame toward an
+// active wall splat (composed into cinematicCamera.x beside recoil and
+// handheld). Snapped to exactly 0 once the pin releases and the ease lands.
+let wallsplatShift = 0;
+// Companion 0..1 focus level for the same beat: while a pin is live the
+// pinned side's foreground occluder dressing (the somerset chain-link was
+// drawing OVER the splat cell) racks down to ~15% and eases back after.
+let wallsplatFocus = 0;
+let wallsplatFocusSide = 1;
+
 // KO freeze-frame punch-in: latched from checkKnockout() on the killing hit.
 // Fast attack, held through the hitstop freeze, easing back out while the
 // FINISH THEM stand-off (and later the roundover call) takes over.
@@ -7383,6 +7462,8 @@ function latchImpactCinema(x, y, kind, blocked, direction, counter) {
 
 function resetCinematicCamera() {
   cameraPunch = null;
+  wallsplatShift = 0;
+  wallsplatFocus = 0;
   cameraRecoil.x = 0;
   cameraRecoil.y = 0;
   cameraRecoil.ampX = 0;
@@ -7444,6 +7525,22 @@ function updateCinematicCamera(dtMs) {
   let targetFocusY = H * 0.5;
   let targetRotation = 0;
   let ease = 1 - Math.exp(-dt * 9);
+  // 2.7 critic round M3: while a wall splat is live, the frame slides toward
+  // the wall (plus a slight push-in focused on the bound) so the pinned
+  // victim — whose cell overhangs the arena bound by ~40-60px — is fully in
+  // frame instead of cropped at the canvas edge.
+  let splatShiftTarget = 0;
+  let splatVictim = null;
+  let splatPin = 0;
+  if (!finisher && !reduced && phase === "fight") {
+    for (const fighter of state.fighters) {
+      const pin = fighterWallPin(fighter);
+      if (!pin) continue;
+      splatVictim = fighter;
+      splatPin = pin;
+      break;
+    }
+  }
   if (finisher) {
     // The scripted finisher camera owns framing: collapse the pose and any
     // pending punch instantly so nothing leaks under the cinematic transform.
@@ -7480,11 +7577,36 @@ function updateCinematicCamera(dtMs) {
     targetFocusX = winner.x;
     targetFocusY = clamp(winner.y - 128, H * 0.3, H * 0.72);
     ease = 1 - Math.exp(-dt * 2.2);
+  } else if (splatVictim) {
+    // Wall-splat framing: 1.05x focused ON the wall, plus the x-shift below —
+    // zoom alone can never reveal world-space past the canvas edge, so the
+    // shift carries the overhang into frame while the push-in hides the
+    // world edge the shift would otherwise expose on the opposite side.
+    const half = fighterRenderSize(splatVictim.def.id) * 0.55;
+    const overhang = splatPin > 0
+      ? Math.max(0, splatVictim.x + half - W)
+      : Math.max(0, half - splatVictim.x);
+    splatShiftTarget = -splatPin * (overhang + 8);
+    targetZoom = 1.05;
+    targetFocusX = splatPin > 0 ? W : 0;
+    targetFocusY = clamp(splatVictim.y - 118, H * 0.3, H * 0.72);
+    ease = 1 - Math.exp(-dt * 11);
   }
   cameraPhaseZoom += (targetZoom - cameraPhaseZoom) * ease;
   cameraPhaseRotation += (targetRotation - cameraPhaseRotation) * (1 - Math.exp(-dt * 6));
   cameraFocusX += (targetFocusX - cameraFocusX) * ease;
   cameraFocusY += (targetFocusY - cameraFocusY) * ease;
+
+  // Wall-splat x-shift: eases in fast with the pin, decays back and SNAPS to
+  // exactly 0 (the identity contract the smoke asserts on cam.x).
+  wallsplatShift += (splatShiftTarget - wallsplatShift)
+    * (1 - Math.exp(-dt * (splatShiftTarget !== 0 ? 11 : 7)));
+  if (splatShiftTarget === 0 && Math.abs(wallsplatShift) < 0.03) wallsplatShift = 0;
+  // Matching focus level for the pinned side's foreground dressing.
+  if (splatPin) wallsplatFocusSide = splatPin;
+  wallsplatFocus += ((splatVictim ? 1 : 0) - wallsplatFocus)
+    * (1 - Math.exp(-dt * (splatVictim ? 10 : 5)));
+  if (!splatVictim && wallsplatFocus < 0.01) wallsplatFocus = 0;
 
   // Transient zoom-punch envelope (KO / counter / dizzy).
   let punchZoom = 1;
@@ -7565,7 +7687,7 @@ function updateCinematicCamera(dtMs) {
   // mode that matters, so anything within a hair of identity becomes identity.
   cam.zoom = cameraPhaseZoom * punchZoom;
   cam.rotation = cameraPhaseRotation + cameraDutch;
-  cam.x = cameraRecoil.x + cameraHandheldX;
+  cam.x = cameraRecoil.x + cameraHandheldX + wallsplatShift;
   cam.y = cameraRecoil.y + cameraHandheldY;
   cam.focusX = clamp(cameraFocusX, 0, W);
   cam.focusY = clamp(cameraFocusY, 0, H);
@@ -8263,6 +8385,33 @@ function buildOccluderRig(stageId) {
   return rig;
 }
 
+// 2.7 critic round M3: the wall-splat camera shift can reveal a strip of
+// world-space past the painted backdrop (stage art covers exactly 0..W).
+// While the shift is live this curtains that strip with the frame-edge dark
+// — the pinned victim reads against deliberate off-stage shadow, not an
+// unpainted band. World-space, drawn between stage and fighters; it costs
+// nothing and draws nothing once the shift settles back to exactly 0.
+function drawWallsplatEdgeCover() {
+  if (wallsplatShift === 0) return;
+  const rightWall = wallsplatShift < 0;
+  const reach = Math.min(130, Math.abs(wallsplatShift) * 1.6 + 70);
+  ctx.save();
+  ctx.fillStyle = "#05070b";
+  if (rightWall) ctx.fillRect(W - 1, -8, reach, H + 16);
+  else ctx.fillRect(1 - reach, -8, reach, H + 16);
+  // Soft lip just inside the arena edge so the seam never reads as a cut.
+  const lip = 26;
+  const gradient = rightWall
+    ? ctx.createLinearGradient(W - lip, 0, W, 0)
+    : ctx.createLinearGradient(lip, 0, 0, 0);
+  gradient.addColorStop(0, "rgba(5,7,11,0)");
+  gradient.addColorStop(1, "rgba(5,7,11,0.6)");
+  ctx.fillStyle = gradient;
+  if (rightWall) ctx.fillRect(W - lip, -8, lip + 1, H + 16);
+  else ctx.fillRect(-1, -8, lip + 1, H + 16);
+  ctx.restore();
+}
+
 function drawForegroundOccluders(centre) {
   if (!state.performance.shadows) return;
   let rig = occluderRigs[state.stage];
@@ -8275,14 +8424,20 @@ function drawForegroundOccluders(centre) {
   const shift = state.accessibility.reducedMotion ? 0 : (centre - W * 0.5) * -0.105;
   const frame = state.simulationTick;
   for (const occluder of rig) {
+    // 2.7 critic round M3: while a wall splat is live, the pinned side's
+    // near-depth dressing racks down to ~15% (the somerset chain-link drew
+    // straight over the splat cell) and eases back once the pin releases.
+    const onPinnedSide = (wallsplatFocusSide < 0) === (occluder.baseX < W * 0.5);
+    const focusFade = wallsplatFocus > 0.01 && onPinnedSide ? 1 - wallsplatFocus * 0.85 : 1;
     const x = clamp(occluder.baseX + shift, occluder.minX, occluder.maxX);
+    ctx.globalAlpha = focusFade;
     ctx.drawImage(occluder.canvas, x, occluder.y);
     if (occluder.steam) {
       // Grate steam: an additive pulse rising off the slats.
       const pulse = state.accessibility.reducedMotion ? 0.5 : Math.sin(frame * 0.035) * 0.5 + 0.5;
       ctx.save();
       ctx.globalCompositeOperation = "lighter";
-      ctx.globalAlpha = 0.1 + pulse * 0.12;
+      ctx.globalAlpha = (0.1 + pulse * 0.12) * focusFade;
       ctx.drawImage(glowSprite(210, 222, 230), x + 30, occluder.y - 130 - pulse * 22, 130, 190);
       ctx.restore();
     }
@@ -12742,11 +12897,17 @@ function updateFighter(fighter, opponent, input, dt) {
     // decays 60% → 20% opacity instead of a flat wash.
     if (state.performance.trailScale > 0 && !state.accessibility.reducedMotion
       && state.simulationTick % 2 === 0) {
+      // v2.7 FRAMES: ghosts stay base-bank smears — a motion pose (the dash
+      // stretch cell) contributes its base fallback frame instead of muting
+      // the trail.
       const ghostPose = fighterAnimationPose(fighter);
-      if (ghostPose.bank === "base") {
+      const ghostFrame = ghostPose.bank === "base" ? ghostPose.frame
+        : ghostPose.bank === "motion" && ghostPose.fallback?.bank === "base"
+          ? ghostPose.fallback.frame : -1;
+      if (ghostFrame >= 0) {
         state.effects.push({
           kind: "afterimage", fighterId: fighter.def.id, side: fighter.side,
-          frame: ghostPose.frame,
+          frame: ghostFrame,
           x: fighter.x, y: fighter.y, facing: fighter.facing,
           size: fighterRenderSize(fighter.def.id),
           life: 0.07, max: 0.07, color: fighter.def.accent,
@@ -15626,16 +15787,63 @@ function drawVetAtmosphere(time) {
   }
 }
 
+// v2.7 FRAMES: the pose selector emits descriptors that may name the motion
+// bank; this resolver holds them only while the fighter's sheet is loaded AND
+// the manifest accepts the cell, else the descriptor's own fallback (exactly
+// the pre-2.7 cell) draws. Every consumer — drawFighter, the observers, the
+// CINEMA 3D bridge — reads through here, so both renderers always agree.
 function fighterAnimationPose(fighter) {
+  return resolveMotionPose(
+    fighterPoseDescriptor(fighter),
+    (cell) => motionCellDrawable(fighter.def.id, cell),
+  );
+}
+
+// Showcase rotation (taunt + round-win): the match seed and banked rounds pick
+// deterministically between the kit victory cell, the motion alternate win
+// pose and the second signature — pure snapshotted sim state, never
+// Math.random, so rollback resimulation and both online peers agree.
+function showcasePoseDescriptor(fighter) {
+  const victory = fighter.kit.victory;
+  const pick = (((state.matchSeed >>> 0) + state.rounds[0] + state.rounds[1]) >>> 0) % 3;
+  if (pick === 1) return motionPose(MOTION_CELLS.victory2, victory.bank, victory.frame);
+  if (pick === 2) return motionPose(MOTION_CELLS.sig2, victory.bank, victory.frame);
+  return { bank: victory.bank, frame: victory.frame };
+}
+
+function fighterPoseDescriptor(fighter) {
   const base = (frame) => ({ bank: "base", frame });
   if (fighter.cinematicFrame !== null) return base(fighter.cinematicFrame);
   if (fighter.grabbed) return base(15);
   if (fighter.dizzyFrames > 0 || fighter.guardCrushFrames > 0) return base(12 + Math.floor(fighter.animTime * 6) % 2);
-  // Release 1.7: air-recovery back-flip tuck.
-  if (fighter.airTechFlipFrames > 0) return base(13);
-  // Release 1.7 wave 11: the taunt holds the fighter's victory pose frame.
+  // Release 1.7: air-recovery back-flip tuck. v2.7 FRAMES: the spin window
+  // wears the authored tuck ball, the tail arches into the airrec footing key.
+  if (fighter.airTechFlipFrames > 0) {
+    const flip = 1 - fighter.airTechFlipFrames / AIR_RECOVERY_RULES.flipFrames;
+    return motionPose(flip < 0.6 ? MOTION_CELLS.tuck : MOTION_CELLS.airrec, "base", 13);
+  }
+  // Release 1.7 wave 11: the taunt holds the fighter's victory pose frame
+  // (v2.7: rotated with the motion alternates).
   if (fighter.tauntFrames > 0 && fighter.kit?.victory) {
-    return { bank: fighter.kit.victory.bank, frame: fighter.kit.victory.frame };
+    return showcasePoseDescriptor(fighter);
+  }
+  // v2.7 FRAMES: signature intro stance — each side holds its own manifest
+  // signature cell through the walk-on, releasing to idle before FIGHT!.
+  if (state.phase === "intro" && state.phaseTime > 0.95 && fighter.grounded
+    && !fighter.attacking && fighter.kit?.victory) {
+    const cell = (((state.matchSeed >>> 0) + fighter.side) % 2) ? MOTION_CELLS.sig2 : MOTION_CELLS.sig1;
+    return motionPose(cell, "base", Math.floor(fighter.animTime * 5) % 4);
+  }
+  // v2.7 FRAMES: round-win pose under the curtain-call spotlight — the winner
+  // holds the showcase rotation (same convention the camera settle uses to
+  // pick its subject).
+  if (state.phase === "roundover" && !state.finisher && state.finisherType < 0
+    && state.fighters?.length === 2 && fighter.kit?.victory
+    && fighter.grounded && !fighter.down && !fighter.attacking
+    && fighter.hitstunFrames === 0 && fighter.knockdownFrames === 0) {
+    const other = state.fighters[1 - fighter.side];
+    const winner = fighter.side === 0 ? fighter.health >= other.health : fighter.health > other.health;
+    if (winner) return showcasePoseDescriptor(fighter);
   }
   // MOTION FIX 4 + 11: victim REACTION TRACKS through the scripted super
   // storms — a pure function of both fighters' snapshotted sim state, so it
@@ -15665,7 +15873,32 @@ function fighterAnimationPose(fighter) {
       return base(hitBeat ? 12 : 13);                                             // per-hit sagging writhe
     }
   }
-  if (fighter.down || fighter.knockdownFrames > 0) return base(15);
+  // v2.7 FRAMES: slammed victims — wall pin, launch arc, knockdown collapse.
+  // All pure snapshotted sim reads: the clamp pins x exactly at the arena
+  // bound while a slammed fighter is in flight (or still carrying slam-grade
+  // push into the wall — the same 220 threshold the wave-4 splat spawn uses,
+  // so light corner pokes never wear it), the ballistic sign splits launch
+  // (bighit) from the juggle fall (airrec), and the last ~120px of a
+  // knockdown fall wear the crumple key before the flat slam.
+  if (fighter.hitstunFrames > 0 || fighter.pendingKnockdown) {
+    if (fighterWallPin(fighter)) return motionPose(MOTION_CELLS.wallsplat, "base", 15);
+    if (!fighter.grounded) {
+      // 2.7 critic round: the crumple (knees buckling) engages only in the
+      // last ~55px of the fall — the old 120px band had victims kneeling on
+      // air for a dozen frames before touchdown.
+      if (fighter.pendingKnockdown && fighter.vy > 0 && FLOOR - fighter.y < 55) {
+        return motionPose(MOTION_CELLS.crumple, "base", 15);
+      }
+      return motionPose(fighter.vy < -120 ? MOTION_CELLS.bighit : MOTION_CELLS.airrec, "base", 15);
+    }
+  }
+  if (fighter.down || fighter.knockdownFrames > 0) {
+    // The first beats of the knockdown keep the mid-collapse key.
+    if (fighter.down && fighter.knockdownFrames > DEFENSE_RULES.knockdownFrames - 7) {
+      return motionPose(MOTION_CELLS.crumple, "base", 15);
+    }
+    return base(15);
+  }
   // v2.6 BODY-FIRST (core 2): EVERY hit sequences the victim through a
   // progressive stagger — head-snap -> torso fold -> stagger step -> recover
   // ease — clocked by ticks since the opponent's combo tracker registered the
@@ -15681,7 +15914,14 @@ function fighterAnimationPose(fighter) {
     const sinceHit = state.simulationTick - (striker?.combo?.lastHitFrame ?? -Infinity);
     if (sinceHit >= 0 && sinceHit <= 44) {
       const hitKey = (striker.combo.hits || 0) % 2;
-      if (sinceHit < 5) return base(15);                    // head snap
+      // v2.7 FRAMES: a landed heavy/special opens the reaction on the
+      // authored big-hit key (body bent backward) instead of the flat hit
+      // cell; lights keep the tighter head snap.
+      if (sinceHit < 5) {
+        return striker.attacking && striker.attacking.kind !== "light"
+          ? motionPose(MOTION_CELLS.bighit, "base", 15)
+          : base(15);                                       // head snap
+      }
       if (sinceHit < 11) return base(hitKey ? 13 : 12);     // torso fold (alternates per hit)
       if (sinceHit < 18) return base(hitKey ? 15 : 13);     // stagger step
       return base(12);                                      // recover ease
@@ -15719,6 +15959,12 @@ function fighterAnimationPose(fighter) {
     const frames = attack.kind === "light" ? [8, 9, 10, 11]
       : attack.kind === "heavy" ? [8, 13, 13, 11]
         : [8, 13, 14, 11];
+    // v2.7 FRAMES: authored smear / full-extension / follow-through keys ride
+    // the kit-less normals timeline, each falling back to the exact base cell
+    // this path showed before.
+    const beat = attackMotionBeat(attack, fighter.attackFrame);
+    if (beat?.beat === "smear") return motionPose(beat.cell, "base", frames[1]);
+    if (beat?.beat === "extension") return motionPose(beat.cell, "base", frames[2]);
     if (time < startup * 0.48) return base(frames[0]);
     if (time < startup) return base(frames[1]);
     if (time <= activeEnd) {
@@ -15726,25 +15972,56 @@ function fighterAnimationPose(fighter) {
       // cell arrives a third early as the follow-through key, so the active
       // hold never freezes on one cell (kit-less fallback path).
       if (attack.kind !== "light"
-        && (time - startup) / Math.max(0.001, activeEnd - startup) >= 0.67) return base(frames[3]);
+        && (time - startup) / Math.max(0.001, activeEnd - startup) >= 0.67) {
+        return beat?.beat === "follow"
+          ? motionPose(beat.cell, "base", frames[3])
+          : base(frames[3]);
+      }
       return base(frames[2]);
     }
     return base(frames[3]);
   }
   if (!fighter.grounded) {
+    // v2.7 FRAMES: the mid-flip tumbling band wears the authored tuck ball.
+    // The band derives from the same pure ballistic-arc progress the flip
+    // rotation in fighterMotionTransform maps onto its eased turn, so the
+    // ball appears while the sprite is genuinely rotating and unwraps before
+    // touchdown. Skipped under reduced motion exactly like the rotation.
+    // 2.7 critic round J2: donald's band opens almost immediately — his base
+    // ascent cell (13) is the golf swing with a baked golden crescent, which
+    // a plain jump was wearing for ~10 ticks before the tuck engaged.
+    if (!state.accessibility.reducedMotion && !fighter.attacking
+      && fighter.hitstunFrames === 0 && !fighter.pendingKnockdown
+      && fighter.dizzyFrames === 0) {
+      const launch = fighter.movement.jumpVelocityY || -720;
+      const apex = (launch * launch) / (2 * GRAVITY);
+      const height = Math.max(0, FLOOR - fighter.y);
+      const progress = fighter.vy < 0
+        ? 0.5 * (1 - clamp(fighter.vy / launch, 0, 1))
+        : 0.5 + 0.5 * clamp(1 - height / Math.max(1, apex), 0, 1);
+      const bandStart = fighter.def.id === "donald" ? 0.06 : 0.22;
+      if (progress > bandStart && progress < 0.82) return motionPose(MOTION_CELLS.tuck, "base", 13);
+    }
     if (fighter.vy < 0) return base(13);
     // BODY-FIRST (spec 4): the descent cell advances BEFORE touchdown — the
     // legs gather on the crouch cell through the last ~110px of the fall
     // (about five ticks), so the frozen late-fall pair is deduped and the
-    // landing squash arrives on a fresh key.
-    return base(FLOOR - fighter.y < 110 ? 12 : 15);
+    // landing squash arrives on a fresh key. v2.7: the authored deep gather.
+    if (FLOOR - fighter.y < 110) return motionPose(MOTION_CELLS.land, "base", 12);
+    return base(15);
   }
+  // v2.7 FRAMES: the landing-recovery window holds the authored full-squat
+  // compress under the existing squash-stretch transform.
+  if (fighter.landingRecoveryFrames > 0) return motionPose(MOTION_CELLS.land, "base", 12);
   if (fighter.dashFrames > 0) {
-    // BODY-FIRST (spec 6): the settle pose arrives sooner — the final two
-    // dash ticks already show the stance the dash ends in, collapsing the
-    // near-identical settle pair the filmstrips caught.
-    if (fighter.dashFrames <= 2) return base(Math.floor(fighter.animTime * 5) % 4);
-    return base(5 + Math.floor(fighter.walkTime * 18) % 3);
+    // BODY-FIRST (spec 6) + 2.7 critic round: the dash used to pop 90° from
+    // the horizontal stretch cell straight to an upright stance in 2 ticks.
+    // The final two dash ticks now hold the base GATHER cell (12 — the
+    // crouched compress) as a rising in-between, so the silhouette bridges
+    // stretch → gather → upright instead of snapping.
+    if (fighter.dashFrames <= 2) return base(12);
+    // v2.7 FRAMES: the dash stretch cell over the old walk-cell cycle.
+    return motionPose(MOTION_CELLS.dash, "base", 5 + Math.floor(fighter.walkTime * 18) % 3);
   }
   if (Math.abs(fighter.vx) > 22) return base(4 + Math.floor(fighter.walkTime * 10) % 4);
   return base(Math.floor(fighter.animTime * 5) % 4);
@@ -16966,6 +17243,20 @@ const MOVE_SHEET_ADJUST = Object.freeze({
   donald: 1.04, cyraxx: 1.05, ali: 1.04, devil: 1.04, commissioner: 1.02,
 });
 
+// v2.7 FRAMES: motion-bank world-size correction. The motion sheets share the
+// base banks' build normalisation (tallest standing frame → 95.6% cell
+// height; MANIFEST.json `scale` records each sheet's build scale), so almost
+// every fighter matches base-cell world size at 1. The Commissioner's older
+// base atlas normalises to the full cell (320px vs 306px measured), so his
+// motion cells scale up to meet it.
+const MOTION_SHEET_ADJUST = Object.freeze({ commissioner: 1.046 });
+
+function bankSheetAdjust(fighterId, bank) {
+  if (bank === "specials") return MOVE_SHEET_ADJUST[fighterId] || 1;
+  if (bank === "motion") return MOTION_SHEET_ADJUST[fighterId] || 1;
+  return 1;
+}
+
 function fighterRenderSize(fighterId) {
   return FIGHTER_RENDER_BASE * FIGHTER_SCALE * (FIGHTER_SIZE_ADJUST[fighterId] || 1);
 }
@@ -17056,7 +17347,7 @@ function drawFighter(fighter, time) {
   const graphicFatality = activeGraphicFatality(fighter);
   const reality = finisherRealityAmount();
   const sizeAdjust = FIGHTER_SIZE_ADJUST[fighter.def.id] || 1;
-  const moveSheetAdjust = pose.bank === "specials" ? (MOVE_SHEET_ADJUST[fighter.def.id] || 1) : 1;
+  const moveSheetAdjust = bankSheetAdjust(fighter.def.id, pose.bank);
   const renderSize = fighterRenderSize(fighter.def.id) * moveSheetAdjust;
   const attackKind = attack?.kind;
   const lunge = attackSwing * (attackKind === "special" ? 68 : attackKind === "heavy" ? 46 : 29);
@@ -17475,7 +17766,7 @@ function drawFighter(fighter, time) {
       if (fadeObs.fadeLeft > 0 && (fadeObs.fadeBank !== pose.bank || fadeObs.fadeFrame !== frame)) {
         const fadeAtlas = paletteAtlas(fighter.def.id, fighter.side, fadeObs.fadeBank);
         if (fadeAtlas?.complete && fadeAtlas.naturalWidth) {
-          const fadeAdjust = fadeObs.fadeBank === "specials" ? (MOVE_SHEET_ADJUST[fighter.def.id] || 1) : 1;
+          const fadeAdjust = bankSheetAdjust(fighter.def.id, fadeObs.fadeBank);
           const fadeSize = fighterRenderSize(fighter.def.id) * fadeAdjust;
           ctx.save();
           ctx.globalAlpha = Math.min(0.3, 0.3 * (fadeObs.fadeLeft / MOTION_RULES.crossfadeFrames) + 0.08);
@@ -18276,17 +18567,35 @@ const severedLimbCache = new Map();
 // fighter's own rendered language (Jez: bare muscled forearm, wrist wrap,
 // black glove, torn blue gi at the shoulder). HD sheet when ready (same map
 // the super close-up warms), SD atlas as fallback, null before either loads.
+// 2.7 critic round: renderer/hd holds sheets for SOME fighters only (devil
+// has none; the commissioner has no specials sheet — the authoritative list
+// is renderer/hd/MANIFEST.json, mirrored here so no code path ever REQUESTS
+// an HD sheet that does not exist: with ?renderer=3d the old unconditional
+// warm-ups 404'd on every devil bout). Absent entries skip silently and the
+// SD atlas draws, exactly like an HD sheet that never finished loading.
+const HD_SHEETS = new Set([
+  "alan", "alan-specials", "ali", "ali-specials", "benny", "benny-specials",
+  "commissioner", "cyraxx", "cyraxx-specials", "deathblow",
+  "deathblow-specials", "donald", "donald-specials", "jez", "jez-specials",
+  "post", "post-specials",
+]);
+
+function hdSheetPath(fighterId, bank = "base") {
+  const key = bank === "specials" ? `${fighterId}-specials` : fighterId;
+  return HD_SHEETS.has(key) ? `renderer/hd/${key}.webp` : null;
+}
+
 function severedArmAtlasSource(victimId) {
   const sd = fighterAtlases[victimId];
   if (!sd?.complete || !sd.naturalWidth) return null;
-  const hdPath = `renderer/hd/${victimId}.webp`;
-  if (!superPortraitHdImages.has(hdPath)) {
+  const hdPath = hdSheetPath(victimId);
+  if (hdPath && !superPortraitHdImages.has(hdPath)) {
     const img = new Image();
     img.src = hdPath;
     superPortraitHdImages.set(hdPath, img);
   }
-  const hd = superPortraitHdImages.get(hdPath);
-  const atlas = hd.complete && hd.naturalWidth ? hd : sd;
+  const hd = hdPath ? superPortraitHdImages.get(hdPath) : null;
+  const atlas = hd?.complete && hd.naturalWidth ? hd : sd;
   const cell = atlas.naturalWidth / 4;
   const x0 = 2 * cell; // frame 10 = column 2, row 2
   const y0 = 2 * cell;
@@ -19425,10 +19734,11 @@ function drawFighterCastShadows() {
     const pose = fighterAnimationPose(fighter);
     const atlas = pose.bank === "specials"
       ? fighterMoveAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
-      : fighterAtlases[fighter.def.id];
+      : pose.bank === "motion"
+        ? fighterMotionAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
+        : fighterAtlases[fighter.def.id];
     if (!atlas?.complete || !atlas.naturalWidth) continue;
-    const renderSize = fighterRenderSize(fighter.def.id)
-      * (pose.bank === "specials" ? MOVE_SHEET_ADJUST[fighter.def.id] || 1 : 1);
+    const renderSize = fighterRenderSize(fighter.def.id) * bankSheetAdjust(fighter.def.id, pose.bank);
     const jump = Math.max(0, FLOOR - fighter.y);
     const airFade = clamp(1 - jump / 520, 0.25, 1);
     ctx.save();
@@ -19531,24 +19841,35 @@ function drawAfterimages() {
     // the fighter has already left (the idle-pose body double is dead).
     let frame = effect.frame;
     const owner = Number.isInteger(effect.side) ? state.fighters[effect.side] : null;
+    // 2.7 critic round: dash echoes END WITH THE DASH — a ghost whose owner
+    // is no longer dashing stops drawing (donald's trail was outliving
+    // dashFrames by ~6 ticks, and leftovers re-read the live pose into a
+    // body double on the following flip's descent).
     if (owner && owner.def.id === effect.fighterId) {
+      if (owner.dashFrames <= 0) continue;
       const livePose = fighterAnimationPose(owner);
       if (livePose.bank === "base") frame = livePose.frame;
+      // v2.7 FRAMES: a live motion pose echoes its base fallback cell.
+      else if (livePose.bank === "motion" && livePose.fallback?.bank === "base") {
+        frame = livePose.fallback.frame;
+      }
     }
     ctx.save();
     ctx.translate(effect.x, effect.y);
     ctx.scale(effect.facing * atlasFrameFacing(effect.fighterId, "base", frame), 1);
     // BODY-FIRST (spec 6): the freshest ghost is a horizontal STRETCH-SMEAR
-    // of the current cell — 1.3x wide at 25% — a smear of the torso in
-    // motion, not a second body; every older ghost sits under 25% with its
-    // head band clipped so nothing behind the dash reads as a copy.
+    // of the current cell — a smear of the torso in motion, not a second
+    // body; every older ghost sits lower with its head band clipped.
+    // 2.7 critic round: alpha CRUSHED below face-readability (25%/22% read
+    // as a legible duplicate figure at speed — echoes are a wash, not a
+    // second fighter).
     const ghostAge = 1 - clamp(effect.life / effect.max, 0, 1);
     if (ghostAge < 0.45) {
-      ctx.globalAlpha = 0.25;
+      ctx.globalAlpha = 0.15;
       ctx.scale(1.3, 0.97);
       drawAtlasFrame(atlas, frame, effect.size);
     } else {
-      ctx.globalAlpha = 0.22 - ghostAge * 0.12;
+      ctx.globalAlpha = 0.13 - ghostAge * 0.07;
       ctx.beginPath();
       ctx.rect(-effect.size * 0.5, -effect.size * 0.74, effect.size, effect.size * 0.74);
       ctx.clip();
@@ -19567,6 +19888,11 @@ function drawAfterimages() {
       const obs = motionObs[side];
       const fighter = state.fighters[side];
       if (!obs?.flipEligible || obs.flipKind === "neutral" || !fighter || fighter.grounded) continue;
+      // 2.7 critic round: the takeoff ribbon is a LAUNCH accent, not a
+      // full-arc contrail — it lives ~8 ticks off the ground (fading over
+      // the last few) instead of tracing the whole ballistic path.
+      if (obs.launchAge < 0 || obs.launchAge > 8) continue;
+      const ribbonFade = clamp(1 - (obs.launchAge - 4) / 5, 0.2, 1);
       const launch = Math.abs(fighter.movement.jumpVelocityY || -720);
       const height = Math.max(0, FLOOR - fighter.y);
       // Mid-frames only: skip the very first ticks off the ground.
@@ -19584,7 +19910,7 @@ function drawAfterimages() {
         const tailX = fighter.x - fighter.vx * dtBack;
         const tailY = centreY - fighter.vy * dtBack + 0.5 * GRAVITY * dtBack * dtBack;
         if (tailY > FLOOR - 8) break;
-        ctx.globalAlpha = 0.44 * (1 - step / 9);
+        ctx.globalAlpha = 0.44 * (1 - step / 9) * ribbonFade;
         ctx.strokeStyle = fighter.def.accent;
         ctx.lineWidth = Math.max(2, 12 - step * 1.2);
         ctx.beginPath();
@@ -19594,7 +19920,7 @@ function drawAfterimages() {
         // Warm core on the freshest stretch of path so the arc reads at a
         // glance while the tail stays a faint wash.
         if (step <= 2) {
-          ctx.globalAlpha = 0.3;
+          ctx.globalAlpha = 0.3 * ribbonFade;
           ctx.strokeStyle = "#fff2d8";
           ctx.lineWidth = Math.max(1.5, (12 - step * 1.2) * 0.35);
           ctx.stroke();
@@ -21066,17 +21392,25 @@ const CUT_IN_PATTERN_SCALE = new DOMMatrix([0.5, 0, 0, 0.5, 0, 0]);
 const superPortraitHdImages = new Map();
 const superPortraitCache = new Map();
 function superPortrait3d(cut) {
-  const bank = cut.poseBank === "specials" && fighterMoveAtlases[cut.fighterId] ? "specials" : "base";
-  const sdAtlas = bank === "specials" ? fighterMoveAtlases[cut.fighterId] : fighterAtlases[cut.fighterId];
+  // v2.7 FRAMES: a motion-bank wind-up (the charge stance) composes from the
+  // SD motion sheet — there are NO HD motion sheets, so that bank never
+  // requests renderer/hd/.
+  const bank = cut.poseBank === "motion" && fighterMotionAtlases[cut.fighterId]?.complete
+    ? "motion"
+    : cut.poseBank === "specials" && fighterMoveAtlases[cut.fighterId] ? "specials" : "base";
+  const sdAtlas = bank === "specials" ? fighterMoveAtlases[cut.fighterId]
+    : bank === "motion" ? fighterMotionAtlases[cut.fighterId] : fighterAtlases[cut.fighterId];
   if (!sdAtlas?.complete || !sdAtlas.naturalWidth) return null;
-  const hdPath = `renderer/hd/${cut.fighterId}${bank === "specials" ? "-specials" : ""}.webp`;
-  if (!superPortraitHdImages.has(hdPath)) {
+  // 2.7 critic round: only warm HD sheets that exist (hdSheetPath returns
+  // null for absent fighters/banks — devil, commissioner-specials).
+  const hdPath = bank === "motion" ? null : hdSheetPath(cut.fighterId, bank);
+  if (hdPath && !superPortraitHdImages.has(hdPath)) {
     const img = new Image();
     img.src = hdPath; // warm in the fighter layer's HTTP cache; SD fallback
     superPortraitHdImages.set(hdPath, img);
   }
-  const hd = superPortraitHdImages.get(hdPath);
-  const atlas = hd.complete && hd.naturalWidth ? hd : sdAtlas;
+  const hd = hdPath ? superPortraitHdImages.get(hdPath) : null;
+  const atlas = hd?.complete && hd.naturalWidth ? hd : sdAtlas;
   const key = `${cut.fighterId}:${bank}:${cut.poseFrame}:${atlas === hd ? "hd" : "sd"}`;
   if (superPortraitCache.has(key)) return superPortraitCache.get(key);
   const cellW = atlas.naturalWidth / 4;
@@ -21643,6 +21977,7 @@ function draw(time) {
   if (!cinema3dWorld) {
     drawStage(time);
     if (state.screen === "fight") {
+      drawWallsplatEdgeCover();
       drawSuperSpotlight();
       drawWinPoseSpotlight();
       drawSuperFocusLines(time);
@@ -23310,10 +23645,25 @@ function announcerBagDraw(cue, size) {
   return pick;
 }
 
-// cue -> { takes: [Audio...], probed }. Probed sequentially (<cue>-1.mp3,
-// -2, ... stop at the first gap) exactly once per session; a fully missing
-// bank costs one HEAD request forever.
+// cue -> { takes: [Audio...], probed }. 2.7 critic round: take counts come
+// from assets/audio/announcer/MANIFEST.json (generated from the files on
+// disk — regenerate it when takes land) so the picker is CLAMPED to takes
+// that exist. The old sequential HEAD probe discovered each bank's end by
+// 404ing one request past it (flawless-3, ko-5, wallbounce-4, ...) on every
+// cue a session touched; it survives only as the fallback for a missing/
+// unreadable manifest, where it still stops at the first gap.
 const announcerBankCache = new Map();
+let announcerManifestPromise = null;
+
+function announcerTakeCounts() {
+  if (!announcerManifestPromise) {
+    announcerManifestPromise = fetch("assets/audio/announcer/MANIFEST.json")
+      .then((response) => (response.ok ? response.json() : null))
+      .then((manifest) => (manifest?.takes && typeof manifest.takes === "object" ? manifest.takes : null))
+      .catch(() => null);
+  }
+  return announcerManifestPromise;
+}
 
 function announcerBank(cue) {
   let bank = announcerBankCache.get(cue);
@@ -23321,11 +23671,20 @@ function announcerBank(cue) {
   bank = { cue, takes: [], probed: false };
   announcerBankCache.set(cue, bank);
   (async () => {
+    const counts = await announcerTakeCounts();
     const found = [];
-    for (let take = 1; take <= ANNOUNCER_MAX_TAKES; take += 1) {
-      const src = `assets/audio/announcer/${cue}-${take}.mp3`;
-      if (!(await probeAudioFile(src))) break;
-      found.push(src);
+    if (counts) {
+      // A cue absent from the manifest has zero recorded takes: no requests.
+      const count = Math.min(ANNOUNCER_MAX_TAKES, Math.max(0, Math.floor(Number(counts[cue]) || 0)));
+      for (let take = 1; take <= count; take += 1) {
+        found.push(`assets/audio/announcer/${cue}-${take}.mp3`);
+      }
+    } else {
+      for (let take = 1; take <= ANNOUNCER_MAX_TAKES; take += 1) {
+        const src = `assets/audio/announcer/${cue}-${take}.mp3`;
+        if (!(await probeAudioFile(src))) break;
+        found.push(src);
+      }
     }
     bank.takes = found.map((src) => {
       const sample = new Audio(src);
@@ -23710,7 +24069,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.6");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.7");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -24881,7 +25240,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "2.6-motion",
+  version: "2.7-frames",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -26588,6 +26947,9 @@ function ensureCinema3d() {
       // palette key invalidates a side's rig when its color pick changes.
       fighterAtlasFor: (fighter, bank) => paletteAtlas(fighter.def.id, fighter.side, bank),
       fighterPaletteKey: (fighter) => (matchPalettes[fighter.side] === 1 ? "alt" : ""),
+      // 2.7 critic round: availability-gated HD lookup — null for fighters/
+      // banks with no sheet under renderer/hd/, so the 3D layer never 404s.
+      hdSheetPath,
       fighterRenderSize,
       fighterAnimationPose,
       // v2.6 MOTION: the shared movement-animation transform (jump flips,
@@ -26595,6 +26957,8 @@ function ensureCinema3d() {
       // identically to drawFighter. Canvas rotation convention (y-down).
       fighterMotionTransform,
       moveSheetAdjust: MOVE_SHEET_ADJUST,
+      // v2.7 FRAMES: motion-bank world-size correction for the 3D rigs.
+      motionSheetAdjust: MOTION_SHEET_ADJUST,
       gritSuperCost: GRIT_RULES.superCost,
       gameCanvas: canvas,
       isRollbackResimulating: () => rollbackResimulating,
