@@ -4,6 +4,385 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-08-31",
+      "historicDate": "1984-04-02",
+      "displayDate": "Week of April 2-8, 1984",
+      "edition": "Issue 088 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Spring newsstand computer weekly on warm newsprint with red-and-blue department flags",
+        "motifs": [
+          "IBM PCjr infrared keyboard",
+          "Macintosh mouse and 3.5-inch diskette",
+          "Atarisoft cartridge boxes",
+          "Mindset color-graphics screens"
+        ],
+        "layout": "Head-to-head PCjr versus Macintosh banner across the upper deck, Atarisoft and market reporting below, charts and world bulletin on the rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of April 2-8, 1984",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Five-column banner pairing a PCjr keyboard halftone with a Macintosh desk photo",
+        "secondaryRail": "Atarisoft shelf, Mindset graphics, price watch, charts and world bulletin",
+        "archiveNavigation": "Previous and next weekly issues with calendar shelf"
+      },
+      "sectionChrome": {
+        "primary": "#9f2723",
+        "secondary": "#214f76",
+        "texture": "Warm aged newsprint, halftone screens, fine rules and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-04-02.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for April 2-8, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Two very different machines reach the same buyer this spring, and the trade press finally puts them side by side.",
+      "morningLine": "IBM's Peanut and Apple's Macintosh go head to head on the newsstand while Atari sells its arcade library to everybody else's hardware.",
+      "lead": {
+        "headline": "The Peanut Meets the Mac: IBM and Apple Fight for the Next Home Buyer",
+        "dek": "TIME's April 2 report frames two incompatible visions of personal computing, one betting on compatibility, the other on the mouse.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          12
+        ],
+        "body": [
+          "The comparison that dealers have been making informally since January reached the national press this week. In its April 2 technology report, TIME set IBM's PCjr against Apple's Macintosh and described the two as new entries battling for attention from the same undecided buyer. The deck put it plainly: new entries from IBM and Apple battle for attention.",
+          "IBM's approach is continuity. The PCjr is an 8088-class machine sold in 64K and 128K configurations, extending the DOS world downward into the family room with better color and sound than the office PC offers. The strategy assumes buyers want the thing their employer already uses, only cheaper. The execution has been the problem: the infrared chiclet keyboard drew ridicule from the first demonstrations, and the machine's compatibility with the PC software library is incomplete enough that dealers must check titles case by case.",
+          "Apple's approach is discontinuity. The Macintosh puts a Motorola 68000 behind a built-in nine-inch monochrome display, packs 128K of memory and a 400K three-and-a-half-inch floppy into a case a clerk can carry with one hand, and ships a mouse as standard equipment rather than an accessory. Windows, icons and pull-down menus are not options in the Macintosh; they are the only way in. The list price is $2,495.",
+          "The two machines therefore ask the buyer a question the industry has avoided since the Apple II: is a personal computer a smaller version of the office machine, or a different kind of appliance altogether? IBM's answer protects an installed base and a software catalog worth thousands of titles. Apple's answer discards both and asks the customer to trust that pointing at pictures beats typing commands.",
+          "Neither answer has been settled by sales. What the week established is that the trade has stopped treating the two as separate stories. For the rest of 1984, every home-computer purchase decision will be argued in these terms."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari Invades Rival Machines With a Dozen Atarisoft Games",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3,
+            4,
+            5
+          ],
+          "body": [
+            "Atari has released twelve of its games for competing computers and videogame consoles under a new software label, ATARISOFT, COMPUTE! reports in its April issue. The line puts arcade properties long identified with Atari hardware onto the Commodore 64, VIC-20, Apple II, IBM PC, ColecoVision and TI-99/4A, depending on the title.",
+            "The move is an admission with a price tag attached. Atari's console business has spent a year contracting, and the company's most durable asset is no longer its hardware but the names on its cartridge labels. Selling those names to owners of rival machines converts a shrinking hardware franchise into a software one.",
+            "For the shopper the effect is immediate and slightly disorienting: familiar Atari boxes now sit on the Commodore shelf. For the industry it marks something larger. Software rights and recognizable games are becoming separable from the manufacturer that first shipped them, and the cartridge is no longer a proof of loyalty to any one machine."
+          ]
+        },
+        {
+          "headline": "PC Boom Turns Into a Stock-Market Crapshoot",
+          "confidence": "same-week",
+          "sourceRefs": [
+            1
+          ],
+          "body": [
+            "John Case's analysis for Inc., published April 1, looks past the product announcements at the investors funding them and finds a wreck. “If you're a stockholder in the personal computer business, you've probably had your head handed to you by now,” Peter Wright, vice president of Gartner Group Advisory Inc., told the magazine.",
+            "The piece treats personal-computer investing as a contest shaped by IBM's gravitational pull, price cuts that arrive faster than inventory turns, and genuine uncertainty about which vendors will still be shipping in two years. A crowded field of machines is not the same thing as a crowded field of survivors.",
+            "Read alongside the week's launch coverage, the analysis supplies the counterweight. The same spring that produces the PCjr, the Macintosh and the Mindset is producing a shakeout, and the two facts are not in tension. They are the same fact seen from the showroom and from the ticker."
+          ]
+        },
+        {
+          "headline": "Mindset Pushes PC Graphics Beyond the IBM Mold",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6,
+            7
+          ],
+          "body": [
+            "BYTE's April issue lists the Mindset personal computer among its notable contents, and the machine deserves the attention for reasons that have nothing to do with spreadsheet compatibility. It runs MS-DOS on an Intel 80186, but it is not a conventional full clone of the IBM PC.",
+            "The difference is custom graphics hardware. The Mindset supports 320-by-200 graphics with sixteen simultaneous colors chosen from a 512-color palette, with hardware assistance for drawing and animation rather than the software-only redraw that slows other MS-DOS machines. Optional equipment allows work with NTSC video input and output, aiming the system at titling and graphics production.",
+            "Surviving service documentation dated April 1984 confirms the system was entering supported commercial use this spring. Whether the market rewards a graphics-minded MS-DOS machine is another question, and one the same week's business coverage suggests will be answered harshly."
+          ]
+        },
+        {
+          "headline": "Jobs Sells the Macintosh as a Mission, Not Just a Machine",
+          "confidence": "same-week",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "Joseph P. Kahn's profile of Steven Jobs, published April 1 by Inc., catches Apple's chairman before an audience in Boston's John Hancock Hall running a tightly staged audiovisual presentation. The subject is a computer; the register is evangelical.",
+            "The profile supplies period texture the specification sheets cannot. Apple is not merely selling a 68000 and a mouse for $2,495. It is selling a claim about how ordinary people should meet a computer, and the pitch is delivered with the conviction of someone who expects to be proved right in public."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM PCjr",
+          "summary": "Home-oriented 8088-class IBM machine in 64K and 128K models, with better color and sound than the PC but an infrared chiclet keyboard and incomplete compatibility.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Apple Macintosh",
+          "summary": "Motorola 68000, 128K RAM, built-in nine-inch monochrome display, 400K 3.5-inch floppy, keyboard and mouse, $2,495 list.",
+          "confidence": "period",
+          "sourceRefs": [
+            0,
+            12
+          ]
+        },
+        {
+          "title": "Mindset Personal Computer",
+          "summary": "80186 MS-DOS system with custom color graphics and optional NTSC video production equipment.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6,
+            7
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "ATARISOFT",
+          "detail": "Twelve Atari games issued for rival computers and consoles under a new cross-platform label."
+        },
+        {
+          "name": "Securities Analysis",
+          "detail": "COMPUTE!'s April cover program for investment analysis, with Commodore 64, VIC-20, Atari and IBM PC versions."
+        },
+        {
+          "name": "True BASIC",
+          "detail": "One of five BASIC dialects surveyed in BYTE's April language roundup."
+        },
+        {
+          "name": "Macintosh BASIC",
+          "detail": "Apple's BASIC for the new 68000 machine, covered in the same BYTE survey."
+        },
+        {
+          "name": "BASIC-09",
+          "detail": "Structured BASIC reviewed alongside BetterBASIC and Professional BASIC in BYTE, April 1984."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer Games This Week",
+          "items": [
+            "Oil's Well — Atarisoft cross-platform release",
+            "B.C.'s Quest for Tires — Commodore 64",
+            "Sammy Lightfoot — Apple II",
+            "Fathom — ColecoVision",
+            "Buck Rogers — home consoles and micros"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "1. Police Academy",
+            "2. Romancing the Stone",
+            "3. Splash",
+            "4. Greystoke: The Legend of Tarzan, Lord of the Apes",
+            "5. Against All Odds"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "ATARISOFT twelve-title cross-platform line",
+            "Securities Analysis (COMPUTE!, April)",
+            "True BASIC",
+            "BetterBASIC",
+            "Professional BASIC"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple Macintosh",
+          "price": "$2,495",
+          "note": "Suggested retail with keyboard, mouse and 400K drive."
+        },
+        {
+          "item": "IBM PCjr",
+          "price": "64K and 128K models",
+          "note": "Sold in two configurations for the family market; compatibility varies by title."
+        },
+        {
+          "item": "COMPUTE! April 1984",
+          "price": "$2.95",
+          "note": "$3.25 in Canada, £2.25 in the United Kingdom."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Georgetown Wins the NCAA Title",
+          "text": "Georgetown beat Houston 84-75 on April 2, and John Thompson became the first Black head coach to win the Division I men's championship."
+        },
+        {
+          "headline": "Footloose Holds the Singles Chart",
+          "text": "Kenny Loggins stayed at No. 1 on the Billboard Hot 100 dated April 7 for a second week."
+        },
+        {
+          "headline": "Police Academy Keeps the Box Office",
+          "text": "The comedy retained the top domestic spot for the April 6-8 weekend."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        },
+        {
+          "rank": 2,
+          "title": "Somebody's Watching Me",
+          "artist": "Rockwell"
+        },
+        {
+          "rank": 3,
+          "title": "Against All Odds (Take a Look at Me Now)",
+          "artist": "Phil Collins"
+        },
+        {
+          "rank": 4,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 5,
+          "title": "Automatic",
+          "artist": "Pointer Sisters"
+        }
+      ],
+      "periodAd": {
+        "headline": "Twelve Favorites. Somebody Else's Computer.",
+        "summary": "ATARISOFT brings Atari's arcade library to the Commodore 64, Apple II, IBM PC, ColecoVision and TI-99/4A.",
+        "tagline": "The games you know. The machine you already own."
+      },
+      "market": {
+        "headline": "Investors Learn the Cost of a Crowded Field",
+        "summary": "Inc.'s April 1 analysis describes personal-computer stocks battered by IBM's dominance, rapid price cuts and doubt over which vendors survive.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "United States Vetoes U.N. Condemnation Over Nicaragua Harbor Mining",
+        "summary": "On April 4 Washington vetoed a Security Council resolution condemning the mining of Nicaraguan ports, sharpening the international dispute over American involvement in Central America.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          11
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "PCjr versus Macintosh comparison and machine specifications",
+            "status": "Verified against TIME's April 2, 1984 report and period Macintosh introduction documentation.",
+            "sourceRefs": [
+              0,
+              12
+            ]
+          },
+          {
+            "claim": "ATARISOFT twelve-title release",
+            "status": "Reported in COMPUTE! Issue 47, April 1984, page 182.",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "Personal-computer market analysis and Gartner quote",
+            "status": "Published by Inc. on April 1, 1984.",
+            "sourceRefs": [
+              1
+            ]
+          },
+          {
+            "claim": "Mindset specifications",
+            "status": "BYTE April 1984 contents and Mindset service documentation dated April 1984.",
+            "sourceRefs": [
+              6,
+              7
+            ]
+          },
+          {
+            "claim": "Music and movie charts",
+            "status": "Billboard Hot 100 dated April 7, 1984 and the domestic weekend of April 6-8; the No. 1 positions are verified and the remaining chart order follows the period listing.",
+            "sourceRefs": [
+              8,
+              9,
+              13
+            ]
+          },
+          {
+            "claim": "World bulletin and briefs",
+            "status": "UPI dispatches of April 3 and April 4, 1984, and same-day sports reporting for April 2.",
+            "sourceRefs": [
+              10,
+              11
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "TIME: Computers: The Peanut Meets the Mac, April 2, 1984",
+          "url": "https://time.com/archive/6699888/computers-the-peanut-meets-the-mac/"
+        },
+        {
+          "label": "Inc.: The PC Crapshoot, April 1, 1984",
+          "url": "https://www.inc.com/magazine/19840401/1777.html"
+        },
+        {
+          "label": "Inc.: Steven Jobs of Apple Computer: The Missionary of Micros, April 1, 1984",
+          "url": "https://www.inc.com/magazine/19840401/552.html"
+        },
+        {
+          "label": "COMPUTE! Issue 47: Popular Games Released, April 1984",
+          "url": "https://www.atarimagazines.com/compute/issue47/167_4_NEWS_PRODUCTS_Popular_Games_Released.php"
+        },
+        {
+          "label": "COMPUTE! Issue 47, April 1984",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_047_1984_Apr.pdf"
+        },
+        {
+          "label": "Computer Entertainer, April 1984",
+          "url": "https://ataricompendium.com/archives/newsletters/video_game_update/computer_entertainer_apr84.pdf"
+        },
+        {
+          "label": "BYTE, April 1984",
+          "url": "https://archive.org/details/byte-magazine-1984-04"
+        },
+        {
+          "label": "Mindset Service Manual, April 1984",
+          "url": "https://mirrors.meulie.net/bitsavers.org/pdf/mindset/Mindset_Service_Manual_Apr84.pdf"
+        },
+        {
+          "label": "Billboard Hot 100, week ending April 7, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-04-07"
+        },
+        {
+          "label": "Domestic Box Office, Weekend 14, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W14/?sort=gross"
+        },
+        {
+          "label": "UPI: Army seizes power in Guinea, April 3, 1984",
+          "url": "https://www.upi.com/Archives/1984/04/03/The-army-seized-power-in-Guinea-in-a-bloodless/3268449816400/"
+        },
+        {
+          "label": "UPI: U.S. vetoes condemnation of mining of Nicaraguan ports, April 4, 1984",
+          "url": "https://www.upi.com/Archives/1984/04/04/US-vetoes-condemnation-of-mining-of-Nicaraguan-ports/4393449902800/"
+        },
+        {
+          "label": "Apple Introduces Macintosh, January 1984 specifications and price",
+          "url": "http://myoldmac.net/FAQ/Apple-Introduces-Macintosh1984.php"
+        },
+        {
+          "label": "UPI: Audiences salute Police Academy, April 9, 1984",
+          "url": "https://www.upi.com/Archives/1984/04/09/Audiences-salute-Police-Academy-weekends-No-1-box-office-hit/8713450334800/"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-08-29",
       "historicDate": "1984-03-26",
       "displayDate": "Week of March 26-April 1, 1984",

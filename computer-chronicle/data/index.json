@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-08-31",
+      "historicDate": "1984-04-02",
+      "displayDate": "Week of April 2-8, 1984",
+      "edition": "Issue 088 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "IBM's Peanut and Apple's Macintosh go head to head on the newsstand while Atari sells its arcade library to everybody else's hardware.",
+      "leadHeadline": "The Peanut Meets the Mac: IBM and Apple Fight for the Next Home Buyer",
+      "storyHeadlines": [
+        "Atari Invades Rival Machines With a Dozen Atarisoft Games",
+        "PC Boom Turns Into a Stock-Market Crapshoot",
+        "Mindset Pushes PC Graphics Beyond the IBM Mold",
+        "Jobs Sells the Macintosh as a Mission, Not Just a Machine"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-02.jpg",
+      "thumb": "media/thumbs/1984-04-02.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-29",
       "historicDate": "1984-03-26",
       "displayDate": "Week of March 26-April 1, 1984",
