@@ -41,6 +41,7 @@ import {
   getActiveHitboxes,
   getHurtboxes,
   isCounterHit,
+  localBoxToWorld,
   resolveArenaCollision,
 } from "./engine/defense.mjs";
 import {
@@ -1038,6 +1039,29 @@ const audioAssets = {
   ko: "assets/audio/knockout.mp3",
 };
 
+// v2.6 ELEMENTS: one short generated layer per element (ElevenLabs
+// sound-effects API), fired from the element-kit release latch through
+// elementSfx() — sfx-toggle-gated and rate-capped there so mashed specials
+// never stack the layer. A separate table on purpose: audioAssets is the
+// review-guarded shared-cue table (exactly the seven takes Jez kept) and
+// these are new generated media, not reviewed recordings returning. They
+// join the same sfxPools below, so sound() plays them through the ordinary
+// pool/cursor/procedural-fallback machinery.
+const elementAudioAssets = Object.freeze({
+  "vfx-flame": "assets/audio/vfx/flame-whoosh.mp3",
+  "vfx-electric": "assets/audio/vfx/electric-crackle.mp3",
+  "vfx-seismic": "assets/audio/vfx/seismic-rumble.mp3",
+  "vfx-spark": "assets/audio/vfx/spark-hiss.mp3",
+  "vfx-smoke": "assets/audio/vfx/smoke-puff.mp3",
+  "vfx-bass": "assets/audio/vfx/bass-drop.mp3",
+  "vfx-curse": "assets/audio/vfx/curse-wind.mp3",
+  "vfx-glyph": "assets/audio/vfx/glyph-chime.mp3",
+  "vfx-paper": "assets/audio/vfx/paper-flutter.mp3",
+  "vfx-paint": "assets/audio/vfx/paint-spray.mp3",
+  "vfx-vinyl": "assets/audio/vfx/vinyl-scratch.mp3",
+  "vfx-cash": "assets/audio/vfx/cash-riffle.mp3",
+});
+
 const sfxVolumes = {
   select: 0.5,
   jump: 0.42,
@@ -1069,6 +1093,19 @@ const sfxVolumes = {
   scream: 0.95,
   // Release 1.7 DEPTH: guard-crush shatter bark.
   crush: 0.74,
+  // v2.6 ELEMENTS: elemental layers sit under the existing swing/impact cues.
+  "vfx-flame": 0.46,
+  "vfx-electric": 0.44,
+  "vfx-seismic": 0.5,
+  "vfx-spark": 0.4,
+  "vfx-smoke": 0.5,
+  "vfx-bass": 0.42,
+  "vfx-curse": 0.55,
+  "vfx-glyph": 0.42,
+  "vfx-paper": 0.62,
+  "vfx-paint": 0.5,
+  "vfx-vinyl": 0.42,
+  "vfx-cash": 0.5,
 };
 
 function createSfxPool(kind, src) {
@@ -1084,6 +1121,11 @@ const sfxPools = Object.fromEntries(Object.entries(audioAssets).map(([kind, src]
   createSfxPool(kind, src),
 ]));
 const sfxCursors = Object.fromEntries(Object.keys(audioAssets).map((kind) => [kind, 0]));
+// The elemental layers ride the same pools/cursors so sound() plays them.
+for (const [kind, src] of Object.entries(elementAudioAssets)) {
+  sfxPools[kind] = createSfxPool(kind, src);
+  sfxCursors[kind] = 0;
+}
 const fighterSfxPools = new Map();
 const fighterSfxCursors = new Map();
 const fighterAudioAudit = auditFighterAudio();
@@ -5665,6 +5707,10 @@ const presentationDebug = {
   practicalLights: 0, weatherParticles: 0, foregroundOccluders: 0, crowdFlashes: 0,
   counterFlashes: 0, projectileGlows: 0, swipeRibbons: 0, wallSplats: 0,
   focusLines: 0, lightSpills: 0,
+  // v2.6 MOTION steady per-frame passes (2D draw path).
+  squashStretchFrames: 0, poseCrossfades: 0, attackSmears: 0,
+  // MOTION FIX 7: flip-path arc ribbon frames (2D world pass).
+  arcRibbons: 0,
   // Wave 7 steady screen-space passes, counted per rendered frame.
   bloomPasses: 0, rgbSplits: 0,
   // Release 1.8C REALITY BREAK steady render-only passes.
@@ -5720,6 +5766,1429 @@ function clearBattleDamage() {
   battleDamageMarks[1].length = 0;
   battleDamageRevision[0] += 1;
   battleDamageRevision[1] += 1;
+}
+
+// ---------------------------------------------------------------------------
+// v2.6 MOTION — the classic 2D-fighter movement-animation layer.
+// Jump flips, squash & stretch, pose cross-fades, attack smears, ground work
+// (dash plumes / skid smoke / landing rings / crack flashes) and recovery
+// wobble. ALL of it is presentation: the flip/stretch transforms are pure
+// functions of already-snapshotted sim fields (vy, y, vx, grounded, movement
+// constants), and the event latches live in module-level render-only observer
+// state on the documented superDimLevel pattern — written exclusively from
+// the render loop (updateMotionObservers runs in draw(), which never executes
+// during rollback resimulation), so checksums and resim are untouched.
+// Consumed by BOTH renderers: drawFighter applies the transform directly and
+// the CINEMA 3D poseRig reads the same fighterMotionTransform via the bridge.
+// ---------------------------------------------------------------------------
+const MOTION_RULES = Object.freeze({
+  crossfadeFrames: 3,        // sim-tick-paced pose cross-fade length
+  landSquashFrames: 4,       // landing impact squash duration
+  wobbleFrames: 10,          // hit-recoil settle after hitstun ends
+  jumpDirThreshold: 60,      // |vx| that reads as a directional jump
+  skidSpeed: 230,            // grounded |vx| that arms a reversal skid
+  skidCooldown: 10,          // ticks between skid puffs per side
+  crackFallSpeed: 940,       // fall speed that earns the ground-crack flash
+});
+// Monotonic one-shot totals on the hudFxDebug pattern (never reset), exposed
+// via snapshot().violence for orchestrator smoke tests.
+const motionFxDebug = { jumpFlips: 0, skidSmokes: 0, landingDust: 0 };
+// Render-frame gate: motion observers advance their frame counters only when
+// the simulation actually ticked, so 120Hz displays and QA manual stepping
+// both pace the latches in sim frames.
+let motionLastObservedTick = -1;
+
+function createMotionObserver() {
+  return {
+    fighterId: null,
+    wasGrounded: true, prevVy: 0, prevVx: 0, prevHitstun: 0, prevDashFrames: 0,
+    // Jump-flip latch: armed at a CONTROLLED launch, cancelled by any hit /
+    // air attack, cleared on landing. flipSpin is the world-space spin sign.
+    flipEligible: false, flipKind: "neutral", flipSpin: 1, airAttackLatch: false,
+    landFrames: 0, landMag: 0,
+    // MOTION FIX 7: a flip landing earns a deeper touchdown compress + foot
+    // dust — latched from flipEligible the tick the feet plant.
+    flipLandFrames: 0,
+    wobbleFrames: 0,
+    leanLevel: 0,
+    skidCooldown: 0, dashPuffClock: 0,
+    // MOTION FIX 8: ticks since the dash push-off, for the early torso lean
+    // (head leads, ~12° over dash frames 2-4) and the stride stretch.
+    dashAge: -1,
+    // BODY-FIRST (spec 5): ticks since a controlled takeoff — the directional
+    // flip's 2-tick launch stretch-smear reads this. -1 = grounded.
+    launchAge: -1,
+    // BODY-FIRST (spec 9): 3-tick rear-up gesture as the Devil's hex charm
+    // leaves the claw; charmCount detects the projectile's spawn tick.
+    castFrames: 0, charmCount: 0,
+    // MOTION FIX 4: swipe ribbons dissipate within ~9 ticks of first contact
+    // instead of holding frozen through hitstop. 1 = live, eases to 0.
+    ribbonFade: 1,
+    // Pose cross-fade bookkeeping (2D draw path only).
+    poseBank: null, poseFrame: -1, fadeBank: null, fadeFrame: -1, fadeLeft: 0,
+  };
+}
+const motionObs = [createMotionObserver(), createMotionObserver()];
+// Reusable transform results — fighterMotionTransform runs up to three times
+// per fighter per frame (main pass, reflection pass, 3D rig), so it writes
+// into these persistent scratches instead of allocating.
+const motionScratch = [
+  { rotation: 0, flipRotation: 0, scaleX: 1, scaleY: 1, offsetX: 0, offsetY: 0, stretchActive: false },
+  { rotation: 0, flipRotation: 0, scaleX: 1, scaleY: 1, offsetX: 0, offsetY: 0, stretchActive: false },
+];
+
+function resetMotionObserver(obs) {
+  const fresh = createMotionObserver();
+  for (const key of Object.keys(fresh)) obs[key] = fresh[key];
+}
+
+// Smootherstep ease shared by the flip arcs: zero-velocity endpoints so the
+// sprite leaves the ground upright and lands upright, with the rotation
+// concentrated through the middle of the arc (the "tuck").
+function motionEase01(edge0, edge1, value) {
+  const t = clamp((value - edge0) / (edge1 - edge0), 0, 1);
+  return t * t * t * (t * (t * 6 - 15) + 10);
+}
+
+// MOTION FIX 8: dash push-off dust is TWO discrete backward puffs — tight
+// irregular clumps kicked off the launch foot at staggered distances — not a
+// homogeneous spray. Render-path spawn into checksum-exempt state.particles.
+function spawnMotionDashPlume(fighter) {
+  const forward = fighter.dashDirection || fighter.facing;
+  const perClump = Math.max(2, Math.round(4 * state.performance.particleScale));
+  for (let clump = 0; clump < 2; clump += 1) {
+    // Each clump shares one base position + velocity so it reads as a single
+    // kicked lump of street dust, with per-mote jitter for the ragged edge.
+    const clumpX = fighter.x - forward * (14 + clump * 30 + visualRandom() * 10);
+    const clumpVx = -forward * (120 + clump * 90 + visualRandom() * 60);
+    const clumpVy = -55 - clump * 30 - visualRandom() * 40;
+    for (let mote = 0; mote < perClump; mote += 1) {
+      state.particles.push({
+        kind: "dust",
+        x: clumpX + (visualRandom() - 0.5) * 12,
+        y: FLOOR - 2 - visualRandom() * 8,
+        vx: clumpVx * (0.8 + visualRandom() * 0.4),
+        vy: clumpVy * (0.7 + visualRandom() * 0.6),
+        gravity: 340,
+        drag: 0.93,
+        life: 0.3 + clump * 0.08 + visualRandom() * 0.22,
+        max: 0.6,
+        size: 4.5 + visualRandom() * (7 - clump * 2),
+        color: visualRandom() > 0.4 ? "#7c756b" : "#524d48",
+      });
+    }
+  }
+  // MOTION FIX 12: mirror the push-off dust into the CINEMA 3D layer.
+  if (cinema3dBridge.onDust) {
+    cinema3dBridge.onDust({ x: fighter.x - forward * 24, y: FLOOR - 4, force: 0.8, direction: -forward });
+  }
+}
+
+// Skid smoke (spec 5): pale drifting puffs when a grounded fighter reverses
+// direction at speed — the feet fighting the old momentum.
+function spawnMotionSkidSmoke(fighter, previousVx) {
+  const skidDir = Math.sign(previousVx) || fighter.facing;
+  const total = Math.max(3, Math.round(8 * state.performance.particleScale));
+  for (let index = 0; index < total; index += 1) {
+    state.particles.push({
+      kind: "dust",
+      x: fighter.x + skidDir * (6 + visualRandom() * 30),
+      y: FLOOR - 3 - visualRandom() * 8,
+      vx: skidDir * (60 + visualRandom() * 150),
+      vy: -50 - visualRandom() * 95,
+      gravity: 220,
+      drag: 0.93,
+      life: 0.3 + visualRandom() * 0.34,
+      max: 0.64,
+      size: 6 + visualRandom() * 8,
+      color: visualRandom() > 0.35 ? "#8a8378" : "#6b655e",
+    });
+  }
+  motionFxDebug.skidSmokes += 1;
+}
+
+// MOTION FIX 6: landing dust is 3-4 IRREGULAR CLUMPS kicking outward and
+// settling — the clean vector shockRing ellipse is gone (a perfect ring read
+// as a decal, not dust). Each clump is a handful of motes sharing a base
+// trajectory; a violent fall still adds the crack flash in the stage-scar
+// visual language (chalky scuff, pale chipped edge, dark crack) that fades
+// out completely — no scar persistence, presentation only.
+function spawnMotionLandingDust(fighter, fallSpeed, heavy = false) {
+  const force = clamp(fallSpeed / 760, 0.45, 1.6) * (heavy ? 1.2 : 1);
+  const clumps = 3 + (visualRandom() < 0.5 ? 1 : 0);
+  const perClump = Math.max(2, Math.round(3 * state.performance.particleScale));
+  for (let clump = 0; clump < clumps; clump += 1) {
+    // Alternate sides, ragged reach: clumps kick OUT along the floor line and
+    // settle under their own gravity — no two landings share a silhouette.
+    const side = clump % 2 ? 1 : -1;
+    const reach = 10 + visualRandom() * 30 + clump * 7;
+    const clumpVx = side * (80 + visualRandom() * 150) * force;
+    // BODY-FIRST (spec 4): the kick-up reaches KNEE height — the old
+    // -40..-130 launch died at ankle level and read as floor noise.
+    const clumpVy = (-110 - visualRandom() * 130) * force;
+    for (let mote = 0; mote < perClump; mote += 1) {
+      state.particles.push({
+        kind: "dust",
+        x: fighter.x + side * reach + (visualRandom() - 0.5) * 14,
+        y: FLOOR - 2 - visualRandom() * 5,
+        vx: clumpVx * (0.75 + visualRandom() * 0.5),
+        vy: clumpVy * (0.6 + visualRandom() * 0.7),
+        gravity: 360,
+        drag: 0.92,
+        life: 0.3 + visualRandom() * 0.34,
+        max: 0.64,
+        size: 3.5 + visualRandom() * (8 - clump),
+        color: visualRandom() > 0.4 ? "#7c756b" : "#4e4a46",
+      });
+    }
+  }
+  if (heavy && state.performance.trailScale > 0 && !state.accessibility.reducedMotion) {
+    // Crack polyline built once at spawn (same construction as pushStageScar,
+    // squashed into the floor perspective) — the draw pass just strokes it.
+    const points = [[0, 0]];
+    const segments = 4 + Math.floor(visualRandom() * 2);
+    const baseAngle = visualRandom() * Math.PI * 2;
+    let px = 0;
+    let py = 0;
+    for (let index = 0; index < segments; index += 1) {
+      const angle = baseAngle + (visualRandom() - 0.5) * 1.9;
+      const length = 12 + visualRandom() * 26;
+      px += Math.cos(angle) * length;
+      py += Math.sin(angle) * length * 0.34;
+      points.push([px, py]);
+    }
+    state.effects.push({
+      kind: "groundCrackFlash", x: fighter.x, y: FLOOR + 7,
+      life: 0.36, max: 0.36, color: "#efe6d4", points,
+      scuffW: 34 + force * 26 + visualRandom() * 14,
+      scuffH: 6 + visualRandom() * 5,
+      rot: (visualRandom() - 0.5) * 0.5,
+    });
+  }
+  // MOTION FIX 12: mirror landing dust into the CINEMA 3D layer.
+  if (cinema3dBridge.onDust) {
+    cinema3dBridge.onDust({ x: fighter.x, y: FLOOR - 4, force, direction: 0 });
+  }
+  motionFxDebug.landingDust += 1;
+}
+
+// BODY-FIRST (spec 6): dash-stop dust slide — a low, forward-dragged smear of
+// motes as the feet bite at the end of the dash (the launch already gets the
+// two-puff plume; this is its closing bracket).
+function spawnMotionDashStopSlide(fighter) {
+  const forward = fighter.dashDirection || fighter.facing;
+  const total = Math.max(2, Math.round(4 * state.performance.particleScale));
+  for (let mote = 0; mote < total; mote += 1) {
+    state.particles.push({
+      kind: "dust",
+      x: fighter.x + forward * (8 + visualRandom() * 14),
+      y: FLOOR - 1 - visualRandom() * 3,
+      vx: forward * (90 + visualRandom() * 120),
+      vy: -8 - visualRandom() * 22,
+      gravity: 260,
+      drag: 0.88,
+      life: 0.2 + visualRandom() * 0.16,
+      max: 0.36,
+      size: 3 + visualRandom() * 4,
+      color: visualRandom() > 0.5 ? "#7c756b" : "#575249",
+    });
+  }
+}
+
+// MOTION FIX 7: flip touchdown foot dust — two small puffs squeezed straight
+// out from under the planted feet on the compress frame, tighter and lower
+// than the landing clumps so the read is "feet slap the street".
+function spawnMotionFlipFootDust(fighter) {
+  const perFoot = Math.max(2, Math.round(3 * state.performance.particleScale));
+  for (let foot = 0; foot < 2; foot += 1) {
+    const side = foot ? 1 : -1;
+    for (let mote = 0; mote < perFoot; mote += 1) {
+      state.particles.push({
+        kind: "dust",
+        x: fighter.x + side * (10 + visualRandom() * 8),
+        y: FLOOR - 1 - visualRandom() * 3,
+        vx: side * (50 + visualRandom() * 90),
+        vy: -14 - visualRandom() * 34,
+        gravity: 300,
+        drag: 0.9,
+        life: 0.2 + visualRandom() * 0.18,
+        max: 0.38,
+        size: 3 + visualRandom() * 4,
+        color: visualRandom() > 0.5 ? "#8a8378" : "#5c5750",
+      });
+    }
+  }
+}
+
+// Per-rendered-frame motion observation. Runs once at the top of draw() —
+// BEFORE either renderer consumes the transforms — and advances its frame
+// counters only on sim-tick edges so render rate never changes the pacing.
+function updateMotionObservers() {
+  if (state.screen !== "fight" || state.fighters.length < 2) {
+    motionObs.forEach(resetMotionObserver);
+    motionLastObservedTick = -1;
+    return;
+  }
+  const tickAdvanced = state.simulationTick !== motionLastObservedTick;
+  motionLastObservedTick = state.simulationTick;
+  if (!tickAdvanced) return;
+  const reducedMotion = state.accessibility.reducedMotion;
+  for (let side = 0; side < 2; side += 1) {
+    const fighter = state.fighters[side];
+    const obs = motionObs[side];
+    if (obs.fighterId !== fighter.def.id) {
+      resetMotionObserver(obs);
+      obs.fighterId = fighter.def.id;
+      obs.wasGrounded = fighter.grounded;
+      obs.prevVy = fighter.vy;
+      obs.prevVx = fighter.vx;
+    }
+    const controlled = fighter.hitstunFrames === 0 && !fighter.down
+      && !fighter.pendingKnockdown && !fighter.grabbed && fighter.dizzyFrames === 0
+      && fighter.airTechFlipFrames === 0 && fighter.cinematicFrame === null;
+    // --- Jump launch: arm the flip on a controlled leap ---------------------
+    if (!fighter.grounded && obs.wasGrounded && fighter.vy < 0 && controlled && !fighter.attacking) {
+      const jumpDir = Math.abs(fighter.vx) > MOTION_RULES.jumpDirThreshold ? Math.sign(fighter.vx) : 0;
+      obs.flipKind = jumpDir === 0 ? "neutral" : jumpDir === fighter.facing ? "forward" : "back";
+      obs.flipSpin = obs.flipKind === "back" ? -fighter.facing : fighter.facing;
+      obs.flipEligible = !reducedMotion;
+      obs.airAttackLatch = false;
+      obs.launchAge = 0;
+      if (obs.flipEligible) motionFxDebug.jumpFlips += 1;
+      // MOTION FIX 12: takeoff dust in both renderers — a small squeeze of
+      // street dust under the launch, mirrored into the 3D layer.
+      if (state.phase === "fight" && !reducedMotion) {
+        spawnMotionFlipFootDust(fighter);
+        if (cinema3dBridge.onDust) {
+          cinema3dBridge.onDust({ x: fighter.x, y: FLOOR - 4, force: 0.6, direction: 0 });
+        }
+      }
+    }
+    // An air attack snaps the sprite upright for the REST of the arc — no
+    // rotation pops back in after the recovery (readability rule).
+    if (!fighter.grounded && fighter.attacking) obs.airAttackLatch = true;
+    // Getting hit / grabbed out of the jump cancels the flip outright.
+    if (!fighter.grounded && !controlled) obs.flipEligible = false;
+    else if (!fighter.grounded && obs.launchAge >= 0 && !obs.wasGrounded) obs.launchAge += 1;
+    // --- Landing ------------------------------------------------------------
+    if (fighter.grounded && !obs.wasGrounded) {
+      const fallSpeed = Math.max(0, obs.prevVy);
+      // "Heavy landing": slamming down out of an air attack (the latch is
+      // still live here) or a faster-than-any-jump fall — earns the crack
+      // flash tier inside spawnMotionLandingDust.
+      const heavyLanding = obs.airAttackLatch || fallSpeed > MOTION_RULES.crackFallSpeed;
+      obs.landFrames = MOTION_RULES.landSquashFrames;
+      obs.landMag = clamp(fallSpeed / 760, 0.55, 1.4);
+      // MOTION FIX 7: a landing out of a live flip gets the touchdown
+      // compress read — 2 ticks of deeper squash plus foot dust — so a
+      // distinct "feet plant" frame sits between airborne and standing.
+      if (obs.flipEligible && !reducedMotion) {
+        obs.flipLandFrames = 2;
+        if (fighter.hitstunFrames === 0 && !fighter.down && !fighter.pendingKnockdown
+          && state.phase === "fight") {
+          spawnMotionFlipFootDust(fighter);
+        }
+      }
+      obs.flipEligible = false;
+      obs.airAttackLatch = false;
+      obs.launchAge = -1;
+      // Controlled landings get the dust clumps; knockdown slams already carry
+      // their own impact spectacle (spawnKnockdownImpact + stage scar), so
+      // those stay theirs.
+      if (fighter.hitstunFrames === 0 && !fighter.down && !fighter.pendingKnockdown
+        && state.phase === "fight") {
+        spawnMotionLandingDust(fighter, fallSpeed, heavyLanding);
+      }
+    } else {
+      if (obs.landFrames > 0) obs.landFrames -= 1;
+      if (obs.flipLandFrames > 0) obs.flipLandFrames -= 1;
+    }
+    // --- Skid smoke on grounded direction reversals at speed ----------------
+    if (obs.skidCooldown > 0) obs.skidCooldown -= 1;
+    if (fighter.grounded && obs.wasGrounded && obs.skidCooldown === 0
+      && Math.abs(obs.prevVx) > MOTION_RULES.skidSpeed
+      && Math.sign(fighter.vx) === -Math.sign(obs.prevVx)
+      && Math.abs(fighter.vx) > 100 && state.phase === "fight") {
+      spawnMotionSkidSmoke(fighter, obs.prevVx);
+      obs.skidCooldown = MOTION_RULES.skidCooldown;
+    }
+    // --- Dash plume + rolling dash dust -------------------------------------
+    if (fighter.dashFrames > 0 && obs.prevDashFrames <= 0 && state.phase === "fight") {
+      spawnMotionDashPlume(fighter);
+      obs.dashPuffClock = 0;
+      obs.dashAge = 0;
+    } else if (fighter.dashFrames > 0 && state.phase === "fight") {
+      obs.dashAge += 1;
+      obs.dashPuffClock += 1;
+      if (obs.dashPuffClock % 3 === 0 && state.performance.particleScale > 0.4) {
+        state.particles.push({
+          kind: "dust",
+          x: fighter.x - (fighter.dashDirection || fighter.facing) * (14 + visualRandom() * 18),
+          y: FLOOR - 2,
+          vx: -(fighter.dashDirection || fighter.facing) * (50 + visualRandom() * 110),
+          vy: -20 - visualRandom() * 60,
+          gravity: 320,
+          drag: 0.94,
+          life: 0.18 + visualRandom() * 0.2,
+          max: 0.38,
+          size: 3.5 + visualRandom() * 5,
+          color: "#6f6961",
+        });
+      }
+      // MOTION FIX 8: accent ember trail shed off the TORSO line (hip to
+      // shoulder), not just the feet — 1-2 hot motes per tick streaming
+      // backward so the dash carries a body-height speed read.
+      if (!reducedMotion && state.performance.particleScale > 0.4) {
+        const back = -(fighter.dashDirection || fighter.facing);
+        const embers = 1 + (obs.dashAge % 2);
+        for (let ember = 0; ember < embers; ember += 1) {
+          state.particles.push({
+            kind: "sparkLine",
+            x: fighter.x + back * (16 + visualRandom() * 26),
+            y: fighter.y - fighter.height * (0.35 + visualRandom() * 0.45),
+            vx: back * (140 + visualRandom() * 180),
+            vy: (visualRandom() - 0.4) * 70,
+            gravity: 60, drag: 0.9,
+            life: 0.12 + visualRandom() * 0.14, max: 0.26,
+            size: 1.2 + visualRandom() * 1.8,
+            color: ember % 2 ? fighter.def.accent : "#ffd9a8",
+          });
+        }
+      }
+    } else if (fighter.dashFrames <= 0) {
+      // BODY-FIRST (spec 6): dash-stop dust slide — the tick the dash ends,
+      // a couple of low motes drag forward as the feet bite the street.
+      if (obs.prevDashFrames > 0 && fighter.grounded && state.phase === "fight"
+        && state.performance.particleScale > 0.4 && !reducedMotion) {
+        spawnMotionDashStopSlide(fighter);
+      }
+      obs.dashAge = -1;
+    }
+    // --- BODY-FIRST (spec 9): hex-charm cast latch --------------------------
+    if (obs.castFrames > 0) obs.castFrames -= 1;
+    let charms = 0;
+    for (const projectile of state.projectiles) {
+      if (projectile.style === "charm" && projectile.ownerSide === side) charms += 1;
+    }
+    if (charms > obs.charmCount && !reducedMotion) obs.castFrames = 3;
+    obs.charmCount = charms;
+    // --- Hit-recoil wobble: settles over ~10 frames after hitstun ends ------
+    if (obs.prevHitstun > 0 && fighter.hitstunFrames === 0 && !fighter.down
+      && fighter.dizzyFrames === 0 && fighter.grounded) {
+      obs.wobbleFrames = MOTION_RULES.wobbleFrames;
+    } else if (obs.wobbleFrames > 0) obs.wobbleFrames -= 1;
+    // --- MOTION FIX 4: ribbon dissipation after contact ---------------------
+    // The swipe ribbon must whip through and be GONE within ~9 ticks of the
+    // hit landing instead of holding frozen through hitstop. attackConnected
+    // is sim truth; ticks keep advancing through the freeze, so this fade
+    // runs while everything else holds.
+    if (fighter.attacking && fighter.attackConnected) {
+      obs.ribbonFade = Math.max(0, obs.ribbonFade - 1 / 9);
+    } else if (!fighter.attacking || !fighter.attackConnected) {
+      obs.ribbonFade = 1;
+    }
+    // --- Dash/walk lean easing ----------------------------------------------
+    const moving = fighter.grounded && !fighter.attacking && !fighter.crouch
+      && !fighter.block && !fighter.down && fighter.hitstunFrames === 0
+      && fighter.cinematicFrame === null;
+    const leanTarget = reducedMotion || !moving ? 0
+      : fighter.dashFrames > 0 ? (fighter.dashDirection || fighter.facing) * 0.07
+        : Math.abs(fighter.vx) > 22 ? Math.sign(fighter.vx) * 0.035 : 0;
+    obs.leanLevel += clamp(leanTarget - obs.leanLevel, -0.018, 0.018);
+    // --- Pose cross-fade observation (spec 3) -------------------------------
+    // Tick-paced here so render rate never changes the fade length; the 2D
+    // draw path consumes fadeBank/fadeFrame/fadeLeft. A fade only ARMS on a
+    // clean pose change — hitstop freezes and hit flashes keep the snap (the
+    // snap IS the impact), battery keeps the plain blit.
+    const observedPose = fighterAnimationPose(fighter);
+    if (obs.poseBank !== observedPose.bank || obs.poseFrame !== observedPose.frame) {
+      if (obs.poseBank !== null && state.hitstop <= 0 && state.performance.trailScale > 0
+        && fighter.hitFlash <= 0 && fighter.cinematicFrame === null) {
+        obs.fadeBank = obs.poseBank;
+        obs.fadeFrame = obs.poseFrame;
+        obs.fadeLeft = MOTION_RULES.crossfadeFrames;
+      } else obs.fadeLeft = 0;
+      obs.poseBank = observedPose.bank;
+      obs.poseFrame = observedPose.frame;
+    } else if (obs.fadeLeft > 0) obs.fadeLeft -= 1;
+    // --- Store previous-frame fields ---------------------------------------
+    obs.wasGrounded = fighter.grounded;
+    obs.prevVy = fighter.vy;
+    obs.prevVx = fighter.vx;
+    obs.prevHitstun = fighter.hitstunFrames;
+    obs.prevDashFrames = fighter.dashFrames;
+  }
+}
+
+// The shared motion transform, consumed by drawFighter AND the CINEMA 3D
+// poseRig (via the bridge). Canvas conventions: rotation is world-space
+// y-down/clockwise; scales are feet-anchored. flipRotation pivots about the
+// body CENTRE (the somersault axis), everything else about the feet.
+function fighterMotionTransform(fighter) {
+  const scratch = motionScratch[fighter.side] || motionScratch[0];
+  scratch.rotation = 0;
+  scratch.flipRotation = 0;
+  scratch.scaleX = 1;
+  scratch.scaleY = 1;
+  // v2.6 BODY-FIRST: world-space pixel offset consumed PRE-mirror by both
+  // renderers — the attack-extension lunge and the victim stagger step.
+  scratch.offsetX = 0;
+  scratch.offsetY = 0;
+  scratch.stretchActive = false;
+  const obs = motionObs[fighter.side];
+  if (!obs || fighter.cinematicFrame !== null || state.screen !== "fight") return scratch;
+  const reducedMotion = state.accessibility.reducedMotion;
+  const squashScale = reducedMotion ? 0.5 : 1;
+  const controlledAir = !fighter.grounded && fighter.hitstunFrames === 0 && !fighter.down
+    && !fighter.pendingKnockdown && !fighter.grabbed && fighter.dizzyFrames === 0
+    && fighter.airTechFlipFrames === 0;
+
+  // 1. JUMP FLIP — a pure function of the ballistic arc. Rising half maps vy
+  // (launch → apex) onto progress 0→0.5; falling half maps the REMAINING
+  // height onto 0.5→1 so capped-descent kits (the Devil's glide) still land
+  // exactly upright. Air attacks and hits zero it instantly (snap upright).
+  if (controlledAir && obs.flipEligible && !fighter.attacking && !obs.airAttackLatch
+    && !reducedMotion) {
+    const launch = fighter.movement.jumpVelocityY || -720;
+    const apex = (launch * launch) / (2 * GRAVITY);
+    const height = Math.max(0, FLOOR - fighter.y);
+    const progress = fighter.vy < 0
+      ? 0.5 * (1 - clamp(fighter.vy / launch, 0, 1))
+      : 0.5 + 0.5 * clamp(1 - height / Math.max(1, apex), 0, 1);
+    // MOTION FIX 6: the rotation eases OUT through the whole fall — no early
+    // plateau. The eased curve tops out at ~0.97 of the turn (≈350°) as the
+    // feet reach the street, so the last frames before touchdown show a
+    // visible UN-TUCK (rotation still closing) and the landing snap covers
+    // only the final ~10°. Directional flips keep their earlier commit but
+    // inherit the same late finish.
+    // BODY-FIRST (spec 4): the neutral flip HOLDS A BEAT at the apex — the
+    // middle of the arc remaps onto a rotation plateau, which compresses the
+    // remaining turn into the fall — and the limb-sprawl cells tuck 6%
+    // toward a ball read mid-rotation.
+    const shaped = obs.flipKind === "neutral"
+      ? (progress < 0.44 ? progress * (0.5 / 0.44)
+        : progress < 0.6 ? 0.5
+          : 0.5 + (progress - 0.6) * (0.5 / 0.4))
+      : progress;
+    const eased = obs.flipKind === "neutral"
+      ? motionEase01(0.12, 1.0, shaped) * 0.97
+      : motionEase01(0.05, 1.0, shaped) * 0.97;
+    scratch.flipRotation = obs.flipSpin * Math.PI * 2 * eased;
+    if (obs.flipKind === "neutral") {
+      const tuck = Math.sin(clamp(progress, 0, 1) * Math.PI) * 0.06;
+      scratch.scaleX *= 1 - tuck;
+      scratch.scaleY *= 1 - tuck;
+    }
+    // BODY-FIRST (spec 5): directional flips leave with ONE genuine
+    // stretch-smear — ~15% stretch along the launch vector for the first two
+    // airborne ticks, the sprite leaning into its own velocity.
+    if (obs.flipKind !== "neutral" && obs.launchAge >= 0 && obs.launchAge < 2) {
+      scratch.rotation += clamp(Math.atan2(fighter.vx, -fighter.vy), -0.9, 0.9) * 0.45;
+      scratch.scaleY *= 1.15;
+      scratch.scaleX *= 0.88;
+      scratch.stretchActive = true;
+    }
+  }
+
+  // 2. SQUASH & STRETCH about the feet. Launch anticipation squat blends into
+  // the fast-rise stretch over the first ~30px of height; the landing squash
+  // scales with observed fall speed and recovers over 3-4 sim frames.
+  // MOTION FIX 12: the anticipation crouch is now a REAL squat (−10% Y, +7% X
+  // through the first two airborne frames) — deep enough to read in both
+  // renderers; the 3D rig consumes the same scales through the bridge.
+  if (controlledAir && !fighter.attacking && fighter.vy < 0) {
+    const launch = fighter.movement.jumpVelocityY || -720;
+    const rise = clamp(fighter.vy / launch, 0, 1);
+    const height = Math.max(0, FLOOR - fighter.y);
+    const windup = clamp(1 - height / 30, 0, 1);
+    scratch.scaleY *= (1 + 0.06 * rise * squashScale) * (1 - windup) + (1 - 0.1 * squashScale) * windup;
+    scratch.scaleX *= (1 - 0.028 * rise * squashScale) * (1 - windup) + (1 + 0.07 * squashScale) * windup;
+    scratch.stretchActive = true;
+  }
+  if (obs.landFrames > 0 && fighter.grounded) {
+    // BODY-FIRST (spec 4): landing squash deepened (0.06 -> 0.09) — the
+    // plant frame must read as a real compress in BOTH renderers.
+    const impact = (obs.landFrames / MOTION_RULES.landSquashFrames) * obs.landMag * squashScale;
+    scratch.scaleY *= 1 - 0.09 * impact;
+    scratch.scaleX *= 1 + 0.075 * impact;
+    scratch.stretchActive = true;
+  }
+  // MOTION FIX 7: flip touchdown compress — 2 ticks of a much deeper crouch
+  // stacked on the ordinary landing squash, so the plant frame is unmistakable
+  // between "airborne" and "standing".
+  if (obs.flipLandFrames > 0 && fighter.grounded) {
+    const compress = (obs.flipLandFrames / 2) * squashScale;
+    scratch.scaleY *= 1 - 0.09 * compress;
+    scratch.scaleX *= 1 + 0.07 * compress;
+    scratch.stretchActive = true;
+  }
+
+  // Dash lean (~4°) / walk lean (~2°), eased by the observer.
+  if (!reducedMotion && Math.abs(obs.leanLevel) > 0.0025 && fighter.grounded && !fighter.down) {
+    scratch.rotation += obs.leanLevel;
+    scratch.stretchActive = true;
+  }
+
+  // MOTION FIX 8: dash launch lean — the head LEADS the dash. Ticks 1-5 of a
+  // forward dash add up to ~12° of forward pitch on top of the eased base
+  // lean, rising fast and easing off as the stride settles, plus a stride
+  // stretch (+7% X) that lengthens the read of each dash step.
+  if (!reducedMotion && fighter.dashFrames > 0 && obs.dashAge >= 0
+    && fighter.grounded && !fighter.down && !fighter.attacking) {
+    const dashDir = fighter.dashDirection || fighter.facing;
+    const punchIn = clamp(obs.dashAge / 1.5, 0, 1);          // full by tick ~2
+    const settle = clamp(1 - (obs.dashAge - 4) / 4, 0, 1);   // gone by tick ~8
+    scratch.rotation += dashDir * 0.21 * punchIn * settle;
+    scratch.scaleX *= 1 + 0.07 * punchIn * settle;
+    scratch.stretchActive = true;
+  }
+
+  // v2.6 BODY-FIRST (core 1): ATTACK EXTENSION + FOLLOW-THROUGH. Pure
+  // function of the snapshotted attack timeline: the body ramps toward the
+  // target through late startup, PEAKS at the first active frame (translate
+  // toward the target + rotation into the swing + stretch along the strike
+  // line), decays across the active window, then settles through early
+  // recovery as a decaying forward lean — the weight visibly carries past
+  // the target. Heavies/specials get the full read, lights a lighter one;
+  // multi-hit supers re-extend on every landed hit (combo tracker = sim
+  // state). Consumed by drawFighter AND the CINEMA 3D poseRig, and
+  // elementLimbPoint adds the same offset so elemental FX decorate the
+  // moving body (core 3).
+  if (fighter.attacking && !fighter.down) {
+    const attack = fighter.attacking;
+    const startup = attack.active[0];
+    const activeEnd = attack.active[1];
+    const t = fighter.attackTime;
+    const heft = attack.kind === "light" ? 0.55
+      : attack.superMove ? 1.25 : attack.kind === "special" ? 1.1 : 1;
+    const calm = reducedMotion ? 0.5 : 1;
+    let extend = 0;
+    if (t >= startup * 0.7 && t < startup) {
+      extend = (t - startup * 0.7) / Math.max(0.001, startup * 0.3);
+    } else if (t >= startup && t <= activeEnd) {
+      extend = 1 - (t - startup) / Math.max(0.016, activeEnd - startup);
+    }
+    if (attack.superMove) {
+      // Per-hit re-extension: each landed hit of the storm re-lunges the
+      // swing, so the cane/fist visibly drives every impact.
+      const sinceOwnHit = state.simulationTick - (fighter.combo?.lastHitFrame ?? -Infinity);
+      if (sinceOwnHit >= 0 && sinceOwnHit < 6 && t >= startup && t <= activeEnd) {
+        extend = Math.max(extend, 1 - sinceOwnHit / 6);
+      }
+    }
+    if (extend > 0.01) {
+      scratch.offsetX += fighter.facing * 10 * heft * extend * calm;
+      scratch.rotation += fighter.facing * 0.1 * heft * extend * calm;
+      scratch.scaleX *= 1 + 0.04 * heft * extend * calm;
+      scratch.scaleY *= 1 - 0.018 * heft * extend * calm;
+      scratch.stretchActive = true;
+    } else if (t > activeEnd && attack.kind !== "light") {
+      const settle = clamp(1 - (t - activeEnd) / Math.max(0.05, (attack.duration - activeEnd) * 0.6), 0, 1);
+      if (settle > 0.01) {
+        scratch.offsetX += fighter.facing * 4 * heft * settle * calm;
+        scratch.rotation += fighter.facing * 0.05 * heft * settle * calm;
+        scratch.stretchActive = true;
+      }
+    }
+  }
+
+  // v2.6 BODY-FIRST (core 2): victim stagger transforms riding the
+  // reaction-track keys — head-snap back rotation, deeper torso-fold
+  // rotation, a 4-8px backward stagger step, then everything eases out.
+  // The clock shares the exact sim reads fighterAnimationPose uses, so cell
+  // and transform always agree; ground-slam (seismic-family) specials shove
+  // the victim visibly further (spec 8).
+  if (fighter.hitstunFrames > 0 && fighter.grounded && !fighter.down
+    && fighter.knockdownFrames === 0 && state.fighters?.length === 2) {
+    const striker = state.fighters[1 - fighter.side];
+    const sinceHit = state.simulationTick - (striker?.combo?.lastHitFrame ?? -Infinity);
+    if (sinceHit >= 0 && sinceHit <= 44) {
+      const calm = reducedMotion ? 0.5 : 1;
+      const away = -fighter.facing; // back away from the attacker
+      const seismicShove = striker?.attacking?.kind === "special"
+        && fighterElementKit(striker.def)?.groundBurst ? 3 : 1;
+      let staggerRot = 0;
+      let staggerStep = 0;
+      if (sinceHit < 5) {                    // head snap
+        staggerRot = 0.055;
+        staggerStep = 1.5;
+      } else if (sinceHit < 11) {            // torso fold
+        staggerRot = 0.1;
+        staggerStep = 3 + (sinceHit - 5) * 0.4;
+      } else if (sinceHit < 18) {            // stagger step
+        const ramp = (sinceHit - 11) / 7;
+        staggerRot = 0.08 * (1 - ramp * 0.4);
+        staggerStep = 5 + ramp * 3;
+      } else {                               // recover ease
+        const easeOut = clamp(1 - (sinceHit - 18) / 10, 0, 1);
+        staggerRot = 0.035 * easeOut;
+        staggerStep = 6 * easeOut;
+      }
+      scratch.rotation += away * staggerRot * calm;
+      scratch.offsetX += away * staggerStep * seismicShove * calm;
+      scratch.stretchActive = true;
+    }
+  }
+
+  // BODY-FIRST (spec 9): cast gesture — the Devil REARS UP for ~3 ticks as
+  // the hex charm leaves the claw (the wing-flare read: back rotation plus a
+  // rise), latched by the motion observer the tick the projectile appears.
+  if (obs.castFrames > 0 && !reducedMotion && fighter.grounded && !fighter.down) {
+    const flare = obs.castFrames / 3;
+    scratch.rotation -= fighter.facing * 0.16 * flare;
+    scratch.scaleY *= 1 + 0.06 * flare;
+    scratch.stretchActive = true;
+  }
+
+  // 6. Hit-recoil wobble: damped oscillation settling after hitstun ends.
+  if (!reducedMotion && obs.wobbleFrames > 0 && fighter.grounded && !fighter.down
+    && fighter.hitstunFrames === 0 && !fighter.attacking) {
+    const settle = obs.wobbleFrames / MOTION_RULES.wobbleFrames;
+    scratch.rotation += Math.sin((MOTION_RULES.wobbleFrames - obs.wobbleFrames) * 1.15 + fighter.side)
+      * 0.055 * settle * settle;
+  }
+
+  // 6. Dizzy body sway (amplitude up): rides on top of the double-vision
+  // ghosts, collapsing with the drain bar. animTime-driven — deterministic.
+  if (!reducedMotion && fighter.dizzyFrames > 0 && !fighter.down) {
+    const drain = fighter.dizzyFrames / Math.max(1, fighter.dizzyTotalFrames);
+    scratch.rotation += Math.sin(fighter.animTime * 4.4 + fighter.side * 1.7)
+      * 0.07 * (0.35 + 0.65 * drain);
+  }
+  return scratch;
+}
+
+// ---------------------------------------------------------------------------
+// v2.6 ELEMENTS — three-phase elemental special-attack VFX (the SF6 bar:
+// "special attacks with things like sparks, smoke, flames"). Every special/
+// EX/super and every personal throwable flight carries an element kit with
+// three phases: CHARGE (gathering aura + converging motes through startup),
+// ACTIVE (velocity-inherited trail off the moving limb/projectile through the
+// active window) and RELEASE (burst on the first active frame + ~0.5s of
+// settling residue). Sprites come from generated 4x4 flipbook sheets under
+// assets/vfx/ (magenta-keyed to alpha by tools/build_vfx_atlas.py;
+// MANIFEST.json carries per-frame trim boxes) with a procedural glow fallback
+// until the media arrives — the sheets follow the on-demand media policy and
+// are NOT in the service-worker shell.
+//
+// Everything in this block is presentation on the documented superDimLevel
+// pattern: module-level render-only state written exclusively from the render
+// loop (updateElementalVfx runs in draw(), which never executes during
+// rollback resimulation), tick-deduped like the motion observers, frame
+// selection uses visualRandom/tick hashes only, and the sprite pool is
+// budget-scaled by the performance profile (full on high, ~68% balanced,
+// minimal on battery). reducedMotion calms particle motion; the flash toggle
+// gates the bright release core and the super screen-edge wash. CINEMA 3D
+// consumes the same kits through the spawnHit latch: the payload now carries
+// the attacker's element id and the 3D impact layer re-tints its
+// protection-mask-joined burst stack per element.
+// ---------------------------------------------------------------------------
+
+// How particles cut from each sheet move and composite. anim sheets play
+// their 16 cells over the particle's life, scatter sheets pin one cell per
+// particle, flicker sheets hash a cell from the sim tick (live electricity).
+const ELEMENT_SHEET_PHYSICS = Object.freeze({
+  flame: Object.freeze({ additive: true, gravity: -150, drag: 0.9, spin: 0.5 }),
+  smoke: Object.freeze({ additive: false, gravity: -85, drag: 0.9, spin: 0.7, alpha: 0.82 }),
+  electric: Object.freeze({ additive: true, gravity: 0, drag: 0.86, spin: 0 }),
+  debris: Object.freeze({ additive: false, gravity: 960, drag: 0.985, spin: 7 }),
+  spark: Object.freeze({ additive: true, gravity: 430, drag: 0.94, spin: 0.8 }),
+  // Glyphs and curse wisps are PAINTED shapes (dark-edged volume, opaque
+  // gold): source-over keeps their silhouettes; additive washed them out
+  // against bright sprites. Both still get a backGlow halo so they separate
+  // from the night stages.
+  glyph: Object.freeze({ additive: false, gravity: -55, drag: 0.9, spin: 0.5, backGlow: true }),
+  paper: Object.freeze({ additive: false, gravity: 240, drag: 0.9, spin: 3.2, flutter: true }),
+  curse: Object.freeze({ additive: false, gravity: -130, drag: 0.9, spin: 0.4, alpha: 0.95, backGlow: true }),
+  // Near-black scatter sprites (feathers, vinyl shards) vanish on the night
+  // stages without a soft kit-coloured halo behind them.
+  feather: Object.freeze({ additive: false, gravity: 140, drag: 0.88, spin: 2.4, flutter: true, backGlow: true }),
+  paint: Object.freeze({ additive: false, gravity: 40, drag: 0.9, spin: 0.3, alpha: 0.9 }),
+  vinyl: Object.freeze({ additive: false, gravity: 880, drag: 0.985, spin: 7.5, backGlow: true }),
+  cash: Object.freeze({ additive: false, gravity: 180, drag: 0.9, spin: 2.8, flutter: true }),
+});
+
+// The element kits: which sheets each phase draws from, the kit's light
+// palette, and the generated SFX layer(s) fired at release (super adds the
+// second layer). Fighters map here through their roster `vfx` signature.
+const ELEMENT_KITS = Object.freeze({
+  seismic: Object.freeze({
+    id: "seismic", glow: "#e8b25a", core: "#ffe9bd", ring: "#d9c9a8", groundBurst: true,
+    charge: ["smoke", "debris"], trail: ["smoke", "debris"], burst: ["debris", "smoke", "spark"],
+    residue: ["smoke", "debris"], superBurst: ["flame"], sfx: "vfx-seismic", superSfx: "vfx-flame",
+  }),
+  neon: Object.freeze({
+    id: "neon", glow: "#5ee9ff", core: "#eafcff", ring: "#9ff2ff",
+    charge: ["electric", "spark"], trail: ["electric"], burst: ["electric", "spark"],
+    residue: ["spark"], superBurst: ["electric"], sfx: "vfx-electric", superSfx: "vfx-spark",
+  }),
+  concrete: Object.freeze({
+    id: "concrete", glow: "#e0e0e0", core: "#ffffff", ring: "#cfcfcf", groundBurst: true,
+    charge: ["spark"], trail: ["debris", "spark"], burst: ["debris", "spark"],
+    residue: ["smoke"], superBurst: ["smoke"], sfx: "vfx-spark", superSfx: "vfx-smoke",
+  }),
+  spray: Object.freeze({
+    id: "spray", glow: "#ff9b3d", core: "#ffd9a8", ring: "#ffb765",
+    charge: ["paint"], trail: ["paint"], burst: ["paint"],
+    residue: ["paint"], superBurst: ["paint"], sfx: "vfx-paint", superSfx: "vfx-smoke",
+  }),
+  tech: Object.freeze({
+    id: "tech", glow: "#7fd4ff", core: "#e8f7ff", ring: "#a8e2ff",
+    charge: ["electric"], trail: ["electric", "spark"], burst: ["electric"],
+    residue: ["spark"], superBurst: ["electric"], sfx: "vfx-electric", superSfx: "vfx-spark",
+  }),
+  gilded: Object.freeze({
+    id: "gilded", glow: "#ffd76b", core: "#fff3cf", ring: "#ffe49a",
+    charge: ["spark"], trail: ["cash", "spark"], burst: ["cash", "spark"],
+    residue: ["cash"], superBurst: ["cash"], sfx: "vfx-cash", superSfx: "vfx-glyph",
+  }),
+  feedback: Object.freeze({
+    id: "feedback", glow: "#b08cff", core: "#e9dcff", ring: "#8cff6b",
+    charge: ["electric"], trail: ["electric", "smoke"], burst: ["electric", "smoke"],
+    residue: ["smoke"], superBurst: ["electric"], sfx: "vfx-electric", superSfx: "vfx-smoke",
+  }),
+  bass: Object.freeze({
+    id: "bass", glow: "#ff8c5a", core: "#ffd9c2", ring: "#ffd9a8", rings: true,
+    charge: ["vinyl"], trail: ["vinyl"], burst: ["vinyl"],
+    residue: ["vinyl"], superBurst: ["vinyl"], sfx: "vfx-bass", superSfx: "vfx-vinyl",
+  }),
+  contract: Object.freeze({
+    id: "contract", glow: "#ffd76b", core: "#fff3cf", ring: "#ffc94f",
+    charge: ["glyph"], trail: ["glyph"], burst: ["glyph", "paper"],
+    residue: ["paper"], superBurst: ["glyph"], sfx: "vfx-glyph", superSfx: "vfx-paper",
+  }),
+  curse: Object.freeze({
+    id: "curse", glow: "#8cff5e", core: "#e4ffd4", ring: "#6bd44a", wind: true,
+    charge: ["curse"], trail: ["curse"], burst: ["curse", "feather"],
+    residue: ["feather"], superBurst: ["curse"], sfx: "vfx-curse", superSfx: "vfx-smoke",
+  }),
+});
+
+// Roster `vfx` signature -> element kit id (the data table's spine).
+const ELEMENT_BY_VFX = Object.freeze({
+  seismic: "seismic", neon: "neon", steel: "concrete", paint: "spray",
+  voltage: "tech", gilded: "gilded", feedback: "feedback", bass: "bass",
+  barrens: "curse", authority: "contract",
+});
+
+function fighterElementKit(def) {
+  return ELEMENT_KITS[ELEMENT_BY_VFX[def?.vfx]] || null;
+}
+
+// Monotonic one-shot totals on the motionFxDebug pattern (never reset),
+// exposed via snapshot().violence for orchestrator smoke tests.
+const elementFxDebug = {
+  elementCharges: 0, elementTrails: 0, elementBursts: 0, elementResidue: 0, vfxSfxPlays: 0,
+};
+
+// Render-only flipbook sprite pool + per-side phase observers.
+const elementParticles = [];
+// BODY-FIRST (spec 10): seal-shatter events queued during the pool walk and
+// drained into paper/spark shards right after it (no mid-iteration pushes).
+const elementShatterQueue = [];
+const elementObs = [
+  { attackSerial: -1, releasedSerial: -1, chargeLevel: 0, limbX: 0, limbY: 0, prevLimbX: 0, prevLimbY: 0, hadLimb: false },
+  { attackSerial: -1, releasedSerial: -1, chargeLevel: 0, limbX: 0, limbY: 0, prevLimbX: 0, prevLimbY: 0, hadLimb: false },
+];
+let elementLastObservedTick = -1;
+let elementLastFrameMs = 0;
+// Super screen-edge element wash (eased render level + owning kit colour).
+const elementWash = { level: 0, color: null };
+// Rate cap per SFX kind so mashed specials never stack the layer.
+const elementSfxLast = new Map();
+const ELEMENT_SFX_MIN_MS = 300;
+
+// Lazy media: manifest + sheets fetched on first elemental emission, never in
+// the install shell. Draws fall back to procedural glows until they arrive.
+const elementSheets = { manifest: null, images: new Map(), requested: false };
+
+function ensureElementMedia() {
+  if (elementSheets.requested) return;
+  elementSheets.requested = true;
+  fetch("assets/vfx/MANIFEST.json")
+    .then((response) => (response.ok ? response.json() : null))
+    .then((manifest) => {
+      if (!manifest) return;
+      elementSheets.manifest = manifest;
+      for (const [name, entry] of Object.entries(manifest)) {
+        const image = new Image();
+        image.src = `assets/vfx/${entry.sheet}`;
+        elementSheets.images.set(name, image);
+      }
+    })
+    .catch(() => {});
+}
+
+function elementBudgetCap() {
+  // ~190 sprites on high, ~129 balanced, minimal (~80) on battery.
+  return Math.max(36, Math.round(190 * state.performance.particleScale));
+}
+
+function pushElementParticle(particle) {
+  if (elementParticles.length >= elementBudgetCap()) elementParticles.shift();
+  elementParticles.push(particle);
+}
+
+function elementSfx(kind, fighter = null) {
+  if (rollbackResimulating || !kind) return;
+  if (!$("#soundToggle").checked) return;
+  const now = performance.now();
+  if (now - (elementSfxLast.get(kind) || -Infinity) < ELEMENT_SFX_MIN_MS) return;
+  elementSfxLast.set(kind, now);
+  sound(kind, fighter);
+  elementFxDebug.vfxSfxPlays += 1;
+}
+
+// EX kits run denser/brighter; supers max all three phases.
+function elementTier(attack) {
+  if (attack.superMove) return 2;
+  return (attack.gritCost || 0) > 0 ? 1 : 0;
+}
+const ELEMENT_TIER_MULT = [1, 1.5, 2.1];
+
+// The limb the element rides: the furthest live hitbox during active frames,
+// the first authored hitbox (projected to world) during startup, the chest as
+// a last resort. Pure read of already-snapshotted sim state.
+function elementLimbPoint(fighter) {
+  // v2.6 BODY-FIRST (core 3): the anchor rides the DRAWN body — the shared
+  // motion transform's extension/stagger offset shifts the limb point the
+  // same pixels the sprite itself moves, so trails and bursts decorate the
+  // extended body instead of the sim-space hitbox behind it.
+  const motion = fighterMotionTransform(fighter);
+  const active = getActiveHitboxes(fighter);
+  const box = active.length ? active[active.length - 1]
+    : fighter.attacking?.hitboxes?.length ? localBoxToWorld(fighter, fighter.attacking.hitboxes[0].box) : null;
+  if (box) return { x: box.x + box.width * 0.5 + motion.offsetX, y: box.y + box.height * 0.5 + motion.offsetY };
+  return { x: fighter.x + fighter.facing * 34 + motion.offsetX, y: fighter.y - fighter.height * 0.55 + motion.offsetY };
+}
+
+function spawnElementSprite(sheet, options) {
+  const physics = ELEMENT_SHEET_PHYSICS[sheet];
+  if (!physics) return;
+  const calm = state.accessibility.reducedMotion ? 0.42 : 1;
+  const meta = elementSheets.manifest?.[sheet];
+  const life = options.life ?? 0.32 + visualRandom() * 0.2;
+  const x = options.x + (visualRandom() - 0.5) * (options.spread ?? 0);
+  const y = options.y + (visualRandom() - 0.5) * (options.spread ?? 0);
+  // MOTION FIX 11: an orbit target turns the sprite into a traveller — it
+  // spirals INTO the target over its life instead of popping at an anchor,
+  // with prev-position bookkeeping so the draw pass can streak its entry.
+  const orbit = options.orbit && !state.accessibility.reducedMotion ? options.orbit : null;
+  const orbitAngle = orbit ? Math.atan2(y - orbit.y, x - orbit.x) : 0;
+  const orbitRadius = orbit ? Math.max(30, Math.hypot(x - orbit.x, y - orbit.y)) : 0;
+  pushElementParticle({
+    sheet,
+    additive: physics.additive,
+    alpha: physics.alpha ?? 1,
+    x, y,
+    prevX: x, prevY: y,
+    vx: (options.vx ?? 0) * calm,
+    vy: (options.vy ?? 0) * calm,
+    homeX: options.homeX, homeY: options.homeY, converge: options.converge ?? 0,
+    orbit: Boolean(orbit),
+    orbitX: orbit ? orbit.x : 0, orbitY: orbit ? orbit.y : 0,
+    orbitAngle, orbitRadius,
+    // BODY-FIRST (spec 10): a caller-supplied orbitDir makes the sweep
+    // deterministic (seals arc over the top toward the victim, never a coin
+    // flip); shatter marks the sprite to burst into shards on contact.
+    orbitAngVel: orbit
+      ? (options.orbitDir || (visualRandom() < 0.5 ? -1 : 1)) * (3.2 + visualRandom() * 2.6)
+      : 0,
+    shatter: Boolean(options.shatter && orbit),
+    shattered: false,
+    gravity: physics.gravity * (state.accessibility.reducedMotion ? 0.45 : 1),
+    drag: physics.drag,
+    // MOTION FIX 3: debris-class sheets earn one floor bounce; smoke-class
+    // sheets shear sideways as they rise. Latched at spawn, integrated below.
+    bounces: sheet === "debris" || sheet === "vinyl" ? 1 : 0,
+    shearDir: sheet === "smoke" ? (visualRandom() < 0.5 ? -1 : 1) : 0,
+    life, max: life,
+    size: options.size ?? 40,
+    backGlow: Boolean(physics.backGlow),
+    rotation: physics.spin ? visualRandom() * Math.PI * 2 : 0,
+    spin: (visualRandom() - 0.5) * physics.spin * calm,
+    flutter: physics.flutter ? 5 + visualRandom() * 4 : 0,
+    seed: Math.floor(visualRandom() * 4096),
+    frame: meta && meta.mode === "scatter" ? Math.floor(visualRandom() * 16) % 16 : 0,
+    glow: options.glow,
+  });
+}
+
+// --- phase emitters ---------------------------------------------------------
+
+function emitElementCharge(kit, fighter, attack, tier, orbitTarget = null) {
+  const mult = ELEMENT_TIER_MULT[tier];
+  // Battery keeps its charge budget for supers only.
+  if (state.performance.particleScale < 0.5 && tier < 2) return;
+  const target = elementLimbPoint(fighter);
+  const count = Math.max(1, Math.round((tier === 2 ? 2 : 1) * state.performance.particleScale));
+  for (let index = 0; index < count; index += 1) {
+    const sheet = kit.charge[Math.floor(visualRandom() * kit.charge.length) % kit.charge.length];
+    const angle = visualRandom() * Math.PI * 2;
+    const radius = (36 + visualRandom() * 52) * mult;
+    const x = target.x + Math.cos(angle) * radius;
+    const y = target.y + Math.sin(angle) * radius * 0.7;
+    // BODY-FIRST (spec 10): travelling seals SPAWN BEHIND the caster and arc
+    // over the top into the victim (deterministic sweep via orbitDir),
+    // shattering on contact — replacing the swap-in-place read.
+    const travelling = orbitTarget && sheet === "glyph";
+    const life = travelling ? 0.24 + visualRandom() * 0.16 : 0.3 + visualRandom() * 0.18;
+    spawnElementSprite(sheet, {
+      x: travelling ? fighter.x - fighter.facing * (55 + visualRandom() * 85) : x,
+      y: travelling ? fighter.y - fighter.height * (0.55 + visualRandom() * 0.5) : y,
+      life,
+      orbit: travelling ? orbitTarget : null,
+      orbitDir: travelling ? fighter.facing : 0,
+      shatter: travelling,
+      // Converging motes: aimed to arrive at the limb as they die. Reduced
+      // motion swaps the rush for a gentle drift + fade in place.
+      vx: state.accessibility.reducedMotion ? 0 : (target.x - x) / life * 0.8,
+      vy: state.accessibility.reducedMotion ? 0 : (target.y - y) / life * 0.8,
+      size: (24 + visualRandom() * 22) * mult,
+      glow: kit.glow,
+    });
+  }
+  if (kit.rings && (state.simulationTick & 7) === 0 && state.performance.trailScale > 0) {
+    // MOTION FIX 3: rings are punctuation, not set dressing — 2-3 frames max.
+    state.effects.push({
+      kind: "shockRing", x: target.x, y: target.y,
+      size: 30 * mult, life: 0.12, max: 0.12, color: kit.ring,
+    });
+  }
+  elementFxDebug.elementCharges += 1;
+}
+
+function emitElementTrail(kit, x, y, vx, vy, tier, glow, orbitTarget = null, caster = null) {
+  const mult = ELEMENT_TIER_MULT[tier];
+  const cadence = state.performance.particleScale < 0.5 ? 3 : 1;
+  if (state.simulationTick % cadence !== 0) return;
+  const count = Math.max(1, Math.round((tier === 2 ? 3 : 2) * state.performance.particleScale));
+  for (let index = 0; index < count; index += 1) {
+    const sheet = kit.trail[Math.floor(visualRandom() * kit.trail.length) % kit.trail.length];
+    const travelling = orbitTarget && sheet === "glyph";
+    // BODY-FIRST (spec 10): mid-storm seals keep spawning BEHIND the caster
+    // and arcing in — the whole window streams travellers, not stamps.
+    const behind = travelling && caster;
+    spawnElementSprite(sheet, {
+      x: behind ? caster.x - caster.facing * (55 + visualRandom() * 85) : x,
+      y: behind ? caster.y - caster.height * (0.55 + visualRandom() * 0.5) : y,
+      spread: behind ? 0 : 40,
+      orbit: travelling ? orbitTarget : null,
+      orbitDir: behind ? caster.facing : 0,
+      shatter: travelling,
+      // Velocity-inherited: the trail streams off the moving limb/projectile.
+      vx: vx * 0.42 + (visualRandom() - 0.5) * 90,
+      vy: vy * 0.42 - 20 - visualRandom() * 60,
+      size: (38 + visualRandom() * 34) * mult,
+      life: travelling ? 0.24 + visualRandom() * 0.16 : 0.42 + visualRandom() * 0.3,
+      glow: glow || kit.glow,
+    });
+  }
+  elementFxDebug.elementTrails += 1;
+}
+
+function emitElementBurst(kit, fighter, attack, tier, orbitTarget = null) {
+  const mult = ELEMENT_TIER_MULT[tier];
+  const point = elementLimbPoint(fighter);
+  const direction = fighter.facing;
+  const sheets = tier === 2 && kit.superBurst ? [...kit.burst, ...kit.superBurst] : kit.burst;
+  const count = Math.max(6, Math.round(13 * mult * state.performance.particleScale));
+  for (let index = 0; index < count; index += 1) {
+    const sheet = sheets[Math.floor(visualRandom() * sheets.length) % sheets.length];
+    const angle = (visualRandom() - 0.5) * 2.4;
+    const speed = (140 + visualRandom() * 320) * mult * 0.8;
+    const travelling = orbitTarget && sheet === "glyph";
+    spawnElementSprite(sheet, {
+      // BODY-FIRST (spec 10): release seals launch from behind the caster
+      // like the charge/trail ones — one continuous arcing stream.
+      x: travelling ? fighter.x - fighter.facing * (55 + visualRandom() * 85) : point.x,
+      y: travelling ? fighter.y - fighter.height * (0.55 + visualRandom() * 0.5) : point.y,
+      spread: travelling ? 0 : 30,
+      orbit: travelling ? orbitTarget : null,
+      orbitDir: travelling ? fighter.facing : 0,
+      shatter: travelling,
+      vx: Math.cos(angle) * speed * 0.55 + direction * speed * 0.6,
+      vy: Math.sin(angle) * speed * 0.6 - 60,
+      size: (48 + visualRandom() * 46) * mult,
+      life: travelling ? 0.26 + visualRandom() * 0.18 : 0.42 + visualRandom() * 0.34,
+      glow: kit.glow,
+    });
+  }
+  // Seismic/concrete kits also erupt along the floor line — the ground-slam
+  // read: a fan of debris and dust kicked out of the street on both sides.
+  if (kit.groundBurst) {
+    const groundCount = Math.max(4, Math.round(8 * mult * state.performance.particleScale));
+    for (let index = 0; index < groundCount; index += 1) {
+      const side = index % 2 ? 1 : -1;
+      const sheet = kit.burst[Math.floor(visualRandom() * kit.burst.length) % kit.burst.length];
+      spawnElementSprite(sheet, {
+        x: point.x + side * (24 + visualRandom() * 90) * mult,
+        y: FLOOR - 6,
+        vx: side * (80 + visualRandom() * 220) * mult * 0.7,
+        vy: -180 - visualRandom() * 260 * mult,
+        size: (36 + visualRandom() * 34) * mult,
+        life: 0.45 + visualRandom() * 0.3,
+        glow: kit.glow,
+      });
+    }
+  }
+  // Element pressure ring in the kit colour (doubled for the bass kit, whose
+  // identity IS the shockwave), riding the existing shockRing effect path.
+  // MOTION FIX 3: rings are 2-3 frame punctuation now — effects keep ticking
+  // through hitstop, so these are genuinely gone in ~0.13s of screen time.
+  if (state.performance.trailScale > 0) {
+    state.effects.push({
+      kind: "shockRing", x: point.x, y: point.y,
+      size: (kit.rings ? 120 : 84) * mult, life: 0.13, max: 0.13, color: kit.ring,
+    });
+    if (kit.rings) {
+      state.effects.push({
+        kind: "shockRing", x: point.x, y: point.y,
+        size: 168 * mult, life: 0.16, max: 0.16, color: kit.glow,
+      });
+    }
+  }
+  // Bright release core, gated by the flash toggle like every hot flash.
+  if ($("#flashToggle").checked) {
+    state.effects.push({
+      kind: "impactFlash", tier: tier === 2 ? "super" : "special", x: point.x, y: point.y,
+      life: tier === 2 ? 0.2 : 0.12, max: tier === 2 ? 0.2 : 0.12,
+      color: kit.core, spill: kit.glow,
+    });
+  }
+  elementFxDebug.elementBursts += 1;
+  // RESIDUE: lingering settle for ~0.5s — embers/wisps/scraps coming to rest.
+  const residueCount = Math.max(3, Math.round(7 * mult * state.performance.particleScale));
+  for (let index = 0; index < residueCount; index += 1) {
+    const sheet = kit.residue[Math.floor(visualRandom() * kit.residue.length) % kit.residue.length];
+    spawnElementSprite(sheet, {
+      x: point.x, y: point.y, spread: 70 * mult,
+      vx: (visualRandom() - 0.5) * 130 + (kit.wind ? direction * 70 : 0),
+      vy: -30 - visualRandom() * 80,
+      size: (30 + visualRandom() * 30) * mult,
+      life: 0.55 + visualRandom() * 0.5,
+      glow: kit.glow,
+    });
+  }
+  elementFxDebug.elementResidue += 1;
+  elementSfx(kit.sfx, fighter);
+  if (tier === 2) elementSfx(kit.superSfx, fighter);
+}
+
+function resetElementObserver(obs) {
+  obs.attackSerial = -1;
+  obs.releasedSerial = -1;
+  obs.chargeLevel = 0;
+  obs.hadLimb = false;
+}
+
+// Per-rendered-frame elemental observation + pool integration. Runs once at
+// the top of draw() beside updateMotionObservers: emissions advance only on
+// sim-tick edges (tick-deduped, so QA manual stepping and 120Hz displays pace
+// identically), while the pool integrates on real render time so residue
+// settles smoothly through hitstop.
+function updateElementalVfx(nowMs) {
+  const dtSec = clamp((nowMs - elementLastFrameMs) / 1000 || 0, 0, 0.05);
+  elementLastFrameMs = nowMs;
+  // Integrate the sprite pool (render-time physics; cheap, allocation-free).
+  for (const particle of elementParticles) {
+    particle.prevX = particle.x;
+    particle.prevY = particle.y;
+    particle.life -= dtSec;
+    // MOTION FIX 11: orbiters spiral into their target — angle advances,
+    // radius collapses over the sprite's life — instead of ballistic drift.
+    if (particle.orbit) {
+      const age = 1 - clamp(particle.life / particle.max, 0, 1);
+      particle.orbitAngle += particle.orbitAngVel * dtSec;
+      const radius = particle.orbitRadius * Math.max(0.08, 1 - age * age * 1.05);
+      particle.x = particle.orbitX + Math.cos(particle.orbitAngle) * radius;
+      particle.y = particle.orbitY + Math.sin(particle.orbitAngle) * radius * 0.6;
+      particle.rotation += particle.spin * dtSec;
+      // BODY-FIRST (spec 10): a travelling seal SHATTERS on contact — the
+      // instant its arc collapses onto the victim it dies into paper/spark
+      // shards (queued; the pool must not mutate mid-walk).
+      if (particle.shatter && !particle.shattered
+        && (radius <= Math.max(22, particle.orbitRadius * 0.16) || particle.life <= 0.04)) {
+        particle.shattered = true;
+        particle.life = 0;
+        elementShatterQueue.push({ x: particle.x, y: particle.y, glow: particle.glow });
+      }
+      continue;
+    }
+    particle.vy += particle.gravity * dtSec;
+    if (particle.flutter) {
+      particle.vx += Math.sin(particle.life * particle.flutter * 6 + particle.seed) * 60 * dtSec;
+    }
+    // MOTION FIX 3: smoke shears sideways as it climbs — the puff slides off
+    // its own column instead of rising in place.
+    if (particle.shearDir) {
+      particle.vx += particle.shearDir * 90 * dtSec;
+    }
+    particle.x += particle.vx * dtSec;
+    particle.y += particle.vy * dtSec;
+    particle.vx *= particle.drag;
+    if (particle.y > FLOOR - 2 && particle.vy > 0) {
+      if (particle.bounces > 0) {
+        // MOTION FIX 3: debris-class chips take one real bounce off the
+        // street before settling — the gravity arc reads as weight.
+        particle.bounces -= 1;
+        particle.y = FLOOR - 2;
+        particle.vy *= -(0.32 + visualRandom() * 0.14);
+        particle.vx *= 0.72;
+        particle.spin *= 0.6;
+      } else {
+        // Residue settles on the floor line instead of sinking through it.
+        particle.y = FLOOR - 2;
+        particle.vy = 0;
+        particle.vx *= 0.82;
+        particle.spin *= 0.8;
+      }
+    }
+    particle.rotation += particle.spin * dtSec;
+  }
+  for (let index = elementParticles.length - 1; index >= 0; index -= 1) {
+    if (elementParticles[index].life <= 0) elementParticles.splice(index, 1);
+  }
+  // BODY-FIRST (spec 10): drain the seal-shatter queue — each contact spits
+  // a small spray of contract paper + sparks off the victim.
+  if (elementShatterQueue.length) {
+    for (const burst of elementShatterQueue) {
+      const shards = Math.max(2, Math.round(4 * state.performance.particleScale));
+      for (let shard = 0; shard < shards; shard += 1) {
+        spawnElementSprite(shard % 2 ? "paper" : "spark", {
+          x: burst.x, y: burst.y, spread: 12,
+          vx: (visualRandom() - 0.5) * 320,
+          vy: -50 - visualRandom() * 190,
+          size: 18 + visualRandom() * 16,
+          life: 0.22 + visualRandom() * 0.16,
+          glow: burst.glow,
+        });
+      }
+    }
+    elementShatterQueue.length = 0;
+  }
+
+  if (state.screen !== "fight" || state.fighters.length < 2) {
+    elementParticles.length = 0;
+    elementObs.forEach(resetElementObserver);
+    elementWash.level = Math.max(0, elementWash.level - dtSec * 3);
+    elementLastObservedTick = -1;
+    return;
+  }
+  const tickAdvanced = state.simulationTick !== elementLastObservedTick;
+  elementLastObservedTick = state.simulationTick;
+
+  let washTarget = 0;
+  for (let side = 0; side < 2; side += 1) {
+    const fighter = state.fighters[side];
+    const obs = elementObs[side];
+    const attack = fighter.attacking;
+    const kit = fighterElementKit(fighter.def);
+    const elemental = attack && kit && attack.kind === "special" && !fighter.cinematicFrame;
+    if (!elemental) {
+      obs.attackSerial = -1;
+      obs.hadLimb = false;
+      obs.chargeLevel = Math.max(0, obs.chargeLevel - dtSec * 6);
+      continue;
+    }
+    ensureElementMedia();
+    const tier = elementTier(attack);
+    if (tier === 2) {
+      washTarget = 1;
+      elementWash.color = kit.glow;
+    }
+    const serial = attack.attackSerial ?? 0;
+    if (obs.attackSerial !== serial) {
+      obs.attackSerial = serial;
+      obs.hadLimb = false;
+    }
+    const point = elementLimbPoint(fighter);
+    obs.prevLimbX = obs.hadLimb ? obs.limbX : point.x;
+    obs.prevLimbY = obs.hadLimb ? obs.limbY : point.y;
+    obs.limbX = point.x;
+    obs.limbY = point.y;
+    obs.hadLimb = true;
+    if (!tickAdvanced) continue;
+    // MOTION FIX 11: during the contract super the glyph storm TRAVELS — every
+    // glyph spirals into the victim's chest instead of popping at an anchor.
+    const victim = state.fighters[1 - side];
+    const orbitTarget = tier === 2 && kit.id === "contract" && victim
+      ? { x: victim.x, y: victim.y - victim.height * 0.55 } : null;
+    if (fighter.attackFrame < attack.activeStartFrame) {
+      // CHARGE — brief aura + gathering particles through the startup.
+      emitElementCharge(kit, fighter, attack, tier, orbitTarget);
+      obs.chargeLevel = Math.min(1, obs.chargeLevel + 0.16 * (tier === 2 ? 1.6 : 1));
+    } else {
+      if (obs.releasedSerial !== serial) {
+        // RELEASE — burst at the first active frame (hit or whiff alike).
+        obs.releasedSerial = serial;
+        emitElementBurst(kit, fighter, attack, tier, orbitTarget);
+      }
+      obs.chargeLevel = Math.max(0, obs.chargeLevel - 0.25);
+      if (fighter.attackFrame < attack.activeEndFrame) {
+        // ACTIVE — persistent trail off the moving limb.
+        const limbVx = (obs.limbX - obs.prevLimbX) * SIMULATION_HZ;
+        const limbVy = (obs.limbY - obs.prevLimbY) * SIMULATION_HZ;
+        emitElementTrail(kit, obs.limbX, obs.limbY,
+          clamp(limbVx, -900, 900), clamp(limbVy, -900, 900), tier, null, orbitTarget, fighter);
+      }
+    }
+  }
+
+  // Personal throwable flights ride their owner's element kit.
+  if (tickAdvanced && state.projectiles.length) {
+    for (let index = 0; index < state.projectiles.length; index += 1) {
+      const projectile = state.projectiles[index];
+      if (!projectile.throwable || projectile.stageWeapon) continue;
+      // MOTION FIX 10: the charm sheds its curse-wisp trail EVERY tick — the
+      // mist tail needs continuous feeding to sell the single arc.
+      if (projectile.style !== "charm" && (state.simulationTick + index) % 2 !== 0) continue;
+      const owner = state.fighters[projectile.ownerSide];
+      const kit = owner ? fighterElementKit(owner.def) : null;
+      if (!kit) continue;
+      ensureElementMedia();
+      emitElementTrail(kit, projectile.x, projectile.y,
+        (projectile.vx || 0) * 0.5, (projectile.vy || 0) * 0.5,
+        projectile.enhanced ? 1 : 0, projectile.color);
+    }
+  }
+
+  // Super screen-edge wash easing (drawn by drawElementalWash).
+  elementWash.level = washTarget > elementWash.level
+    ? Math.min(washTarget, elementWash.level + dtSec * 5)
+    : Math.max(washTarget, elementWash.level - dtSec * 2.4);
+}
+
+// Charge auras + flipbook sprites, drawn in the 2D world pass right above
+// drawParticles. CINEMA 3D gets its element read through the tinted impact
+// layer instead — this pass is 2D-renderer-only by construction.
+function drawElementalVfx() {
+  for (let side = 0; side < 2; side += 1) {
+    const obs = elementObs[side];
+    if (obs.chargeLevel <= 0.02) continue;
+    const fighter = state.fighters[side];
+    const kit = fighterElementKit(fighter?.def);
+    if (!kit) continue;
+    const tier = fighter.attacking ? elementTier(fighter.attacking) : 0;
+    const pulse = 1 + Math.sin(state.simulationTick * 0.55 + side) * 0.08;
+    const radius = (40 + tier * 16) * pulse * (0.6 + obs.chargeLevel * 0.4);
+    const gradient = ctx.createRadialGradient(obs.limbX, obs.limbY, radius * 0.12, obs.limbX, obs.limbY, radius);
+    gradient.addColorStop(0, kit.core);
+    gradient.addColorStop(0.45, kit.glow);
+    gradient.addColorStop(1, "rgba(0,0,0,0)");
+    ctx.save();
+    ctx.globalCompositeOperation = "lighter";
+    ctx.globalAlpha = 0.26 * obs.chargeLevel * (tier === 2 ? 1.35 : 1);
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.arc(obs.limbX, obs.limbY, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+  for (const particle of elementParticles) {
+    const meta = elementSheets.manifest?.[particle.sheet];
+    const image = elementSheets.images.get(particle.sheet);
+    const fade = clamp(particle.life / particle.max, 0, 1);
+    if (!meta || !image?.complete || !image.naturalWidth) {
+      // Procedural fallback until the on-demand sheet arrives.
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = fade * 0.5;
+      ctx.fillStyle = particle.glow || "#ffe9bd";
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size * 0.28, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+      continue;
+    }
+    let index;
+    if (meta.mode === "anim") index = Math.min(15, Math.floor((1 - fade) * meta.frames.length));
+    // MOTION FIX 4: live electricity re-forks EVERY sim tick (the >>1 gate is
+    // gone) — ticks keep advancing through hitstop, so a held impact never
+    // shows the same fork twice.
+    else if (meta.mode === "flicker") index = (particle.seed * 31 + state.simulationTick * 7) % 16;
+    else index = particle.frame;
+    const frame = meta.frames[index];
+    if (!frame || !frame.w) continue;
+    // MOTION FIX 3: smoke grows as it climbs — the puff opens up to ~1.5x
+    // over its life while the shear slide (integrator) drags it off-column.
+    const age = 1 - fade;
+    const growth = particle.shearDir ? 1 + age * 0.55 : 1;
+    const scale = (particle.size * growth) / Math.max(frame.w, frame.h);
+    if (particle.backGlow && particle.glow) {
+      // Soft kit-coloured halo behind dark sprites so their silhouettes
+      // separate from the night stages.
+      ctx.save();
+      ctx.globalCompositeOperation = "lighter";
+      ctx.globalAlpha = fade * 0.32;
+      ctx.fillStyle = particle.glow;
+      ctx.beginPath();
+      ctx.arc(particle.x, particle.y, particle.size * 0.58, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    // MOTION FIX 11: motion-streaked entry for orbiters — a tapered additive
+    // streak trails the glyph along its spiral while it is still travelling
+    // fast (first ~60% of life), so the eye reads the path, not a pop.
+    if (particle.orbit && age < 0.6 && particle.glow) {
+      const streakX = particle.prevX - particle.x;
+      const streakY = particle.prevY - particle.y;
+      const streakLen = Math.hypot(streakX, streakY);
+      if (streakLen > 1.5) {
+        const stretch = Math.min(4.5, 2 + streakLen * 0.25);
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.globalAlpha = fade * 0.4;
+        ctx.strokeStyle = particle.glow;
+        ctx.lineCap = "round";
+        ctx.lineWidth = Math.max(2, particle.size * 0.14);
+        ctx.beginPath();
+        ctx.moveTo(particle.x, particle.y);
+        ctx.lineTo(particle.x + streakX * stretch, particle.y + streakY * stretch);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+    ctx.save();
+    // Front-loaded fades: sprites hold near-full presence through most of
+    // their life and drop off at the end, instead of thinning immediately.
+    ctx.globalAlpha = (particle.additive
+      ? Math.min(1, fade * 1.35)
+      : Math.min(1, Math.sqrt(fade) * 1.08)) * particle.alpha;
+    ctx.globalCompositeOperation = particle.additive ? "lighter" : "source-over";
+    ctx.translate(particle.x, particle.y);
+    if (particle.rotation) ctx.rotate(particle.rotation);
+    ctx.drawImage(image, frame.x, frame.y, frame.w, frame.h,
+      -(frame.cx - frame.x) * scale, -(frame.cy - frame.y) * scale,
+      frame.w * scale, frame.h * scale);
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+  ctx.globalCompositeOperation = "source-over";
+}
+
+// Screen-edge element wash while a super is in flight: the element bleeds in
+// from both sides of the frame. Flash-toggle-gated (it is a bright wash);
+// reduced motion halves it. Screen-space, drawn after the world restore.
+function drawElementalWash() {
+  if (elementWash.level <= 0.02 || !elementWash.color) return;
+  if (!$("#flashToggle").checked) return;
+  const strength = elementWash.level * (state.accessibility.reducedMotion ? 0.45 : 1) * 0.3;
+  const width = W * 0.17;
+  ctx.save();
+  ctx.globalCompositeOperation = "screen";
+  ctx.globalAlpha = strength;
+  const left = ctx.createLinearGradient(0, 0, width, 0);
+  left.addColorStop(0, elementWash.color);
+  left.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = left;
+  ctx.fillRect(0, 0, width, H);
+  const right = ctx.createLinearGradient(W, 0, W - width, 0);
+  right.addColorStop(0, elementWash.color);
+  right.addColorStop(1, "rgba(0,0,0,0)");
+  ctx.fillStyle = right;
+  ctx.fillRect(W - width, 0, width, H);
+  ctx.restore();
 }
 
 // ---------------------------------------------------------------------------
@@ -11266,16 +12735,21 @@ function updateFighter(fighter, opponent, input, dt) {
   if (fighter.dashFrames > 0 && !fighter.attacking) {
     const forward = fighter.dashDirection === fighter.facing;
     fighter.vx = fighter.dashDirection * (forward ? fighter.movement.forwardDashSpeed : fighter.movement.backDashSpeed) * flowSpeed;
-    // Ghost trail: a fading snapshot of the sprite every other tick of a dash.
+    // Ghost trail: a fading echo of the sprite every other tick of a dash.
+    // MOTION FIX 2: echo caps — each ghost lives ~4 ticks (≤2 filmstrip
+    // frames), inherits the fighter's CURRENT atlas cell every frame it is
+    // drawn (the side field lets the draw pass read the live pose), and
+    // decays 60% → 20% opacity instead of a flat wash.
     if (state.performance.trailScale > 0 && !state.accessibility.reducedMotion
       && state.simulationTick % 2 === 0) {
       const ghostPose = fighterAnimationPose(fighter);
       if (ghostPose.bank === "base") {
         state.effects.push({
-          kind: "afterimage", fighterId: fighter.def.id, frame: ghostPose.frame,
+          kind: "afterimage", fighterId: fighter.def.id, side: fighter.side,
+          frame: ghostPose.frame,
           x: fighter.x, y: fighter.y, facing: fighter.facing,
           size: fighterRenderSize(fighter.def.id),
-          life: 0.2, max: 0.2, color: fighter.def.accent,
+          life: 0.07, max: 0.07, color: fighter.def.accent,
         });
       }
     }
@@ -12760,7 +14234,12 @@ function spawnHit(x, y, def, attackKind, blocked, { direction = 1, counter = fal
   // when on — the bridge guards rollbackResimulating + tick-dedupes inside,
   // following the announce()/latch pattern above.
   if (cinema3dBridge.onHit) {
-    cinema3dBridge.onHit({ x, y, kind: attackKind, blocked, direction, counter, tick: state.simulationTick });
+    // v2.6 ELEMENTS: the payload carries the attacker's element id so the 3D
+    // impact layer re-tints its protection-mask-joined burst stack per kit.
+    cinema3dBridge.onHit({
+      x, y, kind: attackKind, blocked, direction, counter, tick: state.simulationTick,
+      element: fighterElementKit(def)?.id || null,
+    });
   }
   if (blocked) {
     const count = Math.max(3, Math.round(8 * state.performance.particleScale));
@@ -12837,14 +14316,34 @@ function spawnHit(x, y, def, attackKind, blocked, { direction = 1, counter = fal
       life: 0.3, max: 0.3, color: "#ffd94f",
     });
   }
+  // MOTION FIX 1: the evolving hitspark — the shared spawn site every landed
+  // hit, special and super inherits. THREE beats, ~6 ticks total (effects
+  // keep ticking through hitstop): a one-frame white flash, then radiating
+  // shards cut from the spark flipbook at a per-hit randomized rotation and
+  // count, then gone. Shard cells re-hash every sim tick so no two rendered
+  // frames share a silhouette — the static spoked-ring "wheel" is dead.
+  ensureElementMedia();
+  state.effects.push({
+    kind: "hitSpark", tier: tierName, x, y, direction,
+    life: 0.15, max: 0.15,
+    color: def.accent,
+    shards: 5 + Math.floor(visualRandom() * 4),
+    baseRot: visualRandom() * Math.PI * 2,
+    seed: Math.floor(visualRandom() * 4096),
+    size: (tierName === "super" ? 96 : tierName === "special" ? 74 : tierName === "light" ? 44 : 60)
+      * (counter ? 1.25 : 1),
+  });
   // White-hot speed-line sparks along the hit direction, drawn additively so
   // they bloom against the dark stages; a shock ring joins the heavy tiers.
+  // MOTION FIX 3: the ring is 2-3 frame punctuation (0.26 → 0.12) — it
+  // finishes its whole expansion during the impact hold instead of freezing
+  // mid-bloom as a decal.
   const ringSizes = { heavy: 74, special: 96, super: 128, weapon: 82 };
   if (ringSizes[tierName] || counter) {
     state.effects.push({
       kind: "shockRing", x, y,
       size: (ringSizes[tierName] || 64) * (counter ? 1.3 : 1),
-      life: 0.26, max: 0.26, color: "#fff2d8",
+      life: 0.12, max: 0.12, color: "#fff2d8",
     });
   }
   const sparkCount = Math.max(3, Math.round((tierName === "light" ? 4 : 9)
@@ -12991,6 +14490,12 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
   state.flash = Math.max(0, state.flash - dt);
   if (state.hitstop > 0) {
     state.hitstop = Math.max(0, state.hitstop - dt);
+    // MOTION FIX 4: NOTHING FREEZES. The fighters hold the impact, but the
+    // VFX keep living straight through the stop — sparks fly on, rings
+    // finish expanding, dust drifts, decals burn out. Particles/effects are
+    // checksum-exempt visual state already ticked inside the sim path, so
+    // advancing them during the freeze changes zero rollback behaviour.
+    advanceVisualEffects(dt);
     // The freeze must not eat inputs. Both fighters' raw inputs still run the
     // full input pipeline — motion history, taunt taps, action buffering into
     // the rollback-snapshotted FrameInputBuffer — while physics stays frozen,
@@ -13100,6 +14605,15 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
     else resetRound();
   }
 
+  advanceVisualEffects(dt);
+  updateTrainingUi(input0);
+}
+
+// MOTION FIX 4: the particle/effect integration, extracted so the hitstop
+// freeze can keep the VFX alive while the fighters hold. Called once per sim
+// tick from simulatePreparedGameTick (frozen and unfrozen paths alike).
+// Everything in here is checksum-exempt visual state on the existing pattern.
+function advanceVisualEffects(dt) {
   for (const particle of state.particles) {
     particle.life -= dt;
     particle.vy += (particle.gravity ?? 720) * dt;
@@ -13176,7 +14690,6 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
   state.effects = state.effects.filter((effect) => effect.life > 0);
   state.particles = trimVisualBudget(state.particles, state.performance.particleBudget);
   state.effects = trimVisualBudget(state.effects, state.performance.effectBudget);
-  updateTrainingUi(input0);
 }
 
 function simulateOfflineGameTick(dt) {
@@ -14124,14 +15637,82 @@ function fighterAnimationPose(fighter) {
   if (fighter.tauntFrames > 0 && fighter.kit?.victory) {
     return { bank: fighter.kit.victory.bank, frame: fighter.kit.victory.frame };
   }
-  if (fighter.down || fighter.knockdownFrames > 0 || fighter.hitFlash > 0 || fighter.hitstunFrames > 21) return base(15);
+  // MOTION FIX 4 + 11: victim REACTION TRACKS through the scripted super
+  // storms — a pure function of both fighters' snapshotted sim state, so it
+  // replays identically under rollback and feeds both renderers. Instead of
+  // pinning the single hit cell for the whole storm: the Commissioner's
+  // FINAL AUTHORITY walks flinch → staggered recoil → bound slump, and the
+  // Devil's BARRENS CURSE walks impact recoil → sagging writhe, all from
+  // existing hit (15) / dizzy (12,13) atlas cells.
+  if (fighter.hitstunFrames > 0 && !fighter.down && fighter.knockdownFrames === 0
+    && fighter.cinematicFrame === null && state.fighters?.length === 2) {
+    const stormCaster = state.fighters[1 - fighter.side];
+    const storm = stormCaster?.attacking?.superMove ? stormCaster.attacking : null;
+    if (storm && stormCaster.attackFrame >= storm.activeStartFrame
+      && (stormCaster.def.vfx === "authority" || stormCaster.def.vfx === "barrens")) {
+      const span = Math.max(1, storm.activeEndFrame - storm.activeStartFrame);
+      const phase = clamp((stormCaster.attackFrame - storm.activeStartFrame) / span, 0, 1);
+      // BODY-FIRST: the storm tracks advance one key PER LANDED HIT — the
+      // combo tracker is sim state, so each seal/curse tick visibly knocks
+      // the victim into the next pose (tick cadence stays as a backstop).
+      const hitBeat = ((stormCaster.combo?.hits || 0) + Math.floor(stormCaster.attackFrame / 9)) % 2;
+      if (stormCaster.def.vfx === "authority") {
+        if (phase < 0.25) return base(15);                                        // flinch at onset
+        if (phase < 0.72) return base(hitBeat ? 13 : 15);                         // per-hit staggered recoil
+        return base(12);                                                          // bound / slumped at the bind
+      }
+      if (phase < 0.4) return base(15);                                           // curse impact recoil
+      return base(hitBeat ? 12 : 13);                                             // per-hit sagging writhe
+    }
+  }
+  if (fighter.down || fighter.knockdownFrames > 0) return base(15);
+  // v2.6 BODY-FIRST (core 2): EVERY hit sequences the victim through a
+  // progressive stagger — head-snap -> torso fold -> stagger step -> recover
+  // ease — clocked by ticks since the opponent's combo tracker registered the
+  // impact (sim state that keeps counting through hitstop), so multi-hit
+  // moves restart the track on every hit, rollback replays it identically,
+  // and both renderers consume the same keys. The rotation/backstep
+  // transforms riding these keys live in fighterMotionTransform; the
+  // authored super-storm tracks above stay the strongest versions. Airborne
+  // victims keep the flying hit cell (the juggle read).
+  if (fighter.hitstunFrames > 0 && fighter.grounded && fighter.knockdownFrames === 0
+    && fighter.cinematicFrame === null && state.fighters?.length === 2) {
+    const striker = state.fighters[1 - fighter.side];
+    const sinceHit = state.simulationTick - (striker?.combo?.lastHitFrame ?? -Infinity);
+    if (sinceHit >= 0 && sinceHit <= 44) {
+      const hitKey = (striker.combo.hits || 0) % 2;
+      if (sinceHit < 5) return base(15);                    // head snap
+      if (sinceHit < 11) return base(hitKey ? 13 : 12);     // torso fold (alternates per hit)
+      if (sinceHit < 18) return base(hitKey ? 15 : 13);     // stagger step
+      return base(12);                                      // recover ease
+    }
+    return base(15);
+  }
+  if (fighter.hitFlash > 0 || fighter.hitstunFrames > 21) return base(15);
   if (fighter.wakeupFrames > 0) return base(fighter.wakeupFrames > 9 ? 15 : 12);
   if (fighter.throwTechFlashFrames > 0) return base(12);
   if (fighter.block || fighter.blockstunFrames > 0 || fighter.crouch) return base(12);
   if (fighter.attacking) {
     const attack = fighter.attacking;
     const kitPose = attackAnimationPose(attack, fighter.attackFrame);
-    if (kitPose) return kitPose;
+    if (kitPose) {
+      // BODY-FIRST (spec 10): the Commissioner's storm is ONE full cane-swing
+      // arc — the cane RAISES (windup cell), strikes through both active
+      // cells and carries into the follow-through cell across the 40-frame
+      // window — instead of the old two-cell toggle. The per-hit extension
+      // pulse in fighterMotionTransform re-lunges the swing on every landed
+      // seal, so the arc reads as driving the multi-hits.
+      if (attack.superMove && fighter.def.vfx === "authority"
+        && fighter.attackFrame >= attack.activeStartFrame
+        && fighter.attackFrame < attack.activeEndFrame
+        && attack.animation?.frames?.length === 4) {
+        const span = Math.max(1, attack.activeEndFrame - attack.activeStartFrame);
+        const phase = (fighter.attackFrame - attack.activeStartFrame) / span;
+        const index = phase < 0.22 ? 0 : phase < 0.52 ? 1 : phase < 0.82 ? 2 : 3;
+        return { bank: attack.animation.bank, frame: attack.animation.frames[index] };
+      }
+      return kitPose;
+    }
     const startup = attack.active[0];
     const activeEnd = attack.active[1];
     const time = fighter.attackTime;
@@ -14140,11 +15721,31 @@ function fighterAnimationPose(fighter) {
         : [8, 13, 14, 11];
     if (time < startup * 0.48) return base(frames[0]);
     if (time < startup) return base(frames[1]);
-    if (time <= activeEnd) return base(frames[2]);
+    if (time <= activeEnd) {
+      // BODY-FIRST: non-lights three-beat the active window — the recovery
+      // cell arrives a third early as the follow-through key, so the active
+      // hold never freezes on one cell (kit-less fallback path).
+      if (attack.kind !== "light"
+        && (time - startup) / Math.max(0.001, activeEnd - startup) >= 0.67) return base(frames[3]);
+      return base(frames[2]);
+    }
     return base(frames[3]);
   }
-  if (!fighter.grounded) return base(fighter.vy < 0 ? 13 : 15);
-  if (fighter.dashFrames > 0) return base(5 + Math.floor(fighter.walkTime * 18) % 3);
+  if (!fighter.grounded) {
+    if (fighter.vy < 0) return base(13);
+    // BODY-FIRST (spec 4): the descent cell advances BEFORE touchdown — the
+    // legs gather on the crouch cell through the last ~110px of the fall
+    // (about five ticks), so the frozen late-fall pair is deduped and the
+    // landing squash arrives on a fresh key.
+    return base(FLOOR - fighter.y < 110 ? 12 : 15);
+  }
+  if (fighter.dashFrames > 0) {
+    // BODY-FIRST (spec 6): the settle pose arrives sooner — the final two
+    // dash ticks already show the stance the dash ends in, collapsing the
+    // near-identical settle pair the filmstrips caught.
+    if (fighter.dashFrames <= 2) return base(Math.floor(fighter.animTime * 5) % 4);
+    return base(5 + Math.floor(fighter.walkTime * 18) % 3);
+  }
   if (Math.abs(fighter.vx) > 22) return base(4 + Math.floor(fighter.walkTime * 10) % 4);
   return base(Math.floor(fighter.animTime * 5) % 4);
 }
@@ -14502,8 +16103,13 @@ function drawAttackVfx(fighter, time, activePower) {
   // nothing at the trail's start. Shared pass ahead of the per-fighter vfx
   // branches; pure render math off attackTime, jittered by presentationHash01
   // so rollback and the mirror pass replay it identically.
+  // MOTION FIX 4: once the hit lands the ribbon dissipates within ~9 ticks
+  // (ticks keep advancing through hitstop) — it whips through and is gone
+  // instead of hanging frozen at full brightness over the impact hold.
+  const ribbonFade = motionObs[fighter.side]?.ribbonFade ?? 1;
   if ((attack.kind === "heavy" || attack.kind === "special")
-    && state.performance.trailScale > 0 && !state.accessibility.reducedMotion) {
+    && state.performance.trailScale > 0 && !state.accessibility.reducedMotion
+    && ribbonFade > 0.05) {
     const progress = clamp(fighter.attackTime / attack.duration, 0, 1);
     if (progress > 0.12) {
       const eased = Math.sin(Math.min(1, progress * 1.15) * Math.PI * 0.5);
@@ -14523,7 +16129,8 @@ function drawAttackVfx(fighter, time, activePower) {
         const a1 = lerp(tailAngle, headAngle, t1);
         const r0 = reach * (0.62 + 0.3 * t0) * (0.97 + presentationHash01(seed, seg) * 0.06);
         const r1 = reach * (0.62 + 0.3 * t1) * (0.97 + presentationHash01(seed, seg + 1) * 0.06);
-        ctx.globalAlpha = clamp(activePower, 0, 1) * (0.12 + 0.62 * t1 * t1);
+        ctx.globalAlpha = clamp(activePower, 0, 1) * (0.12 + 0.62 * t1 * t1)
+          * ribbonFade * ribbonFade;
         ctx.lineWidth = Math.max(1, headWidth * t1);
         ctx.beginPath();
         ctx.moveTo(pivotX + Math.cos(a0) * r0, pivotY + Math.sin(a0) * r0);
@@ -14535,9 +16142,13 @@ function drawAttackVfx(fighter, time, activePower) {
         );
         ctx.stroke();
         // White-hot core on the leading edge so the arc pops off dark stages.
-        if (seg === segments - 1) {
+        // BODY-FIRST (spec 7): SPECIALS ONLY — on heavies the near-invisible
+        // accent ribbon left this core floating as an orphan thin white
+        // slash; the heavy's smear is the limb wedge, which carries its own
+        // attached hot edge.
+        if (seg === segments - 1 && strong) {
           ctx.strokeStyle = "#fff6df";
-          ctx.globalAlpha = clamp(activePower, 0, 1) * 0.5;
+          ctx.globalAlpha = clamp(activePower, 0, 1) * 0.5 * ribbonFade * ribbonFade;
           ctx.lineWidth = Math.max(1, headWidth * 0.34);
           ctx.stroke();
           ctx.strokeStyle = fighter.def.accent;
@@ -14549,15 +16160,51 @@ function drawAttackVfx(fighter, time, activePower) {
   }
 
   if (fighter.def.vfx === "seismic") {
-    ctx.lineWidth = strong ? 9 : 5;
-    for (let i = 0; i < 5; i += 1) {
-      ctx.beginPath();
-      ctx.moveTo(12 + i * 19, -4);
-      ctx.lineTo(33 + i * 18, -18 - (i % 2) * 16);
-      ctx.lineTo(49 + i * 20, -3);
-      ctx.stroke();
+    // BODY-FIRST (spec 8): the ground answer is a textured CRACKED-STREET
+    // decal in the stage-scar language — chalky scuff pad, pale chipped
+    // edges over dark fissures fanning forward from the impact — replacing
+    // the old dashed vector ellipse + zigzag strokes that read as a diagram.
+    // Deterministic per swing (attackSerial-hashed) and drawn in the
+    // fighter's local space, so it rides the extension lunge and mirrors
+    // with the body.
+    const crackSeed = (attack.attackSerial || 0) * 13 + fighter.side * 57;
+    const spread = strong ? 1 : 0.62;
+    ctx.save();
+    ctx.globalCompositeOperation = "source-over";
+    ctx.shadowBlur = 0;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.globalAlpha = clamp(activePower, 0, 1) * 0.4;
+    ctx.fillStyle = "rgba(196,184,164,0.6)";
+    ctx.beginPath();
+    ctx.ellipse(64 * spread, -3, 58 * spread, 11 * spread, 0, 0, Math.PI * 2);
+    ctx.fill();
+    for (let crack = 0; crack < (strong ? 5 : 3); crack += 1) {
+      const fan = -0.55 + presentationHash01(crackSeed, crack) * 1.1; // forward fan
+      const jags = 3 + Math.floor(presentationHash01(crackSeed, crack + 9) * 2);
+      const rootX = 26 + presentationHash01(crackSeed, crack + 17) * 30;
+      for (const [style, width, lift, alphaMul] of [
+        ["rgba(240,230,208,0.85)", 3.1, -1.3, 0.95],
+        ["rgba(12,10,9,0.94)", 2.1, 0, 0.8],
+      ]) {
+        ctx.strokeStyle = style;
+        ctx.lineWidth = width * (strong ? 1.3 : 1);
+        ctx.globalAlpha = clamp(activePower, 0, 1) * alphaMul;
+        ctx.beginPath();
+        ctx.moveTo(rootX, -2 + lift);
+        let px = rootX;
+        let py = -2;
+        for (let jag = 0; jag < jags; jag += 1) {
+          const bend = fan + (presentationHash01(crackSeed, crack * 7 + jag) - 0.5) * 1.2;
+          const length = (14 + presentationHash01(crackSeed, crack * 11 + jag) * 22) * spread;
+          px += Math.cos(bend) * length;
+          py += Math.sin(bend) * length * 0.3; // floor foreshortening
+          ctx.lineTo(px, py + lift);
+        }
+        ctx.stroke();
+      }
     }
-    ctx.beginPath(); ctx.ellipse(76, -5, reach * 0.7 * pulse, 24 * pulse, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
   } else if (fighter.def.vfx === "paint") {
     for (let i = 0; i < (strong ? 11 : 6); i += 1) {
       const x = 44 + i * 13;
@@ -15043,21 +16690,59 @@ function drawStageWeapon(time) {
   ctx.save();
   ctx.translate(weapon.x, FLOOR);
 
-  // Landing marker.
-  ctx.globalAlpha = telegraphing ? 0.35 + 0.4 * Math.abs(Math.sin(time * 0.012)) : 0.28 + remaining * 0.3;
-  ctx.strokeStyle = "#ffd54a";
-  ctx.lineWidth = 3;
+  // MOTION FIX 9: the landing marker is a ground SCORCH/SCUFF now — a warm
+  // irregular burn patch with ragged scuff strokes in the stage-scar visual
+  // language — instead of the clean gold vector ellipse + dashed drop line
+  // (which read as UI decal, not world). Same pulse, same footprint, so the
+  // pickup stays exactly as contestable/readable as before.
+  const markPulse = telegraphing ? 0.35 + 0.4 * Math.abs(Math.sin(time * 0.012)) : 0.28 + remaining * 0.3;
+  const markReach = 46 * FIGHTER_SCALE * (telegraphing ? 0.6 + progress * 0.6 : 1);
+  ctx.save();
+  ctx.globalCompositeOperation = "screen";
+  ctx.globalAlpha = markPulse * 0.85;
+  const scorch = ctx.createRadialGradient(0, 4, 3, 0, 4, markReach);
+  scorch.addColorStop(0, "rgba(255,213,74,0.55)");
+  scorch.addColorStop(0.55, "rgba(214,142,38,0.28)");
+  scorch.addColorStop(1, "rgba(120,70,18,0)");
+  ctx.fillStyle = scorch;
+  ctx.save();
+  ctx.scale(1, 0.3);
   ctx.beginPath();
-  ctx.ellipse(0, 4, 46 * FIGHTER_SCALE * (telegraphing ? 0.6 + progress * 0.6 : 1), 13, 0, 0, Math.PI * 2);
-  ctx.stroke();
+  ctx.arc(0, 13, markReach, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  ctx.restore();
+  // Ragged scuff strokes: short charred flecks at hashed angles/reach — the
+  // irregular edge that makes it a burn mark, not a ring.
+  ctx.lineCap = "round";
+  for (let fleck = 0; fleck < 7; fleck += 1) {
+    const angle = fleck * 0.9 + presentationHash01(Math.round(weapon.x), fleck) * 0.8;
+    const reach = markReach * (0.55 + presentationHash01(fleck, 11) * 0.5);
+    const fx = Math.cos(angle) * reach;
+    const fy = 4 + Math.sin(angle) * reach * 0.28;
+    ctx.globalAlpha = markPulse * (0.5 + (fleck % 3) * 0.18);
+    ctx.strokeStyle = fleck % 2 ? "#c98a2e" : "#3a2c16";
+    ctx.lineWidth = 2.5 + (fleck % 3);
+    ctx.beginPath();
+    ctx.moveTo(fx, fy);
+    ctx.lineTo(fx + Math.cos(angle) * 10, fy + Math.sin(angle) * 3);
+    ctx.stroke();
+  }
   if (telegraphing) {
-    ctx.globalAlpha = 0.6;
+    // Incoming-drop streak: a soft gradient column instead of the dashed line.
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.globalAlpha = 0.5 * markPulse;
+    const dropStreak = ctx.createLinearGradient(0, -190, 0, -14);
+    dropStreak.addColorStop(0, "rgba(255,213,74,0)");
+    dropStreak.addColorStop(1, "rgba(255,213,74,0.55)");
+    ctx.strokeStyle = dropStreak;
+    ctx.lineWidth = 5;
     ctx.beginPath();
     ctx.moveTo(0, -190);
     ctx.lineTo(0, -20);
-    ctx.setLineDash([8, 9]);
     ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.restore();
   }
 
   ctx.globalAlpha = telegraphing ? progress : 1;
@@ -15132,6 +16817,46 @@ function drawProjectiles(time) {
       ctx.fill();
       ctx.restore();
       presentationDebug.projectileGlows += 1;
+    }
+    // MOTION FIX 10: the lobbed charm reads as ONE continuous arc — an
+    // analytic mist tail integrated BACKWARD along the exact ballistic path
+    // (x−vxΔ, y−vyΔ+½gΔ²), so however sparsely the flight is sampled, every
+    // frame carries the arc it just travelled. Fading pine-mist puffs + a
+    // thin path core, drawn before the orb so the head stays crisp.
+    if (projectile.throwable && projectile.style === "charm"
+      && !state.accessibility.reducedMotion && state.performance.trailScale > 0) {
+      const gravity = projectile.gravity ?? 1200;
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      let prevTailX = projectile.x;
+      let prevTailY = projectile.y;
+      for (let step = 1; step <= 9; step += 1) {
+        const dtBack = step * 0.055;
+        const tailX = projectile.x - (projectile.vx || 0) * dtBack;
+        const tailY = projectile.y - (projectile.vy || 0) * dtBack + 0.5 * gravity * dtBack * dtBack;
+        const fadeTail = (1 - step / 10) * Math.min(1, life * 2.2);
+        const radius = Math.max(7, (projectile.width || 40) * (0.36 - step * 0.02));
+        // Connective core along the path so the arc reads as one stroke...
+        ctx.strokeStyle = `rgba(140,255,94,${(0.3 * fadeTail).toFixed(3)})`;
+        ctx.lineWidth = Math.max(2, radius * 0.55);
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(prevTailX, prevTailY);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+        // ...wrapped in soft pine-mist puffs that hang and thin behind it.
+        const mist = ctx.createRadialGradient(tailX, tailY, 1, tailX, tailY, radius * 2.4);
+        mist.addColorStop(0, `rgba(140,255,94,${(0.42 * fadeTail).toFixed(3)})`);
+        mist.addColorStop(0.6, `rgba(107,212,74,${(0.2 * fadeTail).toFixed(3)})`);
+        mist.addColorStop(1, "rgba(107,212,74,0)");
+        ctx.fillStyle = mist;
+        ctx.beginPath();
+        ctx.arc(tailX, tailY, radius * 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        prevTailX = tailX;
+        prevTailY = tailY;
+      }
+      ctx.restore();
     }
     ctx.save();
     ctx.translate(projectile.x, projectile.y);
@@ -15341,8 +17066,12 @@ function drawFighter(fighter, time) {
   // Breathing idle: chest-rise scaleY whose rate and depth grow as health
   // drops, so a gassed fighter visibly heaves before any UI is checked.
   // Transform math only — health/animTime are render-safe reads.
+  // BODY-FIRST (spec 9): super storms breathe — the long held active windows
+  // (the Devil's curse sequence especially) keep the idle chest-rise alive
+  // instead of pinning the sprite solid between authored keys.
   const breathing = fighter.cinematicFrame === null && fighter.grounded && !fighter.down
-    && !attack && !fighter.stun && !fighter.block && fighter.dizzyFrames <= 0 && fighter.guardCrushFrames <= 0;
+    && (!attack || attack.superMove) && !fighter.stun && !fighter.block
+    && fighter.dizzyFrames <= 0 && fighter.guardCrushFrames <= 0;
   const fatigue = clamp(1 - fighter.health / 100, 0, 1);
   const breath = breathing
     ? Math.sin(fighter.animTime * (5.2 + fatigue * 5.6) + fighter.side * 1.9)
@@ -15392,6 +17121,34 @@ function drawFighter(fighter, time) {
     ctx.rotate(fighter.facing * flip * Math.PI * 2);
   }
 
+  // v2.6 MOTION: the shared movement-animation transform. Jump flips pivot
+  // about the body centre (the somersault axis); dash/walk lean, recoil
+  // wobble and dizzy sway pivot about the feet. Same layer feeds poseRig in
+  // the 3D renderer, so both worlds animate identically.
+  const motion = fighterMotionTransform(fighter);
+  if (motion.flipRotation !== 0) {
+    const flipPivot = renderSize * 0.52;
+    ctx.translate(0, -flipPivot);
+    ctx.rotate(motion.flipRotation);
+    ctx.translate(0, flipPivot);
+  }
+  if (motion.rotation !== 0) ctx.rotate(motion.rotation);
+  // v2.6 BODY-FIRST: the shared world-space body offset — attack-extension
+  // lunge toward the target / victim stagger step away from it. Applied
+  // PRE-mirror so mixed-authored sheets can never flip the direction.
+  if (motion.offsetX !== 0 || motion.offsetY !== 0) ctx.translate(motion.offsetX, motion.offsetY);
+  // MOTION FIX 4: victims never freeze solid — a 1-2px pose shiver rides
+  // every hold window (hitstop and the multi-hit super storms), re-hashed
+  // per sim tick so it trembles through the freeze instead of pinning.
+  if (!reducedMotion && fighter.hitstunFrames > 0 && fighter.cinematicFrame === null
+    && (state.hitstop > 0 || state.fighters[1 - fighter.side]?.attacking?.superMove)) {
+    const trembleTick = state.simulationTick * 2 + fighter.side * 17;
+    ctx.translate(
+      (presentationHash01(trembleTick, 3) - 0.5) * 3.2,
+      (presentationHash01(trembleTick, 7) - 0.5) * 1.8,
+    );
+  }
+
   // The mirror combines the fighter's numeric facing with the direction the
   // AUTHORED cell actually points (atlas-facing.mjs) — post's sheets mix
   // left- and right-facing art, so facing alone drew him looking away from
@@ -15416,6 +17173,10 @@ function drawFighter(fighter, time) {
   if (exhausted > 0) ctx.rotate(0.085 * exhausted * (reducedMotion ? 0.5 : 1));
   // Impact squash-and-recover, decaying with the same hitFlash the smear uses.
   if (hitSmear > 0) ctx.scale(1 + hitSmear * 0.05, 1 - hitSmear * 0.06);
+  // v2.6 MOTION squash & stretch: rise stretch / launch squat / landing squash
+  // from the shared motion layer, feet-anchored like every scale above it.
+  if (motion.scaleX !== 1 || motion.scaleY !== 1) ctx.scale(motion.scaleX, motion.scaleY);
+  if (motion.stretchActive && !reflectionPassActive) presentationDebug.squashStretchFrames += 1;
 
   if (fighter.specialGlow > 0) {
     const glow = ctx.createRadialGradient(0, -135, 16, 0, -135, 178);
@@ -15510,7 +17271,9 @@ function drawFighter(fighter, time) {
   }
 
   if (atlas?.complete && atlas.naturalWidth) {
-    const baseTrails = state.accessibility.reducedMotion
+    // BODY-FIRST (spec 8): trail copies stay OUT of the mirror — the band
+    // only ever shows fragments of them, which read as sprite debris.
+    const baseTrails = state.accessibility.reducedMotion || reflectionPassActive
       ? 0
       : attack ? (attackKind === "special" ? 3 : activePower > 0.8 ? 2 : 0) : 0;
     const trails = Math.floor(baseTrails * state.performance.trailScale);
@@ -15524,6 +17287,70 @@ function drawFighter(fighter, time) {
       ctx.shadowBlur = 22;
       drawAtlasFrame(atlas, frame, renderSize);
       ctx.restore();
+    }
+
+    // MOTION FIX 2 + 9: the attack echo, rebuilt to the echo caps. It now
+    // exists ONLY through the active window (the old startup echo sat behind
+    // long heavy wind-ups for 7 filmstrip frames as an idle-pose body
+    // double), always inherits the CURRENT atlas cell, and is capped at 30%
+    // alpha. Heavies drop the body copy entirely — their smear is the limb
+    // wedge below (a stretched arc of the swinging arm), which is the
+    // anime-smear read the body double was failing to be.
+    if (!reflectionPassActive && attack && !graphicFatality
+      && attackKind === "special"
+      && state.performance.trailScale > 0 && !reducedMotion && activePower > 0.3) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      ctx.globalAlpha = 0.28 * activePower;
+      ctx.rotate(-0.14 * activePower);
+      ctx.translate(-(15 + activePower * 13), -2);
+      ctx.scale(1 + 0.12 * activePower, 1 - 0.04 * activePower);
+      drawSilhouetteFrame(atlas, frame, renderSize, fighter.def.accent);
+      ctx.restore();
+      presentationDebug.attackSmears += 1;
+    }
+    // MOTION FIX 9: heavy limb smear — a tapered wedge of the swinging arm
+    // stretched along the swing arc through the active frames, wide and hot
+    // at the fist, thinning to nothing behind it. Shares the ribbon's pivot
+    // and sweep math so wedge and ribbon read as one motion; fades with the
+    // same post-contact ribbon fade so nothing hangs through hitstop.
+    if (!reflectionPassActive && attack && !graphicFatality
+      && attackKind === "heavy"
+      && state.performance.trailScale > 0 && !reducedMotion && activePower > 0.2) {
+      const wedgeFade = motionObs[fighter.side]?.ribbonFade ?? 1;
+      // BODY-FIRST (spec 7): the wedge dies as the body enters its
+      // follow-through beat — the old version hung its arc over the victim
+      // for the whole fade while the fist was already down.
+      const swingProgress = clamp(fighter.attackTime / attack.duration, 0, 1);
+      if (wedgeFade > 0.05 && swingProgress < 0.72) {
+        const progress = swingProgress;
+        const eased = Math.sin(Math.min(1, progress * 1.15) * Math.PI * 0.5);
+        const headAngle = -2.3 + eased * 2.65;
+        const pivotX = 8;
+        const pivotY = -renderSize * 0.62;
+        const reach = renderSize * 0.52;
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        const wedgeGrad = ctx.createRadialGradient(pivotX, pivotY, reach * 0.2, pivotX, pivotY, reach * 1.05);
+        wedgeGrad.addColorStop(0, `${fighter.def.accent}00`);
+        wedgeGrad.addColorStop(0.62, `${fighter.def.accent}66`);
+        wedgeGrad.addColorStop(1, "#fff6df55");
+        ctx.fillStyle = wedgeGrad;
+        ctx.globalAlpha = 0.5 * activePower * wedgeFade * wedgeFade;
+        ctx.beginPath();
+        ctx.moveTo(pivotX + Math.cos(headAngle - 0.85) * reach * 0.3,
+          pivotY + Math.sin(headAngle - 0.85) * reach * 0.3);
+        ctx.arc(pivotX, pivotY, reach * 1.02, headAngle - 0.85, headAngle);
+        ctx.closePath();
+        ctx.fill();
+        // BODY-FIRST (spec 7): the standalone "hot leading edge" stroke is
+        // DEAD — with the accent wedge barely visible it floated as an
+        // orphan thin white slash with no limb under it (the critic's
+        // burst-heavy-8). The gradient wedge + the extension transform now
+        // carry the swing read.
+        ctx.restore();
+        presentationDebug.attackSmears += 1;
+      }
     }
 
     if (!reflectionPassActive && state.performance.shadows && !graphicFatality
@@ -15595,7 +17422,9 @@ function drawFighter(fighter, time) {
       // drift back; the amplitude collapses with the drain bar so recovery is
       // telegraphed. Time-driven only — no RNG, mobile-cheap tinted blits.
       const drain = fighter.dizzyFrames / Math.max(1, fighter.dizzyTotalFrames);
-      const sway = Math.sin(time * 0.008 + fighter.side * 1.7) * 7 * (0.35 + 0.65 * drain);
+      // v2.6 MOTION: sway amplitude up (7 → 10) — rides with the new dizzy
+      // body-sway rotation in fighterMotionTransform.
+      const sway = Math.sin(time * 0.008 + fighter.side * 1.7) * 10 * (0.35 + 0.65 * drain);
       ctx.save();
       ctx.globalCompositeOperation = "screen";
       ctx.globalAlpha = 0.28;
@@ -15629,6 +17458,38 @@ function drawFighter(fighter, time) {
       presentationDebug.battleDamage += battleDamageMarks[fighter.side].length;
     } else drawAtlasFrame(atlas, frame, renderSize);
     ctx.restore();
+
+    // v2.6 MOTION pose cross-fade (spec 3): the previous atlas cell lingers
+    // 2-3 sim frames at falling alpha OVER the fresh pose (keeps the fighter
+    // silhouette solid — no see-through frames), killing the pose snap.
+    // Armed/paced by updateMotionObservers; skipped during hitstop freezes,
+    // the dismemberment compositor, battery, and the mirror pass.
+    // MOTION FIX 5: ghost discipline — alpha caps at 30%, the ghost is
+    // CLIPPED TO THE TORSO (the head band of the old cell is cut, so a
+    // crossfade can never leave a second readable face), and the fade is
+    // skipped entirely mid-flip where the rotating transform would smear the
+    // old cell across the sky.
+    if (!reflectionPassActive && !graphicFatality && state.hitstop <= 0
+      && Math.abs(motion.flipRotation) < 0.3) {
+      const fadeObs = motionObs[fighter.side];
+      if (fadeObs.fadeLeft > 0 && (fadeObs.fadeBank !== pose.bank || fadeObs.fadeFrame !== frame)) {
+        const fadeAtlas = paletteAtlas(fighter.def.id, fighter.side, fadeObs.fadeBank);
+        if (fadeAtlas?.complete && fadeAtlas.naturalWidth) {
+          const fadeAdjust = fadeObs.fadeBank === "specials" ? (MOVE_SHEET_ADJUST[fighter.def.id] || 1) : 1;
+          const fadeSize = fighterRenderSize(fighter.def.id) * fadeAdjust;
+          ctx.save();
+          ctx.globalAlpha = Math.min(0.3, 0.3 * (fadeObs.fadeLeft / MOTION_RULES.crossfadeFrames) + 0.08);
+          ctx.beginPath();
+          // Torso clip: everything below ~72% of the cell height (the head
+          // band of a standing cell lives in the top ~28%).
+          ctx.rect(-fadeSize * 0.5, -fadeSize * 0.72, fadeSize, fadeSize * 0.72);
+          ctx.clip();
+          drawAtlasFrame(fadeAtlas, fadeObs.fadeFrame, fadeSize);
+          ctx.restore();
+          presentationDebug.poseCrossfades += 1;
+        }
+      }
+    }
 
     // The roster portraits are substantially higher resolution than an atlas
     // cell. A restrained soft-light pass brings their skin/fabric/material
@@ -17513,9 +19374,19 @@ function drawFighterReflections(time) {
   // filter briefly during hit flashes; the tail fade below keeps that subtle.
   ctx.translate(0, FLOOR * 2 + 8);
   ctx.scale(1, -1);
-  ctx.filter = `opacity(${Math.round(strength * 100)}%)`;
   reflectionPassActive = true;
-  for (const fighter of state.fighters) drawFighter(fighter, time);
+  for (const fighter of state.fighters) {
+    // BODY-FIRST (spec 8): the mirror LETS GO with height — an airborne
+    // fighter's mirrored sprite slid down the band and left orphan
+    // leg-fragments (a juggled victim's sprawl cell read as detached shoe
+    // chunks under the floor). Same air fade the CINEMA 3D mirror and the
+    // cast shadows already use, so the two ground cues finally agree.
+    const jump = Math.max(0, FLOOR - fighter.y);
+    const airFade = clamp(1 - jump / 170, 0, 1);
+    if (airFade <= 0.03) continue;
+    ctx.filter = `opacity(${Math.round(strength * airFade * 100)}%)`;
+    drawFighter(fighter, time);
+  }
   reflectionPassActive = false;
   ctx.filter = "none";
   ctx.restore();
@@ -17655,14 +19526,88 @@ function drawAfterimages() {
     if (effect.kind !== "afterimage") continue;
     const atlas = fighterAtlases[effect.fighterId];
     if (!atlas) continue;
+    // MOTION FIX 2: current-pose-only echoes — every frame the ghost lives it
+    // re-reads the owner's LIVE atlas cell, so an echo can never show a pose
+    // the fighter has already left (the idle-pose body double is dead).
+    let frame = effect.frame;
+    const owner = Number.isInteger(effect.side) ? state.fighters[effect.side] : null;
+    if (owner && owner.def.id === effect.fighterId) {
+      const livePose = fighterAnimationPose(owner);
+      if (livePose.bank === "base") frame = livePose.frame;
+    }
     ctx.save();
     ctx.translate(effect.x, effect.y);
-    ctx.scale(effect.facing * atlasFrameFacing(effect.fighterId, "base", effect.frame), 1);
-    ctx.globalAlpha = clamp(effect.life / effect.max, 0, 1) * 0.34;
-    drawAtlasFrame(atlas, effect.frame, effect.size);
+    ctx.scale(effect.facing * atlasFrameFacing(effect.fighterId, "base", frame), 1);
+    // BODY-FIRST (spec 6): the freshest ghost is a horizontal STRETCH-SMEAR
+    // of the current cell — 1.3x wide at 25% — a smear of the torso in
+    // motion, not a second body; every older ghost sits under 25% with its
+    // head band clipped so nothing behind the dash reads as a copy.
+    const ghostAge = 1 - clamp(effect.life / effect.max, 0, 1);
+    if (ghostAge < 0.45) {
+      ctx.globalAlpha = 0.25;
+      ctx.scale(1.3, 0.97);
+      drawAtlasFrame(atlas, frame, effect.size);
+    } else {
+      ctx.globalAlpha = 0.22 - ghostAge * 0.12;
+      ctx.beginPath();
+      ctx.rect(-effect.size * 0.5, -effect.size * 0.74, effect.size, effect.size * 0.74);
+      ctx.clip();
+      drawAtlasFrame(atlas, frame, effect.size);
+    }
     ctx.restore();
   }
   ctx.globalAlpha = 1;
+  // MOTION FIX 7: faint arc ribbon under a directional flip — the body
+  // centre's ballistic path integrated backward (exact, stateless), stroked
+  // as a fading tapered curve through the mid-frames of the arc, so the flip
+  // reads as travel along a path rather than a rotating cutout.
+  if (state.screen === "fight" && !state.accessibility.reducedMotion
+    && state.performance.trailScale > 0) {
+    for (let side = 0; side < 2; side += 1) {
+      const obs = motionObs[side];
+      const fighter = state.fighters[side];
+      if (!obs?.flipEligible || obs.flipKind === "neutral" || !fighter || fighter.grounded) continue;
+      const launch = Math.abs(fighter.movement.jumpVelocityY || -720);
+      const height = Math.max(0, FLOOR - fighter.y);
+      // Mid-frames only: skip the very first ticks off the ground.
+      if (height < 40 && fighter.vy < -launch * 0.82) continue;
+      const centreY = fighter.y - fighterRenderSize(fighter.def.id) * 0.52;
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      ctx.lineCap = "round";
+      let prevX = fighter.x;
+      let prevY = centreY;
+      for (let step = 1; step <= 8; step += 1) {
+        // Long enough to clear the sprite footprint and read as a path —
+        // ~0.56s of flight integrated backward, clipped at the street.
+        const dtBack = step * 0.07;
+        const tailX = fighter.x - fighter.vx * dtBack;
+        const tailY = centreY - fighter.vy * dtBack + 0.5 * GRAVITY * dtBack * dtBack;
+        if (tailY > FLOOR - 8) break;
+        ctx.globalAlpha = 0.44 * (1 - step / 9);
+        ctx.strokeStyle = fighter.def.accent;
+        ctx.lineWidth = Math.max(2, 12 - step * 1.2);
+        ctx.beginPath();
+        ctx.moveTo(prevX, prevY);
+        ctx.lineTo(tailX, tailY);
+        ctx.stroke();
+        // Warm core on the freshest stretch of path so the arc reads at a
+        // glance while the tail stays a faint wash.
+        if (step <= 2) {
+          ctx.globalAlpha = 0.3;
+          ctx.strokeStyle = "#fff2d8";
+          ctx.lineWidth = Math.max(1.5, (12 - step * 1.2) * 0.35);
+          ctx.stroke();
+        }
+        prevX = tailX;
+        prevY = tailY;
+      }
+      ctx.restore();
+      presentationDebug.arcRibbons += 1;
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+  }
 }
 
 // Stage key lights for the fighter rim pass: the colour of each arena's
@@ -18010,14 +19955,89 @@ function drawParticles() {
         ctx.fillRect(-reach, -reach, reach * 2, reach * 2);
         presentationDebug.lightSpills += 1;
       }
-      ctx.shadowBlur = 18;
-      ctx.lineWidth = 5 * alpha;
-      for (let ray = 0; ray < 6; ray += 1) {
-        const angle = ray * Math.PI / 3;
+      // MOTION FIX 1: the six static rays are gone (they were half of the
+      // frozen "wheel" read). The impactFlash is now a single soft white pop
+      // that lives only through the front of the effect — the evolving
+      // hitSpark effect owns the shard language.
+      if (alpha > 0.45) {
+        ctx.shadowBlur = 0;
+        const pop = ctx.createRadialGradient(0, 0, 2, 0, 0, radius + 14);
+        pop.addColorStop(0, "rgba(255,250,238,0.95)");
+        pop.addColorStop(0.55, "rgba(255,244,223,0.42)");
+        pop.addColorStop(1, "rgba(255,244,223,0)");
+        ctx.globalAlpha = (alpha - 0.45) / 0.55;
+        ctx.fillStyle = pop;
         ctx.beginPath();
-        ctx.moveTo(Math.cos(angle) * 4, Math.sin(angle) * 4);
-        ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
-        ctx.stroke();
+        ctx.arc(0, 0, radius + 14, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (effect.kind === "hitSpark") {
+      // MOTION FIX 1: the evolving hitspark. Beat 1 (first ~35% of life):
+      // one clean white flash. Beats 2-3: radiating shards cut from the
+      // spark flipbook at the per-hit randomized rotation/count, cells and
+      // jitter re-hashed EVERY sim tick (ticks advance through hitstop), so
+      // the silhouette never repeats between rendered frames; the whole
+      // thing is gone in ~6 ticks.
+      const age = 1 - alpha;
+      ctx.globalCompositeOperation = "lighter";
+      ctx.shadowBlur = 0;
+      if (age < 0.28) {
+        const flash = 1 - age / 0.28;
+        const radius = effect.size * (0.32 + age * 0.9);
+        const core = ctx.createRadialGradient(0, 0, 2, 0, 0, radius);
+        core.addColorStop(0, "rgba(255,255,252,0.98)");
+        core.addColorStop(0.6, "rgba(255,246,224,0.5)");
+        core.addColorStop(1, "rgba(255,246,224,0)");
+        ctx.globalAlpha = 0.65 + 0.35 * flash;
+        ctx.fillStyle = core;
+        ctx.beginPath();
+        ctx.arc(0, 0, radius, 0, Math.PI * 2);
+        ctx.fill();
+      } else {
+        const spread = (age - 0.28) / 0.72;
+        const meta = elementSheets.manifest?.spark;
+        const image = elementSheets.images.get("spark");
+        const tickJitter = state.simulationTick * 0.31 + effect.seed;
+        ctx.shadowColor = effect.color;
+        ctx.shadowBlur = 10;
+        for (let shard = 0; shard < effect.shards; shard += 1) {
+          const angle = effect.baseRot + shard * (Math.PI * 2 / effect.shards)
+            + Math.sin(tickJitter + shard * 2.3) * 0.24;
+          const reach = effect.size * (0.3 + spread * 0.85);
+          const sx = Math.cos(angle) * reach;
+          const sy = Math.sin(angle) * reach * 0.82;
+          ctx.globalAlpha = Math.min(1, (0.35 + alpha) * (0.7 + ((shard + effect.seed) % 3) * 0.15));
+          if (meta && image?.complete && image.naturalWidth) {
+            // Shard cell re-hashed per tick — never the same cell two frames.
+            const cell = meta.frames[(effect.seed + shard * 5 + state.simulationTick * 3) % 16];
+            if (!cell || !cell.w) continue;
+            const size = effect.size * (0.72 - spread * 0.24) * (0.8 + (shard % 3) * 0.18);
+            const scale = size / Math.max(cell.w, cell.h);
+            ctx.save();
+            ctx.translate(sx, sy);
+            ctx.rotate(angle + Math.PI * 0.5);
+            ctx.drawImage(image, cell.x, cell.y, cell.w, cell.h,
+              -(cell.cx - cell.x) * scale, -(cell.cy - cell.y) * scale,
+              cell.w * scale, cell.h * scale);
+            ctx.restore();
+          } else {
+            // Procedural fallback: a tapered wedge, still tick-jittered.
+            ctx.fillStyle = shard % 3 ? "#fff6db" : effect.color;
+            const width = effect.size * 0.09 * (1 - spread * 0.4);
+            ctx.save();
+            ctx.translate(sx, sy);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(-effect.size * 0.3, 0);
+            ctx.lineTo(0, -width);
+            ctx.lineTo(effect.size * 0.22, 0);
+            ctx.lineTo(0, width);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+          }
+        }
+        ctx.shadowBlur = 0;
       }
     } else if (effect.kind === "bloodDecal") {
       ctx.shadowBlur = 0;
@@ -18180,6 +20200,33 @@ function drawParticles() {
       ctx.globalCompositeOperation = "source-over";
     } else if (effect.kind === "afterimage") {
       // Rendered in the world pass before the fighters; nothing to do here.
+    } else if (effect.kind === "groundCrackFlash") {
+      // v2.6 MOTION heavy-landing crack flash (spec 5): the stage-scar visual
+      // language — chalky scuff, pale chipped edge, dark crack — as a ~0.35s
+      // flash that fades out completely. Presentation only, no persistence.
+      ctx.shadowBlur = 0;
+      ctx.rotate(effect.rot);
+      ctx.globalAlpha = alpha * 0.4;
+      ctx.fillStyle = "rgba(196,184,164,0.6)";
+      ctx.beginPath();
+      ctx.ellipse(0, 0, effect.scuffW * (1.05 - alpha * 0.2), effect.scuffH, 0, 0, Math.PI * 2);
+      ctx.fill();
+      for (const [style, width, offsetY, passAlpha] of [
+        ["rgba(255,244,222,0.85)", 3.2, -1.4, 0.9],
+        ["rgba(10,9,8,0.95)", 2.2, 0, 0.75],
+      ]) {
+        ctx.globalAlpha = alpha * passAlpha;
+        ctx.strokeStyle = style;
+        ctx.lineWidth = width;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        ctx.moveTo(effect.points[0][0], effect.points[0][1] + offsetY);
+        for (let index = 1; index < effect.points.length; index += 1) {
+          ctx.lineTo(effect.points[index][0], effect.points[index][1] + offsetY);
+        }
+        ctx.stroke();
+      }
     } else if (effect.kind === "guard") {
       const radius = (1 - alpha) * 64 + 42;
       ctx.lineWidth = 9 * alpha;
@@ -19531,6 +21578,13 @@ function draw(time) {
   // intensity routing, stage ambience) from observed state. Unconditional so
   // every bed settles/tears down the moment the fight screen goes away.
   updateAudioPresentation(time, hudDtMs);
+  // v2.6 MOTION: observe landings/skids/dash starts/hitstun edges and pace
+  // the squash/wobble/crossfade counters BEFORE either renderer consumes the
+  // shared motion transforms (the 3D renderFrame below reads the same layer).
+  updateMotionObservers();
+  // v2.6 ELEMENTS: observe special-attack phases (charge/active/release) and
+  // integrate the flipbook sprite pool before either renderer draws.
+  updateElementalVfx(time);
   // Wave 7 DPR-sharp baseline: all logical-coordinate code below draws through
   // this transform; identity when sharp render is off (renderDpr === 1).
   ctx.setTransform(renderDpr, 0, 0, renderDpr, 0, 0);
@@ -19544,6 +21598,11 @@ function draw(time) {
     cinema3dBridge.renderer.renderFrame(time, hudDtMs);
     ctx.clearRect(0, 0, W, H);
   }
+  // MOTION FIX 12: apex clipping — CINEMA 3D's tighter framing sends a jump
+  // apex behind the top HUD band. While any fighter's head projects up into
+  // the band, the DOM HUD eases down to ~30% opacity and eases back after,
+  // so the flip reads through the chrome instead of being guillotined.
+  updateCinema3dHudFade(cinema3dWorld, hudDtMs);
   ctx.save();
   const shakeScale = state.accessibility.reducedMotion ? 0 : state.accessibility.shakeScale;
   const shakeX = state.shake > 0 ? Math.sin((state.simulationTick + 1) * 12.9898) * state.shake * 9 * shakeScale : 0;
@@ -19598,6 +21657,7 @@ function draw(time) {
       state.fighters.forEach((fighter) => drawDizzyStars(fighter, time));
       state.fighters.forEach((fighter) => drawGuardCrushMarker(fighter, time));
       drawParticles();
+      drawElementalVfx();
       drawForegroundOccluders(state.fighters.length
         ? (state.fighters[0].x + state.fighters[1].x) * 0.5 : W * 0.5);
     }
@@ -19623,6 +21683,7 @@ function draw(time) {
     drawChromaticAberration();
   }
   drawIntroLetterbox();
+  drawElementalWash();
   drawFinisherOverlay();
   if (state.flash > 0) {
 // CINEMA 3D carries its own layered impact flash (hit-masked white pop,
@@ -21649,7 +23710,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.5a");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-2.6");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -22820,7 +24881,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "2.5-voices",
+  version: "2.6-motion",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -23027,6 +25088,8 @@ window.__finalBlowEngine = {
         bloodStains: state.effects.filter((effect) => effect.kind === "bloodDecal" && effect.stain).length,
         fatalitySlowMo: Boolean((state.finisher?.slowMotionTicks || 0) > 0),
         shockRings: state.effects.filter((effect) => effect.kind === "shockRing").length,
+        // MOTION FIX 1: the evolving hitspark effect, countable by probes.
+        hitSparks: state.effects.filter((effect) => effect.kind === "hitSpark").length,
         afterimages: state.effects.filter((effect) => effect.kind === "afterimage").length,
         sweatDrops: state.particles.filter((particle) => particle.kind === "sweat").length,
         rimLights: presentationDebug.rimLights,
@@ -23062,6 +25125,25 @@ window.__finalBlowEngine = {
         projectileGlows: presentationDebug.projectileGlows,
         swipeRibbons: presentationDebug.swipeRibbons,
         wallSplats: presentationDebug.wallSplats,
+        // v2.6 MOTION counters: monotonic one-shots (motionFxDebug) for the
+        // event spawns, per-rendered-frame passes (presentationDebug) for the
+        // steady 2D draw-path composites.
+        jumpFlips: motionFxDebug.jumpFlips,
+        arcRibbons: presentationDebug.arcRibbons,
+        squashStretchFrames: presentationDebug.squashStretchFrames,
+        poseCrossfades: presentationDebug.poseCrossfades,
+        attackSmears: presentationDebug.attackSmears,
+        skidSmokes: motionFxDebug.skidSmokes,
+        landingDust: motionFxDebug.landingDust,
+        // v2.6 ELEMENTS counters: monotonic one-shots (elementFxDebug) for the
+        // charge/trail/burst/residue emissions and the SFX layer plays, plus
+        // the live flipbook-sprite pool size for burst probes.
+        elementCharges: elementFxDebug.elementCharges,
+        elementTrails: elementFxDebug.elementTrails,
+        elementBursts: elementFxDebug.elementBursts,
+        elementResidue: elementFxDebug.elementResidue,
+        vfxSfxPlays: elementFxDebug.vfxSfxPlays,
+        elementParticleCount: elementParticles.length,
         focusLines: presentationDebug.focusLines,
         lightSpills: presentationDebug.lightSpills,
         timeOfDay: Number(timeOfDayLevel().toFixed(3)),
@@ -24408,7 +26490,7 @@ renderMoveList();
 // world-draw handoff happens per-frame in draw() via cinema3dWorldActive().
 // Battery performance profile refuses activation entirely.
 // ---------------------------------------------------------------------------
-const cinema3dBridge = { renderer: null, loading: false, onHit: null };
+const cinema3dBridge = { renderer: null, loading: false, onHit: null, onDust: null };
 
 function cinema3dAllowed() {
   return state.performance?.id !== "battery";
@@ -24423,6 +26505,68 @@ function cinema3dWorldActive() {
     // Scripted fatality finishers keep their bespoke 2D cinematic presentation.
     && !state.finisher,
   );
+}
+
+// MOTION FIX 12: render-side HUD fade so a CINEMA 3D jump apex is never
+// guillotined behind the top HUD band. Pure presentation state on the
+// superDimLevel pattern — measured DOM band height cached ~0.5s, eased
+// opacity written straight to the #hud element, snapped back to stylesheet
+// control the moment nothing is behind it.
+let cinema3dHudFadeLevel = 0;
+let cinema3dHudBandLogical = -1;
+let cinema3dHudBandMeasuredMs = 0;
+
+function updateCinema3dHudFade(active, dtMs) {
+  const hud = $("#hud");
+  if (!hud) return;
+  let target = 0;
+  if (active && cinema3dBridge.renderer?.projectSim
+    && state.fighters?.length === 2 && state.screen === "fight") {
+    const nowMs = performance.now();
+    if (cinema3dHudBandLogical < 0 || nowMs - cinema3dHudBandMeasuredMs > 500) {
+      cinema3dHudBandMeasuredMs = nowMs;
+      const canvasRect = canvas.getBoundingClientRect();
+      const hudRect = hud.getBoundingClientRect();
+      cinema3dHudBandLogical = canvasRect.height > 0
+        ? Math.max(0, (hudRect.bottom - canvasRect.top) / canvasRect.height * H)
+        : H * 0.12;
+    }
+    for (const fighter of state.fighters) {
+      // Sprite top with the flip taken into account: mid-somersault the
+      // rotated cell reaches a full render-cell above the feet (legs/fists
+      // sweep well past head height), which is exactly the pose that was
+      // clipping behind the band. Generous approach margin: the fade eases
+      // IN while the fighter closes on the band, so a genuine overlap is
+      // already soft.
+      const obs = motionObs[fighter.side];
+      const flipping = Boolean(obs?.flipEligible) && !fighter.grounded;
+      const reachAbove = Math.max(
+        (fighter.height || 180) * 1.22,
+        flipping ? fighterRenderSize(fighter.def.id) * 1.04 : 0,
+      );
+      const top = cinema3dBridge.renderer.projectSim(fighter.x, fighter.y - reachAbove);
+      // QA latch (render-only): the projection vs band, for burst probes.
+      if (top && (!window.__finalBlowHudFade || top.y < window.__finalBlowHudFade.topY
+        || window.__finalBlowHudFade.tick !== state.simulationTick)) {
+        window.__finalBlowHudFade = {
+          topY: Math.round(top.y),
+          band: Math.round(cinema3dHudBandLogical),
+          level: Number(cinema3dHudFadeLevel.toFixed(3)),
+          tick: state.simulationTick,
+        };
+      }
+      if (top && top.y < cinema3dHudBandLogical + 34) {
+        target = 1;
+        break;
+      }
+    }
+  }
+  const ease = clamp((dtMs || 16.7) / 1000, 0, 0.05) * (target > cinema3dHudFadeLevel ? 14 : 6);
+  cinema3dHudFadeLevel = clamp(
+    cinema3dHudFadeLevel + (target > cinema3dHudFadeLevel ? ease : -ease), 0, 1,
+  );
+  const opacity = 1 - cinema3dHudFadeLevel * 0.7;
+  hud.style.opacity = opacity >= 0.999 ? "" : opacity.toFixed(3);
 }
 
 function ensureCinema3d() {
@@ -24446,6 +26590,10 @@ function ensureCinema3d() {
       fighterPaletteKey: (fighter) => (matchPalettes[fighter.side] === 1 ? "alt" : ""),
       fighterRenderSize,
       fighterAnimationPose,
+      // v2.6 MOTION: the shared movement-animation transform (jump flips,
+      // squash & stretch, leans, wobble, dizzy sway) so poseRig animates
+      // identically to drawFighter. Canvas rotation convention (y-down).
+      fighterMotionTransform,
       moveSheetAdjust: MOVE_SHEET_ADJUST,
       gritSuperCost: GRIT_RULES.superCost,
       gameCanvas: canvas,
@@ -24455,6 +26603,8 @@ function ensureCinema3d() {
     });
     cinema3dBridge.renderer = renderer3d;
     cinema3dBridge.onHit = (payload) => renderer3d.onHit(payload);
+    // MOTION FIX 12: dust parity latch (takeoff / landing / dash ground work).
+    cinema3dBridge.onDust = (payload) => renderer3d.onDust?.(payload);
   }).catch((error) => {
     console.warn("CINEMA 3D failed to load; staying on the 2D renderer.", error);
   }).finally(() => {
