@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 29 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 31 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 2-8, 1984 — The Peanut Meets the Mac: IBM and Apple Fight for the Next Home Buyer</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-04-02</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-02</guid>
+      <pubDate>Mon, 31 Aug 2026 12:00:00 GMT</pubDate>
+      <description>TIME&apos;s April 2 report frames two incompatible visions of personal computing, one betting on compatibility, the other on the mouse. The comparison that dealers have been making informally since January reached the national press this week. In its April 2 technology report, TIME set IBM&apos;s PCjr against Apple&apos;s Macintosh and described the two as new entries battling for attention from the same undecided buyer. The deck put it plainly: new entries from IBM and Apple battle for attention. Also this week: Atari Invades Rival Machines With a Dozen Atarisoft Games · PC Boom Turns Into a Stock-Market Crapshoot · Mindset Pushes PC Graphics Beyond the IBM Mold · Jobs Sells the Macintosh as a Mission, Not Just a Machine.</description>
+    </item>
     <item>
       <title>Week of March 26-April 1, 1984 — AT&amp;T Throws Down a Unix Gauntlet With Six 3B Computers</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-03-26</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-21</guid>
       <pubDate>Mon, 10 Aug 2026 12:00:00 GMT</pubDate>
       <description>The newly announced graphical environment promises one mouse-driven face across the expanding MS-DOS market—but Microsoft is still showing a future product, not shipping one. Microsoft has put a name and a visible face on its plan for the next stage of MS-DOS computing. Windows, announced in New York on November 10 and pictured for readers in this week’s InfoWorld, places menus, icons and movable on-screen panels between the operator and familiar programs. A mouse becomes a working tool rather than an exotic laboratory accessory. Also this week: Holiday Buyers Enter a Home-Computer Shakeout · IBM&apos;s PCjr Sets a $669 Floor for Big Blue at Home · Computer Chess Programs Learn to Outsmart One Another · An Eyebrow-Controlled Computer Gives a Scientist His Voice.</description>
-    </item>
-    <item>
-      <title>Week of November 14-20, 1983 — Penney Drops Coleco&apos;s Adam From Holiday Line</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-11-14</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-14</guid>
-      <pubDate>Sun, 09 Aug 2026 12:00:00 GMT</pubDate>
-      <description>A major retailer’s retreat exposes delivery and reliability doubts around the ambitious all-in-one home computer. Coleco’s bid to turn its video-game success into a home-computer empire suffered a conspicuous holiday setback this week. The New York Times reported November 15 that J.C. Penney had omitted the Adam computer from its holiday line, a damaging absence at the moment families were studying Christmas catalogs and retailers were committing scarce shelf space. Also this week: Microsoft Opens a Window on DOS · Video Games Enter Christmas Under a Cloud · Schools Add Ethics to Computer Literacy.</description>
     </item>
   </channel>
 </rss>
