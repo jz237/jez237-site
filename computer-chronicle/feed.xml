@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 31 Aug 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 01 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 9-15, 1984 — HomeWord Brings Icons to Three Computer Camps</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-04-09</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-09</guid>
+      <pubDate>Tue, 01 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Sierra On-Line gives Apple, Commodore 64 and Atari owners the same $49.95 picture-guided word processor. A filing cabinet, a printed page, a printer, a disorderly page with an arrow, a question mark and a floppy disk now stand between the home writer and the command line. Sierra On-Line has introduced HomeWord for the Apple, Commodore 64 and Atari families, using six pictured icons to guide the program&apos;s principal jobs. Also this week: Atari&apos;s Games Defect to the Competition · War Games Grow Up on the Commodore 64 · The $100 Home Computer Is No Longer a Fantasy · Color Graphics Become a $39.95 C64 Tool.</description>
+    </item>
     <item>
       <title>Week of April 2-8, 1984 — The Peanut Meets the Mac: IBM and Apple Fight for the Next Home Buyer</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-04-02</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-28</guid>
       <pubDate>Tue, 11 Aug 2026 12:00:00 GMT</pubDate>
       <description>The Las Vegas show reveals an industry rapidly reorganizing around the IBM PC standard. Fall COMDEX opened in Las Vegas on November 28 with a floor full of machines, peripherals and promises. Yet beneath the variety ran a common current: makers were increasingly defining their products by whether they could work with the IBM Personal Computer and its growing software world. Also this week: Windows and Visi On Put the Graphical Desktop in View · Holiday Buyers Enter a Crowded, Cut-Price Computer Market · Electronic Arts Mixes Chess Strategy with Arcade Action · BYTE Asks Software to Become Easier.</description>
-    </item>
-    <item>
-      <title>Week of November 21-27, 1983 — Microsoft Opens a Window on the DOS Desktop</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-11-21</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-21</guid>
-      <pubDate>Mon, 10 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The newly announced graphical environment promises one mouse-driven face across the expanding MS-DOS market—but Microsoft is still showing a future product, not shipping one. Microsoft has put a name and a visible face on its plan for the next stage of MS-DOS computing. Windows, announced in New York on November 10 and pictured for readers in this week’s InfoWorld, places menus, icons and movable on-screen panels between the operator and familiar programs. A mouse becomes a working tool rather than an exotic laboratory accessory. Also this week: Holiday Buyers Enter a Home-Computer Shakeout · IBM&apos;s PCjr Sets a $669 Floor for Big Blue at Home · Computer Chess Programs Learn to Outsmart One Another · An Eyebrow-Controlled Computer Gives a Scientist His Voice.</description>
     </item>
   </channel>
 </rss>

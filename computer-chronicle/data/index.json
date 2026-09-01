@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-01",
+      "historicDate": "1984-04-09",
+      "displayDate": "Week of April 9-15, 1984",
+      "edition": "Issue 089 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "HomeWord turns six writing chores into pictures while Atari sends its arcade catalog onto competitors' machines.",
+      "leadHeadline": "HomeWord Brings Icons to Three Computer Camps",
+      "storyHeadlines": [
+        "Atari's Games Defect to the Competition",
+        "War Games Grow Up on the Commodore 64",
+        "The $100 Home Computer Is No Longer a Fantasy",
+        "Color Graphics Become a $39.95 C64 Tool"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-09.jpg",
+      "thumb": "media/thumbs/1984-04-09.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-08-31",
       "historicDate": "1984-04-02",
       "displayDate": "Week of April 2-8, 1984",
