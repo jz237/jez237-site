@@ -1977,16 +1977,98 @@ export function safeBaseFrame(fighterId, frame) {
 /**
  * Uniform draw-scale correction for one resolved cell. Bank-1/2 sheets carry
  * their own whole-sheet adjust (MOTION_SHEET_ADJUST in the renderers); this
- * is the PER-CELL correction the base bank needs, currently only the
- * oversized deep-squat crouch cells. Both renderers multiply renderSize by
+ * is the PER-CELL correction the base bank needs (the oversized deep-squat
+ * crouch cells and the T4 walk-scale pop) plus, since 3.0, the unified bank's
+ * own idle/walk height reconciliation. Both renderers multiply renderSize by
  * it, exactly as they already do for the sheet adjust.
  */
 export function baseCellDrawAdjust(fighterId, bank, frame) {
+  if (bank === UNIFIED_BANK) return UNIFIED_CELL_ADJUST[fighterId]?.[frame] || 1;
   if (bank !== "base") return 1;
   const roles = BASE_CELL_ROLES[fighterId];
   if (!roles) return BASE_WALK_ADJUST[fighterId]?.[frame] || 1;
   if (frame === roles.crouch) return roles.crouchAdjust || 1;
   return BASE_WALK_ADJUST[fighterId]?.[frame] || 1;
+}
+
+// ---------------------------------------------------------------------------
+// v3.0 critic round (B1) — THE IDLE<->WALK HEIGHT POP.
+//
+// The 3.0 wave shipped `cellDrawAdjust` returning 1 for every unified cell "by
+// design", on the reasoning that one sheet generated in one pass at one global
+// scale needs no per-cell correction. The scale is indeed global; the DRAWING
+// is not. Every unified sheet paints the idle as a settled wide fighting
+// stance with the knees bent and paints the four walk keys as an upright
+// figure mid-stride, so inside one self-consistent sheet the two beats differ
+// in CONTENT HEIGHT. Measured at 1:1 (opaque pixels, alpha >= 24, floor row
+// 315), walk keys against that fighter's own unified idle:
+//
+//   deathblow  idle 272  walk 298/306/300/305   +9.6 .. +12.5%
+//   jez        idle 271  walk 306/306/300/300  +10.7 .. +12.9%
+//   alan       idle 274  walk 306/306/303/305  +10.6 .. +11.7%
+//   post       idle 279  walk 295/294/294/290   +3.9 ..  +5.7%
+//   donald     idle 261  walk 286/289/289/285   +9.2 .. +10.7%
+//   devil      idle 283  walk 303/303/306/303   +7.1 ..  +8.1%
+//   ali        idle 271  walk 303/306/303/301  +11.1 .. +12.9%
+//   benny      idle 279  walk 306/306/305/303   +8.6 ..  +9.7%
+//   comm.      idle 278  walk 303/306/302/306   +8.6 .. +10.1%
+//
+// That is a 4-13% size change in ONE TICK, every time a fighter starts or
+// stops walking — landing on the exact transition this whole bank exists to
+// perfect. The costume is finally stable across it and the fighter changed
+// SIZE instead.
+//
+// The IDLE is the anchor, for three independent reasons: it is the sheet's own
+// U1 reference cell, it is what WAKEUP_RISE_HEIGHT.standUnified was measured
+// on, and it is what the 2.9 precedent does (BASE_WALK_ADJUST lands each walk
+// cell on the fighter's own idle height). So the four walk keys are corrected
+// ONTO the idle, and nothing else on the sheet is touched.
+//
+// Only cells that depict an UPRIGHT STANDING figure are candidates, and of
+// those only the walk keys need anything: guard measures -2.3..+3.0% of the
+// idle and light-hit +0.0..+4.8%, both inside the 5% deadband the T4 table
+// uses. crouch (-26..-43%), crouch-trans (-4.8..-20.5%), jump-tuck, stagger,
+// big-hit and knockdown are legitimately shorter drawings and are deliberately
+// left alone — normalising those would flatten the poses, not the pop.
+//
+// Unlike T4 the correction is applied to ALL FOUR keys whenever ANY of them is
+// outside the deadband (post's cycle spans 3.9-5.7%): correcting only the
+// out-of-band keys would flatten the idle->walk step and leave a smaller pop
+// INSIDE the cycle. All nine sheets need it; all nine land within 0.05%.
+// ---------------------------------------------------------------------------
+const UNIFIED_CELL_ADJUST = Object.freeze({
+  deathblow: Object.freeze({ 1: 0.913, 2: 0.889, 3: 0.907, 4: 0.892 }),
+  jez: Object.freeze({ 1: 0.886, 2: 0.886, 3: 0.903, 4: 0.903 }),
+  alan: Object.freeze({ 1: 0.895, 2: 0.895, 3: 0.904, 4: 0.898 }),
+  post: Object.freeze({ 1: 0.946, 2: 0.949, 3: 0.949, 4: 0.962 }),
+  donald: Object.freeze({ 1: 0.913, 2: 0.903, 3: 0.903, 4: 0.916 }),
+  devil: Object.freeze({ 1: 0.934, 2: 0.934, 3: 0.925, 4: 0.934 }),
+  ali: Object.freeze({ 1: 0.894, 2: 0.886, 3: 0.894, 4: 0.900 }),
+  benny: Object.freeze({ 1: 0.912, 2: 0.912, 3: 0.915, 4: 0.921 }),
+  commissioner: Object.freeze({ 1: 0.917, 2: 0.908, 3: 0.921, 4: 0.908 }),
+});
+
+/**
+ * Audit hook for B1: the measured raw content height of every unified cell,
+ * and the drawn height once UNIFIED_CELL_ADJUST is applied. The contract test
+ * asserts idle and the four walk keys agree once corrected.
+ */
+export const UNIFIED_CELL_HEIGHT = Object.freeze({
+  deathblow: Object.freeze([272, 298, 306, 300, 305, 180, 259, 279, 278, 145, 250, 268, 272, 241, 212, 99]),
+  jez: Object.freeze([271, 306, 306, 300, 300, 161, 240, 279, 249, 148, 261, 266, 280, 283, 219, 101]),
+  alan: Object.freeze([274, 306, 306, 303, 305, 199, 257, 276, 272, 178, 257, 269, 277, 291, 244, 125]),
+  post: Object.freeze([279, 295, 294, 294, 290, 177, 246, 273, 283, 166, 273, 284, 292, 306, 248, 107]),
+  donald: Object.freeze([261, 286, 289, 289, 285, 193, 243, 255, 306, 157, 245, 251, 266, 256, 230, 122]),
+  devil: Object.freeze([283, 303, 303, 306, 303, 191, 242, 284, 292, 176, 266, 268, 294, 296, 254, 123]),
+  ali: Object.freeze([271, 303, 306, 303, 301, 199, 252, 274, 256, 165, 250, 256, 284, 272, 238, 128]),
+  benny: Object.freeze([279, 306, 306, 305, 303, 184, 222, 286, 265, 158, 263, 287, 283, 291, 237, 73]),
+  commissioner: Object.freeze([278, 303, 306, 302, 306, 158, 221, 279, 259, 122, 260, 244, 284, 275, 256, 75]),
+});
+
+/** Drawn (corrected) content height of a unified cell, in cell pixels. */
+export function unifiedDrawnHeight(fighterId, cell) {
+  const raw = UNIFIED_CELL_HEIGHT[fighterId]?.[cell];
+  return Number.isFinite(raw) ? raw * baseCellDrawAdjust(fighterId, UNIFIED_BANK, cell) : 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -2051,10 +2133,54 @@ const GUARD_FLINCH_ADJUST = Object.freeze({
   devil: 1.08, ali: 1.18, benny: 1.11, commissioner: 1.03, cyraxx: 1.05,
 });
 
-/** Scale correction that lands the authored guard flinch on the guard's height. */
-export function guardFlinchAdjust(fighterId, bank, frame) {
+// ---------------------------------------------------------------------------
+// v3.0 — THE GUARD-FLINCH TARGET MOVED, so the 2.9 correction had to be
+// re-derived rather than kept. This is the one 2.9 workaround the unified bank
+// genuinely invalidates.
+//
+// M4's numbers reconcile the authored block-flinch (motion2:8) against the
+// STANDING GUARD CELL. For a unified fighter that cell is no longer
+// base(roles.guard) — it is unified:7, which the unified sheets draw at their
+// own settled-stance height rather than at the base bank's flat 305-306px.
+// Measured content heights at 1:1 (opaque pixels, alpha >= 24) this wave,
+// unified guard : motion2 block-hit, beside the 2.9 value that assumed the
+// base guard:
+//
+//   jez           279 : 255  -> 1.094   (2.9 assumed 1.20)
+//   devil         284 : 252  -> 1.127   (2.9 assumed 1.08)
+//   ali           274 : 259  -> 1.058   (2.9 assumed 1.18)
+//   benny         286 : 275  -> 1.040   (2.9 assumed 1.11)
+//   post          273 : 263  -> 1.038   (2.9 assumed 1.16)
+//   commissioner  279 : 279  -> 1.000   (2.9 assumed 1.03)
+//   alan          276 : 282  -> 0.979   (2.9 assumed 1.09) -> clamped to 1
+//   donald        255 : 265  -> 0.962   (2.9 assumed 1.16) -> clamped to 1
+//
+// Left uncorrected, jez's flinch would have drawn 255 * 1.20 = 306px against a
+// 279px guard: the fighter GROWING 10% on a blocked hit, which is M4's own
+// defect with the sign flipped. The floor stays 1 and the cap stays 1.22, the
+// same philosophy the crouch and base-walk corrections use.
+//
+// `deathblow` and `cyraxx` are not on the bank and are not in this table, so
+// they keep their 2.9 values through the default path.
+// ---------------------------------------------------------------------------
+const UNIFIED_GUARD_FLINCH_ADJUST = Object.freeze({
+  jez: 1.094, alan: 0.979, post: 1.038, donald: 0.962,
+  devil: 1.127, ali: 1.058, benny: 1.040, commissioner: 1.000,
+});
+
+/**
+ * Scale correction that lands the authored guard flinch on the guard's height.
+ * `options.unified` says this fighter's standing guard is drawing from the
+ * unified sheet, which moves the target the flinch is being matched to.
+ */
+export function guardFlinchAdjust(fighterId, bank, frame, options = {}) {
   if (bank !== "motion2" || frame !== MOTION2_CELLS.blockHit) return 1;
-  const adjust = GUARD_FLINCH_ADJUST[fighterId];
+  // A fighter with no unified row falls back to his 2.9 number rather than to
+  // no correction at all: the two fighters off the bank are never passed
+  // `unified: true` by either renderer, and if a future one ever is, keeping
+  // M4's correction is the safe answer.
+  const adjust = (options.unified === true ? UNIFIED_GUARD_FLINCH_ADJUST[fighterId] : undefined)
+    ?? GUARD_FLINCH_ADJUST[fighterId];
   return Number.isFinite(adjust) ? Math.min(1.22, Math.max(1, adjust)) : 1;
 }
 
@@ -2062,9 +2188,17 @@ export function guardFlinchAdjust(fighterId, bank, frame) {
  * The ONE draw-scale correction a renderer needs for a resolved cell. Both
  * renderers call exactly this so the 2D canvas and the CINEMA 3D rig can never
  * disagree about how big a cell draws.
+ *
+ * v3.0: the unified sheets are ONE global scale each, normalised on the same
+ * 306px standing convention motion2 uses and mutually registered by
+ * construction, so no unified cell needs a per-cell correction — the whole
+ * point of authoring the vocabulary in one pass. `options.unified` only
+ * reaches the guard-flinch reconciliation, which compares a motion2 cell
+ * against whichever bank is drawing the guard.
  */
-export function cellDrawAdjust(fighterId, bank, frame) {
-  return baseCellDrawAdjust(fighterId, bank, frame) * guardFlinchAdjust(fighterId, bank, frame);
+export function cellDrawAdjust(fighterId, bank, frame, options = {}) {
+  return baseCellDrawAdjust(fighterId, bank, frame)
+    * guardFlinchAdjust(fighterId, bank, frame, options);
 }
 
 // ---------------------------------------------------------------------------
@@ -2160,6 +2294,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([195, 187, 191, 163, 187, 238, 230, 238, 191, 231, 199, 224, 174, 160, 160, 164]),
     motion2: Object.freeze([171, 163, 164, 168, 187, 171, 186, 174, 177, 174, 176, 197, 201, 174, 212, 180]),
     motion3: Object.freeze([161, 158, 158, 158, 164, 188, 158, 166, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([180, 170, 162, 166, 163, 226, 186, 177, 180, 247, 192, 184, 180, 199, 210, 270]),
     ref: 162,
   }),
   jez: Object.freeze({
@@ -2167,6 +2302,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([187, 182, 189, 163, 179, 228, 220, 227, 197, 229, 198, 195, 175, 160, 160, 190]),
     motion2: Object.freeze([173, 163, 165, 169, 196, 174, 204, 186, 187, 181, 186, 211, 209, 172, 221, 206]),
     motion3: Object.freeze([182, 160, 158, 158, 182, 222, 168, 186, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([180, 164, 162, 168, 166, 235, 196, 176, 195, 244, 185, 182, 176, 176, 206, 269]),
     ref: 162,
   }),
   alan: Object.freeze({
@@ -2174,6 +2310,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([186, 188, 185, 163, 183, 231, 214, 242, 191, 233, 188, 200, 166, 160, 160, 191]),
     motion2: Object.freeze([171, 163, 163, 166, 186, 166, 189, 168, 175, 171, 178, 210, 200, 185, 212, 193]),
     motion3: Object.freeze([160, 158, 158, 161, 168, 214, 158, 172, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([178, 166, 164, 165, 163, 216, 187, 178, 182, 228, 188, 181, 177, 174, 194, 255]),
     ref: 162,
   }),
   post: Object.freeze({
@@ -2181,6 +2318,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([177, 171, 186, 163, 175, 221, 223, 229, 196, 226, 182, 211, 158, 160, 164, 219]),
     motion2: Object.freeze([174, 163, 163, 163, 190, 166, 197, 170, 184, 181, 187, 196, 199, 190, 211, 183]),
     motion3: Object.freeze([172, 158, 158, 158, 176, 204, 158, 178, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([176, 169, 170, 170, 172, 228, 192, 179, 178, 234, 179, 174, 170, 166, 192, 266]),
     ref: 162,
   }),
   donald: Object.freeze({
@@ -2188,6 +2326,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([184, 185, 185, 163, 185, 227, 225, 207, 187, 235, 209, 185, 179, 171, 158, 163]),
     motion2: Object.freeze([175, 163, 162, 169, 197, 172, 196, 181, 183, 175, 188, 202, 197, 191, 209, 200]),
     motion3: Object.freeze([176, 158, 158, 158, 178, 203, 164, 184, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([185, 176, 171, 175, 173, 219, 194, 188, 166, 238, 194, 191, 184, 190, 202, 258]),
     ref: 162,
   }),
   devil: Object.freeze({
@@ -2195,6 +2334,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([175, 171, 178, 163, 176, 205, 224, 252, 194, 219, 191, 201, 188, 160, 184, 169]),
     motion2: Object.freeze([164, 163, 217, 215, 212, 166, 206, 175, 190, 183, 180, 190, 190, 187, 222, 172]),
     motion3: Object.freeze([158, 158, 158, 158, 157, 198, 158, 160, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([176, 164, 164, 162, 165, 222, 196, 176, 174, 228, 186, 186, 172, 172, 192, 258]),
     ref: 165,
   }),
   ali: Object.freeze({
@@ -2202,6 +2342,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([172, 176, 180, 163, 177, 237, 214, 220, 197, 214, 202, 216, 203, 160, 160, 160]),
     motion2: Object.freeze([173, 163, 164, 169, 197, 174, 201, 186, 186, 184, 188, 189, 192, 182, 215, 204]),
     motion3: Object.freeze([172, 158, 158, 158, 158, 201, 158, 172, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([180, 165, 162, 165, 166, 217, 190, 178, 192, 234, 192, 188, 174, 184, 196, 252]),
     ref: 162,
   }),
   benny: Object.freeze({
@@ -2209,6 +2350,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([189, 184, 208, 160, 185, 240, 234, 206, 197, 238, 190, 192, 182, 160, 161, 180]),
     motion2: Object.freeze([171, 163, 163, 165, 199, 173, 185, 164, 178, 174, 182, 193, 194, 168, 213, 194]),
     motion3: Object.freeze([160, 158, 158, 158, 158, 204, 158, 179, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([176, 164, 162, 165, 164, 224, 204, 172, 186, 238, 184, 173, 174, 173, 197, 283]),
     ref: 162,
   }),
   commissioner: Object.freeze({
@@ -2216,6 +2358,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([181, 180, 184, 163, 187, 229, 225, 205, 199, 233, 193, 194, 193, 163, 160, 171]),
     motion2: Object.freeze([168, 163, 163, 163, 198, 170, 204, 183, 176, 176, 190, 197, 167, 174, 199, 197]),
     motion3: Object.freeze([160, 158, 158, 158, 166, 204, 158, 187, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([176, 165, 164, 166, 162, 236, 205, 176, 190, 256, 188, 198, 174, 182, 190, 282]),
     ref: 158,
   }),
   cyraxx: Object.freeze({
@@ -2223,6 +2366,7 @@ export const CELL_BODY_CENTRE = Object.freeze({
     motion: Object.freeze([178, 180, 186, 160, 189, 229, 222, 227, 181, 221, 189, 202, 183, 160, 160, 160]),
     motion2: Object.freeze([175, 163, 163, 165, 195, 164, 201, 188, 175, 175, 182, 206, 204, 160, 208, 174]),
     motion3: Object.freeze([162, 158, 158, 158, 158, 214, 158, 170, -1, -1, -1, -1, -1, -1, -1, -1]),
+    unified: Object.freeze([176, 166, 165, 168, 164, 237, 189, 175, 185, 242, 173, 178, 162, 166, 194, 267]),
     ref: 165,
   }),
 });
@@ -2266,7 +2410,7 @@ export function auditBodyCentres() {
   const errors = [];
   for (const [fighterId, table] of Object.entries(CELL_BODY_CENTRE)) {
     if (!(table.ref > 100 && table.ref < 220)) errors.push(`${fighterId}: ref ${table.ref}`);
-    for (const bank of ["base", "motion", "motion2", "motion3"]) {
+    for (const bank of ["base", "motion", "motion2", "motion3", UNIFIED_BANK]) {
       const centres = table[bank];
       if (!centres || centres.length !== MOTION_CELL_COUNT) {
         errors.push(`${fighterId}/${bank}: ${centres?.length ?? 0} entries`);
@@ -2503,6 +2647,302 @@ export const m3key = (key) => Object.freeze({ bank: MOTION3_BANK, key });
 export const m2key = (cell) => Object.freeze({ bank: "motion2", cell });
 export const m1key = (cell) => Object.freeze({ bank: "motion", cell });
 
+// ---------------------------------------------------------------------------
+// v3.0 — THE UNIFIED BANK (assets/unified, MOTION-ATLAS.md "Unified bank").
+//
+// Banks 1-3 and the walk bank are PATCHES: each supplies a handful of beats
+// and every descriptor carries the base cell it replaces underneath. That
+// architecture is why 2.9 shipped 40 cells behind `accept: false` — cells from
+// different generations do not share a costume, so deathblow's clear glasses
+// became SUNGLASSES and his plaid forearms became GAUNTLETS on the tick he
+// started walking (measured 11.4-11.9 dE against 0.63-1.03 dE of same-
+// generation pose noise).
+//
+// This bank is the opposite shape. Each sheet is a fighter's WHOLE constantly-
+// visible vocabulary — 16 cells — authored in ONE generation, so it is self-
+// consistent by construction. Measured roster-wide, the idle->walk costume
+// delta collapses to 0.0-2.7 dE: inside the base bank's own pose noise.
+//
+// TWO RULES DEFINE THE INTEGRATION, and they answer different questions.
+//
+// RULE 1 — ALL-OR-NOTHING, and it is PER FIGHTER.
+// EVERY unified sheet is a DIFFERENT DRAUGHTSMAN from that fighter's base
+// atlas (donald measures 22.5 dE from his own base idle, jez 11.1, ali 9.9).
+// So no beat the bank owns may fall through to another bank for a fighter who
+// is on it: buildUnifiedAcceptMasks below collapses any sheet that is not
+// 16/16 `accept: true` to an all-false mask, so a partially-accepted sheet
+// cannot draw a single cell and that fighter stays byte-identical to 2.9.
+// Nobody gets a unified idle with a base walk.
+//
+// Today: NINE fighters are whole (deathblow, jez, alan, post, benny, donald,
+// ali, commissioner, devil). `cyraxx` ships 0/16 after failing U1 in three
+// generations and keeps his existing banks entirely; his sheet is not in the
+// repo at all (see assets/unified/MANIFEST.json `cyraxxNote`). Nothing about
+// this file has to change when he lands: drop an all-accept manifest and a
+// sheet in and the gate opens.
+//
+// RULE 2 — CONNECTED REGIONS, and it is PER BEAT, applied to every fighter
+// identically. v3.0 critic round; this is the rule the first 3.0 wave was
+// missing and the reason it had to be re-cut.
+//
+// Rule 1 says a fighter is wholly on the bank or wholly off it. It does NOT
+// say the bank should be routed into every beat it has a drawing for, and the
+// first wave assumed it did. Routing is not about which cells EXIST; it is
+// about which cells are NEIGHBOURS at run time.
+//
+// The measurement that settles it (critics' weighted-Lab cluster metric —
+// adaptive k-means over the opaque Lab pixels of a cell, mean of the two
+// weighted nearest-cluster distances; deathblow's calibration is a same-
+// generation floor of 3.15 dE and a known-bad strobe of 7.29-7.45 dE):
+//
+//   motion and motion2 are COSTUME-COMPATIBLE WITH EACH OTHER. deathblow's
+//   motion:0 against motion2:6 measures 2.62 dE — they share the same white-
+//   side-stripe sneaker. The motion family is ONE generation.
+//
+// So dropping a unified cell into the middle of a motion-bank chain does not
+// remove a seam; it CUTS a chain that was already consistent. Measured on
+// deathblow's heavy punch, boundary by boundary:
+//
+//   2.9  motion2:0 -> motion2:6 -> motion2:4 -> motion:2 -> motion:0
+//        -> motion:4 -> base:11                    2 generation crossings
+//   3.0  motion2:0 -> motion2:6 -> unified:6 -> motion:2 -> unified:10
+//        -> motion:4 -> base:11                    5 generation crossings,
+//        and the follow-through boundary went 3.87 -> 6.95 dE, into the same
+//        band as the strobe that put 40 cells behind accept:false in 2.9.
+//        Two of the five had no smear, flash or impact over them at all
+//        (motion2:6->unified:6 at 5.26, motion:4->base:11 at 7.01).
+//
+// THE RULE: the unified bank owns a beat only if it can own that beat's WHOLE
+// CONNECTED NEIGHBOURHOOD. Where a beat sits inside a chain the motion banks
+// already own consistently, it stays there.
+//
+// Applied by measurement across the roster (see UNIFIED_ROUTED_BEATS below),
+// that gives the bank two connected regions and nothing else:
+//
+//   GROUNDED NEUTRAL  idle, the four walk keys, crouch, crouch-transition and
+//                     guard. Every neighbour of every one of them is another
+//                     one of them, so the region is crossing-free internally:
+//                     crouch in/out went 4 crossings and 8.61 dE worst to
+//                     ZERO, and idle->walk->idle is 100% unified.
+//   REACTIONS         light-hit, big-hit, stagger, knockdown. Measured on all
+//                     nine, owning the WHOLE ladder beats both 2.9 and the
+//                     first 3.0 cut: light 4 -> 2 -> 0 crossings, heavy
+//                     2 -> 2 -> 0.
+//
+// And it RETIRES four cells from routing entirely — jump-rise, jump-tuck,
+// punch-extension and kick-extension. Each of those sits inside a motion chain
+// (the arc's descent and landing, the smear->extension->follow swing), and
+// each was cutting one. The worst single seam in the first cut was unified:9
+// -> motion:11 at 7.56 dE HELD 15+ ticks fully airborne, centre-frame, with no
+// VFX over it; retiring the two jump cells takes the arc's worst crossing to
+// 5.55 dE, below every 2.9 figure. THE ART STAYS IN THE SHEET, unused: the
+// sixteen-cell grammar and the 16/16 accept gate are unchanged, so a future
+// wave that can own a whole airborne or attack chain has the drawings waiting.
+// ---------------------------------------------------------------------------
+
+export const UNIFIED_BANK = "unified";
+
+export const UNIFIED_CELL_COUNT = 16;
+
+/**
+ * The unified grammar. Row-major over a 4x4 320px sheet, right-facing, one
+ * global scale per sheet normalised to 306px on the tallest STANDING figure
+ * (the motion2 convention), foot bottoms on floor row 315.
+ */
+export const UNIFIED_CELLS = Object.freeze({
+  idle: 0,
+  walkContactA: 1, walkPassingA: 2, walkContactB: 3, walkPassingB: 4,
+  crouch: 5, crouchTrans: 6, guard: 7,
+  jumpRise: 8, jumpTuck: 9,
+  punchExt: 10, kickExt: 11,
+  lightHit: 12, bigHit: 13, stagger: 14, knockdown: 15,
+});
+
+/**
+ * The four walk keys, cycled AMONG THEMSELVES at the existing cadence and
+ * never interleaved with the base walk cells.
+ *
+ * The stride is SINGLE-PHASE — the legs do not alternate. That is a settled
+ * decision, not an oversight: it is parity with the shipping base walk (37 of
+ * its 40 cells share one lead foot), and splitting the walk into its own
+ * generation to chase phase is exactly what would put a cross-generation seam
+ * back at idle->walk, which is the most common transition in the game and the
+ * one this bank exists to fix. See MOTION-ATLAS.md "THE ROSTER ROLLOUT".
+ */
+export const UNIFIED_WALK_KEYS = Object.freeze([
+  UNIFIED_CELLS.walkContactA, UNIFIED_CELLS.walkPassingA,
+  UNIFIED_CELLS.walkContactB, UNIFIED_CELLS.walkPassingB,
+]);
+
+/**
+ * The sixteen beats the SHEET carries, by unified cell. This is the GRAMMAR —
+ * what every sheet must draw and what the 16/16 accept gate counts. It is not
+ * the routing table; see UNIFIED_ROUTED_BEATS.
+ */
+export const UNIFIED_BEATS = Object.freeze([
+  "idle", "walk-contact-a", "walk-passing-a", "walk-contact-b", "walk-passing-b",
+  "crouch", "crouch-trans", "guard", "jump-rise", "jump-tuck",
+  "punch-extension", "kick-extension", "light-hit", "big-hit", "stagger", "knockdown",
+]);
+
+/**
+ * RULE 2, as data: the cells the bank is ROUTED into, and the ones it is not.
+ *
+ * Two connected regions and nothing else. A cell being retired is a routing
+ * decision, not an art one — it stays on the sheet, it stays inside the 16/16
+ * accept gate, and it is measured by the same U1 benchmark as the rest.
+ *
+ * The contract test walks both lists: every routed cell must be reachable from
+ * game.js, and no retired cell may appear in a routed chain.
+ */
+export const UNIFIED_ROUTED_CELLS = Object.freeze([
+  UNIFIED_CELLS.idle,
+  UNIFIED_CELLS.walkContactA, UNIFIED_CELLS.walkPassingA,
+  UNIFIED_CELLS.walkContactB, UNIFIED_CELLS.walkPassingB,
+  UNIFIED_CELLS.crouch, UNIFIED_CELLS.crouchTrans, UNIFIED_CELLS.guard,
+  UNIFIED_CELLS.lightHit, UNIFIED_CELLS.bigHit,
+  UNIFIED_CELLS.stagger, UNIFIED_CELLS.knockdown,
+]);
+
+/**
+ * Retired from routing by the v3.0 critic round. Each measured WORSE than the
+ * motion chain it was cutting (deathblow, weighted-Lab cluster dE):
+ *
+ *   jump-rise / jump-tuck   the arc's descent and landing come from motion, so
+ *                           the tuck handed to motion:11 at 7.56 dE and HELD it
+ *                           15+ ticks fully airborne with no VFX cover. Off the
+ *                           route the arc's worst crossing is 5.55 dE.
+ *   punch-ext / kick-ext    sit between the motion smear and the motion
+ *                           follow-through. Routed, the punch ran 5 crossings
+ *                           and pushed the follow-through boundary 3.87 -> 6.95
+ *                           dE. Off the route it runs 3, and the two it keeps
+ *                           are the entry to the swing and the return to the
+ *                           (unified) stance.
+ */
+export const UNIFIED_RETIRED_CELLS = Object.freeze([
+  UNIFIED_CELLS.jumpRise, UNIFIED_CELLS.jumpTuck,
+  UNIFIED_CELLS.punchExt, UNIFIED_CELLS.kickExt,
+]);
+
+/**
+ * A unified descriptor. `fallback` is the ENTIRE 2.9 chain for that beat, so a
+ * fighter whose sheet is missing, still decoding or not 16/16 accepted renders
+ * exactly what 2.9 rendered — there is no third path.
+ */
+export function unifiedPose(cell, fallback) {
+  return { bank: UNIFIED_BANK, frame: cell, fallback };
+}
+
+/** Chain-constructor sibling of m1key/m2key/m3key for the key tracks. */
+export const ukey = (cell) => Object.freeze({ bank: UNIFIED_BANK, cell });
+
+/**
+ * THE ALL-OR-NOTHING GATE, and the only place it lives.
+ *
+ * Same per-cell manifest shape every other bank uses, then one extra rule: a
+ * sheet that is not 16/16 `accept: true` is collapsed to an ALL-FALSE mask.
+ * There is deliberately no partial mode — a fighter is either wholly on this
+ * bank or wholly off it, because a single fallthrough inside these sixteen
+ * beats is the cross-generation strobe the bank was built to delete.
+ */
+export function buildUnifiedAcceptMasks(manifest) {
+  const raw = buildMotionAcceptMasks(manifest, UNIFIED_CELL_COUNT);
+  const masks = {};
+  for (const [fighterId, mask] of Object.entries(raw)) {
+    const whole = mask.accept.length === UNIFIED_CELL_COUNT && mask.accept.every(Boolean);
+    masks[fighterId] = Object.freeze({
+      whole,
+      accept: whole ? mask.accept : Object.freeze(new Array(UNIFIED_CELL_COUNT).fill(false)),
+      scale: mask.scale,
+    });
+  }
+  return masks;
+}
+
+/** The fighter ids whose sheet is whole, from a built mask table. */
+export function unifiedFighterIds(masks) {
+  return Object.keys(masks || {}).filter((id) => masks[id]?.whole).sort();
+}
+
+/**
+ * THE UNIFIED REACTION LADDER — one cell per REACTION_BANDS band, and the only
+ * place a unified fighter's reaction reads from.
+ *
+ * v3.0 critic round (M1) — THE LIGHT REACTION WAS A-B-A ON ALL NINE.
+ *
+ * The first cut layered unified links onto the 2.9 track and left the CALLER's
+ * band ladder (snap / fold / settle / idle over fixed band groups) underneath
+ * it. The two ladders were a band out of step, so the light track measured, on
+ * every unified fighter:
+ *
+ *   unified:12 -> unified:14 -> motion2:10 -> unified:14 -> unified:7
+ *
+ * — the stagger, a cross-generation detour to the rubber-legs key, and then a
+ * RETURN to the stagger for 6-8 ticks. Returning to a drawing the animation
+ * has already left is precisely the rewind hitch the 2.9 throw-recovery fix
+ * (R7) was written to eliminate, and the two motion2 boundaries measured 9.85
+ * dE each on jez with nothing over them.
+ *
+ * The ladder is now EXPLICIT, MONOTONIC and entirely inside one generation.
+ * One entry per band; no cell is ever returned to after the beat leaves it:
+ *
+ *   light   12 light-hit -> 14 stagger -> 6 crouch-trans -> 7 guard -> 0 idle
+ *   heavy   13 big-hit -> 12 light-hit -> 14 stagger -> 7 guard -> 0 idle
+ *
+ * Read at 1:1 on the sheets, that is a rising recovery: struck, folded over
+ * with the knees buckled, half-risen with the guard reforming, braced, back to
+ * the stance. `crouch-trans` earns its place in the light track — it is not a
+ * duck, it is a compressed fighting stance with the fists already up, which is
+ * exactly the in-between between a folded stagger and a standing brace, and
+ * the same kind of re-use motion2:4 already gets as the heavy-windup coil and
+ * the landing gather. The heavy does not need it: it already has four rungs
+ * before the tail. BOTH tracks end on the guard, whose drawn height is within
+ * 3% of the idle on all nine sheets, so the last transition of every reaction
+ * is height-flat. Measured roster-wide the light reaction goes 2 crossings and
+ * 9.85 dE worst to ZERO crossings, and the heavy 2 and 11.20 to ZERO.
+ *
+ * The tracks' openings and middles still differ (13/12 against 12/14), which
+ * is the 2.9 M5 contract, and the two tracks converge only on the shared tail.
+ *
+ * v3.0 critic round (m1) — WHERE THE LADDER ENDS, and the Commissioner.
+ *
+ * 2.9 DROPPED its third tail band (`settle`) for any fighter whose base sheet
+ * cannot supply three distinct non-attack drawings — reactionFallbackCells
+ * returns settle:null when `stagger` is null or equal to `hit` — and handed
+ * band 4 straight to the breathing idle. That is eight of the nine unified
+ * fighters, the Commissioner among them (guard 12 === hit 12, stagger null).
+ * The first 3.0 cut gave the band back unconditionally, and because a measured
+ * reaction runs ~30 ticks against a 44-tick band grid, band 4 is only ever 2-3
+ * ticks long: he got a two-tick flash of the unified brace before the idle.
+ * A 2-tick band is a blip, not a beat.
+ *
+ * So BOTH ladders hand to the breathing idle from band 4 (tick 28 of 44) on
+ * EVERY fighter — which is exactly the tick 2.9 handed the Commissioner (and
+ * seven others) to it. No per-fighter branch: where the bank's ladder ends is
+ * a uniform design decision, like which beats it owns. The rungs are packed
+ * into bands 0-3, the four that a real reaction actually plays.
+ */
+export function unifiedReactionLadder(heavy) {
+  const C = UNIFIED_CELLS;
+  return heavy
+    ? Object.freeze([C.bigHit, C.lightHit, C.stagger, C.guard, C.idle, C.idle])
+    : Object.freeze([C.lightHit, C.stagger, C.crouchTrans, C.guard, C.idle, C.idle]);
+}
+
+/**
+ * The ladder rung for the band a key sits in. game.js holds the key, not the
+ * band index, and both must read the same table or they drift out of step —
+ * which is the bug M1 is.
+ */
+export function unifiedReactionCellAt(at, heavy) {
+  const ladder = unifiedReactionLadder(heavy);
+  let index = 0;
+  for (let band = 0; band < REACTION_BANDS.length; band += 1) {
+    if ((at ?? 0) >= REACTION_BANDS[band]) index = band;
+  }
+  return ladder[index];
+}
+
 /**
  * Fold a key's chain onto a fallback into one pose descriptor. A key may pin
  * its OWN terminal fallback (`key.fallback`) when the beat it replaces showed
@@ -2553,10 +2993,18 @@ export function beatPoseAt(keys, progress, fallback) {
  * resolution the hold-budget audit uses, because "two neighbouring motion3
  * slots that both degrade to the same authored cell" is one hold, not two.
  */
-export function defaultBeatKeyResolve(key, { motion3 = false, fallback = null } = {}) {
+export function defaultBeatKeyResolve(key, { motion3 = false, unified = false, fallback = null } = {}) {
   for (const link of key?.chain || []) {
     if (link.bank === MOTION3_BANK) {
       if (motion3) return `motion3:${link.key}`;
+      continue;
+    }
+    // v3.0: a unified link is skipped exactly like a motion3 slot unless the
+    // caller is auditing a UNIFIED fighter. Two fighters are not on the bank,
+    // so the shipping-today audit (`unified: false`) still measures the 2.9
+    // read and every 2.9 budget assertion keeps its original meaning.
+    if (link.bank === UNIFIED_BANK) {
+      if (unified) return `unified:${link.cell}`;
       continue;
     }
     return `${link.bank}:${link.cell}`;
@@ -2641,8 +3089,14 @@ export function wakeupMotionPose(wakeupFrames, roles = DEFAULT_BASE_ROLES, total
  * pre-fix read showed at that moment, so a missing bank changes nothing.
  */
 export function wakeupKeys(totalFrames = 16, roles = DEFAULT_BASE_ROLES) {
-  const prone = { bank: "base", frame: Number.isInteger(roles.hit) ? roles.hit : 15 };
-  const gather = { bank: "base", frame: Number.isInteger(roles.crouch) ? roles.crouch : 12 };
+  // v3.0: both terminal fallbacks are beats the unified bank owns — the prone
+  // read is its knockdown, the gather is its crouch — so a unified fighter
+  // cannot show a base cell here either. The 2.9 base cell stays underneath
+  // each one, so the read is byte-identical off the bank.
+  const prone = unifiedPose(UNIFIED_CELLS.knockdown,
+    { bank: "base", frame: Number.isInteger(roles.hit) ? roles.hit : 15 });
+  const gather = unifiedPose(UNIFIED_CELLS.crouch,
+    { bank: "base", frame: Number.isInteger(roles.crouch) ? roles.crouch : 12 });
   return [
     { at: 0, chain: [m1key(MOTION_CELLS.crumple)], fallback: prone },
     { at: totalFrames > 12 ? 0.18 : 0.12, chain: [m2key(MOTION2_CELLS.getupA)], fallback: prone },
@@ -2701,6 +3155,28 @@ export function jumpArcKeys(bandStart = 0.17) {
   // The airborne middle is divided RELATIVE to the opening, so an earlier or
   // later tuck cannot stretch one band past the budget.
   const span = 0.72 - open;
+  // v3.0 critic round (RULE 2) — THE JUMP ARC IS A MOTION CHAIN, END TO END.
+  //
+  // The first cut routed the unified rise and tuck into the first two bands
+  // and left the descent (motion:11), the air-recovery (motion:11) and the
+  // landing gather (motion:6) where they were. That put a generation crossing
+  // in the MIDDLE OF THE AIR: deathblow's unified:9 handed to motion:11 at
+  // 7.56 dE — inside his 7.29-7.45 known-bad strobe band — and HELD it 15+
+  // ticks, fully airborne, centre-frame, with no smear, flash or dust over it.
+  // It is the largest and longest-held seam the 3.0 build had.
+  //
+  // Both cells are retired from this track. The arc is now motion2:7 -> the
+  // motion tuck -> [motion3 apex] -> [motion3 descent] -> motion:11 -> the
+  // motion landing gather: one generation from takeoff to touchdown, with its
+  // only two crossings at the moments the fighter actually leaves and rejoins
+  // the street (unified:0 -> motion2:7 at 5.13 dE, motion:6 -> unified:6 at
+  // 5.55 dE on deathblow, both one tick, both under dust). Measured roster-
+  // wide that is a worst crossing of 8.31 dE mean — better than the first 3.0
+  // cut (9.17) AND better than 2.9 (9.08).
+  //
+  // The LANDING GATHER stays unified: it is the crouch-transition beat in its
+  // own connected neighbourhood (gather -> plant -> stand -> idle), not an
+  // airborne one.
   return [
     { at: 0, chain: [m2key(MOTION2_CELLS.jumpRise)] },
     { at: open, chain: [m1key(MOTION_CELLS.tuck)] },
@@ -2731,6 +3207,11 @@ export function airNormalKeys(startupPhase, recoverPhase) {
   const strike = Math.min(0.6, Math.max(0.08, startupPhase));
   const trail = Math.min(0.92, Math.max(strike + 0.1, recoverPhase));
   return [
+    // v3.0 critic round (RULE 2): the unified tuck is retired from this
+    // chamber for the same reason it left the jump arc — every band after it
+    // (the motion2 strike, the motion trail, the motion gather) is one
+    // generation, so routing it here bought a 8.33 dE mean crossing to remove
+    // none. Measured roster-wide the air normal is now crossing-free.
     { at: 0, chain: [m3key(MOTION3_KEYS.airStartup), m1key(MOTION_CELLS.tuck)] },
     { at: strike, chain: [m2key(MOTION2_CELLS.airAttack)] },
     { at: strike + (trail - strike) * 0.5, chain: [m3key(MOTION3_KEYS.airAttackB), m2key(MOTION2_CELLS.airAttack)] },
@@ -2794,6 +3275,14 @@ export function heavyWindupKeys(limb) {
     { at: 0.36, chain: [m3key(mid), m2key(MOTION2_CELLS.dashBrake)] },
     // 3. COMPRESS — the deepest coil on the sheet, and now it is immediately
     //    before the release instead of in the middle of the beat.
+    //    v3.0 critic round (RULE 2): the first cut routed the unified crouch-
+    //    transition here on the reasoning that the extension after it was
+    //    unified too. The extension is retired, and this band was never
+    //    connected in the first place — it sits between motion2:6 (the load)
+    //    and motion:2 (the smear), which are ONE generation. Routed, it added
+    //    a 5.26 dE crossing with no flash over it and a 9.51 dE one into the
+    //    smear; retired, the whole windup->smear->extension->follow swing is
+    //    a single unbroken motion-family chain, exactly as 2.9 shipped it.
     { at: 0.70, chain: [m2key(MOTION2_CELLS.crouchTrans)] },
   ];
 }
@@ -2858,6 +3347,13 @@ export function throwClinchKeys() {
     // SEIZE — the two hands closing, on the first tick of the clinch.
     { at: 0, chain: [m2key(MOTION2_CELLS.throwGrab)] },
     // LOAD — the weight drops to lift.
+    // v3.0 critic round (RULE 2): the unified crouch-transition was routed
+    // here by the first cut and is retired from it. This band's neighbours are
+    // the motion2 seize before it and the kit's own release art after it — a
+    // chain the motion family already owns consistently — and dropping a
+    // unified cell in cost 3 crossings where the 2.9 read had 1 (measured
+    // roster-wide: worst crossing 8.84 dE mean against 7.35). The cell is not
+    // gone from the sheet; it is not routed HERE.
     { at: 0.34, chain: [m3key(MOTION3_KEYS.throwClinch), m2key(MOTION2_CELLS.crouchTrans)] },
     // HURL — the kit's own release art, which the recovery beat then carries
     // forward instead of re-showing. Never a return to the seize: the beat is
@@ -2965,18 +3461,28 @@ export function blockRecoverTransform(phase, exitAt = BLOCK_EXIT_AT) {
  * motion3's react-mid pair slots straight into both. Empty chains defer to the
  * caller's per-band base fallback (the map's stagger/hit/guard reads).
  */
+/**
+ * v3.0 critic round (M1): the unified rung for every band comes from ONE
+ * table, unifiedReactionLadder, so the track and the caller's per-band
+ * fallback in game.js can never fall out of step again — which is exactly how
+ * the light track ended up playing stagger -> rubber-legs -> stagger. A rung
+ * is stacked IN FRONT of that band's 2.9 chain, so a non-unified fighter skips
+ * it (defaultBeatKeyResolve treats a unified link like a motion3 slot) and
+ * reads byte-for-byte what 2.9 read. Bands whose ladder rung is the idle carry
+ * no key at all: the caller hands those to the breathing idle cycle.
+ */
 export function reactionTrackKeys(heavy) {
-  return heavy
+  const ladder = unifiedReactionLadder(heavy);
+  // The 2.9 chains, band by band, unchanged. `null` is an empty chain.
+  const base29 = heavy
     ? [
-      { at: 0, chain: [m1key(MOTION_CELLS.bighit)] },
-      { at: REACTION_BANDS[1], chain: [m3key(MOTION3_KEYS.reactMid), m2key(MOTION2_CELLS.dizzy)] },
-      { at: REACTION_BANDS[2], chain: [m2key(MOTION2_CELLS.lightHit)] },
-      { at: REACTION_BANDS[3], chain: [] },
-      { at: REACTION_BANDS[4], chain: [] },
-      { at: REACTION_BANDS[5], chain: [] },
+      [m1key(MOTION_CELLS.bighit)],
+      [m3key(MOTION3_KEYS.reactMid), m2key(MOTION2_CELLS.dizzy)],
+      [m2key(MOTION2_CELLS.lightHit)],
+      [], [], [],
     ]
     : [
-      { at: 0, chain: [m2key(MOTION2_CELLS.lightHit)] },
+      [m2key(MOTION2_CELLS.lightHit)],
       // v2.9 final round (R3): this band used to be motion2:8, the authored
       // GUARD FLINCH — both forearms crossed over the head — held ~7 ticks
       // after a CLEAN UNBLOCKED hit, so a victim covered up as though he had
@@ -2984,12 +3490,19 @@ export function reactionTrackKeys(heavy) {
       // blockstunKeys, which is the beat it was drawn for. The light track
       // folds through the map's standing recoil and then the authored
       // rubber-legs key, which are both HURT drawings.
-      { at: REACTION_BANDS[1], chain: [] },
-      { at: REACTION_BANDS[2], chain: [m2key(MOTION2_CELLS.dizzy)] },
-      { at: REACTION_BANDS[3], chain: [] },
-      { at: REACTION_BANDS[4], chain: [] },
-      { at: REACTION_BANDS[5], chain: [] },
+      [],
+      [m2key(MOTION2_CELLS.dizzy)],
+      [], [], [],
     ];
+  return REACTION_BANDS.map((at, band) => ({
+    at,
+    // The idle rung is NOT keyed: the tail hands back to the caller's
+    // breathing idle cycle, which advances on its own, rather than pinning one
+    // drawing. Every other rung leads its band's 2.9 chain.
+    chain: ladder[band] === UNIFIED_CELLS.idle
+      ? base29[band]
+      : [ukey(ladder[band]), ...base29[band]],
+  }));
 }
 
 /**
@@ -3113,18 +3626,34 @@ export const WAKEUP_SETTLE_FRAMES = 8;
  * adjust is applied by the functions below, so the crouch fallback is measured
  * at the size it actually draws.
  */
+// v3.0: `standUnified` is the same measurement taken on the cell that
+// ACTUALLY ends the rise for a unified fighter — unified:0, his idle. It is
+// 8-15% shorter than his base idle on every sheet, because the unified idle is
+// a settled wide fighting stance rather than the base bank's upright figure
+// (verified at 1:1: same head size, knees bent, feet apart — pose, not scale,
+// which is why no draw-scale correction is applied to it). Left unfixed, R5's
+// settle would have compressed the standing cell toward a 306px target it no
+// longer reaches and re-opened the wake-up height step it closed. The unified
+// crouch joins `cells` because the gather rung's fallback now resolves there.
 export const WAKEUP_RISE_HEIGHT = Object.freeze({
-  deathblow: Object.freeze({ stand: 306, cells: Object.freeze({ "motion2:15": 270, "base:12": 304 }) }),
-  jez: Object.freeze({ stand: 306, cells: Object.freeze({ "motion2:15": 219, "base:12": 305 }) }),
-  alan: Object.freeze({ stand: 305, cells: Object.freeze({ "motion2:15": 246, "base:12": 299 }) }),
-  post: Object.freeze({ stand: 306, cells: Object.freeze({ "motion2:15": 266, "base:12": 304 }) }),
-  donald: Object.freeze({ stand: 306, cells: Object.freeze({ "motion2:15": 231, "base:12": 304 }) }),
-  devil: Object.freeze({ stand: 301, cells: Object.freeze({ "motion2:15": 287, "base:12": 234 }) }),
-  ali: Object.freeze({ stand: 306, cells: Object.freeze({ "motion2:15": 224, "base:12": 304 }) }),
-  benny: Object.freeze({ stand: 306, cells: Object.freeze({ "motion2:15": 244, "base:12": 304 }) }),
-  commissioner: Object.freeze({ stand: 316, cells: Object.freeze({ "motion2:15": 237, "base:12": 288 }) }),
+  deathblow: Object.freeze({ stand: 306, standUnified: 272, cells: Object.freeze({ "motion2:15": 270, "base:12": 304, "unified:5": 180 }) }),
+  jez: Object.freeze({ stand: 306, standUnified: 271, cells: Object.freeze({ "motion2:15": 219, "base:12": 305, "unified:5": 161 }) }),
+  alan: Object.freeze({ stand: 305, standUnified: 274, cells: Object.freeze({ "motion2:15": 246, "base:12": 299, "unified:5": 199 }) }),
+  post: Object.freeze({ stand: 306, standUnified: 279, cells: Object.freeze({ "motion2:15": 266, "base:12": 304, "unified:5": 177 }) }),
+  donald: Object.freeze({ stand: 306, standUnified: 261, cells: Object.freeze({ "motion2:15": 231, "base:12": 304, "unified:5": 193 }) }),
+  devil: Object.freeze({ stand: 301, standUnified: 283, cells: Object.freeze({ "motion2:15": 287, "base:12": 234, "unified:5": 191 }) }),
+  ali: Object.freeze({ stand: 306, standUnified: 271, cells: Object.freeze({ "motion2:15": 224, "base:12": 304, "unified:5": 199 }) }),
+  benny: Object.freeze({ stand: 306, standUnified: 279, cells: Object.freeze({ "motion2:15": 244, "base:12": 304, "unified:5": 184 }) }),
+  commissioner: Object.freeze({ stand: 316, standUnified: 278, cells: Object.freeze({ "motion2:15": 237, "base:12": 288, "unified:5": 158 }) }),
   cyraxx: Object.freeze({ stand: 302, cells: Object.freeze({ "motion2:15": 284, "base:12": 241 }) }),
 });
+
+/** The standing height the rise is aiming at, per bank the idle draws from. */
+function wakeupStandHeight(entry, options) {
+  if (!entry) return 0;
+  return options?.unified === true && Number.isFinite(entry.standUnified)
+    ? entry.standUnified : entry.stand;
+}
 
 /** The drawn height of a wake-up rung, or 0 when the cell is not a rung. */
 function wakeupRungHeight(fighterId, bank, frame) {
@@ -3135,11 +3664,11 @@ function wakeupRungHeight(fighterId, bank, frame) {
 }
 
 /** How far the final rung stretches toward standing height. 1 = not a rung. */
-export function wakeupRiseStretch(fighterId, bank, frame) {
+export function wakeupRiseStretch(fighterId, bank, frame, options = {}) {
   const entry = WAKEUP_RISE_HEIGHT[fighterId];
   const drawn = wakeupRungHeight(fighterId, bank, frame);
   if (!entry || !(drawn > 0)) return 1;
-  return Math.min(WAKEUP_STRETCH_CAP, Math.max(1, entry.stand / drawn));
+  return Math.min(WAKEUP_STRETCH_CAP, Math.max(1, wakeupStandHeight(entry, options) / drawn));
 }
 
 /**
@@ -3147,17 +3676,17 @@ export function wakeupRiseStretch(fighterId, bank, frame) {
  * stretched rung's own height as a fraction of standing, so the two drawings
  * are the same height across the handoff.
  */
-export function wakeupSettleStart(fighterId, bank, frame, totalFrames = 16) {
+export function wakeupSettleStart(fighterId, bank, frame, totalFrames = 16, options = {}) {
   const entry = WAKEUP_RISE_HEIGHT[fighterId];
   const drawn = wakeupRungHeight(fighterId, bank, frame);
   if (!entry || !(drawn > 0)) return 1;
   // Evaluated through the SAME rise transform the last tick actually used, so
   // the two sides of the handoff are computed from one formula and cannot
   // drift apart if that curve is ever retuned.
-  const stretch = wakeupRiseStretch(fighterId, bank, frame);
+  const stretch = wakeupRiseStretch(fighterId, bank, frame, options);
   const finalTick = wakeupRiseTransform(1, totalFrames, stretch);
   const last = drawn * (finalTick ? finalTick.scaleY : 1);
-  return Math.min(1, Math.max(WAKEUP_SETTLE_FLOOR, last / entry.stand));
+  return Math.min(1, Math.max(WAKEUP_SETTLE_FLOOR, last / wakeupStandHeight(entry, options)));
 }
 
 /** The standing cell easing out of that compression. Null once settled. */
@@ -3248,7 +3777,15 @@ export function walkCycleFrame(walkTime) {
 export function walkCyclePose(walkTime, roles = DEFAULT_BASE_ROLES) {
   const key = walkCycleFrame(walkTime);
   const walk = roles.walk || DEFAULT_BASE_ROLES.walk;
-  return walkPose(key, "base", walk[key % walk.length]);
+  // v3.0: locomotion is the beat this whole programme exists for — the
+  // costume strobe the 2.9 round rejected happened on the tick a fighter
+  // started walking. A unified fighter cycles the four keys of his own sheet
+  // at the identical `walkTime * 10` cadence; the 2.10 walk-bank descriptor
+  // (accept:false roster-wide since the 2.9 consistency gate) and then the
+  // base walk cell stay underneath it, so an unsheeted fighter's locomotion
+  // is byte-identical to what ships today.
+  return unifiedPose(UNIFIED_WALK_KEYS[key % UNIFIED_WALK_KEYS.length],
+    walkPose(key, "base", walk[key % walk.length]));
 }
 
 /**
@@ -3270,8 +3807,13 @@ export function buildMotionAcceptMasks(manifest, cellCount = MOTION_CELL_COUNT) 
   return masks;
 }
 
-/** The authored sheet banks, in the order they were added. */
-export const AUTHORED_BANKS = Object.freeze(["motion", "motion2", "walk"]);
+/**
+ * The authored sheet banks, in the order they were added. v3.0 appends
+ * "unified" — it is index-addressed against a fixed 16-cell grammar like the
+ * first three, so it rides exactly the same sheet + accept-mask gate and the
+ * 3D renderer picks it up from this list with no bank-specific code.
+ */
+export const AUTHORED_BANKS = Object.freeze(["motion", "motion2", "walk", UNIFIED_BANK]);
 
 /** True for a bank that must clear the sheet + accept-mask gate before it draws. */
 export function isAuthoredBank(bank) {
