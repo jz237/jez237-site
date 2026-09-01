@@ -1,8 +1,330 @@
 {
-  "generatedAt": "2026-08-29T12:00:00Z",
+  "generatedAt": "2026-09-01T12:01:32.989Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-01",
+      "historicDate": "1984-04-09",
+      "displayDate": "Week of April 9-15, 1984",
+      "edition": "Issue 089 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Spring 1984 home-computer weekly on warm newsprint with bright red and blue department flags",
+        "motifs": [
+          "HomeWord icon screen",
+          "Atarisoft game boxes",
+          "Commodore 64 war-game map",
+          "mail-order computer price tags"
+        ],
+        "layout": "HomeWord icon interface across the upper deck, Atarisoft games as the largest secondary visual, charts and world bulletin on the rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing & Digital Culture",
+        "dateline": "Week of April 9-15, 1984",
+        "price": "50 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Five-column banner with a halftone home-computer screen and six large HomeWord icons",
+        "secondaryRail": "Atarisoft game shelf, C64 war games, price watch, charts and world bulletin",
+        "archiveNavigation": "Previous and next weekly issues with calendar shelf"
+      },
+      "sectionChrome": {
+        "primary": "#9f2723",
+        "secondary": "#214f76",
+        "texture": "Warm aged newsprint, halftone screens, fine rules and slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-04-09.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for April 9-15, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Pictures are becoming commands: Sierra puts an icon-guided word processor on three rival home-computer families at once.",
+      "morningLine": "HomeWord turns six writing chores into pictures while Atari sends its arcade catalog onto competitors' machines.",
+      "lead": {
+        "headline": "HomeWord Brings Icons to Three Computer Camps",
+        "dek": "Sierra On-Line gives Apple, Commodore 64 and Atari owners the same $49.95 picture-guided word processor.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "A filing cabinet, a printed page, a printer, a disorderly page with an arrow, a question mark and a floppy disk now stand between the home writer and the command line. Sierra On-Line has introduced HomeWord for the Apple, Commodore 64 and Atari families, using six pictured icons to guide the program's principal jobs.",
+          "The screen can be divided into working text, a miniature preview of the finished page and a status chart showing memory and disk space. COMPUTE! reports optional joystick control, outlining, boldface and underlining, block moves, file merging, headers and footers among the features.",
+          "The cross-platform release is as important as the interface. Apple, Commodore and Atari owners cannot exchange programs freely, yet Sierra is treating them as one mass audience and giving each the same visual vocabulary. The approach echoes the mouse-and-icon excitement surrounding Apple's Macintosh without requiring a new $2,495 computer.",
+          "At $49.95, HomeWord places an unusually approachable writing system on machines already sitting in dens and bedrooms. Its icons do not abolish the keyboard, but they make a practical case that everyday software can explain itself with pictures rather than a memorized thicket of commands."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari's Games Defect to the Competition",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "body": [
+            "Atari has released twelve familiar games for competing computers and consoles under the ATARISOFT label. Centipede, Defender, Dig Dug, Donkey Kong, Pac-Man, Robotron and Stargate head a list that reaches Apple II, IBM PC, Commodore, TI, ColecoVision and Intellivision buyers.",
+            "The move is a striking admission after the videogame shakeout: Atari's characters and arcade names may earn more when they travel beyond Atari hardware. Suggested prices run $34.95 for computer disks, $44.95 for computer cartridges and $40.95 for ColecoVision or Intellivision editions."
+          ]
+        },
+        {
+          "headline": "War Games Grow Up on the Commodore 64",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Strategic Simulations is widening the C64 library with Battle for Normandy and Tigers in the Snow, two $39.95 historical simulations that ask players to command campaigns rather than merely chase a score. Both provide a solitaire option and period campaign detail.",
+            "Carrier Force goes further on Apple and Atari at $59.95, modeling four Pacific carrier battles with individual ships and aircraft, weather, visibility, time of day and imperfect sightings. Together the releases show serious computer war gaming moving across the same fragmented machine market as arcade conversions."
+          ]
+        },
+        {
+          "headline": "The $100 Home Computer Is No Longer a Fantasy",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Mail-order advertising in April's computer press lists the VIC-20 at $79.95 and the Atari 600XL at $139.95, or $99.95 after rebate. A Commodore 64 appears at $189.95. These are dealer offers, not manufacturers' list prices, and availability may change.",
+            "The falling entry price extends to communications: a VIC 1600 modem is advertised at $59.95 and a Commodore 1650 at $109.95. A complete home-computing setup remains costlier once storage and display are included, but the first machine—and a doorway to bulletin boards—is rapidly becoming an impulse-scale purchase."
+          ]
+        },
+        {
+          "headline": "Color Graphics Become a $39.95 C64 Tool",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Sophisticated Software's Grafix-Artist gives Commodore 64 owners a high-resolution color drawing package controlled by a special command language or joystick. The publisher proposes program screens, storyboards, design layouts and advertising displays.",
+            "Grafix-Artist lists for $39.95; a separate $29.95 Grafix-Printer utility transfers the high-resolution work to paper. The pair reflects a growing market for tools that turn an inexpensive home machine into a small creative workstation."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "HomeWord",
+          "summary": "Icon-guided $49.95 word processor for Apple, Commodore 64 and Atari computers.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Atarisoft",
+          "summary": "Twelve Atari games cross onto rival computers and consoles.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Grafix-Artist",
+          "summary": "High-resolution C64 graphics package controlled by commands or joystick.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "HomeWord",
+          "detail": "Icon-guided word processing for Apple, C64 and Atari — $49.95"
+        },
+        {
+          "name": "Grafix-Artist",
+          "detail": "C64 high-resolution color graphics — $39.95"
+        },
+        {
+          "name": "Grafix-Printer",
+          "detail": "C64 high-resolution printer-dump utility — $29.95"
+        },
+        {
+          "name": "Battle for Normandy",
+          "detail": "SSI historical simulation, newly on C64 — $39.95"
+        },
+        {
+          "name": "Tigers in the Snow",
+          "detail": "SSI Battle of the Bulge simulation, newly on C64 — $39.95"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Computer Games This Week",
+          "items": [
+            "Centipede — Atarisoft",
+            "Defender — Atarisoft",
+            "Donkey Kong — Atarisoft",
+            "Pac-Man — Atarisoft",
+            "Robotron — Atarisoft"
+          ]
+        },
+        {
+          "label": "Software Desk",
+          "items": [
+            "HomeWord",
+            "Grafix-Artist",
+            "Grafix-Printer",
+            "Battle for Normandy",
+            "Tigers in the Snow"
+          ]
+        },
+        {
+          "label": "Hardware Street Prices",
+          "items": [
+            "VIC-20 — $79.95",
+            "Atari 600XL — $99.95 after rebate",
+            "Commodore 64 — $189.95",
+            "VIC 1600 modem — $59.95",
+            "Commodore 1650 modem — $109.95"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "VIC-20",
+          "price": "$79.95",
+          "note": "Advertised dealer street price."
+        },
+        {
+          "item": "HomeWord",
+          "price": "$49.95",
+          "note": "Apple, C64 and Atari disk versions."
+        },
+        {
+          "item": "Atarisoft games",
+          "price": "$34.95 disk",
+          "note": "Cartridges $44.95; console versions $40.95."
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Friday the 13th Opens at No. 1",
+          "text": "Friday the 13th: The Final Chapter opened April 13 and led the domestic weekend with about $11.2 million."
+        },
+        {
+          "headline": "Footloose Holds No. 1",
+          "text": "Kenny Loggins' title song led the Billboard Hot 100 dated April 14 for a third week."
+        },
+        {
+          "headline": "Tommy Cooper Dies on Live Television",
+          "text": "The British comedian and magician collapsed during a live television variety show on April 15 and died soon afterward."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        },
+        {
+          "rank": 2,
+          "title": "Against All Odds",
+          "artist": "Phil Collins"
+        },
+        {
+          "rank": 3,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 4,
+          "title": "Jump",
+          "artist": "Van Halen"
+        },
+        {
+          "rank": 5,
+          "title": "Somebody's Watching Me",
+          "artist": "Rockwell"
+        }
+      ],
+      "periodAd": {
+        "headline": "Six Pictures. One Better Way to Write.",
+        "summary": "HomeWord brings icon-guided writing, page preview and disk utilities to Apple, Commodore 64 and Atari owners.",
+        "tagline": "Point your thoughts toward the printed page."
+      },
+      "market": {
+        "headline": "Software Publishers See One Market, Not Three",
+        "summary": "Sierra and Atari are spreading the same products across incompatible machines, betting that recognizable software can travel farther than any single hardware brand.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "India Occupies Siachen Glacier Positions",
+        "summary": "India launched Operation Meghdoot on April 13, airlifting troops onto key positions in the disputed Siachen Glacier region and beginning a high-altitude confrontation with Pakistan.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "HomeWord features, platforms and price",
+            "status": "Verified against COMPUTE! Issue 47, April 1984.",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Atarisoft titles, platforms and prices",
+            "status": "Verified against COMPUTE! period reporting.",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "Music and movie standings",
+            "status": "Checked against dated Billboard and domestic weekend charts.",
+            "sourceRefs": [
+              2,
+              3
+            ]
+          },
+          {
+            "claim": "World bulletin",
+            "status": "Checked against the Indian Air Force historical account.",
+            "sourceRefs": [
+              5
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "COMPUTE!, Issue 47, April 1984",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_047_1984_Apr.pdf"
+        },
+        {
+          "label": "COMPUTE!: Popular Games Released",
+          "url": "https://www.atarimagazines.com/compute/issue47/167_4_NEWS_PRODUCTS_Popular_Games_Released.php"
+        },
+        {
+          "label": "Billboard Hot 100, week of April 14, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-04-14"
+        },
+        {
+          "label": "Domestic box office, weekend of April 13-15, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W15/"
+        },
+        {
+          "label": "International Court of Justice: Nicaragua v. United States",
+          "url": "https://www.icj-cij.org/case/70"
+        },
+        {
+          "label": "Indian Air Force: Operation Meghdoot",
+          "url": "https://indianairforce.nic.in/operation-meghdoot/"
+        }
+      ]
+    },
     {
       "currentDate": "2026-08-31",
       "historicDate": "1984-04-02",
