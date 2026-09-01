@@ -1,0 +1,44 @@
+From: Maya Rios <maya@rebootriot.example>
+Company: REBOOT RIOT STUDIO
+Subject: We Don't Suck, So You Won't Either Anymore!
+
+To: The Owner, Cybertect Systems, Incorporated
+
+I'll be blunt: your website is actively undermining your business, and you need professional help to fix it.
+
+Here is the damage:
+
+- I realize you probably have a child that made your logo and you don't want to hurt their feelings by taking it down, but business is serious.. The Cybertect Systems logo looks like an off-brand antivirus popup from 2003: dated, generic, and about as confidence-inspiring as a flashing “YOUR COMPUTER MAY BE INFECTED” banner.
+
+- “Elite Cybernetic Protection” is not a service description—it is a rejected sci-fi movie title. A customer looking for alarms, low-voltage work, or security systems should not have to decode your brand like a CAPTCHA.
+
+- Your “Wall of Shame” is not marketing—it is an endless public tantrum. You have built a huge gallery of other people's allegedly bad installations, with captions like “WTF” and “blasted electrician.” Instead of proving what you do well, it tells customers that you photograph problems at job sites, mock whoever was there before you, and turn their mistakes into a permanent online grievance museum. For commercial, property-management, and security clients who value discretion, that is a giant red flag. It makes Cybertect look petty, combative, professionally risky, and far more excited to sneer at competitors than to earn trust.
+
+- Your portfolio looks like it was assembled from the leftovers of the Wall of Shame. The site gives “Selected Work” only a few collections, while the Wall of Shame gets an enormous gallery of other people's failures. The work photos are dim, crooked, repetitive progress shots rather than clear finished-installation proof. One featured panel full of mismatched wire colors especially needs context—without clear before/during/after labeling, it can look like the chaos you criticize elsewhere.
+
+- The homepage background is a visual hostage situation. It opens on a murky aqua bubble graphic, dumps a tiny strip of vendor logos into a massive white void, then cuts to an alarm keypad, a forest tower, and the Statue of Liberty. It looks like five unrelated PowerPoint slides escaped and formed a website.
+
+- The vendor-logo strip is a corporate junk drawer. Ubiquiti, APC, Chevrolet, ASUS, Orgain, Bose—apparently the sales pitch is “we have encountered logos before.” None of it explains why a customer should hire you.
+
+- Your About section makes customers wade through a dirt-bike crash and an expensive-computer origin story. That may be meaningful to you; it does not tell a prospective client what problem you solve, how well you solve it, or why they should trust you with their property.
+
+- “Pride, Perfectionism & Personal Service …for your Peace of Mind” is generic brochure fog. Every contractor in America has claimed some version of it. Give people specific proof instead.
+
+- The Ukraine-war image behind the contact section is a pointless geopolitical detour. A low-voltage/security contractor's contact page is not the place for a dramatic Ukraine-themed background and “we stand against all deal-breaking aggressors” slogan. It has nothing to do with the services and makes a serious conflict feel like decorative brand theater.
+
+- The Old PBX gallery treats a bed-and-breakfast guest room like filler for your personal camera roll. The same casual photo of a phone on a bedside table appears twice, showing the room and its furnishings rather than a clear installation detail. For a hospitality business, that is a bad privacy-and-discretion signal: guests expect their rooms not to become reusable marketing material.
+
+- The footer's “We stand against all deal-breaking aggressors” line is baffling. You install and support low-voltage systems; this reads like a grade-school civics slogan stapled to a security-company website.
+
+Reboot Riot Studio fixes this mess.
+
+We will turn it into a clear, modern, mobile-first sales site with credible identity, plain-English services, proof of work, trust signals, and useful contact paths.
+
+Reply REBOOT for a no-BS teardown and rebuild plan.
+
+Maya Rios
+Founder, REBOOT RIOT STUDIO
+maya@rebootriot.example · (215) 555-0147
+414 Pixel Foundry Way, Suite 404, Philadelphia, PA 19107
+
+All sender/company details are fictional.
