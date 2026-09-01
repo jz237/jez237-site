@@ -1368,16 +1368,98 @@ function rigDrawSide(fighter) {
   return rigState.rig;
 }
 
-function drawRigFighter(fighter, rig, renderSize) {
-  const pose = rigState.module.rigPose(rig, {
+// ---------------------------------------------------------------------------
+// v3.3 — RENDER-PASS PARITY FOR THE RIG.
+//
+// 3.1 shipped the rig by skipping every pass that blits a sprite silhouette
+// (rim light, cast shadow, projectile glow), because a silhouette cut from the
+// walk CELL behind a differently-posed rig is a second, wrongly-posed fighter
+// peeking out. Right call, wrong end state: in the 3.2 showcase the sprite
+// side wore the stage's rim light and threw a cast shadow while the rigged
+// side did neither, so a viewer read a LIGHTING difference as an animation
+// difference.
+//
+// The answer is to run those passes ON THE RIG'S OWN PIXELS. Every one of
+// them is a transform + composite around a single body blit, so the rig is
+// rasterised ONCE per pose into an offscreen the size of a source sprite cell
+// (RIG_CELL — twice RIG_CELL, so the rig keeps its 3.2 native-draw
+// crispness at fight render sizes), and each pass blits THAT. This also fixes a parity break in the passes the rig already
+// ran: drawRig lays down 14 overlapping pieces, so the floor reflection's
+// per-draw opacity filter and the body drop shadow applied fourteen times,
+// stacking toward full opacity where torso, pelvis and arm overlap — the
+// rig's reflection read hotter than the sprite's. One blit, one alpha, one
+// filter, one shadow: a sprite cell's compositing exactly.
+//
+// Per-side scratches, keyed on the pose inputs: the cast shadow, the rim
+// light, the mirror pass and the main pass share one rasterisation per tick.
+// Nothing here allocates or runs with the rig off.
+// ---------------------------------------------------------------------------
+// 2x the sprite cell: renderSize tops out near 430px, so the blit is a mild
+// DOWNscale and the rig stays as crisp as its 3.2 native-resolution draw.
+const RIG_CELL = 640;
+const rigCellScratches = [null, null];
+
+function rigCellScratch(side) {
+  let scratch = rigCellScratches[side];
+  if (!scratch) {
+    const cell = document.createElement("canvas");
+    cell.width = RIG_CELL;
+    cell.height = RIG_CELL;
+    const tint = document.createElement("canvas");
+    tint.width = RIG_CELL;
+    tint.height = RIG_CELL;
+    scratch = {
+      cell, cellContext: cell.getContext("2d"),
+      tint, tintContext: tint.getContext("2d"),
+      key: "", tintKey: "", pose: null,
+    };
+    rigCellScratches[side] = scratch;
+  }
+  return scratch;
+}
+
+/**
+ * Resolve this fighter's rig pose and rasterise it into its side's cell —
+ * memoised on the pose inputs, so every pass that asks for the same pose in
+ * the same frame shares one rasterisation. Pure render-side cache of a pure
+ * function: rollback and both peers still agree on every pose.
+ */
+function rigFrameCell(fighter, rig, renderSize) {
+  const scratch = rigCellScratch(fighter.side);
+  const sim = {
     walkTime: fighter.walkTime,
     animTime: fighter.animTime,
     moving: Math.abs(fighter.vx) > 22,
     speed: Math.abs(fighter.vx),
     pxPerCell: renderSize / rig.source.cellSize,
     fatigue: clamp(1 - fighter.health / 100, 0, 1),
-  });
-  rigState.module.drawRig(ctx, rig, rigState.image, pose, renderSize);
+  };
+  const key = `${sim.walkTime}|${sim.animTime}|${sim.moving}|${sim.speed}|${sim.pxPerCell}|${sim.fatigue}`;
+  if (key !== scratch.key) {
+    scratch.key = key;
+    scratch.tintKey = "";
+    scratch.pose = rigState.module.rigPose(rig, sim);
+    const cellContext = scratch.cellContext;
+    cellContext.setTransform(1, 0, 0, 1, 0, 0);
+    cellContext.globalCompositeOperation = "source-over";
+    cellContext.clearRect(0, 0, RIG_CELL, RIG_CELL);
+    cellContext.save();
+    // drawRig lands its figure on (-size/2, -size)..(size/2, 0) — the box
+    // drawAtlasFrame blits a cell into. Shifting the origin puts that box on
+    // (0,0)..(cell,cell): the same cell, as a source rect.
+    cellContext.translate(RIG_CELL * 0.5, RIG_CELL);
+    rigState.module.drawRig(cellContext, rig, rigState.image, scratch.pose, RIG_CELL);
+    cellContext.restore();
+  }
+  return scratch;
+}
+
+function drawRigFighter(fighter, rig, renderSize) {
+  const scratch = rigFrameCell(fighter, rig, renderSize);
+  const pose = scratch.pose;
+  // drawAtlasFrame's exact footprint — and now its exact compositing too: the
+  // caller's alpha, filter and drop shadow land on ONE image of the body.
+  ctx.drawImage(scratch.cell, -renderSize * 0.5, -renderSize, renderSize, renderSize);
   if (!reflectionPassActive) {
     rigState.draws += 1;
     rigState.sideDraws[fighter.side] += 1;
@@ -1390,8 +1472,32 @@ function drawRigFighter(fighter, rig, renderSize) {
       farFootX: Number(pose.feet.far.x.toFixed(2)),
       nearPlanted: pose.feet.near.planted,
       farPlanted: pose.feet.far.planted,
+      // v3.3: which leg wears the leading artwork this frame
+      frontSide: pose.frontSide,
     };
   }
+}
+
+/**
+ * drawSilhouetteFrame's rig twin — a flat tinted cut-out of the RIG's own
+ * pixels, cached per colour and invalidated with the pose. This is what lets
+ * the rim light, the cast shadow and the projectile glow run on a rigged
+ * fighter without blitting a differently-posed sprite behind him.
+ */
+function drawRigSilhouetteFrame(fighter, rig, renderSize, color) {
+  const scratch = rigFrameCell(fighter, rig, renderSize);
+  if (scratch.tintKey !== color) {
+    scratch.tintKey = color;
+    const tintContext = scratch.tintContext;
+    tintContext.setTransform(1, 0, 0, 1, 0, 0);
+    tintContext.globalCompositeOperation = "source-over";
+    tintContext.clearRect(0, 0, RIG_CELL, RIG_CELL);
+    tintContext.drawImage(scratch.cell, 0, 0);
+    tintContext.globalCompositeOperation = "source-in";
+    tintContext.fillStyle = color;
+    tintContext.fillRect(0, 0, RIG_CELL, RIG_CELL);
+  }
+  ctx.drawImage(scratch.tint, -renderSize * 0.5, -renderSize, renderSize, renderSize);
 }
 
 /** Bank-routed drawable gate for resolveMotionPose (all five authored banks). */
@@ -20263,11 +20369,14 @@ function drawFighter(fighter, time) {
       }
     }
 
-    // v3.1: every pass below that blits a SPRITE SILHOUETTE is skipped while
-    // the rig draws the body — a rim light cut from the walk cell behind a
-    // rigged pose is a second, differently-posed fighter peeking out.
+    // v3.1 skipped every silhouette pass while the rig drew the body — a rim
+    // light cut from the walk cell behind a rigged pose is a second,
+    // differently-posed fighter peeking out. v3.3: the rim light and the
+    // projectile glow run on a silhouette of the RIG'S OWN pixels instead
+    // (drawRigSilhouetteFrame), under the sprite path's exact alpha, offset
+    // and composite — so both showcase sides finally wear the same light.
     if (!reflectionPassActive && state.performance.shadows && !graphicFatality
-      && !rigDraw && !state.accessibility.highContrast) {
+      && !state.accessibility.highContrast) {
       // Stage-keyed rim light: a tinted silhouette peeking 2-3px past the edge
       // that faces the arena's key light. The sprite draw below covers all but
       // the lit edge; the colour warms while the super spotlight is up.
@@ -20276,13 +20385,14 @@ function drawFighter(fighter, time) {
       ctx.globalCompositeOperation = "lighter";
       ctx.globalAlpha = 0.35;
       ctx.translate(rim.direction * fighter.facing * 3, -2);
-      drawSilhouetteFrame(atlas, frame, renderSize, stageRimColor());
+      if (rigDraw) drawRigSilhouetteFrame(fighter, rigDraw, renderSize, stageRimColor());
+      else drawSilhouetteFrame(atlas, frame, renderSize, stageRimColor());
       ctx.restore();
       presentationDebug.rimLights += 1;
     }
 
     if (!reflectionPassActive && !graphicFatality && state.performance.trailScale > 0
-      && !rigDraw && !state.accessibility.highContrast && state.projectiles.length) {
+      && !state.accessibility.highContrast && state.projectiles.length) {
       // Projectile rim light (wave 4): the nearest incoming projectile or
       // thrown object tints the fighter's silhouette edge on the side facing
       // it, brightening as it closes in — same offset-silhouette technique as
@@ -20305,7 +20415,8 @@ function drawFighter(fighter, time) {
         ctx.globalCompositeOperation = "screen";
         ctx.globalAlpha = 0.55 * strength;
         ctx.translate(towardLocal * 5, -2);
-        drawSilhouetteFrame(atlas, frame, renderSize, tint);
+        if (rigDraw) drawRigSilhouetteFrame(fighter, rigDraw, renderSize, tint);
+        else drawSilhouetteFrame(atlas, frame, renderSize, tint);
         ctx.restore();
         presentationDebug.projectileGlows += 1;
       }
@@ -22319,16 +22430,18 @@ function drawFighterCastShadows() {
   ctx.rect(0, FLOOR + 1, W, REFLECTION_DEPTH);
   ctx.clip();
   for (const fighter of state.fighters) {
-    // v3.1: the cast shadow is a sprite silhouette too, and a rigged fighter's
-    // shadow would be walking a different cycle from his legs.
-    if (rigDrawSide(fighter)) continue;
+    // v3.1 skipped rigged fighters — a sprite-silhouette shadow would walk a
+    // different cycle from the rig's legs. v3.3: the shadow is cut from the
+    // RIG'S OWN pixels instead, under the same transform and alpha, so the
+    // rigged side of the showcase throws the same raked shadow as the sprite.
+    const rigDraw = rigDrawSide(fighter);
     const pose = fighterAnimationPose(fighter);
     const atlas = pose.bank === "specials"
       ? fighterMoveAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
       : pose.bank === "motion"
         ? fighterMotionAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
         : fighterAtlases[fighter.def.id];
-    if (!atlas?.complete || !atlas.naturalWidth) continue;
+    if (!rigDraw && (!atlas?.complete || !atlas.naturalWidth)) continue;
     const renderSize = fighterRenderSize(fighter.def.id) * bankSheetAdjust(fighter.def.id, pose.bank);
     const jump = Math.max(0, FLOOR - fighter.y);
     const airFade = clamp(1 - jump / 520, 0.25, 1);
@@ -22340,7 +22453,8 @@ function drawFighterCastShadows() {
     // shadow of a mixed-orientation sheet cannot point opposite its fighter.
     ctx.scale(fighter.facing * atlasFrameFacing(fighter.def.id, pose.bank, pose.frame), -stretch);  // flip into the floor, squashed long
     ctx.globalAlpha = (0.3 + deepen * 0.22) * airFade;
-    drawSilhouetteFrame(atlas, pose.frame, renderSize, "#04060a");
+    if (rigDraw) drawRigSilhouetteFrame(fighter, rigDraw, renderSize, "#04060a");
+    else drawSilhouetteFrame(atlas, pose.frame, renderSize, "#04060a");
     ctx.restore();
     presentationDebug.castShadows += 1;
   }
@@ -26865,7 +26979,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-3.2");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-3.3");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -26874,6 +26988,114 @@ async function registerOfflineGame() {
     $("#offlineBadge").textContent = "ONLINE ONLY";
   }
 }
+
+// ---------------------------------------------------------------------------
+// v3.3 FRESH — a returning ONLINE player must land on the current build
+// without knowing what a hard reload is. The worker already skipWaiting()s and
+// claim()s, so when a new version installs, controllerchange fires on every
+// open window — and before 3.3 nothing listened: the page kept running the
+// stale shell it booted from, silently, forever (the owner's ?rigdemo link
+// "did nothing" because a months-old game.js was answering it). Now: if the
+// player is safely on the title screen, reload straight onto the fresh cache;
+// if a fight (or anything else — a live online session, the showcase he is
+// watching) is in progress, never yank the shell out from under it — show a
+// dismissible NEW VERSION toast instead and let the player choose. Offline
+// play is untouched: controllerchange only ever fires after a complete new
+// shell finished installing, so the reload lands on a fully cached build even
+// with no network.
+// ---------------------------------------------------------------------------
+const UPDATE_RELOAD_STAMP_KEY = "finalBlowUpdateReloadAt";
+let updateToastDismissed = false;
+
+function updateReloadSafe() {
+  // Deliberately narrow: only the resting title screen with no online session
+  // and no demo/showcase running. Everything else gets the toast.
+  return state.screen === "title" && !onlineSession.role && !demoSession.active;
+}
+
+function showUpdateToast() {
+  if (updateToastDismissed) return;
+  $("#updateToast").hidden = false;
+}
+
+function performUpdateReload() {
+  // Reload-loop guard: if this page already update-reloaded moments ago,
+  // something is re-claiming in a cycle — stop reloading and fall back to the
+  // visible affordance so the player is never trapped in a refresh loop.
+  let lastMs = 0;
+  try { lastMs = Number(sessionStorage.getItem(UPDATE_RELOAD_STAMP_KEY)) || 0; } catch { /* storage may be denied */ }
+  if (Date.now() - lastMs < 15_000) {
+    showUpdateToast();
+    return;
+  }
+  try { sessionStorage.setItem(UPDATE_RELOAD_STAMP_KEY, String(Date.now())); } catch { /* storage may be denied */ }
+  location.reload();
+}
+
+/**
+ * Which shell is this page actually running? Read off the entry script's own
+ * cache-busting stamp (game.js?v=final-blow-X) rather than a constant, so it
+ * can never drift from the build that truly booted this document.
+ */
+function pageShellVersion() {
+  const src = document.querySelector('script[src^="game.js?v="]')?.getAttribute("src") || "";
+  return src.match(/final-blow-([\w.]+)$/)?.[1] || null;
+}
+
+/** Ask the (new) controlling worker which shell it caches; null on silence. */
+function controllerShellVersion() {
+  return new Promise((resolve) => {
+    const controller = navigator.serviceWorker?.controller;
+    if (!controller) {
+      resolve(null);
+      return;
+    }
+    const channel = new MessageChannel();
+    const timer = setTimeout(() => resolve(null), 800);
+    channel.port1.onmessage = (event) => {
+      clearTimeout(timer);
+      resolve(String(event.data?.version || "").match(/final-blow-shell-([\w.]+)$/)?.[1] || null);
+    };
+    try {
+      controller.postMessage({ type: "fb-shell-version?" }, [channel.port2]);
+    } catch {
+      clearTimeout(timer);
+      resolve(null);
+    }
+  });
+}
+
+if ("serviceWorker" in navigator) {
+  // On a virgin first visit the initial clients.claim() flips controller from
+  // null to the brand-new worker — that page IS the current build, so the
+  // first controllerchange there must not reload. Any later flip means a NEW
+  // worker took over, which only happens when a newer build finished caching.
+  let swWasControlled = Boolean(navigator.serviceWorker.controller);
+  navigator.serviceWorker.addEventListener("controllerchange", async () => {
+    if (!swWasControlled) {
+      swWasControlled = true;
+      return;
+    }
+    // Registration echo, not an update: after an update-reload the fresh page
+    // registers its own ?v= URL, which browsers treat as a new script and
+    // install AGAIN even though the bytes are current — that takeover claims
+    // this page too. If the new controller caches exactly the shell this page
+    // booted from, there is nothing fresher to fetch: swallow it, or every
+    // release would end on a spurious NEW VERSION toast one beat after
+    // landing on the new build.
+    const takeover = await controllerShellVersion();
+    if (takeover !== null && takeover === pageShellVersion()) return;
+    if (updateReloadSafe()) performUpdateReload();
+    else showUpdateToast();
+  });
+}
+
+$("#updateReloadButton").addEventListener("click", () => location.reload());
+$("#updateDismissButton").addEventListener("click", (event) => {
+  event.stopPropagation();
+  updateToastDismissed = true;
+  $("#updateToast").hidden = true;
+});
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
@@ -27417,6 +27639,17 @@ function menuPadLoop() {
 $$('[data-mode]').forEach((button) => button.addEventListener("click", () => startSelect(button.dataset.mode)));
 $("#onlineButton").addEventListener("click", openOnlineLobby);
 $("#demoButton").addEventListener("click", () => startDemo());
+// v3.3 FRESH: the rig-vs-sprite showcase is reachable from the title menu, not
+// just the invisible `?rigdemo=1` URL param (which the owner could not find).
+// Selecting it does exactly what `?rigdemo=1` does — same seed, same
+// choreography, rig on P1 — plus the gesture perks every other menu-started
+// mode gets and the URL boot path cannot have (startDemo skips both for the
+// showcase because a cold-load deep link has no user gesture to spend).
+$("#rigShowcaseButton").addEventListener("click", () => {
+  enterImmersiveMode();
+  unlockAudio();
+  startRigShowcase(0);
+});
 // Wave 19: THE PHILLY OPEN bracket screen.
 $("#phillyOpenButton")?.addEventListener("click", showPhillyOpen);
 $("#bracketSize4Button")?.addEventListener("click", () => { bracketSession.setupSize = 4; renderBracketSetup(true); });
@@ -28044,7 +28277,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "3.2-tape",
+  version: "3.3-fresh",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
