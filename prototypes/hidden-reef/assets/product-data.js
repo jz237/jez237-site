@@ -1,11 +1,10 @@
 // The Hidden Reef - Product Data (scraped from thehiddenreef.com)
 // Each product links back to the original Hidden Reef product page
 // Total: 4875 unique products across 36 subcategories
-// Presentation refresh: 35 subcategories refreshed 2026-09-01T04:15:00.789Z
+// Presentation refresh: 35 subcategories refreshed 2026-09-01T04:22:10.703Z
 // Gallery refresh: product image galleries refreshed 2026-05-27T14:49:37.209Z
 // Removed stale 404 product URLs: 7 removed 2026-05-27
-// Public sitemap prune: 3 products removed 2026-09-01T04:15:36.313Z
-// Public sitemap import: 4383 products checked 2026-09-01T04:15:36.313Z
+// Public sitemap import: 4383 products checked 2026-09-01T04:22:35.497Z
 
 const THR_PRODUCTS = {
   "starter-kits": [
@@ -4959,5 +4958,5 @@ const THR_PRODUCTS = {
 
 window.THR_PRODUCTS = THR_PRODUCTS;
 
-const THR_PRODUCT_META = {"total":4875,"subcategories":36,"refreshedAt":"2026-09-01T04:15:00.789Z","publicSitemapCheckedAt":"2026-09-01T04:15:36.313Z","publicSitemapProducts":4383};
+const THR_PRODUCT_META = {"total":4875,"subcategories":36,"refreshedAt":"2026-09-01T04:22:10.703Z","publicSitemapCheckedAt":"2026-09-01T04:22:35.497Z","publicSitemapProducts":4383};
 window.THR_PRODUCT_META = THR_PRODUCT_META;
