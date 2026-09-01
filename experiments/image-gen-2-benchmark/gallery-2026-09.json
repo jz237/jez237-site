@@ -1,5 +1,110 @@
 [
   {
+    "id": "2026-09-01-factual-infographic-factual-infographic-frost-heave-ice-len",
+    "title": "Factual infographic: Frost Heave — Ice Lenses That Lift the Ground",
+    "tests": "General factual infographic; Tuesday scheduled slot 3/6. Direct-canvas orthographic museum information design. Verified mechanism: unfrozen liquid-water migration feeds horizontal segregated ice lenses, which can lift and crack pavement. Visible layers: central cutaway, five-step process, microscopy, lens cross-section, soil comparison, conditions triangle, freeze/heave/thaw sequence, and impact/monitoring band. Independent Claude Opus 5 full-resolution pixel QA: PASS. Anti-repeat variables: geotechnical cryosphere process, buried soil cutaway, cyan-umber-charcoal palette, frost-heave causal mechanism.",
+    "prompt": "Create a finished square museum-quality factual infographic titled FROST HEAVE: ICE LENSES THAT LIFT THE GROUND. The generated canvas itself is the infographic: perfectly front-facing, orthographic, straight-on, edge-to-edge 2D information design, with no visible paper edge, poster, frame, screen, room, desk, tools, hands, cast shadow around the composition, or environmental background. Make a large integrated winter-road-and-soil cutaway the visual anchor: cold air and a descending freezing front above; frost-susceptible moist soil below; thin unfrozen-water pathways moving upward toward several bright horizontal ice lenses; pavement visibly lifted and cracked directly above the thickening lenses. Build eight concrete information layers with crisp museum hierarchy and concise readable labels: 1 central road-and-soil mechanism cutaway; 2 a five-step strip labeled COOLING FRONT DESCENDS, UNFROZEN WATER REMAINS, WATER MIGRATES UPWARD, ICE LENSES THICKEN, GROUND SURFACE RISES; 3 a large microscopy window showing fine soil grains, pore ice, and a connected film of unfrozen liquid water; 4 a clean cross-section of a horizontal segregated ice lens between soil layers; 5 a cautious qualitative comparison of coarse granular soil and frost-susceptible fine soil; 6 a conditions triangle labeled FREEZING, WATER SUPPLY, SUSCEPTIBLE SOIL; 7 a BEFORE FREEZE, DURING HEAVE, THAW comparison showing variable uneven support after melting; 8 a field-impact and observation band showing cracked pavement, a tilted shallow post, a lifted garden stone, subsurface temperature probe, moisture sensor, and layered soil core. Use frozen cyan, glacier white, soil umber, asphalt charcoal, mineral ochre, and restrained hazard coral. Show a clear continuous causal relationship from migrating water to growing lenses to vertical displacement. Keep the science conservative: frost heave is driven chiefly by liquid-water migration feeding segregated ice lenses, not merely by water expanding where it freezes; frozen soil can contain both ice and unfrozen water; not every wet or frozen soil heaves equally; soil, groundwater, temperature, salinity, loading, and freeze-thaw history affect severity. No exact quantities, invented statistics, universal claims, bibliography, URLs, logos, QR codes, decorative pseudo-text, dense paragraphs, fantasy glow, classroom worksheet styling, photographed infographic artifact, or prompt-card instructions.",
+    "image": "images/2026-09-01-factual-infographic-factual-infographic-frost-heave-ice-len.jpg",
+    "thumb": "thumbs/2026-09-01-factual-infographic-factual-infographic-frost-heave-ice-len.webp",
+    "color": "#8e9eab",
+    "date": "2026-09-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How growing ice lenses cause frost heave in soil",
+      "description": "A source-verified direct-canvas museum infographic showing how unfrozen liquid water migrates toward a freezing zone, feeds horizontal segregated ice lenses, and can lift and crack pavement, with soil, freeze-thaw, impact, and monitoring context.",
+      "sourceNote": "Federal Highway Administration (https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/ltpp/08057/03.cfm) supports frozen/unfrozen water coexistence, vertical moisture migration, ice-lens formation and thickening, frost-heave pavement damage, and temperature/moisture monitoring; National Science Foundation Public Access Repository (https://par.nsf.gov/biblio/10657500) independently supports coupled hydrothermal migration, liquid-water flow as the fundamental transport process, and unfrozen water as an intrinsic frozen-soil property.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-01T23:21:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Federal Highway Administration",
+            "title": "Long-Term Pavement Performance Computed Parameter: Frost Penetration — Chapter 3",
+            "sourceType": "government-agency",
+            "url": "https://www.fhwa.dot.gov/publications/research/infrastructure/pavements/ltpp/08057/03.cfm"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Science Foundation Public Access Repository",
+            "title": "Challenges in Numerical Simulation of Frost Heave",
+            "sourceType": "government-agency",
+            "url": "https://par.nsf.gov/biblio/10657500"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Frost heave is driven chiefly by liquid-water migration toward a freezing zone and the formation and thickening of segregated ice lenses, not merely by pore water freezing in place.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Frozen soil can contain both frozen and unfrozen water, with the proportions depending on temperature depression, soil specific surface area, and salt content.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Unfrozen liquid water can migrate vertically during freezing and feed the growth of horizontal layers of solid ice called ice lenses.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Ice lenses can separate soil above from soil below and produce large vertical ground displacements called frost heave.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Three conditions govern damaging frost action: freezing conditions, an available water supply, and frost-susceptible soil; not every wet or frozen soil heaves equally.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Soil type and mineralogy, groundwater and flow properties, moisture content, temperature, salinity, and material properties influence freezing behavior and frost-heave severity.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fine-grained frost-susceptible soils can support more damaging frost action than many coarser soils, but susceptibility depends on the complete soil-water-freezing system rather than texture alone.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Frost heave can lift and damage pavement, producing roughness, displacement, and cracking above the growing ice-lens zone.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Freeze-thaw state in pavement layers can be investigated using subsurface temperature, moisture measurements such as time-domain reflectometry, and coupled heat-moisture models.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "During thaw, ice lenses melt and previously heaved ground may lose support or settle unevenly; the exact outcome varies with soil, drainage, loading, and freeze-thaw history.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-01-factual-infographic-factual-infographic-coral-fluorescence-",
     "title": "Factual infographic: Coral Fluorescence — Proteins That Shift Light",
     "tests": "General Tuesday factual slot 1/6. Direct-canvas orthographic infographic with central coral-polyp and tissue cutaway; verified light-energy shift, cyan/green/red fluorescent protein families, non-fluorescent purple-blue chromoproteins, host-versus-symbiont pigment distinction, Leptoseris tissue localization and sampled-depth pattern, case-study photosynthesis result, proposed context-dependent photoprotection/light-enhancement roles, and explicit uncertainty. Pixel QA: PASS from xai/grok-4.3; direct-canvas museum layout, strong hierarchy, legible text, clear mechanism, distinct pigment panels, at least five information layers, no malformed anatomy or factual misrepresentation. Anti-repeat: radial coral anatomy and spectral color ladder; no prior coral-fluorescence topic in the full factual archive.",
