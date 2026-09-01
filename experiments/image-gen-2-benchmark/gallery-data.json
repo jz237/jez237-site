@@ -11148,5 +11148,112 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-01-factual-infographic-factual-infographic-colobopsis-exploden",
+    "title": "Factual infographic: Colobopsis explodens — The Ant That Ruptures to Defend",
+    "tests": "factual_subtype: bizarre-insect-life; accepted species: exploding ant (Colobopsis explodens); verified mechanism: minor-worker defensive autothysis ruptures the gaster and transfers sticky bright-yellow mandibular-gland contents at close range; macro plan: enormous whole-insect hero plus large reservoir, rupture, and contact-transfer close-ups; direct-canvas orthographic infographic; source-verified Brunei rainforest habitat, 4–7 mm minor-worker scale, minor-versus-major caste defense, broad secretion chemistry; pixel QA passed for dominant insect imagery, correct close-contact causal sequence, legible premise, readable hierarchy, and no poster mockup.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “COLOBOPSIS EXPLODENS: THE ANT THAT RUPTURES TO DEFEND,” explaining the real, source-verified defensive autothysis of the Southeast Asian exploding ant Colobopsis explodens. The generated canvas itself is the finished museum-quality infographic: perfectly front-facing, orthographic, straight-on, and edge-to-edge. No paper edge, poster, page, placard, frame, wall, screen, room, desk, tools, hands, specimen tray, cast shadow around the composition, or environmental staging outside the designed layout. Use concise authoritative typography, large readable labels, restrained leader lines, and no dense paragraphs.\n\nMake insect imagery occupy at least two-thirds of the canvas. The stop-scroll hero is an enormous, naturalistic extreme-macro adult minor worker, reddish-brown, correct ant anatomy with one head, one thorax, one gaster, two antennae, six jointed legs attached to the thorax, realistic mandibles, fine cuticle hairs, tactile segmented exoskeleton, and honest living asymmetry. Show it in a close defensive posture on damp rainforest bark, with a scientifically restrained translucent cutaway through the same body revealing paired enlarged mandibular-gland reservoirs extending from the head through much of the body and containing bright yellow secretion. Do not depict a monster, a fireball, pressure blast, gore, or a human-like expression.\n\nIntegrate at least nine concrete information layers around and through the macro hero while keeping the ant dominant: 1) the whole-insect macro hero and internal reservoir cutaway labeled MINOR WORKER, ENLARGED MANDIBULAR-GLAND RESERVOIRS, and GASTER; 2) a four-stage close-contact mechanism sequence labeled THREAT AT CLOSE RANGE → GASTER RUPTURES → STICKY YELLOW SECRETION TRANSFERS → OPPONENT RESTRAINED OR REPELLED; 3) a very large head-and-thorax close-up tracing the reservoirs backward from the mandibular glands; 4) a very large gaster close-up showing the rupture site non-gorily and as tearing of the ant’s own integument, not an explosion; 5) a very large behavior close-up showing sticky yellow secretion physically bridging the minor worker and a rival arthropod at contact distance; 6) a caste comparison with a slender minor worker beside a major worker whose enlarged plug-shaped head blocks a small wooden nest entrance, labeled MINOR: AUTOTHYSIS and MAJOR: ENTRANCE PLUG; 7) a concise chemistry window showing a varied mixture of ALKANES, CARBOXYLIC ACIDS, and PHENOLIC COMPOUNDS as restrained molecular-family icons, with the note MANY INDIVIDUAL FUNCTIONS REMAIN UNRESOLVED; 8) a habitat panel showing lowland dipterocarp rainforest in Brunei, ants moving along bark toward a wooden cavity nest; 9) an honest scale bar reading MINOR WORKER: ABOUT 4–7 MM; 10) a caution panel labeled NOT EVERY CASTE, NOT EVERY ENCOUNTER, emphasizing that the rupture behavior belongs to minor workers and is an irreversible self-sacrifice; 11) a small taxonomy strip reading INSECT → ANT → COLOBOPSIS CYLINDRICA GROUP → COLOBOPSIS EXPLODENS.\n\nUse a fresh diagonal information architecture: the giant ant runs lower-left to upper-right, the reservoir cutaway follows its long body axis, the four-stage action sequence curves along the lower edge, three oversized biological close-ups form an asymmetric vertical band at right, caste comparison sits upper-left, and the rainforest/scale/chemistry context forms a narrow top band. Palette: humid rainforest green, bark umber, reddish chestnut, bright secretion yellow, warm cream, charcoal, and restrained cyan. Blend naturalistic extreme-macro photography, believable shallow depth of field inside insect panels, micro-CT-style anatomy rendering, crisp scientific cutaways, and clean editorial vector arrows while the overall canvas remains flat and orthographic.\n\nAccuracy constraints: clearly identify Colobopsis explodens as a real Southeast Asian ant; show autothysis as close-contact rupture of a minor worker’s gaster and transfer of sticky mandibular-gland contents, not combustion or a projectile blast; keep the secretion bright yellow; show major workers using enlarged plug-shaped heads at wooden nest entrances; describe the secretion chemistry only as a complex mixture containing the listed broad compound classes and do not claim a proven role for every component. Do not imply every worker explodes, every encounter ends in rupture, or the ant survives afterward. No invented statistics beyond the supported 4–7 mm minor-worker range, no sensational universal claims, no bibliography, URLs, citations, logos, QR codes, watermark, decorative pseudo-text, classroom worksheet, photographed infographic artifact, fantasy glow, or prompt-card instructions. The finished direct infographic must make the whole ant, three large anatomical/behavioral close-ups, body-length gland reservoirs, and contact defense sequence unmistakable at thumbnail scale.",
+    "image": "images/2026-09-01-factual-infographic-factual-infographic-colobopsis-exploden.jpg",
+    "thumb": "thumbs/2026-09-01-factual-infographic-factual-infographic-colobopsis-exploden.webp",
+    "color": "#736d52",
+    "date": "2026-09-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How Colobopsis explodens minor workers defend their colony by rupturing the gaster and releasing sticky mandibular-gland contents",
+      "description": "A source-verified insect-first museum infographic showing the exploding ant Colobopsis explodens, its body-length mandibular-gland reservoirs, the close-contact autothysis sequence, caste-specific nest defense, honest scale, rainforest habitat, and conservative secretion chemistry.",
+      "sourceNote": "ZooKeys (https://pmc.ncbi.nlm.nih.gov/articles/PMC5919914/) supports the species identity, Southeast Asian range, Brunei lowland-rainforest observations, tree-nest context, caste anatomy, yellow secretion, and defensive autothysis; Molecules (https://pmc.ncbi.nlm.nih.gov/articles/PMC6804081/) independently supports minor-worker size, body-length mandibular-gland reservoirs, close-contact sticky secretion transfer, major-worker phragmosis, and the broad chemical classes found in the reservoir contents.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-01T18:18:21Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "ZooKeys",
+            "title": "Colobopsis explodens sp. n., model species for studies on exploding ants, with biological notes and first illustrations of males of the Colobopsis cylindrica group",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5919914/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Molecules",
+            "title": "Volatiles from the Mandibular Gland Reservoir Content of Colobopsis explodens Worker Ants",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6804081/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Colobopsis explodens is a real ant species in the Southeast Asian Colobopsis cylindrica species group and was described from material associated with Borneo, Thailand, and Malaysia.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Field observations of Colobopsis explodens were made in lowland dipterocarp rainforest in Brunei, where colonies occupied trees and wooden nest cavities.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Minor workers are reddish-brown, measure about 4-7 mm, and carry enlarged mandibular-gland reservoirs extending through much of the body.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "During close territorial conflict, a minor worker can rupture the integument of its gaster, an irreversible self-sacrificial behavior called autothysis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Autothysis releases bright yellow, sticky mandibular-gland reservoir contents onto an arthropod opponent, helping restrain, repel, or kill the opponent.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The defensive sequence is a close-contact mechanism, not a fireball or pressure explosion: the gaster ruptures and transfers adhesive secretion to the opponent.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Major workers have enlarged plug-shaped heads and can block entrances to wooden nests, a defensive behavior known as phragmosis.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Chemical analyses found a complex mixture of volatile compounds in the minor workers' mandibular-gland reservoir contents, including alkanes, carboxylic acids, and phenolic compounds.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Researchers proposed that likely irritant and antibiotic phenolic constituents may contribute to defense against arthropod opponents or microbes, but the functions of many individual compounds remain unresolved.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The self-sacrificial rupture behavior belongs to minor workers and should not be implied to occur in every caste or every encounter.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
