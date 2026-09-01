@@ -1,0 +1,99 @@
+[
+  {
+    "id": "2026-09-01-factual-infographic-factual-infographic-coral-fluorescence-",
+    "title": "Factual infographic: Coral Fluorescence — Proteins That Shift Light",
+    "tests": "General Tuesday factual slot 1/6. Direct-canvas orthographic infographic with central coral-polyp and tissue cutaway; verified light-energy shift, cyan/green/red fluorescent protein families, non-fluorescent purple-blue chromoproteins, host-versus-symbiont pigment distinction, Leptoseris tissue localization and sampled-depth pattern, case-study photosynthesis result, proposed context-dependent photoprotection/light-enhancement roles, and explicit uncertainty. Pixel QA: PASS from xai/grok-4.3; direct-canvas museum layout, strong hierarchy, legible text, clear mechanism, distinct pigment panels, at least five information layers, no malformed anatomy or factual misrepresentation. Anti-repeat: radial coral anatomy and spectral color ladder; no prior coral-fluorescence topic in the full factual archive.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “CORAL FLUORESCENCE: PROTEINS THAT SHIFT LIGHT.” This is a real-world, non-fiction museum-quality information design about how coral host fluorescent proteins absorb higher-energy visible light and re-emit lower-energy light at longer wavelengths, how those pigments sit within living coral tissue, and why their biological roles must be described cautiously.\n\nThe generated canvas itself must be the infographic: perfectly front-facing, orthographic, straight-on, edge-to-edge finished 2D artwork with no paper edge, poster, wall chart, placard, frame, screen, desk, room, hands, tools, specimen tray, cast shadow around the composition, or environmental staging outside the designed layout. Use concise authoritative typography, large readable labels, restrained leader lines, and no bibliography, URLs, tiny citations, paragraphs, pseudo-text, logos, QR codes, or watermark.\n\nMake one enormous naturalistic reef-coral polyp and connected coenosarc tissue cutaway the stop-scroll central anchor, occupying almost half the canvas. Show believable tentacles, oral disc, epidermis, gastrodermis containing intracellular dinoflagellate photosymbionts, and underlying skeleton. Place glowing cyan and green host-pigment zones clearly in the oral disc and coenosarc, while keeping the symbionts as separate golden-brown cells in the inner tissue. The anatomy must look like an accurate integrated scientific cutaway, not a fantasy flower or generic glowing blob.\n\nBuild at least nine concrete visual information layers around that central mechanism: 1) the dominant whole-polyp-to-tissue cutaway labeled CORAL HOST TISSUE, ORAL DISC, COENOSARC, PHOTOSYMBIONT CELLS, and SKELETON; 2) a large three-step light-path ribbon labeled ABSORB HIGHER-ENERGY LIGHT → EXCITED PIGMENT → EMIT LOWER-ENERGY LIGHT, using a short blue incident arrow and longer-wave cyan/green emitted arrows without numeric wavelengths; 3) four large macro windows showing CYAN FLUORESCENCE, GREEN FLUORESCENCE, RED FLUORESCENCE, and PURPLE-BLUE CHROMOPROTEIN, with the last explicitly labeled STRONG ABSORPTION, LITTLE OR NO FLUORESCENCE; 4) a protein-scale window showing a simplified barrel-like GFP-family protein around a light-producing chromophore, clearly a conceptual molecular model rather than an atomic claim; 5) a HOST PIGMENT / ALGAL PIGMENT comparison distinguishing colorful host proteins from the golden-brown photosynthetic pigments of symbionts; 6) a shallow-to-mesophotic reef depth strip showing that pigment types and expression vary by species, individual, and environment, without implying one universal depth rule; 7) a LEPTOSERIS CASE STUDY panel showing fluorescent and non-fluorescent colonies co-occurring, with cyan more common in shallower sampled corals, cyan plus green at intermediate sampled depths, and green more common in deeper sampled corals; 8) a POSSIBLE LIGHT-FIELD EFFECTS panel showing two cautious branches, PHOTOPROTECTION and LIGHT ENHANCEMENT, both headed PROPOSED AND CONTEXT-DEPENDENT; 9) a WHAT THE CASE STUDY FOUND comparison showing similar measured symbiont abundance, pigments, photosynthetic performance, and excitation spectra in fluorescent versus non-fluorescent Leptoseris, ending with the concise conclusion NO SIGNIFICANT PHOTOSYNTHESIS ENHANCEMENT FOUND IN THIS STUDY; 10) a compact uncertainty band reading BIOLOGICAL ROLES VARY — PRECISE FUNCTIONS ARE NOT FULLY RESOLVED.\n\nUse a bold radial information architecture unlike recent weather, biomechanics, and insect-anatomy graphics: central coral cutaway in the lower-middle; light-path ribbon arcing across the upper third; four oversized pigment macro windows forming a left-side color ladder; Leptoseris depth transect as a tall right-side column; host-versus-symbiont and case-study comparisons as two broad lower bands. Palette: deep reef navy, turquoise, luminous cyan, vivid but restrained green and red, purple-blue, coral orange, warm skeleton ivory, and golden-brown symbiont cells. Mix photorealistic macro-coral textures, wet translucent tissue, crisp scientific cutaway rendering, clean spectral color fields, and disciplined vector arrows only inside the flat direct-canvas composition. Preserve high contrast, strong hierarchy, and readable labels at thumbnail scale.\n\nAccuracy constraints: do not claim that all corals fluoresce, that coral fluorescence always helps photosynthesis, that every species follows the Leptoseris depth pattern, that fluorescence is bioluminescence, that fluorescent proteins create light without excitation, or that chromoproteins fluoresce strongly. Do not invent universal wavelengths, percentages, depth limits, molecular structures, ecological benefits, or health diagnostics. No classroom worksheet, decorative rainbow, blacklight nightclub aesthetic, aquarium poster mockup, glossy advertisement, or photographed infographic artifact. The finished infographic must make the polyp anatomy, light-energy shift, pigment-color families, tissue location, species variation, Leptoseris case study, and scientific uncertainty unmistakable at a glance.",
+    "image": "images/2026-09-01-factual-infographic-factual-infographic-coral-fluorescence-.jpg",
+    "thumb": "thumbs/2026-09-01-factual-infographic-factual-infographic-coral-fluorescence-.webp",
+    "color": "#2f3a3f",
+    "date": "2026-09-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How coral fluorescent proteins absorb higher-energy light and re-emit lower-energy light, and how their tissue distribution and biological roles vary",
+      "description": "A source-verified direct-canvas museum infographic showing how coral GFP-like host pigments shift light, where they occur in coral tissue, how cyan, green, red and non-fluorescent chromoprotein families differ, and why proposed biological roles remain species- and context-dependent.",
+      "sourceNote": "NOAA NCCOS (https://coastalscience.noaa.gov/data_reports/fluorescent-proteins-in-dominant-mesophotic-reef-building-corals/) supports the Leptoseris tissue localization, sampled-depth distribution, excitation/emission mechanism, and case-study photosynthesis result; Frontiers in Marine Science (https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2023.1204843/full) supports coral host-pigment classes, spectral behavior, tissue-light-field effects, variability, proposed context-dependent roles, and unresolved function.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-01T08:24:30Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "NOAA National Centers for Coastal Ocean Science",
+            "title": "Fluorescent proteins in dominant mesophotic reef-building corals",
+            "sourceType": "government-agency",
+            "url": "https://coastalscience.noaa.gov/data_reports/fluorescent-proteins-in-dominant-mesophotic-reef-building-corals/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Frontiers in Marine Science",
+            "title": "The role of host pigments in coral photobiology",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.frontiersin.org/journals/marine-science/articles/10.3389/fmars.2023.1204843/full"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Many coral host pigments are green-fluorescent-protein-like pigments, and fluorescent forms span cyan, green, and red emission colors.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A fluorescent protein absorbs higher-energy light and emits lower-energy light at a longer wavelength.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Non-fluorescent chromoproteins can absorb visible light strongly while producing little or no fluorescence, and commonly contribute purple-blue coloration.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The pigment types and their expression can differ among coral species and among individuals of the same species.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Coral host pigments can alter the local light field inside coral tissue; proposed photobiological effects include photoprotection or light enhancement depending on species and environment, but their precise biological roles are not fully resolved.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In four Hawaiian mesophotic Leptoseris species studied at 65-125 m, cyan and green fluorescence was localized mainly in the coenosarc and/or oral disc, and fluorescent and non-fluorescent colonies co-occurred across the investigated depths.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In that Leptoseris study, cyan fluorescent protein was more common at shallower sampled depths, green fluorescent protein at deeper sampled depths, and both occurred at intermediate sampled depths.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The Leptoseris study found similar symbiont genotypes, abundance, pigments, photosynthetic efficiency, photosynthetic rates, and chlorophyll excitation spectra in fluorescent and non-fluorescent corals, so those fluorescent proteins were unlikely to significantly enhance symbiont photosynthesis in the studied corals.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Coral tissue can contain intracellular dinoflagellate photosymbionts in the endodermis, while host fluorescent pigments occupy species-dependent tissue locations and modify the light microenvironment around them.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  }
+]
