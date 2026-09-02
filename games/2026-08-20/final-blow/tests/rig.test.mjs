@@ -25,12 +25,48 @@ const rig = prepareRig(definition);
 
 // A representative sim state: forward walk at the shipped speed, at the render
 // scale deathblow actually draws at (330 * 1.14 * 1.068 = 401.8px per 320 cell).
+//
+// v3.5: the SPEED here was 383 from the 3.1 pilot onward and it was never
+// deathblow's. 383 is the roster default (MOVEMENT_RULES forwardWalkSpeed,
+// 336 * FIGHTER_SCALE); his kit overrides it with 246 * 1.14 = 323, which is
+// what `qa.rigWalk()` reads off a held forward walk in the running game. The
+// gap mattered once the stride got long: a 19% overspeed asks the legs to span
+// a stance they cannot reach, so a squat that never happens on screen was
+// failing the no-squat bound, and one that did could have passed it.
 const PX_PER_CELL = 401.8 / 320;
+const WALK_SPEED = 323;
 const walkSim = (walkTime) => ({
-  walkTime, animTime: 1.4, moving: true, speed: 383, pxPerCell: PX_PER_CELL, fatigue: 0,
+  walkTime, animTime: 1.4, moving: true, speed: WALK_SPEED, pxPerCell: PX_PER_CELL, fatigue: 0,
 });
 const idleSim = (animTime) => ({
   walkTime: 0, animTime, moving: false, speed: 0, pxPerCell: PX_PER_CELL, fatigue: 0,
+});
+
+// v3.5 — THE SCALE THE RIG IS ACTUALLY DRAWN AT, which is not PX_PER_CELL.
+//
+// `renderSize = fighterRenderSize(id) * bankSheetAdjust * cellDrawAdjust`, and
+// once the unified atlas is loaded the sprite pose a walking deathblow WOULD
+// have drawn is a unified walk cell, whose UNIFIED_CELL_ADJUST (engine/
+// fighter-kits.mjs) is 0.913 / 0.889 / 0.907 / 0.892 across the four keys. The
+// rig inherits that renderSize because it has to occupy the sprite's footprint,
+// so it draws at 1.2557 * those = 1.116..1.147 px per cell, cycling with the
+// walk — confirmed live, `qa.rigWalk()` reporting strideCells 256.15 / 262.18 /
+// 257.85 / 263.07 on four consecutive walk cells at one held 323 px/s.
+//
+// It matters because the stride is `speed / cadence / pxPerCell`: the SMALLEST
+// scale asks the legs to span the LONGEST stance in cell space, so it is the
+// squat's worst case, and the largest is the stance width's. The tests below
+// run every one of the four rather than an average of them.
+const LIVE_CELL_ADJUSTS = [0.913, 0.889, 0.907, 0.892];
+const LIVE_SCALES = LIVE_CELL_ADJUSTS.map((adjust) => PX_PER_CELL * adjust);
+const LIVE_PX_PER_CELL = PX_PER_CELL * 0.889;   // the deepest correction
+const LIVE_WALK_SPEED = WALK_SPEED;
+const liveSim = (walkTime, pxPerCell = LIVE_PX_PER_CELL) => ({
+  walkTime, animTime: 1.4, speedX: LIVE_WALK_SPEED, speedLift: LIVE_WALK_SPEED,
+  pxPerCell, fatigue: 0,
+});
+const liveIdle = (pxPerCell = LIVE_PX_PER_CELL) => ({
+  walkTime: 0, animTime: 0, speedX: 0, speedLift: 0, pxPerCell, fatigue: 0,
 });
 
 // ---------------------------------------------------------------------------
@@ -298,11 +334,14 @@ test("held-direction fight-mode walk: the stride alternates and the leading leg 
       assert.ok(legDraw(pose, frontLeg.shin).z > legDraw(pose, backLeg.shin).z);
       assert.ok(legDraw(pose, frontLeg.foot).z > legDraw(pose, backLeg.foot).z);
     }
-    // 120 ticks = 2s = 10/3 cycles at 5/3 cycles/sec; two role swaps per cycle
+    // Two role swaps per cycle, and 120 ticks is 2 seconds of them — derived
+    // from the cadence rather than hard-coded, because the swap count is a
+    // property of the crossings and the cadence is what sets how many happen.
+    const expected = 2 * (2 * WALK_CYCLES_PER_SECOND);
     assert.ok(leads.includes("near") && leads.includes("far"),
       "both legs must lead within a couple of cycles");
-    assert.ok(swaps >= 5 && swaps <= 8,
-      `role swaps should track the two foot crossings per cycle, got ${swaps}`);
+    assert.ok(swaps >= Math.floor(expected) - 1 && swaps <= Math.ceil(expected) + 1,
+      `role swaps should track the two foot crossings per cycle, got ${swaps} (expected ~${expected})`);
   }
 });
 
@@ -322,9 +361,11 @@ test("no leg piece is ever drawn a quarter-turn from its authored orientation", 
   }
 });
 
-test("the near-led half and the idle are bit-identical to the shipped 3.2 draw", () => {
+test("the near-led half and the idle keep every bone in its own artwork", () => {
   // The role map is empty whenever the near foot leads — including the whole
-  // idle — so the pilot-approved half of the walk cannot have moved a pixel.
+  // idle — so no bone on the pilot-approved half wears a swapped piece.
+  // (v3.5 moved the hip row and the leg layering, so this is an ART-ASSIGNMENT
+  // check, not the pixel-parity claim the name used to make.)
   for (const sim of [idleSim(0.7), idleSim(2.9)]) {
     const pose = rigPose(rig, sim);
     assert.equal(pose.frontSide, "near", "the idle stance leads with the near foot");
@@ -466,12 +507,19 @@ test("the planted foot stays planted walking BACKWARD too", () => {
 test("full-speed walk keeps the authored 3.3 read and the legacy sim shape still poses", () => {
   // At the full reference stride the amplitudes all resolve to exactly the
   // 3.3 constants (g=1, w=1), so the verified fast-walk strips still hold.
+  // The legacy `moving`/`speed` shape and the 3.4 signed `speedX` shape are the
+  // same pose at the same speed — checked at deathblow's own walk, which is
+  // what walkSim carries since 3.5.
   const viaLegacy = rigPose(rig, walkSim(0.22));
-  const viaGait = rigPose(rig, gaitSim(0.22, 383));
+  const viaGait = rigPose(rig, gaitSim(0.22, WALK_SPEED));
   assert.deepEqual(viaGait.bones, viaLegacy.bones,
     "moving/speed fallback and speedX must agree at the reference speed");
-  assert.equal(viaGait.lift, 17);
-  assert.equal(viaGait.gait, 1);
+  // ...and the amplitudes still saturate at exactly the 3.3 constants once the
+  // walk reaches FULL_STRIDE_SPEED, which is the roster's fastest and above
+  // deathblow's own — that saturation is what the verified fast strips hold.
+  const saturated = rigPose(rig, gaitSim(0.22, 383));
+  assert.equal(saturated.lift, 17);
+  assert.equal(saturated.gait, 1);
 });
 
 test("idle breathes without drifting", () => {
@@ -556,6 +604,17 @@ test("the rig is off by default and every draw-path change is gated on it", () =
 
   // and the pilot only ever covers walk and idle
   assert.match(game, /fighter\.attacking \|\| fighter\.stun \|\| fighter\.down \|\| fighter\.block/);
+
+  // v3.5: ...which means the GAIT EASE has to cover walk and idle too. It runs
+  // across the bail — a dash's 622 px/s is still in the average on the first
+  // rig-eligible tick after the dash ends — so the target is capped at this
+  // fighter's own fastest walk before it is eased. Without it a `?rigdemo=1`
+  // soak poses a 420-cell stride (the runaway clamp, which skates) with the
+  // hips at row 280 against a settled 192.
+  assert.match(game,
+    /Math\.max\(fighter\.movement\.forwardWalkSpeed, fighter\.movement\.backWalkSpeed\)/,
+    "the rig gait ease must be capped at a walk");
+  assert.match(game, /clamp\(fighter\.vx \* fighter\.facing, -walkCap, walkCap\)/);
 });
 
 test("the service worker shell did not grow for the pilot", () => {
@@ -563,4 +622,225 @@ test("the service worker shell did not grow for the pilot", () => {
   assert.doesNotMatch(worker, /rig\.mjs/,
     "the rig is dynamically imported precisely so the install cache stays the size it was");
   assert.doesNotMatch(worker, /assets\/rig/);
+});
+
+// ---------------------------------------------------------------------------
+// v3.5 — THE LEG STRUCTURE.
+//
+// Three rounds of walk work verified BONE ANGLES, STRIDE MATH and FOOT-TARGET
+// POSITIONS. All three measured correct, and all three missed that the RENDERED
+// figure had no lower leg: shorts hem, a stub of thigh, then the shoe. What was
+// never measured was whether the shin's pixels reach the canvas.
+//
+// Two independent things put them there, and both are pinned below because both
+// are invisible to an angle check:
+//
+//   1. DRAW ORDER. The thigh capsule runs 10px past the knee with a 16px end
+//      radius, so the thigh art covers ~26px of a 42px shin and the shoe collar
+//      takes 12 more. Layered thigh-over-shin (the pre-3.5 order) that is
+//      harmless only while the leg is straight, because the covering pixels ARE
+//      the drawn knee. Bend the knee and the thigh's rounded end sweeps ACROSS
+//      the calf: measured 4-25% of the shin survived to the canvas.
+//   2. LEG EXTENSION. The hip row used to be a constant that the reach
+//      constraint could only push DOWN, so a 97.65-cell leg spanned the ~90
+//      cells to the ankle row and put the difference in the knee — 45-75deg of
+//      fold where the artwork was drawn at 7.
+//
+// Pixel compositing is not available in node, so these pin the geometry that
+// PRODUCES the pixels: the layering, the extension, and the ground contact.
+// ---------------------------------------------------------------------------
+
+test("v3.5 leg pieces layer proximal -> distal so a bent knee cannot eat the shin", () => {
+  const zOf = (pose, name) => pose.bones.find((bone) => bone.name === name).z;
+  const poses = [idleSim(0), idleSim(1.7), ...Array.from({ length: 40 }, (_, i) => walkSim(i / 40))];
+  for (const sim of poses) {
+    const pose = rigPose(rig, sim);
+    for (const side of ["near", "far"]) {
+      const leg = rig.legs[side];
+      const thigh = zOf(pose, leg.thigh);
+      const shin = zOf(pose, leg.shin);
+      const foot = zOf(pose, leg.foot);
+      assert.ok(thigh < shin,
+        `${side} shin must draw OVER its own thigh (${shin} vs ${thigh})`);
+      assert.ok(shin < foot,
+        `${side} foot must draw over its own shin (${foot} vs ${shin})`);
+      // and the shorts still hide both hips, which is what the leg z slots
+      // were kept below the pelvis for
+      assert.ok(zOf(pose, "pelvis") > thigh, "shorts draw over the thighs");
+    }
+  }
+});
+
+test("v3.5 the support leg stays extended — the hips hang from it", () => {
+  const reach = rig.byName.get("thighNear").length + rig.byName.get("shinNear").length;
+  const worst = { ext: 1, bend: 0, phase: null };
+  for (let i = 0; i < 60; i += 1) {
+    const pose = rigPose(rig, walkSim(i / 60));
+    // the SUPPORT leg is the most extended one — whichever is carrying
+    let best = 0;
+    for (const side of ["near", "far"]) {
+      const leg = rig.legs[side];
+      const hip = pose.nodes.get(leg.thigh);
+      const ankle = pose.nodes.get(leg.foot);
+      best = Math.max(best, Math.hypot(ankle.x - hip.x, ankle.y - hip.y) / reach);
+    }
+    if (best < worst.ext) { worst.ext = best; worst.phase = pose.phase; }
+  }
+  // pre-3.5 this bottomed out at 0.925 (a 45deg knee) at every foot crossing
+  assert.ok(worst.ext > 0.97,
+    `the carrying leg must stay near full extension, worst ${worst.ext.toFixed(3)} at phase ${worst.phase}`);
+
+  // the hips must actually MOVE with it — a constant hip row is the bug
+  const hips = [];
+  for (let i = 0; i < 60; i += 1) hips.push(rigPose(rig, walkSim(i / 60)).hipRow);
+  const travel = Math.max(...hips) - Math.min(...hips);
+  assert.ok(travel > 4, `the hips must rise and fall over the stride (${travel.toFixed(2)})`);
+  assert.ok(travel < 24, `...as a walk bob, not a squat (${travel.toFixed(2)})`);
+});
+
+test("v3.5 the rest pose reproduces the drawing, and the sole sits on the ground row", () => {
+  const zero = rigPose(rig, { walkTime: 0, animTime: 0, speedX: 0, pxPerCell: PX_PER_CELL, fatigue: 0 });
+  // The pivot chain: every leg piece's pivot must sit on the joint it was cut
+  // from, or the art and the skeleton disagree before a pose is even applied.
+  for (const [piece, joint] of [["thighNear", "hipN"], ["shinNear", "kneeN"], ["footNear", "ankleN"],
+                                ["thighFar", "hipF"], ["shinFar", "kneeF"]]) {
+    const spec = definition.pieces[piece];
+    const bone = rig.byName.get(piece);
+    assert.deepEqual(
+      [spec.cellX + bone.piecePivot[0], spec.cellY + bone.piecePivot[1]],
+      definition.joints[joint],
+      `${piece}'s pivot must land on ${joint}`);
+  }
+  // segment lengths ARE the authored joint distances — a shin whose bone is
+  // shorter than its drawing is the other way this defect can come back
+  const dist = (a, b) => Math.hypot(definition.joints[a][0] - definition.joints[b][0],
+                                    definition.joints[a][1] - definition.joints[b][1]);
+  for (const [bone, a, b] of [["thighNear", "hipN", "kneeN"], ["shinNear", "kneeN", "ankleN"],
+                              ["thighFar", "hipF", "kneeF"], ["shinFar", "kneeF", "ankleF"]]) {
+    assert.ok(Math.abs(rig.byName.get(bone).length - dist(a, b)) < 0.05,
+      `${bone} bone length must equal the ${a}->${b} joint distance`);
+  }
+  // the two legs are the SAME length: a rig with mismatched legs limps
+  const nearLeg = rig.byName.get("thighNear").length + rig.byName.get("shinNear").length;
+  const farLeg = rig.byName.get("thighFar").length + rig.byName.get("shinFar").length;
+  assert.ok(Math.abs(nearLeg - farLeg) / nearLeg < 0.02, "both legs must measure the same");
+
+  // GROUND CONTACT. v3.5 moved this contract from the ANKLE to the SOLE, and it
+  // got stricter in the move. Through 3.4 a planted ankle was pinned to one
+  // constant row for both legs at every phase, which put the SNEAKER — the only
+  // thing a viewer can see — 0.8px through the floor at heel strike and 2.7
+  // above it at toe-off, because the drawing's depth below its own pivot
+  // changes as the piece rotates. Now the ankle row is solved per leg, per
+  // frame, from where that rotated drawing actually bottoms out, so what is
+  // pinned is the thing that should be: the sole, exactly on the floor.
+  for (const side of ["near", "far"]) {
+    assert.ok(zero.feet[side].planted, `${side} foot is planted in the settled stance`);
+    assert.ok(Math.abs(zero.soleRows[side] - definition.ground.soleRow) < 0.001,
+      `${side} settled sole sits on the ground row (got ${zero.soleRows[side]})`);
+  }
+  for (let i = 0; i < 60; i += 1) {
+    const pose = rigPose(rig, walkSim(i / 60));
+    for (const side of ["near", "far"]) {
+      if (!pose.feet[side].planted) continue;
+      assert.ok(Math.abs(pose.soleRows[side] - definition.ground.soleRow) < 0.001,
+        `a planted ${side} sole never leaves the floor (got ${pose.soleRows[side]})`);
+      const ankle = pose.nodes.get(rig.legs[side].foot);
+      assert.ok(Math.hypot(ankle.x - pose.feet[side].x, ankle.y - pose.feet[side].y) < 0.5,
+        "and the solved ankle actually reaches it — no float, no skate");
+    }
+  }
+  // and the ankle rows genuinely DIFFER between the legs at the contact frame:
+  // that split is the whole mechanism the 3.5 stance width is bought with.
+  const contact = Array.from({ length: 240 }, (_, i) => rigPose(rig, liveSim(i / 240 / WALK_CYCLES_PER_SECOND)))
+    .filter((pose) => pose.feet.near.planted && pose.feet.far.planted);
+  assert.ok(contact.length > 0, "there are double-support frames to inspect");
+  const split = Math.max(...contact.map((pose) => Math.abs(pose.feet.near.y - pose.feet.far.y)));
+  // the drawing's own ankleN/ankleF split is 16; the rig reaches ~11.6 of it
+  // inside the double-support window (the last of the lift arrives at toe-off,
+  // by which point the trailing foot has already left stance)
+  assert.ok(split > 10,
+    `the two planted ankles must sit on different rows at contact (got ${split.toFixed(2)})`);
+});
+
+// ---------------------------------------------------------------------------
+// v3.5 STANCE WIDTH. The 3.1-3.4 rig put deathblow's ankles 87 cell px apart at
+// contact where his own drawings put them 123-127, and the walk read as a
+// mince. These two tests pin the fix and the price of it, because the price is
+// the thing that can silently come back: every cell of stance width is paid for
+// out of hip height, and a rig that buys width by squatting has traded one
+// wrong read for another.
+// ---------------------------------------------------------------------------
+
+test("v3.5 the stance opens to the drawing's proportions", () => {
+  // TRUTH, measured off the art (see tools/cut_rig.py JOINTS and
+  // assets/walk/deathblow.webp): the rig's source cell puts ankleN at x 224 and
+  // ankleF at 101, so 123 cell px; the shipped walk bank's two contact keys put
+  // the sole centroids 126.0 and 127.5 apart. Anything past ~85% of that reads
+  // as the same stance.
+  const SPRITE_CONTACT_SEPARATION = 123;
+
+  for (const pxPerCell of LIVE_SCALES) {
+    const poses = Array.from({ length: 240 },
+      (_, i) => rigPose(rig, liveSim(i / 240 / WALK_CYCLES_PER_SECOND, pxPerCell)));
+    const contact = poses.filter((pose) => pose.feet.near.planted && pose.feet.far.planted);
+    assert.ok(contact.length >= 12, `double support must be a real window (${contact.length}/240)`);
+    const mean = contact.reduce((sum, pose) => sum + pose.ankleSeparation, 0) / contact.length;
+    assert.ok(mean > SPRITE_CONTACT_SEPARATION * 0.85,
+      `feet land ${mean.toFixed(1)} cell px apart at scale ${pxPerCell.toFixed(3)}, `
+      + `the drawings land ${SPRITE_CONTACT_SEPARATION}`);
+    // ...and not by overshooting into the splits either
+    assert.ok(mean < SPRITE_CONTACT_SEPARATION * 1.15,
+      `a stride wider than the artwork is its own defect (${mean.toFixed(1)})`);
+
+    // The separation is HALF THE STRIDE and nothing else — that identity is the
+    // no-skate contract restated, so if it ever stops holding the planted foot
+    // has started sliding.
+    const stride = contact[0].strideCells;
+    assert.ok(Math.abs(mean - stride / 2) < 2,
+      `contact separation must be half the stride (${mean.toFixed(1)} vs ${(stride / 2).toFixed(1)})`);
+
+    // A slow creep must still take small steps: the width is earned from speed,
+    // never authored into the pose.
+    const creep = rigPose(rig, { ...liveSim(0.2, pxPerCell), speedX: 90, speedLift: 90 });
+    assert.ok(creep.strideCells < contact[0].strideCells * 0.4,
+      "a creeping approach must not inherit the full-speed stance");
+  }
+});
+
+test("v3.5 the wider stance is not bought by squatting", () => {
+  // The BAR. deathblow's own walk drawings lose 18 cell px of figure height
+  // between their passing keys (304px tall) and their contact keys (286) — the
+  // artwork bobs, and a rig that did not would read as a hovercraft. So the
+  // ceiling is the artwork's own bob, not zero. Checked at every render scale
+  // the rig ships at: the smallest is the worst case, because a smaller
+  // pxPerCell is a LONGER stride in cell space for the same walk.
+  const SPRITE_BOB = 18;
+
+  for (const pxPerCell of LIVE_SCALES) {
+    const idle = rigPose(rig, liveIdle(pxPerCell));
+    const poses = Array.from({ length: 240 },
+      (_, i) => rigPose(rig, liveSim(i / 240 / WALK_CYCLES_PER_SECOND, pxPerCell)));
+    const hips = poses.map((pose) => pose.hipRow);
+    const lowest = Math.max(...hips);
+    const highest = Math.min(...hips);
+
+    assert.ok(lowest - idle.hipRow < SPRITE_BOB,
+      `hips drop ${(lowest - idle.hipRow).toFixed(1)} below the settled row at scale `
+      + `${pxPerCell.toFixed(3)}; the drawings bob ${SPRITE_BOB}`);
+    assert.ok(lowest - highest < SPRITE_BOB * 1.25,
+      `the walk bob is ${(lowest - highest).toFixed(1)} cell px, the drawings' is ${SPRITE_BOB}`);
+
+    // and the hips must come back UP: a constant sag is a squat, a swing is a walk
+    assert.ok(highest <= idle.hipRow + 0.5,
+      `mid-stance must recover the settled hip row (${highest.toFixed(1)} vs ${idle.hipRow.toFixed(1)})`);
+
+    // the support leg is still carrying, so the width did not come from a bent knee
+    const reach = rig.byName.get("thighNear").length + rig.byName.get("shinNear").length;
+    const worst = Math.min(...poses.map((pose) => Math.max(...["near", "far"].map((side) => {
+      const hip = pose.nodes.get(rig.legs[side].thigh);
+      const ankle = pose.nodes.get(rig.legs[side].foot);
+      return Math.hypot(ankle.x - hip.x, ankle.y - hip.y) / reach;
+    }))));
+    assert.ok(worst > 0.97, `the carrying leg must stay extended, worst ${worst.toFixed(3)}`);
+  }
 });

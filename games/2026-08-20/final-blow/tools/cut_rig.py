@@ -255,17 +255,30 @@ PIECES = [
 BONES = [
     ("foreArmFar",   "upperArmFar", "elbowF",    "wristF",    "foreArmFar",    2),
     ("upperArmFar",  "torso",       "shoulderF", "elbowF",    "upperArmFar",   3),
-    # shin under foot (the shoe collar hides the ankle cut) and under thigh (the
-    # quad hides the knee cut) — both cut lines end up buried by design
-    ("shinFar",      "thighFar",    "kneeF",     "ankleF",    "shinFar",       4),
-    ("footFar",      "shinFar",     "ankleF",    None,        "footFar",       5),
-    ("thighFar",     "pelvis",      "hipF",      "kneeF",     "thighFar",      6),
-    ("shinNear",     "thighNear",   "kneeN",     "ankleN",    "shinNear",      7),
-    ("footNear",     "shinNear",    "ankleN",    None,        "footNear",      8),
+    # Within a leg the order is PROXIMAL -> DISTAL: thigh, then shin, then foot.
+    #
+    # v3.5. Until 3.4 it was shin, foot, THIGH — the quad drew over its own
+    # calf, "so the quad hides the knee cut". That is true at the drawn pose and
+    # false at every other one. The thigh capsule runs 10px past the knee with a
+    # 16px end radius, so the thigh art covers ~26px of a 42px shin; the shoe
+    # collar takes 12 more from the bottom. Collinear that is invisible (the
+    # covered part IS the drawn knee). Bend the knee — which the walk does on
+    # every frame — and the thigh's rounded end sweeps ACROSS the calf instead
+    # of along it, and the shin stops reaching the canvas: measured 4-25% of its
+    # pixels survived, so the rendered figure had a thigh stub and a shoe with
+    # no lower leg between them. Distal-over-proximal is what the overlap was
+    # cut for: the shin's own knee end (8px + 16px radius of real drawn leg,
+    # feathered) covers the joint from the front, and the thigh's overlap does
+    # its actual job of filling the gap BEHIND a bending knee.
+    ("thighFar",     "pelvis",      "hipF",      "kneeF",     "thighFar",      4),
+    ("shinFar",      "thighFar",    "kneeF",     "ankleF",    "shinFar",       5),
+    ("footFar",      "shinFar",     "ankleF",    None,        "footFar",       6),
+    ("thighNear",    "pelvis",      "hipN",      "kneeN",     "thighNear",     7),
+    ("shinNear",     "thighNear",   "kneeN",     "ankleN",    "shinNear",      8),
+    ("footNear",     "shinNear",    "ankleN",    None,        "footNear",      9),
     # the crotch patch sits behind BOTH thighs, so it is invisible until a thigh
     # swings off its opening and something has to be there
     ("hipFill",      "pelvis",      "pelvis",    "waist",     "hipFill",     3.5),
-    ("thighNear",    "pelvis",      "hipN",      "kneeN",     "thighNear",     9),
     ("pelvis",       None,          "pelvis",    "waist",     "pelvis",       10),
     ("torso",        "pelvis",      "waist",     "neck",      "torso",        12),
     ("head",         "torso",       "neck",      None,        "head",         14),
@@ -571,6 +584,39 @@ def angle_of(a, b):
     return math.atan2(b[1] - a[1], b[0] - a[0])
 
 
+def sole_hull(image, pivot):
+    """Lower convex hull of a foot piece, in ANKLE-RELATIVE cell pixels.
+
+    v3.5. The engine used to assume one constant `ankleHeight` for the drop from
+    the ankle pivot to the floor, read off the flat rest pose and then applied at
+    every ankle pitch the walk reaches. It is only true at rest: rotate the
+    sneaker to its heel strike and the sole sinks 0.8px through the floor,
+    rotate it to toe-off and it floats 2.7 above. So the shape is measured here
+    and carried in the rig JSON instead, and engine/rig.mjs solves
+
+        soleDrop(theta) = max over hull of (x*sin(theta) + y*cos(theta))
+
+    for the row that actually puts this drawing on the ground. Only the points
+    that are extreme for SOME rotation survive — eighteen of them for deathblow's
+    sneaker — so the runtime loop is a dozen multiply-adds on a value that is
+    already cached per pose.
+    """
+    alpha = image.split()[3]
+    width, height = image.size
+    px, py = pivot
+    data = alpha.load()
+    points = [(x - px, y - py)
+              for y in range(height) for x in range(width) if data[x, y] >= 24]
+    if not points:
+        return []
+    keep = set()
+    for step in range(-360, 361):
+        angle = math.radians(step * 0.5)
+        sin_a, cos_a = math.sin(angle), math.cos(angle)
+        keep.add(max(points, key=lambda p: p[0] * sin_a + p[1] * cos_a))
+    return [[round(x, 2), round(y, 2)] for x, y in sorted(keep)]
+
+
 def build(fighter, cell_index, debug_dir=None):
     sheet = Image.open(os.path.join(ROOT, "assets", "unified", f"{fighter}.webp")).convert("RGBA")
     cx, cy = (cell_index % 4) * CELL, (cell_index // 4) * CELL
@@ -817,6 +863,12 @@ def build(fighter, cell_index, debug_dir=None):
             "soleRow": SOLE_ROW,
             "ankleHeight": round(SOLE_ROW - JOINTS["ankleN"][1], 2),
             "restHipRow": JOINTS["hipN"][1],
+            # v3.5: the same question asked of the PIXELS at every pitch rather
+            # than of one rest pose. See sole_hull().
+            "soleHull": sole_hull(
+                cut["footNear"]["image"],
+                [bone["piecePivot"] for bone in bones_json if bone["name"] == "footNear"][0],
+            ),
         },
         "atlas": {"file": f"{fighter}-pieces.webp", "w": atlas_w, "h": atlas_h},
         "pieces": pieces_json,
