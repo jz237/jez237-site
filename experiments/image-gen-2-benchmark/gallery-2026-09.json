@@ -105,6 +105,123 @@
     }
   },
   {
+    "id": "2026-09-01-factual-infographic-factual-infographic-fire-ant-decapitati",
+    "title": "Factual infographic: Fire-Ant Decapitating Fly — The Head-Capsule Nursery",
+    "tests": "Tuesday factual infographic quota slot 4/6; factual_subtype: bizarre-insect-life; common name: fire-ant decapitating fly; scientific name: Pseudacteon tricuspis; host shown: red imported fire ant Solenopsis invicta; verified unusual mechanism: a female deposits an egg during a rapid aerial strike, the larva develops from thorax to head, head separation occurs before pupariation, and the detached head capsule becomes the protective puparial chamber from which the adult emerges. Macro plan delivered: whole-fly hero over host ant plus enlarged ovipositor, thorax development, head-capsule puparium, and adult-emergence close-ups. Generated exactly once with synchronous openai/gpt-image-2 CLI in high quality; exact non-empty source verified; byte-identical QA mirror inspected at full resolution by claude-opus-5; QA PASS for direct canvas, insect-first dominance, credible six-legged anatomy, relative scale, causal sequence, readable text, non-gory mechanism, no mockup staging, and no watermark.",
+    "prompt": "Create a finished, direct-canvas, museum-quality factual infographic about the real fire-ant decapitating fly Pseudacteon tricuspis and its extraordinary development inside a red imported fire-ant worker, Solenopsis invicta. The generated canvas itself is the infographic: orthographic, straight-on, edge-to-edge polished 2D information design, with no photographed environment outside the layout, no paper edges, no poster, no frame, no wall, no screen, no desk, no specimen tray, no hands, and no cast shadow around the composition.\n\nMake accurate insect imagery the overwhelming visual mass. Use one enormous naturalistic whole-adult female Pseudacteon tricuspis macro as the central hero, hovering immediately above a much larger red imported fire-ant worker during a rapid aerial oviposition approach. Preserve correct six-legged fly and ant anatomy, clear head-thorax-abdomen segmentation, fly-appropriate reduced wing venation, a visibly specialized external ovipositor, believable relative scale, fine bristles, compound-eye facets, translucent wings, ant cuticle microtexture, and shallow macro depth only inside the organism renderings. The fly must look tiny relative to the ant, never monstrous.\n\nSurround that hero with at least four additional large close-up biology views that together occupy most of the remaining canvas: (1) an enlarged female abdomen and specialized ovipositor aligned above the ant thorax, without gore; (2) a restrained translucent cutaway of an intact ant showing the first instar in the thorax and a later larva migrating toward the head; (3) a dominant ant-head cutaway showing the mature larva occupying the head capsule before pupariation; (4) a detached ant head used as the fly's protective puparial chamber, with the hardened anterior plate at the oral opening and paired respiratory structures visible; and (5) a newly emerged adult fly beside the now-empty head capsule. Do not show the adult fly slicing or biting off the head: make clear that separation occurs late in larval development as membranes holding the ant exoskeleton together are degraded.\n\nBuild these concrete information layers into one coherent asymmetric flow: A. title “PSEUDACTEON TRICUSPIS — THE HEAD-CAPSULE NURSERY”; B. a large five-stage causal ribbon labeled only “HOVER & STRIKE,” “LARVA IN THORAX,” “MIGRATE TO HEAD,” “HEAD-CAPSULE PUPARIUM,” and “ADULT EMERGES”; C. the giant whole-fly hero and ant encounter; D. the ovipositor macro window; E. the two internal-development cutaways; F. a scale comparison with silhouettes and the short note “FLY MUCH SMALLER THAN HOST”; G. a small behavior panel showing nearby worker ants interrupting foraging and adopting defensive evasive postures, labeled “ATTACK PRESSURE DISRUPTS FORAGING” and not implying complete colony control; H. a compact origin-and-use strip reading “SOUTH AMERICAN PARASITOID” and “INTRODUCED AGAINST IMPORTED FIRE ANTS”; I. a cautious mechanism note reading “HEAD SEPARATION OCCURS BEFORE PUPARIATION — NOT A DIRECT BITE.”\n\nUse a bold circular life-cycle architecture centered on the hovering fly and ant encounter, with the detached head-capsule puparium as a secondary stop-scroll anchor. Palette: burnished fire-ant red, deep smoky umber, translucent amber, leaf green, bone ivory, and restrained cyan leader lines on a dark charcoal field. Blend extreme-macro natural-history photography with precise scientific cutaway illustration, crisp arrows, fine sectional hatching, authoritative editorial typography, high contrast, and ample hierarchy. Keep every label short, correctly spelled, and readable. Italicize scientific names visually if possible. No URLs, bibliography, tiny citations, unsupported timing, invented percentages, monster scale, sensational gore, torn tissue, human-like motives, extra legs, fused anatomy, decorative pseudo-text, logos, QR code, signature, or watermark.\n",
+    "image": "images/2026-09-01-factual-infographic-factual-infographic-fire-ant-decapitati.jpg",
+    "thumb": "thumbs/2026-09-01-factual-infographic-factual-infographic-fire-ant-decapitati.webp",
+    "color": "#241e19",
+    "date": "2026-09-01",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "factualInfographic": {
+      "topic": "How the fire-ant decapitating fly Pseudacteon tricuspis develops inside red imported fire-ant workers and pupates in the detached head capsule",
+      "description": "An insect-first direct-canvas museum infographic showing the real fire-ant decapitating fly Pseudacteon tricuspis, its rapid aerial oviposition attack, larval migration from thorax to head, and transformation of the detached ant head capsule into a puparial chamber.",
+      "sourceNote": "University of Florida IFAS Extension, Fire Ant Decapitating Flies Pseudacteon spp., https://ask.ifas.ufl.edu/publication/IN1174 ; Insects, Biology of Pseudacteon Decapitating Flies, https://pmc.ncbi.nlm.nih.gov/articles/PMC7073655/ . Verified scope: species identity, specialized ovipositor and aerial attack, thorax-to-head larval development, head separation before pupariation, head-capsule puparium, adult emergence, relative scale, South American origin, U.S. biological-control introduction, and foraging disruption without universal colony-control claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-02T03:19:54Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Florida IFAS Extension",
+            "title": "Fire Ant Decapitating Flies Pseudacteon spp. (Insecta: Diptera: Phoridae)",
+            "sourceType": "university",
+            "url": "https://ask.ifas.ufl.edu/publication/IN1174"
+          },
+          {
+            "id": "S2",
+            "publisher": "Insects",
+            "title": "Biology of Pseudacteon Decapitating Flies (Diptera: Phoridae) That Parasitize Ants of the Solenopsis saevissima Complex (Hymenoptera: Formicidae) in South America",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7073655/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Pseudacteon tricuspis is a real phorid fly species whose larvae are solitary parasitoids of imported fire-ant workers, including the red imported fire ant Solenopsis invicta.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The adult female is a small hump-backed fly with reduced wing venation and a specialized external ovipositor.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A female can hover several millimeters above a fire-ant worker and make a rapid aerial strike that inserts an egg into the worker's thorax.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "After hatching, the first instar develops in the thorax; a later instar migrates into the ant's head.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The third instar consumes tissue in the head capsule before pupariation, killing the worker.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Near pupariation, the late larva appears to release a substance, likely an enzyme, that degrades membranes holding the ant exoskeleton together and allows the head to detach.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The larva uses the detached ant head capsule as a protective chamber for pupariation; its hardened anterior plate occupies the oral opening and paired respiratory structures can extend from the puparium.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The adult fly eventually emerges through the detached ant head capsule.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pseudacteon flies are much smaller than their fire-ant hosts, so the infographic should show the fly hovering close to the ant rather than at monster scale.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The presence of attacking Pseudacteon flies can interrupt imported fire-ant foraging by triggering defensive or evasive behavior, but this does not imply universal or complete colony control.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Pseudacteon tricuspis is native to South America and was introduced in the United States as a biological-control agent against imported fire ants.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-01-factual-infographic-factual-infographic-coral-fluorescence-",
     "title": "Factual infographic: Coral Fluorescence — Proteins That Shift Light",
     "tests": "General Tuesday factual slot 1/6. Direct-canvas orthographic infographic with central coral-polyp and tissue cutaway; verified light-energy shift, cyan/green/red fluorescent protein families, non-fluorescent purple-blue chromoproteins, host-versus-symbiont pigment distinction, Leptoseris tissue localization and sampled-depth pattern, case-study photosynthesis result, proposed context-dependent photoprotection/light-enhancement roles, and explicit uncertainty. Pixel QA: PASS from xai/grok-4.3; direct-canvas museum layout, strong hierarchy, legible text, clear mechanism, distinct pigment panels, at least five information layers, no malformed anatomy or factual misrepresentation. Anti-repeat: radial coral anatomy and spectral color ladder; no prior coral-fluorescence topic in the full factual archive.",
