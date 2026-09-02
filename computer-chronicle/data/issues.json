@@ -1,8 +1,330 @@
 {
-  "generatedAt": "2026-09-01T12:01:32.989Z",
+  "generatedAt": "2026-09-02T12:02:27.247Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-02",
+      "historicDate": "1984-04-16",
+      "displayDate": "Week of April 16-22, 1984",
+      "edition": "Issue 090 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "software-age excitement on warm newsprint",
+        "motifs": [
+          "floppy disks",
+          "Macintosh mouse",
+          "arcade cartridges",
+          "dot-matrix type"
+        ],
+        "layout": "dense three-column computer weekly with boxed charts and halftone hardware portraits"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "Week of April 16-22, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Software cover story across the upper deck",
+        "secondaryRail": "Games, charts, prices and world bulletin",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "IBM blue",
+        "texture": "warm aged newsprint with ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-04-16.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for April 16-22, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Software takes center stage this week, while Atari carries its arcade catalog onto rival machines and Macintosh meets the user-group crowd.",
+      "morningLine": "The box still draws the eye, but the programs inside it are becoming the reason to buy.",
+      "lead": {
+        "headline": "Software Steps Into the Spotlight",
+        "dek": "TIME puts the programs inside the machine on its April 16 cover as applications, compatibility and ease of use begin deciding the personal-computer contest.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "body": [
+          "The personal-computer business has spent years selling the wonder of the machine itself. This week, the spotlight swings decisively to the programs that make those machines useful. TIME’s April 16 cover story, “The Wizard Inside the Machine,” calls software the magic carpet to the future and captures an industry learning that specifications alone do not close the sale.",
+          "That change can be seen on every shelf. Buyers now ask whether a computer can write a letter, keep accounts, draw a picture, teach a lesson or play the latest game—and whether files and programs will travel with them to the next machine. The contest is becoming one of libraries, compatibility and interfaces as much as processors and memory.",
+          "PC Magazine’s April 17 issue documents the application-rich IBM-compatible side of the market, while April’s COMPUTE! reaches across Commodore, Atari, Apple and IBM systems with ready-to-run programs. Together they show software becoming both the common language and the great dividing line of home computing.",
+          "For makers, the lesson is plain: a handsome box may win a demonstration, but a healthy catalog wins a household. For users, this new emphasis promises more practical machines—provided competing formats, disks and operating systems do not turn abundance into confusion."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Macintosh Meets the User-Group Crowd",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ],
+          "body": [
+            "COMPUTE! brings Apple’s new Macintosh before home-computer readers through a report on its Boston Computer Society demonstration. The compact 20-pound machine pairs an 8 MHz Motorola 68000 with a mouse, menus and a crisp graphical display.",
+            "The interface earns praise for direct manipulation, an Undo command and a remarkably tidy desktop. Yet the report also asks the question that follows every dazzling demonstration: what indispensable job will persuade ordinary buyers to spend $2,495?",
+            "MacWrite and MacPaint offer the first answer, turning words and pictures into visible objects on screen. The larger test will be whether independent developers can build a software shelf broad enough to make the unusual machine a standard."
+          ]
+        },
+        {
+          "headline": "Atari Sends Arcade Names to Rival Machines",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4,
+            5
+          ],
+          "body": [
+            "Atari is treating its famous game catalog as portable property. COMPUTE! reports 12 releases under the ATARISOFT label for competing computers and consoles, carrying familiar arcade names beyond Atari hardware.",
+            "The strategy arrives as the console trade remains unsettled. Software sales on Commodore, Apple and Coleco machines give Atari another route to customers and acknowledge that a valuable game can outlive the box it first called home.",
+            "April’s Computer Entertainer tracks a busy field that includes B.C.’s Quest for Tires, Oil’s Well and Fathom. The shelf is fragmented, but the appetite for recognizable games remains strong."
+          ]
+        },
+        {
+          "headline": "PCjr and Macintosh Court the Newcomer",
+          "confidence": "same-month",
+          "sourceRefs": [
+            0,
+            3
+          ],
+          "body": [
+            "IBM and Apple are offering sharply different invitations to first-time buyers. The PCjr leans on the IBM name and PC family, while Macintosh asks users to learn a mouse-driven graphical vocabulary.",
+            "PCjr starts at $669, with the enhanced introduction configuration at $1,269; Macintosh arrives at $2,495. Price matters, but software support, expansion and the feel of daily work may matter more.",
+            "Early criticism of PCjr’s keyboard and limits gives Apple an opening, while IBM’s enormous software orbit remains a formidable advantage. The newcomer’s contest is already proving this week’s larger point: programs decide the value of the package."
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Apple Macintosh",
+          "summary": "8 MHz 68000, 128 KB launch configuration, 9-inch monochrome display, mouse and 3.5-inch disk.",
+          "confidence": "period",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "IBM PCjr",
+          "summary": "IBM’s home-oriented 8088-compatible entry offers cartridge slots and access to part of the PC software world.",
+          "confidence": "period",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Cross-platform Atarisoft",
+          "summary": "A 12-title push takes Atari game brands to competing systems.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "MacWrite",
+          "detail": "Mouse-and-menu word processing for Macintosh"
+        },
+        {
+          "name": "MacPaint",
+          "detail": "Graphical painting showcase for Macintosh"
+        },
+        {
+          "name": "ATARISOFT line",
+          "detail": "Atari arcade properties for rival platforms"
+        },
+        {
+          "name": "B.C.'s Quest for Tires",
+          "detail": "Current ColecoVision and home-system release"
+        },
+        {
+          "name": "Oil's Well",
+          "detail": "Current Commodore 64 game"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "B.C.'s Quest for Tires — ColecoVision",
+            "Oil’s Well — Commodore 64",
+            "Fathom — Apple"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "1. Police Academy",
+            "2. Friday the 13th: The Final Chapter",
+            "3. Romancing the Stone"
+          ]
+        },
+        {
+          "label": "Software Shelf",
+          "items": [
+            "MacWrite",
+            "MacPaint",
+            "ATARISOFT releases"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple Macintosh",
+          "price": "$2,495",
+          "note": "Launch configuration"
+        },
+        {
+          "item": "Macintosh carrying bag",
+          "price": "$100",
+          "note": "Reported accessory price"
+        },
+        {
+          "item": "IBM PCjr",
+          "price": "$669 / $1,269",
+          "note": "Base / enhanced introduction prices"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Spinal Tap expands",
+          "text": "This Is Spinal Tap expands to 62 theaters in its eighth weekend."
+        },
+        {
+          "headline": "Apple IIc due next week",
+          "text": "Apple is expected to unveil its compact Apple IIc on April 24; the launch falls outside this issue week."
+        },
+        {
+          "headline": "Software fills the magazines",
+          "text": "April’s COMPUTE! carries ready-to-run programs for Commodore, Atari and IBM machines."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Against All Odds (Take a Look at Me Now)",
+          "artist": "Phil Collins"
+        },
+        {
+          "rank": 2,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        },
+        {
+          "rank": 3,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 4,
+          "title": "Hold Me Now",
+          "artist": "Thompson Twins"
+        },
+        {
+          "rank": 5,
+          "title": "Somebody's Watching Me",
+          "artist": "Rockwell"
+        }
+      ],
+      "periodAd": {
+        "headline": "Put a Wizard to Work",
+        "summary": "Choose the programs that fit the job, then choose the machine that runs them.",
+        "tagline": "The best computer is the one with something useful to do."
+      },
+      "market": {
+        "headline": "Programs Become the Selling Point",
+        "summary": "Macintosh excitement, PCjr skepticism and Atarisoft’s cross-platform push all show software libraries becoming central to hardware fortunes.",
+        "confidence": "same-week and same-month synthesis",
+        "sourceRefs": [
+          0,
+          3,
+          4
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Britain Breaks Diplomatic Relations With Libya",
+        "summary": "On April 22 Britain severed relations after the London embassy siege and ordered the Libyan mission to leave, while recalling its diplomats from Tripoli.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "TIME software cover",
+            "status": "Verified exact-date",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Macintosh report and specifications",
+            "status": "Verified period report",
+            "sourceRefs": [
+              3
+            ]
+          },
+          {
+            "claim": "Atarisoft 12-title push",
+            "status": "Verified same-month",
+            "sourceRefs": [
+              4
+            ]
+          },
+          {
+            "claim": "Charts and box office",
+            "status": "Verified dated listings",
+            "sourceRefs": [
+              6,
+              7
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "TIME — The Wizard Inside the Machine (Apr. 16, 1984)",
+          "url": "https://time.com/archive/6699949/the-wizard-inside-the-machine/"
+        },
+        {
+          "label": "PC Magazine — April 17, 1984",
+          "url": "https://archive.org/stream/PC-Mag-1984-04-17/PC-Mag-1984-04-17_djvu.txt"
+        },
+        {
+          "label": "COMPUTE! Issue 47 — April 1984",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_047_1984_Apr.pdf"
+        },
+        {
+          "label": "COMPUTE! — Apple Macintosh report",
+          "url": "https://www.atarimagazines.com/compute/issue47/macintosh.php"
+        },
+        {
+          "label": "COMPUTE! — Popular Games Released",
+          "url": "https://www.atarimagazines.com/compute/issue47/167_4_NEWS_PRODUCTS_Popular_Games_Released.php"
+        },
+        {
+          "label": "Computer Entertainer — April 1984",
+          "url": "https://ataricompendium.com/archives/newsletters/video_game_update/computer_entertainer_apr84.pdf"
+        },
+        {
+          "label": "Billboard Hot 100 — April 21, 1984",
+          "url": "https://elpee.jp/hot100/week/1984-04-21"
+        },
+        {
+          "label": "Box Office Mojo — Weekend 16, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W16/"
+        },
+        {
+          "label": "Washington Post — Britain cuts Libya ties",
+          "url": "https://www.washingtonpost.com/archive/politics/1984/04/23/britain-cuts-diplomatic-ties-with-libya-expels-envoys/b637f680-3451-4a12-8d65-f58dabd3ad18/"
+        }
+      ]
+    },
     {
       "currentDate": "2026-09-01",
       "historicDate": "1984-04-09",
