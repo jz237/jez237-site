@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-02",
+      "historicDate": "1984-04-16",
+      "displayDate": "Week of April 16-22, 1984",
+      "edition": "Issue 090 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The box still draws the eye, but the programs inside it are becoming the reason to buy.",
+      "leadHeadline": "Software Steps Into the Spotlight",
+      "storyHeadlines": [
+        "Macintosh Meets the User-Group Crowd",
+        "Atari Sends Arcade Names to Rival Machines",
+        "PCjr and Macintosh Court the Newcomer"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-16.jpg",
+      "thumb": "media/thumbs/1984-04-16.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-01",
       "historicDate": "1984-04-09",
       "displayDate": "Week of April 9-15, 1984",

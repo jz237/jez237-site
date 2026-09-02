@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 01 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 02 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 16-22, 1984 — Software Steps Into the Spotlight</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-04-16</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-16</guid>
+      <pubDate>Wed, 02 Sep 2026 12:00:00 GMT</pubDate>
+      <description>TIME puts the programs inside the machine on its April 16 cover as applications, compatibility and ease of use begin deciding the personal-computer contest. The personal-computer business has spent years selling the wonder of the machine itself. This week, the spotlight swings decisively to the programs that make those machines useful. TIME’s April 16 cover story, “The Wizard Inside the Machine,” calls software the magic carpet to the future and captures an industry learning that specifications alone do not close the sale. Also this week: Macintosh Meets the User-Group Crowd · Atari Sends Arcade Names to Rival Machines · PCjr and Macintosh Court the Newcomer.</description>
+    </item>
     <item>
       <title>Week of April 9-15, 1984 — HomeWord Brings Icons to Three Computer Camps</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-04-09</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-12-05</guid>
       <pubDate>Wed, 12 Aug 2026 12:00:00 GMT</pubDate>
       <description>More than 80,000 visitors and 1,400 exhibitors gather around a market increasingly organized by the IBM PC standard. The computer trade has taken over Las Vegas. A show that began in the winter of 1979 with roughly 4,000 visitors has swollen to more than 80,000 attendees, filling the convention center and rooms in five major hotels. Its 1,400 exhibitors include 400 newcomers, with AT&amp;T among the names making a first appearance. Also this week: Interactive Fiction Turns the Floppy Disk into a Bestseller Shelf · Home Computers Move to the Center of the Christmas Battle · Windows Become Software’s New Battleground.</description>
-    </item>
-    <item>
-      <title>Week of November 28-December 4, 1983 — At COMDEX, IBM Compatibility Becomes the Winning Bet</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-11-28</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-11-28</guid>
-      <pubDate>Tue, 11 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The Las Vegas show reveals an industry rapidly reorganizing around the IBM PC standard. Fall COMDEX opened in Las Vegas on November 28 with a floor full of machines, peripherals and promises. Yet beneath the variety ran a common current: makers were increasingly defining their products by whether they could work with the IBM Personal Computer and its growing software world. Also this week: Windows and Visi On Put the Graphical Desktop in View · Holiday Buyers Enter a Crowded, Cut-Price Computer Market · Electronic Arts Mixes Chess Strategy with Arcade Action · BYTE Asks Software to Become Easier.</description>
     </item>
   </channel>
 </rss>
