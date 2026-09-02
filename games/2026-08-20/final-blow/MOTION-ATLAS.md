@@ -1946,3 +1946,403 @@ rather than in the 7.29-7.45 strobe band — with the one exception of
 this bank, and cannot be closed without an extension/recovery drawing that no
 generation has. **Nothing crosses a generation while the fighter is idle,
 walking, crouching, guarding or reacting.**
+
+## v3.1 — the six-key walk, and the first alternating legs in the game
+
+The owner asked for two things, the second of them mid-wave: *"put the effort
+back in to the sprites, make them all animate more and move smoother"*, then
+*"not just the walking, add frame animations to all movements"*. So: more cells
+per fighter, and the walk defect this file has carried since the walk bank was
+authored — **37 of the 40 original walk cells share one lead foot, and the 3.0
+unified keys were single-phase "by design"** — finally attacked rather than
+documented.
+
+Result: **four fighters ship live** (jez, alan, benny, the Commissioner), each
+with **24 cells from ONE generation** instead of 16, and each with a **six-key
+walk cycle whose two contact keys genuinely lead with opposite legs**. Cyraxx passes
+every gate for the first time, but is held at `accept:false` with his art kept
+out of the repo, for the integration reason given below. Five fighters failed a gate and **keep their 3.0
+sheets untouched**.
+
+### Where the cell ceiling actually is
+
+The interesting finding is that **the ceiling is fal's output resolution, not
+the model's patience.** Asked for a 6x6 = 36-panel sheet, `openai-gpt-image-2`
+returned all 36 panels, coherent, on the first attempt, with the walk filmstrip
+and every named beat where it was asked for. Thirty-six poses in one prompt is
+not the limit.
+
+What *is* the limit: `square_hd` (1024x1024) is the largest canvas the endpoint
+returns. Measured, not assumed — `aspect_ratio: 2:3` returns **1024x768** and
+`portrait_16_9` returns **608x1088**, both *fewer* pixels than square. And the
+generator draws each figure to fill its cell **height** (measured: 125px of a
+128px cell), so **rows set per-cell fidelity and columns are nearly free**:
+
+| grid | cells | cell size | drawn figure | vs the 3.0 sheets |
+| --- | --- | --- | --- | --- |
+| 4x4 | 16 | 256x256 | ~240px | the 3.0 baseline |
+| **6x4** | **24** | **170x256** | **~210-230px** | **-8% to -14%** |
+| 5x5 | 25 | 205x205 | ~190px | -21% |
+| 6x6 | 36 | 170x170 | ~165px | -31% |
+
+A 3x Clarity upscale of the 36-panel sheet was tried and is visibly mushier than
+what ships — the face smears, the prescription glasses stop reading as glasses,
+the gauntlet plates dissolve. So the answer is **wide, not tall**. Six columns
+by four rows is the largest grid that holds the fidelity bar, and a six-column
+top row *is* a six-panel walk filmstrip, which is where the two extra walk keys
+came from. Seven columns (28 cells) was not attempted: the figure is about 0.7
+cell-widths wide, so the eighth column would start clipping the wide poses.
+
+The honest cost: six narrow columns make the model draw a slightly shorter
+figure than four wide ones, so build scale rose from 1.24-1.37 to 1.33-1.49.
+That is 8% less source detail on jez and benny and 14% on the Commissioner. At
+1:1 against the 3.0 sheets it is not visible. It is recorded so the next wave
+knows the trade it is making.
+
+### The walk wording that finally worked
+
+Every previous attempt — five in the 2.10 wave, more since — asked the model to
+**swap which leg is drawn on top** between the two contact keys. It either
+ignored that or alternated it every panel. The fix inverts the framing:
+
+> The NEAR leg is **one fixed physical leg**. It is drawn on top and carries the
+> light in **all six panels**. The only thing that changes is **which way it
+> points** — forward in panels 1-3, backward in panels 4-6 — and that swap
+> happens **once**, between panel 3 and panel 4, and nowhere else. *Do not
+> alternate it panel by panel.*
+
+Then close with a panel-by-panel census of where the bright footwear is, and
+*"if your panel 4 has the bright shoe in front the way panel 1 does, you have
+drawn it wrong."* Don't ask for a swapping relationship; declare a constant
+limb and move it.
+
+It landed on **five of ten** fighters. The other five say something useful about
+why:
+
+- **The tonal cue needs an object that already differs between the legs.**
+  Where one existed the inversion landed and is legible at 1:1: benny's **thigh
+  cargo pocket** swapping thighs, the Commissioner's **red coat lining and pale
+  cane tip** swapping sides, alan's faded-denim highlight, cyraxx's pale sneaker,
+  ali's black outside-seam stripe. Where both legs are identical — donald's navy
+  trousers, devil's matched shin wraps, post's saturated orange coveralls — it
+  did not.
+- **Bare symmetric legs are as hard as uniformly dark trousers, for the opposite
+  reason.** This file already records the Commissioner failing in 2.9 because
+  pushing the tonal split far enough put his trousers outside their own value
+  range. Deathblow fails the mirror image: with both lower legs the same bare
+  skin, the model binds "lit leg" to the **pose** — whichever leg catches the
+  key light, always the forward one — so a fixed-limb contract has nothing to
+  grip. Five generations, one compliant panel out of twelve chances.
+- **The model will swap a held prop but not a leg.** Donald's generations
+  applied the "swap once between panel 3 and 4" rule to his **golf club**
+  correctly while drawing all six walk panels in the same stride phase.
+
+Note also that **silhouette IoU cannot see walk phase.** A true leg exchange
+keeps almost the same outline — alan's inverted contact keys score 0.823 against
+each other. IoU separates "different drawing" from "duplicate"; the phase read
+is occlusion and tone, and on an all-black costume like the Commissioner's the
+luminance proxy is simply blind (it scores his new sheet and his 3.0 sheet
+identically, and both times it is wrong). **The 1:1 read is the verdict.**
+
+### The real failure mode of this wave was props, not the walk
+
+Three fighters produced a sheet with a genuinely better walk and then dropped
+their signature prop. Post lost the **spray can** from cells 2, 6 and 13; ali
+lost the **microphone** from up to four cells; donald lost the **golf club**
+from cell 6. Because `buildUnifiedAcceptMasks` collapses any sheet that is not
+16/16 to an all-false mask, a single prop-less main cell voids the whole
+fighter — and for post the missing cell was a **walk key**, so shipping it would
+have flickered the can on every stride, which is precisely the artefact this
+bank exists to remove. Hardening the prop language in a later generation
+reliably cost the walk inversion or the head anchor instead. **Fixing props and
+walk phase in the same single generation is the open problem for the next
+wave.**
+
+One cheap pipeline win worth keeping: devil lost two generations to **panel
+dropout** (a row rendered with five figures instead of six, which aborts the
+slicer). Counting figures *before* spending any judgement, and simply re-rolling
+on a short count, ended it — four subsequent rolls all came back 24/24.
+
+### What shipped
+
+| fighter | walk alternates | contact IoU new / 3.0 | ground reg. | outcome |
+| --- | --- | --- | --- | --- |
+| jez | **yes** (+23.8 / -4.0) | 0.509 / 0.668 | 1px / 4px | ships, 24 cells |
+| alan | **yes** (+33.1 / -7.4) | 0.823 / 0.688 | 0px / 4px | ships, 24 cells |
+| benny | **yes** (+35.2 / -7.4) | 0.700 / 0.912 | 1px / 4px | ships, 24 cells |
+| commissioner | **yes** (1:1; metric blind) | 0.633 / 0.832 | 5px / 4px | ships, 24 cells |
+| cyraxx | **yes** (+65.6 / -53.4) | 0.720 / — | 6px | passes, held off-repo |
+| deathblow | no (5 gens) | — | — | keeps 3.0 |
+| post | yes, but lost the can | — | — | keeps 3.0 |
+| donald | no (5 gens) | — | — | keeps 3.0 |
+| ali | yes, but lost the mic | — | — | keeps 3.0 |
+| devil | no (7 gens) | — | — | keeps 3.0 |
+
+### The eight new cells, and why nothing is wired
+
+Cells 0-15 keep the 3.0 grammar exactly and the main sheet keeps its
+1280x1280 / 4x4 / 320px / 306px / floor-row-315 geometry, so the four shipped
+sheets are **drop-in replacements that start drawing immediately**. The eight
+new cells ride a second file, `<id>-ext.webp`, at 1280x640 / 4x2 / 320px:
+
+```
+16 idle-breathe   17 walk-down-a   18 walk-down-b   19 jump-ascent
+20 jump-descend   21 punch-windup  22 kick-windup   23 mid-reaction
+```
+
+`drawAtlasFrame`'s hardcoded `cell = 320` with `frame % 4` / `floor(frame / 4)`
+addresses a 4x2 sheet correctly with **no code change**, so ext frames 0-7 are
+cells 16-23 and wiring them is a lookup change and nothing else. They are
+authored, measured and inert: `format.cellCount` stays 16, `format.poseIds`
+stays the 16-id grammar, and every fighter's `cells` array stays 16 entries,
+because `tests/unified-bank.test.mjs` asserts all three and this wave is
+asset-only. The new cells live in a parallel `format.extPoseIds` +
+per-fighter `extSheet` / `extCells` block that nothing reads yet.
+
+Integration order, highest value first: the **six-key walk**
+`1 -> 17 -> 2 -> 3 -> 18 -> 4`; then the **jump arc** `8 -> 19 -> 9 -> 20`,
+which today holds one tuck drawing across both apex and descent; then the
+attack ramps `21 -> 10` and `22 -> 11`; then `12 -> 23 -> 13` in the reaction
+ladder and `0 <-> 16` on the breathing idle.
+
+### Cyraxx, and the one line that turns him on
+
+He has been off the bank since 3.0, rejected three times because his long hair
+and beard swing head-band metrics regardless of what his costume does. Measured
+hair-independently this time — face and shirt, not hair outline — **zero of 24
+cells change his costume**; every width outlier is a hair or beard event with
+the shirt, trousers, sneakers and face intact. His shirt is within 2.3 dE of the
+idle in 14 of 24 cells and 5.1 dE in 22 of 24. He beats **his own base atlas**
+by 33% on head width spread and 44% on head palette max dE, his walk inverts by
+the widest margin on the roster, and the energy speckle his base bank carries at
+the hands and feet is gone (0.019% high-saturation interior pixels against
+0.165%).
+
+He is nonetheless `accept:false` on all 24, **and his art is deliberately not in
+the repo** — for the same reason m3 deleted his last sheet. Turning him on takes
+the roster from nine whole sheets to ten, which `tests/unified-bank.test.mjs`
+U-B pins by name, and the same file asserts at line 782 that he has *no sheet in
+the repo at all*. This wave is asset-only and may not touch tests, so committing
+a 300KB sheet that cannot draw a single pixel would recreate exactly the dead
+weight m3 removed. What wave 14 does instead is small and fully specified in
+`format.cyraxxNote31`: ship the two files, flip 24 flags, update the roster
+lists and that one assertion. Regenerating him is **not** required if the raw
+generation is preserved — the note records the file, the prompt and the build
+scale.
+
+## v4.0 — WIRING THE 24 CELLS: the alternating walk on screen, and cyraxx
+
+The 3.1 art wave drew the cells and stopped at the loader. This wave routes
+them. Six of the eight ext cells are spent on the beat they were drawn for, the
+seventh is refused with a reason, the walk becomes a six-key cycle **for the
+first time in this game with contact keys that genuinely lead with opposite
+legs**, and cyraxx comes onto the bank after three waves off it.
+
+### The two numberings, because getting them confused is the whole trap
+
+| | main sheet | ext sheet |
+| --- | --- | --- |
+| file | `<id>.webp` 1280x1280, 4x4 | `<id>-ext.webp` 1280x640, 4x2 |
+| GRAMMAR cell (manifest, this doc) | 0-15 | **16-23** |
+| SHEET frame (what a descriptor carries) | 0-15 | **0-7** |
+| bank | `unified` | `unified-ext` |
+
+`unifiedExtFrame` / `unifiedExtCell` convert. A descriptor must never carry a
+grammar number — 23 on a two-row sheet addresses row 5 of a four-row grid. The
+reaction ladder is the one place that names cells in grammar numbering across
+both sheets, and `urung` / `unifiedRungPose` dispatch it to the right bank.
+
+### The padding, and the manifest note that was half right
+
+`format.extSheet` says a 4x2 sheet needs no code because `drawAtlasFrame`'s
+`frame % 4` / `floor(frame / 4)` addresses it correctly. **That is true of the
+2D canvas and false of CINEMA 3D**, whose `applyAtlasFrame` builds UVs from a
+hardcoded `ATLAS_ROWS = 4` and would have sampled a quarter-height slice of
+every cell — the two renderers disagreeing about what a frame *is*.
+
+The decoded sheet is therefore padded once, lazily, into the 1280 square. That
+is not a workaround, it is the convention: the walk sheets carry art on row 0
+only and motion3 on 8 of 16, both at 1280x1280. **Full-height sheets with dead
+rows are how every bank in this game ships, and 1280x640 was the outlier.**
+
+### The six-key walk, and the cadence trap
+
+Cycle `1 -> 17 -> 2 -> 3 -> 18 -> 4`, where 17 and 18 are the weight-sinking
+beats between each contact and the passing that follows it.
+
+**The cadence is the part that is easy to get wrong.** The four keys ran at
+`walkTime * 10`, so a gait cycle took 0.4s. Six keys at the same 10/s would take
+0.6s — the legs would cycle 33% slower than the body travels and the fighter
+would **skate**, which is the exact fault the 3.5 stride clock exists to remove.
+The six-key cycle therefore runs at **15 keys/s**: same 0.4s period, same ground
+distance per stride, 50% more drawings. Measured in the demo at 1 tick: an ext
+fighter holds each key **4 ticks** and a holdout holds each key **6**, and both
+complete a stride in **24 ticks**.
+
+Everything about the retreat is untouched. `strideClockAdvance` still signs the
+phase by `vx * facing`, `walkCycleFrameExt` normalises a negative phase the same
+way `walkCycleFrame` does, so a back-walk plays `4 -> 18 -> 3 -> 2 -> 17 -> 1`
+and un-steps through the new in-betweens too.
+
+### What each ext cell was spent on
+
+| cell | beat | routed? |
+| --- | --- | --- |
+| 16 idle-breathe | the breathing idle, alternating with cell 0 every 8 ticks | yes |
+| 17 walk-down-a | six-key walk | yes |
+| 18 walk-down-b | six-key walk | yes |
+| 19 jump-ascent | the jump's ascent band, with unified:8 un-retired | yes |
+| **20 jump-descend** | — | **NO — see below** |
+| 21 punch-windup | the kit-less heavy punch chamber | yes |
+| 22 kick-windup | the kit-less heavy kick chamber | yes |
+| 23 mid-reaction | band 1 of the heavy ladder, band 2 of the light | yes |
+
+The breathing idle is the one to notice. 3.0 collapsed a unified fighter's idle
+to **one drawing** on purpose — the base bank's four-cell breathing cycle is
+9.5-22.5 dE of costume away from the unified walk keys, so cycling base cells
+under a unified walk *is* the strobe — and recorded the cost as real. Cell 16 is
+that cost paid back from inside the same generation, at 8 ticks per drawing,
+which is exactly `MOTION_HOLD_BUDGET`.
+
+### Cell 20 is a hit reaction, on all five sheets
+
+`19 jump-ascent` came back correct. **`20 jump-descend` did not.** The prompt
+asked for "torso upright, legs unfolding and REACHING DOWN, arms out for
+balance". Every one of the five sheets returned a figure with its **head thrown
+back, spine arched backward and arms flung open and limp** — read at 1:1 against
+that fighter's own cells 12 and 13 it is their sibling. Benny's is nearly
+horizontal; alan's is all but indistinguishable from his own big-hit.
+
+This was found twice independently: the 3.1 art wave marked alan's and benny's
+`accept:false` for exactly this reason and called the Commissioner's "the
+weakest cell on the sheet", and the 4.0 read of all five reached the same
+verdict on jez's too. Routed, **every jump would flinch on the way down** — a
+worse fault than the hold it would have broken.
+
+So the cell is **accepted and retired from routing**, the same shape 3.0 used
+for cells 8-11, and for the same reason it is *not* the same shape: 3.0's four
+are waiting on a routing decision and can be switched on with no new art, while
+this one is waiting on a **redraw**. Wave 15's fix is one panel.
+
+**Consequence for the jump.** With no usable descent the bank cannot own the
+airborne middle, so `unified:9` (the apex tuck) stays retired with it — a tuck
+handing straight to a motion cell in mid-air is precisely the 7.56 dE held-15-
+ticks configuration the 3.0 critic round measured and removed. What the arc gets
+instead is the **ascent as a connected sub-region**: `unified:0 idle ->
+unified:8 rise -> ext:19 ascent -> motion:5 tuck`, three consecutive drawings
+from one generation, with the arc's single generation crossing moved one band
+later rather than added to. The measured payoff is the arc's longest hold: the
+rise went from **one drawing for 10 ticks to two for 5 each**.
+
+Because that is an ext-only array, `jumpArcKeys` takes an `extended` flag and a
+fighter without an ext sheet gets the 3.0 array unchanged, retired cells and
+all. That branch is not a preference — routing 8 for a fighter who has no 19
+rebuilds the broken chain 3.0 removed.
+
+### The gate counts the ROUTED cells
+
+`buildUnifiedExtAcceptMasks` requires every **routed** ext frame accepted, plus
+a whole main sheet underneath. Gating on all eight would have cost alan and
+benny their entire ext sheet — walk in-betweens, chambers, breathing idle,
+mid-reaction — over one cell no beat can reach, which is the 3.0 dead-weight
+failure inverted. The retired frame is additionally forced **false** in the
+mask, so the refusal is enforced at the gate as well as in the tracks.
+
+### The tables the art wave could not touch
+
+3.1 was correctly asset-only, which left four fighters wearing height
+reconciliations fitted to sheets that no longer exist. Re-measured here on the
+sheets actually in the repo (alpha >= 24, cell of 320) — and every one of the
+five *untouched* fighters reproduces its recorded numbers exactly, which is what
+confirms the measurement rather than the correction:
+
+* `UNIFIED_CELL_ADJUST` was **undershooting** all four. Benny's contact key drew
+  3.3% below his idle and the Commissioner's second contact 4.7% below — the B1
+  idle<->walk pop, quietly re-opened in the other direction.
+* `UNIFIED_GUARD_FLINCH_ADJUST` had drifted with the redrawn guard cell.
+* `WAKEUP_RISE_HEIGHT.standUnified` and its `unified:5` rung, likewise.
+* `CELL_BODY_CENTRE`'s unified rows, likewise — including the two airborne cells
+  the B2 anchor depends on.
+
+Two sheets also put the **guard** 5-6% below their own idle where 3.0 had every
+guard inside the deadband uncorrected. The guard is an upright standing drawing,
+which is the B1 candidate class, so it now takes the same idle-anchored
+correction the walk keys do, and the contract test asserts the **drawn** height
+rather than the raw one. After correction every fighter's six-key cycle and
+guard land within 0.05% and 3.3% of their own idle respectively.
+
+A useful recovered fact: `CELL_BODY_CENTRE` is the **bounding-box midpoint**,
+not the mass centroid the comment calls a "content-centroid". A mass centroid
+misses the recorded values by up to 29 rows; the bbox midpoint reproduces all
+16 cells of three untouched fighters exactly. Measure it that way or the
+airborne anchor drifts.
+
+### cyraxx, after three waves off the bank
+
+Sliced from the archived winning generation rather than regenerated
+(`final-blow-art-archive/unified-v31/raw-cyraxx-g3.png`, prompt
+`p-cyraxx-g3.txt`, 6x4, scale 1.4712 — confirmed rather than assumed: the
+tallest standing blob is 208px and 208 x 1.4712 = 306.0 = `targetH`).
+
+He passes decisively. **His walk inverts by the widest margin on the roster**,
+leg luminance +64.86 in cell 1 against -52.60 in cell 3, reproducing the
+archived +65.6 / -53.4 to within one unit. At 1:1 and then again on the live
+canvas: the pale cream sneaker is the forward planted foot in cell 1 and the
+trailing heel-up foot in cell 3, and the lighter trouser leg swaps with it.
+Torso-median Lab dE against his own idle maxes at 15.05 — better than three of
+the four sheets already shipping. Energy speckle 0.025% of interior pixels, the
+cleanest sheet on the roster. All 24 cells on floor row 314 and on the torso-band
+centre column within 1.2px. His six-key cycle measures +0.3% to +3.4% of his
+idle, the tightest on the roster.
+
+Two slicing conventions had to be recovered by measurement because the recorded
+ones are wrong: **the shared floor row is 314, not the 315 the manifest names**
+(315 is the exclusive bottom edge — all 96 reference cells measure 314), and
+**horizontal registration is not the full-figure centroid** (sd 7.34, landing
+anywhere from 142 to 188) but the centroid of the rows between **20% and 57.5%
+of figure height**, a torso band, which lands on column 160 with sd 0.41 across
+all 96 reference cells.
+
+### Known defects this wave is shipping, both one-panel fixes
+
+1. **Cell 20 is a hit reaction** on all five sheets. Retired; see above.
+2. **Cell 18 does not invert.** The six-key cycle's second in-between carries
+   cell 17's phase rather than cell 3's, so the cycle reads `1 pale-forward ->
+   17 pale-forward -> 2 passing -> 3 pale-REAR -> 18 pale-forward -> 4 passing`
+   — a one-key phase pop on the down-B beat. Measured on all five sheets (jez
+   +30.29, alan +55.54, benny +49.91, cyraxx +49.43, all positive where cell 3
+   is negative), so it is a generation-wide prompt failure, not a bad fighter.
+   It is shipped rather than worked around because the alternatives are worse:
+   dropping cell 18 gives the A half three keys and the B half two, which is a
+   limp, and both down cells carry the same phase so no re-ordering fixes it.
+   **The contacts — the keys that carry the read — do alternate**, which is the
+   defect the owner asked about twice, and the fix here is one redrawn panel.
+
+### What is still one drawing, and why
+
+The census below is per beat, at the worst-case span each beat can run.
+
+| beat | span | 3.5 worst hold | 4.0 worst hold (ext fighter) | drawings |
+| --- | --- | --- | --- | --- |
+| jump arc | 46 | **12** (motion2:7 x10, motion:6 x12) | **12** (rise now 5+5; the tail is unchanged) | 6 -> 7 |
+| windup punch | 11 | 4 | 4 | 3 -> 3 |
+| windup kick | 17 | 7 | 7 | 3 -> 3 |
+| reaction heavy | 44 | 8 | 8 | 6 -> 6 |
+| reaction light | 44 | 8 | 8 | 6 -> 6 |
+| idle (neutral) | held | **unbounded, ONE drawing** | **8** | 1 -> 2 |
+| air normal | 31 | 9 | 9 | 5 (no ext cell exists for it) |
+| attack recovery | 28 | 9 | 9 | 4 (ditto) |
+| throw clinch | 24 | 9 | 9 | 3 (ditto) |
+| throw recovery | 34 | 9 | 9 | 4 (ditto) |
+| dash | 16 | 5 | 5 | 4 |
+| blockstun | 17 | 8 | 8 | 3 |
+| wakeup | 16 | 6 | 6 | 4 |
+
+The jump's remaining 12 is the **landing gather**, `motion:6` from 0.72 of the
+arc to touchdown. No ext cell depicts it and splitting it with `unified:6` would
+change the five holdouts, whose motion must stay byte-identical this wave. The
+air normal, both throw beats and the attack recovery are over budget exactly as
+they were in 3.5: the ext sheet contains no drawing for any of them, and the
+honest answer to "why is this beat still one drawing for 9 ticks" is that the
+art for it has not been made. Those four are the shopping list for wave 15,
+alongside the two redraws.
