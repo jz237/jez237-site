@@ -41,6 +41,7 @@
     { "n": "Brandywine Battlefield", "lon": -75.5860, "lat": 39.8720, "c": "park", "r": 3, "d": "The Brandywine valley, at the western edge of the frame." },
 
     { "n": "Doylestown", "lon": -75.1299, "lat": 40.3101, "c": "town", "r": 2, "d": "Bucks County seat, in the rolling country above Neshaminy Creek." },
+    { "n": "Levittown", "lon": -74.8380, "lat": 40.1548, "c": "town", "r": 1, "d": "The archetypal postwar planned suburb: 17,000 houses laid out at once on the flat Delaware terrace downstream of the falls at Trenton." },
     { "n": "Washington Crossing", "lon": -74.8710, "lat": 40.2960, "c": "park", "r": 3, "d": "The Delaware crossing of December 1776." },
     { "n": "Peace Valley / Lake Galena", "lon": -75.1750, "lat": 40.3400, "c": "water", "r": 3, "d": "A reservoir on the north branch of Neshaminy Creek." },
     { "n": "Tyler State Park", "lon": -74.9540, "lat": 40.2360, "c": "park", "r": 3, "d": "Neshaminy Creek meanders through central Bucks County." },
