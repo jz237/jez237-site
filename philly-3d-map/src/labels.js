@@ -100,7 +100,6 @@ export function createLabelLayer(THREE, options) {
 
         const sx = (projected.x * 0.5 + 0.5) * width;
         const sy = (-projected.y * 0.5 + 0.5) * height;
-        if (sy < -30 || sy > height + 30) continue;
 
         // Landmark labels are uppercase and letter-spaced, so they run far
         // wider per character than a place name at the same length. Guessing a
@@ -111,8 +110,9 @@ export function createLabelLayer(THREE, options) {
         const h = 20 * scale;
         const box = { l: sx - w / 2, r: sx + w / 2, t: sy - h, b: sy + 4 };
 
-        // Drop anything that would run off the side rather than clipping it.
+        // Drop anything that would run off an edge rather than clipping it.
         if (box.l < 6 || box.r > width - 6) continue;
+        if (box.b < 0 || box.t > height) continue;
 
         if (isOccluded(camera, item, worldY, exaggeration)) continue;
         if (placed.some((p) => overlaps(p, box))) continue;
@@ -129,7 +129,13 @@ export function createLabelLayer(THREE, options) {
         }
         el._data = item;
         el.style.display = '';
-        el.style.transform = `translate3d(${Math.round(sx)}px, ${Math.round(sy)}px, 0)`;
+        // The trailing translate centres the node on its anchor and lifts the
+        // text above it, making the rendered box the same box the declutter
+        // and edge culling reason about. Without it the node's left edge sat
+        // at the anchor and every label rendered half a width to the right of
+        // its own collision model.
+        el.style.transform = `translate3d(${Math.round(sx)}px, ${Math.round(sy)}px, 0) `
+          + 'translate(-50%, -100%)';
         el.style.setProperty('--label-scale', String(scale));
         el.style.opacity = String(clamp(1.15 - item.rank * 0.08, 0.55, 1));
 
