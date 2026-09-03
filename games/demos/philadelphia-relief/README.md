@@ -5,7 +5,7 @@ suburbs — Center City, Northeast and Northwest Philadelphia, the Main Line, an
 Delaware, Montgomery, Chester and Bucks Counties, across the river into Camden,
 Cherry Hill and the Burlington County plain.
 
-Live path: `/philly-3d-map/`
+Live path: `/games/demos/philadelphia-relief/`
 
 It is a plain static page. No build step, no framework, no bundler, no API key,
 no account, and **no third-party requests at runtime** — every byte it draws is
@@ -35,7 +35,7 @@ rectangle. Three decisions do the work of making it legible:
 ## Architecture
 
 ```
-philly-3d-map/
+games/demos/philadelphia-relief/
   index.html            page shell; all widgets are generated from the schema
   app.css               interface; every colour is a custom property the theme rewrites
   src/
@@ -134,15 +134,15 @@ cut roads from 1.6 MB to 387 KB and improved the simplification at the same time
 ## Running it
 
 ```bash
-cd philly-3d-map
-npm run dev          # static server on http://127.0.0.1:8731/philly-3d-map/
+cd games/demos/philadelphia-relief
+npm run dev          # static server on http://127.0.0.1:8731/games/demos/philadelphia-relief/
 npm run check        # lint + tests
-npm test             # node --test over the pure modules (87 assertions)
+npm test             # node --test over the pure modules (92 assertions)
 npm run lint         # dependency-free lint; see below
 npm run qa           # headless-Chrome QA: console errors, interaction pass, screenshots
 ```
 
-There is nothing to build for deployment — `philly-3d-map/` is the artefact.
+There is nothing to build for deployment — `games/demos/philadelphia-relief/` is the artefact.
 
 `npm run lint` has no dependencies. It enforces the rules that actually matter
 for shipping this to a static host: **no credential-shaped strings**, **no

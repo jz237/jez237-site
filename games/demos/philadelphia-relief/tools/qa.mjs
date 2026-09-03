@@ -5,7 +5,7 @@
  * back automatically), records every console message and page error, drives a
  * scripted interaction pass, and writes screenshots for visual review.
  *
- *   node tools/qa.mjs [--url http://127.0.0.1:8731/philly-3d-map/] [--keep]
+ *   node tools/qa.mjs [--url http://127.0.0.1:8731/games/demos/philadelphia-relief/] [--keep]
  *
  * Exits non-zero if anything reached console.error or threw.
  */
@@ -21,7 +21,7 @@ const argOf = (name, fallback) => {
   return i >= 0 && args[i + 1] ? args[i + 1] : fallback;
 };
 
-const URL = argOf('--url', 'http://127.0.0.1:8731/philly-3d-map/');
+const URL = argOf('--url', 'http://127.0.0.1:8731/games/demos/philadelphia-relief/');
 const OUT = argOf('--out', '/tmp/philly-qa');
 
 const VIEWPORTS = [
