@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Philadelphia Relief — A 3D Topographic Map of the Delaware Valley</title>
+<meta name="description" content="An interactive cinematic 3D relief map of Philadelphia and its suburbs — the Wissahickon gorge, the Main Line ridge, the Schuylkill and Delaware rivers, Bucks, Montgomery, Delaware and Chester Counties and South Jersey. Real USGS elevation, no API keys." />
+<meta name="keywords" content="Philadelphia topographic map, 3D terrain, Delaware Valley relief, Wissahickon, Schuylkill River, Main Line, Bucks County, elevation map, WebGL" />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://jez237.com/philly-3d-map/" />
+<meta property="og:title" content="Philadelphia Relief — A 3D Topographic Map" />
+<meta property="og:description" content="A cinematic, interactive relief map of the Philadelphia region built from public USGS elevation data." />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://jez237.com/philly-3d-map/" />
+<link rel="icon" type="image/svg+xml" href="../assets/brand.svg" />
+<link rel="stylesheet" href="app.css" />
+</head>
+<body data-theme="dusk">
+
+<a class="skip-link" href="#studio">Skip to map controls</a>
+
+<div id="stage" class="stage">
+  <canvas id="canvas" aria-label="3D relief map of the Philadelphia region. Drag to pan, right-drag to orbit, scroll to zoom." role="img"></canvas>
+  <div id="labelHost" class="label-host"></div>
+</div>
+
+<!-- ── loading ─────────────────────────────────────────────────────────── -->
+<div id="loading" class="loading" role="status" aria-live="polite">
+  <div class="loading-inner">
+    <div class="loading-mark" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <h1 class="loading-title">Philadelphia Relief</h1>
+    <p class="loading-sub" id="loadingMessage">Reading elevation…</p>
+    <div class="loading-track"><div class="loading-bar" id="loadingBar"></div></div>
+  </div>
+</div>
+
+<!-- ── degraded-mode banner ────────────────────────────────────────────── -->
+<div id="degraded" class="degraded" role="alert" hidden>
+  <div class="degraded-body">
+    <strong id="degradedTitle"></strong>
+    <p id="degradedMessage"></p>
+  </div>
+  <button type="button" class="icon-btn" id="degradedClose" aria-label="Dismiss this notice">✕</button>
+</div>
+
+<!-- ── top bar ─────────────────────────────────────────────────────────── -->
+<header class="topbar">
+  <div class="brand">
+    <a class="brand-home" href="../" title="jez237.com">←</a>
+    <div class="brand-text">
+      <span class="brand-title">Philadelphia Relief</span>
+      <span class="brand-sub">Delaware Valley · 3D topography</span>
+    </div>
+  </div>
+
+  <div class="search" role="search">
+    <label class="visually-hidden" for="searchInput">Search for a place</label>
+    <input id="searchInput" type="search" placeholder="Search a place…" autocomplete="off"
+           spellcheck="false" aria-expanded="false" aria-controls="searchResults"
+           aria-describedby="searchHint" role="combobox" aria-autocomplete="list" />
+    <span id="searchHint" class="visually-hidden">
+      Type to find a neighborhood, town or landmark, then press Enter to fly there.
+    </span>
+    <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
+  </div>
+
+  <div class="topbar-actions">
+    <button type="button" class="icon-btn" id="btnHome" title="Reset view (H)" aria-label="Reset view">⌂</button>
+    <button type="button" class="icon-btn" id="btnShot" title="Save PNG (P)" aria-label="Save a PNG of the current view">▣</button>
+    <button type="button" class="icon-btn" id="btnShare" title="Copy link to this view" aria-label="Copy a link to this view">↗</button>
+    <button type="button" class="icon-btn" id="btnFull" title="Fullscreen (F)" aria-label="Toggle fullscreen">⤢</button>
+    <button type="button" class="icon-btn" id="btnKeys" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">⌘</button>
+    <button type="button" class="icon-btn" id="btnAbout" title="About &amp; sources" aria-label="About and data sources">i</button>
+  </div>
+</header>
+
+<!-- ── control studio ──────────────────────────────────────────────────── -->
+<section id="studio" class="panel studio" aria-labelledby="studioTitle">
+  <header class="panel-head">
+    <h2 id="studioTitle">Control studio</h2>
+    <button type="button" class="panel-toggle" id="studioToggle"
+            aria-expanded="true" aria-controls="studioBody">
+      <span class="panel-toggle-label">Hide</span>
+    </button>
+  </header>
+  <div class="panel-body" id="studioBody">
+    <div id="studioGroups"></div>
+    <div class="control-group">
+      <h3 class="group-head">Layers</h3>
+      <div id="layerToggles" class="layer-grid"></div>
+    </div>
+    <div class="studio-footer">
+      <button type="button" class="text-btn" id="btnReset">Reset everything</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── shots & places ──────────────────────────────────────────────────── -->
+<section id="shots" class="panel shots" aria-labelledby="shotsTitle">
+  <header class="panel-head">
+    <h2 id="shotsTitle">Shots &amp; places</h2>
+    <button type="button" class="panel-toggle" id="shotsToggle"
+            aria-expanded="true" aria-controls="shotsBody">
+      <span class="panel-toggle-label">Hide</span>
+    </button>
+  </header>
+  <div class="panel-body" id="shotsBody">
+    <div class="group-head-row"><h3 class="group-head">Cinematic presets</h3></div>
+    <div id="presetList" class="preset-list" role="group" aria-label="Cinematic presets"></div>
+    <div class="group-head-row"><h3 class="group-head">Quick jump</h3></div>
+    <div id="quickJumps" class="chip-row" role="group" aria-label="Quick jump destinations"></div>
+  </div>
+</section>
+
+<!-- ── bottom readout + timeline ───────────────────────────────────────── -->
+<footer class="readout" id="readout">
+  <div class="readout-main">
+    <div class="readout-preset">
+      <span class="readout-preset-name" id="outPreset">The Delaware Valley</span>
+      <span class="readout-preset-blurb" id="outBlurb"></span>
+    </div>
+    <dl class="readout-stats" aria-live="off">
+      <div><dt>Position</dt><dd id="outCoords">—</dd></div>
+      <div><dt>Elevation</dt><dd id="outElev">—</dd></div>
+      <div><dt>Bearing</dt><dd id="outBearing">—</dd></div>
+      <div><dt>Pitch</dt><dd id="outPitch">—</dd></div>
+      <div><dt>Zoom</dt><dd id="outZoom">—</dd></div>
+      <div><dt>FPS</dt><dd id="outFps">—</dd></div>
+    </dl>
+    <div class="scalebar" aria-hidden="true">
+      <div class="scalebar-line" id="scaleLine"><span id="scaleLabel"></span></div>
+    </div>
+  </div>
+
+  <div class="timeline" role="group" aria-label="Flythrough">
+    <button type="button" class="play-btn" id="btnPlay" aria-label="Play the flythrough">
+      <span id="playIcon">▶</span>
+    </button>
+    <div class="timeline-track" id="timelineTrack">
+      <div class="timeline-fill" id="timelineFill"></div>
+      <div class="timeline-shots" id="timelineShots"></div>
+    </div>
+    <span class="timeline-time" id="timelineTime">0:00</span>
+  </div>
+</footer>
+
+<!-- ── onboarding ──────────────────────────────────────────────────────── -->
+<div id="onboarding" class="overlay" hidden>
+  <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="obTitle">
+    <h2 id="obTitle">The Delaware Valley, in relief</h2>
+    <p>
+      Real elevation for Philadelphia and its suburbs, from the Wissahickon gorge
+      to the Bucks County hills. The land here is subtle — about 380 m of relief
+      across 94 km — so the vertical scale is exaggerated to make it legible.
+    </p>
+    <ul class="overlay-hints">
+      <li><b>Drag</b> to move across the region</li>
+      <li><b>Right-drag</b> or <b>two fingers</b> to orbit and tilt</li>
+      <li><b>Scroll</b> or <b>pinch</b> to zoom</li>
+      <li><b>Press ▶</b> for the flythrough — moving the camera pauses it</li>
+    </ul>
+    <div class="overlay-actions">
+      <button type="button" class="primary-btn" id="obStart">Start exploring</button>
+      <button type="button" class="text-btn" id="obTour">Play the flythrough</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── about ───────────────────────────────────────────────────────────── -->
+<div id="about" class="overlay" hidden>
+  <div class="overlay-card overlay-wide" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+    <button type="button" class="overlay-close" data-close="about" aria-label="Close">✕</button>
+    <h2 id="aboutTitle">About this map</h2>
+
+    <p>
+      A cinematic relief map of the Philadelphia region — Center City, Northeast
+      and Northwest Philadelphia, the Main Line, and Delaware, Montgomery, Chester
+      and Bucks Counties, across the river into Camden, Cherry Hill and the
+      Burlington County plain.
+    </p>
+
+    <h3>Where the data comes from</h3>
+    <dl class="source-list">
+      <div>
+        <dt>Elevation</dt>
+        <dd>
+          <a href="https://registry.opendata.aws/terrain-tiles/" target="_blank" rel="noopener">AWS Terrain Tiles</a>
+          (Mapzen <i>terrarium</i> encoding), sampled at zoom 12 and resampled to a
+          2048 × 2048 grid — about <b id="aboutSpacing">46 m</b> per sample. The
+          underlying elevation for this region is USGS 3DEP and SRTM.
+        </dd>
+      </div>
+      <div>
+        <dt>Rivers, roads, rail, boundaries, parks, place names</dt>
+        <dd>
+          © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
+          contributors, ODbL 1.0. Queried once from the public Overpass API at
+          build time and baked into static files — the page makes no third-party
+          requests at runtime.
+        </dd>
+      </div>
+      <div>
+        <dt>Landmarks</dt>
+        <dd>Hand-curated for this map. Elevations are sampled from the same DEM as the ground.</dd>
+      </div>
+    </dl>
+
+    <h3>What this map is not</h3>
+    <p class="caveat">
+      This is a visualisation, not a survey. Elevations come from a ~30 m public
+      DEM resampled to ~46 m, then <b>vertically exaggerated</b> by whatever the
+      slider says — the default 14× is not a real slope. Readouts are good to a
+      few metres at best. Three source-data seams in the northwest (thin stripes
+      spiking to 900 m in ground that is really ~260 m) were replaced with a
+      local median during the build. Simplified vectors drop detail below roughly
+      25–140 m depending on the layer, minor roads and unnamed streams are not
+      included at all, and OpenStreetMap coverage varies by area. Do not use any
+      of this for navigation, flood risk, engineering or property decisions.
+    </p>
+
+    <h3>How it is built</h3>
+    <p>
+      Three.js on WebGL 2. The terrain is one draw call: a grid that is
+      log-warped around the camera target in the vertex shader, so detail
+      concentrates where you are looking without any LOD seams. Hillshade,
+      contours, ambient occlusion and the atmosphere are computed per pixel from
+      the height field. Every byte is served from this origin — no map service,
+      no account, no API key, nothing to leak.
+    </p>
+
+    <p class="about-foot">
+      Built for <a href="../">jez237.com</a>. See <code>philly-3d-map/README.md</code>
+      for the full architecture and provenance notes.
+    </p>
+  </div>
+</div>
+
+<!-- ── shortcuts ───────────────────────────────────────────────────────── -->
+<div id="shortcuts" class="overlay" hidden>
+  <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="keysTitle">
+    <button type="button" class="overlay-close" data-close="shortcuts" aria-label="Close">✕</button>
+    <h2 id="keysTitle">Keyboard shortcuts</h2>
+    <table class="keys">
+      <tbody>
+        <tr><th scope="row"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></th><td>Pan across the region</td></tr>
+        <tr><th scope="row"><kbd>Shift</kbd> + arrows</th><td>Orbit and tilt</td></tr>
+        <tr><th scope="row"><kbd>+</kbd> <kbd>−</kbd></th><td>Zoom in and out</td></tr>
+        <tr><th scope="row"><kbd>1</kbd>–<kbd>6</kbd></th><td>Jump to a cinematic preset</td></tr>
+        <tr><th scope="row"><kbd>Space</kbd></th><td>Play or pause the flythrough</td></tr>
+        <tr><th scope="row"><kbd>H</kbd></th><td>Reset to the opening view</td></tr>
+        <tr><th scope="row"><kbd>C</kbd></th><td>Show or hide the control studio</td></tr>
+        <tr><th scope="row"><kbd>L</kbd></th><td>Show or hide labels</td></tr>
+        <tr><th scope="row"><kbd>F</kbd></th><td>Fullscreen</td></tr>
+        <tr><th scope="row"><kbd>P</kbd></th><td>Save the current view as a PNG</td></tr>
+        <tr><th scope="row"><kbd>/</kbd></th><td>Focus the search box</td></tr>
+        <tr><th scope="row"><kbd>?</kbd></th><td>This list</td></tr>
+        <tr><th scope="row"><kbd>Esc</kbd></th><td>Close a dialog, or stop the flythrough</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="src/main.js"></script>
+<noscript>
+  <div class="noscript">
+    This map is a WebGL application and needs JavaScript. The elevation data it
+    draws is public: AWS Terrain Tiles (USGS 3DEP / SRTM), with map features from
+    OpenStreetMap contributors.
+  </div>
+</noscript>
+</body>
+</html>

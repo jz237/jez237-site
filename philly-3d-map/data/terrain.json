@@ -1,0 +1,79 @@
+{
+  "generator": "tools/build_terrain.py",
+  "source": {
+    "name": "AWS Terrain Tiles (terrarium)",
+    "url": "https://registry.opendata.aws/terrain-tiles/",
+    "zoom": 12,
+    "underlying": [
+      "USGS 3DEP",
+      "SRTM",
+      "NRCan CDED"
+    ],
+    "license": "Open data; see AWS Terrain Tiles attribution guidance"
+  },
+  "width": 2048,
+  "height": 2048,
+  "bounds": {
+    "west": -75.8,
+    "east": -74.7,
+    "south": 39.7,
+    "north": 40.55
+  },
+  "elevation": {
+    "min": -5.0,
+    "max": 377.0,
+    "step": 0.25,
+    "encoding": "elev_m = elevMin + (R * 256 + G) * step"
+  },
+  "stats": {
+    "meanM": 81.165,
+    "p02M": 0.853,
+    "p98M": 233.017,
+    "sampleSpacingM": 45.8
+  },
+  "projection": {
+    "lat0": 40.125,
+    "lon0": -75.25,
+    "metersPerDegLat": 111037.0072,
+    "metersPerDegLon": 85238.0237,
+    "widthM": 93761.83,
+    "heightM": 94381.46
+  },
+  "probes": [
+    {
+      "x": 0,
+      "y": 0,
+      "q": 539
+    },
+    {
+      "x": 2047,
+      "y": 0,
+      "q": 96
+    },
+    {
+      "x": 0,
+      "y": 2047,
+      "q": 354
+    },
+    {
+      "x": 2047,
+      "y": 2047,
+      "q": 58
+    },
+    {
+      "x": 1024,
+      "y": 1024,
+      "q": 291
+    },
+    {
+      "x": 512,
+      "y": 682,
+      "q": 419
+    },
+    {
+      "x": 1536,
+      "y": 1365,
+      "q": 64
+    }
+  ]
+}
