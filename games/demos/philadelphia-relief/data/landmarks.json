@@ -25,6 +25,7 @@
     { "n": "Laurel Hill", "lon": -75.1880, "lat": 39.9990, "c": "park", "r": 3, "d": "On the bluff above the east bank of the Schuylkill." },
     { "n": "Pennypack Park", "lon": -75.0330, "lat": 40.0620, "c": "park", "r": 3, "d": "A wooded creek corridor through Northeast Philadelphia." },
     { "n": "Northeast Philadelphia", "lon": -75.0106, "lat": 40.0819, "c": "town", "r": 2, "d": "The broad, gently rolling shelf between Pennypack and Poquessing Creeks." },
+    { "n": "Port Richmond", "lon": -75.1009, "lat": 39.9864, "c": "town", "r": 1, "d": "A historic Delaware River neighborhood on the flat waterfront shelf northeast of Center City." },
 
     { "n": "Valley Forge", "lon": -75.4586, "lat": 40.1015, "c": "park", "r": 1, "d": "Where Valley Creek meets the Schuylkill, ringed by Mount Joy and Mount Misery." },
     { "n": "King of Prussia", "lon": -75.3960, "lat": 40.0893, "c": "town", "r": 2, "d": "On the plateau above the Schuylkill's big westward bend." },

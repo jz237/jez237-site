@@ -922,6 +922,18 @@ test('shipped data', async (t) => {
     assert.equal(landmark.r, 1, 'must sit in the always-shown tier');
   });
 
+  await t.test('Port Richmond is present exactly once and always labelable', () => {
+    const hits = places.features.filter((f) => f.properties?.n === 'Port Richmond');
+    assert.equal(hits.length, 1, 'places.geojson must carry exactly one Port Richmond');
+    const landmark = landmarksDoc.landmarks.find((l) => l.n === 'Port Richmond');
+    assert.ok(landmark, 'curated landmark missing');
+    assert.equal(landmark.r, 1, 'must sit in the always-shown tier');
+    const candidates = buildLabelCandidates(places, landmarksDoc)
+      .filter((c) => c.name === 'Port Richmond');
+    assert.equal(candidates.length, 1, 'Port Richmond label must be deduplicated');
+    assert.equal(candidates[0].kind, 'landmark', 'the curated label must win');
+  });
+
   await t.test('every quick jump resolves against the shipped label data', () => {
     const candidates = buildLabelCandidates(places, landmarksDoc);
     const names = new Set(candidates.map((c) => c.name.toLowerCase()));
@@ -935,6 +947,7 @@ test('shipped data', async (t) => {
         `${jump.name}: chip and label disagree by more than ~5 km`);
     }
     assert.ok(names.has('levittown'), 'Levittown must be a label candidate');
+    assert.ok(names.has('port richmond'), 'Port Richmond must be a label candidate');
     const dupes = candidates.map((c) => c.name.toLowerCase())
       .filter((n, i, arr) => arr.indexOf(n) !== i);
     assert.ok(!dupes.includes('levittown'), 'Levittown label is duplicated');

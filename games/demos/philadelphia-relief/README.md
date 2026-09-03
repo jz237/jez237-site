@@ -1,11 +1,14 @@
 # Philadelphia Relief
 
 An interactive, cinematic 3D topographic map of Philadelphia and the surrounding
-suburbs — Center City, Northeast and Northwest Philadelphia, the Main Line, and
+suburbs — Center City, Port Richmond, Northeast and Northwest Philadelphia, the Main Line, and
 Delaware, Montgomery, Chester and Bucks Counties, across the river into Camden,
 Cherry Hill and the Burlington County plain.
 
 Live path: `/games/demos/philadelphia-relief/`
+
+**Concept and prompt by Jez. Built collaboratively with Claude via Traycer and
+GPT-5.6.**
 
 It is a plain static page. No build step, no framework, no bundler, no API key,
 no account, and **no third-party requests at runtime** — every byte it draws is
