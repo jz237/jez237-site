@@ -1,0 +1,7 @@
+# Local build environment for the data generators (see README).
+.venv/
+__pycache__/
+*.pyc
+
+# QA output. Screenshots are review artefacts, not source.
+qa-out/

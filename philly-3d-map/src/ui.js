@@ -1,0 +1,454 @@
+/**
+ * The control studio, preset list, search and dialogs.
+ *
+ * Every widget is generated from schema.js rather than written out in HTML, so
+ * adding a control is a one-line change in one file and the UI, the URL
+ * serialiser and the tests all pick it up together.
+ */
+
+import { CONTROLS, LAYERS, GROUPS } from './schema.js';
+import { PRESETS, QUICK_JUMPS } from './presets.js';
+import { getTheme, THEME_IDS } from './themes.js';
+
+const ENUM_LABELS = {
+  theme: (v) => getTheme(v).label,
+  quality: (v) => ({ performance: 'Performance', balanced: 'Balanced', cinematic: 'Cinematic' }[v] || v),
+  contourInterval: (v) => `${v} m`,
+};
+
+/** Format a control's current value for its readout. */
+export function formatValue(id, value) {
+  const spec = CONTROLS[id];
+  if (!spec) return String(value);
+  if (spec.kind === 'enum') return (ENUM_LABELS[id] || String)(value);
+  const step = spec.step ?? 1;
+  const digits = step >= 1 ? 0 : step >= 0.1 ? 1 : 2;
+  return `${Number(value).toFixed(digits)}${spec.unit || ''}`;
+}
+
+export function buildControls(store, host) {
+  const inputs = new Map();
+
+  for (const group of GROUPS) {
+    const entries = Object.entries(CONTROLS).filter(([, c]) => c.group === group.id);
+    if (!entries.length) continue;
+
+    const section = el('div', 'control-group');
+    section.appendChild(el('h3', 'group-head', group.label));
+
+    for (const [id, spec] of entries) {
+      const wrap = el('div', 'control');
+      const labelRow = el('div', 'control-label');
+      const name = el('label', null, spec.label);
+      name.htmlFor = `ctl-${id}`;
+      const value = el('span', 'control-value', formatValue(id, store.value(id)));
+      labelRow.append(name, value);
+      wrap.appendChild(labelRow);
+
+      if (spec.kind === 'enum') {
+        const seg = el('div', 'seg');
+        seg.setAttribute('role', 'group');
+        seg.setAttribute('aria-label', spec.label);
+        const buttons = new Map();
+        for (const option of spec.values) {
+          const b = el('button', null, (ENUM_LABELS[id] || String)(option));
+          b.type = 'button';
+          b.setAttribute('aria-pressed', String(store.value(id) === option));
+          b.addEventListener('click', () => store.set({ [id]: option }, { source: 'ui' }));
+          buttons.set(option, b);
+          seg.appendChild(b);
+        }
+        // The label row already names the group; the segment carries the id so
+        // the label's `for` still lands somewhere focusable.
+        seg.id = `ctl-${id}`;
+        wrap.appendChild(seg);
+        inputs.set(id, { kind: 'enum', buttons, value });
+      } else {
+        const input = document.createElement('input');
+        input.type = 'range';
+        input.id = `ctl-${id}`;
+        input.min = String(spec.min);
+        input.max = String(spec.max);
+        input.step = String(spec.step ?? 1);
+        input.value = String(store.value(id));
+        input.setAttribute('aria-describedby', `ctl-${id}-val`);
+        value.id = `ctl-${id}-val`;
+        input.addEventListener('input', () => {
+          store.set({ [id]: Number(input.value) }, { source: 'ui' });
+        });
+        wrap.appendChild(input);
+        inputs.set(id, { kind: 'range', input, value });
+        paintRange(input, spec);
+      }
+
+      if (spec.hint) wrap.appendChild(el('p', 'control-hint', spec.hint));
+      section.appendChild(wrap);
+    }
+    host.appendChild(section);
+  }
+
+  function sync(state) {
+    for (const [id, entry] of inputs) {
+      const v = state[id];
+      entry.value.textContent = formatValue(id, v);
+      if (entry.kind === 'range') {
+        if (document.activeElement !== entry.input) entry.input.value = String(v);
+        paintRange(entry.input, CONTROLS[id]);
+      } else {
+        for (const [option, button] of entry.buttons) {
+          button.setAttribute('aria-pressed', String(option === v));
+        }
+      }
+    }
+  }
+
+  sync(store.get());
+  return { sync };
+}
+
+/** Paint the filled portion of a range track (Chromium needs the variable). */
+function paintRange(input, spec) {
+  const pct = ((Number(input.value) - spec.min) / (spec.max - spec.min)) * 100;
+  input.style.setProperty('--fill', `${Math.max(0, Math.min(100, pct))}%`);
+}
+
+export function buildLayerToggles(store, host) {
+  const buttons = new Map();
+  for (const [id, spec] of Object.entries(LAYERS)) {
+    const b = el('button', 'layer-toggle');
+    b.type = 'button';
+    b.appendChild(el('span', 'dot'));
+    b.appendChild(el('span', null, spec.label));
+    b.setAttribute('aria-pressed', String(store.isLayerOn(id)));
+    b.addEventListener('click', () => {
+      if (b.disabled) return;
+      store.set({ layers: { [id]: !store.isLayerOn(id) } }, { source: 'ui' });
+    });
+    buttons.set(id, b);
+    host.appendChild(b);
+  }
+
+  return {
+    sync(state) {
+      for (const [id, b] of buttons) b.setAttribute('aria-pressed', String(!!state.layers[id]));
+    },
+    /** Grey out a layer whose data never arrived, and say why on hover. */
+    disable(ids, reason) {
+      for (const id of ids) {
+        const b = buttons.get(id);
+        if (!b) continue;
+        b.disabled = true;
+        b.title = reason;
+      }
+    },
+  };
+}
+
+export function buildPresets(host, onSelect) {
+  const cards = new Map();
+  PRESETS.forEach((preset, i) => {
+    const b = el('button', 'preset-card');
+    b.type = 'button';
+    b.setAttribute('aria-pressed', 'false');
+    const index = el('span', 'p-index', String(i + 1));
+    const name = el('span', 'p-name', preset.name);
+    b.append(index, name);
+    b.title = preset.blurb;
+    b.addEventListener('click', () => onSelect(preset.id));
+    cards.set(preset.id, b);
+    host.appendChild(b);
+  });
+  return {
+    sync(state) {
+      for (const [id, b] of cards) b.setAttribute('aria-pressed', String(id === state.preset));
+    },
+  };
+}
+
+export function buildQuickJumps(host, onSelect) {
+  for (const jump of QUICK_JUMPS) {
+    const b = el('button', 'chip', jump.name);
+    b.type = 'button';
+    b.addEventListener('click', () => onSelect(jump));
+    host.appendChild(b);
+  }
+}
+
+/**
+ * Type-ahead over presets, curated jumps, landmarks and OSM place names.
+ *
+ * Ranking is deliberately simple and predictable: exact, then prefix, then
+ * word-prefix, then substring, tie-broken by the entry's own importance. A
+ * fuzzy matcher would surface stranger results without being more useful over
+ * a list this size.
+ */
+export function createSearch(options) {
+  const { input, results, entries, onSelect } = options;
+  let matches = [];
+  let active = -1;
+
+  function norm(s) {
+    // Strip combining marks so "Bryn Mawr" matches regardless of how the
+    // query was typed or pasted.
+    return String(s).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  function score(entry, q) {
+    const name = norm(entry.name);
+    if (name === q) return 0;
+    if (name.startsWith(q)) return 1;
+    if (name.split(/[\s\-/]+/).some((w) => w.startsWith(q))) return 2;
+    if (name.includes(q)) return 3;
+    return Infinity;
+  }
+
+  function render() {
+    results.innerHTML = '';
+    if (!matches.length) {
+      const empty = el('li', 'search-empty', 'Nothing matches that name.');
+      empty.setAttribute('role', 'presentation');
+      results.appendChild(empty);
+      results.hidden = false;
+      input.setAttribute('aria-expanded', 'true');
+      return;
+    }
+    matches.forEach((entry, i) => {
+      const li = el('li');
+      li.setAttribute('role', 'option');
+      li.id = `search-opt-${i}`;
+      li.setAttribute('aria-selected', String(i === active));
+      li.append(el('span', null, entry.name), el('span', 'r-kind', entry.kindLabel));
+      li.addEventListener('mousedown', (event) => {
+        event.preventDefault();     // keep focus so blur does not close first
+        choose(i);
+      });
+      results.appendChild(li);
+    });
+    results.hidden = false;
+    input.setAttribute('aria-expanded', 'true');
+    input.setAttribute('aria-activedescendant', active >= 0 ? `search-opt-${active}` : '');
+  }
+
+  function close() {
+    results.hidden = true;
+    results.innerHTML = '';
+    active = -1;
+    matches = [];
+    input.setAttribute('aria-expanded', 'false');
+    input.removeAttribute('aria-activedescendant');
+  }
+
+  function choose(i) {
+    const entry = matches[i];
+    if (!entry) return;
+    input.value = '';
+    close();
+    input.blur();
+    onSelect(entry);
+  }
+
+  function update() {
+    const q = norm(input.value.trim());
+    if (q.length < 1) {
+      close();
+      return;
+    }
+    matches = entries
+      .map((entry) => ({ entry, s: score(entry, q) }))
+      .filter((m) => m.s !== Infinity)
+      .sort((a, b) => (a.s - b.s)
+        || (a.entry.priority - b.entry.priority)
+        || a.entry.name.length - b.entry.name.length)
+      .slice(0, 10)
+      .map((m) => m.entry);
+    active = matches.length ? 0 : -1;
+    render();
+  }
+
+  input.addEventListener('input', update);
+  input.addEventListener('focus', () => { if (input.value.trim()) update(); });
+  input.addEventListener('blur', () => setTimeout(close, 120));
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (!matches.length) return;
+      active = (active + (event.key === 'ArrowDown' ? 1 : matches.length - 1)) % matches.length;
+      render();
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      choose(active >= 0 ? active : 0);
+    } else if (event.key === 'Escape') {
+      input.value = '';
+      close();
+      input.blur();
+    }
+    event.stopPropagation();     // do not let map shortcuts fire while typing
+  });
+
+  return { close };
+}
+
+/**
+ * Build the search index. Curated entries outrank OSM place nodes so
+ * "Valley Forge" lands on the authored shot rather than a nearby hamlet.
+ */
+export function buildSearchIndex(placesGeojson, landmarksDoc) {
+  const entries = [];
+
+  for (const preset of PRESETS) {
+    entries.push({
+      name: preset.name, kind: 'preset', kindLabel: 'Preset',
+      presetId: preset.id, priority: 0,
+    });
+  }
+  for (const jump of QUICK_JUMPS) {
+    entries.push({
+      name: jump.name, kind: 'jump', kindLabel: 'Place',
+      jump, lon: jump.lon, lat: jump.lat, priority: 1,
+    });
+  }
+  const seen = new Set(entries.map((e) => e.name.toLowerCase()));
+
+  for (const l of landmarksDoc?.landmarks || []) {
+    if (seen.has(l.n.toLowerCase())) continue;
+    seen.add(l.n.toLowerCase());
+    entries.push({
+      name: l.n, kind: 'landmark', kindLabel: 'Landmark',
+      lon: l.lon, lat: l.lat, note: l.d, priority: 2 + (l.r ?? 2) * 0.1,
+    });
+  }
+  for (const feature of placesGeojson?.features || []) {
+    const p = feature.properties || {};
+    if (!p.n || seen.has(p.n.toLowerCase())) continue;
+    seen.add(p.n.toLowerCase());
+    const [lon, lat] = feature.geometry?.coordinates || [];
+    entries.push({
+      name: p.n, kind: 'place', kindLabel: labelForPlaceKind(p.k),
+      lon, lat, priority: 4 + (p.rank ?? 3) * 0.1,
+    });
+  }
+  return entries;
+}
+
+function labelForPlaceKind(kind) {
+  return {
+    city: 'City', borough: 'Borough', town: 'Town', village: 'Village',
+    suburb: 'Suburb', neighbourhood: 'Neighborhood',
+  }[kind] || 'Place';
+}
+
+/**
+ * Modal plumbing: focus goes into the dialog on open and returns to whatever
+ * opened it on close, and Tab is kept inside while it is up.
+ */
+export function createDialogs(ids) {
+  const dialogs = new Map();
+  let openId = null;
+  let restoreTo = null;
+
+  for (const id of ids) {
+    const node = document.getElementById(id);
+    if (node) dialogs.set(id, node);
+  }
+
+  function focusables(node) {
+    return [...node.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+      .filter((el2) => !el2.disabled && el2.offsetParent !== null);
+  }
+
+  function open(id) {
+    const node = dialogs.get(id);
+    if (!node) return;
+    if (openId) close();
+    restoreTo = document.activeElement;
+    node.hidden = false;
+    openId = id;
+    const first = focusables(node)[0];
+    if (first) first.focus();
+  }
+
+  function close() {
+    if (!openId) return;
+    const node = dialogs.get(openId);
+    if (node) node.hidden = true;
+    openId = null;
+    if (restoreTo && restoreTo.focus) restoreTo.focus();
+    restoreTo = null;
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (!openId) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopPropagation();
+      close();
+    } else if (event.key === 'Tab') {
+      const node = dialogs.get(openId);
+      const items = focusables(node);
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
+  }, true);
+
+  for (const [, node] of dialogs) {
+    node.addEventListener('click', (event) => {
+      if (event.target === node) close();     // click the scrim
+    });
+    node.querySelectorAll('[data-close]').forEach((btn) => {
+      btn.addEventListener('click', close);
+    });
+  }
+
+  return { open, close, get openId() { return openId; } };
+}
+
+/** Apply a theme's UI colours to the document. */
+export function applyThemeChrome(themeId) {
+  const theme = getTheme(THEME_IDS.includes(themeId) ? themeId : 'dusk');
+  const root = document.documentElement;
+  root.style.setProperty('--bg', theme.ui.bg);
+  root.style.setProperty('--panel', theme.ui.panel);
+  root.style.setProperty('--panel-blur', hexWithAlpha(theme.ui.panel, 0.74));
+  root.style.setProperty('--accent', theme.ui.accent);
+  root.style.setProperty('--text', theme.ui.text);
+  root.style.setProperty('--muted', hexWithAlpha(theme.ui.text, 0.62));
+  root.style.setProperty('--line', hexWithAlpha(theme.ui.text, 0.14));
+  root.style.setProperty('--line-strong', hexWithAlpha(theme.ui.text, 0.28));
+  root.style.setProperty('--label-ink', theme.ink);
+  root.style.setProperty('--label-muted', theme.inkMuted);
+  root.style.setProperty('--label-halo', theme.halo);
+  root.style.setProperty('--label-accent', theme.ui.accent);
+  document.body.dataset.theme = themeId;
+}
+
+function hexWithAlpha(hex, alpha) {
+  const h = String(hex).replace('#', '');
+  const n = parseInt(h.length === 3 ? h.split('').map((c) => c + c).join('') : h, 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
+
+let toastTimer = 0;
+export function toast(message) {
+  const node = document.getElementById('toast');
+  if (!node) return;
+  node.textContent = message;
+  node.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => node.classList.remove('show'), 2600);
+}
+
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}

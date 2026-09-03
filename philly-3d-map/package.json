@@ -1,0 +1,21 @@
+{
+  "name": "philly-3d-map",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Philadelphia Relief — an interactive cinematic 3D topographic map of the Delaware Valley. Static, dependency-free at runtime, no API keys.",
+  "license": "MIT",
+  "scripts": {
+    "dev": "python3 -m http.server 8731 --bind 127.0.0.1 --directory ..",
+    "test": "node --test tests/*.test.js",
+    "lint": "node tools/lint.mjs",
+    "check": "npm run lint && npm test",
+    "qa": "node tools/qa.mjs",
+    "build:terrain": "python3 tools/build_terrain.py --grid 2048 --step 0.25 --out heightmap.webp",
+    "build:vectors": "python3 tools/build_vectors.py",
+    "build:data": "npm run build:terrain && npm run build:vectors"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
