@@ -327,6 +327,10 @@ export const QUICK_JUMPS = [
     camDist: 11000, camBearing: 40, camPitch: 70 },
   { id: 'doylestown', name: 'Doylestown', lon: -75.1299, lat: 40.3101,
     camDist: 14000, camBearing: 214, camPitch: 69 },
+  // Looking up the Delaware toward the falls at Trenton, with the Levitt
+  // sections filling the flat terrace in the foreground.
+  { id: 'levittown', name: 'Levittown', lon: -74.8380, lat: 40.1548,
+    camDist: 13000, camBearing: 42, camPitch: 70 },
   { id: 'camden', name: 'Camden', lon: -75.1196, lat: 39.9259,
     camDist: 12000, camBearing: 292, camPitch: 71 },
   { id: 'cherry-hill', name: 'Cherry Hill', lon: -75.0246, lat: 39.9268,

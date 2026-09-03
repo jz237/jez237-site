@@ -197,10 +197,16 @@ function overlaps(a, b) {
  */
 export function buildLabelCandidates(placesGeojson, landmarksDoc) {
   const out = [];
+  // A curated landmark replaces the OSM place node of the same name outright.
+  // Twenty names exist in both sets; without this the two candidates race in
+  // the collision pass, and whichever wins at one zoom loses at another.
+  const curated = new Set(
+    (landmarksDoc?.landmarks || []).map((l) => l.n.toLowerCase()));
   for (const feature of placesGeojson?.features || []) {
     const p = feature.properties || {};
     const [lon, lat] = feature.geometry?.coordinates || [];
     if (!p.n) continue;
+    if (curated.has(p.n.toLowerCase())) continue;
     out.push({
       name: p.n,
       lon,

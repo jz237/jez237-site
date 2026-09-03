@@ -865,9 +865,73 @@ test('labels', async (t) => {
     assert.ok(hall.rank < out.find((c) => c.name === 'Ardmore').rank);
   });
 
+  await t.test('a curated landmark supersedes the OSM place of the same name', () => {
+    const places = {
+      features: [
+        { properties: { n: 'Levittown', rank: 2, k: 'town' },
+          geometry: { type: 'Point', coordinates: [-74.838, 40.15476] } },
+        { properties: { n: 'Bristol', rank: 2, k: 'borough' },
+          geometry: { type: 'Point', coordinates: [-74.85, 40.10] } },
+      ],
+    };
+    const landmarks = { landmarks: [
+      { n: 'Levittown', lon: -74.838, lat: 40.1548, c: 'town', r: 1, d: 'x' },
+    ] };
+    const out = buildLabelCandidates(places, landmarks);
+    const levittowns = out.filter((c) => c.name === 'Levittown');
+    assert.equal(levittowns.length, 1, 'one name must yield one candidate');
+    assert.equal(levittowns[0].kind, 'landmark', 'the curated entry wins');
+    assert.equal(levittowns[0].rank, 1);
+    assert.ok(out.some((c) => c.name === 'Bristol'), 'unrelated places survive');
+    // Case must not defeat the dedupe.
+    const shouty = { landmarks: [{ n: 'LEVITTOWN', lon: -74.8, lat: 40.1, r: 1 }] };
+    assert.equal(buildLabelCandidates(places, shouty)
+      .filter((c) => c.name.toLowerCase() === 'levittown').length, 1);
+  });
+
   await t.test('empty input is handled', () => {
     assert.deepEqual(buildLabelCandidates(null, null), []);
     assert.deepEqual(buildLabelCandidates({}, {}), []);
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('shipped data', async (t) => {
+  const { readFile } = await import('node:fs/promises');
+  const dataDir = new URL('../data/', import.meta.url);
+  const places = JSON.parse(await readFile(new URL('places.geojson', dataDir), 'utf8'));
+  const landmarksDoc = JSON.parse(await readFile(new URL('landmarks.json', dataDir), 'utf8'));
+
+  await t.test('Levittown is present exactly once and where the chip flies', () => {
+    const hits = places.features.filter((f) => f.properties?.n === 'Levittown');
+    assert.equal(hits.length, 1, 'places.geojson must carry exactly one Levittown');
+    const [lon, lat] = hits[0].geometry.coordinates;
+    const jump = QUICK_JUMPS.find((j) => j.id === 'levittown');
+    assert.ok(jump, 'quick jump missing');
+    // Within ~1 km of the OSM node; the chip is curated, not scraped.
+    assert.ok(Math.abs(jump.lon - lon) < 0.012 && Math.abs(jump.lat - lat) < 0.009,
+      `chip (${jump.lon},${jump.lat}) is far from the data (${lon},${lat})`);
+    const landmark = landmarksDoc.landmarks.find((l) => l.n === 'Levittown');
+    assert.ok(landmark, 'curated landmark missing');
+    assert.equal(landmark.r, 1, 'must sit in the always-shown tier');
+  });
+
+  await t.test('every quick jump resolves against the shipped label data', () => {
+    const candidates = buildLabelCandidates(places, landmarksDoc);
+    const names = new Set(candidates.map((c) => c.name.toLowerCase()));
+    // Areas like Center City or the Main Line are labelled via neighbourhoods,
+    // so require resolution only for jumps that name a single settlement.
+    for (const jump of QUICK_JUMPS) {
+      const candidate = candidates.find((c) => c.name.toLowerCase() === jump.name.toLowerCase());
+      if (!candidate) continue;
+      assert.ok(Math.abs(candidate.lon - jump.lon) < 0.05
+        && Math.abs(candidate.lat - jump.lat) < 0.05,
+        `${jump.name}: chip and label disagree by more than ~5 km`);
+    }
+    assert.ok(names.has('levittown'), 'Levittown must be a label candidate');
+    const dupes = candidates.map((c) => c.name.toLowerCase())
+      .filter((n, i, arr) => arr.indexOf(n) !== i);
+    assert.ok(!dupes.includes('levittown'), 'Levittown label is duplicated');
   });
 });
 
@@ -876,7 +940,7 @@ test('quick jumps', async (t) => {
   await t.test('every required destination is reachable and inside the region', () => {
     const required = ['Center City', 'South Philadelphia', 'University City', 'Manayunk',
       'Chestnut Hill', 'Northeast Philadelphia', 'King of Prussia', 'Media',
-      'Doylestown', 'Camden', 'Cherry Hill', 'Valley Forge'];
+      'Doylestown', 'Levittown', 'Camden', 'Cherry Hill', 'Valley Forge'];
     const names = QUICK_JUMPS.map((j) => j.name);
     for (const name of required) assert.ok(names.includes(name), `missing quick jump: ${name}`);
     for (const jump of QUICK_JUMPS) {
