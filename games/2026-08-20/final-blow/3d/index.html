@@ -122,7 +122,7 @@ async function loadFighter(id) {
     try { const a = await loader.loadAsync(`fighters/${id}/anim-${name}.glb`); const clip = a.animations[0]; clip.name = name;
       for (const tr of clip.tracks) if (tr.name.endsWith('.position')) { const v = tr.values; const hips = tr.name.includes('Hips'); for (let i = 0; i < v.length; i += 3) { v[i] = v[0]; v[i + 2] = v[2]; if (!hips) v[i + 1] = v[1]; } }
       const act = mixer.clipAction(clip); act.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce); act.clampWhenFinished = true; actions[name] = act;
-      if (name === 'jab') { const g = THREE.AnimationUtils.subclip(clip, 'guard', 0, 11, 30); const ga = mixer.clipAction(g); ga.setLoop(THREE.LoopPingPong); ga.timeScale = 0.45; actions.guard = ga; }
+      if (name === 'jab') { const g = THREE.AnimationUtils.subclip(clip, 'guard', 0, 6, 30); const ga = mixer.clipAction(g); ga.setLoop(THREE.LoopPingPong); ga.timeScale = 0.35; actions.guard = ga; }
     } catch (e) { console.warn('clip', name, e); }
   }
   document.querySelectorAll('button[data-clip]').forEach(b => { b.disabled = !actions[b.dataset.clip]; b.style.opacity = actions[b.dataset.clip] ? 1 : .35; });
