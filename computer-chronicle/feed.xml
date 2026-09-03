@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 03 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of April 23-29, 1984 — Apple Puts the II in a Carrying Case</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-04-23</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-23</guid>
+      <pubDate>Thu, 03 Sep 2026 12:00:00 GMT</pubDate>
+      <description>The $1,295 Apple IIc brings 128K, a built-in disk drive and nearly a decade of Apple II software into a compact 7.5-pound package. SAN FRANCISCO — Apple Computer unveiled the Apple IIc on April 24 at its “Apple II Forever” dealer convention, putting the durable Apple II design into an ivory case small enough to carry by its handle. Even a 6.2-magnitude earthquake shaking Moscone Center could not upstage the week’s landmark personal-computer announcement. Also this week: Apple II Forever, Apple III No More · IBM’s PCjr Stumbles Out of the Gate · Software Becomes the Machine’s Magic · April’s Game Shelf Spans Machines.</description>
+    </item>
     <item>
       <title>Week of April 16-22, 1984 — Software Steps Into the Spotlight</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-04-16</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-12-12</guid>
       <pubDate>Thu, 13 Aug 2026 12:00:00 GMT</pubDate>
       <description>Visi On ships a commercial graphical desktop while Microsoft and Quarterdeck ready cheaper rivals. VisiCorp has put a windowed, mouse-driven working environment onto the IBM Personal Computer, turning a laboratory-style graphical interface into a commercial product. Visi On joins word processing, spreadsheet and graphing programs behind one visual system, giving business users a consistent way to move among tasks. Also this week: Home-Computer Price War Finally Cools · Donkey Kong Jr. Clambers Into Arithmetic · A Christmas Bounce for Atari Amid the Crash · Software Moves from Boxes to Parcels.</description>
-    </item>
-    <item>
-      <title>Week of December 5-11, 1983 — COMDEX Becomes Las Vegas&apos;s Biggest Show as IBM Compatibility Takes Command</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-12-05</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-12-05</guid>
-      <pubDate>Wed, 12 Aug 2026 12:00:00 GMT</pubDate>
-      <description>More than 80,000 visitors and 1,400 exhibitors gather around a market increasingly organized by the IBM PC standard. The computer trade has taken over Las Vegas. A show that began in the winter of 1979 with roughly 4,000 visitors has swollen to more than 80,000 attendees, filling the convention center and rooms in five major hotels. Its 1,400 exhibitors include 400 newcomers, with AT&amp;T among the names making a first appearance. Also this week: Interactive Fiction Turns the Floppy Disk into a Bestseller Shelf · Home Computers Move to the Center of the Christmas Battle · Windows Become Software’s New Battleground.</description>
     </item>
   </channel>
 </rss>

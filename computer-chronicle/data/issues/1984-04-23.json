@@ -1,0 +1,359 @@
+{
+  "currentDate": "2026-09-03",
+  "historicDate": "1984-04-23",
+  "displayDate": "Week of April 23-29, 1984",
+  "edition": "Issue 091 - Weekly 1984 Computer & Culture Chronicle",
+  "milestone": {
+    "title": "Apple Introduces the Apple IIc",
+    "note": "The IIc translated the influential Apple II architecture into Apple’s compact new design language while sustaining its mass-market eight-bit ecosystem alongside Macintosh."
+  },
+  "visualProfile": {
+    "tone": "Extra-edition energy on warm aged newsprint",
+    "motifs": [
+      "Apple IIc carrying handle",
+      "5.25-inch disk",
+      "home-computer game shelf"
+    ],
+    "layout": "Dense seven-column 1984 computer weekly with bold red and blue rules"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+    "dateline": "Week of April 23-29, 1984",
+    "price": "75¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Apple IIc extra-edition banner and dominant product photograph",
+    "secondaryRail": "Games, software, charts and price watch",
+    "archiveNavigation": "Chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "#9b1c1c",
+    "secondary": "#173f6b",
+    "texture": "warm newsprint grain and halftone ink"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-04-23.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the Apple IIc debut week of April 23, 1984",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Extra Edition: Apple’s compact IIc arrives carrying the vast Apple II library into a new era.",
+  "morningLine": "Apple II Forever: a familiar computer slips into a carryable new case.",
+  "lead": {
+    "headline": "Apple Puts the II in a Carrying Case",
+    "dek": "The $1,295 Apple IIc brings 128K, a built-in disk drive and nearly a decade of Apple II software into a compact 7.5-pound package.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      0,
+      1,
+      2
+    ],
+    "body": [
+      "SAN FRANCISCO — Apple Computer unveiled the Apple IIc on April 24 at its “Apple II Forever” dealer convention, putting the durable Apple II design into an ivory case small enough to carry by its handle. Even a 6.2-magnitude earthquake shaking Moscone Center could not upstage the week’s landmark personal-computer announcement.",
+      "At $1,295, the IIc includes a 1.02 MHz 65C02 processor, 128K of memory, Applesoft BASIC, a full-stroke keyboard and a built-in 5.25-inch floppy drive. The 7.5-pound machine is compact rather than truly cordless, but a broad set of ports accommodates a display, printer, modem, mouse or joystick and a second disk drive.",
+      "Compatibility is the strongest card in Apple’s hand. The company says roughly 90 percent of some 10,000 Apple II programs will run on the newcomer, letting families, schools and small offices keep their established software. Period reports say dealers placed more than 50,000 orders within hours.",
+      "The IIc also introduces Frog Design’s clean “Snow White” styling and extends Macintosh ideas to the older family through a $99 mouse bundled with MousePaint. Accessories range from a $199 green-screen monitor and $299 Scribe printer to a planned $600 flat display.",
+      "Apple is signaling that Macintosh and Apple II will advance together: one experiments with a graphical future, while the other carries a vast installed base into a friendlier shell. The IIc is evolutionary inside, but its combination of polish, portability and software breadth makes this an extra-edition week."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Apple II Forever, Apple III No More",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1,
+        2
+      ],
+      "body": [
+        "Apple used the IIc debut to reassure dealers that Macintosh would not displace its established eight-bit line. The “Apple II Forever” theme turned compatibility and continuity into the convention’s rallying cry.",
+        "The same day brought the end of the troubled Apple III, Apple’s unsuccessful attempt to build a business successor to the II. The company now presents two clearer families: the profitable Apple II line for homes and schools, and Macintosh for its new graphical ambitions.",
+        "COMPUTE! later reported nearly two million Apple II-family machines sold, while Macintosh passed 70,000 in its first 100 days. Apple is pruning a failure while doubling down on its strongest names."
+      ]
+    },
+    {
+      "headline": "IBM’s PCjr Stumbles Out of the Gate",
+      "confidence": "same-week",
+      "sourceRefs": [
+        3,
+        1
+      ],
+      "body": [
+        "Reports immediately before this week say IBM’s PCjr is selling below expectations, sharpening the contest between two similarly priced family computers. Both the 128K PCjr and IIc offer a floppy drive, external power supply and ties to a larger software family.",
+        "Creative Computing finds the IIc keyboard markedly better, while noting the PCjr’s faster processor, side-bus expansion and cartridge slots. IBM’s machine retains the gravitational pull of the PC name, but its compromised keyboard and compatibility questions are proving costly.",
+        "Apple’s new entry makes ease of use and a proven library the center of the pitch. The home-computer contest will turn on what buyers can actually do after opening the box."
+      ]
+    },
+    {
+      "headline": "Software Becomes the Machine’s Magic",
+      "confidence": "same-month",
+      "sourceRefs": [
+        4,
+        5,
+        1
+      ],
+      "body": [
+        "TIME’s April software cover calls programs “the magic carpet to the future,” capturing an industry shift from hardware novelty toward applications and usability. Apple’s IIc pitch makes the same argument through compatibility rather than raw processor power.",
+        "AppleWorks combines word processing, a database and a spreadsheet for the Apple II family. MousePaint, bundled with the IIc mouse, brings a Macintosh-style pointing interface to the older line.",
+        "The machine matters, but the library increasingly closes the sale. In 1984, useful programs—and the confidence that they will keep running—are becoming the most persuasive specification."
+      ]
+    },
+    {
+      "headline": "April’s Game Shelf Spans Machines",
+      "confidence": "same-month",
+      "sourceRefs": [
+        6
+      ],
+      "body": [
+        "Computer Entertainer’s April issue finds a lively home-game shelf despite the console trade’s contraction. B.C.’s Quest for Tires and Fathom appear for Apple II, Oil’s Well for ColecoVision and Dragonhawk for Commodore 64.",
+        "Publishers continue to cross incompatible formats, searching for players on every popular machine. Arcade conversions share shelf space with original computer games, while reviews and mail-order listings help buyers navigate the crowded field.",
+        "Exact release days are often elusive, so these are April shelf sightings rather than claims of launch-day precision. They nevertheless show software variety remaining one of home computing’s strongest attractions."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Apple IIc",
+      "summary": "1.02 MHz 65C02, 128K RAM, built-in 5.25-inch drive and 7.5-pound case.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "Apple Scribe printer",
+      "summary": "Thermal-transfer text and graphics in black-and-white or color.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "title": "Apple IIc flat display",
+      "summary": "Planned low-power 80-column by 24-row LCD accessory.",
+      "confidence": "exact-date",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "AppleWorks 1.0",
+      "detail": "Integrated word processor, database and spreadsheet"
+    },
+    {
+      "name": "MousePaint",
+      "detail": "Mouse-driven graphics bundled with the IIc mouse"
+    },
+    {
+      "name": "B.C.’s Quest for Tires",
+      "detail": "Apple II game on the April shelf"
+    },
+    {
+      "name": "Fathom",
+      "detail": "Apple II fantasy adventure reviewed this month"
+    },
+    {
+      "name": "Dragonhawk",
+      "detail": "Commodore 64 action title reviewed this month"
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "B.C.’s Quest for Tires — Apple II",
+        "Fathom — Apple II",
+        "Oil’s Well — ColecoVision",
+        "Dragonhawk — Commodore 64",
+        "Protector — Apple II"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "1. Police Academy",
+        "2. Romancing the Stone",
+        "3. Greystoke",
+        "4. Friday the 13th: The Final Chapter",
+        "5. Splash"
+      ]
+    },
+    {
+      "label": "Software Shelf",
+      "items": [
+        "AppleWorks 1.0",
+        "MousePaint",
+        "April multi-platform game releases"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Apple IIc computer",
+      "price": "$1,295",
+      "note": "128K with built-in floppy drive"
+    },
+    {
+      "item": "Apple IIc mouse with MousePaint",
+      "price": "$99",
+      "note": "Pointing device and graphics software"
+    },
+    {
+      "item": "Apple IIc green-phosphor monitor",
+      "price": "$199",
+      "note": "Matching display"
+    },
+    {
+      "item": "Apple IIc external floppy drive",
+      "price": "$329",
+      "note": "Second-drive option"
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Earthquake punctuates IIc debut",
+      "text": "A magnitude 6.2 earthquake shook Moscone Center during Apple’s April 24 convention."
+    },
+    {
+      "headline": "Apple bets on design consistency",
+      "text": "Frog Design’s ivory Snow White styling debuts on the IIc."
+    },
+    {
+      "headline": "Scribe prints in color",
+      "text": "Apple’s $299 thermal-transfer printer offers a cyan, magenta and yellow ribbon option."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Against All Odds (Take a Look at Me Now)",
+      "artist": "Phil Collins"
+    },
+    {
+      "rank": 2,
+      "title": "Hello",
+      "artist": "Lionel Richie"
+    },
+    {
+      "rank": 3,
+      "title": "Let’s Hear It for the Boy",
+      "artist": "Deniece Williams"
+    },
+    {
+      "rank": 4,
+      "title": "Automatic",
+      "artist": "The Pointer Sisters"
+    },
+    {
+      "rank": 5,
+      "title": "Footloose",
+      "artist": "Kenny Loggins"
+    }
+  ],
+  "periodAd": {
+    "headline": "Apple II Forever",
+    "summary": "Carry thousands of familiar Apple II programs into a compact new case.",
+    "tagline": "The computer you know, ready to go."
+  },
+  "market": {
+    "headline": "Apple Clarifies Its Two-Family Strategy",
+    "summary": "The IIc sustains Apple’s mass-market eight-bit ecosystem while Macintosh pursues the graphical business and education market; Apple III exits the catalog.",
+    "confidence": "exact-date synthesis",
+    "sourceRefs": [
+      1,
+      2
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Reagan Opens Six-Day China Visit",
+    "summary": "President Reagan arrived in Beijing April 26 for his first visit to a communist country as president, emphasizing trade and strategic common ground.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Apple IIc debut, price and specifications",
+        "status": "Verified exact-date and period reports",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ]
+      },
+      {
+        "claim": "PCjr weak early sales",
+        "status": "Verified contemporary report",
+        "sourceRefs": [
+          3
+        ]
+      },
+      {
+        "claim": "April game shelf",
+        "status": "Verified same-month period publication",
+        "sourceRefs": [
+          6
+        ]
+      },
+      {
+        "claim": "Music and movies",
+        "status": "Verified dated chart listings",
+        "sourceRefs": [
+          7,
+          8
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "New York Times — Apple Is Banking on New Portable: The IIc Computer",
+      "url": "https://www.nytimes.com/1984/04/24/business/apple-is-banking-on-new-portable-the-iic-computer.html"
+    },
+    {
+      "label": "Creative Computing — Apple announces the IIc",
+      "url": "https://www.atarimagazines.com/creative/v10n7/116_Apple_announces_the_IIc.php"
+    },
+    {
+      "label": "COMPUTE! — The Apple IIc Heads For Home",
+      "url": "https://www.atarimagazines.com/compute/issue50/227_1_Evolutionary_To_The_Core_The_Apple_IIc_Heads_For_Home.php"
+    },
+    {
+      "label": "New York Times — PCjr Sales Less Than Expected",
+      "url": "https://www.nytimes.com/1984/04/20/business/pcjr-sales-less-than-expected.html"
+    },
+    {
+      "label": "TIME — The Wizard Inside the Machine",
+      "url": "https://time.com/archive/6699949/the-wizard-inside-the-machine/"
+    },
+    {
+      "label": "AppleWorks 1.0 brochure",
+      "url": "https://www.cvxmelody.net/AppleWorks_1.0_brochure_February_1984.htm"
+    },
+    {
+      "label": "Computer Entertainer — April 1984",
+      "url": "https://ataricompendium.com/archives/newsletters/video_game_update/computer_entertainer_apr84.pdf"
+    },
+    {
+      "label": "Billboard Hot 100 — April 28, 1984",
+      "url": "https://billboard.elpee.jp/hot100/week/1984-04-28"
+    },
+    {
+      "label": "Box Office Mojo — Weekend 17, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W17/"
+    },
+    {
+      "label": "Christian Science Monitor — Reagan China visit",
+      "url": "https://www.csmonitor.com/1984/0427/042724.html"
+    },
+    {
+      "label": "UPI — Britain moves to expel Libyan embassy staff",
+      "url": "https://www.upi.com/Archives/1984/04/23/Britain-deported-a-Libyan-today-but-the-decision-to/8966451544400/"
+    }
+  ]
+}
