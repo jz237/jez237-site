@@ -128,6 +128,22 @@ async function run() {
     console.log('  probe:', JSON.stringify(probe, null, 2).replace(/\n/g, '\n  '));
     report.push(`[${viewport.id}] probe ${JSON.stringify(probe)}`);
 
+    // No visible label may cross the viewport edge; a truncated name is worse
+    // than an absent one. 1px tolerance for rounding.
+    const clipped = await page.evaluate(() => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+      return [...document.querySelectorAll('.map-label')]
+        .filter((n) => n.style.display !== 'none')
+        .map((n) => ({ t: n.textContent, ...n.getBoundingClientRect().toJSON() }))
+        .filter((r) => r.left < -1 || r.right > vw + 1 || r.top < -1 || r.bottom > vh + 1)
+        .map((r) => `${r.t} [${Math.round(r.left)}..${Math.round(r.right)}]`);
+    });
+    if (clipped.length) {
+      problems.push(`[${viewport.id}] labels cross the viewport edge: ${clipped.join(', ')}`);
+    }
+    report.push(`[${viewport.id}] label edge check: ${clipped.length} clipped`);
+
     if (!probe.canvas || probe.canvas.w < 10) {
       problems.push(`[${viewport.id}] canvas has no drawing buffer`);
     }
