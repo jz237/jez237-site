@@ -66,12 +66,12 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 const ROSTER = await (await fetch('roster.json')).json();
 if (new URLSearchParams(location.search).has('bare')) document.body.classList.add('bare');
 const CLIPS = [
-  ['idle','Combat stance','move',true],['walk_fwd','Walk forward','move',true],['walk_back','Walk back','move',true],['dodge','Dodge','move',false],['jump','Jump','move',false],
+  ['guard','Guard','move',true],['idle','Combat stance','move',true],['walk_fwd','Walk forward','move',true],['walk_back','Walk back','move',true],['dodge','Dodge','move',false],['jump','Jump','move',false],
   ['jab','Jab','strike',false],['hook','Hook','strike',false],['uppercut','Uppercut','strike',false],['roundhouse','Roundhouse','strike',false],['high_kick','High kick','strike',false],['sweep','Sweep','strike',false],
   ['block','Block','react',false],['hit_face','Face hit','react',false],['hit_body','Body hit','react',false],['launched','Launched','react',false],['knockdown','Knockdown','react',false],['getup','Get up','react',false],['ko','KO','react',false],
   ['victory','Victory','misc',false],['taunt','Taunt','misc',false],
 ];
-const DEMO = [['idle',2],['walk_fwd',2.2],['jab',1.2],['hook',1.3],['roundhouse',1.7],['walk_back',1.6],['block',1.3],['hit_face',1.4],['launched',1.8],['getup',2.4],['uppercut',1.4],['high_kick',1.6],['knockdown',2.2],['getup',2.4],['victory',2.5]];
+const DEMO = [['guard',2],['walk_fwd',2.2],['jab',1.2],['hook',1.3],['roundhouse',1.7],['walk_back',1.6],['block',1.3],['hit_face',1.4],['launched',1.8],['getup',2.4],['uppercut',1.4],['high_kick',1.6],['knockdown',2.2],['getup',2.4],['victory',2.5]];
 const LOOK = { outline: 0.014, steps: 2, shadow: 0.75, sat: 1.05, contrast: 1.0, key: 2.0, hemi: 2.0, rim: 0.7, yaw: -35, size: 0.78 };
 for (const [k, v] of new URLSearchParams(location.search)) if (k in LOOK) LOOK[k] = parseFloat(v);
 
@@ -118,11 +118,16 @@ async function loadFighter(id) {
   const have = ROSTER[id].clips;
   for (const [name, , , loop] of CLIPS) {
     if (!have.includes(name)) continue;
-    try { const a = await loader.loadAsync(`fighters/${id}/anim-${name}.glb`); const clip = a.animations[0]; clip.name = name; const act = mixer.clipAction(clip); act.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce); act.clampWhenFinished = true; actions[name] = act; } catch (e) { console.warn('clip', name, e); }
+    if (name === 'guard') continue;
+    try { const a = await loader.loadAsync(`fighters/${id}/anim-${name}.glb`); const clip = a.animations[0]; clip.name = name;
+      for (const tr of clip.tracks) if (tr.name.endsWith('.position')) { const v = tr.values; const hips = tr.name.includes('Hips'); for (let i = 0; i < v.length; i += 3) { v[i] = v[0]; v[i + 2] = v[2]; if (!hips) v[i + 1] = v[1]; } }
+      const act = mixer.clipAction(clip); act.setLoop(loop ? THREE.LoopRepeat : THREE.LoopOnce); act.clampWhenFinished = true; actions[name] = act;
+      if (name === 'jab') { const g = THREE.AnimationUtils.subclip(clip, 'guard', 0, 11, 30); const ga = mixer.clipAction(g); ga.setLoop(THREE.LoopPingPong); ga.timeScale = 0.45; actions.guard = ga; }
+    } catch (e) { console.warn('clip', name, e); }
   }
   document.querySelectorAll('button[data-clip]').forEach(b => { b.disabled = !actions[b.dataset.clip]; b.style.opacity = actions[b.dataset.clip] ? 1 : .35; });
   document.getElementById('tag3d').textContent = `${ROSTER[id].name} · rigged mesh · ${Object.keys(actions).length} clips`;
-  applyLook(); loadingEl.hidden = true; play('idle');
+  applyLook(); loadingEl.hidden = true; play(actions.guard ? 'guard' : 'idle');
 }
 const applyLook = () => looks.forEach(l => { l.o.material = toon ? l.t : l.pbr; });
 function play(name) { const a = actions[name]; if (!a) return; a.reset(); a.enabled = true; a.setEffectiveWeight(1); if (current && current !== a) current.crossFadeTo(a, 0.16, true); a.play(); current = a;
