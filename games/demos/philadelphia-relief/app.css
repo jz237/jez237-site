@@ -591,6 +591,24 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { transform: scale(1.25)
 .caption span { display: block; font-size: 12.5px; line-height: 1.5; color: rgba(255,255,255,0.88); }
 .caption small { display: block; margin-top: 5px; font-size: 10px; color: var(--muted); }
 
+/* ── flood legend ──────────────────────────────────────────────────────── */
+
+.legend {
+  margin-top: 8px; padding: 8px 10px;
+  border: 1px solid var(--line); border-radius: 8px;
+  font-size: 11px; line-height: 1.45; color: rgba(255, 255, 255, 0.86);
+}
+.legend[hidden] { display: none; }
+.legend-title {
+  font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 4px;
+}
+.legend-row { display: flex; align-items: center; gap: 8px; margin: 2px 0; }
+.legend-swatch { flex: 0 0 auto; width: 14px; height: 10px; border-radius: 2px; }
+.legend-source { margin: 6px 0 0; color: var(--muted); }
+.legend-source a { color: var(--accent); }
+.legend-caveat { margin: 4px 0 0; color: var(--muted); font-size: 10.5px; }
+
 /* ── landmark card ─────────────────────────────────────────────────────── */
 
 .card {

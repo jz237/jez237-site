@@ -1,0 +1,54 @@
+{
+ "source": {
+  "name": "FEMA National Flood Hazard Layer (NFHL), Flood Hazard Zones",
+  "url": "https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28",
+  "license": "US federal government work; public domain. Cite as FEMA NFHL.",
+  "note": "The effective FIRM is the regulatory product; this is a simplified visualisation of the NFHL as served on the build date, clipped to the map region and simplified to ~18 m. Not for insurance, permitting or engineering decisions.",
+  "fetched": "2026-09-04"
+ },
+ "classes": [
+  "sfha",
+  "coastal",
+  "moderate"
+ ],
+ "counts": {
+  "sfha": {
+   "fetched": 11539,
+   "kept": 5533,
+   "label": "1% annual-chance flood (Special Flood Hazard Area)"
+  },
+  "coastal": {
+   "fetched": 86,
+   "kept": 58,
+   "label": "1% annual-chance coastal high hazard (wave action)"
+  },
+  "moderate": {
+   "fetched": 13320,
+   "kept": 3292,
+   "label": "0.2% annual-chance flood"
+  }
+ },
+ "withBaseFloodElevation": 719,
+ "classLabels": {
+  "sfha": "1% annual-chance flood (Special Flood Hazard Area)",
+  "coastal": "1% annual-chance coastal high hazard (wave action)",
+  "moderate": "0.2% annual-chance flood"
+ },
+ "format": "PHF1",
+ "file": "fema-nfhl.bin",
+ "bytes": 672356,
+ "kept": {
+  "sfha": 4204,
+  "coastal": 53,
+  "moderate": 1887
+ },
+ "vertices": 160399,
+ "minAreaM2": 10000.0,
+ "simplifyM": 25.0,
+ "bounds": [
+  -75.8,
+  39.7,
+  -74.7,
+  40.55
+ ]
+}
