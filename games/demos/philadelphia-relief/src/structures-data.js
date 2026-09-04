@@ -51,19 +51,23 @@ export function parseTier(buffer) {
   if (view.byteLength < 8) throw new Error('structures: tier stream too short');
   const magic = String.fromCharCode(view.getUint8(0), view.getUint8(1),
     view.getUint8(2), view.getUint8(3));
-  if (magic !== 'PHB1') throw new Error(`structures: bad magic "${magic}"`);
+  if (magic !== 'PHB2') throw new Error(`structures: bad magic "${magic}"`);
 
   const count = view.getUint32(4, true);
   const buildings = new Array(count);
   let offset = 8;
   for (let i = 0; i < count; i += 1) {
-    if (offset + 8 > view.byteLength) throw new Error('structures: truncated tier stream');
+    if (offset + 10 > view.byteLength) throw new Error('structures: truncated tier stream');
     const n = view.getUint16(offset, true);
     const height = view.getUint16(offset + 2, true) / 10;
     const minHeight = view.getUint16(offset + 4, true) / 10;
     const source = SOURCE_NAMES[view.getUint8(offset + 6)] || 'default';
-    const named = (view.getUint8(offset + 7) & 1) === 1;
-    offset += 8;
+    const flags = view.getUint8(offset + 7);
+    const named = (flags & 1) === 1;
+    // Documented construction year (0 = undated) and where it came from.
+    const year = view.getUint16(offset + 8, true);
+    const yearSource = (flags & 4) ? 'curated' : (flags & 2) ? 'osm' : 'none';
+    offset += 10;
     if (n < 3 || offset + n * 4 > view.byteLength) {
       throw new Error(`structures: building ${i} has a bad ring (${n} vertices)`);
     }
@@ -73,7 +77,7 @@ export function parseTier(buffer) {
       poly[k * 2 + 1] = view.getInt16(offset + 2, true);
       offset += 4;
     }
-    buildings[i] = { height, minHeight, source, named, poly };
+    buildings[i] = { height, minHeight, source, named, poly, year, yearSource };
   }
   return { count, buildings, bytes: view.byteLength };
 }
@@ -116,6 +120,7 @@ export function extrudeBuildings(buildings, ctx) {
   const position = new Float32Array(vertCount * 3);
   const ground = new Float32Array(vertCount);
   const info = new Float32Array(vertCount * 2);     // (height, minHeight)
+  const year = new Float32Array(vertCount);         // documented year, 0 = undated
   const index = new Uint32Array(indexCount);
   const buildingEnd = new Uint32Array(buildings.length); // index count after each
 
@@ -158,6 +163,8 @@ export function extrudeBuildings(buildings, ctx) {
       info[(base + k) * 2 + 1] = b.minHeight;
       info[(base + n + k) * 2] = b.height;
       info[(base + n + k) * 2 + 1] = b.minHeight;
+      year[base + k] = b.year || 0;
+      year[base + n + k] = b.year || 0;
     }
     for (let k = 0; k < n; k += 1) {
       const k2 = (k + 1) % n;
@@ -182,7 +189,7 @@ export function extrudeBuildings(buildings, ctx) {
     v += 2 * n;
   }
 
-  return { position, ground, info, index, buildingEnd, vertexCount: vertCount,
+  return { position, ground, info, year, index, buildingEnd, vertexCount: vertCount,
     indexCount, buildingCount: buildings.length };
 }
 
@@ -632,6 +639,7 @@ export function mergeSolids(parts) {
   const position = new Float32Array(vCount * 3);
   const ground = new Float32Array(vCount);
   const info = new Float32Array(vCount * 2);
+  const year = new Float32Array(vCount);
   const index = new Uint32Array(iCount);
   let vo = 0;
   let io = 0;
@@ -639,9 +647,10 @@ export function mergeSolids(parts) {
     position.set(p.position, vo * 3);
     ground.set(p.ground, vo);
     info.set(p.info, vo * 2);
+    if (p.year) year.set(p.year, vo);
     for (let k = 0; k < p.indexCount; k += 1) index[io + k] = p.index[k] + vo;
     vo += p.vertexCount;
     io += p.indexCount;
   }
-  return { position, ground, info, index, vertexCount: vCount, indexCount: iCount };
+  return { position, ground, info, year, index, vertexCount: vCount, indexCount: iCount };
 }

@@ -781,6 +781,50 @@ async function structuresPass(page, viewport, shot, problems, report) {
   }
   await shot('20c-weather-fog');
 
+  // Historical views: 1776 keeps no bridges, no rail, no motorways and shows
+  // the approximate extent; 1900 keeps rail but no Delaware crossing; the
+  // 1950s have exactly three bridges and ghosted motorways. The banner says
+  // what the view can and cannot show and cites its sources.
+  // Old City in 1776, rail layer on: the era must still hide it.
+  await goto('#e=1776&tm=manual&we=clear&Ll=1&x=-75.148&y=39.952&d=5200&b=25&p=60', 4000);
+  const era1776 = (await stats())?.era;
+  const banner = await page.evaluate(() => {
+    const el = document.getElementById('eraBanner');
+    const r = el.getBoundingClientRect();
+    return { hidden: el.hidden, text: el.textContent, links: el.querySelectorAll('a').length,
+      inside: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight };
+  });
+  if (!(era1776?.year === 1776 && era1776.bridges.length === 0 && era1776.railVisible === false
+      && era1776.motorwaysVisible === false && era1776.extent1776Visible === true)) {
+    problems.push(`[${viewport.id}] 1776 view wrong: ${JSON.stringify(era1776)}`);
+  }
+  if (banner.hidden || !banner.inside || banner.links < 2 || !/Faden/.test(banner.text)
+      || !/not a survey/.test(banner.text)) {
+    problems.push(`[${viewport.id}] 1776 banner wrong: ${JSON.stringify(banner)}`);
+  }
+  report.push(`[${viewport.id}] era 1776: ${JSON.stringify(era1776)}`);
+  await shot('21-era-1776');
+  await goto('#e=industrial&x=-75.135&y=39.952&d=9000&b=300&p=62&Ll=1', 4000);
+  const era1900 = (await stats())?.era;
+  if (!(era1900?.year === 1900 && era1900.bridges.length === 0 && era1900.railVisible === true
+      && era1900.motorwaysVisible === false && era1900.extent1776Visible === false)) {
+    problems.push(`[${viewport.id}] 1900 view wrong: ${JSON.stringify(era1900)}`);
+  }
+  await shot('21b-era-1900-unbridged');
+  await goto('#e=1950s&x=-75.135&y=39.952&d=9000&b=300&p=62&Ll=1', 4000);
+  const era1955 = (await stats())?.era;
+  if (JSON.stringify((era1955?.bridges || []).slice().sort())
+      !== JSON.stringify(['Benjamin Franklin Bridge', 'Burlington-Bristol Bridge', 'Tacony-Palmyra Bridge'])
+      || era1955.motorwaysVisible !== true) {
+    problems.push(`[${viewport.id}] 1950s view wrong: ${JSON.stringify(era1955)}`);
+  }
+  await shot('21c-era-1950s');
+  await goto('#e=present&Ll=0', 2000);
+  const eraNow = (await stats())?.era;
+  if (!(eraNow?.year === 9999 && eraNow.bridges.length === 6)) {
+    problems.push(`[${viewport.id}] back to the present failed: ${JSON.stringify(eraNow)}`);
+  }
+
   // Suburban zones are lazy: King of Prussia's notable buildings arrive once
   // the camera gets there (the first-frame check above proves they were not
   // fetched up front).

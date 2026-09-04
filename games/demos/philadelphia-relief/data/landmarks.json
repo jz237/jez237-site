@@ -1,5 +1,5 @@
 {
-  "note": "Hand-curated landmark set for the Philadelphia 3D topographic map. Coordinates are rounded to ~10 m and chosen for geographic legibility (where a place sits in the terrain), not for survey accuracy. Elevations are not stored here: the app samples them from the same DEM as the terrain surface, so a landmark's readout can never disagree with the ground it sits on.",
+  "note": "Hand-curated landmark set for the Philadelphia 3D topographic map. Coordinates are rounded to ~10 m and chosen for geographic legibility (where a place sits in the terrain), not for survey accuracy. Elevations are not stored here: the app samples them from the same DEM as the terrain surface, so a landmark's readout can never disagree with the ground it sits on. 'since' (optional) is the year a landmark came to exist, so era views can hide labels for things that were not there yet.",
   "curated": true,
   "rank": "1 = always shown, 2 = mid density, 3 = dense only",
   "landmarks": [
@@ -9,7 +9,8 @@
       "lat": 39.9526,
       "c": "civic",
       "r": 1,
-      "d": "William Penn stands on the high ground of the original city grid, between the two rivers."
+      "d": "William Penn stands on the high ground of the original city grid, between the two rivers.",
+      "since": 1901
     },
     {
       "n": "Independence Hall",
@@ -25,7 +26,8 @@
       "lat": 39.9656,
       "c": "civic",
       "r": 2,
-      "d": "Sited on Faire Mount, the bluff where the Schuylkill turns toward Center City."
+      "d": "Sited on Faire Mount, the bluff where the Schuylkill turns toward Center City.",
+      "since": 1928
     },
     {
       "n": "Boathouse Row",
@@ -33,7 +35,8 @@
       "lat": 39.9694,
       "c": "water",
       "r": 2,
-      "d": "On the Schuylkill just above the Fairmount Dam."
+      "d": "On the Schuylkill just above the Fairmount Dam.",
+      "since": 1860
     },
     {
       "n": "Comcast Technology Center",
@@ -41,7 +44,8 @@
       "lat": 39.9548,
       "c": "civic",
       "r": 3,
-      "d": "The tallest building in Pennsylvania."
+      "d": "The tallest building in Pennsylvania.",
+      "since": 2018
     },
     {
       "n": "30th Street Station",
@@ -65,7 +69,8 @@
       "lat": 39.954,
       "c": "bridge",
       "r": 2,
-      "d": "Philadelphia to Camden across the Delaware."
+      "d": "Philadelphia to Camden across the Delaware.",
+      "since": 1926
     },
     {
       "n": "Walt Whitman Bridge",
@@ -73,7 +78,8 @@
       "lat": 39.9057,
       "c": "bridge",
       "r": 3,
-      "d": "South Philadelphia to Gloucester City."
+      "d": "South Philadelphia to Gloucester City.",
+      "since": 1957
     },
     {
       "n": "Penn's Landing",
@@ -89,7 +95,8 @@
       "lat": 39.9061,
       "c": "civic",
       "r": 3,
-      "d": "The South Philadelphia sports complex, on reclaimed low ground."
+      "d": "The South Philadelphia sports complex, on reclaimed low ground.",
+      "since": 2004
     },
     {
       "n": "Philadelphia Navy Yard",
@@ -105,7 +112,8 @@
       "lat": 39.8729,
       "c": "transport",
       "r": 2,
-      "d": "Built on the Delaware River tidal flats — among the lowest ground in the region."
+      "d": "Built on the Delaware River tidal flats — among the lowest ground in the region.",
+      "since": 1940
     },
     {
       "n": "Fort Mifflin",
@@ -113,7 +121,8 @@
       "lat": 39.8749,
       "c": "civic",
       "r": 3,
-      "d": "On Mud Island, in the Delaware marshes below the airport."
+      "d": "On Mud Island, in the Delaware marshes below the airport.",
+      "since": 1771
     },
     {
       "n": "Wissahickon Valley",
@@ -185,7 +194,8 @@
       "lat": 40.1015,
       "c": "park",
       "r": 1,
-      "d": "Where Valley Creek meets the Schuylkill, ringed by Mount Joy and Mount Misery."
+      "d": "Where Valley Creek meets the Schuylkill, ringed by Mount Joy and Mount Misery.",
+      "since": 1777
     },
     {
       "n": "King of Prussia",
@@ -289,7 +299,8 @@
       "lat": 40.1548,
       "c": "town",
       "r": 1,
-      "d": "The archetypal postwar planned suburb: 17,000 houses laid out at once on the flat Delaware terrace downstream of the falls at Trenton."
+      "d": "The archetypal postwar planned suburb: 17,000 houses laid out at once on the flat Delaware terrace downstream of the falls at Trenton.",
+      "since": 1952
     },
     {
       "n": "Washington Crossing",
@@ -377,7 +388,8 @@
       "lat": 39.9008,
       "c": "civic",
       "r": 3,
-      "d": "The football stadium of the South Philadelphia sports complex."
+      "d": "The football stadium of the South Philadelphia sports complex.",
+      "since": 2003
     },
     {
       "n": "Battleship New Jersey",
@@ -385,7 +397,8 @@
       "lat": 39.939,
       "c": "civic",
       "r": 3,
-      "d": "A museum ship moored on the Camden waterfront opposite Penn's Landing."
+      "d": "A museum ship moored on the Camden waterfront opposite Penn's Landing.",
+      "since": 2001
     },
     {
       "n": "Cira Centre",
@@ -393,7 +406,8 @@
       "lat": 39.9569,
       "c": "civic",
       "r": 3,
-      "d": "Beside 30th Street Station on the west bank of the Schuylkill."
+      "d": "Beside 30th Street Station on the west bank of the Schuylkill.",
+      "since": 2005
     }
   ]
 }

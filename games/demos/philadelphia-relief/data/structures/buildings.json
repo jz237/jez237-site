@@ -1,5 +1,5 @@
 {
- "format": "PHB1",
+ "format": "PHB2",
  "generator": "tools/build_structures.py",
  "attribution": "(c) OpenStreetMap contributors, ODbL 1.0",
  "heightSources": {
@@ -10,9 +10,9 @@
   "merged": "average of a merged rowhouse row"
  },
  "sourceCounts": {
-  "levels": 3032,
-  "default": 7567,
-  "measured": 28771,
+  "levels": 3033,
+  "default": 7569,
+  "measured": 28772,
   "curated": 24
  },
  "tiers": [
@@ -51,7 +51,7 @@
      "file": "center-city-tall.bin",
      "count": 325,
      "vertices": 3365,
-     "bytes": 16068,
+     "bytes": 16718,
      "minHeight": 35.0,
      "maxHeight": 341.0,
      "named": 255
@@ -61,7 +61,7 @@
      "file": "center-city-mid.bin",
      "count": 5051,
      "vertices": 56031,
-     "bytes": 264540,
+     "bytes": 274642,
      "minHeight": 14.3,
      "maxHeight": 34.9,
      "named": 290
@@ -71,7 +71,7 @@
      "file": "center-city-low.bin",
      "count": 6794,
      "vertices": 75738,
-     "bytes": 357312,
+     "bytes": 370900,
      "minHeight": 5.3,
      "maxHeight": 10.0,
      "named": 1
@@ -162,7 +162,7 @@
      "file": "inner-city-tall.bin",
      "count": 129,
      "vertices": 3731,
-     "bytes": 15964,
+     "bytes": 16222,
      "minHeight": 35.0,
      "maxHeight": 117.0,
      "named": 74
@@ -172,7 +172,7 @@
      "file": "inner-city-mid.bin",
      "count": 1827,
      "vertices": 25079,
-     "bytes": 114940,
+     "bytes": 118594,
      "minHeight": 12.0,
      "maxHeight": 35.0,
      "named": 1370
@@ -180,12 +180,12 @@
     {
      "tier": "low",
      "file": "inner-city-low.bin",
-     "count": 380,
-     "vertices": 5737,
-     "bytes": 25996,
+     "count": 383,
+     "vertices": 5773,
+     "bytes": 26930,
      "minHeight": 4.8,
      "maxHeight": 11.9,
-     "named": 380
+     "named": 383
     }
    ],
    "mergedRowhouses": 0,
@@ -273,7 +273,7 @@
      "file": "schuylkill-valley-tall.bin",
      "count": 59,
      "vertices": 382,
-     "bytes": 2008,
+     "bytes": 2126,
      "minHeight": 35.0,
      "maxHeight": 81.0,
      "named": 11
@@ -283,7 +283,7 @@
      "file": "schuylkill-valley-mid.bin",
      "count": 728,
      "vertices": 5187,
-     "bytes": 26580,
+     "bytes": 28036,
      "minHeight": 12.0,
      "maxHeight": 34.5,
      "named": 200
@@ -291,12 +291,12 @@
     {
      "tier": "low",
      "file": "schuylkill-valley-low.bin",
-     "count": 154,
-     "vertices": 2312,
-     "bytes": 10488,
+     "count": 155,
+     "vertices": 2316,
+     "bytes": 10822,
      "minHeight": 3.0,
      "maxHeight": 11.4,
-     "named": 154
+     "named": 155
     }
    ],
    "mergedRowhouses": 0,
@@ -323,7 +323,7 @@
      "file": "main-line-tall.bin",
      "count": 4,
      "vertices": 94,
-     "bytes": 416,
+     "bytes": 424,
      "minHeight": 37.2,
      "maxHeight": 43.3,
      "named": 3
@@ -333,7 +333,7 @@
      "file": "main-line-mid.bin",
      "count": 191,
      "vertices": 3598,
-     "bytes": 15928,
+     "bytes": 16310,
      "minHeight": 12.0,
      "maxHeight": 34.5,
      "named": 162
@@ -343,7 +343,7 @@
      "file": "main-line-low.bin",
      "count": 59,
      "vertices": 1312,
-     "bytes": 5728,
+     "bytes": 5846,
      "minHeight": 4.8,
      "maxHeight": 11.4,
      "named": 59
@@ -373,7 +373,7 @@
      "file": "northeast-philadelphia-tall.bin",
      "count": 6,
      "vertices": 419,
-     "bytes": 1732,
+     "bytes": 1744,
      "minHeight": 36.9,
      "maxHeight": 51.5,
      "named": 1
@@ -383,7 +383,7 @@
      "file": "northeast-philadelphia-mid.bin",
      "count": 337,
      "vertices": 7528,
-     "bytes": 32816,
+     "bytes": 33490,
      "minHeight": 12.0,
      "maxHeight": 34.7,
      "named": 182
@@ -393,7 +393,7 @@
      "file": "northeast-philadelphia-low.bin",
      "count": 148,
      "vertices": 3266,
-     "bytes": 14256,
+     "bytes": 14552,
      "minHeight": 4.8,
      "maxHeight": 11.9,
      "named": 148
@@ -423,7 +423,7 @@
      "file": "cherry-hill-tall.bin",
      "count": 2,
      "vertices": 16,
-     "bytes": 88,
+     "bytes": 92,
      "minHeight": 41.1,
      "maxHeight": 60.9,
      "named": 1
@@ -433,7 +433,7 @@
      "file": "cherry-hill-mid.bin",
      "count": 172,
      "vertices": 1754,
-     "bytes": 8400,
+     "bytes": 8744,
      "minHeight": 12.0,
      "maxHeight": 31.2,
      "named": 164
@@ -443,7 +443,7 @@
      "file": "cherry-hill-low.bin",
      "count": 150,
      "vertices": 2277,
-     "bytes": 10316,
+     "bytes": 10616,
      "minHeight": 4.8,
      "maxHeight": 11.4,
      "named": 150
@@ -479,7 +479,7 @@
      "file": "airport-chester-mid.bin",
      "count": 104,
      "vertices": 1400,
-     "bytes": 6440,
+     "bytes": 6648,
      "minHeight": 12.0,
      "maxHeight": 30.0,
      "named": 103
@@ -489,7 +489,7 @@
      "file": "airport-chester-low.bin",
      "count": 86,
      "vertices": 1006,
-     "bytes": 4720,
+     "bytes": 4892,
      "minHeight": 8.1,
      "maxHeight": 11.4,
      "named": 86
@@ -519,7 +519,7 @@
      "file": "lower-bucks-mid.bin",
      "count": 141,
      "vertices": 1731,
-     "bytes": 8060,
+     "bytes": 8342,
      "minHeight": 12.0,
      "maxHeight": 30.0,
      "named": 141
@@ -529,7 +529,7 @@
      "file": "lower-bucks-low.bin",
      "count": 63,
      "vertices": 960,
-     "bytes": 4352,
+     "bytes": 4478,
      "minHeight": 4.8,
      "maxHeight": 9.0,
      "named": 63
@@ -559,7 +559,7 @@
      "file": "trenton-tall.bin",
      "count": 4,
      "vertices": 49,
-     "bytes": 236,
+     "bytes": 244,
      "minHeight": 37.8,
      "maxHeight": 50.0,
      "named": 4
@@ -569,7 +569,7 @@
      "file": "trenton-mid.bin",
      "count": 121,
      "vertices": 1181,
-     "bytes": 5700,
+     "bytes": 5942,
      "minHeight": 12.0,
      "maxHeight": 34.5,
      "named": 119
@@ -579,7 +579,7 @@
      "file": "trenton-low.bin",
      "count": 111,
      "vertices": 1094,
-     "bytes": 5272,
+     "bytes": 5494,
      "minHeight": 9.0,
      "maxHeight": 11.4,
      "named": 111
@@ -609,7 +609,7 @@
      "file": "wilmington-tall.bin",
      "count": 29,
      "vertices": 302,
-     "bytes": 1448,
+     "bytes": 1506,
      "minHeight": 37.8,
      "maxHeight": 110.0,
      "named": 25
@@ -619,7 +619,7 @@
      "file": "wilmington-mid.bin",
      "count": 99,
      "vertices": 1421,
-     "bytes": 6484,
+     "bytes": 6682,
      "minHeight": 12.0,
      "maxHeight": 34.5,
      "named": 77
@@ -629,7 +629,7 @@
      "file": "wilmington-low.bin",
      "count": 53,
      "vertices": 858,
-     "bytes": 3864,
+     "bytes": 3970,
      "minHeight": 3.5,
      "maxHeight": 11.4,
      "named": 53
@@ -701,9 +701,9 @@
   }
  ],
  "totals": {
-  "buildings": 17327,
-  "vertices": 207828,
-  "bytes": 970152
+  "buildings": 17331,
+  "vertices": 207868,
+  "bytes": 1005006
  },
  "bridgesFile": "bridges.json",
  "bridgeCount": 6,
@@ -713,6 +713,13 @@
   "Lincoln Financial Field",
   "Philadelphia Museum of Art"
  ],
+ "dated": {
+  "curated": 31,
+  "osm": 68,
+  "undated": 17232,
+  "historicUnmatched": [],
+  "note": "Years: curated = data/historic-buildings.json (published completion/opening year, Wikipedia); osm = OpenStreetMap start_date; undated = no public date in the data this map ships. Philadelphia's assessor records carry a year_built for every parcel but their licence reserves all database rights, so they are not redistributed here."
+ },
  "projection": {
   "metersPerDegLat": 111037.0072,
   "metersPerDegLon": 85238.0237

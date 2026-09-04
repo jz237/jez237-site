@@ -24,6 +24,8 @@ import { damp } from './geo.js';
 const VERTEX_SHADER = /* glsl */ `
   attribute float aGround;     // DEM elevation under the structure, metres
   attribute vec2  aInfo;       // (structure height, base offset), metres
+  attribute float aYear;       // documented construction year, 0 = undated
+  varying float vYear;
   #ifdef LANDMARK
   attribute float aModel;      // which schematic model this vertex belongs to
   varying float vModel;
@@ -49,6 +51,7 @@ const VERTEX_SHADER = /* glsl */ `
     vWorld = p;
     vElev = aGround;
     vRel = aInfo.x > 0.0 ? clamp((position.y - aInfo.y) / aInfo.x, 0.0, 1.0) : 0.0;
+    vYear = aYear;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
   }
 `;
@@ -70,6 +73,8 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uAmbient;
   uniform float uFogDensity;
   uniform float uExposure;
+  uniform float uEraYear;      // 9999 = present; else the era's year
+  varying float vYear;
   #ifdef LANDMARK
   uniform float uSelected;
   uniform vec3  uHighlight;
@@ -107,6 +112,20 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 bounce = uFogColor * uAmbient * 0.35 * max(0.0, -ndl);
     vec3 color = base * (key + sky + bounce) * uExposure;
 
+    // Historical views: documented-newer buildings vanish; undated ones fade
+    // into the haze, because a missing date is not a missing building.
+    if (uEraYear < 9000.0) {
+      if (vYear > uEraYear) discard;
+      if (vYear < 1.0) {
+        // Ghost: a 2 px screen-space checker keeps every other pixel, so the
+        // undated fabric reads as a hatched shadow in any theme, and what
+        // remains is dimmed and pulled toward the haze.
+        vec2 cell = floor(gl_FragCoord.xy * 0.5);
+        if (mod(cell.x + cell.y, 2.0) < 1.0) discard;
+        color = mix(color, uFogColor, 0.45) * 0.55;
+      }
+    }
+
     // Night themes light the upper floors; restrained so towers read as
     // lit buildings, not lanterns.
     color += uGlow * uGlowAmount * (0.35 + 0.65 * vRel) * (1.0 - roof * 0.8);
@@ -138,6 +157,8 @@ const LINE_VERTEX = /* glsl */ `
   attribute float aElev;
   attribute float aOtherElev;
   attribute float aStruct;
+  attribute float aYear;
+  varying float vYear;
   attribute float aOtherStruct;
 
   uniform vec2  uResolution;
@@ -170,6 +191,7 @@ const LINE_VERTEX = /* glsl */ `
     dir = len > 1e-5 ? dir / len : vec2(1.0, 0.0);
     vec2 perp = vec2(-dir.y, dir.x);
     vAlong = aSide;
+    vYear = aYear;
     ca.xy += (perp * aSide * uWidth * 0.5 / uResolution) * ca.w;
     gl_Position = ca;
   }
@@ -179,8 +201,11 @@ const LINE_FRAGMENT = /* glsl */ `
   precision mediump float;
   uniform vec3  uColor;
   uniform float uOpacity;
+  uniform float uEraYear;
   varying float vAlong;
+  varying float vYear;
   void main() {
+    if (uEraYear < 9000.0 && vYear > uEraYear) discard;
     float edge = 1.0 - smoothstep(0.5, 1.0, abs(vAlong));
     gl_FragColor = vec4(uColor, uOpacity * edge);
     if (gl_FragColor.a < 0.004) discard;
@@ -206,6 +231,7 @@ export function createStructures(THREE, options) {
     uFogTint: { value: new THREE.Vector3(1, 0.8, 0.5) },
     uCameraPos: { value: new THREE.Vector3() },
     uKey: { value: 1.2 },
+    uEraYear: { value: 9999 },
     uAmbient: { value: 0.42 },
     uFogDensity: { value: 1e-5 },
     uExposure: { value: 2.1 },
@@ -237,6 +263,8 @@ export function createStructures(THREE, options) {
     geometry.setAttribute('position', new THREE.BufferAttribute(packed.position, 3));
     geometry.setAttribute('aGround', new THREE.BufferAttribute(packed.ground, 1));
     geometry.setAttribute('aInfo', new THREE.BufferAttribute(packed.info, 2));
+    geometry.setAttribute('aYear', new THREE.BufferAttribute(
+      packed.year || new Float32Array(packed.vertexCount), 1));
     geometry.setIndex(new THREE.BufferAttribute(packed.index, 1));
     geometry.computeBoundingSphere();
     geometry.computeBoundingBox();
@@ -298,9 +326,12 @@ export function createStructures(THREE, options) {
       if (worldLine.length < 2) continue;
       const built = buildBridge(spec, resample(worldLine, 40), groundAt);
       if (!built) continue;
+      // Every vertex of a bridge carries its opening year for the era views.
+      built.solids.year = new Float32Array(built.solids.vertexCount).fill(spec.opened || 0);
+      for (const seg of built.lines) seg.year = spec.opened || 0;
       solidParts.push(built.solids);
       lineSegs.push(...built.lines);
-      bridgeInfo.push({ id: spec.id, name: spec.name, type: spec.type,
+      bridgeInfo.push({ id: spec.id, name: spec.name, type: spec.type, opened: spec.opened || 0,
         lengthM: Math.round(built.lengthM), lines: built.lines.length });
     }
     if (solidParts.length) {
@@ -314,6 +345,7 @@ export function createStructures(THREE, options) {
     }
     if (lineSegs.length) {
       bridgeLines = buildLineSegments(THREE, lineSegs);
+      bridgeLines.material.uniforms.uEraYear = sharedUniforms.uEraYear;
       group.add(bridgeLines.mesh);
     }
   }
@@ -327,6 +359,7 @@ export function createStructures(THREE, options) {
     const otherElev = new Float32Array(n * 4);
     const struct = new Float32Array(n * 4);
     const otherStruct = new Float32Array(n * 4);
+    const year = new Float32Array(n * 4);
     const index = new Uint32Array(n * 6);
     let v = 0;
     let i = 0;
@@ -334,6 +367,7 @@ export function createStructures(THREE, options) {
       for (let k = 0; k < 4; k += 1) {
         const atStart = k < 2;
         const idx = v + k;
+        year[idx] = s.year || 0;
         position[idx * 3] = atStart ? s.a[0] : s.b[0];
         position[idx * 3 + 2] = atStart ? s.a[1] : s.b[1];
         other[idx * 3] = atStart ? s.b[0] : s.a[0];
@@ -356,6 +390,7 @@ export function createStructures(THREE, options) {
     geometry.setAttribute('aElev', new THREE3.BufferAttribute(elev, 1));
     geometry.setAttribute('aOtherElev', new THREE3.BufferAttribute(otherElev, 1));
     geometry.setAttribute('aStruct', new THREE3.BufferAttribute(struct, 1));
+    geometry.setAttribute('aYear', new THREE3.BufferAttribute(year, 1));
     geometry.setAttribute('aOtherStruct', new THREE3.BufferAttribute(otherStruct, 1));
     geometry.setIndex(new THREE3.BufferAttribute(index, 1));
     const material = new THREE3.ShaderMaterial({
@@ -503,6 +538,17 @@ export function createStructures(THREE, options) {
 
     get buildingTotal() { return buildingTotal; },
     get landmarkModelCount() { return proxies.length; },
+
+    /** Historical view: 9999 shows everything; an era year hides the newer and ghosts the undated. */
+    setEra(year) {
+      sharedUniforms.uEraYear.value = Number.isFinite(year) ? year : 9999;
+    },
+    get eraYear() { return sharedUniforms.uEraYear.value; },
+    /** Bridges that exist at the current era year (all have opening years). */
+    get visibleBridges() {
+      const y = sharedUniforms.uEraYear.value;
+      return bridgeInfo.filter((b) => !b.opened || b.opened <= y).map((b) => b.name);
+    },
 
     /** Pick a landmark model under a raycaster; returns its model record or null. */
     pickLandmark(raycaster) {

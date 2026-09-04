@@ -1,4 +1,5 @@
 import { WEATHERS } from './solar.js';
+import { ERA_IDS } from './eras.js';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -143,6 +144,13 @@ export const CONTROLS = {
     group: 'time', label: 'Weather',
     hint: 'Simulated: scales haze, sun, sky fill, bloom and water. Not a forecast.',
   },
+  era: {
+    k: 'e', kind: 'enum', values: ERA_IDS, def: 'present',
+    group: 'scene', label: 'Era',
+    hint: 'A past era shows only buildings with a documented date as solid, hides what is ' +
+      'documented newer, and ghosts the undated majority. Bridges, railways and motorways ' +
+      'follow their real opening years. The relief and shoreline are always today\'s.',
+  },
   floodMode: {
     k: 'fm', kind: 'enum', values: FLOOD_MODES, def: 'fema',
     group: 'hazards', label: 'Hazard shown',
@@ -286,5 +294,5 @@ export const CHEAP_KEYS = new Set([
   'boundaryOpacity', 'theme', 'camLon', 'camLat', 'camDist', 'camBearing',
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
-  'timeMode', 'dayOfYear', 'clockHour', 'weather',
+  'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era',
 ]);

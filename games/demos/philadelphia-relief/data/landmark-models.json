@@ -1,5 +1,5 @@
 {
-  "note": "Schematic 3D models for a few landmarks whose real form does not read from a flat extrusion. Each model is a handful of primitives in local metres about its anchor (+x east, +z south), with dimensions rounded from public references. They are recognisable silhouettes, not surveys. Anchors: the landmark's coordinate in landmarks.json unless 'lon'/'lat' overrides it. 'replaces' lists OSM names whose flat extrusion the model stands in for (the build drops those footprints).",
+  "note": "Schematic 3D models for a few landmarks whose real form does not read from a flat extrusion. Each model is a handful of primitives in local metres about its anchor (+x east, +z south), with dimensions rounded from public references. They are recognisable silhouettes, not surveys. Anchors: the landmark's coordinate in landmarks.json unless 'lon'/'lat' overrides it. 'replaces' lists OSM names whose flat extrusion the model stands in for (the build drops those footprints). 'built' is the completion or opening year (the Battleship's is its 2001 arrival as a museum ship; Boathouse Row's the 1860s, when the first surviving houses went up).",
   "primitives": "box(w,d,h,base,rot) | pyramid(w,d,h,base,rot) | gable(w,d,h,ridge,base,rot) | ring(w,d,thick,h,base,rot,segs) | cylinder(r,h,base,segs)",
   "models": [
     {
@@ -67,7 +67,8 @@
           "base": 34,
           "rot": 0
         }
-      ]
+      ],
+      "built": 1753
     },
     {
       "id": "museum-of-art",
@@ -149,7 +150,8 @@
           "base": 8,
           "rot": 40
         }
-      ]
+      ],
+      "built": 1928
     },
     {
       "id": "boathouse-row",
@@ -256,7 +258,8 @@
           "ridge": 4,
           "rot": -16
         }
-      ]
+      ],
+      "built": 1860
     },
     {
       "id": "citizens-bank-park",
@@ -277,7 +280,8 @@
           "rot": 0,
           "segs": 28
         }
-      ]
+      ],
+      "built": 2004
     },
     {
       "id": "lincoln-financial-field",
@@ -300,7 +304,8 @@
           "rot": 10,
           "segs": 28
         }
-      ]
+      ],
+      "built": 2003
     },
     {
       "id": "battleship-new-jersey",
@@ -365,7 +370,8 @@
           "base": 12,
           "segs": 8
         }
-      ]
+      ],
+      "built": 2001
     },
     {
       "id": "fort-mifflin",
@@ -385,7 +391,8 @@
         }
       ],
       "lon": -75.2131,
-      "lat": 39.8754
+      "lat": 39.8754,
+      "built": 1771
     }
   ]
 }

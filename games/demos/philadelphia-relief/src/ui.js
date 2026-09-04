@@ -8,6 +8,7 @@
 
 import { CONTROLS, LAYERS, GROUPS } from './schema.js';
 import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js';
+import { getEra } from './eras.js';
 import { PRESETS, QUICK_JUMPS } from './presets.js';
 import { getTheme, THEME_IDS } from './themes.js';
 
@@ -19,6 +20,7 @@ const ENUM_LABELS = {
   floodMode: (v) => ({ fema: 'FEMA flood zones', slr: 'Sea level rise' }[v] || v),
   timeMode: (v) => ({ manual: 'Sliders', clock: 'Clock' }[v] || v),
   weather: (v) => WEATHER_PRESETS[v]?.label || v,
+  era: (v) => getEra(v).label,
 };
 const RANGE_LABELS = { dayOfYear: dayLabel, clockHour: clockLabel };
 
@@ -506,6 +508,35 @@ export function createCard(options) {
   fly.addEventListener('click', () => { if (openName && onFly) onFly(openName); });
 
   return { open, close, get openName() { return openName; } };
+}
+
+/** The era banner: what this historical view can and cannot show, with sources. */
+export function renderEraBanner(node, era, onPresent) {
+  if (!node) return;
+  if (!era || era.id === 'present') {
+    node.hidden = true;
+    node.replaceChildren();
+    return;
+  }
+  const head = el('div', 'era-head');
+  head.append(el('strong', null, era.label), el('span', 'era-tag', 'historical view'));
+  const note = el('p', 'era-note', era.note);
+  const sources = el('p', 'era-sources');
+  sources.append(document.createTextNode('Sources: '));
+  era.sources.forEach(([label, url], i) => {
+    const a = document.createElement('a');
+    a.href = url;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = label;
+    if (i) sources.append(document.createTextNode(' · '));
+    sources.append(a);
+  });
+  const back = el('button', 'text-btn era-back', 'Back to the present');
+  back.type = 'button';
+  back.addEventListener('click', () => onPresent && onPresent());
+  node.replaceChildren(head, note, sources, back);
+  node.hidden = false;
 }
 
 /** Render (or hide) the flood legend under the layer toggles. */
